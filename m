@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39DB6D1C7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5628F6D1C81
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbjCaJea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
+        id S232181AbjCaJei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbjCaJeI (ORCPT
+        with ESMTP id S232216AbjCaJeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:34:08 -0400
+        Fri, 31 Mar 2023 05:34:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594FB1E71C
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:33:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B55F1EFE1
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:33:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2488D62694
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:33:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 368FDC433EF;
-        Fri, 31 Mar 2023 09:33:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBCFC6264F
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:33:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE935C433EF;
+        Fri, 31 Mar 2023 09:33:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680255215;
-        bh=TCGFo3EUGQQgskyrs3hZqnkhFTHNXk7zL68YZuL2WDw=;
+        s=korg; t=1680255218;
+        bh=wv/9juY+EqUubKOluUfFYi8Ig7tVyvAhOaUNWFGQD1c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MAkEA3ue7aasfHOd8CoMIvVFdDS897IUCmjhHXLlfUn0/BDrSNgvZqBh5f7qN7txl
-         Gbr1WCvr8KKdbyNyzBxDL+Efs/I55xDwWfmzCaeklH24MsNCK9NRE7vvVdK3L6EX0w
-         4FzGCq6EvJvucARKE1wQG/476GGWxIb9qzUjMlGQ=
+        b=OCvvcjW8xtKXhuAVeyIdBSC/oH1IIjwsHCZyMPSXcfgFg0F28z1BWM4jNyIfvaGsg
+         4VeHBn0l6er0sO3/9OlrF9gKgkG3h4pV3r+8H0/vvpXhDrxWR4v0zqvzv4Lo4LHmtp
+         f/AvCSZwB6XDyUDqBuPoi0V5ikwKjJuoX5eNvKpw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH 4/7] driver core: clean up the logic to determine which /sys/dev/ directory to use
-Date:   Fri, 31 Mar 2023 11:33:15 +0200
-Message-Id: <20230331093318.82288-4-gregkh@linuxfoundation.org>
+Subject: [PATCH 5/7] driver core: class: remove dev_kobj from struct class
+Date:   Fri, 31 Mar 2023 11:33:16 +0200
+Message-Id: <20230331093318.82288-5-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230331093318.82288-1-gregkh@linuxfoundation.org>
 References: <20230331093318.82288-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3467; i=gregkh@linuxfoundation.org; h=from:subject; bh=TCGFo3EUGQQgskyrs3hZqnkhFTHNXk7zL68YZuL2WDw=; b=owGbwMvMwCRo6H6F97bub03G02pJDClqK+7eLN65QvTa+6q/8fmJr/mFwyXmulf39P9+8/9n0 +dpG2U/d8SyMAgyMciKKbJ82cZzdH/FIUUvQ9vTMHNYmUCGMHBxCsBELrAyLGi8eFLuUNweyWeG p+wnW4n/0imeIsKwYOKjjN5/x87HM/XzfTGZprX96D6nrwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2167; i=gregkh@linuxfoundation.org; h=from:subject; bh=wv/9juY+EqUubKOluUfFYi8Ig7tVyvAhOaUNWFGQD1c=; b=owGbwMvMwCRo6H6F97bub03G02pJDClqK+6K3rJhErvoJp35YF7pXk2pdWmLZ7l1cjDFOgXFc YedtTfuiGVhEGRikBVTZPmyjefo/opDil6Gtqdh5rAygQxh4OIUgIkUvWOYK3/68P0cxRkChkXl /6b99LCZPOOZFsM87UbBK2bTj9s5hzzo4np+zVCKyVwdAA==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
@@ -52,107 +52,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a dev_t is set in a struct device, an symlink in /sys/dev/ is
-created for it either under /sys/dev/block/ or /sys/dev/char/ depending
-on the device type.
-
-The logic to determine this would trigger off of the class of the
-object, and the kobj_type set in that location.  But it turns out that
-this deep nesting isn't needed at all, as it's either a choice of block
-or "everything else" which is a char device.  So make the logic a lot
-more simple and obvious, and remove the incorrect comments in the code
-that tried to document something that was not happening at all (it is
-impossible to set class->dev_kobj to NULL as the class core prevented
-that from happening.
-
-This removes the only place that class->dev_kobj was being used, so
-after this, it can be removed entirely.
+The dev_kobj field in struct class is now only written to, but never
+read from, so it can be removed as it is useless.
 
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/base/base.h     | 10 ++++++++++
- drivers/base/core.c     | 22 ++++------------------
- drivers/base/devtmpfs.c |  9 ---------
- 3 files changed, 14 insertions(+), 27 deletions(-)
+ block/genhd.c                | 1 -
+ drivers/base/class.c         | 4 ----
+ include/linux/device/class.h | 2 --
+ 3 files changed, 7 deletions(-)
 
-diff --git a/drivers/base/base.h b/drivers/base/base.h
-index 6296164bb7f3..4660e1159ee0 100644
---- a/drivers/base/base.h
-+++ b/drivers/base/base.h
-@@ -209,6 +209,16 @@ int devtmpfs_init(void);
- static inline int devtmpfs_init(void) { return 0; }
- #endif
- 
-+#ifdef CONFIG_BLOCK
-+extern struct class block_class;
-+static inline bool is_blockdev(struct device *dev)
-+{
-+	return dev->class == &block_class;
-+}
-+#else
-+static inline bool is_blockdev(struct device *dev) { return false; }
-+#endif
-+
- /* Device links support */
- int device_links_read_lock(void);
- void device_links_read_unlock(int idx);
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index e3bc34fcf779..dbc2ba6dfffc 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -3430,27 +3430,13 @@ int dev_set_name(struct device *dev, const char *fmt, ...)
- }
- EXPORT_SYMBOL_GPL(dev_set_name);
- 
--/**
-- * device_to_dev_kobj - select a /sys/dev/ directory for the device
-- * @dev: device
-- *
-- * By default we select char/ for new entries.  Setting class->dev_obj
-- * to NULL prevents an entry from being created.  class->dev_kobj must
-- * be set (or cleared) before any devices are registered to the class
-- * otherwise device_create_sys_dev_entry() and
-- * device_remove_sys_dev_entry() will disagree about the presence of
-- * the link.
-- */
-+/* select a /sys/dev/ directory for the device */
- static struct kobject *device_to_dev_kobj(struct device *dev)
+diff --git a/block/genhd.c b/block/genhd.c
+index e1e1230b1b9f..af7208a37c53 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -899,7 +899,6 @@ static int __init genhd_device_init(void)
  {
--	struct kobject *kobj;
--
--	if (dev->class)
--		kobj = dev->class->dev_kobj;
-+	if (is_blockdev(dev))
-+		return sysfs_dev_block_kobj;
- 	else
--		kobj = sysfs_dev_char_kobj;
--
--	return kobj;
-+		return sysfs_dev_char_kobj;
- }
+ 	int error;
  
- static int device_create_sys_dev_entry(struct device *dev)
-diff --git a/drivers/base/devtmpfs.c b/drivers/base/devtmpfs.c
-index ae72d4ba8547..b848764ef018 100644
---- a/drivers/base/devtmpfs.c
-+++ b/drivers/base/devtmpfs.c
-@@ -94,15 +94,6 @@ static struct file_system_type dev_fs_type = {
- 	.mount = public_dev_mount,
- };
+-	block_class.dev_kobj = sysfs_dev_block_kobj;
+ 	error = class_register(&block_class);
+ 	if (unlikely(error))
+ 		return error;
+diff --git a/drivers/base/class.c b/drivers/base/class.c
+index fcfb295363cc..06b96d6faa19 100644
+--- a/drivers/base/class.c
++++ b/drivers/base/class.c
+@@ -197,10 +197,6 @@ int class_register(struct class *cls)
+ 		return error;
+ 	}
  
--#ifdef CONFIG_BLOCK
--static inline int is_blockdev(struct device *dev)
--{
--	return dev->class == &block_class;
--}
--#else
--static inline int is_blockdev(struct device *dev) { return 0; }
--#endif
+-	/* set the default /sys/dev directory for devices of this class */
+-	if (!cls->dev_kobj)
+-		cls->dev_kobj = sysfs_dev_char_kobj;
 -
- static int devtmpfs_submit_req(struct req *req, const char *tmp)
- {
- 	init_completion(&req->done);
+ 	cp->subsys.kobj.kset = class_kset;
+ 	cp->subsys.kobj.ktype = &class_ktype;
+ 	cp->class = cls;
+diff --git a/include/linux/device/class.h b/include/linux/device/class.h
+index f7aad64e256a..e946642c314e 100644
+--- a/include/linux/device/class.h
++++ b/include/linux/device/class.h
+@@ -27,7 +27,6 @@ struct fwnode_handle;
+  * @name:	Name of the class.
+  * @class_groups: Default attributes of this class.
+  * @dev_groups:	Default attributes of the devices that belong to the class.
+- * @dev_kobj:	The kobject that represents this class and links it into the hierarchy.
+  * @dev_uevent:	Called when a device is added, removed from this class, or a
+  *		few other things that generate uevents to add the environment
+  *		variables.
+@@ -55,7 +54,6 @@ struct class {
+ 
+ 	const struct attribute_group	**class_groups;
+ 	const struct attribute_group	**dev_groups;
+-	struct kobject			*dev_kobj;
+ 
+ 	int (*dev_uevent)(const struct device *dev, struct kobj_uevent_env *env);
+ 	char *(*devnode)(const struct device *dev, umode_t *mode);
 -- 
 2.40.0
 
