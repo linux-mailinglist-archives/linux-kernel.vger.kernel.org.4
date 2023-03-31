@@ -2,98 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5806D1AC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F636D1AC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjCaIuM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 04:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        id S231489AbjCaIuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjCaIuI (ORCPT
+        with ESMTP id S231362AbjCaIuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:50:08 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50743E053
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:49:55 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-80-JFvASr4sPtGH8Goypuzf7g-1; Fri, 31 Mar 2023 09:49:51 +0100
-X-MC-Unique: JFvASr4sPtGH8Goypuzf7g-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 31 Mar
- 2023 09:49:48 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 31 Mar 2023 09:49:48 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Wu Zongyong' <wuzongyong@linux.alibaba.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wutu.xq2@linux.alibaba.com" <wutu.xq2@linux.alibaba.com>
-Subject: RE: [RFC PATCH] x86/insn: support decode MOVSXD instruction for MMIO
-Thread-Topic: [RFC PATCH] x86/insn: support decode MOVSXD instruction for MMIO
-Thread-Index: AQHZY3fogCXZ9lyaeEGX/VkAF56JI68Uk4Wg
-Date:   Fri, 31 Mar 2023 08:49:48 +0000
-Message-ID: <94c3f7ba1caa45f7ba503cde6e0c79d2@AcuMS.aculab.com>
-References: <1655f5dc49ab77f94e350ecbdc93e8d9b31acf61.1680058548.git.wuzongyong@linux.alibaba.com>
- <20230330123951.b5vujv67c7q3dhay@box.shutemov.name>
- <20230331022414.GB435@L-PF27918B-1352.localdomain>
-In-Reply-To: <20230331022414.GB435@L-PF27918B-1352.localdomain>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 31 Mar 2023 04:50:14 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496D31BF43
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:50:08 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id o20so19356465ljp.3
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680252606;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Hm2hIAzlWIlh/HN1Ebjpq4RGvB1b+HCsUGt69FXJxjo=;
+        b=OZzN3gG9tUFUcxAB3ktfT4IXwzPS+VV7TL07b1QYgQ4YiHiWCKfi+cQJMLeoKR7Bzs
+         sjhISVj/7gm/tgojJyvLUSlOQrCN6xWk4Qez5mTfkvlO0kNy77xNbUIBQ+3EN8OKBIzD
+         CL+QZG3i33RjSa14dyrobfjtJPlUyRRkfK/T/E9f7/JpBxQs94h8s1RGrVTPq/sMxj2T
+         i925RhEbmaPPxIR5ciVNZGfvOKyr2RqNMYnfoDaz5gxixNXjJ8kxozn7V4DES7VUfw7Z
+         I7alN4mpWXVMm3HA5WLzfMu/KvAVVHbnDUXPYmn4W1e1RkwO67R/ShCjqC1t/lcb4vhP
+         wJDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680252606;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hm2hIAzlWIlh/HN1Ebjpq4RGvB1b+HCsUGt69FXJxjo=;
+        b=HGE7K8yqQr88nzRfQXlT08F1ymmD712dcC91n3Wd37hAPuLtd3jqSGCvaFHyaFFq7w
+         DUiNMggdJ960cayicbk45JOUOFcGKKfmt0lTnjR1khvP0BefE9t2BbTLoyEKt/TPWwCA
+         Ewf+zy7q5ChooMvoHup3rVmv4JpyxIHbS1IxP9WgYa3dX2zIVrUj1GmTS3AGjWeuOODd
+         c+pn++Vf/Iarzy/jFib5F8q4XcIEtvWl1m10kncbsrGP/cr+A3ir+lTJ/BnFqvv9UpLw
+         YL0ION8hrS/8852y5FlysIi9zRcpK7Xz68fhhqnKVUKoMcYynk1s9jHrv5vs7aA7HmSY
+         u7uQ==
+X-Gm-Message-State: AAQBX9fbi5xcp20kN4Y9E/LYzKiU3VgEjXiXgYRUUijxGd5Vva79Oypl
+        NW1458ijBIFYLW51XzIw0QwZQkloR8qN+p0EEaA=
+X-Google-Smtp-Source: AKy350b5BwrspfmaEhSZ5j4TtCdA7YCIHmTX5EQVjnvSnXoOPLRYU9gWB7YN5bhQTMIGSMGEAsyNlg==
+X-Received: by 2002:a2e:b548:0:b0:295:9ba2:8a78 with SMTP id a8-20020a2eb548000000b002959ba28a78mr2608023ljn.17.1680252606400;
+        Fri, 31 Mar 2023 01:50:06 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id p23-20020a2ea417000000b002934abfb109sm270261ljn.45.2023.03.31.01.50.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 01:50:06 -0700 (PDT)
+Message-ID: <ae7bdc73-3836-fd28-f253-123ab27b7418@linaro.org>
+Date:   Fri, 31 Mar 2023 10:50:04 +0200
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: mmc: arasan,sdci: Add Xilinx Versal
+ Net compatible
 Content-Language: en-US
+To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        git@amd.com, saikrishna12468@gmail.com
+References: <20230330065240.3532010-1-sai.krishna.potthuri@amd.com>
+ <20230330065240.3532010-2-sai.krishna.potthuri@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230330065240.3532010-2-sai.krishna.potthuri@amd.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.0 required=5.0 tests=PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wu Zongyong
-> Sent: 31 March 2023 03:24
+On 30/03/2023 08:52, Sai Krishna Potthuri wrote:
+> Add Xilinx Versal Net compatible to support eMMC 5.1 PHY.
 > 
-> On Thu, Mar 30, 2023 at 03:39:51PM +0300, kirill.shutemov@linux.intel.com wrote:
-> > On Wed, Mar 29, 2023 at 10:59:37AM +0800, Wu Zongyong wrote:
-> > > It seems MOVSXD which opcode is 0x63 is not handled, support
-> > > to decode it in insn_decode_mmio().
-> >
-> > Do you have a particular user in mind?
-> To be honest, I don't find a specific user which uses the MOVSXD.
-> 
-> But both Intel and AMD's instructions reference contains MOVSXD and lots
-> of MOVSXD instructions occur when I "objdump -S vmlinux", so I think it
-> may be useful to support it in insn_decode_mmio().
-> 
-> Are there some special consideration about this instruction?
+> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> ---
 
-It is a sign-extending memory read (32bit to 64bit).
-You pretty much never want to do that to a device register.
-Also kernel code should be using readl() (etc) which do
-unsigned reads.
-So they should never happen for mmio.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Of course, if you mmap() PCIe space directly into a program's
-address space anything might happen ...
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Best regards,
+Krzysztof
 
