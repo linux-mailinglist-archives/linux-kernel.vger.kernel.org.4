@@ -2,427 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2796D1ABF
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D366D1AC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbjCaIta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
+        id S230185AbjCaItc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjCaIt2 (ORCPT
+        with ESMTP id S231134AbjCaIt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 31 Mar 2023 04:49:28 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A321A959
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:49:14 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id p34so12435267wms.3
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680252552;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y0jEXvo6u2+BhLKwkJmfDK8810/6BhU9roz8utm2m9U=;
-        b=KBaZdfLOBA1vtfK02ZpeI+MXdrmWikF8Bn4TProiRmOi6bxDBAGz0GdQQXfCdI+CDI
-         q2EP7FNzsN5lPQELJDftgvMiFEhiGzlL6C9lMt9vMdIhHVrCgNwdAIaWCE1VhwJwz3tj
-         Dqsdp6Lq2pN0FNCxyHjulP7VHBeer1VVuWF6TwFI2Xy7BsCPGkK8msYkf+kLB0v6c2Gm
-         qDN0Y3znHI7eTsvX0iDWRQ+Lardy4AbPmtngUxsDmrUd1gWB9wsGMoqYC6NvKnOyhu+a
-         FBm7z6HrPur9bH/YViB1GiDrPcpEr+OQp3RTEyqN1RBF0ZMoteQvZt/h8fBcig6sZTpz
-         DClw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680252552;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y0jEXvo6u2+BhLKwkJmfDK8810/6BhU9roz8utm2m9U=;
-        b=IinxvnAYV0BzZct71fzKt8RrtXnrHmn06T6e7H7Se2uaVwxXc84Jil+IeR9Y0BeyYc
-         639Q8sxzPu3jqrkuIO/C0eAfla+x8PIZDe9eEaLfCwpfjiI8FiY3zmUPv0q6BmNJqZF1
-         0eBbU3Ph6+MM9DYqU//6EzhtUhOjL7lp6jXwdnduGlOCQk+x6W4lu2indXrvrNEw5Z07
-         XbrVEiLYnX8CgcdgMy0xoeTcdlJDb6yDmNxIsk5JhYVDdF7kixo1XzjLuQEFpJ26FudF
-         Oe9CskI6OJF/F87mb+eRW4NpF7nhZqL24O1h+N1jurSiTR/Ha6KhGf4IVrzF7vaBl0IE
-         6beA==
-X-Gm-Message-State: AAQBX9eJfjZ2F62z75qCZv9yT1uHwFtjeyKbsnXhzv7slfgaiNX8xEox
-        TDygDqO3MqSd3UrCxLNT2XWMyw==
-X-Google-Smtp-Source: AKy350ZXWPrNMozEaJsrztMT4/xqb+Vr1IwxePJwY1g6uQzQ3G3+fb6DJSt7esgoD2GUoHAENK9MHw==
-X-Received: by 2002:a1c:4c18:0:b0:3ef:7584:9896 with SMTP id z24-20020a1c4c18000000b003ef75849896mr9566071wmf.26.1680252552376;
-        Fri, 31 Mar 2023 01:49:12 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:17ff:909e:1b73:8366? ([2a05:6e02:1041:c10:17ff:909e:1b73:8366])
-        by smtp.googlemail.com with ESMTPSA id r16-20020a05600c459000b003f03d483966sm3649687wmo.44.2023.03.31.01.49.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 01:49:12 -0700 (PDT)
-Message-ID: <751e20b9-34f6-ab1d-dd42-70239044f13d@linaro.org>
-Date:   Fri, 31 Mar 2023 10:49:11 +0200
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6615C1B7EE;
+        Fri, 31 Mar 2023 01:49:19 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6E1DA6603180;
+        Fri, 31 Mar 2023 09:49:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680252557;
+        bh=EIlHy/fOQ4nvThPIDq8IH7bbZG6jRaS0NwuvOWeucNU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HT7tilTwUS2yXnomFHF6Tjq9o6/wAyNNsybgq7DxBT8JuPLcJLov7IcJ091S5eWGu
+         gNyn5DLK/b0uXCPWVBx22d71xpNzg1txgABQW16i8Kd0Ozk0rOGej4Pw15btAUBBoR
+         3JHh7hmTNafjLVoIMs6ozO/MN6NKq5XufWN5m51wy1nWBFLxWxUEfyTll32QTfpAD1
+         m/5oVpAVPpKwfb+DaNJGiHt46yzabfn8GxuObatGQg3z8qdr5vU2PhFHblkgZxPBmZ
+         rPdul/Ib1m24iXdOGSI+1AB2eAmBBbAdjNssJi15zat9kX2K0tjcX77aquPArG35m1
+         6tBKQC+ui0htw==
+Date:   Fri, 31 Mar 2023 10:49:14 +0200
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     airlied@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        steven.price@arm.com, robh+dt@kernel.org,
+        alyssa.rosenzweig@collabora.com, krzysztof.kozlowski+dt@linaro.org,
+        wenst@chromium.org, kernel@collabora.com
+Subject: Re: [PATCH v1 RESEND 2/2] drm/panfrost: Add basic support for speed
+ binning
+Message-ID: <20230331104914.708b194e@collabora.com>
+In-Reply-To: <5814d779-0635-43fe-3fe8-31c130f05b3a@collabora.com>
+References: <20230323090822.61766-1-angelogioacchino.delregno@collabora.com>
+        <20230323090822.61766-3-angelogioacchino.delregno@collabora.com>
+        <5814d779-0635-43fe-3fe8-31c130f05b3a@collabora.com>
+Organization: Collabora
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] thermal/core: Remove thermal_bind_params structure
-Content-Language: en-US
-To:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        rafael.j.wysocki@intel.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20230330104526.3196-1-rui.zhang@intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230330104526.3196-1-rui.zhang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 31 Mar 2023 10:11:07 +0200
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+wrote:
 
-Hi Rui,
-
-
-On 30/03/2023 12:45, Zhang Rui wrote:
-> Remove struct thermal_bind_params because no one is using it for thermal
-> binding now.
+> Il 23/03/23 10:08, AngeloGioacchino Del Regno ha scritto:
+> > Some SoCs implementing ARM Mali GPUs are subject to speed binning:
+> > this means that some versions of the same SoC model may need to be
+> > limited to a slower frequency compared to the other:
+> > this is being addressed by reading nvmem (usually, an eFuse array)
+> > containing a number that identifies the speed binning of the chip,
+> > which is usually related to silicon quality.
+> > 
+> > To address such situation, add basic support for reading the
+> > speed-bin through nvmem, as to make it possible to specify the
+> > supported hardware in the OPP table for GPUs.
+> > This commit also keeps compatibility with any platform that does
+> > not specify (and does not even support) speed-binning.
+> > 
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>  
 > 
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Hello maintainers,
+> I've seen that this got archived in the dri-devel patchwork; because of that and
+> only that, I'm sending this ping to get this patch reviewed.
 
-Thanks for the cleanup, always good to remove unused code.
+Looks good to me. If you can get a DT maintainer to review the binding
+(Rob?), I'd be happy to queue the series to drm-misc-next.
 
-Rafael, is it fine if I pick it ?
-
-> ---
->   .../driver-api/thermal/sysfs-api.rst          |  40 ------
->   drivers/thermal/thermal_core.c                | 129 ++----------------
->   include/linux/thermal.h                       |  38 ------
->   3 files changed, 11 insertions(+), 196 deletions(-)
 > 
-> diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-> index 2e0f79a9e2ee..6c1175c6afba 100644
-> --- a/Documentation/driver-api/thermal/sysfs-api.rst
-> +++ b/Documentation/driver-api/thermal/sysfs-api.rst
-> @@ -304,42 +304,6 @@ temperature) and throttle appropriate devices.
->   1.4 Thermal Zone Parameters
->   ---------------------------
->   
-> -    ::
-> -
-> -	struct thermal_bind_params
-> -
-> -    This structure defines the following parameters that are used to bind
-> -    a zone with a cooling device for a particular trip point.
-> -
-> -    .cdev:
-> -	     The cooling device pointer
-> -    .weight:
-> -	     The 'influence' of a particular cooling device on this
-> -	     zone. This is relative to the rest of the cooling
-> -	     devices. For example, if all cooling devices have a
-> -	     weight of 1, then they all contribute the same. You can
-> -	     use percentages if you want, but it's not mandatory. A
-> -	     weight of 0 means that this cooling device doesn't
-> -	     contribute to the cooling of this zone unless all cooling
-> -	     devices have a weight of 0. If all weights are 0, then
-> -	     they all contribute the same.
-> -    .trip_mask:
-> -	       This is a bit mask that gives the binding relation between
-> -	       this thermal zone and cdev, for a particular trip point.
-> -	       If nth bit is set, then the cdev and thermal zone are bound
-> -	       for trip point n.
-> -    .binding_limits:
-> -		     This is an array of cooling state limits. Must have
-> -		     exactly 2 * thermal_zone.number_of_trip_points. It is an
-> -		     array consisting of tuples <lower-state upper-state> of
-> -		     state limits. Each trip will be associated with one state
-> -		     limit tuple when binding. A NULL pointer means
-> -		     <THERMAL_NO_LIMITS THERMAL_NO_LIMITS> on all trips.
-> -		     These limits are used when binding a cdev to a trip point.
-> -    .match:
-> -	    This call back returns success(0) if the 'tz and cdev' need to
-> -	    be bound, as per platform data.
-> -
->       ::
->   
->   	struct thermal_zone_params
-> @@ -357,10 +321,6 @@ temperature) and throttle appropriate devices.
->   	       will be created. when no_hwmon == true, nothing will be done.
->   	       In case the thermal_zone_params is NULL, the hwmon interface
->   	       will be created (for backward compatibility).
-> -    .num_tbps:
-> -	       Number of thermal_bind_params entries for this zone
-> -    .tbp:
-> -	       thermal_bind_params entries
->   
->   2. sysfs attributes structure
->   =============================
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index d51cacd66756..2e6a49dd527d 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -794,64 +794,18 @@ void print_bind_err_msg(struct thermal_zone_device *tz,
->   		tz->type, cdev->type, ret);
->   }
->   
-> -static void __bind(struct thermal_zone_device *tz, int mask,
-> -		   struct thermal_cooling_device *cdev,
-> -		   unsigned long *limits,
-> -		   unsigned int weight)
-> -{
-> -	int i, ret;
-> -
-> -	for (i = 0; i < tz->num_trips; i++) {
-> -		if (mask & (1 << i)) {
-> -			unsigned long upper, lower;
-> -
-> -			upper = THERMAL_NO_LIMIT;
-> -			lower = THERMAL_NO_LIMIT;
-> -			if (limits) {
-> -				lower = limits[i * 2];
-> -				upper = limits[i * 2 + 1];
-> -			}
-> -			ret = thermal_zone_bind_cooling_device(tz, i, cdev,
-> -							       upper, lower,
-> -							       weight);
-> -			if (ret)
-> -				print_bind_err_msg(tz, cdev, ret);
-> -		}
-> -	}
-> -}
-> -
->   static void bind_cdev(struct thermal_cooling_device *cdev)
->   {
-> -	int i, ret;
-> -	const struct thermal_zone_params *tzp;
-> +	int ret;
->   	struct thermal_zone_device *pos = NULL;
->   
->   	mutex_lock(&thermal_list_lock);
->   
->   	list_for_each_entry(pos, &thermal_tz_list, node) {
-> -		if (!pos->tzp && !pos->ops->bind)
-> -			continue;
-> -
->   		if (pos->ops->bind) {
->   			ret = pos->ops->bind(pos, cdev);
->   			if (ret)
->   				print_bind_err_msg(pos, cdev, ret);
-> -			continue;
-> -		}
-> -
-> -		tzp = pos->tzp;
-> -		if (!tzp || !tzp->tbp)
-> -			continue;
-> -
-> -		for (i = 0; i < tzp->num_tbps; i++) {
-> -			if (tzp->tbp[i].cdev || !tzp->tbp[i].match)
-> -				continue;
-> -			if (tzp->tbp[i].match(pos, cdev))
-> -				continue;
-> -			tzp->tbp[i].cdev = cdev;
-> -			__bind(pos, tzp->tbp[i].trip_mask, cdev,
-> -			       tzp->tbp[i].binding_limits,
-> -			       tzp->tbp[i].weight);
->   		}
->   	}
->   
-> @@ -1138,16 +1092,6 @@ void thermal_cooling_device_update(struct thermal_cooling_device *cdev)
->   }
->   EXPORT_SYMBOL_GPL(thermal_cooling_device_update);
->   
-> -static void __unbind(struct thermal_zone_device *tz, int mask,
-> -		     struct thermal_cooling_device *cdev)
-> -{
-> -	int i;
-> -
-> -	for (i = 0; i < tz->num_trips; i++)
-> -		if (mask & (1 << i))
-> -			thermal_zone_unbind_cooling_device(tz, i, cdev);
-> -}
-> -
->   /**
->    * thermal_cooling_device_unregister - removes a thermal cooling device
->    * @cdev:	the thermal cooling device to remove.
-> @@ -1157,8 +1101,6 @@ static void __unbind(struct thermal_zone_device *tz, int mask,
->    */
->   void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
->   {
-> -	int i;
-> -	const struct thermal_zone_params *tzp;
->   	struct thermal_zone_device *tz;
->   
->   	if (!cdev)
-> @@ -1175,21 +1117,8 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
->   
->   	/* Unbind all thermal zones associated with 'this' cdev */
->   	list_for_each_entry(tz, &thermal_tz_list, node) {
-> -		if (tz->ops->unbind) {
-> +		if (tz->ops->unbind)
->   			tz->ops->unbind(tz, cdev);
-> -			continue;
-> -		}
-> -
-> -		if (!tz->tzp || !tz->tzp->tbp)
-> -			continue;
-> -
-> -		tzp = tz->tzp;
-> -		for (i = 0; i < tzp->num_tbps; i++) {
-> -			if (tzp->tbp[i].cdev == cdev) {
-> -				__unbind(tz, tzp->tbp[i].trip_mask, cdev);
-> -				tzp->tbp[i].cdev = NULL;
-> -			}
-> -		}
->   	}
->   
->   	mutex_unlock(&thermal_list_lock);
-> @@ -1200,41 +1129,20 @@ EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
->   
->   static void bind_tz(struct thermal_zone_device *tz)
->   {
-> -	int i, ret;
-> +	int ret;
->   	struct thermal_cooling_device *pos = NULL;
-> -	const struct thermal_zone_params *tzp = tz->tzp;
->   
-> -	if (!tzp && !tz->ops->bind)
-> +	if (!tz->ops->bind)
->   		return;
->   
->   	mutex_lock(&thermal_list_lock);
->   
-> -	/* If there is ops->bind, try to use ops->bind */
-> -	if (tz->ops->bind) {
-> -		list_for_each_entry(pos, &thermal_cdev_list, node) {
-> -			ret = tz->ops->bind(tz, pos);
-> -			if (ret)
-> -				print_bind_err_msg(tz, pos, ret);
-> -		}
-> -		goto exit;
-> -	}
-> -
-> -	if (!tzp || !tzp->tbp)
-> -		goto exit;
-> -
->   	list_for_each_entry(pos, &thermal_cdev_list, node) {
-> -		for (i = 0; i < tzp->num_tbps; i++) {
-> -			if (tzp->tbp[i].cdev || !tzp->tbp[i].match)
-> -				continue;
-> -			if (tzp->tbp[i].match(tz, pos))
-> -				continue;
-> -			tzp->tbp[i].cdev = pos;
-> -			__bind(tz, tzp->tbp[i].trip_mask, pos,
-> -			       tzp->tbp[i].binding_limits,
-> -			       tzp->tbp[i].weight);
-> -		}
-> +		ret = tz->ops->bind(tz, pos);
-> +		if (ret)
-> +			print_bind_err_msg(tz, pos, ret);
->   	}
-> -exit:
-> +
->   	mutex_unlock(&thermal_list_lock);
->   }
->   
-> @@ -1491,15 +1399,13 @@ EXPORT_SYMBOL_GPL(thermal_zone_device_id);
->    */
->   void thermal_zone_device_unregister(struct thermal_zone_device *tz)
->   {
-> -	int i, tz_id;
-> -	const struct thermal_zone_params *tzp;
-> +	int tz_id;
->   	struct thermal_cooling_device *cdev;
->   	struct thermal_zone_device *pos = NULL;
->   
->   	if (!tz)
->   		return;
->   
-> -	tzp = tz->tzp;
->   	tz_id = tz->id;
->   
->   	mutex_lock(&thermal_list_lock);
-> @@ -1514,22 +1420,9 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
->   	list_del(&tz->node);
->   
->   	/* Unbind all cdevs associated with 'this' thermal zone */
-> -	list_for_each_entry(cdev, &thermal_cdev_list, node) {
-> -		if (tz->ops->unbind) {
-> +	list_for_each_entry(cdev, &thermal_cdev_list, node)
-> +		if (tz->ops->unbind)
->   			tz->ops->unbind(tz, cdev);
-> -			continue;
-> -		}
-> -
-> -		if (!tzp || !tzp->tbp)
-> -			break;
-> -
-> -		for (i = 0; i < tzp->num_tbps; i++) {
-> -			if (tzp->tbp[i].cdev == cdev) {
-> -				__unbind(tz, tzp->tbp[i].trip_mask, cdev);
-> -				tzp->tbp[i].cdev = NULL;
-> -			}
-> -		}
-> -	}
->   
->   	mutex_unlock(&thermal_list_lock);
->   
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index fef625f799ae..ab7460bfdcf6 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -207,41 +207,6 @@ struct thermal_governor {
->   	struct list_head	governor_list;
->   };
->   
-> -/* Structure that holds binding parameters for a zone */
-> -struct thermal_bind_params {
-> -	struct thermal_cooling_device *cdev;
-> -
-> -	/*
-> -	 * This is a measure of 'how effectively these devices can
-> -	 * cool 'this' thermal zone. It shall be determined by
-> -	 * platform characterization. This value is relative to the
-> -	 * rest of the weights so a cooling device whose weight is
-> -	 * double that of another cooling device is twice as
-> -	 * effective. See Documentation/driver-api/thermal/sysfs-api.rst for more
-> -	 * information.
-> -	 */
-> -	int weight;
-> -
-> -	/*
-> -	 * This is a bit mask that gives the binding relation between this
-> -	 * thermal zone and cdev, for a particular trip point.
-> -	 * See Documentation/driver-api/thermal/sysfs-api.rst for more information.
-> -	 */
-> -	int trip_mask;
-> -
-> -	/*
-> -	 * This is an array of cooling state limits. Must have exactly
-> -	 * 2 * thermal_zone.number_of_trip_points. It is an array consisting
-> -	 * of tuples <lower-state upper-state> of state limits. Each trip
-> -	 * will be associated with one state limit tuple when binding.
-> -	 * A NULL pointer means <THERMAL_NO_LIMITS THERMAL_NO_LIMITS>
-> -	 * on all trips.
-> -	 */
-> -	unsigned long *binding_limits;
-> -	int (*match) (struct thermal_zone_device *tz,
-> -			struct thermal_cooling_device *cdev);
-> -};
-> -
->   /* Structure to define Thermal Zone parameters */
->   struct thermal_zone_params {
->   	char governor_name[THERMAL_NAME_LENGTH];
-> @@ -253,9 +218,6 @@ struct thermal_zone_params {
->   	 */
->   	bool no_hwmon;
->   
-> -	int num_tbps;	/* Number of tbp entries */
-> -	struct thermal_bind_params *tbp;
-> -
->   	/*
->   	 * Sustainable power (heat) that this thermal zone can dissipate in
->   	 * mW
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> (perhaps we can even get it picked for v6.4?)
+> 
+> Regards,
+> Angelo
+> 
+> > ---
+> >   drivers/gpu/drm/panfrost/panfrost_devfreq.c | 30 +++++++++++++++++++++
+> >   1 file changed, 30 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> > index fe5f12f16a63..58dfb15a8757 100644
+> > --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> > +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> > @@ -4,6 +4,7 @@
+> >   #include <linux/clk.h>
+> >   #include <linux/devfreq.h>
+> >   #include <linux/devfreq_cooling.h>
+> > +#include <linux/nvmem-consumer.h>
+> >   #include <linux/platform_device.h>
+> >   #include <linux/pm_opp.h>
+> >   
+> > @@ -82,6 +83,31 @@ static struct devfreq_dev_profile panfrost_devfreq_profile = {
+> >   	.get_dev_status = panfrost_devfreq_get_dev_status,
+> >   };
+> >   
+> > +static int panfrost_read_speedbin(struct device *dev)
+> > +{
+> > +	u32 val;
+> > +	int ret;
+> > +
+> > +	ret = nvmem_cell_read_variable_le_u32(dev, "speed-bin", &val);
+> > +	if (ret) {
+> > +		/*
+> > +		 * -ENOENT means that this platform doesn't support speedbins
+> > +		 * as it didn't declare any speed-bin nvmem: in this case, we
+> > +		 * keep going without it; any other error means that we are
+> > +		 * supposed to read the bin value, but we failed doing so.
+> > +		 */
+> > +		if (ret != -ENOENT) {
+> > +			DRM_DEV_ERROR(dev, "Cannot read speed-bin (%d).", ret);
+> > +			return ret;
+> > +		}
+> > +
+> > +		return 0;
+> > +	}
+> > +	DRM_DEV_DEBUG(dev, "Using speed-bin = 0x%x\n", val);
+> > +
+> > +	return devm_pm_opp_set_supported_hw(dev, &val, 1);
+> > +}
+> > +
+> >   int panfrost_devfreq_init(struct panfrost_device *pfdev)
+> >   {
+> >   	int ret;
+> > @@ -101,6 +127,10 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
+> >   		return 0;
+> >   	}
+> >   
+> > +	ret = panfrost_read_speedbin(dev);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >   	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names);
+> >   	if (ret) {
+> >   		/* Continue if the optional regulator is missing */  
+> 
+> 
 
