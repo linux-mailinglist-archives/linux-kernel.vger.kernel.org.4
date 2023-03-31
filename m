@@ -2,133 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79916D22B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75186D22B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbjCaOb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
+        id S232490AbjCaOcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232747AbjCaObx (ORCPT
+        with ESMTP id S232091AbjCaOcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:31:53 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C74B220625;
-        Fri, 31 Mar 2023 07:31:13 -0700 (PDT)
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id D4D9A4A28;
-        Fri, 31 Mar 2023 16:30:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202211; t=1680273022;
-        bh=kZL8+56e6lv/MMMqFC565eCb5So9E645Hgn/mf2GmaQ=;
-        h=Date:From:Cc:Subject:From;
-        b=P4iu4Sawnk9VTuEhTwtIDc8lh1rkP9olUGgxqiEq/8aFQcI9+njuFp8yIWxh661kx
-         Tg2mBERMbmiOD4MZCOr1KiYufuqNae3nZKmMvH7poPckvSB4qWC676u/QqblwSj1/t
-         UzB8ZQx4gGmVKGhxkRjk+ZBHyPuizi+2T3KJJROfc5jPmB/vOleG/g0FFMIEDUzPyQ
-         ahy3d2Wd0r29Jji/slAHTi2EDdAUXW6Yf/kB8JbVflQqOXl8/NwBUy9FMryLjgWWnG
-         UpeZE+3rueQ7yFA3QbCfXDzYL0Qf24Cr4K01+6y8x6gPCGO8aPYfagSUDPexWB27es
-         PEK+KbCCtZRNw==
-Date:   Fri, 31 Mar 2023 16:30:21 +0200
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
-        "open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>
-Subject: [PATCH] KEYS: Make use of platform keyring for module signature
- verification
-Message-ID: <qvgp2il2co4iyxkzxvcs4p2bpyilqsbfgcprtpfrsajwae2etc@3z2s2o52i3xg>
+        Fri, 31 Mar 2023 10:32:21 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0ECE20D94
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:31:58 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-544f7c176easo417956967b3.9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:31:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680273098;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rM7ugpFCyNjwhnUhml20+mwW8AlBrHR+eTjQajO32Zg=;
+        b=Oa+hC5q3BeYwJzc0m5XU91Q7zQRwOafGdwcwsFxuH63OAc7bMR4mOqT6iaQWt3bW50
+         dg1Z9TmB1duvrsU/SAAKyezSeZyHp9YswJvfmSQNXtwer9eR7xMkcTrC26Pk3hWmrfmN
+         dpSB4RdaY6thxaJFX2g73s6w1UqERcer7JuZFW5dXsc49NyxGoTmov1k7sbFaQGu+x1M
+         iBdq/hWPjSMeMeJwsNg8KGglCdelj6oiy6Y6ej7Km139mqQZTw45XuDrlSV9Qs9bH2wj
+         GKEGSv4Zrguvii+FEWsixOfLQ7JIY5fyZq6UQq6XuzlwYYqIDYScVr3lIBH6WpXXKZgD
+         Ms/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680273098;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rM7ugpFCyNjwhnUhml20+mwW8AlBrHR+eTjQajO32Zg=;
+        b=7zzJW3Aidxq33GocJPB9s/8ZAZ0mRGhQ/Mb2cjmhfeSkefhIvcNJr4sSI/pggLJvcg
+         02WRWSzZWW75VSTs3wiBS7Z9f0f6WDkKnYLqAQ8+6RDz/ah7RnG2d1coo7Q36bzEgihP
+         vQAUiOukSsV08KJddm2ARRDIyn4Vw6BxaYHLT4FLUzeeIJXZY0w8MtdwTL7JCi2/TZcw
+         RGnUdDo5xtZaTa7Q5H9YORr/S4rOAiUcvfLlLhhRPKiznYbypOBs3pG3LQywMLe1s0wD
+         HyD6ThSbWaKsvg8NBMR+UCZxCAcZjp9knoO64j1sw8yPfgGKaWxDwBYcYC1bdpN5mhe2
+         lL2A==
+X-Gm-Message-State: AAQBX9fdW90MWZGFvt9LuGMlVPYi0I1PVM+L4gcZfkiZKq3DTxFwWvEI
+        3qxv7ILjJgKGJHODhKbUlEnDTB9RVNERLX4zTbp3LA==
+X-Google-Smtp-Source: AKy350Zs9CxS2t6p8TcNsUtCCj2WfSKacDr9FWeKjiRytXdNKlpHnPwZKDqe+wfcBCoFJGY0BdETlddD9LkgDV1RA7E=
+X-Received: by 2002:a81:aa05:0:b0:53c:6fda:835f with SMTP id
+ i5-20020a81aa05000000b0053c6fda835fmr2302302ywh.0.1680273097825; Fri, 31 Mar
+ 2023 07:31:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ethhinddwvgbvcoy"
-Content-Disposition: inline
-User-Agent: NeoMutt/20230322
-X-Spam-Status: No, score=1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+References: <20230331101619.4117312-1-vigneshr@ti.com>
+In-Reply-To: <20230331101619.4117312-1-vigneshr@ti.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 31 Mar 2023 16:31:01 +0200
+Message-ID: <CAPDyKFqQZgmd_ydbjKJ+5-Dte9i2=DqWwZNgVHi2MnH+q7pZ1g@mail.gmail.com>
+Subject: Re: [PATCH v3] mmc: sdhci_am654: Add support for PM suspend/resume
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 31 Mar 2023 at 12:17, Vignesh Raghavendra <vigneshr@ti.com> wrote:
+>
+> From: Aswath Govindraju <a-govindraju@ti.com>
+>
+> Add support for suspend/resume and pm_runtime resume/suspend.
+>
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+>
+> Since RFC v2:
+> Address all comments around sdhci_am654_remove()
+> Set autosuspend_delay to -1 as SDHCI will host rootfs via SD/eMMC and
+> autosuspend can cause long latency for user interactive applications
 
---ethhinddwvgbvcoy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I am curious about the "long" latency. Do you have some data that you
+can share for how long it takes to runtime-resume the device?
 
-This allows a cert in DB to be used to sign modules,
-in addition to certs in the MoK and built-in keyrings.
+Using -1 as the default value for the autosuspend_delay seems fine to
+me, but did you consider using a longer timeout than the common 100ms?
+Could that perhaps be a better default option?
 
-This key policy matches what's used for kexec.
+Of course, in the end this is a choice of performance in favor of
+wasting energy.
 
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
----
+Kind regards
+Uffe
 
-Notes:
-    Debian has carried an equivalent patch since 5.3.9-1:
-      https://bugs.debian.org/935945
-      https://bugs.debian.org/1030200
-    in
-      https://salsa.debian.org/kernel-team/linux/-/commit/0e65c8f3e316d6f0f=
-c30f091dd47dba2ac616529
-    and it appears the true origin is some version of
-      https://gitlab.com/cki-project/kernel-ark/-/commit/b697ff5e26974fee8f=
-cd31a1e221e9dd41515efc
-
- kernel/module/signing.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/module/signing.c b/kernel/module/signing.c
-index a2ff4242e623..71d6248cf9ec 100644
---- a/kernel/module/signing.c
-+++ b/kernel/module/signing.c
-@@ -61,10 +61,16 @@ int mod_verify_sig(const void *mod, struct load_info *i=
-nfo)
- 	modlen -=3D sig_len + sizeof(ms);
- 	info->len =3D modlen;
-=20
--	return verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
--				      VERIFY_USE_SECONDARY_KEYRING,
--				      VERIFYING_MODULE_SIGNATURE,
--				      NULL, NULL);
-+	ret =3D verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
-+				     VERIFY_USE_SECONDARY_KEYRING,
-+				     VERIFYING_MODULE_SIGNATURE,
-+				     NULL, NULL);
-+	if (ret =3D=3D -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING))
-+		ret =3D verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
-+					     VERIFY_USE_PLATFORM_KEYRING,
-+					     VERIFYING_MODULE_SIGNATURE,
-+					     NULL, NULL);
-+	return ret;
- }
-=20
- int module_sig_check(struct load_info *info, int flags)
---=20
-2.30.2
-
---ethhinddwvgbvcoy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmQm7nsACgkQvP0LAY0m
-WPH7PxAAm7kjlMTNkXa7IuXBabuDCpGz7Bn5NTDpQlzhMQirVIK9yqnxMB4QKkTv
-fz/N7zsuOrF2ikrk83d3d0siR+oeH8FjfRnfV0rItXLGndTTgoN0SjcYB0lMZfia
-V40hSM+vWJ3Hqlza/KVr5+htvjnJLZh9DcNDGb/P1t71/31TH/9NZ8fn8XgxEgHD
-5Pj0MCBum4ejEM1Pv13bfBauYn3hfQomD0qjDBwn3cEvFemdEZVyxvCgM8PO0lvp
-8SHwIhOUyKCWiMRY2w36pjcawA33QD6rl8APqTAhj2PGJHOPywfz8iBMM05hSXdT
-U40Ns0VYM1xSkJbQ7QEp2iWBM0DetqGeXs+Ttf6ANVwJpm4kZydY4rFNYMBkK9TG
-AceDxM6iLIMFD2k435NOlIeRV+X3EmyIoyCmthNjQaxBK/Tp9j4eF118KiFpOmaM
-M6Jc3O74yyxC7/8Oqn9Tk2/KePQDURxHt7lYFZDNJWcqPlLn3nXcpWENbmLnZi37
-IbHCfOxie3avtNxC3xIHeGXaijEuD5DeI+DzwDfYL0nnfQv17qfIGR8miIwg5tjc
-fV1+4tF6ZKNKRDA3/ahWnJCzwzPMJKTYRdqln1QQvVg4kRciypPG6emghc0JK2jz
-2kQaGPk9m77rBK+RFcG6Xm7YiQsu6sniAlQ9xpPA0TKdTK7zhAw=
-=0QOz
------END PGP SIGNATURE-----
-
---ethhinddwvgbvcoy--
+>
+> RFC v2:
+> https://lore.kernel.org/all/20220408124338.27090-1-a-govindraju@ti.com/
+>
+>  drivers/mmc/host/sdhci_am654.c | 147 +++++++++++++++++++++++++++++----
+>  1 file changed, 131 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
+> index 672d37ea98d0..7cdf0f54e3a5 100644
+> --- a/drivers/mmc/host/sdhci_am654.c
+> +++ b/drivers/mmc/host/sdhci_am654.c
+> @@ -85,6 +85,7 @@
+>  #define DRIVER_STRENGTH_40_OHM 0x4
+>
+>  #define CLOCK_TOO_SLOW_HZ      50000000
+> +#define SDHCI_AM654_AUTOSUSPEND_DELAY  -1
+>
+>  /* Command Queue Host Controller Interface Base address */
+>  #define SDHCI_AM654_CQE_BASE_ADDR 0x200
+> @@ -808,16 +809,10 @@ static int sdhci_am654_probe(struct platform_device *pdev)
+>
+>         pltfm_host->clk = clk_xin;
+>
+> -       /* Clocks are enabled using pm_runtime */
+> -       pm_runtime_enable(dev);
+> -       ret = pm_runtime_resume_and_get(dev);
+> -       if (ret)
+> -               goto pm_runtime_disable;
+> -
+>         base = devm_platform_ioremap_resource(pdev, 1);
+>         if (IS_ERR(base)) {
+>                 ret = PTR_ERR(base);
+> -               goto pm_runtime_put;
+> +               goto err_pltfm_free;
+>         }
+>
+>         sdhci_am654->base = devm_regmap_init_mmio(dev, base,
+> @@ -825,31 +820,47 @@ static int sdhci_am654_probe(struct platform_device *pdev)
+>         if (IS_ERR(sdhci_am654->base)) {
+>                 dev_err(dev, "Failed to initialize regmap\n");
+>                 ret = PTR_ERR(sdhci_am654->base);
+> -               goto pm_runtime_put;
+> +               goto err_pltfm_free;
+>         }
+>
+>         ret = sdhci_am654_get_of_property(pdev, sdhci_am654);
+>         if (ret)
+> -               goto pm_runtime_put;
+> +               goto err_pltfm_free;
+>
+>         ret = mmc_of_parse(host->mmc);
+>         if (ret) {
+>                 dev_err_probe(dev, ret, "parsing dt failed\n");
+> -               goto pm_runtime_put;
+> +               goto err_pltfm_free;
+>         }
+>
+>         host->mmc_host_ops.execute_tuning = sdhci_am654_execute_tuning;
+>
+> +       pm_runtime_get_noresume(dev);
+> +       ret = pm_runtime_set_active(dev);
+> +       if (ret)
+> +               goto pm_put;
+> +       pm_runtime_enable(dev);
+> +       ret = clk_prepare_enable(pltfm_host->clk);
+> +       if (ret)
+> +               goto pm_disable;
+> +
+>         ret = sdhci_am654_init(host);
+>         if (ret)
+> -               goto pm_runtime_put;
+> +               goto clk_disable;
+>
+> +       /* Setting up autosuspend */
+> +       pm_runtime_set_autosuspend_delay(dev, SDHCI_AM654_AUTOSUSPEND_DELAY);
+> +       pm_runtime_use_autosuspend(dev);
+> +       pm_runtime_mark_last_busy(dev);
+> +       pm_runtime_put_autosuspend(dev);
+>         return 0;
+>
+> -pm_runtime_put:
+> -       pm_runtime_put_sync(dev);
+> -pm_runtime_disable:
+> +clk_disable:
+> +       clk_disable_unprepare(pltfm_host->clk);
+> +pm_disable:
+>         pm_runtime_disable(dev);
+> +pm_put:
+> +       pm_runtime_put_noidle(dev);
+>  err_pltfm_free:
+>         sdhci_pltfm_free(pdev);
+>         return ret;
+> @@ -858,23 +869,127 @@ static int sdhci_am654_probe(struct platform_device *pdev)
+>  static int sdhci_am654_remove(struct platform_device *pdev)
+>  {
+>         struct sdhci_host *host = platform_get_drvdata(pdev);
+> +       struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+>         int ret;
+>
+> -       sdhci_remove_host(host, true);
+> -       ret = pm_runtime_put_sync(&pdev->dev);
+> +       ret = pm_runtime_resume_and_get(&pdev->dev);
+>         if (ret < 0)
+>                 return ret;
+>
+> +       sdhci_remove_host(host, true);
+> +       clk_disable_unprepare(pltfm_host->clk);
+>         pm_runtime_disable(&pdev->dev);
+> +       pm_runtime_put_noidle(&pdev->dev);
+>         sdhci_pltfm_free(pdev);
+> +       return 0;
+> +}
+> +
+> +#ifdef CONFIG_PM
+> +static int sdhci_am654_restore(struct sdhci_host *host)
+> +{
+> +       struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> +       struct sdhci_am654_data *sdhci_am654 = sdhci_pltfm_priv(pltfm_host);
+> +       u32 ctl_cfg_2 = 0;
+> +       u32 val;
+> +       int ret;
+> +
+> +       if (sdhci_am654->flags & DLL_CALIB) {
+> +               regmap_read(sdhci_am654->base, PHY_STAT1, &val);
+> +               if (~val & CALDONE_MASK) {
+> +                       /* Calibrate IO lines */
+> +                       regmap_update_bits(sdhci_am654->base, PHY_CTRL1,
+> +                                          PDB_MASK, PDB_MASK);
+> +                       ret = regmap_read_poll_timeout(sdhci_am654->base,
+> +                                                      PHY_STAT1, val,
+> +                                                      val & CALDONE_MASK,
+> +                                                      1, 20);
+> +                       if (ret)
+> +                               return ret;
+> +               }
+> +       }
+> +
+> +       /* Enable pins by setting IO mux to 0 */
+> +       if (sdhci_am654->flags & IOMUX_PRESENT)
+> +               regmap_update_bits(sdhci_am654->base, PHY_CTRL1,
+> +                                  IOMUX_ENABLE_MASK, 0);
+>
+> +       /* Set slot type based on SD or eMMC */
+> +       if (host->mmc->caps & MMC_CAP_NONREMOVABLE)
+> +               ctl_cfg_2 = SLOTTYPE_EMBEDDED;
+> +
+> +       regmap_update_bits(sdhci_am654->base, CTL_CFG_2, SLOTTYPE_MASK,
+> +                          ctl_cfg_2);
+> +
+> +       regmap_read(sdhci_am654->base, CTL_CFG_3, &val);
+> +       if (~val & TUNINGFORSDR50_MASK)
+> +               /* Enable tuning for SDR50 */
+> +               regmap_update_bits(sdhci_am654->base, CTL_CFG_3, TUNINGFORSDR50_MASK,
+> +                                  TUNINGFORSDR50_MASK);
+> +
+> +       return 0;
+> +}
+> +
+> +static int sdhci_am654_runtime_suspend(struct device *dev)
+> +{
+> +       struct sdhci_host *host = dev_get_drvdata(dev);
+> +       struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> +       int ret;
+> +
+> +       if (host->tuning_mode != SDHCI_TUNING_MODE_3)
+> +               mmc_retune_needed(host->mmc);
+> +
+> +       ret = cqhci_suspend(host->mmc);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = sdhci_runtime_suspend_host(host);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /* disable the clock */
+> +       clk_disable_unprepare(pltfm_host->clk);
+>         return 0;
+>  }
+>
+> +static int sdhci_am654_runtime_resume(struct device *dev)
+> +{
+> +       struct sdhci_host *host = dev_get_drvdata(dev);
+> +       struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> +       int ret;
+> +
+> +       /* Enable the clock */
+> +       ret = clk_prepare_enable(pltfm_host->clk);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = sdhci_am654_restore(host);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = sdhci_runtime_resume_host(host, 0);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = cqhci_resume(host->mmc);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return 0;
+> +}
+> +#endif
+> +
+> +static const struct dev_pm_ops sdhci_am654_dev_pm_ops = {
+> +       SET_RUNTIME_PM_OPS(sdhci_am654_runtime_suspend,
+> +                          sdhci_am654_runtime_resume, NULL)
+> +       SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+> +                               pm_runtime_force_resume)
+> +};
+> +
+>  static struct platform_driver sdhci_am654_driver = {
+>         .driver = {
+>                 .name = "sdhci-am654",
+>                 .probe_type = PROBE_PREFER_ASYNCHRONOUS,
+> +               .pm = &sdhci_am654_dev_pm_ops,
+>                 .of_match_table = sdhci_am654_of_match,
+>         },
+>         .probe = sdhci_am654_probe,
+> --
+> 2.40.0
+>
