@@ -2,156 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7766D1A8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E59026D1AA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbjCaIlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S231599AbjCaInY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbjCaIk7 (ORCPT
+        with ESMTP id S231949AbjCaImz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:40:59 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EDE1A478
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:40:18 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id n19so12436971wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:40:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680251931;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u0O+1iDiHGqqkLLtzjSrhhvTogFFIDtpqH3SLB/+nZA=;
-        b=qwp+45yDU/8FeUG/mb5yQk4Baj8bRTtm7Uvuw+61kXsPy6YmBE2gAX1gI+C2nCvB6x
-         2+vrFgyZFFI9Uzw5jTqV1uFcnrLNuEFy3puFk5QDI9+zZPS72PKlQ7kg9TWY+k9DkKil
-         jBNbcLCVOqXWQQxpjnMWudYmjIo0ZdvSKmStlm5lXx5zn1c1tGBUEfKu+i9QZS2mkSFU
-         4DpXDUiiDevAsNhouW7Rp3s9uaCQpI+nb2lMyUeD5PU3ZSfsSZltG9xDpFLbFbkNbt+R
-         gMshyalbmyFewULoENqAnQH+Q/YUqQA8AfXvjoTSdk0ykLEKTiqytW+FOtcETcvtfRA5
-         TQGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680251931;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u0O+1iDiHGqqkLLtzjSrhhvTogFFIDtpqH3SLB/+nZA=;
-        b=CGSu8cKHlIZ/ct6DG9i3/2j5Th3Jmp42MGZO4vkIT5Szj52DjswyR/kfhDkoWTW+3F
-         S1G00w5KfCaHsZRIPbi4bh3rK8mOc1RuZ6H0KF6axiNj8CjW32Ffblb2p6Xh7jFPjid2
-         LR9Z+5M81Po9fqx+91ktdhjBgwsLdIqQV1lMfpb7MwKh0X1ura2PZuOQ3++G2e85eLiJ
-         P3Y/w4o+LMrq6gZdjVMpFnfDSARpszJUtu2r5KTu+Yx0Iv9JP/MimKGNABxPuzmN43Fw
-         figN1GgNrD2ewYnfkFLjL+X9FTdzbsCcIw9j+HQdaQFmDzt9hF9z/z5CHhSWmj11hG2D
-         QZfg==
-X-Gm-Message-State: AO0yUKVpvJaZHwZXESmk2CMsOc+cGCo1Wx7n7Qphoe/9tVfzmYQV+J3s
-        DAILbsWPhoZGiqTVZnJD0E8=
-X-Google-Smtp-Source: AK7set+teNQZei3rKQqSvoEESvdaLQj7q7z52K6Cha/Jmf1FC3DFlCf6DqwjFwk0c+uOGDCgCLCl/Q==
-X-Received: by 2002:a1c:7919:0:b0:3ee:da1:1346 with SMTP id l25-20020a1c7919000000b003ee0da11346mr20639774wme.36.1680251931504;
-        Fri, 31 Mar 2023 01:38:51 -0700 (PDT)
-Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.gmail.com with ESMTPSA id c3-20020a05600c0ac300b003edf2dc7ca3sm1913937wmr.34.2023.03.31.01.38.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 01:38:50 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 09:38:49 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH 1/1] mm: vmalloc: Rename addr_to_vb_xarray() function
-Message-ID: <65a19f0a-be4d-42c9-a75d-1356996acdda@lucifer.local>
-References: <20230331073727.6968-1-urezki@gmail.com>
+        Fri, 31 Mar 2023 04:42:55 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90571BF42;
+        Fri, 31 Mar 2023 01:42:26 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Pnv0D674xz49Q6m;
+        Fri, 31 Mar 2023 11:41:31 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1680252094;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ofzs1/zRJhx7iXfR1mz6Mp398ZtxCc5wKnjcib04Kpo=;
+        b=mjSwuzzgkGYF1aBG+PS8dajSgq9AKxZuC4aqKYO1DR8Cr7MUowtU69KwKauUMetn+ccgbR
+        5raVyjNcjEnzhcrAH21ReWk7TuiKE7UQARgBpYsxa2yeoCF6Jsz5oI64Nw3QCpErp/G6AU
+        x6boAy+Dr5TcXVTqRVsoXCXu+2y45GlUuyNXbDLjvpQ2ojyEoNST8RgV3BHKTAPX40mdT+
+        Yo7OId+nd12zY8b/Modkeoxy8gZ5UzMSKbXWb5BSXMxFy4uXaF3+vWGmGBVTI2L+fRdmQ+
+        V997wJm8YdXBn+wGvcS34gh8lSO7R8kuh5c48nq0NeFO/sZd8VeBcDdHkebhFQ==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1680252094; a=rsa-sha256;
+        cv=none;
+        b=LbQMuPda+h/MK+hwI6qy3vKMvEbSI9MlYhd189ZBlL45LvnMcsq3MRtE0Ee49+HSuimH6/
+        A7JC86v8tjaKncaISZhbqAfemQjnbpQfHhNYqKUd+W8rhRbQMG12cH7kPbI2AxovZJmRSI
+        Eub6gTFRmoNQl95iwVTKvUl1QeBjW7nS3P2+a34SYkMT4EA0jD9GPtjCqPON+tHo/jhGnx
+        htsb7iG+wJ0tMUPgaXhwHA8w3WJibqHYGJtD6/yLGX30aYwL9zGOHHE4+ksUpt+byDrh9+
+        9BPyvEnHXbnqArN7ZOSKS//cAM+D/sIOT/Tv/feO4EWj9LY1+Z03YmI/HCG7cQ==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1680252094;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ofzs1/zRJhx7iXfR1mz6Mp398ZtxCc5wKnjcib04Kpo=;
+        b=las15LzuG4Ixc1zej0ohgzrCfhwANMfPTgofZJEwqUJS+eonu58UIrIjUJbqWC8ONBSdqU
+        i7mlTu/TSJHkAbLkqeFu2TYGxKsW2PUBU098cTQlaoMyiRfPbU3XZEXd3tYdFpFR5fiQ5o
+        amg0sWkT2UfS2eZv3jLDUjaWFodJaNZlIph3T/kmKj9Qr7Xs6Q90sYaSWTOmhFOdzk2Gja
+        DMERJ10jqBlXxbj9TH2Ydo0fTgjlw1ZkInsZTjhfukV+F/qVMLNiV1NQOkilKFmtOUU7fh
+        Yd0n9EBCNzzEsa60lfAWoJ3lPLLVXaUibit0olS4juhG6/daRhrPoVAlOuQLtg==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id DF993634CA1;
+        Fri, 31 Mar 2023 11:39:16 +0300 (EEST)
+Date:   Fri, 31 Mar 2023 11:39:16 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4 2/3] media: dt-bindings: ov2685: convert to dtschema
+Message-ID: <ZCacNEbg8cJo0VAm@valkosipuli.retiisi.eu>
+References: <20230129-ov2685-improvements-v4-0-e71985c5c848@z3ntu.xyz>
+ <20230129-ov2685-improvements-v4-2-e71985c5c848@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230331073727.6968-1-urezki@gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230129-ov2685-improvements-v4-2-e71985c5c848@z3ntu.xyz>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 09:37:27AM +0200, Uladzislau Rezki (Sony) wrote:
-> Short the name of the addr_to_vb_xarray() function to the
-> addr_to_vb_xa(). This aligns with other internal function
-> abbreviations.
->
-> Suggested-by: Baoquan He <bhe@redhat.com>
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+Hi Luca,
+
+Thanks for the patch.
+
+On Thu, Mar 23, 2023 at 06:57:50PM +0100, Luca Weiss wrote:
+> Convert the text-based dt-bindings to yaml.
+> 
+> Changes from original txt:
+> * Take wording for various properties from other yaml bindings, this
+>   removes e.g. volt amount from schema since it isn't really relevant
+>   and the datasheet is a better source.
+> * Don't make reset-gpios a required property since it can be tied to
+>   DOVDD instead.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 > ---
->  mm/vmalloc.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 671d6d5d5b78..b8b646f8a00d 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -1945,7 +1945,7 @@ static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
->   * used as a hash table. When used as a hash a 'cpu' passed to
->   * per_cpu() is not actually a CPU but rather a hash index.
->   *
-> - * A hash function is addr_to_vb_xarray() which hashes any address
-> + * A hash function is addr_to_vb_xa() which hashes any address
->   * to a specific index(in a hash) it belongs to. This then uses a
->   * per_cpu() macro to access an array with generated index.
->   *
-> @@ -1971,7 +1971,7 @@ static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
->   * however xarray spinlocks protect against any contention that remains.
->   */
->  static struct xarray *
-> -addr_to_vb_xarray(unsigned long addr)
-> +addr_to_vb_xa(unsigned long addr)
->  {
->  	int index = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
->
-> @@ -2048,7 +2048,7 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
->  	bitmap_set(vb->used_map, 0, (1UL << order));
->  	INIT_LIST_HEAD(&vb->free_list);
->
-> -	xa = addr_to_vb_xarray(va->va_start);
-> +	xa = addr_to_vb_xa(va->va_start);
->  	vb_idx = addr_to_vb_idx(va->va_start);
->  	err = xa_insert(xa, vb_idx, vb, gfp_mask);
->  	if (err) {
-> @@ -2070,7 +2070,7 @@ static void free_vmap_block(struct vmap_block *vb)
->  	struct vmap_block *tmp;
->  	struct xarray *xa;
->
-> -	xa = addr_to_vb_xarray(vb->va->va_start);
-> +	xa = addr_to_vb_xa(vb->va->va_start);
->  	tmp = xa_erase(xa, addr_to_vb_idx(vb->va->va_start));
->  	BUG_ON(tmp != vb);
->
-> @@ -2193,7 +2193,7 @@ static void vb_free(unsigned long addr, unsigned long size)
->  	order = get_order(size);
->  	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
->
-> -	xa = addr_to_vb_xarray(addr);
-> +	xa = addr_to_vb_xa(addr);
->  	vb = xa_load(xa, addr_to_vb_idx(addr));
->
->  	spin_lock(&vb->lock);
-> @@ -3556,7 +3556,7 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
->  	 * Area is split into regions and tracked with vmap_block, read out
->  	 * each region and zero fill the hole between regions.
->  	 */
-> -	xa = addr_to_vb_xarray((unsigned long) addr);
-> +	xa = addr_to_vb_xa((unsigned long) addr);
->  	vb = xa_load(xa, addr_to_vb_idx((unsigned long)addr));
->  	if (!vb)
->  		goto finished;
-> --
-> 2.30.2
->
+>  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
+>  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101 +++++++++++++++++++++
+>  MAINTAINERS                                        |   1 +
+>  3 files changed, 102 insertions(+), 41 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ov2685.txt b/Documentation/devicetree/bindings/media/i2c/ov2685.txt
+> deleted file mode 100644
+> index 625c4a8c0d53d..0000000000000
+> --- a/Documentation/devicetree/bindings/media/i2c/ov2685.txt
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -* Omnivision OV2685 MIPI CSI-2 sensor
+> -
+> -Required Properties:
+> -- compatible: shall be "ovti,ov2685"
+> -- clocks: reference to the xvclk input clock
+> -- clock-names: shall be "xvclk"
+> -- avdd-supply: Analog voltage supply, 2.8 volts
+> -- dovdd-supply: Digital I/O voltage supply, 1.8 volts
+> -- dvdd-supply: Digital core voltage supply, 1.8 volts
+> -- reset-gpios: Low active reset gpio
+> -
+> -The device node shall contain one 'port' child node with an
+> -'endpoint' subnode for its digital output video port,
+> -in accordance with the video interface bindings defined in
+> -Documentation/devicetree/bindings/media/video-interfaces.txt.
+> -The endpoint optional property 'data-lanes' shall be "<1>".
+> -
+> -Example:
+> -&i2c7 {
+> -	ov2685: camera-sensor@3c {
+> -		compatible = "ovti,ov2685";
+> -		reg = <0x3c>;
+> -		pinctrl-names = "default";
+> -		pinctrl-0 = <&clk_24m_cam>;
+> -
+> -		clocks = <&cru SCLK_TESTCLKOUT1>;
+> -		clock-names = "xvclk";
+> -
+> -		avdd-supply = <&pp2800_cam>;
+> -		dovdd-supply = <&pp1800>;
+> -		dvdd-supply = <&pp1800>;
+> -		reset-gpios = <&gpio2 3 GPIO_ACTIVE_LOW>;
+> -
+> -		port {
+> -			ucam_out: endpoint {
+> -				remote-endpoint = <&mipi_in_ucam>;
+> -				data-lanes = <1>;
+> -			};
+> -		};
+> -	};
+> -};
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+> new file mode 100644
+> index 0000000000000..2ac0ca8a0413b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+> @@ -0,0 +1,101 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov2685.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: OmniVision OV2685 Image Sensor
+> +
+> +maintainers:
+> +  - Shunqian Zheng <zhengsq@rock-chips.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: ovti,ov2685
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: XVCLK clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: xvclk
+> +
+> +  dvdd-supply:
+> +    description: Digital Domain Power Supply
+> +
+> +  avdd-supply:
+> +    description: Analog Domain Power Supply
+> +
+> +  dovdd-supply:
+> +    description: I/O Domain Power Supply
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description: Reset Pin GPIO Control (active low)
+> +
+> +  port:
+> +    description: MIPI CSI-2 transmitter port
+> +    $ref: /schemas/graph.yaml#/$defs/port-base
+> +    additionalProperties: false
+> +
+> +    properties:
+> +      endpoint:
+> +        $ref: /schemas/media/video-interfaces.yaml#
+> +        unevaluatedProperties: false
+> +
+> +        properties:
+> +          data-lanes:
+> +            maxItems: 1
 
-I have no problem with this patch but it's a bit of a pain to apply, as
-doesn't apply to mm-unstable or -next as it doesn't take into account my
-vread_iter changes, however Andrew can probably figure it out :)
+This should be 2 --- the sensor supports two lanes (even if the driver
+doesn't).
 
-I checked it manually and it's fine, so:-
+I can address this when applying if that's ok.
 
-Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> +
+> +        required:
+> +          - data-lanes
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - dvdd-supply
+> +  - avdd-supply
+> +  - dovdd-supply
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/rk3399-cru.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        ov2685: camera-sensor@3c {
+> +            compatible = "ovti,ov2685";
+> +            reg = <0x3c>;
+> +            pinctrl-names = "default";
+> +            pinctrl-0 = <&clk_24m_cam>;
+> +
+> +            clocks = <&cru SCLK_TESTCLKOUT1>;
+> +            clock-names = "xvclk";
+> +
+> +            avdd-supply = <&pp2800_cam>;
+> +            dovdd-supply = <&pp1800>;
+> +            dvdd-supply = <&pp1800>;
+> +            reset-gpios = <&gpio2 3 GPIO_ACTIVE_LOW>;
+> +
+> +            port {
+> +                ucam_out: endpoint {
+> +                    remote-endpoint = <&mipi_in_ucam>;
+> +                    data-lanes = <1>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8ea325040f355..5904f47756fe1 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15410,6 +15410,7 @@ M:	Shunqian Zheng <zhengsq@rock-chips.com>
+>  L:	linux-media@vger.kernel.org
+>  S:	Maintained
+>  T:	git git://linuxtv.org/media_tree.git
+> +F:	Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+>  F:	drivers/media/i2c/ov2685.c
+>  
+>  OMNIVISION OV2740 SENSOR DRIVER
+> 
+
+-- 
+Kind regards,
+
+Sakari Ailus
