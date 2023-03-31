@@ -2,70 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50276D203A
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA346D2040
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbjCaM0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
+        id S231318AbjCaM2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232390AbjCaM0h (ORCPT
+        with ESMTP id S230137AbjCaM2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:26:37 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC9D1165F
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:26:36 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id r187so27168091ybr.6
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680265595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7t9CjXOgWpSz/pLs1pfLzGpzRhlP/Dqfbs5hEbKF6gY=;
-        b=R9pkgLb7mWPyOZ4L56pd/LRhL33whlm4RfOyb6AVCPZWkOdCtX5pB/dGciOyJdNo1F
-         UJ9pcp0won9n97KOfPlybTH/LHSNxMAYInpfBMlZIBO8nqSXv9jmCpJEKUD8FAH0SwBX
-         Ix9VoBozTAXhOjygTOgTTC4TgIvzfv5kJc2ksMQBXrABeeSLHUe4eF7NNJX7kgWLcJVF
-         NzPih5ISz8IsiDdp50m5JLj2HT3Gc/4FCE+UWkniarbN0EHy2Mbspjmh4FVULaEpzEQC
-         WCrA/gP1+1rtJxgSTfjseWFYOLhirRHlUHSmttcSGDveDkeapU1hCtvwWzVs4L4B+SY5
-         X8IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680265595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7t9CjXOgWpSz/pLs1pfLzGpzRhlP/Dqfbs5hEbKF6gY=;
-        b=f4Ko3OAabbJMjRoV/vnxvEvw02pVzH4oHSppgU2K4bbkJgFSjiupPwR5LSus40x9xA
-         KazQYATMS/GV2KbXygZTDVyHIdRpPZwZcCxR7N+3Ck+2uEBo655B+TWcXWbmcKUJ3ADW
-         AYEjEl5MHGue62e9fUfNqIvDJK4IsiioBmAN7X3JmNCnsI5wXPz8FnXDDmqyL43Qtptc
-         Z7DZD4PVD7QCnossA3cacb990hCsSiWZmINNG3Jjh5yzwivzMlkryqFnxgR75vEKn/BN
-         puTSfrFT6Hjljrp+cOdjMLaz/zwLBTUPEGdez2+xdwiIygIc4mduEhraodpPAhxMnop0
-         1aPQ==
-X-Gm-Message-State: AAQBX9dpnGatNOWpSD4SGfx2ndtj+O7Fq2Ri4pqH7p+Ygj24ITORPTHL
-        GEMdCgWpGsP1DOtxb3gISEBDF9J7hD5XG3efMUxiCg==
-X-Google-Smtp-Source: AKy350aGmjtep9hI2AVm2TnZACla550tfInyXNn4xaLkBqIuJrOGxBjqFPRSg9J8V84Q1tehJLEqGdguSBByYK2io84=
-X-Received: by 2002:a25:8712:0:b0:b74:3236:2fac with SMTP id
- a18-20020a258712000000b00b7432362facmr17176959ybl.4.1680265595278; Fri, 31
- Mar 2023 05:26:35 -0700 (PDT)
+        Fri, 31 Mar 2023 08:28:02 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9256D1EFEB;
+        Fri, 31 Mar 2023 05:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=7ZpSK7GjfgyP1lpMVs9s71enrcnwHhDc+XTut1yerCg=; b=zBq2dE6wqUlrjq3xea7L3aRcRh
+        yVJsFTVYq5tCybuDc29hMgODvvyKRLi+z3bYzvZtEmlUEXfbQjxbcpH3pSwjGI5hsqPQPqvJ393aR
+        UANvsc1SkSUjwhwU0i4F30AuMf4jKgLzy29QnGoBvk3rH/F/4Cl3HHj+woQ2XOrktCPA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1piDrA-0091YU-FW; Fri, 31 Mar 2023 14:27:48 +0200
+Date:   Fri, 31 Mar 2023 14:27:48 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Gustav Ekelund <gustav.ekelund@axis.com>
+Cc:     marek.behun@nic.cz, Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@axis.com,
+        Gustav Ekelund <gustaek@axis.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2] net: dsa: mv88e6xxx: Reset mv88e6393x force WD
+ event bit
+Message-ID: <ac0425d3-d52d-4c1b-8bf9-a4be2db87600@lunn.ch>
+References: <20230331084014.1144597-1-gustav.ekelund@axis.com>
 MIME-Version: 1.0
-References: <20230330100550.2049687-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20230330100550.2049687-1-peng.fan@oss.nxp.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 31 Mar 2023 14:26:24 +0200
-Message-ID: <CACRpkdYb6PhGdeUuZvmiUDieZr+tAqO-Ls7+hJiaTgeoPCaAKg@mail.gmail.com>
-Subject: Re: [PATCH V2 1/2] dt-bindings: gpio: fsl-imx-gpio: update gpio-ranges
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, stefan@agner.ch, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331084014.1144597-1-gustav.ekelund@axis.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,21 +54,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 12:00=E2=80=AFPM Peng Fan (OSS) <peng.fan@oss.nxp.c=
-om> wrote:
+On Fri, Mar 31, 2023 at 10:40:13AM +0200, Gustav Ekelund wrote:
+> From: Gustav Ekelund <gustaek@axis.com>
+> 
+> The force watchdog event bit is not cleared during SW reset in the
+> mv88e6393x switch. This is a different behavior compared to mv886390 which
+> clears the force WD event bit as advertised. This causes a force WD event
+> to be handled over and over again as the SW reset following the event never
+> clears the force WD event bit.
+> 
+> Explicitly clear the watchdog event register to 0 in irq_action when
+> handling an event to prevent the switch from sending continuous interrupts.
+> Marvell aren't aware of any other stuck bits apart from the force WD
+> bit.
+> 
+> Signed-off-by: Gustav Ekelund <gustaek@axis.com>
 
-> From: Peng Fan <peng.fan@nxp.com>
->
-> And bounds for gpio-ranges to address dtbs_error.
->
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
-> V2:
->  Enlarge bounds to 32, since it max supports 32 pins
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Saw this after already ACKing v1...
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+    Andrew
