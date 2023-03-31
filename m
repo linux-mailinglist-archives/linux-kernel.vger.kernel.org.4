@@ -2,77 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2C46D2593
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D286D25A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjCaQcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 12:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
+        id S232538AbjCaQdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232273AbjCaQce (ORCPT
+        with ESMTP id S232474AbjCaQdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:32:34 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B3522233;
-        Fri, 31 Mar 2023 09:28:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 31 Mar 2023 12:33:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9862368B
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:29:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680280144;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+ZSAJKtt/ag5B+38eGABocjAtCkqVzXfR0mPd/YeFX8=;
+        b=f0CVYwAalpfnq/L+j3MZQ8ndUVLkKzbsIQhAAkAD7wsewjHOwnh7Y5MGfLr9/LdnwkbESU
+        hMleCC49+YNOnoIQswdt2snX8+PataUVHJDYNWgKYhxKl1cRup7UNljpVGHnbEsCtZhJAo
+        CUA+pIom4vd3V3KnTkdkkA+UqAwUJdw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-410-FhZ9Z2msPdG2BL3PnIP12g-1; Fri, 31 Mar 2023 12:28:59 -0400
+X-MC-Unique: FhZ9Z2msPdG2BL3PnIP12g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8989BCE303D;
-        Fri, 31 Mar 2023 16:28:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5BD8C433D2;
-        Fri, 31 Mar 2023 16:28:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680280120;
-        bh=73IgJtnFs2TGSAjju6TrDNqdmySf1qlRHQ3Dsp/nG/0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sVqKIsAAgSmsFGZ07bdHiEQctl6mIt2BmwFbxffGTlp1gfp/4owkzIEgCwUOxeiSs
-         oJyjQIlfIRiUg9ZDwJhhMVYdWuIYzy8tzM0V/4zgo099W2vOnYGSikMWU9r2XMFWxU
-         251Rr5VIpMk9BQiTavizQ4NpzwyPkD3CXLnmkMLEaFkuiwcmHHNC+pxxiOUSI4N76u
-         5R+O0OtEC0xflg3/rcfq+w3fnCbNkpPzMOHpEAu2/T/1s0ifHHQkozWV2DvRvkVr0m
-         RNub9dq8rI5HAvmlGINbb5cEmX6yFN2h4x0xrxV77NbzteAIMpCIq7VUVc4XpOT+Kd
-         4NmwQR3SWhmGQ==
-Received: by mail-yb1-f182.google.com with SMTP id r187so28051248ybr.6;
-        Fri, 31 Mar 2023 09:28:40 -0700 (PDT)
-X-Gm-Message-State: AAQBX9e0rBDwESX1G/VqeDeuJs/ir6x0hLDLlBzWM9i2ITGkJbXXd8hc
-        pjrNy/+zqu2vMybj30FKVODFZelzRYYxPRDaKA==
-X-Google-Smtp-Source: AKy350YYHHZOKkd+6rbSZojhyMrcgt5V7WRPtHLi1eZqzNDmhN2F/7X0OcFlMu4lT31y3sbpuZVSo26tzqvlloI5gWo=
-X-Received: by 2002:a05:6902:10c3:b0:b79:4826:e8e3 with SMTP id
- w3-20020a05690210c300b00b794826e8e3mr12562188ybu.1.1680280120025; Fri, 31 Mar
- 2023 09:28:40 -0700 (PDT)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7E639885624;
+        Fri, 31 Mar 2023 16:28:58 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8342C40BC797;
+        Fri, 31 Mar 2023 16:28:56 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230331160914.1608208-30-dhowells@redhat.com>
+References: <20230331160914.1608208-30-dhowells@redhat.com> <20230331160914.1608208-1-dhowells@redhat.com>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: Trivial TLS client
 MIME-Version: 1.0
-References: <cover.1680248888.git.geert+renesas@glider.be> <b8701c04d27e51618444a747c4f4be5cc889ce28.1680248888.git.geert+renesas@glider.be>
-In-Reply-To: <b8701c04d27e51618444a747c4f4be5cc889ce28.1680248888.git.geert+renesas@glider.be>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 31 Mar 2023 11:28:28 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJJoTGjTihcCiX8qOowb7tSjxg-rjLVskVPuWvSn=0ikA@mail.gmail.com>
-Message-ID: <CAL_JsqJJoTGjTihcCiX8qOowb7tSjxg-rjLVskVPuWvSn=0ikA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] of: address: Reshuffle to remove forward declarations
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1610448.1680280135.1@warthog.procyon.org.uk>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Date:   Fri, 31 Mar 2023 17:28:55 +0100
+Message-ID: <1610449.1680280135@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 2:52=E2=80=AFAM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> Reshuffle the code to get rid of the forward declarations, which
-> improves readability.
+Here's a trivial TLS client program for testing this.
 
-Is git blame smart enough to ignore this move? If not, I'd rather keep
-the blame than save 3 lines.
+David
+---
+/*
+ * TLS-over-TCP send client
+ */
 
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/of/address.c | 271 +++++++++++++++++++++----------------------
->  1 file changed, 133 insertions(+), 138 deletions(-)
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <sys/stat.h>
+#include <sys/sendfile.h>
+#include <linux/tls.h>
+
+#define OSERROR(X, Y) do { if ((long)(X) =3D=3D -1) { perror(Y); exit(1); =
+} } while(0)
+
+static unsigned char buffer[4096] __attribute__((aligned(4096)));
+
+static void set_tls(int sock)
+{
+	struct tls12_crypto_info_aes_gcm_128 crypto_info;
+
+	crypto_info.info.version =3D TLS_1_2_VERSION;
+	crypto_info.info.cipher_type =3D TLS_CIPHER_AES_GCM_128;
+	memset(crypto_info.iv,		0, TLS_CIPHER_AES_GCM_128_IV_SIZE);
+	memset(crypto_info.rec_seq,	0, TLS_CIPHER_AES_GCM_128_REC_SEQ_SIZE);
+	memset(crypto_info.key,		0, TLS_CIPHER_AES_GCM_128_KEY_SIZE);
+	memset(crypto_info.salt,	0, TLS_CIPHER_AES_GCM_128_SALT_SIZE);
+
+	OSERROR(setsockopt(sock, SOL_TCP, TCP_ULP, "tls", sizeof("tls")),
+		"TCP_ULP");
+	OSERROR(setsockopt(sock, SOL_TLS, TLS_TX, &crypto_info, sizeof(crypto_inf=
+o)),
+		"TLS_TX");
+	OSERROR(setsockopt(sock, SOL_TLS, TLS_RX, &crypto_info, sizeof(crypto_inf=
+o)),
+		"TLS_RX");
+}
+
+int main(int argc, char *argv[])
+{
+	struct sockaddr_in sin =3D { .sin_family =3D AF_INET, .sin_port =3D htons=
+(5556) };
+	struct hostent *h;
+	struct stat st;
+	ssize_t r, o;
+	int sf =3D 0;
+	int cfd, fd;
+
+	if (argc > 1 && strcmp(argv[1], "-s") =3D=3D 0) {
+		sf =3D 1;
+		argc--;
+		argv++;
+	}
+	=
+
+	if (argc !=3D 3) {
+		fprintf(stderr, "tcp-send [-s] <server> <file>\n");
+		exit(2);
+	}
+
+	h =3D gethostbyname(argv[1]);
+	if (!h) {
+		fprintf(stderr, "%s: %s\n", argv[1], hstrerror(h_errno));
+		exit(3);
+	}
+
+	if (!h->h_addr_list[0]) {
+		fprintf(stderr, "%s: No addresses\n", argv[1]);
+		exit(3);
+	}
+
+	memcpy(&sin.sin_addr, h->h_addr_list[0], h->h_length);
+	=
+
+	cfd =3D socket(AF_INET, SOCK_STREAM, 0);
+	OSERROR(cfd, "socket");
+	OSERROR(connect(cfd, (struct sockaddr *)&sin, sizeof(sin)), "connect");
+	set_tls(cfd);
+
+	fd =3D open(argv[2], O_RDONLY);
+	OSERROR(fd, argv[2]);
+	OSERROR(fstat(fd, &st), argv[2]);
+
+	if (!sf) {
+		for (;;) {
+			r =3D read(fd, buffer, sizeof(buffer));
+			OSERROR(r, argv[2]);
+			if (r =3D=3D 0)
+				break;
+
+			o =3D 0;
+			do {
+				ssize_t w =3D write(cfd, buffer + o, r - o);
+				OSERROR(w, "write");
+				o +=3D w;
+			} while (o < r);
+		}
+	} else {
+		off_t off =3D 0;
+		r =3D sendfile(cfd, fd, &off, st.st_size);
+		OSERROR(r, "sendfile");
+		if (r !=3D st.st_size) {
+			fprintf(stderr, "Short sendfile\n");
+			exit(1);
+		}
+	}
+
+	OSERROR(close(cfd), "close/c");
+	OSERROR(close(fd), "close/f");
+	return 0;
+}
+
