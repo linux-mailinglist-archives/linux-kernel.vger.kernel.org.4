@@ -2,58 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1403D6D1CB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F28726D1CB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbjCaJlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
+        id S232140AbjCaJlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbjCaJlE (ORCPT
+        with ESMTP id S231633AbjCaJlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:41:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455A5A6;
-        Fri, 31 Mar 2023 02:41:03 -0700 (PDT)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 480DF6603130;
-        Fri, 31 Mar 2023 10:41:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680255661;
-        bh=5/vUvHtI483hEvXzPFjmdM6/v042ox+SyVhBgPweyfc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IA2jSXiD9Eg2q7EqsltfuzR7o8zucquaK7dqov/Bwn+/7znsoAAgHEtq0V+qw8Agp
-         eFeXdCAFoJBi1qQxbFQ9x0VM9ahpwftaBV2xQ5KdrEDad6aCnaZ0/AIgbacMfwidah
-         UCeSlR1vyfPuw1ssQjzIJNIbAUgSug848qdbPWF4PicQDHegHfbW5RSNbRi1jni0Px
-         XvHKHNwuNijFnssPm05PCGDycybOjNIQR9Wwt1b71Whm9hZfsHKLjmzGTap1qRXNvI
-         xRq0v+jdw7MV1XbnL0nZLjGOWsm8/AKpoeQ05Yd5xn2SuN2uB9S7+JxuwvQQ93o+xB
-         74x2xGtsCHmew==
-Message-ID: <c6ce737d-25cc-7f22-7c0f-c0ba1420e57d@collabora.com>
-Date:   Fri, 31 Mar 2023 11:40:58 +0200
+        Fri, 31 Mar 2023 05:41:50 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD149026
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:41:48 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id p203so26675316ybb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680255708;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hnaNB1XEFARvtvmMjnyCWM6urGrAoqOyko+dcOeieP4=;
+        b=CNHXi9MB2mEr2AuQ/LvwUlACS4Az3+B0YUHQfIOr//HmiPYsXroiJvw3pgwNkVgFE0
+         wXRRtCk8TRxTYe0wfCYNIFxtdKH+w8zE8RbLvoKhkDoNCGL2CkfEigwt2+q+2NuBJyRz
+         dCcNB6lgTz5vwlDrYJfVyKRPDLZVmmL42SoCJnFhCEsKkRjpsX9lAHfYTLvGgjKGzxQU
+         BrZgcPGmtxg9mwOqx8FSa+ou0oa8VLI87WVpMWh+hOKsWpbO6YVwrHw/IBl7DOHwdYVe
+         xM5ICyc7V9ewynH7CtsaO3LEiNeSEO7eiT11ZJZ7SdsuTTGaKQY5TjAcmyAC6rPLyptR
+         Kozg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680255708;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hnaNB1XEFARvtvmMjnyCWM6urGrAoqOyko+dcOeieP4=;
+        b=yWPKlpg2V9RmsrD1fnhE5YRffgK3XJqAP8A0VpjWg9sUQC7qLsl3s988GbT6fKu4fW
+         HbSwhU3YLAJTGf31wpXMgkGmnWQlG2GuHhV2Nm3BSmdTCeQKGiKAKvdh6pDuK/MMLLJ7
+         DN77iMXRoZaK+noIn9aaYvwH2s4WTbbn+HCcrSVY4gdGq7+te+uucxHpNlC1zql3fsD5
+         SlcIO0ZwngTtdEfo/ka+PmsRjCheesXaFQZF/b73QRxLgSAf/kMDTgIS7wjcGfdfrvGG
+         obLovw7TSF6dQZyejxw1YGslo2XLnvO2TRXQf0zHaOAcK2OfVDjsrRwIg2pEfexBG6f4
+         2V1A==
+X-Gm-Message-State: AAQBX9d/naw9jdXplaiMs6f2sStq7KD4/EjcJ3wGUETjVCf4i4LR0eaU
+        /aGQOATf0+5QELb2KlNH8BixcPVRgCamiDNuQKKUpw==
+X-Google-Smtp-Source: AKy350amcuIyJx1ZU05trxaUHqtJYPGKJJHR/eSVOApb4wFEITF/ZQ6+GZDgwhTCygxuJPp9AYOmneX/QLQ0r4PG1oM=
+X-Received: by 2002:a05:6902:168d:b0:b26:47f3:6cb with SMTP id
+ bx13-20020a056902168d00b00b2647f306cbmr14114282ybb.4.1680255708125; Fri, 31
+ Mar 2023 02:41:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 0/3] usb: gadget: functionfs: DMABUF import interface
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     michael.hennerich@analog.com, nuno.sa@analog.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-References: <20230322092118.9213-1-paul@crapouillou.net>
-Content-Language: en-US
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20230322092118.9213-1-paul@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230327130010.8342-1-okan.sahin@analog.com> <20230327130010.8342-3-okan.sahin@analog.com>
+In-Reply-To: <20230327130010.8342-3-okan.sahin@analog.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 31 Mar 2023 11:41:36 +0200
+Message-ID: <CACRpkda5G5b+At5s1WFudpQBQ6LDQxhE3fZj7eBhkZ=thvnQhg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] gpio: ds4520: Add ADI DS4520 Regulator Support
+To:     Okan Sahin <okan.sahin@analog.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,28 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+Hi Okan,
 
-W dniu 22.03.2023 o 10:21, Paul Cercueil pisze:
-> Hi,
-> 
-> This small patchset adds three new IOCTLs that can be used to attach,
-> detach, or transfer from/to a DMABUF object.
-> 
-> Changes since v1:
-> - patch [2/3] is new. I had to reuse a piece of code that was already
->    duplicated in the driver, so I factorized the code.
-> - Make ffs_dma_resv_lock() static
-> - Add MODULE_IMPORT_NS(DMA_BUF);
-> - The attach/detach functions are now performed without locking the
->    eps_lock spinlock. The transfer function starts with the spinlock
->    unlocked, then locks it before allocating and queueing the USB
->    transfer.
-> 
+thanks for your patch!
 
-Can you share an example use case for these new features?
-Is there a userspace that excercises the new ioctls?
+First: why is the word "Regulator" in the subject? I don't quite get it.
 
-Regards,
+On Mon, Mar 27, 2023 at 3:01=E2=80=AFPM Okan Sahin <okan.sahin@analog.com> =
+wrote:
+>
+> Gpio I/O expander.
+>
+> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
 
-Andrzej
+This commit log is too terse. Write a bit about what this hardware is.
+
+> +config GPIO_DS4520
+> +       tristate "DS4520 I2C GPIO expander"
+> +       select REGMAP_I2C
+> +       help
+> +         GPIO driver for Maxim MAX7300 I2C-based GPIO expander.
+
+Is it MAX7300, I don't get this, it seems super-confused.
+
+> +         Say yes here to enable the GPIO driver for the ADI DS4520 chip.
+> +
+> +         To compile this driver as a module, choose M here: the module w=
+ill
+> +         be called gpio-ds4520.
+
+(...)
+
+The driver is pretty straight-forward, but I think this can use the
+generic GPIO_REGMAP helpers in
+drivers/gpio/gpio-regmap.c
+check other drivers selecting this helper library for inspiration.
+
+Yours,
+Linus Walleij
