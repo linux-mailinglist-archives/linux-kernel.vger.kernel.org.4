@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B0B6D177E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203F56D1780
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjCaGe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 02:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
+        id S230179AbjCaGen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 02:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjCaGeH (ORCPT
+        with ESMTP id S230198AbjCaGeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 02:34:07 -0400
+        Fri, 31 Mar 2023 02:34:31 -0400
 Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2058.outbound.protection.outlook.com [40.107.8.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE751CB80;
-        Thu, 30 Mar 2023 23:33:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB0E191FC;
+        Thu, 30 Mar 2023 23:34:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eDRgD2Ed3tq6pC0XXk2aNNQt34EnVsIom+UieSSBL0PdhoJe/ZcSIG+fVXUckUkWhzSUtW5DNxsFAdo5Yp7IXxXkLtaXgH0owm370lH2/fe6ihaUs2gBXiRg2eOJY9+ze6cABvGZ2XSTYIB66qsQmZd02SLjJuxCBJJBY77YcMHrN83Jo3L1ZxYWHYHSt+e/9tlplWFMwD6vu4AmvlIHq7sPeNt/0Rvya7a35xIaCacwwuRqBtxup4qlBQe4oZt4WPL2oly6yyYuJByU25QXSJQAATUYjLyoIV7ESYZdbv0ZxVEMWTiJHemd7WlQUpdScsJS3Uw3u8BzkN6AUc5WWQ==
+ b=S1N8CdvycLCkZMzLknB92BJLSwkP/MKOww+bXJaWy7PVla/dJDCMT/olF9A/6cciefXQuQ+vSTVyEALL1TUp1OP2h7QYtkFsXRl6BiA0joUFs2eLksmjfJKk7fAJrdfmqoJDHYN7X1DfVKKpbZGPTEYIPi8LGwTOIEBDzyCYnE40TwOaUBf3TwTBLt52+EemPpMXhsBHbQIhxLgqN6LtG6ztD+Nnb1qbIE41wAMPdYEG+uqQLXlXrtY3dIOJ+4dcXMFCi7Hkv5mj231IaRQS3ceHZzg9RZMuycgK0k9kfw6yM+eKueMy3VRF4C4HwyPYUCl3sxSG+s1UEGZ8IpNEcw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PY5uwQC9+WsuyirzBJZcLQntfeLaO9VQUhQhxE+Kbf8=;
- b=HPm7i7F/a0B6E3QKn7BOa0SaU9nUqlz9zI5uL8BZjPmYFcAwGrNmekli54rT1oqrYJJ7jNrcIB61oxzhGEaJUCMRqFtctqKPTFjyHptupxOoW//WJbvfsHSSwDE0lEGcAueqSzMIA5IxqECHDJ1iN/Gn7r65zCbBODfTvHGQ7WkHzffv1bdusegyEUQD2gM9jfqQf1XmiSBAwC6nPlN1RwjotVoDnP8e2wlaewXkUK6s3cQgucXb6ZYFRA2yXcRnsxRC8q2zkmXF+hwJyXnv0PKO30Mevi0n++AAUVT0Qe2srDhrhFQL02pShunCTmo+X68217FSzrWVhLQEoad4Lg==
+ bh=g52e/gArTcO74d8AJAS9yrysCvbKh/YZMc+MCbysIW4=;
+ b=YlSwl9OMtcpeU6gA2tHpG7hQAcLvrqMC0XkS/tNmjhNXo2TdcB3081O3aR+b1WaVXqZlVJkebARMkRXnB+rzOkHNm3LJaunKvci5r4f4LM2wD4eQVSaSIWKxRgeOH3vjmn+9v06uBm4b3XKnO32084zM8r3t0oPPuDiFtSHxyuPHLlzyN3OQF1pUWS4Uo9qryVET5y2rwuAPygkSos7etelo3K7Kd9joPui20UFGAfjr5xY7I8Hz8jCfgTQD9Y+9oQqnfRmkbzM4DdxtyoheXcfl2n4q2NLzsBRUdMJ2Yh8qqt1uf82z/pQmHgvs0i8EY2ehz40s0eb1HZOvAAjkiA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PY5uwQC9+WsuyirzBJZcLQntfeLaO9VQUhQhxE+Kbf8=;
- b=le691XHMZIl7Du+cmC/Tb9GhxzY2nQPWiubztAbmFQBX2lXralPeGR+EqQwC33z4jDY+0klT2lnBmZxr4+3KSPi9VX+XnbVrTczOfZqV6hzx9wjZ72SEeFrNPsUVw9HeEDMyQSon5I5HprRCC/K0MqhFM3riVJS1JZA2WTqv9BM=
+ bh=g52e/gArTcO74d8AJAS9yrysCvbKh/YZMc+MCbysIW4=;
+ b=K2W9JHqEBcw9zkRzqG9BSt58bgDeMwMmlfTAx/JeD78YmBu1QX5z3DbA2OXJKFLNgbMwTSEzCLLx29ha5mpZxfeyuTk+PkkbfKQ+dN7cJvilS0YiNNoaO1LoIWucgTSx4sPmMXQOx7bsv0Cwjs5Gf5KrBrLdKMl+akB0atQPblg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
  by PR3PR04MB7356.eurprd04.prod.outlook.com (2603:10a6:102:8d::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.21; Fri, 31 Mar
- 2023 06:33:41 +0000
+ 2023 06:33:46 +0000
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::778e:19d0:cba0:5cc0]) by DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::778e:19d0:cba0:5cc0%4]) with mapi id 15.20.6222.028; Fri, 31 Mar 2023
- 06:33:41 +0000
+ 06:33:46 +0000
 From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 To:     abelvesa@kernel.org, abel.vesa@linaro.org, mturquette@baylibre.com,
         sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
@@ -48,9 +48,9 @@ To:     abelvesa@kernel.org, abel.vesa@linaro.org, mturquette@baylibre.com,
 Cc:     linux-imx@nxp.com, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH 3/5] clk: imx: imx8ulp: keep MU0_B clock enabled always
-Date:   Fri, 31 Mar 2023 14:38:12 +0800
-Message-Id: <20230331063814.2462059-4-peng.fan@oss.nxp.com>
+Subject: [PATCH 4/5] clk: imx: imx8ulp: Add tpm5 clock as critical gate clock
+Date:   Fri, 31 Mar 2023 14:38:13 +0800
+Message-Id: <20230331063814.2462059-5-peng.fan@oss.nxp.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230331063814.2462059-1-peng.fan@oss.nxp.com>
 References: <20230331063814.2462059-1-peng.fan@oss.nxp.com>
@@ -62,51 +62,51 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|PR3PR04MB7356:EE_
-X-MS-Office365-Filtering-Correlation-Id: 01a83280-091c-429c-4861-08db31b1de81
+X-MS-Office365-Filtering-Correlation-Id: c03f6511-e737-4f7c-7162-08db31b1e14f
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iTs4s61CJJRXse5zk5XYxVcC3jIqrL4GooI1qqMyMOOSRJQWyX3iQpiLHPJFqqPNbM2z0ePTTY/XFZfZqflyrOt7iorDq9v7rdWbbMLRgLIZCO1MQhtLAqo9ahgJqvjQJLpEqdoOHGEJK6yeNEoRVI1/gFl3O533t9YFbvzoU3SyTM14uMb5atmcToi5iYUrSSztR3YsxuXQjS7n5FDxB5FbStioIq/GwYetQb87JaiA4Y6CDIndL97Vh33iHX/IiekXWTYCDq3KW6m79p9mf+c2feDOXoKUy4AOe0JbFKA3TH4WkSQmKmioSZNJKOhb2B2Prvx3BFYE3Zjwa1TaTYtNPw2+0rwj/hEDg0oYBqeLpTpv6DV9JOoMuAxb9UmEjIx3cjhlMowDzAL62x8de0jKxiTX6s3cOKibg7V4hOZo6ho8RNi+oiWzslB6Lv35VbTZNGic93hYY6qcuMSidrTwYpvgr7l6tHxhseot92Ou69kj7HR+letwWE2H/C18TXj9B+Nv/m1dVIlqvhAYJgnk9qkQtC9+3Xzy2r8UVnnkHqfCNWDoyTLSn4ZfSQ1gaBfGrHySQqmS2PVTKtC/oSAi/GLTEjPXeBkpTmPqY4upvZNP5BuygBMKxMKn1J6xZRUiyctnRiB+zsAHBWcQfA==
+X-Microsoft-Antispam-Message-Info: 0E35tkqs7n609v8Xt9YPC9wlaDCBTacZyn/6553ChM43m6HyKDsepB66tZS8c7pR78MZaVNGTJX56wMP3TuLbvp7aDx2xFqort6lqFxtNpiNKkZvJOUVPiFDfHiVLIpmWR+4ebp5fZUQ5V6A0nM8Z+VnwSlttuo7cVZuOktMgm4vFL0OaF91rE8UnhDxlD2kPUuwVsGqm3R562+SuxTacc+HDCqrb9gUAslSgEccu1DZDu49HOR+9nS2tbg2RpdENsDVY51mrYyygYXDjrWc78lu2CJsBRETNjaM4JFtOoXX+Hp2yeRvhJgCdlrh4LrIRjgimMNBksBYfcZo/MQh/OqxK72cReEDyLJo2dMXetV5ONMqpazLgwww0cDFDLqDqE7jIHYXb7M2jbcrOBPD0B6bHp4aGE//hjw8Nm7X1HzlzW1MNF5MU/lVsFaUIyBAG+mg9l1DrSza+ZCI1p3gx8QW+xp9GSHTOjqe3FUlOjGGpdh1fwQhNxrgCh7aYZ27msyCAxEjvV+6OnrlwChIjmzkaSBo66yFG+WBDO4aZ3ZE7vkX0xx2esqMw2gg7+QWvg/Onk35sjnOGeDgku1kterkSrht1RBVw5jO7rYMKIhPNZ9DgDUDgvw/ma4L9sXd5MH5yF+flZQxQz2+vRAzoA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(39860400002)(396003)(366004)(451199021)(38100700002)(5660300002)(8936002)(7416002)(66946007)(41300700001)(38350700002)(4326008)(8676002)(66476007)(66556008)(6486002)(83380400001)(2616005)(54906003)(6512007)(26005)(1076003)(186003)(6666004)(86362001)(6506007)(2906002)(52116002)(478600001)(316002)(32563001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/kfmnYCY+Xn+T4IulkjhyiYZzpWAuSV384MHmA+w5HN26EyiY4VcN+CH8/m9?=
- =?us-ascii?Q?mwyqhcIs+ta0jWhIr9P3ixBqbkRPCMBfE2k7p+12dmRCDKEegU0Ddx1H5cr6?=
- =?us-ascii?Q?lmkqAM+GKDdImg/AT/7WMngVmIfo69RVCHdgAaHCt46f7aSHOk1oOnKuc5tz?=
- =?us-ascii?Q?+OjfUvZWkelI1iEhy/0feOFNWtgIkLQJ8u+FEttNhLwwUmWAVHvJi7F9c6dw?=
- =?us-ascii?Q?mF+xqIaguz50O10GKYmBjU0WsWeE1ml7XZQyp72/s4VnRInomxNv59OfW7DH?=
- =?us-ascii?Q?MOSkDCd2v3CpeUOs86Fg1Qz8nR/tqtnjts4v30+bLBm8Q4fDpe5FS7mk5Mqn?=
- =?us-ascii?Q?vyHVgNBd+H90XWG2yfo1OxrrgXWaXjJlpC/5pvvhHGLAh99gZfJBvMDdEDgI?=
- =?us-ascii?Q?3+3u0NERmtb/8Ay+0Qxsd6lZOXd7RXOXD9Bi7sae7FRPaSqVUAeVmuZlmrE3?=
- =?us-ascii?Q?BXfYyjUC2LIXo+07dYncdk47cu7FecVhx0hO8L061/3wua8xQmBEMN771td/?=
- =?us-ascii?Q?TpPI4VdN+U5Fur9AFbzG590+hXoyKVgvzPQBFgsS7EZ9vnm9ePp3c1QO5wD5?=
- =?us-ascii?Q?zictHaKouvSIQUGFb5EIIxWM+eKv+lwGwGyfOuXJr/VhFOwTKoHr8N5ZGuRu?=
- =?us-ascii?Q?L9wWQNBh37eHldx9QFdiKxJhHcBSt89WFZlPqw4RA7RcbCEGOqPasP++gCxR?=
- =?us-ascii?Q?8fkywuMjudzFAowWIGqZ3QUDCYqaNaaB2kQx6n5OPQKqih4wZNdiBaEBXZrL?=
- =?us-ascii?Q?yjlUlDt4fWdwJV26KPeE9A6lLaaL20kpKmaQz9ZKZZuppTRMIEoYtk+9e7y+?=
- =?us-ascii?Q?HHhqzs/U2TFd6fHBVC2ur/AlbOKm4hjk1z7gIo0vRyGDBo2h4QjMjfQ8HbY0?=
- =?us-ascii?Q?EWoyYXG0G7o9Ue4wxplHPUn2cFuvpcURX7QUqdXArZcds74PSvaEtgiQQFjq?=
- =?us-ascii?Q?AZWwc9p/5mnuQdKp+MeO9fVu329RqoSPKEUHmv9jvUrecZ0JTC4e9Byt+Zrf?=
- =?us-ascii?Q?HMumv20NdOaVei8SsferCiJwubEzHVW/fsvTVSN7PAsqyYsH+IYkYhWaDwqu?=
- =?us-ascii?Q?C4RKUEzs3MUnoKCGyDsz7W5F70hCduXNx075Wu4tTWU6AEyg1ybXykDDyEd/?=
- =?us-ascii?Q?oCukwLU5nBnP/7pKO6CNkDQAs4+x2oRh7FAwjXCCwNS1sPI0Apov6du3RvmN?=
- =?us-ascii?Q?kCKwv5QuHf3V2xdC8BUG+9E7q1Fcc+h2p9oPsBvEQr+uarEqt/aIa0UCq2Qu?=
- =?us-ascii?Q?8dWJ/Cw1wC5rf30/Yl8zTjjITjC6FQ/E3Hk5rnLMQd1lnkklqDknm/D9XkkI?=
- =?us-ascii?Q?Ng3OcKNaWHA76aqQU3c9StREKVqsQmoYSFJvdcyPB89ZzjClCdpf3WVXIJ+G?=
- =?us-ascii?Q?yWRee4Le5bPkvSKjNwdqxN+k16EwHKpXsGe4E8xYyzhjPA5A/0+SALqYOu9w?=
- =?us-ascii?Q?X6mMDCPt5enyLUpXK6GDYU1fEufMzKSRV1vsIa4zwwRN7vQMVYv8XUGV3gze?=
- =?us-ascii?Q?NM0+VGIVrHBdfFwo1zxrEnOI+OBSYKQQ6oIEEBKj1tF/HTOUF7lsgt7SrmGC?=
- =?us-ascii?Q?fONKVBLhQM+9LQ8PAmzHArFKkPvKKMlQ4PG0yVS0?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vmMKAfyl7Ypl2gEaAoi/9ASB0HOsnGoLtyV9BrxlEdkq5RevR4N/hEUDUQQJ?=
+ =?us-ascii?Q?FrJ1H28iIQ2gEvEbaL+ky2sp0zG89pq2Yfho+tuRHHHp5Ed3nmHHE22yM6zO?=
+ =?us-ascii?Q?qvGubE6j7WtTRxfjVNnzQsovGoK3Ts52j5dzAWbWL/Y8boQCVSV5607geshL?=
+ =?us-ascii?Q?ylejepSWvkQM/54HozISaNBF7ufj+PNJZrDAwhryOAnp+6gO0/XQZyqJEj/8?=
+ =?us-ascii?Q?1ugVVJmnaX7jdK+M3WfXB7Cw5uKINVlLEKAE0wapjS4xOaPi7DCYBMbZm7AE?=
+ =?us-ascii?Q?IS3VAfpTjmO0mk4vGsJYsjA3ItduJc6/sSinjSvQTyZ1fR4HVERpUex65XZm?=
+ =?us-ascii?Q?MuzPuQcN7LSqKVGQGO7kH1IQFPKhEOqrxJHkqQJ+JzhcxudRzHo887k50etx?=
+ =?us-ascii?Q?3OUAQF17tt1yZKA4e+0rFuA+I4tIXT8YFN/2M7Y+5p/wbG7c5MIcX/2snGU5?=
+ =?us-ascii?Q?tKReNcz7Y42GyR3FEIHSNzeQcYT83+fktb6YT8rW7kpaMz8rN67p2zB2//uX?=
+ =?us-ascii?Q?eMXz6v9gKcMQD/jMGJai0+nsYmx6cWUZ7lXoWW+GalRmizG2lN2IIV995Uyy?=
+ =?us-ascii?Q?iXZSfCLZiowK7fmSG7+d/qWS+Vo6w/o4ELS/5aRN/rjB9zPdHHeBtb+3bQE9?=
+ =?us-ascii?Q?rUwG1Ftf3jU4Fz82LSeW2Q+frXS+PgVQjer/EoGAFqmgtbcME1B61g3rErBf?=
+ =?us-ascii?Q?g4k1XZ597JpSbR8yjvpdQiGfEsDdZMyPMCcRBMvtCGgU7pc2azIKVvsGdc+A?=
+ =?us-ascii?Q?oe3GX+GufzKEjj8l8pRxqGnknhjZY9wrcxCqySYTj1KJe4XALCSLta21hdzA?=
+ =?us-ascii?Q?N8h+30C5eWI9tQbb99JdrCWfi3sCsuwGw2SassTTeFxMnCeoFjSsLdA4ZwHs?=
+ =?us-ascii?Q?sIeaTwzI39AmF6+l05GVD47Rir4CtEE0PEoE/ikM5kq2Gk6CGP3wpKnaZKBg?=
+ =?us-ascii?Q?ISzY2RlaxBm47WcUL7vll+i6MaT4buII5bsvlacX3gedJKMUiVkrpKqenW+7?=
+ =?us-ascii?Q?GmDYY0IK6ueDCBxPxnOU1PkCUHg21VDDBS8oaULxJ+PRrzfY20+AgSaXFzJ0?=
+ =?us-ascii?Q?kbRs9qDKQRHdlCyPS/qBVnPb7xovh6KZKHozfirOoD2/HXrfNqzTmRLgJ/33?=
+ =?us-ascii?Q?iYc6OFE33+4DCixCQa9hCCSpsza9TwsHw1L8xPWZfDL3DOypsNcwObLKDGWG?=
+ =?us-ascii?Q?r6Dhc7OkTVF/q2Z9vNskrxn/ABRiAnC9jEyft+wgMOzEzdDcZlNVGyujOU9j?=
+ =?us-ascii?Q?IohvDvv4iJdV7xv7rc0mHAQpn4qi9sr3vL7y+e2wLMQe0Wb2dCeCfeZgEhOY?=
+ =?us-ascii?Q?ZQTIh9fCSN0obfXuFYVjiOkA8RdKmYvd5SGBZ/TIrfiCNvYoH6MtuRzrobru?=
+ =?us-ascii?Q?WszSLkGmxTsbTOmlOq7KI9nP87HEevWtpWySjznU+ivFt4vGVoWjhXnO2iz+?=
+ =?us-ascii?Q?bIpGEGmtWfF/5DaFExZUWfH1r5+MVCDaFbDhn1ky1xQNDBDuNWmW5Ww/fPEo?=
+ =?us-ascii?Q?6RcAnHLO5UJy/9CzrryDvuiy8YtZaecZ3MX/g9aZJ++8MpkEEqHzPoBaL0br?=
+ =?us-ascii?Q?R/9mYScuMRkzN4KHIZfbt02RkKLr8k+WiKJGsZJx?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01a83280-091c-429c-4861-08db31b1de81
+X-MS-Exchange-CrossTenant-Network-Message-Id: c03f6511-e737-4f7c-7162-08db31b1e14f
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 06:33:41.8626
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 06:33:46.4273
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ya82YARoqyKN4HFEGYFHKNVTDxuud3II3PlSo6stcwR/K2AnE2BCvd5IhWtQdYa2ULjmaV6e45HMsQFNMw/9uQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: YBLGSYH/rkfJm9GMIqeJ/H2xUqbU3JDCeGjV+Jg73P9KnSKVjo4im2VE69QopvuovtISMutNFFDPKqm/AKfKAw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7356
 X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
@@ -119,8 +119,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jacky Bai <ping.bai@nxp.com>
 
-Keep the A35<->M33 MU0_B clock enabled always for low power
-communication.
+The TPM5 is used for broadcast timer purpose and registered
+with TIMER_OF_DECLARE. As the clock driver is not ready at
+that stage, so the TPM5 clock is configured in bootloader(TF-A).
+if we just remove the TPM5 clock from linux will introduce a
+risk that the TPM5's parent clock will be gated, then lead to
+TPM's channel control config can NOT be written into register
+successfully.
+
+Due to the above reason, we still need to add the TPM5 clock
+into linux clock but register it as a simple critical gate
+clock to make sure its parent is always on.
 
 Reviewed-by: Peng Fan <peng.fan@nxp.com>
 Signed-off-by: Jacky Bai <ping.bai@nxp.com>
@@ -130,18 +139,25 @@ Signed-off-by: Peng Fan <peng.fan@nxp.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/clk/imx/clk-imx8ulp.c b/drivers/clk/imx/clk-imx8ulp.c
-index 3cf4b094dfff..0dd48e8159ee 100644
+index 0dd48e8159ee..6a8a9e50d826 100644
 --- a/drivers/clk/imx/clk-imx8ulp.c
 +++ b/drivers/clk/imx/clk-imx8ulp.c
-@@ -376,7 +376,7 @@ static int imx8ulp_clk_pcc3_init(struct platform_device *pdev)
- 	clks[IMX8ULP_CLK_DMA1_CH29] = imx_clk_hw_gate("pcc_dma1_ch29", "xbar_ad_divplat", base + 0x7c, 30);
- 	clks[IMX8ULP_CLK_DMA1_CH30] = imx_clk_hw_gate("pcc_dma1_ch30", "xbar_ad_divplat", base + 0x80, 30);
+@@ -333,7 +333,6 @@ static int imx8ulp_clk_pcc3_init(struct platform_device *pdev)
+ 	clks[IMX8ULP_CLK_WDOG4] = imx8ulp_clk_hw_composite("wdog4", pcc3_periph_bus_sels, ARRAY_SIZE(pcc3_periph_bus_sels), true, true, true, base + 0xac, 1);
+ 	clks[IMX8ULP_CLK_LPIT1] = imx8ulp_clk_hw_composite("lpit1", pcc3_periph_bus_sels, ARRAY_SIZE(pcc3_periph_bus_sels), true, true, true, base + 0xc8, 1);
+ 	clks[IMX8ULP_CLK_TPM4] = imx8ulp_clk_hw_composite("tpm4", pcc3_periph_bus_sels, ARRAY_SIZE(pcc3_periph_bus_sels), true, true, true, base + 0xcc, 1);
+-	clks[IMX8ULP_CLK_TPM5] = imx8ulp_clk_hw_composite("tpm5", pcc3_periph_bus_sels, ARRAY_SIZE(pcc3_periph_bus_sels), true, true, true, base + 0xd0, 1);
+ 	clks[IMX8ULP_CLK_FLEXIO1] = imx8ulp_clk_hw_composite("flexio1", pcc3_periph_bus_sels, ARRAY_SIZE(pcc3_periph_bus_sels), true, true, true, base + 0xd4, 1);
+ 	clks[IMX8ULP_CLK_I3C2] = imx8ulp_clk_hw_composite("i3c2", pcc3_periph_bus_sels, ARRAY_SIZE(pcc3_periph_bus_sels), true, true, true, base + 0xd8, 1);
+ 	clks[IMX8ULP_CLK_LPI2C4] = imx8ulp_clk_hw_composite("lpi2c4", pcc3_periph_bus_sels, ARRAY_SIZE(pcc3_periph_bus_sels), true, true, true, base + 0xdc, 1);
+@@ -378,6 +377,7 @@ static int imx8ulp_clk_pcc3_init(struct platform_device *pdev)
  	clks[IMX8ULP_CLK_DMA1_CH31] = imx_clk_hw_gate("pcc_dma1_ch31", "xbar_ad_divplat", base + 0x84, 30);
--	clks[IMX8ULP_CLK_MU0_B] = imx_clk_hw_gate("mu0_b", "xbar_ad_divplat", base + 0x88, 30);
-+	clks[IMX8ULP_CLK_MU0_B] = imx_clk_hw_gate_flags("mu0_b", "xbar_ad_divplat", base + 0x88, 30, CLK_IS_CRITICAL);
+ 	clks[IMX8ULP_CLK_MU0_B] = imx_clk_hw_gate_flags("mu0_b", "xbar_ad_divplat", base + 0x88, 30, CLK_IS_CRITICAL);
  	clks[IMX8ULP_CLK_MU3_A] = imx_clk_hw_gate("mu3_a", "xbar_ad_divplat", base + 0x8c, 30);
++	clks[IMX8ULP_CLK_TPM5] = imx_clk_hw_gate_flags("tpm5", "sosc_div2",  base + 0xd0, 30, CLK_IS_CRITICAL);
  
  	imx_check_clk_hws(clks, clk_data->num);
+ 
 -- 
 2.37.1
 
