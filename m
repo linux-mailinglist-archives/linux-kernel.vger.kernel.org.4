@@ -2,113 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83706D175E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456226D1760
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCaG0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 02:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        id S229909AbjCaG0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 02:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjCaG0C (ORCPT
+        with ESMTP id S229891AbjCaG0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 02:26:02 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27812191E6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 23:25:43 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32V6PTuT100228;
-        Fri, 31 Mar 2023 01:25:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680243929;
-        bh=9h/ntFw0EFUnq0el7i0tjeXB41W/9vSfuU1AW08A8ko=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=WPOCJGAQvLAxLltOfCdtJEgQHGkDpDxV9xWewkHzqzRvxDjA4Xgswypj+iN/nTwSx
-         LZbPEkDL1cP7fr/dN3NFnlDFx9kKRyYYnRM0H3Gx1s2COUX6rhKk4Vtj3G/rWRH7va
-         /85cNL0vX8jrN1QjJK37YGC6j43QXU6qbE/wxFJQ=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32V6PTWI074210
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 31 Mar 2023 01:25:29 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 31
- Mar 2023 01:25:29 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 31 Mar 2023 01:25:29 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32V6PLvB027504;
-        Fri, 31 Mar 2023 01:25:27 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <vkoul@kernel.org>, <kishon@kernel.org>, <rogerq@kernel.org>
-CC:     <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH 2/2] phy: ti: gmii-sel: Enable USXGMII mode for J784S4
-Date:   Fri, 31 Mar 2023 11:55:21 +0530
-Message-ID: <20230331062521.529005-3-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230331062521.529005-1-s-vadapalli@ti.com>
-References: <20230331062521.529005-1-s-vadapalli@ti.com>
+        Fri, 31 Mar 2023 02:26:32 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D37D52B;
+        Thu, 30 Mar 2023 23:26:15 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id n10-20020a05600c4f8a00b003ee93d2c914so14332731wmq.2;
+        Thu, 30 Mar 2023 23:26:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680243974;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Mu9CebZO0eshSauLlTyKtS5NCzddpSF3sP6M8+rl2s4=;
+        b=dRGX3JBTxDGgR4gPCe5vC+difAx6W8kPn7GB1KHDSL+C6xJi9wWuUU2cygrfOX9QM5
+         kEWtw4k6M4ltWSjsfWUlqA7cPQeyF8l5TkhDyF26E8NqxEyeRS+uxj/3Mr67QPFMLVhD
+         bMW9VVkwHTQQ6OA8n98CjaLMoX+cTi1Q/RKJ3C7ccLHM4HcSpdWpUNdKLQdP4aB5WvYi
+         4Ms5fbkDZ8fv5H4Dne0FHWgT8ENPOwK//XTglfj+dmskRi1EUo0i7MGNhRJEn+XK1VXb
+         QZGweSoO2WFqR1ed3qIF//SgIL5d3U0mL/6ihxBEVO+AQynheqXDX4W6o4Y2YC5Xsgwi
+         fb4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680243974;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mu9CebZO0eshSauLlTyKtS5NCzddpSF3sP6M8+rl2s4=;
+        b=6+Vp7STD7r3Q8I/MWCUQl+RgrrXcMH/PMvHEfWqd0c6SKXF8mOyABijytGDXk4BJOs
+         s6BgKbk7fSs6dLTEQMmYWGObTmb//4PYTQPELxwjuBnh9znydA0uFOyxthWm0oK0TMIW
+         EHN+WUZpbyrFcyKiFbMWljv2IdesdRQgQ4Sx6DPhO2rjB2BHV1wNqRQK2z9PCVn05S2Z
+         227NQ2uUa6GKG8T3At9cskc6W1sWGxDpfbMP7b3TUKkx4KLvsHx+LURjt3iZyP8iKamg
+         V6nWaLIWdCdfqutZB7st1jnW6zJy+MXEoguuPi68Hb7ytDVMQorht2YObmW+cFveLvl1
+         CRIg==
+X-Gm-Message-State: AAQBX9cbMV5Q5H2zIXgiWWOSBeCveHLaxvzjsELwFpzeDRUyEwv6Wdvs
+        SVtZ1mQSKq/rVkme9u+l+WXZwDsA81QrU/Xl
+X-Google-Smtp-Source: AKy350asWuF9LXvvqpmz/y3EOVXRzpCtGaOXxVSLqp8MpRVy9w2kpOGRruJ6CE/ZCbrsIDw90baQ4g==
+X-Received: by 2002:a1c:f216:0:b0:3ef:5e17:1ed9 with SMTP id s22-20020a1cf216000000b003ef5e171ed9mr17061834wmc.31.1680243974054;
+        Thu, 30 Mar 2023 23:26:14 -0700 (PDT)
+Received: from ?IPv6:2001:a61:2b4b:9d01:5416:2b94:da5d:3156? ([2001:a61:2b4b:9d01:5416:2b94:da5d:3156])
+        by smtp.gmail.com with ESMTPSA id p6-20020a05600c358600b003ef6708bc1esm8812464wmq.43.2023.03.30.23.26.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 23:26:13 -0700 (PDT)
+Message-ID: <cf20f272465717da960ae3a3c04eb6c1ebfaf3d3.camel@gmail.com>
+Subject: Re: [PATCH] iio: adc: ad7192: Change "shorted" channels to
+ differential
+From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alisa Roman <alisa.roman@analog.com>
+Date:   Fri, 31 Mar 2023 08:26:12 +0200
+In-Reply-To: <20230330102100.17590-1-paul@crapouillou.net>
+References: <20230330102100.17590-1-paul@crapouillou.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TI's J784S4 SoC supports USXGMII mode with the CPSW9G instance's MAC
-ports 1 and 2. Add USXGMII mode to the extra_modes member of J784S4's
-SoC data.
+On Thu, 2023-03-30 at 12:21 +0200, Paul Cercueil wrote:
+> The AD7192 provides a specific channel configuration where both
+> negative
+> and positive inputs are connected to AIN2. This was represented in
+> the
+> ad7192 driver as a IIO channel with .channel =3D 2 and .extended_name
+> set
+> to "shorted".
+>=20
+> The problem with this approach, is that the driver provided two IIO
+> channels with the identifier .channel =3D 2; one "shorted" and the
+> other
+> not. This goes against the IIO ABI, as a channel identifier should be
+> unique.
+>=20
+> Address this issue by changing "shorted" channels to being
+> differential
+> instead, with channel 2 vs. itself, as we're actually measuring AIN2
+> vs.
+> itself.
+>=20
+> Note that the fix tag is for the commit that moved the driver out of
+> staging. The bug existed before that, but backporting would become
+> very
+> complex further down and unlikely to happen.
+>=20
+> Fixes: b581f748cce0 ("staging: iio: adc: ad7192: move out of
+> staging")
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Co-developed-by: Alisa Roman <alisa.roman@analog.com>
+> Signed-off-by: Alisa Roman <alisa.roman@analog.com>
+> ---
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- drivers/phy/ti/phy-gmii-sel.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Reviewed-by: Nuno Sa <nuno.sa@analog.com>
 
-diff --git a/drivers/phy/ti/phy-gmii-sel.c b/drivers/phy/ti/phy-gmii-sel.c
-index fba5c0c0771c..6286cf25a426 100644
---- a/drivers/phy/ti/phy-gmii-sel.c
-+++ b/drivers/phy/ti/phy-gmii-sel.c
-@@ -25,6 +25,7 @@
- /* J72xx SoC specific definitions for the CONTROL port */
- #define J72XX_GMII_SEL_MODE_SGMII	3
- #define J72XX_GMII_SEL_MODE_QSGMII	4
-+#define J72XX_GMII_SEL_MODE_USXGMII	5
- #define J72XX_GMII_SEL_MODE_QSGMII_SUB	6
- 
- #define PHY_GMII_PORT(n)	BIT((n) - 1)
-@@ -114,6 +115,13 @@ static int phy_gmii_sel_mode(struct phy *phy, enum phy_mode mode, int submode)
- 			gmii_sel_mode = J72XX_GMII_SEL_MODE_SGMII;
- 		break;
- 
-+	case PHY_INTERFACE_MODE_USXGMII:
-+		if (!(soc_data->extra_modes & BIT(PHY_INTERFACE_MODE_USXGMII)))
-+			goto unsupported;
-+		else
-+			gmii_sel_mode = J72XX_GMII_SEL_MODE_USXGMII;
-+		break;
-+
- 	default:
- 		goto unsupported;
- 	}
-@@ -239,7 +247,8 @@ static const
- struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw9g_soc_j784s4 = {
- 	.use_of_data = true,
- 	.regfields = phy_gmii_sel_fields_am654,
--	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII),
-+	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII) |
-+		       BIT(PHY_INTERFACE_MODE_USXGMII),
- 	.num_ports = 8,
- 	.num_qsgmii_main_ports = 2,
- };
--- 
-2.25.1
+
 
