@@ -2,191 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C2C6D2811
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3699B6D280F
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233169AbjCaSr1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 14:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
+        id S233147AbjCaSrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 14:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233130AbjCaSrV (ORCPT
+        with ESMTP id S233151AbjCaSrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:47:21 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE8E23B77;
-        Fri, 31 Mar 2023 11:47:12 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1piJlt-0005U1-Sg; Fri, 31 Mar 2023 20:46:45 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     guoren@kernel.org, Conor Dooley <conor@kernel.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
-        bjorn@kernel.org, palmer@dabbelt.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Yipeng Zou <zouyipeng@huawei.com>
-Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
-Date:   Fri, 31 Mar 2023 20:46:44 +0200
-Message-ID: <23668656.ouqheUzb2q@diego>
-In-Reply-To: <ee83cd00-1f97-49a0-b1f6-b8b4f3ce7258@spud>
-References: <20230222033021.983168-1-guoren@kernel.org>
- <60ee7c26-1a70-427d-beaf-92e2989fc479@spud>
- <ee83cd00-1f97-49a0-b1f6-b8b4f3ce7258@spud>
+        Fri, 31 Mar 2023 14:47:05 -0400
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35301D90C;
+        Fri, 31 Mar 2023 11:47:02 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id ca2-20020a056830610200b006a11ab58c3fso11671783otb.4;
+        Fri, 31 Mar 2023 11:47:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680288422;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KkseuN6EQE7Ox7VHfjMNPwBRFbWM28gSepVze7lckmI=;
+        b=KZflzkX6aA6x9JOG0gzo/g/muFMe+tXKQ262h/d1HmHwLHMQ4pFEmBXG7qT5/VzbWc
+         Wc3ZsHR++a1UyXVd0PN9y/xi028hEkp3kzYPoThi2KBBnYlEuGlhtRTjvKU+epzV0yrW
+         mMDaWR5p0DsgI0qew665uPe7iXWK4z1XuzMSIQvyDLLx7Us4v/yOhbZ+zzG2A6Ofacka
+         FvDjUgLAfli9cJAS5jzjza/Lz6bJqbKlCxODUYRONQO10M/eJMuV4QtwloSUZG4AY3bm
+         5mxqGA8U1dJlmjZU7C2qrWoUqg6Isz4C7CgibRCUnJ/UmZ93aOnY8Ls/FPShsyf7qOtC
+         iReA==
+X-Gm-Message-State: AAQBX9cO1FK/19F5+m0zUqny/mILrKNXONwStT82acU3+vm+lno7F+pv
+        Sa43Ge6lcQP22eKF3pzqLg==
+X-Google-Smtp-Source: AKy350b7+lgd07pvqApJZH2J0ZDEybBc2nhXoQp2Y1busPxFSRbfC6apVQYZP57zQ8jv7W1Hx3ywkQ==
+X-Received: by 2002:a9d:77cd:0:b0:6a1:3101:8e2e with SMTP id w13-20020a9d77cd000000b006a131018e2emr8695069otl.29.1680288421913;
+        Fri, 31 Mar 2023 11:47:01 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j5-20020a9d7385000000b006a14579a8besm1441266otk.43.2023.03.31.11.47.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 11:47:01 -0700 (PDT)
+Received: (nullmailer pid 1933933 invoked by uid 1000);
+        Fri, 31 Mar 2023 18:47:00 -0000
+Date:   Fri, 31 Mar 2023 13:47:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hao Zhang <quic_hazha@quicinc.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonathan Corbet <corbet@lwn.net>, Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: arm: Add Coresight Dummy Trace YAML
+ schema
+Message-ID: <20230331184700.GA1920623-robh@kernel.org>
+References: <20230324061608.33609-1-quic_hazha@quicinc.com>
+ <20230324061608.33609-3-quic_hazha@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324061608.33609-3-quic_hazha@quicinc.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Mar 24, 2023 at 02:16:07PM +0800, Hao Zhang wrote:
+> Add new coresight-dummy.yaml file describing the bindings required
+> to define coresight dummy trace in the device trees.
 
-Am Freitag, 31. März 2023, 20:41:35 CEST schrieb Conor Dooley:
-> On Fri, Mar 31, 2023 at 07:34:38PM +0100, Conor Dooley wrote:
-> > On Tue, Feb 21, 2023 at 10:30:18PM -0500, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > > 
-> > > This patch converts riscv to use the generic entry infrastructure from
-> > > kernel/entry/*. The generic entry makes maintainers' work easier and
-> > > codes more elegant. Here are the changes:
-> > > 
-> > >  - More clear entry.S with handle_exception and ret_from_exception
-> > >  - Get rid of complex custom signal implementation
-> > >  - Move syscall procedure from assembly to C, which is much more
-> > >    readable.
-> > >  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
-> > >  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
-> > >  - Use the standard preemption code instead of custom
-> > 
-> > This has unfortunately broken booting my usual NFS rootfs on both my D1
-> > and Icicle. It's one of the Fedora images from David, I think this one:
-> > http://fedora.riscv.rocks/kojifiles/work/tasks/3933/1313933/
-> > 
-> > It gets pretty far into things, it's once systemd is operational that
-> > things go pear shaped:
-> 
-> Shoulda said, can share the full logs if required of course, but they're
-> quite verbose cos systemd etc.
-
-I was just investigating the same thing just now. So that saves me some
-tracking down the culprit :-) .
-
-My main qemu is living as a "board" in my boardfarm (also doing nfsroot)
-as well as my d1 nezha with nfsroot was affected.
-
-Though my board is stuck in some failure loop with both the journal- as
-well as the timesyncd service failing again and again. And I haven't
-figured out how to get logs without a working login console yet.
-
-
-Heiko
-
+The diff tells me all this. Please explain why this is needed and needs 
+to be in DT here.
 
 > 
-> > 
-> > [  OK  ] Mounted Huge Pages File System.
-> > [   70.297439] systemd[1]: Mounted POSIX Message Queue File System.
-> > [  OK  ] Mounted POSIX Message Queue File System.
-> > [   70.453489] systemd[1]: Mounted Kernel Debug File System.
-> > [  OK  ] Mounted Kernel Debug File System.
-> > [   70.516331] systemd[1]: Mounted Kernel Trace File System.
-> > [  OK  ] Mounted Kernel Trace File System.
-> > [   70.679253] systemd[1]: modprobe@configfs.service: Succeeded.
-> > [   70.788400] systemd[1]: Finished Load Kernel Module configfs.
-> > [  OK  ] Finished Load Kernel Module configfs.
-> > [   71.501222] systemd[1]: modprobe@drm.service: Succeeded.
-> > [   71.573295] systemd[1]: Finished Load Kernel Module drm.
-> > [  OK  ] Finished Load Kernel Module drm.
-> > [   71.825934] systemd[1]: modprobe@fuse.service: Succeeded.
-> > [   71.886945] systemd[1]: Finished Load Kernel Module fuse.
-> > [  OK  ] Finished Load Kernel Module fuse.
-> > [   71.991932] systemd[1]: nfs-convert.service: Succeeded.
-> > [   72.034674] systemd[1]: Finished Preprocess NFS configuration convertion.
-> > [  OK  ] Finished Preprocess NFS configuration convertion.
-> > [   72.148778] systemd[1]: systemd-modules-load.service: Main process exited, code=exited, status=1/FAILURE
-> > [   72.256659] systemd[1]: systemd-modules-load.service: Failed with result 'exit-code'.
-> > [   72.337818] systemd[1]: Failed to start Load Kernel Modules.
-> > [FAILED] Failed to start Load Kernel Modules.
-> > See 'systemctl status systemd-modules-load.service' for details.
-> > [   72.410491] systemd[1]: systemd-modules-load.service: Consumed 1.463s CPU time.
-> > [   72.496739] systemd[1]: Condition check resulted in FUSE Control File System being skipped.
-> > [   72.513689] systemd[1]: Condition check resulted in Kernel Configuration File System being skipped.
-> > [   72.682549] systemd[1]: Starting Apply Kernel Variables..
-> > [  OK  ] Finished Apply Kernel Variables.
-> > [   76.314434] systemd[1]: Finished Load/Save Random Seed.
-> > [  OK  ] Finished Load/Save Random Seed.
-> > [***   ] (1 of 6) A start job is running for…p Virtual Console (14s / no limit)
-> > [  OK  ] Finished Create Static Device Nodes in /dev.
-> > [   79.787065] systemd[1]: Started Entropy Daemon based on the HAVEGE algorithm.
-> > [  OK  ] Started Entropy Daemon based on the HAVEGE algorithm.
-> > [   80.186295] systemd[1]: Starting Journal Service...
-> >          Starting Journal Service...
-> > [   80.713508] systemd[1]: Starting Rule-based Manager for Device Events and Files...
-> >          Starting Rule-based Manage…for Device Events and Files...
-> > [  *** ] (2 of 7) A start job is running for… All udev Devices (17s / no limit)
-> > [   82.939347] systemd[1]: systemd-journald.service: Main process exited, code=exited, status=1/FAILURE
-> > [   83.032046] systemd[1]: systemd-journald.service: Failed with result 'exit-code'.
-> > [FAILED] Failed to start Journal Service.
-> > See 'systemctl status systemd-journald.service' for details.
-> > [   83.210041] systemd[1]: Dependency failed for Flush Journal to Persistent Storage.
-> > [DEPEND] Dependency failed for Flus…Journal to Persistent Storage.
-> > [   83.254122] systemd[1]: systemd-journal-flush.service: Job systemd-journal-flush.service/start failed with result 'dependency'.
-> > [   83.272366] systemd[1]: systemd-journald.service: Consumed 1.443s CPU time.
-> > [   83.334360] systemd[1]: systemd-journald.service: Scheduled restart job, restart counter is at 1.
-> > [   83.427839] systemd[1]: Finished Setup Virtual Console.
-> > [  OK  ] Finished Setup Virtual Console.
-> > [   83.510650] systemd[1]: Stopped Journal Service.
-> > [  OK  ] Stopped Journal Service.
-> > [   83.554417] systemd[1]: systemd-journald.service: Consumed 1.443s CPU time.
-> > [   83.576573] systemd[1]: Condition check resulted in Journal Audit Socket being skipped.
-> > [   83.904878] systemd[1]: Starting Journal Service...
-> >          Starting Journal Service...
-> > [   85.752090] systemd[1]: systemd-journald.service: Main process exited, code=exited, status=1/FAILURE
-> > [   85.826421] systemd[1]: systemd-journald.service: Failed with result 'exit-code'.
-> > [   85.876165] systemd[1]: Failed to start Journal Service.
-> > [FAILED] Failed to start Journal Service.
-> > See 'systemctl status systemd-journald.service' for details.
-> > [   85.952221] systemd[1]: systemd-journald.service: Consumed 1.355s CPU time.
-> > [   86.002092] systemd[1]: systemd-journald.service: Scheduled restart job, restart counter is at 2.
-> > [   86.015081] systemd[1]: Stopped Journal Service.
-> > [  OK  ] Stopped Journal Service.
-> > [   86.076429] systemd[1]: systemd-journald.service: Consumed 1.355s CPU time.
-> > [   86.089700] systemd[1]: Condition check resulted in Journal Audit Socket being skipped.
-> > [   86.390162] systemd[1]: Starting Journal Service...
-> >          Starting Journal Service...
-> > [   87.904427] systemd[1]: systemd-journald.service: Main process exited, code=exited, status=1/FAILURE
-> > [   87.950259] systemd[1]: systemd-journald.service: Failed with result 'exit-code'.
-> > [   88.000661] systemd[1]: Failed to start Journal Service.
-> > [FAILED] Failed to start Journal Service.
-> > See 'systemctl status systemd-journald.service' for details.
-> > [   88.079953] systemd[1]: systemd-journald.service: Consumed 1.316s CPU time.
-> > [   88.128956] systemd[1]: systemd-journald.service: Scheduled restart job, restart counter is at 3.
-> > [   88.145365] systemd[1]: Stopped Journal Service.
-> > [  OK  ] Stopped Journal Service.
-> > [   88.189975] systemd[1]: systemd-journald.service: Consumed 1.316s CPU time.
-> > [   88.205799] systemd[1]: Condition check resulted in Journal Audit Socket being skipped.
-> > [   88.514817] systemd[1]: Starting Journal Service...
-> >          Starting Journal Service...
-> > 
-> > (Note, you need to merge -rc2 into riscv/for-next to actually boot)
-> > 
-> > Cheers,
-> > Conor.
+> Signed-off-by: Hao Zhang <quic_hazha@quicinc.com>
+> ---
+>  .../bindings/arm/qcom,coresight-dummy.yaml    | 118 ++++++++++++++++++
+>  1 file changed, 118 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml
+> new file mode 100644
+> index 000000000000..7b719b084d72
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml
+> @@ -0,0 +1,118 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +# Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/qcom,coresight-dummy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: QCOM Coresight Dummy component
+> +
+> +description: |
+> +  The Coresight Dummy component is for the specific devices that HLOS don't have
+> +  permission to access or configure. Such as Coresight sink EUD, some TPDMs etc.
+
+EUD? TPDM?
+
+I don't really love 'dummy' used here. Maybe the OS still wants/needs to 
+know where the sink goes to even if not configurable.
+
+You *can* have multiple compatibles for a single generic driver if those 
+compatibles might be useful some day.
+
+> +  So there need driver to register dummy devices as Coresight devices. Provide
+> +  Coresight API for dummy device operations, such as enabling and disabling
+> +  dummy devices. Build the Coresight path for dummy sink or dummy source for
+> +  debugging.
+> +
+> +  The primary use case of the coresight dummy is to build path for dummy sink or
+> +  dummy source.
+> +
+> +maintainers:
+> +  - Mao Jinlong <quic_jinlmao@quicinc.com>
+> +  - Tao Zhang <quic_taozha@quicinc.com>
+> +  - Hao Zhang <quic_hazha@quicinc.com>
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - qcom,coresight-dummy
+> +  required:
+> +    - compatible
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^dummy_.*(sink|source)_[0-9]+.*$"
+
+Don't use '_' in node names.
+
+Convention for multiple instances without 'reg' is '-[0-9]+' on the end, 
+but you are allowing anything after that.
+
+> +  compatible:
+> +    items:
+> +      - const: qcom,coresight-dummy
+> +
+> +  qcom,dummy-sink:
+> +    type: boolean
+> +    description:
+> +      Indicates that the type of this coresight node is dummy sink.
+> +
+> +  qcom,dummy-source:
+
+Incorporate source or sink into the compatible strings.
+
+It's also somewhat redundant with 'in-ports' vs. 'out-ports'.
+
+> +    type: boolean
+> +    description:
+> +      Indicates that the type of this coresight node is dummy source.
+> +
+> +  out-ports:
+> +    description: |
+
+Don't need '|' unless you need to preserve formatting.
+
+> +      Output connections from the dummy source to Coresight Trace bus.
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port:
+> +        description: Output connection from the dummy source to Coresight
+> +            Trace bus.
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +
+> +  in-ports:
+> +    description: |
+> +      Input connections from the CoreSight Trace bus to dummy sink.
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port:
+> +        description: Input connection from the Coresight Trace bus to
+> +            dummy sink.
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +oneOf:
+> +  - required:
+> +      - qcom,dummy-sink
+> +  - required:
+> +      - qcom,dummy-source
+> +
+> +examples:
+> +  # minimum dummy sink definition. dummy sink connect to coresight replicator.
+> +  - |
+> +    dummy_sink_1 {
+> +      compatible = "qcom,coresight-dummy";
+> +      qcom,dummy-sink;
+> +
+> +      in-ports {
+> +        port {
+> +          eud_in_replicator_swao: endpoint {
+> +            remote-endpoint =
+> +              <&replicator_swao_out_eud>;
+> +          };
+> +        };
+> +      };
+> +    };
+> +
+> +  # minimum dummy source definition. dummy source connect to coresight funnel.
+> +  - |
+> +    dummy_source_1 {
+> +      compatible = "qcom,coresight-dummy";
+> +      qcom,dummy-source;
+> +
+> +      out-ports {
+> +        port {
+> +          dummy_riscv_out_funnel_swao: endpoint {
+> +            remote-endpoint =
+> +              <&funnel_swao_in_dummy_riscv>;
+> +          };
+> +        };
+> +      };
+> +    };
+> +
+> +...
+> -- 
+> 2.17.1
 > 
-> 
-
-
-
-
