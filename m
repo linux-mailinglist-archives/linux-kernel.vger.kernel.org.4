@@ -2,113 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D430C6D293F
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29086D293E
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbjCaUQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
+        id S232996AbjCaUQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjCaUQA (ORCPT
+        with ESMTP id S232538AbjCaUP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:16:00 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA3C22215;
-        Fri, 31 Mar 2023 13:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680293757; x=1711829757;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Hl1xBPfLx9uM+0HT0MMByFyx2tcjgcA/qWKErLRqhtU=;
-  b=nG7xANgka9YMaJwxPGt7e6ErB000LFCtih3IXoOncmPExEWTQ3qRPxRQ
-   BNNA5ja7AB/4nRFrrsbPMOLLi6F05+vuGgTNbjFp5d9Tplqo7SSGp6CC5
-   fmllklUWkNktFl8RJbbzDt7cBnh2L5KQ4Fm9xDeTWwHZ2R2OrvvbvlNls
-   bnYMCdZFoYAIlu+JMvXphLqSN78e6fKhxObMAUJShx3RHZxmTXTHenHnZ
-   366OZ/+gaMVCZshCKqWvp++jpzOttJdOb5q4WYHnYi8lXiGi8+JulCLlU
-   nG2oeIAnmQfmjatbcWRdkTrvfJutd7byIo1tLcfUqwGndHLzE3frbCzdr
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="321943002"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="321943002"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 13:15:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="754501901"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="754501901"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 31 Mar 2023 13:15:55 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1piLAA-000M85-2J;
-        Fri, 31 Mar 2023 20:15:54 +0000
-Date:   Sat, 1 Apr 2023 04:15:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Josh Triplett <josh@joshtriplett.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2] ext4: Add a uapi header for ext4 userspace APIs
-Message-ID: <202304010437.q1ttcwK7-lkp@intel.com>
-References: <152752fa6b148e0ea304a3cdb3cc33bae0117918.1680272908.git.josh@joshtriplett.org>
+        Fri, 31 Mar 2023 16:15:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C9B2220D;
+        Fri, 31 Mar 2023 13:15:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E21C62BB4;
+        Fri, 31 Mar 2023 20:15:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44293C433EF;
+        Fri, 31 Mar 2023 20:15:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680293753;
+        bh=16dwsgZWYBPEcC5Mo0pKMFJte2h3ZbqjXpx66wj21YA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tukh8HKpkIKrGnzD7GGfO5MBqpoaQ94utwny7C0Hv4uqcjdYsFR0z6rZPGeDBkhkg
+         UwBnGYapRWzEQTpmeQK6vxn6mahEdbz+h0kGVRKpRKCzKtH9izPGLQ8BrIZx9nNy4a
+         oa5nxeK7E3RiDg5FtX5u734NQKO0m9EX2XM2RRZbNCbWEGxe6Jkm1A6nHN0fCrCLAt
+         Fa3hwloajB0ybTUimh06xCDoXuRDrJU5CJF+nRpsbAZaTQNPmA6SrZot7MALuqW4+6
+         eYmxF0KHLzrpRETlghwGq8GNwE+UWox/oX6+nQ3n0XsIaChqIoLVpZSissV2T5s9Ww
+         JdnlG/vn8JZlg==
+Date:   Fri, 31 Mar 2023 21:15:46 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        uwu@icenowy.me
+Subject: Re: [PATCH v7 0/6] RISC-V non-coherent function pointer based CMO +
+ non-coherent DMA support for AX45MP
+Message-ID: <0d5590e4-e78b-4197-bf17-9de54466470d@spud>
+References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <b2dcda17-5850-47c1-94bc-4ca87f900581@spud>
+ <CA+V-a8s+=OY6CX4XTUwyAE9b=rdJZZfgAaY2nU+6aqnu=X9nxQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="r7DYywVukqmnzbkh"
 Content-Disposition: inline
-In-Reply-To: <152752fa6b148e0ea304a3cdb3cc33bae0117918.1680272908.git.josh@joshtriplett.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CA+V-a8s+=OY6CX4XTUwyAE9b=rdJZZfgAaY2nU+6aqnu=X9nxQ@mail.gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Josh,
 
-I love your patch! Yet something to improve:
+--r7DYywVukqmnzbkh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on tytso-ext4/dev]
-[also build test ERROR on linus/master v6.3-rc4 next-20230331]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Fri, Mar 31, 2023 at 08:09:16PM +0000, Lad, Prabhakar wrote:
+> Hi Conor,
+>=20
+> On Fri, Mar 31, 2023 at 7:05=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
+rote:
+> >
+> > On Thu, Mar 30, 2023 at 09:42:11PM +0100, Prabhakar wrote:
+> >
+> > > - This series requires testing on Cores with zicbom and T-Head SoCs
+> >
+> > I don't actually know if there are Zicbom parts, may need to test that
+> > on QEMU.
+> > I had to revert unrelated content to boot, but my D1 NFS setup seems to
+> > work fine with these changes, so where it is relevant:
+> > Tested-by: Conor Dooley <conor.dooley@microchip.com> # tyre-kicking on =
+D1
+> >
+> Thank you for testing this. By any chance did you compare the performance?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Josh-Triplett/ext4-Add-a-uapi-header-for-ext4-userspace-APIs/20230331-224557
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/152752fa6b148e0ea304a3cdb3cc33bae0117918.1680272908.git.josh%40joshtriplett.org
-patch subject: [PATCH v2] ext4: Add a uapi header for ext4 userspace APIs
-config: x86_64-randconfig-a004 (https://download.01.org/0day-ci/archive/20230401/202304010437.q1ttcwK7-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/50d05266bcf4bc3307776d25c0f70d11063a8a4e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Josh-Triplett/ext4-Add-a-uapi-header-for-ext4-userspace-APIs/20230331-224557
-        git checkout 50d05266bcf4bc3307776d25c0f70d11063a8a4e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+No, just tyre kicking. Icenowy had some benchmark for it IIRC, I think
+mining some coin or w/e. +CC them.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304010437.q1ttcwK7-lkp@intel.com/
+--r7DYywVukqmnzbkh
+Content-Type: application/pgp-signature; name="signature.asc"
 
-All errors (new ones prefixed by >>):
+-----BEGIN PGP SIGNATURE-----
 
-   In file included from <command-line>:
->> ./usr/include/linux/ext4.h:113:9: error: unknown type name 'compat_u64'
-     113 |         compat_u64 block_bitmap;
-         |         ^~~~~~~~~~
-   ./usr/include/linux/ext4.h:114:9: error: unknown type name 'compat_u64'
-     114 |         compat_u64 inode_bitmap;
-         |         ^~~~~~~~~~
-   ./usr/include/linux/ext4.h:115:9: error: unknown type name 'compat_u64'
-     115 |         compat_u64 inode_table;
-         |         ^~~~~~~~~~
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCc/cgAKCRB4tDGHoIJi
+0qcNAQCb/JCLCWAyFRm/yAdbNFnCLXnc2InpcdffRHVHLrmn2QD9HXRaoIyBKy8C
++GZGUxjBua3BKi4ILC22+PF1eF7MvAk=
+=W6KH
+-----END PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--r7DYywVukqmnzbkh--
