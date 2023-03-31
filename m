@@ -2,507 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E546D196E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C4D6D196B
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjCaII7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
+        id S231139AbjCaIIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbjCaII4 (ORCPT
+        with ESMTP id S230171AbjCaIIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:08:56 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359A11B7D9
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:08:54 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id s1so11140903ild.6
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:08:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680250134;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YXskskyk5NWWWpuFIiBZnYCbry+zJmmatsttCV4Yelo=;
-        b=d4YlV6hG4OC1PS9dLYvbIA/B8uh5ywrFFg/XMVfZ5lj87AqjFedJd0Lv3MJBA6wRv9
-         jxpsvgZNlS0+9i5hPloxA6XJwHU4fbDIC9lKNmRoAXgw76NYClBOQhlMkMmz+5MBa25p
-         gd6XrJ1z5C4nphc0NVjalyp1jRbs1DGE9jGvwAd9TwCW1givaFAXSNPjQEDPxYkZzryJ
-         aZ8a5uBDSdVJ9NutE3SwnUaTGwHVQVoxlcVM2J4Wdl3T6GfMUo2a0UhRDOvury/bhelT
-         iyGKBBvoE7On3gZwAiCj54IcdYh9UovZ1tZwfH0yXapf3JJVWFmyWd/0371hjMkfIj5G
-         3+IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680250134;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YXskskyk5NWWWpuFIiBZnYCbry+zJmmatsttCV4Yelo=;
-        b=Ng1kTBxriQDukpYEAab7D1iMQ76eUqj+/XVw/U9i4mP4NZu7pkFcVCOgN7q0RfCdJp
-         IidgQhbYdSrU6N9+x0ifPljcVXfpymZf6tuqsjLRar+hKCXWP8VDb5LpPNcuqIosD5uD
-         gDe+gyHyuqYbvGOvGZP79p5vivouGztG9Fc7/4o5qXm9V37qnPXbtCe6pmQqJvKGwuip
-         5BqVLZiK/+v8Fkvlo7ce2G/582VQwtqtJ7ohSwo0OSKV7jc4o05t9YNYeJX8y+1qS6Zo
-         ChpnSFZvwOsl2lBFUL7OA6wxNlAhCeQZYo8J0P4Gz2krLvMMvVaEPdF4A96cfeLJEh3f
-         GLJg==
-X-Gm-Message-State: AAQBX9f1u4RoGsXGP8FlgBm1XootGm3LqayWVl1hE+vRu/RYrBzuUHuH
-        zW0ZW9pCw9Y1qbiZpfWxFKWdtmykUU22t9ObdFqqAA==
-X-Google-Smtp-Source: AKy350aLGnhwlA6xGd1wCV7e2FwTACBbcnm5tTRc/zKzwBwOKecQZYKQJuam8DkwaJrhmRn0SErGxlXPq9nqNyQwAdU=
-X-Received: by 2002:a05:6e02:de9:b0:313:fa72:d9aa with SMTP id
- m9-20020a056e020de900b00313fa72d9aamr13252138ilj.0.1680250134109; Fri, 31 Mar
- 2023 01:08:54 -0700 (PDT)
+        Fri, 31 Mar 2023 04:08:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2194A1BC;
+        Fri, 31 Mar 2023 01:08:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8667DB82CDB;
+        Fri, 31 Mar 2023 08:08:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 308B3C433D2;
+        Fri, 31 Mar 2023 08:08:45 +0000 (UTC)
+Message-ID: <ee171553-c8e4-1128-2a5a-db2b450f8224@xs4all.nl>
+Date:   Fri, 31 Mar 2023 10:08:43 +0200
 MIME-Version: 1.0
-References: <20230331064528.3764174-1-sadiyakazi@google.com>
-In-Reply-To: <20230331064528.3764174-1-sadiyakazi@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 31 Mar 2023 16:08:41 +0800
-Message-ID: <CABVgOSnC5rcO-tf6GSwa4Pgkk0wZfhOdWJFdo4xy6Zjn66mULg@mail.gmail.com>
-Subject: Re: [PATCH v2] list: test: Test the klist structure
-To:     Sadiya Kazi <sadiyakazi@google.com>
-Cc:     brendanhiggins@google.com, skhan@linuxfoundation.org,
-        corbet@lwn.net, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] media: pvrusb2: clean up unneeded complexity in pvrusb2
+ class logic
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000067bef405f82db8cd"
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Cc:     Mike Isely <isely@pobox.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+References: <20230329060132.2688621-1-gregkh@linuxfoundation.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20230329060132.2688621-1-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000067bef405f82db8cd
-Content-Type: text/plain; charset="UTF-8"
+On 29/03/2023 08:01, Greg Kroah-Hartman wrote:
+> The pvrusb2 driver struct class logic was dynamically creating a class
+> that should have just been static as it did not do anything special and
+> was only a wrapper around a stock "struct class" implementation.  Clean
+> this all up by making a static struct class and modifying the code to
+> correctly reference it.
+> 
+> By doing so, lots of unneeded lines of code were removed, and #ifdef
+> logic was cleaned up so that the .c files are not cluttered up with
+> extra complexity following the proper kernel coding style.
+> 
+> Cc: Mike Isely <isely@pobox.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: linux-media@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-On Fri, 31 Mar 2023 at 14:45, Sadiya Kazi <sadiyakazi@google.com> wrote:
->
-> Add KUnit tests to the klist linked-list structure.
-> These perform testing for different variations of node add
-> and node delete in the klist data structure (<linux/klist.h>).
->
-> Limitation: Since we use a static global variable, and if
-> multiple instances of this test are run concurrently, the test may fail.
->
-> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+
 > ---
-> Thank you Brendan and David for reviewing this patch. I have addressed
-> the review comments in this iteration.
->
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20230329110723.3458843-1-sadiyakazi@google.com/
->
-> - Corrected the commenting style
-> - Deleted the comment /* counts the number of nodes*/
-> - Renamed last_node_count to last_node
->
->
-> ---
+> Note: I would like to take this through the driver-core tree as I have
+> later struct class cleanups that depend on this change being made to the
+> tree if that's ok with the maintainer of this file.
 
-Looks good now, thanks!
+That's fine!
 
--- David
+Regards,
 
->  lib/list-test.c | 300 +++++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 299 insertions(+), 1 deletion(-)
->
-> diff --git a/lib/list-test.c b/lib/list-test.c
-> index d374cf5d1a57..0cc27de9cec8 100644
-> --- a/lib/list-test.c
-> +++ b/lib/list-test.c
-> @@ -8,6 +8,7 @@
->  #include <kunit/test.h>
->
->  #include <linux/list.h>
-> +#include <linux/klist.h>
->
->  struct list_test_struct {
->         int data;
-> @@ -1199,6 +1200,303 @@ static struct kunit_suite hlist_test_module = {
->         .test_cases = hlist_test_cases,
+	Hans
+
+> 
+>  drivers/media/usb/pvrusb2/pvrusb2-main.c  | 18 ++-----
+>  drivers/media/usb/pvrusb2/pvrusb2-sysfs.c | 59 +++++++----------------
+>  drivers/media/usb/pvrusb2/pvrusb2-sysfs.h | 16 +++---
+>  3 files changed, 29 insertions(+), 64 deletions(-)
+> 
+> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-main.c b/drivers/media/usb/pvrusb2/pvrusb2-main.c
+> index ce4d566e4e5a..721dafd2c14b 100644
+> --- a/drivers/media/usb/pvrusb2/pvrusb2-main.c
+> +++ b/drivers/media/usb/pvrusb2/pvrusb2-main.c
+> @@ -16,9 +16,7 @@
+>  #include "pvrusb2-context.h"
+>  #include "pvrusb2-debug.h"
+>  #include "pvrusb2-v4l2.h"
+> -#ifdef CONFIG_VIDEO_PVRUSB2_SYSFS
+>  #include "pvrusb2-sysfs.h"
+> -#endif /* CONFIG_VIDEO_PVRUSB2_SYSFS */
+>  
+>  #define DRIVER_AUTHOR "Mike Isely <isely@pobox.com>"
+>  #define DRIVER_DESC "Hauppauge WinTV-PVR-USB2 MPEG2 Encoder/Tuner"
+> @@ -36,10 +34,6 @@ int pvrusb2_debug = DEFAULT_DEBUG_MASK;
+>  module_param_named(debug,pvrusb2_debug,int,S_IRUGO|S_IWUSR);
+>  MODULE_PARM_DESC(debug, "Debug trace mask");
+>  
+> -#ifdef CONFIG_VIDEO_PVRUSB2_SYSFS
+> -static struct pvr2_sysfs_class *class_ptr = NULL;
+> -#endif /* CONFIG_VIDEO_PVRUSB2_SYSFS */
+> -
+>  static void pvr_setup_attach(struct pvr2_context *pvr)
+>  {
+>  	/* Create association with v4l layer */
+> @@ -48,9 +42,7 @@ static void pvr_setup_attach(struct pvr2_context *pvr)
+>  	/* Create association with dvb layer */
+>  	pvr2_dvb_create(pvr);
+>  #endif
+> -#ifdef CONFIG_VIDEO_PVRUSB2_SYSFS
+> -	pvr2_sysfs_create(pvr,class_ptr);
+> -#endif /* CONFIG_VIDEO_PVRUSB2_SYSFS */
+> +	pvr2_sysfs_create(pvr);
+>  }
+>  
+>  static int pvr_probe(struct usb_interface *intf,
+> @@ -115,9 +107,7 @@ static int __init pvr_init(void)
+>  		return ret;
+>  	}
+>  
+> -#ifdef CONFIG_VIDEO_PVRUSB2_SYSFS
+> -	class_ptr = pvr2_sysfs_class_create();
+> -#endif /* CONFIG_VIDEO_PVRUSB2_SYSFS */
+> +	pvr2_sysfs_class_create();
+>  
+>  	ret = usb_register(&pvr_driver);
+>  
+> @@ -141,9 +131,7 @@ static void __exit pvr_exit(void)
+>  
+>  	pvr2_context_global_done();
+>  
+> -#ifdef CONFIG_VIDEO_PVRUSB2_SYSFS
+> -	pvr2_sysfs_class_destroy(class_ptr);
+> -#endif /* CONFIG_VIDEO_PVRUSB2_SYSFS */
+> +	pvr2_sysfs_class_destroy();
+>  
+>  	pvr2_trace(PVR2_TRACE_INIT,"pvr_exit complete");
+>  }
+> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c b/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c
+> index 3e42e209be37..a8c0b513e58e 100644
+> --- a/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c
+> +++ b/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c
+> @@ -66,10 +66,6 @@ struct pvr2_sysfs_ctl_item {
+>  	char name[80];
 >  };
->
-> -kunit_test_suites(&list_test_module, &hlist_test_module);
-> +
-> +struct klist_test_struct {
-> +       int data;
-> +       struct klist klist;
-> +       struct klist_node klist_node;
+>  
+> -struct pvr2_sysfs_class {
+> -	struct class class;
+> -};
+> -
+>  static ssize_t show_name(struct device *class_dev,
+>  			 struct device_attribute *attr,
+>  			 char *buf)
+> @@ -487,15 +483,6 @@ static void pvr2_sysfs_tear_down_controls(struct pvr2_sysfs *sfp)
+>  }
+>  
+>  
+> -static void pvr2_sysfs_class_release(struct class *class)
+> -{
+> -	struct pvr2_sysfs_class *clp;
+> -	clp = container_of(class,struct pvr2_sysfs_class,class);
+> -	pvr2_sysfs_trace("Destroying pvr2_sysfs_class id=%p",clp);
+> -	kfree(clp);
+> -}
+> -
+> -
+>  static void pvr2_sysfs_release(struct device *class_dev)
+>  {
+>  	pvr2_sysfs_trace("Releasing class_dev id=%p",class_dev);
+> @@ -503,6 +490,12 @@ static void pvr2_sysfs_release(struct device *class_dev)
+>  }
+>  
+>  
+> +static struct class pvr2_class = {
+> +	.name		= "pvrusb2",
+> +	.dev_release	= pvr2_sysfs_release,
 > +};
 > +
-> +static int node_count;
-> +static struct klist_node *last_node;
 > +
-> +static void check_node(struct klist_node *node_ptr)
-> +{
-> +       node_count++;
-> +       last_node = node_ptr;
-> +}
-> +
-> +static void check_delete_node(struct klist_node *node_ptr)
-> +{
-> +       node_count--;
-> +       last_node = node_ptr;
-> +}
-> +
-> +static void klist_test_add_tail(struct kunit *test)
-> +{
-> +       struct klist_node a, b;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, NULL);
-> +
-> +       klist_add_tail(&a, &mylist);
-> +       KUNIT_EXPECT_EQ(test, node_count, 1);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &a);
-> +
-> +       klist_add_tail(&b, &mylist);
-> +       KUNIT_EXPECT_EQ(test, node_count, 2);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &b);
-> +
-> +       /* should be [list] -> a -> b */
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +static void klist_test_add_head(struct kunit *test)
-> +{
-> +       struct klist_node a, b;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, NULL);
-> +
-> +       klist_add_head(&a, &mylist);
-> +       KUNIT_EXPECT_EQ(test, node_count, 1);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &a);
-> +
-> +       klist_add_head(&b, &mylist);
-> +       KUNIT_EXPECT_EQ(test, node_count, 2);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &b);
-> +
-> +       /* should be [list] -> b -> a */
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +static void klist_test_add_behind(struct kunit *test)
-> +{
-> +       struct klist_node a, b, c, d;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, NULL);
-> +
-> +       klist_add_head(&a, &mylist);
-> +       klist_add_head(&b, &mylist);
-> +
-> +       klist_add_behind(&c, &a);
-> +       KUNIT_EXPECT_EQ(test, node_count, 3);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &c);
-> +
-> +       klist_add_behind(&d, &b);
-> +       KUNIT_EXPECT_EQ(test, node_count, 4);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &d);
-> +
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       /* should be [list] -> b -> d -> a -> c*/
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +static void klist_test_add_before(struct kunit *test)
-> +{
-> +       struct klist_node a, b, c, d;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, NULL);
-> +
-> +       klist_add_head(&a, &mylist);
-> +       klist_add_head(&b, &mylist);
-> +       klist_add_before(&c, &a);
-> +       KUNIT_EXPECT_EQ(test, node_count, 3);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &c);
-> +
-> +       klist_add_before(&d, &b);
-> +       KUNIT_EXPECT_EQ(test, node_count, 4);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &d);
-> +
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       /* should be [list] -> b -> d -> a -> c*/
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +/*
-> + * Verify that klist_del() delays the deletion of a node until there
-> + * are no other references to it
-> + */
-> +static void klist_test_del_refcount_greater_than_zero(struct kunit *test)
-> +{
-> +       struct klist_node a, b, c, d;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, &check_delete_node);
-> +
-> +       /* Add nodes a,b,c,d to the list*/
-> +       klist_add_tail(&a, &mylist);
-> +       klist_add_tail(&b, &mylist);
-> +       klist_add_tail(&c, &mylist);
-> +       klist_add_tail(&d, &mylist);
-> +
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       /* Advance the iterator to point to node c*/
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-> +
-> +       /* Try to delete node c while there is a reference to it*/
-> +       klist_del(&c);
-> +
-> +       /*
-> +        * Verify that node c is still attached to the list even after being
-> +        * deleted. Since the iterator still points to c, the reference count is not
-> +        * decreased to 0
-> +        */
-> +       KUNIT_EXPECT_TRUE(test, klist_node_attached(&c));
-> +
-> +       /* Check that node c has not been removed yet*/
-> +       KUNIT_EXPECT_EQ(test, node_count, 4);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &d);
-> +
-> +       klist_iter_exit(&i);
-> +
-> +       /*
-> +        * Since the iterator is no longer pointing to node c, node c is removed
-> +        * from the list
-> +        */
-> +       KUNIT_EXPECT_EQ(test, node_count, 3);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &c);
-> +
-> +}
-> +
-> +/*
-> + * Verify that klist_del() deletes a node immediately when there are no
-> + * other references to it.
-> + */
-> +static void klist_test_del_refcount_zero(struct kunit *test)
-> +{
-> +       struct klist_node a, b, c, d;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, &check_delete_node);
-> +
-> +       /* Add nodes a,b,c,d to the list*/
-> +       klist_add_tail(&a, &mylist);
-> +       klist_add_tail(&b, &mylist);
-> +       klist_add_tail(&c, &mylist);
-> +       klist_add_tail(&d, &mylist);
-> +       /* Delete node c*/
-> +       klist_del(&c);
-> +
-> +       /* Check that node c is deleted from the list*/
-> +       KUNIT_EXPECT_EQ(test, node_count, 3);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &c);
-> +
-> +       /* Should be [list] -> a -> b -> d*/
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +static void klist_test_remove(struct kunit *test)
-> +{
-> +       /* This test doesn't check correctness under concurrent access */
-> +       struct klist_node a, b, c, d;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, &check_delete_node);
-> +
-> +       /* Add nodes a,b,c,d to the list*/
-> +       klist_add_tail(&a, &mylist);
-> +       klist_add_tail(&b, &mylist);
-> +       klist_add_tail(&c, &mylist);
-> +       klist_add_tail(&d, &mylist);
-> +       /* Delete node c*/
-> +       klist_remove(&c);
-> +
-> +       /* Check the nodes in the list*/
-> +       KUNIT_EXPECT_EQ(test, node_count, 3);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &c);
-> +
-> +       /* should be [list] -> a -> b -> d*/
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +static void klist_test_node_attached(struct kunit *test)
-> +{
-> +       struct klist_node a = {};
-> +       struct klist mylist;
-> +
-> +       klist_init(&mylist, NULL, NULL);
-> +
-> +       KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
-> +       klist_add_head(&a, &mylist);
-> +       KUNIT_EXPECT_TRUE(test, klist_node_attached(&a));
-> +       klist_del(&a);
-> +       KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
-> +
-> +}
-> +
-> +static struct kunit_case klist_test_cases[] = {
-> +       KUNIT_CASE(klist_test_add_tail),
-> +       KUNIT_CASE(klist_test_add_head),
-> +       KUNIT_CASE(klist_test_add_behind),
-> +       KUNIT_CASE(klist_test_add_before),
-> +       KUNIT_CASE(klist_test_del_refcount_greater_than_zero),
-> +       KUNIT_CASE(klist_test_del_refcount_zero),
-> +       KUNIT_CASE(klist_test_remove),
-> +       KUNIT_CASE(klist_test_node_attached),
-> +       {},
-> +};
-> +
-> +static struct kunit_suite klist_test_module = {
-> +       .name = "klist",
-> +       .test_cases = klist_test_cases,
-> +};
-> +
-> +kunit_test_suites(&list_test_module, &hlist_test_module, &klist_test_module);
->
->  MODULE_LICENSE("GPL v2");
-> --
-> 2.40.0.348.gf938b09366-goog
->
+>  static void class_dev_destroy(struct pvr2_sysfs *sfp)
+>  {
+>  	struct device *dev;
+> @@ -614,8 +607,7 @@ static ssize_t unit_number_show(struct device *class_dev,
+>  }
+>  
+>  
+> -static void class_dev_create(struct pvr2_sysfs *sfp,
+> -			     struct pvr2_sysfs_class *class_ptr)
+> +static void class_dev_create(struct pvr2_sysfs *sfp)
+>  {
+>  	struct usb_device *usb_dev;
+>  	struct device *class_dev;
+> @@ -628,7 +620,7 @@ static void class_dev_create(struct pvr2_sysfs *sfp,
+>  
+>  	pvr2_sysfs_trace("Creating class_dev id=%p",class_dev);
+>  
+> -	class_dev->class = &class_ptr->class;
+> +	class_dev->class = &pvr2_class;
+>  
+>  	dev_set_name(class_dev, "%s",
+>  		     pvr2_hdw_get_device_identifier(sfp->channel.hdw));
+> @@ -753,47 +745,30 @@ static void pvr2_sysfs_internal_check(struct pvr2_channel *chp)
+>  }
+>  
+>  
+> -struct pvr2_sysfs *pvr2_sysfs_create(struct pvr2_context *mp,
+> -				     struct pvr2_sysfs_class *class_ptr)
+> +void pvr2_sysfs_create(struct pvr2_context *mp)
+>  {
+>  	struct pvr2_sysfs *sfp;
+>  	sfp = kzalloc(sizeof(*sfp),GFP_KERNEL);
+> -	if (!sfp) return sfp;
+> +	if (!sfp)
+> +		return;
+>  	pvr2_trace(PVR2_TRACE_STRUCT,"Creating pvr2_sysfs id=%p",sfp);
+>  	pvr2_channel_init(&sfp->channel,mp);
+>  	sfp->channel.check_func = pvr2_sysfs_internal_check;
+>  
+> -	class_dev_create(sfp,class_ptr);
+> -	return sfp;
+> +	class_dev_create(sfp);
+>  }
+>  
+>  
+> -
+> -struct pvr2_sysfs_class *pvr2_sysfs_class_create(void)
+> +void pvr2_sysfs_class_create(void)
+>  {
+> -	struct pvr2_sysfs_class *clp;
+> -	clp = kzalloc(sizeof(*clp),GFP_KERNEL);
+> -	if (!clp) return clp;
+> -	pvr2_sysfs_trace("Creating and registering pvr2_sysfs_class id=%p",
+> -			 clp);
+> -	clp->class.name = "pvrusb2";
+> -	clp->class.class_release = pvr2_sysfs_class_release;
+> -	clp->class.dev_release = pvr2_sysfs_release;
+> -	if (class_register(&clp->class)) {
+> -		pvr2_sysfs_trace(
+> -			"Registration failed for pvr2_sysfs_class id=%p",clp);
+> -		kfree(clp);
+> -		clp = NULL;
+> -	}
+> -	return clp;
+> +	if (class_register(&pvr2_class))
+> +		pvr2_sysfs_trace("Registration failed for pvr2_sysfs_class");
+>  }
+>  
+>  
+> -void pvr2_sysfs_class_destroy(struct pvr2_sysfs_class *clp)
+> +void pvr2_sysfs_class_destroy(void)
+>  {
+> -	pvr2_sysfs_trace("Unregistering pvr2_sysfs_class id=%p", clp);
+> -	if (clp)
+> -		class_unregister(&clp->class);
+> +	class_unregister(&pvr2_class);
+>  }
+>  
+>  
+> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-sysfs.h b/drivers/media/usb/pvrusb2/pvrusb2-sysfs.h
+> index ac580ff39b5f..375a5372e95c 100644
+> --- a/drivers/media/usb/pvrusb2/pvrusb2-sysfs.h
+> +++ b/drivers/media/usb/pvrusb2/pvrusb2-sysfs.h
+> @@ -10,13 +10,15 @@
+>  #include <linux/sysfs.h>
+>  #include "pvrusb2-context.h"
+>  
+> -struct pvr2_sysfs;
+> -struct pvr2_sysfs_class;
+> +#ifdef CONFIG_VIDEO_PVRUSB2_SYSFS
+> +void pvr2_sysfs_class_create(void);
+> +void pvr2_sysfs_class_destroy(void);
+> +void pvr2_sysfs_create(struct pvr2_context *mp);
+> +#else
+> +static inline void pvr2_sysfs_class_create(void) { }
+> +static inline void pvr2_sysfs_class_destroy(void) { }
+> +static inline void pvr2_sysfs_create(struct pvr2_context *mp) { }
+> +#endif
+>  
+> -struct pvr2_sysfs_class *pvr2_sysfs_class_create(void);
+> -void pvr2_sysfs_class_destroy(struct pvr2_sysfs_class *);
+> -
+> -struct pvr2_sysfs *pvr2_sysfs_create(struct pvr2_context *,
+> -				     struct pvr2_sysfs_class *);
+>  
+>  #endif /* __PVRUSB2_SYSFS_H */
 
---00000000000067bef405f82db8cd
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDR
-ZhDR1GkiWSb5Ytzh1OQoOucpJxCdscDJqCU+Rh35BTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMzEwODA4NTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAXQLl5x2IdFNNPBnD4Btv
-+wlLySLocKvQoeZwboTSNCJ5DKhQPSZDLijptSP3cMqJXyOWEqJpQ+6/L0ubwG0NcbhdZBFsF8H6
-3qjW1CQcb9Q8OrGaP2vBQA+lXKW1uNyVa0uLfGgymTTuIt3PppUwLQ++szX5P08mDiHX1SqFN69I
-zneB7qLZxkC1Ls7UaRlnAj9oCt815uHZhc39A5tnTDKqp1jN/7vqJPk/KlpikHojFjyHcZWRcBQ7
-fSNroDmrQlJOEhZ9DEKQfc1A9uXlXMoPQ4UqJ/e9txYHrcx8C60gYp2ygqHm3Vw6HzEOCDNeNHYR
-GR2LhkYnOVEK89vvjA==
---00000000000067bef405f82db8cd--
