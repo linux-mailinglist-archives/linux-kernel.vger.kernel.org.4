@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8246D261A
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6986D2626
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbjCaQqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 12:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
+        id S233036AbjCaQsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232970AbjCaQqS (ORCPT
+        with ESMTP id S230470AbjCaQrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:46:18 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EA123B52
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:44:26 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id w4so21745764plg.9
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:44:26 -0700 (PDT)
+        Fri, 31 Mar 2023 12:47:51 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CC824ADA
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:45:37 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id y15so29682688lfa.7
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:45:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680281064;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9oFHBwDflAuoBx3nAvQZJqLFUNje4jYksqgr3MUJ8Rg=;
-        b=il3cTrMbr5JNkWMDf/06GZqg3tgIq0sGJwg2KvEEbljX+AQ0HVXtv+TmdGc9Ez4Tcl
-         SRpgTWmfSEcz9F9gONJV43wEI+M7i5eJDK/SGFKUwzGz7fIyhJ2z5E6Bx2PVLT6fGHE5
-         90ZGyGe8uFxDDws8xQx5mfFFBzSfjuOrWWAOGvKA9gAcaTAFuQ2SQt/2jv++uGt1O+DZ
-         sn13tRafhaqPlvhCJPVX3nwLM1kEQqkO6Y45OXgNrduoYgrNZfRVEAK3pHUdonbtyHvY
-         aLPkVwxudSj3zXVR4fgY4JMMZlvN/GIWSiWA6lo+noRv/zeKLxdVqCUZ2ZlkZkOMUe/i
-         aBtQ==
+        d=linaro.org; s=google; t=1680281136;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Kmz3C998WVao4UkbIae7gw0Yw5Zh6htrgN/X3GXY8I=;
+        b=tivHTCPqdm0bY2kwozGD/QKWMPIb4CuzLIrFj6DOOFKH+FS/YBDS6OLXylZ1y7gm+S
+         tjKAFVIhipHhsmQfyAP5qbX38bWcEnP0af54QH9EV5cRmpJdI1572usURQpvu2RZ6IPO
+         weos0BDITJkFYi1iXLYZHzpWPWA06UmK68B1zBfiuYu9DVNuS8Wwx4qEk9THlUNdwL7c
+         MljcC60TCHbqqo41ZZboSTkLifNmYXc8a4DZ9OFM5CMId2ar+QCIzGmKKJqUGYLyoQG/
+         jSaKGL/J4CLMrYhFODT+GksZTq88ceIkmFLaEr616/mHkmySapxTt18oUvsuBVTxT+xH
+         gwTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680281064;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9oFHBwDflAuoBx3nAvQZJqLFUNje4jYksqgr3MUJ8Rg=;
-        b=Yh8tE80pTPiVMoMhdtSpyrE3us009FL85x6fFCIAC56j9CjoUMKnioyPRl1zvKhkRm
-         Xt/ZZZxSqzXC4VfAA/WHzNN96UXUSAgxEb24Rphj2+0mAdNjNETFfPYlx+Zx0Juv/F4E
-         Q3vxrnzvOx3hEf5qrwa9qhkQHhxNiZuJglsxtu71SATKzlBf5yGFThhQw7wVzGWi2qhh
-         GrJBgNRvWcDaQKnHn6zdWlCfdbdezDtX+V/AEdHjFDm7uJudkbGpC8i3sH9EadjXcd1L
-         I5l84GZlQAy0Z8OHkfTyl1ltBV0QIyJXM4wcUKqbBL8MoGMTeFJp4U88oRC2r0EVBu4i
-         GZAg==
-X-Gm-Message-State: AAQBX9f5fJ7aY44A9z5DndtvC6PJg4N/ZXhr+35VGpKYRU0nXjIgEc0f
-        LjzboJcs6KYKtAGArLS94Q+bKw==
-X-Google-Smtp-Source: AKy350az2m8ukvlx0xv24TkXLrJ+E8amqHcOA4VfZ/exIUOmE+EYOKV0M/EQ2yRGMgccir6UdTTSKA==
-X-Received: by 2002:a17:902:f983:b0:1a0:50bd:31aa with SMTP id ky3-20020a170902f98300b001a050bd31aamr23244015plb.66.1680281064724;
-        Fri, 31 Mar 2023 09:44:24 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c5e:53ce:1f39:30a5:d20f:f205])
-        by smtp.gmail.com with ESMTPSA id x13-20020a170902b40d00b0019b089bc8d7sm1798767plr.78.2023.03.31.09.44.20
+        d=1e100.net; s=20210112; t=1680281136;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Kmz3C998WVao4UkbIae7gw0Yw5Zh6htrgN/X3GXY8I=;
+        b=fMjW91VMlTG1zdZ1NNl1Ry1jxpf0fApXadrYUww63STOAOw3N3Oh9tS9Lktj50QyCv
+         U6iLD71BRwL01dBuBPjwOEhKjm1pOQJU/tLgQGDL4efzoIsSrJRfXmdjiBrrCHdMTfny
+         dGgmxWNQ406gx+rnGnZjddf3paxLj08/ldgQzMiAlsH3g6Es2Q3i+cz0i0mBAqVq3QwO
+         49O0nJP4kVyShR30zpdoerk2/d63znLq8QePXqYF/jSfDtujL3ZV0JXrxu4K93HfNtFp
+         I6//KKDvDcJwmZUlRP+OuyHVdKR/zQRYg8NfpEgKp2sFqU1zClpSK3uHC4X63/GfZkXB
+         bByg==
+X-Gm-Message-State: AAQBX9dmyeot1uW7OrVcWIgBXDQM3Fg2Osa+g2UaEaQZwdcE/MS2tcnu
+        6bkrdgxVBdMjS48ai5ahS7mVrA==
+X-Google-Smtp-Source: AKy350bA3F8gy4HD9rUqIR1YmyE+ZIZu7WvWnQcjUjVMMPVpvex7vCu0y68oxuXMTOpqpqKXChytIA==
+X-Received: by 2002:a05:6512:961:b0:4eb:274b:a69 with SMTP id v1-20020a056512096100b004eb274b0a69mr1754798lft.26.1680281135816;
+        Fri, 31 Mar 2023 09:45:35 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id u26-20020ac2519a000000b004e8483bff82sm439872lfi.271.2023.03.31.09.45.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 09:44:24 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
-        rfoss@kernel.org, neil.armstrong@linaro.org
-Subject: [PATCH v4 11/11] arm64: dts: qcom: sm8450: add crypto nodes
-Date:   Fri, 31 Mar 2023 22:13:23 +0530
-Message-Id: <20230331164323.729093-12-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230331164323.729093-1-bhupesh.sharma@linaro.org>
-References: <20230331164323.729093-1-bhupesh.sharma@linaro.org>
+        Fri, 31 Mar 2023 09:45:35 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Patrick Lai <quic_plai@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/7] dt-bindings: soundwire: qcom: add 16-bit sample interval
+Date:   Fri, 31 Mar 2023 18:45:24 +0200
+Message-Id: <20230331164530.227302-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -75,57 +80,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Neil Armstrong <neil.armstrong@linaro.org>
+The port sample interval was always 16-bit, split into low and high
+bytes.  This split was unnecessary, although harmless for older devices
+because all of them used only lower byte (so values < 0xff).  With
+support for Soundwire controller on Qualcomm SM8550 and its devices,
+both bytes will be used, thus add a new 'qcom,ports-sinterval' property
+to allow 16-bit sample intervals.
 
-Add crypto engine (CE) and CE BAM related nodes and definitions
-for the SM8450 SoC.
-
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-[Bhupesh: Corrected the compatible list]
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ .../bindings/soundwire/qcom,soundwire.yaml    | 22 +++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 31877f18dce2..d7a28cac4f47 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -4146,6 +4146,34 @@ ufs_mem_phy_lanes: phy@1d87400 {
- 			};
- 		};
+diff --git a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
+index 3efdc192ab01..e2acfd09fb22 100644
+--- a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
++++ b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
+@@ -85,7 +85,7 @@ properties:
+   qcom,ports-sinterval-low:
+     $ref: /schemas/types.yaml#/definitions/uint8-array
+     description:
+-      Sample interval low of each data port.
++      Sample interval (only lowest byte) of each data port.
+       Out ports followed by In ports. Used for Sample Interval calculation.
+       Value of 0xff indicates that this option is not implemented
+       or applicable for the respective data port.
+@@ -93,6 +93,19 @@ properties:
+     minItems: 3
+     maxItems: 8
  
-+		cryptobam: dma-controller@1dc4000 {
-+			compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
-+			reg = <0 0x01dc4000 0 0x28000>;
-+			interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			qcom,ee = <0>;
-+			qcom,controlled-remotely;
-+			iommus = <&apps_smmu 0x584 0x11>,
-+				 <&apps_smmu 0x588 0x0>,
-+				 <&apps_smmu 0x598 0x5>,
-+				 <&apps_smmu 0x59a 0x0>,
-+				 <&apps_smmu 0x59f 0x0>;
-+		};
++  qcom,ports-sinterval:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    description:
++      Sample interval of each data port.
++      Out ports followed by In ports. Used for Sample Interval calculation.
++      Value of 0xffff indicates that this option is not implemented
++      or applicable for the respective data port.
++      More info in MIPI Alliance SoundWire 1.0 Specifications.
++    minItems: 3
++    maxItems: 8
++    items:
++      maximum: 0xffff
 +
-+		crypto: crypto@1de0000 {
-+			compatible = "qcom,sm8450-qce", "qcom,sm8150-qce", "qcom,qce";
-+			reg = <0 0x01dfa000 0 0x6000>;
-+			dmas = <&cryptobam 4>, <&cryptobam 5>;
-+			dma-names = "rx", "tx";
-+			iommus = <&apps_smmu 0x584 0x11>,
-+				 <&apps_smmu 0x588 0x0>,
-+				 <&apps_smmu 0x598 0x5>,
-+				 <&apps_smmu 0x59a 0x0>,
-+				 <&apps_smmu 0x59f 0x0>;
-+			interconnects = <&aggre2_noc MASTER_CRYPTO 0 &mc_virt SLAVE_EBI1 0>;
-+			interconnect-names = "memory";
-+		};
+   qcom,ports-offset1:
+     $ref: /schemas/types.yaml#/definitions/uint8-array
+     description:
+@@ -218,10 +231,15 @@ required:
+   - '#size-cells'
+   - qcom,dout-ports
+   - qcom,din-ports
+-  - qcom,ports-sinterval-low
+   - qcom,ports-offset1
+   - qcom,ports-offset2
+ 
++oneOf:
++  - required:
++      - qcom,ports-sinterval
++  - required:
++      - qcom,ports-sinterval-low
 +
- 		sdhc_2: mmc@8804000 {
- 			compatible = "qcom,sm8450-sdhci", "qcom,sdhci-msm-v5";
- 			reg = <0 0x08804000 0 0x1000>;
+ additionalProperties: false
+ 
+ examples:
 -- 
-2.38.1
+2.34.1
 
