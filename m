@@ -2,87 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377956D2124
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 15:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43CBD6D2128
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 15:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232735AbjCaNGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 09:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
+        id S232740AbjCaNIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 09:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232730AbjCaNGs (ORCPT
+        with ESMTP id S232711AbjCaNIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 09:06:48 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5BF1A440;
-        Fri, 31 Mar 2023 06:06:44 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so23258089pjl.4;
-        Fri, 31 Mar 2023 06:06:44 -0700 (PDT)
+        Fri, 31 Mar 2023 09:08:20 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B7E1A944
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 06:08:16 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id s13so12831734wmr.4
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 06:08:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680268004;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=14bpLXKhsGbcNPJuXxXGVYE6w75UYQ85KK15RjcJ7NM=;
-        b=J+rhCmXUXYpIA9Z4hqSg12/qcx1JRwMtRVYOyRG1oZdWSz28BP+6taWx8MpvgyPCkf
-         z/4Z1gf3ifZu7a+4JHaMc4GEF4BFvsIPuMIIEjj7U/NR98vHHqiGmtXWHjfeSfoPCU5I
-         XIrr9MIr/8N20eLT8RwMJWWWLhiqofH7bkjLfIEthvekHDWWhDw7n66g3vOaxfXRkSSV
-         wlPfMDe8Qqp9RxBouFY0LbY2ZpW40dfnn3/eAb6CV+6MUCjbw8MmCUw6Plpk27E0kH9Q
-         u5jK2hElNCL/LH6xv2ZSmQ1M54Fp4Paq3bqNEn7EtFfObQDHipQTMyqs2vTX0L1U/+Ys
-         7EOg==
+        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1680268095;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=E8V1Bl8K2mO5BPBfvC+IG4HaObqCUBUdhVKIlW8yaQo=;
+        b=D+VDfK4ViTsTLqpx0PYLWBqb8J4neG7eMOaU8bJKAHpCu3K2VVXJrxkgG7HWg3RF7O
+         3YhBpfhQuOWzGFwPd9EmvBhb2eEAFocYMNDJPJ63OD12pRlFkZYUjZznBY6J4SL7/GRa
+         HkrePY+ZI4Y/ouzuNx3DPy13aqAAt2vp+0saNScT4C60weOcSvZGni0SvWvojiB366yb
+         a7Ku97b4NEoRLLi2nYa99gWk2ScH284ibaIerojT0XEi4+DAZIxIOtjVCdMvdE+cMlPb
+         jAihkEPRJd+qbjGxkmWlVI6kKtUBJ+6S9Ff2/Ok/Ks1Hj7kA+poVXUGC5E3UfQtpTiuX
+         wqAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680268004;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=14bpLXKhsGbcNPJuXxXGVYE6w75UYQ85KK15RjcJ7NM=;
-        b=YAz4I3Y53pvLoNdAebubcMRzzMfA6pfDBtjrVgx01qj9uh4m42o0jTm+bTARmpFZxX
-         xTv4i0R+H8eARFyTB9Joe+/9ohCo+XI5PHU3ol/hx9DHOxqG6/XxFG4YsIcXK4jkbw4V
-         Z6387QZnIClxr3V9VD8+5mD1Ii95cuTvo43tpEBA3ESdxFnkZh2+BEKAH5v0esjOYa+y
-         JjjeFHr+fkZ10PtrD2rjqegvEL2cmI7YYkvpmeARIdM2qOl8BlTnqpB6bsaTok2OOFM7
-         mcB+E4PX4IaK7sjwgU4xy74pRGeftyEeBVnnxs4JoWhJFqVqp/Gxg9HAser7jcPHypwA
-         79Wg==
-X-Gm-Message-State: AAQBX9cvdaK9aEJz+qtkhrJmguLovZBp31nws71UB5b2lK3dUBzvi/BD
-        XODwIloOrLx2naFt9kl7/pI=
-X-Google-Smtp-Source: AKy350btzesFQdGHg0HNraW7MNdqEP2cgp0ZyzibFgofLQwudP9lvC9SJrYkNOkcOtLGChmUI7NE8w==
-X-Received: by 2002:a17:90a:e7cf:b0:23e:f855:79ed with SMTP id kb15-20020a17090ae7cf00b0023ef85579edmr29725179pjb.28.1680268004333;
-        Fri, 31 Mar 2023 06:06:44 -0700 (PDT)
-Received: from [192.168.43.80] (subs09b-223-255-225-236.three.co.id. [223.255.225.236])
-        by smtp.gmail.com with ESMTPSA id gz21-20020a17090b0ed500b0023f355a0bb5sm1465269pjb.14.2023.03.31.06.06.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 06:06:44 -0700 (PDT)
-Message-ID: <730b79b3-5adb-c8a2-8eb5-8790860fc1a3@gmail.com>
-Date:   Fri, 31 Mar 2023 20:06:37 +0700
+        d=1e100.net; s=20210112; t=1680268095;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E8V1Bl8K2mO5BPBfvC+IG4HaObqCUBUdhVKIlW8yaQo=;
+        b=Dcz3j0b/feC9c1pZFdLWzj2HvXzd4haX33ZttkWSZSS3APHNYKnBCK6tGXksQtR2ae
+         0g3fUDUGnTNi4Lm4GnE4mxakfY+n93uCl6y74C8yxkJGkXEtCBSQ2e86X1Hv5vQRiY00
+         agdkFUWo/wi4l42rlmirTjCQlR9sWhAJbZD0H9gZkN+K4hDdbjYvbgFpT2GFwPyEwhBv
+         G6F5DeO6Jicwlpi08oPZmdbFsv6hdMaw42aBRu/8bruVp54ncQfuStgw+mTCYaTDy8rA
+         Ua3aCOK/w8Xo0ZfQtqcZM+6gVyisfVZlfd5lrXLWS9BSzgupwYvlPHtGz7UUXf9C9Rmp
+         hzdw==
+X-Gm-Message-State: AO0yUKWfi+LD5OrjLB+fNbjcWUYOooZ20xPoqfPwRmeslOPnc9DyI0Hp
+        Yle7HSMngHDVHWoAcumX4ogN/Q==
+X-Google-Smtp-Source: AK7set9GiuiV4b5e/vjtDk8YReJcNQd/gJiW/RM6IisXdlqLJy0t+QpeZbakT348E4FFd5LuKwCOKg==
+X-Received: by 2002:a7b:c8c3:0:b0:3ed:711c:e8fe with SMTP id f3-20020a7bc8c3000000b003ed711ce8femr23029661wml.2.1680268094744;
+        Fri, 31 Mar 2023 06:08:14 -0700 (PDT)
+Received: from localhost ([194.62.217.4])
+        by smtp.gmail.com with ESMTPSA id v16-20020a5d6110000000b002d89e113691sm2173758wrt.52.2023.03.31.06.08.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 06:08:14 -0700 (PDT)
+References: <20230329223239.138757-14-y86-dev@protonmail.com>
+User-agent: mu4e 1.9.18; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     y86-dev@protonmail.com
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Andreas Hindborg <a.hindborg@samsung.com>
+Subject: Re: [PATCH v3 13/13] rust: sync: add functions for initializing
+ `UniqueArc<MaybeUninit<T>>`
+Date:   Fri, 31 Mar 2023 15:07:18 +0200
+In-reply-to: <20230329223239.138757-14-y86-dev@protonmail.com>
+Message-ID: <87v8ih1329.fsf@metaspace.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RFC v1 1/4] dma-mapping: introduce the DMA_ATTR_MAY_SLEEP
- attribute
-To:     Petr Tesarik <petrtesarik@huaweicloud.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>, petr@tesarici.cz
-References: <cover.1679309810.git.petr.tesarik.ext@huawei.com>
- <ea0646e0e63380bb8595fbac81c23aeca30feae9.1679309810.git.petr.tesarik.ext@huawei.com>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <ea0646e0e63380bb8595fbac81c23aeca30feae9.1679309810.git.petr.tesarik.ext@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,22 +77,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 19:28, Petr Tesarik wrote:
-> +
-> +DMA_ATTR_MAY_SLEEP
-> +------------------
-> +
-> +This tells the DMA-mapping subsystem that it is allowed to sleep. For example,
-> +if mapping needs a bounce buffer, software IO TLB may use CMA for the
-> +allocation if this flag is given.
-> +
-> +This attribute is not used for dma_alloc_* functions. Instead, the provided
-                                  dma_alloc_\* (escape wildcard in order to
-                                                not confuse Sphinx for emphasis).
-> +GFP flags are used to determine whether the allocation may sleep.
 
-Otherwise the doc LGTM.
+y86-dev@protonmail.com writes:
 
--- 
-An old man doll... just what I always wanted! - Clara
+> From: Benno Lossin <y86-dev@protonmail.com>
+>
+> Add two functions `init_with` and `pin_init_with` to
+> `UniqueArc<MaybeUninit<T>>` to initialize the memory of already allocated
+> `UniqueArc`s. This is useful when you want to allocate memory check some
+> condition inside of a context where allocation is forbidden and then
+> conditionally initialize an object.
+>
+> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+> ---
+
+Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
+
+>  rust/kernel/sync/arc.rs | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>
+> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> index 4ed6329a5e5f..64b0e9d67025 100644
+> --- a/rust/kernel/sync/arc.rs
+> +++ b/rust/kernel/sync/arc.rs
+> @@ -540,6 +540,30 @@ impl<T> UniqueArc<MaybeUninit<T>> {
+>              inner: unsafe { Arc::from_inner(inner.cast()) },
+>          }
+>      }
+> +
+> +    /// Initialize `self` using the given initializer.
+> +    pub fn init_with<E>(mut self, init: impl Init<T, E>) -> core::result::Result<UniqueArc<T>, E> {
+> +        // SAFETY: The supplied pointer is valid for initialization.
+> +        match unsafe { init.__init(self.as_mut_ptr()) } {
+> +            // SAFETY: Initialization completed successfully.
+> +            Ok(()) => Ok(unsafe { self.assume_init() }),
+> +            Err(err) => Err(err),
+> +        }
+> +    }
+> +
+> +    /// Pin-initialize `self` using the given pin-initializer.
+> +    pub fn pin_init_with<E>(
+> +        mut self,
+> +        init: impl PinInit<T, E>,
+> +    ) -> core::result::Result<Pin<UniqueArc<T>>, E> {
+> +        // SAFETY: The supplied pointer is valid for initialization and we will later pin the value
+> +        // to ensure it does not move.
+> +        match unsafe { init.__pinned_init(self.as_mut_ptr()) } {
+> +            // SAFETY: Initialization completed successfully.
+> +            Ok(()) => Ok(unsafe { self.assume_init() }.into()),
+> +            Err(err) => Err(err),
+> +        }
+> +    }
+>  }
+>
+>  impl<T: ?Sized> From<UniqueArc<T>> for Pin<UniqueArc<T>> {
 
