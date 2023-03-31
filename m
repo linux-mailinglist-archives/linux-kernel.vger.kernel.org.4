@@ -2,98 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8013F6D1919
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4C86D1928
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjCaHzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
+        id S231232AbjCaIAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjCaHzi (ORCPT
+        with ESMTP id S229441AbjCaIAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:55:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E0F210D;
-        Fri, 31 Mar 2023 00:55:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F347B82C86;
-        Fri, 31 Mar 2023 07:55:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48275C433EF;
-        Fri, 31 Mar 2023 07:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680249335;
-        bh=56tCHTmfZ4Dl+rN8BVNsQISShX6kyMqKc5AH+7Uj+7g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=d8pzU7fa4a0MPZNqdYvhn1SagoTH0CwCH7N8LJtri3bFQikdL7Vvu9xx2rrXkUE8K
-         vU0x4c3bYnhwVYAYv83Mof1cNZnA06zAQDz5Em2fw6YWEX/nrWWIDgdRNUNEsWoLsV
-         9vZWuM0OQf8J7YOEk76ygBfPhdg28jf1uIVMWKrWqLDGLw6dGf8e/dQfU1g4MxVoyI
-         3vqWXTp9oOXcCnf36dprPxkCSO/EnKpfgxqdbns6EDqx1ix2qubNpUI/IxnDmhh2S9
-         NejpCa24KedXER0ZZ8uKhdwK7kV00+Tqa3MKAUzhdxqs4jri4QTBBNG2bqMJPHRBQq
-         PPDj4R1NemEDg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>, Shay Drory <shayd@nvidia.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Eli Cohen <elic@nvidia.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI/MSI: provide dummy pci_msix_can_alloc_dyn() helper
-Date:   Fri, 31 Mar 2023 09:55:04 +0200
-Message-Id: <20230331075528.1300270-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 31 Mar 2023 04:00:17 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62ABEB63;
+        Fri, 31 Mar 2023 01:00:14 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id AD83B5FD37;
+        Fri, 31 Mar 2023 11:00:11 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1680249611;
+        bh=V4eJlIvHXOm3/75lYaNQr5oPI/99sRGeqA0cdS3xh7M=;
+        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+        b=F1fxVg77CUxw+QIRT8vN1DfEK8cX92WJsSUciLe2tobx/nuvIVz6mcEbXrDs84NGN
+         CjJnjVE37rUkma6nJ8NN3lcY/9AguGGZomk90k+wdZO06/NOV7pixWNypr0cQXt6SU
+         iCjObWsgnhMPFuq08k1dB+X8PB923RnecNfGndckFyUtmdC7DwhNbQ702OO2QYVU5G
+         6wIosDmXdvaWUfEDIExF5HDZOxMTLa1hdP7Ib0GdYYWooNC3G57teXjHBSsKM8HlWh
+         h13KIQmzOEw/F4CPPYjoWQiTV/9S4Vdeeuqt2V35+BSTgXDSmFFCuZPULmyFMTyZJ4
+         MERi7ZgzQ9eQw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 31 Mar 2023 11:00:07 +0300 (MSK)
+Message-ID: <2c3aeeac-2fcb-16f6-41cd-c0ca4e6a6d3e@sberdevices.ru>
+Date:   Fri, 31 Mar 2023 10:56:41 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Bryan Tan <bryantan@vmware.com>, Vishnu Dasa <vdasa@vmware.com>
+CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
+        <avkrasnov@sberdevices.ru>, <pv-drivers@vmware.com>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Subject: [PATCH net] vsock/vmci: convert VMCI error code to -ENOMEM on send
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/31 05:18:00 #21105108
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+This adds conversion of VMCI specific error code to general -ENOMEM. It
+is needed, because af_vsock.c passes error value returned from transport
+to the user, which does not expect to get VMCI_ERROR_* values.
 
-A change in mlx5 caused a build failure when PCI_MSI is disabled:
-
-drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c: In function 'irq_release':
-drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c:148:31: error: implicit declaration of function 'pci_msix_can_alloc_dyn' [-Werror=implicit-function-declaration]
-  148 |         if (irq->map.index && pci_msix_can_alloc_dyn(pool->dev->pdev))
-      |                               ^~~~~~~~~~~~~~~~~~~~~~
-
-All the related functions already have a dummy version that does nothing
-in this configuration, but pci_msix_can_alloc_dyn() does not, so add one.
-
-Fixes: fb0a6a268dcd ("net/mlx5: Provide external API for allocating vectors")
-Fixes: 34026364df8e ("PCI/MSI: Provide post-enable dynamic allocation interfaces for MSI-X")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: c43170b7e157 ("vsock: return errors other than -ENOMEM to socket")
+Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Reviewed-by: Vishnu Dasa <vdasa@vmware.com>
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 ---
- include/linux/pci.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ net/vmw_vsock/vmci_transport.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index b50e5c79f7e3..f69f7939331e 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -1624,6 +1624,11 @@ pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
- 					      flags, NULL);
+diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+index 36eb16a40745..95cc4d79ba29 100644
+--- a/net/vmw_vsock/vmci_transport.c
++++ b/net/vmw_vsock/vmci_transport.c
+@@ -1842,7 +1842,13 @@ static ssize_t vmci_transport_stream_enqueue(
+ 	struct msghdr *msg,
+ 	size_t len)
+ {
+-	return vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
++	ssize_t err;
++
++	err = vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
++	if (err < 0)
++		err = -ENOMEM;
++
++	return err;
  }
  
-+static inline bool pci_msix_can_alloc_dyn(struct pci_dev *dev)
-+{
-+	return false;
-+}
-+
- static inline struct msi_map pci_msix_alloc_irq_at(struct pci_dev *dev, unsigned int index,
- 						   const struct irq_affinity_desc *affdesc)
- {
+ static s64 vmci_transport_stream_has_data(struct vsock_sock *vsk)
 -- 
-2.39.2
-
+2.25.1
