@@ -2,75 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18DA6D18BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CC86D18C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjCaHjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        id S230201AbjCaHla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCaHjm (ORCPT
+        with ESMTP id S230025AbjCaHl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:39:42 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4161E07D;
-        Fri, 31 Mar 2023 00:39:40 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id q16so27750068lfe.10;
-        Fri, 31 Mar 2023 00:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680248379;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A4jLK6QPOttnvpPEimzfvO/0Ippj1BKOqaorwSauRVA=;
-        b=Rb0jsDIq1ic2K7eMkgLXDNllba+yhU94V/PubBfoo9bwnlmPXM0PceYdUhuvgAkBRd
-         9b4vJIvqteTS1aXhIVH6XdGLgsvJU5DPLAt0MXKMSjvuH6LU2TUdiaOUf9NTU1oz10ao
-         ZOBBQZy1rPrQS7Dic3/ojH4HuObCQTQ3q9USl5+3FHvlU/0rNo3o/oMZdys//F+3jcBm
-         96rfLCIuD/QkeU3cYaqRYvcuMnw9Qq0mmaSWRX9PEPFMjh0DnP1i2LsYg7wA8tinlsky
-         Iz7kz8L4ocn358fwvhbOm0TpOH9+f8CEzUBGDJbU/5o3AcM+PCi8Aexm66HhSDSKP+X8
-         vLmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680248379;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A4jLK6QPOttnvpPEimzfvO/0Ippj1BKOqaorwSauRVA=;
-        b=3TPylJTTCgojlR0P8M2EzK2G6WQbmyg8QS0d7eiUPKUmwiK1nK2QR/c4n023jQgh6S
-         GoFY+64XGO0odG0VbrfuZJ4esBqUp26Ko7pWMVP4Ba+0bG2wMmhbOuX4UyAE8IhxXcYc
-         SbZRfc+17PoHFsLFfCBtx822Wwd2DOFBxGin61VE9mMgd/bFf0rj+P8erVJq+vW2uG2n
-         ZEXiTv24NoklKyXgVz/4P/dlPUSwIIedvvEH401RIY1+V+yINBG7H7Ztw354aRY70MPq
-         +d79nx+6D3z8PgTpr65gl8KeyqD1k1BqkgMeSQS3ClRm8eZ+OihMFf5vz299/8CxlIZk
-         fGhA==
-X-Gm-Message-State: AAQBX9fQMFVxGw7xZcnDSw31ke/6a9PeutXC+09T2iizqDxeLCKloqio
-        Af6bPStpfFg/0lADPSHpR1N6lwMJ8+4=
-X-Google-Smtp-Source: AKy350ZR+NV9kRlRC88z9sEIySHVYbPLjR+gX9MaOngE5QYSAmgXf+Wbr4pOWPhToKwnLZbQaBPmew==
-X-Received: by 2002:ac2:531b:0:b0:4e1:8309:1db5 with SMTP id c27-20020ac2531b000000b004e183091db5mr7672162lfh.2.1680248378580;
-        Fri, 31 Mar 2023 00:39:38 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id u15-20020ac24c2f000000b004dc4af9089bsm266121lfq.231.2023.03.31.00.39.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 00:39:38 -0700 (PDT)
-Message-ID: <cbbb45d3-b2e0-d57c-870f-553b7a6cbf99@gmail.com>
-Date:   Fri, 31 Mar 2023 10:39:32 +0300
+        Fri, 31 Mar 2023 03:41:27 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2045.outbound.protection.outlook.com [40.107.95.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCE3E072;
+        Fri, 31 Mar 2023 00:41:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SnnkVYxN2JHQmduQLDMlvmvie8g6GMaoul8vaaSEJTer8LUJP/0T904qEZ/Oz9rkkSQYafULYA/0Lxx/u4ZmyVUg6WveU4mGXa4E250+dts8fJW0+eMUAilGsYumqcZX42sZ9Icf7neMvEgSXFth/kY8baDhTzbUb/NqA7iAXgFVUnLZICQ2myZSVFrdcVx5lNScHPQW5REmVQfQcWfzTi842F4QVeoWXIWXCt1VPRpm5FiT0Vhqb0OJaYvGBYiwDAj2P2ax4xoEuwMhg0tSCIMiNgG1WjVG4J31Lxy5JuodkNSS3U6312mjBIhBgwoWS6wkpvq2jG2XLuXrAPGF7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RRdZQLxZQ59lQlB5USihwk2Fts1WqnOErNHDVr93jOE=;
+ b=Vc1CHoILTxsHoecw5eObbx0ImBV0YSUJqwJ6PQroVfg6IwRtXbNsuuI1AlA3bEyJX3oRW9p9sHOEjbWgZTCi0BvHTYaR3VuUqQFAwUDm2+8JTWEYU/cb6d3WgGZ8hcoDJVfK/FdyS5Rr+mEbMuU4Ro9cNR/wAtPCsUR6l27/wyqRHla6SC/RFSq7lwR9vH7YzPi7zf/Vs9WHhcnujeMAx6AED0vHxTeEjVL3qaIHq4d1IFlEauQfmkk5qqNTQZ4+PB+AcydCKPJY06BBU814OPSS4QXhnCwvZtQhNizrjxLmISy/ipvXgft6Uwq89S4kFBf7Kui8YWUYuO/ndJpfmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux-watchdog.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RRdZQLxZQ59lQlB5USihwk2Fts1WqnOErNHDVr93jOE=;
+ b=lxwy8BQ23w9KPQ1TZ220x93eC+N05JOCoQv0Hn3BzEHrbhlibCmjmQa24l4BC9nc57ZmnRJthNlIOr+R8QAEGTOKwkupYbmdEinTHDNIZHSP8RkDqtxkh2FIekjBf4H1zsz9J2uKg1U+UT3awNemXdMSCHgxRQp0apLYk0bPXbU=
+Received: from BN9PR03CA0650.namprd03.prod.outlook.com (2603:10b6:408:13b::25)
+ by MN0PR12MB6032.namprd12.prod.outlook.com (2603:10b6:208:3cc::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Fri, 31 Mar
+ 2023 07:41:23 +0000
+Received: from BL02EPF000108E8.namprd05.prod.outlook.com
+ (2603:10b6:408:13b:cafe::82) by BN9PR03CA0650.outlook.office365.com
+ (2603:10b6:408:13b::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.44 via Frontend
+ Transport; Fri, 31 Mar 2023 07:41:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BL02EPF000108E8.mail.protection.outlook.com (10.167.241.201) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6178.30 via Frontend Transport; Fri, 31 Mar 2023 07:41:22 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 31 Mar
+ 2023 02:41:22 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 31 Mar
+ 2023 02:41:22 -0500
+Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Fri, 31 Mar 2023 02:41:18 -0500
+From:   Srinivas Neeli <srinivas.neeli@amd.com>
+To:     <shubhrajyoti.datta@amd.com>, <michal.simek@amd.com>,
+        <srinivas.goud@amd.com>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <srinivas.neeli@amd.com>, <linux-watchdog@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <git@amd.com>,
+        <git@xilinx.com>, <neelisrinivas18@gmail.com>
+Subject: [PATCH V3 0/4] watchdog: xilinx_wwdt: Add Versal watchdog support
+Date:   Fri, 31 Mar 2023 13:11:13 +0530
+Message-ID: <20230331074117.356339-1-srinivas.neeli@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US, en-GB
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-References: <cover.1679915278.git.mazziesaccount@gmail.com>
- <68179bcc8371ef9026d1179847fc9c73aa7460f4.1679915278.git.mazziesaccount@gmail.com>
- <b8904407-87d1-c8fa-d70c-67259211445e@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v6 2/7] iio: light: Add gain-time-scale helpers
-In-Reply-To: <b8904407-87d1-c8fa-d70c-67259211445e@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF000108E8:EE_|MN0PR12MB6032:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8579fd85-d91f-4ec5-5eaf-08db31bb534e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NTcy+SyAUMTpW6vv2WLvIqTV5/Zfg8P8aIRt2KJs9qljcKajsiPWWJpNz9Q38ty8j+hgpUET9hboQzfXshjAC457weSuEFy91VfkBvRphBEi9bg8mc6iqyltW8QGvzp5hJNMfDwicp4/TdVGQd0Jp/QgbyXnkTOyTbQ6edvx/W5azPTMY4RXGgBP4EZZN9+RNQYJp1KjruZN/BrJ5Cmjgv4C9XP6wZ4e1L5OR0YE0iOJUuSp0+JcJgIPfl3+Wkaiv0av0rgltycCY9cSViAFtIcHWviKxsSocylzvkaECa8Cn4o6jUSOxTOxFuOs9NpnS2V5wV0lJvD5fXvFhoBmRJeyl+eeoS+eRijMzuBEb4HFVZvd2gUWR2q1/vV5Fk8cT0swc7/jjqG4NJKYEIN6KlzMNBtuBV8wqImMRUgSGjkFuQgSF4N7nlF/iBwFuAFpBxybmgDypXF6SdWU45ad9kvv0xhGbcZWXRdj09teIqxHhgPnM8zW0nMjZAPXBIiQdwBM+foCTw6fICb45qez9cgJ/ISkRFBq+HIpz6+BsBdqQhRwof3AjgMSt3UAx+1xy3ztLFQvoaBgR65me2OptaKq55YuAd9FioeXZ3hFsrkELu3LdFNxBT7vzVqktf354ewvVExi/OLe5QWI7LBpUzR2YbfxXbRxteTmRuJ9gKOhUFLux63zAx8VT9ywfQnxZTFfCxGKLV/1B6APYQoa8mmY5a/pjnzPRUUe8vWzoVg=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(376002)(136003)(451199021)(36840700001)(40470700004)(46966006)(86362001)(40460700003)(36756003)(316002)(70586007)(70206006)(4326008)(8676002)(478600001)(54906003)(41300700001)(8936002)(5660300002)(6666004)(82310400005)(4744005)(356005)(82740400003)(44832011)(36860700001)(2906002)(26005)(40480700001)(1076003)(426003)(336012)(110136005)(2616005)(186003)(83380400001)(47076005)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 07:41:22.8878
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8579fd85-d91f-4ec5-5eaf-08db31bb534e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000108E8.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6032
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,148 +106,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 19:48, Matti Vaittinen wrote:
-> On 3/27/23 14:28, Matti Vaittinen wrote:
->> Some light sensors can adjust both the HW-gain and integration time.
->> There are cases where adjusting the integration time has similar impact
->> to the scale of the reported values as gain setting has.
->>
->> IIO users do typically expect to handle scale by a single writable 
->> 'scale'
->> entry. Driver should then adjust the gain/time accordingly.
->>
->> It however is difficult for a driver to know whether it should change
->> gain or integration time to meet the requested scale. Usually it is
->> preferred to have longer integration time which usually improves
->> accuracy, but there may be use-cases where long measurement times can be
->> an issue. Thus it can be preferable to allow also changing the
->> integration time - but mitigate the scale impact by also changing the 
->> gain
->> underneath. Eg, if integration time change doubles the measured values,
->> the driver can reduce the HW-gain to half.
->>
->> The theory of the computations of gain-time-scale is simple. However,
->> some people (undersigned) got that implemented wrong for more than once.
->>
->> Add some gain-time-scale helpers in order to not dublicate errors in all
->> drivers needing these computations.
->>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>
->> ---
->> Currently it is only BU27034 using these in this series. I am however 
->> working
->> with drivers for RGB sensors BU27008 and BU27010 which have similar
->> [gain - integration time - scale] - relation. I hope sending those
->> follows soon after the BU27034 is done.
->>
-> 
->> +/**
->> + * iio_gts_find_new_gain_sel_by_old_gain_time - compensate for time 
->> change
->> + * @gts:        Gain time scale descriptor
->> + * @old_gain:        Previously set gain
->> + * @old_time_sel:    Selector corresponding previously set time
->> + * @new_time_sel:    Selector corresponding new time to be set
->> + * @new_gain:        Pointer to value where new gain is to be written
->> + *
->> + * We may want to mitigate the scale change caused by setting a new 
->> integration
->> + * time (for a light sensor) by also updating the (HW)gain. This 
->> helper computes
->> + * new gain value to maintain the scale with new integration time.
->> + *
->> + * Return: 0 on success. -EINVAL if gain matching the new time is not 
->> found.
-> 
-> Here we need to document another return value denote whether the 
-> @new_gain was updated.
-> 
->> + */
->> +int iio_gts_find_new_gain_sel_by_old_gain_time(struct iio_gts *gts,
->> +                           int old_gain, int old_time_sel,
->> +                           int new_time_sel, int *new_gain)
->> +{
->> +    const struct iio_itime_sel_mul *itime_old, *itime_new;
->> +    u64 scale;
->> +    int ret;
->> +
->> +    itime_old = iio_gts_find_itime_by_sel(gts, old_time_sel);
->> +    if (!itime_old)
->> +        return -EINVAL;
->> +
->> +    itime_new = iio_gts_find_itime_by_sel(gts, new_time_sel);
->> +    if (!itime_new)
->> +        return -EINVAL;
->> +
->> +    ret = iio_gts_get_scale_linear(gts, old_gain, itime_old->time_us,
->> +                       &scale);
->> +    if (ret)
->> +        return ret;
->> +
->> +    ret = gain_get_scale_fraction(gts->max_scale, scale, itime_new->mul,
->> +                      new_gain);
->> +    if (ret)
->> +        return ret;
->> +
->> +    if (!iio_gts_valid_gain(gts, *new_gain))
->> +        return -EINVAL;
-> 
-> I would change this to -ERANGE to differentiate the case where the new 
-> gain was computed but was not valid. The bu27034 (and 
-> not-yet-fully-finished bu27008) driver uses the computed gain to find 
-> closest matching gain the hardware supports. I am not super happy with 
-> the -ERANGE, as it is also possible the gain is in the "range" of 
-> supported gains but not _exactly_ supported one. In a sense -EINVAL 
-> would be more correct. The invalid time could in a sense be interpreted 
-> as an "time selector not found" - so maybe the -ENOENT could be somehow 
-> tolerated. Still, in my opinion the invalid integration time is very 
-> much more an -EINVAL than anything else...
+This patch series does
+-Adds dt-bindings for versal watchdog driver.
+-Adds support for versal watchdog driver.
+-Adds fragment page for xilinx watchdog drivers.
 
-Looks like I keep discussing with myself. This however was not a good 
-solution as we might detect non integer gain to be required in the 
-gain_get_scale_fraction(). And deciding if that function should return 
--ERANGE or -EINVAL got things even worse.
+There was a series[1] sent earlier to add versal watchdog support using
+pretimeout. In review it was discouraged to use pretimeout for open and
+close window . This series is a new implementation of versal watchdog.
 
-So, the take N (where N is a positive integer, much greater than 1) is 
-that I'll do:
+Srinivas Neeli (4):
+  MAINTAINERS: Add fragment for Xilinx watchdog driver
+  dt-bindings: watchdog: xlnx,versal-wwdt: Add versal watchdog bindings
+  watchdog: xilinx_wwdt: Add Versal window watchdog support
+  MAINTAINERS: Add support for Xilinx versal watchdog
 
-int iio_gts_find_new_gain_sel_by_old_gain_time(struct iio_gts *gts,
-                            int old_gain, int old_time_sel,
-                            int new_time_sel, int *new_gain)
-{
-     const struct iio_itime_sel_mul *itime_old, *itime_new;
-     u64 scale;
-     int ret;
-
-     *new_gain = -1;
-
-and add return value doc like:
-
-  * Return: 0 if an exactly matching supported new gain was found. When 
-a
-  * non-zero value is returned, the @new_gain will be set to a negative or
-  * positive value. The negative value means that no gain could be computed.
-  * Positive value will be the "best possible new gain there could be". 
-There
-  * can be two reasons why finding the "best possible" new gain is not 
-deemed
-  * successful. 1) This new value cannot be supported by the hardware. 
-2) The new
-  * gain required to maintain the scale would not be an integer. In this 
-case,
-  * the "best possible" new gain will be a floored optimal gain, which 
-may or
-  * may not be supported by the hardware.
-
-> 
-> I will fix this for v7.
-> 
+ .../bindings/watchdog/xlnx,versal-wwdt.yaml   |  50 ++++
+ MAINTAINERS                                   |  10 +
+ drivers/watchdog/Kconfig                      |  18 ++
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/xilinx_wwdt.c                | 215 ++++++++++++++++++
+ 5 files changed, 294 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+ create mode 100644 drivers/watchdog/xilinx_wwdt.c
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.25.1
 
