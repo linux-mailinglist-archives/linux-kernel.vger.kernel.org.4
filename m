@@ -2,187 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3A56D1440
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6AA6D1446
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjCaAnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 20:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
+        id S229487AbjCaAoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 20:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjCaAnV (ORCPT
+        with ESMTP id S229671AbjCaAo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 20:43:21 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D4A8A5E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:43:19 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id x17so26889990lfu.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680223397;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EdNKd/5MilWhcWrQcl7LfVYBRkltR5mgQKsK73gCn9w=;
-        b=f7IhSXzG2la4GnyESSieHCAL6H5xzP8OBgrxswjRgKsSytJUo56gSw7dQQix1NanC+
-         vwXeSdpzOn9QA1uVGhONEYPGVpfDi4IVfPCo33OHQ1BvvemmO6NYp0oIzq0hXP5S4hnJ
-         +o29cmpupI8JLFaISchPcolciyLTORNsq+hBfOr9f85KMyDhp/Jr3UjnFJuF1WX8vakK
-         rUhXi8k2ZaJTvzN6pfCwO0WXBAaSld0Md58I+YBRnSfDYCbf1meX7ksxz6MpeR1Iu6/9
-         T45LC/UWxKoAd3mQBSbE8O1kys43ijmtDcjwVpoU7guIdO695xo8GTKSg6CZHvQQ83y2
-         E7Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680223397;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EdNKd/5MilWhcWrQcl7LfVYBRkltR5mgQKsK73gCn9w=;
-        b=bdkEeilYbzdMiAl5a+nlB40L1QttjtYhzay2gUmzJ5RKnMTmG6a8pOw4UiOr3DzEfS
-         grR/5ol0OS0VL4g4Xo8o5oAvQHG+JMb6s+DWDNXGiBr5M1+45oWOdGIBkVa9lYj57yQU
-         oGYtlPMW/FtoBBEY4JvickeeaqG7Blv5IqVStmuEXp+0LuDdAYorrhsa8NMWZyZf/vW7
-         MIZnLSb0JbI9QE227h1uZLzJRY96TcDoCV9esuSj3WqYavxBa1iq2XCUJM8L0zZygA4i
-         jMwBrkbvpgl6FlqwMB17N6o6BXLeZ5/HijGeL2XZ0M1w5xQEuEGK3eQ9lkE8lnqFU9zH
-         fdsw==
-X-Gm-Message-State: AAQBX9cePHE5MIqdTyT2uBWwGzqXQCCw3oU6Wp8aiOfnA3EWpFEZZ4O4
-        DcaKDJ3oAkx9O3dW/QKQzPUemg==
-X-Google-Smtp-Source: AKy350YRAZHIs02zJdJuKyBOpAU4E+YEssGtc50ExOFKIzcnRzazeSFbeqTrPGCAxT7laAEv1fmpdA==
-X-Received: by 2002:a19:ca4a:0:b0:4d8:86c1:4771 with SMTP id h10-20020a19ca4a000000b004d886c14771mr2062855lfj.6.1680223397584;
-        Thu, 30 Mar 2023 17:43:17 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id i27-20020ac2523b000000b004e9b4a8f738sm147274lfl.152.2023.03.30.17.43.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 17:43:17 -0700 (PDT)
-Message-ID: <df57f5c1-13aa-c328-57ac-de486d29e549@linaro.org>
-Date:   Fri, 31 Mar 2023 03:43:16 +0300
+        Thu, 30 Mar 2023 20:44:28 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30261024E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680223460; x=1711759460;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0qthxh4Gt/dC4N7K2kHI6cNDqSxhKqKTNcNdiQ8MrQc=;
+  b=XQCbMohbzOPJG1q1ZDl6YsBhD2M8DQWHkkMONOQChJKiQOhARMrD7yi9
+   1PpI+hmb3bo4HwOB8Z5tCHPMeCpGWygIgKcJqhuyLbwBnsQMrP0QOauKb
+   3qNJvumrAQ17OGJjaBb3ncrt3NJUPFRq7MXTx8lGbzfysTJbQPTTmd5CO
+   uVRbqVMAIpkc+hQvaBfCPZWUEMQ0AnF5WxpphU2SknOznVzoiSxEnz/NO
+   maU/HR4rZr24PDl6xPLLPWlkQhngDON6kHfXv+BRLLRn7i6kARvetkKn7
+   Z5WX31+jVh7NGEdH8hCRjvwhBFczajy+ZU/Yc4e10FU2ci0AhkE77/Y5R
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="343824165"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="343824165"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 17:44:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="687460430"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="687460430"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 30 Mar 2023 17:44:18 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pi2sL-000LMa-2G;
+        Fri, 31 Mar 2023 00:44:17 +0000
+Date:   Fri, 31 Mar 2023 08:43:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/sev] BUILD SUCCESS
+ 87efe384109f7938c94e74b1ce9c613136f50fd9
+Message-ID: <64262ca6.6tAlT9cnfy+5UmPb%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: sm8250: Add GPU speedbin support
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230120172233.1905761-1-konrad.dybcio@linaro.org>
- <20230120172233.1905761-6-konrad.dybcio@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230120172233.1905761-6-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2023 19:22, Konrad Dybcio wrote:
-> SM8250 has (at least) four GPU speed bins. With the support added on the
-> driver side, wire up bin detection in the DTS to restrict lower-quality
-> SKUs from running at frequencies they were not validated at.
-> 
-> Tested-by: Marijn Suijten <marijn.suijten@somainline.org> # On Sony Xperia 5 II (speed bin 0x7)
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8250.dtsi | 23 ++++++++++++++++++++++-
->   1 file changed, 22 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index 059c83003fb6..95f1a6afcd43 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -981,6 +981,18 @@ ipcc: mailbox@408000 {
->   			#mbox-cells = <2>;
->   		};
->   
-> +		qfprom: efuse@784000 {
-> +			compatible = "qcom,sm8250-qfprom", "qcom,qfprom";
-> +			reg = <0 0x00784000 0 0x8ff>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +
-> +			gpu_speed_bin: gpu_speed_bin@19b {
-> +				reg = <0x19b 0x1>;
-> +				bits = <5 3>;
-> +			};
-> +		};
-> +
->   		rng: rng@793000 {
->   			compatible = "qcom,prng-ee";
->   			reg = <0 0x00793000 0 0x1000>;
-> @@ -2576,49 +2588,58 @@ gpu: gpu@3d00000 {
->   
->   			qcom,gmu = <&gmu>;
->   
-> +			nvmem-cells = <&gpu_speed_bin>;
-> +			nvmem-cell-names = "speed_bin";
-> +
->   			status = "disabled";
->   
->   			zap-shader {
->   				memory-region = <&gpu_mem>;
->   			};
->   
-> -			/* note: downstream checks gpu binning for 670 Mhz */
->   			gpu_opp_table: opp-table {
->   				compatible = "operating-points-v2";
->   
->   				opp-670000000 {
->   					opp-hz = /bits/ 64 <670000000>;
->   					opp-level = <RPMH_REGULATOR_LEVEL_NOM_L1>;
-> +					opp-supported-hw = <0x6>;
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sev
+branch HEAD: 87efe384109f7938c94e74b1ce9c613136f50fd9  Merge branch 'x86/cc' into x86/sev
 
-opp-supported-hw = <0xa>; /* 3 & 1 */
+elapsed time: 723m
 
->   				};
->   
->   				opp-587000000 {
->   					opp-hz = /bits/ 64 <587000000>;
->   					opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
-> +					opp-supported-hw = <0x7>;
+configs tested: 199
+configs skipped: 157
 
-opp-supported-hw = <0xb>; /* 3, 1, 0 */
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-
->   				};
->   
->   				opp-525000000 {
->   					opp-hz = /bits/ 64 <525000000>;
->   					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L2>;
-> +					opp-supported-hw = <0xf>;
->   				};
->   
->   				opp-490000000 {
->   					opp-hz = /bits/ 64 <490000000>;
->   					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
-> +					opp-supported-hw = <0xf>;
->   				};
->   
->   				opp-441600000 {
->   					opp-hz = /bits/ 64 <441600000>;
->   					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L0>;
-> +					opp-supported-hw = <0xf>;
->   				};
->   
->   				opp-400000000 {
->   					opp-hz = /bits/ 64 <400000000>;
->   					opp-level = <RPMH_REGULATOR_LEVEL_SVS>;
-> +					opp-supported-hw = <0xf>;
->   				};
->   
->   				opp-305000000 {
->   					opp-hz = /bits/ 64 <305000000>;
->   					opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
-> +					opp-supported-hw = <0xf>;
->   				};
->   			};
->   		};
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r002-20230329   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r015-20230329   gcc  
+alpha                randconfig-r016-20230329   gcc  
+alpha                randconfig-r025-20230329   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r005-20230329   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r004-20230329   gcc  
+arc                  randconfig-r032-20230329   gcc  
+arc                  randconfig-r033-20230329   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                      jornada720_defconfig   gcc  
+arm                         lpc18xx_defconfig   gcc  
+arm                         orion5x_defconfig   clang
+arm                  randconfig-c002-20230330   gcc  
+arm                  randconfig-r026-20230329   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r001-20230329   gcc  
+arm64        buildonly-randconfig-r002-20230329   gcc  
+arm64        buildonly-randconfig-r005-20230329   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r025-20230329   clang
+arm64                randconfig-r026-20230329   clang
+arm64                randconfig-r032-20230329   gcc  
+arm64                randconfig-r036-20230329   gcc  
+csky         buildonly-randconfig-r006-20230329   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r003-20230329   gcc  
+csky                 randconfig-r004-20230329   gcc  
+csky                 randconfig-r022-20230329   gcc  
+csky                 randconfig-r034-20230329   gcc  
+hexagon      buildonly-randconfig-r005-20230329   clang
+hexagon              randconfig-r015-20230329   clang
+hexagon              randconfig-r032-20230329   clang
+hexagon              randconfig-r041-20230329   clang
+hexagon              randconfig-r045-20230329   clang
+i386                             allyesconfig   gcc  
+i386                         debian-10.3-func   gcc  
+i386                   debian-10.3-kselftests   gcc  
+i386                        debian-10.3-kunit   gcc  
+i386                          debian-10.3-kvm   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a004   clang
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+i386                          randconfig-c001   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r003-20230329   gcc  
+ia64                                defconfig   gcc  
+ia64                      gensparse_defconfig   gcc  
+ia64                 randconfig-r003-20230329   gcc  
+ia64                 randconfig-r004-20230329   gcc  
+ia64                 randconfig-r005-20230329   gcc  
+ia64                 randconfig-r006-20230329   gcc  
+ia64                 randconfig-r011-20230329   gcc  
+ia64                 randconfig-r023-20230329   gcc  
+ia64                 randconfig-r024-20230329   gcc  
+ia64                 randconfig-r025-20230329   gcc  
+ia64                 randconfig-r035-20230329   gcc  
+ia64                 randconfig-r036-20230329   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r001-20230329   gcc  
+loongarch            randconfig-r006-20230329   gcc  
+loongarch            randconfig-r013-20230329   gcc  
+loongarch            randconfig-r021-20230329   gcc  
+loongarch            randconfig-r034-20230329   gcc  
+m68k                             allmodconfig   gcc  
+m68k                         apollo_defconfig   gcc  
+m68k         buildonly-randconfig-r002-20230329   gcc  
+m68k         buildonly-randconfig-r004-20230329   gcc  
+m68k         buildonly-randconfig-r006-20230329   gcc  
+m68k                                defconfig   gcc  
+m68k                        m5407c3_defconfig   gcc  
+m68k                 randconfig-r002-20230329   gcc  
+m68k                 randconfig-r004-20230329   gcc  
+m68k                 randconfig-r012-20230329   gcc  
+m68k                 randconfig-r014-20230329   gcc  
+m68k                 randconfig-r016-20230329   gcc  
+m68k                 randconfig-r031-20230329   gcc  
+m68k                 randconfig-r035-20230329   gcc  
+microblaze           randconfig-r015-20230329   gcc  
+microblaze           randconfig-r023-20230329   gcc  
+microblaze           randconfig-r024-20230329   gcc  
+microblaze           randconfig-r031-20230329   gcc  
+microblaze           randconfig-r032-20230329   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r003-20230329   clang
+mips                 randconfig-r001-20230329   clang
+mips                 randconfig-r012-20230329   gcc  
+mips                 randconfig-r013-20230329   gcc  
+nios2        buildonly-randconfig-r001-20230329   gcc  
+nios2        buildonly-randconfig-r003-20230329   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r005-20230329   gcc  
+nios2                randconfig-r006-20230329   gcc  
+nios2                randconfig-r011-20230329   gcc  
+nios2                randconfig-r026-20230329   gcc  
+nios2                randconfig-r031-20230329   gcc  
+nios2                randconfig-r033-20230329   gcc  
+nios2                randconfig-r035-20230329   gcc  
+openrisc     buildonly-randconfig-r002-20230329   gcc  
+openrisc     buildonly-randconfig-r004-20230329   gcc  
+openrisc             randconfig-r011-20230329   gcc  
+openrisc             randconfig-r022-20230329   gcc  
+openrisc             randconfig-r034-20230329   gcc  
+openrisc             randconfig-r036-20230329   gcc  
+parisc       buildonly-randconfig-r005-20230329   gcc  
+parisc       buildonly-randconfig-r006-20230329   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r004-20230329   gcc  
+parisc               randconfig-r014-20230329   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                      cm5200_defconfig   gcc  
+powerpc                   motionpro_defconfig   gcc  
+powerpc                 mpc8540_ads_defconfig   gcc  
+powerpc                      pcm030_defconfig   gcc  
+powerpc              randconfig-r003-20230329   gcc  
+powerpc              randconfig-r011-20230329   clang
+powerpc              randconfig-r024-20230329   clang
+powerpc              randconfig-r032-20230329   gcc  
+powerpc              randconfig-r034-20230329   gcc  
+powerpc                    sam440ep_defconfig   gcc  
+powerpc                     tqm8555_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r002-20230329   gcc  
+riscv                randconfig-r005-20230329   gcc  
+riscv                randconfig-r013-20230329   clang
+riscv                randconfig-r016-20230329   clang
+riscv                randconfig-r022-20230329   clang
+riscv                randconfig-r042-20230329   clang
+riscv                          rv32_defconfig   gcc  
+s390                             alldefconfig   clang
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r002-20230329   clang
+s390                                defconfig   gcc  
+s390                 randconfig-r014-20230329   clang
+s390                 randconfig-r016-20230329   clang
+s390                 randconfig-r022-20230329   clang
+s390                 randconfig-r023-20230329   clang
+s390                 randconfig-r035-20230329   gcc  
+s390                 randconfig-r044-20230329   clang
+sh                               allmodconfig   gcc  
+sh                         ecovec24_defconfig   gcc  
+sh                           sh2007_defconfig   gcc  
+sh                   sh7724_generic_defconfig   gcc  
+sparc        buildonly-randconfig-r003-20230329   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r001-20230329   gcc  
+sparc                randconfig-r022-20230329   gcc  
+sparc                randconfig-r036-20230329   gcc  
+sparc64      buildonly-randconfig-r003-20230329   gcc  
+sparc64      buildonly-randconfig-r005-20230329   gcc  
+sparc64      buildonly-randconfig-r006-20230329   gcc  
+sparc64              randconfig-r005-20230329   gcc  
+sparc64              randconfig-r006-20230329   gcc  
+sparc64              randconfig-r012-20230329   gcc  
+sparc64              randconfig-r031-20230329   gcc  
+sparc64              randconfig-r033-20230329   gcc  
+sparc64              randconfig-r035-20230329   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                        randconfig-c001   gcc  
+x86_64                        randconfig-k001   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r003-20230329   gcc  
+xtensa               randconfig-r026-20230329   gcc  
+xtensa               randconfig-r033-20230329   gcc  
 
 -- 
-With best wishes
-Dmitry
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
