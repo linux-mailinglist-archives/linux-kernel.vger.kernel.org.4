@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7B36D27E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7126D27E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjCaSdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 14:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
+        id S230183AbjCaSes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 14:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjCaSdS (ORCPT
+        with ESMTP id S229561AbjCaSeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:33:18 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155531CB87;
-        Fri, 31 Mar 2023 11:33:17 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id d22-20020a9d5e16000000b0069b5252ced7so12311831oti.13;
-        Fri, 31 Mar 2023 11:33:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680287596;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bRhw4+gSmUKDFVNe4CaJ5if9d/WbaipuiqooHxfT4eA=;
-        b=m1WfKWgF3hqz2VG20ZpJbsm1JjgJDcUpH+hkJlEdA0Aiye0ech257iOt/6nnq34Y91
-         VQXX21y6HV4D74obKK/AjbnSzgeQaOKc6RN1Q4pVUxKtY20QuI0fA9tVBkiYhyhiy4IS
-         8vZrZWTAZMUW5284sQ9ltw1LuxJw73EWqSK0KzWco7TbarhmU/9gKpLTWuVdWXdMPgDC
-         WPfa8QPRDURlZlUSWXOH7SwJyr0/U5/aHA7fuycD2IKFmmJFkU2QJ1cDy2dQAhV7MJGh
-         jBcsXl37x7ZjeThEImL4Nzhrg0g3roI98rPQFRp0Cdd+JwIL9GWyx5BYbdVYZtMICLAS
-         xMIw==
-X-Gm-Message-State: AO0yUKUxi3MUhZAHDjctHYF/3PxDriQp4QUN6rFmwHm7Z8mXqL6Cy4DQ
-        pSfmFd9i+KRRiJlQXQRlY0i/3OdqyQ==
-X-Google-Smtp-Source: AK7set+O9b9HU5G/Sjl5yhFUsZUNBveJx2hmlsB2V4mnpUA1VQwLVNq4z86k7P29r8jMZopkPxUItw==
-X-Received: by 2002:a05:6830:3a11:b0:693:d8a3:1f07 with SMTP id di17-20020a0568303a1100b00693d8a31f07mr13892605otb.22.1680287596275;
-        Fri, 31 Mar 2023 11:33:16 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w3-20020a9d6383000000b006a11c15a097sm1428502otk.4.2023.03.31.11.33.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 11:33:15 -0700 (PDT)
-Received: (nullmailer pid 1915009 invoked by uid 1000);
-        Fri, 31 Mar 2023 18:33:15 -0000
-Date:   Fri, 31 Mar 2023 13:33:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     herbert@gondor.apana.org.au, gaurav.jain@nxp.com,
-        davem@davemloft.net, linux-crypto@vger.kernel.org,
-        pankaj.gupta@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        horia.geanta@nxp.com, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH] dt-bindings: crypto: sec-v4.0-mon: add snvs power off
- support
-Message-ID: <168028759194.1914867.10213503513159167493.robh@kernel.org>
-References: <20230323123907.103719-1-peng.fan@oss.nxp.com>
+        Fri, 31 Mar 2023 14:34:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E729A1CB9B;
+        Fri, 31 Mar 2023 11:34:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 830D8B831A0;
+        Fri, 31 Mar 2023 18:34:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53E8C433EF;
+        Fri, 31 Mar 2023 18:34:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680287678;
+        bh=cFHZKXBfF/aAqc3Fsp181F2WteOHfwqXMSb2SVo24wM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ea8m8/H+V5fiadF+7hEBnBK3lItvH3lvCfCUguyEM5G7pmgTYTFrJiQusiFvEg8mN
+         3lkVKNXzoZR2jvkUUlxTq6g6/+UbneQxcOrLby7z37mR5VPxvB+GTpdRBulVUL0lp4
+         4ZnJ2ipVCUS1vGBi3BwiA0hCIVhdeiVTfngniubtBW8pEo6UuwM+2nUIfraH0L04Xb
+         gy1HcfzVUh78BAdlRfhC5DCTGFrALl3/VzWIJxKQzAZy2jERt/OGJBn5+QmwONQsh4
+         qvn8ghtm3E3JVeHuzcDOYdAWBOEg/rzaRRFJbXNVclLedWRh9ZO2NDQICIAFNWKbx8
+         BtR9TkzaQDyrA==
+Date:   Fri, 31 Mar 2023 19:34:31 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
+        bjorn@kernel.org, palmer@dabbelt.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Yipeng Zou <zouyipeng@huawei.com>
+Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
+Message-ID: <60ee7c26-1a70-427d-beaf-92e2989fc479@spud>
+References: <20230222033021.983168-1-guoren@kernel.org>
+ <20230222033021.983168-5-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2r0N5+2Ft3yyCaRu"
 Content-Disposition: inline
-In-Reply-To: <20230323123907.103719-1-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230222033021.983168-5-guoren@kernel.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,17 +64,160 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 23 Mar 2023 20:39:07 +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Add SNVS power off support. The SNVS_LP LPCR register could
-> drive signal to PMIC to turn off system power.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml        | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+--2r0N5+2Ft3yyCaRu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks!
+On Tue, Feb 21, 2023 at 10:30:18PM -0500, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>=20
+> This patch converts riscv to use the generic entry infrastructure from
+> kernel/entry/*. The generic entry makes maintainers' work easier and
+> codes more elegant. Here are the changes:
+>=20
+>  - More clear entry.S with handle_exception and ret_from_exception
+>  - Get rid of complex custom signal implementation
+>  - Move syscall procedure from assembly to C, which is much more
+>    readable.
+>  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
+>  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
+>  - Use the standard preemption code instead of custom
 
+This has unfortunately broken booting my usual NFS rootfs on both my D1
+and Icicle. It's one of the Fedora images from David, I think this one:
+http://fedora.riscv.rocks/kojifiles/work/tasks/3933/1313933/
+
+It gets pretty far into things, it's once systemd is operational that
+things go pear shaped:
+
+[  OK  ] Mounted Huge Pages File System.
+[   70.297439] systemd[1]: Mounted POSIX Message Queue File System.
+[  OK  ] Mounted POSIX Message Queue File System.
+[   70.453489] systemd[1]: Mounted Kernel Debug File System.
+[  OK  ] Mounted Kernel Debug File System.
+[   70.516331] systemd[1]: Mounted Kernel Trace File System.
+[  OK  ] Mounted Kernel Trace File System.
+[   70.679253] systemd[1]: modprobe@configfs.service: Succeeded.
+[   70.788400] systemd[1]: Finished Load Kernel Module configfs.
+[  OK  ] Finished Load Kernel Module configfs.
+[   71.501222] systemd[1]: modprobe@drm.service: Succeeded.
+[   71.573295] systemd[1]: Finished Load Kernel Module drm.
+[  OK  ] Finished Load Kernel Module drm.
+[   71.825934] systemd[1]: modprobe@fuse.service: Succeeded.
+[   71.886945] systemd[1]: Finished Load Kernel Module fuse.
+[  OK  ] Finished Load Kernel Module fuse.
+[   71.991932] systemd[1]: nfs-convert.service: Succeeded.
+[   72.034674] systemd[1]: Finished Preprocess NFS configuration convertion.
+[  OK  ] Finished Preprocess NFS configuration convertion.
+[   72.148778] systemd[1]: systemd-modules-load.service: Main process exite=
+d, code=3Dexited, status=3D1/FAILURE
+[   72.256659] systemd[1]: systemd-modules-load.service: Failed with result=
+ 'exit-code'.
+[   72.337818] systemd[1]: Failed to start Load Kernel Modules.
+[FAILED] Failed to start Load Kernel Modules.
+See 'systemctl status systemd-modules-load.service' for details.
+[   72.410491] systemd[1]: systemd-modules-load.service: Consumed 1.463s CP=
+U time.
+[   72.496739] systemd[1]: Condition check resulted in FUSE Control File Sy=
+stem being skipped.
+[   72.513689] systemd[1]: Condition check resulted in Kernel Configuration=
+ File System being skipped.
+[   72.682549] systemd[1]: Starting Apply Kernel Variables..
+[  OK  ] Finished Apply Kernel Variables.
+[   76.314434] systemd[1]: Finished Load/Save Random Seed.
+[  OK  ] Finished Load/Save Random Seed.
+[***   ] (1 of 6) A start job is running for=E2=80=A6p Virtual Console (14s=
+ / no limit)
+[  OK  ] Finished Create Static Device Nodes in /dev.
+[   79.787065] systemd[1]: Started Entropy Daemon based on the HAVEGE algor=
+ithm.
+[  OK  ] Started Entropy Daemon based on the HAVEGE algorithm.
+[   80.186295] systemd[1]: Starting Journal Service...
+         Starting Journal Service...
+[   80.713508] systemd[1]: Starting Rule-based Manager for Device Events an=
+d Files...
+         Starting Rule-based Manage=E2=80=A6for Device Events and Files...
+[  *** ] (2 of 7) A start job is running for=E2=80=A6 All udev Devices (17s=
+ / no limit)
+[   82.939347] systemd[1]: systemd-journald.service: Main process exited, c=
+ode=3Dexited, status=3D1/FAILURE
+[   83.032046] systemd[1]: systemd-journald.service: Failed with result 'ex=
+it-code'.
+[FAILED] Failed to start Journal Service.
+See 'systemctl status systemd-journald.service' for details.
+[   83.210041] systemd[1]: Dependency failed for Flush Journal to Persisten=
+t Storage.
+[DEPEND] Dependency failed for Flus=E2=80=A6Journal to Persistent Storage.
+[   83.254122] systemd[1]: systemd-journal-flush.service: Job systemd-journ=
+al-flush.service/start failed with result 'dependency'.
+[   83.272366] systemd[1]: systemd-journald.service: Consumed 1.443s CPU ti=
+me.
+[   83.334360] systemd[1]: systemd-journald.service: Scheduled restart job,=
+ restart counter is at 1.
+[   83.427839] systemd[1]: Finished Setup Virtual Console.
+[  OK  ] Finished Setup Virtual Console.
+[   83.510650] systemd[1]: Stopped Journal Service.
+[  OK  ] Stopped Journal Service.
+[   83.554417] systemd[1]: systemd-journald.service: Consumed 1.443s CPU ti=
+me.
+[   83.576573] systemd[1]: Condition check resulted in Journal Audit Socket=
+ being skipped.
+[   83.904878] systemd[1]: Starting Journal Service...
+         Starting Journal Service...
+[   85.752090] systemd[1]: systemd-journald.service: Main process exited, c=
+ode=3Dexited, status=3D1/FAILURE
+[   85.826421] systemd[1]: systemd-journald.service: Failed with result 'ex=
+it-code'.
+[   85.876165] systemd[1]: Failed to start Journal Service.
+[FAILED] Failed to start Journal Service.
+See 'systemctl status systemd-journald.service' for details.
+[   85.952221] systemd[1]: systemd-journald.service: Consumed 1.355s CPU ti=
+me.
+[   86.002092] systemd[1]: systemd-journald.service: Scheduled restart job,=
+ restart counter is at 2.
+[   86.015081] systemd[1]: Stopped Journal Service.
+[  OK  ] Stopped Journal Service.
+[   86.076429] systemd[1]: systemd-journald.service: Consumed 1.355s CPU ti=
+me.
+[   86.089700] systemd[1]: Condition check resulted in Journal Audit Socket=
+ being skipped.
+[   86.390162] systemd[1]: Starting Journal Service...
+         Starting Journal Service...
+[   87.904427] systemd[1]: systemd-journald.service: Main process exited, c=
+ode=3Dexited, status=3D1/FAILURE
+[   87.950259] systemd[1]: systemd-journald.service: Failed with result 'ex=
+it-code'.
+[   88.000661] systemd[1]: Failed to start Journal Service.
+[FAILED] Failed to start Journal Service.
+See 'systemctl status systemd-journald.service' for details.
+[   88.079953] systemd[1]: systemd-journald.service: Consumed 1.316s CPU ti=
+me.
+[   88.128956] systemd[1]: systemd-journald.service: Scheduled restart job,=
+ restart counter is at 3.
+[   88.145365] systemd[1]: Stopped Journal Service.
+[  OK  ] Stopped Journal Service.
+[   88.189975] systemd[1]: systemd-journald.service: Consumed 1.316s CPU ti=
+me.
+[   88.205799] systemd[1]: Condition check resulted in Journal Audit Socket=
+ being skipped.
+[   88.514817] systemd[1]: Starting Journal Service...
+         Starting Journal Service...
+
+(Note, you need to merge -rc2 into riscv/for-next to actually boot)
+
+Cheers,
+Conor.
+
+--2r0N5+2Ft3yyCaRu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCcntwAKCRB4tDGHoIJi
+0mArAP4pqQMIediLrvbLgu1Oy1INpWVZQ5I6KGzgbid6ph2Y1wEAkH+kN4Fi9RCj
+xtvqiZXfW4Als+2R4FJMyfQbcFDQGw8=
+=rXo/
+-----END PGP SIGNATURE-----
+
+--2r0N5+2Ft3yyCaRu--
