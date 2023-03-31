@@ -2,138 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4806D1F6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724E36D1F67
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjCaLrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 07:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
+        id S231694AbjCaLqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 07:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbjCaLrd (ORCPT
+        with ESMTP id S231751AbjCaLqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:47:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A85E5B9E
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 04:46:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680263199;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xiaD/4tMRyy1IsOsTj3zp03+vuUgB/x5nAQukHMowB8=;
-        b=YmYjQ1Pb39507QBo8H9Vz9dlq2HIPU4bApV1zi9EinrDDbazBK64wkeWKH04lV2pziUPr6
-        tyBHYLMl85xU8CiXCF/vQZSqNtI6/07wphx5SqqHLAb4p90fOS7NdtbzOuUpqphcioE5iE
-        vVeC2v0+Ztb6V0j67Jxtsd/BTMqIKSw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-300-Ecv1FegEOO-NwsaZLNUZVw-1; Fri, 31 Mar 2023 07:46:37 -0400
-X-MC-Unique: Ecv1FegEOO-NwsaZLNUZVw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 31 Mar 2023 07:46:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ADB1EA11;
+        Fri, 31 Mar 2023 04:46:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1AEA3811E7C;
-        Fri, 31 Mar 2023 11:46:37 +0000 (UTC)
-Received: from localhost (ovpn-12-64.pek2.redhat.com [10.72.12.64])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E9E07492B00;
-        Fri, 31 Mar 2023 11:46:35 +0000 (UTC)
-Date:   Fri, 31 Mar 2023 19:46:32 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH 1/1] mm: vmalloc: Rename addr_to_vb_xarray() function
-Message-ID: <ZCbIGDUVoirll/JW@MiWiFi-R3L-srv>
-References: <20230331073727.6968-1-urezki@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5C6E62836;
+        Fri, 31 Mar 2023 11:46:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3C31C433D2;
+        Fri, 31 Mar 2023 11:46:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680263199;
+        bh=R9Yumhm1RMDdrtlrXq9zoIJGJBh/7IIt4c1jg6vLDdI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KHmvMrQUdq35+Ksi/AkM2SThIklUFlK5p9qKwCS61ubSQHKh4R6m0Z6OP4J/Lz5ZX
+         p+QTPGGTULCt0NQj4CHMRSqV40/HeSdl3JBCZRlAyC4qvM7ogUxSrr4/W0Vvw3zaj0
+         fXpcPNl09E3SLDnPykpwAVc2qSDS72iVmAj5CuFja6DzQ1wus+6KbIvFufwgZAK415
+         LiG2GvefKZv5D604ixLQg2XD/gs9gHRyS3mfcQqyuQpvaAIpxiHmSS50GxdrKc7o+Q
+         J7LkxA/ngsTV6QljR6XXhQy/U1MT4413HJ4k4DpsbbLIAEGwp/xuYoDlbNC+lPetWe
+         x+4WTVELtTVeg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 51F8C4052D; Fri, 31 Mar 2023 08:46:36 -0300 (-03)
+Date:   Fri, 31 Mar 2023 08:46:36 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1 1/4] tools api: Add io__getline
+Message-ID: <ZCbIHBDwcZ1IX8z8@kernel.org>
+References: <20230331004844.1592789-1-irogers@google.com>
+ <20230331004844.1592789-2-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230331073727.6968-1-urezki@gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230331004844.1592789-2-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/31/23 at 09:37am, Uladzislau Rezki (Sony) wrote:
-> Short the name of the addr_to_vb_xarray() function to the
-> addr_to_vb_xa(). This aligns with other internal function
-> abbreviations.
+Em Thu, Mar 30, 2023 at 05:48:41PM -0700, Ian Rogers escreveu:
+> Reads a line to allocated memory up to a newline following the getline
+> API.
 > 
-> Suggested-by: Baoquan He <bhe@redhat.com>
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  mm/vmalloc.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+>  tools/lib/api/io.h        | 40 +++++++++++++++++++++++++++++++++++++++
+>  tools/perf/tests/api-io.c | 36 +++++++++++++++++++++++++++++++++++
+>  2 files changed, 76 insertions(+)
 > 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 671d6d5d5b78..b8b646f8a00d 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -1945,7 +1945,7 @@ static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
->   * used as a hash table. When used as a hash a 'cpu' passed to
->   * per_cpu() is not actually a CPU but rather a hash index.
->   *
-> - * A hash function is addr_to_vb_xarray() which hashes any address
-> + * A hash function is addr_to_vb_xa() which hashes any address
->   * to a specific index(in a hash) it belongs to. This then uses a
->   * per_cpu() macro to access an array with generated index.
->   *
-> @@ -1971,7 +1971,7 @@ static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
->   * however xarray spinlocks protect against any contention that remains.
->   */
->  static struct xarray *
-> -addr_to_vb_xarray(unsigned long addr)
-> +addr_to_vb_xa(unsigned long addr)
+> diff --git a/tools/lib/api/io.h b/tools/lib/api/io.h
+> index 777c20f6b604..d874e8fa8b07 100644
+> --- a/tools/lib/api/io.h
+> +++ b/tools/lib/api/io.h
+> @@ -7,7 +7,9 @@
+>  #ifndef __API_IO__
+>  #define __API_IO__
+>  
+> +#include <errno.h>
+>  #include <stdlib.h>
+> +#include <string.h>
+>  #include <unistd.h>
+>  
+>  struct io {
+> @@ -112,4 +114,42 @@ static inline int io__get_dec(struct io *io, __u64 *dec)
+>  	}
+>  }
+>  
+> +/* Read up to and including the first newline following the pattern of getline. */
+> +static inline ssize_t io__getline(char **line_out, size_t *line_len_out, struct io *io)
+
+Can we have io be the first arg? To be consistent with the other
+functons here and elsewhere in perf.
+
+- Arnaldo
+
+> +{
+> +	char buf[128];
+> +	int buf_pos = 0;
+> +	char *line = NULL;
+> +	size_t line_len = 0;
+> +	int ch = 0;
+> +
+> +	/* TODO: reuse previously allocated memory. */
+> +	free(*line_out);
+> +	while (ch != '\n') {
+> +		ch = io__get_char(io);
+> +
+> +		if (ch < 0)
+> +			break;
+> +
+> +		if (buf_pos == sizeof(buf)) {
+> +			line = realloc(line, line_len + sizeof(buf));
+> +			if (!line)
+> +				return -ENOMEM;
+> +			memcpy(&line[line_len], buf, sizeof(buf));
+> +			line_len += sizeof(buf);
+> +			buf_pos = 0;
+> +		}
+> +		buf[buf_pos++] = (char)ch;
+> +	}
+> +	line = realloc(line, line_len + buf_pos + 1);
+> +	if (!line)
+> +		return -ENOMEM;
+> +	memcpy(&line[line_len], buf, buf_pos);
+> +	line[line_len + buf_pos] = '\0';
+> +	line_len += buf_pos;
+> +	*line_out = line;
+> +	*line_len_out = line_len;
+> +	return line_len;
+> +}
+> +
+>  #endif /* __API_IO__ */
+> diff --git a/tools/perf/tests/api-io.c b/tools/perf/tests/api-io.c
+> index e91cf2c127f1..0ff39cdfcb01 100644
+> --- a/tools/perf/tests/api-io.c
+> +++ b/tools/perf/tests/api-io.c
+> @@ -289,6 +289,40 @@ static int test_get_dec(void)
+>  	return ret;
+>  }
+>  
+> +static int test_get_line(void)
+> +{
+> +	char path[PATH_MAX];
+> +	struct io io;
+> +	char test_string[1024];
+> +	char *line = NULL;
+> +	size_t i, line_len = 0;
+> +	size_t buf_size = 128;
+> +	int ret = 0;
+> +
+> +	for (i = 0; i < 512; i++)
+> +		test_string[i] = 'a';
+> +	test_string[512] = '\n';
+> +	for (i = 513; i < 1023; i++)
+> +		test_string[i] = 'b';
+> +	test_string[1023] = '\0';
+> +
+> +	if (setup_test(path, test_string, buf_size, &io))
+> +		return -1;
+> +
+> +	EXPECT_EQUAL((int)io__getline(&line, &line_len, &io), 513);
+> +	EXPECT_EQUAL((int)strlen(line), 513);
+> +	for (i = 0; i < 512; i++)
+> +		EXPECT_EQUAL(line[i], 'a');
+> +	EXPECT_EQUAL(line[512], '\n');
+> +	EXPECT_EQUAL((int)io__getline(&line, &line_len, &io), 510);
+> +	for (i = 0; i < 510; i++)
+> +		EXPECT_EQUAL(line[i], 'b');
+> +
+> +	free(line);
+> +	cleanup_test(path, &io);
+> +	return ret;
+> +}
+> +
+>  static int test__api_io(struct test_suite *test __maybe_unused,
+>  			int subtest __maybe_unused)
 >  {
->  	int index = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
+> @@ -300,6 +334,8 @@ static int test__api_io(struct test_suite *test __maybe_unused,
+>  		ret = TEST_FAIL;
+>  	if (test_get_dec())
+>  		ret = TEST_FAIL;
+> +	if (test_get_line())
+> +		ret = TEST_FAIL;
+>  	return ret;
+>  }
 >  
-> @@ -2048,7 +2048,7 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
->  	bitmap_set(vb->used_map, 0, (1UL << order));
->  	INIT_LIST_HEAD(&vb->free_list);
->  
-> -	xa = addr_to_vb_xarray(va->va_start);
-> +	xa = addr_to_vb_xa(va->va_start);
->  	vb_idx = addr_to_vb_idx(va->va_start);
->  	err = xa_insert(xa, vb_idx, vb, gfp_mask);
->  	if (err) {
-> @@ -2070,7 +2070,7 @@ static void free_vmap_block(struct vmap_block *vb)
->  	struct vmap_block *tmp;
->  	struct xarray *xa;
->  
-> -	xa = addr_to_vb_xarray(vb->va->va_start);
-> +	xa = addr_to_vb_xa(vb->va->va_start);
->  	tmp = xa_erase(xa, addr_to_vb_idx(vb->va->va_start));
->  	BUG_ON(tmp != vb);
->  
-> @@ -2193,7 +2193,7 @@ static void vb_free(unsigned long addr, unsigned long size)
->  	order = get_order(size);
->  	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
->  
-> -	xa = addr_to_vb_xarray(addr);
-> +	xa = addr_to_vb_xa(addr);
->  	vb = xa_load(xa, addr_to_vb_idx(addr));
->  
->  	spin_lock(&vb->lock);
-> @@ -3556,7 +3556,7 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
->  	 * Area is split into regions and tracked with vmap_block, read out
->  	 * each region and zero fill the hole between regions.
->  	 */
-> -	xa = addr_to_vb_xarray((unsigned long) addr);
-> +	xa = addr_to_vb_xa((unsigned long) addr);
->  	vb = xa_load(xa, addr_to_vb_idx((unsigned long)addr));
->  	if (!vb)
->  		goto finished;
+> -- 
+> 2.40.0.348.gf938b09366-goog
+> 
 
-Reviewed-by: Baoquan He <bhe@redhat.com>
+-- 
 
+- Arnaldo
