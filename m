@@ -2,140 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775286D20AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202DA6D20BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjCaMoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
+        id S232591AbjCaMqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjCaMoV (ORCPT
+        with ESMTP id S232580AbjCaMqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:44:21 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD4E191E0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:43:55 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id r187so27223215ybr.6
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680266626;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d8wUcVZufaGcIMkEEh5Kyyy9hNa4NEI3tlGV4NFbfOA=;
-        b=dOYhn1Pv4R1vbnTkOa99isSC9HUFcbFyWXhXVBsjf5bUyLWeOxyByjakyAilvTZTC1
-         5JSKVUNDPGvDSRB03FKdq4BZK/hztXF7/qdghNdiQ6noa3NYPLm+PbAt6P5cNtYGcbof
-         PCT2vUMAUBKwSZf7bxmL1he8vAGPYTHj8LZWlia4SfQkKiFDrbNR9lOPGDdQRpYAlp9e
-         Eo6Bd4Pc1uCZzgcg4lPPOYwZ0KD0HExGiHadyGawrhpCgq5zbM8iRHI4uainN3m6MDSH
-         +fLw7P1golGEwTXGc2TmFZFyJ5vjVRTrYDJgXEgQnctl5Hc1z57/tXXvCIv9gk9P6C3c
-         8/ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680266626;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d8wUcVZufaGcIMkEEh5Kyyy9hNa4NEI3tlGV4NFbfOA=;
-        b=dNEL9Hdxu1TREuj2ciGUq9Ua+1kxLJd/4C/4+Q0eA/+wFoMwMrNz/8uAmCYPfBinex
-         6YBMeV2PdLZlW5/JeOjmdz4unmMC3GOpnrqrFQwaAIR85/uhqNDrXFc0qeVzJYoyyKu8
-         yf+0284HNU4ijUl0XolCN7S35FyhNyg70xxly5TYOEG6uRniWe5gj2/hyg5+3EqQiDX/
-         UZjGIVQqf37DVmJNkZBtJgkIvHe2H368v6/Cmi/y5LWf8QmT6hMLyMeTO/MWxqOfmaAE
-         vUyWHQuWQT0lyEH2x+KmnOs9EQ3ljqB+rTtwCsBIf8FBwIo4Mgv9l9BfYgylN+rpNIJw
-         q+1g==
-X-Gm-Message-State: AAQBX9dF2AqxoKP8opAkcnXQdcVfcrhPGzPECS4zsIgHWTrlauFsFtZt
-        mwOrOiEAvo/NP+2N/7ZlVCralYfC3LHhDrqO40ahcw==
-X-Google-Smtp-Source: AKy350bFUOgDXgmIhpH3HEs+a3adie/r2r+Fz9iEPH6HVz++8tVbnwb4WPPXtaN83foxwOjKDtGmQsn3jTViuZa3pFs=
-X-Received: by 2002:a25:1185:0:b0:a27:3ecc:ffe7 with SMTP id
- 127-20020a251185000000b00a273eccffe7mr4970550ybr.3.1680266626404; Fri, 31 Mar
- 2023 05:43:46 -0700 (PDT)
+        Fri, 31 Mar 2023 08:46:11 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8401FD00;
+        Fri, 31 Mar 2023 05:45:55 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 920C21883AFB;
+        Fri, 31 Mar 2023 12:45:52 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 83E4D25004E1;
+        Fri, 31 Mar 2023 12:45:52 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 757369B403F7; Fri, 31 Mar 2023 12:45:52 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id C93F09B403E4;
+        Fri, 31 Mar 2023 12:45:51 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
+ test
+In-Reply-To: <20230331093732.s6loozkdhehewlm4@skbuf>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-7-netdev@kapio-technology.com>
+ <ZBgdAo8mxwnl+pEE@shredder> <87a5zzh65p.fsf@kapio-technology.com>
+ <ZCMYbRqd+qZaiHfu@shredder> <874jq22h2u.fsf@kapio-technology.com>
+ <20230330192714.oqosvifrftirshej@skbuf>
+ <871ql5mjjp.fsf@kapio-technology.com>
+ <20230331093732.s6loozkdhehewlm4@skbuf>
+Date:   Fri, 31 Mar 2023 14:43:11 +0200
+Message-ID: <87tty1nlb4.fsf@kapio-technology.com>
 MIME-Version: 1.0
-References: <20230329202148.71107-1-dennis@kernel.org> <ZCTOMVjW+pnZVGsQ@snowbird>
-In-Reply-To: <ZCTOMVjW+pnZVGsQ@snowbird>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 31 Mar 2023 14:43:10 +0200
-Message-ID: <CAPDyKFrcdJuyA9B-JDReacT2z1ircDoY4oTXZQ8AVFk6UEFYsw@mail.gmail.com>
-Subject: Re: [PATCH v2] mmc: inline the first mmc_scan() on mmc_start_host()
-To:     Dennis Zhou <dennis@kernel.org>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Mar 2023 at 01:48, Dennis Zhou <dennis@kernel.org> wrote:
+On Fri, Mar 31, 2023 at 12:37, Vladimir Oltean <olteanv@gmail.com> wrote:
 >
-> When using dm-verity with a data partition on an emmc device, dm-verity
-> races with the discovery of attached emmc devices. This is because mmc's
-> probing code sets up the host data structure then a work item is
-> scheduled to do discovery afterwards. To prevent this race on init,
-> let's inline the first call to detection, __mm_scan(), and let
-> subsequent detect calls be handled via the workqueue.
+> So, by running the command I posted in the earlier email, you actually
+> run it on the physical DSA user port interfaces, and it should pass
+> there too.
 
-In principle, I don't mind the changes in $subject patch, as long as
-it doesn't hurt the overall initialization/boot time. Especially, we
-may have more than one mmc-slot being used, so this needs to be well
-tested.
+Okay, that sounds like a good idea which I have not done before. I am
+seeing how I can install Debian in an Qemu or VMWare setup to be able to
+test that way.
 
-Although, more importantly, I fail to understand how this is going to
-solve the race condition. Any I/O request to an eMMC or SD requires
-the mmc block device driver to be up and running too, which is getting
-probed from a separate module/driver that's not part of mmc_rescan().
+> This is based on the equivalency principle between the
+> software and the hardware data paths that I was talking about.
+>
+> If you're actively and repeatedly making an effort to work with your eyes
+> closed, and then build strawmen around the fact that you don't see, then
+> you're not going to get very friendly reactions from people, me included,
+> who explain things to you that pertain to your due diligence. This is
+> because these people know the things that they're explaining to you out
+> of their own due diligence, and, as a result, are not easily fooled by
+> your childish excuses.
 
-Kind regards
-Uffe
-
->
-> Signed-off-by: Dennis Zhou <dennis@kernel.org>
-> ---
-> Sigh.. fix missing static declaration.
->
->  drivers/mmc/core/core.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-> index 368f10405e13..fda7ee57dee3 100644
-> --- a/drivers/mmc/core/core.c
-> +++ b/drivers/mmc/core/core.c
-> @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_card *card, sector_t *gpt_sector)
->  }
->  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
->
-> -void mmc_rescan(struct work_struct *work)
-> +static void __mmc_rescan(struct mmc_host *host)
->  {
-> -       struct mmc_host *host =
-> -               container_of(work, struct mmc_host, detect.work);
->         int i;
->
->         if (host->rescan_disable)
-> @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
->                 mmc_schedule_delayed_work(&host->detect, HZ);
->  }
->
-> +void mmc_rescan(struct work_struct *work)
-> +{
-> +       struct mmc_host *host =
-> +               container_of(work, struct mmc_host, detect.work);
-> +
-> +       __mmc_rescan(host);
-> +}
-> +
->  void mmc_start_host(struct mmc_host *host)
->  {
->         host->f_init = max(min(freqs[0], host->f_max), host->f_min);
-> @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
->         }
->
->         mmc_gpiod_request_cd_irq(host);
-> -       _mmc_detect_change(host, 0, false);
-> +       host->detect_change = 1;
-> +       __mmc_rescan(host);
->  }
->
->  void __mmc_stop_host(struct mmc_host *host)
-> --
-> 2.40.0
->
+I am not coming with excuses here, and certainly not childish ones at
+that either. I am just pointing out that on my device the tests don't
+run well because of memory shortage and my reasoning why I think it is
+so.
+I will as long as the system is as it is with these selftests, just run
+single subtests at a time on target, but if I have new phy problems like
+the one you have seen I have had before, then testing on target becomes
+off limits.
