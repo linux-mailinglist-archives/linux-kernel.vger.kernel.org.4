@@ -2,106 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C943C6D2303
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A976D2301
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbjCaOwB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 10:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
+        id S232963AbjCaOvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbjCaOvq (ORCPT
+        with ESMTP id S233000AbjCaOvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:51:46 -0400
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DEE1F7AA
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:51:27 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id ew6so90578236edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:51:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680274271;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KxCr3nedc7gseqp/MKtKxJ5ucMhxAWFs7Ct9g/ZwuMc=;
-        b=gEeCqjUPc0YIN0a/XPRLeR//MB72hMHdJj5Z2RqWoONEFShc+EDe0hjfN3WYWWqCYj
-         uYZyOsownuIHZ28G2tWqtz1108TNeczgdz6YIulm0WicQJ2gacahvDvn3zifWHzu8SkS
-         hvCwDkv1csCe5yWWNXyVJu7Xa5Pi327tHua/ZRu8EIZkmpeNSq2kAWiuaOfwZM9sEQsU
-         n2pkAbyOiHtZyazXCQSa22CeyfM8aBrk/g66cjAmejYIyC8BO4HTy/RhTzyACOyFFQPR
-         RoybkrJq6Imt9OzVlO7CX3kWNNZh2CRXxaBr5P7gD37IrfiIGvEZUlT7rhj//VftTlMa
-         LYww==
-X-Gm-Message-State: AAQBX9cxvzFnp/j+YAAwIkEPfnm9NIxxZUQUcPbkgTRvULvb7zpAeYdm
-        LQO84uI463VLDgYHkkSwuOAflptqPfNMDqWMfbNSLnF+9DU=
-X-Google-Smtp-Source: AKy350aIkTYggXQ6CQIwQa3MlzWB+cEP42QJ6JV/jBsxesEcYMgCrEuBI2UxQle97Cl+WSh9CIfIf3viJyQ21sZyWqQ=
-X-Received: by 2002:a50:d543:0:b0:4fb:f19:87f with SMTP id f3-20020a50d543000000b004fb0f19087fmr13969310edj.3.1680274271068;
- Fri, 31 Mar 2023 07:51:11 -0700 (PDT)
+        Fri, 31 Mar 2023 10:51:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAC120620;
+        Fri, 31 Mar 2023 07:51:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A635B83025;
+        Fri, 31 Mar 2023 14:51:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CF50C433EF;
+        Fri, 31 Mar 2023 14:51:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680274273;
+        bh=D+XXgjf2UQtBlW5uI89248mmOKHwBzaPnjYvu6vzuVc=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=o+INfz7QFJPaGxF/SL2LEnvjN1sS3PcOs9l70p3f6JdyC4A4I94RlpwJKqEbSEf7d
+         sK+a5MeZHB6d1x9R9FDUQjzuQ9k7/LZBozzjusvPqtatGcypef+sE3ge6jRUsoeW85
+         XVLd7YVpouIwn1vgHfR1ykVKb+S3MdQ/K4aIuh41xj98TjpMfWcD3xVLPXfiVUtWnZ
+         Fhd3WX2nKmrCP3sn+NVWD/uXUaQU72qsjOpJpvNncCvcJvJcoJvrt9s1dc0pCAp6C8
+         laaoQK+v9c5QwTGhuKCa/6w0OS/55/jusbRs0CjCnDA6hsIR8Qkafl49Tt8ffpaXUg
+         rXTT7+LRt2vXw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230331093318.82288-1-gregkh@linuxfoundation.org> <20230331093318.82288-7-gregkh@linuxfoundation.org>
-In-Reply-To: <20230331093318.82288-7-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 31 Mar 2023 16:50:59 +0200
-Message-ID: <CAJZ5v0g7bbZc36pZD2TzQVfjsGt99UdpYSfL=TmYmjD3f6gg7g@mail.gmail.com>
-Subject: Re: [PATCH 7/7] driver core: make sysfs_dev_char_kobj static
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [v2] wifi: rtlwifi: fix incorrect error codes in
+ rtl_debugfs_set_write_rfreg()
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230326053138.91338-1-harperchen1110@gmail.com>
+References: <20230326053138.91338-1-harperchen1110@gmail.com>
+To:     Wei Chen <harperchen1110@gmail.com>
+Cc:     pkshih@realtek.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wei Chen <harperchen1110@gmail.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <168027426945.32751.18184826221598610178.kvalo@kernel.org>
+Date:   Fri, 31 Mar 2023 14:51:10 +0000 (UTC)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 11:33 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> Nothing outside of drivers/base/core.c uses sysfs_dev_char_kobj, so
-> make it static and document what it is used for so we remember it the
-> next time we touch it 15 years from now.
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Wei Chen <harperchen1110@gmail.com> wrote:
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+> If there is a failure during copy_from_user or user-provided data buffer
+> is invalid, rtl_debugfs_set_write_rfreg should return negative error code
+> instead of a positive value count.
+> 
+> Fix this bug by returning correct error code. Moreover, the check of buffer
+> against null is removed since it will be handled by copy_from_user.
+> 
+> Fixes: 610247f46feb ("rtlwifi: Improve debugging by using debugfs")
+> Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-> ---
->  drivers/base/base.h | 3 ---
->  drivers/base/core.c | 4 +++-
->  2 files changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/base/base.h b/drivers/base/base.h
-> index 4660e1159ee0..e96f3343fd7c 100644
-> --- a/drivers/base/base.h
-> +++ b/drivers/base/base.h
-> @@ -191,9 +191,6 @@ const char *device_get_devnode(const struct device *dev, umode_t *mode,
->  extern struct kset *devices_kset;
->  void devices_kset_move_last(struct device *dev);
->
-> -/* /sys/dev/char directory */
-> -extern struct kobject *sysfs_dev_char_kobj;
-> -
->  #if defined(CONFIG_MODULES) && defined(CONFIG_SYSFS)
->  void module_add_driver(struct module *mod, struct device_driver *drv);
->  void module_remove_driver(struct device_driver *drv);
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index cf6f41c2060c..47e16c088e77 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2255,7 +2255,9 @@ static void fw_devlink_link_device(struct device *dev)
->  int (*platform_notify)(struct device *dev) = NULL;
->  int (*platform_notify_remove)(struct device *dev) = NULL;
->  static struct kobject *dev_kobj;
-> -struct kobject *sysfs_dev_char_kobj;
-> +
-> +/* /sys/dev/char */
-> +static struct kobject *sysfs_dev_char_kobj;
->
->  /* /sys/dev/block */
->  static struct kobject *sysfs_dev_block_kobj;
-> --
-> 2.40.0
->
+Patch applied to wireless-next.git, thanks.
+
+905a9241e4e8 wifi: rtlwifi: fix incorrect error codes in rtl_debugfs_set_write_rfreg()
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230326053138.91338-1-harperchen1110@gmail.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
