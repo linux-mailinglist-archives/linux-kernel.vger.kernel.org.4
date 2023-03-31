@@ -2,76 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3886D1493
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31356D14A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 03:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjCaA7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 20:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
+        id S229664AbjCaBGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 21:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjCaA7q (ORCPT
+        with ESMTP id S229485AbjCaBGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 20:59:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483961024E;
-        Thu, 30 Mar 2023 17:59:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D26262290;
-        Fri, 31 Mar 2023 00:59:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D7989C4339B;
-        Fri, 31 Mar 2023 00:59:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680224375;
-        bh=u93Aieiy1n2F3ZSl10cyi1S6xA4Q2nfZg8Rkf0kFO8o=;
-        h=Reply-To:From:To:In-Reply-To:References:Subject:Date:From;
-        b=JfBwaRCk2f9+gurayXX54OE0eBUGgB0oDyVPL35RzETRVsl2eOV7jq91DMK7YR1qi
-         gfNfm9U0RbBAeLI7TgwVBCA6457l3g6DvDpHEieSzOr0JHB0tMA5yISs/TfU6cSCHq
-         4feYEpi1P5LCLRPW9Tq11NJIG3GNmC9yVNSH//zTwdysJXzP7o3FBD5WglCV3AELKu
-         QMm0ik81iEN+l42va2Q9OxG6KrxRE2AdAoUC6WbFfz4Jpl8lbHGdoc4EM29LBAvxHG
-         3/9PwJAwtrPteVsVK48Iwykq3fybU/CGnLP1WCig8TW3IEd3UZQQwP0qrhoY7wTxzW
-         9eAdfx28pLdmw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9685E2A03F;
-        Fri, 31 Mar 2023 00:59:35 +0000 (UTC)
-Reply-To: pengfei.xu@intel.com
+        Thu, 30 Mar 2023 21:06:39 -0400
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97C7CA19;
+        Thu, 30 Mar 2023 18:06:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R711e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vf09vE6_1680224794;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vf09vE6_1680224794)
+          by smtp.aliyun-inc.com;
+          Fri, 31 Mar 2023 09:06:35 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     jgg@ziepe.ca
+Cc:     leon@kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] RDMA/cma: Remove NULL check before dev_{put, hold}
+Date:   Fri, 31 Mar 2023 09:06:33 +0800
+Message-Id: <20230331010633.63261-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-From:   "Kernel.org Bugbot" <bugbot@kernel.org>
-To:     linux-kernel@vger.kernel.org, bugs@lists.linux.dev,
-        mingo@redhat.com, acme@kernel.org, peterz@infradead.org,
-        mricon@kernel.org, pengfei.xu@intel.com,
-        linux-perf-users@vger.kernel.org
-Message-ID: <20230331-b217267c2-62770cd7e0a6@bugzilla.kernel.org>
-In-Reply-To: <20230330-b217267c0-15b9c837ad2e@bugzilla.kernel.org>
-References: <20230330-b217267c0-15b9c837ad2e@bugzilla.kernel.org>
-Subject: Re: [Syzkaller & bisect] There is "soft lockup in
- sys_perf_event_open" BUG in v6.3-rc4 kernel
-X-Bugzilla-Product: Linux
-X-Bugzilla-Component: Kernel
-X-Mailer: peebz 0.1
-Date:   Fri, 31 Mar 2023 00:59:35 +0000 (UTC)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pengfei.xu@intel.com writes via Kernel.org Bugzilla:
+The call netdev_{put, hold} of dev_{put, hold} will check NULL,
+so there is no need to check before using dev_{put, hold},
+remove it to silence the warnings:
 
-Thanks, and here is the LKML community link: https://lore.kernel.org/lkml/ZCQmnkqDaP7C1EVi@xpf.sh.intel.com/
+./drivers/infiniband/core/cma.c:713:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
+./drivers/infiniband/core/cma.c:2433:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
 
-Thanks!
-BR.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4668
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/infiniband/core/cma.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-View: https://bugzilla.kernel.org/show_bug.cgi?id=217267#c2
-You can reply to this message to join the discussion.
+diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
+index 6b9563d4f23c..93a1c48d0c32 100644
+--- a/drivers/infiniband/core/cma.c
++++ b/drivers/infiniband/core/cma.c
+@@ -709,8 +709,7 @@ cma_validate_port(struct ib_device *device, u32 port,
+ 	}
+ 
+ 	sgid_attr = rdma_find_gid_by_port(device, gid, gid_type, port, ndev);
+-	if (ndev)
+-		dev_put(ndev);
++	dev_put(ndev);
+ 	return sgid_attr;
+ }
+ 
+@@ -2429,8 +2428,7 @@ static int cma_ib_req_handler(struct ib_cm_id *cm_id,
+ 	mutex_unlock(&listen_id->handler_mutex);
+ 
+ net_dev_put:
+-	if (net_dev)
+-		dev_put(net_dev);
++	dev_put(net_dev);
+ 
+ 	return ret;
+ }
 -- 
-Deet-doot-dot, I am a bot.
-Kernel.org Bugzilla (peebz 0.1)
+2.20.1.7.g153144c
 
