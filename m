@@ -2,120 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E146D2863
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 21:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E0B6D2868
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 21:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjCaTDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 15:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
+        id S231562AbjCaTE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 15:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjCaTDH (ORCPT
+        with ESMTP id S230183AbjCaTE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 15:03:07 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054D622903
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:03:06 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id g17so30204780lfv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:03:05 -0700 (PDT)
+        Fri, 31 Mar 2023 15:04:26 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B528522E80
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:04:25 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id eg48so93472612edb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:04:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680289384;
+        d=google.com; s=20210112; t=1680289464;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+Op2hvo1QpmD4q1fBgDvpflzYt4ille90lJOYkm9McQ=;
-        b=I9MBLXscoVftIVV9CjCEAHOLc8es0K+E7ZAIKRZSAuC79s8JCWAbcfd1/wUUY2D1HQ
-         qqYcbYBp9j38efRMctWg4KhDrinDHH5RMfqVpMBTCL4Pk5KAEY8YYLgbdBmp5lNBd4WX
-         WBc1Yn7iuEmqLxYw2OFLb+mQtYK5mlHl0JUwNLCzNVz+0GIhP2VGQ8Kctjbx/6443Naz
-         LZCatuF8uyuce31qb7oKNBD0H88jyGp68xeFcevSTSVJbS9mpFdEBMKyuWIBKJiEr2z3
-         maWg/ujFK92UZ5pkT8/UrO2C4mPvcUCyo0eGZRpGS2QfuAbUsDWyZRFIM1W4el2h38OR
-         Ai8A==
+        bh=CBgtdWro37xy0xED7gYpWdnIpcRD6CvxaVJDB91GKvs=;
+        b=fL6JQwfkCzg5k8MIp2yW1eevTYpumo4axpAUWjeQVnxZ023oShCKTwLmnAc/fye6xx
+         neR98ZJVj6piv4J9ecd7xjjIQYyACuTq59qmaCS3yTQOGPhA91OF92s4v9CkBWSpvvKM
+         rz65GCEGOOJ8yjBjMqwAS3b3tgCOZKNxFJajWQaJRjRdc4CSg/cA57O8D+Oq6Oe1LAJ4
+         2mVn/cvkii1QVT3GcQW/mRwIrCzXmOwHpOMN8C/onm9XRgMZ288OdnZgwdQUr7MMj8+8
+         RRbSZfC/Y3QYlXMJZsdEzOOnNaU20+AvLyLZyFhObvmRedEK5bFf9W0VpJPo3NjJ/PlU
+         ADqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680289384;
+        d=1e100.net; s=20210112; t=1680289464;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+Op2hvo1QpmD4q1fBgDvpflzYt4ille90lJOYkm9McQ=;
-        b=dRvaUukWDx+O0TYOhn0/Ggvb+XOr3KxZd6TRJNncYAF4Nb5LtgzUXSRlnxZeZqZe2d
-         kIW7Lu7Pc7pMpekIz+vMrHudfPVr4wuzlSC/vj9ko5BYwff348uj5oJClS8YlOY+Wul5
-         QAL1pjWdJqjNSQgiwqt9q3wO3c+cluk9Kz0kOFn7V+AwhElkGcnH5FthrTbEvmSJfzqA
-         81CSNyrbJNXW9siRZZfYy6gOKYGY4TH/WV3XsN6ZyArmyve4dgS01XSH63mjc9crhKIE
-         82Yw0ciRTKog4qIw3jtlZkigF6ffCS6SztuYuFTGufWHZqVGR3+AuCq1cQtDRzxujHrO
-         QnWw==
-X-Gm-Message-State: AAQBX9elICrZSQflOUMDoN7OMFxvLMBeHYV5kVpwjTuWj8KUl1/vE3ph
-        kmWU0xJcJzO4NRXa5XlUXTyWjca8sv+AR9sBhWRAjg==
-X-Google-Smtp-Source: AKy350bg046U6kUEdMKJ47xgMoqU+o1btrNpujCJ6vXB3o551Lu3oiJA8WifEc5bExAewh/oNaLY16yV+c/9sUrBP2Y=
-X-Received: by 2002:ac2:4470:0:b0:4eb:304f:66ea with SMTP id
- y16-20020ac24470000000b004eb304f66eamr823973lfl.13.1680289384305; Fri, 31 Mar
- 2023 12:03:04 -0700 (PDT)
+        bh=CBgtdWro37xy0xED7gYpWdnIpcRD6CvxaVJDB91GKvs=;
+        b=seTAgYFq8O3rk/ODgrYR1DilpWFqJfgR/CVQpBtUpORkBwMw7Gm8ydX6eE0tploGkp
+         ziUXJExTLWABPGj37fsU7wrV83zqWtmhMMyzF6IPjBk619KrxyoBPjl15GBV/OGRyOcM
+         hbS9domKefOTQfLDd7rmelB//BAOnfDaE4+H7/sFjr8ey2r9DniaQ0zCLcEBNnt/pt/c
+         qre92lCOch1ZtyjYq6121F/Fo78DHLiybE+qWK3jEM5itOt+lbtGT1H6kizDwZFCPN4s
+         u7X1t3UpqSRclAYTFlLvuBAn6jnBSjuv/kMbVacM9ZgB2RC/YEXLYUru5IPHU2Y48YbU
+         RXTg==
+X-Gm-Message-State: AAQBX9c9KSodOwQomlv3EbQUnzZKscKvl72fsEpRkKVdYjulRjX3QwU3
+        263Kd1XlBrcjRibWEkFziza7YeYDeRjbF9MLxOxKmQ==
+X-Google-Smtp-Source: AKy350Zu5bBwTsywOca+UGIcS/HARlLbeBWAVVNB4lZtMspaiROXuzs3nwneenpby7qGskVTJooNUd+2uG/N2dk1CQM=
+X-Received: by 2002:a17:906:2456:b0:8e5:411d:4d09 with SMTP id
+ a22-20020a170906245600b008e5411d4d09mr14495139ejb.15.1680289464033; Fri, 31
+ Mar 2023 12:04:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230331182727.4062790-1-evan@rivosinc.com> <25837ca5-b709-4d20-912b-ab13e6353069@spud>
-In-Reply-To: <25837ca5-b709-4d20-912b-ab13e6353069@spud>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Fri, 31 Mar 2023 12:02:28 -0700
-Message-ID: <CALs-Hss-W78x04LS7X_RiTmU19Xv6d3f4x5rgeEhV7TVy7_CEA@mail.gmail.com>
-Subject: Re: [RFC PATCH] riscv: dts: nezha-d1: Add memory
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-sunxi@lists.linux.dev, conor.dooley@microchip.com,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Trevor Woerner <twoerner@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <CAJD7tkb-UpKm2QbjYzB=B=oGk6Hyj9cbUviZUPC+7VsvBecH7g@mail.gmail.com>
+ <20230329192059.2nlme5ubshzdbpg6@google.com> <ZCU1Bp+5bKNJzWIu@dhcp22.suse.cz>
+ <CAJD7tka0CmRvcvB0k8DZuid1vC9OK_mFriHHbXNTUkVE7OjaTA@mail.gmail.com>
+ <ZCU+8lSi+e4WgT3F@dhcp22.suse.cz> <CAJD7tkaKd9Bcb2-e83Q-kzF7G+crr1U+7uqUPBARXWq-LpyKvw@mail.gmail.com>
+ <ZCVFA78lDj2/Uy0C@dhcp22.suse.cz> <CAJD7tkbjmBaXghQ+14Hy28r2LoWSim+LEjOPxaamYeA_kr2uVw@mail.gmail.com>
+ <ZCVKqN2nDkkQFvO0@dhcp22.suse.cz> <CAJD7tkYEOVRcXs-Ag3mWn69EwE4rjFt9j5MAcTGCNE8BuhTd+A@mail.gmail.com>
+ <ZCa9sixp3GJcjf8Y@dhcp22.suse.cz>
+In-Reply-To: <ZCa9sixp3GJcjf8Y@dhcp22.suse.cz>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 31 Mar 2023 12:03:47 -0700
+Message-ID: <CAJD7tka-2vNn25=NdrKQoMf4ntdbWtojY0k4eAa-c9D+v7J=HQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] cgroup: rstat: add WARN_ON_ONCE() if flushing
+ outside task context
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 11:39=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
-ote:
+On Fri, Mar 31, 2023 at 4:02=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
+e:
 >
-> On Fri, Mar 31, 2023 at 11:27:27AM -0700, Evan Green wrote:
-> > Add memory info for the D1 Nezha, which seems to be required for it to
-> > boot with the stock firmware. Note that this hardcodes 1GB, which is
-> > not technically correct as they also make models with different amounts
-> > of RAM.
+> On Thu 30-03-23 01:53:38, Yosry Ahmed wrote:
+> [...]
+> > Maybe we can add a primitive like might_sleep() for this, just food for=
+ thought.
 >
-> > Is the firmware supposed to populate this?
->
-> Yup. Samuel intentionally did it this way:
-> https://lore.kernel.org/linux-riscv/8a2194bf-93bd-de4d-8d39-0cd72aabb0a9@=
-sholland.org/
->
-> Since I don't like using the firmware provided stuff to more easily
-> test I do this in my u-boot boot script:
->
-> tftp 0x54000000 d1-fitImage.fit
-> bootm start 0x54000000
-> bootm loados 0x54000000
-> bootm ramdisk;
-> bootm prep;
-> fdt memory 0x40000000 0x20000000
-> bootm go;
->
-> Hope either of the above are helpful,
-> Conor.
+> I do not think it is the correct to abuse might_sleep if the function
+> itself doesn't sleep. If it does might_sleep is already involved.
 
-Ah, I see, thanks for the pointers. I've got whatever firmware came
-with the "dd and go" Fedora image I found on the internet somewhere,
-which doesn't seem to do the memory node population for me. I've been
-hesitant to rebuild the firmware as I don't want to break the Fedora
-"safe OS", and if there's a way to get mired in some build
-environment, I seem to have a nose for finding it.
+Oh, sorry if I wasn't clear, I did not mean to reuse might_sleep() --
+I meant introducing a new similar debug primitive that shouts if irqs
+are disabled.
 
-I'll probably just keep the patch locally in my tree, and if I'm
-forced to update the firmware for some other reason I'll try removing
-it.
-
--Evan
+> --
+> Michal Hocko
+> SUSE Labs
