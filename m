@@ -2,338 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1446D267C
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 19:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2756B6D267F
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 19:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjCaRQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 13:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S232072AbjCaRRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 13:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjCaRQB (ORCPT
+        with ESMTP id S229529AbjCaRRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 13:16:01 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245E01BF7C
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 10:16:00 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id w9so92398871edc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 10:16:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112; t=1680282958;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eAzw7TT/sjg4SXbGiPwMSsKqPPQHTtEY3GFboR2KSbo=;
-        b=gzeyNPl7aMroQwkhnuH9dGPyoW8udYaZzd0U7ML/vdC4+J7sclUNzM/jNdJZ1BGD55
-         M+UGvhyeguz14vqlRp4kqTNtrUdi+4pa7yVODVlapu245218Z9YiUeIgBi63e2M5/19v
-         1QKhUrIn/8qyjzomEKcIlz2/OLQ+X8c6xnsQIEY1hKzwmpRpaXx3clmtLzcB+fkZTjZ1
-         r56eqPJy4z4DrKCDQ/31TxX5pt9mhsbqCRZ53GUEbCS/plrOviyiXvmaL93zddm3vdAC
-         N/jlIrYlDcCo3Ow/pExikuLl0zFRHD1+TktrgLgWY11XNPk1jBYZVn68wvFteMTU7F8w
-         FJsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680282958;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eAzw7TT/sjg4SXbGiPwMSsKqPPQHTtEY3GFboR2KSbo=;
-        b=CtHWBvoMmYJwcKjSLg+rhoncb84EJPulLAz2/WB91zj5MlvbC83d+WG474x/LE6hsx
-         mlvCTNDQz5oDJDm0H+C10Ps6/ZfYC2btn0Mj9HOgOSI1JE8/0MLqUV2/tY2zkOS8KQ5y
-         F+Io1Owvd4mbZ14u6DFWvBN5fnHR4p7toRqOXvEB0KLOnJ4WEylFgJ7shuo9X2Pmrf0O
-         ixh6vC9171WG3NrsTGkgotQ0EarCGSWA038EFJNd6w8FHZnvn22UAhsy57MINx6vVgsS
-         zGlAWBgAFIn20h39w50FxPzUwJ4hz6tEpSMRRQU7N943BOpI+qCs41wyIFhaZRr16ola
-         /pYA==
-X-Gm-Message-State: AAQBX9dFTE8wPNqi2v177Asd6RxUu1xDjLmx9+oVctVrtpMRE5Yudey0
-        y4NA66VoRwngkBQObqAhY2FHYGDHFxKez8Ful5L+QQ==
-X-Google-Smtp-Source: AKy350aQxTi5kpx3wJRqUiy1Y9IwZo1FZ8Rz6frMwB5t4mEVDlsnr8AT/GAD4F+9EZzjaxUyruZAe7/0f+IOCV0GFlQ=
-X-Received: by 2002:a17:907:7212:b0:946:f3f9:67b5 with SMTP id
- dr18-20020a170907721200b00946f3f967b5mr6589974ejc.6.1680282958562; Fri, 31
- Mar 2023 10:15:58 -0700 (PDT)
+        Fri, 31 Mar 2023 13:17:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CDC1BF75
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 10:17:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B84162ABE
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 17:17:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4853C433D2;
+        Fri, 31 Mar 2023 17:16:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680283019;
+        bh=9SEYP1bD8f9GCzfYuKQIF0RE1GJYNL9on3r1xN1EBlY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=NH0tvn73mETnuiGYkdPV0zjsHcheG6ToJ//tcag/+lGoQwjbIJUxQJG5Cis5wmxF6
+         CesIUMybgfwhKhurBGzvERB9EIQCqwp+0xc5YW4PPEttVXpijRXEA0TuP0liF8F72J
+         LPp0rdfmqWPSjyM/KnNR1cZvGxtZHgM2KCzIOxg2ohT2tAN0H3UGjcWSQ6v+7mcDJ1
+         ThyZEk1+S70jVWEpyokMqoo8pJUzBs99xLo74RbsyIEc8xoPWisUfNwixfGzs9Kx3y
+         ADC2v1/HjCZdijEYjxXivaU6QDPIwN4bONizqfKhnoXjn6BDD23X8JyFpQw5y93pZb
+         HqMZdXnq4oyyA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 24C7A1540476; Fri, 31 Mar 2023 10:16:59 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 10:16:59 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: A couple of TSC questions
+Message-ID: <3daa086c-b4a0-47a9-8bfc-aac4139013c4@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <b2f07f18-b60b-403b-90ff-937ea32963ee@paulmck-laptop>
+ <ZBqOyLByOgvdAve3@feng-clx>
+ <acda3fb5-373a-48b1-b78e-eea18da4ccb0@paulmck-laptop>
+ <ZCD9SnZSUCkE9Ss+@feng-clx>
+ <aaf391d9-98e6-47d8-b402-c90b4a81ae9c@paulmck-laptop>
 MIME-Version: 1.0
-References: <20230128072737.2995881-1-apatel@ventanamicro.com>
- <20230128072737.2995881-6-apatel@ventanamicro.com> <CAOnJCUKh6s6v0TK=4KRZk9GXN23ebvPuy2OHtWBtTOpnN4g9dg@mail.gmail.com>
-In-Reply-To: <CAOnJCUKh6s6v0TK=4KRZk9GXN23ebvPuy2OHtWBtTOpnN4g9dg@mail.gmail.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 31 Mar 2023 22:45:45 +0530
-Message-ID: <CAAhSdy1GxsdRVJDJP_70VtK_tM=sNnpvSJoCWwm1LSfHsVf=Lg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] RISC-V: KVM: Add ONE_REG interface for AIA CSRs
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aaf391d9-98e6-47d8-b402-c90b4a81ae9c@paulmck-laptop>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 5:34=E2=80=AFAM Atish Patra <atishp@atishpatra.org> =
-wrote:
->
-> On Fri, Jan 27, 2023 at 11:28 PM Anup Patel <apatel@ventanamicro.com> wro=
-te:
-> >
-> > We extend the CSR ONE_REG interface to access both general CSRs and
-> > AIA CSRs. To achieve this, we introduce "subtype" field in the ONE_REG
-> > id which can be used for grouping registers within a particular "type"
-> > of ONE_REG registers.
-> >
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > ---
-> >  arch/riscv/include/uapi/asm/kvm.h | 15 ++++-
-> >  arch/riscv/kvm/vcpu.c             | 96 ++++++++++++++++++++++++-------
-> >  2 files changed, 89 insertions(+), 22 deletions(-)
-> >
-> > diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uap=
-i/asm/kvm.h
-> > index 71992ff1f9dd..d0704eff0121 100644
-> > --- a/arch/riscv/include/uapi/asm/kvm.h
-> > +++ b/arch/riscv/include/uapi/asm/kvm.h
-> > @@ -64,7 +64,7 @@ struct kvm_riscv_core {
-> >  #define KVM_RISCV_MODE_S       1
-> >  #define KVM_RISCV_MODE_U       0
-> >
-> > -/* CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-> > +/* General CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-> >  struct kvm_riscv_csr {
-> >         unsigned long sstatus;
-> >         unsigned long sie;
-> > @@ -78,6 +78,10 @@ struct kvm_riscv_csr {
-> >         unsigned long scounteren;
-> >  };
-> >
-> > +/* AIA CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-> > +struct kvm_riscv_aia_csr {
-> > +};
-> > +
-> >  /* TIMER registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-> >  struct kvm_riscv_timer {
-> >         __u64 frequency;
-> > @@ -105,6 +109,7 @@ enum KVM_RISCV_ISA_EXT_ID {
-> >         KVM_RISCV_ISA_EXT_SVINVAL,
-> >         KVM_RISCV_ISA_EXT_ZIHINTPAUSE,
-> >         KVM_RISCV_ISA_EXT_ZICBOM,
-> > +       KVM_RISCV_ISA_EXT_SSAIA,
-> >         KVM_RISCV_ISA_EXT_MAX,
-> >  };
-> >
-> > @@ -134,6 +139,8 @@ enum KVM_RISCV_SBI_EXT_ID {
-> >  /* If you need to interpret the index values, here is the key: */
-> >  #define KVM_REG_RISCV_TYPE_MASK                0x00000000FF000000
-> >  #define KVM_REG_RISCV_TYPE_SHIFT       24
-> > +#define KVM_REG_RISCV_SUBTYPE_MASK     0x0000000000FF0000
-> > +#define KVM_REG_RISCV_SUBTYPE_SHIFT    16
-> >
-> >  /* Config registers are mapped as type 1 */
-> >  #define KVM_REG_RISCV_CONFIG           (0x01 << KVM_REG_RISCV_TYPE_SHI=
-FT)
-> > @@ -147,8 +154,12 @@ enum KVM_RISCV_SBI_EXT_ID {
-> >
-> >  /* Control and status registers are mapped as type 3 */
-> >  #define KVM_REG_RISCV_CSR              (0x03 << KVM_REG_RISCV_TYPE_SHI=
-FT)
-> > +#define KVM_REG_RISCV_CSR_GENERAL      0x0
-> > +#define KVM_REG_RISCV_CSR_AIA          0x1
-> >  #define KVM_REG_RISCV_CSR_REG(name)    \
-> > -               (offsetof(struct kvm_riscv_csr, name) / sizeof(unsigned=
- long))
-> > +       (offsetof(struct kvm_riscv_csr, name) / sizeof(unsigned long))
-> > +#define KVM_REG_RISCV_CSR_AIA_REG(name)        \
-> > +       (offsetof(struct kvm_riscv_aia_csr, name) / sizeof(unsigned lon=
-g))
-> >
-> >  /* Timer registers are mapped as type 4 */
-> >  #define KVM_REG_RISCV_TIMER            (0x04 << KVM_REG_RISCV_TYPE_SHI=
-FT)
-> > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> > index 3cf50eadc8ce..37933ea20274 100644
-> > --- a/arch/riscv/kvm/vcpu.c
-> > +++ b/arch/riscv/kvm/vcpu.c
-> > @@ -58,6 +58,7 @@ static const unsigned long kvm_isa_ext_arr[] =3D {
-> >         [KVM_RISCV_ISA_EXT_I] =3D RISCV_ISA_EXT_i,
-> >         [KVM_RISCV_ISA_EXT_M] =3D RISCV_ISA_EXT_m,
-> >
-> > +       KVM_ISA_EXT_ARR(SSAIA),
-> >         KVM_ISA_EXT_ARR(SSTC),
-> >         KVM_ISA_EXT_ARR(SVINVAL),
-> >         KVM_ISA_EXT_ARR(SVPBMT),
-> > @@ -96,6 +97,7 @@ static bool kvm_riscv_vcpu_isa_disable_allowed(unsign=
-ed long ext)
-> >         case KVM_RISCV_ISA_EXT_C:
-> >         case KVM_RISCV_ISA_EXT_I:
-> >         case KVM_RISCV_ISA_EXT_M:
-> > +       case KVM_RISCV_ISA_EXT_SSAIA:
-> >         case KVM_RISCV_ISA_EXT_SSTC:
-> >         case KVM_RISCV_ISA_EXT_SVINVAL:
-> >         case KVM_RISCV_ISA_EXT_ZIHINTPAUSE:
-> > @@ -451,30 +453,79 @@ static int kvm_riscv_vcpu_set_reg_core(struct kvm=
-_vcpu *vcpu,
-> >         return 0;
-> >  }
-> >
-> > +static int kvm_riscv_vcpu_general_get_csr(struct kvm_vcpu *vcpu,
-> > +                                         unsigned long reg_num,
-> > +                                         unsigned long *out_val)
-> > +{
-> > +       struct kvm_vcpu_csr *csr =3D &vcpu->arch.guest_csr;
-> > +
-> > +       if (reg_num >=3D sizeof(struct kvm_riscv_csr) / sizeof(unsigned=
- long))
-> > +               return -EINVAL;
-> > +
-> > +       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip)) {
-> > +               kvm_riscv_vcpu_flush_interrupts(vcpu);
-> > +               *out_val =3D (csr->hvip >> VSIP_TO_HVIP_SHIFT) & VSIP_V=
-ALID_MASK;
-> > +       } else
-> > +               *out_val =3D ((unsigned long *)csr)[reg_num];
-> > +
-> > +       return 0;
-> > +}
-> > +
-> >  static int kvm_riscv_vcpu_get_reg_csr(struct kvm_vcpu *vcpu,
-> >                                       const struct kvm_one_reg *reg)
-> >  {
-> > -       struct kvm_vcpu_csr *csr =3D &vcpu->arch.guest_csr;
-> > +       int rc;
-> >         unsigned long __user *uaddr =3D
-> >                         (unsigned long __user *)(unsigned long)reg->add=
-r;
-> >         unsigned long reg_num =3D reg->id & ~(KVM_REG_ARCH_MASK |
-> >                                             KVM_REG_SIZE_MASK |
-> >                                             KVM_REG_RISCV_CSR);
-> > -       unsigned long reg_val;
-> > +       unsigned long reg_val, reg_subtype;
-> >
-> >         if (KVM_REG_SIZE(reg->id) !=3D sizeof(unsigned long))
-> >                 return -EINVAL;
-> > +
-> > +       reg_subtype =3D (reg_num & KVM_REG_RISCV_SUBTYPE_MASK)
-> > +                       >> KVM_REG_RISCV_SUBTYPE_SHIFT;
-> > +       reg_num &=3D ~KVM_REG_RISCV_SUBTYPE_MASK;
-> > +       switch (reg_subtype) {
-> > +       case KVM_REG_RISCV_CSR_GENERAL:
-> > +               rc =3D kvm_riscv_vcpu_general_get_csr(vcpu, reg_num, &r=
-eg_val);
-> > +               break;
-> > +       case KVM_REG_RISCV_CSR_AIA:
-> > +               rc =3D kvm_riscv_vcpu_aia_get_csr(vcpu, reg_num, &reg_v=
-al);
-> > +               break;
-> > +       default:
-> > +               rc =3D -EINVAL;
-> > +               break;
-> > +       }
-> > +       if (rc)
-> > +               return rc;
-> > +
-> > +       if (copy_to_user(uaddr, &reg_val, KVM_REG_SIZE(reg->id)))
-> > +               return -EFAULT;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static inline int kvm_riscv_vcpu_general_set_csr(struct kvm_vcpu *vcpu=
-,
-> > +                                                unsigned long reg_num,
-> > +                                                unsigned long reg_val)
-> > +{
-> > +       struct kvm_vcpu_csr *csr =3D &vcpu->arch.guest_csr;
-> > +
-> >         if (reg_num >=3D sizeof(struct kvm_riscv_csr) / sizeof(unsigned=
- long))
-> >                 return -EINVAL;
-> >
-> >         if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip)) {
-> > -               kvm_riscv_vcpu_flush_interrupts(vcpu);
-> > -               reg_val =3D (csr->hvip >> VSIP_TO_HVIP_SHIFT) & VSIP_VA=
-LID_MASK;
-> > -       } else
-> > -               reg_val =3D ((unsigned long *)csr)[reg_num];
-> > +               reg_val &=3D VSIP_VALID_MASK;
-> > +               reg_val <<=3D VSIP_TO_HVIP_SHIFT;
-> > +       }
-> >
-> > -       if (copy_to_user(uaddr, &reg_val, KVM_REG_SIZE(reg->id)))
-> > -               return -EFAULT;
-> > +       ((unsigned long *)csr)[reg_num] =3D reg_val;
-> > +
-> > +       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip))
-> > +               WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
-> >
-> >         return 0;
-> >  }
-> > @@ -482,31 +533,36 @@ static int kvm_riscv_vcpu_get_reg_csr(struct kvm_=
-vcpu *vcpu,
-> >  static int kvm_riscv_vcpu_set_reg_csr(struct kvm_vcpu *vcpu,
-> >                                       const struct kvm_one_reg *reg)
-> >  {
-> > -       struct kvm_vcpu_csr *csr =3D &vcpu->arch.guest_csr;
-> > +       int rc;
-> >         unsigned long __user *uaddr =3D
-> >                         (unsigned long __user *)(unsigned long)reg->add=
-r;
-> >         unsigned long reg_num =3D reg->id & ~(KVM_REG_ARCH_MASK |
-> >                                             KVM_REG_SIZE_MASK |
-> >                                             KVM_REG_RISCV_CSR);
-> > -       unsigned long reg_val;
-> > +       unsigned long reg_val, reg_subtype;
-> >
-> >         if (KVM_REG_SIZE(reg->id) !=3D sizeof(unsigned long))
-> >                 return -EINVAL;
-> > -       if (reg_num >=3D sizeof(struct kvm_riscv_csr) / sizeof(unsigned=
- long))
-> > -               return -EINVAL;
-> >
-> >         if (copy_from_user(&reg_val, uaddr, KVM_REG_SIZE(reg->id)))
-> >                 return -EFAULT;
-> >
-> > -       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip)) {
-> > -               reg_val &=3D VSIP_VALID_MASK;
-> > -               reg_val <<=3D VSIP_TO_HVIP_SHIFT;
-> > +       reg_subtype =3D (reg_num & KVM_REG_RISCV_SUBTYPE_MASK)
-> > +                       >> KVM_REG_RISCV_SUBTYPE_SHIFT;
-> > +       reg_num &=3D ~KVM_REG_RISCV_SUBTYPE_MASK;
-> > +       switch (reg_subtype) {
-> > +       case KVM_REG_RISCV_CSR_GENERAL:
-> > +               rc =3D kvm_riscv_vcpu_general_set_csr(vcpu, reg_num, re=
-g_val);
-> > +               break;
-> > +       case KVM_REG_RISCV_CSR_AIA:
-> > +               rc =3D kvm_riscv_vcpu_aia_set_csr(vcpu, reg_num, reg_va=
-l);
-> > +               break;
-> > +       default:
-> > +               rc =3D -EINVAL;
-> > +               break;
-> >         }
-> > -
-> > -       ((unsigned long *)csr)[reg_num] =3D reg_val;
-> > -
-> > -       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip))
-> > -               WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
-> > +       if (rc)
-> > +               return rc;
-> >
-> >         return 0;
-> >  }
-> > --
-> > 2.34.1
-> >
->
-> This can be split into two patches. The first patch can just modify
-> the existing implementation
-> to parse subtypes for general CSRs. AIA support can be added in the next =
-one.
+On Tue, Mar 28, 2023 at 02:58:54PM -0700, Paul E. McKenney wrote:
+> On Mon, Mar 27, 2023 at 10:19:54AM +0800, Feng Tang wrote:
+> > On Fri, Mar 24, 2023 at 05:47:33PM -0700, Paul E. McKenney wrote:
+> > > On Wed, Mar 22, 2023 at 01:14:48PM +0800, Feng Tang wrote:
 
-Okay, I will split this into two patches.
+[ . . . ]
 
-Regards,
-Anup
+> > > > > Second, we are very occasionally running into console messages like this:
+> > > > > 
+> > > > > Measured 2 cycles TSC warp between CPUs, turning off TSC clock.
+> > > > > 
+> > > > > This comes from check_tsc_sync_source() and indicates that one CPU's
+> > > > > TSC read produced a later time than a later read from some other CPU.
+> > > > > I am beginning to suspect that these can be caused by unscheduled delays
+> > > > > in the TSC synchronization code, but figured I should ask you if you have
+> > > > > ever seen these.  And of course, if so, what the usual causes might be.
+> > > > 
+> > > > I haven't seen this error myself or got similar reports. Usually it
+> > > > should be easy to detect once happened, as falling back to HPET
+> > > > will trigger obvious performance degradation.
+> > > 
+> > > And that is exactly what happened.  ;-)
+> > > 
+> > > > Could you give more detail about when and how it happens, and the
+> > > > HW info like how many sockets the platform has. 
+> > > 
+> > > We are in early days, so I am checking for other experiences.
+> > > 
+> > > > CC Thomas, Waiman, as they discussed simliar case here:
+> > > > https://lore.kernel.org/lkml/87h76ew3sb.ffs@tglx/T/#md4d0a88fb708391654e78312ffa75b481690699f
+> > > 
+> > > Fun!  ;-)
+> 
+> Waiman, do you recall what fraction of the benefit was provided by the
+> first patch, that is, the one that grouped the sync_lock, last_tsc,
+> max_warp, nr_warps, and random_warps global variables into a single
+> struct?
+
+And what we are seeing is unlikely to be due to cache-latency-induced
+delays.  We see a very precise warp, for example, one system always
+has 182 cycles of TSC warp, another 273 cycles, and a third 469 cycles.
+Another is at the insanely large value of about 2^64/10, and shows some
+variation, but that variation is only about 0.1%.
+
+But any given system only sees warp on about half of its reboots.
+Perhaps due to the automation sometimes power cycling?
+
+There are few enough affected systems that investigation will take
+some time.
+
+							Thanx, Paul
