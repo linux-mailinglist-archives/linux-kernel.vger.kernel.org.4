@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85956D2A38
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8476D2A4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjCaVrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 17:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
+        id S233280AbjCaVs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 17:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbjCaVrj (ORCPT
+        with ESMTP id S233259AbjCaVs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 17:47:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD1722931
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:46:26 -0700 (PDT)
+        Fri, 31 Mar 2023 17:48:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E838236AB
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:46:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680299186;
+        s=mimecast20190719; t=1680299192;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DldK2I/IPaSgIsH620iyq/+h6bSvEy3k1WBvR82ldeo=;
-        b=bsRgsRLWPfSxHFE2IprNvucrkie2F91JLDVloL9F/Lp/KnfBW94zKJO/f+DaEKggwaW2Jz
-        1eevQf4OlsuoPSVS6+eb9MjO92XjXw6YgZQARZC66Thn7h4zXHW2jgOMloBQTTW+ND6gh6
-        GAEM/9Zwi5uoIRkgyatg00OFTEv/1kQ=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=lI/wTNKANfMxYvWqJ0umcXHaHwboSDwAnj65voZzExc=;
+        b=C2+NuWp2EZXx6yahu2st7iw+PXdjRiDr87cpBLEbQ7qtWCI+f/Nbj4q2cMZ3HMeMgGZJgv
+        YuMyUsmX/UsoLJ1Ky4ZpwHQUVaVySaUv54mwV7BN0qiKAfOOjEt1yxKSdQh902mAFVO7Ej
+        zSsm6xG2aNI5lYm/dHOVjmiS3XbeEYM=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-206-Ou0ODo2ENWCIe0oFnAgOIw-1; Fri, 31 Mar 2023 17:46:24 -0400
-X-MC-Unique: Ou0ODo2ENWCIe0oFnAgOIw-1
-Received: by mail-oi1-f199.google.com with SMTP id bl28-20020a056808309c00b00387498386a8so5725026oib.7
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:46:24 -0700 (PDT)
+ us-mta-433-yN5jlVquN26tq_78tDsSww-1; Fri, 31 Mar 2023 17:46:28 -0400
+X-MC-Unique: yN5jlVquN26tq_78tDsSww-1
+Received: by mail-oi1-f200.google.com with SMTP id s127-20020acaa985000000b003891d21e8c0so4748759oie.6
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:46:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680299184;
+        d=1e100.net; s=20210112; t=1680299187;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DldK2I/IPaSgIsH620iyq/+h6bSvEy3k1WBvR82ldeo=;
-        b=iUjKn6sGJ1dzVJmD99LGMvRVgjPv+PPB96Aoz4p27DoMpt7k6yEx8qIswuZdxD3bAw
-         PxvaI1HDVp0A2ayi6L+/OXEjo7OlfhvMWDnG/koq+nutlgWuXZWN1l4aB/wG3yhi8xd/
-         ZFGaxqqTS9Clogng87rO4ztyCpqEkbQGv4H9yqq0Uzyp/UeiX1rHG6g9unUbeJgbUDgt
-         jYGqsSX7z5uFX+CE5SnXPpBm2Tc6tRsgcn0tceLblscojrrniMat6jin/jEmWhe6Fjzf
-         b7TYSGenZtyYSVB8UDpzcghy0sx1BgNUR0UNjHpdh7lOZyCNTFED4d2iMGKPBUN7a6G2
-         tzIQ==
-X-Gm-Message-State: AO0yUKWpdbMy8Gt1q2X35kicbslRLuQ8Pjy8klKS9FGH3WqkqQBgZgwb
-        czzMTkBF0LCh3vGbxnLlA4ceOTD2yfomU6I4X3HYg2oP3rme0/BPYqLyZ2jr7x/iMavBeaCOvha
-        yCFDjQcuzS2dZAJejhZKDF0uUmFy1hXIyrcMabS6ESU6Z05BWcSvSFh5Tu8cCe3L1RMxdju8jfw
-        huqK5couyaX8o=
-X-Received: by 2002:a4a:498a:0:b0:525:129c:6165 with SMTP id z132-20020a4a498a000000b00525129c6165mr14258302ooa.6.1680299183842;
-        Fri, 31 Mar 2023 14:46:23 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+27vkGs1bWdUnyWKF+VnjPQB0+2s07heID2AGWKfhkeapB9Pm6gnRicXouOLV40Cd+zuAqbA==
-X-Received: by 2002:a4a:498a:0:b0:525:129c:6165 with SMTP id z132-20020a4a498a000000b00525129c6165mr14258259ooa.6.1680299183586;
-        Fri, 31 Mar 2023 14:46:23 -0700 (PDT)
+        bh=lI/wTNKANfMxYvWqJ0umcXHaHwboSDwAnj65voZzExc=;
+        b=j8u9yHiS2YRJAFLqj/Wk/7H/dg6NGkIM/DXlZAOB8V/qOrqq+7r98wGn3MakYjCaJk
+         sY1N5yb+2y7uYj5h4655NRo8f9CkhhoeynkQSa9MB62vG7Copd3ZWQb6oZFGi7BwI9l+
+         9bXITN3ufiEOHQhfNjg4roqT6UMABgpKsKKQMHssYAjvNUtlRsYem0Xe9dd4kP1R4ZqH
+         LPGCTCEhWlU9xpveSv/3QkimIgYwugygb3Fx0FflZxJapmhzehoNI1HfgmV4SLM+8/fP
+         6Cp73cyQpPJ2f4NqjFej/vsYJf49vy3m3Q1e3PUKv8Sh4jxfR9x8G56TeAnTKSnoIQhX
+         Zjug==
+X-Gm-Message-State: AO0yUKXk/fEk/mS4LXSRtDDbPF2AZEdLm8GdpR4SW8LpHfjjatq5Izak
+        59wm9a1fWtbqUX5yAjZp1Q9smMtHX6ALu/FfSrSS2lfWoHNef2jl9IJJI3dIGS5BccRqSz9ub7x
+        Aj9X87bR6WVf8ALjBXFAeM0BQdBMjzuSpC1k/f/ylpbnHipSgH4uvc9H+A7oVfY7pQhBlZ4NN+D
+        SjDZNGIAwQ+II=
+X-Received: by 2002:a05:6808:4246:b0:384:41e3:75d0 with SMTP id dp6-20020a056808424600b0038441e375d0mr13650089oib.21.1680299187675;
+        Fri, 31 Mar 2023 14:46:27 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+cnC/lvq+HQYTkPySHxCv7Oqj79qtnzLha/xwBat64KUQy8cafpalczgXYXQNna9WcIF3elQ==
+X-Received: by 2002:a05:6808:4246:b0:384:41e3:75d0 with SMTP id dp6-20020a056808424600b0038441e375d0mr13650046oib.21.1680299187462;
+        Fri, 31 Mar 2023 14:46:27 -0700 (PDT)
 Received: from halaney-x13s.attlocal.net (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id x80-20020a4a4153000000b0053d9be4be68sm1328531ooa.19.2023.03.31.14.46.21
+        by smtp.gmail.com with ESMTPSA id x80-20020a4a4153000000b0053d9be4be68sm1328531ooa.19.2023.03.31.14.46.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 14:46:23 -0700 (PDT)
+        Fri, 31 Mar 2023 14:46:27 -0700 (PDT)
 From:   Andrew Halaney <ahalaney@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -76,9 +76,9 @@ Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
         jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com,
         Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH net-next v3 04/12] dt-bindings: net: qcom,ethqos: Add Qualcomm sc8280xp compatibles
-Date:   Fri, 31 Mar 2023 16:45:41 -0500
-Message-Id: <20230331214549.756660-5-ahalaney@redhat.com>
+Subject: [PATCH net-next v3 05/12] net: stmmac: Remove unnecessary if statement brackets
+Date:   Fri, 31 Mar 2023 16:45:42 -0500
+Message-Id: <20230331214549.756660-6-ahalaney@redhat.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230331214549.756660-1-ahalaney@redhat.com>
 References: <20230331214549.756660-1-ahalaney@redhat.com>
@@ -95,61 +95,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sc8280xp has a new version of the ETHQOS hardware in it, EMAC v3.
-Add a compatible for this.
+The brackets are unnecessary, remove them to match the coding style
+used in the kernel.
 
 Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 ---
 
 Changes since v2:
-    * *Really* alphabetical sorting (sorry Krzysztof!)
+    * None
 
 Changes since v1:
-    * Alphabetical sorting (Krzysztof)
- Documentation/devicetree/bindings/net/qcom,ethqos.yaml | 1 +
- Documentation/devicetree/bindings/net/snps,dwmac.yaml  | 3 +++
- 2 files changed, 4 insertions(+)
+    * This patch is split from the next patch since it is a logically
+      different change (Andrew Lunn)
 
-diff --git a/Documentation/devicetree/bindings/net/qcom,ethqos.yaml b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
-index 88234a2010b1..60a38044fb19 100644
---- a/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
-+++ b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
-@@ -20,6 +20,7 @@ properties:
-   compatible:
-     enum:
-       - qcom,qcs404-ethqos
-+      - qcom,sc8280xp-ethqos
-       - qcom,sm8150-ethqos
+ drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
+index 21aaa2730ac8..6807c4c1a0a2 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
+@@ -281,9 +281,8 @@ static int stmmac_mdio_read_c22(struct mii_bus *bus, int phyaddr, int phyreg)
+ 	value |= (phyreg << priv->hw->mii.reg_shift) & priv->hw->mii.reg_mask;
+ 	value |= (priv->clk_csr << priv->hw->mii.clk_csr_shift)
+ 		& priv->hw->mii.clk_csr_mask;
+-	if (priv->plat->has_gmac4) {
++	if (priv->plat->has_gmac4)
+ 		value |= MII_GMAC4_READ;
+-	}
  
-   reg:
-diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-index 1e7982704114..da311c1f2c88 100644
---- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-@@ -66,6 +66,7 @@ properties:
-         - loongson,ls2k-dwmac
-         - loongson,ls7a-dwmac
-         - qcom,qcs404-ethqos
-+        - qcom,sc8280xp-ethqos
-         - qcom,sm8150-ethqos
-         - renesas,r9a06g032-gmac
-         - renesas,rzn1-gmac
-@@ -574,6 +575,7 @@ allOf:
-               - ingenic,x1600-mac
-               - ingenic,x1830-mac
-               - ingenic,x2000-mac
-+              - qcom,sc8280xp-ethqos
-               - snps,dwmac-3.50a
-               - snps,dwmac-4.10a
-               - snps,dwmac-4.20a
-@@ -628,6 +630,7 @@ allOf:
-               - ingenic,x1830-mac
-               - ingenic,x2000-mac
-               - qcom,qcs404-ethqos
-+              - qcom,sc8280xp-ethqos
-               - qcom,sm8150-ethqos
-               - snps,dwmac-4.00
-               - snps,dwmac-4.10a
+ 	data = stmmac_mdio_read(priv, data, value);
+ 
 -- 
 2.39.2
 
