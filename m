@@ -2,101 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E73946D18B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E05D36D18BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjCaHhU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 03:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S230498AbjCaHhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCaHhR (ORCPT
+        with ESMTP id S229529AbjCaHhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:37:17 -0400
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE67199B;
-        Fri, 31 Mar 2023 00:37:17 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5463fa0c2bfso69789997b3.1;
-        Fri, 31 Mar 2023 00:37:17 -0700 (PDT)
+        Fri, 31 Mar 2023 03:37:33 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582C2768B
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:37:31 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id w9so86215237edc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680248249;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d+GCokEixfnjb0KDc+ixTXWvlGW6wj+Kz4azKab2G+4=;
+        b=C0iwRqJ3uiq1194Wqj49Bb5cojtwdi0U0eOUlkL7/QXlm3wLdTPoju+5OIh5CBjiwt
+         5/kgw6xt+Tdp42qLxcM2JWJnj16PqSvvl71uHh8VxOLHsaIlQOUV25bLr+8Nl7646A0q
+         SLYn7wsUcQNuDeu+85b5enQrqSQyHiaN5nVHlZgkVA6H1Nnkx9IzLiY7uFRy8atiIA8F
+         Y1vMvGNV5HN9cVcCMvAtqMATJi2DfgLFAbJWAkg/lV1H9nBIy/TeJtioSTGu6hTrjPtg
+         qvBbPEemJIROQGDgvzTPEsuFaAmVFDUAet9bXAfZlpB/US+eAo9oSRKTIjJm4kZdxNIx
+         FFqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680248236;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vMCPBKqa5X7qdxmutmPXldx9K7gy/4RLJ6RttIJMQZE=;
-        b=bYb5Hlx4fJLVvInPcmj4uLtRfeQvc5uPYKTCLQhd5IGqZ4b8UbpdDBn0zEof7dJT7M
-         lpZ29AZNfPpaDgI+fXN4Qd4jy3IGonC+WUrfu/aIaQosCFG4e60FCxSsvRjr1YBPUEXi
-         KxwfvZZCzXEUBL8mBIYK5/Z1PqEuWLGlikzBcJaG5auq6Uw6GFWyUEOSt4tvqf1CfsRi
-         VvvzGVuwOrqVOGb+kyKubMPHDJCfORjJnTEvjDIjK0m0qsEVTujdanTo5Zefu+bV6W4d
-         MSQ0UeEJz8d7ukhx4JKcR2WTq1wD+SAFdkfNst9nZCRTdW61hU4uembXzjgBGOYFJM03
-         DQZg==
-X-Gm-Message-State: AAQBX9c4PvbXZ9Ge3Oh7ZJCm7387MvT6pj8p+z/poqy+tJUQHMRT7RQV
-        Fo83X+IBT+3LIPBc/IelV3XatDke6+N9W6fl
-X-Google-Smtp-Source: AKy350YKTTRDcNXIjTfJDfEOv4ZMgswwLd47ihrHjWmjOf9Eca3Yfg5BdZ4ylcvIVx3BEFa4Sm/M7w==
-X-Received: by 2002:a81:6141:0:b0:52e:cd73:f927 with SMTP id v62-20020a816141000000b0052ecd73f927mr22476359ywb.48.1680248236195;
-        Fri, 31 Mar 2023 00:37:16 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id l133-20020a81258b000000b00545a08184e5sm368272ywl.117.2023.03.31.00.37.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 00:37:15 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id f188so7980218ybb.3;
-        Fri, 31 Mar 2023 00:37:15 -0700 (PDT)
-X-Received: by 2002:a25:24c3:0:b0:a02:a3a6:78fa with SMTP id
- k186-20020a2524c3000000b00a02a3a678famr13492502ybk.12.1680248235245; Fri, 31
- Mar 2023 00:37:15 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680248249;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d+GCokEixfnjb0KDc+ixTXWvlGW6wj+Kz4azKab2G+4=;
+        b=rlWLZbYVZJgh7byFg/OXeyotgvJAbtTFZaamilR149Y0PB+iIZqNb8/TRs72DJbxQw
+         sm11miZqCr2PlTFQKKzacbvORJt8vmj409y0E+s2tv8JWMv4/n0MnWvzx/oYh/8GCZB3
+         vSXeiSU+jh091VZiWrwAwzTQ7hp27hqXHb+0CP2/YQp8uO8/Th100kUUBDo+NPG0jiv+
+         10OD3jUeZklzddk9KFLSOpVyivxyxrxVB4YFAhLih8wo8z4hCElZVMmZ3XDXCnG6pq6Q
+         guQfSwzTfGxgOMjMp31wvTtK0ONZ+eePWdDcLw73ZO+mW+9JxAH5x5Ua/2lxS/JIX+L+
+         e3uQ==
+X-Gm-Message-State: AAQBX9f4XVHHmL3586SFlhH5WALxnwI39wYujhDVz/5w65d/KUPzyG8u
+        UO8noa7PVD5Hg35HGwFOC+s=
+X-Google-Smtp-Source: AKy350ZOJQSX1gjZAMOgwMXd3tTvZegEvz+G6fSAJ5p5n5wcA8j3qyjV01Tqdm+IQWQG9V0NiZtVyw==
+X-Received: by 2002:a17:907:c088:b0:931:2f49:c040 with SMTP id st8-20020a170907c08800b009312f49c040mr31542588ejc.51.1680248249513;
+        Fri, 31 Mar 2023 00:37:29 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id o12-20020a170906600c00b0092bea699124sm682722ejj.106.2023.03.31.00.37.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 00:37:29 -0700 (PDT)
+From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Baoquan He <bhe@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: [PATCH 1/1] mm: vmalloc: Rename addr_to_vb_xarray() function
+Date:   Fri, 31 Mar 2023 09:37:27 +0200
+Message-Id: <20230331073727.6968-1-urezki@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230330204217.47666-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20230330204217.47666-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 31 Mar 2023 09:37:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWz=Vf1svs3TJrCSq8ED0rEy-NURQ++bUspo73zfct50A@mail.gmail.com>
-Message-ID: <CAMuHMdWz=Vf1svs3TJrCSq8ED0rEy-NURQ++bUspo73zfct50A@mail.gmail.com>
-Subject: Re: [PATCH v7 6/6] soc: renesas: Kconfig: Select the required configs
- for RZ/Five SoC
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 10:42 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Explicitly select the required Cache management and Errata configs
-> required for the RZ/Five SoC.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Short the name of the addr_to_vb_xarray() function to the
+addr_to_vb_xa(). This aligns with other internal function
+abbreviations.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Suggested-by: Baoquan He <bhe@redhat.com>
+Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+---
+ mm/vmalloc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 671d6d5d5b78..b8b646f8a00d 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -1945,7 +1945,7 @@ static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
+  * used as a hash table. When used as a hash a 'cpu' passed to
+  * per_cpu() is not actually a CPU but rather a hash index.
+  *
+- * A hash function is addr_to_vb_xarray() which hashes any address
++ * A hash function is addr_to_vb_xa() which hashes any address
+  * to a specific index(in a hash) it belongs to. This then uses a
+  * per_cpu() macro to access an array with generated index.
+  *
+@@ -1971,7 +1971,7 @@ static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
+  * however xarray spinlocks protect against any contention that remains.
+  */
+ static struct xarray *
+-addr_to_vb_xarray(unsigned long addr)
++addr_to_vb_xa(unsigned long addr)
+ {
+ 	int index = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
+ 
+@@ -2048,7 +2048,7 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+ 	bitmap_set(vb->used_map, 0, (1UL << order));
+ 	INIT_LIST_HEAD(&vb->free_list);
+ 
+-	xa = addr_to_vb_xarray(va->va_start);
++	xa = addr_to_vb_xa(va->va_start);
+ 	vb_idx = addr_to_vb_idx(va->va_start);
+ 	err = xa_insert(xa, vb_idx, vb, gfp_mask);
+ 	if (err) {
+@@ -2070,7 +2070,7 @@ static void free_vmap_block(struct vmap_block *vb)
+ 	struct vmap_block *tmp;
+ 	struct xarray *xa;
+ 
+-	xa = addr_to_vb_xarray(vb->va->va_start);
++	xa = addr_to_vb_xa(vb->va->va_start);
+ 	tmp = xa_erase(xa, addr_to_vb_idx(vb->va->va_start));
+ 	BUG_ON(tmp != vb);
+ 
+@@ -2193,7 +2193,7 @@ static void vb_free(unsigned long addr, unsigned long size)
+ 	order = get_order(size);
+ 	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
+ 
+-	xa = addr_to_vb_xarray(addr);
++	xa = addr_to_vb_xa(addr);
+ 	vb = xa_load(xa, addr_to_vb_idx(addr));
+ 
+ 	spin_lock(&vb->lock);
+@@ -3556,7 +3556,7 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
+ 	 * Area is split into regions and tracked with vmap_block, read out
+ 	 * each region and zero fill the hole between regions.
+ 	 */
+-	xa = addr_to_vb_xarray((unsigned long) addr);
++	xa = addr_to_vb_xa((unsigned long) addr);
+ 	vb = xa_load(xa, addr_to_vb_idx((unsigned long)addr));
+ 	if (!vb)
+ 		goto finished;
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.30.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
