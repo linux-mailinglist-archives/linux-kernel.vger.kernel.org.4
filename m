@@ -2,96 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB8D6D23D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3EAA6D23DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbjCaPSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 11:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42690 "EHLO
+        id S232358AbjCaPTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 11:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233149AbjCaPSL (ORCPT
+        with ESMTP id S231654AbjCaPTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 11:18:11 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716BC2127
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:18:10 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so23706006pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1680275890; x=1682867890;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jGf9Ke6hyi1zrPw7y/bgSfULaNauXRdwBBZ93BW0UFo=;
-        b=62Cp4IX7lIb21FcLQijDFcnypwkk55LKaHk5Dzg1khoFzy1M4sfueHgIxGJa+5GcqN
-         0/gXVgbJmd7CUjZ11wp7WmizldO3nLyehZPz8RmxBu2UOlBVJTdX5kf3+OB3CFF3Gf3e
-         0d3uLLctuvDPRUtX63ZRWqy5bgwtjG5Zgox0mjqgC2VFpl6OJfy3haRteglh57I3/eC4
-         4g6zspqoqD6Un06Tl5Cq9LHMNwiB4Qvdc8lQtrHCNk+hNh05UbXKGDu3wy9+TaGyE1zy
-         HUoNey0KFPZ9zuvQmnWSRZIUv0ygE6nBs7bAq0wd00hw4PkSoEYoyzuMKUjWmsetJMFA
-         Zs+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680275890; x=1682867890;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jGf9Ke6hyi1zrPw7y/bgSfULaNauXRdwBBZ93BW0UFo=;
-        b=SwFHjgC6kyK5MgQeK0oeaIoSoxZZ5vBLuJ+ZBPH4OCuSQG58sy9/FAhXn+5UuDTBnz
-         IIw+2V4xtAS6F70OQKfr+42b6ElZDFQdLBz5jffWTkHVDTxnjplUsVq9bsMX5Z4dnKFC
-         e69zaFL305XxGMPZ7vg65zknHaHxaDW59tC/TLRhktl5RzA+mGPP6by8BWWZp3DDqmmW
-         wEOp3j17GFs2Yv5Chz7IhRjw8bEsnsd7iJ0nQrvr/+tqzoFaIXf7czAvm2SpN7afLtaG
-         u6NCnghftCjHs3erPw6AV3owONWUDocKhhkUba42suwVuSxJHxlQqCGs7LRWPNZvNVF3
-         cH7g==
-X-Gm-Message-State: AAQBX9cGeZKnvh+CSaerx6OjegREt39DJRBoq2Wq88f8NXV5jcDqzMaI
-        ohIim1s88UKafC3f4O2OzQMw0w==
-X-Google-Smtp-Source: AKy350b/VJZeWUJCGjTCUvzHWgLtyLvYuTnW4iqan6UXwl90v3vDFi75PBYrQ6ZGBi8dqnQ0sgAi1g==
-X-Received: by 2002:a17:903:1384:b0:19e:94ff:6780 with SMTP id jx4-20020a170903138400b0019e94ff6780mr6645806plb.6.1680275889647;
-        Fri, 31 Mar 2023 08:18:09 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id kr15-20020a170903080f00b001a1ca6dc38csm1695215plb.118.2023.03.31.08.18.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 08:18:09 -0700 (PDT)
-Message-ID: <57c89d5c-c05d-6be4-0e36-40b4a679983c@kernel.dk>
-Date:   Fri, 31 Mar 2023 09:18:08 -0600
+        Fri, 31 Mar 2023 11:19:47 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B8C1FFC
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680275986; x=1711811986;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6DYU9YNmKUr0TE/DUc3vf67LbYHXMXPhNj+QtfqCNPI=;
+  b=ScqPLaj/4ogiH7FLZB+nXZt8Sm0Hlmc7be/kv4OVokPFNIbRK3dCCk5I
+   3KSUWUh1YH2JrSeCAw0PqJlUhQEGgJw5ehmXRFiHQfYRAUk1/4rolxFhQ
+   qBv7TDyuO8XkUcSi+y15xZS+p7LNbR403prjEgc+MEkyN8oSAEQm4m4V8
+   7sYJFkfDn7b1fER9XhLhXT7OPxHdgLLUH2i9yBf8Q4Oiw4ZiRHZn8OI2F
+   95yyuO+HKjD+8bfQuA2InUCfRJ6Pr4a5++b4wunbvrD/1jnnxaDNCNg3a
+   nQHlSzbkdG6sN76z15GTsIGAhuavFKclcl9m8HWd3iQNfgbPJum3DWKXM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="340201925"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="340201925"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 08:19:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="796160263"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="796160263"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 31 Mar 2023 08:19:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1piGXX-000Lu3-03;
+        Fri, 31 Mar 2023 15:19:43 +0000
+Date:   Fri, 31 Mar 2023 23:18:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Matthew Auld <matthew.auld@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: Re: [PATCH 07/19] drm/i915/gem/i915_gem_create: Provide the function
+ names for proper kerneldoc headers
+Message-ID: <202303312304.LMo1KsTB-lkp@intel.com>
+References: <20230331092607.700644-8-lee@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC 00/11] optimise registered buffer/file updates
-To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <cover.1680187408.git.asml.silence@gmail.com>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <cover.1680187408.git.asml.silence@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331092607.700644-8-lee@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 8:53 AM, Pavel Begunkov wrote:
-> Updating registered files and buffers is a very slow operation, which
-> makes it not feasible for workloads with medium update frequencies.
-> Rework the underlying rsrc infra for greater performance and lesser
-> memory footprint.
-> 
-> The improvement is ~11x for a benchmark updating files in a loop
-> (1040K -> 11468K updates / sec).
-> 
-> The set requires a couple of patches from the 6.3 branch, for that
-> reason it's an RFC and will be resent after merge.
+Hi Lee,
 
-Looks pretty sane to me, didn't find anything immediately wrong. I
-do wonder if we should have a conditional uring_lock helper, we do
-have a few of those. But not really related to this series, as it
-just moves one around.
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on drm-misc/drm-misc-next next-20230331]
+[cannot apply to drm-intel/for-linux-next-fixes lee-leds/for-leds-next linus/master v6.3-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lee-Jones/drm-i915-i915_scatterlist-Fix-kerneldoc-formatting-issue-missing/20230331-173046
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20230331092607.700644-8-lee%40kernel.org
+patch subject: [PATCH 07/19] drm/i915/gem/i915_gem_create: Provide the function names for proper kerneldoc headers
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20230331/202303312304.LMo1KsTB-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/7c87f97c7f11c1a2b3931d46ae1382c5ee0c14f7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lee-Jones/drm-i915-i915_scatterlist-Fix-kerneldoc-formatting-issue-missing/20230331-173046
+        git checkout 7c87f97c7f11c1a2b3931d46ae1382c5ee0c14f7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303312304.LMo1KsTB-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/gem/i915_gem_create.c:411: warning: expecting prototype for i915_gem_create_ext_ioct(). Prototype was for i915_gem_create_ext_ioctl() instead
+
+
+vim +411 drivers/gpu/drm/i915/gem/i915_gem_create.c
+
+ebcb40298947bdb Matthew Auld 2021-04-29  401  
+ebcb40298947bdb Matthew Auld 2021-04-29  402  /**
+7c87f97c7f11c1a Lee Jones    2023-03-31  403   * i915_gem_create_ext_ioct - Creates a new mm object and returns a handle to it.
+ebcb40298947bdb Matthew Auld 2021-04-29  404   * @dev: drm device pointer
+ebcb40298947bdb Matthew Auld 2021-04-29  405   * @data: ioctl data blob
+ebcb40298947bdb Matthew Auld 2021-04-29  406   * @file: drm file pointer
+ebcb40298947bdb Matthew Auld 2021-04-29  407   */
+ebcb40298947bdb Matthew Auld 2021-04-29  408  int
+ebcb40298947bdb Matthew Auld 2021-04-29  409  i915_gem_create_ext_ioctl(struct drm_device *dev, void *data,
+ebcb40298947bdb Matthew Auld 2021-04-29  410  			  struct drm_file *file)
+ebcb40298947bdb Matthew Auld 2021-04-29 @411  {
 
 -- 
-Jens Axboe
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
