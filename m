@@ -2,110 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04816D1EC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B63E6D1EC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbjCaLJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 07:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
+        id S229629AbjCaLKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 07:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjCaLJR (ORCPT
+        with ESMTP id S231593AbjCaLKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:09:17 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA771C1F9
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 04:08:55 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id e65so26892668ybh.10
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 04:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680260935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DrZ4nuKFRbdrvkseheS7XRYqEh2EC/QvjKLix2jXZFM=;
-        b=p8HE8uYDQXIMNWouHzNhuIPq4ZYpcpiB2tjtZuopwJd/AlYTllfvkZumoyD3e/aM7a
-         Rsituuiso2kH/VdZb40vv8jtPdJNbYku8HkT1NxamcWm15rgUETuxgZWfce3K4OlsyJT
-         8EYq24i6h1AxbQKxcbsErcKtHV0SISL4sLOHWGtxxHXScAUsEopBmv6kXPUb2UP3kamx
-         7ejJ4g3jcDtINsK2lt0tIFmNU5xb6+K0y6cGos/6qAj9HGe3eQ9yrRkXgJxG1CWCQDv4
-         U50TBQ8X7/8T8XMPSnMernOOPbz8JoPb/BIhGLvpV6JYEt/IuIVi75EXyJsAZUXykI0w
-         2u1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680260935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DrZ4nuKFRbdrvkseheS7XRYqEh2EC/QvjKLix2jXZFM=;
-        b=De/MQN9qw1+qd/9R9jf0ttDVpyPa30ikQJTzLGhUXLWhEeQyMwg49PM/W7BtqszdFz
-         O67jUjiA3ReiR/0/av37tbHkIzBoa3MU85GEBZHVlw7DLz2AJ6F3dkcIdYULEGCUuBr6
-         3Vtgd9lzfNYPamczarpsTDfPRgm5gAaAbNLoP8Szs1noZyQLi2eh54IbuGvOPAN9UWVY
-         quA0ue9UZiYK27kfWpuDsyAc9akIxtf54Di6nyfI+QuJtPvnAlYbYJaq+0alul6/Tnqu
-         +hzi+HDBBdlCvTHyDynmIuQYPnyZxrAJ8U1bMRsm45Rtk9tGIeRwMFPNdcwmx67CZeuA
-         80vQ==
-X-Gm-Message-State: AAQBX9dAqRcvDDH9yChVCSo6jsmVY5Xt+pr//FOn7KCim+Rcybqb7gAz
-        427JJK+Ay7x68taR7hlO5WImdoj8HBqGwFKeICmX4w==
-X-Google-Smtp-Source: AKy350bS9SyNRus3dGUyYtiJgys+HJA9rC8VrYDEuvi3iswc8ROzk0fLQpNKXYrIlL5r6jnukfZX+uNeYtTgRvFeeN4=
-X-Received: by 2002:a05:6902:18d5:b0:b75:3fd4:1b31 with SMTP id
- ck21-20020a05690218d500b00b753fd41b31mr18131967ybb.1.1680260934863; Fri, 31
- Mar 2023 04:08:54 -0700 (PDT)
+        Fri, 31 Mar 2023 07:10:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7395170A;
+        Fri, 31 Mar 2023 04:10:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E1B8B82E8B;
+        Fri, 31 Mar 2023 11:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D572C433EF;
+        Fri, 31 Mar 2023 11:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680261014;
+        bh=exRDOu4Px6sVej6+eWIMsBnr/fUPC2Vchvz/9blygBQ=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=To4ZTFcxbxrJ5+hKj8J5+U3aMd1zp6Jb003GTCxveNwwieXBo6K4eGh5aV2bgzk2H
+         rr5jOtiCnF2HOZz6mki36/SjQtdJOwz+S0WnfPnatWW6bkYaZdTrQdg8sCOFYcuByI
+         aHZq/zNYWhjr7Oix47sfzJAUBjERpOJSSh5XJ178nxYlRbaR3wBR+zz3dvF+qNRsiy
+         XtIqVCJh1r8k8tKU+eMmqERzdCnjSfDXZarsxQfCM9Qd7cYYjb0EG0uVRbh5YH/Tsb
+         dz4ihq5cRSFQhXEPbemXVgpAx9RiDo/v2EON2XHAAYQkriDg3MxAzrbCS8GMmD9WPP
+         6Fcq5fmStYG1A==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the wireless-next tree
+References: <20230323141548.659479ef@canb.auug.org.au>
+Date:   Fri, 31 Mar 2023 14:10:10 +0300
+In-Reply-To: <20230323141548.659479ef@canb.auug.org.au> (Stephen Rothwell's
+        message of "Thu, 23 Mar 2023 14:15:48 +1100")
+Message-ID: <87y1ndb2i5.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
- <20230203-evk-board-support-v3-10-0003e80e0095@baylibre.com> <7b6be990-9e90-8e44-7c5e-f8b7a2701ce7@collabora.com>
-In-Reply-To: <7b6be990-9e90-8e44-7c5e-f8b7a2701ce7@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Fri, 31 Mar 2023 13:08:43 +0200
-Message-ID: <CAFGrd9qMEtHVT+P-mBNxh6g1jOm5ifArSxi1bbGnrKgxCf7zSQ@mail.gmail.com>
-Subject: Re: [PATCH v3 10/17] arm64: dts: mediatek: set vmc regulator as
- always on
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mer. 29 mars 2023 =C3=A0 15:25, AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> a =C3=A9crit :
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+
+> After merging the wireless-next tree, today's linux-next build (htmldocs)
+> produced this warning:
 >
-> Il 29/03/23 10:54, amergnat@baylibre.com ha scritto:
-> > From: Fabien Parent <fparent@baylibre.com>
-> >
-> > MSDC1 IP block is powered by VMC. Make sure it is always on.
+> Documentation/driver-api/80211/mac80211-advanced:214:
+> /home/sfr/next/next/net/mac80211/sta_info.h:628: ERROR: Unexpected
+> indentation.
 >
-> Why always on?
-> Can't you just set mt6357_vmc_reg as VIN of mt6357_vmch_reg? :-)
+> Introduced by commit
+>
+>   fe4a6d2db3ba ("wifi: mac80211: implement support for yet another
+> mesh A-MSDU format")
 
-I'm not sure to get it. mt6357_vmc_reg & mt6357_vmch_reg come from
-PMIC and are supposed to be independent.
-You suggest to link them in the mt8365-evk dts file using something like:
-&mt6357_vmch_reg {
-    vin-supply =3D <&mt6357_vmc_reg>;
-};
+Thanks, this commit should fix it:
 
-Also, regulator binding probably needs change to support that.
+https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git/commit/?id=f102424befd3751386f3e2f2c70c5a1948248622
 
-Regards,
-Alex
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
