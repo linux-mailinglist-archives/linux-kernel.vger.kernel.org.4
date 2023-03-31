@@ -2,184 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757016D27AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B17C6D27B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbjCaSUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 14:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S232650AbjCaSVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 14:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjCaSUA (ORCPT
+        with ESMTP id S229675AbjCaSVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:20:00 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039D449CD;
-        Fri, 31 Mar 2023 11:19:59 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id ek18so93152982edb.6;
-        Fri, 31 Mar 2023 11:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680286797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ptCDsCZ9M1AP2auqMhwxD2e0Wct9w+HUGpQl1ZXGBuE=;
-        b=Gw584kuBZB4NgIUzfMojlADjttI/sZS9NQ+lUHsKb0GpFWzrCiX5KxgPEM6YM3wfKb
-         L7qyK+P8fd+4VG+CXmujXlxC7BXlewyQ8+k2Te9ebzk+rMzpahTWnav1kHCwZ0u4nDMK
-         qSYzdA+/2PNTicJltJMZRFMjFud3XUTM6iTecSpNvUfmcC4NBDmoiTEsW6VNG4voh0Pl
-         Dd3fimhzfdzOlXUg1Eycw8horsLfQpEwQdTlxhLhd1mTanssQvPjrFvkfEsYOGyq/O+I
-         O9I5u9eAGOgFNajpeowt/EpJIH9cYLLO3sQlQulNKMqZZ9G9hP2k4+Rc4AmRLMzBFnll
-         /QuQ==
+        Fri, 31 Mar 2023 14:21:39 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B4B1C1E7;
+        Fri, 31 Mar 2023 11:21:38 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id r40-20020a05683044a800b006a14270bc7eso8962282otv.6;
+        Fri, 31 Mar 2023 11:21:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680286797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ptCDsCZ9M1AP2auqMhwxD2e0Wct9w+HUGpQl1ZXGBuE=;
-        b=jCSBCXIgL9Z7jCOL+IrNjMh758tclOOq7YbFS2e0VQCIo9OgvfpMjyNFxbIdAZqOrH
-         Aq2yG2FiAKm7dkV7N/lLYy3cg+7qH9W1mdIMuE2Yra8d/89yH9UgIKxAikL5VDNijpTd
-         r4mTgPIFfyZKjX1ObirgAhmsTTToKGBb7IBnbY52kYgP02TTbbvi/IFn1MnzTvB2RNaj
-         dFyDj8NpED4wnh3mz0AT/CyBYGmz+FXiF1UjfZ+I+zyoZVhK/DdusjohaXmuh6mvJ61P
-         S6NwpDd1d7wPQbSi0uUvbw0IjJ+iXYxRHH7Ngl5bKd3FnvGHq6jw/fQmHgsc/uk1BsyY
-         6rsA==
-X-Gm-Message-State: AAQBX9dUGj5lfghSVmNDTzUVVushyj7o6Hwh/PU18TtK5KJJpPJl4rSS
-        +cSQGFPXjsUJ92G7clq/5IWRBv9FGjU+QSosiFtoYRHR
-X-Google-Smtp-Source: AKy350Yj+IgRzl/cUwZ8ZsG3CzqlZxtGxVHdl50ppqglRAoEyoUXrbm8X7qBqemI62LpK7yLYFn/NsSgTus1uzv5ngw=
-X-Received: by 2002:a50:d694:0:b0:4fc:f0b8:7da0 with SMTP id
- r20-20020a50d694000000b004fcf0b87da0mr14424020edi.1.1680286797322; Fri, 31
- Mar 2023 11:19:57 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680286898;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3t5CKl6Ye7wvWfdL46PtBvqDLWnMxYGWKH3UaAAkiUk=;
+        b=fPh/iFOrWzvUgMPurkxKXHYyp2NqdvI172JHtMUVWwBp7xqc0Jh7yB1wDHXDMQsddS
+         FPjMz5mc9MYunc7EZ71/u61OcmC3qOmrzg8XZES54tRtp2u1XurmfS4Y7edi/YDs1R79
+         /5Lp/ujZL1JkO4MUhW7C5jrv+qHx/MqouKJElZBrNlZ89aC1FTF2NCuTKgfd0/T1ICH2
+         KZKc1biKB+hy0Udp+M/47wY3rXEuG4sdgHhiRMO7gvwB0a+zS3tZHzuEUxHTE9RdAx9E
+         vhRmcdZiLOE4I/g+dazVm8fSOtEgPbRK9EpBRgVfTe2Ki90TVFfwusRZiwB8WAPhGar7
+         DV3Q==
+X-Gm-Message-State: AAQBX9f/cSbW/R5ZoTDbchkOjnyOANXvu4cYap+Qh0UjZfbB52BW90Ww
+        jmyHecBhkv6cMzHuNDy7Ng==
+X-Google-Smtp-Source: AKy350am+Rs5fsysUO/Ou+XiPYyX5AqcPtC+SBfe66RPqx+fy71Nv5pVkD5gs3QV9tnB8HWcypjqAw==
+X-Received: by 2002:a9d:7ac9:0:b0:693:d9a5:c5d with SMTP id m9-20020a9d7ac9000000b00693d9a50c5dmr13024037otn.3.1680286897866;
+        Fri, 31 Mar 2023 11:21:37 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b22-20020a9d7556000000b006a305c68617sm56551otl.53.2023.03.31.11.21.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 11:21:37 -0700 (PDT)
+Received: (nullmailer pid 1900261 invoked by uid 1000);
+        Fri, 31 Mar 2023 18:21:36 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] dt-bindings: memory-controller: Drop unneeded quotes
+Date:   Fri, 31 Mar 2023 13:21:18 -0500
+Message-Id: <20230331182119.1899919-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230316170149.4106586-1-jolsa@kernel.org> <ZBNTMZjEoETU9d8N@casper.infradead.org>
- <ZBV3beyxYhKv/kMp@krava> <ZBXV3crf/wX5D9lo@casper.infradead.org> <ZBsihOYrMCILT2cI@kernel.org>
-In-Reply-To: <ZBsihOYrMCILT2cI@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 31 Mar 2023 11:19:45 -0700
-Message-ID: <CAEf4BzakHh3qm2JBsWE8qnMmZMeM7w5vZGneKAsLM_vktPbc9g@mail.gmail.com>
-Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>,
-        Dave Chinner <david@fromorbit.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 8:45=E2=80=AFAM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Sat, Mar 18, 2023 at 03:16:45PM +0000, Matthew Wilcox escreveu:
-> > On Sat, Mar 18, 2023 at 09:33:49AM +0100, Jiri Olsa wrote:
-> > > On Thu, Mar 16, 2023 at 05:34:41PM +0000, Matthew Wilcox wrote:
-> > > > On Thu, Mar 16, 2023 at 06:01:40PM +0100, Jiri Olsa wrote:
-> > > > > hi,
-> > > > > this patchset adds build id object pointer to struct file object.
-> > > > >
-> > > > > We have several use cases for build id to be used in BPF programs
-> > > > > [2][3].
-> > > >
-> > > > Yes, you have use cases, but you never answered the question I aske=
-d:
-> > > >
-> > > > Is this going to be enabled by every distro kernel, or is it for sp=
-ecial
-> > > > use-cases where only people doing a very specialised thing who are
-> > > > willing to build their own kernels will use it?
-> > >
-> > > I hope so, but I guess only time tell.. given the response by Ian and=
- Andrii
-> > > there are 3 big users already
-> >
-> > So the whole "There's a config option to turn it off" shtick is just a
-> > fig-leaf.  I won't ever see it turned off.  You're imposing the cost of
-> > this on EVERYONE who runs a distro kernel.  And almost nobody will see
-> > any benefits from it.  Thanks for admitting that.
->
-> I agree that build-ids are not useful for all 'struct file' uses, just
-> for executable files and for people wanting to have better observability
-> capabilities.
->
-> Having said that, it seems there will be no extra memory overhead at
-> least for a fedora:36 x86_64 kernel:
->
-> void __init files_init(void)
-> {
->         filp_cachep =3D kmem_cache_create("filp", sizeof(struct file), 0,
->                         SLAB_HWCACHE_ALIGN | SLAB_PANIC | SLAB_ACCOUNT, N=
-ULL);
->         percpu_counter_init(&nr_files, 0, GFP_KERNEL);
-> }
->
-> [root@quaco ~]# pahole file | grep size: -A2
->         /* size: 232, cachelines: 4, members: 20 */
->         /* sum members: 228, holes: 1, sum holes: 4 */
->         /* last cacheline: 40 bytes */
-> [acme@quaco perf-tools]$ uname -a
-> Linux quaco 6.1.11-100.fc36.x86_64 #1 SMP PREEMPT_DYNAMIC Thu Feb  9 20:3=
-6:30 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
-> [root@quaco ~]# head -2 /proc/slabinfo
-> slabinfo - version: 2.1
-> # name            <active_objs> <num_objs> <objsize> <objperslab> <pagesp=
-erslab> : tunables <limit> <batchcount> <sharedfactor> : slabdata <active_s=
-labs> <num_slabs> <sharedavail>
-> [root@quaco ~]# grep -w filp /proc/slabinfo
-> filp               12452  13056    256   32    2 : tunables    0    0    =
-0 : slabdata    408    408      0
-> [root@quaco ~]#
->
-> so there are 24 bytes on the 4th cacheline that are not being used,
-> right?
+Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+checking for this can be enabled in yamllint.
 
-Well, even better then!
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/memory-controllers/renesas,dbsc.yaml           | 4 ++--
+ .../bindings/memory-controllers/renesas,rpc-if.yaml         | 2 +-
+ .../bindings/memory-controllers/samsung,exynos5422-dmc.yaml | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
->
-> One other observation is that maybe we could do it as the 'struct sock'
-> hierachy in networking, where we would have a 'struct exec_file' that
-> would be:
->
->         struct exec_file {
->                 struct file file;
->                 char build_id[20];
->         }
->
-> say, and then when we create the 'struct file' in __alloc_file() we
-> could check some bit in 'flags' like Al Viro suggested and pick a
-> different slab than 'filp_cachep', that has that extra space for the
-> build_id (and whatever else exec related state we may end up wanting, if
-> ever).
->
-> No core fs will need to know about that except when we go free it, to
-> free from the right slab cache.
->
-> In current distro configs, no overhead would take place if I read that
-> SLAB_HWCACHE_ALIGN thing right, no?
+diff --git a/Documentation/devicetree/bindings/memory-controllers/renesas,dbsc.yaml b/Documentation/devicetree/bindings/memory-controllers/renesas,dbsc.yaml
+index 7056ccb7eb30..8e3822314b25 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/renesas,dbsc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/renesas,dbsc.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/memory-controllers/renesas,dbsc.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/memory-controllers/renesas,dbsc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Renesas DDR Bus Controllers
+ 
+diff --git a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+index 30a403b1b79a..56e62cd0b36a 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+@@ -20,7 +20,7 @@ description: |
+   - if it contains "cfi-flash", then HyperFlash is used.
+ 
+ allOf:
+-  - $ref: "/schemas/spi/spi-controller.yaml#"
++  - $ref: /schemas/spi/spi-controller.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/memory-controllers/samsung,exynos5422-dmc.yaml b/Documentation/devicetree/bindings/memory-controllers/samsung,exynos5422-dmc.yaml
+index 098348b2b815..783ac984d898 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/samsung,exynos5422-dmc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/samsung,exynos5422-dmc.yaml
+@@ -42,7 +42,7 @@ properties:
+     maxItems: 8
+ 
+   devfreq-events:
+-    $ref: '/schemas/types.yaml#/definitions/phandle-array'
++    $ref: /schemas/types.yaml#/definitions/phandle-array
+     minItems: 1
+     maxItems: 16
+     items:
+@@ -50,7 +50,7 @@ properties:
+     description: phandles of the PPMU events used by the controller.
+ 
+   device-handle:
+-    $ref: '/schemas/types.yaml#/definitions/phandle'
++    $ref: /schemas/types.yaml#/definitions/phandle
+     description: |
+       phandle of the connected DRAM memory device. For more information please
+       refer to jedec,lpddr3.yaml.
+@@ -73,7 +73,7 @@ properties:
+       - description: registers of DREX1
+ 
+   samsung,syscon-clk:
+-    $ref: '/schemas/types.yaml#/definitions/phandle'
++    $ref: /schemas/types.yaml#/definitions/phandle
+     description: |
+       Phandle of the clock register set used by the controller, these registers
+       are used for enabling a 'pause' feature and are not exposed by clock
+-- 
+2.39.2
 
-Makes sense to me as well. Whatever the solution, as long as it's
-usable from NMI contexts would be fine for the purposes of fetching
-build ID. It would be good to hear from folks that are opposing adding
-a pointer field to struct file whether they prefer this way instead?
-
->
-> - Arnaldo
