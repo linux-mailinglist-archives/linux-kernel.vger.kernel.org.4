@@ -2,245 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD41D6D1411
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5456A6D1415
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjCaAah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 20:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
+        id S229648AbjCaAar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 20:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCaAaf (ORCPT
+        with ESMTP id S229644AbjCaAao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 20:30:35 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25ECAF75C;
-        Thu, 30 Mar 2023 17:30:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680222628; x=1711758628;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=291iR8fs89AY3P1z/Ojn7EHb26WDXguxsSvangQrPS4=;
-  b=ZrWcomVeImflRNd7wbezdICfLICWxVjDmc9LItUAoOaLkRlOYeJBYQO4
-   JIZvGjWXjty+5HWKcV2hwDKSXadEWYt4bacTotDS/ivTYEnov+/VJJZMi
-   JUqvmBz0Ftt7jti7amwBLf+d1PtcltxiArdRna3Rsft7CNEdxwCTbSrRY
-   ZPNV8pb4CjAY1+rqd2pHlf4zdRH/X3NKmM70zs5P2KLSqTRnPUNxwJN9n
-   xErJ5HcYH1cxHliwLWXZ8O/wp8Z+7BuFa/TNMPkSPsbLMofd1NpUH28EB
-   3QbDCWRLrzhi85KmIu5Ymycz/b+56qb/QBTM4zrCH2lmiIXXD7iUezjjB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="329844024"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="329844024"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 17:30:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="715219715"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="715219715"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2023 17:30:22 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pi2em-000LLc-2j;
-        Fri, 31 Mar 2023 00:30:16 +0000
-Date:   Fri, 31 Mar 2023 08:29:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v6 11/12] tty: serial: Add Nuvoton ma35d1 serial driver
- support
-Message-ID: <202303310829.6uVozWbB-lkp@intel.com>
-References: <20230328021912.177301-12-ychuang570808@gmail.com>
+        Thu, 30 Mar 2023 20:30:44 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A0EEFAC
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:30:35 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id t10so83295461edd.12
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:30:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680222633;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s3r5eQncDU04l860YNWqLD6wbbCGIfGDlp9mbjOhdOU=;
+        b=dQ93Wk+Ks0MpqcGc+XVhyiMMrBUMuOTlnyUdvZTqVp0bN0Nmlc332OAwEYAAl4bdOb
+         rMvMFpmV/ShWfjSwJCQQlIG8eLhnJAG6GIFRRac4zR3uNqv31lS4gB+893Ba8gr7luBu
+         NYPe2fAf2Jbhe561F22ak4DIq2XkXoPQMnFZA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680222633;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s3r5eQncDU04l860YNWqLD6wbbCGIfGDlp9mbjOhdOU=;
+        b=M0BWAbHRXSj4VsSwpx+D8TgT9igG0dCA2ahk7T9ASyrrJ/BRemX1dkBRM/i6uTuHyR
+         Xi7KhDJ592Io8r96SlPWmp4sDHTyo/SHvEA6esOjax5XfWXoTW7wFBw54CLQ8XLoaTg4
+         NpRJrsn7BaxOoqkFAebHj7ItE27mDKfccogZ4oBcr0KB1HOKWPvRbhj9n1qwZ798HLBx
+         Cd+KL6ysvX69Twl09kScg4wAH8GsGS1IADpSwMNhyaHNtAzYK5x3LayWvm33qfNE+vOw
+         oYpdO5zVofYAPNBowQUieN9icXyNoqhCKvSBOKqCr8/ZehfSm/7n/sJphFpihLuijodA
+         V4AQ==
+X-Gm-Message-State: AAQBX9chSgCjHERW7lvBCDfk1nlfx5MDhyN2W1bbKkdPzLKAvQ6r/fMX
+        oQ6ww77meQ6xuqBkqUCSpS0Ozsf6dw63TrPgWOJY5w==
+X-Google-Smtp-Source: AKy350bUrFjid7TXbTeqMBKOpuNLpzymdFUzXKXUsWM99Dh5ebCTsP5lJJEB9dpSdwE6OtCHBeIdQ5BHXLCCKNvPA98=
+X-Received: by 2002:a17:907:d687:b0:93d:a14f:c9b4 with SMTP id
+ wf7-20020a170907d68700b0093da14fc9b4mr12727665ejc.2.1680222633437; Thu, 30
+ Mar 2023 17:30:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328021912.177301-12-ychuang570808@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221229081252.452240-1-sarthakkukreti@chromium.org>
+ <20221229081252.452240-3-sarthakkukreti@chromium.org> <Y7biAQyLKJDjsAlz@bfoster>
+In-Reply-To: <Y7biAQyLKJDjsAlz@bfoster>
+From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
+Date:   Thu, 30 Mar 2023 17:30:22 -0700
+Message-ID: <CAG9=OMNLAL8M2AqzSWzecXJzR7jfC_3Ckc_L24MzNBgz_+u-wQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] dm: Add support for block provisioning
+To:     Brian Foster <bfoster@redhat.com>
+Cc:     sarthakkukreti@google.com, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        Daniil Lunev <dlunev@google.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacky,
+On Thu, Jan 5, 2023 at 6:42=E2=80=AFAM Brian Foster <bfoster@redhat.com> wr=
+ote:
+>
+> On Thu, Dec 29, 2022 at 12:12:47AM -0800, Sarthak Kukreti wrote:
+> > Add support to dm devices for REQ_OP_PROVISION. The default mode
+> > is to pass through the request and dm-thin will utilize it to provision
+> > blocks.
+> >
+> > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > ---
+> >  drivers/md/dm-crypt.c         |  4 +-
+> >  drivers/md/dm-linear.c        |  1 +
+> >  drivers/md/dm-snap.c          |  7 +++
+> >  drivers/md/dm-table.c         | 25 ++++++++++
+> >  drivers/md/dm-thin.c          | 90 ++++++++++++++++++++++++++++++++++-
+> >  drivers/md/dm.c               |  4 ++
+> >  include/linux/device-mapper.h | 11 +++++
+> >  7 files changed, 139 insertions(+), 3 deletions(-)
+> >
+> ...
+> > diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
+> > index 64cfcf46881d..ab3f1abfabaf 100644
+> > --- a/drivers/md/dm-thin.c
+> > +++ b/drivers/md/dm-thin.c
+> ...
+> > @@ -1980,6 +1992,70 @@ static void process_cell(struct thin_c *tc, stru=
+ct dm_bio_prison_cell *cell)
+> >       }
+> >  }
+> >
+> > +static void process_provision_cell(struct thin_c *tc, struct dm_bio_pr=
+ison_cell *cell)
+> > +{
+> > +     int r;
+> > +     struct pool *pool =3D tc->pool;
+> > +     struct bio *bio =3D cell->holder;
+> > +     dm_block_t begin, end;
+> > +     struct dm_thin_lookup_result lookup_result;
+> > +
+> > +     if (tc->requeue_mode) {
+> > +             cell_requeue(pool, cell);
+> > +             return;
+> > +     }
+> > +
+> > +     get_bio_block_range(tc, bio, &begin, &end);
+> > +
+> > +     while (begin !=3D end) {
+> > +             r =3D ensure_next_mapping(pool);
+> > +             if (r)
+> > +                     /* we did our best */
+> > +                     return;
+> > +
+> > +             r =3D dm_thin_find_block(tc->td, begin, 1, &lookup_result=
+);
+>
+> Hi Sarthak,
+>
+> I think we discussed this before.. but remind me if/how we wanted to
+> handle the case if the thin blocks are shared..? Would a provision op
+> carry enough information to distinguish an FALLOC_FL_UNSHARE_RANGE
+> request from upper layers to conditionally provision in that case?
+>
+I think that should depend on how the filesystem implements unsharing:
+assuming that we use provision on first allocation, unsharing on xfs
+should result in xfs calling REQ_OP_PROVISION on the newly allocated
+blocks first. But for ext4, we'd fail UNSHARE_RANGE unless provision
+(instead of noprovision, provision_on_alloc), in which case, we'd send
+REQ_OP_PROVISION.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on clk/clk-next linus/master]
-[cannot apply to pza/reset/next pza/imx-drm/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230328-102245
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230328021912.177301-12-ychuang570808%40gmail.com
-patch subject: [PATCH v6 11/12] tty: serial: Add Nuvoton ma35d1 serial driver support
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230331/202303310829.6uVozWbB-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/380d83a62e873855024ca4c660865c654a62748a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230328-102245
-        git checkout 380d83a62e873855024ca4c660865c654a62748a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/tty/serial/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303310829.6uVozWbB-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/tty/serial/ma35d1_serial.c:672:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (pdev->dev.of_node) {
-               ^~~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:679:27: note: uninitialized use occurs here
-           up = &ma35d1serial_ports[ret];
-                                    ^~~
-   drivers/tty/serial/ma35d1_serial.c:672:2: note: remove the 'if' if its condition is always true
-           if (pdev->dev.of_node) {
-           ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:668:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
->> drivers/tty/serial/ma35d1_serial.c:730:6: warning: variable 'i' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (dev->dev.of_node)
-               ^~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:732:6: note: uninitialized use occurs here
-           if (i < 0) {
-               ^
-   drivers/tty/serial/ma35d1_serial.c:730:2: note: remove the 'if' if its condition is always true
-           if (dev->dev.of_node)
-           ^~~~~~~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:727:7: note: initialize the variable 'i' to silence this warning
-           int i;
-                ^
-                 = 0
-   drivers/tty/serial/ma35d1_serial.c:750:6: warning: variable 'i' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (dev->dev.of_node)
-               ^~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:752:6: note: uninitialized use occurs here
-           if (i < 0) {
-               ^
-   drivers/tty/serial/ma35d1_serial.c:750:2: note: remove the 'if' if its condition is always true
-           if (dev->dev.of_node)
-           ^~~~~~~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:747:7: note: initialize the variable 'i' to silence this warning
-           int i;
-                ^
-                 = 0
-   3 warnings generated.
+Best
+Sarthak
 
 
-vim +672 drivers/tty/serial/ma35d1_serial.c
+Sarthak
 
-   658	
-   659	/*
-   660	 * Register a set of serial devices attached to a platform device.
-   661	 * The list is terminated with a zero flags entry, which means we expect
-   662	 * all entries to have at least UPF_BOOT_AUTOCONF set.
-   663	 */
-   664	static int ma35d1serial_probe(struct platform_device *pdev)
-   665	{
-   666		struct resource *res_mem;
-   667		struct uart_ma35d1_port *up;
-   668		int ret;
-   669		struct clk *clk;
-   670		int err;
-   671	
- > 672		if (pdev->dev.of_node) {
-   673			ret = of_alias_get_id(pdev->dev.of_node, "serial");
-   674			if (ret < 0) {
-   675				dev_err(&pdev->dev, "failed to get alias/pdev id, errno %d\n", ret);
-   676				return ret;
-   677			}
-   678		}
-   679		up = &ma35d1serial_ports[ret];
-   680		up->port.line = ret;
-   681		res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-   682		if (!res_mem)
-   683			return -ENODEV;
-   684	
-   685		up->port.iobase = res_mem->start;
-   686		up->port.membase = ioremap(up->port.iobase, UART_REG_SIZE);
-   687		up->port.ops = &ma35d1serial_ops;
-   688	
-   689		spin_lock_init(&up->port.lock);
-   690	
-   691		clk = of_clk_get(pdev->dev.of_node, 0);
-   692		if (IS_ERR(clk)) {
-   693			err = PTR_ERR(clk);
-   694			dev_err(&pdev->dev, "failed to get core clk: %d\n", err);
-   695			return -ENOENT;
-   696		}
-   697		err = clk_prepare_enable(clk);
-   698		if (err)
-   699			return -ENOENT;
-   700	
-   701		if (up->port.line != 0)
-   702			up->port.uartclk = clk_get_rate(clk);
-   703		up->port.irq = platform_get_irq(pdev, 0);
-   704		up->port.dev = &pdev->dev;
-   705		up->port.flags = UPF_BOOT_AUTOCONF;
-   706		ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
-   707		platform_set_drvdata(pdev, up);
-   708		return 0;
-   709	}
-   710	
-   711	/*
-   712	 * Remove serial ports registered against a platform device.
-   713	 */
-   714	static int ma35d1serial_remove(struct platform_device *dev)
-   715	{
-   716		struct uart_port *port = platform_get_drvdata(dev);
-   717	
-   718		if (port) {
-   719			uart_remove_one_port(&ma35d1serial_reg, port);
-   720			free_irq(port->irq, port);
-   721		}
-   722		return 0;
-   723	}
-   724	
-   725	static int ma35d1serial_suspend(struct platform_device *dev, pm_message_t state)
-   726	{
-   727		int i;
-   728		struct uart_ma35d1_port *up;
-   729	
- > 730		if (dev->dev.of_node)
-   731			i = of_alias_get_id(dev->dev.of_node, "serial");
-   732		if (i < 0) {
-   733			dev_err(&dev->dev, "failed to get alias/pdev id, errno %d\n", i);
-   734			return i;
-   735		}
-   736		up = &ma35d1serial_ports[i];
-   737		if (i == 0) {
-   738			up->console_baud_rate = serial_in(up, UART_REG_BAUD);
-   739			up->console_line = serial_in(up, UART_REG_LCR);
-   740			up->console_int = serial_in(up, UART_REG_IER);
-   741		}
-   742		return 0;
-   743	}
-   744	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> Brian
+>
+> > +             switch (r) {
+> > +             case 0:
+> > +                     begin++;
+> > +                     break;
+> > +             case -ENODATA:
+> > +                     bio_inc_remaining(bio);
+> > +                     provision_block(tc, bio, begin, cell);
+> > +                     begin++;
+> > +                     break;
+> > +             default:
+> > +                     DMERR_LIMIT(
+> > +                             "%s: dm_thin_find_block() failed: error =
+=3D %d",
+> > +                             __func__, r);
+> > +                     cell_defer_no_holder(tc, cell);
+> > +                     bio_io_error(bio);
+> > +                     begin++;
+> > +                     break;
+> > +             }
+> > +     }
+> > +     bio_endio(bio);
+> > +     cell_defer_no_holder(tc, cell);
+> > +}
+> > +
+> > +static void process_provision_bio(struct thin_c *tc, struct bio *bio)
+> > +{
+> > +     dm_block_t begin, end;
+> > +     struct dm_cell_key virt_key;
+> > +     struct dm_bio_prison_cell *virt_cell;
+> > +
+> > +     get_bio_block_range(tc, bio, &begin, &end);
+> > +     if (begin =3D=3D end) {
+> > +             bio_endio(bio);
+> > +             return;
+> > +     }
+> > +
+> > +     build_key(tc->td, VIRTUAL, begin, end, &virt_key);
+> > +     if (bio_detain(tc->pool, &virt_key, bio, &virt_cell))
+> > +             return;
+> > +
+> > +     process_provision_cell(tc, virt_cell);
+> > +}
+> > +
+> >  static void process_bio(struct thin_c *tc, struct bio *bio)
+> >  {
+> >       struct pool *pool =3D tc->pool;
+> > @@ -2200,6 +2276,8 @@ static void process_thin_deferred_bios(struct thi=
+n_c *tc)
+> >
+> >               if (bio_op(bio) =3D=3D REQ_OP_DISCARD)
+> >                       pool->process_discard(tc, bio);
+> > +             else if (bio_op(bio) =3D=3D REQ_OP_PROVISION)
+> > +                     process_provision_bio(tc, bio);
+> >               else
+> >                       pool->process_bio(tc, bio);
+> >
+> > @@ -2716,7 +2794,8 @@ static int thin_bio_map(struct dm_target *ti, str=
+uct bio *bio)
+> >               return DM_MAPIO_SUBMITTED;
+> >       }
+> >
+> > -     if (op_is_flush(bio->bi_opf) || bio_op(bio) =3D=3D REQ_OP_DISCARD=
+) {
+> > +     if (op_is_flush(bio->bi_opf) || bio_op(bio) =3D=3D REQ_OP_DISCARD=
+ ||
+> > +         bio_op(bio) =3D=3D REQ_OP_PROVISION) {
+> >               thin_defer_bio_with_throttle(tc, bio);
+> >               return DM_MAPIO_SUBMITTED;
+> >       }
+> > @@ -3355,6 +3434,8 @@ static int pool_ctr(struct dm_target *ti, unsigne=
+d argc, char **argv)
+> >       pt->low_water_blocks =3D low_water_blocks;
+> >       pt->adjusted_pf =3D pt->requested_pf =3D pf;
+> >       ti->num_flush_bios =3D 1;
+> > +     ti->num_provision_bios =3D 1;
+> > +     ti->provision_supported =3D true;
+> >
+> >       /*
+> >        * Only need to enable discards if the pool should pass
+> > @@ -4053,6 +4134,7 @@ static void pool_io_hints(struct dm_target *ti, s=
+truct queue_limits *limits)
+> >               blk_limits_io_opt(limits, pool->sectors_per_block << SECT=
+OR_SHIFT);
+> >       }
+> >
+> > +
+> >       /*
+> >        * pt->adjusted_pf is a staging area for the actual features to u=
+se.
+> >        * They get transferred to the live pool in bind_control_target()
+> > @@ -4243,6 +4325,9 @@ static int thin_ctr(struct dm_target *ti, unsigne=
+d argc, char **argv)
+> >               ti->num_discard_bios =3D 1;
+> >       }
+> >
+> > +     ti->num_provision_bios =3D 1;
+> > +     ti->provision_supported =3D true;
+> > +
+> >       mutex_unlock(&dm_thin_pool_table.mutex);
+> >
+> >       spin_lock_irq(&tc->pool->lock);
+> > @@ -4457,6 +4542,7 @@ static void thin_io_hints(struct dm_target *ti, s=
+truct queue_limits *limits)
+> >
+> >       limits->discard_granularity =3D pool->sectors_per_block << SECTOR=
+_SHIFT;
+> >       limits->max_discard_sectors =3D 2048 * 1024 * 16; /* 16G */
+> > +     limits->max_provision_sectors =3D 2048 * 1024 * 16; /* 16G */
+> >  }
+> >
+> >  static struct target_type thin_target =3D {
+> > diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+> > index e1ea3a7bd9d9..4d19bae9da4a 100644
+> > --- a/drivers/md/dm.c
+> > +++ b/drivers/md/dm.c
+> > @@ -1587,6 +1587,7 @@ static bool is_abnormal_io(struct bio *bio)
+> >               case REQ_OP_DISCARD:
+> >               case REQ_OP_SECURE_ERASE:
+> >               case REQ_OP_WRITE_ZEROES:
+> > +             case REQ_OP_PROVISION:
+> >                       return true;
+> >               default:
+> >                       break;
+> > @@ -1611,6 +1612,9 @@ static blk_status_t __process_abnormal_io(struct =
+clone_info *ci,
+> >       case REQ_OP_WRITE_ZEROES:
+> >               num_bios =3D ti->num_write_zeroes_bios;
+> >               break;
+> > +     case REQ_OP_PROVISION:
+> > +             num_bios =3D ti->num_provision_bios;
+> > +             break;
+> >       default:
+> >               break;
+> >       }
+> > diff --git a/include/linux/device-mapper.h b/include/linux/device-mappe=
+r.h
+> > index 04c6acf7faaa..b4d97d5d75b8 100644
+> > --- a/include/linux/device-mapper.h
+> > +++ b/include/linux/device-mapper.h
+> > @@ -333,6 +333,12 @@ struct dm_target {
+> >        */
+> >       unsigned num_write_zeroes_bios;
+> >
+> > +     /*
+> > +      * The number of PROVISION bios that will be submitted to the tar=
+get.
+> > +      * The bio number can be accessed with dm_bio_get_target_bio_nr.
+> > +      */
+> > +     unsigned num_provision_bios;
+> > +
+> >       /*
+> >        * The minimum number of extra bytes allocated in each io for the
+> >        * target to use.
+> > @@ -357,6 +363,11 @@ struct dm_target {
+> >        */
+> >       bool discards_supported:1;
+> >
+> > +     /* Set if this target needs to receive provision requests regardl=
+ess of
+> > +      * whether or not its underlying devices have support.
+> > +      */
+> > +     bool provision_supported:1;
+> > +
+> >       /*
+> >        * Set if we need to limit the number of in-flight bios when swap=
+ping.
+> >        */
+> > --
+> > 2.37.3
+> >
+>
