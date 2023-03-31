@@ -2,164 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADFC6D1B59
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241A06D1B65
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjCaJHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
+        id S229529AbjCaJIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbjCaJHH (ORCPT
+        with ESMTP id S232007AbjCaJIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:07:07 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6021E721
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:06:47 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id q19so18602756wrc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:06:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680253606;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=n/qHDI2XATx2TdwwrGZWbe9ANXTDDjSuUckU4tumIIg=;
-        b=hnrhqzRTrMQRhfBU8NZ73fIzzb4Zmbq3p6PCkrRBm9CxE2RxUcwt/22PASFM3iqAti
-         oysh2iwzb70hD4b47BnDnOruFckF73k40iXKH3WeNHDuQ7ELCstnZr8ngccej7rNNklR
-         lSaFYeMj+PyVdZGPWwbSslcySKbwlKsyX2tC+/+o2H1iVfn4ZEbgaIblJrEDVhNlGDXr
-         +uK7jN1FxkgDP5KzhDCsaYtYNy7RWBNgo3FFPr2IsKhZgFCrUIjj7WJwsTJKmpzI0gwU
-         3jrtEi1bzimgCSatXmRFGDfXFHukhR8czFIDhXqCUICwYrMlNyJ9ckEjMNyN9CnwU9xb
-         hjZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680253606;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n/qHDI2XATx2TdwwrGZWbe9ANXTDDjSuUckU4tumIIg=;
-        b=1paKiu0GdpucPlDyUOj+LIObCGl1qo076F/y/UBl853Sg2bZnwxx6sU7b0T30KuPnP
-         nZ3mFJ1+fP595iJc+PBeQYPs/fGnl9rBbRes2tyyXA6HCveE2hk1DWfrQ6mQufEhDljq
-         /f+nuldjo2b4Pm/mkb3hAasjuR4hu8whb2kmKgT1xsTswNXJbpjKu1Kua8+oHJueearI
-         NtvrU6t3s08uEiuD1SvR9EVlWMRmBFKtb/jxzISiNx0Mynd3358ZGuLZuqXFeEQhcPHn
-         WQF16ICUueDjxnvpeG7I/aOyYiIbQeCqVFT1+2JzdHsVfP4EkGN9xwDSLFhlyTWgI+Tz
-         TlDA==
-X-Gm-Message-State: AAQBX9drNWVk/oOGIzHUcNqpOShmkFRS1+866J1gv99lOiGPs3aNuX0c
-        55uHWo5NDZYATTvoYvluPlHEcA==
-X-Google-Smtp-Source: AKy350aTrYnc9UuG9bJ66DZ/1QaY7OCh8DB9/Nw+qIDm2v5EajtM9gla/uJHB27+0JWtb6ZpZdpKbQ==
-X-Received: by 2002:a05:6000:ca:b0:2d6:5afe:7b91 with SMTP id q10-20020a05600000ca00b002d65afe7b91mr6225734wrx.30.1680253606228;
-        Fri, 31 Mar 2023 02:06:46 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0? ([2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0])
-        by smtp.gmail.com with ESMTPSA id f9-20020adff989000000b002c71dd1109fsm1662892wrr.47.2023.03.31.02.06.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 02:06:45 -0700 (PDT)
-Message-ID: <6a386ff3-2af6-a544-674f-7c60d4d89e4e@linaro.org>
-Date:   Fri, 31 Mar 2023 11:06:44 +0200
+        Fri, 31 Mar 2023 05:08:18 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2535410F6;
+        Fri, 31 Mar 2023 02:07:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=BFqC7haDTybAEGUq1e2Uhe+LahY2lMZuCKo7e1OI8xQ=; b=ln4+Y+gWAHQSIKd2IosmEm1kwL
+        9rQrpQ4E43SCxGnY7oCiHOfu1wEhrtmLCIph2RoTF0Zr9Jl+lwXk0EloYYwZp1vP4G9309e+oavO1
+        W4gscCHtGYQQ/lE4PaexTfIzVhVn8ZkbG/CF1gjy/6j2N0CDUb+u8PLNi0SvNP4j7UurXdo8YXnzj
+        FgTE97HTmPYCpw04O/SaUQ6wP2EslXB8dKZxMKdUsN6rI1OT+fm2ale4gtGaRCzwcx2OlTpIpkN9b
+        CgHQYxdDR/G/k11QZy1D2M1/SQxlzh6J/tvaEB5xTC8HOr4tRJNRZhsIJXbX/XtjKGw1Lgk2JQN4g
+        bD8q98ew==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48688)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1piAjS-0004Sf-1D; Fri, 31 Mar 2023 10:07:38 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1piAjI-000119-8l; Fri, 31 Mar 2023 10:07:28 +0100
+Date:   Fri, 31 Mar 2023 10:07:28 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH 15/21] ARM: dma-mapping: always invalidate WT caches
+ before DMA
+Message-ID: <ZCai0FmZiOqsMkzc@shell.armlinux.org.uk>
+References: <20230327121317.4081816-1-arnd@kernel.org>
+ <20230327121317.4081816-16-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v1 2/2] drm/bridge: ti-sn65dsi83: Add DSI video mode
- configuration
-Content-Language: en-US
-To:     Francesco Dolcini <francesco@dolcini.it>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-References: <20230330101752.429804-1-francesco@dolcini.it>
- <20230330101752.429804-3-francesco@dolcini.it>
-Organization: Linaro Developer Services
-In-Reply-To: <20230330101752.429804-3-francesco@dolcini.it>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327121317.4081816-16-arnd@kernel.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 30/03/2023 12:17, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+On Mon, Mar 27, 2023 at 02:13:11PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Enable configuration of the DSI video mode instead of hard-coding
-> MIPI_DSI_MODE_VIDEO_BURST. The bridge support any of burst-mode,
-> non-burst with sync event or non-burst with sync pulse
+> Most ARM CPUs can have write-back caches and that require
+> cache management to be done in the dma_sync_*_for_device()
+> operation. This is typically done in both writeback and
+> writethrough mode.
 > 
-> With this change is possible to use the bridge with host DSI
-> that do not support burst mode.
+> The cache-v4.S (arm720/740/7tdmi/9tdmi) and cache-v4wt.S
+> (arm920t, arm940t) implementations are the exception here,
+> and only do the cache management after the DMA is complete,
+> in the dma_sync_*_for_cpu() operation.
 > 
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> ---
->   drivers/gpu/drm/bridge/ti-sn65dsi83.c | 24 +++++++++++++++++++++++-
->   1 file changed, 23 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi83.c b/drivers/gpu/drm/bridge/ti-sn65dsi83.c
-> index 91ecfbe45bf9..144d0de0d278 100644
-> --- a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
-> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi83.c
-> @@ -145,6 +145,7 @@ struct sn65dsi83 {
->   	struct drm_bridge		*panel_bridge;
->   	struct gpio_desc		*enable_gpio;
->   	struct regulator		*vcc;
-> +	u32				dsi_video_mode;
->   	bool				lvds_dual_link;
->   	bool				lvds_dual_link_even_odd_swap;
->   };
-> @@ -603,6 +604,9 @@ static int sn65dsi83_parse_dt(struct sn65dsi83 *ctx, enum sn65dsi83_model model)
->   		return dev_err_probe(dev, PTR_ERR(ctx->vcc),
->   				     "Failed to get supply 'vcc'\n");
->   
-> +	ctx->dsi_video_mode = 0;
-> +	of_property_read_u32(dev->of_node, "dsi-video-mode", &ctx->dsi_video_mode);
-> +
->   	return 0;
->   }
->   
-> @@ -642,7 +646,25 @@ static int sn65dsi83_host_attach(struct sn65dsi83 *ctx)
->   
->   	dsi->lanes = dsi_lanes;
->   	dsi->format = MIPI_DSI_FMT_RGB888;
-> -	dsi->mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST;
-> +	dsi->mode_flags = MIPI_DSI_MODE_VIDEO;
-> +
-> +	switch (ctx->dsi_video_mode) {
-> +	case 0:
-> +		/* burst mode */
-> +		dsi->mode_flags |= MIPI_DSI_MODE_VIDEO_BURST;
-> +		break;
-> +	case 1:
-> +		/* non-burst mode with sync event */
-> +		break;
-> +	case 2:
-> +		/* non-burst mode with sync pulse */
-> +		dsi->mode_flags |= MIPI_DSI_MODE_VIDEO_SYNC_PULSE;
-> +		break;
-> +	default:
-> +		dev_warn(dev, "invalid video mode %d\n", ctx->dsi_video_mode);
-> +		break;
-> +	}
-> +
->   
->   	ret = devm_mipi_dsi_attach(dev, dsi);
->   	if (ret < 0) {
+> Change this for consistency with the other platforms. This
+> should have no user visible effect.
 
-As I understand from DSI spec is that those are dynamic, so they are hardcoded in driver now
-but they shouldn't be hardcoded in DT.
+NAK...
 
-The problem is larger and we should add some sort of "supported features" we can get
-from the DSI controller and set the flags accordingly because the features support accross the
-DSI controllers isn't linear.
+The reason we do cache management _after_ is to ensure that there
+is no stale data. The kernel _has_ (at the very least in the past)
+performed DMA to data structures that are embedded within other
+data structures, resulting in cache lines being shared. If one of
+those cache lines is touched while DMA is progressing, then we
+must to cache management _after_ the DMA operation has completed.
+Doing it before is no good.
 
-Neil
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
