@@ -2,108 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E356D1D8B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373866D1D96
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbjCaKDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 06:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S231728AbjCaKF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 06:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbjCaKCg (ORCPT
+        with ESMTP id S230463AbjCaKFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 06:02:36 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AEF22EA4
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:58:37 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id i5so87622173eda.0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:58:36 -0700 (PDT)
+        Fri, 31 Mar 2023 06:05:12 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C912C335
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:59:41 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id ja10so20766932plb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680256623;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v4H+SCpNyTk7eZ1Jx5ghhVexUUtM7yLUPN8EpooXX/M=;
-        b=hUovmKNZisr61xrxlb4+6KtmntMOhl0IMfd+DJEOXSfOsvuKb7sORlzRt+/ceXeYXn
-         gPAucay7kSxn35/SKp+YHtwUloQLtpOo5di43ccGjIT7QAwQ17O58TEFidSJN+tKGUW+
-         aJNRNXJbnu8rPOVXADq1ek0H1V9UEKWzG0UldpGta+GmpqOuFNFP5oYNPOwwNG8/RXUP
-         cwxiveTD4mpcDr8tc3Vu0I4m7D7XV82eYwwh2ft5DkQAigFz452AnouqvkPop3d3dena
-         zSrIiarCr+zaHd581SupL462xYP8GiWp7jQifLjVphVEQMxTO8ELL+lxmKhvr3Kq+TW3
-         zU0Q==
+        d=bytedance.com; s=google; t=1680256746; x=1682848746;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V3Imsv5UXjIU6+jF5fHueU/SbtIe7EZ54LbcEh0yngg=;
+        b=eNFqrrDvToe7K30uj4UJdlWR29i2x/3BZZ8yfzzbmfaNxY2ly4sLki8zpCNb1tZL8F
+         99yx1GqbvY+SYJq73zokyHO5yYeHmQJnsTNl0v83o99fAHuJVEQ3iu2Ib16n74m+GBc6
+         KsAfwyAiBRByPWGUGz3IRg5l0F2ly8Lt9XpJTZa82a9YVQ2YPetXTMGz0Qeub1rUNOGq
+         74U77/tjinuH4nZi8bz3ljpHvUvL6IyDLCusE4TSbGa1lAuOTOJGObcYtPfUSr5/0dr9
+         I6hoGTcoXl3etTMWvHtCYFopuFOlpdoY+jFPcvbTuHhYFNSPp/ax5X/xyzQpFYZJgU8p
+         5rhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680256623;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v4H+SCpNyTk7eZ1Jx5ghhVexUUtM7yLUPN8EpooXX/M=;
-        b=EF/JbLSlhvbgxVlQOK1L8iHujxWJHkYHJ2Nt1YPf/Sn7tV+o0WF3sCikcOnsr8VWKM
-         aIuU7fPdGcU4soAEMEjFbSyLS+WHUOoei2rQoU6DTi4I1pTNEzR6H/oyEfHQYvlubOWF
-         9KSX8B1zebgihFp932sqw95jhSn6yLxe+9juVU4jAXYKGShDMFyjSdN9ClIc0ed8O81P
-         3/T2bH8y+bBdrzE/KZZVT50mTAlLHYtts6cA0ncT7aUhvZ6YV6ZZfQhw8T2YiPwsmg0G
-         Fqo9rSX5aQvDJOQWcmCkD/v9f3r1adqTY/V6A4Ra4UE6C6p+tsO8jWMy7W6PhcKdrKUS
-         eFKg==
-X-Gm-Message-State: AAQBX9fVCTECOtf/mXyNTIv4UBL5Cjrq8TZc9WIu+UyYViipQEGHS1Uj
-        zXSlUhFj2itohBPvIMVhjve7OQ==
-X-Google-Smtp-Source: AKy350bVjpNe+axO1RpW3WbS1yKuQF8XC3/Ty5b4nGHQ842OXSXLHDd90fAIc4I9S+uwldPn0fRXEg==
-X-Received: by 2002:a17:906:5d03:b0:92f:495b:bc7c with SMTP id g3-20020a1709065d0300b0092f495bbc7cmr10004474ejt.23.1680256623575;
-        Fri, 31 Mar 2023 02:57:03 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id g4-20020a17090669c400b0093341746105sm800904ejs.117.2023.03.31.02.57.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 02:57:03 -0700 (PDT)
-Message-ID: <b286776b-f50d-e545-6b21-6dc3d90e6c90@linaro.org>
-Date:   Fri, 31 Mar 2023 10:57:01 +0100
+        d=1e100.net; s=20210112; t=1680256746; x=1682848746;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V3Imsv5UXjIU6+jF5fHueU/SbtIe7EZ54LbcEh0yngg=;
+        b=MrSRfvKtNoxt7yrPhnKgdoEIm0htRMhudAlbi8V/Q76nziFaR+sC5efPdNPyWrqQmy
+         LzWpYhz3eqkfswioMiRbQUQwRvy8ZGFlRzDN1cW3a53qEQBHUPsqUVqYAxlcqnV+BuFc
+         oZA7Qy7P3zyayV9IyCUJYH1nTfZZ2UIlknZOoDGlh+KitgGegJLN94lWvMh0ByXF3Mq0
+         rAzebXNt4Agrwji0SwX970YQXU5JOcwh0Y+BlZPWE7KKJP/vhKCHS2Re73yO948wXafn
+         VRmwpQGOD+eg0rDoKtwXt3+4ODv0+6R0xZAyLKU0kSfBdmM71Ayhtr60LS/6QTrqyVyx
+         OEPA==
+X-Gm-Message-State: AAQBX9dLqEDZjmgcA22/1VYiCPdKiHINA8yxp9RWvTcVlGoURQvBSF0S
+        Q4hmcm31WRBX4I9vtaVYMeD7qcvBME9BcOPDcKo=
+X-Google-Smtp-Source: AKy350ZvNVoMyY9lLBRfiHq5wFZ9JCFpE32CoNb4IXzzebKUTJLtkfr4e6FPbV2oDHIPcOpa6wvfrQ==
+X-Received: by 2002:a17:902:7593:b0:1a2:8871:b430 with SMTP id j19-20020a170902759300b001a28871b430mr5594577pll.2.1680256746575;
+        Fri, 31 Mar 2023 02:59:06 -0700 (PDT)
+Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id oo5-20020a17090b1c8500b0023b3179f0fcsm4687782pjb.6.2023.03.31.02.59.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 02:59:06 -0700 (PDT)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     akpm@linux-foundation.org, willy@infradead.org, lstoakes@gmail.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH 1/2] mm: swap: use folio_batch_reinit() in folio_batch_move_lru()
+Date:   Fri, 31 Mar 2023 17:58:57 +0800
+Message-Id: <20230331095858.51810-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 0/4] ARM: dts: at91: Set sst26vf064b SPI NOR flash at
- its maxumum frequency
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        claudiu.beznea@microchip.com
-Cc:     alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230328101517.1595738-1-tudor.ambarus@linaro.org>
- <3fc2611e-3cd8-d9ae-5ff4-d33fda8c0099@microchip.com>
-Content-Language: en-US
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <3fc2611e-3cd8-d9ae-5ff4-d33fda8c0099@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In folio_batch_move_lru(), the folio_batch is not freshly
+initialised, so it should call folio_batch_reinit() as
+pagevec_lru_move_fn() did before.
 
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+---
+ mm/swap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 3/30/23 19:53, Nicolas Ferre wrote:
-> On 28/03/2023 at 12:15, Tudor Ambarus wrote:
->> Changes in v3: Update S-o-b tag to match author's email.
->> Changes in v2: update value of spi-cs-setup-ns as it was changed to u32
->> since the first proposal.
->> v1 at:
->> https://lore.kernel.org/linux-mtd/20221117105249.115649-1-tudor.ambarus@microchip.com/
->>
->> ---
->> SPI NOR flashes have specific cs-setup time requirements without which
->> they can't work at frequencies close to their maximum supported
->> frequency,
->> as they miss the first bits of the instruction command. Unrecognized
->> commands are ignored, thus the flash will be unresponsive. Introduce the
->> spi-cs-setup-ns property to allow spi devices to specify their cs setup
->> time.
-> 
-> Now that it's tested:
-> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> to the whole series and I'll queue them on at91-dt branch and changed
-> your email address when doing so.
-> 
-> Thanks for your patches Tudor, it's appreciated! Best regards,
+diff --git a/mm/swap.c b/mm/swap.c
+index 57cb01b042f6..423199ee8478 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -222,7 +222,7 @@ static void folio_batch_move_lru(struct folio_batch *fbatch, move_fn_t move_fn)
+ 	if (lruvec)
+ 		unlock_page_lruvec_irqrestore(lruvec, flags);
+ 	folios_put(fbatch->folios, folio_batch_count(fbatch));
+-	folio_batch_init(fbatch);
++	folio_batch_reinit(fbatch);
+ }
+ 
+ static void folio_batch_add_and_move(struct folio_batch *fbatch,
+-- 
+2.20.1
 
-My pleasure, I'm happy I could help. Cheers,
-ta
