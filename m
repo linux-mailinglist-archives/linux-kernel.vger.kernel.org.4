@@ -2,159 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1622E6D263C
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD8E6D263D
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbjCaQui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 12:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S230345AbjCaQwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233134AbjCaQuP (ORCPT
+        with ESMTP id S232622AbjCaQvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:50:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F032CA29;
-        Fri, 31 Mar 2023 09:47:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BE826229F;
-        Fri, 31 Mar 2023 16:47:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54092C433D2;
-        Fri, 31 Mar 2023 16:47:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680281248;
-        bh=/lkIh5Nz3go+vQYNCoQXglwXXZHR6bz3tdiI3tn+/LE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uAUI4tf4c0+iTL6VZpA452QzH6rdPXK2D1+tb4vwwT/OCVlIWYk71lbZJF6RRrGWV
-         LYsPAv/3q2kfIQIF6xRFhs1/+9r4W6MSzzvfcu/DOw5ddPOo2e27YJz00wzn+PgD+B
-         3eLOeqaGIYYJq3/QuqmuAkaNlfXlOBfepGFnP+DQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     axboe@kernel.dk
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-block@vger.kernel.org
-Subject: [PATCH] pktcdvd: simplify the class_pktcdvd logic
-Date:   Fri, 31 Mar 2023 18:47:24 +0200
-Message-Id: <20230331164724.319703-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.40.0
+        Fri, 31 Mar 2023 12:51:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206BC2442F
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680281283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3GXMLIZTguxo7CDhl2SCd0a0QstHDyet0kAuDTud61w=;
+        b=aEfP3AgodQJXXClDdwnzrTmylY17ZfT0XfaRyNz1qiZY90xcH3kFu1olsCvHnup/UP6RoL
+        NkLomIhQc/tDAoTsD5Tnbcg4rxMAXy+akW18nWOAwboxvkfcayQ7qy9Yd410z3Gmpr2I+c
+        jiyaLzUVxQ9BBZreQAPOpyRB29IC4CE=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-131-tSBLTyE3M9CIyLStFlPX1A-1; Fri, 31 Mar 2023 12:47:59 -0400
+X-MC-Unique: tSBLTyE3M9CIyLStFlPX1A-1
+Received: by mail-qt1-f200.google.com with SMTP id u22-20020a05622a011600b003dfd61e8594so14975790qtw.15
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:47:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680281278; x=1682873278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3GXMLIZTguxo7CDhl2SCd0a0QstHDyet0kAuDTud61w=;
+        b=APkUyKvWK3WAenuIlAYdZXRtLEYBhc/cAMoxepfPFaMkhzAAWqTm9mrD2PZpCPGtyv
+         yZaiHGkhFncTxnC9jAmla14eMANDLqDYtlc0dmOSulMlwSiPoz3AYPucdC+ffuoj/r2O
+         cigoqj87h6Ucf/kv1rTUnyvbICScQGovYoftpYJY1EDKfZP715d2E/QNVcSXlaUcEQqO
+         G0NxmHqmSXWfhOagjBeFnzDzT3zqs0vPGEtzkW9sbMgI8ILX84BfU5363b4FxcLexid5
+         jORqIl/qfzDRrGblvHkmYSl6C6iezxkKbg1GtCDDFKslNzRf1l25ApA54bk37BY9myyl
+         G60Q==
+X-Gm-Message-State: AAQBX9cqoNSxBKTeu0ICmROfPFZT1JuHhEw/x96KsMROyWjWR/lAwWKd
+        oNG1dk/1sXGS+jMTTxyd4bMJsW5TRUVueeo3JrK+e/Ckl6XBnmRS4c2i7FQNv8XSg7pAk4ewqpa
+        HIbOS3C6bN9HHVltP4bLcALnG
+X-Received: by 2002:a05:6214:409:b0:56c:222d:427a with SMTP id z9-20020a056214040900b0056c222d427amr43078360qvx.1.1680281278656;
+        Fri, 31 Mar 2023 09:47:58 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ap9fZlD473kbzc1HSP4KKY1YT3jk+Yzx3QBkns6++slf9+KTaBZ3+iJEsk6M5e/UgY0rxEUA==
+X-Received: by 2002:a05:6214:409:b0:56c:222d:427a with SMTP id z9-20020a056214040900b0056c222d427amr43078316qvx.1.1680281278322;
+        Fri, 31 Mar 2023 09:47:58 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id mb7-20020a056214550700b005dd8b934594sm723892qvb.44.2023.03.31.09.47.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 09:47:57 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 12:47:56 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH 00/29] selftests/mm: Split / Refactor userfault test
+Message-ID: <ZCcOvIJKR9lgoC43@x1n>
+References: <20230330155707.3106228-1-peterx@redhat.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3396; i=gregkh@linuxfoundation.org; h=from:subject; bh=/lkIh5Nz3go+vQYNCoQXglwXXZHR6bz3tdiI3tn+/LE=; b=owGbwMvMwCRo6H6F97bub03G02pJDCnqfLM2ZljVbzQ8OFcgf5P80eJV6glVGl5Fx83nrXt4Y uePc78YO2JZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAidv8ZFszbIx716uosyzke z/UrVUNeKbab6zAsuFQbVZT3TohFYmNs7IYzjZb5JzcUAwA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230330155707.3106228-1-peterx@redhat.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to dynamically create and destroy the class_pktcdvd
-structure, just make it static and remove the memory allocation logic
-which simplifies and cleans up the logic a lot.
+On Thu, Mar 30, 2023 at 11:56:38AM -0400, Peter Xu wrote:
+> UFFDIO_API (with syscall)... done
+> UFFDIO_API (with /dev/userfaultfd)... done
+> zeropage on anon... done
+> zeropage on shmem... done
+> zeropage on shmem-private... done
+> zeropage-hugetlb on hugetlb... done
+> zeropage-hugetlb on hugetlb-private... done
+> pagemap on anon... pagemap on anon... pagemap on anon... done
+> wp-unpopulated on anon... done
+> minor on shmem... done
+> minor on hugetlb... done
+> minor-wp on shmem... done
+> minor-wp on hugetlb... done
+> minor-collapse on shmem... done
+> sigbus on anon... sigbus on anon... done
+> sigbus on shmem... sigbus on shmem... done
+> sigbus on shmem-private... sigbus on shmem-private... done
+> sigbus on hugetlb... sigbus on hugetlb... done
+> sigbus on hugetlb-private... sigbus on hugetlb-private... done
+> sigbus-wp on anon... sigbus-wp on anon... done
+> sigbus-wp on shmem... sigbus-wp on shmem... done
+> sigbus-wp on shmem-private... sigbus-wp on shmem-private... done
+> sigbus-wp on hugetlb... sigbus-wp on hugetlb... done
+> sigbus-wp on hugetlb-private... sigbus-wp on hugetlb-private... done
+> events on anon... events on anon... done
+> events on shmem... events on shmem... done
+> events on shmem-private... events on shmem-private... done
+> events on hugetlb... events on hugetlb... done
+> events on hugetlb-private... events on hugetlb-private... done
+> events-wp on anon... events-wp on anon... done
+> events-wp on shmem... events-wp on shmem... done
+> events-wp on shmem-private... events-wp on shmem-private... done
+> events-wp on hugetlb... events-wp on hugetlb... done
+> events-wp on hugetlb-private... events-wp on hugetlb-private... done
 
-Cc: linux-block@vger.kernel.org
-Cc: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-Note, I would like to take this through my driver-core tree as it is
-needed for other struct class cleanup work I have done and am continuing
-to do there.
+Oops, the sigbus/events test do not look right here..  I think I slightly
+messed it up right before I post this set.
 
- drivers/block/pktcdvd.c | 40 ++++++++++++----------------------------
- 1 file changed, 12 insertions(+), 28 deletions(-)
+I'll squash below change into "selftests/mm: UFFDIO_API test" in the next
+post to fix this up:
 
-diff --git a/drivers/block/pktcdvd.c b/drivers/block/pktcdvd.c
-index ba9bbdef9ef5..79af8a59142e 100644
---- a/drivers/block/pktcdvd.c
-+++ b/drivers/block/pktcdvd.c
-@@ -100,7 +100,8 @@ static struct mutex ctl_mutex;	/* Serialize open/close/setup/teardown */
- static mempool_t psd_pool;
- static struct bio_set pkt_bio_set;
- 
--static struct class	*class_pktcdvd = NULL;    /* /sys/class/pktcdvd */
-+/* /sys/class/pktcdvd */
-+static struct class	class_pktcdvd;
- static struct dentry	*pkt_debugfs_root = NULL; /* /sys/kernel/debug/pktcdvd */
- 
- /* forward declaration */
-@@ -315,8 +316,8 @@ static const struct attribute_group *pkt_groups[] = {
- 
- static void pkt_sysfs_dev_new(struct pktcdvd_device *pd)
- {
--	if (class_pktcdvd) {
--		pd->dev = device_create_with_groups(class_pktcdvd, NULL,
-+	if (class_is_registered(&class_pktcdvd)) {
-+		pd->dev = device_create_with_groups(&class_pktcdvd, NULL,
- 						    MKDEV(0, 0), pd, pkt_groups,
- 						    "%s", pd->name);
- 		if (IS_ERR(pd->dev))
-@@ -326,7 +327,7 @@ static void pkt_sysfs_dev_new(struct pktcdvd_device *pd)
- 
- static void pkt_sysfs_dev_remove(struct pktcdvd_device *pd)
- {
--	if (class_pktcdvd)
-+	if (class_is_registered(&class_pktcdvd))
- 		device_unregister(pd->dev);
+===8<===
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 9e7f7c7f2982..793931da5056 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -92,8 +92,10 @@ static void uffd_test_pass(void)
  }
  
-@@ -338,11 +339,6 @@ static void pkt_sysfs_dev_remove(struct pktcdvd_device *pd)
-                      device_map     show mappings
-  *******************************************************************/
- 
--static void class_pktcdvd_release(struct class *cls)
--{
--	kfree(cls);
--}
--
- static ssize_t device_map_show(const struct class *c, const struct class_attribute *attr,
- 			       char *data)
- {
-@@ -405,35 +401,23 @@ static struct attribute *class_pktcdvd_attrs[] = {
- };
- ATTRIBUTE_GROUPS(class_pktcdvd);
- 
-+static struct class class_pktcdvd = {
-+	.name		= DRIVER_NAME,
-+	.class_groups	= class_pktcdvd_groups,
-+};
-+
- static int pkt_sysfs_init(void)
- {
--	int ret = 0;
--
- 	/*
- 	 * create control files in sysfs
- 	 * /sys/class/pktcdvd/...
- 	 */
--	class_pktcdvd = kzalloc(sizeof(*class_pktcdvd), GFP_KERNEL);
--	if (!class_pktcdvd)
--		return -ENOMEM;
--	class_pktcdvd->name = DRIVER_NAME;
--	class_pktcdvd->class_release = class_pktcdvd_release;
--	class_pktcdvd->class_groups = class_pktcdvd_groups;
--	ret = class_register(class_pktcdvd);
--	if (ret) {
--		kfree(class_pktcdvd);
--		class_pktcdvd = NULL;
--		pr_err("failed to create class pktcdvd\n");
--		return ret;
--	}
--	return 0;
-+	return class_register(&class_pktcdvd);
- }
- 
- static void pkt_sysfs_cleanup(void)
- {
--	if (class_pktcdvd)
--		class_destroy(class_pktcdvd);
--	class_pktcdvd = NULL;
-+	class_unregister(&class_pktcdvd);
- }
- 
- /********************************************************************
+ #define  uffd_test_start(...)  do {            \
++               printf("Testing ");             \
+                printf(__VA_ARGS__);            \
+                printf("... ");                 \
++               fflush(stdout);                 \
+                uffd_test_acct.total++;         \
+        } while (0)
+===8<===
+
+So it should look like:
+
+===8<===
+Testing UFFDIO_API (with syscall)... done
+Testing UFFDIO_API (with /dev/userfaultfd)... done
+Testing zeropage on anon... done
+Testing zeropage on shmem... done
+Testing zeropage on shmem-private... done
+Testing zeropage-hugetlb on hugetlb... done
+Testing zeropage-hugetlb on hugetlb-private... done
+Testing pagemap on anon... done
+Testing wp-unpopulated on anon... done
+Testing minor on shmem... done
+Testing minor on hugetlb... done
+Testing minor-wp on shmem... done
+Testing minor-wp on hugetlb... done
+Testing minor-collapse on shmem... done
+Testing sigbus on anon... done
+Testing sigbus on shmem... done
+Testing sigbus on shmem-private... done
+Testing sigbus on hugetlb... done
+Testing sigbus on hugetlb-private... done
+Testing sigbus-wp on anon... done
+Testing sigbus-wp on shmem... done
+Testing sigbus-wp on shmem-private... done
+Testing sigbus-wp on hugetlb... done
+Testing sigbus-wp on hugetlb-private... done
+Testing events on anon... done
+Testing events on shmem... done
+Testing events on shmem-private... done
+Testing events on hugetlb... done
+Testing events on hugetlb-private... done
+Testing events-wp on anon... done
+Testing events-wp on shmem... done
+Testing events-wp on shmem-private... done
+Testing events-wp on hugetlb... done
+Testing events-wp on hugetlb-private... done
+Userfaults unit tests: pass=34, skip=0, fail=0 (total=34)
+===8<===
+
 -- 
-2.40.0
+Peter Xu
 
