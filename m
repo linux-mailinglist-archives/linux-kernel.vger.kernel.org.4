@@ -2,92 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDE66D1461
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163D06D145C
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjCaAuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 20:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjCaAue (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229826AbjCaAue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 30 Mar 2023 20:50:34 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECF410402;
-        Thu, 30 Mar 2023 17:50:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rYjxplCtfMbIi/IGTqusLvoyxMJu8ljmhg5x/8VsxJk=; b=vwA7Z7yaE4d/xObNIoFTAXyoH7
-        xuafAfSSueMv7XI0Xv7wTUNirC9xx772GjzqXymDGkqVAHA1diF4Rpt7KeVWRg3yunNiDlxRAyT9A
-        ZPMcA+a5PgfUDG1Mzaji0s06SxAO7+BjVXLK3UcTH26lZ9Diq6u0yk+b8P1Gsm8a/oCywLj0MMzrU
-        bzBYck+zRzsrQhYfK6Q7i6H7grFFX2Z45TBNdccLx/SQg56N0lqeedp+bjEvREjSTWGGDI+qEzuyA
-        SwhdFhciD4/1C/qQSbxNGCflFbtnm3pLd0VEJUncRt7JKD+bR1Iho+u/bmyCAcppB1Jk+wqwPJk8H
-        LBHltCPA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pi2xg-00AwVc-Ov; Fri, 31 Mar 2023 00:49:48 +0000
-Date:   Fri, 31 Mar 2023 01:49:48 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Dai <davidai@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        kernel-team@android.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
-Message-ID: <ZCYuLPlEFUnxPm4A@casper.infradead.org>
-References: <20230330224348.1006691-1-davidai@google.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229812AbjCaAuc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Mar 2023 20:50:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EA311EB9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:50:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 306F1B82B0C
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C5D58C4339B;
+        Fri, 31 Mar 2023 00:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680223817;
+        bh=5R/8vqj7X/4FXlzrWJR/6Vkxkbq4c9el6EjT8HnT6/I=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WMZWFHNBGy7Pq8jwg/1U6n36kRBEeNw3F61mPelbSHNxQf41e16ToJ3GWrL0H/ClE
+         vTM13U8hNuRIZdBXYin1eGZ6mU0VBy+9R1bCKg0R+y7oEKv8sKV2r5Xj/MJSRJ5HJO
+         NQSU1fip5CTBkkL2B8+bKAuClRnNvD48HsGQ8n9Yv1YZdO922zqYAVRG+fFfs3+vEA
+         Dxle5vhzF/fpI5j2L+aAErHKE+zgLK+ryHByHWXRRnl01jBI98k6a9dW2OpZfd4zp1
+         /TswbOwFCpUd+FyjjFk+zfnHoOlgEWSknxEbo8iKHeH6t4HveWSl3oqjgMyKXNeSDV
+         CvR4sC4JN6OQw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A6761E49FA7;
+        Fri, 31 Mar 2023 00:50:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330224348.1006691-1-davidai@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v1] RISC-V: convert new selectors of RISCV_ALTERNATIVE to
+ dependencies
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <168022381767.20027.13723928750136260683.git-patchwork-notify@kernel.org>
+Date:   Fri, 31 Mar 2023 00:50:17 +0000
+References: <20230324121240.3594777-1-conor.dooley@microchip.com>
+In-Reply-To: <20230324121240.3594777-1-conor.dooley@microchip.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        conor@kernel.org, ajones@ventanamicro.com, Jason@zx2c4.com,
+        apatel@ventanamicro.com, heiko.stuebner@vrull.eu,
+        jszhang@kernel.org, linux-kernel@vger.kernel.org,
+        paul.walmsley@sifive.com
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
-> Hi,
+Hello:
+
+This patch was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
+
+On Fri, 24 Mar 2023 12:12:41 +0000 you wrote:
+> for-next contains two additional extensions that select
+> RISCV_ALTERNATIVE. RISCV_ALTERNATIVE no longer needs to be selected by
+> individual config options as it is now selected for !XIP_KERNEL builds
+> by the top level RISCV option.
+> These extensions rely on the alternative framework, so convert the
+> "select"s to "depends on"s instead.
 > 
-> This patch series is a continuation of the talk Saravana gave at LPC 2022
-> titled "CPUfreq/sched and VM guest workload problems" [1][2][3]. The gist
-> of the talk is that workloads running in a guest VM get terrible task
-> placement and DVFS behavior when compared to running the same workload in
+> [...]
 
-DVFS?  Some new filesystem, perhaps?
+Here is the summary with links:
+  - [v1] RISC-V: convert new selectors of RISCV_ALTERNATIVE to dependencies
+    https://git.kernel.org/riscv/c/d34a6b715a23
 
-> the host. Effectively, no EAS for threads inside VMs. This would make power
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-EAS?
 
-Two unfamiliar and undefined acronyms in your opening paragraph.
-You're not making me want to read the rest of your opus.
