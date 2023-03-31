@@ -2,85 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC8F6D296E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B863A6D2970
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbjCaU2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
+        id S231821AbjCaU33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCaU2A (ORCPT
+        with ESMTP id S229529AbjCaU31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:28:00 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78314B76C;
-        Fri, 31 Mar 2023 13:27:59 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id t10so94193103edd.12;
-        Fri, 31 Mar 2023 13:27:59 -0700 (PDT)
+        Fri, 31 Mar 2023 16:29:27 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9759DB76E
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:29:26 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id dc30so19691840vsb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:29:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680294478;
+        d=chromium.org; s=google; t=1680294565;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GK0MF0uNmzEytcPCm/B24vsna4+KtlPH2hXHihrk2Pg=;
-        b=a/Ja9f9xnk268bxONMh+OrG/q2neNdI+XZOeSE0+gdJLLPyDUH7YsRtBloLv7Tx9Lx
-         2djuie1urUE8cShkZloYXQjcgj99w0IxdWx6FkeISv+u+Ha1n6hUOk15wyK8p2snyqcw
-         fikUhuKOMKa5WgA4BaKYp70euRK7kdjWxVyAuwEhLiJEmNv2fqZfD1RoTUCY5TwE9A29
-         gfgkovrzvAvyS1CDUPEG43I6Hwngd15jU5eDD3DKPe1rlro5tvYt5jUY5Nam5MQYpvGL
-         fROJ3HiGFUgcXzuoeFBPXAkV9d0ZdoTjeE77LprD3k1S96+wHJssIUgoAyqS4y268JCP
-         8uJw==
+        bh=NgY7ioG8j1aHH/GlwYCmuWvPm8w3+ppWkBC1qAdYysc=;
+        b=YX/bRjznJ8xD5/mresCU7N/d7uXrhY+Hsb3XEYAwhTMnItg8/QlitFXqoi+ZR+iwa6
+         xadNEXj7hI0PDvQDcSaZyCnz9iTK1h2Pya+3RiE79EMgjCuUpG6meWWtcWilcDpy5jwf
+         PlsTDSWcHS4oPM46X+COaHpr+wUuGTe9z25C8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680294478;
+        d=1e100.net; s=20210112; t=1680294565;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GK0MF0uNmzEytcPCm/B24vsna4+KtlPH2hXHihrk2Pg=;
-        b=R2oiH3muFMo63MgBWfPi60L7pHdgyZoj2nPKQpZjljWaanAQYGXfWdViAu0/JmvMq7
-         40TS8OojVXvrmHgHw03xYl5UceByIDx5xzjqA09+hpP6qifiHje2ZjJr/WecR695ZVdg
-         9Ij6iTYB5l0IexHqWLgsC1c5tUh1w2w1Tnacyg2GG5/odexM8pcmz8wDjQ/1/byM47aR
-         QmXg2JgNOR74Hca/VQPsiJ3w0G79JRH/X8EWWdoku9uE+oLKMUmN+/0YJcw5ywrMv7Y4
-         GF5er0LV79u3WphQzhird8IiLwReymku8THaQHysByRPw9ro4dFWiB1oKgRrJpHhJqYJ
-         Tn0A==
-X-Gm-Message-State: AAQBX9dv2aGL6HeC+yoNLVP8B2faIhTa/Q8VlaiNhK8ap4vFgfMGfhqU
-        Bh3S4YdTb0G/NCfjNEartVTz2gwUntyCg5WwO1U=
-X-Google-Smtp-Source: AKy350aujevccavshd57e5DTjfc6arS/wKqQ78BHDMvmLt/9c+KO7t8cHimGhGNrYQFNiE3Yn8wTcaUYy+D9jbsyOvQ=
-X-Received: by 2002:a50:d58c:0:b0:502:719e:e7e9 with SMTP id
- v12-20020a50d58c000000b00502719ee7e9mr3286257edi.1.1680294477852; Fri, 31 Mar
- 2023 13:27:57 -0700 (PDT)
+        bh=NgY7ioG8j1aHH/GlwYCmuWvPm8w3+ppWkBC1qAdYysc=;
+        b=WPBADGYtdSxSxEz9bqkdMsHb4Zrbv0CHsf+UdJkWUXO5gHYcGGgmVguvAk4eTQPd1D
+         9LyRuidc6rKHjIAtkyaysDnOqcNhg6HGtRjbrMK9wjsysIejcOlf1FUBQVsLTybgS3TT
+         AnI9MLTnmApAnCBehqTTwAdBUtManXGv6r/bYu4gSkm+jFqGAUaVygtZxWt1k7WO9otI
+         TrXHs3oFfETK4w8+Gyx+Myp6Ybu0JoMrSVKQZWSLCBSEsUaD3zsV8SyRaO6jE6//Wtoh
+         XntjKVTkDQdLhEI5G0wrdKlTK4kh7YJ//SxBU3+zPlDGE2qEZL7Sqz4rUYA1ShbHzcEq
+         g6Yg==
+X-Gm-Message-State: AAQBX9dH40NTUc4D7COjB4biFYzU2vHelKNypurlkPVj6ElVkvZUG2ox
+        2mAS90i4Ixm0AJC95qx+AIeAKOr6hf89oC5I5hc=
+X-Google-Smtp-Source: AKy350bCRWmf8u+p0I1BinTtQiFjdPEvzTszRoEHOca7TzaVCrZgITG40IGyReCVQEjMATq8bjcLpQ==
+X-Received: by 2002:a67:f5cd:0:b0:416:adb3:5caf with SMTP id t13-20020a67f5cd000000b00416adb35cafmr10477511vso.28.1680294564749;
+        Fri, 31 Mar 2023 13:29:24 -0700 (PDT)
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
+        by smtp.gmail.com with ESMTPSA id t17-20020ab04ad1000000b006902fab627bsm620088uae.24.2023.03.31.13.29.23
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 13:29:23 -0700 (PDT)
+Received: by mail-ua1-f50.google.com with SMTP id g9so16958678uam.9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:29:23 -0700 (PDT)
+X-Received: by 2002:ab0:318c:0:b0:765:c225:c914 with SMTP id
+ d12-20020ab0318c000000b00765c225c914mr8048524uan.1.1680294563053; Fri, 31 Mar
+ 2023 13:29:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230316170149.4106586-1-jolsa@kernel.org> <ZBNTMZjEoETU9d8N@casper.infradead.org>
- <ZBV3beyxYhKv/kMp@krava> <ZBXV3crf/wX5D9lo@casper.infradead.org>
- <ZBsihOYrMCILT2cI@kernel.org> <CAEf4BzakHh3qm2JBsWE8qnMmZMeM7w5vZGneKAsLM_vktPbc9g@mail.gmail.com>
- <ZCcoLcncAVeKOZRL@casper.infradead.org>
-In-Reply-To: <ZCcoLcncAVeKOZRL@casper.infradead.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 31 Mar 2023 13:27:45 -0700
-Message-ID: <CAEf4Bzbb-NfyXjvkPSGq_akSD4zwvwiVETaJuo2Gu_T+_6bStA@mail.gmail.com>
-Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>,
-        Dave Chinner <david@fromorbit.com>
+References: <20230331030204.1179524-1-treapking@chromium.org>
+In-Reply-To: <20230331030204.1179524-1-treapking@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 31 Mar 2023 13:29:11 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XdthxVh=wTR5hLj3sy=X__nYQge5=SBXB=eAENe0bd1g@mail.gmail.com>
+Message-ID: <CAD=FV=XdthxVh=wTR5hLj3sy=X__nYQge5=SBXB=eAENe0bd1g@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: ps8640: Use constant sleep time for polling hpd
+To:     Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,35 +83,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 11:36=E2=80=AFAM Matthew Wilcox <willy@infradead.or=
-g> wrote:
->
-> On Fri, Mar 31, 2023 at 11:19:45AM -0700, Andrii Nakryiko wrote:
-> > On Wed, Mar 22, 2023 at 8:45=E2=80=AFAM Arnaldo Carvalho de Melo
-> > <acme@kernel.org> wrote:
-> > > Having said that, it seems there will be no extra memory overhead at
-> > > least for a fedora:36 x86_64 kernel:
-> >
-> > Makes sense to me as well. Whatever the solution, as long as it's
-> > usable from NMI contexts would be fine for the purposes of fetching
-> > build ID. It would be good to hear from folks that are opposing adding
-> > a pointer field to struct file whether they prefer this way instead?
->
-> Still no.  While it may not take up any room right now, this will
-> surely not be the last thing added to struct file.  When something
-> which is genuinely useful needs to be added, that person should
-> not have to sort out your mess first,
+Hi,
 
-So I assume you are talking about adding a pointer field to the struct
-file, right? What about the alternative proposed by Arnaldo to have a
-struct exec_file that extends a struct file?
-
+On Thu, Mar 30, 2023 at 8:02=E2=80=AFPM Pin-yen Lin <treapking@chromium.org=
+> wrote:
 >
-> NAK now, NAK tomorrow, NAK forever.  Al told you how you could do it
-> without trampling on core data structures.
+> The default hpd_wait_us in panel_edp.c is 2 seconds. This makes the
+> sleep time in the polling of _ps8640_wait_hpd_asserted become 200ms.
+> Change it to a constant 20ms to speed up the function.
 
-As I replied to Al, any solution that will have a lookup table on the
-side isn't compatible with usage from NMI context due to locking. And
-lots of tracing use cases are based on perf counters which are handled
-in NMI context. And that's besides all the complexities with
-right-sizing hash maps (if hashmaps are to be used).
+Ah, I see why I never ran into this. All the panels I worked with
+specified "hpd_absent" of 200 and thus I've always been using 20.
+
+
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> ---
+>
+>  drivers/gpu/drm/bridge/parade-ps8640.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bri=
+dge/parade-ps8640.c
+> index b823e55650b1..c3eb45179405 100644
+> --- a/drivers/gpu/drm/bridge/parade-ps8640.c
+> +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+> @@ -184,7 +184,7 @@ static int _ps8640_wait_hpd_asserted(struct ps8640 *p=
+s_bridge, unsigned long wai
+>          * actually connected to GPIO9).
+>          */
+>         ret =3D regmap_read_poll_timeout(map, PAGE2_GPIO_H, status,
+> -                                      status & PS_GPIO9, wait_us / 10, w=
+ait_us);
+> +                                      status & PS_GPIO9, 20000, wait_us)=
+;
+
+I'd have been tempted to go even lower at 10ms. Waiting for HPD isn't
+something that we do all the time during a normal running system and
+thus it's not something we have to optimize every last bit of power
+out of. The user would generally rather have the system boot up or
+switch modes 10ms faster. ;-)
+
+In any case, either at 10ms or 20ms:
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+-Doug
