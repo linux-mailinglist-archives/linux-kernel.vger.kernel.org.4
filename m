@@ -2,32 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48AD66D2A5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092856D2A5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjCaVxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 17:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
+        id S233159AbjCaVxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 17:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbjCaVxC (ORCPT
+        with ESMTP id S232891AbjCaVxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 17:53:02 -0400
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E58219A9
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:52:34 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 21:51:35 +0000
+        Fri, 31 Mar 2023 17:53:14 -0400
+X-Greylist: delayed 170342 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 31 Mar 2023 14:52:43 PDT
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA80724423;
+        Fri, 31 Mar 2023 14:52:43 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 21:51:54 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680299509; x=1680558709;
-        bh=hROJyTm6NeZLJh+vRRO9kol8Xhevc/WCzv7AS4Ky5PI=;
+        s=protonmail3; t=1680299521; x=1680558721;
+        bh=48jAKPilzkuitHOpMRseX8noVPd4jgmB3N1V/TK7bYo=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=Sn5nYBKD4eegGoUxIP+3J1/1yvip3+a7+UsizNlGLHFjc01CEf209czQb+8GedlKG
-         cBniXokJuBvOCMJlntdiBYTEPRWEHdZbhp2a8PbBYxb7wkv1ezhu+AI/2290vA8ZE5
-         Km/+vS2sKTFvG5fWcBJdaOLLmamgK0a2GhGSkLH8prturH5H/yfc9KcFfqo1BPLeXo
-         f6WJ0ku3qmNl/4GSTMm1s/A/DqusdRUtAMa+aVe4fiU9R75Z91zz7RuO/yJRS2hovq
-         ylSQ99BL8puCfTLoi80axvR49EyZ7r+TgHGOGiFxl5j6VV01tRgSQJwmDhBUpLoYcu
-         BIZ/vS1rKzQUw==
+        b=jClr8rPWbGBFTORnLSJ/PraZHMSDC3kexnNlsGpWfAVKf2Z5udt3ageAGFnGOofoF
+         pglwaPvE+GdtYzoKSHuk3TI6aGYMcDk8CjBX4tq2RFjV28bg/YlMcJDo9DEvo2vU7P
+         KMy/P3q58JWbiY/mwv14rf39GT46eKmn0qvPb0N7vu2Lqee5XipuGxxFAlpccFX+Cp
+         6o21a5pFPWIluYxMpocwLogoLEPbViZXRraBSc57/+L4P7D7uiriN6ZqXe3ZtB6oql
+         bwnwQl0u0o2Fac14+YMuRbtgZlUIP2ppR+oDacgj076SKk7QAr5d06whfK/dlH4HCZ
+         U+0guVEKmqQdA==
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -37,10 +38,10 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
 From:   y86-dev@protonmail.com
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Alice Ryhl <aliceryhl@google.com>
-Subject: [PATCH v4 01/15] rust: enable the `pin_macro` feature
-Message-ID: <20230331215053.585759-2-y86-dev@protonmail.com>
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>
+Subject: [PATCH v4 02/15] rust: macros: add `quote!` macro
+Message-ID: <20230331215053.585759-3-y86-dev@protonmail.com>
 In-Reply-To: <20230331215053.585759-1-y86-dev@protonmail.com>
 References: <20230331215053.585759-1-y86-dev@protonmail.com>
 Feedback-ID: 40624463:user:proton
@@ -57,31 +58,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benno Lossin <y86-dev@protonmail.com>
+From: Gary Guo <gary@garyguo.net>
 
-This feature enables the use of the `pin!` macro for the `stack_pin_init!`
-macro. This feature is already stabilized in Rust version 1.68.
+Add the `quote!` macro for creating `TokenStream`s directly via the
+given Rust tokens. It also supports repetitions using iterators.
 
+It will be used by the pin-init API proc-macros to generate code.
+
+Signed-off-by: Gary Guo <gary@garyguo.net>
 Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-Cc: Gary Guo <gary@garyguo.net>
-Cc: Andreas Hindborg <a.hindborg@samsung.com>
 Cc: Alice Ryhl <aliceryhl@google.com>
+Cc: Andreas Hindborg <a.hindborg@samsung.com>
 ---
- rust/kernel/lib.rs | 1 +
- 1 file changed, 1 insertion(+)
+ rust/macros/lib.rs   |   2 +
+ rust/macros/quote.rs | 145 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 147 insertions(+)
+ create mode 100644 rust/macros/quote.rs
 
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 223564f9f0cc..4317b6d5f50b 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -17,6 +17,7 @@
- #![feature(core_ffi_c)]
- #![feature(dispatch_from_dyn)]
- #![feature(generic_associated_types)]
-+#![feature(pin_macro)]
- #![feature(receiver_trait)]
- #![feature(unsize)]
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index c1d385e345b9..82b520f024dd 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -2,6 +2,8 @@
 
+ //! Crate for all kernel procedural macros.
+
++#[macro_use]
++mod quote;
+ mod concat_idents;
+ mod helpers;
+ mod module;
+diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
+new file mode 100644
+index 000000000000..94a6277182ee
+--- /dev/null
++++ b/rust/macros/quote.rs
+@@ -0,0 +1,145 @@
++// SPDX-License-Identifier: Apache-2.0 OR MIT
++
++use proc_macro::{TokenStream, TokenTree};
++
++pub(crate) trait ToTokens {
++    fn to_tokens(&self, tokens: &mut TokenStream);
++}
++
++impl<T: ToTokens> ToTokens for Option<T> {
++    fn to_tokens(&self, tokens: &mut TokenStream) {
++        if let Some(v) =3D self {
++            v.to_tokens(tokens);
++        }
++    }
++}
++
++impl ToTokens for proc_macro::Group {
++    fn to_tokens(&self, tokens: &mut TokenStream) {
++        tokens.extend([TokenTree::from(self.clone())]);
++    }
++}
++
++impl ToTokens for TokenTree {
++    fn to_tokens(&self, tokens: &mut TokenStream) {
++        tokens.extend([self.clone()]);
++    }
++}
++
++impl ToTokens for TokenStream {
++    fn to_tokens(&self, tokens: &mut TokenStream) {
++        tokens.extend(self.clone());
++    }
++}
++
++/// Converts tokens into [`proc_macro::TokenStream`] and performs variable=
+ interpolations with
++/// the given span.
++///
++/// This is a similar to the
++/// [`quote_spanned!`](https://docs.rs/quote/latest/quote/macro.quote_span=
+ned.html) macro from the
++/// `quote` crate but provides only just enough functionality needed by th=
+e current `macros` crate.
++#[allow(unused_macros)]
++macro_rules! quote_spanned {
++    ($span:expr =3D> $($tt:tt)*) =3D> {
++    #[allow(clippy::vec_init_then_push)]
++    {
++        let mut tokens =3D ::std::vec::Vec::new();
++        let span =3D $span;
++        quote_spanned!(@proc tokens span $($tt)*);
++        ::proc_macro::TokenStream::from_iter(tokens)
++    }};
++    (@proc $v:ident $span:ident) =3D> {};
++    (@proc $v:ident $span:ident #$id:ident $($tt:tt)*) =3D> {
++        let mut ts =3D ::proc_macro::TokenStream::new();
++        $crate::quote::ToTokens::to_tokens(&$id, &mut ts);
++        $v.extend(ts);
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident #(#$id:ident)* $($tt:tt)*) =3D> {
++        for token in $id {
++            let mut ts =3D ::proc_macro::TokenStream::new();
++            $crate::quote::ToTokens::to_tokens(&token, &mut ts);
++            $v.extend(ts);
++        }
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident ( $($inner:tt)* ) $($tt:tt)*) =3D> {
++        let mut tokens =3D ::std::vec::Vec::new();
++        quote_spanned!(@proc tokens $span $($inner)*);
++        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
++            ::proc_macro::Delimiter::Parenthesis,
++            ::proc_macro::TokenStream::from_iter(tokens)
++        )));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident [ $($inner:tt)* ] $($tt:tt)*) =3D> {
++        let mut tokens =3D ::std::vec::Vec::new();
++        quote_spanned!(@proc tokens $span $($inner)*);
++        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
++            ::proc_macro::Delimiter::Bracket,
++            ::proc_macro::TokenStream::from_iter(tokens)
++        )));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident { $($inner:tt)* } $($tt:tt)*) =3D> {
++        let mut tokens =3D ::std::vec::Vec::new();
++        quote_spanned!(@proc tokens $span $($inner)*);
++        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
++            ::proc_macro::Delimiter::Brace,
++            ::proc_macro::TokenStream::from_iter(tokens)
++        )));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident :: $($tt:tt)*) =3D> {
++        $v.push(::proc_macro::TokenTree::Punct(
++                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Joint=
+)
++        ));
++        $v.push(::proc_macro::TokenTree::Punct(
++                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone=
+)
++        ));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident : $($tt:tt)*) =3D> {
++        $v.push(::proc_macro::TokenTree::Punct(
++                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone=
+)
++        ));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident , $($tt:tt)*) =3D> {
++        $v.push(::proc_macro::TokenTree::Punct(
++                ::proc_macro::Punct::new(',', ::proc_macro::Spacing::Alone=
+)
++        ));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident @ $($tt:tt)*) =3D> {
++        $v.push(::proc_macro::TokenTree::Punct(
++                ::proc_macro::Punct::new('@', ::proc_macro::Spacing::Alone=
+)
++        ));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident ! $($tt:tt)*) =3D> {
++        $v.push(::proc_macro::TokenTree::Punct(
++                ::proc_macro::Punct::new('!', ::proc_macro::Spacing::Alone=
+)
++        ));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident $id:ident $($tt:tt)*) =3D> {
++        $v.push(::proc_macro::TokenTree::Ident(::proc_macro::Ident::new(st=
+ringify!($id), $span)));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++}
++
++/// Converts tokens into [`proc_macro::TokenStream`] and performs variable=
+ interpolations with
++/// mixed site span ([`Span::mixed_site()`]).
++///
++/// This is a similar to the [`quote!`](https://docs.rs/quote/latest/quote=
+/macro.quote.html) macro
++/// from the `quote` crate but provides only just enough functionality nee=
+ded by the current
++/// `macros` crate.
++///
++/// [`Span::mixed_site()`]: https://doc.rust-lang.org/proc_macro/struct.Sp=
+an.html#method.mixed_site
++#[allow(unused_macros)]
++macro_rules! quote {
++    ($($tt:tt)*) =3D> {
++        quote_spanned!(::proc_macro::Span::mixed_site() =3D> $($tt)*)
++    }
++}
 --
 2.39.2
 
