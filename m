@@ -2,122 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D748F6D22EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950026D22EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjCaOs2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 10:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S232598AbjCaOso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231880AbjCaOs0 (ORCPT
+        with ESMTP id S231880AbjCaOsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:48:26 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EAA1D2C0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:48:25 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id ew6so90545305edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:48:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680274104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x9yfdG+Ykiax5icMw+SbLxlU8RHfzLBC3pI270DeyJs=;
-        b=srn63yGgm9TOTumcpf5az0eecczkR0kRXKsgWOAjNaYjjFD1YM/ewNtH11HW71J6me
-         CEXjYm+pPwdjITLc8YVQfJ1KGRUNmhNff/5PRbsXMzYqekaRoPmVF9NEL77hp5g4r69o
-         ZN3YKoJ1MovmDI/PBEoUiNtSJD2VX4uk1EHxIs3tFAx7FbfgAC7rPEVPj1l+PUkTNJQu
-         7vjRZR6qgGA8da6IQUsAnue+w9SOyu0meinbS5P6pRcvSiv1MvsDwGxLuzMr8MqjzIOp
-         iohAPAch8s3vgKDROsaYMpbg0aItgYsyMfSda2v0CR8dPCG+TCzW3LF2uKXC3iX67Ntq
-         yhGw==
-X-Gm-Message-State: AAQBX9dBlgHNbsZEq9ylMac173afBuvWi0mIB2SxTVRlrFdiITlPBENE
-        Ka21ERoo9jFPTkAADsGpSGvtYvc0YzuBRR1R8xCpXQjk/kY=
-X-Google-Smtp-Source: AKy350bCU+sGcrNd9vvwbp+HE0xJcJHbe8TMLxZqB8KxEZmMuyFDg+KRYMbAlunUp9JKPfiikk6v5gBjz9f1HXaszE4=
-X-Received: by 2002:a50:c34f:0:b0:4fa:71a2:982b with SMTP id
- q15-20020a50c34f000000b004fa71a2982bmr5365918edb.0.1680274104246; Fri, 31 Mar
- 2023 07:48:24 -0700 (PDT)
+        Fri, 31 Mar 2023 10:48:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81EEB1BF74;
+        Fri, 31 Mar 2023 07:48:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 013DD62982;
+        Fri, 31 Mar 2023 14:48:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CC4BC433D2;
+        Fri, 31 Mar 2023 14:48:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680274117;
+        bh=5ePi48wbJ5nUNiKpOzeUOhE93WQhUl7OagIaj68RWtc=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=HHoebeHZWshu5IOH6JeTSkEtwzcWHuyhuXAE0iq7Uy9J4iykllymczOrEUbUuvcHd
+         ptBX0AMJIP3FmLGMKyR5n22IE6AUOuYY5iAORKU6sRjALYux0TGNMTGj9d9hOF5BEW
+         vYijLVkJ3X1F2P4MjuzNhvNNvIXO9MaV83kfP1YXysFIocL35rLSDsbfkx/LFetUlE
+         OBm/l9m/uRMCf2aEBV10yheVekV4fyFU/cyAB6u6smC11p2fB449h59E7cdW0MK1Rp
+         xs5GeiM+sIznxPDzGgsaaT0SmyPgT3edrv7xNgk5yB3MGL0NaVAhfzs0ZxZBXS8UhU
+         ydpOfzedLsfew==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230331093318.82288-1-gregkh@linuxfoundation.org> <20230331093318.82288-3-gregkh@linuxfoundation.org>
-In-Reply-To: <20230331093318.82288-3-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 31 Mar 2023 16:48:13 +0200
-Message-ID: <CAJZ5v0jwqGcj8qn7s5R9pTPZ1ndyTixeQ2vps0qzKN1Bcq0CaA@mail.gmail.com>
-Subject: Re: [PATCH 3/7] driver core: class: remove subsystem private pointer
- from struct class
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] wifi: rndis_wlan: Replace fake flex-array with
+ flexible-array member
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <ZBtIbU77L9eXqa4j@work>
+References: <ZBtIbU77L9eXqa4j@work>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Jussi Kivilinna <jussi.kivilinna@iki.fi>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <168027411323.32751.4098580285097268358.kvalo@kernel.org>
+Date:   Fri, 31 Mar 2023 14:48:34 +0000 (UTC)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 11:33 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> Now that the last users of the subsystem private pointer in struct class
-> are gone, the pointer can be removed, as no one is using it.  One step
-> closer to allowing struct class to be const and moved into read-only
-> memory.
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+"Gustavo A. R. Silva" <gustavoars@kernel.org> wrote:
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+> Zero-length arrays as fake flexible arrays are deprecated and we are
+> moving towards adopting C99 flexible-array members instead.
+> 
+> Address the following warning found with GCC-13 and
+> -fstrict-flex-array=3 enabled:
+> drivers/net/wireless/rndis_wlan.c:2902:23: warning: array subscript 0 is outside array bounds of ‘struct ndis_80211_auth_request[0]’ [-Warray-bounds=]
+> 
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
+> 
+> Link: https://github.com/KSPP/linux/issues/21
+> Link: https://github.com/KSPP/linux/issues/274
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-> ---
->  drivers/base/class.c         | 4 ----
->  include/linux/device/class.h | 2 --
->  2 files changed, 6 deletions(-)
->
-> diff --git a/drivers/base/class.c b/drivers/base/class.c
-> index a8a1bf976290..fcfb295363cc 100644
-> --- a/drivers/base/class.c
-> +++ b/drivers/base/class.c
-> @@ -97,8 +97,6 @@ static void class_release(struct kobject *kobj)
->
->         pr_debug("class '%s': release.\n", class->name);
->
-> -       class->p = NULL;
-> -
->         if (class->class_release)
->                 class->class_release(class);
->         else
-> @@ -206,7 +204,6 @@ int class_register(struct class *cls)
->         cp->subsys.kobj.kset = class_kset;
->         cp->subsys.kobj.ktype = &class_ktype;
->         cp->class = cls;
-> -       cls->p = cp;
->
->         error = kset_register(&cp->subsys);
->         if (error)
-> @@ -222,7 +219,6 @@ int class_register(struct class *cls)
->
->  err_out:
->         kfree(cp);
-> -       cls->p = NULL;
->         return error;
->  }
->  EXPORT_SYMBOL_GPL(class_register);
-> diff --git a/include/linux/device/class.h b/include/linux/device/class.h
-> index 9cb5db0588c8..f7aad64e256a 100644
-> --- a/include/linux/device/class.h
-> +++ b/include/linux/device/class.h
-> @@ -71,8 +71,6 @@ struct class {
->         void (*get_ownership)(const struct device *dev, kuid_t *uid, kgid_t *gid);
->
->         const struct dev_pm_ops *pm;
-> -
-> -       struct subsys_private *p;
->  };
->
->  struct class_dev_iter {
-> --
-> 2.40.0
->
+Patch applied to wireless-next.git, thanks.
+
+06dabcccc08b wifi: rndis_wlan: Replace fake flex-array with flexible-array member
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/ZBtIbU77L9eXqa4j@work/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
