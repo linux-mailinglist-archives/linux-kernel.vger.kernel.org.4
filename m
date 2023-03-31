@@ -2,144 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D0B6D20A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775286D20AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbjCaMnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        id S231209AbjCaMoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232516AbjCaMmw (ORCPT
+        with ESMTP id S230249AbjCaMoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:42:52 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574311FD2E;
-        Fri, 31 Mar 2023 05:42:26 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id br6so28661621lfb.11;
-        Fri, 31 Mar 2023 05:42:26 -0700 (PDT)
+        Fri, 31 Mar 2023 08:44:21 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD4E191E0
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:43:55 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id r187so27223215ybr.6
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:43:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680266541;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HNEmxowoywq3WMNEF0IOfpwPS+SU2BJthzKtRZ1+ZJc=;
-        b=dQUARDfs3jl+z/BT7IHle4vTVbF2FhuzOi9BQFcjrtu7ddIt2jzfSlzeOW8jAoUAE6
-         qhxdYgpx4OlPYoOuH0hxoioBexavXVYBnuIz9LMLsoDrkh/I2NqxdU4MBH2zKVqlEylo
-         ZiqfogQ+wJQozKjPle4sUJgcG2So3N94/VcnB4SaUugWHqbQQkuyYyyCC4AEUxLAbU8c
-         tav+Wbkt65zqCXe5MCVPuiaBxRKLj0xXM/le3HpGzGX2lzF8Af7w88NbzRtsXxine8GB
-         B9F7I/+H/IIfZcuzDN8oR+MguleG2Lez789pUZTWyjMEi8VLWn2zzl2amtNGCCdo+eWe
-         kRWA==
+        d=linaro.org; s=google; t=1680266626;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d8wUcVZufaGcIMkEEh5Kyyy9hNa4NEI3tlGV4NFbfOA=;
+        b=dOYhn1Pv4R1vbnTkOa99isSC9HUFcbFyWXhXVBsjf5bUyLWeOxyByjakyAilvTZTC1
+         5JSKVUNDPGvDSRB03FKdq4BZK/hztXF7/qdghNdiQ6noa3NYPLm+PbAt6P5cNtYGcbof
+         PCT2vUMAUBKwSZf7bxmL1he8vAGPYTHj8LZWlia4SfQkKiFDrbNR9lOPGDdQRpYAlp9e
+         Eo6Bd4Pc1uCZzgcg4lPPOYwZ0KD0HExGiHadyGawrhpCgq5zbM8iRHI4uainN3m6MDSH
+         +fLw7P1golGEwTXGc2TmFZFyJ5vjVRTrYDJgXEgQnctl5Hc1z57/tXXvCIv9gk9P6C3c
+         8/ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680266541;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HNEmxowoywq3WMNEF0IOfpwPS+SU2BJthzKtRZ1+ZJc=;
-        b=vU+hntB6AM6f7LiokQhWw2GAfvPOr9w/AJyuba3rptlKThtuVzhdXiIxtVM9dvZQQN
-         hiZSmPybKXPclvtsQkalV39wCC7yHjKXwHvNx1U2KVVmVoGMXZXZIjSu3cRhD7qKvnzE
-         Fv4Ee9JwbQISZ2XOwF/NvobZlBJhIA+AZb9dYi57rwSS03RUZLvGzBj4QVbLyAacz4LT
-         vwq9utpxv5h+E4ZwLPG0haSvNcLf8DQqkKhHDFfiRYkX0rFbtR4AmoET9bnmiTulRgJ6
-         ikSeDdVNPj2KtE4AcM7f7AN9OKMSEgVryOfzrSE9JLNo3YV9QKkgDcv6mYxOWAZV5rxB
-         RjQA==
-X-Gm-Message-State: AAQBX9cyOyG/8nqMVFb2t1zu5ENpkzWf23n2NrTH4dHFGzatDpM11odr
-        GT8fMlCupw+uEkPX3utmJv6C9DzwQxQ=
-X-Google-Smtp-Source: AKy350b7kh9A1nBQyVGjGpe0uzmbYvTMOLpHf+4vRrly5zjXxI+sRyEl3LDXbOmj01a2E3tGPQnaLg==
-X-Received: by 2002:ac2:418a:0:b0:4e8:595c:60f9 with SMTP id z10-20020ac2418a000000b004e8595c60f9mr7123187lfh.32.1680266541301;
-        Fri, 31 Mar 2023 05:42:21 -0700 (PDT)
-Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id f15-20020ac2532f000000b004e887fd71acsm360364lfh.236.2023.03.31.05.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 05:42:20 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 15:42:17 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        linux-iio@vger.kernel.org
-Subject: [PATCH v7 5/5] MAINTAINERS: Add ROHM BU27034
-Message-ID: <eac4b5f7fc8adcaac59ffa73e46cd7bb9c90edfa.1680263956.git.mazziesaccount@gmail.com>
-References: <cover.1680263956.git.mazziesaccount@gmail.com>
+        d=1e100.net; s=20210112; t=1680266626;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d8wUcVZufaGcIMkEEh5Kyyy9hNa4NEI3tlGV4NFbfOA=;
+        b=dNEL9Hdxu1TREuj2ciGUq9Ua+1kxLJd/4C/4+Q0eA/+wFoMwMrNz/8uAmCYPfBinex
+         6YBMeV2PdLZlW5/JeOjmdz4unmMC3GOpnrqrFQwaAIR85/uhqNDrXFc0qeVzJYoyyKu8
+         yf+0284HNU4ijUl0XolCN7S35FyhNyg70xxly5TYOEG6uRniWe5gj2/hyg5+3EqQiDX/
+         UZjGIVQqf37DVmJNkZBtJgkIvHe2H368v6/Cmi/y5LWf8QmT6hMLyMeTO/MWxqOfmaAE
+         vUyWHQuWQT0lyEH2x+KmnOs9EQ3ljqB+rTtwCsBIf8FBwIo4Mgv9l9BfYgylN+rpNIJw
+         q+1g==
+X-Gm-Message-State: AAQBX9dF2AqxoKP8opAkcnXQdcVfcrhPGzPECS4zsIgHWTrlauFsFtZt
+        mwOrOiEAvo/NP+2N/7ZlVCralYfC3LHhDrqO40ahcw==
+X-Google-Smtp-Source: AKy350bFUOgDXgmIhpH3HEs+a3adie/r2r+Fz9iEPH6HVz++8tVbnwb4WPPXtaN83foxwOjKDtGmQsn3jTViuZa3pFs=
+X-Received: by 2002:a25:1185:0:b0:a27:3ecc:ffe7 with SMTP id
+ 127-20020a251185000000b00a273eccffe7mr4970550ybr.3.1680266626404; Fri, 31 Mar
+ 2023 05:43:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="0ifJEDPDGs33PZSK"
-Content-Disposition: inline
-In-Reply-To: <cover.1680263956.git.mazziesaccount@gmail.com>
+References: <20230329202148.71107-1-dennis@kernel.org> <ZCTOMVjW+pnZVGsQ@snowbird>
+In-Reply-To: <ZCTOMVjW+pnZVGsQ@snowbird>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 31 Mar 2023 14:43:10 +0200
+Message-ID: <CAPDyKFrcdJuyA9B-JDReacT2z1ircDoY4oTXZQ8AVFk6UEFYsw@mail.gmail.com>
+Subject: Re: [PATCH v2] mmc: inline the first mmc_scan() on mmc_start_host()
+To:     Dennis Zhou <dennis@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 30 Mar 2023 at 01:48, Dennis Zhou <dennis@kernel.org> wrote:
+>
+> When using dm-verity with a data partition on an emmc device, dm-verity
+> races with the discovery of attached emmc devices. This is because mmc's
+> probing code sets up the host data structure then a work item is
+> scheduled to do discovery afterwards. To prevent this race on init,
+> let's inline the first call to detection, __mm_scan(), and let
+> subsequent detect calls be handled via the workqueue.
 
---0ifJEDPDGs33PZSK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In principle, I don't mind the changes in $subject patch, as long as
+it doesn't hurt the overall initialization/boot time. Especially, we
+may have more than one mmc-slot being used, so this needs to be well
+tested.
 
-Add myself as a maintainer for ROHM BU27034 ALS driver.
+Although, more importantly, I fail to understand how this is going to
+solve the race condition. Any I/O request to an eMMC or SD requires
+the mmc block device driver to be up and running too, which is getting
+probed from a separate module/driver that's not part of mmc_rescan().
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Kind regards
+Uffe
 
----
-Changes
-v2 =3D>
-- No changes
-
-sRFCv1 =3D> v2:
-- Add iio-list
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6ec9326f4ce9..3f13466e50fd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18100,6 +18100,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/iio/light/bh1750.yaml
- F:	drivers/iio/light/bh1750.c
-=20
-+ROHM BU27034 AMBIENT LIGHT SENSOR DRIVER
-+M:	Matti Vaittinen <mazziesaccount@gmail.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Supported
-+F:	drivers/iio/light/rohm-bu27034.c
-+
- ROHM MULTIFUNCTION BD9571MWV-M PMIC DEVICE DRIVERS
- M:	Marek Vasut <marek.vasut+renesas@gmail.com>
- L:	linux-kernel@vger.kernel.org
---=20
-2.39.2
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---0ifJEDPDGs33PZSK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQm1SkACgkQeFA3/03a
-ocVshAgAi6P7MixAh22l7imkshpv0NWnNrkcTh+xlMw1KxeA+eEu/yf/MNhuBVo5
-PshT9QDyBrAnNWvgTzBqUkXaHPygeeX7eST5UehZMWGC78mXMQ3PgL43cTUKWWqi
-1cQebjEVEa1Qk69Ifj7/gXMwPkK151GCFAB1bFQsaUrs3OPDHfJMoPmRkCQZ9geX
-1Zn6Del9mZPx6TYtfjqv7hoGm9ED2ny4AZgaK8lfi6Wb2HQTuDkt+y+wzkymJ3QM
-78fwkYFOS6snhYgoKCBtOt/ZSJ5cBLnRJs0QShYmi44bRWeINvx5x75iNe+TE4jV
-36Dqn1OsdNbmOALstqOJr08WrG2dxg==
-=hCH6
------END PGP SIGNATURE-----
-
---0ifJEDPDGs33PZSK--
+>
+> Signed-off-by: Dennis Zhou <dennis@kernel.org>
+> ---
+> Sigh.. fix missing static declaration.
+>
+>  drivers/mmc/core/core.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
+> index 368f10405e13..fda7ee57dee3 100644
+> --- a/drivers/mmc/core/core.c
+> +++ b/drivers/mmc/core/core.c
+> @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_card *card, sector_t *gpt_sector)
+>  }
+>  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
+>
+> -void mmc_rescan(struct work_struct *work)
+> +static void __mmc_rescan(struct mmc_host *host)
+>  {
+> -       struct mmc_host *host =
+> -               container_of(work, struct mmc_host, detect.work);
+>         int i;
+>
+>         if (host->rescan_disable)
+> @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
+>                 mmc_schedule_delayed_work(&host->detect, HZ);
+>  }
+>
+> +void mmc_rescan(struct work_struct *work)
+> +{
+> +       struct mmc_host *host =
+> +               container_of(work, struct mmc_host, detect.work);
+> +
+> +       __mmc_rescan(host);
+> +}
+> +
+>  void mmc_start_host(struct mmc_host *host)
+>  {
+>         host->f_init = max(min(freqs[0], host->f_max), host->f_min);
+> @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
+>         }
+>
+>         mmc_gpiod_request_cd_irq(host);
+> -       _mmc_detect_change(host, 0, false);
+> +       host->detect_change = 1;
+> +       __mmc_rescan(host);
+>  }
+>
+>  void __mmc_stop_host(struct mmc_host *host)
+> --
+> 2.40.0
+>
