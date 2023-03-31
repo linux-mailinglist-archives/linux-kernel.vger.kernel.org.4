@@ -2,159 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7FA6D1F30
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75CD36D1F36
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbjCaLfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 07:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S231542AbjCaLgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 07:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbjCaLe5 (ORCPT
+        with ESMTP id S229437AbjCaLge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:34:57 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B661EFD8;
-        Fri, 31 Mar 2023 04:34:39 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32VBYXHL081175;
-        Fri, 31 Mar 2023 06:34:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680262473;
-        bh=GvCcYXn6ovoAura2uB/dpDoFgd16j6cQ/c1lMJFYme4=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=AJ10w/SaEiUKg/SVuJPLY4cO9HhIX8CAB/QB3lfUx4SML5yZydsWkeLwOu0jQEYXR
-         OLyHoDd8yKjWvLj0Y+6ILzFCmda05Bsuq+vMWFSJl0ngJ7JgDrZsHNBCtcHce7awsR
-         EU7mIBhB+XaGFP7DbHrzUElKoLyKhv57B5wMNEu4=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32VBYXVj028519
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 31 Mar 2023 06:34:33 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 31
- Mar 2023 06:34:33 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 31 Mar 2023 06:34:32 -0500
-Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32VBYRIv123330;
-        Fri, 31 Mar 2023 06:34:28 -0500
-Message-ID: <cca8cffb-b6f6-2fbb-f7a2-151b4380b2f6@ti.com>
-Date:   Fri, 31 Mar 2023 17:04:27 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [EXTERNAL] Re: [PATCH v5 3/5] soc: ti: pruss: Add
- pruss_cfg_read()/update() API
-Content-Language: en-US
-From:   Md Danish Anwar <a0501179@ti.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <srk@ti.com>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <20230323062451.2925996-1-danishanwar@ti.com>
- <20230323062451.2925996-4-danishanwar@ti.com> <20230327210126.GC3158115@p14s>
- <4e239000-c5f7-a42e-157e-5b668c6b2908@ti.com>
- <CANLsYkxcprFh4SNxb=TkTLT7PNR6=QPFW5HhqPouPP3+oYk7Sg@mail.gmail.com>
- <10ad5344-e8ae-eb8e-eb1e-6431b3e09384@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <10ad5344-e8ae-eb8e-eb1e-6431b3e09384@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 31 Mar 2023 07:36:34 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C74E7;
+        Fri, 31 Mar 2023 04:36:33 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id E6DF75C0101;
+        Fri, 31 Mar 2023 07:36:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 31 Mar 2023 07:36:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680262592; x=1680348992; bh=lA
+        TVIt48Hpo+q3JJzTeR8jiPkek4/jt/yPq+C0ofGOc=; b=qwOPUeI5fevhA8XQSD
+        cyLK+sTtkxX23M69wn8jJd1j5bycqOJ3N68bTC1+LUzAb9nPYwglJFWJs3CRp/B4
+        wG3zDOMBp0yYsmnNz3z1aAXWTzMqvMteifmzgNpSaj8cbYgKoeLkOdIay6carwKM
+        1hTE7Ai0L7938hAZGaGKHKimFUTQQ7M1Ci6bmSiF99A+SrUgkKO8zhyDI1BKBWDA
+        j1plG8fdUB33NdxDeSRaYM8+ntmYOFzX0Aie+06a6MmQFTn7Xl0bNUGbs+IV+t6v
+        kHbreO/5AmGeAPaqA/D/wSQIIEsgUBnJ/hPR7BLQBZxW1CA6/9lTXONsFlkXKkJu
+        ZfjA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680262592; x=1680348992; bh=lATVIt48Hpo+q
+        3JJzTeR8jiPkek4/jt/yPq+C0ofGOc=; b=lC0u06xIA9SXGzlgtSXgNq9N7A9R6
+        ZLflqDYtON3uJPnuT/DmXFmjCniwajtkC+CIL0pscI1A0D2aaxh1UgJzQ+P5E0pg
+        s+jEiDJyKp3lP1ea21OTCmkGboZr+JHsX6UF6JDayIDy4aeORr0ju+q7xeEbF0OH
+        KIBho75TyesT3bEzI608oyD4ksM5DfuUH17++cMGq/OcdibNWyAMEpzGPZlItVtA
+        7RAt5rdaUi21P5aCCN6aeWSQLXPef89hcZg5QxV5l7kSfybHDd1lz7EgrGeDKAAZ
+        ponC0W30tfTnao/RlPzqBpwpB2mYO35Sl1+igfOrN/QPqqQE7+I5NsgzA==
+X-ME-Sender: <xms:wMUmZBKUM4fKUDD_dmcV3zgf7O9E4E30Ev_X4ZeMeiBNdvxHzJnpQg>
+    <xme:wMUmZNJTjEzXziGaE-gBPfXV4Fq9L-ZsNdcO4GCMw-fcoHJqT31xwCjMX4yqQpVBW
+    VBZYOddg-OJsBAHlEI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiuddgfeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:wMUmZJu0BgRw0CZ1EHzbcbVOnDqx-qnJseYrsmlJWDUliKtq-MrGdA>
+    <xmx:wMUmZCaU5eoDjCvY8WCDnKczM1pSv7MhE-B6UkPIQ_pRqjhZhpZVzg>
+    <xmx:wMUmZIb8JQrgHuQzT1pdfMJ8Kii1TCdUwg9s1XlSepSTyHS8wM-avQ>
+    <xmx:wMUmZFKGL_2aPddCKBucqadFd2dWjWfCGVpw71HFrTW33TtxtZyThg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4667FB6008D; Fri, 31 Mar 2023 07:36:32 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
+Mime-Version: 1.0
+Message-Id: <08eace10-3eee-481a-b1b4-de58e94cd828@app.fastmail.com>
+In-Reply-To: <50e932df-cb20-4679-b911-fd9d7f0f2c1d@spud>
+References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <6ca5941a-8803-477d-8b40-17292decc5af@app.fastmail.com>
+ <CA+V-a8tkiDXG37YjFKPxrGoXVQMVBemMdBcfb+uUDzBofOWH_A@mail.gmail.com>
+ <50e932df-cb20-4679-b911-fd9d7f0f2c1d@spud>
+Date:   Fri, 31 Mar 2023 13:36:11 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Conor.Dooley" <conor.dooley@microchip.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        guoren <guoren@kernel.org>,
+        "Andrew Jones" <ajones@ventanamicro.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "Samuel Holland" <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "Biju Das" <biju.das.jz@bp.renesas.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v7 1/6] riscv: mm: dma-noncoherent: Switch using function pointers
+ for cache management
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathieu,
-
-On 31/03/23 15:52, Md Danish Anwar wrote:
-> On 30/03/23 19:51, Mathieu Poirier wrote:
->> On Thu, 30 Mar 2023 at 04:00, Md Danish Anwar <a0501179@ti.com> wrote:
->>>
->>> Hi Mathieu,
->>>
->>> On 28/03/23 02:31, Mathieu Poirier wrote:
->>>> On Thu, Mar 23, 2023 at 11:54:49AM +0530, MD Danish Anwar wrote:
->>>>> From: Suman Anna <s-anna@ti.com>
->>>>>
->>>>> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
->>>>> the PRUSS platform driver to read and program respectively a register
->>>>> within the PRUSS CFG sub-module represented by a syscon driver.
->>>>>
->>>>> These APIs are internal to PRUSS driver. Various useful registers
->>>>> and macros for certain register bit-fields and their values have also
->>>>> been added.
->>>>>
->>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->>>>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
->>>>> ---
->>>>>  drivers/soc/ti/pruss.c |   1 +
->>>>>  drivers/soc/ti/pruss.h | 112 +++++++++++++++++++++++++++++++++++++++++
->>>>>  2 files changed, 113 insertions(+)
->>>>>  create mode 100644 drivers/soc/ti/pruss.h
->>>>>
->>>>
->>>> This patch doesn't compile without warnings.
->>>>
->>>
->>> I checked the warnings. Below are the warnings that I am getting for these patch.
->>>
->>> In file included from drivers/soc/ti/pruss.c:24:
->>> drivers/soc/ti/pruss.h:103:12: warning: ‘pruss_cfg_update’ defined but not used
->>> [-Wunused-function]
->>>   103 | static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
->>>       |            ^~~~~~~~~~~~~~~~
->>> drivers/soc/ti/pruss.h:84:12: warning: ‘pruss_cfg_read’ defined but not used
->>> [-Wunused-function]
->>>    84 | static int pruss_cfg_read(struct pruss *pruss, unsigned int reg,
->>> unsigned int *val)
->>>
->>> These warnings are coming because pruss_cfg_read() / update() APIs are
->>> introduced in this patch but they are used later.
->>>
->>> One way to resolve this warning is to make this API "inline". I compiled after
->>> making these APIs inline, it got compiled without any warnings.
->>>
->>> The other solution is to merge a user API of these APIs in this patch. Patch 4
->>> and 5 introduces some APIs that uses pruss_cfg_read() / update() APIs. If we
->>> squash patch 5 (as patch 5 uses both read() and update() APIs where as patch 4
->>> only uses update() API) with this patch and make it a single patch where
->>> pruss_cfg_read() / update() is introduced as well as used, then this warning
->>> will be resolved.
->>>
+On Fri, Mar 31, 2023, at 12:55, Conor Dooley wrote:
+> On Fri, Mar 31, 2023 at 11:37:30AM +0100, Lad, Prabhakar wrote:
 >>
->> The proper way to do this is to introduce new APIs only when they are needed.
->>
-> 
-> Sure, Mathieu. I will squash this patch with patch 5 ( as it uses both update()
-> and read() APIs) so that these APIs are introduced and used in the same patch.
-> 
+>
+> Does that actually work? I don't think it does.
+> If you try to enable RISCV_ISA_ZICBOM then you won't get
+> RISC_DMA_NONCOHERENT turned on. Run menuconfig and disable support for
+> Renesas, SiFive and T-Head SoCs & you can replicate.
 
-I have sent next revision [v6] of these patch-set addressing your comments.
-Please have a look at that.
+Right, the circular dependency has to be broken in some form.
 
-[v6] https://lore.kernel.org/all/20230331112941.823410-1-danishanwar@ti.com/
+> I think one of RISCV_ISA_ZICBOM and RISCV_DMA_NONCOHERENT should just be
+> dropped, although I don't know which one to pick!
+> Making RISCV_DMA_NONCOHERENT user selectable probably makes the most
+> sense.
 
--- 
-Thanks and Regards,
-Danish.
+That sounds good to me.
+
+    Arnd
