@@ -2,243 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75556D13FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8E16D13FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjCaAXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 20:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
+        id S229552AbjCaAZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 20:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjCaAXh (ORCPT
+        with ESMTP id S229519AbjCaAZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 20:23:37 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A5D12CE6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:23:00 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id c83-20020a6bb356000000b00758333e1ddfso12600303iof.14
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:23:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680222106; x=1682814106;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wU3dsEsxwHYF6HXDRCFRaWfh3xqSaIzoCCqFezx/r6I=;
-        b=7q2aQ+jnF4Qy6O/DaDYpvB65Nu17qj543UCVETLq+V356RXUmez2MUcRQpyZrKPSyG
-         UhcHeFLJTcLJw2T8rizL0hVvaCUTr9MbDozFv2Ag99Oun8HtFdAZOrnlc8QpHaez3BT+
-         gPQT+VC/Px+M20O65yG4/ryLHTkpjWfID4wQbEPoczpCrAzZWTjXcZ78eeBy679Ca3V1
-         SeHUSpSi1Nw42KMClakYMCZnnJZp3LpuDuhq/kPV7UCPSP/XLcDXr+sRfhBGiXr1IW28
-         Ja8jMxHNQofc0i95HYAF4EDT7wNBpT4JQz2z9zgx8hR1d/CX2D+y0NjFR6dGb9o+LcDH
-         /odA==
-X-Gm-Message-State: AAQBX9euY6mMqHjttoC4N+TvQBT+v4j71S3wFGaMz58NtZ6PlG1MXxFQ
-        SKw0xPW3cfm2Qja+ZYEGDfyJ6jvWcvcZtQEEfDKvdechG9kE
-X-Google-Smtp-Source: AKy350brf8se8epDL+qiI1wWlLUR0gu8CIhNfsbUiX07/oxqiaUUVHncBye5KHlQTInZg4TXxXsEp11AGYEbME7A45PwGenmnIFr
+        Thu, 30 Mar 2023 20:25:51 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C80065AD;
+        Thu, 30 Mar 2023 17:25:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pngzy3pQGz4xDp;
+        Fri, 31 Mar 2023 11:25:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680222335;
+        bh=+t4WWqtAkunj96V49dW5QfSiOsouFv3Q+ac0K9FwnvY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=A797uNXg/xIRHsFPfsSHx2yr95ZKhIqi/laAdWlxkBLRboXJwG0hVIWp64+1xa1Qn
+         DT3gPsAMmPOkJlW23Ot6qBynv0D5nwL4PDQjAl0Om1h4dR7ydbhGEgT2iGb+SgfWd5
+         LQVpKbRHV9kyxSjDDsdBFKyiB0fQeIE9f/KKIR/q0FK9oJBHXOSS7mpFJ6GgSh/V4l
+         SwEJ6qGU9jC64vG3IZdjZW0JleBwuBN2lvr8JT38yZup7lWxS1LfnjGtuSpvaxthcJ
+         DnKbu2W2Je7wnvO3kLyT20jNHa/j1pCBLTB14NOu/NmaML4aKNMOvny/exMFsqz+rk
+         I7jxTOBsacURQ==
+Date:   Fri, 31 Mar 2023 11:25:32 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>
+Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>
+Subject: linux-next: manual merge of the drm-msm-lumag tree with the drm-msm
+ tree
+Message-ID: <20230331112532.4727ce04@canb.auug.org.au>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b46:b0:316:fa49:3705 with SMTP id
- f6-20020a056e020b4600b00316fa493705mr13243005ilu.1.1680222106282; Thu, 30 Mar
- 2023 17:21:46 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 17:21:46 -0700
-In-Reply-To: <0000000000006477b305f2b48b58@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c9f2ae05f82731c0@google.com>
-Subject: Re: [syzbot] [bluetooth?] possible deadlock in rfcomm_dlc_exists
-From:   syzbot <syzbot+b69a625d06e8ece26415@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, yangyingliang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: multipart/signed; boundary="Sig_/7GkwabCTX85/Yx+ekRuG7qR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+--Sig_/7GkwabCTX85/Yx+ekRuG7qR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    a6d9e3034536 Add linux-next specific files for 20230330
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=152adc3ec80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aceb117f7924508e
-dashboard link: https://syzkaller.appspot.com/bug?extid=b69a625d06e8ece26415
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=153acb85c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=179d1ed1c80000
+Hi all,
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ec1f900ea929/disk-a6d9e303.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fabbf89c0d22/vmlinux-a6d9e303.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1ed05d6192fa/bzImage-a6d9e303.xz
+Today's linux-next merge of the drm-msm-lumag tree got a conflict in:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b69a625d06e8ece26415@syzkaller.appspotmail.com
+  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.3.0-rc4-next-20230330-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor363/5115 is trying to acquire lock:
-ffffffff8e357cc8 (rfcomm_mutex){+.+.}-{3:3}, at: rfcomm_dlc_exists+0x58/0x190 net/bluetooth/rfcomm/core.c:546
+between commit:
 
-but task is already holding lock:
-ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_create_dev net/bluetooth/rfcomm/tty.c:484 [inline]
-ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_dev_ioctl+0x8a2/0x1c00 net/bluetooth/rfcomm/tty.c:587
+  52ff0d3073d2 ("drm/msm/atomic: Switch to vblank_start helper")
 
-which lock already depends on the new lock.
+from the drm-msm tree and commit:
 
+  f4d83f101233 ("drm/msm/dpu: Remove empty prepare_commit() function")
 
-the existing dependency chain (in reverse order) is:
+from the drm-msm-lumag tree.
 
--> #3 (rfcomm_ioctl_mutex){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
-       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
-       rfcomm_create_dev net/bluetooth/rfcomm/tty.c:484 [inline]
-       rfcomm_dev_ioctl+0x8a2/0x1c00 net/bluetooth/rfcomm/tty.c:587
-       rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
-       sock_do_ioctl+0xcc/0x230 net/socket.c:1199
-       sock_ioctl+0x1f8/0x680 net/socket.c:1316
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
--> #2 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}:
-       lock_sock_nested+0x3a/0xf0 net/core/sock.c:3474
-       lock_sock include/net/sock.h:1697 [inline]
-       rfcomm_sk_state_change+0x6d/0x3a0 net/bluetooth/rfcomm/sock.c:73
-       __rfcomm_dlc_close+0x1b1/0x890 net/bluetooth/rfcomm/core.c:493
-       rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:524
-       __rfcomm_sock_close+0x17a/0x2f0 net/bluetooth/rfcomm/sock.c:220
-       rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:912
-       rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:933
-       __sock_release+0xcd/0x290 net/socket.c:653
-       sock_close+0x1c/0x20 net/socket.c:1395
-       __fput+0x27c/0xa90 fs/file_table.c:321
-       task_work_run+0x16f/0x270 kernel/task_work.c:179
-       exit_task_work include/linux/task_work.h:38 [inline]
-       do_exit+0xb0d/0x29f0 kernel/exit.c:869
-       do_group_exit+0xd4/0x2a0 kernel/exit.c:1019
-       get_signal+0x2315/0x25b0 kernel/signal.c:2859
-       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:307
-       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
-       exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
-       __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
-       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
-       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+--=20
+Cheers,
+Stephen Rothwell
 
--> #1 (&d->lock){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
-       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
-       __rfcomm_dlc_close+0x15d/0x890 net/bluetooth/rfcomm/core.c:491
-       rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:524
-       __rfcomm_sock_close+0x17a/0x2f0 net/bluetooth/rfcomm/sock.c:220
-       rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:912
-       rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:933
-       __sock_release+0xcd/0x290 net/socket.c:653
-       sock_close+0x1c/0x20 net/socket.c:1395
-       __fput+0x27c/0xa90 fs/file_table.c:321
-       task_work_run+0x16f/0x270 kernel/task_work.c:179
-       exit_task_work include/linux/task_work.h:38 [inline]
-       do_exit+0xb0d/0x29f0 kernel/exit.c:869
-       do_group_exit+0xd4/0x2a0 kernel/exit.c:1019
-       get_signal+0x2315/0x25b0 kernel/signal.c:2859
-       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:307
-       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
-       exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
-       __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
-       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
-       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+diff --cc drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+index 6cd7be500dfe,6944c1315085..000000000000
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+@@@ -411,26 -429,20 +429,6 @@@ static void dpu_kms_disable_commit(stru
+  	pm_runtime_put_sync(&dpu_kms->pdev->dev);
+  }
+ =20
+- static void dpu_kms_prepare_commit(struct msm_kms *kms,
+- 		struct drm_atomic_state *state)
+ -static ktime_t dpu_kms_vsync_time(struct msm_kms *kms, struct drm_crtc *c=
+rtc)
+--{
+- 	struct drm_crtc *crtc;
+- 	struct drm_crtc_state *crtc_state;
+--	struct drm_encoder *encoder;
+- 	int i;
+--
+- 	if (!kms)
+- 		return;
+ -	drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)=
+ {
+ -		ktime_t vsync_time;
+--
+- 	/* Call prepare_commit for all affected encoders */
+- 	for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
+- 		drm_for_each_encoder_mask(encoder, crtc->dev,
+- 					  crtc_state->encoder_mask) {
+- 			dpu_encoder_prepare_commit(encoder);
+- 		}
+ -		if (dpu_encoder_vsync_time(encoder, &vsync_time) =3D=3D 0)
+ -			return vsync_time;
+--	}
+ -
+ -	return ktime_get();
+--}
+--
+  static void dpu_kms_flush_commit(struct msm_kms *kms, unsigned crtc_mask)
+  {
+  	struct dpu_kms *dpu_kms =3D to_dpu_kms(kms);
+@@@ -939,7 -951,7 +937,6 @@@ static const struct msm_kms_funcs kms_f
+  	.irq             =3D dpu_core_irq,
+  	.enable_commit   =3D dpu_kms_enable_commit,
+  	.disable_commit  =3D dpu_kms_disable_commit,
+- 	.prepare_commit  =3D dpu_kms_prepare_commit,
+ -	.vsync_time      =3D dpu_kms_vsync_time,
+  	.flush_commit    =3D dpu_kms_flush_commit,
+  	.wait_flush      =3D dpu_kms_wait_flush,
+  	.complete_commit =3D dpu_kms_complete_commit,
 
--> #0 (rfcomm_mutex){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3108 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
-       validate_chain kernel/locking/lockdep.c:3842 [inline]
-       __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
-       lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5691
-       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
-       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
-       rfcomm_dlc_exists+0x58/0x190 net/bluetooth/rfcomm/core.c:546
-       __rfcomm_create_dev net/bluetooth/rfcomm/tty.c:414 [inline]
-       rfcomm_create_dev net/bluetooth/rfcomm/tty.c:485 [inline]
-       rfcomm_dev_ioctl+0x966/0x1c00 net/bluetooth/rfcomm/tty.c:587
-       rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
-       sock_do_ioctl+0xcc/0x230 net/socket.c:1199
-       sock_ioctl+0x1f8/0x680 net/socket.c:1316
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+--Sig_/7GkwabCTX85/Yx+ekRuG7qR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-other info that might help us debug this:
+-----BEGIN PGP SIGNATURE-----
 
-Chain exists of:
-  rfcomm_mutex --> sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM --> rfcomm_ioctl_mutex
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQmKHwACgkQAVBC80lX
+0GwYNwf8DVepMnLRksEfgiZNbTM01tRyNWz/GtFxFK1mFD8YDzeF2Dxss8x56uPF
+WrDOnhaJCiP45NCtIF8au3k9vD8yJY1AvBrIWoJV5ieCmCw5TjrZS1UJKm7EoTMB
+dLi8V6O0YtTdLp+Sr/MQjsjuF9shN8ZtvFTb+61Evr8XvKJaZeORKVoQdyDOJqdw
+su6iLdMNrkXH+um9epMRqp6aaxFOfi2vtPrSgbATVd2256qLGVLZi76U/FTcRq03
+uKpitWII3iAmKDS7V24yJDRcIAy6njtfg9ZWOIYchnOfEenNsbYXmZ1Zq4JHBRv1
+Kr8ZCKsQfxsADpD5Wl7RWhEweLBWLg==
+=Xei1
+-----END PGP SIGNATURE-----
 
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(rfcomm_ioctl_mutex);
-                               lock(sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM);
-                               lock(rfcomm_ioctl_mutex);
-  lock(rfcomm_mutex);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor363/5115:
- #0: ffff888146eb7130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1697 [inline]
- #0: ffff888146eb7130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: rfcomm_sock_ioctl+0xaa/0xe0 net/bluetooth/rfcomm/sock.c:879
- #1: ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_create_dev net/bluetooth/rfcomm/tty.c:484 [inline]
- #1: ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_dev_ioctl+0x8a2/0x1c00 net/bluetooth/rfcomm/tty.c:587
-
-stack backtrace:
-CPU: 0 PID: 5115 Comm: syz-executor363 Not tainted 6.3.0-rc4-next-20230330-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3108 [inline]
- check_prevs_add kernel/locking/lockdep.c:3227 [inline]
- validate_chain kernel/locking/lockdep.c:3842 [inline]
- __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
- lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5691
- __mutex_lock_common kernel/locking/mutex.c:603 [inline]
- __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
- rfcomm_dlc_exists+0x58/0x190 net/bluetooth/rfcomm/core.c:546
- __rfcomm_create_dev net/bluetooth/rfcomm/tty.c:414 [inline]
- rfcomm_create_dev net/bluetooth/rfcomm/tty.c:485 [inline]
- rfcomm_dev_ioctl+0x966/0x1c00 net/bluetooth/rfcomm/tty.c:587
- rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
- sock_do_ioctl+0xcc/0x230 net/socket.c:1199
- sock_ioctl+0x1f8/0x680 net/socket.c:1316
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fdd90dc3379
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 d1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc287c58b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fdd90dc3379
-RDX: 0000000020000100 RSI: 00000000400452c8 RDI: 0000000000000006
-RBP: 0000000000000000 R08: 0000000000000000 R09: 00007ffc287c58e8
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffc287c5900
-R13: 00007ffc287c5910 R14: 000000000001c039 R15: 00007ffc287c58d0
- </TASK>
-
+--Sig_/7GkwabCTX85/Yx+ekRuG7qR--
