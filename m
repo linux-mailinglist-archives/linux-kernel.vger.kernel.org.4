@@ -2,151 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446FA6D2497
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A6F6D249C
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbjCaQEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 12:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
+        id S232921AbjCaQFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbjCaQEn (ORCPT
+        with ESMTP id S230126AbjCaQFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:04:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10831EFC9
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680278636;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 31 Mar 2023 12:05:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDE91EFC9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:05:32 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 43ADF1F8A3;
+        Fri, 31 Mar 2023 16:05:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680278731; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=rSNZ8/l+VZ86qtadx/3cTwXAVAmwqfzRU1WoIUzmJNE=;
-        b=AWPD+R8Z7Zo+cKE5Rbz7uqtWVIrqftICpfSBT6cXjajmNvqEIl85iA2MbuZWv3hOkXrnYO
-        wIf84z3zN6hF/rCw3jf/+5TKpzeqM7UfKkFlHjM4cqieVcXX7W5/8jl98/mRCv9Ws0gmkf
-        OVuJgcEOczdPfcDnJqaPnlFTy+tSReI=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-493-7xq3yhjTMdulPo2lV8SAOw-1; Fri, 31 Mar 2023 12:03:55 -0400
-X-MC-Unique: 7xq3yhjTMdulPo2lV8SAOw-1
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-544781e30easo221527887b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:03:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680278635;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rSNZ8/l+VZ86qtadx/3cTwXAVAmwqfzRU1WoIUzmJNE=;
-        b=57sCUqO1c4hU1iCtnARwhDqOJBvzMDAYZTlgFD9xqLYn2nNEaHJ4xvfHxzBXGZcifN
-         YiP+eoHVZp3Bq5ibrG61QvgExssc6zRLSTj01zt4+UzkcAFSMjv2HKTQd+xssx5rv7VF
-         /VWFGfwdfCTu9ZUOkEYKBrhRIpCx4JND1VTzuijHEZtBt12HeImrcSHGFXEMFcq0yLoW
-         IOqmSGdzHGHxBDHxLTpch1vMXLjYhqTcrcW1Q1Tvt6yUMckoUEe3NevzbX9yV5TJVFSw
-         1d5B7zM8ey5z3JRMWoNc7XQhQ0W0QypahM2yG0cMIYovmDfQWlVXrkk31jp83dsJQw+o
-         DOGQ==
-X-Gm-Message-State: AAQBX9eHZYp8rz56IMilsJPIvlvyPFLAK8Vu7KjNNhWac/qfqPcgnPe5
-        rOz9T2MpPT4dkVmW6C5LEd/Nonsxgrb6oDyyiv219f4mj4vfGgVyN+m9eSgQxlLfQx8LjJg5+MV
-        KCRZhSyT4ylbeRTeHOeQg8aiU
-X-Received: by 2002:a05:7500:3e83:b0:fe:c8a6:575 with SMTP id li3-20020a0575003e8300b000fec8a60575mr286783gab.18.1680278634914;
-        Fri, 31 Mar 2023 09:03:54 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aYLH+nRBLs0BOSrhOyR0e8vNMPADpf6r8qKAygoUTF/7n8384rN6qordhqj3TeCWcFnm7i8Q==
-X-Received: by 2002:a05:7500:3e83:b0:fe:c8a6:575 with SMTP id li3-20020a0575003e8300b000fec8a60575mr286763gab.18.1680278634565;
-        Fri, 31 Mar 2023 09:03:54 -0700 (PDT)
-Received: from [192.168.1.12] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
-        by smtp.gmail.com with ESMTPSA id y25-20020a37f619000000b0074382b756c2sm760767qkj.14.2023.03.31.09.03.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 09:03:54 -0700 (PDT)
-Message-ID: <f1351c5f-16aa-8407-753c-90049956123d@redhat.com>
-Date:   Fri, 31 Mar 2023 12:03:52 -0400
+        bh=n3FsFrFZEEvyj+FZQD8XDhYw0Rbs8LXkmS09BCUboQc=;
+        b=vssTaNEWuuOsvjH3CRaxUE7nk3r5WyiLxXjHnxHcAwsTHXqvcamczlJG+a/RTzstGjOEZ5
+        A+v7TzmBTWvwU1rlJScZlbOr1IUEjCIlasM7gaJS4B2AkFT769JIugzmcOgKKLboutpMTn
+        7hnRsV6zpCfqTsfxmGEbELMZJBiVwCk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680278731;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n3FsFrFZEEvyj+FZQD8XDhYw0Rbs8LXkmS09BCUboQc=;
+        b=lsKnCu+HdX2lZj2g10HGMbRNwSuJexFbUDF1aTZbyySaNPuFBHuk0Z8rZcnO4MmSKoqwYs
+        0Kqb4TIvqTNVJVDA==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7F6B42C141;
+        Fri, 31 Mar 2023 16:05:28 +0000 (UTC)
+Date:   Fri, 31 Mar 2023 18:05:27 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Laurent Dufour <ldufour@linux.ibm.com>
+Cc:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        nathanl@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Subject: Re: [PATCH 1/2] pseries/smp: export the smt level in the SYS FS.
+Message-ID: <20230331160527.GA3132@kitsune.suse.cz>
+References: <20230331153905.31698-1-ldufour@linux.ibm.com>
+ <20230331153905.31698-2-ldufour@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>
-References: <4ce29654-4e1e-4680-9c25-715823ff5e02@p183>
- <683593a8-79db-4f3b-bc78-7917284683e4@p183>
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
-In-Reply-To: <683593a8-79db-4f3b-bc78-7917284683e4@p183>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331153905.31698-2-ldufour@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 13:04, Alexey Dobriyan wrote:
-> This patchset somehow breaks the build of the simplest livepatch module:
-> 
-> 	make -f linux/linux-1/scripts/Makefile.modfinal
-> 	make[1]: *** No rule to make target 'linux/module-klp/main.tmp.ko', needed by 'linux/module-klp/main.ko'.  Stop.
-> 
+Hello,
 
-Thanks for testing.
+On Fri, Mar 31, 2023 at 05:39:04PM +0200, Laurent Dufour wrote:
+> There is no SMT level recorded in the kernel neither in user space.
+> Indeed there is no real constraint about that and mixed SMT levels are
+> allowed and system is working fine this way.
+> 
+> However when new CPU are added, the kernel is onlining all the threads
+> which is leading to mixed SMT levels and confuse end user a bit.
+> 
+> To prevent this exports a SMT level from the kernel so user space
+> application like the energy daemon, could read it to adjust their settings.
+> There is no action unless recording the value when a SMT value is written
+> into the new sysfs entry. User space applications like ppc64_cpu should
+> update the sysfs when changing the SMT level to keep the system consistent.
+> 
+> Suggested-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+> ---
+>  arch/powerpc/platforms/pseries/pseries.h |  3 ++
+>  arch/powerpc/platforms/pseries/smp.c     | 39 ++++++++++++++++++++++++
+>  2 files changed, 42 insertions(+)
+> 
+> diff --git a/arch/powerpc/platforms/pseries/pseries.h b/arch/powerpc/platforms/pseries/pseries.h
+> index f8bce40ebd0c..af0a145af98f 100644
+> --- a/arch/powerpc/platforms/pseries/pseries.h
+> +++ b/arch/powerpc/platforms/pseries/pseries.h
+> @@ -23,7 +23,9 @@ extern int pSeries_machine_check_exception(struct pt_regs *regs);
+>  extern long pseries_machine_check_realmode(struct pt_regs *regs);
+>  void pSeries_machine_check_log_err(void);
+>  
+> +
+>  #ifdef CONFIG_SMP
+> +extern int pseries_smt;
+>  extern void smp_init_pseries(void);
+>  
+>  /* Get state of physical CPU from query_cpu_stopped */
+> @@ -34,6 +36,7 @@ int smp_query_cpu_stopped(unsigned int pcpu);
+>  #define QCSS_HARDWARE_ERROR -1
+>  #define QCSS_HARDWARE_BUSY -2
+>  #else
+> +#define pseries_smt 1
 
-Presumably this is an out-of-tree livepatch module?  If so, that is
-still on the TODO list.  If not, that is weird as the patchset itself
-includes updates to samples/ and lib/ livepatches that build and load fine.
+Is this really needed for anything?
 
--- 
-Joe
+The code using pseries_smt would not compile with a define, and would be
+only compiled with SMP enabled anyway so we should not need this.
 
-> $ cat Kbuild
-> obj-m := main.o
-> 
-> $ cat main.c
-> #include <linux/module.h>
-> #include <linux/kernel.h>
-> #include <linux/livepatch.h>
-> #include <linux/seq_file.h>
-> 
-> static int livepatch_cmdline_proc_show(struct seq_file *m, void *data)
-> {
-> 	seq_puts(m, "REDACTED 001\n");
-> 	return 0;
-> }
-> 
-> static struct klp_func funcs[] = {
-> 	{
-> 		.old_name = "cmdline_proc_show",
-> 		.new_func = livepatch_cmdline_proc_show,
-> 	},
-> 	{}
-> };
-> 
-> static struct klp_object objs[] = {
-> 	{
-> 		.funcs = funcs,
-> 	},
-> 	{}
-> };
-> 
-> static struct klp_patch g_patch = {
-> 	.mod = THIS_MODULE,
-> 	.objs = objs,
-> };
-> 
-> static int livepatch_init(void)
-> {
-> 	return klp_enable_patch(&g_patch);
-> }
-> 
-> static void livepatch_exit(void)
-> {
-> }
-> module_init(livepatch_init);
-> module_exit(livepatch_exit);
-> MODULE_LICENSE("GPL");
-> MODULE_INFO(livepatch, "Y");
-> 
+Thanks
 
+Michal
+
+>  static inline void smp_init_pseries(void) { }
+>  #endif
+>  
+> diff --git a/arch/powerpc/platforms/pseries/smp.c b/arch/powerpc/platforms/pseries/smp.c
+> index c597711ef20a..6c382922f8f3 100644
+> --- a/arch/powerpc/platforms/pseries/smp.c
+> +++ b/arch/powerpc/platforms/pseries/smp.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/device.h>
+>  #include <linux/cpu.h>
+>  #include <linux/pgtable.h>
+> +#include <linux/sysfs.h>
+>  
+>  #include <asm/ptrace.h>
+>  #include <linux/atomic.h>
+> @@ -45,6 +46,8 @@
+>  
+>  #include "pseries.h"
+>  
+> +int pseries_smt;
+> +
+>  /*
+>   * The Primary thread of each non-boot processor was started from the OF client
+>   * interface by prom_hold_cpus and is spinning on secondary_hold_spinloop.
+> @@ -280,3 +283,39 @@ void __init smp_init_pseries(void)
+>  
+>  	pr_debug(" <- smp_init_pSeries()\n");
+>  }
+> +
+> +static ssize_t pseries_smt_store(struct class *class,
+> +			 struct class_attribute *attr,
+> +			 const char *buf, size_t count)
+> +{
+> +	int smt;
+> +
+> +	if (kstrtou32(buf, 0, &smt) || !smt || smt > (u32) threads_per_core) {
+> +		pr_err("Invalid pseries_smt specified.\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	pseries_smt = smt;
+> +
+> +	return count;
+> +}
+> +
+> +static ssize_t pseries_smt_show(struct class *class, struct class_attribute *attr,
+> +			  char *buf)
+> +{
+> +	return sysfs_emit(buf, "%d\n", pseries_smt);
+> +}
+> +
+> +static CLASS_ATTR_RW(pseries_smt);
+> +
+> +static int __init pseries_smt_init(void)
+> +{
+> +	int rc;
+> +
+> +	pseries_smt = smt_enabled_at_boot;
+> +	rc = sysfs_create_file(kernel_kobj, &class_attr_pseries_smt.attr);
+> +	if (rc)
+> +		pr_err("Can't create pseries_smt sysfs/kernel entry.\n");
+> +	return rc;
+> +}
+> +machine_device_initcall(pseries, pseries_smt_init);
+> -- 
+> 2.40.0
+> 
