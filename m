@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731806D2B7C
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 00:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF1D6D2B8F
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 01:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbjCaWp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 18:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
+        id S232317AbjCaXBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 19:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbjCaWp4 (ORCPT
+        with ESMTP id S229988AbjCaXA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 18:45:56 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EFC40C4
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 15:45:55 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so26955675pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 15:45:55 -0700 (PDT)
+        Fri, 31 Mar 2023 19:00:59 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A14F191FF
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 16:00:58 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id n14so6849762plc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 16:00:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680302755;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FT3VTUjo7B8Z6a6Co0FRAvEldOp0goywye0iYEBwxqQ=;
-        b=bymzRAbBGTzOVh8y2mzeeRerq3UIiF4kZE079arFHGmT9TIO75k6aqXL8nUbrDPK/5
-         aqzUCQO3aFP3ohy6F4Y/RVzpJljEtT9hgu3PYKtF6KwT0EB/t29v3WSGxu130p0tAP9+
-         dgOg094CfB3dOx3wRIYpGwe1PTLE1exXzBF98=
+        d=gmail.com; s=20210112; t=1680303657;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q2mmMqFiAumzcpbbntPymlIf8Np9wiownjUZMtsJues=;
+        b=Gf+pDUGM0BbEJ6NakQ2q0wy2cvDiJHEgSyfeWbWMUKRQCsK9uE/giv9fduE1LMyq8I
+         9YATutxzd5ejWpOrABBqe87S3QZelq2baM11SXb4u54+iHpdVjLiNyVP9Lgsjni9EgNx
+         FBI7pgBHk1ggfbBWDnlNXtb49wR1fj38ovCENgk1ObS/39rWgf6DJET/ibaEP3wvhdTz
+         mMCx/gUCb70qmzfoVmO/sKO3/3zBLsT/Zglz0Z5WTp70gt7qogjxs6nuhMEy6RPqHuAG
+         +ZF11wPtBaXIkjOBREHplrk9PLS50LGLrnAyfR/UddJPDhUwL98YGqnOdQs+FeMPIP09
+         fvqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680302755;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FT3VTUjo7B8Z6a6Co0FRAvEldOp0goywye0iYEBwxqQ=;
-        b=MHJUOwJMSSQJeYpAYWC7p5hnVmApwJK1zwYlEC+C48K/vpOAY5dOJj3C+5QLrA79uK
-         eulc07zB+PXzXPYwKLKJS7qZK6fkP14cn7ZA2wzl4c/4HfvdJCUc+rRspyESzQdS8+KJ
-         /p54Tx6tQKNHuEPAg0PRT1afK+nIse5z185tINAspL5D5exofM2x930V8L2MOVpDI3Tf
-         JsNUh+N0i6UrHdHpahFEA1O8tPjQL1R7Ua9hnhneot80Hj20QiYqTnvoclTPXoGWPuDj
-         KPCuXPUdDMP4fOatqPdXo+/ArAwVoNEXFGagZDAr0dXiWhSHJ6xlkPQLDssbh0oNQGOr
-         an5Q==
-X-Gm-Message-State: AAQBX9d4ASNiT16kQjNBEd88cLjXCFlPWAjShqIEQsBLCVUJ0pFXxzHW
-        FX84PMj4Lpmtuxu+E7HEUi8uDQ==
-X-Google-Smtp-Source: AKy350bGaWt/BjzawxlujTsu+UdC93Q73IN15yVjk8iKLVcxpk0Kzb92ZCHHJsqTzHeW3KM5XN1gqQ==
-X-Received: by 2002:a05:6a20:4a30:b0:df:4e86:9c99 with SMTP id fr48-20020a056a204a3000b000df4e869c99mr19610716pzb.55.1680302754782;
-        Fri, 31 Mar 2023 15:45:54 -0700 (PDT)
-Received: from torsha.c.googlers.com.com (209.148.168.34.bc.googleusercontent.com. [34.168.148.209])
-        by smtp.gmail.com with ESMTPSA id j11-20020aa7800b000000b005895f9657ebsm2289216pfi.70.2023.03.31.15.45.54
+        d=1e100.net; s=20210112; t=1680303657;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q2mmMqFiAumzcpbbntPymlIf8Np9wiownjUZMtsJues=;
+        b=ffHZcSCaoy/jMDLOZNMWzSC7i2LitDzYOkyvOqOI7MYSro5etupYtlfVA6hqhHqCIg
+         WrEj2o2C6JhaAKNlAJ2PwjjCnITzAHSLwh/+qgQvVpPqfkdXsTZ6vBsbMxMlL9u/zLef
+         4F8KkF492NQMZS7WKUgxdF5MSow8ZwKrX4zQN2Dlz7tyUw3FDBWYUIsZ8uLfqQ/Ot092
+         pzTjRfId1UfMPNLIfQ1k/0ru9JMyMgKTojC7xwz5bBOSbci75GJYxH/FlE1TSMNMWuQ7
+         uA9NUUigtLUO98FEvb8/v2Z03qGPiZlFeyeYPf9Tx+w+tm6Cri1tDCZHE1JGNaAljDvk
+         AnaA==
+X-Gm-Message-State: AAQBX9fAwXSDzSmm2f2hKPtGkpoZZ55n5mnzXtJRnen+i06kdULIs76D
+        jKwSTydH/5HFTQBwH47WFOsZ0EO0GcI=
+X-Google-Smtp-Source: AKy350bd8XnjczUSt5srF8tRLRsoHz3erZ4xCviClGGawdNEt0UtnGoZcmno2M2f/VtXRuQYJBc6bw==
+X-Received: by 2002:a17:902:e74e:b0:19d:1674:c04d with SMTP id p14-20020a170902e74e00b0019d1674c04dmr32945454plf.61.1680303657395;
+        Fri, 31 Mar 2023 16:00:57 -0700 (PDT)
+Received: from trent-reznor (c-67-169-174-96.hsd1.ca.comcast.net. [67.169.174.96])
+        by smtp.gmail.com with ESMTPSA id m8-20020a170902768800b001a1a9a639c2sm2044288pll.134.2023.03.31.16.00.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 15:45:54 -0700 (PDT)
-From:   Torsha Banerjee <torsha@chromium.org>
-X-Google-Original-From: Torsha Banerjee <torsha@google.com>
-To:     u-boot@lists.denx.de
-Cc:     Jing <jingyliang@chromium.org>, Sean <seobrien@chromum.org>,
-        Jora Jacobi <jora@google.com>,
-        Harry Cutts <hcutts@chromium.org>,
-        Torsha Banerjee <torsha@google.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Series-to: LKML <linux-kernel@vger.kernel.org>
-Date:   Fri, 31 Mar 2023 22:45:36 +0000
-Message-Id: <20230331224536.1685149-1-torsha@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+        Fri, 31 Mar 2023 16:00:56 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 16:00:24 -0700
+From:   Daniel Watson <ozzloy@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: rtl8723bs: indent with tab, align with space
+Message-ID: <ZCdmCBIdabBGqm11@trent-reznor>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,92 +67,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jora Jacobi <jora@google.com>
+Use tabs to indent code and spaces to align in order to make the code
+consistent and easier to read.
 
-Restore missing cursor for digitizer devices
-
-A previously committed patch to remove cursors for HID Digitizer-Pen
-devices also removed the cursors for some tablets which have incorrect HID
-descriptors. These devices should enumerate with Usage ID "Digitizer"
-instead of Usage ID "Pen".
-
-Patch which introduced the issue: commit 8473a93d1ba5
-("HID: input: Set INPUT_PROP_-property for HID_UP_DIGITIZERS")
-
-Changes-
-Add HID quirk HID_QUIRK_DEVICE_IS_DIGITIZER
-Quirk will force INPUT_PROP_POINTER for HID Digitizers
-Apply quirk to Huion tablets
-Apply quirk to UGEE/XP-Pen tablets based on device ID
-
-Tested with Huion H640P and H430P. Connected the digitizer to the
-Chromebook and confirmed with a drawing program that the cursor appears and
-moves when the digitizer's stylus is hovering over the surface of the
-digitizer.
-
-Signed-off-by: Jora Jacobi <jora@google.com>
-Reviewed-by: Harry Cutts <hcutts@chromium.org>
-Signed-off-by: Torsha Banerjee <torsha@google.com>
+Signed-off-by: Daniel Watson <ozzloy@gmail.com>
 ---
+ drivers/staging/rtl8723bs/include/ieee80211.h | 49 ++++++++++---------
+ 1 file changed, 26 insertions(+), 23 deletions(-)
 
- drivers/hid/hid-input.c  | 3 ++-
- drivers/hid/hid-quirks.c | 9 +++++++++
- include/linux/hid.h      | 1 +
- 3 files changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index 7fc967964dd8..f0c67baddc8d 100644
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -927,7 +927,8 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
- 		break;
+diff --git a/drivers/staging/rtl8723bs/include/ieee80211.h b/drivers/staging/rtl8723bs/include/ieee80211.h
+index 9041d8dc5fb1d..1098b02092003 100644
+--- a/drivers/staging/rtl8723bs/include/ieee80211.h
++++ b/drivers/staging/rtl8723bs/include/ieee80211.h
+@@ -174,7 +174,7 @@ struct ieee_param {
+ 			u8 reserved[32];
+ 			u8 data[];
+ 		} wpa_ie;
+-	        struct{
++		struct{
+ 			int command;
+ 			int reason_code;
+ 		} mlme;
+@@ -271,10 +271,10 @@ struct eapol {
+ #define P80211_OUI_LEN 3
  
- 	case HID_UP_DIGITIZER:
--		if ((field->application & 0xff) == 0x01) /* Digitizer */
-+		if (((field->application & 0xff) == 0x01) ||
-+			(device->quirks & HID_QUIRK_DEVICE_IS_DIGITIZER)) /* Digitizer */
- 			__set_bit(INPUT_PROP_POINTER, input->propbit);
- 		else if ((field->application & 0xff) == 0x02) /* Pen */
- 			__set_bit(INPUT_PROP_DIRECT, input->propbit);
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 66e64350f138..094fe4c4f3b3 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -102,6 +102,8 @@ static const struct hid_device_id hid_quirks[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_HP, USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_0941), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_HP, USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_0641), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_HP, USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_1f4a), HID_QUIRK_ALWAYS_POLL },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_HUION, USB_DEVICE_ID_HUION_HS64), HID_QUIRK_DEVICE_IS_DIGITIZER },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_HUION, USB_DEVICE_ID_HUION_TABLET), HID_QUIRK_DEVICE_IS_DIGITIZER },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_IDEACOM, USB_DEVICE_ID_IDEACOM_IDC6680), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_INNOMEDIA, USB_DEVICE_ID_INNEX_GENESIS_ATARI), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_KYE_EASYPEN_M610X), HID_QUIRK_MULTI_INPUT },
-@@ -1298,6 +1300,13 @@ unsigned long hid_lookup_quirk(const struct hid_device *hdev)
- 		quirks = hid_gets_squirk(hdev);
- 	mutex_unlock(&dquirks_lock);
+ struct ieee80211_snap_hdr {
+-        u8    dsap;   /* always 0xAA */
+-        u8    ssap;   /* always 0xAA */
+-        u8    ctrl;   /* always 0x03 */
+-        u8    oui[P80211_OUI_LEN];    /* organizational universal id */
++	u8    dsap;   /* always 0xAA */
++	u8    ssap;   /* always 0xAA */
++	u8    ctrl;   /* always 0x03 */
++	u8    oui[P80211_OUI_LEN];    /* organizational universal id */
+ } __attribute__ ((packed));
  
-+	/*
-+	 * UGEE/XP-Pen HID Pen devices which have 0x0-0x9 as the low nibble
-+	 * of the device ID are actually digitizers, not HID Pen devices
-+	 */
-+	if (hdev->vendor == USB_VENDOR_ID_UGEE && (hdev->product & 0x0F) <= 0x09)
-+		quirks |= HID_QUIRK_DEVICE_IS_DIGITIZER;
-+
- 	return quirks;
+ #define SNAP_SIZE sizeof(struct ieee80211_snap_hdr)
+@@ -342,12 +342,13 @@ struct ieee80211_snap_hdr {
+ #define IEEE80211_OFDM_RATE_48MB_MASK		(1<<10)
+ #define IEEE80211_OFDM_RATE_54MB_MASK		(1<<11)
+ 
+-#define IEEE80211_CCK_RATES_MASK	        0x0000000F
++#define IEEE80211_CCK_RATES_MASK		0x0000000F
+ #define IEEE80211_CCK_BASIC_RATES_MASK	(IEEE80211_CCK_RATE_1MB_MASK | \
+ 	IEEE80211_CCK_RATE_2MB_MASK)
+-#define IEEE80211_CCK_DEFAULT_RATES_MASK	(IEEE80211_CCK_BASIC_RATES_MASK | \
+-        IEEE80211_CCK_RATE_5MB_MASK | \
+-        IEEE80211_CCK_RATE_11MB_MASK)
++#define IEEE80211_CCK_DEFAULT_RATES_MASK	\
++	(IEEE80211_CCK_BASIC_RATES_MASK |	\
++	 IEEE80211_CCK_RATE_5MB_MASK |		\
++	 IEEE80211_CCK_RATE_11MB_MASK)
+ 
+ #define IEEE80211_OFDM_RATES_MASK		0x00000FF0
+ #define IEEE80211_OFDM_BASIC_RATES_MASK	(IEEE80211_OFDM_RATE_6MB_MASK | \
+@@ -359,8 +360,9 @@ struct ieee80211_snap_hdr {
+ 	IEEE80211_OFDM_RATE_36MB_MASK | \
+ 	IEEE80211_OFDM_RATE_48MB_MASK | \
+ 	IEEE80211_OFDM_RATE_54MB_MASK)
+-#define IEEE80211_DEFAULT_RATES_MASK (IEEE80211_OFDM_DEFAULT_RATES_MASK | \
+-                                IEEE80211_CCK_DEFAULT_RATES_MASK)
++#define IEEE80211_DEFAULT_RATES_MASK		\
++	(IEEE80211_OFDM_DEFAULT_RATES_MASK |	\
++	 IEEE80211_CCK_DEFAULT_RATES_MASK)
+ 
+ #define IEEE80211_NUM_OFDM_RATES	    8
+ #define IEEE80211_NUM_CCK_RATES	            4
+@@ -509,7 +511,7 @@ Total: 28-2340 bytes
+ 
+ static inline int is_multicast_mac_addr(const u8 *addr)
+ {
+-        return ((addr[0] != 0xff) && (0x01 & addr[0]));
++	return ((addr[0] != 0xff) && (0x01 & addr[0]));
  }
- EXPORT_SYMBOL_GPL(hid_lookup_quirk);
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 1ea8c7a3570b..1653359002b3 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -354,6 +354,7 @@ struct hid_item {
- #define HID_QUIRK_INPUT_PER_APP			BIT(11)
- #define HID_QUIRK_X_INVERT			BIT(12)
- #define HID_QUIRK_Y_INVERT			BIT(13)
-+#define HID_QUIRK_DEVICE_IS_DIGITIZER           BIT(14)
- #define HID_QUIRK_SKIP_OUTPUT_REPORTS		BIT(16)
- #define HID_QUIRK_SKIP_OUTPUT_REPORT_ID		BIT(17)
- #define HID_QUIRK_NO_OUTPUT_REPORTS_ON_INTR_EP	BIT(18)
+ 
+ static inline int is_broadcast_mac_addr(const u8 *addr)
+@@ -612,17 +614,18 @@ enum {
+  * @RTW_IEEE80211_CHAN_NO_HT40MINUS: extension channel below this channel
+  *      is not permitted.
+  */
+-  enum rtw_ieee80211_channel_flags {
+-          RTW_IEEE80211_CHAN_DISABLED         = 1<<0,
+-          RTW_IEEE80211_CHAN_PASSIVE_SCAN     = 1<<1,
+-          RTW_IEEE80211_CHAN_NO_IBSS          = 1<<2,
+-          RTW_IEEE80211_CHAN_RADAR            = 1<<3,
+-          RTW_IEEE80211_CHAN_NO_HT40PLUS      = 1<<4,
+-          RTW_IEEE80211_CHAN_NO_HT40MINUS     = 1<<5,
+-  };
+-
+-  #define RTW_IEEE80211_CHAN_NO_HT40 \
+-          (RTW_IEEE80211_CHAN_NO_HT40PLUS | RTW_IEEE80211_CHAN_NO_HT40MINUS)
++enum rtw_ieee80211_channel_flags {
++	RTW_IEEE80211_CHAN_DISABLED         = 1<<0,
++	RTW_IEEE80211_CHAN_PASSIVE_SCAN     = 1<<1,
++	RTW_IEEE80211_CHAN_NO_IBSS          = 1<<2,
++	RTW_IEEE80211_CHAN_RADAR            = 1<<3,
++	RTW_IEEE80211_CHAN_NO_HT40PLUS      = 1<<4,
++	RTW_IEEE80211_CHAN_NO_HT40MINUS     = 1<<5,
++};
++
++#define RTW_IEEE80211_CHAN_NO_HT40	  \
++	(RTW_IEEE80211_CHAN_NO_HT40PLUS | \
++	 RTW_IEEE80211_CHAN_NO_HT40MINUS)
+ 
+ /* Represent channel details, subset of ieee80211_channel */
+ struct rtw_ieee80211_channel {
 -- 
-2.40.0.348.gf938b09366-goog
+2.34.1
 
