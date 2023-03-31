@@ -2,54 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C306D20E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00BD56D20E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjCaMuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
+        id S232131AbjCaMt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbjCaMt1 (ORCPT
+        with ESMTP id S231195AbjCaMtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:49:27 -0400
-Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08291FD0A;
-        Fri, 31 Mar 2023 05:49:07 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [117.133.56.22])
-        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 4BB2A580485;
-        Fri, 31 Mar 2023 20:48:15 +0800 (CST)
-From:   Donglin Peng <pengdonglin@sangfor.com.cn>
-To:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
-        mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
-        rmk+kernel@armlinux.org.uk, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        bp@alien8.de, hpa@zytor.com, chenhuacai@kernel.org,
-        zhangqing@loongson.cn, kernel@xen0n.name, mingo@redhat.com,
-        peterz@infradead.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com
-Cc:     linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Donglin Peng <pengdonglin@sangfor.com.cn>
-Subject: [PATCH v10 8/8] selftests/ftrace: Add funcgraph-retval test case
-Date:   Fri, 31 Mar 2023 05:47:44 -0700
-Message-Id: <ba23c2429f1ef798946ce65e21c7a7a2bff0019e.1680265828.git.pengdonglin@sangfor.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1680265828.git.pengdonglin@sangfor.com.cn>
-References: <cover.1680265828.git.pengdonglin@sangfor.com.cn>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCQ0NOVh5DS0gfQxodQh9KTlUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpKS0hKTFVKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NxQ6MDo6MT0WIU0SHTo6IT0N
-        IilPClZVSlVKTUNLSU1NQ0JNQkhNVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFPSE5DNwY+
-X-HM-Tid: 0a8737b624292eb7kusn4bb2a580485
-X-HM-MType: 1
-X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        Fri, 31 Mar 2023 08:49:21 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332D421A84;
+        Fri, 31 Mar 2023 05:48:57 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 9453058267B;
+        Fri, 31 Mar 2023 08:48:56 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 31 Mar 2023 08:48:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1680266936; x=1680274136; bh=1wl0PaNqVV1tf/UjJBVG7Hr1Nf6zuThoMUu
+        qGEpn1MA=; b=BLukJoG1DbMb6R2AbqA/+7JjbZ7Oc/VY/GccCFivK2SLSyJIUDy
+        eDvuj6KlJ9yQrHhbcVFZFc/7GfKYkkIJnc004z0WtfxhzT8F0Dryc/fj4uAQEHP5
+        0uQBdRp2Y9CzikgGULwwka03ZtEYN+vA0NR1UYoJiMuMTtA+TbmqSw1RKb6bHBwu
+        kgWKCmrmDScSe7b7EAcsyIEqiEeMn1uQFjhnq/BazbUn1vodHcRar+Z8amV+f2ZZ
+        4SEu3kvSxhj8jR9TWpWv6H7rDT3W+eYIj1h32pDouk8U16vHi7UxgZYWiVlTR8pm
+        cvHgSREjUd2DJv11jgWTdKV0doKNHN4KAQQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680266936; x=1680274136; bh=1wl0PaNqVV1tf/UjJBVG7Hr1Nf6zuThoMUu
+        qGEpn1MA=; b=QTw4z9BqGCp34jRTQ9lJ0Te2z7DjXCcjR1cRFuymA6teq1Ue47T
+        RfmowyRx6v1MwMbGt3ApYDk7qwSROS25JV78fgnvrSJIUz/j3GedCAWFmvE8DLl3
+        HoMeyCJb5WbZ+f8j44/HhL12AZyMqN3xRjT/IDdrxGjXOHILLMDS4nNm1QNzKgnt
+        FLCEk9P9FtfqKPKXWuMbSuG7oHcgCKFsVXQhQDt+sRTlprJiPAhFBhU6avHf2Ete
+        uaofk0N4pXe1j7VHba5yYeMGTXuCjt30lCiXSGhI7m4EIcITbbYAAY9vnjAdi0d+
+        SAs1yBNQ6aJg2m3zpufn0UV2fnpNcc/oKsQ==
+X-ME-Sender: <xms:ttYmZMk-K2WF_uQihYdEaE-WxRbKWanSV4_1kq4F_OoJAiQRztqr8Q>
+    <xme:ttYmZL1tFGUNnFuZ3XoKvNtYojk3J4bwbaadBIOeVDI0Ukgz-8ewFG032ufxZ-SbD
+    1b0xoms1quNu7guG_w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiuddgheefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:ttYmZKrf5muOZ7qbqVpPjnkqBNMSMOU4gybMeyJ3rUMZTBnAWuP7Zg>
+    <xmx:ttYmZIlj2z9EhXlgVWbMqhx-qYV5mMM2GAMIKkxak63PHlTsdJDm_Q>
+    <xmx:ttYmZK07ZhhFcRRDILM_35s-tNIWEGc_cMzAk1ijnOb4EPEMJyMkfQ>
+    <xmx:uNYmZAU6_XmPJuSgqvZ3Fo60bA3Va1J04nlnSMvYEI__B3v7Fjseqw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B8952B6008D; Fri, 31 Mar 2023 08:48:54 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
+Mime-Version: 1.0
+Message-Id: <f3637818-7528-4564-a208-6e587efd7128@app.fastmail.com>
+In-Reply-To: <CACRpkdZdnTX4-jnnXZveXxwOg76yH4Zyoa-ZSGeC7KzOnn+6Lg@mail.gmail.com>
+References: <20230327121317.4081816-1-arnd@kernel.org>
+ <20230327121317.4081816-18-arnd@kernel.org>
+ <CACRpkdZdnTX4-jnnXZveXxwOg76yH4Zyoa-ZSGeC7KzOnn+6Lg@mail.gmail.com>
+Date:   Fri, 31 Mar 2023 14:48:34 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Walleij" <linus.walleij@linaro.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, "Vineet Gupta" <vgupta@kernel.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, guoren <guoren@kernel.org>,
+        "Brian Cain" <bcain@quicinc.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Michal Simek" <monstr@monstr.eu>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Stafford Horne" <shorne@gmail.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Rich Felker" <dalias@libc.org>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Max Filippov" <jcmvbkbc@gmail.com>,
+        "Christoph Hellwig" <hch@lst.de>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org,
+        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH 17/21] ARM: dma-mapping: use arch_sync_dma_for_{device,cpu}()
+ internally
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,70 +122,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test case for the funcgraph-retval and funcgraph-retval-hex
-trace options.
+On Fri, Mar 31, 2023, at 11:10, Linus Walleij wrote:
+> On Mon, Mar 27, 2023 at 2:16=E2=80=AFPM Arnd Bergmann <arnd@kernel.org=
+> wrote:
+>
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> The arm specific iommu code in dma-mapping.c uses the page+offset bas=
+ed
+>> __dma_page_cpu_to_dev()/__dma_page_dev_to_cpu() helpers in place of t=
+he
+>> phys_addr_t based arch_sync_dma_for_device()/arch_sync_dma_for_cpu()
+>> wrappers around the.
+>
+> Broken sentence?
 
-Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
----
-v10:
- - Fix issues in selftest
+I've changed s/the/them/ now, at least I think that's what I meant to
+write in the first place.
 
-v8:
- - Fix issues in selftest
----
- .../ftrace/test.d/ftrace/fgraph-retval.tc     | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc
+>> In order to be able to move the latter part set of functions into
+>> common code, change the iommu implementation to use them directly
+>> and remove the internal ones as a separate interface.
+>>
+>> As page+offset and phys_address are equivalent, but are used in
+>> different parts of the code here, this allows removing some of
+>> the conversion but adds them elsewhere.
+>>
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Looks good to me, took me some time to verify and understand
+> the open-coded version of PFN_UP() and this refactoring alone
+> makes the patch highly valuable.
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc
-new file mode 100644
-index 000000000000..5819aa2dd6ad
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc
-@@ -0,0 +1,43 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: ftrace - function graph print function return value
-+# requires: options/funcgraph-retval options/funcgraph-retval-hex function_graph:tracer
-+
-+# Make sure that funcgraph-retval works
-+
-+fail() { # msg
-+    echo $1
-+    exit_fail
-+}
-+
-+disable_tracing
-+clear_trace
-+
-+read PID _ < /proc/self/stat
-+[ -f set_ftrace_pid ] && echo ${PID} > set_ftrace_pid
-+[ -f set_ftrace_filter ] && echo proc_reg_write > set_ftrace_filter
-+[ -f set_graph_function ] && echo proc_reg_write > set_graph_function
-+echo function_graph > current_tracer
-+echo funcgraph-retval > trace_options
-+
-+set +e
-+enable_tracing
-+echo > /proc/interrupts
-+disable_tracing
-+set -e
-+
-+: "Test printing the error code in signed decimal format"
-+echo nofuncgraph-retval-hex > trace_options
-+count=`cat trace | grep 'proc_reg_write' | grep '= -5' | wc -l`
-+if [ $count -eq 0 ]; then
-+    fail "Return value can not be printed in signed decimal format"
-+fi
-+
-+: "Test printing the error code in hexadecimal format"
-+echo funcgraph-retval-hex > trace_options
-+count=`cat trace | grep 'proc_reg_write' | grep 'fffffffb' | wc -l`
-+if [ $count -eq 0 ]; then
-+    fail "Return value can not be printed in hexadecimal format"
-+fi
-+
-+exit 0
--- 
-2.25.1
+Thanks!
 
+    ARnd
