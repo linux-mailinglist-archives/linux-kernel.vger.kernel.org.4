@@ -2,219 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE4B6D233A
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2606D2342
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232977AbjCaO4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
+        id S233013AbjCaO5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232944AbjCaO4n (ORCPT
+        with ESMTP id S232623AbjCaO52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:56:43 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2081.outbound.protection.outlook.com [40.107.7.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6253F211F
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oJyTqfcVIY4zesAWvRSBKaOtUsoiC4pGX9mrz0a0Elc=;
- b=esXbcDb71Oiqoc21dZOTNvVwpqB36PWCHRKDRi4gYNg1KA1DvITrRdCWuHhboj5/6Pgs4ENZeYbL91cKwvMw8bh3WJuPJk35NztD5oM/KkRgqO6E1fsIRaGCexQLx9oZRmYmikDSoP/UVon1YflVhQr+VGE1H7cLuw/vfFcaiXNAfsJeHn5jygsXTj8mUFTsPzzvH5PNomsuG95BZbFFezTPyFFU9n1oLu2SyiPd9HmzOe5mgZzXQ1l6rNoBvZJJXaiGKNTSPRRtnKvhUbY5v6FIBG4H4jyTnmnf8/UwaNsAKTZrqT2YR3jZMDDz/1mhz6zi8aK5PkI99UpCi7+k7Q==
-Received: from AM6P192CA0031.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:83::44)
- by PAVPR03MB9068.eurprd03.prod.outlook.com (2603:10a6:102:328::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Fri, 31 Mar
- 2023 14:56:05 +0000
-Received: from AM6EUR05FT020.eop-eur05.prod.protection.outlook.com
- (2603:10a6:209:83:cafe::2) by AM6P192CA0031.outlook.office365.com
- (2603:10a6:209:83::44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.44 via Frontend
- Transport; Fri, 31 Mar 2023 14:56:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.81)
- smtp.mailfrom=seco.com; dkim=pass (signature was verified)
- header.d=seco.com;dmarc=pass action=none header.from=seco.com;
-Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
- 20.160.56.81 as permitted sender) receiver=protection.outlook.com;
- client-ip=20.160.56.81; helo=inpost-eu.tmcas.trendmicro.com; pr=C
-Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.81) by
- AM6EUR05FT020.mail.protection.outlook.com (10.233.241.105) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.39 via Frontend Transport; Fri, 31 Mar 2023 14:56:05 +0000
-Received: from outmta (unknown [192.168.82.132])
-        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id 2DEA82008088D;
-        Fri, 31 Mar 2023 14:56:05 +0000 (UTC)
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (unknown [104.47.17.168])
-        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id 07F462008006F;
-        Fri, 31 Mar 2023 14:56:13 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OhHLeULJ6nzZyUsE/FYVFNuFUWJubmrosP+/0q9oqO8gvqrZox7NA/AWXKTocssLMlXw9Imx2w+ngWQkzC8soFEkyseGQV0CNT5uL5PoT1OCE/NM7ygqsSC93rNqw9tLYP8VdrpF8/8PEcq2HLb+EyMh0Yb80r3HZDi8fhj4WSteWlB3v5r8jl34oNF4PwbYgg4EPT7xceA9jcN3sdqxQ0in5W1MyIVm1/ZgG/4xYE9AMRiwRkFJ8OOynhHn8vc7RyLMNwXEAoa/jwtehujthWLgO7BY5KJMS8C4sn9awXtdauIb+x2BVp3xodn1c45QPivmluxQPpbrEFiwvQlOHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oJyTqfcVIY4zesAWvRSBKaOtUsoiC4pGX9mrz0a0Elc=;
- b=kkbSh/0z49EOvluAcEVrfu4I9Jxiv/pk8pQmBUg2PmIIUPtUelZaKcPqEozaam+aZXTU6QnCWVakz0XZMk/vNqNxSQvyUb/5J2MY93aSz/AInfzrIRtAAIN8f5HVsCDHXvd/PX0Ey64LxZ0FC2tGWYV2CwDVl6pgJQMGEzv5Kd22ZCQVWbMNZkB4x1o8pqR7SNlTuK0VFheyADYlfhz71AigWJCKkwoKT+KLTOM76XJtaxECVsvWXy13zU0OvaZwxea47D92AJQOUyGArMqky0MmaL7XK+q+JG0jGkBZ/wOI9b4zM6n98FEnWld3nVQOTdeVMc8YeHlICstYjGXblg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oJyTqfcVIY4zesAWvRSBKaOtUsoiC4pGX9mrz0a0Elc=;
- b=esXbcDb71Oiqoc21dZOTNvVwpqB36PWCHRKDRi4gYNg1KA1DvITrRdCWuHhboj5/6Pgs4ENZeYbL91cKwvMw8bh3WJuPJk35NztD5oM/KkRgqO6E1fsIRaGCexQLx9oZRmYmikDSoP/UVon1YflVhQr+VGE1H7cLuw/vfFcaiXNAfsJeHn5jygsXTj8mUFTsPzzvH5PNomsuG95BZbFFezTPyFFU9n1oLu2SyiPd9HmzOe5mgZzXQ1l6rNoBvZJJXaiGKNTSPRRtnKvhUbY5v6FIBG4H4jyTnmnf8/UwaNsAKTZrqT2YR3jZMDDz/1mhz6zi8aK5PkI99UpCi7+k7Q==
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by VI1PR03MB6287.eurprd03.prod.outlook.com (2603:10a6:800:132::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.21; Fri, 31 Mar
- 2023 14:55:57 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2226:eb03:a8c:a7e5]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2226:eb03:a8c:a7e5%2]) with mapi id 15.20.6222.033; Fri, 31 Mar 2023
- 14:55:57 +0000
-Message-ID: <ed94f05d-929d-c4dd-3b00-0fde2a1b4595@seco.com>
-Date:   Fri, 31 Mar 2023 10:55:52 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/2] soc: fsl: qbman: Always disable interrupts when
- taking cgr_lock
-Content-Language: en-US
-To:     Camelia Alexandra Groza <camelia.groza@nxp.com>,
-        Leo Li <leoyang.li@nxp.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Cc:     Scott Wood <oss@buserror.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Roy Pledge <roy.pledge@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-References: <20230327192841.952688-1-sean.anderson@seco.com>
- <AM6PR04MB57997C946E6AE7F2D87B5C78F28F9@AM6PR04MB5799.eurprd04.prod.outlook.com>
-From:   Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <AM6PR04MB57997C946E6AE7F2D87B5C78F28F9@AM6PR04MB5799.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR17CA0024.namprd17.prod.outlook.com
- (2603:10b6:208:15e::37) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+        Fri, 31 Mar 2023 10:57:28 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FB2B459
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:57:12 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e18so22710893wra.9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680274631;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=X2dQ+lYOZmXZreHzCA27SPymWQu74XpJ9AsKWsdeeL4=;
+        b=LxMr8btqIWpZVBhNCuG3Pv8bToCfJWDTdR7+mR8mGHozcnAnNX8W0cDET2uL7CaGs9
+         5e93/RuXqDOnGQEs4AERzNy/Qogvh1lNEl5m/Bf/swKpLDINZWZrVcg2ZaNJuQJxTI3k
+         scrF3ioZ8uoXF7zeOPiJ/wP8xdLa/F/5qp3ahGdIGZuPJ7thH6JA/9PSgY4cV1Egc6BI
+         O1Rz6S+5Em4dXlsXilZs5u99e4DEWL7+4xEEyTpHsjLqG+DWWc96/933gCmUjtvMCuis
+         cNHHsNXvDWRcx4rsOJaAwffsHJR3LJLod1tAvHB9N9onT9OneeyP7ioLARMZpPHqlTA4
+         cJqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680274631;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X2dQ+lYOZmXZreHzCA27SPymWQu74XpJ9AsKWsdeeL4=;
+        b=nsUq2RtauorwxNOtlAFtYIF0CDsmjrCDhzAXTsHQOQ+WGWVN370qaNI+zHIz568XNR
+         G23nENonV8AauS/S235pkamZMFjpboF+hXb9AuQF924gsWsb9svCdEpuAV0jO7EQtzwe
+         lzijR0PpODX0NLaTZQIEsHlSa9fmzg5/o+9SZIgYMuUIDbDpmvk/NsHpldCLoiQxx+eI
+         GL/munc/IblU8VTMqI3X0/3I98tpp92R+ZylUQ+fU/aPeCLDpr6OJcW58pEA4Bdioa83
+         CVKK2G/RCq9Cf3o+pudcwGSwbMNuOj2K0X/7yg61zZg63glXashOmQQuLqpL/d2A1Z0C
+         6eNQ==
+X-Gm-Message-State: AAQBX9djAN9lLVIyHjIpdsfTH+HFNPeYw0mX57pl0Cpw5eeWHY7SM0pt
+        jV0YgD6oFy6+6MPP3+hrnDd1ag==
+X-Google-Smtp-Source: AKy350ZhM7TlzzbkKQh+f2qjf5R7dBolMimYX1XKzO4RjCFaq7KCOpO3n90LcpUgFdpKCsl7ogNfUw==
+X-Received: by 2002:a5d:4409:0:b0:2cf:e422:e28c with SMTP id z9-20020a5d4409000000b002cfe422e28cmr18329961wrq.42.1680274631125;
+        Fri, 31 Mar 2023 07:57:11 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0? ([2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0])
+        by smtp.gmail.com with ESMTPSA id b12-20020a5d4d8c000000b002e51195a3e2sm2392687wru.79.2023.03.31.07.57.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 07:57:10 -0700 (PDT)
+Message-ID: <23e513ad-9fca-30cd-1f08-2ff559072314@linaro.org>
+Date:   Fri, 31 Mar 2023 16:57:05 +0200
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|VI1PR03MB6287:EE_|AM6EUR05FT020:EE_|PAVPR03MB9068:EE_
-X-MS-Office365-Filtering-Correlation-Id: 69a9cbeb-96ff-4e03-c7b5-08db31f80da3
-X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: JMIKbtW4UumUx7F9cjTauqSN8ckMEbwyGsinLV+htALourWbV3ZjlKwgzMc/h4Yxmcs0lfsQkmIEZd/lp5CUIhsivTI/rNlZwTPTbuAFN4RPiDT7HH8WB2ilSiWu9z32okqdRIlKJcB9CUmwsXazq8UnOFjRFpiz8AnU9wBGPZ7kIlKRfgDjGDHF2gBGYMyZGz+KmCs8vlBqRu++5ohVBJnBX7JO1Pehpw63q5hKUGARJJWcJPsPhw7a9yf3U0Fq3cqj02nAttiwmEc1H2fwUYUduj5RNXKdgAmqwypUzPLmsVQymxXxkdzRGdFKEmq0wjuhAy2edRTWBp/eb38R04rLWBGpcXIKQiM6YnMhwcIYlZ2lTqi3uO6EYjnnhuK10C2aJNG7a6AfJcziaIYmCPDoISsypYYWU/rozEXWlKl9ijJfK5kMm2m+GmUbgLlbM5e5nD/XQm0hCKGSxELzySOxOz509Ogi5xAGwvextkaI3BMfHOImd4T7ersEofczH02HBPn3/Sz6Xlu7eAsuBNR1XcNT/Y2ljAQ8txBvkx8ay2aQ9CDbTWxrscJ+L3JdMPWW1YUUpHspxbP4B61R7DF9MGBQc2rMe1O0B9UGGtiggp4c/c2qPTp6T8E+0VByGGAoGCaf9hDnl1ca5Sg8lU5wiLqSBEt7n0AO6HR6h7EILn4mYZWwxst9Tj5U2HKi
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(376002)(39850400004)(366004)(396003)(451199021)(83380400001)(2616005)(86362001)(52116002)(6486002)(26005)(110136005)(316002)(53546011)(6506007)(54906003)(2906002)(186003)(478600001)(6666004)(38350700002)(6512007)(36756003)(44832011)(5660300002)(4326008)(7416002)(31696002)(38100700002)(8936002)(8676002)(66476007)(66556008)(41300700001)(66946007)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR03MB6287
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM6EUR05FT020.eop-eur05.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 33ca7e93-7dc9-4e03-7bff-08db31f808b8
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yxEYlXdMg+61MSMlP/YefKGMUhAAWdYbgPg+2z1mydFJ6T+hnET3kne8ITKdHWMDAhj5o+2rPSFS5WsHKFpKQjod3sgvrdb21xo97VH3G9XI1fsvOry+U2yvseCpSLAvWhRFWn80DDf5sOq0kRXQLCvL+9tlm7vwNBY5wz0RGSNGoDOnhf8yjha43UYkVU+joh5k4sDlqytukOztCu2cU078rbsjjuk/qpAP9xrqUe8Aezu6kzwjvsAEQDwb7amVaV4FWvnxZ/7t45ER7VS1bU51uSU4rkcl5zm+9Ie/Oa+fZMRr8TFJoBEZ2t6bsoy2+9WXuhnX0GE9CdttNOqyn1l8T2fcun3FiGcxWVjKQDfi3cY5gdOZ95CP7NMOPdHCcOIV+An1tsM4/xBI3tMwv50DbEnAvmNcCGjJJMkfzPjLf2E55S9695vS4Kmz4eCvK2KTEHA2FBIAnA6zxDS3vIr0naQD+JTr/UqjUeDh7dBZPFTLrNE7TxZ0hM0mdW4AdAQpXRHLdk4uZLKeMcosHtFlO1ZbaKe0sqTGZvJEBQ11rZsSDJ6fxvI4kwtYl1v6R4w55JyZbKtty7RVRDTia6RbN8+5dIAM1H9qhrBxBXYPQ/0TQKMu3XTbNuhWvYHfj97xqi9ZvYME8xyBIS/Y+gi7tE6uCkigEkNQgU4CFnmoV+lrUxaV29ruA2QNp+QQKenbelhKyyKKxTGJlxqcJVfA1e7x+movOun7FqYn+WqAgXdl6caKcNj9Q2sO2tQTPenMk14xKcD2AraQLa2YXQ==
-X-Forefront-Antispam-Report: CIP:20.160.56.81;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230028)(396003)(39850400004)(136003)(376002)(346002)(451199021)(46966006)(40470700004)(36840700001)(31686004)(6506007)(53546011)(26005)(2906002)(6512007)(44832011)(5660300002)(110136005)(7416002)(8936002)(8676002)(41300700001)(336012)(4326008)(316002)(70206006)(70586007)(6666004)(54906003)(6486002)(47076005)(36860700001)(83380400001)(186003)(478600001)(2616005)(82310400005)(356005)(40460700003)(7596003)(82740400003)(7636003)(36756003)(40480700001)(86362001)(31696002)(34070700002)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 14:56:05.3076
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69a9cbeb-96ff-4e03-c7b5-08db31f80da3
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.81];Helo=[inpost-eu.tmcas.trendmicro.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM6EUR05FT020.eop-eur05.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR03MB9068
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH RFC 00/20] ARM: oxnas support removal
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mtd@lists.infradead.org, Netdev <netdev@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Daniel Golle <daniel@makrotopia.org>
+References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
+ <df218abb-fa83-49d2-baf5-557b83b33670@app.fastmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <df218abb-fa83-49d2-baf5-557b83b33670@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/23 06:58, Camelia Alexandra Groza wrote:
->> -----Original Message-----
->> From: Sean Anderson <sean.anderson@seco.com>
->> Sent: Monday, March 27, 2023 22:29
->> To: Leo Li <leoyang.li@nxp.com>; linuxppc-dev@lists.ozlabs.org; linux-arm-
->> kernel@lists.infradead.org
->> Cc: Scott Wood <oss@buserror.net>; linux-kernel@vger.kernel.org; David S .
->> Miller <davem@davemloft.net>; Claudiu Manoil <claudiu.manoil@nxp.com>;
->> Roy Pledge <roy.pledge@nxp.com>; Vladimir Oltean
->> <vladimir.oltean@nxp.com>; Camelia Alexandra Groza
->> <camelia.groza@nxp.com>; Sean Anderson <sean.anderson@seco.com>
->> Subject: [PATCH 1/2] soc: fsl: qbman: Always disable interrupts when taking
->> cgr_lock
->> 
->> smp_call_function_single disables IRQs when executing the callback. To
->> prevent deadlocks, we must disable IRQs when taking cgr_lock elsewhere.
->> This is already done by qman_update_cgr and qman_delete_cgr; fix the
->> other lockers.
->> 
->> Fixes: c535e923bb97 ("soc/fsl: Introduce DPAA 1.x QMan device driver")
->> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
->> ---
->> 
->>  drivers/soc/fsl/qbman/qman.c | 8 ++++----
->>  1 file changed, 4 insertions(+), 4 deletions(-)
->> 
->> diff --git a/drivers/soc/fsl/qbman/qman.c b/drivers/soc/fsl/qbman/qman.c
->> index 739e4eee6b75..ff870ca07596 100644
->> --- a/drivers/soc/fsl/qbman/qman.c
->> +++ b/drivers/soc/fsl/qbman/qman.c
->> @@ -1456,7 +1456,7 @@ static void qm_congestion_task(struct work_struct
->> *work)
->>  	union qm_mc_result *mcr;
->>  	struct qman_cgr *cgr;
->> 
->> -	spin_lock(&p->cgr_lock);
->> +	spin_lock_irq(&p->cgr_lock);
->>  	qm_mc_start(&p->p);
->>  	qm_mc_commit(&p->p, QM_MCC_VERB_QUERYCONGESTION);
->>  	if (!qm_mc_result_timeout(&p->p, &mcr)) {
->> @@ -1476,7 +1476,7 @@ static void qm_congestion_task(struct work_struct
->> *work)
->>  	list_for_each_entry(cgr, &p->cgr_cbs, node)
->>  		if (cgr->cb && qman_cgrs_get(&c, cgr->cgrid))
->>  			cgr->cb(p, cgr, qman_cgrs_get(&rr, cgr->cgrid));
->> -	spin_unlock(&p->cgr_lock);
->> +	spin_unlock_irq(&p->cgr_lock);
->>  	qman_p_irqsource_add(p, QM_PIRQ_CSCI);
->>  }
+On 31/03/2023 15:42, Arnd Bergmann wrote:
+> On Fri, Mar 31, 2023, at 10:34, Neil Armstrong wrote:
+>> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
+>> associated with a clear lack of maintainance, development and migration to
+>> dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
+>>
+>> In addition, the OX810 hasn't been booted for years and isn't even present
+>> in an ARM config file.
+>>
+>> For the OX820, lack of USB and SATA support makes the platform not usable
+>> in the current Linux support and relies on off-tree drivers hacked from the
+>> vendor (defunct for years) sources.
+>>
+>> The last users are in the OpenWRT distribution, and today's removal means
+>> support will still be in stable 6.1 LTS kernel until end of 2026.
+>>
+>> If someone wants to take over the development even with lack of SMP, I'll
+>> be happy to hand off maintainance.
+>>
+>> The plan is to apply the first 4 patches first, then the drivers
+>> followed by bindings. Finally the MAINTAINANCE entry can be removed.
+>>
+>> I'm not sure about the process of bindings removal, but perhaps the bindings
+>> should be marked as deprecated first then removed later on ?
+>>
+>> It has been a fun time adding support for this architecture, but it's time
+>> to get over!
+>>
+>> Patch 2 obviously depends on [1].
+>>
+>> [1] https://lore.kernel.org/all/20230327121317.4081816-1-arnd@kernel.org/
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > 
-> There is one more spin_unlock call in qm_congestion_task on the error path that needs updating:
+> Thanks a lot for going through this and preparing the patches!
 > 
-> if (!qm_mc_result_timeout(&p->p, &mcr)) {
-> 	spin_unlock(&p->cgr_lock);
+> I've discussed this with Daniel Golle on the OpenWRT channel as well,
+> and he indicated that the timing is probably fine here, as there are
+> already close to zero downloads for oxnas builds, and the 6.1 kernel
+> will only be part of a release in 2024.
+> 
+> For the dependency on my other patch, I'd suggest you instead
+> remove the SMP files here as well, which means we can merge either
+> part independently based on just 6.3-rc. I can do that change
+> myself by picking up patches 1-4 of your RFC series, or maybe you
+> can send resend them after rebase to 6.3-rc1.
 
-Will fix. Thanks.
-
---Sean
+Ack I'll send patches 1-4 rebased on v6.3-rc1 with the acks
+and sent a PR next week.
 
 > 
->> @@ -2440,7 +2440,7 @@ int qman_create_cgr(struct qman_cgr *cgr, u32
->> flags,
->>  	preempt_enable();
->> 
->>  	cgr->chan = p->config->channel;
->> -	spin_lock(&p->cgr_lock);
->> +	spin_lock_irq(&p->cgr_lock);
->> 
->>  	if (opts) {
->>  		struct qm_mcc_initcgr local_opts = *opts;
->> @@ -2477,7 +2477,7 @@ int qman_create_cgr(struct qman_cgr *cgr, u32
->> flags,
->>  	    qman_cgrs_get(&p->cgrs[1], cgr->cgrid))
->>  		cgr->cb(p, cgr, 1);
->>  out:
->> -	spin_unlock(&p->cgr_lock);
->> +	spin_unlock_irq(&p->cgr_lock);
->>  	put_affine_portal();
->>  	return ret;
->>  }
->> --
->> 2.35.1.1320.gc452695387.dirty
+> For the driver removals, I think we can merge those at the same
+> time as the platform removal since there are no shared header files
+> that would cause build time regressions and there are no runtime
+> regressions other than breaking the platform itself. Maybe
+> just send the driver removal separately to the subsystem
+> maintainers with my
 > 
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+Thanks, I'll submit those individually once the first patches are merged.
+
+Neil
+
+> 
+>       Arnd
 
