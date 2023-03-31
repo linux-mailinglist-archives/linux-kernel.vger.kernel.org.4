@@ -2,204 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A93A6D291C
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A906D291F
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbjCaUFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S232273AbjCaUJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCaUFc (ORCPT
+        with ESMTP id S230064AbjCaUI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:05:32 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950471F79A
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:05:31 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id k37so30432933lfv.0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680293130; x=1682885130;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HhMkBqMOvsh1hs5NuN3XdIseTUJUxytQaVYnt3fGACo=;
-        b=CKiFHrTcdNs+6RXLHaR0N4wjV3XmkpbLlpU2eTJg6eUxdnNesJSQL5gOC2c6nHDTU9
-         gxpsA2oZSTp7IGANoD0B5g+0ZzZ9iAnw23wzwBevscy/ZndGTbcRlfzNhh/NaabzubS2
-         s8TRR/mgxdeedBpBoRBHYqwATp78WJeMQ+L9EH82IBSkHdXQeWi3Ojp9WUBoyaeN1/OI
-         b33WYYdIoa+Fs3vGUDO3Elh/Qgx30ZcW0g8oWIpWezYzFKuKSI3yKlf06k+1r37CTvQW
-         V7Z4zh1PST/cFgqSkP7zVqpvLwW6b06orTGI1AfTA+k0QXQZcUsSvMjxGJwQX8FrlbrV
-         J9mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680293130; x=1682885130;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HhMkBqMOvsh1hs5NuN3XdIseTUJUxytQaVYnt3fGACo=;
-        b=ahkl5pf1CrlOB9YdAwq98PirTrEJ+vVkfRiEq/N3IHilh29nuMdQHYPEgco4/OQIqE
-         X0ndWN15zimSFXej46WSvN2iAcF45jH6dImnzUgQneD4eAo4fiU5BhlnMM+Hce5HFxTE
-         imuIfYOni3nhe0+T77oyOIRTpNdTJU60l3LviXpuzijTMKtRdZaMFZu/B/xn2WFGGLr+
-         MWkIFXBLJ1TuL7dSul0pIxPDA5qYEfpWPGJGdYfU2/gwVWWHozWhvFA6T32jvYpZ58K5
-         pQbGrYMAOChAMSh3lNnJr+S1tfpQpmEQmEKl+iVLQMbcWTIVH+FE0RqjiUeLmDgZTCMy
-         BF8Q==
-X-Gm-Message-State: AAQBX9cOsUxdC1MBKV/bJ8P//PjTn5NFoz0NrGQnSpLk0v5BEspznXyS
-        /pG/AvRtFv8yZxMjAyXMorsmbrOJQSHH9FFrqcIKGw==
-X-Google-Smtp-Source: AKy350ZzxL9raDUswX9rEq9TaPaTi0wrfS1d40b4KfnhPiA1zGs8nwTqdPTUKJa2azKoy8XydInoIfJUvcJs1iaagjg=
-X-Received: by 2002:a05:6512:23a3:b0:4d8:86c2:75ea with SMTP id
- c35-20020a05651223a300b004d886c275eamr4951980lfv.3.1680293129654; Fri, 31 Mar
- 2023 13:05:29 -0700 (PDT)
+        Fri, 31 Mar 2023 16:08:59 -0400
+Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6880A21A81;
+        Fri, 31 Mar 2023 13:08:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1680293280; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=VYIqs3CCiPpYDFh/h4Eps0HPs2Z35OTZuosQRHHupQBZgUFFCKHyidMzngbjIYjG+abq0YLEU3O9LI7y+R4ZHl2pJuQ5HEJMjLiCTkxZ8MJSC46+y6rSVWRELqSJT8MaRWLkF7Dkg2LILQZ3jNjJCEUkl42SfgOfbhO9VWCAO7M=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1680293280; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=adlBIyha/e7/m9rUhGH8gGOH3BBWP5KjDgLVUiU1vf0=; 
+        b=ILzJlo9akLEVvqyExxh2LFt1wi19r4ldW5dijs2CMspgBx9ZuwKtp0ZCRweQfxX6HkKUCf3rLnXpGodyMnByOzZ2B2qnh0mJpPcpcBnSSHqZbWAulMXZeDtrBi9CDzCSK6GolIOGSGERGerEH3qLnlbbYLgQzMk/TcSg21EFJi4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1680293280;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=adlBIyha/e7/m9rUhGH8gGOH3BBWP5KjDgLVUiU1vf0=;
+        b=SE6C4KjE1/EKPrCeBf2O37b3LyvbiBckyv64k4WnkU75QuemF62Yj/wU5KiL6QlC
+        ycQesbq9gaGFMfSRWybzVFeQm4EcT/qzQTdCjxuceOxxA7mR+JH639td6ko/xqSoC0J
+        LOvigc05NRuSgXqNIHivZx8rw3aOQaQfCLbqGs4A=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1680293279357652.4368473040126; Fri, 31 Mar 2023 13:07:59 -0700 (PDT)
+Message-ID: <56adf82a-3db0-5909-e948-e21717e3fe03@arinc9.com>
+Date:   Fri, 31 Mar 2023 23:07:51 +0300
 MIME-Version: 1.0
-References: <20230330155707.3106228-1-peterx@redhat.com> <20230330155707.3106228-2-peterx@redhat.com>
- <CAJHvVcgDZBi6pH0BD12sQ3T+7Kr9exX1QU3-YLTd1voYhVBN0w@mail.gmail.com>
- <ZCYMu5P2BJy/2z5t@x1n> <CAJHvVcggL+s=WEGzwR8+QvWgZANiLut+DhmosKtAXZ1F2vtFAg@mail.gmail.com>
- <CAJwJo6YrfDH5-Tdsbau-AevVUuqiDQE74se3XvenT20Fbrrcnw@mail.gmail.com>
-In-Reply-To: <CAJwJo6YrfDH5-Tdsbau-AevVUuqiDQE74se3XvenT20Fbrrcnw@mail.gmail.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Fri, 31 Mar 2023 13:04:53 -0700
-Message-ID: <CAJHvVcgiLbACcCr1O4ng7vrxC1Sok_HXDuzbvnVyAaeqGfdwuw@mail.gmail.com>
-Subject: Re: [PATCH 01/29] Revert "userfaultfd: don't fail on unrecognized features"
-To:     Dmitry Safonov <0x7f454c46@gmail.com>
-Cc:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH net-next 14/15] net: dsa: mt7530: introduce driver for
+ MT7988 built-in switch
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>
+References: <cover.1680180959.git.daniel@makrotopia.org>
+ <fef2cb2fe3d2b70fa46e93107a0c862f53bb3bfa.1680180959.git.daniel@makrotopia.org>
+ <6a7c5f81-a8a3-27b5-4af3-7175a3313f9a@arinc9.com>
+ <ZCazDBJvFvjcQfKo@makrotopia.org>
+ <7d0acaef-0cec-91b9-a5c6-d094b71e3dbd@arinc9.com>
+ <28d048c9-6389-749b-d0eb-18a9c2d83c4e@arinc9.com>
+Content-Language: en-US
+In-Reply-To: <28d048c9-6389-749b-d0eb-18a9c2d83c4e@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 11:08=E2=80=AFAM Dmitry Safonov <0x7f454c46@gmail.c=
-om> wrote:
->
-> On Fri, 31 Mar 2023 at 17:52, Axel Rasmussen <axelrasmussen@google.com> w=
-rote:
-> >
-> > On Thu, Mar 30, 2023 at 3:27=E2=80=AFPM Peter Xu <peterx@redhat.com> wr=
-ote:
-> > >
-> > > On Thu, Mar 30, 2023 at 12:04:09PM -0700, Axel Rasmussen wrote:
-> > > > On Thu, Mar 30, 2023 at 8:57=E2=80=AFAM Peter Xu <peterx@redhat.com=
-> wrote:
-> > > > >
-> > > > > This is a proposal to revert commit 914eedcb9ba0ff53c33808.
-> > > > >
-> > > > > I found this when writting a simple UFFDIO_API test to be the fir=
-st unit
-> > > > > test in this set.  Two things breaks with the commit:
-> > > > >
-> > > > >   - UFFDIO_API check was lost and missing.  According to man page=
-, the
-> > > > >   kernel should reject ioctl(UFFDIO_API) if uffdio_api.api !=3D 0=
-xaa.  This
-> > > > >   check is needed if the api version will be extended in the futu=
-re, or
-> > > > >   user app won't be able to identify which is a new kernel.
-> > > > >
-> > > > >   - Feature flags checks were removed, which means UFFDIO_API wit=
-h a
-> > > > >   feature that does not exist will also succeed.  According to th=
-e man
-> > > > >   page, we should (and it makes sense) to reject ioctl(UFFDIO_API=
-) if
-> > > > >   unknown features passed in.
->
-> If features/flags are not checked in kernel, and the kernel doesn't
-> return an error on
-> an unknown flag/error, that makes the syscall non-extendable, meaning
-> that adding
-> any new feature may break existing software, which doesn't sanitize
-> them properly.
-> https://lwn.net/Articles/588444/
+On 31.03.2023 16:18, Arınç ÜNAL wrote:
+> On 31.03.2023 15:06, Arınç ÜNAL wrote:
+>> On 31.03.2023 13:16, Daniel Golle wrote:
+>>> On Fri, Mar 31, 2023 at 08:50:28AM +0300, Arınç ÜNAL wrote:
+>>>> On 30.03.2023 18:23, Daniel Golle wrote:
+>>>>> Add driver for the built-in Gigabit Ethernet switch which can be found
+>>>>> in the MediaTek MT7988 SoC.
+>>>>>
+>>>>> The switch shares most of its design with MT7530 and MT7531, but has
+>>>>> it's registers mapped into the SoCs register space rather than being
+>>>>> connected externally or internally via MDIO.
+>>>>>
+>>>>> Introduce a new platform driver to support that.
+>>>>>
+>>>>> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+>>>>> ---
+>>>>>    MAINTAINERS                   |   2 +
+>>>>>    drivers/net/dsa/Kconfig       |  12 ++++
+>>>>>    drivers/net/dsa/Makefile      |   1 +
+>>>>>    drivers/net/dsa/mt7530-mmio.c | 101 
+>>>>> ++++++++++++++++++++++++++++++++++
+>>>>>    drivers/net/dsa/mt7530.c      |  86 ++++++++++++++++++++++++++++-
+>>>>>    drivers/net/dsa/mt7530.h      |  12 ++--
+>>>>>    6 files changed, 206 insertions(+), 8 deletions(-)
+>>>>>    create mode 100644 drivers/net/dsa/mt7530-mmio.c
+>>>>>
+>>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>>> index 14924aed15ca7..674673dbdfd8b 100644
+>>>>> --- a/MAINTAINERS
+>>>>> +++ b/MAINTAINERS
+>>>>> @@ -13174,9 +13174,11 @@ MEDIATEK SWITCH DRIVER
+>>>>>    M:    Sean Wang <sean.wang@mediatek.com>
+>>>>>    M:    Landen Chao <Landen.Chao@mediatek.com>
+>>>>>    M:    DENG Qingfang <dqfext@gmail.com>
+>>>>> +M:    Daniel Golle <daniel@makrotopia.org>
+>>>>>    L:    netdev@vger.kernel.org
+>>>>>    S:    Maintained
+>>>>>    F:    drivers/net/dsa/mt7530-mdio.c
+>>>>> +F:    drivers/net/dsa/mt7530-mmio.c
+>>>>>    F:    drivers/net/dsa/mt7530.*
+>>>>>    F:    net/dsa/tag_mtk.c
+>>>>> diff --git a/drivers/net/dsa/Kconfig b/drivers/net/dsa/Kconfig
+>>>>> index c2551b13324c2..de4d86e37973f 100644
+>>>>> --- a/drivers/net/dsa/Kconfig
+>>>>> +++ b/drivers/net/dsa/Kconfig
+>>>>> @@ -52,6 +52,18 @@ config NET_DSA_MT7530
+>>>>>          Multi-chip module MT7530 in MT7621AT, MT7621DAT, MT7621ST and
+>>>>>          MT7623AI SoCs is supported as well.
+>>>>> +config NET_DSA_MT7988
+>>>>> +    tristate "MediaTek MT7988 built-in Ethernet switch support"
+>>>>> +    select NET_DSA_MT7530_COMMON
+>>>>> +    depends on HAS_IOMEM
+>>>>> +    help
+>>>>> +      This enables support for the built-in Ethernet switch found
+>>>>> +      in the MediaTek MT7988 SoC.
+>>>>> +      The switch is a similar design as MT7531, however, unlike
+>>>>> +      other MT7530 and MT7531 the switch registers are directly
+>>>>> +      mapped into the SoCs register space rather than being 
+>>>>> accessible
+>>>>> +      via MDIO.
+>>>>> +
+>>>>>    config NET_DSA_MV88E6060
+>>>>>        tristate "Marvell 88E6060 ethernet switch chip support"
+>>>>>        select NET_DSA_TAG_TRAILER
+>>>>> diff --git a/drivers/net/dsa/Makefile b/drivers/net/dsa/Makefile
+>>>>> index 71250d7dd41af..103a33e20de4b 100644
+>>>>> --- a/drivers/net/dsa/Makefile
+>>>>> +++ b/drivers/net/dsa/Makefile
+>>>>> @@ -8,6 +8,7 @@ endif
+>>>>>    obj-$(CONFIG_NET_DSA_LANTIQ_GSWIP) += lantiq_gswip.o
+>>>>>    obj-$(CONFIG_NET_DSA_MT7530_COMMON) += mt7530.o
+>>>>>    obj-$(CONFIG_NET_DSA_MT7530)    += mt7530-mdio.o
+>>>>> +obj-$(CONFIG_NET_DSA_MT7988)    += mt7530-mmio.o
+>>>>
+>>>> I'm not fond of this way. Wouldn't it be better if we split the mdio 
+>>>> and
+>>>> mmio drivers to separate modules and kept switch hardware support on
+>>>> mt7530.c?
+>>>
+>>> You mean this in terms of Kconfig symbols?
+>>> Because the way you describe is basically what I'm doing here:
+>>>   * mt7530.c is the shared/common switch hardware driver
+>>>   * mt7530-mdio.c contains the MDIO accessors and MDIO device drivers 
+>>> for
+>>>     MT7530, MT7531, MT7621, MT7623, ...
+>>>   * mt7530-mmio.c contains the platform device driver for in-SoC 
+>>> switches
+>>>     which are accessed via MMIO, ie. MT7988 (and yes, this could be
+>>>     extended to also support MT7620A/N).
+>>
+>> Ok great.
+>>
+>>>
+>>> In early drafts I also named the Kconfig symbols
+>>> CONFIG_NET_DSA_MT7530 for mt7530.c (ie. the common part)
+>>> CONFIG_NET_DSA_MT7530_MDIO for the MDIO driver
+>>> CONFIG_NET_DSA_MT7530_MMIO for the MMIO driver
+>>>
+>>> However, as existing kernel configurations expect 
+>>> CONFIG_NET_DSA_MT7530 to
+>>> select the MDIO driver, I decided it would be better to hide the 
+>>> symbol of
+>>> the common part and have CONFIG_NET_DSA_MT7530 select the MDIO driver 
+>>> like
+>>> it was before.
+>>
+>> You can "imply NET_DSA_MT7530_MDIO" from NET_DSA_MT7530 so the MDIO 
+>> driver is also enabled when NET_DSA_MT7530 is selected. For example, 
+>> on Realtek, both MDIO and SMI drivers are enabled by default when 
+>> either of the main drivers are selected.
+>>
+>> config NET_DSA_MT7530
+>>      tristate "MediaTek MT7530 and MT7531 Ethernet switch support"
+>>      select NET_DSA_TAG_MTK
+>>      select MEDIATEK_GE_PHY
+>>      select PCS_MTK_LYNXI
+>>      imply NET_DSA_MT7530_MDIO
+>>      imply NET_DSA_MT7530_MMIO
+> 
+> The final kconfig should look like this:
+> 
+> config NET_DSA_MT7530
+>      tristate "MediaTek MT7530 and MT7531 Ethernet switch support"
+>      select NET_DSA_TAG_MTK
+>      select MEDIATEK_GE_PHY
+>      select PCS_MTK_LYNXI
 
-I don't think the same problem applies here. In the case of syscalls,
-the problem is the only way the kernel can communicate is by the
-EINVAL return value. Without the check, if a call succeeds the caller
-can't tell: was the flag supported + applied, or unrecognized +
-ignored?
+Looks like PCS_MTK_LYNXI is used on NET_DSA_MT7530_MDIO instead now. I 
+also see '#include <linux/pcs/pcs-mtk-lynxi.h>' on mt7530.c but don't 
+see any functions called on it. Leftover?
 
-With UFFDIO_API (we aren't talking about userfaultfd(2) itself), when
-you pass in a set of flags, we return the subset of flags which were
-enabled, in addition to the return code. So via that mechanism, one is
-"able to check whether it is running on a kernel where [userfaultfd]
-supports [the feature]" as the article describes - the only difference
-is, the caller must check the returned set of features, instead of
-checking for an error code. I don't think it's exactly *how* userspace
-can check that's important, but rather *that* it can check.
+>      imply NET_DSA_MT7530_MDIO
+>      imply NET_DSA_MT7530_MMIO
+>      help
+>        This enables support for the MediaTek MT7530 and MT7531 Ethernet
+>        switch chips. Multi-chip module MT7530 in MT7621AT, MT7621DAT,
+>        MT7621ST and MT7623AI SoCs, and built-in switch in MT7688 SoC is
+>        supported.
+> 
+> config NET_DSA_MT7530_MDIO
+>      tristate "MediaTek MT7530 MDIO interface driver"
 
-Another important difference: I have a hard time imagining a case
-where adding a new feature could break userspace, even with my
-approach, but let's say for the sake of argument one arises in the
-future. Unlike normal syscalls, we have the UFFD_API version check, so
-we have the option of incrementing that to separate users relying on
-the old behavior, from users willing to deal with the new behavior.
+Should go here:
 
-(Syscalls can kind of replicate this by adding a new syscall, like
-clone() vs clone2(), but I think that's messier than the API version
-check being built-in to the API.)
+select PCS_MTK_LYNXI
 
->
-> See a bunch of painful exercises from syscalls with numbers in the end:
-> https://lwn.net/Articles/792628/
-> To adding an additional setsockopt() because an old one didn't have
-> sanity checks for flags:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3D8917a777be3b
-> (not the best example, as the new setsockopt() didn't check flags for
-> sanity as well (sic!),
-> but that's near the code I work on now)
->
-> This is even documented nowadays:
-> https://www.kernel.org/doc/html/latest/process/adding-syscalls.html#desig=
-ning-the-api-planning-for-extension
->
-> ...and everyone knows what happens when you blame userspace for breaking =
-by
-> not doing what you would have expected it to do:
-> https://lkml.org/lkml/2012/12/23/75
-
-100% agreed. :)
-
->
-> [..]
-> > > There's one reason that we may consider keeping the behavior.  IMHO i=
-t is
-> > > when there're major softwares that uses the "wrong" ABI (let's say so=
-;
-> > > because it's not following the man pages).  If you're aware any such =
-major
-> > > softwares (especially open sourced) will break due to this revert pat=
-ch,
-> > > please shoot.
-> >
-> > Well, I did find one example, criu:
-> > https://github.com/checkpoint-restore/criu/blob/criu-dev/criu/uffd.c#L2=
-66
->
-> Mike can speak better than me about uffd, but AFAICS, CRIU correctly dete=
-cts
-> features with kerneldat/kdat:
-> https://github.com/checkpoint-restore/criu/blob/criu-dev/criu/kerndat.c#L=
-1235
-
-Ah, right, this is the simplest case where no optional features are
-asked for. So, it's not a great example; this particular case would
-look the same regardless of what the kernel does.
-
->
-> So, doing a sane thing in kernel shouldn't break CRIU (at least here).
->
-> Thanks,
->              Dmitry
+Arınç
