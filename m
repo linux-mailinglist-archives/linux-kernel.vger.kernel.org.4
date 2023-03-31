@@ -2,127 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A856F6D1EA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A0A6D1EA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbjCaLAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 07:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
+        id S232048AbjCaLBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 07:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbjCaLAC (ORCPT
+        with ESMTP id S231971AbjCaLBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:00:02 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992E71EA2F;
-        Fri, 31 Mar 2023 03:58:01 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id n19so12650587wms.0;
-        Fri, 31 Mar 2023 03:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680260275;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ruVZ+nqpPxejELcPa+QVovP9EcRxs5XzTtjPXBzPybw=;
-        b=STGlQbl5pdqAFFPeA9oH+J5ICEFK3qkxQEvxknmC4v2OlpiSrx877BUe9QlCmArIRa
-         PoVbu3en0sjd/b4Iokb1AiZ2ClE2HLGtYEN2xQ0DkUxDUj7G71wCC5b4zg2OJHG5ka4i
-         qAeJszAOv1lbO7hwrOLAZvzj/KJOb0f9AOJO2Wmieh5Yh9VEZGAUJKlRs3fqIN+KVEgf
-         UaZFhEvHrXoZ8dbanR0Z2ODNhcRELXvdARzimA772eEt75Se2cZ4F8/2NTKqzMuwj7Gk
-         MU9RrX0CCqcV4b9bcBrDbxMjljcjBRfZHcNuSWbI+UQCmeOUO70voDs6hLJCgUM/SV62
-         6HzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680260275;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ruVZ+nqpPxejELcPa+QVovP9EcRxs5XzTtjPXBzPybw=;
-        b=W9gZ2tlpWrwozkmFmq/uPYoSRCH44GadX/g0DKs5GEfaiMFES8VBSVizABaGQ3aVtP
-         6ao0JJnip4VBJvuJGG4W6go0diF+guT5QOhPLaIaY+iR/U9HOCeJTOxLYRs9YVWCIY+f
-         PIUDS96H7PBgOn65+HE+hX8/iLWGt9nxxW5YTWdd7AkKJBuG6wOZdzas5IcuPAeaawW2
-         v8PwX+n76P6m9kxQTg3k+a91UhgTsOEr+3gSYvMFMZqQPnWXTDjEmduXdV8oxFuiHbGG
-         g8Yh6SAdLwrn197UFOgfhtsnHHxsWxVt4nHOrMhfdkgRj2Kmm4G9OZl6kHsLOZY8tGFz
-         A6zw==
-X-Gm-Message-State: AO0yUKXFf8b6JVBDpBKxRwGxVQOWbQkekPL5PzE6fKV3wb9FX6QCCV4I
-        96v0Wr7nXPJlmWyx2zl8ASI=
-X-Google-Smtp-Source: AK7set/NThtTJbIt9LOK6pAdTg6KLO5h2EdvVtCl5moj2821TwWnFFcOLxxqECrDAvoDTccyuFfKOw==
-X-Received: by 2002:a05:600c:22d5:b0:3ee:3d2d:841a with SMTP id 21-20020a05600c22d500b003ee3d2d841amr21155578wmg.24.1680260275314;
-        Fri, 31 Mar 2023 03:57:55 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id y22-20020a7bcd96000000b003ee42696acesm2300375wmj.16.2023.03.31.03.57.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 03:57:54 -0700 (PDT)
-Message-ID: <b90a3440-53f8-9384-155a-f7ac2b7f2e9c@gmail.com>
-Date:   Fri, 31 Mar 2023 12:57:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v9 02/11] arm64: dts: mediatek: Update the node name of
- SCP rpmsg subnode
+        Fri, 31 Mar 2023 07:01:15 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on20627.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaf::627])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9B01F7B2
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 03:59:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LERNrkC2pue89Et9TMC5+31S5xyN+NrZRGdfOzuF+UNks5r+5aZFI6rqAS2mTk3OibRJeKPmbi7QFpR1b9Dki4yw5jo62s00qskrykCXVvILR4iS4GHOe5oJHLZqht1haW632dU1LPC0O4Kgus6EDkTeXNcaqQ1GHQGAB5nbZjxsMkMV+4UrwZe9leV4I2PCKBPJZbr8DwTcZCt9p5V7Ezx0wT6nEV2uI6RL7EifN8BfvOlqk0A8anyVmhRbIqIrqLW2qqs/xH6cZLC7Gowl/dL2YP4yAPmOiLH1Ya2NU2zL64A3rmgtiTppVZIIKtLIs8lA+eZQFim0jrDcs2x6bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aMOyN2A1moRRqIV7NL4vuejsyCnuTSd4jihCaqd/WdY=;
+ b=L6WG8nIjBs3sVYfyVcbPJT/1aIanYayCvTElpAaCMCkTH5FD0/BZjC0i74h7YVk9JKDacHYhgL92jrVryEy9E2pb0Gwj7vLFqiSiE234V8Rn7KCeDKKm+skyEXV2nJM6ydpeQ3aMJKJ+l7Vl5wFlAJSiv2N5HEjgE9493qFRYEcXde0VZlzY8yrHshh+KnHnwRMydV/oV8xGIfq998S1bi3Qo/EzpE3r0hVYjmHA9jDD47fVktzTE/3Va5qk9x/emfAPrl2YedKuHYaeioqzlBLdO+LKWwdAca/qlNbHShdEFxNFQkq2rn6IbfD3Q0XHX+n7O7HARYIjNN6/rei5CQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aMOyN2A1moRRqIV7NL4vuejsyCnuTSd4jihCaqd/WdY=;
+ b=BQSXSHYGF/6aMwk28KGlUtG9nieWiRSGrWfSeZSv17U0cwdInbHGboqdNsCro08p2UMyqtRM8Z22PhdaaYEtCDHkixxzhC8GLo3+tyqdNX2A/UWszjm5CI10K+spt91ojLLD9pyh82LfaCJdKf4wL7zEEeCFIBW2k8lQkibCOdk=
+Received: from AM6PR04MB5799.eurprd04.prod.outlook.com (2603:10a6:20b:a9::20)
+ by PAXPR04MB9325.eurprd04.prod.outlook.com (2603:10a6:102:2b9::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Fri, 31 Mar
+ 2023 10:58:44 +0000
+Received: from AM6PR04MB5799.eurprd04.prod.outlook.com
+ ([fe80::fac3:9cb1:492c:9785]) by AM6PR04MB5799.eurprd04.prod.outlook.com
+ ([fe80::fac3:9cb1:492c:9785%4]) with mapi id 15.20.6254.022; Fri, 31 Mar 2023
+ 10:58:44 +0000
+From:   Camelia Alexandra Groza <camelia.groza@nxp.com>
+To:     Sean Anderson <sean.anderson@seco.com>,
+        Leo Li <leoyang.li@nxp.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Scott Wood <oss@buserror.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Roy Pledge <roy.pledge@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: RE: [PATCH 1/2] soc: fsl: qbman: Always disable interrupts when
+ taking cgr_lock
+Thread-Topic: [PATCH 1/2] soc: fsl: qbman: Always disable interrupts when
+ taking cgr_lock
+Thread-Index: AQHZYOJtsilz0/ZTyk+UEV4EcVW4Za8Uuv6g
+Date:   Fri, 31 Mar 2023 10:58:44 +0000
+Message-ID: <AM6PR04MB57997C946E6AE7F2D87B5C78F28F9@AM6PR04MB5799.eurprd04.prod.outlook.com>
+References: <20230327192841.952688-1-sean.anderson@seco.com>
+In-Reply-To: <20230327192841.952688-1-sean.anderson@seco.com>
+Accept-Language: en-GB, ro-RO, en-US
 Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230328022733.29910-1-tinghan.shen@mediatek.com>
- <20230328022733.29910-3-tinghan.shen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230328022733.29910-3-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM6PR04MB5799:EE_|PAXPR04MB9325:EE_
+x-ms-office365-filtering-correlation-id: 0e1e1a7b-5575-4ace-5a05-08db31d6e55b
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: c6fiLBRER93mYSQKyI9CsU8lhBfqavNfZGdcCoWCk3gDNSU6UufYS0BtynDvgdY8pMC2wPItuIbbhSkadPEYnhKakqUt7w+jgJrJRVBHf4w9QdgpZy/dEH0RfQUxWR6CzSLvYF8dGOjmxnKegRq9h23BrB7iqGNZCevjAMTpQwAhalfLFMpHWsyMAJ8QxU5WRoTWis4GWTam9I1EPRjH0tetgUx/rxK4b5BIK+c8Ws98V1OqHOWeSXeReQwHPJyWer1cLeGFnhVl7A4iVxj25yozsPMOQ1cZAGFgx+yWqrY79TcXmOuWYJGHCK4O46ruMe561K1NvWrrEEcKqiNjgkaNsEh9hrnbAd9xZHLTwcePKKNwzSHIKTIqU/sDyu1mZCahJpr1HJxAcX1v1MAoqDK7FE23KW4x4G/cVOP37KsM3Oaa+vb65PZ0Tb6CVqWDLegyJzQGPdXoHpaHx1gmkMLNfj+i9kwcSRkZPOIt8yEzgxJQNmHLnFEEFYQ6Ex3TRqZFtvhfwEKvOPlfX0PFmor4qbwt00kgMgLT83v81txw6l9mNQ80PxZSoFtfoUPgf5ukGNNeSA9AwlKaAcX56GDsHqumC3EiVAS9o6YuouCaE0xeZZ5hPiHNBLLJzD5N
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5799.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(376002)(346002)(366004)(451199021)(38100700002)(478600001)(110136005)(66556008)(316002)(66946007)(64756008)(66476007)(4326008)(76116006)(54906003)(66446008)(41300700001)(8676002)(52536014)(71200400001)(122000001)(7696005)(8936002)(38070700005)(55016003)(26005)(186003)(9686003)(53546011)(2906002)(6506007)(83380400001)(33656002)(5660300002)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?OldC7kW4hpBFuSDn51RIdQo/9ASAI67h1YokPQy5l6JZ/1bPObkADFb7mnIp?=
+ =?us-ascii?Q?765SfPlCnfVA/c1e5STtyDeGa0PTo6XRw9dV5aU6zo67VIZ4UfyyyU0luQYq?=
+ =?us-ascii?Q?XE25Dtq0uG9u1NCfom/9yrRrL/bMySTCTV2rpZg34yqHNpk09ZMMrAccz9mf?=
+ =?us-ascii?Q?P10mGAlLIfdmGQkHJ6mdrorsEi73b8Zz5fm70knIIOSBTW3vwZgxgGsXdpnE?=
+ =?us-ascii?Q?wVtsRm7AwRDEi/NFeEG+JfVA9QZ6xiUwC5ayAfxDbgOuyStoGeKLs54qmqmw?=
+ =?us-ascii?Q?Q4cbBS4FLtYN2LHlaT1B8qBsz1MTOcJalmbgBnCU8QdtTRkrUd5p7i5UG5ep?=
+ =?us-ascii?Q?ZMqgorKOmGe4MzGT5nJZ/Si1gV7cr80hmsoRTptrDk2ogutYjFsmt94ze34L?=
+ =?us-ascii?Q?xSaHcMMfyzdI62SWKsGBEDA+CtcFs+KzFk+CpG2v1diDJGsNtjF9Y2w6YEne?=
+ =?us-ascii?Q?hPySHZ0fm8rdNUFiV4NnrhkND2ouYYCUd5EtIxjcr5DPuqO4Qo/0QJ1AWoUy?=
+ =?us-ascii?Q?JuJxlRgbl5LWKXD/ys75UPsu4r/hvYkFZpOXODop8Ity/14K9fbtNf1kX+fU?=
+ =?us-ascii?Q?hIhmBuU/owc0pEm1N/x0UJk+vTJDoJBimb81k7yKZ1OovXeCdX2fWVC8f6pL?=
+ =?us-ascii?Q?A/avBQtZJ2eXIuHI1ebKeaEgENQRYxepqGx2Me+mZrBgJOzI+1sNdysdlyQk?=
+ =?us-ascii?Q?4jE5LgolRoKwI/Fg3hi+mpw3l+Qq08C+WR/C0GDgE30ta8hhIR3XbrT5Pvrh?=
+ =?us-ascii?Q?NtSmc+ala5FKchqbdABU+U3y4SRJb7BuAH6ONhoQjs3ePBM5mwbukzVRzxu5?=
+ =?us-ascii?Q?SXwezasfe81EheParKGZixKput17KX8HXsDHEU2J8wDLLHMBb8hZLAgUqRCy?=
+ =?us-ascii?Q?M+g+vaaqswKZT15pjDSMzGwiSdaMa6GU1K/AB15IwaEMlMiMTk9Kh/hUGBJA?=
+ =?us-ascii?Q?ffPpdO7jHfhZ9pa/BU/FEfqoRsBrF4+2jrvVxxKSLs2AZzLOcFApIfPEado5?=
+ =?us-ascii?Q?qtD0g265c8F7exjOlISoQwKGCJQyrlK41otKzKwcj4uiPbucMPMh5CcG6mEN?=
+ =?us-ascii?Q?xnWN0DhaMVR6vosJfKoL893WAGxPa2c+ImJjDyN/vUiwVSTt0tRhi0v0wsgm?=
+ =?us-ascii?Q?Yt8tkkBaZo/Ac9n2Mo8C/n3wt76/DQxPVKkN39R9KBcXpJM6lmaUGfGmKN0S?=
+ =?us-ascii?Q?02fvBopT/w5thwuNeDzm8Gr85GANs8/iOMaiWnX6GRe8kvuxY/+gGINCmdh9?=
+ =?us-ascii?Q?ao8pBE+lDALtFGy3iP8YK8Bp8tF/H7mnwAJhl2mKdtnjXG4fTjX7iAGla0xX?=
+ =?us-ascii?Q?MW9qtq7HhMfdBjFyICOYOhCyTaMOGv74DkKJ3z6AdeChVmpgX4o4vGnHbCu/?=
+ =?us-ascii?Q?gtuRkjM7Bz2i6npx8Mqgjo7TxJ9pXOg+lJQc9OdV3A6g025KUFGU6Nljz9wa?=
+ =?us-ascii?Q?MJaAGbVhSNDD8uwHgNQZV1Ix1GWtSMHBkL9NpwhaHoJY0BeI7bAYw4tZxgXf?=
+ =?us-ascii?Q?gXk8/mu3iVZNi1vFItmMYtRPu527imKNfZHil91z/K6KpVP+oEyvRhm/BBXA?=
+ =?us-ascii?Q?h09iUFP9EJfap3EUGi3jkICdCq5UstVMjq4mAKIr?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5799.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0e1e1a7b-5575-4ace-5a05-08db31d6e55b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Mar 2023 10:58:44.3399
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kMzQHCXl4eaq2L5wua16+L74AhTVK0YhrXVjUmiTXvFmPcl76yOMZKbbsIX2Dji4FpcgJcCGwJtNBOhXlHKfow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9325
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        T_SPF_PERMERROR autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 28/03/2023 04:27, Tinghan Shen wrote:
-> Align the node name with the definition in SCP bindings.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
-
+> -----Original Message-----
+> From: Sean Anderson <sean.anderson@seco.com>
+> Sent: Monday, March 27, 2023 22:29
+> To: Leo Li <leoyang.li@nxp.com>; linuxppc-dev@lists.ozlabs.org; linux-arm=
+-
+> kernel@lists.infradead.org
+> Cc: Scott Wood <oss@buserror.net>; linux-kernel@vger.kernel.org; David S =
+.
+> Miller <davem@davemloft.net>; Claudiu Manoil <claudiu.manoil@nxp.com>;
+> Roy Pledge <roy.pledge@nxp.com>; Vladimir Oltean
+> <vladimir.oltean@nxp.com>; Camelia Alexandra Groza
+> <camelia.groza@nxp.com>; Sean Anderson <sean.anderson@seco.com>
+> Subject: [PATCH 1/2] soc: fsl: qbman: Always disable interrupts when taki=
+ng
+> cgr_lock
+>=20
+> smp_call_function_single disables IRQs when executing the callback. To
+> prevent deadlocks, we must disable IRQs when taking cgr_lock elsewhere.
+> This is already done by qman_update_cgr and qman_delete_cgr; fix the
+> other lockers.
+>=20
+> Fixes: c535e923bb97 ("soc/fsl: Introduce DPAA 1.x QMan device driver")
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 > ---
->   arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi   | 2 +-
->   arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> index fbe14b13051a..a259eb043de5 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> @@ -810,7 +810,7 @@
->   	pinctrl-names = "default";
->   	pinctrl-0 = <&scp_pins>;
->   
-> -	cros_ec {
-> +	cros-ec-rpmsg {
->   		compatible = "google,cros-ec-rpmsg";
->   		mediatek,rpmsg-name = "cros-ec-rpmsg";
->   	};
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> index 9f12257ab4e7..8f14b633c1e1 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> @@ -1260,7 +1260,7 @@
->   	pinctrl-names = "default";
->   	pinctrl-0 = <&scp_pins>;
->   
-> -	cros-ec {
-> +	cros-ec-rpmsg {
->   		compatible = "google,cros-ec-rpmsg";
->   		mediatek,rpmsg-name = "cros-ec-rpmsg";
->   	};
+>=20
+>  drivers/soc/fsl/qbman/qman.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/soc/fsl/qbman/qman.c b/drivers/soc/fsl/qbman/qman.c
+> index 739e4eee6b75..ff870ca07596 100644
+> --- a/drivers/soc/fsl/qbman/qman.c
+> +++ b/drivers/soc/fsl/qbman/qman.c
+> @@ -1456,7 +1456,7 @@ static void qm_congestion_task(struct work_struct
+> *work)
+>  	union qm_mc_result *mcr;
+>  	struct qman_cgr *cgr;
+>=20
+> -	spin_lock(&p->cgr_lock);
+> +	spin_lock_irq(&p->cgr_lock);
+>  	qm_mc_start(&p->p);
+>  	qm_mc_commit(&p->p, QM_MCC_VERB_QUERYCONGESTION);
+>  	if (!qm_mc_result_timeout(&p->p, &mcr)) {
+> @@ -1476,7 +1476,7 @@ static void qm_congestion_task(struct work_struct
+> *work)
+>  	list_for_each_entry(cgr, &p->cgr_cbs, node)
+>  		if (cgr->cb && qman_cgrs_get(&c, cgr->cgrid))
+>  			cgr->cb(p, cgr, qman_cgrs_get(&rr, cgr->cgrid));
+> -	spin_unlock(&p->cgr_lock);
+> +	spin_unlock_irq(&p->cgr_lock);
+>  	qman_p_irqsource_add(p, QM_PIRQ_CSCI);
+>  }
+
+There is one more spin_unlock call in qm_congestion_task on the error path =
+that needs updating:
+
+if (!qm_mc_result_timeout(&p->p, &mcr)) {
+	spin_unlock(&p->cgr_lock);
+
+Regards,
+Camelia
+
+> @@ -2440,7 +2440,7 @@ int qman_create_cgr(struct qman_cgr *cgr, u32
+> flags,
+>  	preempt_enable();
+>=20
+>  	cgr->chan =3D p->config->channel;
+> -	spin_lock(&p->cgr_lock);
+> +	spin_lock_irq(&p->cgr_lock);
+>=20
+>  	if (opts) {
+>  		struct qm_mcc_initcgr local_opts =3D *opts;
+> @@ -2477,7 +2477,7 @@ int qman_create_cgr(struct qman_cgr *cgr, u32
+> flags,
+>  	    qman_cgrs_get(&p->cgrs[1], cgr->cgrid))
+>  		cgr->cb(p, cgr, 1);
+>  out:
+> -	spin_unlock(&p->cgr_lock);
+> +	spin_unlock_irq(&p->cgr_lock);
+>  	put_affine_portal();
+>  	return ret;
+>  }
+> --
+> 2.35.1.1320.gc452695387.dirty
+
