@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F7C6D22DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B157C6D22E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbjCaOqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
+        id S232891AbjCaOqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232556AbjCaOqF (ORCPT
+        with ESMTP id S232897AbjCaOqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:46:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901D15FEC;
-        Fri, 31 Mar 2023 07:46:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 184FBB82768;
-        Fri, 31 Mar 2023 14:46:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40293C433D2;
-        Fri, 31 Mar 2023 14:45:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680273961;
-        bh=z1G+0icOQK7/HIu9HyFNmbxaB5G6mdi+J7KItGHVfMo=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=lro5DceS/4SR03HV8dOA3/Aezxs870ykbpEI1vRe/utzdLRFsWd+QtPLGbJcMUIej
-         XcOYyQIrQNCQ32Kar/aRSviAhevlDfiiDUM6/uxQSaH3Ka09vY/vS4jariu6apbsNW
-         wQQnBMVgzkg/2WUH5D7vzSjorsKLhDqd5p4MDA6cNpeCMpmRL8PCOg5Z4NfV0XesiA
-         9YgKuYo4u7QJYxBOClrbNPqf7R0g5F+DFs10qJub0xw4i3vjr9SRiWcukk2FDpj/8p
-         IYrvwHtsW5zaGirBnn1RUOJkVvXxOlvDLWqQzJKgPmFHheXl0dVaFxYCZ0xbuajpZK
-         jT9WE+9PyQ+Cg==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 31 Mar 2023 10:46:17 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A672060A
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:46:13 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id p203so27617576ybb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:46:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680273972;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZrHq3nvdZgYqWKc7TXYHf/S8IML0/6fKVdabRYk6kRs=;
+        b=FSshoQjBEuyysNCAr4gfKkkGjn4WnfdI+qOqlOkmRGkMNcnt/lTDYQWC74sG1SCNSr
+         yA//YZ5ueiDN+mks0OSAOUFD/ujtg6ET1DLreUtSgU2q+etoIHNRF5G933Ped6CgeRI0
+         QL92NvVIMFSNYUE9bbc+c64MKwS4aI45gJ4usYlHz/B9dxSZDWGpJNnepadvvprJ3kWU
+         SKpZLhDKTfmBr40947S5E077bALebDfpjQNAUSNpdXB1O3cKgF35WnBhuNFcnqVd7wUt
+         A6CjUPwCzxd3uRMQakcZWQUV83AYiGZuKUHKAi4faRjl4QKYjuM1EDYKaRJyy4uYt+ir
+         Oukw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680273972;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZrHq3nvdZgYqWKc7TXYHf/S8IML0/6fKVdabRYk6kRs=;
+        b=InGhqauc/JnIGcc9IVgDlJmDWRxfkpNe4ruCpZcwPgp5ZJeRewPDH9gxpFbrDbNYyR
+         3d+UXgvK4TSGdT4XVWBV5KtpY4WFzrWZh+WPLqeXWzp2izeQqdj9nqlN5xbX45h8JuMG
+         /00mWopnB89xR44hYCKmQlBwv1ZjBg/Wf87h+QIrCpo/EjZdn2ejiSqr/Qq0eXJjxmIK
+         3/DsyjnPR4EGSurmqwlQElPaCs3NxJ972SlfBArVLjJHFSje/c1BFwXLHwSWLCBw7tL7
+         HYkAMY/uDMtAQG39bnwtUJTgyiKyZMmQaj+LURNqNmDKEiw9OKyPyL4CrRc4Xap9R9xe
+         jQPw==
+X-Gm-Message-State: AAQBX9fBdNC3WHFwp3gfseVrGp6W2Qi+TThJFWtVjSBQQqCQzzWeCaGe
+        mMu6UgQFDhvsN/y75suPw5ORFx0Zo5TGzpaawZjH7g==
+X-Google-Smtp-Source: AKy350bPOqn4cx7f84281++qJEmUbQ+CCAD8rP4eVc4hTLCXDTlkGh1wbgDJB5qJk6X6yqA4dryEiDQ+tlglpoAIfVU=
+X-Received: by 2002:a05:6902:1501:b0:b4c:9333:2a2 with SMTP id
+ q1-20020a056902150100b00b4c933302a2mr14740974ybu.9.1680273972110; Fri, 31 Mar
+ 2023 07:46:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [net-next] wifi: rsi: Slightly simplify rsi_set_channel()
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <29bf0296bd939e3f6952272bfdcc73b22edbc374.1679328588.git.christophe.jaillet@wanadoo.fr>
-References: <29bf0296bd939e3f6952272bfdcc73b22edbc374.1679328588.git.christophe.jaillet@wanadoo.fr>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     amitkarwar@gmail.com, siva8118@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <168027395743.32751.10963485072704404337.kvalo@kernel.org>
-Date:   Fri, 31 Mar 2023 14:45:59 +0000 (UTC)
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1680271114-1534-1-git-send-email-quic_vpolimer@quicinc.com> <1680271114-1534-3-git-send-email-quic_vpolimer@quicinc.com>
+In-Reply-To: <1680271114-1534-3-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 31 Mar 2023 17:46:01 +0300
+Message-ID: <CAA8EJprG5g2jzfkez1V0HHO0X_8WDfA9cVfaY3K3cUByW58A1g@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] msm/disp/dpu: allow atomic_check in PSR usecase
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_khsieh@quicinc.com,
+        quic_vproddut@quicinc.com, quic_bjorande@quicinc.com,
+        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
+On Fri, 31 Mar 2023 at 16:59, Vinod Polimera <quic_vpolimer@quicinc.com> wrote:
+>
+> Certain flags like dirty_fb will be updated into the plane state
+> during crtc atomic_check. Allow those updates during PSR commit.
+>
+> Reported-by: Bjorn Andersson <andersson@kernel.org>
+> Link: https://lore.kernel.org/all/20230326162723.3lo6pnsfdwzsvbhj@ripper/
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> There is no point in allocating 'skb' and then freeing it if !channel.
-> 
-> Make the sanity check first to slightly simplify the code.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-
-Patch applied to wireless-next.git, thanks.
-
-8de7838acfa3 wifi: rsi: Slightly simplify rsi_set_channel()
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/29bf0296bd939e3f6952272bfdcc73b22edbc374.1679328588.git.christophe.jaillet@wanadoo.fr/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+With best wishes
+Dmitry
