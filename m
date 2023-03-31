@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F216D2324
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796326D2327
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233092AbjCaOxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
+        id S233035AbjCaOx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbjCaOxG (ORCPT
+        with ESMTP id S232920AbjCaOxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 31 Mar 2023 10:53:06 -0400
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF86E20C20
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0832060A
         for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:52:41 -0700 (PDT)
 Received: from ramsan.of.borg ([84.195.187.55])
-        by michel.telenet-ops.be with bizsmtp
-        id f2se2900l1C8whw062seLb; Fri, 31 Mar 2023 16:52:39 +0200
+        by albert.telenet-ops.be with bizsmtp
+        id f2se2900Q1C8whw062sej3; Fri, 31 Mar 2023 16:52:39 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtp (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1piG2N-00FUgb-4H;
+        id 1piG2N-00FUgc-4c;
         Fri, 31 Mar 2023 16:48:16 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1piG36-008fIS-Hl;
+        id 1piG36-008fIV-IQ;
         Fri, 31 Mar 2023 16:48:16 +0200
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -35,9 +35,9 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 Cc:     dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 1/5] drm: shmobile: Use %p4cc to print fourcc codes
-Date:   Fri, 31 Mar 2023 16:48:07 +0200
-Message-Id: <1912536b0972568efc3d4f96c89de96b2abd7510.1680273039.git.geert+renesas@glider.be>
+Subject: [PATCH 2/5] drm: shmobile: Add support for DRM_FORMAT_XRGB8888
+Date:   Fri, 31 Mar 2023 16:48:08 +0200
+Message-Id: <34ad1c1798b37a68ce08cffa8402be497ac2162e.1680273039.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1680273039.git.geert+renesas@glider.be>
 References: <cover.1680273039.git.geert+renesas@glider.be>
@@ -52,45 +52,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the printing of hexadecimal fourcc format codes by
-pretty-printed format names, using the "%p4cc" format specifier.
+DRM_FORMAT_XRGB8888 aka XR24 is the modus francus of DRM, and should be
+supported by all drivers.
+
+The handling for DRM_FORMAT_XRGB8888 is similar to DRM_FORMAT_ARGB8888,
+just ignore the alpha channel.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/gpu/drm/shmobile/shmob_drm_crtc.c | 4 ++--
- drivers/gpu/drm/shmobile/shmob_drm_kms.c  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/shmobile/shmob_drm_crtc.c  | 1 +
+ drivers/gpu/drm/shmobile/shmob_drm_kms.c   | 5 +++++
+ drivers/gpu/drm/shmobile/shmob_drm_plane.c | 5 +++++
+ 3 files changed, 11 insertions(+)
 
 diff --git a/drivers/gpu/drm/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/shmobile/shmob_drm_crtc.c
-index d354ab3077cecf94..713a7612244c647a 100644
+index 713a7612244c647a..08dc1428aa16caf0 100644
 --- a/drivers/gpu/drm/shmobile/shmob_drm_crtc.c
 +++ b/drivers/gpu/drm/shmobile/shmob_drm_crtc.c
-@@ -355,8 +355,8 @@ static int shmob_drm_crtc_mode_set(struct drm_crtc *crtc,
- 
- 	format = shmob_drm_format_info(crtc->primary->fb->format->format);
- 	if (format == NULL) {
--		dev_dbg(sdev->dev, "mode_set: unsupported format %08x\n",
--			crtc->primary->fb->format->format);
-+		dev_dbg(sdev->dev, "mode_set: unsupported format %p4cc\n",
-+			&crtc->primary->fb->format->format);
- 		return -EINVAL;
- 	}
- 
+@@ -232,6 +232,7 @@ static void shmob_drm_crtc_start(struct shmob_drm_crtc *scrtc)
+ 		value = LDDDSR_LS | LDDDSR_WS | LDDDSR_BS;
+ 		break;
+ 	case DRM_FORMAT_ARGB8888:
++	case DRM_FORMAT_XRGB8888:
+ 	default:
+ 		value = LDDDSR_LS;
+ 		break;
 diff --git a/drivers/gpu/drm/shmobile/shmob_drm_kms.c b/drivers/gpu/drm/shmobile/shmob_drm_kms.c
-index 60a2c8d8a0d947d2..3c5fe3bc183c7c13 100644
+index 3c5fe3bc183c7c13..99381cc0abf3ae1f 100644
 --- a/drivers/gpu/drm/shmobile/shmob_drm_kms.c
 +++ b/drivers/gpu/drm/shmobile/shmob_drm_kms.c
-@@ -96,8 +96,8 @@ shmob_drm_fb_create(struct drm_device *dev, struct drm_file *file_priv,
- 
- 	format = shmob_drm_format_info(mode_cmd->pixel_format);
- 	if (format == NULL) {
--		dev_dbg(dev->dev, "unsupported pixel format %08x\n",
--			mode_cmd->pixel_format);
-+		dev_dbg(dev->dev, "unsupported pixel format %p4cc\n",
-+			&mode_cmd->pixel_format);
- 		return ERR_PTR(-EINVAL);
- 	}
- 
+@@ -39,6 +39,11 @@ static const struct shmob_drm_format_info shmob_drm_format_infos[] = {
+ 		.bpp = 32,
+ 		.yuv = false,
+ 		.lddfr = LDDFR_PKF_ARGB32,
++	}, {
++		.fourcc = DRM_FORMAT_XRGB8888,
++		.bpp = 32,
++		.yuv = false,
++		.lddfr = LDDFR_PKF_ARGB32,
+ 	}, {
+ 		.fourcc = DRM_FORMAT_NV12,
+ 		.bpp = 12,
+diff --git a/drivers/gpu/drm/shmobile/shmob_drm_plane.c b/drivers/gpu/drm/shmobile/shmob_drm_plane.c
+index 604ae23825daaafd..850986cee848226a 100644
+--- a/drivers/gpu/drm/shmobile/shmob_drm_plane.c
++++ b/drivers/gpu/drm/shmobile/shmob_drm_plane.c
+@@ -80,6 +80,7 @@ static void __shmob_drm_plane_setup(struct shmob_drm_plane *splane,
+ 		format |= LDBBSIFR_SWPL | LDBBSIFR_SWPW | LDBBSIFR_SWPB;
+ 		break;
+ 	case DRM_FORMAT_ARGB8888:
++	case DRM_FORMAT_XRGB8888:
+ 	default:
+ 		format |= LDBBSIFR_SWPL;
+ 		break;
+@@ -95,6 +96,9 @@ static void __shmob_drm_plane_setup(struct shmob_drm_plane *splane,
+ 	case DRM_FORMAT_ARGB8888:
+ 		format |= LDBBSIFR_AL_PK | LDBBSIFR_RY | LDDFR_PKF_ARGB32;
+ 		break;
++	case DRM_FORMAT_XRGB8888:
++		format |= LDBBSIFR_AL_1 | LDBBSIFR_RY | LDDFR_PKF_ARGB32;
++		break;
+ 	case DRM_FORMAT_NV12:
+ 	case DRM_FORMAT_NV21:
+ 		format |= LDBBSIFR_AL_1 | LDBBSIFR_CHRR_420;
+@@ -231,6 +235,7 @@ static const uint32_t formats[] = {
+ 	DRM_FORMAT_RGB565,
+ 	DRM_FORMAT_RGB888,
+ 	DRM_FORMAT_ARGB8888,
++	DRM_FORMAT_XRGB8888,
+ 	DRM_FORMAT_NV12,
+ 	DRM_FORMAT_NV21,
+ 	DRM_FORMAT_NV16,
 -- 
 2.34.1
 
