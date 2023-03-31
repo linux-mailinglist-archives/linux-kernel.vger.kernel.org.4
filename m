@@ -2,54 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBED6D2A63
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCC36D2A67
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233286AbjCaVxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 17:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
+        id S233407AbjCaVxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 17:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbjCaVxZ (ORCPT
+        with ESMTP id S233316AbjCaVxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 17:53:25 -0400
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55EC24AD6
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:52:53 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 21:52:10 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680299544; x=1680558744;
-        bh=cIYxRs7yWpZ2jDriBGlcgcMewm6UvtEXri4X8Q7xEW0=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=otNFDXXlhG/gIl3RnMg0DdR5n16yctHA1VzqcPrlB7o+CsGPpwgavkyaYyKarynGQ
-         6MP0mgMTeMSckx2GtHfTjFWSPIVuDj1lt1Xvbpes7Qa4GMet7B6BARbVJyMaOqH9Cg
-         E+3shMdvvKd5ark4ZiS65dcSyxMsgq4T8IkY4nNuA9oCDq+fAj4gKeJG72FAQito86
-         DRHbH1ZNLfrGnOBxum0t5Vk8Ziscs12OIlBBOuxnAbWNq+E0D9YmPfIMpp4f+8KGtZ
-         YaGk0KGSrDjmqQ/MEouXNEeI/nLhkL9KN2aPUnB6JMTKhL3Hxb3hM5nOBgt17arcgl
-         kf8jjfDp6QbGg==
-To:     Miguel Ojeda <ojeda@kernel.org>,
+        Fri, 31 Mar 2023 17:53:41 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FE324AF3;
+        Fri, 31 Mar 2023 14:53:08 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id dw2so199227qvb.11;
+        Fri, 31 Mar 2023 14:53:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680299588;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t7Ebxk8AphIDmwnXn1+IjoPN5NSZTsfBvhDF5oJh7jY=;
+        b=O2vDYkYf5AsS15gx5pSGjZzR6Axng0uCxYsCxypYqA8N355Ct3GQEHLuomCfkdNgGf
+         O1AOHCQfDybxI37EoT/og7LwSDTNkJptBb51ywn9oT2hX2rTiAbIdGTJGDsPUhmu5e1o
+         zN5ce0TVqX57WIMf6WoSSxSOVHx3KMNo4v8AthMjHAWxxxmpEJq5Wy3ELITEpps2kxYa
+         w9hj/vCFktaYQ4prjPtwQBladnPz4T1oNYFz+yiCnnT/b5OHh6NfPXU7rtW4pmBiSG/F
+         Y0WdIZafYKh4lDu9URVZuJ3Z05YdQ/cnm3NlxDxG37fQfoTF38v8Pq2arpjTSfbggUiu
+         7M5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680299588;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t7Ebxk8AphIDmwnXn1+IjoPN5NSZTsfBvhDF5oJh7jY=;
+        b=ZombBOawnAvDCottEbRZvZXrMPPtAA4EVEyjm7dvrZO46oJjILQVISMNJbhTLDQ6g8
+         /0iojgfnrgbV2X6PSd802l2PtlC/TEZwaBSFxuRbKiU3itV7G8BoXe4M5aexnQELx9zq
+         rxl44HYn8hmd3S2QUsw5zYFJGEf7iatUoiGAkqQKET8DldaYB+W0KKxxu2pzHtpjs32z
+         UAG/ChuuokMyuKFyN/xx36SVrBnzo+0dlFjvSDWLuIzoDUcLjjGu4+5Q2CoTb2CKRcru
+         wCs9wU5F/QW4+AUtSPv/HvKuWJRmo8whPw+cbDRaJ9Xovr8d6oRTX+9yKyhjtNpk1Rjy
+         MY4w==
+X-Gm-Message-State: AAQBX9eMt72wE4fxN9POzSmZKOXweLJX/TtrJ8jwJXFQowrmaBT8nuEf
+        BvBLjOGZnvLFAx9t/1glPng=
+X-Google-Smtp-Source: AKy350ZF34ugc9xi1UXbPvmjKXVkZFGlTZq1tjdSY5rb+ySld+VRh+Rw7COi3L1WQX3fT4llp9DseQ==
+X-Received: by 2002:ad4:5c6e:0:b0:5ac:239a:9200 with SMTP id i14-20020ad45c6e000000b005ac239a9200mr55249755qvh.9.1680299588087;
+        Fri, 31 Mar 2023 14:53:08 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id t18-20020ac87612000000b003e4d96eae60sm893950qtq.4.2023.03.31.14.53.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 14:53:07 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0B6B827C0054;
+        Fri, 31 Mar 2023 17:53:06 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Fri, 31 Mar 2023 17:53:07 -0400
+X-ME-Sender: <xms:QlYnZCAj5lCMnCKbWwduSoSjONQIWMoyvQQpCluwqZWjZ89U-Yfd8Q>
+    <xme:QlYnZMjQAZ9s-G75ZXjNL3Db1hG6jU3I4Sqx8Vl66kkFw3d1sKfSOkwDDTc2hVORu
+    thzLr5tLV8boy57SA>
+X-ME-Received: <xmr:QlYnZFntGTUuNhfDg4aVu5f5MyFNi1tm8VJr_Ji5mRq88eHFigTkXDw7ZB2-pQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeivddgtdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:QlYnZAxxNyiMy0yc7RSsoNcPgygYljcNVYg9GOCZoMPeGh82OM6UIQ>
+    <xmx:QlYnZHSuf8puKaesFqJZ6SM40DAHoub15-AWJq-BS061wyUk10r7nw>
+    <xmx:QlYnZLYb8Nr6E0MmfiBeV5XNgiobGBVyBuzwjNg1KcfiBhbtGMmMEA>
+    <xmx:QlYnZPaHPISlit1XU3mXDuuWeTGwg6BKMMEvPsSTW5KDOziiyoUilA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 31 Mar 2023 17:53:05 -0400 (EDT)
+Date:   Fri, 31 Mar 2023 14:52:18 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     y86-dev@protonmail.com
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <alice@ryhl.io>
-From:   y86-dev@protonmail.com
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
         Andreas Hindborg <a.hindborg@samsung.com>,
         Alice Ryhl <aliceryhl@google.com>
-Subject: [PATCH v4 03/15] rust: sync: change error type of constructor functions
-Message-ID: <20230331215053.585759-4-y86-dev@protonmail.com>
-In-Reply-To: <20230331215053.585759-1-y86-dev@protonmail.com>
+Subject: Re: [PATCH v4 01/15] rust: enable the `pin_macro` feature
+Message-ID: <ZCdWErZLBFl205UP@boqun-archlinux>
 References: <20230331215053.585759-1-y86-dev@protonmail.com>
-Feedback-ID: 40624463:user:proton
+ <20230331215053.585759-2-y86-dev@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331215053.585759-2-y86-dev@protonmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,67 +106,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benno Lossin <y86-dev@protonmail.com>
+On Fri, Mar 31, 2023 at 09:51:35PM +0000, y86-dev@protonmail.com wrote:
+> From: Benno Lossin <y86-dev@protonmail.com>
+> 
+> This feature enables the use of the `pin!` macro for the `stack_pin_init!`
+> macro. This feature is already stabilized in Rust version 1.68.
+> 
+> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+> Cc: Gary Guo <gary@garyguo.net>
+> Cc: Andreas Hindborg <a.hindborg@samsung.com>
+> Cc: Alice Ryhl <aliceryhl@google.com>
 
-Change the error type of the constructors of `Arc` and `UniqueArc` to be
-`AllocError` instead of `Error`. This makes the API more clear as to
-what can go wrong when calling `try_new` or its variants.
+Acked-by: Boqun Feng <boqun.feng@gmail.com>
 
-Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-Cc: Gary Guo <gary@garyguo.net>
-Cc: Andreas Hindborg <a.hindborg@samsung.com>
-Cc: Alice Ryhl <aliceryhl@google.com>
----
- rust/kernel/sync/arc.rs | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Regards,
+Boqun
 
-diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index f2f1c83d72ba..aa7135f0f238 100644
---- a/rust/kernel/sync/arc.rs
-+++ b/rust/kernel/sync/arc.rs
-@@ -17,11 +17,11 @@
-
- use crate::{
-     bindings,
--    error::Result,
-     types::{ForeignOwnable, Opaque},
- };
- use alloc::boxed::Box;
- use core::{
-+    alloc::AllocError,
-     marker::{PhantomData, Unsize},
-     mem::{ManuallyDrop, MaybeUninit},
-     ops::{Deref, DerefMut},
-@@ -149,7 +149,7 @@ unsafe impl<T: ?Sized + Sync + Send> Sync for Arc<T> {}
-
- impl<T> Arc<T> {
-     /// Constructs a new reference counted instance of `T`.
--    pub fn try_new(contents: T) -> Result<Self> {
-+    pub fn try_new(contents: T) -> Result<Self, AllocError> {
-         // INVARIANT: The refcount is initialised to a non-zero value.
-         let value =3D ArcInner {
-             // SAFETY: There are no safety requirements for this FFI call.
-@@ -469,7 +469,7 @@ pub struct UniqueArc<T: ?Sized> {
-
- impl<T> UniqueArc<T> {
-     /// Tries to allocate a new [`UniqueArc`] instance.
--    pub fn try_new(value: T) -> Result<Self> {
-+    pub fn try_new(value: T) -> Result<Self, AllocError> {
-         Ok(Self {
-             // INVARIANT: The newly-created object has a ref-count of 1.
-             inner: Arc::try_new(value)?,
-@@ -477,7 +477,7 @@ impl<T> UniqueArc<T> {
-     }
-
-     /// Tries to allocate a new [`UniqueArc`] instance whose contents are =
-not initialised yet.
--    pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>> {
-+    pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>, AllocErro=
-r> {
-         Ok(UniqueArc::<MaybeUninit<T>> {
-             // INVARIANT: The newly-created object has a ref-count of 1.
-             inner: Arc::try_new(MaybeUninit::uninit())?,
---
-2.39.2
-
-
+> ---
+>  rust/kernel/lib.rs | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 223564f9f0cc..4317b6d5f50b 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -17,6 +17,7 @@
+>  #![feature(core_ffi_c)]
+>  #![feature(dispatch_from_dyn)]
+>  #![feature(generic_associated_types)]
+> +#![feature(pin_macro)]
+>  #![feature(receiver_trait)]
+>  #![feature(unsize)]
+> 
+> --
+> 2.39.2
+> 
+> 
