@@ -2,103 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E2B6D1C5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865076D1C61
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbjCaJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
+        id S232256AbjCaJb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbjCaJam (ORCPT
+        with ESMTP id S231309AbjCaJbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:30:42 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465AF1B7F4;
-        Fri, 31 Mar 2023 02:30:19 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 50BE66603130;
-        Fri, 31 Mar 2023 10:29:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680254975;
-        bh=lMAebDq17jh7DdNz0cBlqr1fwRmhsP03/MJGfkU1R+8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EPBOOuTWx/PQ4Jo1UY5Tr8aSNr+DKcHxRpQT9tov4AyHcg8SvcD7zt/LzzgIoDRtB
-         w51cc+rm15Z4WQmg1oZ5iDhLV6/JQf7Um3d7mAmyVkIakqT4ucQLvxqHjnqLIE3h2d
-         XFJJA6hV5ldZ4z2dnTzMcsEglkbGJQGnAX4SO/dSguxe6zagccaIPi6AQl0VQGCnPu
-         3Io9CUJdL140asZCXYIW1mT8jWKx0wxWMO9bRTtHN4qNomLqqcEBHHfHx4KiQuXJiC
-         NC3GzF1JzNdu9/J+B/fbWsgpSad5gfrdDFxvyl1fzvpC1wyWs0OpxEDIui4H87FOKZ
-         be8yyv1mbztbQ==
-Date:   Fri, 31 Mar 2023 11:29:32 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, steven.price@arm.com,
-        robh+dt@kernel.org, alyssa.rosenzweig@collabora.com,
-        wenst@chromium.org, kernel@collabora.com
-Subject: Re: [PATCH v1 RESEND 2/2] drm/panfrost: Add basic support for speed
- binning
-Message-ID: <20230331112932.73b39d5a@collabora.com>
-In-Reply-To: <fb19c82b-f2bf-7f22-ba5c-e1a1c98f987f@collabora.com>
-References: <20230323090822.61766-1-angelogioacchino.delregno@collabora.com>
-        <20230323090822.61766-3-angelogioacchino.delregno@collabora.com>
-        <5814d779-0635-43fe-3fe8-31c130f05b3a@collabora.com>
-        <20230331104914.708b194e@collabora.com>
-        <fb19c82b-f2bf-7f22-ba5c-e1a1c98f987f@collabora.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
+        Fri, 31 Mar 2023 05:31:14 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48CC1D86E
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:30:53 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id h11so21124377lfu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:30:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680255049;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z6TFgvgFQKP5NKQsnrAjaH5l7UrfRJ9YIu/DRwuCXfg=;
+        b=GVg5LkEZwgNYz06PP3UmTmWuKhTeOaD3Zm5r7hkRlAkCnei5CShaxGwz4vLbhnIPKl
+         iu4xAOEkFLCwBmHkLq4RGOb7ZpvBc0kQJ/Phy14T81cK4NtPpXYeJrBsRs2vYImuzR1Y
+         q3u6ByisYsHjoSd/1jkyF5ENkJQtbvPt9CvmO1VvCPCSVeTRVPqdo7WyVq5tB/lzzANx
+         mcFKozhNEWmgoeySvoOEup95Ss8lIVtjzADyjEH0dGqxRnrFCOyMQBAedqne1dRYvVI7
+         VK+X1ZyJ0344YcVIg5hFCHna9idZAqwXh1Qw5G0AYq10RPuTKY3ZdRasxFGbDvjzA2WJ
+         BS7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680255049;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z6TFgvgFQKP5NKQsnrAjaH5l7UrfRJ9YIu/DRwuCXfg=;
+        b=gp18MrJK9nsVO146VgIgGhZ2vkA+CS6Gh243+SgiEqGV2KMIbTbDR13eI39I8hqgEB
+         XHyeQzuCNlkimmmyfL+HaKsx/ErfJ3nikoW/JsPhZvXHupagVHDDVH9vqh/ZjYbslapk
+         1Flfj+wpPHpoiAYkgyR30W0gxaEL3XHHEhnNUzC5NLyyG/rtrLzTYmccT8e9AA5vGUSP
+         kDDUaroWlSbRMtnmVlpaOEWXT6UP2ICCXW49lkopJLlXglFepWEe6crpiR1e+iPB5doE
+         PxnYWIt2ONEjGQQC9P+8p2TKBfW/HZrhpQnva43LWOHN2ZmH/bN8lXg9SK7XPMsTTr5z
+         S0QA==
+X-Gm-Message-State: AAQBX9f53+AdUi0oWxqtb4nevI+G6ZMlyK8Pa6+5klaV/g2800dFOyQv
+        FA2bSbmihWZxH8SpEgmbSj2kbg==
+X-Google-Smtp-Source: AKy350Zi/uDy4Yx1smxvpB3PViMtdtk7l3H/Lus79ZzsrkCg0c7Zw1aRukfysjd9dJ0kLUGDojsfiQ==
+X-Received: by 2002:ac2:5d69:0:b0:4ea:f8cc:4c9c with SMTP id h9-20020ac25d69000000b004eaf8cc4c9cmr6892958lft.63.1680255049351;
+        Fri, 31 Mar 2023 02:30:49 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id y27-20020ac2447b000000b004e9b183fc5bsm310245lfl.8.2023.03.31.02.30.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 02:30:49 -0700 (PDT)
+Message-ID: <ed9f10e6-a2fe-1c75-a667-4dbdb91327c2@linaro.org>
+Date:   Fri, 31 Mar 2023 11:30:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 4/4] clk: qcom: lpasscc-sc7280: Remove qdsp6ss clock
+ registration
+Content-Language: en-US
+To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>, swboyd@chromium.org,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org, broonie@kernel.org,
+        quic_plai@quicinc.com, konrad.dybcio@somainline.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        quic_visr@quicinc.com
+References: <20230327163249.1081824-1-quic_mohs@quicinc.com>
+ <20230327163249.1081824-5-quic_mohs@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230327163249.1081824-5-quic_mohs@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Mar 2023 10:57:46 +0200
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-wrote:
-
-> Il 31/03/23 10:49, Boris Brezillon ha scritto:
-> > On Fri, 31 Mar 2023 10:11:07 +0200
-> > AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > wrote:
-> >   
-> >> Il 23/03/23 10:08, AngeloGioacchino Del Regno ha scritto:  
-> >>> Some SoCs implementing ARM Mali GPUs are subject to speed binning:
-> >>> this means that some versions of the same SoC model may need to be
-> >>> limited to a slower frequency compared to the other:
-> >>> this is being addressed by reading nvmem (usually, an eFuse array)
-> >>> containing a number that identifies the speed binning of the chip,
-> >>> which is usually related to silicon quality.
-> >>>
-> >>> To address such situation, add basic support for reading the
-> >>> speed-bin through nvmem, as to make it possible to specify the
-> >>> supported hardware in the OPP table for GPUs.
-> >>> This commit also keeps compatibility with any platform that does
-> >>> not specify (and does not even support) speed-binning.
-> >>>
-> >>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>  
-> >>
-> >> Hello maintainers,
-> >> I've seen that this got archived in the dri-devel patchwork; because of that and
-> >> only that, I'm sending this ping to get this patch reviewed.  
-> > 
-> > Looks good to me. If you can get a DT maintainer to review the binding
-> > (Rob?), I'd be happy to queue the series to drm-misc-next.
-> >   
+On 27/03/2023 18:32, Mohammad Rafi Shaik wrote:
+> The qdsp6ss memory region is being shared by ADSP remoteproc device and
+> lpasscc clock device, hence causing memory conflict.
+> As the qdsp6ss clocks are being enabled in remoteproc driver, remove the
+> qdsp6ss clock registration.
 > 
-> The binding was acked by Krzysztof already... so, just to be sure:
-> 
-> Krzysztof, can the binding [1] get picked?
+> Fixes: 4ab43d171181 ("clk: qcom: Add lpass clock controller driver for SC7280")
 
-Oops, sorry, I didn't realize Krzysztof is a DT maintainer.
+I don't understand why this is a fix. The clocks were working before,
+right? So removing them is both ABI break and not a fix.
+
+More over, this *cannot* be backported because it will break users, thus
+Fixes tag is here misleading stable folks.
+
+Best regards,
+Krzysztof
+
