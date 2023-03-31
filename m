@@ -2,198 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F286D2BB2
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 01:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CE36D2BB4
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 01:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233244AbjCaXaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 19:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
+        id S232984AbjCaXap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 19:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjCaX37 (ORCPT
+        with ESMTP id S229988AbjCaXan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 19:29:59 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D125E12CF0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 16:29:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680305391; x=1711841391;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Gq/oEkpL+PwKJCH9m6+9NUzpqd78HwHIHKyS3S775Ak=;
-  b=hORCpiJuOUkvtJpT2Q8t0Myxma8raKfWWOXC07LCs2uBxbtggfsON5TP
-   DqnzqSRyGVIxgu1mjJeT+nDAIWUKmqIAGsXste5R10arpqihmMCUArURx
-   O2PGsxaiY9UAPFAhAP2/R80UzfihBjxjvGjZgh/IFJaKMh+Y85ewUhRnl
-   kh2Ji9Npmbzro9uPUeA6nDznpDJHtLB24mwMODh6MiyHHmSGZKG12iMP/
-   8NIhWDAO19m8qcrsAq/3AqcbubaJonE02Jj16aI9E1lzRtcta27PZqJCy
-   FnOP+ROG7daray6maeDZ5XyJB//b3jhtasLM0OaQBiSF2zzyPATqtLvOY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="427855617"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="427855617"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 16:29:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="796283440"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="796283440"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga002.fm.intel.com with ESMTP; 31 Mar 2023 16:29:49 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 31 Mar 2023 16:29:49 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 31 Mar 2023 16:29:48 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 31 Mar 2023 16:29:48 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.175)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Fri, 31 Mar 2023 16:29:48 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n/7MsbmbKPh0CmMwdqRKneZhG1PxgmExicq10fTmd/dC+b9otlwBVFPDcth+uwo2bo3qoCA4sIvjS3IoODipwiqvDCcMIgxDtLuAIBXWrTsjJKw3RpnVy5dZG0GSZ68Cva7RV432vPc2xR1udM8IOHqCmCF1ItBjCdQyDyJmQTqTNTSQDBWNEJuQk35b5LCzdF0yS+sjDDExoLefxAEmSCNKaFRqMpKSsgsjFAa3hgtOz3KvU6o4yR5xxwvjhrO7n74bDWfOC7ZRkrMaRxS2oaErP75T/x/SERTU4GajwWcUXcuNAhAjnjcJABWoEe3xqVpqv8h3bx1fqsw4lqseAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V6A41qdaPrhBsMvQLa5I2iiJ74r83dqfDOMuNYIWV+M=;
- b=m6f1iQjMNFJuHsdeS1ojdGTfWpbhbX7BicH2aqrBxfXeZWlfkuw8PP7rz+5seq8E9fMkQkRnYdCR3YhnHzm9V60xCKUilR1t1VlDSkEDQRYnMUd9DMdKynidkxMDEumNUi6ZUM2+E5GjadaT/V9Gs9+6BmOOZYp4j4GrMjdlQ4Vi4TZclo2qE1LAcwvQrSxFvpN8HsQtGCq/Vc/25F53vMqGjLN+UvWhDGBBPgCuVN7vlbEI7uTnfLSO0yb0RLS7EWwcTEB0JL1i+dKA9BN8Msf8ZRBSPz2FUuqOoY25sfGTAhNbUamWw80wO19LrQqnZZxWzspnLV3SkXusRvuaUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by PH7PR11MB6426.namprd11.prod.outlook.com (2603:10b6:510:1f6::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Fri, 31 Mar
- 2023 23:29:47 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::d651:ac39:526d:604f]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::d651:ac39:526d:604f%12]) with mapi id 15.20.6254.024; Fri, 31 Mar
- 2023 23:29:47 +0000
-Message-ID: <c429e614-fe97-1c44-287a-9c52438dbeb2@intel.com>
-Date:   Fri, 31 Mar 2023 16:29:43 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.1
-Subject: Re: [PATCH v3 16/19] x86/resctrl: Add cpu online callback for resctrl
- work
-Content-Language: en-US
-To:     James Morse <james.morse@arm.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        <shameerali.kolothum.thodi@huawei.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        <carl@os.amperecomputing.com>, <lcherian@marvell.com>,
-        <bobo.shaobowang@huawei.com>, <tan.shaopeng@fujitsu.com>,
-        <xingxin.hx@openanolis.org>, <baolin.wang@linux.alibaba.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, <peternewman@google.com>
-References: <20230320172620.18254-1-james.morse@arm.com>
- <20230320172620.18254-17-james.morse@arm.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230320172620.18254-17-james.morse@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR04CA0002.namprd04.prod.outlook.com
- (2603:10b6:a03:40::15) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+        Fri, 31 Mar 2023 19:30:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927D812CF0
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 16:30:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38475B83294
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 23:30:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0707AC433EF;
+        Fri, 31 Mar 2023 23:30:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680305440;
+        bh=rztUcqlYcdZaRzLY5VUrM4dmO5NewoOi9N88PCpBK3U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jK3TlWReKZ22CyVeRauW6VBW4zWzqkJiBnWSQsYej+IQ/ojiECyqB6zB+ZayUIeB7
+         UtCmzbXc43YjOZ/DCBvznOtCwadsRaE7/7BPa24a1a38rnilsD8sO5WJCHXTnnBzqh
+         O849SgCBL0P5jgthjVyCJME5fL3vPLiarqeSKFXFjE6vDYK6R0EDGanjwVNJ6lYZ5L
+         ROBPOR0jKmf/k0+u1UbZ6BHNB6IrQ8SEQOQin+QBculyqT69SddOE3aS+1MmJ+6i8+
+         crLyumWDEz9MMji6OFspDjmr4nF/fMFjiBT9GalqAnCarnSuILStJTA6bG8ZxQVOjv
+         Ih2Hgg0Yj8u/Q==
+Date:   Fri, 31 Mar 2023 16:30:37 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        Rob Clark <robdclark@chromium.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v10 11/15] drm/atomic-helper: Set fence deadline for
+ vblank
+Message-ID: <20230331233037.GA2443175@dev-arch.thelio-3990X>
+References: <20230308155322.344664-1-robdclark@gmail.com>
+ <20230308155322.344664-12-robdclark@gmail.com>
+ <20230331204412.GA396777@dev-arch.thelio-3990X>
+ <CAF6AEGtDbSDNBBdONQ6YubZDaKMpDQ-BJx5mP+aGw4uy9qbXDQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|PH7PR11MB6426:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d955c61-37b9-4445-7121-08db323fd060
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Rn6ky5dtL3qb1iiWay5NV0i69OqWopiTudI95Wt3jejHV5iJ+l1OQ71c10kDY/grd4I1W318mkN9NZ0Ll/qidfncStGfoYlj9rTQIzlkuD9g5ngfIgeAT6SSpjUww4/5JnpY6l98w+I00amusNgn4+q+u7TtO/l7KIrROo7kB3DO6bm3GGphg58lZnWZ9AsSIPSqsx1n3IIaRBpPZ2r/Z29crNaAZGPN/dEphux6ejydZl7UDNCugcPdxvQn/z6EgPGvwKY3J2o54aD+JYChFmCWq573KMN3JMj/XTWmjGvac6wPkG+b1vrzCky9nRPG4/q+s2L8+UgvW92XBZBoePc3Na2JPFoiJoSAgKrbTZ4X7BxGFfHitzQWdSfzrDhtFZNYPRPrM9XznSvW1mOiZh8WoHxrmbpXby+Yp3uYIuukg7UDfJvgDixVnT12aFQqYSP3kKH2/byOgU9JY9ZNaBQS/jGe/1+4meMlP1JIr9qWl56qIqMDcuO/h7+Z5IPFvj77eJcGWG5kxEJgiEniIx9r0mpvWi8/f3kHftk3j/m4SABv4AvS1oirg9HgFh9A7wyQDgT0mAgeo/s2FZUOwJmwFcWrOTof3/GhDEWha2N5hVCEiO3xZR8xlHAm+8Um72L2WZI51h9EJ/KAuR/4PQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(366004)(396003)(346002)(39860400002)(451199021)(36756003)(66556008)(44832011)(7416002)(8936002)(5660300002)(6666004)(2616005)(478600001)(8676002)(66476007)(6506007)(4326008)(86362001)(316002)(26005)(66946007)(31686004)(31696002)(54906003)(53546011)(38100700002)(6486002)(83380400001)(82960400001)(41300700001)(186003)(6512007)(4744005)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S2ZSMnhYNEJMdUZaeW5OVGZxaW1LZXJjdTFtYlVYS2gyUjBxbDF1Q1dsNngy?=
- =?utf-8?B?blNOa2o4MlNKYzRERHBjSitobEhsWEJmaVRzVFd1NkhKRy9DNUptUWRPZjBy?=
- =?utf-8?B?a1F0bXFkMnhOQ3NVWnlGRE5kb2o4UTVuSmFIRzVlZXNOVDQrRVMzVlpTSXNG?=
- =?utf-8?B?Zmx1U0RndTE1Nll3cXdlRE1FWmp5UHdRNmZGQllkdVBWcUZBQnZUY2VUMnQ1?=
- =?utf-8?B?VHZQQmFTTVBEallTeTBCNDRzazk0Y0I3TklvL2RZanZIaGprTm80RlpoRVFa?=
- =?utf-8?B?NmU5TktWY3RxcHJMUmU5dXNVUlI1ZUpJS2VJaWFabVpDbFB0cE9VdWVCYU9y?=
- =?utf-8?B?NkhXNnpEcGh4bS90QVRQNldNeUtvNUJ5MXo2cFVRRWUrMUUyNXg1Z3FOR1lr?=
- =?utf-8?B?bEdFYU5UQ095a0xMK2V6VERBRGQrMFBQbTg3Z0hScWswUHU2dndyTDJOUzlv?=
- =?utf-8?B?bjFnaFF1Si94YjN4NXo2bmpnVFZjaHc4VmRQNVRnK09uTWtZNlNDSUlTOVBH?=
- =?utf-8?B?eE01ZVpxL2s4RmFsU1JQclkxTUZaOC9rZEswam1FbW1zbzFzTVFCSEU2aml1?=
- =?utf-8?B?U2JzRUhuRTNNaE9heW9uRTlxMzB4SlZDTVdXaXZIRTdhTm1MVkF0ZGdoS2dW?=
- =?utf-8?B?MTNzcVEyUEltZHQxbzh3N2xjTGRMUVAwVVdCNzNEV2Z6eExOdTdrbE0zMlRr?=
- =?utf-8?B?Q2JsUnUwWXQwRmM5S2RZTVZja2JtV1AxSFZFaUhwcHEyMnFGL0FtV2pTRUd3?=
- =?utf-8?B?bURzSVRhbTAvYmVZOHRoQ240RnlsdTBtZmhSL3Nnb0JTQStwM3VoN2dyMVRy?=
- =?utf-8?B?aUhtRHJUaXZMMzdoMTA0NXRRV3dHUlpkRmNiUS9wdndIQTdoY2dBUFVMSUFC?=
- =?utf-8?B?aVVkd2d0RGZuaHJWSHJiaW9EMk83cmNRenAvcFhNTGZKZ05hUm56c1EyU2Ir?=
- =?utf-8?B?RlExSk1Qb0EyREpXd2gxZmlqc1VFejg0UkRIV1dUVm5hT21IRVV0SWV6UHdt?=
- =?utf-8?B?NXg2Q2o2THVsVmgzRHNYK2RIOEZJZUFmQ2tOQU9PcFF4VFhBam16T3ZKN2dk?=
- =?utf-8?B?Sml6STlmYUxlb1VuY295dlYydDlZUmc0RWwxUVhTQU14Rkg1NE91Z2xPOTBJ?=
- =?utf-8?B?a01kcWtnckFFdEUwVHdValIzSzFrMXlnMG1VQ2JPYzhrWnlqZkw3UHlPczhU?=
- =?utf-8?B?c0pwdDNKcytxdnJsbCtHeVVtMEVvaTBONi9HSGRjbmpzV3h5eG90V244QTV2?=
- =?utf-8?B?RFhwTGhOM3NzV1o0RkFJc2dHcDN1d25CYWwrY2NSTitJNjdKTDVCUTEvY1Ri?=
- =?utf-8?B?NUNqS0t2aTd1ZUtUOGY2YXZYYzF5ZFppVlk1WEZTNkkxd2xTeVhib0tkL2Yr?=
- =?utf-8?B?Q0tzSnd0bzI1RU5IOFVXR0F4Y3hYKzZFY3l5bVZXVVIrNHVlQmhQVWpId3BL?=
- =?utf-8?B?U0VVMS9XakhqMzk3WWxRSS9BTnVaQ3BkQ2xQeUtxaXBnSWNKV2k2dnRueWZL?=
- =?utf-8?B?RjArMHNLTjNnTDRQTFRYQkttelVqU3ZrK3ErT2hnTWp5STI3cThtbWJEbFBR?=
- =?utf-8?B?aW5XNkFCSGVCRDRYNjQ3V284cVBwTjZBbWc0UTAwS1ljT0xjVGdodHhSK3FR?=
- =?utf-8?B?Wmw5T2VCS0FSV1ZNR0t4RU8vM0JUbkhTanVkWWdzTklvbGM1WWVjeDY1bHhR?=
- =?utf-8?B?c3VOV1VyREgzVmIrc3ZJT3dnRHJldnJhSWc4dnZsWnJtQjU1R3lTdDdHWjlY?=
- =?utf-8?B?dTkycG1aaVNjMUhWRVlWc01lR3ZaRE8xeGxlRlIxNmpybmIwcU8vZDZnVlRK?=
- =?utf-8?B?VitXRHl2OW1ha3AzQk4wd0gwcFdEUlVTbUNncnNVNkZIWDlCc1RIU0FQQ3Bx?=
- =?utf-8?B?cC9velJ0Ui95ajMxbUpCVDZSMTNwcHl4b0o1TnJnbDBwclRBNGlmU1ZJNmNR?=
- =?utf-8?B?eDBHOHV4dDJTT1AwcmVSaG52b1U1clRvUTFxUlFuclpvaUxtUXFTRjhWVTJU?=
- =?utf-8?B?TlRVT0lzMzhQRE1RQ3prUDU5UkRBeDNOYVJuZkM1Vnc3enA0eTV6bHNSQ2xF?=
- =?utf-8?B?RVUzZk1CZGI3RDhNYzZwS3NiMWd3V0pLSlY4QTNJb2p3eGZZaXFxSnNCVEd6?=
- =?utf-8?B?MGJuLzBldHpVUFZMOXdvcElwVFlmeER0WXVUZ3VweEtVWUFBS21WUTFXdDJY?=
- =?utf-8?B?MWc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d955c61-37b9-4445-7121-08db323fd060
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 23:29:46.8767
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BSo8A2zGG9KlZl0q32ELbF8C5HU5kfOy6QaBtTjAM6XZwuL3VBbqYPejGcke6oVrIV7UHxSYrPIdULqs9fT9fsCMzr3EI/A3LKnLP5ZReL4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6426
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF6AEGtDbSDNBBdONQ6YubZDaKMpDQ-BJx5mP+aGw4uy9qbXDQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+On Fri, Mar 31, 2023 at 03:14:30PM -0700, Rob Clark wrote:
+> On Fri, Mar 31, 2023 at 1:44 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > Hi Rob,
+> >
+> > On Wed, Mar 08, 2023 at 07:53:02AM -0800, Rob Clark wrote:
+> > > From: Rob Clark <robdclark@chromium.org>
+> > >
+> > > For an atomic commit updating a single CRTC (ie. a pageflip) calculate
+> > > the next vblank time, and inform the fence(s) of that deadline.
+> > >
+> > > v2: Comment typo fix (danvet)
+> > > v3: If there are multiple CRTCs, consider the time of the soonest vblank
+> > >
+> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >
+> > I apologize if this has already been reported or fixed, I searched lore
+> > but did not find anything.
+> >
+> > This change as commit d39e48ca80c0 ("drm/atomic-helper: Set fence
+> > deadline for vblank") in -next causes a hang while running LTP's
+> > read_all test on /proc on my Ampere Altra system (it seems it is hanging
+> > on a pagemap file?). Additionally, I have this splat in dmesg, which
+> > seems related based on the call stack.
+> 
+> Hi, I'm not familiar with this hardware.. do you know which drm driver
+> is used?  I can't tell from the call-stack.
 
-On 3/20/2023 10:26 AM, James Morse wrote:
+I think it is drivers/gpu/drm/ast, as I see ast in lsmod?
 
-...
-
-> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-> index 351319403f84..8e25ea49372e 100644
-> --- a/arch/x86/kernel/cpu/resctrl/core.c
-> +++ b/arch/x86/kernel/cpu/resctrl/core.c
-> @@ -603,19 +603,20 @@ static void clear_closid_rmid(int cpu)
->  	wrmsr(MSR_IA32_PQR_ASSOC, RESCTRL_RESERVED_CLOSID, 0);
->  }
->  
-> -static int resctrl_online_cpu(unsigned int cpu)
-> +static int resctrl_arch_online_cpu(unsigned int cpu)
->  {
->  	struct rdt_resource *r;
-> +	int err;
-
-Could you please rename err to ret? 
-
-Reinette
+> > [   20.542591] fbcon: Taking over console
+> > [   20.550772] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000074
+> > [   20.550776] Mem abort info:
+> > [   20.550777]   ESR = 0x0000000096000004
+> > [   20.550779]   EC = 0x25: DABT (current EL), IL = 32 bits
+> > [   20.550781]   SET = 0, FnV = 0
+> > [   20.550782]   EA = 0, S1PTW = 0
+> > [   20.550784]   FSC = 0x04: level 0 translation fault
+> > [   20.550785] Data abort info:
+> > [   20.550786]   ISV = 0, ISS = 0x00000004
+> > [   20.550788]   CM = 0, WnR = 0
+> > [   20.550789] user pgtable: 4k pages, 48-bit VAs, pgdp=0000080009d16000
+> > [   20.550791] [0000000000000074] pgd=0000000000000000, p4d=0000000000000000
+> > [   20.550796] Internal error: Oops: 0000000096000004 [#1] SMP
+> > [   20.550800] Modules linked in: ip6table_nat tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc binfmt_misc vfat fat xfs snd_usb_audio snd_hwdep snd_usbmidi_lib snd_seq snd_pcm snd_rawmidi snd_timer snd_seq_device snd soundcore joydev mc ipmi_ssif ipmi_devintf ipmi_msghandler arm_spe_pmu arm_cmn arm_dsu_pmu arm_dmc620_pmu cppc_cpufreq loop zram crct10dif_ce polyval_ce nvme polyval_generic ghash_ce sbsa_gwdt igb nvme_core ast nvme_common i2c_algo_bit xgene_hwmon gpio_dwapb scsi_dh_rdac scsi_dh_emc scsi_dh_alua ip6_tables ip_tables dm_multipath fuse
+> > [   20.550869] CPU: 12 PID: 469 Comm: kworker/12:1 Not tainted 6.3.0-rc2-00008-gd39e48ca80c0 #1
+> > [   20.550872] Hardware name: ADLINK AVA Developer Platform/AVA Developer Platform, BIOS TianoCore 2.04.100.07 (SYS: 2.06.20220308) 09/08/2022
+> > [   20.550875] Workqueue: events fbcon_register_existing_fbs
+> > [   20.550884] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > [   20.550888] pc : drm_crtc_next_vblank_start+0x2c/0x98
+> > [   20.550894] lr : drm_atomic_helper_wait_for_fences+0x90/0x240
+> > [   20.550898] sp : ffff80000d583960
+> > [   20.550900] x29: ffff80000d583960 x28: ffff07ff8fc187b0 x27: 0000000000000000
+> > [   20.550904] x26: ffff07ff99c08c00 x25: 0000000000000038 x24: ffff07ff99c0c000
+> > [   20.550908] x23: 0000000000000001 x22: 0000000000000038 x21: 0000000000000000
+> > [   20.550912] x20: ffff07ff9640a280 x19: 0000000000000000 x18: ffffffffffffffff
+> > [   20.550915] x17: 0000000000000000 x16: ffffb24d2eece1c0 x15: 0000003038303178
+> > [   20.550919] x14: 3032393100000048 x13: 0000000000000000 x12: 0000000000000000
+> > [   20.550923] x11: 0000000000000000 x10: 0000000000000000 x9 : ffffb24d2eeeaca0
+> > [   20.550926] x8 : ffff80000d583628 x7 : 0000080077783000 x6 : 0000000000000000
+> > [   20.550930] x5 : ffff80000d584000 x4 : ffff07ff99c0c000 x3 : 0000000000000130
+> > [   20.550934] x2 : 0000000000000000 x1 : ffff80000d5839c0 x0 : ffff07ff99c0cc08
+> > [   20.550937] Call trace:
+> > [   20.550939]  drm_crtc_next_vblank_start+0x2c/0x98
+> > [   20.550942]  drm_atomic_helper_wait_for_fences+0x90/0x240
+> > [   20.550946]  drm_atomic_helper_commit+0xb0/0x188
+> > [   20.550949]  drm_atomic_commit+0xb0/0xf0
+> > [   20.550953]  drm_client_modeset_commit_atomic+0x218/0x280
+> > [   20.550957]  drm_client_modeset_commit_locked+0x64/0x1a0
+> > [   20.550961]  drm_client_modeset_commit+0x38/0x68
+> > [   20.550965]  __drm_fb_helper_restore_fbdev_mode_unlocked+0xb0/0xf8
+> > [   20.550970]  drm_fb_helper_set_par+0x44/0x88
+> > [   20.550973]  fbcon_init+0x1e0/0x4a8
+> > [   20.550976]  visual_init+0xbc/0x118
+> > [   20.550981]  do_bind_con_driver.isra.0+0x194/0x3a0
+> > [   20.550984]  do_take_over_console+0x50/0x70
+> > [   20.550987]  do_fbcon_takeover+0x74/0xf8
+> > [   20.550989]  do_fb_registered+0x13c/0x158
+> > [   20.550992]  fbcon_register_existing_fbs+0x78/0xc0
+> > [   20.550995]  process_one_work+0x1ec/0x478
+> > [   20.551000]  worker_thread+0x74/0x418
+> > [   20.551002]  kthread+0xec/0x100
+> > [   20.551005]  ret_from_fork+0x10/0x20
+> > [   20.551011] Code: f9400004 b9409013 f940a082 9ba30a73 (b9407662)
+> > [   20.551013] ---[ end trace 0000000000000000 ]---
+> >
+> > If there is any additional information that I can provide or patches I
+> > can test, I am more than happy to do so.
+> >
+> > Cheers,
+> > Nathan
+> >
+> > # bad: [4b0f4525dc4fe8af17b3daefe585f0c2eb0fe0a5] Add linux-next specific files for 20230331
+> > # good: [b2bc47e9b2011a183f9d3d3454a294a938082fb9] Merge tag 'net-6.3-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
+> > git bisect start '4b0f4525dc4fe8af17b3daefe585f0c2eb0fe0a5' 'b2bc47e9b2011a183f9d3d3454a294a938082fb9'
+> > # good: [ed5f95f3349003d74a4a11b27b0f05d6794c382a] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+> > git bisect good ed5f95f3349003d74a4a11b27b0f05d6794c382a
+> > # bad: [85f7d1bfa30a05df2c9d8a0e9f6b1f23b4a6f13b] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git
+> > git bisect bad 85f7d1bfa30a05df2c9d8a0e9f6b1f23b4a6f13b
+> > # bad: [fbd0f79f200f8e5cb73fb3d7b788de09a8f33a6f] Merge branch 'msm-next' of https://gitlab.freedesktop.org/drm/msm.git
+> > git bisect bad fbd0f79f200f8e5cb73fb3d7b788de09a8f33a6f
+> > # good: [90031bc33f7525f0cc7a9ef0b1df62a1a4463382] Merge tag 'amd-drm-next-6.4-2023-03-17' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
+> > git bisect good 90031bc33f7525f0cc7a9ef0b1df62a1a4463382
+> > # good: [d4e04817db670083aed73de1fadd3b21758e69ba] drm/amdgpu: Return from switch early for EEPROM I2C address
+> > git bisect good d4e04817db670083aed73de1fadd3b21758e69ba
+> > # good: [70e360f9b548d99f959668d4f047d1363d42fe8e] drm: exynos: dsi: Consolidate component and bridge
+> > git bisect good 70e360f9b548d99f959668d4f047d1363d42fe8e
+> > # bad: [0b43595d0cbb06736d1e572e79e29a410a273573] Merge branch 'drm-next' of https://gitlab.freedesktop.org/agd5f/linux
+> > git bisect bad 0b43595d0cbb06736d1e572e79e29a410a273573
+> > # good: [fbb3b3500f76ec8b741bd2d0e761ca3e856ad924] dt-bindings: display: boe,tv101wum-nl6: document rotation
+> > git bisect good fbb3b3500f76ec8b741bd2d0e761ca3e856ad924
+> > # bad: [82bbec189ab34873688484cd14189a5392946fbb] Merge v6.3-rc4 into drm-next
+> > git bisect bad 82bbec189ab34873688484cd14189a5392946fbb
+> > # bad: [d39e48ca80c0960b039cb38633957f0040f63e1a] drm/atomic-helper: Set fence deadline for vblank
+> > git bisect bad d39e48ca80c0960b039cb38633957f0040f63e1a
+> > # good: [d7d5a21dd6b4706c04fbba5d25db8da5f25aab68] dma-buf/dma-resv: Add a way to set fence deadline
+> > git bisect good d7d5a21dd6b4706c04fbba5d25db8da5f25aab68
+> > # good: [f3823da7e4ba7d4781375c2bb786a8a78efc6591] drm/scheduler: Add fence deadline support
+> > git bisect good f3823da7e4ba7d4781375c2bb786a8a78efc6591
+> > # good: [b2c077d001b612b1f34f7e528b2dc6072bd6794e] drm/vblank: Add helper to get next vblank time
+> > git bisect good b2c077d001b612b1f34f7e528b2dc6072bd6794e
+> > # first bad commit: [d39e48ca80c0960b039cb38633957f0040f63e1a] drm/atomic-helper: Set fence deadline for vblank
