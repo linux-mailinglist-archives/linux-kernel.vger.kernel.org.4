@@ -2,174 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2606D2342
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101406D2347
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233013AbjCaO5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
+        id S232891AbjCaO63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232623AbjCaO52 (ORCPT
+        with ESMTP id S231775AbjCaO61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:57:28 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FB2B459
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:57:12 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id e18so22710893wra.9
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:57:12 -0700 (PDT)
+        Fri, 31 Mar 2023 10:58:27 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E896A63
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:58:24 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id p15so27675745ybl.9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:58:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680274631;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=X2dQ+lYOZmXZreHzCA27SPymWQu74XpJ9AsKWsdeeL4=;
-        b=LxMr8btqIWpZVBhNCuG3Pv8bToCfJWDTdR7+mR8mGHozcnAnNX8W0cDET2uL7CaGs9
-         5e93/RuXqDOnGQEs4AERzNy/Qogvh1lNEl5m/Bf/swKpLDINZWZrVcg2ZaNJuQJxTI3k
-         scrF3ioZ8uoXF7zeOPiJ/wP8xdLa/F/5qp3ahGdIGZuPJ7thH6JA/9PSgY4cV1Egc6BI
-         O1Rz6S+5Em4dXlsXilZs5u99e4DEWL7+4xEEyTpHsjLqG+DWWc96/933gCmUjtvMCuis
-         cNHHsNXvDWRcx4rsOJaAwffsHJR3LJLod1tAvHB9N9onT9OneeyP7ioLARMZpPHqlTA4
-         cJqw==
+        d=linaro.org; s=google; t=1680274703;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+9vywVkizA1/BL+IoFGg5oSdyRUHG9JaCTPgm6cyxaI=;
+        b=RiEUbASd4Nv2bK5U0NfdCxz+zGU9jvca9t9L9dX8WOCA+TKl2+UavAzbHhwokVPtii
+         Ns/nmgxsMfcFREXylGBnoQNH6yVWzO9I2/Lr3fBUhDBuQ1B02+IPW9wI7Go+UeQ767GJ
+         EhsoUgCVLsyu3PM+cZRxuOjp9fXxG+208DkvZObKFf5+Y4mixJ7fwrqXVbbPt7cvcmzD
+         GgRTzUc4OrI0bZSmug8TxFMTjUjrbMYcNWhYjrwVdDTxEPvyavmLqideHlzGIoFLPTw+
+         WE795LitI1h0crKga2+zmrGOIs39+D7z1ih/3NIVqwwwnnbEjuSYrYJrTMzC7ozAKF+L
+         5z3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680274631;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1680274703;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=X2dQ+lYOZmXZreHzCA27SPymWQu74XpJ9AsKWsdeeL4=;
-        b=nsUq2RtauorwxNOtlAFtYIF0CDsmjrCDhzAXTsHQOQ+WGWVN370qaNI+zHIz568XNR
-         G23nENonV8AauS/S235pkamZMFjpboF+hXb9AuQF924gsWsb9svCdEpuAV0jO7EQtzwe
-         lzijR0PpODX0NLaTZQIEsHlSa9fmzg5/o+9SZIgYMuUIDbDpmvk/NsHpldCLoiQxx+eI
-         GL/munc/IblU8VTMqI3X0/3I98tpp92R+ZylUQ+fU/aPeCLDpr6OJcW58pEA4Bdioa83
-         CVKK2G/RCq9Cf3o+pudcwGSwbMNuOj2K0X/7yg61zZg63glXashOmQQuLqpL/d2A1Z0C
-         6eNQ==
-X-Gm-Message-State: AAQBX9djAN9lLVIyHjIpdsfTH+HFNPeYw0mX57pl0Cpw5eeWHY7SM0pt
-        jV0YgD6oFy6+6MPP3+hrnDd1ag==
-X-Google-Smtp-Source: AKy350ZhM7TlzzbkKQh+f2qjf5R7dBolMimYX1XKzO4RjCFaq7KCOpO3n90LcpUgFdpKCsl7ogNfUw==
-X-Received: by 2002:a5d:4409:0:b0:2cf:e422:e28c with SMTP id z9-20020a5d4409000000b002cfe422e28cmr18329961wrq.42.1680274631125;
-        Fri, 31 Mar 2023 07:57:11 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0? ([2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0])
-        by smtp.gmail.com with ESMTPSA id b12-20020a5d4d8c000000b002e51195a3e2sm2392687wru.79.2023.03.31.07.57.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 07:57:10 -0700 (PDT)
-Message-ID: <23e513ad-9fca-30cd-1f08-2ff559072314@linaro.org>
-Date:   Fri, 31 Mar 2023 16:57:05 +0200
+        bh=+9vywVkizA1/BL+IoFGg5oSdyRUHG9JaCTPgm6cyxaI=;
+        b=Wdy4kY7fLLxjCXuatq38aMNeKKRFeKOElwT6dGFYLLVAvnjJLR77iPbEctuhP6AL7x
+         NHFqA+Q0TUIxgZNleaiLbIFiv2BVJoiTvJ7v/PIcMyJ0pITJrlAsdXOTbLmwIkJiNTYB
+         Vcq6j7PrJYUYE8B0gMLuoj9QuTndT0ZDUQv3JMoQ+zTzmYGj8IpRTaPLXc/VZ2I8QyGn
+         a4PPlUNueGOdmvm89kWqbJv3Iu6rUKF+Cpm41uiW5JpYA6X50wpftsTRg9MPu/nTrFtH
+         J5Tu3T1JjhrigmWSOyPgumOeUg1F3Hx+OTbL8QHF6pNGCC18NKuo2qu6qmLVmeg56qj2
+         s7Rw==
+X-Gm-Message-State: AAQBX9eDUH5ckamMywgmMHPj1sipGGuovdEVNzwrgzDotjZRaL7PI28Z
+        FK2CTZnkLj6pzUHlvevlOPdwGUe2lD7YTWqYo7GNhg==
+X-Google-Smtp-Source: AKy350asvDklS51ndeBMVx+J7/M6JaGcY9r/+cXahsDugorB/yziYIP20bAOPlDlUaFmd1YvBHiWeGw991/U9/QIB18=
+X-Received: by 2002:a25:d747:0:b0:b82:410e:daae with SMTP id
+ o68-20020a25d747000000b00b82410edaaemr211714ybg.9.1680274703429; Fri, 31 Mar
+ 2023 07:58:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH RFC 00/20] ARM: oxnas support removal
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sebastian Reichel <sre@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-mtd@lists.infradead.org, Netdev <netdev@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pm@vger.kernel.org, Daniel Golle <daniel@makrotopia.org>
-References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
- <df218abb-fa83-49d2-baf5-557b83b33670@app.fastmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <df218abb-fa83-49d2-baf5-557b83b33670@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <1680271114-1534-1-git-send-email-quic_vpolimer@quicinc.com> <1680271114-1534-4-git-send-email-quic_vpolimer@quicinc.com>
+In-Reply-To: <1680271114-1534-4-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 31 Mar 2023 17:58:12 +0300
+Message-ID: <CAA8EJppc3LDQy2RgVZbWki4Y-_FOTK67Y8RfK5Bm9gqdfqMjqQ@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] msm: skip the atomic commit of self refresh while
+ PSR running
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_khsieh@quicinc.com,
+        quic_vproddut@quicinc.com, quic_bjorande@quicinc.com,
+        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2023 15:42, Arnd Bergmann wrote:
-> On Fri, Mar 31, 2023, at 10:34, Neil Armstrong wrote:
->> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
->> associated with a clear lack of maintainance, development and migration to
->> dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
->>
->> In addition, the OX810 hasn't been booted for years and isn't even present
->> in an ARM config file.
->>
->> For the OX820, lack of USB and SATA support makes the platform not usable
->> in the current Linux support and relies on off-tree drivers hacked from the
->> vendor (defunct for years) sources.
->>
->> The last users are in the OpenWRT distribution, and today's removal means
->> support will still be in stable 6.1 LTS kernel until end of 2026.
->>
->> If someone wants to take over the development even with lack of SMP, I'll
->> be happy to hand off maintainance.
->>
->> The plan is to apply the first 4 patches first, then the drivers
->> followed by bindings. Finally the MAINTAINANCE entry can be removed.
->>
->> I'm not sure about the process of bindings removal, but perhaps the bindings
->> should be marked as deprecated first then removed later on ?
->>
->> It has been a fun time adding support for this architecture, but it's time
->> to get over!
->>
->> Patch 2 obviously depends on [1].
->>
->> [1] https://lore.kernel.org/all/20230327121317.4081816-1-arnd@kernel.org/
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> 
-> Thanks a lot for going through this and preparing the patches!
-> 
-> I've discussed this with Daniel Golle on the OpenWRT channel as well,
-> and he indicated that the timing is probably fine here, as there are
-> already close to zero downloads for oxnas builds, and the 6.1 kernel
-> will only be part of a release in 2024.
-> 
-> For the dependency on my other patch, I'd suggest you instead
-> remove the SMP files here as well, which means we can merge either
-> part independently based on just 6.3-rc. I can do that change
-> myself by picking up patches 1-4 of your RFC series, or maybe you
-> can send resend them after rebase to 6.3-rc1.
+On Fri, 31 Mar 2023 at 16:59, Vinod Polimera <quic_vpolimer@quicinc.com> wrote:
+>
+> In certain CPU stress conditions, there can be a delay in scheduling commit
+> work and it was observed that PSR commit from a different work queue was
+> scheduled. Avoid these commits as display is already in PSR mode.
+>
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/msm_atomic.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/msm/msm_atomic.c b/drivers/gpu/drm/msm/msm_atomic.c
+> index 645fe53..f8141bb 100644
+> --- a/drivers/gpu/drm/msm/msm_atomic.c
+> +++ b/drivers/gpu/drm/msm/msm_atomic.c
+> @@ -192,6 +192,9 @@ int msm_atomic_check(struct drm_device *dev, struct drm_atomic_state *state)
+>                         new_crtc_state->mode_changed = true;
+>                         state->allow_modeset = true;
+>                 }
+> +
+> +               if (old_crtc_state->self_refresh_active && new_crtc_state->self_refresh_active)
+> +                       return -EINVAL;
 
-Ack I'll send patches 1-4 rebased on v6.3-rc1 with the acks
-and sent a PR next week.
+EINVAL here means that atomic_check will fail if both old and new
+states are in SR mode. For example, there might be a mode set for
+another CRTC (while keeping this one in SR mode). I don't think this
+is correct. We should skip/shortcut the commit, that's true. But I
+doubt that returning an error here is a proper way to do this. Please
+correct me if I'm wrong.
 
-> 
-> For the driver removals, I think we can merge those at the same
-> time as the platform removal since there are no shared header files
-> that would cause build time regressions and there are no runtime
-> regressions other than breaking the platform itself. Maybe
-> just send the driver removal separately to the subsystem
-> maintainers with my
-> 
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
+>         }
+>
+>         return drm_atomic_helper_check(dev, state);
+> --
+> 2.7.4
+>
 
-Thanks, I'll submit those individually once the first patches are merged.
 
-Neil
-
-> 
->       Arnd
-
+-- 
+With best wishes
+Dmitry
