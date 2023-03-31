@@ -2,237 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF5D6D263A
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1622E6D263C
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbjCaQu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 12:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
+        id S233152AbjCaQui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233011AbjCaQuA (ORCPT
+        with ESMTP id S233134AbjCaQuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:50:00 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB82C23B75
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:47:24 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5445009c26bso425557937b3.8
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680281243;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sZS7d7+T0OxQvYK3IXahXhyZfGvpeL3UaMkf6s2Bw4Y=;
-        b=NRAWWllwTLVGvMSvyrYM2t7yJQGQzEtzX1s2+wMIffidrBT850ocAuhwKJ8I9hVoGg
-         yDfjxOpBet9evCqoOrFf3NZBsJGt4hXaaoxQ543woJGWS3FfaYED6NuJvWOgEvwQf0a3
-         t5lCwIuEhmsNwsYmdxcdxBBVQ/Hi6leXSVYCTHy9Uqm3wPPvsvaLR7+IhkiFcX/IkmD+
-         iWL04tMGSyGPGLK4XqeqmNEKkpd6ToKj3ulrm+2kwPaAmSm6uWOUg6TkooiFfyHTE8Nq
-         HLyvOZxSSW2+PPGnHKllK98ass29UoTkbWUCm92/V8hS86BFcTOeCHoldlLJW7VkevTX
-         lBlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680281243;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sZS7d7+T0OxQvYK3IXahXhyZfGvpeL3UaMkf6s2Bw4Y=;
-        b=g+5o3qA39OsMrm1t1GNL1W7MUlu/YBF2NQKP2nPPI9p2SsYL5NFUP2hC4GsDUKXsNM
-         TSOFl1LArxhTOh6LjF73fm8qgepB/N5x0E4QIVAY46kJGayvR/FGtZllzJwwd1F7GaCc
-         QsuFnBgPYw3qftCsuf5YVuSy8Fd8JIadZzpP3ap0h/YBs/Z1+ysVTaMPOsneR/Bi41ph
-         fAdydIe+ho4N7Z0bHLYeeIe03/sP6CrZDM43fy/xZlr49OZl3g3pdW3aoXd2WmKBS9Zv
-         pcz1m21ttoHEU8BolT0jq8xrcN+LoiNXL+QmNPbvI2eWDmoy9QKB1k3qJ3/rDG+ugQoQ
-         774Q==
-X-Gm-Message-State: AAQBX9d6BSUkgnylqxAbb/FY1LTFHS0Vg2Dg4N4iEY6sNVnssFht3Qsj
-        pmqgqjGAttgoPpNQFr/BCbmAZj9swq/oqrN9ETw=
-X-Google-Smtp-Source: AKy350Y7/xO/rQJYMGqdUAlYBMUfzqrigzlpMOS5N8Qw02cwN6O7P8VBYSLpWwCpGzVxUPz6viRUZkwqJzCzP1Od9uU=
-X-Received: by 2002:a81:b50f:0:b0:544:b8d8:339e with SMTP id
- t15-20020a81b50f000000b00544b8d8339emr14051696ywh.5.1680281242941; Fri, 31
- Mar 2023 09:47:22 -0700 (PDT)
+        Fri, 31 Mar 2023 12:50:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F032CA29;
+        Fri, 31 Mar 2023 09:47:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BE826229F;
+        Fri, 31 Mar 2023 16:47:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54092C433D2;
+        Fri, 31 Mar 2023 16:47:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680281248;
+        bh=/lkIh5Nz3go+vQYNCoQXglwXXZHR6bz3tdiI3tn+/LE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uAUI4tf4c0+iTL6VZpA452QzH6rdPXK2D1+tb4vwwT/OCVlIWYk71lbZJF6RRrGWV
+         LYsPAv/3q2kfIQIF6xRFhs1/+9r4W6MSzzvfcu/DOw5ddPOo2e27YJz00wzn+PgD+B
+         3eLOeqaGIYYJq3/QuqmuAkaNlfXlOBfepGFnP+DQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     axboe@kernel.dk
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-block@vger.kernel.org
+Subject: [PATCH] pktcdvd: simplify the class_pktcdvd logic
+Date:   Fri, 31 Mar 2023 18:47:24 +0200
+Message-Id: <20230331164724.319703-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org> <ZCMmrnmZFcH65Orp@bombadil.infradead.org>
- <ZCNlWnQTbWoBBPd2@codewreck.org> <2322056.HEUtEhvpMu@silver> <6f89f0ac34956e7f527c7efa3d162b4a1f5ea71a.camel@kernel.org>
-In-Reply-To: <6f89f0ac34956e7f527c7efa3d162b4a1f5ea71a.camel@kernel.org>
-From:   Eric Van Hensbergen <ericvh@gmail.com>
-Date:   Fri, 31 Mar 2023 11:47:12 -0500
-Message-ID: <CAFkjPT=gJBELBg1gCjYFrZKVp5fy1vmidByOstB8tfqcuCUvLA@mail.gmail.com>
-Subject: Re: 9p caching with cache=loose and cache=fscache
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Josef Bacik <josef@toxicpanda.com>, lucho@ionkov.net,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Amir Goldstein <amir73il@gmail.com>,
-        Pankaj Raghav <p.raghav@samsung.com>, v9fs@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3396; i=gregkh@linuxfoundation.org; h=from:subject; bh=/lkIh5Nz3go+vQYNCoQXglwXXZHR6bz3tdiI3tn+/LE=; b=owGbwMvMwCRo6H6F97bub03G02pJDCnqfLM2ZljVbzQ8OFcgf5P80eJV6glVGl5Fx83nrXt4Y uePc78YO2JZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAidv8ZFszbIx716uosyzke z/UrVUNeKbab6zAsuFQbVZT3TohFYmNs7IYzjZb5JzcUAwA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I like the sliding window concept - I wasn't aware NFS was doing that,
-I'll have a look as part of my rework.
-The unmount/mount should indeed flush any cache (unless using
-fscache), so that might be a good workaround if it can be automated in
-the workflow.
+There is no need to dynamically create and destroy the class_pktcdvd
+structure, just make it static and remove the memory allocation logic
+which simplifies and cleans up the logic a lot.
 
-          -eric
+Cc: linux-block@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+Note, I would like to take this through my driver-core tree as it is
+needed for other struct class cleanup work I have done and am continuing
+to do there.
 
-On Wed, Mar 29, 2023 at 6:32=E2=80=AFAM Jeff Layton <jlayton@kernel.org> wr=
-ote:
->
-> On Wed, 2023-03-29 at 13:19 +0200, Christian Schoenebeck wrote:
-> > On Wednesday, March 29, 2023 12:08:26 AM CEST Dominique Martinet wrote:
-> > > Luis Chamberlain wrote on Tue, Mar 28, 2023 at 10:41:02AM -0700:
-> > > > >   "To speedup things you can also consider to use e.g. cache=3Dlo=
-ose instead.
-> > > >
-> > > > My experience is that cache=3Dloose is totally useless.
-> > >
-> > > If the fs you mount isn't accessed by the host while the VM is up, an=
-d
-> > > isn't shared with another guest (e.g. "exclusive share"), you'll get
-> > > what you expect.
-> > >
-> > > I have no idea what people use qemu's virtfs for but this is apparent=
-ly
-> > > common enough that it was recommended before without anyone complaini=
-ng
-> > > since that started being recommended in 2011[1] until now?
-> > >
-> > > [1] https://wiki.qemu.org/index.php?title=3DDocumentation/9psetup&dif=
-f=3D2178&oldid=3D2177
-> > >
-> > > (now I'm not arguing it should be recommended, my stance as a 9p
-> > > maintainer is that the default should be used unless you know what
-> > > you're doing, so the new code should just remove the 'cache=3Dnone'
-> > > altogether as that's the default.
-> > > With the new cache models Eric is preparing comes, we'll get a new sa=
-fe
-> > > default that will likely be better than cache=3Dnone, there is no rea=
-son
-> > > to explicitly recommend the historic safe model as the default has
-> > > always been on the safe side and we have no plan of changing that.)
-> >
-> > It's not that I receive a lot of feedback for what people use 9p for, n=
-or am I
-> > QEMU's 9p maintainer for a long time, but so far contributors cared mor=
-e about
-> > performance and other issues than propagating changes host -> guest wit=
-hout
-> > reboot/remount/drop_caches. At least they did not care enough to work o=
-n
-> > patches.
-> >
-> > Personally I also use cache=3Dloose and only need to push changes host-=
->guest
-> > once in a while.
-> >
-> > > > >    That will deploy a filesystem cache on guest side and reduces =
-the amount of
-> > > > >    9p requests to hosts. As a consequence however guest might not=
- see file
-> > > > >    changes performed on host side *at* *all*
-> > > >
-> > > > I think that makes it pretty useless, aren't most setups on the gue=
-st read-only?
-> > > >
-> > > > It is not about "may not see", just won't. For example I modified t=
-he
-> > > > Makefile and compiled a full kernel and even with those series of
-> > > > changes, the guest *minutes later* never saw any updates.
-> > >
-> > > read-only on the guest has nothing to do with it, nor has time.
-> > >
-> > > If the directory is never accessed on the guest before the kernel has
-> > > been built, you'll be able to make install on the guest -- once, even=
- if
-> > > the build was done after the VM booted and fs mounted.
-> > >
-> > > After it's been read once, it'll stay in cache until memory pressure =
-(or
-> > > an admin action like umount/mount or sysctl vm.drop_caches=3D3) clear=
-s it.
-> > >
-> > > I believe that's why it appeared to work until you noticed the issue =
-and
-> > > had to change the mount option -- I'd expect in most case you'll run
-> > > make install once and reboot/kexec into the new kernel.
-> > >
-> > > It's not safe for your usecase and cache=3Dnone definitely sounds bet=
-ter
-> > > to me, but people should use defaults make their own informed decisio=
-n.
-> >
-> > It appears to me that read-only seems not to be the average use case fo=
-r 9p,
-> > at least from the command lines I received. It is often used in combina=
-tion
-> > with overlayfs though.
-> >
-> > I (think) the reason why cache=3Dloose was recommended as default optio=
-n on the
-> > QEMU wiki page ages ago, was because of its really poor performance at =
-that
-> > point. I would personally not go that far and discourage people from us=
-ing
-> > cache=3Dloose in general, as long as they get informed about the conseq=
-uences.
-> > You still get a great deal of performance boost, the rest is for each
-> > individual to decide.
-> >
-> > Considering that Eric already has patches for revalidating the cache in=
- the
-> > works, I think the changes I made on the other QEMU wiki page are appro=
-priate,
-> > including the word "might" as it's soon only a matter of kernel version=
-.
-> >
-> > > > >   In the above example the folder /home/guest/9p_setup/ shared of=
- the
-> > > > >   host is shared with the folder /tmp/shared on the guest. We use=
- no
-> > > > >   cache because current caching mechanisms need more work and the
-> > > > >   results are not what you would expect."
-> > > >
-> > > > I got a wiki account now and I was the one who had clarified this.
-> > >
-> > > Thanks for helping making this clearer.
-> >
-> > Yep, and thanks for making a wiki account and improving the content the=
-re
-> > directly. Always appreciated!
-> >
->
-> Catching up on this thread.
->
-> Getting cache coherency right on a network filesystem is quite
-> difficult. It's always a balance between correctness and performance.
->
-> Some protocols (e.g. CIFS and Ceph) take a very heavy-handed approach to
-> try ensure that the caches are always coherent. Basically, these clients
-> are only allowed to cache when the server grants permission for it. That
-> can have a negative effect on performance, of course.
->
-> NFS as a protocol is more "loose", but we've generally beat its cache
-> coherency mechanisms into shape over the years, so you don't see these
-> sorts of problems there as much. FWIW, NFS uses a sliding time window to
-> revalidate the cache, such that it'll revalidate frequently when an
-> inodes is changing frequently, but less so when it's more stable.
->
-> 9P I haven't worked with as much, but it sounds like it doesn't try to
-> keep caches coherent (at least not with cache=3Dloose).
->
-> Probably the simplest solution here is to simply unmount/mount before
-> you have the clients call "make modules_install && make install". That
-> should ensure that the client doesn't have any stale data in the cache
-> when the time comes to do the reads. A full reboot shouldn't be
-> required.
->
-> --
-> Jeff Layton <jlayton@kernel.org>
+ drivers/block/pktcdvd.c | 40 ++++++++++++----------------------------
+ 1 file changed, 12 insertions(+), 28 deletions(-)
+
+diff --git a/drivers/block/pktcdvd.c b/drivers/block/pktcdvd.c
+index ba9bbdef9ef5..79af8a59142e 100644
+--- a/drivers/block/pktcdvd.c
++++ b/drivers/block/pktcdvd.c
+@@ -100,7 +100,8 @@ static struct mutex ctl_mutex;	/* Serialize open/close/setup/teardown */
+ static mempool_t psd_pool;
+ static struct bio_set pkt_bio_set;
+ 
+-static struct class	*class_pktcdvd = NULL;    /* /sys/class/pktcdvd */
++/* /sys/class/pktcdvd */
++static struct class	class_pktcdvd;
+ static struct dentry	*pkt_debugfs_root = NULL; /* /sys/kernel/debug/pktcdvd */
+ 
+ /* forward declaration */
+@@ -315,8 +316,8 @@ static const struct attribute_group *pkt_groups[] = {
+ 
+ static void pkt_sysfs_dev_new(struct pktcdvd_device *pd)
+ {
+-	if (class_pktcdvd) {
+-		pd->dev = device_create_with_groups(class_pktcdvd, NULL,
++	if (class_is_registered(&class_pktcdvd)) {
++		pd->dev = device_create_with_groups(&class_pktcdvd, NULL,
+ 						    MKDEV(0, 0), pd, pkt_groups,
+ 						    "%s", pd->name);
+ 		if (IS_ERR(pd->dev))
+@@ -326,7 +327,7 @@ static void pkt_sysfs_dev_new(struct pktcdvd_device *pd)
+ 
+ static void pkt_sysfs_dev_remove(struct pktcdvd_device *pd)
+ {
+-	if (class_pktcdvd)
++	if (class_is_registered(&class_pktcdvd))
+ 		device_unregister(pd->dev);
+ }
+ 
+@@ -338,11 +339,6 @@ static void pkt_sysfs_dev_remove(struct pktcdvd_device *pd)
+                      device_map     show mappings
+  *******************************************************************/
+ 
+-static void class_pktcdvd_release(struct class *cls)
+-{
+-	kfree(cls);
+-}
+-
+ static ssize_t device_map_show(const struct class *c, const struct class_attribute *attr,
+ 			       char *data)
+ {
+@@ -405,35 +401,23 @@ static struct attribute *class_pktcdvd_attrs[] = {
+ };
+ ATTRIBUTE_GROUPS(class_pktcdvd);
+ 
++static struct class class_pktcdvd = {
++	.name		= DRIVER_NAME,
++	.class_groups	= class_pktcdvd_groups,
++};
++
+ static int pkt_sysfs_init(void)
+ {
+-	int ret = 0;
+-
+ 	/*
+ 	 * create control files in sysfs
+ 	 * /sys/class/pktcdvd/...
+ 	 */
+-	class_pktcdvd = kzalloc(sizeof(*class_pktcdvd), GFP_KERNEL);
+-	if (!class_pktcdvd)
+-		return -ENOMEM;
+-	class_pktcdvd->name = DRIVER_NAME;
+-	class_pktcdvd->class_release = class_pktcdvd_release;
+-	class_pktcdvd->class_groups = class_pktcdvd_groups;
+-	ret = class_register(class_pktcdvd);
+-	if (ret) {
+-		kfree(class_pktcdvd);
+-		class_pktcdvd = NULL;
+-		pr_err("failed to create class pktcdvd\n");
+-		return ret;
+-	}
+-	return 0;
++	return class_register(&class_pktcdvd);
+ }
+ 
+ static void pkt_sysfs_cleanup(void)
+ {
+-	if (class_pktcdvd)
+-		class_destroy(class_pktcdvd);
+-	class_pktcdvd = NULL;
++	class_unregister(&class_pktcdvd);
+ }
+ 
+ /********************************************************************
+-- 
+2.40.0
+
