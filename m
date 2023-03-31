@@ -2,112 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29086D293E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A75E6D2944
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbjCaUQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
+        id S232462AbjCaURb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232538AbjCaUP6 (ORCPT
+        with ESMTP id S232273AbjCaUR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:15:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C9B2220D;
-        Fri, 31 Mar 2023 13:15:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E21C62BB4;
-        Fri, 31 Mar 2023 20:15:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44293C433EF;
-        Fri, 31 Mar 2023 20:15:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680293753;
-        bh=16dwsgZWYBPEcC5Mo0pKMFJte2h3ZbqjXpx66wj21YA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tukh8HKpkIKrGnzD7GGfO5MBqpoaQ94utwny7C0Hv4uqcjdYsFR0z6rZPGeDBkhkg
-         UwBnGYapRWzEQTpmeQK6vxn6mahEdbz+h0kGVRKpRKCzKtH9izPGLQ8BrIZx9nNy4a
-         oa5nxeK7E3RiDg5FtX5u734NQKO0m9EX2XM2RRZbNCbWEGxe6Jkm1A6nHN0fCrCLAt
-         Fa3hwloajB0ybTUimh06xCDoXuRDrJU5CJF+nRpsbAZaTQNPmA6SrZot7MALuqW4+6
-         eYmxF0KHLzrpRETlghwGq8GNwE+UWox/oX6+nQ3n0XsIaChqIoLVpZSissV2T5s9Ww
-         JdnlG/vn8JZlg==
-Date:   Fri, 31 Mar 2023 21:15:46 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        uwu@icenowy.me
-Subject: Re: [PATCH v7 0/6] RISC-V non-coherent function pointer based CMO +
- non-coherent DMA support for AX45MP
-Message-ID: <0d5590e4-e78b-4197-bf17-9de54466470d@spud>
-References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <b2dcda17-5850-47c1-94bc-4ca87f900581@spud>
- <CA+V-a8s+=OY6CX4XTUwyAE9b=rdJZZfgAaY2nU+6aqnu=X9nxQ@mail.gmail.com>
+        Fri, 31 Mar 2023 16:17:28 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4572220A
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:17:26 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id k37so30466543lfv.0
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:17:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680293845;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PCmSmcqOfsVfl2tCC9qQBF7W/rjcBMfD/MOmc9ZECng=;
+        b=FEiZSZ2LMcZKJU2i8m5CNciGjOyJb4arZgojJLsdnH9X51Wu0xd9kykG7TVQeTWVt7
+         EGdy0HMjLrf41HKCU5RkhArcpTo0OK/eIsYj0NSAXifw3hQ0JBi+IHUZF0TIGjEaJAUT
+         REgb/Q4U4TV9zLTRSz6NiaZ7t5kmVlZAdyBrUHXB1dhGkRkdH0TLcRtvFgoQQy777BNT
+         4CxdWjSMdSLdvAIWBDuRSlSKHIDXf0qRtRU0/JQFh2ySp2TJMbQw7KtTXVRP+kDh61si
+         BZ+W1D8+PpuK+CQs+kL3EBN9ENntaT69bjpNmGSJe9ORVuSH8YKpdsCMi747ameemdZe
+         r9tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680293845;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PCmSmcqOfsVfl2tCC9qQBF7W/rjcBMfD/MOmc9ZECng=;
+        b=t/pKCVUgc9nnGgIMmjhrkF7DVCEZktP54hWQdmV8vHg4QM1duD6roLbPkMjUStCVWH
+         +TK4DD9xbXh/Xba/ubvhJDo0VNgOtdteFUeJO9qaqq9f3HU8LasIpXJCfS+mAN+5u5HN
+         6I6ysFWJqOeEvsBzQcmdOKM72A5R4J1syZ0khs6vTHlFKzkTbOgbB/Ohdlb+QMx/1fbc
+         AmkNhtQqAvZFp9+fQRZ7GWhVFVQz0LWkxjuvCihYlhoX+Nj9AQoNHqeR+2gsUAiaPj6P
+         CXunWL+xwfUWmBuzXtmAY2c2jpqeZn178hAhnP7QEMm9sisZyZc6NuvZHdm456ImYNBj
+         qmUw==
+X-Gm-Message-State: AAQBX9cX2PzHIs20M2doxjzRZlu9oHYvj7IJ2tFtKOxC1qIPe1oVQ9JO
+        qkqEjxYBazikwvasQzEnCIP4aw==
+X-Google-Smtp-Source: AKy350ZW4tojQvCr/HnE4u4WkpM3V/on97zQF5/1LXrQhTmYXHS1Eyrs70NrN1cP9EiLT2GR3K7Mzg==
+X-Received: by 2002:ac2:5b5b:0:b0:4da:ffa0:3f21 with SMTP id i27-20020ac25b5b000000b004daffa03f21mr3033440lfp.14.1680293844910;
+        Fri, 31 Mar 2023 13:17:24 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id l28-20020ac24a9c000000b004db508326c0sm506148lfp.90.2023.03.31.13.17.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 13:17:24 -0700 (PDT)
+Message-ID: <fccbd0bb-8cd5-b286-c68e-32c094db3cb3@linaro.org>
+Date:   Fri, 31 Mar 2023 22:17:23 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="r7DYywVukqmnzbkh"
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8s+=OY6CX4XTUwyAE9b=rdJZZfgAaY2nU+6aqnu=X9nxQ@mail.gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] dt-bindings: remoteproc: typo fix
+Content-Language: en-US
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        devicetree@vger.kernel.org
+References: <20230331155527.3111125-1-arnaud.pouliquen@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230331155527.3111125-1-arnaud.pouliquen@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 31/03/2023 17:55, Arnaud Pouliquen wrote:
+> Fix "communnication" typo error.
 
---r7DYywVukqmnzbkh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Use subject prefixes matching the subsystem/device (which you can get
+for example with `git log --oneline -- DIRECTORY_OR_FILE` on the
+directory your patch is touching).
 
-On Fri, Mar 31, 2023 at 08:09:16PM +0000, Lad, Prabhakar wrote:
-> Hi Conor,
->=20
-> On Fri, Mar 31, 2023 at 7:05=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
-> >
-> > On Thu, Mar 30, 2023 at 09:42:11PM +0100, Prabhakar wrote:
-> >
-> > > - This series requires testing on Cores with zicbom and T-Head SoCs
-> >
-> > I don't actually know if there are Zicbom parts, may need to test that
-> > on QEMU.
-> > I had to revert unrelated content to boot, but my D1 NFS setup seems to
-> > work fine with these changes, so where it is relevant:
-> > Tested-by: Conor Dooley <conor.dooley@microchip.com> # tyre-kicking on =
-D1
-> >
-> Thank you for testing this. By any chance did you compare the performance?
+> 
+> Fixes: aca8f94e5b69 ("dt-bindings: remoteproc: stm32-rproc: add new mailbox channel for detach")
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 
-No, just tyre kicking. Icenowy had some benchmark for it IIRC, I think
-mining some coin or w/e. +CC them.
+No line breaks between tags.
 
---r7DYywVukqmnzbkh
-Content-Type: application/pgp-signature; name="signature.asc"
+With missing device prefix and dropping line break:
 
------BEGIN PGP SIGNATURE-----
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCc/cgAKCRB4tDGHoIJi
-0qcNAQCb/JCLCWAyFRm/yAdbNFnCLXnc2InpcdffRHVHLrmn2QD9HXRaoIyBKy8C
-+GZGUxjBua3BKi4ILC22+PF1eF7MvAk=
-=W6KH
------END PGP SIGNATURE-----
+Best regards,
+Krzysztof
 
---r7DYywVukqmnzbkh--
