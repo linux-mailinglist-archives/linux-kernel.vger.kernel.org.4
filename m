@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BD96D26C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 19:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E18B6D26C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 19:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjCaRhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 13:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S231701AbjCaRhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 13:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjCaRhv (ORCPT
+        with ESMTP id S230064AbjCaRhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 31 Mar 2023 13:37:51 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABC31EA12
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 10:37:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DF81EA19
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 10:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680284224;
+        s=mimecast20190719; t=1680284233;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TW3eRYhY8krxuQYRljIfEDzKI7IC0lmrJ5k4rfM21Xg=;
-        b=MTae3yG+kFwK9uNFyoOofc8NYLhsY0d4c5NZsMhjcJ5fi0pcetRp00GC2dm/bQyBZGnCYQ
-        qMxL58LVARUOKKcewjiTRAuF/M0QrsE/vXGP98TQZtvzpzHdZBJaoLNKSAlUKVm1MjWlCF
-        KmUXAWaSly0sluNIufFuLk3FEpKrAQQ=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-190-XFKyX_fTPVGvdLGfRK6BYg-1; Fri, 31 Mar 2023 13:36:58 -0400
-X-MC-Unique: XFKyX_fTPVGvdLGfRK6BYg-1
-Received: by mail-ed1-f71.google.com with SMTP id k30-20020a50ce5e000000b00500544ebfb1so32710875edj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 10:36:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680284217;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TW3eRYhY8krxuQYRljIfEDzKI7IC0lmrJ5k4rfM21Xg=;
-        b=0smlwctM3F6RngLjILG/3cOlVqIteZ+4nG4wouM3X/DME87+BshKvnyRS9yZOOIdYn
-         k6SRdG+XJE/WHANIDAmPGQwju9dndRGbjJY4sAscBqmZyfzipun/wiRoP5lnhQUbFu5e
-         B1JGjuSYZjuwLJh5v+HGWVQF069mZ0LrVUm9FoZCNpQOuaCdWTI0STIoKxfWN9DePsJb
-         QYR+KlDzt1cHQ6db/ajHDucFRVcF+FwBtkkHd4ElQZPsb+G6YimXy9Z5pVI/ZqX34pYW
-         421UwJNHhMTnpaI2exE7nD7ods7jT5pgCP1Hdhs1+q73I9+GuzvTbVdOM2FI5vHTed3h
-         9yIQ==
-X-Gm-Message-State: AAQBX9cu4RCJDUXhs67ZOMsOeYWm26hAI+/bXtMO/L+BQwd+VuY8OqrI
-        N0O1XIWql2lg4MWA6RYGNG8DZjRYUMuH7yEvXjxN/rfnxn5RPLl1Q3zFPS/jMbcjJIZyt7TGvsS
-        sy105Z1AOmexH17D5uBA7JCKH2EiOjTCM
-X-Received: by 2002:a17:907:31c9:b0:8e1:12b6:a8fc with SMTP id xf9-20020a17090731c900b008e112b6a8fcmr35359825ejb.4.1680284217413;
-        Fri, 31 Mar 2023 10:36:57 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aLVFsaDSdzCWqC92WwjhMyQo3uQWkmyog3iTj2B/nfN3+H43nOF4AhDPjhQ1C+MvaERqwQkg==
-X-Received: by 2002:a17:907:31c9:b0:8e1:12b6:a8fc with SMTP id xf9-20020a17090731c900b008e112b6a8fcmr35359813ejb.4.1680284217188;
-        Fri, 31 Mar 2023 10:36:57 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id oq26-20020a170906cc9a00b009318ad4a583sm1172870ejb.210.2023.03.31.10.36.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 10:36:56 -0700 (PDT)
-Message-ID: <15c8a804-6e73-706a-d6de-fa9d84e9a0d4@redhat.com>
-Date:   Fri, 31 Mar 2023 19:36:55 +0200
+        bh=l3uCQVEhe2fnq86iop6kxjBqus9BAmkIKRjZkI+ygfw=;
+        b=IRx0As+cA0AqYhUMM7h+fA5tL/IYUyzSmnUvZ0h3Jiq9EN30ol2I8ZBuHubFaT5D7oUx0g
+        9RONeGX3Zs3Tm6Ek4btA0g6Jb7l/4ogtqwCyazophPbRW5OrYBq2659nd77WjsQpDHtf98
+        tVA4TiCmFrI7dtHN4lXTui7liFeXZq4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-240-n8tWhk8bPYmGASeLJerjFw-1; Fri, 31 Mar 2023 13:37:07 -0400
+X-MC-Unique: n8tWhk8bPYmGASeLJerjFw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D1D4F101A531;
+        Fri, 31 Mar 2023 17:37:06 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B79C22166B33;
+        Fri, 31 Mar 2023 17:37:04 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230331160914.1608208-34-dhowells@redhat.com>
+References: <20230331160914.1608208-34-dhowells@redhat.com> <20230331160914.1608208-1-dhowells@redhat.com>
+To:     Tom Herbert <tom@herbertland.com>, Tom Herbert <tom@quantonium.net>
+Cc:     dhowells@redhat.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Test program for AF_KCM
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] asus-nb-wmi: Add quirk_asus_tablet_mode to other ROG
- Flow X13 models
-Content-Language: en-US, nl
-To:     weiliang1503 <weiliang1503@gmail.com>, corentin.chary@gmail.com
-Cc:     markgross@kernel.org, acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230330114943.15057-1-weiliang1503@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230330114943.15057-1-weiliang1503@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1614622.1680284224.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 31 Mar 2023 18:37:04 +0100
+Message-ID: <1614623.1680284224@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,45 +76,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Tom,
 
-On 3/30/23 13:49, weiliang1503 wrote:
-> Make quirk_asus_tablet_mode apply on other ROG Flow X13 devices,
-> which only affects the GV301Q model before.
-> 
-> Signed-off-by: weiliang1503 <weiliang1503@gmail.com>
+I found a test program for AF_KCM:
 
-Thank you for your patch, I've applied this patch to my fixes
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
+	https://gist.githubusercontent.com/peo3/fd0e266a3852d3422c08854aba96bff5/=
+raw/98e02e120bd4b4bc5d499c4510e5879bb3a023d7/kcm-sample.c
 
-Note it will show up in my fixes branch once I've pushed my
-local branch there, which might take a while.
+I don't suppose you have a version that compiles?  It seems that the userl=
+and
+BPF API has changed.
 
-I will include this patch in my next fixes pull-req to Linus
-for the current kernel development cycle.
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/platform/x86/asus-nb-wmi.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/asus-nb-wmi.c b/drivers/platform/x86/asus-nb-wmi.c
-> index cb15acdf1..e2c9a68d1 100644
-> --- a/drivers/platform/x86/asus-nb-wmi.c
-> +++ b/drivers/platform/x86/asus-nb-wmi.c
-> @@ -464,7 +464,8 @@ static const struct dmi_system_id asus_quirks[] = {
->  		.ident = "ASUS ROG FLOW X13",
->  		.matches = {
->  			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "GV301Q"),
-> +			/* Match GV301** */
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "GV301"),
->  		},
->  		.driver_data = &quirk_asus_tablet_mode,
->  	},
+Thanks,
+David
 
