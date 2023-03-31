@@ -2,76 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1036D2878
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 21:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B676D2879
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 21:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232679AbjCaTH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 15:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
+        id S232017AbjCaTHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 15:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjCaTH0 (ORCPT
+        with ESMTP id S232462AbjCaTH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 31 Mar 2023 15:07:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780CF22E80
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680289597;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GfL4asY+ZnHcLZiDdqOI9tltGi48G8yGqEg4NgPtO4A=;
-        b=Kw03Ty0YoTuB+3N/nVmxWP2AlsprBF+kEkh8KP/nc2PzaHbJA3IQsaBJ6MORV0ahRPTAP+
-        dA3MTzFR8wGdodVFSPtO9OPfvdGjD1uPRft8JaK9pkKvgi+Jtnz+1/ERyLKW5Pem3cX5fC
-        iXSf/KCcYAFmiQQ1eluSbjX/yOhftPA=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-550-1lbIaCneOnm43s8hAvAv0w-1; Fri, 31 Mar 2023 15:06:36 -0400
-X-MC-Unique: 1lbIaCneOnm43s8hAvAv0w-1
-Received: by mail-ed1-f69.google.com with SMTP id h11-20020a0564020e8b00b004e59d4722a3so33004576eda.6
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:06:36 -0700 (PDT)
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C0522933
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:07:25 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id n14so22623169qta.10
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:07:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112; t=1680289644;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pMRUsebyQ3K+oRbvGz0OgZqKFBtrPEJ2p4+ZFvhigaU=;
+        b=YuQxViwdUk90gHQ/2KIzGu/DK8R4deZMcmawGiTY+fXik+vDT6npk7xJqJFWoyp6TR
+         e2VhlrZjt4RUoOLmQw313flnsClMLakq9J92I3I5n+G7SdQJQMGulL48Re+VsrqsitYa
+         8A2FED5SaUxgAG8PcRFtGNwTRVCiC9VHuuMY8PejpvTq8+ARgsJfAzrXtBeDGKOUaR7M
+         yUvajONXOgGY3AjiQ3KMfy0WgQad2sQN07S1w4qAiLZgmFsKgXYTuhIGZpOhIN8Zrf1G
+         jthDxywmg2BHnm0uTRB/z7AT4EnIU/tmdolnadp7XfZiksfBnYXuOhfPYawRUDHi6P5n
+         Zjrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680289594;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GfL4asY+ZnHcLZiDdqOI9tltGi48G8yGqEg4NgPtO4A=;
-        b=D6nWgOn0Id2VT8NZawpSxvH9iHLx9cUs4MrNKcLuYt1AclLCzPPzCWDEeRIIGBaCLF
-         aTholMRJCT4HOxWiZSKEiBSJIbIKUKpAo2wDOiWsKygcL5o8Kn2VisZbkaik5i8mBBTj
-         Gw0Dkl0hIuWP0JFa6jR3dGbhEFRLf4OE/nD8ZNnl55efNnXgxBevy23TNOZN1Iwxx9hc
-         Kpi5NM5K8bOv/IyLzWk2pR7jIpg1/11PdOvE7YwdiaXeRKCjH4baSaZKHI3GctW5LD8B
-         traVAA4o6ArGegAhWlkSurqieNJs3Q8Zt8RDZ2svM3trA2cAVgJvblGIpEqY+5SjEtP7
-         J5Yw==
-X-Gm-Message-State: AAQBX9dvGYv1rIIm8OqMehn6owk1fl2C0v242ZDDOFqQOM+gX2rsnrQ3
-        bmqy0J3HDRT9frJjJOTp7fmiZ2Uap97Sq7ZGhdMa4XbKjfRutr2aiS9zLkzHLRxSnnryJVbY1y1
-        dbcHfjPak0c28grEyZK7mXpI3QB5h7ej9
-X-Received: by 2002:aa7:d39a:0:b0:4fd:2b05:aa2 with SMTP id x26-20020aa7d39a000000b004fd2b050aa2mr27475764edq.42.1680289594403;
-        Fri, 31 Mar 2023 12:06:34 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YA+ItNnwj/ji7Kbipg9PlB9562AAtBo6LkVXgG3d4qMLvslyY4/p0Nlhc9ppxbyjf2LJTyzg==
-X-Received: by 2002:aa7:d39a:0:b0:4fd:2b05:aa2 with SMTP id x26-20020aa7d39a000000b004fd2b050aa2mr27475750edq.42.1680289594134;
-        Fri, 31 Mar 2023 12:06:34 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id v14-20020a50a44e000000b004bc15a440f1sm1367864edb.78.2023.03.31.12.06.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 12:06:33 -0700 (PDT)
-Message-ID: <531dfb17-bdc6-00a2-cbf2-7a7c096896b0@redhat.com>
-Date:   Fri, 31 Mar 2023 21:06:31 +0200
+        d=1e100.net; s=20210112; t=1680289644;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pMRUsebyQ3K+oRbvGz0OgZqKFBtrPEJ2p4+ZFvhigaU=;
+        b=Y9vIJiLVZJL5rIdwimIhTua5DWtaEjdsR6p0DWQCRTeZqpPjsqmNtiPrFVFDCWq3Jc
+         5HGhNoj1kAPco9LzKqjmhajEBbeeoKwF8IyBy+f8/y+bBlT+ASt50HcSUB4atareeAVl
+         hdwjn/EEbNRjsy0NNwxApESVl59OF44G31LkPXDme6oe0T8r/zlRhjnM5GN2q00NdTLO
+         CDvKMgnmRpoIrO6S8XaigNfvQgMl5LNtIK74fthyE8hYVyZJ2sjPwU1bGUB5sJynehy6
+         8lBRsl1OUcMgEnSvGlQkzxTRXZ6FxK87GEgpRrptfoaKlqNjxbihvaSUSBMyl3xDRuWh
+         IxZg==
+X-Gm-Message-State: AO0yUKUcUoGGou+vmHGl1RxLmi/a4qdOvnApwvcWpX4ZkhX6e9w9sRFF
+        p2KAAjsKHC6VsOde2ATEFtpo/w==
+X-Google-Smtp-Source: AK7set+yzGmjUCCfKmLI0eGwVq5GmGvjBm883sXpbX5Kxiis3RtX5l/GNMfOuCsLPZdohe+mayr6uQ==
+X-Received: by 2002:a05:622a:181b:b0:3d0:7bdf:42c4 with SMTP id t27-20020a05622a181b00b003d07bdf42c4mr48530950qtc.59.1680289644733;
+        Fri, 31 Mar 2023 12:07:24 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain ([2606:6d00:15:a07e::580])
+        by smtp.gmail.com with ESMTPSA id e1-20020a05620a014100b0074a1d2a17c8sm701489qkn.29.2023.03.31.12.07.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 12:07:24 -0700 (PDT)
+Message-ID: <57144a4a5dc9994319bb1f7c3a75a1943227417c.camel@ndufresne.ca>
+Subject: Re: [PATCH 4/9] media: v4l2: Add JPEG pixel format to v4l2 format
+ info
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Adam Pigg <adam@piggz.co.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date:   Fri, 31 Mar 2023 15:07:23 -0400
+In-Reply-To: <20230324151228.2778112-5-paul.kocialkowski@bootlin.com>
+References: <20230324151228.2778112-1-paul.kocialkowski@bootlin.com>
+         <20230324151228.2778112-5-paul.kocialkowski@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] platform-drivers-x86 for 6.3-4
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org
-Content-Language: en-US, nl
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,72 +82,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Le vendredi 24 mars 2023 =C3=A0 16:12 +0100, Paul Kocialkowski a =C3=A9crit=
+=C2=A0:
+> Represent the JPEG pixel format in the v4l2 format info table.
+>=20
+> Note that the bpp is set to 1 which is not a proper way to estimate
+> the needed buffer size for a given JPEG image. However the compression
+> ratios of JPEG typically allow fitting the image in a smaller size,
+> even though extra metadata could increase the total size by an
+> arbitrary amount. Thus it is not a perfectly safe way to calculate the
+> size of a JPEG buffer for given dimensions but it still provides a
+> reasonable approach.
+>=20
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+>  drivers/media/v4l2-core/v4l2-common.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-c=
+ore/v4l2-common.c
+> index 5101989716aa..8b2f201a8918 100644
+> --- a/drivers/media/v4l2-core/v4l2-common.c
+> +++ b/drivers/media/v4l2-core/v4l2-common.c
+> @@ -317,6 +317,9 @@ const struct v4l2_format_info *v4l2_format_info(u32 f=
+ormat)
+>  		{ .format =3D V4L2_PIX_FMT_SGBRG12,	.pixel_enc =3D V4L2_PIXEL_ENC_BAYE=
+R, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 2, 0, 0, 0 }, .hdiv =
+=3D 1, .vdiv =3D 1 },
+>  		{ .format =3D V4L2_PIX_FMT_SGRBG12,	.pixel_enc =3D V4L2_PIXEL_ENC_BAYE=
+R, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 2, 0, 0, 0 }, .hdiv =
+=3D 1, .vdiv =3D 1 },
+>  		{ .format =3D V4L2_PIX_FMT_SRGGB12,	.pixel_enc =3D V4L2_PIXEL_ENC_BAYE=
+R, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 2, 0, 0, 0 }, .hdiv =
+=3D 1, .vdiv =3D 1 },
+> +
+> +		/* Compressed formats */
+> +		{ .format =3D V4L2_PIX_FMT_JPEG,	.pixel_enc =3D V4L2_PIXEL_ENC_COMPRES=
+SED, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 1, 0, 0, 0 }, .hdiv =
+=3D 1, .vdiv =3D 1 },
 
-Here is another round of fixes for platform-drivers-x86 for 6.3.
+This is ackward, at best. Guesstimating the compressed buffer size is a val=
+id
+use case, but this table and the related helper function seems badly suited=
+.
+When I look at the stateless decoders that do that, they take into account =
+the
+fact that the compression can handle different bit depth, and difference
+subsampling (choma idc). In this implementation, JPEG is reduce to 4:4:4, 8=
+bit.
 
-Highlights:
- -  Fix a regression in ideapad-laptop which caused the touchpad
-    to stop working after a suspend/resume on some models
- -  1 other small fix and 3 hw-id additions
+I'd like to reject this change, and recommand coming back with a suitable
+integration, so that it can be special cased and the driver can communicate=
+ the
+required information to narrow down the estimate. And this way, you are act=
+ually
+making it usable for other compressed format like H.264, HEVC, VP8, VP9 AV1=
+ etc.
 
-Regards,
+Nicolas
 
-Hans
+Nacked in that form.
 
-
-The following changes since commit acd0acb802b90f88d19ad4337183e44fd0f77c50:
-
-  platform/surface: aggregator: Add missing fwnode_handle_put() (2023-03-22 15:23:03 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.3-4
-
-for you to fetch changes up to e3271a5917d1501089b1a224d702aa053e2877f4:
-
-  platform/x86: ideapad-laptop: Stop sending KEY_TOUCHPAD_TOGGLE (2023-03-31 19:37:18 +0200)
-
-----------------------------------------------------------------
-platform-drivers-x86 for v6.3-4
-
-Highlights
- -  Fix a regression in ideapad-laptop which caused the touchpad
-    to stop working after a suspend/resume on some models
- -  1 other small fix and 3 hw-id additions
-
-The following is an automated git shortlog grouped by driver:
-
-asus-nb-wmi:
- -  Add quirk_asus_tablet_mode to other ROG Flow X13 models
-
-gigabyte-wmi:
- -  add support for X570S AORUS ELITE
- -  add support for B650 AORUS ELITE AX
-
-ideapad-laptop:
- -  Stop sending KEY_TOUCHPAD_TOGGLE
-
-platform/x86/intel/pmc:
- -  Alder Lake PCH slp_s0_residency fix
-
-----------------------------------------------------------------
-Hans de Goede (2):
-      platform/x86: gigabyte-wmi: add support for X570S AORUS ELITE
-      platform/x86: ideapad-laptop: Stop sending KEY_TOUCHPAD_TOGGLE
-
-Rajvi Jingar (1):
-      platform/x86/intel/pmc: Alder Lake PCH slp_s0_residency fix
-
-Thomas Weißschuh (1):
-      platform/x86: gigabyte-wmi: add support for B650 AORUS ELITE AX
-
-weiliang1503 (1):
-      platform/x86: asus-nb-wmi: Add quirk_asus_tablet_mode to other ROG Flow X13 models
-
- drivers/platform/x86/asus-nb-wmi.c    |  3 ++-
- drivers/platform/x86/gigabyte-wmi.c   |  2 ++
- drivers/platform/x86/ideapad-laptop.c | 23 ++++++++++-------------
- drivers/platform/x86/intel/pmc/core.c | 13 ++++++++++++-
- 4 files changed, 26 insertions(+), 15 deletions(-)
+>=20
+>  	};
+>  	unsigned int i;
+> =20
 
