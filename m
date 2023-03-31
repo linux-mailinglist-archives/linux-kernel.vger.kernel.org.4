@@ -2,96 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A90B6D24A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 663806D24FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjCaQJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 12:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+        id S233349AbjCaQN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjCaQJG (ORCPT
+        with ESMTP id S233081AbjCaQMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:09:06 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2056.outbound.protection.outlook.com [40.107.93.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D3110274;
-        Fri, 31 Mar 2023 09:09:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kwJlEwU2QYQChuuI3v8s5JcN67uAd95tDQiDlvtbepCsdRdKzIETHfAetkYnVM+bYwPj3S4GlXJIB1K96xDC87Z5v4WabAZ376Wf2RSaA24lbuUojJuEANv4mThRUGPRJE7XZ94vw5KqTD6qKZFacmbPA7UMgYu8JYW4RPLaVrX0gEIf36Wc8ZiPGDQPMndHMdhCCTqaWz42A3sk0xeGGslSftZoYhN07Kj7kTN1ye29cpg4wZuyvh02koxtugifPskqgUUtmTnkpQfJnbi4sk7jhcEjzXvqBQRS9YSLBzYifMLZFGWkFKldvtG2mXcBV25lkIYjuS/RuSKFg1PbMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ildR3zT2nPxdncwQUFM7mO2ztga/esrkc7IYWLPKxzg=;
- b=U06wnX6UTxOa6K8TujQjRoaDKEMIbV4waHG2rynLmRnQX2Bf/wqbhbi/HNjwg+ZHhlhyMzc3xshVZg7jneplrUVQACvBcqftywsiHePZRYHeqQrNXmVGBnQI0KuQBuk1AHXhM5yu8nFBC/wuWxcvm6b4jmMhTY5bfebZpZQCVOw3+7tFVpm6Bx9SB1kLb6efQ33u5M/yUZxMBOu4k670RvUmbd0fDQoxElaLP2buzVYDKi6zGkmRD1ORZbXB2rpqRcgpGp1sRZZvi4uqLtxpCiho5ZbJJgtEyuSLcmseVedqBvLvGr5WzlA4ncdPClVs+gZa7woTq4wmq2zBAbQw/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ildR3zT2nPxdncwQUFM7mO2ztga/esrkc7IYWLPKxzg=;
- b=RN1iaXnXuAEvslUv3qSwJWeqrLXFh5NCGZ/OaBPcRigAl9fIfmkR2+KIP6ARD6/0uviE4avEyQDdrAbQp06b1x7UgEvw2vtaakR4+/n3f2hWVLhnfRf9Nj6ShL9ILgc+i3ux0mt/J5QzmYW1eAd3rHh+NoIyO/5o8FohjD1xn5E=
-Received: from MW4PR03CA0279.namprd03.prod.outlook.com (2603:10b6:303:b5::14)
- by MW4PR12MB7144.namprd12.prod.outlook.com (2603:10b6:303:21b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.24; Fri, 31 Mar
- 2023 16:09:01 +0000
-Received: from CO1NAM11FT008.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b5:cafe::d2) by MW4PR03CA0279.outlook.office365.com
- (2603:10b6:303:b5::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22 via Frontend
- Transport; Fri, 31 Mar 2023 16:09:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT008.mail.protection.outlook.com (10.13.175.191) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6254.26 via Frontend Transport; Fri, 31 Mar 2023 16:09:01 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 31 Mar
- 2023 11:08:59 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Mario Limonciello <mario.limonciello@amd.com>,
-        Stuart Axon <stuaxo2@yahoo.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, <linux-acpi@vger.kernel.org>
-Subject: [PATCH] ACPI: x86: utils: Add Picasso to the list for forcing StorageD3Enable
-Date:   Fri, 31 Mar 2023 11:08:42 -0500
-Message-ID: <20230331160842.7817-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 31 Mar 2023 12:12:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9AA1EFF3
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:10:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680279032;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bQ5QnEnteMQfZ4j7G0XrCpLzGl+D3sZ9ge7q0vobANw=;
+        b=KFD11+19/rtgjRN53suD2tLpatNQeswN17GfhuPYoQfldzUtNGUHn742LO/iB43qgnfdY1
+        4hkg9ALV/GdE5HdvXqGdeRlpTGPJizTRy8BiVG4bUulyFghafRvUQzVg/RLzcez9pR+jEQ
+        eGt9HPcA/6EoAkektRVzvXqxgJ9oxE0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-451-zyE999oJOe6JnagrFD2R3w-1; Fri, 31 Mar 2023 12:10:29 -0400
+X-MC-Unique: zyE999oJOe6JnagrFD2R3w-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1847B85A5B1;
+        Fri, 31 Mar 2023 16:10:28 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0691D1121315;
+        Fri, 31 Mar 2023 16:10:25 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-crypto@vger.kernel.org
+Subject: [PATCH v3 24/55] crypto: af_alg: Support MSG_SPLICE_PAGES
+Date:   Fri, 31 Mar 2023 17:08:43 +0100
+Message-Id: <20230331160914.1608208-25-dhowells@redhat.com>
+In-Reply-To: <20230331160914.1608208-1-dhowells@redhat.com>
+References: <20230331160914.1608208-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT008:EE_|MW4PR12MB7144:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7180e8b6-8794-4d04-aa06-08db32023df3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ERDHzIo+MbF3QLwV4frPpIob15f8EM+S9e69ra2igkldeocd7sEl6zcomSKTRjSUpeXhSw/hir+88vF9um5sRpF9Ev9NPE/NzitWWxs0cAmD8gvjzL6VA3W1x7KI54f7lo97gGVAfeEsnAO0VyMez7aXqXo+mbyzI23K04jemCALx7YK9fY1EFdBe5wYAQPZcbWhfBJDTB+Um8+IlJR/6suc03urujfPKMX866GyqhW4shtGSBotvYDgsm1urJzaYPlFFUP1/dyYBazfEBIdYaaX1aK7I89aYFdeT+v4RJI4QPoUV0y/gLxrqL6bnsTHmis2BemTest0wXHndT9Jx08oSJsSXW7LHjI1U6nGyGXtq+Eh41FiXYBBPm0DyVf2OVSARIoddWdoSJVQ+Kh/B4MEu46LRND6R1ckH7EFXSMyeEhM5/DG05JhPNslTiHD9+nIRg0hHZxj7aKNZQ+65QFDfBb4lAIhz0/1H6M0oQ3QN69YnJGvm1FjqlgMwWbrDEO67JuKrG2UQxlh2rbvLuTBZ1I/QYPT47Yp4xru/50luL0rhTdiOezF52/dH5D22gJqtoqUi0f+gYn5HNnVworh/AX0/UUwma5+ZlkRErkS6a6/3vKr+9i9NNPY8tFTYVw8n18zg0QeRAys46m5MFG20USs6hefDVLOd24LByYzIp5NsixqyZvYskcis9qk
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(46966006)(36840700001)(40470700004)(8936002)(5660300002)(82740400003)(356005)(41300700001)(81166007)(40480700001)(44832011)(86362001)(40460700003)(2906002)(6666004)(1076003)(26005)(7696005)(966005)(47076005)(36756003)(426003)(336012)(186003)(16526019)(82310400005)(2616005)(316002)(70586007)(70206006)(8676002)(6916009)(4326008)(478600001)(36860700001)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 16:09:01.2040
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7180e8b6-8794-4d04-aa06-08db32023df3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT008.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7144
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,34 +73,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Picasso was the first APU that introduced s2idle support from AMD,
-and it was predating before vendors started to use `StorageD3Enable`
-in their firmware.
+Make AF_ALG sendmsg() support MSG_SPLICE_PAGES.  This causes pages to be
+spliced from the source iterator.
 
-Windows doesn't have problems with this hardware and NVME so it was
-likely on the list of hardcoded CPUs to use this behavior in Windows.
+This allows ->sendpage() to be replaced by something that can handle
+multiple multipage folios in a single transaction.
 
-Add it to the list for Linux to avoid NVME resume issues.
+[!] Note that this makes use of netfs_extract_iter_to_sg() from netfslib.
+    This probably needs moving to core code somewhere.
 
-Reported-by: Stuart Axon <stuaxo2@yahoo.com>
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2449
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Herbert Xu <herbert@gondor.apana.org.au>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: linux-crypto@vger.kernel.org
+cc: netdev@vger.kernel.org
 ---
- drivers/acpi/x86/utils.c | 1 +
- 1 file changed, 1 insertion(+)
+ crypto/Kconfig          |  1 +
+ crypto/af_alg.c         | 28 ++++++++++++++++++++++++++--
+ crypto/algif_aead.c     | 22 +++++++++++-----------
+ crypto/algif_skcipher.c |  8 ++++----
+ 4 files changed, 42 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
-index da5727069d85..ba420a28a4aa 100644
---- a/drivers/acpi/x86/utils.c
-+++ b/drivers/acpi/x86/utils.c
-@@ -213,6 +213,7 @@ bool acpi_device_override_status(struct acpi_device *adev, unsigned long long *s
-       disk in the system.
-  */
- static const struct x86_cpu_id storage_d3_cpu_ids[] = {
-+	X86_MATCH_VENDOR_FAM_MODEL(AMD, 23, 24, NULL),  /* Picasso */
- 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 23, 96, NULL),	/* Renoir */
- 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 23, 104, NULL),	/* Lucienne */
- 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 25, 80, NULL),	/* Cezanne */
--- 
-2.34.1
+diff --git a/crypto/Kconfig b/crypto/Kconfig
+index 9c86f7045157..8c04ecbb4395 100644
+--- a/crypto/Kconfig
++++ b/crypto/Kconfig
+@@ -1297,6 +1297,7 @@ menu "Userspace interface"
+ 
+ config CRYPTO_USER_API
+ 	tristate
++	select NETFS_SUPPORT # for netfs_extract_iter_to_sg()
+ 
+ config CRYPTO_USER_API_HASH
+ 	tristate "Hash algorithms"
+diff --git a/crypto/af_alg.c b/crypto/af_alg.c
+index 483821e310e9..3088ab298632 100644
+--- a/crypto/af_alg.c
++++ b/crypto/af_alg.c
+@@ -941,6 +941,10 @@ int af_alg_sendmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 	bool init = false;
+ 	int err = 0;
+ 
++	if ((msg->msg_flags & MSG_SPLICE_PAGES) &&
++	    !iov_iter_is_bvec(&msg->msg_iter))
++		return -EINVAL;
++
+ 	if (msg->msg_controllen) {
+ 		err = af_alg_cmsg_send(msg, &con);
+ 		if (err)
+@@ -986,7 +990,7 @@ int af_alg_sendmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 	while (size) {
+ 		struct scatterlist *sg;
+ 		size_t len = size;
+-		size_t plen;
++		ssize_t plen;
+ 
+ 		/* use the existing memory in an allocated page */
+ 		if (ctx->merge) {
+@@ -1031,7 +1035,27 @@ int af_alg_sendmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 		if (sgl->cur)
+ 			sg_unmark_end(sg + sgl->cur - 1);
+ 
+-		if (1 /* TODO check MSG_SPLICE_PAGES */) {
++		if (msg->msg_flags & MSG_SPLICE_PAGES) {
++			struct sg_table sgtable = {
++				.sgl		= sg,
++				.nents		= sgl->cur,
++				.orig_nents	= sgl->cur,
++			};
++
++			plen = netfs_extract_iter_to_sg(&msg->msg_iter, len,
++							&sgtable, MAX_SGL_ENTS, 0);
++			if (plen < 0) {
++				err = plen;
++				goto unlock;
++			}
++
++			for (; sgl->cur < sgtable.nents; sgl->cur++)
++				get_page(sg_page(&sg[sgl->cur]));
++			len -= plen;
++			ctx->used += plen;
++			copied += plen;
++			size -= plen;
++		} else {
+ 			do {
+ 				struct page *pg;
+ 				unsigned int i = sgl->cur;
+diff --git a/crypto/algif_aead.c b/crypto/algif_aead.c
+index f6aa3856d8d5..b16111a3025a 100644
+--- a/crypto/algif_aead.c
++++ b/crypto/algif_aead.c
+@@ -9,8 +9,8 @@
+  * The following concept of the memory management is used:
+  *
+  * The kernel maintains two SGLs, the TX SGL and the RX SGL. The TX SGL is
+- * filled by user space with the data submitted via sendpage/sendmsg. Filling
+- * up the TX SGL does not cause a crypto operation -- the data will only be
++ * filled by user space with the data submitted via sendpage. Filling up
++ * the TX SGL does not cause a crypto operation -- the data will only be
+  * tracked by the kernel. Upon receipt of one recvmsg call, the caller must
+  * provide a buffer which is tracked with the RX SGL.
+  *
+@@ -113,19 +113,19 @@ static int _aead_recvmsg(struct socket *sock, struct msghdr *msg,
+ 	}
+ 
+ 	/*
+-	 * Data length provided by caller via sendmsg/sendpage that has not
+-	 * yet been processed.
++	 * Data length provided by caller via sendmsg that has not yet been
++	 * processed.
+ 	 */
+ 	used = ctx->used;
+ 
+ 	/*
+-	 * Make sure sufficient data is present -- note, the same check is
+-	 * also present in sendmsg/sendpage. The checks in sendpage/sendmsg
+-	 * shall provide an information to the data sender that something is
+-	 * wrong, but they are irrelevant to maintain the kernel integrity.
+-	 * We need this check here too in case user space decides to not honor
+-	 * the error message in sendmsg/sendpage and still call recvmsg. This
+-	 * check here protects the kernel integrity.
++	 * Make sure sufficient data is present -- note, the same check is also
++	 * present in sendmsg. The checks in sendmsg shall provide an
++	 * information to the data sender that something is wrong, but they are
++	 * irrelevant to maintain the kernel integrity.  We need this check
++	 * here too in case user space decides to not honor the error message
++	 * in sendmsg and still call recvmsg. This check here protects the
++	 * kernel integrity.
+ 	 */
+ 	if (!aead_sufficient_data(sk))
+ 		return -EINVAL;
+diff --git a/crypto/algif_skcipher.c b/crypto/algif_skcipher.c
+index a251cd6bd5b9..b1f321b9f846 100644
+--- a/crypto/algif_skcipher.c
++++ b/crypto/algif_skcipher.c
+@@ -9,10 +9,10 @@
+  * The following concept of the memory management is used:
+  *
+  * The kernel maintains two SGLs, the TX SGL and the RX SGL. The TX SGL is
+- * filled by user space with the data submitted via sendpage/sendmsg. Filling
+- * up the TX SGL does not cause a crypto operation -- the data will only be
+- * tracked by the kernel. Upon receipt of one recvmsg call, the caller must
+- * provide a buffer which is tracked with the RX SGL.
++ * filled by user space with the data submitted via sendmsg. Filling up the TX
++ * SGL does not cause a crypto operation -- the data will only be tracked by
++ * the kernel. Upon receipt of one recvmsg call, the caller must provide a
++ * buffer which is tracked with the RX SGL.
+  *
+  * During the processing of the recvmsg operation, the cipher request is
+  * allocated and prepared. As part of the recvmsg operation, the processed
 
