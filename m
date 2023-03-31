@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7996D228C
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311356D2292
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbjCaO13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        id S232754AbjCaO1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbjCaO1X (ORCPT
+        with ESMTP id S232538AbjCaO13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:27:23 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668EE20C20
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:26:50 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id t13so16474851qvn.2
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:26:50 -0700 (PDT)
+        Fri, 31 Mar 2023 10:27:29 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30E91E72F
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:26:58 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id t19so21791410qta.12
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:26:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680272808; x=1682864808;
+        d=linaro.org; s=google; t=1680272813; x=1682864813;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=3dxk5D/WIM5agiPzLfy0bKY3higsqR8pdGCbn1Ese0Y=;
-        b=dkpB/AytYNjRNFr1OwerJ4ryTHyWpmP9AbttOewQ7t8LCFWHgvyRLqhuq57kLfscqX
-         l+3/PvDQxdSpYvU/h7akpFAhwZkjZBU64s5M4EM9CHg4zlrpPQdlxjGTz0Eel19QXiNy
-         L67UnJC0VVM62VL4IZfuXwRUo75oOC0hfTrTtxvq+PrXOh+v30AhpLNE+cXOrsYdiF68
-         QT0HApsksNkVhwbQvm6ZbpKabOPWTYbQ7Crnx8QfQMBA7EPs9KUwWHXywpAinir3y/y2
-         HNo0bwsaie0AzesyMSw0PbW5bwfRH5Ndhmnbf043iWLW/rbiELs1NqTvorkT7ehU1vhd
-         djfw==
+        bh=AepkT1wk642AMoxt36LM3nPaMig9zHziqmtS4m+5IYA=;
+        b=BEmnYwFiBL+keaattFmRJwszVXtARgYTJKWN2Tr9W7Kk60AIPebJcD1dN35FfctXzP
+         1fodMwuKPjamJyohGK5wYv6BC9Bp31Yxp/Rsg/gcWK8VLhzveBtz2k2AxwfwwZ4puLLA
+         lNCSbHxn+6WyiAbl0nW/QfCWqVsKXUzvMjK59Y4+7xlJ4CMLKdaQ+xiXMaXg39WPskt7
+         oRK9WnkoI3fN2gRFVlTOjhkMs7yXK+9Atyo9hpfquwFTU0owYARtSoG2FpP0rlcANMwj
+         nqMtljq85C9kSvXNFUrazcuKGoHEHmM41LzaGM3D6OGgocrkMTrggrrqiDBldduxnlXW
+         S6XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680272808; x=1682864808;
+        d=1e100.net; s=20210112; t=1680272813; x=1682864813;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3dxk5D/WIM5agiPzLfy0bKY3higsqR8pdGCbn1Ese0Y=;
-        b=wDscsfXFCMLdpa1b6rmSa+33fWrrTKNcH6u5VUAA+rBfzS24SyCRAjnMkl//ospiGn
-         1iWdl1CbFuybunN8rkHfbFSbx/ZnMeToTaCVghF0+hXF2A/DFlygPuP/7/vPqWeCwBK8
-         JVMF93dyEurUuGj4WhUyY2nPpCGvClsnjT1umKpI6f/Nvwty7kijB7OStR/uEdUf9z15
-         BwIYSCUE9WI5QNQE3L/HiZg2iByc0qeZ+Xb/wBv71XW5lTVZxrBlNBdjtkDNLZGNgOZM
-         Sh0B1jEyQokwU3GnWBlR3zHXE6rEyXHnvD9RKD15s2HXFAp2ep6zGIckFI6JVRoDMOTG
-         y7aQ==
-X-Gm-Message-State: AAQBX9fzJx/rZfo3lGNgsfR1mcyDC6kvIVvvWCtvKfQelPmYuDnEyKuE
-        7+MxUL+fvIermPm2xxBHX0/WqA==
-X-Google-Smtp-Source: AKy350bZeTRq+/m0WZz3TxBBUXHt3PO7r+bEwzC7KnQQAzahYppX4Juc5wuWDvtdZIhfSXOTU6qN2Q==
-X-Received: by 2002:a05:6214:3008:b0:5ac:d6e6:452b with SMTP id ke8-20020a056214300800b005acd6e6452bmr14176547qvb.24.1680272808164;
-        Fri, 31 Mar 2023 07:26:48 -0700 (PDT)
+        bh=AepkT1wk642AMoxt36LM3nPaMig9zHziqmtS4m+5IYA=;
+        b=b+Br1K4HUy5OptQC7VjKtCTYMYbeyVq6i8ErgwfXTeAMX4OM+LoDMizeKhh1zn4AXi
+         Ls+WkktfUZxZclog33CzTEejPUX+Z2AvSKkGiWeEUPVR7Yqz5YS0PkOPJcLub8f5wDVp
+         s++CJcqKZzgyy8Tc6pG4xMYThSJ9x4Lj/HAkqMo5B8UliXYi30Thiqm0/W6eB8kkGyYg
+         X0MAWXArzhRk08AcKXi+A0pMDmmM9L2XGUetOKN2wsrjYV91ylfRrMEx6ugsWo4b7gjl
+         k+1k8B7LRATUaqk5tpzzF17fPVTeREc8Fgxo33MDDOgXXbfhhECXdjUnWT1zEcxiaOp3
+         CJ8A==
+X-Gm-Message-State: AAQBX9dUrFtssBr82kj65vO7F9bwccQ/CXC1v6CdXhJyWEyid/vDrSMX
+        GMaJGSXOqBihb03xneer3Nj1nQ==
+X-Google-Smtp-Source: AKy350bmYOUhDlf3tKWJbe0bhmYDip0LvEhCpmdPWj6YbJZshPUnQJmBV5NfA52/NzlInFOdKNMRYQ==
+X-Received: by 2002:ac8:7fd4:0:b0:3e4:e61d:5eeb with SMTP id b20-20020ac87fd4000000b003e4e61d5eebmr30560515qtk.6.1680272813012;
+        Fri, 31 Mar 2023 07:26:53 -0700 (PDT)
 Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id pr23-20020a056214141700b005dd8b9345c5sm624779qvb.93.2023.03.31.07.26.46
+        by smtp.googlemail.com with ESMTPSA id m62-20020a375841000000b0071eddd3bebbsm694153qkb.81.2023.03.31.07.26.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 07:26:47 -0700 (PDT)
-Message-ID: <6739f846-141f-d23d-536a-e00d18eb11be@linaro.org>
-Date:   Fri, 31 Mar 2023 09:26:46 -0500
+        Fri, 31 Mar 2023 07:26:52 -0700 (PDT)
+Message-ID: <f2994324-cf04-c695-bbbe-df4cf2faa0c1@linaro.org>
+Date:   Fri, 31 Mar 2023 09:26:50 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
 From:   Alex Elder <elder@linaro.org>
-Subject: Re: [PATCH v11 15/26] gunyah: rsc_mgr: Add platform ops on
- mem_lend/mem_reclaim
+Subject: Re: [PATCH v11 18/26] virt: gunyah: Translate gh_rm_hyp_resource into
+ gunyah_resource
 To:     Elliot Berman <quic_eberman@quicinc.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
@@ -74,16 +76,15 @@ Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
-        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        Andy Gross <agross@kernel.org>,
         Jassi Brar <jassisinghbrar@gmail.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
- <20230304010632.2127470-16-quic_eberman@quicinc.com>
+ <20230304010632.2127470-19-quic_eberman@quicinc.com>
 Content-Language: en-US
-In-Reply-To: <20230304010632.2127470-16-quic_eberman@quicinc.com>
+In-Reply-To: <20230304010632.2127470-19-quic_eberman@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -97,236 +98,347 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 3/3/23 7:06 PM, Elliot Berman wrote:
-> On Qualcomm platforms, there is a firmware entity which controls access
-> to physical pages. In order to share memory with another VM, this entity
-> needs to be informed that the guest VM should have access to the memory.
-
-Will Gunyah ever be used on something other than a Qualcomm
-platform?
-
-Is there really any need to have these "platform hooks"
-conditionally compiled?
-
-One other comment below.
-
-					-Alex
-
-> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
->   drivers/virt/gunyah/Kconfig                 |  4 ++
->   drivers/virt/gunyah/Makefile                |  1 +
->   drivers/virt/gunyah/gunyah_platform_hooks.c | 80 +++++++++++++++++++++
->   drivers/virt/gunyah/rsc_mgr.h               |  3 +
->   drivers/virt/gunyah/rsc_mgr_rpc.c           | 18 ++++-
->   include/linux/gunyah_rsc_mgr.h              | 17 +++++
->   6 files changed, 121 insertions(+), 2 deletions(-)
->   create mode 100644 drivers/virt/gunyah/gunyah_platform_hooks.c
+> When booting a Gunyah virtual machine, the host VM may gain capabilities
+> to interact with resources for the guest virtual machine. Examples of
+> such resources are vCPUs or message queues. To use those resources, we
+> need to translate the RM response into a gunyah_resource structure which
+> are useful to Linux drivers. Presently, Linux drivers need only to know
+> the type of resource, the capability ID, and an interrupt.
 > 
-> diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
-> index 1a737694c333..de815189dab6 100644
-> --- a/drivers/virt/gunyah/Kconfig
-> +++ b/drivers/virt/gunyah/Kconfig
-> @@ -4,6 +4,7 @@ config GUNYAH
->   	tristate "Gunyah Virtualization drivers"
->   	depends on ARM64
->   	depends on MAILBOX
-> +	select GUNYAH_PLATFORM_HOOKS
->   	help
->   	  The Gunyah drivers are the helper interfaces that run in a guest VM
->   	  such as basic inter-VM IPC and signaling mechanisms, and higher level
-> @@ -11,3 +12,6 @@ config GUNYAH
->   
->   	  Say Y/M here to enable the drivers needed to interact in a Gunyah
->   	  virtual environment.
-> +
-> +config GUNYAH_PLATFORM_HOOKS
-> +	tristate
-> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
-> index ff8bc4925392..6b8f84dbfe0d 100644
-> --- a/drivers/virt/gunyah/Makefile
-> +++ b/drivers/virt/gunyah/Makefile
-> @@ -1,6 +1,7 @@
->   # SPDX-License-Identifier: GPL-2.0
->   
->   obj-$(CONFIG_GUNYAH) += gunyah.o
-> +obj-$(CONFIG_GUNYAH_PLATFORM_HOOKS) += gunyah_platform_hooks.o
->   
->   gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o vm_mgr_mm.o
->   obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
-> diff --git a/drivers/virt/gunyah/gunyah_platform_hooks.c b/drivers/virt/gunyah/gunyah_platform_hooks.c
+> On ARM64 systems, the interrupt reported by Gunyah is the GIC interrupt
+> ID number and always a SPI.
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+
+Several comments here, nothing major.	-Alex
+
+> ---
+>   arch/arm64/include/asm/gunyah.h |  23 +++++
+>   drivers/virt/gunyah/rsc_mgr.c   | 163 +++++++++++++++++++++++++++++++-
+>   include/linux/gunyah.h          |   4 +
+>   include/linux/gunyah_rsc_mgr.h  |   3 +
+>   4 files changed, 192 insertions(+), 1 deletion(-)
+>   create mode 100644 arch/arm64/include/asm/gunyah.h
+> 
+> diff --git a/arch/arm64/include/asm/gunyah.h b/arch/arm64/include/asm/gunyah.h
 > new file mode 100644
-> index 000000000000..60da0e154e98
+> index 000000000000..64cfb964efee
 > --- /dev/null
-> +++ b/drivers/virt/gunyah/gunyah_platform_hooks.c
-> @@ -0,0 +1,80 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
+> +++ b/arch/arm64/include/asm/gunyah.h
+> @@ -0,0 +1,23 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
 > +/*
-> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
 > + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/rwsem.h>
-> +#include <linux/gunyah_rsc_mgr.h>
-> +
-> +#include "rsc_mgr.h"
-> +
-> +static struct gh_rm_platform_ops *rm_platform_ops;
-> +static DECLARE_RWSEM(rm_platform_ops_lock);
-> +
-> +int gh_rm_platform_pre_mem_share(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel)
-> +{
-> +	int ret = 0;
-> +
-> +	down_read(&rm_platform_ops_lock);
-> +	if (rm_platform_ops && rm_platform_ops->pre_mem_share)
-> +		ret = rm_platform_ops->pre_mem_share(rm, mem_parcel);
-> +	up_read(&rm_platform_ops_lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_rm_platform_pre_mem_share);
-> +
-> +int gh_rm_platform_post_mem_reclaim(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel)
-> +{
-> +	int ret = 0;
-> +
-> +	down_read(&rm_platform_ops_lock);
-> +	if (rm_platform_ops && rm_platform_ops->post_mem_reclaim)
-> +		ret = rm_platform_ops->post_mem_reclaim(rm, mem_parcel);
-> +	up_read(&rm_platform_ops_lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_rm_platform_post_mem_reclaim);
-> +
-> +int gh_rm_register_platform_ops(struct gh_rm_platform_ops *platform_ops)
-> +{
-> +	int ret = 0;
-> +
-> +	down_write(&rm_platform_ops_lock);
-> +	if (!rm_platform_ops)
-> +		rm_platform_ops = platform_ops;
-> +	else
-> +		ret = -EEXIST;
-> +	up_write(&rm_platform_ops_lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_rm_register_platform_ops);
-> +
-> +void gh_rm_unregister_platform_ops(struct gh_rm_platform_ops *platform_ops)
-> +{
-> +	down_write(&rm_platform_ops_lock);
-> +	if (rm_platform_ops == platform_ops)
-> +		rm_platform_ops = NULL;
-> +	up_write(&rm_platform_ops_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(gh_rm_unregister_platform_ops);
-> +
-> +static void _devm_gh_rm_unregister_platform_ops(void *data)
-> +{
-> +	gh_rm_unregister_platform_ops(data);
-> +}
-> +
-> +int devm_gh_rm_register_platform_ops(struct device *dev, struct gh_rm_platform_ops *ops)
-> +{
-> +	int ret;
-> +
-> +	ret = gh_rm_register_platform_ops(ops);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return devm_add_action(dev, _devm_gh_rm_unregister_platform_ops, ops);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_gh_rm_register_platform_ops);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Gunyah Platform Hooks");
-> diff --git a/drivers/virt/gunyah/rsc_mgr.h b/drivers/virt/gunyah/rsc_mgr.h
-> index 3665ebc7b020..6838e736f361 100644
-> --- a/drivers/virt/gunyah/rsc_mgr.h
-> +++ b/drivers/virt/gunyah/rsc_mgr.h
-> @@ -13,4 +13,7 @@ struct gh_rm;
->   int gh_rm_call(struct gh_rm *rsc_mgr, u32 message_id, void *req_buff, size_t req_buf_size,
->   		void **resp_buf, size_t *resp_buf_size);
->   
-> +int gh_rm_platform_pre_mem_share(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
-> +int gh_rm_platform_post_mem_reclaim(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
-> +
->   #endif
-> diff --git a/drivers/virt/gunyah/rsc_mgr_rpc.c b/drivers/virt/gunyah/rsc_mgr_rpc.c
-> index 3df15ad5b97d..733be4dc8dd2 100644
-> --- a/drivers/virt/gunyah/rsc_mgr_rpc.c
-> +++ b/drivers/virt/gunyah/rsc_mgr_rpc.c
-> @@ -204,6 +204,12 @@ static int gh_rm_mem_lend_common(struct gh_rm *rm, u32 message_id, struct gh_rm_
->   	if (!msg)
->   		return -ENOMEM;
->   
-> +	ret = gh_rm_platform_pre_mem_share(rm, p);
-> +	if (ret) {
-> +		kfree(msg);
-> +		return ret;
-> +	}
-> +
->   	req_header = msg;
->   	acl_section = (void *)req_header + sizeof(*req_header);
->   	mem_section = (void *)acl_section + struct_size(acl_section, entries, p->n_acl_entries);
-> @@ -227,8 +233,10 @@ static int gh_rm_mem_lend_common(struct gh_rm *rm, u32 message_id, struct gh_rm_
->   	ret = gh_rm_call(rm, message_id, msg, msg_size, (void **)&resp, &resp_size);
->   	kfree(msg);
->   
-> -	if (ret)
-> +	if (ret) {
-> +		gh_rm_platform_post_mem_reclaim(rm, p);
->   		return ret;
-> +	}
->   
->   	p->mem_handle = le32_to_cpu(*resp);
->   
-> @@ -283,8 +291,14 @@ int gh_rm_mem_reclaim(struct gh_rm *rm, struct gh_rm_mem_parcel *parcel)
->   	struct gh_rm_mem_release_req req = {
->   		.mem_handle = cpu_to_le32(parcel->mem_handle),
->   	};
-> +	int ret;
-> +
-> +	ret = gh_rm_call(rm, GH_RM_RPC_MEM_RECLAIM, &req, sizeof(req), NULL, NULL);
-> +	/* Do not call platform mem reclaim hooks: the reclaim didn't happen*/
+> +#ifndef __ASM_GUNYAH_H_
+> +#define __ASM_GUNYAH_H_
 
-Move the comment above the gh_rm_call() call, and rephrase, such as:
+Maybe just one _ at the beginning and none at the end?
+Follow the same convention across all your header files.
+(Maybe you're looking at other files in the same directory
+as this one, but that's not consistent.)
 
-	/* Only call platform mem reclaim hooks if... */
+> +
+> +#include <linux/irq.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +static inline int arch_gh_fill_irq_fwspec_params(u32 virq, struct irq_fwspec *fwspec)
+> +{
+> +	if (virq < 32 || virq > 1019)
+> +		return -EINVAL;
 
-> +	if (ret)
-> +		return ret;
+What is special about VIRQs greater than 1019 (minus 32)?
+
+It's probably documented somewhere but it's worth adding a
+comment here to explain the check.
+
+You would know better than I, but could/should the caller
+be responsible for this check?  (Not a big deal.)
+
+> +
+> +	fwspec->param_count = 3;
+> +	fwspec->param[0] = GIC_SPI;
+> +	fwspec->param[1] = virq - 32;
+
+And why is 32 subtracted?
+
+> +	fwspec->param[2] = IRQ_TYPE_EDGE_RISING;
+> +	return 0;
+> +}
+> +
+> +#endif
+> diff --git a/drivers/virt/gunyah/rsc_mgr.c b/drivers/virt/gunyah/rsc_mgr.c
+> index d7ce692d0067..383be5ac0f44 100644
+> --- a/drivers/virt/gunyah/rsc_mgr.c
+> +++ b/drivers/virt/gunyah/rsc_mgr.c
+> @@ -17,6 +17,8 @@
+>   #include <linux/platform_device.h>
+>   #include <linux/miscdevice.h>
 >   
-> -	return gh_rm_call(rm, GH_RM_RPC_MEM_RECLAIM, &req, sizeof(req), NULL, NULL);
-> +	return gh_rm_platform_post_mem_reclaim(rm, parcel);
+> +#include <asm/gunyah.h>
+> +
+>   #include "rsc_mgr.h"
+>   #include "vm_mgr.h"
+>   
+> @@ -132,6 +134,7 @@ struct gh_rm_connection {
+>    * @send_lock: synchronization to allow only one request to be sent at a time
+>    * @nh: notifier chain for clients interested in RM notification messages
+>    * @miscdev: /dev/gunyah
+> + * @irq_domain: Domain to translate Gunyah hwirqs to Linux irqs
+>    */
+>   struct gh_rm {
+>   	struct device *dev;
+> @@ -150,6 +153,7 @@ struct gh_rm {
+>   	struct blocking_notifier_head nh;
+>   
+>   	struct miscdevice miscdev;
+> +	struct irq_domain *irq_domain;
+>   };
+>   
+>   /**
+> @@ -190,6 +194,134 @@ static inline int gh_rm_remap_error(enum gh_rm_error rm_error)
+>   	}
 >   }
+>   
+> +struct gh_irq_chip_data {
+> +	u32 gh_virq;
+> +};
+> +
+> +static struct irq_chip gh_rm_irq_chip = {
+> +	.name			= "Gunyah",
+> +	.irq_enable		= irq_chip_enable_parent,
+> +	.irq_disable		= irq_chip_disable_parent,
+> +	.irq_ack		= irq_chip_ack_parent,
+> +	.irq_mask		= irq_chip_mask_parent,
+> +	.irq_mask_ack		= irq_chip_mask_ack_parent,
+> +	.irq_unmask		= irq_chip_unmask_parent,
+> +	.irq_eoi		= irq_chip_eoi_parent,
+> +	.irq_set_affinity	= irq_chip_set_affinity_parent,
+> +	.irq_set_type		= irq_chip_set_type_parent,
+> +	.irq_set_wake		= irq_chip_set_wake_parent,
+> +	.irq_set_vcpu_affinity	= irq_chip_set_vcpu_affinity_parent,
+> +	.irq_retrigger		= irq_chip_retrigger_hierarchy,
+> +	.irq_get_irqchip_state	= irq_chip_get_parent_state,
+> +	.irq_set_irqchip_state	= irq_chip_set_parent_state,
+> +	.flags			= IRQCHIP_SET_TYPE_MASKED |
+> +				  IRQCHIP_SKIP_SET_WAKE |
+> +				  IRQCHIP_MASK_ON_SUSPEND,
+> +};
+> +
+> +static int gh_rm_irq_domain_alloc(struct irq_domain *d, unsigned int virq, unsigned int nr_irqs,
+> +				 void *arg)
+> +{
+> +	struct gh_irq_chip_data *chip_data, *spec = arg;
+> +	struct irq_fwspec parent_fwspec;
+> +	struct gh_rm *rm = d->host_data;
+> +	u32 gh_virq = spec->gh_virq;
+> +	int ret;
+> +
+> +	if (nr_irqs != 1 || gh_virq == U32_MAX)
+
+Does U32_MAX have special meaning?  Why are you checking for it?
+Whatever it is, you should explain why this is invalid here.
+
+> +		return -EINVAL;
+> +
+> +	chip_data = kzalloc(sizeof(*chip_data), GFP_KERNEL);
+> +	if (!chip_data)
+> +		return -ENOMEM;
+> +
+> +	chip_data->gh_virq = gh_virq;
+> +
+> +	ret = irq_domain_set_hwirq_and_chip(d, virq, chip_data->gh_virq, &gh_rm_irq_chip,
+> +						chip_data);
+> +	if (ret)
+> +		goto err_free_irq_data;
+> +
+> +	parent_fwspec.fwnode = d->parent->fwnode;
+> +	ret = arch_gh_fill_irq_fwspec_params(chip_data->gh_virq, &parent_fwspec);
+> +	if (ret) {
+> +		dev_err(rm->dev, "virq translation failed %u: %d\n", chip_data->gh_virq, ret);
+> +		goto err_free_irq_data;
+> +	}
+> +
+> +	ret = irq_domain_alloc_irqs_parent(d, virq, nr_irqs, &parent_fwspec);
+> +	if (ret)
+> +		goto err_free_irq_data;
+> +
+> +	return ret;
+> +err_free_irq_data:
+> +	kfree(chip_data);
+> +	return ret;
+> +}
+> +
+> +static void gh_rm_irq_domain_free_single(struct irq_domain *d, unsigned int virq)
+> +{
+> +	struct gh_irq_chip_data *chip_data;
+
+No need to define chip_data.
+
+> +	struct irq_data *irq_data;
+> +
+> +	irq_data = irq_domain_get_irq_data(d, virq);
+> +	if (!irq_data)
+> +		return;
+> +
+> +	chip_data = irq_data->chip_data;
+> +
+> +	kfree(chip_data);
+
+Just call kfree(irq_data->chip_data);
+
+> +	irq_data->chip_data = NULL;
+> +}
+> +
+> +static void gh_rm_irq_domain_free(struct irq_domain *d, unsigned int virq, unsigned int nr_irqs)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < nr_irqs; i++)
+> +		gh_rm_irq_domain_free_single(d, virq);
+> +}
+> +
+> +static const struct irq_domain_ops gh_rm_irq_domain_ops = {
+> +	.alloc		= gh_rm_irq_domain_alloc,
+> +	.free		= gh_rm_irq_domain_free,
+> +};
+> +
+> +struct gh_resource *gh_rm_alloc_resource(struct gh_rm *rm, struct gh_rm_hyp_resource *hyp_resource)
+> +{
+> +	struct gh_resource *ghrsc;
+> +
+> +	ghrsc = kzalloc(sizeof(*ghrsc), GFP_KERNEL);
+> +	if (!ghrsc)
+> +		return NULL;
+> +
+> +	ghrsc->type = hyp_resource->type;
+> +	ghrsc->capid = le64_to_cpu(hyp_resource->cap_id);
+> +	ghrsc->irq = IRQ_NOTCONNECTED;
+> +	ghrsc->rm_label = le32_to_cpu(hyp_resource->resource_label);
+> +	if (hyp_resource->virq && le32_to_cpu(hyp_resource->virq) != U32_MAX) {
+
+Again, does U32_MAX have a particular meaning here?
+
+> +		struct gh_irq_chip_data irq_data = {
+> +			.gh_virq = le32_to_cpu(hyp_resource->virq),
+> +		};
+> +
+> +		ghrsc->irq = irq_domain_alloc_irqs(rm->irq_domain, 1, NUMA_NO_NODE, &irq_data);
+> +		if (ghrsc->irq < 0) {
+> +			dev_err(rm->dev,
+> +				"Failed to allocate interrupt for resource %d label: %d: %d\n",
+> +				ghrsc->type, ghrsc->rm_label, ghrsc->irq);
+> +			ghrsc->irq = IRQ_NOTCONNECTED;
+
+ghrsc->irq already had that value.  You could use a local
+variable irq to hold the value, and then assign ghrsc->irq
+after you know it's good.
+
+> +		}
+> +	}
+> +
+> +	return ghrsc;
+> +}
+> +
+> +void gh_rm_free_resource(struct gh_resource *ghrsc)
+> +{
+> +	irq_dispose_mapping(ghrsc->irq);
+> +	kfree(ghrsc);
+> +}
+> +
+>   static int gh_rm_init_connection_payload(struct gh_rm_connection *connection, void *msg,
+>   					size_t hdr_size, size_t msg_size)
+>   {
+> @@ -639,6 +771,8 @@ static int gh_msgq_platform_probe_direction(struct platform_device *pdev, bool t
+>   
+>   static int gh_rm_drv_probe(struct platform_device *pdev)
+>   {
+> +	struct irq_domain *parent_irq_domain;
+> +	struct device_node *parent_irq_node;
+>   	struct gh_msgq_tx_data *msg;
+>   	struct gh_rm *rm;
+>   	int ret;
+> @@ -675,15 +809,41 @@ static int gh_rm_drv_probe(struct platform_device *pdev)
+>   	if (ret)
+>   		goto err_cache;
+>   
+> +	parent_irq_node = of_irq_find_parent(pdev->dev.of_node);
+> +	if (!parent_irq_node) {
+> +		dev_err(&pdev->dev, "Failed to find interrupt parent of resource manager\n");
+> +		ret = -ENODEV;
+> +		goto err_msgq;
+> +	}
+> +
+> +	parent_irq_domain = irq_find_host(parent_irq_node);
+> +	if (!parent_irq_domain) {
+> +		dev_err(&pdev->dev, "Failed to find interrupt parent domain of resource manager\n");
+> +		ret = -ENODEV;
+> +		goto err_msgq;
+> +	}
+> +
+> +	rm->irq_domain = irq_domain_add_hierarchy(parent_irq_domain, 0, 0, pdev->dev.of_node,
+> +							&gh_rm_irq_domain_ops, NULL);
+> +	if (!rm->irq_domain) {
+> +		dev_err(&pdev->dev, "Failed to add irq domain\n");
+> +		ret = -ENODEV;
+> +		goto err_msgq;
+> +	}
+> +	rm->irq_domain->host_data = rm;
+> +
+> +	rm->miscdev.parent = &pdev->dev;
+>   	rm->miscdev.name = "gunyah";
+>   	rm->miscdev.minor = MISC_DYNAMIC_MINOR;
+>   	rm->miscdev.fops = &gh_dev_fops;
+>   
+>   	ret = misc_register(&rm->miscdev);
+>   	if (ret)
+> -		goto err_msgq;
+> +		goto err_irq_domain;
+>   
+>   	return 0;
+> +err_irq_domain:
+> +	irq_domain_remove(rm->irq_domain);
+>   err_msgq:
+>   	mbox_free_channel(gh_msgq_chan(&rm->msgq));
+>   	gh_msgq_remove(&rm->msgq);
+> @@ -697,6 +857,7 @@ static int gh_rm_drv_remove(struct platform_device *pdev)
+>   	struct gh_rm *rm = platform_get_drvdata(pdev);
+>   
+>   	misc_deregister(&rm->miscdev);
+> +	irq_domain_remove(rm->irq_domain);
+>   	mbox_free_channel(gh_msgq_chan(&rm->msgq));
+>   	gh_msgq_remove(&rm->msgq);
+>   	kmem_cache_destroy(rm->cache);
+> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
+> index 378bec0f2ce1..3e706b59d2c0 100644
+> --- a/include/linux/gunyah.h
+> +++ b/include/linux/gunyah.h
+> @@ -27,6 +27,10 @@ struct gh_resource {
+>   	enum gh_resource_type type;
+>   	u64 capid;
+>   	unsigned int irq;
+> +
+> +	/* To help allocator in vm manager */
+
+I don't find the above comment helpful.
+
+> +	struct list_head list;
+> +	u32 rm_label;
+>   };
 >   
 >   /**
 > diff --git a/include/linux/gunyah_rsc_mgr.h b/include/linux/gunyah_rsc_mgr.h
-> index 8b0b46f28e39..515087931a2b 100644
+> index acf8c1545a6c..58693c27cf1a 100644
 > --- a/include/linux/gunyah_rsc_mgr.h
 > +++ b/include/linux/gunyah_rsc_mgr.h
-> @@ -145,4 +145,21 @@ int gh_rm_get_hyp_resources(struct gh_rm *rm, u16 vmid,
+> @@ -145,6 +145,9 @@ int gh_rm_get_hyp_resources(struct gh_rm *rm, u16 vmid,
 >   				struct gh_rm_hyp_resources **resources);
 >   int gh_rm_get_vmid(struct gh_rm *rm, u16 *vmid);
 >   
-> +struct gunyah_rm_platform_ops {
-> +	int (*pre_mem_share)(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
-> +	int (*post_mem_reclaim)(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
-> +};
+> +struct gh_resource *gh_rm_alloc_resource(struct gh_rm *rm, struct gh_rm_hyp_resource *hyp_resource);
+> +void gh_rm_free_resource(struct gh_resource *ghrsc);
 > +
-> +#if IS_ENABLED(CONFIG_GUNYAH_PLATFORM_HOOKS)
-> +int gh_rm_register_platform_ops(struct gh_rm_platform_ops *platform_ops);
-> +void gh_rm_unregister_platform_ops(struct gh_rm_platform_ops *platform_ops);
-> +int devm_gh_rm_register_platform_ops(struct device *dev, struct gh_rm_platform_ops *ops);
-> +#else
-> +static inline int gh_rm_register_platform_ops(struct gh_rm_platform_ops *platform_ops)
-> +	{ return 0; }
-> +static inline void gh_rm_unregister_platform_ops(struct gh_rm_platform_ops *platform_ops) { }
-> +static inline int devm_gh_rm_register_platform_ops(struct device *dev,
-> +	struct gh_rm_platform_ops *ops) { return 0; }
-> +#endif
-> +
->   #endif
+>   struct gh_rm_platform_ops {
+>   	int (*pre_mem_share)(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
+>   	int (*post_mem_reclaim)(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
 
