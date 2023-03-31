@@ -2,102 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304F36D23AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6126D23AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233093AbjCaPKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 11:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S233038AbjCaPLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 11:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233036AbjCaPKS (ORCPT
+        with ESMTP id S232303AbjCaPLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 11:10:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37806A74;
-        Fri, 31 Mar 2023 08:10:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44601B8306A;
-        Fri, 31 Mar 2023 15:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAEA6C4339B;
-        Fri, 31 Mar 2023 15:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680275413;
-        bh=w1OhyLtdA+PjJV84MZFPETN/oXonzdgzgHgWJaORuCY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=NNUUrmBLPk6iC+75Ae4RVNFSH7JKbWQ2PdfPmst98WIVuhTZZ9y67n44i1wxUdktE
-         9UZiX7Zz+IMvEHeX4ZW3vuw0VleOJ5D4sjMfmDX3eZxgbVkQFgJtSf2YwNmo27TP2S
-         D87Rp8prctYT/DmE1gWqe2SxHzlxeGAZYO0SdyyFm6u1Bgy/VbLSrYcSOmg08dmVcr
-         FK0zGk9YPz6ZUW+XuoJ5JEojXHiEmsiH9G9gaseKwt9bEkE0P+9qAy9LGznNVaa4YC
-         OISgQaErAaY8iZ/otAuWa98fTnPVTb09vI0c/Gro/l0r3ntKsE0ylvnKtdiApLkr5M
-         /sCo+RazC9X7w==
-Date:   Fri, 31 Mar 2023 10:10:12 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
- error recovery
-Message-ID: <20230331151012.GA3225386@bhelgaas>
+        Fri, 31 Mar 2023 11:11:06 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DDBC54209
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:11:02 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:32986.221759475
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 24C731001C8;
+        Fri, 31 Mar 2023 23:10:58 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 4ca22286f0024de39acc6a100cbf722e for gangecen@hust.edu.cn;
+        Fri, 31 Mar 2023 23:10:59 CST
+X-Transaction-ID: 4ca22286f0024de39acc6a100cbf722e
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <45b623af-e72e-f728-5ce6-dce014a772ed@189.cn>
+Date:   Fri, 31 Mar 2023 23:10:57 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <17f5c023-910a-f88f-e7c4-c5a1c3c3ac0e@linux.intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PING] drm/bochs: replace ioremap with devm_ioremap to avoid immo
+ leak
+To:     Gencen Gan <gangecen@hust.edu.cn>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20230329052655.3487616-1-gangecen@hust.edu.cn>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <20230329052655.3487616-1-gangecen@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 11:46:45PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> On 3/30/23 8:45 AM, Bjorn Helgaas wrote:
+Hi,
 
-> > This sounds like a plausible assumption.  But is there actually spec
-> > language that says EDR notification is not allowed in the AER native
-> > case (when OS owns the AER Capability)?  I looked but didn't find
-> > anything.
-> 
-> In the PCIe firmware specification v3.3, table "Table 4-6: Interpretation of
-> the _OSC Control Field, Returned Value", field "PCI Express Downstream Port
-> Containment configuration control", it explains that the firmware can use
-> EDR notification only when OS DPC control is not requested or denied by
-> firmware.
+I'm noticed you patch, interesting!
 
-I'm sure that's the intent, but I don't see that restriction in the
-spec.  Here's what I'm looking at, which doesn't directly restrict
-generation of EDR notifications:
+On 2023/3/29 13:26, Gencen Gan wrote:
+> From: Gan Gecen <gangecen@hust.edu.cn>
+>
+> Smatch reports:
+>
+> 	drivers/gpu/drm/tiny/bochs.c:290 bochs_hw_init()
+> 	warn: 'bochs->mmio' from ioremap() not released on
+> 	lines: 246,250,254.
+>
+> In the function bochs_load() that calls bochs_hw_init()
+> only, if bochs_hw_init(dev) returns -ENODEV(-19), it
+> will jumps to err_free_dev instead of err_hw_fini, so
+> bochs->immo won't be freed.
 
-  If control of this feature was requested and denied, or was not
-  requested, firmware is responsible for initializing Downstream Port
-  Containment Extended Capability Structures per firmware policy.
-  Further, [the OS is permitted to write several registers while
-  processing an EDR notification]
+    `mmio`, not `immo`,  you should also fix the typos in you patch's 
+commit title.
 
-> > Actually I do have one idea: in the firmware-first case, firmware
-> > collects all the status information, clears it, and then passes the
-> > status on to the OS.  In this case we don't need to clear the status
-> > registers in handle_error_source(), pcie_do_recovery(), etc.
-> 
-> So the idea is to get the error info in a particular format using
-> something like _DSM call?
+> We would prefer to replace ioremap with devm_ioremap
+> to avoid adding lengthy error handling. The function
+> `devm_ioremap` will automatically release the allocated
+> resources after use.
 
-No, that's not what I'm thinking at all.  I definitely would not want
-to add a new _DSM, which would add yet another case the OS has to
-handle.
+Yet, I notice that there is iounmap in bochs_hw_fini() function, does 
+double free will happen?
 
-In the firmware-first case, the firmware collects the error status and
-clears it before handing the info off to the OS error handling path.
+static void bochs_hw_fini(struct drm_device *dev)
+{
+     struct bochs_device *bochs = dev->dev_private;
+     // ...
+     if (bochs->mmio)
+         iounmap(bochs->mmio);
+     // ...
+}
 
-In the native case, the OS should be able to collect the error status
-and clear it before starting the OS error handling path.  Same
-register accesses, should be indistinguishable from the device point
-of view, it's just that the register accesses would be done by the OS
-instead of by firmware.
 
-Bjorn
+I still advise you free it by adding error handling code, free it manually.
+
+Because still there other ioremap() function in the driver.
+
+But you can choose to heard other reviewer's voice, I can only help to 
+review.
+
+> Signed-off-by: Gan Gecen <gangecen@hust.edu.cn>
+> ---
+>   drivers/gpu/drm/tiny/bochs.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/tiny/bochs.c b/drivers/gpu/drm/tiny/bochs.c
+> index 024346054c70..0d7e119a732f 100644
+> --- a/drivers/gpu/drm/tiny/bochs.c
+> +++ b/drivers/gpu/drm/tiny/bochs.c
+> @@ -223,7 +223,7 @@ static int bochs_hw_init(struct drm_device *dev)
+>   		}
+>   		ioaddr = pci_resource_start(pdev, 2);
+>   		iosize = pci_resource_len(pdev, 2);
+> -		bochs->mmio = ioremap(ioaddr, iosize);
+> +		bochs->mmio = devm_ioremap(&pdev->dev, ioaddr, iosize);
+>   		if (bochs->mmio == NULL) {
+>   			DRM_ERROR("Cannot map mmio region\n");
+>   			return -ENOMEM;
