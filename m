@@ -2,171 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2777D6D189B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025C66D18A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjCaHba convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 03:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
+        id S230293AbjCaHcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCaHb1 (ORCPT
+        with ESMTP id S229722AbjCaHcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:31:27 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B0CB44E;
-        Fri, 31 Mar 2023 00:31:26 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-536af432ee5so400839157b3.0;
-        Fri, 31 Mar 2023 00:31:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680247885;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CUd21DqN56tUJJauxzkykeUBegNuegGhlGwWCjC09Bs=;
-        b=XUsOuEyYJ4pdt/iyo2h3i4Vk9Ewxll9E+PmZPbwSKJxXFh/enZObs4zaeqvYZyqtvB
-         Y271wzwBiLPA53lLUue8cLKora/KZE4EhF3oi6KOhbihln/CoHjCUxpBguNYUM6fIWlB
-         E5KNFClAX7W8M5GBtLepyY7x+FKRE4kJZHfmXFr2Cet0+oHgkSNgfkgBjyutbsiMwPz7
-         JLIq6FaS/lCiKUsxxrB4nhqG1P76+VF5M7tXYrfMFkUpsTS4EmvVvwP46hymSMLgv+0H
-         +oWP+wsAzmj4EUu1z//6lIOUVyBzCSZpgv1Ow4ypQlR4o05YtsiRlrvJ7GL9JUabZ1Vm
-         EwKw==
-X-Gm-Message-State: AAQBX9cXBjLl40lvBD331JGUfSIXnUd4d0/sFS/4mze9l0KrXccQM7v+
-        5mNOCtOFKFXizga6StzSOv8/mhmqQITM2CSM
-X-Google-Smtp-Source: AKy350Y9tjv6c27rnNvCUslBs8mc1G4k6/FF9mARBwAX5wjTJk/yrBTxteLNouqngBMwIJW2pXyYwA==
-X-Received: by 2002:a0d:d6d1:0:b0:53c:8a40:330f with SMTP id y200-20020a0dd6d1000000b0053c8a40330fmr27236603ywd.22.1680247885503;
-        Fri, 31 Mar 2023 00:31:25 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id 188-20020a8114c5000000b00545a081848esm377380ywu.30.2023.03.31.00.31.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 00:31:25 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-545cb3c9898so324939957b3.7;
-        Fri, 31 Mar 2023 00:31:25 -0700 (PDT)
-X-Received: by 2002:a81:b65f:0:b0:545:611c:8d19 with SMTP id
- h31-20020a81b65f000000b00545611c8d19mr13248405ywk.4.1680247884888; Fri, 31
- Mar 2023 00:31:24 -0700 (PDT)
+        Fri, 31 Mar 2023 03:32:39 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C941733;
+        Fri, 31 Mar 2023 00:32:37 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 836655C01A0;
+        Fri, 31 Mar 2023 03:32:36 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Fri, 31 Mar 2023 03:32:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680247956; x=1680334356; bh=Q/B4T30X2b42IMrzFs3a89ZTi4QhgYECDXb
+        6nVPSW5A=; b=NpHCzPVvzQkWspa1jPiArUmeZnAMnV/8Oz2XjI3WUwjT1iYdzyB
+        V5gcj750cF49YujRsHDchMi/LDmj2hcWfThm+DH/Ow0Psh7d746j1iZDk7rocxIR
+        3SX7shBBZs2jHmZcFIsECJLo7GWkgs+DaQG3E01wYXo3kva6vc+0n1W7pkD0Mhdt
+        umwj0aVqLA3CXqa/Uy+fuMal+85vMs/R9tuUd60uex6syyf2j5oE8NQF5ir/Qcna
+        /1yS+jzefpbl+EJL0RNa06gVj0do6nBYaZiq42jKvan6IGjdKAb9PmHCKl69wcTo
+        CiSc1v6qegflCFp/5QF7A//G7hjMl3b+caQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680247956; x=1680334356; bh=Q/B4T30X2b42IMrzFs3a89ZTi4QhgYECDXb
+        6nVPSW5A=; b=nSO1DzntpFog/z6bDkbpzfkwPhpqy8Ds8OiZ9kCGpUAzUbcmaJ9
+        mQH2ryUbZp58matfZSM1yWXs4/vzV6px+m4F+KsyxRK6hHjXyKhQwnPuYmfTeN1p
+        o4tm7UEg4ZsqKrPLtof++yaNloH30D004+nPN/w5hrcktznkV4SVc2LJ+ETMRi0Y
+        CCLp1zMh2pkO48azGLSDJHJ9HytegHhChxbemYPC/nVQoqMKQL1U2mQtUeF7ZL/M
+        fHzxD7cAJuYBm70xweQV5MntQY6AwCglo+3sFTr2ADX54Db5XmJXEEgeEqghSdUK
+        KpqsWkNbKgVSaN2Z9/DDc13q9CBsVRUjFqA==
+X-ME-Sender: <xms:lIwmZMIciDCA0VenndYavsqi4wkjPxeHIdUlK5uReEw-lrbivYaZAQ>
+    <xme:lIwmZMKmmPogCzJCjedqIU48CLFZjcRBfCqoORcEnAPkhywCUFiISbqaCPGTdpXeI
+    mAPGgKWhcdV6OGQtA>
+X-ME-Received: <xmr:lIwmZMukCccwyqFodfwEDVlVrLB37SwHorW551lH3xHcGUpYwNKsDNZ8hIBwfPY0UVNe8K-r68yD5Zcyfi49jrAjxQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeitddguddvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomheptehl
+    ihgtvgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnh
+    epheduuddvteekvdektdduledugfffhfdugeejgeeuvdevtdetveejheehiefffeegnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
+    esrhihhhhlrdhioh
+X-ME-Proxy: <xmx:lIwmZJb4MKMauQkpP1-skLWPkl2SETIBoM1p31mJjbH6flgJ_5hyqw>
+    <xmx:lIwmZDZgvPUS5sf-4YOQFGRMiGH61uWfhXSpYm831eJNkCWvbJOnYg>
+    <xmx:lIwmZFAXVOazdH7PvXpN16GXKZK1WlbcdtYJEeVEVH_sv1frBbGC7A>
+    <xmx:lIwmZNlqbdJQoB4evwBoYQatjdwkV4fbovTPhWjwZKpx2HyMBIjJbA>
+Feedback-ID: i56684263:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 31 Mar 2023 03:32:34 -0400 (EDT)
+Message-ID: <283f3831-a51c-1798-6871-cd19584bc03e@ryhl.io>
+Date:   Fri, 31 Mar 2023 09:32:46 +0200
 MIME-Version: 1.0
-References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 31 Mar 2023 09:31:12 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVseMfkQw5OnTM4CxW9BUCZ0pVZP6px67h8VPah0x3QAA@mail.gmail.com>
-Message-ID: <CAMuHMdVseMfkQw5OnTM4CxW9BUCZ0pVZP6px67h8VPah0x3QAA@mail.gmail.com>
-Subject: Re: [PATCH v7 1/6] riscv: mm: dma-noncoherent: Switch using function
- pointers for cache management
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 10/13] rust: introduce `Task::current`
+Content-Language: en-US
+To:     Gary Guo <gary@garyguo.net>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230330043954.562237-1-wedsonaf@gmail.com>
+ <20230330043954.562237-10-wedsonaf@gmail.com>
+ <20230331034701.0657d5f2.gary@garyguo.net>
+From:   Alice Ryhl <alice@ryhl.io>
+In-Reply-To: <20230331034701.0657d5f2.gary@garyguo.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+On 3/31/23 04:47, Gary Guo wrote:
+> On Thu, 30 Mar 2023 01:39:51 -0300
+> Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
+> 
+>> From: Wedson Almeida Filho <walmeida@microsoft.com>
+>>
+>> This allows Rust code to get a reference to the current task without
+>> having to increment the refcount, but still guaranteeing memory safety.
+>>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+>> ---
+>>   rust/helpers.c      |  6 ++++
+>>   rust/kernel/task.rs | 83 ++++++++++++++++++++++++++++++++++++++++++++-
+>>   2 files changed, 88 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/rust/helpers.c b/rust/helpers.c
+>> index 58a194042c86..96441744030e 100644
+>> --- a/rust/helpers.c
+>> +++ b/rust/helpers.c
+>> @@ -100,6 +100,12 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r)
+>>   }
+>>   EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
+>>   
+>> +struct task_struct *rust_helper_get_current(void)
+>> +{
+>> +	return current;
+>> +}
+>> +EXPORT_SYMBOL_GPL(rust_helper_get_current);
+>> +
+>>   void rust_helper_get_task_struct(struct task_struct *t)
+>>   {
+>>   	get_task_struct(t);
+>> diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
+>> index 8d7a8222990f..8b2b56ba9c6d 100644
+>> --- a/rust/kernel/task.rs
+>> +++ b/rust/kernel/task.rs
+>> @@ -5,7 +5,7 @@
+>>   //! C header: [`include/linux/sched.h`](../../../../include/linux/sched.h).
+>>   
+>>   use crate::bindings;
+>> -use core::{cell::UnsafeCell, ptr};
+>> +use core::{cell::UnsafeCell, marker::PhantomData, ops::Deref, ptr};
+>>   
+>>   /// Wraps the kernel's `struct task_struct`.
+>>   ///
+>> @@ -13,6 +13,46 @@ use core::{cell::UnsafeCell, ptr};
+>>   ///
+>>   /// Instances of this type are always ref-counted, that is, a call to `get_task_struct` ensures
+>>   /// that the allocation remains valid at least until the matching call to `put_task_struct`.
+>> +///
+>> +/// # Examples
+>> +///
+>> +/// The following is an example of getting the PID of the current thread with zero additional cost
+>> +/// when compared to the C version:
+>> +///
+>> +/// ```
+>> +/// use kernel::task::Task;
+>> +///
+>> +/// let pid = Task::current().pid();
+>> +/// ```
+>> +///
+>> +/// Getting the PID of the current process, also zero additional cost:
+>> +///
+>> +/// ```
+>> +/// use kernel::task::Task;
+>> +///
+>> +/// let pid = Task::current().group_leader().pid();
+>> +/// ```
+>> +///
+>> +/// Getting the current task and storing it in some struct. The reference count is automatically
+>> +/// incremented when creating `State` and decremented when it is dropped:
+>> +///
+>> +/// ```
+>> +/// use kernel::{task::Task, ARef};
+>> +///
+>> +/// struct State {
+>> +///     creator: ARef<Task>,
+>> +///     index: u32,
+>> +/// }
+>> +///
+>> +/// impl State {
+>> +///     fn new() -> Self {
+>> +///         Self {
+>> +///             creator: Task::current().into(),
+>> +///             index: 0,
+>> +///         }
+>> +///     }
+>> +/// }
+>> +/// ```
+>>   #[repr(transparent)]
+>>   pub struct Task(pub(crate) UnsafeCell<bindings::task_struct>);
+>>   
+>> @@ -25,6 +65,20 @@ unsafe impl Sync for Task {}
+>>   type Pid = bindings::pid_t;
+>>   
+>>   impl Task {
+>> +    /// Returns a task reference for the currently executing task/thread.
+>> +    pub fn current<'a>() -> TaskRef<'a> {
+>> +        // SAFETY: Just an FFI call with no additional safety requirements.
+>> +        let ptr = unsafe { bindings::get_current() };
+>> +
+>> +        TaskRef {
+>> +            // SAFETY: If the current thread is still running, the current task is valid. Given
+>> +            // that `TaskRef` is not `Send`, we know it cannot be transferred to another thread
+>> +            // (where it could potentially outlive the caller).
+>> +            task: unsafe { &*ptr.cast() },
+>> +            _not_send: PhantomData,
+>> +        }
+>> +    }
+>> +
+> 
+> I don't think this API is sound, as you can do `&*Task::current()` and
+> get a `&'static Task`, which is very problematic.
+> 
+> A sound API would be
+> 
+> 	pub fn with_current<R>(f: imp FnOnce(&Task) -> R) -> R { ... }
+> 
+> (which also is how thread local works in Rust)
+> 
+> You would have to write `Task::with_current(|cur| cur.pid())` though,
+> which unfortunately is a bit less ergonomic.
+> 
+> Best,
+> Gary
 
-Thanks for your patch!
-
-On Thu, Mar 30, 2023 at 10:42 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Currently, selecting which CMOs to use on a given platform is done using
-> and ALTERNATIVE_X() macro. This was manageable when there were just two
-
-the ALTERNATIVE_X()
-
-> CMO implementations, but now that there are more and more platforms coming
-> needing custom CMOs, the use of the ALTERNATIVE_X() macro is unmanageable.
->
-> To avoid such issues this patch switches to use of function pointers
-
-"the use" or "using"
-
-> instead of ALTERNATIVE_X() macro for cache management (the only drawback
-
-the ALTERNATIVE_X()
-
-> being performance over the previous approach).
->
-> void (*clean_range)(unsigned long addr, unsigned long size);
-> void (*inv_range)(unsigned long addr, unsigned long size);
-> void (*flush_range)(unsigned long addr, unsigned long size);
->
-> The above function pointers are provided to be overridden for platforms
-> needing CMO.
->
-> Convert ZICBOM and T-HEAD CMO to use function pointers.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-
-> +#ifdef CONFIG_ERRATA_THEAD_CMO
-
-> +static void thead_register_cmo_ops(void)
-> +{
-> +       riscv_noncoherent_register_cache_ops(&thead_cmo_ops);
-> +}
-> +#else
-> +static void thead_register_cmo_ops(void) {}
-> +#endif
-
-> --- a/arch/riscv/mm/dma-noncoherent.c
-> +++ b/arch/riscv/mm/dma-noncoherent.c
-
-> @@ -75,3 +83,12 @@ void riscv_noncoherent_supported(void)
->              "Non-coherent DMA support enabled without a block size\n");
->         noncoherent_supported = true;
->  }
-> +
-> +void riscv_noncoherent_register_cache_ops(const struct riscv_cache_ops *ops)
-> +{
-> +       if (!ops)
-> +               return;
-
-This is never true.
-I guess originally you wanted to call riscv_noncoherent_register_cache_ops()
-unconditionally from common code, instead of the various *register_cmo_ops()?
-But that would have required something like
-
-#ifdef CONFIG_ERRATA_THEAD_CMO
-#define THEAD_CMO_OPS_PTR   (&thead_cmo_ops)
-#else
-#define THEAD_CMO_OPS_PTR   NULL
-#endif
-
-Or can we come up with some macro like pm_ptr(), but that also takes
-care of the "&", so we can do "#define thead_cmo_ops NULL"?
-
-> +
-> +       noncoherent_cache_ops = *ops;
-> +}
-> +EXPORT_SYMBOL_GPL(riscv_noncoherent_register_cache_ops);
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+This is true, unfortunately. It would be possible to write a macro with 
+a more similar API to the current implementation.
