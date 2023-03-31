@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0516D17A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0AB6D17A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjCaGmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 02:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
+        id S230251AbjCaGmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 02:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbjCaGlx (ORCPT
+        with ESMTP id S229992AbjCaGmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 02:41:53 -0400
+        Fri, 31 Mar 2023 02:42:03 -0400
 Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2064.outbound.protection.outlook.com [40.107.104.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A926F1CBBC;
-        Thu, 30 Mar 2023 23:41:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD761CBBD;
+        Thu, 30 Mar 2023 23:41:51 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P5mKJEz/oRLjrI+I4yaX5oU+0FYq32Hfmv5dm07oVHld7u+sMrPJz+PEJjXdwW8eU3lCy/Ozazt6ZnvQatDsdIdPQ+SqRo6AcI/ng+4SqQD0y3qPISk9r863n0O7YgkzRgmS5Z70SvoNv7eHdTp1LxoUfrmwoBhBahfH+iUU6wgc4NbnaSwCc+whuXtnamz44BMoif2JcQwOxddoUVfGEo7hihEy6POeBdyg9oMdBHL3M3oUEd167dINcQgAR0knnhbqD34i2YJB4ePcpmklS8bupNOb8nvRm7VCJPY5luSfnF+vL7mB3kR38rB+pfhQau5EInhjjgLbi29DNCduLQ==
+ b=h/Q9paJbXsMHkAJdI34/Muor49lpYXwGH3vw27LrDgXQcze0fvX1usqb/9s/VINq0BR0JWJ0bFbICU9uIprL1OnRALl3/lh4GXTKt7sltb+TWmQaMiPQ39Oz0Ue+tTQ1TkEeYYFyjj5sN6IutXtFqLTxP5ZU/QXl06QhCdMvG++GIys3KDR+9H+sTWgVIWNCJmY35TfQ8XrbfmS7Pt+shcOUcoR5ctxbFFZc/d2rNREwxZWwA6pxqPtT1UlGPxjmJlUG1taRg4rSVTvUKY3gl5Qj9SjnUxKVch77fxscYVsTHkDaSr9Ndq1yflHm2y0dFKU+PAnPoCV7LvGmOZQFDw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mNvKSM0cMjKyVgYD4C1TuVD+pATokKsELecBHdNvvdE=;
- b=Ho+nUZ9aeqBtl8K21BukF6YthRJ5MQVUtbbf6lgP2/4lYG6fP0LZYdI/w6Q6N0R+zFWHmDqXXQA3UX/p62XqGQB0gUajc6MN0eT1Kk0jkoy0BDfKCmvHPpFBzHPV+6Jt7tG6IoigMzBGFw5uHqBt0dcmwr0kjJ5+vCf9Anf6fPBgmhJd3B8dGldFatoBmTwsO2UsNn2yXiV61b6cX/uRgU0ezfJjU2P6czO36sBeP7H6IBlEV9J4U+8MjxJczyv7KJWg9h8lnmLDqlDUoYGPkK9BSAg3PKSRbnprMyBVPBgYTC0QJeHAYf3OlsMBB4Q82TVpW2B9al5DFo6lIbPEtQ==
+ bh=FIBehFsIFdkaRnxNQOLdNBYuAICLDBe7ee85gR/Gbcg=;
+ b=AU/wRMjHrqNLwZVhVi4gCX543EyAWYTFwGWScrNjJmeBfcpLqlMR1wwH8Lp93FF56V1wg0WCxRZ3Oldeftv479EQF3VhMwhJ5w9Ch6ezFyMFPs4XBUFkTjqiJvW/4gmq6SwMEBz7OaF+iRKSmsK6aOocqknLVKIfH5haGO7ZNdNMFadvyWRwZ9T4dMRCR/NLMNX6lW6gk6IlDYaMnZ8n1t14lE5RFUhTazQbGNZaH/rggKfjxI97rAmkO+DXf44vMoLCAy4aGqc0vOoHLlm/V5ijbJCHx6J4LTHaeGBB2D/lGr9O4MUfDVLPOqZ++XSluOQ7bO2a2vGknhSVxkYQiA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mNvKSM0cMjKyVgYD4C1TuVD+pATokKsELecBHdNvvdE=;
- b=Iou7iM1B07/orEv/N9vbqxE7UZGqRIDnh0WcB5gLAiTNjUfaQknDLO3Dkp9EWy1cU3W5uc+KZYMFlY4rKfIqt0zlNbVORlo3/1tNsWRu3dfBmnrioQOMezbbqsI90B8f6CJVNQAz/lzYMARQoPULt8D59IuBngPNtQQS22E5f64=
+ bh=FIBehFsIFdkaRnxNQOLdNBYuAICLDBe7ee85gR/Gbcg=;
+ b=GyEE2i6yz86Wcw0xpW4udR3rxoD86AAZeyeIsDkhLnwrxX3DSqQn7suWv4TxteE2KBI8UjCOWV0tL+1FAk5cZVJcNXL9eB7qkCfW2J4lARWrDhzTj1ZHfTltmkAfZMmUI9JnifgjT50BTmeHj0vQrMxqlpt9kY7ncCm3r3wiXgo=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
  by PA4PR04MB9271.eurprd04.prod.outlook.com (2603:10a6:102:2a6::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Fri, 31 Mar
- 2023 06:41:40 +0000
+ 2023 06:41:45 +0000
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::778e:19d0:cba0:5cc0]) by DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::778e:19d0:cba0:5cc0%4]) with mapi id 15.20.6222.028; Fri, 31 Mar 2023
- 06:41:40 +0000
+ 06:41:45 +0000
 From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 To:     abelvesa@kernel.org, abel.vesa@linaro.org, mturquette@baylibre.com,
         sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
         kernel@pengutronix.de, festevam@gmail.com
 Cc:     linux-imx@nxp.com, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>, Ye Li <ye.li@nxp.com>
-Subject: [PATCH 3/6] clk: imx: imx93: add mcore_booted module paratemter
-Date:   Fri, 31 Mar 2023 14:46:26 +0800
-Message-Id: <20230331064629.2475338-4-peng.fan@oss.nxp.com>
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH 4/6] clk: imx: fracn-gppll: support integer pll
+Date:   Fri, 31 Mar 2023 14:46:27 +0800
+Message-Id: <20230331064629.2475338-5-peng.fan@oss.nxp.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230331064629.2475338-1-peng.fan@oss.nxp.com>
 References: <20230331064629.2475338-1-peng.fan@oss.nxp.com>
@@ -63,51 +63,51 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|PA4PR04MB9271:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2fc325da-5e9e-4e8e-d60b-08db31b2fbdb
+X-MS-Office365-Filtering-Correlation-Id: 0e8ee0d7-51ab-47b7-c2cb-08db31b2fe9b
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: w33RbaRJuQV7peD4I3+V99zFbzro9o6LlyVsnjPZLGC5elVNVYYJPX5HJMoVnkFUAfBGZpifdfznenWGMyz7tUdzCrRwnzIUzZ82wnQKSWd9nGbF4lPbQmdIGsn6KtO74uCOttbi2KpGjthtSI6uy4ZYHFBLSy0xcXlfnFbzPWT0gJOBVpIVVwwtQpxPpRFx2mEdSyjW+x2p0RGEI0qg9rFBnL1uAq90x8eIO6xZTe0GbmY2CCfpa5gIJ5fgra0ajK/oD/f9r0ISMktdpr3NvMC9N4mOZGQlF1yfeE5lwIU4EW02cWY9TvqgFhC3dfvTtmqUxhxM+XKp8IE3aZNB2GL+tf2GMSBtxemUReZA2zAGCazWy1H7WdRMLWEfU8tX0+RwMZb3O9AyD3HdIaA1twy63bz+vDLGVxyA7m/uYP5xwCaI/SLzacrWqj4qvroH/Pg0L5doynugZOEAEjn8v9wDzyzaJKIg7GhMKdN4damU9V5obuYQdKVo24q8S0QDjRx+3y2FiZb+QfxEYCEY7KP9qEtlwSZmM20wafMX3D8aLZ+FhKqfbLi8t76K7jaRdWUFVeAltvUUo/8dPsLIOM5NMi4S/mLRsfzSS3vKt3pPA98xFgH8fQuVOSw5G/P/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199021)(2616005)(2906002)(4326008)(38350700002)(38100700002)(41300700001)(83380400001)(86362001)(8936002)(66946007)(66556008)(6506007)(26005)(1076003)(186003)(6512007)(66476007)(8676002)(316002)(5660300002)(54906003)(6666004)(7416002)(52116002)(6486002)(478600001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: GFkU3bVYKuq4/Kwsj0J0v8R/OXCODeJtmfQeODvzi6x98ztsWMpgdiKtFcdbZIvnrkbB4eShjIKeXyWHSZtH7P6zYpb3ZZy7ywlij3yUhAjBHYzo3K8PoHsSITO2H+gzTOy9vNtZrtlDYwWEisVdaHtTqVFGuFjqzafM3K8LwiTxjeDiGVEgEa1iZFox+qrSidgEPdDfaumI+9c02USFwuGwkynJVY0PAnwnK+c7k88/iWfa7xecP64r5VqKzWUT9PZONjo6JSfNwIkIf5wgkG55T2TaBmAZCl191WFVA5HRtX8hCrYWGaT8rUuuRmtI/v3WIlHBYvh4o3KeDGK3GO+s9ATEz3RJahK1hvMOfUYcobsKvphOYbRKxUIJL/5F49S0Vn00P/P1XQNR8/3ZWJQXUJvK9Clu+Wq6Aj44J/cwjBlHKRMEyV5SpmsWIXC2uKoIuKy8TbPt1cHvMPVzXpmhoX1yZhWEkhfdNnErfZ+zZE7ZORt6ROmeDqMFrAekcGaycfRWy/+GzYwlh0+yeNAnhrgqV2VLT4SYCDEusC0ZKcPPfqGTB3O7gDF2aM+L1C+CtBajI0IPeihbjJWWMWcUOA+7Lox9q/BDCz1nGqHGb+e+E5aJn3Kp0WbGdI1L
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199021)(2616005)(2906002)(4326008)(38350700002)(38100700002)(41300700001)(83380400001)(86362001)(8936002)(66946007)(66556008)(6506007)(26005)(1076003)(186003)(6512007)(66476007)(8676002)(316002)(5660300002)(6666004)(7416002)(52116002)(6486002)(478600001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/XEp/JM5DFIgx5I87qUYw7HDcLVbvw61pClxvMGfTle+oTPRZ1SP5XFcfp96?=
- =?us-ascii?Q?pgSI9E5f0GqFPzfv2Zcnk5CfvtY0tS5P86SU/jsk2sGTGfdYwlpMj6+zQG1o?=
- =?us-ascii?Q?ZPw8QPmVr/CcemG+GdnlDSbz8BielPy3g4oi/Db78CKD4RyUhDzXSB08R99a?=
- =?us-ascii?Q?edTavSlt5VCZJ9HvT1xt5UBYWwuuxx2j8Xj/yfIpkb2XLtW+XJYD5BA7+pWI?=
- =?us-ascii?Q?Q/ILc9ewJXl8P2cAMQbUjbKTDvwcUxVCnXPi1/bGecCq8aWjPG16vUGWn+mb?=
- =?us-ascii?Q?w64SJ+TZeqOTpVbBc1U2ijCeslbZ/qqNflPUrhlErj0raZJY2JO9+HCcV6R9?=
- =?us-ascii?Q?8ybIAwwvcEY8IdnF8jQ1zd3MTFFqQQ1vHl2Y9GzSe3Q5SHeHjS48UYBjLc+x?=
- =?us-ascii?Q?VwHVEk/vRlYKC0uu15w0H/5KkmzLJ2Z1NZdUNJSuT1a24+4dIWHwkXDPXwBu?=
- =?us-ascii?Q?2xnNkXcA1ivcYalloYJ3dxFJKDm4iOVuYTVXKDmqnWRnLnKsGnVuVRhp/9Pf?=
- =?us-ascii?Q?7DO2S6PoJDg9IYTuZxoFKGtl/dCqTIzJdJo6Xv/JPxBBiqTQEWXIcaosO7NG?=
- =?us-ascii?Q?OforU3vKThOq686z7M24FBcsRSorqx3mg0M2sk/gPADEDBlaXF7818TuZGEg?=
- =?us-ascii?Q?B7lsEbFRsk5OuZE6555lw7hoqIRnvprg/7gQQ3u9b+1uPlOkBEeXyXj2N14X?=
- =?us-ascii?Q?xuPjAelBPHZTrXKWPPBaK/FVtq2RrPuX0dj/DcyJ6ekHlFxFmUv5dH7RN3Ko?=
- =?us-ascii?Q?4FuWmnhpYSlYf+FmPiWFEs8NgVD7QfzeltPysr9aeklvOasJjj+1sKb4Zn2X?=
- =?us-ascii?Q?1Bd3Y5BRbQ2jyUEv5/N45H/sFlIYNNcxaQFdhFC2d+YyoTp72tHLzxKFhmPa?=
- =?us-ascii?Q?NPnnfBzq2HnIHbYAazOcGiENQbdpHdwCVCHIMIgFU81tPxeK4xu0YiYjpAWa?=
- =?us-ascii?Q?rhkI0c+SYhOCo4a0WgnzMqCnSWLqICZPjXt+0zs1Sdu1m1KkBW1m1c06p1qt?=
- =?us-ascii?Q?YuoBFKDEuTp1/7qUGB7ONWENJ3v3urNlNpc8YyuBkuBjgH8/LbilhD6OI3u5?=
- =?us-ascii?Q?X2l6R9KOk6RqJG04uyE+gaU1tBPF4FVqmIXSQTMcVDZUyQ2IjJNl13s+SbGd?=
- =?us-ascii?Q?5PbZbkrFGOTKQHWvoztR6tNuxeh+NNrOtZ1NX24B8ha/mvgeWpvEN5yvnsMF?=
- =?us-ascii?Q?kosg0uWyjV++3g/wuvV92hdWcEYEjeFcLX0svvTjC/1KCsJ/L1VO2G+GauvB?=
- =?us-ascii?Q?h4HncAC4AKwMUmmu1UB0ld/1OZnHO486PCwwq4hWEHGkwzMNpjVdgtnB+6Za?=
- =?us-ascii?Q?hOSyX/mVMdgzb742AZEJ2kA0girQCwnxUvzgnmRww7RF5jFcweSH95FzYWgG?=
- =?us-ascii?Q?pK7t9McrNQgwrkabmshtZLBANk5uAQCxqlz+YYsmErD+GAmfKwy+FAYveEqM?=
- =?us-ascii?Q?hWi7SwhiGi9YlpGen15EBgO9UYAMK3zS2rZZKTERR1lp3/XFjez1uyi1cnWy?=
- =?us-ascii?Q?GcQKs9LJ1IW6VJ4+z/4/EpZZWqpb42zUiWE1SRwoPKeZBt+HR0rB3P6aFPtd?=
- =?us-ascii?Q?0fKfFcfNRru+P1GPvEaWeha15buXBelQAFpPgcVM?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?twpxdh4rUv432Mw1CfES3eY/nWnCiBx/4WtMzZzXUDnAdJkVyiEkVJhOSeF0?=
+ =?us-ascii?Q?ABuUu8zC2keeEFxEyBM3TsxJ0RwINA5L+O44/zejsPTdIoyvWMv54dbatrRO?=
+ =?us-ascii?Q?oW2cZvphfsBnlEd5rsdNbDu4K+46vlQAk6MUxXt5FJP+9/PZdE03rC950LLe?=
+ =?us-ascii?Q?fxHGUMHXwiS3NBxbUGBR22wQOpua1vloDgi3oGq56O1MqJyqITJkcjXFx/wy?=
+ =?us-ascii?Q?Z486mjqK5U72Zr5YXhBfB/GxwlAx0O+04DNqTgwLZT5rmgV2CxtNv0vmVL6Q?=
+ =?us-ascii?Q?kAfWSCRe6ptyqHWAydT5OJKqvd/b8NPpNOo3dhBupbaaigOJMtVe4MNDJK/D?=
+ =?us-ascii?Q?0D3WeK9V56U3eKNkHIgpxHMad7avy2+B1FjM2Wc7J0xB5aI3gcMm6Ik06WNy?=
+ =?us-ascii?Q?2QRU2fGGCYQabj3i7s2Wywc3fkUsGOxTywMs1xgjhMuS0GPq4Wzcl02YLtfn?=
+ =?us-ascii?Q?V2i4Ui5vPEkwQD4/HFLOhZq6h2dhG1Lnf5v8Rgm1YsFv2aJ1GEl597Ye35id?=
+ =?us-ascii?Q?PiAW6ZZp2uoxsB918BYuWWlHPz8Wy9q+kaz23rjK/AvboEFyW06dUcQ0SAqO?=
+ =?us-ascii?Q?lzuHDYOqpF2geARN2hxlrmEG8rJtRXfKmDJoHvt5jpkJzAPEaJikNkZaQ/Zc?=
+ =?us-ascii?Q?0pz402ds6uqkmAh+RumGMVTK13zBgEO6utF6pv2Q+Jq3VKPNQpWDiFnpwQlt?=
+ =?us-ascii?Q?GAgegi688AybsUM4babwE5/WkZmo221AUdX0OuZVW35wCGEiSmIs3ZyCgVze?=
+ =?us-ascii?Q?QFUK14d7EGdQQ72oH5aAR6i/+AQRPOWcuTiuVLA/SrVzpL9EgkGhgEme7j8M?=
+ =?us-ascii?Q?NTQvBmyeealKMUkcUmiORaAJbPnnTyjitYqLlmiM1Ac2eXVtqWMYhsNJMWV6?=
+ =?us-ascii?Q?7grM69i4jWiAZe6+omhIErjiGtVkSbb1BdLEO34JkXwOySaxSS1eV86zkPT3?=
+ =?us-ascii?Q?cguL7c13mCcXmI1keRtALCUZFgML+VOLUv0eOFISdpQ3J5qJo1ZMwEbab5F8?=
+ =?us-ascii?Q?HivC9OZrtUVeBdxloARHXKifcLOIjjeAe4FhEY7XO75hTiFsJ1BGrv5DhzxB?=
+ =?us-ascii?Q?2c77j/0WzHRQ3JXqZqy1bUII2/3EvodW8Yp42uJOG09FszzdMVMvfXELI1bi?=
+ =?us-ascii?Q?KGy9fgHRWqayzuErA27km1C14CDcMv+RezaR9O7WUxanAGaSnKWGyH5vldJ5?=
+ =?us-ascii?Q?bNqyIwEGy66/PgDJSrJt0ti2ybIJmFVDvcSKN39h9uQ2SsJnzi1gkjFtF/SD?=
+ =?us-ascii?Q?NIRQkSTBMTrJkXBNI9qOq+fyQjXZlfXW3s8UDJZ1ZD2oYNcg54FTlVXUW0om?=
+ =?us-ascii?Q?Qpk/V0QcCiCCmYOZJM9o5bPEnxKyWoZGqlKjyrfPHXit+W1eb061hyd2s4pw?=
+ =?us-ascii?Q?KI05geCUHzPZJTigf4/LjaqqC1rjOI0nReimmQS34dlgb6OMhXwFLR7KrDuZ?=
+ =?us-ascii?Q?u2IAQqDmw8/56omrmoVRM7qYeKo/ZuQMW9TMYTZogJOUwiQCHmO94y2zJ/Gu?=
+ =?us-ascii?Q?BgIupQgBYykI93hf/IxrLMsNt0Qg1miRc7G70Dun9lp6WpvROxUBXc9/V8Zp?=
+ =?us-ascii?Q?T64nLYLmYtSotwpa1GubCrBigJkMVn7vOwBMKZA9?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2fc325da-5e9e-4e8e-d60b-08db31b2fbdb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0e8ee0d7-51ab-47b7-c2cb-08db31b2fe9b
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 06:41:40.5271
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 06:41:45.3846
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GsrtbQsbXNo+T0yuM61jUzpYxvHP4aKLbkP47Y5K8/dOtrsZpRO/b73PohsLKYWvqm4t727lcT3XRF39KczivA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: D7I0PujEv6zSKywn5ooU+bZ2UiDgwuVfEDFf/YNyrM4c5zTBfVO2MkRyS8XVc+Os/O5KnlghuNsfn+t7ssvfgw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9271
 X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -120,64 +120,171 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peng Fan <peng.fan@nxp.com>
 
-Add mcore_booted boot parameter which could simplify AMP clock
-management. To i.MX93, there is CCM(clock control Module) to generate
-clock root clock, anatop(analog PLL module) to generate PLL, and LPCG
-(clock gating) to gate clocks to peripherals. As below:
-anatop->ccm->lpcg->peripheral
+The fracn gppll could be configured in FRAC or INTEGER mode during
+hardware design. The current driver only support FRAC mode, while
+this patch introduces INTEGER support. When the PLL is INTEGER pll,
+there is no mfn, mfd, the calculation is as below:
+ Fvco_clk = (Fref / DIV[RDIV] ) * DIV[MFI]
+ Fclko_odiv = Fvco_clk / DIV[ODIV]
 
-Linux handles the clock management and the auxiliary core is under
-control of Linux. Although there is per hardware domain control for LPCG
-and CCM, auxiliary core normally only use LPCG hardware domain control
-to avoid linux gate off the clk to peripherals and leave CCM ana anatop
-to Linux.
+In this patch, we reuse the FRAC pll logic with some condition check to
+simplify the driver
 
-Reviewed-by: Ye Li <ye.li@nxp.com>
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/clk/imx/clk-composite-93.c | 8 +++++++-
- drivers/clk/imx/clk-imx93.c        | 2 ++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ drivers/clk/imx/clk-fracn-gppll.c | 66 +++++++++++++++++++++++++++----
+ drivers/clk/imx/clk.h             |  7 ++++
+ 2 files changed, 66 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/clk/imx/clk-composite-93.c b/drivers/clk/imx/clk-composite-93.c
-index 74a66b0203e4..81164bdcd6cc 100644
---- a/drivers/clk/imx/clk-composite-93.c
-+++ b/drivers/clk/imx/clk-composite-93.c
-@@ -222,7 +222,7 @@ struct clk_hw *imx93_clk_composite_flags(const char *name, const char * const *p
- 		hw = clk_hw_register_composite(NULL, name, parent_names, num_parents,
- 					       mux_hw, &clk_mux_ro_ops, div_hw,
- 					       &clk_divider_ro_ops, NULL, NULL, flags);
--	} else {
-+	} else if (!mcore_booted) {
- 		gate = kzalloc(sizeof(*gate), GFP_KERNEL);
- 		if (!gate)
- 			goto fail;
-@@ -238,6 +238,12 @@ struct clk_hw *imx93_clk_composite_flags(const char *name, const char * const *p
- 					       &imx93_clk_composite_divider_ops, gate_hw,
- 					       &imx93_clk_composite_gate_ops,
- 					       flags | CLK_SET_RATE_NO_REPARENT);
-+	} else {
-+		hw = clk_hw_register_composite(NULL, name, parent_names, num_parents,
-+					       mux_hw, &imx93_clk_composite_mux_ops, div_hw,
-+					       &imx93_clk_composite_divider_ops, NULL,
-+					       &imx93_clk_composite_gate_ops,
-+					       flags | CLK_SET_RATE_NO_REPARENT);
+diff --git a/drivers/clk/imx/clk-fracn-gppll.c b/drivers/clk/imx/clk-fracn-gppll.c
+index f6674110a88e..2c4e64db828f 100644
+--- a/drivers/clk/imx/clk-fracn-gppll.c
++++ b/drivers/clk/imx/clk-fracn-gppll.c
+@@ -53,11 +53,22 @@
+ 		.odiv	=	(_odiv),			\
  	}
  
- 	if (IS_ERR(hw))
-diff --git a/drivers/clk/imx/clk-imx93.c b/drivers/clk/imx/clk-imx93.c
-index 8d0974db6bfd..bf2908be26a1 100644
---- a/drivers/clk/imx/clk-imx93.c
-+++ b/drivers/clk/imx/clk-imx93.c
-@@ -352,6 +352,8 @@ static struct platform_driver imx93_clk_driver = {
- 	},
++#define PLL_FRACN_GP_INTEGER(_rate, _mfi, _rdiv, _odiv)		\
++	{							\
++		.rate	=	(_rate),			\
++		.mfi	=	(_mfi),				\
++		.mfn	=	0,				\
++		.mfd	=	0,				\
++		.rdiv	=	(_rdiv),			\
++		.odiv	=	(_odiv),			\
++	}
++
+ struct clk_fracn_gppll {
+ 	struct clk_hw			hw;
+ 	void __iomem			*base;
+ 	const struct imx_fracn_gppll_rate_table *rate_table;
+ 	int rate_count;
++	u32 flags;
  };
- module_platform_driver(imx93_clk_driver);
-+module_param(mcore_booted, bool, 0444);
-+MODULE_PARM_DESC(mcore_booted, "See Cortex-M core is booted or not");
  
- MODULE_DESCRIPTION("NXP i.MX93 clock driver");
- MODULE_LICENSE("GPL v2");
+ /*
+@@ -83,6 +94,24 @@ struct imx_fracn_gppll_clk imx_fracn_gppll = {
+ };
+ EXPORT_SYMBOL_GPL(imx_fracn_gppll);
+ 
++/*
++ * Fvco = (Fref / rdiv) * MFI
++ * Fout = Fvco / odiv
++ * The (Fref / rdiv) should be in range 20MHz to 40MHz
++ * The Fvco should be in range 2.5Ghz to 5Ghz
++ */
++static const struct imx_fracn_gppll_rate_table int_tbl[] = {
++	PLL_FRACN_GP_INTEGER(1700000000U, 141, 1, 2),
++	PLL_FRACN_GP_INTEGER(1400000000U, 175, 1, 3),
++	PLL_FRACN_GP_INTEGER(900000000U, 150, 1, 4),
++};
++
++struct imx_fracn_gppll_clk imx_fracn_gppll_integer = {
++	.rate_table = int_tbl,
++	.rate_count = ARRAY_SIZE(int_tbl),
++};
++EXPORT_SYMBOL_GPL(imx_fracn_gppll_integer);
++
+ static inline struct clk_fracn_gppll *to_clk_fracn_gppll(struct clk_hw *hw)
+ {
+ 	return container_of(hw, struct clk_fracn_gppll, hw);
+@@ -169,9 +198,15 @@ static unsigned long clk_fracn_gppll_recalc_rate(struct clk_hw *hw, unsigned lon
+ 		break;
+ 	}
+ 
+-	/* Fvco = Fref * (MFI + MFN / MFD) */
+-	fvco = fvco * mfi * mfd + fvco * mfn;
+-	do_div(fvco, mfd * rdiv * odiv);
++	if (pll->flags & CLK_FRACN_GPPLL_INTEGER) {
++		/* Fvco = (Fref / rdiv) * MFI */
++		fvco = fvco * mfi;
++		do_div(fvco, rdiv * odiv);
++	} else {
++		/* Fvco = (Fref / rdiv) * (MFI + MFN / MFD) */
++		fvco = fvco * mfi * mfd + fvco * mfn;
++		do_div(fvco, mfd * rdiv * odiv);
++	}
+ 
+ 	return (unsigned long)fvco;
+ }
+@@ -215,8 +250,10 @@ static int clk_fracn_gppll_set_rate(struct clk_hw *hw, unsigned long drate,
+ 	pll_div = FIELD_PREP(PLL_RDIV_MASK, rate->rdiv) | rate->odiv |
+ 		FIELD_PREP(PLL_MFI_MASK, rate->mfi);
+ 	writel_relaxed(pll_div, pll->base + PLL_DIV);
+-	writel_relaxed(rate->mfd, pll->base + PLL_DENOMINATOR);
+-	writel_relaxed(FIELD_PREP(PLL_MFN_MASK, rate->mfn), pll->base + PLL_NUMERATOR);
++	if (pll->flags & CLK_FRACN_GPPLL_FRACN) {
++		writel_relaxed(rate->mfd, pll->base + PLL_DENOMINATOR);
++		writel_relaxed(FIELD_PREP(PLL_MFN_MASK, rate->mfn), pll->base + PLL_NUMERATOR);
++	}
+ 
+ 	/* Wait for 5us according to fracn mode pll doc */
+ 	udelay(5);
+@@ -300,8 +337,8 @@ static const struct clk_ops clk_fracn_gppll_ops = {
+ 	.set_rate	= clk_fracn_gppll_set_rate,
+ };
+ 
+-struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
+-				   const struct imx_fracn_gppll_clk *pll_clk)
++struct clk_hw *_imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
++				    const struct imx_fracn_gppll_clk *pll_clk, u32 pll_flags)
+ {
+ 	struct clk_fracn_gppll *pll;
+ 	struct clk_hw *hw;
+@@ -322,6 +359,7 @@ struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, vo
+ 	pll->hw.init = &init;
+ 	pll->rate_table = pll_clk->rate_table;
+ 	pll->rate_count = pll_clk->rate_count;
++	pll->flags = pll_flags;
+ 
+ 	hw = &pll->hw;
+ 
+@@ -334,4 +372,18 @@ struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, vo
+ 
+ 	return hw;
+ }
++
++struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
++				   const struct imx_fracn_gppll_clk *pll_clk)
++{
++	return _imx_clk_fracn_gppll(name, parent_name, base, pll_clk, CLK_FRACN_GPPLL_FRACN);
++}
+ EXPORT_SYMBOL_GPL(imx_clk_fracn_gppll);
++
++struct clk_hw *imx_clk_fracn_gppll_integer(const char *name, const char *parent_name,
++					   void __iomem *base,
++					   const struct imx_fracn_gppll_clk *pll_clk)
++{
++	return _imx_clk_fracn_gppll(name, parent_name, base, pll_clk, CLK_FRACN_GPPLL_INTEGER);
++}
++EXPORT_SYMBOL_GPL(imx_clk_fracn_gppll_integer);
+diff --git a/drivers/clk/imx/clk.h b/drivers/clk/imx/clk.h
+index 3d94722bbf99..bb105d6e5b39 100644
+--- a/drivers/clk/imx/clk.h
++++ b/drivers/clk/imx/clk.h
+@@ -73,6 +73,9 @@ extern struct imx_pll14xx_clk imx_1416x_pll;
+ extern struct imx_pll14xx_clk imx_1443x_pll;
+ extern struct imx_pll14xx_clk imx_1443x_dram_pll;
+ 
++#define CLK_FRACN_GPPLL_INTEGER	BIT(0)
++#define CLK_FRACN_GPPLL_FRACN	BIT(1)
++
+ /* NOTE: Rate table should be kept sorted in descending order. */
+ struct imx_fracn_gppll_rate_table {
+ 	unsigned int rate;
+@@ -91,8 +94,12 @@ struct imx_fracn_gppll_clk {
+ 
+ struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
+ 				   const struct imx_fracn_gppll_clk *pll_clk);
++struct clk_hw *imx_clk_fracn_gppll_integer(const char *name, const char *parent_name,
++					   void __iomem *base,
++					   const struct imx_fracn_gppll_clk *pll_clk);
+ 
+ extern struct imx_fracn_gppll_clk imx_fracn_gppll;
++extern struct imx_fracn_gppll_clk imx_fracn_gppll_integer;
+ 
+ #define imx_clk_cpu(name, parent_name, div, mux, pll, step) \
+ 	to_clk(imx_clk_hw_cpu(name, parent_name, div, mux, pll, step))
 -- 
 2.37.1
 
