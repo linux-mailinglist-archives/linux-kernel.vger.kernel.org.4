@@ -2,231 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F2C6D15AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 04:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A556D15B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 04:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjCaCgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 22:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S229779AbjCaCio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 22:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjCaCgx (ORCPT
+        with ESMTP id S229659AbjCaCim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 22:36:53 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77FB61B7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 19:36:51 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id n28so4754269ioz.11
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 19:36:51 -0700 (PDT)
+        Thu, 30 Mar 2023 22:38:42 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CE5CDD1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 19:38:39 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id b6so1568610ljr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 19:38:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680230211;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112; t=1680230318;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JOKd8Q/yyL2Vxt/B7mCiLmN2+GLEWiOvEP6b0sT30PQ=;
-        b=fLAVIymlVLtMTb1OjnAuBaj7urPwyZKEBOmwoAFmOw63GSs/eFd54mlEyiF8t/oxH5
-         WNBjJbLZutvpZ73ltowGOCUqKIzcUWI2PZlW9vLvaYeQ7U2EWVXoKuxwH+fBk6O8T3fI
-         b7Dvz7j9ez80eZY6vUDx3aJCc19D9uPXqpugg=
+        bh=cnjJbCFJ84xSw6+b+YYcpjgJUgGf7WAv7FcMkr2usx4=;
+        b=mKGdDFJCcNtHk6Tmk3hrqlX+z+CDnpVSXLIsUXdBK3RDTeH65Z3Nz8troQzRChNX/9
+         Ns8vSOnfC+Li8gfKlROPPj0QLVI5dYjfohmLos/AOrFCipBn4LOezDujZr2Azw09xY7/
+         S/LZt3QwX5HV454c6o0UXsJRdEU/c/W2Mhc0S+oW8p7JmV6Axt/qCRpurhotBDpcC3GY
+         phiRJfHgzA0riXKI44yGM7KiqhsViRMVCp5XIN2jA74Do0fEHlEX0Hw3bANQcRGHk0O2
+         8ekr7LSfEdER1scE+qkwOMZ8OiF3lf38IiYjKENYUft2zQYajIdhCQVklDFrXol/5dyn
+         XQ4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680230211;
+        d=1e100.net; s=20210112; t=1680230318;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JOKd8Q/yyL2Vxt/B7mCiLmN2+GLEWiOvEP6b0sT30PQ=;
-        b=4arusSYONuCcbm4cer1/O05E4mn8y+oYlsQ1Lrs96amnNsh6waQHpkFufrI5tHDlqF
-         u0A5XXQzuMHIyHlK8w6/54bv1fBPeBPGDnSJAZsnCB4KKOjf+YaCfgYhuydyGulm/s0G
-         xf1W2nEwu3Z842xuKiybxk3aTaHNdOKYbZIbdsRC1+jp3ZrPcaH/ORiMGF23hlIZdfRT
-         O1ozuRw9KCni2/Afi0KSzKTIjKVK9LKFyGLK5IJFA9Gmzrq58EGO6Fu3BNECHt3wQ6oV
-         iq7apSRskIybpU+BzwItwPhgCoP2P0XxrTX+qOLXo7nR5/OFEu8FerYxG+7dTFASwQQZ
-         YX1g==
-X-Gm-Message-State: AO0yUKWebom/kLGb5Ex7v011K95is/0FRNbzPK2augypNN1CS7nvC4dF
-        mjiMpr17h2CQFgz7HCwUeG2watT4T8N3Q5TTpkM37w==
-X-Google-Smtp-Source: AK7set8iHyEfMscSQN6K+wU64uXRfznAJTa3p7iwGPfwmfjxtVwhD5T091Ndlb+dZQRGTYJqdf7/mi2dwLdlRru+94U=
-X-Received: by 2002:a02:2304:0:b0:406:38ac:716e with SMTP id
- u4-20020a022304000000b0040638ac716emr9747717jau.6.1680230211040; Thu, 30 Mar
- 2023 19:36:51 -0700 (PDT)
+        bh=cnjJbCFJ84xSw6+b+YYcpjgJUgGf7WAv7FcMkr2usx4=;
+        b=XHXYA1ak3kS0996AOKQaWL9892YtmKT9CWxr7Lk7nGGPJBrgJVLXQKCTiWgG8wg6x9
+         HKxajzP9ESx3K12sClzyubk2aaRmDS32zktOeDs1GUEWN2APaOeoceoV1MYQ40F4n3i5
+         F/L88qXNtOn4S0Iz2PVDtYiHQYHyn9+m6hL6bykk0gzbvV6bzHD2OGHnrdRoBdOUZAb7
+         VEjWEKKhcfgi4foieUzRMoDznWgZ5HLMZKWg9gO97IP42DCY/2pVe9TTl4fc4AJ/s5so
+         G1wndM23fb7cwcpUWGBIQgh1hvEbuHN6UK8XLluDN4t4t9fASv+++/uy5DvvCLrqAJnx
+         AWKg==
+X-Gm-Message-State: AAQBX9d/AFK2EZDJZZauSMVsyPX1JRKSqqVuyDMOPiWmc3WsGCbpUnrE
+        PZfXfYwAeBLuzITTQqAe8dde+BvRRwQo/fOE5mc5gg==
+X-Google-Smtp-Source: AKy350bRKZHNRV7Itzh8Oh1f8CZmHVlPGbkbKOlllyOEVc3Yf4lEzadXN7Cw5QbSnxAwFXkd4e6vqT8qeEfB2+/0OVM=
+X-Received: by 2002:a2e:6a0d:0:b0:295:93eb:e790 with SMTP id
+ f13-20020a2e6a0d000000b0029593ebe790mr7879693ljc.5.1680230317918; Thu, 30 Mar
+ 2023 19:38:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230322104639.221402-1-treapking@chromium.org>
- <20230322104639.221402-4-treapking@chromium.org> <ZBrgD61p/p17IOJL@smile.fi.intel.com>
-In-Reply-To: <ZBrgD61p/p17IOJL@smile.fi.intel.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Fri, 31 Mar 2023 11:36:40 +0900
-Message-ID: <CAEXTbpcLU6jr2MoDEhZCz3wWzXmJATwHU+Tird-3Q9bXrGeTnA@mail.gmail.com>
-Subject: Re: [PATCH v14 03/10] drm/display: Add Type-C switch helpers
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-acpi@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Lyude Paul <lyude@redhat.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
-        Stephen Boyd <swboyd@chromium.org>,
-        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Imre Deak <imre.deak@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        YueHaibing <yuehaibing@huawei.com>
+References: <20230313154132.3684181-1-zyytlz.wz@163.com>
+In-Reply-To: <20230313154132.3684181-1-zyytlz.wz@163.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Thu, 30 Mar 2023 23:38:25 -0300
+Message-ID: <CAAEAJfAjND_Bj9HRBae22eO7cG_Xm=AX93bL+CPEb24-sitWTg@mail.gmail.com>
+Subject: Re: [PATCH v3] media: hantro: fix use after free bug in hantro_remove
+ due to race condition
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        hverkuil@xs4all.nl
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Hi Zheng,
 
-Thanks for the review.
+On Mon, Mar 13, 2023 at 12:42=E2=80=AFPM Zheng Wang <zyytlz.wz@163.com> wro=
+te:
+>
+> In hantro_probe, vpu->watchdog_work is bound with
+> hantro_watchdog. Then hantro_end_prepare_run may
+> be called to start the work.
+>
+> If we close the file or remove the module which will
+> call hantro_release and hantro_remove to make cleanup,
 
-On Wed, Mar 22, 2023 at 8:01=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Mar 22, 2023 at 06:46:32PM +0800, Pin-yen Lin wrote:
-> > Add helpers to register and unregister Type-C "switches" for bridges
-> > capable of switching their output between two downstream devices.
-> >
-> > The helper registers USB Type-C mode switches when the "mode-switch"
-> > and the "reg" properties are available in Device Tree.
->
-> ...
->
-> > +config DRM_DISPLAY_DP_TYPEC_HELPER
->
-> > +     bool
-> > +     default y
->
->         def_bool y
->
-> > +     depends on DRM_DISPLAY_HELPER
-> > +     depends on DRM_DISPLAY_HELPER=3DTYPEC || TYPEC=3Dy
-> > +     help
-> > +       DRM display helpers for USB Type-C Displayport Alternate mode.
->
-> Hmm... Dunno if this help is enough.
+It's not possible to close the file or remove the module while a watchdog i=
+s
+scheduled.
 
-Okay I'll add more detail in the next version.
->
-> ...
->
-> > +     snprintf(name, sizeof(name), "%pfwP-%u", fwnode, port_num);
->
-> Would it be possible to have a dup in name and would it be a problem if s=
-o?
->
-The port_num is included in the name, so the names should be unique.
-Also, the fwnode name actually contains the reg property, so this name
-looks like "endpoint@0-1" now... I'll change the name from fwnode name
-to dev_name() per Dmitry's comment.
-> ...
->
-> > +/**
-> > + * drm_dp_register_typec_switches() - register Type-C switches
-> > + * @dev: Device that registers Type-C switches
-> > + * @port: Device node for the switch
-> > + * @switch_desc: A Type-C switch descriptor
-> > + * @data: Private data for the switches
-> > + * @mux_set: Callback function for typec_mux_set
-> > + *
-> > + * This function registers USB Type-C switches for DP bridges that can=
- switch
-> > + * the output signal between their output pins. This function uses dev=
-m_kcalloc
-> > + * to allocate memory, so it is expected to only call this in the driv=
-er probe
-> > + * functions.
-> > + *
-> > + * Currently only mode switches are implemented, and the function assu=
-mes the
-> > + * given @port device node has endpoints with "mode-switch" property.
-> > + * The port number is determined by the "reg" property of the endpoint=
-.
->
-> `kernel-doc -v ...` should complain on absence of "Return" section.
->
-> > + */
->
-> ...
->
-> > +     switch_desc->typec_ports =3D devm_kcalloc(dev, switch_desc->num_t=
-ypec_switches,
-> > +                                             sizeof(struct drm_dp_type=
-c_port_data),
->
->                                                 sizeof(*switch_desc_typec=
-_ports),
->
-> ?
->
-> > +                                             GFP_KERNEL);
-> > +     if (!switch_desc->typec_ports)
-> > +             return -ENOMEM;
->
-> ...
->
-> > +#ifdef CONFIG_DRM_DISPLAY_DP_TYPEC_HELPER
->
-> Ah, maybe this should use IS_REACHABLE() ?
+That's because the watchdog is active only during a mem2mem job,
+and the file won't be closed until the job is done.
 
-CONFIG_DRM_DISPLAY_DP_TYPEC_HELPER is a boolean. Is there any
-difference between IS_REACHABLE and ifdef when the given config is a
-boolean?
+v4l2_m2m_ctx_release calls v4l2_m2m_cancel_jobw
+which waits until the job is done.
+
+If you can confirm it's possible to remove or close the file
+while a job is running, that would be a driver bug.
+
+Thanks for the patch, but it's not needed.
+
+Regards,
+Ezequiel
+
+> there may be an unfinished work. The possible sequence
+> is as follows, which will cause a typical UAF bug.
 >
-> > +void drm_dp_unregister_typec_switches(struct drm_dp_typec_switch_desc =
-*switch_desc);
-> > +int drm_dp_register_typec_switches(struct device *dev, struct fwnode_h=
-andle *port,
-> > +                                struct drm_dp_typec_switch_desc *switc=
-h_desc,
-> > +                                void *data, typec_mux_set_fn_t mux_set=
-);
-> > +#else
-> > +static inline void drm_dp_unregister_typec_switches(struct drm_dp_type=
-c_switch_desc *switch_desc)
-> > +{
-> > +}
-> > +static inline int drm_dp_register_typec_switches(
-> > +             struct device *dev, struct fwnode_handle *port,
-> > +             struct drm_dp_typec_switch_desc *switch_desc, void *data,
-> > +             typec_mux_set_fn_t mux_set)
-> > +{
-> > +     return -EOPNOTSUPP;
-> > +}
-> > +#endif
+> The same thing will happen in hantro_release, and use
+> ctx after freeing it.
 >
+> Fix it by canceling the work before cleanup in hantro_release.
+>
+> CPU0                  CPU1
+>
+>                     |hantro_watchdog
+> hantro_remove     |
+>   v4l2_m2m_release  |
+>     kfree(m2m_dev); |
+>                     |
+>                     | v4l2_m2m_get_curr_priv
+>                     |   m2m_dev->curr_ctx //use
+>
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+> v3:
+> - use cancel_delayed_work_sync instead of cancel_delayed_work and add it =
+to
+> hantro_release suggested by Hans Verkuil
+>
+> v2:
+> - move the cancel-work-related code to hantro_remove suggested by Hans Ve=
+rkuil
+> ---
+>  drivers/media/platform/verisilicon/hantro_drv.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/me=
+dia/platform/verisilicon/hantro_drv.c
+> index b0aeedae7b65..86a4c0fa8c7d 100644
+> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> @@ -597,6 +597,7 @@ static int hantro_release(struct file *filp)
+>         struct hantro_ctx *ctx =3D
+>                 container_of(filp->private_data, struct hantro_ctx, fh);
+>
+> +       cancel_delayed_work_sync(&ctx->dev->watchdog_work);
+>         /*
+>          * No need for extra locking because this was the last reference
+>          * to this file.
+> @@ -1099,6 +1100,7 @@ static int hantro_remove(struct platform_device *pd=
+ev)
+>
+>         v4l2_info(&vpu->v4l2_dev, "Removing %s\n", pdev->name);
+>
+> +       cancel_delayed_work_sync(&vpu->watchdog_work);
+>         media_device_unregister(&vpu->mdev);
+>         hantro_remove_dec_func(vpu);
+>         hantro_remove_enc_func(vpu);
 > --
-> With Best Regards,
-> Andy Shevchenko
->
-
-Best regards,
-Pin-yen
+> 2.25.1
 >
