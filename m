@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B27E6D19AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 665FF6D19B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjCaIU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S231324AbjCaIZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbjCaIUY (ORCPT
+        with ESMTP id S229832AbjCaIYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:20:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036E6AF3B;
-        Fri, 31 Mar 2023 01:20:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 965F7B82CF3;
-        Fri, 31 Mar 2023 08:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 422FBC4339B;
-        Fri, 31 Mar 2023 08:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680250817;
-        bh=V+bfnvlS+kOmBBeElvXS7vrBIjidlHmWIetDz9gZ2Fc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=p8rQfzc1uGsVvHTd7Ewy0ywh0zOHBOm99RCtK/jO3kJ/EvUhnFAJmCWVCqT+LB7gZ
-         oMAhL68de6QogCqVcdPAB+tSFznhNcqn/mSAI+xyzrhsVvKR75jLEO299cURmoU1YZ
-         C6MTqVRHuWmyFffrxcKxgJZW/olvqcHQ5x4y1K9t66D6+v/nKXPl2F2MExvloG58pr
-         5+LKbiTQ7KDciS0m/l2L3fwTKWD6giOfwKRttZNiYdRvuHH73cU9Kw48gnhCqBz0Zi
-         HN5OyaB5+Y1LC/JRH20UjFZrxx/XXB6lBz2i/4NrIFGhC11d76RrUnq+sfELgWJhBm
-         uOB76fvNDi/LQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1F8E8C0C40E;
-        Fri, 31 Mar 2023 08:20:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 31 Mar 2023 04:24:22 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F661B7C8
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:23:33 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id j11so27863256lfg.13
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680251012;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SFM/eoJq62VMd0BThJcIsWt0E57OGZL4qf+KcrA3TXM=;
+        b=qjBLAWtwVkcMJKOf/T/zHVv1LHnyI0dYBudnw1wyesrWNPDE/UH+dZ0bG6t4MrjHmm
+         rBBbOTK8Fivj12NbFtEWthmJU/vyNbHTvSbwlJR+rM7ufQWTGDagP2WH+qCt8kmePvov
+         iiiIN4fyAPCHSIIkTxkdd2OOEWlYEZSzirBzt8JJDkqotaDfQcE/c4KTAb2rAj/vMGs1
+         lVAsOZlgc3GgEE3fx6OoAyTQXbVHZSOQM5UrZaMEzlmPY2ZrVz/zbb7qt7TxpxJMniwq
+         b9CdtqGL46fkIm5Wdigo2zj+ersnKnkARaSgqFUbz5TMzvxmRp6Bdke6LF6T2BgEI2JE
+         G5IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680251012;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SFM/eoJq62VMd0BThJcIsWt0E57OGZL4qf+KcrA3TXM=;
+        b=btlIi1JLooFpz6Dj6yfGPM3WQwSp9sHx+FK4xRzvGxxWdBTYcvMJpeEyuIak2nkyoL
+         9g7ZRxRf9jSucZV6kIzKYL3eyCwjcSgea/8H24/ondshO5tl6Ue1n7Ihder1ZUCfNVHm
+         BPDNN2AzDcd3/MpBhfzy9ZwIW59QdLZrA2dYUOV4O5L6dVODS6+9SE2iCmG8GJXIv4ch
+         LXhnFg8QKEPciiKSnXzbZvCGjrtPlEx0US+6K5+VZwmWxsA8nITydfp7PJapD+ZZ8JXh
+         n+1QaYWd31PSl5w84ThbbVyCIbp1sPMY7pIAN9CWx7vR6PLfeEHTMDNb6EQXmupUPjNT
+         lEMw==
+X-Gm-Message-State: AAQBX9djsbbcFUl2FpvnrGGkHcccZ9262QVNCIH/Vi9OhPKLHbHXHjg0
+        xE+ubnGsRpDowboqeHsJxcS2FA==
+X-Google-Smtp-Source: AKy350Yx2sdKgu8tI9CRCsLXniSwS6JAiBf3Jf4pjSYqbo9lRR7T1GxMyik5Jl1LaHt+KwpoJ99OCw==
+X-Received: by 2002:a19:7003:0:b0:4dd:af76:d3c with SMTP id h3-20020a197003000000b004ddaf760d3cmr8275543lfc.48.1680251011806;
+        Fri, 31 Mar 2023 01:23:31 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id v11-20020ac2558b000000b004d85316f2d6sm282684lfg.118.2023.03.31.01.23.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 01:23:31 -0700 (PDT)
+Message-ID: <a4d235ea-8476-23ad-6678-1ecbce93ade6@linaro.org>
+Date:   Fri, 31 Mar 2023 10:23:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: qrtr: Fix a refcount bug in qrtr_recvmsg()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168025081712.23963.16327516163139075912.git-patchwork-notify@kernel.org>
-Date:   Fri, 31 Mar 2023 08:20:17 +0000
-References: <20230330012532.1065159-1-william.xuanziyang@huawei.com>
-In-Reply-To: <20230330012532.1065159-1-william.xuanziyang@huawei.com>
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-Cc:     mani@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, andersson@kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] dt-bindings: pinctrl: xway: drop the deprecated
+ compatible strings
+Content-Language: en-US
+To:     Aleksander Jan Bajkowski <olek2@wp.pl>, linus.walleij@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230330212225.10214-1-olek2@wp.pl>
+ <20230330212225.10214-2-olek2@wp.pl>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230330212225.10214-2-olek2@wp.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 30/03/2023 23:22, Aleksander Jan Bajkowski wrote:
+> This code are marked as deprecated since kernel 4.5[1]. Downstream OpenWRT
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+References to commits do not use [1] bookmarks.
 
-On Thu, 30 Mar 2023 09:25:32 +0800 you wrote:
-> Syzbot reported a bug as following:
-> 
-> refcount_t: addition on 0; use-after-free.
-> ...
-> RIP: 0010:refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
-> ...
-> Call Trace:
->  <TASK>
->  __refcount_add include/linux/refcount.h:199 [inline]
->  __refcount_inc include/linux/refcount.h:250 [inline]
->  refcount_inc include/linux/refcount.h:267 [inline]
->  kref_get include/linux/kref.h:45 [inline]
->  qrtr_node_acquire net/qrtr/af_qrtr.c:202 [inline]
->  qrtr_node_lookup net/qrtr/af_qrtr.c:398 [inline]
->  qrtr_send_resume_tx net/qrtr/af_qrtr.c:1003 [inline]
->  qrtr_recvmsg+0x85f/0x990 net/qrtr/af_qrtr.c:1070
->  sock_recvmsg_nosec net/socket.c:1017 [inline]
->  sock_recvmsg+0xe2/0x160 net/socket.c:1038
->  qrtr_ns_worker+0x170/0x1700 net/qrtr/ns.c:688
->  process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
->  worker_thread+0x669/0x1090 kernel/workqueue.c:2537
-> 
-> [...]
+"since commit ....., in v4.5 kernel."
 
-Here is the summary with links:
-  - [net] net: qrtr: Fix a refcount bug in qrtr_recvmsg()
-    https://git.kernel.org/netdev/net/c/44d807320000
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof
 
