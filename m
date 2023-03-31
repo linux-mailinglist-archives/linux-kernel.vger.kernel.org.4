@@ -2,154 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B446D1C87
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9426D1C91
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbjCaJfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
+        id S232163AbjCaJgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbjCaJeR (ORCPT
+        with ESMTP id S232089AbjCaJga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:34:17 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D99ECA1D
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:34:02 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id q16so28079473lfe.10
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680255240;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ai/1YpnrQGMFVrnQJeZGVLCmWTY7Fz7OsSb9rllfA/A=;
-        b=bXr2Xm5tyW+sglpq+sV+BJ/VlJIXrkWrlavLQftfI12wsd+i87DDKbAWpw4fLK6JJu
-         TuQxBQoXbC1FkMaIY+osrvcF3Uo0DCrkn3YlroowTyOUQG/JSyf6j/Qz+I362/qyYvpb
-         vW6KmvooSBlZETfBQhFqLfrwMnKhsD6CKuXTJSHMyLqfhVSWqUkipTrRX4+H1aIBby9R
-         GQjkOO6fVn/Uj6ZYHIQ1W2VZ/5THM/Di45QsRBw5En6fFKaqB4iH78ULxJoSB9XUuBWD
-         ZoCGLcg00OVTS5tUOQj+fKV4Bn5a+6UTbGLmfWBY8vvvv/UVBZm72g6kMFqLpvHwPGXK
-         i2iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680255240;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ai/1YpnrQGMFVrnQJeZGVLCmWTY7Fz7OsSb9rllfA/A=;
-        b=gZDVh6MgnC0QFHCJ6/sBjPzQV/5SRrwrnZkW1KixV4TkjEDO/iewrWigOEt3+i0HK/
-         eUv0hmqgA1ulKCG4Kgm+MOQpmGMtvHCOVCjGub41NqJyQ8xl9H9q+/CvzrPiiL9XKech
-         re2EeXegNbKEqkwQQeUDKcf7mRVpag8YrLS3Y2Lw3Mi5wd1xon/ClAwaqXt0s1BPhZkK
-         fDedYiPww8YfyomT7+LruN4a/nHjgJ6kpVhUCct2Pml1BgtSH9ETVTQkizJTxUivdwK4
-         o9e/bsuljlZR6yF8JORPyIjIt58A18qpoUcA/Japj6w+RBN6rqb/N/I7Zo2BbZiHWG9l
-         NFog==
-X-Gm-Message-State: AAQBX9c0w1v4V+fewEkSq4BZOR8fAhxrLKjSqXJLSRu0fOEWMHJCp7bz
-        Q3FqrbUphmHKmoZL96ggscCUZw==
-X-Google-Smtp-Source: AKy350Zw3AEl/l1nQ2UFiIHwCfWmha0LEvbnsktucmxS1dk8XV4DbUPsuRtguW7IZ5SHImNMhoNXQw==
-X-Received: by 2002:ac2:5318:0:b0:4e9:b64a:b87d with SMTP id c24-20020ac25318000000b004e9b64ab87dmr8522538lfh.9.1680255240307;
-        Fri, 31 Mar 2023 02:34:00 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id l14-20020a2e99ce000000b0029f7d27b78bsm285041ljj.110.2023.03.31.02.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 02:33:59 -0700 (PDT)
-Message-ID: <f224159b-a5cd-e2f3-c34a-acc1de343cf8@linaro.org>
-Date:   Fri, 31 Mar 2023 11:33:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 2/6] dt-bindings: display: bridge: toshiba,tc358768:
- Add TC9594
-Content-Language: en-US
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Fri, 31 Mar 2023 05:36:30 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1B41C1D5;
+        Fri, 31 Mar 2023 02:36:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LizQNlR5xeQ9Nx7+wKPFYUJj75jOfRmgpvd1Wr0G7No=; b=UKbXTqzhq2L4s+MyI6LAhZHXPR
+        JEXjbEnQAW9YjlzhOJTLAm3faUqrzczga5/5A+k3OzAcg8y2zTvhiGLWpnnuu9Ohj85XsU4grnYcD
+        yk5M61TG+xOGvvpr7BdospIoI188Iq0Jt42tRt/xOCB196NQnP2eeZJxFhk6W8d3WLrvzOeDmeDGp
+        JdEZ4IItk3nxicikeyfyOXcN5BcpLJAlq5iFuQOYzNedzBy1kDsV1y5AtlHxecOF2ffvGBufXeIlS
+        4QoK4UR/YHLQPaOKfszLD1j9qGgpZKpcHV1ssSQAyjuKCuBpMtpEGtTDYtwzgJ2cUFhaZW4SwHxwU
+        CCfEAozA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34852)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1piBAV-0004Wr-DT; Fri, 31 Mar 2023 10:35:35 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1piBAM-00012N-TR; Fri, 31 Mar 2023 10:35:26 +0100
+Date:   Fri, 31 Mar 2023 10:35:26 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Vineet Gupta <vgupta@kernel.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        devicetree@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-References: <20230330095941.428122-1-francesco@dolcini.it>
- <20230330095941.428122-3-francesco@dolcini.it>
- <ff88e5d3-4c31-7698-b8d1-8a03b9fea643@linaro.org>
- <ZCaoTDjvAUZJYP3s@francesco-nb.int.toradex.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZCaoTDjvAUZJYP3s@francesco-nb.int.toradex.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH 15/21] ARM: dma-mapping: always invalidate WT caches
+ before DMA
+Message-ID: <ZCapXlrqMOpRxkSu@shell.armlinux.org.uk>
+References: <20230327121317.4081816-1-arnd@kernel.org>
+ <20230327121317.4081816-16-arnd@kernel.org>
+ <ZCai0FmZiOqsMkzc@shell.armlinux.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCai0FmZiOqsMkzc@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2023 11:30, Francesco Dolcini wrote:
-> On Fri, Mar 31, 2023 at 10:42:40AM +0200, Krzysztof Kozlowski wrote:
->> On 30/03/2023 11:59, Francesco Dolcini wrote:
->>> From: Francesco Dolcini <francesco.dolcini@toradex.com>
->>>
->>> Add TC9594, from the software point of view this is identical to
->>> TC358768 with the main difference being automotive qualified.
->>>
->>> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
->>> ---
->>>  .../devicetree/bindings/display/bridge/toshiba,tc358768.yaml | 5 +++--
->>>  1 file changed, 3 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
->>> index d6dac186ac59..8f22093b61ae 100644
->>> --- a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
->>> +++ b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
->>> @@ -4,19 +4,20 @@
->>>  $id: http://devicetree.org/schemas/display/bridge/toshiba,tc358768.yaml#
->>>  $schema: http://devicetree.org/meta-schemas/core.yaml#
->>>  
->>> -title: Toshiba TC358768/TC358778 Parallel RGB to MIPI DSI bridge
->>> +title: Toshiba TC358768/TC358778/TC9594 Parallel RGB to MIPI DSI bridge
->>>  
->>>  maintainers:
->>>    - Peter Ujfalusi <peter.ujfalusi@ti.com>
->>>  
->>>  description: |
->>> -  The TC358768/TC358778 is bridge device which converts RGB to DSI.
->>> +  The TC358768/TC358778/TC9594 is bridge device which converts RGB to DSI.
->>>  
->>>  properties:
->>>    compatible:
->>>      enum:
->>>        - toshiba,tc358768
->>>        - toshiba,tc358778
->>> +      - toshiba,tc9594
->>
->> If it is the same, why they are not compatible?
+On Fri, Mar 31, 2023 at 10:07:28AM +0100, Russell King (Oracle) wrote:
+> On Mon, Mar 27, 2023 at 02:13:11PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > Most ARM CPUs can have write-back caches and that require
+> > cache management to be done in the dma_sync_*_for_device()
+> > operation. This is typically done in both writeback and
+> > writethrough mode.
+> > 
+> > The cache-v4.S (arm720/740/7tdmi/9tdmi) and cache-v4wt.S
+> > (arm920t, arm940t) implementations are the exception here,
+> > and only do the cache management after the DMA is complete,
+> > in the dma_sync_*_for_cpu() operation.
+> > 
+> > Change this for consistency with the other platforms. This
+> > should have no user visible effect.
 > 
-> I assume I am not understanding something very basic ...
+> NAK...
 > 
-> The register description and SW functionality of all these 3 parts is
-> identical.
-> 
-> How should be the compatible described in the DT schema in this case?
+> The reason we do cache management _after_ is to ensure that there
+> is no stale data. The kernel _has_ (at the very least in the past)
+> performed DMA to data structures that are embedded within other
+> data structures, resulting in cache lines being shared. If one of
+> those cache lines is touched while DMA is progressing, then we
+> must to cache management _after_ the DMA operation has completed.
+> Doing it before is no good.
 
-Look at any board compatibles for example.
+It looks like the main offender of "touching cache lines shared
+with DMA" has now been resolved - that was the SCSI sense buffer,
+and was fixed some time ago:
 
-> 
-> 
->> I got only three patches out of six, thus I cannot check by myself.
-> 
-> Here the whole series: https://lore.kernel.org/all/20230330095941.428122-1-francesco@dolcini.it/
-> 
-> Do you want to me to send the whole series and not just the DT binding
-> next time? Happy to do it, if you prefer.
+commit de25deb18016f66dcdede165d07654559bb332bc
+Author: FUJITA Tomonori <fujita.tomonori@lab.ntt.co.jp>
+Date:   Wed Jan 16 13:32:17 2008 +0900
 
-So NAK on 4th patch. Don't grow device ID tables needlessly.
+/if/ that is the one and only case, then we're probably fine, but
+having been through an era where this kind of thing was the norm
+and requests to fix it did not get great responses from subsystem
+maintainers, I just don't trust the kernel not to want to DMA to
+overlapping cache lines.
 
-Best regards,
-Krzysztof
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
