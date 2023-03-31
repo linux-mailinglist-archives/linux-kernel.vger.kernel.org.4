@@ -2,158 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE6A6D1898
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8AB6D1894
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjCaHax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S229925AbjCaHaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbjCaHav (ORCPT
+        with ESMTP id S229529AbjCaHaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:30:51 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAD6F76B
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:30:49 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id r11so86144052edd.5
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680247847;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H3XUuqj7bKq4sqEKBJ9kOUJxwFH8O9yCA3hlxqudGM0=;
-        b=ZJ2LTdKfP/dAFMQDQkpdCGFmdqEJnIPuRIEmPgNneqWjwxu56d8a9f1xM1kEqG53C8
-         hKtc3aFtSKmXBq7xMndGMx9yInLTGifW7IFhF+y/nsdiPAkwH79Li1rdyvUunm6K+kIF
-         fuVosgq7RsPqtx+KDgnV80nxZckDEMDTGGRehphSIv5SOMiHFn2+nN88e7YhKNn6UXdK
-         xPl8SyLKrQhrDzWqFEQGW9Ur+LD8P6Jp6MeBDz1jTUBit3TtXxKXj4TJ979fGqTnuVqU
-         JwW2zuI12L5XMn6L0d0gI36rkXhJta0wkNZJYbuuOfOSlx6z0tfhlogJEK6abpUX34lg
-         QtUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680247847;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H3XUuqj7bKq4sqEKBJ9kOUJxwFH8O9yCA3hlxqudGM0=;
-        b=sjrSJMSNMXYHAkpeISs76MtAvmYf/zSQ/MBK2B1CwHPuzvsAaaMaumcpuCvHNo3diM
-         XNy74krGa8VNqR1IV7RCNJSgpldmeztIw0ShWNIyy3vES0Oz19XsqOyyHeIaAxKW6iRx
-         VEWdeRiC3Kk80r1uh4+3E18AvJf5ESKuenJbGnALj/nal3G97Cat3kYL8GG8Mf4uwCb5
-         zBSbGv68geH11aisHWJ3ntYl9BKmFof/gjIQ55nlzz2vgF/6ab6FCpGtPmAbp8gv7lFD
-         oKmG5EYCQhHooxmtwGA5q8ltPu1gY8Rm34yBVyzIVEZofnjYKhgT/huF8ts5iE4Nuopm
-         Czig==
-X-Gm-Message-State: AAQBX9cFiOCwEaqBmRRkOVLOajlKadytCidKBUK0SdpeXdiFS8h1agTn
-        BCzmxc9ImXl5NyZaqL9SJT03bBHtHAuhv0zcNV6QCQ==
-X-Google-Smtp-Source: AKy350b5AcmwLZ9juLlS9K/F62ATFOsAhPvyQLkDd1WrL6qYD19g5H8RANCYexuuLD3iuFmBRlqQISUwO5ZWA2jECMo=
-X-Received: by 2002:a17:906:2a15:b0:933:7658:8b44 with SMTP id
- j21-20020a1709062a1500b0093376588b44mr11617095eje.15.1680247847390; Fri, 31
- Mar 2023 00:30:47 -0700 (PDT)
+        Fri, 31 Mar 2023 03:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D100768B;
+        Fri, 31 Mar 2023 00:30:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 026AF623EB;
+        Fri, 31 Mar 2023 07:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B6FC433EF;
+        Fri, 31 Mar 2023 07:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680247815;
+        bh=zXw6u1EURy0w/G8+aTN3bFZY3VPBIAO84MiEoOwOeoM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c0eDMujfzGZl/a/qQcu/oXOkm8+AdridpQm92a6IcGD0dvb3iwN5DeyVgwzFMflbd
+         hdM5mIitXezpKMM70JE2iP+StMHwP8+u5A/eRVNN/QQTlff4Yl4gQ311AzN3Y83/o4
+         bT2MMtIoLIl0N4dudexssqUrnlNmSWEB4q2zO5Fs=
+Date:   Fri, 31 Mar 2023 09:30:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dennis Zhou <dennis@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mmc: allow mmc to block wait_for_device_probe()
+Message-ID: <ZCaMBEDaISmajPRj@kroah.com>
+References: <20230328223740.69446-1-dennis@kernel.org>
+ <ZCPEcxueuGUaRNOP@kroah.com>
+ <ZCSfwBiponFGFXlN@snowbird>
 MIME-Version: 1.0
-References: <20230331070818.2792558-1-yosryahmed@google.com>
- <20230331070818.2792558-4-yosryahmed@google.com> <CAOUHufY2NieQ8x7-Kv8PSzMVEOjJtBhi6QwKeu-Ojxnia4-TpQ@mail.gmail.com>
-In-Reply-To: <CAOUHufY2NieQ8x7-Kv8PSzMVEOjJtBhi6QwKeu-Ojxnia4-TpQ@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 31 Mar 2023 00:30:11 -0700
-Message-ID: <CAJD7tkbOupKO1CpKbtPdVUFUfCK=UqHcpctZYU3xJ_Ho+OS6kA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCSfwBiponFGFXlN@snowbird>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 12:25=E2=80=AFAM Yu Zhao <yuzhao@google.com> wrote:
->
-> On Fri, Mar 31, 2023 at 1:08=E2=80=AFAM Yosry Ahmed <yosryahmed@google.co=
-m> wrote:
->
-> ...
->
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index a3e38851b34ac..bf9d8e175e92a 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -533,7 +533,35 @@ EXPORT_SYMBOL(mm_account_reclaimed_pages);
-> >  static void flush_reclaim_state(struct scan_control *sc,
-> >                                 struct reclaim_state *rs)
-> >  {
-> > -       if (rs) {
-> > +       /*
-> > +        * Currently, reclaim_state->reclaimed includes three types of =
-pages
-> > +        * freed outside of vmscan:
-> > +        * (1) Slab pages.
-> > +        * (2) Clean file pages from pruned inodes.
-> > +        * (3) XFS freed buffer pages.
-> > +        *
-> > +        * For all of these cases, we have no way of finding out whethe=
-r these
-> > +        * pages were related to the memcg under reclaim. For example, =
-a freed
-> > +        * slab page could have had only a single object charged to the=
- memcg
-> > +        * under reclaim. Also, populated inodes are not on shrinker LR=
-Us
-> > +        * anymore except on highmem systems.
-> > +        *
-> > +        * Instead of over-reporting the reclaimed pages in a memcg rec=
-laim,
-> > +        * only count such pages in system-wide reclaim. This prevents
-> > +        * unnecessary retries during memcg charging and false positive=
- from
-> > +        * proactive reclaim (memory.reclaim).
->
-> What happens when writing to the root memory.reclaim?
->
-> > +        *
-> > +        * For uncommon cases were the freed pages were actually signif=
-icantly
-> > +        * charged to the memcg under reclaim, and we end up under-repo=
-rting, it
-> > +        * should be fine. The freed pages will be uncharged anyway, ev=
-en if
-> > +        * they are not reported properly, and we will be able to make =
-forward
-> > +        * progress in charging (which is usually in a retry loop).
-> > +        *
-> > +        * We can go one step further, and report the uncharged objcg p=
-ages in
-> > +        * memcg reclaim, to make reporting more accurate and reduce
-> > +        * under-reporting, but it's probably not worth the complexity =
-for now.
-> > +        */
-> > +       if (rs && !cgroup_reclaim(sc)) {
->
-> To answer the question above, global_reclaim() would be preferred.
+On Wed, Mar 29, 2023 at 01:29:52PM -0700, Dennis Zhou wrote:
+> On Wed, Mar 29, 2023 at 06:54:11AM +0200, Greg Kroah-Hartman wrote:
+> > On Tue, Mar 28, 2023 at 03:37:40PM -0700, Dennis Zhou wrote:
+> > > I've been hitting a failed data device lookup when using dm-verity and a
+> > > root device on an emmc partition. This is because there is a race where
+> > > dm-verity is looking for a data device, but the partitions on the emmc
+> > > device haven't been probed yet.
+> > > 
+> > > Initially I looked at solving this by changing devt_from_devname() to
+> > > look for partitions, but it seems there is legacy reasons and issues due
+> > > to dm.
+> > > 
+> > > MMC uses 2 levels of probing. The first to handle initializing the
+> > > host and the second to iterate attached devices. The second is done by
+> > > a workqueue item. However, this paradigm makes wait_for_device_probe()
+> > > useless as a barrier for when we can assume attached devices have been
+> > > probed.
+> > > 
+> > > This patch fixes this by exposing 2 methods inc/dec_probe_count() to
+> > > allow device drivers that do asynchronous probing to delay waiters on
+> > > wait_for_device_probe() so that when they are released, they can assume
+> > > attached devices have been probed.
+> > 
+> 
+> Thanks for the quick reply.
+> 
+> > Please no.  For 2 reasons:
+> >   - the api names you picked here do not make much sense from a global
+> >     namespace standpoint.  Always try to do "noun/verb" as well, so if
+> >     we really wanted to do this it would be "driver_probe_incrememt()"
+> >     or something like that.
+> 
+> Yeah that is a bit of a blunder on my part...
+> 
+> >  - drivers and subsystems should not be messing around with the probe
+> >    count as it's a hack in the first place to get around other issues.
+> >    Please let's not make it worse and make a formal api for it and allow
+> >    anyone to mess with it.
+> > 
+> 
+> That's fair.
+> 
+> > Why can't you just use normal deferred probing for this?
+> > 
+> 
+> I'm not familiar with why mmc is written the way it is, but probing
+> creates a notion of the host whereas the devices attached are probed
+> later via a work item.
+> 
+> Examining it a bit closer, inlining the first discovery call
+> avoids all of this mess. I sent that out just now in [1]. Hopefully
+> that'll be fine.
+> 
+> [1] https://lore.kernel.org/lkml/20230329202148.71107-1-dennis@kernel.org/T/#u
 
-Great point, global_reclaim() is fairly recent. I didn't see it
-before. Thanks for pointing it out. I will change it for v4 -- will
-wait for more feedback before respinning.
+Looks much better, except for the kernel test bot issues...
 
-Thanks Yu!
+thanks,
+
+greg k-h
