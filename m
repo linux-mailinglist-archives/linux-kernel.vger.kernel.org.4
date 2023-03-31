@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB97C6D1FEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9406D1FEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbjCaMSm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 08:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S232209AbjCaMSt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 08:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbjCaMSe (ORCPT
+        with ESMTP id S232118AbjCaMSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 31 Mar 2023 08:18:34 -0400
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA781EFE7;
-        Fri, 31 Mar 2023 05:18:32 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9AB1EFE6;
+        Fri, 31 Mar 2023 05:18:31 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 65FF424E208;
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id BAA1C24E21A;
         Fri, 31 Mar 2023 20:18:30 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 31 Mar
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 31 Mar
  2023 20:18:30 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 31 Mar
@@ -41,9 +41,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>,
         <changhuang.liang@starfivetech.com>
-Subject: [PATCH v3 6/9] media: cadence: Add operation on reset
-Date:   Fri, 31 Mar 2023 20:18:23 +0800
-Message-ID: <20230331121826.96973-7-jack.zhu@starfivetech.com>
+Subject: [PATCH v3 7/9] media: cadence: Add support for external dphy
+Date:   Fri, 31 Mar 2023 20:18:24 +0800
+Message-ID: <20230331121826.96973-8-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230331121826.96973-1-jack.zhu@starfivetech.com>
 References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
@@ -62,116 +62,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add operation on reset for Cadence MIPI-CSI2 RX Controller.
+Add support for external MIPI D-PHY.
 
 Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 ---
- drivers/media/platform/cadence/cdns-csi2rx.c | 30 ++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 66 +++++++++++++++++---
+ 1 file changed, 56 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index cc3ebb0d96f6..a1555cedb349 100644
+index a1555cedb349..add982edce64 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -13,6 +13,7 @@
- #include <linux/of_graph.h>
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
-+#include <linux/reset.h>
- #include <linux/slab.h>
+@@ -31,6 +31,12 @@
+ #define CSI2RX_STATIC_CFG_DLANE_MAP(llane, plane)	((plane) << (16 + (llane) * 4))
+ #define CSI2RX_STATIC_CFG_LANES_MASK			GENMASK(11, 8)
  
- #include <media/v4l2-ctrls.h>
-@@ -68,6 +69,9 @@ struct csi2rx_priv {
- 	struct clk			*sys_clk;
- 	struct clk			*p_clk;
- 	struct clk			*pixel_clk[CSI2RX_STREAMS_MAX];
-+	struct reset_control		*sys_rst;
-+	struct reset_control		*p_rst;
-+	struct reset_control		*pixel_rst[CSI2RX_STREAMS_MAX];
- 	struct phy			*dphy;
- 
- 	u8				lanes[CSI2RX_LANES_MAX];
-@@ -112,6 +116,7 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
- 	if (ret)
- 		return ret;
- 
-+	reset_control_deassert(csi2rx->p_rst);
- 	csi2rx_reset(csi2rx);
- 
- 	reg = csi2rx->num_lanes << 8;
-@@ -154,6 +159,8 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
- 		if (ret)
- 			goto err_disable_pixclk;
- 
-+		reset_control_deassert(csi2rx->pixel_rst[i]);
++#define CSI2RX_DPHY_LANE_CTRL_REG		0x40
++#define CSI2RX_DPHY_CL_RST			BIT(16)
++#define CSI2RX_DPHY_DL_RST(i)			BIT((i) + 12)
++#define CSI2RX_DPHY_CL_EN			BIT(4)
++#define CSI2RX_DPHY_DL_EN(i)			BIT(i)
 +
- 		writel(CSI2RX_STREAM_CFG_FIFO_MODE_LARGE_BUF,
- 		       csi2rx->base + CSI2RX_STREAM_CFG_REG(i));
+ #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
  
-@@ -169,6 +176,7 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
+@@ -105,6 +111,24 @@ static void csi2rx_reset(struct csi2rx_priv *csi2rx)
+ 	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
+ }
+ 
++static int csi2rx_configure_ext_dphy(struct csi2rx_priv *csi2rx)
++{
++	union phy_configure_opts opts = { };
++	int ret;
++
++	ret = phy_power_on(csi2rx->dphy);
++	if (ret)
++		return ret;
++
++	ret = phy_configure(csi2rx->dphy, &opts);
++	if (ret) {
++		phy_power_off(csi2rx->dphy);
++		return ret;
++	}
++
++	return 0;
++}
++
+ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ {
+ 	unsigned int i;
+@@ -144,6 +168,17 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
  	if (ret)
+ 		goto err_disable_pclk;
+ 
++	/* Enable DPHY clk and data lanes. */
++	if (csi2rx->dphy) {
++		reg = CSI2RX_DPHY_CL_EN | CSI2RX_DPHY_CL_RST;
++		for (i = 0; i < csi2rx->num_lanes; i++) {
++			reg |= CSI2RX_DPHY_DL_EN(csi2rx->lanes[i] - 1);
++			reg |= CSI2RX_DPHY_DL_RST(csi2rx->lanes[i] - 1);
++		}
++
++		writel(reg, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
++	}
++
+ 	/*
+ 	 * Create a static mapping between the CSI virtual channels
+ 	 * and the output stream.
+@@ -177,10 +212,22 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
  		goto err_disable_pixclk;
  
-+	reset_control_deassert(csi2rx->sys_rst);
+ 	reset_control_deassert(csi2rx->sys_rst);
++
++	if (csi2rx->dphy) {
++		ret = csi2rx_configure_ext_dphy(csi2rx);
++		if (ret) {
++			dev_err(csi2rx->dev,
++				"Failed to configure external DPHY: %d\n", ret);
++			goto err_disable_sysclk;
++		}
++	}
++
  	clk_disable_unprepare(csi2rx->p_clk);
  
  	return 0;
-@@ -188,14 +196,17 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
- 	unsigned int i;
  
- 	clk_prepare_enable(csi2rx->p_clk);
-+	reset_control_assert(csi2rx->sys_rst);
- 	clk_disable_unprepare(csi2rx->sys_clk);
- 
- 	for (i = 0; i < csi2rx->max_streams; i++) {
- 		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
- 
-+		reset_control_assert(csi2rx->pixel_rst[i]);
- 		clk_disable_unprepare(csi2rx->pixel_clk[i]);
- 	}
- 
-+	reset_control_assert(csi2rx->p_rst);
- 	clk_disable_unprepare(csi2rx->p_clk);
++err_disable_sysclk:
++	clk_disable_unprepare(csi2rx->sys_clk);
+ err_disable_pixclk:
+ 	for (; i > 0; i--)
+ 		clk_disable_unprepare(csi2rx->pixel_clk[i - 1]);
+@@ -211,6 +258,13 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
  
  	if (v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, false))
-@@ -299,6 +310,17 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
- 		return PTR_ERR(csi2rx->p_clk);
+ 		dev_warn(csi2rx->dev, "Couldn't disable our subdev\n");
++
++	if (csi2rx->dphy) {
++		writel(0, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
++
++		if (phy_power_off(csi2rx->dphy))
++			dev_warn(csi2rx->dev, "Couldn't power off DPHY\n");
++	}
+ }
+ 
+ static int csi2rx_s_stream(struct v4l2_subdev *subdev, int enable)
+@@ -327,15 +381,6 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+ 		return PTR_ERR(csi2rx->dphy);
  	}
  
-+	csi2rx->sys_rst =
-+		devm_reset_control_get_optional_exclusive(&pdev->dev,
-+							  "sys_rst");
-+	if (IS_ERR(csi2rx->sys_rst))
-+		return PTR_ERR(csi2rx->sys_rst);
-+
-+	csi2rx->p_rst =
-+		devm_reset_control_get_optional_exclusive(&pdev->dev, "p_rst");
-+	if (IS_ERR(csi2rx->p_rst))
-+		return PTR_ERR(csi2rx->p_rst);
-+
- 	csi2rx->dphy = devm_phy_optional_get(&pdev->dev, "dphy");
- 	if (IS_ERR(csi2rx->dphy)) {
- 		dev_err(&pdev->dev, "Couldn't get external D-PHY\n");
-@@ -350,6 +372,7 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
- 
- 	for (i = 0; i < csi2rx->max_streams; i++) {
- 		char clk_name[16];
-+		char rst_name[16];
- 
- 		snprintf(clk_name, sizeof(clk_name), "pixel_if%u_clk", i);
- 		csi2rx->pixel_clk[i] = devm_clk_get(&pdev->dev, clk_name);
-@@ -357,6 +380,13 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
- 			dev_err(&pdev->dev, "Couldn't get clock %s\n", clk_name);
- 			return PTR_ERR(csi2rx->pixel_clk[i]);
- 		}
-+
-+		snprintf(rst_name, sizeof(rst_name), "pixel_if%u_rst", i);
-+		csi2rx->pixel_rst[i] =
-+			devm_reset_control_get_optional_exclusive(&pdev->dev,
-+								  rst_name);
-+		if (IS_ERR(csi2rx->pixel_rst[i]))
-+			return PTR_ERR(csi2rx->pixel_rst[i]);
+-	/*
+-	 * FIXME: Once we'll have external D-PHY support, the check
+-	 * will need to be removed.
+-	 */
+-	if (csi2rx->dphy) {
+-		dev_err(&pdev->dev, "External D-PHY not supported yet\n");
+-		return -EINVAL;
+-	}
+-
+ 	ret = clk_prepare_enable(csi2rx->p_clk);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Couldn't prepare and enable P clock\n");
+@@ -365,7 +410,7 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+ 	 * FIXME: Once we'll have internal D-PHY support, the check
+ 	 * will need to be removed.
+ 	 */
+-	if (csi2rx->has_internal_dphy) {
++	if (!csi2rx->dphy && csi2rx->has_internal_dphy) {
+ 		dev_err(&pdev->dev, "Internal D-PHY not supported yet\n");
+ 		return -EINVAL;
  	}
+@@ -492,6 +537,7 @@ static int csi2rx_probe(struct platform_device *pdev)
+ 	dev_info(&pdev->dev,
+ 		 "Probed CSI2RX with %u/%u lanes, %u streams, %s D-PHY\n",
+ 		 csi2rx->num_lanes, csi2rx->max_lanes, csi2rx->max_streams,
++		 csi2rx->dphy ? "external" :
+ 		 csi2rx->has_internal_dphy ? "internal" : "no");
  
  	return 0;
 -- 
