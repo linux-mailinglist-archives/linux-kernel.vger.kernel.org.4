@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3BB6D297A
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D3C6D297B
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbjCaUa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S233271AbjCaUak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233223AbjCaUaG (ORCPT
+        with ESMTP id S233257AbjCaUaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:30:06 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D8F24426;
-        Fri, 31 Mar 2023 13:30:04 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so24637056pjz.1;
-        Fri, 31 Mar 2023 13:30:04 -0700 (PDT)
+        Fri, 31 Mar 2023 16:30:24 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D1C22928;
+        Fri, 31 Mar 2023 13:30:05 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so24637135pjz.1;
+        Fri, 31 Mar 2023 13:30:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680294604; x=1682886604;
+        d=gmail.com; s=20210112; t=1680294605; x=1682886605;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lEdFQ1e9O/nmgtLY4q6GhreBjz/AYmss+2MTbnjFDcU=;
-        b=aycFzHBdi0Sa6AEyDSKkTns8AJjhvaJozVBp/IYcun2wMMQmMwZ5oZV30btThiZEEl
-         u7CKMhM0f0d+Ny+AChC4r87PKnCuWY0kOc2jFYfkT1k6KYP59BqYk9lJwOm0gnRgNE27
-         nKTh7PBOKHJ9PBBgJ3Wq7pFlH8oZVNn3N7NocMoe0PCRC+J6xZJCQpGavGDwQ+4AoQwq
-         L9BurlyC52Lv6ZVtH3IcAo61KjsuvugZ6dhyXLkGe96R+gD5RluGFSlCRpwHF8eDMuLD
-         ak16qZI2zV3i5ZXndX1om6aBL2O2qs3ol/HCgISa6g8s62HTkfWPeEfFPcRyKDFNyPOt
-         aYzw==
+        bh=VszdLpAL7WqW9IxkGHXAfoIlaDcuh12lplT2Sv91rgM=;
+        b=fJTPcqNjyxIKGGtqdvBiSEHrCMcmx8ZiItq9Z5trLCfiBkGu9Wm1Hbc18e7T+EJeiw
+         LTe15kEhlp9pxxdNNl61QBW2DMakNHw307l9JIOqBuw9kje28RcSQ4i8qmiBF44zwioW
+         OFRjZVuPkMuJBCPXgL1F2mT81a/nPDVnrfrCVPkfkOgyos8IaiBW4w4n3bU6R2WXkxgk
+         0dQFIDMek5uVuVONmkqeYpuSR3zGi7ziZngQOqB8p22myN0BgFQiekaWATJTKLHy+pqI
+         1s749Dlp50qjsCs0tVQJag9LNlhmeseuQd05FbxiIEvGMhoQMZ/+AeII2mGe2d3GS4GK
+         4d6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680294604; x=1682886604;
+        d=1e100.net; s=20210112; t=1680294605; x=1682886605;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lEdFQ1e9O/nmgtLY4q6GhreBjz/AYmss+2MTbnjFDcU=;
-        b=cKWgaty8hRLyQXdKl33J50BAhrEK2hadv92a7MsMhrAcV1k8ppO8A2fbz3YyflfJly
-         ltcd/QI++U6DJn3VBSq/YUfw8EKnX0PQGefBjZTy/CAIAUyzcxhHAkT/juj8++qEeU8q
-         6SSj54+NcPhKnTIHmDHi1yAC0Twq+zCIpyxyBc0n7rnsyrVDA7dIbrcI+myf58MgdLuK
-         nLpxoIgY9Le/6GR33xNh/AqMSOsNmM9tgTaSXPKs3NWRak/BpEHvNZr2+mdGS/tiYw+1
-         Ht1MgBVI8Mnx1UlANdeqlYU0uZEOcwbnAB4l0ALRgIfn06CHLY5t+YkE9yfppNWsSyWC
-         PLnA==
-X-Gm-Message-State: AAQBX9dm0i28nJG76nR95o3hmLCoaC7EYpHppIqQr0QOcC27JRfZDEFD
-        skncOjuUZRF+h+/g4X96oas=
-X-Google-Smtp-Source: AKy350aRn4Df8msY0H66XmKOonObnVNoorAxA7bGhq2EYBbPFfIS1zNn+vTN8KMLtqsCcHSefjPJ+A==
-X-Received: by 2002:a17:902:e3c5:b0:19a:98c9:8cea with SMTP id r5-20020a170902e3c500b0019a98c98ceamr21379978ple.39.1680294603600;
-        Fri, 31 Mar 2023 13:30:03 -0700 (PDT)
+        bh=VszdLpAL7WqW9IxkGHXAfoIlaDcuh12lplT2Sv91rgM=;
+        b=aeN0HurK0b5OuiMiBJx7jptIpamnla58kYU6IVuWmhzgWyWD2/qEHKaJhQ8a/oHBo7
+         SGIwW+B/7KbghJbTpR2JIvHdL6rp07OqR4o9i88V0xKcP9VH0FZifo8I2S4hDm7QOWoM
+         An9qjZg6zmJrw3N0SiMririv8Ju6XciLo4rLiQNAtdljXFdWI1ouri9uYF01gwKdwGnj
+         PNUz6/eB7Q1uqAKS7q5Q+AOba9/9/dY9/Sh+jo7TjgHtCpG1iCqs6PsGZdmwJD5LHrLv
+         MeLlkslFDGMF5DmQmpxe5IwIx0qBHmEs4SAAUXGt8Q518R5m6CG7Dub0GS1sKIM9o9Fm
+         TSPQ==
+X-Gm-Message-State: AAQBX9fEAdRRlv+lxyk/0oNnkVWvsiwzuZ0/pNs/fPCceO02NAPhRW1v
+        YAWfWCODRev0v/rmVmEyEE8=
+X-Google-Smtp-Source: AKy350arHlvmF6DIyZbkP9LcdFyyG3+qB4Th0ZjhnVAbe1BAKpnzxP1XVTMU1ToXoBk6tFW6Q5/Oxg==
+X-Received: by 2002:a17:903:32d0:b0:19c:dbce:dce8 with SMTP id i16-20020a17090332d000b0019cdbcedce8mr31103443plr.15.1680294605042;
+        Fri, 31 Mar 2023 13:30:05 -0700 (PDT)
 Received: from bangji.hsd1.ca.comcast.net ([2601:647:6780:44b0:5cfb:ad2c:e6f5:d42f])
-        by smtp.gmail.com with ESMTPSA id t14-20020a1709028c8e00b001a1dc2be791sm1916803plo.259.2023.03.31.13.30.02
+        by smtp.gmail.com with ESMTPSA id t14-20020a1709028c8e00b001a1dc2be791sm1916803plo.259.2023.03.31.13.30.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 13:30:03 -0700 (PDT)
+        Fri, 31 Mar 2023 13:30:04 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -62,9 +62,9 @@ Cc:     Ian Rogers <irogers@google.com>,
         linux-perf-users@vger.kernel.org,
         Kan Liang <kan.liang@linux.intel.com>,
         Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH 8/9] perf pmu: Add perf_pmu__{open,scan}_file_at()
-Date:   Fri, 31 Mar 2023 13:29:48 -0700
-Message-Id: <20230331202949.810326-9-namhyung@kernel.org>
+Subject: [PATCH 9/9] perf intel-pt: Use perf_pmu__scan_file_at() if possible
+Date:   Fri, 31 Mar 2023 13:29:49 -0700
+Message-Id: <20230331202949.810326-10-namhyung@kernel.org>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 In-Reply-To: <20230331202949.810326-1-namhyung@kernel.org>
 References: <20230331202949.810326-1-namhyung@kernel.org>
@@ -80,177 +80,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These two helpers will also use openat() to reduce the overhead with
-relative pathnames.  Convert other functions in pmu_lookup() to use
-the new helpers.
+Intel-PT calls perf_pmu__scan_file() a lot, let's use relative address
+when it accesses multiple files at one place.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/pmu.c | 57 ++++++++++++++++++++++++++++++++++---------
- tools/perf/util/pmu.h |  6 ++++-
- 2 files changed, 50 insertions(+), 13 deletions(-)
+ tools/perf/arch/x86/util/intel-pt.c | 52 ++++++++++++++++++-----------
+ 1 file changed, 32 insertions(+), 20 deletions(-)
 
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index 0c1d87f10b23..78a407b42ad1 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -567,7 +567,7 @@ static void pmu_read_sysfs(void)
-  * Uncore PMUs have a "cpumask" file under sysfs. CPU PMUs (e.g. on arm/arm64)
-  * may have a "cpus" file.
-  */
--static struct perf_cpu_map *pmu_cpumask(const char *name)
-+static struct perf_cpu_map *pmu_cpumask(int dirfd, const char *name)
- {
- 	struct perf_cpu_map *cpus;
- 	const char *templates[] = {
-@@ -582,10 +582,11 @@ static struct perf_cpu_map *pmu_cpumask(const char *name)
- 
- 	strlcpy(pmu_name, name, sizeof(pmu_name));
- 	for (template = templates; *template; template++) {
--		file = perf_pmu__open_file(&pmu, *template);
-+		file = perf_pmu__open_file_at(&pmu, dirfd, *template);
- 		if (!file)
- 			continue;
- 		cpus = perf_cpu_map__read(file);
-+		fclose(file);
- 		if (cpus)
- 			return cpus;
- 	}
-@@ -593,15 +594,19 @@ static struct perf_cpu_map *pmu_cpumask(const char *name)
- 	return NULL;
- }
- 
--static bool pmu_is_uncore(const char *name)
-+static bool pmu_is_uncore(int dirfd, const char *name)
- {
--	char path[PATH_MAX];
-+	int fd;
- 
- 	if (perf_pmu__hybrid_mounted(name))
- 		return false;
- 
--	perf_pmu__pathname_scnprintf(path, sizeof(path), name, "cpumask");
--	return file_available(path);
-+	fd = perf_pmu__pathname_fd(dirfd, name, "cpumask", O_PATH);
-+	if (fd < 0)
-+		return false;
+diff --git a/tools/perf/arch/x86/util/intel-pt.c b/tools/perf/arch/x86/util/intel-pt.c
+index 1e39a034cee9..2cff11de9d8a 100644
+--- a/tools/perf/arch/x86/util/intel-pt.c
++++ b/tools/perf/arch/x86/util/intel-pt.c
+@@ -194,16 +194,19 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
+ 	int pos = 0;
+ 	u64 config;
+ 	char c;
++	int dirfd;
 +
-+	close(fd);
-+	return true;
- }
++	dirfd = perf_pmu__event_source_devices_fd();
  
- static char *pmu_id(const char *name)
-@@ -853,11 +858,11 @@ pmu_find_alias_name(const char *name __maybe_unused)
- 	return NULL;
- }
+ 	pos += scnprintf(buf + pos, sizeof(buf) - pos, "tsc");
  
--static int pmu_max_precise(struct perf_pmu *pmu)
-+static int pmu_max_precise(int dirfd, struct perf_pmu *pmu)
- {
- 	int max_precise = -1;
+-	if (perf_pmu__scan_file(intel_pt_pmu, "caps/mtc", "%d",
+-				&mtc) != 1)
++	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/mtc", "%d",
++				   &mtc) != 1)
+ 		mtc = 1;
  
--	perf_pmu__scan_file(pmu, "caps/max_precise", "%d", &max_precise);
-+	perf_pmu__scan_file_at(pmu, dirfd, "caps/max_precise", "%d", &max_precise);
- 	return max_precise;
- }
- 
-@@ -895,14 +900,14 @@ static struct perf_pmu *pmu_lookup(int dirfd, const char *lookup_name)
- 	if (!pmu)
- 		return NULL;
- 
--	pmu->cpus = pmu_cpumask(name);
-+	pmu->cpus = pmu_cpumask(dirfd, name);
- 	pmu->name = strdup(name);
- 
- 	if (!pmu->name)
- 		goto err;
- 
- 	/* Read type, and ensure that type value is successfully assigned (return 1) */
--	if (perf_pmu__scan_file(pmu, "type", "%u", &type) != 1)
-+	if (perf_pmu__scan_file_at(pmu, dirfd, "type", "%u", &type) != 1)
- 		goto err;
- 
- 	alias_name = pmu_find_alias_name(name);
-@@ -913,10 +918,10 @@ static struct perf_pmu *pmu_lookup(int dirfd, const char *lookup_name)
+ 	if (mtc) {
+-		if (perf_pmu__scan_file(intel_pt_pmu, "caps/mtc_periods", "%x",
+-					&mtc_periods) != 1)
++		if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/mtc_periods", "%x",
++					   &mtc_periods) != 1)
+ 			mtc_periods = 0;
+ 		if (mtc_periods) {
+ 			mtc_period = intel_pt_pick_bit(mtc_periods, 3);
+@@ -212,13 +215,13 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
+ 		}
  	}
  
- 	pmu->type = type;
--	pmu->is_uncore = pmu_is_uncore(name);
-+	pmu->is_uncore = pmu_is_uncore(dirfd, name);
- 	if (pmu->is_uncore)
- 		pmu->id = pmu_id(name);
--	pmu->max_precise = pmu_max_precise(pmu);
-+	pmu->max_precise = pmu_max_precise(dirfd, pmu);
- 	pmu_add_cpu_aliases(&aliases, pmu);
- 	pmu_add_sys_aliases(&aliases, pmu);
+-	if (perf_pmu__scan_file(intel_pt_pmu, "caps/psb_cyc", "%d",
+-				&psb_cyc) != 1)
++	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/psb_cyc", "%d",
++				   &psb_cyc) != 1)
+ 		psb_cyc = 1;
  
-@@ -1730,6 +1735,17 @@ FILE *perf_pmu__open_file(struct perf_pmu *pmu, const char *name)
- 	return fopen(path, "r");
+ 	if (psb_cyc && mtc_periods) {
+-		if (perf_pmu__scan_file(intel_pt_pmu, "caps/psb_periods", "%x",
+-					&psb_periods) != 1)
++		if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/psb_periods", "%x",
++					   &psb_periods) != 1)
+ 			psb_periods = 0;
+ 		if (psb_periods) {
+ 			psb_period = intel_pt_pick_bit(psb_periods, 3);
+@@ -227,8 +230,8 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
+ 		}
+ 	}
+ 
+-	if (perf_pmu__scan_file(intel_pt_pmu, "format/pt", "%c", &c) == 1 &&
+-	    perf_pmu__scan_file(intel_pt_pmu, "format/branch", "%c", &c) == 1)
++	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "format/pt", "%c", &c) == 1 &&
++	    perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "format/branch", "%c", &c) == 1)
+ 		pos += scnprintf(buf + pos, sizeof(buf) - pos, ",pt,branch");
+ 
+ 	pr_debug2("%s default config: %s\n", intel_pt_pmu->name, buf);
+@@ -236,6 +239,7 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
+ 	intel_pt_parse_terms(intel_pt_pmu->name, &intel_pt_pmu->format, buf,
+ 			     &config);
+ 
++	close(dirfd);
+ 	return config;
  }
  
-+FILE *perf_pmu__open_file_at(struct perf_pmu *pmu, int dirfd, const char *name)
-+{
-+	int fd;
-+
-+	fd = perf_pmu__pathname_fd(dirfd, pmu->name, name, O_RDONLY);
-+	if (fd < 0)
-+		return NULL;
-+
-+	return fdopen(fd, "r");
-+}
-+
- int perf_pmu__scan_file(struct perf_pmu *pmu, const char *name, const char *fmt,
- 			...)
- {
-@@ -1747,6 +1763,23 @@ int perf_pmu__scan_file(struct perf_pmu *pmu, const char *name, const char *fmt,
- 	return ret;
+@@ -488,7 +492,7 @@ static void intel_pt_valid_str(char *str, size_t len, u64 valid)
+ 	}
  }
  
-+int perf_pmu__scan_file_at(struct perf_pmu *pmu, int dirfd, const char *name,
-+			   const char *fmt, ...)
-+{
-+	va_list args;
-+	FILE *file;
-+	int ret = EOF;
-+
-+	va_start(args, fmt);
-+	file = perf_pmu__open_file_at(pmu, dirfd, name);
-+	if (file) {
-+		ret = vfscanf(file, fmt, args);
-+		fclose(file);
-+	}
-+	va_end(args);
-+	return ret;
-+}
-+
- bool perf_pmu__file_exists(struct perf_pmu *pmu, const char *name)
+-static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu,
++static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu, int dirfd,
+ 				    const char *caps, const char *name,
+ 				    const char *supported, u64 config)
  {
- 	char path[PATH_MAX];
-diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-index 751c7016e7b6..32c3a75bca0e 100644
---- a/tools/perf/util/pmu.h
-+++ b/tools/perf/util/pmu.h
-@@ -220,7 +220,12 @@ bool is_pmu_core(const char *name);
- void print_pmu_events(const struct print_callbacks *print_cb, void *print_state);
- bool pmu_have_event(const char *pname, const char *name);
+@@ -498,11 +502,11 @@ static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu,
+ 	u64 bits;
+ 	int ok;
  
-+FILE *perf_pmu__open_file(struct perf_pmu *pmu, const char *name);
-+FILE *perf_pmu__open_file_at(struct perf_pmu *pmu, int dirfd, const char *name);
+-	if (perf_pmu__scan_file(intel_pt_pmu, caps, "%llx", &valid) != 1)
++	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, caps, "%llx", &valid) != 1)
+ 		valid = 0;
+ 
+ 	if (supported &&
+-	    perf_pmu__scan_file(intel_pt_pmu, supported, "%d", &ok) == 1 && !ok)
++	    perf_pmu__scan_file_at(intel_pt_pmu, dirfd, supported, "%d", &ok) == 1 && !ok)
+ 		valid = 0;
+ 
+ 	valid |= 1;
+@@ -531,37 +535,45 @@ static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu,
+ static int intel_pt_validate_config(struct perf_pmu *intel_pt_pmu,
+ 				    struct evsel *evsel)
+ {
+-	int err;
++	int err, dirfd;
+ 	char c;
+ 
+ 	if (!evsel)
+ 		return 0;
+ 
++	dirfd = perf_pmu__event_source_devices_fd();
++	if (dirfd < 0)
++		return dirfd;
 +
- int perf_pmu__scan_file(struct perf_pmu *pmu, const char *name, const char *fmt, ...) __scanf(3, 4);
-+int perf_pmu__scan_file_at(struct perf_pmu *pmu, int dirfd, const char *name,
-+			   const char *fmt, ...) __scanf(4, 5);
+ 	/*
+ 	 * If supported, force pass-through config term (pt=1) even if user
+ 	 * sets pt=0, which avoids senseless kernel errors.
+ 	 */
+-	if (perf_pmu__scan_file(intel_pt_pmu, "format/pt", "%c", &c) == 1 &&
++	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "format/pt", "%c", &c) == 1 &&
+ 	    !(evsel->core.attr.config & 1)) {
+ 		pr_warning("pt=0 doesn't make sense, forcing pt=1\n");
+ 		evsel->core.attr.config |= 1;
+ 	}
  
- bool perf_pmu__file_exists(struct perf_pmu *pmu, const char *name);
+-	err = intel_pt_val_config_term(intel_pt_pmu, "caps/cycle_thresholds",
++	err = intel_pt_val_config_term(intel_pt_pmu, dirfd, "caps/cycle_thresholds",
+ 				       "cyc_thresh", "caps/psb_cyc",
+ 				       evsel->core.attr.config);
+ 	if (err)
+-		return err;
++		goto out;
  
-@@ -259,7 +264,6 @@ int perf_pmu__pathname_scnprintf(char *buf, size_t size,
- 				 const char *pmu_name, const char *filename);
- int perf_pmu__event_source_devices_fd(void);
- int perf_pmu__pathname_fd(int dirfd, const char *pmu_name, const char *filename, int flags);
--FILE *perf_pmu__open_file(struct perf_pmu *pmu, const char *name);
+-	err = intel_pt_val_config_term(intel_pt_pmu, "caps/mtc_periods",
++	err = intel_pt_val_config_term(intel_pt_pmu, dirfd, "caps/mtc_periods",
+ 				       "mtc_period", "caps/mtc",
+ 				       evsel->core.attr.config);
+ 	if (err)
+-		return err;
++		goto out;
  
- void perf_pmu__destroy(void);
+-	return intel_pt_val_config_term(intel_pt_pmu, "caps/psb_periods",
++	err = intel_pt_val_config_term(intel_pt_pmu, dirfd, "caps/psb_periods",
+ 					"psb_period", "caps/psb_cyc",
+ 					evsel->core.attr.config);
++
++out:
++	close(dirfd);
++	return err;
+ }
  
+ static void intel_pt_config_sample_mode(struct perf_pmu *intel_pt_pmu,
 -- 
 2.40.0.348.gf938b09366-goog
 
