@@ -2,159 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8880B6D241A
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE826D2426
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbjCaPfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 11:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
+        id S233249AbjCaPju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 11:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCaPfP (ORCPT
+        with ESMTP id S232922AbjCaPjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 11:35:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E1610E4;
-        Fri, 31 Mar 2023 08:35:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F3A4921AAC;
-        Fri, 31 Mar 2023 15:35:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680276913; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bgopTtLCvd94QN1+0LY//7r0zDRlIg6vTuYpHw3fzAI=;
-        b=ZRVgYvYm6jRZNmpCVOkzrgkuBXNCC8D7JWT7YbJ6gnK7qukWuv+eQk7rJy9+dtMCztQXdj
-        BNSSPEoWwRdXhYMgNkn+GKWFu5N3st/ZtT2tAvm0ku5vd2t/syQXL4jq6eRpOCZKxA7+VH
-        QoGuktiYZXj8Go5HlzAL9CPt03CkywI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680276913;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bgopTtLCvd94QN1+0LY//7r0zDRlIg6vTuYpHw3fzAI=;
-        b=KGmnWEHc9J+I0Wb9nsbwULmKlUrwCcJMYnDXrLoBy0M8Ja+QthUNeECfW1n4zU+bS+I5Ny
-        4yfOv+Y8T1GRR2DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C10AC133B6;
-        Fri, 31 Mar 2023 15:35:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id W6z8LbD9JmTuDQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 31 Mar 2023 15:35:12 +0000
-Message-ID: <7b63909c-07c2-86bd-5a6e-29504b88dae6@suse.de>
-Date:   Fri, 31 Mar 2023 17:35:12 +0200
+        Fri, 31 Mar 2023 11:39:42 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85C520322
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:39:41 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32VDcdWs022563;
+        Fri, 31 Mar 2023 15:39:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=UpblJDU7vz76uVVRKDbjzEDuGN2orkZu8ubqezXdWbs=;
+ b=OTJWbur3s7IbBmMNrVsQpr0xoy5xbM6TsEE29muFuNCkorilSyW0HeecFJm6Q7yy957F
+ BXTwz+ST4yVCWAE8ubCd36XYuACR4FC2lEePBy6JS9CVCO2ZPYAuNQ1Ql4hlRwMe9XFP
+ XRYx6ZqSh1QXnZSyw7wxvxRXMBzr3+iXJqbBnr7hihsDqNY32TXj9sbF2iR6TMaFFy2d
+ My/qktrPFcSTUE5r0vnc8kyxb2NV4ApjU50qhdZXFe/dCu/oMcVU9M153Gnu8eIKtC4I
+ V+45YvpvpoDdgIqc+TrxmhYA52lPMcvH5ITI08sJaVvqOf6jAKN9UoLIjlLzFvrI8vT/ cw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pnyyx47xs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 15:39:30 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32VEqurx015243;
+        Fri, 31 Mar 2023 15:39:30 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pnyyx47t2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 15:39:29 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32UKhWc9019202;
+        Fri, 31 Mar 2023 15:39:20 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3phrk6pw6m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 15:39:20 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32VFdGJA25428694
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 Mar 2023 15:39:16 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C8F4E20043;
+        Fri, 31 Mar 2023 15:39:16 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1613D20040;
+        Fri, 31 Mar 2023 15:39:16 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.179.0.144])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 31 Mar 2023 15:39:15 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu
+Cc:     msuchanek@suse.de, nathanl@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 0/2] Online new threads according to the current SMT level
+Date:   Fri, 31 Mar 2023 17:39:03 +0200
+Message-Id: <20230331153905.31698-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/5] drm: shmobile: Fixes and enhancements
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <cover.1680273039.git.geert+renesas@glider.be>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <cover.1680273039.git.geert+renesas@glider.be>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------iBMAxBiqxaasxQ1oHtj09ku8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QIhdxJvQkW_D27aogd9MPS49xoIDn8XO
+X-Proofpoint-ORIG-GUID: eRf1oP8p4BOZ73N2skgpM0sMxePKXi_-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-31_07,2023-03-31_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=947 clxscore=1015 priorityscore=1501 impostorscore=0
+ bulkscore=0 malwarescore=0 suspectscore=0 mlxscore=0 adultscore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303310123
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------iBMAxBiqxaasxQ1oHtj09ku8
-Content-Type: multipart/mixed; boundary="------------IrREz1EpaWTr98WYqdzm8yuw";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
-Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Message-ID: <7b63909c-07c2-86bd-5a6e-29504b88dae6@suse.de>
-Subject: Re: [PATCH 0/5] drm: shmobile: Fixes and enhancements
-References: <cover.1680273039.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1680273039.git.geert+renesas@glider.be>
+When a new CPU is added, the kernel is activating all its threads. This
+leads to weird, but functional, result when adding CPU on a SMT 4 system
+for instance.
 
---------------IrREz1EpaWTr98WYqdzm8yuw
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Here the newly added CPU 1 has 8 threads while the other one has 4 threads
+active (system has been booted with the 'smt-enabled=4' kernel option):
 
-SGkNCg0KUmV2aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNl
-LmRlPg0KDQpmb3IgdGhlIHdob2xlIHBhdGNoc2V0Lg0KDQpCZXN0IHJlZ2FyZHMNClRob21h
-cw0KDQpBbSAzMS4wMy4yMyB1bSAxNjo0OCBzY2hyaWViIEdlZXJ0IFV5dHRlcmhvZXZlbjoN
-Cj4gCUhpIGFsbCwNCj4gDQo+IEN1cnJlbnRseSwgdGhlcmUgYXJlIHR3byBkcml2ZXJzIGZv
-ciB0aGUgTENEIGNvbnRyb2xsZXIgb24gUmVuZXNhcw0KPiBTdXBlckgtYmFzZWQgYW5kIEFS
-TS1iYXNlZCBTSC1Nb2JpbGUgYW5kIFItTW9iaWxlIFNvQ3M6DQo+ICAgIDEuIHNoX21vYmls
-ZV9sY2RjZmIsIHVzaW5nIHRoZSBmYmRldiBmcmFtZXdvcmssDQo+ICAgIDIuIHNobW9iX2Ry
-bSwgdXNpbmcgdGhlIERSTSBmcmFtZXdvcmsuDQo+IEhvd2V2ZXIsIG9ubHkgdGhlIGZvcm1l
-ciBkcml2ZXIgY2FuIGJlIHVzZWQsIGFzIGFsbCBwbGF0Zm9ybSBzdXBwb3J0DQo+IGludGVn
-cmF0ZXMgdGhlIGZvcm1lci4gIE5vbmUgb2YgdGhlc2UgZHJpdmVycyBzdXBwb3J0IERULWJh
-c2VkIHN5c3RlbXMuDQo+IA0KPiBUaGlzIHBhdGNoIHNlcmllcyBpcyBhIGZpcnN0IHN0ZXAg
-dG8gZW5hYmxlIHRoZSBTSC1Nb2JpbGUgRFJNIGRyaXZlciBmb3INCj4gUmVuZXNhcyBBUk0t
-YmFzZWQgU0gtTW9iaWxlIGFuZCBSLU1vYmlsZSBTb0NzLiAgVGhlIG5leHQgc3RlcCBwbGFu
-bmVkIGlzDQo+IHRvIGFkZCBEVCBzdXBwb3J0Lg0KPiANCj4gVGhpcyBoYXMgYmVlbiB0ZXN0
-ZWQgb24gdGhlIFItTW9iaWxlIEExLWJhc2VkIEF0bWFyayBUZWNobm8NCj4gQXJtYWRpbGxv
-LTgwMC1FVkEgZGV2ZWxvcG1lbnQgYm9hcmQsIHVzaW5nIGEgdGVtcG9yYXJ5DQo+IHBsYXRm
-b3JtLWVuYWJsZW1lbnQgcGF0Y2hbMV0uDQo+IA0KPiBUaGFua3MgZm9yIHlvdXIgY29tbWVu
-dHMhDQo+IA0KPiBbMV0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci9jMDNkNGVkYmQ2NTA4
-MzZiZjZhOTY1MDRkZjgyMzM4ZWM2ZDgwMGZmLjE2ODAyNzI5ODAuZ2l0LmdlZXJ0K3JlbmVz
-YXNAZ2xpZGVyLmJlDQo+IA0KPiBHZWVydCBVeXR0ZXJob2V2ZW4gKDUpOg0KPiAgICBkcm06
-IHNobW9iaWxlOiBVc2UgJXA0Y2MgdG8gcHJpbnQgZm91cmNjIGNvZGVzDQo+ICAgIGRybTog
-c2htb2JpbGU6IEFkZCBzdXBwb3J0IGZvciBEUk1fRk9STUFUX1hSR0I4ODg4DQo+ICAgIGRy
-bTogc2htb2JpbGU6IFN3aXRjaCB0byBkcm1fY3J0Y19pbml0X3dpdGhfcGxhbmVzKCkNCj4g
-ICAgZHJtOiBzaG1vYmlsZTogQWRkIG1pc3NpbmcgY2FsbCB0byBkcm1fZmJkZXZfZ2VuZXJp
-Y19zZXR1cCgpDQo+ICAgIGRybTogc2htb2JpbGU6IE1ha2UgRFJNX1NITU9CSUxFIHZpc2li
-bGUgb24gUmVuZXNhcyBTb0MgcGxhdGZvcm1zDQo+IA0KPiAgIGRyaXZlcnMvZ3B1L2RybS9z
-aG1vYmlsZS9LY29uZmlnICAgICAgICAgICB8ICAyICstDQo+ICAgZHJpdmVycy9ncHUvZHJt
-L3NobW9iaWxlL3NobW9iX2RybV9jcnRjLmMgIHwgMzUgKysrKysrKysrKysrKysrKysrKy0t
-LQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9zaG1vYmlsZS9zaG1vYl9kcm1fZHJ2LmMgICB8ICAz
-ICsrDQo+ICAgZHJpdmVycy9ncHUvZHJtL3NobW9iaWxlL3NobW9iX2RybV9rbXMuYyAgIHwg
-IDkgKysrKy0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3NobW9iaWxlL3NobW9iX2RybV9wbGFu
-ZS5jIHwgIDUgKysrKw0KPiAgIDUgZmlsZXMgY2hhbmdlZCwgNDcgaW5zZXJ0aW9ucygrKSwg
-NyBkZWxldGlvbnMoLSkNCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNz
-IERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21i
-SA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5
-LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+ltcden3-lp12:~ # ppc64_cpu --info
+Core   0:    0*    1*    2*    3*    4     5     6     7
+Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
 
---------------IrREz1EpaWTr98WYqdzm8yuw--
+This mixed SMT level is confusing end users and some application like
+lparstat are reporting wrong values.
 
---------------iBMAxBiqxaasxQ1oHtj09ku8
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+There is no SMT level recorded in the kernel, neither in user space. Such a
+level could be helpful when adding new CPU or when optimizing the energy
+efficiency. This series introduce a new SYS FS entry named 'pseries_smt' to
+store the current SMT level.
 
------BEGIN PGP SIGNATURE-----
+The SMT level is provided in best effort, writing a new value into that
+entry is only recording it into the kernel. This way, it can be used when
+new CPU are onlined for instance. There is no real change to the CPU setup
+when a value is written, no CPU are onlined or offlined.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQm/bAFAwAAAAAACgkQlh/E3EQov+CL
-6A/+Kx3TRyqGRDdU08FG6qG4Cvf6ANSau0X83PljDvKCotDJS1+kMGxxje96/xVO4NqsYiABZ+oy
-hGfaV31TfsrbOlPRoEKGEVxd1d7bS8wpkqMgERIy5P8JxF29ubozwtJMBrmle9wxqd/3YrCbnSqz
-rd132kSU5DBrHX7/JoQT9RluCWci4SqDxyVDd9sHMFrE96/nS5MidP1IEZwoC+jrXeXaNeXhkti4
-2enO6r+jIJvEPOMCh8ZNLWAjGBvB3nEfWigmu+HiWeGqv/syuHAErIsEuUNIgpYAeqkEJ9j3d6tx
-lPBXEd78YvmuInZWN4gwG3IrrX1twYARTGW6G49bxvV9NhbkFa4urvdC+C+f8hNi33E0AAIEdH3U
-1F0wwL0JDcNvCYzuLvz2vW+geFkBKqMp2GwePrumEaXzRTnFnn42px5xqjD/rOTxYi5On3Lra+ZJ
-ffoEUdsnhiDW/HdeAL/w+B9fb9VcqxcGjkA5h/s8lt2FN2eeAHApl5f54S0xaTMRU9jiZF3NUJVT
-KzNX6KpFZr73VaILnP7/NtCiqUmw8lN510givThUrvNpTcINC2FnWs0DeBRrU6xJdCYXR1KebZBP
-UI1EWwo/wBaAlZl/70ZKvZJCQb4g846mtynvUO3iRqw28jNxuGHcnnHdFFdHoa+N7eyRUWONfUAR
-sBc=
-=sbAn
------END PGP SIGNATURE-----
+At boot time `pseries_smt` is loaded with smt_enabled_at_boot which is
+containing the SMT level set at boot time, even if no kernel option is
+specified.
 
---------------iBMAxBiqxaasxQ1oHtj09ku8--
+The change is specific to pseries since CPU hot-plug is only provided for
+this platform.
+
+The second patch of this series is implementing the change to online only
+the right number of threads when a new CPU is added.
+
+Laurent Dufour (2):
+  pseries/smp: export the smt level in the SYS FS.
+  powerpc/pseries/cpuhp: respect current SMT when adding new CPU
+
+ arch/powerpc/platforms/pseries/hotplug-cpu.c | 18 ++++++---
+ arch/powerpc/platforms/pseries/pseries.h     |  3 ++
+ arch/powerpc/platforms/pseries/smp.c         | 39 ++++++++++++++++++++
+ 3 files changed, 55 insertions(+), 5 deletions(-)
+
+-- 
+2.40.0
+
