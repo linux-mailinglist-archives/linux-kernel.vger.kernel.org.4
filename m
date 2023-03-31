@@ -2,346 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCF26D2174
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 15:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9C16D2179
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 15:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbjCaN0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 09:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
+        id S232119AbjCaN2g convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 09:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjCaN0o (ORCPT
+        with ESMTP id S231868AbjCaN2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 09:26:44 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05791D2C6;
-        Fri, 31 Mar 2023 06:26:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680269203; x=1711805203;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aj9UVU10nk+SSrkG/0LsLStugM/6Ixl3SYYPuFOAiFI=;
-  b=jsj3D8BmrpXw9cd09T6RNBDYNeZjhLrylyzyBljzVCg1PhAOB9LOFQco
-   dQS3QqWpyh+QUiAWD41Q4+sb5QEF7CLSVpLYY+XSXBJEgKb4D4V9KfTgA
-   VrBGDSVn0Ye2g1xDPG4d6kZa3l4k/t6gcgUtm9MKJNJtt12TPIS40lUEM
-   EtzNrWoFYv7yFVm2RncRWWbyOXeuwCkyGkq1acHbk4aySlTuiZosUnUyW
-   GBuJu+7J4z/Wy6EM0WAcXu+D2+BunPJv79VbwzvSahEMEFx0XGeM38MAT
-   iD3Lvptm+pcHV8ds7JSTS+uuvpSuRchQbd+TAkU5peMAC2OkL/4ECNgW1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="321839694"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="321839694"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 06:26:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="685127540"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="685127540"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga002.jf.intel.com with ESMTP; 31 Mar 2023 06:26:41 -0700
-Received: from [10.209.36.4] (kliang2-mobl1.ccr.corp.intel.com [10.209.36.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 6DEFD580D74;
-        Fri, 31 Mar 2023 06:26:40 -0700 (PDT)
-Message-ID: <9557fa1f-57f7-3114-5710-0600b1835db3@linux.intel.com>
-Date:   Fri, 31 Mar 2023 09:26:39 -0400
+        Fri, 31 Mar 2023 09:28:34 -0400
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CA51EFCF
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 06:28:19 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id y4so89669998edo.2
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 06:28:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680269298;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p9kQgeyK17OKmqbFzH4IRm1k3jZcfLqZAx4ecVwrUaE=;
+        b=mF9loRzn77b0Bbcs2FoGj+EummwxhbXK1B/RK53Tl/ZX4Zbae8cJCt6m1tOXPPmNbq
+         lAfncF/2pV/9THVRR2BINq1p290eRhG7pDgyY9bz3XPRuSYTqXKU0GsH/wDZW1butkjT
+         dYbW/CAyTELzG5vADRTzA1qwXeu33M9hAB59jaBmDIJi1RFMdno1eTv4LjmlVPGCp0dI
+         SDzkAVzbmPUTCbIg5pk0ppD0wGVt91vhL7GcL3XrUUywkBJkyfwlSgcGRcdOaVtkBpn2
+         x0RfRvgsoe57aM0htspj+s/wUHov94BqPJsjMgkGB9hynA8psVzgXvLpgdF+evTKJZrX
+         wgBQ==
+X-Gm-Message-State: AAQBX9eQl/fibVN8c8cbOa0GRxULCPEy+egZspoRhOTsaNKQqsrDZeEN
+        Gc6xhsSIPrLKREv+uO48VArz2g5KYTQkuw==
+X-Google-Smtp-Source: AKy350ahXSxuC4EF9SDrkQBsTS+LcXS003CreW1XJr0qVUMCuR6H2bkImL56JKvgx1HnTQvuUOv5Mw==
+X-Received: by 2002:a05:6402:28c:b0:501:cde8:c523 with SMTP id l12-20020a056402028c00b00501cde8c523mr26838465edv.6.1680269297354;
+        Fri, 31 Mar 2023 06:28:17 -0700 (PDT)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id v14-20020a50954e000000b004fc649481basm1043669eda.58.2023.03.31.06.28.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 06:28:16 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id ew6so89527898edb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 06:28:16 -0700 (PDT)
+X-Received: by 2002:a17:907:a412:b0:947:9f2a:8ca4 with SMTP id
+ sg18-20020a170907a41200b009479f2a8ca4mr1531769ejc.9.1680269296254; Fri, 31
+ Mar 2023 06:28:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3] perf/x86: use hexidecimal value for cpuid
-Content-Language: en-US
-To:     Zhenyu Wang <zhenyuw@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        CodyYao-oc <CodyYao-oc@zhaoxin.com>
-References: <20230312132633.228006-1-zhenyuw@linux.intel.com>
- <20230322053746.4888-1-zhenyuw@linux.intel.com>
- <e60623a4-57e1-dde6-1c76-d9c7f956d3f1@linux.intel.com>
- <ZCYssdebU2L+f4YC@debian-scheme>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <ZCYssdebU2L+f4YC@debian-scheme>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230328-soc-mailbox-v1-0-3953814532fd@marcan.st>
+In-Reply-To: <20230328-soc-mailbox-v1-0-3953814532fd@marcan.st>
+From:   Neal Gompa <neal@gompa.dev>
+Date:   Fri, 31 Mar 2023 09:27:39 -0400
+X-Gmail-Original-Message-ID: <CAEg-Je-hO5F5AbjftFXYmVEJadkUAoV6-PUbk1HVTQnTRyD1mg@mail.gmail.com>
+Message-ID: <CAEg-Je-hO5F5AbjftFXYmVEJadkUAoV6-PUbk1HVTQnTRyD1mg@mail.gmail.com>
+Subject: Re: [PATCH 0/5] mailbox: apple: Move driver into soc/apple and stop
+ using the subsystem
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Janne Grunau <j@jannau.net>, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-03-30 8:43 p.m., Zhenyu Wang wrote:
-> 
-> On 2023.03.24 09:33:19 -0400, Liang, Kan wrote:
->>
-> 
-> sorry that I missed this one in my inbox...
-> 
->> On 2023-03-22 1:37 a.m., Zhenyu Wang wrote:
->>> It's easier to use hexidecimal value instead of decimal for reading
->>> and following with SDM doc, also align with other cpuid calls. As new
->>> cpuid leaf would be added in future, this tries to convert current
->>> forms and would take it as convention for new leaf definition.
->>>
->>> This changes name for both cpuid type and cpuid calls.
->>
->> It seems the patch touches 3 CPUIDs, 0xa, 0x1c and 0x14, right?
->> The patch also crosses several different subsystems and drivers.
->> I think it may be better to divide the patch by CPUID. Each patch to
->> handle one CPUID. It's easier for review.
-> 
-> ok, I can do that.
-> 
->>
->> Also, can you please add a macro for the CPUID leaf number?
->> Please refer ARCH_PERFMON_EXT_LEAF (0x23).
->>
-> 
-> As originally the purpose of this change is to use hex value in cpuid
-> call and struct name, good to see that use for 0x23.  If define every
-> macro for these, e.g ARCH_PERFMON_LEAF(0xa), PT_LEAF(0x14),
-> LBR_LEAF(0x1c), struct name needs change too?  As in context of what
-> source file you're reading, you already get idea what these cpuid
-> numbers are for what kind of leaf...
+On Tue, Mar 28, 2023 at 9:14 AM Hector Martin <marcan@marcan.st> wrote:
+>
+> Once upon a time, Apple machines had some mailbox hardware, and we had
+> to write a driver for it. And since it was a mailbox, it felt natural to
+> use the Linux mailbox subsystem.
+>
+> More than a year later, it has become evident that was not the right
+> decision.
+>
+> Linux driver class subsystems generally exist for a few purposes:
+> 1. To allow mixing and matching generic producers and consumers.
+> 2. To implement common code that is likely to be shared across drivers,
+>    and do so correctly so correct code only has to be written once.
+> 3. To force drivers into a "correct" design, such that driver authors
+>    avoid common pitfalls.
+>
+> The mailbox subsystem does not do any of the above for us:
+> 1. Mailbox hardware is not generic; "mailbox" is a vague idea, not a
+>    standard for communication. Almost all mailbox consumers are tied to
+>    one or a few producers. There is practically no mixing and matching
+>    possible. We have one (1) consumer subsystem (RTKit) talking to one
+>    (1) mailbox driver (apple-mailbox). We might have a second consumer
+>    in the future (SEP), but there will still be no useful
+>    combinatronics with other drivers.
+> 2. The mailbox subsystem implements a bunch of common code for queuing,
+>    but we don't need that because our hardware has hardware queues. It
+>    also implements a bunch of common code for supporting multiple
+>    channels, but we don't need that because our hardware only has one
+>    channel (it has "endpoints" but those are just tags that are part of
+>    the message). On top of this, the mailbox subsystem makes design
+>    decisions unsuitable for our use case. Its queuing implementation
+>    has a fixed queue size and fails sends when full instead of pushing
+>    back by blocking, which is completely unsuitable for high-traffic
+>    mailboxes with hard reliability requirements, such as ours. We've
+>    also run into multiple issues around using mailbox in an atomic
+>    context (required for SMC reboot/shutdown requests).
+> 3. Mailbox doesn't really do much for us as far as driver design.
+>    If anything, it has been forcing us to add extra workarounds for the
+>    impedance mismatches between the subsystem core and the hardware.
+>    Other drivers already are inconsistent in how they use the mailbox
+>    core, because the documentation is unclear on various details.
+>
+> The interface for mailboxes is very simple - basically just a send() and
+> a receive callback. This series quite literally just rips out the
+> middleman, and connects both sides together directly. There just isn't
+> anything useful the mailbox common code is doing for us - it's just a
+> pile of complexity in the middle that adds bugs, impedance mismatches,
+> overhead, and offers no extra features we can use.
+>
+> This series offers:
+>
+> - A modest reduction in overall code size (-27 net lines excluding #1).
+> - Fixes a pile of bugs related to using the mailbox subsystem and its
+>   quirks and limitations (race conditions when messages are already in
+>   the queue on startup, atomic issues, the list goes on).
+> - Adds runtime-PM support.
+> - Adds support for the FIFOs in the mailbox hardware, improving
+>   performance.
+> - Simplifies code by removing extraneous memory allocations (the
+>   mailbox subsystem requires consumers to pass pointers to messages,
+>   instead of inlining them, even though messages are usually only one or
+>   two registers in size) and the requisite cleanup/freeing in the
+>   completion path.
+>
+> In addition, it paves the way for future Apple-specific mailbox
+> optimizations, such as adding the ability to de-duplicate message sends
+> if the same message is already known to be in the FIFO (which can be
+> done by keeping a rolling history of recently sent messages). This is
+> useful for doorbell-style messages, which are redundant to send more
+> than once if not yet processed.
+>
+> Apple Silicon platforms use these mailboxes pervasively, including as
+> part of the GPU submission hot path. On top of that, bad interactions
+> with firmware coprocessors can cause immediate lockups or crashes with
+> no recovery possible but a reboot. Our requirements for reliability and
+> performance are probably much higher than the average mailbox user, and
+> we'd much rather not have a bunch of common code getting in the way of
+> performance profiling and future optimization. It doesn't make much
+> sense for the mailbox subsystem either, since solving these issues would
+> require major refactoring that is unlikely to provide significant
+> benefit to most other users.
+>
+> So let's just call usage of the mailbox subsystem a failed experiment,
+> and move the driver into soc/apple, where we can control the API and can
+> add whatever peculiarities we need for our mailboxes. Farewell, mailbox.
+>
+> There are no changes to the DT bindings. This driver has been shipping
+> in Asahi stable kernel packages for a week, with no regressions
+> reported by any users.
+>
+> As an additional non-kernel-related benefit, this introduces a direct
+> module dependency between consumers and the mailbox producer. This, in
+> turn, is in the critical path for the NVMe driver on these platforms.
+> Prior to this series, we had to have custom initramfs hooks to add
+> apple-mailbox to distro initramfses, and accidentally removing these
+> hooks would result in a completely unbootable system (there is no way
+> for standard initramfs machinery to detect soft consumer/producer
+> relationships like this, they usually just go looking for block device
+> modules and their direct dependencies). We still need the initramfs
+> hooks for other things, but with this change, completely removing all
+> Apple-related initramfs hooks will at least result in a *bootable*
+> system so you can fix the problem. This has already bit several users,
+> and it also means many more distros have a chance of working out of the
+> box (enough to let you install extra stuff) on these platforms, instead
+> of having a hard requirement that *every single distro* fix up their
+> initramfs generation in order to even boot/install on these platforms at
+> all.
+>
+> Jassi: Ideally I'd like to get an ack on this and merge it all through
+> asahi-soc, so we don't have to play things patch-by-patch across
+> multiple merge cycles to avoid potentially broken intermediate states.
+>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+> Hector Martin (5):
+>       soc: apple: rtkit: Get rid of apple_rtkit_send_message_wait
+>       soc: apple: mailbox: Add ASC/M3 mailbox driver
+>       soc: apple: rtkit: Port to the internal mailbox driver
+>       mailbox: apple: Delete driver
+>       soc: apple: mailbox: Rename config symbol to APPLE_MAILBOX
+>
+>  MAINTAINERS                        |   2 -
+>  drivers/mailbox/Kconfig            |  12 -
+>  drivers/mailbox/Makefile           |   2 -
+>  drivers/mailbox/apple-mailbox.c    | 441 -------------------------------------
+>  drivers/soc/apple/Kconfig          |  15 +-
+>  drivers/soc/apple/Makefile         |   3 +
+>  drivers/soc/apple/mailbox.c        | 434 ++++++++++++++++++++++++++++++++++++
+>  drivers/soc/apple/mailbox.h        |  48 ++++
+>  drivers/soc/apple/rtkit-internal.h |   8 +-
+>  drivers/soc/apple/rtkit.c          | 133 +++--------
+>  include/linux/apple-mailbox.h      |  19 --
+>  include/linux/soc/apple/rtkit.h    |  18 --
+>  12 files changed, 529 insertions(+), 606 deletions(-)
+> ---
+> base-commit: bdfe6de2695c5bccc663a5a7d530f81925d8bc10
+> change-id: 20230328-soc-mailbox-3cb6bb2b0b2d
+>
+> Best regards,
+> --
+> Hector Martin <marcan@marcan.st>
+>
 >
 
-No, only the hex value is good enough for an union name.
+Series LGTM.
 
-What I want is a consistent style for the leaf definition of the entire
-X86 perf code.
-For a union, e.g., cpuid_$hex_eax
-For the leaf, e.g., #define __meaning_name_macro	__hex
+Acked-by: Neal Gompa <neal@gompa.dev>
 
-I think AMD has already done it. See EXT_PERFMON_DEBUG_FEATURES and
-union cpuid_0x80000022_ebx.
-If we have the same style, the code style will be consistent.
 
-Thanks,
-Kan
 
->>
->>>
->>> Cc: Peter Zijlstra <peterz@infradead.org>
->>> Cc: Ingo Molnar <mingo@redhat.com>
->>> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
->>> Cc: Mark Rutland <mark.rutland@arm.com>
->>> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
->>> Cc: Jiri Olsa <jolsa@kernel.org>
->>> Cc: Namhyung Kim <namhyung@kernel.org>
->>> Cc: Kan Liang <kan.liang@linux.intel.com>
->>> Cc: CodyYao-oc <CodyYao-oc@zhaoxin.com>
->>> Signed-off-by: Zhenyu Wang <zhenyuw@linux.intel.com>
->>> ---
->>> v3:
->>> - add more explanation in commit message for purpose of this
->>> - use lowercase number in call to align with current code
->>>
->>> v2:
->>> - rename in cpuid data type as well
->>>
->>>  arch/x86/events/intel/core.c      | 10 +++++-----
->>>  arch/x86/events/intel/lbr.c       |  8 ++++----
->>>  arch/x86/events/intel/pt.c        |  2 +-
->>>  arch/x86/events/zhaoxin/core.c    |  8 ++++----
->>>  arch/x86/include/asm/perf_event.h | 12 ++++++------
->>>  arch/x86/kvm/cpuid.c              |  4 ++--
->>>  arch/x86/kvm/vmx/pmu_intel.c      |  4 ++--
->>>  7 files changed, 24 insertions(+), 24 deletions(-)
->>>
->>> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
->>> index a3fb996a86a1..5487a39d4975 100644
->>> --- a/arch/x86/events/intel/core.c
->>> +++ b/arch/x86/events/intel/core.c
->>> @@ -5170,7 +5170,7 @@ static __init void intel_arch_events_quirk(void)
->>>  
->>>  static __init void intel_nehalem_quirk(void)
->>>  {
->>> -	union cpuid10_ebx ebx;
->>> +	union cpuid_0xa_ebx ebx;
->>>  
->>>  	ebx.full = x86_pmu.events_maskl;
->>>  	if (ebx.split.no_branch_misses_retired) {
->>> @@ -5878,9 +5878,9 @@ __init int intel_pmu_init(void)
->>>  	struct attribute **td_attr    = &empty_attrs;
->>>  	struct attribute **mem_attr   = &empty_attrs;
->>>  	struct attribute **tsx_attr   = &empty_attrs;
->>> -	union cpuid10_edx edx;
->>> -	union cpuid10_eax eax;
->>> -	union cpuid10_ebx ebx;
->>> +	union cpuid_0xa_edx edx;
->>> +	union cpuid_0xa_eax eax;
->>> +	union cpuid_0xa_ebx ebx;
->>>  	unsigned int fixed_mask;
->>>  	bool pmem = false;
->>>  	int version, i;
->>> @@ -5903,7 +5903,7 @@ __init int intel_pmu_init(void)
->>>  	 * Check whether the Architectural PerfMon supports
->>>  	 * Branch Misses Retired hw_event or not.
->>>  	 */
->>> -	cpuid(10, &eax.full, &ebx.full, &fixed_mask, &edx.full);
->>> +	cpuid(0xa, &eax.full, &ebx.full, &fixed_mask, &edx.full);
->>>  	if (eax.split.mask_length < ARCH_PERFMON_EVENTS_COUNT)
->>>  		return -ENODEV;
->>>  
->>> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
->>> index c3b0d15a9841..616a6904af03 100644
->>> --- a/arch/x86/events/intel/lbr.c
->>> +++ b/arch/x86/events/intel/lbr.c
->>> @@ -1497,16 +1497,16 @@ static bool is_arch_lbr_xsave_available(void)
->>>  void __init intel_pmu_arch_lbr_init(void)
->>>  {
->>>  	struct pmu *pmu = x86_get_pmu(smp_processor_id());
->>> -	union cpuid28_eax eax;
->>> -	union cpuid28_ebx ebx;
->>> -	union cpuid28_ecx ecx;
->>> +	union cpuid_0x1c_eax eax;
->>> +	union cpuid_0x1c_ebx ebx;
->>> +	union cpuid_0x1c_ecx ecx;
->>>  	unsigned int unused_edx;
->>>  	bool arch_lbr_xsave;
->>>  	size_t size;
->>>  	u64 lbr_nr;
->>>  
->>>  	/* Arch LBR Capabilities */
->>> -	cpuid(28, &eax.full, &ebx.full, &ecx.full, &unused_edx);
->>> +	cpuid(0x1c, &eax.full, &ebx.full, &ecx.full, &unused_edx);
->>>  
->>>  	lbr_nr = fls(eax.split.lbr_depth_mask) * 8;
->>>  	if (!lbr_nr)
->>> diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
->>> index 42a55794004a..da3c5d748365 100644
->>> --- a/arch/x86/events/intel/pt.c
->>> +++ b/arch/x86/events/intel/pt.c
->>> @@ -235,7 +235,7 @@ static int __init pt_pmu_hw_init(void)
->>>  	}
->>>  
->>>  	for (i = 0; i < PT_CPUID_LEAVES; i++) {
->>> -		cpuid_count(20, i,
->>> +		cpuid_count(0x14, i,
->>>  			    &pt_pmu.caps[CPUID_EAX + i*PT_CPUID_REGS_NUM],
->>>  			    &pt_pmu.caps[CPUID_EBX + i*PT_CPUID_REGS_NUM],
->>>  			    &pt_pmu.caps[CPUID_ECX + i*PT_CPUID_REGS_NUM],
->>> diff --git a/arch/x86/events/zhaoxin/core.c b/arch/x86/events/zhaoxin/core.c
->>> index 3e9acdaeed1e..1d071974f4db 100644
->>> --- a/arch/x86/events/zhaoxin/core.c
->>> +++ b/arch/x86/events/zhaoxin/core.c
->>> @@ -504,9 +504,9 @@ static __init void zhaoxin_arch_events_quirk(void)
->>>  
->>>  __init int zhaoxin_pmu_init(void)
->>>  {
->>> -	union cpuid10_edx edx;
->>> -	union cpuid10_eax eax;
->>> -	union cpuid10_ebx ebx;
->>> +	union cpuid_0xa_edx edx;
->>> +	union cpuid_0xa_eax eax;
->>> +	union cpuid_0xa_ebx ebx;
->>>  	struct event_constraint *c;
->>>  	unsigned int unused;
->>>  	int version;
->>> @@ -517,7 +517,7 @@ __init int zhaoxin_pmu_init(void)
->>>  	 * Check whether the Architectural PerfMon supports
->>>  	 * hw_event or not.
->>>  	 */
->>> -	cpuid(10, &eax.full, &ebx.full, &unused, &edx.full);
->>> +	cpuid(0xa, &eax.full, &ebx.full, &unused, &edx.full);
->>>  
->>>  	if (eax.split.mask_length < ARCH_PERFMON_EVENTS_COUNT - 1)
->>>  		return -ENODEV;
->>> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
->>> index 8fc15ed5e60b..0d2d735c8167 100644
->>> --- a/arch/x86/include/asm/perf_event.h
->>> +++ b/arch/x86/include/asm/perf_event.h
->>> @@ -125,7 +125,7 @@
->>>   * Intel "Architectural Performance Monitoring" CPUID
->>>   * detection/enumeration details:
->>>   */
->>> -union cpuid10_eax {
->>> +union cpuid_0xa_eax {
->>>  	struct {
->>>  		unsigned int version_id:8;
->>>  		unsigned int num_counters:8;
->>> @@ -135,7 +135,7 @@ union cpuid10_eax {
->>>  	unsigned int full;
->>>  };
->>>  
->>> -union cpuid10_ebx {
->>> +union cpuid_0xa_ebx {
->>>  	struct {
->>>  		unsigned int no_unhalted_core_cycles:1;
->>>  		unsigned int no_instructions_retired:1;
->>> @@ -148,7 +148,7 @@ union cpuid10_ebx {
->>>  	unsigned int full;
->>>  };
->>>  
->>> -union cpuid10_edx {
->>> +union cpuid_0xa_edx {
->>>  	struct {
->>>  		unsigned int num_counters_fixed:5;
->>>  		unsigned int bit_width_fixed:8;
->>> @@ -170,7 +170,7 @@ union cpuid10_edx {
->>>  /*
->>>   * Intel Architectural LBR CPUID detection/enumeration details:
->>>   */
->>> -union cpuid28_eax {
->>> +union cpuid_0x1c_eax {
->>>  	struct {
->>>  		/* Supported LBR depth values */
->>>  		unsigned int	lbr_depth_mask:8;
->>> @@ -183,7 +183,7 @@ union cpuid28_eax {
->>>  	unsigned int		full;
->>>  };
->>>  
->>> -union cpuid28_ebx {
->>> +union cpuid_0x1c_ebx {
->>>  	struct {
->>>  		/* CPL Filtering Supported */
->>>  		unsigned int    lbr_cpl:1;
->>> @@ -195,7 +195,7 @@ union cpuid28_ebx {
->>>  	unsigned int            full;
->>>  };
->>>  
->>> -union cpuid28_ecx {
->>> +union cpuid_0x1c_ecx {
->>>  	struct {
->>>  		/* Mispredict Bit Supported */
->>>  		unsigned int    lbr_mispred:1;
->>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->>> index 599aebec2d52..57f43dc87538 100644
->>> --- a/arch/x86/kvm/cpuid.c
->>> +++ b/arch/x86/kvm/cpuid.c
->>> @@ -967,8 +967,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->>>  		}
->>>  		break;
->>>  	case 0xa: { /* Architectural Performance Monitoring */
->>> -		union cpuid10_eax eax;
->>> -		union cpuid10_edx edx;
->>> +		union cpuid_0xa_eax eax;
->>> +		union cpuid_0xa_edx edx;
->>>  
->>>  		if (!static_cpu_has(X86_FEATURE_ARCH_PERFMON)) {
->>>  			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
->>> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
->>> index e8a3be0b9df9..f4b165667ca9 100644
->>> --- a/arch/x86/kvm/vmx/pmu_intel.c
->>> +++ b/arch/x86/kvm/vmx/pmu_intel.c
->>> @@ -512,8 +512,8 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->>>  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
->>>  	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
->>>  	struct kvm_cpuid_entry2 *entry;
->>> -	union cpuid10_eax eax;
->>> -	union cpuid10_edx edx;
->>> +	union cpuid_0xa_eax eax;
->>> +	union cpuid_0xa_edx edx;
->>>  	u64 perf_capabilities;
->>>  	u64 counter_mask;
->>>  	int i;
+--
+真実はいつも一つ！/ Always, there's only one truth!
