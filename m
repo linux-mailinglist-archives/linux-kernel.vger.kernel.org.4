@@ -2,113 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9CB6D2873
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 21:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1036D2878
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 21:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbjCaTGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 15:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
+        id S232679AbjCaTH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 15:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbjCaTGA (ORCPT
+        with ESMTP id S230107AbjCaTH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 15:06:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5F422E8C;
-        Fri, 31 Mar 2023 12:05:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9E8E62B55;
-        Fri, 31 Mar 2023 19:05:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC5DC433D2;
-        Fri, 31 Mar 2023 19:05:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680289558;
-        bh=iO9lT4G+VhW54/C/njgyZWfDAkyGJR8Jg6RkIdRfetY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ph/7mpr4I+PN8mUUNwZLB+N2Azsxl/vFp3YIJ+bdZhdrmM4ACyFf68tVeZCpFqJG4
-         gYjtsRlbUi3rt2F9V/ekTIedom19mcF67u0Ch4XpJIjyvWzzBtAx+3bj/VRKKxEW/+
-         SWyMTy2b9bFUbg9eU6qlA3Rys87qUQ/eOnI7py4DPEK3IcLOV8NnQkRv2fcS64pA1w
-         98pL9Ki9Of2ltspo2xcVvu5zw2hfke7ybOVlOg9XHOEFACFeFvDfdShI1GIrA7Hig9
-         b9RS5F1AabdNZIwjBa+O/XRFXlF+UlMwZYbtoQUUBprHWaK0lCbQGZqEY65cOKa93M
-         +j9o2x3pShS/g==
-Message-ID: <a6adab95d955065dd05c78ac462c32dfd146e820.camel@kernel.org>
-Subject: Re: [PATCH v3 01/55] netfs: Fix netfs_extract_iter_to_sg() for
- ITER_UBUF/IOVEC
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org
-Date:   Fri, 31 Mar 2023 15:05:55 -0400
-In-Reply-To: <20230331160914.1608208-2-dhowells@redhat.com>
-References: <20230331160914.1608208-1-dhowells@redhat.com>
-         <20230331160914.1608208-2-dhowells@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Fri, 31 Mar 2023 15:07:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780CF22E80
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680289597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GfL4asY+ZnHcLZiDdqOI9tltGi48G8yGqEg4NgPtO4A=;
+        b=Kw03Ty0YoTuB+3N/nVmxWP2AlsprBF+kEkh8KP/nc2PzaHbJA3IQsaBJ6MORV0ahRPTAP+
+        dA3MTzFR8wGdodVFSPtO9OPfvdGjD1uPRft8JaK9pkKvgi+Jtnz+1/ERyLKW5Pem3cX5fC
+        iXSf/KCcYAFmiQQ1eluSbjX/yOhftPA=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-550-1lbIaCneOnm43s8hAvAv0w-1; Fri, 31 Mar 2023 15:06:36 -0400
+X-MC-Unique: 1lbIaCneOnm43s8hAvAv0w-1
+Received: by mail-ed1-f69.google.com with SMTP id h11-20020a0564020e8b00b004e59d4722a3so33004576eda.6
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:06:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680289594;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GfL4asY+ZnHcLZiDdqOI9tltGi48G8yGqEg4NgPtO4A=;
+        b=D6nWgOn0Id2VT8NZawpSxvH9iHLx9cUs4MrNKcLuYt1AclLCzPPzCWDEeRIIGBaCLF
+         aTholMRJCT4HOxWiZSKEiBSJIbIKUKpAo2wDOiWsKygcL5o8Kn2VisZbkaik5i8mBBTj
+         Gw0Dkl0hIuWP0JFa6jR3dGbhEFRLf4OE/nD8ZNnl55efNnXgxBevy23TNOZN1Iwxx9hc
+         Kpi5NM5K8bOv/IyLzWk2pR7jIpg1/11PdOvE7YwdiaXeRKCjH4baSaZKHI3GctW5LD8B
+         traVAA4o6ArGegAhWlkSurqieNJs3Q8Zt8RDZ2svM3trA2cAVgJvblGIpEqY+5SjEtP7
+         J5Yw==
+X-Gm-Message-State: AAQBX9dvGYv1rIIm8OqMehn6owk1fl2C0v242ZDDOFqQOM+gX2rsnrQ3
+        bmqy0J3HDRT9frJjJOTp7fmiZ2Uap97Sq7ZGhdMa4XbKjfRutr2aiS9zLkzHLRxSnnryJVbY1y1
+        dbcHfjPak0c28grEyZK7mXpI3QB5h7ej9
+X-Received: by 2002:aa7:d39a:0:b0:4fd:2b05:aa2 with SMTP id x26-20020aa7d39a000000b004fd2b050aa2mr27475764edq.42.1680289594403;
+        Fri, 31 Mar 2023 12:06:34 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YA+ItNnwj/ji7Kbipg9PlB9562AAtBo6LkVXgG3d4qMLvslyY4/p0Nlhc9ppxbyjf2LJTyzg==
+X-Received: by 2002:aa7:d39a:0:b0:4fd:2b05:aa2 with SMTP id x26-20020aa7d39a000000b004fd2b050aa2mr27475750edq.42.1680289594134;
+        Fri, 31 Mar 2023 12:06:34 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id v14-20020a50a44e000000b004bc15a440f1sm1367864edb.78.2023.03.31.12.06.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 12:06:33 -0700 (PDT)
+Message-ID: <531dfb17-bdc6-00a2-cbf2-7a7c096896b0@redhat.com>
+Date:   Fri, 31 Mar 2023 21:06:31 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: [GIT PULL] platform-drivers-x86 for 6.3-4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Gross <mgross@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org
+Content-Language: en-US, nl
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-31 at 17:08 +0100, David Howells wrote:
-> Fix netfs_extract_iter_to_sg() for ITER_UBUF and ITER_IOVEC to set the si=
-ze
-> of the page to the part of the page extracted, not the remaining amount o=
-f
-> data in the extracted page array at that point.
->=20
-> This doesn't yet affect anything as cifs, the only current user, only
-> passes in non-user-backed iterators.
->=20
-> Fixes: 018584697533 ("netfs: Add a function to extract an iterator into a=
- scatterlist")
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Jeff Layton <jlayton@kernel.org>
-> cc: Steve French <sfrench@samba.org>
-> cc: Shyam Prasad N <nspmangalore@gmail.com>
-> cc: Rohith Surabattula <rohiths.msft@gmail.com>
-> cc: linux-cachefs@redhat.com
-> cc: linux-cifs@vger.kernel.org
-> cc: linux-fsdevel@vger.kernel.org
-> ---
->  fs/netfs/iterator.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/fs/netfs/iterator.c b/fs/netfs/iterator.c
-> index e9a45dea748a..8a4c86687429 100644
-> --- a/fs/netfs/iterator.c
-> +++ b/fs/netfs/iterator.c
-> @@ -139,7 +139,7 @@ static ssize_t netfs_extract_user_to_sg(struct iov_it=
-er *iter,
->  			size_t seg =3D min_t(size_t, PAGE_SIZE - off, len);
-> =20
->  			*pages++ =3D NULL;
-> -			sg_set_page(sg, page, len, off);
-> +			sg_set_page(sg, page, seg, off);
->  			sgtable->nents++;
->  			sg++;
->  			len -=3D seg;
->=20
+Hi Linus,
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Here is another round of fixes for platform-drivers-x86 for 6.3.
+
+Highlights:
+ -  Fix a regression in ideapad-laptop which caused the touchpad
+    to stop working after a suspend/resume on some models
+ -  1 other small fix and 3 hw-id additions
+
+Regards,
+
+Hans
+
+
+The following changes since commit acd0acb802b90f88d19ad4337183e44fd0f77c50:
+
+  platform/surface: aggregator: Add missing fwnode_handle_put() (2023-03-22 15:23:03 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.3-4
+
+for you to fetch changes up to e3271a5917d1501089b1a224d702aa053e2877f4:
+
+  platform/x86: ideapad-laptop: Stop sending KEY_TOUCHPAD_TOGGLE (2023-03-31 19:37:18 +0200)
+
+----------------------------------------------------------------
+platform-drivers-x86 for v6.3-4
+
+Highlights
+ -  Fix a regression in ideapad-laptop which caused the touchpad
+    to stop working after a suspend/resume on some models
+ -  1 other small fix and 3 hw-id additions
+
+The following is an automated git shortlog grouped by driver:
+
+asus-nb-wmi:
+ -  Add quirk_asus_tablet_mode to other ROG Flow X13 models
+
+gigabyte-wmi:
+ -  add support for X570S AORUS ELITE
+ -  add support for B650 AORUS ELITE AX
+
+ideapad-laptop:
+ -  Stop sending KEY_TOUCHPAD_TOGGLE
+
+platform/x86/intel/pmc:
+ -  Alder Lake PCH slp_s0_residency fix
+
+----------------------------------------------------------------
+Hans de Goede (2):
+      platform/x86: gigabyte-wmi: add support for X570S AORUS ELITE
+      platform/x86: ideapad-laptop: Stop sending KEY_TOUCHPAD_TOGGLE
+
+Rajvi Jingar (1):
+      platform/x86/intel/pmc: Alder Lake PCH slp_s0_residency fix
+
+Thomas Weißschuh (1):
+      platform/x86: gigabyte-wmi: add support for B650 AORUS ELITE AX
+
+weiliang1503 (1):
+      platform/x86: asus-nb-wmi: Add quirk_asus_tablet_mode to other ROG Flow X13 models
+
+ drivers/platform/x86/asus-nb-wmi.c    |  3 ++-
+ drivers/platform/x86/gigabyte-wmi.c   |  2 ++
+ drivers/platform/x86/ideapad-laptop.c | 23 ++++++++++-------------
+ drivers/platform/x86/intel/pmc/core.c | 13 ++++++++++++-
+ 4 files changed, 26 insertions(+), 15 deletions(-)
+
