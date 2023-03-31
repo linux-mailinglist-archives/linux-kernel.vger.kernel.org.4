@@ -2,159 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AC96D1903
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27046D18FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbjCaHvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S231282AbjCaHvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbjCaHvE (ORCPT
+        with ESMTP id S231274AbjCaHus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:51:04 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B161C1C2;
-        Fri, 31 Mar 2023 00:49:58 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32V71JNS020803;
-        Fri, 31 Mar 2023 07:49:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
- : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=13eN19ykrC1NIz/k/gipi1BTZEQj9+AphjGs7LxAaK0=;
- b=HAc8Hj7AR1xgWhl31TTg9wY5vUBHmMPG8MC4uPOhyAIbjR+ydTbn6741xRuCefzTmlO1
- HnmdI/k6KzvFcd/i8oNlofU0hqXWv31efWMMa5JmqKZ2M4fuSgiG6T4tn/bKNYTov096
- pVwZuiZOw+f6Ub88unt9u3mGJxuLru1IiVSFd8/OzFpk1xMcNYoservp6PpL70Bxy6Io
- SHIIKaOvzpF4dvJVaoHcSrpA2OynX+xIKOojLVl+x4KfmNuZSUozO/j1LmBggQEkmQTV
- a5Cs39gr+xUUj6XawR77rrcm9WiE9jULmsfcEBIZhX+h0MjkqXTmpc4kdewKgkFcT8Mq hQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pn9kgttcb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Mar 2023 07:49:43 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32V7ngBA028620
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Mar 2023 07:49:43 GMT
-Received: from srichara-linux.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 31 Mar 2023 00:49:08 -0700
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-To:     <mani@kernel.org>, <manivannan.sadhasivam@linaro.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <linux-arm-msm@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH V2] net: qrtr: Do not do DEL_SERVER broadcast after DEL_CLIENT
-Date:   Fri, 31 Mar 2023 13:18:57 +0530
-Message-ID: <1680248937-16617-1-git-send-email-quic_srichara@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 31 Mar 2023 03:50:48 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED991CBA9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:49:36 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32V7nC89032086;
+        Fri, 31 Mar 2023 02:49:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680248952;
+        bh=M9rGFzZVAKQIHFo+6Vrn0/FJ6eEqdHqLhsMOa8+fA2g=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=i+p210SuKELCHvyTRorWzQJSGHo4Nglx39hmKW2uZZNPiaSfJBLEudFl5jocVGgaZ
+         aKzj93o2mr9EIE6gQkX3YxqcAEieRAQ0pqCASd+dYS5j9UkmpCPGubRmUDW444aFNZ
+         nF8w5fIw7ctpmHqhWJxzITaei0WvNjA6nMJoNxUs=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32V7nCb1116419
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 31 Mar 2023 02:49:12 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 31
+ Mar 2023 02:49:12 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 31 Mar 2023 02:49:12 -0500
+Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32V7n9xx084053;
+        Fri, 31 Mar 2023 02:49:10 -0500
+Message-ID: <b5e426fb-8af9-c372-1076-63194e4de781@ti.com>
+Date:   Fri, 31 Mar 2023 13:19:09 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: EWu-S4bW2rpNZjEA_VPm3ZwHLApJQrLk
-X-Proofpoint-ORIG-GUID: EWu-S4bW2rpNZjEA_VPm3ZwHLApJQrLk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-31_03,2023-03-30_04,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- adultscore=0 malwarescore=0 suspectscore=0 bulkscore=0 spamscore=0
- clxscore=1015 mlxlogscore=843 lowpriorityscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303310063
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+CC:     <vkoul@kernel.org>, <kishon@kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH 1/2] phy: ti: gmii-sel: Add support for CPSW9G GMII SEL in
+ J784S4
+To:     Roger Quadros <rogerq@kernel.org>
+References: <20230331062521.529005-1-s-vadapalli@ti.com>
+ <20230331062521.529005-2-s-vadapalli@ti.com>
+ <cfcdb25b-5426-2532-ab8c-224a5e33baf3@kernel.org>
+Content-Language: en-US
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <cfcdb25b-5426-2532-ab8c-224a5e33baf3@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On the remote side, when QRTR socket is removed, af_qrtr will call
-qrtr_port_remove() which broadcasts the DEL_CLIENT packet to all neighbours
-including local NS. NS upon receiving the DEL_CLIENT packet, will remove
-the lookups associated with the node:port and broadcasts the DEL_SERVER
-packet.
+Hello Roger,
 
-But on the host side, due to the arrival of the DEL_CLIENT packet, the NS
-would've already deleted the server belonging to that port. So when the
-remote's NS again broadcasts the DEL_SERVER for that port, it throws below
-error message on the host:
+On 31/03/23 13:15, Roger Quadros wrote:
+> 
+> 
+> On 31/03/2023 09:25, Siddharth Vadapalli wrote:
+>> Each of the CPSW9G ports in TI's J784S4 SoC support modes such as QSGMII.
+>>
+>> Add a new compatible for it and allow the usage of "ti,qsgmii-main-ports"
+>> property for J784S4.
+>>
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> ---
+>>  drivers/phy/ti/phy-gmii-sel.c | 13 +++++++++++++
+>>  1 file changed, 13 insertions(+)
+>>
+>> diff --git a/drivers/phy/ti/phy-gmii-sel.c b/drivers/phy/ti/phy-gmii-sel.c
+>> index c87118cb2af9..fba5c0c0771c 100644
+>> --- a/drivers/phy/ti/phy-gmii-sel.c
+>> +++ b/drivers/phy/ti/phy-gmii-sel.c
+>> @@ -235,6 +235,15 @@ struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw9g_soc_j721e = {
+>>  	.num_qsgmii_main_ports = 2,
+>>  };
+>>  
+>> +static const
+>> +struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw9g_soc_j784s4 = {
+> 
+> Please make it into one line
 
-"failed while handling packet from 2:-2"
+I was simply following the convention used for other SoC data structs in the
+same file. Please let me know why this has to be an exception and I will post
+the v2 series with the change accordingly.
 
-So fix this error by not broadcasting the DEL_SERVER packet when the
-DEL_CLIENT packet gets processed."
-
-Fixes: 0c2204a4ad71 ("net: qrtr: Migrate nameservice to kernel from userspace")
-Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Signed-off-by: Ram Kumar Dharuman <quic_ramd@quicinc.com>
----
-[v2] Fixed comments from Manivannan and Jakub Kicinski
-Note: Functionally tested on 5.4 and compile tested on 6.3 TOT
-
- net/qrtr/ns.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/net/qrtr/ns.c b/net/qrtr/ns.c
-index 722936f..0f25a38 100644
---- a/net/qrtr/ns.c
-+++ b/net/qrtr/ns.c
-@@ -274,7 +274,7 @@ static struct qrtr_server *server_add(unsigned int service,
- 	return NULL;
- }
- 
--static int server_del(struct qrtr_node *node, unsigned int port)
-+static int server_del(struct qrtr_node *node, unsigned int port, bool bcast)
- {
- 	struct qrtr_lookup *lookup;
- 	struct qrtr_server *srv;
-@@ -287,7 +287,7 @@ static int server_del(struct qrtr_node *node, unsigned int port)
- 	radix_tree_delete(&node->servers, port);
- 
- 	/* Broadcast the removal of local servers */
--	if (srv->node == qrtr_ns.local_node)
-+	if (srv->node == qrtr_ns.local_node && bcast)
- 		service_announce_del(&qrtr_ns.bcast_sq, srv);
- 
- 	/* Announce the service's disappearance to observers */
-@@ -373,7 +373,7 @@ static int ctrl_cmd_bye(struct sockaddr_qrtr *from)
- 		}
- 		slot = radix_tree_iter_resume(slot, &iter);
- 		rcu_read_unlock();
--		server_del(node, srv->port);
-+		server_del(node, srv->port, true);
- 		rcu_read_lock();
- 	}
- 	rcu_read_unlock();
-@@ -459,10 +459,13 @@ static int ctrl_cmd_del_client(struct sockaddr_qrtr *from,
- 		kfree(lookup);
- 	}
- 
--	/* Remove the server belonging to this port */
-+	/* Remove the server belonging to this port but don't broadcast
-+	 * DEL_SERVER. Neighbours would've already removed the server belonging
-+	 * to this port due to the DEL_CLIENT broadcast from qrtr_port_remove().
-+	 */
- 	node = node_get(node_id);
- 	if (node)
--		server_del(node, port);
-+		server_del(node, port, false);
- 
- 	/* Advertise the removal of this client to all local servers */
- 	local_node = node_get(qrtr_ns.local_node);
-@@ -567,7 +570,7 @@ static int ctrl_cmd_del_server(struct sockaddr_qrtr *from,
- 	if (!node)
- 		return -ENOENT;
- 
--	return server_del(node, port);
-+	return server_del(node, port, true);
- }
- 
- static int ctrl_cmd_new_lookup(struct sockaddr_qrtr *from,
--- 
-2.7.4
-
+Regards,
+Siddharth.
