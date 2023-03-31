@@ -2,183 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B90B36D1996
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F8D6D19A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjCaIQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
+        id S231561AbjCaISn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbjCaIQf (ORCPT
+        with ESMTP id S231548AbjCaISk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:16:35 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0134EE0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:16:25 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id a19-20020a056e0208b300b003260dffae47so9210838ilt.17
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:16:25 -0700 (PDT)
+        Fri, 31 Mar 2023 04:18:40 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3FDB46F
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:18:38 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id i5so86738481eda.0
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1680250717;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=uMJy1C9/3QR5jjuw5Xv2+S7pMfTZMnWAxKSE4c5qidM=;
+        b=fmzfl9IOs735tXSv5WRpDWImpl7qScBJ0TpByEkzL0uKL4RNFRy8fFPjWqyMz5M76F
+         zlBJtzL56YDZmviRE03XGtIWzaq/Z5rnScnRHJi4Qf8YeWnlRV52yVtAGlxWwGzBnGV/
+         3x06jpXMum2HJ7t4VmxOiJYCAte4E3jW9sPhA9FjXT2zUJbx3TdzfCKY23+b4HDb5fxA
+         jLyy9mQd04BST5ySdlp+y4TF0gG+wy36ROKjnHL7FJ5FEEzjxEwid5sWV4SdY7iv7oMW
+         rXHUoo2PfyxJE+hbktrKRbWfZ4hne/HlDFy8GGPTc0QVxS4CsKAUokZEVsnoFVcYBSPu
+         4kGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680250584; x=1682842584;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=770k2WaOAJnuWzf93GYtm1LliPDVFFoGdWOwPR0VoqE=;
-        b=BHVSq+W4g4ZjwFLwEeTzu6U02i2IiCpzuKqCP4zOu2bREnwEl2nnfxDNO3lHbzUf75
-         ktq9ADDt3n7Wk2hXqOGrdBV19AmQmlw5RrXqjuOckZt0bqNCRB/1pzx0W4de/l1dbtZC
-         kRUZTb4XadEPU5AHqGDnzZAZwArDCz97b6wNyKoSW0EXv+iEVJsIUXtvAhBR8PbvznPH
-         UTx6Ujp/cyl19ehRy+wh+0VXOln6eDurWb5dedmcsPMWmXr47j7E4OV8UndUfRKPuRAv
-         6ffG5dCULIJqrpyF8qAPeSwXFGKJu5AqDXbemcSfLt2rRr6EAYNFSqz8BEvbSoNnS8nc
-         O2Ug==
-X-Gm-Message-State: AAQBX9elqJcadq13J8jiuYWQfOVb6WqOzMG09nEZYUl/fiZ8pesVzFHQ
-        8AnsJ3hfjIbLC90mYlXr0bJHwfuM0RJw2cVEqqDNm/1x/fxK
-X-Google-Smtp-Source: AKy350YySo7RfqugXMh8BfKcRG3AcpIj9+VSMF0ukCt1skIYC04M4F4k5FKrB/LR7AxFyeTCcddqmwu2YKTsxPvFgPZsBR7s+yHV
+        d=1e100.net; s=20210112; t=1680250717;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uMJy1C9/3QR5jjuw5Xv2+S7pMfTZMnWAxKSE4c5qidM=;
+        b=jBVDKiqriEidKTu7uKJPsEntzvl6M1ILcofOf0lDNuUNsxYoqQBaDnagdobrAmvXsW
+         FtaxCymZezZnKt5axp8k/G9RteATvaHiOeCW6PLWpxHjD8+DGp1jojJhMzhmOZIJ4wyu
+         Y6mbXbGBUagHwiz2TtARk6EzkKCUW7YBumfU2O5AV76YKk6z2iQUF4bv2eTyyTOfCLB8
+         Ipyc5+QmpY06nm5WvpViG4JV3I3X0xHIHziQg9u9W/JAak+qRSBF74O7nembdLVPvqX7
+         SFeWeShbOj0DRiVLt7Pw3atm9lLvX9V/hxOd2NMZXDrkxe4Ps5IiQSz4DncOFRzYJjhL
+         Y3Qg==
+X-Gm-Message-State: AAQBX9d/YlsIYwkFwI8GzFxfgIpfA/jy1UBL69zgJR1Lr6rxxak6ilRm
+        8SMDnoCg0CFhhUj/N2DPnmcwqg==
+X-Google-Smtp-Source: AKy350b3Wzo7SMpS0QCe0HFcHDRnX9Y5vwvxvTXiZ+KLr1OZAOTr3A0/ZUOsuDwzc/Tz3MJU6jY50A==
+X-Received: by 2002:a17:906:5a94:b0:933:15c0:6e05 with SMTP id l20-20020a1709065a9400b0093315c06e05mr25588433ejq.7.1680250717477;
+        Fri, 31 Mar 2023 01:18:37 -0700 (PDT)
+Received: from localhost ([194.62.217.4])
+        by smtp.gmail.com with ESMTPSA id h13-20020a1709066d8d00b009475bd8f441sm719038ejt.60.2023.03.31.01.18.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 01:18:36 -0700 (PDT)
+References: <20230329223239.138757-1-y86-dev@protonmail.com>
+ <20230329223239.138757-5-y86-dev@protonmail.com>
+ <87h6u24bip.fsf@metaspace.dk>
+ <6c3985d3-6b81-df0e-5c22-12a0d8044119@protonmail.com>
+User-agent: mu4e 1.9.18; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     Benno Lossin <y86-dev@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v3 04/13] rust: add pin-init API core
+Date:   Fri, 31 Mar 2023 10:16:56 +0200
+In-reply-to: <6c3985d3-6b81-df0e-5c22-12a0d8044119@protonmail.com>
+Message-ID: <871ql549lv.fsf@metaspace.dk>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:cc1:b0:325:a8e7:126c with SMTP id
- c1-20020a056e020cc100b00325a8e7126cmr12722836ilj.0.1680250584561; Fri, 31 Mar
- 2023 01:16:24 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 01:16:24 -0700
-In-Reply-To: <20230331080108.3156-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000039ff8905f82dd30d@google.com>
-Subject: Re: [syzbot] [bluetooth?] possible deadlock in rfcomm_dlc_exists
-From:   syzbot <syzbot+b69a625d06e8ece26415@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-possible deadlock in rfcomm_dev_ioctl
+Benno Lossin <y86-dev@protonmail.com> writes:
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.3.0-rc4-next-20230330-syzkaller-dirty #0 Not tainted
-------------------------------------------------------
-syz-executor.0/5603 is trying to acquire lock:
-ffff88801e179130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1697 [inline]
-ffff88801e179130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: __rfcomm_create_dev net/bluetooth/rfcomm/tty.c:417 [inline]
-ffff88801e179130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: rfcomm_create_dev net/bluetooth/rfcomm/tty.c:488 [inline]
-ffff88801e179130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: rfcomm_dev_ioctl+0x9ca/0x1cb0 net/bluetooth/rfcomm/tty.c:590
+> On 30.03.23 15:05, Andreas Hindborg wrote:
+>>> +//! [`Arc<T>`]: crate::sync::Arc
+>>> +//! [`impl PinInit<Foo>`]: PinInit
+>>> +//! [`impl PinInit<T, E>`]: PinInit
+>>> +//! [`impl Init<T, E>`]: Init
+>>> +//! [`Opaque`]: kernel::types::Opaque
+>>> +//! [`pin_data`]: ::macros::pin_data
+>>> +//! [`UniqueArc<T>`]: kernel::sync::UniqueArc
+>>> +//! [`Box<T>`]: alloc::boxed::Box
+>>> +
+>>> +use core::{convert::Infallible, marker::PhantomData, mem::MaybeUninit};
+>>> +
+>>> +/// A pinned initializer for `T`.
+>>
+>> "An initializer for a pinned `T`" instead?
+>
+> To me this does not really make sense, since the type `T` cannot be
+> pinned, only an instance can be. But maybe I should use the term
+> `pin-initializer` instead.
 
-but task is already holding lock:
-ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_create_dev net/bluetooth/rfcomm/tty.c:487 [inline]
-ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_dev_ioctl+0x8a2/0x1cb0 net/bluetooth/rfcomm/tty.c:590
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (rfcomm_ioctl_mutex){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
-       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
-       rfcomm_create_dev net/bluetooth/rfcomm/tty.c:487 [inline]
-       rfcomm_dev_ioctl+0x8a2/0x1cb0 net/bluetooth/rfcomm/tty.c:590
-       rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
-       sock_do_ioctl+0xcc/0x230 net/socket.c:1199
-       sock_ioctl+0x1f8/0x680 net/socket.c:1316
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3108 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
-       validate_chain kernel/locking/lockdep.c:3842 [inline]
-       __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
-       lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5691
-       lock_sock_nested+0x3a/0xf0 net/core/sock.c:3474
-       lock_sock include/net/sock.h:1697 [inline]
-       __rfcomm_create_dev net/bluetooth/rfcomm/tty.c:417 [inline]
-       rfcomm_create_dev net/bluetooth/rfcomm/tty.c:488 [inline]
-       rfcomm_dev_ioctl+0x9ca/0x1cb0 net/bluetooth/rfcomm/tty.c:590
-       rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
-       sock_do_ioctl+0xcc/0x230 net/socket.c:1199
-       sock_ioctl+0x1f8/0x680 net/socket.c:1316
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(rfcomm_ioctl_mutex);
-                               lock(sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM);
-                               lock(rfcomm_ioctl_mutex);
-  lock(sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.0/5603:
- #0: ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_create_dev net/bluetooth/rfcomm/tty.c:487 [inline]
- #0: ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_dev_ioctl+0x8a2/0x1cb0 net/bluetooth/rfcomm/tty.c:590
-
-stack backtrace:
-CPU: 0 PID: 5603 Comm: syz-executor.0 Not tainted 6.3.0-rc4-next-20230330-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3108 [inline]
- check_prevs_add kernel/locking/lockdep.c:3227 [inline]
- validate_chain kernel/locking/lockdep.c:3842 [inline]
- __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
- lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5691
- lock_sock_nested+0x3a/0xf0 net/core/sock.c:3474
- lock_sock include/net/sock.h:1697 [inline]
- __rfcomm_create_dev net/bluetooth/rfcomm/tty.c:417 [inline]
- rfcomm_create_dev net/bluetooth/rfcomm/tty.c:488 [inline]
- rfcomm_dev_ioctl+0x9ca/0x1cb0 net/bluetooth/rfcomm/tty.c:590
- rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
- sock_do_ioctl+0xcc/0x230 net/socket.c:1199
- sock_ioctl+0x1f8/0x680 net/socket.c:1316
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f94d848c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f94d911c168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f94d85ac050 RCX: 00007f94d848c0f9
-RDX: 0000000020000100 RSI: 00000000400452c8 RDI: 0000000000000006
-RBP: 00007f94d84e7b39 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffef88f28bf R14: 00007f94d911c300 R15: 0000000000022000
- </TASK>
-
-
-Tested on:
-
-commit:         a6d9e303 Add linux-next specific files for 20230330
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=14b657d5c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aceb117f7924508e
-dashboard link: https://syzkaller.appspot.com/bug?extid=b69a625d06e8ece26415
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1741d1cdc80000
+I see. Could be "An initializer for a pinned instance of `T`" then. Just
+to clarify that the initializer itself is not the thing that is pinned.
 
