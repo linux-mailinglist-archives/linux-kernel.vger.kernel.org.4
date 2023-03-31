@@ -2,149 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C3126D20B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06FB6D20B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232582AbjCaMqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
+        id S232153AbjCaMqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbjCaMqG (ORCPT
+        with ESMTP id S232494AbjCaMqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:46:06 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F5220638;
-        Fri, 31 Mar 2023 05:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1680266747; x=1711802747;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XSJ9xYx7OKiDUOZcxx839tz93MC5ZSo3mvtiQkoZYKA=;
-  b=apPXsXgOBVZMM8Jmpf+q/nzqbBP3gwMIx9dKKO5zuE7FF+LeOcDnpupP
-   C6d7I+sCMppP0eK+OJfcp1vbVjmbNdckTE3k6C3tD0erRKa/v2EdJFcWB
-   ZXzSCfP2C/0EExQ4PxCmeiWGMs35I4x+TTgpPcXIAjzN/aHp1A0XrBi+C
-   CR9b+W/Ns13Jm/FmuzP9SsXnhqQJBpzvm23BdofdHLAGNuRLdJYAGJXtQ
-   QYA4m7J02TPVQfRm6ByI2is8cgHsy4/tRhfj33MxsuZZouU6jAMz9cuYF
-   MA3yqEL0yxvS24w4LtkDIixvDYSoJ2EY/SwXWiR4d1wiB5QcdEHL6qL7A
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,307,1673938800"; 
-   d="asc'?scan'208";a="207589991"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Mar 2023 05:45:45 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 31 Mar 2023 05:45:44 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 31 Mar 2023 05:45:41 -0700
-Date:   Fri, 31 Mar 2023 13:45:27 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        <linux-riscv@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v7 5/6] cache: Add L2 cache management for Andes AX45MP
- RISC-V core
-Message-ID: <5468019d-e688-4019-882f-6f9611443408@spud>
-References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230330204217.47666-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Fri, 31 Mar 2023 08:46:07 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E4720306
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:45:46 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id b18so27248690ybp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680266745;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0HKfBpYDui2jI8K5LgjSIY/OSJW/0mGd+VN1L2aUDv4=;
+        b=q79CD/0L6HR/dRZEi3GQO7M4pFjsIkMivQYdySeQGayP236pXi2kThqDw2bg8lqn5q
+         fiAvYKta5zzSlt4jOuJ8lYjqHzo1+wBa+7Fm3ENNUylPxE10MnLem48AluZP2JpUuxZ5
+         S7HYmpZ4xJteNJlN3gKC3/XPBtbmR1MBbXu5ey8BK/7W52Ccwmo0fu+lN14bF0BXqjIw
+         tpF9O7JyQ6r8wP1dgtNQTlvvcJxiEZH5bua2lkdauKjZ96m5GKL721tLrQ1eAKlQuyv5
+         rw/Bw2z7sTZQGa9POtJ4Kkzr1IsVJwhKoKrUe8Op3j+YmYlzY+Hpgvz87/d+ADyTJnqf
+         yIMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680266745;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0HKfBpYDui2jI8K5LgjSIY/OSJW/0mGd+VN1L2aUDv4=;
+        b=ZlDj5rWgrRdKguzdV/nbqGTeUAavJz10XG+AXoP6+spvnPHjvFAtnwMuSoHKXiVS7E
+         S2RozTyZpxWNl+/pZo+KQa4olxUggRBDuTb9DAuMPjgCMMcLCYG76E2leeFOlTglr9PR
+         St1hydVV5lVQ62OvN82+TKox0HToXpViwI8JdKqSBGDJZphTVZ3XQCzdJhA0EKwp2/OJ
+         x3A6eD7L/jq1W6+6Fhe7aDTQxBMJJGGqqkPGAVWtHF5HYoMHeZFsszUxsj3OSndmnH+r
+         9s1dd4siSozMrOZrj6nsaeJ7Zum0WQNc1AxCyobM4TNJGTVkrfKeEahrrR7mqHdaWESR
+         fP2Q==
+X-Gm-Message-State: AAQBX9d/3h6K/kSqFY8J2kSnX0EuDQ3zPl6j650pnLO36/fKZhHLQInp
+        DbeWb1yLXHbxZYFZ3jjse2y21ODHRRTsdu1JaFd7Hw==
+X-Google-Smtp-Source: AKy350bTpAaze35hjxiuAALTHZ3KSy715dUTYBm0bv9MuZgwP+tj8wMsO3D8vWDj94xprGIrO4VxcpeweKWQ8v5OpL8=
+X-Received: by 2002:a05:6902:168d:b0:b26:47f3:6cb with SMTP id
+ bx13-20020a056902168d00b00b2647f306cbmr14344149ybb.4.1680266745586; Fri, 31
+ Mar 2023 05:45:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ujmC02K2mc/43jGi"
-Content-Disposition: inline
-In-Reply-To: <20230330204217.47666-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230330100550.2049687-1-peng.fan@oss.nxp.com> <20230330100550.2049687-2-peng.fan@oss.nxp.com>
+In-Reply-To: <20230330100550.2049687-2-peng.fan@oss.nxp.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 31 Mar 2023 14:45:34 +0200
+Message-ID: <CACRpkdY2wT-79dnLUdNSGbHE+bH-uc1QyDN0CrsoJju7LW6u_Q@mail.gmail.com>
+Subject: Re: [PATCH V2 2/2] dt-bindings: gpio: vf610: update gpio-ranges
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, stefan@agner.ch, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---ujmC02K2mc/43jGi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Thu, Mar 30, 2023 at 12:00=E2=80=AFPM Peng Fan (OSS) <peng.fan@oss.nxp.c=
+om> wrote:
 
-On Thu, Mar 30, 2023 at 09:42:16PM +0100, Prabhakar wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> And bounds for gpio-ranges to address dtbs_error.
+>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>
+> V2:
+>  Enlarge bounds, and still restrict as 1 for previous devices
+>  Add A-b
 
-> +STANDALONE CACHE CONTROLLER DRIVERS
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> +F:	include/cache
-
-This can go since the file no longer exists.
-
-> +config AX45MP_L2_CACHE
-> +	bool "Andes Technology AX45MP L2 Cache controller"
-> +	depends on RISCV && RISCV_DMA_NONCOHERENT
-
-This can just be depends on RISCV_DMA_NONCOHERENT, since that's only
-defined on RISC-V.
-
-> +static void ax45mp_get_l2_line_size(struct platform_device *pdev)
-> +{
-> +	struct device_node *np = pdev->dev.of_node;
-> +	struct device *dev = &pdev->dev;
-> +	int ret;
-> +
-> +	ret = of_property_read_u32(np, "cache-line-size", &ax45mp_priv->ax45mp_cache_line_size);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to get cache-line-size, defaulting to 64 bytes\n");
-> +		ax45mp_priv->ax45mp_cache_line_size = AX45MP_CACHE_LINE_SIZE;
-> +	}
-> +
-> +	if (ax45mp_priv->ax45mp_cache_line_size != AX45MP_CACHE_LINE_SIZE) {
-> +		dev_err(dev, "Expected cache-line-size to be 64 bytes (found:%u). Defaulting to 64 bytes\n",
-> +			ax45mp_priv->ax45mp_cache_line_size);
-> +		ax45mp_priv->ax45mp_cache_line_size = AX45MP_CACHE_LINE_SIZE;
-> +	}
-
-I forget, why are we doing this defaulting rather than falling over
-immediately if we detect the property is missing or wrong?
-
-> +}
-
-> +static const struct riscv_cache_ops ax45mp_cmo_ops = {
-> +	.clean_range = &ax45mp_cpu_dma_wb_range,
-> +	.inv_range = &ax45mp_cpu_dma_inval_range,
-> +	.flush_range = &ax45mp_cpu_dma_flush_range,
-> +};
-
-I think it would be nice if your driver functions matched the names used
-by the ops. (and as I said on the other patch, I think the ops should
-match the cross-arch naming.
-
-Otherwise, looks grand - although I think I was mostly happy with the
-last revision too.a
-
-Cheers,
-Conor.
-
---ujmC02K2mc/43jGi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCbV5wAKCRB4tDGHoIJi
-0jXXAP0Wzcz5s99w4wfN/xL5lC591ZxAOt8+z4NTdIBaxn4mzQD+PLdKyy6NKLib
-xz7hD43NmKAe5yK/zmiimoEH/rNnTA4=
-=25N2
------END PGP SIGNATURE-----
-
---ujmC02K2mc/43jGi--
+Yours,
+Linus Walleij
