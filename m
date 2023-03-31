@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487FA6D29F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2AA6D29F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbjCaV2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 17:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
+        id S232302AbjCaV2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 17:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbjCaV2T (ORCPT
+        with ESMTP id S231929AbjCaV2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 17:28:19 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14A424430
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:28:13 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id eg48so94745444edb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:28:13 -0700 (PDT)
+        Fri, 31 Mar 2023 17:28:31 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DF923FFA
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:28:20 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-502507c7da4so244476a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:28:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680298092; x=1682890092;
+        d=gmail.com; s=20210112; t=1680298098; x=1682890098;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M6eeMO2fOkTmQFtQvQlgUDTMHxNMIRBK0p3MGXvUrqc=;
-        b=NRmG9bnKsan4+8PU/mmgHL/s1dDmkW2yglzBB9UpGMXu8E7Eud+uG7q76n03riVT5n
-         ZBaVBw8+G+Uf1v/nzPiL+bweIUWFh3+TM4+y08A5xclaySnckVIJbI+8ENxfoNC6c+C0
-         VVf2iiG7Dat/Nt8hQr9/6+yTIxP3nJuwZCZerGycFBhJkAt2Nn6Z27XX+GeVB9pPQOFr
-         R50JXql/vqgtalxz5EOlf0UI1WH5fEoJkVRQqmYWzT72KwX0M2xy8cC9Ox67XFAUywwg
-         WlXD5C6GMfxBIiJdoN3TTx19KlTeuCR2gfNk6Ywp8JvI52KwVLODZU8i6aHzckstm6xu
-         cPpQ==
+        bh=J25hLV3FiWX9nakLLPh8ft08O4hV9weZdaVT2vmny5g=;
+        b=M3UB/OqFTUVzhx17Xvw+Y45bmYCpDuSluFqye4oH8pAVZzKlEdjAHdUodVOgQxKG1Z
+         fXIpFv3hUsL7BcFFyQlrXQ/uFaUaCGNwF9wp9Ndjnxr2WAECurfze/BRn2p4KUivDLaY
+         FakYt5rWdUSI54y3drY5DJ5b+WK3Q2wWGE+rQ0B41O/hHr55BsNtTr01VqR3YzlIpeUo
+         9S9fVJ3AIQnh/+5Ek46Ex6VuXchhQCpktWQ/GclR2Z+vCRjQx6U1iUXKyjD9jkOTlTF7
+         wxF8cbKsK43jGztMOlta5w96inDZnTjSca13SDOStO6d33C5ZypkarU7ssaEj+GLj/66
+         ZaEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680298092; x=1682890092;
+        d=1e100.net; s=20210112; t=1680298098; x=1682890098;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M6eeMO2fOkTmQFtQvQlgUDTMHxNMIRBK0p3MGXvUrqc=;
-        b=YPJyev1peYkFAv25cVY47WADibBXfA7MjRNjqM76I9MwnlTh1W8fYfQ8MqC2H3l+/w
-         iB1mG2r8efRLdF3hhC1qUixji4a00pQYw9G+hPUdDv9zXM8kWJyFAoZD186c7as9/TIc
-         2oyotnUK1ghF4jwGRcmZObupQMt3zn39M9AmSoe+dngO5c6OcrjU+m6pUihFAZ0D34OT
-         l7C0fpX6i0inG/Kzfct8euk6elrIlBkYm7KCJRAYh7v+vFVMrUri6oxVpLEh/dQjzEsq
-         SUt3hn0ojksmphu3Jhcs+rmhxYpCgwnvw7R/LrhbDKub/WHEU3gKzAR7GDNkIEjvO8TA
-         /xGA==
-X-Gm-Message-State: AAQBX9dlXVEHUhGIo4rirWPRyJ7hOyhiqZf0AZ8UiTb6p7TJDkm6vr/L
-        EeBF2PT8F4PzO9Y+/KlfywQ=
-X-Google-Smtp-Source: AKy350aEiQiP4G5X3dx7V6sMsDzvREAngt9bWeT7p6yDFAXhqy2v9do3VMobs5Ni/SpTBfIfdWq7YQ==
-X-Received: by 2002:a17:906:519d:b0:939:5398:768e with SMTP id y29-20020a170906519d00b009395398768emr25210213ejk.7.1680298092270;
-        Fri, 31 Mar 2023 14:28:12 -0700 (PDT)
+        bh=J25hLV3FiWX9nakLLPh8ft08O4hV9weZdaVT2vmny5g=;
+        b=bFFA3rwDPfXkeWSh9U1rEwlIn70NB/R+9X67XK5EbCqyH5CLabqcbqyiWEAYxuwCR1
+         KJix5LAX6EKLag87Zo+D0YXiKpbqyLh00jHBTFJ9JEXYuT4MDaBPtwEqY5xUoRhHRErP
+         9AqYMTEtyAiPE4HRxfF4w1P8a7zkYD0XfXZig7jNi5Z+++rySvTjqt5A2e6g0iwpkkH3
+         4MW1vjDARkDqmbG8TGIEN9YMdKkaKY/vpY++uir6vfwpr3B+G8kpMe7HCh1POngEzdXG
+         WybcXuHB9ta/+gnDZFpNQPSEgAyFSUpPFZt+/V1oi9zIFGKhwP4HAUuh+hMViRTG+gSn
+         WU7w==
+X-Gm-Message-State: AAQBX9dnOiC7jfSiCgezPI8o4FtCv4LSmC+RAx/Ubdg1I8vEtp0gZRXU
+        pukUPCz5peJJ90FZZfBI6Z5J+atHaAA=
+X-Google-Smtp-Source: AKy350ZqWv1X0AQqpyjUZfzWoHYufJ7efeHzue1dd2mTvDgT+3o2eQB50GJ4LhKE06e659A/4h25wg==
+X-Received: by 2002:a05:6402:524e:b0:500:3fd0:25a8 with SMTP id t14-20020a056402524e00b005003fd025a8mr7158816edd.0.1680298098261;
+        Fri, 31 Mar 2023 14:28:18 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id t23-20020a1709060c5700b0093e23d03d72sm1381763ejf.177.2023.03.31.14.28.11
+        by smtp.gmail.com with ESMTPSA id g8-20020a170906394800b008cafeec917dsm1378502eje.101.2023.03.31.14.28.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 14:28:11 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 23:28:09 +0200
+        Fri, 31 Mar 2023 14:28:17 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 23:28:15 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/5] staging: rtl8192e: Remove local variable Value and
- powerlevelOFDM24G
-Message-ID: <9b17cf3828915f541aa26b02973f4e9f9ddd1776.1680297150.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 3/5] staging: rtl8192e: Remove case customer_id = RT_CID_DLINK
+Message-ID: <4786e89c7a394f0e7f4d17c35cda147b11162268.1680297150.git.philipp.g.hortmann@gmail.com>
 References: <cover.1680297150.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,46 +70,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-powerlevelOFDM24G is set to priv->pwr_track. Then Value is set to
-powerlevelOFDM24G and then only once used. Remove both variables to
-increase readability.
+customer_id is initialize to zero. Changing customer_id to RT_CID_DLINK
+would not change the program execution as there is no equation for
+RT_CID_DLINK. Remove useless code lines to increase readability.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c | 6 ------
+ drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h  | 1 -
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h   | 1 -
+ 3 files changed, 8 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index 2100d9d4e940..a6ae76005d56 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -518,10 +518,8 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 	struct r8192_priv *priv = rtllib_priv(dev);
- 	bool	viviflag = false;
- 	struct dcmd_txcmd tx_cmd;
--	u8	powerlevelOFDM24G;
- 	int	i = 0, j = 0, k = 0;
- 	u8	RF_Type, tmp_report[5] = {0, 0, 0, 0, 0};
--	u32	Value;
- 	u8	Pwr_Flag;
- 	u16	Avg_TSSI_Meas, tssi_13dBm, Avg_TSSI_Meas_from_driver = 0;
- 	u32	delta = 0;
-@@ -530,14 +528,11 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 	rtl92e_writeb(dev, FW_Busy_Flag, 0);
- 	priv->rtllib->bdynamic_txpower_enable = false;
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+index 1da14e737aa4..cbe66b4a6ad9 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+@@ -431,9 +431,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 	else
+ 		priv->chnl_plan = priv->reg_chnl_plan;
  
--	powerlevelOFDM24G = priv->pwr_track >> 24;
--	Value = powerlevelOFDM24G;
+-	if (priv->eeprom_vid == 0x1186 &&  priv->eeprom_did == 0x3304)
+-		priv->customer_id =  RT_CID_DLINK;
 -
- 	for (j = 0; j <= 30; j++) {
+ 	switch (priv->eeprom_customer_id) {
+ 	case EEPROM_CID_DEFAULT:
+ 		priv->customer_id = RT_CID_DEFAULT;
+@@ -460,9 +457,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 	case EEPROM_CID_Pronet:
+ 		priv->customer_id = RT_CID_PRONET;
+ 		break;
+-	case EEPROM_CID_DLINK:
+-		priv->customer_id = RT_CID_DLINK;
+-		break;
  
- 		tx_cmd.op	= TXCMD_SET_TX_PWR_TRACKING;
- 		tx_cmd.length	= 4;
--		tx_cmd.value	= Value;
-+		tx_cmd.value	= priv->pwr_track >> 24;
- 		rtl92e_send_cmd_pkt(dev, DESC_PACKET_TYPE_NORMAL, (u8 *)&tx_cmd,
- 				    sizeof(struct dcmd_txcmd));
- 		mdelay(1);
+ 	case EEPROM_CID_WHQL:
+ 		break;
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h b/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+index 99640c4779f7..706d024bcfd1 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+@@ -37,7 +37,6 @@ enum baseband_config {
+ #define EEPROM_CID_NetCore				0x5
+ #define EEPROM_CID_Nettronix			0x6
+ #define EEPROM_CID_Pronet				0x7
+-#define EEPROM_CID_DLINK				0x8
+ #define EEPROM_CID_WHQL					0xFE
+ enum _RTL8192PCI_HW {
+ 	MAC0			= 0x000,
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index 1e99eb833405..91d634f5d3e7 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -134,7 +134,6 @@ enum rt_customer_id {
+ 	RT_CID_TOSHIBA	  = 9,
+ 	RT_CID_819X_NETCORE     = 10,
+ 	RT_CID_Nettronix	= 11,
+-	RT_CID_DLINK	    = 12,
+ 	RT_CID_PRONET	   = 13,
+ };
+ 
 -- 
 2.40.0
 
