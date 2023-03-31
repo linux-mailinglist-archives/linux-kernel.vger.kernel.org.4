@@ -2,202 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71DEB6D161F
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 05:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637146D1626
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 05:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjCaDrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 23:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50464 "EHLO
+        id S229727AbjCaDwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 23:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjCaDrP (ORCPT
+        with ESMTP id S229448AbjCaDwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 23:47:15 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3D8218809
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:47:11 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:42466.404899232
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id AC602102ABC;
-        Fri, 31 Mar 2023 11:47:08 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 3e13d1cf94ea41e3b353b15ae5fd8948 for tzimmermann@suse.de;
-        Fri, 31 Mar 2023 11:47:10 CST
-X-Transaction-ID: 3e13d1cf94ea41e3b353b15ae5fd8948
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <c4d0facc-7a91-d1a1-d0ce-c5f16c2093a4@189.cn>
-Date:   Fri, 31 Mar 2023 11:47:07 +0800
+        Thu, 30 Mar 2023 23:52:30 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2428DCA36
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:52:29 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id l7so19206990pjg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680234748;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wbLtiTUui/GO9MzLgYAsvMU2H4RFeH7VFLRx6yIXGH4=;
+        b=HPt3oQON0ZAMW1dd/Qg35ryiVkB9YsMsecBBaCAFStKFXXH/cH1D8fhXlQKUalmiZs
+         +6P1xR0rWeTTd9RaTKrUv4kZ+f6HJLRpGUmXKuzok+5pDbKwNR4nuRCRoa8aAy1HJr8H
+         6iuErwr6lSM1w2tOTZSgSTz3XgETtXjIq+cmV6LpHB7oA1yiw9l9gwS5kRNvyOhBJPQk
+         D5jF4a+1XVl3pRX5lQBvRGTudUWq467z0y5H1w2s3lNab9eVy0FceDWwQuT0zseDA2iA
+         dj0UUcjLfQJEeLyd2lSsWM0q5Fxo+a7Hkj7jjii9/CLjgsv3Lqfe57LxQpdPpV571qRV
+         djiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680234748;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wbLtiTUui/GO9MzLgYAsvMU2H4RFeH7VFLRx6yIXGH4=;
+        b=n2/Vme+cxQtY+F+WzzH9JueIt5H21V2/+/hSvxBxIl3CUhsHGXT44DdmlHW5lHu0be
+         Iysjm7PWWi7nt1OdCk/r1/U/GDv4jr+8vNrTPtqFYCpW7h93Mg30NfQv59KFcDe9SDE+
+         L2bVY1rp/38vQJdXotn9O8PbDOWsTWK240gXUR4r9Lh8nhDyT4s+FVbocgwnPpSiZ+zi
+         OEfmag/PUNPTMrArVdLzFc7hBrOiOwHLxpPRmn1Ck241ZRQpBwlVa3oQwBuYCDK1Mo3b
+         OsysjQaXdz1P7fVhYIa4pISrm2YB6ak1Iqh4r2uv/SnLpAMcSMTt0pcAxEFN4QizuqSV
+         NW2g==
+X-Gm-Message-State: AAQBX9cu+KlaCoj9s5DfOlc/6MsZ7VSIRNlP357NGXDr2y7MOQyQkW2i
+        d2GdURIRPJWw4hbPwWuSikI1hN3a7TA=
+X-Google-Smtp-Source: AKy350YKUT4yjdblZ0/0t4aRzcUYRmnjB9FtxT6+tdVKrtUsad8NSOkzcVBlzmV+ZOeOwdpz/fD8kQ==
+X-Received: by 2002:a05:6a20:7908:b0:dd:ff4f:b856 with SMTP id b8-20020a056a20790800b000ddff4fb856mr9713922pzg.26.1680234748553;
+        Thu, 30 Mar 2023 20:52:28 -0700 (PDT)
+Received: from localhost ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id h5-20020a62b405000000b005a7c892b435sm639784pfn.25.2023.03.30.20.52.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 30 Mar 2023 20:52:28 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 11:59:19 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>
+Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, huyue2@coolpad.com,
+        zhangwen@coolpad.com
+Subject: Re: [PATCH v2 1/8] erofs: move several xattr helpers into xattr.c
+Message-ID: <20230331115919.0000002d.zbestahu@gmail.com>
+In-Reply-To: <20230330082910.125374-2-jefflexu@linux.alibaba.com>
+References: <20230330082910.125374-1-jefflexu@linux.alibaba.com>
+        <20230330082910.125374-2-jefflexu@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
- clause
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     David Airlie <airlied@linux.ie>, liyi <liyi@loongson.cn>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230325074636.136833-1-15330273260@189.cn>
- <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
- <20230330041726.w7boceq7ljymvfq2@ldmartin-desk2>
- <f42d8ab8-c765-2517-7d25-6ce1dea320e8@suse.de>
- <2e6ec82f-dfde-0f3a-7980-136cea161d6b@189.cn>
- <4e2a2222-59c2-2935-08a7-4a661d5073b2@suse.de>
-Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <4e2a2222-59c2-2935-08a7-4a661d5073b2@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 30 Mar 2023 16:29:03 +0800
+Jingbo Xu <jefflexu@linux.alibaba.com> wrote:
 
-On 2023/3/30 15:26, Thomas Zimmermann wrote:
-> Hi
->
-> Am 30.03.23 um 09:17 schrieb Sui Jingfeng:
->> Hi,
->>
->> On 2023/3/30 14:57, Thomas Zimmermann wrote:
->>> Hi
->>>
->>> Am 30.03.23 um 06:17 schrieb Lucas De Marchi:
->>>> On Wed, Mar 29, 2023 at 11:04:17AM +0200, Thomas Zimmermann wrote:
->>>>> (cc'ing Lucas)
->>>>>
->>>>> Hi
->>>>>
->>>>> Am 25.03.23 um 08:46 schrieb Sui Jingfeng:
->>>>>>  The assignment already done in drm_client_buffer_vmap(),
->>>>>>  just trival clean, no functional change.
->>>>>>
->>>>>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->>>>>> ---
->>>>>>  drivers/gpu/drm/drm_fbdev_generic.c | 5 ++---
->>>>>>  1 file changed, 2 insertions(+), 3 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
->>>>>> b/drivers/gpu/drm/drm_fbdev_generic.c
->>>>>> index 4d6325e91565..1da48e71c7f1 100644
->>>>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
->>>>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
->>>>>> @@ -282,7 +282,7 @@ static int drm_fbdev_damage_blit(struct 
->>>>>> drm_fb_helper *fb_helper,
->>>>>>                   struct drm_clip_rect *clip)
->>>>>>  {
->>>>>>      struct drm_client_buffer *buffer = fb_helper->buffer;
->>>>>> -    struct iosys_map map, dst;
->>>>>> +    struct iosys_map map;
->>>>>>      int ret;
->>>>>>      /*
->>>>>> @@ -302,8 +302,7 @@ static int drm_fbdev_damage_blit(struct 
->>>>>> drm_fb_helper *fb_helper,
->>>>>>      if (ret)
->>>>>>          goto out;
->>>>>> -    dst = map;
->>>>>> -    drm_fbdev_damage_blit_real(fb_helper, clip, &dst);
->>>>>> +    drm_fbdev_damage_blit_real(fb_helper, clip, &map);
->>>>>
->>>>> I see what you're doing and it's probably correct in this case.
->>>>>
->>>>> But there's a larger issue with this iosys interfaces. Sometimes 
->>>>> the address has to be modified (see calls of iosys_map_incr()). 
->>>>> That can prevent incorrect uses of the mapping in other places, 
->>>>> especially in unmap code.
->>>>
->>>> using a initializer for the cases it's needed IMO would make these 
->>>> kind
->>>> of problems go away, because then the intent is explicit
->>>>
->>>>>
->>>>> I think it would make sense to consider a separate structure for 
->>>>> the I/O location. The buffer as a whole would still be represented 
->>>>> by struct iosys_map.  And that new structure, let's call it struct 
->>>>> iosys_ptr, would point to an actual location within the buffer's
->>>>
->>>> sounds fine to me, but I'd have to take a deeper look later (or when
->>>> someone writes the patch).  It seems we'd replicate almost the entire
->>>> API to just accomodate the 2 structs.  And the different types will 
->>>> lead
->>>> to confusion when one or the other should be used
->>>
->>> I think we can split the current interface onto two categories: 
->>> mapping and I/O. The former would use iosys_map and the latter would 
->>> use iosys_ptr. And we'd need a helper that turns gets a ptr for a 
->>> given map.
->>>
->>> If I find the tine, I'll probably type up a patch.
->>>
->>   Here i fix a typo, 'tine' -> 'time'
->>
->> As far as i can see, they are two major type of memory in the system.
->>
->> System memory or VRAM,  for the gpu with dedicate video ram, VRAM is 
->> belong to the IO memory category.
->>
->> But there are system choose carveout part of system ram as video 
->> ram(i915?,  for example).
->>
->> the name iosys_map and iosys_ptr have no difference at the first 
->> sight, tell me which one is for mapping system ram
->>
->> and which one is for mapping vram?
->
-> As you say correctly, graphics buffers and be in various locations. 
-> They can even move between I/O and system memory. The idea behind 
-> iosys_map ("I/O and/or system mapping") is that it's a single 
-> interface that can handle both.
->
-They are all pointers in its very nature.
+> Move xattrblock_addr() and xattrblock_offset() helpers into xattr.c,
+> as they are not used outside of xattr.c.
+> 
+> inlinexattr_header_size() has only one caller, and thus make it inlined
+> into the caller directly.
+> 
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
 
-The hard part to make ensure that  iosys_map can not be replaced with 
-iosys_ptr,
+Reviewed-by: Yue Hu <huyue2@coolpad.com>
 
-They should not overlap in functional, I meant.
+> ---
+>  fs/erofs/xattr.c | 48 +++++++++++++++++++++++++++++-------------------
+>  fs/erofs/xattr.h | 23 -----------------------
+>  2 files changed, 29 insertions(+), 42 deletions(-)
+> 
+> diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
+> index 459caa3cd65d..9ccd57581bc7 100644
+> --- a/fs/erofs/xattr.c
+> +++ b/fs/erofs/xattr.c
+> @@ -7,6 +7,19 @@
+>  #include <linux/security.h>
+>  #include "xattr.h"
+>  
+> +static inline erofs_blk_t erofs_xattr_blkaddr(struct super_block *sb,
+> +					      unsigned int xattr_id)
+> +{
+> +	return EROFS_SB(sb)->xattr_blkaddr +
+> +	       erofs_blknr(sb, xattr_id * sizeof(__u32));
+> +}
+> +
+> +static inline unsigned int erofs_xattr_blkoff(struct super_block *sb,
+> +					      unsigned int xattr_id)
+> +{
+> +	return erofs_blkoff(sb, xattr_id * sizeof(__u32));
+> +}
+> +
+>  struct xattr_iter {
+>  	struct super_block *sb;
+>  	struct erofs_buf buf;
+> @@ -157,7 +170,8 @@ static int inline_xattr_iter_begin(struct xattr_iter *it,
+>  	struct erofs_inode *const vi = EROFS_I(inode);
+>  	unsigned int xattr_header_sz, inline_xattr_ofs;
+>  
+> -	xattr_header_sz = inlinexattr_header_size(inode);
+> +	xattr_header_sz = sizeof(struct erofs_xattr_ibody_header) +
+> +			  sizeof(u32) * vi->xattr_shared_count;
+>  	if (xattr_header_sz >= vi->xattr_isize) {
+>  		DBG_BUGON(xattr_header_sz > vi->xattr_isize);
+>  		return -ENOATTR;
+> @@ -351,20 +365,18 @@ static int inline_getxattr(struct inode *inode, struct getxattr_iter *it)
+>  static int shared_getxattr(struct inode *inode, struct getxattr_iter *it)
+>  {
+>  	struct erofs_inode *const vi = EROFS_I(inode);
+> -	struct super_block *const sb = inode->i_sb;
+> -	unsigned int i;
+> +	struct super_block *const sb = it->it.sb;
+> +	unsigned int i, xsid;
+>  	int ret = -ENOATTR;
+>  
+>  	for (i = 0; i < vi->xattr_shared_count; ++i) {
+> -		erofs_blk_t blkaddr =
+> -			xattrblock_addr(sb, vi->xattr_shared_xattrs[i]);
+> -
+> -		it->it.ofs = xattrblock_offset(sb, vi->xattr_shared_xattrs[i]);
+> -		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+> -						  EROFS_KMAP);
+> +		xsid = vi->xattr_shared_xattrs[i];
+> +		it->it.blkaddr = erofs_xattr_blkaddr(sb, xsid);
+> +		it->it.ofs = erofs_xattr_blkoff(sb, xsid);
+> +		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb,
+> +						  it->it.blkaddr, EROFS_KMAP);
+>  		if (IS_ERR(it->it.kaddr))
+>  			return PTR_ERR(it->it.kaddr);
+> -		it->it.blkaddr = blkaddr;
+>  
+>  		ret = xattr_foreach(&it->it, &find_xattr_handlers, NULL);
+>  		if (ret != -ENOATTR)
+> @@ -562,20 +574,18 @@ static int shared_listxattr(struct listxattr_iter *it)
+>  {
+>  	struct inode *const inode = d_inode(it->dentry);
+>  	struct erofs_inode *const vi = EROFS_I(inode);
+> -	struct super_block *const sb = inode->i_sb;
+> -	unsigned int i;
+> +	struct super_block *const sb = it->it.sb;
+> +	unsigned int i, xsid;
+>  	int ret = 0;
+>  
+>  	for (i = 0; i < vi->xattr_shared_count; ++i) {
+> -		erofs_blk_t blkaddr =
+> -			xattrblock_addr(sb, vi->xattr_shared_xattrs[i]);
+> -
+> -		it->it.ofs = xattrblock_offset(sb, vi->xattr_shared_xattrs[i]);
+> -		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+> -						  EROFS_KMAP);
+> +		xsid = vi->xattr_shared_xattrs[i];
+> +		it->it.blkaddr = erofs_xattr_blkaddr(sb, xsid);
+> +		it->it.ofs = erofs_xattr_blkoff(sb, xsid);
+> +		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb,
+> +						  it->it.blkaddr, EROFS_KMAP);
+>  		if (IS_ERR(it->it.kaddr))
+>  			return PTR_ERR(it->it.kaddr);
+> -		it->it.blkaddr = blkaddr;
+>  
+>  		ret = xattr_foreach(&it->it, &list_xattr_handlers, NULL);
+>  		if (ret)
+> diff --git a/fs/erofs/xattr.h b/fs/erofs/xattr.h
+> index f7a21aaa9755..a65158cba14f 100644
+> --- a/fs/erofs/xattr.h
+> +++ b/fs/erofs/xattr.h
+> @@ -13,29 +13,6 @@
+>  /* Attribute not found */
+>  #define ENOATTR         ENODATA
+>  
+> -static inline unsigned int inlinexattr_header_size(struct inode *inode)
+> -{
+> -	return sizeof(struct erofs_xattr_ibody_header) +
+> -		sizeof(u32) * EROFS_I(inode)->xattr_shared_count;
+> -}
+> -
+> -static inline erofs_blk_t xattrblock_addr(struct super_block *sb,
+> -					  unsigned int xattr_id)
+> -{
+> -#ifdef CONFIG_EROFS_FS_XATTR
+> -	return EROFS_SB(sb)->xattr_blkaddr +
+> -		xattr_id * sizeof(__u32) / sb->s_blocksize;
+> -#else
+> -	return 0;
+> -#endif
+> -}
+> -
+> -static inline unsigned int xattrblock_offset(struct super_block *sb,
+> -					     unsigned int xattr_id)
+> -{
+> -	return (xattr_id * sizeof(__u32)) % sb->s_blocksize;
+> -}
+> -
+>  #ifdef CONFIG_EROFS_FS_XATTR
+>  extern const struct xattr_handler erofs_xattr_user_handler;
+>  extern const struct xattr_handler erofs_xattr_trusted_handler;
 
-> Best regards
-> Thomas
->
->>
->>
->>> Best regards
->>> Thomas
->>>
->>>>
->>>> thanks
->>>> Lucas De Marchi
->>>>
->>>>> memory range. A few locations and helpers would need changes, but 
->>>>> there are not so many callers that it's an issue.  This would also 
->>>>> allow for a few debugging tests that ensure that iosys_ptr always 
->>>>> operates within the bounds of an iosys_map.
->>>>>
->>>>> I've long considered this idea, but there was no pressure to work 
->>>>> on it. Maybe now.
->>>>>
->>>>> Best regards
->>>>> Thomas
->>>>>
->>>>>> drm_client_buffer_vunmap(buffer);
->>>>>
->>>>> -- 
->>>>> Thomas Zimmermann
->>>>> Graphics Driver Developer
->>>>> SUSE Software Solutions Germany GmbH
->>>>> Maxfeldstr. 5, 90409 Nürnberg, Germany
->>>>> (HRB 36809, AG Nürnberg)
->>>>> Geschäftsführer: Ivo Totev
->>>>
->>>>
->>>>
->>>
->
