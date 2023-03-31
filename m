@@ -2,352 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AD26D229A
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 541F96D22B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbjCaO1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
+        id S231799AbjCaOdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbjCaO1m (ORCPT
+        with ESMTP id S232091AbjCaOdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:27:42 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14231EA15
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:27:05 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id s12so18192861qtx.11
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680272823; x=1682864823;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=IgTXkcIiC0h9wm5MLlPl4UB+1jDZi2nsxdXSiSdb80E=;
-        b=ZARDdcnIhnzIj1icXHRSJV7Kc/TS7hPtltn5UFpTYpkSHooI8QKmBNdidesBZ+UDt8
-         t6ODUQCj24a9pUuw32xWxxf9VTiHQReblirNQJV/ThX9V4PUIWbeV3WGdWpW/2G7tD0z
-         bLPn+a8UZOf1tRTtevv/doKSsXtWM5VqXuHv99PA2TT6eonzDo8OM6WIpldnn+7sXLYO
-         1SvQ7ouIYXs9hJQcXoSTE6GG/WX+mHhT2P2zd08SOyQ3olTjdaXxW/ccpC4FQDs/cAAb
-         0uHKqB9GY4Nu8ZQ3AjtKIZBg3GBuLJR7ROBPz1mvQgEmXJ3+DTLzB+TcJPUw2ivW3IZH
-         kiCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680272823; x=1682864823;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IgTXkcIiC0h9wm5MLlPl4UB+1jDZi2nsxdXSiSdb80E=;
-        b=G91I4shkjjgRficDIpCM5vuQaMn+MeedLGMOIh+mm2nMUiVys+U8QfJ58N3e9I+YmV
-         m9xOgCpRIIxfGAIe0CtkXidGHAb1j3PwDATYu6GYUVVocF/cpZKD00abbP6QZFzXkfxW
-         17DxlUFak+FUD8P6cWj1ZwNpm1ISi9eBiMzaxciyzjFMbxGVtUlz3v+86mDaGyp1CbEO
-         s30sN07+enbweM5w97y/xKs+Oa3pjH56PPPx1AY8zeAV5+Lo9ZbD1pNkzoVTvPZkTuNn
-         fGpHm1HU6S8Alqdf/sPb+Hz0QXO0yCyWYC3YsohBRx+Wf32aAAgAAm7LIPK6RIM3ytC7
-         4lhg==
-X-Gm-Message-State: AAQBX9fQP/DB7qIc6HlTS92MI6I+B4ikkGalh/MrLXcpjrjZ+vQ7+EbB
-        7tPXKebUQZcd2ZClj1x1Q94Sww==
-X-Google-Smtp-Source: AKy350Zr0W/Swpo+wuuMF5zMYWmZqMgGBl7FFUrAaIRvugwUMnavndzfU0CvNHm9xYeFDEbxmphhPQ==
-X-Received: by 2002:ac8:5c49:0:b0:3e6:3861:b1f6 with SMTP id j9-20020ac85c49000000b003e63861b1f6mr7967260qtj.0.1680272823453;
-        Fri, 31 Mar 2023 07:27:03 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id c131-20020a379a89000000b007468ed0160csm684172qke.128.2023.03.31.07.27.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 07:27:03 -0700 (PDT)
-Message-ID: <dd56d297-2483-5b7d-4c63-fd103070af5c@linaro.org>
-Date:   Fri, 31 Mar 2023 09:27:01 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Alex Elder <elder@linaro.org>
-Subject: Re: [PATCH v11 20/26] virt: gunyah: Add resource tickets
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
- <20230304010632.2127470-21-quic_eberman@quicinc.com>
+        Fri, 31 Mar 2023 10:33:38 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20611.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::611])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B8C7A8F;
+        Fri, 31 Mar 2023 07:33:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hqCHKcttHAhL6tXyhoLOz7y6rPObqixZQVwGLz64ptCymnwQLo4LbLasYWXVA++XUFEJEzNueThWXeMcXQWSPBUH1hfzRNcHgPqp1G2n3UMcZ/zqHqRIZDw2Qq0sbd0itS1iNd/7KBcw5XFe7Q9Be0oNi0TdPM/HfCDlm6Mlk9sfnZKHLm/N5cODlDPZ6YaDVs01ewJMIh2AztjMETQaik80kd66w2mU5pHv2V4M1/K9fmOtjfpCeSDMyIy5fQGyXKRr4VRM6Z8rX9mKrx6JORY7RuvhmRiatFWFwBKuMNmFJ7Gf3xrpDmUEokLPChsbGCbFHy70CLLQCBcrEXpMIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Xr0oBZRFN73j3Bc6FECET/2XJP1tEgX5k+ZH6xmqtDY=;
+ b=ZFbXvkpAx8t1U7S8IDmPTggZ2qoX4GkGslsRWBAyNBhEyP+2MfGKhbs2IOJrL2nhGgUYa1D2YX4lKflKaPGJUcxWTyQZVZ/qeGx/7kxKsbPzDopJBMRRXor0eJJeJAbgBB5YL/u1cZT3P6s4CO7f+KEHq1dTbpOIevmy9+KPSTG4Ksm5CReRulmIgnI7qWs6/I2j6rdANs+qaL+657fjSHS5dR2+GpYO0yE0hBlh0cDWSg0s/Z9eIToguvjgh6ZqW5xLT1ImXycHY77igfZ2NiMRVf3JfwVEX8DZj6I2LjXhBHDS5437At4Ys4y46SwtXScY4ajMwtYhjPD/5Lj0ew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Xr0oBZRFN73j3Bc6FECET/2XJP1tEgX5k+ZH6xmqtDY=;
+ b=pRInXRgXNOedolytuSH5SkPbnHt6uEdqP2XNPcQK7j8ppAX3fNpxjWkJKwVYlhQQ8Or4XaR/7oRStR0NNPfg61wCk5mg7YwjZv2qUkZk3J7UzfKkamj0wtWPje1djJyodisv5+7cDocjAvSEGrzGkdZdeLyJ5KsAaIxeVth3XBE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
+ by CH3PR12MB8512.namprd12.prod.outlook.com (2603:10b6:610:158::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20; Fri, 31 Mar
+ 2023 14:27:55 +0000
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::8511:7da:3d1e:4db0]) by BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::8511:7da:3d1e:4db0%6]) with mapi id 15.20.6222.035; Fri, 31 Mar 2023
+ 14:27:55 +0000
+Message-ID: <d7a4460a-3f26-ae30-3eaa-cc72ae0a51e7@amd.com>
+Date:   Fri, 31 Mar 2023 09:27:15 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH] docs/sp_SP: Add translation of process/adding-syscalls
 Content-Language: en-US
-In-Reply-To: <20230304010632.2127470-21-quic_eberman@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        mauriciofb@gmail.com
+References: <20230315143526.1213813-1-carlos.bilbao@amd.com>
+ <87wn2ziin4.fsf@meer.lwn.net>
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+In-Reply-To: <87wn2ziin4.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA9PR10CA0011.namprd10.prod.outlook.com
+ (2603:10b6:806:a7::16) To BL1PR12MB5874.namprd12.prod.outlook.com
+ (2603:10b6:208:396::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5874:EE_|CH3PR12MB8512:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7a4750a3-8d0c-4ee3-b9f5-08db31f41e66
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 40txgLAYlbnysYgHYXB6hiXYY0t5jT/gGaOqagU37ih85eKU5KGHcoHqhmTaEPmFrMQKY3gS+XyBwZQpJBs3o+Kg4jCbO8JY+XfNITxgOCs+l3nh7L0+DPGHsJeZmb96qQmqVLxqhK1PxxPlgUE+lxs1w/Sw2jTe288LCYfdudtSjORAWsk1iNPuHcUGnSRzHnnSpHsCT6jAGFNkLN6OM+x3uq64fk0vAINS8RjJUlVQAOs3EFYxG7zES39DKPYcTroFRB7gyBpp0XKaABLv3ddQ/beYNE3//1Fh13JQtbWXP9kGZ03Ia4SHRrNq+xTEk9YiA27rEd5uiPQMsH5eYSXj343lRnurBn+oI7boiTWz7x5o3QHhdwMcKbbqXylud29iL9ST0JKmBF6e+XLLjx3v+AvSs4ZejgRhvIo5FUQ2Einjy3FTCL0jBsTuhjnz4374YdoNoZAoROh7oHB3MLB+cd20MTdhJfZ47G6ddHE0xDegew5dJJqKmN96Zmq6292pddS8Pij7SZmN912h2lzGZlRGN0f2ggu3pp/3BJBc8sCsZOd/BjwHHeKi+eCVHb/Uh7+Ch1saWd+snb+gxpR7jXl3qQAMITvKhl0czdwzdfyDWMOw5ANubYDoBLNTv7mgClfu7mL8651r7VIOCw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(39860400002)(376002)(136003)(396003)(451199021)(31686004)(44832011)(2906002)(66556008)(6506007)(8936002)(86362001)(66476007)(66946007)(41300700001)(6916009)(4326008)(8676002)(478600001)(53546011)(36756003)(316002)(6666004)(6486002)(6512007)(5660300002)(38100700002)(31696002)(186003)(2616005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ODVWZmQrTFl5bkpXcyt6OWo2Q2J1RXhRd05JM2ZBVGN6Mm9Dc3NaUGlrcC9O?=
+ =?utf-8?B?ZkRNK2xhbnBYNkhONHU4NGRHM2RYUDBObHY5U1Btb0V1WWI4ZENDYUR4WG8z?=
+ =?utf-8?B?TUkvVWlHNEV6S3Bmd1B0a3JGd2FUMU5MZzFiZXZYcTlxWmFjaDNJbnBJcTM3?=
+ =?utf-8?B?c2U2aEM5UmVaUTlnS1F1enptVXl5a2pVclFNbVIreWlEelhUS1dtWjNYNnZp?=
+ =?utf-8?B?L2phcHNPYi9PM0V0VkhKczcrS0dKNkFqdks3Q3VDUFhzczdhRWNxbnFodWd3?=
+ =?utf-8?B?U0hYN0NyVzg2WGNpT04rQlNteCtKSXZWci93V3lmQWhnTGRqbFd4Tk5BVzE0?=
+ =?utf-8?B?MkdwSVkrcFBGN090QTg0Z05QMWxWbk5TVlFTSW5TZldIN0x0cWlsL1RmVHQ2?=
+ =?utf-8?B?WlhzQys4OUJkZkFTTXFIay80V3UxK2gySmY0aDh6aUxkWEtTM3lWMWFzRG5P?=
+ =?utf-8?B?RjZSekhib1N6eDdZVFQxODBzWmprR0JJWjBrNzYzNU5VOWpmbWhJQnV3Vzg5?=
+ =?utf-8?B?THVMYXJ5dEE0alhscmk2NWFjcElWSGVwanVZdkhHeGpKRHU2VUw1ZXJPZGNR?=
+ =?utf-8?B?cTVhYjJpRmhVb2lxWUpnUG9vWnl4dWdhaHgrSExUTytlK3dvcUxDQ01HL2po?=
+ =?utf-8?B?c05jQTkrWUtVeUtsN0paNnBGTUdVZnVCa1I1UmJyMTFhdjRJTDVTTGx5Szhx?=
+ =?utf-8?B?M0pNb3BpUlNBWlpwbTdtUFJyRm1CRXUvZG9Wd3JuL3FUOXNmeWZ4aTNWSldv?=
+ =?utf-8?B?TzBjektYaS80TTl0a0NtN25mdk5iQyt5YUFac011YmFrcHQrMzdTREpuTjZn?=
+ =?utf-8?B?N0dkL1FXMGNMWEErVTc0aVJuWW1YK0NRbXBTNjgxZks1R0kwWitwd0Juc2dE?=
+ =?utf-8?B?RWZ1VHp5M1lYaWh6KzBRUDJmcTV4OGNDNk1oY3h1SmVPUmNCN2hvdGdINFFO?=
+ =?utf-8?B?MHNtR0ZNMUNEL3lnRDRycFUxRUdxcGtpTHhQYjF5dmV0Mng4aXE3ai96VFBj?=
+ =?utf-8?B?NTdmL3VNL0JNK2tha0QyTmlJNGpxZEs2Y0QxMS8vc2wwVlc3dVN2a09GdWh5?=
+ =?utf-8?B?TENWTlR6U3BmRXVSQ3Z3NHVMaXY1czd2YnhBaHJLeHVpK0JKTTlkVmkzd3Ew?=
+ =?utf-8?B?YmVLZ3RyeFZ2ZE5TaXN2K3NnTTcxWm1YMFQ4ck5MYUpGRy93NFF1WGhQVWJ0?=
+ =?utf-8?B?cXZoKzR6dDNvclM4S2h0WkRPQnFiS1Q0QVVqdi92QW9zNDZPLzdwN2R2Mnpw?=
+ =?utf-8?B?RWJEbzB5R3JBYjdqcVJOZVVxU0tHdHJydHpCbTdPVHkwbHg3bHBZeWRRRUZB?=
+ =?utf-8?B?cWRXN0ZDbyt0MytFYk1Ka3B5Mm1nNTcxSVp5T2NXZzFVUC9wL1FrT1VNS1N5?=
+ =?utf-8?B?QVJUSU1zY2Z3TjdZQWJHNE9GaU0zMjR6enQ5SUlHWjhDNUtScm1qNCtTbWhF?=
+ =?utf-8?B?VGJXMnRYWW1raTlIdEI1YUxSOERUVlExZW9ZVHowdkZIZmpPeU5wN3Q0STFO?=
+ =?utf-8?B?akNpODlCck05eTNSVkFHQytJZ0V1S1kzdGtiVFpXVk4ybEFWbi9iQk5LQzJF?=
+ =?utf-8?B?eGRpamRsNUhnK3A3eUpCMm50WFpBeEdEOURLMERLNGtET3cyeWlWTjdIbGxJ?=
+ =?utf-8?B?ZFpFV2loQWVBSUVaLzVKM2JobEEwcDUxY1k2QzhLTG5hS1ViY3BSekVvcysz?=
+ =?utf-8?B?MytnZXZDbzFmVDNnSUhkV29QZEp0L2JxR0dmcXhmWUdtMjljQTRFcVRjZVhv?=
+ =?utf-8?B?a2c3V1M3TTQyaVdxR0lmU2dtTnErUFNhU1Z2Ym94bGdtdjF0ZG1Xd3dLd2FF?=
+ =?utf-8?B?YVNtYko0N2FDTXdXTktCOGNSejlkdk9ORjBRbDlldzRlUmdveDRBT0ptTnhD?=
+ =?utf-8?B?SlBqdWtHK0p6U2JaTktrNjZyZlNUZVRFdWtTQzVxODBKQm1Oc1pLWnRoM09r?=
+ =?utf-8?B?eTdKbVh6enhoSUlRRkdoYUtZWUZtU0JCRjU3NDlZaWV4RGdmZlNQUk9JVGdV?=
+ =?utf-8?B?b3QyelhqWlk0MmM3YSs5U3NBcEppT25FdmxqMW9aZUNCUFFCWThFUFJiVy9F?=
+ =?utf-8?B?dEM0WitSOGJ2RkJ0Uk16ek5GWlFmSXNyWVJDNVpJRHVGK21laWZXb0VXUHB5?=
+ =?utf-8?B?a0l2L21qM2U1SWoxZWJxMXBwdVpjaXVteHUvR2ZOWWhNZlZLbW5ReVNHaUlT?=
+ =?utf-8?Q?0snIVvCZ9cW/gsJqbuSm8o9p1PBrt9eolMxf0tKs+8XM?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a4750a3-8d0c-4ee3-b9f5-08db31f41e66
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 14:27:55.6668
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8DBFZtN8dy6w5ZbxMe6eUKgzjJ0xNx2y3gFGr/a7jmcPiBtkXrya8BS5DXwr1sm4L6pQtFs0nA/mgkKsn4CTzA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8512
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/23 7:06 PM, Elliot Berman wrote:
-> Some VM functions need to acquire Gunyah resources. For instance, Gunyah
-> vCPUs are exposed to the host as a resource. The Gunyah vCPU function
-> will register a resource ticket and be able to interact with the
-> hypervisor once the resource ticket is filled.
+On 3/29/23 12:15 PM, Jonathan Corbet wrote:
+> Carlos Bilbao <carlos.bilbao@amd.com> writes:
 > 
-> Resource tickets are the mechanism for functions to acquire ownership of
-> Gunyah resources. Gunyah functions can be created before the VM's
-> resources are created and made available to Linux. A resource ticket
-> identifies a type of resource and a label of a resource which the ticket
-> holder is interested in.
+>> Translate Documentation/process/adding-syscalls.rst into Spanish.
+>>
+>> Co-developed-by: Mauricio Fuentes <mauriciofb@gmail.com>
+>> Signed-off-by: Mauricio Fuentes <mauriciofb@gmail.com>
+>> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+>> ---
+>>  .../sp_SP/process/adding-syscalls.rst         | 632 ++++++++++++++++++
+>>  .../translations/sp_SP/process/index.rst      |   1 +
+>>  2 files changed, 633 insertions(+)
+>>  create mode 100644 Documentation/translations/sp_SP/process/adding-syscalls.rst
 > 
-> Resources are created by Gunyah as configured in the VM's devicetree
-> configuration. Gunyah doesn't process the label and that makes it
-> possible for userspace to create multiple resources with the same label.
-> Resource ticket owners need to be prepared for populate to be called
-> multiple times if userspace created multiple resources with the same
-> label.
+> So for whatever reason, I can't get this to apply to docs-next; care to
+> respin and resend?
+
+I checked the latest version of docs-next:
+
+c3806d572040af7270ddb2bead501e5589cd75c8 ("docs: move nios2 documentation
+under Documentation/arch/")
+
+and the patch applied successfully. Could you please tell me what error or
+warning are you getting?
+
 > 
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-
-One possibly substantive suggestion here, plus a couple suggestions
-to add or revise comments.
-
-					-Alex
-
-> ---
->   drivers/virt/gunyah/vm_mgr.c  | 112 +++++++++++++++++++++++++++++++++-
->   drivers/virt/gunyah/vm_mgr.h  |   4 ++
->   include/linux/gunyah_vm_mgr.h |  14 +++++
->   3 files changed, 129 insertions(+), 1 deletion(-)
+> While you're at it ...
 > 
-> diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
-> index 88db011395ec..0269bcdaf692 100644
-> --- a/drivers/virt/gunyah/vm_mgr.c
-> +++ b/drivers/virt/gunyah/vm_mgr.c
-> @@ -165,6 +165,74 @@ static long gh_vm_rm_function(struct gh_vm *ghvm, struct gh_fn_desc *f)
->   	return r;
->   }
->   
-> +int gh_vm_add_resource_ticket(struct gh_vm *ghvm, struct gh_vm_resource_ticket *ticket)
-> +{
-> +	struct gh_vm_resource_ticket *iter;
-> +	struct gh_resource *ghrsc;
-> +	int ret = 0;
-> +
-> +	mutex_lock(&ghvm->resources_lock);
-> +	list_for_each_entry(iter, &ghvm->resource_tickets, list) {
-> +		if (iter->resource_type == ticket->resource_type && iter->label == ticket->label) {
-> +			ret = -EEXIST;
-> +			goto out;
-> +		}
-> +	}
-> +
-> +	if (!try_module_get(ticket->owner)) {
-> +		ret = -ENODEV;
-> +		goto out;
-> +	}
-> +
-> +	list_add(&ticket->list, &ghvm->resource_tickets);
-> +	INIT_LIST_HEAD(&ticket->resources);
-> +
-> +	list_for_each_entry(ghrsc, &ghvm->resources, list) {
-> +		if (ghrsc->type == ticket->resource_type && ghrsc->rm_label == ticket->label) {
-> +			if (!ticket->populate(ticket, ghrsc))
-> +				list_move(&ghrsc->list, &ticket->resources);
-> +		}
-> +	}
-> +out:
-> +	mutex_unlock(&ghvm->resources_lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_vm_add_resource_ticket);
-> +
-> +void gh_vm_remove_resource_ticket(struct gh_vm *ghvm, struct gh_vm_resource_ticket *ticket)
-> +{
-> +	struct gh_resource *ghrsc, *iter;
-> +
-> +	mutex_lock(&ghvm->resources_lock);
-> +	list_for_each_entry_safe(ghrsc, iter, &ticket->resources, list) {
-> +		ticket->unpopulate(ticket, ghrsc);
-> +		list_move(&ghrsc->list, &ghvm->resources);
-> +	}
-> +
-> +	module_put(ticket->owner);
-> +	list_del(&ticket->list);
-> +	mutex_unlock(&ghvm->resources_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(gh_vm_remove_resource_ticket);
-> +
-> +static void gh_vm_add_resource(struct gh_vm *ghvm, struct gh_resource *ghrsc)
-> +{
-> +	struct gh_vm_resource_ticket *ticket;
-> +
-> +	mutex_lock(&ghvm->resources_lock);
-> +	list_for_each_entry(ticket, &ghvm->resource_tickets, list) {
-> +		if (ghrsc->type == ticket->resource_type && ghrsc->rm_label == ticket->label) {
-> +			if (!ticket->populate(ticket, ghrsc)) {
-> +				list_add(&ghrsc->list, &ticket->resources);
-> +				goto found;
-> +			}
+>> + - un puntero a un struc conteniendo un puntero (por ejemplo
+>> +   ``struct iovec __user *``)
+> 
+> You might want to fix that "struc" typo :)
 
-I think the "goto found" belongs here, unconditionally.
-You disallow adding more than one ticket of a given type
-with the same label.  So you will never match another
-ticket once you've matched this one.
+Oh, will do, thanks.
 
-The populate function generally shouldn't fail.  I think
-it only fails if you find a duplicate, and again, I think
-you prevent that from happening.  (But if it does, you
-silently ignore it...)
+> 
+> Thanks,
+> 
+> jon
 
-> +		}
-> +	}
-> +	list_add(&ghrsc->list, &ghvm->resources);
-> +found:
-> +	mutex_unlock(&ghvm->resources_lock);
-> +}
-> +
->   static int gh_vm_rm_notification_status(struct gh_vm *ghvm, void *data)
->   {
->   	struct gh_rm_vm_status_payload *payload = data;
-> @@ -230,6 +298,8 @@ static void gh_vm_free(struct work_struct *work)
->   {
->   	struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
->   	struct gh_vm_function_instance *inst, *iiter;
-> +	struct gh_vm_resource_ticket *ticket, *titer;
-> +	struct gh_resource *ghrsc, *riter;
->   	struct gh_vm_mem *mapping, *tmp;
->   	int ret;
->   
-> @@ -246,6 +316,25 @@ static void gh_vm_free(struct work_struct *work)
->   		}
->   		mutex_unlock(&ghvm->fn_lock);
->   
-> +		mutex_lock(&ghvm->resources_lock);
-> +		if (!list_empty(&ghvm->resource_tickets)) {
-> +			dev_warn(ghvm->parent, "Dangling resource tickets:\n");
-> +			list_for_each_entry_safe(ticket, titer, &ghvm->resource_tickets, list) {
-> +				dev_warn(ghvm->parent, "  %pS\n", ticket->populate);
-> +				gh_vm_remove_resource_ticket(ghvm, ticket);
-> +			}
-> +		}
-> +
-> +		list_for_each_entry_safe(ghrsc, riter, &ghvm->resources, list) {
-> +			gh_rm_free_resource(ghrsc);
-> +		}
-> +		mutex_unlock(&ghvm->resources_lock);
-> +
-> +		ret = gh_rm_vm_reset(ghvm->rm, ghvm->vmid);
-> +		if (ret)
-> +			dev_err(ghvm->parent, "Failed to reset the vm: %d\n", ret);
-> +		wait_event(ghvm->vm_status_wait, ghvm->vm_status == GH_RM_VM_STATUS_RESET);
-> +
->   		mutex_lock(&ghvm->mm_lock);
->   		list_for_each_entry_safe(mapping, tmp, &ghvm->memory_mappings, list) {
->   			gh_vm_mem_reclaim(ghvm, mapping);
-> @@ -329,6 +418,9 @@ static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
->   	init_rwsem(&ghvm->status_lock);
->   	INIT_WORK(&ghvm->free_work, gh_vm_free);
->   	kref_init(&ghvm->kref);
-> +	mutex_init(&ghvm->resources_lock);
-> +	INIT_LIST_HEAD(&ghvm->resources);
-> +	INIT_LIST_HEAD(&ghvm->resource_tickets);
->   	INIT_LIST_HEAD(&ghvm->functions);
->   	ghvm->vm_status = GH_RM_VM_STATUS_LOAD;
->   
-> @@ -338,9 +430,11 @@ static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
->   static int gh_vm_start(struct gh_vm *ghvm)
->   {
->   	struct gh_vm_mem *mapping;
-> +	struct gh_rm_hyp_resources *resources;
-> +	struct gh_resource *ghrsc;
->   	u64 dtb_offset;
->   	u32 mem_handle;
-> -	int ret;
-> +	int ret, i, n;
->   
->   	down_write(&ghvm->status_lock);
->   	if (ghvm->vm_status != GH_RM_VM_STATUS_LOAD) {
-> @@ -394,6 +488,22 @@ static int gh_vm_start(struct gh_vm *ghvm)
->   		goto err;
->   	}
->   
-> +	ret = gh_rm_get_hyp_resources(ghvm->rm, ghvm->vmid, &resources);
-> +	if (ret) {
-> +		dev_warn(ghvm->parent, "Failed to get hypervisor resources for VM: %d\n", ret);
-> +		goto err;
-> +	}
-> +
-> +	for (i = 0, n = le32_to_cpu(resources->n_entries); i < n; i++) {
-> +		ghrsc = gh_rm_alloc_resource(ghvm->rm, &resources->entries[i]);
-> +		if (!ghrsc) {
-> +			ret = -ENOMEM;
-> +			goto err;
-> +		}
-> +
-> +		gh_vm_add_resource(ghvm, ghrsc);
-> +	}
-> +
->   	ret = gh_rm_vm_start(ghvm->rm, ghvm->vmid);
->   	if (ret) {
->   		dev_warn(ghvm->parent, "Failed to start VM: %d\n", ret);
-> diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
-> index 7bd271bad721..18d0e1effd25 100644
-> --- a/drivers/virt/gunyah/vm_mgr.h
-> +++ b/drivers/virt/gunyah/vm_mgr.h
-> @@ -7,6 +7,7 @@
->   #define _GH_PRIV_VM_MGR_H
->   
->   #include <linux/gunyah_rsc_mgr.h>
-> +#include <linux/gunyah_vm_mgr.h>
->   #include <linux/list.h>
->   #include <linux/kref.h>
->   #include <linux/miscdevice.h>
-> @@ -51,6 +52,9 @@ struct gh_vm {
->   	struct list_head memory_mappings;
->   	struct mutex fn_lock;
->   	struct list_head functions;
-> +	struct mutex resources_lock;
-> +	struct list_head resources;
-> +	struct list_head resource_tickets;
->   };
->   
->   int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region);
-> diff --git a/include/linux/gunyah_vm_mgr.h b/include/linux/gunyah_vm_mgr.h
-> index 3825c951790a..01b1761b5923 100644
-> --- a/include/linux/gunyah_vm_mgr.h
-> +++ b/include/linux/gunyah_vm_mgr.h
-> @@ -70,4 +70,18 @@ void gh_vm_function_unregister(struct gh_vm_function *f);
->   	DECLARE_GH_VM_FUNCTION(_name, _type, _bind, _unbind);	\
->   	module_gh_vm_function(_name)
->   
-> +struct gh_vm_resource_ticket {
-> +	struct list_head list; /* for gh_vm's resources list */
-
-Maybe "resource lists" above (it's for the resources list and
-resource_tickets list).
-
-> +	struct list_head resources; /* for gh_resources's list */
-
-Maybe:	/* resources associated with this ticket */
-
-> +	enum gh_resource_type resource_type;
-> +	u32 label;
-> +
-> +	struct module *owner;
-> +	int (*populate)(struct gh_vm_resource_ticket *ticket, struct gh_resource *ghrsc);
-> +	void (*unpopulate)(struct gh_vm_resource_ticket *ticket, struct gh_resource *ghrsc);
-> +};
-> +
-> +int gh_vm_add_resource_ticket(struct gh_vm *ghvm, struct gh_vm_resource_ticket *ticket);
-> +void gh_vm_remove_resource_ticket(struct gh_vm *ghvm, struct gh_vm_resource_ticket *ticket);
-> +
->   #endif
-
+Thanks,
+Carlos
