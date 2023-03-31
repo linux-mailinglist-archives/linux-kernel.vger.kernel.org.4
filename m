@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB406D1B47
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1616D1B45
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbjCaJFb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 05:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
+        id S232043AbjCaJF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbjCaJFD (ORCPT
+        with ESMTP id S231757AbjCaJFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:05:03 -0400
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6A71E728;
-        Fri, 31 Mar 2023 02:04:58 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id t10so86796500edd.12;
-        Fri, 31 Mar 2023 02:04:58 -0700 (PDT)
+        Fri, 31 Mar 2023 05:05:02 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EE61E709
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:04:57 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id br6so27980647lfb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:04:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680253495;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d/OtqxTnNq7CqzCkiTooH/rPt2g41wH7cPk9c0SghjQ=;
+        b=l3D/Kf7+XbfD+n3e6AGmQUFuB7+BNV9XXr6ywh3aSuqGL95gINH8K55U/BdIr1Bmv7
+         XPqnsfQ8Vs2D47naTMounw1fiT9KAAGQY24nPXknTaHoOhvNe/9vAztuKWoE2I8Ga9TP
+         TD9LZ7pHDUuagJKKuGzpuWW39hIW+wFuZePmEZkf0dmBooRcNtK1SDueqV5k8HgxHRv9
+         ojUHqJ4rZaAFDyhDWKYmHmSyDqb3uSHF8tRZfL3Vvs7BmWui1iEz/jUKYgQvOxe1qTBe
+         nTRq9tN0iootRYNfgt2xnbRvXuBETWeWgPxJjFhBWpH7FVjQNtzWgymLuHwC4uxqV/Dj
+         e2zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680253497;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pg7UvCKf4FflsOaE7m6CKblqSYNUNLu+zsGJqL+kAIo=;
-        b=CyWjmHBNCMZOZgEzkZ/LUgXPVLWsoZPxzn+HK2G6vFfmkJ53uscRRZQBbGJgBzdWp0
-         T/WG0XS1weZSm+KfPeR+so2Pcx7eQAHhiYrqvsC/ZMoYrxk8Y9RJD+7W+X6oOrOhpKcw
-         0iKfuboEwX7hrfOWKEID0y9WiZpl5QnCuTLqAr7DvxQG967Ht8IvosJAMru+mk+vFwR+
-         tbxHOnMdMjR10skuQN8HReLsjv1wSIDic77khVeA9ZL/kx6v6yznFSfAGiW77yRxM8WS
-         QWz1uoohWSTR1k/BGoDmerUZH8JcthN6zEHBjdxkSxxAHJ7FvXVVY602zt+vMYx3Gkfk
-         YwJg==
-X-Gm-Message-State: AAQBX9e09aaou8ff1PTTBf0XU8H2jZuq7hQvcbtTtOC8wjsvYEFgQ0Z0
-        WBBCKka7wYfbmiW7CKftXeldEjliwu8NhXq/fSE=
-X-Google-Smtp-Source: AKy350ZubaYRqIEgMdcx/bX/uJcrS6NTNG8xSB+YnlIP65Jv2fmonLvwL9ZmfCS2Wbvtq4XF3yqqER+2aj6WGc1q+qU=
-X-Received: by 2002:a50:cc94:0:b0:4fb:c8e3:1ae2 with SMTP id
- q20-20020a50cc94000000b004fbc8e31ae2mr13352964edi.3.1680253496669; Fri, 31
- Mar 2023 02:04:56 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680253495;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d/OtqxTnNq7CqzCkiTooH/rPt2g41wH7cPk9c0SghjQ=;
+        b=ODqm8hlemNt6qIz+iFC50pq5cW2XL40Ah/cD36JHLSfZRfFSaRNEBfSULDY7C4w+Ab
+         MZ+jUHSrhXGi+Ja65Fjo4QoQyAdfdQctcsBap65Tafjyw4+KAfhRhjTFiN7AetF5MNBz
+         G3CP218OF6h/7hGmSZ6KfYTXora/nNxMeelMik6pOWc3LFlajdvfV0zv5gnqv0xk81nf
+         bYDeU7BimMIXvcr2gOxhyeGSaXgN5L3WtvYbgmHqCt9c7xMLsQ3QBv6G8lrs3ifZSyJr
+         xCbncdO8DPkVzaxRGb+hTiNfHCtVWnltXYhj74re7nCqSnqkvtm4uQt15L8zIrzswbMq
+         QDjw==
+X-Gm-Message-State: AAQBX9dKH45PNzv7QtRFM2+WUC9AS9qCDjssxvabQQCdRw/xB2d+NgXp
+        eNYHLqGi+Qoo4cW8at/xII3Aig==
+X-Google-Smtp-Source: AKy350bdEbVr8Cjexjw++gtzG0tNjH+qBS6QfktmdF0sjXjaRLe4JrB6MQ7A74GxfHrQlswPE2seDw==
+X-Received: by 2002:ac2:5dd7:0:b0:4e8:3f35:6844 with SMTP id x23-20020ac25dd7000000b004e83f356844mr8412347lfq.19.1680253495402;
+        Fri, 31 Mar 2023 02:04:55 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id l10-20020ac24a8a000000b004db3e445f1fsm299243lfp.97.2023.03.31.02.04.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 02:04:55 -0700 (PDT)
+Message-ID: <66e42255-29f0-5f8d-bc84-8c54e38001bd@linaro.org>
+Date:   Fri, 31 Mar 2023 11:04:54 +0200
 MIME-Version: 1.0
-References: <20230310144726.1545543-1-robh@kernel.org> <CAJZ5v0hAeRa9xsp6-_um9j-9F6nf=PYuOC2mgMAmmUHP+9=RZg@mail.gmail.com>
- <CAJZ5v0i-Vum+js8c7fZJiQWwTBYByy2O=UtObR6GciLMLt41Nw@mail.gmail.com> <f4592c81-af30-8289-d02d-a44e25e0fe26@linaro.org>
-In-Reply-To: <f4592c81-af30-8289-d02d-a44e25e0fe26@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 31 Mar 2023 11:04:44 +0200
-Message-ID: <CAJZ5v0ioHh2E1krvVhXTdzKN+Bh64ML+t5v-Tnt+bORpAqHUyw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: Use of_property_present() for testing DT
- property presence
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 4/4] dts: arm64: qcom: sdm845-shift-axolotl: enable
+ SLPI
+Content-Language: en-US
+To:     Dylan Van Assche <me@dylanvanassche.be>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230330165322.118279-1-me@dylanvanassche.be>
+ <20230330165322.118279-5-me@dylanvanassche.be>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230330165322.118279-5-me@dylanvanassche.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 10:44 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 30/03/2023 19:28, Rafael J. Wysocki wrote:
-> > On Mon, Mar 27, 2023 at 7:13 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >>
-> >> On Fri, Mar 10, 2023 at 3:48 PM Rob Herring <robh@kernel.org> wrote:
-> >>>
-> >>> It is preferred to use typed property access functions (i.e.
-> >>> of_property_read_<type> functions) rather than low-level
-> >>> of_get_property/of_find_property functions for reading properties. As
-> >>> part of this, convert of_get_property/of_find_property calls to the
-> >>> recently added of_property_present() helper when we just want to test
-> >>> for presence of a property and nothing more.
-> >>>
-> >>> Signed-off-by: Rob Herring <robh@kernel.org>
-> >>
-> >> Daniel, are you going to apply this, or should I take it directly?
-> >
-> > Applied as 6.4 material, thanks
->
-> Sorry, I forgot to answer. I already applied it.
->
-> Shall I drop it from my branch ?
+On 30/03/2023 18:53, Dylan Van Assche wrote:
+> Enable the SLPI DSP on the SHIFTPHONES SHIFT6mq phone with a
+> Qualcomm SDM845 SoC.
+> 
+> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-If you can do that, then yes, please.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
