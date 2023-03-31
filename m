@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856AB6D2AFE
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 00:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF976D2B08
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 00:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbjCaWMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 18:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S232190AbjCaWMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 18:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233438AbjCaWM2 (ORCPT
+        with ESMTP id S233472AbjCaWMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 18:12:28 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C521EA3D
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 15:12:27 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id n125so29020747ybg.7
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 15:12:27 -0700 (PDT)
+        Fri, 31 Mar 2023 18:12:37 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D53A9751
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 15:12:30 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-54184571389so440896357b3.4
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 15:12:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680300747;
+        d=chromium.org; s=google; t=1680300749;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QQCW7qAlPoCanMOibyvaqreXBiUzfYEQ1+FdC/VaNrE=;
-        b=BLvvTR2NCPvzRNBZZoGIZ3hzWnaS8cQouhgQLf6NorLhzUp1z4yXGygAwFflmH42mE
-         Cje843BRgJtS+shb2nkKP8KLxs691CP0pPCanL4oyl5ODn3QD+8abYXozduHf0t+DZBV
-         w8ET/tVCap4TTvInAg926pMpeFGnmRPMCA2kk=
+        bh=qGgLIktZeZXjiXyd1NjOxdv56SzugjctpV1IlWL/kqY=;
+        b=jsZkDxZAH8hVeEcj22vVCDHy0eypNmaofIzVXqKT4oNK16dIuueo5Li10OB4OOFAsA
+         HQtTYEh/49LKeUGIF+hrf2kDw9nGrsweHozD0a2DRi1HIsFVmc/7KTYYLTFjrn/B1TJ0
+         zs4Ou9zfXnzBG3MFhkv9a9s7/s2zICcm3GPPQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680300747;
+        d=1e100.net; s=20210112; t=1680300749;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QQCW7qAlPoCanMOibyvaqreXBiUzfYEQ1+FdC/VaNrE=;
-        b=GBwRXKjNF9X3RbaQokCbbXKOxQNLwfVJRIejlxZHb5yVLDsNrCrNiXuVeoaE6i1py+
-         fWUBoZOoykz9CVJVrEvaC9JuUBXs9tGwL5AcSG3L55gySX1fiXVuFB6unNoXFJbv2npn
-         0bGRJgLG53ahWRKum/+CuxE/9z+TQAgPCuc7RFYzVmEYJ7LTKmgaN5u7rztKonlU+DzO
-         oO6oRpLaqWk1Wk8gOvI62BSCvsyZU5RO+bZwI/PtKbvTGEPF3Usn1/FVkCw50eqwruHk
-         5vT8P5WVCjUq+FeQ8KN6qLyha5w17K3fRa+BZ0XeKCF+pPmTlM9OyTPwRPEXSMPfB8ym
-         mAKA==
-X-Gm-Message-State: AAQBX9dWkgv52e/N2emYqfJ4cMJ1iUxjk5qUlNefTpqL3Cj85Sg/QJm2
-        XUhgKstwlKXVFPgvOpFWbsBsx7mdge+jo7b8Kew=
-X-Google-Smtp-Source: AKy350ZOc5RDf5J2kc0TLzAC0z0GmRU+8srPDqhPDFOpaoU5OD6YsojA+Uu6XHtS/F1APzWJLFI2UQ==
-X-Received: by 2002:a25:2392:0:b0:b73:ae6e:464 with SMTP id j140-20020a252392000000b00b73ae6e0464mr24928252ybj.21.1680300746791;
-        Fri, 31 Mar 2023 15:12:26 -0700 (PDT)
+        bh=qGgLIktZeZXjiXyd1NjOxdv56SzugjctpV1IlWL/kqY=;
+        b=K4RoseABiyu09Xjoj4+LYNIRJ4QHhOi3ap7ouYyYn7UXA3s/1RFuWNP7QMOzhXHDY5
+         NIHZbfqV45KZdiZA39e0xvTDirTlS7KW365WiXLadG9S0Gjijky9mrtTwJhksj56pBRz
+         bHyfk9KtgjUsBsmXtAz/vJ5Dj77oGAdbZ7cn5VCSwWRYy4glkd3Iv7rLu9RLGNSxmR5g
+         PnQCmYjmqmD4nc+OduWCTfekTXFwPTkUD9gimr/sxsC4Es95fmxghnKAxjo4yMLXF2wS
+         7ng39eNhZlWK1TTtswCIQFH2M7BSUu4LY+QAF1xFY0viocgejV/jbDTmnS6XQ1TAWqxI
+         4M7w==
+X-Gm-Message-State: AAQBX9dTYfQh3lHa9UzX7gys3Q/LRpEwecuv20th02IoKC7dLR2k9G0H
+        p3P0i50Vf/hIKJCBW81IDz7kOw==
+X-Google-Smtp-Source: AKy350ZRPOziXCpTkUj91VzY16avZZT5oQngZPsx82vYs3AG5qkg1I0iD/z2p8+baWuEgkqNCgzJgQ==
+X-Received: by 2002:a81:4f07:0:b0:541:8275:c520 with SMTP id d7-20020a814f07000000b005418275c520mr26739527ywb.15.1680300748922;
+        Fri, 31 Mar 2023 15:12:28 -0700 (PDT)
 Received: from localhost ([2620:0:1035:15:a8f6:869a:3ef5:e1d])
-        by smtp.gmail.com with UTF8SMTPSA id t4-20020a817804000000b00545a0818493sm799378ywc.35.2023.03.31.15.12.25
+        by smtp.gmail.com with UTF8SMTPSA id dt6-20020a05690c250600b00545a0818474sm797839ywb.4.2023.03.31.15.12.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 15:12:26 -0700 (PDT)
+        Fri, 31 Mar 2023 15:12:28 -0700 (PDT)
 From:   Mark Yacoub <markyacoub@chromium.org>
 X-Google-Original-From: Mark Yacoub <markyacoub@google.com>
 To:     Jani Nikula <jani.nikula@linux.intel.com>,
@@ -59,10 +59,11 @@ Cc:     seanpaul@chromium.org, suraj.kandpal@intel.com,
         dianders@chromium.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         Jani Nikula <jani.nikula@intel.com>,
+        Mark Yacoub <markyacoub@chromium.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v8 05/10] drm/i915/hdcp: Consolidate HDCP setup/state cache
-Date:   Fri, 31 Mar 2023 18:12:07 -0400
-Message-Id: <20230331221213.1691997-6-markyacoub@google.com>
+Subject: [PATCH v8 06/10] drm/i915/hdcp: Retain hdcp_capable return codes
+Date:   Fri, 31 Mar 2023 18:12:08 -0400
+Message-Id: <20230331221213.1691997-7-markyacoub@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 In-Reply-To: <20230331221213.1691997-1-markyacoub@google.com>
 References: <20230331221213.1691997-1-markyacoub@google.com>
@@ -80,13 +81,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sean Paul <seanpaul@chromium.org>
 
-Stick all of the setup for HDCP into a dedicated function. No functional
-change, but this will facilitate moving HDCP logic into helpers.
+The shim functions return error codes, but they are discarded in
+intel_hdcp.c. This patch plumbs the return codes through so they are
+properly handled.
 
 Acked-by: Jani Nikula <jani.nikula@intel.com>
 Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Change-Id: Ib358a503fa4520d072e477f708f1705b19f1c4fc
 Signed-off-by: Sean Paul <seanpaul@chromium.org>
+Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
 
 ---
 Changes in v2:
@@ -98,97 +100,179 @@ Changes in v4:
 Changes in v5:
 -None
 Changes in v6:
--None
+-Rebased
 Changes in v7:
-- None
+-None
 Changes in v8:
 -None
 
- drivers/gpu/drm/i915/display/intel_hdcp.c | 52 +++++++++++++++--------
- 1 file changed, 35 insertions(+), 17 deletions(-)
+ .../drm/i915/display/intel_display_debugfs.c  |  9 +++-
+ drivers/gpu/drm/i915/display/intel_hdcp.c     | 51 ++++++++++---------
+ drivers/gpu/drm/i915/display/intel_hdcp.h     |  4 +-
+ 3 files changed, 37 insertions(+), 27 deletions(-)
 
+diff --git a/drivers/gpu/drm/i915/display/intel_display_debugfs.c b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
+index 7bcd90384a46d..a14b86a07e545 100644
+--- a/drivers/gpu/drm/i915/display/intel_display_debugfs.c
++++ b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
+@@ -494,6 +494,7 @@ static void intel_panel_info(struct seq_file *m,
+ static void intel_hdcp_info(struct seq_file *m,
+ 			    struct intel_connector *intel_connector)
+ {
++	int ret;
+ 	bool hdcp_cap, hdcp2_cap;
+ 
+ 	if (!intel_connector->hdcp.shim) {
+@@ -501,8 +502,12 @@ static void intel_hdcp_info(struct seq_file *m,
+ 		goto out;
+ 	}
+ 
+-	hdcp_cap = intel_hdcp_capable(intel_connector);
+-	hdcp2_cap = intel_hdcp2_capable(intel_connector);
++	ret = intel_hdcp_capable(intel_connector, &hdcp_cap);
++	if (ret)
++		hdcp_cap = false;
++	ret = intel_hdcp2_capable(intel_connector, &hdcp2_cap);
++	if (ret)
++		hdcp2_cap = false;
+ 
+ 	if (hdcp_cap)
+ 		seq_puts(m, "HDCP1.4 ");
 diff --git a/drivers/gpu/drm/i915/display/intel_hdcp.c b/drivers/gpu/drm/i915/display/intel_hdcp.c
-index 396d2cef000aa..0a20bc41be55d 100644
+index 0a20bc41be55d..61a862ae1f286 100644
 --- a/drivers/gpu/drm/i915/display/intel_hdcp.c
 +++ b/drivers/gpu/drm/i915/display/intel_hdcp.c
-@@ -2190,6 +2190,37 @@ static enum mei_fw_tc intel_get_mei_fw_tc(enum transcoder cpu_transcoder)
- 	}
+@@ -177,50 +177,49 @@ int intel_hdcp_read_valid_bksv(struct intel_digital_port *dig_port,
  }
  
-+static int
-+_intel_hdcp_setup(struct intel_connector *connector,
-+		  const struct intel_crtc_state *pipe_config, u8 content_type)
-+{
-+	struct drm_i915_private *dev_priv = to_i915(connector->base.dev);
-+	struct intel_digital_port *dig_port = intel_attached_dig_port(connector);
-+	struct intel_hdcp *hdcp = &connector->hdcp;
-+	int ret = 0;
-+
-+	if (!connector->encoder) {
-+		drm_err(&dev_priv->drm, "[%s:%d] encoder is not initialized\n",
-+			connector->base.name, connector->base.base.id);
-+		return -ENODEV;
-+	}
-+
-+	hdcp->content_type = content_type;
-+
-+	if (intel_crtc_has_type(pipe_config, INTEL_OUTPUT_DP_MST)) {
-+		hdcp->cpu_transcoder = pipe_config->mst_master_transcoder;
-+		hdcp->stream_transcoder = pipe_config->cpu_transcoder;
-+	} else {
-+		hdcp->cpu_transcoder = pipe_config->cpu_transcoder;
-+		hdcp->stream_transcoder = INVALID_TRANSCODER;
-+	}
-+
-+	if (DISPLAY_VER(dev_priv) >= 12)
-+		dig_port->hdcp_port_data.fw_tc = intel_get_mei_fw_tc(hdcp->cpu_transcoder);
-+
-+	return ret;
-+}
-+
- static int initialize_hdcp_port_data(struct intel_connector *connector,
- 				     struct intel_digital_port *dig_port,
- 				     const struct intel_hdcp_shim *shim)
-@@ -2329,28 +2360,14 @@ int intel_hdcp_enable(struct intel_connector *connector,
- 	if (!hdcp->shim)
- 		return -ENOENT;
+ /* Is HDCP1.4 capable on Platform and Sink */
+-bool intel_hdcp_capable(struct intel_connector *connector)
++int intel_hdcp_capable(struct intel_connector *connector, bool *capable)
+ {
+ 	struct intel_digital_port *dig_port = intel_attached_dig_port(connector);
+ 	const struct intel_hdcp_shim *shim = connector->hdcp.shim;
+-	bool capable = false;
+ 	u8 bksv[5];
  
--	if (!connector->encoder) {
--		drm_err(&dev_priv->drm, "[%s:%d] encoder is not initialized\n",
--			connector->base.name, connector->base.base.id);
--		return -ENODEV;
--	}
--
- 	mutex_lock(&hdcp->mutex);
- 	mutex_lock(&dig_port->hdcp_mutex);
- 	drm_WARN_ON(&dev_priv->drm,
- 		    hdcp->value == DRM_MODE_CONTENT_PROTECTION_ENABLED);
--	hdcp->content_type = content_type;
--
--	if (intel_crtc_has_type(pipe_config, INTEL_OUTPUT_DP_MST)) {
--		hdcp->cpu_transcoder = pipe_config->mst_master_transcoder;
--		hdcp->stream_transcoder = pipe_config->cpu_transcoder;
++	*capable = false;
++
+ 	if (!shim)
+-		return capable;
++		return 0;
+ 
+-	if (shim->hdcp_capable) {
+-		shim->hdcp_capable(dig_port, &capable);
 -	} else {
--		hdcp->cpu_transcoder = pipe_config->cpu_transcoder;
--		hdcp->stream_transcoder = INVALID_TRANSCODER;
+-		if (!intel_hdcp_read_valid_bksv(dig_port, shim, bksv))
+-			capable = true;
 -	}
++	if (shim->hdcp_capable)
++		return shim->hdcp_capable(dig_port, capable);
++
++	if (!intel_hdcp_read_valid_bksv(dig_port, shim, bksv))
++		*capable = true;
  
--	if (DISPLAY_VER(dev_priv) >= 12)
--		dig_port->hdcp_port_data.fw_tc = intel_get_mei_fw_tc(hdcp->cpu_transcoder);
-+	ret = _intel_hdcp_setup(connector, pipe_config, content_type);
-+	if (ret)
-+		goto out;
+-	return capable;
++	return 0;
+ }
+ 
+ /* Is HDCP2.2 capable on Platform and Sink */
+-bool intel_hdcp2_capable(struct intel_connector *connector)
++int intel_hdcp2_capable(struct intel_connector *connector, bool *capable)
+ {
+ 	struct intel_digital_port *dig_port = intel_attached_dig_port(connector);
+ 	struct drm_i915_private *dev_priv = to_i915(connector->base.dev);
+ 	struct intel_hdcp *hdcp = &connector->hdcp;
+-	bool capable = false;
++
++	*capable = false;
+ 
+ 	/* I915 support for HDCP2.2 */
+ 	if (!hdcp->hdcp2_supported)
+-		return false;
++		return 0;
+ 
+ 	/* MEI interface is solid */
+ 	mutex_lock(&dev_priv->display.hdcp.comp_mutex);
+ 	if (!dev_priv->display.hdcp.comp_added ||  !dev_priv->display.hdcp.master) {
+ 		mutex_unlock(&dev_priv->display.hdcp.comp_mutex);
+-		return false;
++		return 0;
+ 	}
+ 	mutex_unlock(&dev_priv->display.hdcp.comp_mutex);
+ 
+ 	/* Sink's capability for HDCP2.2 */
+-	hdcp->shim->hdcp_2_2_capable(dig_port, &capable);
+-
+-	return capable;
++	return hdcp->shim->hdcp_2_2_capable(dig_port, capable);
+ }
+ 
+ static bool intel_hdcp_in_use(struct drm_i915_private *dev_priv,
+@@ -2355,6 +2354,7 @@ int intel_hdcp_enable(struct intel_connector *connector,
+ 	struct intel_digital_port *dig_port = intel_attached_dig_port(connector);
+ 	struct intel_hdcp *hdcp = &connector->hdcp;
+ 	unsigned long check_link_interval = DRM_HDCP_CHECK_PERIOD_MS;
++	bool capable;
+ 	int ret = -EINVAL;
+ 
+ 	if (!hdcp->shim)
+@@ -2373,21 +2373,27 @@ int intel_hdcp_enable(struct intel_connector *connector,
+ 	 * Considering that HDCP2.2 is more secure than HDCP1.4, If the setup
+ 	 * is capable of HDCP2.2, it is preferred to use HDCP2.2.
+ 	 */
+-	if (intel_hdcp2_capable(connector)) {
++	ret = intel_hdcp2_capable(connector, &capable);
++	if (capable) {
+ 		ret = _intel_hdcp2_enable(connector);
+-		if (!ret)
++		if (!ret) {
+ 			check_link_interval = DRM_HDCP2_CHECK_PERIOD_MS;
++			goto out;
++		}
+ 	}
  
  	/*
- 	 * Considering that HDCP2.2 is more secure than HDCP1.4, If the setup
-@@ -2378,6 +2395,7 @@ int intel_hdcp_enable(struct intel_connector *connector,
+ 	 * When HDCP2.2 fails and Content Type is not Type1, HDCP1.4 will
+ 	 * be attempted.
+ 	 */
+-	if (ret && intel_hdcp_capable(connector) &&
+-	    hdcp->content_type != DRM_MODE_HDCP_CONTENT_TYPE1) {
++	ret = intel_hdcp_capable(connector, &capable);
++	if (ret)
++		goto out;
++
++	if (capable && hdcp->content_type != DRM_MODE_HDCP_CONTENT_TYPE1)
+ 		ret = _intel_hdcp_enable(connector);
+-	}
+ 
++out:
+ 	if (!ret) {
+ 		schedule_delayed_work(&hdcp->check_work, check_link_interval);
+ 		intel_hdcp_update_value(connector,
+@@ -2395,7 +2401,6 @@ int intel_hdcp_enable(struct intel_connector *connector,
  					true);
  	}
  
-+out:
+-out:
  	mutex_unlock(&dig_port->hdcp_mutex);
  	mutex_unlock(&hdcp->mutex);
  	return ret;
+diff --git a/drivers/gpu/drm/i915/display/intel_hdcp.h b/drivers/gpu/drm/i915/display/intel_hdcp.h
+index 7c5fd84a7b65a..f06f6e5a2b1ad 100644
+--- a/drivers/gpu/drm/i915/display/intel_hdcp.h
++++ b/drivers/gpu/drm/i915/display/intel_hdcp.h
+@@ -33,8 +33,8 @@ void intel_hdcp_update_pipe(struct intel_atomic_state *state,
+ 			    const struct intel_crtc_state *crtc_state,
+ 			    const struct drm_connector_state *conn_state);
+ bool is_hdcp_supported(struct drm_i915_private *dev_priv, enum port port);
+-bool intel_hdcp_capable(struct intel_connector *connector);
+-bool intel_hdcp2_capable(struct intel_connector *connector);
++int intel_hdcp_capable(struct intel_connector *connector, bool *capable);
++int intel_hdcp2_capable(struct intel_connector *connector, bool *capable);
+ void intel_hdcp_component_init(struct drm_i915_private *dev_priv);
+ void intel_hdcp_component_fini(struct drm_i915_private *dev_priv);
+ void intel_hdcp_cleanup(struct intel_connector *connector);
 -- 
 2.40.0.348.gf938b09366-goog
 
