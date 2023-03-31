@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DF96D1CF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538416D1CFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbjCaJtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
+        id S231598AbjCaJvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbjCaJs4 (ORCPT
+        with ESMTP id S231865AbjCaJvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:48:56 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276A5EB61
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:47:52 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id br6so28102806lfb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:47:52 -0700 (PDT)
+        Fri, 31 Mar 2023 05:51:25 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC0722E87
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:49:42 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id y20so28179742lfj.2
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:49:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680256070;
+        d=linaro.org; s=google; t=1680256181;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8+FVjc7Vr5u63Aky+QFc4CNm5/6VJEJaY0PE/oQ5V5Y=;
-        b=ezQU1fwlthlnLkzOKfjJOlU8Vs5/eSnmr9Kp1S6uvV/QCN0zH9rfO/hE5raTnlebbz
-         b25EcCa/+TCWFoGRjP+iRjdvnpbdE9nd+x5F6YWd2m/CK4a5+LdFtF9MbsNpgKQUgKSD
-         2nW5MmV09cZ4wU5rIWYaP3uQJ/euxqQJ4ZTlsNxlPb7YVK6M0ip6KC6uApjtvLRrwAaH
-         twUNIusSdJ929h36uDlk6TNck720rAkxa/pPqy1a+ATahXn7qOiVG20zFoiOJCSUgnU3
-         twvqifPVC5JGcCdTqV1GjyLLQYer1PLjPvbgENYNu//RXfB5JnFrfzTwlBrbwN+dWYI0
-         x9hg==
+        bh=ZnWBUW3nUtZAoa8t2Uk9JsdIPMN187oJzfJjlXLN/3k=;
+        b=SO47t4BrSz+0Ya2L17CY5aaGJmyu12XYH/60nMWB4NqBn/p8/0zEv2hk8YZTzilXHk
+         K2leQyVkG4hZtep7CXRjOzCrcG0TVMTBy43uXEl2OyECJLd/oDYGMj6pdVf01oCBVVhM
+         7k56sT52l9DEqL/iALbWu/GA2aCPZIj7dXv5qP5jV/UIBG2pdSphgv5t3Q8n2gXtJRpT
+         3J4XmTcKq/flTsNoqwZHRLqMqXuRa+FLBI/ww3y7vhim775/t3V55vuY5AQS3vmGsct7
+         pwqlA4dbd6ly7aLwYPlNpr2fY3kwTj3aY8REs3sY4aR4A3zgCbC5dUW8NeA8jpMt16yM
+         tY/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680256070;
+        d=1e100.net; s=20210112; t=1680256181;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8+FVjc7Vr5u63Aky+QFc4CNm5/6VJEJaY0PE/oQ5V5Y=;
-        b=Zgy45QRbjniPsQXd0JNO/I3WsBmlVorIkX7pA5mxHlpa3zmrrKZRg+C/GjHKdwLPoL
-         kF/tjDgK6OtKMV0CnBrVv1HOQdEnT4Uwoz6o8sjZGKxEzprosCuCZvubfMmIkmwp0+oP
-         2pVCCXDdoeWzg6bnGm4mdXlYBxgPtVF7MUSzuC18yRNG4p6Md39RXQ+YPiBH++2PpHeQ
-         1tRoy0dC/heexgHvNfw565MZ3xhn05vRRX6hjJj/bzEJVTIEw5y7zVB8+DEeXWwYv1Eg
-         MvJw6Ci55MXvYxOzITmKJ/JwbatM9/uvNA3WQaKQwF0rMUeVo5S2Q1MuhfWhFDpNX3C4
-         E94g==
-X-Gm-Message-State: AAQBX9ez7Gsi+qunLj5mUt5Bf68i2F1cIhOcBJtBAiaCvpb3AQ8QXHvJ
-        3gYj6JePG8hr20G/wFE0Z/O7vg==
-X-Google-Smtp-Source: AKy350Yfe7vvDbdX5/m31I+n1dQH9YM3t6uIDyBc+99lpi+x0QXmahT38KoUxCALt0/tRmw5I5ybGw==
-X-Received: by 2002:a19:ad46:0:b0:4eb:1527:e29d with SMTP id s6-20020a19ad46000000b004eb1527e29dmr3764702lfd.52.1680256070447;
-        Fri, 31 Mar 2023 02:47:50 -0700 (PDT)
+        bh=ZnWBUW3nUtZAoa8t2Uk9JsdIPMN187oJzfJjlXLN/3k=;
+        b=dgsjzs3j+fGy38Ubls7gJNHrEfqAXhY1cLCrrImNqxTtRJ6NhM1CdFZ2qH2Ig1ab12
+         iDCvTWkCP0ro1mHFB5fdAfRXjFVGYOJp11/nodI1eE9rxn3w8aCNSnVxq4IkYimxSBpH
+         UZ7LhOTf4BRZYSyWLPRUHRFegcTCmEg4Dz3InfjN1o6pknJdDvUHqV9uhLMBw0nHfJ/p
+         ZGL2rW6B+28eyUOjT0oOiKPZBm53PLTW3MRN95KUi/Nmd3SPzbgYDrs1MfHsuhC70/OT
+         5WdzODweAuep5z+CsUQntnpFGR4lYwTimzBq3Jm6Hbssn5Dvj1R9aYkVfHFM9tbyMCea
+         FmUg==
+X-Gm-Message-State: AAQBX9ePPciWv1i8NI4gsFjLIk3I68EQZyefUaL82Td8+sGFeeUiCB6Q
+        YlNoauBLB7FtTkBVwhWdmJXGPA==
+X-Google-Smtp-Source: AKy350bRaWmaWYv9VciLbpP08Z1N4J3jY/hl0ylFbIG8kB+HmxvcndpVh+yrb2bBTuHo0y3AhQEBVg==
+X-Received: by 2002:ac2:4c95:0:b0:4d7:58c8:5f44 with SMTP id d21-20020ac24c95000000b004d758c85f44mr8869699lfl.12.1680256181030;
+        Fri, 31 Mar 2023 02:49:41 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m14-20020a19520e000000b004cb1de3f487sm310397lfb.104.2023.03.31.02.47.49
+        by smtp.gmail.com with ESMTPSA id g12-20020ac2538c000000b004d85895d7e0sm313021lfh.147.2023.03.31.02.49.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 02:47:50 -0700 (PDT)
-Message-ID: <08c18374-5d1a-7407-07d3-151bc5ce2511@linaro.org>
-Date:   Fri, 31 Mar 2023 11:47:49 +0200
+        Fri, 31 Mar 2023 02:49:40 -0700 (PDT)
+Message-ID: <d9043fa1-dff0-cb9a-afb8-8db9c3eeea2c@linaro.org>
+Date:   Fri, 31 Mar 2023 11:49:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: maxim,max98371: Convert to DT schema
+Subject: Re: [PATCH v4 1/2] dt-bindings: power: supply: bq256xx: Add
+ ti,no-thermistor property
 Content-Language: en-US
-To:     =?UTF-8?Q?Andr=c3=a9_Morishita?= <andremorishita@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+To:     Hermes Zhang <chenhuiz@axis.com>,
+        Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        anish kumar <yesanishhere@gmail.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     mairacanal@riseup.net, dri-devel@lists.freedesktop.org,
-        daniel.baluta@nxp.com
-References: <20230331020527.482991-1-andremorishita@gmail.com>
+        Andrew Davis <afd@ti.com>
+Cc:     linux-kernel@vger.kernel.org, kernel@axis.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230330065202.1349948-1-chenhuiz@axis.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230331020527.482991-1-andremorishita@gmail.com>
+In-Reply-To: <20230330065202.1349948-1-chenhuiz@axis.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -82,17 +80,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2023 04:05, André Morishita wrote:
-> Convert the Maxim Integrated MAX98371 audio codec bindings to DT schema.
+On 30/03/2023 08:52, Hermes Zhang wrote:
+> Add a new property ti,no-thermistor to indicate that no thermistor is
+> connected to the TS pin of the chip.
 > 
-> Signed-off-by: André Morishita <andremorishita@gmail.com>
+> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+> ---
 
-Ahh, and missing ASoC subject prefix.
+So you keep ignoring my comments? I wrote extensive comment at v3. You
+did not respond that anything is not clear about my request.
 
-(which you can get for example with `git log --oneline --
-DIRECTORY_OR_FILE` on the directory your patch is touching).
-
-
+If you keep ignoring it then it's a NAK from me.
 
 Best regards,
 Krzysztof
