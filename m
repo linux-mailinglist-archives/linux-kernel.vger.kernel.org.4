@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621F36D1C80
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39DB6D1C7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbjCaJed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
+        id S232184AbjCaJea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjCaJeI (ORCPT
+        with ESMTP id S231421AbjCaJeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 31 Mar 2023 05:34:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67F51EA23
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594FB1E71C
         for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:33:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2476B82D7C
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:33:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2EEC433D2;
-        Fri, 31 Mar 2023 09:33:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2488D62694
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:33:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 368FDC433EF;
+        Fri, 31 Mar 2023 09:33:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680255212;
-        bh=cG2nXhJrWKrDIwvw+gSEk9fxnRVDM8TBTZRetku5/tE=;
+        s=korg; t=1680255215;
+        bh=TCGFo3EUGQQgskyrs3hZqnkhFTHNXk7zL68YZuL2WDw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bRO3vsYsc5CcSBOAQcpEnD60o0CZkMqi9Rd+btz2vALjxImFFaafm8DFBdU1LLaKq
-         96+Yd7JusWfOT+5J8R8Ef1UcStaZ9g8E6CmIqce8hlToVkiW7+rTuQVjvByZsnfN5O
-         j4/yUtcX63dOLEod2oH91gnBsVtehFwTWlhf54I0=
+        b=MAkEA3ue7aasfHOd8CoMIvVFdDS897IUCmjhHXLlfUn0/BDrSNgvZqBh5f7qN7txl
+         Gbr1WCvr8KKdbyNyzBxDL+Efs/I55xDwWfmzCaeklH24MsNCK9NRE7vvVdK3L6EX0w
+         4FzGCq6EvJvucARKE1wQG/476GGWxIb9qzUjMlGQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH 3/7] driver core: class: remove subsystem private pointer from struct class
-Date:   Fri, 31 Mar 2023 11:33:14 +0200
-Message-Id: <20230331093318.82288-3-gregkh@linuxfoundation.org>
+Subject: [PATCH 4/7] driver core: clean up the logic to determine which /sys/dev/ directory to use
+Date:   Fri, 31 Mar 2023 11:33:15 +0200
+Message-Id: <20230331093318.82288-4-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230331093318.82288-1-gregkh@linuxfoundation.org>
 References: <20230331093318.82288-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1634; i=gregkh@linuxfoundation.org; h=from:subject; bh=cG2nXhJrWKrDIwvw+gSEk9fxnRVDM8TBTZRetku5/tE=; b=owGbwMvMwCRo6H6F97bub03G02pJDClqK+5myDzteeM6I6R0XoU8c92GquySFl4eoZr5aaqHV nH/kUvviGVhEGRikBVTZPmyjefo/opDil6Gtqdh5rAygQxh4OIUgIlYBjIs6FudsDxL9fZ90R/u XY/MA1Uinrf1MczPMnG/FZaWdaWcN5f1UrPQZZ+tXbUA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3467; i=gregkh@linuxfoundation.org; h=from:subject; bh=TCGFo3EUGQQgskyrs3hZqnkhFTHNXk7zL68YZuL2WDw=; b=owGbwMvMwCRo6H6F97bub03G02pJDClqK+7eLN65QvTa+6q/8fmJr/mFwyXmulf39P9+8/9n0 +dpG2U/d8SyMAgyMciKKbJ82cZzdH/FIUUvQ9vTMHNYmUCGMHBxCsBELrAyLGi8eFLuUNweyWeG p+wnW4n/0imeIsKwYOKjjN5/x87HM/XzfTGZprX96D6nrwA=
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
@@ -52,60 +52,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the last users of the subsystem private pointer in struct class
-are gone, the pointer can be removed, as no one is using it.  One step
-closer to allowing struct class to be const and moved into read-only
-memory.
+When a dev_t is set in a struct device, an symlink in /sys/dev/ is
+created for it either under /sys/dev/block/ or /sys/dev/char/ depending
+on the device type.
+
+The logic to determine this would trigger off of the class of the
+object, and the kobj_type set in that location.  But it turns out that
+this deep nesting isn't needed at all, as it's either a choice of block
+or "everything else" which is a char device.  So make the logic a lot
+more simple and obvious, and remove the incorrect comments in the code
+that tried to document something that was not happening at all (it is
+impossible to set class->dev_kobj to NULL as the class core prevented
+that from happening.
+
+This removes the only place that class->dev_kobj was being used, so
+after this, it can be removed entirely.
 
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/base/class.c         | 4 ----
- include/linux/device/class.h | 2 --
- 2 files changed, 6 deletions(-)
+ drivers/base/base.h     | 10 ++++++++++
+ drivers/base/core.c     | 22 ++++------------------
+ drivers/base/devtmpfs.c |  9 ---------
+ 3 files changed, 14 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/base/class.c b/drivers/base/class.c
-index a8a1bf976290..fcfb295363cc 100644
---- a/drivers/base/class.c
-+++ b/drivers/base/class.c
-@@ -97,8 +97,6 @@ static void class_release(struct kobject *kobj)
+diff --git a/drivers/base/base.h b/drivers/base/base.h
+index 6296164bb7f3..4660e1159ee0 100644
+--- a/drivers/base/base.h
++++ b/drivers/base/base.h
+@@ -209,6 +209,16 @@ int devtmpfs_init(void);
+ static inline int devtmpfs_init(void) { return 0; }
+ #endif
  
- 	pr_debug("class '%s': release.\n", class->name);
- 
--	class->p = NULL;
--
- 	if (class->class_release)
- 		class->class_release(class);
- 	else
-@@ -206,7 +204,6 @@ int class_register(struct class *cls)
- 	cp->subsys.kobj.kset = class_kset;
- 	cp->subsys.kobj.ktype = &class_ktype;
- 	cp->class = cls;
--	cls->p = cp;
- 
- 	error = kset_register(&cp->subsys);
- 	if (error)
-@@ -222,7 +219,6 @@ int class_register(struct class *cls)
- 
- err_out:
- 	kfree(cp);
--	cls->p = NULL;
- 	return error;
++#ifdef CONFIG_BLOCK
++extern struct class block_class;
++static inline bool is_blockdev(struct device *dev)
++{
++	return dev->class == &block_class;
++}
++#else
++static inline bool is_blockdev(struct device *dev) { return false; }
++#endif
++
+ /* Device links support */
+ int device_links_read_lock(void);
+ void device_links_read_unlock(int idx);
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index e3bc34fcf779..dbc2ba6dfffc 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3430,27 +3430,13 @@ int dev_set_name(struct device *dev, const char *fmt, ...)
  }
- EXPORT_SYMBOL_GPL(class_register);
-diff --git a/include/linux/device/class.h b/include/linux/device/class.h
-index 9cb5db0588c8..f7aad64e256a 100644
---- a/include/linux/device/class.h
-+++ b/include/linux/device/class.h
-@@ -71,8 +71,6 @@ struct class {
- 	void (*get_ownership)(const struct device *dev, kuid_t *uid, kgid_t *gid);
+ EXPORT_SYMBOL_GPL(dev_set_name);
  
- 	const struct dev_pm_ops *pm;
+-/**
+- * device_to_dev_kobj - select a /sys/dev/ directory for the device
+- * @dev: device
+- *
+- * By default we select char/ for new entries.  Setting class->dev_obj
+- * to NULL prevents an entry from being created.  class->dev_kobj must
+- * be set (or cleared) before any devices are registered to the class
+- * otherwise device_create_sys_dev_entry() and
+- * device_remove_sys_dev_entry() will disagree about the presence of
+- * the link.
+- */
++/* select a /sys/dev/ directory for the device */
+ static struct kobject *device_to_dev_kobj(struct device *dev)
+ {
+-	struct kobject *kobj;
 -
--	struct subsys_private *p;
+-	if (dev->class)
+-		kobj = dev->class->dev_kobj;
++	if (is_blockdev(dev))
++		return sysfs_dev_block_kobj;
+ 	else
+-		kobj = sysfs_dev_char_kobj;
+-
+-	return kobj;
++		return sysfs_dev_char_kobj;
+ }
+ 
+ static int device_create_sys_dev_entry(struct device *dev)
+diff --git a/drivers/base/devtmpfs.c b/drivers/base/devtmpfs.c
+index ae72d4ba8547..b848764ef018 100644
+--- a/drivers/base/devtmpfs.c
++++ b/drivers/base/devtmpfs.c
+@@ -94,15 +94,6 @@ static struct file_system_type dev_fs_type = {
+ 	.mount = public_dev_mount,
  };
  
- struct class_dev_iter {
+-#ifdef CONFIG_BLOCK
+-static inline int is_blockdev(struct device *dev)
+-{
+-	return dev->class == &block_class;
+-}
+-#else
+-static inline int is_blockdev(struct device *dev) { return 0; }
+-#endif
+-
+ static int devtmpfs_submit_req(struct req *req, const char *tmp)
+ {
+ 	init_completion(&req->done);
 -- 
 2.40.0
 
