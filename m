@@ -2,104 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC356D2351
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067096D2353
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232767AbjCaO7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S233087AbjCaO7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232667AbjCaO7F (ORCPT
+        with ESMTP id S232912AbjCaO7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:59:05 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DAECA03
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:59:02 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso15536502wms.1
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:59:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680274741;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=vnlFqaagyiGC/yxykb+LPtjAztaRZkdyq0QplfwjoFU=;
-        b=nF3sjGDQMAa+9jHsKfcp2XyDYlHpo2KuexE8K8B4AEt9/p0IObEDWv2CgD5R/nHOZs
-         LKrnCyin/QS2zaGGOJyMPMc9pDYbfs+wygN0GlXYN79Pk627UpehAwFW+43cDdVYZ3h5
-         EKqyUv3wk56Nyvg2r5e0GliVdi+B8N8eRMEu7xCrjLBQFnSstXL2oVvoMkrtv/dveeiO
-         F37ewmOOr6JQO4KPhRRQmgyaI7I1mqSfqTqfRB3WByalYZ5HZ8FovnO1iw6OQz1VY4oN
-         KGrF+QS+fO8qgq6jFJlJv0L9G9eYlEl0jj7QZM7zsAaCtqPH4+v4I5ncnoa+EWF86CHG
-         DKmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680274741;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vnlFqaagyiGC/yxykb+LPtjAztaRZkdyq0QplfwjoFU=;
-        b=azGZBXFT2tJvgq+sfOoBO4hlmmOeAm8vqOPbRPcpKlrwAMjjah7knRpf8ezvs+JjBT
-         obenNxyBZ+gaSLLllu8J0ID9SB3BtGyXFAjx6wZDvkmeQzIW0Bn+KNH20CqBckKVPS58
-         Z0mWIao+we67VHnR6bNCUGSGeND992rtCJdYcZ15tg5YSLaGF72q+TmndjWEQu1Kjclr
-         0tbT49+BRL7aZVYF1gFQBWOVaFyU8HKB92mOB1hEabwPP6I2m+ibG6W5QlodnCZaJdOd
-         eU12MfVih6AIC3tzgf+Dcq1dPI9d7KA6QW60r2XthxbeZAag/HPXnk7HHU/otZ7xNbN1
-         1nVA==
-X-Gm-Message-State: AO0yUKUakorZbtuS8TDB5eX4YQp97bPuDl0eKLp0csVJJmcUVavNh91x
-        hh1q+1yZejswHHBDEKiWMWfmag==
-X-Google-Smtp-Source: AK7set/StNy++vH3rTk//CEKOWCplvO4ynmJaY373xQJNztEOfuyKCvvX4OAZ8I7XwRimDvrMK7WOA==
-X-Received: by 2002:a7b:c8c3:0:b0:3ed:711c:e8fe with SMTP id f3-20020a7bc8c3000000b003ed711ce8femr23315255wml.2.1680274741435;
-        Fri, 31 Mar 2023 07:59:01 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0? ([2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0])
-        by smtp.gmail.com with ESMTPSA id iv19-20020a05600c549300b003ef69873cf1sm10363016wmb.40.2023.03.31.07.58.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 07:59:01 -0700 (PDT)
-Message-ID: <22bac350-0a2f-48df-c8b3-6d915a830caa@linaro.org>
-Date:   Fri, 31 Mar 2023 16:58:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH RFC 00/20] ARM: oxnas support removal
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
+        Fri, 31 Mar 2023 10:59:11 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52981A24B;
+        Fri, 31 Mar 2023 07:59:07 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0393DFF80E;
+        Fri, 31 Mar 2023 14:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1680274746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v716jqJtSMTkwli2R/cxVa2KhfQunAioMV9kYubIKks=;
+        b=cBv/p9pJf8AgZMkcwkOnLL1o1MnBsWFtMeO2xvgtcczn74NxS5OXLtJJad4wtmZbgydAWZ
+        saeDkVAKb+UTF3BPFMkfql9IBWgtnMhko9ebXLofpc6QktK5F7atY1OxxxAtYA3fW1PZTa
+        ZpoeVkyl+bacg47gZGjzrXD8qU7U3KrEpZjvrq4T2lAac2b4COgtRmUENhoHA0NECzw2St
+        jZpSjGjiZc8P6H6Ql992C+OKkP22RLi8plz4vkozutvHNhkgl+1zBEAi0hrFTR2bb1SsNE
+        oiD6ZEIu48E9ESKzdyetV1YoVNwHjan8EbuT5N42KSQn4NJb3yqzQSeqk3zz1A==
+Date:   Fri, 31 Mar 2023 16:59:04 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sebastian Reichel <sre@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-mtd@lists.infradead.org, Netdev <netdev@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pm@vger.kernel.org
-References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
- <df218abb-fa83-49d2-baf5-557b83b33670@app.fastmail.com>
- <ZCblCsKMHYDZI-H9@makrotopia.org>
-Organization: Linaro Developer Services
-In-Reply-To: <ZCblCsKMHYDZI-H9@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v5 2/5] mfd: Add support for the Lantiq PEF2256 framer
+Message-ID: <20230331165904.4e7f46a1@bootlin.com>
+In-Reply-To: <a642e653-e3e2-c3d2-68cb-1efc92be05bb@linaro.org>
+References: <20230328092645.634375-1-herve.codina@bootlin.com>
+        <20230328092645.634375-3-herve.codina@bootlin.com>
+        <20230330160510.GB489249@google.com>
+        <20230331094208.41ab4420@bootlin.com>
+        <6d39e9c3-fb6a-4b2a-9889-8fe8d86716d5@linaro.org>
+        <20230331141104.42445da9@bootlin.com>
+        <a642e653-e3e2-c3d2-68cb-1efc92be05bb@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -108,78 +67,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Fri, 31 Mar 2023 15:44:19 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-On 31/03/2023 15:50, Daniel Golle wrote:
-> On Fri, Mar 31, 2023 at 03:42:15PM +0200, Arnd Bergmann wrote:
->> On Fri, Mar 31, 2023, at 10:34, Neil Armstrong wrote:
->>> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
->>> associated with a clear lack of maintainance, development and migration to
->>> dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
->>>
->>> In addition, the OX810 hasn't been booted for years and isn't even present
->>> in an ARM config file.
->>>
->>> For the OX820, lack of USB and SATA support makes the platform not usable
->>> in the current Linux support and relies on off-tree drivers hacked from the
->>> vendor (defunct for years) sources.
->>>
->>> The last users are in the OpenWRT distribution, and today's removal means
->>> support will still be in stable 6.1 LTS kernel until end of 2026.
->>>
->>> If someone wants to take over the development even with lack of SMP, I'll
->>> be happy to hand off maintainance.
->>>
->>> The plan is to apply the first 4 patches first, then the drivers
->>> followed by bindings. Finally the MAINTAINANCE entry can be removed.
->>>
->>> I'm not sure about the process of bindings removal, but perhaps the bindings
->>> should be marked as deprecated first then removed later on ?
->>>
->>> It has been a fun time adding support for this architecture, but it's time
->>> to get over!
->>>
->>> Patch 2 obviously depends on [1].
->>>
->>> [1] https://lore.kernel.org/all/20230327121317.4081816-1-arnd@kernel.org/
->>>
->>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->>
->> Thanks a lot for going through this and preparing the patches!
->>
->> I've discussed this with Daniel Golle on the OpenWRT channel as well,
->> and he indicated that the timing is probably fine here, as there are
->> already close to zero downloads for oxnas builds, and the 6.1 kernel
->> will only be part of a release in 2024.
->>
->> For the dependency on my other patch, I'd suggest you instead
->> remove the SMP files here as well, which means we can merge either
->> part independently based on just 6.3-rc. I can do that change
->> myself by picking up patches 1-4 of your RFC series, or maybe you
->> can send resend them after rebase to 6.3-rc1.
->>
->> For the driver removals, I think we can merge those at the same
->> time as the platform removal since there are no shared header files
->> that would cause build time regressions and there are no runtime
->> regressions other than breaking the platform itself. Maybe
->> just send the driver removal separately to the subsystem
->> maintainers with my
->>
->> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> On 31/03/2023 14:11, Herve Codina wrote:
+> > Hi Krzysztof, Lee
+> > 
+> > On Fri, 31 Mar 2023 11:13:30 +0200
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >   
+> >> On 31/03/2023 09:42, Herve Codina wrote:  
+> >>> Hi Lee,
+> >>>
+> >>> On Thu, 30 Mar 2023 17:05:10 +0100
+> >>> Lee Jones <lee@kernel.org> wrote:
+> >>>     
+> >>>> On Tue, 28 Mar 2023, Herve Codina wrote:
+> >>>>    
+> >>>>> The Lantiq PEF2256 is a framer and line interface component designed to
+> >>>>> fulfill all required interfacing between an analog E1/T1/J1 line and the
+> >>>>> digital PCM system highway/H.100 bus.      
+> >>>>
+> >>>> My goodness!
+> >>>>
+> >>>> It's been a long time since I've seen anything quite like this.    
+> >>>
+> >>> Yes, old things but working on recent kernel.
+> >>>     
+> >>>>
+> >>>> My suggestion to you:
+> >>>>
+> >>>> * Split this up into components that fit functional subsystems    
+> >>>
+> >>> It is done. The audio part is present in ASoC subsystem (path 5 in this
+> >>> series). pinctrl function is implemented in this driver and, as I don't
+> >>> want to share registers, I would prefer to keep this function inside this
+> >>> driver.    
+> >>
+> >> The amount of defines and huge functions like pef2256_setup_e1()
+> >> contradict it.
+> >>
+> >> Even the pef2256_setup_e1() really does not follow Linux coding style -
+> >> you know the size requirement, right?  
+> > 
+> > I know that pef2256_setup_e1() is quite big and I will look at a way
+> > to split it in a consistent way.
+> >   
+> >>
+> >> pef2256_get_groups_count, struct pinmux_ops and others - this is
+> >> pinctrl, not MFD! They cannot be in MFD driver.  
+> > 
+> > Maybe the issue is that MFD was not a good choice.
+> > The "function" provided are not independent of each other.
+> > The "main" driver (pef2256.c) needs to do the setup and handle the interrupt.  
 > 
-> Sounds reasonable, so also
+> Just like all PMICs...
 > 
-> Acked-by: Daniel Golle <daniel@makrotopia.org>
+> > The "function" provided are some glues in order to be used in some sub-systems
+> > such as audio. Indeed, ASoC needs a codec DAI to be connected to a CPU DAI.  
 > 
-> (but I am a bit sad about it anyway. without SMP it doesn't make sense
-> to keep ox820 though)
+> Just like in all other cases...
+> 
+> > These "functions" need to be started (ie probe()) after the pef2256 setup was
+> > done. So a start (probe()) order relationship is needed.  
+> 
+> Just like in all other cases, so I really do not see here anything special.
+> 
+> > 
+> > If a MFD driver needs independent children to handle independent functions,
+> > the pef2256 does not fit well as a MFD driver.  
+> 
+> Why? So far everything is exactly the same.
+> 
+> > 
+> > I switched from misc to MFD just to handle child DT nodes instead of having
+> > phandles. Using child DT nodes instead of phandles is really a good thing and
+> > need to be kept.  
+> 
+> Your DT bindings and nodes are not related to driver design. It does not
+> matter for Devicetree if you put it to misc or MFD.
+> 
+> It does not matter for driver whether you call it in Devicetree foo or bar.
+> 
+> > The switch to MFD was probably not the best thing to do.  
+> 
+> Maybe, but your existing arguments are not really related...
+> 
+> > 
+> > What do you think if I switched back the pef2256 "main" driver (pef2256.c) to
+> > misc ?  
+> 
+> Why? What would it solve? You want to stuff pinctrl driver to misc, to
+> avoid Lee's review? No. Pinctrl goes to pinctrl. Not to misc. Not to MFD.
 
-Same !
+Just to be clear on that point, I do not want to avoid any reviews and Lee's
+reviews are fully welcome.
 
-I would have loved to see the full support mainline, but the platform is
-old and apart you nobody were interested in working on this.
+I just misunderstood. I thought the issue was that the pef2256 MFD driver has an
+internal setup() and that the 'function' provided were not independent (they share
+the pef2256 API).
+My first feeling was that it was expected a kind of 'empty' driver for the pef2256
+MFD driver. The pef2256 driver cannot be empty. That's why I talk about misc.
 
-Thanks a lot for you work keeping Oxnas support alive!
-Neil
+Related to pinctrl, the probe() orders need to be controlled but that would not be
+an issue if I move the pinctrl part to pinctrl. I would like also to avoid
+exporting all registers. Only the pinctrl part needs to access registers and
+it needs to access a few of them.
 
+Is there a way to restrict the registers available from a child ?
 
+Best regards,
+Hervé
+
+> 
+> > 
+> >   
+> >>  
+> >>>
+> >>> Also, I sent a RFC related to HDLC and PHY. In this RFC, the pef2256 is
+> >>> considered as a PHY and handled in the PHY subsystem.
+> >>>   https://lore.kernel.org/linux-kernel/20230323103154.264546-1-herve.codina@bootlin.com/
+> >>>     
+> >>>> * Run checkpatch.pl    
+> >>>
+> >>> I did.    
+> >>
+> >> There are tons of weird indentation,e.g.:
+> >> +#define     PEF2256_2X_PC_XPC_XLT	(0x8 << 0)
+> >>         ^^^^ there is only one space after #define  
+> > 
+> > I ran checkpatch.pl, not checkpatch.pl --strict.
+> > 
+> > The spaces related the #define can be seen on many other drivers.
+> > 
+> > #define FOO_REG_BAR	0x10
+> > #define   FOO_REG_BAR_BIT0	BIT(0)
+> > #define   FOO_REG_BAR_BIT4	BIT(4)
+> > 
+> > The first line is the register offset and the other lines (indented) are
+> > the bits description related to this register.  
+> 
+> I don't think we have such convention in general and argument that some
+> drivers do it in some subsystems is never a good argument. If they also
+> misspell things or use Hungarian notation, shall we do the same?
+> 
+> Although maybe it is fine for Lee. I find it unreadable.
+> 
+> git grep '#define  \+[A-Z]' | wc -l
+> 73889
+> git grep '#define [A-Z]' | wc -l
+> 3996054
+> 
+> In MFD there is only one driver doing this.
+> 
+> Most of other cases are net and gpu.
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
