@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977F16D28F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 21:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55EF16D2902
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 21:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbjCaT7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 15:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
+        id S232855AbjCaT7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 15:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjCaT7e (ORCPT
+        with ESMTP id S231637AbjCaT7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 15:59:34 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EF1114
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:59:32 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id t4so18343728wra.7
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:59:32 -0700 (PDT)
+        Fri, 31 Mar 2023 15:59:35 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA13B458
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:59:33 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id y14so23596006wrq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:59:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680292771;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aKMqWuHq1atNt6umWF5yeL6AWpUb/E2kDARevmv/t7E=;
-        b=R1yGbDzZkXSfNAmHOrec1xK+vmJwYF1I9Tmf/86J//hF4fFCeObYLB/wng4+xQouEu
-         IRHckzWQYRtWBSOU99bxb3/VfvIaF0Tp0i8TCxAZtDqKgW27pDehQGLXzHUeUT+3Xo9j
-         1JNeCmWulw+B2RmWzURTrsKrqvE84OJxJ+WiVJAhfBw6IYh2cNeDEpF+B91M/JIJXvT1
-         Bnc2FU0rLYrCRcM1iwhSjaAdIXBXGayRbyBnQd0Vz0w4I80SRNkIbgDRHzcd5Rj2XLSh
-         MwC2Q0SkR9bstLKfuXsue7hxTLABhSZA2MuwSZVlL6L93HdYBkIwJ9QkMOKQW9UMB/yv
-         lY8g==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680292772;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OZ4tY9ZYWjx+L/GieKh5Pi36vPyy7QPV1ldHuKzb5+s=;
+        b=L3lmJ5z640wRzUBye8uUTVuzCzoYv4SJvO8Se0nlyyvbcnVcRskZ0cG5JeZbxW+GCH
+         5fdlaKsLiDHgPWuMqm8GefeOXEHENJZanI4inA/wabzA/ncA10bbj5i343n1lbUxwDNC
+         eMfKlH8HXgU5L3erhaIpY4mXcLd4KttOuvoGOyqbIUWDDCx6k4EwHf14rrS7MvBuUYOw
+         z2nln4YQ69ilNrUY4VFW67QyeaYzK5P8TE8h0eRA/gknWVC4jR33obiB83UF2+1v5hin
+         XXGj37mnQyb1yin+aS0atsQ15cDlQ8HvjUT0QwluUvIpdo7RT80R9HlIZoKtQZWJAk05
+         qEew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680292771;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aKMqWuHq1atNt6umWF5yeL6AWpUb/E2kDARevmv/t7E=;
-        b=LUAAo8hi27ZZS9B34IKQ4xrcBvrRW+8YBe7SDI3HCBL8d3xtjSavmTLfW0V99HYCgt
-         8JRL//gi57/zpLHADKVGhGdLuNYg3uUf/GCfSFtKgzdM7R6gaBAK81Wj7PSj6kCPUPe0
-         S5pZsEG/vXkqWpErKFO46EIFR5cHfZpFrrt5Tv8f5Rrl7ZuGwNgvOiCT4XyLobfunkuW
-         tHlt1xJ8MPRaOwvTQs0GtHXqEeagPkjQcQF/0n6PSoBoKF867PdwBoOgltwj+uRfNyzU
-         /N23/ATOiOIgdRhl5B9l92/gOeY7/EoAqUySGigw5hFozjQzwz/2mFwaESgOBFtwJD/F
-         D0DA==
-X-Gm-Message-State: AAQBX9eshJUXiPORHRntKX3jqiNqS6xFu1XIr7AJXHTUUU7RdvuR5qN8
-        ukVhkvcM14akaGUMtECPL2eA8Ny//JKg/EnCU24=
-X-Google-Smtp-Source: AKy350a1XhX1OiVE2JDxPVA6mRqh+3WGPa6RQJBfgkXi+23ET2/y3h1dJrDNAhcrcMzEY25bJ5KkdA==
-X-Received: by 2002:a5d:4e47:0:b0:2e4:cbfe:da52 with SMTP id r7-20020a5d4e47000000b002e4cbfeda52mr5117629wrt.3.1680292771045;
-        Fri, 31 Mar 2023 12:59:31 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680292772;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OZ4tY9ZYWjx+L/GieKh5Pi36vPyy7QPV1ldHuKzb5+s=;
+        b=GKpysZx2O/II8ZYXt/dpOdlNg652/qu+Ov5cVS65Zv3A/YilttYKsEXqgnoXW4u2Bw
+         IMuBycXi89nlD0x81KjWUaZrWpC6L7apdHOddDaLoDPU4J+q+EHcR2cR2Oa9TLFjHw5z
+         8XE63e5U/oZZCts2WYzzeTzb5DJqSArTxzcpT+JHt2y8YMU7I+HpnxKLuH29ehKfOtfU
+         G1pOemIrc/evaA10NWrO/EomHeoTu1e3xtLXQA94kFVChqzI34ywWGFkh7QvqqtmqBW3
+         8HV1YOB8tB6gIiDonPtrgCC1IFi2twLKdCUfUy+Qiw3z+J78e0LWdbPW50Ekzb1mznZW
+         a49A==
+X-Gm-Message-State: AAQBX9fuGRIdXaD4ivYWmtGHdTty8SslV9UQLiBX+sho50jyO2eG2iGT
+        mMLeHpzSFW22l/3S8/akjQTktw==
+X-Google-Smtp-Source: AKy350YvQk00Iyf+Kahd6DxXZ7ieQXGXto0RYjH8G4uQwsyXBRPgD3ySLFWoWor+u6jzuP7Tjwr/HQ==
+X-Received: by 2002:adf:eb0b:0:b0:2d8:4e4:8cf1 with SMTP id s11-20020adfeb0b000000b002d804e48cf1mr19296816wrn.21.1680292772089;
+        Fri, 31 Mar 2023 12:59:32 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:1dc:d1f:e44f:2a1d])
-        by smtp.gmail.com with ESMTPSA id c13-20020a5d4ccd000000b002cff0e213ddsm2990286wrt.14.2023.03.31.12.59.30
+        by smtp.gmail.com with ESMTPSA id c13-20020a5d4ccd000000b002cff0e213ddsm2990286wrt.14.2023.03.31.12.59.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 12:59:30 -0700 (PDT)
+        Fri, 31 Mar 2023 12:59:31 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -65,10 +66,12 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-scsi@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 0/5] arm64: qcom: sa8775p: add support for UFS
-Date:   Fri, 31 Mar 2023 21:59:15 +0200
-Message-Id: <20230331195920.582620-1-brgl@bgdev.pl>
+Subject: [PATCH 1/5] dt-bindings: ufs: qcom: add compatible for sa8775p
+Date:   Fri, 31 Mar 2023 21:59:16 +0200
+Message-Id: <20230331195920.582620-2-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230331195920.582620-1-brgl@bgdev.pl>
+References: <20230331195920.582620-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -82,24 +85,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Update relevant DT bindings, add new config to the driver and add UFS
-and PHY nodes to the .dtsi and enable them in the board .dts for
-sa8775p-ride.
+Add the compatible string for the UFS on sa8775p platforms.
 
-Bartosz Golaszewski (5):
-  dt-bindings: ufs: qcom: add compatible for sa8775p
-  dt-bindings: phy: qmp-ufs: describe the UFS PHY for sa8775p
-  phy: qualcomm: phy-qcom-qmp-ufs: add definitions for sa8775p
-  arm64: dts: qcom: sa8775p: add UFS nodes
-  arm64: dts: qcom: sa8775p-ride: enable UFS
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
- .../phy/qcom,sc8280xp-qmp-ufs-phy.yaml        | 34 ++++++++++--
- .../devicetree/bindings/ufs/qcom,ufs.yaml     |  2 +
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts     | 19 +++++++
- arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 54 +++++++++++++++++++
- drivers/phy/qualcomm/phy-qcom-qmp-ufs.c       | 38 +++++++++++++
- 5 files changed, 143 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+index c5a06c048389..4abd3c0950e2 100644
+--- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
++++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+@@ -27,6 +27,7 @@ properties:
+           - qcom,msm8996-ufshc
+           - qcom,msm8998-ufshc
+           - qcom,sc8280xp-ufshc
++          - qcom,sa8775p-ufshc
+           - qcom,sdm845-ufshc
+           - qcom,sm6350-ufshc
+           - qcom,sm8150-ufshc
+@@ -106,6 +107,7 @@ allOf:
+             enum:
+               - qcom,msm8998-ufshc
+               - qcom,sc8280xp-ufshc
++              - qcom,sa8775p-ufshc
+               - qcom,sm8250-ufshc
+               - qcom,sm8350-ufshc
+               - qcom,sm8450-ufshc
 -- 
 2.37.2
 
