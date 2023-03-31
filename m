@@ -2,88 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D760B6D29A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258646D29AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbjCaUv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
+        id S231701AbjCaUwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232917AbjCaUvX (ORCPT
+        with ESMTP id S229523AbjCaUww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:51:23 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A6322236
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:51:20 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id c18so22414020ple.11
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:51:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1680295880;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JRtzt5673pTBKCFQHX4UYCBd1m8JBF6Zbrrqfs4di9A=;
-        b=sXAFDda3zkcwpKdTpeSLhqOkOCproJyUjAxYnkIZqqtYJQR0zPt3ML4D1hMXQBwS9g
-         a0nmSOSxm4Bseka1sDryDTasxJXpwTjTq3427t6UMW+Eqr28vGQXGdBd8sddp3cvjpDt
-         MUGDPWdU3UQ2dyd/yPEaofbIJI2VdqxJPnEKIxShKwvUqsEpGLWL2FoYOGyJ3/JVXC6t
-         TMjPJjW9gs7HPq0qrBIqlXCZ9oamDENbToQItl4kQnuEQVrZin0EKEd03vQuXgbLd4bm
-         xsCvzf1fGNGnnrkyiSG+DDovI5RqIqi4/QOj3voi0jP5UvS9ZDRl0JXrNnFYX09llJ6+
-         wQ4w==
+        Fri, 31 Mar 2023 16:52:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569A6A5FA
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680295923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TExCraw6m8qeEuU/cKmvx3BPZJEqqAr20GEIk47fq4k=;
+        b=Qr2871cXvrI53psf/bjoYgpVWzgUo/y8iNJAY/Ih7ZbmPiMYoguBUx9LFbMfUkSpvWc/qH
+        Igi3p+h7hkJpRlRdX1dw5Y/fg0297JOaMu/vXVK7UW8ugY/Vfwk8WR+GWEHCenHlFuZcC2
+        g/3r2Ioml2O2V3/uJrGwbhEOGp8xh34=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-53-WGdmWIGsPuad2B-Gu1X8BA-1; Fri, 31 Mar 2023 16:52:02 -0400
+X-MC-Unique: WGdmWIGsPuad2B-Gu1X8BA-1
+Received: by mail-qv1-f71.google.com with SMTP id l15-20020a0cd6cf000000b005df451a51ddso6183483qvi.9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:52:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680295880;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JRtzt5673pTBKCFQHX4UYCBd1m8JBF6Zbrrqfs4di9A=;
-        b=Q9dYEQqmMBF4VzSawfVWK+3CFo2LxD7zXWlen50oERagPaPcS2wz/3augN3rOJRqpw
-         v+MZiwF8vvI1geQ180Z89fYQ/GvT21kxLnTRvpp4Jv4Jw80vJSdXS8VXdY/R3fLRmFNz
-         2EGW3mi3ShPuncc27vD9kU/QqT3Xwbleln29N+cX+qsamm0fvvWQ1ZrEowUTnvZx3sKx
-         MmAPoQxQqhgTu/1XoNgN7jOUAxq5zowxrnByaBnplMcsFUjAQh+ftzed8bHDdqSNO3nu
-         pQrbtYyFfq31rFDw6BAvOBFD9X7bsi4qsHPnXewOayxp1WX3gSWP3ItVelI6Kx0ziHZg
-         TRmw==
-X-Gm-Message-State: AAQBX9fe4yfN1A4/YMYuYHP5WVEVNlP9K1+d1FjICNZkK4973qn/7zyb
-        gwPresJvf3lNgrCI4kK/Rp9v/w==
-X-Google-Smtp-Source: AKy350Zd1SJBPcPtRskYI01NIeYVd9XIyz1RMBNV6xb7+9mZreUhDv4A1BbFCs/GjenmQlsecveCdQ==
-X-Received: by 2002:a17:902:db10:b0:1a1:f5dd:2dce with SMTP id m16-20020a170902db1000b001a1f5dd2dcemr31879426plx.6.1680295880383;
-        Fri, 31 Mar 2023 13:51:20 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-91-157.pa.nsw.optusnet.com.au. [49.181.91.157])
-        by smtp.gmail.com with ESMTPSA id t16-20020a170902b21000b0019a997bca5csm1967102plr.121.2023.03.31.13.51.19
+        d=1e100.net; s=20210112; t=1680295921;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TExCraw6m8qeEuU/cKmvx3BPZJEqqAr20GEIk47fq4k=;
+        b=TwlJCuJYYQNS3ZMkfjDD5WkmXI9xsNeymddydBJRNSfPLhsHO01dWfKXl3MB/m/v9+
+         Y8M8MbFmebZomZ4b/tl39fw8+ekJxuFtGcSqxyPLGaOpGuY6j7Ap4Bsphc4fLsguvh1N
+         Ys8zN2SmQe7hltsNaBZbCVZ9NC/2M30WnXhLwOEunVnC45zy5yYL312uSx9gZP8EXgkM
+         rE24p6iiQiu8ZTKh8abCF6NwCr5lDajD9Q81ZQFfuZNKo/PEp9LEqGP0IrBXVy2K4Acy
+         vVH354mtHWNH/tHEVdawkJukdJWgdj4UUIfb2hGcnivPWYtU0gcljbvyC+uvH3/N0pg+
+         emPw==
+X-Gm-Message-State: AAQBX9fT7z+Au+6lJWb6bwmz179Yo2XOP6gTdx0Rr8Ul/+0QotHfUn9d
+        anZTMTZSXEI01gI2v5lkHQWW2JFAd0VYjoXsy6vUJh0hxSExKFCUwhvvMIhj9t6EFJLHr/vtsdh
+        1cy6xfUtMD7VwdhAsC6BrlgHYQd0fqNdE
+X-Received: by 2002:ad4:5de2:0:b0:5b5:a816:6b27 with SMTP id jn2-20020ad45de2000000b005b5a8166b27mr46860468qvb.8.1680295921459;
+        Fri, 31 Mar 2023 13:52:01 -0700 (PDT)
+X-Google-Smtp-Source: AKy350a4BujdGcJ2iPES2jo4+UFcgXVDnbMTbMhCNXJcZZp/TV6Ekdjl4SHquQYXB/2xAlFP8ZOBGQ==
+X-Received: by 2002:ad4:5de2:0:b0:5b5:a816:6b27 with SMTP id jn2-20020ad45de2000000b005b5a8166b27mr46860448qvb.8.1680295921187;
+        Fri, 31 Mar 2023 13:52:01 -0700 (PDT)
+Received: from ?IPv6:2600:4040:5c57:b700::feb? ([2600:4040:5c57:b700::feb])
+        by smtp.gmail.com with ESMTPSA id bm20-20020a05620a199400b007435a646354sm939211qkb.0.2023.03.31.13.52.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 13:51:20 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1piLiP-00FUn3-2r; Sat, 01 Apr 2023 07:51:17 +1100
-Date:   Sat, 1 Apr 2023 07:51:17 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 2/3] mm: vmscan: refactor updating reclaimed pages in
- reclaim_state
-Message-ID: <20230331205117.GI3223426@dread.disaster.area>
-References: <20230331070818.2792558-1-yosryahmed@google.com>
- <20230331070818.2792558-3-yosryahmed@google.com>
+        Fri, 31 Mar 2023 13:52:00 -0700 (PDT)
+Message-ID: <286e8ae9c2bddf332e917b72178e0d4e82ab63cb.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau/disp: Support more modes by checking with
+ lower bpc
+From:   Lyude Paul <lyude@redhat.com>
+To:     Karol Herbst <kherbst@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Ben Skeggs <bskeggs@redhat.com>, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, stable@vger.kernel.org
+Date:   Fri, 31 Mar 2023 16:51:59 -0400
+In-Reply-To: <20230330223938.4025569-1-kherbst@redhat.com>
+References: <20230330223938.4025569-1-kherbst@redhat.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230331070818.2792558-3-yosryahmed@google.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,49 +81,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 07:08:17AM +0000, Yosry Ahmed wrote:
-> During reclaim, we keep track of pages reclaimed from other means than
-> LRU-based reclaim through scan_control->reclaim_state->reclaimed_slab,
-> which we stash a pointer to in current task_struct.
-> 
-> However, we keep track of more than just reclaimed slab pages through
-> this. We also use it for clean file pages dropped through pruned inodes,
-> and xfs buffer pages freed. Rename reclaimed_slab to reclaimed, and add
-> a helper function that wraps updating it through current, so that future
-> changes to this logic are contained within mm/vmscan.c.
-> 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-.....
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index fef7d1c0f82b2..a3e38851b34ac 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -511,6 +511,34 @@ static void set_task_reclaim_state(struct task_struct *task,
->  	task->reclaim_state = rs;
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+
+On Fri, 2023-03-31 at 00:39 +0200, Karol Herbst wrote:
+> This allows us to advertise more modes especially on HDR displays.
+>=20
+> Fixes using 4K@60 modes on my TV and main display both using a HDMI to DP
+> adapter. Also fixes similiar issues for users running into this.
+>=20
+> Cc: stable@vger.kernel.org # 5.10+
+> Signed-off-by: Karol Herbst <kherbst@redhat.com>
+> ---
+>  drivers/gpu/drm/nouveau/dispnv50/disp.c | 32 +++++++++++++++++++++++++
+>  drivers/gpu/drm/nouveau/nouveau_dp.c    |  8 ++++---
+>  2 files changed, 37 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/nouveau/dispnv50/disp.c b/drivers/gpu/drm/no=
+uveau/dispnv50/disp.c
+> index ed9d374147b8d..f28e47c161dd9 100644
+> --- a/drivers/gpu/drm/nouveau/dispnv50/disp.c
+> +++ b/drivers/gpu/drm/nouveau/dispnv50/disp.c
+> @@ -363,6 +363,35 @@ nv50_outp_atomic_check_view(struct drm_encoder *enco=
+der,
+>  	return 0;
 >  }
->  
-> +/*
-> + * mm_account_reclaimed_pages(): account reclaimed pages outside of LRU-based
-> + * reclaim
-> + * @pages: number of pages reclaimed
-> + *
-> + * If the current process is undergoing a reclaim operation, increment the
-> + * number of reclaimed pages by @pages.
-> + */
-> +void mm_account_reclaimed_pages(unsigned long pages)
+> =20
+> +static void
+> +nv50_outp_atomic_fix_depth(struct drm_encoder *encoder, struct drm_crtc_=
+state *crtc_state)
 > +{
-> +	if (current->reclaim_state)
-> +		current->reclaim_state->reclaimed += pages;
+> +	struct nv50_head_atom *asyh =3D nv50_head_atom(crtc_state);
+> +	struct nouveau_encoder *nv_encoder =3D nouveau_encoder(encoder);
+> +	struct drm_display_mode *mode =3D &asyh->state.adjusted_mode;
+> +	unsigned int max_rate, mode_rate;
+> +
+> +	switch (nv_encoder->dcb->type) {
+> +	case DCB_OUTPUT_DP:
+> +		max_rate =3D nv_encoder->dp.link_nr * nv_encoder->dp.link_bw;
+> +
+> +                /* we don't support more than 10 anyway */
+> +		asyh->or.bpc =3D max_t(u8, asyh->or.bpc, 10);
+> +
+> +		/* reduce the bpc until it works out */
+> +		while (asyh->or.bpc > 6) {
+> +			mode_rate =3D DIV_ROUND_UP(mode->clock * asyh->or.bpc * 3, 8);
+> +			if (mode_rate <=3D max_rate)
+> +				break;
+> +
+> +			asyh->or.bpc -=3D 2;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
 > +}
-> +EXPORT_SYMBOL(mm_account_reclaimed_pages);
+> +
+>  static int
+>  nv50_outp_atomic_check(struct drm_encoder *encoder,
+>  		       struct drm_crtc_state *crtc_state,
+> @@ -381,6 +410,9 @@ nv50_outp_atomic_check(struct drm_encoder *encoder,
+>  	if (crtc_state->mode_changed || crtc_state->connectors_changed)
+>  		asyh->or.bpc =3D connector->display_info.bpc;
+> =20
+> +	/* We might have to reduce the bpc */
+> +	nv50_outp_atomic_fix_depth(encoder, crtc_state);
+> +
+>  	return 0;
+>  }
+> =20
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_dp.c b/drivers/gpu/drm/nouve=
+au/nouveau_dp.c
+> index e00876f92aeea..d49b4875fc3c9 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_dp.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_dp.c
+> @@ -263,8 +263,6 @@ nouveau_dp_irq(struct work_struct *work)
+>  }
+> =20
+>  /* TODO:
+> - * - Use the minimum possible BPC here, once we add support for the max =
+bpc
+> - *   property.
+>   * - Validate against the DP caps advertised by the GPU (we don't check =
+these
+>   *   yet)
+>   */
+> @@ -276,7 +274,11 @@ nv50_dp_mode_valid(struct drm_connector *connector,
+>  {
+>  	const unsigned int min_clock =3D 25000;
+>  	unsigned int max_rate, mode_rate, ds_max_dotclock, clock =3D mode->cloc=
+k;
+> -	const u8 bpp =3D connector->display_info.bpc * 3;
+> +	/* Check with the minmum bpc always, so we can advertise better modes.
+> +	 * In particlar not doing this causes modes to be dropped on HDR
+> +	 * displays as we might check with a bpc of 16 even.
+> +	 */
+> +	const u8 bpp =3D 6 * 3;
+> =20
+>  	if (mode->flags & DRM_MODE_FLAG_INTERLACE && !outp->caps.dp_interlace)
+>  		return MODE_NO_INTERLACE;
 
-Shouldn't this be a static inline in a header file?
+--=20
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
-Then you don't need an EXPORT_SYMBOL() - which should really be
-EXPORT_SYMBOL_GPL() - and callers don't add the overhead of a
-function call for two lines of code....
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
