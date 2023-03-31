@@ -2,81 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A326D1CCA
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1714E6D1CAD
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbjCaJn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
+        id S231189AbjCaJkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbjCaJnP (ORCPT
+        with ESMTP id S231942AbjCaJkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:43:15 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6F51F783;
-        Fri, 31 Mar 2023 02:42:49 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkzcv-3yyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4505:1fdc::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4PnwLD2CtzzyRB;
-        Fri, 31 Mar 2023 12:42:12 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1680255734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=puXl1O5LTLm6mQC1hY7tBUYCwI/kPsGafEK/CuEAVhM=;
-        b=J8sJddVL9ds5RZrJJVE6QICLnEV+Q9LHZ3tVXQLhln9EOv4JZIIC3LBuXaj1ZsSrkZa9w1
-        og3HojgJki8ayz+ESSOdoY8S6QuOWuFEsaIiOLBNRQjxQnx3O7ZlOg6uhTaSkMava9NMhL
-        U3tRe1L9TtmAIV8EHwlxC9E5XE1pcsk=
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1680255734; a=rsa-sha256; cv=none;
-        b=tAa0IExFH7cbCQ2EDGsYFAeoVVC77NOWpDz8LScrE6s6R0r7Y3vaxujy9NXEdFmoA0Yxg4
-        bFb0iQFY0ajiHBi9ZZJYyXEOQTEddl9VlwRuMN4fS8NLzD9khLqmPy9rFHhHoC+a0WwvTV
-        eOe8iUQii5P/kjSunKAurL6TyVoyOo8=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1680255734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=puXl1O5LTLm6mQC1hY7tBUYCwI/kPsGafEK/CuEAVhM=;
-        b=d6sCkbwuvAkqzIyKF1nM1fVHhznKjvI5Jza4Ahb0FDDIdZrz/VMR5XqnNLd6/kPnSn+x8L
-        cEw5mhMGG3Vc17amBKOhb483aKjp6NW6K5CUWFo+TVwpby55wuV70/2wcBKiji7DchldNY
-        s5xt9+D4z5TiVc32lFsLpFzLNJe9usg=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 03A26634C99;
-        Fri, 31 Mar 2023 12:39:56 +0300 (EEST)
-Date:   Fri, 31 Mar 2023 12:39:56 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Fri, 31 Mar 2023 05:40:08 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC274EEB;
+        Fri, 31 Mar 2023 02:40:05 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        by mail11.truemail.it (Postfix) with ESMTPA id C99BA207CC;
+        Fri, 31 Mar 2023 11:40:02 +0200 (CEST)
+Date:   Fri, 31 Mar 2023 11:40:01 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Francesco Dolcini <francesco@dolcini.it>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 2/3] media: dt-bindings: ov2685: convert to dtschema
-Message-ID: <ZCaqbL4plknXYPCT@valkosipuli.retiisi.eu>
-References: <20230129-ov2685-improvements-v4-0-e71985c5c848@z3ntu.xyz>
- <20230129-ov2685-improvements-v4-2-e71985c5c848@z3ntu.xyz>
- <ZCacNEbg8cJo0VAm@valkosipuli.retiisi.eu>
- <9AF47749-12CB-40D5-A300-170A35390CFD@z3ntu.xyz>
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        devicetree@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/6] dt-bindings: display: bridge: toshiba,tc358768:
+ add parallel input mode
+Message-ID: <ZCaqcaq02VDsqCPJ@francesco-nb.int.toradex.com>
+References: <20230330095941.428122-1-francesco@dolcini.it>
+ <20230330095941.428122-4-francesco@dolcini.it>
+ <a924186c-31d3-b7f0-085f-97b849a4d751@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9AF47749-12CB-40D5-A300-170A35390CFD@z3ntu.xyz>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a924186c-31d3-b7f0-085f-97b849a4d751@linaro.org>
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,32 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luca,
-
-On Fri, Mar 31, 2023 at 11:18:29AM +0200, Luca Weiss wrote:
-> >> +        properties:
-> >> +          data-lanes:
-> >> +            maxItems: 1
-> >
-> >This should be 2 --- the sensor supports two lanes (even if the driver
-> >doesn't).
+On Fri, Mar 31, 2023 at 10:48:15AM +0200, Krzysztof Kozlowski wrote:
+> On 30/03/2023 11:59, Francesco Dolcini wrote:
+> > From: Francesco Dolcini <francesco.dolcini@toradex.com>
+> > 
+> > Add new toshiba,input-rgb-mode property to describe the actual signal
+> > connection on the parallel RGB input interface.
+> > 
+> > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> > ---
+> >  .../bindings/display/bridge/toshiba,tc358768.yaml | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
+> > index 8f22093b61ae..2638121a2223 100644
+> > --- a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
+> > +++ b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
+> > @@ -42,6 +42,21 @@ properties:
+> >    clock-names:
+> >      const: refclk
+> >  
+> > +  toshiba,input-rgb-mode:
+> > +    description: |
+> > +      Parallel Input (RGB) Mode.
+> > +
+> > +      RGB inputs (PD[23:0]) color arrangement as documented in the datasheet
+> > +      and in the table below.
+> > +
+> > +      0 = R[7:0], G[7:0], B[7:0]
 > 
-> Right, for some reason the product brief mentions that it features "a
-> single-lane MIPI interface" but the datasheet I have writes that it has a
-> 2-lane MIPI serial output, so I guess it does support two lanes?
+> RGB888?
 
-I suppose the datasheet is right. Well, if someone proves otherwise, we can
-always change this.
+Or anything else - like a RGB666 - just connecting to GND the unused
+pins.
 
+> > +      1 = R[1:0], G[1:0], B[1:0], R[7:2], G[7:2], B[7:2]
+> > +      2 = 8’b0, R[4:0], G[5:0], B[4:0]
 > 
-> >
-> >I can address this when applying if that's ok.
+> Isn't this RGB565?
 > 
-> That would be nice, thanks!
+> Don't we have already properties like this? e.g. colorspace?
 
-Done, thanks!
+It's not really the colorspace this property.
 
--- 
-Kind regards,
+tc358768 is a parallel RGB to DSI bridge, it has 24 bit parallel input
+line.
 
-Sakari Ailus
+The way this lines are connected is configurable with this parameter, if you
+look at mode 0 and 1 they all allow to have a RGB888 or a RGB666 or a
+RGB565 mapping. This just configure some internal mux, it's not strictly
+about the RGB mode.
+
+The description for mode 2 was copied from the datasheet, and I agree
+this is really about having a RGB565 on the first 16 parallel input
+pins.
+
+Honestly I do not know what is going to happen with PD[23-16] if they
+are not connected to GND, given that the component does not know the
+parallel input bus width it might as well sample those pins in some
+un-documented way.
+
+Francesco
+
