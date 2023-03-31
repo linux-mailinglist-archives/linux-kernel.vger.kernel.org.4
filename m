@@ -2,114 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E174D6D1932
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079296D1920
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbjCaIBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S231178AbjCaH6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbjCaIBH (ORCPT
+        with ESMTP id S229530AbjCaH6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:01:07 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424C0B743;
-        Fri, 31 Mar 2023 01:00:49 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id A069F5FD37;
-        Fri, 31 Mar 2023 11:00:47 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1680249647;
-        bh=LrSavz6ZxpB+cGyjOWLRxU20+S4IOL/y4TU59q9/XlE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=poU6mGAfk7nbEuTTIq2mMI71b3NM9BhoGdFZh2w3el1H8YLBkmlAAW8g/R6ddKZKi
-         v8F6D5y0HbfDd7hgLJlFP+Nb+Osmtz2vhzpagU9a6ROzqJgAoaQn6BR6X4pTD4JGhJ
-         glUIxr9nt+k+y/enFleOS9/ejoQml45u6npbizpxBwa2Wc9QSGM8dl1g84uh/O/xad
-         ie2EtnuoiY6LsaSYxQ8to6cwashNHzv0pyGWSpRFeRoKqzB//jIcdOy1je/UrTZxKV
-         QT8vc1COewVPvpmNrMKklkXXhkxa2fNqJjO/NtNH3h2yb+vkg2gHLegsY/YDgtThph
-         1JjlUG68wLSdA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri, 31 Mar 2023 11:00:47 +0300 (MSK)
-Message-ID: <69ae1718-0c99-a4a1-645f-5c87271d6bd6@sberdevices.ru>
-Date:   Fri, 31 Mar 2023 10:57:21 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v3 2/4] vsock/vmci: convert VMCI error code to -ENOMEM
- on receive
-Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>, <kvm@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <pv-drivers@vmware.com>
-References: <4d34fac8-7170-5a3e-5043-42a9f7e4b5b3@sberdevices.ru>
- <9fd06ca5-ace9-251d-34af-aca4db9c3ee0@sberdevices.ru>
- <7pypi573nxgwz7vrgd2cwcrtha4abijutlsgtnxrwcgaatdjbz@cwnq5dlurfhs>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <7pypi573nxgwz7vrgd2cwcrtha4abijutlsgtnxrwcgaatdjbz@cwnq5dlurfhs>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/31 05:18:00 #21105108
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 31 Mar 2023 03:58:48 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C50710D7;
+        Fri, 31 Mar 2023 00:58:47 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id F15D35C01C0;
+        Fri, 31 Mar 2023 03:58:46 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 31 Mar 2023 03:58:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680249526; x=1680335926; bh=wH
+        aFZh9Hjt71v1c/Rx3QN0Gf6IAjxia8M9ANG/7PiMU=; b=alX5bdCEDMDEuYnsGY
+        iucLQv7b+7i/49as9dH58EZpEOY5EJ7tFCR6CH3KYDHdqaTUDBSrN9ix6SxTvOuK
+        RXVYmGGDuIANQthZQpO5ycyI/bhajwGTOh0seZjerEpGD4BK0LgrTR/OKxjUec1X
+        myW5ESxHyfLX44jhpKE8ASdQN/drjHC39jbNDhOtz/XuYPssieX2lQ+BRDJ7b7Jl
+        wDzM9HVU+vFtBfkmpg8u5T6QWmNzDeBtLcFMvwGfA9JVaqCWAUWLjBYOaujQLEfe
+        9W1pkxpXoc5X0WOQoEknBmMUWr26duTk3tr6FerxFCew9a4RxhrQhppGvuSc22Ii
+        eTpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680249526; x=1680335926; bh=wHaFZh9Hjt71v
+        1c/Rx3QN0Gf6IAjxia8M9ANG/7PiMU=; b=lOFo7bxKojH/ePY7knlvBmje9OV5V
+        gAk/zPc9PytSlgFWPVulRG9PaF9ZIk/PUiFNe9cmHu8N9oPwKSOJOjkfBAvM/suG
+        fFt1herjaPgjtkgOCQZh9gQiGVljbAdoJTtSLbYtiwCcLrZDOy3tJTY9UWRC/VsX
+        AXdldjgnbBVEqkPd2dyd9uZckb/9RpjhwmzGc/3VqC695dBqPCLQlc6aIUKkSYTt
+        2K2+EIk2L2EKKo5BCd6iGv7CCh2sOd/K+jzVhzV7D57+sZa3G4jQ9C/MPlQUsk6L
+        Vi30Fw2QlVhMVfk68pIJjneX1Amp8uq1aKX1hJykno83ZxhCRgC884o/Q==
+X-ME-Sender: <xms:tpImZFe0R5LrJjfZVziAaclxa3r3gUK2RftkazW6Abe0mgk2XuItPQ>
+    <xme:tpImZDMPuK6H_FxYZlXtgaLYbb5td-oTgJLXyx7ovk4DldqHNzhvLFmj_U4XQe0jj
+    dVavPtsveYX25Gww0A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeitddguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:tpImZOiiavZKiAdFLvHv21kMcSBx5Nmsq3z0G444kPGg53uBE8YR4A>
+    <xmx:tpImZO84h1zvkCjOtw8iH-yt0-Wco_jCxImi07LPYgHj-OQRNMa4-w>
+    <xmx:tpImZBu8Ud1zpxVhotDPQlb5kQdk1VxBHvejmkemGuJA-trhf2zGHA>
+    <xmx:tpImZBOP00k0sZkgqZYLG4AwRG_aWQenGN2-v3KvCkqAzgbyP4WR9Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 08457B6008D; Fri, 31 Mar 2023 03:58:46 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
+Mime-Version: 1.0
+Message-Id: <887fe1ff-0bb7-485d-a7ef-262bab808c31@app.fastmail.com>
+In-Reply-To: <c63bace6-1046-4428-97ba-6f12fd119dc6@spud>
+References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <6ca5941a-8803-477d-8b40-17292decc5af@app.fastmail.com>
+ <c63bace6-1046-4428-97ba-6f12fd119dc6@spud>
+Date:   Fri, 31 Mar 2023 09:58:25 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Conor.Dooley" <conor.dooley@microchip.com>
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        guoren <guoren@kernel.org>,
+        "Andrew Jones" <ajones@ventanamicro.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "Samuel Holland" <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "Biju Das" <biju.das.jz@bp.renesas.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v7 1/6] riscv: mm: dma-noncoherent: Switch using function pointers
+ for cache management
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 31, 2023, at 09:54, Conor Dooley wrote:
+> On Thu, Mar 30, 2023 at 11:34:02PM +0200, Arnd Bergmann wrote:
+>> On Thu, Mar 30, 2023, at 22:42, Prabhakar wrote:
+>> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+>> > +#ifdef CONFIG_ERRATA_THEAD_CMO
+>> 
+>> I would rename this to not call this an 'ERRATA' but
+>> just make it a driver. Not important though, and there
+>> was probably a reason you did it like this.
+>
+> I think what was discussed in a prior iteration was that we'd leave
+> refactoring the T-HEAD bits into a driver for a subsequent work.
 
+Ok, makes sense.
 
-On 31.03.2023 10:12, Stefano Garzarella wrote:
-> On Thu, Mar 30, 2023 at 11:18:36PM +0300, Arseniy Krasnov wrote:
->>
->>
->> On 30.03.2023 23:13, Arseniy Krasnov wrote:
->>> This adds conversion of VMCI specific error code to general -ENOMEM. It
->>> is needed, because af_vsock.c passes error value returned from transport
->>> to the user, which does not expect to get VMCI_ERROR_* values.
->>
->> @Stefano, I have some doubts about this commit message, as it says "... af_vsock.c
->> passes error value returned from transport to the user ...", but this
->> behaviour is implemented only in the next patch. Is it ok, if both patches
->> are in a single patchset?
-> 
-> Yes indeed it is not clear. In my opinion we can do one of these 2
-> things:
-> 
-> 1. Update the message, where we can say that this is a preparation patch
->    for the next changes where af_vsock.c will directly return transport
->    values to the user, so we need to return an errno.
-> 
-> 2. Merge this patch and patch 3 in a single patch.
-> 
-> Both are fine for my point of view, take your choice ;-)
-
-Ok! Thanks for this!
-
-Thanks, Arseniy
-
-> 
-> Thanks,
-> Stefano
-> 
+     Arnd
