@@ -2,116 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEECA6D1C26
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A216D1C1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbjCaJ1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S231839AbjCaJ0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232089AbjCaJ0s (ORCPT
+        with ESMTP id S231417AbjCaJ0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:26:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C5B1E73C
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:26:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A2D56265A
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:26:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219BBC4339B;
-        Fri, 31 Mar 2023 09:26:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680254792;
-        bh=ta2pbVKeW086ExcAdggWjg7nNpPFLKl54oJMSC9ka1Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j3gsDsoVQRjqVXWT3xex2OuYoYat0CyfY2hZdt9DGVD0jmEecHiZC8mlheKaXzyMK
-         4J/M6Wb2D0GdWJqYSGnAGzax9sa39rCsWw6XB8PaXvmVDGfcGHNSxE5DnzyLKXI8B3
-         j4KuBztziW1CycbQiFYbMPSuSKXVX4TqHNr2R/PhrLT5SK/JZgpSvXmX8FMEEyzxqd
-         HgkdDrOoDsnanNom9Qu58oID52zl2K3/BNeoQWP/ogQvgktk2mKgCZHpn/0uDCR4J0
-         p5SG9phpT0uqF29qnfcNMZAxun/JuUG6uwJFhgKG4XR30IOs6pK1CT/dN4wqM0FJlY
-         /O25w0TrzyFdQ==
-From:   Lee Jones <lee@kernel.org>
-To:     lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH 07/19] drm/i915/gem/i915_gem_create: Provide the function names for proper kerneldoc headers
-Date:   Fri, 31 Mar 2023 10:25:55 +0100
-Message-Id: <20230331092607.700644-8-lee@kernel.org>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-In-Reply-To: <20230331092607.700644-1-lee@kernel.org>
-References: <20230331092607.700644-1-lee@kernel.org>
+        Fri, 31 Mar 2023 05:26:23 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD1D1D2DD;
+        Fri, 31 Mar 2023 02:26:22 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32V9Q0Wg056198;
+        Fri, 31 Mar 2023 04:26:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680254760;
+        bh=gIvlurnr4TzVrOK7Fbvtp8wI7+jYvwfr27GEkxvhbPA=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=IzQLNJF/SDsPyx/Fc36h8FywkXOM7ig6ENaHw0drRrR8/BCcEQ3GLTmNVII8rDi4z
+         YSialPbAahobwZCkpZxpUIc+bdY4YQWjx3kK3ed8ZGMkBLrZzeHbHtIoMWyOhu5fK7
+         pIdSENoXx9/uSowHlqOExZDjNIG6gK5rAxGt2wNo=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32V9Q0H8016793
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 31 Mar 2023 04:26:00 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 31
+ Mar 2023 04:26:00 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 31 Mar 2023 04:26:00 -0500
+Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32V9PuHs031936;
+        Fri, 31 Mar 2023 04:25:57 -0500
+Message-ID: <7a9c96f4-6a94-4a2c-18f5-95f7246e10d5@ti.com>
+Date:   Fri, 31 Mar 2023 14:55:56 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <rogerq@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net-next 2/2] net: ethernet: ti: am65-cpsw: Enable USXGMII
+ mode for J784S4 CPSW9G
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+References: <20230331065110.604516-1-s-vadapalli@ti.com>
+ <20230331065110.604516-3-s-vadapalli@ti.com>
+ <ZCaSXQFZ/e/JIDEj@shell.armlinux.org.uk>
+ <54c3964b-5dd8-c55e-08db-61df4a07797c@ti.com>
+ <ZCaYve8wYl15YRxh@shell.armlinux.org.uk>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <ZCaYve8wYl15YRxh@shell.armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+Russell,
 
- drivers/gpu/drm/i915/gem/i915_gem_create.c:147: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- drivers/gpu/drm/i915/gem/i915_gem_create.c:218: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- drivers/gpu/drm/i915/gem/i915_gem_create.c:402: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+On 31/03/23 13:54, Russell King (Oracle) wrote:
+> On Fri, Mar 31, 2023 at 01:35:10PM +0530, Siddharth Vadapalli wrote:
+>> Hello Russell,
+>>
+>> Thank you for reviewing the patch.
+>>
+>> On 31/03/23 13:27, Russell King (Oracle) wrote:
+>>> On Fri, Mar 31, 2023 at 12:21:10PM +0530, Siddharth Vadapalli wrote:
+>>>> TI's J784S4 SoC supports USXGMII mode. Add USXGMII mode to the
+>>>> extra_modes member of the J784S4 SoC data. Additionally, configure the
+>>>> MAC Control register for supporting USXGMII mode. Also, for USXGMII
+>>>> mode, include MAC_5000FD in the "mac_capabilities" member of struct
+>>>> "phylink_config".
+>>>
+>>> I don't think TI "get" phylink at all...
+>>>
+>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>> index 4b4d06199b45..ab33e6fe5b1a 100644
+>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>> @@ -1555,6 +1555,8 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
+>>>>  		mac_control |= CPSW_SL_CTL_GIG;
+>>>>  	if (interface == PHY_INTERFACE_MODE_SGMII)
+>>>>  		mac_control |= CPSW_SL_CTL_EXT_EN;
+>>>> +	if (interface == PHY_INTERFACE_MODE_USXGMII)
+>>>> +		mac_control |= CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN;
+>>>
+>>> The configuration of the interface mode should *not* happen in
+>>> mac_link_up(), but should happen in e.g. mac_config().
+>>
+>> I will move all the interface mode associated configurations to mac_config() in
+>> the v2 series.
+> 
+> Looking at the whole of mac_link_up(), could you please describe what
+> effect these bits are having:
+> 
+> 	CPSW_SL_CTL_GIG
+> 	CPSW_SL_CTL_EXT_EN
+> 	CPSW_SL_CTL_IFCTL_A
 
-Cc: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Matthew Auld <matthew.auld@intel.com>
-Cc: intel-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: Lee Jones <lee@kernel.org>
----
- drivers/gpu/drm/i915/gem/i915_gem_create.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+CPSW_SL_CTL_GIG corresponds to enabling Gigabit mode (full duplex only).
+CPSW_SL_CTL_EXT_EN when set enables in-band mode of operation and when cleared
+enables forced mode of operation.
+CPSW_SL_CTL_IFCTL_A is used to set the RMII link speed (0=10 mbps, 1=100 mbps).
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_create.c b/drivers/gpu/drm/i915/gem/i915_gem_create.c
-index e76c9703680ef..4270575f88908 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_create.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_create.c
-@@ -144,7 +144,8 @@ __i915_gem_object_create_user_ext(struct drm_i915_private *i915, u64 size,
- }
- 
- /**
-- * Creates a new object using the same path as DRM_I915_GEM_CREATE_EXT
-+ * __i915_gem_object_create_user - Creates a new object using the same path as
-+ *                                 DRM_I915_GEM_CREATE_EXT
-  * @i915: i915 private
-  * @size: size of the buffer, in bytes
-  * @placements: possible placement regions, in priority order
-@@ -215,7 +216,7 @@ i915_gem_dumb_create(struct drm_file *file,
- }
- 
- /**
-- * Creates a new mm object and returns a handle to it.
-+ * i915_gem_create_ioctl - Creates a new mm object and returns a handle to it.
-  * @dev: drm device pointer
-  * @data: ioctl data blob
-  * @file: drm file pointer
-@@ -399,7 +400,7 @@ static const i915_user_extension_fn create_extensions[] = {
- };
- 
- /**
-- * Creates a new mm object and returns a handle to it.
-+ * i915_gem_create_ext_ioct - Creates a new mm object and returns a handle to it.
-  * @dev: drm device pointer
-  * @data: ioctl data blob
-  * @file: drm file pointer
--- 
-2.40.0.348.gf938b09366-goog
-
+Regards,
+Siddharth.
