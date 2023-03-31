@@ -2,158 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D366D1AC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E1A6D1AC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjCaItc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        id S231593AbjCaIuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbjCaIt2 (ORCPT
+        with ESMTP id S231451AbjCaIuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:49:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6615C1B7EE;
-        Fri, 31 Mar 2023 01:49:19 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6E1DA6603180;
-        Fri, 31 Mar 2023 09:49:17 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680252557;
-        bh=EIlHy/fOQ4nvThPIDq8IH7bbZG6jRaS0NwuvOWeucNU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HT7tilTwUS2yXnomFHF6Tjq9o6/wAyNNsybgq7DxBT8JuPLcJLov7IcJ091S5eWGu
-         gNyn5DLK/b0uXCPWVBx22d71xpNzg1txgABQW16i8Kd0Ozk0rOGej4Pw15btAUBBoR
-         3JHh7hmTNafjLVoIMs6ozO/MN6NKq5XufWN5m51wy1nWBFLxWxUEfyTll32QTfpAD1
-         m/5oVpAVPpKwfb+DaNJGiHt46yzabfn8GxuObatGQg3z8qdr5vU2PhFHblkgZxPBmZ
-         rPdul/Ib1m24iXdOGSI+1AB2eAmBBbAdjNssJi15zat9kX2K0tjcX77aquPArG35m1
-         6tBKQC+ui0htw==
-Date:   Fri, 31 Mar 2023 10:49:14 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     airlied@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        steven.price@arm.com, robh+dt@kernel.org,
-        alyssa.rosenzweig@collabora.com, krzysztof.kozlowski+dt@linaro.org,
-        wenst@chromium.org, kernel@collabora.com
-Subject: Re: [PATCH v1 RESEND 2/2] drm/panfrost: Add basic support for speed
- binning
-Message-ID: <20230331104914.708b194e@collabora.com>
-In-Reply-To: <5814d779-0635-43fe-3fe8-31c130f05b3a@collabora.com>
-References: <20230323090822.61766-1-angelogioacchino.delregno@collabora.com>
-        <20230323090822.61766-3-angelogioacchino.delregno@collabora.com>
-        <5814d779-0635-43fe-3fe8-31c130f05b3a@collabora.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
+        Fri, 31 Mar 2023 04:50:13 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA741A478;
+        Fri, 31 Mar 2023 01:50:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680252603; x=1711788603;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G+kxJZEIE+GVMqJqP/vS09+4cvaoQgOrzIwz7KkJRuE=;
+  b=n+TYM3PySxyyKD22LwJEGTGqtcMn3mZ0B+Rr40SWjESrD5Y0zCjRNCW9
+   97KM8sI8wjRaPURAZPpSelRUnKR8fPuC4608cNzCXW8/SFytnsxK3XcRo
+   JkJtCKcAC34H69hbSJ89xwKtWXel6jE+OD/kap3Yhi++axsIL2xNPLZsG
+   Y2al6+TH+Brh5k4h9MBwNqwo7YBIMRSxRew+ALXMAkaV3lRnasVLMiAx7
+   hZv5ZiDWn9siXyUJcHW7A5YVLYdlWmH7wYYlgnZ6Swhx8pJTXJ9/asjFq
+   QfARlvRaCUdmWDAG8OQA4D9SMGId48NEKDZO3hfNOgctmixE1dK8NOQ7/
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="325365066"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="325365066"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 01:49:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="808972514"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="808972514"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 01:49:41 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id B491911FAD0;
+        Fri, 31 Mar 2023 11:49:38 +0300 (EEST)
+Date:   Fri, 31 Mar 2023 11:49:38 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Jimmy Su <jimmy.su@intel.com>, stable@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Max Staudt <mstaudt@chromium.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: ov8856: Do not check for for module version
+Message-ID: <ZCaeojsCxe39+zVE@kekkonen.localdomain>
+References: <20230323-ov8856-otp-v1-0-604f7fd23729@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323-ov8856-otp-v1-0-604f7fd23729@chromium.org>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Mar 2023 10:11:07 +0200
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-wrote:
+Hi Ricardo,
 
-> Il 23/03/23 10:08, AngeloGioacchino Del Regno ha scritto:
-> > Some SoCs implementing ARM Mali GPUs are subject to speed binning:
-> > this means that some versions of the same SoC model may need to be
-> > limited to a slower frequency compared to the other:
-> > this is being addressed by reading nvmem (usually, an eFuse array)
-> > containing a number that identifies the speed binning of the chip,
-> > which is usually related to silicon quality.
-> > 
-> > To address such situation, add basic support for reading the
-> > speed-bin through nvmem, as to make it possible to specify the
-> > supported hardware in the OPP table for GPUs.
-> > This commit also keeps compatibility with any platform that does
-> > not specify (and does not even support) speed-binning.
-> > 
-> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>  
+On Thu, Mar 23, 2023 at 11:44:20PM +0100, Ricardo Ribalda wrote:
+> It the device is probed in non-zero ACPI D state, the module
+> identification is delayed until the first streamon.
 > 
-> Hello maintainers,
-> I've seen that this got archived in the dri-devel patchwork; because of that and
-> only that, I'm sending this ping to get this patch reviewed.
+> The module identification has two parts: deviceID and version. To rea
+> the version we have to enable OTP read. This cannot be done during
+> streamon, becase it modifies REG_MODE_SELECT.
+> 
+> Since the driver has the same behaviour for all the module versions, do
+> not read the module version from the sensor's OTP.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 0e014f1a8d54 ("media: ov8856: support device probe in non-zero ACPI D state")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Looks good to me. If you can get a DT maintainer to review the binding
-(Rob?), I'd be happy to queue the series to drm-misc-next.
+I guess the identification could be done from pre_streamon() callback
+instead, but the driver doesn't implement it. But the information isn't
+used for anything indeed so I'll just take this.
 
-> 
-> (perhaps we can even get it picked for v6.4?)
-> 
-> Regards,
-> Angelo
-> 
-> > ---
-> >   drivers/gpu/drm/panfrost/panfrost_devfreq.c | 30 +++++++++++++++++++++
-> >   1 file changed, 30 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> > index fe5f12f16a63..58dfb15a8757 100644
-> > --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> > +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> > @@ -4,6 +4,7 @@
-> >   #include <linux/clk.h>
-> >   #include <linux/devfreq.h>
-> >   #include <linux/devfreq_cooling.h>
-> > +#include <linux/nvmem-consumer.h>
-> >   #include <linux/platform_device.h>
-> >   #include <linux/pm_opp.h>
-> >   
-> > @@ -82,6 +83,31 @@ static struct devfreq_dev_profile panfrost_devfreq_profile = {
-> >   	.get_dev_status = panfrost_devfreq_get_dev_status,
-> >   };
-> >   
-> > +static int panfrost_read_speedbin(struct device *dev)
-> > +{
-> > +	u32 val;
-> > +	int ret;
-> > +
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, "speed-bin", &val);
-> > +	if (ret) {
-> > +		/*
-> > +		 * -ENOENT means that this platform doesn't support speedbins
-> > +		 * as it didn't declare any speed-bin nvmem: in this case, we
-> > +		 * keep going without it; any other error means that we are
-> > +		 * supposed to read the bin value, but we failed doing so.
-> > +		 */
-> > +		if (ret != -ENOENT) {
-> > +			DRM_DEV_ERROR(dev, "Cannot read speed-bin (%d).", ret);
-> > +			return ret;
-> > +		}
-> > +
-> > +		return 0;
-> > +	}
-> > +	DRM_DEV_DEBUG(dev, "Using speed-bin = 0x%x\n", val);
-> > +
-> > +	return devm_pm_opp_set_supported_hw(dev, &val, 1);
-> > +}
-> > +
-> >   int panfrost_devfreq_init(struct panfrost_device *pfdev)
-> >   {
-> >   	int ret;
-> > @@ -101,6 +127,10 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
-> >   		return 0;
-> >   	}
-> >   
-> > +	ret = panfrost_read_speedbin(dev);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> >   	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names);
-> >   	if (ret) {
-> >   		/* Continue if the optional regulator is missing */  
-> 
-> 
+Thanks.
 
+-- 
+Kind regards,
+
+Sakari Ailus
