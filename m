@@ -2,100 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221B26D1906
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F0B6D1909
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjCaHvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S231232AbjCaHxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbjCaHvO (ORCPT
+        with ESMTP id S230083AbjCaHxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:51:14 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BE61A96B
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:50:11 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id by14so2966450ljb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680249010;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=rp61AZrrrJ7L6Ea4XSRLHJ/Ln9sIYk2x6qqY8rh7zM4=;
-        b=qM+oBIBD6/4I26sY9lrDp/o6uOQD+VJqjveehx5YKQ5U4XVIIJdQyWfIqLGrjSRFGM
-         OVSGuWvmjg4bHjNyx4hooahb8ZMXIF/FKcH4A5/DTX/UO0KoQpdLzBt1duQeuwiyQlIr
-         NegaXc/uhq0C1G8dE3Fpmy8fAcmOIGLaYTrPkO3pkKx0T4Hi4XcEedrpVbXhpqhG7rQ3
-         S0+dsfpQTRhlfRl1DUePVmMgOpbBV8Ti9hlTG8cxeRVgJUvjsTDqVIWBJDPXYasUVgeO
-         4y13tVzzYjdCDj469LKssnOgESUixPCxtuHXtIPKnoFh1PDNs+6opz42G4RdfEUCKu+V
-         f2vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680249010;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rp61AZrrrJ7L6Ea4XSRLHJ/Ln9sIYk2x6qqY8rh7zM4=;
-        b=L7oAZAwptkX0TJLIGzZTBAdcPOpt+TMPYnbixsJhtRxCjXpz6CiGST49lWJFoXF4Zi
-         XLTkmO9e72abTf6G2qu6eunpzAoHvycRI8C5m0Xi4+htQge0cqI9LJ+sR4hcVpsOJ77E
-         PVyY5BWwWaZpMxkaJw0kD+395VOjiZ7WOSS1VsdYItDjO9SOibtUS5F+zCm5xLg9pOs3
-         8c/glDIvs3GNc9lbygy5eJFYrvuMF86PyGaoBDjdcnaRWV5k+O6HbFqmSeIiZXGqW01Z
-         JHqW73FkNfV1mMbpoQzH7veK/XlPMH52kWmTStfnANzJ2nyWpkcc918H5/3oiuuOLyiH
-         aLQQ==
-X-Gm-Message-State: AAQBX9e36yaZseGct95qcvjc1SjyW6KG/C8yQyc6+v3aWVb+MvaxpKKf
-        IYa/KN82n3um3vcGKxmr7VgmTRNCrJgTen4whAc=
-X-Google-Smtp-Source: AKy350aP0sVxOVbRdfaxygjd9Zkval2nVvpFquxKpaz0Y8pPfwIPacIOwyKNqxo+YZny2UHLm+5AUQ==
-X-Received: by 2002:a2e:9ccc:0:b0:2a6:183a:9a13 with SMTP id g12-20020a2e9ccc000000b002a6183a9a13mr1625313ljj.46.1680249009752;
-        Fri, 31 Mar 2023 00:50:09 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id p23-20020a2ea417000000b002934abfb109sm249539ljn.45.2023.03.31.00.50.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 00:50:09 -0700 (PDT)
-Message-ID: <2872b939-a617-90ee-2249-9eb535559f07@linaro.org>
-Date:   Fri, 31 Mar 2023 09:50:08 +0200
+        Fri, 31 Mar 2023 03:53:03 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE6B1B7E5;
+        Fri, 31 Mar 2023 00:52:16 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 9FDDC3200893;
+        Fri, 31 Mar 2023 03:52:15 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 31 Mar 2023 03:52:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1680249135; x=1680335535; bh=Ks
+        vbGlp6O7ZgT74trKBEeabFrQEUJq5unbKXi23ARQ0=; b=buBtjzatT0kD1METZS
+        IBtDACOuNKluJNtIfmPR8yieP4d1v0oEAgUaApF99INgb/VHjQJy89n1NFv6qfAI
+        Ooq4vPFxLgETCRa+qEaASosbGtVyCtBW2DaLycfGTtOgUMC1vv0E9vIYDsDCtYMW
+        piHfWCcVWAzbrxiDMFe/38yriNITtw6g2q4AaAwfjTJj0CVJjKrDHmb7IW32fmdr
+        dGq6N1Iyz0aXF+/LAQ4NEWQgclW4Vk+scC5NqxBoyLEoA62zSVqE+U8n8uWWRqrr
+        PJn33wshlbvT9d5rDwzZpTYiG42iP79sAU3OhrBJ63pFHG2js0Tm4h7sfHtdGFOB
+        boTA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680249135; x=1680335535; bh=KsvbGlp6O7ZgT
+        74trKBEeabFrQEUJq5unbKXi23ARQ0=; b=ijM0oPie2tMXoyk3zlUg0l0HjozxD
+        J6wMFRdJUyIGtXkYQe3ihGBymasjdXqF77zsIxbRmPmtDeszqMQctJabhEZ3B/1+
+        yDmjiATiDgyxNpnm43lyvkSsZ0jIGbTz8uE489zhb5cGqiR1PH9wyG0DkPAHo+XY
+        kY5eOnPJaEV6Fu+CN76G7HWZ3Umh63Q1uQOm9y5/M3H/1VQQJyvyNx/+zn2ZdcjX
+        QZCCGEzY3yUkt7cd95GAlFgCuGDUcSVo0cxDfi2jMr2aWTQ8FaD3E1jpbxtStn8s
+        hlI7wNpMKXj20nqR31bAiGC6D0zu86TpzuxbaGCiImMRE0kQmdfraHv7g==
+X-ME-Sender: <xms:LpEmZLWUFJJZFj6H0c0xkarO87tQ-5-4e_0XoTiPzf2PK9FsWV-OYw>
+    <xme:LpEmZDkLMAXvutSaT4tVQPrpvViw1AV6KwIsvsXTemRWDCstbp4mKT4s89PXr_xmK
+    kd8LcggvxbjYQ>
+X-ME-Received: <xmr:LpEmZHZVdh3Zue_DbPxCCg9KT8MyH4LzeWF7qWFkH7IPu4sBzCit9txV-xCbAFSkIZSu9TLdVo31qCgbPOX6jv84PWlyDGgOpeoi8w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeitddguddvgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
+    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:LpEmZGXT1T2thfvXA7J6j1gG4CKSYGWGyuflE3AwcP7fq1kcAQ5MjQ>
+    <xmx:LpEmZFmEVyOrurjB9RJ7Epn_9jFABr-1-Qy_jSp2U-PX9OwmEVQIxw>
+    <xmx:LpEmZDfsHV47PH0Ouy-69eJ5thiBF7DXnm-ctdBwMnXklEpwvbcOag>
+    <xmx:L5EmZH6H3ZjVB3UrpXUf_AmzZLe78B2X2u7LEl3pOKoNTgM4ev4Yjw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 31 Mar 2023 03:52:13 -0400 (EDT)
+Date:   Fri, 31 Mar 2023 09:52:10 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <ZCaRKtj9eIs1HcpF@kroah.com>
+References: <20230331140150.597576b2@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V4 2/2] ASoC: dt-bindings: max98363: add soundwire
- amplifier
-To:     =?UTF-8?B?4oCcUnlhbg==?= <ryan.lee.analog@gmail.com>,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, rf@opensource.cirrus.com,
-        ckeepax@opensource.cirrus.com,
-        pierre-louis.bossart@linux.intel.com, herve.codina@bootlin.com,
-        wangweidong.a@awinic.com, james.schulman@cirrus.com,
-        ajye_huang@compal.corp-partner.google.com, shumingf@realtek.com,
-        povik+lin@cutebit.org, flatmax@flatmax.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        ryans.lee@analog.com
-References: <20230330234319.6841-1-ryan.lee.analog@gmail.com>
- <20230330234319.6841-2-ryan.lee.analog@gmail.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230330234319.6841-2-ryan.lee.analog@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331140150.597576b2@canb.auug.org.au>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2023 01:43, “Ryan wrote:
-> From: Ryan Lee <ryans.lee@analog.com>
+On Fri, Mar 31, 2023 at 02:01:50PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Add dt-bindings information for Analog Devices MAX98363 SoundWire Amplifier
+> Today's linux-next merge of the usb tree got a conflict in:
 > 
-> Signed-off-by: Ryan Lee <ryans.lee@analog.com>
-> ---
+>   drivers/usb/host/xhci-pci.c
+> 
+> between commit:
+> 
+>   8e77d3d59d7b ("Revert "usb: xhci-pci: Set PROBE_PREFER_ASYNCHRONOUS"")
+> 
+> from the usb.current tree and commit:
+> 
+>   130eac417085 ("xhci: use pm_ptr() instead of #ifdef for CONFIG_PM conditionals")
+> 
+> from the usb tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/usb/host/xhci-pci.c
+> index 6db07ca419c3,bbbb01282038..000000000000
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@@ -771,11 -967,10 +967,9 @@@ static struct pci_driver xhci_pci_drive
+>   	/* suspend and resume implemented later */
+>   
+>   	.shutdown = 	usb_hcd_pci_shutdown,
+> - #ifdef CONFIG_PM
+>   	.driver = {
+> - 		.pm = &usb_hcd_pci_pm_ops
+> + 		.pm = pm_ptr(&usb_hcd_pci_pm_ops),
+>  -		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+>   	},
+> - #endif
+>   };
+>   
+>   static int __init xhci_pci_init(void)
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best regards,
-Krzysztof
+Thanks, this looks good.  I'll resolve it this way when I send the
+usb-linus branch to Linus this weekend.
 
+greg k-h
