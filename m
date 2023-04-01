@@ -2,184 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8F06D325C
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 17:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF406D3265
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 17:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjDAPV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 11:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
+        id S229538AbjDAPiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 11:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjDAPVZ (ORCPT
+        with ESMTP id S229458AbjDAPiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 11:21:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA40024AFD;
-        Sat,  1 Apr 2023 08:21:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A59AB80BA5;
-        Sat,  1 Apr 2023 15:21:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3C6C433EF;
-        Sat,  1 Apr 2023 15:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680362467;
-        bh=VRDENP0GBG7HEPJPomXEJE7ipvrog3G07035r41JCJ8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=h1+F7BuKL9lM30A5/t9JaKr/WJreYYGl8tgMNUJufsHzv/7TyX0pJeaZ4GqmVlE8o
-         8yo1OhgVT9lsepFxu2sKxvbn1ya2ityYCNWj4Tr/RBsIdH404gWZ+kSBdvyDN1EmgN
-         KAA0gJLuuTiC9ZXvovGFK2/rNXfzpv0XLBQI4JhnT6N+Kycbekeg4Da4bjjmJ1SyH4
-         DKDj4TpO+HLmzJ97joKmDPt5u5bP3rS3uU9zbbDIQYQlUeySGbCvDZ9PPmTHs9of+Y
-         yEQLlHS3xMX+MkvCDHITjKXTsPHNDSNOpVp6WePlDwGoOZ8axw2XyK0WiTVSq4gaao
-         vQX8+PmsdI+Xw==
-Date:   Sat, 1 Apr 2023 16:36:14 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <20230401163614.38f68397@jic23-huawei>
-In-Reply-To: <20230329194609.7u2hgidxdk34emsf@penduick>
-References: <ZBtPhoelZo4U5jwC@kroah.com>
-        <20230323101216.w56kz3rudlj23vab@houat>
-        <ZBwoRgc2ICBJX/Lq@kroah.com>
-        <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
-        <20230323122925.kqdnomr7i46qnyo4@houat>
-        <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
-        <20230323163639.xtwpid2uunwnzai4@houat>
-        <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
-        <20230324123157.bbwvfq4gsxnlnfwb@houat>
-        <20230325175044.7bee9e7d@jic23-huawei>
-        <20230329194609.7u2hgidxdk34emsf@penduick>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 1 Apr 2023 11:38:13 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94228B77E
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 08:38:11 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id f22so20039903plr.0
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 08:38:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680363491;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hqFog0EPi7cc7jTi4SQHHm60kq3S4Ku+FYssibLDulE=;
+        b=PIAQVgWrwX7mWOViq/0HRPOO2TQURrQ0yUv/Ex2hyIAMb49v3Ddote57S2KhyJpEYX
+         qHJ8jPSUT2wf2amPnwOsAKJLzcwubD0OBTi2875zzfRe7LM38kxYs0Xb6l1bwd2yUU4W
+         cQOAQrvhEh6uzNNurNuxNPj9IHA3UqJLFlwAklAYUFkf3ZMn89KJjGlFjJ0SgE8Cpr0a
+         NlX3bHRSwhpvQxDdENlUHrTyUTFkXomVTlGujHakxo7dSc9jGRPw1Xxk4KEoSClr0+ET
+         IG4Lc9IJk3ffGo4khN1XOYeQNn6ldl1qUg30Rmdwrkn+68s9ZDVx2hU/xRfSHHrLiW4r
+         x7fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680363491;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hqFog0EPi7cc7jTi4SQHHm60kq3S4Ku+FYssibLDulE=;
+        b=IEYAH7eOx+6RNaSu2niEm6Pwe4sctaJaFS877dG3OGvkd7P2EK7ln9WAjjMCUFjoUY
+         XmrvbMNkhXundkKCaRsPuVACsWw1/pIw+2JLIUaZqJ63VAhCgbKOlVmANjcj+ce34UE0
+         Cz4bn0MKzvjLLXLNrXnAkY28v9Scw5pmOAKqZyj/uI7z9On44FU1lhgglXfufeDvtTd5
+         76uAJTsUd35U0YKnCQ1lymN6PfeHs1FDKldyV/UAMm/cNHl5ZVuNE/xvSBGiatBkzaX2
+         sCNoNQ0PD7h1Jd4FCKFgOQ4XQzP5rxE9kJeYhW1NDgoBwci6lZt33XFVDv+YEExndAzc
+         OFeA==
+X-Gm-Message-State: AAQBX9e4jb9C90AeaeY52/waTVEH9zBOR48nq+EuwqAA9uOzZQ/XVtFY
+        uftU7qZyTVNlFCugwFzQBOU=
+X-Google-Smtp-Source: AKy350bYx/r/sVzUWr1sjtDCKXZWvcOM2M0Db1J3dLpQBa5ivBOTw0PGcUU75aLfD7Unb4HQ3VskRg==
+X-Received: by 2002:a17:902:e744:b0:19d:1fce:c9ec with SMTP id p4-20020a170902e74400b0019d1fcec9ecmr38680787plf.37.1680363490968;
+        Sat, 01 Apr 2023 08:38:10 -0700 (PDT)
+Received: from localhost (c-73-37-105-206.hsd1.or.comcast.net. [73.37.105.206])
+        by smtp.gmail.com with ESMTPSA id p8-20020a1709026b8800b0019a74841c9bsm3476873plk.192.2023.04.01.08.38.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Apr 2023 08:38:10 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/vblank: Fix for drivers that do not drm_vblank_init()
+Date:   Sat,  1 Apr 2023 08:38:02 -0700
+Message-Id: <20230401153802.1066072-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023 21:46:09 +0200
-Maxime Ripard <maxime@cerno.tech> wrote:
+From: Rob Clark <robdclark@chromium.org>
 
-> On Sat, Mar 25, 2023 at 05:50:44PM +0000, Jonathan Cameron wrote:
-> > On Fri, 24 Mar 2023 13:31:57 +0100
-> > Maxime Ripard <maxime@cerno.tech> wrote:
-> >   
-> > > On Fri, Mar 24, 2023 at 08:11:52AM +0200, Matti Vaittinen wrote:  
-> > > > On 3/23/23 18:36, Maxime Ripard wrote:    
-> > > > > On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:    
-> > > > > > On 3/23/23 14:29, Maxime Ripard wrote:    
-> > > > > > > On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
-> > > > > > > 
-> > > > > > > This is the description of what was happening:
-> > > > > > > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/    
-> > > > > > 
-> > > > > > Thanks Maxime. Do I read this correcty. The devm_ unwinding not being done
-> > > > > > when root_device_register() is used is not because root_device_unregister()
-> > > > > > would not trigger the unwinding - but rather because DRM code on top of this
-> > > > > > device keeps the refcount increased?    
-> > > > > 
-> > > > > There's a difference of behaviour between a root_device and any device
-> > > > > with a bus: the root_device will only release the devm resources when
-> > > > > it's freed (in device_release), but a bus device will also do it in
-> > > > > device_del (through bus_remove_device() -> device_release_driver() ->
-> > > > > device_release_driver_internal() -> __device_release_driver() ->
-> > > > > device_unbind_cleanup(), which are skipped (in multiple places) if
-> > > > > there's no bus and no driver attached to the device).
-> > > > > 
-> > > > > It does affect DRM, but I'm pretty sure it will affect any framework
-> > > > > that deals with device hotplugging by deferring the framework structure
-> > > > > until the last (userspace) user closes its file descriptor. So I'd
-> > > > > assume that v4l2 and cec at least are also affected, and most likely
-> > > > > others.    
-> > > > 
-> > > > Thanks for the explanation and patience :)
-> > > >     
-> > > > >     
-> > > > > > If this is the case, then it sounds like a DRM specific issue to me.    
-> > > > > 
-> > > > > I mean, I guess. One could also argue that it's because IIO doesn't
-> > > > > properly deal with hotplugging.    
-> > > > 
-> > > > I must say I haven't been testing the IIO registration API. I've only tested
-> > > > the helper API which is not backed up by any "IIO device". (This is fine for
-> > > > the helper because it must by design be cleaned-up only after the
-> > > > IIO-deregistration).
-> > > > 
-> > > > After your explanation here, I am not convinced IIO wouldn't see the same
-> > > > issue if I was testing the devm_iio_device_alloc() & co.    
-> > > 
-> > > It depends really. The issue DRM is trying to solve is that, when a
-> > > device is gone, some application might still have an open FD and could
-> > > still poke into the kernel, while all the resources would have been
-> > > free'd if it was using devm.
-> > > 
-> > > So everything is kept around until the last fd is closed, so you still
-> > > have a reference to the device (even though it's been removed from its
-> > > bus) until that time.
-> > > 
-> > > It could be possible that IIO just doesn't handle that case at all. I
-> > > guess most of the devices aren't hotpluggable, and there's not much to
-> > > interact with from a userspace PoV iirc, so it might be why.  
-> > 
-> > Lars-Peter Clausen (IIRC) fixed up the IIO handling of the similar cases a
-> > long time ago now. It's simpler that for some other subsystems as we don't
-> > have as many interdependencies as occur in DRM etc.
-> > 
-> > I 'think' we are fine in general with the IIO approach to this (I think we
-> > did have one report of a theoretical race condition in the remove path that
-> > was never fully addressed).
-> > 
-> > For IIO we also have fds that can be open but all accesses to them are proxied
-> > through the IIO core and one of the things iio_device_unregister() or the devm
-> > equivalent does is to set indio_dev->info = NULL  (+ wake up anyone waiting on
-> > data etc). Alongside removing the callbacks, that is also used as a flag
-> > to indicate the device has gone.  
-> 
-> Sorry if it came as trying to put IIO under a bad light, it certainly
-> wasn't my intention. I was trying to come up with possible explanations
-> as to why IIO's design was simpler than DRM is :)
+This should fix a crash that was reported on ast (and possibly other
+drivers which do not initialize vblank).
 
-No problem :) I'm sure there are gremlins hiding there.
-Part of the problem is that nothing prevents drivers doing 'wrong things'
-other than us noticing when it happens.
+   fbcon: Taking over console
+   Unable to handle kernel NULL pointer dereference at virtual address 0000000000000074
+   Mem abort info:
+     ESR = 0x0000000096000004
+     EC = 0x25: DABT (current EL), IL = 32 bits
+     SET = 0, FnV = 0
+     EA = 0, S1PTW = 0
+     FSC = 0x04: level 0 translation fault
+   Data abort info:
+     ISV = 0, ISS = 0x00000004
+     CM = 0, WnR = 0
+   user pgtable: 4k pages, 48-bit VAs, pgdp=0000080009d16000
+   [0000000000000074] pgd=0000000000000000, p4d=0000000000000000
+   Internal error: Oops: 0000000096000004 [#1] SMP
+   Modules linked in: ip6table_nat tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc binfmt_misc vfat fat xfs snd_usb_audio snd_hwdep snd_usbmidi_lib snd_seq snd_pcm snd_rawmidi snd_timer snd_seq_device snd soundcore joydev mc ipmi_ssif ipmi_devintf ipmi_msghandler arm_spe_pmu arm_cmn arm_dsu_pmu arm_dmc620_pmu cppc_cpufreq loop zram crct10dif_ce polyval_ce nvme polyval_generic ghash_ce sbsa_gwdt igb nvme_core ast nvme_common i2c_algo_bit xgene_hwmon gpio_dwapb scsi_dh_rdac scsi_dh_emc scsi_dh_alua ip6_tables ip_tables dm_multipath fuse
+   CPU: 12 PID: 469 Comm: kworker/12:1 Not tainted 6.3.0-rc2-00008-gd39e48ca80c0 #1
+   Hardware name: ADLINK AVA Developer Platform/AVA Developer Platform, BIOS TianoCore 2.04.100.07 (SYS: 2.06.20220308) 09/08/2022
+   Workqueue: events fbcon_register_existing_fbs
+   pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+   pc : drm_crtc_next_vblank_start+0x2c/0x98
+   lr : drm_atomic_helper_wait_for_fences+0x90/0x240
+   sp : ffff80000d583960
+   x29: ffff80000d583960 x28: ffff07ff8fc187b0 x27: 0000000000000000
+   x26: ffff07ff99c08c00 x25: 0000000000000038 x24: ffff07ff99c0c000
+   x23: 0000000000000001 x22: 0000000000000038 x21: 0000000000000000
+   x20: ffff07ff9640a280 x19: 0000000000000000 x18: ffffffffffffffff
+   x17: 0000000000000000 x16: ffffb24d2eece1c0 x15: 0000003038303178
+   x14: 3032393100000048 x13: 0000000000000000 x12: 0000000000000000
+   x11: 0000000000000000 x10: 0000000000000000 x9 : ffffb24d2eeeaca0
+   x8 : ffff80000d583628 x7 : 0000080077783000 x6 : 0000000000000000
+   x5 : ffff80000d584000 x4 : ffff07ff99c0c000 x3 : 0000000000000130
+   x2 : 0000000000000000 x1 : ffff80000d5839c0 x0 : ffff07ff99c0cc08
+   Call trace:
+    drm_crtc_next_vblank_start+0x2c/0x98
+    drm_atomic_helper_wait_for_fences+0x90/0x240
+    drm_atomic_helper_commit+0xb0/0x188
+    drm_atomic_commit+0xb0/0xf0
+    drm_client_modeset_commit_atomic+0x218/0x280
+    drm_client_modeset_commit_locked+0x64/0x1a0
+    drm_client_modeset_commit+0x38/0x68
+    __drm_fb_helper_restore_fbdev_mode_unlocked+0xb0/0xf8
+    drm_fb_helper_set_par+0x44/0x88
+    fbcon_init+0x1e0/0x4a8
+    visual_init+0xbc/0x118
+    do_bind_con_driver.isra.0+0x194/0x3a0
+    do_take_over_console+0x50/0x70
+    do_fbcon_takeover+0x74/0xf8
+    do_fb_registered+0x13c/0x158
+    fbcon_register_existing_fbs+0x78/0xc0
+    process_one_work+0x1ec/0x478
+    worker_thread+0x74/0x418
+    kthread+0xec/0x100
+    ret_from_fork+0x10/0x20
+   Code: f9400004 b9409013 f940a082 9ba30a73 (b9407662)
+   ---[ end trace 0000000000000000 ]---
 
-> 
-> > Note that we keep a reference to the struct indio_dev->dev (rather that the
-> > underlying device) so that is not freed until the last fd is closed.
-> > Thus, although devm unwinding has occurred that doesn't mean all the data
-> > that was allocated with devm_xx calls is cleared up immediately.  
-> 
-> I'm not sure I get that part though. devm unwinding can happen even if the refcount is > 1
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Fixes: d39e48ca80c0 ("drm/atomic-helper: Set fence deadline for vblank")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/drm_vblank.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-No IIO driver should be using devm on the indio_dev->dev, they should be doing it on the
-parent device.  When the devm_iio_device_free() gets called, that doesn't actually free
-the device. Just decrements a reference count (earlier on we already ensured that
-it is just acting as a stub that provides no access to the underlying device for
-open FDs.).
-
-There are probably more problems hiding though!
-
-Jonathan
-
-
-
-> 
-> Maxime
+diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
+index 299fa2a19a90..e98e3cefba3a 100644
+--- a/drivers/gpu/drm/drm_vblank.c
++++ b/drivers/gpu/drm/drm_vblank.c
+@@ -996,10 +996,16 @@ EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
+ int drm_crtc_next_vblank_start(struct drm_crtc *crtc, ktime_t *vblanktime)
+ {
+ 	unsigned int pipe = drm_crtc_index(crtc);
+-	struct drm_vblank_crtc *vblank = &crtc->dev->vblank[pipe];
+-	struct drm_display_mode *mode = &vblank->hwmode;
++	struct drm_vblank_crtc *vblank;
++	struct drm_display_mode *mode;
+ 	u64 vblank_start;
+ 
++	if (!crtc->dev->vblank)
++		return -EINVAL;
++
++	vblank = &crtc->dev->vblank[pipe];
++	mode = &vblank->hwmode;
++
+ 	if (!vblank->framedur_ns || !vblank->linedur_ns)
+ 		return -EINVAL;
+ 
+-- 
+2.39.2
 
