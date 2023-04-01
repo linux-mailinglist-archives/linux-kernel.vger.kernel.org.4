@@ -2,332 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A236D33A2
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 21:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DF56D33AE
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 21:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjDATul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 15:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S229659AbjDAT6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 15:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDATuj (ORCPT
+        with ESMTP id S229379AbjDAT62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 15:50:39 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2061.outbound.protection.outlook.com [40.107.243.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAB626580;
-        Sat,  1 Apr 2023 12:50:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RQmzJ8ceP4Yik497GPm2n9MWMu2PMMF31EZvhik/3EbuePWinXUmy6Ni2bRBjAbysbx6dLhSpar/I1f8w7faF1d4rV/ivcAg3025zJ4/tS7a+p7pNHWdtHmUD6PRorO0mzsI/PAs+JTDysu8wbKglCzIpgtpg8FSPO2nQnwoJsiibKuB/M1MzO9ZHQKAWBI6dK+2p/O5Hx6NTdn9QdcJptwBm4DPHnugWS9+QQXyLzxJXUY8QSmIdAPJ6pfX6tdvFaFeFE5YfVk97i+S92qPrJmAHlCTQEmqV5LZVa9poIutQGW38wj1Lmhd6/iXxiry8QvSvqAmboxN+P1djmhq2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tTjymSt0VfSc0fXRap84FqhH5s2yNtzwrSTE0Xmew70=;
- b=oY5JOc/jBlZb/ArLfnVBZ2dhSjKJ/ebJ4t4pCatPCx53AbV/b/rfsGxbeEU4ONH6HCMdfMNddYdOT/S+nk675QTkaoFh3E7UJ7JTn6vpChtE3dfrqALDO5/SNgMgy+ZMCan6wOH8pDz3zHxmnbSmdbU/QXiE7CE5QPAlVO2JodoonRSG03Pmew7o5I/yHxkp7E77v0+Kl+Zt8rtmyXNvkEX213Sm1DzgtZWl6KdbtK3SXzetX/b3fghyVAEDnIy4/RbbIPeSkNk8GsMUYubcXYi0YQ42CgdOw4ULYQiEsdIAacCMv0o6Id65o7PLdXWKo3dEEsqeaxUKZNvyRW/Dbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tTjymSt0VfSc0fXRap84FqhH5s2yNtzwrSTE0Xmew70=;
- b=QYqXJZDFca/n5fAEmaEGH8hbsl85JFn5Lvt0oTdf9uWHDBKpPV3dDW4iX6E5UZhSlriXMDqVy/pNupY7FPPNZQUIqjIHu4B4LE8FU8z5Ng5VGR24g5UUd0WHyKSYnyCDzBcEtt/ZxOT4pOhwUs6kBbWkd4II94jr11HeXVaQSQAVWUQ1mSakI8j9pO1ZoeswER4o4R+bauRsNmksERNYwnonNvEQv2rp5Qo+4+ZtklMEPfNE5kJy5feRCCSf0BmiXxgCC2RGRtwWx3pZy+Z/d+kpT05FOzzSy5bmWL++81RQP+9ExyLwMdyDJ9YH10ppkTgc0w8RH8YcrOHDv2iTIg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN0PR12MB5762.namprd12.prod.outlook.com (2603:10b6:208:375::12)
- by MW4PR12MB7013.namprd12.prod.outlook.com (2603:10b6:303:218::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.27; Sat, 1 Apr
- 2023 19:50:32 +0000
-Received: from MN0PR12MB5762.namprd12.prod.outlook.com
- ([fe80::f3e4:c5a8:7103:8ef1]) by MN0PR12MB5762.namprd12.prod.outlook.com
- ([fe80::f3e4:c5a8:7103:8ef1%3]) with mapi id 15.20.6254.023; Sat, 1 Apr 2023
- 19:50:32 +0000
-Message-ID: <05cac339-5585-b82b-ae5a-4258c62ad8a9@nvidia.com>
-Date:   Sat, 1 Apr 2023 14:50:27 -0500
+        Sat, 1 Apr 2023 15:58:28 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4B4AD0C
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 12:58:24 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 20so26504006lju.0
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 12:58:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680379102;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fwnHi09+elTR3UZLLVl3sZt/UwMRssVkoYabnFhUaeU=;
+        b=HglNIkSjQqrTxRcsmP8Eyo8nFkjkwb0Fp6cVqY9/jIId+cA5SUnPhWJ3CicpBeMbrY
+         TkRZ1AtL2hBCbR5OjxbLlaJz7XXU1GF2PqN0nAHaRHm4BWe8R50UNUWEbPZugw2KCeYV
+         mAfYYkFXAt1aR3AirNvfa6xWRJR5lozSlDIWaYLSRJ8bnTsOhE/tHhmOiALiYrsIm4Mi
+         5OCOXx0yPWICXOyn3+aCNa+6aQsyPw2fXFFjx7PKeI6iomBnev/yrdvHS+P5tQ8Rf7y4
+         MpojXLl43T5U/6sVmKu8qfp7wD8kpf2XtlTpSrAXlSugHykBAA/hGrrpvF3USKu4Q2G9
+         LSdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680379102;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fwnHi09+elTR3UZLLVl3sZt/UwMRssVkoYabnFhUaeU=;
+        b=uVYXTYPIt9bzwdtCuTovoiTHWvKqDwsM74aIvUxShKg/H4Im24CxttfPPSDixWkzSV
+         xFoM+hrk/tgyNvsgLWttEb0cf1iKu2pjt3cPXs3pVo3qHZc+gFwOfT1BvoVmqCoyR0Zr
+         MlI2tD3sxI61nZO70nmbuSDj0hcHDpdLc8EbX3ZwEYeFUB7Q5JiX5BdcS2OHAbhjuHZ/
+         o5F2q/aZqBS9ioOobKMK7jGz9M/iS2O/PrHPf12mV4mtLPBUCR6FGlD+YxWmefKvxkcq
+         IGk+guGvLsR6cGPJdJ1xnlCfulWJBlwzjQn4b++I9xLOl2vWm1oNpR4MEim8pF+wT+1l
+         zXhw==
+X-Gm-Message-State: AAQBX9cluF5zDddKN6k9cZQM/BsrUkSYsJSQNVimSjbsWjEMAMjK+cBn
+        E5Xsk8uioknOR87L5xCs0ovyFA==
+X-Google-Smtp-Source: AKy350bgfdixJAWw6uWqEqJ5aTFocNM2BbyRCa+1LC9oDjHuI0w9TCDVG5l+vC7V+bbVnQUAZ2exMg==
+X-Received: by 2002:a2e:8781:0:b0:2a6:2088:cfa4 with SMTP id n1-20020a2e8781000000b002a62088cfa4mr1710135lji.42.1680379102378;
+        Sat, 01 Apr 2023 12:58:22 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id d4-20020a2e3604000000b0029353caa593sm955337lja.5.2023.04.01.12.58.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Apr 2023 12:58:21 -0700 (PDT)
+Message-ID: <e5b758ed-f279-ecc3-3be4-039c5a19b212@linaro.org>
+Date:   Sat, 1 Apr 2023 22:58:21 +0300
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2] arm64: mm: Increase MODULES_VSIZE to 2GB
-Content-Language: en-US
-From:   Shanker Donthineni <sdonthineni@nvidia.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Zhou Guanghui <zhouguanghui1@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vikram Sethi <vsethi@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>
-References: <20230330140437.984211-1-sdonthineni@nvidia.com>
- <d0f20427-256d-d88c-5a40-5e4aa5c0618f@nvidia.com>
-In-Reply-To: <d0f20427-256d-d88c-5a40-5e4aa5c0618f@nvidia.com>
+Subject: Re: [RESEND PATCH v2 1/1] arm64: dts: qcom: sm6115: Add CPU
+ idle-states
+Content-Language: en-GB
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        andersson@kernel.org, bhupesh.linux@gmail.com,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org
+References: <20230330193303.612475-1-bhupesh.sharma@linaro.org>
+ <0ff99bb5-4792-270d-b03e-2638939f160f@linaro.org>
+ <CAH=2NtzPReiUHuEAW8PsQJvNzOYvb71pZ7SWRbThWdLT7_a0ug@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <CAH=2NtzPReiUHuEAW8PsQJvNzOYvb71pZ7SWRbThWdLT7_a0ug@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR07CA0104.namprd07.prod.outlook.com
- (2603:10b6:a03:12b::45) To MN0PR12MB5762.namprd12.prod.outlook.com
- (2603:10b6:208:375::12)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB5762:EE_|MW4PR12MB7013:EE_
-X-MS-Office365-Filtering-Correlation-Id: 878887c4-c0aa-4e3c-7c8d-08db32ea5a37
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EOOYCn1Nya5zaaXqXV6XBtZa7cJjiqYY3OS/wYShdRAH8NyywaniNbNXfx/+YF0sxjwvYUd6vx8ByqQygH2e7jFliRvgfCecrpzXtAA16TXmAL1jv/j96lJKP114Aa+cF8aZ4lHzVPs09WxKJap061wjJvTZUS1okIISmjhDsQBMdXB1x25qWIw4f5m4VYx7+JTCt0EAGb7BTZcEzwOf+Ji9NOhp7yvjnxBbOyuitFtAQm47bz/ckg2vQ88LUIx20siPuJeTh9es+N3fUIiLzmFSVz9sQff32aFafcVrxarUGJMm742at/o0LzwC/u4LquzwtlAJ08JxYGz9S7ZcSfWLJghr1QP5WcaZti3sgVpKrnL/pMSNNU/xMrj78W/zAIhWx37mCrEF5REjNGbkuczOYNGLWzfw0mcLQXj7Jd40olugQPE2WZ/CtQtfjOpY+fN0iQsMMHOlGjRKteBM+oFuyhJQCNehM09VeCikUIA9k7bOslcv8GGsnq5vgw+jYUSkDJCMlMV1PGsYuXHVVtPcANZNmOzFp9k7I9y+Tp8jrHY3hThi+QLr4BGD3caeA5urxmEI6JprIMch/DufmruMH+eSCKDrvqFcKznuX1PTFw/aGCE4d+9zVlQlWKIWLdpb22LuIBidM/7S20OcLQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5762.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(376002)(396003)(346002)(136003)(451199021)(2906002)(66476007)(186003)(53546011)(41300700001)(6512007)(83380400001)(4326008)(6506007)(6486002)(5660300002)(26005)(66946007)(316002)(7416002)(38100700002)(31696002)(54906003)(6666004)(2616005)(31686004)(8676002)(110136005)(478600001)(8936002)(66556008)(36756003)(86362001)(107886003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z2FodTRqd1A2MW1pazkvZ29OVFdiWWNwbSszY2hQNFdLNFpHSW9mQ2JseGtj?=
- =?utf-8?B?L2EvbHNOUHZVSDZrWTNLdUM5VVFpcm9mcGU1TURxb1hIWlFFSEpWSFFzRXVp?=
- =?utf-8?B?VU1Ed2J5K1BzeDBoSzZPbXdRU1o1UFR5cnpiSGh4dFlMOFhPcWx6UUR2QU54?=
- =?utf-8?B?Tm9DZ2FkTm9UVjhTUXIybGw1RXU2enZFUzRlZUxVRTdleTZwcm5YeVRJQmNm?=
- =?utf-8?B?MlpHRitvM29CcWRMRytmWlFmOVJVeUFFYkNqUEpSRGc4UkozUUxmTDJycDVz?=
- =?utf-8?B?SHRncVVrRUtlMzBMY1FLWHVWcUZWTEVmRkpIUVI0YzdKMnJ4MzFJVE5tQVZv?=
- =?utf-8?B?enNRUVlqZ0p2T1JwRHpyOW1PdFpzZ2FHZ2tUd1hROGxTT2xKRUxnbGtEdkli?=
- =?utf-8?B?QXJmemRpaTk1WFp5UlZ5QzdSVUlsaVBuQ282eERNRGpjYVpoREhvVG9vSm5Y?=
- =?utf-8?B?VUgyQkw3Ujdhb2VKc1BndTVBRy9aVS9uRGtSQ0tUVysrKy9YSllRMkIwcEh6?=
- =?utf-8?B?Qk5kNWkvQW8wcUtNUituSXFzZ1pzWDBCUzVIMDRzRUhmYjhKYUZibXRzNFFp?=
- =?utf-8?B?aXlCdUpMcXpZQjI1bGtSUnRRQlVxeHl1VVFiTnp4UzJ2cTkrR1FVb2ZubThK?=
- =?utf-8?B?QVpiVjZiWEdhanRhRGIwNU5EU21nWkFacHhVV094UEU4NS9hKzVUVUI5cURH?=
- =?utf-8?B?OVlnTWNBdVZ1dlYzRTZ0Y3FvMGFsQkJQZWU2T2FOQllBaXpBRndCekNseC9n?=
- =?utf-8?B?WWF5N1lOVjVQWk9NS2o1NzFzR3hZZ21MZ2x2L0sydWdpeXBVV0NScVcwL2xp?=
- =?utf-8?B?WldPSk1iT2pHY3dESmRlQ1JpV21qRkNyVzhZSlAwWjRQcUkzUlczdHczK1Qy?=
- =?utf-8?B?eUpRNlZzQVhBak5CNFpvL2FQOVNrOXVDQVZoTnpkYzNUb3kxZi9EcE1nUVlx?=
- =?utf-8?B?aXZJRkdoQ0YyM3pHdU5wSkd4NUFtN25obldOenFUejFZQWU1aE1KenBlZXFy?=
- =?utf-8?B?Z0syUEhMcVcrTGR4c3NCM3ZBMVZVYkVaK09adGZTcTBWZkNQUTZ3T050WExW?=
- =?utf-8?B?YXVzV1FJZFhrY0FMTHZDeWZ1cHhWOUc3dnlBS2FlckNrKzRFSVdPNTdrOUlF?=
- =?utf-8?B?NFVyaUxKYzlYTTBjVWNtUUZrZWZtYWVkUzRuaXl3OUdxUXduVWwyZ1htNmRE?=
- =?utf-8?B?WHNNVVhOQ0pNM3lTQzBxcE5iOGJYWFg5eTZqcFRaWlMyZTVKQmlKWEhSMlgw?=
- =?utf-8?B?eDNCclduWkU3ZEZtaGd1ZExaL2N1dy9yL0xMcDlxb3RSZUhqaG9ZQmlxcGdo?=
- =?utf-8?B?YlVTVGdxQ1FTU2hxSk83MTdGZlhxZ1lIZjNkVkYwZzdvT1NLSHNjQ1pjQ0Rv?=
- =?utf-8?B?elBUUElYNXptSTA5RDlIK0tDMEZnNmZyS1lMR3V3MWk2T1lnQmRZOU01QWVt?=
- =?utf-8?B?ZG5abHp0NEZBMXU0dk03UVBXTHp5b2xYdUN6VWpGbkxleGM3ellXNlpCOUhr?=
- =?utf-8?B?c2N2OHBHYnR0WjJVMmd4TXRYeVpGRExPelJTYWhUL3pEMExCLzhPbmtocVF5?=
- =?utf-8?B?dnRnQm1jMkd5cmhXeGpWNFhWTVhrSk1vM1Q0VGR4Q0JDOElWUi9YRzNIbFpv?=
- =?utf-8?B?MGdMdXQ4Tys4OWJvVkQzOG1KZUxzSmhHb3FHNTZTYnNNbDQyMnBiSzFnekx0?=
- =?utf-8?B?VlBMaDZiOWZmQ3lRZWcyVktFUkNVQ0djQ1BHYktQOVV3bG0zN2FtR1lkdzVH?=
- =?utf-8?B?bWN4SVFia2dLa2pDZjhwQ3VzQytsTm5OK3hjaUFaY1o2QURBZHY0cXYwREdj?=
- =?utf-8?B?TllSdVZENjdOWHhIam5oV2UxSEo0UXY5dnNBcTcrK3BSRllZeW52T29UWWdN?=
- =?utf-8?B?U0JXZGZ4VFIzYm13ZHNrYTdiZGpxQnpVMEhIRVp0WDh1NVFHQ1dUc20xbnU4?=
- =?utf-8?B?c3ZlbzROUlFWMjVzNjlGVmJSM0lqQTNpbDRJaXA2VjR4b0tZWkNRbkpKcU5y?=
- =?utf-8?B?Nlg4WU85akNueVJpbGh6b1RpbHJXZlVkdm0wVGlTWTJTWVRxQjhZNE9xSmRB?=
- =?utf-8?B?dzMvanF4N0dLYW5WeVFLZmZmY3piNlp2U2s0UlNBS01zNy9RcXBGcTZPQy9p?=
- =?utf-8?Q?kmmvtArLW5vwpUL5D+k2MgcdG?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 878887c4-c0aa-4e3c-7c8d-08db32ea5a37
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5762.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2023 19:50:32.3565
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GQupfJk8pcF5/T7beSPG/SfJ4mOe4R0DawvG+CEXuiZwRx6hVDHthjO2X/vrVuZppPuJQCNCKqPwQuvQ8gyszQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7013
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Ard,
-
-On 3/31/23 16:48, Shanker Donthineni wrote:
-> Hi Ard,
+On 01/04/2023 21:26, Bhupesh Sharma wrote:
+> Hi Konrad,
 > 
-> On 3/30/23 09:04, Shanker Donthineni wrote:
->> The allocation of modules occurs in two regions. The first region
->> is MODULES_VSIZE, which is 128MB in size and shared with the core
->> kernel when the KASLR feature is unavailable or disabled through
->> a boot parameter. The second region, which is 2GB in size, is
->> shared with the other vmalloc callers. Depending on the size of
->> the core kernel, the 128MB region may quickly fill up after
->> loading a few modules, causing the system to switch to the 2GB
->> region. Unfortunately, even the 2GB region can run out of space
->> if previously loaded modules and other kernel subsystems consume
->> the entire area, leaving no space for additional modules.
+> On Sat, 1 Apr 2023 at 17:51, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 >>
->> This issue usually occurs when the system has a large number of
->> CPU cores, PCIe host-brigde controllers, and I/O devices. For
->> instance, the ECAM region of one host-bridge controller can use
->> up to 256MB of vmalloc space, while eight controllers can occupy
->> the entire 2GB.
 >>
->> To address this problem, a possible solution would be to increase
->> the MODULES_VSIZE to 2GB. This would improve the system's ability
->> to accommodate a greater number of dynamically loaded modules and
->> drivers when KASLR is not enabled. However, prior to switching to
->> the 2GB region, it is advisable to allocate modules within the
->> 128MB space that covers the core kernel, in order to benefit from
->> the direct branches.
 >>
->> Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
->> ---
->> Changes since v1:
->>   - Included Ard's recommendations.
->>   - Revised the commit message.
+>> On 30.03.2023 21:33, Bhupesh Sharma wrote:
+>>> Add CPU idle-state nodes and power-domains in Qualcomm sm6115 SoC dtsi.
+>>>
+>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>>> ---
+>>> Changes since v1:
+>>> - v1 can be viewed here: https://lore.kernel.org/lkml/e5cda4cf-5c2a-a7ed-9e1d-1fe9f2cbef40@linaro.org
+>>> - Addressed Konrad's comments on v1 and added GDHS and Power Collapse
+>>>    cluster power states.
+>>>
+>>>   arch/arm64/boot/dts/qcom/sm6115.dtsi | 136 +++++++++++++++++++++++++++
+>>>   1 file changed, 136 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+>>> index 2a51c938bbcb..b63395d476ed 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+>>> @@ -45,6 +45,8 @@ CPU0: cpu@0 {
+>>>                        enable-method = "psci";
+>>>                        next-level-cache = <&L2_0>;
+>>>                        qcom,freq-domain = <&cpufreq_hw 0>;
+>>> +                     power-domains = <&CPU_PD0>;
+>>> +                     power-domain-names = "psci";
+>>>                        L2_0: l2-cache {
+>>>                                compatible = "cache";
+>>>                                cache-level = <2>;
+>>> @@ -61,6 +63,8 @@ CPU1: cpu@1 {
+>>>                        enable-method = "psci";
+>>>                        next-level-cache = <&L2_0>;
+>>>                        qcom,freq-domain = <&cpufreq_hw 0>;
+>>> +                     power-domains = <&CPU_PD1>;
+>>> +                     power-domain-names = "psci";
+>>>                };
+>>>
+>>>                CPU2: cpu@2 {
+>>> @@ -73,6 +77,8 @@ CPU2: cpu@2 {
+>>>                        enable-method = "psci";
+>>>                        next-level-cache = <&L2_0>;
+>>>                        qcom,freq-domain = <&cpufreq_hw 0>;
+>>> +                     power-domains = <&CPU_PD2>;
+>>> +                     power-domain-names = "psci";
+>>>                };
+>>>
+>>>                CPU3: cpu@3 {
+>>> @@ -85,6 +91,8 @@ CPU3: cpu@3 {
+>>>                        enable-method = "psci";
+>>>                        next-level-cache = <&L2_0>;
+>>>                        qcom,freq-domain = <&cpufreq_hw 0>;
+>>> +                     power-domains = <&CPU_PD3>;
+>>> +                     power-domain-names = "psci";
+>>>                };
+>>>
+>>>                CPU4: cpu@100 {
+>>> @@ -97,6 +105,8 @@ CPU4: cpu@100 {
+>>>                        dynamic-power-coefficient = <282>;
+>>>                        next-level-cache = <&L2_1>;
+>>>                        qcom,freq-domain = <&cpufreq_hw 1>;
+>>> +                     power-domains = <&CPU_PD4>;
+>>> +                     power-domain-names = "psci";
+>>>                        L2_1: l2-cache {
+>>>                                compatible = "cache";
+>>>                                cache-level = <2>;
+>>> @@ -113,6 +123,8 @@ CPU5: cpu@101 {
+>>>                        enable-method = "psci";
+>>>                        next-level-cache = <&L2_1>;
+>>>                        qcom,freq-domain = <&cpufreq_hw 1>;
+>>> +                     power-domains = <&CPU_PD5>;
+>>> +                     power-domain-names = "psci";
+>>>                };
+>>>
+>>>                CPU6: cpu@102 {
+>>> @@ -125,6 +137,8 @@ CPU6: cpu@102 {
+>>>                        enable-method = "psci";
+>>>                        next-level-cache = <&L2_1>;
+>>>                        qcom,freq-domain = <&cpufreq_hw 1>;
+>>> +                     power-domains = <&CPU_PD6>;
+>>> +                     power-domain-names = "psci";
+>>>                };
+>>>
+>>>                CPU7: cpu@103 {
+>>> @@ -137,6 +151,8 @@ CPU7: cpu@103 {
+>>>                        enable-method = "psci";
+>>>                        next-level-cache = <&L2_1>;
+>>>                        qcom,freq-domain = <&cpufreq_hw 1>;
+>>> +                     power-domains = <&CPU_PD7>;
+>>> +                     power-domain-names = "psci";
+>>>                };
+>>>
+>>>                cpu-map {
+>>> @@ -176,6 +192,68 @@ core3 {
+>>>                                };
+>>>                        };
+>>>                };
+>>> +
+>>> +             idle-states {
+>>> +                     entry-method = "psci";
+>>> +
+>>> +                     LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
+>>> +                             compatible = "arm,idle-state";
+>>> +                             idle-state-name = "silver-rail-power-collapse";
+>>> +                             arm,psci-suspend-param = <0x40000003>;
+>>> +                             entry-latency-us = <290>;
+>>> +                             exit-latency-us = <376>;
+>>> +                             min-residency-us = <1182>;
+>>> +                             local-timer-stop;
+>>> +                     };
+>>> +
+>>> +                     BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
+>>> +                             compatible = "arm,idle-state";
+>>> +                             idle-state-name = "gold-rail-power-collapse";
+>>> +                             arm,psci-suspend-param = <0x40000003>;
+>>> +                             entry-latency-us = <297>;
+>>> +                             exit-latency-us = <324>;
+>>> +                             min-residency-us = <1110>;
+>>> +                             local-timer-stop;
+>>> +                     };
+>>> +             };
+>>> +
+>>> +             domain-idle-states {
+>>> +                     CLUSTER_0_SLEEP_0: cluster-sleep-0-0 {
+>>> +                             /* GDHS */
+>>> +                             compatible = "domain-idle-state";
+>>> +                             arm,psci-suspend-param = <0x40000022>;
+>> This 0x22 ending seems very sus.
 >>
->> dmesg:
->>   On a NVIDIA T241 system with Ubuntu-22.04, hitting boot failures
->>   due to vmalloc/vmap allocation errors when loading modules.
+>> The last nibble represents the core-level power state and the
+>> penultimate one represents the same at cluster level. A value
+>> of 2 in that cluster nibble is actually undefined by the PSCI spec,
+>> whereas the value of 4 (as you have in all of the other idle
+>> states, including D3G for the perf cluster) corresponds to
+>> "Retention", so unless there's a very weird nuance in the
+>> TZ for this SoC, it should probably end in 0x42.
 >>
->>   [   64.181308] ipmi_ssif: IPMI SSIF Interface driver
->>   [   64.184494] usbcore: registered new interface driver r8152
->>   [   64.242492] vmap allocation for size 393216 failed: use vmalloc=<size> to increase size
->>   [   64.242499] systemd-udevd: vmalloc error: size 327680, vm_struct allocation failed, mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0-3
->>   [   64.242510] CPU: 32 PID: 2910 Comm: systemd-udevd Tainted: G           OE      6.2-generic-64k
->>   [   64.242513] Hardware name: NVIDIA T241, BIOS v1.1.0 2023-03-18T21:32:31+00:00
->>   [   64.242515] Call trace:
->>   [   64.242516]  dump_backtrace+0xe0/0x130
->>   [   64.242523]  show_stack+0x20/0x60
->>   [   64.242525]  dump_stack_lvl+0x68/0x84
->>   [   64.242530]  dump_stack+0x18/0x34
->>   [   64.242532]  warn_alloc+0x11c/0x1b0
->>   [   64.242537]  __vmalloc_node_range+0xe0/0x20c
->>   [   64.242540]  module_alloc+0x118/0x160
->>   [   64.242543]  move_module+0x2c/0x190
->>   [   64.242546]  layout_and_allocate+0xfc/0x160
->>   [   64.242548]  load_module+0x260/0xbc4
->>   [   64.242549]  __do_sys_finit_module+0xac/0x130
->>   [   64.242551]  __arm64_sys_finit_module+0x28/0x34
->>   [   64.242552]  invoke_syscall+0x78/0x100
->>   [   64.242553]  el0_svc_common.constprop.0+0x170/0x194
->>   [   64.242555]  do_el0_svc+0x38/0x4c
->>   [   64.242556]  el0_svc+0x2c/0xc0
->>   [   64.242558]  el0t_64_sync_handler+0xbc/0x13c
->>   [   64.242560]  el0t_64_sync+0x1a0/0x1a4
->>
->>   Documentation/arm64/memory.rst  | 8 ++++----
->>   arch/arm64/include/asm/memory.h | 2 +-
->>   arch/arm64/kernel/module.c      | 2 +-
->>   3 files changed, 6 insertions(+), 6 deletions(-)
->>
->> diff --git a/Documentation/arm64/memory.rst b/Documentation/arm64/memory.rst
->> index 2a641ba7be3b..55a55f30eed8 100644
->> --- a/Documentation/arm64/memory.rst
->> +++ b/Documentation/arm64/memory.rst
->> @@ -33,8 +33,8 @@ AArch64 Linux memory layout with 4KB pages + 4 levels (48-bit)::
->>     0000000000000000    0000ffffffffffff     256TB        user
->>     ffff000000000000    ffff7fffffffffff     128TB        kernel logical memory map
->>    [ffff600000000000    ffff7fffffffffff]      32TB        [kasan shadow region]
->> -  ffff800000000000    ffff800007ffffff     128MB        modules
->> -  ffff800008000000    fffffbffefffffff     124TB        vmalloc
->> +  ffff800000000000    ffff80007fffffff       2GB        modules
->> +  ffff800080000000    fffffbffefffffff     124TB        vmalloc
->>     fffffbfff0000000    fffffbfffdffffff     224MB        fixed mappings (top down)
->>     fffffbfffe000000    fffffbfffe7fffff       8MB        [guard region]
->>     fffffbfffe800000    fffffbffff7fffff      16MB        PCI I/O space
->> @@ -50,8 +50,8 @@ AArch64 Linux memory layout with 64KB pages + 3 levels (52-bit with HW support):
->>     0000000000000000    000fffffffffffff       4PB        user
->>     fff0000000000000    ffff7fffffffffff      ~4PB        kernel logical memory map
->>    [fffd800000000000    ffff7fffffffffff]     512TB        [kasan shadow region]
->> -  ffff800000000000    ffff800007ffffff     128MB        modules
->> -  ffff800008000000    fffffbffefffffff     124TB        vmalloc
->> +  ffff800000000000    ffff80007fffffff       2GB        modules
->> +  ffff800080000000    fffffbffefffffff     124TB        vmalloc
->>     fffffbfff0000000    fffffbfffdffffff     224MB        fixed mappings (top down)
->>     fffffbfffe000000    fffffbfffe7fffff       8MB        [guard region]
->>     fffffbfffe800000    fffffbffff7fffff      16MB        PCI I/O space
->> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
->> index 78e5163836a0..b58c3127323e 100644
->> --- a/arch/arm64/include/asm/memory.h
->> +++ b/arch/arm64/include/asm/memory.h
->> @@ -46,7 +46,7 @@
->>   #define KIMAGE_VADDR        (MODULES_END)
->>   #define MODULES_END        (MODULES_VADDR + MODULES_VSIZE)
->>   #define MODULES_VADDR        (_PAGE_END(VA_BITS_MIN))
->> -#define MODULES_VSIZE        (SZ_128M)
->> +#define MODULES_VSIZE        (SZ_2G)
->>   #define VMEMMAP_START        (-(UL(1) << (VA_BITS - VMEMMAP_SHIFT)))
->>   #define VMEMMAP_END        (VMEMMAP_START + VMEMMAP_SIZE)
->>   #define PCI_IO_END        (VMEMMAP_START - SZ_8M)
->> diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
->> index 5af4975caeb5..b4affe775f23 100644
->> --- a/arch/arm64/kernel/module.c
->> +++ b/arch/arm64/kernel/module.c
->> @@ -37,7 +37,7 @@ void *module_alloc(unsigned long size)
->>           /* don't exceed the static module region - see below */
->>           module_alloc_end = MODULES_END;
->> -    p = __vmalloc_node_range(size, MODULE_ALIGN, module_alloc_base,
->> +    p = __vmalloc_node_range(size, MODULE_ALIGN, module_alloc_end - SZ_128M,
->>                   module_alloc_end, gfp_mask, PAGE_KERNEL, VM_DEFER_KMEMLEAK,
->>                   NUMA_NO_NODE, __builtin_return_address(0));
-> Occasionally encountering the "overflow in relocation type 261" error suggests that the
-> expression 'module_alloc_end - SZ_128M' may be outside the 2GB range starting from the
-> beginning of _stext. Used the following code to resolve the issue And also enable
-> randomization of module base within 128MB if CONFIG_RANDOMIZE_MODULE_REGION_FULL is not
-> defined.
+>> Otherwise I think this LGTM now!
 > 
+> I am also learning by experiment about the exact values to use here,
+> as the only ready reckoner of how these values are calculated, seems
+> to be available via [1].
 > 
-> --- a/arch/arm64/include/asm/memory.h
-> +++ b/arch/arm64/include/asm/memory.h
-> @@ -46,7 +46,7 @@
->   #define KIMAGE_VADDR           (MODULES_END)
->   #define MODULES_END            (MODULES_VADDR + MODULES_VSIZE)
->   #define MODULES_VADDR          (_PAGE_END(VA_BITS_MIN))
-> -#define MODULES_VSIZE          (SZ_128M)
-> +#define MODULES_VSIZE          (SZ_2G)
->   #define VMEMMAP_START          (-(UL(1) << (VA_BITS - VMEMMAP_SHIFT)))
->   #define VMEMMAP_END            (VMEMMAP_START + VMEMMAP_SIZE)
->   #define PCI_IO_END             (VMEMMAP_START - SZ_8M)
-> diff --git a/arch/arm64/kernel/kaslr.c b/arch/arm64/kernel/kaslr.c
-> index e7477f21a4c9..4f92fc511b85 100644
-> @@ -70,18 +70,19 @@ static int __init kaslr_init(void)
->                   * resolved normally.)
->                   */
->                  module_range = SZ_2G - (u64)(_end - _stext);
-> -               module_alloc_base = max((u64)_end - SZ_2G, (u64)MODULES_VADDR);
-> +               module_alloc_base = max((u64)_etext - SZ_2G, (u64)MODULES_VADDR);
->          } else {
+> Also it seems the downstream code uses the following approach to
+> calculate the LPM state suspend-param, which for example for
+> CLUSTER_0_SLEEP_1 states turns out to be:
+> 
+>      state_id = get_cluster_id(cpu->parent, &affinity_level, from_idle); = 0x40
+>      power_state = (is-reset << 30) = 0x40000000
+>      affinity_level = (affinity level & 0x3) << 24 = 0x1000000
+>      state_id += power_state + affinity_level + psci_id;
+> 
+>      = 0x40000000 + 0x1000000 + 0x40 + 0x4 = 0x41000044
+> 
+> For the D3G cases as well, I just used the 'qcom,psci-mode = <2>'
+> value as provided in downstream code (see [2]), for the overall
+> calculations.
+> 
+> Also, the only usage of D3G state I could find upstream (in qcom dtsi
+> files0 is for 'msm8916' (see [3]), which also uses the value with
+> ending 0x2 -> 'arm,psci-suspend-param = <0x41000032>'
 
+D3G has min-child-idx = 1, so the end PSCI param should be 0x41000023
+D3 is 0x41000043
 
-Upon careful review, I have determined that this change, which involves utilizing
-different fields for the range and base, is incorrect and not required. Please review
-the following code and advise me if there are any missing changes that I may have
-overlooked or if it is appropriate to post the v3 patch.
+> 
+> [1]. https://patchwork.kernel.org/project/linux-arm-msm/patch/20201221002907.2870059-3-danny@kdrag0n.dev/#23857409
+> [2]. https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/tags/android-11.0.0_r0.56/qcom/bengal-pm.dtsi#127
+> [3]. https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/msm8916.dtsi#L209
+> 
+> Thanks,
+> Bhupesh
+> 
+>>> +                             entry-latency-us = <360>;
+>>> +                             exit-latency-us = <421>;
+>>> +                             min-residency-us = <782>;
+>>> +                     };
+>>> +
+>>> +                     CLUSTER_0_SLEEP_1: cluster-sleep-0-1 {
+>>> +                             /* Power Collapse */
+>>> +                             compatible = "domain-idle-state";
+>>> +                             arm,psci-suspend-param = <0x41000044>;
+>>> +                             entry-latency-us = <800>;
+>>> +                             exit-latency-us = <2118>;
+>>> +                             min-residency-us = <7376>;
+>>> +                     };
+>>> +
+>>> +                     CLUSTER_1_SLEEP_0: cluster-sleep-1-0 {
+>>> +                             /* GDHS */
+>>> +                             compatible = "domain-idle-state";
+>>> +                             arm,psci-suspend-param = <0x40000042>;
+>>> +                             entry-latency-us = <314>;
+>>> +                             exit-latency-us = <345>;
+>>> +                             min-residency-us = <660>;
+>>> +                     };
+>>> +
+>>> +                     CLUSTER_1_SLEEP_1: cluster-sleep-1-1 {
+>>> +                             /* Power Collapse */
+>>> +                             compatible = "domain-idle-state";
+>>> +                             arm,psci-suspend-param = <0x41000044>;
+>>> +                             entry-latency-us = <640>;
+>>> +                             exit-latency-us = <1654>;
+>>> +                             min-residency-us = <8094>;
+>>> +                     };
+>>> +             };
+>>>        };
+>>>
+>>>        firmware {
+>>> @@ -199,6 +277,64 @@ pmu {
+>>>        psci {
+>>>                compatible = "arm,psci-1.0";
+>>>                method = "smc";
+>>> +
+>>> +             CPU_PD0: power-domain-cpu0 {
+>>> +                     #power-domain-cells = <0>;
+>>> +                     power-domains = <&CLUSTER_0_PD>;
+>>> +                     domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+>>> +             };
+>>> +
+>>> +             CPU_PD1: power-domain-cpu1 {
+>>> +                     #power-domain-cells = <0>;
+>>> +                     power-domains = <&CLUSTER_0_PD>;
+>>> +                     domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+>>> +             };
+>>> +
+>>> +             CPU_PD2: power-domain-cpu2 {
+>>> +                     #power-domain-cells = <0>;
+>>> +                     power-domains = <&CLUSTER_0_PD>;
+>>> +                     domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+>>> +             };
+>>> +
+>>> +             CPU_PD3: power-domain-cpu3 {
+>>> +                     #power-domain-cells = <0>;
+>>> +                     power-domains = <&CLUSTER_0_PD>;
+>>> +                     domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+>>> +             };
+>>> +
+>>> +             CPU_PD4: power-domain-cpu4 {
+>>> +                     #power-domain-cells = <0>;
+>>> +                     power-domains = <&CLUSTER_1_PD>;
+>>> +                     domain-idle-states = <&BIG_CPU_SLEEP_0>;
+>>> +             };
+>>> +
+>>> +             CPU_PD5: power-domain-cpu5 {
+>>> +                     #power-domain-cells = <0>;
+>>> +                     power-domains = <&CLUSTER_1_PD>;
+>>> +                     domain-idle-states = <&BIG_CPU_SLEEP_0>;
+>>> +             };
+>>> +
+>>> +             CPU_PD6: power-domain-cpu6 {
+>>> +                     #power-domain-cells = <0>;
+>>> +                     power-domains = <&CLUSTER_1_PD>;
+>>> +                     domain-idle-states = <&BIG_CPU_SLEEP_0>;
+>>> +             };
+>>> +
+>>> +             CPU_PD7: power-domain-cpu7 {
+>>> +                     #power-domain-cells = <0>;
+>>> +                     power-domains = <&CLUSTER_1_PD>;
+>>> +                     domain-idle-states = <&BIG_CPU_SLEEP_0>;
+>>> +             };
+>>> +
+>>> +             CLUSTER_0_PD: power-domain-cpu-cluster0 {
+>>> +                     #power-domain-cells = <0>;
+>>> +                     domain-idle-states = <&CLUSTER_0_SLEEP_0>, <&CLUSTER_0_SLEEP_1>;
+>>> +             };
+>>> +
+>>> +             CLUSTER_1_PD: power-domain-cpu-cluster1 {
+>>> +                     #power-domain-cells = <0>;
+>>> +                     domain-idle-states = <&CLUSTER_1_SLEEP_0>, <&CLUSTER_1_SLEEP_1>;
+>>> +             };
+>>>        };
+>>>
+>>>        reserved_memory: reserved-memory {
 
-diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-@@ -46,7 +46,7 @@
-  #define KIMAGE_VADDR           (MODULES_END)
-  #define MODULES_END            (MODULES_VADDR + MODULES_VSIZE)
-  #define MODULES_VADDR          (_PAGE_END(VA_BITS_MIN))
--#define MODULES_VSIZE          (SZ_128M)
-+#define MODULES_VSIZE          (SZ_2G)
-  #define VMEMMAP_START          (-(UL(1) << (VA_BITS - VMEMMAP_SHIFT)))
-  #define VMEMMAP_END            (VMEMMAP_START + VMEMMAP_SIZE)
-  #define PCI_IO_END             (VMEMMAP_START - SZ_8M)
+-- 
+With best wishes
+Dmitry
 
-diff --git a/arch/arm64/kernel/kaslr.c b/arch/arm64/kernel/kaslr.c
-@@ -74,14 +74,15 @@ static int __init kaslr_init(void)
-         } else {
-                 /*
-                  * Randomize the module region by setting module_alloc_base to
--                * a PAGE_SIZE multiple in the range [_etext - MODULES_VSIZE,
-+                * a PAGE_SIZE multiple in the range [_etext - SZ_128M,
-                  * _stext) . This guarantees that the resulting region still
-                  * covers [_stext, _etext], and that all relative branches can
-                  * be resolved without veneers unless this region is exhausted
-                  * and we fall back to a larger 2GB window in module_alloc()
-                  * when ARM64_MODULE_PLTS is enabled.
-                  */
--               module_range = MODULES_VSIZE - (u64)(_etext - _stext);
-+               module_range = SZ_128M - (u64)(_etext - _stext);
-+               module_alloc_base = (u64)_etext - SZ_128M;
-         }
-
-         /* use the lower 21 bits to randomize the base of the module region */
-
-diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
-@@ -37,7 +37,8 @@ void *module_alloc(unsigned long size)
-                 /* don't exceed the static module region - see below */
-                 module_alloc_end = MODULES_END;
-
--       p = __vmalloc_node_range(size, MODULE_ALIGN, module_alloc_base,
-+       p = __vmalloc_node_range(size, MODULE_ALIGN, kaslr_enabled() ?
-+                               module_alloc_base : module_alloc_end - SZ_128M,
-                                 module_alloc_end, gfp_mask, PAGE_KERNEL, VM_DEFER_KMEMLEAK,
-                                 NUMA_NO_NODE, __builtin_return_address(0));
