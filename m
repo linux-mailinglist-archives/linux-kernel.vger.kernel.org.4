@@ -2,96 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF21D6D3333
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 20:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9586D333A
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 20:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjDASl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 14:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S229852AbjDASoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 14:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjDASl1 (ORCPT
+        with ESMTP id S229811AbjDASoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 14:41:27 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE2D729A
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 11:41:26 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id w9so102301820edc.3
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 11:41:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680374485;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J3CX0tphHwucVQy/XBMHzMB2OpwqIu91GQKmtAUHW5M=;
-        b=mHydUQdLtrrja7rpwWgXxy5mypWihyqXUP8jESwZXYQ+UMo6cyf4ARIpqPZt9seg3I
-         viD8SINsrNFJTY+slyuegQUNoXoyUgGWNqNVbcgVwIxihQmrdkXVXvGZpaqvQ4qtGyhn
-         ZaTg1OeZqPsnFvfI8KPO2vXotEmS84P8VD/aowhwkz4zu+Gs1dEz5PvvBG0+IBWouKmw
-         L9yNjPA4eb8unexMMTlJIKBjfLSGvMAEBV5YJysQGgz7iV0MwdSCRo2BfI7N8tG2RPXh
-         lG0tgpCZrnrW6gB1CVl7u9EUrxINDXJztBVjy4PIQQuPu/r7NvVibcJma2TtbIX2gDp/
-         sApw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680374485;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J3CX0tphHwucVQy/XBMHzMB2OpwqIu91GQKmtAUHW5M=;
-        b=H12TsooWTBplirjc8JW21MPa/dHW7ZoJ6FpatdKEim3xC7tU9Twh9lweKXbSuwUnCl
-         lQG1Gp5fuv0wDy8MdQjRWI7og3QJsb0JAN/QBDUCJlzw+pwrHoWuoZ5McxSqSE/HpDUW
-         m1klh1gYtnBQU8rahatffriXNrSTAGvYHE2LaAjD1/eSAnWffOtmpWZg9aXgn2Jtj9c3
-         Ev8vvRT5Hx3UW6s/R81VmH2JM9j+hROwUVeAY+tG21jyXTGX7002otXQb0XqbNxLPM1z
-         FWTmJg6sdjIP3WX7p6UV3FOnWEqANXm+LreTbkyC0FKDMaA32yjBXQKIeR/4SZvHMZFQ
-         R0Bw==
-X-Gm-Message-State: AAQBX9enTAAio0WheBQs/av2tiuGgE8NOUhIueooaxypYjNQbExVu7Sf
-        R34yc7oefiQ/FiM/oXv12fDTdQ==
-X-Google-Smtp-Source: AKy350ZiZuxr3nGNpPlOhGyuV5/ZXciTT5jaK/TheV5lAt/QXLE6MfBHCobXTB/i0A5limdD5B7WdA==
-X-Received: by 2002:aa7:c94c:0:b0:4fc:eee9:417 with SMTP id h12-20020aa7c94c000000b004fceee90417mr27190427edt.18.1680374484789;
-        Sat, 01 Apr 2023 11:41:24 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ec00:3acd:519:c7c2? ([2a02:810d:15c0:828:ec00:3acd:519:c7c2])
-        by smtp.gmail.com with ESMTPSA id p9-20020a50cd89000000b004c0c5864cc5sm2389927edi.25.2023.04.01.11.41.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Apr 2023 11:41:24 -0700 (PDT)
-Message-ID: <5b0f9fc9-45ef-e501-6840-df4b03d9dab7@linaro.org>
-Date:   Sat, 1 Apr 2023 20:41:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3] ASoC: dt-bindings: maxim,max98371: Convert to DT
- schema
-To:     =?UTF-8?Q?Andr=c3=a9_Morishita?= <andremorishita@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        anish kumar <yesanishhere@gmail.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        Sat, 1 Apr 2023 14:44:03 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A857694;
+        Sat,  1 Apr 2023 11:44:02 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 6DF2F3200917;
+        Sat,  1 Apr 2023 14:43:59 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sat, 01 Apr 2023 14:44:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1680374639; x=
+        1680461039; bh=NzdlQHPf2ubVQgJ2HZpDAwS0DtAbvUSrLwWN7up3J78=; b=K
+        ZmKcnlKnb0ftNbtcdgOmgHNqT8d/XGAe2faoivoB1BBEy55hWKpJQuJoxH31Alm+
+        xoRiATcwAFyAtjHFNqkw6o88CW/qvKOeqoqmzI0Rggdr3eeh++6oR2Lao+ZXT+v+
+        jlv8KNKTW3/RRSd8UvNQwFmKWKo+qGoWOi04orMKzfGTCLSE0JdbElBjQBsI8LIe
+        NwFH+tr4Wt6jCNuBzoPrlzby4MKM5Ea7GRLKpw7dK7QHsqenOKslXVXQSJQYUaGw
+        R7JsJtLdTLssjuLgf3P+uuLfAfbRpsV3PgpUchlrhi/vp7x5pxV5VO95CmysCU4t
+        8oNqCNzON6rEhz3xW89MA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1680374639; x=
+        1680461039; bh=NzdlQHPf2ubVQgJ2HZpDAwS0DtAbvUSrLwWN7up3J78=; b=t
+        2fNE5E2ltcsimc1VKb+onhUveuswjjEQU7FjkEr25UdU6EqTYBBELWlhJjbUWl48
+        zgMEFep6KmlMU2afC8NyT6NzSs+AqMi5o/EEYJ0iypvs76sIv2y4grBveVCR/Pdl
+        3k85sYzGmEsNsD0UB0xWmxLz1xSgOrLM8dSwzHbn5upYx8HkPiUnOJA/pE2D0VJi
+        cyI6swUtjJLzXpQOQAqRjGvu/Y+ktHBHILX6OLVQ+UbcLaE5+Qy9qje2ILxERvfw
+        3Jp+dfL20i2vx/ZifgC0X3lUOuiURBdM/gBPeVnQP+zblI4T/7iGPlYrzjWrrNAH
+        uDYIidAjq8vseVdd+a36A==
+X-ME-Sender: <xms:bnsoZP2z0bWNRqpQoUyvhsMxJieqMsSYhOXGXXJnsnQrkFBLzJB14A>
+    <xme:bnsoZOEMMW0w_BNjol2trzUBmiiuN49OLdULd6iTJ-gX2BBZoD51t3ITB0SV4I38-
+    bKJNhMKxw75SJ0ESWw>
+X-ME-Received: <xmr:bnsoZP75QIRWD9ACwImVObEu7F3V7WDbIgGX-SNUEJ7ESUKWuy_qayjX9y3PU6T8BsttkxGaXmmBSEq1VFmSK7Z6I6z68FQgmUrqjOz0NK_Vh9lzJHZ91u_q5gDpwOTj4wVf4Dlbsw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeifedguddvlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecuogetfedtuddqtdduucdludehmdenucfjughrpe
+    fhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforghrkhcurfgvrghr
+    shhonhcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggrqeenucggtf
+    frrghtthgvrhhnpeevtdelgfeggfejtedtvdfgkefhuefguedtkeeffeduueduvdeiuedt
+    leejvdfhvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhhpvggrrhhsohhnqdhlvghnohhv
+    ohesshhquhgvsggsrdgtrg
+X-ME-Proxy: <xmx:bnsoZE0RUK-n8PIfOEvzGusFjBuzRQjyOCmkPWTpR-RH_MOaXXx-MA>
+    <xmx:bnsoZCFQ4okyi5UhpnAq2C3dgkHJVP4P3sgRn-4fAeZmQdkH6mfM3g>
+    <xmx:bnsoZF9grAbxCRjFOnlAFwmrVj3BHwnuiIoJJwtpGuBZTs6zSRqXVQ>
+    <xmx:b3soZF2R60Md8j-4HPGX53t6EWfjiR8p1cwvrApqOcdADoZZXl01-Q>
+Feedback-ID: ibe194615:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 1 Apr 2023 14:43:57 -0400 (EDT)
+From:   Mark Pearson <mpearson-lenovo@squebb.ca>
+To:     mpearson-lenovo@squebb.ca
+Cc:     hdegoede@redhat.com, markgross@kernel.org, W_Armin@gmx.de,
+        mirsad.todorovac@alu.unizg.hr, linux@weissschuh.net,
+        Mario.Limonciello@amd.com, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     mairacanal@riseup.net, dri-devel@lists.freedesktop.org,
-        daniel.baluta@nxp.com
-References: <20230401181930.533067-1-andremorishita@gmail.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230401181930.533067-1-andremorishita@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: [PATCH 1/2] platform/x86: think-lmi: Fix memory leaks when parsing ThinkStation WMI strings
+Date:   Sat,  1 Apr 2023 14:43:44 -0400
+Message-Id: <20230401184345.208960-1-mpearson-lenovo@squebb.ca>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <mpearson-lenovo@squebb.ca>
+References: <mpearson-lenovo@squebb.ca>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/04/2023 20:19, André Morishita wrote:
-> Convert the Maxim Integrated MAX98371 audio codec bindings to DT schema.
-> 
-> Signed-off-by: André Morishita <andremorishita@gmail.com>
-> ---
-> Changes in v3:
+My previous commit introduced a memory leak where the item allocated
+from tlmi_setting was not freed.
+This commit also renames it to avoid confusion with the similarly name
+variable in the same function.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: 8a02d70679fc ("platform/x86: think-lmi: Add possible_values for ThinkStation")
+Reported-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Link: https://lore.kernel.org/lkml/df26ff45-8933-f2b3-25f4-6ee51ccda7d8@gmx.de/T/
+Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+---
+This patch series builds on top of the proposed patch from Armin Wolf
+"platform/x86: think-lmi: Fix memory leak when showing current settings"
 
-Best regards,
-Krzysztof
+ drivers/platform/x86/think-lmi.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+index 88da7bcb6ce9..ad952b49617b 100644
+--- a/drivers/platform/x86/think-lmi.c
++++ b/drivers/platform/x86/think-lmi.c
+@@ -1459,10 +1459,10 @@ static int tlmi_analyze(void)
+ 			 * name string.
+ 			 * Try and pull that out if it's available.
+ 			 */
+-			char *item, *optstart, *optend;
++			char *optitem, *optstart, *optend;
+ 
+-			if (!tlmi_setting(setting->index, &item, LENOVO_BIOS_SETTING_GUID)) {
+-				optstart = strstr(item, "[Optional:");
++			if (!tlmi_setting(setting->index, &optitem, LENOVO_BIOS_SETTING_GUID)) {
++				optstart = strstr(optitem, "[Optional:");
+ 				if (optstart) {
+ 					optstart += strlen("[Optional:");
+ 					optend = strstr(optstart, "]");
+@@ -1471,6 +1471,7 @@ static int tlmi_analyze(void)
+ 							kstrndup(optstart, optend - optstart,
+ 									GFP_KERNEL);
+ 				}
++				kfree(optitem);
+ 			}
+ 		}
+ 		/*
+-- 
+2.39.2
 
