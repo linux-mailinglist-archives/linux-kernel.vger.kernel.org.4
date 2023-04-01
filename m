@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5736D32DB
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 19:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A206F6D32E1
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 19:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjDARfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 13:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S230104AbjDARft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 13:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjDARfm (ORCPT
+        with ESMTP id S229575AbjDARfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 13:35:42 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FCAB756;
-        Sat,  1 Apr 2023 10:35:40 -0700 (PDT)
+        Sat, 1 Apr 2023 13:35:44 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050:0:465::102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C82B443;
+        Sat,  1 Apr 2023 10:35:42 -0700 (PDT)
 Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Ppkp10gS2z9slb;
-        Sat,  1 Apr 2023 19:35:37 +0200 (CEST)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Ppkp32z4Dz9sdM;
+        Sat,  1 Apr 2023 19:35:39 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
-        s=MBO0001; t=1680370537;
+        s=MBO0001; t=1680370539;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xqA+kJXDocnnJfMI7ArNRBbUlPcBQF5RtKhT0QIIGC4=;
-        b=kyysQ7V6HBz5rWJmFl0CLG8yD5McCRW/PE5CPvoajm0R7X5kdg0LXAY62Ttqdf+hBszU48
-        CDuJp1ew4TczyrxsK2IrGa5XFC6YFBooSbRikhCyDvf+b9zrGMbJraSxBygCYkMyaLjA2k
-        aY31AWP6iWPNZXt2Zc2Ck+0v1rj9foEXKbHQoPv50FdagEEmOjudw5hSSC8upPgs69jT0Q
-        A0Pm0HuAVQIEnS86cw43+KNQ/vmumo0LtKKCubdyytD6DFG7tkVs/2P4sCAVM/ZcrERvI+
-        yt4Mza89mnKsZ7iQ5vMb4L6VY+NMMY+p5so5RW4Fyo3jnC+4gHZDlrdAqGiDxA==
+        bh=89+6K5+dVh1rTgHK8yIcdKeIjnxl4WNbv71lKIaqsj0=;
+        b=pEh8pqHcDFh18aR1HJrl4bhFuJmxk60BiaRkdRqduKqBbdoiuX01KlT44t65eEJuZE37m9
+        gWBLmMZDO5VjRhNRGrQJlj+djddQP7VWE0iYigKFRSPY53rF43rl8tCFo32jb58dePwWQu
+        3j2qQm6GKRj2l0lHFViaWtoy9KdzJeOr5fMnqjcVqmXUxsclctZoUZQRVfdAQ3La8MBUtD
+        KBvpTi8kGISeaB2dFwcUSamwgkzq/bHTGTRriAb53u3V6NvGP+1xEOjDK1mXQnKfThB773
+        6l2jiWP8p38u33ivO+pnJR+zV4MHknvo15QNObjA/pOl9qwbRH3KU1wnipWluA==
 From:   Dylan Van Assche <me@dylanvanassche.be>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -43,9 +43,9 @@ Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Dylan Van Assche <me@dylanvanassche.be>
-Subject: [PATCH v4 1/6] dts: arm64: qcom: sdm845: add SLPI remoteproc
-Date:   Sat,  1 Apr 2023 19:35:18 +0200
-Message-Id: <20230401173523.15244-2-me@dylanvanassche.be>
+Subject: [PATCH v4 2/6] dts: arm64: qcom: sdm845: add SLPI FastRPC support
+Date:   Sat,  1 Apr 2023 19:35:19 +0200
+Message-Id: <20230401173523.15244-3-me@dylanvanassche.be>
 In-Reply-To: <20230401173523.15244-1-me@dylanvanassche.be>
 References: <20230401173523.15244-1-me@dylanvanassche.be>
 MIME-Version: 1.0
@@ -59,64 +59,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the SLPI remoteproc to the SDM845 Qualcomm SoC which is responsible
-for exposing the sensors connected to the SoC. The SLPI communicates
-over GLink edge 'dsps' and is similar to other DSPs e.g. ADSP or CDSP.
-This patch allows the SLPI to boot and expose itself over QRTR as
-service 400.
+Qualcomm SDM845 SoC features a SLPI DSP which uses FastRPC through
+an allocated memory region to load files from the host filesystem
+such as sensor configuration files.
+
+Add a FastRPC node at /dev/fastrpc-sdsp and a DMA region, similar to
+downstream, to allow userspace to communicate with the SLPI via the
+FastRPC interface for initializing the sensors on the SLPI.
 
 Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
 ---
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 36 ++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 2f32179c7d1b..338a715d110a 100644
+index 338a715d110a..1f25a7f4e02b 100644
 --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -3325,6 +3325,42 @@ gpucc: clock-controller@5090000 {
- 				      "gcc_gpu_gpll0_div_clk_src";
+@@ -878,6 +878,14 @@ mdata_mem: mpss-metadata {
+ 			size = <0 0x4000>;
+ 			no-map;
+ 		};
++
++		fastrpc_mem: fastrpc {
++			compatible = "shared-dma-pool";
++			alloc-ranges = <0x0 0x00000000 0x0 0xffffffff>;
++			alignment = <0x0 0x400000>;
++			size = <0x0 0x1000000>;
++			reusable;
++		};
+ 	};
+ 
+ 	adsp_pas: remoteproc-adsp {
+@@ -3358,6 +3366,22 @@ glink-edge {
+ 				label = "dsps";
+ 				qcom,remote-pid = <3>;
+ 				mboxes = <&apss_shared 24>;
++
++				fastrpc {
++					compatible = "qcom,fastrpc";
++					qcom,glink-channels = "fastrpcglink-apps-dsp";
++					label = "sdsp";
++					qcom,non-secure-domain;
++					qcom,vmids = <0x3 0xF 0x5 0x6>;
++					memory-region = <&fastrpc_mem>;
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					compute-cb@0 {
++						compatible = "qcom,fastrpc-compute-cb";
++						reg = <0>;
++					};
++				};
+ 			};
  		};
  
-+		slpi_pas: remoteproc@5c00000 {
-+			compatible = "qcom,sdm845-slpi-pas";
-+			reg = <0 0x5c00000 0 0x4000>;
-+
-+			interrupts-extended = <&intc GIC_SPI 494 IRQ_TYPE_EDGE_RISING>,
-+						<&slpi_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-+						<&slpi_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-+						<&slpi_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-+						<&slpi_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "wdog", "fatal", "ready",
-+						"handover", "stop-ack";
-+
-+			clocks = <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "xo";
-+
-+			qcom,qmp = <&aoss_qmp>;
-+
-+			power-domains = <&rpmhpd SDM845_CX>,
-+					<&rpmhpd SDM845_MX>;
-+			power-domain-names = "lcx", "lmx";
-+
-+			memory-region = <&slpi_mem>;
-+
-+			qcom,smem-states = <&slpi_smp2p_out 0>;
-+			qcom,smem-state-names = "stop";
-+
-+			status = "disabled";
-+
-+			glink-edge {
-+				interrupts = <GIC_SPI 170 IRQ_TYPE_EDGE_RISING>;
-+				label = "dsps";
-+				qcom,remote-pid = <3>;
-+				mboxes = <&apss_shared 24>;
-+			};
-+		};
-+
- 		stm@6002000 {
- 			compatible = "arm,coresight-stm", "arm,primecell";
- 			reg = <0 0x06002000 0 0x1000>,
 -- 
 2.39.2
 
