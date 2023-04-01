@@ -2,96 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9276D2F67
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 11:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102276D2F6E
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 11:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjDAJcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 05:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S229611AbjDAJi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 05:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDAJcT (ORCPT
+        with ESMTP id S229462AbjDAJi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 05:32:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8F2CC19;
-        Sat,  1 Apr 2023 02:32:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AC35B80760;
-        Sat,  1 Apr 2023 09:32:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3059C433EF;
-        Sat,  1 Apr 2023 09:32:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680341535;
-        bh=A5HEcH0POC1LQ0vBBzRHCMIcClN+LFwasAfQrlGntQo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uZr15WEFQvk2JjTe5rDaNJERa72I1D5N3iTbwZYVZhm3A8FHrQVJ/zIoyjci9cpTn
-         rIckJFN3fk9BuZ6SAJQmwWV7zcH+ENysMgdjkjUHauEbIkWoy1ns+aqXFElH/+ATju
-         1wGzr7lLqcsKA5/iA7/9FoJBKfaIH3HqDp34hP5Kn/APT1IKUVvBH1CP0OO2p4n0QL
-         UMQa1eKUhagaALNCtxGNDmPSqYf7pUtVa8IqF/g1t++7IqvHYX39SE/r8jEkpyO+E1
-         zFtSk3gGP68oPd9Q9kUMbaqCQBmoI28yl19pP2wDgoZgnWMCh3VBLe9khZJ3HpGk9M
-         35HuN/nleBrXA==
-Date:   Sat, 1 Apr 2023 10:32:08 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
-        bjorn@kernel.org, palmer@dabbelt.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Yipeng Zou <zouyipeng@huawei.com>
-Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
-Message-ID: <0d07b570-07ac-4a36-a988-b2ffa2a4d433@spud>
-References: <20230222033021.983168-1-guoren@kernel.org>
- <20230222033021.983168-5-guoren@kernel.org>
- <60ee7c26-1a70-427d-beaf-92e2989fc479@spud>
- <CAJF2gTQJB3f=80sOsgXpYn7JqfGmq+FSaCwCJ-Er=d7fKhwJcA@mail.gmail.com>
+        Sat, 1 Apr 2023 05:38:27 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC348D503
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 02:38:25 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id r11so24693803wrr.12
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 02:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680341904;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7y4QObQjB8Gj761x2HaPGgKP0RKXZVV70/mLt0he7Vg=;
+        b=k7v4l0o0N7KDt8NrpBfKXc5a/hZScb4HmLJYiVpO575TRB+vv/AtIUb5dUGLW6gddw
+         Sj8JHt0j/7qKQuReJMPJ0XMQ3OOwg11BzxNYj/VbaF50eeaMQmQcHji9/eL6LPZjKzwR
+         n8cA8jZlTl+Ej0NdQQ1wyQztA+ar+n4DKwe/05Op28BMZpkDtudyJ9L6NxuMuRZx9FQE
+         LXBVSax2ClH92U7vsxhJUJh3p433UrKzGPBVMfITwxOjhV4n+aNY9xDeKbQcVfjUxIPt
+         JvbHb6nTpq7IfkX+8S3mbqZKHyqCa0mLPwhtRc5GqAfvARQRxaNDtLe3uQOm1U2nINcv
+         893w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680341904;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7y4QObQjB8Gj761x2HaPGgKP0RKXZVV70/mLt0he7Vg=;
+        b=zRI+ndQRiMOU7Amf2HIU0jN0mJQ6lbdayW8vYAQ64IQ6Up4TUQ5zrKwKX4rv/gnBY+
+         dPTHxBmNOd+lUkbu6jyXAE5omx7qHBuanxLGqxmX5CMsQlp+H50Z55zakn6OBvs9jdOU
+         4qgyJRrzrKiFHUT4Vz8mp8FiBp/l0aSw+o4Lx9QRZXXPkgGov7kNl15uMb7l7k7iIyZ/
+         rnXcK5Wmv/soe90riIY+LM+DPdACcooQYOFzLHLBB8SgMZ7etpK6r3UIZTw52YLMtMec
+         0b+hPeGGjF1dsd7iCgKUMTQs1hJVsA8dI820oRCxEgFmNBzCSNKS8kWIv4CX/SWs6rmi
+         TIZw==
+X-Gm-Message-State: AAQBX9eB9BuG6/fOyHy9X6Iqd3s6tFcRoNwhR7QilE9ZHScGuCKOiKlW
+        u9lhwecw1TF6PWxwTqTmwc2ncg==
+X-Google-Smtp-Source: AKy350YT94N4vYS2YYwzi3p7MzDvppiiKQEgYsVoO99YGOnea2g2/EBTUwNszOjH2rMTWeX+hAQR+A==
+X-Received: by 2002:adf:ff85:0:b0:2e4:aa42:787e with SMTP id j5-20020adfff85000000b002e4aa42787emr6679300wrr.51.1680341904016;
+        Sat, 01 Apr 2023 02:38:24 -0700 (PDT)
+Received: from [172.50.14.32] (5-226-109-132.static.ip.netia.com.pl. [5.226.109.132])
+        by smtp.gmail.com with ESMTPSA id m17-20020adfe0d1000000b002d1e49cff35sm4440930wri.40.2023.04.01.02.38.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Apr 2023 02:38:23 -0700 (PDT)
+Message-ID: <afe6b710-9f95-e225-27ca-655b104939c9@linaro.org>
+Date:   Sat, 1 Apr 2023 11:38:22 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="N697bhe7hq7YhlHp"
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTQJB3f=80sOsgXpYn7JqfGmq+FSaCwCJ-Er=d7fKhwJcA@mail.gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/3] Support Honeywell mpr pressure sensor
+Content-Language: en-US
+To:     Andreas Klinger <ak@it-klinger.de>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <ZCf0wM4RT5bFWlhF@arbad>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZCf0wM4RT5bFWlhF@arbad>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 01/04/2023 11:09, Andreas Klinger wrote:
+> Support Honeywell mpr pressure sensor.
+> 
+> This patch series adds support for Honeywell mpr pressure sensors. There are a variety of sensors
+> with different pressure range supported. The pressure range needs to be set up in the device tree as
+> minimum and maximum pressure in Pascal.
+> 
+Your threading is missing thus patches are scattered all over the inbox.
 
---N697bhe7hq7YhlHp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Best regards,
+Krzysztof
 
-On Fri, Mar 31, 2023 at 09:39:32PM -0400, Guo Ren wrote:
-> On Fri, Mar 31, 2023 at 2:34=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
-
-> > [   72.337818] systemd[1]: Failed to start Load Kernel Modules.
-> > [FAILED] Failed to start Load Kernel Modules.
-
-> Are you sure, you've compiled all kernel modules? This patch needs all
-> kernel stuff re-compiled.
-
-It does this with CONFIG_MODULES=3Dn kernels too FWIW.
-
---N697bhe7hq7YhlHp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCf6GAAKCRB4tDGHoIJi
-0ty8AP4pLw9M1SQ8agp95E8v0ZshSN4g/vspxvoTn3ZBCm1TfgD9FPZ4yEkwdAj/
-ar7NYJ22grdRYVRIMczJ3M7lD9nLMgE=
-=pMx5
------END PGP SIGNATURE-----
-
---N697bhe7hq7YhlHp--
