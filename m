@@ -2,94 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCCB6D2F86
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 11:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E816D2F8E
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 11:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjDAJxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 05:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S229900AbjDAJ5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 05:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjDAJxl (ORCPT
+        with ESMTP id S229562AbjDAJ5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 05:53:41 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D58EB54
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 02:53:33 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id i9so24735487wrp.3
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 02:53:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680342812;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qOhA43LmOrt8qpSaW/te4zffJ9QGZH2fj5kj0zYlFHQ=;
-        b=aV9fJxI8HVKJHfqCRSmsB9pzLwNDj78SV+1sF/RdFom0TmCGg1D6C4piyaIP+CQlFj
-         VY0LBD1dDk+/Xla/udoffg4SS+LjBTOb1GLmTqYdUKwhk50p1YSi40/wldJkLPviZUiV
-         vAQJj6CmkuA4NiNaLmTjYjzYL5PHcUZlP13dMnQK34qAOokUXrgnanE8jXMuSJKi0k7n
-         i8JiM2VUEZA7xmINNz0rOpgemjCAA/S+y6FGShUA0x7hWUcpgGLRFaqXqlsoRDdtME8Q
-         0PscSrdrgv+F37isys+eBaQ2uuV3Ie/rgA4QfYY2mkFGo35nQQ7INBaURS8RvNnz5mk8
-         9BuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680342812;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qOhA43LmOrt8qpSaW/te4zffJ9QGZH2fj5kj0zYlFHQ=;
-        b=IyH7RTz/DbVWnsa4XxypCVFOMSsaIgPPQrpLMXqwFY/R4RAfzBfGwZTHZLFrT2D4ZB
-         IslXPHuJWlvk9/nUGacPytQRUqdgylKbL3YlLfC1epRX7zHjw6kkk29hcTtqU4kKUBPK
-         ZyWC/2XrxSA96FTmzSOHkfDeweE5y2/whbzpLync3SDEDwpf8y5evINQNPFwRxjqLDm9
-         U8eh9+9kL2B8XGWgQSz7xcRW/Qlp2kIsJwUkiVTZ8bU4DYrAI/IcID8dgYoZH31xhthg
-         qbadq1KqZTKeg3+34R0d2Cd11w2BiHnGorFvr4WMGn4I4An+QyCd3a2hPTlY5D9a8mwP
-         DDfQ==
-X-Gm-Message-State: AAQBX9d1Q4u8Ef/5+zj6CFo4i9ki6QW6gL4qfNK0pNXeYC6IqtC5ceQh
-        zaW8S6bx66KwtOArdiPeYwBOwaeVXYruU+i4SAY=
-X-Google-Smtp-Source: AKy350befYly/lSC5kDrLJqEFpU6KISleaqO8PETRRTz0P/MBUQizsolm9NPaMHLFin3D8iORHoYfA==
-X-Received: by 2002:adf:e391:0:b0:2d9:10e7:57e8 with SMTP id e17-20020adfe391000000b002d910e757e8mr9128945wrm.16.1680342811799;
-        Sat, 01 Apr 2023 02:53:31 -0700 (PDT)
-Received: from [172.50.14.32] (5-226-109-132.static.ip.netia.com.pl. [5.226.109.132])
-        by smtp.gmail.com with ESMTPSA id g6-20020adfe406000000b002d743eeab39sm4470590wrm.58.2023.04.01.02.53.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Apr 2023 02:53:31 -0700 (PDT)
-Message-ID: <5a8a5cfb-6b56-42e9-8e75-14a936de2c4f@linaro.org>
-Date:   Sat, 1 Apr 2023 11:53:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: arm: nvidia: Drop unneeded quotes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
+        Sat, 1 Apr 2023 05:57:02 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CA06DBC6;
+        Sat,  1 Apr 2023 02:57:00 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxJNjq_ydkKzYVAA--.21121S3;
+        Sat, 01 Apr 2023 17:56:58 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axlrzl_ydkPcgSAA--.13901S2;
+        Sat, 01 Apr 2023 17:56:57 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230331182159.1900674-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230331182159.1900674-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v6 0/2] spi: loongson: add bus driver for the loongson spi
+Date:   Sat,  1 Apr 2023 17:56:50 +0800
+Message-Id: <20230401095652.17364-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Axlrzl_ydkPcgSAA--.13901S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWFy3Zr48trWrJw4UuFW5Awb_yoW5Ww45pF
+        W3C3Z8Kr4DAF4xArs3Jay7uFyfZ3yrXr9rXFW3t3yDuryDZ34UZr1vqF4jvrZrAFsIvFyI
+        qFyvgrs5Ga4UZwUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b78Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
+        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
+        UvcSsGvfC2KfnxnUUI43ZEXa7IU1tl1PUUUUU==
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2023 20:21, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+Loongson platform support spi hardware controller and this series patch
+was to add spi driver and binding support.
 
+Change in v2:
+		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+	 	   https://
+		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+		2. Remove the clock-names in spi yaml file.
+		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
+		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
+		   macro to limit some pci code.
+		5. Make the spi driver top code comment block that use C++ style.
+		6. Drop spi->max_speed_hz.
+		7. Add a spin_lock for loongson_spi_setup.
+		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
+		9. Add spi_transfer_one and drop transfer and rework entire spi
+		   driver that include some necessary changes.
+		10. Use module_init replace subsys_initcall.
+		11. About PM interface that I don't find any issue so I don't add
+		    any changes.
+Change in v3:
+		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Drop the unused blank line in loongson,ls-spi.yaml file.
+		3. Replace clock minItems with clock maxItems in yaml file.
+		4. Separate spi driver into platform module, pci module and core
+		   module.
+		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
+		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
+		   that reported by test robot.
+		6. Remove the spin lock.
+		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
+		   the issue that multiple spi device transfer that maybe cause spi was
+		   be misconfigured.
+Change in v4:
+		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
+		   issue which devm_ioremap no declaration.
+		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
+		   spi-loongson-core.c for fix the compile issue which
+		   loongson_spi_dev_pm_ops undefined.
+Change in v5:
+		1. Get rid of the clock patch's dependency and open-code the clock IDs.
+		2. Fixup checkpatch issue that by installed ply and gitpython package
+		   locally, but this series of patch's code doesn't have any change.
+Change in v6:
+		1. Remove the "#include <dt-bindings/clock/loongson,ls2k-clk.h>" in
+		   yaml file.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Yinbo Zhu (2):
+  dt-bindings: spi: add loongson spi
+  spi: loongson: add bus driver for the loongson spi controller
 
-Best regards,
-Krzysztof
+ .../bindings/spi/loongson,ls-spi.yaml         |  42 +++
+ MAINTAINERS                                   |  10 +
+ drivers/spi/Kconfig                           |  31 ++
+ drivers/spi/Makefile                          |   3 +
+ drivers/spi/spi-loongson-core.c               | 304 ++++++++++++++++++
+ drivers/spi/spi-loongson-pci.c                |  89 +++++
+ drivers/spi/spi-loongson-plat.c               |  66 ++++
+ drivers/spi/spi-loongson.h                    |  41 +++
+ 8 files changed, 586 insertions(+)
+
+-- 
+2.20.1
 
