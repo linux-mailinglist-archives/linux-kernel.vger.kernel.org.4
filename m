@@ -2,206 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87F66D2DAF
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 04:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CD06D2D9F
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 04:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233862AbjDACSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 22:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
+        id S233321AbjDACKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 22:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233368AbjDACSf (ORCPT
+        with ESMTP id S233271AbjDACKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 22:18:35 -0400
-X-Greylist: delayed 528 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 31 Mar 2023 19:18:34 PDT
-Received: from out-15.mta0.migadu.com (out-15.mta0.migadu.com [IPv6:2001:41d0:1004:224b::f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AACCA26
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 19:18:34 -0700 (PDT)
-Message-ID: <095b1562-0c5e-4390-adf3-59ec0ed3e97e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1680314982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EkKgLCsHkb3KLU+7/5bEY49oBe2mnx4fK27wGk4be5g=;
-        b=DIJa8NfPM0T0IKHErnnvvuSKR4n0Mrtxni3tDbZS9KIooJmizoMLrgf4JqdPeGjix5ZCJs
-        YtiCQwfTeRp9KDUNmGv97Ylqkj9EBKt0rIdkx7ZEmHD5FoXvCsucSR7qPr1PET6kkpYDft
-        CNRg36/jEuJwyHqVgq5K8aIeoONHX+8=
-Date:   Sat, 1 Apr 2023 10:09:28 +0800
+        Fri, 31 Mar 2023 22:10:37 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66F9E053;
+        Fri, 31 Mar 2023 19:10:35 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so25335175pjz.1;
+        Fri, 31 Mar 2023 19:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680315035;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JnyrkYSNqls/jv3SFfexrWS8fA+F90l+8vMjnIu/dDk=;
+        b=Zbx/dep8b0wFaQ3ok5UKrG21PvLlbh9WImL3ZchBW30R5/PRXx/buvD7XGh8fSHdAH
+         hIIUQv+Nrqf4dM1kpecBU/zS+Aa9wPCOvJdyfT6HaZQsWuE5IkADp/7J17Wh563GZiC9
+         yVAHmpHI+qtqVDE64MNHozCweOXEKiKN1ltiknSJK3w4EM/6TW83R8b6KNNb81gfN294
+         zLGAGXIAyIkLQngGlR3YHzY4rOvUmnpq94XDrZJ9vRAX9bmXmVGyehyW0WrRuejn4Uhc
+         nWiZO4Vwdha5BThGqOwN2RHpdbz0naoOizq7ogefNVxA0p/T8ppIGEVeALfeN1Tb5E8/
+         4qpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680315035;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JnyrkYSNqls/jv3SFfexrWS8fA+F90l+8vMjnIu/dDk=;
+        b=V9EGAn+lG3gYCVQAx8kbSGurpmxq/w2pBB3M4+sbOWTZIznrGlu07cjbRFySPUfom0
+         gSUBScDEJibog6VUVZOD4W6ohXZDxc77uIonZYBUU6myDHZ086IxNq/QI306LIKWXlV9
+         ukeZqp7EdkuCuhoIbhcNMufwAC/SbhSOMacecGnqNLaf7exrfoTbpjbl5OFng2iT57gG
+         nPfqMLP/bqhQuh9uJf74BzgRkHtX6xgNDuCbTNpMkixOp3Y2EgJDr0px46de9xms/JS8
+         C1sksyASfkY0DK3QJRUGEGf5Ep8SuEw9tvjBWaPUHIJ7u+OrUJ/3NG5HI5ZqsAK8b5Kg
+         /bvQ==
+X-Gm-Message-State: AAQBX9d9qFiaqk30JWf2E3rh5ka48s9LFq6BD+LVUe0XIGeIfZa0YmNZ
+        gkh0UNbBHKys/B15Ctl271c=
+X-Google-Smtp-Source: AKy350YUq7DoV3rTzX8fP87JGF6Hj6ucie5EV59nAeF8Akr6nPpDbZfLyoj/v+V/DE4bWRR1yjsdJQ==
+X-Received: by 2002:a17:902:e546:b0:1a1:cc5a:b04 with SMTP id n6-20020a170902e54600b001a1cc5a0b04mr35087221plf.3.1680315035458;
+        Fri, 31 Mar 2023 19:10:35 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-71.three.co.id. [180.214.232.71])
+        by smtp.gmail.com with ESMTPSA id ik30-20020a170902ab1e00b0019f1264c7d7sm2196638plb.103.2023.03.31.19.10.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 19:10:35 -0700 (PDT)
+Message-ID: <f3e29e72-240a-20ba-c301-5b6fe1ec777a@gmail.com>
+Date:   Sat, 1 Apr 2023 09:10:29 +0700
 MIME-Version: 1.0
-Subject: Re: [syzbot] [rdma?] INFO: trying to register non-static key in
- rxe_cleanup_task (2)
-To:     syzbot <syzbot+cfcc1a3c85be15a40cba@syzkaller.appspotmail.com>,
-        jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        zyjzyj2000@gmail.com
-References: <0000000000003ee4ee05f5c40e99@google.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <0000000000003ee4ee05f5c40e99@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] docs/mm: Physical Memory: Fix grammar
+To:     Kim Phillips <kim.phillips@amd.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Rapoport <rppt@kernel.org>, linux-doc@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230331165254.207526-1-kim.phillips@amd.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230331165254.207526-1-kim.phillips@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/2/28 23:14, syzbot 写道:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    982818426a0f Merge tag 'arm-fixes-6.3-1' of git://git.kern..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1194800f480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=90a4de3f96747e3f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=cfcc1a3c85be15a40cba
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/225d8c8e9264/disk-98281842.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/87a9e2a89842/vmlinux-98281842.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/39bdeb741f2e/bzImage-98281842.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+cfcc1a3c85be15a40cba@syzkaller.appspotmail.com
-> 
-> Node 1 hugepages_total=2 hugepages_free=2 hugepages_surp=0 hugepages_size=2048kB
-> 14586 total pagecache pages
-> 0 pages in swap cache
-> Free swap  = 0kB
-> Total swap = 0kB
-> 2097051 pages RAM
-> 0 pages HighMem/MovableOnly
-> 392145 pages reserved
-> 0 pages cma reserved
-> INFO: trying to register non-static key.
-> The code is fine but needs lockdep annotation, or maybe
-> you didn't initialize this object before use?
-> turning off the locking correctness validator.
-> CPU: 1 PID: 5486 Comm: syz-executor.2 Not tainted 6.2.0-syzkaller-12765-g982818426a0f #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
-> Call Trace:
->   <TASK>
->   __dump_stack lib/dump_stack.c:88 [inline]
->   dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
->   assign_lock_key kernel/locking/lockdep.c:982 [inline]
->   register_lock_class+0xdb6/0x1120 kernel/locking/lockdep.c:1295
->   __lock_acquire+0x108/0x5d40 kernel/locking/lockdep.c:4935
->   lock_acquire kernel/locking/lockdep.c:5669 [inline]
->   lock_acquire+0x1e3/0x670 kernel/locking/lockdep.c:5634
->   __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
->   _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
->   spin_lock_bh include/linux/spinlock.h:355 [inline]
->   rxe_cleanup_task+0x73/0xc0 drivers/infiniband/sw/rxe/rxe_task.c:119
->   rxe_qp_do_cleanup+0x8c/0x7c0 drivers/infiniband/sw/rxe/rxe_qp.c:776
->   execute_in_process_context+0x3b/0x150 kernel/workqueue.c:3458
->   __rxe_cleanup+0x21e/0x370 drivers/infiniband/sw/rxe/rxe_pool.c:233
->   rxe_create_qp+0x2c2/0x340 drivers/infiniband/sw/rxe/rxe_verbs.c:430
+On 3/31/23 23:52, Kim Phillips wrote:
+> diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
+> index 1bc888d36ea1..df2ed81e3639 100644
+> --- a/Documentation/mm/physical_memory.rst
+> +++ b/Documentation/mm/physical_memory.rst
+> @@ -19,7 +19,7 @@ a bank of memory very suitable for DMA near peripheral devices.
+>  
+>  Each bank is called a node and the concept is represented under Linux by a
+>  ``struct pglist_data`` even if the architecture is UMA. This structure is
+> -always referenced to by it's typedef ``pg_data_t``. ``A pg_data_t`` structure
+> +always referenced by its typedef ``pg_data_t``. A ``pg_data_t`` structure
+>  for a particular node can be referenced by ``NODE_DATA(nid)`` macro where
+>  ``nid`` is the ID of that node.
+>  
 
-It took me a lot of time to reproduce this problem. And finally I can 
-reproduce this problem.
+LGTM, thanks!
 
-The root cause is:
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-In this function rxe_create_qp, if some problem occur in 
-rxe_qp_init_req, rxe_init_task functions are not executed.
-But error handler of rxe_create_qp still calls rxe_cleanup_task. This 
-problem will occur.
-
-static int rxe_create_qp
-{
-   ...
-   err = rxe_qp_from_init {
-         ...
-         err = rxe_qp_init_req {
-         ... some errors occur <---This will go to the error handler of 
-rxe_create_qp
-         rxe_init_task(&qp->req.task, qp, rxe_requester); <---It is not 
-executed.
-         rxe_init_task(&qp->comp.task, qp, rxe_completer);<---It is not 
-executed.
-         ...
-         }
-         if (err)
-           goto err1;
-         ...
-         err = rxe_qp_init_resp{
-         ...
-         rxe_init_task(&qp->resp.task, qp, rxe_responder);<---It is not 
-executed.
-         ...
-         }
-         if (err)
-            goto err2;
-         }
-         if (err)
-                 goto qp_init;
-...
-qp_init:
-         rxe_cleanup(qp);  ---> rxe_cleanup_task
-         return err;
-}
-
-Zhu Yanjun
-
->   create_qp+0x5ac/0x970 drivers/infiniband/core/verbs.c:1233
->   ib_create_qp_kernel+0xa1/0x310 drivers/infiniband/core/verbs.c:1344
->   ib_create_qp include/rdma/ib_verbs.h:3743 [inline]
->   create_mad_qp+0x177/0x380 drivers/infiniband/core/mad.c:2905
->   ib_mad_port_open drivers/infiniband/core/mad.c:2986 [inline]
->   ib_mad_init_device+0xf40/0x1a90 drivers/infiniband/core/mad.c:3077
->   add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:721
->   enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1332
->   ib_register_device drivers/infiniband/core/device.c:1420 [inline]
->   ib_register_device+0x8b1/0xbc0 drivers/infiniband/core/device.c:1366
->   rxe_register_device+0x317/0x3f0 drivers/infiniband/sw/rxe/rxe_verbs.c:1096
->   rxe_net_add+0x90/0xf0 drivers/infiniband/sw/rxe/rxe_net.c:524
->   rxe_newlink+0xd5/0x140 drivers/infiniband/sw/rxe/rxe.c:195
->   nldev_newlink+0x332/0x5e0 drivers/infiniband/core/nldev.c:1731
->   rdma_nl_rcv_msg+0x371/0x6a0 drivers/infiniband/core/netlink.c:195
->   rdma_nl_rcv_skb.constprop.0.isra.0+0x2fc/0x440 drivers/infiniband/core/netlink.c:239
->   netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
->   netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
->   netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1942
->   sock_sendmsg_nosec net/socket.c:722 [inline]
->   sock_sendmsg+0xde/0x190 net/socket.c:745
->   ____sys_sendmsg+0x71c/0x900 net/socket.c:2504
->   ___sys_sendmsg+0x110/0x1b0 net/socket.c:2558
->   __sys_sendmsg+0xf7/0x1c0 net/socket.c:2587
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7fd95868c0f9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007fd9594b3168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> RAX: ffffffffffffffda RBX: 00007fd9587abf80 RCX: 00007fd95868c0f9
-> RDX: 0000000000000000 RSI: 0000000020000200 RDI: 0000000000000003
-> RBP: 00007fd9586e7ae9 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007fff9db7c9ef R14: 00007fd9594b3300 R15: 0000000000022000
->   </TASK>
-> infiniband syz1: Couldn't create ib_mad QP1
-> infiniband syz1: Couldn't open port 1
-> RDS/IB: syz1: added
-> smc: adding ib device syz1 with port count 1
-> smc:    ib device syz1 port 1 has pnetid
-> syz-executor.2 (5486) used greatest stack depth: 22840 bytes left
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+An old man doll... just what I always wanted! - Clara
 
