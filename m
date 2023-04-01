@@ -2,73 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0F16D3312
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 20:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621366D3314
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 20:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjDASUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 14:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
+        id S229379AbjDASVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 14:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDASUG (ORCPT
+        with ESMTP id S229475AbjDASVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 14:20:06 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0F01A96A;
-        Sat,  1 Apr 2023 11:20:05 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id h1-20020a4adcc1000000b0053e9796cc7dso1182226oou.4;
-        Sat, 01 Apr 2023 11:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680373205;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fITr2HwYgqLUUk1Kke5I+QMgFMyvuPMKr1ZR1hYIU3I=;
-        b=TWTywiVBMaANiqanN77gtisbmbm/wLVaWH+qyvtSiG7Ip59YMo9aZDcndAj+mKA+np
-         pmRQ/MRD3zciKrhFt0RuZvZz2+h78fnTzX/LcAXMYKtlKZxIYQAoAP4r4EremUZ3sz0b
-         qkxGHWGCNrdO76vAQ9tDN0qdcTRQQlaidz9AixfK1WPfKQHehUmHtsft+IME2e+dtrn+
-         19VBxkzkYCibQxoy7a1ESloaQXtfmxLJ3EhA8uCs0lomI+AfOuw00QACf/hwYVUCwKKU
-         3oeE4S6hC+9ht1tFV7Nti8PwpFUsmbeyI9oqrOcY2RqMGsSjyUcsTXnL2A5iKKaz4EDY
-         DGlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680373205;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fITr2HwYgqLUUk1Kke5I+QMgFMyvuPMKr1ZR1hYIU3I=;
-        b=4KZZTrmE3AoMbjSz20UJl7GnYRKXDst9iNBh+O56qN/lb0MJRvbThz+5/BznqLrGk5
-         P8cdwQFyaaXYhnJixQxdBdsccMdisEqXbbN1gND4RFwW2SPAUW2uSP5LpAZEkvo5qDSH
-         oVEt1Lh0xQ+OLsR01zZqnHfffvU/aurP9aXW6DVXkZJRTbEoCas/HEnpR1c/W3ZAMpuW
-         qL051+6ScaT8yPaEz9itcmQOqyPtJLj5WJ6eQVUB10HnzZi+iVUyzhQ3j53nA2sFecNj
-         EaKY5hAcK6hRrg938vfbSD759W/DYEG6EWiip3TwVzC8LpgF9x0U40dUenvwX2fK3XEi
-         2oDw==
-X-Gm-Message-State: AAQBX9dvJaU4oHZJwM31z7zXfVSRGwyQfGbXFZJAfytpFNDI/yGVeU1e
-        EDupFsU3Wz7pBrNPh3hqh6o=
-X-Google-Smtp-Source: AKy350ZGi7A5EVHermG2a+d2Y1EJ0swdZU4PDDJgxPBdTR3MqzeWevqrtPAxWogwUpGjkvCHzT782A==
-X-Received: by 2002:a4a:bd8c:0:b0:53c:5f89:eb85 with SMTP id k12-20020a4abd8c000000b0053c5f89eb85mr6913034oop.2.1680373205132;
-        Sat, 01 Apr 2023 11:20:05 -0700 (PDT)
-Received: from heimdal.localdomain ([2804:431:cfec:79f0:85a3:2af2:a6f4:1842])
-        by smtp.gmail.com with ESMTPSA id e193-20020a4a55ca000000b005255e556399sm2159485oob.43.2023.04.01.11.20.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Apr 2023 11:20:04 -0700 (PDT)
-From:   =?UTF-8?q?Andr=C3=A9=20Morishita?= <andremorishita@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        anish kumar <yesanishhere@gmail.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     mairacanal@riseup.net, dri-devel@lists.freedesktop.org,
-        daniel.baluta@nxp.com,
-        =?UTF-8?q?Andr=C3=A9=20Morishita?= <andremorishita@gmail.com>
-Subject: [PATCH v3] ASoC: dt-bindings: maxim,max98371: Convert to DT schema
-Date:   Sat,  1 Apr 2023 15:19:29 -0300
-Message-Id: <20230401181930.533067-1-andremorishita@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Sat, 1 Apr 2023 14:21:01 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FC71A96F
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 11:20:59 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-109-PIpW_n9fObuDPrn_DKoLWg-1; Sat, 01 Apr 2023 19:20:57 +0100
+X-MC-Unique: PIpW_n9fObuDPrn_DKoLWg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 1 Apr
+ 2023 19:20:55 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sat, 1 Apr 2023 19:20:55 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Eric Dumazet' <edumazet@google.com>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>
+CC:     Arnd Bergmann <arnd@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        "Jason Xing" <kerneljasonxing@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] net: netcp: MAX_SKB_FRAGS is now 'int'
+Thread-Topic: [PATCH] net: netcp: MAX_SKB_FRAGS is now 'int'
+Thread-Index: AQHZY/INR0Ls8ZWFPEGBAKU08KSVVa8WxH4g
+Date:   Sat, 1 Apr 2023 18:20:54 +0000
+Message-ID: <5c940a6c29674b2986e4e9be1c2e4b39@AcuMS.aculab.com>
+References: <20230331074919.1299425-1-arnd@kernel.org>
+ <8dd0ab75-d007-8aa7-e546-c5fe93f9e03b@intel.com>
+ <CANn89iLcgesDzLvvoAhDSFgmKz_1VcMNOTA=F8rDXzLmOSuTvw@mail.gmail.com>
+In-Reply-To: <CANn89iLcgesDzLvvoAhDSFgmKz_1VcMNOTA=F8rDXzLmOSuTvw@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,95 +65,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Maxim Integrated MAX98371 audio codec bindings to DT schema.
-
-Signed-off-by: André Morishita <andremorishita@gmail.com>
----
-Changes in v3:
-  - Make commit message and subject as v1 with ASoC subject prefix
-
-Changes in v2:
-   - Generic node names - codec (Krzysztof)
-   - Drop label max98371 (Krzysztof)
-   - Add sound-dai-cells in example (Krzysztof)
-
- .../devicetree/bindings/sound/max98371.txt    | 17 --------
- .../bindings/sound/maxim,max98371.yaml        | 42 +++++++++++++++++++
- 2 files changed, 42 insertions(+), 17 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/sound/max98371.txt
- create mode 100644 Documentation/devicetree/bindings/sound/maxim,max98371.yaml
-
-diff --git a/Documentation/devicetree/bindings/sound/max98371.txt b/Documentation/devicetree/bindings/sound/max98371.txt
-deleted file mode 100644
-index 8b2b2704b574..000000000000
---- a/Documentation/devicetree/bindings/sound/max98371.txt
-+++ /dev/null
-@@ -1,17 +0,0 @@
--max98371 codec
--
--This device supports I2C mode only.
--
--Required properties:
--
--- compatible : "maxim,max98371"
--- reg : The chip select number on the I2C bus
--
--Example:
--
--&i2c {
--	max98371: max98371@31 {
--		compatible = "maxim,max98371";
--		reg = <0x31>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/sound/maxim,max98371.yaml b/Documentation/devicetree/bindings/sound/maxim,max98371.yaml
-new file mode 100644
-index 000000000000..14fba34ef81a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/maxim,max98371.yaml
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/maxim,max98371.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim MAX98371 audio codec
-+
-+maintainers:
-+  - anish kumar <yesanishhere@gmail.com>
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: maxim,max98371
-+
-+  '#sound-dai-cells':
-+    const: 0
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        codec@31 {
-+            compatible = "maxim,max98371";
-+            reg = <0x31>;
-+            #sound-dai-cells = <0>;
-+        };
-+    };
--- 
-2.40.0
+RnJvbTogRXJpYyBEdW1hemV0DQo+IFNlbnQ6IDMxIE1hcmNoIDIwMjMgMTc6NTgNCi4uLi4NCj4g
+PiBJJ2QgcGVyc29uYWxseSBkZWZpbmUgJU1BWF9TS0JfRlJBR1MgYXMgYCh1MzIpQ09ORklHX01B
+WF9TS0JfRlJBR1NgLg0KPiA+IEl0IGNhbid0IGJlIGJlbG93IHplcm8gb3IgYWJvdmUgJVUzMl9N
+QVggYW5kIHdlIGhhdmUgdG8gZGVmaW5lIGl0DQo+ID4gbWFudWFsbHkgYW55d2F5LCBzbyB3aHkg
+bm90IGNhc3QgdG8gdGhlIHR5cGUgZXhwZWN0ZWQgZnJvbSBpdCA6RA0KPiA+DQo+IA0KPiBTb21l
+IGZpbGVzIGhhdmUgdGhlIGFzc3VtcHRpb24gTUFYX1NLQl9GUkFHUyBjYW4gYmUgdW5kZXJzdG9v
+ZCBieSB0aGUNCj4gQyBwcmVwcm9jZXNzb3IuDQo+IA0KPiAjaWYgTUFYX1NLQl9GUkFHUyA+IDMy
+DQoNCi4uLg0KDQpZb3UgY291bGQgdXNlOg0KI2RlZmluZSBNQVhfU0tCX0ZSQUdTIChDT05GSUdf
+TUFYX1NLQl9GUkFHUyArIDB1KQ0KdG8gZm9yY2UgdGhlIHR5cGUgdG8gYmUgJ3Vuc2lnbmVkIGlu
+dCcgd2hpbGUgc3RpbGwgbGVhdmluZw0KYSB2YWx1ZSB0aGF0IGNwcCBncm9rcy4NCihPciBhZGQg
+MHVsIHRvIGdldCB0aGUgdHlwZSBiYWNrPyB0byAndW5zaWduZWQgbG9uZycuKQ0KDQoJRGF2aWQN
+Cg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZh
+cm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYg
+KFdhbGVzKQ0K
 
