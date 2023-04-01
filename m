@@ -2,108 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6206D30A5
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 14:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6896D30A8
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 14:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjDAMGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 08:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        id S229882AbjDAMHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 08:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDAMGe (ORCPT
+        with ESMTP id S229441AbjDAMHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 08:06:34 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522A193F7;
-        Sat,  1 Apr 2023 05:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680350793; x=1711886793;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GhN/zLgZPhjtxMWToJxXXsvcAbSsvRGheQVMGCpow7w=;
-  b=bHnXxtjecow8+mruu2cNG0S9yw7pyfRp5OwFbNv8i+HteKW6dSgl8i3x
-   LzgBURD+01a9ktr6zzmyb7tNofDniL9vT5g2BpKoWZ1ZvlE703Z1BmsoJ
-   tK5eymx0Va3op25/a9QECcnAzCTsSuMg1jz4oOEYRKLlYM48U5rbIgGHM
-   wHJFfeCQCnd09EmTIiqiFYbeC8k4N2ylnhqQufOkczXAfk+Y3yyVUbsyA
-   9c8pGJcwamC1RFdHkuU1oZrYD4UHkgKIlr9+doPTEu7jmlIxmuJAX+vdz
-   EARE338GZMbZoFq0E7HPmYbhUq9FPpPCxmA7sVxGiP0VXoi/4ZuRyfUJT
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="427927556"
-X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="427927556"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 05:06:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="859651603"
-X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="859651603"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Apr 2023 05:06:26 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pia01-000MkP-1w;
-        Sat, 01 Apr 2023 12:06:25 +0000
-Date:   Sat, 1 Apr 2023 20:05:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andreas Klinger <ak@it-klinger.de>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] iio: pressure: Honeywell mpr pressure sensor
-Message-ID: <202304011957.pKSWQHyS-lkp@intel.com>
-References: <ZCf085W4XL2PtQf6@arbad>
+        Sat, 1 Apr 2023 08:07:08 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431DE20C22
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 05:07:07 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id x17so32281572lfu.5
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 05:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680350825;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y7Qmqlgj/pXH3Y28DXqDizOgEn8pn2sV8hA+vFAOHvY=;
+        b=Yg7crNRCm/hXBLfZLqn1mfEJ607+Poa1SAM2cROWjKYPWEWkwrGXkIFtCmzUGIu7zm
+         OP5NMTzMNnWwF9WkT/pZ68PAs1QfrAQ+CoHVmJWWxRuZTEtqgJQFJgGsXwJamqCK5LvR
+         11n17o/6aoIxrIymTaAtNKOu+OaKhTyaANQUOo2xdmkDK7fIgT/2BV1ekK3eAab1wElI
+         J9NqlI2Zv+EHfiSvmcwgeGGFWuquuthrNXK8w4iu3bXaxu327RJ8Y6Co/H05D6pSn7dS
+         5+uOwQ90IYJ28xf3mthvBBpNMNO6pGnVOU4Q3wPq4664X/cjWVFdfJ8JsdsSKqXUOceI
+         /T9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680350825;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y7Qmqlgj/pXH3Y28DXqDizOgEn8pn2sV8hA+vFAOHvY=;
+        b=1tG8VjuCcElxjsWbyXZLeUHgQWkalea/QOKLcNoM9haGbz2IWqaD/QnaMFLVtQmTYt
+         vsAVGW2bRZDnqpvy9jB7cvj4T5VzbCGNwgYRjAOjY/FLnhAYY2bHR5g4cuKefOlezcOV
+         kHVCVus7ppiVH/ogqvNpPZNgIpoJrpZgrVPmlLdu8+0oBfm01KiWGnq1+6Ug4KQtWsF5
+         G1Dilch9KgUjfEZ2JNlWLBDyZ1elzH5T8mC1wFMwbgHFg5Jz2kYOO05wCbP1Hu5RZuer
+         i3RBU3uzuXek/1orP9UK+4WluqhHFEmYQLllROIC11HAjid4Bg49BbTd5XVCFzyzmfRO
+         6adQ==
+X-Gm-Message-State: AAQBX9fpdIAYVRxI3iqPTbsaWhW3bZS5y5/acM/NPOqiQEA+IbLcX3j5
+        B3RheI4DMC9+YDy6clSSludTQQ==
+X-Google-Smtp-Source: AKy350ZeUt96m9Ua90W2xBAzxyacEvLLa/RKgrIImkJP0pE8+ut0lVJRyC55RxK3g3VKWlP0bwgljg==
+X-Received: by 2002:ac2:523b:0:b0:4eb:cbb:9229 with SMTP id i27-20020ac2523b000000b004eb0cbb9229mr5804873lfl.59.1680350825498;
+        Sat, 01 Apr 2023 05:07:05 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id h22-20020ac250d6000000b004cb24a027d2sm784282lfm.48.2023.04.01.05.07.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Apr 2023 05:07:05 -0700 (PDT)
+Message-ID: <64f8f865-6a3f-118e-4080-91eb466a5acf@linaro.org>
+Date:   Sat, 1 Apr 2023 14:06:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCf085W4XL2PtQf6@arbad>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 2/2] irqchip: irq-qcom-mpm: Support passing a slice of
+ SRAM as reg space
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230328-topic-msgram_mpm-v1-0-1b788a5f5a33@linaro.org>
+ <20230328-topic-msgram_mpm-v1-2-1b788a5f5a33@linaro.org>
+ <20230329034958.GC3554086@dragon>
+ <c42b8c24-2159-64ae-d36c-92c69274f24f@linaro.org>
+ <20230329132819.GA3590215@dragon>
+ <14350eba-edb6-0243-5451-2e2b7d1bd3fd@linaro.org>
+ <20230330013449.GB3590215@dragon>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230330013449.GB3590215@dragon>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andreas,
 
-I love your patch! Yet something to improve:
 
-[auto build test ERROR on jic23-iio/togreg]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On 30.03.2023 03:34, Shawn Guo wrote:
+> On Wed, Mar 29, 2023 at 03:30:12PM +0200, Konrad Dybcio wrote:
+>>>>>> @@ -374,9 +377,21 @@ static int qcom_mpm_init(struct device_node *np, struct device_node *parent)
+>>>>>>  
+>>>>>>  	raw_spin_lock_init(&priv->lock);
+>>>>>>  
+>>>>>> -	priv->base = devm_platform_ioremap_resource(pdev, 0);
+>>>>>> -	if (IS_ERR(priv->base))
+>>>>>> -		return PTR_ERR(priv->base);
+>>>>>> +	/* If we have a handle to an RPM message ram partition, use it. */
+>>>>>> +	msgram_np = of_parse_phandle(np, "qcom,rpm-msg-ram", 0);
+>>>>>> +	if (msgram_np) {
+>>>>>> +		ret = of_address_to_resource(msgram_np, 0, &res);
+>>>>>> +		/* Don't use devm_ioremap_resource, as we're accessing a shared region. */
+>>>>>> +		priv->base = ioremap(res.start, resource_size(&res));
+>>>>>
+>>>>> Are you suggesting that other cores/drivers will also need to access
+>>>>> the mpm slice below?
+>>>>>
+>>>>> 	apss_mpm: sram@1b8 {
+>>>>> 		reg = <0x1b8 0x48>;
+>>>>> 	};
+>>>> Yes, the RPM M3 core. Other slices may be accessed
+>>>> by any core at any time.
+>>>
+>>> Hmm, let me reword my question.  Other than irq-qcom-mpm, is there any
+>>> other Linux drivers that also need to request this slice region?
+>> No.
+>>
+>>> Otherwise, I do not understand why devm_ioremap_resource() cannot be
+>>> used.
+>> drivers/rpmsg/qcom_glink_rpm.c calls devm_ioremap on the entire
+>> RPM MSG RAM.
+> 
+> Can we use devm_ioremap() too instead of ioremap() here?
+Hm. Yes, we totally can!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andreas-Klinger/dt-bindings-iio-pressure-Support-Honeywell-mpr-sensors/20230401-171226
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/ZCf085W4XL2PtQf6%40arbad
-patch subject: [PATCH 2/3] iio: pressure: Honeywell mpr pressure sensor
-config: m68k-randconfig-r023-20230401 (https://download.01.org/0day-ci/archive/20230401/202304011957.pKSWQHyS-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6a49dae45811d8a644c56dc18b6cdbc6ea67df98
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andreas-Klinger/dt-bindings-iio-pressure-Support-Honeywell-mpr-sensors/20230401-171226
-        git checkout 6a49dae45811d8a644c56dc18b6cdbc6ea67df98
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304011957.pKSWQHyS-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "__divdi3" [drivers/iio/pressure/mpr.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Konrad
+> 
+> Shawn
