@@ -2,150 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7EE6D31A2
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA7D6D31A5
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjDAOtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 10:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
+        id S229640AbjDAOx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 10:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjDAOtr (ORCPT
+        with ESMTP id S229603AbjDAOx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 10:49:47 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2112.outbound.protection.outlook.com [40.107.223.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A61D1BF52;
-        Sat,  1 Apr 2023 07:49:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bwtaiRml7EId8f7raBJ9ZCD9gAAR/MVSY+vpOmULSMAEPn70U5izLUWBGuFrdwUZnID50/66K/2fWbyg6IooqSnvCc/3gmooKD3vQR+pmjFlIXo3Q28tLOyokNpX4yLyd6Y3hJjUogtQx7lucwPoO/lx8FUTDlgUZOXoBQa/LreXiF0oZoAioFXFR5wvkFpQc9uOcIm6TPYK9NIOGQUdDwx1Ae/8ruvhbd4/a2/LAfEWW2QJ7sXCgz0HKfq+7M4Kpnq1qq8YpXFpHgC1iueL3GKcifN8zK+L+azB3ndbTRh9qWj6vzPAV5vsVVirHqoUYc2pfA+Mlpl2wyMhoB7OTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z8tPGns9u1LHYEJDXsVrp8jTEj5uw5kl/50uPqdNdrU=;
- b=KQljiPk/wh8p4QDaphKLAQDZlD1N9QKSUpPlOj6fcmJ/4Y/hVcdStjZ2GtgqkA0gDe6BRAICkmFibEN435onp6DecvHMGkwjaYkGTU2P3/d+/GHUNZmZ9yWwLjGX8YAbMc/lRpz1RinG71sWpzvLc+0G+BmvdoqRrzFGttlUsuRhvr1I6i9B7F9kmRT/pyc4gIGMQXzGxbcft6S7pOCBuN22Mu1F7L36x6MSDWFOh9C8tPySV75ZNsoGbk9cRGLZdd2FeTf46yNgEjABaqWwcN+5eLPEkU6ruA4cRIy0kP89wwDUjON141C9sObtwh2StNOv4gpLfuttKxMOKO7k7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z8tPGns9u1LHYEJDXsVrp8jTEj5uw5kl/50uPqdNdrU=;
- b=n5RX9Lyeeunmw+ix/4U/S9dICyFscEDzfPYbdatuA1vqj8ShqMlPaJTrzLsEJVCVNrfLkEyPfr6gIPtDElIx1bM1E2cbCgNPXS7cEBTlCTh5fq5JNLOmQJ7qQE7X3a/MWaTFaKJ7rt2MLdDIDuSR2xSwrLAlC53HxSsrOW1iSpU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CO1PR13MB4789.namprd13.prod.outlook.com (2603:10b6:303:f4::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.26; Sat, 1 Apr
- 2023 14:49:43 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb%5]) with mapi id 15.20.6254.021; Sat, 1 Apr 2023
- 14:49:42 +0000
-Date:   Sat, 1 Apr 2023 16:49:30 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        bhupesh.sharma@linaro.org, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, mturquette@baylibre.com,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
-        richardcochran@gmail.com, linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
-Subject: Re: [PATCH net-next v3 07/12] net: stmmac: Remove some unnecessary
- void pointers
-Message-ID: <ZChEeuyNJlL6mpPC@corigine.com>
-References: <20230331214549.756660-1-ahalaney@redhat.com>
- <20230331214549.756660-8-ahalaney@redhat.com>
+        Sat, 1 Apr 2023 10:53:26 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031FC18838;
+        Sat,  1 Apr 2023 07:53:23 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id C607E5C0095;
+        Sat,  1 Apr 2023 10:53:20 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Sat, 01 Apr 2023 10:53:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1680360800; x=1680447200; bh=os
+        h0QUHcMMAqD5b2lxUL3ZPOtpTu3lTXFN7owj4dApo=; b=N7N93ljthaL7TEmJCL
+        zSyiAprYP5Wf96tmmrVOOiIzj+L6fIzW7EjAD9TD79CSn35KBjC64aryxWPFRFTm
+        JDm7bt7YIY7J1jVwlXDAE18WKWc8pdRePUWyFO9ArN6/8XVNE3mnwwTIsD1HupBl
+        GoEpFYE+0LI8WR/V3rahm0kbNTk9imouMFM9+HcihArKxDR02Ww3Nyj+Hn6hhTJv
+        ce5emFQlvWOYRyiKx4i3gi+b9cHgeCqYBaRNdCwTYnz1EfMh0JWvy3wgsE8kSRyC
+        Z/iNWzJTde+J+iJqzDK2j2xmAcVlIG+28hkse4AW7HyENbj0z1SEuv1/8f4G4Rsq
+        lEfw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680360800; x=1680447200; bh=osh0QUHcMMAqD
+        5b2lxUL3ZPOtpTu3lTXFN7owj4dApo=; b=c+sqZSFmV3d7NAYxSa2FS1s4bTf3o
+        7z853q71A3qTFHYCHK6tyo4mtOWksh581+uAfjjzB2CZVsaieCZGuwmm9Am59zwy
+        TJnNrzdFnD2WR3oTCS6O7lee8NepMc1KlF+Z8jHODY5PI6ouX9vAlvGWqthffkmc
+        hTT4bYcqSDUAeW5kCGUASM5CiZBb7eAXNB2y7YNRswu1CdcLzSC0V3D9BbYl68tQ
+        K07M8vuNwat+vlabMkp6VQKy2xF6YNuIUiy5gijq1wkj03VPDeiW+Xu+GLaiRL2B
+        TVzWb9ssSZHTKyha9RiOsVKBXpijgJU8YIzoAqisip8pbzUE8xGpsbPVA==
+X-ME-Sender: <xms:YEUoZEGWlSsS9ub5Fniv2zhXyzmIMd65JGnHMY2nzVMfMuW2zi3sOA>
+    <xme:YEUoZNV7kR1UOLW_AEBBAK-mud4TAYwQYJNI5BPs2hijhUDC1Ce-dz8MY5Pzr1GoN
+    ZSLMOvG5hovIA>
+X-ME-Received: <xmr:YEUoZOJv7yHEQOV9JxacecS4zlQKYuHvnco64J9nDEgWUOH0IyZs0FoO5MMOH5zodQdbToTt00kThuHJmuEyV0Za6kdMuVexkIIlRA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeifedgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepleevve
+    dtvdfhheefuddvffdthedutddvfeektdekvedvueegudfffefhieetfeevnecuffhomhgr
+    ihhnpehshiiikhgrlhhlvghrrdgrphhpshhpohhtrdgtohhmpdhkvghrnhgvlhdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgv
+    gheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:YEUoZGEbs_ZamwMJ0NVGqwfzKVf0cW_jt9UDrZM-4y6AyyBOdBb34Q>
+    <xmx:YEUoZKWSi4wt5XyGoJPPPM_11TdwpzGFgBemi8p4eMlImahAQbeAKQ>
+    <xmx:YEUoZJNKMASDrC_c2ZubyKtTHgOyrMX6LUaD50w_Vwb9rlXBocTlrw>
+    <xmx:YEUoZLulogowGSzxJpQ48eG-IreIbi5Cufvv9bbYQZ-es9bm18oaHg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 1 Apr 2023 10:53:20 -0400 (EDT)
+Date:   Sat, 1 Apr 2023 16:53:17 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>,
+        syzbot <syzbot+1cb937c125adb93fad2d@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in shark_write_reg/usb_submit_urb, WARNING in
+ shark_write_val/usb_submit_urb
+Message-ID: <2023040148-aground-cornbread-84e2@gregkh>
+References: <00000000000096e4f905f81b2702@google.com>
+ <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
+ <8896f261-9602-4663-aa87-1feb9bf3ec0f@redhat.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230331214549.756660-8-ahalaney@redhat.com>
-X-ClientProxiedBy: AM0PR01CA0161.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:aa::30) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB4789:EE_
-X-MS-Office365-Filtering-Correlation-Id: c13d6ede-b371-44d5-701e-08db32c053dd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y3PNvaaOgidkmlTqtTdyUnR014FAp8yirt4yodcgiqkOa4/DVqYhaLOQ0R07s5NOpd1k307p9J31bnoj3E65ww6lidkNkMZlhLUjPvJoxXPL/sBMxmbdNkNW1M2quVHpn58mcF9Jz4xfd++ha+zywXe8pRHQW4ct98A6NYA07aASEV30mHMaV1y6dBa1LEnKQeP3KZOXLYq8c/7u2RRk0cAdMknfjWZcoMy5cWKU+mDrQpYw2x+oh+uGMEZLR2cngq7c9bIpGf2trl+C4bR0dgFtynXVam2IHrQHGuEQZLNmcf9ms8tXkJRKaACNehg1TunmvWtPD3XmvdnE66dSFdsjvWCg86mF7X2vpOG6IyEKciKWIfrAMDa+Me76+lpps77VHapgqthCXInIsgT7b5rS3gpWl4XlKfo40wh28YbLFXKXkN5eGPK1GSnhNnV/F3u3Guc3Q0GyqVlUPNmkhYIp+3s8OctEXhN1Rhbrqy/PQNczldbAi7bHfQJ9bIT8m3JLiF/TLFvTQaZG2CDCd0UV+8pQdErtqnoYWZ4IiqObFL0f+TSg+6gAptFkD1HQ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(346002)(39840400004)(136003)(451199021)(36756003)(6916009)(316002)(4326008)(8676002)(66946007)(66556008)(66476007)(6486002)(478600001)(8936002)(5660300002)(41300700001)(7416002)(2906002)(7406005)(4744005)(44832011)(86362001)(38100700002)(2616005)(186003)(6666004)(6512007)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?njKEqOpGFwUjeuyewXLj4yNrQYSiUXx65JT4j6MQAjPlmquSeC0SGard5F+9?=
- =?us-ascii?Q?PfJ0Trs7GsD/bCWb46ZkEH9m5eoK92oTzMXq6O3Krvm12fJcY/YeC49UjIin?=
- =?us-ascii?Q?Wuy17ZQMd1cWAN07luyzcAA5REh25KnK2Ge7HhpplOl6GVWEWhAvfmyA9zPd?=
- =?us-ascii?Q?J2YIAx+9EW9cn85ygiqrO7aFppgHVe8mALRLzatKySpSSY19krN5isobYQr7?=
- =?us-ascii?Q?JPyQ95fwPb/5v6dzuYowaI+eu8f45BTZlpJIX3KitnFCt2GfIcpdzUxluVkR?=
- =?us-ascii?Q?DULcml3HsAFoMBL9vrnwaipiBixPND++zv6a7QawnoFxmdTl5FTzK4FFA+wR?=
- =?us-ascii?Q?j4+Unv5/8iQP3elKhwxZRV3FlBByoNc1kI8Hcg/J+cMeZ1erdaBHOi7XCUKX?=
- =?us-ascii?Q?PY76iOIlyRLdcMDKYIWfQm+ugca44pIqp2n4FDTP6ohj9BniTJjE/hiU9xsi?=
- =?us-ascii?Q?HbMVZ9zQDGcRD7E7Eb6XWdMbHmeV0vBLXTdgn/zRufvG/FR6kF4fhpoXR0Oh?=
- =?us-ascii?Q?OcdMWLWCX6wmuRyftEaYzn+B402/2hVND/Mu7J8+kX8S+CzKAEfRoaQtV/I9?=
- =?us-ascii?Q?KfgJnNvUvtBHu1Sou6jVPoyw3QXNQW/LHrxApRJnnGlUtlIczUuz1gc/Qx7y?=
- =?us-ascii?Q?6bujcWEA/yUq5mCMj3rssX8zmM8wgBigMvGuQg+i4m7zn+LjemmkwyBB6hba?=
- =?us-ascii?Q?COxz1wHmr0UgUxv6HEDLGCmBnz2Nra0SBeH2x5BuPreNM0skhQSStd2W/Yq6?=
- =?us-ascii?Q?E5d25IFdPro12sVrzbntwOEi0CahA3O5ysCRBJe7wPW/HMQR0wKNN3c/+HQ0?=
- =?us-ascii?Q?wvzpdtt8Wk1FJwnKPv/zSsnYxPRQ7btInUuoJ+QdXRV5kzoiTugwtJJLGtgQ?=
- =?us-ascii?Q?kfA3eTJxsoU/4ukA5/Ec7NakWlK9PVE0c/e15/vjgl/tT83OSfclgdBe86t1?=
- =?us-ascii?Q?c+U3G+vdlhq2swVPR4FEUMqJmF2sEKtiFNGYlAhCY1ANWslwuK2hZlXJRd6n?=
- =?us-ascii?Q?YYrlsGof/RmX5y+USCk2aj7VltPLhxnu8ckmhT/u0RsEo19CPT+Ds9dfDRvy?=
- =?us-ascii?Q?YPvaruGEqKv5rQMn5ryfIdr9CZz0acJa7gtQW7YPe3rN0VRnZTatOUKS1Yoz?=
- =?us-ascii?Q?/cX2I2uq7X3NlXiLxuojQ/9661hQhcUytLhcGpEWCnmPc2gaXPT3Jla/0RjU?=
- =?us-ascii?Q?VgAjypAjavMhUWI1LGf1rm0KlyqGPvjaMDXzl+DqeNlmDpWtzHwor81ZipR2?=
- =?us-ascii?Q?eE5m1kHZ5mPXyvSeTghUzNdYKLipT30pKHtCf4OidzKRpWyNIqD/m6K8wENC?=
- =?us-ascii?Q?cHUroQRpQzY2dTxWw2innYrNNiROyLz4+drTLfbrk6j52p4RoaBq1Ftzkpq9?=
- =?us-ascii?Q?lhYVcucdt534F6/LnNK3rswm2f292Dq/5xD6cWG0ATnisy2bDWx89uhymGCx?=
- =?us-ascii?Q?BMlGDyIutohzvQBnLJbbhE+Om9E5LakOp73x8/52azQk0mxvcvuQF9tWriI+?=
- =?us-ascii?Q?MBqXU03mCvoW9pKyS0n0R2vRhLZEyVsucJujmmCq7EXFvUJQSGFNgFJnU723?=
- =?us-ascii?Q?rUxiN8ob4DgiquLMHwfO0cCW6YteqYrL1d3eylfvj5q0iHSrIg1I5+j0wlya?=
- =?us-ascii?Q?45njv5nTKwcqBe2kSW4OIhXmLX0fE0kevwLp13A9FqTUUxu4H5bnBSXkvhqD?=
- =?us-ascii?Q?jH3VqQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c13d6ede-b371-44d5-701e-08db32c053dd
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2023 14:49:42.7524
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M0TY7PKpuuLD9VIQKJm8JCWvYKz2XPwq7GLtFdEirzO5Yr2uTFzTCC9fGdMlyf87++NUGMm6wsJYkqQEuBFZHFzbexk2f6sSWTwJP4bPQPA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB4789
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <8896f261-9602-4663-aa87-1feb9bf3ec0f@redhat.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 04:45:44PM -0500, Andrew Halaney wrote:
-> There's a few spots in the hardware interface where a void pointer is
-> used, but what's passed in and later cast out is always the same type.
+On Sat, Apr 01, 2023 at 12:48:07PM +0200, Hans de Goede wrote:
+> Hi Alan,
 > 
-> Just use the proper type directly.
+> On 3/30/23 22:10, Alan Stern wrote:
+> > Reference: https://syzkaller.appspot.com/bug?extid=4b3f8190f6e13b3efd74
+> > Reference: https://syzkaller.appspot.com/bug?extid=1cb937c125adb93fad2d
+> > 
+> > The radio-shark driver just assumes that the endpoints it uses will be
+> > present, without checking.  This adds an appropriate check.
+> > 
+> > Alan Stern
+> > 
+> > #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
 > 
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> ---
+> Thank you for working on this!
 > 
-> Changes since v2:
->     * New patch. In later patches refactoring hwif.h I touched these in
->       their first form (which was later dropped) and changed this as
->       part of that. But I thought the change was still good overall,
->       so I left this improvement in the series.
+> Both the core changes and the 2 radio-shark driver changes look good to me.
+> 
+> Please add my:
+> 
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> 
+> When submitting these upstream.
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+> 
+> 
+> > 
+> >  drivers/usb/core/usb.c |   70 +++++++++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/usb.h    |    7 ++++
+> >  2 files changed, 77 insertions(+)
+> > 
+> > Index: usb-devel/drivers/usb/core/usb.c
+> > ===================================================================
+> > --- usb-devel.orig/drivers/usb/core/usb.c
+> > +++ usb-devel/drivers/usb/core/usb.c
+> > @@ -207,6 +207,76 @@ int usb_find_common_endpoints_reverse(st
+> >  EXPORT_SYMBOL_GPL(usb_find_common_endpoints_reverse);
+> >  
+> >  /**
+> > + * usb_find_endpoint() - Given an endpoint address, search for the endpoint's
+> > + * usb_host_endpoint structure in an interface's current altsetting.
+> > + * @intf: the interface whose current altsetting should be searched
+> > + * @ep_addr: the endpoint address (number and direction) to find
+> > + *
+> > + * Search the altsetting's list of endpoints for one with the specified address.
+> > + *
+> > + * Return: Pointer to the usb_host_endpoint if found, %NULL otherwise.
+> > + */
+> > +struct usb_host_endpoint __must_check *usb_find_endpoint(
+> > +		const struct usb_interface *intf, unsigned int ep_addr)
+> > +{
+> > +	int n;
+> > +	struct usb_host_endpoint *ep;
+> > +
+> > +	n = intf->cur_altsetting->desc.bNumEndpoints;
+> > +	ep = intf->cur_altsetting->endpoint;
+> > +	for (; n > 0; (--n, ++ep)) {
+> > +		if (ep->desc.bEndpointAddress == ep_addr)
+> > +			return ep;
+> > +	}
+> > +	return NULL;
+> > +}
+> > +EXPORT_SYMBOL_GPL(usb_find_endpoint);
+> > +
+> > +/**
+> > + * usb_check_bulk_endpoint - Check whether an interface's current altsetting
+> > + * contains a bulk endpoint with the given address.
+> > + * @intf: the interface whose current altsetting should be searched
+> > + * @ep_addr: the endpoint address (number and direction) to look for
+> > + *
+> > + * Search for an endpoint with the specified address and check its type.
+> > + *
+> > + * Return: %true if the endpoint is found and is bulk, %false otherwise.
+> > + */
+> > +bool usb_check_bulk_endpoint(
+> > +		const struct usb_interface *intf, unsigned int ep_addr)
+> > +{
+> > +	const struct usb_host_endpoint *ep;
+> > +
+> > +	ep = usb_find_endpoint(intf, ep_addr);
+> > +	if (!ep)
+> > +		return false;
+> > +	return usb_endpoint_xfer_bulk(&ep->desc);
+> > +}
+> > +EXPORT_SYMBOL_GPL(usb_check_bulk_endpoint);
+> > +
+> > +/**
+> > + * usb_check_int_endpoint - Check whether an interface's current altsetting
+> > + * contains an interrupt endpoint with the given address.
+> > + * @intf: the interface whose current altsetting should be searched
+> > + * @ep_addr: the endpoint address (number and direction) to look for
+> > + *
+> > + * Search for an endpoint with the specified address and check its type.
+> > + *
+> > + * Return: %true if the endpoint is found and is interrupt, %false otherwise.
+> > + */
+> > +bool usb_check_int_endpoint(
+> > +		const struct usb_interface *intf, unsigned int ep_addr)
+> > +{
+> > +	const struct usb_host_endpoint *ep;
+> > +
+> > +	ep = usb_find_endpoint(intf, ep_addr);
+> > +	if (!ep)
+> > +		return false;
+> > +	return usb_endpoint_xfer_int(&ep->desc);
+> > +}
+> > +EXPORT_SYMBOL_GPL(usb_check_int_endpoint);
 
-FWIIW, I am very pleased to see this kind of change.
+Shouldn't you use the usb_find_bulk_in_endpoint() and friends functions
+instead of these?  Many drivers hard-coded their "I know this endpoint
+is this type" which breaks in fuzzing as you know (and see here), which
+is why those functions were created to be used.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+I think just using them in the probe function would fix this issue
+instead of these functions which would only be used by that one driver.
+
+thanks,
+
+greg k-h
