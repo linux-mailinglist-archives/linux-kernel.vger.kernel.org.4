@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116AF6D3055
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 13:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137E36D3058
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 13:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjDALy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 07:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
+        id S229915AbjDALzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 07:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjDALyz (ORCPT
+        with ESMTP id S229822AbjDALy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 07:54:55 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ED01C1CD
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 04:54:53 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id q16so32197807lfe.10
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 04:54:53 -0700 (PDT)
+        Sat, 1 Apr 2023 07:54:58 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6EE22E89
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 04:54:57 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id x17so32258024lfu.5
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 04:54:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680350091;
+        d=linaro.org; s=google; t=1680350095;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ctHnqMHZO0pzp/yb6Z2dEorUTEc6FXrEYWhX8iD6OjI=;
-        b=aVGHIcDwAhHEbX8rTDGY5Rb7qR+M8HNPK1MH/vfK/lO55HbWywTqJdioncURcXv74e
-         uYUfZxuRkvuzEdG+Y8CDvm9LahtJQPUhWh5yf/HJm6EfXfTLdNdesGBE5Or4MSIVY+xE
-         orjq0j64cZMqQrb0MWijoKzQ+mVpMQ4EDd1EL0NcOEm6OgjcOsBEuBe5a3+A8XaXz7Zh
-         q7V2dWHDmHmbL29R0wg+Ti3q6nM7B4pV6Z5BYUz0MbC+L8Rp79e7uV7bangEAU3uTgVf
-         Qhz0JiukPVUgwnO6F2/EQv5JbXJNJh2pcpZyuERJB7pJNJILCGqm5SyDjg6nJ1JQS18d
-         2heA==
+        bh=1zLOaNti8US4yjllYIUZXiOKkjRQYJjDZ58RHJWDDs4=;
+        b=RuNCVGTaN5gZnDQnvL6Nhf5iCmkua53Vi4bno/QMxLBaTtqkqGPCyrmvByqtzYkmHW
+         Xr4YdeQqCir0ro2gRn+mbRb7xIzxOJ3hYAb+KvA16dWVsaHuNJ8LfrM3EErpnjB7qi+X
+         feoiKpibMclNNCJ/GIaDM3Km77vZPtf/TNszA7bFAn9ZZeXR00DgG079KZVG7gZuGdz+
+         PrAr6cYKl4b0txU4BYmbaIYMxVWPIln/rdoIR4uXbrCRmW8LEinj1gPm346qCaeVYa52
+         YkxuxLNoeEQ33EPIiQ4tqELVVoYzZADHPEmAyTUCXTYDBI22vn1jLlHplWtj2z9xEALw
+         R+jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680350091;
+        d=1e100.net; s=20210112; t=1680350095;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ctHnqMHZO0pzp/yb6Z2dEorUTEc6FXrEYWhX8iD6OjI=;
-        b=Tkl8xkxHv5eETFh5xK7FJnxMbx4Tnz2oj+eXZ2s3DTiiXDohyfXcqvKWVqD6Ffr57U
-         r6wG5iE96z8dG1cqF7zNM6V/m46o2K/hYXxs8d6yKJIAU5EmfbU68UcVHWDFmLJBY8xz
-         2Mn3sgmayx1sNZu81aHV3cozkYFLkcbx+kLSte7Ls25MmrAxLAE77HdLtJNfdku/I6Xz
-         c1sAipTXB/ihg8l+YW7+IK+28HpL2zB88r2FbwwJ/NkkPw8EbArKd9ZfSwAgOGWOx89r
-         pQz/iRaQngXBvlRDYmas7SzQ1EQnN6VkPyz400NW81H+EGYWzX1Fci0SnhYr84nSy2mY
-         fDUQ==
-X-Gm-Message-State: AAQBX9fGmFfJsDhfVUfWRdihalHsGq/6mtA6emWYHi8G1Jz+e4CTSaxO
-        LtB4O36nr7jqV9/UJWDdUnto/A==
-X-Google-Smtp-Source: AKy350aIVzUYbMsf+4Ma49meqzWQW8ICcdLO0rTGM74lSEzeeotYTSpy/PnWE+VwXf87vD0pJkvzgA==
-X-Received: by 2002:ac2:5972:0:b0:4db:3847:12f0 with SMTP id h18-20020ac25972000000b004db384712f0mr9567501lfp.50.1680350091424;
-        Sat, 01 Apr 2023 04:54:51 -0700 (PDT)
+        bh=1zLOaNti8US4yjllYIUZXiOKkjRQYJjDZ58RHJWDDs4=;
+        b=rkGN4/0L9sATUR2EdB82jghhmHOKF+/uwnXg9xhqiVkhmhCsv0ZCk7Lm1DEkOxdnHe
+         p7zOSt1fycOHGge7YqPRMkHj/jBSTvHoyY27cQC+F3i9HkBPZbzRa94yJD4oBbw4SSPm
+         2UZmQvG/4fWxwCg1PeDGLI9NOfi//HTU3MEzE3Sq6oPTLu0UmPYG7wHfwUSi9zuvG/zj
+         eb4VwzhQ2DnYK/7KzpW8KwHwR3A9Mxy+8cCs34gXSfhRak6VdLKbH2IlEY3OFAMLV8p0
+         Bb0x+BFEZIv7X4RSQVapCEzi2LIKVmUjUxrlvQag6VR2gXo/BGVcbf4Lz9EFoShge9DD
+         gobQ==
+X-Gm-Message-State: AAQBX9dZB2ueuEJpzqMs41y7+LNMMV/8tdR7nbhf/zWjxT3nPEi+vRrU
+        b7Zdf2Nz6y0AQ78HjSRGWCxgUw==
+X-Google-Smtp-Source: AKy350YuzizgJ6QE3l39U5ozbe45B4Y6XvzYkEt87TCXHM2UIwCbBE/2TFoNySQXVHG7Z0SLkqf7ag==
+X-Received: by 2002:ac2:5fc8:0:b0:4eb:1294:983d with SMTP id q8-20020ac25fc8000000b004eb1294983dmr5425511lfg.7.1680350095725;
+        Sat, 01 Apr 2023 04:54:55 -0700 (PDT)
 Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id w8-20020ac254a8000000b004e83f386878sm786737lfk.153.2023.04.01.04.54.48
+        by smtp.gmail.com with ESMTPSA id w8-20020ac254a8000000b004e83f386878sm786737lfk.153.2023.04.01.04.54.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Apr 2023 04:54:51 -0700 (PDT)
+        Sat, 01 Apr 2023 04:54:55 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Sat, 01 Apr 2023 13:54:38 +0200
-Subject: [PATCH v6 01/15] drm/msm/adreno: adreno_gpu: Don't set OPP scaling
- clock w/ GMU
+Date:   Sat, 01 Apr 2023 13:54:39 +0200
+Subject: [PATCH v6 02/15] dt-bindings: display/msm: gpu: Document GMU
+ wrapper-equipped A6xx
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230223-topic-gmuwrapper-v6-1-2034115bb60c@linaro.org>
+Message-Id: <20230223-topic-gmuwrapper-v6-2-2034115bb60c@linaro.org>
 References: <20230223-topic-gmuwrapper-v6-0-2034115bb60c@linaro.org>
 In-Reply-To: <20230223-topic-gmuwrapper-v6-0-2034115bb60c@linaro.org>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -76,11 +76,11 @@ Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         Marijn Suijten <marijn.suijten@somainline.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680350084; l=2082;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680350084; l=3273;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=uLNnu/k+L1QbWFWkCWE2U/K/JWVJJaw9MSaaSbA5pkE=;
- b=c69tvTZp+eIVVV5kmR4XL9hM2jDTb2CKHbPZwbWjhYEMNXj783BF9pyz0eHWUGzzmv+6khEclsDI
- yYPF1Uk6C03PYld7+6ehn4/5kGtJCEAZhtxsV29rkQPqEQgn8BZv
+ bh=PlpPtlQZuCcXGxNxg4tBwrBjp8RpPmQvuWz5XR9uQF0=;
+ b=+zjHJg9qutShAJ+HmZMGEEq7+Hwtxprz8Uf0MwcBkcf4tKJyKXX8ACUw+IsQJxplDgzmP73Z/0eG
+ +njJZ0tHCn31Hsd2F4BPwa8r9Kco4MJPEyAU5Cqxoicl6iIaikX5
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -92,58 +92,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently I contributed the switch to OPP API for all Adreno generations.
-I did however also skip over the fact that GPUs with a GMU don't specify
-a core clock of any kind in the GPU node. While that didn't break
-anything, it did introduce unwanted spam in the dmesg:
+The "GMU Wrapper" is Qualcomm's name for "let's treat the GPU blocks
+we'd normally assign to the GMU as if they were a part of the GMU, even
+though they are not". It's a (good) software representation of the GMU_CX
+and GMU_GX register spaces within the GPUSS that helps us programatically
+treat these de-facto GMU-less parts in a way that's very similar to their
+GMU-equipped cousins, massively saving up on code duplication.
 
-adreno 5000000.gpu: error -ENOENT: _opp_set_clknames: Couldn't find clock with name: core_clk
+The "wrapper" register space was specifically designed to mimic the layout
+of a real GMU, though it rather obviously does not have the M3 core et al.
 
-Guard the entire logic so that it's not used with GMU-equipped GPUs.
+GMU wrapper-equipped A6xx GPUs require clocks and clock-names to be
+specified under the GPU node, just like their older cousins. Account
+for that.
 
-Fixes: 9f251f934012 ("drm/msm/adreno: Use OPP for every GPU generation")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/gpu/drm/msm/adreno/adreno_gpu.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+ .../devicetree/bindings/display/msm/gpu.yaml       | 61 ++++++++++++++++++----
+ 1 file changed, 52 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-index bb38e728864d..6934cee07d42 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-@@ -1074,18 +1074,22 @@ int adreno_gpu_init(struct drm_device *drm, struct platform_device *pdev,
- 	u32 speedbin;
- 	int ret;
+diff --git a/Documentation/devicetree/bindings/display/msm/gpu.yaml b/Documentation/devicetree/bindings/display/msm/gpu.yaml
+index 5dabe7b6794b..58ca8912a8c3 100644
+--- a/Documentation/devicetree/bindings/display/msm/gpu.yaml
++++ b/Documentation/devicetree/bindings/display/msm/gpu.yaml
+@@ -36,10 +36,7 @@ properties:
  
--	/*
--	 * This can only be done before devm_pm_opp_of_add_table(), or
--	 * dev_pm_opp_set_config() will WARN_ON()
--	 */
--	if (IS_ERR(devm_clk_get(dev, "core"))) {
-+	/* Only handle the core clock when GMU is not in use */
-+	if (config->rev.core < 6) {
- 		/*
--		 * If "core" is absent, go for the legacy clock name.
--		 * If we got this far in probing, it's a given one of them exists.
-+		 * This can only be done before devm_pm_opp_of_add_table(), or
-+		 * dev_pm_opp_set_config() will WARN_ON()
- 		 */
--		devm_pm_opp_set_clkname(dev, "core_clk");
--	} else
--		devm_pm_opp_set_clkname(dev, "core");
-+		if (IS_ERR(devm_clk_get(dev, "core"))) {
-+			/*
-+			 * If "core" is absent, go for the legacy clock name.
-+			 * If we got this far in probing, it's a given one of
-+			 * them exists.
-+			 */
-+			devm_pm_opp_set_clkname(dev, "core_clk");
-+		} else
-+			devm_pm_opp_set_clkname(dev, "core");
-+	}
+   reg-names:
+     minItems: 1
+-    items:
+-      - const: kgsl_3d0_reg_memory
+-      - const: cx_mem
+-      - const: cx_dbgc
++    maxItems: 3
  
- 	adreno_gpu->funcs = funcs;
- 	adreno_gpu->info = adreno_info(config->rev);
+   interrupts:
+     maxItems: 1
+@@ -157,16 +154,62 @@ allOf:
+       required:
+         - clocks
+         - clock-names
++
+   - if:
+       properties:
+         compatible:
+           contains:
+-            pattern: '^qcom,adreno-6[0-9][0-9]\.[0-9]$'
+-
+-    then: # Since Adreno 6xx series clocks should be defined in GMU
++            enum:
++              - qcom,adreno-610.0
++              - qcom,adreno-619.1
++    then:
+       properties:
+-        clocks: false
+-        clock-names: false
++        clocks:
++          minItems: 6
++          maxItems: 6
++
++        clock-names:
++          items:
++            - const: core
++              description: GPU Core clock
++            - const: iface
++              description: GPU Interface clock
++            - const: mem_iface
++              description: GPU Memory Interface clock
++            - const: alt_mem_iface
++              description: GPU Alternative Memory Interface clock
++            - const: gmu
++              description: CX GMU clock
++            - const: xo
++              description: GPUCC clocksource clock
++
++        reg-names:
++          minItems: 1
++          items:
++            - const: kgsl_3d0_reg_memory
++            - const: cx_dbgc
++
++      required:
++        - clocks
++        - clock-names
++    else:
++      if:
++        properties:
++          compatible:
++            contains:
++              pattern: '^qcom,adreno-6[0-9][0-9]\.[0-9]$'
++
++      then: # Starting with A6xx, the clocks are usually defined in the GMU node
++        properties:
++          clocks: false
++          clock-names: false
++
++          reg-names:
++            minItems: 1
++            items:
++              - const: kgsl_3d0_reg_memory
++              - const: cx_mem
++              - const: cx_dbgc
+ 
+ examples:
+   - |
 
 -- 
 2.40.0
