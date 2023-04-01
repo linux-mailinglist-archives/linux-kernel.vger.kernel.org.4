@@ -2,79 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7456D3113
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EC96D312F
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjDANgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 09:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
+        id S229847AbjDAOEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 10:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDANgP (ORCPT
+        with ESMTP id S229674AbjDAOEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 09:36:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5BF1B7EE;
-        Sat,  1 Apr 2023 06:36:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2053B80B4B;
-        Sat,  1 Apr 2023 13:36:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EBD5C433EF;
-        Sat,  1 Apr 2023 13:36:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680356172;
-        bh=xWIPov0IQiaNQ96i3rNsCQsiBHiJ3C0LQ80p6KiqcNs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qJ5NJPF9v5QJKLs/1kJuHIUU/gx7mX7f91/idrdCE/ZihXnB8CVMykQ3+yVqzTUrY
-         MG6U4/q1EC2SbaZGDa9BktQ2/CaVjjL4yVhMD9UTAnCFckBxqVnG3HRmDvlGXXNsnM
-         wE+KVhb1nCxWz4PyhIZ3ic9bSxLkGxsOwhG8Datf1hUcJRWeH5rxQStR3nMd2UuaN9
-         Tryf5RPmtuIPWDRpxp1bnupY50o3F6l8gVNfkicHMll2x7ZP1/5i4iwqAEVkKkseKq
-         rmedcPS9iqVBDXNCjmShRKN4+2HOvrRCRGYydco74MyNruu6AfoVfVEVv+qo4CuQ7L
-         e44cdCZI6uDHA==
-Date:   Sat, 1 Apr 2023 14:51:21 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     William Breathitt Gray <william.gray@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] iio: addac: stx104: Migrate to the regmap API
-Message-ID: <20230401145121.1a64a113@jic23-huawei>
-In-Reply-To: <ZCGBIAvr7OQLwNXv@smile.fi.intel.com>
-References: <cover.1679867815.git.william.gray@linaro.org>
-        <4ebc1b6b609a086846420954b893e914fd395384.1679867815.git.william.gray@linaro.org>
-        <ZCGBIAvr7OQLwNXv@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 1 Apr 2023 10:04:41 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44C1B76D;
+        Sat,  1 Apr 2023 07:04:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680357862; x=1711893862;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rN2te+wjttVhFgSe9IzLsk8u67wrPaGxd4Fr7MnntQc=;
+  b=ZXOB5fDaYg9xYUBkGylcJvefvd7HE28Fmit/iHwwWfh0BDcWebbhUN8X
+   Oy9paHFfF2Pd2I9CDLe4ryjkR8yIhDKT+VCPxuzech+n9L+lsp7KloWF9
+   fN6kzCUlOZ5lIR3EH4MX8rjaDSlS5f7Z2b0Y+ZhxPir0ws0IW06h93MI7
+   c9/YEEOuqI0iaMdE9c09T/BkQHUzk4dfuQTpFx6JeIC2BPeLKo8hsHyE/
+   S5yAZUmgBI8zUxtosb0ZLkHkXG0ovDW0D5v/j8KpDHpDO9DSvt+SOLej3
+   rnjtfV1GHckgSk7jRyX7K9lcAxMRLx0UoGHyRGzTBM5UEePq/lsof8ZpW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="322045496"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="322045496"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 07:04:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="715761416"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="715761416"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga008.jf.intel.com with ESMTP; 01 Apr 2023 07:04:20 -0700
+Date:   Sat, 1 Apr 2023 21:52:45 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: select FPGA_BRIDGE for
+ 'Xilinx LogiCORE PR Decoupler'
+Message-ID: <ZCg3LepdPRFtsAcb@yilunxu-OptiPlex-7050>
+References: <20230327115103.106059-1-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327115103.106059-1-nava.kishore.manne@amd.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-03-27 at 17:21:03 +0530, Nava kishore Manne wrote:
+> The Xilinx LogiCORE PR Decoupler depends on the FPGA_BRIDGE always and
+> hence select it explicitly to make sure that it will be available all
+> the time when PR decoupler is enabled.
+
+FPGA_BRIDGE is available all the time if XILINX_PR_DECOUPLER is selected
+by user. What's the problem now?
+
+Thanks,
+Yilun
 
 > 
-> > +		do {
-> > +			err = regmap_read(priv->aio_ctl_map, STX104_ADC_STATUS, &adc_status);
-> > +			if (err)
-> > +				return err;
-> > +		} while (u8_get_bits(adc_status, STX104_CNV));  
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> ---
+>  drivers/fpga/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Hmm... Isn't it a potential infinite loop (e.g., ther hardware / firmware
-> is broken)?
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 0a00763b9f28..71003f256c60 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -115,8 +115,8 @@ config ALTERA_FREEZE_BRIDGE
+>  
+>  config XILINX_PR_DECOUPLER
+>  	tristate "Xilinx LogiCORE PR Decoupler"
+> -	depends on FPGA_BRIDGE
+>  	depends on HAS_IOMEM
+> +	select FPGA_BRIDGE
+>  	help
+>  	  Say Y to enable drivers for Xilinx LogiCORE PR Decoupler
+>  	  or Xilinx Dynamic Function eXchange AIX Shutdown Manager.
+> -- 
+> 2.25.1
 > 
-> Why not using regmap_read_poll_timeout() (or its atomic variant, depends on
-> the case)?
-
-Just to shortcut things as I'm looking at this.
-That's currently handled in patch 2.  Argument being this is a direct conversion
-of existing code, whereas changing to xxx_poll_timeout() is an improvement.
-
-I'm fine with it just being rolled into first patch with a note in the patch
-description though if that works better.
-
