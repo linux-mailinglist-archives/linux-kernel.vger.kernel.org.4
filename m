@@ -2,102 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221846D2F59
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 11:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCDE6D2F5D
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 11:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjDAJS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 05:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
+        id S229783AbjDAJWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 05:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDAJSY (ORCPT
+        with ESMTP id S229441AbjDAJWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 05:18:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C633AF26;
-        Sat,  1 Apr 2023 02:18:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E97C160BED;
-        Sat,  1 Apr 2023 09:18:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C73D2C433EF;
-        Sat,  1 Apr 2023 09:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680340702;
-        bh=L/sME2FIr0aX8i+u4x8Bk/GKIj9HRuPD+w8rKgEAVik=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0TXJDBUVkZ+12qcMwHwVgcP21I0COj4wuNnwgFCE+HVhenYDrRiTneLgrVsARzJif
-         YH3BbJAsRF8DNh/K8YW7SG1g/LGTcWM3cPY7wwv1wO47HHVIdrNycjJNhvtUP0Kmzp
-         ZoOgUIRIvI58d/21uLnrwFC3Iy8CHITmSb59luYo=
-Date:   Sat, 1 Apr 2023 11:18:19 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Maxim Levitsky <maximlevitsky@gmail.com>,
-        Alex Dubov <oakad@yahoo.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Hannes Reinecke <hare@suse.de>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        ye xingchen <ye.xingchen@zte.com.cn>, linux-mmc@vger.kernel.org
-Subject: Re: BUG FIX: [PATCH RFC v3] memstick_check() memleak in kernel
- 6.1.0+ introduced pre 4.17
-Message-ID: <2023040127-untrue-obtrusive-1ea4@gregkh>
-References: <7d873dd3-9bab-175b-8158-c458b61a7122@alu.unizg.hr>
- <f74219a7-1607-deb4-a6ae-7b73e2467ac7@alu.unizg.hr>
- <df560535-2a8e-de21-d45d-805159d70954@alu.unizg.hr>
- <2023033124-causing-cassette-4d96@gregkh>
- <4d80549f-e59d-6319-07fd-1fbed75d7a1c@alu.unizg.hr>
- <ZCfO90WwyS6JwaHi@kroah.com>
- <ZCfQQDkw3D_BXJaZ@kroah.com>
+        Sat, 1 Apr 2023 05:22:15 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C175FAF26;
+        Sat,  1 Apr 2023 02:22:13 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b20so99002441edd.1;
+        Sat, 01 Apr 2023 02:22:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680340932; x=1682932932;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2JAXjEh00e4SLFvJwSAfkOz5lCcAQOFO7gXGReDig9g=;
+        b=hM9QVU/gTNXHt0T6rSic4JFPX3dZwj6smNRVN2+KTkGBsqpaZPzKm4yL+ANnu2JyP6
+         hRXf2XQLgeHC0XPhpRDuSCB5AvLvlGNZCBqBUCQoBGE0xcEm2Vg1vAJfqwJGiYcl/6ph
+         eThu1cHNsNkKLdVlx9fbi6j16b2lFluox1vj0UOyH8OUDFpOar3UUdt+FVTfsM3CWgoy
+         ui02UUMxFPCXPP+uXKbue4PkbRt3MoKmH9t/YuNp0qgKfgnUzZM5mIeNsbFPR2Qo3VGJ
+         CcSevXERu+fnqgAYb1kTXM6jsOQgcr6T0HfMiA1+LuxviP184wDZqUeubUzAzuk95/aD
+         YsqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680340932; x=1682932932;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2JAXjEh00e4SLFvJwSAfkOz5lCcAQOFO7gXGReDig9g=;
+        b=qbYr5W8++jk65P0csOMq64atYfK0pI2yX+ai9hLYTFv1h+sWM5pC2p566DxNtef/C6
+         w3nTueTizpsP9IRxC+yhqS4ZOMR2Dhl4lHwaPJmYAEcpwJ6tMCaVsam27cwFeVXM953S
+         tXEr5X1jQxf2WU0H35/jIQ+IMiTdPthpUw+bJYPfI9gWXyp+Omwd5N2NoAlPlCErAMW+
+         FXvGeysR8uMqBZU0pNYEIUpV0swaj8uUXLypZsB6IJukaxtep0jqdWDUFSat0gSYn1Th
+         dmYXEvIS2iE4USZ+/o3PmSQqHYN7jL+O4+DFMMDZ0wIn0gxf3e1cxJjRsgqTm8Mm/+cy
+         5frA==
+X-Gm-Message-State: AAQBX9cxQXHIg7wIT7vVuv/iyb699m9wRb1l/mLhX3DTNcY0TnqSSrDa
+        SLFm/z7o7u2CRZPXPdZ2+fg=
+X-Google-Smtp-Source: AKy350ZC7Jp6bb0KKIDt6HVyCcf/E6RKfx79MtDfHO/qgKIZXf2ZLQRw9+yzj75P/WOHpopxMG1T5Q==
+X-Received: by 2002:a05:6402:524e:b0:502:465:28e0 with SMTP id t14-20020a056402524e00b00502046528e0mr8967686edd.0.1680340931961;
+        Sat, 01 Apr 2023 02:22:11 -0700 (PDT)
+Received: from ivan-HLYL-WXX9.. ([37.252.81.51])
+        by smtp.gmail.com with ESMTPSA id t28-20020a50ab5c000000b005024faae65esm1885147edc.10.2023.04.01.02.22.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Apr 2023 02:22:11 -0700 (PDT)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     skhan@linuxfoundation.org
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH] selftests: media_tests: Add new subtest to video_device_test
+Date:   Sat,  1 Apr 2023 13:22:07 +0400
+Message-Id: <20230401092207.16667-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCfQQDkw3D_BXJaZ@kroah.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 01, 2023 at 08:33:36AM +0200, Greg KH wrote:
-> On Sat, Apr 01, 2023 at 08:28:07AM +0200, Greg KH wrote:
-> > On Sat, Apr 01, 2023 at 08:23:26AM +0200, Mirsad Goran Todorovac wrote:
-> > > > This patch is implying that anyone who calls "dev_set_name()" also has
-> > > > to do this hack, which shouldn't be the case at all.
-> > > > 
-> > > > thanks,
-> > > > 
-> > > > greg k-h
-> > > 
-> > > This is my best guess. Unless there is dev_free_name() or kobject_free_name(), I don't
-> > > see a more sensible way to patch this up.
-> > 
-> > In sleeping on this, I think this has to move to the driver core.  I
-> > don't understand why we haven't seen this before, except maybe no one
-> > has really noticed before (i.e. we haven't had good leak detection tools
-> > that run with removable devices?)
-> > 
-> > Anyway, let me see if I can come up with something this weekend, give me
-> > a chance...
-> 
-> Wait, no, this already should be handled by the kobject core, look at
-> kobject_cleanup(), at the bottom.  So your change should be merely
-> duplicating the logic there that already runs when the struct device is
-> freed, right?
-> 
-> So I don't understand why your change works, odd.  I need more coffee...
+Add new subtest to video_device_test to cover the VIDIOC_G_PRIORITY
+and VIDIOC_S_PRIORITY ioctl calls. This test tries to set the priority
+associated with the file descriptior via ioctl VIDIOC_S_PRIORITY
+command from V4L2 API. After that, the test tries to get the new
+priority via VIDIOC_G_PRIORITY ioctl command and compares the result
+with the v4l2_priority it set before. At the end, the test restores the
+old priority.
 
-I think you got half of the change correctly.  This init code is a maze
-of twisty passages, let me take your patch and tweak it a bit into
-something that I think should work.  This looks to be only a memstick
-issue, not a driver core issue (which makes me feel better.)
+This test will increase the code coverage for video_device_test, so
+I think it might be useful. Additionally, this patch will refactor the
+video_device_test a little bit, according to the new functionality.
 
-thanks,
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+ .../selftests/media_tests/video_device_test.c | 131 +++++++++++++-----
+ 1 file changed, 93 insertions(+), 38 deletions(-)
 
-greg k-h
+diff --git a/tools/testing/selftests/media_tests/video_device_test.c b/tools/testing/selftests/media_tests/video_device_test.c
+index 0f6aef2e2593..5e6f65ad2ca3 100644
+--- a/tools/testing/selftests/media_tests/video_device_test.c
++++ b/tools/testing/selftests/media_tests/video_device_test.c
+@@ -13,18 +13,9 @@
+  * in the Kselftest run. This test should be run when hardware and driver
+  * that makes use of V4L2 API is present.
+  *
+- * This test opens user specified Video Device and calls video ioctls in a
+- * loop once every 10 seconds.
+- *
+  * Usage:
+  *	sudo ./video_device_test -d /dev/videoX
+- *
+- *	While test is running, remove the device or unbind the driver and
+- *	ensure there are no use after free errors and other Oops in the
+- *	dmesg.
+- *	When possible, enable KaSan kernel config option for use-after-free
+- *	error detection.
+-*/
++ */
+ 
+ #include <stdio.h>
+ #include <unistd.h>
+@@ -37,45 +28,67 @@
+ #include <time.h>
+ #include <linux/videodev2.h>
+ 
+-int main(int argc, char **argv)
++#define PRIORITY_MAX 4
++
++int priority_test(int fd)
+ {
+-	int opt;
+-	char video_dev[256];
+-	int count;
+-	struct v4l2_tuner vtuner;
+-	struct v4l2_capability vcap;
++	/* This test will try to update the priority associated with a file descriptor */
++
++	enum v4l2_priority old_priority, new_priority, priority_to_compare;
+ 	int ret;
+-	int fd;
++	int result = 0;
+ 
+-	if (argc < 2) {
+-		printf("Usage: %s [-d </dev/videoX>]\n", argv[0]);
+-		exit(-1);
++	ret = ioctl(fd, VIDIOC_G_PRIORITY, &old_priority);
++	if (ret < 0) {
++		printf("Failed to get priority: %s\n", strerror(errno));
++		return -1;
++	}
++	new_priority = (old_priority + 1) % PRIORITY_MAX;
++	ret = ioctl(fd, VIDIOC_S_PRIORITY, &new_priority);
++	if (ret < 0) {
++		printf("Failed to set priority: %s\n", strerror(errno));
++		return -1;
++	}
++	ret = ioctl(fd, VIDIOC_G_PRIORITY, &priority_to_compare);
++	if (ret < 0) {
++		printf("Failed to get new priority: %s\n", strerror(errno));
++		result = -1;
++		goto cleanup;
++	}
++	if (priority_to_compare != new_priority) {
++		printf("Priority wasn't set - test failed\n");
++		result = -1;
+ 	}
+ 
+-	/* Process arguments */
+-	while ((opt = getopt(argc, argv, "d:")) != -1) {
+-		switch (opt) {
+-		case 'd':
+-			strncpy(video_dev, optarg, sizeof(video_dev) - 1);
+-			video_dev[sizeof(video_dev)-1] = '\0';
+-			break;
+-		default:
+-			printf("Usage: %s [-d </dev/videoX>]\n", argv[0]);
+-			exit(-1);
+-		}
++cleanup:
++	ret = ioctl(fd, VIDIOC_S_PRIORITY, &old_priority);
++	if (ret < 0) {
++		printf("Failed to restore priority: %s\n", strerror(errno));
++		return -1;
+ 	}
++	return result;
++}
++
++int loop_test(int fd)
++{
++	/*
++	 * This test opens user specified Video Device and calls video ioctls in a
++	 * loop once every 10 seconds.
++	 * While test is running, remove the device or unbind the driver and
++	 * ensure there are no use after free errors and other Oops in the
++	 * dmesg.
++	 * When possible, enable KaSan kernel config option for use-after-free
++	 * error detection.
++	 */
++	int count;
++	struct v4l2_tuner vtuner;
++	struct v4l2_capability vcap;
++	int ret;
+ 
+ 	/* Generate random number of interations */
+ 	srand((unsigned int) time(NULL));
+ 	count = rand();
+ 
+-	/* Open Video device and keep it open */
+-	fd = open(video_dev, O_RDWR);
+-	if (fd == -1) {
+-		printf("Video Device open errno %s\n", strerror(errno));
+-		exit(-1);
+-	}
+-
+ 	printf("\nNote:\n"
+ 	       "While test is running, remove the device or unbind\n"
+ 	       "driver and ensure there are no use after free errors\n"
+@@ -98,4 +111,46 @@ int main(int argc, char **argv)
+ 		sleep(10);
+ 		count--;
+ 	}
++	return 0;
++}
++
++int main(int argc, char **argv)
++{
++	int opt;
++	char video_dev[256];
++	int fd;
++	int test_result;
++
++	if (argc < 2) {
++		printf("Usage: %s [-d </dev/videoX>]\n", argv[0]);
++		exit(-1);
++	}
++
++	/* Process arguments */
++	while ((opt = getopt(argc, argv, "d:")) != -1) {
++		switch (opt) {
++		case 'd':
++			strncpy(video_dev, optarg, sizeof(video_dev) - 1);
++			video_dev[sizeof(video_dev)-1] = '\0';
++			break;
++		default:
++			printf("Usage: %s [-d </dev/videoX>]\n", argv[0]);
++			exit(-1);
++		}
++	}
++
++	/* Open Video device and keep it open */
++	fd = open(video_dev, O_RDWR);
++	if (fd == -1) {
++		printf("Video Device open errno %s\n", strerror(errno));
++		exit(-1);
++	}
++
++	test_result = priority_test(fd);
++	if (!test_result)
++		printf("Priority test - PASSED\n");
++	else
++		printf("Priority test - FAILED\n");
++
++	loop_test(fd);
+ }
+-- 
+2.34.1
+
