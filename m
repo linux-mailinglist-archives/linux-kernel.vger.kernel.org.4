@@ -2,71 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E706D3147
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0080B6D315B
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjDAO0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 10:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
+        id S229930AbjDAOdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 10:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjDAO0a (ORCPT
+        with ESMTP id S229537AbjDAOdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 10:26:30 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1473AD30
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 07:26:28 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F193C1EC03DB;
-        Sat,  1 Apr 2023 16:26:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680359187;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=3B+zsaPtlmltz8XFOiurt9dC/urcpVERHr2urY/O8Ds=;
-        b=rCbUHfLQIrDqQAHr9N4KWxC/ieOe9VLRIMbt2hjb/YHVRdyMeFKgH/pyt7iO5xU2Ew9QNP
-        9UzFixbcTi7CJUMlpjq7rC1/vF5u0CnwLu2KbfPqYANXEJjb6EZOb78/xIgPx9rWvqIdZR
-        pKwHTXHm1ggFaKhqxPpt/w2dpmTiMq4=
-Date:   Sat, 1 Apr 2023 16:26:26 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v4 09/12] x86/mtrr: construct a memory map with cache
- modes
-Message-ID: <20230401142626.GDZCg/EsspWrd7BV1G@fat_crate.local>
-References: <20230306163425.8324-1-jgross@suse.com>
- <20230306163425.8324-10-jgross@suse.com>
- <20230331125740.GCZCbYxFkJOg8hIl6C@fat_crate.local>
- <73226c11-4443-1e52-4566-5799d21e4ccb@suse.com>
+        Sat, 1 Apr 2023 10:33:37 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C695ACA0B;
+        Sat,  1 Apr 2023 07:33:36 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id ix20so24084233plb.3;
+        Sat, 01 Apr 2023 07:33:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680359616;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XVMCxKkdAj5G/sHqBJwRjfivjb3c00JzonL5QvYBrDc=;
+        b=oorS77R7MIzVP0hceo91ptJHWN9iXoA1WQeFlSuZGUdTpqzzj+6KEWHDb9EvFJioJB
+         s7Yk/litLZVKfdHl2yWdlE2pKQ3qC3Aw3v7reTboKin+yD1gkIBCODUAYsLsZ6kMdDM+
+         d7E/3CR/y4+dI3crXmJE/IC5fqv8XTyyK51Qn2x28S/dfqrqty9m6QyLUPLeOjvQSabB
+         o71Lrwk67YDTb17v79gPk94omHSRIKPnRsXaQBmPEZxvNRa5W0R0NBTCs+SEx1tqU4Q5
+         dSgxXViMUO5Tj6yXlV2tnPu1nCSNXT7TQOQYK0Y2WWhZkna0tkn7H+MzFuTHhWu0fti1
+         q0tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680359616;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XVMCxKkdAj5G/sHqBJwRjfivjb3c00JzonL5QvYBrDc=;
+        b=CODQ2XSdzEi80XB+HeaeUJSMcmKH+uOTRw21SRAGPJGXjhOhFgf1f8gTUzmcYKY93D
+         6mlNLuC9y8anlQ5XySn13ISIyaSDImi6YkzhxEG58VLc0iQUGhBL45n/5rLpswAoVs0o
+         C1TpEX4m/2CIGpV7xspTkWVCaT/AMRXf924Ml5OPjwyG8a4YvB0B1Tw42BEVEwJP7x35
+         o4InCiHDhs+RQs1LdFpslHuxRfpIXYsY6TsqYUJjCR37FAcHKGHDWqPuf7pZGUvFAm/c
+         j6UvTMrwhRPVAGfZ2PSDA2OYr68+Cfx0oGpdXmZ1fsRaIfDwgTekG+IwAGX35ODt3107
+         8ILw==
+X-Gm-Message-State: AAQBX9efa9cM9UkUOP3cKkqflM+WcZKtNX2JomrDInvIyBnYJ96Etj4K
+        ZP0VXdEFezm6Jm+Sxyil6068IwcHkNYl8TdEPss=
+X-Google-Smtp-Source: AKy350bWY76S1g8Vj/Huvn7WWZ45nm5q5e7cFRBykceGGzehIhVjpEW9LM82jjc/w8x69HUL9jxGeorEgerr+yx+Blo=
+X-Received: by 2002:a17:902:d70b:b0:1a2:8940:6da8 with SMTP id
+ w11-20020a170902d70b00b001a289406da8mr3191541ply.13.1680359616143; Sat, 01
+ Apr 2023 07:33:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <73226c11-4443-1e52-4566-5799d21e4ccb@suse.com>
+References: <20230331163058.5688-1-sebastian.reichel@collabora.com>
+In-Reply-To: <20230331163058.5688-1-sebastian.reichel@collabora.com>
+From:   Vincent Legoll <vincent.legoll@gmail.com>
+Date:   Sat, 1 Apr 2023 16:30:53 +0200
+Message-ID: <CAEwRq=q=W57W33nYe_uUDQb0cf7QkFoa0rO+EWdsuUGTN7k_Vg@mail.gmail.com>
+Subject: Re: [PATCHv1 0/2] Improve RK3588 clocks and power domains support
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        Peter Geis <pgwipeout@gmail.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Finley Xiao <finley.xiao@rock-chips.com>,
+        Jagan Teki <jagan@edgeble.ai>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 03:35:07PM +0200, Juergen Gross wrote:
-> Hmm, this makes it much harder to see that the code really does nothing
-> if enabled isn't set.
+Hello,
 
-Both callsites in mtrr_bp_init() are behind such a check already.
+I'm running a QuartzPro64 with this patch set applied, everything(*)
+works properly.
 
-Thx.
+(*) eMMC, SD, LED, ethernet, serial, watchdog.
+
+Are there any tests I can do to help with this ?
+
+Regards
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Vincent Legoll
