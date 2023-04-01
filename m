@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B1C6D2E7D
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 738C66D2E7F
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbjDAGFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 02:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S232975AbjDAGFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 02:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjDAGFk (ORCPT
+        with ESMTP id S232528AbjDAGFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 02:05:40 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6CE1E716
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 23:05:37 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id d13-20020a17090ad98d00b00240922fdb7cso7495612pjv.6
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 23:05:37 -0700 (PDT)
+        Sat, 1 Apr 2023 02:05:44 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC4E1E716
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 23:05:43 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id e23-20020a25e717000000b00b66ab374ba1so24082907ybh.22
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 23:05:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680329137;
+        d=google.com; s=20210112; t=1680329142;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nzj9Fg3GaIV9NE2Q/zhkZ2tE1+n4uT9HgOjZrVlSexY=;
-        b=a+B/eYfLO/QRcC2R3kk9NVzQz2ZbJaoghwKedq2mxrvnt1fQ7X76yzOyktp3FTrfZJ
-         lXOAhtIJgjpaznN4gd0nxR7Def4aezPHYphl+ftF1NWyx0e/fN7tNE68F7eCkX9UEhWL
-         umWGKN4TuxXJtCbZzrK0hb2vPU+lG49Rz9r6W0Zb5xAcOuMHAIDd8AdKCDzjBhtR5tY7
-         74PoftD/PfUW/5VHfWz06fpLSMMH5j2dggJEUDKepMqqBWXRsLI0rcrGYn91dOWD1f7P
-         yPLdRKBLjnB2IChd8iaZ+LHB7yNrPqLFuHdZ6N6ByM/khZ03IAGUzzC3dOGq7E4CjMdK
-         UttQ==
+        bh=YJIKAiLrcYph4SDFvXf83ay8bL8jHgmMLaG1jX6sOx0=;
+        b=frACg17a8pI0bbcxxKJzpQQeLf47wzT6rc2ZVp3Aaq8MfX03AmW3eP1GF68xZeBM6N
+         n9ewuLIh9l54jBHPvslv9mMx1A/Ej8zTYEh/t6IAGO6qfydAw0wPzS48ERRVRQJSE00C
+         YesQl6RTmnVvR4uE70swykMBPexUt58a13kSleN4aYjOgzJg9bAqlXStAUP/pLTTlLY6
+         4vLvdo1IxAU5ZmTqbKWUp98FeELLIX1M1z8fnAJiv83m/uqcpVvtuN77UEo/zE7k5X2M
+         tFprKTQztNiF5Ws5gTFoju5yCH1bR1XRzna97+ZwHgJPldsiyWqYzQ9pKkKhKZ3GZ9nd
+         30Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680329137;
+        d=1e100.net; s=20210112; t=1680329142;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nzj9Fg3GaIV9NE2Q/zhkZ2tE1+n4uT9HgOjZrVlSexY=;
-        b=asdnPtaA0B/qfjl+D8k48iIGihrSL1MJXPq6HBlJJMTtF9LWiF9/Rfzz0BWraiEMzu
-         z8u2HmhCToP14pSvifeyPku7SYO/71h+PfVCFQui8mSr+M3RGMRTz0NxPhFBetzdyJx4
-         Jfgx1uOZhEppQeaJF8LcAD5UpFsjrZ2bMV2K1ZXtmAZ1uPiYiYXywMA+F6vwOkIRkoXI
-         4wMNWHkUmmVVxMdkfMllPrI+WMkxodBb7QSbJdh25FyaX+EA7F6NDGx7/k9QdMOrwmMo
-         LaIEhjPbjuNFONN09LvXT4xAPSOFye/n49YaPBnIxE3sLfg5DALLaJenZZFofbuFfi+P
-         t9wA==
-X-Gm-Message-State: AAQBX9e5+jDPNT7Enc+9NLKAEXpZxe9PCoJuVhBHXZk4MQkfOvasgo7r
-        QntphGy3ZkybNICmj0UFY3QsaWfEcLhc
-X-Google-Smtp-Source: AKy350ZHfWs0860/xrymzSKCPQKop/B7XtT0OncKiX+Pf72FRIpkclD9sEc9SXlIlKdxX1csdPDiXRq/uB17
+        bh=YJIKAiLrcYph4SDFvXf83ay8bL8jHgmMLaG1jX6sOx0=;
+        b=3gUBo9/NRxSpIBDj/8fcffRKE2gaGR7mBqbI9saiFKIM0WyzsAORllfR+eN6U6j06V
+         TDCg/VSb0xTfv3cVZQnm96YgIceqwH5CNC29HZtVilpX3HCk5rI5m4LgabICaW5evev4
+         6veBs/gNGE3Zw7S/7+SuWvye4axE2zbS9CdIcL2tgve3e+b2V/UBHFIebmTg8n+UYYvF
+         +5/WQUo2+ZcadFprOGmB+HEdNzkUeGo658rgaUfdXPFec1IjcP4XiT2w+elCnSDAEjPq
+         IwBoCFmaqAnlWF4hpLuXOM0xsqhRwQJBYwwv3qHSjkmQRF+jWZ4fYHDRGHAt1w59EVjs
+         oaDw==
+X-Gm-Message-State: AAQBX9d6yI8nTS6dayYgc37SnEVIZxXfp1Jj4BJKupH+uRA/xe0OHZNq
+        HuylH98p/9kkR8rmX66LUtJ7YWPoKcTB
+X-Google-Smtp-Source: AKy350ZEkYkx/cnN4LKrWExUKxfzEZ+Fbw1UrV+ww+lENePsSHSFei3i2z2m6GsTrCtyz5NuzrjcBN12YoyN
 X-Received: from dhavale-ctop.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:5e39])
- (user=dhavale job=sendgmr) by 2002:a17:902:7c81:b0:1a1:f44c:8b98 with SMTP id
- y1-20020a1709027c8100b001a1f44c8b98mr9863957pll.12.1680329137028; Fri, 31 Mar
- 2023 23:05:37 -0700 (PDT)
-Date:   Sat,  1 Apr 2023 06:05:08 +0000
+ (user=dhavale job=sendgmr) by 2002:a81:ae60:0:b0:546:5f4d:c002 with SMTP id
+ g32-20020a81ae60000000b005465f4dc002mr1322669ywk.10.1680329142383; Fri, 31
+ Mar 2023 23:05:42 -0700 (PDT)
+Date:   Sat,  1 Apr 2023 06:05:09 +0000
 In-Reply-To: <20230401060509.3608259-1-dhavale@google.com>
 Mime-Version: 1.0
 References: <20230401060509.3608259-1-dhavale@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230401060509.3608259-2-dhavale@google.com>
-Subject: [PATCH v1 1/2] usb: gadget: f_fs: Fix ffs_epfile_read_iter to handle ITER_UBUF
+Message-ID: <20230401060509.3608259-3-dhavale@google.com>
+Subject: [PATCH v1 2/2] usb: gadgetfs: Fix ep_read_iter to handle ITER_UBUF
 From:   Sandeep Dhavale <dhavale@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>
 Cc:     Sandeep Dhavale <dhavale@google.com>, kernel-team@android.com,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -69,29 +69,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iov_iter for ffs_epfile_read_iter can be ITER_UBUF with io_uring.
-In that case dup_iter() does not have to allocate anything and it
-can return NULL. ffs_epfile_read_iter treats this as a failure and
-returns -ENOMEM. Fix it by checking if iter_is_ubuf().
+iov_iter for ep_read_iter can be ITER_UBUF with io_uring.
+In that case dup_iter() does not have to allocate iov and it can
+return NULL. Fix the assumption by checking for iter_is_ubuf()
+other wise ep_read_iter can treat this as failure and return -ENOMEM.
 
 Fixes: 1e23db450cff ("io_uring: use iter_ubuf for single range imports")
 Signed-off-by: Sandeep Dhavale <dhavale@google.com>
 ---
- drivers/usb/gadget/function/f_fs.c | 2 +-
+ drivers/usb/gadget/legacy/inode.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 8830847fbf97..a13c946e0663 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1230,7 +1230,7 @@ static ssize_t ffs_epfile_read_iter(struct kiocb *kiocb, struct iov_iter *to)
- 	p->kiocb = kiocb;
- 	if (p->aio) {
- 		p->to_free = dup_iter(&p->data, to, GFP_KERNEL);
--		if (!p->to_free) {
-+		if (!iter_is_ubuf(&p->data) && !p->to_free) {
- 			kfree(p);
- 			return -ENOMEM;
+diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+index d605bc2e7e8f..28249d0bf062 100644
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -614,7 +614,7 @@ ep_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ 		if (!priv)
+ 			goto fail;
+ 		priv->to_free = dup_iter(&priv->to, to, GFP_KERNEL);
+-		if (!priv->to_free) {
++		if (!iter_is_ubuf(&priv->to) && !priv->to_free) {
+ 			kfree(priv);
+ 			goto fail;
  		}
 -- 
 2.40.0.348.gf938b09366-goog
