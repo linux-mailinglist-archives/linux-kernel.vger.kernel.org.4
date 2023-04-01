@@ -2,321 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6BE6D3330
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 20:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF21D6D3333
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 20:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjDASio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 14:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S229811AbjDASl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 14:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDASin (ORCPT
+        with ESMTP id S229791AbjDASl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 14:38:43 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B4DCE7299
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 11:38:41 -0700 (PDT)
-Received: (qmail 274705 invoked by uid 1000); 1 Apr 2023 14:38:40 -0400
-Date:   Sat, 1 Apr 2023 14:38:39 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <greg@kroah.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>,
-        syzbot <syzbot+1cb937c125adb93fad2d@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in shark_write_reg/usb_submit_urb, WARNING in
- shark_write_val/usb_submit_urb
-Message-ID: <f764a19d-858e-408c-a5f5-d6fe7306c4cb@rowland.harvard.edu>
-References: <00000000000096e4f905f81b2702@google.com>
- <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
- <8896f261-9602-4663-aa87-1feb9bf3ec0f@redhat.com>
- <2023040148-aground-cornbread-84e2@gregkh>
+        Sat, 1 Apr 2023 14:41:27 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE2D729A
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 11:41:26 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id w9so102301820edc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 11:41:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680374485;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J3CX0tphHwucVQy/XBMHzMB2OpwqIu91GQKmtAUHW5M=;
+        b=mHydUQdLtrrja7rpwWgXxy5mypWihyqXUP8jESwZXYQ+UMo6cyf4ARIpqPZt9seg3I
+         viD8SINsrNFJTY+slyuegQUNoXoyUgGWNqNVbcgVwIxihQmrdkXVXvGZpaqvQ4qtGyhn
+         ZaTg1OeZqPsnFvfI8KPO2vXotEmS84P8VD/aowhwkz4zu+Gs1dEz5PvvBG0+IBWouKmw
+         L9yNjPA4eb8unexMMTlJIKBjfLSGvMAEBV5YJysQGgz7iV0MwdSCRo2BfI7N8tG2RPXh
+         lG0tgpCZrnrW6gB1CVl7u9EUrxINDXJztBVjy4PIQQuPu/r7NvVibcJma2TtbIX2gDp/
+         sApw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680374485;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J3CX0tphHwucVQy/XBMHzMB2OpwqIu91GQKmtAUHW5M=;
+        b=H12TsooWTBplirjc8JW21MPa/dHW7ZoJ6FpatdKEim3xC7tU9Twh9lweKXbSuwUnCl
+         lQG1Gp5fuv0wDy8MdQjRWI7og3QJsb0JAN/QBDUCJlzw+pwrHoWuoZ5McxSqSE/HpDUW
+         m1klh1gYtnBQU8rahatffriXNrSTAGvYHE2LaAjD1/eSAnWffOtmpWZg9aXgn2Jtj9c3
+         Ev8vvRT5Hx3UW6s/R81VmH2JM9j+hROwUVeAY+tG21jyXTGX7002otXQb0XqbNxLPM1z
+         FWTmJg6sdjIP3WX7p6UV3FOnWEqANXm+LreTbkyC0FKDMaA32yjBXQKIeR/4SZvHMZFQ
+         R0Bw==
+X-Gm-Message-State: AAQBX9enTAAio0WheBQs/av2tiuGgE8NOUhIueooaxypYjNQbExVu7Sf
+        R34yc7oefiQ/FiM/oXv12fDTdQ==
+X-Google-Smtp-Source: AKy350ZiZuxr3nGNpPlOhGyuV5/ZXciTT5jaK/TheV5lAt/QXLE6MfBHCobXTB/i0A5limdD5B7WdA==
+X-Received: by 2002:aa7:c94c:0:b0:4fc:eee9:417 with SMTP id h12-20020aa7c94c000000b004fceee90417mr27190427edt.18.1680374484789;
+        Sat, 01 Apr 2023 11:41:24 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ec00:3acd:519:c7c2? ([2a02:810d:15c0:828:ec00:3acd:519:c7c2])
+        by smtp.gmail.com with ESMTPSA id p9-20020a50cd89000000b004c0c5864cc5sm2389927edi.25.2023.04.01.11.41.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Apr 2023 11:41:24 -0700 (PDT)
+Message-ID: <5b0f9fc9-45ef-e501-6840-df4b03d9dab7@linaro.org>
+Date:   Sat, 1 Apr 2023 20:41:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023040148-aground-cornbread-84e2@gregkh>
-X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3] ASoC: dt-bindings: maxim,max98371: Convert to DT
+ schema
+To:     =?UTF-8?Q?Andr=c3=a9_Morishita?= <andremorishita@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        anish kumar <yesanishhere@gmail.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     mairacanal@riseup.net, dri-devel@lists.freedesktop.org,
+        daniel.baluta@nxp.com
+References: <20230401181930.533067-1-andremorishita@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230401181930.533067-1-andremorishita@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 01, 2023 at 04:53:17PM +0200, Greg KH wrote:
-> On Sat, Apr 01, 2023 at 12:48:07PM +0200, Hans de Goede wrote:
-> > Hi Alan,
-> > 
-> > On 3/30/23 22:10, Alan Stern wrote:
-> > > Reference: https://syzkaller.appspot.com/bug?extid=4b3f8190f6e13b3efd74
-> > > Reference: https://syzkaller.appspot.com/bug?extid=1cb937c125adb93fad2d
-> > > 
-> > > The radio-shark driver just assumes that the endpoints it uses will be
-> > > present, without checking.  This adds an appropriate check.
-> > > 
-> > > Alan Stern
-> > > 
-> > > #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
-> > 
-> > Thank you for working on this!
-> > 
-> > Both the core changes and the 2 radio-shark driver changes look good to me.
-> > 
-> > Please add my:
-> > 
-> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> > 
-> > When submitting these upstream.
-> > 
-> > Regards,
-> > 
-> > Hans
-> > 
-> > 
-> > 
-> > 
-> > 
-> > > 
-> > >  drivers/usb/core/usb.c |   70 +++++++++++++++++++++++++++++++++++++++++++++++++
-> > >  include/linux/usb.h    |    7 ++++
-> > >  2 files changed, 77 insertions(+)
-> > > 
-> > > Index: usb-devel/drivers/usb/core/usb.c
-> > > ===================================================================
-> > > --- usb-devel.orig/drivers/usb/core/usb.c
-> > > +++ usb-devel/drivers/usb/core/usb.c
-> > > @@ -207,6 +207,76 @@ int usb_find_common_endpoints_reverse(st
-> > >  EXPORT_SYMBOL_GPL(usb_find_common_endpoints_reverse);
-> > >  
-> > >  /**
-> > > + * usb_find_endpoint() - Given an endpoint address, search for the endpoint's
-> > > + * usb_host_endpoint structure in an interface's current altsetting.
-> > > + * @intf: the interface whose current altsetting should be searched
-> > > + * @ep_addr: the endpoint address (number and direction) to find
-> > > + *
-> > > + * Search the altsetting's list of endpoints for one with the specified address.
-> > > + *
-> > > + * Return: Pointer to the usb_host_endpoint if found, %NULL otherwise.
-> > > + */
-> > > +struct usb_host_endpoint __must_check *usb_find_endpoint(
-> > > +		const struct usb_interface *intf, unsigned int ep_addr)
-> > > +{
-> > > +	int n;
-> > > +	struct usb_host_endpoint *ep;
-> > > +
-> > > +	n = intf->cur_altsetting->desc.bNumEndpoints;
-> > > +	ep = intf->cur_altsetting->endpoint;
-> > > +	for (; n > 0; (--n, ++ep)) {
-> > > +		if (ep->desc.bEndpointAddress == ep_addr)
-> > > +			return ep;
-> > > +	}
-> > > +	return NULL;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(usb_find_endpoint);
-> > > +
-> > > +/**
-> > > + * usb_check_bulk_endpoint - Check whether an interface's current altsetting
-> > > + * contains a bulk endpoint with the given address.
-> > > + * @intf: the interface whose current altsetting should be searched
-> > > + * @ep_addr: the endpoint address (number and direction) to look for
-> > > + *
-> > > + * Search for an endpoint with the specified address and check its type.
-> > > + *
-> > > + * Return: %true if the endpoint is found and is bulk, %false otherwise.
-> > > + */
-> > > +bool usb_check_bulk_endpoint(
-> > > +		const struct usb_interface *intf, unsigned int ep_addr)
-> > > +{
-> > > +	const struct usb_host_endpoint *ep;
-> > > +
-> > > +	ep = usb_find_endpoint(intf, ep_addr);
-> > > +	if (!ep)
-> > > +		return false;
-> > > +	return usb_endpoint_xfer_bulk(&ep->desc);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(usb_check_bulk_endpoint);
-> > > +
-> > > +/**
-> > > + * usb_check_int_endpoint - Check whether an interface's current altsetting
-> > > + * contains an interrupt endpoint with the given address.
-> > > + * @intf: the interface whose current altsetting should be searched
-> > > + * @ep_addr: the endpoint address (number and direction) to look for
-> > > + *
-> > > + * Search for an endpoint with the specified address and check its type.
-> > > + *
-> > > + * Return: %true if the endpoint is found and is interrupt, %false otherwise.
-> > > + */
-> > > +bool usb_check_int_endpoint(
-> > > +		const struct usb_interface *intf, unsigned int ep_addr)
-> > > +{
-> > > +	const struct usb_host_endpoint *ep;
-> > > +
-> > > +	ep = usb_find_endpoint(intf, ep_addr);
-> > > +	if (!ep)
-> > > +		return false;
-> > > +	return usb_endpoint_xfer_int(&ep->desc);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(usb_check_int_endpoint);
+On 01/04/2023 20:19, André Morishita wrote:
+> Convert the Maxim Integrated MAX98371 audio codec bindings to DT schema.
 > 
-> Shouldn't you use the usb_find_bulk_in_endpoint() and friends functions
-> instead of these?  Many drivers hard-coded their "I know this endpoint
-> is this type" which breaks in fuzzing as you know (and see here), which
-> is why those functions were created to be used.
+> Signed-off-by: André Morishita <andremorishita@gmail.com>
+> ---
+> Changes in v3:
 
-It's true, we could use the existing functions in this case.  I'm not sure 
-which approach would be better; it's probably mostly a matter of taste.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Using the existing functions, the probe function would get additional code 
-something like this:
+Best regards,
+Krzysztof
 
-	struct usb_endpoint_descriptor *ep;
-
-	if (!(usb_find_int_in_endpoint(intf->cur_altsetting, &ep) == 0 &&
-			usb_endpoint_num(&ep->desc) == SHARK_IN_EP) ||
-	    !(usb_find_int_out_endpoint(intf->cur_altsetting, &ep) == 0 &&
-			usb_endpoint_num(&ep->desc) == SHARK_OUT_EP)) {
-		dev_err(...
-
-Using the new functions (with a revised API, see the patch below) we would 
-instead add this:
-
-	static const u8 ep_addresses[] = {
-		SHARK_IN_EP | USB_DIR_IN,
-		SHARK_OUT_EP | USB_DIR_OUT,
-		0};
-
-	if (!usb_check_int_endpoints(intf, ep_addresses)) {
-		dev_err(...
-
-In this case the difference is not particularly meaningful.  With the new 
-functions, the amount of code added to the driver is smaller, but of 
-course that's offset by adding the new functions themselves to the core.  
-(On the other hand there's probably a bunch of drivers that could stand 
-to be fixed up this way, which would amortize the cost to the core.)
-
-The difference becomes a lot more noticeable with the sisusbvga driver 
-[1].  It has six endpoints that need to be checked: four bulk-OUT and two 
-bulk-IN.  While usb_find_common_endpoints() would be able to find them, 
-it's not well suited for checking that they have the expected addresses.  
-With the new functions, all the work can be done with a single call.
-
-> I think just using them in the probe function would fix this issue 
-> instead of these functions which would only be used by that one driver.
-
-It wouldn't be used just by these two drivers.  The new routines are 
-ideally suited for doing the checking in old drivers that have their 
-endpoint numbers and directions built-in, like these do.  While I haven't 
-looked to see, there must be quite a few of them.
-
-Alan Stern
-
-[1] https://lore.kernel.org/linux-usb/b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu
-
-
- drivers/usb/core/usb.c |   76 +++++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/usb.h    |    5 +++
- 2 files changed, 81 insertions(+)
-
-Index: usb-devel/drivers/usb/core/usb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/usb.c
-+++ usb-devel/drivers/usb/core/usb.c
-@@ -207,6 +207,82 @@ int usb_find_common_endpoints_reverse(st
- EXPORT_SYMBOL_GPL(usb_find_common_endpoints_reverse);
- 
- /**
-+ * usb_find_endpoint() - Given an endpoint address, search for the endpoint's
-+ * usb_host_endpoint structure in an interface's current altsetting.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addr: the endpoint address (number and direction) to find
-+ *
-+ * Search the altsetting's list of endpoints for one with the specified address.
-+ *
-+ * Return: Pointer to the usb_host_endpoint if found, %NULL otherwise.
-+ */
-+struct usb_host_endpoint __must_check *usb_find_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr)
-+{
-+	int n;
-+	struct usb_host_endpoint *ep;
-+
-+	n = intf->cur_altsetting->desc.bNumEndpoints;
-+	ep = intf->cur_altsetting->endpoint;
-+	for (; n > 0; (--n, ++ep)) {
-+		if (ep->desc.bEndpointAddress == ep_addr)
-+			return ep;
-+	}
-+	return NULL;
-+}
-+
-+/**
-+ * usb_check_bulk_endpoints - Check whether an interface's current altsetting
-+ * contains a set of bulk endpoints with the given addresses.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addrs: 0-terminated array of the endpoint addresses (number and
-+ * direction) to look for
-+ *
-+ * Search for endpoints with the specified addresses and check their types.
-+ *
-+ * Return: %true if all the endpoints are found and are bulk, %false otherwise.
-+ */
-+bool usb_check_bulk_endpoints(
-+		const struct usb_interface *intf, const u8 *ep_addrs)
-+{
-+	const struct usb_host_endpoint *ep;
-+
-+	for (; *ep_addrs; ++ep_addrs) {
-+		ep = usb_find_endpoint(intf, *ep_addrs);
-+		if (!ep || !usb_endpoint_xfer_bulk(&ep->desc))
-+			return false;
-+	}
-+	return true;
-+}
-+EXPORT_SYMBOL_GPL(usb_check_bulk_endpoints);
-+
-+/**
-+ * usb_check_int_endpoints - Check whether an interface's current altsetting
-+ * contains a set of interrupt endpoints with the given addresses.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addrs: 0-terminated array of the endpoint addresses (number and
-+ * direction) to look for
-+ *
-+ * Search for endpoints with the specified addresses and check their types.
-+ *
-+ * Return: %true if all the endpoints are found and are interrupt,
-+ * %false otherwise.
-+ */
-+bool usb_check_int_endpoints(
-+		const struct usb_interface *intf, const u8 *ep_addrs)
-+{
-+	const struct usb_host_endpoint *ep;
-+
-+	for (; *ep_addrs; ++ep_addrs) {
-+		ep = usb_find_endpoint(intf, *ep_addrs);
-+		if (!ep || !usb_endpoint_xfer_int(&ep->desc))
-+			return false;
-+	}
-+	return true;
-+}
-+EXPORT_SYMBOL_GPL(usb_check_int_endpoints);
-+
-+/**
-  * usb_find_alt_setting() - Given a configuration, find the alternate setting
-  * for the given interface.
-  * @config: the configuration to search (not necessarily the current config).
-Index: usb-devel/include/linux/usb.h
-===================================================================
---- usb-devel.orig/include/linux/usb.h
-+++ usb-devel/include/linux/usb.h
-@@ -292,6 +292,11 @@ void usb_put_intf(struct usb_interface *
- #define USB_MAXINTERFACES	32
- #define USB_MAXIADS		(USB_MAXINTERFACES/2)
- 
-+bool usb_check_bulk_endpoints(
-+		const struct usb_interface *intf, const u8 *ep_addrs);
-+bool usb_check_int_endpoints(
-+		const struct usb_interface *intf, const u8 *ep_addrs);
-+
- /*
-  * USB Resume Timer: Every Host controller driver should drive the resume
-  * signalling on the bus for the amount of time defined by this macro.
