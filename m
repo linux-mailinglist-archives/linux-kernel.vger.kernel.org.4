@@ -2,109 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1449A6D3168
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7EE6D31A2
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjDAOnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 10:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
+        id S229775AbjDAOtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 10:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDAOnM (ORCPT
+        with ESMTP id S229705AbjDAOtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 10:43:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C62EC6B;
-        Sat,  1 Apr 2023 07:43:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0289D60DE4;
-        Sat,  1 Apr 2023 14:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFDCC433EF;
-        Sat,  1 Apr 2023 14:43:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680360190;
-        bh=jJKWkGuu8Pn0PDFmmLGYmuxPtM3djk+j7/04iXmbiRU=;
-        h=From:Date:Subject:To:Cc:From;
-        b=Nbhk/zO5KVdZ3+dhDMlJF5EFuVt/au75mBEqWLVn5xTbV+tMcgmgIMuydGk5h9vM/
-         wcBeJ3UbDt9VER/bShofy5JU/3wGIlLpnXUnGo9jDEv7a138ucRo5Vm6cgl/D3hr8P
-         m9/jZP255Y+NTz4h3Xl3MqJXsIjYgOrpPrgLMvn6DuZOC1cCP8LeSmw+BjtDsGQAff
-         6r0HiNuPSWLl2SQWi94PA7twQnwyQM41zvmAFvdH3AwbPS8wwSz2+h/pZmJ5NcaQSj
-         5/OiaSo6h611y3DUpibg6+dviV4pR+/D/mfKzJorjpZU2ACPxWcipfgy8aNZcjXxnK
-         j0OJAes+Gqhkg==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-17fcc07d6c4so12145093fac.8;
-        Sat, 01 Apr 2023 07:43:10 -0700 (PDT)
-X-Gm-Message-State: AO0yUKW8UuMDI7yF9R+pUSBaafRNHBa5qGuy60RiqwPANjuQMPAPRGSY
-        DrpzLH7m5N+JJwDB1GJOKDnObWEPceYY6VqAglQ=
-X-Google-Smtp-Source: AK7set9Wi1kI/70goKat3FOzYyTvIbpeWlsh2lob/ZfhbqmLL9bkHuWCsRNZwkbHq77CWevmMc2kqCF6NeTWF6IvwVE=
-X-Received: by 2002:a05:6870:df8d:b0:17a:a5a2:62a6 with SMTP id
- us13-20020a056870df8d00b0017aa5a262a6mr10165781oab.11.1680360189627; Sat, 01
- Apr 2023 07:43:09 -0700 (PDT)
+        Sat, 1 Apr 2023 10:49:47 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2112.outbound.protection.outlook.com [40.107.223.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A61D1BF52;
+        Sat,  1 Apr 2023 07:49:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bwtaiRml7EId8f7raBJ9ZCD9gAAR/MVSY+vpOmULSMAEPn70U5izLUWBGuFrdwUZnID50/66K/2fWbyg6IooqSnvCc/3gmooKD3vQR+pmjFlIXo3Q28tLOyokNpX4yLyd6Y3hJjUogtQx7lucwPoO/lx8FUTDlgUZOXoBQa/LreXiF0oZoAioFXFR5wvkFpQc9uOcIm6TPYK9NIOGQUdDwx1Ae/8ruvhbd4/a2/LAfEWW2QJ7sXCgz0HKfq+7M4Kpnq1qq8YpXFpHgC1iueL3GKcifN8zK+L+azB3ndbTRh9qWj6vzPAV5vsVVirHqoUYc2pfA+Mlpl2wyMhoB7OTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z8tPGns9u1LHYEJDXsVrp8jTEj5uw5kl/50uPqdNdrU=;
+ b=KQljiPk/wh8p4QDaphKLAQDZlD1N9QKSUpPlOj6fcmJ/4Y/hVcdStjZ2GtgqkA0gDe6BRAICkmFibEN435onp6DecvHMGkwjaYkGTU2P3/d+/GHUNZmZ9yWwLjGX8YAbMc/lRpz1RinG71sWpzvLc+0G+BmvdoqRrzFGttlUsuRhvr1I6i9B7F9kmRT/pyc4gIGMQXzGxbcft6S7pOCBuN22Mu1F7L36x6MSDWFOh9C8tPySV75ZNsoGbk9cRGLZdd2FeTf46yNgEjABaqWwcN+5eLPEkU6ruA4cRIy0kP89wwDUjON141C9sObtwh2StNOv4gpLfuttKxMOKO7k7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z8tPGns9u1LHYEJDXsVrp8jTEj5uw5kl/50uPqdNdrU=;
+ b=n5RX9Lyeeunmw+ix/4U/S9dICyFscEDzfPYbdatuA1vqj8ShqMlPaJTrzLsEJVCVNrfLkEyPfr6gIPtDElIx1bM1E2cbCgNPXS7cEBTlCTh5fq5JNLOmQJ7qQE7X3a/MWaTFaKJ7rt2MLdDIDuSR2xSwrLAlC53HxSsrOW1iSpU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CO1PR13MB4789.namprd13.prod.outlook.com (2603:10b6:303:f4::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.26; Sat, 1 Apr
+ 2023 14:49:43 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::c506:5243:557e:82cb]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::c506:5243:557e:82cb%5]) with mapi id 15.20.6254.021; Sat, 1 Apr 2023
+ 14:49:42 +0000
+Date:   Sat, 1 Apr 2023 16:49:30 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Andrew Halaney <ahalaney@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        bhupesh.sharma@linaro.org, wens@csie.org, jernej.skrabec@gmail.com,
+        samuel@sholland.org, mturquette@baylibre.com,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
+        richardcochran@gmail.com, linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
+Subject: Re: [PATCH net-next v3 07/12] net: stmmac: Remove some unnecessary
+ void pointers
+Message-ID: <ZChEeuyNJlL6mpPC@corigine.com>
+References: <20230331214549.756660-1-ahalaney@redhat.com>
+ <20230331214549.756660-8-ahalaney@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331214549.756660-8-ahalaney@redhat.com>
+X-ClientProxiedBy: AM0PR01CA0161.eurprd01.prod.exchangelabs.com
+ (2603:10a6:208:aa::30) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 1 Apr 2023 23:42:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQEKgqrJNeknymSTsiRBbjoJJjWQ8VJ7ViC2-9Z0Mgpyw@mail.gmail.com>
-Message-ID: <CAK7LNAQEKgqrJNeknymSTsiRBbjoJJjWQ8VJ7ViC2-9Z0Mgpyw@mail.gmail.com>
-Subject: [GIT PULL] Kbuild fixes for v6.3-rc5
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB4789:EE_
+X-MS-Office365-Filtering-Correlation-Id: c13d6ede-b371-44d5-701e-08db32c053dd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: y3PNvaaOgidkmlTqtTdyUnR014FAp8yirt4yodcgiqkOa4/DVqYhaLOQ0R07s5NOpd1k307p9J31bnoj3E65ww6lidkNkMZlhLUjPvJoxXPL/sBMxmbdNkNW1M2quVHpn58mcF9Jz4xfd++ha+zywXe8pRHQW4ct98A6NYA07aASEV30mHMaV1y6dBa1LEnKQeP3KZOXLYq8c/7u2RRk0cAdMknfjWZcoMy5cWKU+mDrQpYw2x+oh+uGMEZLR2cngq7c9bIpGf2trl+C4bR0dgFtynXVam2IHrQHGuEQZLNmcf9ms8tXkJRKaACNehg1TunmvWtPD3XmvdnE66dSFdsjvWCg86mF7X2vpOG6IyEKciKWIfrAMDa+Me76+lpps77VHapgqthCXInIsgT7b5rS3gpWl4XlKfo40wh28YbLFXKXkN5eGPK1GSnhNnV/F3u3Guc3Q0GyqVlUPNmkhYIp+3s8OctEXhN1Rhbrqy/PQNczldbAi7bHfQJ9bIT8m3JLiF/TLFvTQaZG2CDCd0UV+8pQdErtqnoYWZ4IiqObFL0f+TSg+6gAptFkD1HQ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(346002)(39840400004)(136003)(451199021)(36756003)(6916009)(316002)(4326008)(8676002)(66946007)(66556008)(66476007)(6486002)(478600001)(8936002)(5660300002)(41300700001)(7416002)(2906002)(7406005)(4744005)(44832011)(86362001)(38100700002)(2616005)(186003)(6666004)(6512007)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?njKEqOpGFwUjeuyewXLj4yNrQYSiUXx65JT4j6MQAjPlmquSeC0SGard5F+9?=
+ =?us-ascii?Q?PfJ0Trs7GsD/bCWb46ZkEH9m5eoK92oTzMXq6O3Krvm12fJcY/YeC49UjIin?=
+ =?us-ascii?Q?Wuy17ZQMd1cWAN07luyzcAA5REh25KnK2Ge7HhpplOl6GVWEWhAvfmyA9zPd?=
+ =?us-ascii?Q?J2YIAx+9EW9cn85ygiqrO7aFppgHVe8mALRLzatKySpSSY19krN5isobYQr7?=
+ =?us-ascii?Q?JPyQ95fwPb/5v6dzuYowaI+eu8f45BTZlpJIX3KitnFCt2GfIcpdzUxluVkR?=
+ =?us-ascii?Q?DULcml3HsAFoMBL9vrnwaipiBixPND++zv6a7QawnoFxmdTl5FTzK4FFA+wR?=
+ =?us-ascii?Q?j4+Unv5/8iQP3elKhwxZRV3FlBByoNc1kI8Hcg/J+cMeZ1erdaBHOi7XCUKX?=
+ =?us-ascii?Q?PY76iOIlyRLdcMDKYIWfQm+ugca44pIqp2n4FDTP6ohj9BniTJjE/hiU9xsi?=
+ =?us-ascii?Q?HbMVZ9zQDGcRD7E7Eb6XWdMbHmeV0vBLXTdgn/zRufvG/FR6kF4fhpoXR0Oh?=
+ =?us-ascii?Q?OcdMWLWCX6wmuRyftEaYzn+B402/2hVND/Mu7J8+kX8S+CzKAEfRoaQtV/I9?=
+ =?us-ascii?Q?KfgJnNvUvtBHu1Sou6jVPoyw3QXNQW/LHrxApRJnnGlUtlIczUuz1gc/Qx7y?=
+ =?us-ascii?Q?6bujcWEA/yUq5mCMj3rssX8zmM8wgBigMvGuQg+i4m7zn+LjemmkwyBB6hba?=
+ =?us-ascii?Q?COxz1wHmr0UgUxv6HEDLGCmBnz2Nra0SBeH2x5BuPreNM0skhQSStd2W/Yq6?=
+ =?us-ascii?Q?E5d25IFdPro12sVrzbntwOEi0CahA3O5ysCRBJe7wPW/HMQR0wKNN3c/+HQ0?=
+ =?us-ascii?Q?wvzpdtt8Wk1FJwnKPv/zSsnYxPRQ7btInUuoJ+QdXRV5kzoiTugwtJJLGtgQ?=
+ =?us-ascii?Q?kfA3eTJxsoU/4ukA5/Ec7NakWlK9PVE0c/e15/vjgl/tT83OSfclgdBe86t1?=
+ =?us-ascii?Q?c+U3G+vdlhq2swVPR4FEUMqJmF2sEKtiFNGYlAhCY1ANWslwuK2hZlXJRd6n?=
+ =?us-ascii?Q?YYrlsGof/RmX5y+USCk2aj7VltPLhxnu8ckmhT/u0RsEo19CPT+Ds9dfDRvy?=
+ =?us-ascii?Q?YPvaruGEqKv5rQMn5ryfIdr9CZz0acJa7gtQW7YPe3rN0VRnZTatOUKS1Yoz?=
+ =?us-ascii?Q?/cX2I2uq7X3NlXiLxuojQ/9661hQhcUytLhcGpEWCnmPc2gaXPT3Jla/0RjU?=
+ =?us-ascii?Q?VgAjypAjavMhUWI1LGf1rm0KlyqGPvjaMDXzl+DqeNlmDpWtzHwor81ZipR2?=
+ =?us-ascii?Q?eE5m1kHZ5mPXyvSeTghUzNdYKLipT30pKHtCf4OidzKRpWyNIqD/m6K8wENC?=
+ =?us-ascii?Q?cHUroQRpQzY2dTxWw2innYrNNiROyLz4+drTLfbrk6j52p4RoaBq1Ftzkpq9?=
+ =?us-ascii?Q?lhYVcucdt534F6/LnNK3rswm2f292Dq/5xD6cWG0ATnisy2bDWx89uhymGCx?=
+ =?us-ascii?Q?BMlGDyIutohzvQBnLJbbhE+Om9E5LakOp73x8/52azQk0mxvcvuQF9tWriI+?=
+ =?us-ascii?Q?MBqXU03mCvoW9pKyS0n0R2vRhLZEyVsucJujmmCq7EXFvUJQSGFNgFJnU723?=
+ =?us-ascii?Q?rUxiN8ob4DgiquLMHwfO0cCW6YteqYrL1d3eylfvj5q0iHSrIg1I5+j0wlya?=
+ =?us-ascii?Q?45njv5nTKwcqBe2kSW4OIhXmLX0fE0kevwLp13A9FqTUUxu4H5bnBSXkvhqD?=
+ =?us-ascii?Q?jH3VqQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c13d6ede-b371-44d5-701e-08db32c053dd
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2023 14:49:42.7524
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: M0TY7PKpuuLD9VIQKJm8JCWvYKz2XPwq7GLtFdEirzO5Yr2uTFzTCC9fGdMlyf87++NUGMm6wsJYkqQEuBFZHFzbexk2f6sSWTwJP4bPQPA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB4789
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+On Fri, Mar 31, 2023 at 04:45:44PM -0500, Andrew Halaney wrote:
+> There's a few spots in the hardware interface where a void pointer is
+> used, but what's passed in and later cast out is always the same type.
+> 
+> Just use the proper type directly.
+> 
+> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> ---
+> 
+> Changes since v2:
+>     * New patch. In later patches refactoring hwif.h I touched these in
+>       their first form (which was later dropped) and changed this as
+>       part of that. But I thought the change was still good overall,
+>       so I left this improvement in the series.
 
-Please pull some more Kbuild fixes.
-Thank you.
+FWIIW, I am very pleased to see this kind of change.
 
-
-
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
-
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-fixes-v6.3-2
-
-for you to fetch changes up to fb27e70f6e408dee5d22b083e7a38a59e6118253:
-
-  modpost: Fix processing of CRCs on 32-bit build machines (2023-03-23
-15:28:41 +0900)
-
-----------------------------------------------------------------
-Kbuild fixes for v6.3 (2nd)
-
- - Fix linux-headers debian package
-
- - Fix a merge_config.sh error due to a misspelled variable
-
- - Fix modversion for 32-bit build machines
-
-----------------------------------------------------------------
-Ben Hutchings (1):
-      modpost: Fix processing of CRCs on 32-bit build machines
-
-Kevin Locke (1):
-      kbuild: deb-pkg: set version for linux-headers paths
-
-Mirsad Goran Todorovac (1):
-      scripts: merge_config: Fix typo in variable name.
-
- scripts/kconfig/merge_config.sh | 2 +-
- scripts/mod/modpost.c           | 2 +-
- scripts/package/builddeb        | 3 ++-
- 3 files changed, 4 insertions(+), 3 deletions(-)
-
-
--- 
-Best Regards
-Masahiro Yamada
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
