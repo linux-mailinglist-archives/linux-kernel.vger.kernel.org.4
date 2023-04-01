@@ -2,84 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE6C6D3382
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 21:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893BD6D3386
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 21:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjDATZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 15:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
+        id S230062AbjDAT0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 15:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjDATZU (ORCPT
+        with ESMTP id S229944AbjDAT0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 15:25:20 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797FE2704
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 12:25:17 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id r11so102548512edd.5
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 12:25:17 -0700 (PDT)
+        Sat, 1 Apr 2023 15:26:34 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F101410D8
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 12:26:32 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id p34so14812246wms.3
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 12:26:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680377116;
+        d=linaro.org; s=google; t=1680377191;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=77FWYvL8qBVi4MJtC3pgtw0jIHuLIUI8wtQ8Jr492jU=;
-        b=k1KTXGbkEZ9gAB9ri2VFq9SAsme/0wjVnDetam6LLitGx/1Lqccru62N/ORR3BtrUO
-         Ejfjlt8D3aALROwI96uQvQpPNbIbUNB+NKC0GwQIw23ohOf2Ltf2cnpCvwIf4TnvNRqx
-         Jqibd0TUuLr7Ur//lGgVrTWirKhdVpcIM5hsJ1fS6NGsQQyu61F2EfojfvRjFAtNpGwK
-         salx3C7rjfUISLZvaYQ8UPd1XOJL/YzSeycQ8Og7heIhK7kHVwfp1Z8j9ZWR9KXT96np
-         Nvs6T3K6cNzQ3Yv5rcJBr6N4XAsGZWBhnmSpGQH09NND2/frUXA3rxmcmv5qsBpS29uu
-         Srww==
+        bh=eQRytjytsEiYcMZDbuNUVXlNDLCOKJzift2W+Ng+xEk=;
+        b=mCBMjqlgRGa8zhbvfQ0PlUdww5ls6cGVUXAgNFTR/ZDGUwsKmlogETkNRXli2sHZLT
+         R4Ww68e1Jymgk2wp6PP8wXsaSyRU2k9DT6O30nevWJ54x0c3QYve0JclUskY7m4IXWFL
+         41lq+dn/1ukl4BYJGS5DvcxRj+efWVZQLGdr+NHg4sdBgdekS2VTlLP8n278ixBdwG/n
+         JWaZWy85Cq/P02z8BjkU+YQy7m+Ql7qUJIQ9jw/yjvbshtOJiI8DdpIPUGHF2iaZJnyA
+         qOFTeNIG7Kr7flM8Dq5uTHjhT2+0MTBPZqeLDA7vn2E5OrzA8r3T74klzZ3jbTdv/j9t
+         Dv2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680377116;
+        d=1e100.net; s=20210112; t=1680377191;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=77FWYvL8qBVi4MJtC3pgtw0jIHuLIUI8wtQ8Jr492jU=;
-        b=ZhZUKfo90A5ciB6nfffuXDVLEHpSWO3lRXO6QGYWEdcveBPuKkTK/g2kiarIFs3WDg
-         /5tG6aTAvgxcA2gO3VAeK0wD3UgXqcpcwLfFsYROF2QZ86tQ3XS5rD2KonV7BoQ23Ly7
-         DsN0kNmiOiWkEHOP1VExgZqssMAG5PqUUiNXdbsp8r/Q88cWKNbRQx91zDFh3N5PuAt4
-         Eh5BAY/Sewu/xDoU9yuXRfFEj8Jn+SbL12t94uYoJ9optHMQBgiX3MXE0wD1geuUJ8ee
-         foZXI0a3Rt154ZUi8qpItbfSxp1UzUJ9hY56JlT6CePqEBSuLiqtriPpyDPYRP6he/u4
-         LEdw==
-X-Gm-Message-State: AAQBX9fowL7vh3ck0y/Dz/+tkNq9WzkGJRLID3wo81wUeqV3dnEj9MjN
-        SIfmXP/jmcZ1MiwkVDOJqnYaXA==
-X-Google-Smtp-Source: AKy350Y218oME6QsL2EkWtrjn84dOsXVTk1jUQBJaccGJZPDZrKKwrErNagP2pIgjZfI052yGWMdGg==
-X-Received: by 2002:aa7:ccce:0:b0:501:cf67:97f3 with SMTP id y14-20020aa7ccce000000b00501cf6797f3mr29074550edt.25.1680377115959;
-        Sat, 01 Apr 2023 12:25:15 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ec00:3acd:519:c7c2? ([2a02:810d:15c0:828:ec00:3acd:519:c7c2])
-        by smtp.gmail.com with ESMTPSA id g29-20020a50d0dd000000b004c0239e41d8sm2444639edf.81.2023.04.01.12.25.14
+        bh=eQRytjytsEiYcMZDbuNUVXlNDLCOKJzift2W+Ng+xEk=;
+        b=pvjZnw4zw7sJ3PjRO15wzbIoHRIt9bqunnvgMTUpOvGhgshHXz5EiVarqTKPf5r7Ni
+         0S8fMqaUYimSfYCMK4B0zdLXlSgRM5usg/Z5N2ZxAdWEDd+Z5w7QnB9NNDaN0xFFkav0
+         iv1ev+ykvMRMg8jZvehYWhTAbBSkEu+3h4/AhWpmdmaMvsmbag45EwQgY0BPxB6kX6O8
+         juuPN/HIdiVu/ArCaN0d43UYNIphwihxhosyf4V/d89K7hqPCrq7KZZgSEMu51/suzi2
+         wEMDJMdvm1Q/SEblRgu0QFLZGsYpMRWXKf4V1bgAZ6o0iAGV6rSTLO5VfI7209UkeYVt
+         rklg==
+X-Gm-Message-State: AO0yUKVxLq5XbWVBLMNUVuuBS9tdt7CmmJncO2LxKUdLgs5h9N4VvQSm
+        m92c6YbUa/1PHq3lZmpBIaiDEA==
+X-Google-Smtp-Source: AK7set+J1FiQywg4s1jpd+AQbRjltoaADnPelb/qRGV5JzasjQrS8UZWtYA+Xdr99vhZ2DDXLOZZmQ==
+X-Received: by 2002:a7b:c7c5:0:b0:3ed:809b:79ac with SMTP id z5-20020a7bc7c5000000b003ed809b79acmr22977255wmk.19.1680377191375;
+        Sat, 01 Apr 2023 12:26:31 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:b36a:1186:309c:1f9a? ([2a05:6e02:1041:c10:b36a:1186:309c:1f9a])
+        by smtp.googlemail.com with ESMTPSA id y5-20020a05600c364500b003ee0d191539sm6995456wmq.10.2023.04.01.12.26.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Apr 2023 12:25:15 -0700 (PDT)
-Message-ID: <e1b6f8bc-0bbb-f403-9126-22a89e813de8@linaro.org>
-Date:   Sat, 1 Apr 2023 21:25:14 +0200
+        Sat, 01 Apr 2023 12:26:30 -0700 (PDT)
+Message-ID: <7aafa534-412d-d7b9-96f6-d5cef98c8021@linaro.org>
+Date:   Sat, 1 Apr 2023 21:26:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/5] dt-bindings: phy: qmp-ufs: describe the UFS PHY for
- sa8775p
+Subject: Re: [PATCH] MAINTAINERS: adjust entry in THERMAL/POWER_ALLOCATOR
+ after header movement
 Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230331195920.582620-1-brgl@bgdev.pl>
- <20230331195920.582620-3-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230331195920.582620-3-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>, linux-pm@vger.kernel.org
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230328091737.6785-1-lukas.bulwahn@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230328091737.6785-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -90,97 +79,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2023 21:59, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 28/03/2023 11:17, Lukas Bulwahn wrote:
+> Commit e97b6e04095a ("thermal/core: Relocate the traces definition in
+> thermal directory") moves include/trace/events/thermal_power_allocator.h to
+> drivers/thermal/thermal_trace_ipa.h, but misses to adjust the file entry
+> for the THERMAL/POWER_ALLOCATOR section.
 > 
-> Add a new compatible for the QMP UFS PHY found on sa8775p platforms and
-> update the clocks property to accommodate three clocks.
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+> broken reference.
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Adjust this file entry in THERMAL/POWER_ALLOCATOR.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 > ---
->  .../phy/qcom,sc8280xp-qmp-ufs-phy.yaml        | 34 ++++++++++++++++---
->  1 file changed, 30 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> index 64ed331880f6..a414b2c2d9cc 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> @@ -16,6 +16,7 @@ description:
->  properties:
->    compatible:
->      enum:
-> +      - qcom,sa8775p-qmp-ufs-phy
->        - qcom,sc8280xp-qmp-ufs-phy
->        - qcom,sm6125-qmp-ufs-phy
->        - qcom,sm8550-qmp-ufs-phy
-> @@ -24,12 +25,12 @@ properties:
->      maxItems: 1
->  
->    clocks:
-> -    maxItems: 2
-> +    minItems: 2
-> +    maxItems: 3
->  
->    clock-names:
-> -    items:
-> -      - const: ref
-> -      - const: ref_aux
+> Daniel, please apply this minor clean-up patch on top of the commit above. Thanks.
 
-Keep it here and add qref. We want to encourage the same clocks
-everywhere it is possible. Otherwise people will add soon 'q_ref' or
-'ref_q' for their variants as third clock.
+Applied, thanks
 
-> +    minItems: 2
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-With this.
-
-> +    maxItems: 3
-
-But without this.
-
->  
->    power-domains:
->      maxItems: 1
-> @@ -51,6 +52,31 @@ properties:
->    "#phy-cells":
->      const: 0
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sa8775p-qmp-ufs-phy
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 3
-> +        clock-names:
-> +          items:
-
-Instead maxItems: 3
-
-
-> +            - const: ref
-> +            - const: ref_aux
-> +            - const: qref
-> +    else:
-> +      properties:
-> +        clocks:
-> +          maxItems: 2
-> +        clock-names:
-> +          items:
-
-Instead maxItems: 2
-
-> +            - const: ref
-> +            - const: ref_aux
-> +
->  required:
->    - compatible
->    - reg
-
-Best regards,
-Krzysztof
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
