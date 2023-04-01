@@ -2,131 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39246D3120
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD096D3123
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjDANqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 09:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
+        id S230023AbjDANsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 09:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDANqP (ORCPT
+        with ESMTP id S229379AbjDANso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 09:46:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5708D1C1C9;
-        Sat,  1 Apr 2023 06:46:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E56F260A6E;
-        Sat,  1 Apr 2023 13:46:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445ADC433D2;
-        Sat,  1 Apr 2023 13:46:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680356773;
-        bh=2caHwm/Q0yptshRVPEBUR7yOaQ1LLmmc8uhEFSqrOLE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=o+FiH4jkKQ9OgmV8Zq0Va+wolCyShP8eZDpzcHzs65DpqXHEbiHrTvPsAy/MRjtMu
-         A6dp1eu9mdL6yEmCaus46dkWnCMwDG8Xxc0D0LOqx6vJusIxEz3FUIXHhyhb+EZfyC
-         cCjO57yX6kfZfMlyG0ucjHWybVIbj5XC8UpDC2qLhlfnqqAC7gsQTzi3WKFUWE0WR3
-         UwL/tAU7GNP+8wBLv5h3fN4gEW+lpcP6TlkZPT+GrgYa+3U1shGZUeTRdxY9LCh36w
-         CH/7S2W87qU7LYQi/0j+77Q9QNWEeEhoN7a1pYvfvsqLO8UPWF4GExzWOHtdJjR5cQ
-         sz9h6esSIrqFQ==
-Date:   Sat, 1 Apr 2023 22:46:09 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 09/10] tracing/probes: Add fprobe events for tracing
- function entry and exit.
-Message-Id: <20230401224609.bebb256be8e6da55f0358ea9@kernel.org>
-In-Reply-To: <20230329081454.05133571@rorschach.local.home>
-References: <167526695292.433354.8949652607331707144.stgit@mhiramat.roam.corp.google.com>
-        <167526703341.433354.12634235635015890994.stgit@mhiramat.roam.corp.google.com>
-        <20230329081454.05133571@rorschach.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sat, 1 Apr 2023 09:48:44 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D0A1D84C;
+        Sat,  1 Apr 2023 06:48:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680356923; x=1711892923;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9MCRDrcqTn5jIv/7IOOmvCRTNHP2x/Uu3rpz7+Ba/Gg=;
+  b=PDgTTIPYcl/yDsI0RpXo8mxRoWy3PAF39Hpu43EyzLBkCQcC6ae8zruh
+   Gymo2u386SX1bzyCYcH9DHKzspJ2rE6R+no//f+7qnYOSBdtXpTR5uqes
+   V0HbnSPrOqkDFQ5xCKq9QUuPuUQ89/Yh9PvB8kKR7qY0gdkkQ8MZVwbj5
+   nk7rQwJhJ26gXbG4D80Mb5DO/7MHwisNbw0981HMJKvALRfem7AbmCFm8
+   RRoZW6jAlZUfbSqNyc4qH4Zb9mR9733hNMxJGK/yxyslNGqsb9hh5d0xu
+   zhdcVJxQP/4IIvlLU32gDo4zctPMpNh7tZdZc/UhwOXfjeOq6svVDekp3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="344199208"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="344199208"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 06:48:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="796461044"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="796461044"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.211.241]) ([10.254.211.241])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 06:48:38 -0700
+Message-ID: <a63e70cc-8890-bb99-3326-0b19e81ea92e@linux.intel.com>
+Date:   Sat, 1 Apr 2023 21:48:36 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>
+Subject: Re: [PATCH v3 6/7] iommu/vt-d: Implement set_dev_pasid domain op
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org
+References: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
+ <20230331231137.1947675-7-jacob.jun.pan@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230331231137.1947675-7-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023 08:14:54 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On 2023/4/1 7:11, Jacob Pan wrote:
+> Devices that use ENQCMDS to submit work on buffers mapped by DMA API
+> must attach a PASID to the default domain of the device. In preparation
+> for this use case, this patch implements set_dev_pasid() for the
+> default_domain_ops.
+> 
+> If the device context has not been set up prior to this call, this will
+> set up the device context in addition to PASID attachment.
+> 
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> ---
+>   drivers/iommu/intel/iommu.c | 21 +++++++++++++++++++++
+>   1 file changed, 21 insertions(+)
+> 
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 52b9d0d3a02c..1ad9c5a4bd8f 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4784,6 +4784,26 @@ static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
+>   	domain_detach_iommu(dmar_domain, info->iommu);
+>   }
+>   
+> +static int intel_iommu_attach_device_pasid(struct iommu_domain *domain,
+> +					   struct device *dev, ioasid_t pasid)
+> +{
+> +	struct device_domain_info *info = dev_iommu_priv_get(dev);
+> +	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
+> +	struct intel_iommu *iommu = info->iommu;
+> +	int ret;
+> +
+> +	if (!pasid_supported(iommu))
+> +		return -ENODEV;
 
-> On Thu,  2 Feb 2023 00:57:13 +0900
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-> 
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Add fprobe events for tracing function entry and exit instead of kprobe
-> > events. With this change, we can continue to trace function entry/exit
-> > even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
-> > CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
-> > it is not available if the architecture only supports
-> > CONFIG_DYNAMIC_FTRACE_WITH_ARGS. And that means kprobe events can not
-> > probe function entry/exit effectively on such architecture.
-> > But this can be solved if the dynamic events supports fprobe events.
-> > 
-> > The fprobe event is a new dynamic events which is only for the function
-> > (symbol) entry and exit. This event accepts non register fetch arguments
-> > so that user can trace the function arguments and return values.
-> > 
-> 
-> Hi Masami,
-> 
-> After applying this patch I get a bunch of these:
-> 
-> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c:117:1: error: redefinition of ‘fetch_store_strlen_user’
->   117 | fetch_store_strlen_user(unsigned long addr)
->       | ^~~~~~~~~~~~~~~~~~~~~~~
-> In file included from /work/git/linux-trace.git/kernel/trace/trace_fprobe.c:16:
-> /work/git/linux-trace.git/kernel/trace/trace_probe_kernel.h:15:1: note: previous definition of ‘fetch_store_strlen_user’ with type ‘int(long unsigned int)’
->    15 | fetch_store_strlen_user(unsigned long addr)
->       | ^~~~~~~~~~~~~~~~~~~~~~~
-> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c: In function ‘fetch_store_strlen_user’:
-> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c:119:16: error: implicit declaration of function ‘kern_fetch_store_strlen_user’; did you mean ‘fetch_store_strlen_user’? [-Werror=implicit-function-declaration]
->   119 |         return kern_fetch_store_strlen_user(addr);
->       |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                fetch_store_strlen_user
-> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c: At top level:
-> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c:124:1: error: redefinition of ‘fetch_store_strlen’
->   124 | fetch_store_strlen(unsigned long addr)
->       | ^~~~~~~~~~~~~~~~~~
-> /work/git/linux-trace.git/kernel/trace/trace_probe_kernel.h:32:1: note: previous definition of ‘fetch_store_strlen’ with type ‘int(long unsigned int)’
->    32 | fetch_store_strlen(unsigned long addr)
->       | ^~~~~~~~~~~~~~~~~~
-> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c: In function ‘fetch_store_strlen’:
-> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c:126:16: error: implicit declaration of function ‘kern_fetch_store_strlen’; did you mean ‘fetch_store_strlen’? [-Werror=implicit-function-declaration]
->   126 |         return kern_fetch_store_strlen(addr);
->       |                ^~~~~~~~~~~~~~~~~~~~~~~
->       |                fetch_store_strlen
-> 
-> 
-> Can you rebase it on the latest changes (on top of trace/for-next)?
+As the domain ID will be set to the pasid entry, need to get a refcount
+of the domain ID. Call domain_attach_iommu() here, and release it after
+the pasid entry is torn down.
 
-OK, let me update it.
+> +	ret = prepare_domain_attach_device(domain, dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return dmar_domain_attach_device_pasid(dmar_domain, dev, pasid);
+> +}
+> +
+> +
+> +
+>   const struct iommu_ops intel_iommu_ops = {
+>   	.capable		= intel_iommu_capable,
+>   	.domain_alloc		= intel_iommu_domain_alloc,
+> @@ -4803,6 +4823,7 @@ const struct iommu_ops intel_iommu_ops = {
+>   #endif
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+>   		.attach_dev		= intel_iommu_attach_device,
+> +		.set_dev_pasid          = intel_iommu_attach_device_pasid,
+>   		.map_pages		= intel_iommu_map_pages,
+>   		.unmap_pages		= intel_iommu_unmap_pages,
+>   		.iotlb_sync_map		= intel_iommu_iotlb_sync_map,
 
-> 
-> BTW, I've applied patches 1-8 and I'm currently running them through my
-> tests. So if you do rebase, just send patches 9 and 10. I'm hoping to
-> post a for-next series later today, that will include those other
-> patches.
-
-Thanks!
-
-> 
-> -- Steve
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Best regards,
+baolu
