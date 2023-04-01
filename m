@@ -2,114 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09AB6D2EC7
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6256D2ECD
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 09:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233470AbjDAGn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 02:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
+        id S233486AbjDAHAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 03:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjDAGny (ORCPT
+        with ESMTP id S230193AbjDAHAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 02:43:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22201D861;
-        Fri, 31 Mar 2023 23:43:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 589BC60B27;
-        Sat,  1 Apr 2023 06:43:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E23CC433EF;
-        Sat,  1 Apr 2023 06:43:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680331431;
-        bh=c36lwFwHZ8G1e703Idi7Ck6uKneXMSQqAbeazYyyj3w=;
-        h=From:Date:Subject:To:Cc:From;
-        b=N2hLYYxim4fCGv6fI0Tr8vSVihXiwc8OXIBTgI1F78It1BDze18bhbwKmE91unR6B
-         zhxVXCovtoBsOFIIPOApE766CTypgR+oua2Zr1EZbFr7Mv3DgET1VUic2T5EfqYC1c
-         UQQU8cGmRzMJY9hcUMWlSF5bRC0EiJxT8t26hRATR7zPHkG4Rw4ZNI39OUhh4EQYZM
-         6tgXRtvAnysW6ZUDTWxv3DtwRujICEeXcfk3UgVOEGaKVtG68Gn7hstg0QTszFuqqW
-         S+AEjw8+43WR/TCzGCmZTVD90jg3YWfB0+JLo+Y8mXXI6loHvmp3EG1t/jIGPauJay
-         zccTD4auJs8rw==
-From:   Simon Horman <horms@kernel.org>
-Date:   Sat, 01 Apr 2023 08:43:44 +0200
-Subject: [PATCH] net: ethernet: mtk_eth_soc: use be32 type to store be32
- values
+        Sat, 1 Apr 2023 03:00:46 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6871A470;
+        Sat,  1 Apr 2023 00:00:44 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id h25so31737333lfv.6;
+        Sat, 01 Apr 2023 00:00:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680332442; x=1682924442;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z4N/zqwZCwI+hFvEisSUVXazz/w3zutZ7e26nPhhd1c=;
+        b=OWFV/otHntfgbZf/w47Qi7A8BurSREAyhNBg+gGxzwaY/+g2DnbUipiem796mu4wLv
+         qx5qDMMk6WLMP+FXsuWf5iy06Mw0uOEQ9F/gevMKv5nT7BNOEdlVswsR4TEVjMNLJR2p
+         48Fx8dnFc1Z2N0xTBVsLAQCCk93KqAyH6uI1Vd7m1GEbxY8U6pBQ8z3csstkLMydhACY
+         wGA+ZGmjowtMZgAjNlBubBUjp/0BHxcL8+zoSch8slpw1MkiTMfVAJl6Xz9uXT77z3Ph
+         QIaIixWAKIwrWLRAJzfU77dogTtiRJvljdOlMippskPvO53FRyVxb+j7F+EZ1OibKqXz
+         xMHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680332442; x=1682924442;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z4N/zqwZCwI+hFvEisSUVXazz/w3zutZ7e26nPhhd1c=;
+        b=tCuf9Duc95P31xbfWASAlUJK+3sKd3rL2z9YHYKaouPAtGoSwpQ2tW0ddzf0FJUMzp
+         5xTRV3qnxucONm2kj00aNSD6XbbxjhpmLODk32YAfhVw9XkN+coPaScfDXMR+UoSXPEO
+         MBGkqjO1PKwU1PYgGNLFHWSijssKm3hMB9QBwY81Cs6mJ3bRlb3r1xyJsnZq6za5QWSB
+         NUbp9tFyyHp7l7ao69WJO/WMBTpzcdwYGOdfshHstvyFHy2jqbwKx+oUaW1K3wnEeWPr
+         RXDAM4y2/p2VSXb+5CmF31REgQ/WogKTCYf7ThA2KPxfd/Y+NLMYj34mLigWC19dAQ9U
+         bdjg==
+X-Gm-Message-State: AAQBX9c372A8C3+sv4F97d89X9ul5A1s7kakxSNHGz27tGSEnewr1fzK
+        7PJdbYiuVoHXk+4XDE8tj7E=
+X-Google-Smtp-Source: AKy350bX3oyjM1fk52UPbQp3gI4Arl0r3n2g09mjo9ID5ZrfUYzn8EsM61ZQ9KMwJKCzs5juwoN3IQ==
+X-Received: by 2002:ac2:4884:0:b0:4db:387f:a3aa with SMTP id x4-20020ac24884000000b004db387fa3aamr7445525lfc.1.1680332442120;
+        Sat, 01 Apr 2023 00:00:42 -0700 (PDT)
+Received: from localhost (88-113-32-99.elisa-laajakaista.fi. [88.113.32.99])
+        by smtp.gmail.com with ESMTPSA id y22-20020ac255b6000000b004d0b1327b75sm706968lfg.61.2023.04.01.00.00.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Apr 2023 00:00:42 -0700 (PDT)
+Date:   Sat, 1 Apr 2023 10:00:40 +0300
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCH v13 018/113] KVM: x86, tdx: Make KVM_CAP_MAX_VCPUS
+ backend specific
+Message-ID: <20230401100040.0000515c@gmail.com>
+In-Reply-To: <20230329233258.GC1108448@ls.amr.corp.intel.com>
+References: <cover.1678643051.git.isaku.yamahata@intel.com>
+        <87f6baf8419103077f0a42859a0a847c695f5f59.1678643052.git.isaku.yamahata@intel.com>
+        <20230325201326.00002d4d@gmail.com>
+        <20230329233258.GC1108448@ls.amr.corp.intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230401-mtk_eth_soc-sparse-v1-1-84e9fc7b8eab@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAJ/SJ2QC/x2N0QrCMAwAf2Xk2UK2DhR/RWSkXWaDsxvJFGHs3
- w0+3sFxOxirsMG12UH5IyZLdWhPDeRC9cFBRmfosIvYYxte23PgrQy25GArqXHAnmLCMZ/jZQI
- PE7lMSjUXT+t7nl2uypN8/6fb/Th+IRJA0nkAAAA=
-To:     Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Perhaps there is a nicer way to handle this but the code
-calls for converting an array of host byte order 32bit values
-to big endian 32bit values: an ipv6 address to be pretty printed.
+On Wed, 29 Mar 2023 16:32:58 -0700
+Isaku Yamahata <isaku.yamahata@gmail.com> wrote:
 
-Use a sparse-friendly array of be32 to store these values.
+> On Sat, Mar 25, 2023 at 08:13:26PM +0200,
+> Zhi Wang <zhi.wang.linux@gmail.com> wrote:
+> 
+> > On Sun, 12 Mar 2023 10:55:42 -0700
+> > isaku.yamahata@intel.com wrote:
+> > 
+> > > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > > 
+> > > TDX has its own limitation on the maximum number of vcpus that the guest
+> > > can accommodate.  Allow x86 kvm backend to implement its own KVM_ENABLE_CAP
+> > > handler and implement TDX backend for KVM_CAP_MAX_VCPUS.  user space VMM,
+> > > e.g. qemu, can specify its value instead of KVM_MAX_VCPUS.
+> > > 
+> > 
+> > I think enabling the cap here is actually "configuring the cap". KVM_CAP_MAX
+> > _VCPUS is actually always enabled whether userspace enables it or not. It
+> > would be nice to configure of the max VCPUS in kvm_arch_vm_ioctl() where
+> > routines of configuring a VM should belong. E.g. KVM_SET_MAX_VCPUS.
+> 
+> I'm not sure I understand your point.  Although KVM_ENABLE_CAP sounds like
+> only on/off feature, but it isn't. It's also used to set parameters. For
+> example, KVM_CAP_MAX_VCPU_ID.
+>
 
-Also make use of the cpu_to_be32_array helper rather
-than open coding the conversion.
+Yes, I understand your point. But what has been there might not be right as
+well. That doesn't smell right as "enable" is for something which is previously
+"disabled". I understand that there can be some caps require configuration
+when being enabled. But later, for those caps which don't have "on/off"
+state, KVM_ENABLE_CAP doesn't actually enable a feature, it is just
+configuring a feature. It seems like the KVM_ENABLE_CAP has been mis-used
+little by little in the history. Also, I don't find KVM_DISABLE_CAP
+accordingly. So KVM_ENABLE_CAP is actually used as "KVM_SET_CAP". 
 
-Flagged by sparse:
-  drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:59:27: warning: incorrect type in assignment (different base types)
-  drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:59:27:    expected unsigned int
-  drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:59:27:    got restricted __be32 [usertype]
-  drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:161:46: warning: cast to restricted __be16
+I realize it is not realistic to solve the problem in this patch series.
+You can keep the current approach. 
 
-No functional changes intended.
-Compile tested only.
-
-Signed-off-by: Simon Horman <horms@kernel.org>
----
- drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c b/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
-index 53cf87e9acbb..1e0bb8cee7c4 100644
---- a/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
-+++ b/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
-@@ -47,16 +47,14 @@ static const char *mtk_foe_pkt_type_str(int type)
- static void
- mtk_print_addr(struct seq_file *m, u32 *addr, bool ipv6)
- {
--	u32 n_addr[4];
--	int i;
-+	__be32 n_addr[4];
- 
- 	if (!ipv6) {
- 		seq_printf(m, "%pI4h", addr);
- 		return;
- 	}
- 
--	for (i = 0; i < ARRAY_SIZE(n_addr); i++)
--		n_addr[i] = htonl(addr[i]);
-+	cpu_to_be32_array(n_addr, addr, 4);
- 	seq_printf(m, "%pI6", n_addr);
- }
- 
+> KVM_SET_XXX is for run time feature. But the maxium number of vcpus is not
+> runtime changable. Set it at vm creation.
 
