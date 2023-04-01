@@ -2,173 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA186D2C06
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 02:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020286D2C07
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 02:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbjDAATM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 20:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
+        id S233490AbjDAATc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 20:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233465AbjDAATJ (ORCPT
+        with ESMTP id S233465AbjDAAT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 20:19:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA49C1D876
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 17:19:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F17F106F;
-        Fri, 31 Mar 2023 17:19:52 -0700 (PDT)
-Received: from slackpad.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 472D03F6C4;
-        Fri, 31 Mar 2023 17:19:05 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Mark Brown <broonie@kernel.org>
-Cc:     Martin Botka <martin.botka@somainline.org>,
-        martin.botka1@gmail.com, Shengyu Qu <wiagn233@outlook.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v10 3/3] regulator: axp20x: Add support for AXP313a variant
-Date:   Sat,  1 Apr 2023 01:18:50 +0100
-Message-Id: <20230401001850.4988-4-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.35.7
-In-Reply-To: <20230401001850.4988-1-andre.przywara@arm.com>
-References: <20230401001850.4988-1-andre.przywara@arm.com>
+        Fri, 31 Mar 2023 20:19:29 -0400
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF941EFF2;
+        Fri, 31 Mar 2023 17:19:18 -0700 (PDT)
+Received: by mail-ua1-f47.google.com with SMTP id 89so17324075uao.0;
+        Fri, 31 Mar 2023 17:19:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680308358; x=1682900358;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3kN1OI426ezj2MWajyPtGNRa8U4BJeq5PITvMLQQ1/Y=;
+        b=DeQTue7QWuuU289VaxS3cHYPwUXvJ2MCX9j1RO6RRpfWJDAMtnpC0I/mtfFBfs3nmM
+         gcMd9lT1kWZ4yM8V6g3vzvf4y8n0703ZhnQuNAVdf1BbVTTPslfcKmp5cKqG3EtuMjel
+         Hi7/oFSYQCt73oXvWVpFI+Z+WtVfjB8zWjFPk26OZrU2Kjef3bmPzVv7jZR3qIidWcKl
+         wt47Sun/b/BZgBxyz9hoiOL1tKGVD7Cu12R7DCXIZelOwzbPm7JaiGNXKcAPn0JSrYox
+         NYWFc+ROyR7kL1XpyOueL5bNOH0qP0rBC2KVgfNi1MZq2r8JiFarm6BWy1Pe0X+M2mXN
+         C7tg==
+X-Gm-Message-State: AAQBX9ddKXhlX5tGHPluUPEeIkkBH2MsCMK5X1iFZ9ernMqUaH18SFUG
+        zVDEKeLLpVb8G/06viW5h5neJw4UunOeSvbKK+A=
+X-Google-Smtp-Source: AKy350aS07PTliXHfT/6Fq04P4riBefEIEVNi71XSk6owR1j8k7Nb0TCatxE3WstsfhhsfpiDIWmIjP0RuLipcCwExM=
+X-Received: by 2002:a05:6122:2e9:b0:400:f286:4e07 with SMTP id
+ b9-20020a05612202e900b00400f2864e07mr11620548vko.9.1680308357755; Fri, 31 Mar
+ 2023 17:19:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230331004844.1592789-1-irogers@google.com> <20230331004844.1592789-2-irogers@google.com>
+In-Reply-To: <20230331004844.1592789-2-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 31 Mar 2023 17:19:06 -0700
+Message-ID: <CAM9d7cjXGO-xd1tKDUHUrYtG=94aXnubRrUNe6EmyuGwo3=okA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] tools api: Add io__getline
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Botka <martin.botka@somainline.org>
+Hi Ian,
 
-The AXP313a is your typical I2C controlled PMIC, although in a lighter
-fashion compared to the other X-Powers PMICs: it has only three DCDC
-rails, three LDOs, and no battery charging support.
+On Thu, Mar 30, 2023 at 5:49 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Reads a line to allocated memory up to a newline following the getline
+> API.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/lib/api/io.h        | 40 +++++++++++++++++++++++++++++++++++++++
+>  tools/perf/tests/api-io.c | 36 +++++++++++++++++++++++++++++++++++
+>  2 files changed, 76 insertions(+)
+>
+> diff --git a/tools/lib/api/io.h b/tools/lib/api/io.h
+> index 777c20f6b604..d874e8fa8b07 100644
+> --- a/tools/lib/api/io.h
+> +++ b/tools/lib/api/io.h
+> @@ -7,7 +7,9 @@
+>  #ifndef __API_IO__
+>  #define __API_IO__
+>
+> +#include <errno.h>
+>  #include <stdlib.h>
+> +#include <string.h>
+>  #include <unistd.h>
+>
+>  struct io {
+> @@ -112,4 +114,42 @@ static inline int io__get_dec(struct io *io, __u64 *dec)
+>         }
+>  }
+>
+> +/* Read up to and including the first newline following the pattern of getline. */
+> +static inline ssize_t io__getline(char **line_out, size_t *line_len_out, struct io *io)
+> +{
+> +       char buf[128];
+> +       int buf_pos = 0;
+> +       char *line = NULL;
+> +       size_t line_len = 0;
+> +       int ch = 0;
+> +
+> +       /* TODO: reuse previously allocated memory. */
+> +       free(*line_out);
+> +       while (ch != '\n') {
+> +               ch = io__get_char(io);
+> +
+> +               if (ch < 0)
+> +                       break;
+> +
+> +               if (buf_pos == sizeof(buf)) {
+> +                       line = realloc(line, line_len + sizeof(buf));
+> +                       if (!line)
+> +                               return -ENOMEM;
 
-The AXP313a datasheet does not describe a register to change the DCDC
-switching frequency, and talks of it being fixed at 3 MHz. Check that
-the property allowing to change that frequency is absent from the DT,
-and bail out otherwise.
+We can use a temp variable for the failure case, and also free
+the original line before returning the error.
 
-The third LDO, RTCLDO, is fixed, and cannot even be turned on or off,
-programmatically. On top of that, its voltage is customisable (either
-1.8V or 3.3V), which we cannot describe easily using the existing
-regulator wrapper functions. This should be fixed properly, using
-regulator-{min,max}-microvolt in the DT, but this requires more changes
-to the code. As some other PMICs (AXP2xx, AXP803) seem to paper over the
-same problem as well, we follow suit here and pretend it's a fixed 1.8V
-regulator. A proper fix can follow later. The BSP code seems to ignore
-this regulator altogether.
 
-Describe the AXP313A's voltage settings and switch registers, how the
-voltages are encoded, and connect this to the MFD device via its
-regulator ID.
+> +                       memcpy(&line[line_len], buf, sizeof(buf));
+> +                       line_len += sizeof(buf);
+> +                       buf_pos = 0;
+> +               }
+> +               buf[buf_pos++] = (char)ch;
+> +       }
+> +       line = realloc(line, line_len + buf_pos + 1);
+> +       if (!line)
+> +               return -ENOMEM;
 
-Signed-off-by: Martin Botka <martin.botka@somainline.org>
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- drivers/regulator/axp20x-regulator.c | 60 ++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+Ditto.
 
-diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
-index d260c442b788d..81f339009df9b 100644
---- a/drivers/regulator/axp20x-regulator.c
-+++ b/drivers/regulator/axp20x-regulator.c
-@@ -134,6 +134,11 @@
- #define AXP22X_PWR_OUT_DLDO4_MASK	BIT_MASK(6)
- #define AXP22X_PWR_OUT_ALDO3_MASK	BIT_MASK(7)
- 
-+#define AXP313A_DCDC1_NUM_VOLTAGES	107
-+#define AXP313A_DCDC23_NUM_VOLTAGES	88
-+#define AXP313A_DCDC_V_OUT_MASK		GENMASK(6, 0)
-+#define AXP313A_LDO_V_OUT_MASK		GENMASK(4, 0)
-+
- #define AXP803_PWR_OUT_DCDC1_MASK	BIT_MASK(0)
- #define AXP803_PWR_OUT_DCDC2_MASK	BIT_MASK(1)
- #define AXP803_PWR_OUT_DCDC3_MASK	BIT_MASK(2)
-@@ -638,6 +643,48 @@ static const struct regulator_desc axp22x_drivevbus_regulator = {
- 	.ops		= &axp20x_ops_sw,
- };
- 
-+static const struct linear_range axp313a_dcdc1_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000,   0,  70,  10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 71,  87,  20000),
-+	REGULATOR_LINEAR_RANGE(1600000, 88, 106, 100000),
-+};
-+
-+static const struct linear_range axp313a_dcdc2_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000,   0, 70, 10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 71, 87, 20000),
-+};
-+
-+/*
-+ * This is deviating from the datasheet. The values here are taken from the
-+ * BSP driver and have been confirmed by measurements.
-+ */
-+static const struct linear_range axp313a_dcdc3_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000,   0,  70, 10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 71, 102, 20000),
-+};
-+
-+static const struct regulator_desc axp313a_regulators[] = {
-+	AXP_DESC_RANGES(AXP313A, DCDC1, "dcdc1", "vin1",
-+			axp313a_dcdc1_ranges, AXP313A_DCDC1_NUM_VOLTAGES,
-+			AXP313A_DCDC1_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-+			AXP313A_OUTPUT_CONTROL, BIT(0)),
-+	AXP_DESC_RANGES(AXP313A, DCDC2, "dcdc2", "vin2",
-+			axp313a_dcdc2_ranges, AXP313A_DCDC23_NUM_VOLTAGES,
-+			AXP313A_DCDC2_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-+			AXP313A_OUTPUT_CONTROL, BIT(1)),
-+	AXP_DESC_RANGES(AXP313A, DCDC3, "dcdc3", "vin3",
-+			axp313a_dcdc3_ranges, AXP313A_DCDC23_NUM_VOLTAGES,
-+			AXP313A_DCDC3_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-+			AXP313A_OUTPUT_CONTROL, BIT(2)),
-+	AXP_DESC(AXP313A, ALDO1, "aldo1", "vin1", 500, 3500, 100,
-+		 AXP313A_ALDO1_CONRTOL, AXP313A_LDO_V_OUT_MASK,
-+		 AXP313A_OUTPUT_CONTROL, BIT(3)),
-+	AXP_DESC(AXP313A, DLDO1, "dldo1", "vin1", 500, 3500, 100,
-+		 AXP313A_DLDO1_CONRTOL, AXP313A_LDO_V_OUT_MASK,
-+		 AXP313A_OUTPUT_CONTROL, BIT(4)),
-+	AXP_DESC_FIXED(AXP313A, RTC_LDO, "rtc-ldo", "vin1", 1800),
-+};
-+
- /* DCDC ranges shared with AXP813 */
- static const struct linear_range axp803_dcdc234_ranges[] = {
- 	REGULATOR_LINEAR_RANGE(500000,
-@@ -1040,6 +1087,15 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
- 		def = 3000;
- 		step = 150;
- 		break;
-+	case AXP313A_ID:
-+		/* The DCDC PWM frequency seems to be fixed to 3 MHz. */
-+		if (dcdcfreq != 0) {
-+			dev_err(&pdev->dev,
-+				"DCDC frequency on AXP313a is fixed to 3 MHz.\n");
-+			return -EINVAL;
-+		}
-+
-+		return 0;
- 	default:
- 		dev_err(&pdev->dev,
- 			"Setting DCDC frequency for unsupported AXP variant\n");
-@@ -1232,6 +1288,10 @@ static int axp20x_regulator_probe(struct platform_device *pdev)
- 		drivevbus = of_property_read_bool(pdev->dev.parent->of_node,
- 						  "x-powers,drive-vbus-en");
- 		break;
-+	case AXP313A_ID:
-+		regulators = axp313a_regulators;
-+		nregulators = AXP313A_REG_ID_MAX;
-+		break;
- 	case AXP803_ID:
- 		regulators = axp803_regulators;
- 		nregulators = AXP803_REG_ID_MAX;
--- 
-2.35.7
+Thanks,
+Namhyung
 
+
+> +       memcpy(&line[line_len], buf, buf_pos);
+> +       line[line_len + buf_pos] = '\0';
+> +       line_len += buf_pos;
+> +       *line_out = line;
+> +       *line_len_out = line_len;
+> +       return line_len;
+> +}
+> +
+>  #endif /* __API_IO__ */
+> diff --git a/tools/perf/tests/api-io.c b/tools/perf/tests/api-io.c
+> index e91cf2c127f1..0ff39cdfcb01 100644
+> --- a/tools/perf/tests/api-io.c
+> +++ b/tools/perf/tests/api-io.c
+> @@ -289,6 +289,40 @@ static int test_get_dec(void)
+>         return ret;
+>  }
+>
+> +static int test_get_line(void)
+> +{
+> +       char path[PATH_MAX];
+> +       struct io io;
+> +       char test_string[1024];
+> +       char *line = NULL;
+> +       size_t i, line_len = 0;
+> +       size_t buf_size = 128;
+> +       int ret = 0;
+> +
+> +       for (i = 0; i < 512; i++)
+> +               test_string[i] = 'a';
+> +       test_string[512] = '\n';
+> +       for (i = 513; i < 1023; i++)
+> +               test_string[i] = 'b';
+> +       test_string[1023] = '\0';
+> +
+> +       if (setup_test(path, test_string, buf_size, &io))
+> +               return -1;
+> +
+> +       EXPECT_EQUAL((int)io__getline(&line, &line_len, &io), 513);
+> +       EXPECT_EQUAL((int)strlen(line), 513);
+> +       for (i = 0; i < 512; i++)
+> +               EXPECT_EQUAL(line[i], 'a');
+> +       EXPECT_EQUAL(line[512], '\n');
+> +       EXPECT_EQUAL((int)io__getline(&line, &line_len, &io), 510);
+> +       for (i = 0; i < 510; i++)
+> +               EXPECT_EQUAL(line[i], 'b');
+> +
+> +       free(line);
+> +       cleanup_test(path, &io);
+> +       return ret;
+> +}
+> +
+>  static int test__api_io(struct test_suite *test __maybe_unused,
+>                         int subtest __maybe_unused)
+>  {
+> @@ -300,6 +334,8 @@ static int test__api_io(struct test_suite *test __maybe_unused,
+>                 ret = TEST_FAIL;
+>         if (test_get_dec())
+>                 ret = TEST_FAIL;
+> +       if (test_get_line())
+> +               ret = TEST_FAIL;
+>         return ret;
+>  }
+>
+> --
+> 2.40.0.348.gf938b09366-goog
+>
