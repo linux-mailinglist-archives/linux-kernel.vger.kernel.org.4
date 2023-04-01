@@ -2,155 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C7C6D34D0
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 00:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF7A6D34DD
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 00:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjDAWT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 18:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
+        id S229705AbjDAWep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 18:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDAWT1 (ORCPT
+        with ESMTP id S229448AbjDAWeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 18:19:27 -0400
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BCDFF0D;
-        Sat,  1 Apr 2023 15:19:25 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0Vf6Rq6N_1680387561;
-Received: from localhost.localdomain(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0Vf6Rq6N_1680387561)
-          by smtp.aliyun-inc.com;
-          Sun, 02 Apr 2023 06:19:22 +0800
-From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-stable@vger.kernel.org
-Subject: [PATCH] mm/swap: fix swap_info_struct race between swapoff and get_swap_pages()
-Date:   Sun,  2 Apr 2023 06:19:20 +0800
-Message-Id: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0
+        Sat, 1 Apr 2023 18:34:44 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3CF27813
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 15:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680388483; x=1711924483;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eiky+500i74r/cBfNNpHB89b7wDGe1Es5wmhXznND6w=;
+  b=PyNxoiLoGs3XnkB2xQekhxJgMqQt2jLicic7RogZdtmPJZlpWJTJge/g
+   ys6CxRvPIqzPQJ0grxsAS/h6oeUqkGPjECkM3YF2gOPQqT5io9/OrSQPf
+   8OapRyJ67eDvnJGvWNAyJTtci0xXNS9ZiOY32em1AcH8zU/azPr62N+lt
+   N/Y1WcVmziLapWMpVe3NfthKB7SreJo8Wu+qhrIwyfruXW+xoeyqhBL2U
+   8uQteTC/2s66cQDjxFYzS6nOMwLA6CzYWSTr9NukVszh7YNUlfPR4QXhR
+   O3q6rtuJDVe3gFax86DgGlbbSQ9qk1Wh0bp/tr6lZTJNpLWIMCsR8Ka7d
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="339180027"
+X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
+   d="scan'208";a="339180027"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 15:34:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="859746408"
+X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
+   d="scan'208";a="859746408"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Apr 2023 15:34:41 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pijo0-000N5L-1m;
+        Sat, 01 Apr 2023 22:34:40 +0000
+Date:   Sun, 2 Apr 2023 06:34:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against
+ symbol 'init_thread_union'; recompile with -fPIC
+Message-ID: <202304020631.WHiXIj5y-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Without this modification, a core will wait (mostly)
-'swap_info_struct->lock' when completing
-'del_from_avail_list(p)'. Immediately, other cores
-soon calling 'add_to_avail_list()' to add the same
-object again when acquiring the lock that released
-by former. It's not the desired result but exists
-indeed. This case can be described as below:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   00c7b5f4ddc5b346df62b757ec73f9357bb452af
+commit: ffe74a6dc9bc47c7c1bb8e9a3d017f6bd5496d76 m68knommu: fix ucsimm sparse warnings
+date:   1 year, 1 month ago
+config: powerpc-randconfig-r016-20230402 (https://download.01.org/0day-ci/archive/20230402/202304020631.WHiXIj5y-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ffe74a6dc9bc47c7c1bb8e9a3d017f6bd5496d76
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ffe74a6dc9bc47c7c1bb8e9a3d017f6bd5496d76
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-core 0                       core 1
-swapoff
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304020631.WHiXIj5y-lkp@intel.com/
 
-del_from_avail_list(p)       waiting
+All errors (new ones prefixed by >>):
 
-try lock p->lock             acquire swap_avail_lock and
-                             add p into swap_avail_head again
+>> ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against symbol 'init_thread_union'; recompile with -fPIC
+   >>> referenced by arch/powerpc/kernel/head_44x.o:(.head.text+0x4E)
+--
+>> ld.lld: error: relocation R_PPC_ADDR16_LO cannot be used against symbol 'init_thread_union'; recompile with -fPIC
+   >>> referenced by arch/powerpc/kernel/head_44x.o:(.head.text+0x52)
+--
+>> ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against local symbol; recompile with -fPIC
+   >>> defined in arch/powerpc/kernel/head_44x.o
+   >>> referenced by arch/powerpc/kernel/head_44x.o:(.head.text+0x1676)
+--
+>> ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against local symbol; recompile with -fPIC
+   >>> defined in arch/powerpc/kernel/head_44x.o
+   >>> referenced by arch/powerpc/kernel/head_44x.o:(.head.text+0x1686)
+--
+>> ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against local symbol; recompile with -fPIC
+   >>> defined in arch/powerpc/kernel/head_44x.o
+   >>> referenced by arch/powerpc/kernel/head_44x.o:(.head.text+0x17DA)
 
-acquire p->lock but
-missing p already be
-added again, and continuing
-to clear SWP_WRITEOK, etc.
-
-It can be easily found a massive warning messages can
-be triggered inside get_swap_pages() by some special
-cases, for example, we call madvise(MADV_PAGEOUT) on
-blocks of touched memory concurrently, meanwhile, run
-much swapon-swapoff operations (e.g. stress-ng-swap).
-
-But, a worse consequence, panic also can be caused by
-the above scene. In swapoff(), p, refers to one
-swap_info_struct variable, maybe reinsert swap_avail_head
-by 'reinsert_swap_info', or as we wanted, turns off this
-swap block successfully. the worse case is that swapoff()
-run the last code of function but the p still linked in
-swap_avail_head[]. It has very bad effects, such as the
-memory used by p could be kept in swap_info[], this means
-reuse it will destroy the data. A panic message caused:
-
-(with CONFIG_PLIST_DEBUG enabled)
-
-------------[ cut here ]------------
-top: ffff001800875c00, n: ffff001800fdc6e0, p: ffff001800fdc6e0
-prev: ffff001800875c00, n: ffff001800fdc6e0, p: ffff001800fdc6e0
-next: ffff001800fdc6e0, n: ffff001800fdc6e0, p: ffff001800fdc6e0
-WARNING: CPU: 21 PID: 1843 at lib/plist.c:60 plist_check_prev_next_node+0x50/0x70
-Modules linked in: rfkill(E) crct10dif_ce(E)...
-CPU: 21 PID: 1843 Comm: stress-ng Kdump: ... 5.10.134+
-Hardware name: Alibaba Cloud ECS, BIOS 0.0.0 02/06/2015
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO BTYPE=--)
-pc : plist_check_prev_next_node+0x50/0x70
-lr : plist_check_prev_next_node+0x50/0x70
-sp : ffff0018009d3c30
-x29: ffff0018009d3c40 x28: ffff800011b32a98
-x27: 0000000000000000 x26: ffff001803908000
-x25: ffff8000128ea088 x24: ffff800011b32a48
-x23: 0000000000000028 x22: ffff001800875c00
-x21: ffff800010f9e520 x20: ffff001800875c00
-x19: ffff001800fdc6e0 x18: 0000000000000030
-x17: 0000000000000000 x16: 0000000000000000
-x15: 0736076307640766 x14: 0730073007380731
-x13: 0736076307640766 x12: 0730073007380731
-x11: 000000000004058d x10: 0000000085a85b76
-x9 : ffff8000101436e4 x8 : ffff800011c8ce08
-x7 : 0000000000000000 x6 : 0000000000000001
-x5 : ffff0017df9ed338 x4 : 0000000000000001
-x3 : ffff8017ce62a000 x2 : ffff0017df9ed340
-x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- plist_check_prev_next_node+0x50/0x70
- plist_check_head+0x80/0xf0
- plist_add+0x28/0x140
- add_to_avail_list+0x9c/0xf0
- _enable_swap_info+0x78/0xb4
- __do_sys_swapon+0x918/0xa10
- __arm64_sys_swapon+0x20/0x30
- el0_svc_common+0x8c/0x220
- do_el0_svc+0x2c/0x90
- el0_svc+0x1c/0x30
- el0_sync_handler+0xa8/0xb0
- el0_sync+0x148/0x180
-irq event stamp: 2082270
-
-In this patch, we lock p->lock before calling
-'del_from_avail_list()' to make sure other thread
-see the swap_info_struct object had been deleted
-and SWP_WRITEOK cleared together, will not reinsert
-again.
-
-We also find this problem exists in stable 5.10.
-
-Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
----
- mm/swapfile.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 5af6b0f770de..4df77fef50b5 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -2610,8 +2610,12 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
- 		spin_unlock(&swap_lock);
- 		goto out_dput;
- 	}
--	del_from_avail_list(p);
-+	/*
-+	 * Here lock is used to protect deleting and SWP_WRITEOK clearing
-+	 * can be seen concurrently.
-+	 */
- 	spin_lock(&p->lock);
-+	del_from_avail_list(p);
- 	if (p->prio < 0) {
- 		struct swap_info_struct *si = p;
- 		int nid;
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
