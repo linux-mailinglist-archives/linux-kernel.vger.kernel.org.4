@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB0A6D312E
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392726D3133
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbjDAOEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 10:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
+        id S229575AbjDAOGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 10:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjDAOD5 (ORCPT
+        with ESMTP id S229519AbjDAOGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 10:03:57 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E56FB45E;
-        Sat,  1 Apr 2023 07:03:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=NKxwm21XjGgUdSW0+D1bTw1sMwz5rzkfKXeghzRuYj0=; b=AEFwoGNnpXLeMA+AiUz2B7UCEi
-        vDMiQP2OWooMbPHAS2IcJF/E9vkC4ZM5uWQbcAmgJgtSgeIGco4qbI5BzH1hBKc05i6WxlcnbD+s3
-        WNJn46hRCnWF9t+TUT5omN/H0YHNNBdJ12bozsHdi2jeWBd7Vl0NmAd4GdmKaMGc8S0E+kFqV9pOs
-        O4QtbfJ+rvZxkOnP+W+7Lnh6i+6pYT9DELgHP3vbTBhHLyA9jfkQ9l/tYmm45APreqWALx3BzqNVz
-        Jb0CGQzv3arE4L3TxhoocIHmjAoYLkrXoG3UE9GGV8X1A+RQ2H0YJY6R+Fwxw/9D1fggR2n1G9DTn
-        4L9llH1g==;
-Received: from p200300ccff2d4a001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff2d:4a00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pibpg-0006g6-9L; Sat, 01 Apr 2023 16:03:53 +0200
-Received: from andi by aktux with local (Exim 4.96)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pibpf-00E73Z-34;
-        Sat, 01 Apr 2023 16:03:51 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@kernel.org,
-        Tony Lindgren <tony@atomide.com>
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v3 2/2] MAINTAINERS: add board bindings list to OMAP2+ files
-Date:   Sat,  1 Apr 2023 16:02:48 +0200
-Message-Id: <20230401140248.3363674-3-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230401140248.3363674-1-andreas@kemnade.info>
-References: <20230401140248.3363674-1-andreas@kemnade.info>
+        Sat, 1 Apr 2023 10:06:04 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95263B462;
+        Sat,  1 Apr 2023 07:06:02 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id h14so15043288pgj.7;
+        Sat, 01 Apr 2023 07:06:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680357962;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YuazLWFC/WWE2drNijqhScFxpCqHXp9v8rGhMiQ1nyU=;
+        b=PIZqIu0Hrw2dbPp2SaC4fTc4HLMJ/lvz7nLtFWnqzNg++hrFAVtshZHlkwcFZ7PFHP
+         jUfFA3ckiumlnvOpPq6iDM2JfhA9LlhGaG5JH4CN/+4fmV9K/RvvjVK1mTiq3T6bgIHD
+         PkGcC6ebieefx3LbJ4lbOyzkVW6/tOV8XEK1b6c6ytpBshei0nbq72uirIylFv+8VltB
+         Mb1euRkyGdiOeWqBOMAjHihhJmUweeH/TjYaGUiyYK8lQOsq/P3exSYZ9/nxdssIMqMW
+         CQoPYFrvARIsxBeg5eM8njoo8AMfjJ8LZJCzQ8iSsBFerz8nTJUULraNCUDrm9lBzqxe
+         LC2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680357962;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YuazLWFC/WWE2drNijqhScFxpCqHXp9v8rGhMiQ1nyU=;
+        b=emyEbZLJKrRvfS/ks9LYpTtwrD89BH7MEqgWtjzrJMqxup918f3ncXZ54ytyM8Yu8g
+         EVC4lU2FHjqV/bYScN6Ge96InMA93N0z1He3dTeQSYNKI8blsyJiLw/GoX4+CJrJvJt4
+         hGCgPIlMnSe1jKHTnEiicorXZdxV1FH7Enba+jJSdAkA8WlZ5jFy8YNhWRXwi6tztASC
+         i8C4Grp38p5Z6EFrRlzChpQsXnAgGpgg3TyzJzfa3ebfzPjhNlLK8hKX4RDkMBUKw9M7
+         usCof3aAKzam97YecSrWOFOJldcj+cWtc4bAmRVsJBIBvJChKdINV6lGSyKrnvlrK4Uo
+         nqPQ==
+X-Gm-Message-State: AAQBX9fwceVfU5u3gwr7J0aEl9E4Wk1GPLPy1pkc5UEH0Ab8FsUou+cR
+        Mn7MS3w7H292ShmAD3vwo549gHM7clg8joBWR6w=
+X-Google-Smtp-Source: AKy350aadZd4FdZnJTUY9A87DID3XrcnoP8bQW/WSUSt20d6X2kII62qqw3vUQNC2wU/t/XzivNWghob/M8IBNTPKSg=
+X-Received: by 2002:a05:6a00:14cc:b0:62d:b08a:8e13 with SMTP id
+ w12-20020a056a0014cc00b0062db08a8e13mr6968302pfu.2.1680357961824; Sat, 01 Apr
+ 2023 07:06:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
+References: <20230331101943.831347-1-mmyangfl@gmail.com> <ZCfmCmxobIKaBdT4@gondor.apana.org.au>
+In-Reply-To: <ZCfmCmxobIKaBdT4@gondor.apana.org.au>
+From:   Yangfl <mmyangfl@gmail.com>
+Date:   Sat, 1 Apr 2023 22:05:25 +0800
+Message-ID: <CAAXyoMN+eVLNeiDtkwSZC2gFUDsBwn8SFST1=Nrw-qNr-u3-5w@mail.gmail.com>
+Subject: Re: [PATCH v4] crypto: hisilicon/trng - add support for HiSTB TRNG
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-crypto@vger.kernel.org, Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add list of OMAP2+ boards to the corresponding section
+Herbert Xu <herbert@gondor.apana.org.au> =E4=BA=8E2023=E5=B9=B44=E6=9C=881=
+=E6=97=A5=E5=91=A8=E5=85=AD 16:07=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, Mar 31, 2023 at 06:19:34PM +0800, David Yang wrote:
+> >
+> > +     struct histb_trng_priv *priv =3D (struct histb_trng_priv *) rng->=
+priv;
+>
+> Plesae don't use rng->priv at all.  We're trying to phase it
+> out because it encourages horrible casting like this.
+>
+> Please follow the model used in the meson driver.
+>
+> Thanks,
+> --
+> Email: Herbert Xu <herbert@gondor.apana.org.au>
+> Home Page: http://gondor.apana.org.au/~herbert/
+> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 99b665e85f0a..e6c1d54a4d08 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15354,6 +15354,7 @@ W:	http://www.muru.com/linux/omap/
- W:	http://linux.omap.com/
- Q:	http://patchwork.kernel.org/project/linux-omap/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
-+F:	Documentation/devicetree/bindings/arm/ti.yaml
- F:	arch/arm/configs/omap2plus_defconfig
- F:	arch/arm/mach-omap2/
- F:	drivers/bus/ti-sysc.c
--- 
-2.30.2
-
+Which meson driver? I didn't find any rng module under amlogic/ dir.
