@@ -2,117 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B346D311D
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1896D311F
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjDANnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 09:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
+        id S230010AbjDANn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 09:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDANnV (ORCPT
+        with ESMTP id S229379AbjDANn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 09:43:21 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5412191E8;
-        Sat,  1 Apr 2023 06:43:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680356600; x=1711892600;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MFKyQgWRfmOJKme2+efm2K6/Azaun05Iy1yrj8qyo5E=;
-  b=bgUfNM/scLvL0pE4KgW4wq4MOIlziaPfz0oKD66yrOLBxwPQ9qSgfX1Y
-   EdZCMam7Rd6bF1WiWUbxU+vzvrun8HyoVQ3aiyoo6niQwxb3aDWfNjr1O
-   Dq7riiG/ehJhLjtNHsetsrsSqC8N6Ujgd66U41Fab7hiTxl9pf14VR1sY
-   BM97orfUCDumFEpFeoUEkAsJQw0NWBi7/7J4HFKO0eHYkImmJzF/ckuSc
-   nAFQJCHjuFq3kALF5Goe4lX7wGAAOEFtagFN+AH3bPPag+kNvxHSDHJam
-   LyRjPwvVOSoXz3CMEF3CATXI6gVhbAKsYJqWpOXU6rlwutFYI3ddEfG/T
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="341673178"
-X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="341673178"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 06:43:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="749978248"
-X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="749978248"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.211.241]) ([10.254.211.241])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 06:43:15 -0700
-Message-ID: <13bf4050-7563-798a-1776-dd6c948bc1f8@linux.intel.com>
-Date:   Sat, 1 Apr 2023 21:43:13 +0800
+        Sat, 1 Apr 2023 09:43:56 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5E5191E8
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 06:43:54 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id e65so30215151ybh.10
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 06:43:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680356634;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tP7UpzHOr3tkhr619arFQRlNrfveNlWZwn+YXq6owuk=;
+        b=lBWAZonbtaNgRQcvNRoZwNkSUWGBKIvZtyo98vzy8zpc8cJhMpYhTMnUJ4KzOYX5Ul
+         E3+vkr+HHGM2eiiNCcf+GegpywDRRzirfkRlKaD7KEG8Kh9VfU9wIOJY1BnQKUpyKH/n
+         5XcUsXQ+p3OdSF3/aYoC3XhWOVhyo3X1Y+t6BudhbCTrrGh/eUJRo9aa++G7H7BGEYkU
+         qwABcgSseLVyF0sc3gYPWHn/yKgBBRwakfGAYnt6ZZbI8OUIrLZMTYPF+zdyPNi3pGAS
+         Zcx2IoNWdl71bI6hCtfIfMmTauQoPdwrSa4Z2SjGsWroJwxu6xFF9JNXKC4twR/hSTP6
+         tQMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680356634;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tP7UpzHOr3tkhr619arFQRlNrfveNlWZwn+YXq6owuk=;
+        b=psqvkdQuAXiRz0axvDSvWOl7ihmItp09IfZhBXBSaPztUkcR6r2PIFA/nUqWqJsFFD
+         9gK2C4+66/2/leCt4qOgoRWDWVXAXn14rCTAOUdqng47iEkzq7vGatkv7lFKxylj/eIv
+         ntGZMNyjx18RnQsqGugy/7CNrODqoXb18pgCzQQzNUqhoTDCNIu9Yy2Oqil3oIaohmgC
+         sam/dz9qkNVBfuyWFUBt68uTaApzP0aiiJ7esh5Ak72blwfv1p8SpOSlqX7MxiAGN/Rf
+         uWtSYiq6JrZgnqL3vskXkKTVkEEq3MDYZeIBeoyDYJadYhpEHCvIBgxeZBiH63eEajo/
+         41Kw==
+X-Gm-Message-State: AAQBX9fEB64Yfd5y8ypoHr9Mp1BwrZYeo3MVnqDfxkcsYgMocmevTHVy
+        ZEQ8aehKQ/3kB5ObmnFah+1mXw==
+X-Google-Smtp-Source: AKy350YskRo0KwXK+RPnoX6NndU3tvfL3ndo1tK2qR2YhfdASlwk4sHfJtRTLlpftifhiu34+J7DhA==
+X-Received: by 2002:a25:ad87:0:b0:97d:c4d4:911c with SMTP id z7-20020a25ad87000000b0097dc4d4911cmr32000078ybi.57.1680356634130;
+        Sat, 01 Apr 2023 06:43:54 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id y19-20020a25bb93000000b00b7767ca747bsm1225457ybg.24.2023.04.01.06.43.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Apr 2023 06:43:53 -0700 (PDT)
+Date:   Sat, 1 Apr 2023 09:43:51 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] iio: addac: stx104: Migrate to the regmap API
+Message-ID: <ZCg1FyfcOvpLrMmH@fedora>
+References: <cover.1679867815.git.william.gray@linaro.org>
+ <4ebc1b6b609a086846420954b893e914fd395384.1679867815.git.william.gray@linaro.org>
+ <ZCGBIAvr7OQLwNXv@smile.fi.intel.com>
+ <20230401145121.1a64a113@jic23-huawei>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: Re: [PATCH v3 4/7] iommu/vt-d: Reserve RID_PASID from global PASID
- space
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org
-References: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
- <20230331231137.1947675-5-jacob.jun.pan@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230331231137.1947675-5-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KbeYdy2842VnTNzT"
+Content-Disposition: inline
+In-Reply-To: <20230401145121.1a64a113@jic23-huawei>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/1 7:11, Jacob Pan wrote:
-> On VT-d platforms, RID_PASID is used for DMA request without PASID. We
-> should not treat RID_PASID special instead let it be allocated from the
-> global PASID number space. Non-zero value can be used in RID_PASID on
-> Intel VT-d.
-> 
-> For ARM, AMD and others that _always_ use 0 as RID_PASID, there is no
-> impact in that SVA PASID allocation base is 1.
-> 
-> With this change, devices do both DMA with PASID and SVA will not worry
-> about conflicts when it comes to allocating PASIDs for in-kernel DMA.
-> 
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> ---
->   drivers/iommu/intel/iommu.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index 9f737ef55463..cbb2670f88ca 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -3956,6 +3956,10 @@ int __init intel_iommu_init(void)
->   
->   	intel_iommu_enabled = 1;
->   
-> +	/* Reserved RID_PASID from the global namespace for legacy DMA */
-> +	WARN_ON(iommu_alloc_global_pasid(PASID_RID2PASID, PASID_RID2PASID) !=
-> +		PASID_RID2PASID);
 
-This looks odd. With the previous patch unchanged,
-iommu_alloc_global_pasid() will always return IOMMU_PASID_INVALID if
-CONFIG_IOMMU_SVA is not set.
+--KbeYdy2842VnTNzT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +
->   	return 0;
->   
->   out_free_dmar:
+On Sat, Apr 01, 2023 at 02:51:21PM +0100, Jonathan Cameron wrote:
+>=20
+> >=20
+> > > +		do {
+> > > +			err =3D regmap_read(priv->aio_ctl_map, STX104_ADC_STATUS, &adc_st=
+atus);
+> > > +			if (err)
+> > > +				return err;
+> > > +		} while (u8_get_bits(adc_status, STX104_CNV)); =20
+> >=20
+> > Hmm... Isn't it a potential infinite loop (e.g., ther hardware / firmwa=
+re
+> > is broken)?
+> >=20
+> > Why not using regmap_read_poll_timeout() (or its atomic variant, depend=
+s on
+> > the case)?
+>=20
+> Just to shortcut things as I'm looking at this.
+> That's currently handled in patch 2.  Argument being this is a direct con=
+version
+> of existing code, whereas changing to xxx_poll_timeout() is an improvemen=
+t.
+>=20
+> I'm fine with it just being rolled into first patch with a note in the pa=
+tch
+> description though if that works better.
 
-Best regards,
-baolu
+I'm going to keep it as a separate follow-up patch because introducing a
+timeout is enough of a functional change to risk a regression that
+having it in a dedicated commit makes it easier to revert later if we
+need to.
+
+William Breathitt Gray
+
+--KbeYdy2842VnTNzT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZCg1FwAKCRC1SFbKvhIj
+KwfPAQC0qyFGLIKKcxO0aN0oqjFdF6fMtToeQek70VRbNnBA7gEAy9WIVmR1n/LP
+XtuVVyKufI9v+lw3SM0J+9icvaYeLAU=
+=DZ9m
+-----END PGP SIGNATURE-----
+
+--KbeYdy2842VnTNzT--
