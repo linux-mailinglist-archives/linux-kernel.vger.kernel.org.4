@@ -2,108 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428146D2BFB
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 02:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 527806D2BFD
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 02:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233436AbjDAAFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 20:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
+        id S233067AbjDAALR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 20:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233396AbjDAAFD (ORCPT
+        with ESMTP id S229523AbjDAALP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 20:05:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D595901C;
-        Fri, 31 Mar 2023 17:04:53 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 34D7021A89;
-        Sat,  1 Apr 2023 00:04:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680307492; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Okwnr5qauASHAsEFw1/R6hIbFinf58P4KeKuOuyDC8s=;
-        b=TX46C1dQTO9lgGzXXjdlcIcH5Ny/YS1+HeVUfOdQhwsDLRIY0/SALE1KlmQSuLzluTt0b+
-        tS8OHlXfHGzYHNRvK8XpmexsROVUiIqLI0mZRi1W5eb/5kc4aLia9XTLnc2U4B3VzqM0ko
-        R6yIopHQgZ8uGD5Z9CDvVvsuwabKBsU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680307492;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Okwnr5qauASHAsEFw1/R6hIbFinf58P4KeKuOuyDC8s=;
-        b=IPxozgKTw3NH//wQSo1bSnKWB+qf5WXWBFVe4DUVTpiVZaDhx8wRwKG+BbydGQMLJJG9yq
-        +8OUIRaAmDVtRNAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A4B43134FB;
-        Sat,  1 Apr 2023 00:04:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ok/EGyN1J2RHZQAAMHmgww
-        (envelope-from <krisman@suse.de>); Sat, 01 Apr 2023 00:04:51 +0000
-From:   Gabriel Krisman Bertazi <krisman@suse.de>
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/11] io_uring/rsrc: cache struct io_rsrc_node
-Organization: SUSE
-References: <cover.1680187408.git.asml.silence@gmail.com>
-        <7f5eb1b89e8dcf93739607c79bbf7aec1784cbbe.1680187408.git.asml.silence@gmail.com>
-        <87cz4p1083.fsf@suse.de>
-        <6eaadad2-d6a6-dfbb-88aa-8ae68af2f89d@gmail.com>
-Date:   Fri, 31 Mar 2023 21:04:48 -0300
-In-Reply-To: <6eaadad2-d6a6-dfbb-88aa-8ae68af2f89d@gmail.com> (Pavel
-        Begunkov's message of "Fri, 31 Mar 2023 17:27:45 +0100")
-Message-ID: <87wn2wzcv3.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Fri, 31 Mar 2023 20:11:15 -0400
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F891024A;
+        Fri, 31 Mar 2023 17:11:13 -0700 (PDT)
+Received: by mail-ua1-f51.google.com with SMTP id s23so17263272uae.5;
+        Fri, 31 Mar 2023 17:11:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680307873; x=1682899873;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nke42VouiMKyNWR3ankpeC1nBHAkEoxU/z0yVq9MO0Q=;
+        b=mUi5hnviJGJZXi4MzDjk6KNXvoP/YUacbILB7wj6aKEWO6aq3H0kYY6xZruuPJOJ3F
+         lUZj6b1jcuzPNJPJu67uVlCOPKlF5/mQDp/GSsna10Zx8N/fI9dMUTSPA8IaWmGqj0Nf
+         rb5uZ9pgTX8GR5svXZinWCHT+qArvsqYz2zJ+j4Ogs5jkGQFplHkDphxYeN5y+S2OOAB
+         sEPGmZk5DnRfDw/UUJMT8m5w2TrIKJPBXboM/RdRqYxNPgqhtHuNEtI0fCv+f0Owi0WW
+         5uR29uRPUl9U8MoLgaLBt3nZ5qa3VEJ+1ag9kF6pIEDW07jgrwHExfIumFaCXk7OgloW
+         zxzw==
+X-Gm-Message-State: AAQBX9fde3dTdeQXutJtUebdhrvQ4YF0BXHR9awAnBISptGPRfMTJ2pF
+        PcSOfLndJjd/zkWbXZo3KT6iPmDySLU9ZVPtXTo=
+X-Google-Smtp-Source: AKy350aqvhPPKCeCa5/veozoAkaSgdzSji+xmWoW4nqfYqAy6uXVjOOp8JlYvnQFAt8eUegQAMk2zXNo3gYTrZ/rXi0=
+X-Received: by 2002:a1f:b446:0:b0:401:32f5:a867 with SMTP id
+ d67-20020a1fb446000000b0040132f5a867mr3899359vkf.2.1680307872792; Fri, 31 Mar
+ 2023 17:11:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230317100514.1373-1-laihangliang1@huawei.com>
+In-Reply-To: <20230317100514.1373-1-laihangliang1@huawei.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 31 Mar 2023 17:11:01 -0700
+Message-ID: <CAM9d7cjrkWdg18wTA_tRch8oN0YUEy3ZJ2mhrYtk23iLqd1XPw@mail.gmail.com>
+Subject: Re: [PATCH] perf top: expand the range of multithreaded phase
+To:     Hangliang Lai <laihangliang1@huawei.com>
+Cc:     liuwenyu7@huawei.com, acme@kernel.org, adrian.hunter@intel.com,
+        alexander.shishkin@linux.intel.com, brauner@kernel.org,
+        hewenliang4@huawei.com, irogers@google.com, jolsa@kernel.org,
+        linfeilong@huawei.com, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        mingo@redhat.com, yeyunfeng@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pavel Begunkov <asml.silence@gmail.com> writes:
+Hello,
 
-> On 3/31/23 15:09, Gabriel Krisman Bertazi wrote:
->> Pavel Begunkov <asml.silence@gmail.com> writes:
->> 
->>> Add allocation cache for struct io_rsrc_node, it's always allocated and
->>> put under ->uring_lock, so it doesn't need any extra synchronisation
->>> around caches.
->> Hi Pavel,
->> I'm curious if you considered using kmem_cache instead of the custom
->> cache for this case?  I'm wondering if this provokes visible difference in
->> performance in your benchmark.
+Sorry for the late reply.
+
+On Fri, Mar 17, 2023 at 3:05 AM Hangliang Lai <laihangliang1@huawei.com> wrote:
 >
-> I didn't try it, but kmem_cache vs kmalloc, IIRC, doesn't bring us
-> much, definitely doesn't spare from locking, and the overhead
-> definitely wasn't satisfactory for requests before.
+> In __cmd_top, perf_set_multithreaded is used to enable pthread_rwlock, thus
+> donw_read and down_write can work to handle concurrency problems. Then top
+> use perf_set_singlethreaded and switch to single threaded phase, assuming
+> that no thread concurrency will happen later.
+>
+> However, a UAF problem could occur in perf top in single threaded phase,
+> The concurrent procedure is like this:
+>
+> display_thread                              process_thread
+> --------------                              --------------
+>
+> thread__comm_len
+>   -> thread__comm_str
+>     -> __thread__comm_str(thread)
+>                                             thread__delete
+>                                              -> comm__free
+>                                               -> comm_str__put
+>                                                -> zfree(&cs->str)
+>     -> thread->comm_len = strlen(comm);
+>
+> Since in single thread phase, perf_singlethreaded is true, down_read and
+> down_write can not work to avoid concurrency problems.
+>
+> This patch put perf_set_singlethreaded to the function tail to expand the
+> multithreaded phase range, make display_thread and process_thread run
+> safe.
 
-There is no locks in the fast path of slub, as far as I know.  it has a
-per-cpu cache that is refilled once empty, quite similar to the fastpath
-of this cache.  I imagine the performance hit in slub comes from the
-barrier and atomic operations?
+I think it should be unconditional as perf top is always multi-threaded.
 
-kmem_cache works fine for most hot paths of the kernel.  I think this
-custom cache makes sense for the request cache, where objects are
-allocated at an incredibly high rate.  but is this level of update
-frequency a valid use case here?
+>
+> Signed-off-by: Hangliang Lai  <laihangliang1@huawei.com>
+> Reported-by: Wenyu Liu <liuwenyu7@huawei.com>
+> Reviewed-by: Yunfeng Ye <yeyunfeng@huawei.com>
+> ---
+>  tools/perf/builtin-top.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+> index 7c6413447..74239940b 100644
+> --- a/tools/perf/builtin-top.c
+> +++ b/tools/perf/builtin-top.c
+> @@ -1280,9 +1280,6 @@ static int __cmd_top(struct perf_top *top)
+>                                     top->evlist->core.threads, false,
+>                                     top->nr_threads_synthesize);
+>
+> -       if (top->nr_threads_synthesize > 1)
+> -               perf_set_singlethreaded();
 
-If it is indeed a significant performance improvement, I guess it is
-fine to have another user of the cache. But I'd be curious to know how
-much of the performance improvement you mentioned in the cover letter is
-due to this patch!
+Instead, we can simply do
 
--- 
-Gabriel Krisman Bertazi
+    perf_set_multithreaded();
+
+If top->nr_threads_synthesize > 1, no effect.  If not, it turns
+the switch on here.
+
+> -
+>         if (perf_hpp_list.socket) {
+>                 ret = perf_env__read_cpu_topology_map(&perf_env);
+>                 if (ret < 0) {
+> @@ -1359,6 +1356,10 @@ out_join:
+>  out_join_thread:
+>         pthread_cond_signal(&top->qe.cond);
+>         pthread_join(thread_process, NULL);
+> +
+> +       if (top->nr_threads_synthesize > 1)
+> +               perf_set_singlethreaded();
+
+And remove the condition here.
+
+Thanks,
+Namhyung
+
+
+> +
+>         return ret;
+>  }
+>
+> --
+> 2.33.0
+>
