@@ -2,103 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F28C6D3165
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB30A6D3166
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjDAOg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 10:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S229573AbjDAOkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 10:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjDAOg4 (ORCPT
+        with ESMTP id S229488AbjDAOkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 10:36:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A82CA0B
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 07:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680359764;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HV6/OHVclbGiO335z21XsKMkjGpi6QM03ig/0pOY3VQ=;
-        b=M8y23xULVWzqS82mAn8pJcazqhkDvGm2jl9oehA7d4OInWoTVZNLGL5gP9itYFN9FTqelp
-        g5/wOtWepDXIeD0wcTAyiK9Uko5G8msL1xWkN6TEB25B90b6cCgS/ZBq4bK+sruhEcrscL
-        be7l594zljG8ub2fsNjElqKQrx1klzY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-FZbD6ekWNoGRjMLDkTehCQ-1; Sat, 01 Apr 2023 10:36:01 -0400
-X-MC-Unique: FZbD6ekWNoGRjMLDkTehCQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8B57B85A5A3;
-        Sat,  1 Apr 2023 14:36:00 +0000 (UTC)
-Received: from ovpn-8-19.pek2.redhat.com (ovpn-8-19.pek2.redhat.com [10.72.8.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C78054020C82;
-        Sat,  1 Apr 2023 14:35:52 +0000 (UTC)
-Date:   Sat, 1 Apr 2023 22:35:47 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Bernd Schubert <bschubert@ddn.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>, ming.lei@redhat.com
-Subject: Re: [PATCH V6 03/17] io_uring: add generic IORING_OP_FUSED_CMD
-Message-ID: <ZChBQ3EJ/VWFBnF3@ovpn-8-19.pek2.redhat.com>
-References: <20230330113630.1388860-1-ming.lei@redhat.com>
- <20230330113630.1388860-4-ming.lei@redhat.com>
+        Sat, 1 Apr 2023 10:40:33 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE0718838
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 07:40:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680360032; x=1711896032;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0ExRvvSma7ZR29bKMxuZ7D9JTFvqeOvkUqJcGZl2PE0=;
+  b=GJnCL4mGP5Ze7qlktG4I6vQrhMUuCC4MFmhb5jB+BDfs9Yx08a1hKj8L
+   yOvL4ns0JCjIzUkGitQI1P//xrhtBXG+mWpLROH1CwnSBpSdt71rp50G9
+   VRP8L3Uzpg258Lc0E18GaQ09k+6VykqEN19+MyX8u9XkP+GeJ3HIohIlh
+   7UOIvQJ1VrLLpkWnGQDlY6e4776GBX6bb5PETSbE/CGzzbqarn5ZZtG2v
+   pygKf4MCVlNiKei8DMGhdI+lkVnCABZlw6KVGif6ITFfDFsoQ0UBrJM3d
+   YX9PrWqRwcxluEMPb5PkaiWksaacd7ybOFVoOxzr9qVPXhTaTVM3SD71y
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="330216942"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="330216942"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 07:40:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="931527366"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="931527366"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Apr 2023 07:40:30 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1picP8-000MrB-0e;
+        Sat, 01 Apr 2023 14:40:30 +0000
+Date:   Sat, 1 Apr 2023 22:39:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: ERROR: modpost: "__st_r13_to_r22" [lib/zstd/zstd_decompress.ko]
+ undefined!
+Message-ID: <202304012245.0mdA0bK8-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230330113630.1388860-4-ming.lei@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 07:36:16PM +0800, Ming Lei wrote:
-> Multiple requests submitted as one whole request logically, and the 1st one
-> is primary command(IORING_OP_FUSED_CMD), and the others are secondary
-> requests, which number can be retrieved from primary SQE.
-> 
-> Primary command is responsible for providing resources and submitting
-> secondary requests, which depends on primary command's resources, and
-> primary command won't be completed until all secondary requests are done.
-> 
-> The provided resource has same lifetime with primary command, and it
-> lifetime won't cross multiple OPs, and this way provides safe way for
-> secondary OPs to use the resource.
-> 
-> Add generic IORING_OP_FUSED_CMD for modeling this primary/secondary
-> relationship among requests.
+Hi Masahiro,
 
-BTW, this model also solves 1:N dependency problem of io_uring.
+First bad commit (maybe != root cause):
 
-Current io_uring can't handle this kind of dependency(1:N) efficiently,
-and simply convert it into one linked list:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7b50567bdcad8925ca1e075feb7171c12015afd1
+commit: 0aa24a79ee3b603f6e6cd470c364edc2d746f613 kbuild: do not try to parse *.cmd files for objects provided by compiler
+date:   10 months ago
+config: arc-randconfig-r024-20230401 (https://download.01.org/0day-ci/archive/20230401/202304012245.0mdA0bK8-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0aa24a79ee3b603f6e6cd470c364edc2d746f613
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0aa24a79ee3b603f6e6cd470c364edc2d746f613
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-- N requests(1~n) depends on one request(0), and there isn't dependency among
-these N requests
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304012245.0mdA0bK8-lkp@intel.com/
 
-- current io_uring converts the dependency to linked list of (N + 1) requests
-(0, 1, ...., n), in which all requests are just issued one by one from 0 to n,
-inefficiently
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-The primary/secondary model solves it by issuing request 0 first, then issues
-all other N requests concurrently.
+ERROR: modpost: "__ld_r13_to_r23_ret" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__st_r13_to_r22" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__st_r13_to_r17" [lib/zstd/zstd_decompress.ko] undefined!
+ERROR: modpost: "__ld_r13_to_r19_ret" [lib/zstd/zstd_decompress.ko] undefined!
+ERROR: modpost: "__ld_r13_to_r22_ret" [lib/zstd/zstd_decompress.ko] undefined!
+ERROR: modpost: "__st_r13_to_r24" [lib/zstd/zstd_decompress.ko] undefined!
+ERROR: modpost: "__ld_r13_to_r17_ret" [lib/zstd/zstd_decompress.ko] undefined!
+ERROR: modpost: "__st_r13_to_r19" [lib/zstd/zstd_decompress.ko] undefined!
+ERROR: modpost: "__st_r13_to_r23" [lib/zstd/zstd_decompress.ko] undefined!
+ERROR: modpost: "__ld_r13_to_r24_ret" [lib/zstd/zstd_decompress.ko] undefined!
+WARNING: modpost: suppressed 3 unresolved symbol warnings because there were too many)
 
-
-Thanks,
-Ming
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
