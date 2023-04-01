@@ -2,105 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9160E6D310D
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39246D3120
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjDANaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 09:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
+        id S230019AbjDANqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 09:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDANaL (ORCPT
+        with ESMTP id S229379AbjDANqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 09:30:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62D03AB5;
-        Sat,  1 Apr 2023 06:30:09 -0700 (PDT)
+        Sat, 1 Apr 2023 09:46:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5708D1C1C9;
+        Sat,  1 Apr 2023 06:46:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28E2C60909;
-        Sat,  1 Apr 2023 13:30:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C2FFC433D2;
-        Sat,  1 Apr 2023 13:30:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E56F260A6E;
+        Sat,  1 Apr 2023 13:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445ADC433D2;
+        Sat,  1 Apr 2023 13:46:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680355808;
-        bh=r3oFw2s2cuB7y9FHYeEVs9HnftQHY2aRB2DbWbl2xEc=;
+        s=k20201202; t=1680356773;
+        bh=2caHwm/Q0yptshRVPEBUR7yOaQ1LLmmc8uhEFSqrOLE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IPTrFPR4Zjc3mzHt1Bpq0/poqXX6FFL2z3BCXAI2/2t3kdI2KTjen44Ch0kIt5Ih5
-         2zN9+KQLucA4Sl7LuKPZFT272RDi6343FWJ/jlkP6zhlAEocb73Jco+kiDYI3mRVoo
-         FtYbshnSNLmXPMywFYx5FYVJPv2fcqEB8rmm8Sa/RgQOAdcNibuz1l5zfvt03tEX29
-         deKCOJw/6smCr60LbIeobauxqQpvLQCyZzs1YYo9OITjqvAEQ41M4Ty2PWjmTuBwyq
-         ROiDkvHt8099DK3dCeZavXJNzdDxU3cHlXSZYo0fQjTHaYyzryTtgIfQAyr5jwnGR4
-         34lXRV10N+4Vg==
-Date:   Sat, 1 Apr 2023 14:45:17 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2] iio: addac: stx104: Migrate to the regmap API
-Message-ID: <20230401144517.4ad446e1@jic23-huawei>
-In-Reply-To: <ZCC1bhdHymSBMQOX@fedora>
-References: <20230324030916.396569-1-william.gray@linaro.org>
-        <20230326164920.1e4575f9@jic23-huawei>
-        <ZCC1bhdHymSBMQOX@fedora>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        b=o+FiH4jkKQ9OgmV8Zq0Va+wolCyShP8eZDpzcHzs65DpqXHEbiHrTvPsAy/MRjtMu
+         A6dp1eu9mdL6yEmCaus46dkWnCMwDG8Xxc0D0LOqx6vJusIxEz3FUIXHhyhb+EZfyC
+         cCjO57yX6kfZfMlyG0ucjHWybVIbj5XC8UpDC2qLhlfnqqAC7gsQTzi3WKFUWE0WR3
+         UwL/tAU7GNP+8wBLv5h3fN4gEW+lpcP6TlkZPT+GrgYa+3U1shGZUeTRdxY9LCh36w
+         CH/7S2W87qU7LYQi/0j+77Q9QNWEeEhoN7a1pYvfvsqLO8UPWF4GExzWOHtdJjR5cQ
+         sz9h6esSIrqFQ==
+Date:   Sat, 1 Apr 2023 22:46:09 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 09/10] tracing/probes: Add fprobe events for tracing
+ function entry and exit.
+Message-Id: <20230401224609.bebb256be8e6da55f0358ea9@kernel.org>
+In-Reply-To: <20230329081454.05133571@rorschach.local.home>
+References: <167526695292.433354.8949652607331707144.stgit@mhiramat.roam.corp.google.com>
+        <167526703341.433354.12634235635015890994.stgit@mhiramat.roam.corp.google.com>
+        <20230329081454.05133571@rorschach.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 26 Mar 2023 17:13:18 -0400
-William Breathitt Gray <william.gray@linaro.org> wrote:
+On Wed, 29 Mar 2023 08:14:54 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On Sun, Mar 26, 2023 at 04:49:20PM +0100, Jonathan Cameron wrote:
-> > On Thu, 23 Mar 2023 23:09:16 -0400
-> > William Breathitt Gray <william.gray@linaro.org> wrote:
-> >   
-> > > The regmap API supports IO port accessors so we can take advantage of
-> > > regmap abstractions rather than handling access to the device registers
-> > > directly in the driver.
-> > > 
-> > > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>  
-> > 
-> > I would have preferred slightly if you had avoided reording the probe
-> > (previously gpio chip was registered before iio device and now it is after)
-> > but it make no real difference so I'm not that bothered.
-> > 
-> > A few other minor comments. Biggest one being that the defines should be
-> > prefixed.
-> > 
-> > Thanks,
-> > 
-> > Jonathan  
+> On Thu,  2 Feb 2023 00:57:13 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 > 
-> Hi Jonathan,
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Add fprobe events for tracing function entry and exit instead of kprobe
+> > events. With this change, we can continue to trace function entry/exit
+> > even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
+> > CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+> > it is not available if the architecture only supports
+> > CONFIG_DYNAMIC_FTRACE_WITH_ARGS. And that means kprobe events can not
+> > probe function entry/exit effectively on such architecture.
+> > But this can be solved if the dynamic events supports fprobe events.
+> > 
+> > The fprobe event is a new dynamic events which is only for the function
+> > (symbol) entry and exit. This event accepts non register fetch arguments
+> > so that user can trace the function arguments and return values.
+> > 
 > 
-> I'll be submitting a v3 soon addressing your comments as well as some
-> minor fixes to v2; I'll make the regmap_read_poll_timeout() change as a
-> follow-up patch as suggested.
+> Hi Masami,
 > 
-> Regarding the GPIO code reordering in the probe, I decided to move it
-> after the iio device registration so that all the IIO-related code is
-> grouped together and finished before we deal with GPIO-related stuff.
-> Given that all the original gpio chip code is removed anyway in this
-> patch, I figure this is a minor enough cleanup to perform here. If you
-> aren't too strongly opposed to this change I'll keep it in v3 as it
-> avoids the hassle of creating a separate patch for such a trivial
-> change.
-That's fine, just call it out in the patch description as a 
-"While making these changes, also ..." or similar.
+> After applying this patch I get a bunch of these:
+> 
+> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c:117:1: error: redefinition of ‘fetch_store_strlen_user’
+>   117 | fetch_store_strlen_user(unsigned long addr)
+>       | ^~~~~~~~~~~~~~~~~~~~~~~
+> In file included from /work/git/linux-trace.git/kernel/trace/trace_fprobe.c:16:
+> /work/git/linux-trace.git/kernel/trace/trace_probe_kernel.h:15:1: note: previous definition of ‘fetch_store_strlen_user’ with type ‘int(long unsigned int)’
+>    15 | fetch_store_strlen_user(unsigned long addr)
+>       | ^~~~~~~~~~~~~~~~~~~~~~~
+> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c: In function ‘fetch_store_strlen_user’:
+> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c:119:16: error: implicit declaration of function ‘kern_fetch_store_strlen_user’; did you mean ‘fetch_store_strlen_user’? [-Werror=implicit-function-declaration]
+>   119 |         return kern_fetch_store_strlen_user(addr);
+>       |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |                fetch_store_strlen_user
+> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c: At top level:
+> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c:124:1: error: redefinition of ‘fetch_store_strlen’
+>   124 | fetch_store_strlen(unsigned long addr)
+>       | ^~~~~~~~~~~~~~~~~~
+> /work/git/linux-trace.git/kernel/trace/trace_probe_kernel.h:32:1: note: previous definition of ‘fetch_store_strlen’ with type ‘int(long unsigned int)’
+>    32 | fetch_store_strlen(unsigned long addr)
+>       | ^~~~~~~~~~~~~~~~~~
+> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c: In function ‘fetch_store_strlen’:
+> /work/git/linux-trace.git/kernel/trace/trace_fprobe.c:126:16: error: implicit declaration of function ‘kern_fetch_store_strlen’; did you mean ‘fetch_store_strlen’? [-Werror=implicit-function-declaration]
+>   126 |         return kern_fetch_store_strlen(addr);
+>       |                ^~~~~~~~~~~~~~~~~~~~~~~
+>       |                fetch_store_strlen
+> 
+> 
+> Can you rebase it on the latest changes (on top of trace/for-next)?
 
-Jonathan
+OK, let me update it.
 
 > 
-> William Breathitt Gray
+> BTW, I've applied patches 1-8 and I'm currently running them through my
+> tests. So if you do rebase, just send patches 9 and 10. I'm hoping to
+> post a for-next series later today, that will include those other
+> patches.
 
+Thanks!
+
+> 
+> -- Steve
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
