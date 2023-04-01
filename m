@@ -2,370 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9706D334F
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 21:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F156D3352
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 21:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjDATCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 15:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40988 "EHLO
+        id S229985AbjDATFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 15:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDATB4 (ORCPT
+        with ESMTP id S229583AbjDATFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 15:01:56 -0400
-Received: from ste-pvt-msa1.bahnhof.se (ste-pvt-msa1.bahnhof.se [213.80.101.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938C0FF;
-        Sat,  1 Apr 2023 12:01:54 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id E5A763F59B;
-        Sat,  1 Apr 2023 21:01:52 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Score: -2.099
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
-Authentication-Results: ste-pvt-msa1.bahnhof.se (amavisd-new);
-        dkim=pass (2048-bit key) header.d=dalakolonin.se
-Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id As8fSJ2NU94Y; Sat,  1 Apr 2023 21:01:52 +0200 (CEST)
-Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id C4DB63F55F;
-        Sat,  1 Apr 2023 21:01:51 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.dalakolonin.se (Postfix) with ESMTP id 1FC9E93074;
-        Sat,  1 Apr 2023 19:01:51 +0000 (UTC)
-Received: from zimbra.dalakolonin.se ([127.0.0.1])
-        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id RuK9Eq3gxX-2; Sat,  1 Apr 2023 19:01:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.dalakolonin.se (Postfix) with ESMTP id 6519D93071;
-        Sat,  1 Apr 2023 19:01:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.dalakolonin.se 6519D93071
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dalakolonin.se;
-        s=D374B428-D0A7-11ED-A657-75977B426508; t=1680375706;
-        bh=sm8C11+8ErjSqrxa12aF+9WUbL/MLUtzIW1cAw8s+5E=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=WOhRIqrvMYuf/twhSPI+KOgVVZu2LdAn5bjJjD7OFXAGdARNPbywNCbdCuP6aJMoB
-         XvquWZOuzyxCp/0NQU6IP54ZPnVOxRHOyAMbQI21NqQ6deVs6xBKp4Gk3+Clppakpo
-         ZUHhh/x+BOJVciahl+nwNBL3r4xf3bGMlH+7GIqzCXSGi4UFaDzKm4BrHyabL2Ssr6
-         Ul9loMU5esa4rIYFIGtpLarHpmDrOnvfO/2XcoPwm6V5UswmxQ+gX3CpyxyseXU6ns
-         9+BiiV/dLDRWkE1DSZNbisDSepT1nvhEikcIIr51Z2psoEJGEEiZrsEtPYEtONxMKb
-         x7LEMPxNVRSOA==
-X-Virus-Scanned: amavisd-new at dalakolonin.se
-Received: from zimbra.dalakolonin.se ([127.0.0.1])
-        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id bVCiIYYtF0LA; Sat,  1 Apr 2023 19:01:46 +0000 (UTC)
-Received: from dalakolonin.se (unknown [172.17.0.1])
-        by zimbra.dalakolonin.se (Postfix) with ESMTPSA id 1BF629306C;
-        Sat,  1 Apr 2023 19:01:46 +0000 (UTC)
-Date:   Sat, 1 Apr 2023 21:01:44 +0200
-From:   Patrik =?iso-8859-1?Q?Dahlstr=F6m?= <risca@dalakolonin.se>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
-        pgoudagunta@nvidia.com, hns@goldelico.com, lars@metafoo.de
-Subject: Re: [PATCH 3/3] iio: adc: palmas_gpadc: remove
- palmas_adc_wakeup_property
-Message-ID: <20230401190144.GC2403322@dalakolonin.se>
-References: <20230319223908.108540-1-risca@dalakolonin.se>
- <20230319223908.108540-4-risca@dalakolonin.se>
- <20230326175928.0dc26a4f@jic23-huawei>
+        Sat, 1 Apr 2023 15:05:02 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE72EAF0C
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 12:04:59 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id v1so25528789wrv.1
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 12:04:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680375898;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m98PBJ4u06sVFb+2thOqdSIivC6c7g7mGdj5jNvYhaE=;
+        b=N8jVwiJWykSOq4wihv5KjwnWrisRqU8Bidp4gX+tsyBkNfqmGowG4mG4zKzRKh0tCG
+         nrKLl3ZQEd0apqsRqOTwk1+Otgv/8W7qX9HP4isfP+sU9OemXWsnRDBe/Cw0IBX/anpt
+         MF4ksEBnQdAcfND2LUlOKrCGFbET+Hf9a3haFa4wBCVoztg1C0/sYm0AoQxx2OGj/mJ2
+         dPgIfF61hJbe0OXjtja5gO2Epq37ocSB/K3X8+65NrHirnGrqcdsk3Zaun/FXeDegaMu
+         bmoNdhC+iWAtKp3f+ARzmgcOfTeCQF4tRPGo4zSwUte33xi+6hWeaKGsNDz9TZg5kYLK
+         ByIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680375898;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=m98PBJ4u06sVFb+2thOqdSIivC6c7g7mGdj5jNvYhaE=;
+        b=Oi6eAKnpjbkBh01unXvHkWULvhYVMEvcMuE5VHngRW0XZxSOWtTDI1OKlZDKMNwrpa
+         N+2YRGOzQO9uEgJm/lkvSICWjZrBrh4zyxnU/qx0U0dOhg9BnoCxyyruIm8N5EF2uu5T
+         1yHSV783E3FzU3Jyqyf1rf8VBlESa0NBCvapTaq1YDWT+AJO8M48S3NlcEXStRilQlx7
+         fv7CBTCSV7nOTaMjsxzA4OWCOpzsXZXe/Ob0YcoTF/vYuCLmx/i6kTzAfCdpbPHTREem
+         mhn/c/bjdqvtV/6EyYt09wqspUPfCDv/sI04dkYDGPwkhaW3zmDM9uJc52K+v+qIM4lp
+         kYtg==
+X-Gm-Message-State: AAQBX9cJjXZwHOhAk2l5FgD6KM+34JpgHbiMhnBCMGUQb1CppSGmG6lj
+        fxHBUys1haf7Iem4ZF/iLmwXrg==
+X-Google-Smtp-Source: AKy350bHmieCk/E+JXDNuyqlg93a0oSgsfoHhnTSq5oZQpaNCvPJ9GsaR9wRh/WemcSxev436nY8vQ==
+X-Received: by 2002:a5d:5601:0:b0:2d2:ac99:a72 with SMTP id l1-20020a5d5601000000b002d2ac990a72mr26085616wrv.46.1680375898029;
+        Sat, 01 Apr 2023 12:04:58 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:b36a:1186:309c:1f9a? ([2a05:6e02:1041:c10:b36a:1186:309c:1f9a])
+        by smtp.googlemail.com with ESMTPSA id r10-20020a056000014a00b002d2f0e23acbsm5534110wrx.12.2023.04.01.12.04.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Apr 2023 12:04:57 -0700 (PDT)
+Message-ID: <ab323c72-61f9-9ac6-48ce-366f62e82091@linaro.org>
+Date:   Sat, 1 Apr 2023 21:04:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20230326175928.0dc26a4f@jic23-huawei>
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yang Li <yang.lee@linux.alibaba.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal for v6.4-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 05:59:28PM +0100, Jonathan Cameron wrote:
-> On Sun, 19 Mar 2023 23:39:08 +0100
-> Patrik Dahlstr=F6m <risca@dalakolonin.se> wrote:
->=20
-> > This struct contain essentially the same information as
-> > palmas_adc_event and palmas_gpadc_thresholds combined, but with more
-> > ambiguity: the code decided whether to trigger on rising or falling e=
-dge
-> > based on the high threshold being non-zero.
-> >=20
-> > Since its use in platform data has now been removed, we can remove it
-> > entirely.
-> >=20
-> > Lastly, the use case for waking up the cpu from sleep mode when a
-> > threshold has been passed is no longer the primary use for events so =
-all
-> > code is changed to say "event" instead of "wakeup".
-> Good. I nearly pointed this out in the earlier patch.  The wakeup namin=
-g
-> was confusing. However, I'd prefer that was done in a separate patch to
-> any other changes.  It's hard to spot the meaningful stuff when there
-> is a lot of renaming going on.
+The following changes since commit 2b6db9efa50799fa75ce609f24b355f29504bd9a:
 
-Since I was doing this patch last, it made little sense to keep the wakeu=
-p
-naming when removing the wakeup property. However, as you pointed out in
-your review of the previous patches, it would be better to first remove t=
-he
-wakeup property and then add iio events support.
->=20
-> A few questions / comments inline.
->=20
-> Jonathan
->=20
-> >=20
-> > Signed-off-by: Patrik Dahlstr=F6m <risca@dalakolonin.se>
-> > ---
-> >  drivers/iio/adc/palmas_gpadc.c | 94 +++++++++++++-------------------=
---
-> >  include/linux/mfd/palmas.h     |  6 ---
-> >  2 files changed, 36 insertions(+), 64 deletions(-)
-> >=20
-> > diff --git a/drivers/iio/adc/palmas_gpadc.c b/drivers/iio/adc/palmas_=
-gpadc.c
-> > index 419d7db51345..042b68f29444 100644
-> > --- a/drivers/iio/adc/palmas_gpadc.c
-> > +++ b/drivers/iio/adc/palmas_gpadc.c
-> > @@ -122,10 +122,8 @@ struct palmas_gpadc {
-> >  	int				irq_auto_1;
-> >  	struct palmas_gpadc_info	*adc_info;
-> >  	struct completion		conv_completion;
-> > -	struct palmas_adc_wakeup_property wakeup1_data;
-> > -	struct palmas_adc_wakeup_property wakeup2_data;
-> > -	bool				wakeup1_enable;
-> > -	bool				wakeup2_enable;
-> > +	bool				event0_enable;
-> > +	bool				event1_enable;
-> >  	int				auto_conversion_period;
-> >  	struct mutex			lock;
-> >  	struct palmas_adc_event		event0;
-> > @@ -592,50 +590,26 @@ static int palmas_gpadc_read_event_config(struc=
-t iio_dev *indio_dev,
-> >  	return ret;
-> >  }
-> > =20
-> > -static void palmas_adc_event_to_wakeup(struct palmas_gpadc *adc,
-> > -				       struct palmas_adc_event *ev,
-> > -				       struct palmas_adc_wakeup_property *wakeup)
-> > -{
-> > -	wakeup->adc_channel_number =3D ev->channel;
-> > -	if (ev->direction =3D=3D IIO_EV_DIR_RISING) {
-> > -		wakeup->adc_low_threshold =3D 0;
-> > -		wakeup->adc_high_threshold =3D
-> > -			palmas_gpadc_get_high_threshold_raw(adc, &adc->event0);
-> > -	}
-> > -	else {
-> > -		wakeup->adc_low_threshold =3D
-> > -			palmas_gpadc_get_low_threshold_raw(adc, &adc->event0);
-> > -		wakeup->adc_high_threshold =3D 0;
-> > -	}
-> > -}
-> > -
-> > -static int palmas_adc_wakeup_configure(struct palmas_gpadc *adc);
-> > -static int palmas_adc_wakeup_reset(struct palmas_gpadc *adc);
-> > +static int palmas_adc_events_configure(struct palmas_gpadc *adc);
-> > +static int palmas_adc_events_reset(struct palmas_gpadc *adc);
-> > =20
-> >  static int palmas_gpadc_reconfigure_event_channels(struct palmas_gpa=
-dc *adc)
-> >  {
-> > -	bool was_enabled =3D adc->wakeup1_enable || adc->wakeup2_enable;
-> > +	bool was_enabled =3D adc->event0_enable || adc->event1_enable;
-> >  	bool enable;
-> > =20
-> > -	adc->wakeup1_enable =3D adc->event0.channel =3D=3D -1 ? false : tru=
-e;
-> > -	adc->wakeup2_enable =3D adc->event1.channel =3D=3D -1 ? false : tru=
-e;
-> > +	adc->event0_enable =3D adc->event0.channel =3D=3D -1 ? false : true=
-;
-> > +	adc->event1_enable =3D adc->event1.channel =3D=3D -1 ? false : true=
-;
-> > =20
-> > -	enable =3D adc->wakeup1_enable || adc->wakeup2_enable;
-> > +	enable =3D adc->event0_enable || adc->event1_enable;
-> >  	if (!was_enabled && enable)
-> >  		device_wakeup_enable(adc->dev);
-> >  	else if (was_enabled && !enable)
-> >  		device_wakeup_disable(adc->dev);
-> > =20
-> > -	if (!enable)
-> > -		return palmas_adc_wakeup_reset(adc);
-> > -
-> > -	// adjust levels
-> > -	if (adc->wakeup1_enable)
-> > -		palmas_adc_event_to_wakeup(adc, &adc->event0, &adc->wakeup1_data);
-> > -	if (adc->wakeup2_enable)
-> > -		palmas_adc_event_to_wakeup(adc, &adc->event1, &adc->wakeup2_data);
-> > -
-> > -	return palmas_adc_wakeup_configure(adc);
-> > +	return enable ?
-> > +		palmas_adc_events_configure(adc) :
-> > +		palmas_adc_events_reset(adc);
-> >  }
-> > =20
-> >  static int palmas_gpadc_enable_event_config(struct palmas_gpadc *adc=
-,
-> > @@ -864,12 +838,14 @@ static int palmas_gpadc_get_adc_dt_data(struct =
-platform_device *pdev,
-> >  	return 0;
-> >  }
-> > =20
-> > -static void palmas_disable_wakeup(void *data)
-> > +static void palmas_disable_events(void *data)
-> >  {
-> >  	struct palmas_gpadc *adc =3D data;
-> > =20
-> > -	if (adc->wakeup1_enable || adc->wakeup2_enable)
-> > +	if (adc->event0_enable || adc->event1_enable) {
-> > +		palmas_adc_events_reset(adc);
->=20
-> I can't immediately follow why this reset is needed when it wasn't befo=
-re.
-> Perhaps that will be clearer once the renames aren't in the same patch.
+   Merge branch 'thermal-core' into thermal (2023-03-08 14:03:56 +0100)
 
-The original code would only enable adc events when entering any kind of
-sleep mode and then reset when resuming, hence the name wakeupX_enable. T=
-he
-new code allow adc events to be enabled at any time. palmas_disable_event=
-s
-is run when unloading the module and as such it makes sense to also reset
-the adc.
+are available in the Git repository at:
 
->=20
-> >  		device_wakeup_disable(adc->dev);
-> > +	}
-> >  }
-> > =20
-> >  static int palmas_gpadc_probe(struct platform_device *pdev)
-> > @@ -993,7 +969,7 @@ static int palmas_gpadc_probe(struct platform_dev=
-ice *pdev)
-> > =20
-> >  	device_set_wakeup_capable(&pdev->dev, 1);
-> >  	ret =3D devm_add_action_or_reset(&pdev->dev,
-> > -				       palmas_disable_wakeup,
-> > +				       palmas_disable_events,
-> >  				       adc);
-> >  	if (ret)
-> >  		return ret;
-> > @@ -1001,7 +977,7 @@ static int palmas_gpadc_probe(struct platform_de=
-vice *pdev)
-> >  	return 0;
-> >  }
-> > =20
-> > -static int palmas_adc_wakeup_configure(struct palmas_gpadc *adc)
-> > +static int palmas_adc_events_configure(struct palmas_gpadc *adc)
-> >  {
-> >  	int adc_period, conv;
-> >  	int i;
-> > @@ -1027,16 +1003,18 @@ static int palmas_adc_wakeup_configure(struct=
- palmas_gpadc *adc)
-> >  	}
-> > =20
-> >  	conv =3D 0;
-> > -	if (adc->wakeup1_enable) {
-> > +	if (adc->event0_enable) {
-> > +		struct palmas_adc_event *ev =3D &adc->event0;
-> >  		int polarity;
-> > =20
-> > -		ch0 =3D adc->wakeup1_data.adc_channel_number;
-> > +		ch0 =3D ev->channel;
-> >  		conv |=3D PALMAS_GPADC_AUTO_CTRL_AUTO_CONV0_EN;
-> > -		if (adc->wakeup1_data.adc_high_threshold > 0) {
-> > -			thres =3D adc->wakeup1_data.adc_high_threshold;
-> > +
-> > +		if (ev->direction =3D=3D IIO_EV_DIR_RISING) {
-> > +			thres =3D palmas_gpadc_get_high_threshold_raw(adc, ev);
-> >  			polarity =3D 0;
-> >  		} else {
-> > -			thres =3D adc->wakeup1_data.adc_low_threshold;
-> > +			thres =3D palmas_gpadc_get_low_threshold_raw(adc, ev);
-> >  			polarity =3D PALMAS_GPADC_THRES_CONV0_MSB_THRES_CONV0_POL;
-> >  		}
-> > =20
-> > @@ -1058,16 +1036,18 @@ static int palmas_adc_wakeup_configure(struct=
- palmas_gpadc *adc)
-> >  		}
-> >  	}
-> > =20
-> > -	if (adc->wakeup2_enable) {
-> > +	if (adc->event1_enable) {
-> > +		struct palmas_adc_event *ev =3D &adc->event1;
-> >  		int polarity;
-> > =20
-> > -		ch1 =3D adc->wakeup2_data.adc_channel_number;
-> > +		ch1 =3D ev->channel;
-> >  		conv |=3D PALMAS_GPADC_AUTO_CTRL_AUTO_CONV1_EN;
-> > -		if (adc->wakeup2_data.adc_high_threshold > 0) {
-> > -			thres =3D adc->wakeup2_data.adc_high_threshold;
-> > +
-> > +		if (ev->direction =3D=3D IIO_EV_DIR_RISING) {
-> > +			thres =3D palmas_gpadc_get_high_threshold_raw(adc, ev);
-> >  			polarity =3D 0;
-> >  		} else {
-> > -			thres =3D adc->wakeup2_data.adc_low_threshold;
-> > +			thres =3D palmas_gpadc_get_low_threshold_raw(adc, ev);
-> >  			polarity =3D PALMAS_GPADC_THRES_CONV1_MSB_THRES_CONV1_POL;
-> >  		}
-> > =20
-> > @@ -1106,7 +1086,7 @@ static int palmas_adc_wakeup_configure(struct p=
-almas_gpadc *adc)
-> >  	return ret;
-> >  }
-> > =20
-> > -static int palmas_adc_wakeup_reset(struct palmas_gpadc *adc)
-> > +static int palmas_adc_events_reset(struct palmas_gpadc *adc)
-> >  {
-> >  	int ret;
-> > =20
-> > @@ -1128,15 +1108,14 @@ static int palmas_gpadc_suspend(struct device=
- *dev)
-> >  {
-> >  	struct iio_dev *indio_dev =3D dev_get_drvdata(dev);
-> >  	struct palmas_gpadc *adc =3D iio_priv(indio_dev);
-> > -	int ret;
->=20
-> ?  Seems unrelated - perhaps should be in earlier patch.
+ 
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v6.4-rc1-1
 
-You're right. I'll look into it.
+for you to fetch changes up to 0c492be4002b7411a1587b429e68e0cf3f562488:
 
->=20
-> > =20
-> >  	if (!device_may_wakeup(dev))
-> >  		return 0;
-> > =20
-> > -	if (adc->wakeup1_enable)
-> > +	if (adc->event0_enable)
-> >  		enable_irq_wake(adc->irq_auto_0);
-> > =20
-> > -	if (adc->wakeup2_enable)
-> > +	if (adc->event1_enable)
-> >  		enable_irq_wake(adc->irq_auto_1);
-> > =20
-> >  	return 0;
-> > @@ -1146,15 +1125,14 @@ static int palmas_gpadc_resume(struct device =
-*dev)
-> >  {
-> >  	struct iio_dev *indio_dev =3D dev_get_drvdata(dev);
-> >  	struct palmas_gpadc *adc =3D iio_priv(indio_dev);
-> > -	int ret;
->=20
-> ?
->=20
-> > =20
-> >  	if (!device_may_wakeup(dev))
-> >  		return 0;
-> > =20
-> > -	if (adc->wakeup1_enable)
-> > +	if (adc->event0_enable)
-> >  		disable_irq_wake(adc->irq_auto_0);
-> > =20
-> > -	if (adc->wakeup2_enable)
-> > +	if (adc->event1_enable)
-> >  		disable_irq_wake(adc->irq_auto_1);
-> > =20
-> >  	return 0;
->=20
->=20
+   thermal/drivers/ti: Use fixed update interval (2023-04-01 20:51:45 +0200)
+
+----------------------------------------------------------------
+- Add more thermal zone device encapsulation: prevent setting
+   structure field directly, access the sensor device instead the
+   thermal zone's device for trace, relocate the traces in
+   drivers/thermal (Daniel Lezcano)
+
+- Use the generic trip point for the i.MX and remove the get_trip_temp
+   ops (Daniel Lezcano)
+
+- Use the devm_platform_ioremap_resource() in the Hisilicon driver
+   (Yang Li)
+
+- Remove R-Car H3 ES1.* handling as public has only access to the ES2
+   version and the upstream support for the ES1 has been shutdown 
+(Wolfram Sang)
+
+- Add a delay after initializing the bank in order to let the time to
+   the hardware to initialze itself before reading the temperature
+   (Amjad Ouled-Ameur)
+
+- Add MT8365 support (Amjad Ouled-Ameur)
+
+----------------------------------------------------------------
+Amjad Ouled-Ameur (1):
+       thermal/drivers/mediatek: Add delay after thermal banks 
+initialization
+
+Daniel Lezcano (6):
+       thermal/drivers/imx: Remove get_trip_temp ops
+       thermal/drivers/imx: Use the thermal framework for the trip point
+       thermal/core: Relocate the traces definition in thermal directory
+       thermal/drivers/db8500: Use driver dev instead of tz->device
+       thermal/drivers/stm: Don't set no_hwmon to false
+       thermal/drivers/ti: Use fixed update interval
+
+Fabien Parent (2):
+       dt-bindings: thermal: mediatek: Add binding documentation for 
+MT8365 SoC
+       thermal/drivers/mediatek: Add support for MT8365 SoC
+
+Markus Schneider-Pargmann (1):
+       thermal/drivers/mediatek: Control buffer enablement tweaks
+
+Wolfram Sang (1):
+       thermal/drivers/rcar_gen3_thermal: Remove R-Car H3 ES1.* handling
+
+Yang Li (1):
+       thermal/drivers/hisi: Use devm_platform_ioremap_resource()
+
+  .../bindings/thermal/mediatek-thermal.txt          |   1 +
+  drivers/thermal/Makefile                           |   3 +-
+  drivers/thermal/cpufreq_cooling.c                  |   2 +-
+  drivers/thermal/db8500_thermal.c                   |   7 +-
+  drivers/thermal/devfreq_cooling.c                  |   2 +-
+  drivers/thermal/gov_fair_share.c                   |   2 +-
+  drivers/thermal/gov_power_allocator.c              |   2 +-
+  drivers/thermal/gov_step_wise.c                    |   2 +-
+  drivers/thermal/hisi_thermal.c                     |   4 +-
+  drivers/thermal/imx_thermal.c                      |  19 ++--
+  drivers/thermal/mediatek/auxadc_thermal.c          | 107 
++++++++++++++++++----
+  drivers/thermal/rcar_gen3_thermal.c                |  52 +---------
+  drivers/thermal/st/stm_thermal.c                   |   1 -
+  drivers/thermal/thermal_core.c                     |   2 +-
+  drivers/thermal/thermal_helpers.c                  |   3 +-
+  .../thermal.h => drivers/thermal/thermal_trace.h   |   6 ++
+  .../thermal/thermal_trace_ipa.h                    |   6 ++
+  drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   8 +-
+  18 files changed, 131 insertions(+), 98 deletions(-)
+  rename include/trace/events/thermal.h => 
+drivers/thermal/thermal_trace.h (97%)
+  rename include/trace/events/thermal_power_allocator.h => 
+drivers/thermal/thermal_trace_ipa.h (96%)
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
