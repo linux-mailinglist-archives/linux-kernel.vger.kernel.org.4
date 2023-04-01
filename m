@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F375D6D32ED
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 19:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407636D32F6
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 19:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjDARmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 13:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
+        id S229983AbjDARsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 13:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjDARmG (ORCPT
+        with ESMTP id S229626AbjDARsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 13:42:06 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975DB1164C
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 10:42:02 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id n10-20020a05600c4f8a00b003ee93d2c914so16980556wmq.2
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 10:42:02 -0700 (PDT)
+        Sat, 1 Apr 2023 13:48:10 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E474CDE2
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 10:48:09 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id ew6so101904841edb.7
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 10:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680370921;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=merQPvph7q/x0aOQVRyhO3lhqdf/YVeXNljQsqoNaGE=;
-        b=iZ/0wIrvRaQE+pW0fOMWY8n4BHZXr3w94OZk29xHka93TM8zs2r9QYKR9PdypbN5qZ
-         CsqLeQp9OsjGuyLkOQQhRyECOaU4x6gWu1eYfccBv0YapvVl2JaYL468EC9DieToFnCx
-         GAdL86atXpyFRJmJ42i9oiYjjqCmsKmZAssrE2OjU0T6O3yuo8bgAgyNtT1/6Fp3GnSI
-         uS1oshFIvtTl9C+sXrPz4+ioqFMHGZKr3Ogp8ki7KU+/ZChCLqwDzpKdbcS77nN8MMQk
-         D7gXccjvDpdfV7F2QS1jh+NDqdFG7Dz1QuV8Dnu+MCiCdLcnyIcts17f9bekmb4zrmzH
-         DURQ==
+        d=gmail.com; s=20210112; t=1680371288;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uUk473gkjGgeA+vrTjspm7ZOU1tv85Lj1DyviVq1tIM=;
+        b=V15yo1agiL/f/jCBH1vAnC4upO7VVXPn1t4xtCG0U3fuURPgscayNelI9XTdr17e+U
+         5X7TdYnFqA0U/9T2md+S+SNi6p/jdy3kpe+AX28cxaoCYtbkQ+XJYcbja8qDHwZXFz/o
+         /O7/7wW6zZbsrjTm9poE9ME/JpJuHvsCnDq5qEYxaVo+ane08jlS9RhZtBl4WN0kJGXu
+         l+LRyz1gZ3sWpwwQyfbsu0xdamENwsqA9LqtzBGf2VI0Mff8LuuDaM3igZ4v24GodUSM
+         unJAd6i/9kdld9DWnWp9dSaq8VQWZeXYf5PSsc0ls834hMb5vylKQYSVVI3dSfxZiPFB
+         KdKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680370921;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=merQPvph7q/x0aOQVRyhO3lhqdf/YVeXNljQsqoNaGE=;
-        b=SOue235qe68Sx/xGCxm+xJUNlZnsb03aiJ3TUQyWzdbiKVAbNOuCcWfUDXh+EPV9rl
-         zRXsUdQ/ZSNZwLomx44oGgrsggnpbVO40IyuewzhA5rfab4D+o5qaYKYPO/i+jL+05hH
-         16X9hnt2cDyiRl1NNdLgGdb1JHdNCOpV2ZiagrcGde/ZlL6dwAtLL4dhPfrLMv5j6oyS
-         VmYOdvALOaMUxL8xVBxkgMF27CS0K24UPugl6EGmv+TuA4MuMPY5n7LDvvuLo2Z0RhOe
-         qABNrE0/qBtq25oWREqu5ssf6itDf63JzCWzCePA3VQl7XbQQg4WZ2fZwOf2CABj5cYp
-         Ok6A==
-X-Gm-Message-State: AO0yUKXdnaDsAjM/7OInAbEutymE6IP6GzKZaIpS6lTyto1JzFToxl8y
-        bjVbgyfjIVbeOvsIFIKUyLQ=
-X-Google-Smtp-Source: AK7set9gbqxU+g3zXQ8niV5jxCprtZqMtFtF+kWWCEH+NTnuB7UVU8Zomtsfk89ArKgHnEiXFy6Wtg==
-X-Received: by 2002:a05:600c:20f:b0:3eb:5ab3:b6d0 with SMTP id 15-20020a05600c020f00b003eb5ab3b6d0mr22258209wmi.6.1680370920878;
-        Sat, 01 Apr 2023 10:42:00 -0700 (PDT)
-Received: from khadija-virtual-machine ([39.41.14.14])
-        by smtp.gmail.com with ESMTPSA id f11-20020a7bc8cb000000b003edff838723sm6703814wml.3.2023.04.01.10.41.59
+        d=1e100.net; s=20210112; t=1680371288;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uUk473gkjGgeA+vrTjspm7ZOU1tv85Lj1DyviVq1tIM=;
+        b=OMCRMsSQJr7f55nW2mW5jJhHqLJWHFKw34DBA2BOeZuaxkdOjgb3AbjvgBeu33EhhE
+         CeyKcA/+RyF3cklEBkhzy1/OPfDee9sNXmhGEDmtZrvVIlpDXukVtnez77+HOKrmlFAo
+         3PtMoJQXrYYlWisa2YC07q+BLjxtrNLqtTFJPslBQsSxJtEM0ippdz8hvnkH1kmLkX5K
+         pe6wv07zzwOZouFt6Zs36kLLM2WMZrbVPsmS1XrCCKfbCgSdtmzNPsE4u7BVs3kSfA5x
+         qp51rMAkHudlDW6CwqhI2U8u7oVFYPGXe+p3jxDzw+GG+aeXks/QhiON1BfAspg+DCNP
+         z3cg==
+X-Gm-Message-State: AAQBX9eOOmK1hm+CHkC2nTI7aTlj3fzBuFpqIpiaNRXOiTxLTJzm2yu7
+        femFqVZrmMW5xP4mAmkh+LLSo1yzvg==
+X-Google-Smtp-Source: AKy350blbxvhNnaPoMGCuFxzwUe22wFmfxCtujnaSfY2ap36H3Lf0LjChdJ5DCFmIbc20B7OSjLeRw==
+X-Received: by 2002:a17:906:2759:b0:931:ad32:79ed with SMTP id a25-20020a170906275900b00931ad3279edmr28497694ejd.12.1680371287742;
+        Sat, 01 Apr 2023 10:48:07 -0700 (PDT)
+Received: from p183 ([46.53.251.40])
+        by smtp.gmail.com with ESMTPSA id gx20-20020a1709068a5400b00931faf03db0sm2316217ejc.27.2023.04.01.10.48.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Apr 2023 10:42:00 -0700 (PDT)
-Date:   Sat, 1 Apr 2023 22:41:58 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     outreachy@lists.linux.dev, hvaibhav.linux@gmail.com,
-        johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Alison Schofield <alison.schofield@intel.com>
-Subject: Re: [PATCH 2/2] staging: greybus: refactor arche_platform_wd_irq()
-Message-ID: <ZChs5jB7DMCUnVzr@khadija-virtual-machine>
-References: <cover.1680185025.git.kamrankhadijadj@gmail.com>
- <96d04a4ff3d4a46293355f5afae3a8ece65f2c5b.1680185025.git.kamrankhadijadj@gmail.com>
- <6ce8aa34-e600-4d6a-adad-ead8255342e5@kili.mountain>
+        Sat, 01 Apr 2023 10:48:07 -0700 (PDT)
+Date:   Sat, 1 Apr 2023 20:48:05 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] string: implement streq()
+Message-ID: <4b595ab9-238c-43a5-aba0-be5d6afc0f87@p183>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6ce8aa34-e600-4d6a-adad-ead8255342e5@kili.mountain>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -76,152 +67,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 06:23:19PM +0300, Dan Carpenter wrote:
-> On Thu, Mar 30, 2023 at 07:11:25PM +0500, Khadija Kamran wrote:
-> > Linux kernel coding-style suggests to fix your program if it needs more
-> > than 3 levels of indentation. Due to indentation, line length also
-> > exceeds 100 columns, resulting in issues reported by checkpatch.
-> > 
-> > Refactor the arche_platform_wd_irq() function and reduce the indentation
-> > with the help of goto statement.
-> > 
-> > Suggested-by: Alison Schofield <alison.schofield@intel.com>
-> > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> > ---
-> >  drivers/staging/greybus/arche-platform.c | 79 ++++++++++++------------
-> >  1 file changed, 41 insertions(+), 38 deletions(-)
-> > 
-> > diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
-> > index a64c1af091b0..dde30c8da1a1 100644
-> > --- a/drivers/staging/greybus/arche-platform.c
-> > +++ b/drivers/staging/greybus/arche-platform.c
-> > @@ -158,49 +158,52 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
-> >  
-> >  	spin_lock_irqsave(&arche_pdata->wake_lock, flags);
-> >  
-> > -	if (gpiod_get_value(arche_pdata->wake_detect)) {
-> > -		/* wake/detect rising */
-> > +	if (!gpiod_get_value(arche_pdata->wake_detect))
-> > +		goto falling;
-> >  
-> > +	/* wake/detect rising */
-> > +
-> > +	/*
-> > +	 * If wake/detect line goes high after low, within less than
-> > +	 * 30msec, then standby boot sequence is initiated, which is not
-> > +	 * supported/implemented as of now. So ignore it.
-> > +	 */
-> > +	if (arche_pdata->wake_detect_state != WD_STATE_BOOT_INIT)
-> > +		goto out;
-> 
-> This checks that we are in WD_STATE_BOOT_INIT state.
-> 
-> > +
-> > +	if (time_before(jiffies,
-> > +			arche_pdata->wake_detect_start +
-> > +			msecs_to_jiffies(WD_COLDBOOT_PULSE_WIDTH_MS))) {
-> > +		arche_platform_set_wake_detect_state(arche_pdata,
-> > +						     WD_STATE_IDLE);
-> > +		got out;
-> > +	}
-> > +
-> > +	/* Check we are not in middle of irq thread already */
-> > +	if (arche_pdata->wake_detect_state !=
-> > +			WD_STATE_COLDBOOT_START) {
-> 
-> This checks that we are not in WD_STATE_COLDBOOT_START state.  How are
-> we going to be in COLDBOOT if we are in INIT?  Is this changing in the
-> background?  Can this check be removed?  This might be took tricky to
-> answer but it's important that we understand this before we continue.
-> 
-> 
-> > +		arche_platform_set_wake_detect_state(arche_pdata,
-> > +						     WD_STATE_COLDBOOT_TRIG);
-> > +		rc = IRQ_WAKE_THREAD;
-> > +		goto out;
-> > +	}
-> 
-> Let's assume the above check cannot be removed.
-> 
-> In the original code if gpiod_get_value(arche_pdata->wake_detect)
-> returned true and arche_pdata->wake_detect_state == WD_STATE_IDLE then
-> it just returned without doing anything, but now we fall through to the
-> falling: label below.
+Most of the time strcmp() is being used, strings are checked for equality.
+Add wrapper to relay such intent (it is shorter to type, too).
 
-Hey Dan,
+Use
+	if (streq(s, "s")) {
+	}
+or
+	if (!streq(s, "s")) {
+	}
 
-Just to clear my undrstanding in the new code, if
-gpiod_get_value(arche_pdata->wake_detect) returned true, we go to the
-rising section. In the rising section if arche_pdata->wake_detect_state
-== WD_STATE_IDLE then the condition,
-if (arche_pdata->wake_detect_state != WD_STATE_BOOT_INIT) becomes true
-so we goto out label. I do not understand how we go to falling label.
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+---
 
-Regards,
-Khadija
+ drivers/clk/socfpga/clk-gate-a10.c |    2 --
+ drivers/clk/socfpga/clk.h          |    1 -
+ include/linux/string.h             |    6 ++++++
+ scripts/dtc/dtc.h                  |    6 +++++-
+ 4 files changed, 11 insertions(+), 4 deletions(-)
 
-> So this patch seems like it introduces a bug, but actually it might just
-> have a dead code problem.
-> 
-> regards,
-> dan carpenter
-> 
-> > +
-> > +falling:
-> > +	/* wake/detect falling */
-> > +	if (arche_pdata->wake_detect_state == WD_STATE_IDLE) {
-> > +		arche_pdata->wake_detect_start = jiffies;
-> >  		/*
-> > -		 * If wake/detect line goes high after low, within less than
-> > -		 * 30msec, then standby boot sequence is initiated, which is not
-> > -		 * supported/implemented as of now. So ignore it.
-> > +		 * In the beginning, when wake/detect goes low
-> > +		 * (first time), we assume it is meant for coldboot
-> > +		 * and set the flag. If wake/detect line stays low
-> > +		 * beyond 30msec, then it is coldboot else fallback
-> > +		 * to standby boot.
-> >  		 */
-> > -		if (arche_pdata->wake_detect_state == WD_STATE_BOOT_INIT) {
-> > -			if (time_before(jiffies,
-> > -					arche_pdata->wake_detect_start +
-> > -					msecs_to_jiffies(WD_COLDBOOT_PULSE_WIDTH_MS))) {
-> > -				arche_platform_set_wake_detect_state(arche_pdata,
-> > -								     WD_STATE_IDLE);
-> > -			} else {
-> > -				/*
-> > -				 * Check we are not in middle of irq thread
-> > -				 * already
-> > -				 */
-> > -				if (arche_pdata->wake_detect_state !=
-> > -						WD_STATE_COLDBOOT_START) {
-> > -					arche_platform_set_wake_detect_state(arche_pdata,
-> > -									     WD_STATE_COLDBOOT_TRIG);
-> > -					rc = IRQ_WAKE_THREAD;
-> > -				}
-> > -			}
-> > -		}
-> > -	} else {
-> > -		/* wake/detect falling */
-> > -		if (arche_pdata->wake_detect_state == WD_STATE_IDLE) {
-> > -			arche_pdata->wake_detect_start = jiffies;
-> > -			/*
-> > -			 * In the beginning, when wake/detect goes low
-> > -			 * (first time), we assume it is meant for coldboot
-> > -			 * and set the flag. If wake/detect line stays low
-> > -			 * beyond 30msec, then it is coldboot else fallback
-> > -			 * to standby boot.
-> > -			 */
-> > -			arche_platform_set_wake_detect_state(arche_pdata,
-> > -							     WD_STATE_BOOT_INIT);
-> > -		}
-> > +		arche_platform_set_wake_detect_state(arche_pdata,
-> > +						     WD_STATE_BOOT_INIT);
-> >  	}
-> >  
-> > +out:
-> >  	spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
-> >  
-> >  	return rc;
-> > -- 
-> > 2.34.1
-> > 
+--- a/drivers/clk/socfpga/clk-gate-a10.c
++++ b/drivers/clk/socfpga/clk-gate-a10.c
+@@ -11,8 +11,6 @@
+ 
+ #include "clk.h"
+ 
+-#define streq(a, b) (strcmp((a), (b)) == 0)
+-
+ #define to_socfpga_gate_clk(p) container_of(p, struct socfpga_gate_clk, hw.hw)
+ 
+ /* SDMMC Group for System Manager defines */
+--- a/drivers/clk/socfpga/clk.h
++++ b/drivers/clk/socfpga/clk.h
+@@ -19,7 +19,6 @@
+ 
+ #define SOCFPGA_MAX_PARENTS		5
+ 
+-#define streq(a, b) (strcmp((a), (b)) == 0)
+ #define SYSMGR_SDMMC_CTRL_SET(smplsel, drvsel) \
+ 	((((smplsel) & 0x7) << 3) | (((drvsel) & 0x7) << 0))
+ 
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -47,6 +47,12 @@ extern size_t strlcat(char *, const char *, __kernel_size_t);
+ #ifndef __HAVE_ARCH_STRCMP
+ extern int strcmp(const char *,const char *);
+ #endif
++
++static inline bool streq(const char *a, const char *b)
++{
++	return strcmp(a, b) == 0;
++}
++
+ #ifndef __HAVE_ARCH_STRNCMP
+ extern int strncmp(const char *,const char *,__kernel_size_t);
+ #endif
+--- a/scripts/dtc/dtc.h
++++ b/scripts/dtc/dtc.h
+@@ -88,7 +88,11 @@ static inline uint64_t dtb_ld64(const void *p)
+ 		| bp[7];
+ }
+ 
+-#define streq(a, b)	(strcmp((a), (b)) == 0)
++static inline bool streq(const char *a, const char *b)
++{
++	return strcmp(a, b) == 0;
++}
++
+ #define strstarts(s, prefix)	(strncmp((s), (prefix), strlen(prefix)) == 0)
+ #define strprefixeq(a, n, b)	(strlen(b) == (n) && (memcmp(a, b, n) == 0))
+ static inline bool strends(const char *str, const char *suffix)
