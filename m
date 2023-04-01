@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18046D2DA6
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 04:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3ECD6D2DB6
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 04:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbjDACPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 22:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
+        id S233560AbjDAC3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 22:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbjDACPi (ORCPT
+        with ESMTP id S233272AbjDAC3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 22:15:38 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7C2173F;
-        Fri, 31 Mar 2023 19:15:37 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id l7-20020a4abe07000000b0053e1205c84bso3442248oop.9;
-        Fri, 31 Mar 2023 19:15:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680315336;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:sender:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=q/8ymO10OrcPxy/DHt31x8jIOet/Tm3AwxwojOGkYto=;
-        b=ph6ADDDnoaOjNUjFFidGxTStn8uMQf5BO3PYpXCo7BVeL0Uq+zdM81h6UqNEcQfnl4
-         9i8jzFXX05E6wj3bGVeUcg2SyFNXQSsfBrLEHwetQjTv2EJI4XZDRTKvFGqDVMRrJgTQ
-         +yLHpXMq6Wnwid5IDYaC1JoGSleN6d2MdCUA2giRUGRyVJ8hGV5xFivE2vC6JiClTZKf
-         2A4AozBA69I/SxzEPIaH3yTfq3MhpK4rDmx4FqK9aYRT5r881Cqezyb92IQBN9nRYxek
-         E9lBtofYFdrgWTdoe9hYM+0zF38ePlQX153l7+jBCrrsd2peJ7DWnoaOP1MYQKC7dcg/
-         TGXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680315336;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:sender:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q/8ymO10OrcPxy/DHt31x8jIOet/Tm3AwxwojOGkYto=;
-        b=hO9/mCl8AJRI1TmVYwaEBnwbMgYRRDV9tS8bA8MtZjRmB8WGO+AZzAp+fXEfh9KI+F
-         7IjdaF4YBA+tx7cvWIjGRGTGgPYWO8kxTfVPkaZcyFJwVF6wcgYlJpbDuCMj8eMnjPOw
-         CoYIpaQpJYbaC3SE1gQYsPpA60bT0Bnd0/O2YNcG6NfWz3A8Laz8WHbxovmrYQDDQvEm
-         iD+f/3nV35CqZVzx/io2x2Ylz1djKuDG+oYELSKrLHfTvFdJpHADZf0JFAtPfli5sKvw
-         Z0SrmqxB28IvqiwMV/OKOLj7zybp8votKX3a/LyjKpnpcX43p85t+hQln22nSM6xb35J
-         jsFw==
-X-Gm-Message-State: AO0yUKVuMMYX+A4b+kDVl+DoSinIdUKvPJIpIT4qiteqSw6d5gisY08M
-        ILqVqhMkTIGBVAdXH+fbDfw=
-X-Google-Smtp-Source: AK7set/3X0UzE4r/LU1M6wlPxrr/tc4E5y7l+AWtSHmUMu9/UvwZ5HyWLlFHItScb3EgBaGftdUmoA==
-X-Received: by 2002:a4a:498a:0:b0:525:129c:6165 with SMTP id z132-20020a4a498a000000b00525129c6165mr14533749ooa.6.1680315336770;
-        Fri, 31 Mar 2023 19:15:36 -0700 (PDT)
-Received: from [192.168.0.116] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id v184-20020acadec1000000b003871471f894sm1612227oig.27.2023.03.31.19.15.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 19:15:36 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <3e3d0ea7-4c85-f432-6e34-1d90b991c53c@lwfinger.net>
-Date:   Fri, 31 Mar 2023 21:15:35 -0500
+        Fri, 31 Mar 2023 22:29:06 -0400
+Received: from out-57.mta1.migadu.com (out-57.mta1.migadu.com [95.215.58.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD1FD53A
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 19:29:05 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 22:28:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1680316142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nk3BO9ozKnNgHpSZ+K/XAgwZZGpDKyN1TJC8W4PiYMA=;
+        b=bFZFMdRc23zZazbLH0H7CmHlemGuo1HoqhVyo8DLD3kUfbRL8eKREH+Hw+KMKfNkp0F6p6
+        2GSK/citNW0eQCpkjgUoN/rOlKW9MXgDhSNKZJE2zXCbryBqzXJHz7svtlopAeeToW9FA/
+        yiE0cJuT0ZiG3oidJyx9UG7LHjm12UU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Phillip Lougher <phillip@squashfs.org.uk>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        willy@infradead.org, axboe@kernel.dk,
+        Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH 1/2] block: Rework bio_for_each_segment_all()
+Message-ID: <ZCeW6j44aHGI/v5Q@moria.home.lan>
+References: <20230327174402.1655365-1-kent.overstreet@linux.dev>
+ <20230327174402.1655365-2-kent.overstreet@linux.dev>
+ <52a5bd5c-d3a1-71d7-e1e5-7965501818bd@squashfs.org.uk>
+ <ZCXNDQ6Eslhj+9g5@moria.home.lan>
+ <4753802a-685f-ab56-fed2-22d6eb4cfccd@squashfs.org.uk>
+ <5ab59623-4317-5aff-5173-d7285b5b224c@squashfs.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Linux Bluetooth mailing list <linux-bluetooth@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-Subject: Memory leaks in Bluetooth and btusb
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5ab59623-4317-5aff-5173-d7285b5b224c@squashfs.org.uk>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Mar 31, 2023 at 02:10:15AM +0100, Phillip Lougher wrote:
+> On 30/03/2023 19:59, Phillip Lougher wrote:
+> > On 30/03/2023 18:55, Kent Overstreet wrote:
+> > > On Wed, Mar 29, 2023 at 05:50:27PM +0100, Phillip Lougher wrote:
+> > > > There is a problem with the above code, on testing I get the following
+> > > > results:
+> > > > 
+> > > > Index 78018785329, offset 49, bvec.bv_len 1024: In same bio,
+> > > > metadata length
+> > > > 32780
+> > > 
+> > > Could you share how you're doing your testing? I set up a basic test
+> > > (created images using every compression type, tested reading them) and
+> > > so far I'm not able to reproduce this.
+> > 
+> > I use a very large Squashfs file that triggers the edge case.
+> > 
+> > That is too big to post, and so I'll see if I can artifically generate
+> > a small Squashfs filesystem that triggers the edge case.
+> > 
+> > Phillip
+> > 
+> > 
+> 
+> Hi,
+> 
+> This is a Google drive link to a file that triggers the issue.
+> 
+> https://drive.google.com/file/d/1-3-a1BKq62hZGQ6ynioreMSWFMuCV9B4/view?usp=sharing
+> 
+> To reproduce the issue
+> 
+> % mount -t squashfs <the file> /mnt -o errors=panic
+> 
+> then either one of the following will produce a panic
+> 
+> % ls /mnt
+> % find /mnt -type f | xargs wc > /dev/null
 
-I am running kernel 6.3.0-rc4-00041-g45a74775bbcd, and noticed the following 
-memory leaks:
+Appears to be fixed now - updated version of the patchset is at
+https://evilpiepirate.org/git/bcachefs.git bio_folio_iter
 
-unreferenced object 0xffff9c8157f32800 (size 640):
-   comm "softirq", pid 0, jiffies 4303340208 (age 1378.908s)
-   hex dump (first 32 bytes):
-     6c 69 62 75 64 65 76 00 0e 0c 02 01 10 00 08 6b  libudev........k
-     ab 08 5d 00 5c 70 00 00 05 77 c5 e5 b1 02 47 65  ..].\p...w....Ge
-   backtrace:
-     [<ffffffff90103df9>] kmalloc_reserve+0x89/0xf0
-     [<ffffffff90105a43>] __alloc_skb+0x83/0x190
-     [<ffffffffc11111d1>] btusb_recv_intr+0x131/0x190 [btusb]
-     [<ffffffffc11112ca>] btusb_intr_complete+0x9a/0x150 [btusb]
-     [<ffffffffc0325321>] __usb_hcd_giveback_urb+0x91/0x110 [usbcore]
-     [<ffffffffc03254f4>] usb_giveback_urb_bh+0x94/0x110 [usbcore]
-     [<ffffffff8f8a66e8>] tasklet_action_common.isra.0+0xb8/0x130
-     [<ffffffff90302721>] __do_softirq+0xc1/0x298
-unreferenced object 0xffff9c811cb9e800 (size 224):
-   comm "kworker/u9:1", pid 15177, jiffies 4303340208 (age 1378.908s)
-   hex dump (first 32 bytes):
-     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-   backtrace:
-     [<ffffffff90108da5>] skb_clone+0x55/0xd0
-     [<ffffffffc126978f>] hci_event_packet+0xcf/0x550 [bluetooth]
-     [<ffffffffc124e9e6>] hci_rx_work+0x2a6/0x570 [bluetooth]
-     [<ffffffff8f8bfdf1>] process_one_work+0x201/0x410
-     [<ffffffff8f8c004a>] worker_thread+0x4a/0x3b0
-     [<ffffffff8f8c8587>] kthread+0xd7/0x100
-     [<ffffffff8f802dbf>] ret_from_fork+0x1f/0x30
-
-The Bluetooth device in question is from Realtek, and is part of a Realtek 
-RTW8822BU wifi/BT combination device.
-
-Thanks,
-
-Larry
+Can you confirm, then I'll mail out the updated series?
