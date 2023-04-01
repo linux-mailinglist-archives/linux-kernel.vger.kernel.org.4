@@ -2,95 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D676D2E97
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5846D2E9A
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232984AbjDAGdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 02:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
+        id S233200AbjDAGhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 02:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjDAGdp (ORCPT
+        with ESMTP id S229529AbjDAGg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 02:33:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211081D85C;
-        Fri, 31 Mar 2023 23:33:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 1 Apr 2023 02:36:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC0A1D85C;
+        Fri, 31 Mar 2023 23:36:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1B8EB832B2;
-        Sat,  1 Apr 2023 06:33:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0847EC433EF;
-        Sat,  1 Apr 2023 06:33:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680330819;
-        bh=d70Vp8SNdPL0Uf4Gb8aXU2perlHFjj5G3Axx7WjxzYk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A+ZuQgTCa5Qmy2Rxm6+7EV+2kGx6gz+OrviWZhznK9QTPAgPROVDCdahjcBYKZF+w
-         3kbqR1cdVu8dDF1pZ6Hn68yv5PgsOr8FQs7eKCUi0DLzabBmRrg04o8BBe3Ll8+N74
-         yQc/lyhvny53egzpRPxslwHxFR+zDizHpJIuL870=
-Date:   Sat, 1 Apr 2023 08:33:36 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Maxim Levitsky <maximlevitsky@gmail.com>,
-        Alex Dubov <oakad@yahoo.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Hannes Reinecke <hare@suse.de>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        ye xingchen <ye.xingchen@zte.com.cn>, linux-mmc@vger.kernel.org
-Subject: Re: BUG FIX: [PATCH RFC v3] memstick_check() memleak in kernel
- 6.1.0+ introduced pre 4.17
-Message-ID: <ZCfQQDkw3D_BXJaZ@kroah.com>
-References: <7d873dd3-9bab-175b-8158-c458b61a7122@alu.unizg.hr>
- <f74219a7-1607-deb4-a6ae-7b73e2467ac7@alu.unizg.hr>
- <df560535-2a8e-de21-d45d-805159d70954@alu.unizg.hr>
- <2023033124-causing-cassette-4d96@gregkh>
- <4d80549f-e59d-6319-07fd-1fbed75d7a1c@alu.unizg.hr>
- <ZCfO90WwyS6JwaHi@kroah.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 85D9F1F8B9;
+        Sat,  1 Apr 2023 06:36:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680331015; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=fwlqVEU+eay08IeeOOBfH65TQZ/XQ2nl5oYOkjj7LF0=;
+        b=MLhGuHY3CSmYqr2j6E4yBaM89chPjWoCvhK+8ZTpJAQ4LqUfQfGaDbjFkxkQbSoUvT19LR
+        UnX7QI+Uvo4rZ2gsQVxltDevlaQX+pUb0sZdTlyT42PQAUrR4sbpAQ0h0YQABpzteF3uPT
+        KiNeYdvQLVNqIhlg1bIFWY1mzObA3oI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 10300134FB;
+        Sat,  1 Apr 2023 06:36:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id AzBZAgfRJ2QGdwAAMHmgww
+        (envelope-from <jgross@suse.com>); Sat, 01 Apr 2023 06:36:55 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hyperv@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v5 00/15] x86/mtrr: fix handling with PAT but without MTRR
+Date:   Sat,  1 Apr 2023 08:36:37 +0200
+Message-Id: <20230401063652.23522-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCfO90WwyS6JwaHi@kroah.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 01, 2023 at 08:28:07AM +0200, Greg KH wrote:
-> On Sat, Apr 01, 2023 at 08:23:26AM +0200, Mirsad Goran Todorovac wrote:
-> > > This patch is implying that anyone who calls "dev_set_name()" also has
-> > > to do this hack, which shouldn't be the case at all.
-> > > 
-> > > thanks,
-> > > 
-> > > greg k-h
-> > 
-> > This is my best guess. Unless there is dev_free_name() or kobject_free_name(), I don't
-> > see a more sensible way to patch this up.
-> 
-> In sleeping on this, I think this has to move to the driver core.  I
-> don't understand why we haven't seen this before, except maybe no one
-> has really noticed before (i.e. we haven't had good leak detection tools
-> that run with removable devices?)
-> 
-> Anyway, let me see if I can come up with something this weekend, give me
-> a chance...
+This series tries to fix the rather special case of PAT being available
+without having MTRRs (either due to CONFIG_MTRR being not set, or
+because the feature has been disabled e.g. by a hypervisor).
 
-Wait, no, this already should be handled by the kobject core, look at
-kobject_cleanup(), at the bottom.  So your change should be merely
-duplicating the logic there that already runs when the struct device is
-freed, right?
+The main use cases are Xen PV guests and SEV-SNP guests running under
+Hyper-V.
 
-So I don't understand why your change works, odd.  I need more coffee...
+Instead of trying to work around all the issues by adding if statements
+here and there, just try to use the complete available infrastructure
+by setting up a read-only MTRR state when needed.
 
-thanks,
+In the Xen PV case the current MTRR MSR values can be read from the
+hypervisor, while for the SEV-SNP case all needed is to set the
+default caching mode to "WB".
 
-greg k-h
+I have added more cleanup which has been discussed when looking into
+the most recent failures.
+
+Note that I couldn't test the Hyper-V related change (patch 3).
+
+Running on bare metal and with Xen didn't show any problems with the
+series applied.
+
+It should be noted that patches 9+10 are replacing today's way to
+lookup the MTRR cache type for a memory region from looking at the
+MTRR register values to building a memory map with the cache types.
+This should make the lookup much faster and much easier to understand.
+
+Changes in V2:
+- replaced former patches 1+2 with new patches 1-4, avoiding especially
+  the rather hacky approach of V1, while making all the MTRR type
+  conflict tests available for the Xen PV case
+- updated patch 6 (was patch 4 in V1)
+
+Changes in V3:
+- dropped patch 5 of V2, as already applied
+- split patch 1 of V2 into 2 patches
+- new patches 6-10
+- addressed comments
+
+Changes in V4:
+- addressed comments
+
+Changes in V5
+- addressed comments
+- some other small fixes
+- new patches 3, 8 and 15
+
+clone of "mtrr"
+
+Juergen Gross (15):
+  x86/mtrr: split off physical address size calculation
+  x86/mtrr: optimize mtrr_calc_physbits()
+  x86/mtrr: replace some constants with defines
+  x86/mtrr: support setting MTRR state for software defined MTRRs
+  x86/hyperv: set MTRR state when running as SEV-SNP Hyper-V guest
+  x86/xen: set MTRR state when running as Xen PV initial domain
+  x86/mtrr: replace vendor tests in MTRR code
+  x86/mtrr: have only one set_mtrr() variant
+  x86/mtrr: allocate mtrr_value array dynamically
+  x86/mtrr: add get_effective_type() service function
+  x86/mtrr: construct a memory map with cache modes
+  x86/mtrr: use new cache_map in mtrr_type_lookup()
+  x86/mtrr: don't let mtrr_type_lookup() return MTRR_TYPE_INVALID
+  x86/mm: only check uniform after calling mtrr_type_lookup()
+  x86/mtrr: remove unused code
+
+ arch/x86/include/asm/mtrr.h        |  44 ++-
+ arch/x86/include/uapi/asm/mtrr.h   |   6 +-
+ arch/x86/kernel/cpu/mshyperv.c     |   4 +
+ arch/x86/kernel/cpu/mtrr/amd.c     |   2 +-
+ arch/x86/kernel/cpu/mtrr/centaur.c |  11 +-
+ arch/x86/kernel/cpu/mtrr/cleanup.c |   6 +-
+ arch/x86/kernel/cpu/mtrr/cyrix.c   |   2 +-
+ arch/x86/kernel/cpu/mtrr/generic.c | 578 +++++++++++++++++++----------
+ arch/x86/kernel/cpu/mtrr/mtrr.c    | 146 ++++----
+ arch/x86/kernel/cpu/mtrr/mtrr.h    |   7 +-
+ arch/x86/kernel/setup.c            |   2 +
+ arch/x86/mm/pgtable.c              |  24 +-
+ arch/x86/xen/enlighten_pv.c        |  52 +++
+ 13 files changed, 573 insertions(+), 311 deletions(-)
+
+-- 
+2.35.3
+
