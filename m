@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1666D3279
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 17:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4046D327C
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 17:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjDAPwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 11:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S229941AbjDAPz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 11:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDAPwW (ORCPT
+        with ESMTP id S229891AbjDAPzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 11:52:22 -0400
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102A522EA5
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 08:52:20 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id idWapMwyLusWfidWap27kk; Sat, 01 Apr 2023 17:52:19 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 01 Apr 2023 17:52:19 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] clk: stm32h7: Remove an unused field in struct stm32_fractional_divider
-Date:   Sat,  1 Apr 2023 17:52:12 +0200
-Message-Id: <e08a470fbd6151ebd83a548714c08807a80a8ad0.1680364296.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 1 Apr 2023 11:55:54 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D252546D;
+        Sat,  1 Apr 2023 08:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=KFjf9PEaoJi14CUAATwY45BK0qqNZE+cgvT7EX51gUw=; b=UKWmWRSTJKdxjIME6/xKk7QkZG
+        ZSePWqucj9TwogJAHYMYQ77bPtOHbSAvKdLXP9fVBz6be3pdidYWDgApPnO7ielCgxIY8yhP3MWdK
+        908qsRM7Ncv+JwppwpcnkvGOPgf67yxshUb1zTkHK2BiZ6CuhH2M/c0F3jtOICxrbIM0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pidZn-00994v-Uj; Sat, 01 Apr 2023 17:55:35 +0200
+Date:   Sat, 1 Apr 2023 17:55:35 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Simon Horman <horms@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] net: ethernet: mtk_eth_soc: use be32 type to store be32
+ values
+Message-ID: <c7684349-535c-45a4-9a74-d47479a50020@lunn.ch>
+References: <20230401-mtk_eth_soc-sparse-v1-1-84e9fc7b8eab@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230401-mtk_eth_soc-sparse-v1-1-84e9fc7b8eab@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'mmask' has never been used in this driver.
-Remove it.
+On Sat, Apr 01, 2023 at 08:43:44AM +0200, Simon Horman wrote:
+> Perhaps there is a nicer way to handle this but the code
+> calls for converting an array of host byte order 32bit values
+> to big endian 32bit values: an ipv6 address to be pretty printed.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/clk/clk-stm32h7.c | 1 -
- 1 file changed, 1 deletion(-)
+Hi Simon
 
-diff --git a/drivers/clk/clk-stm32h7.c b/drivers/clk/clk-stm32h7.c
-index 1a701eada0c1..04c18a1d45d3 100644
---- a/drivers/clk/clk-stm32h7.c
-+++ b/drivers/clk/clk-stm32h7.c
-@@ -667,7 +667,6 @@ struct stm32_fractional_divider {
- 	void __iomem	*mreg;
- 	u8		mshift;
- 	u8		mwidth;
--	u32		mmask;
- 
- 	void __iomem	*nreg;
- 	u8		nshift;
--- 
-2.34.1
+Maybe make a generic helper? I could be used in other places, e.g:
 
+https://elixir.bootlin.com/linux/latest/source/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c#L6773
+
+	Andrew
