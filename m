@@ -2,56 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9FF6D347D
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 00:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15D26D34CE
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 00:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjDAWEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 18:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S229659AbjDAWRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 18:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjDAWEd (ORCPT
+        with ESMTP id S229448AbjDAWRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 18:04:33 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2DF27839
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 15:04:31 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-278-p39s4WFePrSsQjihVNUmug-1; Sat, 01 Apr 2023 23:04:29 +0100
-X-MC-Unique: p39s4WFePrSsQjihVNUmug-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 1 Apr
- 2023 23:04:26 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Sat, 1 Apr 2023 23:04:26 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
-        'Vlastimil Babka' <vbabka@suse.cz>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [PATCH] mm: remove all the slab allocators
-Thread-Topic: [PATCH] mm: remove all the slab allocators
-Thread-Index: AQHZZH7yC1nc5Yxd6ES5VUUdsjQvja8WxpGg///z5QCAAEfSoA==
-Date:   Sat, 1 Apr 2023 22:04:26 +0000
-Message-ID: <45a4b0ac2bac40a691b55ae9de5c6617@AcuMS.aculab.com>
-References: <20230401094658.11146-1-vbabka@suse.cz>
- <eea7e17ab4264b7ca7ccea0ab725120f@AcuMS.aculab.com>
- <a84e8534-ef49-c33f-711c-fa5b9ee88269@csgroup.eu>
-In-Reply-To: <a84e8534-ef49-c33f-711c-fa5b9ee88269@csgroup.eu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        Sat, 1 Apr 2023 18:17:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3BAE042;
+        Sat,  1 Apr 2023 15:17:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB15060A47;
+        Sat,  1 Apr 2023 22:17:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF6BCC433EF;
+        Sat,  1 Apr 2023 22:17:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680387441;
+        bh=aoDdZ34PoBNv5QUtFFFcg/3Z3R3lKI8oojzkBnrAy5s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QiFoaS/Rg1H+6UGrilF4GMPsbFrWRrcUHt3WvJmKBjGthkOwGXTzhcYTouJEFiIjk
+         6wYfCPmxXZ73ddq0dEPbZW/lBAuzvCNKoG1XGi/Sm+nfW1nvO82w8tW0ZGjNhNY84g
+         pDoucuW732ESD33YTpF+R8NTFcaBGnW0viIEK6wVXguxIPu0Yxeb3Nj2CaOmd3o+oo
+         7297BBaO9ULjQ/dSyFkO3InXYDbif8rmH6+PZ/Ln8+Q+b9SRpYTYOA+HopesyN0qjH
+         UBuEBu2DLEmWOrAiiVDNerzzEQmqIagENWX8v3NTzWHwhQw6jsicHjS1QqL12s3Sij
+         G9ee0SukSMhRQ==
+Date:   Sun, 2 Apr 2023 07:17:13 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Donglin Peng <pengdonglin@sangfor.com.cn>
+Cc:     rostedt@goodmis.org, linux@armlinux.org.uk, mark.rutland@arm.com,
+        will@kernel.org, catalin.marinas@arm.com,
+        rmk+kernel@armlinux.org.uk, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        bp@alien8.de, hpa@zytor.com, chenhuacai@kernel.org,
+        zhangqing@loongson.cn, kernel@xen0n.name, mingo@redhat.com,
+        peterz@infradead.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
+        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
+        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 2/8] tracing: Add documentation for funcgraph-retval
+ and funcgraph-retval-hex
+Message-Id: <20230402071713.4f278b65ba9bb67c72ab2fb5@kernel.org>
+In-Reply-To: <a3dcdd61b3ac07eefabc1b11fc18e9fae23d8cbe.1680265828.git.pengdonglin@sangfor.com.cn>
+References: <cover.1680265828.git.pengdonglin@sangfor.com.cn>
+        <a3dcdd61b3ac07eefabc1b11fc18e9fae23d8cbe.1680265828.git.pengdonglin@sangfor.com.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,29 +67,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQ2hyaXN0b3BoZSBMZXJveQ0KPiBTZW50OiAwMSBBcHJpbCAyMDIzIDE5OjQ1DQo+IA0K
-PiBMZSAwMS8wNC8yMDIzIMOgIDIwOjMzLCBEYXZpZCBMYWlnaHQgYSDDqWNyaXTCoDoNCj4gPiBG
-cm9tOiBWbGFzdGltaWwgQmFia2ENCj4gPj4gU2VudDogMzIgTWFyY2ggMjAyMyAxMDo0Nw0KPiA+
-Pg0KPiA+PiBBcyB0aGUgU0xPQiByZW1vdmFsIGlzIG9uIHRyYWNrIGFuZCB0aGUgU0xBQiByZW1v
-dmFsIGlzIHBsYW5uZWQsIEkgaGF2ZQ0KPiA+PiByZWFsaXplZCAtIHdoeSBzaG91bGQgd2Ugc3Rv
-cCB0aGVyZSBhbmQgbm90IHJlbW92ZSBhbHNvIFNMVUI/IFdoYXQncyBhDQo+ID4+IHNsYWIgYWxs
-b2NhdG9yIGdvb2QgZm9yIGluIDIwMjM/IFRoZSBSQU0gc2l6ZXMgYXJlIGdldHRpbmcgbGFyZ2Vy
-IGFuZA0KPiA+PiB0aGUgbW9kdWxlcyBjaGVhcGVyIFsxXS4gVGhlIG9iamVjdCBjb25zdHJ1Y3Rv
-ciB0cmljayB3YXMgcGVyaGFwcw0KPiA+PiBpbnRlcmVzdGluZyBpbiAxOTk0LCBidXQgbm90IHdp
-dGggY29udGVtcG9yYXJ5IENQVXMuIFNvIGFsbCB0aGUgc2xhYg0KPiA+PiBhbGxvY2F0b3IgZG9l
-cyB0b2RheSBpcyBqdXN0IGFkZGluZyBhbiB1bm5lY2Vzc2FyeSBsYXllciBvZiBjb21wbGV4aXR5
-DQo+ID4+IG92ZXIgdGhlIHBhZ2UgYWxsb2NhdG9yLg0KPiA+DQo+ID4gV2h5IHN0b3AgdGhlcmU/
-DQo+ID4gUmVtb3ZlIGttYWxsb2MoKSBjb21wbGV0ZWx5Lg0KPiA+IFdpdGggY2hlYXAgbWVtb3J5
-IGlzbid0IHVucmVhc29uYWJsZSB0byBnbyBiYWNrIHRvIGNvbXBpbGUtdGltZQ0KPiA+IHNldHRh
-YmxlIGZpeGVkIHNpemUgYXJyYXlzIGZvciBhbGwgaXRlbXMuDQo+ID4gU2hvdWxkIG1ha2UgJ3Vz
-ZSBhZnRlciBmcmVlJyBtdWNoIGVhc2llciB0byB0cmFjayBkb3duLg0KPiA+DQo+IA0KPiBXaGls
-ZSBhdCBpdCwgd2h5IG5vdCBhbHNvIGluY3JlYXNlIHRoZSBwYWdlIHNpemUgdG8gaHVnZXBhZ2Ug
-c2l6ZSwgdGhhdA0KPiB3b3VsZCBhbGxvdyB1cyB0byByZW1vdmUgYWxsIHRoZSBjb21wbGV4IFRI
-UCBsb2dpYywgYW5kIHdvdWxkIHJlbW92ZSBvbmUNCj4gbGV2ZWwgb2YgcGFnZSB0YWJsZXMuIEkg
-d291bGQgYWxzbyByZWR1Y2UgVExCIHByZXNzdXJlLg0KDQpHb29kIGlkZWEsIDRrIHBhZ2VzIHdl
-cmUgdXNlZCBvbiBzeXN0ZW1zIHdoZXJlIHRoZSB0b3RhbCBzeXN0ZW0NCm1lbW9yeSB3YXMgYSBm
-ZXcgTUIuDQpNZW1vcnkgc3lzdGVtIGFyZSBub3cgZWFzaWx5IDEwMDB4IHRpbWVzIGxhcmdlciAt
-IHNvIHdoeSBub3QgNE1CDQpwYWdlcyAuLi4uDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFk
-ZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywg
-TUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Fri, 31 Mar 2023 05:47:38 -0700
+Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
 
+> Add documentation for the two newly introduced options for the
+> function_graph tracer. The funcgraph-retval option is used to
+> control whether or not to display the return value, while the
+> funcgraph-retval-hex option is used to control the display
+> format of the return value.
+> 
+> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
+
+Looks good to me.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thank you!
+
+> ---
+> v9:
+>  - Update limitation description
+> 
+> v7:
+>  - Rename trace option 'graph_retval_hex' to 'funcgraph-retval-hex'
+>  - Update documentation description
+> 
+> v6:
+>  - Modify the limitations for funcgraph-retval
+>  - Optimize the English expression
+> 
+> v5:
+>  - Describe the limitations of funcgraph-retval
+> ---
+>  Documentation/trace/ftrace.rst | 74 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+> 
+> diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+> index b927fb2b94dc..f572ae419219 100644
+> --- a/Documentation/trace/ftrace.rst
+> +++ b/Documentation/trace/ftrace.rst
+> @@ -1328,6 +1328,19 @@ Options for function_graph tracer:
+>  	only a closing curly bracket "}" is displayed for
+>  	the return of a function.
+>  
+> +  funcgraph-retval
+> +	When set, the return value of each traced function
+> +	will be printed after an equal sign "=". By default
+> +	this is off.
+> +
+> +  funcgraph-retval-hex
+> +	When set, the return value will always be printed
+> +	in hexadecimal format. If the option is not set and
+> +	the return value is an error code, it will be printed
+> +	in signed decimal format; otherwise it will also be
+> +	printed in hexadecimal format. By default, this option
+> +	is off.
+> +
+>    sleep-time
+>  	When running function graph tracer, to include
+>  	the time a task schedules out in its function.
+> @@ -2673,6 +2686,67 @@ It is default disabled.
+>      0)   1.757 us    |        } /* kmem_cache_free() */
+>      0)   2.861 us    |      } /* putname() */
+>  
+> +The return value of each traced function can be displayed after
+> +an equal sign "=". When encountering system call failures, it
+> +can be verfy helpful to quickly locate the function that first
+> +returns an error code.
+> +
+> +	- hide: echo nofuncgraph-retval > trace_options
+> +	- show: echo funcgraph-retval > trace_options
+> +
+> +  Example with funcgraph-retval::
+> +
+> +    1)               |    cgroup_migrate() {
+> +    1)   0.651 us    |      cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
+> +    1)               |      cgroup_migrate_execute() {
+> +    1)               |        cpu_cgroup_can_attach() {
+> +    1)               |          cgroup_taskset_first() {
+> +    1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
+> +    1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
+> +    1)   0.380 us    |          sched_rt_can_attach(); /* = 0x0 */
+> +    1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
+> +    1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
+> +    1)   7.143 us    |    } /* cgroup_migrate = -22 */
+> +
+> +The above example shows that the function cpu_cgroup_can_attach
+> +returned the error code -22 firstly, then we can read the code
+> +of this function to get the root cause.
+> +
+> +When the option funcgraph-retval-hex is not set, the return value can
+> +be displayed in a smart way. Specifically, if it is an error code,
+> +it will be printed in signed decimal format, otherwise it will
+> +printed in hexadecimal format.
+> +
+> +	- smart: echo nofuncgraph-retval-hex > trace_options
+> +	- hexadecimal always: echo funcgraph-retval-hex > trace_options
+> +
+> +  Example with funcgraph-retval-hex::
+> +
+> +    1)               |      cgroup_migrate() {
+> +    1)   0.651 us    |        cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
+> +    1)               |        cgroup_migrate_execute() {
+> +    1)               |          cpu_cgroup_can_attach() {
+> +    1)               |            cgroup_taskset_first() {
+> +    1)   0.732 us    |              cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
+> +    1)   1.232 us    |            } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
+> +    1)   0.380 us    |            sched_rt_can_attach(); /* = 0x0 */
+> +    1)   2.335 us    |          } /* cpu_cgroup_can_attach = 0xffffffea */
+> +    1)   4.369 us    |        } /* cgroup_migrate_execute = 0xffffffea */
+> +    1)   7.143 us    |      } /* cgroup_migrate = 0xffffffea */
+> +
+> +At present, there are some limitations when using the funcgraph-retval
+> +option, and these limitations will be eliminated in the future:
+> +
+> +- Even if the function return type is void, a return value will still
+> +  be printed, and you can just ignore it.
+> +
+> +- Even if return values are stored in multiple registers, only the
+> +  value contained in the first register will be recorded and printed.
+> +  To illustrate, in the x86 architecture, eax and edx are used to store
+> +  a 64-bit return value, with the lower 32 bits saved in eax and the
+> +  upper 32 bits saved in edx. However, only the value stored in eax
+> +  will be recorded and printed.
+> +
+>  You can put some comments on specific functions by using
+>  trace_printk() For example, if you want to put a comment inside
+>  the __might_sleep() function, you just have to include
+> -- 
+> 2.25.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
