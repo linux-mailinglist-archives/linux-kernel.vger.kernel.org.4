@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BA06D3348
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 20:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3F06D3349
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 20:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjDAS6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 14:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
+        id S229992AbjDAS7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 14:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjDAS6w (ORCPT
+        with ESMTP id S229847AbjDAS6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 14:58:52 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B7610D4
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 11:58:51 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id v6-20020a05600c470600b003f034269c96so5560013wmo.4
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 11:58:51 -0700 (PDT)
+        Sat, 1 Apr 2023 14:58:53 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F7B3592
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 11:58:52 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id s13so14777700wmr.4
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 11:58:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680375530;
+        d=gmail.com; s=20210112; t=1680375531;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N4O3XZtJ4K7opusRPJDG2obDOo5CziuFWNMf3s6wXVg=;
-        b=hoW50hi2hMW8Al6S0cBLHk2xdT2gqsg+gpVk0IpgM081rXOQSiqyLbN+oclzkOGWXj
-         b1TfC4rA0iMsAdd4jzdVP41ZOBmt9wUvaX8S6o6+f4bwZMiItZECrOQc7tjOF20c3s/S
-         6aD7WWjT7+1t8K3r9RXq/nyULZglBqrozReWzR7GrYNdTEvwdcKwOjjQOwyeP6eASCQr
-         /FYHtrCifF8GGVeG0AU/F1cPVX7osh/INB0wxeYbc5PqoOQYJ1rONOnIyxWVpORn9hXL
-         yhrQWhdkLxFM0uO7gOm621TSGP8AyUqeLmyrA6552EfLvgnrXtULLss5a8LCDoJD6AYf
-         wm9g==
+        bh=K0EbqnaKdSiijP5AMHVuBOUgkUfHYyGlvbGYlKLav6c=;
+        b=D2Wv96vcb3yoPTQYqJj798MQvDM69mQmUSiTRwNmVtEAwcfI87/2bHbmxjvIMsH5bU
+         7qzxxO+oLaCioavYqdZ/qtnSkw8gSFx3un7zY715c3CqaHkdGZb7wH/7s4VN+TJKKWmk
+         2oSSJUSuMdPdUqyBmoGnVDIAMy0BDFyPeLbWL37VlVBehJeKFJWAlVri4BjKjxzvt1EO
+         TNfS6ROQ0sY+qNjtRtf2HZeDYgoA/+/m9UvKq8VhJGve7NjQEfb12e7qjNy/M/PfuJF0
+         w3YMd5rJCMd61kvS3MSba+/EXwQxcGNpmwdQwbeOiWgUGCH9tfqv1vPL0uHU84xyJH0h
+         An4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680375530;
+        d=1e100.net; s=20210112; t=1680375531;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N4O3XZtJ4K7opusRPJDG2obDOo5CziuFWNMf3s6wXVg=;
-        b=a1C8E9Tzi+xWAdzFFB5AhQHXeGrPh3Ux+MTG4ibounAXHjsJPYPALDNZjY+Tek2fZ/
-         Cx8F03oHKmcCR445fLwx6AnFp4m3fIyi8+QMs7BbdqpVn41jVsKPKSqzFDlAwI5ovE9x
-         eVlNrp1wIUnEBF3ObaFIU5d8FfsSV8+rPvD/e9e771bq4oM2F0/KuPX++NdIO56RLD2f
-         uAup1G53NmGMiT0IGm4lMEB93WWdTpLJ5LMDRCRG9HWxdZKywiTM8Ie6toHMG6Vd1TEK
-         gl7uJFAvr3lTQJ+u+niwa4bQIwcR8t+OayGwdDRicv2JMUSOnep2A5BBilFVZtD/DfAE
-         wlVA==
-X-Gm-Message-State: AAQBX9c0hNOnVZTLHuPoxY6ELWoG16MS8PZ7wkKob5N9B/mQ9VFWg8TB
-        xuVpoL3UVCHL/JuM7eo544Sl0Pd2GxZmhviA
-X-Google-Smtp-Source: AKy350aQlYfD9YnJLLdnlOfvG/XCbSRUS/RxcGzEgKUbLX4Kv+YjT2tUqIDg1nePu48TFIPNvR2I5A==
-X-Received: by 2002:a1c:4c11:0:b0:3ef:6ea4:a675 with SMTP id z17-20020a1c4c11000000b003ef6ea4a675mr17267044wmf.36.1680375529730;
-        Sat, 01 Apr 2023 11:58:49 -0700 (PDT)
+        bh=K0EbqnaKdSiijP5AMHVuBOUgkUfHYyGlvbGYlKLav6c=;
+        b=EkPlMswVs3qnHwm8UTB/JsKthyXOzNUeJIHSpQ/zOlJ9L4g5mFBNi7bP9dI0dlTKqk
+         m8M6SVUQLVe3H0pM85qcBlRXkoIxHWHIzD4oKGGTAC8Ic6gaYalserkTqC8PSek8k1Dh
+         44wYJnvO1McKz/2lR1E7a9nzOPvoSRXHur9tSGs6WECpoB648y11r4sVAMNY5AQkHxCq
+         pRdDQrejRAlrrDkZDNTElrrRDgxAqLQtR/YBWrp28hGmRR5lipxEhGFEJNcUkB0mdAIX
+         y09egtBk/q6ANWfWGyq666JtdooeqtHr3fStRR0ZvajC86uRRsVQukPTWHL3hXEQdoX4
+         KQeA==
+X-Gm-Message-State: AO0yUKXGN+L8VzSa0xWyTJpRwauS1VtgMjsQ0HAb/82WeKoKZVHNRU0F
+        fZK/jWJ7dSIC47T/ZeB0jkE=
+X-Google-Smtp-Source: AK7set8080+qC+D5SOfY8YZLaERU3d+h6AONLNLXHZfn/ByUituNzOF37sbRbEOrdrg6k6rThnYMoA==
+X-Received: by 2002:a05:600c:22d4:b0:3ed:b56c:9496 with SMTP id 20-20020a05600c22d400b003edb56c9496mr22974761wmg.31.1680375531269;
+        Sat, 01 Apr 2023 11:58:51 -0700 (PDT)
 Received: from khadija-virtual-machine.localdomain ([39.41.14.14])
-        by smtp.gmail.com with ESMTPSA id s17-20020a05600c45d100b003ed51cdb94csm14017463wmo.26.2023.04.01.11.58.48
+        by smtp.gmail.com with ESMTPSA id s17-20020a05600c45d100b003ed51cdb94csm14017463wmo.26.2023.04.01.11.58.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Apr 2023 11:58:49 -0700 (PDT)
+        Sat, 01 Apr 2023 11:58:51 -0700 (PDT)
 From:   Khadija Kamran <kamrankhadijadj@gmail.com>
 To:     outreachy@lists.linux.dev
 Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] staging: rtl8192e: remove extra blank lines in rtllib_crypt_ccmp.c
-Date:   Sat,  1 Apr 2023 23:58:40 +0500
-Message-Id: <283265f6a5ff938f8425e14af86cee9e2da36318.1680375200.git.kamrankhadijadj@gmail.com>
+Subject: [PATCH 2/5] staging: rtl8192e: fix alignment to match open parenthesis
+Date:   Sat,  1 Apr 2023 23:58:41 +0500
+Message-Id: <76814f7a2a026ef195334b0c42ecd2aeb8e8ea40.1680375200.git.kamrankhadijadj@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1680375200.git.kamrankhadijadj@gmail.com>
 References: <cover.1680375200.git.kamrankhadijadj@gmail.com>
@@ -72,91 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove extra blank lines as suggested by the Linux kernel coding-style.
-These issues were reported by checkpatch.
-
-"CHECK: Please don't use multiple blank lines"
+Fix alignemnt to match opening parenthesis as suggested by Linux kernel
+coding-style. This issue is reported by checkpatch.
 
 Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
 ---
- drivers/staging/rtl8192e/rtllib_crypt_ccmp.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ drivers/staging/rtl8192e/rtllib_crypt_ccmp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/staging/rtl8192e/rtllib_crypt_ccmp.c b/drivers/staging/rtl8192e/rtllib_crypt_ccmp.c
-index a8d22da8bc9a..eb7b6deb2ca7 100644
+index eb7b6deb2ca7..8d3067a6ccca 100644
 --- a/drivers/staging/rtl8192e/rtllib_crypt_ccmp.c
 +++ b/drivers/staging/rtl8192e/rtllib_crypt_ccmp.c
-@@ -74,7 +74,6 @@ static void *rtllib_ccmp_init(int key_idx)
- 	return NULL;
- }
- 
--
- static void rtllib_ccmp_deinit(void *priv)
- {
- 	struct rtllib_ccmp_data *_priv = priv;
-@@ -84,7 +83,6 @@ static void rtllib_ccmp_deinit(void *priv)
- 	kfree(priv);
- }
- 
--
- static int ccmp_init_iv_and_aad(struct rtllib_hdr_4addr *hdr,
- 				u8 *pn, u8 *iv, u8 *aad)
- {
-@@ -150,8 +148,6 @@ static int ccmp_init_iv_and_aad(struct rtllib_hdr_4addr *hdr,
- 	return aad_len;
- }
- 
--
--
- static int rtllib_ccmp_encrypt(struct sk_buff *skb, int hdr_len, void *priv)
- {
- 	struct rtllib_ccmp_data *key = priv;
-@@ -220,7 +216,6 @@ static int rtllib_ccmp_encrypt(struct sk_buff *skb, int hdr_len, void *priv)
- 	return 0;
- }
- 
--
- static int rtllib_ccmp_decrypt(struct sk_buff *skb, int hdr_len, void *priv)
- {
- 	struct rtllib_ccmp_data *key = priv;
-@@ -315,7 +310,6 @@ static int rtllib_ccmp_decrypt(struct sk_buff *skb, int hdr_len, void *priv)
- 	return keyidx;
- }
- 
--
- static int rtllib_ccmp_set_key(void *key, int len, u8 *seq, void *priv)
- {
- 	struct rtllib_ccmp_data *data = priv;
-@@ -349,7 +343,6 @@ static int rtllib_ccmp_set_key(void *key, int len, u8 *seq, void *priv)
- 	return 0;
- }
- 
--
- static int rtllib_ccmp_get_key(void *key, int len, u8 *seq, void *priv)
- {
- 	struct rtllib_ccmp_data *data = priv;
-@@ -373,7 +366,6 @@ static int rtllib_ccmp_get_key(void *key, int len, u8 *seq, void *priv)
- 	return CCMP_TK_LEN;
- }
- 
--
- static void rtllib_ccmp_print_stats(struct seq_file *m, void *priv)
- {
- 	struct rtllib_ccmp_data *ccmp = priv;
-@@ -403,13 +395,11 @@ static struct lib80211_crypto_ops rtllib_crypt_ccmp = {
- 	.owner			= THIS_MODULE,
- };
- 
--
- static int __init rtllib_crypto_ccmp_init(void)
- {
- 	return lib80211_register_crypto_ops(&rtllib_crypt_ccmp);
- }
- 
--
- static void __exit rtllib_crypto_ccmp_exit(void)
- {
- 	lib80211_unregister_crypto_ops(&rtllib_crypt_ccmp);
+@@ -332,7 +332,7 @@ static int rtllib_ccmp_set_key(void *key, int len, u8 *seq, void *priv)
+ 			data->rx_pn[5] = seq[0];
+ 		}
+ 		if (crypto_aead_setauthsize(data->tfm, CCMP_MIC_LEN) ||
+-			crypto_aead_setkey(data->tfm, data->key, CCMP_TK_LEN))
++		    crypto_aead_setkey(data->tfm, data->key, CCMP_TK_LEN))
+ 			return -1;
+ 	} else if (len == 0) {
+ 		data->key_set = 0;
 -- 
 2.34.1
 
