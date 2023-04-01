@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629B46D2EC5
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09AB6D2EC7
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbjDAGnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 02:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
+        id S233470AbjDAGn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 02:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjDAGnl (ORCPT
+        with ESMTP id S230193AbjDAGny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 02:43:41 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACBB7E192;
-        Fri, 31 Mar 2023 23:43:38 -0700 (PDT)
-Received: from loongson.cn (unknown [112.20.109.241])
-        by gateway (Coremail) with SMTP id _____8Axu5eZ0idkVy4VAA--.32734S3;
-        Sat, 01 Apr 2023 14:43:37 +0800 (CST)
-Received: from [192.168.100.131] (unknown [112.20.109.241])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxwOSS0idk2aoSAA--.51534S3;
-        Sat, 01 Apr 2023 14:43:30 +0800 (CST)
-Message-ID: <17ecd97e-a750-55ca-a067-986890a8d494@loongson.cn>
-Date:   Sat, 1 Apr 2023 14:43:30 +0800
+        Sat, 1 Apr 2023 02:43:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22201D861;
+        Fri, 31 Mar 2023 23:43:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 589BC60B27;
+        Sat,  1 Apr 2023 06:43:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E23CC433EF;
+        Sat,  1 Apr 2023 06:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680331431;
+        bh=c36lwFwHZ8G1e703Idi7Ck6uKneXMSQqAbeazYyyj3w=;
+        h=From:Date:Subject:To:Cc:From;
+        b=N2hLYYxim4fCGv6fI0Tr8vSVihXiwc8OXIBTgI1F78It1BDze18bhbwKmE91unR6B
+         zhxVXCovtoBsOFIIPOApE766CTypgR+oua2Zr1EZbFr7Mv3DgET1VUic2T5EfqYC1c
+         UQQU8cGmRzMJY9hcUMWlSF5bRC0EiJxT8t26hRATR7zPHkG4Rw4ZNI39OUhh4EQYZM
+         6tgXRtvAnysW6ZUDTWxv3DtwRujICEeXcfk3UgVOEGaKVtG68Gn7hstg0QTszFuqqW
+         S+AEjw8+43WR/TCzGCmZTVD90jg3YWfB0+JLo+Y8mXXI6loHvmp3EG1t/jIGPauJay
+         zccTD4auJs8rw==
+From:   Simon Horman <horms@kernel.org>
+Date:   Sat, 01 Apr 2023 08:43:44 +0200
+Subject: [PATCH] net: ethernet: mtk_eth_soc: use be32 type to store be32
+ values
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 3/4] docs: move parisc documentation under
- Documentation/arch/
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Alex Shi <alexs@kernel.org>
-References: <20230330195604.269346-1-corbet@lwn.net>
- <20230330195604.269346-4-corbet@lwn.net>
-Content-Language: en-US
-From:   Yanteng Si <siyanteng@loongson.cn>
-In-Reply-To: <20230330195604.269346-4-corbet@lwn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxwOSS0idk2aoSAA--.51534S3
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3WrWUuF1kWw1xJF1kXrWkJFb_yoWxXF1xp3
-        Z7Kr1Ig3WSvryUC348WF17GFy7Ca4xua13WF4Utw10qFn8W39Yyr4UK3s0gFn3XrW0yFWk
-        uF4fKrW5uw1qywUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
-        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_
-        JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
-        daVFxhVjvjDU0xZFpf9x07j5xhLUUUUU=
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230401-mtk_eth_soc-sparse-v1-1-84e9fc7b8eab@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJ/SJ2QC/x2N0QrCMAwAf2Xk2UK2DhR/RWSkXWaDsxvJFGHs3
+ w0+3sFxOxirsMG12UH5IyZLdWhPDeRC9cFBRmfosIvYYxte23PgrQy25GArqXHAnmLCMZ/jZQI
+ PE7lMSjUXT+t7nl2uypN8/6fb/Th+IRJA0nkAAAA=
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,145 +66,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Perhaps there is a nicer way to handle this but the code
+calls for converting an array of host byte order 32bit values
+to big endian 32bit values: an ipv6 address to be pretty printed.
 
-在 3/31/23 03:56, Jonathan Corbet 写道:
-> Architecture-specific documentation is being moved into Documentation/arch/
-> as a way of cleaning up the top-level documentation directory and making
-> the docs hierarchy more closely match the source hierarchy.  Move
-> Documentation/parisc into arch/ and fix all in-tree references.
->
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Alex Shi <alexs@kernel.org>
-> Cc: Yanteng Si <siyanteng@loongson.cn>
-> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+Use a sparse-friendly array of be32 to store these values.
 
-Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
+Also make use of the cpu_to_be32_array helper rather
+than open coding the conversion.
 
+Flagged by sparse:
+  drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:59:27: warning: incorrect type in assignment (different base types)
+  drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:59:27:    expected unsigned int
+  drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:59:27:    got restricted __be32 [usertype]
+  drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:161:46: warning: cast to restricted __be16
 
-Thanks,
+No functional changes intended.
+Compile tested only.
 
-Yanteng
+Signed-off-by: Simon Horman <horms@kernel.org>
+---
+ drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-> ---
->   Documentation/arch/index.rst                                    | 2 +-
->   Documentation/{ => arch}/parisc/debugging.rst                   | 0
->   Documentation/{ => arch}/parisc/features.rst                    | 0
->   Documentation/{ => arch}/parisc/index.rst                       | 0
->   Documentation/{ => arch}/parisc/registers.rst                   | 0
->   Documentation/translations/zh_CN/arch/index.rst                 | 2 +-
->   .../translations/zh_CN/{ => arch}/parisc/debugging.rst          | 2 +-
->   Documentation/translations/zh_CN/{ => arch}/parisc/index.rst    | 2 +-
->   .../translations/zh_CN/{ => arch}/parisc/registers.rst          | 2 +-
->   MAINTAINERS                                                     | 2 +-
->   10 files changed, 6 insertions(+), 6 deletions(-)
->   rename Documentation/{ => arch}/parisc/debugging.rst (100%)
->   rename Documentation/{ => arch}/parisc/features.rst (100%)
->   rename Documentation/{ => arch}/parisc/index.rst (100%)
->   rename Documentation/{ => arch}/parisc/registers.rst (100%)
->   rename Documentation/translations/zh_CN/{ => arch}/parisc/debugging.rst (97%)
->   rename Documentation/translations/zh_CN/{ => arch}/parisc/index.rst (88%)
->   rename Documentation/translations/zh_CN/{ => arch}/parisc/registers.rst (99%)
->
-> diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rst
-> index 77e287c3eeb9..6839cd46850d 100644
-> --- a/Documentation/arch/index.rst
-> +++ b/Documentation/arch/index.rst
-> @@ -18,7 +18,7 @@ implementation.
->      ../mips/index
->      nios2/index
->      openrisc/index
-> -   ../parisc/index
-> +   parisc/index
->      ../powerpc/index
->      ../riscv/index
->      ../s390/index
-> diff --git a/Documentation/parisc/debugging.rst b/Documentation/arch/parisc/debugging.rst
-> similarity index 100%
-> rename from Documentation/parisc/debugging.rst
-> rename to Documentation/arch/parisc/debugging.rst
-> diff --git a/Documentation/parisc/features.rst b/Documentation/arch/parisc/features.rst
-> similarity index 100%
-> rename from Documentation/parisc/features.rst
-> rename to Documentation/arch/parisc/features.rst
-> diff --git a/Documentation/parisc/index.rst b/Documentation/arch/parisc/index.rst
-> similarity index 100%
-> rename from Documentation/parisc/index.rst
-> rename to Documentation/arch/parisc/index.rst
-> diff --git a/Documentation/parisc/registers.rst b/Documentation/arch/parisc/registers.rst
-> similarity index 100%
-> rename from Documentation/parisc/registers.rst
-> rename to Documentation/arch/parisc/registers.rst
-> diff --git a/Documentation/translations/zh_CN/arch/index.rst b/Documentation/translations/zh_CN/arch/index.rst
-> index 7e59af567331..908ea131bb1c 100644
-> --- a/Documentation/translations/zh_CN/arch/index.rst
-> +++ b/Documentation/translations/zh_CN/arch/index.rst
-> @@ -12,7 +12,7 @@
->      ../arm64/index
->      ../riscv/index
->      openrisc/index
-> -   ../parisc/index
-> +   parisc/index
->      ../loongarch/index
->   
->   TODOList:
-> diff --git a/Documentation/translations/zh_CN/parisc/debugging.rst b/Documentation/translations/zh_CN/arch/parisc/debugging.rst
-> similarity index 97%
-> rename from Documentation/translations/zh_CN/parisc/debugging.rst
-> rename to Documentation/translations/zh_CN/arch/parisc/debugging.rst
-> index 68b73eb57105..9bd197eb0d41 100644
-> --- a/Documentation/translations/zh_CN/parisc/debugging.rst
-> +++ b/Documentation/translations/zh_CN/arch/parisc/debugging.rst
-> @@ -1,6 +1,6 @@
->   .. include:: ../disclaimer-zh_CN.rst
->   
-> -:Original: Documentation/parisc/debugging.rst
-> +:Original: Documentation/arch/parisc/debugging.rst
->   
->   :翻译:
->   
-> diff --git a/Documentation/translations/zh_CN/parisc/index.rst b/Documentation/translations/zh_CN/arch/parisc/index.rst
-> similarity index 88%
-> rename from Documentation/translations/zh_CN/parisc/index.rst
-> rename to Documentation/translations/zh_CN/arch/parisc/index.rst
-> index 0cc553fc8272..848742539550 100644
-> --- a/Documentation/translations/zh_CN/parisc/index.rst
-> +++ b/Documentation/translations/zh_CN/arch/parisc/index.rst
-> @@ -1,7 +1,7 @@
->   .. SPDX-License-Identifier: GPL-2.0
->   .. include:: ../disclaimer-zh_CN.rst
->   
-> -:Original: Documentation/parisc/index.rst
-> +:Original: Documentation/arch/parisc/index.rst
->   
->   :翻译:
->   
-> diff --git a/Documentation/translations/zh_CN/parisc/registers.rst b/Documentation/translations/zh_CN/arch/parisc/registers.rst
-> similarity index 99%
-> rename from Documentation/translations/zh_CN/parisc/registers.rst
-> rename to Documentation/translations/zh_CN/arch/parisc/registers.rst
-> index d2ab1874a602..caf5f258248b 100644
-> --- a/Documentation/translations/zh_CN/parisc/registers.rst
-> +++ b/Documentation/translations/zh_CN/arch/parisc/registers.rst
-> @@ -1,6 +1,6 @@
->   .. include:: ../disclaimer-zh_CN.rst
->   
-> -:Original: Documentation/parisc/registers.rst
-> +:Original: Documentation/arch/parisc/registers.rst
->   
->   :翻译:
->   
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c515abc269f2..02720bc91481 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15834,7 +15834,7 @@ W:	https://parisc.wiki.kernel.org
->   Q:	http://patchwork.kernel.org/project/linux-parisc/list/
->   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jejb/parisc-2.6.git
->   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git
-> -F:	Documentation/parisc/
-> +F:	Documentation/arch/parisc/
->   F:	arch/parisc/
->   F:	drivers/char/agp/parisc-agp.c
->   F:	drivers/input/misc/hp_sdc_rtc.c
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c b/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
+index 53cf87e9acbb..1e0bb8cee7c4 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
++++ b/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
+@@ -47,16 +47,14 @@ static const char *mtk_foe_pkt_type_str(int type)
+ static void
+ mtk_print_addr(struct seq_file *m, u32 *addr, bool ipv6)
+ {
+-	u32 n_addr[4];
+-	int i;
++	__be32 n_addr[4];
+ 
+ 	if (!ipv6) {
+ 		seq_printf(m, "%pI4h", addr);
+ 		return;
+ 	}
+ 
+-	for (i = 0; i < ARRAY_SIZE(n_addr); i++)
+-		n_addr[i] = htonl(addr[i]);
++	cpu_to_be32_array(n_addr, addr, 4);
+ 	seq_printf(m, "%pI6", n_addr);
+ }
+ 
 
