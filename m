@@ -2,63 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020286D2C07
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 02:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CA36D2C0F
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 02:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233490AbjDAATc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 20:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S232670AbjDAAVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 20:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233465AbjDAAT3 (ORCPT
+        with ESMTP id S233249AbjDAAVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 20:19:29 -0400
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF941EFF2;
-        Fri, 31 Mar 2023 17:19:18 -0700 (PDT)
-Received: by mail-ua1-f47.google.com with SMTP id 89so17324075uao.0;
-        Fri, 31 Mar 2023 17:19:18 -0700 (PDT)
+        Fri, 31 Mar 2023 20:21:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FBB1E719
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 17:19:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680308390;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1akfVcI7QR7lEshuitx6obMsoCPveh68wJcZR6xPcO0=;
+        b=i9M7ILAJXCtolQx2EpRTBMI98VjWGKUNFy44uSjEkM7pMWX/UcwtKjqJIDxZh8NQzZzXiw
+        yC7LISeqiO0GFNVGdIEog2Virex7Y0qQcFx2HnoT9FzHPaqG8M9uZyDvkERxK/Tg99t95J
+        xOS0HKfX90K+ibaH04nT32TNqD22N8k=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-114-qFWjlV2gMzqyzZ2-Tugf2A-1; Fri, 31 Mar 2023 20:19:48 -0400
+X-MC-Unique: qFWjlV2gMzqyzZ2-Tugf2A-1
+Received: by mail-lf1-f71.google.com with SMTP id a14-20020a19ca0e000000b004e95c80075aso9296255lfg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 17:19:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680308358; x=1682900358;
+        d=1e100.net; s=20210112; t=1680308386;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3kN1OI426ezj2MWajyPtGNRa8U4BJeq5PITvMLQQ1/Y=;
-        b=DeQTue7QWuuU289VaxS3cHYPwUXvJ2MCX9j1RO6RRpfWJDAMtnpC0I/mtfFBfs3nmM
-         gcMd9lT1kWZ4yM8V6g3vzvf4y8n0703ZhnQuNAVdf1BbVTTPslfcKmp5cKqG3EtuMjel
-         Hi7/oFSYQCt73oXvWVpFI+Z+WtVfjB8zWjFPk26OZrU2Kjef3bmPzVv7jZR3qIidWcKl
-         wt47Sun/b/BZgBxyz9hoiOL1tKGVD7Cu12R7DCXIZelOwzbPm7JaiGNXKcAPn0JSrYox
-         NYWFc+ROyR7kL1XpyOueL5bNOH0qP0rBC2KVgfNi1MZq2r8JiFarm6BWy1Pe0X+M2mXN
-         C7tg==
-X-Gm-Message-State: AAQBX9ddKXhlX5tGHPluUPEeIkkBH2MsCMK5X1iFZ9ernMqUaH18SFUG
-        zVDEKeLLpVb8G/06viW5h5neJw4UunOeSvbKK+A=
-X-Google-Smtp-Source: AKy350aS07PTliXHfT/6Fq04P4riBefEIEVNi71XSk6owR1j8k7Nb0TCatxE3WstsfhhsfpiDIWmIjP0RuLipcCwExM=
-X-Received: by 2002:a05:6122:2e9:b0:400:f286:4e07 with SMTP id
- b9-20020a05612202e900b00400f2864e07mr11620548vko.9.1680308357755; Fri, 31 Mar
- 2023 17:19:17 -0700 (PDT)
+        bh=1akfVcI7QR7lEshuitx6obMsoCPveh68wJcZR6xPcO0=;
+        b=yraIyIfCSNNawfM8fgCYPK8dszviq52SYiA4wEtK6PPs+5G959dqPEM+6UZn6Ji3c9
+         0I+dHAq6LuPddnuMfg3X7TNK2Ffyikxv9mzewX/WRqNPnwSu7CeSLlSeerAXkQIkzefG
+         07z0tY/t4Y9p/z3HsYjxkECGUYHsJUTrHmgofK5Q/8BJ9KzTk4d1V0bP/t+/NbOuPApJ
+         nYpevqPLK9gslmHbtTcK3dZdTr0VY2QPvGm+5m8W8PzJxWUPjZ16y/NbA/cyNSSwpCzn
+         7nZaPAvMLDYY+XyVQJuDEP1YXhDiqH6ZvCVzXLOaGeGmH6/qILMe8xxOMWG2h5gbBVbt
+         4JGg==
+X-Gm-Message-State: AAQBX9fWGtaD8HDs3lbwwlwkDdWiZkOUr/h9tiAr5iu0L6mwrfhrHm2z
+        liM3syfHDrquQIVV17skJk7y/8G+LGN9/hOQncRhZOBVU8MIby0+kczCJJTy6w2gTyiPs/ZT9xs
+        LqTNScqDTO0l95/kPtEI9EHkLURcCK2dXeqNe9v8wLL2mTD39
+X-Received: by 2002:ac2:5448:0:b0:4e9:bcf5:a0b6 with SMTP id d8-20020ac25448000000b004e9bcf5a0b6mr8226775lfn.11.1680308386562;
+        Fri, 31 Mar 2023 17:19:46 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Ym6jp94Bk1kg399ONU4Y43W8m0No6VgXmQakZUMxIsdvzW+dZo3JC+oAnN0j7K8A6lQ3Sh1UTftySQqNEDppQ=
+X-Received: by 2002:ac2:5448:0:b0:4e9:bcf5:a0b6 with SMTP id
+ d8-20020ac25448000000b004e9bcf5a0b6mr8226765lfn.11.1680308386241; Fri, 31 Mar
+ 2023 17:19:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230331004844.1592789-1-irogers@google.com> <20230331004844.1592789-2-irogers@google.com>
-In-Reply-To: <20230331004844.1592789-2-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 31 Mar 2023 17:19:06 -0700
-Message-ID: <CAM9d7cjXGO-xd1tKDUHUrYtG=94aXnubRrUNe6EmyuGwo3=okA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] tools api: Add io__getline
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+References: <20230330223938.4025569-1-kherbst@redhat.com>
+In-Reply-To: <20230330223938.4025569-1-kherbst@redhat.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Sat, 1 Apr 2023 02:19:34 +0200
+Message-ID: <CACO55turFB8MNbxB3Vk=J1GK_t07K+Ybym906fR=yDLfnwk8bw@mail.gmail.com>
+Subject: Re: [PATCH] drm/nouveau/disp: Support more modes by checking with
+ lower bpc
+To:     linux-kernel@vger.kernel.org
+Cc:     Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,142 +77,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
-
-On Thu, Mar 30, 2023 at 5:49 PM Ian Rogers <irogers@google.com> wrote:
+On Fri, Mar 31, 2023 at 12:39=E2=80=AFAM Karol Herbst <kherbst@redhat.com> =
+wrote:
 >
-> Reads a line to allocated memory up to a newline following the getline
-> API.
+> This allows us to advertise more modes especially on HDR displays.
 >
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Fixes using 4K@60 modes on my TV and main display both using a HDMI to DP
+> adapter. Also fixes similiar issues for users running into this.
+>
+> Cc: stable@vger.kernel.org # 5.10+
+> Signed-off-by: Karol Herbst <kherbst@redhat.com>
 > ---
->  tools/lib/api/io.h        | 40 +++++++++++++++++++++++++++++++++++++++
->  tools/perf/tests/api-io.c | 36 +++++++++++++++++++++++++++++++++++
->  2 files changed, 76 insertions(+)
+>  drivers/gpu/drm/nouveau/dispnv50/disp.c | 32 +++++++++++++++++++++++++
+>  drivers/gpu/drm/nouveau/nouveau_dp.c    |  8 ++++---
+>  2 files changed, 37 insertions(+), 3 deletions(-)
 >
-> diff --git a/tools/lib/api/io.h b/tools/lib/api/io.h
-> index 777c20f6b604..d874e8fa8b07 100644
-> --- a/tools/lib/api/io.h
-> +++ b/tools/lib/api/io.h
-> @@ -7,7 +7,9 @@
->  #ifndef __API_IO__
->  #define __API_IO__
->
-> +#include <errno.h>
->  #include <stdlib.h>
-> +#include <string.h>
->  #include <unistd.h>
->
->  struct io {
-> @@ -112,4 +114,42 @@ static inline int io__get_dec(struct io *io, __u64 *dec)
->         }
+> diff --git a/drivers/gpu/drm/nouveau/dispnv50/disp.c b/drivers/gpu/drm/no=
+uveau/dispnv50/disp.c
+> index ed9d374147b8d..f28e47c161dd9 100644
+> --- a/drivers/gpu/drm/nouveau/dispnv50/disp.c
+> +++ b/drivers/gpu/drm/nouveau/dispnv50/disp.c
+> @@ -363,6 +363,35 @@ nv50_outp_atomic_check_view(struct drm_encoder *enco=
+der,
+>         return 0;
 >  }
 >
-> +/* Read up to and including the first newline following the pattern of getline. */
-> +static inline ssize_t io__getline(char **line_out, size_t *line_len_out, struct io *io)
+> +static void
+> +nv50_outp_atomic_fix_depth(struct drm_encoder *encoder, struct drm_crtc_=
+state *crtc_state)
 > +{
-> +       char buf[128];
-> +       int buf_pos = 0;
-> +       char *line = NULL;
-> +       size_t line_len = 0;
-> +       int ch = 0;
+> +       struct nv50_head_atom *asyh =3D nv50_head_atom(crtc_state);
+> +       struct nouveau_encoder *nv_encoder =3D nouveau_encoder(encoder);
+> +       struct drm_display_mode *mode =3D &asyh->state.adjusted_mode;
+> +       unsigned int max_rate, mode_rate;
 > +
-> +       /* TODO: reuse previously allocated memory. */
-> +       free(*line_out);
-> +       while (ch != '\n') {
-> +               ch = io__get_char(io);
+> +       switch (nv_encoder->dcb->type) {
+> +       case DCB_OUTPUT_DP:
+> +               max_rate =3D nv_encoder->dp.link_nr * nv_encoder->dp.link=
+_bw;
 > +
-> +               if (ch < 0)
-> +                       break;
+> +                /* we don't support more than 10 anyway */
+> +               asyh->or.bpc =3D max_t(u8, asyh->or.bpc, 10);
+
+luckily I didn't push yet, but this has to be `min_t` :)
+
 > +
-> +               if (buf_pos == sizeof(buf)) {
-> +                       line = realloc(line, line_len + sizeof(buf));
-> +                       if (!line)
-> +                               return -ENOMEM;
-
-We can use a temp variable for the failure case, and also free
-the original line before returning the error.
-
-
-> +                       memcpy(&line[line_len], buf, sizeof(buf));
-> +                       line_len += sizeof(buf);
-> +                       buf_pos = 0;
+> +               /* reduce the bpc until it works out */
+> +               while (asyh->or.bpc > 6) {
+> +                       mode_rate =3D DIV_ROUND_UP(mode->clock * asyh->or=
+.bpc * 3, 8);
+> +                       if (mode_rate <=3D max_rate)
+> +                               break;
+> +
+> +                       asyh->or.bpc -=3D 2;
 > +               }
-> +               buf[buf_pos++] = (char)ch;
+> +               break;
+> +       default:
+> +               break;
 > +       }
-> +       line = realloc(line, line_len + buf_pos + 1);
-> +       if (!line)
-> +               return -ENOMEM;
-
-Ditto.
-
-Thanks,
-Namhyung
-
-
-> +       memcpy(&line[line_len], buf, buf_pos);
-> +       line[line_len + buf_pos] = '\0';
-> +       line_len += buf_pos;
-> +       *line_out = line;
-> +       *line_len_out = line_len;
-> +       return line_len;
 > +}
 > +
->  #endif /* __API_IO__ */
-> diff --git a/tools/perf/tests/api-io.c b/tools/perf/tests/api-io.c
-> index e91cf2c127f1..0ff39cdfcb01 100644
-> --- a/tools/perf/tests/api-io.c
-> +++ b/tools/perf/tests/api-io.c
-> @@ -289,6 +289,40 @@ static int test_get_dec(void)
->         return ret;
+>  static int
+>  nv50_outp_atomic_check(struct drm_encoder *encoder,
+>                        struct drm_crtc_state *crtc_state,
+> @@ -381,6 +410,9 @@ nv50_outp_atomic_check(struct drm_encoder *encoder,
+>         if (crtc_state->mode_changed || crtc_state->connectors_changed)
+>                 asyh->or.bpc =3D connector->display_info.bpc;
+>
+> +       /* We might have to reduce the bpc */
+> +       nv50_outp_atomic_fix_depth(encoder, crtc_state);
+> +
+>         return 0;
 >  }
 >
-> +static int test_get_line(void)
-> +{
-> +       char path[PATH_MAX];
-> +       struct io io;
-> +       char test_string[1024];
-> +       char *line = NULL;
-> +       size_t i, line_len = 0;
-> +       size_t buf_size = 128;
-> +       int ret = 0;
-> +
-> +       for (i = 0; i < 512; i++)
-> +               test_string[i] = 'a';
-> +       test_string[512] = '\n';
-> +       for (i = 513; i < 1023; i++)
-> +               test_string[i] = 'b';
-> +       test_string[1023] = '\0';
-> +
-> +       if (setup_test(path, test_string, buf_size, &io))
-> +               return -1;
-> +
-> +       EXPECT_EQUAL((int)io__getline(&line, &line_len, &io), 513);
-> +       EXPECT_EQUAL((int)strlen(line), 513);
-> +       for (i = 0; i < 512; i++)
-> +               EXPECT_EQUAL(line[i], 'a');
-> +       EXPECT_EQUAL(line[512], '\n');
-> +       EXPECT_EQUAL((int)io__getline(&line, &line_len, &io), 510);
-> +       for (i = 0; i < 510; i++)
-> +               EXPECT_EQUAL(line[i], 'b');
-> +
-> +       free(line);
-> +       cleanup_test(path, &io);
-> +       return ret;
-> +}
-> +
->  static int test__api_io(struct test_suite *test __maybe_unused,
->                         int subtest __maybe_unused)
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_dp.c b/drivers/gpu/drm/nouve=
+au/nouveau_dp.c
+> index e00876f92aeea..d49b4875fc3c9 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_dp.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_dp.c
+> @@ -263,8 +263,6 @@ nouveau_dp_irq(struct work_struct *work)
+>  }
+>
+>  /* TODO:
+> - * - Use the minimum possible BPC here, once we add support for the max =
+bpc
+> - *   property.
+>   * - Validate against the DP caps advertised by the GPU (we don't check =
+these
+>   *   yet)
+>   */
+> @@ -276,7 +274,11 @@ nv50_dp_mode_valid(struct drm_connector *connector,
 >  {
-> @@ -300,6 +334,8 @@ static int test__api_io(struct test_suite *test __maybe_unused,
->                 ret = TEST_FAIL;
->         if (test_get_dec())
->                 ret = TEST_FAIL;
-> +       if (test_get_line())
-> +               ret = TEST_FAIL;
->         return ret;
->  }
+>         const unsigned int min_clock =3D 25000;
+>         unsigned int max_rate, mode_rate, ds_max_dotclock, clock =3D mode=
+->clock;
+> -       const u8 bpp =3D connector->display_info.bpc * 3;
+> +       /* Check with the minmum bpc always, so we can advertise better m=
+odes.
+> +        * In particlar not doing this causes modes to be dropped on HDR
+> +        * displays as we might check with a bpc of 16 even.
+> +        */
+> +       const u8 bpp =3D 6 * 3;
 >
+>         if (mode->flags & DRM_MODE_FLAG_INTERLACE && !outp->caps.dp_inter=
+lace)
+>                 return MODE_NO_INTERLACE;
 > --
-> 2.40.0.348.gf938b09366-goog
+> 2.39.2
 >
+
