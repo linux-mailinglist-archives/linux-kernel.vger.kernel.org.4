@@ -2,82 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6293B6D3131
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761876D3156
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 16:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjDAOFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 10:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S229868AbjDAOdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 10:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjDAOFV (ORCPT
+        with ESMTP id S229543AbjDAOdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 10:05:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4790FB45E;
-        Sat,  1 Apr 2023 07:05:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEAEA60AD1;
-        Sat,  1 Apr 2023 14:05:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F240DC433D2;
-        Sat,  1 Apr 2023 14:05:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680357920;
-        bh=MZ44pijlcbwqZoRd2llf2veubGkW4dMJTr6PLEgL0wY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NqM4nLnKP4gbENhoIgQOGTWfbGeuJSxqlEjtpt7lpmSEqlMKKgrjtINPe1r6mCT5/
-         ZvGhgAcG3krRSPgvEUVYLd2N+XtN0aBY9KqK8vUl421b3aAzPhJIzTDAIkusRLuEoJ
-         dJhERA/0ioZOQki2R8Mvo72rZYIFvPda8jiCGUsAuQZubGPk5zjjf4x4ZAIXBeidm8
-         pxzAFfaVujODZLDbK1glMw0aY2DFfnMWwul3aR/NHwixyNw54mVRgZf9LpLw4Xz2xI
-         nIt6ZLp0c2QWkXU7hTv5UqaymlXLvz8T2QMVp+nFSjSydhPl3qYr/8MqiemhR2Z7NF
-         EIZ6uLm/mQDSg==
-Date:   Sat, 1 Apr 2023 15:20:28 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Tom Rix <trix@redhat.com>, lars@metafoo.de, nathan@kernel.org,
-        ndesaulniers@google.com, u.kleine-koenig@pengutronix.de,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Chuhong Yuan <hslester96@gmail.com>,
-        Brian Masney <bmasney@redhat.com>,
-        Brian Masney <masneyb@onstation.org>
-Subject: Re: [PATCH] iio: tsl2772: remove unused prox_diode_mask variable
-Message-ID: <20230401152028.30344b48@jic23-huawei>
-In-Reply-To: <ZCGVJOSBjKO3FKD6@smile.fi.intel.com>
-References: <20230327120823.1369700-1-trix@redhat.com>
-        <ZCGVJOSBjKO3FKD6@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 1 Apr 2023 10:33:02 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73BFC678;
+        Sat,  1 Apr 2023 07:33:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680359581; x=1711895581;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=t6ZyHKlSM/RWzkJaCnaHAvOC8U7nlGw+Qcy8Hciv6FE=;
+  b=N2ONSdym/fpcBMx91t7paACIQXHES3taRvNY0yt2xno3oGQZrn7PVy9C
+   IWaITWsp5RcAPnWNBFiQk/iwVq4SkuWl/SvwggPIT9Ex/4F7DC5z+pQpm
+   vivOIh7vMCdvSvOb36nBpS7qca+R6+fWakwij8uyhBR+uvmqnUMl19EM4
+   MnzxyIYh/mRuJIeAnk55X+KwIHvUTxWywp1/0K5G9qiUNWtqKdbS2gqZ5
+   B1EfdJQQNFXdd1+mFCLxoniSKq3G34UXrDxnPKxyItQacCb9/9uEx3KnP
+   Nt4Fm32tYZEsTBXYGeLPKJzoLVwZZ/wpK+ZOmjPn7XfSCeTt4KyzKWAvI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="341676923"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="341676923"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 07:33:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="829049450"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="829049450"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Apr 2023 07:32:59 -0700
+Date:   Sat, 1 Apr 2023 22:21:24 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] fpga: zynq: Add parse_header ops support
+Message-ID: <ZCg95G5P2KMnjTcr@yilunxu-OptiPlex-7050>
+References: <20230327122057.205123-1-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327122057.205123-1-nava.kishore.manne@amd.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 16:07:48 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On 2023-03-27 at 17:50:57 +0530, Nava kishore Manne wrote:
+> The commit 3cc624beba63 ("fpga: fpga-mgr: support bitstream offset in
+> image buffer") added a new parse_header ops to handle the header related
+> stuff in the fpga framework. So moved the header validation logic from
+> write_init() to parse_header().
 
-> On Mon, Mar 27, 2023 at 08:08:23AM -0400, Tom Rix wrote:
-> > clang with W=1 reports
-> > drivers/iio/light/tsl2772.c:576:24: error: variable
-> >   'prox_diode_mask' set but not used [-Werror,-Wunused-but-set-variable]
-> >         int i, ret, num_leds, prox_diode_mask;
-> >                               ^
-> > This variable is not used so remove it.  
+On second thought, I don't think the change is necessary. Implementing
+parse_header only if the info->head/data_size needs runtime
+re-evaluation according to the image. Otherwise, checking header in
+write_init() is just fine.
+
+Thanks,
+Yilun
+
 > 
-> While from the compilation point of view this is a correct fix, I think
-> we need to hear from the author (or interested stakeholders) about this
-> feature. Perhaps it should be enabled / fixed differently.
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> ---
+> Changes for v2:
+>               - Limit the sync pattern validation size to header_size
+>                 as suggested Yilun.
 > 
-
-Superficially it looks like this value should have been stored to
-chip->settings.prox_diode
-
-+CC people who might know...
-
-Jonathan
+> Changes for v3:
+>               - zynq_fpga_has_sync () API is expecting "u8 *". So type cast
+>                 formal parameter "const char *" to "u8 *".
+> 
+>  drivers/fpga/zynq-fpga.c | 23 ++++++++++++++++-------
+>  1 file changed, 16 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+> index ae0da361e6c6..a6096f0c93fc 100644
+> --- a/drivers/fpga/zynq-fpga.c
+> +++ b/drivers/fpga/zynq-fpga.c
+> @@ -248,6 +248,21 @@ static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
+>  	return false;
+>  }
+>  
+> +static int zynq_fpga_ops_parse_header(struct fpga_manager *mgr,
+> +				      struct fpga_image_info *info,
+> +				      const char *buf, size_t count)
+> +{
+> +	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
+> +		if (!zynq_fpga_has_sync((u8 *)buf, info->header_size)) {
+> +			dev_err(&mgr->dev,
+> +				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
+>  				    struct fpga_image_info *info,
+>  				    const char *buf, size_t count)
+> @@ -275,13 +290,6 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
+>  
+>  	/* don't globally reset PL if we're doing partial reconfig */
+>  	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
+> -		if (!zynq_fpga_has_sync(buf, count)) {
+> -			dev_err(&mgr->dev,
+> -				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
+> -			err = -EINVAL;
+> -			goto out_err;
+> -		}
+> -
+>  		/* assert AXI interface resets */
+>  		regmap_write(priv->slcr, SLCR_FPGA_RST_CTRL_OFFSET,
+>  			     FPGA_RST_ALL_MASK);
+> @@ -545,6 +553,7 @@ static enum fpga_mgr_states zynq_fpga_ops_state(struct fpga_manager *mgr)
+>  static const struct fpga_manager_ops zynq_fpga_ops = {
+>  	.initial_header_size = 128,
+>  	.state = zynq_fpga_ops_state,
+> +	.parse_header = zynq_fpga_ops_parse_header,
+>  	.write_init = zynq_fpga_ops_write_init,
+>  	.write_sg = zynq_fpga_ops_write,
+>  	.write_complete = zynq_fpga_ops_write_complete,
+> -- 
+> 2.25.1
+> 
