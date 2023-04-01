@@ -2,139 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803866D33D3
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 22:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246C36D3390
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 21:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjDAUaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 16:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
+        id S229974AbjDATeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 15:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDAUad (ORCPT
+        with ESMTP id S229890AbjDATeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 16:30:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED7BC669;
-        Sat,  1 Apr 2023 13:30:31 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 77EBA66030C4;
-        Sat,  1 Apr 2023 21:30:29 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680381029;
-        bh=YzmZJzLAOt9Kefz8r1tk+YrbDj+ypz+EkDt0+WX3YpA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lKi4CdANBtbKhg0xQoFMSHXZcwmziR9fMMChivQ0oyM4iVY/Jfen9Q0BYeafYXJSO
-         h3TDxA1UFtbHk6EaWlFeGsAjtEpY/U+WU2OK7Mow562NQuuenTNaCNNgrjsm8t1DGM
-         8apySrygtU6RQ6gRyKzU8CqbvBkqn9rpAjkhl8wjfAF1TBh/vpNZQuUhBa6QuW722C
-         LiBUhyuhU0bpgyJq9UeHiH0uCsIS7sVAufIDem3wsQAk+McE+NE1q9DKEKQvHnQgJp
-         LSiP8dj4Z4veg87Os6q5Dz7Rok9IIPDetdXaB1b4gHdOEJDlo98oZh1BClWiS+qB/O
-         KzU+ab3OEnhTw==
-Received: by mercury (Postfix, from userid 1000)
-        id EA5EE1062746; Sat,  1 Apr 2023 22:30:26 +0200 (CEST)
-Date:   Sat, 1 Apr 2023 22:30:26 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     nathan@kernel.org, ndesaulniers@google.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Andreas Kemnade <andreas@kemnade.info>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: Re: [PATCH] power: supply: twl4030-charger: remove unused cur_reg
- variable
-Message-ID: <20230401203026.nzk4aygv7sr7quhe@mercury.elektranox.org>
-References: <20230401113432.1873847-1-trix@redhat.com>
+        Sat, 1 Apr 2023 15:34:07 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FA01A969
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 12:34:04 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id e18so25555862wra.9
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 12:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1680377643;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T8nk4QZgWJg4nXeLh4FKwCEMlZL89Q2/gxR+wnUlYKE=;
+        b=HGKGh54YFhrvPb37yH8hOS5CsqeTujyV4VL3WbkXqVVrUDuuVS7v90zKoJMmRRdeaa
+         eGde5sjydMFGflefdX1gjRpbpA8Ef5k8g5MedMHSnytb2/pU57TWhqccC0lzljcR7jyT
+         hu9oW2uNzKlsPDcK8AX+juNDSJKqo4W4DS0RE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680377643;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T8nk4QZgWJg4nXeLh4FKwCEMlZL89Q2/gxR+wnUlYKE=;
+        b=ELHk6eGTi4xCyQ2kJL+NjcnVVF3MiH4rltwb+GpiTdZAhyDDWkbWm9dSV84F6m9MTM
+         v9jUeHYFH3iVAVT+mFKoNWwGiXVabR0Cs9CIqkcWG7cpjsMld2tQZo4x5tmj8zavkSdY
+         98GFONf/LKnCkVU/4LUJxFQHc0Y5E5LOzAMm9NlLwpur1ez7VgKZgDddjoDRNVbdmVtE
+         hLVAxFjTUS1j/B8v3Jfixtc4RGimRfs2TkxQrLQ4JOm6jqmshwJjFRK9LfA8m/VA4N6P
+         mxgFL0KBIQV9d8EsWLWNIw0iSZKNTrK1HPoHSs9XhL78Hy11qY1E7jMUM3M3fF5UQ3XS
+         7lxg==
+X-Gm-Message-State: AAQBX9dPLtygqGecSuMf30CJuoIJyLpGvwfYMRU+2Mnw9pkHYuzbqMiG
+        2/5gQRMAlgRY1jf/7tVf4gVVig==
+X-Google-Smtp-Source: AKy350Y5D0ExAXEkg5rfqePCtbRp8sfXIZ7hSLc+dGA9E1RgAyvEH+GV0tJZXYvCamlzuZrbySxjjw==
+X-Received: by 2002:a5d:538d:0:b0:2cf:e023:5915 with SMTP id d13-20020a5d538d000000b002cfe0235915mr21430570wrv.61.1680377643121;
+        Sat, 01 Apr 2023 12:34:03 -0700 (PDT)
+Received: from workstation.ehrig.io (tmo-065-106.customers.d1-online.com. [80.187.65.106])
+        by smtp.gmail.com with ESMTPSA id b5-20020a5d4b85000000b002c559843748sm5600416wrt.10.2023.04.01.12.34.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Apr 2023 12:34:02 -0700 (PDT)
+From:   Christian Ehrig <cehrig@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     cehrig@cloudflare.com, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Kaixi Fan <fankaixi.li@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, netdev@vger.kernel.org,
+        Paul Chaignon <paul@isovalent.com>,
+        Shmulik Ladkani <shmulik@metanetworks.com>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>, Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next 0/3] Add FOU support for externally controlled ipip devices
+Date:   Sat,  1 Apr 2023 22:33:25 +0200
+Message-Id: <cover.1680379518.git.cehrig@cloudflare.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mfptafjvzvw5h7cx"
-Content-Disposition: inline
-In-Reply-To: <20230401113432.1873847-1-trix@redhat.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch set adds support for using FOU or GUE encapsulation with
+an ipip device operating in collect-metadata mode and a set of kfuncs
+for controlling encap parameters exposed to a BPF tc-hook.
 
---mfptafjvzvw5h7cx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+BPF tc-hooks allow us to read tunnel metadata (like remote IP addresses)
+in the ingress path of an externally controlled tunnel interface via
+the bpf_skb_get_tunnel_{key,opt} bpf-helpers. Packets can then be
+redirected to the same or a different externally controlled tunnel
+interface by overwriting metadata via the bpf_skb_set_tunnel_{key,opt}
+helpers and a call to bpf_redirect. This enables us to redirect packets
+between tunnel interfaces - and potentially change the encapsulation
+type - using only a single BPF program.
 
-Hi,
+Today this approach works fine for a couple of tunnel combinations.
+For example: redirecting packets between Geneve and GRE interfaces or
+GRE and plain ipip interfaces. However, redirecting using FOU or GUE is
+not supported today. The ip_tunnel module does not allow us to egress
+packets using additional UDP encapsulation from an ipip device in
+collect-metadata mode.
 
-On Sat, Apr 01, 2023 at 07:34:32AM -0400, Tom Rix wrote:
-> clang with W=3D1 reports
-> drivers/power/supply/twl4030_charger.c:242:16: error: variable
->   'cur_reg' set but not used [-Werror,-Wunused-but-set-variable]
->         unsigned reg, cur_reg;
->                       ^
-> This variable is not used so remove it.
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/power/supply/twl4030_charger.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/suppl=
-y/twl4030_charger.c
-> index 7adfd69fe649..5fa5b2311330 100644
-> --- a/drivers/power/supply/twl4030_charger.c
-> +++ b/drivers/power/supply/twl4030_charger.c
-> @@ -239,7 +239,7 @@ static int twl4030_charger_update_current(struct twl4=
-030_bci *bci)
->  {
->  	int status;
->  	int cur;
-> -	unsigned reg, cur_reg;
-> +	unsigned reg;
->  	u8 bcictl1, oldreg, fullreg;
->  	bool cgain =3D false;
->  	u8 boot_bci;
-> @@ -357,11 +357,9 @@ static int twl4030_charger_update_current(struct twl=
-4030_bci *bci)
->  	status =3D twl4030_bci_read(TWL4030_BCIIREF1, &oldreg);
->  	if (status < 0)
->  		return status;
-> -	cur_reg =3D oldreg;
->  	status =3D twl4030_bci_read(TWL4030_BCIIREF2, &oldreg);
->  	if (status < 0)
->  		return status;
-> -	cur_reg |=3D oldreg << 8;
->  	if (reg !=3D oldreg) {
+Patch 1 lifts this restriction by adding a struct ip_tunnel_encap to
+the tunnel metadata. It can be filled by a new BPF kfunc introduced
+in Patch 2 and evaluated by the ip_tunnel egress path. This will allow
+us to use FOU and GUE encap with externally controlled ipip devices.
 
-I think the correct fix would be checking for (reg !=3D cur_reg) here.
+Patch 2 introduces two new BPF kfuncs: bpf_skb_{set,get}_fou_encap.
+These helpers can be used to set and get UDP encap parameters from the
+BPF tc-hook doing the packet redirect.
 
--- Sebastian
+Patch 3 adds BPF tunnel selftests using the two kfuncs.
 
->  		/* disable write protection for one write access for
->  		 * BCIIREF */
-> --=20
-> 2.27.0
->=20
+Christian Ehrig (3):
+  ipip,ip_tunnel,sit: Add FOU support for externally controlled ipip
+    devices
+  bpf,fou: Add bpf_skb_{set,get}_fou_encap kfuncs
+  selftests/bpf: Test FOU kfuncs for externally controlled ipip devices
 
---mfptafjvzvw5h7cx
-Content-Type: application/pgp-signature; name="signature.asc"
+ include/net/fou.h                             |   2 +
+ include/net/ip_tunnels.h                      |  27 ++--
+ net/ipv4/Makefile                             |   2 +-
+ net/ipv4/fou_bpf.c                            | 118 ++++++++++++++++++
+ net/ipv4/fou_core.c                           |   5 +
+ net/ipv4/ip_tunnel.c                          |  22 +++-
+ net/ipv4/ipip.c                               |   1 +
+ net/ipv6/sit.c                                |   2 +-
+ .../selftests/bpf/progs/test_tunnel_kern.c    | 117 +++++++++++++++++
+ tools/testing/selftests/bpf/test_tunnel.sh    |  81 ++++++++++++
+ 10 files changed, 360 insertions(+), 17 deletions(-)
+ create mode 100644 net/ipv4/fou_bpf.c
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.39.2
 
-iQIyBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQolF4ACgkQ2O7X88g7
-+poTpw/4qkx6YJ+9tkZXsBoUZCdHoevMWeMg4FDt6d351ZoMDrZQyLWkrrQglRt6
-rwnpaReLsWPt3q9TmZwsQ5892JZOZw5QMOUHyfGhlCBPp7wiY35PQ0Ihff0NyzoJ
-KermMpArXyjcL4meLX8Q5NRlanU4TpDJwN03SmJziryemQI5ytwGxjBBXOcvq2hB
-ck2Py7rSk8FgBAtNAA2tjV05eJL6rVRcD3JknZicSQ1F1CissdhlJS72OdUhRDVj
-ydmiXywW1jTEMCMrXG92x3COR0Niv/MH0PjlMakYKrjUlD0hMXUsNLq4CRjknhRu
-QnGF1kGtBSd15ANhNNcqOmSTyC7uWzvQTOnE1Ge0wbMNVXSNeHFvieRxN5EOEAC0
-6Yt9xUDMQtMIVoBgzUk3GAdwSvW+mYBXC14UlTFzfRKh0GozhZSuG8Ee+rtEdovn
-xqdTx/mxR75AWTiL/JsbAzrkCv3+Yt7sSwvcsz5CseNXxWvuWt/W7apC9HSvEd7O
-L7eR1iaB42II2oJJBtZra0Lp4bscslMwmXK7B9/Zjkdn5SnD0vttBuBAEpgksU/4
-thNJUNt8jtS0WSKbAjeJEWpFwxo9Yha1grP4wXqDgGpuEYZjUFLqp+C/HgSoS4sO
-Onf5LmXisLayRqToKWUUEmRfOa+a/xTicUvyxrxeOVdmLOolbg==
-=28ub
------END PGP SIGNATURE-----
-
---mfptafjvzvw5h7cx--
