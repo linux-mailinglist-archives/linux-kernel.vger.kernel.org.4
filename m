@@ -2,145 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A016D2E86
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B84866D2E8C
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232852AbjDAGPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 02:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
+        id S233104AbjDAGW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 02:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbjDAGPn (ORCPT
+        with ESMTP id S231926AbjDAGW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 02:15:43 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D177EFBA
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 23:15:41 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id z65-20020a6bc944000000b007584beb0e28so14519080iof.21
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 23:15:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680329740; x=1682921740;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XqNN61HFN9AplPUAzlgJ4Lk0uE9RFppc2dGoBPDTz44=;
-        b=EZ/N5v5XUYBE6HZ5D0BTLkKEbD/QMm7D8t6jSebRJSNSxq4L/niE/CHrm/efe5QH5L
-         u1RC36JF1+v3/BSWSSjpmtEv+GZDy0v6sTc5NXvlR7vyqDTPWOFIiCnOyYPCfrtZoBOw
-         b/A5G/YZi/bBic8F01gbkgCF5fMJ66rt9Cz7y5ec1C2cz81RWoIWKPW5EJhcxjeET9/q
-         UQQeTqxJO3U1bkZPmoqj3N0J8YNaZCG8LygaRhG0ElDpgU3oJDKa5tYn4nOD2m5C9UJh
-         zzBWTSlSBVhlsFZBfTdnVBlNvsOaNNKGEbryHrttCR7G4x4Nz0SiD6W8HAEpmWeu7NIn
-         cw6Q==
-X-Gm-Message-State: AAQBX9e0Tls3p7wpZIgKAsB24JGGEqumiYPr+fA4RyLJWMtgUlTk8Zxe
-        T7JVXPU70SPXynq/vBRYN3t81IUpGDJHF7JJFF6wJYQauskb
-X-Google-Smtp-Source: AKy350bZqtamB1Vq06uzF8HFZMKc15oFP+0u6nylgPGgQGTrdDe4+5VgG+vfYgjUKXjWeBz52pgJbgMD7B/ffkBweaPpCTXc8b10
+        Sat, 1 Apr 2023 02:22:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDC310D3;
+        Fri, 31 Mar 2023 23:22:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2938C603F7;
+        Sat,  1 Apr 2023 06:22:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75DF9C433D2;
+        Sat,  1 Apr 2023 06:22:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680330175;
+        bh=C4wrTt4zKss+4MIQ4zd/7UCc8iEP633HVcG1T+mQhiY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sci3SLV5e2aXT5PUIjsGGDa2+eckoillSpkBvvRdjZlRDGuGJ+Zpp9OXnRfbmQ3fY
+         9VVezGsnMsZiznZa+bfAdurrfmAosQ9Gsdp0/r7BvPbJux5JcqwdBmyphmsP+RlEJi
+         c4Up6nQnLjcarI/Jrw0v5JEsGuIW4rPk/q2rBaGFmu7nh/slpaFKS8FiLAbiKwSAid
+         9VlTVg1BZYX1yeJNxGBCnwzhFZBA8P7zMfNH55KCtTV89pQjQuN5u1HHmYSehicHbd
+         wKwC6IzCrXtNwWH3Tx/xyhiKDW6m17KIZbHpk+QKVK64qEzRYQkaJncSUiR2BchEdW
+         OX9U3KgUztNzA==
+Received: by mail-oi1-f180.google.com with SMTP id l18so18272411oic.13;
+        Fri, 31 Mar 2023 23:22:55 -0700 (PDT)
+X-Gm-Message-State: AO0yUKXq23bSMMHQW5caKcsjSkHGs39HVRxavlJjmvJoogzOVCMxFjMd
+        9N5/cC70FmBYRdnVU7Yt+qBlZ1Q1LLrQstIdtI0=
+X-Google-Smtp-Source: AK7set9kbagaDQWo3VqsPvdsr+y+o5EyTN7o/8YsD4bA8ctmP71eEtUcCFuhO327T4HZXkPMjVoIAr+gx3H0deluQCg=
+X-Received: by 2002:a05:6808:14d5:b0:384:a13:952a with SMTP id
+ f21-20020a05680814d500b003840a13952amr9469531oiw.11.1680330174630; Fri, 31
+ Mar 2023 23:22:54 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:7b49:0:b0:75d:2e78:ee76 with SMTP id
- m9-20020a6b7b49000000b0075d2e78ee76mr1347408iop.4.1680329740600; Fri, 31 Mar
- 2023 23:15:40 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 23:15:40 -0700
-In-Reply-To: <00000000000078275b05b798f7df@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004b4e4805f84041e0@google.com>
-Subject: Re: [syzbot] [usb?] INFO: task hung in usbdev_open (2)
-From:   syzbot <syzbot+b73659f5bb96fac34820@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, jeremy.linton@arm.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
+References: <1de9eccd-8570-3b69-4be2-347e862bcc33@mailbox.org>
+In-Reply-To: <1de9eccd-8570-3b69-4be2-347e862bcc33@mailbox.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 1 Apr 2023 15:22:18 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATY8PvkDesOBQxLw11t1-OT9EsrNHekjAeOjLDhwPcP8w@mail.gmail.com>
+Message-ID: <CAK7LNATY8PvkDesOBQxLw11t1-OT9EsrNHekjAeOjLDhwPcP8w@mail.gmail.com>
+Subject: Re: [Question] Restore previous "local tag" behaviour
+To:     Tor Vic <torvic9@mailbox.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Tue, Mar 28, 2023 at 2:44=E2=80=AFAM Tor Vic <torvic9@mailbox.org> wrote=
+:
+>
+> Hi,
+>
+> When I'm building my kernels, I used to tag my personal releases with a
+> similar annotated tag commit as with vanilla kernel, just appending
+> "-tv" or similar to it, i.e. "v6.3-rc4" becomes "v6.3-rc4-tv".
 
-HEAD commit:    59caa87f9dfb Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=16dd438ec80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e918bdf4f2f853c4
-dashboard link: https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15cb0c69c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=160d1e21c80000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4d91c587af1a/disk-59caa87f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c2a88c8fab99/vmlinux-59caa87f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0f56d2d1cbfc/Image-59caa87f.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b73659f5bb96fac34820@syzkaller.appspotmail.com
-
-INFO: task syz-executor388:6000 blocked for more than 143 seconds.
-      Not tainted 6.3.0-rc4-syzkaller-g59caa87f9dfb #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor388 state:D stack:0     pid:6000  ppid:5984   flags:0x00000001
-Call trace:
- __switch_to+0x320/0x754 arch/arm64/kernel/process.c:556
- context_switch kernel/sched/core.c:5307 [inline]
- __schedule+0x1048/0x1e38 kernel/sched/core.c:6625
- schedule+0xc4/0x170 kernel/sched/core.c:6701
- schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6760
- __mutex_lock_common+0xbd8/0x21a0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- device_lock include/linux/device.h:832 [inline]
- usbdev_open+0x13c/0x6c0 drivers/usb/core/devio.c:1041
- chrdev_open+0x3e8/0x4fc fs/char_dev.c:414
- do_dentry_open+0x724/0xf90 fs/open.c:920
- vfs_open+0x7c/0x90 fs/open.c:1051
- do_open fs/namei.c:3560 [inline]
- path_openat+0x1f2c/0x27f8 fs/namei.c:3715
- do_filp_open+0x1bc/0x3cc fs/namei.c:3742
- do_sys_openat2+0x128/0x3d8 fs/open.c:1348
- do_sys_open fs/open.c:1364 [inline]
- __do_sys_openat fs/open.c:1380 [inline]
- __se_sys_openat fs/open.c:1375 [inline]
- __arm64_sys_openat+0x1f0/0x240 fs/open.c:1375
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-
-Showing all locks held in the system:
-1 lock held by rcu_tasks_kthre/12:
- #0: ffff800015d36810 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x44/0xcf4 kernel/rcu/tasks.h:510
-1 lock held by rcu_tasks_trace/13:
- #0: ffff800015d37010 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x44/0xcf4 kernel/rcu/tasks.h:510
-1 lock held by khungtaskd/28:
- #0: ffff800015d36640 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0xc/0x44 include/linux/rcupdate.h:326
-5 locks held by kworker/0:2/1522:
- #0: ffff0000c13f7d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x664/0x12d4 kernel/workqueue.c:2363
- #1: ffff8000225b7c20 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x6a8/0x12d4 kernel/workqueue.c:2365
- #2: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #2: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c8/0x474c drivers/usb/core/hub.c:5739
- #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: __device_attach+0x90/0x434 drivers/base/dd.c:973
- #4: ffff0000cc332118 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #4: ffff0000cc332118 (&dev->mutex){....}-{3:3}, at: __device_attach+0x90/0x434 drivers/base/dd.c:973
-2 locks held by getty/5625:
- #0: ffff0000d354c098 (&tty->ldisc_sem){++++}-{0:0}, at: ldsem_down_read+0x3c/0x4c drivers/tty/tty_ldsem.c:340
- #1: ffff80001a8602f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x414/0x1210 drivers/tty/n_tty.c:2177
-4 locks held by udevd/5996:
- #0: ffff0000d0fe41c8 (&p->lock){+.+.}-{3:3}, at: seq_read_iter+0xac/0xc44 fs/seq_file.c:182
- #1: ffff0000cf47a088 (&of->mutex){+.+.}-{3:3}, at: kernfs_seq_start+0x58/0x384 fs/kernfs/file.c:154
- #2: ffff0000d37d0660 (kn->active#14){.+.+}-{0:0}, at: kernfs_seq_start+0x74/0x384 fs/kernfs/file.c:155
- #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: device_lock_interruptible include/linux/device.h:837 [inline]
- #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: manufacturer_show+0x30/0xac drivers/usb/core/sysfs.c:142
-1 lock held by syz-executor388/6000:
- #0: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
- #0: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: usbdev_open+0x13c/0x6c0 drivers/usb/core/devio.c:1041
-
-=============================================
+I do not understand what you want to achieve.
 
 
+
+Let's say you wanted to release "v6.0-rc4-tv",
+which consists of v6.0-rc4 with 331 extra commits.
+
+
+$ git checkout  v6.0-rc5^
+HEAD is now at 4ed9c1e971b1 Merge tag 'kbuild-fixes-v6.0-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+$ git describe
+v6.0-rc4-331-g4ed9c1e971b1
+$ make kernelrelease
+6.0.0-rc4-00331-g4ed9c1e971b1
+
+
+Then, you released it as "v6.0-rc4-tv".
+
+$ git tag -a v6.0-rc4-tv -m "Linux v6.0-rc4-tv"
+$ make kernelrelease
+6.0.0-rc4
+
+
+Then, kernelrelease becomes clean '6.0.0-rc4'.
+Is this what you want?
+
+It is apparently wrong since there are
+331 commits between v6.0-rc4 and v6.0-rc4-tv.
+
+That is what 6ab7e1f95e96 _fixed_.
+
+
+The behavior is now clearer and correct.
+
+$ git describe
+v6.3-rc4-174-g2bac7dc169af
+$ git tag  -a v6.3-rc4-tv  -m "Linux v6.3-rc4-tv"
+$ make kernelrelease
+6.3.0-rc4-00174-g2bac7dc169af
+
+
+If you wanted to make a "-tv" release,
+you would want to change the version field in Makefile
+before tagging.
+
+
+ diff --git a/Makefile b/Makefile
+ index da2586d4c728..8639036f5095 100644
+ --- a/Makefile
+ +++ b/Makefile
+ @@ -2,7 +2,7 @@
+  VERSION =3D 6
+  PATCHLEVEL =3D 3
+  SUBLEVEL =3D 0
+ -EXTRAVERSION =3D -rc4
+ +EXTRAVERSION =3D -rc4-tv
+  NAME =3D Hurr durr I'ma ninja sloth
+
+  # *DOCUMENTATION*
+
+
+
+Then, kernelrelease shows it is a "-tv" release.
+
+$ make kernelrelease
+6.3.0-rc4-tv
+
+
+
+
+
+
+
+> This has worked just fine so far, but...
+>
+> Since commit 6ab7e1f95e96f0c688ae132b0e9a16c0f206689d ("setlocalversion:
+> use only the correct release tag for git-describe"), this is not taken
+> into account anymore, it uses the "git describe" tag instead of using
+> the actually tagged commit as "kernelrelease".
+>
+> Is there a way to restore the previous behaviour without having to
+> revert this (and preceding) commits?
+>
+> I know that we can disable CONFIG_LOCALVERSION_AUTO=3Dy and append
+> directly to CONFIG_LOCALVERSION, but maybe someone knows how to use the
+> "old" way of using tags...?
+>
+> In other words, when I have a local tag, I want "kernelrelease" to use
+> just that tag, and when I don't tag anything, it should just use the
+> standard "git describe" tag.
+
+
+Again, I do not understand.
+
+git tag is not stable information.
+
+If you call it "a release",
+you would want to work in the same way with/without git
+even if most kernel developers are working in a git tree.
+
+
+The mainline kernel, stable-kernel, linux-next are
+released in https://kernel.org/
+(and GitHub allows users to download a tarball of
+a tagged commit.)
+
+
+A released tarball (of course, there is no tag there),
+produces the same kernelrelease as the git tree does.
+
+You are requiring the kernelrelease be different
+with/without the *-tv tag.
+That is not what the release would look like.
+
+The mainline kernel and stable kernel increment
+the version field in Makefile.
+linux-next has "localversion-next" at the top of the tree.
+
+
+
+
+
+
+> For the moment I have just reverted the related commits as they don't
+> serve any purpose for my needs.
+>
+> Cheers,
+>
+> Tor Vic
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
