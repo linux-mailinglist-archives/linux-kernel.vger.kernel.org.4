@@ -2,122 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DCF6D33EB
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 22:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898566D33F4
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 22:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjDAUvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 16:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        id S230062AbjDAUvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 16:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjDAUuz (ORCPT
+        with ESMTP id S229890AbjDAUvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 16:50:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B0A27804;
-        Sat,  1 Apr 2023 13:50:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C101E60FC8;
-        Sat,  1 Apr 2023 20:50:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A83A1C433EF;
-        Sat,  1 Apr 2023 20:50:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680382251;
-        bh=cblNPwspiLiu6TBVBEScNWqtn9HgaLDxVomWxXoSOWQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R2Xsf7OmDrvxKOnaV1o2olTZD/+xO24c1NxVVjgi4tY54cdvVXRkP8hJX46e8UoKN
-         vHFfU3gTbKbx1gzg/9ZYBwKR77EFvO/bE9X5mbcwTnp5Xav6jrPMbaxht6AO6eYeeU
-         8uZ8Q6WVgufuMawepfUsnfuH+0iPYWMfn+pjTVn+FOP5n6swmE7RwLL05Fp4hH719s
-         trz6qOMwQ7pEP0BXeCulcHfwhx2FbZDit9dRQgxqa4X+m6eps5Cu7fkyEs8Jd/kMXl
-         yBu1tZ0WR2yiKZf80HCi8SKkX8C0Q74lFP4zMMEs70FtCI4Ykck7/2RopRFMfOCEyW
-         HPxAvf8S4LXqQ==
-Date:   Sat, 1 Apr 2023 21:50:47 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v15 1/2] pwm: add microchip soft ip corePWM driver
-Message-ID: <0b91dee7-6c1d-4a33-8235-8fd5d58b200e@spud>
-References: <20230330071203.286972-1-conor.dooley@microchip.com>
- <20230330071203.286972-2-conor.dooley@microchip.com>
+        Sat, 1 Apr 2023 16:51:47 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3802700F;
+        Sat,  1 Apr 2023 13:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680382306; x=1711918306;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N23LrCmIXbWTc0I8sjnRDXdeh+BfnU52W2myvp+hnDQ=;
+  b=Bls3hMtseBK23gNL59IbrLd4AuWf/BNtwWMU1WZGDJhuYcmN7N6TbEtn
+   InWrCdtT/BeprOOwDFzqOfspgA4U4ZzeN2XCzgMvQRAje7TUq31kk81kQ
+   4J/ApWthIH1wx64+vVMQjsi05MKUBvcx3w98QDd5Dy4qBn+AFPII+wT1f
+   jHIPwFGrTf9r0ONAXu+T6QD0552LHphT3BAnJ4s6Fcr3YQRRU/cW0BtKs
+   vbVmMF3kSR48Mhto1fR864zYL5W8JPnLInH0XERy04ZRgV73fLRhOkyWu
+   mfCWLPLjoLaXTN1LXOetxd0SUGwPtVAUyUdrPAs2KdSx0d93kE/+hwIGy
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="369481158"
+X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
+   d="scan'208";a="369481158"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 13:51:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="1015229352"
+X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
+   d="scan'208";a="1015229352"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Apr 2023 13:51:39 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1piiCI-000N29-1n;
+        Sat, 01 Apr 2023 20:51:38 +0000
+Date:   Sun, 2 Apr 2023 04:51:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christian Ehrig <cehrig@cloudflare.com>, bpf@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, cehrig@cloudflare.com,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/3] bpf,fou: Add bpf_skb_{set,get}_fou_encap
+ kfuncs
+Message-ID: <202304020425.L8MwfV5h-lkp@intel.com>
+References: <65b05e447b28d32fb0e07275dc988989f358da2c.1680379518.git.cehrig@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WqrHL50fzIiM0DjG"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230330071203.286972-2-conor.dooley@microchip.com>
+In-Reply-To: <65b05e447b28d32fb0e07275dc988989f358da2c.1680379518.git.cehrig@cloudflare.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Christian,
 
---WqrHL50fzIiM0DjG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thank you for the patch! Perhaps something to improve:
 
-On Thu, Mar 30, 2023 at 08:12:03AM +0100, Conor Dooley wrote:
+[auto build test WARNING on bpf-next/master]
 
-> +	/*
-> +	 * Because 0xff is not a permitted value some error will seep into the
-> +	 * calculation of prescale as prescale grows. Specifically, this error
-> +	 * occurs where the remainder of the prescale calculation is less than
-> +	 * prescale.
-> +	 * For small values of prescale, only a handful of values will need
-> +	 * correction, but overall this applies to almost half of the valid
-> +	 * values for tmp.
-> +	 *
-> +	 * To keep the algorithm's decision making consistent, this case is
-> +	 * checked for and the simple solution is to, in these cases,
-> +	 * decrement prescale and check that the resulting value of period_steps
-> +	 * is valid.
-> +	 *
-> +	 * period_steps can be computed from prescale:
-> +	 *                      period * clk_rate
-> +	 * period_steps = ----------------------------- - 1
-> +	 *                NSEC_PER_SEC * (prescale + 1)
-> +	 *
-> +	 */
-> +	if (tmp % (MCHPCOREPWM_PERIOD_STEPS_MAX + 1) < *prescale) {
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Ehrig/ipip-ip_tunnel-sit-Add-FOU-support-for-externally-controlled-ipip-devices/20230402-033512
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/65b05e447b28d32fb0e07275dc988989f358da2c.1680379518.git.cehrig%40cloudflare.com
+patch subject: [PATCH bpf-next 2/3] bpf,fou: Add bpf_skb_{set,get}_fou_encap kfuncs
+config: microblaze-randconfig-r021-20230402 (https://download.01.org/0day-ci/archive/20230402/202304020425.L8MwfV5h-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/111ef54093a724110ca63e6a6279e60dd669094b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christian-Ehrig/ipip-ip_tunnel-sit-Add-FOU-support-for-externally-controlled-ipip-devices/20230402-033512
+        git checkout 111ef54093a724110ca63e6a6279e60dd669094b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash net/ipv4/
 
-Hmm, looks like 32-bit doesn't like this modulus.
-I pushed things out for LKP to test before sending as I felt I'd not be
-allowed to do that operation, but got a build success email from it.
-I'm not sure why the mail wasn't sent as a reply to this, but
-<202304020410.A86IBNES-lkp@intel.com> complains:
-pwm-microchip-core.c:(.text+0x20a): undefined reference to `__aeabi_uldivmod'
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304020425.L8MwfV5h-lkp@intel.com/
 
-I know that tmp < 65536 at this point, so if the general approach is
-fine, I can always cast it to a non 64-bit type without losing any
-information.
+All warnings (new ones prefixed by >>):
 
-> +		u16 smaller_prescale = *prescale - 1;
-> +
-> +		*period_steps = div_u64(tmp, smaller_prescale + 1) - 1;
-> +		if (*period_steps < 255) {
-> +			*prescale = smaller_prescale;
-> +
-> +			return 0;
-> +		}
-> +	}
+>> net/ipv4/fou_bpf.c:114:5: warning: no previous prototype for 'register_fou_bpf' [-Wmissing-prototypes]
+     114 | int register_fou_bpf(void)
+         |     ^~~~~~~~~~~~~~~~
 
---WqrHL50fzIiM0DjG
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+vim +/register_fou_bpf +114 net/ipv4/fou_bpf.c
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCiZJwAKCRB4tDGHoIJi
-0iJlAQCB2UJl++XV4NMR+7ECnWEx79RdqD/XDFZb1Ug8Y9BRwwEAvSU+APt+rIRQ
-PbPJgMxFUNyTzMFYCMWtE6d2M3dPCQ8=
-=v2Y6
------END PGP SIGNATURE-----
+   113	
+ > 114	int register_fou_bpf(void)
 
---WqrHL50fzIiM0DjG--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
