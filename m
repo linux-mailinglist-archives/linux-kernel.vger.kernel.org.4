@@ -2,56 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03BF6D2D7A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 03:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD83E6D2D89
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 04:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233852AbjDAB5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 21:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        id S234037AbjDACAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 22:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233605AbjDAB5X (ORCPT
+        with ESMTP id S234021AbjDAB7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 21:57:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E892D26595
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 18:55:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74512B83347
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 01:49:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D7C4C433EF;
-        Sat,  1 Apr 2023 01:49:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680313759;
-        bh=jT5FBQyI7dpDl0WTd9grmQmwScdfcc+9wiwY0baN8Kc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=elrvg/Oo5WlLKQy73XlerIavUGkkTcdArmOZXaJ1/SBdzXYmLyYL3xebLJ1L3lTMN
-         AEWrGzdl5GCOkmKLJzD4rO1LcfzOi1ZeeSPNyvn0VfZfl4rz6m+eC7HpudqXfyPPwr
-         xzsHX2yWdfd+Exd46Ui+PWop1ejTmf4oJhFBjskAPQbwqkBBS6ONtGHm5PU+VoAzS+
-         0CgNSU4rPHK5JEw11R6edygxr4ZoR9IeUMb+qPiUeOm+c7MtXga/qGt9Z7Nd3dNtiA
-         oG46adXJUrxZSWyb/ZEd0WA6VElFNkT6SeFXVpzd/hYO++6FtJjtwMWK2xqi4XBkCm
-         lYpVkAqKiT2cQ==
-Message-ID: <6db7be47-9455-c466-f99a-497f8fe8930a@kernel.org>
-Date:   Sat, 1 Apr 2023 09:49:16 +0800
+        Fri, 31 Mar 2023 21:59:55 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD3724404
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 18:58:50 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id h11so24217463lfu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 18:58:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680314299; x=1682906299;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vq3rSG2aoZXhHoIZpsTLA7CDeNmLWnFMK9f5Q3ElX6U=;
+        b=cTMO764NVMfDQ02GmKYpwGW7uOyjMtRDGKwa69UXSukBmcjeHe9AlVqCgIM1W2mmNR
+         zxTP4P4tyCpMy2GQ021fSPFRncsiv+E1CAfEXicYI5K/0TPUELO4gxS/WYJ+P7TtZtGx
+         c2IToFU2gQV0xX8jb32yq9c9Z3L+sWD6x1CMCKxJEklErWPAmeZquTqGPpewiI9pHvPa
+         cFNq8D1Q/o/3xs01WinP2ydg75sHOSYXghmrG++K3YSRtR42y4Ezkoe8jxR1XM7aDMOK
+         3Usa2vJJngCWsZ36ADKfAC6RPFVYTjPnNxGDqh2RNIMKZLFQ4GUmWo//PRVnvbSmKunN
+         MtWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680314299; x=1682906299;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vq3rSG2aoZXhHoIZpsTLA7CDeNmLWnFMK9f5Q3ElX6U=;
+        b=6m6r87CbfixLWRtMkdJQ+vBpbIxzRMMrpcDk2vNrN8oTEHS6pInvIAmSuWhVnM41it
+         gl/oO0z/Qzg3MnX+ZAm8V7a3R3+yzgzhbqj5ii5egXE/bYQMY7tezdQ8fbOP7AGhBdRH
+         MOJjfg5eq28W8shLKEwS6nyTEbulcB2yRmWohPeur+FJlwvB2ynwHXedZAsT9TJmNuTe
+         QVymvvMgsJWhqUXWVVQMLbUZvPNtwEOXO1EFDnp64bLHh/JMG9aoJCTD6V3o0LomgE6w
+         XDNe1Fwkg0JfJt0vdMgYzwNaekkqvS7xNipu/z4CdfnqLcDTRRN89kp+V6GdJ5kKGVXr
+         Jvqg==
+X-Gm-Message-State: AAQBX9cQCPY7UuwttpTTxn5Id2E2KzPa30qaUkUrdFUaC+MJZ2104RI9
+        AfXEMwaAHHm/WkFTP+JtLoiS0I0AkgFya3En+LiwUPOG6aV+s83F1w4=
+X-Google-Smtp-Source: AKy350axl64hB+NsJXRL/NGZ1OWlEZ7je83H8wof4NheuQHKtsQWreaDEyvoljdWcrxhAVbQEG9f9iONspCnq/gmV6s=
+X-Received: by 2002:ac2:59c4:0:b0:4eb:d8d:6c17 with SMTP id
+ x4-20020ac259c4000000b004eb0d8d6c17mr6349126lfn.10.1680314298620; Fri, 31 Mar
+ 2023 18:58:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix align check for npo2
-Content-Language: en-US
-To:     Yohan Joung <jyh429@gmail.com>, jaegeuk@kernel.org
-Cc:     lkp@intel.com, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        oe-kbuild-all@lists.linux.dev
-References: <ZBzlJ36kO5KvxODB@google.com>
- <20230324130747.523-1-jyh429@gmail.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230324130747.523-1-jyh429@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230330155707.3106228-1-peterx@redhat.com> <20230330160714.3106999-1-peterx@redhat.com>
+ <20230331183726.GD12460@monkey>
+In-Reply-To: <20230331183726.GD12460@monkey>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Fri, 31 Mar 2023 18:57:41 -0700
+Message-ID: <CAJHvVcjOqShPeu3mYk2Xu1ZyMfFLuPCUp8+8nQ+CUyCj4nZVqA@mail.gmail.com>
+Subject: Re: [PATCH 10/29] selftests/mm: Test UFFDIO_ZEROPAGE only when !hugetlb
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,41 +76,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/24 21:07, Yohan Joung wrote:
-> Fix alignment check to be correct in npo2 as well
-> 
-> Signed-off-by: Yohan Joung <yohan.joung@sk.com>
-> ---
->   fs/f2fs/segment.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index 055e70e77aa2..f4a22a065277 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -1842,6 +1842,7 @@ static int __f2fs_issue_discard_zone(struct f2fs_sb_info *sbi,
->   	sector_t sector, nr_sects;
->   	block_t lblkstart = blkstart;
->   	int devi = 0;
-> +	u32 remainder = 0;
->   
->   	if (f2fs_is_multi_device(sbi)) {
->   		devi = f2fs_target_device_index(sbi, blkstart);
-> @@ -1857,9 +1858,9 @@ static int __f2fs_issue_discard_zone(struct f2fs_sb_info *sbi,
->   	if (f2fs_blkz_is_seq(sbi, devi, blkstart)) {
->   		sector = SECTOR_FROM_BLOCK(blkstart);
->   		nr_sects = SECTOR_FROM_BLOCK(blklen);
-> +		div_u64_rem(sector, bdev_zone_sectors(bdev), &remainder);
+On Fri, Mar 31, 2023 at 11:37=E2=80=AFAM Mike Kravetz <mike.kravetz@oracle.=
+com> wrote:
+>
+> On 03/30/23 12:07, Peter Xu wrote:
+> > Make the check as simple as "test_type =3D=3D TEST_HUGETLB" because tha=
+t's the
+> > only mem that doesn't support ZEROPAGE.
+> >
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >  tools/testing/selftests/mm/userfaultfd.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/s=
+elftests/mm/userfaultfd.c
+> > index 795fbc4d84f8..d724f1c78847 100644
+> > --- a/tools/testing/selftests/mm/userfaultfd.c
+> > +++ b/tools/testing/selftests/mm/userfaultfd.c
+> > @@ -1118,7 +1118,7 @@ static int __uffdio_zeropage(int ufd, unsigned lo=
+ng offset, bool retry)
+> >  {
+> >       struct uffdio_zeropage uffdio_zeropage;
+> >       int ret;
+> > -     bool has_zeropage =3D get_expected_ioctls(0) & (1 << _UFFDIO_ZERO=
+PAGE);
+> > +     bool has_zeropage =3D !(test_type =3D=3D TEST_HUGETLB);
+>
+> It is true that hugetlb is the only mem type that does not support zeropa=
+ge.
+> So, the change is correct.
+>
+> However, I actually prefer the explicit check that is there today.  It se=
+ems
+> more like a test of the API.  And, is more future proof is code changes.
+>
+> Just my opinion/thoughts, not a strong objection.
 
-Should use div64_u64_rem()? As both sector and return value of bdev_zone_sectors()
-are u64.
+I agree. The existing code is more robust to future changes where we
+might support or stop supporting this ioctl in some cases. It also
+proves that the ioctl works, any time the API reports that it is
+supported / ought to work, independent of when the *test* thinks it
+should be supported.
 
-Thanks,
+Then again, I think this is unlikely to change in the future, so I
+also agree with Mike that it's not the biggest deal.
 
->   
-> -		if (sector & (bdev_zone_sectors(bdev) - 1) ||
-> -				nr_sects != bdev_zone_sectors(bdev)) {
-> +		if (remainder || nr_sects != bdev_zone_sectors(bdev)) {
->   			f2fs_err(sbi, "(%d) %s: Unaligned zone reset attempted (block %x + %x)",
->   				 devi, sbi->s_ndevs ? FDEV(devi).path : "",
->   				 blkstart, blklen);
+> --
+> Mike Kravetz
