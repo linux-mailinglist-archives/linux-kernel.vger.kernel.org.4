@@ -2,72 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF6B6D2ED4
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 09:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9276D2E93
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbjDAHKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 03:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        id S231926AbjDAG2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 02:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjDAHKF (ORCPT
+        with ESMTP id S229529AbjDAG2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 03:10:05 -0400
-X-Greylist: delayed 409 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Apr 2023 00:10:03 PDT
-Received: from nimbus1.mmprivatehosting.com (nimbus1.mmprivatehosting.com [54.208.90.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77941D855
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 00:10:03 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by nimbus1.mmprivatehosting.com (Postfix) with ESMTP id 6C1CC60034
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 07:03:13 +0000 (UTC)
-X-Virus-Scanned: amavis at mmprivatehosting.com
-Received: from dave.mielke.cc (unknown [174.116.27.113])
-        (Authenticated sender: relay@dave.mielke.cc)
-        by nimbus1.mmprivatehosting.com (Postfix) with ESMTPA
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 07:03:12 +0000 (UTC)
-Received: from beta.private.mielke.cc (beta.private.mielke.cc [192.168.0.2])
-        by dave.mielke.cc (Postfix) with ESMTPS id 3B6FB491
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 03:03:11 -0400 (EDT)
-Received: from beta.private.mielke.cc (localhost [127.0.0.1])
-        by beta.private.mielke.cc (8.17.1/8.15.2) with ESMTPS id 33173A0U005027
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Sat, 1 Apr 2023 03:03:10 -0400
-Received: (from dave@localhost)
-        by beta.private.mielke.cc (8.17.1/8.17.1/Submit) id 33173ARt005026
-        for linux-kernel@vger.kernel.org; Sat, 1 Apr 2023 03:03:10 -0400
-Date:   Sat, 1 Apr 2023 02:25:22 -0400
-From:   Dave Mielke <Dave@mielke.cc>
-To:     Linux Kernel Mailing List 
-        <linux-kernel%40vger.kernel.org@beta.private.mielke.cc>
-Cc:     Samuel Thibault <Samuel.Thibault@ens-lyon.org>
-Subject: The regrettable demise of the TIOCSTI ioctl.
-Message-ID: <ZCfOUSZ87LaBVjq7@beta.private.mielke.cc>
+        Sat, 1 Apr 2023 02:28:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DA91A474;
+        Fri, 31 Mar 2023 23:28:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9FBCB83377;
+        Sat,  1 Apr 2023 06:28:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C5D9C433D2;
+        Sat,  1 Apr 2023 06:28:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680330490;
+        bh=xatQZvTKR+6MYzldJT4t1KTnJ8Rt57yUO7iWzD7aoXI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LMLZ6EUpJUlprrJ92k1qJlGkhKVNz0V0GAQEwB+A8+k7hmzeMNiqB4K92+y5HiOu4
+         wlfk/kigArkH8zUukN0Z3pZhyIppU3QnOMm9uqj/Bw5pvJi73vyp9TBRNSXMbMhmPv
+         ZtnAZdb2W5LCIT6uK67oO4n1arvi1cxiKcf4XuHA=
+Date:   Sat, 1 Apr 2023 08:28:07 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Maxim Levitsky <maximlevitsky@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Hannes Reinecke <hare@suse.de>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        ye xingchen <ye.xingchen@zte.com.cn>, linux-mmc@vger.kernel.org
+Subject: Re: BUG FIX: [PATCH RFC v3] memstick_check() memleak in kernel
+ 6.1.0+ introduced pre 4.17
+Message-ID: <ZCfO90WwyS6JwaHi@kroah.com>
+References: <7d873dd3-9bab-175b-8158-c458b61a7122@alu.unizg.hr>
+ <f74219a7-1607-deb4-a6ae-7b73e2467ac7@alu.unizg.hr>
+ <df560535-2a8e-de21-d45d-805159d70954@alu.unizg.hr>
+ <2023033124-causing-cassette-4d96@gregkh>
+ <4d80549f-e59d-6319-07fd-1fbed75d7a1c@alu.unizg.hr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/2.1.5 (2021-12-30)
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <4d80549f-e59d-6319-07fd-1fbed75d7a1c@alu.unizg.hr>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems that, starting in the 6.2 kernel (I think), there's a move underway to get rid of the TIOCSTI ioctl. The fact that the kernel configuration information says "provides no meaningful real-world utility any more" shows that the kernel developers seem to be unaware of an important subset of their users who absolutely depend on TIOCSTI.
+On Sat, Apr 01, 2023 at 08:23:26AM +0200, Mirsad Goran Todorovac wrote:
+> > This patch is implying that anyone who calls "dev_set_name()" also has
+> > to do this hack, which shouldn't be the case at all.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> This is my best guess. Unless there is dev_free_name() or kobject_free_name(), I don't
+> see a more sensible way to patch this up.
 
-By removing TIOCSTI, you have broken several users' *ability* to work at all with their current hardware!
+In sleeping on this, I think this has to move to the driver core.  I
+don't understand why we haven't seen this before, except maybe no one
+has really noticed before (i.e. we haven't had good leak detection tools
+that run with removable devices?)
 
-The users I'm referring to are those who rely on their ability to work productively with braille devices. They use BRLTTY (see brltty.app). Most braille devices, these days, have braille keyboards. BRLTTY interprets what its users type on those braille keyboards, and uses TIOCSTI to inject those characters. Since I'm unaware of any adequate replacement for TIOCSTI, I'm asking (begging?) that this ioctl please be NOT removed.
+Anyway, let me see if I can come up with something this weekend, give me
+a chance...
 
-Even disablign it isn't good because a blind user who relies on his/her braille keyboard won't be able to fix the problem by logging in and issuing the needed sysctl command (try imagining how you'd do that without your keyboard). We could distribute a brltty.conf sysctl.d file, but that isn't a great idea either given that, in
-the end, it'd end up being run on all systems since BRLTTY is generally distributed.
+thanks,
 
-Please understand that it simply isn't true at all that TIOCSTI has no practical use these days. It most certainly does!
-
-Thanks for at least hearing me out.
-
--- 
-I believe the Bible to be the very Word of God: http://Mielke.cc/bible/
-Dave Mielke            | 2213 Fox Crescent | WebHome: http://Mielke.cc/
-EMail: Dave@Mielke.cc  | Ottawa, Ontario   | Twitter: @Dave_Mielke
-Phone: +1 613 726 0014 | Canada  K2A 1H7   |
+greg k-h
