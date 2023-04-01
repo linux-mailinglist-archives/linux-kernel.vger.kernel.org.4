@@ -2,294 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76036D2DCD
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 04:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912356D2DD5
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 05:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233539AbjDACyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 22:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
+        id S233608AbjDADMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 23:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbjDACyt (ORCPT
+        with ESMTP id S229988AbjDADMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 22:54:49 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C6A12CD5;
-        Fri, 31 Mar 2023 19:54:47 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 9F055604FD;
-        Sat,  1 Apr 2023 04:54:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680317684; bh=HjmfytkbBV/eFKZb8z80cmUVzNOTTkjffBFMk5BAviM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=2b1gtEtz611K0Ck6Km+4X+REM+C0GMwIVO9iO2vjTemvKtEk9tRgpEEngopQb+M6h
-         i81i+FkaD0o7CFBanVhJnHSagcAaopi1RFxdfTPCHixTsAl7j+lhbh1YdSpUZdBMnZ
-         5mQ/9uvEDliTBOISc25txJ/Q21t2fXJaSnmMWV5iIP3ZAL/VPPS985SkGNlNLq1qRe
-         daw/ypHFTlN+851G8cazmsumUfDrChod8FNS11YlcmAtiexOSApHhb4p1pve1bVt7o
-         FLPqBo3taLgv4CQKDmeVWXiCCK6Tmp48SeaBw77rKJ3edjXPGTvT5XK6+tlbp3g/RG
-         wRW1AQiQfj+cA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id troqFhIx71lp; Sat,  1 Apr 2023 04:54:41 +0200 (CEST)
-Received: from [192.168.1.4] (unknown [77.237.101.225])
-        by domac.alu.hr (Postfix) with ESMTPSA id 19141604F0;
-        Sat,  1 Apr 2023 04:54:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680317681; bh=HjmfytkbBV/eFKZb8z80cmUVzNOTTkjffBFMk5BAviM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=1aU/qd7PivbShv4DWrI4MipjN/qPyQGdCaFlfLmR4bo3boKs3CkDvPEZ/EWGd8i9S
-         GEx/uTkg5BnnBo1iNsEjtOWzar+zcpN2uO7oV+QQgm/N+35Q8wltBcgbZPjaaW87Td
-         9P33OwkW70a6BDpzZuH6D52+S+msO7e6sveEWJC7Ury1Jbf9EwGo4fw099YA9dC5/U
-         Ihv6Tn30llGHdXdxPZEwfCc3l+6zg897JdVVJnfQAnanDpzoLmJYQUfUAcIHpSXp+9
-         YgDyHT008jJb+lreaa77mlfUyefLqNWAyfoL7kCY+q2NhpVnyb07tkZ/symzRXvYrM
-         Evc8py3s9pVmQ==
-Message-ID: <3f5f9f8b-2596-2a5f-8f28-88483bfacd55@alu.unizg.hr>
-Date:   Sat, 1 Apr 2023 04:54:39 +0200
+        Fri, 31 Mar 2023 23:12:21 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF931EFC5;
+        Fri, 31 Mar 2023 20:12:20 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso9699113pjc.1;
+        Fri, 31 Mar 2023 20:12:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680318739;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GMsqA2/S4acnYNFGSszhcxD2t1ID/uK62fRiA76JiBA=;
+        b=izzE5BwTcnLtWXiLFvb1b1GiNKSO8qGbitdSPuU2w3doJeL1SXvD/0YcRCbyPbSHd0
+         LJwJSLBiDslPaI69lmy9Y/1xjuqTF2IXhiJ8wNO0q2bY7aTUTx/B/sgRoZFeuoGkJ6wA
+         rNdMRDFWVWTizj4ktebC7jnALxztJWSYdPqf2/gQSMTizk+5ibKtsgavvHVVIoewpNJT
+         fsfUbERSIZUx5xKiNwnld9prEvcpmyju0cY2+8iMbiB9tuZCpC6ZGmadcu0dWe3w5hyx
+         2hhXx2L3psFIFJb0tN83ePDQsMHg7eNPqt3ZzfYzibSAlBikvflC3XtoU4IgYDVIoPzb
+         1dJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680318739;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GMsqA2/S4acnYNFGSszhcxD2t1ID/uK62fRiA76JiBA=;
+        b=zzJGlT7OCM77PM6xs/akAoJnkr9IueWeucLQMgCH/0Lpfh+Y3gL1AL2fgsMq8/9pnk
+         BO719qwVTUSV03ay7JOqjRzs/56Mw1mEa89UAagEQwfkVS6l7CuGdzie75dPW3PwXx91
+         rZU1mcmrJjhKvmxi1LWT/8nZAS63xLNAHnbJIUYNH1ctuKfiAj3oq0u0vfJCc0Xz87x2
+         AkTWQkJKbIuu/a+2+m05k2a4hzMfrLDgk+v+sIFzsKZ26yUcZLsiF8TMKfukGXse6LC7
+         /6R0axlrRp3AmbpSENJiL8OJzJ9/qCIRjW1UwmbqDgcoKqAyOyvWK1EWIzr/dy027vjx
+         Ktzg==
+X-Gm-Message-State: AAQBX9dFFNP/2CNuhvlYgMBGurHZdv0K+Jkndx2MXA0E9TfFvMr7ZtPx
+        Jtpt+0XEZg3jF4ELB1bWjmM=
+X-Google-Smtp-Source: AKy350bPTa+6wCaLlfIe0t8Z/dZpxNsv/Fw1CdcxoSM2Sy7O3EUGDsMbmYmRcGqE3Vk4WsBjOQymQA==
+X-Received: by 2002:a17:902:fa43:b0:1a1:a8db:495d with SMTP id lb3-20020a170902fa4300b001a1a8db495dmr22990145plb.4.1680318739546;
+        Fri, 31 Mar 2023 20:12:19 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-71.three.co.id. [180.214.232.71])
+        by smtp.gmail.com with ESMTPSA id w15-20020a1709027b8f00b0019f789cddccsm2292207pll.19.2023.03.31.20.12.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 20:12:19 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 31AA4101622; Sat,  1 Apr 2023 10:12:15 +0700 (WIB)
+Date:   Sat, 1 Apr 2023 10:12:15 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     David Dai <davidai@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev
+Subject: Re: [RFC PATCH v2 2/6] kvm: arm64: Add support for get_cur_cpufreq
+ service
+Message-ID: <ZCehD15QJyDapG3u@debian.me>
+References: <20230331014356.1033759-1-davidai@google.com>
+ <20230331014356.1033759-3-davidai@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] platform/x86: think-lmi: Fix memory leak when showing
- current settings
-Content-Language: en-US, hr
-To:     Armin Wolf <W_Armin@gmx.de>, markpearson@lenovo.com
-Cc:     hdegoede@redhat.com, markgross@kernel.org, thomas@t-8ch.de,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230331180912.38392-1-W_Armin@gmx.de>
- <baa37033-9b0c-5e40-41a9-bca0836c1330@alu.unizg.hr>
- <0bbab386-70ef-5c1a-1007-d2e26346bdd3@gmx.de>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <0bbab386-70ef-5c1a-1007-d2e26346bdd3@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230331014356.1033759-3-davidai@google.com>
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31. 03. 2023. 23:30, Armin Wolf wrote:
-> Am 31.03.23 um 22:23 schrieb Mirsad Goran Todorovac:
-> 
->> On 31. 03. 2023. 20:09, Armin Wolf wrote:
->>> When retriving a item string with tlmi_setting(), the result has to be
->>> freed using kfree(). In current_value_show() however, malformed
->>> item strings are not freed, causing a memory leak.
->>> Fix this by eliminating the early return responsible for this.
->>>
->>> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->>> Link: https://lore.kernel.org/platform-driver-x86/01e920bc-5882-ba0c-dd15-868bf0eca0b8@alu.unizg.hr/T/#t
->>> Fixes: a40cd7ef22fb ("platform/x86: think-lmi: Add WMI interface support on Lenovo platforms")
->>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->>> ---
->>> Changes in v2:
->>> - Add Reported-by: and Link: tags
->>> ---
->>>   drivers/platform/x86/think-lmi.c | 6 ++++--
->>>   1 file changed, 4 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
->>> index cc66f7cbccf2..8cafb9d4016c 100644
->>> --- a/drivers/platform/x86/think-lmi.c
->>> +++ b/drivers/platform/x86/think-lmi.c
->>> @@ -930,10 +930,12 @@ static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *a
->>>       /* validate and split from `item,value` -> `value` */
->>>       value = strpbrk(item, ",");
->>>       if (!value || value == item || !strlen(value + 1))
->>> -        return -EINVAL;
->>> +        ret = -EINVAL;
->>> +    else
->>> +        ret = sysfs_emit(buf, "%s\n", value + 1);
->>>
->>> -    ret = sysfs_emit(buf, "%s\n", value + 1);
->>>       kfree(item);
->>> +
->>>       return ret;
->>>   }
->>>
->>> -- 
->>> 2.30.2
->> I can confirm that the test passed in the original environment that caused the kmemleak.
->>
->> [root@pc-mtodorov marvin]# cat /sys/kernel/debug/kmemleak
->> unreferenced object 0xffff8e614889e390 (size 16):
->>    comm "kworker/u12:5", pid 366, jiffies 4294896428 (age 93.704s)
->>    hex dump (first 16 bytes):
->>      6d 65 6d 73 74 69 63 6b 30 00 cc cc cc cc cc cc  memstick0.......
->>    backtrace:
->>      [<ffffffff860fb26c>] slab_post_alloc_hook+0x8c/0x3e0
->>      [<ffffffff86102b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
->>      [<ffffffff860773c9>] __kmalloc_node_track_caller+0x59/0x180
->>      [<ffffffff86066a1a>] kstrdup+0x3a/0x70
->>      [<ffffffff86066a8c>] kstrdup_const+0x2c/0x40
->>      [<ffffffff864a987c>] kvasprintf_const+0x7c/0xb0
->>      [<ffffffff86e3b427>] kobject_set_name_vargs+0x27/0xa0
->>      [<ffffffff8678ed17>] dev_set_name+0x57/0x80
->>      [<ffffffffc0e49f0f>] memstick_check+0x10f/0x3b0 [memstick]
->>      [<ffffffff85dcb4c0>] process_one_work+0x250/0x530
->>      [<ffffffff85dcb7f8>] worker_thread+0x48/0x3a0
->>      [<ffffffff85dd6dff>] kthread+0x10f/0x140
->>      [<ffffffff85c02fa9>] ret_from_fork+0x29/0x50
->> unreferenced object 0xffff8e6158f93b90 (size 16):
->>    comm "kworker/u12:5", pid 366, jiffies 4294896433 (age 93.684s)
->>    hex dump (first 16 bytes):
->>      6d 65 6d 73 74 69 63 6b 30 00 cc cc cc cc cc cc  memstick0.......
->>    backtrace:
->>      [<ffffffff860fb26c>] slab_post_alloc_hook+0x8c/0x3e0
->>      [<ffffffff86102b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
->>      [<ffffffff860773c9>] __kmalloc_node_track_caller+0x59/0x180
->>      [<ffffffff86066a1a>] kstrdup+0x3a/0x70
->>      [<ffffffff86066a8c>] kstrdup_const+0x2c/0x40
->>      [<ffffffff864a987c>] kvasprintf_const+0x7c/0xb0
->>      [<ffffffff86e3b427>] kobject_set_name_vargs+0x27/0xa0
->>      [<ffffffff8678ed17>] dev_set_name+0x57/0x80
->>      [<ffffffffc0e49f0f>] memstick_check+0x10f/0x3b0 [memstick]
->>      [<ffffffff85dcb4c0>] process_one_work+0x250/0x530
->>      [<ffffffff85dcb7f8>] worker_thread+0x48/0x3a0
->>      [<ffffffff85dd6dff>] kthread+0x10f/0x140
->>      [<ffffffff85c02fa9>] ret_from_fork+0x29/0x50
->> [root@pc-mtodorov marvin]# uname -rms
->> Linux 6.3.0-rc4-00034-gfcd476ea6a88-dirty x86_64
->> [root@pc-mtodorov marvin]#
->>
->> NOTE: The leaks here belong to drivers/memstick/core/memstick.c leak for which I have
->> proposed a fix in message <df560535-2a8e-de21-d45d-805159d70954@alu.unizg.hr>.
->>
->> This test was built on the 6.3-rc4+ commit fcd476ea6a88 Torvalds tree + the following
->> patches (Armin's, and Thomas's).
->>
->>   drivers/platform/x86/think-lmi.c | 18 ++++++++++--------
->>   drivers/usb/host/xhci.c          |  1 +
->>   2 files changed, 11 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
->> index c816646eb661..c2146add88ab 100644
->> --- a/drivers/platform/x86/think-lmi.c
->> +++ b/drivers/platform/x86/think-lmi.c
->> @@ -930,10 +930,12 @@ static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *a
->>          /* validate and split from `item,value` -> `value` */
->>          value = strpbrk(item, ",");
->>          if (!value || value == item || !strlen(value + 1))
->> -               return -EINVAL;
->> +               ret = -EINVAL;
->> +       else
->> +               ret = sysfs_emit(buf, "%s\n", value + 1);
->>
->> -       ret = sysfs_emit(buf, "%s\n", value + 1);
->>          kfree(item);
->> +
->>          return ret;
->>   }
->>
->> @@ -1380,7 +1382,6 @@ static struct tlmi_pwd_setting *tlmi_create_auth(const char *pwd_type,
->>
->>   static int tlmi_analyze(void)
->>   {
->> -       acpi_status status;
->>          int i, ret;
->>
->>          if (wmi_has_guid(LENOVO_SET_BIOS_SETTINGS_GUID) &&
->> @@ -1417,8 +1418,8 @@ static int tlmi_analyze(void)
->>                  char *p;
->>
->>                  tlmi_priv.setting[i] = NULL;
->> -               status = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
->> -               if (ACPI_FAILURE(status))
->> +               ret = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
->> +               if (ret)
->>                          break;
->>                  if (!item)
->>                          break;
->> @@ -1457,10 +1458,10 @@ static int tlmi_analyze(void)
->>                           * name string.
->>                           * Try and pull that out if it's available.
->>                           */
->> -                       char *item, *optstart, *optend;
->> +                       char *optitem, *optstart, *optend;
->>
->> -                       if (!tlmi_setting(setting->index, &item, LENOVO_BIOS_SETTING_GUID)) {
->> -                               optstart = strstr(item, "[Optional:");
->> +                       if (!tlmi_setting(setting->index, &optitem, LENOVO_BIOS_SETTING_GUID)) {
->> +                               optstart = strstr(optitem, "[Optional:");
->>                                  if (optstart) {
->>                                          optstart += strlen("[Optional:");
->>                                          optend = strstr(optstart, "]");
->> @@ -1469,6 +1470,7 @@ static int tlmi_analyze(void)
->>                                                          kstrndup(optstart, optend - optstart,
->>                                                                          GFP_KERNEL);
->>                                  }
->> +                               kfree(optitem);
->>                          }
->>                  }
->>                  /*
->> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->> index 6183ce8574b1..905f1e89ead8 100644
->> --- a/drivers/usb/host/xhci.c
->> +++ b/drivers/usb/host/xhci.c
->> @@ -4438,6 +4438,7 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
->>
->>          if (!virt_dev || max_exit_latency == virt_dev->current_mel) {
->>                  spin_unlock_irqrestore(&xhci->lock, flags);
->> +               xhci_free_command(xhci, command);
->>                  return 0;
->>          }
->>
->> Xhci patch from Mathias is included because it is well tested and already submitted and acked.
->>
->> At your convenience and according to the Code of Conduct, you can add:
->>
->> Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->>
->> Otherwise, Armin, I think you should submit this patch rightly because all idea to search in
->> think-lmi.c was yours.
->>
->> Bisect was also much faster and in fewer steps.
->>
->> Thanks,
->> Mirsad
->>
-> Thank you for reporting the memory leak issues and testing the patches.
-> I will send a v3 of my patch soon which will contain your Tested-by: tag.
+On Thu, Mar 30, 2023 at 06:43:46PM -0700, David Dai wrote:
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 62de0768d6aa..b0ff0ad700bf 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -8380,6 +8380,14 @@ structure.
+>  When getting the Modified Change Topology Report value, the attr->addr
+>  must point to a byte where the value will be stored or retrieved from.
+>  
+> +8.40 KVM_CAP_GET_CUR_CPUFREQ
+> +------------------------
+> +
+> +:Architectures: arm64
+> +
+> +This capability indicates that KVM supports getting the
+> +frequency of the current CPU that the vCPU thread is running on.
+> +
+>  9. Known KVM API problems
+>  =========================
+>  
+> diff --git a/Documentation/virt/kvm/arm/get_cur_cpufreq.rst b/Documentation/virt/kvm/arm/get_cur_cpufreq.rst
+> new file mode 100644
+> index 000000000000..06e0ed5b3868
+> --- /dev/null
+> +++ b/Documentation/virt/kvm/arm/get_cur_cpufreq.rst
+> @@ -0,0 +1,21 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +get_cur_cpufreq support for arm/arm64
+> +=============================
+> +
+> +Get_cur_cpufreq support is used to get current frequency(in KHz) of the
+> +current CPU that the vCPU thread is running on.
+> +
+> +* ARM_SMCCC_VENDOR_HYP_KVM_GET_CUR_CPUFREQ_FUNC_ID: 0x86000040
+> +
+> +This hypercall uses the SMC32/HVC32 calling convention:
+> +
+> +ARM_SMCCC_VENDOR_HYP_KVM_GET_CUR_CPUFREQ_FUNC_ID
+> +    ==============    ========    =====================================
+> +    Function ID:      (uint32)    0x86000040
+> +    Return Values:    (int32)     NOT_SUPPORTED(-1) on error, or
+> +                      (uint32)    Frequency in KHz of current CPU that the
+> +                                  vCPU thread is running on.
+> +    Endianness:                   Must be the same endianness
+> +                                  as the host.
+> +    ==============    ========    =====================================
 
-That's awesome, Armin.
+Sphinx reports htmldocs warnings:
+/home/bagas/repo/linux-kernel/Documentation/virt/kvm/api.rst:8384: WARNING: Title underline too short.
 
-I thought of a way to make an exact account of which patches were used in the build,}}}
-i.e. adding patch checksum to 6.3.0-rc4-00034-gfcd476ea6a88-dirty, for currently in
-rpm -ivh --oldpacage install the kernels
+8.40 KVM_CAP_GET_CUR_CPUFREQ
+------------------------
+/home/bagas/repo/linux-kernel/Documentation/virt/kvm/api.rst:8384: WARNING: Title underline too short.
 
-kernel-6.3.0_rc4mt+20230330_00051_g8bb95a1662f8_dirty-24.x86_64.rpm
-kernel-6.3.0_rc4mt+20230330_00051_g8bb95a1662f8_dirty-25.x86_64.rpm
-kernel-6.3.0_rc4mt+20230330_00051_g8bb95a1662f8_dirty-26.x86_64.rpm
+8.40 KVM_CAP_GET_CUR_CPUFREQ
+------------------------
+/home/bagas/repo/linux-kernel/Documentation/virt/kvm/api.rst:8404: WARNING: Title underline too short.
 
-all interlap, so I have to reboot in i.e. 6.1.15, remove the offending kernel, and
-then CONFIG_LOCALVERSION_AUTO=y rpm build script should add something that rpm
-command sees in the install process so the files do not overlap (kernel numbes
-being truncated at '-' sign).
+I have applied the fixup:
 
-See what I mean?
+---- >8 ----
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 8f905456e2b4a1..baf8a4c43b5839 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -8381,7 +8381,7 @@ When getting the Modified Change Topology Report value, the attr->addr
+ must point to a byte where the value will be stored or retrieved from.
+ 
+ 8.40 KVM_CAP_GET_CUR_CPUFREQ
+-------------------------
++----------------------------
+ 
+ :Architectures: arm64
+ 
+diff --git a/Documentation/virt/kvm/arm/get_cur_cpufreq.rst b/Documentation/virt/kvm/arm/get_cur_cpufreq.rst
+index 06e0ed5b3868d7..76f112efb99f92 100644
+--- a/Documentation/virt/kvm/arm/get_cur_cpufreq.rst
++++ b/Documentation/virt/kvm/arm/get_cur_cpufreq.rst
+@@ -11,11 +11,12 @@ current CPU that the vCPU thread is running on.
+ This hypercall uses the SMC32/HVC32 calling convention:
+ 
+ ARM_SMCCC_VENDOR_HYP_KVM_GET_CUR_CPUFREQ_FUNC_ID
+-    ==============    ========    =====================================
++
++    ==============    ========    ========================================
+     Function ID:      (uint32)    0x86000040
+     Return Values:    (int32)     NOT_SUPPORTED(-1) on error, or
+                       (uint32)    Frequency in KHz of current CPU that the
+                                   vCPU thread is running on.
+     Endianness:                   Must be the same endianness
+                                   as the host.
+-    ==============    ========    =====================================
++    ==============    ========    ========================================
 
-Optionally, a /proc/<applied-patches-to-build> or something like that could be
-added to the running kernel, much like i.e. TuxCare has kcarectl --patch-info
-for live patches?
-
-Tell me pls if I speak rubbish.
-
-Regards,
-Mirsad
+Thanks.
 
 -- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
-"I see something approaching fast ... Will it be friends with me?"
-
+An old man doll... just what I always wanted! - Clara
