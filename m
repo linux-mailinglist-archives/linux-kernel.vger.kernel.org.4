@@ -2,133 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9966D2F71
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 11:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4750D6D2F74
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 11:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjDAJis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 05:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
+        id S229739AbjDAJmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 05:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjDAJiq (ORCPT
+        with ESMTP id S229581AbjDAJmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 05:38:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E82F63A97;
-        Sat,  1 Apr 2023 02:38:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 07E71106F;
-        Sat,  1 Apr 2023 02:39:26 -0700 (PDT)
-Received: from [10.57.54.53] (unknown [10.57.54.53])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E43D53F73F;
-        Sat,  1 Apr 2023 02:38:38 -0700 (PDT)
-Message-ID: <4660d44b-a53c-7323-0e0b-2a285e1a8c76@arm.com>
-Date:   Sat, 1 Apr 2023 10:38:37 +0100
+        Sat, 1 Apr 2023 05:42:21 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F733A97
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 02:42:18 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id l27so24721347wrb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 02:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680342137;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fu9gPLfW7KtEv2IIXvaOXu6pnvnnIoGSqbS5YRQSMzA=;
+        b=ucK0Cs/61lk20Ig8uaid8/nFHg/p8O1F9ptRB99lJXNPHCCkL6emOD9PdVgrHSPI2+
+         ZS25kl5VhzjR3qpLixn5UWt7LdllMyYcIF/bCdYrXmRRd6Rxocg2l1ZeRzY3aOtcMaWT
+         XHb25UeW++5WBKdRRG8uvByqoqnzCdcKQfvz6RR7Z0Nqm5A4h27XeV6WPB1mbvgiY+2U
+         zp98QeXst9VUm/uZEurKOyiQmTedV24uHTRVGFl67pUqxE89EyvfJa/YUbddEzgK6pYs
+         +hxOkpWzrL+yaiLKIMDnNWcH+19dt4rg1nY0dZq5wvjkWAC3PVfLA/+5C+d5GKUlDdw+
+         XNJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680342137;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fu9gPLfW7KtEv2IIXvaOXu6pnvnnIoGSqbS5YRQSMzA=;
+        b=TG8AL6W2ii5u7R7VUwTI+r+CCXqt9Z0LWt8Zfen0Gh9Ayou/t5h7eX2sO3VsJTZF9X
+         YdihhFdWZyCA5CvKTXsqsEykVqBHUEdlqz9gNbmfOGqtoa89pppmwkzjrr2xIioqq2FL
+         JByZt7cbtMsnoJTJmLAsTFNew3GCNisSWX/SBCH+Xy97ek2tvXKoGc4yBvo/yVF84ep1
+         qN+KcrcS5WZvM/GyfnAxov+OSYAGRz8d5243gLNlsTEa/P0SJfNW4D24KgPDKZpq0eOc
+         7gEpnq7lbZ5Q84bngsITHEDnlHZO7JrPH2ad8ilBawtDd3hB3AAjCK1J5D0tpvhU9qHr
+         XeCw==
+X-Gm-Message-State: AAQBX9frs80BhTMszAMtRuCoAVUpNoP4/7motyCwbbUN7kq0+CKP4sM1
+        hXhjiu2jYPBKjiXw0gktK0teNw==
+X-Google-Smtp-Source: AKy350ZNywWmraefRumCeoc7z8qpk9hbW1aIxktKLZVn7vMJFr6GDtmm5oKw4VPswANZcnL/llP7ow==
+X-Received: by 2002:adf:fd51:0:b0:2ce:adda:f45a with SMTP id h17-20020adffd51000000b002ceaddaf45amr21986074wrs.62.1680342137511;
+        Sat, 01 Apr 2023 02:42:17 -0700 (PDT)
+Received: from [172.50.14.32] (5-226-109-132.static.ip.netia.com.pl. [5.226.109.132])
+        by smtp.gmail.com with ESMTPSA id h14-20020adffd4e000000b002c71a32394dsm4404362wrs.64.2023.04.01.02.42.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Apr 2023 02:42:16 -0700 (PDT)
+Message-ID: <27a1d0f4-3a02-c7fd-36a0-07729a136e20@linaro.org>
+Date:   Sat, 1 Apr 2023 11:42:15 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH V2 3/5] coresight: etm4x: Drop pid argument from
- etm4_probe()
-To:     scclevenger@os.amperecomputing.com,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230327050537.30861-1-anshuman.khandual@arm.com>
- <20230327050537.30861-4-anshuman.khandual@arm.com>
- <d995fec6-1d3f-df37-724e-67d929e9e0db@arm.com>
- <a69dfdc6-31da-f813-858a-fdf246dea4fe@os.amperecomputing.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <a69dfdc6-31da-f813-858a-fdf246dea4fe@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/3] dt-bindings: iio: pressure: Support Honeywell mpr
+ sensors
+Content-Language: en-US
+To:     Andreas Klinger <ak@it-klinger.de>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <ZCf01btsJRXcIOce@arbad>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZCf01btsJRXcIOce@arbad>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2023 22:24, Steve Clevenger wrote:
+On 01/04/2023 11:09, Andreas Klinger wrote:
+> Honeywell mpr is a pressure sensor family. There are many different
+> types with different pressure ranges. The range needs to be set up in
+> the dt. Therefore new properties honeywell,pmin and honeywell,pmax are
+> introduced.
 > 
+> Add dt-bindings.
 > 
-> On 3/31/2023 4:06 AM, Suzuki K Poulose wrote:
->> On 27/03/2023 06:05, Anshuman Khandual wrote:
->>> Coresight device pid can be retrieved from its iomem base address,
->>> which is
->>> stored in 'struct etm4x_drvdata'. This drops pid argument from
->>> etm4_probe()
->>> and 'struct etm4_init_arg'. Instead etm4_check_arch_features() derives
->>> the
->>> coresight device pid with a new helper coresight_get_pid(), right
->>> before it
->>> is consumed in etm4_hisi_match_pid().
->>>
->>> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
->>> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
->>> Cc: Mike Leach <mike.leach@linaro.org>
->>> Cc: Leo Yan <leo.yan@linaro.org>
->>> Cc: coresight@lists.linaro.org
->>> Cc: linux-arm-kernel@lists.infradead.org
->>> Cc: linux-kernel@vger.kernel.org
->>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>> ---
->>>    .../coresight/coresight-etm4x-core.c          | 21 +++++++------------
->>>    include/linux/coresight.h                     | 12 +++++++++++
->>>    2 files changed, 20 insertions(+), 13 deletions(-)
->>>
->>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>> b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>> index 5d77571a8df9..3521838ab4fb 100644
->>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>> @@ -66,7 +66,6 @@ static u64 etm4_get_access_type(struct etmv4_config
->>> *config);
->>>    static enum cpuhp_state hp_online;
->>>      struct etm4_init_arg {
->>> -    unsigned int        pid;
->>>        struct device        *dev;
->>>        struct csdev_access    *csa;
->>>    };
->>> @@ -370,8 +369,10 @@ static void etm4_disable_arch_specific(struct
->>> etmv4_drvdata *drvdata)
->>>    }
->>>      static void etm4_check_arch_features(struct etmv4_drvdata *drvdata,
->>> -                      unsigned int id)
->>> +                     struct csdev_access *csa)
->>>    {
->>> +    unsigned int id = coresight_get_pid(csa);
->>> +
->>
->> This throws up the following error on an ETE.
->>
->> ete: trying to read unsupported register @fe0
->>
->> So, I guess this must be performed only for iomem based
->> devices. System instruction based device must be identified
->> by MIDR_EL1/REVIDR_EL1 if needed for specific erratum.
->> This is not required now. So, we could bail out early
->> if we are system instruction based device.
+> Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+> ---
+>  .../bindings/iio/pressure/honeywell,mpr.yaml  | 74 +++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/pressure/honeywell,mpr.yaml
 > 
-> Besides this, the PID is limited to (I think) 4 bits of ID. TRCIDRs
-> offer revision information, but nothing manufacturer specific save for
-> the designer. Register fields like MIDR_EL1 Variant + PartNum + Revision
-> and TRCPIDR3 REVAND offer help. It may be a combination of registers are
-> needed for a manufacturer to adequately ID a part to apply an erratum.
-> Perhaps you could at least cache MIDR_EL1 for possible future use?
+> diff --git a/Documentation/devicetree/bindings/iio/pressure/honeywell,mpr.yaml b/Documentation/devicetree/bindings/iio/pressure/honeywell,mpr.yaml
+> new file mode 100644
+> index 000000000000..d6fad6f841cf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/pressure/honeywell,mpr.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/pressure/honeywell,mpr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Honeywell mpr pressure sensor
+> +
+> +maintainers:
+> +  - Andreas Klinger <ak@it-klinger.de>
+> +
+> +description: |
+> +  Honeywell pressure sensor of type mpr. This sensor has an I2C and SPI interface. Only the I2C
 
-Like I said, if we ever need them, we could add it. I don't see a point
-in storing it right now, if we don't use it.
+Doesn't look wrapped according to Linux coding style (see Coding style).
 
-Suzuki
+> +  interface is implemented.
+> +
+> +  There are many subtypes with different pressure ranges available. Therefore the minimum and
+> +  maximum pressure values of the specific sensor needs to be specified in Pascal.
+> +
+> +  Specifications about the devices can be found at:
+> +    https://prod-edam.honeywell.com/content/dam/honeywell-edam/sps/siot/en-us/products/sensors/  \
+> +      pressure-sensors/board-mount-pressure-sensors/micropressure-mpr-series/documents/          \
+> +      sps-siot-mpr-series-datasheet-32332628-ciid-172626.pdf
+
+Lines are not continued, so drop \
+
+> +
+> +properties:
+> +  compatible:
+> +    const: honeywell,mpr
+
+You need device specific compatible, not some generic one. Rename also
+then the filename (should match the compatible).
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  reset-gpios:
+> +    description:
+> +      Optional GPIO for resetting the device. If not present the device is not resetted.
+
+Are you sure it is wrapped properly?
+
+> +    maxItems: 1
+> +
+> +  honeywell,pmin:
+> +    description:
+> +      Minimum pressure value the sensor can measure in pascal.
+
+Use standard unit suffix:
+https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  honeywell,pmax:
+> +    description:
+> +      Maximum pressure value the sensor can measure in pascal.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+Same.
+
+Why these values are suitable for DT? Does it depend on type of sensor
+(thus it is implied from compatible) or on system setup?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - honeywell,pmin
+> +  - honeywell,pmax
+> +
+
+
+Best regards,
+Krzysztof
+
