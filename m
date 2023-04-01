@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E55C6D3343
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 20:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6E26D3341
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 20:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjDAS5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 14:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
+        id S229781AbjDAS4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 14:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjDAS5c (ORCPT
+        with ESMTP id S229441AbjDAS4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 14:57:32 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A439B766
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 11:57:31 -0700 (PDT)
-Received: from liber-MS-7D42.. ([10.12.190.56])
-        (user=gangecen@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 331ItuHl030779-331ItuHm030779
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 2 Apr 2023 02:56:01 +0800
-From:   Gencen Gan <gangecen@hust.edu.cn>
-To:     Gerd Hoffmann <kraxel@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Gan Gecen <gangecen@hust.edu.cn>,
-        virtualization@lists.linux-foundation.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/bochs: fix ioremap leak of mmio in bochs
-Date:   Sun,  2 Apr 2023 02:55:43 +0800
-Message-Id: <20230401185544.3027703-1-gangecen@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        Sat, 1 Apr 2023 14:56:15 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FBFB763
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 11:56:14 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so28818798pjb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 11:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680375373;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dXcG1+c5Jl39ysxbFzlW+WnXY9ydxR0wHedPIyhRzvU=;
+        b=LNRHqxuyfJhbXQ/b/4tDU3gMwfoWxDWpVS+ANxapv/yTjv2rnql7u2KM28buwg+GT5
+         Qf1L1j2qwR0fYo1qe8JjqAGDJFcwZogHT6yBsvg0UI+ni4rSZVWPHdK7Vtff5Ja7/HHl
+         OzjjICYQ02FuXjADppqURMoYkGVcwN3JiZhwg6hdEZPyw9wIiUDpKAY5HZE/bPTX8Pc/
+         q7xeoox0NIlRDvP33Vco+hH1JQrj7+Yit/5rZnd3rs8OR6t1rNH8Mm9de20A4Kx2dI+V
+         h7VOXSUnhpgwuJCubK50HvwUDHKzDX5z0XXxsz3d7bimULbClhcvOqsFliVToeuukSIv
+         1ipw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680375373;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dXcG1+c5Jl39ysxbFzlW+WnXY9ydxR0wHedPIyhRzvU=;
+        b=D+wPaIjXiaSk3JZ+9L7W2LBwmm6NTNs/VI5rQmPINKJ6gu/beLenWTxBZEuAqPTTFl
+         JpKMMBapAQrcsgP006BZBpyeOX7dBLgLs2xIwOdL5IbfOOFs17I78VLPsVxm9+Qo0W8K
+         /IzOw8lp5GVtxnUL7dxBvKAE9j6co8+0lo2TVrz0dCFFlxdl1VMGSwnj2RiBRpwde9sa
+         qAGuJnJhbQruSEx50K6lqOerlZ2CDUpNEG3HvNS/bP9MiBR80/Ft9m41Yl7kfRsVa7zb
+         0RkHbvoEFOwgBqsH+Wo31BmbLHLW1SrK8TgGqD8hQ9hYAO1HTYDzu69DoLxKkj0F0sEH
+         2pvQ==
+X-Gm-Message-State: AAQBX9eZL27faSpStlFQe2xbP/c713oidxBJhARqJeeZB+LxsGGBdgcy
+        93OCA0VT3fBM6Z58SJpym7ndX6MUecPyfaZTAIs=
+X-Google-Smtp-Source: AKy350Zj9jMGv7x+aGg83kutUm7pRaSj6gAH3IZdrFyjnOv/Ib01HNQ7bbPu7XFqsohz2UeEShrSe2ldrftFZJyWG6M=
+X-Received: by 2002:a17:90a:d684:b0:23b:517d:beca with SMTP id
+ x4-20020a17090ad68400b0023b517dbecamr9708225pju.0.1680375373221; Sat, 01 Apr
+ 2023 11:56:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: gangecen@hust.edu.cn
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:7300:320c:b0:99:61ed:ff08 with HTTP; Sat, 1 Apr 2023
+ 11:56:12 -0700 (PDT)
+Reply-To: Mrs.billchantallawrence9@gmail.com
+From:   "Mrs. Bill Chantal" <larbanamountougou@gmail.com>
+Date:   Sat, 1 Apr 2023 11:56:12 -0700
+Message-ID: <CALhVCXqbydbyVV_Ks=BTaJ4XaNxTwMrCHYF2XMThhqEF0TMSEA@mail.gmail.com>
+Subject: HELLO...
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_ATM_CARD,
+        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:102f listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [larbanamountougou[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrs.billchantallawrence9[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 MONEY_ATM_CARD Lots of money on an ATM card
+        *  1.1 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gan Gecen <gangecen@hust.edu.cn>
+You have been compensated with the sum of 5.9 million euro by the
+United Nations,The payment will be Issue in the form of an ATM Visa
+Card and send to you through the bank, To receive the ATM CARD We need
+your Address, Passport and your Whatsapp Number please reply with the
+requested information.
 
-Smatch reports:
-
-	drivers/gpu/drm/tiny/bochs.c:290 bochs_hw_init()
-	warn: 'bochs->mmio' from ioremap() not released on
-	lines: 246,250,254.
-
-In the function bochs_load() that calls bochs_hw_init()
-only, if bochs_hw_init(dev) returns -ENODEV(-19), it
-will jumps to err_free_dev instead of err_hw_fini, so
-bochs->mmio won't be freed.
-
-We just need to release mmio in the corresponding error
-handling.
-
-Signed-off-by: Gan Gecen <gangecen@hust.edu.cn>
----
-v1->v2: Change the strategy for fixing this
-issue to manually release mmio by iounmap 
-instead of changing ioremap to devm_ioremap.
- drivers/gpu/drm/tiny/bochs.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/tiny/bochs.c b/drivers/gpu/drm/tiny/bochs.c
-index 024346054c70..46abed11c163 100644
---- a/drivers/gpu/drm/tiny/bochs.c
-+++ b/drivers/gpu/drm/tiny/bochs.c
-@@ -243,15 +243,20 @@ static int bochs_hw_init(struct drm_device *dev)
- 		* 64 * 1024;
- 	if ((id & 0xfff0) != VBE_DISPI_ID0) {
- 		DRM_ERROR("ID mismatch\n");
-+		iounmap(bochs->mmio);
- 		return -ENODEV;
- 	}
- 
--	if ((pdev->resource[0].flags & IORESOURCE_MEM) == 0)
-+	if ((pdev->resource[0].flags & IORESOURCE_MEM) == 0) {
-+		iounmap(bochs->mmio);
- 		return -ENODEV;
-+	}
- 	addr = pci_resource_start(pdev, 0);
- 	size = pci_resource_len(pdev, 0);
--	if (addr == 0)
-+	if (addr == 0) {
-+		iounmap(bochs->mmio);
- 		return -ENODEV;
-+	}
- 	if (size != mem) {
- 		DRM_ERROR("Size mismatch: pci=%ld, bochs=%ld\n",
- 			size, mem);
--- 
-2.34.1
-
+Thanks
+Mrs. Bill Chantal Lawrence.
