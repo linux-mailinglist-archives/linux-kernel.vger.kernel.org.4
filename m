@@ -2,107 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DD26D341A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 23:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84416D341C
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 23:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjDAVdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 17:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        id S229933AbjDAVjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 17:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDAVdN (ORCPT
+        with ESMTP id S229379AbjDAVj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 17:33:13 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C47FDF;
-        Sat,  1 Apr 2023 14:33:11 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id e9so11336766ljq.4;
-        Sat, 01 Apr 2023 14:33:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680384790;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=F5VegHT0J88UW3h2u7j2HGa/Un6298+OaL4En3w2TQk=;
-        b=TDb7GsuEUv/YOdA+RukCA0z6/DAceAV83ELAyW9fsLccMrZZ2xTq5TfU6Pdcah3BY7
-         Kl1qTlSN8HkYMCIpo6eZ3iibmc76ulOBmut/3zDdnWjX1hxyvH9OeigMSi96gBgAQxny
-         ngSp6GX3Cj3MJnD50JH41tW10JRLg6RLimZMT1H/ZqKNy30lqIoMp/5SMLVlQ3DXmnQa
-         LHE3PYdSEC9vJ9O2as2ncwvI8ITAeMwSwxotyo1yqlty2k3gkI9BL1Bn5wIT6QO4IKRe
-         sfTFMJ27S/ctq3RViarg9wbuEnM4VeyiQws68iKMvNcpyJbbVduQoXgv/M+uvDzAILNe
-         jVdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680384790;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F5VegHT0J88UW3h2u7j2HGa/Un6298+OaL4En3w2TQk=;
-        b=gkKmkYSZDQrH3Cf9kD/2oy7gGLtP9U11qTd1qdfpGDF/1+J0yJS5fmTU5a8D6LImRD
-         26j07iyLvf5rEFG3rZGB0y5Dz02n3cz/9Xo5zQ/rN1vWkJawGFAO+lKidnbSFfOXl1Xr
-         gUfhLBLTP7OG8QD4VLI9JPPvJPFFcbk63mkMXmtdn0w4q5F8HuA7RYF8uREr6GW3AvQk
-         9D1PEVMNUXZNOJxBKGIuAV+4kQFP3Tpge7KMDbTj/FxllCU+r2NrD7gmjgc9tPSlKeAW
-         Kr0fBTLNP8LOtEJ1r5um+w7UnN34NPHFwxCdLtMrGs+mkhc3n+6XJHcEA0reAB2HJlWa
-         LI4g==
-X-Gm-Message-State: AAQBX9cotaBenY772cc7ZwO/RyfFSbg9CrEgmHTgFNNaoa5j+2qJsbYf
-        j7KtIUEReCEj3CT+7057CJ2kRKWXzYAmXTq49Vvg+wnqYzE=
-X-Google-Smtp-Source: AKy350Z0DObfW5Q9yg5lOg7UHJ3kSY1lVs7ja3tjTpjZxsiJyEgj1DcwbhQgK/uPYzn3zwyY+nsgy/kASUt41qCEeaU=
-X-Received: by 2002:a2e:9c0f:0:b0:299:ac5e:376e with SMTP id
- s15-20020a2e9c0f000000b00299ac5e376emr9619921lji.2.1680384789340; Sat, 01 Apr
- 2023 14:33:09 -0700 (PDT)
+        Sat, 1 Apr 2023 17:39:29 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C171880F;
+        Sat,  1 Apr 2023 14:39:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nq+wVlpePRQY2WWVL6tQTzkVmNZ7Jw4IvnL2MwD+skY=; b=hL1OEayWzlSO6rrTZwbNOwx0/T
+        YhLh0NO8HA8DFC3rLBud7OjpuWCdBhNM0fJ6zdowLldJnCqfS0eCPakKPeJYHXjhDvf1c2Bqh88kP
+        bnQrlP/8jbVZUdg8T2oOZ8h1vq23zzhpwfyT++peQsXMKbhnvd1x9NAgj4si36UjiENgsmcuSSJmq
+        wmZ6B+DTkMyeHAKDzcoFSbnswdjesb2/vFTUQdNjvJJt20mMyIImU2A19Foa5Kq14jxFOkbO35POJ
+        u+aix5ypPMQr4jS0YYHA5kfMRx4wrsMfJjcMQvrX+Mz12FN2JNqI0y+n2tsBF4h70Q5y97RZJJjTt
+        kRDQ+kaA==;
+Received: from p200300ccff2d4a001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff2d:4a00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1piiwP-0000Aw-8q; Sat, 01 Apr 2023 23:39:17 +0200
+Date:   Sat, 1 Apr 2023 23:39:16 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Tom Rix <trix@redhat.com>, nathan@kernel.org,
+        ndesaulniers@google.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: Re: [PATCH] power: supply: twl4030-charger: remove unused cur_reg
+ variable
+Message-ID: <20230401233916.374ffe1a@aktux>
+In-Reply-To: <20230401203026.nzk4aygv7sr7quhe@mercury.elektranox.org>
+References: <20230401113432.1873847-1-trix@redhat.com>
+        <20230401203026.nzk4aygv7sr7quhe@mercury.elektranox.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 1 Apr 2023 16:32:58 -0500
-Message-ID: <CAH2r5mtvRF98xs3FCjc+WcfdR2wNVLNTqn=h+rYvtkj22T2f4w@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-197b6b60ae7bc51dd0814953c562833143b292aa:
+On Sat, 1 Apr 2023 22:30:26 +0200
+Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
 
-  Linux 6.3-rc4 (2023-03-26 14:40:20 -0700)
+> Hi,
+> 
+> On Sat, Apr 01, 2023 at 07:34:32AM -0400, Tom Rix wrote:
+> > clang with W=1 reports
+> > drivers/power/supply/twl4030_charger.c:242:16: error: variable
+> >   'cur_reg' set but not used [-Werror,-Wunused-but-set-variable]
+> >         unsigned reg, cur_reg;
+> >                       ^
+> > This variable is not used so remove it.
+> > 
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > ---
+> >  drivers/power/supply/twl4030_charger.c | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/supply/twl4030_charger.c
+> > index 7adfd69fe649..5fa5b2311330 100644
+> > --- a/drivers/power/supply/twl4030_charger.c
+> > +++ b/drivers/power/supply/twl4030_charger.c
+> > @@ -239,7 +239,7 @@ static int twl4030_charger_update_current(struct twl4030_bci *bci)
+> >  {
+> >  	int status;
+> >  	int cur;
+> > -	unsigned reg, cur_reg;
+> > +	unsigned reg;
+> >  	u8 bcictl1, oldreg, fullreg;
+> >  	bool cgain = false;
+> >  	u8 boot_bci;
+> > @@ -357,11 +357,9 @@ static int twl4030_charger_update_current(struct twl4030_bci *bci)
+> >  	status = twl4030_bci_read(TWL4030_BCIIREF1, &oldreg);
+> >  	if (status < 0)
+> >  		return status;
+> > -	cur_reg = oldreg;
+> >  	status = twl4030_bci_read(TWL4030_BCIIREF2, &oldreg);
+> >  	if (status < 0)
+> >  		return status;
+> > -	cur_reg |= oldreg << 8;
+> >  	if (reg != oldreg) {  
+> 
+> I think the correct fix would be checking for (reg != cur_reg) here.
+> 
+yes, makes more sense.
 
-are available in the Git repository at:
-
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.3-rc4-smb3-client-fixes
-
-for you to fetch changes up to e03677100707f849f01d8faf07ee58b4e56cdbf1:
-
-  cifs: get rid of dead check in smb2_reconnect() (2023-03-30 17:56:30 -0500)
-
-----------------------------------------------------------------
-Four cifs/smb3 client (reconnect and DFS related) fixes, including two
-for stable:
-- DFS oops fix
-- DFS reconnect recursion fix
-- An SMB1 parallel reconnect fix
-- Trivial dead code removal in smb2_reconnect
-
-This P/R does not include the important deferred close lease break fix
-(additional changes were needed for that).
-----------------------------------------------------------------
-David Disseldorp (1):
-      cifs: fix DFS traversal oops without CONFIG_CIFS_DFS_UPCALL
-
-Paulo Alcantara (3):
-      cifs: avoid races in parallel reconnects in smb1
-      cifs: prevent infinite recursion in CIFSGetDFSRefer()
-      cifs: get rid of dead check in smb2_reconnect()
-
- fs/cifs/cifsfs.h  |  5 ++++-
- fs/cifs/cifssmb.c | 30 ++++++++++++++++++++++--------
- fs/cifs/smb2pdu.c |  1 -
- 3 files changed, 26 insertions(+), 10 deletions(-)
-
-
--- 
-Thanks,
-
-Steve
+Regards,
+Andreas
