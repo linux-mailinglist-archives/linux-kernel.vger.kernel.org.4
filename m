@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5846D2E9A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E056D2E9C
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233200AbjDAGhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 02:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
+        id S233257AbjDAGhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 02:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjDAGg7 (ORCPT
+        with ESMTP id S233230AbjDAGhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 02:36:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC0A1D85C;
-        Fri, 31 Mar 2023 23:36:56 -0700 (PDT)
+        Sat, 1 Apr 2023 02:37:06 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EC51E73B
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 23:37:02 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 85D9F1F8B9;
-        Sat,  1 Apr 2023 06:36:55 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 324471FD78;
+        Sat,  1 Apr 2023 06:37:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680331015; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=fwlqVEU+eay08IeeOOBfH65TQZ/XQ2nl5oYOkjj7LF0=;
-        b=MLhGuHY3CSmYqr2j6E4yBaM89chPjWoCvhK+8ZTpJAQ4LqUfQfGaDbjFkxkQbSoUvT19LR
-        UnX7QI+Uvo4rZ2gsQVxltDevlaQX+pUb0sZdTlyT42PQAUrR4sbpAQ0h0YQABpzteF3uPT
-        KiNeYdvQLVNqIhlg1bIFWY1mzObA3oI=
+        t=1680331021; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gsM8JG+0YjKpprMSP0WcpLzh0EmtHSX+OEFp6YWu4DY=;
+        b=g8DLE9Ug7PYEkqHVYmdV+X8Cg3YN7OhOO2THjBCiMltqzaduccgavEz5vuQLMoxChKwp7O
+        qiXUoviI00yYbavx/BgEsUy+5Y3Kx9swildIQ6yxKHyyaa7PyZiTk9m953mG3IWXpviIqP
+        GMlpfHJbaMPFJgIH7WxAVxFFzSG57rc=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 10300134FB;
-        Sat,  1 Apr 2023 06:36:55 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E29F9134FB;
+        Sat,  1 Apr 2023 06:37:00 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id AzBZAgfRJ2QGdwAAMHmgww
-        (envelope-from <jgross@suse.com>); Sat, 01 Apr 2023 06:36:55 +0000
+        id 0IT8NQzRJ2QSdwAAMHmgww
+        (envelope-from <jgross@suse.com>); Sat, 01 Apr 2023 06:37:00 +0000
 From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-hyperv@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Juergen Gross <jgross@suse.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v5 00/15] x86/mtrr: fix handling with PAT but without MTRR
-Date:   Sat,  1 Apr 2023 08:36:37 +0200
-Message-Id: <20230401063652.23522-1-jgross@suse.com>
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [PATCH v5 01/15] x86/mtrr: split off physical address size calculation
+Date:   Sat,  1 Apr 2023 08:36:38 +0200
+Message-Id: <20230401063652.23522-2-jgross@suse.com>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20230401063652.23522-1-jgross@suse.com>
+References: <20230401063652.23522-1-jgross@suse.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -67,88 +65,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series tries to fix the rather special case of PAT being available
-without having MTRRs (either due to CONFIG_MTRR being not set, or
-because the feature has been disabled e.g. by a hypervisor).
+Move the calculation of the physical address size in mtrr_bp_init()
+into a helper function. This will be needed later.
 
-The main use cases are Xen PV guests and SEV-SNP guests running under
-Hyper-V.
+Do only the pure code movement without optimizing it.
 
-Instead of trying to work around all the issues by adding if statements
-here and there, just try to use the complete available infrastructure
-by setting up a read-only MTRR state when needed.
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Tested-by: Michael Kelley <mikelley@microsoft.com>
+---
+V2:
+- new patch
+V3:
+- only move code, split off optimizations (Boris Petkov)
+---
+ arch/x86/kernel/cpu/mtrr/mtrr.c | 57 ++++++++++++++++++---------------
+ 1 file changed, 32 insertions(+), 25 deletions(-)
 
-In the Xen PV case the current MTRR MSR values can be read from the
-hypervisor, while for the SEV-SNP case all needed is to set the
-default caching mode to "WB".
-
-I have added more cleanup which has been discussed when looking into
-the most recent failures.
-
-Note that I couldn't test the Hyper-V related change (patch 3).
-
-Running on bare metal and with Xen didn't show any problems with the
-series applied.
-
-It should be noted that patches 9+10 are replacing today's way to
-lookup the MTRR cache type for a memory region from looking at the
-MTRR register values to building a memory map with the cache types.
-This should make the lookup much faster and much easier to understand.
-
-Changes in V2:
-- replaced former patches 1+2 with new patches 1-4, avoiding especially
-  the rather hacky approach of V1, while making all the MTRR type
-  conflict tests available for the Xen PV case
-- updated patch 6 (was patch 4 in V1)
-
-Changes in V3:
-- dropped patch 5 of V2, as already applied
-- split patch 1 of V2 into 2 patches
-- new patches 6-10
-- addressed comments
-
-Changes in V4:
-- addressed comments
-
-Changes in V5
-- addressed comments
-- some other small fixes
-- new patches 3, 8 and 15
-
-clone of "mtrr"
-
-Juergen Gross (15):
-  x86/mtrr: split off physical address size calculation
-  x86/mtrr: optimize mtrr_calc_physbits()
-  x86/mtrr: replace some constants with defines
-  x86/mtrr: support setting MTRR state for software defined MTRRs
-  x86/hyperv: set MTRR state when running as SEV-SNP Hyper-V guest
-  x86/xen: set MTRR state when running as Xen PV initial domain
-  x86/mtrr: replace vendor tests in MTRR code
-  x86/mtrr: have only one set_mtrr() variant
-  x86/mtrr: allocate mtrr_value array dynamically
-  x86/mtrr: add get_effective_type() service function
-  x86/mtrr: construct a memory map with cache modes
-  x86/mtrr: use new cache_map in mtrr_type_lookup()
-  x86/mtrr: don't let mtrr_type_lookup() return MTRR_TYPE_INVALID
-  x86/mm: only check uniform after calling mtrr_type_lookup()
-  x86/mtrr: remove unused code
-
- arch/x86/include/asm/mtrr.h        |  44 ++-
- arch/x86/include/uapi/asm/mtrr.h   |   6 +-
- arch/x86/kernel/cpu/mshyperv.c     |   4 +
- arch/x86/kernel/cpu/mtrr/amd.c     |   2 +-
- arch/x86/kernel/cpu/mtrr/centaur.c |  11 +-
- arch/x86/kernel/cpu/mtrr/cleanup.c |   6 +-
- arch/x86/kernel/cpu/mtrr/cyrix.c   |   2 +-
- arch/x86/kernel/cpu/mtrr/generic.c | 578 +++++++++++++++++++----------
- arch/x86/kernel/cpu/mtrr/mtrr.c    | 146 ++++----
- arch/x86/kernel/cpu/mtrr/mtrr.h    |   7 +-
- arch/x86/kernel/setup.c            |   2 +
- arch/x86/mm/pgtable.c              |  24 +-
- arch/x86/xen/enlighten_pv.c        |  52 +++
- 13 files changed, 573 insertions(+), 311 deletions(-)
-
+diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
+index 783f3210d582..8310bdb111d0 100644
+--- a/arch/x86/kernel/cpu/mtrr/mtrr.c
++++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
+@@ -620,22 +620,14 @@ static struct syscore_ops mtrr_syscore_ops = {
+ int __initdata changed_by_mtrr_cleanup;
+ 
+ #define SIZE_OR_MASK_BITS(n)  (~((1ULL << ((n) - PAGE_SHIFT)) - 1))
+-/**
+- * mtrr_bp_init - initialize mtrrs on the boot CPU
+- *
+- * This needs to be called early; before any of the other CPUs are
+- * initialized (i.e. before smp_init()).
+- *
+- */
+-void __init mtrr_bp_init(void)
++
++static unsigned int __init mtrr_calc_physbits(bool generic)
+ {
+-	const char *why = "(not available)";
+-	u32 phys_addr;
++	unsigned int phys_addr;
+ 
+ 	phys_addr = 32;
+ 
+-	if (boot_cpu_has(X86_FEATURE_MTRR)) {
+-		mtrr_if = &generic_mtrr_ops;
++	if (generic) {
+ 		size_or_mask = SIZE_OR_MASK_BITS(36);
+ 		size_and_mask = 0x00f00000;
+ 		phys_addr = 36;
+@@ -667,29 +659,44 @@ void __init mtrr_bp_init(void)
+ 			size_and_mask = 0;
+ 			phys_addr = 32;
+ 		}
++	} else {
++		size_or_mask = SIZE_OR_MASK_BITS(32);
++		size_and_mask = 0;
++	}
++
++	return phys_addr;
++}
++
++/**
++ * mtrr_bp_init - initialize mtrrs on the boot CPU
++ *
++ * This needs to be called early; before any of the other CPUs are
++ * initialized (i.e. before smp_init()).
++ *
++ */
++void __init mtrr_bp_init(void)
++{
++	const char *why = "(not available)";
++	unsigned int phys_addr;
++
++	phys_addr = mtrr_calc_physbits(boot_cpu_has(X86_FEATURE_MTRR));
++
++	if (boot_cpu_has(X86_FEATURE_MTRR)) {
++		mtrr_if = &generic_mtrr_ops;
+ 	} else {
+ 		switch (boot_cpu_data.x86_vendor) {
+ 		case X86_VENDOR_AMD:
+-			if (cpu_feature_enabled(X86_FEATURE_K6_MTRR)) {
+-				/* Pre-Athlon (K6) AMD CPU MTRRs */
++			/* Pre-Athlon (K6) AMD CPU MTRRs */
++			if (cpu_feature_enabled(X86_FEATURE_K6_MTRR))
+ 				mtrr_if = &amd_mtrr_ops;
+-				size_or_mask = SIZE_OR_MASK_BITS(32);
+-				size_and_mask = 0;
+-			}
+ 			break;
+ 		case X86_VENDOR_CENTAUR:
+-			if (cpu_feature_enabled(X86_FEATURE_CENTAUR_MCR)) {
++			if (cpu_feature_enabled(X86_FEATURE_CENTAUR_MCR))
+ 				mtrr_if = &centaur_mtrr_ops;
+-				size_or_mask = SIZE_OR_MASK_BITS(32);
+-				size_and_mask = 0;
+-			}
+ 			break;
+ 		case X86_VENDOR_CYRIX:
+-			if (cpu_feature_enabled(X86_FEATURE_CYRIX_ARR)) {
++			if (cpu_feature_enabled(X86_FEATURE_CYRIX_ARR))
+ 				mtrr_if = &cyrix_mtrr_ops;
+-				size_or_mask = SIZE_OR_MASK_BITS(32);
+-				size_and_mask = 0;
+-			}
+ 			break;
+ 		default:
+ 			break;
 -- 
 2.35.3
 
