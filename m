@@ -2,149 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67786D2DF9
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 05:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D12F6D2DFF
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 05:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbjDADhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 23:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        id S233189AbjDADtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 23:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbjDADhN (ORCPT
+        with ESMTP id S231532AbjDADtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 23:37:13 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226C183F7
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 20:36:54 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id l10-20020a056e0205ca00b00322fdda7261so15427240ils.6
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 20:36:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680320213; x=1682912213;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hwOffVYvisJdV2o5GWhDpDI8kgqhn1tf7ofiQZHvtvs=;
-        b=nxByy5SPrzhgPMYx/UwI38dlX74AvQBHdnarUdsarTns8rOx7BBC/lvNriUfZJnhoK
-         yFv578HlYym6OvDYXKyzDSQ+a53/9/W5Lq+iPsGk60nD+PQMYCfJEdjcS3/J94t4oBjI
-         we5wKqGONi29lqG4cmBb5cFaBuzpkeuMp2jX7UdULi+EziKTq++ME/zHv1+SBEWWg+FO
-         sx9AGFlVhR+CMdWOftRI6kR2nKiMOWLOj6LtetYscoOEuNCEstlfZtA0CyDxHoZa7vzj
-         +d4nDrAGWKYmItDAWDeJsiQkAP34Itul+F0fm9oCpdhMZ1eFVV9AXXkHZXHl9CoQcxdh
-         Khkg==
-X-Gm-Message-State: AAQBX9fBXCU3xamnIPxGjx9uHoz1gwWcls2RxqHKi4zzeLEnI/PesSD8
-        E2fIAQyz3uV3xrKhVFIguGhLfGETaoKiFF6W9WofFPN6FcLR
-X-Google-Smtp-Source: AKy350YNU4INQYRerQ4SAMHbfPVmSpn+4PFSXOtC3QFQju8X6kMwNC1FmOUNLmpgZCBd6ccSDjlhDWYB9Cb9n6RlCjuAjrW73aUN
+        Fri, 31 Mar 2023 23:49:04 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB347F75C;
+        Fri, 31 Mar 2023 20:49:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680320942; x=1711856942;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iKRGjxyuVPlp7bjfbPORRfcTp1PxnLq+Mx9fXMULy44=;
+  b=PJzX4mCSl9L2jiuSGvZ+N0EMt67ebEwMK3TV54KB5fQcqM3N7qifeSoi
+   +0qJpiNYj4Sk3m196E4yTN19GEcuRsTgvdudW+j6nwSGUaUSIc5N8kYMJ
+   6l7JXhUq13yeuP5jRxVNqcL3pKiiUChtijLJNWyrHAIPOwQ4MolIblPS8
+   1pmlWirOXhNMTXOQafV8XcSz5YeInJgDJ4Zpkt7CbZKheXPc2aJjFjA5L
+   tO96lc92sCXzVIgJ2/WI/FIoY9Sszy9ilgEtZHYZpbQJY1y/JfNmUfVFx
+   cczYRv2ccbAqHWmd8YeI1M3h+zv/UBtEYX0nhgnxi1761OL1942TXkyDz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="321268508"
+X-IronPort-AV: E=Sophos;i="5.98,308,1673942400"; 
+   d="scan'208";a="321268508"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 20:45:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="662612093"
+X-IronPort-AV: E=Sophos;i="5.98,308,1673942400"; 
+   d="scan'208";a="662612093"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 31 Mar 2023 20:45:10 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1piSAv-000MQR-2Z;
+        Sat, 01 Apr 2023 03:45:09 +0000
+Date:   Sat, 1 Apr 2023 11:44:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Yacoub <markyacoub@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Mark Yacoub <markyacoub@chromium.org>,
+        intel-gfx@lists.freedesktop.org, dianders@chromium.org,
+        dri-devel@lists.freedesktop.org,
+        Stephen Boyd <swboyd@chromium.org>, seanpaul@chromium.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH v8 10/10] drm/msm: Implement HDCP 1.x using
+ the new drm HDCP helpers
+Message-ID: <202304011152.dsr8g6yX-lkp@intel.com>
+References: <20230331221213.1691997-11-markyacoub@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4392:b0:40b:2922:8a14 with SMTP id
- bo18-20020a056638439200b0040b29228a14mr615346jab.0.1680320213440; Fri, 31 Mar
- 2023 20:36:53 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 20:36:53 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006e66d605f83e09bc@google.com>
-Subject: [syzbot] [iommu?] WARNING in iommufd_hw_pagetable_detach
-From:   syzbot <syzbot+3b81771e32dd5b2f9931@syzkaller.appspotmail.com>
-To:     baolu.lu@linux.intel.com, iommu@lists.linux.dev, jgg@nvidia.com,
-        jgg@ziepe.ca, joro@8bytes.org, kevin.tian@intel.com,
-        linux-kernel@vger.kernel.org, nicolinc@nvidia.com,
-        robin.murphy@arm.com, syzkaller-bugs@googlegroups.com,
-        will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331221213.1691997-11-markyacoub@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Mark,
 
-syzbot found the following issue on:
+I love your patch! Yet something to improve:
 
-HEAD commit:    4b0f4525dc4f Add linux-next specific files for 20230331
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1540ac7dc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=85cc4b935a1f7194
-dashboard link: https://syzkaller.appspot.com/bug?extid=3b81771e32dd5b2f9931
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12120eb9c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ec200dc80000
+[auto build test ERROR on drm-intel/for-linux-next-fixes]
+[also build test ERROR on linus/master v6.3-rc4]
+[cannot apply to drm-misc/drm-misc-next drm-intel/for-linux-next drm/drm-next next-20230331]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8d06bb015df3/disk-4b0f4525.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6a1c1ebf3724/vmlinux-4b0f4525.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4bb2b8d6cd7d/bzImage-4b0f4525.xz
+url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Yacoub/drm-hdcp-Add-drm_hdcp_atomic_check/20230401-061425
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next-fixes
+patch link:    https://lore.kernel.org/r/20230331221213.1691997-11-markyacoub%40google.com
+patch subject: [Intel-gfx] [PATCH v8 10/10] drm/msm: Implement HDCP 1.x using the new drm HDCP helpers
+config: arc-randconfig-r043-20230329 (https://download.01.org/0day-ci/archive/20230401/202304011152.dsr8g6yX-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/697c762c590d862f4f6ed4a8cac97ac2de815f73
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mark-Yacoub/drm-hdcp-Add-drm_hdcp_atomic_check/20230401-061425
+        git checkout 697c762c590d862f4f6ed4a8cac97ac2de815f73
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-The issue was bisected to:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304011152.dsr8g6yX-lkp@intel.com/
 
-commit 9d05029acd4e4c0a85e412bf955dfc5526b9a6c1
-Author: Jason Gunthorpe <jgg@nvidia.com>
-Date:   Mon Mar 27 18:37:57 2023 +0000
+All errors (new ones prefixed by >>):
 
-    iommufd: Replace the hwpt->devices list with iommufd_group
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13dbbb71c80000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=103bbb71c80000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17dbbb71c80000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3b81771e32dd5b2f9931@syzkaller.appspotmail.com
-Fixes: 9d05029acd4e ("iommufd: Replace the hwpt->devices list with iommufd_group")
-
-iommufd_mock iommufd_mock0: Adding to iommu group 0
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5081 at drivers/iommu/iommufd/device.c:344 iommufd_hw_pagetable_detach+0x2cb/0x480 drivers/iommu/iommufd/device.c:344
-Modules linked in:
-CPU: 0 PID: 5081 Comm: syz-executor226 Not tainted 6.3.0-rc4-next-20230331-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-RIP: 0010:iommufd_hw_pagetable_detach+0x2cb/0x480 drivers/iommu/iommufd/device.c:344
-Code: f2 fc 49 8d 7d 70 be ff ff ff ff e8 cf 2f 76 05 31 ff 41 89 c5 89 c6 e8 63 6d f2 fc 45 85 ed 0f 85 ee fd ff ff e8 35 71 f2 fc <0f> 0b e9 e2 fd ff ff e8 29 71 f2 fc 49 8d bd a0 00 00 00 48 b8 00
-RSP: 0018:ffffc90003b0fb30 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88801676da00 RCX: 0000000000000000
-RDX: ffff8880279c8000 RSI: ffffffff8490a01b RDI: 0000000000000005
-RBP: ffff88801676dab0 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801676dc00
-R13: 0000000000000000 R14: 0000000000000001 R15: ffff88801676dcc0
-FS:  0000555555fa9300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000188 CR3: 000000002ba93000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- iommufd_hw_pagetable_alloc+0x646/0x800 drivers/iommu/iommufd/hw_pagetable.c:114
- iommufd_device_auto_get_domain drivers/iommu/iommufd/device.c:500 [inline]
- iommufd_device_change_pt+0x570/0xb30 drivers/iommu/iommufd/device.c:553
- iommufd_device_attach+0x27/0xd0 drivers/iommu/iommufd/device.c:591
- iommufd_test_mock_domain drivers/iommu/iommufd/selftest.c:439 [inline]
- iommufd_test+0x81c/0x2ef0 drivers/iommu/iommufd/selftest.c:987
- iommufd_fops_ioctl+0x317/0x4b0 drivers/iommu/iommufd/main.c:351
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f6a1d59bc89
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe55301508 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f6a1d59bc89
-RDX: 00000000200000c0 RSI: 0000000000003ba0 RDI: 0000000000000003
-RBP: 00007f6a1d55fe30 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6a1d55fec0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+   arc-elf-ld: drivers/gpu/drm/msm/msm_atomic.o: in function `msm_atomic_commit_tail':
+>> drivers/gpu/drm/msm/msm_atomic.c:193: undefined reference to `dp_drm_is_bridge_msm_dp'
+>> arc-elf-ld: drivers/gpu/drm/msm/msm_atomic.c:193: undefined reference to `dp_drm_is_bridge_msm_dp'
+>> arc-elf-ld: drivers/gpu/drm/msm/msm_atomic.c:194: undefined reference to `dp_drm_atomic_commit'
+>> arc-elf-ld: drivers/gpu/drm/msm/msm_atomic.c:194: undefined reference to `dp_drm_atomic_commit'
+   arc-elf-ld: drivers/gpu/drm/msm/dp/dp_debug.o: in function `dp_hdcp_key_write':
+>> drivers/gpu/drm/msm/dp/dp_debug.c:219: undefined reference to `dp_hdcp_ingest_key'
+>> arc-elf-ld: drivers/gpu/drm/msm/dp/dp_debug.c:219: undefined reference to `dp_hdcp_ingest_key'
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +193 drivers/gpu/drm/msm/msm_atomic.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+   184	
+   185	static void msm_atomic_commit_connectors(struct drm_atomic_state *state)
+   186	{
+   187		struct drm_device *dev = state->dev;
+   188		struct msm_drm_private *priv = dev->dev_private;
+   189		int i;
+   190	
+   191		for (i = 0; i < priv->num_bridges; ++i) {
+   192			struct drm_bridge *bridge = priv->bridges[i];
+ > 193			if (dp_drm_is_bridge_msm_dp(bridge)) {
+ > 194				dp_drm_atomic_commit(bridge, state);
+   195			}
+   196		}
+   197	}
+   198	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
