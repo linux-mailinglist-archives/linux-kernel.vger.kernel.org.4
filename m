@@ -2,48 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D646D30E2
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D1E6D30E5
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjDANC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 09:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
+        id S229739AbjDANGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 09:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDANC6 (ORCPT
+        with ESMTP id S229379AbjDANGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 09:02:58 -0400
-Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CD6494
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 06:02:56 -0700 (PDT)
-Received: from 8bytes.org (p200300c27714bc0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7714:bc00:86ad:4f9d:2505:dd0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id C2F01245407;
-        Sat,  1 Apr 2023 15:02:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1680354174;
-        bh=ivLCR7G42mOBHbyzSVSeaGBW1vJ1pQzIUjyUrNLx6HU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bc4WRjtn7yMT7g/GeeY+l0pgDBKsWK8a5n7Dz/KkY3D4ZEyqtOkplNdh4KUmHa2jx
-         U3U+aCr+eIXVT4WIVIlZvXMuUbTX18DW+7lK/i4pH8Glx1jAsibof0nfdO7Kr2PjCV
-         yGcwuzHYcC4wTCmXUoKCL7av8QkPgDX8t/mCZIfvXNvJLf1yr8TmLoKJi9Rkb7wvvq
-         2UndONTiz8k9WDhZaVVJGIMPfoaw4SB2w8Tb+uIzoiIJd5zAcyeYC/WQrm1mUchXHL
-         LiHtKtLdbRwNvL/Arci+ZrWFHeh3S8Cv2tXZ7c5KtMT8QjJsT4feUhzBqOJPYKet7j
-         hIQPNTCenw+9g==
-Date:   Sat, 1 Apr 2023 15:02:53 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: [git pull] IOMMU Fixes for Linux v6.3-rc4
-Message-ID: <ZCgrfX7DoO9puGmY@8bytes.org>
+        Sat, 1 Apr 2023 09:06:04 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185BBAF3E;
+        Sat,  1 Apr 2023 06:06:03 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1piava-0008Q2-1A;
+        Sat, 01 Apr 2023 15:05:54 +0200
+Date:   Sat, 1 Apr 2023 14:05:48 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH net-next 13/15] net: dsa: mt7530: add support for 10G
+ link modes for CPU port
+Message-ID: <ZCgsLFT6dwhCsAyE@makrotopia.org>
+References: <cover.1680180959.git.daniel@makrotopia.org>
+ <89ef48606fdbe896705a57a65a85c22cae01936e.1680180959.git.daniel@makrotopia.org>
+ <8f213456-af0b-3047-d7ec-865fecec8142@arinc9.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+gelX+8wR+xGJNeO"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8f213456-af0b-3047-d7ec-865fecec8142@arinc9.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,88 +62,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Apr 01, 2023 at 11:56:43AM +0300, Arınç ÜNAL wrote:
+> On 30.03.2023 18:23, Daniel Golle wrote:
+> > The built-in switch of the MT7988 SoC is internally connected using
+> > a stateless 10G link. Add support for 10G interface modes to silence
+> > a warning otherwise occurring when the switch driver is setup.
+> > 
+> > Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> > ---
+> >   drivers/net/dsa/mt7530.c | 7 ++++++-
+> >   1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> > index 3a4682e71e746..ac666da2d10dc 100644
+> > --- a/drivers/net/dsa/mt7530.c
+> > +++ b/drivers/net/dsa/mt7530.c
+> > @@ -2618,6 +2618,9 @@ mt7531_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
+> >   	case PHY_INTERFACE_MODE_1000BASEX:
+> >   	case PHY_INTERFACE_MODE_2500BASEX:
+> >   		/* handled in SGMII PCS driver */
+> > +	case PHY_INTERFACE_MODE_USXGMII:
+> > +	case PHY_INTERFACE_MODE_10GKR:
+> > +		/* internal stateless 10G link */
+> >   		return 0;
+> >   	default:
+> >   		return -EINVAL;
+> 
+> I think it'd be better to make this explicitly for the switch in the
+> MT7988 SoC.
 
---+gelX+8wR+xGJNeO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I decided to rather introduce mt7988_mac_config (a noop returning
+either 0 or -EINVAL), mt7988_mac_port_get_caps (allowing only USXGMII
+and 10000FD) and mt7988_cpu_port_config (setting CPU port bit in
+registers but not caring about interface mode and speed other than
+USXGMII/10000FD).
 
-Hi Linus,
+The updated commit adding MT7988 is here:
+https://github.com/dangowrt/linux/commit/595c940cbee90b5dbdc8173974a007fefe641550
 
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
+So then I dropped
+"net: dsa: mt7530: add support for 10G link modes for CPU port"
+because it is no longer needed if all this is done explicitely for MT7988.
 
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-fixes-6.3-rc4
-
-for you to fetch changes up to 16812c96550c30a8d5743167ef4e462d6fbe7472:
-
-  iommu/vt-d: Fix an IOMMU perfmon warning when CPU hotplug (2023-03-31 10:06:16 +0200)
-
-----------------------------------------------------------------
-IOMMU Fixes for Linux v6.3-rc4
-
-Including:
-
-	- Maintainer update for S390 IOMMU driver
-
-	- A fix for the set_platform_dma_ops() call-back in the
-	  Exynos IOMMU driver
-
-	- Intel VT-d fixes from Lu Baolu:
-	  - Fix a lockdep splat
-	  - Fix a supplement of the specification
-	  - Fix a warning in perfmon code
-
-----------------------------------------------------------------
-Kan Liang (1):
-      iommu/vt-d: Fix an IOMMU perfmon warning when CPU hotplug
-
-Lu Baolu (2):
-      iommu/vt-d: Remove unnecessary locking in intel_irq_remapping_alloc()
-      iommu/vt-d: Allow zero SAGAW if second-stage not supported
-
-Marek Szyprowski (1):
-      iommu/exynos: Fix set_platform_dma_ops() callback
-
-Niklas Schnelle (1):
-      MAINTAINERS: Update s390-iommu driver maintainer information
-
- MAINTAINERS                         |  3 +-
- drivers/iommu/exynos-iommu.c        | 17 ++++++----
- drivers/iommu/intel/dmar.c          |  3 +-
- drivers/iommu/intel/iommu.h         |  2 ++
- drivers/iommu/intel/irq_remapping.c |  6 ----
- drivers/iommu/intel/perfmon.c       | 68 ++++++++++++++++++++++++-------------
- include/linux/cpuhotplug.h          |  1 -
- 7 files changed, 60 insertions(+), 40 deletions(-)
-
-Please pull.
-
-Thanks,
-
-	Joerg
-
---+gelX+8wR+xGJNeO
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmQoK30ACgkQK/BELZcB
-GuP7vhAAsS/pWWeNqE+/kqgFDuwUo4dvATUse5hCfHnLf7KNVYfsCXFte6kC2EyN
-YeQiKXRDGz5QLm8XmmqeZSqdjc73OtYXvxPhbd7+9UQjutri+SAj+3ntJPP4LXcO
-iFE5nHuTA02Ir/oGE4E2LOTeK75i8HJdR4vaQpbpcrvvF7i32p0MrYpl424dq7BV
-icXsJ0Cy8iVLaIyTCOyWkFFMcd0L/pBMFZelHc/MJeZuFgULcp1jFhRdvflT4ctR
-vNtl9qZtplWE6Vs9lJOSGHUrkdfnY1Uy1JoTUr+F0lS6QVQ6JyIYPPfz65x24XiK
-2WajiHTP53r4RCZSXSXvfA2kfIr4AvferaUC1KUv3mP2A5dQH2uPVBiNmnzW2DwO
-MgOThEzJcegyRz2ZTPraQEl/cqUqrILaLUdVnz5pR/2I8V3iB4PlH0X1j7vdgWhu
-5t0u6FWtISWiWu7mPQLqwIrSsh3jEpEc/mceLqey1N/ms7lMZiuU2biMM7rdep16
-ZiXIxM7ojGzWGPQ6o63nvRQ8VFc30/aR8NEhN0SKCPM+lVMgoVUY+Nt4/he8e21U
-HpB+yxUuPA2qo38iIjKZn5GZvWl6VyAJNXLAN4HYIQVk6fAXlClGObc+Pkj03+0T
-6/odNocDJ0NeLSVWTmuduw5IETe84Hx6CeyRG+Wog+ngi+BzXYg=
-=KIvi
------END PGP SIGNATURE-----
-
---+gelX+8wR+xGJNeO--
+> 
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index e5347dd2521b..f7542c7f60e4 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -2666,10 +2665,13 @@ mt7531_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
+>  	case PHY_INTERFACE_MODE_1000BASEX:
+>  	case PHY_INTERFACE_MODE_2500BASEX:
+>  		/* handled in SGMII PCS driver */
+> +		return 0;
+>  	case PHY_INTERFACE_MODE_USXGMII:
+>  	case PHY_INTERFACE_MODE_10GKR:
+> -		/* internal stateless 10G link */
+> -		return 0;
+> +		if (priv->id == ID_MT7988)
+> +			/* internal stateless 10G link */
+> +			return 0;
+> +
+>  	default:
+>  		return -EINVAL;
+>  	}
+> 
+> Arınç
