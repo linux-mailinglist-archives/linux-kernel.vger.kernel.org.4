@@ -2,196 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCE06D327A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 17:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2396D326D
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 17:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjDAPzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 11:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
+        id S229767AbjDAPtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 11:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDAPza (ORCPT
+        with ESMTP id S229519AbjDAPth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 11:55:30 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835B820620;
-        Sat,  1 Apr 2023 08:55:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680364526; x=1711900526;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Gh91C+ZNgnlHe95VEAG2ZvyvuVbTO3suX8aj+cqURKc=;
-  b=A7Iz9/5KUtB8mfSBV71mY5Md0QkuQHVhnnycr3BTT2oBdoEfNUo8BbNM
-   1wpo4Qcm9g1w1x6OOsuIUy0+9WBArhHZigFllGm12OX0a04N+y2ZVA81y
-   Kdmx47zswHFgX0t/g4jNWDcJj+DOrUxo6BsLuoFMzVF/vj8xUHY9FPZqY
-   5hyWHlIhWJZx4m+/C97RNhsCul4kzS+X3br4rrEqSOTQkMPuYGBafnGzh
-   HQg31Wk3P2sei9SZKhJoLLuDTKPc+uDwyeh3P3hlYjr/EUiY23BmBBjD/
-   5rsRnqtJmBrIOzQsS8Uuw4Z+wBRC9q1X0IEXlO428arbJ9vYlc4wOw0MZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="321319307"
-X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="321319307"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 08:55:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="662716294"
-X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="662716294"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga006.jf.intel.com with ESMTP; 01 Apr 2023 08:55:23 -0700
-Date:   Sat, 1 Apr 2023 23:43:48 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     "Manne, Nava kishore" <nava.kishore.manne@amd.com>
-Cc:     "mdf@kernel.org" <mdf@kernel.org>,
-        "hao.wu@intel.com" <hao.wu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] fpga: zynqmp: Make word align the configuration data
-Message-ID: <ZChRNHCU273FLkGz@yilunxu-OptiPlex-7050>
-References: <20230314094222.66916-1-nava.kishore.manne@amd.com>
- <ZBWDhAaavbrehAjh@yilunxu-OptiPlex-7050>
- <DM6PR12MB399339FED1FDAFEBD0D3A566CD889@DM6PR12MB3993.namprd12.prod.outlook.com>
+        Sat, 1 Apr 2023 11:49:37 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACF91EFC4
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 08:49:36 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id kc4so24157825plb.10
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 08:49:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680364176;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QjzqAIl3Ts8TC3ttDK2ZT2hJcqB0556wUOjFhbTFVHk=;
+        b=sz+//GCQble51W2h9V617r6lA89aaFxg4pwpEBjvE5HHUXcczloBvNjygUk7YDYKS1
+         60022mHnrlzmBD/ivX7hbzZlkUTE3M9RK3y5UvOnWrpxMKODnhJLK9NOdUxqif9vBLV5
+         0a1+0mVZEgrgI+CFc8iEKSN2bIWK/xu6XlxqgnbzX18ktgiefq3PvqqNIGeotZA64VUl
+         SOQZz1duxZ6Dztn3RDs8F5NeduhX9YhFEXr5/xbBJd0RJ5mNe3pdFROPcj/eGMyK22+I
+         zuItZiIpmYGhYC4JMsFUGzehq2dyjMxDcXtNOJ1dHdaAItwjgl6KK5zr2cXxf5noUD4U
+         gctA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680364176;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QjzqAIl3Ts8TC3ttDK2ZT2hJcqB0556wUOjFhbTFVHk=;
+        b=ZCcjAeEo4We3J5JAbNihwZILmaLtUCiilmr74IfELyocp/8yjzdKJ4CTKekL3c4HRG
+         A2Pnnf+DIzO7EEf0f7lvjuO+Dd9J2ukAHmoOowvoFeqwphhmuWfo6fvyjSOVU5qI4JFB
+         K97DMOho1VfZX+WI7vGvsVjFvaHTFBgtKHYS08yeK4qISt+C0NBT+8Oq1o32EtT5dCv2
+         vnkQYwNR3TLPVyrOML242UGdG8cWYE3dhSUPLuN2lB/p3oo40sn+i+s/SzGTPgnqNgRj
+         j3ocY8RihwHCyQV+u1ED5/jRGjgHUjjRORuL3HzmuMTWcGb47EYZnObC3IepilefuYA1
+         cU4g==
+X-Gm-Message-State: AO0yUKUgvVRv39QofN8eSV2+AGBJAJu2Nx23lOkpjhzHLpitSarNmrhj
+        93i1SSyrRqOh7QD7i/zAARZ3Qw==
+X-Google-Smtp-Source: AK7set8kv0KcICPLpF1MhNDL7vJZJ/C4KBEDUEDtb2DBefxDPtBOxVAW6qa/A/JtWZg6Yoec8sSQYQ==
+X-Received: by 2002:a05:6a20:1b18:b0:da:368e:7c73 with SMTP id ch24-20020a056a201b1800b000da368e7c73mr25768054pzb.37.1680364175845;
+        Sat, 01 Apr 2023 08:49:35 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.66.184])
+        by smtp.gmail.com with ESMTPSA id 65-20020a630444000000b0050fb4181e8bsm3385367pge.40.2023.04.01.08.49.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Apr 2023 08:49:35 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org
+Subject: [PATCH v4 0/2] Enable USB SS qmp phy for Qualcomm SM6115 SoC
+Date:   Sat,  1 Apr 2023 21:17:23 +0530
+Message-Id: <20230401154725.1059563-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR12MB399339FED1FDAFEBD0D3A566CD889@DM6PR12MB3993.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-28 at 09:33:17 +0000, Manne, Nava kishore wrote:
-> Hi Yilun,
-> 
-> 	Please find my response inline.
-> 
-> > -----Original Message-----
-> > From: Xu Yilun <yilun.xu@intel.com>
-> > Sent: Saturday, March 18, 2023 2:55 PM
-> > To: Manne, Nava kishore <nava.kishore.manne@amd.com>
-> > Cc: mdf@kernel.org; hao.wu@intel.com; trix@redhat.com;
-> > michal.simek@xilinx.com; linux-fpga@vger.kernel.org; linux-arm-
-> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH] fpga: zynqmp: Make word align the configuration data
-> > 
-> > On 2023-03-14 at 15:12:22 +0530, Nava kishore Manne wrote:
-> > > To avoid unwanted copies at firmware(PMUFW) this patch provides a fix
-> > 
-> > The copy happens in firmware? Please help briefly describe the firmware
-> > operations in commit message.
-> > 
-> 
-> Yes, If the firmware receives unaligned Bitstream file from Linux to make them align
-> it will do one more copy at firmware and this copy takes much time as firmware code
-> runs on microblaze(32-bit processor and runs at lower frequency). 
-> So, we suggested the users to handle the alignment issues at top layers(Before submitting request to the firmware).
-> 
-> Will update the description in v2.
-> 
-> > > to align programmable logic(PL) configuration data if the data is not
-> > > word-aligned. To align the configuration data this patch adds a few
-> > > padding bytes and these additional padding bytes will not create any
-> > > functional impact on the PL configuration.
-> > >
-> > > Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-> > > ---
-> > >  drivers/fpga/zynqmp-fpga.c | 15 +++++++++++++--
-> > >  1 file changed, 13 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
-> > > index c60f20949c47..70a12dc6e15c 100644
-> > > --- a/drivers/fpga/zynqmp-fpga.c
-> > > +++ b/drivers/fpga/zynqmp-fpga.c
-> > > @@ -15,6 +15,9 @@
-> > >  /* Constant Definitions */
-> > >  #define IXR_FPGA_DONE_MASK	BIT(3)
-> > >
-> > > +#define DUMMY_PAD_BYTE		0xFF
-> > > +#define FPGA_WORD_SIZE		4
-> > > +
-> > >  /**
-> > >   * struct zynqmp_fpga_priv - Private data structure
-> > >   * @dev:	Device data structure
-> > > @@ -41,18 +44,26 @@ static int zynqmp_fpga_ops_write(struct
-> > fpga_manager *mgr,
-> > >  				 const char *buf, size_t size)
-> > >  {
-> > >  	struct zynqmp_fpga_priv *priv;
-> > > +	int word_align, ret, index;
-> > >  	dma_addr_t dma_addr;
-> > >  	u32 eemi_flags = 0;
-> > >  	char *kbuf;
-> > > -	int ret;
-> > >
-> > >  	priv = mgr->priv;
-> > > +	word_align = size % FPGA_WORD_SIZE;
-> > > +	if (word_align)
-> > > +		word_align = FPGA_WORD_SIZE - word_align;
-> > > +
-> > > +	size = size + word_align;
-> > 
-> > Does the Macro ALIGN() help?
-> > 
-> 
-> Will fix in v2.
-> 
-> > >
-> > >  	kbuf = dma_alloc_coherent(priv->dev, size, &dma_addr,
-> > GFP_KERNEL);
-> > >  	if (!kbuf)
-> > >  		return -ENOMEM;
-> > >
-> > > -	memcpy(kbuf, buf, size);
-> > 
-> > This is historical, but why do the realloc & copy? Any better way?
-> > 
-> 
-> Firmware internally uses the AXI DMA engine to transfer PL data from memory to the device
-> and it supports only continues DMA-able memory access(It will not support scatter-gather memory access).
-> So, this extra copy is needed to copy the data from kernel memory(allocated by the firmware subsystem using page allocators)
+Changes since v3:
+-----------------
+- v3 can be seen here: https://lore.kernel.org/linux-arm-msm/20221215094532.589291-4-bhupesh.sharma@linaro.org/
+- Fixed v4 as per the downstream driver code: https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/heads/android-msm-bramble-4.19-android11-qpr1/qcom/bengal-usb.dtsi#296
+- As per the downstream code, the qmp phy on this SoC is similar to the
+  SM8150 qmp phy and is indeed not a qmp-dp combo phy.
 
-I see, but seems the issues are generic. Same issues for versal-fpga
+This patchset adds the support for USB SS qmp phy for Qualcomm SM6115
+SoC.
 
-1. fpga_mgr_buf_load_mapped(), fpgamanager_ops::write are intended for
-   contiguous (and maybe dma-safe) buffer but fpga_mgr_firmware_load()
-   breaks this. This may also affect spi backend drivers.
+Bhupesh Sharma (2):
+  dt-bindings: phy: qcom,qmp-usb: Fix phy subnode for SM6115 & QCM2290
+    USB3 PHY
+  arm64: dts: qcom: sm6115: Add USB SS qmp phy node
 
-2. Some drivers needs dma addr rather than cpu addr, this could be
-   generally supported. But allocating a bounce buffer by
-   dma_alloc_coherent() is not a good idea.
+ .../phy/qcom,msm8996-qmp-usb3-phy.yaml        |  4 +--
+ .../boot/dts/qcom/sm4250-oneplus-billie2.dts  |  3 ++
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          | 36 +++++++++++++++++--
+ .../boot/dts/qcom/sm6115p-lenovo-j606f.dts    |  3 ++
+ 4 files changed, 42 insertions(+), 4 deletions(-)
 
-3. fpga_manager_ops::write() may also be called for each fragment of a
-   sg buffer, could the firmware OK to handle this case?
+-- 
+2.38.1
 
-I think framework refactoring is needed for these issues. I may not have
-time to do the refactoring but will support these topics in first
-priority.
-
-Thanks,
-Yilun
-
-> to continues DMA-able memory.
->  
-> > > +	for (index = 0; index < word_align; index++)
-> > > +		kbuf[index] = DUMMY_PAD_BYTE;
-> > > +
-> > > +	memcpy(&kbuf[index], buf, size - index);
-> > 
-> > Generally I object to massive copy in fpga_manager_ops::write if not
-> > necessary. If there is an alignment requirement from HW, it should be
-> > noticed to the caller in some way, before the buffer is created.
-> > 
-> 
-> Agree, we should find a way to support this kind of use cases. 
-> 
-> Regards,
-> Navakishore.
-> 
