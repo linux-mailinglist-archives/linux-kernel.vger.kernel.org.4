@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03FB6D2EB5
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9FA6D2EB6
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 08:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbjDAGiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 02:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
+        id S233509AbjDAGi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 02:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233345AbjDAGiB (ORCPT
+        with ESMTP id S233437AbjDAGiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 02:38:01 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA9720C32
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 23:37:37 -0700 (PDT)
+        Sat, 1 Apr 2023 02:38:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D11220C29
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 23:37:44 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7A0CB219FD;
-        Sat,  1 Apr 2023 06:37:35 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2AEE921A1E;
+        Sat,  1 Apr 2023 06:37:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680331055; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1680331061; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mZHEzRhRpsOluDYn0rKzRSXTPPE43ZmgbokxRzXTPPA=;
-        b=uUgy4V32tKBB48WW+9iOl5pSw3Z4xAs6bMDyJfBU1BnGbQoIUh6ZvcigaivyNPpL5pqOxn
-        sloDs/1xBI2b5VynXFAVt2ixI3wVx2eJ1tsI6BH9tCUB4oIXbhJciEYzAYDY2ExmdNBtk2
-        YNktr9WD4Ik+bToK8AgiLdmYrbnUEdE=
+        bh=gGbVw+rY2wWQKNxEpBvLV+m9QLBkN/LeTzgmGJVY0Cs=;
+        b=R6we+1e6T/w51cN8TxAWMUWmMeZhqVw4EdiPH5TcRaIGJsNT+aC26U2oKgBiGU3JZBh55t
+        uWFD/pVi+Uxl5614aqFgxKQbKLCDN4xqBeOuzRITzdZo3xb6+DfMEjtpTeQ2Sc4aOsxM8o
+        25BzkZShgR75CpHyoLTdhFb/V0kzjIY=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2E2AE134FB;
-        Sat,  1 Apr 2023 06:37:35 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DF8B5134FB;
+        Sat,  1 Apr 2023 06:37:40 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id zSTiCS/RJ2RbdwAAMHmgww
-        (envelope-from <jgross@suse.com>); Sat, 01 Apr 2023 06:37:35 +0000
+        id vSJFNTTRJ2RjdwAAMHmgww
+        (envelope-from <jgross@suse.com>); Sat, 01 Apr 2023 06:37:40 +0000
 From:   Juergen Gross <jgross@suse.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Juergen Gross <jgross@suse.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: [PATCH v5 07/15] x86/mtrr: replace vendor tests in MTRR code
-Date:   Sat,  1 Apr 2023 08:36:44 +0200
-Message-Id: <20230401063652.23522-8-jgross@suse.com>
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v5 08/15] x86/mtrr: have only one set_mtrr() variant
+Date:   Sat,  1 Apr 2023 08:36:45 +0200
+Message-Id: <20230401063652.23522-9-jgross@suse.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230401063652.23522-1-jgross@suse.com>
 References: <20230401063652.23522-1-jgross@suse.com>
@@ -65,161 +64,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modern CPUs all share the same MTRR interface implemented via
-generic_mtrr_ops.
+Today there are two variants of set_mtrr(): one calling stop_machine()
+and one calling stop_machine_cpuslocked().
 
-At several places in MTRR code this generic interface is deduced via
-is_cpu(INTEL) tests, which is only working due to X86_VENDOR_INTEL
-being 0 (the is_cpu() macro is testing mtrr_if->vendor, which isn't
-explicitly set in generic_mtrr_ops).
+The first one (set_mtrr()) has only one caller, and this caller is
+always running with only one CPU online and interrupts being off.
 
-Fix that by replacing the is_cpu(INTEL) tests with testing for mtrr_if
-to be &generic_mtrr_ops.
+Remove the first variant completely and replace the call of it with
+a call of mtrr_if->set().
 
-The only other place where the .vendor member of struct mtrr_ops is
-being used is in set_num_var_ranges(), where depending on the vendor
-the number of MTRR registers is determined. This can easily be changed
-by replacing .vendor with the static number of MTRR registers.
-
-It should be noted that the test "is_cpu(HYGON)" wasn't ever returning
-true, as there is no struct mtrr_ops with that vendor information.
+Rename the second variant set_mtrr_cpuslocked() to set_mtrr() now that
+there is only one variant left.
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
 ---
-V3:
+V5:
 - new patch
-V4:
-- use cpu_feature_enabled(X86_FEATURE_MTRR) for testing generic MTRRs
-  (Boris Petkov)
 ---
- arch/x86/kernel/cpu/mtrr/amd.c     | 2 +-
- arch/x86/kernel/cpu/mtrr/centaur.c | 2 +-
- arch/x86/kernel/cpu/mtrr/cleanup.c | 4 ++--
- arch/x86/kernel/cpu/mtrr/cyrix.c   | 2 +-
- arch/x86/kernel/cpu/mtrr/generic.c | 2 +-
- arch/x86/kernel/cpu/mtrr/mtrr.c    | 8 +++-----
- arch/x86/kernel/cpu/mtrr/mtrr.h    | 4 +---
- 7 files changed, 10 insertions(+), 14 deletions(-)
+ arch/x86/kernel/cpu/mtrr/mtrr.c | 28 ++++++++--------------------
+ 1 file changed, 8 insertions(+), 20 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mtrr/amd.c b/arch/x86/kernel/cpu/mtrr/amd.c
-index eff6ac62c0ff..ef3e8e42b782 100644
---- a/arch/x86/kernel/cpu/mtrr/amd.c
-+++ b/arch/x86/kernel/cpu/mtrr/amd.c
-@@ -110,7 +110,7 @@ amd_validate_add_page(unsigned long base, unsigned long size, unsigned int type)
- }
- 
- const struct mtrr_ops amd_mtrr_ops = {
--	.vendor            = X86_VENDOR_AMD,
-+	.var_regs          = 2,
- 	.set               = amd_set_mtrr,
- 	.get               = amd_get_mtrr,
- 	.get_free_region   = generic_get_free_region,
-diff --git a/arch/x86/kernel/cpu/mtrr/centaur.c b/arch/x86/kernel/cpu/mtrr/centaur.c
-index b8a74eddde83..4466ddeb0125 100644
---- a/arch/x86/kernel/cpu/mtrr/centaur.c
-+++ b/arch/x86/kernel/cpu/mtrr/centaur.c
-@@ -112,7 +112,7 @@ centaur_validate_add_page(unsigned long base, unsigned long size, unsigned int t
- }
- 
- const struct mtrr_ops centaur_mtrr_ops = {
--	.vendor            = X86_VENDOR_CENTAUR,
-+	.var_regs          = 8,
- 	.set               = centaur_set_mcr,
- 	.get               = centaur_get_mcr,
- 	.get_free_region   = centaur_get_free_region,
-diff --git a/arch/x86/kernel/cpu/mtrr/cleanup.c b/arch/x86/kernel/cpu/mtrr/cleanup.c
-index ce45d7617874..0f27c38f3ff9 100644
---- a/arch/x86/kernel/cpu/mtrr/cleanup.c
-+++ b/arch/x86/kernel/cpu/mtrr/cleanup.c
-@@ -689,7 +689,7 @@ int __init mtrr_cleanup(unsigned address_bits)
- 	int index_good;
- 	int i;
- 
--	if (!is_cpu(INTEL) || enable_mtrr_cleanup < 1)
-+	if (!cpu_feature_enabled(X86_FEATURE_MTRR) || enable_mtrr_cleanup < 1)
- 		return 0;
- 
- 	rdmsr(MSR_MTRRdefType, def, dummy);
-@@ -886,7 +886,7 @@ int __init mtrr_trim_uncached_memory(unsigned long end_pfn)
- 	 * Make sure we only trim uncachable memory on machines that
- 	 * support the Intel MTRR architecture:
- 	 */
--	if (!is_cpu(INTEL) || disable_mtrr_trim)
-+	if (!cpu_feature_enabled(X86_FEATURE_MTRR) || disable_mtrr_trim)
- 		return 0;
- 
- 	rdmsr(MSR_MTRRdefType, def, dummy);
-diff --git a/arch/x86/kernel/cpu/mtrr/cyrix.c b/arch/x86/kernel/cpu/mtrr/cyrix.c
-index 173b9e01e623..238dad57d4d6 100644
---- a/arch/x86/kernel/cpu/mtrr/cyrix.c
-+++ b/arch/x86/kernel/cpu/mtrr/cyrix.c
-@@ -235,7 +235,7 @@ static void cyrix_set_arr(unsigned int reg, unsigned long base,
- }
- 
- const struct mtrr_ops cyrix_mtrr_ops = {
--	.vendor            = X86_VENDOR_CYRIX,
-+	.var_regs          = 8,
- 	.set               = cyrix_set_arr,
- 	.get               = cyrix_get_arr,
- 	.get_free_region   = cyrix_get_free_region,
-diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
-index 0794f3f1cc27..5d60b46187f7 100644
---- a/arch/x86/kernel/cpu/mtrr/generic.c
-+++ b/arch/x86/kernel/cpu/mtrr/generic.c
-@@ -846,7 +846,7 @@ int generic_validate_add_page(unsigned long base, unsigned long size,
- 	 * For Intel PPro stepping <= 7
- 	 * must be 4 MiB aligned and not touch 0x70000000 -> 0x7003FFFF
- 	 */
--	if (is_cpu(INTEL) && boot_cpu_data.x86 == 6 &&
-+	if (mtrr_if == &generic_mtrr_ops && boot_cpu_data.x86 == 6 &&
- 	    boot_cpu_data.x86_model == 1 &&
- 	    boot_cpu_data.x86_stepping <= 7) {
- 		if (base & ((1 << (22 - PAGE_SHIFT)) - 1)) {
 diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 1c19d67ddab3..46aae69d259e 100644
+index 46aae69d259e..4fa3d0f94f39 100644
 --- a/arch/x86/kernel/cpu/mtrr/mtrr.c
 +++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -108,14 +108,12 @@ static int have_wrcomb(void)
- /*  This function returns the number of variable MTRRs  */
- static void __init set_num_var_ranges(bool use_generic)
- {
--	unsigned long config = 0, dummy;
-+	unsigned long config, dummy;
- 
- 	if (use_generic)
- 		rdmsr(MSR_MTRRcap, config, dummy);
--	else if (is_cpu(AMD) || is_cpu(HYGON))
--		config = 2;
--	else if (is_cpu(CYRIX) || is_cpu(CENTAUR))
--		config = 8;
-+	else
-+		config = mtrr_if->var_regs;
- 
- 	num_var_ranges = config & MTRR_CONFIG_NUM_VAR_MASK;
- }
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.h b/arch/x86/kernel/cpu/mtrr/mtrr.h
-index 02eb5871492d..a3c362d3d5bf 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.h
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.h
-@@ -13,7 +13,7 @@
- extern unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
- 
- struct mtrr_ops {
--	u32	vendor;
-+	u32	var_regs;
- 	void	(*set)(unsigned int reg, unsigned long base,
- 		       unsigned long size, mtrr_type type);
- 	void	(*get)(unsigned int reg, unsigned long *base,
-@@ -54,8 +54,6 @@ bool get_mtrr_state(void);
- extern u64 size_or_mask, size_and_mask;
- extern const struct mtrr_ops *mtrr_if;
- 
--#define is_cpu(vnd)	(mtrr_if && mtrr_if->vendor == X86_VENDOR_##vnd)
+@@ -192,20 +192,8 @@ static inline int types_compatible(mtrr_type type1, mtrr_type type2)
+  * Note that the mechanism is the same for UP systems, too; all the SMP stuff
+  * becomes nops.
+  */
+-static void
+-set_mtrr(unsigned int reg, unsigned long base, unsigned long size, mtrr_type type)
+-{
+-	struct set_mtrr_data data = { .smp_reg = reg,
+-				      .smp_base = base,
+-				      .smp_size = size,
+-				      .smp_type = type
+-				    };
 -
- extern unsigned int num_var_ranges;
- extern u64 mtrr_tom2;
- extern struct mtrr_state_type mtrr_state;
+-	stop_machine(mtrr_rendezvous_handler, &data, cpu_online_mask);
+-}
+-
+-static void set_mtrr_cpuslocked(unsigned int reg, unsigned long base,
+-				unsigned long size, mtrr_type type)
++static void set_mtrr(unsigned int reg, unsigned long base, unsigned long size,
++		     mtrr_type type)
+ {
+ 	struct set_mtrr_data data = { .smp_reg = reg,
+ 				      .smp_base = base,
+@@ -335,7 +323,7 @@ int mtrr_add_page(unsigned long base, unsigned long size,
+ 	/* Search for an empty MTRR */
+ 	i = mtrr_if->get_free_region(base, size, replace);
+ 	if (i >= 0) {
+-		set_mtrr_cpuslocked(i, base, size, type);
++		set_mtrr(i, base, size, type);
+ 		if (likely(replace < 0)) {
+ 			mtrr_usage_table[i] = 1;
+ 		} else {
+@@ -343,7 +331,7 @@ int mtrr_add_page(unsigned long base, unsigned long size,
+ 			if (increment)
+ 				mtrr_usage_table[i]++;
+ 			if (unlikely(replace != i)) {
+-				set_mtrr_cpuslocked(replace, 0, 0, 0);
++				set_mtrr(replace, 0, 0, 0);
+ 				mtrr_usage_table[replace] = 0;
+ 			}
+ 		}
+@@ -471,7 +459,7 @@ int mtrr_del_page(int reg, unsigned long base, unsigned long size)
+ 		goto out;
+ 	}
+ 	if (--mtrr_usage_table[reg] < 1)
+-		set_mtrr_cpuslocked(reg, 0, 0, 0);
++		set_mtrr(reg, 0, 0, 0);
+ 	error = reg;
+  out:
+ 	mutex_unlock(&mtrr_mutex);
+@@ -601,9 +589,9 @@ static void mtrr_restore(void)
+ 
+ 	for (i = 0; i < num_var_ranges; i++) {
+ 		if (mtrr_value[i].lsize) {
+-			set_mtrr(i, mtrr_value[i].lbase,
+-				    mtrr_value[i].lsize,
+-				    mtrr_value[i].ltype);
++			mtrr_if->set(i, mtrr_value[i].lbase,
++				     mtrr_value[i].lsize,
++				     mtrr_value[i].ltype);
+ 		}
+ 	}
+ }
 -- 
 2.35.3
 
