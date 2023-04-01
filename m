@@ -2,153 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FED36D2F7C
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 11:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0C06D2F80
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 11:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjDAJrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 05:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
+        id S229780AbjDAJxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 05:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjDAJrg (ORCPT
+        with ESMTP id S229450AbjDAJw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 05:47:36 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CB81D2C6
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 02:47:23 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so26018092pjt.5
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 02:47:23 -0700 (PDT)
+        Sat, 1 Apr 2023 05:52:58 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A841BEF
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 02:52:57 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id o24-20020a05600c511800b003ef59905f26so15281067wms.2
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 02:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680342442;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hiK4KO4kZbl8xYSoAWQs5Xyf4Snj7jNQFcEtAQejez8=;
-        b=V+zhxA472E3zjzApz3J/B0H+TF2UZuO9A3fqlLhaAsX+s8ZPpc6Y5xCXMt+ODvpYia
-         prVRA6DUvQ0U8QdnsdMSDgxnevfp/Htz8mOqyOLtb/ctA/aKl7nZX5U1yZOEb8m1jhIS
-         h2XiY2mp3+D5wLLfJJ9IWb9ftDxnGzA9PjwjTDB58mMn4WjQlAP9ATXwjr0EZF6KVmMo
-         CseN0wvqz9Cb3qySGD9rkACfMDQ7Lmknsc0B9/T5z24lpA8DEXa9OyJu1KaNRtkaErtR
-         WU2DKk+Q55OX8+3ozYk2myGGhObt9Vsrf3CqSyvenh4P2tCxjdTR8vfI+su5veg4D4Ys
-         1rwg==
+        d=linaro.org; s=google; t=1680342776;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ubewBkPby97o40oELqocw2J96D+WGJJIF9H13Ba/6cw=;
+        b=Fbtbg7IFl93B8s+l5jjIi1+vv6IyRXiYEWxJZev0SKPEucXNpRygOlsgYhaNIi2XkA
+         SAE+HmLtuZRkbK3xBgf8oMKIztfLDtTnUA6qvohVLUES6E+pdNevcfmLVlUWysyAc6B4
+         hXDGwzx4TfS1sgJfPpq4hDzkKz4Sb1uqTmDAd+kRIEWeR7VI7bShTcXPAv3GVMPG3UUv
+         Y3te1boGoJVdNeImb32MI+sfAn0l5AqaEygPPBXxWJpby6gFFajRq7Fi4W4x1GLVgKal
+         vKamKVFVN1H+/1kTcacb2ha/zrFY8MnfoAe8E5whvj70TAtgouA2BglfnHAQabM+WARl
+         7MdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680342442;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hiK4KO4kZbl8xYSoAWQs5Xyf4Snj7jNQFcEtAQejez8=;
-        b=FdwlpYf9a63Om3KYgWj6baMNlFSRvmGU6vGZFEiwsE+HFXstQtSDuhwBYQ4qROkPIv
-         jZ9eLPNZtqwdBljX0hBs4DCuFaDT5ai04kSLlPs3FEKeFI0MrhWteLj4rno0sVIUuu//
-         fZHAdELROriEXexYRWwBxy2w8hSiLnXoSBH8BTuflFaVhbeJW7kpujLIN9YWJ0rhZeEo
-         F8ImL9dCt0yzv/S+f8mt31jwgoZsfcmEWmewYD0aMgnz93nFf6pQz+p0mMbYwzPpdm9Q
-         v1IlTXzxv1cD4xy9WodZoGfgNC0gNYnmHf/wTcW7ZP4+HYA0hRUZ0ibkZfurHVEsMq8r
-         56IA==
-X-Gm-Message-State: AAQBX9esXN0oYoSB+pwQjlAl975bgqW9x2JoBf8/+lpO2r88FVI0pMbe
-        rAmpfSpLhhq314U6mo01wLpBHI1Fn9EzU3fE6edGMA==
-X-Google-Smtp-Source: AKy350a5Qyn30MXPsqFDtaona2Q3ahaJBygNo5/JecPGW8Mz2FslX1mFe6llG8NPGyJowvc0Ntl7+A==
-X-Received: by 2002:a05:6a20:cd5a:b0:e4:d395:5ce6 with SMTP id hn26-20020a056a20cd5a00b000e4d3955ce6mr3118164pzb.25.1680342442606;
-        Sat, 01 Apr 2023 02:47:22 -0700 (PDT)
-Received: from C02GD5ZHMD6R.bytedance.net ([139.177.225.240])
-        by smtp.gmail.com with ESMTPSA id w26-20020aa7859a000000b0062d90f36d16sm3233919pfn.88.2023.04.01.02.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Apr 2023 02:47:22 -0700 (PDT)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jinke Han <hanjinke.666@bytedance.com>
-Subject: [PATCH v2] blk-throttle: Fix io statistics for cgroup v1
-Date:   Sat,  1 Apr 2023 17:47:08 +0800
-Message-Id: <20230401094708.77631-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        d=1e100.net; s=20210112; t=1680342776;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ubewBkPby97o40oELqocw2J96D+WGJJIF9H13Ba/6cw=;
+        b=LoRE2o4ig9TASyMfZEZf809emNW0u2cENCHLNpAQyssfF9lqM3/4RYIZlZ8vrnEMwY
+         H4caknECWUM2vddh00z6qVYBWrNAkc31k44h1WWFjZe+WdfSoBcD6e/mQK6KuMj9yf1f
+         Tr5sVAZXYQ6vGFN3BsZi7aX4OyHbSG2HBPjD1SoUxAY9otnia3KM+3T+x8FYdqL5C3PB
+         MLxgDyjVJcb81SJFA5ZLMk5hJNF2zRfa07Uvo6Zu8I+9IJ/oK1UhqnNKcWlhWyPR/Fbq
+         48FYmfbECX5oRGTDSHgKl+NyENVwrzqNbmDmrPWvH/Q+TpUhk+kZdlnIcaEpPy4q1sZF
+         EZfw==
+X-Gm-Message-State: AAQBX9d6MldPkplmhhFpkf8GqdotM6RcHNUhsWisqfuh+Wf7YHjeGaOV
+        e1ZESdAViwJImPQ+9ZWpuRBYsg==
+X-Google-Smtp-Source: AKy350bDZRr78VsY4xPGgA9fKeLTsoROMnZx4JUnIGKxF+xa12guHsktQkku7LNwe1GcqNSz172BQw==
+X-Received: by 2002:a05:600c:3b11:b0:3ee:91a8:5ce7 with SMTP id m17-20020a05600c3b1100b003ee91a85ce7mr9609554wms.15.1680342775850;
+        Sat, 01 Apr 2023 02:52:55 -0700 (PDT)
+Received: from [172.50.14.32] (5-226-109-132.static.ip.netia.com.pl. [5.226.109.132])
+        by smtp.gmail.com with ESMTPSA id iv19-20020a05600c549300b003ef69873cf1sm13084631wmb.40.2023.04.01.02.52.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Apr 2023 02:52:55 -0700 (PDT)
+Message-ID: <bbbad646-16d2-fd35-9aa5-83373b962973@linaro.org>
+Date:   Sat, 1 Apr 2023 11:52:54 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] dt-bindings: dma: Drop unneeded quotes
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230331182141.1900348-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230331182141.1900348-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
+On 31/03/2023 20:21, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-After commit f382fb0bcef4 ("block: remove legacy IO schedulers"),
-blkio.throttle.io_serviced and blkio.throttle.io_service_bytes become
-the only stable io stats interface of cgroup v1, and these statistics
-are done in the blk-throttle code. But the current code only counts the
-bios that are actually throttled. When the user does not add the throttle
-limit, the io stats for cgroup v1 has nothing. I fix it according to the
-statistical method of v2, and made it count all ios accurately.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Fixes: a7b36ee6ba29 ("block: move blk-throtl fast path inline")
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
----
- block/blk-cgroup.c   | 6 ++++--
- block/blk-throttle.c | 6 ------
- block/blk-throttle.h | 9 +++++++++
- 3 files changed, 13 insertions(+), 8 deletions(-)
-
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index bd50b55bdb61..33263d0d0e0f 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -2033,6 +2033,9 @@ void blk_cgroup_bio_start(struct bio *bio)
- 	struct blkg_iostat_set *bis;
- 	unsigned long flags;
- 
-+	if (!cgroup_subsys_on_dfl(io_cgrp_subsys))
-+		return;
-+
- 	/* Root-level stats are sourced from system-wide IO stats */
- 	if (!cgroup_parent(blkcg->css.cgroup))
- 		return;
-@@ -2064,8 +2067,7 @@ void blk_cgroup_bio_start(struct bio *bio)
- 	}
- 
- 	u64_stats_update_end_irqrestore(&bis->sync, flags);
--	if (cgroup_subsys_on_dfl(io_cgrp_subsys))
--		cgroup_rstat_updated(blkcg->css.cgroup, cpu);
-+	cgroup_rstat_updated(blkcg->css.cgroup, cpu);
- 	put_cpu();
- }
- 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 47e9d8be68f3..2be66e9430f7 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -2174,12 +2174,6 @@ bool __blk_throtl_bio(struct bio *bio)
- 
- 	rcu_read_lock();
- 
--	if (!cgroup_subsys_on_dfl(io_cgrp_subsys)) {
--		blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
--				bio->bi_iter.bi_size);
--		blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
--	}
--
- 	spin_lock_irq(&q->queue_lock);
- 
- 	throtl_update_latency_buckets(td);
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index ef4b7a4de987..d1ccbfe9f797 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -185,6 +185,15 @@ static inline bool blk_should_throtl(struct bio *bio)
- 	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
- 	int rw = bio_data_dir(bio);
- 
-+	if (!cgroup_subsys_on_dfl(io_cgrp_subsys)) {
-+		if (!bio_flagged(bio, BIO_CGROUP_ACCT)) {
-+			bio_set_flag(bio, BIO_CGROUP_ACCT);
-+			blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
-+					bio->bi_iter.bi_size);
-+		}
-+		blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
-+	}
-+
- 	/* iops limit is always counted */
- 	if (tg->has_rules_iops[rw])
- 		return true;
--- 
-2.20.1
+Best regards,
+Krzysztof
 
