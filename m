@@ -2,97 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001576D2DED
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 05:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8733C6D2DF2
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 05:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232932AbjDADYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 23:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S232373AbjDAD2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 23:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbjDADXi (ORCPT
+        with ESMTP id S229998AbjDAD20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 23:23:38 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72BB61F799;
-        Fri, 31 Mar 2023 20:23:29 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Bxok6woydk9SQVAA--.21044S3;
-        Sat, 01 Apr 2023 11:23:28 +0800 (CST)
-Received: from [10.130.0.102] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axnr6uoydka4sSAA--.45160S3;
-        Sat, 01 Apr 2023 11:23:28 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: Add kernel address sanitizer support
-To:     Andrey Konovalov <andreyknvl@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>
-References: <20230328111714.2056-1-zhangqing@loongson.cn>
- <CA+fCnZevgYh7CzJ9gOWJ80SwY4Y9w8UO2ZiFAXEnAhQhFgrffA@mail.gmail.com>
- <dccfbff3-7bad-de33-4d96-248bdff44a8b@loongson.cn>
- <CA+fCnZddt50+10SZ+hZRKBudsmMF0W9XpsDG6=58p1ot62LjXQ@mail.gmail.com>
- <2360000f-7292-9da8-d6b5-94b125c5f2b0@loongson.cn>
- <CA+fCnZfoTszdoy7o_EfPXOc4QYo_Jgw9Qf0ua2JoNp0PXdrTPA@mail.gmail.com>
-From:   Qing Zhang <zhangqing@loongson.cn>
-Message-ID: <34a1a391-6ad9-8722-b206-1e830711b096@loongson.cn>
-Date:   Sat, 1 Apr 2023 11:23:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 31 Mar 2023 23:28:26 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273D4C656;
+        Fri, 31 Mar 2023 20:28:25 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id n14so7341865plc.8;
+        Fri, 31 Mar 2023 20:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680319704;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1aOQ4eYy8N4YCSiaLMCwB/yerXMVOmw3wp9ck3pUmQA=;
+        b=Ok8vzWQ0fTWrdQmBekE/vwQkYJaeU+hCLGvU18l6tpgh+LY+guFyw1PCOkt6cTIDi2
+         Bi2rSAQ4ZWcSGNL5VXFZfhfY9W+UUMxFc836pBNMtI/YKiNa3lkmWiIeZkq/HOE2i6v1
+         CrYVfVRFvUIKsb9OYQYZttYR9+0qI6gi6G2q3B6O6heI5B6NINqaX8Decf4bPIdmgNnw
+         OaJfm9V/8H+3AActZ4CZ6pmApo3U2T1Addxc3QfoMJxKRJcGIg7WF89sAh+ZjT4HrCSn
+         og13ZG7hFc8Nl0yLoQjtBu0DXS/TVzMXnQhNidB4L5HU73Pr3qRkc91hBgz7qlyfdc9C
+         2WzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680319704;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1aOQ4eYy8N4YCSiaLMCwB/yerXMVOmw3wp9ck3pUmQA=;
+        b=jmFDBpOy8Z6Mp+u440v8SSVvR+vvDcWrYFi3YgJWfZISb7JJ0wY1pOEsFiY5/VPaLh
+         mUfzY5n7yY+5UGc0xJNcfNFtXwEVwi9BQmxJDzferfuHhj7c9LbSqtmxzu/DK1+SVwdp
+         6J+sCwO3+ZOZtbKWlfOWcR5BTyPzKrZDq1I6GrHfenoDsWJJqWqQ1d5nroRkw2b+E2Au
+         LBI2zl79kHlc3UxbUVOlsPFzcvcrEuxkh1sV46OBqt383cqKGzPtBmqPXmyTyMca/8HG
+         oy6A/Ia8iG4TcWO1yQelE2Kb3Srr+Il7RdGutEk8PehQ+g0XaVdSZ8GWBuXcI5jV+7hu
+         skzA==
+X-Gm-Message-State: AAQBX9eVttcyHn477xSpnzX1V+5jvg3y8LjqQtrCx/mTiMkAqlHkaA/A
+        2RHCRcaTB9IQZkn6NdlUKno=
+X-Google-Smtp-Source: AKy350Yoi20kGNomZnY7Fh4bdxg2fFhnur0eeEf88TS9IaTsvuK0id2OfKq0eADwsFcWp5pRxAwcFg==
+X-Received: by 2002:a17:902:f683:b0:1a0:7156:f8d1 with SMTP id l3-20020a170902f68300b001a07156f8d1mr37983907plg.19.1680319704568;
+        Fri, 31 Mar 2023 20:28:24 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-71.three.co.id. [180.214.232.71])
+        by smtp.gmail.com with ESMTPSA id f6-20020a170902ab8600b001a1f5dc64e5sm2271330plr.177.2023.03.31.20.28.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 20:28:24 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id CC3F510677D; Sat,  1 Apr 2023 10:28:21 +0700 (WIB)
+Date:   Sat, 1 Apr 2023 10:28:21 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     David Dai <davidai@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev
+Subject: Re: [RFC PATCH v2 4/6] kvm: arm64: Add support for get_freqtbl
+ service
+Message-ID: <ZCek1YOmg99d6l9A@debian.me>
+References: <20230331014356.1033759-1-davidai@google.com>
+ <20230331014356.1033759-5-davidai@google.com>
 MIME-Version: 1.0
-In-Reply-To: <CA+fCnZfoTszdoy7o_EfPXOc4QYo_Jgw9Qf0ua2JoNp0PXdrTPA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axnr6uoydka4sSAA--.45160S3
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-        BjDU0xBIdaVrnRJUUUmjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
-        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280
-        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4c8EcI0En4kS14v26r1q6r43MxAqzxv26xkF
-        7I0En4kS14v26r1q6r43MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r
-        43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-        UI43ZEXa7IU8l38UUUUUU==
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230331014356.1033759-5-davidai@google.com>
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/31 下午11:58, Andrey Konovalov wrote:
-> On Thu, Mar 30, 2023 at 6:32 AM Qing Zhang <zhangqing@loongson.cn> wrote:
->>
->>> I get that, but you already added a special case for
->>> __HAVE_ARCH_SHADOW_MAP to addr_has_metadata, so you can just call it?
->>>
->> ok, all the changes are going to be in v2.
-> 
-> Could you also please put changes to the common KASAN code into a
-> separate patch/patches? This will simplify any potential backporting
-> of common KASAN code changes in the future.
-> 
-ok, no problem.
+On Thu, Mar 30, 2023 at 06:43:48PM -0700, David Dai wrote:
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 38ce33564efc..8f905456e2b4 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -8400,6 +8400,14 @@ after normalizing for architecture. This is useful when guests are tracking
+>  workload on its vCPUs. Util hints allow the host to make more accurate
+>  frequency selections and task placement for vCPU threads.
+>  
+> +8.42 KVM_CAP_GET_CPUFREQ_TBL
+> +---------------------------
+> +
+> +:Architectures: arm64
+> +
+> +This capability indicates that the KVM supports getting the
+> +frequency table of the current CPU that the vCPU thread is running on.
+> +
+>  9. Known KVM API problems
+>  =========================
+>  
+> diff --git a/Documentation/virt/kvm/arm/get_freqtbl.rst b/Documentation/virt/kvm/arm/get_freqtbl.rst
+> new file mode 100644
+> index 000000000000..f6832d7566e7
+> --- /dev/null
+> +++ b/Documentation/virt/kvm/arm/get_freqtbl.rst
+> @@ -0,0 +1,23 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +get_freqtbl support for arm/arm64
+> +=============================
+> +
+> +Allows guest to query the frequency(in KHz) table of the current CPU that
+> +the vCPU thread is running on.
+> +
+> +* ARM_SMCCC_VENDOR_HYP_KVM_GET_CPUFREQ_TBL_FUNC_ID: 0x86000042
+> +
+> +This hypercall uses the SMC32/HVC32 calling convention:
+> +
+> +ARM_SMCCC_VENDOR_HYP_KVM_GET_CPUFREQ_TBL_FUNC_ID
+> +    ==============    ========    =====================================
+> +    Function ID:      (uint32)    0x86000042
+> +    Arguments:        (uint32)    index of the current CPU's frequency table
+> +    Return Values:    (int32)     NOT_SUPPORTED(-1) on error, or
+> +                      (uint32)    Frequency table entry of requested index
+> +                                  in KHz
+> +                                  of current CPU(r1)
+> +    Endianness:                   Must be the same endianness
+> +                                  as the host.
+> +    ==============    ========    =====================================
 
-Thanks,
--Qing
-> Thanks!
-> 
+Sphinx reports htmldocs warnings:
+/home/bagas/repo/linux-kernel/Documentation/virt/kvm/api.rst:8404: WARNING: Title underline too short.
 
+8.42 KVM_CAP_GET_CPUFREQ_TBL
+---------------------------
+/home/bagas/repo/linux-kernel/Documentation/virt/kvm/api.rst:8404: WARNING: Title underline too short.
+
+8.42 KVM_CAP_GET_CPUFREQ_TBL
+---------------------------
+/home/bagas/repo/linux-kernel/Documentation/virt/kvm/arm/get_freqtbl.rst:4: WARNING: Title underline too short.
+
+get_freqtbl support for arm/arm64
+=============================
+
+I have applied the fixup:
+
+---- >8 ----
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index baf8a4c43b5839..3579c470375938 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -8401,7 +8401,7 @@ workload on its vCPUs. Util hints allow the host to make more accurate
+ frequency selections and task placement for vCPU threads.
+ 
+ 8.42 KVM_CAP_GET_CPUFREQ_TBL
+----------------------------
++----------------------------
+ 
+ :Architectures: arm64
+ 
+diff --git a/Documentation/virt/kvm/arm/get_freqtbl.rst b/Documentation/virt/kvm/arm/get_freqtbl.rst
+index f6832d7566e7e5..215bf0f653e461 100644
+--- a/Documentation/virt/kvm/arm/get_freqtbl.rst
++++ b/Documentation/virt/kvm/arm/get_freqtbl.rst
+@@ -1,7 +1,7 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+ get_freqtbl support for arm/arm64
+-=============================
++=================================
+ 
+ Allows guest to query the frequency(in KHz) table of the current CPU that
+ the vCPU thread is running on.
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
