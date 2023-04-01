@@ -2,109 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559686D3102
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 711766D3108
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjDANYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 09:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S229819AbjDAN2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 09:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjDANYA (ORCPT
+        with ESMTP id S229461AbjDAN2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 09:24:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A12B4EEA;
-        Sat,  1 Apr 2023 06:23:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCFCE60E17;
-        Sat,  1 Apr 2023 13:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2362BC433D2;
-        Sat,  1 Apr 2023 13:23:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680355435;
-        bh=sAx2eyoHZphV7y6Ejbx4McAtoXE+uA+9ASpvRgIQZqg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=igOLlc1qJ2ipXS93uDABV2VrzqSUuSQSg+ylXfKyUAr3oN5Qn0iBWTg/F/Eedj8oh
-         f+H+R07Mmu9Q9uBvm98/yFjL8KThB6e4nSI3jvTOfCeiaXg429ouI2wJrwFOXYjcr1
-         VFJCH4cqp8IR/rvt3rCD62qmAHqTZMo9PaggzYJr8SqnKKT0OnBEL2mqNiFi8cxYe3
-         ahlx+kh4oGJEr9Vm5BdDL6KIQlmMRWjAcGb66nw8ktlC1xSLs9YPIlhD+dD6O9zgze
-         13Mi9SnyeSK1xgAWyayjM0M4dy1qezVRWC08kwUx9yhIP0mEwrHmhcFuBk7LE3FxDq
-         v2GyatgGzZ2Yg==
-Date:   Sat, 1 Apr 2023 09:23:53 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Mathias Krause <minipli@grsecurity.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, torvalds@linux-foundation.org,
-        lwn@lwn.net, jslaby@suse.cz,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Subject: Re: Linux 5.15.103
-Message-ID: <ZCgwaWSgnUWAPyiv@sashalap>
-References: <1679040264214179@kroah.com>
- <c359c777-c3af-b4a6-791d-d51916160bf5@grsecurity.net>
- <ZCLaLWJiIsDV5yGr@kroah.com>
- <f86cb36e-b331-8b8d-f087-5e2e8a5ae962@grsecurity.net>
+        Sat, 1 Apr 2023 09:28:11 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEC1191CB;
+        Sat,  1 Apr 2023 06:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680355689; x=1711891689;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sSjm2R/ZERWrLvuTMJ4+1cTW3tasqNODXsINXDA4T4w=;
+  b=g0Fo7DlRTniNHg3FTEurLfmm/UIxskHVCqetswAG/PSNZv2wKPqYOC1E
+   ShXuujwuijqU2oFjYCK2wVUknmhfdK0J51aXerMN2FyZpmWZB6HVKowPL
+   E4vUQ+Z0SC/FzNZXtZGeL00SszVybK4AFo1m9CnB241fhrGw+5WZujcT6
+   MXwRiC+JDTs0soZhCopvG4tsuXEPjybNZoas0SEF8PhB4THHai1Lqjp4Y
+   F8n8CakVjW+cV3Z0ghx24y1gUYGGATrtvyAezK+V2VS8eaV2sfInGDM2T
+   yzEoJhT/hSJP9ZG4W8fnjrmFSiVlnzAfBlKquzWCqPok7OJQUOcviPtOL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="321307543"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="321307543"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 06:28:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="774661731"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="774661731"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.211.241]) ([10.254.211.241])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 06:28:04 -0700
+Message-ID: <81fddd3e-bf6c-966a-b44b-b8a7c9c00591@linux.intel.com>
+Date:   Sat, 1 Apr 2023 21:28:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <f86cb36e-b331-8b8d-f087-5e2e8a5ae962@grsecurity.net>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>
+Subject: Re: [PATCH v3 3/7] iommu/sva: Support allocation of global PASIDs
+ outside SVA
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org
+References: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
+ <20230331231137.1947675-4-jacob.jun.pan@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230331231137.1947675-4-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 02:29:11PM +0200, Mathias Krause wrote:
->On 28.03.23 14:14, Greg Kroah-Hartman wrote:
->> On Tue, Mar 28, 2023 at 02:02:03PM +0200, Mathias Krause wrote:
->>> On 17.03.23 09:04, Greg Kroah-Hartman wrote:
->>>> I'm announcing the release of the 5.15.103 kernel.
->>>>
->>>> [...]
->>>>
->>>> Vitaly Kuznetsov (4):
->>>>       KVM: Optimize kvm_make_vcpus_request_mask() a bit
->>>>       KVM: Pre-allocate cpumasks for kvm_make_all_cpus_request_except()
->>>>       KVM: nVMX: Don't use Enlightened MSR Bitmap for L3
->>>>       KVM: VMX: Introduce vmx_msr_bitmap_l01_changed() helper
->>>>
->>>
->>> That list is missing commit 6470accc7ba9 ("KVM: x86: hyper-v: Avoid
->>> calling kvm_make_vcpus_request_mask() with vcpu_mask==NULL") to fulfill
->>> the prerequisite of "KVM: Optimize kvm_make_vcpus_request_mask() a bit".
->>>
->>> Right now the kvm selftests trigger a kernel NULL deref for the hyperv
->>> test, making the system hang.
->>>
->>> Please consider applying commit 6470accc7ba9 for the next v5.15.x release.
->>
->> It wasn't tagged for the stable kernels, so we didn't pick it up :(
->
->Neither were any of the above commits. o.O
->
->Commit 3e48a6349d29 ("KVM: Optimize kvm_make_vcpus_request_mask() a
->bit") has this tag, though:
->
->Stable-dep-of: 2b0128127373 ("KVM: Register /dev/kvm as the _very_ last
->thing during initialization")
->
->I don't know why, though. These two commits have little in common.
->Maybe Sasha knows why?
+On 2023/4/1 7:11, Jacob Pan wrote:
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 54f535ff9868..f70478a11a5f 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -1187,6 +1187,9 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev,
+>   					struct mm_struct *mm);
+>   void iommu_sva_unbind_device(struct iommu_sva *handle);
+>   u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+> +ioasid_t iommu_alloc_global_pasid(ioasid_t min, ioasid_t max);
+> +void iommu_free_global_pasid(ioasid_t pasid);
+> +
+>   #else
+>   static inline struct iommu_sva *
+>   iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
+> @@ -1202,6 +1205,13 @@ static inline u32 iommu_sva_get_pasid(struct iommu_sva *handle)
+>   {
+>   	return IOMMU_PASID_INVALID;
+>   }
+> +
+> +static inline ioasid_t iommu_alloc_global_pasid(ioasid_t min, ioasid_t max)
+> +{
+> +	return IOMMU_PASID_INVALID;
+> +}
+> +
+> +static inline void iommu_free_global_pasid(ioasid_t pasid) {}
+>   static inline void mm_pasid_init(struct mm_struct *mm) {}
+>   static inline void mm_pasid_drop(struct mm_struct *mm) {}
+>   #endif /* CONFIG_IOMMU_SVA */
 
-Because you've skipped the commit in the middle of the two you've
-pointed out :)
+I don't think the function prototypes of
+iommu_[alloc|free]_global_pasid() should be impacted by
+CONFIG_IOMMU_SVA. Or I may overlooked something?
 
-3e48a6349d29 is needed by 0a0ecaf0988b ("KVM: Pre-allocate cpumasks for
-kvm_make_all_cpus_request_except()"), which in turn is needed by
-2b0128127373.
-
--- 
-Thanks,
-Sasha
+Best regards,
+baolu
