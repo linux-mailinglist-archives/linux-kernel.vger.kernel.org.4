@@ -2,239 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2E36D2F22
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 10:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE366D32AE
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 18:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjDAI7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 04:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
+        id S229891AbjDAQ5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 12:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDAI7a (ORCPT
+        with ESMTP id S229461AbjDAQ5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 04:59:30 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985234EC8;
-        Sat,  1 Apr 2023 01:59:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680339569; x=1711875569;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Bc7ArXz/vWXFGr5BByH146n6s1vyUE41mjE6rULWOSY=;
-  b=TD5EP3EQuPSsxLrl9IXmI4GVs79I+qFqh0kRkOIQa4lVnojlFU1ANBZV
-   CdC2P2mKbn/0PW4+51gWF9NNhQ5r5tMbU32K+DKxdaGw3GgZ6lesqumXK
-   C8ZZliM4Mw/Irx1Lh0NghJ6tHAtiio+0yz/ew6vYVDGKqSL57JH4HYO7n
-   cRLV8QItCnA8McT50JLgm0I3+30mzeFLyDJ1f5FVdwnMAdGb5A4HWl+K3
-   TFiAnkBVEdbBOQe2kD2C+mLCOo5ByGFbFy2vlb7vD/yW/zWxbmGN7fsWq
-   OGtm+4AlHb2V2I1AR5hAqlEHbY3hiyrK9h7PsPaYemQgxRnS+sHoupu1Q
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="343314041"
-X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="343314041"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 01:59:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="635557538"
-X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
-   d="scan'208";a="635557538"
-Received: from chenyu-dev.sh.intel.com ([10.239.158.170])
-  by orsmga003.jf.intel.com with ESMTP; 01 Apr 2023 01:59:26 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>
-Cc:     Ye Bin <yebin10@huawei.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>,
-        Yifan Li <yifan2.li@intel.com>
-Subject: [PATCH] PM: hibernate: Do not get block device exclusively in test_resume mode
-Date:   Sun,  2 Apr 2023 00:55:40 +0800
-Message-Id: <20230401165540.322665-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        Sat, 1 Apr 2023 12:57:34 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68E3CC3A;
+        Sat,  1 Apr 2023 09:57:33 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 331Fk4VQ027431;
+        Sat, 1 Apr 2023 16:57:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=p+9jihlrSFZgB2eBUCx0dZ9L0V64SZG/10WisCIecLQ=;
+ b=o6UTf/lkCz9pc4Ckd7+T5GQfjwXnq0tvF+gAem6ogwfnBe/ImyZOXErlZQl3WgZIbW9E
+ y6CUwqOS1hZKMWfAfmGVb/ewYc2NXx5Se3Zl9nuyNdF/6Ez1ZOrhWYEb2xamkRPd45Xx
+ lw8OzjH6Z72j/KbtGOjX+r/XAnz4mYoeQPK5373BD5MlCGR4nRWVsOqstwhtLPwfu7mL
+ V6JmIStKTeHTuoRRHtBml9M+SawPuT2pMIZAKfygpwy9qNBuMC13p81Im0O0Hyae+9qL
+ WZikBjtIztpAjDXw3uu6+2q0p8TPAkHTfjNEDAcecH3coCTwwhDCft5R+k8OxdWrkcws SQ== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ppcq3h2e1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 01 Apr 2023 16:57:31 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 331GvRMv006674;
+        Sat, 1 Apr 2023 16:57:27 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3ppdpk2udr-1;
+        Sat, 01 Apr 2023 16:57:27 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 331GvQvc006668;
+        Sat, 1 Apr 2023 16:57:26 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-sartgarg-hyd.qualcomm.com [10.213.105.147])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 331GvQSk006666;
+        Sat, 01 Apr 2023 16:57:26 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2339771)
+        id F0394504928; Sat,  1 Apr 2023 22:27:25 +0530 (+0530)
+From:   Sarthak Garg <quic_sartgarg@quicinc.com>
+To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, quic_rampraka@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_sachgupt@quicinc.com,
+        quic_pragalla@quicinc.com, quic_sayalil@quicinc.com,
+        Sarthak Garg <quic_sartgarg@quicinc.com>
+Subject: [PATCH V1 0/2] Introduce new vendor op and export few symbols
+Date:   Sat,  1 Apr 2023 22:27:21 +0530
+Message-Id: <20230401165723.19762-1-quic_sartgarg@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8ZmnscFKtjUJ3lp370yyogy9g4U7TIvw
+X-Proofpoint-ORIG-GUID: 8ZmnscFKtjUJ3lp370yyogy9g4U7TIvw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-31_07,2023-03-31_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=5 priorityscore=1501 mlxscore=5
+ lowpriorityscore=0 phishscore=0 impostorscore=0 suspectscore=0 spamscore=5
+ bulkscore=0 mlxlogscore=130 adultscore=0 clxscore=1011 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304010154
+X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The system refused to do a test_resume because it found that the
-swap device has already been taken by someone else. Specificly,
-the swsusp_check()->blkdev_get_by_dev(FMODE_EXCL) is supposed to
-do this check.
+For our earlier discussions on clock scaling and partial init features
+we have come up with a new design where we have moved the entire logic
+for both the features in our vendor related files.
 
-Steps to reproduce:
- dd if=/dev/zero of=/swapfile bs=$(cat /proc/meminfo | 
-       awk '/MemTotal/ {print $2}') count=1024 conv=notrunc
- mkswap /swapfile
- swapon /swapfile
- swap-offset /swapfile
- echo 34816 > /sys/power/resume_offset
- echo test_resume > /sys/power/disk
- echo disk > /sys/power/state
+But to support this new design we need a vendor op in
+_mmc_suspend/_mmc_resume functions to control our feature functionality
+in suspend/resume paths.
+Moreover export of few symbols is also needed to make core layer
+functions accessible to our vendor module.
 
- PM: Using 3 thread(s) for compression
- PM: Compressing and saving image data (293150 pages)...
- PM: Image saving progress:   0%
- PM: Image saving progress:  10%
- ata1: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
- ata1.00: configured for UDMA/100
- ata2: SATA link down (SStatus 0 SControl 300)
- ata5: SATA link down (SStatus 0 SControl 300)
- ata6: SATA link down (SStatus 0 SControl 300)
- ata3: SATA link down (SStatus 0 SControl 300)
- ata4: SATA link down (SStatus 0 SControl 300)
- PM: Image saving progress:  20%
- PM: Image saving progress:  30%
- PM: Image saving progress:  40%
- PM: Image saving progress:  50%
- pcieport 0000:00:02.5: pciehp: Slot(0-5): No device found
- PM: Image saving progress:  60%
- PM: Image saving progress:  70%
- PM: Image saving progress:  80%
- PM: Image saving progress:  90%
- PM: Image saving done
- PM: hibernation: Wrote 1172600 kbytes in 2.70 seconds (434.29 MB/s)
- PM: S|
- PM: hibernation: Basic memory bitmaps freed
- PM: Image not found (code -16)
+Old discussion for Clock scaling feature :
+https://patchwork.kernel.org/project/linux-mmc/cover/1571668177-3766-1-git-send-email-rampraka@codeaurora.org/
 
-This is because when using the swapfile as the hibernation storage,
-the block device where the swapfile is located has already been mounted
-by the OS distribution(usually been mounted as the rootfs). This is not
-an issue for normal hibernation, because software_resume()->swsusp_check()
-happens before the block device(rootfs) mount. But it is a problem for the
-test_resume mode. Because when test_resume happens, the block device has
-been mounted already.
+Old discussion for Partial init feature :
+https://patchwork.kernel.org/project/linux-mmc/patch/1650963852-4173-1-git-send-email-quic_spathi@quicinc.com/
 
-Thus remove the FMODE_EXCL for test_resume mode. This would not be a
-problem because in test_resume stage, the processes have already been
-frozen, and the race condition described in
-Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
-is unlikely to happen.
+Hence introduce new vendor op in suspend/resume and export few symbols
+nedeed for our feature.
 
-Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
-Reported-by: Yifan Li <yifan2.li@intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- kernel/power/hibernate.c | 18 +++++++++++-------
- kernel/power/power.h     |  2 +-
- kernel/power/swap.c      | 10 +++++++---
- 3 files changed, 19 insertions(+), 11 deletions(-)
+Sarthak Garg (2):
+  mmc: core: Define new vendor ops to enable internal features
+  mmc: core: Export core functions to let vendors use for their features
 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 793c55a2becb..f50456e72f0a 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -683,22 +683,26 @@ static void power_down(void)
- 		cpu_relax();
- }
- 
--static int load_image_and_restore(void)
-+static int load_image_and_restore(bool safe)
- {
-+	fmode_t mode = FMODE_READ;
- 	int error;
- 	unsigned int flags;
- 
- 	pm_pr_dbg("Loading hibernation image.\n");
- 
-+	if (!safe)
-+		mode |= FMODE_EXCL;
-+
- 	lock_device_hotplug();
- 	error = create_basic_memory_bitmaps();
- 	if (error) {
--		swsusp_close(FMODE_READ | FMODE_EXCL);
-+		swsusp_close(mode);
- 		goto Unlock;
- 	}
- 
- 	error = swsusp_read(&flags);
--	swsusp_close(FMODE_READ | FMODE_EXCL);
-+	swsusp_close(mode);
- 	if (!error)
- 		error = hibernation_restore(flags & SF_PLATFORM_MODE);
- 
-@@ -785,9 +789,9 @@ int hibernate(void)
- 	unlock_device_hotplug();
- 	if (snapshot_test) {
- 		pm_pr_dbg("Checking hibernation image\n");
--		error = swsusp_check();
-+		error = swsusp_check(true);
- 		if (!error)
--			error = load_image_and_restore();
-+			error = load_image_and_restore(true);
- 	}
- 	thaw_processes();
- 
-@@ -983,7 +987,7 @@ static int software_resume(void)
- 		MAJOR(swsusp_resume_device), MINOR(swsusp_resume_device));
- 
- 	pm_pr_dbg("Looking for hibernation image.\n");
--	error = swsusp_check();
-+	error = swsusp_check(false);
- 	if (error)
- 		goto Unlock;
- 
-@@ -1011,7 +1015,7 @@ static int software_resume(void)
- 		goto Close_Finish;
- 	}
- 
--	error = load_image_and_restore();
-+	error = load_image_and_restore(false);
- 	thaw_processes();
-  Finish:
- 	pm_notifier_call_chain(PM_POST_RESTORE);
-diff --git a/kernel/power/power.h b/kernel/power/power.h
-index b4f433943209..66a7595ad3e7 100644
---- a/kernel/power/power.h
-+++ b/kernel/power/power.h
-@@ -173,7 +173,7 @@ extern int swsusp_swap_in_use(void);
- #define SF_HW_SIG		8
- 
- /* kernel/power/hibernate.c */
--extern int swsusp_check(void);
-+extern int swsusp_check(bool safe);
- extern void swsusp_free(void);
- extern int swsusp_read(unsigned int *flags_p);
- extern int swsusp_write(unsigned int flags);
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 36a1df48280c..1be0257da8ab 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -1514,13 +1514,17 @@ int swsusp_read(unsigned int *flags_p)
-  *      swsusp_check - Check for swsusp signature in the resume device
-  */
- 
--int swsusp_check(void)
-+int swsusp_check(bool safe)
- {
-+	fmode_t mode = FMODE_READ;
- 	int error;
- 	void *holder;
- 
-+	if (!safe)
-+		mode |= FMODE_EXCL;
-+
- 	hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device,
--					    FMODE_READ | FMODE_EXCL, &holder);
-+					    mode, &holder);
- 	if (!IS_ERR(hib_resume_bdev)) {
- 		set_blocksize(hib_resume_bdev, PAGE_SIZE);
- 		clear_page(swsusp_header);
-@@ -1547,7 +1551,7 @@ int swsusp_check(void)
- 
- put:
- 		if (error)
--			blkdev_put(hib_resume_bdev, FMODE_READ | FMODE_EXCL);
-+			blkdev_put(hib_resume_bdev, mode);
- 		else
- 			pr_debug("Image signature found, resuming\n");
- 	} else {
+ drivers/mmc/core/core.c    |  6 ++++++
+ drivers/mmc/core/host.c    |  1 +
+ drivers/mmc/core/mmc.c     | 31 ++++++++++++++++++++++---------
+ drivers/mmc/core/mmc_ops.c |  1 +
+ drivers/mmc/core/queue.c   |  1 +
+ include/linux/mmc/host.h   |  4 ++++
+ 6 files changed, 35 insertions(+), 9 deletions(-)
+
 -- 
-2.25.1
+2.17.1
 
