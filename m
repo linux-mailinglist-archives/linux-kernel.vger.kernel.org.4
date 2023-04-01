@@ -2,282 +2,721 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998056D34F2
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 01:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5546D34F5
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 01:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjDAXMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 19:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        id S229867AbjDAXQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 19:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDAXMs (ORCPT
+        with ESMTP id S229452AbjDAXQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 19:12:48 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D6E1B35C
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 16:12:46 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id g7-20020a056602242700b00758e7dbd0dbso16064922iob.16
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 16:12:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680390766; x=1682982766;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ztqmH68+XXccWlVqS7GLZy0labq1EgCTA5s2+a0IZMc=;
-        b=a0mjGtILmN8UMMM9pvwPgSL4tymw5sQX7UyetVGs/+z7zBbHEHn+429WfeV86wJbQl
-         WInCPYJppjF6DqaKEGqHciWWe1qHKM/wSDCGpm6bUd7X+Q32Xq6c+1bb8esXT3l9rpLU
-         iYQTGPqV7k/liwXDnSkkxlFf0kzVXfbZqv0/gcO3wrwArt8gBw4ONkJ5QEZejnVagEuH
-         nILpBKYRkVatiVgqArdMyQPS45ViE7YIqAlp1eP2VgLMBjikjbl9LeoTw0KoDnOTPHbT
-         WRKnC5iVA8C6zXBGbS/Vdb+0rQiyaOlsG5AKE1yHmw3u4pP8WyakDzYFIJINgcDcku6+
-         z6WA==
-X-Gm-Message-State: AO0yUKWaNIEBR1H0S8PzvRT/jbc94izprpG2w07sxXkMuaHVrccuxH6L
-        jAmc13/YDguvDXmb67DaFZTlZxnOWoIyyfw7hP4iJZijpPUE
-X-Google-Smtp-Source: AK7set8/hRJ5dIU+BrcR8JAPfq5wC4NUTGWSv06oswmjCsj+oaQmt5VgKqem7YURFwAlHR0uOpS7eGj1HqB+ARmueLGaRJUBfP64
+        Sat, 1 Apr 2023 19:16:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68551FF3;
+        Sat,  1 Apr 2023 16:16:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E3D6603F7;
+        Sat,  1 Apr 2023 23:16:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A02F5C433D2;
+        Sat,  1 Apr 2023 23:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680391001;
+        bh=H5STw0pJowgy64wqBEXRdvl1LSl7H7PAsGywQXxANvk=;
+        h=From:Date:Subject:To:Cc:From;
+        b=tcdi/fkfFEt3RDE0/TeiTc4726GCfsduRiIPY4UXa3thDXq6Lv1ZBhTrVTEl/fTA3
+         qlOE9Wsc5L/d5pKiyVNIqYYNUQM7m86OOCEy3OqRydqo+TIM3hnFPGmdpbBB1/1hHd
+         sO7uPOQ3Fo08vkKRRS/neS8zZ9rmVqWG1CnWtPwRaB2JwZBOT2xlISwFkHmvLnXCTh
+         kp2puzAE0XThuTY7GoPZO6oD3uXOYp83bOrGWW7QPoYIKl2R8U2HvJ/8JMNB6VtBVx
+         +1arGlDsGVawyiCfzb2bzwUKg2Ji5KHHCEjY/IZ5JmP+UHj7keXc7rA5dRx7W8hjGb
+         dRCXcmUoHFnPA==
+From:   Eric Van Hensbergen <ericvh@kernel.org>
+Date:   Sat, 01 Apr 2023 23:16:23 +0000
+Subject: [PATCH] fs/9p: Rework cache modes and add new options to
+ Documentation
 MIME-Version: 1.0
-X-Received: by 2002:a02:95a6:0:b0:3a7:e46f:1016 with SMTP id
- b35-20020a0295a6000000b003a7e46f1016mr12747135jai.0.1680390766005; Sat, 01
- Apr 2023 16:12:46 -0700 (PDT)
-Date:   Sat, 01 Apr 2023 16:12:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b113b705f84e761b@google.com>
-Subject: [syzbot] [batman?] WARNING: locking bug in batadv_nc_process_nc_paths
-From:   syzbot <syzbot+6c3ddeb774a88806d35a@syzkaller.appspotmail.com>
-To:     a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, mareklindner@neomailbox.ch,
-        netdev@vger.kernel.org, pabeni@redhat.com, sven@narfation.org,
-        sw@simonwunderlich.de, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230401-ericvh-dev-rework-cache-options-v1-1-12d3adbdd33a@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAEa7KGQC/yWO0QqDMBAEf0XuuUdjFCn9ldKHeK5NKCRykVQQ/
+ 72xfRzYGXanDA3IdG92UpSQQ4oV2ktD4l18gcNUmayxnelNy3UuxfOEwopP0jeLEw9Oy1rVzFa
+ GobuNcLY3VCujy+BRXRR/dv76dU7KEdt6LhbFHLbfh8fzOL5p8MxgkwAAAA==
+To:     Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        v9fs@lists.linux.dev
+Cc:     v9fs-developer@lists.sourceforge.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Eric Van Hensbergen <ericvh@kernel.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=23735; i=ericvh@kernel.org;
+ h=from:subject:message-id; bh=H5STw0pJowgy64wqBEXRdvl1LSl7H7PAsGywQXxANvk=;
+ b=owEBbQKS/ZANAwAKAYj/1ftKX/+YAcsmYgBkKLtYB4OThbxBcEi23mIO6p0UOir2tFxXSBcYd
+ sjN3TjhEPSJAjMEAAEKAB0WIQSWlvDRlqWQmKTK0VGI/9X7Sl//mAUCZCi7WAAKCRCI/9X7Sl//
+ mPJ+D/4rPjF0ABVtrQz2bUrxTK3jBAwNI9jdPj1RCRIafCpdjpcKEtKimotKAIptcJZhh7tUX3f
+ eBFCHPnMV9OcRfQsnlrFVeEEeyjTm/g2PnUt6OXvV4CXsPVJwZtZ8a5BIXzLSXKifas371NJx6/
+ PaZaR4alBx7AtbjSnDmHq9RNLnVoHo+Sv9qPUsiCLQGt+kbDPBXFdfDHPWNVUbZOr4L65rxvycx
+ HdnI+iiUcsQI4+2mOczWTZcM2DiRL7Akrr9REgvQMSLahbI5UyidGkbNjhUVxwBsVsuESEUeI9I
+ 3sD41rQgSFwfyWwYZ8kzpVWdecJKH6uxIcJrKpwSdDIk1/66q91fFY5sw9BEksD6NlC6SajUgFL
+ kA++QFKUoVs6J0ns8G3Q3dHkNuo7wInov664/cFdlaa0fuWqRbtAuK86ehsWJwVD4XvEzifoMzR
+ HarDGLbGFbrlcpubXuiY07Xd/77i00ums+a6EbZ7rpPZhBE14j7aTeXAllCmTBD/b2NmFz82wo/
+ DCb06SatdoI4CvqOLdrDaQ5iIbeUCPO02E24eNc5a9bERZ3KRVLUmhlohalrKA6or7dzI3oTC4+
+ QmvGrxQQQqKifNFOp0yQvTBlTQqBOvt8X9jqo7H2lsxKduNuNpAQbudN34MMjJ28pX25Bi9haZg
+ Kx3yZwXbYWDdt6g==
+X-Developer-Key: i=ericvh@kernel.org; a=openpgp;
+ fpr=9696F0D196A59098A4CAD15188FFD5FB4A5FFF98
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Switch cache modes to a bit-mask and use legacy
+cache names as shortcuts.  Update documentation to
+include information on both shortcuts and bitmasks.
 
-syzbot found the following issue on:
+This patch also fixes missing guards related to fscache.
 
-HEAD commit:    a6faf7ea9fcb Add linux-next specific files for 20230328
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12e4a6d1c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dd9eb5678a80e926
-dashboard link: https://syzkaller.appspot.com/bug?extid=6c3ddeb774a88806d35a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Update the documentation for new mount flags
+and cache modes.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Signed-off-by: Eric Van Hensbergen <ericvh@kernel.org>
+---
+ Documentation/filesystems/9p.rst | 50 ++++++++++++++++++++++--------
+ fs/9p/cache.h                    |  3 +-
+ fs/9p/fid.h                      |  4 +--
+ fs/9p/v9fs.c                     | 34 +++++++-------------
+ fs/9p/v9fs.h                     | 67 ++++++++++++++++++++++++++--------------
+ fs/9p/vfs_addr.c                 | 37 +++++++++++++---------
+ fs/9p/vfs_file.c                 |  6 ++--
+ fs/9p/vfs_inode.c                | 28 ++++++++++++-----
+ fs/9p/vfs_inode_dotl.c           | 24 +++++++-------
+ fs/9p/vfs_super.c                |  4 +--
+ 10 files changed, 154 insertions(+), 103 deletions(-)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b03351a37b6b/disk-a6faf7ea.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/663c2ddae5f7/vmlinux-a6faf7ea.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a5e229b4773a/bzImage-a6faf7ea.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6c3ddeb774a88806d35a@syzkaller.appspotmail.com
-
-=============================
-[ BUG: Invalid wait context ]
-6.3.0-rc4-next-20230328-syzkaller #0 Not tainted
------------------------------
-kworker/u4:11/7080 is trying to lock:
-ffffffff916756d0 (lock_keys_hash){....}-{40:209}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
-ffffffff916756d0 (lock_keys_hash){....}-{40:209}, at: batadv_nc_process_nc_paths.part.0+0x142/0x3f0 net/batman-adv/network-coding.c:690
-other info that might help us debug this:
-context-{4:4}
-3 locks held by kworker/u4:11/7080:
- #0: ffff888026eef938
- ((wq_completion)bat_events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- ((wq_completion)bat_events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- ((wq_completion)bat_events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
- ((wq_completion)bat_events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:643 [inline]
- ((wq_completion)bat_events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:670 [inline]
- ((wq_completion)bat_events){+.+.}-{0:0}, at: process_one_work+0x883/0x15e0 kernel/workqueue.c:2376
- #1: ffffc900033afdb0
- ((work_completion)(&(&bat_priv->nc.work)->work)){+.+.}-{0:0}, at: process_one_work+0x8b7/0x15e0 kernel/workqueue.c:2380
- #2: ffffffff8c795e00 (rcu_read_lock){....}-{1:2}, at: batadv_nc_process_nc_paths.part.0+0xb1/0x3f0 net/batman-adv/network-coding.c:684
-stack backtrace:
-CPU: 1 PID: 7080 Comm: kworker/u4:11 Not tainted 6.3.0-rc4-next-20230328-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/17/2023
-Workqueue: bat_events batadv_nc_worker
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_lock_invalid_wait_context kernel/locking/lockdep.c:4724 [inline]
- check_wait_context kernel/locking/lockdep.c:4785 [inline]
- __lock_acquire+0x159e/0x5df0 kernel/locking/lockdep.c:5024
- lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5691
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:355 [inline]
- batadv_nc_process_nc_paths.part.0+0x142/0x3f0 net/batman-adv/network-coding.c:690
- batadv_nc_process_nc_paths net/batman-adv/network-coding.c:679 [inline]
- batadv_nc_worker+0xc82/0xfe0 net/batman-adv/network-coding.c:728
- process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
- worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
- kthread+0x33e/0x440 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-==================================================================
-BUG: KASAN: slab-out-of-bounds in batadv_nc_fwd_flush+0x422/0x4d0 net/batman-adv/network-coding.c:650
-Read of size 4 at addr ffff88807a916130 by task kworker/u4:11/7080
-
-CPU: 1 PID: 7080 Comm: kworker/u4:11 Not tainted 6.3.0-rc4-next-20230328-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/17/2023
-Workqueue: bat_events batadv_nc_worker
-
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
- print_report mm/kasan/report.c:462 [inline]
- kasan_report+0x11c/0x130 mm/kasan/report.c:572
- batadv_nc_fwd_flush+0x422/0x4d0 net/batman-adv/network-coding.c:650
- batadv_nc_process_nc_paths.part.0+0x1b6/0x3f0 net/batman-adv/network-coding.c:693
- batadv_nc_process_nc_paths net/batman-adv/network-coding.c:679 [inline]
- batadv_nc_worker+0xc82/0xfe0 net/batman-adv/network-coding.c:728
- process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
- worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
- kthread+0x33e/0x440 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Allocated by task 12301:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:374 [inline]
- ____kasan_kmalloc mm/kasan/common.c:333 [inline]
- __kasan_kmalloc+0xa2/0xb0 mm/kasan/common.c:383
- kmalloc include/linux/slab.h:559 [inline]
- kzalloc include/linux/slab.h:680 [inline]
- ref_tracker_alloc+0x158/0x580 lib/ref_tracker.c:85
- __netdev_tracker_alloc include/linux/netdevice.h:4059 [inline]
- netdev_hold include/linux/netdevice.h:4088 [inline]
- netdev_hold include/linux/netdevice.h:4083 [inline]
- fib_check_nh_nongw net/ipv4/fib_semantics.c:1238 [inline]
- fib_check_nh+0x270/0x640 net/ipv4/fib_semantics.c:1258
- fib_create_info+0x23b0/0x4c00 net/ipv4/fib_semantics.c:1553
- fib_table_insert+0x199/0x1be0 net/ipv4/fib_trie.c:1236
- fib_magic+0x493/0x580 net/ipv4/fib_frontend.c:1104
- fib_add_ifaddr+0x4bc/0x560 net/ipv4/fib_frontend.c:1148
- fib_netdev_event+0x38c/0x6f0 net/ipv4/fib_frontend.c:1486
- notifier_call_chain+0xb6/0x3c0 kernel/notifier.c:93
- call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1937
- call_netdevice_notifiers_extack net/core/dev.c:1975 [inline]
- call_netdevice_notifiers net/core/dev.c:1989 [inline]
- __dev_notify_flags+0x120/0x2d0 net/core/dev.c:8566
- dev_change_flags+0x11b/0x170 net/core/dev.c:8604
- do_setlink+0x9f4/0x3d30 net/core/rtnetlink.c:2836
- rtnl_group_changelink net/core/rtnetlink.c:3380 [inline]
- __rtnl_newlink+0xb90/0x1840 net/core/rtnetlink.c:3636
- rtnl_newlink+0x68/0xa0 net/core/rtnetlink.c:3673
- rtnetlink_rcv_msg+0x43d/0xd50 net/core/rtnetlink.c:6388
- netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2572
- netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
- netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1942
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:747
- ____sys_sendmsg+0x71c/0x900 net/socket.c:2501
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2555
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2584
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff88807a916100
- which belongs to the cache kmalloc-32 of size 32
-The buggy address is located 16 bytes to the right of
- allocated 32-byte region [ffff88807a916100, ffff88807a916120)
-
-The buggy address belongs to the physical page:
-page:ffffea0001ea4580 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7a916
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-page_type: 0xffffffff()
-raw: 00fff00000000200 ffff888012441500 ffffea0001dedf40 dead000000000002
-raw: 0000000000000000 0000000000400040 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112c40(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY|__GFP_HARDWALL), pid 5781, tgid 5781 (syz-executor.4), ts 327417606587, free_ts 297066583858
- prep_new_page mm/page_alloc.c:1729 [inline]
- get_page_from_freelist+0xf75/0x2aa0 mm/page_alloc.c:3493
- __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4759
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2283
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x28e/0x380 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3292
- __slab_alloc_node mm/slub.c:3345 [inline]
- slab_alloc_node mm/slub.c:3442 [inline]
- __kmem_cache_alloc_node+0x136/0x320 mm/slub.c:3491
- __do_kmalloc_node mm/slab_common.c:965 [inline]
- __kmalloc+0x4e/0x190 mm/slab_common.c:979
- kmalloc include/linux/slab.h:563 [inline]
- kzalloc include/linux/slab.h:680 [inline]
- tomoyo_encode2.part.0+0xe9/0x3a0 security/tomoyo/realpath.c:45
- tomoyo_encode2 security/tomoyo/realpath.c:31 [inline]
- tomoyo_encode+0x2c/0x50 security/tomoyo/realpath.c:80
- tomoyo_path_perm+0x394/0x430 security/tomoyo/file.c:831
- tomoyo_path_symlink+0x98/0xe0 security/tomoyo/tomoyo.c:211
- security_path_symlink+0xe3/0x160 security/security.c:1747
- do_symlinkat+0x10a/0x2e0 fs/namei.c:4422
- __do_sys_symlinkat fs/namei.c:4440 [inline]
- __se_sys_symlinkat fs/namei.c:4437 [inline]
- __x64_sys_symlinkat+0x97/0xc0 fs/namei.c:4437
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1302 [inline]
- free_unref_page_prepare+0x4d8/0xb80 mm/page_alloc.c:2555
- free_unref_page+0x33/0x370 mm/page_alloc.c:2650
- qlink_free mm/kasan/quarantine.c:166 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:185
- kasan_quarantine_reduce+0x195/0x220 mm/kasan/quarantine.c:292
- __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:305
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:711 [inline]
- slab_alloc_node mm/slub.c:3452 [inline]
- __kmem_cache_alloc_node+0x17c/0x320 mm/slub.c:3491
- __do_kmalloc_node mm/slab_common.c:965 [inline]
- __kmalloc+0x4e/0x190 mm/slab_common.c:979
- kmalloc include/linux/slab.h:563 [inline]
- tomoyo_realpath_from_path+0xc3/0x600 security/tomoyo/realpath.c:251
- tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
- tomoyo_check_open_permission+0x29a/0x3a0 security/tomoyo/file.c:771
- tomoyo_file_open security/tomoyo/tomoyo.c:332 [inline]
- tomoyo_file_open+0xa1/0xc0 security/tomoyo/tomoyo.c:327
- security_file_open+0x49/0xb0 security/security.c:2797
- do_dentry_open+0x575/0x13f0 fs/open.c:907
- do_open fs/namei.c:3560 [inline]
- path_openat+0x1baa/0x2750 fs/namei.c:3715
- do_filp_open+0x1ba/0x410 fs/namei.c:3742
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1356
- do_sys_open fs/open.c:1372 [inline]
- __do_sys_openat fs/open.c:1388 [inline]
- __se_sys_openat fs/open.c:1383 [inline]
- __x64_sys_openat+0x143/0x1f0 fs/open.c:1383
-
-Memory state around the buggy address:
- ffff88807a916000: 00 00 00 00 fc fc fc fc 00 00 00 00 fc fc fc fc
- ffff88807a916080: 00 00 00 00 fc fc fc fc 00 00 05 fc fc fc fc fc
->ffff88807a916100: 00 00 00 00 fc fc fc fc 00 00 00 00 fc fc fc fc
-                                     ^
- ffff88807a916180: 00 00 00 00 fc fc fc fc 00 00 00 00 fc fc fc fc
- ffff88807a916200: 00 00 00 00 fc fc fc fc 00 00 04 fc fc fc fc fc
-==================================================================
-
+diff --git a/Documentation/filesystems/9p.rst b/Documentation/filesystems/9p.rst
+index 0e800b8f73cc..d79bf4e41a71 100644
+--- a/Documentation/filesystems/9p.rst
++++ b/Documentation/filesystems/9p.rst
+@@ -78,19 +78,39 @@ Options
+   		offering several exported file systems.
+ 
+   cache=mode	specifies a caching policy.  By default, no caches are used.
+-
+-                        none
+-				default no cache policy, metadata and data
+-                                alike are synchronous.
+-			loose
+-				no attempts are made at consistency,
+-                                intended for exclusive, read-only mounts
+-                        fscache
+-				use FS-Cache for a persistent, read-only
+-				cache backend.
+-                        mmap
+-				minimal cache that is only used for read-write
+-                                mmap.  Northing else is cached, like cache=none
++		The mode can be specified as a bitmask or by using one of the
++		prexisting common 'shortcuts'.
++		The bitmask is described below: (unspecified bits are reserved)
++
++			==========	================================================
++			0b00000000	all caches disabled, mmap disabled
++			0b00000001	file caches enabled
++			0b00000010	meta-data caches enabled
++			0b00000100	writeback behavior (as opposed to writethrough)
++			0b00001000	loose caches (no explicit consistency with server)
++			0b10000000	fscache enabled for persistent caching
++			=========	================================================
++
++		The current shortcuts and their associated bitmask are:
++
++			=========	=============================================
++			none		0b00000000 (no caching)
++			readahead	0b00000001 (only read-ahead file caching)
++			mmap		0b00000101 (read-ahead + writeback file cache)
++			loose		0b00001111 (non-coherent file and meta-data caches)
++			fscache		0b10001111 (persistent loose cache)
++			=========	=============================================
++
++		NOTE: only these shortcuts are tested modes of operation at the
++		moment, so using other combinations of bit-patterns is not
++		known to work.  Work on better cache support is in progress.
++
++		IMPORTANT: loose caches (and by extension at the moment fscache)
++		do not necessarily validate cached values on the server.  In other
++		words changes on the server are not guaranteed to be reflected
++		on the client system.  Only use this mode of operation if you
++		have an exclusive mount and the server will modify the filesystem
++		underneath you.
+ 
+   debug=n	specifies debug level.  The debug level is a bitmask.
+ 
+@@ -137,6 +157,10 @@ Options
+   		This can be used to share devices/named pipes/sockets between
+ 		hosts.  This functionality will be expanded in later versions.
+ 
++  directio	bypass page cache on all read/write operations
++
++  ignoreqv	ignore qid.version==0 as a marker to ignore cache
++
+   noxattr	do not offer xattr functions on this mount.
+ 
+   access	there are four access modes.
+diff --git a/fs/9p/cache.h b/fs/9p/cache.h
+index 1923affcdc62..ee1b6b06a2fd 100644
+--- a/fs/9p/cache.h
++++ b/fs/9p/cache.h
+@@ -8,9 +8,8 @@
+ #ifndef _9P_CACHE_H
+ #define _9P_CACHE_H
+ 
+-#include <linux/fscache.h>
+-
+ #ifdef CONFIG_9P_FSCACHE
++#include <linux/fscache.h>
+ 
+ extern int v9fs_cache_session_get_cookie(struct v9fs_session_info *v9ses,
+ 					  const char *dev_name);
+diff --git a/fs/9p/fid.h b/fs/9p/fid.h
+index 11576e1364bf..0c51889a60b3 100644
+--- a/fs/9p/fid.h
++++ b/fs/9p/fid.h
+@@ -56,11 +56,9 @@ static inline void v9fs_fid_add_modes(struct p9_fid *fid, int s_flags,
+ 	   ((fid->qid.version == 0) && !(s_flags & V9FS_IGNORE_QV)) ||
+ 	   (s_flags & V9FS_DIRECT_IO) || (f_flags & O_DIRECT)) {
+ 		fid->mode |= P9L_DIRECT; /* no read or write cache */
+-	} else if ((s_cache < CACHE_WRITEBACK) ||
++	} else if ((!(s_cache & CACHE_WRITEBACK)) ||
+ 				(f_flags & O_DSYNC) | (s_flags & V9FS_SYNC)) {
+ 		fid->mode |= P9L_NOWRITECACHE;
+-	} else if (s_cache == CACHE_LOOSE) {
+-		fid->mode |= P9L_LOOSE; /* noncoherent cache */
+ 	}
+ }
+ #endif
+diff --git a/fs/9p/v9fs.c b/fs/9p/v9fs.c
+index 43d3806150a9..c7f774fe398f 100644
+--- a/fs/9p/v9fs.c
++++ b/fs/9p/v9fs.c
+@@ -66,40 +66,30 @@ static const match_table_t tokens = {
+ 	{Opt_err, NULL}
+ };
+ 
+-static const char *const v9fs_cache_modes[nr__p9_cache_modes] = {
+-	[CACHE_NONE]		= "none",
+-	[CACHE_READAHEAD]	= "readahead",
+-	[CACHE_WRITEBACK]	= "writeback",
+-	[CACHE_MMAP]		= "mmap",
+-	[CACHE_LOOSE]		= "loose",
+-	[CACHE_FSCACHE]		= "fscache",
+-};
+-
+ /* Interpret mount options for cache mode */
+ static int get_cache_mode(char *s)
+ {
+ 	int version = -EINVAL;
+ 
+ 	if (!strcmp(s, "loose")) {
+-		version = CACHE_LOOSE;
++		version = CACHE_SC_LOOSE;
+ 		p9_debug(P9_DEBUG_9P, "Cache mode: loose\n");
+ 	} else if (!strcmp(s, "fscache")) {
+-		version = CACHE_FSCACHE;
++		version = CACHE_SC_FSCACHE;
+ 		p9_debug(P9_DEBUG_9P, "Cache mode: fscache\n");
+ 	} else if (!strcmp(s, "mmap")) {
+-		version = CACHE_MMAP;
++		version = CACHE_SC_MMAP;
+ 		p9_debug(P9_DEBUG_9P, "Cache mode: mmap\n");
+-	} else if (!strcmp(s, "writeback")) {
+-		version = CACHE_WRITEBACK;
+-		p9_debug(P9_DEBUG_9P, "Cache mode: writeback\n");
+ 	} else if (!strcmp(s, "readahead")) {
+-		version = CACHE_READAHEAD;
++		version = CACHE_SC_READAHEAD;
+ 		p9_debug(P9_DEBUG_9P, "Cache mode: readahead\n");
+ 	} else if (!strcmp(s, "none")) {
+-		version = CACHE_NONE;
++		version = CACHE_SC_NONE;
+ 		p9_debug(P9_DEBUG_9P, "Cache mode: none\n");
+-	} else
+-		pr_info("Unknown Cache mode %s\n", s);
++	} else if (kstrtoint(s, 0, &version) != 0) {
++		version = -EINVAL;
++		pr_info("Unknown Cache mode or invalid value %s\n", s);
++	}
+ 	return version;
+ }
+ 
+@@ -127,9 +117,9 @@ int v9fs_show_options(struct seq_file *m, struct dentry *root)
+ 	if (v9ses->nodev)
+ 		seq_puts(m, ",nodevmap");
+ 	if (v9ses->cache)
+-		seq_printf(m, ",cache=%s", v9fs_cache_modes[v9ses->cache]);
++		seq_printf(m, ",cache=%x", v9ses->cache);
+ #ifdef CONFIG_9P_FSCACHE
+-	if (v9ses->cachetag && v9ses->cache == CACHE_FSCACHE)
++	if (v9ses->cachetag && (v9ses->cache & CACHE_FSCACHE))
+ 		seq_printf(m, ",cachetag=%s", v9ses->cachetag);
+ #endif
+ 
+@@ -481,7 +471,7 @@ struct p9_fid *v9fs_session_init(struct v9fs_session_info *v9ses,
+ 
+ #ifdef CONFIG_9P_FSCACHE
+ 	/* register the session for caching */
+-	if (v9ses->cache == CACHE_FSCACHE) {
++	if (v9ses->cache & CACHE_FSCACHE) {
+ 		rc = v9fs_cache_session_get_cookie(v9ses, dev_name);
+ 		if (rc < 0)
+ 			goto err_clnt;
+diff --git a/fs/9p/v9fs.h b/fs/9p/v9fs.h
+index 999cdbcbfed9..06a2514f0d88 100644
+--- a/fs/9p/v9fs.h
++++ b/fs/9p/v9fs.h
+@@ -31,35 +31,54 @@
+ #define V9FS_ACL_MASK V9FS_POSIX_ACL
+ 
+ enum p9_session_flags {
+-	V9FS_PROTO_2000U	= 0x01,
+-	V9FS_PROTO_2000L	= 0x02,
+-	V9FS_ACCESS_SINGLE	= 0x04,
+-	V9FS_ACCESS_USER	= 0x08,
+-	V9FS_ACCESS_CLIENT	= 0x10,
+-	V9FS_POSIX_ACL		= 0x20,
+-	V9FS_NO_XATTR		= 0x40,
+-	V9FS_IGNORE_QV		= 0x80, /* ignore qid.version for cache hints */
+-	V9FS_DIRECT_IO		= 0x100,
+-	V9FS_SYNC		= 0x200
++	V9FS_PROTO_2000U    = 0x01,
++	V9FS_PROTO_2000L    = 0x02,
++	V9FS_ACCESS_SINGLE  = 0x04,
++	V9FS_ACCESS_USER    = 0x08,
++	V9FS_ACCESS_CLIENT  = 0x10,
++	V9FS_POSIX_ACL      = 0x20,
++	V9FS_NO_XATTR       = 0x40,
++	V9FS_IGNORE_QV      = 0x80, /* ignore qid.version for cache hints */
++	V9FS_DIRECT_IO      = 0x100,
++	V9FS_SYNC           = 0x200
+ };
+ 
+-/* possible values of ->cache */
+ /**
+- * enum p9_cache_modes - user specified cache preferences
+- * @CACHE_NONE: do not cache data, dentries, or directory contents (default)
+- * @CACHE_LOOSE: cache data, dentries, and directory contents w/no consistency
++ * enum p9_cache_shortcuts - human readable cache preferences
++ * @CACHE_SC_NONE: disable all caches
++ * @CACHE_SC_READAHEAD: only provide caching for readahead
++ * @CACHE_SC_MMAP: provide caching to enable mmap
++ * @CACHE_SC_LOOSE: non-coherent caching for files and meta data
++ * @CACHE_SC_FSCACHE: persistent non-coherent caching for files and meta-data
+  *
+- * eventually support loose, tight, time, session, default always none
+  */
+ 
+-enum p9_cache_modes {
+-	CACHE_NONE,
+-	CACHE_READAHEAD,
+-	CACHE_WRITEBACK,
+-	CACHE_MMAP,
+-	CACHE_LOOSE,
+-	CACHE_FSCACHE,
+-	nr__p9_cache_modes
++enum p9_cache_shortcuts {
++	CACHE_SC_NONE       = 0b00000000,
++	CACHE_SC_READAHEAD  = 0b00000001,
++	CACHE_SC_MMAP       = 0b00000101,
++	CACHE_SC_LOOSE      = 0b00001111,
++	CACHE_SC_FSCACHE    = 0b10001111,
++};
++
++/**
++ * enum p9_cache_bits - possible values of ->cache
++ * @CACHE_NONE: caches disabled
++ * @CACHE_FILE: file caching (open to close)
++ * @CACHE_META: meta-data and directory caching
++ * @CACHE_WRITEBACK: write-back caching for files
++ * @CACHE_LOOSE: don't check cache consistency
++ * @CACHE_FSCACHE: local persistent caches
++ *
++ */
++
++enum p9_cache_bits {
++	CACHE_NONE          = 0b00000000,
++	CACHE_FILE          = 0b00000001,
++	CACHE_META          = 0b00000010,
++	CACHE_WRITEBACK     = 0b00000100,
++	CACHE_LOOSE         = 0b00001000,
++	CACHE_FSCACHE       = 0b10000000,
+ };
+ 
+ /**
+@@ -68,7 +87,7 @@ enum p9_cache_modes {
+  * @nodev: set to 1 to disable device mapping
+  * @debug: debug level
+  * @afid: authentication handle
+- * @cache: cache mode of type &p9_cache_modes
++ * @cache: cache mode of type &p9_cache_bits
+  * @cachetag: the tag of the cache associated with this session
+  * @fscache: session cookie associated with FS-Cache
+  * @uname: string user name to mount hierarchy as
+diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
+index 211165430a8a..193e898093cd 100644
+--- a/fs/9p/vfs_addr.c
++++ b/fs/9p/vfs_addr.c
+@@ -115,8 +115,6 @@ const struct netfs_request_ops v9fs_req_ops = {
+ 
+ static bool v9fs_release_folio(struct folio *folio, gfp_t gfp)
+ {
+-	struct inode *inode = folio_inode(folio);
+-
+ 	if (folio_test_private(folio))
+ 		return false;
+ #ifdef CONFIG_9P_FSCACHE
+@@ -125,8 +123,8 @@ static bool v9fs_release_folio(struct folio *folio, gfp_t gfp)
+ 			return false;
+ 		folio_wait_fscache(folio);
+ 	}
++	fscache_note_page_release(v9fs_inode_cookie(V9FS_I(folio_inode(folio))));
+ #endif
+-	fscache_note_page_release(v9fs_inode_cookie(V9FS_I(inode)));
+ 	return true;
+ }
+ 
+@@ -136,6 +134,7 @@ static void v9fs_invalidate_folio(struct folio *folio, size_t offset,
+ 	folio_wait_fscache(folio);
+ }
+ 
++#ifdef CONFIG_9P_FSCACHE
+ static void v9fs_write_to_cache_done(void *priv, ssize_t transferred_or_error,
+ 				     bool was_async)
+ {
+@@ -149,12 +148,11 @@ static void v9fs_write_to_cache_done(void *priv, ssize_t transferred_or_error,
+ 				   i_size_read(&v9inode->netfs.inode), 0);
+ 	}
+ }
++#endif
+ 
+ static int v9fs_vfs_write_folio_locked(struct folio *folio)
+ {
+ 	struct inode *inode = folio_inode(folio);
+-	struct v9fs_inode *v9inode = V9FS_I(inode);
+-	struct fscache_cookie *cookie = v9fs_inode_cookie(v9inode);
+ 	loff_t start = folio_pos(folio);
+ 	loff_t i_size = i_size_read(inode);
+ 	struct iov_iter from;
+@@ -181,15 +179,22 @@ static int v9fs_vfs_write_folio_locked(struct folio *folio)
+ 
+ 	p9_client_write(writeback_fid, start, &from, &err);
+ 
+-	if (err == 0 &&
+-	    fscache_cookie_enabled(cookie) &&
+-	    test_bit(FSCACHE_COOKIE_IS_CACHING, &cookie->flags)) {
+-		folio_start_fscache(folio);
+-		fscache_write_to_cache(v9fs_inode_cookie(v9inode),
+-				       folio_mapping(folio), start, len, i_size,
+-				       v9fs_write_to_cache_done, v9inode,
+-				       true);
++#ifdef CONFIG_9P_FSCACHE
++	{
++		struct v9fs_inode *v9inode = V9FS_I(inode);
++		struct fscache_cookie *cookie = v9fs_inode_cookie(v9inode);
++
++		if (err == 0 &&
++			fscache_cookie_enabled(cookie) &&
++			test_bit(FSCACHE_COOKIE_IS_CACHING, &cookie->flags)) {
++			folio_start_fscache(folio);
++			fscache_write_to_cache(v9fs_inode_cookie(v9inode),
++						folio_mapping(folio), start, len, i_size,
++						v9fs_write_to_cache_done, v9inode,
++						true);
++		}
+ 	}
++#endif
+ 
+ 	folio_end_writeback(folio);
+ 	p9_fid_put(writeback_fid);
+@@ -300,7 +305,6 @@ static int v9fs_write_end(struct file *filp, struct address_space *mapping,
+ 	loff_t last_pos = pos + copied;
+ 	struct folio *folio = page_folio(subpage);
+ 	struct inode *inode = mapping->host;
+-	struct v9fs_inode *v9inode = V9FS_I(inode);
+ 
+ 	p9_debug(P9_DEBUG_VFS, "filp %p, mapping %p\n", filp, mapping);
+ 
+@@ -320,7 +324,10 @@ static int v9fs_write_end(struct file *filp, struct address_space *mapping,
+ 	if (last_pos > inode->i_size) {
+ 		inode_add_bytes(inode, last_pos - inode->i_size);
+ 		i_size_write(inode, last_pos);
+-		fscache_update_cookie(v9fs_inode_cookie(v9inode), NULL, &last_pos);
++#ifdef CONFIG_9P_FSCACHE
++		fscache_update_cookie(v9fs_inode_cookie(V9FS_I(inode)), NULL,
++			&last_pos);
++#endif
+ 	}
+ 	folio_mark_dirty(folio);
+ out:
+diff --git a/fs/9p/vfs_file.c b/fs/9p/vfs_file.c
+index 9f1d464bc1b5..581d2a3a037a 100644
+--- a/fs/9p/vfs_file.c
++++ b/fs/9p/vfs_file.c
+@@ -60,7 +60,7 @@ int v9fs_file_open(struct inode *inode, struct file *file)
+ 		if (IS_ERR(fid))
+ 			return PTR_ERR(fid);
+ 
+-		if ((v9ses->cache >= CACHE_WRITEBACK) && (omode & P9_OWRITE)) {
++		if ((v9ses->cache & CACHE_WRITEBACK) && (omode & P9_OWRITE)) {
+ 			int writeback_omode = (omode & ~P9_OWRITE) | P9_ORDWR;
+ 
+ 			p9_debug(P9_DEBUG_CACHE, "write-only file with writeback enabled, try opening O_RDWR\n");
+@@ -85,7 +85,7 @@ int v9fs_file_open(struct inode *inode, struct file *file)
+ 	}
+ 
+ #ifdef CONFIG_9P_FSCACHE
+-	if (v9ses->cache == CACHE_FSCACHE)
++	if (v9ses->cache & CACHE_FSCACHE)
+ 		fscache_use_cookie(v9fs_inode_cookie(v9inode),
+ 				   file->f_mode & FMODE_WRITE);
+ #endif
+@@ -485,7 +485,7 @@ v9fs_file_mmap(struct file *filp, struct vm_area_struct *vma)
+ 
+ 	p9_debug(P9_DEBUG_MMAP, "filp :%p\n", filp);
+ 
+-	if (v9ses->cache < CACHE_MMAP) {
++	if (!(v9ses->cache & CACHE_WRITEBACK)) {
+ 		p9_debug(P9_DEBUG_CACHE, "(no mmap mode)");
+ 		if (vma->vm_flags & VM_MAYSHARE)
+ 			return -ENODEV;
+diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
+index fb5e5c0e41e4..5d106cbcdf25 100644
+--- a/fs/9p/vfs_inode.c
++++ b/fs/9p/vfs_inode.c
+@@ -376,12 +376,18 @@ void v9fs_evict_inode(struct inode *inode)
+ 
+ 	truncate_inode_pages_final(&inode->i_data);
+ 	version = cpu_to_le32(v9inode->qid.version);
++
++#ifdef CONFIG_9P_FSCACHE
+ 	fscache_clear_inode_writeback(v9fs_inode_cookie(v9inode), inode,
+ 				      &version);
++#endif
++
+ 	clear_inode(inode);
+ 	filemap_fdatawrite(&inode->i_data);
+ 
++#ifdef CONFIG_9P_FSCACHE
+ 	fscache_relinquish_cookie(v9fs_inode_cookie(v9inode), false);
++#endif
+ }
+ 
+ static int v9fs_test_inode(struct inode *inode, void *data)
+@@ -761,7 +767,7 @@ struct dentry *v9fs_vfs_lookup(struct inode *dir, struct dentry *dentry,
+ 		inode = NULL;
+ 	else if (IS_ERR(fid))
+ 		inode = ERR_CAST(fid);
+-	else if (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE)
++	else if (v9ses->cache & (CACHE_META|CACHE_LOOSE))
+ 		inode = v9fs_get_inode_from_fid(v9ses, fid, dir->i_sb);
+ 	else
+ 		inode = v9fs_get_new_inode_from_fid(v9ses, fid, dir->i_sb);
+@@ -816,7 +822,7 @@ v9fs_vfs_atomic_open(struct inode *dir, struct dentry *dentry,
+ 	perm = unixmode2p9mode(v9ses, mode);
+ 	p9_omode = v9fs_uflags2omode(flags, v9fs_proto_dotu(v9ses));
+ 
+-	if ((v9ses->cache >= CACHE_WRITEBACK) && (p9_omode & P9_OWRITE)) {
++	if ((v9ses->cache & CACHE_WRITEBACK) && (p9_omode & P9_OWRITE)) {
+ 		p9_omode = (p9_omode & !P9_OWRITE) | P9_ORDWR;
+ 		p9_debug(P9_DEBUG_CACHE,
+ 			"write-only file with writeback enabled, creating w/ O_RDWR\n");
+@@ -835,9 +841,11 @@ v9fs_vfs_atomic_open(struct inode *dir, struct dentry *dentry,
+ 		goto error;
+ 
+ 	file->private_data = fid;
+-	if (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE)
++#ifdef CONFIG_9P_FSCACHE
++	if (v9ses->cache & CACHE_FSCACHE)
+ 		fscache_use_cookie(v9fs_inode_cookie(v9inode),
+ 				   file->f_mode & FMODE_WRITE);
++#endif
+ 
+ 	v9fs_fid_add_modes(fid, v9ses->flags, v9ses->cache, file->f_flags);
+ 	v9fs_open_fid_add(inode, &fid);
+@@ -1008,10 +1016,10 @@ v9fs_vfs_getattr(struct mnt_idmap *idmap, const struct path *path,
+ 
+ 	p9_debug(P9_DEBUG_VFS, "dentry: %p\n", dentry);
+ 	v9ses = v9fs_dentry2v9ses(dentry);
+-	if (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE) {
++	if (v9ses->cache & (CACHE_META|CACHE_LOOSE)) {
+ 		generic_fillattr(&nop_mnt_idmap, inode, stat);
+ 		return 0;
+-	} else if (v9ses->cache >= CACHE_WRITEBACK) {
++	} else if (v9ses->cache & CACHE_WRITEBACK) {
+ 		if (S_ISREG(inode->i_mode)) {
+ 			int retval = filemap_fdatawrite(inode->i_mapping);
+ 
+@@ -1050,7 +1058,6 @@ static int v9fs_vfs_setattr(struct mnt_idmap *idmap,
+ {
+ 	int retval, use_dentry = 0;
+ 	struct inode *inode = d_inode(dentry);
+-	struct v9fs_inode *v9inode = V9FS_I(inode);
+ 	struct v9fs_session_info *v9ses;
+ 	struct p9_fid *fid = NULL;
+ 	struct p9_wstat wstat;
+@@ -1115,8 +1122,13 @@ static int v9fs_vfs_setattr(struct mnt_idmap *idmap,
+ 		truncate_setsize(inode, iattr->ia_size);
+ 		truncate_pagecache(inode, iattr->ia_size);
+ 
+-		if (v9ses->cache == CACHE_FSCACHE)
++#ifdef CONFIG_9P_FSCACHE
++		if (v9ses->cache & CACHE_FSCACHE) {
++			struct v9fs_inode *v9inode = V9FS_I(inode);
++
+ 			fscache_resize_cookie(v9fs_inode_cookie(v9inode), iattr->ia_size);
++		}
++#endif
+ 	}
+ 
+ 	v9fs_invalidate_inode_attr(inode);
+@@ -1400,7 +1412,7 @@ int v9fs_refresh_inode(struct p9_fid *fid, struct inode *inode)
+ 	 * We don't want to refresh inode->i_size,
+ 	 * because we may have cached data
+ 	 */
+-	flags = (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE) ?
++	flags = (v9ses->cache & CACHE_LOOSE) ?
+ 		V9FS_STAT2INODE_KEEP_ISIZE : 0;
+ 	v9fs_stat2inode(st, inode, inode->i_sb, flags);
+ out:
+diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
+index 4b9488cb7a56..a1c7dae6795c 100644
+--- a/fs/9p/vfs_inode_dotl.c
++++ b/fs/9p/vfs_inode_dotl.c
+@@ -287,7 +287,7 @@ v9fs_vfs_atomic_open_dotl(struct inode *dir, struct dentry *dentry,
+ 		goto out;
+ 	}
+ 
+-	if ((v9ses->cache >= CACHE_WRITEBACK) && (p9_omode & P9_OWRITE)) {
++	if ((v9ses->cache & CACHE_WRITEBACK) && (p9_omode & P9_OWRITE)) {
+ 		p9_omode = (p9_omode & !P9_OWRITE) | P9_ORDWR;
+ 		p9_debug(P9_DEBUG_CACHE,
+ 			"write-only file with writeback enabled, creating w/ O_RDWR\n");
+@@ -325,7 +325,7 @@ v9fs_vfs_atomic_open_dotl(struct inode *dir, struct dentry *dentry,
+ 		goto out;
+ 	file->private_data = ofid;
+ #ifdef CONFIG_9P_FSCACHE
+-	if (v9ses->cache == CACHE_FSCACHE) {
++	if (v9ses->cache & CACHE_FSCACHE) {
+ 		struct v9fs_inode *v9inode = V9FS_I(inode);
+ 		fscache_use_cookie(v9fs_inode_cookie(v9inode),
+ 				   file->f_mode & FMODE_WRITE);
+@@ -403,7 +403,7 @@ static int v9fs_vfs_mkdir_dotl(struct mnt_idmap *idmap,
+ 	}
+ 
+ 	/* instantiate inode and assign the unopened fid to the dentry */
+-	if (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE) {
++	if (v9ses->cache & (CACHE_META|CACHE_LOOSE)) {
+ 		inode = v9fs_get_new_inode_from_fid(v9ses, fid, dir->i_sb);
+ 		if (IS_ERR(inode)) {
+ 			err = PTR_ERR(inode);
+@@ -451,7 +451,7 @@ v9fs_vfs_getattr_dotl(struct mnt_idmap *idmap,
+ 
+ 	p9_debug(P9_DEBUG_VFS, "dentry: %p\n", dentry);
+ 	v9ses = v9fs_dentry2v9ses(dentry);
+-	if (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE) {
++	if (v9ses->cache & (CACHE_META|CACHE_LOOSE)) {
+ 		generic_fillattr(&nop_mnt_idmap, inode, stat);
+ 		return 0;
+ 	} else if (v9ses->cache) {
+@@ -538,7 +538,6 @@ int v9fs_vfs_setattr_dotl(struct mnt_idmap *idmap,
+ {
+ 	int retval, use_dentry = 0;
+ 	struct inode *inode = d_inode(dentry);
+-	struct v9fs_inode *v9inode = V9FS_I(inode);
+ 	struct v9fs_session_info *v9ses;
+ 	struct p9_fid *fid = NULL;
+ 	struct p9_iattr_dotl p9attr = {
+@@ -603,8 +602,11 @@ int v9fs_vfs_setattr_dotl(struct mnt_idmap *idmap,
+ 		truncate_setsize(inode, iattr->ia_size);
+ 		truncate_pagecache(inode, iattr->ia_size);
+ 
+-		if (v9ses->cache == CACHE_FSCACHE)
+-			fscache_resize_cookie(v9fs_inode_cookie(v9inode), iattr->ia_size);
++#ifdef CONFIG_9P_FSCACHE
++		if (v9ses->cache & CACHE_FSCACHE)
++			fscache_resize_cookie(v9fs_inode_cookie(V9FS_I(inode)),
++				iattr->ia_size);
++#endif
+ 	}
+ 
+ 	v9fs_invalidate_inode_attr(inode);
+@@ -732,7 +734,7 @@ v9fs_vfs_symlink_dotl(struct mnt_idmap *idmap, struct inode *dir,
+ 	}
+ 
+ 	v9fs_invalidate_inode_attr(dir);
+-	if (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE) {
++	if (v9ses->cache & (CACHE_META|CACHE_LOOSE)) {
+ 		/* Now walk from the parent so we can get an unopened fid. */
+ 		fid = p9_client_walk(dfid, 1, &name, 1);
+ 		if (IS_ERR(fid)) {
+@@ -809,7 +811,7 @@ v9fs_vfs_link_dotl(struct dentry *old_dentry, struct inode *dir,
+ 	}
+ 
+ 	v9fs_invalidate_inode_attr(dir);
+-	if (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE) {
++	if (v9ses->cache & (CACHE_META|CACHE_LOOSE)) {
+ 		/* Get the latest stat info from server. */
+ 		struct p9_fid *fid;
+ 
+@@ -886,7 +888,7 @@ v9fs_vfs_mknod_dotl(struct mnt_idmap *idmap, struct inode *dir,
+ 	}
+ 
+ 	/* instantiate inode and assign the unopened fid to the dentry */
+-	if (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE) {
++	if (v9ses->cache & (CACHE_META|CACHE_LOOSE)) {
+ 		inode = v9fs_get_new_inode_from_fid(v9ses, fid, dir->i_sb);
+ 		if (IS_ERR(inode)) {
+ 			err = PTR_ERR(inode);
+@@ -971,7 +973,7 @@ int v9fs_refresh_inode_dotl(struct p9_fid *fid, struct inode *inode)
+ 	 * We don't want to refresh inode->i_size,
+ 	 * because we may have cached data
+ 	 */
+-	flags = (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE) ?
++	flags = (v9ses->cache & CACHE_LOOSE) ?
+ 		V9FS_STAT2INODE_KEEP_ISIZE : 0;
+ 	v9fs_stat2inode_dotl(st, inode, flags);
+ out:
+diff --git a/fs/9p/vfs_super.c b/fs/9p/vfs_super.c
+index af83b39e340c..c6cbc666a4c1 100644
+--- a/fs/9p/vfs_super.c
++++ b/fs/9p/vfs_super.c
+@@ -136,7 +136,7 @@ static struct dentry *v9fs_mount(struct file_system_type *fs_type, int flags,
+ 	if (retval)
+ 		goto release_sb;
+ 
+-	if (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE)
++	if (v9ses->cache & (CACHE_META|CACHE_LOOSE))
+ 		sb->s_d_op = &v9fs_cached_dentry_operations;
+ 	else
+ 		sb->s_d_op = &v9fs_dentry_operations;
+@@ -277,7 +277,7 @@ static int v9fs_drop_inode(struct inode *inode)
+ 	struct v9fs_session_info *v9ses;
+ 
+ 	v9ses = v9fs_inode2v9ses(inode);
+-	if (v9ses->cache == CACHE_LOOSE || v9ses->cache == CACHE_FSCACHE)
++	if (v9ses->cache & (CACHE_META|CACHE_LOOSE))
+ 		return generic_drop_inode(inode);
+ 	/*
+ 	 * in case of non cached mode always drop the
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+base-commit: 1543b4c5071c54d76aad7a7a26a6e43082269b0c
+change-id: 20230401-ericvh-dev-rework-cache-options-2c6638bea240
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Best regards,
+-- 
+Eric Van Hensbergen <ericvh@kernel.org>
+
