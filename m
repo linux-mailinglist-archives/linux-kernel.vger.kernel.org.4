@@ -2,60 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8F36D2FCC
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 13:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E516D2FCE
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 13:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjDALDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 07:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S229708AbjDALEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 07:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDALDb (ORCPT
+        with ESMTP id S229458AbjDALEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 07:03:31 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4853A527C;
-        Sat,  1 Apr 2023 04:03:30 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BC13F1EC058A;
-        Sat,  1 Apr 2023 13:03:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680347008;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=bu3McgVP/d3Ju81gjVcESMOT0g3qbxvhWxkFxSUF5Ss=;
-        b=f8P/ctORe1URi+fT+anKUsiELY4s+CJ6tblWx8Vdm9UfkzhIj48RtZjW/lCaEJZ/rI3UQw
-        1Ucvll9iZE+1k266Rbk3xI9QV+KZHz5LNxYSaZqz5zQo4V6aG9Kt0et8PzPPoS7GPUFsaf
-        FDjAeIDoab4MO5BhPQo05niVIh7CsiA=
-Date:   Sat, 1 Apr 2023 13:03:24 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Lyude Paul <lyude@redhat.com>
-Cc:     linux-acpi@vger.kernel.org, Leo Duran <leo.duran@amd.com>,
-        Kishon Vijay Abraham I <kvijayab@amd.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Revert "x86/acpi/boot: Do not register processors that
- cannot be onlined for x2APIC"
-Message-ID: <20230401110324.GAZCgPfG3Mk4Pp1VfP@fat_crate.local>
-References: <20230331235328.4312-1-lyude@redhat.com>
- <c5e49ef29c50715f8fa5086fec999c0fa6d84dac.camel@redhat.com>
+        Sat, 1 Apr 2023 07:04:41 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E09B2527C;
+        Sat,  1 Apr 2023 04:04:39 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 331B4XZ1015062;
+        Sat, 1 Apr 2023 13:04:33 +0200
+Date:   Sat, 1 Apr 2023 13:04:33 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] tools/nolibc: validate C99 compatibility
+Message-ID: <ZCgPwavNqLAfclpV@1wt.eu>
+References: <20230328-nolibc-c99-v1-1-a8302fb19f19@weissschuh.net>
+ <ZCPJm/Nb2AGlJqXg@1wt.eu>
+ <2be5dd3f-d4ca-499a-9f7e-3113b4f04412@t-8ch.de>
+ <ZCPWrrrlVRsaVIsl@1wt.eu>
+ <ZCgBcs3RT07BrNA9@1wt.eu>
+ <de90f88a-f741-4ed6-a153-3309a568aea7@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <c5e49ef29c50715f8fa5086fec999c0fa6d84dac.camel@redhat.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <de90f88a-f741-4ed6-a153-3309a568aea7@t-8ch.de>
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,18 +44,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 07:56:03PM -0400, Lyude Paul wrote:
-> As well, hopefully it goes without saying but: I'm happy to try any kind of
-> fixes
+On Sat, Apr 01, 2023 at 10:33:45AM +0000, Thomas Weißschuh wrote:
+> Hi Willy,
+> 
+> sorry for the late response to your previous mail, I was traveling.
 
-See if that branch fixes things for you:
+Don't be sorry, I hardly have the time to respond between week-ends,
+so you're waiting for me more than the other way around!
 
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=x86/urgent
+> > I just ran some tests and there's actually better to achieve what you're
+> > looking for. Let's just use -fno-asm, it removes the GNU-specific "asm",
+> > "inline", and "typeof" in favor of the "__" variants. With gcc 11.3 it
+> > gives me this, which is exactly what we were looking for:
+> > 
+> >   gcc -Os -fno-ident -fno-asynchronous-unwind-tables -fno-stack-protector -DNOLIBC_STACKPROTECTOR -mstack-protector-guard=global -fstack-protector-all -fno-asm -s -o nolibc-test \
+> >     -nostdlib -static -Isysroot/x86/include nolibc-test.c -lgcc
+> >   In file included from sysroot/x86/include/stdlib.h:14,
+> >                    from sysroot/x86/include/nolibc.h:103,
+> >                    from sysroot/x86/include/errno.h:26,
+> >                    from sysroot/x86/include/stdio.h:14,
+> >                    from nolibc-test.c:15:
+> >   sysroot/x86/include/string.h: In function 'memset':
+> >   sysroot/x86/include/string.h:93:17: error: 'asm' undeclared (first use in this function)
+> >      93 |                 asm volatile("");
+> >         |                 ^~~
+> >   sysroot/x86/include/string.h:93:17: note: each undeclared identifier is reported only once for each function it appears in
+> >   sysroot/x86/include/string.h:93:20: error: expected ';' before 'volatile'
+> >      93 |                 asm volatile("");
+> >         |                    ^~~~~~~~~
+> >         |                    ;
+> >   sysroot/x86/include/string.h: In function 'strlen':
+> >   sysroot/x86/include/string.h:142:17: warning: implicit declaration of function 'asm' [-Wimplicit-function-declaration]
+> >     142 |                 asm("");
+> >         |                 ^~~
+> >   nolibc-test.c: In function 'main':
+> >   nolibc-test.c:898:25: error: 'asm' undeclared (first use in this function)
+> >     898 |                         asm volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
+> >         |                         ^~~
+> >   nolibc-test.c:898:28: error: expected ';' before 'volatile'
+> >     898 |                         asm volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
+> >         |                            ^~~~~~~~~
+> >         |                            ;
+> >   make: *** [Makefile:128: nolibc-test] Error 1
+> > 
+> > With this, we don't need to force -std=c99 nor to build two variants,
+> > a single variant will catch GCCisms even with older compilers while not
+> > being overly annoying.
+> 
+> The original goal was to have a fixed and explicit baseline that is
+> supported. Using -std= ensures that no deviations are accidentally
+> introduced.
+> 
+> Using -fno-asm only prevents this specific gnu-ism. All other gnu-isms
+> and features from whatever the current compilers default language level
+> is are still allowed.
+> 
+> Therefore I'm not convinced of this aproach.
+> 
+> These are the aproaches I can see that reach this goal:
+> 
+> * Declare C99 as baseline, build with -std=c99
+> * Declare C99 and GNU89 as baseline, build with both.
+> * Declare C99 and GNU89 as baseline, build with -std=c99,
+>   wait for people to complain if something breaks on gnu89
+>   (same as current status)
+> * Declare C89 as baseline, remove all C99-isms and gnu-isms
+>   (C++ comments, "inline" and some smaller stuff),
+>   build with -std=c89.
+> 
+> Personally I think C99 is a baseline that is easy to fulfill by nolibc
+> and should not restrict users.
 
-Thx.
+I *am* affected. I do maintain some code that builds using an older
+version of nolibc and still builds with the current one, that builds
+fine on gcc 4.4..4.9 (as still present on some still supported distros
+such as RHEL7 which comes with gcc-4.8). I just tried to build
+nolibc-test with gcc-4.7 (which I still have for plenty of archs and
+that is ~50% faster than 11.x, something appreciable during wide
+range bisects) and it breaks on the size_t declared inside the for
+statement.
 
--- 
-Regards/Gruss,
-    Boris.
+We could possibly go with your 3rd proposal above (i.e. both baselines,
+only build with c99 and wait for reports). Or we could equally build
+with "-std=gnu89 -fno-asm" and make sure we stay away from any recent
+accidental deviation. All relevant compilers in use for a while are
+compatible with this because this has been the default for a very long
+time. By the way, it's worth noting that no single gcc version ever
+used c99 as a default standard.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Willy
