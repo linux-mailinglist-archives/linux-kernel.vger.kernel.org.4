@@ -2,64 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15D26D34CE
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 00:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C7C6D34D0
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 00:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjDAWRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 18:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S229788AbjDAWT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 18:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDAWRX (ORCPT
+        with ESMTP id S229448AbjDAWT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 18:17:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3BAE042;
-        Sat,  1 Apr 2023 15:17:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB15060A47;
-        Sat,  1 Apr 2023 22:17:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF6BCC433EF;
-        Sat,  1 Apr 2023 22:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680387441;
-        bh=aoDdZ34PoBNv5QUtFFFcg/3Z3R3lKI8oojzkBnrAy5s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QiFoaS/Rg1H+6UGrilF4GMPsbFrWRrcUHt3WvJmKBjGthkOwGXTzhcYTouJEFiIjk
-         6wYfCPmxXZ73ddq0dEPbZW/lBAuzvCNKoG1XGi/Sm+nfW1nvO82w8tW0ZGjNhNY84g
-         pDoucuW732ESD33YTpF+R8NTFcaBGnW0viIEK6wVXguxIPu0Yxeb3Nj2CaOmd3o+oo
-         7297BBaO9ULjQ/dSyFkO3InXYDbif8rmH6+PZ/Ln8+Q+b9SRpYTYOA+HopesyN0qjH
-         UBuEBu2DLEmWOrAiiVDNerzzEQmqIagENWX8v3NTzWHwhQw6jsicHjS1QqL12s3Sij
-         G9ee0SukSMhRQ==
-Date:   Sun, 2 Apr 2023 07:17:13 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Donglin Peng <pengdonglin@sangfor.com.cn>
-Cc:     rostedt@goodmis.org, linux@armlinux.org.uk, mark.rutland@arm.com,
-        will@kernel.org, catalin.marinas@arm.com,
-        rmk+kernel@armlinux.org.uk, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        bp@alien8.de, hpa@zytor.com, chenhuacai@kernel.org,
-        zhangqing@loongson.cn, kernel@xen0n.name, mingo@redhat.com,
-        peterz@infradead.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 2/8] tracing: Add documentation for funcgraph-retval
- and funcgraph-retval-hex
-Message-Id: <20230402071713.4f278b65ba9bb67c72ab2fb5@kernel.org>
-In-Reply-To: <a3dcdd61b3ac07eefabc1b11fc18e9fae23d8cbe.1680265828.git.pengdonglin@sangfor.com.cn>
-References: <cover.1680265828.git.pengdonglin@sangfor.com.cn>
-        <a3dcdd61b3ac07eefabc1b11fc18e9fae23d8cbe.1680265828.git.pengdonglin@sangfor.com.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Sat, 1 Apr 2023 18:19:27 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BCDFF0D;
+        Sat,  1 Apr 2023 15:19:25 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0Vf6Rq6N_1680387561;
+Received: from localhost.localdomain(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0Vf6Rq6N_1680387561)
+          by smtp.aliyun-inc.com;
+          Sun, 02 Apr 2023 06:19:22 +0800
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-stable@vger.kernel.org
+Subject: [PATCH] mm/swap: fix swap_info_struct race between swapoff and get_swap_pages()
+Date:   Sun,  2 Apr 2023 06:19:20 +0800
+Message-Id: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,137 +39,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Mar 2023 05:47:38 -0700
-Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
+Without this modification, a core will wait (mostly)
+'swap_info_struct->lock' when completing
+'del_from_avail_list(p)'. Immediately, other cores
+soon calling 'add_to_avail_list()' to add the same
+object again when acquiring the lock that released
+by former. It's not the desired result but exists
+indeed. This case can be described as below:
 
-> Add documentation for the two newly introduced options for the
-> function_graph tracer. The funcgraph-retval option is used to
-> control whether or not to display the return value, while the
-> funcgraph-retval-hex option is used to control the display
-> format of the return value.
-> 
-> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
+core 0                       core 1
+swapoff
 
-Looks good to me.
+del_from_avail_list(p)       waiting
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+try lock p->lock             acquire swap_avail_lock and
+                             add p into swap_avail_head again
 
-Thank you!
+acquire p->lock but
+missing p already be
+added again, and continuing
+to clear SWP_WRITEOK, etc.
 
-> ---
-> v9:
->  - Update limitation description
-> 
-> v7:
->  - Rename trace option 'graph_retval_hex' to 'funcgraph-retval-hex'
->  - Update documentation description
-> 
-> v6:
->  - Modify the limitations for funcgraph-retval
->  - Optimize the English expression
-> 
-> v5:
->  - Describe the limitations of funcgraph-retval
-> ---
->  Documentation/trace/ftrace.rst | 74 ++++++++++++++++++++++++++++++++++
->  1 file changed, 74 insertions(+)
-> 
-> diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
-> index b927fb2b94dc..f572ae419219 100644
-> --- a/Documentation/trace/ftrace.rst
-> +++ b/Documentation/trace/ftrace.rst
-> @@ -1328,6 +1328,19 @@ Options for function_graph tracer:
->  	only a closing curly bracket "}" is displayed for
->  	the return of a function.
->  
-> +  funcgraph-retval
-> +	When set, the return value of each traced function
-> +	will be printed after an equal sign "=". By default
-> +	this is off.
-> +
-> +  funcgraph-retval-hex
-> +	When set, the return value will always be printed
-> +	in hexadecimal format. If the option is not set and
-> +	the return value is an error code, it will be printed
-> +	in signed decimal format; otherwise it will also be
-> +	printed in hexadecimal format. By default, this option
-> +	is off.
-> +
->    sleep-time
->  	When running function graph tracer, to include
->  	the time a task schedules out in its function.
-> @@ -2673,6 +2686,67 @@ It is default disabled.
->      0)   1.757 us    |        } /* kmem_cache_free() */
->      0)   2.861 us    |      } /* putname() */
->  
-> +The return value of each traced function can be displayed after
-> +an equal sign "=". When encountering system call failures, it
-> +can be verfy helpful to quickly locate the function that first
-> +returns an error code.
-> +
-> +	- hide: echo nofuncgraph-retval > trace_options
-> +	- show: echo funcgraph-retval > trace_options
-> +
-> +  Example with funcgraph-retval::
-> +
-> +    1)               |    cgroup_migrate() {
-> +    1)   0.651 us    |      cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
-> +    1)               |      cgroup_migrate_execute() {
-> +    1)               |        cpu_cgroup_can_attach() {
-> +    1)               |          cgroup_taskset_first() {
-> +    1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
-> +    1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
-> +    1)   0.380 us    |          sched_rt_can_attach(); /* = 0x0 */
-> +    1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
-> +    1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
-> +    1)   7.143 us    |    } /* cgroup_migrate = -22 */
-> +
-> +The above example shows that the function cpu_cgroup_can_attach
-> +returned the error code -22 firstly, then we can read the code
-> +of this function to get the root cause.
-> +
-> +When the option funcgraph-retval-hex is not set, the return value can
-> +be displayed in a smart way. Specifically, if it is an error code,
-> +it will be printed in signed decimal format, otherwise it will
-> +printed in hexadecimal format.
-> +
-> +	- smart: echo nofuncgraph-retval-hex > trace_options
-> +	- hexadecimal always: echo funcgraph-retval-hex > trace_options
-> +
-> +  Example with funcgraph-retval-hex::
-> +
-> +    1)               |      cgroup_migrate() {
-> +    1)   0.651 us    |        cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
-> +    1)               |        cgroup_migrate_execute() {
-> +    1)               |          cpu_cgroup_can_attach() {
-> +    1)               |            cgroup_taskset_first() {
-> +    1)   0.732 us    |              cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
-> +    1)   1.232 us    |            } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
-> +    1)   0.380 us    |            sched_rt_can_attach(); /* = 0x0 */
-> +    1)   2.335 us    |          } /* cpu_cgroup_can_attach = 0xffffffea */
-> +    1)   4.369 us    |        } /* cgroup_migrate_execute = 0xffffffea */
-> +    1)   7.143 us    |      } /* cgroup_migrate = 0xffffffea */
-> +
-> +At present, there are some limitations when using the funcgraph-retval
-> +option, and these limitations will be eliminated in the future:
-> +
-> +- Even if the function return type is void, a return value will still
-> +  be printed, and you can just ignore it.
-> +
-> +- Even if return values are stored in multiple registers, only the
-> +  value contained in the first register will be recorded and printed.
-> +  To illustrate, in the x86 architecture, eax and edx are used to store
-> +  a 64-bit return value, with the lower 32 bits saved in eax and the
-> +  upper 32 bits saved in edx. However, only the value stored in eax
-> +  will be recorded and printed.
-> +
->  You can put some comments on specific functions by using
->  trace_printk() For example, if you want to put a comment inside
->  the __might_sleep() function, you just have to include
-> -- 
-> 2.25.1
-> 
+It can be easily found a massive warning messages can
+be triggered inside get_swap_pages() by some special
+cases, for example, we call madvise(MADV_PAGEOUT) on
+blocks of touched memory concurrently, meanwhile, run
+much swapon-swapoff operations (e.g. stress-ng-swap).
 
+But, a worse consequence, panic also can be caused by
+the above scene. In swapoff(), p, refers to one
+swap_info_struct variable, maybe reinsert swap_avail_head
+by 'reinsert_swap_info', or as we wanted, turns off this
+swap block successfully. the worse case is that swapoff()
+run the last code of function but the p still linked in
+swap_avail_head[]. It has very bad effects, such as the
+memory used by p could be kept in swap_info[], this means
+reuse it will destroy the data. A panic message caused:
 
+(with CONFIG_PLIST_DEBUG enabled)
+
+------------[ cut here ]------------
+top: ffff001800875c00, n: ffff001800fdc6e0, p: ffff001800fdc6e0
+prev: ffff001800875c00, n: ffff001800fdc6e0, p: ffff001800fdc6e0
+next: ffff001800fdc6e0, n: ffff001800fdc6e0, p: ffff001800fdc6e0
+WARNING: CPU: 21 PID: 1843 at lib/plist.c:60 plist_check_prev_next_node+0x50/0x70
+Modules linked in: rfkill(E) crct10dif_ce(E)...
+CPU: 21 PID: 1843 Comm: stress-ng Kdump: ... 5.10.134+
+Hardware name: Alibaba Cloud ECS, BIOS 0.0.0 02/06/2015
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO BTYPE=--)
+pc : plist_check_prev_next_node+0x50/0x70
+lr : plist_check_prev_next_node+0x50/0x70
+sp : ffff0018009d3c30
+x29: ffff0018009d3c40 x28: ffff800011b32a98
+x27: 0000000000000000 x26: ffff001803908000
+x25: ffff8000128ea088 x24: ffff800011b32a48
+x23: 0000000000000028 x22: ffff001800875c00
+x21: ffff800010f9e520 x20: ffff001800875c00
+x19: ffff001800fdc6e0 x18: 0000000000000030
+x17: 0000000000000000 x16: 0000000000000000
+x15: 0736076307640766 x14: 0730073007380731
+x13: 0736076307640766 x12: 0730073007380731
+x11: 000000000004058d x10: 0000000085a85b76
+x9 : ffff8000101436e4 x8 : ffff800011c8ce08
+x7 : 0000000000000000 x6 : 0000000000000001
+x5 : ffff0017df9ed338 x4 : 0000000000000001
+x3 : ffff8017ce62a000 x2 : ffff0017df9ed340
+x1 : 0000000000000000 x0 : 0000000000000000
+Call trace:
+ plist_check_prev_next_node+0x50/0x70
+ plist_check_head+0x80/0xf0
+ plist_add+0x28/0x140
+ add_to_avail_list+0x9c/0xf0
+ _enable_swap_info+0x78/0xb4
+ __do_sys_swapon+0x918/0xa10
+ __arm64_sys_swapon+0x20/0x30
+ el0_svc_common+0x8c/0x220
+ do_el0_svc+0x2c/0x90
+ el0_svc+0x1c/0x30
+ el0_sync_handler+0xa8/0xb0
+ el0_sync+0x148/0x180
+irq event stamp: 2082270
+
+In this patch, we lock p->lock before calling
+'del_from_avail_list()' to make sure other thread
+see the swap_info_struct object had been deleted
+and SWP_WRITEOK cleared together, will not reinsert
+again.
+
+We also find this problem exists in stable 5.10.
+
+Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
+---
+ mm/swapfile.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 5af6b0f770de..4df77fef50b5 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -2610,8 +2610,12 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
+ 		spin_unlock(&swap_lock);
+ 		goto out_dput;
+ 	}
+-	del_from_avail_list(p);
++	/*
++	 * Here lock is used to protect deleting and SWP_WRITEOK clearing
++	 * can be seen concurrently.
++	 */
+ 	spin_lock(&p->lock);
++	del_from_avail_list(p);
+ 	if (p->prio < 0) {
+ 		struct swap_info_struct *si = p;
+ 		int nid;
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.27.0
+
