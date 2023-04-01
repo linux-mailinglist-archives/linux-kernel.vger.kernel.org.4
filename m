@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31E76D301A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 13:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F8E6D3017
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 13:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjDALU5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 1 Apr 2023 07:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
+        id S230142AbjDALVB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 1 Apr 2023 07:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbjDALUP (ORCPT
+        with ESMTP id S230045AbjDALUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 07:20:15 -0400
+        Sat, 1 Apr 2023 07:20:40 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F0525454;
-        Sat,  1 Apr 2023 04:19:58 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D5C25465;
+        Sat,  1 Apr 2023 04:19:59 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B627F24E2AE;
-        Sat,  1 Apr 2023 19:19:56 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 1 Apr
- 2023 19:19:56 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B2B6024E2AF;
+        Sat,  1 Apr 2023 19:19:57 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 1 Apr
+ 2023 19:19:57 +0800
 Received: from ubuntu.localdomain (113.72.144.76) by EXMBX172.cuchost.com
  (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 1 Apr
- 2023 19:19:55 +0800
+ 2023 19:19:56 +0800
 From:   Hal Feng <hal.feng@starfivetech.com>
 To:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>
@@ -45,9 +45,9 @@ CC:     Stephen Boyd <sboyd@kernel.org>,
         Emil Renner Berthing <emil.renner.berthing@canonical.com>,
         Hal Feng <hal.feng@starfivetech.com>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 20/22] riscv: dts: starfive: Add StarFive JH7110 pin function definitions
-Date:   Sat, 1 Apr 2023 19:19:32 +0800
-Message-ID: <20230401111934.130844-21-hal.feng@starfivetech.com>
+Subject: [PATCH v7 21/22] riscv: dts: starfive: Add StarFive JH7110 VisionFive 2 board device tree
+Date:   Sat, 1 Apr 2023 19:19:33 +0800
+Message-ID: <20230401111934.130844-22-hal.feng@starfivetech.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230401111934.130844-1-hal.feng@starfivetech.com>
 References: <20230401111934.130844-1-hal.feng@starfivetech.com>
@@ -58,8 +58,8 @@ X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
  (172.16.6.92)
 X-YovoleRuleAgent: yovoleflag
 Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.8 required=5.0 tests=RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,334 +67,301 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianlong Huang <jianlong.huang@starfivetech.com>
+From: Emil Renner Berthing <kernel@esmil.dk>
 
-Add pin function definitions for StarFive JH7110 SoC.
+Add a minimal device tree for StarFive JH7110 VisionFive 2 board
+which has version A and version B. Support booting and basic
+clock/reset/pinctrl/uart drivers.
 
 Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
-Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
 Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
 Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 ---
- arch/riscv/boot/dts/starfive/jh7110-pinfunc.h | 308 ++++++++++++++++++
- 1 file changed, 308 insertions(+)
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-pinfunc.h
+ arch/riscv/boot/dts/starfive/Makefile         |   6 +-
+ .../jh7110-starfive-visionfive-2-v1.2a.dts    |  13 ++
+ .../jh7110-starfive-visionfive-2-v1.3b.dts    |  13 ++
+ .../jh7110-starfive-visionfive-2.dtsi         | 215 ++++++++++++++++++
+ 4 files changed, 246 insertions(+), 1 deletion(-)
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-pinfunc.h b/arch/riscv/boot/dts/starfive/jh7110-pinfunc.h
+diff --git a/arch/riscv/boot/dts/starfive/Makefile b/arch/riscv/boot/dts/starfive/Makefile
+index 7b00a48580ca..170956846d49 100644
+--- a/arch/riscv/boot/dts/starfive/Makefile
++++ b/arch/riscv/boot/dts/starfive/Makefile
+@@ -1,2 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+-dtb-$(CONFIG_ARCH_STARFIVE) += jh7100-beaglev-starlight.dtb jh7100-starfive-visionfive-v1.dtb
++dtb-$(CONFIG_ARCH_STARFIVE) += jh7100-beaglev-starlight.dtb
++dtb-$(CONFIG_ARCH_STARFIVE) += jh7100-starfive-visionfive-v1.dtb
++
++dtb-$(CONFIG_ARCH_STARFIVE) += jh7110-starfive-visionfive-2-v1.2a.dtb
++dtb-$(CONFIG_ARCH_STARFIVE) += jh7110-starfive-visionfive-2-v1.3b.dtb
+diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
 new file mode 100644
-index 000000000000..fb0139b56723
+index 000000000000..4af3300f3cf3
 --- /dev/null
-+++ b/arch/riscv/boot/dts/starfive/jh7110-pinfunc.h
-@@ -0,0 +1,308 @@
-+/* SPDX-License-Identifier: GPL-2.0 OR MIT */
++++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: GPL-2.0 OR MIT
 +/*
-+ * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
 + * Copyright (C) 2022 StarFive Technology Co., Ltd.
++ * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
 + */
 +
-+#ifndef __JH7110_PINFUNC_H__
-+#define __JH7110_PINFUNC_H__
++/dts-v1/;
++#include "jh7110-starfive-visionfive-2.dtsi"
 +
++/ {
++	model = "StarFive VisionFive 2 v1.2A";
++	compatible = "starfive,visionfive-2-v1.2a", "starfive,jh7110";
++};
+diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts
+new file mode 100644
+index 000000000000..9230cc3d8946
+--- /dev/null
++++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: GPL-2.0 OR MIT
 +/*
-+ * mux bits:
-+ *  | 31 - 24 | 23 - 16 | 15 - 10 |  9 - 8   |  7 - 0  |
-+ *  |  din    |  dout   |  doen   | function | gpio nr |
-+ *
-+ * dout:     output signal
-+ * doen:     output enable signal
-+ * din:      optional input signal, 0xff = none
-+ * function: function selector
-+ * gpio nr:  gpio number, 0 - 63
++ * Copyright (C) 2022 StarFive Technology Co., Ltd.
++ * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
 + */
-+#define GPIOMUX(n, dout, doen, din) ( \
-+		(((din)  & 0xff) << 24) | \
-+		(((dout) & 0xff) << 16) | \
-+		(((doen) & 0x3f) << 10) | \
-+		((n) & 0x3f))
 +
-+#define PINMUX(n, func) ((1 << 10) | (((func) & 0x3) << 8) | ((n) & 0xff))
++/dts-v1/;
++#include "jh7110-starfive-visionfive-2.dtsi"
 +
-+/* sys_iomux dout */
-+#define GPOUT_LOW				0
-+#define GPOUT_HIGH				1
-+#define GPOUT_SYS_WAVE511_UART_TX		2
-+#define GPOUT_SYS_CAN0_STBY			3
-+#define GPOUT_SYS_CAN0_TST_NEXT_BIT		4
-+#define GPOUT_SYS_CAN0_TST_SAMPLE_POINT		5
-+#define GPOUT_SYS_CAN0_TXD			6
-+#define GPOUT_SYS_USB_DRIVE_VBUS		7
-+#define GPOUT_SYS_QSPI_CS1			8
-+#define GPOUT_SYS_SPDIF				9
-+#define GPOUT_SYS_HDMI_CEC_SDA			10
-+#define GPOUT_SYS_HDMI_DDC_SCL			11
-+#define GPOUT_SYS_HDMI_DDC_SDA			12
-+#define GPOUT_SYS_WATCHDOG			13
-+#define GPOUT_SYS_I2C0_CLK			14
-+#define GPOUT_SYS_I2C0_DATA			15
-+#define GPOUT_SYS_SDIO0_BACK_END_POWER		16
-+#define GPOUT_SYS_SDIO0_CARD_POWER_EN		17
-+#define GPOUT_SYS_SDIO0_CCMD_OD_PULLUP_EN	18
-+#define GPOUT_SYS_SDIO0_RST			19
-+#define GPOUT_SYS_UART0_TX			20
-+#define GPOUT_SYS_HIFI4_JTAG_TDO		21
-+#define GPOUT_SYS_JTAG_TDO			22
-+#define GPOUT_SYS_PDM_MCLK			23
-+#define GPOUT_SYS_PWM_CHANNEL0			24
-+#define GPOUT_SYS_PWM_CHANNEL1			25
-+#define GPOUT_SYS_PWM_CHANNEL2			26
-+#define GPOUT_SYS_PWM_CHANNEL3			27
-+#define GPOUT_SYS_PWMDAC_LEFT			28
-+#define GPOUT_SYS_PWMDAC_RIGHT			29
-+#define GPOUT_SYS_SPI0_CLK			30
-+#define GPOUT_SYS_SPI0_FSS			31
-+#define GPOUT_SYS_SPI0_TXD			32
-+#define GPOUT_SYS_GMAC_PHYCLK			33
-+#define GPOUT_SYS_I2SRX_BCLK			34
-+#define GPOUT_SYS_I2SRX_LRCK			35
-+#define GPOUT_SYS_I2STX0_BCLK			36
-+#define GPOUT_SYS_I2STX0_LRCK			37
-+#define GPOUT_SYS_MCLK				38
-+#define GPOUT_SYS_TDM_CLK			39
-+#define GPOUT_SYS_TDM_SYNC			40
-+#define GPOUT_SYS_TDM_TXD			41
-+#define GPOUT_SYS_TRACE_DATA0			42
-+#define GPOUT_SYS_TRACE_DATA1			43
-+#define GPOUT_SYS_TRACE_DATA2			44
-+#define GPOUT_SYS_TRACE_DATA3			45
-+#define GPOUT_SYS_TRACE_REF			46
-+#define GPOUT_SYS_CAN1_STBY			47
-+#define GPOUT_SYS_CAN1_TST_NEXT_BIT		48
-+#define GPOUT_SYS_CAN1_TST_SAMPLE_POINT		49
-+#define GPOUT_SYS_CAN1_TXD			50
-+#define GPOUT_SYS_I2C1_CLK			51
-+#define GPOUT_SYS_I2C1_DATA			52
-+#define GPOUT_SYS_SDIO1_BACK_END_POWER		53
-+#define GPOUT_SYS_SDIO1_CARD_POWER_EN		54
-+#define GPOUT_SYS_SDIO1_CLK			55
-+#define GPOUT_SYS_SDIO1_CMD_OD_PULLUP_EN	56
-+#define GPOUT_SYS_SDIO1_CMD			57
-+#define GPOUT_SYS_SDIO1_DATA0			58
-+#define GPOUT_SYS_SDIO1_DATA1			59
-+#define GPOUT_SYS_SDIO1_DATA2			60
-+#define GPOUT_SYS_SDIO1_DATA3			61
-+#define GPOUT_SYS_SDIO1_DATA4			63
-+#define GPOUT_SYS_SDIO1_DATA5			63
-+#define GPOUT_SYS_SDIO1_DATA6			64
-+#define GPOUT_SYS_SDIO1_DATA7			65
-+#define GPOUT_SYS_SDIO1_RST			66
-+#define GPOUT_SYS_UART1_RTS			67
-+#define GPOUT_SYS_UART1_TX			68
-+#define GPOUT_SYS_I2STX1_SDO0			69
-+#define GPOUT_SYS_I2STX1_SDO1			70
-+#define GPOUT_SYS_I2STX1_SDO2			71
-+#define GPOUT_SYS_I2STX1_SDO3			72
-+#define GPOUT_SYS_SPI1_CLK			73
-+#define GPOUT_SYS_SPI1_FSS			74
-+#define GPOUT_SYS_SPI1_TXD			75
-+#define GPOUT_SYS_I2C2_CLK			76
-+#define GPOUT_SYS_I2C2_DATA			77
-+#define GPOUT_SYS_UART2_RTS			78
-+#define GPOUT_SYS_UART2_TX			79
-+#define GPOUT_SYS_SPI2_CLK			80
-+#define GPOUT_SYS_SPI2_FSS			81
-+#define GPOUT_SYS_SPI2_TXD			82
-+#define GPOUT_SYS_I2C3_CLK			83
-+#define GPOUT_SYS_I2C3_DATA			84
-+#define GPOUT_SYS_UART3_TX			85
-+#define GPOUT_SYS_SPI3_CLK			86
-+#define GPOUT_SYS_SPI3_FSS			87
-+#define GPOUT_SYS_SPI3_TXD			88
-+#define GPOUT_SYS_I2C4_CLK			89
-+#define GPOUT_SYS_I2C4_DATA			90
-+#define GPOUT_SYS_UART4_RTS			91
-+#define GPOUT_SYS_UART4_TX			92
-+#define GPOUT_SYS_SPI4_CLK			93
-+#define GPOUT_SYS_SPI4_FSS			94
-+#define GPOUT_SYS_SPI4_TXD			95
-+#define GPOUT_SYS_I2C5_CLK			96
-+#define GPOUT_SYS_I2C5_DATA			97
-+#define GPOUT_SYS_UART5_RTS			98
-+#define GPOUT_SYS_UART5_TX			99
-+#define GPOUT_SYS_SPI5_CLK			100
-+#define GPOUT_SYS_SPI5_FSS			101
-+#define GPOUT_SYS_SPI5_TXD			102
-+#define GPOUT_SYS_I2C6_CLK			103
-+#define GPOUT_SYS_I2C6_DATA			104
-+#define GPOUT_SYS_SPI6_CLK			105
-+#define GPOUT_SYS_SPI6_FSS			106
-+#define GPOUT_SYS_SPI6_TXD			107
++/ {
++	model = "StarFive VisionFive 2 v1.3B";
++	compatible = "starfive,visionfive-2-v1.3b", "starfive,jh7110";
++};
+diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+new file mode 100644
+index 000000000000..2a6d81609284
+--- /dev/null
++++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+@@ -0,0 +1,215 @@
++// SPDX-License-Identifier: GPL-2.0 OR MIT
++/*
++ * Copyright (C) 2022 StarFive Technology Co., Ltd.
++ * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
++ */
 +
-+/* aon_iomux dout */
-+#define GPOUT_AON_CLK_32K_OUT			2
-+#define GPOUT_AON_PTC0_PWM4			3
-+#define GPOUT_AON_PTC0_PWM5			4
-+#define GPOUT_AON_PTC0_PWM6			5
-+#define GPOUT_AON_PTC0_PWM7			6
-+#define GPOUT_AON_CLK_GCLK0			7
-+#define GPOUT_AON_CLK_GCLK1			8
-+#define GPOUT_AON_CLK_GCLK2			9
++/dts-v1/;
++#include "jh7110.dtsi"
++#include "jh7110-pinfunc.h"
++#include <dt-bindings/gpio/gpio.h>
 +
-+/* sys_iomux doen */
-+#define GPOEN_ENABLE				0
-+#define GPOEN_DISABLE				1
-+#define GPOEN_SYS_HDMI_CEC_SDA			2
-+#define GPOEN_SYS_HDMI_DDC_SCL			3
-+#define GPOEN_SYS_HDMI_DDC_SDA			4
-+#define GPOEN_SYS_I2C0_CLK			5
-+#define GPOEN_SYS_I2C0_DATA			6
-+#define GPOEN_SYS_HIFI4_JTAG_TDO		7
-+#define GPOEN_SYS_JTAG_TDO			8
-+#define GPOEN_SYS_PWM0_CHANNEL0			9
-+#define GPOEN_SYS_PWM0_CHANNEL1			10
-+#define GPOEN_SYS_PWM0_CHANNEL2			11
-+#define GPOEN_SYS_PWM0_CHANNEL3			12
-+#define GPOEN_SYS_SPI0_NSSPCTL			13
-+#define GPOEN_SYS_SPI0_NSSP			14
-+#define GPOEN_SYS_TDM_SYNC			15
-+#define GPOEN_SYS_TDM_TXD			16
-+#define GPOEN_SYS_I2C1_CLK			17
-+#define GPOEN_SYS_I2C1_DATA			18
-+#define GPOEN_SYS_SDIO1_CMD			19
-+#define GPOEN_SYS_SDIO1_DATA0			20
-+#define GPOEN_SYS_SDIO1_DATA1			21
-+#define GPOEN_SYS_SDIO1_DATA2			22
-+#define GPOEN_SYS_SDIO1_DATA3			23
-+#define GPOEN_SYS_SDIO1_DATA4			24
-+#define GPOEN_SYS_SDIO1_DATA5			25
-+#define GPOEN_SYS_SDIO1_DATA6			26
-+#define GPOEN_SYS_SDIO1_DATA7			27
-+#define GPOEN_SYS_SPI1_NSSPCTL			28
-+#define GPOEN_SYS_SPI1_NSSP			29
-+#define GPOEN_SYS_I2C2_CLK			30
-+#define GPOEN_SYS_I2C2_DATA			31
-+#define GPOEN_SYS_SPI2_NSSPCTL			32
-+#define GPOEN_SYS_SPI2_NSSP			33
-+#define GPOEN_SYS_I2C3_CLK			34
-+#define GPOEN_SYS_I2C3_DATA			35
-+#define GPOEN_SYS_SPI3_NSSPCTL			36
-+#define GPOEN_SYS_SPI3_NSSP			37
-+#define GPOEN_SYS_I2C4_CLK			38
-+#define GPOEN_SYS_I2C4_DATA			39
-+#define GPOEN_SYS_SPI4_NSSPCTL			40
-+#define GPOEN_SYS_SPI4_NSSP			41
-+#define GPOEN_SYS_I2C5_CLK			42
-+#define GPOEN_SYS_I2C5_DATA			43
-+#define GPOEN_SYS_SPI5_NSSPCTL			44
-+#define GPOEN_SYS_SPI5_NSSP			45
-+#define GPOEN_SYS_I2C6_CLK			46
-+#define GPOEN_SYS_I2C6_DATA			47
-+#define GPOEN_SYS_SPI6_NSSPCTL			48
-+#define GPOEN_SYS_SPI6_NSSP			49
++/ {
++	aliases {
++		i2c0 = &i2c0;
++		i2c2 = &i2c2;
++		i2c5 = &i2c5;
++		i2c6 = &i2c6;
++		serial0 = &uart0;
++	};
 +
-+/* aon_iomux doen */
-+#define GPOEN_AON_PTC0_OE_N_4			2
-+#define GPOEN_AON_PTC0_OE_N_5			3
-+#define GPOEN_AON_PTC0_OE_N_6			4
-+#define GPOEN_AON_PTC0_OE_N_7			5
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
 +
-+/* sys_iomux gin */
-+#define GPI_NONE				255
++	cpus {
++		timebase-frequency = <4000000>;
++	};
 +
-+#define GPI_SYS_WAVE511_UART_RX			0
-+#define GPI_SYS_CAN0_RXD			1
-+#define GPI_SYS_USB_OVERCURRENT			2
-+#define GPI_SYS_SPDIF				3
-+#define GPI_SYS_JTAG_RST			4
-+#define GPI_SYS_HDMI_CEC_SDA			5
-+#define GPI_SYS_HDMI_DDC_SCL			6
-+#define GPI_SYS_HDMI_DDC_SDA			7
-+#define GPI_SYS_HDMI_HPD			8
-+#define GPI_SYS_I2C0_CLK			9
-+#define GPI_SYS_I2C0_DATA			10
-+#define GPI_SYS_SDIO0_CD			11
-+#define GPI_SYS_SDIO0_INT			12
-+#define GPI_SYS_SDIO0_WP			13
-+#define GPI_SYS_UART0_RX			14
-+#define GPI_SYS_HIFI4_JTAG_TCK			15
-+#define GPI_SYS_HIFI4_JTAG_TDI			16
-+#define GPI_SYS_HIFI4_JTAG_TMS			17
-+#define GPI_SYS_HIFI4_JTAG_RST			18
-+#define GPI_SYS_JTAG_TDI			19
-+#define GPI_SYS_JTAG_TMS			20
-+#define GPI_SYS_PDM_DMIC0			21
-+#define GPI_SYS_PDM_DMIC1			22
-+#define GPI_SYS_I2SRX_SDIN0			23
-+#define GPI_SYS_I2SRX_SDIN1			24
-+#define GPI_SYS_I2SRX_SDIN2			25
-+#define GPI_SYS_SPI0_CLK			26
-+#define GPI_SYS_SPI0_FSS			27
-+#define GPI_SYS_SPI0_RXD			28
-+#define GPI_SYS_JTAG_TCK			29
-+#define GPI_SYS_MCLK_EXT			30
-+#define GPI_SYS_I2SRX_BCLK			31
-+#define GPI_SYS_I2SRX_LRCK			32
-+#define GPI_SYS_I2STX0_BCLK			33
-+#define GPI_SYS_I2STX0_LRCK			34
-+#define GPI_SYS_TDM_CLK				35
-+#define GPI_SYS_TDM_RXD				36
-+#define GPI_SYS_TDM_SYNC			37
-+#define GPI_SYS_CAN1_RXD			38
-+#define GPI_SYS_I2C1_CLK			39
-+#define GPI_SYS_I2C1_DATA			40
-+#define GPI_SYS_SDIO1_CD			41
-+#define GPI_SYS_SDIO1_INT			42
-+#define GPI_SYS_SDIO1_WP			43
-+#define GPI_SYS_SDIO1_CMD			44
-+#define GPI_SYS_SDIO1_DATA0			45
-+#define GPI_SYS_SDIO1_DATA1			46
-+#define GPI_SYS_SDIO1_DATA2			47
-+#define GPI_SYS_SDIO1_DATA3			48
-+#define GPI_SYS_SDIO1_DATA4			49
-+#define GPI_SYS_SDIO1_DATA5			50
-+#define GPI_SYS_SDIO1_DATA6			51
-+#define GPI_SYS_SDIO1_DATA7			52
-+#define GPI_SYS_SDIO1_STRB			53
-+#define GPI_SYS_UART1_CTS			54
-+#define GPI_SYS_UART1_RX			55
-+#define GPI_SYS_SPI1_CLK			56
-+#define GPI_SYS_SPI1_FSS			57
-+#define GPI_SYS_SPI1_RXD			58
-+#define GPI_SYS_I2C2_CLK			59
-+#define GPI_SYS_I2C2_DATA			60
-+#define GPI_SYS_UART2_CTS			61
-+#define GPI_SYS_UART2_RX			62
-+#define GPI_SYS_SPI2_CLK			63
-+#define GPI_SYS_SPI2_FSS			64
-+#define GPI_SYS_SPI2_RXD			65
-+#define GPI_SYS_I2C3_CLK			66
-+#define GPI_SYS_I2C3_DATA			67
-+#define GPI_SYS_UART3_RX			68
-+#define GPI_SYS_SPI3_CLK			69
-+#define GPI_SYS_SPI3_FSS			70
-+#define GPI_SYS_SPI3_RXD			71
-+#define GPI_SYS_I2C4_CLK			72
-+#define GPI_SYS_I2C4_DATA			73
-+#define GPI_SYS_UART4_CTS			74
-+#define GPI_SYS_UART4_RX			75
-+#define GPI_SYS_SPI4_CLK			76
-+#define GPI_SYS_SPI4_FSS			77
-+#define GPI_SYS_SPI4_RXD			78
-+#define GPI_SYS_I2C5_CLK			79
-+#define GPI_SYS_I2C5_DATA			80
-+#define GPI_SYS_UART5_CTS			81
-+#define GPI_SYS_UART5_RX			82
-+#define GPI_SYS_SPI5_CLK			83
-+#define GPI_SYS_SPI5_FSS			84
-+#define GPI_SYS_SPI5_RXD			85
-+#define GPI_SYS_I2C6_CLK			86
-+#define GPI_SYS_I2C6_DATA			87
-+#define GPI_SYS_SPI6_CLK			88
-+#define GPI_SYS_SPI6_FSS			89
-+#define GPI_SYS_SPI6_RXD			90
++	memory@40000000 {
++		device_type = "memory";
++		reg = <0x0 0x40000000 0x1 0x0>;
++	};
 +
-+/* aon_iomux gin */
-+#define GPI_AON_PMU_GPIO_WAKEUP_0		0
-+#define GPI_AON_PMU_GPIO_WAKEUP_1		1
-+#define GPI_AON_PMU_GPIO_WAKEUP_2		2
-+#define GPI_AON_PMU_GPIO_WAKEUP_3		3
++	gpio-restart {
++		compatible = "gpio-restart";
++		gpios = <&sysgpio 35 GPIO_ACTIVE_HIGH>;
++		priority = <224>;
++	};
++};
 +
-+#endif
++&gmac0_rgmii_rxin {
++	clock-frequency = <125000000>;
++};
++
++&gmac0_rmii_refin {
++	clock-frequency = <50000000>;
++};
++
++&gmac1_rgmii_rxin {
++	clock-frequency = <125000000>;
++};
++
++&gmac1_rmii_refin {
++	clock-frequency = <50000000>;
++};
++
++&i2srx_bclk_ext {
++	clock-frequency = <12288000>;
++};
++
++&i2srx_lrck_ext {
++	clock-frequency = <192000>;
++};
++
++&i2stx_bclk_ext {
++	clock-frequency = <12288000>;
++};
++
++&i2stx_lrck_ext {
++	clock-frequency = <192000>;
++};
++
++&mclk_ext {
++	clock-frequency = <12288000>;
++};
++
++&osc {
++	clock-frequency = <24000000>;
++};
++
++&rtc_osc {
++	clock-frequency = <32768>;
++};
++
++&tdm_ext {
++	clock-frequency = <49152000>;
++};
++
++&i2c0 {
++	clock-frequency = <100000>;
++	i2c-sda-hold-time-ns = <300>;
++	i2c-sda-falling-time-ns = <510>;
++	i2c-scl-falling-time-ns = <510>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c0_pins>;
++	status = "okay";
++};
++
++&i2c2 {
++	clock-frequency = <100000>;
++	i2c-sda-hold-time-ns = <300>;
++	i2c-sda-falling-time-ns = <510>;
++	i2c-scl-falling-time-ns = <510>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c2_pins>;
++	status = "okay";
++};
++
++&i2c5 {
++	clock-frequency = <100000>;
++	i2c-sda-hold-time-ns = <300>;
++	i2c-sda-falling-time-ns = <510>;
++	i2c-scl-falling-time-ns = <510>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c5_pins>;
++	status = "okay";
++};
++
++&i2c6 {
++	clock-frequency = <100000>;
++	i2c-sda-hold-time-ns = <300>;
++	i2c-sda-falling-time-ns = <510>;
++	i2c-scl-falling-time-ns = <510>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c6_pins>;
++	status = "okay";
++};
++
++&sysgpio {
++	i2c0_pins: i2c0-0 {
++		i2c-pins {
++			pinmux = <GPIOMUX(57, GPOUT_LOW,
++					      GPOEN_SYS_I2C0_CLK,
++					      GPI_SYS_I2C0_CLK)>,
++				 <GPIOMUX(58, GPOUT_LOW,
++					      GPOEN_SYS_I2C0_DATA,
++					      GPI_SYS_I2C0_DATA)>;
++			bias-disable; /* external pull-up */
++			input-enable;
++			input-schmitt-enable;
++		};
++	};
++
++	i2c2_pins: i2c2-0 {
++		i2c-pins {
++			pinmux = <GPIOMUX(3, GPOUT_LOW,
++					     GPOEN_SYS_I2C2_CLK,
++					     GPI_SYS_I2C2_CLK)>,
++				 <GPIOMUX(2, GPOUT_LOW,
++					     GPOEN_SYS_I2C2_DATA,
++					     GPI_SYS_I2C2_DATA)>;
++			bias-disable; /* external pull-up */
++			input-enable;
++			input-schmitt-enable;
++		};
++	};
++
++	i2c5_pins: i2c5-0 {
++		i2c-pins {
++			pinmux = <GPIOMUX(19, GPOUT_LOW,
++					      GPOEN_SYS_I2C5_CLK,
++					      GPI_SYS_I2C5_CLK)>,
++				 <GPIOMUX(20, GPOUT_LOW,
++					      GPOEN_SYS_I2C5_DATA,
++					      GPI_SYS_I2C5_DATA)>;
++			bias-disable; /* external pull-up */
++			input-enable;
++			input-schmitt-enable;
++		};
++	};
++
++	i2c6_pins: i2c6-0 {
++		i2c-pins {
++			pinmux = <GPIOMUX(16, GPOUT_LOW,
++					      GPOEN_SYS_I2C6_CLK,
++					      GPI_SYS_I2C6_CLK)>,
++				 <GPIOMUX(17, GPOUT_LOW,
++					      GPOEN_SYS_I2C6_DATA,
++					      GPI_SYS_I2C6_DATA)>;
++			bias-disable; /* external pull-up */
++			input-enable;
++			input-schmitt-enable;
++		};
++	};
++
++	uart0_pins: uart0-0 {
++		tx-pins {
++			pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX,
++					     GPOEN_ENABLE,
++					     GPI_NONE)>;
++			bias-disable;
++			drive-strength = <12>;
++			input-disable;
++			input-schmitt-disable;
++			slew-rate = <0>;
++		};
++
++		rx-pins {
++			pinmux = <GPIOMUX(6, GPOUT_LOW,
++					     GPOEN_DISABLE,
++					     GPI_SYS_UART0_RX)>;
++			bias-disable; /* external pull-up */
++			drive-strength = <2>;
++			input-enable;
++			input-schmitt-enable;
++			slew-rate = <0>;
++		};
++	};
++};
++
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_pins>;
++	status = "okay";
++};
 -- 
 2.38.1
 
