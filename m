@@ -2,91 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EDA6D3105
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559686D3102
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 15:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjDANYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 09:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
+        id S229882AbjDANYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 09:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjDANYD (ORCPT
+        with ESMTP id S229804AbjDANYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 09:24:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198CC2547F
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 06:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680355356;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WVXk13Jt7hsNQvxvVP08hy5UcBn+tBDbfgB3QoQy/aw=;
-        b=eMUv7gdFuKpuNCn7hepp9gV0SjSyAt11OM87ELRBdEDnuoi8NhEa06LguW9p1RRqsSG8dY
-        tpbIq1vMl7U7m8812g6P9rmq0mv8elN5QJobCBVSrVKw8d7WpI6ytRayhCZHPWIAyQm5ds
-        rf8Q1un5sLD+Q8aeDP4yfgWB32dCzjE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-W_xJP64DP8-Bw2Hu84eTPw-1; Sat, 01 Apr 2023 09:22:33 -0400
-X-MC-Unique: W_xJP64DP8-Bw2Hu84eTPw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Sat, 1 Apr 2023 09:24:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A12B4EEA;
+        Sat,  1 Apr 2023 06:23:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B56861C05EB5;
-        Sat,  1 Apr 2023 13:22:32 +0000 (UTC)
-Received: from ovpn-8-18.pek2.redhat.com (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D66791121314;
-        Sat,  1 Apr 2023 13:22:25 +0000 (UTC)
-Date:   Sat, 1 Apr 2023 21:22:20 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Bernd Schubert <bschubert@ddn.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>, ming.lei@redhat.com
-Subject: Re: [PATCH V6 17/17] block: ublk_drv: apply io_uring FUSED_CMD for
- supporting zero copy
-Message-ID: <ZCgwDLhyZpFSi77R@ovpn-8-18.pek2.redhat.com>
-References: <20230330113630.1388860-1-ming.lei@redhat.com>
- <20230330113630.1388860-18-ming.lei@redhat.com>
- <22d9e781-4100-9d24-0ece-a008fd299ab4@ddn.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCFCE60E17;
+        Sat,  1 Apr 2023 13:23:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2362BC433D2;
+        Sat,  1 Apr 2023 13:23:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680355435;
+        bh=sAx2eyoHZphV7y6Ejbx4McAtoXE+uA+9ASpvRgIQZqg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=igOLlc1qJ2ipXS93uDABV2VrzqSUuSQSg+ylXfKyUAr3oN5Qn0iBWTg/F/Eedj8oh
+         f+H+R07Mmu9Q9uBvm98/yFjL8KThB6e4nSI3jvTOfCeiaXg429ouI2wJrwFOXYjcr1
+         VFJCH4cqp8IR/rvt3rCD62qmAHqTZMo9PaggzYJr8SqnKKT0OnBEL2mqNiFi8cxYe3
+         ahlx+kh4oGJEr9Vm5BdDL6KIQlmMRWjAcGb66nw8ktlC1xSLs9YPIlhD+dD6O9zgze
+         13Mi9SnyeSK1xgAWyayjM0M4dy1qezVRWC08kwUx9yhIP0mEwrHmhcFuBk7LE3FxDq
+         v2GyatgGzZ2Yg==
+Date:   Sat, 1 Apr 2023 09:23:53 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Mathias Krause <minipli@grsecurity.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, torvalds@linux-foundation.org,
+        lwn@lwn.net, jslaby@suse.cz,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: Re: Linux 5.15.103
+Message-ID: <ZCgwaWSgnUWAPyiv@sashalap>
+References: <1679040264214179@kroah.com>
+ <c359c777-c3af-b4a6-791d-d51916160bf5@grsecurity.net>
+ <ZCLaLWJiIsDV5yGr@kroah.com>
+ <f86cb36e-b331-8b8d-f087-5e2e8a5ae962@grsecurity.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <22d9e781-4100-9d24-0ece-a008fd299ab4@ddn.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f86cb36e-b331-8b8d-f087-5e2e8a5ae962@grsecurity.net>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 07:55:30PM +0000, Bernd Schubert wrote:
-> On 3/30/23 13:36, Ming Lei wrote:
+On Tue, Mar 28, 2023 at 02:29:11PM +0200, Mathias Krause wrote:
+>On 28.03.23 14:14, Greg Kroah-Hartman wrote:
+>> On Tue, Mar 28, 2023 at 02:02:03PM +0200, Mathias Krause wrote:
+>>> On 17.03.23 09:04, Greg Kroah-Hartman wrote:
+>>>> I'm announcing the release of the 5.15.103 kernel.
+>>>>
+>>>> [...]
+>>>>
+>>>> Vitaly Kuznetsov (4):
+>>>>       KVM: Optimize kvm_make_vcpus_request_mask() a bit
+>>>>       KVM: Pre-allocate cpumasks for kvm_make_all_cpus_request_except()
+>>>>       KVM: nVMX: Don't use Enlightened MSR Bitmap for L3
+>>>>       KVM: VMX: Introduce vmx_msr_bitmap_l01_changed() helper
+>>>>
+>>>
+>>> That list is missing commit 6470accc7ba9 ("KVM: x86: hyper-v: Avoid
+>>> calling kvm_make_vcpus_request_mask() with vcpu_mask==NULL") to fulfill
+>>> the prerequisite of "KVM: Optimize kvm_make_vcpus_request_mask() a bit".
+>>>
+>>> Right now the kvm selftests trigger a kernel NULL deref for the hyperv
+>>> test, making the system hang.
+>>>
+>>> Please consider applying commit 6470accc7ba9 for the next v5.15.x release.
+>>
+>> It wasn't tagged for the stable kernels, so we didn't pick it up :(
+>
+>Neither were any of the above commits. o.O
+>
+>Commit 3e48a6349d29 ("KVM: Optimize kvm_make_vcpus_request_mask() a
+>bit") has this tag, though:
+>
+>Stable-dep-of: 2b0128127373 ("KVM: Register /dev/kvm as the _very_ last
+>thing during initialization")
+>
+>I don't know why, though. These two commits have little in common.
+>Maybe Sasha knows why?
 
-...
+Because you've skipped the commit in the middle of the two you've
+pointed out :)
 
-> > +static inline bool ublk_check_fused_buf_dir(const struct request *req,
-> > +		unsigned int flags)
-> > +{
-> > +	flags &= IO_URING_F_FUSED_BUF;
-> 
-> ~IO_URING_F_FUSED_BUF ?
+3e48a6349d29 is needed by 0a0ecaf0988b ("KVM: Pre-allocate cpumasks for
+kvm_make_all_cpus_request_except()"), which in turn is needed by
+2b0128127373.
 
-IO_URING_F_FUSED_BUF is buffer direction mask, and we can get direction
-flags only in above way, so the above is correct.
-
-
-Thanks, 
-Ming
-
+-- 
+Thanks,
+Sasha
