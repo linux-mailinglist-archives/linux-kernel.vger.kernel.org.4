@@ -2,121 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B246D3066
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 13:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B3E6D309D
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 13:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjDALzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 07:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        id S229980AbjDAL53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 07:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjDALzG (ORCPT
+        with ESMTP id S229942AbjDAL5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 07:55:06 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B012545B;
-        Sat,  1 Apr 2023 04:54:59 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 295CF604F3;
-        Sat,  1 Apr 2023 13:54:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680350098; bh=wktZsIqZgEoZxlbnPKAfy7jySjlcBvOPoUk/oBiI7Sc=;
-        h=Date:To:Cc:From:Subject:From;
-        b=c/HCzqrg1OKXCwkzp9edXWYbdA0sM6zie9t1KnelDoEv+MDAZfYLbUHEyVv8Wuct0
-         QRQdxCSYhUWRLPNKqcLzHrBcwYoz87NGjiGQt2KDSBotq3nZ2OgkVMxZVH/kd539cs
-         XjX47Uall9UarVYFnDoQNwKjnLOYtZrfDiWFGGcHrqDqMwqzsjcjj7WflekfesdUMR
-         zemoHx7DQATVMxx0VDzpBOBlK5wu6TQWz2pSFlmgfJekLHk9tmB9RO49iBQQOoRn1V
-         zS1U+gYjci++e81a0R1BoBLLHJHeeORa3K+K5RE5fEAV7gdvrsWKxVARdygctssl3i
-         RWpu5OsDcuxIg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id emDkzAQ-alcD; Sat,  1 Apr 2023 13:54:55 +0200 (CEST)
-Received: from [192.168.1.3] (unknown [77.237.101.225])
-        by domac.alu.hr (Postfix) with ESMTPSA id C7D36604F0;
-        Sat,  1 Apr 2023 13:54:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680350095; bh=wktZsIqZgEoZxlbnPKAfy7jySjlcBvOPoUk/oBiI7Sc=;
-        h=Date:To:Cc:From:Subject:From;
-        b=JJmsuRYtC5enHtcGkA813CrFL0wQXXyjNBYvwRtPBxMDkAS9We48nz+SPZLKZQLlB
-         id7ndE4jQ1IVS1WQwjWfUNC9iNBjvmB3CZwfGqkrnpmge8/cEBy7A1+EeYyQ+dQlvT
-         Vf3ol7wpmG9HoNBm6WF/t3Nugh8edjMhDA9M3x9LjVUmDTfXFg7DsQFGzXVBKqsMUD
-         17N7IWBLo5tmA625n55c8NT6K7pLZk5whY2P67G0rCqRwqcOjC5kRauMDC7r4xVmbY
-         AOB+vohne1LU+uIKRwxdc2T2sSoTiTl58qeiIpY18MQHTfRRKQAMetNhs8QkXe36JZ
-         IozQ4SV6Fd3AQ==
-Message-ID: <c4c14e20-941d-444e-7390-8624024d3027@alu.unizg.hr>
-Date:   Sat, 1 Apr 2023 13:54:55 +0200
+        Sat, 1 Apr 2023 07:57:10 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B6724413;
+        Sat,  1 Apr 2023 04:56:41 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8E4591EC0420;
+        Sat,  1 Apr 2023 13:56:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680350186;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=BRoEIkIG+7eAVhs9duV3p3lIy/wXARVavujoy8JQa7o=;
+        b=OCWazxffDgwyQU8bVPdKGu4Zw3dZA3N5/z1oKXVCZXRotfDERE9Xg2dIWiZx/sEu5F+seO
+        PAqFKHBg+lqfXA6aXejznrl5r2BS/d/lQVd7/F7O02876bTo5oOqCJjlidLgrRTctSp535
+        DeXPuEz3b9ikdIvVwMQSRF3CtoYCdPY=
+Date:   Sat, 1 Apr 2023 13:56:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org
+Subject: Re: [PATCH 23/24] kbuild, EDAC, altera: remove MODULE_LICENSE in
+ non-modules
+Message-ID: <20230401115623.GBZCgb50aBhMs/nUlO@fat_crate.local>
+References: <20230217141059.392471-1-nick.alcock@oracle.com>
+ <20230217141059.392471-24-nick.alcock@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US, hr
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Armin Wolf <W_Armin@gmx.de>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: [BUG] Problem with automatic kernel numbering
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230217141059.392471-24-nick.alcock@oracle.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Mr. Bagas, Sir!
+On Fri, Feb 17, 2023 at 02:10:58PM +0000, Nick Alcock wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+> 
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+> 
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: linux-edac@vger.kernel.org
+> ---
+>  drivers/edac/altera_edac.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+> index e7e8e624a436..ba325d4c5e83 100644
+> --- a/drivers/edac/altera_edac.c
+> +++ b/drivers/edac/altera_edac.c
+> @@ -2226,6 +2226,5 @@ static struct platform_driver altr_edac_a10_driver = {
+>  };
+>  module_platform_driver(altr_edac_a10_driver);
+>  
+> -MODULE_LICENSE("GPL v2");
+>  MODULE_AUTHOR("Thor Thayer");
+>  MODULE_DESCRIPTION("EDAC Driver for Altera Memories");
+> -- 
 
-I am talking about a problem with the CONFIG_LOCALVERSION_AUTO=y feature.
-
-I thought of a way to make an exact account of which patches were applied in a build
-i.e. adding patch checksum to 6.3.0-rc4-00034-gfcd476ea6a88-dirty, for currently the
-command
-
-# rpm -ivh --oldpackage <kernelname>-<build-no>.rpm
-
-install the kernels
-
-kernel-6.3.0_rc4mt+20230330_00051_g8bb95a1662f8_dirty-24.x86_64.rpm
-kernel-6.3.0_rc4mt+20230330_00051_g8bb95a1662f8_dirty-25.x86_64.rpm
-kernel-6.3.0_rc4mt+20230330_00051_g8bb95a1662f8_dirty-26.x86_64.rpm
-
-all overlapping (apparently everything after '-' [minus] sign is discarded,
-so one has to reboot to another kernel, i.e. 6.1.15, remove the offending kernel,
-and then install the new one in the sequence of testing.
-The CONFIG_LOCALVERSION_AUTO=y rpm build script might add something that rpm
-command sees in the install process so the files do not overlap (as kernel names
-are being truncated at '-' sign).
-
-A smaller hash of the applied patches would suffice, considering the limit
-of 64 chars. Or using an underscore '_' instead of minus '-', so the rpm
-installer doesn't treat them as the same version of kernel.
-
-Is this a violation of the build process?
-
-It would be time and energy efficient, for changing the .config and
-CONFIG_LOCALVERSION causes much greater recompilation and touches more dependencies.
-
-Optionally, a /proc/<applied-patches-to-build> or something like that could be
-added to the running kernel, much like i.e. TuxCare has kcarectl --patch-info
-for live patches?
-
-Thank you very much for considering this problem report.
-
-Kind regards,
-Mirsad
-
+Applied, thanks.
 
 -- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
+Regards/Gruss,
+    Boris.
 
-"I see something approaching fast ... Will it be friends with me?"
+https://people.kernel.org/tglx/notes-about-netiquette
