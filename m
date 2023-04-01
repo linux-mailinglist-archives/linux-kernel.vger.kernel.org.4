@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4749D6D33D0
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 22:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CBC6D33D4
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 22:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjDAU3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 16:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
+        id S229787AbjDAUam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 16:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjDAU3N (ORCPT
+        with ESMTP id S229379AbjDAUal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 16:29:13 -0400
-X-Greylist: delayed 337 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Apr 2023 13:29:11 PDT
-Received: from onstation.org (onstation.org [52.200.56.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CA72701D;
-        Sat,  1 Apr 2023 13:29:10 -0700 (PDT)
-Received: from localhost (c-73-214-169-22.hsd1.pa.comcast.net [73.214.169.22])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by onstation.org (Postfix) with ESMTPSA id 91AC24212BC;
-        Sat,  1 Apr 2023 16:23:32 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 onstation.org 91AC24212BC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onstation.org;
-        s=default; t=1680380612;
-        bh=8kDgeSe0XAJ1hw6nbgK0BQxOJVCl6IRIynQ8IhHYmk0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HY5QSjvV487ajsKs1J3BFL5ZbLCSj/sg13x0hj1iBLJmFNWcCTucWpxDsojXfDCsH
-         fPWKAsSTiY2bPfI9JHKklN+uv8hgD8jBa8OjCzzbyIZcSO0zrfOtDbQlAE9NmQfpPa
-         ixg5wf5aS3cfwVpTOp/Gkfs6AuUCmsMcrIhduZoo=
-Date:   Sat, 1 Apr 2023 16:23:32 -0400
-From:   Brian Masney <masneyb@onstation.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tom Rix <trix@redhat.com>, lars@metafoo.de, nathan@kernel.org,
-        ndesaulniers@google.com, u.kleine-koenig@pengutronix.de,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Chuhong Yuan <hslester96@gmail.com>,
-        Brian Masney <bmasney@redhat.com>
-Subject: Re: [PATCH] iio: tsl2772: remove unused prox_diode_mask variable
-Message-ID: <ZCiSxK5JgY6g+0X+@onstation.org>
-References: <20230327120823.1369700-1-trix@redhat.com>
- <ZCGVJOSBjKO3FKD6@smile.fi.intel.com>
- <20230401152028.30344b48@jic23-huawei>
+        Sat, 1 Apr 2023 16:30:41 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D142702E
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 13:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680381040; x=1711917040;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FneL4CM/IJgrCvaan/SOP4zKfBMW4yA484IprofLbos=;
+  b=N5rsjfQoXeVzWIiihqCCkeKlNNfi0TCZvxZwKcomHus7Tx7HLryvZSwB
+   oRSVBMiZjSGCT0zG5nEh7YEhkwU2aank42MAlkq3jmMo2bIiz9kTDG3Rx
+   3wUMjeYQ6Z6w7P1cIwGbPlNOJKtq0SiDWWUMlmAwVFEtFEKzO2IqI0oPT
+   xZp4DJPaE/affgjmKprHEo8YsOdV+e4G+SeaBmHtxmeh+WuDUA+fKW97S
+   HCz/oNjDQ3B2W795Mn4Ttuog2hHGJTeQ022LzorXpNZInyFmkfEii/QxQ
+   dnZ+ioo7JTD+hE1th1dJe1CgMsSzi5LpfWcbNWOB1Si/p+fCJV0DsuHlN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="322072708"
+X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
+   d="scan'208";a="322072708"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 13:30:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="829102001"
+X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
+   d="scan'208";a="829102001"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Apr 2023 13:30:38 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pihrx-000N0z-2q;
+        Sat, 01 Apr 2023 20:30:37 +0000
+Date:   Sun, 2 Apr 2023 04:30:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, Fuad Tabba <tabba@google.com>
+Subject: arch/arm64/kvm/hyp/nvhe/stacktrace.c:10:1: sparse: sparse: symbol
+ '__pcpu_scope_overflow_stack' was not declared. Should it be static?
+Message-ID: <202304020428.Vid1AddO-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230401152028.30344b48@jic23-huawei>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 01, 2023 at 03:20:28PM +0100, Jonathan Cameron wrote:
-> On Mon, 27 Mar 2023 16:07:48 +0300
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> > On Mon, Mar 27, 2023 at 08:08:23AM -0400, Tom Rix wrote:
-> > > clang with W=1 reports
-> > > drivers/iio/light/tsl2772.c:576:24: error: variable
-> > >   'prox_diode_mask' set but not used [-Werror,-Wunused-but-set-variable]
-> > >         int i, ret, num_leds, prox_diode_mask;
-> > >                               ^
-> > > This variable is not used so remove it.  
-> > 
-> > While from the compilation point of view this is a correct fix, I think
-> > we need to hear from the author (or interested stakeholders) about this
-> > feature. Perhaps it should be enabled / fixed differently.
-> > 
-> 
-> Superficially it looks like this value should have been stored to
-> chip->settings.prox_diode
-> 
-> +CC people who might know...
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   93e2b01740863cf2f4a58887ac1384e6324b50a2
+commit: 548ec3336f323db56260b312c232ab37285f0284 KVM: arm64: On stack overflow switch to hyp overflow_stack
+date:   8 months ago
+config: arm64-randconfig-s031-20230402 (https://download.01.org/0day-ci/archive/20230402/202304020428.Vid1AddO-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=548ec3336f323db56260b312c232ab37285f0284
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 548ec3336f323db56260b312c232ab37285f0284
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/ drivers/gpu/ drivers/usb/gadget/function/
 
-Jonathan is correct about the proper fix and is this is my mistake. We
-should just need to add this to the bottom of that function:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304020428.Vid1AddO-lkp@intel.com/
 
-   chip->settings.prox_diode = prox_diode_mask;
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm64/kvm/hyp/nvhe/stacktrace.c:10:1: sparse: sparse: symbol '__pcpu_scope_overflow_stack' was not declared. Should it be static?
 
-Tom: I can fix this up next week, unless I hear from you otherwise that
-you'll do it.
+vim +/__pcpu_scope_overflow_stack +10 arch/arm64/kvm/hyp/nvhe/stacktrace.c
 
-Brian
+  > 10	#include <asm/percpu.h>
+    11	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
