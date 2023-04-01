@@ -2,180 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D3C6D2C33
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 03:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4043D6D2C34
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 03:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbjDABBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 21:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S233345AbjDABBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 21:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233315AbjDABBN (ORCPT
+        with ESMTP id S233301AbjDABBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 21:01:13 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B106D1D869
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 18:01:11 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.221.228])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 33110dwi1634686
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Fri, 31 Mar 2023 18:00:39 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 33110dwi1634686
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023030901; t=1680310842;
-        bh=iBrhDcT3pcdPV/Jo46PvXF1uBf1OgqTiWiIgTf+W7yg=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=hCEAS6SJ2kaiKIFHOuJ+aTkMldUo6d410GW3zcUCh5P6OaCFORIxXdOc7OUtBWxO9
-         53mHf4jtgAOdfAwNp4D+Xmsv/hh12gYV2Ggfcg8Ycv8CltUp/64x0B1qNIFFGkt5Xf
-         j77oG2GhlPeS6iJEpB9WcPt68vRJ09vQKFQUDKZPgbMz4dp0Lm6OjZEo7CqssuILSU
-         ZVvlMd+FKOUgP24ZSiQF25FYqqXQ4S1BEh6yokJ5Ziae+YVCGDxbmvw01wRsfh/laR
-         ebpYjj442qR1lnSfGwbAmT+mip90AMd6BBXY3YHyxHjGBH2+7EY6OtMzV4hWp2oF+Q
-         7KBHFpvX+9lJg==
-Date:   Fri, 31 Mar 2023 18:00:35 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Brian Gerst <brgerst@gmail.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH] x86/boot: Clean up handling of boot_params pointer
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20230331182839.13960-1-brgerst@gmail.com>
-References: <20230331182839.13960-1-brgerst@gmail.com>
-Message-ID: <659B7DAA-7D24-4122-8A66-B490E0AFDEA0@zytor.com>
+        Fri, 31 Mar 2023 21:01:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F491B7EE
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 18:01:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CAE03B83284
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 01:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70020C433EF;
+        Sat,  1 Apr 2023 01:01:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680310863;
+        bh=tt7ZGatFV1hjdhv+xFUnZBFTFezV1KSetDds2ucKZNs=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=janccKIkv8gk5FEqwL/V+sypzlpq4VKfugp40dB6anoP5nnRNthYLPOkEfwEJ7cdJ
+         j7MogpyMRpzNioQVQhOZpLQSKoBI1jVCSBDSwEia/Ga+jgrS1tewbGxgUNjygTltw0
+         vZ8ixmvySVtuX7D4ZpF76C3li+cBtzLsH1+1UwFs+nXq+XRYmRNBnPa9OovYqYo4+/
+         fFECcg/GgLz0FVsEwhTi1U936XArQt5FUSoSNJrCtUqHmwMROp8LLBf2rt7BH8OCoT
+         jrpo3I3356eoXIB0tiZFTO5HeQp4NmQXBwsdra2KKn9gbSkF9iM3upx92YFOa5V1ih
+         Vo3P/JEDThlrw==
+Message-ID: <ec3f83d3-c00c-17d5-c967-2e3e7a4798c7@kernel.org>
+Date:   Sat, 1 Apr 2023 09:00:59 +0800
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Bo Ye <bo.ye@mediatek.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        xiongping1 <xiongping1@xiaomi.com>,
+        qixiaoyu1 <qixiaoyu1@xiaomi.com>
+Cc:     yongdong.zhang@mediatek.com, peng.zhou@mediatek.com,
+        browse.zhang@mediatek.com, light.hsieh@mediatek.com,
+        Qilin Tan <qilin.tan@mediatek.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230331092658.72386-1-bo.ye@mediatek.com>
+ <20230331092658.72386-2-bo.ye@mediatek.com>
+From:   Chao Yu <chao@kernel.org>
+Subject: Re: [PATCH 2/2] f2fs: add __pack attribute for extent_info
+In-Reply-To: <20230331092658.72386-2-bo.ye@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On March 31, 2023 11:28:39 AM PDT, Brian Gerst <brgerst@gmail=2Ecom> wrote:
->On entry from the bootloader, RSI contains the pointer to the
->boot_params data structure=2E  Since the RSI register can be clobbered
->when calling C functions, it is saved and restored around every call=2E
->Instead, move it to the R12 register, which is preserved across calls=2E
->
->Signed-off-by: Brian Gerst <brgerst@gmail=2Ecom>
->---
-> arch/x86/kernel/head_64=2ES | 29 ++++++++++-------------------
-> 1 file changed, 10 insertions(+), 19 deletions(-)
->
->diff --git a/arch/x86/kernel/head_64=2ES b/arch/x86/kernel/head_64=2ES
->index a5df3e994f04=2E=2E0d130ca2e0a3 100644
->--- a/arch/x86/kernel/head_64=2ES
->+++ b/arch/x86/kernel/head_64=2ES
->@@ -49,8 +49,6 @@ SYM_CODE_START_NOALIGN(startup_64)
-> 	 * for us=2E  These identity mapped page tables map all of the
-> 	 * kernel pages and possibly all of memory=2E
-> 	 *
->-	 * %rsi holds a physical pointer to real_mode_data=2E
->-	 *
-> 	 * We come here either directly from a 64bit bootloader, or from
-> 	 * arch/x86/boot/compressed/head_64=2ES=2E
-> 	 *
->@@ -61,6 +59,12 @@ SYM_CODE_START_NOALIGN(startup_64)
-> 	 * tables and then reload them=2E
-> 	 */
->=20
->+	/*
->+	 * RSI holds a physical pointer to real_mode_data=2E  Move it to R12,
->+	 * which is preserved across C function calls=2E
->+	 */
->+	movq	%rsi, %r12
->+
-> 	/* Set up the stack for verify_cpu() */
-> 	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
->=20
->@@ -73,9 +77,7 @@ SYM_CODE_START_NOALIGN(startup_64)
-> 	shrq	$32,  %rdx
-> 	wrmsr
->=20
->-	pushq	%rsi
-> 	call	startup_64_setup_env
->-	popq	%rsi
->=20
-> #ifdef CONFIG_AMD_MEM_ENCRYPT
-> 	/*
->@@ -84,10 +86,8 @@ SYM_CODE_START_NOALIGN(startup_64)
-> 	 * which needs to be done before any CPUID instructions are executed in
-> 	 * subsequent code=2E
-> 	 */
->-	movq	%rsi, %rdi
->-	pushq	%rsi
->+	movq	%r12, %rdi
-> 	call	sme_enable
->-	popq	%rsi
-> #endif
->=20
-> 	/* Now switch to __KERNEL_CS so IRET works reliably */
->@@ -109,9 +109,8 @@ SYM_CODE_START_NOALIGN(startup_64)
-> 	 * programmed into CR3=2E
-> 	 */
-> 	leaq	_text(%rip), %rdi
->-	pushq	%rsi
->+	movq	%r12, %rsi
-> 	call	__startup_64
->-	popq	%rsi
->=20
-> 	/* Form the CR3 value being sure to include the CR3 modifier */
-> 	addq	$(early_top_pgt - __START_KERNEL_map), %rax
->@@ -125,8 +124,6 @@ SYM_CODE_START(secondary_startup_64)
-> 	 * At this point the CPU runs in 64bit mode CS=2EL =3D 1 CS=2ED =3D 0,
-> 	 * and someone has loaded a mapped page table=2E
-> 	 *
->-	 * %rsi holds a physical pointer to real_mode_data=2E
->-	 *
-> 	 * We come here either from startup_64 (using physical addresses)
-> 	 * or from trampoline=2ES (using virtual addresses)=2E
-> 	 *
->@@ -197,13 +194,9 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_=
-L_GLOBAL)
-> 	 * hypervisor could lie about the C-bit position to perform a ROP
-> 	 * attack on the guest by writing to the unencrypted stack and wait for
-> 	 * the next RET instruction=2E
->-	 * %rsi carries pointer to realmode data and is callee-clobbered=2E Sav=
-e
->-	 * and restore it=2E
-> 	 */
->-	pushq	%rsi
-> 	movq	%rax, %rdi
-> 	call	sev_verify_cbit
->-	popq	%rsi
->=20
-> 	/*
-> 	 * Switch to new page-table
->@@ -294,9 +287,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L=
-_GLOBAL)
-> 	wrmsr
->=20
-> 	/* Setup and Load IDT */
->-	pushq	%rsi
-> 	call	early_setup_idt
->-	popq	%rsi
->=20
-> 	/* Check if nx is implemented */
-> 	movl	$0x80000001, %eax
->@@ -332,9 +323,9 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L=
-_GLOBAL)
-> 	pushq $0
-> 	popfq
->=20
->-	/* rsi is pointer to real mode structure with interesting info=2E
->+	/* R12 is pointer to real mode structure with interesting info=2E
-> 	   pass it to C */
->-	movq	%rsi, %rdi
->+	movq	%r12, %rdi
->=20
-> =2ELjump_to_C_code:
-> 	/*
+On 2023/3/31 17:26, Bo Ye wrote:
+> From: Qilin Tan <qilin.tan@mediatek.com>
+> 
+> Need add __pack for struct extent_info to align to memory
+> layout of struct rb_entry.
 
-Would it not make more sense to write it into a memory variable and access=
-ing that variable from the C code by name?
+Jaegeuk has fixed this bug w/ below patchset, please check it:
+
+https://lore.kernel.org/linux-f2fs-devel/20230313201216.924234-1-jaegeuk@kernel.org/
+
+Thanks,
+
+> 
+> struct rb_entry {
+>      struct rb_node rb_node;     /* rb node located in rb-tree */
+>      union {
+>          struct {
+>              unsigned int ofs;   /* start offset of the entry */
+>              unsigned int len;   /* length of the entry */
+>          };
+>          unsigned long long key;     /* 64-bits key */
+>      } __packed;
+> };
+> 
+> struct extent_info {
+>      unsigned int fofs;      /* start offset in a file */
+>      unsigned int len;       /* length of the extent */
+>      union {
+>          ...
+>          /* block age extent_cache */
+>          struct {
+>              /* block age of the extent */
+>              unsigned long long age;
+>              /* last total blocks allocated */
+>              unsigned long long last_blocks;
+>          };
+> };
+> 
+> The new fields(age, last_blocks) are u64 in change 71644dff4811, it
+> cause the memory alignment based on 8 bytes in some complier. So the
+> field fofs and len are alloced with 8 bytes and using the last 4 byts.
+> Its memory is not aligned with struct rb_entry. the ofs of rb_entry
+> pointer to a invalid value and cause writing file failed.
+> 
+> struct extent_info's offset should be 12 rather than 16 from the
+> beginning of struct rb_entry.
+> 
+> The offset dump for the bad case as:
+> kworker/u16:6: [name:f2fs&]f2fs_lookup_rb_tree_for_insert:MTK_DEBUG: ino=1629 re=0xc675dc08 ofs=0 re->ofs=0, re->len=68 ei=0xc675dc18 ei.fofs=68 ei.len=277
+> 
+> Fixes: 71644dff4811 ("f2fs: add block_age-based extent cache")
+> Signed-off-by: Bo Ye <bo.ye@mediatek.com>
+> Signed-off-by: Qilin Tan <qilin.tan@mediatek.com>
+> ---
+>   fs/f2fs/f2fs.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index b0ab2062038a..7c690667a42f 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -660,7 +660,7 @@ struct extent_info {
+>   			unsigned long long last_blocks;
+>   		};
+>   	};
+> -};
+> +} __packed;
+>   
+>   struct extent_node {
+>   	struct rb_node rb_node;		/* rb node located in rb-tree */
