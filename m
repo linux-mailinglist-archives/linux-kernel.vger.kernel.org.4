@@ -2,90 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA036D3293
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 18:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004416D329D
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 18:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjDAQUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 12:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S229722AbjDAQ2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 12:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDAQUV (ORCPT
+        with ESMTP id S229574AbjDAQ2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 12:20:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D46AA5E1;
-        Sat,  1 Apr 2023 09:20:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B81FEB80B53;
-        Sat,  1 Apr 2023 16:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 71EC2C433EF;
-        Sat,  1 Apr 2023 16:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680366017;
-        bh=TfVkFAQrZRqszfcTd87B057fpnS2YlPX9AigM3sNpBk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=q0GXdfjk6CWtoXshR7/w9bTKsQqNd4ubmlT83L/igTvIwO8uc/6pf599oJkz4UmFr
-         Dx35ia2gZEkuBlSVZ7G4Gbstk7RI3mM3roMPPuckEnONe0ke9hIJUeq+uQYNtGoFTS
-         D0iQcCaF/1RnPzQbTGVUvOocv0ZicUa0ukS+RMDpMZB5mLb7Maa9EVk2TsEHJxmpyu
-         ORjwHvCs2XrpMSteibrC1ZV2j/+OpDIxyUt0WxeYS9VyPX1JahD4Cz3Q9Kz/K4xQMa
-         pbZrfzGG+x7BDanUOprgtszG726+Q6YdNAhef9KNpjVO3QbWJbMThJkDLMxHJJR42L
-         bcnZ50JQfyZ0A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4B207E21EDD;
-        Sat,  1 Apr 2023 16:20:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 1 Apr 2023 12:28:33 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3167B11EAD
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 09:28:32 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5419d4c340aso472456067b3.11
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 09:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680366511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SwTNo3Ki2aER2ZIEedraVm2CwLGI/LI38zPc5dQIans=;
+        b=LX/HcdgqO2RVPx90CkmZvm/8vG74P0Fzg9Pf1f6imquWRijLCYoJFkBywXrtVQLumK
+         vAGV9LyHB+jrWwOf7Fr+tfzOjJeGfJvxVLK6awf8He80dd24q8J7nTJiBhI4zDmVLSU1
+         EUGB9XTuzlSdntsxE1YYdmABDekg0CIGd0OfNxB4wghzTj4Hwyb9o+20XzxYTrTOLuXZ
+         DNoPc2Le82S13zSH8GIgyhFpuUBJlnm/spZZtkCcf7f+X/Z3/xs1gYiJ8rWsw0NMDdQV
+         SLxpIuaQvVDj2iJBYFLQLcZ3vndHxc94wX8FHoWB04ftgwEB2ifuv5qKDSPZhtm9UUKN
+         VIdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680366511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SwTNo3Ki2aER2ZIEedraVm2CwLGI/LI38zPc5dQIans=;
+        b=lM+vQ3pGKrF+bV6PrkyiwTrKniKEV8+BkYh97bEeC7YpjsjhAvgQO1A7iq5tCQwMe9
+         Z0CF94dCdQsZ9m63mzrm+hGakYLRjvTX5VMsH8l0GhOvqjezuhYsSBMKWjmTnDdlZLoJ
+         ckF3oj3aEhpxiajyTpAHKyJTeyOO2+hDE+mjy4vMyKRgt/sjQF1PJdksTp23YKWaH3AS
+         ngj0Mjk1mohlV3JQ3qh9OWdJBGGa0cYlBfsTietOK256gPdDQkxvCjFCGhCvB9ZSfqts
+         Dzx8GANB2/Y/J4t7FmjeOib/eNkRelKHf0QR5PK0PeWMTBEqSAd59VFu4oVvqidm+e6B
+         v8og==
+X-Gm-Message-State: AAQBX9c4bjQAo19ecHLSEXntDuIqsQRpgPzHdx5H8fCZer1io8f/uWVC
+        Xa5+2WO/Fku+cBEr0HSDiojszyG0owGKol+9XL5xTZgFNTSXXFTifqg=
+X-Google-Smtp-Source: AKy350aSqQLfOEJsp5nxESdUZUTqkKWIrBRSCxN8+xZZ2K9i6N4/UlMjYOmcA9Z+2QBUekzOy+0hA+KgjaxbxX8OCEM=
+X-Received: by 2002:a81:de0d:0:b0:541:a0ab:bd28 with SMTP id
+ k13-20020a81de0d000000b00541a0abbd28mr7057595ywj.4.1680366511416; Sat, 01 Apr
+ 2023 09:28:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/3] Enable RCU semantics for task kptrs
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168036601729.14852.14484701453991641814.git-patchwork-notify@kernel.org>
-Date:   Sat, 01 Apr 2023 16:20:17 +0000
-References: <20230331195733.699708-1-void@manifault.com>
-In-Reply-To: <20230331195733.699708-1-void@manifault.com>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 1 Apr 2023 18:28:20 +0200
+Message-ID: <CACRpkdZqoUZuLr9ra9JbSEQqqOWZvdh33Lk+R2P7qw8upx3nnA@mail.gmail.com>
+Subject: [GIT PULL] pin control fixes for v6.3
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Linus,
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+here are some pin control fixes for the v6.3 series.
+The most notable and urgent one is probably the AMD
+fix which affects AMD laptops, found by the Chromium
+people.
 
-On Fri, 31 Mar 2023 14:57:30 -0500 you wrote:
-> In commit 22df776a9a86 ("tasks: Extract rcu_users out of union"), the
-> 'refcount_t rcu_users' field was extracted out of a union with the
-> 'struct rcu_head rcu' field. This allows us to use the field for
-> refcounting struct task_struct with RCU protection, as the RCU callback
-> no longer flips rcu_users to be nonzero after the callback is scheduled.
-> 
-> This patch set leverages this to do a few things:
-> 
-> [...]
+Please pull it in!
 
-Here is the summary with links:
-  - [bpf-next,v2,1/3] bpf: Make struct task_struct an RCU-safe type
-    https://git.kernel.org/bpf/bpf-next/c/d02c48fa1139
-  - [bpf-next,v2,2/3] bpf: Remove now-defunct task kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/f85671c6ef46
-  - [bpf-next,v2,3/3] bpf,docs: Update documentation to reflect new task kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/db9d479ab59b
+Yours,
+Linus Walleij
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6=
+:
 
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
+tags/pinctrl-v6.3-2
+
+for you to fetch changes up to e4056e38ec87b4c21eb34bb8e38b1b0ca1221744:
+
+  dt-bindings: pinctrl: qcom,sm8550-lpass-lpi: allow input-enabled and
+bias-bus-hold (2023-03-29 10:41:57 +0200)
+
+----------------------------------------------------------------
+Pin control fixes for the v6.3 kernel cycle:
+
+- Fix up the Kconfig options for MediaTek MT7981.
+
+- Fix the irq domain name in the AT91-PIO4 driver.
+
+- Fix some alternative muxing modes in the Ocelot
+  driver.
+
+- Allocate the GPIO numbers dynamically in the STM32
+  driver.
+
+- Disable and mask interrupts on resume in the AMD
+  driver.
+
+- Fix a typo in the Qualcomm SM8550 pin control
+  device tree bindings.
+
+----------------------------------------------------------------
+Ar=C4=B1n=C3=A7 =C3=9CNAL (2):
+      pinctrl: mediatek: add missing options to PINCTRL_MT7981
+      pinctrl: mediatek: fix naming inconsistency
+
+Dario Binacchi (1):
+      pinctrl: stm32: use dynamic allocation of GPIO base
+
+Horatiu Vultur (1):
+      pinctrl: ocelot: Fix alt mode for ocelot
+
+Johan Hovold (1):
+      pinctrl: at91-pio4: fix domain name assignment
+
+Kornel Dul=C4=99ba (1):
+      pinctrl: amd: Disable and mask interrupts on resume
+
+Krzysztof Kozlowski (1):
+      dt-bindings: pinctrl: qcom,sm8550-lpass-lpi: allow input-enabled
+and bias-bus-hold
+
+ .../pinctrl/qcom,sm8550-lpass-lpi-pinctrl.yaml     |  2 +
+ drivers/pinctrl/mediatek/Kconfig                   | 44 +++++++++++-------=
+----
+ drivers/pinctrl/pinctrl-amd.c                      | 36 ++++++++++--------
+ drivers/pinctrl/pinctrl-at91-pio4.c                |  1 -
+ drivers/pinctrl/pinctrl-ocelot.c                   |  2 +-
+ drivers/pinctrl/stm32/pinctrl-stm32.c              |  2 +-
+ 6 files changed, 47 insertions(+), 40 deletions(-)
