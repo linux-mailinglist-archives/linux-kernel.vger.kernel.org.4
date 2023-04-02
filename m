@@ -2,129 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FDB6D38F3
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 18:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467A86D3906
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 18:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbjDBQVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 12:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S231134AbjDBQn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 12:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjDBQVn (ORCPT
+        with ESMTP id S230141AbjDBQn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 12:21:43 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B59A5E1
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 09:21:42 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id n9-20020a056e02100900b00325c9240af7so17673183ilj.10
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 09:21:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680452501; x=1683044501;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x07zT0iCo8wKSCVHAjMWe9fzPd0xcWscECCQqfth9ec=;
-        b=8BYRUCvmxy+hgaVp9RQ5N6XPmaQp9dO3oTp1yGj3gLgNPs6ENPCZKgiNkYHMIigbIo
-         vNK+NdLXRcx8KsCtg/WhDm9diQjb85rXbZCXwy5NAhkB2AcTy/BsgZ1li6NUs41m3ZRH
-         986lYyptCmQByGbHovpMts9zk7fp6UUuJQ1wTi+uBnqu3Pgm/BgNeCJl0+0gwz5phP+G
-         V93HbuXcAXfejHmIJa093985p4kelvZc9xTni5d8enPm0qI4VwH+83B5F7UGbp4YjwW5
-         iWkO12BbKfIcqFcydIFNOqLUyXpukoTOoOAl+N4tKvgbyHWO0kmZWQ+ExXnT1OdBrxtK
-         nVFg==
-X-Gm-Message-State: AO0yUKWbx3MLEgJNcoNWLqRhnHYU8PLrCH8kYIMCmSfX0xtI2PVckXN3
-        CIQpyP7cORGCxZmhkIXH4x1/iJELyO1xpNwqxqAiqOBBAsRZ
-X-Google-Smtp-Source: AK7set/bi4Wd8lT1rCMiTGzNOyybxOUDZmKUSa9kdAtlHK8uWQPRWN6MUSWo+nKl5CElpWkF1FRUS2BSDjTGx3V8qNzYyMWb71Em
+        Sun, 2 Apr 2023 12:43:27 -0400
+Received: from pio-pvt-msa3.bahnhof.se (pio-pvt-msa3.bahnhof.se [79.136.2.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5041EB54;
+        Sun,  2 Apr 2023 09:43:22 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id 3F8483F417;
+        Sun,  2 Apr 2023 18:43:20 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Score: -2.1
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
+Authentication-Results: pio-pvt-msa3.bahnhof.se (amavisd-new);
+        dkim=pass (2048-bit key) header.d=dalakolonin.se
+Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id CtEccJModFEV; Sun,  2 Apr 2023 18:43:19 +0200 (CEST)
+Received: by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 131903F401;
+        Sun,  2 Apr 2023 18:43:17 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTP id 8B5FE93782;
+        Sun,  2 Apr 2023 16:43:17 +0000 (UTC)
+Received: from zimbra.dalakolonin.se ([127.0.0.1])
+        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id V3Ezy4A6zUhb; Sun,  2 Apr 2023 16:43:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTP id D3F909376D;
+        Sun,  2 Apr 2023 16:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.dalakolonin.se D3F909376D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dalakolonin.se;
+        s=D374B428-D0A7-11ED-A657-75977B426508; t=1680453793;
+        bh=cgM57hJm5k2oui+gMMCv8ZY471CwtzcndNIPu6989Ds=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=mcQyqI7SP0xQ8pJ27+crN8V1MJw2iVrPRhFUnoHUcg9qz4gP3kdPMub7r3XudGyJG
+         rLr9jNtFMELk/97K09AczhdFPhJQ7z7HNGKxj8Z5pn7HEnAXnLazzgANgeX+BhXvlz
+         xWrFivxm8gL8lJz6qyP1J1sIiYF7ML765iKwxxlWKvHOL1VJxYtEtsvloxySLK3mHu
+         X5oG5dmTjXpRWrbCvmxdCuYZmYrbsSEKvNVsS7I52w5vzhvJY+AOEt1U41bN/l0bDI
+         C6oYbiaO/ZbshvLuwQF0qd3Z+gZb8SSPXr+lDymmaH67NNPI9Us/DyGHjVpPomS1mM
+         JGNyCKDIPSS5w==
+X-Virus-Scanned: amavisd-new at dalakolonin.se
+Received: from zimbra.dalakolonin.se ([127.0.0.1])
+        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id yuFgG64aUGIw; Sun,  2 Apr 2023 16:43:13 +0000 (UTC)
+Received: from rack-server-1.dalakolonin.se (unknown [172.17.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTPSA id 8212393767;
+        Sun,  2 Apr 2023 16:43:13 +0000 (UTC)
+From:   =?UTF-8?q?Patrik=20Dahlstr=C3=B6m?= <risca@dalakolonin.se>
+To:     linux-iio@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, pgoudagunta@nvidia.com,
+        hns@goldelico.com, jic23@kernel.org, lars@metafoo.de,
+        linux-omap@vger.kernel.org,
+        =?UTF-8?q?Patrik=20Dahlstr=C3=B6m?= <risca@dalakolonin.se>
+Subject: [PATCH v2 0/7] iio: adc: palmas_gpadc: add iio events
+Date:   Sun,  2 Apr 2023 18:42:40 +0200
+Message-Id: <20230402164247.3089146-1-risca@dalakolonin.se>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a5e:db05:0:b0:745:6788:149f with SMTP id
- q5-20020a5edb05000000b007456788149fmr12143135iop.0.1680452501731; Sun, 02 Apr
- 2023 09:21:41 -0700 (PDT)
-Date:   Sun, 02 Apr 2023 09:21:41 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006d817e05f85cd6a8@google.com>
-Subject: [syzbot] [nfc?] UBSAN: shift-out-of-bounds in nci_activate_target
-From:   syzbot <syzbot+0839b78e119aae1fec78@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The palmas gpadc block has support for monitoring up to 2 ADC channels
+and issue an interrupt if they reach past a set threshold. This can be
+configured statically with device tree today, but it only gets enabled
+when reaching sleep mode. Also, it doesn't look like anyone is using it.
 
-syzbot found the following issue on:
+Instead of this one special case, change the code so userspace can
+configure the ADC channels to their own needs through the iio events
+subsystem. The high and low threshold values can be set for every
+channel, but only 2 thresholds can be enabled at a time. Trying to
+enable more than 2 thresholds will result in an error.
 
-HEAD commit:    198925fae644 Add linux-next specific files for 20230329
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1174a6d1c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=91e70627549fd509
-dashboard link: https://syzkaller.appspot.com/bug?extid=0839b78e119aae1fec78
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+The configured thresholds will wake up the system from sleep mode if
+wakeup is enabled in /sys/devices/.../power/wakeup.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+The old platform data was removed.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/53c685bee82f/disk-198925fa.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/45e82baa3bc5/vmlinux-198925fa.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7c31fbc6acb9/bzImage-198925fa.xz
+Thresholds, events, and wakeup were tested on omap5-uevm board. It wakes
+up from sleep mode when wakeup is enabled and a threshold is passed. A
+userspace tool for monitoring events and adjusting thresholds can be
+found at [3].
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0839b78e119aae1fec78@syzkaller.appspotmail.com
+Patrik Dahlstr=C3=B6m (7):
+  iio: adc: palmas: remove adc_wakeupX_data
+  iio: adc: palmas: replace "wakeup" with "event"
+  iio: adc: palmas: use iio_event_direction for threshold polarity
+  iio: adc: palmas: move eventX_enable into palmas_adc_event
+  iio: adc: palmas: always reset events on unload
+  iio: adc: palmas: add support for iio threshold events
+  iio: adc: palmas: don't alter event config on suspend/resume
 
-================================================================================
-UBSAN: shift-out-of-bounds in net/nfc/nci/core.c:912:45
-shift exponent 4294967071 is too large for 32-bit type 'int'
-CPU: 1 PID: 30237 Comm: syz-executor.2 Not tainted 6.3.0-rc4-next-20230329-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_shift_out_of_bounds+0x221/0x5a0 lib/ubsan.c:387
- nci_activate_target.cold+0x1a/0x1f net/nfc/nci/core.c:912
- nfc_activate_target+0x1f8/0x4c0 net/nfc/core.c:420
- nfc_genl_activate_target+0x1f3/0x290 net/nfc/netlink.c:900
- genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
- genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
- genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
- netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2572
- genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
- netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
- netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1942
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:747
- ____sys_sendmsg+0x71c/0x900 net/socket.c:2501
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2555
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2584
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc4abc8c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc4aca02168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007fc4abdabf80 RCX: 00007fc4abc8c0f9
-RDX: 0000000000000000 RSI: 0000000020000780 RDI: 0000000000000005
-RBP: 00007fc4abce7b39 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffcb707727f R14: 00007fc4aca02300 R15: 0000000000022000
- </TASK>
-================================================================================
+ drivers/iio/adc/palmas_gpadc.c | 550 +++++++++++++++++++++++++++------
+ include/linux/mfd/palmas.h     |   8 -
+ 2 files changed, 455 insertions(+), 103 deletions(-)
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+base-commit: 37fd83916da2e4cae03d350015c82a67b1b334c4
+prerequisite-patch-id: 9b1f55610800b91b721d042bf7f33b58179237d1
+prerequisite-patch-id: b0418c707db13f514400956596e9ebe91c25bba0
+--=20
+2.25.1
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
