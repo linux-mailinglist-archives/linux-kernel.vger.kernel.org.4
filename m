@@ -2,163 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98F76D3632
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 10:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B297D6D363E
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 10:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjDBIXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 04:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
+        id S229811AbjDBIae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 04:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjDBIXK (ORCPT
+        with ESMTP id S229447AbjDBIac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 04:23:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7242F1A952;
-        Sun,  2 Apr 2023 01:23:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 2 Apr 2023 04:30:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF42F76B
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 01:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680424186;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fjMU4p9+DXZHNmOHLlNl/8Bfex0ApnD0yNYoZFOYHXs=;
+        b=UlE/2/gknE9BmPRSTX+7FApRWBgBePfLBd+di1PQ/fw/aQK2cc1DISiabFVcMzv4wiaQhP
+        0XPcOQtP5O/WF2qKJ0w46VQ6jmdeS7xsnNrTCa9vqD3oq/hFXXdB8sC0XtYte+wO+AQDfD
+        SZGCuAbYVLMfUEQLsVYNwY93fIC8Ajk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-497-pC-a7scgODqWaQKYKe72UQ-1; Sun, 02 Apr 2023 04:29:40 -0400
+X-MC-Unique: pC-a7scgODqWaQKYKe72UQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0036D61084;
-        Sun,  2 Apr 2023 08:23:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4D1C4339B;
-        Sun,  2 Apr 2023 08:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680423788;
-        bh=rqmI+2ncgqv8TeVA56uwwXT2fHfEv1PS7v4WdYAbJXw=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=U03GhHvo77HswkSeu6SilRZCfbKYZ8VczUx+ZoWMRuVVCmcLL7PiM2mtrJaiIHLdq
-         Y9NwfQGrD2kBzXRX9J0Rw0g0yzmLQwGqDxnSQFRdoraT7iv8SzFgsu4V1QXnJTSuKo
-         oSGybFvAOiNCiKSWZtofVLER2qVUuckiul79YCLyRsolojJ7SltDyP5dmMrK3MM1zt
-         gOSIHj4VZmx7gsuuiIoY2gUT+UDwGSXT4obZkUtSMkxgqKXQS9AjPGHJjo+UnTDHWH
-         58aG/tYd+uM+1MhPM9pWdPC/YU/xIaUzssvW70fljgwKCJAiZwQyNjkYIGZTaXoZto
-         w/PIi0HK2AXiw==
-Date:   Sun, 02 Apr 2023 09:23:03 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Xu Yilun <yilun.xu@intel.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-CC:     linux-fpga@vger.kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] PolarFire SoC Auto Update Support
-User-Agent: K-9 Mail for Android
-In-Reply-To: <ZCk2IgDjHRUlyD+t@yilunxu-OptiPlex-7050>
-References: <20230331071823.956087-1-conor.dooley@microchip.com> <ZCk2IgDjHRUlyD+t@yilunxu-OptiPlex-7050>
-Message-ID: <958EDDDE-B62D-4CCC-9851-0F01516D95CD@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC516811E7C;
+        Sun,  2 Apr 2023 08:29:39 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.45.242.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 26D1E175AD;
+        Sun,  2 Apr 2023 08:29:39 +0000 (UTC)
+Received: from [10.1.1.1] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id 2459830736C72;
+        Sun,  2 Apr 2023 10:29:38 +0200 (CEST)
+Subject: [PATCH bpf V6 0/5] XDP-hints: API change for RX-hash kfunc
+ bpf_xdp_metadata_rx_hash
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
+        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net, tariqt@nvidia.com, saeedm@nvidia.com,
+        leon@kernel.org, linux-rdma@vger.kernel.org
+Date:   Sun, 02 Apr 2023 10:29:38 +0200
+Message-ID: <168042409059.4051476.8176861613304493950.stgit@firesoul>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Current API for bpf_xdp_metadata_rx_hash() returns the raw RSS hash value,
+but doesn't provide information on the RSS hash type (part of 6.3-rc).
+
+This patchset proposal is to change the function call signature via adding
+a pointer value argument for providing the RSS hash type. 
+
+---
+V6:
+ - Resend: selftest failure is unrelated (in xdp_do_redirect)
+   Issue in fccca038f300 ("veth: take into account device reconfiguration for xdp_features flag")
+V5:
+ - Fixes for checkpatch.pl
+ - Change function signature for all xmo_rx_hash calls
+
+Jesper Dangaard Brouer (5):
+      xdp: rss hash types representation
+      mlx5: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      veth: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      mlx4: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      selftests/bpf: Adjust bpf_xdp_metadata_rx_hash for new arg
 
 
-On 2 April 2023 09:00:34 IST, Xu Yilun <yilun=2Exu@intel=2Ecom> wrote:
->On 2023-03-31 at 08:18:16 +0100, Conor Dooley wrote:
->> Hey all,
->>=20
->> This patchset adds support for the "Auto Update" feature on PolarFire
->> SoC that allows for writing an FPGA bistream to the SPI flash connected
->> to the system controller=2E
->> On powercycle (or reboot depending on how the firmware implements the
->> openSBI SRST extension) "Auto Update" will take place, and program the
->> FPGA with the contents of the SPI flash - provided that that image is
->> valid and an actual upgrade from that already programmed!
->>=20
->> Unfortunately, this series is not really testable yet - the Engineering
->> Sample silicon on most dev boards has a bug in the QSPI controller
->> connected to the system controller's flash and cannot access it=2E
->> Pre-production and later silicon has this bug fixed=2E
->>=20
->> I previously posted an RFC about my approach in this driver, since as a
->> flash-based FPGA we are somewhat different to the existing
->> self-reprogramming drivers here=2E That RFC is here:
->> https://lore=2Ekernel=2Eorg/linux-fpga/20221121225748=2E124900-1-conor@=
-kernel=2Eorg/
->>=20
->> This series depends on the following fixes:
->> https://lore=2Ekernel=2Eorg/all/d7c3ec51-8493-444a-bdec-2a30b0a15bdc@sp=
-ud/
->
->Is that series already merged? If yes, just remove this line=2E
->If no, either put all of them in one series, or still make this series
->as RFC until the dependency is resolved=2E
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c    | 22 ++++++-
+ drivers/net/ethernet/mellanox/mlx4/mlx4_en.h  |  3 +-
+ .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 63 ++++++++++++++++++-
+ drivers/net/veth.c                            | 10 ++-
+ include/linux/mlx5/device.h                   | 14 ++++-
+ include/linux/netdevice.h                     |  3 +-
+ include/net/xdp.h                             | 47 ++++++++++++++
+ net/core/xdp.c                                | 10 ++-
+ .../selftests/bpf/prog_tests/xdp_metadata.c   |  2 +
+ .../selftests/bpf/progs/xdp_hw_metadata.c     | 14 +++--
+ .../selftests/bpf/progs/xdp_metadata.c        |  6 +-
+ .../selftests/bpf/progs/xdp_metadata2.c       |  7 ++-
+ tools/testing/selftests/bpf/xdp_hw_metadata.c |  2 +-
+ tools/testing/selftests/bpf/xdp_metadata.h    |  1 +
+ 14 files changed, 180 insertions(+), 24 deletions(-)
 
-Merged into what?
-I'll be applying the dependencies tomorrow probably=2E
+--
 
->
->Thanks,
->Yilun
->
->>=20
->> The patch adding the driver depends on the soc patches earlier in the
->> series, so taking both through the same tree makes sense=2E Depending o=
-n
->> sequencing with the dependencies, me taking it through the soc tree
->> (with Acks etc of course) may make the most sense=2E
->>=20
->> Cheers,
->> Conor=2E
->>=20
->> Changes in v2:
->> - per Russ' suggestion, the driver has been switched to using the
->>   firmware-upload API rather than the fpga one
->> - as a result of that change, the structure of the driver has changed
->>   significantly, although most of that is reshuffling existing code
->>   around
->> - check if the upgrade is possible in probe and fail if it isn't
->> - only write the image index if it is not already set
->> - delete the now unneeded debugfs bits
->>=20
->> CC: Conor Dooley <conor=2Edooley@microchip=2Ecom>
->> CC: Daire McNamara <daire=2Emcnamara@microchip=2Ecom>
->> CC: Rob Herring <robh+dt@kernel=2Eorg>
->> CC: Krzysztof Kozlowski <krzysztof=2Ekozlowski+dt@linaro=2Eorg>
->> CC: Moritz Fischer <mdf@kernel=2Eorg>
->> CC: Wu Hao <hao=2Ewu@intel=2Ecom>
->> CC: Xu Yilun <yilun=2Exu@intel=2Ecom>
->> CC: Tom Rix <trix@redhat=2Ecom>
->> CC; Russ Weight <russell=2Eh=2Eweight@intel=2Ecom>
->> CC: linux-riscv@lists=2Einfradead=2Eorg
->> CC: devicetree@vger=2Ekernel=2Eorg
->> CC: linux-kernel@vger=2Ekernel=2Eorg
->> CC: linux-fpga@vger=2Ekernel=2Eorg
->>=20
->> Conor Dooley (7):
->>   soc: microchip: mpfs: add a prefix to rx_callback()
->>   dt-bindings: soc: microchip: add a property for system controller
->>     flash
->>   soc: microchip: mpfs: enable access to the system controller's flash
->>   soc: microchip: mpfs: print service status in warning message
->>   soc: microchip: mpfs: add auto-update subdev to system controller
->>   fpga: add PolarFire SoC Auto Update support
->>   riscv: dts: microchip: add the mpfs' system controller qspi &
->>     associated flash
->>=20
->>  =2E=2E=2E/microchip,mpfs-sys-controller=2Eyaml        |  10 +
->>  =2E=2E=2E/boot/dts/microchip/mpfs-icicle-kit=2Edts    |  21 +
->>  arch/riscv/boot/dts/microchip/mpfs=2Edtsi       |  24 +-
->>  drivers/fpga/Kconfig                          |  11 +
->>  drivers/fpga/Makefile                         |   3 +-
->>  drivers/fpga/microchip-auto-update=2Ec          | 494 ++++++++++++++++=
-++
->>  drivers/soc/microchip/Kconfig                 |   1 +
->>  drivers/soc/microchip/mpfs-sys-controller=2Ec   |  37 +-
->>  include/soc/microchip/mpfs=2Eh                  |   2 +
->>  9 files changed, 591 insertions(+), 12 deletions(-)
->>  create mode 100644 drivers/fpga/microchip-auto-update=2Ec
->>=20
->> --=20
->> 2=2E39=2E2
->>=20
