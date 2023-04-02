@@ -2,136 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649226D3581
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 06:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E3E6D358E
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 07:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjDBEpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 00:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S230152AbjDBFDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 01:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDBEpw (ORCPT
+        with ESMTP id S229379AbjDBFDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 00:45:52 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE8E1CB81;
-        Sat,  1 Apr 2023 21:45:50 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c18so25097964ple.11;
-        Sat, 01 Apr 2023 21:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680410750;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t+bA3SJ3PjGD6qFQQBdTjIrrF87xvGfeEMJfP2Ma1Co=;
-        b=ZEJVdOPecChJmV3KOeSfuZTcGdLCAYoNnT4xVp07N7nji1NObeYro/5fGK2sWY8gTg
-         uV+nwt8SXkNPWQO+atI4Ltu+UZ0YCbCVcxNC5CqdFkzW8NPMUGBmY3ACMY/UECk316F7
-         pCtsUHMxwqmKxf3J1T5YIfQGSjLxqeuXgW+bFPQwNWZPYOnIZX44nto8yc02wDkVysI9
-         r0q0vYLDwBEegCsmwfnvILv3SmtI4akL9Nyiffc74XOVJtw9TOHYfSTaePg16Gfa7tdN
-         mxIBhmpupDuojaOnMS7m376zs0o4XL/Be9Pxn4nVurifKMahaH2SAt3LDkfxNoh4LZEP
-         UIIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680410750;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t+bA3SJ3PjGD6qFQQBdTjIrrF87xvGfeEMJfP2Ma1Co=;
-        b=d7hXLj2TTy4ylRNis9bcX4lMRZWXH5npOUS2CEYCRUxF+qrZ7Ok0CinJijzaf0c+al
-         8ryllGwdGhWwRqZ4ZSFcUvwqel6Yh6qkWinnr4+LpXwpIUfWaO5/a32y9N05RsBZ+J+D
-         MafujaElIbIkJz8oq7xNGgEe3ZGDz5tWMoOuWiKorq4unU1HSvRAuf/YAnqf58O7ZfKZ
-         EvcgOG2jujVVqiJl3cPVJEs7tLcRH5PyNU4X+3zzTI9EprviOwTYGSwbxe+SDR1X6mZO
-         LZvP3kCFTQuai3SIGIS4okV5il9TCAa6Rg+H+2ZAcyfvvelsvWa4xrviThzpOEsXW0ut
-         sNnA==
-X-Gm-Message-State: AAQBX9f6n99lbwt0cK4yTcBjLR0jXqQZLLznd5mldsrraSPZ/r4c2y1U
-        HdJvP7jor2PNhBhKASFUeLk=
-X-Google-Smtp-Source: AKy350aJnnZTQvWuApyIgiaZeG9NGG3UWlb+OVWST3nWi4fR0STN06INNApzpLVSI2cJvEPZU29UFQ==
-X-Received: by 2002:a17:90a:47:b0:237:c209:5b14 with SMTP id 7-20020a17090a004700b00237c2095b14mr36985912pjb.22.1680410750239;
-        Sat, 01 Apr 2023 21:45:50 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id ja5-20020a170902efc500b00199203a4fa3sm4103756plb.203.2023.04.01.21.45.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Apr 2023 21:45:49 -0700 (PDT)
-From:   Jinliang Zheng <alexjlzheng@gmail.com>
-X-Google-Original-From: Jinliang Zheng <alexjlzheng@tencent.com>
-To:     seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinliang Zheng <alexjlzheng@tencent.com>
-Subject: [PATCH kvm] KVM: i8259: Fix poll command
-Date:   Sun,  2 Apr 2023 12:45:20 +0800
-Message-Id: <20230402044520.2125966-1-alexjlzheng@tencent.com>
-X-Mailer: git-send-email 2.31.1
+        Sun, 2 Apr 2023 01:03:10 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DFA1EA27;
+        Sat,  1 Apr 2023 22:03:07 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1piprn-0003eO-Bq; Sun, 02 Apr 2023 07:02:59 +0200
+Message-ID: <12c5a8f2-3082-68a2-e973-18fb957068ac@leemhuis.info>
+Date:   Sun, 2 Apr 2023 07:02:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] Revert "venus: firmware: Correct non-pix start and end
+ addresses"
+Content-Language: en-US, de-DE
+To:     Leonard Lausen <leonard@lausen.nl>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        Vikash Garodia <vgarodia@qti.qualcomm.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, mka@chromium.org,
+        Albert Esteve <aesteve@redhat.com>,
+        stanimir.varbanov@linaro.org,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        Fritz Koenig <frkoenig@google.com>,
+        "Rajeshwar Kurapaty (QUIC)" <quic_rkurapat@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <87edq2dus1.fsf@minerva.mail-host-address-is-not-set>
+ <ef09bc9f-d570-be11-238b-bd34063917fc@redhat.com>
+ <70c01751-1dd7-c4bd-a96e-94dea437aa40@redhat.com>
+ <DM8PR02MB81696369DBFE619E43F81EEFF3DE9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <e87344c6-acef-7f3f-5cac-24961dbd9401@redhat.com>
+ <6f97a117-0d9c-e21b-9adf-50f2233ba9e3@leemhuis.info>
+ <ea283f0a-ca72-447e-ce87-68c1bbee793e@leemhuis.info>
+ <CAFOAJEdBbzqkGVqw+vgNYNxyaTHwvjFyskTwjycP820L2tOctA@mail.gmail.com>
+ <b548da46-bf91-6f1c-4b63-4002109056bc@leemhuis.info>
+ <9a0bfef8-0b5d-f4d0-a8a5-4bbcacc5c0fb@leemhuis.info>
+ <DM8PR02MB8169E16569616870A583B376F3AB9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <87356wn6xf.fsf@minerva.mail-host-address-is-not-set>
+ <87edq9hj4w.fsf@minerva.mail-host-address-is-not-set>
+ <d18fac76-6b77-a446-5fe0-7236556e9187@quicinc.com>
+ <0c84724d-08d4-ddcb-5f71-4eb8261240c6@quicinc.com>
+ <a2fec0a5855150966fa5a920216c205032965f98@lausen.nl>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <a2fec0a5855150966fa5a920216c205032965f98@lausen.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680411787;3e27d53d;
+X-HE-SMSGID: 1piprn-0003eO-Bq
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the hardware manual, when the Poll command is issued, the
-byte returned by the I/O read is 1 in Bit 7 when there is an interrupt,
-and the highest priority binary code in Bits 2:0. The current pic
-simulation code is not implemented strictly according to the above
-expression.
 
-Fix the implementation of poll mode in pic simulation by pic_intack,
-and remove redundant pic_poll_read code.
 
-Signed-off-by: Jinliang Zheng <alexjlzheng@tencent.com>
----
- arch/x86/kvm/i8259.c | 29 ++++++-----------------------
- 1 file changed, 6 insertions(+), 23 deletions(-)
+On 01.04.23 22:53, Leonard Lausen wrote:
+> Hi Javier, Dikshita, Stan,
+> 
+> the revert wasn't applied to v6.2 series. Can you please apply it and include it for v6.2.10?
+> 
+> March 6, 2023 at 5:43 AM, "Javier Martinez Canillas" <javierm@redhat.com> wrote:
+>>> On 3/1/2023 3:15 PM, Dikshita Agarwal wrote:
+>>>> On 2/28/2023 9:33 PM, Javier Martinez Canillas wrote:
+>>>>> Javier Martinez Canillas<javierm@redhat.com>  writes:
+>>>>>> Vikash Garodia<vgarodia@qti.qualcomm.com>  writes:
+>>>>>>
+>>>>>>> Stan, could you please help with the revert and a pull request having this revert
+>>>>>>> alongwith other pending changes ?
+>>>>>>>
+>>>>>> Other fix posted is "media: venus: dec: Fix capture formats enumeration order":
+>>>>>>
+>>>>>> https://patchwork.kernel.org/project/linux-media/patch/20230210081835.2054482-1-javierm@redhat.com/
+>>>
+>>> Hi Javier,
+>>>
+>>> Thanks for this patch "media: venus: dec: Fix capture formats
+>>> enumeration order".
+>>>
+>>> Somehow I can't find it in my mailbox to be able to reply there.
+>>>
+>>> Could you please explain what is the regression you see here?
+>>>
+>>
+>> You can find the thread and explanation of the issue here:
+>>
+>> https://lore.kernel.org/lkml/Y+KPW18o%2FDa+N8UI@google.com/T/
+>>
+>> But Stanimir already picked it and sent a PR for v6.3 including it.
+> 
+> While "media: venus: dec: Fix capture formats enumeration order" may have been
+> applied to v6.3,
 
-diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
-index 4756bcb5724f..bc5b758e8f73 100644
---- a/arch/x86/kvm/i8259.c
-+++ b/arch/x86/kvm/i8259.c
-@@ -397,35 +397,18 @@ static void pic_ioport_write(void *opaque, u32 addr, u32 val)
- 		}
- }
- 
--static u32 pic_poll_read(struct kvm_kpic_state *s, u32 addr1)
--{
--	int ret;
--
--	ret = pic_get_irq(s);
--	if (ret >= 0) {
--		if (addr1 >> 7) {
--			s->pics_state->pics[0].isr &= ~(1 << 2);
--			s->pics_state->pics[0].irr &= ~(1 << 2);
--		}
--		s->irr &= ~(1 << ret);
--		pic_clear_isr(s, ret);
--		if (addr1 >> 7 || ret != 2)
--			pic_update_irq(s->pics_state);
--	} else {
--		ret = 0x07;
--		pic_update_irq(s->pics_state);
--	}
--
--	return ret;
--}
--
- static u32 pic_ioport_read(void *opaque, u32 addr)
- {
- 	struct kvm_kpic_state *s = opaque;
- 	int ret;
- 
- 	if (s->poll) {
--		ret = pic_poll_read(s, addr);
-+		ret = pic_get_irq(s);
-+		if (ret >= 0) {
-+			pic_intack(s, ret);
-+			ret |= 0x80;
-+		} else
-+			ret = 0;
- 		s->poll = 0;
- 	} else
- 		if ((addr & 1) == 0)
--- 
-2.37.3
+To me it looks like it was submitted[1], but not yet applied even to the
+media tree[2] -- while guess, maybe due problems mentioned in[3]? Or am
+I missing something?
 
+[1]
+https://lore.kernel.org/all/20230329211655.100276-1-stanimir.k.varbanov@gmail.com/
+[2] https://git.linuxtv.org/media_tree.git/log/?h=fixes
+[3]
+https://lore.kernel.org/all/20230329214310.2503484-1-jenkins@linuxtv.org/
+
+> this still leaves the regression introduced by "venus:
+> firmware: Correct non-pix start and end addresses". As pointed out by Matthias
+> Kaehlcke, the commit prevents SC7180 and sc7280 AOSS from entering sleep mode
+> during system suspend. This is a serious regression in v6.2 kernel series.
+
+That fix is sitting in the media tree for a while and afaics still
+hasn't been sent to Linus (which is needed to get this fixed in 6.2.y).
+
+Mauro, could you maybe take care of that?
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
