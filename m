@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C006D37E7
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 14:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B986D37EE
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 14:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjDBMkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 08:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S230355AbjDBMss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 08:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjDBMkv (ORCPT
+        with ESMTP id S229459AbjDBMsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 08:40:51 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EF2E1B6;
-        Sun,  2 Apr 2023 05:40:48 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pix0b-0005dt-9D; Sun, 02 Apr 2023 14:40:33 +0200
-Message-ID: <3a2ca263-7f60-63d3-7f9a-208ab8197c07@leemhuis.info>
-Date:   Sun, 2 Apr 2023 14:40:32 +0200
+        Sun, 2 Apr 2023 08:48:46 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34506BB86
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 05:48:45 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54606036bb3so338169547b3.6
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 05:48:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680439724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YAIgrqdE3MPfyJvbHSqkch4ENAZwFJPM9U7up3c8s+U=;
+        b=yP5NGKPNbQm4+cg4kVrG8svhAYydLasi+I5KqHBg/PkjYcZyw+VZQx68DkSRTqppMv
+         iUe1CiD05wz7vrMiO7B/I7GhWdjB5AqiW8yVBlG21AzAcPpskNhWbxDAvaIiTyhpWD3+
+         REpQWmUsbEudz4gzkrwkWmbzpVuguvS1UuFH0gLrxHI3d8SYlYqqG60fhpfyEDoj1IQs
+         kjsCKjbN07jIk3VhMSopQDmCeaeHlvT4CoVmkpvUUsN/jWHJCRdZXCp95qzgggJPhng/
+         arTdnO8YkPKeHZapdWkfLN6tyKmsKHGY5scB9YebeIK3Mdv85MyKW9I9d7f/U4gHZ5Ps
+         6CeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680439724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YAIgrqdE3MPfyJvbHSqkch4ENAZwFJPM9U7up3c8s+U=;
+        b=cJCA767eN3BIUrDi6qaG1woF3jzXrphuni2A/a49Bag6COwGhyXmFEKcwXbOx7ABBR
+         E8dbPX1GBZf/pajW//Ly/6peWTykxYhML3utgLHo3sOB+reDA5ISnpOMBU+giJAdgsq0
+         7JCyAOaI+WISuk64xxUeXR4fbUvA4MTo9AsND11E95FJMAgNn2PpmS4KVXzpjYYMWbut
+         wkqL7He/w0fkJOzgjgwLIPV44SPRBO0+Fr0lNradSaCcnL1BUouBIXZ9MJTBMWFw5wue
+         QQlThg4WXF3inhCFxGLGhAwXYcgKaF+c54P1P9+611ZAIlz4VWRA+mbTyLnjIG5zxc1u
+         rrDQ==
+X-Gm-Message-State: AAQBX9fO3Uj3UX4XOgrGyBUher4AClppMLBpZ6b8AWB077qALw5MEEiO
+        Wk8BhgUo6toklttlnIATMtc4u0lQRZQPSvEhyI2RjQ==
+X-Google-Smtp-Source: AKy350Z2pxrg73bxnmOYk3KSWveMo5H/mQj3AN3N+wKI03iMbQJiY7AXHeq+OlIKS11wHVH6SHC20Pv+bPmydVw6O4I=
+X-Received: by 2002:a81:4426:0:b0:53d:2772:65d with SMTP id
+ r38-20020a814426000000b0053d2772065dmr16560744ywa.9.1680439724351; Sun, 02
+ Apr 2023 05:48:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [REGRESSION] CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait()
- and slow-stuck reboots
-Content-Language: en-US, de-DE
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Alexey Klimov <alexey.klimov@linaro.org>
-Cc:     peterz@infradead.org, draszik@google.com, peter.griffin@linaro.org,
-        willmcvicker@google.com, mingo@kernel.org, ulf.hansson@linaro.org,
-        tony@atomide.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, axboe@kernel.dk,
-        alim.akhtar@samsung.com, regressions@lists.linux.dev,
-        avri.altman@wdc.com, bvanassche@acm.org, klimova@google.com
-References: <20230314230004.961993-1-alexey.klimov@linaro.org>
- <ZBhlL4tqSUi/c3qk@FVFF77S0Q05N.cambridge.arm.com>
- <ZBiEEyDaxq9oSXJk@FVFF77S0Q05N.cambridge.arm.com>
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <ZBiEEyDaxq9oSXJk@FVFF77S0Q05N.cambridge.arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680439249;6dba8e56;
-X-HE-SMSGID: 1pix0b-0005dt-9D
-X-Spam-Status: No, score=-2.4 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230401165723.19762-1-quic_sartgarg@quicinc.com> <20230401165723.19762-2-quic_sartgarg@quicinc.com>
+In-Reply-To: <20230401165723.19762-2-quic_sartgarg@quicinc.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 2 Apr 2023 14:48:33 +0200
+Message-ID: <CACRpkdam5M+Px58hHJp30tCYz-Vh54KvMei7WeZmqmTvtw5X8w@mail.gmail.com>
+Subject: Re: [PATCH V1 1/2] mmc: core: Define new vendor ops to enable
+ internal features
+To:     Sarthak Garg <quic_sartgarg@quicinc.com>
+Cc:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, quic_rampraka@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_sachgupt@quicinc.com,
+        quic_pragalla@quicinc.com, quic_sayalil@quicinc.com,
+        Brian Norris <briannorris@chromium.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. See link in footer if these mails annoy you.]
+Hi Sarthak,
 
-On 20.03.23 17:04, Mark Rutland wrote:
-> On Mon, Mar 20, 2023 at 01:52:47PM +0000, Mark Rutland wrote:
->> On Tue, Mar 14, 2023 at 11:00:04PM +0000, Alexey Klimov wrote:
->>> #regzbot introduced: 0c5ffc3d7b15
->>> #regzbot title: CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait() and slow-stuck reboots
->>>
->>> The upstream changes are being merged into android-mainline repo and at some
->>> point we started to observe kernel panics on reboot or long reboot times.
->>
->> Where can I find the android-mainline repo, and which specific branch/commit
->> from that repo is being merged in?
-> 
-> I assume that was the android-mainline branch in:
-> 
->   https://android.googlesource.com/kernel/common/
-> 
-> ... and I had a go with commit:
-> 
->   8338670fd5bdf8d7 ("Merge "Merge 36289a03bcd3 ("Merge tag 'v6.3-p1' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6") into android-mainline" into android-mainline")
-> 
-> ... as that was the commit immediately before your local revert:
-> 
->   a32cec8e3f2253bc ("ANDROID: Revert "cpuidle, dt: Push RCU-idle into driver")
-> 
-> Testing on Juno R2 with defconfig + PROVE_LOCKING=y + DEBUG_LOCKDEP=y, I cannot
-> reproduce the reboot issue; everything seems to work just fine.
-> 
-> Can you say which config you're using?
-> 
-> Just to check: are you using a pristine version of that tree, or do you have
-> any vendor hooks present? I note that there are special hooks added to the
-> cpuidle and PSCI code, and I can imagine those might expect the old behaviour
-> w.r.t. RCU and idle, so ruling those out would help.
+thanks for your patch!
 
-No reply to this since more than 10 days afaics, hence for now assuming
-that this is not really a regression.
+On Sat, Apr 1, 2023 at 6:57=E2=80=AFPM Sarthak Garg <quic_sartgarg@quicinc.=
+com> wrote:
 
-#regzbot inconclusive: another dev could not reproduce issue; reporter
-MIA and might have used a patched tree
-#regzbot ignore-activity
+> Define new ops to let vendor enable internal features in
+> mmc_suspend/resume paths like partial init feature.
+>
+> Signed-off-by: Sarthak Garg <quic_sartgarg@quicinc.com>
+(...)
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+> --- a/include/linux/mmc/host.h
+> +++ b/include/linux/mmc/host.h
+> @@ -212,6 +212,10 @@ struct mmc_host_ops {
+>
+>         /* Initialize an SD express card, mandatory for MMC_CAP2_SD_EXP. =
+*/
+>         int     (*init_sd_express)(struct mmc_host *host, struct mmc_ios =
+*ios);
+> +
+> +       void    (*cache_card_properties)(struct mmc_host *host);
+> +       bool    (*partial_init_card)(struct mmc_host *host);
+
+These have confusing names, first it has nothing to do with
+cards since the callbacks are to the host. Second the functions
+are named after usecases in a certain host rather than function.
+
+I would just call them .suspend() and .resume(), the use
+is obvious and they are called from the driver .suspend()
+and .resume() hooks.
+
+Yours,
+Linus Walleij
