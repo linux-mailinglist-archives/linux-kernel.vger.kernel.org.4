@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8FE6D3A20
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 22:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8288E6D3A27
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 22:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjDBUDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 16:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
+        id S230280AbjDBUKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 16:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjDBUDS (ORCPT
+        with ESMTP id S229915AbjDBUKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 16:03:18 -0400
-Received: from valentin-vidic.from.hr (valentin-vidic.from.hr [IPv6:2001:470:1f0b:3b7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2015A8A49;
-        Sun,  2 Apr 2023 13:03:16 -0700 (PDT)
-X-Virus-Scanned: Debian amavisd-new at valentin-vidic.from.hr
-Received: by valentin-vidic.from.hr (Postfix, from userid 1000)
-        id 32CA1295B5; Sun,  2 Apr 2023 22:03:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=valentin-vidic.from.hr; s=2020; t=1680465791;
-        bh=9VdTdi38B+ohBYB7mtje7rl53RM9eLoGTNFkms+HzbE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P3zQOheTkGXjBNtEJf5A2qf6YkJ32PjA29Prfa5xseW4hrwSq+qEWFXeEQGezBDMT
-         wx7w2YEcMjz3l6q4YAgjhzTtWpvrj5kRaTHtGtwuBAZtBCZMqoEVkXicDQ2bUy/wcG
-         DYDq907W2MlUjmlG7P/r2z3RCLksqMFOS8LTlsQ10evFhefimbOTDxcNRenbL+qcwl
-         IFvL/42Zr+1zNHxXqb69AtyBV3/LS6jNj2sjtz4eXaUXjRkp6eXM2w8058Sn8UTTJD
-         xKS09CY8bSBCn9eUn9QdVtQz/lcpa6zzjGMb6fNaUSgDm3Aa7QzBreyteCTwBWsxY8
-         FN33R5V0GD4k1F4oZTEB46ivyUXxuk9Sme8sNHd9bIGAZxKBQnVz+ODd1PgeLaFwGC
-         b3LSXJvxepn7mjloawdID81IE5sr8IM5E07aQYd1xWzmqxYxCAeiJHLBxYpjdZmxLh
-         7BlZApm3Q32CFVmSSbuao4qR0KJaVMD4YY+aG/lx6Qf+NIKmRLn+TQJTbhyTkVNhD7
-         6gFb2ae2hCawUWYF9ZZBrq6SVPwWGqWAMFctkaWKSoA2IYMUlpbHtVdPIlQV6rH/r5
-         BIhireO219++LWC26DWQrKp9g94j83911I2FGhu/CHp+X7qXma4AqyAol+XIHDfvzi
-         /DzeNmGZkh5j8tWZhqR+Cf9Y=
-Date:   Sun, 2 Apr 2023 22:03:11 +0200
-From:   Valentin =?utf-8?B?VmlkacSH?= <vvidic@valentin-vidic.from.hr>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Micah Morton <mortonm@chromium.org>,
-        =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Vivek Goyal <vgoyal@redhat.com>
-Subject: Re: [PATCH] security, lsm: security_old_inode_init_security() Handle
- multi LSM registration
-Message-ID: <ZCnff6gUjU89zfAb@valentin-vidic.from.hr>
-References: <20230401214151.1243189-1-vvidic@valentin-vidic.from.hr>
- <CAHC9VhT6VXwybScqsnYHHtbHNPoWMVQJzQ7VAccm2MWZEz+5Dw@mail.gmail.com>
+        Sun, 2 Apr 2023 16:10:18 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15838682
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 13:10:14 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id x3so109415763edb.10
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 13:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1680466211;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XeS/K6Vgqovzy5IrEj4kKLQF6NPWoliB9Z+vqp09t2o=;
+        b=bY8hUBO+rCdsyAGIYLZBsm+0DU+1MCE2UVtl7UI75LohQBQzyszIIGGHeSZXHxv7hO
+         0U3uAcGSFMpUr/7Gvt95CMAaDDGVHUlK0pENcWopedTAK40iUxyADnckvtnyktdjHr3t
+         ADaYwi/icfQ0i+xwnVpG8O3H12rpsdSHG/9+4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680466211;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XeS/K6Vgqovzy5IrEj4kKLQF6NPWoliB9Z+vqp09t2o=;
+        b=VxSSBjhuVeP9y7HfQDCYa92XojOlK/QOE9lJGn+IQt20oJcO+ouU/vr0TpT06+kW4u
+         RIZr8xitSnVtkTOqV4/FqqlwDKx6egLtAkc+W4nSBEO5M9tbnWloj8Zht+9NhEa/mKaC
+         9BkF73pPnqrMEDvZGut0y7Q+ebATUu5ZaI8XOJ2Gq3JdcrAQkfbcLtk/b3Trxbqk9aHw
+         wHCtM2nWVP+Vk6MVh2pSoD9z260xzRbLis8zqdo4wJMG9+tqFl8syHJqnVP2rj/RTlCk
+         YzSgC/MV0WH9u6pVKB7oCOj+64gn5KH/v+yCsZDT0KAVYCKT6aC/7OIubOhuz81PU/W+
+         kT8A==
+X-Gm-Message-State: AAQBX9e9fzJPiMFV0KDdneOAAhlVFOCdeaKl0v0VooslB4rsN7qjIi/A
+        9xuYgj000P/+hHbZZY7aIiTbu/sJ6dIPqMCC4Og=
+X-Google-Smtp-Source: AKy350a1vSodAG/tA7cFsuKSJchqyQPcLm3dsPvLg9Y1l3eGdYyK9240gFQuDos4og+HzB0FcYYU9A==
+X-Received: by 2002:a17:906:25d5:b0:932:40f4:5c44 with SMTP id n21-20020a17090625d500b0093240f45c44mr33576716ejb.36.1680466211712;
+        Sun, 02 Apr 2023 13:10:11 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-248-31-153.retail.telecomitalia.it. [95.248.31.153])
+        by smtp.gmail.com with ESMTPSA id gl18-20020a170906e0d200b00924d38bbdc0sm3553127ejb.105.2023.04.02.13.10.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Apr 2023 13:10:11 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-input@vger.kernel.org
+Subject: [PATCH 0/9] Input: edt-ft5x06 - convert to use regmap API
+Date:   Sun,  2 Apr 2023 22:09:42 +0200
+Message-Id: <20230402200951.1032513-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhT6VXwybScqsnYHHtbHNPoWMVQJzQ7VAccm2MWZEz+5Dw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,19 +72,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 11:14:33AM -0400, Paul Moore wrote:
-> If you have the time, could you try a patch we have queued up in the
-> lsm/next branch?  We are in the process of removing
-> security_old_inode_init_security() and transitioning all the callers
-> over to security_inode_init_security(), and I believe the ocfs2 patch
-> for this should solve the problem you are seeing, can you test it on
-> your system and let us know?
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/patch/?id=de3004c874e740304cc4f4a83d6200acb511bbda
 
-Great, thanks for the pointer. This patch also works for me as I don't
-see the crash anymore. Can it also be included in the 6.1 LTS kernel
-since this is were I first noticed the problem?
+This series converts the driver to use the regmap API for accessing the
+registers of the different models it manages, making the driver code more
+generic.
+The series has been tested on the following touchscreen models:
+- M06
+- M09
+- M12
+- EP0430MLF0M
+- generic ft5x06 (05)
+
+The series also includes some code cleaning and optimization patches.
+
+
+Dario Binacchi (9):
+  Input: edt-ft5x06 - fix indentation
+  Input: edt-ft5x06 - remove unnecessary blank lines
+  Input: edt-ft5x06 - add spaces to ensure format specification
+  Input: edt-ft5x06 - don't recalculate the CRC
+  Input: edt-ft5x06 - remove code duplication
+  Input: edt-ft5x06 - don't print error messages with dev_dbg()
+  Input: edt-ft5x06 - convert to use regmap API
+  Input: edt-ft5x06 - unify the crc check
+  Input: edt-ft5x06: Calculate points data length only once
+
+ drivers/input/touchscreen/edt-ft5x06.c | 496 +++++++++++++------------
+ 1 file changed, 251 insertions(+), 245 deletions(-)
 
 -- 
-Valentin
+2.32.0
+
