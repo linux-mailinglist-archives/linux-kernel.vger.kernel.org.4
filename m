@@ -2,123 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F85E6D3AF5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 01:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2958A6D3AF9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 01:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjDBXht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 19:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S230204AbjDBXnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 19:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDBXhq (ORCPT
+        with ESMTP id S229379AbjDBXna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 19:37:46 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7AA59F9;
-        Sun,  2 Apr 2023 16:37:45 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id w4so26345169plg.9;
-        Sun, 02 Apr 2023 16:37:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680478665; x=1683070665;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ao3ul6XNYxlEloMUF9UKkjGjNYX4IkQEThyq71yxJ2A=;
-        b=Q/jRySSY8fGAlaUWG/dY+2Dnha50fi9OCf9j2El+U6gSR2LuZ03KL1hv7MuPfon3D7
-         546qgkoWpaulYChTI8l4S/EyZY2hqAG4wAkMmtuJAL6ePaTB6P+cf52LSTOsfpzAnHyG
-         4ePVtgVxAbV9MTj3+wp9t0wGNNhlb/7jdhEbQnFurqoJqsP3Op2fCGni9uiT3cSVHwFG
-         +npdz5fI4qIq2DIFz1vAHweMRswod/Wbsp4yQL+lUCWfWNr/WNfXzkUj62YzGcz+ZAFC
-         BdeW7gXFC/33DG5LoyaGzYlXt1BL6huU2jcFLNWFEAHSTHiIQJ6YK0QqHSe/wBeftczS
-         B43A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680478665; x=1683070665;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ao3ul6XNYxlEloMUF9UKkjGjNYX4IkQEThyq71yxJ2A=;
-        b=QFXB7936NuSfiSYIeunQm+txByuVXonQs3yqCWz1d6q76oWb+5tBAEJIt7RcZJfDmn
-         6kF546BDB/ecXqYI8Gmb5i09vCDGuUpOvEB0WQdO1rt+mfFbP6M5R3+mL0DGRFBUyLIK
-         C/fwaXXkj2PniDsljOvwEpmhG93HvUdkKfmRaRmJLt0f6OwnPSMiAFgDb/hb7SCgJmu+
-         0/16SsTrzwQ978i9xyZk9JYQdi6pXWAMrIJrFWP6pBRWq3DpichFLaxAgpVgomUPUyAH
-         61LIRwQjjLb/bZQAYWpim7O+VjN0n8HPoAD7S15NgSQIHSIrBNbbQYhG5n+7vdCKHFoM
-         nxqg==
-X-Gm-Message-State: AO0yUKXS3qkYqriyHGwPIXlGA3uokM6VDyt5/OY8q7bgUfhHJQZMFtcF
-        jAeAOVPdh8L3W6KGs858KHagznvo/CU=
-X-Google-Smtp-Source: AK7set9jxQYoQMogbP0M/KKqLkkBPUS4uGQyGeVdmMM7N0Kpd769vFGXVKEZSrBo8uWL0aNTS8xHYA==
-X-Received: by 2002:a05:6a20:6589:b0:d9:3440:9a26 with SMTP id p9-20020a056a20658900b000d934409a26mr30214216pzh.20.1680478664732;
-        Sun, 02 Apr 2023 16:37:44 -0700 (PDT)
-Received: from dhcp-172-26-102-232.dhcp.thefacebook.com ([2620:10d:c090:400::5:3c8])
-        by smtp.gmail.com with ESMTPSA id 18-20020aa79212000000b0062db34242aesm5484548pfo.167.2023.04.02.16.37.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 16:37:44 -0700 (PDT)
-Date:   Sun, 2 Apr 2023 16:37:40 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     Song Liu <song@kernel.org>, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
-Message-ID: <20230402233740.haxb7lgfavcoe27f@dhcp-172-26-102-232.dhcp.thefacebook.com>
-References: <20230326092208.13613-1-laoar.shao@gmail.com>
- <CAPhsuW43EiH0tVKU8s+JwV_V6EBETTDyXsAmMzAftpVtcgLHag@mail.gmail.com>
- <CALOAHbCqCb3xmSpNe1Qvm75GBY4ZEGrAOHfVJvpZV5t=akTTgQ@mail.gmail.com>
+        Sun, 2 Apr 2023 19:43:30 -0400
+Received: from sender11-op-o11.zoho.eu (sender11-op-o11.zoho.eu [31.186.226.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D5E3A95
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 16:43:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1680478986; cv=none; 
+        d=zohomail.eu; s=zohoarc; 
+        b=ga8OY/nbDa0UZUODAAyuB7UDvHr1K1jR45KHgmdPRUIM1rNMfgvm754d9z6Eiq4N9OBG8o+Eps3l6kdzOdr1BPliVG6Q8t/xIt936vS+rTcUnN46AdEvkA+iTacSuVMAyPFLMH0H8x3B9RVI1t+w62zQ3++XbfqRMdzNoolt048=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+        t=1680478986; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=U1rXoYumoYcKZFnPPR3s49+uZFff4p+7bEQE/flFm0g=; 
+        b=frRMJ/xiq/EwJMiVLOqQKT1oj80WoRlFwwubbNiCztfdmSlQj1dOU67wsT8IuaB5BRJEZ0IboQ+QmCgOkLtKmYUvGqLSJ1fhkDph/c1pkrdUkwnZEs6Q6sGdIFqD+6FBLDkp2eCe++m6MD78IImLFDB6Cf25qedQccjkSErufUA=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+        spf=pass  smtp.mailfrom=jes@trained-monkey.org;
+        dmarc=pass header.from=<jes@trained-monkey.org>
+Received: from [192.168.99.41] (pool-98-113-67-206.nycmny.fios.verizon.net [98.113.67.206]) by mx.zoho.eu
+        with SMTPS id 1680478985147643.8234160036232; Mon, 3 Apr 2023 01:43:05 +0200 (CEST)
+Message-ID: <24836c4f-75b1-75f5-dfb0-2a3007aba458@trained-monkey.org>
+Date:   Sun, 2 Apr 2023 19:43:02 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALOAHbCqCb3xmSpNe1Qvm75GBY4ZEGrAOHfVJvpZV5t=akTTgQ@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] net: alteon: remove unused len variable
+Content-Language: en-US
+To:     Tom Rix <trix@redhat.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230331205545.1863496-1-trix@redhat.com>
+From:   Jes Sorensen <jes@trained-monkey.org>
+In-Reply-To: <20230331205545.1863496-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.4 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:47:31AM +0800, Yafang Shao wrote:
-> On Tue, Mar 28, 2023 at 3:04 AM Song Liu <song@kernel.org> wrote:
-> >
-> > On Sun, Mar 26, 2023 at 2:22 AM Yafang Shao <laoar.shao@gmail.com> wrote:
-> > >
-> > > Currently only CAP_SYS_ADMIN can iterate BPF object IDs and convert IDs
-> > > to FDs, that's intended for BPF's security model[1]. Not only does it
-> > > prevent non-privilidged users from getting other users' bpf program, but
-> > > also it prevents the user from iterating his own bpf objects.
-> > >
-> > > In container environment, some users want to run bpf programs in their
-> > > containers. These users can run their bpf programs under CAP_BPF and
-> > > some other specific CAPs, but they can't inspect their bpf programs in a
-> > > generic way. For example, the bpftool can't be used as it requires
-> > > CAP_SYS_ADMIN. That is very inconvenient.
-> >
-> > Agreed that it is important to enable tools like bpftool without
-> > CAP_SYS_ADMIN. However, I am not sure whether we need a new
-> > namespace for this. Can we reuse some existing namespace for this?
-> >
+On 3/31/23 16:55, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/net/ethernet/alteon/acenic.c:2438:10: error: variable
+>    'len' set but not used [-Werror,-Wunused-but-set-variable]
+>                  int i, len = 0;
+>                         ^
+> This variable is not used so remove it.
 > 
-> It seems we can't.
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Yafang,
+Signed-off-by: Jes Sorensen <jes@trained-monkey.org>
 
-It's a Nack.
 
-The only thing you've been trying to "solve" with bpf namespace is to
-allow 'bpftool prog show' iterate progs in the "namespace" without CAP_SYS_ADMIN.
-The concept of bpf namespace is not even close to be thought through.
-Others pointed out the gaps in the design. Like bpffs. There are plenty.
-Please do not send patches like this in the future.
-You need to start with describing the problem you want to solve,
-then propose _several_ solutions, describe their pros and cons,
-solicit feedback, present at the conferences (like LSFMMBPF or LPC),
-and when the community agrees that 1. problem is worth solving,
-2. the solution makes sense, only then work on patches.
+> ---
+>   drivers/net/ethernet/alteon/acenic.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/alteon/acenic.c b/drivers/net/ethernet/alteon/acenic.c
+> index d7762da8b2c0..eafef84fe3be 100644
+> --- a/drivers/net/ethernet/alteon/acenic.c
+> +++ b/drivers/net/ethernet/alteon/acenic.c
+> @@ -2435,7 +2435,7 @@ static netdev_tx_t ace_start_xmit(struct sk_buff *skb,
+>   	} else {
+>   		dma_addr_t mapping;
+>   		u32 vlan_tag = 0;
+> -		int i, len = 0;
+> +		int i;
+>   
+>   		mapping = ace_map_tx_skb(ap, skb, NULL, idx);
+>   		flagsize = (skb_headlen(skb) << 16);
+> @@ -2454,7 +2454,6 @@ static netdev_tx_t ace_start_xmit(struct sk_buff *skb,
+>   			const skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
+>   			struct tx_ring_info *info;
+>   
+> -			len += skb_frag_size(frag);
+>   			info = ap->skb->tx_skbuff + idx;
+>   			desc = ap->tx_ring + idx;
+>   
 
-"In container environment, some users want to run bpf programs in their containers."
-is something Song brought up at LSFMMBPF a year ago.
-At that meeting most of the folks agreed that there is a need to run bpf
-in containers and make sure that the effect of bpf prog is limited to a container.
-This new namespace that creates virtual IDs for progs and maps doesn't come
-close in solving this task.
