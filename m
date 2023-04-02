@@ -2,160 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006566D3AFE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 01:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5CE6D3B05
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 01:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjDBXxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 19:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S230330AbjDBX7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 19:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbjDBXxa (ORCPT
+        with ESMTP id S230328AbjDBX7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 19:53:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC03A26A
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 16:53:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 2 Apr 2023 19:59:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B6F5241;
+        Sun,  2 Apr 2023 16:59:48 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C6C5612AF
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 23:53:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6882CC433EF;
-        Sun,  2 Apr 2023 23:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680479608;
-        bh=zxrbVz61l15V8rpjrWR/yAZucRlfOGPOwL7NhSw3bMI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l+vTChPUE33q/wdeQ27LvPylZnBcv4j4qjHtMUoA8vOVQSWqcrFpsWWizkj38nRhZ
-         FiCbkjKQzcnWIQTxox79TlU/LVCjJ3trsADj4gXwjOG/xiRTDo8yxr9xuasl2rTwu7
-         qZwGFb/9eCx0Segx/ZXFZ8H1XDqvJYjk0WPIj7W/vy28/nC6V51vUD2jabB/AcaGiu
-         1467S+ooSe+hgkrgNHfmi2vyStwUODvWJEGMLvRq1YeiVRJmEfPEWwlCRLZibWSO27
-         BDaxYXCvty1eLYaF8ZVUZ+frGqrgaN8HiR8Jb0iFaOUc3GnAux5B/Co/fd+OMs2WDP
-         ousNcvG5mw8WQ==
-Date:   Sun, 2 Apr 2023 16:53:25 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drm/vblank: Fix for drivers that do not drm_vblank_init()
-Message-ID: <20230402235325.GA1068285@dev-arch.thelio-3990X>
-References: <20230401153802.1066072-1-robdclark@gmail.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PqWGj2Lq4z4x1d;
+        Mon,  3 Apr 2023 09:59:41 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680479982;
+        bh=BCqdPfGxR3iXmxIIQroDKtqaoRU4eM/i8SKEIAgbIBU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TKsonUC+kXomeRwiuUMwGOvrmimWhlOaKoHEqmPYqsYmVhTYq+WEWe0n4B91iO5Ch
+         I9K3TRl2Eo3vke2uK61cVJUI4AUQWCz+5HuGhuOEq+krM8rszuS1VPh85lczLOlkks
+         I14AjGACBgNC6dx7Z6QHlCPAowZYwy43kzt7bJI+BfKX8CpisrtBytdtm8VPW2INZR
+         EDI6tvQYO7EFpkC2fhdZreSWdrDML0tXE+o7OXnDDoEKdcmCSt2j6ATjQ6I8QT5Orq
+         121nczKqFRlR8PZnXbDpb8THQulSUIx1OgPkHOUw/IkmyQVHLjo+KKSk7HTbKIu1wE
+         OkFgBhhw4IOEQ==
+Date:   Mon, 3 Apr 2023 09:59:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the clk tree
+Message-ID: <20230403095939.423806fa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230401153802.1066072-1-robdclark@gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/EUcM.HxKayhTipK6IvJl7zZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 01, 2023 at 08:38:02AM -0700, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> This should fix a crash that was reported on ast (and possibly other
-> drivers which do not initialize vblank).
-> 
->    fbcon: Taking over console
->    Unable to handle kernel NULL pointer dereference at virtual address 0000000000000074
->    Mem abort info:
->      ESR = 0x0000000096000004
->      EC = 0x25: DABT (current EL), IL = 32 bits
->      SET = 0, FnV = 0
->      EA = 0, S1PTW = 0
->      FSC = 0x04: level 0 translation fault
->    Data abort info:
->      ISV = 0, ISS = 0x00000004
->      CM = 0, WnR = 0
->    user pgtable: 4k pages, 48-bit VAs, pgdp=0000080009d16000
->    [0000000000000074] pgd=0000000000000000, p4d=0000000000000000
->    Internal error: Oops: 0000000096000004 [#1] SMP
->    Modules linked in: ip6table_nat tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc binfmt_misc vfat fat xfs snd_usb_audio snd_hwdep snd_usbmidi_lib snd_seq snd_pcm snd_rawmidi snd_timer snd_seq_device snd soundcore joydev mc ipmi_ssif ipmi_devintf ipmi_msghandler arm_spe_pmu arm_cmn arm_dsu_pmu arm_dmc620_pmu cppc_cpufreq loop zram crct10dif_ce polyval_ce nvme polyval_generic ghash_ce sbsa_gwdt igb nvme_core ast nvme_common i2c_algo_bit xgene_hwmon gpio_dwapb scsi_dh_rdac scsi_dh_emc scsi_dh_alua ip6_tables ip_tables dm_multipath fuse
->    CPU: 12 PID: 469 Comm: kworker/12:1 Not tainted 6.3.0-rc2-00008-gd39e48ca80c0 #1
->    Hardware name: ADLINK AVA Developer Platform/AVA Developer Platform, BIOS TianoCore 2.04.100.07 (SYS: 2.06.20220308) 09/08/2022
->    Workqueue: events fbcon_register_existing_fbs
->    pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->    pc : drm_crtc_next_vblank_start+0x2c/0x98
->    lr : drm_atomic_helper_wait_for_fences+0x90/0x240
->    sp : ffff80000d583960
->    x29: ffff80000d583960 x28: ffff07ff8fc187b0 x27: 0000000000000000
->    x26: ffff07ff99c08c00 x25: 0000000000000038 x24: ffff07ff99c0c000
->    x23: 0000000000000001 x22: 0000000000000038 x21: 0000000000000000
->    x20: ffff07ff9640a280 x19: 0000000000000000 x18: ffffffffffffffff
->    x17: 0000000000000000 x16: ffffb24d2eece1c0 x15: 0000003038303178
->    x14: 3032393100000048 x13: 0000000000000000 x12: 0000000000000000
->    x11: 0000000000000000 x10: 0000000000000000 x9 : ffffb24d2eeeaca0
->    x8 : ffff80000d583628 x7 : 0000080077783000 x6 : 0000000000000000
->    x5 : ffff80000d584000 x4 : ffff07ff99c0c000 x3 : 0000000000000130
->    x2 : 0000000000000000 x1 : ffff80000d5839c0 x0 : ffff07ff99c0cc08
->    Call trace:
->     drm_crtc_next_vblank_start+0x2c/0x98
->     drm_atomic_helper_wait_for_fences+0x90/0x240
->     drm_atomic_helper_commit+0xb0/0x188
->     drm_atomic_commit+0xb0/0xf0
->     drm_client_modeset_commit_atomic+0x218/0x280
->     drm_client_modeset_commit_locked+0x64/0x1a0
->     drm_client_modeset_commit+0x38/0x68
->     __drm_fb_helper_restore_fbdev_mode_unlocked+0xb0/0xf8
->     drm_fb_helper_set_par+0x44/0x88
->     fbcon_init+0x1e0/0x4a8
->     visual_init+0xbc/0x118
->     do_bind_con_driver.isra.0+0x194/0x3a0
->     do_take_over_console+0x50/0x70
->     do_fbcon_takeover+0x74/0xf8
->     do_fb_registered+0x13c/0x158
->     fbcon_register_existing_fbs+0x78/0xc0
->     process_one_work+0x1ec/0x478
->     worker_thread+0x74/0x418
->     kthread+0xec/0x100
->     ret_from_fork+0x10/0x20
->    Code: f9400004 b9409013 f940a082 9ba30a73 (b9407662)
->    ---[ end trace 0000000000000000 ]---
-> 
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Fixes: d39e48ca80c0 ("drm/atomic-helper: Set fence deadline for vblank")
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+--Sig_/EUcM.HxKayhTipK6IvJl7zZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Seems to work for me, I no longer see the above crash.
+Hi all,
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+After merging the clk tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-> ---
->  drivers/gpu/drm/drm_vblank.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
-> index 299fa2a19a90..e98e3cefba3a 100644
-> --- a/drivers/gpu/drm/drm_vblank.c
-> +++ b/drivers/gpu/drm/drm_vblank.c
-> @@ -996,10 +996,16 @@ EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
->  int drm_crtc_next_vblank_start(struct drm_crtc *crtc, ktime_t *vblanktime)
->  {
->  	unsigned int pipe = drm_crtc_index(crtc);
-> -	struct drm_vblank_crtc *vblank = &crtc->dev->vblank[pipe];
-> -	struct drm_display_mode *mode = &vblank->hwmode;
-> +	struct drm_vblank_crtc *vblank;
-> +	struct drm_display_mode *mode;
->  	u64 vblank_start;
->  
-> +	if (!crtc->dev->vblank)
-> +		return -EINVAL;
-> +
-> +	vblank = &crtc->dev->vblank[pipe];
-> +	mode = &vblank->hwmode;
-> +
->  	if (!vblank->framedur_ns || !vblank->linedur_ns)
->  		return -EINVAL;
->  
-> -- 
-> 2.39.2
-> 
+In file included from include/linux/device/driver.h:21,
+                 from include/linux/device.h:32,
+                 from include/linux/platform_device.h:13,
+                 from drivers/clk/mediatek/clk-mt8188-wpe.c:9:
+drivers/clk/mediatek/clk-mt8188-wpe.c:91:31: error: 'clk_mt8188_vpp1_id_tab=
+le' undeclared here (not in a function)
+   91 | MODULE_DEVICE_TABLE(platform, clk_mt8188_vpp1_id_table);
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/module.h:243:15: note: in definition of macro 'MODULE_DEVICE_=
+TABLE'
+  243 | extern typeof(name) __mod_##type##__##name##_device_table          =
+     \
+      |               ^~~~
+include/linux/module.h:243:21: error: '__mod_platform__clk_mt8188_vpp1_id_t=
+able_device_table' aliased to undefined symbol 'clk_mt8188_vpp1_id_table'
+  243 | extern typeof(name) __mod_##type##__##name##_device_table          =
+     \
+      |                     ^~~~~~
+drivers/clk/mediatek/clk-mt8188-wpe.c:91:1: note: in expansion of macro 'MO=
+DULE_DEVICE_TABLE'
+   91 | MODULE_DEVICE_TABLE(platform, clk_mt8188_vpp1_id_table);
+      | ^~~~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  f42b9e9a43e3 ("clk: mediatek: Add MT8188 wpesys clock support")
+
+I have used the clk tree from next-20230331 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/EUcM.HxKayhTipK6IvJl7zZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqFuwACgkQAVBC80lX
+0GxZlQgApgR6zgP+URPXuMmB4/LBfktsX0xBYjRjRZvgJhS1n0mumL7mbbYp6nTb
+JWbVbMn6pzMgfxWWKS7qbCQ2QPkr/slrAhKkOQ721SgYJ9pkGZcWad6cyB2DtOh1
+JoLslFCPQMm3e5rlXizLN6gVm80gKcVDDxrjioVAfPLuDAxGyCbCREVXJ9+yVMnK
+IU52SaOVqbDM3lUvyI3dWu0aFFzYcSqfWF773+A2IHpS0I0LHMguU8UbcuVLuB4y
+kyPoebmu/D7PBLTR8bBQF9vMLcsTHW+fEsdLaVEPJlKePuUboTaGXoPDEjJosa0F
+/A1oSdPBJ1K0W5tKCbSV4grl33Wdsg==
+=sU6l
+-----END PGP SIGNATURE-----
+
+--Sig_/EUcM.HxKayhTipK6IvJl7zZ--
