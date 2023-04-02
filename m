@@ -2,116 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142666D3AD6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 00:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093506D3ADC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 00:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjDBWaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 18:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
+        id S230175AbjDBWzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 18:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDBWa2 (ORCPT
+        with ESMTP id S229379AbjDBWzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 18:30:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571336EBB;
-        Sun,  2 Apr 2023 15:30:27 -0700 (PDT)
-Received: from [192.168.2.163] (109-252-124-32.nat.spd-mgts.ru [109.252.124.32])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Sun, 2 Apr 2023 18:55:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A075FD9;
+        Sun,  2 Apr 2023 15:55:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3ACE06602E34;
-        Sun,  2 Apr 2023 23:30:18 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680474626;
-        bh=8PXBF8vV02LOUYcIW54cjJhIhkm+x7i45sfvjpWdHT8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VavHMw5TBD5Vk/Vta/7MpXGm0jSCH9ZANdchgd6Xq+rEE2g2hiDE0FyDaXMYg2QpU
-         D7w0+Oa+EAfbneCaruAPnZv7G3ZjzkY3ZEpeE5ZlHSmITCjKsgPkyF5vds0tbNkSGh
-         ABNDkLxJcRFEtycPCfUNa88FVxMcDX6bg7UQO3yK2Iu7ZYsqhvQRPPyNm0LZ1QM78n
-         dpdajKV051YcBxfjTBmX5mENPgiprJCwOkF9FHYaxChG0QKMfmWJnrTZDTmXOjAuUn
-         nTdZH7gSiZ3xUlpn1/rVaENBrOYO6bsTV5EkkiR696ksIUZ92trKXF+7v4dtMk9rfO
-         d/vKgIyiMNF/w==
-Message-ID: <6abaa803-1639-b949-3af5-05a341f9b459@collabora.com>
-Date:   Mon, 3 Apr 2023 01:30:09 +0300
+        by sin.source.kernel.org (Postfix) with ESMTPS id CD1FACE06B2;
+        Sun,  2 Apr 2023 22:55:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5C6C4339B;
+        Sun,  2 Apr 2023 22:55:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680476141;
+        bh=Lx2idhvRNG1dw9LUdErWFhzY49bD2WkzlnwBAK0/08w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=k4LJgGNBzxmSzkENVv50EPCcN09TK1s4ETBR3y1MO/ZjryOpwZ2BGQie9vAbSGDCj
+         YedY01t/R6fTl2PlJedmkABb5+2/70NYndNK24OQ1Zti+Q8wkNaHvauYIUsA4bx0kw
+         EGa1/ODVlzxRmANTfKnvLgFMZXsv3QKgnJm/Bf31WLFBbYfZEQ5bL0NsWiL7rO1b+l
+         VMYBHBeFqP/+H+xyugZVQOsQ0Bnc66KNpxNvxNOPrBnOuD7JMv92E/Fn6h+Et/dCOD
+         5tZt0cNTF24NsdvFt70zkuMRUtkntDhjGBk69BhvcUfXlTWK02rUWgf8agYhdJ4xsB
+         1Dzvt48I9d+BA==
+Date:   Sun, 2 Apr 2023 17:55:39 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Donald Hunter <donald.hunter@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, netdev@vger.kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: Re: [BUG] net, pci: 6.3-rc1-4 hangs during boot on PowerEdge R620
+ with igb
+Message-ID: <20230402225539.GA3388013@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 4/4] mfd: tps6586x: register restart handler
-Content-Language: en-US
-To:     Benjamin Bara <bbara93@gmail.com>, Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee@kernel.org>, rafael.j.wysocki@intel.com
-Cc:     jonathanh@nvidia.com, richard.leitner@linux.dev,
-        treding@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-References: <20230327-tegra-pmic-reboot-v3-0-3c0ee3567e14@skidata.com>
- <20230327-tegra-pmic-reboot-v3-4-3c0ee3567e14@skidata.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20230327-tegra-pmic-reboot-v3-4-3c0ee3567e14@skidata.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD4GDZwgOVn4dR2qiqrQWz-fw52aT9uyv22NCdo+hY4HJEgofQ@mail.gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/27/23 16:57, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
+On Sat, Apr 01, 2023 at 01:52:25PM +0100, Donald Hunter wrote:
+> On Fri, 31 Mar 2023 at 20:42, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > I assume this igb NIC (07:00.0) must be built-in (not a plug-in card)
+> > because it apparently has an ACPI firmware node, and there's something
+> > we don't expect about its status?
 > 
-> There are a couple of boards which use a tps6586x as
-> "ti,system-power-controller", e.g. the tegra20-tamonten.dtsi.
-> For these, the only registered restart handler is the warm reboot via
-> tegra's PMC. As the bootloader of the tegra20 requires the VDE, it must
-> be ensured that VDE is enabled (which is the case after a cold reboot).
-> For the "normal reboot", this is basically the case since
-> 8f0c714ad9be1ef774c98e8819a7a571451cb019.
-> However, this workaround is not executed in case of an emergency restart.
-> In case of an emergency restart, the system now simply hangs in the
-> bootloader, as VDE is not enabled (as not in use).
+> Yes they are built-in, to my knowledge.
 > 
-> The TPS658629-Q1 (unfortunately the only TPS6586x with public data sheet)
-> provides a SOFT RST bit in the SUPPLYENE reg to request a (cold) reboot.
-> This avoids the hang-up.
+> > Hopefully Rob will look at this.  If I were looking, I would be
+> > interested in acpidump to see what's in the DSDT.
 > 
-> Tested on a TPS658640.
-> 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-> ---
->  drivers/mfd/tps6586x.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/drivers/mfd/tps6586x.c b/drivers/mfd/tps6586x.c
-> index 93f1bf440191..c8adf6a08277 100644
-> --- a/drivers/mfd/tps6586x.c
-> +++ b/drivers/mfd/tps6586x.c
-> @@ -30,6 +30,7 @@
->  #include <linux/mfd/tps6586x.h>
->  
->  #define TPS6586X_SUPPLYENE	0x14
-> +#define SOFT_RST_BIT		BIT(0)
->  #define EXITSLREQ_BIT		BIT(1)
->  #define SLEEP_MODE_BIT		BIT(3)
->  
-> @@ -470,6 +471,17 @@ static int tps6586x_power_off_handler(struct sys_off_data *data)
->  	return tps6586x_set_bits(tps6586x_dev, TPS6586X_SUPPLYENE, SLEEP_MODE_BIT);
->  }
->  
-> +static int tps6586x_restart_handler(struct sys_off_data *data)
-> +{
-> +	struct device *tps6586x_dev = data->cb_data;
-> +
-> +	/* bring pmic into HARD REBOOT state */
-> +	tps6586x_set_bits(tps6586x_dev, TPS6586X_SUPPLYENE, SOFT_RST_BIT);
-> +
-> +	mdelay(500);
-Is this delay needed? There is no delay in a case of power off.
+> I can get an acpidump. Is there a preferred way to share the files, or just
+> an email attachment?
 
--- 
-Best regards,
-Dmitry
+I think by default acpidump produces ASCII that can be directly
+included in email.  http://vger.kernel.org/majordomo-info.html says
+100K is the limit for vger mailing lists.  Or you could open a report
+at https://bugzilla.kernel.org and attach it there, maybe along with a
+complete dmesg log and "sudo lspci -vv" output.
 
+Bjorn
