@@ -2,110 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B986D37EE
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 14:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2496D37F2
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 14:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjDBMss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 08:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
+        id S230390AbjDBMuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 08:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDBMsq (ORCPT
+        with ESMTP id S229459AbjDBMuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 08:48:46 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34506BB86
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 05:48:45 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54606036bb3so338169547b3.6
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 05:48:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680439724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YAIgrqdE3MPfyJvbHSqkch4ENAZwFJPM9U7up3c8s+U=;
-        b=yP5NGKPNbQm4+cg4kVrG8svhAYydLasi+I5KqHBg/PkjYcZyw+VZQx68DkSRTqppMv
-         iUe1CiD05wz7vrMiO7B/I7GhWdjB5AqiW8yVBlG21AzAcPpskNhWbxDAvaIiTyhpWD3+
-         REpQWmUsbEudz4gzkrwkWmbzpVuguvS1UuFH0gLrxHI3d8SYlYqqG60fhpfyEDoj1IQs
-         kjsCKjbN07jIk3VhMSopQDmCeaeHlvT4CoVmkpvUUsN/jWHJCRdZXCp95qzgggJPhng/
-         arTdnO8YkPKeHZapdWkfLN6tyKmsKHGY5scB9YebeIK3Mdv85MyKW9I9d7f/U4gHZ5Ps
-         6CeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680439724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YAIgrqdE3MPfyJvbHSqkch4ENAZwFJPM9U7up3c8s+U=;
-        b=cJCA767eN3BIUrDi6qaG1woF3jzXrphuni2A/a49Bag6COwGhyXmFEKcwXbOx7ABBR
-         E8dbPX1GBZf/pajW//Ly/6peWTykxYhML3utgLHo3sOB+reDA5ISnpOMBU+giJAdgsq0
-         7JCyAOaI+WISuk64xxUeXR4fbUvA4MTo9AsND11E95FJMAgNn2PpmS4KVXzpjYYMWbut
-         wkqL7He/w0fkJOzgjgwLIPV44SPRBO0+Fr0lNradSaCcnL1BUouBIXZ9MJTBMWFw5wue
-         QQlThg4WXF3inhCFxGLGhAwXYcgKaF+c54P1P9+611ZAIlz4VWRA+mbTyLnjIG5zxc1u
-         rrDQ==
-X-Gm-Message-State: AAQBX9fO3Uj3UX4XOgrGyBUher4AClppMLBpZ6b8AWB077qALw5MEEiO
-        Wk8BhgUo6toklttlnIATMtc4u0lQRZQPSvEhyI2RjQ==
-X-Google-Smtp-Source: AKy350Z2pxrg73bxnmOYk3KSWveMo5H/mQj3AN3N+wKI03iMbQJiY7AXHeq+OlIKS11wHVH6SHC20Pv+bPmydVw6O4I=
-X-Received: by 2002:a81:4426:0:b0:53d:2772:65d with SMTP id
- r38-20020a814426000000b0053d2772065dmr16560744ywa.9.1680439724351; Sun, 02
- Apr 2023 05:48:44 -0700 (PDT)
+        Sun, 2 Apr 2023 08:50:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD1C1C1DF;
+        Sun,  2 Apr 2023 05:50:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E318FB80E79;
+        Sun,  2 Apr 2023 12:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A1FA9C433A4;
+        Sun,  2 Apr 2023 12:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680439817;
+        bh=VWD8AhzQ5saiH3TAQeVQN3iTIBGgdcpAgBHSgDg8uE0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=P+uF+XHpFGEBoYo1nLM0vZVF8MWEmioSKbHBUukOeYoQSW1uejwXr8uT2r3XPZcKx
+         Wg7L9nM92pRtIv+wXT2cD1pLPfS1hid0a6vxrCmWJYhfaTd7suOpdXP1kNX+k1Wwr8
+         DTqhPWZDXzDJ6AN3c1mOz8XWwtkGsMEal8hbhZ3/kCZUv1VZpubh65oJWM98obzEQM
+         7r9Ysl7G9s0GkdDdPzjW8FQRrNr9Wk8o2x3Ts7ptgL5GLjwRWu/YSpCFeM933GBayN
+         9lSnT9U5/F9Fx27Imfi8lh6vt9ws0IDa1GY0rWhvuLYLnXRYHg0fS1OMUI/LX5htFS
+         2K+0US0oNmZTQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7CEB3C73FE2;
+        Sun,  2 Apr 2023 12:50:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230401165723.19762-1-quic_sartgarg@quicinc.com> <20230401165723.19762-2-quic_sartgarg@quicinc.com>
-In-Reply-To: <20230401165723.19762-2-quic_sartgarg@quicinc.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 2 Apr 2023 14:48:33 +0200
-Message-ID: <CACRpkdam5M+Px58hHJp30tCYz-Vh54KvMei7WeZmqmTvtw5X8w@mail.gmail.com>
-Subject: Re: [PATCH V1 1/2] mmc: core: Define new vendor ops to enable
- internal features
-To:     Sarthak Garg <quic_sartgarg@quicinc.com>
-Cc:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, quic_rampraka@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_sachgupt@quicinc.com,
-        quic_pragalla@quicinc.com, quic_sayalil@quicinc.com,
-        Brian Norris <briannorris@chromium.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: alteon: remove unused len variable
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168043981750.15620.10299883476369868511.git-patchwork-notify@kernel.org>
+Date:   Sun, 02 Apr 2023 12:50:17 +0000
+References: <20230331205545.1863496-1-trix@redhat.com>
+In-Reply-To: <20230331205545.1863496-1-trix@redhat.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     jes@trained-monkey.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+        ndesaulniers@google.com, linux-acenic@sunsite.dk,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sarthak,
+Hello:
 
-thanks for your patch!
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-On Sat, Apr 1, 2023 at 6:57=E2=80=AFPM Sarthak Garg <quic_sartgarg@quicinc.=
-com> wrote:
+On Fri, 31 Mar 2023 16:55:45 -0400 you wrote:
+> clang with W=1 reports
+> drivers/net/ethernet/alteon/acenic.c:2438:10: error: variable
+>   'len' set but not used [-Werror,-Wunused-but-set-variable]
+>                 int i, len = 0;
+>                        ^
+> This variable is not used so remove it.
+> 
+> [...]
 
-> Define new ops to let vendor enable internal features in
-> mmc_suspend/resume paths like partial init feature.
->
-> Signed-off-by: Sarthak Garg <quic_sartgarg@quicinc.com>
-(...)
+Here is the summary with links:
+  - net: alteon: remove unused len variable
+    https://git.kernel.org/netdev/net-next/c/51aaa68222d6
 
-> --- a/include/linux/mmc/host.h
-> +++ b/include/linux/mmc/host.h
-> @@ -212,6 +212,10 @@ struct mmc_host_ops {
->
->         /* Initialize an SD express card, mandatory for MMC_CAP2_SD_EXP. =
-*/
->         int     (*init_sd_express)(struct mmc_host *host, struct mmc_ios =
-*ios);
-> +
-> +       void    (*cache_card_properties)(struct mmc_host *host);
-> +       bool    (*partial_init_card)(struct mmc_host *host);
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-These have confusing names, first it has nothing to do with
-cards since the callbacks are to the host. Second the functions
-are named after usecases in a certain host rather than function.
 
-I would just call them .suspend() and .resume(), the use
-is obvious and they are called from the driver .suspend()
-and .resume() hooks.
-
-Yours,
-Linus Walleij
