@@ -2,69 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2EFB6D3B00
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 01:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006566D3AFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 01:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjDBXxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 19:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+        id S230307AbjDBXxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 19:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDBXxR (ORCPT
+        with ESMTP id S230299AbjDBXxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 19:53:17 -0400
+        Sun, 2 Apr 2023 19:53:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DBF9EF1
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 16:53:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC03A26A
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 16:53:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB6FC61239
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 23:53:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96DF6C433D2;
-        Sun,  2 Apr 2023 23:53:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C6C5612AF
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 23:53:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6882CC433EF;
+        Sun,  2 Apr 2023 23:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680479595;
-        bh=ltPEbF2nHt2rsmy/3jx2u3rUnXIX6TvuDwOBnZTp1cE=;
-        h=From:Date:Subject:To:Cc:From;
-        b=DICcnRV+7l/iOeli6NE7rUq5KXhuUFZLIJA/5guYMlMB5Sq8xHi77Kv52SqEKF8eh
-         UdQvvHGgPpfHtcKejHrc63UwogMhkoEsw+w/lvS6POh86ziJtVbscWrhhcdMl/xFlG
-         sDSBL0uUEgpcdMQ3LNvJknVEpaHKp+Q2PZy9oncZl14I0vjbZrYabVY5Km88il2Fgl
-         6krDssp9TABSt+Xat+8TSWL6Kht0uO7j1/brNEZrfAdFA33Z5j7eOK7iziuJyV4kab
-         QOrPysL4lFLUd0ge0v7IMfUUnpTzSwOrcd8YVS688WE3oycCLjZu839IT4rmdV2ZKi
-         /uDjQiZq203CA==
-From:   Eric Van Hensbergen <ericvh@kernel.org>
-Date:   Sun, 02 Apr 2023 23:53:00 +0000
-Subject: [PATCH v2] Update email address and mailing list for v9fs
+        s=k20201202; t=1680479608;
+        bh=zxrbVz61l15V8rpjrWR/yAZucRlfOGPOwL7NhSw3bMI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l+vTChPUE33q/wdeQ27LvPylZnBcv4j4qjHtMUoA8vOVQSWqcrFpsWWizkj38nRhZ
+         FiCbkjKQzcnWIQTxox79TlU/LVCjJ3trsADj4gXwjOG/xiRTDo8yxr9xuasl2rTwu7
+         qZwGFb/9eCx0Segx/ZXFZ8H1XDqvJYjk0WPIj7W/vy28/nC6V51vUD2jabB/AcaGiu
+         1467S+ooSe+hgkrgNHfmi2vyStwUODvWJEGMLvRq1YeiVRJmEfPEWwlCRLZibWSO27
+         BDaxYXCvty1eLYaF8ZVUZ+frGqrgaN8HiR8Jb0iFaOUc3GnAux5B/Co/fd+OMs2WDP
+         ousNcvG5mw8WQ==
+Date:   Sun, 2 Apr 2023 16:53:25 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drm/vblank: Fix for drivers that do not drm_vblank_init()
+Message-ID: <20230402235325.GA1068285@dev-arch.thelio-3990X>
+References: <20230401153802.1066072-1-robdclark@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230401-ericvh-fix-maintainers-v2-1-ece364bc6543@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFsVKmQC/4WOTQ6CMBCFr2JmbRVaSowr72FYtHWgE7WYKWkwh
- Ls7cAEXs/jeT+YtkJEJM1wPCzAWyjQmAX08QIguDajoIQy60qZqqlpJPJSoeprV21Ga5JCzurS
- 2sRrb0BgHUvYuo/LsUohbXeKYzwnnaTM/jLsgzr0TjpSnkb/7iFJv6t9/pVbimWCN9drb0N+ey
- Alfp5EH6NZ1/QFBN6Qw2gAAAA==
-To:     linux-kernel@vger.kernel.org
-Cc:     v9fs-developer@lists.sourceforge.net, v9fs@lists.linux.dev,
-        Eric Van Hensbergen <ericvh@kernel.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1548; i=ericvh@kernel.org;
- h=from:subject:message-id; bh=ltPEbF2nHt2rsmy/3jx2u3rUnXIX6TvuDwOBnZTp1cE=;
- b=owEBbQKS/ZANAwAKAYj/1ftKX/+YAcsmYgBkKhVq9UaRUyrm7OT+RT06zI14mjM6O1P84aSUf
- KJOkic6ZDmJAjMEAAEKAB0WIQSWlvDRlqWQmKTK0VGI/9X7Sl//mAUCZCoVagAKCRCI/9X7Sl//
- mC/TEAC1d4L6RPq0umdzXwdr5iKjvczkId8RQzBjJDdXwd/HizkIsBMv9ZonNdQ7hgeOap3R6kD
- lPr/rRJ8s1AxPH7Lh6r0sKXaaCkp1exmAtWdEHXGYh1AjoyEj8ZJTbg77g0qb1FVbPFiRflDEm8
- Ds5a5P4g7xBomvcQjQ14uBMxbmc64KP5v/pgOqJnXPOFjglKLs3kUEaMAB+C8uGJ2hH+TkBvfNV
- nMcO2ezYLj7ZkJYJESemyftZTkU5TsChyAab7tDARLijHTlOdQe1plSNMqR1gzimx+1pO16KE22
- /QwBTv0+cmPB919jDAQKFNMjf3pcV8u2Se5fqEW1Umv1xN+qaiYNs4TTxjyXxgae2W/NEjhRbL5
- HPHWlIzss+crw2jSF/jXY0TFfeQECGiRwjApMkhen7K1UlXZ8mCfvXxTVFVDIyoj3FfNj0EoU2h
- O22x1bVnXDebhNHNhyGQQ6E4/hAivxCM37yMQprEpeiRFF1EFk80VFCnh9qf2ghEqjBk1CvfYSN
- Xxo5jzMpqiwAa4JimjFxa1jjUVgLNQvk5t8PcaGtIgXIX/PgjzMmdgaS5oAjsgiIc9K156zSGBm
- kL6fWKvSjj/2IEnZ/vqxUMllWOVrOKgka7trqhe9jaOignxz9AxGAmTouu74uo+Z1Uhmi0o8eMV
- 0bSc/PyCECNwpJw==
-X-Developer-Key: i=ericvh@kernel.org; a=openpgp;
- fpr=9696F0D196A59098A4CAD15188FFD5FB4A5FFF98
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230401153802.1066072-1-robdclark@gmail.com>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -74,47 +59,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We've recently moved the mailing list to lists.linux.dev to move away
-from the sourceforge infrastructure.  This also updates the website
-from the (no longer v9fs relevant?) swik.net address to the github
-group which contains pointers to test cases, the protocol, servers,
-etc.  This also changes my email from my gmail to my kernel.org
-address.
+On Sat, Apr 01, 2023 at 08:38:02AM -0700, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+> 
+> This should fix a crash that was reported on ast (and possibly other
+> drivers which do not initialize vblank).
+> 
+>    fbcon: Taking over console
+>    Unable to handle kernel NULL pointer dereference at virtual address 0000000000000074
+>    Mem abort info:
+>      ESR = 0x0000000096000004
+>      EC = 0x25: DABT (current EL), IL = 32 bits
+>      SET = 0, FnV = 0
+>      EA = 0, S1PTW = 0
+>      FSC = 0x04: level 0 translation fault
+>    Data abort info:
+>      ISV = 0, ISS = 0x00000004
+>      CM = 0, WnR = 0
+>    user pgtable: 4k pages, 48-bit VAs, pgdp=0000080009d16000
+>    [0000000000000074] pgd=0000000000000000, p4d=0000000000000000
+>    Internal error: Oops: 0000000096000004 [#1] SMP
+>    Modules linked in: ip6table_nat tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc binfmt_misc vfat fat xfs snd_usb_audio snd_hwdep snd_usbmidi_lib snd_seq snd_pcm snd_rawmidi snd_timer snd_seq_device snd soundcore joydev mc ipmi_ssif ipmi_devintf ipmi_msghandler arm_spe_pmu arm_cmn arm_dsu_pmu arm_dmc620_pmu cppc_cpufreq loop zram crct10dif_ce polyval_ce nvme polyval_generic ghash_ce sbsa_gwdt igb nvme_core ast nvme_common i2c_algo_bit xgene_hwmon gpio_dwapb scsi_dh_rdac scsi_dh_emc scsi_dh_alua ip6_tables ip_tables dm_multipath fuse
+>    CPU: 12 PID: 469 Comm: kworker/12:1 Not tainted 6.3.0-rc2-00008-gd39e48ca80c0 #1
+>    Hardware name: ADLINK AVA Developer Platform/AVA Developer Platform, BIOS TianoCore 2.04.100.07 (SYS: 2.06.20220308) 09/08/2022
+>    Workqueue: events fbcon_register_existing_fbs
+>    pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>    pc : drm_crtc_next_vblank_start+0x2c/0x98
+>    lr : drm_atomic_helper_wait_for_fences+0x90/0x240
+>    sp : ffff80000d583960
+>    x29: ffff80000d583960 x28: ffff07ff8fc187b0 x27: 0000000000000000
+>    x26: ffff07ff99c08c00 x25: 0000000000000038 x24: ffff07ff99c0c000
+>    x23: 0000000000000001 x22: 0000000000000038 x21: 0000000000000000
+>    x20: ffff07ff9640a280 x19: 0000000000000000 x18: ffffffffffffffff
+>    x17: 0000000000000000 x16: ffffb24d2eece1c0 x15: 0000003038303178
+>    x14: 3032393100000048 x13: 0000000000000000 x12: 0000000000000000
+>    x11: 0000000000000000 x10: 0000000000000000 x9 : ffffb24d2eeeaca0
+>    x8 : ffff80000d583628 x7 : 0000080077783000 x6 : 0000000000000000
+>    x5 : ffff80000d584000 x4 : ffff07ff99c0c000 x3 : 0000000000000130
+>    x2 : 0000000000000000 x1 : ffff80000d5839c0 x0 : ffff07ff99c0cc08
+>    Call trace:
+>     drm_crtc_next_vblank_start+0x2c/0x98
+>     drm_atomic_helper_wait_for_fences+0x90/0x240
+>     drm_atomic_helper_commit+0xb0/0x188
+>     drm_atomic_commit+0xb0/0xf0
+>     drm_client_modeset_commit_atomic+0x218/0x280
+>     drm_client_modeset_commit_locked+0x64/0x1a0
+>     drm_client_modeset_commit+0x38/0x68
+>     __drm_fb_helper_restore_fbdev_mode_unlocked+0xb0/0xf8
+>     drm_fb_helper_set_par+0x44/0x88
+>     fbcon_init+0x1e0/0x4a8
+>     visual_init+0xbc/0x118
+>     do_bind_con_driver.isra.0+0x194/0x3a0
+>     do_take_over_console+0x50/0x70
+>     do_fbcon_takeover+0x74/0xf8
+>     do_fb_registered+0x13c/0x158
+>     fbcon_register_existing_fbs+0x78/0xc0
+>     process_one_work+0x1ec/0x478
+>     worker_thread+0x74/0x418
+>     kthread+0xec/0x100
+>     ret_from_fork+0x10/0x20
+>    Code: f9400004 b9409013 f940a082 9ba30a73 (b9407662)
+>    ---[ end trace 0000000000000000 ]---
+> 
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Fixes: d39e48ca80c0 ("drm/atomic-helper: Set fence deadline for vblank")
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 
-Signed-off-by: Eric Van Hensbergen <ericvh@kernel.org>
-Acked-by: Dominique Martinet <asmadeus@codewreck.org>
-Acked-by: Christian Schoenebeck <linux_oss@crudebyte.com>
----
- MAINTAINERS | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Seems to work for me, I no longer see the above crash.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d5bc223f305..8799a222048b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -224,13 +224,13 @@ S:	Orphan / Obsolete
- F:	drivers/net/ethernet/8390/
- 
- 9P FILE SYSTEM
--M:	Eric Van Hensbergen <ericvh@gmail.com>
-+M:	Eric Van Hensbergen <ericvh@kernel.org>
- M:	Latchesar Ionkov <lucho@ionkov.net>
- M:	Dominique Martinet <asmadeus@codewreck.org>
- R:	Christian Schoenebeck <linux_oss@crudebyte.com>
--L:	v9fs-developer@lists.sourceforge.net
-+L:	v9fs@lists.linux.dev
- S:	Maintained
--W:	http://swik.net/v9fs
-+W:	http://github.com/v9fs
- Q:	http://patchwork.kernel.org/project/v9fs-devel/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/ericvh/v9fs.git
- T:	git git://github.com/martinetd/linux.git
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
----
-base-commit: 707823e7f22f3864ddc7d85e8e9b614afe4f1b16
-change-id: 20230401-ericvh-fix-maintainers-865452e6c43a
-
-Best regards,
--- 
-Eric Van Hensbergen <ericvh@kernel.org>
-
+> ---
+>  drivers/gpu/drm/drm_vblank.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
+> index 299fa2a19a90..e98e3cefba3a 100644
+> --- a/drivers/gpu/drm/drm_vblank.c
+> +++ b/drivers/gpu/drm/drm_vblank.c
+> @@ -996,10 +996,16 @@ EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
+>  int drm_crtc_next_vblank_start(struct drm_crtc *crtc, ktime_t *vblanktime)
+>  {
+>  	unsigned int pipe = drm_crtc_index(crtc);
+> -	struct drm_vblank_crtc *vblank = &crtc->dev->vblank[pipe];
+> -	struct drm_display_mode *mode = &vblank->hwmode;
+> +	struct drm_vblank_crtc *vblank;
+> +	struct drm_display_mode *mode;
+>  	u64 vblank_start;
+>  
+> +	if (!crtc->dev->vblank)
+> +		return -EINVAL;
+> +
+> +	vblank = &crtc->dev->vblank[pipe];
+> +	mode = &vblank->hwmode;
+> +
+>  	if (!vblank->framedur_ns || !vblank->linedur_ns)
+>  		return -EINVAL;
+>  
+> -- 
+> 2.39.2
+> 
