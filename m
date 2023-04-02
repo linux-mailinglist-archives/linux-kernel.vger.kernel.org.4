@@ -2,162 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2AF6D3967
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 19:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E81FC6D3970
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 19:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbjDBRR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 13:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S230490AbjDBR00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 13:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjDBRR6 (ORCPT
+        with ESMTP id S230433AbjDBR0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 13:17:58 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB61FB770;
-        Sun,  2 Apr 2023 10:17:55 -0700 (PDT)
-Date:   Sun, 2 Apr 2023 17:17:53 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1680455874;
-        bh=pBp7XSZ0Evv+XdMsUT8o9bazlrtdBOpu5ew841a0wFo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nsNE7Lll8imB1HukOgWersulXk31SbXlZCqoRVI1PrVm/swVOavLGr5+Qjsg2oZCx
-         OUNQs1ZTDp0uo4+VT69HqIvGZfhNMO5Rp0TX3AGV8pEU3M0+7E2uT1hWNbbS2evk45
-         FgEFDM9tgB0j2u3OIlbe8jY8vPTzPBMYdqog/bO4=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] tools/nolibc: add testcases for vfprintf
-Message-ID: <dd8547a7-d794-409e-baa2-b431b0196360@t-8ch.de>
-References: <20230328-nolibc-printf-test-v2-0-f72bdf210190@weissschuh.net>
- <ZCmwqcwxHIlODz2i@1wt.eu>
+        Sun, 2 Apr 2023 13:26:24 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA77E7DB2;
+        Sun,  2 Apr 2023 10:26:22 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso18395889wms.1;
+        Sun, 02 Apr 2023 10:26:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680456381;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/vbuti5krowtrunNTliRTFxJEP25/MzDnPfiiGQsdeo=;
+        b=J8pksCugxMr7bNtJ0/qlJ10Lptx3EC19lN5z0s2GXmprRrIdmcWo1XMFCfUn7NJ14z
+         q++BYaehv+imhuaKg5o+SmZ5oX5gOtxhjWoX0ed0jSwWohiQIBtn2v6+eo1CQclstfNK
+         I1KthpbxHxvg222LwDWep11UAaY8FQ3g9ytU/50M5oO51DrrVlYc3K5yQ+jQ9goyYIGc
+         y6yC8D68mPCkirbDK87ugI7LDhxCk9bD4CW38wdiP17sEedkMdp8rfqhdgV2k4dpLzTt
+         Jp9EheRPAm3LT80wLYfZ47azt2yNF2VvGNJVZVeRQz/wO4twCX7ro3bbEOQ3gR/vcsw+
+         E7qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680456381;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/vbuti5krowtrunNTliRTFxJEP25/MzDnPfiiGQsdeo=;
+        b=ahXAs1H+gXq406VTQ563Wgw3YyytDpeV3gdeTWtMKNBw0aa9/M18M596WJsmEEj1vi
+         mZeRrZZziARrn0iInFWIFo/D1SXejV10Dej44OLboUg8rFU52yO9NxuZxXIxtau7bRC2
+         1KRPHxrpXkQ0auEsK1Psy6k/kEgwcZA5Ylyesm9ws6KW0IZwtZrDzLkSsDA3oVEY0sCh
+         nesw7ATWsyFg2ObixXcNUyxu/JbYhlfUoIA6GjHfrmd+k2FY5/ix5jc232j75fwvH+i6
+         bY3S6gdV0i5dqMAwdUqC07BUs7d70T23bY8gH9bZkpHBmFvYtzc0v9PCLNruFBlXxFOb
+         BJAQ==
+X-Gm-Message-State: AAQBX9chjJPh1HEXJlMTz5OIC9sTVFZNpQqT7TFGsXzUIAkrRHqxtgY9
+        B86dXhFYKIuZSuzbhiZg1wk=
+X-Google-Smtp-Source: AKy350YkZU0wUME6kjYWBKsiN+B6Bd5JavScpbV6FA4h3HrYDvcxwr2Qsm/WheupkAVb02tDYveAgg==
+X-Received: by 2002:a05:600c:2144:b0:3ef:6396:d9b3 with SMTP id v4-20020a05600c214400b003ef6396d9b3mr21145158wml.18.1680456381192;
+        Sun, 02 Apr 2023 10:26:21 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id h14-20020adffd4e000000b002c71a32394dsm7659691wrs.64.2023.04.02.10.26.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Apr 2023 10:26:20 -0700 (PDT)
+Message-ID: <77528d8d-29f3-9bae-33f3-3296c9c8b0b1@gmail.com>
+Date:   Sun, 2 Apr 2023 19:26:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCmwqcwxHIlODz2i@1wt.eu>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 00/17] MT6795 Helio X10 and Sony Xperia M5: DT step 2!
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     qii.wang@mediatek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
+        houlong.wei@mediatek.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <20230327083647.22017-1-angelogioacchino.delregno@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230327083647.22017-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-02 18:43:21+0200, Willy Tarreau wrote:
-> Thomas,
-> 
-> On Sun, Apr 02, 2023 at 01:02:44PM +0000, Thomas Weißschuh wrote:
-> > vfprintf() is complex and so far did not have proper tests.
-> > 
-> > This series is based on the "dev" branch of the RCU tree.
-> 
-> I've just ran it with glibc to see:
-> 
->   $ gcc nolibc-test.c  
->   $ ./a.out vfprintf
->   Running test 'vfprintf'
->   0 empty "" = ""                                                  [OK]
->   1 simple written(3) != read(0)                                  [FAIL]
->   2 string written(3) != read(0)                                  [FAIL]
->   3 number written(4) != read(0)                                  [FAIL]
->   4 negnumber written(5) != read(0)                               [FAIL]
->   5 unsigned written(5) != read(0)                                [FAIL]
->   6 char written(1) != read(0)                                    [FAIL]
->   7 hex written(1) != read(0)                                     [FAIL]
->   8 pointer written(5) != 3                                       [FAIL]
->   Errors during this test: 8
-> 
-> The main issue was that glibc uses buffered writes by default.
-> 
-> I could fix them with fflush() (which we don't have so it required an
-> ifndef), and this also made me realize that we were missing an fclose()
-> as well for compatibility with glibc. With this it got better:
-> 
->   Running test 'vfprintf'
->   0 empty "" = ""                                                  [OK]
->   1 simple "foo" = "foo"                                           [OK]
->   2 string "foo" = "foo"                                           [OK]
->   3 number "1234" = "1234"                                         [OK]
->   4 negnumber "-1234" = "-1234"                                    [OK]
->   5 unsigned "12345" = "12345"                                     [OK]
->   6 char "c" = "c"                                                 [OK]
->   7 hex "f" = "f"                                                  [OK]
->   8 pointer written(5) != 3                                       [FAIL]
->   Errors during this test: 1
-> 
-> This is caused by glibc emitting "(nil)" while we emit "0x0" for a NULL
-> pointer since we use the same code as when dumping integers. I could fix
-> that one as well by printing (void*)1 instead, which shows "0x1" for both.
-> 
-> This gives me the patch below on top of yours, which I think would make
-> sense to integrate in this form or a simplified one if we manage to add
-> fflush() and fclose() earlier.
-> 
-> What do you think ?
-> 
-> Thanks,
-> Willy
-> 
-> 
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index 28a8d77078dc..2958dc3eca93 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -678,6 +678,7 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
->  	int ret, fd, w, r;
->  	char buf[100];
->  	va_list args;
-> +	FILE *memfile;
->  
->  	fd = memfd_create("vfprintf", 0);
->  	if (fd == -1) {
-> @@ -685,8 +686,14 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
->  		return 1;
->  	}
->  
-> +	memfile = fdopen(fd, "w+");
-> +	if (!memfile) {
-> +		pad_spc(llen, 64, "[FAIL]\n");
-> +		return 1;
-> +	}
-> +
->  	va_start(args, fmt);
-> -	w = vfprintf(fdopen(fd, "w+"), fmt, args);
-> +	w = vfprintf(memfile, fmt, args);
->  	va_end(args);
->  
->  	if (w != c) {
-> @@ -695,12 +702,19 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
->  		return 1;
->  	}
->  
-> +#ifndef _NOLIBC_STDIO_H
-> +	fflush(memfile);
-> +#endif
->  	lseek(fd, 0, SEEK_SET);
->  
->  	r = read(fd, buf, sizeof(buf) - 1);
->  	buf[r] = '\0';
->  
-> +#ifndef _NOLIBC_STDIO_H
-> +	fclose(memfile);
-> +#else
->  	close(fd);
-> +#endif
 
-Wouldn't it be nicer to implement fflush/fclose in nolibc?
-I can send a v3 with that.
 
->  	if (r != w) {
->  		llen += printf(" written(%d) != read(%d)", w, r);
-> @@ -737,7 +751,7 @@ static int run_vfprintf(int min, int max)
->  		CASE_TEST(unsigned);     EXPECT_VFPRINTF(5, "12345", "%u", 12345); break;
->  		CASE_TEST(char);         EXPECT_VFPRINTF(1, "c", "%c", 'c'); break;
->  		CASE_TEST(hex);          EXPECT_VFPRINTF(1, "f", "%x", 0xf); break;
-> -		CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x0", "%p", NULL); break;
-> +		CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x1", "%p", (void*)0x1); break;
->  		case __LINE__:
->  			return ret; /* must be last */
->  		/* note: do not set any defaults so as to permit holes above */
+On 27/03/2023 10:36, AngeloGioacchino Del Regno wrote:
+> Changes in v2:
+>   - Squashed the addition of mediatek,mt6795-gce.h header with the
+>     commit adding the MT6795 GCE compatible.
+> 
+> This series further enhances the support for the MT6795 Helio X10 SoC
+> and the Sony Xperia M5 smartphone.
+> 
+> In particular, for the SoC support, this adds:
+>   - Frequency Hopping support
+>   - I2C controllers
+>   - Power domains
+>   - IOMMU support and LARBs
+>   - GCE/CMDQ Mailbox
+>   - VDECSYS and VENCSYS clocks
+>   - MMSYS support
+> 
+> ...and, on the Xperia M5 smartphone, this adds:
+>   - Frequency Hopping with Spread Spectrum for MAINPLL, MPLL, MSDCPLL
+>   - Touchscreen support (Synaptics S2726, fw id: 1898977, RMI4 protocol)
+>   - Accelerometer
+>   - Magnetometer
+>   - Proximity sensor
+>   - NFC support
+> 
+> ...all of which was successfully tested on the Xperia M5 smartphone.
+> 
+> This series depends on [1] for the MMSYS support.
+> 
+> Plan for step 3 is to push upstream full display support, which does
+> already work on my custom tree ;-)
+> 
+> [1]: https://lore.kernel.org/all/20230309102618.114157-1-angelogioacchino.delregno@collabora.com/
+> 
+> Cheers!
+> 
+
+Applied all but:
+4/17 dt-binding already applied
+7/17 dt-binding not applied
+8/17 we are missing the dt binding
+
+Thanks a lot for the great work
+Matthias
+
+> AngeloGioacchino Del Regno (17):
+>    arm64: dts: mediatek: mt6795: Add Frequency Hopping Controller node
+>    arm64: dts: mediatek: mt6795: Add apmixedsys syscon node
+>    arm64: dts: mediatek: mt6795: xperia-m5: Enable Frequency Hopping
+>    dt-bindings: i2c: i2c-mt65xx: Add compatible for MT6795 Helio X10
+>    arm64: dts: mediatek: mt6795: Add nodes for I2C controllers
+>    arm64: dts: mediatek: mt6795: Add SoC power domains
+>    dt-bindings: mailbox: mediatek,gce-mailbox: Add support for MT6795
+>    arm64: dts: mediatek: mt6795: Add support for the CMDQ/GCE mailbox
+>    arm64: dts: mediatek: mt6795: Add MMSYS node for multimedia clocks
+>    arm64: dts: mediatek: mt6795: Add VDECSYS and VENCSYS clocks
+>    arm64: dts: mediatek: mt6795: Add support for IOMMU and LARBs
+>    arm64: dts: mediatek: mt6795-xperia-m5: Enable I2C 0-3 busses
+>    arm64: dts: mediatek: mt6795-xperia-m5: Add Synaptics RMI4 Touchscreen
+>    arm64: dts: mediatek: mt6795-xperia-m5: Add Bosch BMA255 Accelerometer
+>    arm64: dts: mediatek: mt6795-xperia-m5: Add Bosch BMM050 Magnetometer
+>    arm64: dts: mediatek: mt6795-xperia-m5: Add Sensortek STK3310
+>      Proximity
+>    arm64: dts: mediatek: mt6795-xperia-m5: Add NXP PN547 NFC on I2C3
+> 
+>   .../devicetree/bindings/i2c/i2c-mt65xx.yaml   |   4 +
+>   .../mailbox/mediatek,gce-mailbox.yaml         |  20 +-
+>   .../dts/mediatek/mt6795-sony-xperia-m5.dts    | 166 ++++++++++++
+>   arch/arm64/boot/dts/mediatek/mt6795.dtsi      | 245 ++++++++++++++++++
+>   include/dt-bindings/gce/mediatek,mt6795-gce.h | 123 +++++++++
+>   5 files changed, 550 insertions(+), 8 deletions(-)
+>   create mode 100644 include/dt-bindings/gce/mediatek,mt6795-gce.h
+> 
