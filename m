@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FC66D3A32
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 22:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27F66D3A33
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 22:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjDBUKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 16:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
+        id S230444AbjDBUKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 16:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjDBUKU (ORCPT
+        with ESMTP id S230297AbjDBUKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 16:10:20 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7579A3586
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 13:10:19 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id b20so109523438edd.1
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 13:10:19 -0700 (PDT)
+        Sun, 2 Apr 2023 16:10:22 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDAC3586
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 13:10:20 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id eh3so109434009edb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 13:10:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1680466217;
+        d=amarulasolutions.com; s=google; t=1680466219;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/6yCxE8OoG8PeYtqKpR9SG7wxwNS753oO+7UKWNzpVg=;
-        b=N9sz1W2nE5acZfsaVT+YC3J/c7YMv2SuZ2EhIM5begbM7seJrl65wteJHGxYZnCQWg
-         oesgZqYRLy2aeHHLdg/QhWpBFRpVgFeVFrH22NLC1qUQFPGqz5790QzANSU5mSSPpfwv
-         JgV4Jm0WtlkBHy498Qk3sUQD0+18MwQaGeOHY=
+        bh=kMHERFML/oNzDxt2xRgB06w0p+QqR9zI3HtwO5KrpJg=;
+        b=BTA0a7k7iFtvaI2JEereURx8iOMHTUOIQcSCoitVWC3sF+WGnPQVeju6CVDc/6tRB2
+         ZfpEnkmpRBCSppaEZ5OdsY/Oi+Jo32snp7n7puHWzt7bBzxZonHe9cHpKVYQdPMf9Vl7
+         ZjEVTpQBasomg2sk23RR/gSl5qHGWIR8C9U5c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680466217;
+        d=1e100.net; s=20210112; t=1680466219;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/6yCxE8OoG8PeYtqKpR9SG7wxwNS753oO+7UKWNzpVg=;
-        b=qF1w6pA9v+Ucoj6knGCd+uAzX6Iqt3jPklho/HAdJ6e8WvQspk3a3gWUwUsUIUFzDM
-         xFqkjdYy0UwSwTYQiAbwWCZPokwaZOMN8PFBBmXTYG1utyNfzkAqRvZlngQLqNQqvs7R
-         WIXN3n763qYO3Cc1FBZbYsDU9/4056vo9qhI6qAgWj9KQ06Hn9L4Kab5AxNtoSHmnWiy
-         6TqeBe4D+WH0bRkd2A34O69s/Cm/f+VDeF4JgV3AX7kDYH27QiukhShPxLT0093Xiara
-         gFiOvQTxpTojCV8NR0hpFC+yRYG533Z5lhwmhyfx8/V8kM7DGc3QSgDMrbXYKQy9bG8t
-         Ut4g==
-X-Gm-Message-State: AAQBX9eol+OLwvl/h4c9xXMVOtOo20HADqrza2EsGLQhXGK2KHbL2nwp
-        xcMASKwvOucgk/72BTnWE/Z8oSEPLmtfSVoOC3A=
-X-Google-Smtp-Source: AKy350ZJmiV/iG/KdkY8Z4BybeVcfbuz3pwQ5ecPcXpiI6+BODgcGjO17mujGqBKrFmJ3/4np3nIHQ==
-X-Received: by 2002:a17:906:a150:b0:8a0:7158:15dc with SMTP id bu16-20020a170906a15000b008a0715815dcmr33439578ejb.74.1680466217623;
-        Sun, 02 Apr 2023 13:10:17 -0700 (PDT)
+        bh=kMHERFML/oNzDxt2xRgB06w0p+QqR9zI3HtwO5KrpJg=;
+        b=cnvFworFjtub1Sf05CTd/MmemvOy6+gy83gFLJKqHC6Tl/JKQ0gadZ/cbuF8Kh+7so
+         r1W6sMQCk2Tep5DC4knTxmGSsCMPm01nvdDHQHsurk2aUiN7Io40w19NhEWdINgGC0po
+         PVZ0QKObTDRlmxeWjY5lMipx7djmbbxNeLY4Hh9XlDp7+5vO36KVPtgyt3dlRaVdK4RX
+         djWfysLOqmmiMYiXEcZ7EDuzV+knQ4/P/ubsgCE6TN6MIfmxyzzF7Tc6ZIDeQdAlqeF4
+         lOwBUTRmef9RMCtoE77gH/L1MR6hwDzig1mK448M70GqzUGj7KX6eBlNGqnSK56AdpjW
+         hpUw==
+X-Gm-Message-State: AAQBX9dmoUNuONJjCsJx72anaJjmhJ3BEJYDYakD/kzOh5Gfg8mjbTGE
+        dIecZcIJh8o55At1EqfQUbMbjzSKy9unqPARaSY=
+X-Google-Smtp-Source: AKy350YzePVZDu3bwXduDlhZsJ0xniTfatUrFkqFgAC9hiqa91HtRn0heuR8JnLEVJgG+BTqIbYKrw==
+X-Received: by 2002:a17:906:b049:b0:937:9a24:370b with SMTP id bj9-20020a170906b04900b009379a24370bmr34522323ejb.67.1680466219066;
+        Sun, 02 Apr 2023 13:10:19 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-248-31-153.retail.telecomitalia.it. [95.248.31.153])
-        by smtp.gmail.com with ESMTPSA id gl18-20020a170906e0d200b00924d38bbdc0sm3553127ejb.105.2023.04.02.13.10.16
+        by smtp.gmail.com with ESMTPSA id gl18-20020a170906e0d200b00924d38bbdc0sm3553127ejb.105.2023.04.02.13.10.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 13:10:17 -0700 (PDT)
+        Sun, 02 Apr 2023 13:10:18 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
@@ -58,9 +58,9 @@ Cc:     michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
         <u.kleine-koenig@pengutronix.de>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-input@vger.kernel.org
-Subject: [PATCH 4/9] Input: edt-ft5x06 - don't recalculate the CRC
-Date:   Sun,  2 Apr 2023 22:09:46 +0200
-Message-Id: <20230402200951.1032513-5-dario.binacchi@amarulasolutions.com>
+Subject: [PATCH 5/9] Input: edt-ft5x06 - remove code duplication
+Date:   Sun,  2 Apr 2023 22:09:47 +0200
+Message-Id: <20230402200951.1032513-6-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20230402200951.1032513-1-dario.binacchi@amarulasolutions.com>
 References: <20230402200951.1032513-1-dario.binacchi@amarulasolutions.com>
@@ -75,42 +75,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to recalculate the CRC when the data has not changed.
+The use of the macros M06_REG_ADDR and M06_REG_CMD avoids code
+duplication without impacting the application load, and reduces the
+chances of errors or mistakes.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
 
- drivers/input/touchscreen/edt-ft5x06.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/input/touchscreen/edt-ft5x06.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
-index c96fe6520578..d4f39724b259 100644
+index d4f39724b259..7d82f412ab15 100644
 --- a/drivers/input/touchscreen/edt-ft5x06.c
 +++ b/drivers/input/touchscreen/edt-ft5x06.c
-@@ -319,7 +319,7 @@ static int edt_ft5x06_register_write(struct edt_ft5x06_ts_data *tsdata,
- static int edt_ft5x06_register_read(struct edt_ft5x06_ts_data *tsdata,
- 				    u8 addr)
- {
--	u8 wrbuf[2], rdbuf[2];
-+	u8 wrbuf[2], rdbuf[2], crc;
- 	int error;
+@@ -75,6 +75,9 @@
+ #define EDT_DEFAULT_NUM_X		1024
+ #define EDT_DEFAULT_NUM_Y		1024
+ 
++#define M06_REG_CMD(factory) ((factory) ? 0xf3 : 0xfc)
++#define M06_REG_ADDR(factory, addr) ((factory) ? (addr) & 0x7f : (addr) & 0x3f)
++
+ enum edt_pmode {
+ 	EDT_PMODE_NOT_SUPPORTED,
+ 	EDT_PMODE_HIBERNATE,
+@@ -294,8 +297,8 @@ static int edt_ft5x06_register_write(struct edt_ft5x06_ts_data *tsdata,
  
  	switch (tsdata->version) {
-@@ -333,11 +333,11 @@ static int edt_ft5x06_register_read(struct edt_ft5x06_ts_data *tsdata,
- 		if (error)
- 			return error;
+ 	case EDT_M06:
+-		wrbuf[0] = tsdata->factory_mode ? 0xf3 : 0xfc;
+-		wrbuf[1] = tsdata->factory_mode ? addr & 0x7f : addr & 0x3f;
++		wrbuf[0] = M06_REG_CMD(tsdata->factory_mode);
++		wrbuf[1] = M06_REG_ADDR(tsdata->factory_mode, addr);
+ 		wrbuf[2] = value;
+ 		wrbuf[3] = wrbuf[0] ^ wrbuf[1] ^ wrbuf[2];
+ 		return edt_ft5x06_ts_readwrite(tsdata->client, 4,
+@@ -324,8 +327,8 @@ static int edt_ft5x06_register_read(struct edt_ft5x06_ts_data *tsdata,
  
--		if ((wrbuf[0] ^ wrbuf[1] ^ rdbuf[0]) != rdbuf[1]) {
-+		crc = wrbuf[0] ^ wrbuf[1] ^ rdbuf[0];
-+		if (crc != rdbuf[1]) {
- 			dev_err(&tsdata->client->dev,
- 				"crc error: 0x%02x expected, got 0x%02x\n",
--				wrbuf[0] ^ wrbuf[1] ^ rdbuf[0],
--				rdbuf[1]);
-+				crc, rdbuf[1]);
- 			return -EIO;
- 		}
- 		break;
+ 	switch (tsdata->version) {
+ 	case EDT_M06:
+-		wrbuf[0] = tsdata->factory_mode ? 0xf3 : 0xfc;
+-		wrbuf[1] = tsdata->factory_mode ? addr & 0x7f : addr & 0x3f;
++		wrbuf[0] = M06_REG_CMD(tsdata->factory_mode);
++		wrbuf[1] = M06_REG_ADDR(tsdata->factory_mode, addr);
+ 		wrbuf[1] |= tsdata->factory_mode ? 0x80 : 0x40;
+ 
+ 		error = edt_ft5x06_ts_readwrite(tsdata->client, 2, wrbuf, 2,
 -- 
 2.32.0
 
