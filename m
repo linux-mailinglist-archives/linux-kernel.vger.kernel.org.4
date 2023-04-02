@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284B46D3817
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18516D381E
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjDBN1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 09:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
+        id S230229AbjDBNhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 09:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDBN1G (ORCPT
+        with ESMTP id S229448AbjDBNhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 09:27:06 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088EE5FFA;
-        Sun,  2 Apr 2023 06:27:05 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id q102so24820350pjq.3;
-        Sun, 02 Apr 2023 06:27:05 -0700 (PDT)
+        Sun, 2 Apr 2023 09:37:03 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F96DBB9A
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 06:37:00 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-62810466cccso1487176b3a.1
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 06:37:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680442024;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CbdL7KkvQ82fAe5djvivuibJu2664croIJIdJMGh+kQ=;
-        b=TsPesgJvSErJnJtAg3/aTWlCULgIyZ4QgR/5Mf9tAHabQKbwqicezd2NimjN2E4y25
-         +ZlAaakrfofmrdOsj5jelxuz0ISo1u8eCSD4V2AyzA3cSXVt2Ew4gmPeU+vmBiE4+FiD
-         /08q6BOKZtoP+a/s6uJdi01SEk0r7rhVS+cL52+AO4OawFr5FVQO/9siewIQtYz3Et3u
-         Qzuy+MIJ4HyPrTvXZo8iomR7xtF4E5UPP+9Y7D+ugkFMQrnWri8lY25hEiD/kSCE4uTV
-         LTCzplrbJf3O/Vl1VNGoi9vvHEWOHjC5oSjJbjoBNGz9hvE+PfCepOgHL7Bp1UaGSC7O
-         xe/g==
+        d=bytedance.com; s=google; t=1680442619;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ViAGGHazEfKTbj7wQQXXZXJrHaZfKLnWPNnZQrD+NW8=;
+        b=b9ICgWg0Hsb7zbdqXKNMRMSL3n8Fo/ffHpwWAKhqV9NN+SpmU+7PNQf0ZTVPygxzYb
+         13cyxX/PY6vMxMYZb90WHSGMrVomsJeeUNfFMutPzCKBcK3z7zekTNI3NPHlOO9bp+3W
+         5Ebvlg/sMPWguXCuJfBmkVQWWqlWmIVrn1O7SysHXtEN7HXwE2D5zOlemIU56zVNkJfE
+         rJh3BWCwp3Payh6cixnnRYOujFqkLuJHjSb6FECh8jKq3xvGYT+7oAcodgr06vzIGvKl
+         8O+73QxyAIeljOw4tbbATbnQ4JIx+XDgnNn8rl9CuoqSGnAumV2VRcQCJVNvAgzLspEI
+         mpAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680442024;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CbdL7KkvQ82fAe5djvivuibJu2664croIJIdJMGh+kQ=;
-        b=QeFAEUbllAKvXxIKP3gzkWXBXQP3k6oEmFPFG8lrn7gOUfkGvMkL1Gc7ocVkb089/e
-         AXhU5fQs5bfJNU9YBUDFssEyQULU8CE3JdWgrzpxM4x4agMR6wajj852yOymVE0njYIu
-         F/vCPTEFDsN20WTgsaNpRtV8yq9G/aDJ98KqP9mlpRI7q0Wu89njJzNhzsfMKy2BjVnK
-         Uapc80xspfRuC2gUsIdSPFhBjIP78hzDnBQKxvKgukXfqUBNJfHw6oElkYoFTmJnjEX3
-         C2YBVINBS9sAHCSDBqGf5ih2qC+iblL2doKvIN0uFCefoP1zqyp/5S0irbkHEt+LqQ5e
-         rtZg==
-X-Gm-Message-State: AO0yUKVuL/MvGeU+2ljK9sdpD6odNazNWqo2Nr3TAgQPEHbSmXseBg3J
-        lhcqeZPCvKPP0yPnKW7DX8E=
-X-Google-Smtp-Source: AK7set/paSWQhha7wLAUxN+IU7yHKYH1hHFbgAAWpVgJ0psQ98mgrhpwVFbPLyCg9/isep0L3IBM+w==
-X-Received: by 2002:a05:6a20:4f88:b0:d3:78ab:77c3 with SMTP id gh8-20020a056a204f8800b000d378ab77c3mr29939874pzb.48.1680442024514;
-        Sun, 02 Apr 2023 06:27:04 -0700 (PDT)
-Received: from debian.me (subs28-116-206-12-38.three.co.id. [116.206.12.38])
-        by smtp.gmail.com with ESMTPSA id d25-20020aa78699000000b00580e3917af7sm4622850pfo.117.2023.04.02.06.27.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 06:27:04 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id CCA351066AF; Sun,  2 Apr 2023 20:27:00 +0700 (WIB)
-Date:   Sun, 2 Apr 2023 20:27:00 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Sedat Dilek <sedat.dilek@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     Ron Economos <re@w6rz.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: Bug in recent changes to builddeb
-Message-ID: <ZCmCpCL7mfuf+71q@debian.me>
-References: <54a519ec-bfe5-60f3-fc43-707a11d38d2a@w6rz.net>
- <642d6944-4488-4dc6-99e9-209849b9771c@infradead.org>
- <5946f189-c564-e196-a375-cb03edcacaa0@infradead.org>
- <CA+icZUXt2Q6k6b6tHVA_F6rjeUTPmMb9uCCz+rbDJ9UW2kq3=A@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1680442619;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ViAGGHazEfKTbj7wQQXXZXJrHaZfKLnWPNnZQrD+NW8=;
+        b=zL5iiYUvZjTJllL8Tpt7UOMPlqchQDz3EkuAxSpnHdOD5N4pB3H4GYiBfCZoDGfsA2
+         HHlh9Gux9Wv2KAXTokaFKIvQiPZ2j2J2LOhxcJdx36vlhx6bTcs/f4ojWvvM70ntNAGH
+         IoMgK7mbhqnfLA2cgWMCynjkWkWqrUUy9HuUURNOOCAN+sAB8u9LAfLC8t1BFYgoLpoA
+         aIZnOxF/8W7yQUZC1WxSbjUK3d2N1dgdmY5g+vaim8IxwJOOxGPnHU0HfjnzHHiQM0y9
+         yXleBesMUqAvyj7aL3QINBXTtTZfRz4HoVG39KhkJKkxXpQDyBaHo2fnFKPA/bLhN+UP
+         mVQg==
+X-Gm-Message-State: AAQBX9cEQ6MWX1P0YGNcrd28uylOhBiogj6Fj3boof/ACnfdOfk6EZV4
+        PIWhUk/c8dsiqSKgh14OukPHOg==
+X-Google-Smtp-Source: AKy350bi6bpU6bw1qBKGFkvnb1QX/0FDCD1BDFcHg5UYXr1LHxDfk6wd8gho3vRtQwxIP7bZyu5ZlQ==
+X-Received: by 2002:a17:90a:bc83:b0:23f:6872:e37c with SMTP id x3-20020a17090abc8300b0023f6872e37cmr10973754pjr.0.1680442619599;
+        Sun, 02 Apr 2023 06:36:59 -0700 (PDT)
+Received: from [10.200.9.195] ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id g11-20020a17090a300b00b00233e860f69esm7993719pjb.56.2023.04.02.06.36.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Apr 2023 06:36:59 -0700 (PDT)
+Message-ID: <3bd45269-557d-db5a-2224-3d960ba3159d@bytedance.com>
+Date:   Sun, 2 Apr 2023 21:36:53 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9nm8mXwebsdpjF4p"
-Content-Disposition: inline
-In-Reply-To: <CA+icZUXt2Q6k6b6tHVA_F6rjeUTPmMb9uCCz+rbDJ9UW2kq3=A@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH 1/2] mm: swap: use folio_batch_reinit() in
+ folio_batch_move_lru()
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     willy@infradead.org, lstoakes@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230331095858.51810-1-zhengqi.arch@bytedance.com>
+ <20230331150430.546de954b0a7918f042c562e@linux-foundation.org>
+Content-Language: en-US
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <20230331150430.546de954b0a7918f042c562e@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,39 +77,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andrew,
 
---9nm8mXwebsdpjF4p
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2023/4/1 06:04, Andrew Morton wrote:
+> On Fri, 31 Mar 2023 17:58:57 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+> 
+>> In folio_batch_move_lru(), the folio_batch is not freshly
+>> initialised, so it should call folio_batch_reinit() as
+>> pagevec_lru_move_fn() did before.
+>>
+>> ...
+>>
+>> --- a/mm/swap.c
+>> +++ b/mm/swap.c
+>> @@ -222,7 +222,7 @@ static void folio_batch_move_lru(struct folio_batch *fbatch, move_fn_t move_fn)
+>>   	if (lruvec)
+>>   		unlock_page_lruvec_irqrestore(lruvec, flags);
+>>   	folios_put(fbatch->folios, folio_batch_count(fbatch));
+>> -	folio_batch_init(fbatch);
+>> +	folio_batch_reinit(fbatch);
+>>   }
+>>   
+>>   static void folio_batch_add_and_move(struct folio_batch *fbatch,
+> 
+> Well...  why?  This could leave the kernel falsely thinking that the
+> folio's pages have been drained from the per-cpu LRU addition
+> magazines.
+> 
+> Maybe that's desirable, maybe not, but I think this change needs much
+> much more explanation describing why it is beneficial.
+> 
+> 
+> folio_batch_reinit() seems to be a custom thing for the mlock code -
+> perhaps it just shouldn't exist, and its operation should instead be
+> open-coded in mlock_folio_batch().
 
-On Tue, Mar 28, 2023 at 06:49:00AM +0200, Sedat Dilek wrote:
->=20
-> Hi Masahiro,
->=20
-> when do you plan the next git-pull request to Linus?
->=20
-> For people using Debian and builddeb this is really annoying.
+The folio_batch_reinit() corresponds to pagevec_reinit(),
+the pagevec_reinit() was originally used in pagevec_lru_move_fn()
+and mlock_pagevec(), not a custom thing for the mlock code.
 
-He has sent the PR [1] and got merged.
 
-Thanks.
+The commit c2bc16817aa0 ("mm/swap: add folio_batch_move_lru()")
+introduces folio_batch_move_lru() to replace pagevec_lru_move_fn(),
+but calls folio_batch_init() (corresponding to pagevec_init()) instead
+of folio_batch_reinit() (corresponding to pagevec_reinit()). This
+change was not explained in the commit message and seems like an
+oversight.
 
-[1]: https://lore.kernel.org/lkml/CAK7LNAQEKgqrJNeknymSTsiRBbjoJJjWQ8VJ7ViC=
-2-9Z0Mgpyw@mail.gmail.com/
+> 
+> 
+> The dynamics and rules around ->percpu_pvec_drained are a bit
+> mysterious.  A code comment which explains all of this would be
+> useful.
 
---=20
-An old man doll... just what I always wanted! - Clara
+The commit d9ed0d08b6c6 ("mm: only drain per-cpu pagevecs once per
+pagevec usage") originally introduced the ->drained (which was later
+renamed to ->percpu_pvec_drained by commit 7f0b5fb953e7), which is
+intended to drain per-cpu pagevecs only once per pagevec usage.
 
---9nm8mXwebsdpjF4p
-Content-Type: application/pgp-signature; name="signature.asc"
+Maybe it would be better to add the following code comment:
 
------BEGIN PGP SIGNATURE-----
+diff --git a/mm/swap.c b/mm/swap.c
+index 423199ee8478..107c4a13e476 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -1055,6 +1055,7 @@ EXPORT_SYMBOL(release_pages);
+   */
+  void __pagevec_release(struct pagevec *pvec)
+  {
++       /* Only drain per-cpu pagevecs once per pagevec usage */
+         if (!pvec->percpu_pvec_drained) {
+                 lru_add_drain();
+                 pvec->percpu_pvec_drained = true;
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCmCoQAKCRD2uYlJVVFO
-o5uCAQDXn5FKcuShOWk41xg09WbLLsHfnfbzMfKxrnAed2xW6AEA5Z702KdxOo7N
-xifApWkFmTkWWRIoXj02PU66hjZxqgw=
-=jycJ
------END PGP SIGNATURE-----
+Please let me know if I missed something.
 
---9nm8mXwebsdpjF4p--
+Thanks,
+Qi
+
+> 
+
