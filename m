@@ -2,33 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A016D38CE
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 17:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39646D38D2
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 17:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbjDBPle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 11:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
+        id S231297AbjDBPlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 11:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjDBPlc (ORCPT
+        with ESMTP id S230469AbjDBPle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 11:41:32 -0400
+        Sun, 2 Apr 2023 11:41:34 -0400
+X-Greylist: delayed 422 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 02 Apr 2023 08:41:27 PDT
 Received: from kozue.soulik.info (kozue.soulik.info [108.61.200.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5103E7EC3
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50ED47282
         for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 08:41:27 -0700 (PDT)
 Received: from ritsuko.sh.sumomo.pri (unknown [112.64.60.49])
-        by kozue.soulik.info (Postfix) with ESMTPSA id 579C9101D5C;
-        Mon,  3 Apr 2023 00:34:07 +0900 (JST)
+        by kozue.soulik.info (Postfix) with ESMTPSA id 46CBA100C93;
+        Mon,  3 Apr 2023 00:34:18 +0900 (JST)
 From:   Randy Li <ayaka@soulik.info>
 To:     dri-devel@lists.freedesktop.org
-Cc:     Randy Li <ayaka@soulik.info>, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-        daniel@ffwll.ch, linux-kernel@vger.kernel.org, tfiga@chromium.org,
+Cc:     "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+        linux-kernel@vger.kernel.org, tfiga@chromium.org,
         nicolas@ndufresne.ca, laurent.pinchart@ideasonboard.com,
         ribalda@chromium.org
-Subject: [PATCH v7 0/2] Add pixel formats used in Synatpics SoC
-Date:   Sun,  2 Apr 2023 23:33:56 +0800
-Message-Id: <20230402153358.32948-1-ayaka@soulik.info>
+Subject: [PATCH v7 1/2] drm/fourcc: Add Synaptics VideoSmart tiled modifiers
+Date:   Sun,  2 Apr 2023 23:33:57 +0800
+Message-Id: <20230402153358.32948-2-ayaka@soulik.info>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230402153358.32948-1-ayaka@soulik.info>
+References: <20230402153358.32948-1-ayaka@soulik.info>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
@@ -39,48 +43,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Those pixel formats are used in Synaptics's VideoSmart series SoCs,
-likes VS640, VS680. I just disclose the pixel formats used in the video
-codecs and display pipeline this time. Actually any device connected to
-the MTR module could support those tiling and compressed pixel formats.
+From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
 
-https://synaptics.com/products/multimedia-solutions
+Those modifiers only record the parameters would effort pixel
+layout or memory layout. Whether physical memory page mapping
+is used is not a part of format.
 
-Changelog:
-v7:
-Fixed all warnings and errors for its document.
-Add its document to GPU tree.
-v6:
-Refresh and fix warnings in its document.
-v5:
-Moving back the document and rewriting the description.
-v4:
-Removed the patches for V4L2, V4L2 would use the drm_fourcc.h .
-Moving the documents to the mesa project.
-v3:
-There was a mistake in format macro.
-Correcting the description of 64L4 variant modifiers.
-v2:
-The DRM modifiers in the first draft is too simple, it can't tell
-the tiles in group attribute in memory layout.
-Removing the v4l2 fourcc. Adding a document for the future v4l2 extended
-fmt.
-v1:
-first draft of DRM modifiers
-Try to put basic tile formats into v4l2 fourcc
+Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+---
+ include/uapi/drm/drm_fourcc.h | 75 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
-Hsia-Jun(Randy) Li (1):
-  drm/fourcc: Add Synaptics VideoSmart tiled modifiers
-
-Randy Li (1):
-  Documentation/gpu: Add Synaptics tiling formats documentation
-
- Documentation/gpu/drivers.rst   |  1 +
- Documentation/gpu/synaptics.rst | 81 +++++++++++++++++++++++++++++++++
- include/uapi/drm/drm_fourcc.h   | 75 ++++++++++++++++++++++++++++++
- 3 files changed, 157 insertions(+)
- create mode 100644 Documentation/gpu/synaptics.rst
-
+diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+index de703c6be969..ee13250f06f4 100644
+--- a/include/uapi/drm/drm_fourcc.h
++++ b/include/uapi/drm/drm_fourcc.h
+@@ -419,6 +419,7 @@ extern "C" {
+ #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
+ #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
+ #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
++#define DRM_FORMAT_MOD_VENDOR_SYNAPTICS 0x0b
+ 
+ /* add more to the end as needed */
+ 
+@@ -1519,6 +1520,80 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
+ #define AMD_FMT_MOD_CLEAR(field) \
+ 	(~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
+ 
++/*
++ * Synaptics VideoSmart modifiers
++ *
++ * Tiles could be arranged in Groups of Tiles (GOTs), it is a small tile
++ * within a tile. GOT size and layout varies based on platform and
++ * performance concern. When the compression is applied, it is possible
++ * that we would have two tile type in the GOT, these parameters can't
++ * tell the secondary tile type.
++ *
++ * Besides, an 8 size 4 bytes arrary (32 bytes) would be need to store
++ * some compression parameters for a compression meta data plane.
++ *
++ *       Macro
++ * Bits  Param Description
++ * ----  ----- -----------------------------------------------------------------
++ *
++ *  7:0  f     Scan direction description.
++ *
++ *               0 = Invalid
++ *               1 = V4, the scan would always start from vertical for 4 pixel
++ *                   then move back to the start pixel of the next horizontal
++ *                   direction.
++ *               2 = Reserved for future use.
++ *
++ * 15:8  m     The times of pattern repeat in the right angle direction from
++ *             the first scan direction.
++ *
++ * 19:16 p     The padding bits after the whole scan, could be zero.
++ *
++ * 20:20 g     GOT packing flag.
++ *
++ * 23:21 -     Reserved for future use.  Must be zero.
++ *
++ * 27:24 h     log2(horizontal) of bytes, in GOTs.
++ *
++ * 31:28 v     log2(vertical) of bytes, in GOTs.
++ *
++ * 35:32 -     Reserved for future use.  Must be zero.
++ *
++ * 36:36 c     Compression flag.
++ *
++ * 55:37 -     Reserved for future use.  Must be zero.
++ *
++ */
++
++#define DRM_FORMAT_MOD_SYNA_V4_TILED		fourcc_mod_code(SYNAPTICS, 1)
++
++#define DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(f, m, p, g, h, v, c) \
++	fourcc_mod_code(SYNAPTICS, ((__u64)((f) & 0xff) | \
++				 ((__u64)((m) & 0xff) << 8) | \
++				 ((__u64)((p) & 0xf) << 16) | \
++				 ((__u64)((g) & 0x1) << 20) | \
++				 ((__u64)((h) & 0xf) << 24) | \
++				 ((__u64)((v) & 0xf) << 28) | \
++				 ((__u64)((c) & 0x1) << 36)))
++
++#define DRM_FORMAT_MOD_SYNA_V4H1 \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 0, 0, 0, 0)
++
++#define DRM_FORMAT_MOD_SYNA_V4H3P8 \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 0, 0, 0, 0)
++
++#define DRM_FORMAT_MOD_SYNA_V4H1_64L4_COMPRESSED \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1, 6, 2, 1)
++
++#define DRM_FORMAT_MOD_SYNA_V4H3P8_64L4_COMPRESSED \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1, 6, 2, 1)
++
++#define DRM_FORMAT_MOD_SYNA_V4H1_128L128_COMPRESSED \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1, 7, 7, 1)
++
++#define DRM_FORMAT_MOD_SYNA_V4H3P8_128L128_COMPRESSED \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1, 7, 7, 1)
++
+ #if defined(__cplusplus)
+ }
+ #endif
 -- 
 2.39.2
 
