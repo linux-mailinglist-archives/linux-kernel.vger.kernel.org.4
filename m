@@ -2,288 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999CF6D38AD
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 17:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89676D38B5
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 17:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbjDBPK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 11:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
+        id S231207AbjDBPOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 11:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjDBPKx (ORCPT
+        with ESMTP id S231133AbjDBPOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 11:10:53 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94028B74C;
-        Sun,  2 Apr 2023 08:10:51 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id ev7so555579qvb.5;
-        Sun, 02 Apr 2023 08:10:51 -0700 (PDT)
+        Sun, 2 Apr 2023 11:14:47 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12058A73
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 08:14:44 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5419d4c340aso507166847b3.11
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 08:14:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680448250; x=1683040250;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1680448484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BHC0GFWUwq2JnOuNQ5ZOk+vWFfVa0/7RcD29gvIoxDw=;
-        b=FQEaAngQkHhMdTI5rcyg59rY9t+Y0cgwgpzLxRnxlucn8XpzfIujXvSwBsZE6DGCm1
-         yDqKORXWV2Uam/Ny5+nlFIh9C3Y3lO5s/2qj8FwczyUcuOq0rVoAxdOd8coHaOnzo8yB
-         TzB7ScCNUkMxw9TnrzA6G+MJef4UC12owUWWYryO8qXn99UfDOItwuXV/zuVmNzTRWLX
-         w+VLlhuzJzhdwSGTbCZPJ/hx3Z6hm5Y1Ep4FixdzcViEetZaiAigjtEUSDzKBe5All1v
-         NS/X1uEPKsJT97Q4kg8RDc2iRfB7rIOletDCj7Dvt7a8u/4G73KgkFx5uKwWA26XFAT2
-         GKdA==
+        bh=srtxwhfavuNLVEqBKCn0HkTlKyHJRXfd1PAURlkq5Mk=;
+        b=MYlRKoZjIVEJvrRebWhj3FgQYhVKAb/y7cpWCSsNWAQ/Kkroh4+nCrEmh1ssgfrqI5
+         IN3wHyxU1XyjYtV4gKmMtGNzowAWze2L8X22m23Y1PCasSarEWHz5N/4t5As59R+eGOv
+         AHcEqvY9sy6gvlG3aqZST+s72xGqnwVjdLj3lTy9l6tV7DC/W91iaRVzZCfB36Y+0SzF
+         Wwi6/EQ4IklUOERei0aziwqjPyXfSwya4MOy8e1M9tfZdF8Ja2o3kQC52mB4kxRWYLBe
+         ryind48KuriOh1gAaysj0ZrbnOxbUJuAkeJEPVwmgRndAo4g7pGlV+vCm5v25gi3k4Ez
+         Q04w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680448250; x=1683040250;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BHC0GFWUwq2JnOuNQ5ZOk+vWFfVa0/7RcD29gvIoxDw=;
-        b=j9era0lXufMtFn8WabtQU3C6nGZNQSgrRXrWFa35GERATqQJnroBJPFaLfQtukwez9
-         KaOHnwpzmghAwodbUxgGirw157Sta4XhPZMILk7P0YREN4QyL3XxEIb4hNweYG+eXc2s
-         awC/FuzLVQLkoMcENh0gywOVJHjdr1/DlrYk1bE2biTLlJqqlOfSAxKy7XUknEDk0RM1
-         J/i5f3tiDWtUR69gKPMv6xSJnaSsuNhhxdfMdSRIAhNoJ9zVF5kiblJobyYypilbPq99
-         iMF+hbpJgw1Q3BPMm6Y/BUrqCpve1uOQTTVWC9Q3oF/Xus99vZJBUwDpyttrVZRe1Iv+
-         Oshw==
-X-Gm-Message-State: AAQBX9dsGcTMKqgkm4xfNkXfnxuu1DerFoU4PexyFALoz90D4bJaUNhf
-        OE3VXwt3Opnnfgto0BsucDs=
-X-Google-Smtp-Source: AKy350ZX70VyypDcKzgDCIFtwpdv3xFpsjXteqYT0mVokk1I3cZ6ka1KubBvzH5Ch7y19hqmtCyJGQ==
-X-Received: by 2002:ad4:5ca2:0:b0:56e:9ef7:e76d with SMTP id q2-20020ad45ca2000000b0056e9ef7e76dmr58249480qvh.1.1680448250672;
-        Sun, 02 Apr 2023 08:10:50 -0700 (PDT)
-Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
-        by smtp.gmail.com with ESMTPSA id jy21-20020a0562142b5500b005e35629b7c4sm1098645qvb.3.2023.04.02.08.10.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 08:10:50 -0700 (PDT)
-Date:   Sun, 02 Apr 2023 11:10:49 -0400
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        d=1e100.net; s=20210112; t=1680448484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=srtxwhfavuNLVEqBKCn0HkTlKyHJRXfd1PAURlkq5Mk=;
+        b=X1WS+4tkqUkFhS3KkP5NLBIFQUC455vrPvYHWs1or+56Jyl0Av3snLbuEpuSQ/Cfou
+         h4Il4gkjpYpgT5H9h8gwEmfzccjDpqa3fRilZyFDWCg7OQGtxTjH1w20+K60jk6FleI2
+         3MItPeCLswIRnozashuQ0Cw5SsGIFqJv6E4H4hO9h3sYMD0LrcaVQc30yyHkZ//j5YQ4
+         EHEA1PDaTSlFYQFgE3N9TnpZrJtB3oifog1Ph6QjDKCPw+HMFtxbWoOue+j6IOemtgKg
+         6QK+sFTNeLK0/e5bp5GfSFyjKBHPgi1aXvpt8XSiux/2GFKVXqFojsA7f4fgTlJMCXwh
+         r9Dg==
+X-Gm-Message-State: AAQBX9cALKHZRPiq/c45MOfvukmn4NZge27nxZBHaDggyL/uz4xpQYff
+        O0RVqU10O15ONlV3SOsvEpA3km7bBmeJ1dwPcTt2
+X-Google-Smtp-Source: AKy350YSjuNDcAkojlLSrUIjjzjLFIiJd19uP62Gr/lJkvV88NkI1CAKw68Mu9Tl8eVz3JmzAqDGaWChmc0v32j5ZgE=
+X-Received: by 2002:a81:bc0c:0:b0:545:612a:c04a with SMTP id
+ a12-20020a81bc0c000000b00545612ac04amr15852261ywi.8.1680448483967; Sun, 02
+ Apr 2023 08:14:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230401214151.1243189-1-vvidic@valentin-vidic.from.hr>
+In-Reply-To: <20230401214151.1243189-1-vvidic@valentin-vidic.from.hr>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Sun, 2 Apr 2023 11:14:33 -0400
+Message-ID: <CAHC9VhT6VXwybScqsnYHHtbHNPoWMVQJzQ7VAccm2MWZEz+5Dw@mail.gmail.com>
+Subject: Re: [PATCH] security, lsm: security_old_inode_init_security() Handle
+ multi LSM registration
+To:     Valentin Vidic <vvidic@valentin-vidic.from.hr>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
         Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Message-ID: <64299af9e8861_2d2a20208e6@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20230331160914.1608208-16-dhowells@redhat.com>
-References: <20230331160914.1608208-1-dhowells@redhat.com>
- <20230331160914.1608208-16-dhowells@redhat.com>
-Subject: RE: [PATCH v3 15/55] ip, udp: Support MSG_SPLICE_PAGES
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        Dave Chinner <dchinner@redhat.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Micah Morton <mortonm@chromium.org>,
+        =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Vivek Goyal <vgoyal@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells wrote:
-> Make IP/UDP sendmsg() support MSG_SPLICE_PAGES.  This causes pages to be
-> spliced from the source iterator.
-> 
-> This allows ->sendpage() to be replaced by something that can handle
-> multiple multipage folios in a single transaction.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: netdev@vger.kernel.org
-> ---
->  net/ipv4/ip_output.c | 102 +++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 99 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-> index 4e4e308c3230..e2eaba817c1f 100644
-> --- a/net/ipv4/ip_output.c
-> +++ b/net/ipv4/ip_output.c
-> @@ -956,6 +956,79 @@ csum_page(struct page *page, int offset, int copy)
->  	return csum;
->  }
->  
-> +/*
-> + * Allocate a packet for MSG_SPLICE_PAGES.
-> + */
-> +static int __ip_splice_alloc(struct sock *sk, struct sk_buff **pskb,
-> +			     unsigned int fragheaderlen, unsigned int maxfraglen,
-> +			     unsigned int hh_len)
-> +{
-> +	struct sk_buff *skb_prev = *pskb, *skb;
-> +	unsigned int fraggap = skb_prev->len - maxfraglen;
-> +	unsigned int alloclen = fragheaderlen + hh_len + fraggap + 15;
-> +
-> +	skb = sock_wmalloc(sk, alloclen, 1, sk->sk_allocation);
-> +	if (unlikely(!skb))
-> +		return -ENOBUFS;
-> +
-> +	/* Fill in the control structures */
-> +	skb->ip_summed = CHECKSUM_NONE;
-> +	skb->csum = 0;
-> +	skb_reserve(skb, hh_len);
-> +
-> +	/* Find where to start putting bytes. */
-> +	skb_put(skb, fragheaderlen + fraggap);
-> +	skb_reset_network_header(skb);
-> +	skb->transport_header = skb->network_header + fragheaderlen;
-> +	if (fraggap) {
-> +		skb->csum = skb_copy_and_csum_bits(skb_prev, maxfraglen,
-> +						   skb_transport_header(skb),
-> +						   fraggap);
-> +		skb_prev->csum = csum_sub(skb_prev->csum, skb->csum);
-> +		pskb_trim_unique(skb_prev, maxfraglen);
-> +	}
-> +
-> +	/* Put the packet on the pending queue. */
-> +	__skb_queue_tail(&sk->sk_write_queue, skb);
-> +	*pskb = skb;
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Add (or copy) data pages for MSG_SPLICE_PAGES.
-> + */
-> +static int __ip_splice_pages(struct sock *sk, struct sk_buff *skb,
-> +			     void *from, int *pcopy)
-> +{
-> +	struct msghdr *msg = from;
-> +	struct page *page = NULL, **pages = &page;
-> +	ssize_t copy = *pcopy;
-> +	size_t off;
-> +	int err;
-> +
-> +	copy = iov_iter_extract_pages(&msg->msg_iter, &pages, copy, 1, 0, &off);
-> +	if (copy <= 0)
-> +		return copy ?: -EIO;
-> +
-> +	err = skb_append_pagefrags(skb, page, off, copy);
-> +	if (err < 0) {
-> +		iov_iter_revert(&msg->msg_iter, copy);
-> +		return err;
-> +	}
-> +
-> +	if (skb->ip_summed == CHECKSUM_NONE) {
-> +		__wsum csum;
-> +
-> +		csum = csum_page(page, off, copy);
-> +		skb->csum = csum_block_add(skb->csum, csum, skb->len);
-> +	}
-> +
-> +	skb_len_add(skb, copy);
-> +	refcount_add(copy, &sk->sk_wmem_alloc);
-> +	*pcopy = copy;
-> +	return 0;
-> +}
-
-These functions are derived from and replace ip_append_page.
-That can be removed once udp_sendpage is converted?
-
+On Sat, Apr 1, 2023 at 5:42=E2=80=AFPM Valentin Vidic
+<vvidic@valentin-vidic.from.hr> wrote:
 >
->  static int __ip_append_data(struct sock *sk,
->  			    struct flowi4 *fl4,
->  			    struct sk_buff_head *queue,
-> @@ -977,7 +1050,7 @@ static int __ip_append_data(struct sock *sk,
->  	int err;
->  	int offset = 0;
->  	bool zc = false;
-> -	unsigned int maxfraglen, fragheaderlen, maxnonfragsize;
-> +	unsigned int maxfraglen, fragheaderlen, maxnonfragsize, initial_length;
->  	int csummode = CHECKSUM_NONE;
->  	struct rtable *rt = (struct rtable *)cork->dst;
->  	unsigned int wmem_alloc_delta = 0;
-> @@ -1017,6 +1090,7 @@ static int __ip_append_data(struct sock *sk,
->  	    (!exthdrlen || (rt->dst.dev->features & NETIF_F_HW_ESP_TX_CSUM)))
->  		csummode = CHECKSUM_PARTIAL;
->  
-> +	initial_length = length;
->  	if ((flags & MSG_ZEROCOPY) && length) {
->  		struct msghdr *msg = from;
->  
-> @@ -1047,6 +1121,14 @@ static int __ip_append_data(struct sock *sk,
->  				skb_zcopy_set(skb, uarg, &extra_uref);
->  			}
->  		}
-> +	} else if ((flags & MSG_SPLICE_PAGES) && length) {
-> +		if (inet->hdrincl)
-> +			return -EPERM;
-> +		if (rt->dst.dev->features & NETIF_F_SG)
-> +			/* We need an empty buffer to attach stuff to */
-> +			initial_length = transhdrlen;
+> Copying files to an ocfs2 filesystem causes a crash with NULL pointer
+> dereference in strlen.
+>
+> [   27.386786] BUG: kernel NULL pointer dereference, address: 00000000000=
+00000
+> [   27.386818] #PF: supervisor read access in kernel mode
+> [   27.386832] #PF: error_code(0x0000) - not-present page
+> [   27.386844] PGD 0 P4D 0=3D20
+> [   27.386855] Oops: 0000 [#1] PREEMPT SMP PTI
+> [   27.386867] CPU: 0 PID: 1792 Comm: cp Not tainted 6.1.0-5-amd64 #1  De=
+bian 6.1.12-1
+> [   27.386887] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1=
+.14.0-2 04/01/2014
+> [   27.386904] RIP: 0010:strlen+0x0/0x20
+> [   27.386928] Code: b6 07 38 d0 74 14 48 83 c7 01 84 c0 74 05 48 39 f7 7=
+5 ec 31 c0 c3 cc cc cc cc 48 89 f8 c3 cc cc cc cc 0f 1f 84 00 00 00 00 00 <=
+80> 3f 00 74 14 48 89 f8 48 83 c0 01 80 38 00 75 f7 48 29 f8 c3 cc
+> [   27.386966] RSP: 0018:ffffa33340e4fbc0 EFLAGS: 00010202
+> [   27.386980] RAX: ffff8b578c3b1800 RBX: 0000000000000001 RCX: 000000000=
+0000000
+> [   27.386996] RDX: 0000000000000100 RSI: ffff8b57843d86e8 RDI: 000000000=
+0000000
+> [   27.387012] RBP: ffff8b57849ca608 R08: ffffa33340e4fc7c R09: ffffa3334=
+0e4fc84
+> [   27.387027] R10: ffff8b578f1e6000 R11: ffffa33340e4fc80 R12: ffffa3334=
+0e4fcb8
+> [   27.387043] R13: ffffa33340e4fc84 R14: 00000000000041c0 R15: ffffa3334=
+0e4fc7c
+> [   27.387059] FS:  00007f7b36d50500(0000) GS:ffff8b57bec00000(0000) knlG=
+S:0000000000000000
+> [   27.387077] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   27.387091] CR2: 0000000000000000 CR3: 000000003cfe2003 CR4: 000000000=
+0370ef0
+> [   27.387111] Call Trace:
+> [   27.387130]  <TASK>
+> [   27.387141]  ocfs2_calc_xattr_init+0x7d/0x330 [ocfs2]
+> [   27.387382]  ocfs2_mknod+0x471/0x1020 [ocfs2]
+> [   27.387471]  ? preempt_count_add+0x6a/0xa0
+> [   27.387487]  ? _raw_spin_lock+0x13/0x40
+> [   27.387506]  ocfs2_mkdir+0x44/0x130 [ocfs2]
+> [   27.387583]  ? security_inode_mkdir+0x3e/0x70
+> [   27.387598]  vfs_mkdir+0x9c/0x140
+> [   27.387617]  do_mkdirat+0x142/0x170
+> [   27.387631]  __x64_sys_mkdirat+0x47/0x80
+> [   27.387643]  do_syscall_64+0x58/0xc0
+> [   27.387659]  ? vfs_fstatat+0x5b/0x70
+> [   27.387671]  ? __do_sys_newfstatat+0x3f/0x80
+> [   27.387684]  ? fpregs_assert_state_consistent+0x22/0x50
+> [   27.387698]  ? exit_to_user_mode_prepare+0x3c/0x1c0
+> [   27.387712]  ? syscall_exit_to_user_mode+0x17/0x40
+> [   27.387726]  ? do_syscall_64+0x67/0xc0
+> [   27.387738]  ? exit_to_user_mode_prepare+0x3c/0x1c0
+> [   27.387752]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> Similar to security_dentry_init_security fix in 7f5056b9e7b, the problem
+> is that ocfs2 checks the return code from security_old_inode_init_securit=
+y
+> and if the return code is 0, it assumes everything is fine and continues
+> to call strlen(name), which crashes.
+>
+> Typically SELinux LSM returns 0 and sets name to "security.selinux" and
+> it is not a problem. Or if SELinux is not compiled in or disabled, it
+> returns -EOPNOTSUP and ocfs2 deals with it.
+>
+> However if BPF LSM is enabled, it registeres every hook and returns the
+> default return value, in this case 0.
+>
+> This patch copies the behaviour of security_dentry_init_security() to
+> allow only one LSM to initialize security context (or return the default
+> value of -EOPNOTSUP).
+>
+> Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+> ---
+>  include/linux/lsm_hook_defs.h |  2 +-
+>  security/security.c           | 16 ++++++++++++++--
+>  2 files changed, 15 insertions(+), 3 deletions(-)
 
-I still don't entirely understand what initial_length means.
+Hi Valentin,
 
-More importantly, transhdrlen can be zero. If not called for UDP
-but for RAW. Or if this is a subsequent call to a packet that is
-being held with MSG_MORE.
+Thanks for the problem report and a patch.  It's always good to get
+bug reports, and it's even better when they come with a patch :)
 
-This works fine for existing use-cases, which go to alloc_new_skb.
-Not sure how this case would be different. But the comment alludes
-that it does.
+If you have the time, could you try a patch we have queued up in the
+lsm/next branch?  We are in the process of removing
+security_old_inode_init_security() and transitioning all the callers
+over to security_inode_init_security(), and I believe the ocfs2 patch
+for this should solve the problem you are seeing, can you test it on
+your system and let us know?
 
-> +		else
-> +			flags &= ~MSG_SPLICE_PAGES;
->  	}
->  
->  	cork->length += length;
-> @@ -1074,6 +1156,16 @@ static int __ip_append_data(struct sock *sk,
->  			unsigned int alloclen, alloc_extra;
->  			unsigned int pagedlen;
->  			struct sk_buff *skb_prev;
-> +
-> +			if (unlikely(flags & MSG_SPLICE_PAGES)) {
-> +				err = __ip_splice_alloc(sk, &skb, fragheaderlen,
-> +							maxfraglen, hh_len);
-> +				if (err < 0)
-> +					goto error;
-> +				continue;
-> +			}
-> +			initial_length = length;
-> +
->  alloc_new_skb:
->  			skb_prev = skb;
->  			if (skb_prev)
-> @@ -1085,7 +1177,7 @@ static int __ip_append_data(struct sock *sk,
->  			 * If remaining data exceeds the mtu,
->  			 * we know we need more fragment(s).
->  			 */
-> -			datalen = length + fraggap;
-> +			datalen = initial_length + fraggap;
->  			if (datalen > mtu - fragheaderlen)
->  				datalen = maxfraglen - fragheaderlen;
->  			fraglen = datalen + fragheaderlen;
-> @@ -1099,7 +1191,7 @@ static int __ip_append_data(struct sock *sk,
->  			 * because we have no idea what fragment will be
->  			 * the last.
->  			 */
-> -			if (datalen == length + fraggap)
-> +			if (datalen == initial_length + fraggap)
->  				alloc_extra += rt->dst.trailer_len;
->  
->  			if ((flags & MSG_MORE) &&
-> @@ -1206,6 +1298,10 @@ static int __ip_append_data(struct sock *sk,
->  				err = -EFAULT;
->  				goto error;
->  			}
-> +		} else if (flags & MSG_SPLICE_PAGES) {
-> +			err = __ip_splice_pages(sk, skb, from, &copy);
-> +			if (err < 0)
-> +				goto error;
->  		} else if (!zc) {
->  			int i = skb_shinfo(skb)->nr_frags;
->  
-> 
+https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/patch/?id=
+=3Dde3004c874e740304cc4f4a83d6200acb511bbda
 
-
+--=20
+paul-moore.com
