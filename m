@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B15A6D392E
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 18:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4E86D3933
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 18:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbjDBQtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 12:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
+        id S231320AbjDBQt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 12:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbjDBQtT (ORCPT
+        with ESMTP id S231213AbjDBQtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 12:49:19 -0400
+        Sun, 2 Apr 2023 12:49:21 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D11F741;
-        Sun,  2 Apr 2023 09:49:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B9A6585;
+        Sun,  2 Apr 2023 09:49:20 -0700 (PDT)
 Received: from workpc.. (109-252-124-32.nat.spd-mgts.ru [109.252.124.32])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EA3226602E9A;
-        Sun,  2 Apr 2023 17:49:14 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 650816602FDA;
+        Sun,  2 Apr 2023 17:49:17 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680454157;
-        bh=HiyDIkUkEjDEJF+osjkxQkulrceoXx475BclUH016Os=;
+        s=mail; t=1680454159;
+        bh=zdNUMjauHmiBRJnPvNU2fTsVHtTUBPtEEsYz6zGIZr4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cwC+tKlUtghtXqFxGAXYwzku4b2+TE0IjQ12simTDuoet2q0PP4V1f6uHSx47V3WP
-         KQ8nFsLvFAGWHb4+uIWHwUB04Mz3cQq98ImYA70IIPzQHvZfaRR5tP5UTfKLm1+F/O
-         ApvhCHuHxl7JOXBkAzMxNf+2LTi4F8RCwUGPHRLlN1USR4t3/KRK48vHaHwIp3VdPF
-         N6vAVjXaBHt0k0q4jEUkOxxF6cC52ghP8fXF/iSoQMNasnzJtfOgHdP2pVeiLnHaef
-         3xBFze+MosYws9gNT+MOelFRJipTQiL64js8gKnDqMAD63kD7RGXenT5+MOP+lCSzv
-         oI1I1BZswh6jQ==
+        b=QMr2QpnTzcjVjAGqe26Bqrvh0pQFHwrGTV31v93fqjSM9NOYhXtvL+cwDRK93LYm8
+         9N8s5DIOJHbRiH38eUgPsjwh/QS5AqJZaxTisiqHYzi7r2xKkBYuqfJTBUF18SSCsA
+         hiuzvriFfZpVSerlKnOs1UJqVQEo1Zt72rJlBJhuyGIpB296qZeQXJ2j9s2JXG91Y3
+         OrIAeId7+6SUsMTLQM/g7OZ7i9tthS6JneLefCRqM2nfmh7S6P/bv+3xN5NDjUX8Ey
+         7KnFvrK/l5yWKlck2FGGX93UYc9+i/kJPVi+GNBKPhLRrapg585U1mOV8Ipodhqtgy
+         e/zLApOs4SfUw==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     Sumit Semwal <sumit.semwal@linaro.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
@@ -56,9 +56,9 @@ Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
         linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         kernel@collabora.com
-Subject: [PATCH v1 2/7] Revert "dma-buf/heaps: Assert held reservation lock for dma-buf mmapping"
-Date:   Sun,  2 Apr 2023 19:48:21 +0300
-Message-Id: <20230402164826.752842-3-dmitry.osipenko@collabora.com>
+Subject: [PATCH v1 3/7] Revert "udmabuf: Assert held reservation lock for dma-buf mmapping"
+Date:   Sun,  2 Apr 2023 19:48:22 +0300
+Message-Id: <20230402164826.752842-4-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230402164826.752842-1-dmitry.osipenko@collabora.com>
 References: <20230402164826.752842-1-dmitry.osipenko@collabora.com>
@@ -81,54 +81,24 @@ will have to handle the lock. The previous locking policy caused deadlock
 problem for DRM drivers in a case of self-imported dma-bufs, it's solved
 by moving the lock down to exporters.
 
-Fixes: 27f3733a1049 ("dma-buf/heaps: Assert held reservation lock for dma-buf mmapping")
+Fixes: aa3f99896443 ("udmabuf: Assert held reservation lock for dma-buf mmapping")
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/dma-buf/heaps/cma_heap.c    | 3 ---
- drivers/dma-buf/heaps/system_heap.c | 3 ---
- 2 files changed, 6 deletions(-)
+ drivers/dma-buf/udmabuf.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma_heap.c
-index 1131fb943992..28fb04eccdd0 100644
---- a/drivers/dma-buf/heaps/cma_heap.c
-+++ b/drivers/dma-buf/heaps/cma_heap.c
-@@ -13,7 +13,6 @@
- #include <linux/dma-buf.h>
- #include <linux/dma-heap.h>
- #include <linux/dma-map-ops.h>
--#include <linux/dma-resv.h>
- #include <linux/err.h>
- #include <linux/highmem.h>
- #include <linux/io.h>
-@@ -183,8 +182,6 @@ static int cma_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+index 740d6e426ee9..277f1afa9552 100644
+--- a/drivers/dma-buf/udmabuf.c
++++ b/drivers/dma-buf/udmabuf.c
+@@ -52,8 +52,6 @@ static int mmap_udmabuf(struct dma_buf *buf, struct vm_area_struct *vma)
  {
- 	struct cma_heap_buffer *buffer = dmabuf->priv;
+ 	struct udmabuf *ubuf = buf->priv;
  
--	dma_resv_assert_held(dmabuf->resv);
+-	dma_resv_assert_held(buf->resv);
 -
  	if ((vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) == 0)
  		return -EINVAL;
- 
-diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
-index e8bd10e60998..fcf836ba9c1f 100644
---- a/drivers/dma-buf/heaps/system_heap.c
-+++ b/drivers/dma-buf/heaps/system_heap.c
-@@ -13,7 +13,6 @@
- #include <linux/dma-buf.h>
- #include <linux/dma-mapping.h>
- #include <linux/dma-heap.h>
--#include <linux/dma-resv.h>
- #include <linux/err.h>
- #include <linux/highmem.h>
- #include <linux/mm.h>
-@@ -202,8 +201,6 @@ static int system_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
- 	struct sg_page_iter piter;
- 	int ret;
- 
--	dma_resv_assert_held(dmabuf->resv);
--
- 	for_each_sgtable_page(table, &piter, vma->vm_pgoff) {
- 		struct page *page = sg_page_iter_page(&piter);
  
 -- 
 2.39.2
