@@ -2,85 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF736D356B
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 05:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649226D3581
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 06:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjDBD5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 23:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
+        id S230044AbjDBEpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 00:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDBD5j (ORCPT
+        with ESMTP id S229379AbjDBEpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 23:57:39 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90B121AAD
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 20:57:38 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id CFBCB3200A1D;
-        Sat,  1 Apr 2023 23:57:35 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sat, 01 Apr 2023 23:57:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:cc:content-type:content-type:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1680407855; x=1680494255; bh=5a
-        mwOPaxC92wzRYxQ1JVx2WftbFO9nBcwXCPE0iFBO8=; b=VF9aqMCeFRQygL/ne8
-        MipRK84Xwz6nJAYRO9LGXXfr5Av6eDwBh9frwI1HTfoxkPWE5hmVblgSQpQ0LiH/
-        vWKnPWGtyHn3wUPvQa+n6gS9y36BwMBvZ2/5LaT4hcwmtm3XphOCSIsy0HYH8RSS
-        RWtmlVGvsbKtrlCKeKDloXmlvlo0v9Pez0L9VV3ERaK0OUInO4Dj91jBA28o7yfx
-        Lj99nr9NCeRe3Iu6Ut4SvAk3QAOh6sZKWx4DvaW9uSjiAiKZVhoDJ5BVp4dTntyV
-        leLWcYR7GFYh3OMcv71nryXIYuBTh6LA2jgX9AAaka1DjCUpZ4/+Y1KIzBdOgf3M
-        4Skg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680407855; x=1680494255; bh=5amwOPaxC92wzRYxQ1JVx2WftbFO9nBcwXC
-        PE0iFBO8=; b=IzGUC9nefIiqZGndgS+++xFjU/94qy7T2Cy87f4p4VSOV0l+NyD
-        0JtwgwdFJwoP1nHMGs49ITbvioNL+nQTzk8Z43BWlWTszDb6qQHJs8NO5JUoOoHC
-        0WsXkHP2e66JszO1HojiI/lW01AfnOXMUzotqbQDY2YheVrUxS8CecitZiFvBycQ
-        AfQPa9XWtxq1BqiPc28LRbd+z8gAbXJ77WR70cFnrxPQg1mAPVJa+7C9s2jNirO0
-        b3TFHodRXG9s9oI+EvPrkBjmY7+2GZsnDaaiq47RGA1FfLCoKBzZEKPAOdPPHAWx
-        8TseTYVP7sLr831475S93EeR1Kv1ecOGlXg==
-X-ME-Sender: <xms:L_0oZDL0RtCUlERyOY024LQwQ0pTMu_w32x-6dva63EMKnu1g9bB2A>
-    <xme:L_0oZHIBqS8dPPzOqF-oVcKzX_vnf0rwBIHWYvgVI4b94YTVm-I2Clyf4sfIKHQJH
-    8aJEq_Pew1ZvSw5YFc>
-X-ME-Received: <xmr:L_0oZLthukp9ON2NuRSiETXAg5eKr0I0Jh0UIzP2I4O3qsfI8LQn_Ju8N8-ZvUkkNsDfu5R3PkMRXA2CON-A96etuurEeH5lPEKflxQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeigedgjeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkgggtugesthdtredttddtvdenucfhrhhomheplfhoshhhucfv
-    rhhiphhlvghtthcuoehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhgqeenucggtf
-    frrghtthgvrhhnpeduvdelheettdfgvddvleegueefudegudevffekjeegffefvdeikeeh
-    vdehleekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhg
-X-ME-Proxy: <xmx:L_0oZMYKcczQN-hPxbon_f0CtcU_aor00ZiBB2uKkpUnOaLC5PRPwA>
-    <xmx:L_0oZKY-m3qhLPWgCDPfITCdvetDYUlZI5_TlMhpPPqStBKHVeMouw>
-    <xmx:L_0oZABtUeQixdaQDC5-E03i8ihKFzTMpllXoY0cBaYNGdV83GbLiQ>
-    <xmx:L_0oZC7M_cU3QwL3DutT4xRHY4HRAGxsiRdH-Nokqkmv7m0UC6jckA>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 1 Apr 2023 23:57:31 -0400 (EDT)
-Date:   Sun, 2 Apr 2023 12:57:29 +0900
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH] sysinfo: Saturate 16-bit procs rather than wrapping
-Message-ID: <e32ea9a03d0797ce2b8e7a82ed59c0dad9431f2b.1680407255.git.josh@joshtriplett.org>
+        Sun, 2 Apr 2023 00:45:52 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE8E1CB81;
+        Sat,  1 Apr 2023 21:45:50 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id c18so25097964ple.11;
+        Sat, 01 Apr 2023 21:45:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680410750;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=t+bA3SJ3PjGD6qFQQBdTjIrrF87xvGfeEMJfP2Ma1Co=;
+        b=ZEJVdOPecChJmV3KOeSfuZTcGdLCAYoNnT4xVp07N7nji1NObeYro/5fGK2sWY8gTg
+         uV+nwt8SXkNPWQO+atI4Ltu+UZ0YCbCVcxNC5CqdFkzW8NPMUGBmY3ACMY/UECk316F7
+         pCtsUHMxwqmKxf3J1T5YIfQGSjLxqeuXgW+bFPQwNWZPYOnIZX44nto8yc02wDkVysI9
+         r0q0vYLDwBEegCsmwfnvILv3SmtI4akL9Nyiffc74XOVJtw9TOHYfSTaePg16Gfa7tdN
+         mxIBhmpupDuojaOnMS7m376zs0o4XL/Be9Pxn4nVurifKMahaH2SAt3LDkfxNoh4LZEP
+         UIIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680410750;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t+bA3SJ3PjGD6qFQQBdTjIrrF87xvGfeEMJfP2Ma1Co=;
+        b=d7hXLj2TTy4ylRNis9bcX4lMRZWXH5npOUS2CEYCRUxF+qrZ7Ok0CinJijzaf0c+al
+         8ryllGwdGhWwRqZ4ZSFcUvwqel6Yh6qkWinnr4+LpXwpIUfWaO5/a32y9N05RsBZ+J+D
+         MafujaElIbIkJz8oq7xNGgEe3ZGDz5tWMoOuWiKorq4unU1HSvRAuf/YAnqf58O7ZfKZ
+         EvcgOG2jujVVqiJl3cPVJEs7tLcRH5PyNU4X+3zzTI9EprviOwTYGSwbxe+SDR1X6mZO
+         LZvP3kCFTQuai3SIGIS4okV5il9TCAa6Rg+H+2ZAcyfvvelsvWa4xrviThzpOEsXW0ut
+         sNnA==
+X-Gm-Message-State: AAQBX9f6n99lbwt0cK4yTcBjLR0jXqQZLLznd5mldsrraSPZ/r4c2y1U
+        HdJvP7jor2PNhBhKASFUeLk=
+X-Google-Smtp-Source: AKy350aJnnZTQvWuApyIgiaZeG9NGG3UWlb+OVWST3nWi4fR0STN06INNApzpLVSI2cJvEPZU29UFQ==
+X-Received: by 2002:a17:90a:47:b0:237:c209:5b14 with SMTP id 7-20020a17090a004700b00237c2095b14mr36985912pjb.22.1680410750239;
+        Sat, 01 Apr 2023 21:45:50 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id ja5-20020a170902efc500b00199203a4fa3sm4103756plb.203.2023.04.01.21.45.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Apr 2023 21:45:49 -0700 (PDT)
+From:   Jinliang Zheng <alexjlzheng@gmail.com>
+X-Google-Original-From: Jinliang Zheng <alexjlzheng@tencent.com>
+To:     seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jinliang Zheng <alexjlzheng@tencent.com>
+Subject: [PATCH kvm] KVM: i8259: Fix poll command
+Date:   Sun,  2 Apr 2023 12:45:20 +0800
+Message-Id: <20230402044520.2125966-1-alexjlzheng@tencent.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,31 +72,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct sysinfo has a 16-bit field for the number of processes. Current
-systems can easily exceed this. Rather than wrapping around, saturate
-the value at U16_MAX. This is still incorrect, but more likely to
-help the user know what's going on; a caller can then (for instance)
-parse the full value out of /proc/loadavg.
+According to the hardware manual, when the Poll command is issued, the
+byte returned by the I/O read is 1 in Bit 7 when there is an interrupt,
+and the highest priority binary code in Bits 2:0. The current pic
+simulation code is not implemented strictly according to the above
+expression.
 
-Signed-off-by: Josh Triplett <josh@joshtriplett.org>
+Fix the implementation of poll mode in pic simulation by pic_intack,
+and remove redundant pic_poll_read code.
+
+Signed-off-by: Jinliang Zheng <alexjlzheng@tencent.com>
 ---
+ arch/x86/kvm/i8259.c | 29 ++++++-----------------------
+ 1 file changed, 6 insertions(+), 23 deletions(-)
 
-Not sure what tree changes to kernel/sys.c should flow through. Andrew,
-could you take this through your tree (assuming you agree with it), or
-suggest what tree it should go through instead?
-
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 495cd87d9bf4..ba05fca26927 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -2699,7 +2699,7 @@ static int do_sysinfo(struct sysinfo *info)
+diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
+index 4756bcb5724f..bc5b758e8f73 100644
+--- a/arch/x86/kvm/i8259.c
++++ b/arch/x86/kvm/i8259.c
+@@ -397,35 +397,18 @@ static void pic_ioport_write(void *opaque, u32 addr, u32 val)
+ 		}
+ }
  
- 	get_avenrun(info->loads, 0, SI_LOAD_SHIFT - FSHIFT);
+-static u32 pic_poll_read(struct kvm_kpic_state *s, u32 addr1)
+-{
+-	int ret;
+-
+-	ret = pic_get_irq(s);
+-	if (ret >= 0) {
+-		if (addr1 >> 7) {
+-			s->pics_state->pics[0].isr &= ~(1 << 2);
+-			s->pics_state->pics[0].irr &= ~(1 << 2);
+-		}
+-		s->irr &= ~(1 << ret);
+-		pic_clear_isr(s, ret);
+-		if (addr1 >> 7 || ret != 2)
+-			pic_update_irq(s->pics_state);
+-	} else {
+-		ret = 0x07;
+-		pic_update_irq(s->pics_state);
+-	}
+-
+-	return ret;
+-}
+-
+ static u32 pic_ioport_read(void *opaque, u32 addr)
+ {
+ 	struct kvm_kpic_state *s = opaque;
+ 	int ret;
  
--	info->procs = nr_threads;
-+	info->procs = min_t(typeof(nr_threads), nr_threads, U16_MAX);
- 
- 	si_meminfo(info);
- 	si_swapinfo(info);
+ 	if (s->poll) {
+-		ret = pic_poll_read(s, addr);
++		ret = pic_get_irq(s);
++		if (ret >= 0) {
++			pic_intack(s, ret);
++			ret |= 0x80;
++		} else
++			ret = 0;
+ 		s->poll = 0;
+ 	} else
+ 		if ((addr & 1) == 0)
 -- 
-2.40.0
+2.37.3
+
