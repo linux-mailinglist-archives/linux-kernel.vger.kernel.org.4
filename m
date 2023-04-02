@@ -2,89 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E186D3669
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 11:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D796B6D3673
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 11:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbjDBJLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 05:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
+        id S230326AbjDBJNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 05:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjDBJLc (ORCPT
+        with ESMTP id S230287AbjDBJNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 05:11:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279B1C641
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 02:11:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDA7C60917
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 09:11:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB11FC433EF;
-        Sun,  2 Apr 2023 09:11:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680426690;
-        bh=1YPYK7sayQjP+I10RuHiG39Itwo4QUIikFgJs5dJUOI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dXmn9KPR+SF/Hv52lz4rgiD1pLhkmp9/xXJ2Hfqc/E5lgJ7i92ClRK9/phRLgzIAk
-         wUTlNfF3Lbv67OAylQ13C+35QWyeLG+5MmrSmiNXkyN48DuLynfWOljOjuQsuKrMKu
-         I/uYY2wXkdYeR9DgR3Amy8a+Um4KV++wnzE54H/Y=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH] driver core: remove incorrect comment for device_create*
-Date:   Sun,  2 Apr 2023 11:11:18 +0200
-Message-Id: <2023040218-scouts-unplowed-24d2@gregkh>
-X-Mailer: git-send-email 2.40.0
+        Sun, 2 Apr 2023 05:13:10 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A21EC641;
+        Sun,  2 Apr 2023 02:13:08 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Pq7bf42Lrz4f3p1B;
+        Sun,  2 Apr 2023 17:13:02 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgD3X7MeRylkVUE8Gg--.50168S4;
+        Sun, 02 Apr 2023 17:13:03 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     logang@deltatee.com, song@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH v4 0/5] md: fix uaf for sync_thread
+Date:   Sun,  2 Apr 2023 17:12:31 +0800
+Message-Id: <20230402091236.976723-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1486; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=1YPYK7sayQjP+I10RuHiG39Itwo4QUIikFgJs5dJUOI=; b=owGbwMvMwCRo6H6F97bub03G02pJDCmabts27PU4rHbVV1Ip0/avgL+RD3P8nK9BbqnrU1YKb nrQ9Uy4I5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACYivYNhwfLrDVtzZmtdtrPs yP4oxc7y5eb6Fwzzs/fp5Vz20lpf2Rqy01ZAY0Z19Il2AA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgD3X7MeRylkVUE8Gg--.50168S4
+X-Coremail-Antispam: 1UD129KBjvJXoWrZry3AFy3uFyUWr4DXryrWFg_yoW8JF1fpF
+        W3WrZxZw4UCrsxZFsrXryj9a45G3W8Kay7KryIyw4rXa45uFWUJr4UJFWkWF9rWFyfJay7
+        Xr15Jr18CF10yFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device_create() and device_create_with_groups() function comments
-incorrectly state that they only work with a struct class that was
-created using class_create(), but that is not true now and I am not sure
-if it ever was.  So just remove the comment as it's not needed now.
+From: Yu Kuai <yukuai3@huawei.com>
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/base/core.c | 6 ------
- 1 file changed, 6 deletions(-)
+Changes in v4:
+ - remove patch 2 from v3
+ - fix sparse errors and warnings from v3, in order to do that, all access
+ to md_thread need to be modified, patch 2-4 is splited to avoid a huge
+ patch.
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 3ee5d206e7eb..7a42d1b6b721 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -4330,9 +4330,6 @@ device_create_groups_vargs(const struct class *class, struct device *parent,
-  * pointer.
-  *
-  * Returns &struct device pointer on success, or ERR_PTR() on error.
-- *
-- * Note: the struct class passed to this function must have previously
-- * been created with a call to class_create().
-  */
- struct device *device_create(const struct class *class, struct device *parent,
- 			     dev_t devt, void *drvdata, const char *fmt, ...)
-@@ -4371,9 +4368,6 @@ EXPORT_SYMBOL_GPL(device_create);
-  * pointer.
-  *
-  * Returns &struct device pointer on success, or ERR_PTR() on error.
-- *
-- * Note: the struct class passed to this function must have previously
-- * been created with a call to class_create().
-  */
- struct device *device_create_with_groups(const struct class *class,
- 					 struct device *parent, dev_t devt,
+Changes in v3:
+ - remove patch 3 from v2
+ - use rcu instead of a new lock
+
+Changes in v2:
+ - fix a compile error for md-cluster in patch 2
+ - replace spin_lock/unlock with spin_lock/unlock_irq in patch 5
+ - don't wake up inside the new lock in md wakeup_thread in patch 5
+
+Yu Kuai (5):
+  md: pass a md_thread pointer to md_register_thread()
+  md: factor out a helper to wake up md_thread directly
+  md: add a helper to access md_thread() directly
+  dm-raid: remove useless checking in raid_message()
+  md: protect md_thread with rcu
+
+ drivers/md/dm-raid.c      |   4 +-
+ drivers/md/md-bitmap.c    |  28 +++++++---
+ drivers/md/md-cluster.c   |  11 ++--
+ drivers/md/md-multipath.c |   6 +--
+ drivers/md/md.c           | 108 ++++++++++++++++++++------------------
+ drivers/md/md.h           |  21 +++++---
+ drivers/md/raid1.c        |   9 ++--
+ drivers/md/raid1.h        |   2 +-
+ drivers/md/raid10.c       |  21 ++++----
+ drivers/md/raid10.h       |   2 +-
+ drivers/md/raid5-cache.c  |  14 ++---
+ drivers/md/raid5.c        |  19 +++----
+ drivers/md/raid5.h        |   2 +-
+ 13 files changed, 132 insertions(+), 115 deletions(-)
+
 -- 
-2.40.0
+2.39.2
 
