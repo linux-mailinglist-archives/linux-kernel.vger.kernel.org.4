@@ -2,92 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BB96D38C7
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 17:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A016D38CE
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 17:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjDBPcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 11:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
+        id S231146AbjDBPle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 11:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjDBPcw (ORCPT
+        with ESMTP id S230141AbjDBPlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 11:32:52 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311E9E042
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 08:32:48 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id m8so4756248wmq.5
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 08:32:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680449566;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ROdznGkDW/Cnxv1c0rSMvRWt/kX2WgW6XJagkUDkrao=;
-        b=NjQ+bX2U5JDkfRb+BW+lAjJ83wvPvSfQf9bG+I45s2iP5SZIb3QfZ1AxXHrGNMnvlR
-         PRuCMbszFMCwxrucLB99qJc29r+ScRN5UhbNJuyb+DuLC5m6m9bntuXnW1PItZfyjdPE
-         4I6aevZXVZV6uFQTOj1wuvHLeg6c143QXQck9iN0J4eufQ1ahRDoBQS7rr7sm0JqKqMG
-         YSKGDPFqTnaOgRg8jY4wMX8eCp1JLFoc5P0mbyUSvkHZiC0YdIMxUQfCW/E9JyEPHgih
-         LCYv2zpCxGEwm5hJ4j/3RhO9s4F6PWBtkTo0HYE65ESvWbE5eRyB7FRAP67RmRHL7FIF
-         EdRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680449566;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ROdznGkDW/Cnxv1c0rSMvRWt/kX2WgW6XJagkUDkrao=;
-        b=egMsF2E7CCNlUeIAO8sKfebGaz55Mf+6Urfs3VyolAVsDESIkfZNJCOILVF8YEmdIM
-         Pi2ZqErgznJIBwKl/Ysz0f1gAq+jSzPSOPMdVl/IchiUwrfg6XTCF1qn4+wf9smFDFRp
-         14nNbyouZ6kdswlWRHWOE7fS4+EwQS2Q5OKvqDIesMkB+sw9neS1C6s7KxmI+clY1bI2
-         XcHFA2d5UjZs9J8YmDY3koTHqEygIO/P82AfHsaw7v/4jEfdl+QMzPfXPvA1vc5lKDBZ
-         0XT8tPnnRfOlmA/JliIJ1qRxZXjR05tsgyCfJHBudk1geKbC1YfPMZfvW7ge12kXlXoU
-         G5zQ==
-X-Gm-Message-State: AO0yUKX/R/SKDPFVqnG34a4DL/ZG6rMM02eXFo7EXuaI+xZqnyqvNlmO
-        YDwTCNlJ5a9PXp9vL6B+Fw==
-X-Google-Smtp-Source: AK7set8v3PAD+xMYhMSx0hmgJk9LHrWsbe2xJjPqyspqOmodgzn2EpIAllkqSSRt8wHtc4VnnZWZug==
-X-Received: by 2002:a7b:c4c6:0:b0:3ee:5754:f139 with SMTP id g6-20020a7bc4c6000000b003ee5754f139mr24350103wmk.13.1680449566619;
-        Sun, 02 Apr 2023 08:32:46 -0700 (PDT)
-Received: from koolguy (dslb-002-205-192-117.002.205.pools.vodafone-ip.de. [2.205.192.117])
-        by smtp.gmail.com with ESMTPSA id v20-20020a7bcb54000000b003ed2c0a0f37sm9321258wmj.35.2023.04.02.08.32.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 08:32:46 -0700 (PDT)
-Date:   Sun, 2 Apr 2023 17:32:44 +0200
-From:   Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: wlan-ng: add comment to spinlock_t
-Message-ID: <20230402153244.GA12609@koolguy>
+        Sun, 2 Apr 2023 11:41:32 -0400
+Received: from kozue.soulik.info (kozue.soulik.info [108.61.200.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5103E7EC3
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 08:41:27 -0700 (PDT)
+Received: from ritsuko.sh.sumomo.pri (unknown [112.64.60.49])
+        by kozue.soulik.info (Postfix) with ESMTPSA id 579C9101D5C;
+        Mon,  3 Apr 2023 00:34:07 +0900 (JST)
+From:   Randy Li <ayaka@soulik.info>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Randy Li <ayaka@soulik.info>, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
+        daniel@ffwll.ch, linux-kernel@vger.kernel.org, tfiga@chromium.org,
+        nicolas@ndufresne.ca, laurent.pinchart@ideasonboard.com,
+        ribalda@chromium.org
+Subject: [PATCH v7 0/2] Add pixel formats used in Synatpics SoC
+Date:   Sun,  2 Apr 2023 23:33:56 +0800
+Message-Id: <20230402153358.32948-1-ayaka@soulik.info>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix checkpatch.pl warning: spinlock_t definition without comment in
-drivers/staging/wlan-ng/hfa384x.h
+Those pixel formats are used in Synaptics's VideoSmart series SoCs,
+likes VS640, VS680. I just disclose the pixel formats used in the video
+codecs and display pipeline this time. Actually any device connected to
+the MTR module could support those tiling and compressed pixel formats.
 
-Signed-off-by: Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
----
- drivers/staging/wlan-ng/hfa384x.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://synaptics.com/products/multimedia-solutions
 
-diff --git a/drivers/staging/wlan-ng/hfa384x.h b/drivers/staging/wlan-ng/hfa384x.h
-index e33dd1b9c40e..fc6d67cec5b1 100644
---- a/drivers/staging/wlan-ng/hfa384x.h
-+++ b/drivers/staging/wlan-ng/hfa384x.h
-@@ -1000,7 +1000,7 @@ struct hfa384x_usbctlx {
- };
- 
- struct hfa384x_usbctlxq {
--	spinlock_t lock;
-+	spinlock_t lock;	/* disable interrupts while working in hfa384 or hfa384x_usbctlx */
- 	struct list_head pending;
- 	struct list_head active;
- 	struct list_head completing;
+Changelog:
+v7:
+Fixed all warnings and errors for its document.
+Add its document to GPU tree.
+v6:
+Refresh and fix warnings in its document.
+v5:
+Moving back the document and rewriting the description.
+v4:
+Removed the patches for V4L2, V4L2 would use the drm_fourcc.h .
+Moving the documents to the mesa project.
+v3:
+There was a mistake in format macro.
+Correcting the description of 64L4 variant modifiers.
+v2:
+The DRM modifiers in the first draft is too simple, it can't tell
+the tiles in group attribute in memory layout.
+Removing the v4l2 fourcc. Adding a document for the future v4l2 extended
+fmt.
+v1:
+first draft of DRM modifiers
+Try to put basic tile formats into v4l2 fourcc
+
+Hsia-Jun(Randy) Li (1):
+  drm/fourcc: Add Synaptics VideoSmart tiled modifiers
+
+Randy Li (1):
+  Documentation/gpu: Add Synaptics tiling formats documentation
+
+ Documentation/gpu/drivers.rst   |  1 +
+ Documentation/gpu/synaptics.rst | 81 +++++++++++++++++++++++++++++++++
+ include/uapi/drm/drm_fourcc.h   | 75 ++++++++++++++++++++++++++++++
+ 3 files changed, 157 insertions(+)
+ create mode 100644 Documentation/gpu/synaptics.rst
+
 -- 
-2.25.1
+2.39.2
 
