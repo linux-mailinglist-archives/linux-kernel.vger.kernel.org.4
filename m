@@ -2,156 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9A46D3764
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 12:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B646D376E
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 12:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjDBKrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 06:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
+        id S230410AbjDBKzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 06:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjDBKrH (ORCPT
+        with ESMTP id S229503AbjDBKzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 06:47:07 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C794113E2
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 03:47:04 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id r11so106562792edd.5
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 03:47:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680432423;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=boY93jyd6+T4l8iYNZlZE0N095pRX4NnlYNcBxMegqE=;
-        b=KJF9SsfWvwvyR4Yw5C5V1+mHelTyrF51rvwVQmy4cS34/YnHeIMNzaqun0xl6GDRdi
-         yCD7Nxe7hxn7VJgirW/NXE9dHznT7Q4+fQq2Lrp+ZET8RipTCo/T+L8x7zqJN+m/lDh9
-         cZDJjGN5Q7c8bb5MzjB78EtPkDrxHezKhnJPw4d4ZNrsLyWGqZj4D2nf8OSWYTWOTHrY
-         uL7y6P8t3S//PuVzPNZERT9zxrfHouWnW80Yf+LkQM4jLAitXRfilQSjvegdz8c9tle/
-         vKbV8EzMR0n9zSGiX6dptsHQVHJG2nPPYST7+x/N3QFgjovOM+wp/Z5FmHInkWg0snZ+
-         YGFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680432423;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=boY93jyd6+T4l8iYNZlZE0N095pRX4NnlYNcBxMegqE=;
-        b=BE34IFX6hGh26ZE2TGRmgrDvfm6gm/FmWEWK55CcIGiWImR7sx3m7ncaQVoR+0L19+
-         F/zz/xF7+414O8qlaoJe2Zz9s1hY9F6WDdrgnYzasOo9hF/NFNH6r59P5XO3FG+7bGmx
-         48OalMNX1t3zJHJn2FJIcMx5Zm99SrJk8sshQ2mCjOpxf8wGBGjJrTdUULNG53ZXGYwe
-         ZpiBdi2eSYyWfM3PlOA5znH0oZv4LIADNZF9pERbULOh/dRkaUqKmzGLQAJs7JbmfcGA
-         aTadH1t6rxzVC57L39gjqzQcLl3h9MFkOTAcRJYwIXJKcqSKovci9MAAJFBRFMcnIEHH
-         h8gQ==
-X-Gm-Message-State: AAQBX9eg7XlO/jE7S2kHkjluTNAYbbbsfRk5a6ebyXXXFYu9VbwMzrhJ
-        6SCg3SnPQh/vIEueOwfvGom3ww==
-X-Google-Smtp-Source: AKy350ZEHhfp/UzJ0URFQoZ1spvf7xAJ6vhppv6/DhrVo837ythU/SyCg9S1R8dhbRGHXfjkskDSVQ==
-X-Received: by 2002:aa7:d885:0:b0:4fd:2155:74ef with SMTP id u5-20020aa7d885000000b004fd215574efmr32584061edq.19.1680432423031;
-        Sun, 02 Apr 2023 03:47:03 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7f7f:6a30:7a20:94d5? ([2a02:810d:15c0:828:7f7f:6a30:7a20:94d5])
-        by smtp.gmail.com with ESMTPSA id u26-20020a50a41a000000b004fb95f51f54sm3142513edb.12.2023.04.02.03.47.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Apr 2023 03:47:02 -0700 (PDT)
-Message-ID: <8a22aea9-5027-e8a4-db80-ce79f3830e10@linaro.org>
-Date:   Sun, 2 Apr 2023 12:47:01 +0200
+        Sun, 2 Apr 2023 06:55:17 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E5D1A975
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 03:55:15 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Pq9sW6T1fz9sVx;
+        Sun,  2 Apr 2023 12:55:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1680432911;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JGmLL2lif/lN1JO6yxqqMUbCCQ09GzfW7zKPJU5P/qA=;
+        b=B53XDWj8eAlOkkTpZqQh0vAT+uK+slZGNpNqeRmmbjiB3J0NWX56+wQF62EussCLl8zDKW
+        m5KnuZ10WixAhM111aPX4gVET5pbzPjBITADUpWWIKjCERRQ1aaYprjCcV/52/JU5MoJnS
+        L36CnY7LVREDx/PR8iugWLYT3S0LJspLg3zL2XdpOyCjVNui/7ktJX3Yhra0kav6S9cxch
+        +WENgzLr/+iVvFculnbm2sloiGCTYMSy7NWFFZtOcaHvMMEdXySRz6j2S3vhCiiemUv4Wc
+        HZpDlHWIaPqv8k/NE7QWye0VOaZjmUWS0+WM7cVPf4eC4oGqS/gVtYTF45DEbA==
+References: <20230331110245.43527-1-me@crly.cz>
+ <20230331110245.43527-4-me@crly.cz>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Roman Beranek <me@crly.cz>
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] drm: sun4i: calculate proper DCLK rate for DSI
+Date:   Sun, 02 Apr 2023 12:49:08 +0200
+In-reply-to: <20230331110245.43527-4-me@crly.cz>
+Message-ID: <87h6tya70h.fsf@oltmanns.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [Patch v4 01/10] dt-bindings: memory: tegra: add bpmp ref in
- tegra234-mc node
-Content-Language: en-US
-To:     Sumit Gupta <sumitg@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     treding@nvidia.com, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, lpieralisi@kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
-        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
-        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
-References: <20230327161426.32639-1-sumitg@nvidia.com>
- <20230327161426.32639-2-sumitg@nvidia.com>
- <787f656a-223d-5eed-e311-9cc7a6c46452@linaro.org> <ZCLF6ZRH528pu/r3@orome>
- <79d8044f-ce68-463e-66f7-8755e253bc99@linaro.org> <ZCLiCWRYbO98qwCn@orome>
- <0b393600-3f08-c2e8-9b02-664c6a984de1@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0b393600-3f08-c2e8-9b02-664c6a984de1@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2023 19:12, Sumit Gupta wrote:
-> 
-> 
-> On 28/03/23 18:18, Thierry Reding wrote:
->> On Tue, Mar 28, 2023 at 01:22:26PM +0200, Krzysztof Kozlowski wrote:
->>> On 28/03/2023 12:48, Thierry Reding wrote:
->>>> On Tue, Mar 28, 2023 at 09:23:04AM +0200, Krzysztof Kozlowski wrote:
->>>>> On 27/03/2023 18:14, Sumit Gupta wrote:
->>>>>> For Tegra234, add the "nvidia,bpmp" property within the Memory
->>>>>> Controller (MC) node to reference BPMP node. This is needed in
->>>>>> the MC driver to pass the client info to the BPMP-FW when memory
->>>>>> interconnect support is available.
->>>>>>
->>>>>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
->>>>>> ---
->>>>>>   .../bindings/memory-controllers/nvidia,tegra186-mc.yaml    | 7 +++++++
->>>>>>   1 file changed, 7 insertions(+)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>>>>> index 935d63d181d9..398d27bb2373 100644
->>>>>> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
->>>>>> @@ -58,6 +58,10 @@ properties:
->>>>>>     "#interconnect-cells":
->>>>>>       const: 1
->>>>>>   
->>>>>> +  nvidia,bpmp:
->>>>>> +    $ref: /schemas/types.yaml#/definitions/phandle
->>>>>> +    description: phandle of the node representing the BPMP
->>>>>
->>>>> Why do you need this multiple times? Both in parent and all external-mc
->>>>> children?
->>>>
->>>> We've had nvidia,bpmp in the external memory controller node since
->>>> basically the beginning because we've always needed it there. For newer
->>>> chips we now also need it for the memory controller.
->>>>
->>>> Ideally I think we would only have this in the MC and have the EMC
->>>> driver reference it via the EMC's parent (i.e. MC), but that would break
->>>> backwards-compatibility. Reaching into the EMC's DT node from the MC was
->>>> another option that we discussed internally, but it didn't look right
->>>> given how this is also needed by the MC.
->>>>
->>>> One thing we could potentially do is deprecate the nvidia,bpmp phandle
->>>> in the EMC and only keep it as a fallback in the drivers in case the
->>>> parent MC doesn't find it's own in the DT.
->>>
->>> Yes, deprecation would answer to my question.
->>
->> Okay, great. Sumit, you can resolve this by adding a "deprecated: true"
->> to the EMC's nvidia,bpmp property schema. In the driver we can then try
->> to look at the MC's ->bpmp and if it exists reuse that. If it doesn't
->> exist, we can keep the existing lookup as a fallback for device trees
->> that haven't been updated yet.
-> 
-> We can't use MC's->bpmp in the EMC driver's probe as it will be NULL. 
-> This is because MC driver uses "arch_initcall" and gets probed earlier 
-> than BPMP. We can do this in another way as below change. This way we 
-> can use the existing "nvidia,bpmp" property from EMC node and don't need 
-> to move it to the MC node. Please share if this change sounds OK.
+Hi Roman,
 
-Then rather it sounds like time to fix these
-orderings/arch_initcall/missing defer.
+On 2023-03-31 at 13:02:45 +0200, Roman Beranek <me@crly.cz> wrote:
+> In DSI mode, TCON0's data clock is required to run at 1/4 the per-lane
+> bit rate.
+>
+> Signed-off-by: Roman Beranek <me@crly.cz>
+> ---
+>  drivers/gpu/drm/sun4i/sun4i_tcon.c | 36 +++++++++++++++++-------------
+>  1 file changed, 21 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/sun4i/sun4i_tcon.c b/drivers/gpu/drm/sun4i/sun4i_tcon.c
+> index eec26b1faa4b..b263de7a8237 100644
+> --- a/drivers/gpu/drm/sun4i/sun4i_tcon.c
+> +++ b/drivers/gpu/drm/sun4i/sun4i_tcon.c
+> @@ -291,18 +291,6 @@ static int sun4i_tcon_get_clk_delay(const struct drm_display_mode *mode,
+>  	return delay;
+>  }
+>
+> -static void sun4i_tcon0_mode_set_common(struct sun4i_tcon *tcon,
+> -					const struct drm_display_mode *mode)
+> -{
+> -	/* Configure the dot clock */
+> -	clk_set_rate(tcon->dclk, mode->crtc_clock * 1000);
+> -
+> -	/* Set the resolution */
+> -	regmap_write(tcon->regs, SUN4I_TCON0_BASIC0_REG,
+> -		     SUN4I_TCON0_BASIC0_X(mode->crtc_hdisplay) |
+> -		     SUN4I_TCON0_BASIC0_Y(mode->crtc_vdisplay));
+> -}
+> -
+>  static void sun4i_tcon0_mode_set_dithering(struct sun4i_tcon *tcon,
+>  					   const struct drm_connector *connector)
+>  {
+> @@ -367,10 +355,18 @@ static void sun4i_tcon0_mode_set_cpu(struct sun4i_tcon *tcon,
+>  	u32 block_space, start_delay;
+>  	u32 tcon_div;
+>
+> +	/*
+> +	 * dclk is required to run at 1/4 the DSI per-lane bit rate.
+> +	 */
+>  	tcon->dclk_min_div = SUN6I_DSI_TCON_DIV;
+>  	tcon->dclk_max_div = SUN6I_DSI_TCON_DIV;
+> +	clk_set_rate(tcon->dclk, mode->crtc_clock * 1000 * (bpp / lanes)
+> +						  / SUN6I_DSI_TCON_DIV);
+
+When apply this to drm-next my panel stays dark. I haven't figured out
+yet why, though. The other two patches in this series work fine, i.e.
+they have no effect as they are just a refactoring.
+
+I'm testing this on my pinephone. It's the same with the patch I
+submitted. For whatever reason, it no longer works on drm-next.
+
+At the time I'm writing this, drm-next is at 82bbec189ab3 "Merge
+v6.3-rc4 into drm-next".
+
+Does it work for you? And if so, on which commit are you basing this
+series?
+
+Thanks,
+  Frank
 
 
-Best regards,
-Krzysztof
+>
+> -	sun4i_tcon0_mode_set_common(tcon, mode);
+> +	/* Set the resolution */
+> +	regmap_write(tcon->regs, SUN4I_TCON0_BASIC0_REG,
+> +		     SUN4I_TCON0_BASIC0_X(mode->crtc_hdisplay) |
+> +		     SUN4I_TCON0_BASIC0_Y(mode->crtc_vdisplay));
+>
+>  	/* Set dithering if needed */
+>  	sun4i_tcon0_mode_set_dithering(tcon, sun4i_tcon_get_connector(encoder));
+> @@ -438,7 +434,12 @@ static void sun4i_tcon0_mode_set_lvds(struct sun4i_tcon *tcon,
+>
+>  	tcon->dclk_min_div = 7;
+>  	tcon->dclk_max_div = 7;
+> -	sun4i_tcon0_mode_set_common(tcon, mode);
+> +	clk_set_rate(tcon->dclk, mode->crtc_clock * 1000);
+> +
+> +	/* Set the resolution */
+> +	regmap_write(tcon->regs, SUN4I_TCON0_BASIC0_REG,
+> +		     SUN4I_TCON0_BASIC0_X(mode->crtc_hdisplay) |
+> +		     SUN4I_TCON0_BASIC0_Y(mode->crtc_vdisplay));
+>
+>  	/* Set dithering if needed */
+>  	sun4i_tcon0_mode_set_dithering(tcon, sun4i_tcon_get_connector(encoder));
+> @@ -515,7 +516,12 @@ static void sun4i_tcon0_mode_set_rgb(struct sun4i_tcon *tcon,
+>
+>  	tcon->dclk_min_div = tcon->quirks->dclk_min_div;
+>  	tcon->dclk_max_div = 127;
+> -	sun4i_tcon0_mode_set_common(tcon, mode);
+> +	clk_set_rate(tcon->dclk, mode->crtc_clock * 1000);
+> +
+> +	/* Set the resolution */
+> +	regmap_write(tcon->regs, SUN4I_TCON0_BASIC0_REG,
+> +		     SUN4I_TCON0_BASIC0_X(mode->crtc_hdisplay) |
+> +		     SUN4I_TCON0_BASIC0_Y(mode->crtc_vdisplay));
+>
+>  	/* Set dithering if needed */
+>  	sun4i_tcon0_mode_set_dithering(tcon, connector);
 
+
+--
+--
+Frank Oltmanns
