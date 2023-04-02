@@ -2,72 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233166D389D
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 16:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274676D38A0
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 16:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjDBO4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 10:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S230517AbjDBO4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 10:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjDBO4e (ORCPT
+        with ESMTP id S230462AbjDBO4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 10:56:34 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E284D6A7A;
-        Sun,  2 Apr 2023 07:56:32 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Vf8O9Kq_1680447388;
-Received: from 192.168.31.179(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0Vf8O9Kq_1680447388)
-          by smtp.aliyun-inc.com;
-          Sun, 02 Apr 2023 22:56:29 +0800
-Message-ID: <3cb9b024-d124-b13d-a80e-f5788b023065@linux.alibaba.com>
-Date:   Sun, 2 Apr 2023 22:56:27 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/swap: fix swap_info_struct race between swapoff and
- get_swap_pages()
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-stable@vger.kernel.org
-References: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
- <ZCmFExoOsho9pt+Q@debian.me>
-Content-Language: en-US
-From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
-In-Reply-To: <ZCmFExoOsho9pt+Q@debian.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Sun, 2 Apr 2023 10:56:53 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65007295;
+        Sun,  2 Apr 2023 07:56:52 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id k12so690049qvo.13;
+        Sun, 02 Apr 2023 07:56:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680447412; x=1683039412;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=atds8gSClqlNHaxVTY/u8jWQRo/FCkzxGm1dMixJaaM=;
+        b=B/By7XhjU69AY0lqHx25qllp0doybNw50wUiGKlqOp010V9jcCzstlJZiVKM8a5lyU
+         5gv75rX9n0NSqTu3b2k/FoQLZi1j8BjfiD69pzhdPSOwAau+JYwlPWAuKiePY+EoO/dV
+         hheJK+8ZD9CcKKPa/0LnI3fVDfy9nq8tkX/ZzYZrrSdR+ui1PkzTWvtEabpt2wg/ba9X
+         poR9Hsf2rYQM0yMWnpaYXTgLCjLb/6tkPrmBkNU5YJPgvdgx50whJR1udUbGkE4RFOvc
+         gMSC61tu6eezoJY0zWVh4pn/3OIU/vL2cArywyxMk/P1wml+3m8YF2fjKdQrXzuSxmTr
+         5+BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680447412; x=1683039412;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=atds8gSClqlNHaxVTY/u8jWQRo/FCkzxGm1dMixJaaM=;
+        b=lUHVOkSzjoBobtpu1Hcbh/23uFUtgAuvi9+QTCT+um9c3oBHrRKPBENmtuQmk2IZ3l
+         y8OZr+AOFIw7Y/jTrjIS4kJgAzKrfYgaRv488YOHbKr4IYX/ZtYZaWxvZNph0T1Im2uc
+         oP7EWz4Pgz75aO/Rkm1LWmODqgVQ5dzqSQpiSni+30Ae4yCtsGVdOAnXwrwkve+893FJ
+         ha/MdWJ31joDtjYKNCMrT1iwGuHoeFP6mxEY9VaNaZ4Rz3fpoigfG7TTgHnvfmKCrrJs
+         1rT7pymxuSjkDE13NitPoNZ23DQkpUgxO5C80M23sgc9YPgiFsVm9+3B6TG+M04/NJFi
+         yVzw==
+X-Gm-Message-State: AAQBX9cjo63LB8FhCtXRTM5pS+EG47XdtkTop4Pv3nWX0Ubt2cnuHWzt
+        jIXAVfClwvmu3wURHYMobkY=
+X-Google-Smtp-Source: AKy350a4rkwDBTQMVluJtKUgqOxCwrYsf5coqfb0RWcqcMAYP5IbUbp///HoN0WpAm/c1TL6UVdubA==
+X-Received: by 2002:ad4:5b87:0:b0:5a5:f1eb:fc67 with SMTP id 7-20020ad45b87000000b005a5f1ebfc67mr49357634qvp.52.1680447411816;
+        Sun, 02 Apr 2023 07:56:51 -0700 (PDT)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id x23-20020a05620a0b5700b00746b79101b6sm2080331qkg.67.2023.04.02.07.56.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Apr 2023 07:56:51 -0700 (PDT)
+Date:   Sun, 02 Apr 2023 10:56:51 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Message-ID: <642997b31bf8f_2d2a202088e@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20230331160914.1608208-4-dhowells@redhat.com>
+References: <20230331160914.1608208-1-dhowells@redhat.com>
+ <20230331160914.1608208-4-dhowells@redhat.com>
+Subject: RE: [PATCH v3 03/55] net: Declare MSG_SPLICE_PAGES internal sendmsg()
+ flag
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+David Howells wrote:
+> Declare MSG_SPLICE_PAGES, an internal sendmsg() flag, that hints to a
+> network protocol that it should splice pages from the source iterator
+> rather than copying the data if it can.  This flag is added to a list that
+> is cleared by sendmsg and recvmsg syscalls on entry.
 
-On 4/2/23 9:37 PM, Bagas Sanjaya wrote:
-> On Sun, Apr 02, 2023 at 06:19:20AM +0800, Rongwei Wang wrote:
->> Without this modification, a core will wait (mostly)
-> "Currently, a core will ..."
->
->> But, a worse consequence, panic also can be caused by
-> "However, in the worst case, ..."
->
->> In this patch, we lock p->lock before calling
-> "Lock p->lock before calling ..."
->
->> We also find this problem exists in stable 5.10.
-> So, you claim that 5.15.y and 6.1.y aren't affected, right?
+nit: comment not longer matches implementation: recvmsg
+ 
+> This is intended as a replacement for the ->sendpage() op, allowing a way
+> to splice in several multipage folios in one go.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+> cc: "David S. Miller" <davem@davemloft.net>
+> cc: Eric Dumazet <edumazet@google.com>
+> cc: Jakub Kicinski <kuba@kernel.org>
+> cc: Paolo Abeni <pabeni@redhat.com>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: netdev@vger.kernel.org
 
-I think above both versions also be affected. I can check they next.
+Aside from that
 
->
-> Also, Cc: stable@vger.kernel.org on the SoB area (as pointed by kernel
-> test robot [1].
-Thanks, next version will to do.
->
-> Thanks.
->
-> [1]: https://lore.kernel.org/stable/ZCiuGEkyk%2F1Afisk@ec83ac1404bb/
->   
+Reviewed-by: Willem de Bruijn <willemb@google.com>
