@@ -2,113 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DA16D3567
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 05:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF736D356B
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 05:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjDBDhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 23:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
+        id S230105AbjDBD5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 23:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDBDhq (ORCPT
+        with ESMTP id S229492AbjDBD5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 23:37:46 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2906518FB6
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 20:37:44 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3323bU3u028074
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 1 Apr 2023 23:37:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1680406651; bh=qAsrzmj7/kad1P6cbuZ6kJUzmtGwZZtOex6p18MMEME=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=lJfWxuqoKoGx6cQg0ESsATw8eYJnWBYqyOJHaV1hB86WOTK4bJ98HEVCu0x8ninox
-         sGgLb0ZO+O8dBFG/MUKinZyYFYhVeEbaybWGIXGJRIZwnLvL63+pPBa9oqkZfWMsBY
-         gL3MFbjHhNiOWEVJMewuR+99cC1pN20uqHJTowTfH+tz/RFB4xZj04FBlamHHU/C+R
-         4LcPlqwpxegHytBCUTLn2mtQihzNg9Nh1K/BxrgRKwQy245cnXkRrmUCM/Lke18XXH
-         9yyZMMtaigCHcaiF4LiBHBPkWixYp+3VAc33cZZ8H/ctTREhYS7GWcYulZTepgrYEO
-         RtOabtD/58+pw==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id D4E3F15C5253; Sat,  1 Apr 2023 23:37:29 -0400 (EDT)
-Date:   Sat, 1 Apr 2023 23:37:29 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Change in kernel debian packages between -rc2 and -rc3
-Message-ID: <20230402033729.GA619325@mit.edu>
-References: <20230325143122.GA409315@mit.edu>
- <CAK7LNARndpbtzRAW1kEiqyNBmAxdqJKiTquvY9bW08LYTTMiOg@mail.gmail.com>
- <20230326121118.GB323408@mit.edu>
- <CAK7LNARcUSsjzi7UV+rHHaQU1X-XJ0jN0sLAw2m=SypTQTCHKA@mail.gmail.com>
- <20230328040917.GC108653@mit.edu>
+        Sat, 1 Apr 2023 23:57:39 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90B121AAD
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 20:57:38 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id CFBCB3200A1D;
+        Sat,  1 Apr 2023 23:57:35 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Sat, 01 Apr 2023 23:57:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        joshtriplett.org; h=cc:cc:content-type:content-type:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680407855; x=1680494255; bh=5a
+        mwOPaxC92wzRYxQ1JVx2WftbFO9nBcwXCPE0iFBO8=; b=VF9aqMCeFRQygL/ne8
+        MipRK84Xwz6nJAYRO9LGXXfr5Av6eDwBh9frwI1HTfoxkPWE5hmVblgSQpQ0LiH/
+        vWKnPWGtyHn3wUPvQa+n6gS9y36BwMBvZ2/5LaT4hcwmtm3XphOCSIsy0HYH8RSS
+        RWtmlVGvsbKtrlCKeKDloXmlvlo0v9Pez0L9VV3ERaK0OUInO4Dj91jBA28o7yfx
+        Lj99nr9NCeRe3Iu6Ut4SvAk3QAOh6sZKWx4DvaW9uSjiAiKZVhoDJ5BVp4dTntyV
+        leLWcYR7GFYh3OMcv71nryXIYuBTh6LA2jgX9AAaka1DjCUpZ4/+Y1KIzBdOgf3M
+        4Skg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680407855; x=1680494255; bh=5amwOPaxC92wzRYxQ1JVx2WftbFO9nBcwXC
+        PE0iFBO8=; b=IzGUC9nefIiqZGndgS+++xFjU/94qy7T2Cy87f4p4VSOV0l+NyD
+        0JtwgwdFJwoP1nHMGs49ITbvioNL+nQTzk8Z43BWlWTszDb6qQHJs8NO5JUoOoHC
+        0WsXkHP2e66JszO1HojiI/lW01AfnOXMUzotqbQDY2YheVrUxS8CecitZiFvBycQ
+        AfQPa9XWtxq1BqiPc28LRbd+z8gAbXJ77WR70cFnrxPQg1mAPVJa+7C9s2jNirO0
+        b3TFHodRXG9s9oI+EvPrkBjmY7+2GZsnDaaiq47RGA1FfLCoKBzZEKPAOdPPHAWx
+        8TseTYVP7sLr831475S93EeR1Kv1ecOGlXg==
+X-ME-Sender: <xms:L_0oZDL0RtCUlERyOY024LQwQ0pTMu_w32x-6dva63EMKnu1g9bB2A>
+    <xme:L_0oZHIBqS8dPPzOqF-oVcKzX_vnf0rwBIHWYvgVI4b94YTVm-I2Clyf4sfIKHQJH
+    8aJEq_Pew1ZvSw5YFc>
+X-ME-Received: <xmr:L_0oZLthukp9ON2NuRSiETXAg5eKr0I0Jh0UIzP2I4O3qsfI8LQn_Ju8N8-ZvUkkNsDfu5R3PkMRXA2CON-A96etuurEeH5lPEKflxQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeigedgjeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkgggtugesthdtredttddtvdenucfhrhhomheplfhoshhhucfv
+    rhhiphhlvghtthcuoehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhgqeenucggtf
+    frrghtthgvrhhnpeduvdelheettdfgvddvleegueefudegudevffekjeegffefvdeikeeh
+    vdehleekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhg
+X-ME-Proxy: <xmx:L_0oZMYKcczQN-hPxbon_f0CtcU_aor00ZiBB2uKkpUnOaLC5PRPwA>
+    <xmx:L_0oZKY-m3qhLPWgCDPfITCdvetDYUlZI5_TlMhpPPqStBKHVeMouw>
+    <xmx:L_0oZABtUeQixdaQDC5-E03i8ihKFzTMpllXoY0cBaYNGdV83GbLiQ>
+    <xmx:L_0oZC7M_cU3QwL3DutT4xRHY4HRAGxsiRdH-Nokqkmv7m0UC6jckA>
+Feedback-ID: i83e94755:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 1 Apr 2023 23:57:31 -0400 (EDT)
+Date:   Sun, 2 Apr 2023 12:57:29 +0900
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH] sysinfo: Saturate 16-bit procs rather than wrapping
+Message-ID: <e32ea9a03d0797ce2b8e7a82ed59c0dad9431f2b.1680407255.git.josh@joshtriplett.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328040917.GC108653@mit.edu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've worked around this in xfstests-bld.
+struct sysinfo has a 16-bit field for the number of processes. Current
+systems can easily exceed this. Rather than wrapping around, saturate
+the value at U16_MAX. This is still incorrect, but more likely to
+help the user know what's going on; a caller can then (for instance)
+parse the full value out of /proc/loadavg.
 
-					- Ted
+Signed-off-by: Josh Triplett <josh@joshtriplett.org>
+---
 
-commit e3309f769882397e605f956755dfec30f1f3f196
-Author: Theodore Ts'o <tytso@mit.edu>
-Date:   Sat Apr 1 23:22:09 2023 -0400
+Not sure what tree changes to kernel/sys.c should flow through. Andrew,
+could you take this through your tree (assuming you agree with it), or
+suggest what tree it should go through instead?
 
-    kernel-build: work around backwards incompatible change in "make bindeb-pkg"
-    
-    Starting in v6.3-rc3, "make bindeb-pkg" made an incompatible change in
-    how the debian package version is constructed, by dropping
-    CONFIG_LOCALVERSION from the package version.  This might make sense
-    given that Debian and Ubuntu try to adhere to Stable ABI nonsense with
-    their Distribution kernels, but the default version chosen by "make
-    bindeb-pkg" isn't compatible with the stable ABI nonsense versioning
-    scheme in any case, so the change just breaks upstream developers for
-    no good reason.
-    
-    Fix this by overriding the package version using KDEB_PKGVERSION,
-    which is not documented, but hopefully it won't also incompatibly
-    change in the future.  :-(
-    
-    Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-
-diff --git a/kernel-build/kbuild b/kernel-build/kbuild
-index 16dfb7cd..4ab9ea28 100755
---- a/kernel-build/kbuild
-+++ b/kernel-build/kbuild
-@@ -153,7 +153,25 @@ rm -f "$BLD_DIR/linux-image.deb" "$BLD_DIR/linux-image-dbg.deb" \
- if test -n "$DO_DPKG" ; then
-     $NO_ACTION make "${MAKE_ARGS[@]}" prepare
-     REL=$(make "${MAKE_ARGS[@]}" kernelrelease | grep -v ^make)
--    $NO_ACTION time nice make "KDEB_SOURCENAME=linux-${REL}" "${MAKE_ARGS[@]}" \
-+    MAJOR=$(echo $REL | awk -F. '{print $1}')
-+    MINOR=$(echo $REL | awk -F. '{print $2}')
-+    if test -f "$BLD_DIR/.version" ; then
-+	NUM=$(cat "$BLD_DIR/.version")
-+	# Starting in 6.1, how "make bindeb-pkg" handled the
-+	# .version numbering randomly changed; accomodate that
-+	# here.   Things are broken starting in 6.1-rc1 until 6.1-rc6
-+	# but we won't worry about that here.  See commit
-+	# 5db8face97f8 ("kbuild: Restore .version auto-increment behaviour
-+	# for Debian packages") which fixed the problem but in a way
-+	# which was different compared to how 6.0 and earlier kernels
-+	# handled things.
-+	if test "$MAJOR" -ge 6 -a "$MINOR" -ge 1 ; then
-+	    NUM=$(( $NUM + 1 ))
-+	fi
-+    else
-+	NUM=1
-+    fi
-+    $NO_ACTION time nice make "KDEB_PKGVERSION=$REL-$NUM" "KDEB_SOURCENAME=linux-${REL}" "${MAKE_ARGS[@]}" \
- 	 bindeb-pkg "$@"
-     err=$?
-     d="$BLD_DIR/.."
+diff --git a/kernel/sys.c b/kernel/sys.c
+index 495cd87d9bf4..ba05fca26927 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -2699,7 +2699,7 @@ static int do_sysinfo(struct sysinfo *info)
+ 
+ 	get_avenrun(info->loads, 0, SI_LOAD_SHIFT - FSHIFT);
+ 
+-	info->procs = nr_threads;
++	info->procs = min_t(typeof(nr_threads), nr_threads, U16_MAX);
+ 
+ 	si_meminfo(info);
+ 	si_swapinfo(info);
+-- 
+2.40.0
