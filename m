@@ -2,152 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153266D39F9
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 21:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826786D39FC
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 21:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbjDBTTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 15:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
+        id S231192AbjDBTX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 15:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDBTTw (ORCPT
+        with ESMTP id S229448AbjDBTX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 15:19:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374C9BBB9;
-        Sun,  2 Apr 2023 12:19:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6AB5B81002;
-        Sun,  2 Apr 2023 19:19:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E23E0C433EF;
-        Sun,  2 Apr 2023 19:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680463187;
-        bh=inEW+jtO8y4n3Uvc+E4dflVytHhuhEnZfJdXbyiVNQo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Sd8FP0S9LEIbmuopOGvYgeBYVUgWX9q8cUDUakVOjKeHCvx83hNM9Lj0HSCygouZj
-         ot8ftyp97Cho3JQVGFZolvn5+2pz0QN8wTdwpkAHxntMKMW1q04TjaSp4IOZLghZjz
-         4PwkLxDnovGltyZ+9WsJzmhL/dIs2gbbEemDql+UaAU7kaIvkzMahAkNY1RZzbVB8P
-         hZS/Zp+zlNZ4zt0TYDx2wBwsGHNKxfL9DAKLJtiTK/nqbI3gW/8VLNjxQgVRq0SGFP
-         SskcGRhhcyAUOYkpLHbR7BRJBbTPbDtXV2dN1aRIXQTuk6bR+KbpIlI4ZuiiqLOG3b
-         SpubQ4ePEAxew==
-Date:   Sun, 2 Apr 2023 20:19:41 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 00/22] Basic clock, reset & device tree support for
- StarFive JH7110 RISC-V SoC
-Message-ID: <acb36897-8085-4f41-9b68-b243467ffc6f@spud>
-References: <20230401111934.130844-1-hal.feng@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SO2Uk5pRGCbZdMav"
-Content-Disposition: inline
-In-Reply-To: <20230401111934.130844-1-hal.feng@starfivetech.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Sun, 2 Apr 2023 15:23:57 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B0E6194;
+        Sun,  2 Apr 2023 12:23:56 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id B21BB5C010C;
+        Sun,  2 Apr 2023 15:23:53 -0400 (EDT)
+Received: from imap52 ([10.202.2.102])
+  by compute5.internal (MEProxy); Sun, 02 Apr 2023 15:23:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1680463433; x=1680549833; bh=kkNbyRljaYc9FJTztqR1CFE1tS2ZZwX6jaP
+        Nlt9y7Uw=; b=RCI2w2HTwM1SY80QEJ7vFDO+6pMdfsKVIs05/g3wyK7EFJTeL15
+        zoNHiw8wxYfO90TCnUSGbN1qhaDxvqQxXrgA/ti3XCp8bWy9lh4jLEwAkFeRQaux
+        qEZCYTVoNUPrRUNeVgdaa12RflIGvanlnTUzEAejfmje32AXdp4CEKe8hl3C1Q6+
+        uqmIgWW2EbRQOs2C7SPX0c/xADeyR/ZlL4mDXBa8K3PzJ9ehIIz+hrBLd4h1zVE9
+        DkoTy9pshVIDiClyJCQJRIWcPtq0DjVK+GiR+9e/nJTvhMfYLCQ8lgJbN/8nXGTw
+        BSyHV3CXJjpe8qLC7I38aAWnAPFauGDt9vw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680463433; x=1680549833; bh=kkNbyRljaYc9FJTztqR1CFE1tS2ZZwX6jaP
+        Nlt9y7Uw=; b=CWuhAmqJTVifnoQp2ZdOSOEPUVvAHfrJXINg1sDu/2Ckaag2ot+
+        X1W3WEVOF+0BKPrffNOynPzAltTojKiikyMwzO4zpv5bIjGXz4hx5QWGyE7W202J
+        ZmonjQu24XA4O9lgG8clGl3pqP9tvOhkjdhDH0+gFqBKH6eGWGIZ4A1oNxJ7YNdt
+        sclrywrlrCnrNqqu4SY1ziCW7NEm4xuf+aFrNIEVWL9zDM+V+mc82KToJTckjTto
+        c4KX2UPjQp/q/rO5aT7e4VZWBanyMZ/6B63k2h0+ZMo2r8RYUVw48jFkUp8RXa0r
+        Wjj6t5LgP4fTDturwd67ajfCKGAjORmQDDg==
+X-ME-Sender: <xms:SNYpZDGLUfVMWeMH4jR3tyHvmlz1g_9PISpAHvGgiuvWaiJvvjVKMA>
+    <xme:SNYpZAVm6M1puOKI-FwPGIBIQCx0_cF5xjiw7KAiw7GTQXmLE8e0eCT9kNMyaLgj3
+    SecJpVYXGtJbPwG8fQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeihedgudefiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    ofgrrhhkucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvg
+    gssgdrtggrqeenucggtffrrghtthgvrhhnpeefjeegvddugedvkeehvdfffeejhfeutdfh
+    tdehheekffduvdfgteejgeejueefgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhhpvggr
+    rhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrg
+X-ME-Proxy: <xmx:SNYpZFJGmNFyXmMv7AGCWa3LthaeMR8FG7S5_GVfm48L7XsHr6d2UA>
+    <xmx:SNYpZBEJf0HpcuKzMr05wK9qZbLPLQbgjF-E6ffCmHqxDeoYyQojQw>
+    <xmx:SNYpZJXmK1vGlL994DlyjOy6oArVKj8aoGrxUERs2IG2bYt12jGriA>
+    <xmx:SdYpZHf9_W1CRDaiTGGLuAxfIZQ1-MNKmLOmwW4juciWF2BVe8pm_Q>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B02A7C60091; Sun,  2 Apr 2023 15:23:52 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
+Mime-Version: 1.0
+Message-Id: <dfd65bd6-26d8-4ef4-8eaa-3cc412f381ec@app.fastmail.com>
+In-Reply-To: <f2bbd848-2079-d5cb-6a59-9040708dc429@amd.com>
+References: <mpearson-lenovo@squebb.ca>
+ <20230401184345.208960-1-mpearson-lenovo@squebb.ca>
+ <f2bbd848-2079-d5cb-6a59-9040708dc429@amd.com>
+Date:   Sun, 02 Apr 2023 15:23:31 -0400
+From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     "Hans de Goede" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "Armin Wolf" <W_Armin@gmx.de>,
+        "Mirsad Goran Todorovac" <mirsad.todorovac@alu.unizg.hr>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] platform/x86: think-lmi: Fix memory leaks when parsing
+ ThinkStation WMI strings
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mario
 
---SO2Uk5pRGCbZdMav
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sun, Apr 2, 2023, at 10:04 AM, Mario Limonciello wrote:
+> On 4/1/23 13:43, Mark Pearson wrote:
+>
+>> My previous commit introduced a memory leak where the item allocated
+>> from tlmi_setting was not freed.
+>> This commit also renames it to avoid confusion with the similarly name
+>> variable in the same function.
+>>
+>> Fixes: 8a02d70679fc ("platform/x86: think-lmi: Add possible_values fo=
+r ThinkStation")
+>> Reported-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+>> Link: https://lore.kernel.org/lkml/df26ff45-8933-f2b3-25f4-6ee51ccda7=
+d8@gmx.de/T/
+>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+>> ---
+>> This patch series builds on top of the proposed patch from Armin Wolf
+>> "platform/x86: think-lmi: Fix memory leak when showing current settin=
+gs"
+>
+> Which version of the patch did you do it from?=C2=A0 I tried to apply =
+v3 of=20
+> Armin's patch
+> to Linus' tree and then apply these two.
+>
+> The first applied, but the second had conflicts.=C2=A0 Here was my bas=
+e (with=20
+> patch 1 in
+> this series applied).
 
-Hey Hal,
+I was using v2 - but there shouldn't be any code changes between v3 and =
+v2....so I hadn't re-based.
 
-On Sat, Apr 01, 2023 at 07:19:12PM +0800, Hal Feng wrote:
-> This patch series adds basic clock, reset & DT support for StarFive
-> JH7110 SoC.
->=20
-> @Stephen and @Conor, I have made this series start with the shared
-> dt-bindings, so it will be easier to merge.
+I'm working in the fixes branch from pdx86.git (with the aim of making i=
+t easier for Hans to pull in the patches). It's possible I've goofed som=
+ehow...though not sure how :(
 
-Thanks. I probably should have asked for that, makes my life easier
-that's for sure!
+I'll go double check - but likely won't be until tomorrow I'm afraid. I =
+should probably just wait for the patch to be accepted and then work fro=
+m there....
 
-> @Conor, patch 1, 2, 16~21 were already in your branch. Patch 22 is the
-> same with the patch [1] I submitted before, which you had accepted but
-> not merge it into your branch.
-
-I hadn't merged that into anywhere, so I just went and dropped the
-original incarnation of that branch and have re-created it.
-I don't recall there being a maintainers pattern error (from running
-scripts/get_maintainer.pl --self-test=3Dpatterns) with what I had done in
-my branch, but with your patch 1 applied I see one. To save myself a
-complaint from LKP, I stripped out the MAINTAINERS bits from patch 1
-into their own patch that can go with the clock/reset bits.
-
-I squashed 22 into "riscv: dts: starfive: Add initial StarFive JH7110
-device tree" since there's no reason to add something knowingly
-incorrect IMO.
-
-I've gone and pushed out the following as riscv-jh7110_initial_dts:
-riscv: dts: starfive: Add StarFive JH7110 VisionFive 2 board device
-riscv: dts: starfive: Add StarFive JH7110 pin function definitions
-riscv: dts: starfive: Add initial StarFive JH7110 device tree
-dt-bindings: riscv: Add SiFive S7 compatible
-dt-bindings: interrupt-controller: Add StarFive JH7110 plic
-dt-bindings: timer: Add StarFive JH7110 clint
-dt-bindings: clock: Add StarFive JH7110 always-on clock and reset generator
-dt-bindings: clock: Add StarFive JH7110 system clock and reset generator
-
-And the rest as riscv-jh7110_clk_reset:
-MAINTAINERS: generalise StarFive clk/reset entries
-reset: starfive: Add StarFive JH7110 reset driver
-clk: starfive: Add StarFive JH7110 always-on clock driver
-clk: starfive: Add StarFive JH7110 system clock driver
-reset: starfive: jh71x0: Use 32bit I/O on 32bit registers
-reset: starfive: Rename "jh7100" to "jh71x0" for the common code
-reset: starfive: Extract the common JH71X0 reset code
-reset: starfive: Factor out common JH71X0 reset code
-reset: Create subdirectory for StarFive drivers
-reset: starfive: Replace SOC_STARFIVE with ARCH_STARFIVE
-clk: starfive: Rename "jh7100" to "jh71x0" for the common code
-clk: starfive: Rename clk-starfive-jh7100.h to clk-starfive-jh71x0.h
-clk: starfive: Factor out common JH7100 and JH7110 code
-clk: starfive: Replace SOC_STARFIVE with ARCH_STARFIVE
-dt-bindings: clock: Add StarFive JH7110 always-on clock and reset generator
-dt-bindings: clock: Add StarFive JH7110 system clock and reset generator
-
-<https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/refs>
-
-As it looks like everything has been resolved in terms of comments on
-v6, provided LKP doesn't complain or people don't spot something else,
-my plan is to send Stephen a PR around Wednesday for the driver bits.
-
-Please LMK if I screwed up anything,
-Conor.
-
---SO2Uk5pRGCbZdMav
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCnVTQAKCRB4tDGHoIJi
-0kgSAP0ZhGnMAGUiJ+KlSFzyP2jt+4RI/2QTwN1oKvhgmXYp9gEA51va6jlAkqWF
-g5FAbwRJR2vtVawWCI8Mfw/SSpp/jQk=
-=ZYkW
------END PGP SIGNATURE-----
-
---SO2Uk5pRGCbZdMav--
+Mark
