@@ -2,74 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5CD6D3560
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 05:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DA16D3567
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 05:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbjDBDRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 23:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
+        id S230225AbjDBDhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 23:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDBDR1 (ORCPT
+        with ESMTP id S229603AbjDBDhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 23:17:27 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA35D1B7E0
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 20:17:26 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id x15so24291935pjk.2
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 20:17:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680405446;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o5rFwZN4arfT+quf2ScnUr6XHy1fT8u5eEhmQaaASlA=;
-        b=UtJwdvLcUzjHvS4wnr5R9NIdmpRy6wBEEas5o3BT9o69hT5Vz08J0Zuf2ICuZD9XGG
-         C5w0FvFlIKJYyQ1khXc2idyl4nDJpNL2DoxFyJH5saGIoyOr7OewMf1aCDzdN+iGeSx4
-         qSaeYfjFQFmhgzZOrdkQtbU4RK/VJxaiY9Ch3UYq1v74Fu+IbGNMMAjkuPlt0y6hZ9+b
-         v51xxp/pM2HcA5x/PHaLiqd1ryKNaiiqWZ4VeAXrpMYYykaBQ0N4whK64E8bz7Ec0dmH
-         wcwh+nUVWttKWk1D7R+85oxMlbrqFLqnpn0nLSvAw852EkPidEIcGETuo7uXBHFspkIr
-         U57A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680405446;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o5rFwZN4arfT+quf2ScnUr6XHy1fT8u5eEhmQaaASlA=;
-        b=u183pnfk6oFgkKfXytQSTvs/ploz0BQCmdt4tMHkRMtTB7lgRTH/jGcs08RRrN6RIB
-         ApZDqiu8heV64Bqu+fjU7SJq/38+PslJsAWZ6df1/CIywDFRbz2E9DysMk/YYSbxWY6t
-         P52TjyUgCTzpzDNGgfQN7eBr3TPfWnceheSEwFythwVXKWRGniaqTb5b2VgV0szRojwU
-         xVFwc/CYiMupZqjzhn8Ys1n+MOsFAeRVkay1pZAE7zraLKs0TUTcurKRBx+zXsGVeMCc
-         PuR+jE0uhwuugiikWBhu0nXZQYZgySN3S6smjXetfObKW8Lok7QpI2i/h7JPK5XHmm5Z
-         gbNg==
-X-Gm-Message-State: AAQBX9cRSiayz9W1Izq6mt/mpLQZu0teMVWcgCq1dJDrszw4/xAHOk7P
-        zt11J7l+k2PbIuKBX+/jpxM=
-X-Google-Smtp-Source: AKy350YYP/el4R+46FhTkfdbpKa6uJ7uWQynmnEpS0NPC1S2v7kjvu2+wGLivgc7UCCGp6co5tmkaQ==
-X-Received: by 2002:a17:903:1250:b0:1a2:55ca:6669 with SMTP id u16-20020a170903125000b001a255ca6669mr28198412plh.33.1680405446264;
-        Sat, 01 Apr 2023 20:17:26 -0700 (PDT)
-Received: from DESKTOPB5TBVBT ([175.117.51.71])
-        by smtp.gmail.com with ESMTPSA id bd10-20020a170902830a00b001991f3d85acsm3989098plb.299.2023.04.01.20.17.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 01 Apr 2023 20:17:25 -0700 (PDT)
-From:   "Yohan Joung" <jyh429@gmail.com>
-To:     "'Chao Yu'" <chao@kernel.org>, <jaegeuk@kernel.org>
-Cc:     <lkp@intel.com>, <linux-kernel@vger.kernel.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        <oe-kbuild-all@lists.linux.dev>
-References: <ZBzlJ36kO5KvxODB@google.com> <20230324130747.523-1-jyh429@gmail.com> <6db7be47-9455-c466-f99a-497f8fe8930a@kernel.org>
-In-Reply-To: <6db7be47-9455-c466-f99a-497f8fe8930a@kernel.org>
-Subject: RE: [f2fs-dev] [PATCH] f2fs: fix align check for npo2
-Date:   Sun, 2 Apr 2023 12:17:23 +0900
-Message-ID: <004e01d96511$a65359b0$f2fa0d10$@gmail.com>
+        Sat, 1 Apr 2023 23:37:46 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2906518FB6
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 20:37:44 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3323bU3u028074
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 1 Apr 2023 23:37:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1680406651; bh=qAsrzmj7/kad1P6cbuZ6kJUzmtGwZZtOex6p18MMEME=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=lJfWxuqoKoGx6cQg0ESsATw8eYJnWBYqyOJHaV1hB86WOTK4bJ98HEVCu0x8ninox
+         sGgLb0ZO+O8dBFG/MUKinZyYFYhVeEbaybWGIXGJRIZwnLvL63+pPBa9oqkZfWMsBY
+         gL3MFbjHhNiOWEVJMewuR+99cC1pN20uqHJTowTfH+tz/RFB4xZj04FBlamHHU/C+R
+         4LcPlqwpxegHytBCUTLn2mtQihzNg9Nh1K/BxrgRKwQy245cnXkRrmUCM/Lke18XXH
+         9yyZMMtaigCHcaiF4LiBHBPkWixYp+3VAc33cZZ8H/ctTREhYS7GWcYulZTepgrYEO
+         RtOabtD/58+pw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id D4E3F15C5253; Sat,  1 Apr 2023 23:37:29 -0400 (EDT)
+Date:   Sat, 1 Apr 2023 23:37:29 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Change in kernel debian packages between -rc2 and -rc3
+Message-ID: <20230402033729.GA619325@mit.edu>
+References: <20230325143122.GA409315@mit.edu>
+ <CAK7LNARndpbtzRAW1kEiqyNBmAxdqJKiTquvY9bW08LYTTMiOg@mail.gmail.com>
+ <20230326121118.GB323408@mit.edu>
+ <CAK7LNARcUSsjzi7UV+rHHaQU1X-XJ0jN0sLAw2m=SypTQTCHKA@mail.gmail.com>
+ <20230328040917.GC108653@mit.edu>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 15.0
-Content-Language: ko
-Thread-Index: AQF6XO6yHRdACLHpz3GwDztUEe2YOQJb5qXHAomEG4Svrj19UA==
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328040917.GC108653@mit.edu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,55 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Chao Yu [mailto:chao@kernel.org]
-> Sent: Saturday, April 1, 2023 10:49 AM
-> To: Yohan Joung; jaegeuk@kernel.org
-> Cc: lkp@intel.com; linux-kernel@vger.kernel.org; linux-f2fs-
-> devel@lists.sourceforge.net; oe-kbuild-all@lists.linux.dev
-> Subject: Re: [f2fs-dev] [PATCH] f2fs: fix align check for npo2
-> 
-> On 2023/3/24 21:07, Yohan Joung wrote:
-> > Fix alignment check to be correct in npo2 as well
-> >
-> > Signed-off-by: Yohan Joung <yohan.joung@sk.com>
-> > ---
-> >   fs/f2fs/segment.c | 5 +++--
-> >   1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c index
-> > 055e70e77aa2..f4a22a065277 100644
-> > --- a/fs/f2fs/segment.c
-> > +++ b/fs/f2fs/segment.c
-> > @@ -1842,6 +1842,7 @@ static int __f2fs_issue_discard_zone(struct
-> f2fs_sb_info *sbi,
-> >   	sector_t sector, nr_sects;
-> >   	block_t lblkstart = blkstart;
-> >   	int devi = 0;
-> > +	u32 remainder = 0;
-> >
-> >   	if (f2fs_is_multi_device(sbi)) {
-> >   		devi = f2fs_target_device_index(sbi, blkstart); @@ -1857,9
-> +1858,9
-> > @@ static int __f2fs_issue_discard_zone(struct f2fs_sb_info *sbi,
-> >   	if (f2fs_blkz_is_seq(sbi, devi, blkstart)) {
-> >   		sector = SECTOR_FROM_BLOCK(blkstart);
-> >   		nr_sects = SECTOR_FROM_BLOCK(blklen);
-> > +		div_u64_rem(sector, bdev_zone_sectors(bdev), &remainder);
-> 
-> Should use div64_u64_rem()? As both sector and return value of
-> bdev_zone_sectors() are u64.
-> 
-> Thanks,
-Upload based on your comments.
-Thanks
-> 
-> >
-> > -		if (sector & (bdev_zone_sectors(bdev) - 1) ||
-> > -				nr_sects != bdev_zone_sectors(bdev)) {
-> > +		if (remainder || nr_sects != bdev_zone_sectors(bdev)) {
-> >   			f2fs_err(sbi, "(%d) %s: Unaligned zone reset attempted
-> (block %x + %x)",
-> >   				 devi, sbi->s_ndevs ? FDEV(devi).path : "",
-> >   				 blkstart, blklen);
+I've worked around this in xfstests-bld.
 
+					- Ted
+
+commit e3309f769882397e605f956755dfec30f1f3f196
+Author: Theodore Ts'o <tytso@mit.edu>
+Date:   Sat Apr 1 23:22:09 2023 -0400
+
+    kernel-build: work around backwards incompatible change in "make bindeb-pkg"
+    
+    Starting in v6.3-rc3, "make bindeb-pkg" made an incompatible change in
+    how the debian package version is constructed, by dropping
+    CONFIG_LOCALVERSION from the package version.  This might make sense
+    given that Debian and Ubuntu try to adhere to Stable ABI nonsense with
+    their Distribution kernels, but the default version chosen by "make
+    bindeb-pkg" isn't compatible with the stable ABI nonsense versioning
+    scheme in any case, so the change just breaks upstream developers for
+    no good reason.
+    
+    Fix this by overriding the package version using KDEB_PKGVERSION,
+    which is not documented, but hopefully it won't also incompatibly
+    change in the future.  :-(
+    
+    Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+
+diff --git a/kernel-build/kbuild b/kernel-build/kbuild
+index 16dfb7cd..4ab9ea28 100755
+--- a/kernel-build/kbuild
++++ b/kernel-build/kbuild
+@@ -153,7 +153,25 @@ rm -f "$BLD_DIR/linux-image.deb" "$BLD_DIR/linux-image-dbg.deb" \
+ if test -n "$DO_DPKG" ; then
+     $NO_ACTION make "${MAKE_ARGS[@]}" prepare
+     REL=$(make "${MAKE_ARGS[@]}" kernelrelease | grep -v ^make)
+-    $NO_ACTION time nice make "KDEB_SOURCENAME=linux-${REL}" "${MAKE_ARGS[@]}" \
++    MAJOR=$(echo $REL | awk -F. '{print $1}')
++    MINOR=$(echo $REL | awk -F. '{print $2}')
++    if test -f "$BLD_DIR/.version" ; then
++	NUM=$(cat "$BLD_DIR/.version")
++	# Starting in 6.1, how "make bindeb-pkg" handled the
++	# .version numbering randomly changed; accomodate that
++	# here.   Things are broken starting in 6.1-rc1 until 6.1-rc6
++	# but we won't worry about that here.  See commit
++	# 5db8face97f8 ("kbuild: Restore .version auto-increment behaviour
++	# for Debian packages") which fixed the problem but in a way
++	# which was different compared to how 6.0 and earlier kernels
++	# handled things.
++	if test "$MAJOR" -ge 6 -a "$MINOR" -ge 1 ; then
++	    NUM=$(( $NUM + 1 ))
++	fi
++    else
++	NUM=1
++    fi
++    $NO_ACTION time nice make "KDEB_PKGVERSION=$REL-$NUM" "KDEB_SOURCENAME=linux-${REL}" "${MAKE_ARGS[@]}" \
+ 	 bindeb-pkg "$@"
+     err=$?
+     d="$BLD_DIR/.."
