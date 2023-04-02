@@ -2,79 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2166D38FD
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 18:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBB66D3925
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 18:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbjDBQbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 12:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
+        id S230470AbjDBQtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 12:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjDBQbu (ORCPT
+        with ESMTP id S229459AbjDBQtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 12:31:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1A3CC37;
-        Sun,  2 Apr 2023 09:31:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 2 Apr 2023 12:49:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58963DBD0;
+        Sun,  2 Apr 2023 09:49:14 -0700 (PDT)
+Received: from workpc.. (109-252-124-32.nat.spd-mgts.ru [109.252.124.32])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D91B66127C;
-        Sun,  2 Apr 2023 16:31:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03FEBC433EF;
-        Sun,  2 Apr 2023 16:31:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680453108;
-        bh=qJeZ5uDyEeQaZcj4Q81noYNElzTzq/Y3eW1UJP6DIF8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uqQIUBqEnMt25KlGU3fSrHKonEIX2ToZt58RDQj4a3U+scmq69TikS0QNlQI5/OT4
-         rwny0Bw16lLqlbwnQuutBtfE55CQnKp2fJVCpYPIa2Hn71+ZBcI7NQvmtciKVQE3sr
-         r3MyDXnB9BKOO6+wepXSBdGM4XidoMNaPhGa5rXvAOyrfqQYVmQ+n294CpGvHe3Eg2
-         S2mWhetoKMvbgKitlTCPzikANH2sskvAoGC4/xTzEOJCLbdDeDZdJ+CJRg11enE4bZ
-         KeMqkqoid7Flj3fT5EK099ROy6DygZqdfTWFuzUZAxFF2pJheYy8wvrG4yRVT+6Kp3
-         2GHXj9wXhothQ==
-Date:   Sun, 2 Apr 2023 17:46:57 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] iio: addac: stx104: Migrate to the regmap API
-Message-ID: <20230402174657.55159879@jic23-huawei>
-In-Reply-To: <ZCg6bhkxGKmkMloM@fedora>
-References: <cover.1679867815.git.william.gray@linaro.org>
-        <4ebc1b6b609a086846420954b893e914fd395384.1679867815.git.william.gray@linaro.org>
-        <ZCGBIAvr7OQLwNXv@smile.fi.intel.com>
-        <ZCg6bhkxGKmkMloM@fedora>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 55288660209A;
+        Sun,  2 Apr 2023 17:49:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680454152;
+        bh=kjTtuZafxqQ//qonolfaG0xTHClDJ/0hYqwWpo1/w0k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PM3m6hysogG6uCz7g8USUVA1IMYM+iGZA6+yIjQgSO72di64cd3XcPWbSoQK4u17A
+         NF5dj16eH5qZED1KNKFanlRxxAm33kiySG/ZCfeQQZSLmMavJo8DDfRdGdUvPbwQz9
+         3nGTOktieV1US0uEoj0ZjpqwQ+9Ar6n/VfJlqv0TI7F33tXQfLmGOs0QruTBvHrey4
+         QVLQZR5Vhn6IF2ASDNZtrHeH/7STOxqrfwrMOLISeiNaNhPDHttDYeIQoC1TTNGYIr
+         cf2lOEToXQJSC39ChYTfcECrx5g5hpr1s3eW8kQ/gWWgcrTeAi4enC2cynT8Psd2kT
+         yJwrl4uuH9k8Q==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        kernel@collabora.com
+Subject: [PATCH v1 0/7] Move dma-buf mmap() reservation locking down to exporters
+Date:   Sun,  2 Apr 2023 19:48:19 +0300
+Message-Id: <20230402164826.752842-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset makes dma-buf exporters responisble for taking care of
+the reservation lock. I also included patch that moves drm-shmem to use
+reservation lock, to let CI test the whole set. I'm going to take all
+the patches via the drm-misc tree, please give an ack.
 
-> > > +	.wr_table = &aio_ctl_wr_table,
-> > > +	.rd_table = &aio_ctl_rd_table,
-> > > +	.volatile_table = &aio_ctl_volatile_table,
-> > > +	.cache_type = REGCACHE_FLAT,
-> > > +};  
-> > 
-> > Do we need regmap lock?  
-> 
-> I think the regmap lock is opt-out, so I don't think we need to set an
-> custom lock callback for the regmaps in this driver.
-> 
-> Jonathan, do read_raw() and write_raw() require explicit locking?
+Previous policy stated that dma-buf core takes the lock around mmap()
+callback. Which meant that both importers and exporters shouldn't touch
+the reservation lock in the mmap() code path. This worked well until
+Intel-CI found a deadlock problem in a case of self-imported dma-buf [1].
 
-The don't provide their own locking.  Depending on the access pattern the
-underlying bus locking may be sufficient.  If you have read modify write
-cycles though you'll want locking at the appropriate level for that
-which might well be at the level of regmap.
+The problem happens when userpace mmaps a self-imported dma-buf, i.e.
+mmaps the dma-buf FD. DRM core treats self-imported dma-bufs as own GEMs
+[2]. There is no way to differentiate a prime GEM from a normal GEM for
+drm-shmem in drm_gem_shmem_mmap(), which resulted in a deadlock problem
+for drm-shmem mmap() code path once it's switched to use reservation lock.
 
-Jonathan
+It was difficult to fix the drm-shmem problem without adjusting dma-buf
+locking policy. In parctice not much changed from importers perspective
+because previosly dma-buf was taking the lock in between of importers
+and exporters. Now this lock is shifted down to exporters.
+
+[1] https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_114671v2/shard-snb5/igt@prime_vgem@sync@rcs0.html
+[2] https://elixir.bootlin.com/linux/v6.3-rc4/source/drivers/gpu/drm/drm_prime.c#L924
+
+Dmitry Osipenko (7):
+  Revert "media: videobuf2: Assert held reservation lock for dma-buf
+    mmapping"
+  Revert "dma-buf/heaps: Assert held reservation lock for dma-buf
+    mmapping"
+  Revert "udmabuf: Assert held reservation lock for dma-buf mmapping"
+  Revert "fastrpc: Assert held reservation lock for dma-buf mmapping"
+  Revert "drm: Assert held reservation lock for dma-buf mmapping"
+  dma-buf: Change locking policy for mmap()
+  drm/shmem-helper: Switch to reservation lock
+
+ drivers/dma-buf/dma-buf.c                     |  17 +-
+ drivers/dma-buf/heaps/cma_heap.c              |   3 -
+ drivers/dma-buf/heaps/system_heap.c           |   3 -
+ drivers/dma-buf/udmabuf.c                     |   2 -
+ drivers/gpu/drm/drm_gem_shmem_helper.c        | 217 ++++++++----------
+ drivers/gpu/drm/drm_prime.c                   |   2 -
+ drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   2 -
+ drivers/gpu/drm/lima/lima_gem.c               |   8 +-
+ drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c     |   2 -
+ drivers/gpu/drm/panfrost/panfrost_drv.c       |   7 +-
+ .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |   6 +-
+ drivers/gpu/drm/panfrost/panfrost_mmu.c       |  19 +-
+ drivers/gpu/drm/tegra/gem.c                   |   2 -
+ .../common/videobuf2/videobuf2-dma-contig.c   |   3 -
+ .../media/common/videobuf2/videobuf2-dma-sg.c |   3 -
+ .../common/videobuf2/videobuf2-vmalloc.c      |   3 -
+ drivers/misc/fastrpc.c                        |   3 -
+ include/drm/drm_gem_shmem_helper.h            |  14 +-
+ 18 files changed, 123 insertions(+), 193 deletions(-)
+
+-- 
+2.39.2
+
