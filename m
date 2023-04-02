@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81FC6D3970
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 19:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082EF6D3971
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 19:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbjDBR00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 13:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
+        id S231218AbjDBR1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 13:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbjDBR0Y (ORCPT
+        with ESMTP id S229565AbjDBR1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 13:26:24 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA77E7DB2;
-        Sun,  2 Apr 2023 10:26:22 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso18395889wms.1;
-        Sun, 02 Apr 2023 10:26:22 -0700 (PDT)
+        Sun, 2 Apr 2023 13:27:49 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921FF7DBA
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 10:27:48 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id d17so27036774wrb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 10:27:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680456381;
+        d=gmail.com; s=20210112; t=1680456467;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/vbuti5krowtrunNTliRTFxJEP25/MzDnPfiiGQsdeo=;
-        b=J8pksCugxMr7bNtJ0/qlJ10Lptx3EC19lN5z0s2GXmprRrIdmcWo1XMFCfUn7NJ14z
-         q++BYaehv+imhuaKg5o+SmZ5oX5gOtxhjWoX0ed0jSwWohiQIBtn2v6+eo1CQclstfNK
-         I1KthpbxHxvg222LwDWep11UAaY8FQ3g9ytU/50M5oO51DrrVlYc3K5yQ+jQ9goyYIGc
-         y6yC8D68mPCkirbDK87ugI7LDhxCk9bD4CW38wdiP17sEedkMdp8rfqhdgV2k4dpLzTt
-         Jp9EheRPAm3LT80wLYfZ47azt2yNF2VvGNJVZVeRQz/wO4twCX7ro3bbEOQ3gR/vcsw+
-         E7qg==
+        bh=Lai18srKbEc5Y0N4kYNIKail00meRifHOIv93tm0RKQ=;
+        b=H5kzva5gJTiQugbxCd+mPDSr2M8sn7syUsd+AtHXjqG6foGeeA7tlI2rqEsg+0tWUc
+         z3bifdzCQVsPYVE4w3pRaWKDiy5Wnb1RgOBtLuH5dwX0no6qXmDlm01mCdYS7gauTau6
+         jPGXNF9IQI4FnXjT5bBFtKFxeYlviF3GlwLIh7tBDVbzT9kTNQd74UG83dgBENj4++dk
+         5Ad9dN7vA2Gfv9DUxXyO/y3k/3pyo/QrdUUU6LAmhagxEv2W7yhd1CjLdryAVRUlhFYa
+         em1XkbLyZ85vYA8VWxuoO9xyvyKaJaZqpTwlbGIE/WiCRaqSr2gphweeToSYEhUXi44E
+         y6Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680456381;
+        d=1e100.net; s=20210112; t=1680456467;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/vbuti5krowtrunNTliRTFxJEP25/MzDnPfiiGQsdeo=;
-        b=ahXAs1H+gXq406VTQ563Wgw3YyytDpeV3gdeTWtMKNBw0aa9/M18M596WJsmEEj1vi
-         mZeRrZZziARrn0iInFWIFo/D1SXejV10Dej44OLboUg8rFU52yO9NxuZxXIxtau7bRC2
-         1KRPHxrpXkQ0auEsK1Psy6k/kEgwcZA5Ylyesm9ws6KW0IZwtZrDzLkSsDA3oVEY0sCh
-         nesw7ATWsyFg2ObixXcNUyxu/JbYhlfUoIA6GjHfrmd+k2FY5/ix5jc232j75fwvH+i6
-         bY3S6gdV0i5dqMAwdUqC07BUs7d70T23bY8gH9bZkpHBmFvYtzc0v9PCLNruFBlXxFOb
-         BJAQ==
-X-Gm-Message-State: AAQBX9chjJPh1HEXJlMTz5OIC9sTVFZNpQqT7TFGsXzUIAkrRHqxtgY9
-        B86dXhFYKIuZSuzbhiZg1wk=
-X-Google-Smtp-Source: AKy350YkZU0wUME6kjYWBKsiN+B6Bd5JavScpbV6FA4h3HrYDvcxwr2Qsm/WheupkAVb02tDYveAgg==
-X-Received: by 2002:a05:600c:2144:b0:3ef:6396:d9b3 with SMTP id v4-20020a05600c214400b003ef6396d9b3mr21145158wml.18.1680456381192;
-        Sun, 02 Apr 2023 10:26:21 -0700 (PDT)
+        bh=Lai18srKbEc5Y0N4kYNIKail00meRifHOIv93tm0RKQ=;
+        b=AaUblhWP5WzUgcp/RTiOIkHjbq/DVI5eBG4FklcIwVYTZaDJb4XUz1LYGOYdrhU+l0
+         HNYVtmae7Lv1bdbaVSgiAQToGSdxQMWF3OONQnupYMmxJuPGQ1cy5t7rDahIzI+g2SpD
+         17NoloU6hhnYxzca8TY9BkufsRC9XaXTUcGgDNaWmCo9FtI+wPNRUXxQGhmNzxOfQuiD
+         U51ssRktA7w6kVb3xM2lZrZSj39f8rw0YnRlojvQ8XhPFUD+D4EZCXvpLYiQQrxjlY5I
+         1g2b1X2gC+MbBKQtvKBM7hiCKIyWUeJtamiTzRIu/NE5z/ttBdWzCe7y54aV9gVvL0UP
+         YVzw==
+X-Gm-Message-State: AAQBX9fvtpWZGUmh5L0f6T4mPP55wsPMMcx7FIwyUDuHEL8T1yKnZ3oi
+        dzdlXGNGK5p16rnpto+zM/g=
+X-Google-Smtp-Source: AKy350asqwgosYo2Ay67urHCg7UlZ6Ng3fTeNs8dbZe8pt7MI3H1IEgw2cVLmmpGwV7AU+CwwzCNxA==
+X-Received: by 2002:adf:ef87:0:b0:2d1:bbe3:29b8 with SMTP id d7-20020adfef87000000b002d1bbe329b8mr11729952wro.28.1680456466852;
+        Sun, 02 Apr 2023 10:27:46 -0700 (PDT)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id h14-20020adffd4e000000b002c71a32394dsm7659691wrs.64.2023.04.02.10.26.19
+        by smtp.gmail.com with ESMTPSA id a12-20020a056000100c00b002cea8664304sm7610629wrx.91.2023.04.02.10.27.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Apr 2023 10:26:20 -0700 (PDT)
-Message-ID: <77528d8d-29f3-9bae-33f3-3296c9c8b0b1@gmail.com>
-Date:   Sun, 2 Apr 2023 19:26:18 +0200
+        Sun, 02 Apr 2023 10:27:45 -0700 (PDT)
+Message-ID: <b656b070-28e6-48ae-5a17-f9ee3b25baae@gmail.com>
+Date:   Sun, 2 Apr 2023 19:27:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2 00/17] MT6795 Helio X10 and Sony Xperia M5: DT step 2!
+Subject: Re: [PATCH] soc: mediatek: mutex: Use dev_err_probe()
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     qii.wang@mediatek.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
-        houlong.wei@mediatek.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230327083647.22017-1-angelogioacchino.delregno@collabora.com>
+To:     ye.xingchen@zte.com.cn
+Cc:     angelogioacchino.delregno@collabora.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <202303241017290414354@zte.com.cn>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230327083647.22017-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <202303241017290414354@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -83,76 +78,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 27/03/2023 10:36, AngeloGioacchino Del Regno wrote:
-> Changes in v2:
->   - Squashed the addition of mediatek,mt6795-gce.h header with the
->     commit adding the MT6795 GCE compatible.
+On 24/03/2023 03:17, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
 > 
-> This series further enhances the support for the MT6795 Helio X10 SoC
-> and the Sony Xperia M5 smartphone.
+> Replace the open-code with dev_err_probe() to simplify the code.
 > 
-> In particular, for the SoC support, this adds:
->   - Frequency Hopping support
->   - I2C controllers
->   - Power domains
->   - IOMMU support and LARBs
->   - GCE/CMDQ Mailbox
->   - VDECSYS and VENCSYS clocks
->   - MMSYS support
-> 
-> ...and, on the Xperia M5 smartphone, this adds:
->   - Frequency Hopping with Spread Spectrum for MAINPLL, MPLL, MSDCPLL
->   - Touchscreen support (Synaptics S2726, fw id: 1898977, RMI4 protocol)
->   - Accelerometer
->   - Magnetometer
->   - Proximity sensor
->   - NFC support
-> 
-> ...all of which was successfully tested on the Xperia M5 smartphone.
-> 
-> This series depends on [1] for the MMSYS support.
-> 
-> Plan for step 3 is to push upstream full display support, which does
-> already work on my custom tree ;-)
-> 
-> [1]: https://lore.kernel.org/all/20230309102618.114157-1-angelogioacchino.delregno@collabora.com/
-> 
-> Cheers!
-> 
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-Applied all but:
-4/17 dt-binding already applied
-7/17 dt-binding not applied
-8/17 we are missing the dt binding
+Applied, thanks
 
-Thanks a lot for the great work
-Matthias
-
-> AngeloGioacchino Del Regno (17):
->    arm64: dts: mediatek: mt6795: Add Frequency Hopping Controller node
->    arm64: dts: mediatek: mt6795: Add apmixedsys syscon node
->    arm64: dts: mediatek: mt6795: xperia-m5: Enable Frequency Hopping
->    dt-bindings: i2c: i2c-mt65xx: Add compatible for MT6795 Helio X10
->    arm64: dts: mediatek: mt6795: Add nodes for I2C controllers
->    arm64: dts: mediatek: mt6795: Add SoC power domains
->    dt-bindings: mailbox: mediatek,gce-mailbox: Add support for MT6795
->    arm64: dts: mediatek: mt6795: Add support for the CMDQ/GCE mailbox
->    arm64: dts: mediatek: mt6795: Add MMSYS node for multimedia clocks
->    arm64: dts: mediatek: mt6795: Add VDECSYS and VENCSYS clocks
->    arm64: dts: mediatek: mt6795: Add support for IOMMU and LARBs
->    arm64: dts: mediatek: mt6795-xperia-m5: Enable I2C 0-3 busses
->    arm64: dts: mediatek: mt6795-xperia-m5: Add Synaptics RMI4 Touchscreen
->    arm64: dts: mediatek: mt6795-xperia-m5: Add Bosch BMA255 Accelerometer
->    arm64: dts: mediatek: mt6795-xperia-m5: Add Bosch BMM050 Magnetometer
->    arm64: dts: mediatek: mt6795-xperia-m5: Add Sensortek STK3310
->      Proximity
->    arm64: dts: mediatek: mt6795-xperia-m5: Add NXP PN547 NFC on I2C3
+> ---
+>   drivers/soc/mediatek/mtk-mutex.c | 7 ++-----
+>   1 file changed, 2 insertions(+), 5 deletions(-)
 > 
->   .../devicetree/bindings/i2c/i2c-mt65xx.yaml   |   4 +
->   .../mailbox/mediatek,gce-mailbox.yaml         |  20 +-
->   .../dts/mediatek/mt6795-sony-xperia-m5.dts    | 166 ++++++++++++
->   arch/arm64/boot/dts/mediatek/mt6795.dtsi      | 245 ++++++++++++++++++
->   include/dt-bindings/gce/mediatek,mt6795-gce.h | 123 +++++++++
->   5 files changed, 550 insertions(+), 8 deletions(-)
->   create mode 100644 include/dt-bindings/gce/mediatek,mt6795-gce.h
+> diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+> index 7751527fc30d..05c8ad3c2664 100644
+> --- a/drivers/soc/mediatek/mtk-mutex.c
+> +++ b/drivers/soc/mediatek/mtk-mutex.c
+> @@ -1014,11 +1014,8 @@ static int mtk_mutex_probe(struct platform_device *pdev)
 > 
+>   	if (!mtx->data->no_clk) {
+>   		mtx->clk = devm_clk_get(dev, NULL);
+> -		if (IS_ERR(mtx->clk)) {
+> -			if (PTR_ERR(mtx->clk) != -EPROBE_DEFER)
+> -				dev_err(dev, "Failed to get clock\n");
+> -			return PTR_ERR(mtx->clk);
+> -		}
+> +		if (IS_ERR(mtx->clk))
+> +			return dev_err_probe(dev, PTR_ERR(mtx->clk), "Failed to get clock\n");
+>   	}
+> 
+>   	mtx->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &regs);
