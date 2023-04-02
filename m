@@ -2,126 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F806D3547
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 04:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457606D3549
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 04:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbjDBCgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 22:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
+        id S230222AbjDBCh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 22:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDBCgU (ORCPT
+        with ESMTP id S229379AbjDBChy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 22:36:20 -0400
-Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021025.outbound.protection.outlook.com [52.101.62.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F0CF0;
-        Sat,  1 Apr 2023 19:36:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fHbq3DvbUtf5sLnfVEkofI9l1NJc4KVf+Ni/RMBGiyDOTgXVPtBI012SNZ9QljAWqoJGn1TL9tBGzpfM1q1l+yaaCQ71EDRPW9QNxn9L6z99xOgZHTFbCT4ZjhuziO14mytpKdMmYgI8n0nccEcain4EhJg6wWCZc1wZQVxpavqbPohn2EGaaeyEMbI2CkNL5Nklwi5HjKxIaNGuSO7RLE0fljQxd/BFuzwCjblLCz2PG9MbHZjkPAS9IPYDinacYuUvwp+Qq1RalXnqNJ7nPSOJLoF53+clpQ728Gp1IB7OLI2Ipm4ODUBO3doGZoRy963zewzpVU+FY8PwQxEClw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k9hc6BGA4dbzirzsC9fVdXVP81YA9zRNJGLpic1ZP9I=;
- b=MhmO0n6UyUkXg6fTklUiwae9r8RyVu9AosG+qzlc3Q1tUURR4+wTmWDgGiV4SPjRWOLUcDYNr3918OogVbxQxq+dlLM5jQgyD98arQYFnYivJNpw2dyyTzVhKdXqBDtpDZFv6ddmbkkNOLqPcBsxLAvJ9KNgiy/dtA9RpD7oBLbyz+NUmwKGUI575irn11gN3elWi3nloejfd7OX2sYZlH1PKiaKJX6s1obQsYNTBg4sC3I5rANFz0gfp0Af/HIclriAAOi8+mAq1rmhFxqFiCXcna+R0OlwopoQ//X6QJZ4MGTNZhjf61itQssAb55p0RrYuVr3zWHz0ZJ0E2OuzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k9hc6BGA4dbzirzsC9fVdXVP81YA9zRNJGLpic1ZP9I=;
- b=Eadn7NNIvhxK798wSurZtzUGDdp+N2hNS3AhlBPBUc1yhM0vyu4b3RProK0752Tns7KcXw5+BhP3vS/u0Y3m0ju2PsPeQrGDNvqHkvA+sRvB0XE2/fwuS+/F9zyJyo8pfgV9CsXyDPlNTUjrPUsx3ZzEYcll9Kv3AUz7lSgzcfM=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by PH0PR21MB1909.namprd21.prod.outlook.com (2603:10b6:510:1a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.4; Sun, 2 Apr
- 2023 02:36:16 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c%7]) with mapi id 15.20.6277.018; Sun, 2 Apr 2023
- 02:36:15 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Juergen Gross <jgross@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-CC:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: RE: [PATCH v5 05/15] x86/hyperv: set MTRR state when running as
- SEV-SNP Hyper-V guest
-Thread-Topic: [PATCH v5 05/15] x86/hyperv: set MTRR state when running as
- SEV-SNP Hyper-V guest
-Thread-Index: AQHZZGRucoKoD7y5r0OA1Rf8kkYNeq8XS9nQ
-Date:   Sun, 2 Apr 2023 02:36:15 +0000
-Message-ID: <BYAPR21MB1688814591F2C482CC945F6FD78D9@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20230401063652.23522-1-jgross@suse.com>
- <20230401063652.23522-6-jgross@suse.com>
-In-Reply-To: <20230401063652.23522-6-jgross@suse.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=0291ad30-731a-4333-bbcd-b3054b6871f1;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-04-02T02:24:57Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|PH0PR21MB1909:EE_
-x-ms-office365-filtering-correlation-id: 81021994-3b80-4864-3c4d-08db3323081d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wWAN8GSmm3P/GT9inpujoWdEINuvM+8Lt/iPmaeNsnWA5J+KUkGDFFZKa9tljKdR3Bfnub/FVUsfQGoJS+nJSnBM7l6qLaLNRGBGqp+pF7XlblELxBlagthTw6VD5OE3gZEIbDUf1IkNTGMinv+5EkyAHVbFFqm6GSKfkENJ4PyFUzhAWskD0SWPgg8orMext5Ihyj4oTzg5Us5RhnkcrJyIr3x1s7dwJbIP2veqtATRKdXPhJoR2xwMVvfcKw1iJIzcuaLxw5ii+pinIsYwLItFJsxIurF4JY7EsYS97V8ZlBgLCK3d6/Vbmi/hcpBY4zDws8f7n5Ce/xz9CNRSLe3U235iwBRn+NhgRxSyI7gxIisc8qz8luMVGGIAf0w7o+bN9CrUIuHakfwuf9G/n5RgrsRckil8qXr9zky8UXEb5BkzWXLqt/slLcw04KgehFM5ZJP5PWCNw60az5vn2f4YebVB9/Iwo3YvuRDT/6IHTk9fO2xlif+W6QOuDP7TUXYIzcTNIIz9Xx9s8zLf5ZmQRd8NSKheBhlLTTgwP5msP7uBV10kujL+uSV0bWYgqROrk+vXGv279Aanzp/aSRMrYsIdAMG9iaOrYBdI7xW44c9mzYTqQjyHNP1Wsw0Od+yIGh7t91EDayR2vFpLk00ZToofpJt9HkEONCUuHyk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(39860400002)(366004)(396003)(451199021)(64756008)(66446008)(66556008)(66476007)(4326008)(41300700001)(2906002)(122000001)(82950400001)(82960400001)(33656002)(55016003)(8676002)(7696005)(83380400001)(71200400001)(26005)(9686003)(6506007)(86362001)(186003)(478600001)(10290500003)(110136005)(786003)(316002)(54906003)(38070700005)(8936002)(52536014)(66946007)(76116006)(7416002)(5660300002)(38100700002)(8990500004);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ezuGGxXcjRuTvjW1HKDHIHqmSB9VQ57TMES7Rd/vyO+CyZlAEefseqhkP3++?=
- =?us-ascii?Q?CUAg9uYw5g5pavBf267o0ISggJcfrYkhWaHvlA/YAT5avxDHo/fX52iSCWHH?=
- =?us-ascii?Q?SUMePqF7i0jIxN4/hPmb10ItsdR9GfStS+lW0/GMchjHHnP0yplIWRZH+vp9?=
- =?us-ascii?Q?oqwT6RcY/TLOBcEMcbfVY14yCzlJSg5Lidk8GM2ZK4OEv3d0mWLoWzQAvhn9?=
- =?us-ascii?Q?6m1z47ng9cfX9Qql/iAAANnAh4ZnkT91DJxPp/xt6DXkXnmghl/60qJAoPG2?=
- =?us-ascii?Q?6H4LhKDl66gdEIDyzsoECzx2jCBcQyxtzzXS5N8l8vNW73Uu9Qklyr6bJNkn?=
- =?us-ascii?Q?d/lbQR1rSqUu3PuZkVdHanfsd76KybAVcVJHYnETkl/JZLV+xoxoPA5qmFP9?=
- =?us-ascii?Q?dSho9RBHb5MCAFuC948x5Kwo+tf8P/KQYyFCNM2tGLSZR1hbW2L7UElpVrjY?=
- =?us-ascii?Q?FkvFpfWYgMFUiyKvmGASrnRr6R7OeeaF1GeCTyAjcZmlSMOJm8ea3PYWAooa?=
- =?us-ascii?Q?tKG6yXxEWxHZs9sbvUGPWBN0HsNZyUUs36I++H2SHuaMDNhBd8Gr9pXy1VUC?=
- =?us-ascii?Q?y9N7OVxe4t4FFiORUJTHhkkNgjitCOJ+b4CG3wPHTLtSUT2xL/qSPMiFoHfX?=
- =?us-ascii?Q?IUMVGNxyYe01aT1+MAsRfWpCzmRwO0A7RErh5gygPAJRHPeuBV2dNAB6ai9l?=
- =?us-ascii?Q?0vWNJJrshbJcmAWpZnnhOgW7grKek8SB6h4J+fJlW7PPOmoJTsmzZU8XShB5?=
- =?us-ascii?Q?rZQTLDLxOkiT3Rky252MocDcawN5d1Xvw9PkfGeJxoB6AoKg/h+JJHxgKtjA?=
- =?us-ascii?Q?PkiI99j0NMeiccGavEbJfs+izlZFxs/zBQra/uxgvIE9g8vmrxXha2DSqGxK?=
- =?us-ascii?Q?1R1vN8xnGf7OfgKT6r/ORnPmbiAAmRJBkpEwgT4pOjBZmT1qy8hnsl/iYJnk?=
- =?us-ascii?Q?QiDg2XvATduGTBkTQ/cZpDX6AVkxzMSoJ+2nUjmVx0tuCYDwNSUcBKAspA0w?=
- =?us-ascii?Q?jUi73QYoKkDPkY3Pg+54ATyvId/GINkx5qwZcPLihg0m3ChWRUZ3k9VEteXr?=
- =?us-ascii?Q?plZu/OHJK/U4wt6NQQotModtOr/SgMN+R3Me3puSZDiCd/JJY6A+Qvn9JIuU?=
- =?us-ascii?Q?sCVs/MJYmyis3C6uHQzLuC0hY7nU5zwY3Yu7QWdy7BIA/aCh70crxhhxB3eS?=
- =?us-ascii?Q?NxC1HHx3jnKPU0Ufr7O+JElM8/dUyXyZu8k4MtUkZlBgJZf1Q1c3NLf+4Olf?=
- =?us-ascii?Q?IUamitzeVgqBKV7Hqdtd9u2Sah2G6BDw+d6Ks0bEljXgXvMqQfjWfUfP/J5A?=
- =?us-ascii?Q?dXSBQicbRiRCrPk4rFd+aeaIUtsqWEXLoQGj/MX0lvvna2gLFMsi6FnEttbF?=
- =?us-ascii?Q?6f4HW3DSq5cNYPwFS4HfvaFd0RLq+WQFs32GlYIjI8PUuZ68cVBqtAu1Pcy4?=
- =?us-ascii?Q?KTi1BeMlgdZ+yB5hvDNMeuP+I4+5AO2dFuR2MuV+TfGNRGJjq4K6yA3Dr8cn?=
- =?us-ascii?Q?/ogqdATpMVgs/cXukraFuVdMuTDWjyVHkFcu3Ei3mWqIqEPhuiBPFuzROK0P?=
- =?us-ascii?Q?ZEvcX4xrBRUax59J4Q8sp7QjoQKFnVG28UB3sPCMG5Ed9GJd59za0l/ayTOt?=
- =?us-ascii?Q?HA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sat, 1 Apr 2023 22:37:54 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E15F0;
+        Sat,  1 Apr 2023 19:37:51 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 53CBF320094C;
+        Sat,  1 Apr 2023 22:37:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Sat, 01 Apr 2023 22:37:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        joshtriplett.org; h=cc:content-type:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680403067; x=1680489467; bh=Ma
+        XWLS/nhQZwaTMtsdXoJ6M+0qaPQNoA1bM1WRsxPcw=; b=SGKTsorRgoBlgCt4YJ
+        jNmtcNI+DTyOBB8iU69uG+YJLOKGlrxbmo8by4Rv0Is3ylgpBqxF2h02WBC+ezQ7
+        VpyE+NRLGp+nd3n8ZoYcSmPoipMywYdmX8jk7iqLE8Yyb8RjzFJkfHR1XaUi7GRh
+        iC0alJvhaDCXP1u1wVhd3j+8X8k+uEaYqUxZrT/p+elHsOuMV8jnjigLaE2kWoL4
+        o9HLzImHSB5iIc1myqqLpz1WsvIEl/UqN8Q0BUxkWDeVUJABvVRxdP9p8vwty1q9
+        8OIqywmtvd1tphpsveAfxBEMbtfs7l0z5SKMN6keN5KlyHfaUPm0Qcqo5+9QWVVs
+        7A7Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680403067; x=1680489467; bh=MaXWLS/nhQZwaTMtsdXoJ6M+0qaPQNoA1bM
+        1WRsxPcw=; b=JJLQnB97qKJQ9B7B89YD0v+5VXQVXSoS34JhTRZiHHOq8xaugZn
+        kx0TuCqeeLxA5fnTN9/Vbn2nglNWQAeh5fHxbFf4L0Bjb8w68whW/9jOnrCyWlAA
+        sk8sQ4FL48y6TlAojfzsBOjdNnowJLiHZMnFUR5tqU+GIfxhtqx0+Kcy6QldW+3b
+        BJR8sp3eQ1omCU2e4uoyrTf+MF9irxPzsTxmZXPEhbsTYiQncKrrLnypw1m1sYI7
+        1bvcVAL400/7o9KXShNylrNA1Wg6eBdbXIovnDDTPQfR6jiZD9eHXCLe3cjt8GMH
+        QxwexGVlZ8UG7aWp+/Hy7W5cTTFW8DnVdWg==
+X-ME-Sender: <xms:e-ooZFHUV-ZUD4PIbl9sRqb54aGsuCxSZeS9X2DywN6pG9qSYYV8Kw>
+    <xme:e-ooZKVIyDw2Zz4MtnT6KuqlM_pWdT4I3-SE8tsSwgqHRUdvTf6ouECynWlEw6EKq
+    2W4RkKtF9AyEY4WbiQ>
+X-ME-Received: <xmr:e-ooZHKEB9grLU0AA5DjNIhX0OBg99Uyu6aD7u7ZyZLsjUQgn4Gqxlmo3cI0hXmK8T-X-vZgQxVxYh5XB717ZTZyn1GbD1xEdfznr0Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeigedgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkgggtugesthdtredttd
+    dtvdenucfhrhhomheplfhoshhhucfvrhhiphhlvghtthcuoehjohhshhesjhhoshhhthhr
+    ihhplhgvthhtrdhorhhgqeenucggtffrrghtthgvrhhnpeelteekheejvdfffedvjeduke
+    evtefhffdugeffveffgeffkeekteefudeuteehveenucffohhmrghinhepkhgvrhhnvghl
+    rdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epjhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgh
+X-ME-Proxy: <xmx:e-ooZLE8LfbNhR0MCcDcJ9pMB1_UAV687K8UUK22RZPLAuEWBWSGgQ>
+    <xmx:e-ooZLWhOSOnRv1R_QTonkrawrnQm5odcTvhGpmLBXRD8L2IEFhBig>
+    <xmx:e-ooZGMUlVAa0V6wuc-3ei3-x9yp5jlLPdBM43vodAW0lr6eXE75sA>
+    <xmx:e-ooZIhQ0dwLUu8d81KFtfW2JCX-3ZG_AtVENIT6FrI37ktQ7ynH8Q>
+Feedback-ID: i83e94755:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 1 Apr 2023 22:37:45 -0400 (EDT)
+Date:   Sun, 2 Apr 2023 11:37:42 +0900
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
+Subject: [PATCH v3] ext4: Add a uapi header for ext4 userspace APIs
+Message-ID: <680175260970d977d16b5cc7e7606483ec99eb63.1680402881.git.josh@joshtriplett.org>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81021994-3b80-4864-3c4d-08db3323081d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Apr 2023 02:36:15.5692
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uPWunkEJbaK2iAIYoEm36fgvcMmAMYa5AEGwAhycIcNqQyZmwCvXPnn0sjQZc05u5ehLWcjSeymtfhYTfv+Z1qNCEQroWfjPj+cnwGRIZ08=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1909
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,84 +82,297 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com> Sent: Friday, March 31, 2023 11:37 PM
->=20
-> In order to avoid mappings using the UC- cache attribute, set the
-> MTRR state to use WB caching as the default.
->=20
-> This is needed in order to cope with the fact that PAT is enabled,
-> while MTRRs are not supported by the hypervisor.
->=20
-> Fixes: 90b926e68f50 ("x86/pat: Fix pat_x_mtrr_type() for MTRR disabled ca=
-se")
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> Tested-by: Michael Kelley <mikelley@microsoft.com>
+Create a uapi header include/uapi/linux/ext4.h, move the ioctls and
+associated data structures to the uapi header, and include it from
+fs/ext4/ext4.h.
 
-I've tested the full v5 series in a Hyper-V SEV-SNP guest with vTOM.  All l=
-ooks
-good.  The following output appears in dmesg, which I think matches expecta=
-tions:
+Signed-off-by: Josh Triplett <josh@joshtriplett.org>
+---
 
-[    0.004000] MTRR map: 0 entries (0 fixed + 0 variable; max 0), built fro=
-m 0 variable MTRRs
-[    0.004000] MTRRs set to read-only
-[    0.004000] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT
+Sorry for the churn; I didn't encounter these errors in local
+test builds.
 
-The page attributes listed in /sys/kernel/debug/x86/pat_memtype_list are
-"write-back" in the expected cases, and the "mtrr" x86 feature no longer ap=
-pears
-in the "flags" output of "lscpu" or /proc/cpuinfo.  /proc/mtrr does not exi=
-st, again
-as expected.
+v2:
+- Add UAPI header to MAINTAINERS
+- Fix include paths in UAPI header
+- Formatting fix for EXT4_IOC_SHUTDOWN
 
-> ---
-> V2:
-> - new patch
-> ---
->  arch/x86/kernel/cpu/mshyperv.c | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
-v.c
-> index f36dc2f796c5..0a6cc3cf8919 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -34,6 +34,7 @@
->  #include <clocksource/hyperv_timer.h>
->  #include <asm/numa.h>
->  #include <asm/coco.h>
-> +#include <asm/mtrr.h>
->=20
->  /* Is Linux running as the root partition? */
->  bool hv_root_partition;
-> @@ -408,6 +409,9 @@ static void __init ms_hyperv_init_platform(void)
->  #ifdef CONFIG_SWIOTLB
->  			swiotlb_unencrypted_base =3D
-> ms_hyperv.shared_gpa_boundary;
->  #endif
-> +
-> +			/* Set WB as the default cache mode. */
-> +			mtrr_overwrite_state(NULL, 0, MTRR_TYPE_WRBACK);
+v3:
+- Leave compat ioctls in the private ext4.h header. It appears that some other
+  UAPI headers already follow this pattern, with compat defined privately. For
+  instance, quota and ethtool both follow that pattern.
 
-The placement of this call needs to change due to a patch set I submitted a=
-nd
-that Boris has accepted into the 'tip' tree for the 6.4 merge window (so it=
-'s now
-in linux-next).  The call should be placed in the function hv_vtom_init() i=
-n the
-source file arch/x86/hyperv/ivm.c.  Anywhere in hv_vtom_init() is fine -- I=
- would
-suggest at the end.
+ MAINTAINERS               |   1 +
+ fs/ext4/ext4.h            |  91 +----------------------------
+ include/uapi/linux/ext4.h | 117 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 119 insertions(+), 90 deletions(-)
+ create mode 100644 include/uapi/linux/ext4.h
 
-Minor request: In a v6 of this patch set, please include me on all the patc=
-hes in
-the series so I can easily keep track of how it is progressing.
-
-Michael
-
->  		}
->  		/* Isolation VMs are unenlightened SEV-based VMs, thus this check: */
->  		if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
-> --
-> 2.35.3
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1dc8bd26b6cf..7d1e56a88f2f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7728,6 +7728,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git
+ F:	Documentation/filesystems/ext4/
+ F:	fs/ext4/
+ F:	include/trace/events/ext4.h
++F:	include/uapi/linux/ext4.h
+ 
+ Extended Verification Module (EVM)
+ M:	Mimi Zohar <zohar@linux.ibm.com>
+diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+index 08b29c289da4..a395030cd0c8 100644
+--- a/fs/ext4/ext4.h
++++ b/fs/ext4/ext4.h
+@@ -40,6 +40,7 @@
+ #ifdef __KERNEL__
+ #include <linux/compat.h>
+ #endif
++#include <uapi/linux/ext4.h>
+ 
+ #include <linux/fscrypt.h>
+ #include <linux/fsverity.h>
+@@ -591,17 +592,6 @@ static inline void ext4_check_flag_values(void)
+ 	CHECK_FLAG_VALUE(RESERVED);
+ }
+ 
+-/* Used to pass group descriptor data when online resize is done */
+-struct ext4_new_group_input {
+-	__u32 group;		/* Group number for this data */
+-	__u64 block_bitmap;	/* Absolute block number of block bitmap */
+-	__u64 inode_bitmap;	/* Absolute block number of inode bitmap */
+-	__u64 inode_table;	/* Absolute block number of inode table start */
+-	__u32 blocks_count;	/* Total number of blocks in this group */
+-	__u16 reserved_blocks;	/* Number of reserved blocks in this group */
+-	__u16 unused;
+-};
+-
+ #if defined(__KERNEL__) && defined(CONFIG_COMPAT)
+ struct compat_ext4_new_group_input {
+ 	u32 group;
+@@ -698,70 +688,6 @@ enum {
+ #define EXT4_FREE_BLOCKS_NOFREE_LAST_CLUSTER	0x0020
+ #define EXT4_FREE_BLOCKS_RERESERVE_CLUSTER      0x0040
+ 
+-/*
+- * ioctl commands
+- */
+-#define	EXT4_IOC_GETVERSION		_IOR('f', 3, long)
+-#define	EXT4_IOC_SETVERSION		_IOW('f', 4, long)
+-#define	EXT4_IOC_GETVERSION_OLD		FS_IOC_GETVERSION
+-#define	EXT4_IOC_SETVERSION_OLD		FS_IOC_SETVERSION
+-#define EXT4_IOC_GETRSVSZ		_IOR('f', 5, long)
+-#define EXT4_IOC_SETRSVSZ		_IOW('f', 6, long)
+-#define EXT4_IOC_GROUP_EXTEND		_IOW('f', 7, unsigned long)
+-#define EXT4_IOC_GROUP_ADD		_IOW('f', 8, struct ext4_new_group_input)
+-#define EXT4_IOC_MIGRATE		_IO('f', 9)
+- /* note ioctl 10 reserved for an early version of the FIEMAP ioctl */
+- /* note ioctl 11 reserved for filesystem-independent FIEMAP ioctl */
+-#define EXT4_IOC_ALLOC_DA_BLKS		_IO('f', 12)
+-#define EXT4_IOC_MOVE_EXT		_IOWR('f', 15, struct move_extent)
+-#define EXT4_IOC_RESIZE_FS		_IOW('f', 16, __u64)
+-#define EXT4_IOC_SWAP_BOOT		_IO('f', 17)
+-#define EXT4_IOC_PRECACHE_EXTENTS	_IO('f', 18)
+-/* ioctl codes 19--39 are reserved for fscrypt */
+-#define EXT4_IOC_CLEAR_ES_CACHE		_IO('f', 40)
+-#define EXT4_IOC_GETSTATE		_IOW('f', 41, __u32)
+-#define EXT4_IOC_GET_ES_CACHE		_IOWR('f', 42, struct fiemap)
+-#define EXT4_IOC_CHECKPOINT		_IOW('f', 43, __u32)
+-#define EXT4_IOC_GETFSUUID		_IOR('f', 44, struct fsuuid)
+-#define EXT4_IOC_SETFSUUID		_IOW('f', 44, struct fsuuid)
+-
+-#define EXT4_IOC_SHUTDOWN _IOR ('X', 125, __u32)
+-
+-/*
+- * Flags for going down operation
+- */
+-#define EXT4_GOING_FLAGS_DEFAULT		0x0	/* going down */
+-#define EXT4_GOING_FLAGS_LOGFLUSH		0x1	/* flush log but not data */
+-#define EXT4_GOING_FLAGS_NOLOGFLUSH		0x2	/* don't flush log nor data */
+-
+-/*
+- * Flags returned by EXT4_IOC_GETSTATE
+- *
+- * We only expose to userspace a subset of the state flags in
+- * i_state_flags
+- */
+-#define EXT4_STATE_FLAG_EXT_PRECACHED	0x00000001
+-#define EXT4_STATE_FLAG_NEW		0x00000002
+-#define EXT4_STATE_FLAG_NEWENTRY	0x00000004
+-#define EXT4_STATE_FLAG_DA_ALLOC_CLOSE	0x00000008
+-
+-/* flags for ioctl EXT4_IOC_CHECKPOINT */
+-#define EXT4_IOC_CHECKPOINT_FLAG_DISCARD	0x1
+-#define EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT	0x2
+-#define EXT4_IOC_CHECKPOINT_FLAG_DRY_RUN	0x4
+-#define EXT4_IOC_CHECKPOINT_FLAG_VALID		(EXT4_IOC_CHECKPOINT_FLAG_DISCARD | \
+-						EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT | \
+-						EXT4_IOC_CHECKPOINT_FLAG_DRY_RUN)
+-
+-/*
+- * Structure for EXT4_IOC_GETFSUUID/EXT4_IOC_SETFSUUID
+- */
+-struct fsuuid {
+-	__u32       fsu_len;
+-	__u32       fsu_flags;
+-	__u8        fsu_uuid[];
+-};
+-
+ #if defined(__KERNEL__) && defined(CONFIG_COMPAT)
+ /*
+  * ioctl commands in 32 bit emulation
+@@ -776,12 +702,6 @@ struct fsuuid {
+ #define EXT4_IOC32_SETVERSION_OLD	FS_IOC32_SETVERSION
+ #endif
+ 
+-/*
+- * Returned by EXT4_IOC_GET_ES_CACHE as an additional possible flag.
+- * It indicates that the entry in extent status cache is for a hole.
+- */
+-#define EXT4_FIEMAP_EXTENT_HOLE		0x08000000
+-
+ /* Max physical block we can address w/o extents */
+ #define EXT4_MAX_BLOCK_FILE_PHYS	0xFFFFFFFF
+ 
+@@ -852,15 +772,6 @@ struct ext4_inode {
+ 	__le32	i_projid;	/* Project ID */
+ };
+ 
+-struct move_extent {
+-	__u32 reserved;		/* should be zero */
+-	__u32 donor_fd;		/* donor file descriptor */
+-	__u64 orig_start;	/* logical start offset in block for orig */
+-	__u64 donor_start;	/* logical start offset in block for donor */
+-	__u64 len;		/* block length to be moved */
+-	__u64 moved_len;	/* moved block length */
+-};
+-
+ #define EXT4_EPOCH_BITS 2
+ #define EXT4_EPOCH_MASK ((1 << EXT4_EPOCH_BITS) - 1)
+ #define EXT4_NSEC_MASK  (~0UL << EXT4_EPOCH_BITS)
+diff --git a/include/uapi/linux/ext4.h b/include/uapi/linux/ext4.h
+new file mode 100644
+index 000000000000..1c4c2dd29112
+--- /dev/null
++++ b/include/uapi/linux/ext4.h
+@@ -0,0 +1,117 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++
++#ifndef _UAPI_LINUX_EXT4_H
++#define _UAPI_LINUX_EXT4_H
++#include <linux/fiemap.h>
++#include <linux/fs.h>
++#include <linux/ioctl.h>
++#include <linux/types.h>
++
++/*
++ * ext4-specific ioctl commands
++ */
++#define	EXT4_IOC_GETVERSION		_IOR('f', 3, long)
++#define	EXT4_IOC_SETVERSION		_IOW('f', 4, long)
++#define	EXT4_IOC_GETVERSION_OLD		FS_IOC_GETVERSION
++#define	EXT4_IOC_SETVERSION_OLD		FS_IOC_SETVERSION
++#define EXT4_IOC_GETRSVSZ		_IOR('f', 5, long)
++#define EXT4_IOC_SETRSVSZ		_IOW('f', 6, long)
++#define EXT4_IOC_GROUP_EXTEND		_IOW('f', 7, unsigned long)
++#define EXT4_IOC_GROUP_ADD		_IOW('f', 8, struct ext4_new_group_input)
++#define EXT4_IOC_MIGRATE		_IO('f', 9)
++ /* note ioctl 10 reserved for an early version of the FIEMAP ioctl */
++ /* note ioctl 11 reserved for filesystem-independent FIEMAP ioctl */
++#define EXT4_IOC_ALLOC_DA_BLKS		_IO('f', 12)
++#define EXT4_IOC_MOVE_EXT		_IOWR('f', 15, struct move_extent)
++#define EXT4_IOC_RESIZE_FS		_IOW('f', 16, __u64)
++#define EXT4_IOC_SWAP_BOOT		_IO('f', 17)
++#define EXT4_IOC_PRECACHE_EXTENTS	_IO('f', 18)
++/* ioctl codes 19--39 are reserved for fscrypt */
++#define EXT4_IOC_CLEAR_ES_CACHE		_IO('f', 40)
++#define EXT4_IOC_GETSTATE		_IOW('f', 41, __u32)
++#define EXT4_IOC_GET_ES_CACHE		_IOWR('f', 42, struct fiemap)
++#define EXT4_IOC_CHECKPOINT		_IOW('f', 43, __u32)
++#define EXT4_IOC_GETFSUUID		_IOR('f', 44, struct fsuuid)
++#define EXT4_IOC_SETFSUUID		_IOW('f', 44, struct fsuuid)
++
++#define EXT4_IOC_SHUTDOWN _IOR('X', 125, __u32)
++
++/*
++ * ioctl commands in 32 bit emulation
++ */
++#define EXT4_IOC32_GETVERSION		_IOR('f', 3, int)
++#define EXT4_IOC32_SETVERSION		_IOW('f', 4, int)
++#define EXT4_IOC32_GETRSVSZ		_IOR('f', 5, int)
++#define EXT4_IOC32_SETRSVSZ		_IOW('f', 6, int)
++#define EXT4_IOC32_GROUP_EXTEND		_IOW('f', 7, unsigned int)
++#define EXT4_IOC32_GROUP_ADD		_IOW('f', 8, struct compat_ext4_new_group_input)
++#define EXT4_IOC32_GETVERSION_OLD	FS_IOC32_GETVERSION
++#define EXT4_IOC32_SETVERSION_OLD	FS_IOC32_SETVERSION
++
++/*
++ * Flags returned by EXT4_IOC_GETSTATE
++ *
++ * We only expose to userspace a subset of the state flags in
++ * i_state_flags
++ */
++#define EXT4_STATE_FLAG_EXT_PRECACHED	0x00000001
++#define EXT4_STATE_FLAG_NEW		0x00000002
++#define EXT4_STATE_FLAG_NEWENTRY	0x00000004
++#define EXT4_STATE_FLAG_DA_ALLOC_CLOSE	0x00000008
++
++/*
++ * Flags for ioctl EXT4_IOC_CHECKPOINT
++ */
++#define EXT4_IOC_CHECKPOINT_FLAG_DISCARD	0x1
++#define EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT	0x2
++#define EXT4_IOC_CHECKPOINT_FLAG_DRY_RUN	0x4
++#define EXT4_IOC_CHECKPOINT_FLAG_VALID		(EXT4_IOC_CHECKPOINT_FLAG_DISCARD | \
++						EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT | \
++						EXT4_IOC_CHECKPOINT_FLAG_DRY_RUN)
++
++/*
++ * Structure for EXT4_IOC_GETFSUUID/EXT4_IOC_SETFSUUID
++ */
++struct fsuuid {
++	__u32       fsu_len;
++	__u32       fsu_flags;
++	__u8        fsu_uuid[];
++};
++
++/*
++ * Structure for EXT4_IOC_MOVE_EXT
++ */
++struct move_extent {
++	__u32 reserved;		/* should be zero */
++	__u32 donor_fd;		/* donor file descriptor */
++	__u64 orig_start;	/* logical start offset in block for orig */
++	__u64 donor_start;	/* logical start offset in block for donor */
++	__u64 len;		/* block length to be moved */
++	__u64 moved_len;	/* moved block length */
++};
++
++/*
++ * Flags used by EXT4_IOC_SHUTDOWN
++ */
++#define EXT4_GOING_FLAGS_DEFAULT		0x0	/* going down */
++#define EXT4_GOING_FLAGS_LOGFLUSH		0x1	/* flush log but not data */
++#define EXT4_GOING_FLAGS_NOLOGFLUSH		0x2	/* don't flush log nor data */
++
++/* Used to pass group descriptor data when online resize is done */
++struct ext4_new_group_input {
++	__u32 group;		/* Group number for this data */
++	__u64 block_bitmap;	/* Absolute block number of block bitmap */
++	__u64 inode_bitmap;	/* Absolute block number of inode bitmap */
++	__u64 inode_table;	/* Absolute block number of inode table start */
++	__u32 blocks_count;	/* Total number of blocks in this group */
++	__u16 reserved_blocks;	/* Number of reserved blocks in this group */
++	__u16 unused;
++};
++
++/*
++ * Returned by EXT4_IOC_GET_ES_CACHE as an additional possible flag.
++ * It indicates that the entry in extent status cache is for a hole.
++ */
++#define EXT4_FIEMAP_EXTENT_HOLE		0x08000000
++
++#endif /* _UAPI_LINUX_EXT4_H */
+-- 
+2.40.0
 
