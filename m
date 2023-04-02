@@ -2,119 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752626D381F
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2523D6D3822
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjDBNha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 09:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S230344AbjDBNsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 09:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDBNh2 (ORCPT
+        with ESMTP id S229448AbjDBNsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 09:37:28 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557C1BBA4;
-        Sun,  2 Apr 2023 06:37:27 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id iw3so25603377plb.6;
-        Sun, 02 Apr 2023 06:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680442647;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yJE4pnnm0VUmz2w+YWBprkOi8rvRZMPtDmxykOoTYl0=;
-        b=FMU7hZhlEGokCgTkSlI+CZmrkXTLHUq3462QmDzr5XRKGXHE+wRKAvyF0KjAjp7AzR
-         x5S51/tBKEqm8uzwaDMYmZTbWA0niw5NY8M9V+HOcyCDcT9FugPaiJD1LDkDLHGHbizM
-         19IIhh95/d30jcBFqPsvYFljT0N+5Q5IKs/34h4iZxqps1srA0b09IgQwZ2mCV02IexC
-         rwIvvHuN0mpWovDft1j8/QR3dkpDSaZu+bF1dJehUk2MRUFSa1KBcz0CvDDNmAOMPJea
-         +bvAOf+M1j2hQCRqSX8m3aTUnVR/9yvheXX5gCGc0E5nX6xYC5K+FZXUddDJsCkW1nkl
-         8M4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680442647;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yJE4pnnm0VUmz2w+YWBprkOi8rvRZMPtDmxykOoTYl0=;
-        b=wmKnOX/uqaridGqqKRvtteTkVmnzU/btGRJEF6kXHGF/jRM21vOClUcAAg1WoGEp85
-         YPMrrjLPGbMCuNHMy3NF7CzOkuchNQI0RPRmmRsIBkm1IMqvH5JW63VdPDbHTkxF5sue
-         Qc2W1SQv0DTcmEFGt9Fjm3iNxkW7ce3QozJvsXr0qEklcXTCoSym+K4rsT12KVW8R1em
-         i8jWsF8cS9nhBn3TdN7XojbrEPxgAhMhZPFXfPFd8LdRVpWT4r37DqvW5C1WJsyvwrMa
-         V4orchK7uvHamE8u5Lg8tBzFVOM/Czdjy1W4uopwLytLpNL95aQnlRJG3JY1jAG1bwkY
-         1UtA==
-X-Gm-Message-State: AAQBX9d0HpT6RKFGU0AGO0jksXh0ZkRSavz+DejczmSRXLfGx8kFXKdN
-        WIAWge2NCGA4QtekzOnAgeM=
-X-Google-Smtp-Source: AKy350Yxz2CiSI0uFgBbOpXYxtZGf7jmzV6zy8iqCUmxCu8v3vRH8lvCoUEkqjO2J2gRF+NfjeTDAA==
-X-Received: by 2002:a17:903:28c5:b0:1a2:9183:a499 with SMTP id kv5-20020a17090328c500b001a29183a499mr9689820plb.34.1680442646834;
-        Sun, 02 Apr 2023 06:37:26 -0700 (PDT)
-Received: from debian.me (subs28-116-206-12-38.three.co.id. [116.206.12.38])
-        by smtp.gmail.com with ESMTPSA id jf2-20020a170903268200b001a27e5ee634sm4798774plb.33.2023.04.02.06.37.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 06:37:26 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 893461066A7; Sun,  2 Apr 2023 20:37:23 +0700 (WIB)
-Date:   Sun, 2 Apr 2023 20:37:23 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-stable@vger.kernel.org
-Subject: Re: [PATCH] mm/swap: fix swap_info_struct race between swapoff and
- get_swap_pages()
-Message-ID: <ZCmFExoOsho9pt+Q@debian.me>
-References: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
+        Sun, 2 Apr 2023 09:48:07 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D165A7DBB;
+        Sun,  2 Apr 2023 06:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680443285; x=1711979285;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x8IrL2VmEc7QY4rRQiZNQOAy6BijstVun0yp4vULcF8=;
+  b=j0wexA6wXbvn76SykgDQaJkJLUPdR8G70yg3Ppfqp9uMxjjesfeyHZHq
+   mkYBdk9zkyqKnDoz7L0myWSJDKwELuTj6lUvFh+D/cQl8rDisJnwaA6st
+   SODe8NtbFJ4GISiwC+Rhn5BvTIAKU6nnveiv7F8Qr68IYaSzZscEeVFbz
+   bZ3wkevcP01CjL5BI2nppB1Tem1eLbGA+6xi33GdWlGO/MwFDsc6KrVmy
+   RqWcOMxbC13zhn/XVT8X2IKBJLQxyDzQVethEWPrMcMNFS3EJOnla7qz3
+   TuSIUhPwgUTT18sH2AV5QyS+D/Z0lNntBidNPF28luqgPAijQqyZfKHg+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="325731176"
+X-IronPort-AV: E=Sophos;i="5.98,312,1673942400"; 
+   d="scan'208";a="325731176"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2023 06:48:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="774892544"
+X-IronPort-AV: E=Sophos;i="5.98,312,1673942400"; 
+   d="scan'208";a="774892544"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Apr 2023 06:48:02 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1piy3t-000NQT-1O;
+        Sun, 02 Apr 2023 13:48:01 +0000
+Date:   Sun, 2 Apr 2023 21:47:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Joe Stringer <joe@isovalent.com>, bpf@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
+        martin.lau@linux.dev, bagasdotme@gmail.com, maxtram95@gmail.com,
+        john.fastabend@gmail.com
+Subject: Re: [PATCH bpf-next v4 2/2] docs/bpf: Add LRU internals description
+ and graph
+Message-ID: <202304022107.IwHc05cs-lkp@intel.com>
+References: <20230401200651.1022113-2-joe@isovalent.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kZSKbbifSvmxXjNz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230401200651.1022113-2-joe@isovalent.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Joe,
 
---kZSKbbifSvmxXjNz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for the patch! Perhaps something to improve:
 
-On Sun, Apr 02, 2023 at 06:19:20AM +0800, Rongwei Wang wrote:
-> Without this modification, a core will wait (mostly)
-"Currently, a core will ..."
+[auto build test WARNING on bpf-next/master]
 
-> But, a worse consequence, panic also can be caused by
-"However, in the worst case, ..."
+url:    https://github.com/intel-lab-lkp/linux/commits/Joe-Stringer/docs-bpf-Add-LRU-internals-description-and-graph/20230402-040757
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230401200651.1022113-2-joe%40isovalent.com
+patch subject: [PATCH bpf-next v4 2/2] docs/bpf: Add LRU internals description and graph
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/0c42be421b73fffe9160867ac673ea9841982ece
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Joe-Stringer/docs-bpf-Add-LRU-internals-description-and-graph/20230402-040757
+        git checkout 0c42be421b73fffe9160867ac673ea9841982ece
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
 
-> In this patch, we lock p->lock before calling
-"Lock p->lock before calling ..."
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304022107.IwHc05cs-lkp@intel.com/
 
-> We also find this problem exists in stable 5.10.
+All warnings (new ones prefixed by >>):
 
-So, you claim that 5.15.y and 6.1.y aren't affected, right?
+>> Warning: Orthogonal edges do not currently handle edge labels. Try using xlabels.
 
-Also, Cc: stable@vger.kernel.org on the SoB area (as pointed by kernel
-test robot [1].
-
-Thanks.
-
-[1]: https://lore.kernel.org/stable/ZCiuGEkyk%2F1Afisk@ec83ac1404bb/
-=20
---=20
-An old man doll... just what I always wanted! - Clara
-
---kZSKbbifSvmxXjNz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCmFEwAKCRD2uYlJVVFO
-o7N9AQD6KAL9B/rP0BIGjyYtOvCZvnVm5e3JKQg+Aoc/W8gKbAD8CecN3SdI0E2k
-n1uesdLFbR0vE9W8lDWjeZLr3z0cnwU=
-=P7MJ
------END PGP SIGNATURE-----
-
---kZSKbbifSvmxXjNz--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
