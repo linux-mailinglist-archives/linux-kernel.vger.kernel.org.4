@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126E86D37B8
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 13:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4D66D37C7
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 14:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjDBLow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 07:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
+        id S230340AbjDBMDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 08:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjDBLou (ORCPT
+        with ESMTP id S229591AbjDBMDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 07:44:50 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54C52443A;
-        Sun,  2 Apr 2023 04:44:49 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1piw8a-0003lK-1H;
-        Sun, 02 Apr 2023 13:44:44 +0200
-Date:   Sun, 2 Apr 2023 12:44:37 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     chowtom <chowtom@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH] net: sfp: add qurik enabling 2500Base-x for HG MXPD-483II
-Message-ID: <5e9a87a3f4c1ccc30625c8092b057f0fbd8a9947.1680435823.git.daniel@makrotopia.org>
+        Sun, 2 Apr 2023 08:03:34 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAC51A948;
+        Sun,  2 Apr 2023 05:03:32 -0700 (PDT)
+Date:   Sun, 2 Apr 2023 12:00:08 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1680437009;
+        bh=J6EUXY7ZNeAl1Bncy9vRZdILjTEGiNKvAMcj5y/RNbM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XYl6kyn/n2/W85dGTuwMMjP3992BXmiTLIzzY+BGq+SdNFKmwixp5qftFEyNDck2M
+         gD5MC9PJ4HDv6nXHaOS9/4XmTIXyatxf14vcHh4hNzamvTsnRexHVggfbkRoPvnrFD
+         KxEgYhoVaEy2jSj4AmV9TFIKlmE8T6eoLu2U2Ark=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] tools/nolibc: validate C99 compatibility
+Message-ID: <84882550-b036-47fd-9bef-3657ac32e46e@t-8ch.de>
+References: <20230328-nolibc-c99-v1-1-a8302fb19f19@weissschuh.net>
+ <ZCPJm/Nb2AGlJqXg@1wt.eu>
+ <2be5dd3f-d4ca-499a-9f7e-3113b4f04412@t-8ch.de>
+ <ZCPWrrrlVRsaVIsl@1wt.eu>
+ <ZCgBcs3RT07BrNA9@1wt.eu>
+ <de90f88a-f741-4ed6-a153-3309a568aea7@t-8ch.de>
+ <ZCgPwavNqLAfclpV@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZCgPwavNqLAfclpV@1wt.eu>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,40 +50,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HG MXPD-483II 1310nm SFP module is meant to operate with 2500Base-X,
-however, in their EEPROM they incorrectly specify:
-    Transceiver type                          : Ethernet: 1000BASE-LX
-    ...
-    BR, Nominal                               : 2600MBd
+On 2023-04-01 13:04:33+0200, Willy Tarreau wrote:
+> On Sat, Apr 01, 2023 at 10:33:45AM +0000, Thomas Weißschuh wrote:
+> > Hi Willy,
+> > 
+> > sorry for the late response to your previous mail, I was traveling.
+> 
+> Don't be sorry, I hardly have the time to respond between week-ends,
+> so you're waiting for me more than the other way around!
+> 
+> > > I just ran some tests and there's actually better to achieve what you're
+> > > looking for. Let's just use -fno-asm, it removes the GNU-specific "asm",
+> > > "inline", and "typeof" in favor of the "__" variants. With gcc 11.3 it
+> > > gives me this, which is exactly what we were looking for:
+> > > 
+> > >   gcc -Os -fno-ident -fno-asynchronous-unwind-tables -fno-stack-protector -DNOLIBC_STACKPROTECTOR -mstack-protector-guard=global -fstack-protector-all -fno-asm -s -o nolibc-test \
+> > >     -nostdlib -static -Isysroot/x86/include nolibc-test.c -lgcc
+> > >   In file included from sysroot/x86/include/stdlib.h:14,
+> > >                    from sysroot/x86/include/nolibc.h:103,
+> > >                    from sysroot/x86/include/errno.h:26,
+> > >                    from sysroot/x86/include/stdio.h:14,
+> > >                    from nolibc-test.c:15:
+> > >   sysroot/x86/include/string.h: In function 'memset':
+> > >   sysroot/x86/include/string.h:93:17: error: 'asm' undeclared (first use in this function)
+> > >      93 |                 asm volatile("");
+> > >         |                 ^~~
+> > >   sysroot/x86/include/string.h:93:17: note: each undeclared identifier is reported only once for each function it appears in
+> > >   sysroot/x86/include/string.h:93:20: error: expected ';' before 'volatile'
+> > >      93 |                 asm volatile("");
+> > >         |                    ^~~~~~~~~
+> > >         |                    ;
+> > >   sysroot/x86/include/string.h: In function 'strlen':
+> > >   sysroot/x86/include/string.h:142:17: warning: implicit declaration of function 'asm' [-Wimplicit-function-declaration]
+> > >     142 |                 asm("");
+> > >         |                 ^~~
+> > >   nolibc-test.c: In function 'main':
+> > >   nolibc-test.c:898:25: error: 'asm' undeclared (first use in this function)
+> > >     898 |                         asm volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
+> > >         |                         ^~~
+> > >   nolibc-test.c:898:28: error: expected ';' before 'volatile'
+> > >     898 |                         asm volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
+> > >         |                            ^~~~~~~~~
+> > >         |                            ;
+> > >   make: *** [Makefile:128: nolibc-test] Error 1
+> > > 
+> > > With this, we don't need to force -std=c99 nor to build two variants,
+> > > a single variant will catch GCCisms even with older compilers while not
+> > > being overly annoying.
+> > 
+> > The original goal was to have a fixed and explicit baseline that is
+> > supported. Using -std= ensures that no deviations are accidentally
+> > introduced.
+> > 
+> > Using -fno-asm only prevents this specific gnu-ism. All other gnu-isms
+> > and features from whatever the current compilers default language level
+> > is are still allowed.
+> > 
+> > Therefore I'm not convinced of this aproach.
+> > 
+> > These are the aproaches I can see that reach this goal:
+> > 
+> > * Declare C99 as baseline, build with -std=c99
+> > * Declare C99 and GNU89 as baseline, build with both.
+> > * Declare C99 and GNU89 as baseline, build with -std=c99,
+> >   wait for people to complain if something breaks on gnu89
+> >   (same as current status)
+> > * Declare C89 as baseline, remove all C99-isms and gnu-isms
+> >   (C++ comments, "inline" and some smaller stuff),
+> >   build with -std=c89.
+> > 
+> > Personally I think C99 is a baseline that is easy to fulfill by nolibc
+> > and should not restrict users.
+> 
+> I *am* affected. I do maintain some code that builds using an older
+> version of nolibc and still builds with the current one, that builds
+> fine on gcc 4.4..4.9 (as still present on some still supported distros
+> such as RHEL7 which comes with gcc-4.8). I just tried to build
+> nolibc-test with gcc-4.7 (which I still have for plenty of archs and
+> that is ~50% faster than 11.x, something appreciable during wide
+> range bisects) and it breaks on the size_t declared inside the for
+> statement.
 
-Use sfp_quirk_2500basex for this module to allow 2500Base-X mode anyway.
+> We could possibly go with your 3rd proposal above (i.e. both baselines,
+> only build with c99 and wait for reports). Or we could equally build
+> with "-std=gnu89 -fno-asm" and make sure we stay away from any recent
+> accidental deviation. All relevant compilers in use for a while are
+> compatible with this because this has been the default for a very long
+> time. By the way, it's worth noting that no single gcc version ever
+> used c99 as a default standard.
 
-https://forum.banana-pi.org/t/bpi-r3-sfp-module-compatibility/14573/60
+Personally I don't trust myself not to accidentally introduce
+incompatible code.
+Case in point with the above mentioned declaration.
+Also it's non-obvious for new contributors.
 
-Reported-by: chowtom <chowtom@gmail.com>
-Tested-by: chowtom <chowtom@gmail.com>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/phy/sfp.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I'll resend a version that also builds with -std=gnu89.
 
-diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-index f0fcb06fbe829..5e515165ceab7 100644
---- a/drivers/net/phy/sfp.c
-+++ b/drivers/net/phy/sfp.c
-@@ -406,6 +406,10 @@ static const struct sfp_quirk sfp_quirks[] = {
- 
- 	SFP_QUIRK_F("HALNy", "HL-GSFP", sfp_fixup_halny_gsfp),
- 
-+	// HG MXPD-483II-F 2.5G supports 2500Base-X, but incorrectly reports
-+	// 2600MBd in their EERPOM
-+	SFP_QUIRK_M("HG GENUINE", "MXPD-483II", sfp_quirk_2500basex),
-+
- 	// Huawei MA5671A can operate at 2500base-X, but report 1.2GBd NRZ in
- 	// their EEPROM
- 	SFP_QUIRK("HUAWEI", "MA5671A", sfp_quirk_2500basex,
-
-base-commit: d74aab2ca19842d16815a97d4dd605deaae73c69
--- 
-2.40.0
-
+Thomas
