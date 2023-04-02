@@ -2,74 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606CA6D380E
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2955A6D381B
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjDBNNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 09:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
+        id S230386AbjDBNbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 09:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDBNNM (ORCPT
+        with ESMTP id S229448AbjDBNbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 09:13:12 -0400
-Received: from smtp26.services.sfr.fr (smtp26.services.sfr.fr [93.17.128.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DC25FFA;
-        Sun,  2 Apr 2023 06:13:08 -0700 (PDT)
-X-mail-filterd: {"version":"1.6.0","queueID":"4PqDwg18gGz1LQKcd","contextId":
- "d5fbdbee-675f-4c3c-a303-2cad8805f6a4"}
-Received: from [192.168.1.30] (atoulouse-656-1-945-91.w90-11.abo.wanadoo.fr [90.11.30.91])
-        by msfrf2621.sfr.fr (SMTP Server) with ESMTP id 4PqDwg18gGz1LQKcd;
-        Sun,  2 Apr 2023 15:13:07 +0200 (CEST)
-X-mail-filterd: {"version":"1.6.0","queueID":"4PqDwd67f3z1LQKdJ","contextId":
- "d71c0dae-802e-4170-b039-caf56db25b78"}
-X-sfr-mailing: LEGIT
-X-sfr-spamrating: 36
-X-sfr-spam: not-spam
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=cegetel.net; s=202006;
- t=1680441187; h=Date:Subject:To:Cc:References:From:In-Reply-To; bh=T6bCBwYVBW
-  WNvdSwubSv0cmUFyvnnKxXCzM7F4b5fQk=; b=EROc8NH5DOrUDIOUwb6AuLt56CF1PVrRXpIZRV
-  NatK/XwW1CPmGOgPcHk8B2c1WXbu5G1Q5zJeNGEbO43KentlwJUzcdO8YLVS/+TTzjyGT+87Uz0f
-  e3iTBn3PmQf0TkQfSq+AQUz+R6jm4H8jc4FlS1j7pOkqxG/aCRHdNH6wnTdYSVPXkVWtGRHJdYj9
-  R6odu2OpecTU9gdy+5zwcen9U2mN/YLp3Fgs3DqaVrghA51QADZUzgDTjXiOJOXS4/Bljm7P04JG
-  hNnZA0jSnfqkDObdal+7xi8sIb5akwUPro2MCPa5xf0XrAc8YLfT5F0ODX7ckMiR/0yYjAWIjcPQ
-  ==
-Received: from [192.168.1.30] (atoulouse-656-1-945-91.w90-11.abo.wanadoo.fr [90.11.30.91])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: guy.durrieu@cegetel.net)
-        by msfrf2621.sfr.fr (SMTP Server) with ESMTPSA id 4PqDwd67f3z1LQKdJ;
-        Sun,  2 Apr 2023 15:13:05 +0200 (CEST)
-Authentication-Results: sfr.fr; auth=pass (PLAIN) smtp.auth=guy.durrieu@cegetel.net
-Message-ID: <961f96d3-df1c-483d-f681-42a291d88740@cegetel.net>
-Date:   Sun, 2 Apr 2023 15:13:05 +0200
+        Sun, 2 Apr 2023 09:31:40 -0400
+X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 02 Apr 2023 06:31:38 PDT
+Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B301B340;
+        Sun,  2 Apr 2023 06:31:38 -0700 (PDT)
+Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
+        by mxout2.routing.net (Postfix) with ESMTP id CEE775FBFE;
+        Sun,  2 Apr 2023 13:13:55 +0000 (UTC)
+Received: from frank-G5.. (fttx-pool-217.61.149.201.bambit.de [217.61.149.201])
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id E3A711007F0;
+        Sun,  2 Apr 2023 13:13:54 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] PCI: mediatek-gen3: handle PERST after reset
+Date:   Sun,  2 Apr 2023 15:13:47 +0200
+Message-Id: <20230402131347.99268-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2] x86/acpi/boot: Do not register processors that cannot
- be onlined for x2apic
-To:     Borislav Petkov <bp@alien8.de>,
-        Kishon Vijay Abraham I <kvijayab@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Santosh Shukla <santosh.shukla@amd.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Borislav Petkov <bpetkov@amd.com>,
-        Leo Duran <leo.duran@amd.com>, 1033732@bugs.debian.org
-References: <20230105041059.39366-1-kvijayab@amd.com>
- <c02a2a2f-2b40-e13e-ac40-e5d19a66b5ba@cegetel.net>
- <D2229CD1-CD5F-49E9-A0F5-BAB3940B6BFB@alien8.de>
-Content-Language: fr
-From:   Guy Durrieu <guy.durrieu@cegetel.net>
-In-Reply-To: <D2229CD1-CD5F-49E9-A0F5-BAB3940B6BFB@alien8.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Mail-ID: 0729ddf9-6bfe-4c25-9067-7616871ef223
+X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,20 +50,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 02/04/2023 à 12:57, Borislav Petkov a écrit :
+From: Frank Wunderlich <frank-w@public-files.de>
 
-> On April 2, 2023 12:41:46 PM GMT+02:00, Guy Durrieu <guy.durrieu@cegetel.net> wrote:
->> My system worked fine with kernel 6.1.15, but stopped booting after
->> upgrading to 6.1.20 and resulted in a kernel panic:
-> Does this fix it:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=x86/urgent
->
-> Thx.
->
-Yes it does.
+De-assert PERST in separate step after reset signals to fully comply
+the PCIe CEM clause 2.2.
 
-Regards.
+This fixes some NVME detection issues on mt7986.
 
--- Guy Durrieu
+Fixes: d3bf75b579b9 ("PCI: mediatek-gen3: Add MediaTek Gen3 driver for MT8192")
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+Patch is taken from user Ruslan aka RRKh61 (permitted me to send it
+with me as author).
+
+https://forum.banana-pi.org/t/bpi-r3-nvme-connection-issue/14563/17
+---
+ drivers/pci/controller/pcie-mediatek-gen3.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
+index b8612ce5f4d0..176b1a04565d 100644
+--- a/drivers/pci/controller/pcie-mediatek-gen3.c
++++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+@@ -350,7 +350,13 @@ static int mtk_pcie_startup_port(struct mtk_gen3_pcie *pcie)
+ 	msleep(100);
+ 
+ 	/* De-assert reset signals */
+-	val &= ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB | PCIE_PE_RSTB);
++	val &= ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB);
++	writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
++
++	msleep(100);
++
++	/* De-assert PERST# signals */
++	val &= ~(PCIE_PE_RSTB);
+ 	writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
+ 
+ 	/* Check if the link is up or not */
+-- 
+2.34.1
 
