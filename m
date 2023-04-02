@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E3E6D358E
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 07:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDF56D358F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 07:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjDBFDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 01:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
+        id S229849AbjDBFJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 01:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDBFDK (ORCPT
+        with ESMTP id S229379AbjDBFJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 01:03:10 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DFA1EA27;
-        Sat,  1 Apr 2023 22:03:07 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1piprn-0003eO-Bq; Sun, 02 Apr 2023 07:02:59 +0200
-Message-ID: <12c5a8f2-3082-68a2-e973-18fb957068ac@leemhuis.info>
-Date:   Sun, 2 Apr 2023 07:02:58 +0200
+        Sun, 2 Apr 2023 01:09:44 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C173A27B
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 22:09:44 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id x15so24384909pjk.2
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 22:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680412183;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HcLtKW5dA48qzTUGgoX0tKQeVpPNMnjuygndAHWt5os=;
+        b=GMeoq310zOmtFnO+ZbfugK6HsZIFju4p8arLMffSNZlknshUAGo9SFe/6YEZaYgq7n
+         MXwl9IoqYSYSO/IimzIITK28JnoDkfX4siV9m1Kf4yTFCa8Teznyz2hweCZjheEb7FW2
+         Ju754vzEaSgiGnK3K05hblR/sUQpF1LWdbPhHIovsnrQPUW4uYI7NygezqjeB3ZBlp2q
+         U65wKQKQg5VQErOw4ut0Po+Fl57BVUK7NWS5oKuwamOxfkG9aBxqIVlnUHBv2Geehlbd
+         Hgl77r/Qr1j8bJrgoO7qUsWN2LK6+QLWznxl7Vq3AzJ4GF9tCaM3Kg8ldEWq4NmRD0zx
+         mxww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680412183;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HcLtKW5dA48qzTUGgoX0tKQeVpPNMnjuygndAHWt5os=;
+        b=46Od7iZjHa6IE3MLA82OCM2DZ5Wr0t+HVWezkZbwS1vLXmKDknJ6pe/XVSFYDr4eIx
+         A54QrYNRhJ81C9DEb5Bv5xLl7QmqU2/9JXeQvDIg7cncV4Osi0sszmHQxgLGJ6KdXYan
+         ZV38r1DrhyCrsPZYUDket5eC9ofD3qLtIfTcGvMiWEBtnkpG7l9q4uxatgW1ToGXKSbK
+         qQ2Zu5EJbYv9eYkI/iIgmi0fX+hQN8QmizP31BEOTWbKnkNEB6ZLGKdFLmd2iLIIc430
+         B3ZADkYHFIUHRopfnXsGj4XsNjNzBjg9hBRwKZdg02oYxvSD8wH7dXaDWMzqiOVfZ+z7
+         VG5A==
+X-Gm-Message-State: AAQBX9dzmATwv1xd6m07Yatjwa8WSrRBoP7R4uIhmyDVuJ9KtjIGyzY0
+        KYm6aw+Xv6l7zUsgsxKsRzOqyqSdHg0f6QeUGq2Rht57/KEFhg==
+X-Google-Smtp-Source: AKy350YPuURXwC57sDalj6w4V2wbvUU3a1umoK+xHY28NA27tXIavSamvnvOj2xgLQ2E75kqn3Irm68wPpO6Wl5b7hg=
+X-Received: by 2002:a17:90a:5145:b0:23d:551c:c5fb with SMTP id
+ k5-20020a17090a514500b0023d551cc5fbmr9770700pjm.4.1680412183513; Sat, 01 Apr
+ 2023 22:09:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] Revert "venus: firmware: Correct non-pix start and end
- addresses"
-Content-Language: en-US, de-DE
-To:     Leonard Lausen <leonard@lausen.nl>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Vikash Garodia <vgarodia@qti.qualcomm.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, mka@chromium.org,
-        Albert Esteve <aesteve@redhat.com>,
-        stanimir.varbanov@linaro.org,
-        Enric Balletbo i Serra <eballetb@redhat.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        Fritz Koenig <frkoenig@google.com>,
-        "Rajeshwar Kurapaty (QUIC)" <quic_rkurapat@quicinc.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <87edq2dus1.fsf@minerva.mail-host-address-is-not-set>
- <ef09bc9f-d570-be11-238b-bd34063917fc@redhat.com>
- <70c01751-1dd7-c4bd-a96e-94dea437aa40@redhat.com>
- <DM8PR02MB81696369DBFE619E43F81EEFF3DE9@DM8PR02MB8169.namprd02.prod.outlook.com>
- <e87344c6-acef-7f3f-5cac-24961dbd9401@redhat.com>
- <6f97a117-0d9c-e21b-9adf-50f2233ba9e3@leemhuis.info>
- <ea283f0a-ca72-447e-ce87-68c1bbee793e@leemhuis.info>
- <CAFOAJEdBbzqkGVqw+vgNYNxyaTHwvjFyskTwjycP820L2tOctA@mail.gmail.com>
- <b548da46-bf91-6f1c-4b63-4002109056bc@leemhuis.info>
- <9a0bfef8-0b5d-f4d0-a8a5-4bbcacc5c0fb@leemhuis.info>
- <DM8PR02MB8169E16569616870A583B376F3AB9@DM8PR02MB8169.namprd02.prod.outlook.com>
- <87356wn6xf.fsf@minerva.mail-host-address-is-not-set>
- <87edq9hj4w.fsf@minerva.mail-host-address-is-not-set>
- <d18fac76-6b77-a446-5fe0-7236556e9187@quicinc.com>
- <0c84724d-08d4-ddcb-5f71-4eb8261240c6@quicinc.com>
- <a2fec0a5855150966fa5a920216c205032965f98@lausen.nl>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <a2fec0a5855150966fa5a920216c205032965f98@lausen.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680411787;3e27d53d;
-X-HE-SMSGID: 1piprn-0003eO-Bq
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
+References: <20230401094658.11146-1-vbabka@suse.cz>
+In-Reply-To: <20230401094658.11146-1-vbabka@suse.cz>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Sun, 2 Apr 2023 13:09:31 +0800
+Message-ID: <CAEr6+EBK1WUq0U9n3VwhU1+=F5X7-654v0XwqHtENOt98HU0gw@mail.gmail.com>
+Subject: Re: [PATCH] mm: remove all the slab allocators
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,67 +69,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Apr 1, 2023 at 5:47=E2=80=AFPM Vlastimil Babka <vbabka@suse.cz> wro=
+te:
+>
+> As the SLOB removal is on track and the SLAB removal is planned, I have
+> realized - why should we stop there and not remove also SLUB? What's a
+> slab allocator good for in 2023? The RAM sizes are getting larger and
+> the modules cheaper [1]. The object constructor trick was perhaps
+> interesting in 1994, but not with contemporary CPUs. So all the slab
+> allocator does today is just adding an unnecessary layer of complexity
+> over the page allocator.
+>
+> Thus, with this patch, all three slab allocators are removed, and only a
+> layer that passes everything to the page allocator remains in the slab.h
+> and mm/slab_common.c files. This will allow users to gradually
+> transition away and use the page allocator directly. To summarize the
+> advantages:
+>
+> - Less code to maintain: over 13k lines are removed by this patch, and
+>   more could be removed if I wast^Wspent more time on this, and later as
+>   users are transitioned from the legacy layer. This no longer needs a
+>   separate subsystem so remove it from MAINTAINERS (I hope I can keep the
+>   kernel.org account anyway, though).
+>
+> - Simplified MEMCG_KMEM accounting: while I was lazy and just marked it
+>   BROKEN in this patch, it should be trivial to use the page memcg
+>   accounting now that we use the page allocator. The per-object
+>   accounting went through several iterations in the past and was always
+>   complex and added overhead. Page accounting is much simpler by
+>   comparison.
+>
+> - Simplified KASAN and friends: also was lazy in this patch so they
+>   can't be enabled but should be easy to fix up and work just on the
+>   page level.
+>
+> - Simpler debugging: just use debug_pagealloc=3Don, no need to look up th=
+e
+>   exact syntax of the absurdly complex slub_debug parameter.
 
+This really simplifies the complexity of dealing with memory problems
+in the production environment,
+ and I hope it can be merged into the linux kernel soon.
 
-On 01.04.23 22:53, Leonard Lausen wrote:
-> Hi Javier, Dikshita, Stan,
-> 
-> the revert wasn't applied to v6.2 series. Can you please apply it and include it for v6.2.10?
-> 
-> March 6, 2023 at 5:43 AM, "Javier Martinez Canillas" <javierm@redhat.com> wrote:
->>> On 3/1/2023 3:15 PM, Dikshita Agarwal wrote:
->>>> On 2/28/2023 9:33 PM, Javier Martinez Canillas wrote:
->>>>> Javier Martinez Canillas<javierm@redhat.com>  writes:
->>>>>> Vikash Garodia<vgarodia@qti.qualcomm.com>  writes:
->>>>>>
->>>>>>> Stan, could you please help with the revert and a pull request having this revert
->>>>>>> alongwith other pending changes ?
->>>>>>>
->>>>>> Other fix posted is "media: venus: dec: Fix capture formats enumeration order":
->>>>>>
->>>>>> https://patchwork.kernel.org/project/linux-media/patch/20230210081835.2054482-1-javierm@redhat.com/
->>>
->>> Hi Javier,
->>>
->>> Thanks for this patch "media: venus: dec: Fix capture formats
->>> enumeration order".
->>>
->>> Somehow I can't find it in my mailbox to be able to reply there.
->>>
->>> Could you please explain what is the regression you see here?
->>>
->>
->> You can find the thread and explanation of the issue here:
->>
->> https://lore.kernel.org/lkml/Y+KPW18o%2FDa+N8UI@google.com/T/
->>
->> But Stanimir already picked it and sent a PR for v6.3 including it.
-> 
-> While "media: venus: dec: Fix capture formats enumeration order" may have been
-> applied to v6.3,
+Acked-by: Jeff Xie <xiehuan09@gmail.com>
 
-To me it looks like it was submitted[1], but not yet applied even to the
-media tree[2] -- while guess, maybe due problems mentioned in[3]? Or am
-I missing something?
-
-[1]
-https://lore.kernel.org/all/20230329211655.100276-1-stanimir.k.varbanov@gmail.com/
-[2] https://git.linuxtv.org/media_tree.git/log/?h=fixes
-[3]
-https://lore.kernel.org/all/20230329214310.2503484-1-jenkins@linuxtv.org/
-
-> this still leaves the regression introduced by "venus:
-> firmware: Correct non-pix start and end addresses". As pointed out by Matthias
-> Kaehlcke, the commit prevents SC7180 and sc7280 AOSS from entering sleep mode
-> during system suspend. This is a serious regression in v6.2 kernel series.
-
-That fix is sitting in the media tree for a while and afaics still
-hasn't been sent to Linus (which is needed to get this fixed in 6.2.y).
-
-Mauro, could you maybe take care of that?
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+--=20
+Thanks,
+JeffXie
