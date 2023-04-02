@@ -2,138 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7AD6D3885
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 16:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1316D3889
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 16:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjDBOnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 10:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S230413AbjDBOrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 10:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDBOnd (ORCPT
+        with ESMTP id S229681AbjDBOrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 10:43:33 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A9465AD;
-        Sun,  2 Apr 2023 07:43:32 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id l18so20012133oic.13;
-        Sun, 02 Apr 2023 07:43:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680446612;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sUwmWgSfaGA5atDzRhwn1tpe5ebZkyiB77hJpeGdg84=;
-        b=nv0XhA/T5AIkp1Qv7E1OpA0IV0oSHIFicHYSNN8j6NgJbyO7us4BReYOICj0gs6lOB
-         OeyGV+IQTqbcy1O+C45fZxifIuS2dJvARn+MH3gphxHir3gMGC+DvBydE1AAWoxHAzNk
-         8R5dvSa3Vog6Y7UyAUDBE6ZxUb4QhseNxvil0XhZdQ/FTSyDVRwCnxIy8zuWim/lPU7l
-         yUZqOqf816TvsQwFa5pOnwQq+4VQOAW3T9pFzSRMgAzmtLbla6K8QkTGE63zmUCfCJHq
-         205hIk5pRTAMQVRyNkBHcyCe7F18NEQ8gYViKEhWpsc5n5YFH4DQFUpZVW+Ij/buwyRK
-         +/ng==
-X-Gm-Message-State: AAQBX9d4XDwXs4bKs1b2n2P5vgWpti4Zd7OCTON5USJHPFNUgyojvM8d
-        ns81tAUyN2vt8tcPrHdZkg==
-X-Google-Smtp-Source: AKy350YWvZr3975Dnkh/gHPxxNhfiohDAWa1yAnyk7vbBz8LN5dXTp+7ALZnHhJdHNoSWB5sswMD6w==
-X-Received: by 2002:a05:6808:12:b0:389:23e:45e0 with SMTP id u18-20020a056808001200b00389023e45e0mr13478672oic.11.1680446611708;
-        Sun, 02 Apr 2023 07:43:31 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q189-20020acad9c6000000b0038756901d1esm2962147oig.35.2023.04.02.07.43.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 07:43:31 -0700 (PDT)
-Received: (nullmailer pid 2422586 invoked by uid 1000);
-        Sun, 02 Apr 2023 14:43:30 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Sun, 2 Apr 2023 10:47:33 -0400
+Received: from out-63.mta1.migadu.com (out-63.mta1.migadu.com [IPv6:2001:41d0:203:375::3f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2243C65BE
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 07:47:31 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
+        t=1680446849;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qPfc+eCKh1pSOYkXvXBQlJIfH+6a3ZfZffRcrpKqr+g=;
+        b=glTzsPBQQ1wYWXTkdnagOD0wXM6S3zhULf6kyX6Tckw5gAMDK3kTrFl4r+o6XBlQ4Lry7F
+        UnG0YvFGfFbFtlnJGRJdxR/5I6xeWD4I8S0U4vvyKO5h0TbwA101cbutWW1E5WabyybA7C
+        6wbLk9W8z5xx00Zdckwdm20l9nME17g=
+From:   Henrik Grimler <henrik@grimler.se>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        alim.akhtar@samsung.com, m.szyprowski@samsung.com,
+        jenneron@protonmail.com, markuss.broks@gmail.com,
+        martin.juecker@gmail.com, virag.david003@gmail.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        replicant@osuosl.org
+Cc:     Henrik Grimler <henrik@grimler.se>
+Subject: [PATCH v7 0/2] ARM: dts: add mmc aliases for Exynos devices
+Date:   Sun,  2 Apr 2023 16:47:22 +0200
+Message-Id: <20230402144724.17839-1-henrik@grimler.se>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Nikita Bondarenko <n2h9z4@gmail.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, rjui@broadcom.com,
-        linux@roeck-us.net, f.fainelli@gmail.com, robh+dt@kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org, sbranden@broadcom.com,
-        wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <20230402135555.62507-1-n2h9z4@gmail.com>
-References: <20230402135555.62507-1-n2h9z4@gmail.com>
-Message-Id: <168044604098.2412538.8062482147729168054.robh@kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: watchdog: brcm,kona-wdt: convert txt
- file to yaml
-Date:   Sun, 02 Apr 2023 09:43:30 -0500
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It is convenient to have fixed mmcblk numbering of the eMMC and sdcard
+so that assigned numbers will not change from boot-to-boot or
+depending on if storage devices are actually attached or not.
 
-On Sun, 02 Apr 2023 15:55:55 +0200, Nikita Bondarenko wrote:
-> Remove device tree binding in txt
-> Add device tree binding in json-schema
+Anton Bambura has done the work for the chromebooks while I have
+looked at the other devices.  On the chromebooks, mmc0 is used for
+eMMC and mmc1 for sdcard, while mmc0 is used for eMMC and mmc2 for
+sdcard on the other boards, simply because Anton and I had different
+preferences.
 
-Write complete sentences. The commit msg purpose is not to explain the 
-diff, we can read that. The purpose is to explain why though we don't 
-need much reasoning why for conversions. What is useful is any fixes or 
-changes you made to the binding (only because the existing binding 
-didn't match reality). For example, there's a mismatch in the 
-compatible. If you aren't adjusting the schema, then it means you think 
-the .dts file is wrong and it needs to be fixed.
+Also drop mshc aliases while we are at it and instead add mmc
+capabilities to the individual device trees (right now they are added
+depending on alias index).  I have tested the changes on
+exynos4412-odroid-u2 and exynos5422-odroid-xu4: the MMC_CAP_1_8V_DDR
+and MMC_CAP_8_BIT_DATA caps are set correctly (meaning they are set
+for mshc_0/mmc_0 but not mshc_2/mmc_2) both before and after this
+patchset.
 
-> 
-> 
+---
 
-Single blank line here.
+Changes since v6:
+* Fix syntax error in patch 2
 
-> Signed-off-by: Nikita Bondarenko <n2h9z4@gmail.com>
-> ---
-> 
-> Changes in v2, according to review comments:
-> - use subject prefixes matching the subsystem in patch subject
-> - add commit message
-> - update the list of maintainers: add here all maintainers returned by scripts/get_maintainer.p who are marked as "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX"
-> - remove quotes in - $ref: watchdog.yaml#
-> - remove description for reg
-> - leave one example
-> - add all SoCs mentioned in txt file description to compatible enum values
-> 
-> Both checks (dtbs_check, dt_binding_check) return no error:
-> 
-> make  DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml ARCH=arm dtbs_check
->   LINT    Documentation/devicetree/bindings
->   CHKDT   Documentation/devicetree/bindings/processed-schema.json
->   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+Changes since v5:
+* Make mmc index numbering linear per default (that is, always use 0,
+  1, 2 instead of for example 0, 2, 3) for devices where no documentation
+  or schematics are available that use other numbering.
+* Drop Marek's test tag for patch 2 since mmc numbering has been updated
+* Add mmc0 alias to exynos5422-samsung-k3g, was accidentally dropped in v5
 
-Doesn't match what I get below...
+Changes since v4:
+* Do not set mmc-ddr-1_8v for sdhci_0 on Exynos 4210,
+  following Marek's tests
+* Collect tags
 
-> 
-> make  DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml ARCH=arm dt_binding_check
->   LINT    Documentation/devicetree/bindings
->   CHKDT   Documentation/devicetree/bindings/processed-schema.json
->   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
->   DTEX    Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.example.dts
->   DTC_CHK Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.example.dtb
-> 
->  .../bindings/watchdog/brcm,kona-wdt.txt       | 15 -------
->  .../bindings/watchdog/brcm,kona-wdt.yaml      | 45 +++++++++++++++++++
->  2 files changed, 45 insertions(+), 15 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
-> 
+Changes since v3:
+* Skip sorting of nodes, to not make reviewing impossible (and I need
+  to read up on preferred style)
+* Move two mmc alias additions from patch 1 to patch 2
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Changes since v2:
+* Set mmc-ddr-1_8v in device trees so that MMC_CAP_1_8V_DDR is set
+  also after removal of mshc0 alias.  Issue was pointed out by Krzysztof
+  and David.
+* Fix whitespace issue in patch 2 which was pointed out by Krzysztof
+* Reword commit message of patch 2 after Rob's comment
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Changes since v1:
+* Move mshc alias cleanup to a separate commit
+* Use mmc0 and mmc1 (instead of mmc0 and mmc2) for eMMC and sdcard on
+  chromebooks
+* Address Krzysztof's review comments:
+ - Make changes per device rather than in soc dtsi
 
-Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230402135555.62507-1-n2h9z4@gmail.com
+Henrik Grimler (2):
+  ARM: dts: exynos: replace mshc0 alias with mmc-ddr-1_8v property
+  ARM: dts: exynos: add mmc aliases
+
+ arch/arm/boot/dts/exynos3250-artik5-eval.dts        | 4 ++++
+ arch/arm/boot/dts/exynos3250-artik5.dtsi            | 6 ++++++
+ arch/arm/boot/dts/exynos3250-monk.dts               | 2 ++
+ arch/arm/boot/dts/exynos3250-rinato.dts             | 3 +++
+ arch/arm/boot/dts/exynos3250.dtsi                   | 3 ---
+ arch/arm/boot/dts/exynos4210-i9100.dts              | 6 ++++++
+ arch/arm/boot/dts/exynos4210-origen.dts             | 5 +++++
+ arch/arm/boot/dts/exynos4210-smdkv310.dts           | 4 ++++
+ arch/arm/boot/dts/exynos4210-trats.dts              | 6 ++++++
+ arch/arm/boot/dts/exynos4210-universal_c210.dts     | 6 ++++++
+ arch/arm/boot/dts/exynos4412-itop-elite.dts         | 4 ++++
+ arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi     | 5 +++++
+ arch/arm/boot/dts/exynos4412-midas.dtsi             | 4 ++++
+ arch/arm/boot/dts/exynos4412-odroid-common.dtsi     | 6 ++++++
+ arch/arm/boot/dts/exynos4412-origen.dts             | 6 ++++++
+ arch/arm/boot/dts/exynos4412-p4note.dtsi            | 7 +++++++
+ arch/arm/boot/dts/exynos4412-smdk4412.dts           | 4 ++++
+ arch/arm/boot/dts/exynos4412-tiny4412.dts           | 4 ++++
+ arch/arm/boot/dts/exynos4412.dtsi                   | 1 -
+ arch/arm/boot/dts/exynos5250-arndale.dts            | 6 ++++++
+ arch/arm/boot/dts/exynos5250-smdk5250.dts           | 3 +++
+ arch/arm/boot/dts/exynos5250-snow-common.dtsi       | 4 ++++
+ arch/arm/boot/dts/exynos5250-spring.dts             | 6 ++++++
+ arch/arm/boot/dts/exynos5250.dtsi                   | 4 ----
+ arch/arm/boot/dts/exynos5260-xyref5260.dts          | 6 ++++++
+ arch/arm/boot/dts/exynos5410-odroidxu.dts           | 3 +++
+ arch/arm/boot/dts/exynos5410-smdk5410.dts           | 6 ++++++
+ arch/arm/boot/dts/exynos5420-arndale-octa.dts       | 6 ++++++
+ arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi | 6 ++++++
+ arch/arm/boot/dts/exynos5420-peach-pit.dts          | 4 ++++
+ arch/arm/boot/dts/exynos5420-smdk5420.dts           | 6 ++++++
+ arch/arm/boot/dts/exynos5420.dtsi                   | 3 ---
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi       | 4 ++++
+ arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi  | 5 +++++
+ arch/arm/boot/dts/exynos5422-samsung-k3g.dts        | 5 +++++
+ arch/arm/boot/dts/exynos5800-peach-pi.dts           | 4 ++++
+ 36 files changed, 156 insertions(+), 11 deletions(-)
 
 
-watchdog@35002f40: compatible: ['brcm,bcm11351-wdt', 'brcm,kona-wdt'] is too long
-	arch/arm/boot/dts/bcm28155-ap.dtb
-
-watchdog@35002f40: Unevaluated properties are not allowed ('compatible' was unexpected)
-	arch/arm/boot/dts/bcm28155-ap.dtb
+base-commit: 0e84f3493a37d50f2f629dbea670135b8a8ee391
+-- 
+2.30.2
 
