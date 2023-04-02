@@ -2,91 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2955A6D381B
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1686D3810
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjDBNbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 09:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        id S230330AbjDBNQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 09:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDBNbk (ORCPT
+        with ESMTP id S229448AbjDBNQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 09:31:40 -0400
-X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 02 Apr 2023 06:31:38 PDT
-Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B301B340;
-        Sun,  2 Apr 2023 06:31:38 -0700 (PDT)
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout2.routing.net (Postfix) with ESMTP id CEE775FBFE;
-        Sun,  2 Apr 2023 13:13:55 +0000 (UTC)
-Received: from frank-G5.. (fttx-pool-217.61.149.201.bambit.de [217.61.149.201])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id E3A711007F0;
-        Sun,  2 Apr 2023 13:13:54 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] PCI: mediatek-gen3: handle PERST after reset
-Date:   Sun,  2 Apr 2023 15:13:47 +0200
-Message-Id: <20230402131347.99268-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
+        Sun, 2 Apr 2023 09:16:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FC15FFA
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 06:16:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1ED6B80E81
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 13:16:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A22C433EF;
+        Sun,  2 Apr 2023 13:16:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680441372;
+        bh=jnibmCt45iklluBfswBTDC0ZgT3EPyw8KU5oBm/VtLw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mMXKWtNc6QdQRCKXFeoPGwjiJrBCOu6nqTs8R4fcViysabfnSUE/AKZqbP+7Y3QDv
+         QDs88m36vbnL4IrxzQ0XqU91nXvyQ3+SAA7djzL6DpXyFIXo+R92wslErBbfAHIm9x
+         1XiC04Sa8yx4cdzXWPeyPuGV4tpVfK7xI4waEDis=
+Date:   Sun, 2 Apr 2023 15:16:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Angel Alberto Carretero <angelalbertoc.r@gmail.com>
+Cc:     Bryan O'Donoghue <pure.logic@nexus-software.ie>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: greybus: loopback: fix up checkpath macro do
+ while error.
+Message-ID: <2023040252-racoon-daintily-3589@gregkh>
+References: <20230402122550.70682-1-angelalbertoc.r@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 0729ddf9-6bfe-4c25-9067-7616871ef223
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230402122550.70682-1-angelalbertoc.r@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On Sun, Apr 02, 2023 at 02:25:51PM +0200, Angel Alberto Carretero wrote:
+> Wrap macro in a do-while statement.
+> 
+> Signed-off-by: Angel Alberto Carretero <angelalbertoc.r@gmail.com>
+> ---
+>  drivers/staging/greybus/loopback.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/greybus/loopback.c b/drivers/staging/greybus/loopback.c
+> index d7b39f3bb652..371809770ed0 100644
+> --- a/drivers/staging/greybus/loopback.c
+> +++ b/drivers/staging/greybus/loopback.c
+> @@ -162,9 +162,11 @@ static ssize_t name##_avg_show(struct device *dev,		\
+>  static DEVICE_ATTR_RO(name##_avg)
+>  
+>  #define gb_loopback_stats_attrs(field)				\
+> -	gb_loopback_ro_stats_attr(field, min, u);		\
+> -	gb_loopback_ro_stats_attr(field, max, u);		\
+> -	gb_loopback_ro_avg_attr(field)
+> +	do {		\
+> +		gb_loopback_ro_stats_attr(field, min, u);		\
+> +		gb_loopback_ro_stats_attr(field, max, u);		\
+> +		gb_loopback_ro_avg_attr(field);		\
+> +	} while (0)
+>  
+>  #define gb_loopback_attr(field, type)					\
+>  static ssize_t field##_show(struct device *dev,				\
+> -- 
+> 2.40.0
+> 
+> 
 
-De-assert PERST in separate step after reset signals to fully comply
-the PCIe CEM clause 2.2.
+Any specific reason why you did not test build your change before
+submitting it?
 
-This fixes some NVME detection issues on mt7986.
+thanks,
 
-Fixes: d3bf75b579b9 ("PCI: mediatek-gen3: Add MediaTek Gen3 driver for MT8192")
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
-Patch is taken from user Ruslan aka RRKh61 (permitted me to send it
-with me as author).
-
-https://forum.banana-pi.org/t/bpi-r3-nvme-connection-issue/14563/17
----
- drivers/pci/controller/pcie-mediatek-gen3.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
-index b8612ce5f4d0..176b1a04565d 100644
---- a/drivers/pci/controller/pcie-mediatek-gen3.c
-+++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-@@ -350,7 +350,13 @@ static int mtk_pcie_startup_port(struct mtk_gen3_pcie *pcie)
- 	msleep(100);
- 
- 	/* De-assert reset signals */
--	val &= ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB | PCIE_PE_RSTB);
-+	val &= ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB);
-+	writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
-+
-+	msleep(100);
-+
-+	/* De-assert PERST# signals */
-+	val &= ~(PCIE_PE_RSTB);
- 	writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
- 
- 	/* Check if the link is up or not */
--- 
-2.34.1
-
+greg k-h
