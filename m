@@ -2,160 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243386D36B8
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 11:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685EB6D36BB
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 11:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjDBJve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 05:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
+        id S230363AbjDBJwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 05:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjDBJv0 (ORCPT
+        with ESMTP id S230331AbjDBJwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 05:51:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2200C2702E;
-        Sun,  2 Apr 2023 02:51:17 -0700 (PDT)
-Received: from localhost (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 124C0660312B;
-        Sun,  2 Apr 2023 10:51:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680429075;
-        bh=kJdtSesynjBrpuEEDEDtpj5X9IcAxkUH0Y/1s8Txv6c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VPVs0DcGUSDRxbBrFcdRhMjqt8jtEg5eb28bos+eF5kpI1VDZqZ+dhsFH6buDdKEF
-         WRtsAa5DN849V5kQTAZqh5CSiBloB8WjFuyNhoQOPhwCLtLqjX41p9uS7ig9l+0g7O
-         x+YMryXdGC068oBI9C4vV1pMHo2HR7hpKbgZrM6yfoRb55Oh08or6wydCW73SySoDl
-         wI6DD6mb+GWdIwzNpGS3MsuMEvfsi3FV4pI4887sWayoBH6bMHxmvqRZH22yVcpoGN
-         b9Wwd9LRONXwRIlWMy0iTmmYe3yohpbl5kNze3lBsMqTI2caZkP7C2rUdnPF9IMStE
-         xba9WMu6jAwSg==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>,
-        Jagan Teki <jagan@edgeble.ai>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH v4 5/5] arm64: dts: rockchip: rk3588-rock-5b: Add analog audio
-Date:   Sun,  2 Apr 2023 12:50:54 +0300
-Message-Id: <20230402095054.384739-6-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230402095054.384739-1-cristian.ciocaltea@collabora.com>
-References: <20230402095054.384739-1-cristian.ciocaltea@collabora.com>
+        Sun, 2 Apr 2023 05:52:06 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A092BEE0
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 02:51:43 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id h8so106301404ede.8
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 02:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680429099; x=1683021099;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2IDvEqK40hdfeaC/5vcKlzJ8ldccO8ZyOrtbI8/UQso=;
+        b=bYGfDEJghpcBi7i4yza2Phq8tCEBxOpVWp2cGMeFpQgVy9Jw8azJbFwW/GVLDkVeiM
+         borWGvtXbfTdFgmyENPaFICjo/Bx76xoh+Xx4nkNm8QvzsI8Bho0S2ARYp8h3XnHdpiV
+         67OplqowEnZh2w+UvJPZEVBta2ARLiMU1aS/Z3QeB7Y/N72b55D8qrgLHPrIVHh6WjVp
+         pGwWw9m0jxFXus57lfO5QNUm5pBaWFdx3p+7zz/0DbFuuE6Ru5TRxSYQO0ptGTs8cZFG
+         bRjwXRPtdFmFrCMje8GYPiuMcrhukdmQdh20OdKovDvIApqD3zuzT20i1pwRVgR7fMxY
+         91LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680429099; x=1683021099;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2IDvEqK40hdfeaC/5vcKlzJ8ldccO8ZyOrtbI8/UQso=;
+        b=eI27DDP7vgzbudEH347LxJp5ATJO7XJg+mnQ8gnB4yr3yxGX3cpZWnCIbnpxjAzmn3
+         YaCxNVBvKp2gggRYP/estTqVIfWCMWYbo4j4wM9WOukeaaSrWJ1q59bfnRjNghEHs7ru
+         cPyuKLFjWN/G3Kq53c6ZJ5z9p0yVTJNytvBLT5w+VId0tCdm3ac7SZpjXizyQl94rEmA
+         CkWNPmnXsNrYSazBd/kudodgPjaRy0XoOwHzS/NyjjsmjsenQ6fSuDi+S+v5/DnDAY/a
+         u9HJHaSnWblc+sAqaixJtfDFbcKvAeBgZbf/BxebXzSQ5j4i5eIMrnZ+Z6lw5EbyL/RN
+         YtBw==
+X-Gm-Message-State: AAQBX9chflIyoO3843czySaymtCpQ76f4UHPbhDK1WmKO/8VWGuOWUi+
+        YFNipjelcBgG/cjuwJmzCE3TKy9hBsc=
+X-Google-Smtp-Source: AKy350a9MsvkMpzvVI6Nn+Qh5M6t4iuNAkNmgQeVoknnM++Kmh0S2kpecy3A7VgcwD/0rh5GAM24dQ==
+X-Received: by 2002:a05:6402:2803:b0:502:e50:3358 with SMTP id h3-20020a056402280300b005020e503358mr12854788ede.3.1680429099044;
+        Sun, 02 Apr 2023 02:51:39 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id e27-20020a50d4db000000b004fadc041e13sm3085852edj.42.2023.04.02.02.51.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Apr 2023 02:51:38 -0700 (PDT)
+Date:   Sun, 2 Apr 2023 11:51:36 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] staging: rtl8192e: Remove enum RF_1T2R and useless
+ cases for customer_id
+Message-ID: <cover.1680427945.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the necessary DT nodes for the Rock 5B board to enable the analog
-audio support provided by the Everest Semi ES8316 codec.
+Remove enum RF_1T2R as the code using it has always the same result.
+Remove useless cases for customer_id.
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Tested with rtl8192e
+Transferred this patch over wlan connection of rtl8192e
 ---
- .../boot/dts/rockchip/rk3588-rock-5b.dts      | 62 +++++++++++++++++++
- 1 file changed, 62 insertions(+)
+V1->V2: Added first patch to avoid a useage of an uninitialized
+        variable RF_Type introduced by later patches.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-index 95805cb0adfa..a9e12e098d48 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-@@ -2,6 +2,7 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/gpio/gpio.h>
- #include "rk3588.dtsi"
- 
- / {
-@@ -17,6 +18,23 @@ chosen {
- 		stdout-path = "serial2:1500000n8";
- 	};
- 
-+	sound {
-+		compatible = "audio-graph-card";
-+		label = "Analog";
-+
-+		widgets = "Microphone", "Mic Jack",
-+			  "Headphone", "Headphones";
-+
-+		routing = "MIC2", "Mic Jack",
-+			  "Headphones", "HPOL",
-+			  "Headphones", "HPOR";
-+
-+		dais = <&i2s0_8ch_p0>;
-+		hp-det-gpio = <&gpio1 RK_PD5 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&hp_detect>;
-+	};
-+
- 	vcc5v0_sys: vcc5v0-sys-regulator {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vcc5v0_sys";
-@@ -27,6 +45,50 @@ vcc5v0_sys: vcc5v0-sys-regulator {
- 	};
- };
- 
-+&i2c7 {
-+	status = "okay";
-+
-+	es8316: es8316@11 {
-+		compatible = "everest,es8316";
-+		reg = <0x11>;
-+		clocks = <&cru I2S0_8CH_MCLKOUT>;
-+		clock-names = "mclk";
-+		#sound-dai-cells = <0>;
-+
-+		port {
-+			es8316_p0_0: endpoint {
-+				remote-endpoint = <&i2s0_8ch_p0_0>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2s0_8ch {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2s0_lrck
-+		     &i2s0_mclk
-+		     &i2s0_sclk
-+		     &i2s0_sdi0
-+		     &i2s0_sdo0>;
-+	status = "okay";
-+
-+	i2s0_8ch_p0: port {
-+		i2s0_8ch_p0_0: endpoint {
-+			dai-format = "i2s";
-+			mclk-fs = <256>;
-+			remote-endpoint = <&es8316_p0_0>;
-+		};
-+	};
-+};
-+
-+&pinctrl {
-+	sound {
-+		hp_detect: hp-detect {
-+			rockchip,pins = <1 RK_PD5 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+};
-+
- &sdhci {
- 	bus-width = <8>;
- 	no-sdio;
+Philipp Hortmann (6):
+  staging: rtl8192e: Remove RF_Type from
+    .._dm_tx_update_tssi_weak_signal
+  staging: rtl8192e: Remove enum RF_1T2R and RF_Type
+  staging: rtl8192e: Remove local variable Value and powerlevelOFDM24G
+  staging: rtl8192e: Remove case customer_id = RT_CID_DLINK
+  staging: rtl8192e: Remove case customer_id = RT_CID_819x_CAMEO, ..
+  staging: rtl8192e: Remove case customer_id = RT_CID_DEFAULT, ..
+
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 26 -------------------
+ drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h |  7 -----
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  5 ----
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    | 21 +++++----------
+ drivers/staging/rtl8192e/rtllib.h             |  4 ---
+ 5 files changed, 6 insertions(+), 57 deletions(-)
+
 -- 
 2.40.0
 
