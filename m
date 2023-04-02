@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 291E26D3874
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 16:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA456D3876
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 16:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjDBOdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 10:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        id S231142AbjDBOec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 10:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjDBOdF (ORCPT
+        with ESMTP id S229997AbjDBOea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 10:33:05 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3D82682
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 07:32:59 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id h8so107712098ede.8
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 07:32:59 -0700 (PDT)
+        Sun, 2 Apr 2023 10:34:30 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56337DA;
+        Sun,  2 Apr 2023 07:34:12 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id z10so16010646pgr.8;
+        Sun, 02 Apr 2023 07:34:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680445978;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1680446052;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=81yzIuoBJY31RIgCNtPXI4MH4MI0Ymz/ovjpa7G5Au8=;
-        b=mz8q8tlTRahr4dUJqiWpfSFk/N5vv6BLwE3qVuiCsEYdc/9lsa0OL2zlXz9KCo/NQQ
-         DiPa3GFA4WkUWpNMJdWWumgcd8swVdzafrOhHnOBNi8qZ3XGv5Na+jxcwGDSDrMvbtC9
-         OzlmQwlz36Gp/gSfyaOFoHgWIX4CfNHJT9T8h6xAjwCTojXywY0/hEfXP1WzmKo1YbCX
-         aIbC1Knr8I+lpuC4YrKpYu+T4YsLIIS9nq8PoYwKi+QnnB9oWlPFmAqqvH8obAWYf2vu
-         lWo8uab5iTo+IFTmSXBygZh4UTRSIF7jNMv2ba7Zh4pcwi1vvc8Uw4vWpCUrZVrF9H54
-         sjMw==
+        bh=OoKAUsS1+OPv2yaj0HT7KaFR2MH6Yyn+hzIBLI7xgeI=;
+        b=ILEvwS91rgkWPiWhD7zih4rFjl7XNbDo2TWQbTQmLiSCIRjv76s9QPGoQlsN043vzN
+         yBk6Y2LTK6XhR/DZbwerQlmxtwoJMHabnz0iK2D/M5mc+CrRIQu5bw4kif3w/29NBgFB
+         pQo4K/fce8HBMfRPVNUOJ8p0MOYg+DuF2eam+iD9PbmBYo/qe0xqHdzKh8SbvXKXSIf3
+         g3YRkSHCV9F65Cyb3psaAYUq98SzfwGMlSbYu8O2YfHFBKJXzRCGbefzIfMm9pgNBnip
+         vE6MX1JqDKSopsTjGPu3sWDthzudvdLVTgr1w3M517g7uoeEM8mu1AUAhIUnOVdGwmh6
+         2c4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680445978;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680446052;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=81yzIuoBJY31RIgCNtPXI4MH4MI0Ymz/ovjpa7G5Au8=;
-        b=pxaPYHF2ZpxU18vVXC3xzXAGjRCSO4TqbDoROBZ/MClyf5wty1VfKHW6K/S4QfPEQP
-         St8NqZPVXdGn4/ADQ1kiqIEDp6Hi/nKuTfSZvTLmFxVNJUWCjjuKdkDmB8VgHm4UK6f0
-         +miMLty8RTj38Fkw0zFdI+E9pzhrT/1YIkeOMXpzUJNR+h3nMuiuCBfFEj7dwgr2mY0F
-         WYZu3GkCNIbgamddZOZtRExE88orcEmENMC5eCKPO5Lm1N6QzM3/pa7DRhyKh+ezwJ1y
-         xHDgAKvMdaL75pOA7QprkEmUO+XlP7WV2myLYd3TLSVKZ/DN+hwHqmCsAKrr1VpKKeVi
-         4A6w==
-X-Gm-Message-State: AAQBX9fv15LOTBbRntZfYzdNxYAO5CjfR/gw53vlYXI5UFovCLcFRe4G
-        PINjdVwRlkqClp14RPbJOYU=
-X-Google-Smtp-Source: AKy350ZcqOubIDVdPJe9vMrgbtScXlEby33eShAZQfT065MfI3J9DCmnbKS86v+TQomKpq6WDtswyA==
-X-Received: by 2002:a17:906:5d03:b0:92f:495b:bc7c with SMTP id g3-20020a1709065d0300b0092f495bbc7cmr17158572ejt.23.1680445978075;
-        Sun, 02 Apr 2023 07:32:58 -0700 (PDT)
-Received: from khadija-virtual-machine.localdomain ([39.41.14.14])
-        by smtp.gmail.com with ESMTPSA id p18-20020a170906839200b009476dafa705sm3273292ejx.193.2023.04.02.07.32.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 07:32:57 -0700 (PDT)
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] staging: rtl8192e: avoid CamelCase <dot11RSNAStatsCCMPDecryptErrors>
-Date:   Sun,  2 Apr 2023 19:32:46 +0500
-Message-Id: <d29ff5db6f19d79ee762a835db88155bee2aefba.1680445545.git.kamrankhadijadj@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1680445545.git.kamrankhadijadj@gmail.com>
-References: <cover.1680445545.git.kamrankhadijadj@gmail.com>
+        bh=OoKAUsS1+OPv2yaj0HT7KaFR2MH6Yyn+hzIBLI7xgeI=;
+        b=jzW5sIvm2vNB3A9Rd/vaEp6coN+wIhTc93GamwME3zNz/lggV3nzP8T8ZMLdwxkeAe
+         4clsfraoEWG2smsnhvUfxLx8exL5mm+GrvrX6xOqyK1QfudTQpSq0pNekIws59A9zT1/
+         cs4d8MDn5lkDrPheJ/p7iiT5winbvmSUE7eFrpjr7y7b6S47ABuGrEM7kIrm7JWD98kK
+         4FDeRKjH4WBjl8QJZlLgcwJt5Q9Mlphg1WRv4UYeK+tWwL1CiH4+Pc/FyutbYiPy0bgr
+         DLN0zoATGcyTemwrz7rNqZ8oXe5jgKKFnjh53kku9/YjmHEJyPXY7Of2PYWiQVJlCyrG
+         33Xw==
+X-Gm-Message-State: AAQBX9cJ8bvIAWKYjHnQJVbDfIsy4U1oiCvbnzegZRqCJgB3ob5Gdq8y
+        7qPkiqsFjHYJ2jLR167oY5zO/i28UtCb9Qsx1zw=
+X-Google-Smtp-Source: AKy350YhREvdHCLaIM3E+GIkX8AqtxKuIacMDNv7RPZaGmpahRKm1+Oas+9LD694s7AeGD6aep3xqXszgN6JcVG8At4=
+X-Received: by 2002:a63:40c1:0:b0:4fd:5105:eb93 with SMTP id
+ n184-20020a6340c1000000b004fd5105eb93mr8830444pga.3.1680446051785; Sun, 02
+ Apr 2023 07:34:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230329163107.GA3061927@bhelgaas> <0603c75d-82d3-01d5-ffe7-b648c1f02f0e@linux.intel.com>
+In-Reply-To: <0603c75d-82d3-01d5-ffe7-b648c1f02f0e@linux.intel.com>
+From:   Xinghui Li <korantwork@gmail.com>
+Date:   Sun, 2 Apr 2023 22:34:00 +0800
+Message-ID: <CAEm4hYXwGuuZiKb9psXPyau+zKq-w=VboJEuYbS0FbY-iT-EmA@mail.gmail.com>
+Subject: Re: [PATCH v4] PCI: vmd: Add the module param to adjust MSI mode
+To:     "Patel, Nirmal" <nirmal.patel@linux.intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, kbusch@kernel.org,
+        jonathan.derrick@linux.dev, lpieralisi@kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -72,46 +71,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux kernel coding-style suggests to not use mixed-case names. Fix
-checkpatch issue by changing the variable name from camel case to snake
-case.
+On Thu, Mar 30, 2023 at 2:49=E2=80=AFPM Patel, Nirmal
+<nirmal.patel@linux.intel.com> wrote:
+>
+> How about adding a boolean flag by comparing user input for module
+> parameter msi_remap? and add the flag at
+>
+>     - if (!(features & VMD_FEAT_CAN_BYPASS_MSI_REMAP) || msi_flag
+>         || offset[0] || offset[1])
+>
+> Correct if I am wrong, but in this way we can cover all the cases.
+> If user adds msi_remap=3Don, msi_flag=3Dtrue and enables remapping.
+> If user adds msi_remap=3Doff, msi_flag=3Dfalse and disables remapping.
+> If user doesn't add anything, msi_flag=3Dfalse and decision will be
+> made same as current implementation. This will cover guest OS case
+> as well.
+>
+Sorry, I don't quite get your point. How is msi_flag assigned?
+Do you mean when msi_remap=3Dno, the msi_flag is assigned as true?
+And msi_remap=3Doff, the msi_flag is assigned as false?
 
-Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
----
- drivers/staging/rtl8192e/rtllib_crypt_ccmp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/staging/rtl8192e/rtllib_crypt_ccmp.c b/drivers/staging/rtl8192e/rtllib_crypt_ccmp.c
-index 448c0a931c78..f88096bcb181 100644
---- a/drivers/staging/rtl8192e/rtllib_crypt_ccmp.c
-+++ b/drivers/staging/rtl8192e/rtllib_crypt_ccmp.c
-@@ -36,7 +36,7 @@ struct rtllib_ccmp_data {
- 
- 	u32 dot11rsna_stats_ccmp_format_errors;
- 	u32 dot11rsna_stats_ccmp_replays;
--	u32 dot11RSNAStatsCCMPDecryptErrors;
-+	u32 dot11rsna_stats_ccmp_decrypt_errors;
- 
- 	int key_idx;
- 
-@@ -296,7 +296,7 @@ static int rtllib_ccmp_decrypt(struct sk_buff *skb, int hdr_len, void *priv)
- 				pr_debug("CCMP: decrypt failed: STA= %pM\n",
- 					 hdr->addr2);
- 			}
--			key->dot11RSNAStatsCCMPDecryptErrors++;
-+			key->dot11rsna_stats_ccmp_decrypt_errors++;
- 			return -5;
- 		}
- 
-@@ -376,7 +376,7 @@ static void rtllib_ccmp_print_stats(struct seq_file *m, void *priv)
- 		   ccmp->tx_pn, ccmp->rx_pn,
- 		   ccmp->dot11rsna_stats_ccmp_format_errors,
- 		   ccmp->dot11rsna_stats_ccmp_replays,
--		   ccmp->dot11RSNAStatsCCMPDecryptErrors);
-+		   ccmp->dot11rsna_stats_ccmp_decrypt_errors);
- }
- 
- static struct lib80211_crypto_ops rtllib_crypt_ccmp = {
--- 
-2.34.1
-
+Thanks~
