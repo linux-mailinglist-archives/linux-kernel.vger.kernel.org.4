@@ -2,203 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D5D6D3595
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 07:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CF06D352F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 03:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjDBFTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 01:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S230057AbjDBBqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 21:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDBFTt (ORCPT
+        with ESMTP id S229379AbjDBBqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 01:19:49 -0400
-X-Greylist: delayed 12977 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Apr 2023 22:19:46 PDT
-Received: from smtp-out-webmail.u-picardie.fr (smtp-out-webmail.u-picardie.fr [195.83.152.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6211E39A
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 22:19:46 -0700 (PDT)
-Received: from passoire-02.vm.u-picardie.fr (passoire-02.vm.u-picardie.fr [10.0.132.142])
-        by smtp-out-webmail.u-picardie.fr (Postfix) with ESMTP id 4Ppxcn0fGQz48p9;
-        Sun,  2 Apr 2023 03:43:21 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at u-picardie.fr
-Received: from smtp.u-picardie.fr ([10.0.132.227])
-        by passoire-02.vm.u-picardie.fr (passoire-02.vm.u-picardie.fr [10.0.132.142]) (amavisd-new, port 10048)
-        with LMTP id v0AaBkk400r2; Sun,  2 Apr 2023 03:43:13 +0200 (CEST)
-Received: from horde-ext-05 (horde-ext-05.vm.u-picardie.fr [10.0.132.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: g21701498)
-        by smtp.u-picardie.fr (Postfix) with ESMTPSA id 4Ppxcb4WBKz4Nf9;
-        Sun,  2 Apr 2023 03:43:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=u-picardie.fr;
-        s=smtp; t=1680399793; h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=1Q4fsvgrk8Zeu3qzhzVcfoERSl56J1ECCxqTlujNu7c=;
-        b=hs7X9pCSCnDLT/6SZ8MIIqE9B8gghpoTfcn6UlQNlOqeMb7Tbuxp47C8krV87twaKdeO3h
-        D8q2zP1xVqEIZAYM1vGgW0HDPKdisJKB7Rrs4y6kfAR3BTVaHeIG1C2qhKSJ3AfPi9v4kK
-        B5VUerEeOhZS1BQwpnjkajr/Zu94Htmkb5ODoefADgNpK4ZKgatioBCZlESDluhkxtTD2V
-        G6Kocj4litLLjsDs7sEcyH+/PFbGrf0OVc4A7crXpglZVOPtB3Vx3LSH5vHBcUOpaobL5v
-        dR/VbyDD+AJ9TLm7dVBKyuuUPjLPZxbdGoObF3fbhNi80Tfi23QjJS2EiGTG1w==
-Received: from unn-84-17-43-249.cdn77.com (unn-84-17-43-249.cdn77.com
- [84.17.43.249]) by webmail.etud.u-picardie.fr (Horde Framework) with HTTP;
- Sun, 02 Apr 2023 03:43:11 +0200
-Date:   Sun, 02 Apr 2023 03:43:11 +0200
-Message-ID: <20230402034311.Horde.i25m1gdSZbKv-hAPEX_xzsG@webmail.etud.u-picardie.fr>
-From:   St Thomas Hospital UK <guillaume.gobeaut@etud.u-picardie.fr>
-Subject: Job Offer
-Reply-to: recruitment@gstt-nhs-co-uk.com
-User-Agent: Horde Application Framework 5
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        Sat, 1 Apr 2023 21:46:31 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1186BDBE6;
+        Sat,  1 Apr 2023 18:46:30 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso27258717pjb.3;
+        Sat, 01 Apr 2023 18:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680399989;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Bb8e+yvqbOsaU3lAGqJyEfpetYx3Zam8q/Ik/zjoW0=;
+        b=XNvF/LzfVH1AX+2s5DHymZ+Fv+4BPpj48mrxKGgWLnyJB+5xxmP/iVG5W6NXRkqufF
+         iYTNCXGFg/W6f/N1sgRe0dtXFxyOgkcABZRBl9aFpE6dsGUJ0Ivdkl8QAFxlK+K6lzqW
+         YInuQr5TsqV7mA3lEkk2/cBe3Rx/OJku9wJ42d2s5I+5bh75YN/AVuqpDnvzsDK2Y4Fd
+         Jrq/7MNOvEVLwGieXyArtXyXK6iuv1dQ4JYMbF9f+MrSzZFNNj/ICvdv1JKmVmhZnhK0
+         +tUIOPD/gOkIIGhxa37ea2NPDR0HnDiR+2ilanUs/dYv5WXDOIM7TrIOcywW6/qMtoBH
+         +pOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680399989;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Bb8e+yvqbOsaU3lAGqJyEfpetYx3Zam8q/Ik/zjoW0=;
+        b=N8+UQAWivC05OkFO8sr4wWmIYI5UZmzu09pzGu5H+Z3qDaaWtG4RXoryUWU5dL3FeS
+         16+oc06w8rRKBcdEbbnXvZdJUwZYob1hX0b4C1eRA+zkv92UET8o9gsrJ8N7NMw5Qvzf
+         URFpITuJFv0VpnQ4cyM8iwaREyka7dxRkcCPFXN9drHOJwwtZD9RRcWwV6tCrNIHd+1J
+         X1vu2rh8fROmiQaoTnH5vHO7kDGTK5xqVLU3aurg0TEfWAbIodCzYTJ0wopBWsO8XkTD
+         RqGc1MYESjXpPNUIdQLyxrW0vP6T500mm1tCzch8MeZTWssjWHrzXX9lhXJl4InpZZL8
+         K8yA==
+X-Gm-Message-State: AAQBX9cobwjUH7qa4Ba+TqgF23dl0R2nqWUH5u7AZjaryrTZeH9wHXCZ
+        AoV+upUHAcU6W6Cx9JJ1OVg=
+X-Google-Smtp-Source: AKy350aJ6H/Yx3AC2upO019FO/x1hb8yP7V8EQkhbobcviHgBAb/tn32j+OqQk2fXLezOuEWtu9OXw==
+X-Received: by 2002:a17:90b:4a02:b0:234:ba34:71bf with SMTP id kk2-20020a17090b4a0200b00234ba3471bfmr36096554pjb.1.1680399989417;
+        Sat, 01 Apr 2023 18:46:29 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:ac04:c59e:2de:5791])
+        by smtp.gmail.com with ESMTPSA id s17-20020a17090a881100b002372106a5casm3717345pjn.44.2023.04.01.18.46.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Apr 2023 18:46:28 -0700 (PDT)
+Date:   Sat, 1 Apr 2023 18:46:25 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] Input: cma3000_d0x - Clean up some inconsistent indenting
+Message-ID: <ZCjecTFJKnsiwJmT@google.com>
+References: <20230322064158.4043-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: -
-Authentication-Results: smtp.u-picardie.fr;
-        auth=pass smtp.auth=g21701498 smtp.mailfrom=guillaume.gobeaut@etud.u-picardie.fr
-X-Rspamd-Server: passoire-04
-X-Rspamd-Queue-Id: 4Ppxcb4WBKz4Nf9
-X-Spamd-Result: default: False [-1.10 / 1000.00];
-        BAYES_HAM(-3.00)[100.00%];
-        MISSING_TO(2.00)[];
-        MIME_GOOD(-0.10)[text/plain];
-        DKIM_SIGNED(0.00)[u-picardie.fr:s=smtp];
-        NEURAL_HAM(-0.00)[-0.993];
-        MIME_TRACE(0.00)[0:+];
-        FROM_EQ_ENVFROM(0.00)[];
-        RCVD_TLS_LAST(0.00)[];
-        MID_RHS_MATCH_FROMTLD(0.00)[];
-        R_RATELIMIT(0.00)[from(RL3etwgbhaz7x7jfbbsxwirdp8),user(RLgcurcyohztxw7y),user(RLwgotuqu5wsyzzj)];
-        REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-        RCVD_VIA_SMTP_AUTH(0.00)[];
-        HAS_REPLYTO(0.00)[recruitment@gstt-nhs-co-uk.com];
-        RCVD_COUNT_TWO(0.00)[2];
-        FROM_HAS_DN(0.00)[];
-        TAGGED_RCPT(0.00)[];
-        FREEMAIL_ENVRCPT(0.00)[libero.it,alice.it,virgilio.it,gmail.com,postmaster.co.uk,yahoo.it,hotmail.com,yahoo.com,tiscali.it,i.ua,uol.com.br,katamail.com,iol.it,interfree.it,inwind.it,hotmail.it,bigpond.net.au,bigpond.com,icloud.com,mac.com,163.com,protonmail.com,yahoo.com.vn,inbox.ru,naver.com];
-        ARC_NA(0.00)[]
-X-Spam-Status: No, score=3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+In-Reply-To: <20230322064158.4043-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jiapeng,
 
+On Wed, Mar 22, 2023 at 02:41:58PM +0800, Jiapeng Chong wrote:
+> No functional modification involved.
+> 
+> drivers/input/misc/cma3000_d0x.c:328 cma3000_init() warn: inconsistent indenting.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4588
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/input/misc/cma3000_d0x.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/input/misc/cma3000_d0x.c b/drivers/input/misc/cma3000_d0x.c
+> index e6feb73bb52b..c444a44e4576 100644
+> --- a/drivers/input/misc/cma3000_d0x.c
+> +++ b/drivers/input/misc/cma3000_d0x.c
+> @@ -325,7 +325,7 @@ struct cma3000_accl_data *cma3000_init(struct device *dev, int irq,
+>  	input_dev->open = cma3000_open;
+>  	input_dev->close = cma3000_close;
+>  
+> -	 __set_bit(EV_ABS, input_dev->evbit);
+> +	__set_bit(EV_ABS, input_dev->evbit);
 
-    St. Thomas' Hospital UK
-    REF: HR/MED-004/06923
+We should simply remove this, as input_set_abs_params() will set EV_ABS
+bit for us.
 
-St. Thomas' Hospital UK is a large NHS teaching hospital in Central  
-London, England. It is one of the institutions that compose the King's  
-Health Partners, an academic health science Center. Administratively  
-part of the Guy's and St Thomas' NHS Foundation Trust, together with  
-Guy's Hospital and King's College Hospital, it provides the location  
-of the King's College London GKT School of Medical Education.
+>  
+>  	input_set_abs_params(input_dev, ABS_X,
+>  			-data->g_range, data->g_range, pdata->fuzz_x, 0);
+> -- 
+> 2.20.1.7.g153144c
+> 
 
-It is ranked amongst the best Ten (10) hospitals in the United Kingdom  
-with 840 beds. The hospital has provided healthcare freely or under  
-charitable auspices since the 12th century. It is one of London's most  
-famous hospitals, associated with names such as Sir Astley Cooper,  
-William Cheselden, Florence Nightingale, Linda Richards, Edmund  
-Montgomery, Agnes Elizabeth Jones and Sir Harold Ridley. It is a  
-prominent London landmark – largely due to its location on the  
-opposite bank of the River Thames to the Houses of Parliament.
+Thanks.
 
-The largest not-for-profit health system in the world, we provide high  
-quality, personalized and compassionate care to our patients through  
-our dedication to safety, rigorous self-assessment, performance  
-improvement, corporate integrity and health service management. We are  
-committed to being the per-eminent provider of acute inpatient and  
-outpatient health care services.
-
-DESCRIPTION: Following the COVID-19 outbreak, expansion and  
-development in our hospital, we are currently recruiting and employing  
-the services of Medical Professionals  (Specialists, Consultants,  
-General Practitioners) with relevant experiences to fill in the  
-following below vacancies in our health care facility in the United  
-Kingdom.
-
-
-
-AREAS OF VACANCIES:
-
-StH1. ALLERGY & IMMUNOLOGY StH2. ANAESTHESIOLOGY StH3. ANGIOLOGY StH4.  
-ANTHROPOSOPHIC MEDICINE StH5. BREAST SURGERY  StH6. CARDIOLOGY StH7.  
-CRANIOSACRAL PRACTITIONER / THERAPIST StH8. CARDIOTHORACIC SURGERY  
-StH9. CARDIAC SURGERY
-
-StH10. CRITICAL CARE MEDICINE StH11. DENTISTS StH12. DENTAL SURGEON  
-StH13. DERMATOLOGY StH14. ENDOCRINOLOGY
-
-StH15. EMERGENCY MEDICINE StH16. GASTROENTEROLOGY StH17. GENERAL  
-SURGERY StH18. GENERAL PAEDIATRICS  StH19. GENERAL MEDICINE  StH20.  
-HEMATOLOGY StH21. HYPERTENSION SPECIALIST StH22. INTERNAL MEDICINE  
-StH23. INFECTOLOGY StH24. MORPHOLOGY StH25. NEPHROLOGY  StH26.  
-NEUROSURGERY StH27. NEONATOLOGY StH28. ORTHOPAEDICS StH29. ORTHOPAEDIC  
-SURGERY StH30. OTORHINOLARYNGOLOGY  StH31. ORTHODONTIST StH32.  
-OCCUPATIONAL MEDICINE StH33. ORAL AND MAXILLOFACIAL SURGERY StH34.  
-PATHOLOGY
-
-StH35. PLASTIC & RECONSTRUCTIVE SURGERY StH36. PNEUMOLOGY StH37.   
-PAEDIATRIC SURGEON  StH38.  PSYCHOLOGIST StH39.  PHYSIOTHERAPY  StH40.  
-PEDIATRICS StH41. PUBLIC HEALTH  StH42. RADIOLOGY StH43. RHEUMATOLOGY  
-StH44. REHABILITATION MEDICINE StH45. RESPIRATORY MEDICINE  StH46.  
-THORACIC SURGERY  StH47. TRAUMATOLOGY StH48. TRICHOLOGIST StH49. UROLOGY
-
-
-
-JOB LOCATION: London, United Kingdom
-
-JOB COMMENCEMENT: 2023
-
-EMPLOYMENT TYPE: Contract / Full-time
-
-EMPLOYMENT BENEFITS:
-
-
-
-Excellent Salary and Overtime Bonus, Health/life Insurance, Relocation  
-expenses, Research and Educational assistance, Medical, Optical and  
-Dental Care, Family/Single housing accommodation, 24/7 Official  
-Vehicle, Scholarship for employee's dependent within UK schools.
-
-Interested applicants are to send a detailed resume via email  
-attachment along with medical graduation certificate(s) to:   
-recruitment@gstt-nhs-co-uk.com
-
-NOTE: APPLICATION IS OPEN TO INTERESTED PERSONS FROM ALL INTERNATIONAL  
-LOCATIONS, ALL SUCCESSFUL APPLICANTS IN OUR RECRUITMENT PROCESS MUST  
-BE WILLING TO RELOCATE TO THE UK FOR WORK.
-
-Coronavirus (COVID-19)- Stay at home if you feel unwell. If you have a  
-fever, cough and difficulty breathing, seek medical attention and  
-call-in advance. Follow the directions of your local health authority.  
-Source: World Health Organization
-
-
-
-Sincerely,
-
-
-
-Agnes Cardella
-Medical Recruitment Assistant
-
-
-
-St. Thomas' Hospital
-Guy's & St. Thomas NHS Foundation Trust
-London, United Kingdom
-
-Tel:  +447 452 117 852
-Fax: +447 6785 90456
-
-St Thomas' Hospital UK incorporated in England, UK (Reg. No: 06160266)  
-having its registered address at Westminster Bridge Rd, London SE1  
-7EH, England.
-
-
+-- 
+Dmitry
