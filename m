@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766936D368F
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 11:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480726D3695
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 11:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjDBJm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 05:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
+        id S230348AbjDBJmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 05:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjDBJm0 (ORCPT
+        with ESMTP id S230297AbjDBJm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 05:42:26 -0400
+        Sun, 2 Apr 2023 05:42:29 -0400
 Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC3A1BF7B
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 02:42:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E741D1BF76
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 02:42:26 -0700 (PDT)
 Received: from pop-os.home ([86.243.2.178])
         by smtp.orange.fr with ESMTPA
-        id iuDzpwm4hwFKBiuEApeDi6; Sun, 02 Apr 2023 11:42:23 +0200
+        id iuDzpwm4hwFKBiuEDpeDiY; Sun, 02 Apr 2023 11:42:25 +0200
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 02 Apr 2023 11:42:23 +0200
+X-ME-Date: Sun, 02 Apr 2023 11:42:25 +0200
 X-ME-IP: 86.243.2.178
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     mturquette@baylibre.com, sboyd@kernel.org, abelvesa@kernel.org,
@@ -31,9 +31,9 @@ Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH v2 1/4] clk: Compute masks for fractional_divider clk when needed.
-Date:   Sun,  2 Apr 2023 11:42:04 +0200
-Message-Id: <0fd6357242c974259c9e034c6e28a0391c480bf0.1680423909.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH v2 2/4] clk: imx: Remove values for mmask and nmask in struct clk_fractional_divider
+Date:   Sun,  2 Apr 2023 11:42:05 +0200
+Message-Id: <187a2266c3a034a593a151d6e5e6b21118043b5d.1680423909.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1680423909.git.christophe.jaillet@wanadoo.fr>
 References: <cover.1680423909.git.christophe.jaillet@wanadoo.fr>
@@ -48,74 +48,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no real need to pre-compute mmask and nmask when handling
-fractional_divider clk.
-
-They can be computed when needed.
+Now that fractional_divider clk computes mmask and nmask when needed, there
+is no more need to provide them explicitly anymore.
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/clk/clk-fractional-divider.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ drivers/clk/imx/clk-composite-7ulp.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/clk/clk-fractional-divider.c b/drivers/clk/clk-fractional-divider.c
-index 6affe3565025..479297763e70 100644
---- a/drivers/clk/clk-fractional-divider.c
-+++ b/drivers/clk/clk-fractional-divider.c
-@@ -71,6 +71,7 @@ static void clk_fd_get_div(struct clk_hw *hw, struct u32_fract *fract)
- 	struct clk_fractional_divider *fd = to_clk_fd(hw);
- 	unsigned long flags = 0;
- 	unsigned long m, n;
-+	u32 mmask, nmask;
- 	u32 val;
+diff --git a/drivers/clk/imx/clk-composite-7ulp.c b/drivers/clk/imx/clk-composite-7ulp.c
+index 4eedd45dbaa8..e208ddc51133 100644
+--- a/drivers/clk/imx/clk-composite-7ulp.c
++++ b/drivers/clk/imx/clk-composite-7ulp.c
+@@ -19,10 +19,8 @@
+ #define PCG_CGC_SHIFT	30
+ #define PCG_FRAC_SHIFT	3
+ #define PCG_FRAC_WIDTH	1
+-#define PCG_FRAC_MASK	BIT(3)
+ #define PCG_PCD_SHIFT	0
+ #define PCG_PCD_WIDTH	3
+-#define PCG_PCD_MASK	0x7
  
- 	if (fd->lock)
-@@ -85,8 +86,11 @@ static void clk_fd_get_div(struct clk_hw *hw, struct u32_fract *fract)
- 	else
- 		__release(fd->lock);
+ #define SW_RST		BIT(28)
  
--	m = (val & fd->mmask) >> fd->mshift;
--	n = (val & fd->nmask) >> fd->nshift;
-+	mmask = GENMASK(fd->mwidth - 1, 0) << fd->mshift;
-+	nmask = GENMASK(fd->nwidth - 1, 0) << fd->nshift;
-+
-+	m = (val & mmask) >> fd->mshift;
-+	n = (val & nmask) >> fd->nshift;
- 
- 	if (fd->flags & CLK_FRAC_DIVIDER_ZERO_BASED) {
- 		m++;
-@@ -166,6 +170,7 @@ static int clk_fd_set_rate(struct clk_hw *hw, unsigned long rate,
- 	struct clk_fractional_divider *fd = to_clk_fd(hw);
- 	unsigned long flags = 0;
- 	unsigned long m, n;
-+	u32 mmask, nmask;
- 	u32 val;
- 
- 	rational_best_approximation(rate, parent_rate,
-@@ -182,8 +187,11 @@ static int clk_fd_set_rate(struct clk_hw *hw, unsigned long rate,
- 	else
- 		__acquire(fd->lock);
- 
-+	mmask = GENMASK(fd->mwidth - 1, 0) << fd->mshift;
-+	nmask = GENMASK(fd->nwidth - 1, 0) << fd->nshift;
-+
- 	val = clk_fd_readl(fd);
--	val &= ~(fd->mmask | fd->nmask);
-+	val &= ~(mmask | nmask);
- 	val |= (m << fd->mshift) | (n << fd->nshift);
- 	clk_fd_writel(fd, val);
- 
-@@ -260,10 +268,8 @@ struct clk_hw *clk_hw_register_fractional_divider(struct device *dev,
- 	fd->reg = reg;
- 	fd->mshift = mshift;
- 	fd->mwidth = mwidth;
--	fd->mmask = GENMASK(mwidth - 1, 0) << mshift;
- 	fd->nshift = nshift;
- 	fd->nwidth = nwidth;
--	fd->nmask = GENMASK(nwidth - 1, 0) << nshift;
- 	fd->flags = clk_divider_flags;
- 	fd->lock = lock;
- 	fd->hw.init = &init;
+@@ -102,10 +100,8 @@ static struct clk_hw *imx_ulp_clk_hw_composite(const char *name,
+ 		fd->reg = reg;
+ 		fd->mshift = PCG_FRAC_SHIFT;
+ 		fd->mwidth = PCG_FRAC_WIDTH;
+-		fd->mmask  = PCG_FRAC_MASK;
+ 		fd->nshift = PCG_PCD_SHIFT;
+ 		fd->nwidth = PCG_PCD_WIDTH;
+-		fd->nmask = PCG_PCD_MASK;
+ 		fd->flags = CLK_FRAC_DIVIDER_ZERO_BASED;
+ 		if (has_swrst)
+ 			fd->lock = &imx_ccm_lock;
 -- 
 2.34.1
 
