@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FA46D388C
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 16:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9DA6D388F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 16:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjDBOro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 10:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
+        id S231233AbjDBOrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 10:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjDBOrl (ORCPT
+        with ESMTP id S231237AbjDBOrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 10:47:41 -0400
-Received: from out-7.mta1.migadu.com (out-7.mta1.migadu.com [95.215.58.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327866A4C
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 07:47:37 -0700 (PDT)
+        Sun, 2 Apr 2023 10:47:43 -0400
+Received: from out-11.mta1.migadu.com (out-11.mta1.migadu.com [95.215.58.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201106E97;
+        Sun,  2 Apr 2023 07:47:40 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
-        t=1680446855;
+        t=1680446858;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Y4j46yKV1MkIMbUod5R7okabOUM9RsqmvXSzW3LrQHM=;
-        b=bcG0LhLmFLdBV9vKvGTHznzQmIhBE2vaFyzFLew3+VyyYNRixlvvDnBeNVQiutr7lw4v28
-        eL56MwPWOKGNQ3luTVl00ZSeRD6W9/GLC11x2Vbs/0nWFqkLyFX4/m9vfesbJ8S8V+ibdT
-        nPne+7g+JT+YT3HE0E4ThuzevuMqzec=
+        bh=7LxFOte+img0UFi7UGP+5QqnyCqfim/xcGn0o7qDeQM=;
+        b=VKPP+6QbR42EJ9X1ZmEscwfb6ERfkZbYJ+rB03L+ukExjASx5Dd7ZAQotxNtmFtUblcsep
+        3k+cE0DUQ/BoB0tspdw/+pmPXaOydzv2rDdCrsAZM+ItbFf+vo018P1pDVAHVIUAkEmJeI
+        Im0JAoRHkzeA8D55xBqHw9EZHrJjK/g=
 From:   Henrik Grimler <henrik@grimler.se>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         alim.akhtar@samsung.com, m.szyprowski@samsung.com,
@@ -35,10 +35,11 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         replicant@osuosl.org
-Cc:     Henrik Grimler <henrik@grimler.se>
-Subject: [PATCH v7 1/2] ARM: dts: exynos: replace mshc0 alias with mmc-ddr-1_8v property
-Date:   Sun,  2 Apr 2023 16:47:23 +0200
-Message-Id: <20230402144724.17839-2-henrik@grimler.se>
+Cc:     Henrik Grimler <henrik@grimler.se>,
+        Valentine Iourine <iourine@iourine.msk.su>
+Subject: [PATCH v7 2/2] ARM: dts: exynos: add mmc aliases
+Date:   Sun,  2 Apr 2023 16:47:24 +0200
+Message-Id: <20230402144724.17839-3-henrik@grimler.se>
 In-Reply-To: <20230402144724.17839-1-henrik@grimler.se>
 References: <20230402144724.17839-1-henrik@grimler.se>
 MIME-Version: 1.0
@@ -53,27 +54,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, the mshc0 alias has been necessary so that
-MMC_CAP_1_8V_DDR | MMC_CAP_8_BIT_DATA are set for mshc_0/mmc_0.
-However, these capabilities should be described in the device tree so
-that we do not have to rely on the alias.
+Add aliases for eMMC, SD card and WiFi where applicable, so that
+assigned mmc indeces are always the same.
 
-The property mmc-ddr-1_8v replaces MMC_CAP_1_8V_DDR, while bus_width =
-<8>, which is already set for all the mshc0/mmc0 nodes, replaces
-MMC_CAP_8_BIT_DATA.
-
-Also drop other mshc aliases as they are not needed.
-
+Co-developed-by: Anton Bambura <jenneron@protonmail.com>
+Signed-off-by: Anton Bambura <jenneron@protonmail.com>
+[ Tested on exynos5800-peach-pi ]
+Tested-by: Valentine Iourine <iourine@iourine.msk.su>
 Signed-off-by: Henrik Grimler <henrik@grimler.se>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
 ---
 
 Changes since v6:
-* None
+* Fix syntax error in exynos5422-samsung-k3g.dts
 
 Changes since v5:
-* None
+* Make index numbering linear per default (that is, always use 0, 1, 2
+  instead of for example 0, 2, 3) for devices where no documentation
+  or schematics are available that use other numbering.
+* Drop Marek's test tag since numbering has been updated
+* Add mmc0 alias to exynos5422-samsung-k3g, was accidentally dropped in v5
 
 Changes since v4:
 * Do not set mmc-ddr-1_8v for sdhci_0 on Exynos 4210,
@@ -86,353 +86,527 @@ Changes since v3:
 
 Changes since v2:
 * Set mmc-ddr-1_8v in device trees for mshc_0/mmc_0
- arch/arm/boot/dts/exynos3250-artik5.dtsi            | 1 +
- arch/arm/boot/dts/exynos3250-monk.dts               | 1 +
- arch/arm/boot/dts/exynos3250-rinato.dts             | 1 +
- arch/arm/boot/dts/exynos3250.dtsi                   | 3 ---
- arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi     | 1 +
- arch/arm/boot/dts/exynos4412-midas.dtsi             | 1 +
- arch/arm/boot/dts/exynos4412-odroid-common.dtsi     | 1 +
- arch/arm/boot/dts/exynos4412-origen.dts             | 1 +
- arch/arm/boot/dts/exynos4412-p4note.dtsi            | 1 +
- arch/arm/boot/dts/exynos4412.dtsi                   | 1 -
- arch/arm/boot/dts/exynos5250-arndale.dts            | 1 +
- arch/arm/boot/dts/exynos5250-smdk5250.dts           | 1 +
- arch/arm/boot/dts/exynos5250-snow-common.dtsi       | 1 +
- arch/arm/boot/dts/exynos5250-spring.dts             | 1 +
- arch/arm/boot/dts/exynos5250.dtsi                   | 4 ----
- arch/arm/boot/dts/exynos5260-xyref5260.dts          | 1 +
- arch/arm/boot/dts/exynos5410-odroidxu.dts           | 1 +
- arch/arm/boot/dts/exynos5410-smdk5410.dts           | 1 +
- arch/arm/boot/dts/exynos5420-arndale-octa.dts       | 1 +
- arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi | 1 +
- arch/arm/boot/dts/exynos5420-peach-pit.dts          | 1 +
- arch/arm/boot/dts/exynos5420-smdk5420.dts           | 1 +
- arch/arm/boot/dts/exynos5420.dtsi                   | 3 ---
- arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi  | 1 +
- arch/arm/boot/dts/exynos5422-samsung-k3g.dts        | 1 +
- arch/arm/boot/dts/exynos5800-peach-pi.dts           | 1 +
- 26 files changed, 22 insertions(+), 11 deletions(-)
 
+ arch/arm/boot/dts/exynos3250-artik5-eval.dts        | 4 ++++
+ arch/arm/boot/dts/exynos3250-artik5.dtsi            | 5 +++++
+ arch/arm/boot/dts/exynos3250-monk.dts               | 1 +
+ arch/arm/boot/dts/exynos3250-rinato.dts             | 2 ++
+ arch/arm/boot/dts/exynos4210-i9100.dts              | 6 ++++++
+ arch/arm/boot/dts/exynos4210-origen.dts             | 5 +++++
+ arch/arm/boot/dts/exynos4210-smdkv310.dts           | 4 ++++
+ arch/arm/boot/dts/exynos4210-trats.dts              | 6 ++++++
+ arch/arm/boot/dts/exynos4210-universal_c210.dts     | 6 ++++++
+ arch/arm/boot/dts/exynos4412-itop-elite.dts         | 4 ++++
+ arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi     | 4 ++++
+ arch/arm/boot/dts/exynos4412-midas.dtsi             | 3 +++
+ arch/arm/boot/dts/exynos4412-odroid-common.dtsi     | 5 +++++
+ arch/arm/boot/dts/exynos4412-origen.dts             | 5 +++++
+ arch/arm/boot/dts/exynos4412-p4note.dtsi            | 6 ++++++
+ arch/arm/boot/dts/exynos4412-smdk4412.dts           | 4 ++++
+ arch/arm/boot/dts/exynos4412-tiny4412.dts           | 4 ++++
+ arch/arm/boot/dts/exynos5250-arndale.dts            | 5 +++++
+ arch/arm/boot/dts/exynos5250-smdk5250.dts           | 2 ++
+ arch/arm/boot/dts/exynos5250-snow-common.dtsi       | 3 +++
+ arch/arm/boot/dts/exynos5250-spring.dts             | 5 +++++
+ arch/arm/boot/dts/exynos5260-xyref5260.dts          | 5 +++++
+ arch/arm/boot/dts/exynos5410-odroidxu.dts           | 2 ++
+ arch/arm/boot/dts/exynos5410-smdk5410.dts           | 5 +++++
+ arch/arm/boot/dts/exynos5420-arndale-octa.dts       | 5 +++++
+ arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi | 5 +++++
+ arch/arm/boot/dts/exynos5420-peach-pit.dts          | 3 +++
+ arch/arm/boot/dts/exynos5420-smdk5420.dts           | 5 +++++
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi       | 4 ++++
+ arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi  | 4 ++++
+ arch/arm/boot/dts/exynos5422-samsung-k3g.dts        | 4 ++++
+ arch/arm/boot/dts/exynos5800-peach-pi.dts           | 3 +++
+ 32 files changed, 134 insertions(+)
+
+diff --git a/arch/arm/boot/dts/exynos3250-artik5-eval.dts b/arch/arm/boot/dts/exynos3250-artik5-eval.dts
+index a1e22f630638..660cc7fac4db 100644
+--- a/arch/arm/boot/dts/exynos3250-artik5-eval.dts
++++ b/arch/arm/boot/dts/exynos3250-artik5-eval.dts
+@@ -16,6 +16,10 @@ / {
+ 	model = "Samsung ARTIK5 evaluation board";
+ 	compatible = "samsung,artik5-eval", "samsung,artik5",
+ 			"samsung,exynos3250", "samsung,exynos3";
++
++	aliases {
++		mmc0 = &mshc_2;
++	};
+ };
+ 
+ &mshc_2 {
 diff --git a/arch/arm/boot/dts/exynos3250-artik5.dtsi b/arch/arm/boot/dts/exynos3250-artik5.dtsi
-index 0ac3f284fbb8..b81e1a9df126 100644
+index b81e1a9df126..3fdd922e635c 100644
 --- a/arch/arm/boot/dts/exynos3250-artik5.dtsi
 +++ b/arch/arm/boot/dts/exynos3250-artik5.dtsi
-@@ -321,6 +321,7 @@ &mshc_0 {
- 	vmmc-supply = <&ldo12_reg>;
- 	clock-frequency = <100000000>;
- 	max-frequency = <100000000>;
-+	mmc-ddr-1_8v;
- 	samsung,dw-mshc-ciu-div = <1>;
- 	samsung,dw-mshc-sdr-timing = <0 1>;
- 	samsung,dw-mshc-ddr-timing = <1 2>;
+@@ -17,6 +17,11 @@
+ / {
+ 	compatible = "samsung,artik5", "samsung,exynos3250", "samsung,exynos3";
+ 
++	aliases {
++		mmc0 = &mshc_0;
++		mmc1 = &mshc_1;
++	};
++
+ 	chosen {
+ 		stdout-path = &serial_2;
+ 	};
 diff --git a/arch/arm/boot/dts/exynos3250-monk.dts b/arch/arm/boot/dts/exynos3250-monk.dts
-index 80d90fe7fad1..861c26824d4f 100644
+index 861c26824d4f..2de877d4ccc5 100644
 --- a/arch/arm/boot/dts/exynos3250-monk.dts
 +++ b/arch/arm/boot/dts/exynos3250-monk.dts
-@@ -443,6 +443,7 @@ &mshc_0 {
- 	vmmc-supply = <&vemmc_reg>;
- 	clock-frequency = <100000000>;
- 	max-frequency = <100000000>;
-+	mmc-ddr-1_8v;
- 	samsung,dw-mshc-ciu-div = <1>;
- 	samsung,dw-mshc-sdr-timing = <0 1>;
- 	samsung,dw-mshc-ddr-timing = <1 2>;
-diff --git a/arch/arm/boot/dts/exynos3250-rinato.dts b/arch/arm/boot/dts/exynos3250-rinato.dts
-index 1f9cba0607e1..a252a5f667eb 100644
---- a/arch/arm/boot/dts/exynos3250-rinato.dts
-+++ b/arch/arm/boot/dts/exynos3250-rinato.dts
-@@ -624,6 +624,7 @@ &mshc_0 {
- 	vmmc-supply = <&ldo12_reg>;
- 	clock-frequency = <100000000>;
- 	max-frequency = <100000000>;
-+	mmc-ddr-1_8v;
- 	samsung,dw-mshc-ciu-div = <1>;
- 	samsung,dw-mshc-sdr-timing = <0 1>;
- 	samsung,dw-mshc-ddr-timing = <1 2>;
-diff --git a/arch/arm/boot/dts/exynos3250.dtsi b/arch/arm/boot/dts/exynos3250.dtsi
-index cb2c59c98c4a..bd37f1b587f0 100644
---- a/arch/arm/boot/dts/exynos3250.dtsi
-+++ b/arch/arm/boot/dts/exynos3250.dtsi
-@@ -28,9 +28,6 @@ / {
+@@ -22,6 +22,7 @@ / {
+ 
  	aliases {
- 		pinctrl0 = &pinctrl_0;
- 		pinctrl1 = &pinctrl_1;
--		mshc0 = &mshc_0;
--		mshc1 = &mshc_1;
--		mshc2 = &mshc_2;
- 		spi0 = &spi_0;
- 		spi1 = &spi_1;
- 		i2c0 = &i2c_0;
-diff --git a/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi b/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
-index e42e39dc0e40..ca8d42b2ce3b 100644
---- a/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
-+++ b/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
-@@ -476,6 +476,7 @@ &mshc_0 {
- 	vmmc-supply = <&buck9_reg>;
- 	broken-cd;
- 	card-detect-delay = <200>;
-+	mmc-ddr-1_8v;
- 	samsung,dw-mshc-ciu-div = <3>;
- 	samsung,dw-mshc-sdr-timing = <2 3>;
- 	samsung,dw-mshc-ddr-timing = <1 2>;
-diff --git a/arch/arm/boot/dts/exynos4412-midas.dtsi b/arch/arm/boot/dts/exynos4412-midas.dtsi
-index 3be48de5c130..82aed59cba7c 100644
---- a/arch/arm/boot/dts/exynos4412-midas.dtsi
-+++ b/arch/arm/boot/dts/exynos4412-midas.dtsi
-@@ -977,6 +977,7 @@ &mshc_0 {
- 	samsung,dw-mshc-ciu-div = <0>;
- 	samsung,dw-mshc-sdr-timing = <2 3>;
- 	samsung,dw-mshc-ddr-timing = <1 2>;
-+	mmc-ddr-1_8v;
- 	pinctrl-0 = <&sd4_clk &sd4_cmd &sd4_bus4 &sd4_bus8>;
- 	pinctrl-names = "default";
- 	status = "okay";
-diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-index 7c2780d3e37c..25e082fda955 100644
---- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-+++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-@@ -533,6 +533,7 @@ &mshc_0 {
- 
- 	broken-cd;
- 	card-detect-delay = <200>;
-+	mmc-ddr-1_8v;
- 	samsung,dw-mshc-ciu-div = <3>;
- 	samsung,dw-mshc-sdr-timing = <2 3>;
- 	samsung,dw-mshc-ddr-timing = <1 2>;
-diff --git a/arch/arm/boot/dts/exynos4412-origen.dts b/arch/arm/boot/dts/exynos4412-origen.dts
-index ea9fd284386d..f6cebf73b839 100644
---- a/arch/arm/boot/dts/exynos4412-origen.dts
-+++ b/arch/arm/boot/dts/exynos4412-origen.dts
-@@ -498,6 +498,7 @@ &mshc_0 {
- 
- 	broken-cd;
- 	card-detect-delay = <200>;
-+	mmc-ddr-1_8v;
- 	samsung,dw-mshc-ciu-div = <3>;
- 	samsung,dw-mshc-sdr-timing = <2 3>;
- 	samsung,dw-mshc-ddr-timing = <1 2>;
-diff --git a/arch/arm/boot/dts/exynos4412-p4note.dtsi b/arch/arm/boot/dts/exynos4412-p4note.dtsi
-index 317e248f354b..9052b3ebb3e8 100644
---- a/arch/arm/boot/dts/exynos4412-p4note.dtsi
-+++ b/arch/arm/boot/dts/exynos4412-p4note.dtsi
-@@ -693,6 +693,7 @@ &mshc_0 {
- 	samsung,dw-mshc-ciu-div = <0>;
- 	samsung,dw-mshc-sdr-timing = <2 3>;
- 	samsung,dw-mshc-ddr-timing = <1 2>;
-+	mmc-ddr-1_8v;
- 	pinctrl-0 = <&sd4_clk &sd4_cmd &sd4_bus4 &sd4_bus8>;
- 	pinctrl-names = "default";
- 	bus-width = <4>;
-diff --git a/arch/arm/boot/dts/exynos4412.dtsi b/arch/arm/boot/dts/exynos4412.dtsi
-index 7fa3e5fd6801..82a36fb5ee8b 100644
---- a/arch/arm/boot/dts/exynos4412.dtsi
-+++ b/arch/arm/boot/dts/exynos4412.dtsi
-@@ -28,7 +28,6 @@ aliases {
- 		pinctrl3 = &pinctrl_3;
- 		fimc-lite0 = &fimc_lite_0;
- 		fimc-lite1 = &fimc_lite_1;
--		mshc0 = &mshc_0;
+ 		i2c7 = &i2c_max77836;
++		mmc0 = &mshc_0;
  	};
  
- 	bus_acp: bus-acp {
-diff --git a/arch/arm/boot/dts/exynos5250-arndale.dts b/arch/arm/boot/dts/exynos5250-arndale.dts
-index c03bb436bfed..8f01337bb291 100644
---- a/arch/arm/boot/dts/exynos5250-arndale.dts
-+++ b/arch/arm/boot/dts/exynos5250-arndale.dts
-@@ -589,6 +589,7 @@ &mmc_0 {
- 	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_bus4 &sd0_bus8>;
- 	bus-width = <8>;
- 	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
- };
- 
- &mmc_2 {
-diff --git a/arch/arm/boot/dts/exynos5250-smdk5250.dts b/arch/arm/boot/dts/exynos5250-smdk5250.dts
-index 831b3494bd46..f7d4017e1ede 100644
---- a/arch/arm/boot/dts/exynos5250-smdk5250.dts
-+++ b/arch/arm/boot/dts/exynos5250-smdk5250.dts
-@@ -350,6 +350,7 @@ &mmc_0 {
- 	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_bus4 &sd0_bus8>;
- 	bus-width = <8>;
- 	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
- };
- 
- &mmc_2 {
-diff --git a/arch/arm/boot/dts/exynos5250-snow-common.dtsi b/arch/arm/boot/dts/exynos5250-snow-common.dtsi
-index 3d84b9c6dea3..dea2dc818578 100644
---- a/arch/arm/boot/dts/exynos5250-snow-common.dtsi
-+++ b/arch/arm/boot/dts/exynos5250-snow-common.dtsi
-@@ -549,6 +549,7 @@ &mmc_0 {
- 	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_cd &sd0_bus4 &sd0_bus8>;
- 	bus-width = <8>;
- 	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
- };
- 
- /* uSD card */
-diff --git a/arch/arm/boot/dts/exynos5250-spring.dts b/arch/arm/boot/dts/exynos5250-spring.dts
-index 5eca10ecd550..8980cdbdcb3b 100644
---- a/arch/arm/boot/dts/exynos5250-spring.dts
-+++ b/arch/arm/boot/dts/exynos5250-spring.dts
-@@ -431,6 +431,7 @@ &mmc_0 {
- 	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_cd &sd0_bus4 &sd0_bus8>;
- 	bus-width = <8>;
- 	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
- };
- 
- /*
-diff --git a/arch/arm/boot/dts/exynos5250.dtsi b/arch/arm/boot/dts/exynos5250.dtsi
-index 89c8665ac9aa..1a4c6c028d03 100644
---- a/arch/arm/boot/dts/exynos5250.dtsi
-+++ b/arch/arm/boot/dts/exynos5250.dtsi
-@@ -30,10 +30,6 @@ aliases {
- 		gsc1 = &gsc_1;
- 		gsc2 = &gsc_2;
- 		gsc3 = &gsc_3;
--		mshc0 = &mmc_0;
--		mshc1 = &mmc_1;
--		mshc2 = &mmc_2;
--		mshc3 = &mmc_3;
- 		i2c4 = &i2c_4;
- 		i2c5 = &i2c_5;
- 		i2c6 = &i2c_6;
-diff --git a/arch/arm/boot/dts/exynos5260-xyref5260.dts b/arch/arm/boot/dts/exynos5260-xyref5260.dts
-index 387b8494f18f..0fd728bc0b75 100644
---- a/arch/arm/boot/dts/exynos5260-xyref5260.dts
-+++ b/arch/arm/boot/dts/exynos5260-xyref5260.dts
-@@ -89,6 +89,7 @@ &mmc_0 {
- 	cap-mmc-highspeed;
- 	mmc-hs200-1_8v;
- 	card-detect-delay = <200>;
-+	mmc-ddr-1_8v;
- 	samsung,dw-mshc-ciu-div = <3>;
- 	samsung,dw-mshc-sdr-timing = <0 4>;
- 	samsung,dw-mshc-ddr-timing = <0 2>;
-diff --git a/arch/arm/boot/dts/exynos5410-odroidxu.dts b/arch/arm/boot/dts/exynos5410-odroidxu.dts
-index 6ddd1dd2fb0b..1ed73f3b4ac0 100644
---- a/arch/arm/boot/dts/exynos5410-odroidxu.dts
-+++ b/arch/arm/boot/dts/exynos5410-odroidxu.dts
-@@ -513,6 +513,7 @@ &mmc_0 {
- 	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_bus1 &sd0_bus4 &sd0_bus8 &sd0_cd>;
- 	bus-width = <8>;
- 	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
- 	mmc-hs200-1_8v;
- 	vmmc-supply = <&ldo20_reg>;
- 	vqmmc-supply = <&ldo11_reg>;
-diff --git a/arch/arm/boot/dts/exynos5410-smdk5410.dts b/arch/arm/boot/dts/exynos5410-smdk5410.dts
-index b8f953c41c73..b4a74f9cf319 100644
---- a/arch/arm/boot/dts/exynos5410-smdk5410.dts
-+++ b/arch/arm/boot/dts/exynos5410-smdk5410.dts
-@@ -61,6 +61,7 @@ &mmc_0 {
- 	cap-mmc-highspeed;
- 	broken-cd;
- 	card-detect-delay = <200>;
-+	mmc-ddr-1_8v;
- 	samsung,dw-mshc-ciu-div = <3>;
- 	samsung,dw-mshc-sdr-timing = <2 3>;
- 	samsung,dw-mshc-ddr-timing = <1 2>;
-diff --git a/arch/arm/boot/dts/exynos5420-arndale-octa.dts b/arch/arm/boot/dts/exynos5420-arndale-octa.dts
-index 55b7759682a9..5ed55a5b0c67 100644
---- a/arch/arm/boot/dts/exynos5420-arndale-octa.dts
-+++ b/arch/arm/boot/dts/exynos5420-arndale-octa.dts
-@@ -778,6 +778,7 @@ &mmc_0 {
- 	status = "okay";
- 	non-removable;
- 	card-detect-delay = <200>;
-+	mmc-ddr-1_8v;
- 	samsung,dw-mshc-ciu-div = <3>;
- 	samsung,dw-mshc-sdr-timing = <0 4>;
- 	samsung,dw-mshc-ddr-timing = <0 2>;
-diff --git a/arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi b/arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
-index 63675fe189cd..6a51cb14b58a 100644
---- a/arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
-+++ b/arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
-@@ -604,6 +604,7 @@ &mmc_0 {
- 	bus-width = <8>;
- 	cap-mmc-highspeed;
- 	card-detect-delay = <200>;
-+	mmc-ddr-1_8v;
- 	mmc-hs200-1_8v;
- 	non-removable;
- 	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_bus1 &sd0_bus4 &sd0_bus8>;
-diff --git a/arch/arm/boot/dts/exynos5420-peach-pit.dts b/arch/arm/boot/dts/exynos5420-peach-pit.dts
-index 9e2123470cad..df863b909ff7 100644
---- a/arch/arm/boot/dts/exynos5420-peach-pit.dts
-+++ b/arch/arm/boot/dts/exynos5420-peach-pit.dts
-@@ -722,6 +722,7 @@ &mixer {
- /* eMMC flash */
- &mmc_0 {
- 	status = "okay";
-+	mmc-ddr-1_8v;
- 	mmc-hs200-1_8v;
- 	cap-mmc-highspeed;
- 	non-removable;
-diff --git a/arch/arm/boot/dts/exynos5420-smdk5420.dts b/arch/arm/boot/dts/exynos5420-smdk5420.dts
-index 4d7b6d9008a7..0a9371bec3e0 100644
---- a/arch/arm/boot/dts/exynos5420-smdk5420.dts
-+++ b/arch/arm/boot/dts/exynos5420-smdk5420.dts
-@@ -355,6 +355,7 @@ &mmc_0 {
- 	status = "okay";
- 	broken-cd;
- 	card-detect-delay = <200>;
-+	mmc-ddr-1_8v;
- 	samsung,dw-mshc-ciu-div = <3>;
- 	samsung,dw-mshc-sdr-timing = <0 4>;
- 	samsung,dw-mshc-ddr-timing = <0 2>;
-diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
-index 17dec11fb773..dd291f1199f2 100644
---- a/arch/arm/boot/dts/exynos5420.dtsi
-+++ b/arch/arm/boot/dts/exynos5420.dtsi
-@@ -19,9 +19,6 @@ / {
- 	compatible = "samsung,exynos5420", "samsung,exynos5";
+ 	memory@40000000 {
+diff --git a/arch/arm/boot/dts/exynos3250-rinato.dts b/arch/arm/boot/dts/exynos3250-rinato.dts
+index a252a5f667eb..88fb3e68ff02 100644
+--- a/arch/arm/boot/dts/exynos3250-rinato.dts
++++ b/arch/arm/boot/dts/exynos3250-rinato.dts
+@@ -23,6 +23,8 @@ / {
  
  	aliases {
--		mshc0 = &mmc_0;
--		mshc1 = &mmc_1;
--		mshc2 = &mmc_2;
- 		pinctrl0 = &pinctrl_0;
- 		pinctrl1 = &pinctrl_1;
- 		pinctrl2 = &pinctrl_2;
+ 		i2c7 = &i2c_max77836;
++		mmc0 = &mshc_0;
++		mmc1 = &mshc_1;
+ 	};
+ 
+ 	chosen {
+diff --git a/arch/arm/boot/dts/exynos4210-i9100.dts b/arch/arm/boot/dts/exynos4210-i9100.dts
+index bba85011ecc9..37cd4dde53e4 100644
+--- a/arch/arm/boot/dts/exynos4210-i9100.dts
++++ b/arch/arm/boot/dts/exynos4210-i9100.dts
+@@ -25,6 +25,12 @@ memory@40000000 {
+ 		reg = <0x40000000 0x40000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &sdhci_0;
++		mmc1 = &sdhci_2;
++		mmc2 = &sdhci_3;
++	};
++
+ 	chosen {
+ 		stdout-path = "serial2:115200n8";
+ 	};
+diff --git a/arch/arm/boot/dts/exynos4210-origen.dts b/arch/arm/boot/dts/exynos4210-origen.dts
+index 1103e7f92b57..f1927ca15e08 100644
+--- a/arch/arm/boot/dts/exynos4210-origen.dts
++++ b/arch/arm/boot/dts/exynos4210-origen.dts
+@@ -30,6 +30,11 @@ memory@40000000 {
+ 		       0x70000000 0x10000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &sdhci_0;
++		mmc1 = &sdhci_2;
++	};
++
+ 	chosen {
+ 		bootargs = "root=/dev/ram0 rw ramdisk=8192 initrd=0x41000000,8M init=/linuxrc";
+ 		stdout-path = "serial2:115200n8";
+diff --git a/arch/arm/boot/dts/exynos4210-smdkv310.dts b/arch/arm/boot/dts/exynos4210-smdkv310.dts
+index 181c99eca675..b566f878ed84 100644
+--- a/arch/arm/boot/dts/exynos4210-smdkv310.dts
++++ b/arch/arm/boot/dts/exynos4210-smdkv310.dts
+@@ -25,6 +25,10 @@ memory@40000000 {
+ 		reg = <0x40000000 0x80000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &sdhci_2;
++	};
++
+ 	chosen {
+ 		bootargs = "root=/dev/ram0 rw ramdisk=8192 initrd=0x41000000,8M init=/linuxrc";
+ 		stdout-path = "serial1:115200n8";
+diff --git a/arch/arm/boot/dts/exynos4210-trats.dts b/arch/arm/boot/dts/exynos4210-trats.dts
+index b8e9dd23fc51..ff6ee4b2c31b 100644
+--- a/arch/arm/boot/dts/exynos4210-trats.dts
++++ b/arch/arm/boot/dts/exynos4210-trats.dts
+@@ -26,6 +26,12 @@ memory@40000000 {
+ 			0x70000000 0x10000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &sdhci_0;
++		mmc1 = &sdhci_2;
++		mmc2 = &sdhci_3;
++	};
++
+ 	chosen {
+ 		bootargs = "root=/dev/mmcblk0p5 rootwait earlyprintk panic=5";
+ 		stdout-path = "serial2:115200n8";
+diff --git a/arch/arm/boot/dts/exynos4210-universal_c210.dts b/arch/arm/boot/dts/exynos4210-universal_c210.dts
+index 140abfb38e1d..8fe0d5d2be2d 100644
+--- a/arch/arm/boot/dts/exynos4210-universal_c210.dts
++++ b/arch/arm/boot/dts/exynos4210-universal_c210.dts
+@@ -24,6 +24,12 @@ memory@40000000 {
+ 			0x50000000 0x10000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &sdhci_0;
++		mmc1 = &sdhci_2;
++		mmc2 = &sdhci_3;
++	};
++
+ 	chosen {
+ 		bootargs = "root=/dev/mmcblk0p5 rw rootwait earlyprintk panic=5 maxcpus=1";
+ 		stdout-path = "serial2:115200n8";
+diff --git a/arch/arm/boot/dts/exynos4412-itop-elite.dts b/arch/arm/boot/dts/exynos4412-itop-elite.dts
+index 6260da187e92..ded232b04e0d 100644
+--- a/arch/arm/boot/dts/exynos4412-itop-elite.dts
++++ b/arch/arm/boot/dts/exynos4412-itop-elite.dts
+@@ -20,6 +20,10 @@ / {
+ 	model = "TOPEET iTop 4412 Elite board based on Exynos4412";
+ 	compatible = "topeet,itop4412-elite", "samsung,exynos4412", "samsung,exynos4";
+ 
++	aliases {
++		mmc1 = &sdhci_2;
++	};
++
+ 	chosen {
+ 		bootargs = "root=/dev/mmcblk0p2 rw rootfstype=ext4 rootdelay=1 rootwait";
+ 		stdout-path = "serial2:115200n8";
+diff --git a/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi b/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
+index ca8d42b2ce3b..7bc6968af9c3 100644
+--- a/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
++++ b/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
+@@ -23,6 +23,10 @@ memory@40000000 {
+ 		reg = <0x40000000 0x40000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &mshc_0;
++	};
++
+ 	firmware@203f000 {
+ 		compatible = "samsung,secure-firmware";
+ 		reg = <0x0203f000 0x1000>;
+diff --git a/arch/arm/boot/dts/exynos4412-midas.dtsi b/arch/arm/boot/dts/exynos4412-midas.dtsi
+index 82aed59cba7c..e6b949c1a00f 100644
+--- a/arch/arm/boot/dts/exynos4412-midas.dtsi
++++ b/arch/arm/boot/dts/exynos4412-midas.dtsi
+@@ -25,6 +25,9 @@ / {
+ 	aliases {
+ 		i2c11 = &i2c_max77693;
+ 		i2c12 = &i2c_max77693_fuel;
++		mmc0 = &mshc_0;
++		mmc2 = &sdhci_2;
++		mmc3 = &sdhci_3;
+ 	};
+ 
+ 	chosen {
+diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+index 25e082fda955..45ef7b7ba7e0 100644
+--- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
++++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+@@ -13,6 +13,11 @@
+ #include "exynos-mfc-reserved-memory.dtsi"
+ 
+ / {
++	aliases {
++		mmc0 = &mshc_0;
++		mmc2 = &sdhci_2;
++	};
++
+ 	chosen {
+ 		stdout-path = &serial_1;
+ 	};
+diff --git a/arch/arm/boot/dts/exynos4412-origen.dts b/arch/arm/boot/dts/exynos4412-origen.dts
+index f6cebf73b839..23b151645d66 100644
+--- a/arch/arm/boot/dts/exynos4412-origen.dts
++++ b/arch/arm/boot/dts/exynos4412-origen.dts
+@@ -25,6 +25,11 @@ memory@40000000 {
+ 		reg = <0x40000000 0x40000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &mshc_0;
++		mmc1 = &sdhci_2;
++	};
++
+ 	chosen {
+ 		stdout-path = "serial2:115200n8";
+ 	};
+diff --git a/arch/arm/boot/dts/exynos4412-p4note.dtsi b/arch/arm/boot/dts/exynos4412-p4note.dtsi
+index 9052b3ebb3e8..0b89d5682f85 100644
+--- a/arch/arm/boot/dts/exynos4412-p4note.dtsi
++++ b/arch/arm/boot/dts/exynos4412-p4note.dtsi
+@@ -26,6 +26,12 @@ memory@40000000 {
+ 		reg = <0x40000000 0x80000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &mshc_0;
++		mmc2 = &sdhci_2;
++		mmc3 = &sdhci_3;
++	};
++
+ 	chosen {
+ 		stdout-path = &serial_2;
+ 	};
+diff --git a/arch/arm/boot/dts/exynos4412-smdk4412.dts b/arch/arm/boot/dts/exynos4412-smdk4412.dts
+index a40ff394977c..715dfcba1417 100644
+--- a/arch/arm/boot/dts/exynos4412-smdk4412.dts
++++ b/arch/arm/boot/dts/exynos4412-smdk4412.dts
+@@ -22,6 +22,10 @@ memory@40000000 {
+ 		reg = <0x40000000 0x40000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &sdhci_2;
++	};
++
+ 	chosen {
+ 		bootargs = "root=/dev/ram0 rw ramdisk=8192 initrd=0x41000000,8M init=/linuxrc";
+ 		stdout-path = "serial1:115200n8";
+diff --git a/arch/arm/boot/dts/exynos4412-tiny4412.dts b/arch/arm/boot/dts/exynos4412-tiny4412.dts
+index e0b6162d2e2a..5a2dcdc5c28b 100644
+--- a/arch/arm/boot/dts/exynos4412-tiny4412.dts
++++ b/arch/arm/boot/dts/exynos4412-tiny4412.dts
+@@ -17,6 +17,10 @@ / {
+ 	model = "FriendlyARM TINY4412 board based on Exynos4412";
+ 	compatible = "friendlyarm,tiny4412", "samsung,exynos4412", "samsung,exynos4";
+ 
++	aliases {
++		mmc0 = &sdhci_2;
++	};
++
+ 	chosen {
+ 		stdout-path = &serial_0;
+ 	};
+diff --git a/arch/arm/boot/dts/exynos5250-arndale.dts b/arch/arm/boot/dts/exynos5250-arndale.dts
+index 8f01337bb291..d586189966da 100644
+--- a/arch/arm/boot/dts/exynos5250-arndale.dts
++++ b/arch/arm/boot/dts/exynos5250-arndale.dts
+@@ -23,6 +23,11 @@ memory@40000000 {
+ 		reg = <0x40000000 0x80000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &mmc_0;
++		mmc1 = &mmc_2;
++	};
++
+ 	chosen {
+ 		stdout-path = "serial2:115200n8";
+ 	};
+diff --git a/arch/arm/boot/dts/exynos5250-smdk5250.dts b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+index f7d4017e1ede..bb623726ef1e 100644
+--- a/arch/arm/boot/dts/exynos5250-smdk5250.dts
++++ b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+@@ -17,6 +17,8 @@ / {
+ 	compatible = "samsung,smdk5250", "samsung,exynos5250", "samsung,exynos5";
+ 
+ 	aliases {
++		mmc0 = &mmc_0;
++		mmc1 = &mmc_2;
+ 	};
+ 
+ 	memory@40000000 {
+diff --git a/arch/arm/boot/dts/exynos5250-snow-common.dtsi b/arch/arm/boot/dts/exynos5250-snow-common.dtsi
+index dea2dc818578..59b2cc35c37b 100644
+--- a/arch/arm/boot/dts/exynos5250-snow-common.dtsi
++++ b/arch/arm/boot/dts/exynos5250-snow-common.dtsi
+@@ -15,6 +15,9 @@
+ / {
+ 	aliases {
+ 		i2c104 = &i2c_104;
++		mmc0 = &mmc_0; /* eMMC */
++		mmc1 = &mmc_2; /* SD */
++		mmc2 = &mmc_3; /* WiFi */
+ 	};
+ 
+ 	memory@40000000 {
+diff --git a/arch/arm/boot/dts/exynos5250-spring.dts b/arch/arm/boot/dts/exynos5250-spring.dts
+index 8980cdbdcb3b..c12bb17631b7 100644
+--- a/arch/arm/boot/dts/exynos5250-spring.dts
++++ b/arch/arm/boot/dts/exynos5250-spring.dts
+@@ -23,6 +23,11 @@ memory@40000000 {
+ 		reg = <0x40000000 0x80000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &mmc_0;
++		mmc1 = &mmc_1;
++	};
++
+ 	chosen {
+ 		bootargs = "console=tty1";
+ 		stdout-path = "serial3:115200n8";
+diff --git a/arch/arm/boot/dts/exynos5260-xyref5260.dts b/arch/arm/boot/dts/exynos5260-xyref5260.dts
+index 0fd728bc0b75..d072a7398866 100644
+--- a/arch/arm/boot/dts/exynos5260-xyref5260.dts
++++ b/arch/arm/boot/dts/exynos5260-xyref5260.dts
+@@ -18,6 +18,11 @@ memory@20000000 {
+ 		reg = <0x20000000 0x80000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &mmc_0;
++		mmc1 = &mmc_2;
++	};
++
+ 	chosen {
+ 		stdout-path = "serial2:115200n8";
+ 	};
+diff --git a/arch/arm/boot/dts/exynos5410-odroidxu.dts b/arch/arm/boot/dts/exynos5410-odroidxu.dts
+index 1ed73f3b4ac0..882fc77c4bc4 100644
+--- a/arch/arm/boot/dts/exynos5410-odroidxu.dts
++++ b/arch/arm/boot/dts/exynos5410-odroidxu.dts
+@@ -21,6 +21,8 @@ / {
+ 
+ 	aliases {
+ 		ethernet = &ethernet;
++		mmc0 = &mmc_0;
++		mmc1 = &mmc_2;
+ 	};
+ 
+ 	memory@40000000 {
+diff --git a/arch/arm/boot/dts/exynos5410-smdk5410.dts b/arch/arm/boot/dts/exynos5410-smdk5410.dts
+index b4a74f9cf319..bb29b76f6f6a 100644
+--- a/arch/arm/boot/dts/exynos5410-smdk5410.dts
++++ b/arch/arm/boot/dts/exynos5410-smdk5410.dts
+@@ -18,6 +18,11 @@ memory@40000000 {
+ 		reg = <0x40000000 0x80000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &mmc_0;
++		mmc1 = &mmc_2;
++	};
++
+ 	chosen {
+ 		stdout-path = "serial2:115200n8";
+ 	};
+diff --git a/arch/arm/boot/dts/exynos5420-arndale-octa.dts b/arch/arm/boot/dts/exynos5420-arndale-octa.dts
+index 5ed55a5b0c67..809ddda02e53 100644
+--- a/arch/arm/boot/dts/exynos5420-arndale-octa.dts
++++ b/arch/arm/boot/dts/exynos5420-arndale-octa.dts
+@@ -23,6 +23,11 @@ memory@20000000 {
+ 		reg = <0x20000000 0x80000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &mmc_0;
++		mmc1 = &mmc_2;
++	};
++
+ 	chosen {
+ 		stdout-path = "serial3:115200n8";
+ 	};
+diff --git a/arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi b/arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
+index 6a51cb14b58a..f525b2f5e4e0 100644
+--- a/arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
++++ b/arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
+@@ -28,6 +28,11 @@ / {
+ 	 * for more details.
+ 	 */
+ 
++	aliases {
++		mmc0 = &mmc_0;
++		mmc2 = &mmc_2;
++	};
++
+ 	chosen {
+ 		stdout-path = "serial2:115200n8";
+ 	};
+diff --git a/arch/arm/boot/dts/exynos5420-peach-pit.dts b/arch/arm/boot/dts/exynos5420-peach-pit.dts
+index df863b909ff7..7a48f2b32819 100644
+--- a/arch/arm/boot/dts/exynos5420-peach-pit.dts
++++ b/arch/arm/boot/dts/exynos5420-peach-pit.dts
+@@ -31,6 +31,9 @@ / {
+ 	aliases {
+ 		/* Assign 20 so we don't get confused w/ builtin ones */
+ 		i2c20 = &i2c_tunnel;
++		mmc0 = &mmc_0; /* eMMC */
++		mmc1 = &mmc_2; /* uSD */
++		mmc2 = &mmc_1; /* WiFi */
+ 	};
+ 
+ 	backlight: backlight {
+diff --git a/arch/arm/boot/dts/exynos5420-smdk5420.dts b/arch/arm/boot/dts/exynos5420-smdk5420.dts
+index 0a9371bec3e0..e299344e427a 100644
+--- a/arch/arm/boot/dts/exynos5420-smdk5420.dts
++++ b/arch/arm/boot/dts/exynos5420-smdk5420.dts
+@@ -21,6 +21,11 @@ memory@20000000 {
+ 		reg = <0x20000000 0x80000000>;
+ 	};
+ 
++	aliases {
++		mmc0 = &mmc_0;
++		mmc1 = &mmc_2;
++	};
++
+ 	chosen {
+ 		bootargs = "init=/linuxrc";
+ 		stdout-path = "serial2:115200n8";
+diff --git a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+index 30fc677d8bac..2f5b8602e020 100644
+--- a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
++++ b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+@@ -19,6 +19,10 @@ memory@40000000 {
+ 		reg = <0x40000000 0x7ea00000>;
+ 	};
+ 
++	aliases {
++		mmc2 = &mmc_2;
++	};
++
+ 	chosen {
+ 		stdout-path = "serial2:115200n8";
+ 	};
 diff --git a/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi b/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi
-index e6e7e2ff2a26..d1b8e59e2daf 100644
+index d1b8e59e2daf..b4a851aa8881 100644
 --- a/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi
 +++ b/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi
-@@ -472,6 +472,7 @@ &mmc_0 {
- 	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_bus1 &sd0_bus4 &sd0_bus8 &sd0_cd &sd0_rclk>;
- 	bus-width = <8>;
- 	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
- 	mmc-hs200-1_8v;
- 	mmc-hs400-1_8v;
- 	max-frequency = <200000000>;
+@@ -13,6 +13,10 @@
+ #include "exynos5422-odroid-core.dtsi"
+ 
+ / {
++	aliases {
++		mmc0 = &mmc_0;
++	};
++
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		pinctrl-names = "default";
 diff --git a/arch/arm/boot/dts/exynos5422-samsung-k3g.dts b/arch/arm/boot/dts/exynos5422-samsung-k3g.dts
-index df41723d56d4..13134592c199 100644
+index 13134592c199..c35261a338ff 100644
 --- a/arch/arm/boot/dts/exynos5422-samsung-k3g.dts
 +++ b/arch/arm/boot/dts/exynos5422-samsung-k3g.dts
-@@ -597,6 +597,7 @@ rmi4-f12@12 {
- /* eMMC flash */
- &mmc_0 {
- 	status = "okay";
-+	mmc-ddr-1_8v;
- 	mmc-hs200-1_8v;
- 	cap-mmc-highspeed;
- 	non-removable;
+@@ -19,6 +19,10 @@ / {
+ 
+ 	chassis-type = "handset";
+ 
++	aliases {
++		mmc0 = &mmc_0;
++	};
++
+ 	memory@20000000 {
+ 		device_type = "memory";
+ 		reg = <0x20000000 0x80000000>; /* 2 GiB */
 diff --git a/arch/arm/boot/dts/exynos5800-peach-pi.dts b/arch/arm/boot/dts/exynos5800-peach-pi.dts
-index 0ebcb66c6319..37af8fbd215c 100644
+index 37af8fbd215c..1f544f12da6c 100644
 --- a/arch/arm/boot/dts/exynos5800-peach-pi.dts
 +++ b/arch/arm/boot/dts/exynos5800-peach-pi.dts
-@@ -703,6 +703,7 @@ &mixer {
- /* eMMC flash */
- &mmc_0 {
- 	status = "okay";
-+	mmc-ddr-1_8v;
- 	mmc-hs200-1_8v;
- 	mmc-hs400-1_8v;
- 	cap-mmc-highspeed;
+@@ -29,6 +29,9 @@ / {
+ 	aliases {
+ 		/* Assign 20 so we don't get confused w/ builtin ones */
+ 		i2c20 = &i2c_tunnel;
++		mmc0 = &mmc_0; /* eMMC */
++		mmc1 = &mmc_2; /* SD */
++		mmc2 = &mmc_1; /* WiFi */
+ 	};
+ 
+ 	backlight: backlight {
 -- 
 2.30.2
 
