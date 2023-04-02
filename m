@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18516D381E
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752626D381F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjDBNhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 09:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
+        id S230390AbjDBNha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 09:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDBNhD (ORCPT
+        with ESMTP id S229448AbjDBNh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 09:37:03 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F96DBB9A
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 06:37:00 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-62810466cccso1487176b3a.1
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 06:37:00 -0700 (PDT)
+        Sun, 2 Apr 2023 09:37:28 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557C1BBA4;
+        Sun,  2 Apr 2023 06:37:27 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id iw3so25603377plb.6;
+        Sun, 02 Apr 2023 06:37:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680442619;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ViAGGHazEfKTbj7wQQXXZXJrHaZfKLnWPNnZQrD+NW8=;
-        b=b9ICgWg0Hsb7zbdqXKNMRMSL3n8Fo/ffHpwWAKhqV9NN+SpmU+7PNQf0ZTVPygxzYb
-         13cyxX/PY6vMxMYZb90WHSGMrVomsJeeUNfFMutPzCKBcK3z7zekTNI3NPHlOO9bp+3W
-         5Ebvlg/sMPWguXCuJfBmkVQWWqlWmIVrn1O7SysHXtEN7HXwE2D5zOlemIU56zVNkJfE
-         rJh3BWCwp3Payh6cixnnRYOujFqkLuJHjSb6FECh8jKq3xvGYT+7oAcodgr06vzIGvKl
-         8O+73QxyAIeljOw4tbbATbnQ4JIx+XDgnNn8rl9CuoqSGnAumV2VRcQCJVNvAgzLspEI
-         mpAw==
+        d=gmail.com; s=20210112; t=1680442647;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJE4pnnm0VUmz2w+YWBprkOi8rvRZMPtDmxykOoTYl0=;
+        b=FMU7hZhlEGokCgTkSlI+CZmrkXTLHUq3462QmDzr5XRKGXHE+wRKAvyF0KjAjp7AzR
+         x5S51/tBKEqm8uzwaDMYmZTbWA0niw5NY8M9V+HOcyCDcT9FugPaiJD1LDkDLHGHbizM
+         19IIhh95/d30jcBFqPsvYFljT0N+5Q5IKs/34h4iZxqps1srA0b09IgQwZ2mCV02IexC
+         rwIvvHuN0mpWovDft1j8/QR3dkpDSaZu+bF1dJehUk2MRUFSa1KBcz0CvDDNmAOMPJea
+         +bvAOf+M1j2hQCRqSX8m3aTUnVR/9yvheXX5gCGc0E5nX6xYC5K+FZXUddDJsCkW1nkl
+         8M4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680442619;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ViAGGHazEfKTbj7wQQXXZXJrHaZfKLnWPNnZQrD+NW8=;
-        b=zL5iiYUvZjTJllL8Tpt7UOMPlqchQDz3EkuAxSpnHdOD5N4pB3H4GYiBfCZoDGfsA2
-         HHlh9Gux9Wv2KAXTokaFKIvQiPZ2j2J2LOhxcJdx36vlhx6bTcs/f4ojWvvM70ntNAGH
-         IoMgK7mbhqnfLA2cgWMCynjkWkWqrUUy9HuUURNOOCAN+sAB8u9LAfLC8t1BFYgoLpoA
-         aIZnOxF/8W7yQUZC1WxSbjUK3d2N1dgdmY5g+vaim8IxwJOOxGPnHU0HfjnzHHiQM0y9
-         yXleBesMUqAvyj7aL3QINBXTtTZfRz4HoVG39KhkJKkxXpQDyBaHo2fnFKPA/bLhN+UP
-         mVQg==
-X-Gm-Message-State: AAQBX9cEQ6MWX1P0YGNcrd28uylOhBiogj6Fj3boof/ACnfdOfk6EZV4
-        PIWhUk/c8dsiqSKgh14OukPHOg==
-X-Google-Smtp-Source: AKy350bi6bpU6bw1qBKGFkvnb1QX/0FDCD1BDFcHg5UYXr1LHxDfk6wd8gho3vRtQwxIP7bZyu5ZlQ==
-X-Received: by 2002:a17:90a:bc83:b0:23f:6872:e37c with SMTP id x3-20020a17090abc8300b0023f6872e37cmr10973754pjr.0.1680442619599;
-        Sun, 02 Apr 2023 06:36:59 -0700 (PDT)
-Received: from [10.200.9.195] ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id g11-20020a17090a300b00b00233e860f69esm7993719pjb.56.2023.04.02.06.36.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Apr 2023 06:36:59 -0700 (PDT)
-Message-ID: <3bd45269-557d-db5a-2224-3d960ba3159d@bytedance.com>
-Date:   Sun, 2 Apr 2023 21:36:53 +0800
+        d=1e100.net; s=20210112; t=1680442647;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yJE4pnnm0VUmz2w+YWBprkOi8rvRZMPtDmxykOoTYl0=;
+        b=wmKnOX/uqaridGqqKRvtteTkVmnzU/btGRJEF6kXHGF/jRM21vOClUcAAg1WoGEp85
+         YPMrrjLPGbMCuNHMy3NF7CzOkuchNQI0RPRmmRsIBkm1IMqvH5JW63VdPDbHTkxF5sue
+         Qc2W1SQv0DTcmEFGt9Fjm3iNxkW7ce3QozJvsXr0qEklcXTCoSym+K4rsT12KVW8R1em
+         i8jWsF8cS9nhBn3TdN7XojbrEPxgAhMhZPFXfPFd8LdRVpWT4r37DqvW5C1WJsyvwrMa
+         V4orchK7uvHamE8u5Lg8tBzFVOM/Czdjy1W4uopwLytLpNL95aQnlRJG3JY1jAG1bwkY
+         1UtA==
+X-Gm-Message-State: AAQBX9d0HpT6RKFGU0AGO0jksXh0ZkRSavz+DejczmSRXLfGx8kFXKdN
+        WIAWge2NCGA4QtekzOnAgeM=
+X-Google-Smtp-Source: AKy350Yxz2CiSI0uFgBbOpXYxtZGf7jmzV6zy8iqCUmxCu8v3vRH8lvCoUEkqjO2J2gRF+NfjeTDAA==
+X-Received: by 2002:a17:903:28c5:b0:1a2:9183:a499 with SMTP id kv5-20020a17090328c500b001a29183a499mr9689820plb.34.1680442646834;
+        Sun, 02 Apr 2023 06:37:26 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-38.three.co.id. [116.206.12.38])
+        by smtp.gmail.com with ESMTPSA id jf2-20020a170903268200b001a27e5ee634sm4798774plb.33.2023.04.02.06.37.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Apr 2023 06:37:26 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 893461066A7; Sun,  2 Apr 2023 20:37:23 +0700 (WIB)
+Date:   Sun, 2 Apr 2023 20:37:23 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-stable@vger.kernel.org
+Subject: Re: [PATCH] mm/swap: fix swap_info_struct race between swapoff and
+ get_swap_pages()
+Message-ID: <ZCmFExoOsho9pt+Q@debian.me>
+References: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH 1/2] mm: swap: use folio_batch_reinit() in
- folio_batch_move_lru()
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     willy@infradead.org, lstoakes@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230331095858.51810-1-zhengqi.arch@bytedance.com>
- <20230331150430.546de954b0a7918f042c562e@linux-foundation.org>
-Content-Language: en-US
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20230331150430.546de954b0a7918f042c562e@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kZSKbbifSvmxXjNz"
+Content-Disposition: inline
+In-Reply-To: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,83 +76,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
 
-On 2023/4/1 06:04, Andrew Morton wrote:
-> On Fri, 31 Mar 2023 17:58:57 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
-> 
->> In folio_batch_move_lru(), the folio_batch is not freshly
->> initialised, so it should call folio_batch_reinit() as
->> pagevec_lru_move_fn() did before.
->>
->> ...
->>
->> --- a/mm/swap.c
->> +++ b/mm/swap.c
->> @@ -222,7 +222,7 @@ static void folio_batch_move_lru(struct folio_batch *fbatch, move_fn_t move_fn)
->>   	if (lruvec)
->>   		unlock_page_lruvec_irqrestore(lruvec, flags);
->>   	folios_put(fbatch->folios, folio_batch_count(fbatch));
->> -	folio_batch_init(fbatch);
->> +	folio_batch_reinit(fbatch);
->>   }
->>   
->>   static void folio_batch_add_and_move(struct folio_batch *fbatch,
-> 
-> Well...  why?  This could leave the kernel falsely thinking that the
-> folio's pages have been drained from the per-cpu LRU addition
-> magazines.
-> 
-> Maybe that's desirable, maybe not, but I think this change needs much
-> much more explanation describing why it is beneficial.
-> 
-> 
-> folio_batch_reinit() seems to be a custom thing for the mlock code -
-> perhaps it just shouldn't exist, and its operation should instead be
-> open-coded in mlock_folio_batch().
+--kZSKbbifSvmxXjNz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The folio_batch_reinit() corresponds to pagevec_reinit(),
-the pagevec_reinit() was originally used in pagevec_lru_move_fn()
-and mlock_pagevec(), not a custom thing for the mlock code.
+On Sun, Apr 02, 2023 at 06:19:20AM +0800, Rongwei Wang wrote:
+> Without this modification, a core will wait (mostly)
+"Currently, a core will ..."
 
+> But, a worse consequence, panic also can be caused by
+"However, in the worst case, ..."
 
-The commit c2bc16817aa0 ("mm/swap: add folio_batch_move_lru()")
-introduces folio_batch_move_lru() to replace pagevec_lru_move_fn(),
-but calls folio_batch_init() (corresponding to pagevec_init()) instead
-of folio_batch_reinit() (corresponding to pagevec_reinit()). This
-change was not explained in the commit message and seems like an
-oversight.
+> In this patch, we lock p->lock before calling
+"Lock p->lock before calling ..."
 
-> 
-> 
-> The dynamics and rules around ->percpu_pvec_drained are a bit
-> mysterious.  A code comment which explains all of this would be
-> useful.
+> We also find this problem exists in stable 5.10.
 
-The commit d9ed0d08b6c6 ("mm: only drain per-cpu pagevecs once per
-pagevec usage") originally introduced the ->drained (which was later
-renamed to ->percpu_pvec_drained by commit 7f0b5fb953e7), which is
-intended to drain per-cpu pagevecs only once per pagevec usage.
+So, you claim that 5.15.y and 6.1.y aren't affected, right?
 
-Maybe it would be better to add the following code comment:
+Also, Cc: stable@vger.kernel.org on the SoB area (as pointed by kernel
+test robot [1].
 
-diff --git a/mm/swap.c b/mm/swap.c
-index 423199ee8478..107c4a13e476 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -1055,6 +1055,7 @@ EXPORT_SYMBOL(release_pages);
-   */
-  void __pagevec_release(struct pagevec *pvec)
-  {
-+       /* Only drain per-cpu pagevecs once per pagevec usage */
-         if (!pvec->percpu_pvec_drained) {
-                 lru_add_drain();
-                 pvec->percpu_pvec_drained = true;
+Thanks.
 
-Please let me know if I missed something.
+[1]: https://lore.kernel.org/stable/ZCiuGEkyk%2F1Afisk@ec83ac1404bb/
+=20
+--=20
+An old man doll... just what I always wanted! - Clara
 
-Thanks,
-Qi
+--kZSKbbifSvmxXjNz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCmFEwAKCRD2uYlJVVFO
+o7N9AQD6KAL9B/rP0BIGjyYtOvCZvnVm5e3JKQg+Aoc/W8gKbAD8CecN3SdI0E2k
+n1uesdLFbR0vE9W8lDWjeZLr3z0cnwU=
+=P7MJ
+-----END PGP SIGNATURE-----
+
+--kZSKbbifSvmxXjNz--
