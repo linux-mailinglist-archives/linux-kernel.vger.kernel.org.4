@@ -2,123 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 199286D3AEF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 01:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F85E6D3AF5
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 01:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjDBX2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 19:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
+        id S230105AbjDBXht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 19:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDBX2b (ORCPT
+        with ESMTP id S229459AbjDBXhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 19:28:31 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09993AF29;
-        Sun,  2 Apr 2023 16:28:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PqVZf0BkHz4x1d;
-        Mon,  3 Apr 2023 09:28:25 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680478108;
-        bh=scqXINyn5PkPyesGIzKR6g3bD+rz5JUuwzD7IWl2tZg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FX4dsGWmC4R3W/oLVGwg4sHwZHrwRlC3hUlM/9eXh1OT4DJwlfkd2ezkviDcaju5+
-         ACq5hmXEW3JF7BFsETAAxzhqhB8Vfd0yanr5psftOE1zwWL83XLiAq8PUE8iWGffsz
-         YmeRtUvKlVJeV0JCPpEZh6I1wdWIKeYCEMpN/1mehw5Mtg1l5zSuvxAaQ+MA755xwM
-         GMVHy/7pRsi+MVHfV9fWLfiSnISFTbIdOuiglmBf2CwWe5Jl8UX6UvdXY23wg8wqYx
-         YMCXgT4E50BprAKhuPQ21gzcPPHgkm1QJU5Butwf2E4h4h4slf6723MO6kAeBKJB5X
-         j6aYcZUo+RAFw==
-Date:   Mon, 3 Apr 2023 09:28:24 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Abel Vesa <abel.vesa@nxp.com>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Abel Vesa <abel.vesa@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>
-Subject: linux-next: manual merge of the clk-imx tree with the clk tree
-Message-ID: <20230403092824.67117617@canb.auug.org.au>
+        Sun, 2 Apr 2023 19:37:46 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7AA59F9;
+        Sun,  2 Apr 2023 16:37:45 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id w4so26345169plg.9;
+        Sun, 02 Apr 2023 16:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680478665; x=1683070665;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ao3ul6XNYxlEloMUF9UKkjGjNYX4IkQEThyq71yxJ2A=;
+        b=Q/jRySSY8fGAlaUWG/dY+2Dnha50fi9OCf9j2El+U6gSR2LuZ03KL1hv7MuPfon3D7
+         546qgkoWpaulYChTI8l4S/EyZY2hqAG4wAkMmtuJAL6ePaTB6P+cf52LSTOsfpzAnHyG
+         4ePVtgVxAbV9MTj3+wp9t0wGNNhlb/7jdhEbQnFurqoJqsP3Op2fCGni9uiT3cSVHwFG
+         +npdz5fI4qIq2DIFz1vAHweMRswod/Wbsp4yQL+lUCWfWNr/WNfXzkUj62YzGcz+ZAFC
+         BdeW7gXFC/33DG5LoyaGzYlXt1BL6huU2jcFLNWFEAHSTHiIQJ6YK0QqHSe/wBeftczS
+         B43A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680478665; x=1683070665;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ao3ul6XNYxlEloMUF9UKkjGjNYX4IkQEThyq71yxJ2A=;
+        b=QFXB7936NuSfiSYIeunQm+txByuVXonQs3yqCWz1d6q76oWb+5tBAEJIt7RcZJfDmn
+         6kF546BDB/ecXqYI8Gmb5i09vCDGuUpOvEB0WQdO1rt+mfFbP6M5R3+mL0DGRFBUyLIK
+         C/fwaXXkj2PniDsljOvwEpmhG93HvUdkKfmRaRmJLt0f6OwnPSMiAFgDb/hb7SCgJmu+
+         0/16SsTrzwQ978i9xyZk9JYQdi6pXWAMrIJrFWP6pBRWq3DpichFLaxAgpVgomUPUyAH
+         61LIRwQjjLb/bZQAYWpim7O+VjN0n8HPoAD7S15NgSQIHSIrBNbbQYhG5n+7vdCKHFoM
+         nxqg==
+X-Gm-Message-State: AO0yUKXS3qkYqriyHGwPIXlGA3uokM6VDyt5/OY8q7bgUfhHJQZMFtcF
+        jAeAOVPdh8L3W6KGs858KHagznvo/CU=
+X-Google-Smtp-Source: AK7set9jxQYoQMogbP0M/KKqLkkBPUS4uGQyGeVdmMM7N0Kpd769vFGXVKEZSrBo8uWL0aNTS8xHYA==
+X-Received: by 2002:a05:6a20:6589:b0:d9:3440:9a26 with SMTP id p9-20020a056a20658900b000d934409a26mr30214216pzh.20.1680478664732;
+        Sun, 02 Apr 2023 16:37:44 -0700 (PDT)
+Received: from dhcp-172-26-102-232.dhcp.thefacebook.com ([2620:10d:c090:400::5:3c8])
+        by smtp.gmail.com with ESMTPSA id 18-20020aa79212000000b0062db34242aesm5484548pfo.167.2023.04.02.16.37.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Apr 2023 16:37:44 -0700 (PDT)
+Date:   Sun, 2 Apr 2023 16:37:40 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     Song Liu <song@kernel.org>, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
+Message-ID: <20230402233740.haxb7lgfavcoe27f@dhcp-172-26-102-232.dhcp.thefacebook.com>
+References: <20230326092208.13613-1-laoar.shao@gmail.com>
+ <CAPhsuW43EiH0tVKU8s+JwV_V6EBETTDyXsAmMzAftpVtcgLHag@mail.gmail.com>
+ <CALOAHbCqCb3xmSpNe1Qvm75GBY4ZEGrAOHfVJvpZV5t=akTTgQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WS.qhpd_80KTRl8sU9poFhx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALOAHbCqCb3xmSpNe1Qvm75GBY4ZEGrAOHfVJvpZV5t=akTTgQ@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WS.qhpd_80KTRl8sU9poFhx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 28, 2023 at 11:47:31AM +0800, Yafang Shao wrote:
+> On Tue, Mar 28, 2023 at 3:04 AM Song Liu <song@kernel.org> wrote:
+> >
+> > On Sun, Mar 26, 2023 at 2:22 AM Yafang Shao <laoar.shao@gmail.com> wrote:
+> > >
+> > > Currently only CAP_SYS_ADMIN can iterate BPF object IDs and convert IDs
+> > > to FDs, that's intended for BPF's security model[1]. Not only does it
+> > > prevent non-privilidged users from getting other users' bpf program, but
+> > > also it prevents the user from iterating his own bpf objects.
+> > >
+> > > In container environment, some users want to run bpf programs in their
+> > > containers. These users can run their bpf programs under CAP_BPF and
+> > > some other specific CAPs, but they can't inspect their bpf programs in a
+> > > generic way. For example, the bpftool can't be used as it requires
+> > > CAP_SYS_ADMIN. That is very inconvenient.
+> >
+> > Agreed that it is important to enable tools like bpftool without
+> > CAP_SYS_ADMIN. However, I am not sure whether we need a new
+> > namespace for this. Can we reuse some existing namespace for this?
+> >
+> 
+> It seems we can't.
 
-Hi all,
+Yafang,
 
-Today's linux-next merge of the clk-imx tree got a conflict in:
+It's a Nack.
 
-  include/linux/clk-provider.h
+The only thing you've been trying to "solve" with bpf namespace is to
+allow 'bpftool prog show' iterate progs in the "namespace" without CAP_SYS_ADMIN.
+The concept of bpf namespace is not even close to be thought through.
+Others pointed out the gaps in the design. Like bpffs. There are plenty.
+Please do not send patches like this in the future.
+You need to start with describing the problem you want to solve,
+then propose _several_ solutions, describe their pros and cons,
+solicit feedback, present at the conferences (like LSFMMBPF or LPC),
+and when the community agrees that 1. problem is worth solving,
+2. the solution makes sense, only then work on patches.
 
-between commit:
-
-  d54c1fd4a51e ("clk: Add Sunplus SP7021 clock driver")
-
-from the clk tree and commit:
-
-  27fc5ec673b5 ("clk: Introduce devm_clk_hw_register_gate_parent_data()")
-
-from the clk-imx tree.
-
-These add the same macro, but the letter has the docmenting comment wrong.
-
-I fixed it up (I just used the former) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/clk-provider.h
-index faad3cdc1e48,92b7c794c627..000000000000
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@@ -608,9 -608,9 +608,10 @@@ struct clk *clk_register_gate(struct de
-  	__devm_clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL, \
-  			       NULL, (flags), (reg), (bit_idx),		      \
-  			       (clk_gate_flags), (lock))
-+=20
-  /**
- - * devm_clk_hw_register_gate - register a gate clock with the clock frame=
-work
- + * devm_clk_hw_register_gate_parent_data - register a gate clock with the
- + * clock framework
-   * @dev: device that is registering this clock
-   * @name: name of this clock
-   * @parent_data: parent clk data
-
---Sig_/WS.qhpd_80KTRl8sU9poFhx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqD5gACgkQAVBC80lX
-0Gz3wgf8CigVtHHO3b8Z8RPXi8Zh42yH4ewp1KFVUsR8i8tPg74ibnABKdkum8Hx
-PrGp4H0kjlxUxDP1dkGP/vXgZJy3yJRa5IQByvNs5nqJG01J7dk8CHw+iaHD5+bS
-nLua0IrNloAc20gD9NBpL0L+yVmciKY8B1x7Kj8pjayJkC09tH5wkx4ciSXdRFWm
-hsBQYchYAq1myBc7i0C2mAsshz7q53T1kOiMk87B6PvfCazOsSwY1wY8JtVuHyVK
-kSqnfEWhrMfnU4A+ar/sgWiiXLc8NceSr+eVSeRAyhro3qNdInu3R11zpwUtURMy
-n4SNybMsSML5P2QMAXpxyJyFvH3qFg==
-=KqOs
------END PGP SIGNATURE-----
-
---Sig_/WS.qhpd_80KTRl8sU9poFhx--
+"In container environment, some users want to run bpf programs in their containers."
+is something Song brought up at LSFMMBPF a year ago.
+At that meeting most of the folks agreed that there is a need to run bpf
+in containers and make sure that the effect of bpf prog is limited to a container.
+This new namespace that creates virtual IDs for progs and maps doesn't come
+close in solving this task.
