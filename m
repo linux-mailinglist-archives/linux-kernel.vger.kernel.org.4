@@ -2,96 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7766D38EB
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 18:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FDB6D38F3
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 18:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjDBQAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 12:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        id S229448AbjDBQVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 12:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDBQAI (ORCPT
+        with ESMTP id S230383AbjDBQVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 12:00:08 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DDBBB9C
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 09:00:07 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id r11so108164322edd.5
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 09:00:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680451205; x=1683043205;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j6lbVzylHSD1bkwqF+EEh8vp3rCF+fULXBoCye8hbUI=;
-        b=oT3hW/sIwwMuZlR7SThF3UUX3oUtfKDo9uiBq3hqWEZJ8TBfOfLq4pkxl1obxYQDBI
-         OseLrkQA/pUcaiPM/nwn2FK5a9AxbTkcy63hrcdQa7Kw1AeLpZ0h+RlQtbbnt2b5Tshm
-         WGbIeWLGsu/cI0O9EJ6xM//TLbCcWXFMpMvNBjwiw1rpVk7LEroXiZZX5Ku22aO0Fxcc
-         HBLdPlkuraleN0fC0khsQ+yblRFJqoDaJ0XSwORO4R9zIXSQA5a6YlnLYT+k7dGh9Kd9
-         mgbkZBTw/xJh+nmoPozDal+wl/zqzDY5vAMvRh+O3rUiLjQX0ChfGKWsgcPis8XfzC1L
-         OvAQ==
+        Sun, 2 Apr 2023 12:21:43 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B59A5E1
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 09:21:42 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id n9-20020a056e02100900b00325c9240af7so17673183ilj.10
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 09:21:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680451205; x=1683043205;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j6lbVzylHSD1bkwqF+EEh8vp3rCF+fULXBoCye8hbUI=;
-        b=bRTYWI/fPHLB8XICcLd0l/2QVODFF83JZNZISOitAYD7g3qV+9TdlTv/qA2Tkl31Kv
-         Bl/tGKwiGIZZTNjTy4u4oZ2UU0sWeDm/wkN9nCiLWCp8T9CwogZk72J3xcekEyLJt/dh
-         u61hbetGTIgIjxNY52zKkLOKo7zq5repW4BCx40bRC8HzGOiuFS/iPPtUdoidCOolsQz
-         KY5tLv3zAfmzZwA5nax4nfEiDxBcF2JEx0tkLzl2X+1+3JPkt6Bf/sdpaABmaFdLenCN
-         hiWg06RCYbGuvqm2B/l6pRPU11MolWscCcpYVtGTNhht3Q5Ogy6FoXYX28WX1mhEbSSr
-         1xvw==
-X-Gm-Message-State: AAQBX9cuckAwQTp01m2aAf9MTjU3mPFjzBTZeyoQHQGcvo5XNTHc12BV
-        hWawtKRxn6LWQdeCmJbzjyuelJJrdB0=
-X-Google-Smtp-Source: AKy350brr9ZcZTZfYr38J1LydLHUvz8vf6PleV3OLbnjTdr5uVSjVgjB/czCAO0bqxm5nTG8iwvmJw==
-X-Received: by 2002:a17:906:1c4:b0:931:5145:c51f with SMTP id 4-20020a17090601c400b009315145c51fmr6452359ejj.4.1680451205506;
-        Sun, 02 Apr 2023 09:00:05 -0700 (PDT)
-Received: from [192.168.0.102] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id b10-20020a1709065e4a00b0093dbb008281sm3354798eju.130.2023.04.02.09.00.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Apr 2023 09:00:04 -0700 (PDT)
-Message-ID: <91cc4474-8991-6762-841e-8936d3bb66d2@gmail.com>
-Date:   Sun, 2 Apr 2023 18:00:03 +0200
+        d=1e100.net; s=20210112; t=1680452501; x=1683044501;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x07zT0iCo8wKSCVHAjMWe9fzPd0xcWscECCQqfth9ec=;
+        b=8BYRUCvmxy+hgaVp9RQ5N6XPmaQp9dO3oTp1yGj3gLgNPs6ENPCZKgiNkYHMIigbIo
+         vNK+NdLXRcx8KsCtg/WhDm9diQjb85rXbZCXwy5NAhkB2AcTy/BsgZ1li6NUs41m3ZRH
+         986lYyptCmQByGbHovpMts9zk7fp6UUuJQ1wTi+uBnqu3Pgm/BgNeCJl0+0gwz5phP+G
+         V93HbuXcAXfejHmIJa093985p4kelvZc9xTni5d8enPm0qI4VwH+83B5F7UGbp4YjwW5
+         iWkO12BbKfIcqFcydIFNOqLUyXpukoTOoOAl+N4tKvgbyHWO0kmZWQ+ExXnT1OdBrxtK
+         nVFg==
+X-Gm-Message-State: AO0yUKWbx3MLEgJNcoNWLqRhnHYU8PLrCH8kYIMCmSfX0xtI2PVckXN3
+        CIQpyP7cORGCxZmhkIXH4x1/iJELyO1xpNwqxqAiqOBBAsRZ
+X-Google-Smtp-Source: AK7set/bi4Wd8lT1rCMiTGzNOyybxOUDZmKUSa9kdAtlHK8uWQPRWN6MUSWo+nKl5CElpWkF1FRUS2BSDjTGx3V8qNzYyMWb71Em
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 0/5] staging: rtl8192e: fix checkpatch issues in
- rtllib_crypt_ccmp.c
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>,
-        outreachy@lists.linux.dev
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <cover.1680445545.git.kamrankhadijadj@gmail.com>
-Content-Language: en-US
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <cover.1680445545.git.kamrankhadijadj@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:db05:0:b0:745:6788:149f with SMTP id
+ q5-20020a5edb05000000b007456788149fmr12143135iop.0.1680452501731; Sun, 02 Apr
+ 2023 09:21:41 -0700 (PDT)
+Date:   Sun, 02 Apr 2023 09:21:41 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006d817e05f85cd6a8@google.com>
+Subject: [syzbot] [nfc?] UBSAN: shift-out-of-bounds in nci_activate_target
+From:   syzbot <syzbot+0839b78e119aae1fec78@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/2/23 16:32, Khadija Kamran wrote:
-> Fix several issues reported by checkpatch in rtllib_crypt_ccmp.c file.
-> 
-> Changes in v2:
->   - Update variable_name in PATCH 3, 4 and 5 to dot11rsna_{variable_name}
->   - Remove comment from PATCH 3
-> 
-> Khadija Kamran (5):
->    staging: rtl8192e: remove extra blank lines in rtllib_crypt_ccmp.c
->    staging: rtl8192e: fix alignment to match open parenthesis
->    staging: rtl8192e: avoid CamelCase <dot11RSNAStatsCCMPFormatErrors>
->    staging: rtl8192e: avoid CamelCase <dot11RSNAStatsCCMPReplays>
->    staging: rtl8192e: avoid CamelCase <dot11RSNAStatsCCMPDecryptErrors>
-> 
->   drivers/staging/rtl8192e/rtllib_crypt_ccmp.c | 32 +++++++-------------
->   1 file changed, 11 insertions(+), 21 deletions(-)
-> 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    198925fae644 Add linux-next specific files for 20230329
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1174a6d1c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=91e70627549fd509
+dashboard link: https://syzkaller.appspot.com/bug?extid=0839b78e119aae1fec78
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/53c685bee82f/disk-198925fa.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/45e82baa3bc5/vmlinux-198925fa.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7c31fbc6acb9/bzImage-198925fa.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0839b78e119aae1fec78@syzkaller.appspotmail.com
+
+================================================================================
+UBSAN: shift-out-of-bounds in net/nfc/nci/core.c:912:45
+shift exponent 4294967071 is too large for 32-bit type 'int'
+CPU: 1 PID: 30237 Comm: syz-executor.2 Not tainted 6.3.0-rc4-next-20230329-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x221/0x5a0 lib/ubsan.c:387
+ nci_activate_target.cold+0x1a/0x1f net/nfc/nci/core.c:912
+ nfc_activate_target+0x1f8/0x4c0 net/nfc/core.c:420
+ nfc_genl_activate_target+0x1f3/0x290 net/nfc/netlink.c:900
+ genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2572
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1942
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:747
+ ____sys_sendmsg+0x71c/0x900 net/socket.c:2501
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2555
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2584
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc4abc8c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fc4aca02168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007fc4abdabf80 RCX: 00007fc4abc8c0f9
+RDX: 0000000000000000 RSI: 0000000020000780 RDI: 0000000000000005
+RBP: 00007fc4abce7b39 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffcb707727f R14: 00007fc4aca02300 R15: 0000000000022000
+ </TASK>
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
