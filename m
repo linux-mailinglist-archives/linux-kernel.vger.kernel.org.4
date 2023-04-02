@@ -2,96 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424E56D3A5C
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 22:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C546D3A69
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 23:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjDBU63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 16:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S230269AbjDBVYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 17:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjDBU62 (ORCPT
+        with ESMTP id S229448AbjDBVYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 16:58:28 -0400
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D805393D9
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 13:58:26 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id j4mJp3wID985Cj4mJp2a4R; Sun, 02 Apr 2023 22:58:24 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 02 Apr 2023 22:58:24 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org
-Subject: [PATCH v2] iio: accel: bmi088: Correctly compute the address of the struct spi_device
-Date:   Sun,  2 Apr 2023 22:58:18 +0200
-Message-Id: <8da05ad95015e048e3058f275bd57d382420b46f.1680469082.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 2 Apr 2023 17:24:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1709EC5
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 14:24:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4732B80FF2
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 21:24:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CD62C433EF;
+        Sun,  2 Apr 2023 21:24:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680470645;
+        bh=Bhk1NvODXF0op6yKbbwQDWwfvsZ2GC/kb/TLI3m77WU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=kv3zRQVRlz1Q56x/WOcUzlPQRyORSFN9BZMhR1BzBE0+WQJqNgEPb+/9un214z0W3
+         bjjKWduSO5zZcKe0p9+DpI801DqD84vDXY8x5+FjpAgRZdf2WfFQErEHNUKZqzBLxN
+         QUKI1FOCcec7BiUoBLyA7iZHjc+k//Eu6CsEwYCeltRycGUh1VdK1GnONb2rZcH6Xc
+         EsM917QQplbQu0ppcEBQGBk0E2IVC4lLPaqGRNnofWl9MLBFVTx8Kl++GsPJAOwcJp
+         IcZRZaPPfxx1VnQAbZEat3LQ752dE5yWdCjTE2v+9F6+aZswTpRIhDRIwczmzK1z/K
+         BW8kbBoSeS0gQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id D5829154047C; Sun,  2 Apr 2023 14:24:04 -0700 (PDT)
+Date:   Sun, 2 Apr 2023 14:24:04 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     linux@weissschuh.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] tools/nolibc: add testcases for vfprintf
+Message-ID: <530708ce-92af-41ad-84da-a691a518852b@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230402184806.12440-1-w@1wt.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230402184806.12440-1-w@1wt.eu>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bmi088_regmap_spi_write() is said to be similar to the SPI generic write
-function.
-However, regmap_spi_write() calls to_spi_device() in order to find the
-reference to the "struct spi_device", instead of considering that 'context'
-is already the correct value.
+On Sun, Apr 02, 2023 at 08:48:02PM +0200, Willy Tarreau wrote:
+> Hello Paul,
+> 
+> Thomas added new tests for vfprintf(), which is a good idea because it
+> was a new implementation, we use it a lot in the tests so we'd rather
+> make sure it works! This required to implement support for memfd_create()
+> that is used to collect the output into a buffer, as well as to complete
+> a little bit the minimalistic FILE emulation with fileno(), fdopen(),
+> fflush() and fclose(). The result is neat and works equally on glibc and
+> nolibc. We just had to cheat on the pointer test because for NULL nolibc
+> prints "0x0" while glibc prints "(nil)" so we check 0x1 instead to avoid
+> this special case.
+> 
+> Finally Thomas added a new target to the makefile to ease building the
+> test against the default libc. This should help detect incompatibilities
+> when new features are added.
+> 
+> I've tested it locally with my libc and against all supported architectures
+> (userland tests only), and all tests passed.
+> 
+> This can be added to your dev tree for 6.5 on top of the previous series.
 
-This works because "struct device	dev" is the first entry of
-"struct spi_device".
+Looks like some useful code to make testing more comprehensive, thank
+you both!  Queued and pushed.
 
-Align bmi088_regmap_spi_write() and regmap_spi_write() to be more
-future proof, should "struct spi_device" be shuffled one day.
+							Thanx, Paul
 
-Also update bmi088_regmap_spi_read() in the same way.
-
-Fixes: c19ae6be7555 ("iio: accel: Add support for the Bosch-Sensortec BMI088")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-v2: do the same for bmi088_regmap_spi_read()
----
- drivers/iio/accel/bmi088-accel-spi.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/iio/accel/bmi088-accel-spi.c b/drivers/iio/accel/bmi088-accel-spi.c
-index ee540edd8412..79e4b5392312 100644
---- a/drivers/iio/accel/bmi088-accel-spi.c
-+++ b/drivers/iio/accel/bmi088-accel-spi.c
-@@ -15,7 +15,8 @@
- 
- static int bmi088_regmap_spi_write(void *context, const void *data, size_t count)
- {
--	struct spi_device *spi = context;
-+	struct device *dev = context;
-+	struct spi_device *spi = to_spi_device(dev);
- 
- 	/* Write register is same as generic SPI */
- 	return spi_write(spi, data, count);
-@@ -24,7 +25,8 @@ static int bmi088_regmap_spi_write(void *context, const void *data, size_t count
- static int bmi088_regmap_spi_read(void *context, const void *reg,
- 				size_t reg_size, void *val, size_t val_size)
- {
--	struct spi_device *spi = context;
-+	struct device *dev = context;
-+	struct spi_device *spi = to_spi_device(dev);
- 	u8 addr[2];
- 
- 	addr[0] = *(u8 *)reg;
--- 
-2.34.1
-
+> Thanks!
+> Willy
+> 
+> Thomas Weißschuh (4):
+>   tools/nolibc: add libc-test binary
+>   tools/nolibc: add wrapper for memfd_create
+>   tools/nolibc: implement fd-based FILE streams
+>   tools/nolibc: add testcases for vfprintf
+> 
+>  tools/include/nolibc/stdio.h                 | 95 ++++++++++++++------
+>  tools/include/nolibc/sys.h                   | 23 +++++
+>  tools/testing/selftests/nolibc/.gitignore    |  1 +
+>  tools/testing/selftests/nolibc/Makefile      |  6 ++
+>  tools/testing/selftests/nolibc/nolibc-test.c | 86 ++++++++++++++++++
+>  5 files changed, 184 insertions(+), 27 deletions(-)
+> 
+> -- 
+> 2.17.5
+> 
