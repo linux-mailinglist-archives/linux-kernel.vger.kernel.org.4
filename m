@@ -2,46 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF656D39B7
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 20:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F456D39BA
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 20:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbjDBSEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 14:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S231373AbjDBSST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 14:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjDBSEr (ORCPT
+        with ESMTP id S230229AbjDBSSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 14:04:47 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5DA5255;
-        Sun,  2 Apr 2023 11:04:45 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1680458683;
-        bh=lRlYUuDp5glflddJvEoeapRiiCbk9usZQ1sjBHNJHWA=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=hAqtsk1tMBTOcLmQdfShfuClxGMOfQ87C1yjw1nXaohBeAmIZ/e/XxuFfsdy7yO+p
-         OXqzOIh903ka6x+00ab+Iz2eJSzlOzTipUjoo/vQ0DSbbJ3BJgIGarqD0mQTag+73p
-         CKaeLPdhaEvB9qxGbfTqKeI8hzmdfQSmNYAYoOU0=
-Date:   Sun, 02 Apr 2023 18:04:37 +0000
-Subject: [PATCH v3 4/4] tools/nolibc: add testcases for vfprintf
+        Sun, 2 Apr 2023 14:18:18 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B138A71;
+        Sun,  2 Apr 2023 11:18:14 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 8D50D5FD04;
+        Sun,  2 Apr 2023 21:18:12 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1680459492;
+        bh=s4eKgbhgNv4f1gYW15n6VyDdSflCXwAy8F8mScWFz1Y=;
+        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+        b=kebCLhG8m8b44nPUXgIiLoHlm2div159+gCaxPZlok7PfL1MsDsFZz7JTObR9vHeh
+         RaHgn0m3DSUt2AraE9JbfNEuaT/J5X9lJtnWOCH9INtbfLQHiVIgzbhbcLD6nl1KIE
+         oNnsJ8jlNspkJhTkllNgItCG3s3gG/WuKp9IAGvHNbQYauohrFBuV0Q7+SOLEoqC/e
+         vU2K9Q7GN5MQJA1Ah6WfIlvfUfgeWMoVNJ0R7GEHs9U6joeqT/ht5ATK0qewNvIiCO
+         p8ZcDzfqXIqSJyx+c4MTTTfu7It2vzriaFKU+5p+A0XYcXKnhxVzMlSCef79mQQXpm
+         gjxWCEVSsLQYQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Sun,  2 Apr 2023 21:18:07 +0300 (MSK)
+Message-ID: <5440aa51-8a6c-ac9f-9578-5bf9d66217a5@sberdevices.ru>
+Date:   Sun, 2 Apr 2023 21:14:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230328-nolibc-printf-test-v3-4-ddc79f92efd5@weissschuh.net>
-References: <20230328-nolibc-printf-test-v3-0-ddc79f92efd5@weissschuh.net>
-In-Reply-To: <20230328-nolibc-printf-test-v3-0-ddc79f92efd5@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680458682; l=3462;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=lRlYUuDp5glflddJvEoeapRiiCbk9usZQ1sjBHNJHWA=;
- b=r1gaqwcr5bI+JYJYF6F/e7zU/ZbkMtq+8Nx9jeWHBtiCSsdad9o8hV1RBLVCxN8lFZ0Rv2ta+
- gv3a94JEvWNBu2sE9onoc7uR2GvxejWHKmk4N4eDNT6RtNdjesRUa4P
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Bryan Tan <bryantan@vmware.com>, Vishnu Dasa <vdasa@vmware.com>
+CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
+        <avkrasnov@sberdevices.ru>, <pv-drivers@vmware.com>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Subject: [RFC PATCH v4 0/3] vsock: return errors other than -ENOMEM to socket
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/02 13:52:00 #21029650
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -51,125 +72,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vfprintf() is complex and so far did not have proper tests.
+Hello,
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 86 ++++++++++++++++++++++++++++
- 1 file changed, 86 insertions(+)
+this patchset removes behaviour, where error code returned from any
+transport was always switched to ENOMEM. This works in the same way as
+patch from Bobby Eshleman:
+commit c43170b7e157 ("vsock: return errors other than -ENOMEM to socket"),
+but for receive calls. VMCI transport is also updated (both tx and rx
+SOCK_STREAM callbacks), because it returns VMCI specific error code to
+af_vsock.c (like VMCI_ERROR_*). Tx path is already merged to net, so it
+was excluded from patchset in v4. At the same time, virtio and Hyper-V
+transports are using general error codes, so there is no need to update
+them.
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 47013b78972e..de943e028933 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -20,6 +20,7 @@
- #include <linux/reboot.h>
- #include <sys/io.h>
- #include <sys/ioctl.h>
-+#include <sys/mman.h>
- #include <sys/mount.h>
- #include <sys/reboot.h>
- #include <sys/stat.h>
-@@ -667,6 +668,90 @@ int run_stdlib(int min, int max)
- 	return ret;
- }
- 
-+#define EXPECT_VFPRINTF(c, expected, fmt, ...)				\
-+	ret += expect_vfprintf(llen, c, expected, fmt, ##__VA_ARGS__)
-+
-+static int expect_vfprintf(int llen, size_t c, const char *expected, const char *fmt, ...)
-+{
-+	int ret, fd, w, r;
-+	char buf[100];
-+	FILE *memfile;
-+	va_list args;
-+
-+	fd = memfd_create("vfprintf", 0);
-+	if (fd == -1) {
-+		pad_spc(llen, 64, "[FAIL]\n");
-+		return 1;
-+	}
-+
-+	memfile = fdopen(fd, "w+");
-+	if (!memfile) {
-+		pad_spc(llen, 64, "[FAIL]\n");
-+		return 1;
-+	}
-+
-+	va_start(args, fmt);
-+	w = vfprintf(memfile, fmt, args);
-+	va_end(args);
-+
-+	if (w != c) {
-+		llen += printf(" written(%d) != %d", w, (int) c);
-+		pad_spc(llen, 64, "[FAIL]\n");
-+		return 1;
-+	}
-+
-+	fflush(memfile);
-+	lseek(fd, 0, SEEK_SET);
-+
-+	r = read(fd, buf, sizeof(buf) - 1);
-+	buf[r] = '\0';
-+
-+	fclose(memfile);
-+
-+	if (r != w) {
-+		llen += printf(" written(%d) != read(%d)", w, r);
-+		pad_spc(llen, 64, "[FAIL]\n");
-+		return 1;
-+	}
-+
-+	llen += printf(" \"%s\" = \"%s\"", expected, buf);
-+	ret = strncmp(expected, buf, c);
-+
-+	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
-+	return ret;
-+}
-+
-+static int run_vfprintf(int min, int max)
-+{
-+	int test;
-+	int tmp;
-+	int ret = 0;
-+	void *p1, *p2;
-+
-+	for (test = min; test >= 0 && test <= max; test++) {
-+		int llen = 0; // line length
-+
-+		/* avoid leaving empty lines below, this will insert holes into
-+		 * test numbers.
-+		 */
-+		switch (test + __LINE__ + 1) {
-+		CASE_TEST(empty);        EXPECT_VFPRINTF(0, "", ""); break;
-+		CASE_TEST(simple);       EXPECT_VFPRINTF(3, "foo", "foo"); break;
-+		CASE_TEST(string);       EXPECT_VFPRINTF(3, "foo", "%s", "foo"); break;
-+		CASE_TEST(number);       EXPECT_VFPRINTF(4, "1234", "%d", 1234); break;
-+		CASE_TEST(negnumber);    EXPECT_VFPRINTF(5, "-1234", "%d", -1234); break;
-+		CASE_TEST(unsigned);     EXPECT_VFPRINTF(5, "12345", "%u", 12345); break;
-+		CASE_TEST(char);         EXPECT_VFPRINTF(1, "c", "%c", 'c'); break;
-+		CASE_TEST(hex);          EXPECT_VFPRINTF(1, "f", "%x", 0xf); break;
-+		CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x1", "%p", (void *) 0x1); break;
-+		case __LINE__:
-+			return ret; /* must be last */
-+		/* note: do not set any defaults so as to permit holes above */
-+		}
-+	}
-+	return ret;
-+}
-+
- static int smash_stack(void)
- {
- 	char buf[100];
-@@ -774,6 +859,7 @@ static const struct test test_names[] = {
- 	/* add new tests here */
- 	{ .name = "syscall",    .func = run_syscall    },
- 	{ .name = "stdlib",     .func = run_stdlib     },
-+	{ .name = "vfprintf",   .func = run_vfprintf   },
- 	{ .name = "protection", .func = run_protection },
- 	{ 0 }
- };
+vsock_test suite is also updated.
+
+Link to v1:
+https://lore.kernel.org/netdev/97f19214-ba04-c47e-7486-72e8aa16c690@sberdevices.ru/
+Link to v2:
+https://lore.kernel.org/netdev/60abc0da-0412-6e25-eeb0-8e32e3ec21e7@sberdevices.ru/
+Link to v3:
+https://lore.kernel.org/netdev/dead4842-333a-015e-028b-302151336ff9@sberdevices.ru/
+
+Changelog:
+
+v1 -> v2:
+ - Add patch for VMCI as Vishnu Dasa suggested.
+v2 -> v3:
+ - Change type of 'err' var in VMCI patches from 'int' to 'ssize_t'.
+ - Split VMCI patch to two patches: for send and for receive cases.
+ - Reorder patches: move VMCI before af_vsock.c.
+v3 -> v4:
+ - Exclude VMCI patch for send from patchset (merged to 'net').
+ - Update commit message of VMCI patch for receive.
+
+Arseniy Krasnov (3):
+  vsock/vmci: convert VMCI error code to -ENOMEM on receive
+  vsock: return errors other than -ENOMEM to socket
+  vsock/test: update expected return values
+
+ net/vmw_vsock/af_vsock.c         |  4 ++--
+ net/vmw_vsock/vmci_transport.c   | 11 +++++++++--
+ tools/testing/vsock/vsock_test.c |  4 ++--
+ 3 files changed, 13 insertions(+), 6 deletions(-)
 
 -- 
-2.40.0
-
+2.25.1
