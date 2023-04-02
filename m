@@ -2,125 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FF76D397D
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 19:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119076D3983
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 19:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjDBRiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 13:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S230490AbjDBRp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 13:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDBRiC (ORCPT
+        with ESMTP id S229448AbjDBRp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 13:38:02 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D7183E8;
-        Sun,  2 Apr 2023 10:38:00 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id p34so15769542wms.3;
-        Sun, 02 Apr 2023 10:38:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680457079;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rAKxm6MzCphy5Z2gvE2Jr+LH4ajwExyKc8Eoh3hOm1A=;
-        b=dtm9ymYqBU5D/2K0eq/oNxuYV0djmKwUOmlQ0PWCBYr+JSm412ciULUeuUFZbq3vL/
-         cnuDuLULPh2rOEAY5MVcLpn4WACpjF0ENO5xN1gAqBurSRfYMHlceYlp81tL3Co5ZBbo
-         v1Ni3ifdgStxMXh2hB79hbUrh3XcV3dsefBjEYMkU+Y3zThU7XLx5QDkPOtiXnI84Zl4
-         vu/W8b/gCRhsOTv0KmOY24HdK/MHDWS/6W+C2dVnWXlgRT757bTMxD5eYsghoYZmVZXm
-         neFvBoR5cMRKmlxnT9Qbact8NIq7e4QloBRZmrXRXiIuCMrnVlJCUPFzQaiEAhj8czdx
-         GqNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680457079;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rAKxm6MzCphy5Z2gvE2Jr+LH4ajwExyKc8Eoh3hOm1A=;
-        b=24SI2DNcxaiSkl33lDZXlZtkd02O6Tb+E3U235oKTcRfHlL9SFmQuFA7WoPcQuDy+L
-         2zffpIPU2glOVBewTyn/iu/K45wdehpqVgdwbBa0VzAY/vs4ifHLPgHN/BuGEUWnVyZ8
-         jt0bd465Dbo5UZC2AABYuIaY9tuSvttb0zt874jMN+nspPrfkADLc67orWSut6IIRaNY
-         6B/J09wATinHWCxaREoX/zLU0tiBvrOvOlAS6JqD5zk7nfuu6z1ouIX7HYgERQIp7QU1
-         acft7s0k0YzC7woTvO8tdcDkgXN/OHlzFXZsCy01ja2DH9jCbDEsqc6WjASzn7nk+Chh
-         4pFQ==
-X-Gm-Message-State: AO0yUKUFGXXrbBXag/4Kzng/R1TsyhkeuPg+S8BfbbUbeRl+snqgzJIV
-        HMh8Bs15h+r4mWedZNFJzO8=
-X-Google-Smtp-Source: AK7set84pyQWNwhP6zk2k0vqJMXn1mqREdZavTBb2sWu3uESiHjFSV4SYgnJic1228mXwbwRwdDCJA==
-X-Received: by 2002:a7b:cd87:0:b0:3ed:de58:1559 with SMTP id y7-20020a7bcd87000000b003edde581559mr26298914wmj.2.1680457079332;
-        Sun, 02 Apr 2023 10:37:59 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05600c444d00b003ee8ab8d6cfsm17066115wmn.21.2023.04.02.10.37.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Apr 2023 10:37:58 -0700 (PDT)
-Message-ID: <0b743983-1534-d860-5ce8-7fcb67382474@gmail.com>
-Date:   Sun, 2 Apr 2023 19:37:56 +0200
+        Sun, 2 Apr 2023 13:45:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918DDCDC4
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 10:45:25 -0700 (PDT)
+Received: from [192.168.2.163] (109-252-124-32.nat.spd-mgts.ru [109.252.124.32])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1CC166602EDC;
+        Sun,  2 Apr 2023 18:45:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680457524;
+        bh=LQR9mavIiKKD1Q2f+8uq43FK4M4C09ETxpwD/UcvWp0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IdhoDVHb2ZwbrR5Bt8RZj7mnma0Wf1SMHw9eb6adCbETUE8xjL07xb9bvdDHQV7Tr
+         ywWSc46Jn9vKXR+zsyamTXeVG1Oezt7oVRfrdkCuv5TZExjn3MzxW/ZlXrrQVVuzOQ
+         z8VxYvafqCqj97+2JFjJn1LKv3mfmRG7m00WXZEfdLz/P9M11NVgWXwwemlCoeRrxh
+         GJuHF4qba5PftW3e4p9WLvXY8GG3pUAgS3hcxv3KhUC9l1QHOtusNxl989O3HTIg8a
+         U2Dtj+SWl/z2joh7OHomI931kz1NlBZSyjRTvGJsCwrAOUomT3iVtsEcps87aJumpv
+         yh2EBlykfj+Wg==
+Message-ID: <3618a293-4f61-b076-0a9c-c70812436431@collabora.com>
+Date:   Sun, 2 Apr 2023 20:45:19 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8173: correct GPIO keys wakeup
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 2/2] drm/virtio: Support sync objects
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230304123301.33952-1-krzysztof.kozlowski@linaro.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230304123301.33952-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Emil Velikov <emil.velikov@collabora.com>
+Cc:     David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20230323230755.1094832-1-dmitry.osipenko@collabora.com>
+ <20230323230755.1094832-3-dmitry.osipenko@collabora.com>
+ <ZCXF4q81wPcczkqx@arch-x395>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <ZCXF4q81wPcczkqx@arch-x395>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 04/03/2023 13:33, Krzysztof Kozlowski wrote:
-> gpio-keys,wakeup is a deprecated property.
+On 3/30/23 20:24, Emil Velikov wrote:
+> Hi Dmitry,
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Applied, thanks!
-
-> ---
->   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+> Have you considered creating a few DRM helpers for this functionality?
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> index d452cab28c67..d77f6af19065 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> @@ -58,7 +58,7 @@ switch-lid {
->   			gpios = <&pio 69 GPIO_ACTIVE_LOW>;
->   			linux,code = <SW_LID>;
->   			linux,input-type = <EV_SW>;
-> -			gpio-key,wakeup;
-> +			wakeup-source;
->   		};
->   
->   		switch-power {
-> @@ -66,7 +66,7 @@ switch-power {
->   			gpios = <&pio 14 GPIO_ACTIVE_HIGH>;
->   			linux,code = <KEY_POWER>;
->   			debounce-interval = <30>;
-> -			gpio-key,wakeup;
-> +			wakeup-source;
->   		};
->   
->   		switch-tablet-mode {
-> @@ -74,7 +74,7 @@ switch-tablet-mode {
->   			gpios = <&pio 121 GPIO_ACTIVE_HIGH>;
->   			linux,code = <SW_TABLET_MODE>;
->   			linux,input-type = <EV_SW>;
-> -			gpio-key,wakeup;
-> +			wakeup-source;
->   		};
->   
->   		switch-volume-down {
+> AFAICT this is the third driver which supports syncobj timelines and
+> looking at one of the implementations ... it is not great. Note that
+> this suggestion is _not_ a blocker.
+
+Would like to see a third driver starting to use the exactly same
+drm_execbuffer_syncobj struct because UABI part isn't generic, though
+it's a replica of the MSM driver for now.
+
+The virtio-gpu is only at the beginning of starting to use sync objects,
+compared to MSM driver. Will be better to defer the generalization until
+virtio-gpu will become more mature, like maybe after a year since the
+time virtio userspace will start using sync objects, IMO.
+
+...
+>> +static void virtio_gpu_reset_syncobjs(struct drm_syncobj **syncobjs,
+>> +				      uint32_t nr_syncobjs)
+>> +{
+>> +	uint32_t i;
+>> +
+>> +	for (i = 0; i < nr_syncobjs; i++) {
+>> +		if (syncobjs[i])
+>> +			drm_syncobj_replace_fence(syncobjs[i], NULL);
+> 
+> Side note: the drm_syncobj_put() called immediately after also calls
+> replace/reset fence internally. Although reading from the docs, I'm not
+> sure if relying on that is a wise move.
+> 
+> Just thought I'd point it out.
+
+The drm_syncobj_put() doesn't call replace/reset fence until syncobj is
+freed. We drop the old fence for active/alive in-syncobj here after
+handling the fence-wait, this makes syncobj reusable, otherwise
+userpsace would have to re-create syncobjs after each submission.
+
+>>  
+>> +	ret = virtio_gpu_parse_deps(&submit);
+>> +	if (ret)
+>> +		goto cleanup;
+>> +
+>> +	ret = virtio_gpu_parse_post_deps(&submit);
+>> +	if (ret)
+>> +		goto cleanup;
+>> +
+> 
+> I think we should zero num_(in|out)_syncobjs when the respective parse
+> fails. Otherwise we get one "cleanup" within the parse function itself
+> and a second during the cleanup_submit. Haven't looked at it too closely
+> but I suspect that will trigger an UAF or two.
+
+There are checks for NULL pointers in the code that will prevent the
+UAF. I'll add zeroing of the nums for more consistency.
+
+>>  	ret = virtio_gpu_install_out_fence_fd(&submit);
+>>  	if (ret)
+>>  		goto cleanup;
+>> @@ -294,6 +512,7 @@ int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
+>>  		goto cleanup;
+>>  
+>>  	virtio_gpu_submit(&submit);
+>> +	virtio_gpu_process_post_deps(&submit);
+> 
+> Any particular reason why the virtio_gpu_reset_syncobjs is deferred to
+> virtio_gpu_cleanup_submit(). Having it just above the process_post_deps
+> (similar to msm) allows the reader to get closure about the in syncobjs.
+> 
+> This is just personal preference, so don't read too much into it.
+
+The job submission path should be short as possible in general.
+Technically, virtio_gpu_process_post_deps() should be fast, but since
+I'm not 100% sure about all the corner cases, it's better to hold until
+job is sent out.
+
+Thank you very much for the review! I'll address the rest of comments in v5.
+
+-- 
+Best regards,
+Dmitry
+
