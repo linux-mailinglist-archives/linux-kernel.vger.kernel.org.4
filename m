@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5586D3981
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 19:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B166D389A
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 16:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjDBRk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 13:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S230405AbjDBOzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 10:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbjDBRky (ORCPT
+        with ESMTP id S229565AbjDBOzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 13:40:54 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866DBCC23
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 10:40:52 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5416698e889so512127857b3.2
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 10:40:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680457251;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NJpTsvE1EuL9/USYXCTsI8NfHm4n9LB4JRYujq1u5b8=;
-        b=lIOyUIFZXVU085qpGi3Cz3gY+GJ4NrjN6YPjm6oq9gCAThs3IG45H1VZy/xisolQfc
-         /QqAJZNvEe3cUufI8ec4AwifJnVvZ8pDglYS1mo23C6tTMmNfSCllM5T0816UtUmM74j
-         cnjvM6NZonAR3oyQbksvqoLs1BxXtrS1iA3yX8/G7QO12wfsWjOyj/KWyl613R6RqS+P
-         Afwmo0+nQaOh/iPDwMfPJiYhe1dDQxU9UVqcgYxKSUKsUfqwfjSUHzJ7zwm5ywnhLmtR
-         6R6sBCxkQ4IHzkxFtGQBjeh6H/CFw6liaiKutHmqw2l5sPvBc1KE2UFDhElGBnfnPZfS
-         +YDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680457251;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NJpTsvE1EuL9/USYXCTsI8NfHm4n9LB4JRYujq1u5b8=;
-        b=r8fPKvUq0tpjo7+6jA9v39YpdobQY7GaPIUsWebJfHGZ000rxLheYUQ0h1h9fA4Dq7
-         cdaqnwLM93YLl+z09CTSv+AHkns2tEC15fCRf+W/WFOBouCp+yarxEaXZjz5eV7ClNvl
-         /ydgh6bbCfNDoSesG37FGqCkNzxfQWNt4FZ5hvaF4rOCzJVoevTvJEFGm1BlNMbtx6/M
-         +fd6caKxmwm0S0nrogJZh8GqGBe0JmNc0seiTKamUVlv8lCP20RL1iXkizaNrD9ng9ej
-         s9+vo8ph0LTEP8cGTu/zk8u1HUT6Q/KQxwoudpWUvetqQ8vz7MvJjWxe6PhiM4E6+u/J
-         oPXg==
-X-Gm-Message-State: AAQBX9fmMv/RfeIgQtETvBlii0B8YV0fMO+nIgDzcvAlKHvsfYGS3r6s
-        Q4qMcfZ2M2/3fEpTqPojVIRifQ==
-X-Google-Smtp-Source: AKy350Y9pn+fv4dLQtkOD+UCspvVtT89Yf/yzkAotSwBDV23/Hua3fUCMEQ6UFKWB+IuHM+KmJqstQ==
-X-Received: by 2002:a0d:d505:0:b0:541:7193:e136 with SMTP id x5-20020a0dd505000000b005417193e136mr31935308ywd.23.1680457251476;
-        Sun, 02 Apr 2023 10:40:51 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id q65-20020a819944000000b0054601a8399csm2017755ywg.119.2023.04.02.10.40.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 10:40:50 -0700 (PDT)
-Date:   Sun, 2 Apr 2023 10:51:19 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] iio: addac: stx104: Migrate to the regmap API
-Message-ID: <ZCmWZyEOnfknvSLg@fedora>
-References: <cover.1679867815.git.william.gray@linaro.org>
- <4ebc1b6b609a086846420954b893e914fd395384.1679867815.git.william.gray@linaro.org>
- <ZCGBIAvr7OQLwNXv@smile.fi.intel.com>
- <ZCg6bhkxGKmkMloM@fedora>
- <20230402174657.55159879@jic23-huawei>
+        Sun, 2 Apr 2023 10:55:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2F86A7A
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 07:54:59 -0700 (PDT)
+Received: from [192.168.2.163] (unknown [109.252.124.32])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AB315660212B;
+        Sun,  2 Apr 2023 15:54:56 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680447298;
+        bh=PNLOiQz44h5E3O/8HvWEl9u5VjS2kdzOQ4M+EXBh5n8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZXuhqZ86reOnfGEy0Mty0wUnDCXbuvIExjuJWhxCTp6O6dpKOekf4Ys9c521ZJHzb
+         wOE4By0iKXj4WRnG7ljmeeQ8uqi5nxCFkr257nGfWhRVFgpdbXLWUWZofPsPgzBGkw
+         UcZkBe/XbI5h+xawmM5/OOBreHZKS1aKGLqHqwPVje8tY00XFpqJ+52NQeDZ5z4Rtg
+         qBxrXvzYV0s3vvoAsG5I2Yv+96x5x9h++ykPlw3Advot/f2PpXzOA9yFQFRxJ6Awkb
+         Bw+ujXOzOhDaaAnFTDoKGod51q/nnfaH4/EFFAoDEikDVUDL17oJm/ToX8Y92z+tN4
+         msCE9jc+hKyaQ==
+Message-ID: <90c71a10-9791-1cd5-b7af-badac24bf5c2@collabora.com>
+Date:   Sun, 2 Apr 2023 17:54:53 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yEXAaY2iei/+iClt"
-Content-Disposition: inline
-In-Reply-To: <20230402174657.55159879@jic23-huawei>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v13 01/10] drm/shmem-helper: Switch to reservation lock
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        intel-gfx@lists.freedesktop.org, David Airlie <airlied@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>
+References: <20230314022659.1816246-1-dmitry.osipenko@collabora.com>
+ <20230314022659.1816246-2-dmitry.osipenko@collabora.com>
+ <6b5644cf-6229-f99b-d429-a45d724493ee@collabora.com>
+ <20c88807-8513-a816-aed9-5cd67eb5c1ed@collabora.com>
+ <2631edac-a57e-638d-226c-08ea3d9b6b8d@gmail.com>
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <2631edac-a57e-638d-226c-08ea3d9b6b8d@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,51 +76,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/26/23 12:19, Christian König wrote:
+> Am 25.03.23 um 15:58 schrieb Dmitry Osipenko:
+>> On 3/15/23 16:46, Dmitry Osipenko wrote:
+>>> On 3/14/23 05:26, Dmitry Osipenko wrote:
+>>>> @@ -633,7 +605,10 @@ int drm_gem_shmem_mmap(struct
+>>>> drm_gem_shmem_object *shmem, struct vm_area_struct
+>>>>           return ret;
+>>>>       }
+>>>>   +    dma_resv_lock(shmem->base.resv, NULL);
+>>>>       ret = drm_gem_shmem_get_pages(shmem);
+>>>> +    dma_resv_unlock(shmem->base.resv);
+>>> Intel CI reported locking problem [1] here. It actually was also
+>>> reported for v12, but I missed that report because of the other noisy
+>>> reports.
+>>>
+>>> [1]
+>>> https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_114671v2/shard-snb5/igt@prime_vgem@sync@rcs0.html
+>>>
+>>> The test does the following:
+>>>
+>>> 1. creates vgem
+>>> 2. export it do dmabuf
+>>> 3. mmaps dmabuf
+>>>
+>>> There is an obvious deadlock there. The DRM code assumes that mmap() is
+>>> unlocked, while for dma-buf it's locked. I'll see how to fix it for v14.
+>>>
+>> Christian, there is a deadlock problem in drm_gem_shmem_mmap() once we
+>> move drm-shmem to use resv lock. The current dma-buf locking policy
+>> claims that importer holds the lock for mmap(), but DRM code assumes
+>> that obj->mmap() handles the locking itself and then the same
+>> obj->mmap() code path is used by both dma-buf DRM and a usual DRM object
+>> paths. Hence importer -> dma_buf_mmap_internal()[takes the lock] ->
+>> exporter -> drm_gem_shmem_mmap()[takes the lock] deadlocks.
+>>
+>> I was looking at how to fix it and to me the best option is to change
+>> the dma-buf locking policy, making exporter responsible for handling the
+>> resv lock. Changing DRM code mmap lockings might be possible too [moving
+>> locking to drm_gem_mmap_obj()], but will be very messy and doesn't feel
+>> intuitive.
+>>
+>> Want to get yours thoughts on this before sending out the dma-buf mmap()
+>> policy-change patch. Does the new mmap() locking policy sound good to
+>> you? Thanks!
+> 
+> 
+> IIRC we tried that before and ran into problems.
+> 
+> dma_buf_mmap() needs to swap the backing file of the VMA and for this
+> calls fput() on the old file.
+> 
+> This fput() in turn could (in theory) grab the resv lock as well and
+> there isn't anything we could do about that.
+> 
+> Just information from the back of my memory, probably best if you double
+> check that.
 
---yEXAaY2iei/+iClt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks, Christian! The fput() code path will be unlocked with updated
+locking policy, like it was before. The new locking policy looks goods
+on my side, don't see anything that needs locking protection from the
+importer side for mmap().
 
-On Sun, Apr 02, 2023 at 05:46:57PM +0100, Jonathan Cameron wrote:
->=20
-> > > > +	.wr_table =3D &aio_ctl_wr_table,
-> > > > +	.rd_table =3D &aio_ctl_rd_table,
-> > > > +	.volatile_table =3D &aio_ctl_volatile_table,
-> > > > +	.cache_type =3D REGCACHE_FLAT,
-> > > > +}; =20
-> > >=20
-> > > Do we need regmap lock? =20
-> >=20
-> > I think the regmap lock is opt-out, so I don't think we need to set an
-> > custom lock callback for the regmaps in this driver.
-> >=20
-> > Jonathan, do read_raw() and write_raw() require explicit locking?
->=20
-> The don't provide their own locking.  Depending on the access pattern the
-> underlying bus locking may be sufficient.  If you have read modify write
-> cycles though you'll want locking at the appropriate level for that
-> which might well be at the level of regmap.
->=20
-> Jonathan
+I'll send the patches, letting intel-ci test them. Will be also easier
+to discuss it there with the code.
 
-If read_raw() can be called concurrently multiple times then we risk
-changing the ADC channel while the analog-to-digital conversion is in
-progress, thus resulting in an incorrect reported value. Looks like
-we'll need an explicit lock for this after all, so I'll create a
-precursor patch addressing that.
+-- 
+Best regards,
+Dmitry
 
-William Breathitt Gray
-
---yEXAaY2iei/+iClt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZCmWZwAKCRC1SFbKvhIj
-KwOXAQCxIk2C5V1TsQ/IO+hSQKNUJQofrl9yPD5Cj7Hqhm8krAD+LwqxOaNPKZ86
-T4S/v73bD/2MaFkSBaC1sEQcyfSBqA4=
-=jsa1
------END PGP SIGNATURE-----
-
---yEXAaY2iei/+iClt--
