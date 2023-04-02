@@ -2,112 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908386D360B
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 10:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF836D360F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 10:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbjDBIBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 04:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S230204AbjDBIKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 04:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjDBIBN (ORCPT
+        with ESMTP id S229492AbjDBIKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 04:01:13 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC516FF0D;
-        Sun,  2 Apr 2023 01:01:09 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pise4-0005MC-Ve; Sun, 02 Apr 2023 10:01:02 +0200
-Message-ID: <83966474-658d-7e2f-3e7f-eb66100660e9@leemhuis.info>
-Date:   Sun, 2 Apr 2023 10:00:59 +0200
+        Sun, 2 Apr 2023 04:10:49 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6631EEB7E;
+        Sun,  2 Apr 2023 01:10:48 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-17ab3a48158so27690251fac.1;
+        Sun, 02 Apr 2023 01:10:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680423047;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=29YYJrYDhT+9UyWZEkCjUn9HsfHoLWU9D1aux/U2VU4=;
+        b=EiJWf2njKcQRCkNQ5F//bLaBc8lXUUmAbuD4P12Y/K7dY4Zd0d0xg6K+3YKH5fbHoX
+         Km132z6utv+LuISyu4S1wSSdRmHpCGbC/xAD4dDkVjT7Q4cicotdEKMCIIu69/6m6KxR
+         P0fIRPjWrf79HMusrTFSK26xZ3/sGCLHWODAuyF+fOWJ3TUe8y/pBGcPFlREth/PAyP3
+         0+IcXZHQo58p8MPbN5+WNr+R4u7A6K3uK+pXdrwTay7//dFJh4yJckxcpLbJnKSMM39N
+         Wy8wn0LcBTUChm6+1SIQfq7KOAPvfCq9U2c7oQIo1e9Aljnaa6yScEdmiq45TYEhHstZ
+         TtaA==
+X-Gm-Message-State: AAQBX9eF2VvDn/PDOCkBIO736pZD5eILteeQg0/04j3K2jdoNWxczx5y
+        L+28EOaCd8CPcwLAxh9ZSO1ZyATAQ1LQQw==
+X-Google-Smtp-Source: AK7set8r7ng6IuhEEmlu/Az5TRQt4kqlgZAMmpYQQ78NCvZV0IQNnKCdZvrfJvmtYwNUvTNKJV/C9A==
+X-Received: by 2002:a05:6871:70b:b0:177:97ba:2eb4 with SMTP id f11-20020a056871070b00b0017797ba2eb4mr21897432oap.17.1680423047613;
+        Sun, 02 Apr 2023 01:10:47 -0700 (PDT)
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com. [209.85.160.50])
+        by smtp.gmail.com with ESMTPSA id us16-20020a056870df9000b00177b33ce85bsm2511396oab.30.2023.04.02.01.10.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Apr 2023 01:10:47 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-17683b570b8so27627025fac.13;
+        Sun, 02 Apr 2023 01:10:47 -0700 (PDT)
+X-Received: by 2002:a05:687c:19c:b0:17b:5f31:7ae3 with SMTP id
+ yo28-20020a05687c019c00b0017b5f317ae3mr7868128oab.5.1680423046878; Sun, 02
+ Apr 2023 01:10:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     ath11k <ath11k@lists.infradead.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217282 - Regression: ath11k hang on boot since
- updating from 6.1.21 to 6.1.22
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680422469;6d53c10d;
-X-HE-SMSGID: 1pise4-0005MC-Ve
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Reply-To: tanure@linux.com
+From:   Lucas Tanure <tanure@linux.com>
+Date:   Sun, 2 Apr 2023 09:10:36 +0100
+X-Gmail-Original-Message-ID: <CAJX_Q+1Tjc+-TjZ6JW9X0NxEdFe=82a9626yL63j7uVD4LpxEA@mail.gmail.com>
+Message-ID: <CAJX_Q+1Tjc+-TjZ6JW9X0NxEdFe=82a9626yL63j7uVD4LpxEA@mail.gmail.com>
+Subject: Kernel Panic - V6.2 - Reseved memory issue
+To:     kernelnewbies <kernelnewbies@kernelnewbies.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
+Hi,
 
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developers don't keep an eye on it, I decided to forward it by mail.
+I am trying to fix a kernel panic I am seeing on my vim3 board (Amlogic A311D).
+I don't have enough knowledge about this area, but my current guess is
+the kernel is using a piece of memory belonging to ARM-trusted
+firmware that I shouldn't.
+Log:
 
-Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
-not CCed them in mails like this.
+[ 9.792966] SError Interrupt on CPU3, code 0x00000000bf000000 -- SError
+[ 9.792980] CPU: 3 PID: 3471 Comm: kded5 Tainted: G C 6.2.0 #1
+[ 9.792985] Hardware name: Khadas VIM3 (DT)
+[ 9.792987] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[ 9.792991] pc : kmem_cache_free_bulk.part.98+0x1f0/0x528
+[ 9.793004] lr : kmem_cache_free_bulk.part.98+0x2f8/0x528
+[ 9.793008] sp : ffff80000a2eb7f0
+[ 9.793009] x29: ffff80000a2eb7f0 x28: ffff00001f358518 x27: ffff000000008800
+[ 9.793016] x26: ffff00000262b300 x25: ffff00000262b300 x24: 0000000000000001
+[ 9.793019] x23: ffff00000262b000 x22: 0000000000000000 x21: ffff00001f358538
+[ 9.793022] x20: fffffc0000098ac0 x19: 0000000000000004 x18: 0000000000000040
+[ 9.793025] x17: 0000000000000018 x16: 00000000000007f8 x15: 0000000000000003
+[ 9.793028] x14: 0000000000000006 x13: ffff800008e48550 x12: 0000ffff9dc91fff
+[ 9.793031] x11: 0000000000000004 x10: 0000000000000001 x9 : ffff000007e93680
+[ 9.793035] x8 : 0000000000000020 x7 : ffff000001d2b100 x6 : 0000000000000007
+[ 9.793037] x5 : 0000000000000020 x4 : ffff000000008800 x3 : 0000000000000001
+[ 9.793040] x2 : 0000000000000007 x1 : 0000000000000000 x0 : ffff00001f358540
+[ 9.793045] Kernel panic - not syncing: Asynchronous SError Interrupt
 
-Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217282 :
+This doesn't happen with downstream Khadas 6.2 kernel, and that's
+because the downstream kernel removed this from
+early_init_dt_reserve_memory (drivers/of/fdt.c):
 
->  Carsten Hatger 2023-03-31 14:49:06 UTC
-> 
-> Created attachment 304068 [details]
-> dmesg of 6.1.22 vanilla boot
-> 
-> Dear all,
-> 
-> ath11k hangs when booting v6.1.22 on a HP Pro x360 G9 w/ Qualcomm FastConnect 6900 using firmware WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3.6510.23.
-> 
-> However, v.6.1.21 works fine.
-> 
-> Please let me know if I can further assist in resolving this issue - testing would be fine.
-> 
-> Yours,
-> Carsten
+/*
+* If the memory is already reserved (by another region), we
+* should not allow it to be marked nomap, but don't worry
+* if the region isn't memory as it won't be mapped.
+*/
+if (memblock_overlaps_region(&memblock.memory, base, size) &&
+    memblock_is_region_reserved(base, size))
+          return -EBUSY;
 
 
-See the ticket for more details.
+And this causes 3 MiB of memory belonging to ARM Trusted firmware to
+be reserved.
 
+arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi :
+/* 3 MiB reserved for ARM Trusted Firmware (BL31) */
+secmon_reserved: secmon@5000000 {
+        reg = <0x0 0x05000000 0x0 0x300000>;
+        no-map;
+};
 
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
+And the mainline kernel fails to reserve that memory:
+[    0.000000] OF: fdt: Reserved memory: failed to reserve memory for
+node 'secmon@5000000': base 0x0000000005000000, size 3 MiB
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
+It fails to reserve because memblock_overlaps_region and
+memblock_is_region_reserved return one.
+I think memblock_is_region_reserved is saying the memory is already
+reserved by uboot and shouldn't be nomap, but it should.
 
-#regzbot introduced: v6.1.21..v6.1.22
-https://bugzilla.kernel.org/show_bug.cgi?id=217282
-#regzbot title: net: wireless: ath11k: hang on boot
-#regzbot ignore-activity
+Is there a bug here?
+Why the kernel is failing to reserve this memory?
+Is this an u-boot issue?
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
+I would appreciate any help. The current mainline kernel fails 90% of
+the time to boot into the Vim3 board.
 
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-[1] because bugzilla.kernel.org tells users upon registration their
-"email address will never be displayed to logged out users"
+Best Regards
+Lucas Tanure
