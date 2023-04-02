@@ -2,112 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92E56D3554
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 05:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920206D3557
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 05:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjDBDEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 23:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S230106AbjDBDNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 23:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDBDD5 (ORCPT
+        with ESMTP id S229603AbjDBDNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 23:03:57 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F3520C3A;
-        Sat,  1 Apr 2023 20:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680404636; x=1711940636;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UwGIjXk3/Uoh9jUrJy/wr/+7yvyMHOiCs5iNw+KoTj8=;
-  b=MsYVmEvFEyy7DSx/e3YcPU4wLoNy3O8xGU7hObWELVA0KxyvcXeo/Gke
-   ImQYCQhgD9MeJxnU1XjrNdNH6BsrD2/1eU9jOIp+pSi8wBUaNqS6fnW8j
-   B9jm2mJ9/2Lhqr6y0SSUCXLavIqoVjKBOqSiB3O1axJa1PRwh9CVINH0A
-   SO/jB0eM0IztforZ6J4D7rNJGd0mgQkFtxz8XpqcVK+K6iIuJBIlNq4l2
-   2c31tUb1e5tFpr78EB1ZCt0AIUvuj6HrNSIOZCIPerrRwN97ST41sgmNK
-   V4ZqAUblFdDrq9HihBRRnwHfCAAhpB3LQc29pTrPLviJuWpL0tUmMsayI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="330260334"
-X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
-   d="scan'208";a="330260334"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 20:03:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="718147955"
-X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
-   d="scan'208";a="718147955"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 01 Apr 2023 20:03:52 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pio0Q-000NCN-2f;
-        Sun, 02 Apr 2023 03:03:46 +0000
-Date:   Sun, 2 Apr 2023 11:02:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andreas Klinger <ak@it-klinger.de>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] iio: pressure: Honeywell mpr pressure sensor
-Message-ID: <202304021013.6NytoSFn-lkp@intel.com>
-References: <ZCf085W4XL2PtQf6@arbad>
+        Sat, 1 Apr 2023 23:13:05 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2313A1B7DD
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 20:13:04 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id u10so25029203plz.7
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Apr 2023 20:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680405183;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WBn8FWyIBGPoaocuNnuzNDzQNus3aBXXJi3F94yzU7g=;
+        b=dDbXy/ksBOsAuiljfaQBgfcBvYmVdwu2Pr1XaPN9vcLDju09h47KAhxxSFt9WUjzcc
+         Ffcc7CatnyquBrd6kATdczwiHtzAKq3GQqAn0KHUvzc5YLeHTkL4bXv31iEv/CrJFUuJ
+         N9/VLsdrngXMLtx6YA46/m4t3xyVZeHLgLR1kpleCVxKC+opblEDxcylieMPvuWaa0+h
+         7lD61whHb6szJddnayZyQYEA9DhKK67Qi8Cbzn0ZGSuU+Y0L3MbFvpF5ERbr7oiS0lyj
+         bqaUVT3fjpTj0lULhF9RTE6zRNgNCx+te1BITlDZa5dZrf6/WVDRA2tz9rv/wcVmCTSu
+         mczg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680405183;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WBn8FWyIBGPoaocuNnuzNDzQNus3aBXXJi3F94yzU7g=;
+        b=0gG1bZoUg2IU9Xc2auVEQzeLwt6cX2kgSUO3IA750f72mT2yBRkyTa0/5kxQ61eCFS
+         ZDjFT3r4y6ko7KfKwmtf0Rr4HjRjvxU8+lU7BXId1pIvWpGbKhNa5vMwnFbblXQqLaML
+         v1p9t2yBdMNNrDWoHQFojH0YqlWi1paOJltb/TfDbMARhGtHDNxzdE1J6JFv37s1YueD
+         4OJlxsOjTfAO85qEsodPtCMI40jAIHGbLkh5wBZ9u1hOq25x3KfiCBpVCF1v4BYI7zEa
+         78tLSt/m5y/lKX0k2VL0I+oLAIDY9u6HZfMu2CSUBF1hF/ou3CuZhL9Ffm8WKDoWCyzC
+         1qXw==
+X-Gm-Message-State: AAQBX9dYclmZxgEW/NdnP7WzhysaM9VT6+3WTJ7jH5E0CVXF0V9CvLrd
+        wUBS+zxJunDZmFVTB3fatjmpYEh8Ge0SpXGY
+X-Google-Smtp-Source: AKy350aw4KcPF03eEMSTE5Kgg3lOoy2cfLY1pa/n1CEHAeEjLcZ9eOykVUDcpE63SYFq7F3Ac7WhMw==
+X-Received: by 2002:a17:903:687:b0:19e:8688:86fe with SMTP id ki7-20020a170903068700b0019e868886femr29894686plb.42.1680405183454;
+        Sat, 01 Apr 2023 20:13:03 -0700 (PDT)
+Received: from DESKTOP-B5TBVBT.localdomain ([175.117.51.71])
+        by smtp.gmail.com with ESMTPSA id x6-20020a1709028ec600b001a1ea1d6d65sm3974309plo.272.2023.04.01.20.13.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Apr 2023 20:13:02 -0700 (PDT)
+From:   Yohan Joung <jyh429@gmail.com>
+X-Google-Original-From: Yohan Joung <yohan.joung@sk.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yohan Joung <jyh429@gmail.com>,
+        Yohan Joung <yohan.joung@sk.com>
+Subject: [PATCH v2] f2fs: fix align check for npo2
+Date:   Sun,  2 Apr 2023 12:12:59 +0900
+Message-Id: <20230402031259.286-1-yohan.joung@sk.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCf085W4XL2PtQf6@arbad>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andreas,
+From: Yohan Joung <jyh429@gmail.com>
 
-I love your patch! Yet something to improve:
+Fix alignment check to be correct in npo2 as well
 
-[auto build test ERROR on jic23-iio/togreg]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Yohan Joung <yohan.joung@sk.com>
+---
+ fs/f2fs/segment.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andreas-Klinger/dt-bindings-iio-pressure-Support-Honeywell-mpr-sensors/20230401-171226
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/ZCf085W4XL2PtQf6%40arbad
-patch subject: [PATCH 2/3] iio: pressure: Honeywell mpr pressure sensor
-config: arm-buildonly-randconfig-r004-20230401 (https://download.01.org/0day-ci/archive/20230402/202304021013.6NytoSFn-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/6a49dae45811d8a644c56dc18b6cdbc6ea67df98
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andreas-Klinger/dt-bindings-iio-pressure-Support-Honeywell-mpr-sensors/20230401-171226
-        git checkout 6a49dae45811d8a644c56dc18b6cdbc6ea67df98
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304021013.6NytoSFn-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "__aeabi_ldivmod" [drivers/iio/pressure/mpr.ko] undefined!
-
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 055e70e77aa2..c1525168f265 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -1842,6 +1842,7 @@ static int __f2fs_issue_discard_zone(struct f2fs_sb_info *sbi,
+ 	sector_t sector, nr_sects;
+ 	block_t lblkstart = blkstart;
+ 	int devi = 0;
++	u64 remainder = 0;
+ 
+ 	if (f2fs_is_multi_device(sbi)) {
+ 		devi = f2fs_target_device_index(sbi, blkstart);
+@@ -1857,9 +1858,9 @@ static int __f2fs_issue_discard_zone(struct f2fs_sb_info *sbi,
+ 	if (f2fs_blkz_is_seq(sbi, devi, blkstart)) {
+ 		sector = SECTOR_FROM_BLOCK(blkstart);
+ 		nr_sects = SECTOR_FROM_BLOCK(blklen);
++		div64_u64_rem(sector, bdev_zone_sectors(bdev), &remainder);
+ 
+-		if (sector & (bdev_zone_sectors(bdev) - 1) ||
+-				nr_sects != bdev_zone_sectors(bdev)) {
++		if (remainder || nr_sects != bdev_zone_sectors(bdev)) {
+ 			f2fs_err(sbi, "(%d) %s: Unaligned zone reset attempted (block %x + %x)",
+ 				 devi, sbi->s_ndevs ? FDEV(devi).path : "",
+ 				 blkstart, blklen);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
