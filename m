@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685EB6D36BB
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 11:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1976A6D36BD
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 11:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjDBJwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 05:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
+        id S230368AbjDBJwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 05:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjDBJwG (ORCPT
+        with ESMTP id S230377AbjDBJwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 05:52:06 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A092BEE0
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 02:51:43 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id h8so106301404ede.8
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 02:51:43 -0700 (PDT)
+        Sun, 2 Apr 2023 05:52:10 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7972C2C9FA
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 02:51:48 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id w9so106293379edc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 02:51:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680429099; x=1683021099;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2IDvEqK40hdfeaC/5vcKlzJ8ldccO8ZyOrtbI8/UQso=;
-        b=bYGfDEJghpcBi7i4yza2Phq8tCEBxOpVWp2cGMeFpQgVy9Jw8azJbFwW/GVLDkVeiM
-         borWGvtXbfTdFgmyENPaFICjo/Bx76xoh+Xx4nkNm8QvzsI8Bho0S2ARYp8h3XnHdpiV
-         67OplqowEnZh2w+UvJPZEVBta2ARLiMU1aS/Z3QeB7Y/N72b55D8qrgLHPrIVHh6WjVp
-         pGwWw9m0jxFXus57lfO5QNUm5pBaWFdx3p+7zz/0DbFuuE6Ru5TRxSYQO0ptGTs8cZFG
-         bRjwXRPtdFmFrCMje8GYPiuMcrhukdmQdh20OdKovDvIApqD3zuzT20i1pwRVgR7fMxY
-         91LQ==
+        d=gmail.com; s=20210112; t=1680429104; x=1683021104;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VaeBDPkSiTEyNdN0rUscDp5HyS5CgrVs8mEE78XtpGY=;
+        b=m11NQ93My1CKSjCNRpFIoKODHOqd0MpOWOR7t4H6N1NO7dt1q4UiU98zUOXEi9iCwA
+         awQ6J4BXGgVAEfH7b4sYbC10/RVwMeTSjRM5JdG7gpxSYC4ZxxBMZSee5HKAG47mca17
+         ltIG5/7kpiUHLHtiHXA2qNUEQ8cP6clXZM8we4dH5rG3dYJIl0hhS3EJeQPObh/M24Mh
+         BTbITuCR0msP4rZ1Z/4LU479HmI+BC+U45/0A08gsx0zOEtDAzI9OwJRs+Lndmw7uazh
+         D9N+HPMlkPqf19ornTNxVJExAjHKwpl+20TGPYEESHRtFCaw6BKEDM22rsF2GOrVdchl
+         M1Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680429099; x=1683021099;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2IDvEqK40hdfeaC/5vcKlzJ8ldccO8ZyOrtbI8/UQso=;
-        b=eI27DDP7vgzbudEH347LxJp5ATJO7XJg+mnQ8gnB4yr3yxGX3cpZWnCIbnpxjAzmn3
-         YaCxNVBvKp2gggRYP/estTqVIfWCMWYbo4j4wM9WOukeaaSrWJ1q59bfnRjNghEHs7ru
-         cPyuKLFjWN/G3Kq53c6ZJ5z9p0yVTJNytvBLT5w+VId0tCdm3ac7SZpjXizyQl94rEmA
-         CkWNPmnXsNrYSazBd/kudodgPjaRy0XoOwHzS/NyjjsmjsenQ6fSuDi+S+v5/DnDAY/a
-         u9HJHaSnWblc+sAqaixJtfDFbcKvAeBgZbf/BxebXzSQ5j4i5eIMrnZ+Z6lw5EbyL/RN
-         YtBw==
-X-Gm-Message-State: AAQBX9chflIyoO3843czySaymtCpQ76f4UHPbhDK1WmKO/8VWGuOWUi+
-        YFNipjelcBgG/cjuwJmzCE3TKy9hBsc=
-X-Google-Smtp-Source: AKy350a9MsvkMpzvVI6Nn+Qh5M6t4iuNAkNmgQeVoknnM++Kmh0S2kpecy3A7VgcwD/0rh5GAM24dQ==
-X-Received: by 2002:a05:6402:2803:b0:502:e50:3358 with SMTP id h3-20020a056402280300b005020e503358mr12854788ede.3.1680429099044;
-        Sun, 02 Apr 2023 02:51:39 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680429104; x=1683021104;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VaeBDPkSiTEyNdN0rUscDp5HyS5CgrVs8mEE78XtpGY=;
+        b=O4webkITj6FfTwQvVmx+9iq5aDgyL1z6+Ca6QJ3NsJDRI1qlZVFCgi8zu5Q2jQ/6sc
+         SY+r1zbbTgWzjiwPo20navyrHxIIPct1oi6dm5Ol9HDT6xOJVQ/mNH7DF6AJCHnrr6Ym
+         YQxjrvIPNvO1+/6kZax/dg8SnIeFfw0TMULSQsyWYvVhQBTnZuFD9X2/0DdV9H0i7411
+         7e6B8T4Cj7Ea7QFUzN+DmEgll0276gnfnLJjr+HEQRJlaURicnJopTyyVR743Doz/4Ld
+         Fs2jQcwclmk8pLVfsWpM6LsTL6ipGKQ+6Y0m/HPabJTcwtDfDSlDDJs39FIJ73pOcA3C
+         Ht9Q==
+X-Gm-Message-State: AAQBX9e74pQh367ONjsT093ZyLSRuJZ39QCeigY0KUneTLRmTgeYNtPI
+        urvbCJlD7SzanrgqRYWDiQs4CgocYbk=
+X-Google-Smtp-Source: AKy350ZqQ0Kj2HWD+AtYdnNQ8V2cqxvVTdwF6CPMkzO2spgWeg9jAVZj/ZCVRcwzVdoJWiLuNlmglg==
+X-Received: by 2002:a17:906:2098:b0:8d2:78c5:1d4e with SMTP id 24-20020a170906209800b008d278c51d4emr9637967ejq.5.1680429104567;
+        Sun, 02 Apr 2023 02:51:44 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id e27-20020a50d4db000000b004fadc041e13sm3085852edj.42.2023.04.02.02.51.37
+        by smtp.gmail.com with ESMTPSA id gl25-20020a170906e0d900b00929fc8d264dsm3103867ejb.17.2023.04.02.02.51.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 02:51:38 -0700 (PDT)
-Date:   Sun, 2 Apr 2023 11:51:36 +0200
+        Sun, 02 Apr 2023 02:51:44 -0700 (PDT)
+Date:   Sun, 2 Apr 2023 11:51:42 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/6] staging: rtl8192e: Remove enum RF_1T2R and useless
- cases for customer_id
-Message-ID: <cover.1680427945.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH v2 1/6] staging: rtl8192e: Remove RF_Type from
+ .._dm_tx_update_tssi_weak_signal
+Message-ID: <95744a9d271723b44b92465809d092f90edf9bc9.1680427945.git.philipp.g.hortmann@gmail.com>
+References: <cover.1680427945.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1680427945.git.philipp.g.hortmann@gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -68,31 +71,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove enum RF_1T2R as the code using it has always the same result.
-Remove useless cases for customer_id.
+Remove RF_Type from _rtl92e_dm_tx_update_tssi_weak_signal and
+_rtl92e_dm_tx_update_tssi_strong_signal as it is unused.
 
-Tested with rtl8192e
-Transferred this patch over wlan connection of rtl8192e
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
-V1->V2: Added first patch to avoid a useage of an uninitialized
-        variable RF_Type introduced by later patches.
+V1->V2: This patch did not exist before and was added because RF_Type
+        was used here but left uninitialized by later patches.
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-Philipp Hortmann (6):
-  staging: rtl8192e: Remove RF_Type from
-    .._dm_tx_update_tssi_weak_signal
-  staging: rtl8192e: Remove enum RF_1T2R and RF_Type
-  staging: rtl8192e: Remove local variable Value and powerlevelOFDM24G
-  staging: rtl8192e: Remove case customer_id = RT_CID_DLINK
-  staging: rtl8192e: Remove case customer_id = RT_CID_819x_CAMEO, ..
-  staging: rtl8192e: Remove case customer_id = RT_CID_DEFAULT, ..
-
- .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 26 -------------------
- drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h |  7 -----
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  5 ----
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    | 21 +++++----------
- drivers/staging/rtl8192e/rtllib.h             |  4 ---
- 5 files changed, 6 insertions(+), 57 deletions(-)
-
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+index b5f4d0230da7..258ea66ab2fd 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+@@ -475,8 +475,7 @@ static u8	CCKSwingTable_Ch14[CCK_TABLE_LEN][8] = {
+ #define		Tssi_Report_Value2			0x13e
+ #define		FW_Busy_Flag				0x13f
+ 
+-static void _rtl92e_dm_tx_update_tssi_weak_signal(struct net_device *dev,
+-						  u8 RF_Type)
++static void _rtl92e_dm_tx_update_tssi_weak_signal(struct net_device *dev)
+ {
+ 	struct r8192_priv *p = rtllib_priv(dev);
+ 
+@@ -495,8 +494,7 @@ static void _rtl92e_dm_tx_update_tssi_weak_signal(struct net_device *dev,
+ 	}
+ }
+ 
+-static void _rtl92e_dm_tx_update_tssi_strong_signal(struct net_device *dev,
+-						    u8 RF_Type)
++static void _rtl92e_dm_tx_update_tssi_strong_signal(struct net_device *dev)
+ {
+ 	struct r8192_priv *p = rtllib_priv(dev);
+ 
+@@ -610,10 +608,9 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
+ 				return;
+ 			}
+ 			if (Avg_TSSI_Meas_from_driver < tssi_13dBm - E_FOR_TX_POWER_TRACK)
+-				_rtl92e_dm_tx_update_tssi_weak_signal(dev,
+-								      RF_Type);
++				_rtl92e_dm_tx_update_tssi_weak_signal(dev);
+ 			else
+-				_rtl92e_dm_tx_update_tssi_strong_signal(dev, RF_Type);
++				_rtl92e_dm_tx_update_tssi_strong_signal(dev);
+ 
+ 			priv->cck_present_attn_diff
+ 				= priv->rfa_txpowertrackingindex_real - priv->rfa_txpowertracking_default;
 -- 
 2.40.0
 
