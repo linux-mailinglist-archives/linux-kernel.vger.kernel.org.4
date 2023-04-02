@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C54F6D3674
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 11:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFE46D366D
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 11:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjDBJNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 05:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        id S230303AbjDBJNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 05:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbjDBJNL (ORCPT
+        with ESMTP id S229447AbjDBJNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 05:13:11 -0400
+        Sun, 2 Apr 2023 05:13:10 -0400
 Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BAACC36;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796ABCDCC;
         Sun,  2 Apr 2023 02:13:08 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pq7bg22Y6z4f3lKM;
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pq7bg4ghZz4f3lwR;
         Sun,  2 Apr 2023 17:13:03 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgD3X7MeRylkVUE8Gg--.50168S7;
+        by APP4 (Coremail) with SMTP id gCh0CgD3X7MeRylkVUE8Gg--.50168S8;
         Sun, 02 Apr 2023 17:13:05 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     logang@deltatee.com, song@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
         yangerkun@huawei.com
-Subject: [PATCH v4 3/5] md: add a helper to access md_thread() directly
-Date:   Sun,  2 Apr 2023 17:12:34 +0800
-Message-Id: <20230402091236.976723-4-yukuai1@huaweicloud.com>
+Subject: [PATCH v4 4/5] dm-raid: remove useless checking in raid_message()
+Date:   Sun,  2 Apr 2023 17:12:35 +0800
+Message-Id: <20230402091236.976723-5-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230402091236.976723-1-yukuai1@huaweicloud.com>
 References: <20230402091236.976723-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3X7MeRylkVUE8Gg--.50168S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxuFy5tw18ZFWrWry5Jr4ktFb_yoWrCFy8pa
-        yvqFyY9w48AFW3Zr1DAaykuFyFqwn2gF9rKryfC3yrC3W5G398Jry5CFyjyr1DZF1FyF43
-        tF15Kr48GF4vgr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9v14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbJ73DUUUUU==
+X-CM-TRANSID: gCh0CgD3X7MeRylkVUE8Gg--.50168S8
+X-Coremail-Antispam: 1UD129KBjvdXoWrZrW7trWxXryfJF1fKFW8tFb_yoWfuwbEgF
+        s5Zr9rXrnruw1fA3W2vw40vr90ywn5uF1kWF4rtFyayFy8KryrXryrurn8CwnrZFW7Cryj
+        krWUCr4fCrn5CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbT8FF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
+        IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
+        F7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr
+        1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
+        8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
+        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l4I
+        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
+        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
+        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
+        cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
+        4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOBTYUUUUU
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=1.0 required=5.0 tests=KHOP_HELO_FCRDNS,MAY_BE_FORGED,
@@ -64,124 +64,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-In some context it's safe to access md_thread directly without
-protection, this patch add a helper to do that. There are no functional
-changes, prepare to protect md_thread with rcu.
+md_wakeup_thread() handle the case that pass in md_thread is NULL, there
+is no need to checking this. Prepare to protect md_thread with rcu.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/md-bitmap.c   | 7 ++++---
- drivers/md/md.c          | 4 +++-
- drivers/md/md.h          | 6 ++++++
- drivers/md/raid10.c      | 2 +-
- drivers/md/raid5-cache.c | 7 ++++---
- 5 files changed, 18 insertions(+), 8 deletions(-)
+ drivers/md/dm-raid.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
-index e7cc6ba1b657..f670c72d97be 100644
---- a/drivers/md/md-bitmap.c
-+++ b/drivers/md/md-bitmap.c
-@@ -1246,7 +1246,7 @@ void md_bitmap_daemon_work(struct mddev *mddev)
- 
- 	bitmap->daemon_lastrun = jiffies;
- 	if (bitmap->allclean) {
--		mddev->thread->timeout = MAX_SCHEDULE_TIMEOUT;
-+		get_md_thread(mddev->thread)->timeout = MAX_SCHEDULE_TIMEOUT;
- 		goto done;
+diff --git a/drivers/md/dm-raid.c b/drivers/md/dm-raid.c
+index 60632b409b80..5c952a209214 100644
+--- a/drivers/md/dm-raid.c
++++ b/drivers/md/dm-raid.c
+@@ -3754,11 +3754,11 @@ static int raid_message(struct dm_target *ti, unsigned int argc, char **argv,
+ 		 * canceling read-auto mode
+ 		 */
+ 		mddev->ro = 0;
+-		if (!mddev->suspended && mddev->sync_thread)
++		if (!mddev->suspended)
+ 			md_wakeup_thread(mddev->sync_thread);
  	}
- 	bitmap->allclean = 1;
-@@ -1343,7 +1343,7 @@ void md_bitmap_daemon_work(struct mddev *mddev)
+ 	set_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
+-	if (!mddev->suspended && mddev->thread)
++	if (!mddev->suspended)
+ 		md_wakeup_thread(mddev->thread);
  
-  done:
- 	if (bitmap->allclean == 0)
--		mddev->thread->timeout =
-+		get_md_thread(mddev->thread)->timeout =
- 			mddev->bitmap_info.daemon_sleep;
- 	mutex_unlock(&mddev->bitmap_info.mutex);
- }
-@@ -1941,7 +1941,8 @@ int md_bitmap_load(struct mddev *mddev)
- 	/* Kick recovery in case any bits were set */
- 	set_bit(MD_RECOVERY_NEEDED, &bitmap->mddev->recovery);
- 
--	mddev->thread->timeout = mddev->bitmap_info.daemon_sleep;
-+	get_md_thread(mddev->thread)->timeout =
-+				mddev->bitmap_info.daemon_sleep;
- 	md_wakeup_thread(mddev->thread);
- 
- 	md_bitmap_update_sb(bitmap);
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 139c7b0202e3..d5a29ccb24ec 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -458,7 +458,9 @@ static void md_submit_bio(struct bio *bio)
-  */
- void mddev_suspend(struct mddev *mddev)
- {
--	WARN_ON_ONCE(mddev->thread && current == mddev->thread->tsk);
-+	struct md_thread *thread = get_md_thread(mddev->thread);
-+
-+	WARN_ON_ONCE(thread && current == thread->tsk);
- 	lockdep_assert_held(&mddev->reconfig_mutex);
- 	if (mddev->suspended++)
- 		return;
-diff --git a/drivers/md/md.h b/drivers/md/md.h
-index 344e055e4d0f..5acdd704a922 100644
---- a/drivers/md/md.h
-+++ b/drivers/md/md.h
-@@ -718,6 +718,12 @@ struct md_io_acct {
- 
- #define THREAD_WAKEUP  0
- 
-+/* caller need to make sured returned md_thread won't be freed */
-+static inline struct md_thread *get_md_thread(struct md_thread *t)
-+{
-+	return t;
-+}
-+
- static inline void safe_put_page(struct page *p)
- {
- 	if (p) put_page(p);
-diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index 0171ba4f19b0..fc8d07fb1c7d 100644
---- a/drivers/md/raid10.c
-+++ b/drivers/md/raid10.c
-@@ -996,7 +996,7 @@ static bool stop_waiting_barrier(struct r10conf *conf)
- 		return true;
- 
- 	/* move on if recovery thread is blocked by us */
--	if (conf->mddev->thread->tsk == current &&
-+	if (get_md_thread(conf->mddev->thread)->tsk == current &&
- 	    test_bit(MD_RECOVERY_RUNNING, &conf->mddev->recovery) &&
- 	    conf->nr_queued > 0)
- 		return true;
-diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
-index 0464d4d551fc..7e45df3e093f 100644
---- a/drivers/md/raid5-cache.c
-+++ b/drivers/md/raid5-cache.c
-@@ -1582,11 +1582,11 @@ void r5l_quiesce(struct r5l_log *log, int quiesce)
- 		/* make sure r5l_write_super_and_discard_space exits */
- 		mddev = log->rdev->mddev;
- 		wake_up(&mddev->sb_wait);
--		kthread_park(log->reclaim_thread->tsk);
-+		kthread_park(get_md_thread(log->reclaim_thread)->tsk);
- 		r5l_wake_reclaim(log, MaxSector);
- 		r5l_do_reclaim(log);
- 	} else
--		kthread_unpark(log->reclaim_thread->tsk);
-+		kthread_unpark(get_md_thread(log->reclaim_thread)->tsk);
- }
- 
- bool r5l_log_disk_error(struct r5conf *conf)
-@@ -3124,7 +3124,8 @@ int r5l_init_log(struct r5conf *conf, struct md_rdev *rdev)
- 	if (md_register_thread(&log->reclaim_thread, r5l_reclaim_thread,
- 			       log->rdev->mddev, "reclaim"))
- 		goto reclaim_thread;
--	log->reclaim_thread->timeout = R5C_RECLAIM_WAKEUP_INTERVAL;
-+	get_md_thread(log->reclaim_thread)->timeout =
-+				R5C_RECLAIM_WAKEUP_INTERVAL;
- 
- 	init_waitqueue_head(&log->iounit_wait);
- 
+ 	return 0;
 -- 
 2.39.2
 
