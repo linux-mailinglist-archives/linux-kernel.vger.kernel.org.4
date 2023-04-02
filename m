@@ -2,91 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C285F6D3989
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 19:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9952D6D39A1
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 19:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjDBRt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 13:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S231254AbjDBR7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 13:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDBRt5 (ORCPT
+        with ESMTP id S231233AbjDBR7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 13:49:57 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532EFCDD3
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 10:49:55 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id t10so108587744edd.12
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 10:49:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1680457793; x=1683049793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=twCPC0pauRSrcDGPcatZZnRn4es+o8hDMAtgf21b8Ls=;
-        b=V1xjAwxIQpU+AKtTAqNqQTXZ5XTfQpwo4FJqpSfOxuxfMAijag35GXzem9qcwW2Grl
-         137BTU5gvXiBbzDSEmPfs7+3Rl+4BFwl48XsV6MD8xvTpWZQeuvewmUgOrk/4OvhGu7h
-         9gtsaSAf1ocKhC28eHJD8r8M9nHMnnaA6JnUo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680457793; x=1683049793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=twCPC0pauRSrcDGPcatZZnRn4es+o8hDMAtgf21b8Ls=;
-        b=OlO2bYnFiYcihCrm5Uh1oKpJjg5CEbhrhESKOmKhlmZGaA/FE6BTkGXB0yZIgF8VsI
-         TyTNbOLCd7b+HLHWmQK2N6e8NiMibAo/RYsp/qn/lSVK+u7koU3ZRErYZrGp5/WI4oUd
-         Uy9dWmOZkNJhKSi/AgqEPOyff0W6dbEazg+1K/2FwUBGHnCWeWNUrzucTf7junfDh/ck
-         VpPopp3Uz34shFHc6E8oolPl89DclrZ9B4EVQdJH9mxrs1M6AwnfbvWorjoQVMq7Qu50
-         +SbuWDQGi5jgnp/fTq1aiK17Z3u/YDzKbWJqR+1F3Zf6Z/cDeWvPv4Z4XsRSvPcQSLaa
-         CyuA==
-X-Gm-Message-State: AAQBX9ekDnVCVgZlplUTRKlYyT796tHvIvNhQrXjsEwM4aUj3Xh4+s84
-        lCPqHjn84uGOqaBD+hwx04UX7vq5w5CLgH5ZBSY=
-X-Google-Smtp-Source: AKy350b2+3hF87s79kIJ9GoLgJWWsX4Ccqmn3V2yyFmuR9NWgkR8PGIhZUr/EDLwbCV6dLTbMF5sfQ==
-X-Received: by 2002:a17:906:4787:b0:933:89a1:57e6 with SMTP id cw7-20020a170906478700b0093389a157e6mr42473101ejc.26.1680457793522;
-        Sun, 02 Apr 2023 10:49:53 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id x3-20020a50d603000000b004c06f786602sm3483284edi.85.2023.04.02.10.49.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Apr 2023 10:49:52 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id r11so108770121edd.5
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 10:49:52 -0700 (PDT)
-X-Received: by 2002:a05:6402:e93:b0:502:a4ec:a225 with SMTP id
- h19-20020a0564020e9300b00502a4eca225mr436161eda.4.1680457792538; Sun, 02 Apr
- 2023 10:49:52 -0700 (PDT)
+        Sun, 2 Apr 2023 13:59:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44DE4EFD
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 10:59:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A3CA612D1
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 17:59:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DB2EC433D2;
+        Sun,  2 Apr 2023 17:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680458344;
+        bh=hypU8I+jGgfmux7jn63x7uy8u7xkg961ImzN1SN31nk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=taE1iN91ihIB4QdUqvXHcKjh1UsDchKGI7ms0t/lQXLD6TkFitithwtw98gsTVEyi
+         fEjBizI3MC4sLJzRqjazplZKgJvH2BkGQ+ThVmycKUJpgh0xK0DBl/XQe80ZPHB471
+         fcaxJiydybCtrzZNX8/0ozmEqh6IA67kOIKg+by0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     rafael@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 0/5] driver core: class: allow struct class to be static
+Date:   Sun,  2 Apr 2023 19:58:45 +0200
+Message-Id: <2023040244-duffel-pushpin-f738@gregkh>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <168045676522.992122.1074253542608037015@leemhuis.info>
-In-Reply-To: <168045676522.992122.1074253542608037015@leemhuis.info>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 2 Apr 2023 10:49:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whRs_MavKCqtV3=K31dq9Z6HzbaG8Uxo-EV=uRxdsXduA@mail.gmail.com>
-Message-ID: <CAHk-=whRs_MavKCqtV3=K31dq9Z6HzbaG8Uxo-EV=uRxdsXduA@mail.gmail.com>
-Subject: Re: Linux regressions report for mainline [2023-04-02]
-To:     "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Lines:  49
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2507; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=hypU8I+jGgfmux7jn63x7uy8u7xkg961ImzN1SN31nk=; b=owGbwMvMwCRo6H6F97bub03G02pJDCmah0LvuhTL7fzeajfz38f1C7K8L2W0HW2zP7xJP0vt2 vIDy3hOdcSyMAgyMciKKbJ82cZzdH/FIUUvQ9vTMHNYmUCGMHBxCsBE2ngYFjRuPLCNpTpVx9Fm 1usv9aELJqmeFGCYX83o/pRRmIn/zM6CCteFi9qvCm4wBgA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 2, 2023 at 10:34=E2=80=AFAM Regzbot (on behalf of Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> But there is a 6.2 regression that annoys me. It's one of the two in the
-> media driver venus I mentioned a few times already in earlier reports.
+There's been a semi-slow drip of driver core struct class changes
+recently, and here's the final bit to the core that makes it possible
+for 'struct class' to be moved into read-only memory.  And as proof, the
+last patch in the series does just that for the tty classes.
 
-Ok, something is rotten in the state of Denmark^Hmedia.
+After this series, there's some tree-wide cleanups needed to move away
+from the class_create() api back to class_register() to move the
+structures into read-only memory.  The class_create() api was a good
+idea when it was created (as struct class was a dynamic structure), but
+that got changed a long time ago and that's not necessary anymore.  But
+that can wait for after 6.4-rc1 is out as they can all go through the
+different relevant subsystems if wanted.
 
-I've taken that revert directly, the same way I had to take Arnd's
-build fix. Both patches from way back on February 7.
+All of these apply on top of my latest driver-core.git driver-core-next
+branch (or linux-next), as they require the current set of struct class
+and struct bus_type reworks and have been tested locally (I'm typing
+this and will send them out on a kernel running these changes).
 
-Oh well.
+Greg Kroah-Hartman (5):
+  driver core: class: mark class_release() as taking a const *
+  driver core: class: make class_register() take a const *
+  driver core: class: mark the struct class in struct class_interface
+    constant
+  driver core: class: remove struct class_interface * from callbacks
+  tty: make tty_class a static const structure
 
-                   Linus
+ drivers/base/base.h                      |  2 +-
+ drivers/base/class.c                     | 14 +++++++-------
+ drivers/base/core.c                      | 10 ++++------
+ drivers/hwmon/drivetemp.c                |  4 ++--
+ drivers/net/rionet.c                     |  3 +--
+ drivers/ntb/hw/mscc/ntb_hw_switchtec.c   |  6 ++----
+ drivers/pcmcia/cs.c                      |  2 +-
+ drivers/pcmcia/ds.c                      |  6 ++----
+ drivers/pcmcia/rsrc_nonstatic.c          |  6 ++----
+ drivers/rapidio/devices/rio_mport_cdev.c |  7 ++-----
+ drivers/rapidio/rio_cm.c                 |  8 ++------
+ drivers/scsi/ses.c                       |  6 ++----
+ drivers/scsi/sg.c                        |  8 ++++----
+ drivers/tty/pty.c                        |  2 +-
+ drivers/tty/tty_io.c                     | 24 +++++++++++-------------
+ drivers/tty/vt/vt.c                      |  2 +-
+ include/linux/device/class.h             | 10 +++++-----
+ include/linux/tty.h                      |  2 +-
+ kernel/time/alarmtimer.c                 |  3 +--
+ 19 files changed, 52 insertions(+), 73 deletions(-)
+
+-- 
+2.40.0
+
