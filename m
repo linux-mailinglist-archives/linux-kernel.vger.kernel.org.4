@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50196D3534
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 04:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 214676D3536
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 04:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjDBCAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Apr 2023 22:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
+        id S230167AbjDBCLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Apr 2023 22:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjDBCAu (ORCPT
+        with ESMTP id S229681AbjDBCLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Apr 2023 22:00:50 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE496E192
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Apr 2023 19:00:48 -0700 (PDT)
+        Sat, 1 Apr 2023 22:11:52 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0E5EC5F;
+        Sat,  1 Apr 2023 19:11:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680400848; x=1711936848;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7nxn/Ua8nJkRMxxAXjefZY7ZAhrGJZkIb1Bz/1aTfgA=;
-  b=GI0I7wq1iaQEgH8goz/1amXKUgM7wjTp2ks+tErERGeUy5oDMcJGb4FU
-   5WgROic8sTE0YOLfzIZKuGUUEAdRzSFevy5VigXOL1B1ln9sAJHjYUp8N
-   LkrDxSl9PUrPkFe3VCEYVIoSmPvgK2DSlj7w/GfF7DumlF8OtRZRZTlS9
-   qXtocDjXNjTTQSgJUB/8ckFKMVpk9Qm9oT70VX6teahF5pU/xQmSIJBKs
-   nL56e5uzsEc+VyZRsyLpWhUo0fBH/8ba8RRUoJ4z7vKLSROG0bEXW22Zh
-   S58lvtw7coCeJnsmRO63Wos3tOwI/Jb69MdqzqifUoSyszXVtQcw2tKNG
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="340422178"
+  t=1680401509; x=1711937509;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EAUnShvAN7CBmVvc/poi83y0CvKkYQeH+bGcVMW0RxY=;
+  b=D9mhDpUSJ2yj+AQGW83yIuafu8WApLBR7IxDRrr6XpktNcULizsjiCu8
+   KOUBldjljWKn5Y6mwo/XH9u22JrYjORcR2k108ns1sJ9SYEuWW8ERo1tT
+   Y/HlE4H4F+AXANLYBrB4ewVRDr+DROh/quYl6XjdxLQc8Wjyol+ZcFBeA
+   bnrxYJRads9jRTmxYmFQGvkxM9sBEvIEHXrvuXnX3lnyjdAhnJDTUBoBj
+   AvSo1oiXETfxfUmY5g/n0eHtsmEoROX1aYM64WRZVG5/bgTqkjnGJRUCY
+   qB08Ut0Evxfve8Q5I23qcXBw0TMtOjqQAxgk9ZzLHC8jhMSl4/QlynErA
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="341713738"
 X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
-   d="scan'208";a="340422178"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 19:00:48 -0700
+   d="scan'208";a="341713738"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 19:11:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="679039251"
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="688113255"
 X-IronPort-AV: E=Sophos;i="5.98,311,1673942400"; 
-   d="scan'208";a="679039251"
+   d="scan'208";a="688113255"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 01 Apr 2023 19:00:46 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 01 Apr 2023 19:11:46 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pin1R-000NAb-23;
-        Sun, 02 Apr 2023 02:00:45 +0000
-Date:   Sun, 2 Apr 2023 10:00:42 +0800
+        id 1pinC5-000NAx-2a;
+        Sun, 02 Apr 2023 02:11:45 +0000
+Date:   Sun, 2 Apr 2023 10:11:09 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Wesley Chalmers <Wesley.Chalmers@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jun Lei <Jun.Lei@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6:
- warning: no previous prototype for
- 'optc3_wait_drr_doublebuffer_pending_clear'
-Message-ID: <202304020914.aETvh0O8-lkp@intel.com>
+To:     Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rahul Rameshbabu <rrameshbabu@nvidia.com>
+Subject: Re: [PATCH v1 RESEND 1/1] HID: shield: Initial driver implementation
+ with Thunderstrike support
+Message-ID: <202304020922.vsngJnBT-lkp@intel.com>
+References: <20230401032150.7424-2-rrameshbabu@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230401032150.7424-2-rrameshbabu@nvidia.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
@@ -64,77 +68,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wesley,
+Hi Rahul,
 
-FYI, the error/warning still remains.
+I love your patch! Perhaps something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   00c7b5f4ddc5b346df62b757ec73f9357bb452af
-commit: 8f0d304d21b351d65e8c434c5399a40231876ba1 drm/amd/display: Do not commit pipe when updating DRR
-date:   7 weeks ago
-config: arm64-buildonly-randconfig-r005-20230402 (https://download.01.org/0day-ci/archive/20230402/202304020914.aETvh0O8-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
+[auto build test WARNING on hid/for-next]
+[also build test WARNING on linus/master v6.3-rc4 next-20230331]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Rahul-Rameshbabu/HID-shield-Initial-driver-implementation-with-Thunderstrike-support/20230401-112438
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+patch link:    https://lore.kernel.org/r/20230401032150.7424-2-rrameshbabu%40nvidia.com
+patch subject: [PATCH v1 RESEND 1/1] HID: shield: Initial driver implementation with Thunderstrike support
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20230402/202304020922.vsngJnBT-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f0d304d21b351d65e8c434c5399a40231876ba1
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8f0d304d21b351d65e8c434c5399a40231876ba1
+        # https://github.com/intel-lab-lkp/linux/commit/febf8c75cc77baaf26a8ae869201cb1df6d67124
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Rahul-Rameshbabu/HID-shield-Initial-driver-implementation-with-Thunderstrike-support/20230401-112438
+        git checkout febf8c75cc77baaf26a8ae869201cb1df6d67124
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hid/ drivers/iio/pressure/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304020914.aETvh0O8-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304020922.vsngJnBT-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
-     294 | void optc3_wait_drr_doublebuffer_pending_clear(struct timing_generator *optc)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/dcn30_fpu.h:29,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:32:
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:143:22: warning: 'SYNAPTICS_DEVICE_ID' defined but not used [-Wunused-const-variable=]
-     143 | static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
-         |                      ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:140:22: warning: 'DP_VGA_LVDS_CONVERTER_ID_3' defined but not used [-Wunused-const-variable=]
-     140 | static const uint8_t DP_VGA_LVDS_CONVERTER_ID_3[] = "dnomlA";
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:138:22: warning: 'DP_VGA_LVDS_CONVERTER_ID_2' defined but not used [-Wunused-const-variable=]
-     138 | static const uint8_t DP_VGA_LVDS_CONVERTER_ID_2[] = "sivarT";
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:135:17: warning: 'DP_SINK_BRANCH_DEV_NAME_7580' defined but not used [-Wunused-const-variable=]
-     135 | static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] = "7580\x80u";
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:133:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
-     133 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:132:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
-     132 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dc_types.h:36,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dm_services_types.h:30,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dm_services.h:35,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/reg_helper.h:28,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:26:
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dc_hdmi_types.h:53:22: warning: 'dp_hdmi_dongle_signature_str' defined but not used [-Wunused-const-variable=]
-      53 | static const uint8_t dp_hdmi_dongle_signature_str[] = "DP-HDMI ADAPTOR";
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hid/hid-shield.c:199:6: warning: no previous prototype for function 'thunderstrike_hostcmd_req_work_handler' [-Wmissing-prototypes]
+   void thunderstrike_hostcmd_req_work_handler(struct work_struct *work)
+        ^
+   drivers/hid/hid-shield.c:199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void thunderstrike_hostcmd_req_work_handler(struct work_struct *work)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +/optc3_wait_drr_doublebuffer_pending_clear +294 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c
+vim +/thunderstrike_hostcmd_req_work_handler +199 drivers/hid/hid-shield.c
 
-   293	
- > 294	void optc3_wait_drr_doublebuffer_pending_clear(struct timing_generator *optc)
-   295	{
-   296		struct optc *optc1 = DCN10TG_FROM_TG(optc);
-   297	
-   298		REG_WAIT(OTG_DOUBLE_BUFFER_CONTROL, OTG_DRR_TIMING_DBUF_UPDATE_PENDING, 0, 2, 100000); /* 1 vupdate at 5hz */
-   299	
+   198	
+ > 199	void thunderstrike_hostcmd_req_work_handler(struct work_struct *work)
+   200	{
+   201		struct thunderstrike *ts =
+   202			container_of(work, struct thunderstrike, hostcmd_req_work);
+   203		struct thunderstrike_hostcmd_req_report *report;
+   204		unsigned long flags;
+   205	
+   206		report = ts->req_report_dmabuf;
+   207	
+   208		if (test_and_clear_bit(THUNDERSTRIKE_FW_VERSION_UPDATE, &ts->update_flags)) {
+   209			thunderstrike_hostcmd_req_report_init(
+   210				report, THUNDERSTRIKE_HOSTCMD_ID_FW_VERSION);
+   211			thunderstrike_send_hostcmd_request(ts);
+   212		}
+   213	
+   214		if (test_and_clear_bit(THUNDERSTRIKE_BOARD_INFO_UPDATE, &ts->update_flags)) {
+   215			thunderstrike_hostcmd_req_report_init(
+   216				report, THUNDERSTRIKE_HOSTCMD_ID_BOARD_INFO);
+   217			thunderstrike_send_hostcmd_request(ts);
+   218		}
+   219	
+   220		if (test_and_clear_bit(THUNDERSTRIKE_HAPTICS_UPDATE, &ts->update_flags)) {
+   221			thunderstrike_hostcmd_req_report_init(
+   222				report, THUNDERSTRIKE_HOSTCMD_ID_HAPTICS);
+   223	
+   224			report->haptics.update = 1;
+   225			spin_lock_irqsave(&ts->haptics_update_lock, flags);
+   226			report->haptics.motors = ts->haptics_val;
+   227			spin_unlock_irqrestore(&ts->haptics_update_lock, flags);
+   228	
+   229			thunderstrike_send_hostcmd_request(ts);
+   230		}
+   231	}
+   232	
 
 -- 
 0-DAY CI Kernel Test Service
