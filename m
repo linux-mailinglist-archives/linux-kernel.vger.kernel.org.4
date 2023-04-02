@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2523D6D3822
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB566D3827
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 15:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjDBNsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 09:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
+        id S229681AbjDBNyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 09:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDBNsH (ORCPT
+        with ESMTP id S229448AbjDBNyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 09:48:07 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D165A7DBB;
-        Sun,  2 Apr 2023 06:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680443285; x=1711979285;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x8IrL2VmEc7QY4rRQiZNQOAy6BijstVun0yp4vULcF8=;
-  b=j0wexA6wXbvn76SykgDQaJkJLUPdR8G70yg3Ppfqp9uMxjjesfeyHZHq
-   mkYBdk9zkyqKnDoz7L0myWSJDKwELuTj6lUvFh+D/cQl8rDisJnwaA6st
-   SODe8NtbFJ4GISiwC+Rhn5BvTIAKU6nnveiv7F8Qr68IYaSzZscEeVFbz
-   bZ3wkevcP01CjL5BI2nppB1Tem1eLbGA+6xi33GdWlGO/MwFDsc6KrVmy
-   RqWcOMxbC13zhn/XVT8X2IKBJLQxyDzQVethEWPrMcMNFS3EJOnla7qz3
-   TuSIUhPwgUTT18sH2AV5QyS+D/Z0lNntBidNPF28luqgPAijQqyZfKHg+
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="325731176"
-X-IronPort-AV: E=Sophos;i="5.98,312,1673942400"; 
-   d="scan'208";a="325731176"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2023 06:48:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="774892544"
-X-IronPort-AV: E=Sophos;i="5.98,312,1673942400"; 
-   d="scan'208";a="774892544"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Apr 2023 06:48:02 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1piy3t-000NQT-1O;
-        Sun, 02 Apr 2023 13:48:01 +0000
-Date:   Sun, 2 Apr 2023 21:47:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Joe Stringer <joe@isovalent.com>, bpf@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
-        martin.lau@linux.dev, bagasdotme@gmail.com, maxtram95@gmail.com,
-        john.fastabend@gmail.com
-Subject: Re: [PATCH bpf-next v4 2/2] docs/bpf: Add LRU internals description
- and graph
-Message-ID: <202304022107.IwHc05cs-lkp@intel.com>
-References: <20230401200651.1022113-2-joe@isovalent.com>
+        Sun, 2 Apr 2023 09:54:33 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB589ED0;
+        Sun,  2 Apr 2023 06:54:32 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id l7so24851154pjg.5;
+        Sun, 02 Apr 2023 06:54:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680443671; x=1683035671;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Js0vdR9qo581AbpL/JRCH5c1IDiCJNDf7AV+/DBVZ8=;
+        b=iZCF4e54pSQKxlmpeKZ7YX/I3vvW6ll4Q/Ru0VXhjWwe2o/l0LpaDyK4kH+GeSS3BW
+         rt5OqJVodAL3pMlF8huCgOz3bK5vi/4T+uJKG79FQ0htpEo+LSbcv8acgwqU3ZPj+W6V
+         JkcWpWp3O/A51RoPybOR7CZifv+htikGpE8cdKbgFG4d1ZwFI484icwxknbhLKw3nMrV
+         nBN0oqs6j162HupVsW8kTOYaCOt2TMXqEasFl9UcGfcF0eTO8pfZrSIyopT36/lvrO6z
+         Uj83khLsrems7lPkpreRAM6FDFnWqQYayUg+h9tPnAizMIPfZprqRGh2tElX+t8Y38cr
+         JRag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680443671; x=1683035671;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+Js0vdR9qo581AbpL/JRCH5c1IDiCJNDf7AV+/DBVZ8=;
+        b=vijbjg5/A4vK2eHITXqsF3vs6xL9sq8SNFzzjx6Pp3ykRlWf3mucXZNa/4aLeCgTO3
+         0ofSogsY9bGjWVenlf93RwbwcOLEaNrer61/ChpytXvZzaUQABgVdK0fN067NUpdqLvn
+         YfR3lolb/PuJbMlBgT/Ogd+vAXrv9AVAy6MmpDT4IGoxhCEIHXMgC1Ydkju1DWdOSdhg
+         0TEgvwzBsjzlBZvdSkNEHhRQuy0juMH1revm9glEh2RvR1cKrRqbFaPYzCBxqr8CKm95
+         I8GuTops/njg9iJyZ5hy9qOf8/EnWMyouQG0T9Q5g6KNybKtjArrUSoWHulYwwVL/wq0
+         06YA==
+X-Gm-Message-State: AAQBX9djysJMhoIc5gQr2cbd9PkphXd+F4Nk8elR9uDuhohRX/T5h8vI
+        vR5rkC9ZgTeqN+61NfixLEm6p4AfkNv/NQ==
+X-Google-Smtp-Source: AKy350Zt9eyH4Fk7vZKvgUBlf/okVVMn2EMJV4TdfWiVeEa+Kmw/88qSjvidDFmuBTgYrTHPUO15Gw==
+X-Received: by 2002:a17:902:fb46:b0:1a1:a722:104f with SMTP id lf6-20020a170902fb4600b001a1a722104fmr27675880plb.24.1680443671513;
+        Sun, 02 Apr 2023 06:54:31 -0700 (PDT)
+Received: from 7YHHR73.igp.broadcom.net (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id ji13-20020a170903324d00b001a1aeb3a7a9sm4824861plb.137.2023.04.02.06.54.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Apr 2023 06:54:30 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION)
+Subject: [PATCH] Documentation: firmware: Clarify firmware path usage
+Date:   Sun,  2 Apr 2023 06:54:14 -0700
+Message-Id: <20230402135423.3235-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230401200651.1022113-2-joe@isovalent.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joe,
+Newline characters will be taken into account for the firmware search
+path parameter, warn users about that and provide an example using 'echo
+-n' such that it clarifies the typical use of that parameter.
 
-Thank you for the patch! Perhaps something to improve:
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ Documentation/driver-api/firmware/fw_search_path.rst | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-[auto build test WARNING on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Joe-Stringer/docs-bpf-Add-LRU-internals-description-and-graph/20230402-040757
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230401200651.1022113-2-joe%40isovalent.com
-patch subject: [PATCH bpf-next v4 2/2] docs/bpf: Add LRU internals description and graph
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/0c42be421b73fffe9160867ac673ea9841982ece
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Joe-Stringer/docs-bpf-Add-LRU-internals-description-and-graph/20230402-040757
-        git checkout 0c42be421b73fffe9160867ac673ea9841982ece
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304022107.IwHc05cs-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: Orthogonal edges do not currently handle edge labels. Try using xlabels.
-
+diff --git a/Documentation/driver-api/firmware/fw_search_path.rst b/Documentation/driver-api/firmware/fw_search_path.rst
+index a360f1009fa3..d7cb1e8f0076 100644
+--- a/Documentation/driver-api/firmware/fw_search_path.rst
++++ b/Documentation/driver-api/firmware/fw_search_path.rst
+@@ -22,5 +22,10 @@ can use the file:
+ 
+ * /sys/module/firmware_class/parameters/path
+ 
+-You would echo into it your custom path and firmware requested will be
+-searched for there first.
++You would echo into it your custom path and firmware requested will be searched
++for there first. Be aware that newline characters will be taken into account
++and may not produce the intended effects. For instance you might want to use:
++
++echo -n /path/to/script > /sys/module/firmware_class/parameters/path
++
++to ensure that your script is being used.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
