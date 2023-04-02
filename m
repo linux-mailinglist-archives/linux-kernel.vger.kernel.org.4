@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4E86D3933
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 18:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C48A16D393A
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 18:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjDBQt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 12:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        id S231303AbjDBQtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 12:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjDBQtV (ORCPT
+        with ESMTP id S231254AbjDBQt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 12:49:21 -0400
+        Sun, 2 Apr 2023 12:49:26 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B9A6585;
-        Sun,  2 Apr 2023 09:49:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A37EEC5F;
+        Sun,  2 Apr 2023 09:49:23 -0700 (PDT)
 Received: from workpc.. (109-252-124-32.nat.spd-mgts.ru [109.252.124.32])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 650816602FDA;
-        Sun,  2 Apr 2023 17:49:17 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C97F16603149;
+        Sun,  2 Apr 2023 17:49:19 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680454159;
-        bh=zdNUMjauHmiBRJnPvNU2fTsVHtTUBPtEEsYz6zGIZr4=;
+        s=mail; t=1680454162;
+        bh=eVCdRV5qU8vynb/wrbVZGCbVBKV3Y+cRuke8yPhNiSw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QMr2QpnTzcjVjAGqe26Bqrvh0pQFHwrGTV31v93fqjSM9NOYhXtvL+cwDRK93LYm8
-         9N8s5DIOJHbRiH38eUgPsjwh/QS5AqJZaxTisiqHYzi7r2xKkBYuqfJTBUF18SSCsA
-         hiuzvriFfZpVSerlKnOs1UJqVQEo1Zt72rJlBJhuyGIpB296qZeQXJ2j9s2JXG91Y3
-         OrIAeId7+6SUsMTLQM/g7OZ7i9tthS6JneLefCRqM2nfmh7S6P/bv+3xN5NDjUX8Ey
-         7KnFvrK/l5yWKlck2FGGX93UYc9+i/kJPVi+GNBKPhLRrapg585U1mOV8Ipodhqtgy
-         e/zLApOs4SfUw==
+        b=hP3BTt5MkgWeSKeeRJnyPJdkJiCW4vh+CO/RD3NLk4Z71S6FposyyUQvkf+9iAEvm
+         ViYtSop9tvAbEeer3NCbYe/ksUYBAaDKPI3yk3PY0jdHSlWullovFmAkAfywGn72+0
+         2OtqCX755RxvHKTzm25LdjO5bt5nv8+gWe29xcH+PpxoxeOnqihfOjDkPwGXBE5BXL
+         1lqsBdysM0KsO7CnNJwE2ewR/DFm45y2iNyqIP0Cb8x8BRonPuUZ5zplmcGUhKu5v1
+         y05NU/gTqSAzoeyRYtqoewGziWoxECJQKdv7R6MP1tZ7uftHxjroX9+JHenoswzVCr
+         7I8ScLsqJwgbw==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     Sumit Semwal <sumit.semwal@linaro.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
@@ -56,9 +56,9 @@ Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
         linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         kernel@collabora.com
-Subject: [PATCH v1 3/7] Revert "udmabuf: Assert held reservation lock for dma-buf mmapping"
-Date:   Sun,  2 Apr 2023 19:48:22 +0300
-Message-Id: <20230402164826.752842-4-dmitry.osipenko@collabora.com>
+Subject: [PATCH v1 4/7] Revert "fastrpc: Assert held reservation lock for dma-buf mmapping"
+Date:   Sun,  2 Apr 2023 19:48:23 +0300
+Message-Id: <20230402164826.752842-5-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230402164826.752842-1-dmitry.osipenko@collabora.com>
 References: <20230402164826.752842-1-dmitry.osipenko@collabora.com>
@@ -81,25 +81,33 @@ will have to handle the lock. The previous locking policy caused deadlock
 problem for DRM drivers in a case of self-imported dma-bufs, it's solved
 by moving the lock down to exporters.
 
-Fixes: aa3f99896443 ("udmabuf: Assert held reservation lock for dma-buf mmapping")
+Fixes: 265751a513ad ("fastrpc: Assert held reservation lock for dma-buf mmapping")
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/dma-buf/udmabuf.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/misc/fastrpc.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-index 740d6e426ee9..277f1afa9552 100644
---- a/drivers/dma-buf/udmabuf.c
-+++ b/drivers/dma-buf/udmabuf.c
-@@ -52,8 +52,6 @@ static int mmap_udmabuf(struct dma_buf *buf, struct vm_area_struct *vma)
- {
- 	struct udmabuf *ubuf = buf->priv;
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index a701132638cf..7e9c9ad37fd9 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -6,7 +6,6 @@
+ #include <linux/device.h>
+ #include <linux/dma-buf.h>
+ #include <linux/dma-mapping.h>
+-#include <linux/dma-resv.h>
+ #include <linux/idr.h>
+ #include <linux/list.h>
+ #include <linux/miscdevice.h>
+@@ -733,8 +732,6 @@ static int fastrpc_mmap(struct dma_buf *dmabuf,
+ 	struct fastrpc_buf *buf = dmabuf->priv;
+ 	size_t size = vma->vm_end - vma->vm_start;
  
--	dma_resv_assert_held(buf->resv);
+-	dma_resv_assert_held(dmabuf->resv);
 -
- 	if ((vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) == 0)
- 		return -EINVAL;
- 
+ 	return dma_mmap_coherent(buf->dev, vma, buf->virt,
+ 				 FASTRPC_PHYS(buf->phys), size);
+ }
 -- 
 2.39.2
 
