@@ -2,122 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C5F6D36D8
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 12:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1626D36DC
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Apr 2023 12:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjDBKFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 06:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
+        id S230266AbjDBKH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 06:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDBKFC (ORCPT
+        with ESMTP id S230338AbjDBKHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 06:05:02 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291C2C7;
-        Sun,  2 Apr 2023 03:05:01 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id i5so106562316eda.0;
-        Sun, 02 Apr 2023 03:05:01 -0700 (PDT)
+        Sun, 2 Apr 2023 06:07:23 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4749910F5
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 03:07:20 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id fb38so17327866pfb.7
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 03:07:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680429899;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vON38RePuqLozDLYgddF4MhnfOMXnlOt/UI+1d380Tc=;
-        b=AGf0Nt8d3g3Tjs8UM6Y9oy0kRPOCOY3mhu/4yHnogRcf625IkJ//ZQZA5l5ruJeH7J
-         SGztoIejVOeoCQHRQYU1kIB3AIE7RtuIvcJVGr8GLMAFsFnVNR5wTwmoYGDeeTodMU0a
-         QNmmOschEdAt8dvirRPvk6DpE5YFMgHTalXk3+0PUbrQ70fOQ0dTB4151PXw+l/MyZwI
-         OoWvtXBKMcry5heube3yrkiCQnCffICAhH7bHYxb8jIZzzTFpaLI38joM4doWEgeDkBt
-         +fGlCpnvDOyIXA2xHOw96Ghv4HBZ62dN/J8+XTmj+RmFymXpimBvBdpkLwZsHwCZnKhP
-         5Emg==
+        d=linaro.org; s=google; t=1680430040;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LbcpNdii47h7TS2sDEqIBCRRzLggrrEsT68ykuaA9G4=;
+        b=R86U4rubSlMu45rTmKuGAh1ipkQWxDqIc2yaQZ85Du3zUVU3JZp41800pHfCldruTL
+         KPKq6BNNFQ0rySvQyQyESWp2hOy0Nwk44tENFq9vQTsgIaBZzTjP8Y1N7/7A4QRta6Yh
+         dDSdteaVIY/4BHTJ7zM8AKmN8uefWwklMnLqydTVxfws2kPecGsNB+/AktaX8JcQ4a1u
+         lpyTQdyxhvpm71bo+GQV56pqgnvM3Nf5Y9NVLsy8YJytVkCo/IlJMC9yEuIfcsHAgjIl
+         8JM117lDSm3WacL7KxP27R3suAD4W247audx3IXuGvHIkJAQAwCCj+Rhyn3KPqJ12ut5
+         yimQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680429899;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1680430040;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vON38RePuqLozDLYgddF4MhnfOMXnlOt/UI+1d380Tc=;
-        b=AVr7Gqo9MTnTz25CzBRtAaN6tmg9FUYYhoHyxoMdoEEKJGGWm8/pV/+zvDw05OjI1C
-         bLWVG7sa4ecnk5ULsC2IN1YE8GVTldolFY7IZYjOkkNiDBHF7j7wv38wWask0qD1LTjG
-         OEa8E0EVk95c3bpNm4SOtwO4rdnWWDb4FiaPg7nbqyDtFidvoaBe63shUETY8FBRLLkJ
-         yCzmZb4wEZPQvPku5PnaJ1U+teqXpn4pcPr9aVcPrB+r31YWl0bMMSiSfLMDzXRLR5VB
-         cZmkdqplOAb8qBhMC1OYwzig+TidZPiZddBxH3B4EHRXRc9msujgW+OAyEIxEcoosY3n
-         1WeQ==
-X-Gm-Message-State: AAQBX9cNFJqxrCMUMJGlZ4RRLczZ4qKk95r2es3PZJP6sAQ4HeB+qLI+
-        hRL/wAbJ/5Khjo9FJ79F5bfWgo6sbuiZKSnAtvuaqGUv1JQeeg==
-X-Google-Smtp-Source: AKy350bETyU8FCFBHNo7aZNd+kj0kRyOpAWPw1ac3/+7VMBqkj27wnx24V7VJ6rrxW7Kz7QIPmwANFA6TtuBcxCUYTw=
-X-Received: by 2002:a17:906:6a0d:b0:928:6456:729c with SMTP id
- qw13-20020a1709066a0d00b009286456729cmr16213480ejc.10.1680429899526; Sun, 02
- Apr 2023 03:04:59 -0700 (PDT)
+        bh=LbcpNdii47h7TS2sDEqIBCRRzLggrrEsT68ykuaA9G4=;
+        b=31kPzmGC3jlZoPS7d8LCyCgppnHf1vk92L/sJ86z0v6SxOPBG3T67MD/INxtquAmaG
+         3XKms3VPR9NgaZSsgWxWdOfNdAr4fB1HJvwXAQ4nJX9KyzejIAFdjLkIF/66+YccR6Xd
+         LRQYs+fX6G4Gd4dyqYt3nVv2qKbS3spRAg6gwcCi7ez3Ei+sv+Y0LY08E4/fYYesiQMl
+         wJ5jw6mZh5qzD9QLxieJ+7dg5ADh5IwwjnVeRdHlXTKaY/jaB0V9XcfvrlnUZXF6kGJC
+         gf5W7u4tJpzU2KoQBK/ThR/DWBKmWLBf4gquiLoBOyrJ+RoDDqv17wz+fkBXrcvowtt7
+         P5bQ==
+X-Gm-Message-State: AAQBX9f6Flwwv4LaKoY9UCNH/ZjIMFaDuhGa15rf48YQepV0MVtK38hT
+        TVOQrQSjy3tQDi6qeoLfiWebmw==
+X-Google-Smtp-Source: AKy350ZBYGQQN100axzsFpPvHBD8jqrHFqg3mLi4YgSLtrKJamjsjGuvXDq36mOgNs3Fq6UKyxZbYw==
+X-Received: by 2002:a62:1c49:0:b0:626:80f:7a0d with SMTP id c70-20020a621c49000000b00626080f7a0dmr31584270pfc.8.1680430039671;
+        Sun, 02 Apr 2023 03:07:19 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.66.184])
+        by smtp.gmail.com with ESMTPSA id a26-20020a62bd1a000000b0062dba4e4706sm4788739pff.191.2023.04.02.03.07.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Apr 2023 03:07:19 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, andersson@kernel.org,
+        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
+        rfoss@kernel.org, neil.armstrong@linaro.org
+Subject: [PATCH v5 00/11] arm64: qcom: Enable Crypto Engine for a few Qualcomm SoCs
+Date:   Sun,  2 Apr 2023 15:34:58 +0530
+Message-Id: <20230402100509.1154220-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20230327-tegra-pmic-reboot-v3-0-3c0ee3567e14@skidata.com>
- <20230327-tegra-pmic-reboot-v3-2-3c0ee3567e14@skidata.com>
- <ZCGuMzmS0Lz5WX2/@ninjato> <CAJpcXm6bt100442y8ajz7kR0nF3Gm9PVVwo3EKVBDC4Pmd-7Ag@mail.gmail.com>
- <ZCSWkhyQjnzByDoR@shikoro>
-In-Reply-To: <ZCSWkhyQjnzByDoR@shikoro>
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Sun, 2 Apr 2023 12:04:48 +0200
-Message-ID: <CAJpcXm5eKhQg3JDksGs5fHi-DN+VAJNnuyUKtQGiS2OzTgzyVw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] i2c: core: run atomic i2c xfer when !preemptible
-To:     Wolfram Sang <wsa@kernel.org>, Benjamin Bara <bbara93@gmail.com>,
-        Lee Jones <lee@kernel.org>, rafael.j.wysocki@intel.com,
-        dmitry.osipenko@collabora.com, jonathanh@nvidia.com,
-        richard.leitner@linux.dev, treding@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        stable@vger.kernel.org
-Cc:     peterz@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023 at 21:50, Wolfram Sang <wsa@kernel.org> wrote:
-> Could you make sure please?
+Changes since v4:
+-----------------
+- v4 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230331164323.729093-1-bhupesh.sharma@linaro.org/
+- Collected R-Bs from Konrad for a couple of patches sent in v4.
+- Fixed incorrect email IDs for a couple of patches sent in v3, which I used for
+  some patches created on a different work machine.
+- No functional changes since v3.
 
-Sure, I'll try. The check before bae1d3a was:
-in_atomic() || irqs_disabled()
-which boils down to:
-(preempt_count() != 0) || irqs_disabled()
-preemptible() is defined as:
-(preempt_count() == 0 && !irqs_disabled())
+Changes since v3:
+-----------------
+- v3 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230328092815.292665-1-bhupesh.sharma@linaro.org/
+- Collected Acks from Krzysztof for a couple of patches sent in v3.
+- Fixed review comments from Krzysztof regarding DMA binding document
+  and also added a couple of new patches which are required to fix the
+  'dtbs_check' errors highlighted after this fix.
 
-so this patch should behave the same as pre-v5.2, but with the
-additional system state check. From my point of view, the additional
-value of the in_atomic() check was that it activated atomic i2c xfers
-when preemption is disabled, like in the case of panic(). So reverting
-that commit would also re-activate atomic i2c transfers during emergency
-restarts. However, I think considering the system state makes sense
-here.
+Changes since v2:
+-----------------
+- v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230322114519.3412469-1-bhupesh.sharma@linaro.org/
+- No functional change since v2. As the sdm845 patch from v1 was accepted in linux-next,
+  dropped it from this version.
 
-From my understanding, non-atomic i2c transfers require enabled IRQs,
-but atomic i2c transfers do not have any "requirements". So the
-irqs_disabled() check is not here to ensure that the following atomic
-i2c transfer works correctly, but to use non-atomic i2c xfer as
-long/often as possible.
+Changes since v1:
+-----------------
+- v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230321190118.3327360-1-bhupesh.sharma@linaro.org/
+- Folded the BAM DMA dt-binding change.
+  (sent earlier as: https://lore.kernel.org/linux-arm-msm/20230321184811.3325725-1-bhupesh.sharma@linaro.org/)
+- Folded the QCE dt-binding change.
+  (sent earlier as: https://lore.kernel.org/linux-arm-msm/20230320073816.3012198-1-bhupesh.sharma@linaro.org/)
+- Folded Neil's SM8450 dts patch in this series.
+- Addressed review comments from Rob, Stephan and Konrad.
+- Collected Konrad's R-B for [PATCH 5/9].
 
-Unfortunately, I am not sure yet about !CONFIG_PREEMPTION. I looked into
-some i2c-bus implementations which implement both, atomic and
-non-atomic. As far as I saw, the basic difference is that the non-atomic
-variants usually utilize the DMA and then call a variant of
-wait_for_completion(), like in i2c_imx_dma_write() [1]. However, the
-documentation of wait_for_completion [2] states that:
-"wait_for_completion() and its variants are only safe in process context
-(as they can sleep) but not (...) [if] preemption is disabled".
-Therefore, I am not quite sure yet if !CONFIG_PREEMPTION uses the
-non-atomic variant at all or if this case is handled differently.
+This patchset enables Crypto Engine support for Qualcomm SoCs like
+SM6115, SM8150, SM8250, SM8350 and SM8450.
 
-> Asking Peter Zijlstra might be a good idea.
-> He helped me with the current implementation.
+Note that:
+- SM8250 crypto engine patch utilizes the work already done by myself and
+  Vladimir.
+- SM8350 crypto engine patch utilizes the work already done by Robert.
+- SM8450 crypto engine patch utilizes the work already done by Neil.
 
-Thanks for the hint! I wrote an extra email to him and added him to CC.
+Also this patchset is rebased on linux-next/master.
 
-Thanks & best regards,
-Benjamin
+Bhupesh Sharma (10):
+  dt-bindings: dma: Add support for SM6115 and QCM2290 SoCs
+  dt-bindings: dma: Increase iommu maxItems for BAM DMA
+  arm64: dts: qcom: sdm8550: Fix the BAM DMA engine compatible string
+  arm64: dts: qcom: sdm845: Fix the slimbam DMA engine compatible string
+  dt-bindings: qcom-qce: Fix compatible combinations for SM8150 and
+    IPQ4019 SoCs
+  dt-bindings: qcom-qce: Add compatibles for SM6115 and QCM2290
+  arm64: dts: qcom: sm6115: Add Crypto Engine support
+  arm64: dts: qcom: sm8150: Add Crypto Engine support
+  arm64: dts: qcom: sm8250: Add Crypto Engine support
+  arm64: dts: qcom: sm8350: Add Crypto Engine support
 
-[1] drivers/i2c/busses/i2c-imx.c
-[2] https://www.kernel.org/doc/Documentation/scheduler/completion.txt
+Neil Armstrong (1):
+  arm64: dts: qcom: sm8450: add crypto nodes
+
+ .../devicetree/bindings/crypto/qcom-qce.yaml  |  8 ++++++
+ .../devicetree/bindings/dma/qcom,bam-dma.yaml | 22 +++++++++------
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  2 +-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          | 22 +++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          | 22 +++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 22 +++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8350.dtsi          | 22 +++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          | 28 +++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8550.dtsi          |  2 +-
+ 9 files changed, 140 insertions(+), 10 deletions(-)
+
+-- 
+2.38.1
+
