@@ -2,48 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803AB6D3F11
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083EB6D3F12
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbjDCIeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S231492AbjDCIek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbjDCIe3 (ORCPT
+        with ESMTP id S230175AbjDCIef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:34:29 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE6C59D2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 01:34:23 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1pjFdi-0006hM-RM; Mon, 03 Apr 2023 10:34:10 +0200
-Message-ID: <a23f486a-e08f-f1ce-5f1b-bc34e4c92e67@pengutronix.de>
-Date:   Mon, 3 Apr 2023 10:34:09 +0200
+        Mon, 3 Apr 2023 04:34:35 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B3149C2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 01:34:33 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id i5so114257499eda.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 01:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680510872;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uFBcj649F1IzeRI1uWw25EwSYVuuiyxx6zAlaJgRii8=;
+        b=nq1CZsegBgMBDpd+gUx4NBKLjrOSqM08YoTc883yWkS4QiEzygfTXrLXi2iQ7QdaEa
+         LS5UG2Ymz4UQ/2dJkxV5njj7NctSxbPAVWxeCsKy+H6TBWYMCW8hBxp6kZTdsmep1wUM
+         +1f+k8fHnlmukSUgxKDVnjiSD3qOW1Fg7dSw8stOHrbvraNo1vHKTH587sbWvjnmLanJ
+         Z6K1jMkH5gKECLlZZjAVxB1M8E+TguWucR8YDuQfPjiP1m1Lpusllo/bGrk3PlAq9Sej
+         vSBSbpfSqAimEA/UL+Cz1yU6l7a+kZJfcO+5QbsJSKyrBVKrgGzxwhGdG5Vg25LdkGB+
+         xqEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680510872;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uFBcj649F1IzeRI1uWw25EwSYVuuiyxx6zAlaJgRii8=;
+        b=DRLGIEb+7aZz7Xh7U34LhpcF9nDAwP8roPHYYR//Ket0hMjLPkxFzJ2GeZx0LaqYsB
+         sd6QcYzqq5j49kxOjx5Y7rBwQqCc7LIrLZdBGu6ml0hv3GxnCcPNN1QcZ1x5c1BCHsVL
+         neE5AXy+kqHO5pdNTD4LtbHHFAbKG8AVd9OSY6ZOAU2wP9ZfsEpbdamMxkKthQuGVDRA
+         PJtCIgne8lfRHv80QANP13EOMZk5o2lzXU13Rm7vvMzBVvjSnp4PVej8lJjV1shOFUO0
+         SMc5KKm2fIANTQlAnwE11iP+fkunBS/CU1vhgPJAYVNnI2PYvxHOsUaZyoDkUjbRJtf9
+         MaRA==
+X-Gm-Message-State: AAQBX9cda2fnp69i3g7CNbRALMojd622IvCUSePKoccPs8x16wdxa1/k
+        Fo2BcBwxQzOCTdpUfEHpBv8=
+X-Google-Smtp-Source: AKy350ahuOtaPCW0A94HRm6u8LxaRrKFd7ZcyqXQIJkuwkXSEipkLhvHNsupd2jWXIdEcJ9Wm4DEwA==
+X-Received: by 2002:aa7:c448:0:b0:4fb:86c8:e9cc with SMTP id n8-20020aa7c448000000b004fb86c8e9ccmr33345752edr.40.1680510871698;
+        Mon, 03 Apr 2023 01:34:31 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id x3-20020a50d603000000b004c06f786602sm4213292edi.85.2023.04.03.01.34.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 01:34:31 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 11:34:27 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     oe-kbuild@lists.linux.dev, lkp@intel.com,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: arch/arm64/kernel/compat_alignment.c:333
+ do_compat_alignment_fixup() error: uninitialized symbol 'tinst2'.
+Message-ID: <589c4ea1-95e0-4e3e-9567-a4278860d256@kili.mountain>
+References: <be46d0ab-8553-4a5d-af46-6fa909c45213@kili.mountain>
+ <CAMj1kXEbaWNNp98GRACR_JUt7JOowU=3BaRKs0ZoOvibnbN_LA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V2] clk: imx: imx6sx: spdif clock rate is too high for
- asrc
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, abelvesa@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com
-Cc:     Peng Fan <peng.fan@nxp.com>, Shengjiu Wang <shengjiu.wang@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230403082138.3195452-1-peng.fan@oss.nxp.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20230403082138.3195452-1-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXEbaWNNp98GRACR_JUt7JOowU=3BaRKs0ZoOvibnbN_LA@mail.gmail.com>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,61 +75,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Peng,
-
-On 03.04.23 10:21, Peng Fan (OSS) wrote:
-> From: Shengjiu Wang <shengjiu.wang@nxp.com>
+On Mon, Apr 03, 2023 at 10:03:15AM +0200, Ard Biesheuvel wrote:
+> On Mon, 3 Apr 2023 at 08:29, Dan Carpenter <error27@gmail.com> wrote:
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   00c7b5f4ddc5b346df62b757ec73f9357bb452af
+> > commit: 3fc24ef32d3b9368f4c103dcd21d6a3f959b4870 arm64: compat: Implement misalignment fixups for multiword loads
+> > config: arm64-randconfig-m041-20230329 (https://download.01.org/0day-ci/archive/20230402/202304021214.gekJ8yRc-lkp@intel.com/config)
+> > compiler: aarch64-linux-gcc (GCC) 12.1.0
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Reported-by: Dan Carpenter <error27@gmail.com>
+> > | Link: https://lore.kernel.org/r/202304021214.gekJ8yRc-lkp@intel.com/
+> >
+> > smatch warnings:
+> > arch/arm64/kernel/compat_alignment.c:333 do_compat_alignment_fixup() error: uninitialized symbol 'tinst2'.
+> >
+> > vim +/tinst2 +333 arch/arm64/kernel/compat_alignment.c
+> >
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  310  int do_compat_alignment_fixup(unsigned long addr, struct pt_regs *regs)
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  311  {
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  312   union offset_union offset;
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  313   unsigned long instrptr;
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  314   int (*handler)(unsigned long addr, u32 instr, struct pt_regs *regs);
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  315   unsigned int type;
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  316   u32 instr = 0;
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  317   u16 tinstr = 0;
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  318   int isize = 4;
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  319   int thumb2_32b = 0;
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  320   int fault;
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  321
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  322   instrptr = instruction_pointer(regs);
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  323
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  324   if (compat_thumb_mode(regs)) {
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  325           __le16 __user *ptr = (__le16 __user *)(instrptr & ~1);
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  326
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  327           fault = alignment_get_thumb(regs, ptr, &tinstr);
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  328           if (!fault) {
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  329                   if (IS_T32(tinstr)) {
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  330                           /* Thumb-2 32-bit */
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  331                           u16 tinst2;
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  332                           fault = alignment_get_thumb(regs, ptr + 1, &tinst2);
+> > 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01 @333                           instr = ((u32)tinstr << 16) | tinst2;
+> >
+> > Smatch is complaining that there is no error checking to see if the
+> > copy_from_user() fails in alignment_get_thumb.  Eventually the syzbot
+> > will learn to detect this as well.
+> >
 > 
-> spdif clock is one of the asrc clock source, which is used
-> for ideal ratio mode. when set to 98.304MHz, it cause the
-> divider of asrc input clock and output clock exceed the
-> maximum value, and asrc driver saturate the value to maximum
-> value, which will cause the ASRC's performance very bad.
-> So we need to set spdif clock to a proper rate. which make asrc
-> divider not exceed maximum value, at least one of divider not
-> exceed maximum value.
-> The target is spdif clock rate / output(or input) sample rate
-> less than 1024(which is maximum divider).
+> That shouldn't matter.
 > 
-> Fixes: f1541e15e38e ("clk: imx6sx: Switch to clk_hw based API")
-
-Before referenced commit, it looked like this:
-
-  clk_set_rate(clks[IMX6SX_CLK_SPDIF_PODF], 98304000);
-
-I think commit d55135689019 ("ARM: imx: add clock driver for imx6sx")
-is what you're after.
-
-Cheers,
-Ahmad
-
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
+>         u16 instr = 0;
+>         int fault;
 > 
-> V2:
->  Add Fixes tag
+>         if (user_mode(regs))
+>                 fault = get_user(instr, ip);
+>         else
+>                 fault = get_kernel_nofault(instr, ip);
 > 
->  drivers/clk/imx/clk-imx6sx.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>         *inst = __mem_to_opcode_thumb16(instr);
 > 
-> diff --git a/drivers/clk/imx/clk-imx6sx.c b/drivers/clk/imx/clk-imx6sx.c
-> index 7cf86707bc39..3face052527d 100644
-> --- a/drivers/clk/imx/clk-imx6sx.c
-> +++ b/drivers/clk/imx/clk-imx6sx.c
-> @@ -520,7 +520,7 @@ static void __init imx6sx_clocks_init(struct device_node *ccm_node)
->  	clk_set_rate(hws[IMX6SX_CLK_PLL4_AUDIO_DIV]->clk, 393216000);
->  
->  	clk_set_parent(hws[IMX6SX_CLK_SPDIF_SEL]->clk, hws[IMX6SX_CLK_PLL4_AUDIO_DIV]->clk);
-> -	clk_set_rate(hws[IMX6SX_CLK_SPDIF_PODF]->clk, 98304000);
-> +	clk_set_rate(hws[IMX6SX_CLK_SPDIF_PODF]->clk, 24576000);
->  
->  	clk_set_parent(hws[IMX6SX_CLK_AUDIO_SEL]->clk, hws[IMX6SX_CLK_PLL3_USB_OTG]->clk);
->  	clk_set_rate(hws[IMX6SX_CLK_AUDIO_PODF]->clk, 24000000);
+> So the *inst assignment is never ambiguous here, regardless of whether
+> get_user() fails. The value could be wrong (i.e., get_user may have
+> failed after reading only one byte) but the value is never
+> uninitialized. Then, the fault value is always propagated so the
+> calling function will not succeed spuriously when this happens.
+> 
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+I don't know what code that is...  We are looking at different code.
+For me on linux-next it looks like this:
+
+arch/arm64/kernel/compat_alignment.c
+   297  static int alignment_get_thumb(struct pt_regs *regs, __le16 __user *ip, u16 *inst)
+   298  {
+   299          __le16 instr = 0;
+   300          int fault;
+   301  
+   302          fault = get_user(instr, ip);
+   303          if (fault)
+   304                  return fault;
+
+*inst not initialized.
+
+   305  
+   306          *inst = __le16_to_cpu(instr);
+   307          return 0;
+   308  }
+   309  
+   310  int do_compat_alignment_fixup(unsigned long addr, struct pt_regs *regs)
+   311  {
+   312          union offset_union offset;
+   313          unsigned long instrptr;
+   314          int (*handler)(unsigned long addr, u32 instr, struct pt_regs *regs);
+   315          unsigned int type;
+   316          u32 instr = 0;
+   317          u16 tinstr = 0;
+   318          int isize = 4;
+   319          int thumb2_32b = 0;
+   320          int fault;
+   321  
+   322          instrptr = instruction_pointer(regs);
+   323  
+   324          if (compat_thumb_mode(regs)) {
+   325                  __le16 __user *ptr = (__le16 __user *)(instrptr & ~1);
+   326  
+   327                  fault = alignment_get_thumb(regs, ptr, &tinstr);
+   328                  if (!fault) {
+   329                          if (IS_T32(tinstr)) {
+   330                                  /* Thumb-2 32-bit */
+   331                                  u16 tinst2;
+   332                                  fault = alignment_get_thumb(regs, ptr + 1, &tinst2);
+   333                                  instr = ((u32)tinstr << 16) | tinst2;
+                                                                      ^^^^^^
+Uninitialized variable here.
+
+   334                                  thumb2_32b = 1;
+   335                          } else {
+   336                                  isize = 2;
+   337                                  instr = thumb2arm(tinstr);
+   338                          }
+   339                  }
+   340          } else {
+
+regards,
+dan carpenter
 
