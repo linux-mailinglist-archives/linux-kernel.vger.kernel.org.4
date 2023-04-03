@@ -2,107 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B7C6D3F03
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8688C6D3F07
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbjDCIcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
+        id S231556AbjDCIcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbjDCIca (ORCPT
+        with ESMTP id S231855AbjDCIco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:32:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7C9524D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 01:32:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 978A161633
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:32:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF8EC433D2;
-        Mon,  3 Apr 2023 08:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680510743;
-        bh=sU8bXmwTk2RS7zLLyrZOKwV1vzQHYYZlV0f4wQU4Xlw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L2iHxjeXsyhhjl8NfcneqxqreyNX/YJG3n6ZKYkdI8krSIXnbid0bvcqEzfhLGg+o
-         0SBmWLr99z6jmj6CB9W250CRT7Nx9KP6GzLK6zekiGxnszAk8ci0REw+tFb9WE5cvU
-         zerdv1w0s/oUvZfHIKxIyF6vDojEeu4Zn0b1+olbPeuJG3ClB3buf1Xb9YiIoZBodD
-         mIbocCyHLXXzy+iT1afB185ehB6wh2XwApO0wxoOeij98cHGyIFgDwYReZr21rTG2k
-         pZGxw6HF/cvBpGfhDvlWJw7nfLwVXQCkEs+EMSIBo1ZJcv3YRKi9hDmGA3W7NzFqcb
-         J3oyI1vgxuyRg==
-Date:   Mon, 3 Apr 2023 10:32:18 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: gic700 shareability question
-Message-ID: <ZCqPEjxDmI0/kruD@lpieralisi>
-References: <DU0PR04MB9417388F9BDD73080294FA8E88889@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <868rfdw797.wl-maz@kernel.org>
- <DU0PR04MB9417FCF524FA0BB9808B4E8088929@DU0PR04MB9417.eurprd04.prod.outlook.com>
+        Mon, 3 Apr 2023 04:32:44 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2FD5BB9;
+        Mon,  3 Apr 2023 01:32:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=01gayVV3++Wf58D2nrigu1LyEW250ZpuC9pqh/U9RlA=; b=mtoKptTHdC8YSa2GcFbmSs0PhN
+        uf2NXfVTDV+4bzJ2P7+iarjijbx/r5Tx//zCtL030LbKB2SxHY/2yvGeje/QW1s5SvhH7mdTCyNZU
+        7EyoODvszE6IMXoECN+HvNvgtwcnpWES5Up7VsDFAyEYmafZrXz9s7BIZEPcezKr+z8guK0+oI6Sb
+        wpr0Af4+ZSbfW+nPRbqUGni7zsqlM0WS6LRgi3Dcn6ZMpKOxF+dw2+iwJ5x8vnclu2XKVJ8a0evhd
+        OGVLjdHYgL9DmAKI8L99FeD0YRkev8r9Sr6h3AQbITut4KZn6IjR9gyqgkSEOosFe7C6weBKiRlBC
+        Ot9TSWag==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55416)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pjFc5-0002OO-P7; Mon, 03 Apr 2023 09:32:29 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pjFc4-00044E-2P; Mon, 03 Apr 2023 09:32:28 +0100
+Date:   Mon, 3 Apr 2023 09:32:28 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, rogerq@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srk@ti.com
+Subject: Re: [PATCH net-next 2/2] net: ethernet: ti: am65-cpsw: Enable
+ USXGMII mode for J784S4 CPSW9G
+Message-ID: <ZCqPHM2/qismCaaN@shell.armlinux.org.uk>
+References: <20230331065110.604516-3-s-vadapalli@ti.com>
+ <ZCaSXQFZ/e/JIDEj@shell.armlinux.org.uk>
+ <54c3964b-5dd8-c55e-08db-61df4a07797c@ti.com>
+ <ZCaYve8wYl15YRxh@shell.armlinux.org.uk>
+ <7a9c96f4-6a94-4a2c-18f5-95f7246e10d5@ti.com>
+ <ZCasBMNxaWk2+XVO@shell.armlinux.org.uk>
+ <dea9ae26-e7f2-1052-58cd-f7975165aa96@ti.com>
+ <ZCbAE7IIc8HcOdxl@shell.armlinux.org.uk>
+ <1477e0c3-bb92-72b0-9804-0393c34571d3@ti.com>
+ <be166ab3-29f9-a18d-bbbd-34e7828453e4@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DU0PR04MB9417FCF524FA0BB9808B4E8088929@DU0PR04MB9417.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <be166ab3-29f9-a18d-bbbd-34e7828453e4@ti.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 01:36:31AM +0000, Peng Fan wrote:
-> Hi Marc,
+On Mon, Apr 03, 2023 at 11:57:21AM +0530, Siddharth Vadapalli wrote:
+> Hello Russell,
 > 
-> > Subject: Re: gic700 shareability question
+> On 31/03/23 19:16, Siddharth Vadapalli wrote:
 > > 
-> > + Lorenzo
 > > 
-> > On Tue, 28 Mar 2023 13:48:19 +0100,
-> > Peng Fan <peng.fan@nxp.com> wrote:
-> > >
-> > > Hi Marc,
-> > >
-> > > We have an SoC that use GIC-700, but not support shareability,
-> > 
-> > Define this. The IP does support shareability, but your integration doesn't?
-> > 
-> > > Currently I just hack the code as below. Do you think it is feasible
-> > > to add firmware bindings such that these can be used to define the
-> > > correct shareability/cacheability instead of relying on the
-> > > programmability of the CBASER register?
-> > >
-> > > Saying with "broken-shareability", we just clear all the shareability
-> > > settings.
-> > 
-> > This is the same thing as the Rockchip crap, so you are in good company.
-> > 
-> > I've repeatedly stated that this needs to be handled:
-> > 
-> > - either by describing the full system topology and describe what is
-> >   in the same inner-shareable domain as the CPUs, which needs to
-> >   encompass both DT and ACPI (starting with DT seems reasonable),
-> > 
+> > On 31-03-2023 16:42, Russell King (Oracle) wrote:
+> >> On Fri, Mar 31, 2023 at 04:23:16PM +0530, Siddharth Vadapalli wrote:
+> >>>
+> >>>
+> >>> On 31/03/23 15:16, Russell King (Oracle) wrote:
+> >>>> On Fri, Mar 31, 2023 at 02:55:56PM +0530, Siddharth Vadapalli wrote:
+> >>>>> Russell,
+> >>>>>
+> >>>>> On 31/03/23 13:54, Russell King (Oracle) wrote:
+> >>>>>> On Fri, Mar 31, 2023 at 01:35:10PM +0530, Siddharth Vadapalli wrote:
+> >>>>>>> Hello Russell,
+> >>>>>>>
+> >>>>>>> Thank you for reviewing the patch.
+> >>>>>>>
+> >>>>>>> On 31/03/23 13:27, Russell King (Oracle) wrote:
+> >>>>>>>> On Fri, Mar 31, 2023 at 12:21:10PM +0530, Siddharth Vadapalli wrote:
+> >>>>>>>>> TI's J784S4 SoC supports USXGMII mode. Add USXGMII mode to the
+> >>>>>>>>> extra_modes member of the J784S4 SoC data. Additionally, configure the
+> >>>>>>>>> MAC Control register for supporting USXGMII mode. Also, for USXGMII
+> >>>>>>>>> mode, include MAC_5000FD in the "mac_capabilities" member of struct
+> >>>>>>>>> "phylink_config".
+> >>>>>>>>
+> >>>>>>>> I don't think TI "get" phylink at all...
+> >>>>>>>>
+> >>>>>>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >>>>>>>>> index 4b4d06199b45..ab33e6fe5b1a 100644
+> >>>>>>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >>>>>>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >>>>>>>>> @@ -1555,6 +1555,8 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
+> >>>>>>>>>  		mac_control |= CPSW_SL_CTL_GIG;
+> >>>>>>>>>  	if (interface == PHY_INTERFACE_MODE_SGMII)
+> >>>>>>>>>  		mac_control |= CPSW_SL_CTL_EXT_EN;
+> >>>>>>>>> +	if (interface == PHY_INTERFACE_MODE_USXGMII)
+> >>>>>>>>> +		mac_control |= CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN;
+> >>>>>>>>
+> >>>>>>>> The configuration of the interface mode should *not* happen in
+> >>>>>>>> mac_link_up(), but should happen in e.g. mac_config().
+> >>>>>>>
+> >>>>>>> I will move all the interface mode associated configurations to mac_config() in
+> >>>>>>> the v2 series.
+> >>>>>>
+> >>>>>> Looking at the whole of mac_link_up(), could you please describe what
+> >>>>>> effect these bits are having:
+> >>>>>>
+> >>>>>> 	CPSW_SL_CTL_GIG
+> >>>>>> 	CPSW_SL_CTL_EXT_EN
+> >>>>>> 	CPSW_SL_CTL_IFCTL_A
+> >>>>>
+> >>>>> CPSW_SL_CTL_GIG corresponds to enabling Gigabit mode (full duplex only).
+> >>>>> CPSW_SL_CTL_EXT_EN when set enables in-band mode of operation and when cleared
+> >>>>> enables forced mode of operation.
+> >>>>> CPSW_SL_CTL_IFCTL_A is used to set the RMII link speed (0=10 mbps, 1=100 mbps).
+> >>>>
+> >>>> Okay, so I would do in mac_link_up():
+> >>>>
+> >>>> 	/* RMII needs to be manually configured for 10/100Mbps */
+> >>>> 	if (interface == PHY_INTERFACE_MODE_RMII && speed == SPEED_100)
+> >>>> 		mac_control |= CPSW_SL_CTL_IFCTL_A;
+> >>>>
+> >>>> 	if (speed == SPEED_1000)
+> >>>> 		mac_control |= CPSW_SL_CTL_GIG;
+> >>>> 	if (duplex)
+> >>>> 		mac_control |= CPSW_SL_CTL_FULLDUPLEX;
+> >>>>
+> >>>> I would also make mac_link_up() do a read-modify-write operation to
+> >>>> only affect the bits that it is changing.
+> >>>
+> >>> This is the current implementation except for the SGMII mode associated
+> >>> operation that I had recently added. I will fix that. Also, the
+> >>> cpsw_sl_ctl_set() function which writes the mac_control value performs a read
+> >>> modify write operation.
+> >>>
+> >>>>
+> >>>> Now, for SGMII, I would move setting CPSW_SL_CTL_EXT_EN to mac_config()
+> >>>> to enable in-band mode - don't we want in-band mode enabled all the
+> >>>> time while in SGMII mode so the PHY gets the response from the MAC?
+> >>>
+> >>> Thank you for pointing it out. I will move that to mac_config().
+> >>>
+> >>>>
+> >>>> Lastly, for RGMII at 10Mbps, you seem to suggest that you need RGMII
+> >>>> in-band mode enabled for that - but if you need RGMII in-band for
+> >>>> 10Mbps, wouldn't it make sense for the other speeds as well? If so,
+> >>>> wouldn't that mean that CPSW_SL_CTL_EXT_EN can always be set for
+> >>>> RGMII no matter what speed is being used?
+> >>>
+> >>> The CPSW MAC does not support forced mode at 10 Mbps RGMII. For this reason, if
+> >>> RGMII 10 Mbps is requested, it is set to in-band mode.
+> >>
+> >> What I'm saying is that if we have in-band signalling that is reliable
+> >> for a particular interface mode, why not always use it, rather than
+> >> singling out one specific speed as an exception? Does it not work in
+> >> 100Mbps and 1Gbps?
 > 
-> We will give a look on this. But honestly not have a good idea on how.
-
-It is a longer term fix for the issue, we are looking into this.
-
-> > - or as a SoC specific erratum, but not as a general "sh*t happened"
-> >   property.
+> While the CPSW MAC supports RGMII in-band status operation, the link partner
+> might not support it. I have also observed that forced mode is preferred to
+> in-band mode as implemented for another driver:
+> commit ade64eb5be9768e40c90ecb01295416abb2ddbac
+> net: dsa: microchip: Disable RGMII in-band status on KSZ9893
 > 
-> I will ask the hardware team to create an errata.
-> > 
-> > AFAIK, Lorenzo is looking into this.
+> and in the mail thread at:
+> https://lore.kernel.org/netdev/20200905160647.GJ3164319@lunn.ch/
+> based on Andrew's suggestion, using forced mode appears to be better.
 > 
-> Lorenzo, are you working on this? 
+> Additionally, I have verified that switching to in-band status causes a
+> regression. Thus, I will prefer keeping it in forced mode for 100 and 1000 Mbps
+> RGMII mode which is the existing implementation in the driver. Please let me know.
 
-Yes it is being worked on, that does not prevent though an errata
-workaround to be applied, firmware bindings definitions can take
-a while to sort out.
+Okay, so what this seems to mean is if you have a PHY that does not
+support in-band status in RGMII mode, then 10Mbps isn't possible -
+because the MAC requires in-band status mode to select 10Mbps.
+To put it another way, in such a combination, 10Mbps link modes
+should not be advertised, nor should they be reported to userspace
+as being supported.
 
-Lorenzo
+Is that correct?
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
