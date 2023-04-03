@@ -2,136 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8107B6D3B7A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 03:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D8C6D3B7B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 03:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbjDCBY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 21:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
+        id S231382AbjDCBY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 21:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbjDCBYW (ORCPT
+        with ESMTP id S230269AbjDCBYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 21:24:22 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501E91FE2
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 18:24:21 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id i22so19757734uat.8
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 18:24:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1680485060; x=1683077060;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kULG8pOF6j41wBUUG8M7GoBq42bx2nu3Fa8BgwSuDdU=;
-        b=w6QYMAq5WfJF34MdtpGxNWUC0NcVfmexz/ogm+B3xa+j/KT53oyCFtSwoAFqy75O8S
-         SLkSX7yO5hceO65ypFmlIim/+63eK270bPnUCKvIvUMYAsQZRj9cg98h9n3H15HS0JmO
-         5e6P1GFjDF9FrC16/pt4gdCwXLRpI8sCIzrUuOqi62nWV1dXY7U4xpnFlSUA6G9gzWvE
-         EvN/O48F8MC9Y8TpzJzIDNep8JmJI0vYiP6zPePW9/ZyK7kOnzewmx1ZjnINP/Dp1Br7
-         8M6lRi93gZRIC8a/NoHuWdsrC4kYI4CETrXKWAf62b7sXw8Cl6eReqYri85Vr+1fzlbo
-         6AlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680485060; x=1683077060;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kULG8pOF6j41wBUUG8M7GoBq42bx2nu3Fa8BgwSuDdU=;
-        b=ChxMCPwK0ZhmPjiojxExxsIlJh4Q784MafR2Og8zFZzrLHAGXHPWMIIGQg5PQKzZ7H
-         rS5li0sbFQurPuDQWbFTZXDHlruDkHkkr+O1rmbXnIfG68r9SfPGhY5/YfuD27+HL4Yu
-         n8POiNaet24nhuaInXFxRpzmAB0mshyUW75eKqpjQ7PhzyeAUAVI46IexhQWARWnLC9+
-         voYCf6g1mT3ufGCxjO2N8pU+pA9ceaZLdXW8WqbJvDsuU8a4RSsnrWNi3rbKo0+866xV
-         A05dAfzeftBQce6gjzKqHblPkUbm7/Ws5yZA2UrhUlgFDdzPjNG9dI2mVQOkIP8fbawa
-         nWgA==
-X-Gm-Message-State: AAQBX9c+jQjgm3wurz7Nnq4C3zAMNNIQWwMwnKWhfyOVLsOsfpHLXh9H
-        MJyFMqtYrnieYgWoG6wnZtN5UA==
-X-Google-Smtp-Source: AKy350Y8HDkSQ9k8o6/USFC6zFiQL0UZiO5UVSROZXiQHuHAECMHgp7tYuYe5YFVf+tnoKC2scpQ0A==
-X-Received: by 2002:a05:6122:169f:b0:436:1d1c:ebe6 with SMTP id 31-20020a056122169f00b004361d1cebe6mr13820021vkl.1.1680485060276;
-        Sun, 02 Apr 2023 18:24:20 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id g7-20020ab01047000000b0068e4f0409eesm1625369uab.23.2023.04.02.18.24.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Apr 2023 18:24:19 -0700 (PDT)
-Message-ID: <d696eb70-9dac-9334-7aec-1b5af62442e3@kernel.dk>
-Date:   Sun, 2 Apr 2023 19:24:17 -0600
+        Sun, 2 Apr 2023 21:24:23 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8924FF
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 18:24:22 -0700 (PDT)
+Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PqY7k0vxLzKqtr;
+        Mon,  3 Apr 2023 09:23:46 +0800 (CST)
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 3 Apr
+ 2023 09:24:20 +0800
+Message-ID: <dc0625d2-edaf-22fe-5eea-3088e95a2998@huawei.com>
+Date:   Mon, 3 Apr 2023 09:24:19 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V6 00/17] io_uring/ublk: add generic IORING_OP_FUSED_CMD
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH] x86: profiling: Using generic unwinding in profile_pc
+To:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>
+References: <20230224021858.120078-1-chenzhongjin@huawei.com>
 Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Bernd Schubert <bschubert@ddn.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>
-References: <20230330113630.1388860-1-ming.lei@redhat.com>
- <ZConr0f8e/mEL0Cl@ovpn-8-18.pek2.redhat.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZConr0f8e/mEL0Cl@ovpn-8-18.pek2.redhat.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <20230224021858.120078-1-chenzhongjin@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.7 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/2/23 7:11?PM, Ming Lei wrote:
-> On Thu, Mar 30, 2023 at 07:36:13PM +0800, Ming Lei wrote:
->> Hello Jens and Guys,
->>
->> Add generic fused command, which can include one primary command and multiple
->> secondary requests. This command provides one safe way to share resource between
->> primary command and secondary requests, and primary command is always
->> completed after all secondary requests are done, and resource lifetime
->> is bound with primary command.
->>
->> With this way, it is easy to support zero copy for ublk/fuse device, and
->> there could be more potential use cases, such as offloading complicated logic
->> into userspace, or decouple kernel subsystems.
->>
->> Follows ublksrv code, which implements zero copy for loop, nbd and
->> qcow2 targets with fused command:
->>
->> https://github.com/ming1/ubdsrv/tree/fused-cmd-zc-for-v6
->>
->> All three(loop, nbd and qcow2) ublk targets have supported zero copy by passing:
->>
->> 	ublk add -t [loop|nbd|qcow2] -z .... 
->>
->> Also add liburing test case for covering fused command based on miniublk
->> of blktest.
->>
->> https://github.com/ming1/liburing/tree/fused_cmd_miniublk_for_v6
->>
->> Performance improvement is obvious on memory bandwidth related workloads,
->> such as, 1~2X improvement on 64K/512K BS IO test on loop with ramfs backing file.
->> ublk-null shows 5X IOPS improvement on big BS test when the copy is avoided.
->>
->> Please review and consider for v6.4.
->>
->> V6:
->> 	- re-design fused command, and make it more generic, moving sharing buffer
->> 	as one plugin of fused command, so in future we can implement more plugins
->> 	- document potential other use cases of fused command
->> 	- drop support for builtin secondary sqe in SQE128, so all secondary
->> 	  requests has standalone SQE
->> 	- make fused command as one feature
->> 	- cleanup & improve naming
-> 
-> Hi Jens,
-> 
-> Can you apply ublk cleanup patches 7~11 on for-6.4? For others, we may
-> delay to 6.5, and I am looking at other approach too.
+Just ping... Or has profile code already been obsoleted?
 
-Done - and yes, we're probably looking at 6.5 for the rest. But that's
-fine, I'd rather end up with the right interface than try and rush one.
-
--- 
-Jens Axboe
-
+On 2023/2/24 10:18, chenzhongjin wrote:
+> Syzbot has been reporting the problem of stack-out-of-bounds in
+> profile_pc for a long time:
+> https://syzkaller.appspot.com/bug?extid=84fe685c02cd112a2ac3
+>
+> profile_pc tries to get pc if current regs is inside lock function. For
+> !CONFIG_FRAME_POINTER it used a hack way to get the pc from stack, which
+> is not work with ORC. It makes profile_pc returns wrong result, and
+> frequently triggers KASAN.
+>
+> This can be fixed by using the unwind_start, it will skip the first
+> regs frame and get the caller of lock function directly, or 0 if
+> unwind_get_return_address finds the unwinding failed. For all of FP, ORC
+> and guess unwinders it works.
+>
+> Fixes: 0cb91a229364 ("[PATCH] i386: Account spinlocks to the caller during profiling for !FP kernels")
+> Reported-by: syzbot+84fe685c02cd112a2ac3@syzkaller.appspotmail.com
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+>   arch/x86/kernel/time.c | 20 ++++++--------------
+>   1 file changed, 6 insertions(+), 14 deletions(-)
+>
+> diff --git a/arch/x86/kernel/time.c b/arch/x86/kernel/time.c
+> index e42faa792c07..5e0446f49906 100644
+> --- a/arch/x86/kernel/time.c
+> +++ b/arch/x86/kernel/time.c
+> @@ -24,26 +24,18 @@
+>   #include <asm/timer.h>
+>   #include <asm/hpet.h>
+>   #include <asm/time.h>
+> +#include <asm/unwind.h>
+>   
+>   unsigned long profile_pc(struct pt_regs *regs)
+>   {
+>   	unsigned long pc = instruction_pointer(regs);
+>   
+>   	if (!user_mode(regs) && in_lock_functions(pc)) {
+> -#ifdef CONFIG_FRAME_POINTER
+> -		return *(unsigned long *)(regs->bp + sizeof(long));
+> -#else
+> -		unsigned long *sp = (unsigned long *)regs->sp;
+> -		/*
+> -		 * Return address is either directly at stack pointer
+> -		 * or above a saved flags. Eflags has bits 22-31 zero,
+> -		 * kernel addresses don't.
+> -		 */
+> -		if (sp[0] >> 22)
+> -			return sp[0];
+> -		if (sp[1] >> 22)
+> -			return sp[1];
+> -#endif
+> +		struct unwind_state state;
+> +
+> +		/* unwind_start will skip the first regs frame */
+> +		unwind_start(&state, current, regs, NULL);
+> +		pc = unwind_get_return_address(&state);
+>   	}
+>   	return pc;
+>   }
