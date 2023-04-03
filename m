@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B58A6D51F3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4276D51F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbjDCUGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 16:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
+        id S232891AbjDCUGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 16:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233041AbjDCUGE (ORCPT
+        with ESMTP id S233066AbjDCUGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 16:06:04 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520AB40FB
+        Mon, 3 Apr 2023 16:06:05 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F3235BE
         for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 13:05:45 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id o32so17774827wms.1
+Received: by mail-wm1-x334.google.com with SMTP id p34so17777210wms.3
         for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 13:05:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680552343;
+        d=linaro.org; s=google; t=1680552345;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WxtpzpFs1Tw6uofVd0d2KLNhFn43zUjmYP/cv+oeiIM=;
-        b=TMwERpu+tL5Vz48pwx+6BML5X0T9Tz76yx4fuqGI4EPMGSN8RA30XW8aYeAAAaI+NK
-         m3jjTCNmHmE/1xJZD4uqpoXY2fBurWIzfrAUw5uMmlMszBqq/f2fUBPL978RC0UA+yQK
-         fsY2h3Z4wE83Q8Hmv73I5ohZyx52KkGcbfUp79EjaKL3qcfgwAYc4audDIPdI9/1CHoQ
-         IdoEgXvZCsvOUhzkpr0zgVI1JMOvMGiBa1oZ5NtVvQxF8nzMoGhZjliv26+Yy6MKG6SU
-         7purlgu7V5Zt8eE3d19KweqCGXS6ZnmReHVyhI66n66CQqZx1RwVQ3pGqvJEBJvnnanT
-         3EDA==
+        bh=BZ615oMmZ+kIPk1HGG6xfcUARa/GDRjjMtyn1biYM8U=;
+        b=PMLaBT0BwoghV66jxnRunKONRvuitB7KwxkmA4SLbOSP6F4oNNK/pjTm4OB63ZN/x8
+         mZIeqqb2btzRswPxVrGVSr7iROf5cr+r+qUc+eQ3JeOnlJR4zHL8vW2mbrNhd4bSiXYc
+         pTz4kY0lLRwl8bL3jwwsli45sQ39XkO/M5Kk5XY6JhZcac1YgjmurXx3EDo6GKScu9nl
+         IhKy/8Ayu5YEVaxBNwMsAv1jjObAcf3gXXIpzkLrbxtqZ6eHo+WmEPfLlOehe8rFxRqp
+         ZoEwR/MtZafejkwOApLDg+v9IqmndE3Mwx0uwtgAEet0c+UAsXvf/2NWIzdk1yTAtoR+
+         Js0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680552343;
+        d=1e100.net; s=20210112; t=1680552345;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WxtpzpFs1Tw6uofVd0d2KLNhFn43zUjmYP/cv+oeiIM=;
-        b=CE6Z9cJ4cUPHc9VUIcVrYjZDEmP+YPmHFr12pcdkyWH3/eHUH3uOVcN/z9jQQXDwXe
-         ZfRy54KwdD6P/C48KV5XvJ9dPd84mJadgnRad0rFu9kE8LpAVZP4wevzCWcLijUlDeoO
-         PE1Y3Cx888uY5zPZDxQhsTfadntpnNADzg/wJcMO1OpU6WDCAGVuZCeLb2qm+g8V0TTV
-         KdYghr1HD9TIewZTP+Jr3M0XRlE3uLk3OOqx3Az9ZZW9KL+EnAv32nAyLBqtHIEWShI7
-         CqL3BZSNLcg8mYvL+9KIfqbIxVOkFUcEa9Zs/+8diAIlI6BbphMUDE0g3tWqZt8Lfd9V
-         tcSw==
-X-Gm-Message-State: AAQBX9fiUYGpzq2EK/s60mnlpoyxzr3w915sHeRiAg52pHNxvQy0fjxT
-        wRlMPZZv76UJCvNCk5aguRc8gg==
-X-Google-Smtp-Source: AKy350ad34+wSPf71PNAP4pL7R42DbssIa4TFLpYLSIL9Xao6qcD7da5PaxZUKE/icbFCW50Mqm55Q==
-X-Received: by 2002:a05:600c:a4e:b0:3ed:bfb4:ad9f with SMTP id c14-20020a05600c0a4e00b003edbfb4ad9fmr13755171wmq.2.1680552343508;
-        Mon, 03 Apr 2023 13:05:43 -0700 (PDT)
+        bh=BZ615oMmZ+kIPk1HGG6xfcUARa/GDRjjMtyn1biYM8U=;
+        b=FI/Gb7nHOnGStzxzjv01FFremfCAXKN8Qd86HeFYaKBr/OzpBTUocNk1LR/Hos/Zhn
+         TJzeqf7Uf1rCBCLUIFP+yfRg/kkFvod3ZDDWEI/LRjzT5O42vnCN3IHG7IRtDm9OUhkJ
+         a3A5WK+JbmFSoFwPzGed7KP90huXgpOaDUBlokYsCSaLvsfJ0RUySBkQTKiZnl8KuDLl
+         U5MYZKHqkyZtQswOPzZ36AwEwMMAiscGpC+HyniPIrr+0Pz8a10AImGmLsvavaWPeH0F
+         Uu2A6hK3LnulvLCe22XfvW7iQJ4dGQs8Fsq+FqyqTV0EZqO0uKCf15rlmFW0HRb0xED7
+         qgLQ==
+X-Gm-Message-State: AAQBX9cS5A7Ug1brCCetAG/Asm3COdmn4VL8UL5SfzLLRnpgz+G4nY09
+        vc6DGfUUiNjrtHcL1RteiQKJpQ==
+X-Google-Smtp-Source: AKy350bID5C+bvoyzunR91HsQz3LK57z5OK2BBA79FphTyLLO9FUT3vnBywSaZ/a1rndsXDXxv83Mw==
+X-Received: by 2002:a7b:c3c7:0:b0:3e2:589:2512 with SMTP id t7-20020a7bc3c7000000b003e205892512mr437220wmj.21.1680552345226;
+        Mon, 03 Apr 2023 13:05:45 -0700 (PDT)
 Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id iv19-20020a05600c549300b003ef69873cf1sm20798037wmb.40.2023.04.03.13.05.41
+        by smtp.gmail.com with ESMTPSA id iv19-20020a05600c549300b003ef69873cf1sm20798037wmb.40.2023.04.03.13.05.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 13:05:43 -0700 (PDT)
+        Mon, 03 Apr 2023 13:05:44 -0700 (PDT)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -71,9 +71,9 @@ Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
         linux-scsi@vger.kernel.org
-Subject: [PATCH v5 4/6] scsi: ufs: ufs-qcom: Switch to the new ICE API
-Date:   Mon,  3 Apr 2023 23:05:28 +0300
-Message-Id: <20230403200530.2103099-5-abel.vesa@linaro.org>
+Subject: [PATCH v5 5/6] mmc: sdhci-msm: Switch to the new ICE API
+Date:   Mon,  3 Apr 2023 23:05:29 +0300
+Message-Id: <20230403200530.2103099-6-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230403200530.2103099-1-abel.vesa@linaro.org>
 References: <20230403200530.2103099-1-abel.vesa@linaro.org>
@@ -88,31 +88,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that there is a new dedicated ICE driver, drop the ufs-qcom-ice and
-use the new ICE api provided by the Qualcomm soc driver ice. The platforms
-that already have ICE support will use the API as library since there will
-not be a devicetree node, but instead they have reg range. In this case,
-the of_qcom_ice_get will return an ICE instance created for the consumer's
-device. But if there are platforms that do not have ice reg in the
-consumer devicetree node and instead provide a dedicated ICE devicetree
-node, the of_qcom_ice_get will look up the device based on qcom,ice
-property and will get the ICE instance registered by the probe function
-of the ice driver.
+Now that there is a new dedicated ICE driver, drop the sdhci-msm ICE
+implementation and use the new ICE api provided by the Qualcomm soc
+driver ice. The platforms that already have ICE support will use the
+API as library since there will not be a devicetree node, but instead
+they have reg range. In this case, the of_qcom_ice_get will return an
+ICE instance created for the consumer's device. But if there are
+platforms that do not have ice reg in the consumer devicetree node
+and instead provide a dedicated ICE devicetree node, theof_qcom_ice_get
+will look up the device based on qcom,ice property and will get the ICE
+instance registered by the probe function of the ice driver.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
 
 The v4 is here:
-https://lore.kernel.org/all/20230327134734.3256974-6-abel.vesa@linaro.org/
+https://lore.kernel.org/all/20230327134734.3256974-7-abel.vesa@linaro.org/
 
 Changes since v4:
- * moved the setting of the UFSHCD_CAP_CRYPTO in the ufs_qcom_ice_init
+ * none
 
 Changes since v3:
- * since ufs-qcom-ice is being dropped, switch back to single file for CONFIG_SCSI_UFS_QCOM
- * handle properly the not-supported error returned by of_qcom_ice_get
- * drop cfg->crypto_cap_idx argument from qcom_ice_program_key call
- * added back the clearing of UFSHCD_CAP_CRYPTO and its checks in resume and enable
+ * added back the checks for and the setting of MMC_CAP2_CRYPTO
+ * added enable/resume/suspend implementation for !CONFIG_MMC_CRYPTO
+ * dropped cfg->crypto_cap_idx argument from qcom_ice_program_key
 
 Changes since v2:
  * added the suspend API call for ICE
@@ -123,117 +122,83 @@ Changes since v1:
    and passed the ICE defined values for algorithm and key size
  * Added call to evict function
 
- drivers/ufs/host/Kconfig        |   2 +-
- drivers/ufs/host/Makefile       |   4 +-
- drivers/ufs/host/ufs-qcom-ice.c | 244 --------------------------------
- drivers/ufs/host/ufs-qcom.c     |  97 ++++++++++++-
- drivers/ufs/host/ufs-qcom.h     |  32 +----
- 5 files changed, 102 insertions(+), 277 deletions(-)
- delete mode 100644 drivers/ufs/host/ufs-qcom-ice.c
+ drivers/mmc/host/Kconfig     |   2 +-
+ drivers/mmc/host/sdhci-msm.c | 220 +++++++----------------------------
+ 2 files changed, 46 insertions(+), 176 deletions(-)
 
-diff --git a/drivers/ufs/host/Kconfig b/drivers/ufs/host/Kconfig
-index 8793e3433580..16624ba08050 100644
---- a/drivers/ufs/host/Kconfig
-+++ b/drivers/ufs/host/Kconfig
-@@ -59,7 +59,7 @@ config SCSI_UFS_QCOM
- 	depends on SCSI_UFSHCD_PLATFORM && ARCH_QCOM
- 	depends on GENERIC_MSI_IRQ
- 	depends on RESET_CONTROLLER
--	select QCOM_SCM if SCSI_UFS_CRYPTO
-+	select QCOM_INLINE_CRYPTO_ENGINE if SCSI_UFS_CRYPTO
+diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+index 4745fe217ade..09f837df5435 100644
+--- a/drivers/mmc/host/Kconfig
++++ b/drivers/mmc/host/Kconfig
+@@ -549,7 +549,7 @@ config MMC_SDHCI_MSM
+ 	depends on MMC_SDHCI_PLTFM
+ 	select MMC_SDHCI_IO_ACCESSORS
+ 	select MMC_CQHCI
+-	select QCOM_SCM if MMC_CRYPTO
++	select QCOM_INLINE_CRYPTO_ENGINE if MMC_CRYPTO
  	help
- 	  This selects the QCOM specific additions to UFSHCD platform driver.
- 	  UFS host on QCOM needs some vendor specific configuration before
-diff --git a/drivers/ufs/host/Makefile b/drivers/ufs/host/Makefile
-index d7c5bf7fa512..4573aead02eb 100644
---- a/drivers/ufs/host/Makefile
-+++ b/drivers/ufs/host/Makefile
-@@ -3,9 +3,7 @@
- obj-$(CONFIG_SCSI_UFS_DWC_TC_PCI) += tc-dwc-g210-pci.o ufshcd-dwc.o tc-dwc-g210.o
- obj-$(CONFIG_SCSI_UFS_DWC_TC_PLATFORM) += tc-dwc-g210-pltfrm.o ufshcd-dwc.o tc-dwc-g210.o
- obj-$(CONFIG_SCSI_UFS_CDNS_PLATFORM) += cdns-pltfrm.o
--obj-$(CONFIG_SCSI_UFS_QCOM) += ufs_qcom.o
--ufs_qcom-y += ufs-qcom.o
--ufs_qcom-$(CONFIG_SCSI_UFS_CRYPTO) += ufs-qcom-ice.o
-+obj-$(CONFIG_SCSI_UFS_QCOM) += ufs-qcom.o
- obj-$(CONFIG_SCSI_UFS_EXYNOS) += ufs-exynos.o
- obj-$(CONFIG_SCSI_UFSHCD_PCI) += ufshcd-pci.o
- obj-$(CONFIG_SCSI_UFSHCD_PLATFORM) += ufshcd-pltfrm.o
-diff --git a/drivers/ufs/host/ufs-qcom-ice.c b/drivers/ufs/host/ufs-qcom-ice.c
-deleted file mode 100644
-index 453978877ae9..000000000000
---- a/drivers/ufs/host/ufs-qcom-ice.c
-+++ /dev/null
-@@ -1,244 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Qualcomm ICE (Inline Crypto Engine) support.
-- *
-- * Copyright (c) 2014-2019, The Linux Foundation. All rights reserved.
-- * Copyright 2019 Google LLC
-- */
--
--#include <linux/delay.h>
--#include <linux/platform_device.h>
--#include <linux/firmware/qcom/qcom_scm.h>
--
--#include "ufs-qcom.h"
--
+ 	  This selects the Secure Digital Host Controller Interface (SDHCI)
+ 	  support present in Qualcomm SOCs. The controller supports
+diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+index 8ac81d57a3df..1a6e63b7af12 100644
+--- a/drivers/mmc/host/sdhci-msm.c
++++ b/drivers/mmc/host/sdhci-msm.c
+@@ -19,6 +19,8 @@
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/reset.h>
+ 
++#include <soc/qcom/ice.h>
++
+ #include "sdhci-cqhci.h"
+ #include "sdhci-pltfm.h"
+ #include "cqhci.h"
+@@ -258,12 +260,14 @@ struct sdhci_msm_variant_info {
+ struct sdhci_msm_host {
+ 	struct platform_device *pdev;
+ 	void __iomem *core_mem;	/* MSM SDCC mapped address */
+-	void __iomem *ice_mem;	/* MSM ICE mapped address (if available) */
+ 	int pwr_irq;		/* power irq */
+ 	struct clk *bus_clk;	/* SDHC bus voter clock */
+ 	struct clk *xo_clk;	/* TCXO clk needed for FLL feature of cm_dll*/
+-	/* core, iface, cal, sleep, and ice clocks */
+-	struct clk_bulk_data bulk_clks[5];
++	/* core, iface, cal and sleep clocks */
++	struct clk_bulk_data bulk_clks[4];
++#ifdef CONFIG_MMC_CRYPTO
++	struct qcom_ice *ice;
++#endif
+ 	unsigned long clk_rate;
+ 	struct mmc_host *mmc;
+ 	bool use_14lpp_dll_reset;
+@@ -1804,164 +1808,49 @@ static void sdhci_msm_set_clock(struct sdhci_host *host, unsigned int clock)
+ 
+ #ifdef CONFIG_MMC_CRYPTO
+ 
 -#define AES_256_XTS_KEY_SIZE			64
 -
 -/* QCOM ICE registers */
 -
--#define QCOM_ICE_REG_CONTROL			0x0000
--#define QCOM_ICE_REG_RESET			0x0004
 -#define QCOM_ICE_REG_VERSION			0x0008
+-
 -#define QCOM_ICE_REG_FUSE_SETTING		0x0010
--#define QCOM_ICE_REG_PARAMETERS_1		0x0014
--#define QCOM_ICE_REG_PARAMETERS_2		0x0018
--#define QCOM_ICE_REG_PARAMETERS_3		0x001C
--#define QCOM_ICE_REG_PARAMETERS_4		0x0020
--#define QCOM_ICE_REG_PARAMETERS_5		0x0024
--
--/* QCOM ICE v3.X only */
--#define QCOM_ICE_GENERAL_ERR_STTS		0x0040
--#define QCOM_ICE_INVALID_CCFG_ERR_STTS		0x0030
--#define QCOM_ICE_GENERAL_ERR_MASK		0x0044
--
--/* QCOM ICE v2.X only */
--#define QCOM_ICE_REG_NON_SEC_IRQ_STTS		0x0040
--#define QCOM_ICE_REG_NON_SEC_IRQ_MASK		0x0044
--
--#define QCOM_ICE_REG_NON_SEC_IRQ_CLR		0x0048
--#define QCOM_ICE_REG_STREAM1_ERROR_SYNDROME1	0x0050
--#define QCOM_ICE_REG_STREAM1_ERROR_SYNDROME2	0x0054
--#define QCOM_ICE_REG_STREAM2_ERROR_SYNDROME1	0x0058
--#define QCOM_ICE_REG_STREAM2_ERROR_SYNDROME2	0x005C
--#define QCOM_ICE_REG_STREAM1_BIST_ERROR_VEC	0x0060
--#define QCOM_ICE_REG_STREAM2_BIST_ERROR_VEC	0x0064
--#define QCOM_ICE_REG_STREAM1_BIST_FINISH_VEC	0x0068
--#define QCOM_ICE_REG_STREAM2_BIST_FINISH_VEC	0x006C
--#define QCOM_ICE_REG_BIST_STATUS		0x0070
--#define QCOM_ICE_REG_BYPASS_STATUS		0x0074
--#define QCOM_ICE_REG_ADVANCED_CONTROL		0x1000
--#define QCOM_ICE_REG_ENDIAN_SWAP		0x1004
--#define QCOM_ICE_REG_TEST_BUS_CONTROL		0x1010
--#define QCOM_ICE_REG_TEST_BUS_REG		0x1014
--
--/* BIST ("built-in self-test"?) status flags */
--#define QCOM_ICE_BIST_STATUS_MASK		0xF0000000
--
 -#define QCOM_ICE_FUSE_SETTING_MASK		0x1
 -#define QCOM_ICE_FORCE_HW_KEY0_SETTING_MASK	0x2
 -#define QCOM_ICE_FORCE_HW_KEY1_SETTING_MASK	0x4
 -
--#define qcom_ice_writel(host, val, reg)	\
--	writel((val), (host)->ice_mmio + (reg))
--#define qcom_ice_readl(host, reg)	\
--	readl((host)->ice_mmio + (reg))
+-#define QCOM_ICE_REG_BIST_STATUS		0x0070
+-#define QCOM_ICE_BIST_STATUS_MASK		0xF0000000
 -
--static bool qcom_ice_supported(struct ufs_qcom_host *host)
+-#define QCOM_ICE_REG_ADVANCED_CONTROL		0x1000
+-
+-#define sdhci_msm_ice_writel(host, val, reg)	\
+-	writel((val), (host)->ice_mem + (reg))
+-#define sdhci_msm_ice_readl(host, reg)	\
+-	readl((host)->ice_mem + (reg))
+-
+-static bool sdhci_msm_ice_supported(struct sdhci_msm_host *msm_host)
 -{
--	struct device *dev = host->hba->dev;
--	u32 regval = qcom_ice_readl(host, QCOM_ICE_REG_VERSION);
+-	struct device *dev = mmc_dev(msm_host->mmc);
+-	u32 regval = sdhci_msm_ice_readl(msm_host, QCOM_ICE_REG_VERSION);
 -	int major = regval >> 24;
 -	int minor = (regval >> 16) & 0xFF;
 -	int step = regval & 0xFFFF;
@@ -249,7 +214,7 @@ index 453978877ae9..000000000000
 -		 major, minor, step);
 -
 -	/* If fuses are blown, ICE might not work in the standard way. */
--	regval = qcom_ice_readl(host, QCOM_ICE_REG_FUSE_SETTING);
+-	regval = sdhci_msm_ice_readl(msm_host, QCOM_ICE_REG_FUSE_SETTING);
 -	if (regval & (QCOM_ICE_FUSE_SETTING_MASK |
 -		      QCOM_ICE_FORCE_HW_KEY0_SETTING_MASK |
 -		      QCOM_ICE_FORCE_HW_KEY1_SETTING_MASK)) {
@@ -259,19 +224,23 @@ index 453978877ae9..000000000000
 -	return true;
 -}
 -
--int ufs_qcom_ice_init(struct ufs_qcom_host *host)
+-static inline struct clk *sdhci_msm_ice_get_clk(struct device *dev)
 -{
--	struct ufs_hba *hba = host->hba;
--	struct device *dev = hba->dev;
--	struct platform_device *pdev = to_platform_device(dev);
+-	return devm_clk_get(dev, "ice");
+-}
+-
+ static int sdhci_msm_ice_init(struct sdhci_msm_host *msm_host,
+ 			      struct cqhci_host *cq_host)
+ {
+ 	struct mmc_host *mmc = msm_host->mmc;
+ 	struct device *dev = mmc_dev(mmc);
 -	struct resource *res;
--	int err;
--
--	if (!(ufshcd_readl(hba, REG_CONTROLLER_CAPABILITIES) &
--	      MASK_CRYPTO_SUPPORT))
--		return 0;
--
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ice");
+ 
+ 	if (!(cqhci_readl(cq_host, CQHCI_CAP) & CQHCI_CAP_CS))
+ 		return 0;
+ 
+-	res = platform_get_resource_byname(msm_host->pdev, IORESOURCE_MEM,
+-					   "ice");
 -	if (!res) {
 -		dev_warn(dev, "ICE registers not found\n");
 -		goto disable;
@@ -280,100 +249,118 @@ index 453978877ae9..000000000000
 -	if (!qcom_scm_ice_available()) {
 -		dev_warn(dev, "ICE SCM interface not found\n");
 -		goto disable;
--	}
++	msm_host->ice = of_qcom_ice_get(dev);
++	if (msm_host->ice == ERR_PTR(-EOPNOTSUPP)) {
++		dev_warn(dev, "Disabling inline encryption support\n");
++		msm_host->ice = NULL;
+ 	}
+ 
+-	msm_host->ice_mem = devm_ioremap_resource(dev, res);
+-	if (IS_ERR(msm_host->ice_mem))
+-		return PTR_ERR(msm_host->ice_mem);
 -
--	host->ice_mmio = devm_ioremap_resource(dev, res);
--	if (IS_ERR(host->ice_mmio)) {
--		err = PTR_ERR(host->ice_mmio);
--		return err;
--	}
--
--	if (!qcom_ice_supported(host))
+-	if (!sdhci_msm_ice_supported(msm_host))
 -		goto disable;
--
++	if (IS_ERR(msm_host->ice))
++		return PTR_ERR(msm_host->ice);
+ 
+ 	mmc->caps2 |= MMC_CAP2_CRYPTO;
 -	return 0;
--
+ 
 -disable:
 -	dev_warn(dev, "Disabling inline encryption support\n");
--	hba->caps &= ~UFSHCD_CAP_CRYPTO;
--	return 0;
--}
--
--static void qcom_ice_low_power_mode_enable(struct ufs_qcom_host *host)
+ 	return 0;
+ }
+ 
+-static void sdhci_msm_ice_low_power_mode_enable(struct sdhci_msm_host *msm_host)
 -{
 -	u32 regval;
 -
--	regval = qcom_ice_readl(host, QCOM_ICE_REG_ADVANCED_CONTROL);
+-	regval = sdhci_msm_ice_readl(msm_host, QCOM_ICE_REG_ADVANCED_CONTROL);
 -	/*
 -	 * Enable low power mode sequence
 -	 * [0]-0, [1]-0, [2]-0, [3]-E, [4]-0, [5]-0, [6]-0, [7]-0
 -	 */
 -	regval |= 0x7000;
--	qcom_ice_writel(host, regval, QCOM_ICE_REG_ADVANCED_CONTROL);
+-	sdhci_msm_ice_writel(msm_host, regval, QCOM_ICE_REG_ADVANCED_CONTROL);
 -}
 -
--static void qcom_ice_optimization_enable(struct ufs_qcom_host *host)
--{
+-static void sdhci_msm_ice_optimization_enable(struct sdhci_msm_host *msm_host)
++static void sdhci_msm_ice_enable(struct sdhci_msm_host *msm_host)
+ {
 -	u32 regval;
 -
 -	/* ICE Optimizations Enable Sequence */
--	regval = qcom_ice_readl(host, QCOM_ICE_REG_ADVANCED_CONTROL);
+-	regval = sdhci_msm_ice_readl(msm_host, QCOM_ICE_REG_ADVANCED_CONTROL);
 -	regval |= 0xD807100;
 -	/* ICE HPG requires delay before writing */
 -	udelay(5);
--	qcom_ice_writel(host, regval, QCOM_ICE_REG_ADVANCED_CONTROL);
+-	sdhci_msm_ice_writel(msm_host, regval, QCOM_ICE_REG_ADVANCED_CONTROL);
 -	udelay(5);
--}
--
--int ufs_qcom_ice_enable(struct ufs_qcom_host *host)
--{
--	if (!(host->hba->caps & UFSHCD_CAP_CRYPTO))
--		return 0;
--	qcom_ice_low_power_mode_enable(host);
--	qcom_ice_optimization_enable(host);
--	return ufs_qcom_ice_resume(host);
--}
--
--/* Poll until all BIST bits are reset */
--static int qcom_ice_wait_bist_status(struct ufs_qcom_host *host)
--{
--	int count;
--	u32 reg;
--
--	for (count = 0; count < 100; count++) {
--		reg = qcom_ice_readl(host, QCOM_ICE_REG_BIST_STATUS);
--		if (!(reg & QCOM_ICE_BIST_STATUS_MASK))
--			break;
--		udelay(50);
--	}
--	if (reg)
--		return -ETIMEDOUT;
--	return 0;
--}
--
--int ufs_qcom_ice_resume(struct ufs_qcom_host *host)
--{
--	int err;
--
--	if (!(host->hba->caps & UFSHCD_CAP_CRYPTO))
--		return 0;
--
--	err = qcom_ice_wait_bist_status(host);
--	if (err) {
--		dev_err(host->hba->dev, "BIST status error (%d)\n", err);
--		return err;
--	}
--	return 0;
--}
--
++	if (msm_host->mmc->caps2 & MMC_CAP2_CRYPTO)
++		qcom_ice_enable(msm_host->ice);
+ }
+ 
 -/*
-- * Program a key into a QC ICE keyslot, or evict a keyslot.  QC ICE requires
-- * vendor-specific SCM calls for this; it doesn't support the standard way.
+- * Wait until the ICE BIST (built-in self-test) has completed.
+- *
+- * This may be necessary before ICE can be used.
+- *
+- * Note that we don't really care whether the BIST passed or failed; we really
+- * just want to make sure that it isn't still running.  This is because (a) the
+- * BIST is a FIPS compliance thing that never fails in practice, (b) ICE is
+- * documented to reject crypto requests if the BIST fails, so we needn't do it
+- * in software too, and (c) properly testing storage encryption requires testing
+- * the full storage stack anyway, and not relying on hardware-level self-tests.
 - */
--int ufs_qcom_ice_program_key(struct ufs_hba *hba,
--			     const union ufs_crypto_cfg_entry *cfg, int slot)
+-static int sdhci_msm_ice_wait_bist_status(struct sdhci_msm_host *msm_host)
++static __maybe_unused int sdhci_msm_ice_resume(struct sdhci_msm_host *msm_host)
+ {
+-	u32 regval;
+-	int err;
++	if (msm_host->mmc->caps2 & MMC_CAP2_CRYPTO)
++		return qcom_ice_resume(msm_host->ice);
+ 
+-	err = readl_poll_timeout(msm_host->ice_mem + QCOM_ICE_REG_BIST_STATUS,
+-				 regval, !(regval & QCOM_ICE_BIST_STATUS_MASK),
+-				 50, 5000);
+-	if (err)
+-		dev_err(mmc_dev(msm_host->mmc),
+-			"Timed out waiting for ICE self-test to complete\n");
+-	return err;
++	return 0;
+ }
+ 
+-static void sdhci_msm_ice_enable(struct sdhci_msm_host *msm_host)
++static __maybe_unused int sdhci_msm_ice_suspend(struct sdhci_msm_host *msm_host)
+ {
+-	if (!(msm_host->mmc->caps2 & MMC_CAP2_CRYPTO))
+-		return;
+-	sdhci_msm_ice_low_power_mode_enable(msm_host);
+-	sdhci_msm_ice_optimization_enable(msm_host);
+-	sdhci_msm_ice_wait_bist_status(msm_host);
+-}
++	if (msm_host->mmc->caps2 & MMC_CAP2_CRYPTO)
++		return qcom_ice_suspend(msm_host->ice);
+ 
+-static int __maybe_unused sdhci_msm_ice_resume(struct sdhci_msm_host *msm_host)
 -{
--	union ufs_crypto_cap_entry cap;
+-	if (!(msm_host->mmc->caps2 & MMC_CAP2_CRYPTO))
+-		return 0;
+-	return sdhci_msm_ice_wait_bist_status(msm_host);
++	return 0;
+ }
+ 
+ /*
+@@ -1972,48 +1861,28 @@ static int sdhci_msm_program_key(struct cqhci_host *cq_host,
+ 				 const union cqhci_crypto_cfg_entry *cfg,
+ 				 int slot)
+ {
+-	struct device *dev = mmc_dev(cq_host->mmc);
++	struct sdhci_host *host = mmc_priv(cq_host->mmc);
++	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
++	struct sdhci_msm_host *msm_host = sdhci_pltfm_priv(pltfm_host);
+ 	union cqhci_crypto_cap_entry cap;
 -	union {
 -		u8 bytes[AES_256_XTS_KEY_SIZE];
 -		u32 words[AES_256_XTS_KEY_SIZE / sizeof(u32)];
@@ -381,19 +368,20 @@ index 453978877ae9..000000000000
 -	int i;
 -	int err;
 -
--	if (!(cfg->config_enable & UFS_CRYPTO_CONFIGURATION_ENABLE))
+-	if (!(cfg->config_enable & CQHCI_CRYPTO_CONFIGURATION_ENABLE))
 -		return qcom_scm_ice_invalidate_key(slot);
--
--	/* Only AES-256-XTS has been tested so far. */
--	cap = hba->crypto_cap_array[cfg->crypto_cap_idx];
--	if (cap.algorithm_id != UFS_CRYPTO_ALG_AES_XTS ||
--	    cap.key_size != UFS_CRYPTO_KEY_SIZE_256) {
--		dev_err_ratelimited(hba->dev,
+ 
+ 	/* Only AES-256-XTS has been tested so far. */
+ 	cap = cq_host->crypto_cap_array[cfg->crypto_cap_idx];
+ 	if (cap.algorithm_id != CQHCI_CRYPTO_ALG_AES_XTS ||
+-	    cap.key_size != CQHCI_CRYPTO_KEY_SIZE_256) {
+-		dev_err_ratelimited(dev,
 -				    "Unhandled crypto capability; algorithm_id=%d, key_size=%d\n",
 -				    cap.algorithm_id, cap.key_size);
--		return -EINVAL;
++		cap.key_size != CQHCI_CRYPTO_KEY_SIZE_256)
+ 		return -EINVAL;
 -	}
--
+ 
 -	memcpy(key.bytes, cfg->crypto_key, AES_256_XTS_KEY_SIZE);
 -
 -	/*
@@ -408,194 +396,64 @@ index 453978877ae9..000000000000
 -				   cfg->data_unit_size);
 -	memzero_explicit(&key, sizeof(key));
 -	return err;
--}
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 82d02e7f3b4f..eb700ced884d 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -15,6 +15,8 @@
- #include <linux/reset-controller.h>
- #include <linux/devfreq.h>
- 
-+#include <soc/qcom/ice.h>
-+
- #include <ufs/ufshcd.h>
- #include "ufshcd-pltfrm.h"
- #include <ufs/unipro.h>
-@@ -55,6 +57,98 @@ static struct ufs_qcom_host *rcdev_to_ufs_host(struct reset_controller_dev *rcd)
- 	return container_of(rcd, struct ufs_qcom_host, rcdev);
- }
- 
-+#ifdef CONFIG_SCSI_UFS_CRYPTO
-+
-+static inline void ufs_qcom_ice_enable(struct ufs_qcom_host *host)
-+{
-+	if (host->hba->caps & UFSHCD_CAP_CRYPTO)
-+		qcom_ice_enable(host->ice);
-+}
-+
-+static int ufs_qcom_ice_init(struct ufs_qcom_host *host)
-+{
-+	struct ufs_hba *hba = host->hba;
-+	struct device *dev = hba->dev;
-+
-+	host->ice = of_qcom_ice_get(dev);
-+	if (host->ice == ERR_PTR(-EOPNOTSUPP)) {
-+		dev_warn(dev, "Disabling inline encryption support\n");
-+		host->ice = NULL;
-+	}
-+
-+	if (IS_ERR_OR_NULL(host->ice))
-+		return PTR_ERR_OR_ZERO(host->ice);
-+
-+	hba->caps |= UFSHCD_CAP_CRYPTO;
-+
-+	return 0;
-+}
-+
-+static inline int ufs_qcom_ice_resume(struct ufs_qcom_host *host)
-+{
-+	if (host->hba->caps & UFSHCD_CAP_CRYPTO)
-+		return qcom_ice_resume(host->ice);
-+
-+	return 0;
-+}
-+
-+static inline int ufs_qcom_ice_suspend(struct ufs_qcom_host *host)
-+{
-+	if (host->hba->caps & UFSHCD_CAP_CRYPTO)
-+		return qcom_ice_suspend(host->ice);
-+
-+	return 0;
-+}
-+
-+static int ufs_qcom_ice_program_key(struct ufs_hba *hba,
-+				    const union ufs_crypto_cfg_entry *cfg,
-+				    int slot)
-+{
-+	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-+	union ufs_crypto_cap_entry cap;
-+	bool config_enable =
-+		cfg->config_enable & UFS_CRYPTO_CONFIGURATION_ENABLE;
-+
-+	/* Only AES-256-XTS has been tested so far. */
-+	cap = hba->crypto_cap_array[cfg->crypto_cap_idx];
-+	if (cap.algorithm_id != UFS_CRYPTO_ALG_AES_XTS ||
-+	    cap.key_size != UFS_CRYPTO_KEY_SIZE_256)
-+		return -EINVAL;
-+
-+	if (config_enable)
-+		return qcom_ice_program_key(host->ice,
++	if (cfg->config_enable & CQHCI_CRYPTO_CONFIGURATION_ENABLE)
++		return qcom_ice_program_key(msm_host->ice,
 +					    QCOM_ICE_CRYPTO_ALG_AES_XTS,
 +					    QCOM_ICE_CRYPTO_KEY_SIZE_256,
 +					    cfg->crypto_key,
 +					    cfg->data_unit_size, slot);
 +	else
-+		return qcom_ice_evict_key(host->ice, slot);
-+}
++		return qcom_ice_evict_key(msm_host->ice, slot);
+ }
 +
-+#else
-+
-+#define ufs_qcom_ice_program_key NULL
-+
-+static inline void ufs_qcom_ice_enable(struct ufs_qcom_host *host)
-+{
-+}
-+
-+static int ufs_qcom_ice_init(struct ufs_qcom_host *host)
-+{
-+	return 0;
-+}
-+
-+static inline int ufs_qcom_ice_resume(struct ufs_qcom_host *host)
-+{
-+	return 0;
-+}
-+
-+static inline int ufs_qcom_ice_suspend(struct ufs_qcom_host *host)
-+{
-+	return 0;
-+}
-+#endif
-+
- static int ufs_qcom_host_clk_get(struct device *dev,
- 		const char *name, struct clk **clk_out, bool optional)
+ #else /* CONFIG_MMC_CRYPTO */
+-static inline struct clk *sdhci_msm_ice_get_clk(struct device *dev)
+-{
+-	return NULL;
+-}
+ 
+ static inline int sdhci_msm_ice_init(struct sdhci_msm_host *msm_host,
+ 				     struct cqhci_host *cq_host)
+@@ -2025,11 +1894,17 @@ static inline void sdhci_msm_ice_enable(struct sdhci_msm_host *msm_host)
  {
-@@ -607,7 +701,7 @@ static int ufs_qcom_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
- 		ufs_qcom_disable_lane_clks(host);
- 	}
- 
--	return 0;
-+	return ufs_qcom_ice_suspend(host);
  }
  
- static int ufs_qcom_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
-@@ -853,7 +947,6 @@ static void ufs_qcom_set_caps(struct ufs_hba *hba)
- 	hba->caps |= UFSHCD_CAP_CLK_SCALING | UFSHCD_CAP_WB_WITH_CLK_SCALING;
- 	hba->caps |= UFSHCD_CAP_AUTO_BKOPS_SUSPEND;
- 	hba->caps |= UFSHCD_CAP_WB_EN;
--	hba->caps |= UFSHCD_CAP_CRYPTO;
- 	hba->caps |= UFSHCD_CAP_AGGR_POWER_COLLAPSE;
- 	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
- 
-diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
-index 39e774254fb2..6289ad5a42d0 100644
---- a/drivers/ufs/host/ufs-qcom.h
-+++ b/drivers/ufs/host/ufs-qcom.h
-@@ -7,6 +7,7 @@
- 
- #include <linux/reset-controller.h>
- #include <linux/reset.h>
-+#include <soc/qcom/ice.h>
- #include <ufs/ufshcd.h>
- 
- #define MAX_UFS_QCOM_HOSTS	1
-@@ -205,12 +206,13 @@ struct ufs_qcom_host {
- 	struct clk *tx_l1_sync_clk;
- 	bool is_lane_clks_enabled;
- 
-+#ifdef CONFIG_SCSI_UFS_CRYPTO
-+	struct qcom_ice *ice;
-+#endif
+-static inline int __maybe_unused
++static inline __maybe_unused int
+ sdhci_msm_ice_resume(struct sdhci_msm_host *msm_host)
+ {
+ 	return 0;
+ }
 +
- 	void __iomem *dev_ref_clk_ctrl_mmio;
- 	bool is_dev_ref_clk_enabled;
- 	struct ufs_hw_version hw_ver;
--#ifdef CONFIG_SCSI_UFS_CRYPTO
--	void __iomem *ice_mmio;
--#endif
++static inline __maybe_unused int
++sdhci_msm_ice_suspend(struct sdhci_msm_host *msm_host)
++{
++	return 0;
++}
+ #endif /* !CONFIG_MMC_CRYPTO */
  
- 	u32 dev_ref_clk_en_mask;
+ /*****************************************************************************\
+@@ -2630,11 +2505,6 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 		clk = NULL;
+ 	msm_host->bulk_clks[3].clk = clk;
  
-@@ -248,28 +250,4 @@ static inline bool ufs_qcom_cap_qunipro(struct ufs_qcom_host *host)
- 	return host->caps & UFS_QCOM_CAP_QUNIPRO;
+-	clk = sdhci_msm_ice_get_clk(&pdev->dev);
+-	if (IS_ERR(clk))
+-		clk = NULL;
+-	msm_host->bulk_clks[4].clk = clk;
+-
+ 	ret = clk_bulk_prepare_enable(ARRAY_SIZE(msm_host->bulk_clks),
+ 				      msm_host->bulk_clks);
+ 	if (ret)
+@@ -2827,7 +2697,7 @@ static __maybe_unused int sdhci_msm_runtime_suspend(struct device *dev)
+ 	clk_bulk_disable_unprepare(ARRAY_SIZE(msm_host->bulk_clks),
+ 				   msm_host->bulk_clks);
+ 
+-	return 0;
++	return sdhci_msm_ice_suspend(msm_host);
  }
  
--/* ufs-qcom-ice.c */
--
--#ifdef CONFIG_SCSI_UFS_CRYPTO
--int ufs_qcom_ice_init(struct ufs_qcom_host *host);
--int ufs_qcom_ice_enable(struct ufs_qcom_host *host);
--int ufs_qcom_ice_resume(struct ufs_qcom_host *host);
--int ufs_qcom_ice_program_key(struct ufs_hba *hba,
--			     const union ufs_crypto_cfg_entry *cfg, int slot);
--#else
--static inline int ufs_qcom_ice_init(struct ufs_qcom_host *host)
--{
--	return 0;
--}
--static inline int ufs_qcom_ice_enable(struct ufs_qcom_host *host)
--{
--	return 0;
--}
--static inline int ufs_qcom_ice_resume(struct ufs_qcom_host *host)
--{
--	return 0;
--}
--#define ufs_qcom_ice_program_key NULL
--#endif /* !CONFIG_SCSI_UFS_CRYPTO */
--
- #endif /* UFS_QCOM_H_ */
+ static __maybe_unused int sdhci_msm_runtime_resume(struct device *dev)
 -- 
 2.34.1
 
