@@ -2,164 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8D76D4949
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5196D4945
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbjDCOgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S233661AbjDCOgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233653AbjDCOgf (ORCPT
+        with ESMTP id S233653AbjDCOgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:36:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF91E58
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680532548;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cP+bGhDlk17abfeJRcbu/Vx3+Nezj9s5bVdauklB/8Q=;
-        b=fOyBMqc+ENNZ7W97GkBGk+GjEUltgRsi+Dt8PAtfZUW7iN6DEB82FI03L8HysmY38a3MXP
-        /XPXvRibX5v9MwMZ6IiFrWCsyCzmdz8Eyw3FiV1cnrTfkG7ihZKMPpLVxPC1migFdnyLid
-        eLmPQajN1EF/BZ/xZckyZ8i7XgJnnTQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-608-kXwApEh3NracL8aTR_vbkw-1; Mon, 03 Apr 2023 10:35:47 -0400
-X-MC-Unique: kXwApEh3NracL8aTR_vbkw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 744272A5954F;
-        Mon,  3 Apr 2023 14:35:46 +0000 (UTC)
-Received: from rotkaeppchen (unknown [10.39.192.158])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 612E21121315;
-        Mon,  3 Apr 2023 14:35:45 +0000 (UTC)
-Date:   Mon, 3 Apr 2023 16:35:40 +0200
-From:   Philipp Rudo <prudo@redhat.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        Baoquan He <bhe@redhat.com>
-Subject: Re: [PATCH v3] kexec: Support purgatories with .text.hot sections
-Message-ID: <20230403163540.4f597d50@rotkaeppchen>
-In-Reply-To: <CANiDSCtu8oOn9vV9eak=S2RDVVO9yan2BO8K5ia9jALABqiwjQ@mail.gmail.com>
-References: <20230321-kexec_clang16-v3-0-5f016c8d0e87@chromium.org>
-        <20230324165855.23084947@rotkaeppchen>
-        <CANiDSCtu8oOn9vV9eak=S2RDVVO9yan2BO8K5ia9jALABqiwjQ@mail.gmail.com>
-Organization: Red Hat inc.
+        Mon, 3 Apr 2023 10:36:23 -0400
+Received: from mail-ed1-x564.google.com (mail-ed1-x564.google.com [IPv6:2a00:1450:4864:20::564])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CC617672
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:36:13 -0700 (PDT)
+Received: by mail-ed1-x564.google.com with SMTP id er13so77228953edb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1680532572;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U5r7YRW0ZNQYQAUWUSjjSl8/aBINAbtHL/3e+twmpks=;
+        b=r9QrjT90BPkxKRltjojacHRrzBGVAyjMvPlwDhL7hO3+MhZunGBQH16KYfsoQWb8UT
+         Nndx/n9S8RG17b8ls9oB7tYUKQIHRSQng5VaC9NU2wfOrLjI06fONzYAMLCY+UAv0/0q
+         df9M4hXqP+nHHYYLwkoLfc31ZkdgVrE7/RY+8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680532572;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U5r7YRW0ZNQYQAUWUSjjSl8/aBINAbtHL/3e+twmpks=;
+        b=ENwqIKIcg3bu6Xib0n4AasbtYRDB7/f8v6GfLHOhzAO1/E8z98kpU24SvIUQiX3dRj
+         1i8CfFw3UG7z5YQGrIMJY4z6LcfUVIM3CxjPDKYF8OoEJYpn7vsVSv0CJeimGo9phLMi
+         t35YRO7/fMLSa+1MJ0uRsct05u1Rs99GX4ncXSgu1ffG7T7jvZOCro+hYkhZo5jyUTBN
+         3/Se1wSkeJoS+AkNDNBF9d5bmz+e2HsmzOTX9x8PDnf9QMb8xjzzZi1WcdoQcRLqG9+k
+         2ocwYXUSb00IeVv82RnYUGlh/B8PZJ8s5/6qwEf2awdJCiFbm9wAuL9Lf7l6h9cwR1Ga
+         8ARg==
+X-Gm-Message-State: AAQBX9foC0nzEA5gcPYMzm1AkYGvs4u9s41GTREAEGQlpljdcgj0+u0d
+        GTsVMX5JRF41E88a8db8ynRCNTe4koM2qvHLeaNU/v7jZUQ6
+X-Google-Smtp-Source: AKy350Y8nj7Dmf0M2lIbht8Tt1l0YyX9VpNsVwlG4YnyGlwJGE6ARk5FVdaHVaOvwOjGn9wi3uLrSq5aEun0
+X-Received: by 2002:a17:906:4990:b0:932:20a5:5b with SMTP id p16-20020a170906499000b0093220a5005bmr17548153eju.23.1680532572026;
+        Mon, 03 Apr 2023 07:36:12 -0700 (PDT)
+Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
+        by smtp-relay.gmail.com with ESMTPS id r6-20020a1709064d0600b008b25260a59dsm3079775eju.290.2023.04.03.07.36.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 07:36:12 -0700 (PDT)
+X-Relaying-Domain: dectris.com
+From:   Kal Conley <kal.conley@dectris.com>
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maxim Mikityanskiy <maximmi@mellanox.com>
+Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf] xsk: Fix unaligned descriptor validation
+Date:   Mon,  3 Apr 2023 16:36:01 +0200
+Message-Id: <20230403143601.32168-1-kal.conley@dectris.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+Make sure unaligned descriptors that straddle the end of the UMEM are
+considered invalid. Currently, descriptor validation is broken for
+zero-copy mode which only checks descriptors at page granularity.
+Descriptors that cross the end of the UMEM but not a page boundary may
+be therefore incorrectly considered valid. The check needs to happen
+before the page boundary and contiguity checks in
+xp_desc_crosses_non_contig_pg. Do this check in
+xp_unaligned_validate_desc instead like xp_check_unaligned already does.
 
-sorry for the late reply...
+Fixes: 2b43470add8c ("xsk: Introduce AF_XDP buffer allocation API")
+Signed-off-by: Kal Conley <kal.conley@dectris.com>
+---
+ include/net/xsk_buff_pool.h | 9 ++-------
+ net/xdp/xsk_queue.h         | 1 +
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-On Mon, 27 Mar 2023 13:52:08 +0200
-Ricardo Ribalda <ribalda@chromium.org> wrote:
-
-[...]
-
-> 
-> I tried removing the -r from arch/x86/purgatory/Makefile and that resulted into:
-> 
-> [  115.631578] BUG: unable to handle page fault for address: ffff93224d5c8e20
-> [  115.631583] #PF: supervisor write access in kernel mode
-> [  115.631585] #PF: error_code(0x0002) - not-present page
-> [  115.631586] PGD 100000067 P4D 100000067 PUD 1001ed067 PMD 132b58067 PTE 0
-> [  115.631589] Oops: 0002 [#1] PREEMPT SMP NOPTI
-> [  115.631592] CPU: 0 PID: 5291 Comm: kexec-lite Tainted: G     U
->       5.15.103-17399-g852a928df601-dirty #19
-> cd159e0d6a91f03e06035a0a8eb7fc984a8f3e82
-> [  115.631594] Hardware name: Google Crota/Crota, BIOS
-> Google_Crota.14505.288.0 11/08/2022
-> [  115.631595] RIP: 0010:memcpy_erms+0x6/0x10
-> [  115.631599] Code: 5d 00 eb bd eb 1e 0f 1f 00 48 89 f8 48 89 d1 48
-> c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 cc cc cc cc 66 90 48 89 f8
-> 48 89 d1 <f3> a4 c3 cc cc cc cc 0f 1f 00 48 89 f8 48 83 fa 20 72 7e 40
-> 38 fe
-> [  115.631601] RSP: 0018:ffff93224f65fe50 EFLAGS: 00010246
-> [  115.631602] RAX: ffff93224d5c8e20 RBX: 00000000ffffffea RCX: 0000000000000100
-> [  115.631603] RDX: 0000000000000100 RSI: ffff9322407bd000 RDI: ffff93224d5c8e20
-> [  115.631604] RBP: ffff93224f65fe88 R08: 0000000000000000 R09: ffff92133cd3ef08
-> [  115.631605] R10: ffff9322407be000 R11: ffffffffa1b4f2e0 R12: 0000000000000000
-> [  115.631606] R13: ffff92133cee4c00 R14: 0000000000000100 R15: ffffffffa2b6f14f
-> [  115.631607] FS:  000078e8b9dbf7c0(0000) GS:ffff921437800000(0000)
-> knlGS:0000000000000000
-> [  115.631609] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  115.631610] CR2: ffff93224d5c8e20 CR3: 000000015be26001 CR4: 0000000000770ef0
-> [  115.631611] PKRU: 55555554
-> [  115.631612] Call Trace:
-> [  115.631614]  <TASK>
-> [  115.631615]  kexec_purgatory_get_set_symbol+0x82/0xd3
-> [  115.631619]  __se_sys_kexec_file_load+0x523/0x644
-> [  115.631621]  do_syscall_64+0x58/0xa5
-> [  115.631623]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
-
-Yeah, simply dropping -r doesn't work. You at least need to add -fPIE
-to the CFLAGS. But probably you need more. When you go down this route
-you really need to pay attention to some nasty details...
-
-> And I did not continue in that direction.
-
-That's totally fine.
-
-Thanks
-Philipp
-
-> I also tried finding a flag for llvm that would avoid splitting .text,
-> but was not lucky either.
-> 
-> I will look into making a linker script for x86, we could combine it
-> with something like:
-> 
->                 if (sechdrs[i].sh_flags & SHF_EXECINSTR &&
->                     pi->ehdr->e_entry >= sechdrs[i].sh_addr &&
->                     pi->ehdr->e_entry < (sechdrs[i].sh_addr
-> -                                        + sechdrs[i].sh_size) &&
-> -                   kbuf->image->start == pi->ehdr->e_entry) {
-> -                       kbuf->image->start -= sechdrs[i].sh_addr;
-> -                       kbuf->image->start += kbuf->mem + offset;
-> +                                        + sechdrs[i].sh_size)) {
-> +                       if (!WARN_ON(kbuf->image->start != pi->ehdr->e_entry)) {
-> +                               kbuf->image->start -= sechdrs[i].sh_addr;
-> +                               kbuf->image->start += kbuf->mem + offset;
-> +                       }
->                 }
-> 
-> So developers have some hints of what to look at.
-> 
-> Thanks!
-> 
-> 
-> >
-> > Thanks
-> > Philipp
-> >  
-> > >                       kbuf->image->start -= sechdrs[i].sh_addr;
-> > >                       kbuf->image->start += kbuf->mem + offset;
-> > >               }
-> > >
-> > > ---
-> > > base-commit: 17214b70a159c6547df9ae204a6275d983146f6b
-> > > change-id: 20230321-kexec_clang16-4510c23d129c
-> > >
-> > > Best regards,  
-> >  
-> 
-> 
+diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+index 3e952e569418..d318c769b445 100644
+--- a/include/net/xsk_buff_pool.h
++++ b/include/net/xsk_buff_pool.h
+@@ -180,13 +180,8 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
+ 	if (likely(!cross_pg))
+ 		return false;
+ 
+-	if (pool->dma_pages_cnt) {
+-		return !(pool->dma_pages[addr >> PAGE_SHIFT] &
+-			 XSK_NEXT_PG_CONTIG_MASK);
+-	}
+-
+-	/* skb path */
+-	return addr + len > pool->addrs_cnt;
++	return pool->dma_pages_cnt &&
++	       !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
+ }
+ 
+ static inline u64 xp_aligned_extract_addr(struct xsk_buff_pool *pool, u64 addr)
+diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+index bfb2a7e50c26..66c6f57c9c44 100644
+--- a/net/xdp/xsk_queue.h
++++ b/net/xdp/xsk_queue.h
+@@ -162,6 +162,7 @@ static inline bool xp_unaligned_validate_desc(struct xsk_buff_pool *pool,
+ 		return false;
+ 
+ 	if (base_addr >= pool->addrs_cnt || addr >= pool->addrs_cnt ||
++	    addr + desc->len > pool->addrs_cnt ||
+ 	    xp_desc_crosses_non_contig_pg(pool, addr, desc->len))
+ 		return false;
+ 
+-- 
+2.39.2
 
