@@ -2,187 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6176F6D4564
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969DC6D456F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbjDCNNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
+        id S232146AbjDCNO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbjDCNNK (ORCPT
+        with ESMTP id S231738AbjDCNO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:13:10 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AC8359E;
-        Mon,  3 Apr 2023 06:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lncX9KfL/akxexU7ZmIZaJu0/3VrjzFBjGBMgco/NoA=; b=fb7bQ878IFwQ4NgVX6Y8jI1pcW
-        Dc6xZAyPU6/yNfddjQaESCyCaEOgtwmUDw18UeKa4L5AaKg1z1YzQYJmXjSmoJffpWXpQNCVo8iHu
-        ekqiqctm9Otr340O4T7crNsoxJ7p0YfbIJn/OsKJr778JQv/3OUV3raYTdmEttf9R4H3eQUKvZmX/
-        iiHnNBnQ5xJbQfnsatLLjeQyb1JzDO1fwxbdurrdVCtPgyrsloEVV2h891bqM3FYZF+BXBrmTokqa
-        +YtJj8oui4WW8oW/vEsbtb5eV+Mp4mNOehg/bMFlOfjRdBWmnrXAkxEbnK4mf/iQOk4OFHpNfOBcu
-        LPMD9Rjw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35002)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pjJzb-0002oj-SP; Mon, 03 Apr 2023 14:13:03 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pjJza-0004GU-TN; Mon, 03 Apr 2023 14:13:02 +0100
-Date:   Mon, 3 Apr 2023 14:13:02 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, rogerq@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srk@ti.com
-Subject: Re: [PATCH net-next v2 1/3] net: ethernet: ti: am65-cpsw: Move mode
- specific config to mac_config()
-Message-ID: <ZCrQ3lPjEmxXc9a2@shell.armlinux.org.uk>
-References: <20230403110106.983994-1-s-vadapalli@ti.com>
- <20230403110106.983994-2-s-vadapalli@ti.com>
- <ZCqzuwDLGuBDMHQG@shell.armlinux.org.uk>
- <3a62f5cf-ebba-1603-50a0-7a873973534d@ti.com>
+        Mon, 3 Apr 2023 09:14:27 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5BB11664;
+        Mon,  3 Apr 2023 06:14:24 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 56C7421C60;
+        Mon,  3 Apr 2023 13:14:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680527663; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dK1mW2U1fuKTTzQCJrkI6ES5a1IUIgGEmxklFFyWTE8=;
+        b=KWInf08Va6zfedTNfa2B4/yu/bfV4f/MG5RGWNapg9lqltc3pCtNIcVsqQC7xtbJ1IMQQY
+        oSwCWtO7CWiKijyLFfaN8p/ZFXrwxDOv+5cULgqPEQGXeHgPBnLBqHYc0tAbuIWkgwfucX
+        5vptceokG1Ll9f7FyXZnL56YwmEfNH4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680527663;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dK1mW2U1fuKTTzQCJrkI6ES5a1IUIgGEmxklFFyWTE8=;
+        b=K0cm9tTGaZz6m26c5a4kMbBm0FeSYJTA+cj1iLw5Fh7jl4eJbfhmJG8aWVro3BFLx4iuJR
+        5s3I7JAjDk02CYAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2AAD81331A;
+        Mon,  3 Apr 2023 13:14:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vf5ZCS/RKmSlZwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 03 Apr 2023 13:14:23 +0000
+Message-ID: <01484ce3-2366-5000-3aa6-727448145f36@suse.de>
+Date:   Mon, 3 Apr 2023 15:14:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a62f5cf-ebba-1603-50a0-7a873973534d@ti.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/5] drm: shmobile: Fixes and enhancements
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <cover.1680273039.git.geert+renesas@glider.be>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <cover.1680273039.git.geert+renesas@glider.be>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------dMBPv2tUDcPke7H09l1ZZyn1"
+X-Spam-Status: No, score=-3.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 06:31:52PM +0530, Siddharth Vadapalli wrote:
-> 
-> 
-> On 03-04-2023 16:38, Russell King (Oracle) wrote:
-> > On Mon, Apr 03, 2023 at 04:31:04PM +0530, Siddharth Vadapalli wrote:
-> >> Move the interface mode specific configuration to the mac_config()
-> >> callback am65_cpsw_nuss_mac_config().
-> >>
-> >> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> >> ---
-> >>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 10 +++++++---
-> >>  1 file changed, 7 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >> index d17757ecbf42..74e099828978 100644
-> >> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >> @@ -1504,12 +1504,17 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
-> >>  							  phylink_config);
-> >>  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
-> >>  	struct am65_cpsw_common *common = port->common;
-> >> +	u32 mac_control = 0;
-> >>  
-> >>  	if (common->pdata.extra_modes & BIT(state->interface)) {
-> >> -		if (state->interface == PHY_INTERFACE_MODE_SGMII)
-> >> +		if (state->interface == PHY_INTERFACE_MODE_SGMII) {
-> >> +			mac_control |= CPSW_SL_CTL_EXT_EN;
-> >>  			writel(ADVERTISE_SGMII,
-> >>  			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
-> >> +		}
-> >>  
-> >> +		if (mac_control)
-> >> +			cpsw_sl_ctl_set(port->slave.mac_sl, mac_control);
-> >>  		writel(AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
-> >>  		       port->sgmii_base + AM65_CPSW_SGMII_CONTROL_REG);
-> >>  	}
-> >> @@ -1553,8 +1558,7 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
-> >>  
-> >>  	if (speed == SPEED_1000)
-> >>  		mac_control |= CPSW_SL_CTL_GIG;
-> >> -	if (interface == PHY_INTERFACE_MODE_SGMII)
-> >> -		mac_control |= CPSW_SL_CTL_EXT_EN;
-> >> +	/* TODO: Verify whether in-band is necessary for 10 Mbps RGMII */
-> >>  	if (speed == SPEED_10 && phy_interface_mode_is_rgmii(interface))
-> >>  		/* Can be used with in band mode only */
-> >>  		mac_control |= CPSW_SL_CTL_EXT_EN;
-> > 
-> > I'm afraid I can see you haven't thought this patch through properly.
-> > 
-> > am65_cpsw_nuss_mac_link_down() will call
-> > cpsw_sl_ctl_reset(port->slave.mac_sl); which has the effect of clearing
-> > to zero the entire MAC control register. This will clear
-> > CPSW_SL_CTL_EXT_EN that was set in am65_cpsw_nuss_mac_config() which is
-> > not what you want to be doing.
-> > 
-> > Given that we have the 10Mbps issue with RGMII, I think what you want
-> > to be doing is:
-> > 
-> > 1. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_config() if in SGMII
-> >    mode, otherwise clear this bit.
-> > 
-> > 2. Clear the mac_control register in am65_cpsw_nuss_mac_link_down()
-> >    if in RMGII mode, otherwise preserve the state of
-> >    CPSW_SL_CTL_EXT_EN but clear all other bits.
-> > 
-> > 3. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_link_up() if in
-> >    RGMII mode and 10Mbps.
-> 
-> I plan to implement it as follows:
-> 1. Add a member "u32 mode_config" to "struct am65_cpsw_slave_data" in
-> "am65-cpsw-nuss.h".
-> 2. In am65_cpsw_nuss_mac_config(), store the value of mac_control in
-> "port->slave.mode_config".
-> 3. In am65_cpsw_nuss_mac_link_down(), after the reset via
-> cpsw_sl_ctl_reset(), execute:
-> cpsw_sl_ctl_set(port->slave.mac_sl, port->slave.mode_config) in order to
-> restore the configuration performed in am65_cpsw_nuss_mac_config().
-> 
-> Please let me know in case of any suggestions to implement it in a
-> better manner.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------dMBPv2tUDcPke7H09l1ZZyn1
+Content-Type: multipart/mixed; boundary="------------DhMD5KGvcChrberQ5M70FzgZ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
+Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+Message-ID: <01484ce3-2366-5000-3aa6-727448145f36@suse.de>
+Subject: Re: [PATCH 0/5] drm: shmobile: Fixes and enhancements
+References: <cover.1680273039.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1680273039.git.geert+renesas@glider.be>
 
-Do you think this complexity is really worth it?
+--------------DhMD5KGvcChrberQ5M70FzgZ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Let's look at what's available:
+SGkgR2VlcnQNCg0KQW0gMzEuMDMuMjMgdW0gMTY6NDggc2NocmllYiBHZWVydCBVeXR0ZXJo
+b2V2ZW46DQo+IAlIaSBhbGwsDQo+IA0KPiBDdXJyZW50bHksIHRoZXJlIGFyZSB0d28gZHJp
+dmVycyBmb3IgdGhlIExDRCBjb250cm9sbGVyIG9uIFJlbmVzYXMNCj4gU3VwZXJILWJhc2Vk
+IGFuZCBBUk0tYmFzZWQgU0gtTW9iaWxlIGFuZCBSLU1vYmlsZSBTb0NzOg0KPiAgICAxLiBz
+aF9tb2JpbGVfbGNkY2ZiLCB1c2luZyB0aGUgZmJkZXYgZnJhbWV3b3JrLA0KPiAgICAyLiBz
+aG1vYl9kcm0sIHVzaW5nIHRoZSBEUk0gZnJhbWV3b3JrLg0KPiBIb3dldmVyLCBvbmx5IHRo
+ZSBmb3JtZXIgZHJpdmVyIGNhbiBiZSB1c2VkLCBhcyBhbGwgcGxhdGZvcm0gc3VwcG9ydA0K
+PiBpbnRlZ3JhdGVzIHRoZSBmb3JtZXIuICBOb25lIG9mIHRoZXNlIGRyaXZlcnMgc3VwcG9y
+dCBEVC1iYXNlZCBzeXN0ZW1zLg0KPiANCj4gVGhpcyBwYXRjaCBzZXJpZXMgaXMgYSBmaXJz
+dCBzdGVwIHRvIGVuYWJsZSB0aGUgU0gtTW9iaWxlIERSTSBkcml2ZXIgZm9yDQo+IFJlbmVz
+YXMgQVJNLWJhc2VkIFNILU1vYmlsZSBhbmQgUi1Nb2JpbGUgU29Dcy4gIFRoZSBuZXh0IHN0
+ZXAgcGxhbm5lZCBpcw0KPiB0byBhZGQgRFQgc3VwcG9ydC4NCj4gDQo+IFRoaXMgaGFzIGJl
+ZW4gdGVzdGVkIG9uIHRoZSBSLU1vYmlsZSBBMS1iYXNlZCBBdG1hcmsgVGVjaG5vDQo+IEFy
+bWFkaWxsby04MDAtRVZBIGRldmVsb3BtZW50IGJvYXJkLCB1c2luZyBhIHRlbXBvcmFyeQ0K
+PiBwbGF0Zm9ybS1lbmFibGVtZW50IHBhdGNoWzFdLg0KDQpTaW5jZSB5b3UgaGF2ZSB0aGUg
+aGFyZHdhcmUgZm9yIHNobW9iaWxlLCB3b3VsZCB5b3UgYmUgYWJsZSB0byB0ZXN0IA0KcGF0
+Y2hlcyBvY2Nhc2lvbmFsbHk/DQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IFRo
+YW5rcyBmb3IgeW91ciBjb21tZW50cyENCj4gDQo+IFsxXSBodHRwczovL2xvcmUua2VybmVs
+Lm9yZy9yL2MwM2Q0ZWRiZDY1MDgzNmJmNmE5NjUwNGRmODIzMzhlYzZkODAwZmYuMTY4MDI3
+Mjk4MC5naXQuZ2VlcnQrcmVuZXNhc0BnbGlkZXIuYmUNCj4gDQo+IEdlZXJ0IFV5dHRlcmhv
+ZXZlbiAoNSk6DQo+ICAgIGRybTogc2htb2JpbGU6IFVzZSAlcDRjYyB0byBwcmludCBmb3Vy
+Y2MgY29kZXMNCj4gICAgZHJtOiBzaG1vYmlsZTogQWRkIHN1cHBvcnQgZm9yIERSTV9GT1JN
+QVRfWFJHQjg4ODgNCj4gICAgZHJtOiBzaG1vYmlsZTogU3dpdGNoIHRvIGRybV9jcnRjX2lu
+aXRfd2l0aF9wbGFuZXMoKQ0KPiAgICBkcm06IHNobW9iaWxlOiBBZGQgbWlzc2luZyBjYWxs
+IHRvIGRybV9mYmRldl9nZW5lcmljX3NldHVwKCkNCj4gICAgZHJtOiBzaG1vYmlsZTogTWFr
+ZSBEUk1fU0hNT0JJTEUgdmlzaWJsZSBvbiBSZW5lc2FzIFNvQyBwbGF0Zm9ybXMNCj4gDQo+
+ICAgZHJpdmVycy9ncHUvZHJtL3NobW9iaWxlL0tjb25maWcgICAgICAgICAgIHwgIDIgKy0N
+Cj4gICBkcml2ZXJzL2dwdS9kcm0vc2htb2JpbGUvc2htb2JfZHJtX2NydGMuYyAgfCAzNSAr
+KysrKysrKysrKysrKysrKysrLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3NobW9iaWxlL3No
+bW9iX2RybV9kcnYuYyAgIHwgIDMgKysNCj4gICBkcml2ZXJzL2dwdS9kcm0vc2htb2JpbGUv
+c2htb2JfZHJtX2ttcy5jICAgfCAgOSArKysrLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vc2ht
+b2JpbGUvc2htb2JfZHJtX3BsYW5lLmMgfCAgNSArKysrDQo+ICAgNSBmaWxlcyBjaGFuZ2Vk
+LCA0NyBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQ0KPiANCg0KLS0gDQpUaG9tYXMg
+WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
+b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
+IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
+OiBJdm8gVG90ZXYNCg==
 
-cpsw_sl_ctl_set() - sets bits in the mac control register
-cpsw_sl_ctl_clr() - clears bits in the mac control register
-cpsw_sl_ctl_reset() - sets the mac control register to zero
+--------------DhMD5KGvcChrberQ5M70FzgZ--
 
-So, in mac_config(), we can do:
+--------------dMBPv2tUDcPke7H09l1ZZyn1
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-	if (interface == SGMII)
-		cpsw_sl_ctl_set(CPSW_SL_CTL_EXT_EN);
-	else
-		cpsw_sl_ctl_clr(CPSW_SL_CTL_EXT_EN);
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQq0S4FAwAAAAAACgkQlh/E3EQov+Ar
+0RAAuSftliJH1q788Q4KH7J3xudbChbLQU9Cblw3x7T/530doeLBEtt0+kmwuscVPvCfdW6OkWAu
+u6EICfmksZY63lj/1Wo/OenGOdj8oaR8j0dNrBRFU07KkpLCh016becua2+Oquol3XVoSIQLoIup
+GdPDBgtPXlktW0/Sjc+n+zP2fYh4xF7VwpnD+IufcYqUjvGunQiE8exZMCrUBO2pdjuGYJnxW8pX
+OZx0bxBEr8e7MhhljLf1T4y7JAchA6jY9QVP2UuEAR6Ixmk2rAlgwBFYQI8TJVaYsX2cEgvzW7/y
+X3iAJ7f9yeXf+sBD9LHM+f3uiL9jmGU94bw9hSliA61Yb9kdLBKfuCzxnylT9jKFRQ+DSRt+VnPO
+hu3Ffp5u31SmQ4Zn0lLV+1ai+YxHntrz3LUj+fUDt6Dbh9nJK1Zbnxed14mcQiHBNVH/5HWZxrAp
+XK8lgkImUqVxmoL2h1M9JdJJhXIjWP7uoYmmVGhOp9f5xoog2kU/UXzIzscYHVZajduBygyst5Pb
+vsl+hA7DFmJBhX8iFhvQDBr0A40Aj9B/6TjJUEedOpKLibaWCz6D897DWmkkJsFYferiez6cbNkW
+XwSuoCElZj8HzMP8Ko5CL7WZnUSzXiWd9rph4VGXPOZy0+/sfkrBnpvOMYfCupHkNJ0t7S7juQCk
+QLY=
+=OGTE
+-----END PGP SIGNATURE-----
 
-in mac_link_down():
-
-	u32 ctl;
-
-	ctl = CPSW_SL_CTL_GMII_EN | CPSW_SL_CTL_GIG |
-	      CPSW_SL_CTL_IFCTL_A | CPSW_SL_CTL_FULLDUPLEX |
-	      CPSW_SL_CTL_RX_FLOW_EN | CPSW_SL_CTL_TX_FLOW_EN;
-	if (phy_interface_mode_is_rgmii(interface))
-		ctl |= CPSW_SL_CTL_EXT_EN;
-
-	cpsw_sl_ctl_clr(ctl);
-
-This ensures that we don't touch any bits in mac_link_down() which we
-aren't modifying in the corresponding mac_link_up() implementation.
-
-Q: do we really need to clear the mac control register on link down?
-If we don't, then we can do better, but we need an additional helper
-which allows read-modify-write of the mac control register using a
-mask value and a value of bits to set. Then we can have mac_link_up()
-setting and clearing the bits as necessary - but I would still keep
-the clearing of CPSW_SL_CTL_EXT_EN for RGMII modes in mac_link_down()
-for now.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+--------------dMBPv2tUDcPke7H09l1ZZyn1--
