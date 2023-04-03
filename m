@@ -2,248 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A490C6D40A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3CB6D4018
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbjDCJdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
+        id S231895AbjDCJTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjDCJdP (ORCPT
+        with ESMTP id S231751AbjDCJTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:33:15 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEF84C13
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:33:11 -0700 (PDT)
-X-UUID: 6ea78390d20011edb6b9f13eb10bd0fe-20230403
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=y6bfMcY1Ypuy0nDqx1NzBnWK3wOJRRbUjxnxkHPZHrA=;
-        b=VnA2CaQvOSF5FEoSwik0QIfQauQvEvNvMplMgZ4cLRCeRx1npMJiAgUFdzbmKfdeVb4euKVx4uqgdk0jBKncfdkNWzAEOvA8Yh5pDNyaq46DUfiCA3WTe8grm8rCIxhZrtiyQkzzxrRra6jyv7o5PIiLWpTzBkNhIfig6RABTJI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:2dcb9cd8-b71c-4c81-9c27-93327153f5b9,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:55a7b1f7-ddba-41c3-91d9-10eeade8eac7,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 6ea78390d20011edb6b9f13eb10bd0fe-20230403
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1109378952; Mon, 03 Apr 2023 17:18:01 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Mon, 3 Apr 2023 17:18:00 +0800
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Mon, 3 Apr 2023 17:18:00 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A7SMVDMpPqyqTYG3vdxCuU2EVo4rSmeb7RPOAsqNaAK1Wm7x2C9/W/pa1w1iks8Podpwz6D9fB8xRLw2BoX1ai8AWQYdi6fp7BuxplGyq0OCocgvObBanZSmYYlLTjmv+ETSwNmb1nCzk87XTpMxg7sgGVBOTxxNWWHGJewNwWGh8rEWwing70tTKMO6Le90sJCO2cLZHpl7lYrh/xvKpSOK6ksW9OvHPr6UZQiOvnHMRz49W0lT5pPhjcIyly12NZ1gJ7Kkn6HqtaQyeNWPcf8xxu3OLCUMXrIPLkN2iDX7eSvkoS9stEbZ2kunlRO+Ic8s2pIVoy1VtGKqxwBf6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y6bfMcY1Ypuy0nDqx1NzBnWK3wOJRRbUjxnxkHPZHrA=;
- b=lWwCGpAQDVb640UJc5lzUnhvQ4KgqZMdZnNNqgJKs02tbZE6cfNX/7j40gurA7nCj3YHK3EIHi/RFyMPLxRW0mzOtoaxtVjHGLz0Scfs/BUnJwLWXm2DogrTu+Cz5Qem+2lnuIrGNSLG6siE7yzlRG3EJ+GRuY9BlDfpwztQifvdLdiyvkha+TJBVz4xG70A+qg2/tSHbBLgGPCBzUKRTRkJVIThSlAVl8kMYOn+8CKpMxyR3PQ5K5ROn2GIkGJtI9W2bUCAlA26ZWIzWcnOllZts0L2yV1OPBYSBcETRu0eWet5NIjvy03XyrwgQhEXIaZcGKSkqN/GIs55zo6u+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y6bfMcY1Ypuy0nDqx1NzBnWK3wOJRRbUjxnxkHPZHrA=;
- b=P8i/5CHjb0CVQSVze/0e2rxRHOvV6r+0Oa8XKY2RZTdqn8QC9x/lsziDy7DBINSBwczdIrvFSAH2j8wZVtrPKkOvc7DJ98tXv1SriLTVkDez8Lp/esxFxZbJr8U9sudOZgs9XAlTP41axRHW+vaI+94aydP4987WvL3vberwJek=
-Received: from SI2PR03MB5339.apcprd03.prod.outlook.com (2603:1096:4:105::9) by
- TYZPR03MB6647.apcprd03.prod.outlook.com (2603:1096:400:1f4::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.27; Mon, 3 Apr
- 2023 09:17:57 +0000
-Received: from SI2PR03MB5339.apcprd03.prod.outlook.com
- ([fe80::214b:e2ea:d75f:76a4]) by SI2PR03MB5339.apcprd03.prod.outlook.com
- ([fe80::214b:e2ea:d75f:76a4%9]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
- 09:17:57 +0000
-From:   =?utf-8?B?WGlubGVpIExlZSAo5p2O5piV56OKKQ==?= 
-        <Xinlei.Lee@mediatek.com>
-To:     "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "airlied@linux.ie" <airlied@linux.ie>
-Subject: Re: [PATCH] drm/mediatek: dp: change the aux retries times when
- receiving AUX_DEFER
-Thread-Topic: [PATCH] drm/mediatek: dp: change the aux retries times when
- receiving AUX_DEFER
-Thread-Index: AQHZYgnFX7mPeDovkUqMbusj4Z/MEK8Y+nWAgABb6oA=
-Date:   Mon, 3 Apr 2023 09:17:57 +0000
-Message-ID: <06038e8711a9214ed020901722c96af5380bee99.camel@mediatek.com>
-References: <1680072203-10394-1-git-send-email-xinlei.lee@mediatek.com>
-         <CAAOTY_-bgkkqnfshmdNz-NP7TqdqE9Qdf-PyEOc6iANPmY+bRw@mail.gmail.com>
-In-Reply-To: <CAAOTY_-bgkkqnfshmdNz-NP7TqdqE9Qdf-PyEOc6iANPmY+bRw@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SI2PR03MB5339:EE_|TYZPR03MB6647:EE_
-x-ms-office365-filtering-correlation-id: 2a7cbb2b-c794-45c3-5a4b-08db3424502f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nYxp+gkYRI6jOjMX9tIGsBGU/SSz0ihyQ29ztfG/T/yOsnmEwd07SMBL1blS1PyKLA1dU4vkWMzuS3m5A/TVuZUenMNxLAJ95540CdZ8NMiqL0GXgP/eoiGuGIPdH1fafjWzWPab5IBpqLGmU5eaOG0Q9N+Qu//UTNK4TRBfKbYANm5XY61meUVzAG18GpHDhEHFvDIXPkB4syIA99WTM9y9bG6TbWa9iHoKFDy0XAGqtgfx9o7j8XIl8l658Oa1X1XgtMbRxNhMMQh0aGFDHubD05DoIZDWHaPFWZ+IrYtdrLXxgu2AahaQv/5buLy6Q5tpb/uXwiJqlqogTBTMiy7TszXy8F/HkGzs3trNllFuaPkdzu2WWDhdurO2yld834CZN+IWlgxE+ZV1QBiqQYAWja7p/FFJHYHtHxvHuuSVqlM9GMGA4uerVJabukplk9FDeVyGMlSAFceBqbIjOi+LUiw932YeUHCnV8GOsT1ffM4oPYF9gBohUxTEkmPucQ49oBxHpmqi1oa5E5b4ccOGmvWvZN9rWGJuVQeog/CvqXd6xQXbNAo+qH0xyhw/FD7Zng4p9DadJigHFG0OHkrCDJMrkFSuJtGUo3tg/ec=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR03MB5339.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(366004)(376002)(136003)(451199021)(6486002)(8676002)(8936002)(54906003)(41300700001)(71200400001)(4326008)(5660300002)(316002)(66446008)(64756008)(66556008)(6916009)(66476007)(478600001)(76116006)(66946007)(86362001)(38070700005)(2906002)(6506007)(6512007)(26005)(38100700002)(122000001)(186003)(83380400001)(36756003)(2616005)(85182001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Nng2Q284UHk0cFpqbzdBODJON3BiK0xnTUFDeXBXamowQjIvMGRXRlRpb1R3?=
- =?utf-8?B?Vi9DN05qdFpDZjNjN0dSaTdBckl4Y0xLREpYQm5XU2NFa05WK2l3bnJ5aEhF?=
- =?utf-8?B?SHBwOWE2ZlRSa0lVU1JuLzZVS24zWTUxTElhelpIeVhGSzI0NGFzSXU3YmlD?=
- =?utf-8?B?NklLNkwyNDVPU29aODdUMTZ5U1RHRmxwc2lOLzFHR1ZzckhDbjZlMmZHN0lR?=
- =?utf-8?B?bXh5Y01sSFI3cTBtZFpEdWp4b2lVUFZ5KzFhUVc3SHRCYnY2QktIRUZXdVJv?=
- =?utf-8?B?YjN3MElyZlBiK1Ezenc3OXFtVGdLQkhmTkRKaWZ3V3NscVpvV00wQTRKdDhm?=
- =?utf-8?B?WXZCZ3NZaStNNWhQQ3F2Y0dNZnlGOXU0VWdLRThsTkhHNFgvRDIvZVU3bkU2?=
- =?utf-8?B?YlBqNmo4c2JQMWhzZ0FaUVJ5UDJlQWhuaFl5V3JJazJEN3FaRW5DU1hxOGJK?=
- =?utf-8?B?anVNcWNtclN6OHMrVUNVNGo4bEpZakF4VVhLSlBWNXJsdGJVVDlzK0NiSU1p?=
- =?utf-8?B?NFhSTUtRZFAzem5RbHlsVk9TZGtOWVNwb3dCZUJxREZabWdNUFZ1NmE2dkNY?=
- =?utf-8?B?QXdTUTJ1cWJDWExlNmNlVzlZajcxV3crT0U5a1hiRUl2UWhIRCt5c2VOVGk3?=
- =?utf-8?B?SWd4YkRaS2g2dituRWhNYWtLK2w0SUFjN2ttNk1QT2NKV3JSaHdVNnl4dndu?=
- =?utf-8?B?TmVuT1lDVVlnbGIzZWc0VlprbXVVc0VDOUlsa3IzdllCWDNPby9HdUx6K1hV?=
- =?utf-8?B?WEE0eWtMUGVldzFweElhdWJxUkZGSU1ZNmhqczRUM0xvdVNJeFFwd2dwSjdl?=
- =?utf-8?B?RHNLc2xEUzREVDJQT1pxbmt5WFl1RWphTU5lMksyYyswUFZCK0RhNkZjb2oz?=
- =?utf-8?B?NDIzd0w1M0lOS3o4cXd6V09HT1BSdTlldEl2ejFzaGx4ZWV1UURVK25tR3o4?=
- =?utf-8?B?R1poUysxdmxDSkNYaDNvSnFTL1ltbzZYbE1Ga09QUUFKNTh4SlV1d2puenox?=
- =?utf-8?B?N3BZdk15YUd0UzRsR2kvcmc0R09IL0g1cmtMU05wendjeG1pUFphWXJIcDZ0?=
- =?utf-8?B?a2ZNZnRpekJMZHlrRmYycldRTHJXckk0ckhBbHl4MkpoRFJwMldLajlaSXUv?=
- =?utf-8?B?b1lQRFJud3c0aEpZVEZuK3BFZXNkbmNOTTBIMG1qREpjSkl5Z3V5OGhrNHpS?=
- =?utf-8?B?MkUwTlNSV09ub293K0JGS0pMS2NsdUMwcUdGU2ZaNnQzVVhxdmZMOTVpMlVN?=
- =?utf-8?B?L3NvS1dRU29zd2xIZ29qNWdCRzZmR08yTWJhOGZGaEd2S01hRzZ0MnlPOVNJ?=
- =?utf-8?B?d09ieXFzWWlVMzBnbUhPWTVnTXZKYTU1NkhNT2J6QlA5TVorQjhGMTUyNGQz?=
- =?utf-8?B?QWtsbUVzQzJDOWVGSkYwbUFuejRGKzBWZzVqdC9jRWM5cEVVQmo0TU1DbEFn?=
- =?utf-8?B?UW1TZ0szdkF6Tk1XSWxjZU9IdkRuaFJQZU1DMEQ0MnpnV2lWbVRWUHo3bmxi?=
- =?utf-8?B?cng2WjZMY2JiSkxjVTdkRHRVWWNWR2k4a1lZN01vYTVic3k1RHNtajV3WUJF?=
- =?utf-8?B?ZDZJRE1FajM5NFN2dTRJdzF2MG5ZZ2lDdG9uQUlBQUVxd1NMUW5vMnQzOHVH?=
- =?utf-8?B?MU9yUmRLb2ZFcHdXMmoxVlJHM2s1YjdneXhJSzBQWXlGRWpYZUEyWHRUOG5s?=
- =?utf-8?B?bGVGWTBmTXhXREVSRWRNTmg0STlYRXRmbVpmUXdzdXA0RVQrdXZ3NVU4MzJ1?=
- =?utf-8?B?cFpiMnUvZFNJaW5HM0MreExFN1VUekk2UWh1dnhHaktmMkxjeHh5WHNPR2tk?=
- =?utf-8?B?cWdmYmk3am9OSmROeUdnUytrSHNBWGY1bnNVOUlNL2FhMU9ITDhmQlpGYjli?=
- =?utf-8?B?a1JudnNjVnEyOXZzeTJUeXQzNFZTRDBpK1o5aEVGVzZIdzFDcE5Zdm1ZUTZq?=
- =?utf-8?B?ekt5SUVTQVFsZ3ZNcG02enVyQ2M0cnhzdGttanZPM0ZvbzdHQzBRaVdyTWNB?=
- =?utf-8?B?dEtxbS9QNHhSak5pNURkRHJML3AwYmFoV2xWbGZyazNjV1BwSXd4V2JrMnow?=
- =?utf-8?B?aExuZ0pvZW9nSXhXaUNrS1k1WHhlNElTTEFrNUFvUlNQQVRTeEpnd2k1UHNr?=
- =?utf-8?B?YUNEVEZ1N1BEc3RKRHY4SW1QZ3lPL1A1ZDBlTG9NdDh6dGsvTTRiYUkrRVFh?=
- =?utf-8?B?cVE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <39F973F2CBDFB64382DF8B192D80663A@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 3 Apr 2023 05:19:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B82D3CDEC
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:18:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF9591063;
+        Mon,  3 Apr 2023 02:18:50 -0700 (PDT)
+Received: from [10.57.54.53] (unknown [10.57.54.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7545F3F840;
+        Mon,  3 Apr 2023 02:18:04 -0700 (PDT)
+Message-ID: <2c3e8332-e964-91d0-51e9-649e09d9187c@arm.com>
+Date:   Mon, 3 Apr 2023 10:18:02 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR03MB5339.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a7cbb2b-c794-45c3-5a4b-08db3424502f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Apr 2023 09:17:57.1629
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xaZNCanhxXD5Na/a2vGQpWzVrbTO620piOZCF1HU8P3yxiXUkdavDCmS/KezG3NbmKVG3ot6l2iD3ljzmBwTXw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB6647
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 08/13] coresight: Simplify connection fixup mechanism
+To:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
+        quic_jinlmao@quicinc.com, mike.leach@linaro.org
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230329115329.2747724-1-james.clark@arm.com>
+ <20230329115329.2747724-9-james.clark@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20230329115329.2747724-9-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTA0LTAzIGF0IDExOjQ5ICswODAwLCBDaHVuLUt1YW5nIEh1IHdyb3RlOg0K
-PiBFeHRlcm5hbCBlbWFpbCA6IFBsZWFzZSBkbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRh
-Y2htZW50cyB1bnRpbA0KPiB5b3UgaGF2ZSB2ZXJpZmllZCB0aGUgc2VuZGVyIG9yIHRoZSBjb250
-ZW50Lg0KPiANCj4gDQo+IEhpLCBYaW5sZWk6DQo+IA0KPiA8eGlubGVpLmxlZUBtZWRpYXRlay5j
-b20+IOaWvCAyMDIz5bm0M+aciDI55pelIOmAseS4iSDkuIvljYgyOjQz5a+r6YGT77yaDQo+ID4g
-DQo+ID4gRnJvbTogWGlubGVpIExlZSA8eGlubGVpLmxlZUBtZWRpYXRlay5jb20+DQo+ID4gDQo+
-ID4gRFAgMS40YSBTZWN0aW9uIDIuOC43LjEuNS42LjE6DQo+ID4gQSBEUCBTb3VyY2UgZGV2aWNl
-IHNoYWxsIHJldHJ5IGF0IGxlYXN0IHNldmVuIHRpbWVzIHVwb24gcmVjZWl2aW5nDQo+ID4gQVVY
-X0RFRkVSIGJlZm9yZSBnaXZpbmcgdXAgdGhlIEFVWCB0cmFuc2FjdGlvbi4NCj4gPiANCj4gPiBU
-aGUgZHJtX2RwX2kyY19kb19tc2coKSBmdW5jdGlvbiBpbiB0aGUgZHJtX2RwX2hlbHBlci5jIGZp
-bGUgd2lsbA0KPiA+IGp1ZGdlIHRoZSBzdGF0dXMgb2YgdGhlIG1zZy0+cmVwbHkgcGFyYW1ldGVy
-IHBhc3NlZCB0byBhdXhfdHJhbnNmZXINCj4gPiBhbmdlLXRoZS1hdXgtcmV0cmllcy10aW1lcy13
-aGVuLXJlLnBhdGNoZm9yIGRpZmZlcmVudCBwcm9jZXNzaW5nLg0KPiA+IA0KPiA+IEZpeGVzOiBm
-NzBhYzA5N2EyY2YgKCJkcm0vbWVkaWF0ZWs6IEFkZCBNVDgxOTUgRW1iZWRkZWQgRGlzcGxheVBv
-cnQNCj4gPiBkcml2ZXIiKQ0KPiA+IFNpZ25lZC1vZmYtYnk6IFhpbmxlaSBMZWUgPHhpbmxlaS5s
-ZWVAbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL2dwdS9kcm0vbWVkaWF0ZWsv
-bXRrX2RwLmMgfCAxMiArKysrKy0tLS0tLS0NCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0
-aW9ucygrKSwgNyBkZWxldGlvbnMoLSkNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9n
-cHUvZHJtL21lZGlhdGVrL210a19kcC5jDQo+ID4gYi9kcml2ZXJzL2dwdS9kcm0vbWVkaWF0ZWsv
-bXRrX2RwLmMNCj4gPiBpbmRleCAxZjk0ZmNjMTQ0ZDMuLjc2N2I3MWRhMzFhNCAxMDA2NDQNCj4g
-PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vbWVkaWF0ZWsvbXRrX2RwLmMNCj4gPiArKysgYi9kcml2
-ZXJzL2dwdS9kcm0vbWVkaWF0ZWsvbXRrX2RwLmMNCj4gPiBAQCAtODA2LDEwICs4MDYsOSBAQCBz
-dGF0aWMgaW50DQo+ID4gbXRrX2RwX2F1eF93YWl0X2Zvcl9jb21wbGV0aW9uKHN0cnVjdCBtdGtf
-ZHAgKm10a19kcCwgYm9vbCBpc19yZWFkKQ0KPiA+ICB9DQo+ID4gDQo+ID4gIHN0YXRpYyBpbnQg
-bXRrX2RwX2F1eF9kb190cmFuc2ZlcihzdHJ1Y3QgbXRrX2RwICptdGtfZHAsIGJvb2wNCj4gPiBp
-c19yZWFkLCB1OCBjbWQsDQo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHUz
-MiBhZGRyLCB1OCAqYnVmLCBzaXplX3QgbGVuZ3RoKQ0KPiA+ICsgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICB1MzIgYWRkciwgdTggKmJ1Ziwgc2l6ZV90IGxlbmd0aCwNCj4gPiB1OCAq
-cmVwbHlfY21kKQ0KPiA+ICB7DQo+ID4gICAgICAgICBpbnQgcmV0Ow0KPiA+IC0gICAgICAgdTMy
-IHJlcGx5X2NtZDsNCj4gPiANCj4gPiAgICAgICAgIGlmIChpc19yZWFkICYmIChsZW5ndGggPiBE
-UF9BVVhfTUFYX1BBWUxPQURfQllURVMgfHwNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAo
-Y21kID09IERQX0FVWF9OQVRJVkVfUkVBRCAmJiAhbGVuZ3RoKSkpDQo+ID4gQEAgLTg0MSwxMCAr
-ODQwLDEwIEBAIHN0YXRpYyBpbnQgbXRrX2RwX2F1eF9kb190cmFuc2ZlcihzdHJ1Y3QNCj4gPiBt
-dGtfZHAgKm10a19kcCwgYm9vbCBpc19yZWFkLCB1OCBjbWQsDQo+ID4gICAgICAgICAvKiBXYWl0
-IGZvciBmZWVkYmFjayBmcm9tIHNpbmsgZGV2aWNlLiAqLw0KPiA+ICAgICAgICAgcmV0ID0gbXRr
-X2RwX2F1eF93YWl0X2Zvcl9jb21wbGV0aW9uKG10a19kcCwgaXNfcmVhZCk7DQo+ID4gDQo+ID4g
-LSAgICAgICByZXBseV9jbWQgPSBtdGtfZHBfcmVhZChtdGtfZHAsIE1US19EUF9BVVhfUDBfMzYy
-NCkgJg0KPiA+IC0gICAgICAgICAgICAgICAgICAgQVVYX1JYX1JFUExZX0NPTU1BTkRfQVVYX1RY
-X1AwX01BU0s7DQo+ID4gKyAgICAgICAqcmVwbHlfY21kID0gbXRrX2RwX3JlYWQobXRrX2RwLCBN
-VEtfRFBfQVVYX1AwXzM2MjQpICYNCj4gPiArICAgICAgICAgICAgICAgICAgICBBVVhfUlhfUkVQ
-TFlfQ09NTUFORF9BVVhfVFhfUDBfTUFTSzsNCj4gPiANCj4gPiAtICAgICAgIGlmIChyZXQgfHwg
-cmVwbHlfY21kKSB7DQo+ID4gKyAgICAgICBpZiAocmV0KSB7DQo+ID4gICAgICAgICAgICAgICAg
-IHUzMiBwaHlfc3RhdHVzID0gbXRrX2RwX3JlYWQobXRrX2RwLA0KPiA+IE1US19EUF9BVVhfUDBf
-MzYyOCkgJg0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEFVWF9SWF9QSFlf
-U1RBVEVfQVVYX1RYX1AwX01BU0s7DQo+ID4gICAgICAgICAgICAgICAgIGlmIChwaHlfc3RhdHVz
-ICE9DQo+ID4gQVVYX1JYX1BIWV9TVEFURV9BVVhfVFhfUDBfUlhfSURMRSkgew0KPiA+IEBAIC0y
-MDcwLDcgKzIwNjksNyBAQCBzdGF0aWMgc3NpemVfdCBtdGtfZHBfYXV4X3RyYW5zZmVyKHN0cnVj
-dA0KPiA+IGRybV9kcF9hdXggKm10a19hdXgsDQo+ID4gICAgICAgICAgICAgICAgIHJldCA9IG10
-a19kcF9hdXhfZG9fdHJhbnNmZXIobXRrX2RwLCBpc19yZWFkLA0KPiA+IHJlcXVlc3QsDQo+ID4g
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbXNnLT5hZGRyZXNz
-ICsNCj4gPiBhY2Nlc3NlZF9ieXRlcywNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBtc2ctPmJ1ZmZlciArDQo+ID4gYWNjZXNzZWRfYnl0ZXMsDQo+ID4g
-LSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdG9fYWNjZXNzKTsN
-Cj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB0b19hY2Nl
-c3MsICZtc2ctDQo+ID4gPnJlcGx5KTsNCj4gPiANCj4gPiAgICAgICAgICAgICAgICAgaWYgKHJl
-dCkgew0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgIGRybV9pbmZvKG10a19kcC0+ZHJtX2Rl
-diwNCj4gPiBAQCAtMjA4MCw3ICsyMDc5LDYgQEAgc3RhdGljIHNzaXplX3QgbXRrX2RwX2F1eF90
-cmFuc2ZlcihzdHJ1Y3QNCj4gPiBkcm1fZHBfYXV4ICptdGtfYXV4LA0KPiA+ICAgICAgICAgICAg
-ICAgICBhY2Nlc3NlZF9ieXRlcyArPSB0b19hY2Nlc3M7DQo+ID4gICAgICAgICB9IHdoaWxlIChh
-Y2Nlc3NlZF9ieXRlcyA8IG1zZy0+c2l6ZSk7DQo+ID4gDQo+ID4gLSAgICAgICBtc2ctPnJlcGx5
-ID0gRFBfQVVYX05BVElWRV9SRVBMWV9BQ0sgfA0KPiA+IERQX0FVWF9JMkNfUkVQTFlfQUNLOw0K
-PiANCj4gSW4geW91ciBkZXNjcmlwdGlvbiwgeW91IGp1c3QgbWVudGlvbiB0aGUgcmV0cnkgY291
-bnQgaXMgNyB0aW1lcywgYnV0DQo+IHlvdSBkb2VzIG5vdCBtZW50aW9uIHlvdSBzaG91bGQgY2hh
-bmdlIHRoZSByZXBseS4gV2h5IHlvdSBtb2RpZnkNCj4gdGhpcz8NCj4gQW5kIHdoZXJlIGlzIHRo
-ZSA3IHRpbWVzIHJldHJ5Pw0KPiANCj4gUmVnYXJkcywNCj4gQ2h1bi1LdWFuZy4NCj4gDQo+ID4g
-ICAgICAgICByZXR1cm4gbXNnLT5zaXplOw0KPiA+ICBlcnI6DQo+ID4gICAgICAgICBtc2ctPnJl
-cGx5ID0gRFBfQVVYX05BVElWRV9SRVBMWV9OQUNLIHwNCj4gPiBEUF9BVVhfSTJDX1JFUExZX05B
-Q0s7DQo+ID4gLS0NCj4gPiAyLjE4LjANCj4gPiANCg0KSGkgQ0s6DQoNClRoYW5rcyBmb3IgeW91
-ciByZXZpZXchDQoNClRoaXMgcGF0Y2ggaXMgdG8gZml4IHNvbWUgRFAgc2lua3MgdGhhdCByZXR1
-cm4gQVVYX0RFRkVSLCBhbmQgdGhlIGRwIA0KZHJpdmVyIGRvZXMgbm90IGhhbmRsZSBpdCBhY2Nv
-cmRpbmcgdG8gdGhlIHNwZWNpZmljYXRpb24uIERQX3YxLjRhDQpzcGVjIDIuOC4xLjIgZGVzY3Jp
-YmVzIHRoYXQgaWYgdGhlIHNpbmsgcmV0dXJucyBBVVhfREVGRVIsIERQVFggbWF5IA0KcmV0cnkg
-bGF0ZXI6DQoNClRoZSBsb2dpYyBiZWZvcmUgdGhlIG1vZGlmaWNhdGlvbiBpcyB0aGF0IHJlcGx5
-X2NtZCByZXR1cm5zIEVUSU1FRE9VVCANCmlmIGl0IGlzIG5vdCBBVVhfQUNLIGFmdGVyIHRoZSBy
-ZWFkIG9wZXJhdGlvbiwgd2l0aG91dCBjb25zaWRlcmluZyB0aGUgDQpyZXRyeSBvcGVyYXRpb24g
-d2hlbiByZXR1cm5pbmcgQVVYX0RFRkVSOw0KDQpUaGUgbW9kaWZpZWQgbG9naWMgaXMgdG8gYWRk
-IHBhcmFtZXRlcnMgdG8gbXRrX2RwX2F1eF9kb190cmFuc2ZlcigpIHRvIA0Kc3RvcmUgdGhlIHJl
-dHVybiB2YWx1ZSBvZiB0aGUgc2luay4gSW4gdGhlIGRtcl9kcF9oZWxwZXIuYyBmaWxlLCANCmRy
-bV9kcF9pMmNfZG9fbXNnIGNhbGxzIGF1eC0+dHJhbnNmZXIgYW5kIHRoZW4gcGVyZm9ybXMgcmV0
-cnkNCm9wZXJhdGlvbiBhY2NvcmRpbmcgdG8gbXNnLT5yZXBseS4gVGhlIDcgdGltZXMgc3BlY2lm
-aWVkIGluIHRoZSBzcGVjIA0KYXJlIGFsc28gaW4gdGhpcyBmdW5jdGlvbiBkZWZpbmVkIGluICht
-YXhfcmV0cmllcykuDQoNCkJlc3QgUmVnYXJkcyENCnhpbmxlaQ0K
+On 29/03/2023 12:53, James Clark wrote:
+> There is some duplication between coresight_fixup_device_conns() and
+> coresight_fixup_orphan_conns(). They both do the same thing except for
+> the fact that coresight_fixup_orphan_conns() can't handle iterating over
+> itself.
+> 
+> By making it able to handle fixing up it's own connections the other
+> function can be removed.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-core.c | 72 +++++++-------------
+>   1 file changed, 26 insertions(+), 46 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index 389f6203c8f0..2f4aa15ef8f9 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -1316,38 +1316,42 @@ static int coresight_orphan_match(struct device *dev, void *data)
+>   {
+>   	int i, ret = 0;
+>   	bool still_orphan = false;
+> -	struct coresight_device *csdev, *i_csdev;
+> +	struct coresight_device *csdev = data;
+> +	struct coresight_device *i_csdev = to_coresight_device(dev);
+>   	struct coresight_connection *conn;
+>   
+> -	csdev = data;
+> -	i_csdev = to_coresight_device(dev);
+> -
+> -	/* No need to check oneself */
+> -	if (csdev == i_csdev)
+> -		return 0;
+> -
+>   	/* Move on to another component if no connection is orphan */
+>   	if (!i_csdev->orphan)
+>   		return 0;
+>   	/*
+> -	 * Circle throuch all the connection of that component.  If we find
+> +	 * Circle through all the connections of that component.  If we find
+>   	 * an orphan connection whose name matches @csdev, link it.
+>   	 */
+>   	for (i = 0; i < i_csdev->pdata->nr_outconns; i++) {
+>   		conn = i_csdev->pdata->out_conns[i];
+>   
+> -		/* We have found at least one orphan connection */
+> -		if (conn->dest_dev == NULL) {
+> -			/* Does it match this newly added device? */
+> -			if (conn->dest_fwnode == csdev->dev.fwnode) {
+> -				ret = coresight_make_links(i_csdev,
+> -							   conn, csdev);
+> -				if (ret)
+> -					return ret;
+> -			} else {
+> -				/* This component still has an orphan */
+> -				still_orphan = true;
+> -			}
+
+
+To be honest, this unification makes it really hard to follow.
+
+> +		/* Skip the port if it's already connected. */
+> +		if (conn->dest_dev)
+> +			continue;
+> +
+> +		/*
+> +		 * When connecting the newly registered device, we need to find
+> +		 * the remote instead of using the *data shortcut that avoids
+> +		 * the need for this search.
+> +		 */
+> +		if (csdev == i_csdev)
+> +			csdev = coresight_find_csdev_by_fwnode(
+> +				conn->dest_fwnode);
+
+And this is overwriting the csdev, and I am struggling to follow, how
+further connections are being fixed up after the first one, because the
+condition wouldn't be true after the first one.
+
+One way to do that would be, doing something like:
+
+Rename the variables as follow:
+
+	csdev => dst_dev
+	i_csdev => src_dev
+
+	bool fixup_self = (src_dev == dst_dev);
+
+
+	for (i = 0; i ....) {
+		...
+
+		/*
+		 * If we are at the "new" device, which triggered
+		 * this search, we must find the remote device
+		 * from the fwnode in the connection.
+		 */
+		if (fixup_self) {
+			dst_dev = find_by_fwnode(...);
+		}
+
+> +
+> +		/* Does it match this newly added device? */
+> +		if (csdev && conn->dest_fwnode == csdev->dev.fwnode) {
+> +			ret = coresight_make_links(i_csdev, conn, csdev);
+> +			if (ret)
+> +				return ret;
+> +
+> +		} else {
+> +			/* This component still has an orphan */
+> +			still_orphan = true;
+>   		}
+>   	}
+
+
+Suzuki
+
+
+>   
+> @@ -1366,28 +1370,6 @@ static int coresight_fixup_orphan_conns(struct coresight_device *csdev)
+>   			 csdev, coresight_orphan_match);
+>   }
+>   
+> -
+> -static int coresight_fixup_device_conns(struct coresight_device *csdev)
+> -{
+> -	int i, ret = 0;
+> -
+> -	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+> -		struct coresight_connection *conn = csdev->pdata->out_conns[i];
+> -
+> -		conn->dest_dev =
+> -			coresight_find_csdev_by_fwnode(conn->dest_fwnode);
+> -		if (conn->dest_dev && conn->dest_dev->has_conns_grp) {
+> -			ret = coresight_make_links(csdev, conn, conn->dest_dev);
+> -			if (ret)
+> -				break;
+> -		} else {
+> -			csdev->orphan = true;
+> -		}
+> -	}
+> -
+> -	return ret;
+> -}
+> -
+>   static int coresight_remove_match(struct device *dev, void *data)
+>   {
+>   	int i;
+> @@ -1594,7 +1576,7 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+>   	csdev->subtype = desc->subtype;
+>   	csdev->ops = desc->ops;
+>   	csdev->access = desc->access;
+> -	csdev->orphan = false;
+> +	csdev->orphan = true;
+>   
+>   	csdev->dev.type = &coresight_dev_type[desc->type];
+>   	csdev->dev.groups = desc->groups;
+> @@ -1644,8 +1626,6 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+>   	registered = true;
+>   
+>   	ret = coresight_create_conns_sysfs_group(csdev);
+> -	if (!ret)
+> -		ret = coresight_fixup_device_conns(csdev);
+>   	if (!ret)
+>   		ret = coresight_fixup_orphan_conns(csdev);
+>   
+
