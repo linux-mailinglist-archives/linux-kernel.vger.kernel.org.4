@@ -2,110 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33CA6D4157
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F14156D4151
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbjDCJyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
+        id S232088AbjDCJxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbjDCJyK (ORCPT
+        with ESMTP id S231558AbjDCJwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:54:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B58EFAC
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:52:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680515453;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fhMzb4M7buCw/z89I96CjAU7IGJVjjKJKkPGs/PZ09w=;
-        b=G7slEEDAMruZ7G9z/a9Es+Apl9zIXGbX+hXqeSIHv5Lo6qL8exM/j1w8AxeJafiS+7PMrD
-        WENgRugehiJOe7cYXVG95zG5KH1LP3ZNjytjSgkU7zkPjzUY3sVc+PhXQZDTO7gliDmHpH
-        IltxnHVVHZ4GHb6idSpc1/RNH3MGrQA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-39-4-IXX9ZSPZipH8aFkS7Z8Q-1; Mon, 03 Apr 2023 05:50:50 -0400
-X-MC-Unique: 4-IXX9ZSPZipH8aFkS7Z8Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 416BE1C05147;
-        Mon,  3 Apr 2023 09:50:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 52E2BC15BA0;
-        Mon,  3 Apr 2023 09:50:47 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <64299af9e8861_2d2a20208e6@willemb.c.googlers.com.notmuch>
-References: <64299af9e8861_2d2a20208e6@willemb.c.googlers.com.notmuch> <20230331160914.1608208-1-dhowells@redhat.com> <20230331160914.1608208-16-dhowells@redhat.com>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 15/55] ip, udp: Support MSG_SPLICE_PAGES
+        Mon, 3 Apr 2023 05:52:46 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59ECC1284D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:52:03 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id eg48so114803972edb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 02:52:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680515512;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9nr+uA+ZP2tbdI/0kq6sL0Hql+LVt1wSnJCPSdLceG0=;
+        b=Cht9Y2vM9TnL6su8oK8fsrE+NlCl07kvCeH1Ss3sQEfVIz+3oASpya8J2AUWrJpxgM
+         SCco5IOUvSki5XMqFCC4gafwpE/N2km04ZRJsINqM4MoK61Z0KdpyV7ITRhLu65xJutg
+         BktbY7DuUBSmVmAV1DiTyvagSErGI7E1jJkNyHch88mu8hG5+LmfWFS7W0wDU6iX8Xd7
+         jjoiZ2Mz9fTYaT4UfPLDTG2x0ZfE6p3iZJzIkx9/oqavMrZ21qiPc7GkYID+SHdq81lL
+         jm0UAAvOfhbRjfUD/kgK0iiBMMKWc2qEJw7CNQuj2S4JYsZ6z0aZ69ArQqmr274p3o54
+         lcAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680515512;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9nr+uA+ZP2tbdI/0kq6sL0Hql+LVt1wSnJCPSdLceG0=;
+        b=XfLRGvLOJi4KGM6ohHLc2yUzIazi+RlDQWbwoPLFxTq7xxlP7hG3VVOh4vB5tZOP2R
+         2KGJSRwAduGUXoiDVstvf8LpIxq6EQpwuO7fEq76h7vJutoLFyUq+r33yNJwCDzmmZFt
+         CK9GNyKGSC//X9jn92bEFZxo9BZBlVuHdnrPuh8Njo/AjwUxgnzlT3RliDQYkSuM2RJv
+         FeUtkK2EBhY4nJICCqi0+d7i6+RCHb+TAB/QjBJ1zF9P1WPZ8bUC7kDeF/3NAnr6mcKI
+         xeb8z/mGxuOjPQGcccrH52CRfviWgKIOdyw8oIv0euQBbvVD7Xch0yoTqIWghFG0QH1Z
+         /1Eg==
+X-Gm-Message-State: AAQBX9eicmZYIgBEbvyVtb9N6zhpVNe8pQnprjqOHEBu79KV3engLIAl
+        wD76+r1Y1q3ZhfLk0AQXPGMhbQ==
+X-Google-Smtp-Source: AKy350Z7S5nIBg15xObBEMjnFcgoXpWwPfgC871POYyYAMKORNyzeGXP8WOT94M+1eeV1eh2TBj2wA==
+X-Received: by 2002:aa7:c587:0:b0:502:9296:a456 with SMTP id g7-20020aa7c587000000b005029296a456mr6634276edq.4.1680515512470;
+        Mon, 03 Apr 2023 02:51:52 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
+        by smtp.gmail.com with ESMTPSA id o1-20020a50c281000000b00502b0b0d75csm314317edf.46.2023.04.03.02.51.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 02:51:51 -0700 (PDT)
+Message-ID: <6c9c74ee-b9ed-815f-dd92-37eb4c8f802a@linaro.org>
+Date:   Mon, 3 Apr 2023 11:51:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1818503.1680515446.1@warthog.procyon.org.uk>
-Date:   Mon, 03 Apr 2023 10:50:46 +0100
-Message-ID: <1818504.1680515446@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] phy: mtk-mipi-csi: add driver for CSI phy
+Content-Language: en-US
+To:     Julien Stephan <jstephan@baylibre.com>
+Cc:     Phi-bang Nguyen <pnguyen@baylibre.com>,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DRM DRIVERS FOR MEDIATEK" 
+        <dri-devel@lists.freedesktop.org>
+References: <20230403071929.360911-1-jstephan@baylibre.com>
+ <20230403071929.360911-3-jstephan@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230403071929.360911-3-jstephan@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
-
-> > +	} else if ((flags & MSG_SPLICE_PAGES) && length) {
-> > +		if (inet->hdrincl)
-> > +			return -EPERM;
-> > +		if (rt->dst.dev->features & NETIF_F_SG)
-> > +			/* We need an empty buffer to attach stuff to */
-> > +			initial_length = transhdrlen;
+On 03/04/2023 09:19, Julien Stephan wrote:
+> From: Phi-bang Nguyen <pnguyen@baylibre.com>
 > 
-> I still don't entirely understand what initial_length means.
+> This is a new driver that supports the MIPI CSI CD-PHY for mediatek
+> mt8365 soc
 > 
-> More importantly, transhdrlen can be zero. If not called for UDP
-> but for RAW. Or if this is a subsequent call to a packet that is
-> being held with MSG_MORE.
+> Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
+> Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
+> [Julien Stephan: use regmap]
+> [Julien Stephan: use GENMASK]
+> Co-developed-by: Julien Stephan <jstephan@baylibre.com>
+> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
+> ---
+>  .../bindings/phy/mediatek,csi-phy.yaml        |   9 +-
+>  MAINTAINERS                                   |   1 +
+>  drivers/phy/mediatek/Kconfig                  |   8 +
+>  drivers/phy/mediatek/Makefile                 |   2 +
+>  .../phy/mediatek/phy-mtk-mipi-csi-rx-reg.h    | 435 ++++++++++++++++++
+>  drivers/phy/mediatek/phy-mtk-mipi-csi.c       | 392 ++++++++++++++++
+>  6 files changed, 845 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi-rx-reg.h
+>  create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi.c
 > 
-> This works fine for existing use-cases, which go to alloc_new_skb.
-> Not sure how this case would be different. But the comment alludes
-> that it does.
+> diff --git a/Documentation/devicetree/bindings/phy/mediatek,csi-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,csi-phy.yaml
+> index c026e43f35fd..ad4ba1d93a68 100644
+> --- a/Documentation/devicetree/bindings/phy/mediatek,csi-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/mediatek,csi-phy.yaml
 
-The problem is that in the non-MSG_ZEROCOPY case, __ip_append_data() assumes
-that it's going to copy the data it is given and will allocate sufficient
-space in the skb in advance to hold it - but I don't want to do that because I
-want to splice in the pages holding the data instead.  However, I do need to
-allocate space to hold the transport header.
+NAK, bindings are always separate patches. It also does not make any
+sense - you just added it.
 
-Maybe I should change 'initial_length' to 'initial_alloc'?  It represents the
-amount I think we should allocate.  Or maybe I should have a separate
-allocation clause for MSG_SPLICE_PAGES?
+> @@ -33,9 +33,14 @@ additionalProperties: false
+>  
+>  examples:
+>    - |
+> -    phy@10011800 {
+> +    soc {
+> +      #address-cells = <2>;
+> +      #size-cells = <2>;
+> +
+> +      phy@11c10000 {
+>          compatible = "mediatek,mt8365-mipi-csi";
+> -        reg = <0 0x10011800 0 0x60>;
+> +        reg = <0 0x11c10000 0 0x4000>;
+>          #phy-cells = <1>;
+> +      };
+>      };
 
-I also wonder if __ip_append_data() really needs two places that call
-getfrag().
 
-David
+
+k_mipi_dphy_of_match[] = {
+> +	{.compatible = "mediatek,mt8365-mipi-csi"},
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mtk_mipi_dphy_of_match);
+> +
+> +static struct platform_driver mipi_dphy_pdrv = {
+> +	.probe = mtk_mipi_dphy_probe,
+> +	.remove = mtk_mipi_dphy_remove,
+> +	.driver	= {
+> +		.name	= "mtk-mipi-csi",
+> +		.of_match_table = of_match_ptr(mtk_mipi_dphy_of_match),
+
+Drop of_match_ptr(). You should see W=1 warnings when compile testing.
+
+
+Best regards,
+Krzysztof
 
