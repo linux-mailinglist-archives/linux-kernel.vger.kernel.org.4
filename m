@@ -2,159 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C376D3D4D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76B16D3D51
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbjDCG0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 02:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
+        id S231450AbjDCG1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 02:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbjDCG0s (ORCPT
+        with ESMTP id S229454AbjDCG1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 02:26:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE70D9014
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 23:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680503160;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=afBNaZ0DMuI7GB+2iDCGbyFFwGSVdQ773bP8QWimT1I=;
-        b=hVt84RZB1Lu91P0oGv2K24vng+TC4k4uSIffBfcZfn62oUIQoW4CZpkU+zWbVJr1rgB6+X
-        c6o8jp3nKng/EC7jBdAvjVPxbBjnirMiYc1Gg8sJ1A2WniM3alfYAgmOSCMjL7GBgNgH5C
-        xznGjOmUH1Ow6EM4awrGrZ0C+SmKQug=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-244-28z4qi46NM2VpjD3-hJMRQ-1; Mon, 03 Apr 2023 02:25:57 -0400
-X-MC-Unique: 28z4qi46NM2VpjD3-hJMRQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C99A801210;
-        Mon,  3 Apr 2023 06:25:56 +0000 (UTC)
-Received: from [10.72.12.158] (ovpn-12-158.pek2.redhat.com [10.72.12.158])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2D5BAC15BA0;
-        Mon,  3 Apr 2023 06:25:40 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [RFC PATCH 00/32] ACPI/arm64: add support for virtual cpuhotplug
-To:     Shaoqin Huang <shahuang@redhat.com>,
-        James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20230203135043.409192-1-james.morse@arm.com>
- <e17627fb-283e-dd42-94c1-f89dea167577@redhat.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <972ed7df-78cd-e02a-7376-78c806181b5f@redhat.com>
-Date:   Mon, 3 Apr 2023 14:25:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Mon, 3 Apr 2023 02:27:53 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF42C869B;
+        Sun,  2 Apr 2023 23:27:51 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3336RQjm013056;
+        Mon, 3 Apr 2023 01:27:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680503246;
+        bh=IUjGDRnpRzPURCV8uSTZlVgPtZ8lAY7F0OvRLdEU+aM=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=CfaFxK6qbYDNWlbgSSFb9bNnYY5VOW5Wcd2i7FhxaSb8m8FW4zJWxUY9rnB9E/TNu
+         GcGpYYjzDvUrVhbRYmhqtJYPPiTZ32ZRFaou5Fkmhid8Uw+HnxSqrfc6D3uXyg2bOU
+         YxbMtHaeQh6wAk9SZMZX0xu2kl8Mkj48lPjrkoSA=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3336RQrG028255
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 3 Apr 2023 01:27:26 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
+ Apr 2023 01:27:25 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 3 Apr 2023 01:27:25 -0500
+Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3336RM9E011886;
+        Mon, 3 Apr 2023 01:27:22 -0500
+Message-ID: <be166ab3-29f9-a18d-bbbd-34e7828453e4@ti.com>
+Date:   Mon, 3 Apr 2023 11:57:21 +0530
 MIME-Version: 1.0
-In-Reply-To: <e17627fb-283e-dd42-94c1-f89dea167577@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <rogerq@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net-next 2/2] net: ethernet: ti: am65-cpsw: Enable USXGMII
+ mode for J784S4 CPSW9G
 Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+References: <20230331065110.604516-1-s-vadapalli@ti.com>
+ <20230331065110.604516-3-s-vadapalli@ti.com>
+ <ZCaSXQFZ/e/JIDEj@shell.armlinux.org.uk>
+ <54c3964b-5dd8-c55e-08db-61df4a07797c@ti.com>
+ <ZCaYve8wYl15YRxh@shell.armlinux.org.uk>
+ <7a9c96f4-6a94-4a2c-18f5-95f7246e10d5@ti.com>
+ <ZCasBMNxaWk2+XVO@shell.armlinux.org.uk>
+ <dea9ae26-e7f2-1052-58cd-f7975165aa96@ti.com>
+ <ZCbAE7IIc8HcOdxl@shell.armlinux.org.uk>
+ <1477e0c3-bb92-72b0-9804-0393c34571d3@ti.com>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <1477e0c3-bb92-72b0-9804-0393c34571d3@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shaoqin,
+Hello Russell,
 
-On 3/29/23 1:52 PM, Shaoqin Huang wrote:
-> On 2/3/23 21:50, James Morse wrote:
-
-[...]
-
->>
->> The first patch has already been posted as a fix here:
->> https://www.spinics.net/lists/linux-ia64/msg21920.html
->> I've only build tested Loongarch and ia64.
->>
->>
->> If folk want to play along at home, you'll need a copy of Qemu that supports this.
->> https://github.com/salil-mehta/qemu.git salil/virt-cpuhp-armv8/rfc-v1-port29092022.psci.present
->>
->> You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
->> to match your host kernel. Replace your '-smp' argument with something like:
->> | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
->>
->> then feed the following to the Qemu montior;
->> | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
->> | (qemu) device_del cpu1
->>
->>
->> This series is based on v6.2-rc3, and can be retrieved from:
->> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v1
+On 31/03/23 19:16, Siddharth Vadapalli wrote:
 > 
-> I applied this patch series on v6.2-rc3 and using the QEMU cloned from the salil-mehta/qemu.git repo. But when I try to run the QEMU, it shows:
 > 
-> $ qemu-system-aarch64: -accel kvm: Failed to enable KVM_CAP_ARM_PSCI_TO_USER cap.
+> On 31-03-2023 16:42, Russell King (Oracle) wrote:
+>> On Fri, Mar 31, 2023 at 04:23:16PM +0530, Siddharth Vadapalli wrote:
+>>>
+>>>
+>>> On 31/03/23 15:16, Russell King (Oracle) wrote:
+>>>> On Fri, Mar 31, 2023 at 02:55:56PM +0530, Siddharth Vadapalli wrote:
+>>>>> Russell,
+>>>>>
+>>>>> On 31/03/23 13:54, Russell King (Oracle) wrote:
+>>>>>> On Fri, Mar 31, 2023 at 01:35:10PM +0530, Siddharth Vadapalli wrote:
+>>>>>>> Hello Russell,
+>>>>>>>
+>>>>>>> Thank you for reviewing the patch.
+>>>>>>>
+>>>>>>> On 31/03/23 13:27, Russell King (Oracle) wrote:
+>>>>>>>> On Fri, Mar 31, 2023 at 12:21:10PM +0530, Siddharth Vadapalli wrote:
+>>>>>>>>> TI's J784S4 SoC supports USXGMII mode. Add USXGMII mode to the
+>>>>>>>>> extra_modes member of the J784S4 SoC data. Additionally, configure the
+>>>>>>>>> MAC Control register for supporting USXGMII mode. Also, for USXGMII
+>>>>>>>>> mode, include MAC_5000FD in the "mac_capabilities" member of struct
+>>>>>>>>> "phylink_config".
+>>>>>>>>
+>>>>>>>> I don't think TI "get" phylink at all...
+>>>>>>>>
+>>>>>>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>>>>> index 4b4d06199b45..ab33e6fe5b1a 100644
+>>>>>>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>>>>> @@ -1555,6 +1555,8 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
+>>>>>>>>>  		mac_control |= CPSW_SL_CTL_GIG;
+>>>>>>>>>  	if (interface == PHY_INTERFACE_MODE_SGMII)
+>>>>>>>>>  		mac_control |= CPSW_SL_CTL_EXT_EN;
+>>>>>>>>> +	if (interface == PHY_INTERFACE_MODE_USXGMII)
+>>>>>>>>> +		mac_control |= CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN;
+>>>>>>>>
+>>>>>>>> The configuration of the interface mode should *not* happen in
+>>>>>>>> mac_link_up(), but should happen in e.g. mac_config().
+>>>>>>>
+>>>>>>> I will move all the interface mode associated configurations to mac_config() in
+>>>>>>> the v2 series.
+>>>>>>
+>>>>>> Looking at the whole of mac_link_up(), could you please describe what
+>>>>>> effect these bits are having:
+>>>>>>
+>>>>>> 	CPSW_SL_CTL_GIG
+>>>>>> 	CPSW_SL_CTL_EXT_EN
+>>>>>> 	CPSW_SL_CTL_IFCTL_A
+>>>>>
+>>>>> CPSW_SL_CTL_GIG corresponds to enabling Gigabit mode (full duplex only).
+>>>>> CPSW_SL_CTL_EXT_EN when set enables in-band mode of operation and when cleared
+>>>>> enables forced mode of operation.
+>>>>> CPSW_SL_CTL_IFCTL_A is used to set the RMII link speed (0=10 mbps, 1=100 mbps).
+>>>>
+>>>> Okay, so I would do in mac_link_up():
+>>>>
+>>>> 	/* RMII needs to be manually configured for 10/100Mbps */
+>>>> 	if (interface == PHY_INTERFACE_MODE_RMII && speed == SPEED_100)
+>>>> 		mac_control |= CPSW_SL_CTL_IFCTL_A;
+>>>>
+>>>> 	if (speed == SPEED_1000)
+>>>> 		mac_control |= CPSW_SL_CTL_GIG;
+>>>> 	if (duplex)
+>>>> 		mac_control |= CPSW_SL_CTL_FULLDUPLEX;
+>>>>
+>>>> I would also make mac_link_up() do a read-modify-write operation to
+>>>> only affect the bits that it is changing.
+>>>
+>>> This is the current implementation except for the SGMII mode associated
+>>> operation that I had recently added. I will fix that. Also, the
+>>> cpsw_sl_ctl_set() function which writes the mac_control value performs a read
+>>> modify write operation.
+>>>
+>>>>
+>>>> Now, for SGMII, I would move setting CPSW_SL_CTL_EXT_EN to mac_config()
+>>>> to enable in-band mode - don't we want in-band mode enabled all the
+>>>> time while in SGMII mode so the PHY gets the response from the MAC?
+>>>
+>>> Thank you for pointing it out. I will move that to mac_config().
+>>>
+>>>>
+>>>> Lastly, for RGMII at 10Mbps, you seem to suggest that you need RGMII
+>>>> in-band mode enabled for that - but if you need RGMII in-band for
+>>>> 10Mbps, wouldn't it make sense for the other speeds as well? If so,
+>>>> wouldn't that mean that CPSW_SL_CTL_EXT_EN can always be set for
+>>>> RGMII no matter what speed is being used?
+>>>
+>>> The CPSW MAC does not support forced mode at 10 Mbps RGMII. For this reason, if
+>>> RGMII 10 Mbps is requested, it is set to in-band mode.
+>>
+>> What I'm saying is that if we have in-band signalling that is reliable
+>> for a particular interface mode, why not always use it, rather than
+>> singling out one specific speed as an exception? Does it not work in
+>> 100Mbps and 1Gbps?
+
+While the CPSW MAC supports RGMII in-band status operation, the link partner
+might not support it. I have also observed that forced mode is preferred to
+in-band mode as implemented for another driver:
+commit ade64eb5be9768e40c90ecb01295416abb2ddbac
+net: dsa: microchip: Disable RGMII in-band status on KSZ9893
+
+and in the mail thread at:
+https://lore.kernel.org/netdev/20200905160647.GJ3164319@lunn.ch/
+based on Andrew's suggestion, using forced mode appears to be better.
+
+Additionally, I have verified that switching to in-band status causes a
+regression. Thus, I will prefer keeping it in forced mode for 100 and 1000 Mbps
+RGMII mode which is the existing implementation in the driver. Please let me know.
+
+Regards,
+Siddharth.
+
 > 
-> Here is the command I use:
+> In-band RGMII is supported for speeds of 10, 100 and 1000 Mbps.
+> Unfortunately, I am not aware of the reason why RGMII at speeds 100 and
+> 1000 Mbps was implemented in the driver in forced mode. As suggested by
+> you, I will work on implementing it in in-band mode for all speeds and
+> verify that it works, following which I will post the v2 of this series,
+> with the following changes based on your feedback:
+> 1. All interface mode specific configuration will be moved to mac_config().
+> 2. Since CPSW MAC supports USXGMII mode, MAC_5000FD will be added to the
+> list of mac_capabilites unconditionally, unlike the current implementation.
+> 3. In-band mode of operation will be enabled for all interface modes by
+> default.
 > 
-> $ qemu-system-aarch64
-> -machine virt
-> -bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd
-> -accel kvm
-> -m 4096
-> -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
-> -cpu host
-> -qmp unix:./src.socket,server,nowait
-> -hda ./XXX.qcow2
-> -serial unix:./src.serial,server,nowait
-> -monitor stdio
-> 
-> It seems something related to your notice: You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
-> to match your host kernel.
-> 
-> But I'm not actually understand what should I fix, since I haven't review the patch series. Could you give me some more information? Maybe I'm doing something wrong.
-> 
-
-When the kernel is rebased to v6.2.rc3, the two capabilities are conflictsing
-between QEMU and host kernel. Please adjust them like below and have a try:
-
-In qemu/linux-headers/linux/kvm.h
-
-#define KVM_CAP_ARM_HVC_TO_USER 250 /* TODO: as per linux 6.1-rc2 */
-#define KVM_CAP_ARM_PSCI_TO_USER 251 /* TODO: as per linux 6.1-rc2 */
-
-In linux/include/uapi/linux/kvm.h
-
-#define KVM_CAP_ARM_HVC_TO_USER 250
-#define KVM_CAP_ARM_PSCI_TO_USER 251
-
-Thanks,
-Gavin
-
-
+> Regards,
+> Siddharth.
