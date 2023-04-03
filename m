@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D40B6D3D22
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 173376D3D26
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbjDCGLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 02:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        id S231248AbjDCGOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 02:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjDCGL1 (ORCPT
+        with ESMTP id S229498AbjDCGOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 02:11:27 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED178527F;
-        Sun,  2 Apr 2023 23:11:25 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id ew6so112626051edb.7;
-        Sun, 02 Apr 2023 23:11:25 -0700 (PDT)
+        Mon, 3 Apr 2023 02:14:34 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E435A6592
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 23:14:32 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id ek18so112752785edb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 23:14:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680502284;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gP/NAOYyuv0YBnm/nFebw7X1khDfTArI7Js9IuJTeyU=;
-        b=fvXEIW64HYGcT3RzfX5lo60MtOsOPf4xOlyaT5Gjcv1vp00oIq8IZAh0cE+M6bW0J5
-         NeffADjSx/WOmYqJFZpwQNAnlk6zFOYrCgPClrSki0lXfMy46ipO3y5Tjjf54KsqQ8Uy
-         L4QByAtRMfW9Z+iiUcNfeDykSOLXfzSrvhjeLucMZnlOLHTvWByptBAkzm5KoJaLdhm/
-         tAHOl0RdryGwSxEBMPoDK/uYFuoQuUblB9xUQGmoQcU16PMebXbz++GN4X7PZw5AnCId
-         VO05btGwwuoTAk0ESP/rAqMJDVDD2gXRPC3iB37eBC8GXAehDgLZgn0UyZ6xpS37A6jK
-         KVNw==
+        d=gmail.com; s=20210112; t=1680502471;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bVeCXy+GBi88X47vUp2kci/ua0r4Qmm4tGxxhSCn7+s=;
+        b=C6OSI3+zC0WBr/2T+Mm/rvlpWMEnrlVbbcvMc+X7ZkMi3VQfvvnj+laGh3f0R6gwfP
+         ZSsdnPJ2vREsj6jPyWbTmxd18ClFHkVhu+eNPcjN0M0aO9KxKDIKvqbQf4XwPd9kDNIQ
+         wfvA+mFrRnX7RE2TiIiCI4j685Ftzv1nCPkriCttcK8eNn27YvKwUpm0Pe9odOMJWliw
+         mN4yoafY5gAD8MybxYWwsTyhRsxOHJEurMjvxFZl18WPvLJBt8GrbwzJsakqeO65bMws
+         5JBN0B+mPrDdXf0YwpmEKcdCtxjqn35dKyz10oSeEAQ+Tu+d2Ev9A1fNsqvULzuf9/Ex
+         jo/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680502284;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gP/NAOYyuv0YBnm/nFebw7X1khDfTArI7Js9IuJTeyU=;
-        b=iW/b8jGSgrVk0yPLL2GLfvhn1LtVWsijKg952KyMZ2MVmvFvJZAKNplzIOiJQy4ag7
-         0pF4b4odVA8kHYorQC2J7UE39JwGZliF8cDYNd6mgFVUXQiSa5+zt53vmejNl95ANjvX
-         t5r9Dwvtm2clrZQPlKEZnQKHPjf2fB+U38YkuiYmRSNagZTfwvjASwbgR8yWomS9EBmA
-         ACn7pHG7QWQou0+4JGbv9dv2IweZR2RJY4v1QYm8H7gGyU6tZGRmbMIyVvhtVsg2tJLD
-         w/DO4ehZXC7Z5ndbtGMFpIbaP6/J5/iixqUALdXfyMEMpBsdJOrxMploPo5xp/Xpt7kK
-         x1Ww==
-X-Gm-Message-State: AAQBX9einmhQNkQqkXo0AYb7Lo8290AACht1ImtFXpVRh5OJ6CNF0KPu
-        ILGKpzUwC6zn7vMTJf3YeeI=
-X-Google-Smtp-Source: AKy350Ye3LiLkSxBkKbzdxrTQTtUxqZAoBTleoqrk1A27MshnAmxLQ3Itn7a+kAQANDTvjUWfdBXFw==
-X-Received: by 2002:a05:6402:d3:b0:4fa:e1fd:5a30 with SMTP id i19-20020a05640200d300b004fae1fd5a30mr34077597edu.19.1680502284345;
-        Sun, 02 Apr 2023 23:11:24 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680502471;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bVeCXy+GBi88X47vUp2kci/ua0r4Qmm4tGxxhSCn7+s=;
+        b=FOdPeMAarcaaUJ76Rslcg/bVMFhGx3Dxr0kcqxS64oRixbcthWhCaGzBfNhnuFrP+o
+         3plpJuX5GJZ7cR1QCJ0wh5JFnlUUfab+NfG5Gil2Mcfl053e7iX0ZP4SpElOQ6aHv+8t
+         7grsacGBINMm7BmIYQBUVa2fRwGHVdmP5Hl2StxhfVDfz5NTpTfK2r9KIpAdr/ybliUi
+         j+yqG602iw9WlNotiYBTbsFz0ENMW2DplLbkvXM5dAu4Wpuf0FdR3NIgendpKXe8apb5
+         pDFRmbcqqJBJ6nOeaLC7cVqmG+XtuoibmkzCkM5vmcccLi98JC8Fm5/7kqpmrE7ZRZB+
+         FF3A==
+X-Gm-Message-State: AAQBX9c2YJK1QAPSjg/+1imelSrc929BxvFHNUwy+zVEEkb36Hdt9hyT
+        hjy0kAVoMPVH3TGj5p/UFOk=
+X-Google-Smtp-Source: AKy350ZP2GmTKzJfZURtI7SagiwJP+b8fzs406ux0ufhxpKxxCQtp2+4OeEsV7HPVccTDB3uys5Luw==
+X-Received: by 2002:a17:907:3f15:b0:947:735b:fcbe with SMTP id hq21-20020a1709073f1500b00947735bfcbemr16186074ejc.19.1680502471396;
+        Sun, 02 Apr 2023 23:14:31 -0700 (PDT)
 Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id u23-20020a50d517000000b004af720b855fsm4062690edi.82.2023.04.02.23.11.22
+        by smtp.gmail.com with ESMTPSA id h8-20020a17090619c800b0092d16623eeasm4025286ejd.138.2023.04.02.23.14.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 23:11:23 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 09:11:11 +0300
+        Sun, 02 Apr 2023 23:14:31 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 09:14:27 +0300
 From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Avri Altman <avri.altman@wdc.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
+To:     oe-kbuild@lists.linux.dev,
+        Heming Zhao via Ocfs2-devel <ocfs2-devel@oss.oracle.com>
 Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Avri Altman <avri.altman@wdc.com>
-Subject: Re: [PATCH v2] scsi: ufs: mcq: Limit the amount of inflight requests
-Message-ID: <b5c43582-0a73-45ec-83c2-8c1bfd2af2a2@kili.mountain>
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>
+Subject: fs/ocfs2/super.c:1809 ocfs2_mount_volume() warn: missing error code
+ 'status'
+Message-ID: <9e1d6835-34fc-49cd-869e-d99d9b546d17@kili.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230331074650.75-1-avri.altman@wdc.com>
 X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
@@ -76,74 +72,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Avri,
-
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Avri-Altman/scsi-ufs-mcq-Limit-the-amount-of-inflight-requests/20230331-155149
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20230331074650.75-1-avri.altman%40wdc.com
-patch subject: [PATCH v2] scsi: ufs: mcq: Limit the amount of inflight requests
-config: parisc-randconfig-m031-20230329 (https://download.01.org/0day-ci/archive/20230401/202304011340.ltlHYazS-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7b50567bdcad8925ca1e075feb7171c12015afd1
+commit: 0737e01de9c411e4db87dcedf4a9789d41b1c5c1 ocfs2: ocfs2_mount_volume does cleanup job before return error
+config: arm64-randconfig-m041-20230329 (https://download.01.org/0day-ci/archive/20230401/202304012244.gX4H4rBO-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 | Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202304011340.ltlHYazS-lkp@intel.com/
+| Link: https://lore.kernel.org/r/202304012244.gX4H4rBO-lkp@intel.com/
 
-New smatch warnings:
-drivers/ufs/core/ufshcd.c:8473 ufshcd_alloc_mcq() warn: missing error code 'ret'
+smatch warnings:
+fs/ocfs2/super.c:1809 ocfs2_mount_volume() warn: missing error code 'status'
 
-Old smatch warnings:
-drivers/ufs/core/ufshcd.c:5412 ufshcd_uic_cmd_compl() error: we previously assumed 'hba->active_uic_cmd' could be null (see line 5400)
-drivers/ufs/core/ufshcd.c:2350 ufshcd_hba_capabilities() warn: missing error code? 'err'
+vim +/status +1809 fs/ocfs2/super.c
 
-vim +/ret +8473 drivers/ufs/core/ufshcd.c
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1803  static int ocfs2_mount_volume(struct super_block *sb)
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1804  {
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1805  	int status = 0;
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1806  	struct ocfs2_super *osb = OCFS2_SB(sb);
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1807  
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1808  	if (ocfs2_is_hard_readonly(osb))
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29 @1809  		goto out;
 
-57b1c0ef89ac9d drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8457  static int ufshcd_alloc_mcq(struct ufs_hba *hba)
-57b1c0ef89ac9d drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8458  {
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8459  	int ret;
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8460  	int old_nutrs = hba->nutrs;
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8461  
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8462  	ret = ufshcd_mcq_decide_queue_depth(hba);
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8463  	if (ret < 0)
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8464  		return ret;
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8465  
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8466  	hba->nutrs = ret;
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8467  	ret = ufshcd_mcq_init(hba);
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8468  	if (ret)
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8469  		goto err;
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8470  
-2580a95e61d461 drivers/ufs/core/ufshcd.c Avri Altman   2023-03-31  8471  	if (hba->nutrs * hba->nr_hw_queues > SZ_64K - 1) {
-2580a95e61d461 drivers/ufs/core/ufshcd.c Avri Altman   2023-03-31  8472  		dev_info(hba->dev, "there can be at most 64K inflight requests\n");
-2580a95e61d461 drivers/ufs/core/ufshcd.c Avri Altman   2023-03-31 @8473  		goto err;
+Hard to tell if this should be an error path or not...  Canonical
+problem with do nothing gotos.
 
-ret = -EINVAL;
-
-2580a95e61d461 drivers/ufs/core/ufshcd.c Avri Altman   2023-03-31  8474  	}
-2580a95e61d461 drivers/ufs/core/ufshcd.c Avri Altman   2023-03-31  8475  
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8476  	/*
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8477  	 * Previously allocated memory for nutrs may not be enough in MCQ mode.
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8478  	 * Number of supported tags in MCQ mode may be larger than SDB mode.
-6ccf44fe4cd7c4 drivers/scsi/ufs/ufshcd.c Seungwon Jeon 2013-06-26  8479  	 */
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8480  	if (hba->nutrs != old_nutrs) {
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8481  		ufshcd_release_sdb_queue(hba, old_nutrs);
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8482  		ret = ufshcd_memory_alloc(hba);
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8483  		if (ret)
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8484  			goto err;
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8485  		ufshcd_host_memory_configure(hba);
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8486  	}
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8487  
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8488  	ret = ufshcd_mcq_memory_alloc(hba);
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8489  	if (ret)
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8490  		goto err;
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8491  
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8492  	return 0;
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8493  err:
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8494  	hba->nutrs = old_nutrs;
-4682abfae2eb3a drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8495  	return ret;
-57b1c0ef89ac9d drivers/ufs/core/ufshcd.c Asutosh Das   2023-01-13  8496  }
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1810  
+5500ab4ed3b8f0 Gang He                     2019-03-05  1811  	mutex_init(&osb->obs_trim_fs_mutex);
+5500ab4ed3b8f0 Gang He                     2019-03-05  1812  
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1813  	status = ocfs2_dlm_init(osb);
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1814  	if (status < 0) {
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1815  		mlog_errno(status);
+a52370b3b182f7 Gang He                     2018-01-31  1816  		if (status == -EBADR && ocfs2_userspace_stack(osb))
+a52370b3b182f7 Gang He                     2018-01-31  1817  			mlog(ML_ERROR, "couldn't mount because cluster name on"
+a52370b3b182f7 Gang He                     2018-01-31  1818  			" disk does not match the running cluster name.\n");
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1819  		goto out;
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1820  	}
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1821  
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1822  	status = ocfs2_super_lock(osb, 1);
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1823  	if (status < 0) {
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1824  		mlog_errno(status);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1825  		goto out_dlm;
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1826  	}
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1827  
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1828  	/* This will load up the node map and add ourselves to it. */
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1829  	status = ocfs2_find_slot(osb);
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1830  	if (status < 0) {
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1831  		mlog_errno(status);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1832  		goto out_super_lock;
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1833  	}
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1834  
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1835  	/* load all node-local system inodes */
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1836  	status = ocfs2_init_local_system_inodes(osb);
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1837  	if (status < 0) {
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1838  		mlog_errno(status);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1839  		goto out_super_lock;
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1840  	}
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1841  
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1842  	status = ocfs2_check_volume(osb);
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1843  	if (status < 0) {
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1844  		mlog_errno(status);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1845  		goto out_system_inodes;
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1846  	}
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1847  
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1848  	status = ocfs2_truncate_log_init(osb);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1849  	if (status < 0) {
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1850  		mlog_errno(status);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1851  		goto out_system_inodes;
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1852  	}
+c271c5c22b0a7c Sunil Mushran               2006-12-05  1853  
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1854  	ocfs2_super_unlock(osb, 1);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1855  	return 0;
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1856  
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1857  out_system_inodes:
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1858  	if (osb->local_alloc_state == OCFS2_LA_ENABLED)
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1859  		ocfs2_shutdown_local_alloc(osb);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1860  	ocfs2_release_system_inodes(osb);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1861  	/* before journal shutdown, we should release slot_info */
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1862  	ocfs2_free_slot_info(osb);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1863  	ocfs2_journal_shutdown(osb);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1864  out_super_lock:
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1865  	ocfs2_super_unlock(osb, 1);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1866  out_dlm:
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1867  	ocfs2_dlm_shutdown(osb, 0);
+0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1868  out:
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1869  	return status;
+ccd979bdbce9fb Mark Fasheh                 2005-12-15  1870  }
 
 -- 
 0-DAY CI Kernel Test Service
