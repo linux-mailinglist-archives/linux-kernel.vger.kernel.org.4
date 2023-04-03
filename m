@@ -2,172 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1E46D3E07
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5176F6D3E0F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbjDCHY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 03:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        id S231573AbjDCHZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 03:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjDCHYY (ORCPT
+        with ESMTP id S231617AbjDCHZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 03:24:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32D98769D;
-        Mon,  3 Apr 2023 00:24:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1665BFEC;
-        Mon,  3 Apr 2023 00:25:06 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.57.89])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EAB463F6C4;
-        Mon,  3 Apr 2023 00:24:18 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 08:24:13 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Newman <peternewman@google.com>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        will@kernel.org, catalin.marinas@arm.com, eranian@google.com
-Subject: Re: [PATCH v4] arm64: pmuv3: dynamically map
- PERF_COUNT_HW_BRANCH_INSTRUCTIONS
-Message-ID: <ZCp/HX4YQLyOp0TE@FVFF77S0Q05N>
-References: <20230327122527.3913496-1-peternewman@google.com>
+        Mon, 3 Apr 2023 03:25:11 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D4EB759;
+        Mon,  3 Apr 2023 00:25:10 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3337P1IR099914;
+        Mon, 3 Apr 2023 02:25:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680506701;
+        bh=6Ed6qPfuT18dvks5JxwLRZtyqU2L3Q9JY+h8JgvLRrk=;
+        h=From:To:CC:Subject:Date;
+        b=FUTZse4Hmr85JruZEsL1jrKCXfildUFIwKNp0b3dK1KnXXWrjXIcURPl5CPVFhCLD
+         sqm4c/OsIWxmtcgbfKu/Bbkzp8EWUFIMKOgd3VlcA4ENyoc1Fyz7Z7zSIkr/3GCpvI
+         5X4981AhT/2HRGzU7sZ/SqvnoYVP2vO3Aj/Pu9q4=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3337P10g031349
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 3 Apr 2023 02:25:01 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
+ Apr 2023 02:25:00 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 3 Apr 2023 02:25:00 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3337Oxje036694;
+        Mon, 3 Apr 2023 02:25:00 -0500
+From:   Dhruva Gole <d-gole@ti.com>
+To:     <linux-gpio@vger.kernel.org>
+CC:     Dhruva Gole <d-gole@ti.com>, <linux-kernel@vger.kernel.org>,
+        Keerthy <j-keerthy@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Vibhore Vardhan <vibhore@ti.com>
+Subject: [PATCH 0/2] gpio: davinci: interrupt related fixes
+Date:   Mon, 3 Apr 2023 12:54:41 +0530
+Message-ID: <20230403072443.83810-1-d-gole@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327122527.3913496-1-peternewman@google.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 02:25:27PM +0200, Peter Newman wrote:
-> From: Stephane Eranian <eranian@google.com>
-> 
-> The mapping of perf_events generic hardware events to actual PMU events on
-> ARM PMUv3 may not always be correct. This is in particular true for the
-> PERF_COUNT_HW_BRANCH_INSTRUCTIONS event. Although the mapping points to an
-> architected event, it may not always be available. This can be seen with a
-> simple:
-> 
-> $ perf stat -e branches sleep 0
->  Performance counter stats for 'sleep 0':
-> 
->    <not supported>      branches
-> 
->        0.001401081 seconds time elapsed
-> 
-> Yet the hardware does have an event that could be used for branches.
-> 
-> Dynamically check for a supported hardware event which can be used for
-> PERF_COUNT_HW_BRANCH_INSTRUCTIONS at mapping time.
-> 
-> And with that:
-> 
-> $ perf stat -e branches sleep 0
-> 
->  Performance counter stats for 'sleep 0':
-> 
->            166,739      branches
-> 
->        0.000832163 seconds time elapsed
-> 
-> Based-on: https://lore.kernel.org/all/YvunKCJHSXKz%2FkZB@FVFF77S0Q05N
-> Based-on-patch-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Stephane Eranian <eranian@google.com>
-> Signed-off-by: Peter Newman <peternewman@google.com>
+This series fixes some critical bugs in the gpio-davinci driver
+that come to light when the system tries to wakeup from a suspended
+state.
 
-Thanks for reworking the patch; the patch itself and commit message look good
-to me.
+It was earlier posted as an RFC here:
+https://lore.kernel.org/all/20230323122910.991148-1-d-gole@ti.com/
 
-I'd like to keep my S-o-b here for the code itself; could we please make the
-tags:
+No changes, just resending without the RFC tag since the patches are now
+proposed to be merged into mainline.
+Also add all the Acks and R-by's from respective maintainers and reviewers.
 
-  Co-Developed-by: Stephane Eranian <eranian@google.com>
-  Signed-off-by: Stephane Eranian <eranian@google.com>
-  Co-Developed-by: Mark Rutland <mark.rutland@arm.com>
-  Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-  Co-Developed-by: Peter Newman <peternewman@google.com>
-  Signed-off-by: Peter Newman <peternewman@google.com>
-  Link: https://lore.kernel.org/all/YvunKCJHSXKz%2FkZB@FVFF77S0Q05N
+Cc: Keerthy <j-keerthy@ti.com>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Devarsh Thakkar <devarsht@ti.com>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Vibhore Vardhan <vibhore@ti.com>
 
-That follow the conventions documented in:
+Dhruva Gole (2):
+  gpio: davinci: Do not clear the bank intr enable bit in save_context
+  gpio: davinci: Add irq chip flag to skip set wake
 
-  https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+ drivers/gpio/gpio-davinci.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Thanks,
-Mark.
+-- 
+2.25.1
 
-> ---
-> v3->v4:
->  - splice Mark's patch with Stephane's problem statement
-> v2->v3:
->  - removed prints per Will's suggestion
->  
-> [v3] https://lore.kernel.org/all/20220816130221.885920-1-peternewman@google.com/
-> [v2] https://lore.kernel.org/lkml/20220324181458.3216262-1-eranian@google.com/
-> 
->  arch/arm64/kernel/perf_event.c | 27 +++++++++++++++++++++++----
->  1 file changed, 23 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-> index dde06c0f97f3..ee63f8e719ea 100644
-> --- a/arch/arm64/kernel/perf_event.c
-> +++ b/arch/arm64/kernel/perf_event.c
-> @@ -45,7 +45,6 @@ static const unsigned armv8_pmuv3_perf_map[PERF_COUNT_HW_MAX] = {
->  	[PERF_COUNT_HW_INSTRUCTIONS]		= ARMV8_PMUV3_PERFCTR_INST_RETIRED,
->  	[PERF_COUNT_HW_CACHE_REFERENCES]	= ARMV8_PMUV3_PERFCTR_L1D_CACHE,
->  	[PERF_COUNT_HW_CACHE_MISSES]		= ARMV8_PMUV3_PERFCTR_L1D_CACHE_REFILL,
-> -	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED,
->  	[PERF_COUNT_HW_BRANCH_MISSES]		= ARMV8_PMUV3_PERFCTR_BR_MIS_PRED,
->  	[PERF_COUNT_HW_BUS_CYCLES]		= ARMV8_PMUV3_PERFCTR_BUS_CYCLES,
->  	[PERF_COUNT_HW_STALLED_CYCLES_FRONTEND]	= ARMV8_PMUV3_PERFCTR_STALL_FRONTEND,
-> @@ -1048,6 +1047,28 @@ static void armv8pmu_reset(void *info)
->  	armv8pmu_pmcr_write(pmcr);
->  }
->  
-> +static int __armv8_pmuv3_map_event_id(struct arm_pmu *armpmu,
-> +				      struct perf_event *event)
-> +{
-> +	if (event->attr.type == PERF_TYPE_HARDWARE &&
-> +	    event->attr.config == PERF_COUNT_HW_BRANCH_INSTRUCTIONS) {
-> +
-> +		if (test_bit(ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED,
-> +			     armpmu->pmceid_bitmap))
-> +			return ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED;
-> +
-> +		if (test_bit(ARMV8_PMUV3_PERFCTR_BR_RETIRED,
-> +			     armpmu->pmceid_bitmap))
-> +			return ARMV8_PMUV3_PERFCTR_BR_RETIRED;
-> +
-> +		return HW_OP_UNSUPPORTED;
-> +	}
-> +
-> +	return armpmu_map_event(event, &armv8_pmuv3_perf_map,
-> +				&armv8_pmuv3_perf_cache_map,
-> +				ARMV8_PMU_EVTYPE_EVENT);
-> +}
-> +
->  static int __armv8_pmuv3_map_event(struct perf_event *event,
->  				   const unsigned (*extra_event_map)
->  						  [PERF_COUNT_HW_MAX],
-> @@ -1059,9 +1080,7 @@ static int __armv8_pmuv3_map_event(struct perf_event *event,
->  	int hw_event_id;
->  	struct arm_pmu *armpmu = to_arm_pmu(event->pmu);
->  
-> -	hw_event_id = armpmu_map_event(event, &armv8_pmuv3_perf_map,
-> -				       &armv8_pmuv3_perf_cache_map,
-> -				       ARMV8_PMU_EVTYPE_EVENT);
-> +	hw_event_id = __armv8_pmuv3_map_event_id(armpmu, event);
->  
->  	/*
->  	 * CHAIN events only work when paired with an adjacent counter, and it
-> -- 
-> 2.40.0.348.gf938b09366-goog
-> 
