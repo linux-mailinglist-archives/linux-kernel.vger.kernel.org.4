@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9091E6D3E0D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5585C6D3E17
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjDCHZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 03:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S229698AbjDCH3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 03:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbjDCHZI (ORCPT
+        with ESMTP id S231395AbjDCH3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 03:25:08 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EB67EE8;
-        Mon,  3 Apr 2023 00:25:07 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3337P6bW112641;
-        Mon, 3 Apr 2023 02:25:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680506706;
-        bh=Hvi6qctb3XXG7WV2dOJUbwRkvmIGGv2xKBvV0X641Dc=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=WkPLUeWDAkm4NopJ6NosEi7QByFe91/WF9SSdvCsYczJjlAIAZNxf4GNiSs5faItA
-         jmBdHIBXSH7Lr1Q6M1MhuWz/4fDZ6DjCoAVCShN8YY7RHeQ+FAvKReCUvEPQC1UfdM
-         FIeOId/nYXq1NvUUYzfD6U/aq0S0cS0a4AnfDMHE=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3337P6ZB067052
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 3 Apr 2023 02:25:06 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
- Apr 2023 02:25:06 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 3 Apr 2023 02:25:06 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3337P5bW031538;
-        Mon, 3 Apr 2023 02:25:05 -0500
-From:   Dhruva Gole <d-gole@ti.com>
-To:     <linux-gpio@vger.kernel.org>
-CC:     Dhruva Gole <d-gole@ti.com>, <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 2/2] gpio: davinci: Add irq chip flag to skip set wake
-Date:   Mon, 3 Apr 2023 12:54:43 +0530
-Message-ID: <20230403072443.83810-3-d-gole@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230403072443.83810-1-d-gole@ti.com>
-References: <20230403072443.83810-1-d-gole@ti.com>
+        Mon, 3 Apr 2023 03:29:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5F483FC;
+        Mon,  3 Apr 2023 00:29:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A71BA6155B;
+        Mon,  3 Apr 2023 07:29:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89D8FC433D2;
+        Mon,  3 Apr 2023 07:29:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680506975;
+        bh=lQcjagvQW5vaKjYm9FM3pRh642wat0HtPZnNd6xz+c0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=N7io5QkHpEI2QN6UpD2VmiAswDOIIp1DM7o4nOxJKwqIDAZT6vBS4OEc9QGsbHx6/
+         eWglYVbCgvn9waOVIPUg/kEKy8loKzgK8uZusMUHNcYzyrc3fPfSBzBU/kLfe1rQrd
+         B4hmSlx83bj2+Zbd8lVv18yjY3c6lkZ5jSRYwDfK4GUKosy/1QbvXsMXaxnn3F9MC+
+         Ioz9AMty2OOYXwGdWvefIrreav4Xiq5BTZ+9BV5NA1fqje3ZmNv1NWvhSQ8MjQLBpG
+         jOTno9/vlsHwGv/8M7RrhvuXKxRlrBYNDqKYxG7o5JiTvEsYAetBWzjHWQb7k7w7r0
+         D4NnRDCqPgUOQ==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        v9fs-developer@lists.sourceforge.net,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Joel Becker <jlbec@evilplan.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] fs: consolidate duplicate dt_type helpers
+Date:   Mon,  3 Apr 2023 09:28:07 +0200
+Message-Id: <20230403-zealous-refusal-b811eb5e1cdf@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230330104144.75547-1-jlayton@kernel.org>
+References: <20230330104144.75547-1-jlayton@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=560; i=brauner@kernel.org; h=from:subject:message-id; bh=g7myO4zItbTFXcpfnu52zRNrXg6NcZ41DX48kuLxQ7o=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaRo1T9/Ejv77vLS841zEjJjrzBVuqu/OWR8ateJIwttVLQy PotM6yhlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZhI0yRGhl8LcxlEbDJUJ+xl3J+6KT bt9q9j99YtDPhyrnV60M5nvvUM/xT7krZFGW014ZkX/rJe9Xeo0DTx7e3TDXlqDD0WCnruZQUA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,29 +67,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the IRQCHIP_SKIP_SET_WAKE flag since there are no special IRQ Wake
-bits that can be set to enable wakeup IRQ.
 
-Fixes: 3d9edf09d452 ("[ARM] 4457/2: davinci: GPIO support")
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/gpio/gpio-davinci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 30 Mar 2023 06:41:43 -0400, Jeff Layton wrote:
+> There are three copies of the same dt_type helper sprinkled around the
+> tree. Convert them to use the common fs_umode_to_dtype function instead,
+> which has the added advantage of properly returning DT_UNKNOWN when
+> given a mode that contains an unrecognized type.
+> 
+> 
 
-diff --git a/drivers/gpio/gpio-davinci.c b/drivers/gpio/gpio-davinci.c
-index d7595b39e8c4..aaaf61dc2632 100644
---- a/drivers/gpio/gpio-davinci.c
-+++ b/drivers/gpio/gpio-davinci.c
-@@ -322,7 +322,7 @@ static struct irq_chip gpio_irqchip = {
- 	.irq_enable	= gpio_irq_enable,
- 	.irq_disable	= gpio_irq_disable,
- 	.irq_set_type	= gpio_irq_type,
--	.flags		= IRQCHIP_SET_TYPE_MASKED,
-+	.flags		= IRQCHIP_SET_TYPE_MASKED | IRQCHIP_SKIP_SET_WAKE,
- };
- 
- static void gpio_irq_handler(struct irq_desc *desc)
--- 
-2.25.1
+I've picked this up now,
 
+tree: git://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git
+branch: fs.misc
+[1/1] fs: consolidate duplicate dt_type helpers
+      commit: 364595a6851bf64e1c38224ae68f5dd6651906d1
