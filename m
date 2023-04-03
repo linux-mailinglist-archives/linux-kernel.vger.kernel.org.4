@@ -2,158 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAA56D4E85
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86F16D4E8B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233033AbjDCQ6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
+        id S233038AbjDCRAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233035AbjDCQ6e (ORCPT
+        with ESMTP id S231730AbjDCRAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:58:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD892D41
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:58:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD6BC62204
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:58:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52787C433EF;
-        Mon,  3 Apr 2023 16:58:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680541112;
-        bh=iqxc59ET3lN3lBscGV9OLRH4v6aWLbJznO+AhkK6vA4=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=IAzhI9WwctqC0d+GHe9FFn/UcxLKnAH0rIn8xonBB8gz+5nVL29DckeqjaK/qaefq
-         kQjht1tfouiU2hivs3MOsneGFJBAn1S9s+oxZBNAuvd4T2Ohnryw8JXZ8Tyb0q4TDk
-         eh5+Ilg3on+MQIfPETduOI26tIa1N4b1hpenCV5EqWJi/KmcXWds/EVMfr5KIdNNK6
-         9C8y7EyXPNKB9zjeldz9YrdQFT0UDY5oRKQmjmc9A+WgvEu/zQez2PWHhdDgZDCiKv
-         VKBgTXS+3/YieYDIhsDkr35Bn8TJcA0CWZHDxM4d50ZAbnCmPbw5A4uT1RTEcfhNzK
-         VsWIu1clW1+2g==
-Date:   Mon, 3 Apr 2023 17:58:27 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] regmap: Add maple tree based register cache
-Message-ID: <6f49fdf0-c373-46f7-89bd-f30f0fb68c15@sirena.org.uk>
-References: <20230325-regcache-maple-v3-0-23e271f93dc7@kernel.org>
- <20230325-regcache-maple-v3-2-23e271f93dc7@kernel.org>
- <20230403154508.qia42tyasj4vhtm5@revolver>
+        Mon, 3 Apr 2023 13:00:33 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F192B19B7;
+        Mon,  3 Apr 2023 10:00:31 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id bl9so13127298iob.8;
+        Mon, 03 Apr 2023 10:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680541231; x=1683133231;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2nf1Z/1629BSjtPERMC0xegxmYOylmoUX4r5kQI3Zb4=;
+        b=afZSs2OWGE0NO12jOYZZiTTElaK97bfx4375BKXFjikdA8n0hir3GyRGXNuXs1UnzL
+         5lg2tgzlu/ihguK+7ws1V4VP+Ka/6E+KU4xzIGpJmSb3wVON495DEAv0vWks7ObDMy0B
+         QeN2khJBAeNmAYfBLjn/xfcGpDlC+jhTxnD3qH+o8D4xdkBt2Tt8tws9PK3V3TU7DoYg
+         Ub7icz4RPADSd1ONMIXOz3/ZZoK9OBeDmv8mJhSioQmNb3a47+nWiZsG8DR3zS1X4IoF
+         wz3YoMCBH6X9N2Sm8lpmJnI8G0EwYsYAf7foI5TI7Ph7SQ3uZHPejgFzF9MMjC+4xI/V
+         pwhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680541231; x=1683133231;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2nf1Z/1629BSjtPERMC0xegxmYOylmoUX4r5kQI3Zb4=;
+        b=l6g67eDjttfCXbZEzvh4Z2yNPmnkZ3V6nWhcbuiLe0UIpGX9uJwLPBn+o3LE7tzHy7
+         K0jmY6rOIJwLq3zWHQSmYN7TTAIaeObAoNq/lTFdntPa+NW7fO4pLxvOfw2bTq3IrY7f
+         +YbIVMQNYxJsaIBJzv4czrnKvmVjwZ+Lf6dg/33cs2faRKjeTXdXbT2BlRj67h0abcsu
+         /L1BNWj0GsvVb7FihKwlv42N+dGWE+wHMYdN1NNqLDWOlBYhOMmFC+c8h6zmU7YWeaJA
+         X3PJ3ss5Q+S351CfkrmycHzznNJV73JazDcydxvsSmtshzmRTOIH5zi8oStylKbth8S8
+         0Krw==
+X-Gm-Message-State: AAQBX9cVPpaS+oC1VCfgp06+aMd85/2jmwCkrvI3EMCpn4R/8ULiZDd2
+        mHcZwZukb1B7s8+OIoONKZh2+m0+30nsm9OQBQw=
+X-Google-Smtp-Source: AKy350Y/yLdfzY2ZvtkWGRk2SOZ/N5p31WZSenKJhc7loZKG0LwU+ujjt2tYneg/fN/rDMA3AWrQzzlpaYBPirIuotA=
+X-Received: by 2002:a02:7359:0:b0:3a7:e46e:ab64 with SMTP id
+ a25-20020a027359000000b003a7e46eab64mr17031jae.1.1680541231305; Mon, 03 Apr
+ 2023 10:00:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Pz8PLUjRknEnv01J"
-Content-Disposition: inline
-In-Reply-To: <20230403154508.qia42tyasj4vhtm5@revolver>
-X-Cookie: Membership dues are not refundable.
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <6ca5941a-8803-477d-8b40-17292decc5af@app.fastmail.com> <CA+V-a8tkiDXG37YjFKPxrGoXVQMVBemMdBcfb+uUDzBofOWH_A@mail.gmail.com>
+ <1c441d20-951d-407b-90ba-4cda3b0505b2@app.fastmail.com>
+In-Reply-To: <1c441d20-951d-407b-90ba-4cda3b0505b2@app.fastmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 3 Apr 2023 18:00:04 +0100
+Message-ID: <CA+V-a8t-j6DRpcv5oGREHVUaQpafcHiW8M_mRWAK4dC6PAsbcg@mail.gmail.com>
+Subject: Re: [PATCH v7 1/6] riscv: mm: dma-noncoherent: Switch using function
+ pointers for cache management
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     "Conor.Dooley" <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        guoren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Arnd,
 
---Pz8PLUjRknEnv01J
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Mar 31, 2023 at 11:45=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
+e:
+>
+> On Fri, Mar 31, 2023, at 12:37, Lad, Prabhakar wrote:
+> > On Thu, Mar 30, 2023 at 10:34=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
+wrote:
+> >
+> >> It also seems wrong to have the fallback be to do nothing
+> >> when the pointer is NULL, since that cannot actually work
+> >> when a device is not cache coherent.
+> >>
+> > If the device is non cache coherent and if it doesn't support ZICBOM
+> > ISA extension the device won't work anyway. So non-cache coherent
+> > devices until they have their CMO config enabled won't work anyway. So
+> > I didn't see any benefit in enabling ZICBOM by default. Please let me
+> > know if I am misunderstanding.
+>
+> Two things:
+>
+> - Having a broken machine crash with in invalid instruction
+>   exception is better than having it run into silent data
+>   corruption.
+>
+> - a correctly predicted branch is typically faster than an
+>   indirect function call, so the fallback to zicbom makes the
+>   expected (at least in the future) case the fast one.
+>
+> > @@ -465,7 +466,6 @@ config RISCV_ISA_ZICBOM
+> >         depends on MMU
+> >         depends on RISCV_ALTERNATIVE
+> >         default y
+> > -       select RISCV_DMA_NONCOHERENT
+> >         help
+> >            Adds support to dynamically detect the presence of the ZICBO=
+M
+> >            extension (Cache Block Management Operations) and enable its
+> >
+> > But what if the platform doesn't have the ZICBOM ISA extension?
+>
+> Then it needs to register its cache operations before the first
+> DMA, which is something that it should do anyway. With your
+> current code, it may work by accident depending on the state of
+> the cache, but with the version I suggested, it will either work
+> correctly all the time or crash in an obvious way when misconfigured.
+>
+You were right, defaulting to ZICBOM is giving me a crash. So I need
+to switch to something else rather than using arch_initcall().
 
-On Mon, Apr 03, 2023 at 11:45:08AM -0400, Liam R. Howlett wrote:
-> * Mark Brown <broonie@kernel.org> [230329 20:10]:
+I tried early_initcall() but this doesn't let me register a platform
+driver. I should be able to access the resources and DT from init
+callback and then register CMO callbacks (I havent tried this yet) but
+it wont be a platform driver. Should this be OK?
 
-> > The entries stored in the maple tree are arrays of register
-> > values, with the maple tree keys holding the register addresses.
-
-> Why not store the registers to values in the maple tree without the
-> array?  From reading the below code, the maple tree will hold a ranges
-> (based on registers) pointing to an array which will store the value at
-> the register offset.  Could we just store the value in the maple tree
-> directly?
-
-AFAICT that means that we can't readily get the values back out en masse
-to do bulk operations on them without doing a bunch of work to check for
-adjacency and then doing some intermediate marshalling, with cache sync
-block operations are a noticable win.  I'm *hopeful* this might end up
-working out fast enough to make the cache more viable on faster buses.
-
-> > This should work well for a lot of devices, though there's some
-> > additional areas that could be looked at such as caching the
-> > last accessed entry like we do for rbtree and trying to minimise
-> > the maple tree level locking.
-
-> In the case of the VMAs, we had a vmacache, which was removed when the
-> maple tree was added since it wasn't providing any benefit.  We lost any
-> speed increase to cache misses and updating the cache.  I don't know
-> your usecase or if it would result in the same outcome here, but I
-> thought I'd share what happened in the VMA space.
-
-Yeah, I'm hopeful that the maple tree is fast enough that it's not worth
-it.  The main use case is read/modify/write sequences where you hit the
-same register twice in quick succession.
-
-> > +	rcu_read_lock();
-> > +
-> > +	entry =3D mas_find(&mas, reg);
-
-> mas_walk() might be a better interface for this.
-
-Ah, that's not very discoverable.  mas_find() should possibly be called
-mas_find_pausable() or something?
-
-> > +	/* Any adjacent entries to extend/merge? */
-> > +	mas_set_range(&mas, reg - 1, reg + 1);
-> > +	index =3D reg;
-> > +	last =3D reg;
-> > +
-> > +	lower =3D mas_find(&mas, reg - 1);
-
-> If you just want to check the previous, you can use:
-> mas_prev(&mas, reg - 1);
-> This will try the previous entry without rewalking from the top of the
-> tree and you don't need to mas_set_range() call.
-
-Hrm, right - it looks like that doesn't actually apply the constraints
-so that'd work.  The whole specifying constraints for some operations in
-the mas is a bit confusing.
-
-> > +    =20
-> > +     mas_set_range(&mas, index, last);
-> > +     ret =3D mas_store_gfp(&mas, entry, GFP_KERNEL);
-
-> You can avoid this walk as well by changing the order of the code
-> before:
-
-> mas_walk(&mas, reg);
-> if entry... return
-> mas_next(&mas, reg + 1);
-> ...
-> mas_prev(&mas, reg - 1);
-> ...
-
-> This should now be pointing at the location mas_store_gfp() expects:
-> mas.last =3D last;
-> ret =3D mas_store_gfp()
-
-Don't we need to set mas.index as well?  It does feel a bit wrong to be
-just writing into the mas struct.
-
---Pz8PLUjRknEnv01J
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQrBbAACgkQJNaLcl1U
-h9BPMgf/Ui2oTezf7ISr0rf8ZIIqbMcDAA6o/QSvY4WA7elSpDVuS2VXfJTRGPB4
-PA6TwsvLLJ5ItxJCTdiR/Z/aNcnq4FlTy59K93kzg1j/0qQoQkE0hmzx7Kzwh3ek
-xlSfj6IIJsscNHyIskg5D1u0fa7PSZK+2FHJYVv9JB8SALGqZx6P1Do2FJoy+R83
-gOeMtCPu7kF9BciL5NBx0Mf6+O8qTvA2UI0MFrrHYODHSGC5LroeSI67rCM+YwW9
-6cRSpCyeRpggqLhfaSNHICe0yQwNb8dChVMR+fkbyfCr0NwLQUTjQFLQlctAlHEN
-ZSLDkyq9Mc0P+NGxgsVkXFsRSTwNVQ==
-=XOAL
------END PGP SIGNATURE-----
-
---Pz8PLUjRknEnv01J--
+Cheers,
+Prabhakar
