@@ -2,83 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E516D4659
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C73E96D46C9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjDCOB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
+        id S232824AbjDCONz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjDCOB0 (ORCPT
+        with ESMTP id S232697AbjDCONx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:01:26 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5676180;
-        Mon,  3 Apr 2023 07:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680530484; x=1712066484;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=E2/L3dSmFZyGypte52BusMAZoEzd6dL9dvpwxpB4ngo=;
-  b=diVNx8X+h2HeJ2d5pJHgozCqSxovmWX9X5ugcSrD5v7+MF7Odj1HjP9G
-   sFrZT0w1mG/viymhAKnZIDsFp8Z9e+rJhBTRqQ8mKHJdvDV8VpNTkD2NX
-   a1FFPZogT43GUC5CcBGCDKdTTZTO4n3FCHkVo2CvAQSCMExnw8A4aVm1N
-   nEGoBV8R6VEkM3Xjdb4Em/KCb5cbmufCTzvcSKiLRPmWA0Dx8Kv4Jocif
-   MHsI8ugwgK3eTvI5pgxXX+fcswDMOKY/juhREL8nR/XgprfpOOCsjZlpR
-   0ZeSBgtxXjh2YRrkyC6CKBPBypz47mc6gwDKLXoVGWtaw4Esz254TN7fQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="325906544"
-X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
-   d="scan'208";a="325906544"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 07:01:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="755258376"
-X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
-   d="scan'208";a="755258376"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Apr 2023 07:01:21 -0700
-Date:   Mon, 3 Apr 2023 07:12:15 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 21/24] thermal: intel: hfi: Implement model-specific
- checks for task classification
-Message-ID: <20230403141215.GB1643@ranerica-svr.sc.intel.com>
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
- <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0hxKg_u4GKMkdGEp-JbvnymEtxSZT7fB2kbhWoQFSK1fw@mail.gmail.com>
- <20230329001536.GG8958@ranerica-svr.sc.intel.com>
- <CAJZ5v0iHJrXDU=C0oaf-3DJfatWGj4No_J1rwN6PCpRTZMXqyA@mail.gmail.com>
- <20230330024157.GD26315@ranerica-svr.sc.intel.com>
- <CAJZ5v0jqC=0pSU79heEypXK6SjP8TbYZfwSscrezs3bbPx-nyQ@mail.gmail.com>
+        Mon, 3 Apr 2023 10:13:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C04ED4ECB
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:13:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D24721063;
+        Mon,  3 Apr 2023 07:14:35 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D2B293F73F;
+        Mon,  3 Apr 2023 07:13:49 -0700 (PDT)
+Message-ID: <2ed464b9-1754-b649-050d-14c070faa67b@arm.com>
+Date:   Mon, 3 Apr 2023 15:13:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 10/13] coresight: Make refcount a property of the
+ connection
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
+        mike.leach@linaro.org
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230329115329.2747724-1-james.clark@arm.com>
+ <20230329115329.2747724-11-james.clark@arm.com>
+ <3f090ce3-618d-56d1-1ab6-b38de5c86393@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <3f090ce3-618d-56d1-1ab6-b38de5c86393@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jqC=0pSU79heEypXK6SjP8TbYZfwSscrezs3bbPx-nyQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,157 +55,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 07:08:55PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Mar 30, 2023 at 4:31 AM Ricardo Neri
-> <ricardo.neri-calderon@linux.intel.com> wrote:
-> >
-> > On Wed, Mar 29, 2023 at 02:21:57PM +0200, Rafael J. Wysocki wrote:
-> > > On Wed, Mar 29, 2023 at 2:04 AM Ricardo Neri
-> > > <ricardo.neri-calderon@linux.intel.com> wrote:
-> > > >
-> > > > On Mon, Mar 27, 2023 at 07:03:08PM +0200, Rafael J. Wysocki wrote:
-> > > > > On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
-> > > > > <ricardo.neri-calderon@linux.intel.com> wrote:
-> > > > > >
-> > > > > > In Alder Lake and Raptor Lake, the result of thread classification is more
-> > > > > > accurate when only one SMT sibling is busy. Classification results for
-> > > > > > class 2 and 3 are always reliable.
-> > > > > >
-> > > > > > To avoid unnecessary migrations, only update the class of a task if it has
-> > > > > > been the same during 4 consecutive user ticks.
-> > > > > >
-> > > > > > Cc: Ben Segall <bsegall@google.com>
-> > > > > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> > > > > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > > > > > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> > > > > > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > > > > Cc: Len Brown <len.brown@intel.com>
-> > > > > > Cc: Lukasz Luba <lukasz.luba@arm.com>
-> > > > > > Cc: Mel Gorman <mgorman@suse.de>
-> > > > > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > > > > > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > > > > > Cc: Tim C. Chen <tim.c.chen@intel.com>
-> > > > > > Cc: Valentin Schneider <vschneid@redhat.com>
-> > > > > > Cc: x86@kernel.org
-> > > > > > Cc: linux-pm@vger.kernel.org
-> > > > > > Cc: linux-kernel@vger.kernel.org
-> > > > > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > > > > > ---
-> > > > > > Changes since v2:
-> > > > > >  * None
-> > > > > >
-> > > > > > Changes since v1:
-> > > > > >  * Adjusted the result the classification of Intel Thread Director to start
-> > > > > >    at class 1. Class 0 for the scheduler means that the task is
-> > > > > >    unclassified.
-> > > > > >  * Used the new names of the IPC classes members in task_struct.
-> > > > > >  * Reworked helper functions to use sched_smt_siblings_idle() to query
-> > > > > >    the idle state of the SMT siblings of a CPU.
-> > > > > > ---
-> > > > > >  drivers/thermal/intel/intel_hfi.c | 60 ++++++++++++++++++++++++++++++-
-> > > > > >  1 file changed, 59 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> > > > > > index 35d947f47550..fdb53e4cabc1 100644
-> > > > > > --- a/drivers/thermal/intel/intel_hfi.c
-> > > > > > +++ b/drivers/thermal/intel/intel_hfi.c
-> > > > > > @@ -40,6 +40,7 @@
-> > > > > >  #include <linux/workqueue.h>
-> > > > > >
-> > > > > >  #include <asm/msr.h>
-> > > > > > +#include <asm/intel-family.h>
-> > > > > >
-> > > > > >  #include "../thermal_core.h"
-> > > > > >  #include "intel_hfi.h"
-> > > > > > @@ -209,9 +210,64 @@ static int __percpu *hfi_ipcc_scores;
-> > > > > >   */
-> > > > > >  #define HFI_UNCLASSIFIED_DEFAULT 1
-> > > > > >
-> > > > > > +#define CLASS_DEBOUNCER_SKIPS 4
-> > > > > > +
-> > > > > > +/**
-> > > > > > + * debounce_and_update_class() - Process and update a task's classification
-> > > > > > + *
-> > > > > > + * @p:         The task of which the classification will be updated
-> > > > > > + * @new_ipcc:  The new IPC classification
-> > > > > > + *
-> > > > > > + * Update the classification of @p with the new value that hardware provides.
-> > > > > > + * Only update the classification of @p if it has been the same during
-> > > > > > + * CLASS_DEBOUNCER_SKIPS consecutive ticks.
-> > > > > > + */
-> > > > > > +static void debounce_and_update_class(struct task_struct *p, u8 new_ipcc)
-> > > > > > +{
-> > > > > > +       u16 debounce_skip;
-> > > > > > +
-> > > > > > +       /* The class of @p changed. Only restart the debounce counter. */
-> > > > > > +       if (p->ipcc_tmp != new_ipcc) {
-> > > > > > +               p->ipcc_cntr = 1;
-> > > > > > +               goto out;
-> > > > > > +       }
-> > > > > > +
-> > > > > > +       /*
-> > > > > > +        * The class of @p did not change. Update it if it has been the same
-> > > > > > +        * for CLASS_DEBOUNCER_SKIPS user ticks.
-> > > > > > +        */
-> > > > > > +       debounce_skip = p->ipcc_cntr + 1;
-> > > > > > +       if (debounce_skip < CLASS_DEBOUNCER_SKIPS)
-> > > > > > +               p->ipcc_cntr++;
-> > > > > > +       else
-> > > > > > +               p->ipcc = new_ipcc;
-> > > > > > +
-> > > > > > +out:
-> > > > > > +       p->ipcc_tmp = new_ipcc;
-> > > > > > +}
-> > > > >
-> > > > > Why does the code above belong to the Intel HFI driver?  It doesn't
-> > > > > look like there is anything driver-specific in it.
-> > > >
-> > > > That is a good point. This post-processing is specific to the
-> > > > implementation of IPCC classes using Intel Thread Director.
-> > >
-> > > Well, the implementation-specific part is the processor model check
-> > > whose only contribution is to say whether or not the classification is
-> > > valid.  The rest appears to be fairly generic to me.
-> >
-> > I meant to say that we use Intel Thread Director and the HFI driver to
-> > implement the interfaces defined in patch 2. Other architectures may
-> > implement those interfaces differently.
-> >
-> > For Intel, we may even need different filters and debouncers for different
-> > models.
-> >
-> > >
-> > > > Maybe a new file called drivers/thermal/intel/intel_itd.c would be better?
-> > >
-> > > So which part of this code other than the processor model check
-> > > mentioned above is Intel-specific?
-> >
-> > debounce_and_update_class() is needed for Intel processors, other
-> > architectures may not need it or have a different solution.
+
+
+On 03/04/2023 12:47, Suzuki K Poulose wrote:
+> On 29/03/2023 12:53, James Clark wrote:
+>> This removes the need to do an additional lookup for the total number
+>> of ports used and also removes the need to allocate an array of
+>> refcounts which is just another representation of a connection array.
+>>
+>> This was only used for link type devices, for regular devices a single
+>> refcount on the coresight device is used.
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-core.c  |  96 +++++++--------
+>>   drivers/hwtracing/coresight/coresight-etb10.c |  10 +-
+>>   .../hwtracing/coresight/coresight-funnel.c    |  26 +++--
+>>   .../hwtracing/coresight/coresight-platform.c  | 109 +-----------------
+>>   .../coresight/coresight-replicator.c          |  23 ++--
+>>   .../hwtracing/coresight/coresight-tmc-etf.c   |  24 ++--
+>>   .../hwtracing/coresight/coresight-tmc-etr.c   |  12 +-
+>>   drivers/hwtracing/coresight/coresight-tpda.c  |  23 ++--
+>>   drivers/hwtracing/coresight/coresight-tpiu.c  |   4 +-
+>>   drivers/hwtracing/coresight/ultrasoc-smb.c    |   8 +-
+>>   include/linux/coresight.h                     |  13 ++-
+>>   11 files changed, 124 insertions(+), 224 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-core.c
+>> b/drivers/hwtracing/coresight/coresight-core.c
+>> index be1e8be2459f..baa23aa53971 100644
+>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>> @@ -112,8 +112,9 @@ struct coresight_device
+>> *coresight_get_percpu_sink(int cpu)
+>>   }
+>>   EXPORT_SYMBOL_GPL(coresight_get_percpu_sink);
+>>   -static int coresight_find_link_inport(struct coresight_device *csdev,
+>> -                      struct coresight_device *parent)
+>> +static struct coresight_connection *
+>> +coresight_find_link_inport(struct coresight_device *csdev,
+>> +               struct coresight_device *parent)
+>>   {
+>>       int i;
+>>       struct coresight_connection *conn;
+>> @@ -121,17 +122,18 @@ static int coresight_find_link_inport(struct
+>> coresight_device *csdev,
+>>       for (i = 0; i < parent->pdata->nr_outconns; i++) {
+>>           conn = parent->pdata->out_conns[i];
+>>           if (conn->dest_dev == csdev)
+>> -            return conn->dest_port;
+>> +            return conn;
+>>       }
+>>         dev_err(&csdev->dev, "couldn't find inport, parent: %s, child:
+>> %s\n",
+>>           dev_name(&parent->dev), dev_name(&csdev->dev));
+>>   -    return -ENODEV;
+>> +    return ERR_PTR(-ENODEV);
+>>   }
+>>   -static int coresight_find_link_outport(struct coresight_device *csdev,
+>> -                       struct coresight_device *child)
+>> +static struct coresight_connection *
+>> +coresight_find_link_outport(struct coresight_device *csdev,
+>> +                struct coresight_device *child)
+>>   {
+>>       int i;
+>>       struct coresight_connection *conn;
+>> @@ -139,13 +141,13 @@ static int coresight_find_link_outport(struct
+>> coresight_device *csdev,
+>>       for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>>           conn = csdev->pdata->out_conns[i];
+>>           if (conn->dest_dev == child)
+>> -            return conn->src_port;
+>> +            return conn;
+>>       }
+>>         dev_err(&csdev->dev, "couldn't find outport, parent: %s,
+>> child: %s\n",
+>>           dev_name(&csdev->dev), dev_name(&child->dev));
+>>   -    return -ENODEV;
+>> +    return ERR_PTR(-ENODEV);
+>>   }
 > 
-> IMV, one general problem with this approach is that it is making a
-> more-or-less random thermal driver operate on task structure
-> internals, while drivers/thermal/ is not a usual place to look for CPU
-> scheduler code.
-
-Fair point.
-
+> minor nit: I think the above two functions are exactly similar except
+> for the error message ? And could be unified by fixing the caller ?
 > 
-> I'm not sure why it has to be done this way and none of the above
-> explains that IIUC.
+> coresight_find_connection(src_dev, dst_dev)
 > 
-> Is it really the role of the thermal HFI driver to implement a task
-> classification algorithm?  I'm not convinced about that. 
+> 
+> 
+>>     static inline u32 coresight_read_claim_tags(struct
+>> coresight_device *csdev)
+>> @@ -352,24 +354,24 @@ static int coresight_enable_link(struct
+>> coresight_device *csdev,
+>>   {
+>>       int ret = 0;
+>>       int link_subtype;
+>> -    int inport, outport;
+>> +    struct coresight_connection *inconn, *outconn;
+>>         if (!parent || !child)
+>>           return -EINVAL;
+>>   -    inport = coresight_find_link_inport(csdev, parent);
+>> -    outport = coresight_find_link_outport(csdev, child);
+>> +    inconn = coresight_find_link_inport(csdev, parent);
+>> +    outconn = coresight_find_link_outport(csdev, child);
+> 
+> here :
+> 
+>     
+>         outconn = coresight_find_connection(csdev, child);
+>     inconn = coresight_find_connection(parent, csdev);
+> 
+>>       link_subtype = csdev->subtype.link_subtype;
+>>   -    if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG && inport < 0)
+>> -        return inport;
+>> -    if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT && outport < 0)
+>> -        return outport;
+>> +    if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG &&
+>> IS_ERR(inconn))
+>> +        return PTR_ERR(inconn);
+>> +    if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT &&
+>> IS_ERR(outconn))
+>> +        return PTR_ERR(outconn);
+>>         if (link_ops(csdev)->enable) {
+>>           ret = coresight_control_assoc_ectdev(csdev, true);
+>>           if (!ret) {
+>> -            ret = link_ops(csdev)->enable(csdev, inport, outport);
+>> +            ret = link_ops(csdev)->enable(csdev, inconn, outconn);
+>>               if (ret)
+>>                   coresight_control_assoc_ectdev(csdev, false);
+>>           }
+>> @@ -385,33 +387,36 @@ static void coresight_disable_link(struct
+>> coresight_device *csdev,
+>>                      struct coresight_device *parent,
+>>                      struct coresight_device *child)
+>>   {
+>> -    int i, nr_conns;
+>> +    int i;
+>>       int link_subtype;
+>> -    int inport, outport;
+>> +    struct coresight_connection *inconn, *outconn;
+>>         if (!parent || !child)
+>>           return;
+>>   -    inport = coresight_find_link_inport(csdev, parent);
+>> -    outport = coresight_find_link_outport(csdev, child);
+>> +    inconn = coresight_find_link_inport(csdev, parent);
+>> +    outconn = coresight_find_link_outport(csdev, child);
+> 
+> similarly here
+> 
+>>       link_subtype = csdev->subtype.link_subtype;
+>>   -    if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG) {
+>> -        nr_conns = csdev->pdata->high_inport;
+>> -    } else if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT) {
+>> -        nr_conns = csdev->pdata->high_outport;
+>> -    } else {
+>> -        nr_conns = 1;
+>> -    }
+>> -
+>>       if (link_ops(csdev)->disable) {
+>> -        link_ops(csdev)->disable(csdev, inport, outport);
+>> +        link_ops(csdev)->disable(csdev, inconn, outconn);
+>>           coresight_control_assoc_ectdev(csdev, false);
+>>       }
+>>   -    for (i = 0; i < nr_conns; i++)
+>> -        if (atomic_read(&csdev->refcnt[i]) != 0)
+>> +    if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG) {
+>> +        for (i = 0; i < csdev->pdata->nr_inconns; i++)
+>> +            if (atomic_read(&csdev->pdata->in_conns[i]->refcnt) !=
+>> +                0)
+>> +                return;
+>> +    } else if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT) {
+>> +        for (i = 0; i < csdev->pdata->nr_outconns; i++)
+>> +            if (atomic_read(&csdev->pdata->out_conns[i]->refcnt) !=
+>> +                0)
+>> +                return;
+>> +    } else {
+>> +        if (atomic_read(&csdev->refcnt) != 0)
+>>               return;
+>> +    }
+> 
+> I am slightly concerned about a case where a (practically a corner case,
+> but not impossible) replicator-out could be connected to a funnel-in. In
+> which case, we might be operating on the same "connection" and could
+> mess up with the refcounting and may not do the right thing (e.g, enable
+> the funnel - depends on in_conn ref, when the Replicator was enabled -
+> touches out_conn ref)
+>
 
-Arguably, Intel Thread Director, an extension of the HFI driver provides
-the classification.
+Yeah I think you are right. It's possible that if an output increases
+its refcount first, then the input will skip the ..._enable_hw() call
+because it will look like that connection is already enabled.
 
-> Personally,
-> I would probably introduce some proper arch code doing that and using
-> input from the HFI driver.
+It looks like it would be solved by splitting the refcounts into
+separate in and out refcount members. The other alternative is not
+sharing the connection object between inputs and outputs which is a big
+change and didn't feel like it was the right thing to do before.
 
-This makes sense to me. I will work on such updates.
+Splitting them actually feels like it would be the right thing to do
+anyway, and it would be excatly the same as the old version then.
 
-Thanks and BR,
-Ricardo
+
+> Suzuki
+> 
+> 
