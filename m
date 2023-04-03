@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8806D3EBC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7246D3EC0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbjDCIPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
+        id S231448AbjDCIQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjDCIPm (ORCPT
+        with ESMTP id S230269AbjDCIQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:15:42 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C00155A1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 01:15:40 -0700 (PDT)
-Received: from dggpeml500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PqkC41LjJz17R1J;
-        Mon,  3 Apr 2023 16:12:16 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- dggpeml500002.china.huawei.com (7.185.36.158) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 3 Apr 2023 16:15:38 +0800
-From:   Junhao He <hejunhao3@huawei.com>
-To:     <jonathan.cameron@huawei.com>, <will@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mark.rutland@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>, <catalin.marinas@arm.com>,
-        <kernel-team@android.com>, <linuxarm@huawei.com>,
-        <yangyicong@huawei.com>, <f.fangjian@huawei.com>,
-        <shenyang39@huawei.com>, <prime.zeng@hisilicon.com>,
-        <hejunhao3@huawei.com>
-Subject: [PATCH 2/2] drivers/perf: hisi: add NULL check for name
-Date:   Mon, 3 Apr 2023 16:14:23 +0800
-Message-ID: <20230403081423.62460-3-hejunhao3@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20230403081423.62460-1-hejunhao3@huawei.com>
-References: <20230403081423.62460-1-hejunhao3@huawei.com>
+        Mon, 3 Apr 2023 04:16:17 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75EFAF1C;
+        Mon,  3 Apr 2023 01:15:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PqkHG6TFHz4xFj;
+        Mon,  3 Apr 2023 18:15:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680509755;
+        bh=Q2R8Dot9lOgfCR3BJoYVs7FXCpjz1nOl+0DsGoZait4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=c+XVBGDMaK8MrO6IGSvgSsDSR+kSZ5kr6DTpwUdvWsy+MNndoCDRiqEc/jD5SC7N0
+         uhS2IhtVYNpUCDrS1fnBaIFH5jWwuPxWjZFuXhstqoKkQxqaON3fwoTRoMAMGgQk2p
+         pfK2WoLjXz7NBifywH35cvukBJxz1Unk6iopm15RuZNkqtPYWmsIXat+oF4KDKCHC1
+         JDusUJyP4QmdCYfWxIq8uuVTJhkNbSGhFbp2b06ijQbZsyAMnnOuuWDBfCYjRHJxzs
+         v52dt06xzNk5rfQ3WlT6eyxHR/Vn4ywh7kadAqYtfndhjA7zAmkYEaALYu1c3jJxsX
+         WGjQJ/gMNL05g==
+Date:   Mon, 3 Apr 2023 18:15:52 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mediatek tree
+Message-ID: <20230403181552.607a8b64@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500002.china.huawei.com (7.185.36.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: multipart/signed; boundary="Sig_/95aa3W4Sir8AnNa+cGlkH8d";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,113 +52,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When allocations fails that can be NULL now.
+--Sig_/95aa3W4Sir8AnNa+cGlkH8d
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If the name provided is NULL, then the initialization process of the PMU
-type and dev will be skipped in function perf_pmu_register().
-Consequently, the PMU will not be able to register into the kernel.
-Moreover, in the case of unregister the PMU, the function device_del()
-will need to handle NULL pointers, which potentially can cause issues.
+Hi all,
 
-So move this allocation above the cpuhp_state_add_instance() and directly
-return if it does fail.
+After merging the mediatek tree, today's linux-next build (arm64
+defconfig) failed like this:
 
-Signed-off-by: Junhao He <hejunhao3@huawei.com>
----
- drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c | 17 ++++++++++-------
- drivers/perf/hisilicon/hisi_uncore_hha_pmu.c  |  7 +++++--
- drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c  | 11 +++++------
- 3 files changed, 20 insertions(+), 15 deletions(-)
+aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
+aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
+aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_mm=
+sys_update_bits':
+drivers/soc/mediatek/mtk-mmsys.c:147: undefined reference to `cmdq_pkt_writ=
+e_mask'
+aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_mm=
+sys_probe':
+drivers/soc/mediatek/mtk-mmsys.c:386: undefined reference to `cmdq_dev_get_=
+client_reg'
+aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_mu=
+tex_enable_by_cmdq':
+drivers/soc/mediatek/mtk-mutex.c:883: undefined reference to `cmdq_pkt_writ=
+e'
+aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_mu=
+tex_probe':
+drivers/soc/mediatek/mtk-mutex.c:1023: undefined reference to `cmdq_dev_get=
+_client_reg'
 
-diff --git a/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c b/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
-index 8a3d74ddcd6d..ffb039d05d07 100644
---- a/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
-+++ b/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
-@@ -499,13 +499,6 @@ static int hisi_ddrc_pmu_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_DDRC_ONLINE,
--				       &ddrc_pmu->node);
--	if (ret) {
--		dev_err(&pdev->dev, "Error %d registering hotplug;\n", ret);
--		return ret;
--	}
--
- 	if (ddrc_pmu->identifier >= HISI_PMU_V2)
- 		name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
- 				      "hisi_sccl%u_ddrc%u_%u",
-@@ -516,6 +509,16 @@ static int hisi_ddrc_pmu_probe(struct platform_device *pdev)
- 				      "hisi_sccl%u_ddrc%u", ddrc_pmu->sccl_id,
- 				      ddrc_pmu->index_id);
- 
-+	if (!name)
-+		return -ENOMEM;
-+
-+	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_DDRC_ONLINE,
-+				       &ddrc_pmu->node);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Error %d registering hotplug;\n", ret);
-+		return ret;
-+	}
-+
- 	hisi_pmu_init(ddrc_pmu, THIS_MODULE);
- 
- 	ret = perf_pmu_register(&ddrc_pmu->pmu, name, -1);
-diff --git a/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c b/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c
-index 5701a84edb0e..15caf99e1eef 100644
---- a/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c
-+++ b/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c
-@@ -510,6 +510,11 @@ static int hisi_hha_pmu_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sccl%u_hha%u",
-+			      hha_pmu->sccl_id, hha_pmu->index_id);
-+	if (!name)
-+		return -ENOMEM;
-+
- 	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_HHA_ONLINE,
- 				       &hha_pmu->node);
- 	if (ret) {
-@@ -517,8 +522,6 @@ static int hisi_hha_pmu_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sccl%u_hha%u",
--			      hha_pmu->sccl_id, hha_pmu->index_id);
- 	hisi_pmu_init(hha_pmu, THIS_MODULE);
- 
- 	ret = perf_pmu_register(&hha_pmu->pmu, name, -1);
-diff --git a/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c b/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c
-index 68596b566344..794dbcd19b7a 100644
---- a/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c
-+++ b/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c
-@@ -544,6 +544,11 @@ static int hisi_l3c_pmu_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sccl%u_l3c%u",
-+			      l3c_pmu->sccl_id, l3c_pmu->ccl_id);
-+	if (!name)
-+		return -ENOMEM;
-+
- 	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_L3_ONLINE,
- 				       &l3c_pmu->node);
- 	if (ret) {
-@@ -551,12 +556,6 @@ static int hisi_l3c_pmu_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	/*
--	 * CCL_ID is used to identify the L3C in the same SCCL which was
--	 * used _UID by mistake.
--	 */
--	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sccl%u_l3c%u",
--			      l3c_pmu->sccl_id, l3c_pmu->ccl_id);
- 	hisi_pmu_init(l3c_pmu, THIS_MODULE);
- 
- 	ret = perf_pmu_register(&l3c_pmu->pmu, name, -1);
--- 
-2.33.0
+Caused by commit
 
+  b34884b4c878 ("soc: mediatek: Cleanup ifdefs for IS_REACHABLE(CONFIG_MTK_=
+CMDQ)")
+
+I have used the mediatek tree from next-20230331 for today.
+
+There were also the following warnings:
+
+arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warnin=
+g (unit_address_format): /soc/i2c@11010000/accelerometer@0x10: unit name sh=
+ould not have leading "0x"
+arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warnin=
+g (unit_address_format): /soc/i2c@11010000/magnetometer@0x12: unit name sho=
+uld not have leading "0x"
+arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warnin=
+g (i2c_bus_reg): /soc/i2c@11010000/accelerometer@0x10: I2C bus unit address=
+ format error, expected "10"
+arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warnin=
+g (i2c_bus_reg): /soc/i2c@11010000/magnetometer@0x12: I2C bus unit address =
+format error, expected "12"
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/95aa3W4Sir8AnNa+cGlkH8d
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqizgACgkQAVBC80lX
+0GxoTAf9GFGRRE0fwnjtKsbJGJp/i9zy31ytzJkMewVHdASpZWs4QRijKiSVPIKQ
++e5+OV8KsKLHDo+JBmiUyTCFTKqPDz7yGQjJ3LwgX+LTs9GXxhjk39G6whvkdUZj
+cMU19DsToRUzVDzW0D8Po8DVSwbZY5+8khKVr/ZfcUNYQomC3oLlKiPN81PZpZRf
+Eob/alYCrdND/FWpONNOHd+754kIt8ZFRooc4poIQHvmpwPsde03VBG+c4aI1Ycb
+p5WMqeK87Ap5f2vz2xCP+Ow4SIHu97+RiqD8iESOlPYU7Rfz9IOn3w5UJvQ0pdyN
+VWwDDf1r6diSx/4ryGG8evoAn382IQ==
+=JJ+I
+-----END PGP SIGNATURE-----
+
+--Sig_/95aa3W4Sir8AnNa+cGlkH8d--
