@@ -2,77 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3BD6D4327
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 548576D4328
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbjDCLOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
+        id S232246AbjDCLOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbjDCLNr (ORCPT
+        with ESMTP id S230090AbjDCLOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:13:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 190281A95E;
-        Mon,  3 Apr 2023 04:13:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6EE3F1063;
-        Mon,  3 Apr 2023 04:14:01 -0700 (PDT)
-Received: from e122027.arm.com (unknown [10.57.57.191])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 33EB73F6C4;
-        Mon,  3 Apr 2023 04:13:15 -0700 (PDT)
-From:   Steven Price <steven.price@arm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Steven Price <steven.price@arm.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Thomas Hellstrom <thellstrom@vmware.com>,
-        Christoph Hellwig <hch@lst.de>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] smaps: Fix defined but not used smaps_shmem_walk_ops
-Date:   Mon,  3 Apr 2023 12:12:55 +0100
-Message-Id: <20230403111255.141623-1-steven.price@arm.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 3 Apr 2023 07:14:47 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59ED31CBB9
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:14:17 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id g7-20020a056602242700b00758e7dbd0dbso18183606iob.16
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:14:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680520426; x=1683112426;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6qRalQX92RaMzxMrrjGMKbPnvBBp0MOKkNKZUYWOjCE=;
+        b=j9GQtMUaMFPIMFdJer3lXfXI1xXLslTqtzKVKbmPP7+IAHihYbtT+f8Wu0Bz2WQ4Fb
+         W3U0P3UwVArKU+AnhM4hQwE+8VslROKRxrWCYmMZPh6gQkgmT0/MoSbaPt5Lk8TioiyR
+         IypdGS2vy2QzpB2/rIfyddb9BUQn4xYlZzKSle3vfztZzr85AAv8IqdiSuNeEIGOw9Wq
+         1kiAD67cFXbu8+IusDqeg/IOXwxns572OpxENcI+iEt/rTqEwLr8EHw3PRdLm7RMsZVa
+         7x+zajl1PgHAHgqDDwMbV6f7+55K1JwJRJEtqLYGMUb9fXrAVZZm0G1fuw1qOkOtCkSw
+         +AAg==
+X-Gm-Message-State: AO0yUKUOkAj5fsQvrBhkJALrdxyJlORmdZoD3Cla1NKVMBOgMD1c71Su
+        bnzBUXRv55ediG2xei6Ruh0aTKwB1G9rtlZtBSIEHUj/RwTGpLw=
+X-Google-Smtp-Source: AK7set9uAROm7QPXq3GWjhjRoOCg9EkWXuY37I+RppjWGTOKrDXWyUvVe8GwYH3sVm7jzxkdRGYwSYL1FV2bb3NVXUQi+ljyZ/xm
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:8581:0:b0:3f6:e3c2:d4bd with SMTP id
+ d1-20020a028581000000b003f6e3c2d4bdmr15101947jai.0.1680520426727; Mon, 03 Apr
+ 2023 04:13:46 -0700 (PDT)
+Date:   Mon, 03 Apr 2023 04:13:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000012b01e05f86ca7dc@google.com>
+Subject: [syzbot] Monthly nfc report
+From:   syzbot <syzbot+liste310c7f57d844ae45c27@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When !CONFIG_SHMEM smaps_shmem_walk_ops is defined but not used,
-triggering a compiler warning. Surround the definition with an #ifdef to
-keep the compiler happy.
+Hello nfc maintainers/developers,
 
-Fixes: 7b86ac3371b7 ("pagewalk: separate function pointers from iterator data")
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304031749.UiyJpxzF-lkp@intel.com/
-Signed-off-by: Steven Price <steven.price@arm.com>
+This is a 30-day syzbot report for the nfc subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/nfc
+
+During the period, 1 new issues were detected and 1 were fixed.
+In total, 11 issues are still open and 15 have been fixed so far.
+
+Some of the still happening issues:
+
+Crashes Repro Title
+63      Yes   BUG: corrupted list in nfc_llcp_unregister_device
+              https://syzkaller.appspot.com/bug?extid=81232c4a81a886e2b580
+39      Yes   KASAN: use-after-free Read in nfc_llcp_find_local
+              https://syzkaller.appspot.com/bug?extid=e7ac69e6a5d806180b40
+38      Yes   BUG: corrupted list in nfc_llcp_register_device
+              https://syzkaller.appspot.com/bug?extid=c1d0a03d305972dbbe14
+38      Yes   INFO: task hung in nfc_rfkill_set_block
+              https://syzkaller.appspot.com/bug?extid=3e3c2f8ca188e30b1427
+14      Yes   BUG: corrupted list in nfc_llcp_local_put
+              https://syzkaller.appspot.com/bug?extid=ecb2ae7b1add2a4120de
+8       Yes   INFO: task hung in pn533_finalize_setup
+              https://syzkaller.appspot.com/bug?extid=1dc8b460d6d48d7ef9ca
+
 ---
- fs/proc/task_mmu.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 6a96e1713fd5..3d4f8859dac1 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -761,11 +761,13 @@ static const struct mm_walk_ops smaps_walk_ops = {
- 	.hugetlb_entry		= smaps_hugetlb_range,
- };
- 
-+#ifdef CONFIG_SHMEM
- static const struct mm_walk_ops smaps_shmem_walk_ops = {
- 	.pmd_entry		= smaps_pte_range,
- 	.hugetlb_entry		= smaps_hugetlb_range,
- 	.pte_hole		= smaps_pte_hole,
- };
-+#endif
- 
- /*
-  * Gather mem stats from @vma with the indicated beginning
--- 
-2.34.1
-
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
