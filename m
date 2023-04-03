@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354856D5377
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75BB6D5379
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233539AbjDCVZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 17:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
+        id S233545AbjDCV0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 17:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233713AbjDCVZd (ORCPT
+        with ESMTP id S233703AbjDCV0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:25:33 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5764C21;
-        Mon,  3 Apr 2023 14:25:24 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so20657468wmq.4;
-        Mon, 03 Apr 2023 14:25:24 -0700 (PDT)
+        Mon, 3 Apr 2023 17:26:06 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A857746B2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:26:01 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id g21-20020a4ad855000000b0053e563c2f72so3661296oov.6
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 14:26:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1680557123;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20210112; t=1680557161;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VIR23tVTvNCqVdOLn9EZ+Au8EAUJ7AiO6u6/9Nuexhc=;
-        b=NfT05tNQvxCUfD2aerk9b1zGCfDZSUJHGA9DhvC76SDQcKo2ztcfkMJODvLFwdcGIe
-         k37WdPTfn6c1QciK7LFx/Dy9hAEB1Hcu0phVqroV6ZMfpSgDwsCzG9J+vDq3azM6AuGy
-         0F2QOD13dz7f4fJwZ9f7CWYiVca8IIYoxec8s2/BoeLNR2sTeI69/Cs+NHv0MGOMTDFd
-         wrwEbAIi50OyV1xv1vugxyvWi/Y4RCJxf5p/sm8o5swl+7jvkE41H9i+yzXijUbBZDXF
-         9y4Gq45/uIadFK2X/J4Jvjs77il7Z2jrJLkbnkM8kmcWYE1QMifxN81cK4o79m1MtVbH
-         H2sw==
+        bh=kj5a1Gjv5u3ed9nScVQuCJw/TrKNl0CS2e9DPpgpMXA=;
+        b=mgVL+rENIqJd9I9v7V0Guir9ljCZePQyRnCXisG5f1mOrzACjXVqszlL/X48Vanzo1
+         CjSAKSQ0mdQ3p/mVUVSOmzOOqszaQHXxfclviPRo7GCBAmHcdoGZhoxlEQaU8vjkjidC
+         JWA048aq1fb0aq47KQ58KMM30zZ5KBhy6EsFxZzk0M2LfmX4jpgE6Ql0UflKmsqGB0qR
+         Z9m3xzs0lYj8z/0uAiioNURmyO3StSqsmubWQ0qfIG9mfMR9plqhEZixLkCYodxZuzUN
+         GB0dBemlcOud2MslvusZ4ZQYOnAkm0OQ8dplUsrUoKquub/JZFFSyNLdq6+HzrSlFfeF
+         DNrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680557123;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680557161;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VIR23tVTvNCqVdOLn9EZ+Au8EAUJ7AiO6u6/9Nuexhc=;
-        b=lUPGef08lNnjPRFzm2sngXu/k0HRqit62/QZj8Wb0XQ7DJCGwmMTGoXCmQqM6A6ref
-         9f+3QuUG9Rmf2JvqBptASJtwrAX/jyaGRDg57NaeLzSlO/l9k75wHV+aempb2j54VW1D
-         h9S/6H7NQYGQn5SrQfqFrkhyE/oC3+s1hFc3Y06N+r/hYpxRcmQbm9l93yxbBGbV3Lg1
-         +P18/crZPNeyHJUu8MqZ/VrxBrYncM2cMHK8ouEBSsN1g165G8lCIey/jmV4+aXWl/SG
-         Alqa7AzXGGz+AUtudFSK8MJl0Soz4LxAnE2YR/TXp7iFOujEdKOXRhluAcPhwTnkQqGW
-         jALA==
-X-Gm-Message-State: AAQBX9eVuMZ4pBE44XQHGRUUed+INMhejoB7nCepl0FJbyGrLQv91+7d
-        TDIc1svZYo0XPMsbbE5S/fE=
-X-Google-Smtp-Source: AKy350bZY6EtR7wvHBKIrt7OS1qjTi8Wveiqtqxq+rdf48JdfURnCCSj2CHGoO8P92DrFcHB1L9uPw==
-X-Received: by 2002:a7b:c5cd:0:b0:3ea:d611:f8 with SMTP id n13-20020a7bc5cd000000b003ead61100f8mr531737wmk.38.1680557122734;
-        Mon, 03 Apr 2023 14:25:22 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a01-0c22-7651-4500-0000-0000-0000-0e63.c22.pool.telefonica.de. [2a01:c22:7651:4500::e63])
-        by smtp.googlemail.com with ESMTPSA id g19-20020a05600c311300b003ee74c25f12sm20405564wmo.35.2023.04.03.14.25.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 14:25:22 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     michael.wei.hong.sit@intel.com
-Cc:     alexandre.torgue@foss.st.com, andrew@lunn.ch,
-        boon.leong.ong@intel.com, davem@davemloft.net, edumazet@google.com,
-        hkallweit1@gmail.com, hong.aun.looi@intel.com,
-        joabreu@synopsys.com, kuba@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux@armlinux.org.uk,
-        mcoquelin.stm32@gmail.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, peppe.cavallaro@st.com,
-        peter.jun.ann.lai@intel.com, weifeng.voon@intel.com
-Subject: RE [PATCH net v5 2/3] net: stmmac: check if MAC needs to attach to a PHY
-Date:   Mon,  3 Apr 2023 23:24:34 +0200
-Message-Id: <20230403212434.296975-1-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230330091404.3293431-3-michael.wei.hong.sit@intel.com>
-References: <20230330091404.3293431-3-michael.wei.hong.sit@intel.com>
+        bh=kj5a1Gjv5u3ed9nScVQuCJw/TrKNl0CS2e9DPpgpMXA=;
+        b=s/De2ImamZlo0AnQUPIvRjLFWCkjZZc8/8neH5K22FmePKkmVXPbdf4xHbC4AmyPxf
+         WJiFgtgXq687K7HsmmYQkVuCPEL2gWplGPEAUZXF+YoMqiyddqp7Bo7+H2dgkcgr/Oql
+         IAsqUCEqky5QaFrr3vswPruC9KQHHff1MvTKdSvhmIl+xvdeDkFjk9ioaOdN6jpSJOnO
+         GbCbDAixh7jW4kR0PWdB3ge/Kxa/rrfDjoYz+kabRuP471yyRoh94KOkz/SG3Vs8CJMA
+         yyECm7fIoq3egVQLkDK8CsSlJ0//FFrxd14Q+lGUUC9xx4xzprufg9q5Md/JjeO/3JvB
+         CNXQ==
+X-Gm-Message-State: AAQBX9faX52xbGlG/iVAJNnEp/eVJzTyCdooKhmvym7i1UOjPZK/6bJI
+        A1mwGoPISVdmt2U1GbGM47JskPOp0DCD38bCdfbKEQ==
+X-Google-Smtp-Source: AKy350Zqul6mVyvawVN/gE10vGUZ571dKlqpaiOYYFKigQGJiSFxqug/tZdueykq19XibUWA6mbqM9ZFY60UoL6xlFM=
+X-Received: by 2002:a4a:a406:0:b0:53e:944:8896 with SMTP id
+ v6-20020a4aa406000000b0053e09448896mr354553ool.0.1680557160674; Mon, 03 Apr
+ 2023 14:26:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230206172340.2639971-1-rananta@google.com> <20230206172340.2639971-7-rananta@google.com>
+ <ZCTVFYd2oJnGR6O+@linux.dev>
+In-Reply-To: <ZCTVFYd2oJnGR6O+@linux.dev>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Mon, 3 Apr 2023 14:25:49 -0700
+Message-ID: <CAJHc60wfkYiO95c-oY1jSNyRBLtjBvr6bDDbBw26DxqiY4MSmA@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] KVM: arm64: Break the table entries using TLBI
+ range instructions
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,84 +83,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Mar 29, 2023 at 5:17=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> nit: s/break/invalidate/g
+>
+> There is a rather important degree of nuance there. 'Break' as it
+> relates to break-before-make implies that the PTE is made invalid and
+> visible to hardware _before_ a subsequent invalidation. There will be
+> systems that relax this requirement and also support TLBIRANGE.
+>
+> On Mon, Feb 06, 2023 at 05:23:39PM +0000, Raghavendra Rao Ananta wrote:
+>
+> Some nitpicking on the changelog:
+>
+> > Currently, when breaking up the stage-2 table entries, KVM
+>
+> 'breaking up stage-2 table entries' is rather ambiguous. Instead
+> describe the operation taking place on the page tables (i.e. hugepage
+> collapse).
+>
+> > would flush the entire VM's context using 'vmalls12e1is'
+> > TLBI operation. One of the problematic situation is collapsing
+> > table entries into a hugepage, specifically if the VM is
+> > faulting on many hugepages (say after dirty-logging). This
+> > creates a performance penality for the guest whose pages have
+>
+> typo: penalty
+>
+> > already been faulted earlier as they would have to refill their
+> > TLBs again.
+> >
+> > Hence, if the system supports it, use __kvm_tlb_flush_range_vmid_ipa()
+>
+> > to flush only the range of pages governed by the table entry,
+> > while leaving other TLB entries alone. An upcoming patch also
+> > takes advantage of this when breaking up table entries during
+> > the unmap operation.
+>
+> Language regarding an upcoming patch isn't necessary, as this one stands
+> on its own (implements and uses a range-based invalidation helper).
+>
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >  arch/arm64/kvm/hyp/pgtable.c | 23 ++++++++++++++++++++---
+> >  1 file changed, 20 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.=
+c
+> > index b11cf2c618a6c..0858d1fa85d6b 100644
+> > --- a/arch/arm64/kvm/hyp/pgtable.c
+> > +++ b/arch/arm64/kvm/hyp/pgtable.c
+> > @@ -686,6 +686,20 @@ static bool stage2_try_set_pte(const struct kvm_pg=
+table_visit_ctx *ctx, kvm_pte_
+> >       return cmpxchg(ctx->ptep, ctx->old, new) =3D=3D ctx->old;
+> >  }
+> >
+> > +static void kvm_pgtable_stage2_flush_range(struct kvm_s2_mmu *mmu, u64=
+ start, u64 end,
+> > +                                             u32 level, u32 tlb_level)
+> > +{
+> > +     if (system_supports_tlb_range())
+>
+> You also check this in __kvm_tlb_flush_range(), ideally this should be
+> done exactly once per call.
+>
+> > +             kvm_call_hyp(__kvm_tlb_flush_range_vmid_ipa, mmu, start, =
+end, level, tlb_level);
+> > +     else
+> > +             /*
+> > +              * Invalidate the whole stage-2, as we may have numerous =
+leaf
+> > +              * entries below us which would otherwise need invalidati=
+ng
+> > +              * individually.
+> > +              */
+> > +             kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
+> > +}
+> > +
+> >  /**
+> >   * stage2_try_break_pte() - Invalidates a pte according to the
+> >   *                       'break-before-make' requirements of the
+> > @@ -721,10 +735,13 @@ static bool stage2_try_break_pte(const struct kvm=
+_pgtable_visit_ctx *ctx,
+> >        * Perform the appropriate TLB invalidation based on the evicted =
+pte
+> >        * value (if any).
+> >        */
+> > -     if (kvm_pte_table(ctx->old, ctx->level))
+> > -             kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
+> > -     else if (kvm_pte_valid(ctx->old))
+> > +     if (kvm_pte_table(ctx->old, ctx->level)) {
+> > +             u64 end =3D ctx->addr + kvm_granule_size(ctx->level);
+> > +
+> > +             kvm_pgtable_stage2_flush_range(mmu, ctx->addr, end, ctx->=
+level, 0);
+> > +     } else if (kvm_pte_valid(ctx->old)) {
+> >               kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu, ctx->addr, ct=
+x->level);
+> > +     }
+> >
+> >       if (stage2_pte_is_counted(ctx->old))
+> >               mm_ops->put_page(ctx->ptep);
+> > --
+> > 2.39.1.519.gcb327c4b5f-goog
+> >
+> >
+ACK on all of the comments. I'll address them in next revision.
 
-[...]
-> @@ -1144,10 +1145,11 @@ static int stmmac_init_phy(struct net_device *dev)
->  	if (fwnode)
->  		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
->  
-> +	phy_needed = phylink_expects_phy(priv->phylink);
->  	/* Some DT bindings do not set-up the PHY handle. Let's try to
->  	 * manually parse it
->  	 */
-> -	if (!fwnode || ret) {
-> +	if (!fwnode || phy_needed || ret) {
-Unfortunately this breaks Ethernet on my X96 Air board (the .dts file
-can be found upstream in:
-arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dts)
-
-Working boot-log:
-# dmesg | grep dwmac
-[    3.699961] meson8b-dwmac ff3f0000.ethernet: IRQ eth_wake_irq not found
-[    3.700944] meson8b-dwmac ff3f0000.ethernet: IRQ eth_lpi not found
-[    3.707196] meson8b-dwmac ff3f0000.ethernet: PTP uses main clock
-[    3.713688] meson8b-dwmac ff3f0000.ethernet: User ID: 0x11, Synopsys ID: 0x37
-[    3.720201] meson8b-dwmac ff3f0000.ethernet:         DWMAC1000
-[    3.725387] meson8b-dwmac ff3f0000.ethernet: DMA HW capability register supported
-[    3.732832] meson8b-dwmac ff3f0000.ethernet: RX Checksum Offload Engine supported
-[    3.740301] meson8b-dwmac ff3f0000.ethernet: COE Type 2
-[    3.745491] meson8b-dwmac ff3f0000.ethernet: TX Checksum insertion supported
-[    3.752504] meson8b-dwmac ff3f0000.ethernet: Wake-Up On Lan supported
-[    3.758993] meson8b-dwmac ff3f0000.ethernet: Normal descriptors
-[    3.764813] meson8b-dwmac ff3f0000.ethernet: Ring mode enabled
-[    3.770629] meson8b-dwmac ff3f0000.ethernet: Enable RX Mitigation via HW Watchdog Timer
-[   13.565781] meson8b-dwmac ff3f0000.ethernet end0: renamed from eth0
-[   14.036061] meson8b-dwmac ff3f0000.ethernet end0: Register MEM_TYPE_PAGE_POOL RxQ-0
-[   14.255617] meson8b-dwmac ff3f0000.ethernet end0: PHY [mdio_mux-0.0:00] driver [RTL8211F Gigabit Ethernet] (irq=33)
-[   14.265404] meson8b-dwmac ff3f0000.ethernet end0: No Safety Features support found
-[   14.267977] meson8b-dwmac ff3f0000.ethernet end0: PTP not supported by HW
-[   14.275723] meson8b-dwmac ff3f0000.ethernet end0: configuring for phy/rgmii-txid link mode
-[   17.394262] meson8b-dwmac ff3f0000.ethernet end0: Link is Up - 1Gbps/Full - flow control rx/tx
-
-Non-working boot-log:
-# dmesg | grep dwmac
-[    3.730072] meson8b-dwmac ff3f0000.ethernet: IRQ eth_wake_irq not found
-[    3.731053] meson8b-dwmac ff3f0000.ethernet: IRQ eth_lpi not found
-[    3.737303] meson8b-dwmac ff3f0000.ethernet: PTP uses main clock
-[    3.743795] meson8b-dwmac ff3f0000.ethernet: User ID: 0x11, Synopsys ID: 0x37
-[    3.750311] meson8b-dwmac ff3f0000.ethernet:         DWMAC1000
-[    3.755498] meson8b-dwmac ff3f0000.ethernet: DMA HW capability register supported
-[    3.762944] meson8b-dwmac ff3f0000.ethernet: RX Checksum Offload Engine supported
-[    3.770412] meson8b-dwmac ff3f0000.ethernet: COE Type 2
-[    3.775603] meson8b-dwmac ff3f0000.ethernet: TX Checksum insertion supported
-[    3.782615] meson8b-dwmac ff3f0000.ethernet: Wake-Up On Lan supported
-[    3.789106] meson8b-dwmac ff3f0000.ethernet: Normal descriptors
-[    3.794924] meson8b-dwmac ff3f0000.ethernet: Ring mode enabled
-[    3.800738] meson8b-dwmac ff3f0000.ethernet: Enable RX Mitigation via HW Watchdog Timer
-[   13.052942] meson8b-dwmac ff3f0000.ethernet end0: renamed from eth0
-[   13.594285] meson8b-dwmac ff3f0000.ethernet end0: Register MEM_TYPE_PAGE_POOL RxQ-0
-[   13.825578] meson8b-dwmac ff3f0000.ethernet end0: PHY [mdio_mux-0.0:00] driver [RTL8211F Gigabit Ethernet] (irq=33)
-[   13.831358] meson8b-dwmac ff3f0000.ethernet end0: no phy found
-[   13.836229] meson8b-dwmac ff3f0000.ethernet end0: __stmmac_open: Cannot attach to PHY (error: -19)
-
-Reverting this patch fixes that problem.
-
-I think the reason is a logic error in the patch:
-As you can see the PHY is found and attached (my understanding is
-that this happens through phylink_fwnode_phy_connect()). But we now
-also go to that if block below even fwnode != NULL && ret == 0 (which
-indicates that phylink_fwnode_phy_connect() was successful). Inside
-that if block priv->plat->phy_addr then has the default value (-1)
-that was set in stmmac_probe_config_dt().
-
-I am running out of time for today. Could you please look into this
-and follow up with a patch (on top of this one, as this one has
-already been applied) that considers your original issues as well as
-the case of my board (I suspect that all Amlogic boards that are
-supported upstream are affected)? Please keep me Cc'ed so I can test
-your additional patch and then add my Tested-by.
-
-
-Thank you!
-Martin
+Thank you.
+Raghavendra
+>
+> --
+> Thanks,
+> Oliver
