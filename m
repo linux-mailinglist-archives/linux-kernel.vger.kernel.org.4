@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB71D6D51B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2F46D51B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbjDCT7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 15:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        id S232776AbjDCUAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 16:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbjDCT7l (ORCPT
+        with ESMTP id S231716AbjDCUAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 15:59:41 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7DAD7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 12:59:40 -0700 (PDT)
-Received: from [192.168.2.163] (109-252-124-32.nat.spd-mgts.ru [109.252.124.32])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 3 Apr 2023 16:00:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E963CD7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 13:00:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B534660313D;
-        Mon,  3 Apr 2023 20:59:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680551979;
-        bh=zSQYwYndd2ZkXF8gAMJqDSt3JLQqZ/V49jQOay+yYh0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gmZTC9WgGEnkIJRbZHhDIpRyiFsupcwjPbNtMgslR/51LDLLd5HmQn8sqR/dESI+1
-         EconZcSC1VbR4oKxOMBOVjzgogZLjWd3LHkWimqGYNrO6oZKBjV7Kl0CquIQZjA6n1
-         X08RkSBI362i7jevCEn2j1MxdLj7K99mNfXNkBD6mEOtSEqEjNayEC2BZxUUUhz5KA
-         EKKkdwpOtXymF7WmVTRPIrAIMCydIjYhd7WzwROta2zKBoJF/WnXXODKmoQpMGuFMk
-         2pgOQDEhIgWdf2nuISrD9pVw6124hOBt+tUXCYBTvRudhk3vII3t7bK/Jdz1dWSxgX
-         gMNBSgm82G1/w==
-Message-ID: <699f2130-11be-e0db-5f7f-ff53dc3a46fc@collabora.com>
-Date:   Mon, 3 Apr 2023 22:59:35 +0300
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8543762950
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 20:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B32ECC433D2;
+        Mon,  3 Apr 2023 20:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680552017;
+        bh=wWhl5BO+MfmttCEYPrR6iCQCTocuBDmG7hzKkDLpiEY=;
+        h=From:Date:Subject:To:Cc:From;
+        b=RlU27bvgnVIZ1GKdEIB6+ciFV1mx+akcXX2NWw7hnvXjrDbv+u3PSsaD6sKwAwIkU
+         AL98YXCl+Vd6CUGAPMpP3zB+l4XBlj94ev9DaHwhA7USUXiwbsr9UFb+m9E0PbkmVp
+         deWnn2Pa1hPuobDynVtTAm17pEGTTb448DOY8vZekIBHyTTFrm1128Scm79wPvijuw
+         /8BaI07flgBKl8npYnm0hfRPNRNLfCHYtBXwmoHMpxFOl1HM4roaUxq4sitqFW5Q7S
+         HR7DQLI51P2f0qGvOuQvy0SsqKE5EYHDMcsVkr0t62Hsc45KJUP7akn9e5S0j1x30y
+         TJFCGaaOT+inw==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Mon, 03 Apr 2023 20:59:44 +0100
+Subject: [PATCH] regmap: Use mas_walk() instead of mas_find()
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 1/2] drm/virtio: Refactor job submission code path
-Content-Language: en-US
-To:     Emil Velikov <emil.velikov@collabora.com>
-Cc:     David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20230323230755.1094832-1-dmitry.osipenko@collabora.com>
- <20230323230755.1094832-2-dmitry.osipenko@collabora.com>
- <ZCWre6oy0vHNyIkW@arch-x395>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <ZCWre6oy0vHNyIkW@arch-x395>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-Id: <20230403-regmap-maple-walk-fine-v1-1-09512dd51e50@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAC8wK2QC/x2NywqDMBBFf0Vm3YE0Vmj7K6WLPG500EaZQC2I/
+ 97o4i7OhcPZqEAFhZ7NRoqvFJlzheuloTC43IMlViZrbGtupmVF/3EL103g1U0jJ8ngx916H20
+ MCR1V2bsC9upyGA59nXU87kWR5Hf2Xu99/wPwVgZsfwAAAA==
+To:     Liam.Howlett@Oracle.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-00303
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1373; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=wWhl5BO+MfmttCEYPrR6iCQCTocuBDmG7hzKkDLpiEY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkKzBPMCJJJ9pw9zNKYOGOOOthUXSElqODjRYbaAQQ
+ wHMJiNaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZCswTwAKCRAk1otyXVSH0HyjB/
+ 9wuWX5Z7lfnrqp1liHLKEwKUHODnEuvabqwTPf1uvVDhjFhgC3G9DFzPu978V6VXl4p3wNClqRku2N
+ 2T/8cUIuGr60h7YwgaE/UdYTwjzCUKTls1yYu7Oaxw+joUONq5KfogO5wpcxpPJf5y5zb5Jb4QFJl/
+ 5WSOkQdPYZG/sub3/fHB9hpDpyENfZbsu/xDWmcztea3nGf2Z47ygjGAeJ2b5RMBZrfruvpZZqgyvP
+ UBPLEgFuOCPeFsQlCwn2dSugunJehlic96yryxmykQFgB7JayX7/cM8avae/ar6WTSoH43xw77ikLD
+ 9/pZKZMFtYcEsLineeob16SXJ/jxOO
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 18:32, Emil Velikov wrote:
->> +static int virtio_gpu_dma_fence_wait(struct virtio_gpu_submit *submit,
->> +				     struct dma_fence *fence)
->> +{
->> +	struct dma_fence_unwrap itr;
->> +	struct dma_fence *f;
->> +	int err;
->> +
->> +	dma_fence_unwrap_for_each(f, &itr, fence) {
-> The dma_fence_unwrap_for_each() change should be a separate patch,
-> highlighting why we want it.
+Liam recommends using mas_walk() instead of mas_find() for our use case so
+let's do that, it avoids some minor overhead associated with being able to
+restart the operation which we don't need since we do a simple search.
 
-Good point, it actually should be a potential optimization for the
-in-fence waiting.
+Suggested-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/base/regmap/regcache-maple.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
->> +	ret = virtio_gpu_init_submit(&submit, exbuf, dev, file,
->> +				     fence_ctx, ring_idx);
->> +	if (ret)
->> +		goto cleanup;
->> +
->> +	ret = virtio_gpu_wait_in_fence(&submit);
->> +	if (ret)
->> +		goto cleanup;
->> +
-> We have reshuffled the order around in_fence waiting, out_fence install,
-> handles, cmdbuf, drm events, etc. Can we get that split up a bit, with
-> some comments.
-> 
-> If it were me, I would keep the wait_in_fence early and inline
-> virtio_gpu_init_submit (the nesting/abstraction seems a bit much). This
-> means one can omit the virtio_gpu_submit::exbuf all together.
+diff --git a/drivers/base/regmap/regcache-maple.c b/drivers/base/regmap/regcache-maple.c
+index 497cc708d277..5d1bc3691830 100644
+--- a/drivers/base/regmap/regcache-maple.c
++++ b/drivers/base/regmap/regcache-maple.c
+@@ -22,7 +22,9 @@ static int regcache_maple_read(struct regmap *map,
+ 
+ 	rcu_read_lock();
+ 
+-	entry = mas_find(&mas, reg);
++	mas.index = reg;
++	mas.last = reg;
++	entry = mas_walk(&mas);
+ 	if (!entry) {
+ 		rcu_read_unlock();
+ 		return -ENOENT;
+@@ -47,7 +49,9 @@ static int regcache_maple_write(struct regmap *map, unsigned int reg,
+ 
+ 	rcu_read_lock();
+ 
+-	entry = mas_find(&mas, reg);
++	mas.index = reg;
++	mas.last = reg;
++	entry = mas_walk(&mas);
+ 	if (entry) {
+ 		entry[reg - mas.index] = val;
+ 		rcu_read_unlock();
 
-I tried to inline and this variant makes code much less readable to me.
+---
+base-commit: f033c26de5a5734625d2dd1dc196745fae186f1b
+change-id: 20230403-regmap-maple-walk-fine-982bbd2dcfe5
 
-The point of having wait_in_fence after submit_init is that it makes
-submit code path shorter. If we have to wait for in-fence, then once
-fence signals, there is no need to init and instead move directly to a
-further submission step.
-
-Perhaps won't hurt to also factor out the wait_fence from parse_deps in
-the second patch and do all the waits right before locking the buflist.
-
--- 
 Best regards,
-Dmitry
+-- 
+Mark Brown <broonie@kernel.org>
 
