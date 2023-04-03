@@ -2,276 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EC66D3D55
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2906F6D3D57
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbjDCG2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 02:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
+        id S230480AbjDCG3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 02:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbjDCG2a (ORCPT
+        with ESMTP id S230053AbjDCG3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 02:28:30 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBB91729
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 23:28:29 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id u38so18307086pfg.10
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 23:28:29 -0700 (PDT)
+        Mon, 3 Apr 2023 02:29:02 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E73172B
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 23:29:01 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id w9so112841944edc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 23:29:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680503308;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8EZusFPyKlVLlAuor8AkBQgzEgMdx910d6xeQgDfz4M=;
-        b=fIWatEyLoScrepvqscXmHq9GJz2vt6UKbk2sx3R0X+13Ep7wmpbX4g8JC2uMSoe6XB
-         KcNhgN4ewZZlPO461eyunk4MsIBmHCgOz8gx3BA3plKGpVJRV+F7PDSdfyqqobevZIvL
-         K0sMWYD2YsXXsMFonhLk1/F+kJOnS33tGMao7Z67GJsryB9P70aGe6xBSFwppQAG4TAa
-         7xNcZVIYgsDXpTkAM2Wi1Z+gXhellW906rdkj9Xei1JeDf7G1KbSKsLQke+ekM5c8Vqh
-         hC8nUD+Bb5M5f/wv1rkqjPqr8iMHkU0OAXOLFI7fjQzzUsQrusXthvFiDY7bzfMon2ZK
-         TXVA==
+        d=gmail.com; s=20210112; t=1680503340;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Yu12iafjoarKx+r5oMuQ8ttdUsEmu43myMm/b7fl7pY=;
+        b=Tx20nZjz7rsjTbrp6uMtx8K0Lu+gEvc8r171iqDYAMI18dhV5uGUQf2D5tHBsDUj9m
+         6if3HkokMaAmNJherVLk2PCHwnSx7xn7gKOnH0lPwLiH7LGSQZYCSD8puekzQeBbN+ll
+         PdoNvchqdtirBGgCRX0QYgkTSeT8yuhszKoyEyMCVtXoWWtYDK2yOv6le69hfRWgZ+bJ
+         0ORUwAe9/a7c6K5XMc+6BLCvPrpV/wCIvLOIBMJQfMYnPgqju93+sGH9ESAlh9RKrNbk
+         dl4SdQVY/tWpH2BvyRS0PPqdIC4z0JWyXTdcONG058eUMoTv5HdG9oiRUalZ8TjLcnMW
+         P8cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680503308;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8EZusFPyKlVLlAuor8AkBQgzEgMdx910d6xeQgDfz4M=;
-        b=DWOvNSMxaE0UAEcRIEt8P+g5PUvw6iZUuLIgKdT2MumMfeDRCuYCwTKwUzhFdxNa8F
-         ptZH+likD3QmKhQoAg6hssEvDAXW0H7IccPlq077N4sG5Ff4aWWDoD0/bNrR6+b9gxiA
-         pGslqgD58oTU/rTmAcKK0AC28XVimut7pRPyDvnO0SqBxcBuS8Fckb65RBfqJUXNUyDI
-         ouFfa5goXQRfAkCSUpQT2NEYzvwwFQLjRnBe7KC6A3NnOGeCO51DjBidWmVpM9BLp4Jl
-         +NrK7mlExYkpsFrmwTrWmV++bvCO9JuDS3HHLSjmQqSjKIzbUHTjIOY0jzdKzdmYVsly
-         mXKg==
-X-Gm-Message-State: AAQBX9eQhKfTEtDFlifUT5XgLiuWg2soOvWtSQZrtcwQYTXvcUIiST1j
-        6HInii4JolTQtok9rLy/sIVIGg==
-X-Google-Smtp-Source: AKy350ZnTBEW9Zpd0Fn5hv+VcvWBXlRzv4xlVmZ3piblvUgpvHgtuUQpA8IsT1/HfkkszbAuZksayw==
-X-Received: by 2002:a62:6346:0:b0:626:cc72:51a7 with SMTP id x67-20020a626346000000b00626cc7251a7mr34281634pfb.9.1680503308511;
-        Sun, 02 Apr 2023 23:28:28 -0700 (PDT)
-Received: from GL4FX4PXWL.bytedance.net ([139.177.225.248])
-        by smtp.gmail.com with ESMTPSA id k14-20020aa7820e000000b00625ee4c50eesm6013919pfi.77.2023.04.02.23.28.24
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 02 Apr 2023 23:28:28 -0700 (PDT)
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-To:     glider@google.com, elver@google.com, dvyukov@google.com,
-        akpm@linux-foundation.org
-Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        d=1e100.net; s=20210112; t=1680503340;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yu12iafjoarKx+r5oMuQ8ttdUsEmu43myMm/b7fl7pY=;
+        b=MeLM+ZZbgeJjOs693iB4ypLbvgbxsVX14gwoPPzjtpkveHLgqioEsn4fjI9TqbQgcA
+         f90t2KLMODndGIXlrDUv0YVkr8E/gmZhhX3lyAHEno1Mxldwj3XLlxJ/O0C6doajo1r+
+         46etBhS+X0QjJVJfjnjPIguxpsWJqohHzoXl5UdhSj3DQTdl/uJPZoSzyzHJkDFzYmIw
+         MHPhEBW3WldF+NFCeJYfpHcDVxx3GCPZjgNTlf25xWykNCCkpkZCnxRedhivldB8UTr7
+         chOfocWNSiwnonOUko3x5T21j2tRtD01CGvaID/9vBQMAlTqPqLe+bdsRVxIjQnQ4kJK
+         QOXA==
+X-Gm-Message-State: AAQBX9eYY1Ukp546Aab/qn5K0134EGqzatJZxLR/9jbzFRT6oqpt53Ej
+        YZXuyUEHg4O4IhP326QNXm0=
+X-Google-Smtp-Source: AKy350bpT1MVuxA99ZQxxFa6juIF47/zUlGeNo5pzKjHo11lDy1+DhQRzR0E36WyjBo76h/fawwgew==
+X-Received: by 2002:a17:906:2009:b0:933:4184:f0d7 with SMTP id 9-20020a170906200900b009334184f0d7mr35255820ejo.69.1680503340059;
+        Sun, 02 Apr 2023 23:29:00 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id g3-20020a056402090300b005024459f431sm4047813edz.70.2023.04.02.23.28.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Apr 2023 23:28:59 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 09:28:55 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
         linux-kernel@vger.kernel.org,
-        Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH] mm: kfence: Improve the performance of __kfence_alloc() and __kfence_free()
-Date:   Mon,  3 Apr 2023 14:27:57 +0800
-Message-Id: <20230403062757.74057-1-zhangpeng.00@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: arch/arm64/kernel/compat_alignment.c:333 do_compat_alignment_fixup()
+ error: uninitialized symbol 'tinst2'.
+Message-ID: <be46d0ab-8553-4a5d-af46-6fa909c45213@kili.mountain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In __kfence_alloc() and __kfence_free(), we will set and check canary.
-Assuming that the size of the object is close to 0, nearly 4k memory
-accesses are required because setting and checking canary is executed
-byte by byte.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   00c7b5f4ddc5b346df62b757ec73f9357bb452af
+commit: 3fc24ef32d3b9368f4c103dcd21d6a3f959b4870 arm64: compat: Implement misalignment fixups for multiword loads
+config: arm64-randconfig-m041-20230329 (https://download.01.org/0day-ci/archive/20230402/202304021214.gekJ8yRc-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
 
-canary is now defined like this:
-KFENCE_CANARY_PATTERN(addr) ((u8)0xaa ^ (u8)((unsigned long)(addr) & 0x7))
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202304021214.gekJ8yRc-lkp@intel.com/
 
-Observe that canary is only related to the lower three bits of the
-address, so every 8 bytes of canary are the same. We can access 8-byte
-canary each time instead of byte-by-byte, thereby optimizing nearly 4k
-memory accesses to 4k/8 times.
+smatch warnings:
+arch/arm64/kernel/compat_alignment.c:333 do_compat_alignment_fixup() error: uninitialized symbol 'tinst2'.
 
-Use the bcc tool funclatency to measure the latency of __kfence_alloc()
-and __kfence_free(), the numbers (deleted the distribution of latency)
-is posted below. Though different object sizes will have an impact on the
-measurement, we ignore it for now and assume the average object size is
-roughly equal.
+vim +/tinst2 +333 arch/arm64/kernel/compat_alignment.c
 
-Before playing patch:
-__kfence_alloc:
-avg = 5055 nsecs, total: 5515252 nsecs, count: 1091
-__kfence_free:
-avg = 5319 nsecs, total: 9735130 nsecs, count: 1830
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  310  int do_compat_alignment_fixup(unsigned long addr, struct pt_regs *regs)
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  311  {
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  312  	union offset_union offset;
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  313  	unsigned long instrptr;
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  314  	int (*handler)(unsigned long addr, u32 instr, struct pt_regs *regs);
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  315  	unsigned int type;
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  316  	u32 instr = 0;
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  317  	u16 tinstr = 0;
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  318  	int isize = 4;
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  319  	int thumb2_32b = 0;
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  320  	int fault;
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  321  
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  322  	instrptr = instruction_pointer(regs);
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  323  
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  324  	if (compat_thumb_mode(regs)) {
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  325  		__le16 __user *ptr = (__le16 __user *)(instrptr & ~1);
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  326  
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  327  		fault = alignment_get_thumb(regs, ptr, &tinstr);
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  328  		if (!fault) {
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  329  			if (IS_T32(tinstr)) {
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  330  				/* Thumb-2 32-bit */
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  331  				u16 tinst2;
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  332  				fault = alignment_get_thumb(regs, ptr + 1, &tinst2);
+3fc24ef32d3b93 Ard Biesheuvel 2022-07-01 @333  				instr = ((u32)tinstr << 16) | tinst2;
 
-After playing patch:
-__kfence_alloc:
-avg = 3597 nsecs, total: 6428491 nsecs, count: 1787
-__kfence_free:
-avg = 3046 nsecs, total: 3415390 nsecs, count: 1121
+Smatch is complaining that there is no error checking to see if the
+copy_from_user() fails in alignment_get_thumb.  Eventually the syzbot
+will learn to detect this as well.
 
-The numbers indicate that there is ~30% - ~40% performance improvement.
+Most distro kernels are going to automatically zero out stack variables
+like tinst2 to prevent undefined behavior.
 
-Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
----
- mm/kfence/core.c   | 71 +++++++++++++++++++++++++++++++++-------------
- mm/kfence/kfence.h | 10 ++++++-
- mm/kfence/report.c |  2 +-
- 3 files changed, 62 insertions(+), 21 deletions(-)
+Presumably this is a fast path.  So setting "u16 tinst2 = 0;" does not
+affect runtime speed for distro kernels and it might be the best
+solution.
 
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index 79c94ee55f97..0b1b1298c738 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -297,20 +297,13 @@ metadata_update_state(struct kfence_metadata *meta, enum kfence_object_state nex
- 	WRITE_ONCE(meta->state, next);
- }
- 
--/* Write canary byte to @addr. */
--static inline bool set_canary_byte(u8 *addr)
--{
--	*addr = KFENCE_CANARY_PATTERN(addr);
--	return true;
--}
--
- /* Check canary byte at @addr. */
- static inline bool check_canary_byte(u8 *addr)
- {
- 	struct kfence_metadata *meta;
- 	unsigned long flags;
- 
--	if (likely(*addr == KFENCE_CANARY_PATTERN(addr)))
-+	if (likely(*addr == KFENCE_CANARY_PATTERN_U8(addr)))
- 		return true;
- 
- 	atomic_long_inc(&counters[KFENCE_COUNTER_BUGS]);
-@@ -323,11 +316,27 @@ static inline bool check_canary_byte(u8 *addr)
- 	return false;
- }
- 
--/* __always_inline this to ensure we won't do an indirect call to fn. */
--static __always_inline void for_each_canary(const struct kfence_metadata *meta, bool (*fn)(u8 *))
-+static inline void set_canary(const struct kfence_metadata *meta)
- {
- 	const unsigned long pageaddr = ALIGN_DOWN(meta->addr, PAGE_SIZE);
--	unsigned long addr;
-+	unsigned long addr = pageaddr;
-+
-+	/*
-+	 * The canary may be written to part of the object memory, but it does
-+	 * not affect it. The user should initialize the object before using it.
-+	 */
-+	for (; addr < meta->addr; addr += sizeof(u64))
-+		*((u64 *)addr) = KFENCE_CANARY_PATTERN_U64;
-+
-+	addr = ALIGN_DOWN(meta->addr + meta->size, sizeof(u64));
-+	for (; addr - pageaddr < PAGE_SIZE; addr += sizeof(u64))
-+		*((u64 *)addr) = KFENCE_CANARY_PATTERN_U64;
-+}
-+
-+static inline void check_canary(const struct kfence_metadata *meta)
-+{
-+	const unsigned long pageaddr = ALIGN_DOWN(meta->addr, PAGE_SIZE);
-+	unsigned long addr = pageaddr;
- 
- 	/*
- 	 * We'll iterate over each canary byte per-side until fn() returns
-@@ -339,14 +348,38 @@ static __always_inline void for_each_canary(const struct kfence_metadata *meta,
- 	 */
- 
- 	/* Apply to left of object. */
--	for (addr = pageaddr; addr < meta->addr; addr++) {
--		if (!fn((u8 *)addr))
-+	for (; meta->addr - addr >= sizeof(u64); addr += sizeof(u64)) {
-+		if (unlikely(*((u64 *)addr) != KFENCE_CANARY_PATTERN_U64))
- 			break;
- 	}
- 
--	/* Apply to right of object. */
--	for (addr = meta->addr + meta->size; addr < pageaddr + PAGE_SIZE; addr++) {
--		if (!fn((u8 *)addr))
-+	/*
-+	 * If the canary is damaged in a certain 64 bytes, or the canay memory
-+	 * cannot be completely covered by multiple consecutive 64 bytes, it
-+	 * needs to be checked one by one.
-+	 */
-+	for (; addr < meta->addr; addr++) {
-+		if (unlikely(!check_canary_byte((u8 *)addr)))
-+			break;
-+	}
-+
-+	/*
-+	 * Apply to right of object.
-+	 * For easier implementation, check from high address to low address.
-+	 */
-+	addr = pageaddr + PAGE_SIZE - sizeof(u64);
-+	for (; addr >= meta->addr + meta->size ; addr -= sizeof(u64)) {
-+		if (unlikely(*((u64 *)addr) != KFENCE_CANARY_PATTERN_U64))
-+			break;
-+	}
-+
-+	/*
-+	 * Same as above, checking byte by byte, but here is the reverse of
-+	 * the above.
-+	 */
-+	addr = addr + sizeof(u64) - 1;
-+	for (; addr >= meta->addr + meta->size; addr--) {
-+		if (unlikely(!check_canary_byte((u8 *)addr)))
- 			break;
- 	}
- }
-@@ -434,7 +467,7 @@ static void *kfence_guarded_alloc(struct kmem_cache *cache, size_t size, gfp_t g
- #endif
- 
- 	/* Memory initialization. */
--	for_each_canary(meta, set_canary_byte);
-+	set_canary(meta);
- 
- 	/*
- 	 * We check slab_want_init_on_alloc() ourselves, rather than letting
-@@ -495,7 +528,7 @@ static void kfence_guarded_free(void *addr, struct kfence_metadata *meta, bool z
- 	alloc_covered_add(meta->alloc_stack_hash, -1);
- 
- 	/* Check canary bytes for memory corruption. */
--	for_each_canary(meta, check_canary_byte);
-+	check_canary(meta);
- 
- 	/*
- 	 * Clear memory if init-on-free is set. While we protect the page, the
-@@ -751,7 +784,7 @@ static void kfence_check_all_canary(void)
- 		struct kfence_metadata *meta = &kfence_metadata[i];
- 
- 		if (meta->state == KFENCE_OBJECT_ALLOCATED)
--			for_each_canary(meta, check_canary_byte);
-+			check_canary(meta);
- 	}
- }
- 
-diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
-index 600f2e2431d6..2aafc46a4aaf 100644
---- a/mm/kfence/kfence.h
-+++ b/mm/kfence/kfence.h
-@@ -21,7 +21,15 @@
-  * lower 3 bits of the address, to detect memory corruptions with higher
-  * probability, where similar constants are used.
-  */
--#define KFENCE_CANARY_PATTERN(addr) ((u8)0xaa ^ (u8)((unsigned long)(addr) & 0x7))
-+#define KFENCE_CANARY_PATTERN_U8(addr) ((u8)0xaa ^ (u8)((unsigned long)(addr) & 0x7))
-+
-+/*
-+ * Define a continuous 8-byte canary starting from a multiple of 8. The canary
-+ * of each byte is only related to the lowest three bits of its address, so the
-+ * canary of every 8 bytes is the same. 64-bit memory can be filled and checked
-+ * at a time instead of byte by byte to improve performance.
-+ */
-+#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^ (u64)(0x0706050403020100))
- 
- /* Maximum stack depth for reports. */
- #define KFENCE_STACK_DEPTH 64
-diff --git a/mm/kfence/report.c b/mm/kfence/report.c
-index 60205f1257ef..197430a5be4a 100644
---- a/mm/kfence/report.c
-+++ b/mm/kfence/report.c
-@@ -168,7 +168,7 @@ static void print_diff_canary(unsigned long address, size_t bytes_to_show,
- 
- 	pr_cont("[");
- 	for (cur = (const u8 *)address; cur < end; cur++) {
--		if (*cur == KFENCE_CANARY_PATTERN(cur))
-+		if (*cur == KFENCE_CANARY_PATTERN_U8(cur))
- 			pr_cont(" .");
- 		else if (no_hash_pointers)
- 			pr_cont(" 0x%02x", *cur);
 -- 
-2.20.1
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
 
