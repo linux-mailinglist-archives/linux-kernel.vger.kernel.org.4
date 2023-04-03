@@ -2,644 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDB16D4EDB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BD96D4EDD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232979AbjDCRXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
+        id S233060AbjDCRYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjDCRXp (ORCPT
+        with ESMTP id S230044AbjDCRYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:23:45 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2868E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:23:43 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3e392e10cc4so1226551cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:23:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680542622;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LWXh2Y7TR4i0kK2b3BIDbsK7NSRKBd9ezRImoQdMgo8=;
-        b=Ifw3fZP1SKO5ALwaLp8RWF4fO34QCaOd0iO/DhCIS3MfyLWXZiAGSItD6P/h4zHP/0
-         VXjnmHa6BK9D8k+N9LI/J7U5B4P8vjSp6hq4pWkr1VByfNB57OvzImGO/5r5lYorP26Z
-         sxM0lcV6tisaXQJbIctHBVkasU2GAg6RWDPIl1AC+NmOaAZ6Nn3evk17eOvUssEbNq9j
-         lS0dhOt3bskbrMFySL+sCZ4eWDk1giNM8FMk7i0ST4Eyq5fUpbdz0Jj/q65FeYRv2n4v
-         RFkRlWdgUhSIZ7S/woXX/Q9oyPcv3V9SFw1nf970ABCbtK83Lbsy/k2BHp4qn8Deo6oR
-         2EVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680542622;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LWXh2Y7TR4i0kK2b3BIDbsK7NSRKBd9ezRImoQdMgo8=;
-        b=comxOiuXeW795S4YQa3OwLKDgVD8Kmwy/sd347Mb7TvPVPSj59/Q/dfeiYWvkKO5bC
-         gpsTXWKxTPyUlsIZ8PyKCkxt6HIO3QJTPz+o6QqmC6a8vYIUMjKXvgDTkbu74V2aWitF
-         Cyl+UpB37fPuLkYJgFg5rACo7qAQBwKTlmqkvrPhamjplh2AGUnfwtM/RA6emZqDxDsQ
-         G4RQME/b/tmyBpffCjGRG4FjAZKMClQwv3iYM9rufICA24RHD6GXxfLq4qmC2EiaoPIM
-         DGmKwanUds5UfAyPPSbfeEV/4PkUSwN8GM+JkDyQa+47hTKDMp/7LkfJbsGzxsLsLI0S
-         2FSQ==
-X-Gm-Message-State: AAQBX9fOyG1M4F8yOZuWenDETkI0h6iqLrtYrr7jIxdQ/W5UiKxYtnqo
-        QZbw61vxTJpyCqdwd2w8+cpe5oQjS0qS/ispzZUIuA==
-X-Google-Smtp-Source: AKy350a8QcGFOeP2ELfV5GH2gi8jD9tNVzi15WDxkuu7qyfc/hcnhZbT0BsSpK63Nu+kk1DvQR7gnQC8JboeY1/vDGY=
-X-Received: by 2002:a05:622a:134e:b0:3b9:f696:c762 with SMTP id
- w14-20020a05622a134e00b003b9f696c762mr694617qtk.19.1680542622280; Mon, 03 Apr
- 2023 10:23:42 -0700 (PDT)
+        Mon, 3 Apr 2023 13:24:09 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2075.outbound.protection.outlook.com [40.107.223.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D327D122;
+        Mon,  3 Apr 2023 10:24:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RIsbEc6tUxKulOu58PI4WRdnVI52gTNUfylh0q9F7J7pi4/mEZ3reyJRAh6Fl23CgnaG+uHdqHv8f5N8lS1Y+eunyGyzwsRtuBdthujNCHc6im7ynurD/lS4ZAmy3QXwYJKmYFW1UGzt5gZmAJa/cjnI+JJarll92mlF+2cjZQbguWvGnGEDLbpuXpjrN6DiWfoe4bWsnXV7XHU3RJPWK7MBAuTd78Qb3As8c1ZyNm7ArmWxE6z9X89I9Eftwi6uRQ5CTGgLZAJGVuOKxqE0rmTN6PFUrVNeQ2JVmb1w7czQkGnjIwtG3dRoUrM8P5EUvq7tluuW1zREeLTUkqOmmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EaJMQkST40PG3e9uZbFJZOovoZA1Rz5biuVydXsEjus=;
+ b=nsbIjmE/VtRzydDsAPx6n2++jYu9dWETZk20qr1VJlg0wsudkZ/pH4aYJHnmOV4XhKMKz/Be3xYvxSsFvzGFMmkl30c3Y83xiYsLEPvY5qrkBxHiH0KPalquJSQ8hu45WbehncwiaTMsa+FWWKguBgTzexdwlnEuX0bU43pbIPZoPnKk6uelfadM+qQmrzOnWyv7mb0ZCFTlSt3jMJ3bC7i9vY6hf9NTLjz4VTePUw4aAIJOSKbacG0Dx8E/7ww7RPAn8/qqOe47lsSQw/EONpVj9G80PRw5rjlL7wx7Pa+y20kRkhwuFOfMfzKD+bFBQlqJaenbnpf78rvK5aVlqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EaJMQkST40PG3e9uZbFJZOovoZA1Rz5biuVydXsEjus=;
+ b=g1HECMKBxWEdfP74GTv6KnjSuIJORIlk3ka2X2Ks4cpB/CNs3DlIqhJFTy/FpETzPboegZyMA7HpzuG55YNUcsUD3sdvo3d3gYRyfYJq8fbH721fXam2UHbaRhA12NY1e3m9quj7c8yA5APItcR7YrIkgK0Yfmk5qXpse5IWypY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by SJ1PR12MB6100.namprd12.prod.outlook.com (2603:10b6:a03:45d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.26; Mon, 3 Apr
+ 2023 17:24:03 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::e62f:89e5:df27:9e45]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::e62f:89e5:df27:9e45%6]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
+ 17:24:03 +0000
+Message-ID: <8fe661ef-fa03-5ee9-de57-eec6a5bb7a28@amd.com>
+Date:   Mon, 3 Apr 2023 13:24:01 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Cc:     yazen.ghannam@amd.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC/mce_amd: Update SMCA bank error descriptions
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>, Avadhut Naik <avadnaik@amd.com>
+References: <20230329192200.110813-1-avadnaik@amd.com>
+ <20230331154412.GBZCb/zO/BGR3a/bVT@fat_crate.local>
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+In-Reply-To: <20230331154412.GBZCb/zO/BGR3a/bVT@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BN0PR04CA0018.namprd04.prod.outlook.com
+ (2603:10b6:408:ee::23) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 MIME-Version: 1.0
-References: <20230331202949.810326-1-namhyung@kernel.org> <20230331202949.810326-6-namhyung@kernel.org>
-In-Reply-To: <20230331202949.810326-6-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 3 Apr 2023 10:23:27 -0700
-Message-ID: <CAP-5=fX1pktRMBrbzc+xFPOG8VsH9+zthck61aRstavvjn0YPw@mail.gmail.com>
-Subject: Re: [PATCH 5/9] perf pmu: Use relative path for sysfs scan
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|SJ1PR12MB6100:EE_
+X-MS-Office365-Filtering-Correlation-Id: 26327171-0a94-435c-867f-08db3468388a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NN84yXVsWfwrM9ecge3QeHk9vXCe/T4HwLEM+duY1RnMXtrKFePFxs8bvR2uRUK/l56KM/PJpVZf7i9fuYCfrLgb8LNvo2XV+dnWafBnR2azaeQBojjSni1HzugaczEpAJEhQflXPBvV5U6pZWkC/+m2u9JHfdwsH0+Q+RSc3Gjp/dHx2KHq2KPG23HYuJuCWpgcFOFWzE1a5hn4DoCGEo+VvzFFLU706LlTfL0HpRqXEU2wjElwf2rtTMP48LQzI1/VdngrVRNeQ2tKNqacSauHfzBCPo08FmfpI42J5zNhRo4QBWy8kA5y2RZn/aCNOu7pWhCq8OdKVZZE4YYGHgGArVgM2QfTG9y2dqDAoI5loxI6zIzYxQHRONuKvFj9V22g5AOL/PeauJzgsARMyoRaKCqEAUqln2iM1jUy2tHbKRdsbOziiA/6D6cVP5bBOdeZctXERaYJmGvDNOkrrJxWy5ZiKpurxo1DLoUxiG5c/+U2gKp/Qh5FvMmm6rn6LqwzxRIHa8dVicwz9o3Dt3ugXviTt1S7bsLbvyiyzwMy9YKaFdL1hTdve8hSe0KkqKkJ08FakzqRL1+Q2YLaj7RmUp2vXXVTz7Q69tNXmkLyYMae6YcjoSyxIO2NJ3d4pAcFICXGpWGnNewh6U8I0w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(366004)(136003)(376002)(451199021)(86362001)(66556008)(66946007)(53546011)(6506007)(66476007)(26005)(6512007)(8676002)(4326008)(186003)(36756003)(6486002)(6636002)(316002)(110136005)(478600001)(8936002)(2616005)(5660300002)(38100700002)(41300700001)(15650500001)(2906002)(31686004)(83380400001)(44832011)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OWlUTnhSMWllcHVxTmhBTUZjYmZGSC9aaDgxdFFJaFN0VlJvdnc0MmhRM25U?=
+ =?utf-8?B?U0cxMjZ5Z3hnUlZza25Jb3JsTFNGUHZpNFpGUmJ1SWxXSCs3R3lmL0ZtMWZ0?=
+ =?utf-8?B?UjhYdXJEK1RkUDRBZGhkTEpUUDBubElqTVlBSHlEZEcwYytPL0YzcVJidDFn?=
+ =?utf-8?B?Q043c3Fud2xyOUFUdTNadGxLQUZLZVZEY09YYS83U0psYlREUU1TOFRKdlZ3?=
+ =?utf-8?B?V0thYVhGNGRxamp4eTgxMnZHMGRxcUg3M1JLWXYxV2FJSTVYNkxaL0k2UHg5?=
+ =?utf-8?B?ZncvMG1aT2RvMnJhWXNRZkl5QUFSdTJzaGJwVVpHNzVkYzlqM0JJcWRzdHBY?=
+ =?utf-8?B?SGRFcjRjOFh1UE1Pekhhc2dFenNQRVQ3NllHSzU1cFFHS2ZVMWdFd3ZXRDNQ?=
+ =?utf-8?B?WnVNWEZiejJBN1E2dG95WXNCTWdtQmxJdHAyQTgwWWNFOFJhUG1ITTQxVjlQ?=
+ =?utf-8?B?L3hKMkNESG83Z2Y1Y1Z1REFPcUdNc2pOMU5TSGZPUFdDZDJRYlRzdnRHMG9Z?=
+ =?utf-8?B?ekVPSGZTWEUvVFNQMS81WXFHemtNWXBLWUxQblM0SUNweEpxa1AwbVBpWFdB?=
+ =?utf-8?B?RzdVWkdjMXoydk1ncEtLejVjcFZnYnNrWW95QUxDUzVqRzFvVkwyNzRjR211?=
+ =?utf-8?B?TGczNGszMjdiUWJvVVd4b1Z0YlJQQWxWbzNwQm11OHR5eG9jYndNR1Y3R1B6?=
+ =?utf-8?B?eFBFaG1Ua0xleC9hczlVQldoaWdOMEh0QmxVeTgzd1JnUVZYSlIzS2gzNTVH?=
+ =?utf-8?B?MkJlbXMzVW05aW53NGdYeEFWaFBhWHNNRldlRVkwYWFWMzhvZ1VTVkFVaVBU?=
+ =?utf-8?B?a0RWMXZmT3owS1dTSXVnUVdONUR4cTE0K1lrY1pCUWhnVklxUHRRYWJHUDQy?=
+ =?utf-8?B?d0FPU09zZUQzMC83MFpTaGFxaHVtdmZXT1ZrSzcwZ0trbmxsV2tDRWhaK2sr?=
+ =?utf-8?B?Ny92V0pneDJKRjhZQk5vNG10Z1I2dm8xNHEvczdzbjF4b1dzTUlLZ25vNFk2?=
+ =?utf-8?B?UWZpRWc1TzF0ZDB0UlFvMFI1MWd0MzBRRDR0Ukx4UEFFUHJDckhCNC9yL1V5?=
+ =?utf-8?B?b2oxemV5OVFiZFk4TUtFbzdCU1VUUjdKODhSaVAyd0VPQXR3c0kxVUM3SzFG?=
+ =?utf-8?B?TUFycVpHdjRnektTTjNrQjNCeWYwREdhbm56UE5MQmxxaHRKUkFGQmZTOXIv?=
+ =?utf-8?B?UStvRUFwanVsOGlyZ1hPck1IdkhBRm91WlNuUm51T2lTVzFNMkFJMGh4S1pO?=
+ =?utf-8?B?TUJuc2YxYzlNdTBNekgyb0NoKzRhTkh6bmVJSXNTNTNlU2QvTVdEc0hFZm9F?=
+ =?utf-8?B?NkkzaXRuR0NhenZONHovZ05ON0tKWTgvb3dTUlZQRkhBSFRHbTJLeTMyc25J?=
+ =?utf-8?B?ajFzVUg1SFVPL1ZvaklLaDVua1ZFV1BZRFNaU3lPMzc0RzcweWhjZlFGa0VG?=
+ =?utf-8?B?SjJGODBYVTJnTE9RVzllbmpWNFBmU3U5VWwyTUNTTFgyZHZpa0N5MDFzVHc2?=
+ =?utf-8?B?N2NUMllqcml4NTgveitweGRwSjVJa3AyeDdBcmxtR2pTVWV0VGladDhnOGR3?=
+ =?utf-8?B?Z0lmdit4TFdxaTZjYTBvWGhRcU04MGtldnFRU0h2ZEZUZDFTOURyL1FxSHJi?=
+ =?utf-8?B?aHh1eG9qMUtiUmJLOUMxRml6UzdJdHBNd1NWU2VYdmxCcXMyNXUvM3p2M01k?=
+ =?utf-8?B?bnJESzNkMXNzdHg4aDJMK1FJKzlQVzFqVkhqcm9Yc2dORDJReTBWWFZtRXR3?=
+ =?utf-8?B?MnJLdDhOVGN4dW91alo4UC9mTEJIbk02bDlmbW9BaVArMFZoS05MREVxSUdC?=
+ =?utf-8?B?M2FJcERoa1NXSE1FdHF0SVFhTi9ySktwZzJLUEV5Wnpkd0szMGloVDFBaWJ0?=
+ =?utf-8?B?S2tETG9vTGVtNmlMeSs5MlZZbW5GVEZPRjlXRVk1VEZwRHF0NDdaM1JqRGc3?=
+ =?utf-8?B?Qkp3QS9lbzNGNzArV3FwWjVYMndHelA4bVNqTGdVUVZCYVZYYy85bXgvU0JF?=
+ =?utf-8?B?dWdQeVdSL3dkYlN6NG1YaXUyYXFlbGh2QlY1RkxhbkJzREFDeEJwMmFKWndr?=
+ =?utf-8?B?a2VOZkFHdXFYS3l1aEpkNEc5ODJpc0hseDZ1NlNaZGJrMi9jY0x0OTA5Qi9K?=
+ =?utf-8?Q?FfmYxlLZFGtZ+T/k+Rh83i/aI?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26327171-0a94-435c-867f-08db3468388a
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 17:24:03.4426
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uTxMcZBJE74oTbE+5yCPslqSvZrcZeaGpS+TGI00HIAybv5E/agEIESsbNuYlnZDMRWT6sKwe8g8h2+UECwKLw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6100
+X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 1:30=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> The PMU information is in the kernel sysfs so it needs to scan the
-> directory to get the whole information like event aliases, formats
-> and so on.  During the traversal, it opens a lot of files and
-> directories like below:
->
->   dir =3D opendir("/sys/bus/event_source/devices");
->   while (dentry =3D readdir(dir)) {
->     char buf[PATH_MAX];
->
->     snprintf(buf, sizeof(buf), "%s/%s",
->              "/sys/bus/event_source/devices", dentry->d_name);
->     fd =3D open(buf, O_RDONLY);
->     ...
->   }
->
-> But this is not good since it needs to copy the string to build the
-> absolute pathname, and it makes redundant pathname walk (from the /sys)
-> unnecessarily.  We can use openat(2) to open the file in the given
-> directory.  While it's not a problem ususally, it can be a problem
-> when the kernel has contentions on the sysfs.
->
-> Add a couple of new helper to return the file descriptor of PMU
-> directory so that it can use it with relative paths.
->
->  * perf_pmu__event_source_devices_fd()
->    - returns a fd for the PMU root ("/sys/bus/event_source/devices")
->
->  * perf_pmu__pathname_fd()
->    - returns a fd for "<pmu>/<file>" under the PMU root
->
-> Now the above code can be converted something like below:
->
->   dirfd =3D perf_pmu__event_source_devices_fd();
->   dir =3D fdopendir(dirfd);
->   while (dentry =3D readdir(dir)) {
->     fd =3D openat(dirfd, dentry->d_name, O_RDONLY);
->     ...
->   }
->
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/tests/pmu.c |   9 ++-
->  tools/perf/util/pmu.c  | 161 +++++++++++++++++++++++++----------------
->  tools/perf/util/pmu.h  |   4 +-
->  3 files changed, 111 insertions(+), 63 deletions(-)
->
-> diff --git a/tools/perf/tests/pmu.c b/tools/perf/tests/pmu.c
-> index 8507bd615e97..3cf25f883df7 100644
-> --- a/tools/perf/tests/pmu.c
-> +++ b/tools/perf/tests/pmu.c
-> @@ -3,6 +3,7 @@
->  #include "pmu.h"
->  #include "tests.h"
->  #include <errno.h>
-> +#include <fcntl.h>
->  #include <stdio.h>
->  #include <linux/kernel.h>
->  #include <linux/limits.h>
-> @@ -149,10 +150,16 @@ static int test__pmu(struct test_suite *test __mayb=
-e_unused, int subtest __maybe
->
->         do {
->                 struct perf_event_attr attr;
-> +               int fd;
->
->                 memset(&attr, 0, sizeof(attr));
->
-> -               ret =3D perf_pmu__format_parse(format, &formats);
-> +               fd =3D open(format, O_DIRECTORY);
-> +               if (fd < 0) {
-> +                       ret =3D fd;
-> +                       break;
-> +               }
-> +               ret =3D perf_pmu__format_parse(fd, &formats);
->                 if (ret)
->                         break;
->
-> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> index b112606f36ec..9fc6b8b5732b 100644
-> --- a/tools/perf/util/pmu.c
-> +++ b/tools/perf/util/pmu.c
-> @@ -62,38 +62,38 @@ extern FILE *perf_pmu_in;
->
->  static bool hybrid_scanned;
->
-> +static struct perf_pmu *perf_pmu__find2(int dirfd, const char *name);
-> +
->  /*
->   * Parse & process all the sysfs attributes located under
->   * the directory specified in 'dir' parameter.
->   */
-> -int perf_pmu__format_parse(char *dir, struct list_head *head)
-> +int perf_pmu__format_parse(int dirfd, struct list_head *head)
->  {
->         struct dirent *evt_ent;
->         DIR *format_dir;
->         int ret =3D 0;
->
-> -       format_dir =3D opendir(dir);
-> +       format_dir =3D fdopendir(dirfd);
->         if (!format_dir)
->                 return -EINVAL;
->
->         while (!ret && (evt_ent =3D readdir(format_dir))) {
-> -               char path[PATH_MAX];
->                 char *name =3D evt_ent->d_name;
-> -               FILE *file;
-> +               int fd;
->
->                 if (!strcmp(name, ".") || !strcmp(name, ".."))
->                         continue;
->
-> -               snprintf(path, PATH_MAX, "%s/%s", dir, name);
->
->                 ret =3D -EINVAL;
-> -               file =3D fopen(path, "r");
-> -               if (!file)
-> +               fd =3D openat(dirfd, name, O_RDONLY);
-> +               if (fd < 0)
->                         break;
->
-> -               perf_pmu_in =3D file;
-> +               perf_pmu_in =3D fdopen(fd, "r");
->                 ret =3D perf_pmu_parse(head, name);
-> -               fclose(file);
-> +               fclose(perf_pmu_in);
+On 3/31/23 11:44, Borislav Petkov wrote:
+> On Wed, Mar 29, 2023 at 07:22:00PM +0000, Avadhut Naik wrote:
+>> diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
+>> index cc5c63feb26a..869dcca5e2f4 100644
+>> --- a/drivers/edac/mce_amd.c
+>> +++ b/drivers/edac/mce_amd.c
+>> @@ -192,24 +192,24 @@ static const char * const smca_ls2_mce_desc[] = {
+>>  	"A SystemReadDataError error was reported on read data returned from L2 for an SCB store",
+>>  	"A SystemReadDataError error was reported on read data returned from L2 for a WCB store",
+>>  	"A hardware assertion error was reported",
+>> -	"A parity error was detected in an STLF, SCB EMEM entry or SRB store data by any access",
+>> +	"A parity error was detected in an STLF, SCB EMEM entry, store data mask or SRB store data by any access",
+> 
+> I'm assuming that "by any access" is not needed because
+> amd_decode_err_code() would say "GEN"-eric for the transaction type
+> which is the same thing, basically.
+> 
 
-Eek, I hadn't realized that the pmu parser wasn't reentrant. I sent out:
-https://lore.kernel.org/lkml/20230403172031.1759781-1-irogers@google.com/
-to fix this.
+That's fair.
+
+Two (likely weak) arguments for this:
+1) Match the wording as closely as possible to the documentation.
+2) Folks are likely only looking at the Extended Error Code.
+
+If we deviate to far from the docs, then people will ask us why
+Linux says "X" when the docs say "Y". :/
+
+>>  static const char * const smca_if_mce_desc[] = {
+>> -	"Op Cache Microtag Probe Port Parity Error",
+>> +	"Op Cache Microtag Parity Error",
+>>  	"IC Microtag or Full Tag Multi-hit Error",
+>>  	"IC Full Tag Parity Error",
+>>  	"IC Data Array Parity Error",
+>> -	"Decoupling Queue PhysAddr Parity Error",
+>> +	"PRQ Parity Error",
+>>  	"L0 ITLB Parity Error",
+>> -	"L1 ITLB Parity Error",
+>> -	"L2 ITLB Parity Error",
+>> +	"L1-TLB Parity Error",
+>> +	"L2-TLB Parity Error",
+>>  	"BPQ Thread 0 Snoop Parity Error",
+>>  	"BPQ Thread 1 Snoop Parity Error",
+>> -	"L1 BTB Multi-Match Error",
+>> -	"L2 BTB Multi-Match Error",
+>> +	"BP L1-BTB Multi-Hit Error",
+>> +	"BP L2-BTB Multi-Hit Error",
+>>  	"L2 Cache Response Poison Error",
+>> -	"System Read Data Error",
+>> +	"L2 Cache Error Response",
+> 
+> Hmm, so I don't think we can do that - I'll bet on older Zens, this was
+> "System Read Data Error" and on newer it is "L2 Cache Error Response"
+> which are not the same thing.
+> 
+> Right?
+> 
+> If so, we can't really "update" descriptions like that. If we had to be
+> precise, we will have to differentiate by family here. Not sure if we
+> care enough but still...
+> 
+
+You're right. And that's why we need a new HWID/McaType if the errors codes
+change. That's the reason for the other "decoding quirks" set.
+
+In this case, the error is likely the same event. But the description is made
+more explicit. Otherwise, we'll need another quirk.
 
 Thanks,
-Ian
+Yazen
 
->         }
->
->         closedir(format_dir);
-> @@ -105,17 +105,16 @@ int perf_pmu__format_parse(char *dir, struct list_h=
-ead *head)
->   * located at:
->   * /sys/bus/event_source/devices/<dev>/format as sysfs group attributes.
->   */
-> -static int pmu_format(const char *name, struct list_head *format)
-> +static int pmu_format(int dirfd, const char *name, struct list_head *for=
-mat)
->  {
-> -       char path[PATH_MAX];
-> -
-> -       if (!perf_pmu__pathname_scnprintf(path, sizeof(path), name, "form=
-at"))
-> -               return -1;
-> +       int fd;
->
-> -       if (!file_available(path))
-> +       fd =3D perf_pmu__pathname_fd(dirfd, name, "format", O_DIRECTORY);
-> +       if (fd < 0)
->                 return 0;
->
-> -       if (perf_pmu__format_parse(path, format))
-> +       /* it'll close the fd */
-> +       if (perf_pmu__format_parse(fd, format))
->                 return -1;
->
->         return 0;
-> @@ -158,7 +157,7 @@ int perf_pmu__convert_scale(const char *scale, char *=
-*end, double *sval)
->         return ret;
->  }
->
-> -static int perf_pmu__parse_scale(struct perf_pmu_alias *alias, char *dir=
-, char *name)
-> +static int perf_pmu__parse_scale(struct perf_pmu_alias *alias, int dirfd=
-, char *name)
->  {
->         struct stat st;
->         ssize_t sret;
-> @@ -166,9 +165,9 @@ static int perf_pmu__parse_scale(struct perf_pmu_alia=
-s *alias, char *dir, char *
->         int fd, ret =3D -1;
->         char path[PATH_MAX];
->
-> -       scnprintf(path, PATH_MAX, "%s/%s.scale", dir, name);
-> +       scnprintf(path, PATH_MAX, "%s.scale", name);
->
-> -       fd =3D open(path, O_RDONLY);
-> +       fd =3D openat(dirfd, path, O_RDONLY);
->         if (fd =3D=3D -1)
->                 return -1;
->
-> @@ -190,15 +189,15 @@ static int perf_pmu__parse_scale(struct perf_pmu_al=
-ias *alias, char *dir, char *
->         return ret;
->  }
->
-> -static int perf_pmu__parse_unit(struct perf_pmu_alias *alias, char *dir,=
- char *name)
-> +static int perf_pmu__parse_unit(struct perf_pmu_alias *alias, int dirfd,=
- char *name)
->  {
->         char path[PATH_MAX];
->         ssize_t sret;
->         int fd;
->
-> -       scnprintf(path, PATH_MAX, "%s/%s.unit", dir, name);
-> +       scnprintf(path, PATH_MAX, "%s.unit", name);
->
-> -       fd =3D open(path, O_RDONLY);
-> +       fd =3D openat(dirfd, path, O_RDONLY);
->         if (fd =3D=3D -1)
->                 return -1;
->
-> @@ -221,14 +220,14 @@ static int perf_pmu__parse_unit(struct perf_pmu_ali=
-as *alias, char *dir, char *n
->  }
->
->  static int
-> -perf_pmu__parse_per_pkg(struct perf_pmu_alias *alias, char *dir, char *n=
-ame)
-> +perf_pmu__parse_per_pkg(struct perf_pmu_alias *alias, int dirfd, char *n=
-ame)
->  {
->         char path[PATH_MAX];
->         int fd;
->
-> -       scnprintf(path, PATH_MAX, "%s/%s.per-pkg", dir, name);
-> +       scnprintf(path, PATH_MAX, "%s.per-pkg", name);
->
-> -       fd =3D open(path, O_RDONLY);
-> +       fd =3D openat(dirfd, path, O_RDONLY);
->         if (fd =3D=3D -1)
->                 return -1;
->
-> @@ -239,14 +238,14 @@ perf_pmu__parse_per_pkg(struct perf_pmu_alias *alia=
-s, char *dir, char *name)
->  }
->
->  static int perf_pmu__parse_snapshot(struct perf_pmu_alias *alias,
-> -                                   char *dir, char *name)
-> +                                   int dirfd, char *name)
->  {
->         char path[PATH_MAX];
->         int fd;
->
-> -       scnprintf(path, PATH_MAX, "%s/%s.snapshot", dir, name);
-> +       scnprintf(path, PATH_MAX, "%s.snapshot", name);
->
-> -       fd =3D open(path, O_RDONLY);
-> +       fd =3D openat(dirfd, path, O_RDONLY);
->         if (fd =3D=3D -1)
->                 return -1;
->
-> @@ -332,7 +331,7 @@ static bool perf_pmu_merge_alias(struct perf_pmu_alia=
-s *newalias,
->         return false;
->  }
->
-> -static int __perf_pmu__new_alias(struct list_head *list, char *dir, char=
- *name,
-> +static int __perf_pmu__new_alias(struct list_head *list, int dirfd, char=
- *name,
->                                  char *desc, char *val, const struct pmu_=
-event *pe)
->  {
->         struct parse_events_term *term;
-> @@ -391,14 +390,14 @@ static int __perf_pmu__new_alias(struct list_head *=
-list, char *dir, char *name,
->         }
->
->         alias->name =3D strdup(name);
-> -       if (dir) {
-> +       if (dirfd >=3D 0) {
->                 /*
->                  * load unit name and scale if available
->                  */
-> -               perf_pmu__parse_unit(alias, dir, name);
-> -               perf_pmu__parse_scale(alias, dir, name);
-> -               perf_pmu__parse_per_pkg(alias, dir, name);
-> -               perf_pmu__parse_snapshot(alias, dir, name);
-> +               perf_pmu__parse_unit(alias, dirfd, name);
-> +               perf_pmu__parse_scale(alias, dirfd, name);
-> +               perf_pmu__parse_per_pkg(alias, dirfd, name);
-> +               perf_pmu__parse_snapshot(alias, dirfd, name);
->         }
->
->         alias->desc =3D desc ? strdup(desc) : NULL;
-> @@ -419,7 +418,7 @@ static int __perf_pmu__new_alias(struct list_head *li=
-st, char *dir, char *name,
->         return 0;
->  }
->
-> -static int perf_pmu__new_alias(struct list_head *list, char *dir, char *=
-name, FILE *file)
-> +static int perf_pmu__new_alias(struct list_head *list, int dirfd, char *=
-name, FILE *file)
->  {
->         char buf[256];
->         int ret;
-> @@ -433,7 +432,7 @@ static int perf_pmu__new_alias(struct list_head *list=
-, char *dir, char *name, FI
->         /* Remove trailing newline from sysfs file */
->         strim(buf);
->
-> -       return __perf_pmu__new_alias(list, dir, name, NULL, buf, NULL);
-> +       return __perf_pmu__new_alias(list, dirfd, name, NULL, buf, NULL);
->  }
->
->  static inline bool pmu_alias_info_file(char *name)
-> @@ -457,17 +456,17 @@ static inline bool pmu_alias_info_file(char *name)
->   * Process all the sysfs attributes located under the directory
->   * specified in 'dir' parameter.
->   */
-> -static int pmu_aliases_parse(char *dir, struct list_head *head)
-> +static int pmu_aliases_parse(int dirfd, struct list_head *head)
->  {
->         struct dirent *evt_ent;
->         DIR *event_dir;
-> +       int fd;
->
-> -       event_dir =3D opendir(dir);
-> +       event_dir =3D fdopendir(dirfd);
->         if (!event_dir)
->                 return -EINVAL;
->
->         while ((evt_ent =3D readdir(event_dir))) {
-> -               char path[PATH_MAX];
->                 char *name =3D evt_ent->d_name;
->                 FILE *file;
->
-> @@ -480,15 +479,14 @@ static int pmu_aliases_parse(char *dir, struct list=
-_head *head)
->                 if (pmu_alias_info_file(name))
->                         continue;
->
-> -               scnprintf(path, PATH_MAX, "%s/%s", dir, name);
-> -
-> -               file =3D fopen(path, "r");
-> +               fd =3D openat(dirfd, name, O_RDONLY);
-> +               file =3D fdopen(fd, "r");
->                 if (!file) {
-> -                       pr_debug("Cannot open %s\n", path);
-> +                       pr_debug("Cannot open %s\n", name);
->                         continue;
->                 }
->
-> -               if (perf_pmu__new_alias(head, dir, name, file) < 0)
-> +               if (perf_pmu__new_alias(head, dirfd, name, file) < 0)
->                         pr_debug("Cannot set up %s\n", name);
->                 fclose(file);
->         }
-> @@ -501,17 +499,16 @@ static int pmu_aliases_parse(char *dir, struct list=
-_head *head)
->   * Reading the pmu event aliases definition, which should be located at:
->   * /sys/bus/event_source/devices/<dev>/events as sysfs group attributes.
->   */
-> -static int pmu_aliases(const char *name, struct list_head *head)
-> +static int pmu_aliases(int dirfd, const char *name, struct list_head *he=
-ad)
->  {
-> -       char path[PATH_MAX];
-> -
-> -       if (!perf_pmu__pathname_scnprintf(path, sizeof(path), name, "even=
-ts"))
-> -               return -1;
-> +       int fd;
->
-> -       if (!file_available(path))
-> +       fd =3D perf_pmu__pathname_fd(dirfd, name, "events", O_DIRECTORY);
-> +       if (fd < 0)
->                 return 0;
->
-> -       if (pmu_aliases_parse(path, head))
-> +       /* it'll close the fd */
-> +       if (pmu_aliases_parse(fd, head))
->                 return -1;
->
->         return 0;
-> @@ -544,14 +541,15 @@ static int pmu_alias_terms(struct perf_pmu_alias *a=
-lias,
->  /* Add all pmus in sysfs to pmu list: */
->  static void pmu_read_sysfs(void)
->  {
-> -       char path[PATH_MAX];
-> +       int fd;
->         DIR *dir;
->         struct dirent *dent;
->
-> -       if (!perf_pmu__event_source_devices_scnprintf(path, sizeof(path))=
-)
-> +       fd =3D perf_pmu__event_source_devices_fd();
-> +       if (fd < 0)
->                 return;
->
-> -       dir =3D opendir(path);
-> +       dir =3D fdopendir(fd);
->         if (!dir)
->                 return;
->
-> @@ -559,7 +557,7 @@ static void pmu_read_sysfs(void)
->                 if (!strcmp(dent->d_name, ".") || !strcmp(dent->d_name, "=
-.."))
->                         continue;
->                 /* add to static LIST_HEAD(pmus): */
-> -               perf_pmu__find(dent->d_name);
-> +               perf_pmu__find2(fd, dent->d_name);
->         }
->
->         closedir(dir);
-> @@ -763,7 +761,7 @@ static int pmu_add_cpu_aliases_map_callback(const str=
-uct pmu_event *pe,
->
->  new_alias:
->         /* need type casts to override 'const' */
-> -       __perf_pmu__new_alias(data->head, NULL, (char *)pe->name, (char *=
-)pe->desc,
-> +       __perf_pmu__new_alias(data->head, -1, (char *)pe->name, (char *)p=
-e->desc,
->                               (char *)pe->event, pe);
->         return 0;
->  }
-> @@ -814,7 +812,7 @@ static int pmu_add_sys_aliases_iter_fn(const struct p=
-mu_event *pe,
->
->         if (!strcmp(pmu->id, pe->compat) &&
->             pmu_uncore_alias_match(pe->pmu, pmu->name)) {
-> -               __perf_pmu__new_alias(idata->head, NULL,
-> +               __perf_pmu__new_alias(idata->head, -1,
->                                       (char *)pe->name,
->                                       (char *)pe->desc,
->                                       (char *)pe->event,
-> @@ -863,7 +861,7 @@ static int pmu_max_precise(struct perf_pmu *pmu)
->         return max_precise;
->  }
->
-> -static struct perf_pmu *pmu_lookup(const char *lookup_name)
-> +static struct perf_pmu *pmu_lookup(int dirfd, const char *lookup_name)
->  {
->         struct perf_pmu *pmu;
->         LIST_HEAD(format);
-> @@ -884,13 +882,13 @@ static struct perf_pmu *pmu_lookup(const char *look=
-up_name)
->          * type value and format definitions. Load both right
->          * now.
->          */
-> -       if (pmu_format(name, &format))
-> +       if (pmu_format(dirfd, name, &format))
->                 return NULL;
->
->         /*
->          * Check the aliases first to avoid unnecessary work.
->          */
-> -       if (pmu_aliases(name, &aliases))
-> +       if (pmu_aliases(dirfd, name, &aliases))
->                 return NULL;
->
->         pmu =3D zalloc(sizeof(*pmu));
-> @@ -1024,6 +1022,27 @@ bool evsel__is_aux_event(const struct evsel *evsel=
-)
->  }
->
->  struct perf_pmu *perf_pmu__find(const char *name)
-> +{
-> +       struct perf_pmu *pmu;
-> +       int dirfd;
-> +
-> +       /*
-> +        * Once PMU is loaded it stays in the list,
-> +        * so we keep us from multiple reading/parsing
-> +        * the pmu format definitions.
-> +        */
-> +       pmu =3D pmu_find(name);
-> +       if (pmu)
-> +               return pmu;
-> +
-> +       dirfd =3D perf_pmu__event_source_devices_fd();
-> +       pmu =3D pmu_lookup(dirfd, name);
-> +       close(dirfd);
-> +
-> +       return pmu;
-> +}
-> +
-> +static struct perf_pmu *perf_pmu__find2(int dirfd, const char *name)
->  {
->         struct perf_pmu *pmu;
->
-> @@ -1036,7 +1055,7 @@ struct perf_pmu *perf_pmu__find(const char *name)
->         if (pmu)
->                 return pmu;
->
-> -       return pmu_lookup(name);
-> +       return pmu_lookup(dirfd, name);
->  }
->
->  static struct perf_pmu_format *
-> @@ -1938,6 +1957,18 @@ int perf_pmu__event_source_devices_scnprintf(char =
-*pathname, size_t size)
->         return scnprintf(pathname, size, "%s/bus/event_source/devices/", =
-sysfs);
->  }
->
-> +int perf_pmu__event_source_devices_fd(void)
-> +{
-> +       char path[PATH_MAX];
-> +       const char *sysfs =3D sysfs__mountpoint();
-> +
-> +       if (!sysfs)
-> +               return -1;
-> +
-> +       scnprintf(path, sizeof(path), "%s/bus/event_source/devices/", sys=
-fs);
-> +       return open(path, O_DIRECTORY);
-> +}
-> +
->  /*
->   * Fill 'buf' with the path to a file or folder in 'pmu_name' in
->   * sysfs. For example if pmu_name =3D "cs_etm" and 'filename' =3D "forma=
-t"
-> @@ -1957,6 +1988,14 @@ int perf_pmu__pathname_scnprintf(char *buf, size_t=
- size,
->         return scnprintf(buf, size, "%s%s/%s", base_path, pmu_name, filen=
-ame);
->  }
->
-> +int perf_pmu__pathname_fd(int dirfd, const char *pmu_name, const char *f=
-ilename, int flags)
-> +{
-> +       char path[PATH_MAX];
-> +
-> +       scnprintf(path, sizeof(path), "%s/%s", pmu_name, filename);
-> +       return openat(dirfd, path, flags);
-> +}
-> +
->  static void perf_pmu__delete(struct perf_pmu *pmu)
->  {
->         perf_pmu__del_formats(&pmu->format);
-> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-> index 72fd5de334c0..751c7016e7b6 100644
-> --- a/tools/perf/util/pmu.h
-> +++ b/tools/perf/util/pmu.h
-> @@ -211,7 +211,7 @@ void perf_pmu_error(struct list_head *list, char *nam=
-e, char const *msg);
->  int perf_pmu__new_format(struct list_head *list, char *name,
->                          int config, unsigned long *bits);
->  void perf_pmu__set_format(unsigned long *bits, long from, long to);
-> -int perf_pmu__format_parse(char *dir, struct list_head *head);
-> +int perf_pmu__format_parse(int dirfd, struct list_head *head);
->  void perf_pmu__del_formats(struct list_head *formats);
->
->  struct perf_pmu *perf_pmu__scan(struct perf_pmu *pmu);
-> @@ -257,6 +257,8 @@ double perf_pmu__cpu_slots_per_cycle(void);
->  int perf_pmu__event_source_devices_scnprintf(char *pathname, size_t size=
-);
->  int perf_pmu__pathname_scnprintf(char *buf, size_t size,
->                                  const char *pmu_name, const char *filena=
-me);
-> +int perf_pmu__event_source_devices_fd(void);
-> +int perf_pmu__pathname_fd(int dirfd, const char *pmu_name, const char *f=
-ilename, int flags);
->  FILE *perf_pmu__open_file(struct perf_pmu *pmu, const char *name);
->
->  void perf_pmu__destroy(void);
-> --
-> 2.40.0.348.gf938b09366-goog
->
