@@ -2,79 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534F86D4EE4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E776D4EEB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjDCR0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S233143AbjDCR0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbjDCR0P (ORCPT
+        with ESMTP id S233116AbjDCR0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:26:15 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162B2F9
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:26:14 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-17ab3a48158so31610834fac.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:26:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680542773;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qd9vNo8gmYRz8Z2M2O7ElfQfkdlOYiM1xlJu96lXJAs=;
-        b=oX8NBYb547UrM6ZoqymNw1EdsaXNXl8OfwHwQLHx77p13cWWg7QxpeSNTbBJQzK7zN
-         GORcfbDwlQG/J8YJ/Udb5aZvAsZpBIlCzL5NbfC07p+OldQfiBWgQjJ8edDqp5/JEwGN
-         Vlja5+ZGYN22+5FeGnB3oCd/Aa+fHf5RSjiYxKABYg15BXJODLZ9FdRg3q60s7f5oIII
-         1ZaKJSwt6SqvgmHP3cde1MNJOh0BUK71PwH06e/+YCLXpBZJKUOFuthBS6ylbRdFUA5Q
-         ivFv1wsc705bWl5a4i6xDG64+T17HQ0h/Kz7lLpBDTcuufNYWZl//dh86SgqnSl/k0nU
-         YYGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680542773;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qd9vNo8gmYRz8Z2M2O7ElfQfkdlOYiM1xlJu96lXJAs=;
-        b=qDtFPRTVIMFHgbj4/m7YvE8uAcFTxLkc7hqRoYVS+x5/KxHcWRgDNZWcuU8rLk7h9X
-         TD9yuIQo7/4s7hqru6fNp4DBVCAyfFrfMyKhjuMdMwpqcppqgTVkvz7JlSGw+jRx06VM
-         RZvDzvdSX7GHCGZuCDveDvoHxA+oInSTk/4rvjp4SDY+5l+cs0ee514XrYrdQtdDsX57
-         1opTsMG5TqSAXH8hG598KAeuvYvnIn6396y6haEfIzhGfbYqhUtBRAJksslqD9TcyB+C
-         ACpLY5KnCLblqGCceyluHyUb2e5Y3t9KwVYCAVK9zg0f3vpqThBEGCltn6wTvxkjiifH
-         w+Hw==
-X-Gm-Message-State: AAQBX9dMYSUMpWFizg3AdbXzSOiW26V63Hle+Uk58zM5+uhqC0bLcDlF
-        YD3YUFjHP+GqHxPC999GAmSqJSO4901gWDBW16oHVg==
-X-Google-Smtp-Source: AKy350ZvpCTIPloJRcOFoCrQ+HT6tXfd4a3GZ/Vtv3sZwoG6TcgOwSNV226vkhToXbFZYP2WlIqpnoj9PF1pwnBRTZc=
-X-Received: by 2002:a05:6870:96a2:b0:17e:d94f:90d9 with SMTP id
- o34-20020a05687096a200b0017ed94f90d9mr7605490oaq.3.1680542773212; Mon, 03 Apr
- 2023 10:26:13 -0700 (PDT)
+        Mon, 3 Apr 2023 13:26:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F72FF9;
+        Mon,  3 Apr 2023 10:26:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 767524B3;
+        Mon,  3 Apr 2023 10:27:22 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.29.158])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDE2A3F6C4;
+        Mon,  3 Apr 2023 10:26:35 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 18:26:27 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Florent Revest <revest@chromium.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
+        xukuohai@huaweicloud.com, lihuafei1@huawei.com
+Subject: Re: [PATCH v5 3/4] arm64: ftrace: Add direct call trampoline samples
+ support
+Message-ID: <ZCsMQ/6MI49st2oW@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230403113552.2857693-1-revest@chromium.org>
+ <20230403113552.2857693-4-revest@chromium.org>
 MIME-Version: 1.0
-References: <20230206172340.2639971-1-rananta@google.com> <20230206172340.2639971-3-rananta@google.com>
- <ZCTjirkCgBkT65eP@linux.dev>
-In-Reply-To: <ZCTjirkCgBkT65eP@linux.dev>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 3 Apr 2023 10:26:01 -0700
-Message-ID: <CAJHc60y1BLQC4c0qXCuqF7JfewBC_fG2xuH0Wj0AHJh9x3CK5g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] KVM: arm64: Add FEAT_TLBIRANGE support
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403113552.2857693-4-revest@chromium.org>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,109 +48,321 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+On Mon, Apr 03, 2023 at 01:35:51PM +0200, Florent Revest wrote:
+> The ftrace samples need per-architecture trampoline implementations
+> to save and restore argument registers around the calls to
+> my_direct_func* and to restore polluted registers (eg: x30).
+> 
+> These samples also include <asm/asm-offsets.h> which, on arm64, is not
+> necessary and redefines previously defined macros (resulting in
+> warnings) so these includes are guarded by !CONFIG_ARM64.
+> 
+> Signed-off-by: Florent Revest <revest@chromium.org>
 
-On Wed, Mar 29, 2023 at 6:19=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
-v> wrote:
->
-> On Mon, Feb 06, 2023 at 05:23:35PM +0000, Raghavendra Rao Ananta wrote:
-> > Define a generic function __kvm_tlb_flush_range() to
-> > invalidate the TLBs over a range of addresses. The
-> > implementation accepts 'op' as a generic TLBI operation.
-> > Upcoming patches will use this to implement IPA based
-> > TLB invalidations (ipas2e1is).
-> >
-> > If the system doesn't support FEAT_TLBIRANGE, the
-> > implementation falls back to flushing the pages one by one
-> > for the range supplied.
-> >
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > ---
-> >  arch/arm64/include/asm/kvm_asm.h | 18 ++++++++++++++++++
-> >  1 file changed, 18 insertions(+)
-> >
-> > diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/=
-kvm_asm.h
-> > index 43c3bc0f9544d..995ff048e8851 100644
-> > --- a/arch/arm64/include/asm/kvm_asm.h
-> > +++ b/arch/arm64/include/asm/kvm_asm.h
-> > @@ -221,6 +221,24 @@ DECLARE_KVM_NVHE_SYM(__per_cpu_end);
-> >  DECLARE_KVM_HYP_SYM(__bp_harden_hyp_vecs);
-> >  #define __bp_harden_hyp_vecs CHOOSE_HYP_SYM(__bp_harden_hyp_vecs)
-> >
-> > +#define __kvm_tlb_flush_range(op, mmu, start, end, level, tlb_level) d=
-o {    \
-> > +     unsigned long pages, stride;                                     =
-       \
-> > +                                                                      =
-       \
-> > +     stride =3D kvm_granule_size(level);                              =
-         \
->
-> Hmm... There's a rather subtle and annoying complication here that I
-> don't believe is handled.
->
-> Similar to what I said in the last spin of the series, there is no
-> guarantee that a range of IPAs is mapped at the exact same level
-> throughout. Dirty logging and memslots that aren't hugepage aligned
-> could lead to a mix of mapping levels being used within a range of the
-> IPA space.
->
-Unlike the comment on v1, the level/stride here is used to jump the
-addresses in case the system doesn't support TLBIRANGE. The TTL hint
-is 0.
-That being said, do you think we can always assume the least possible
-stride (say, 4k) and hardcode it?
-With respect to alignment, since the function is only called while
-breaking the table PTE,  do you think it'll still be a problem even if
-we go with the least granularity stride?
+Overall this looks pretty good!
 
-> > +     start =3D round_down(start, stride);                             =
-         \
-> > +     end =3D round_up(end, stride);                                   =
-         \
-> > +     pages =3D (end - start) >> PAGE_SHIFT;                           =
-         \
-> > +                                                                      =
-       \
-> > +     if ((!system_supports_tlb_range() &&                             =
-       \
-> > +          (end - start) >=3D (MAX_TLBI_OPS * stride)) ||              =
-         \
->
-> Doesn't checking for TLBIRANGE above eliminate the need to test against
-> MAX_TLBI_OPS?
->
-Derived from __flush_tlb_range(), I think the condition is used to
-just flush everything if the range is too large to iterate and flush
-when the system doesn't support TLBIRANGE. Probably to prevent
-soft-lockups?
+I spotted a few bugs below while testing, and I've suggested some fixups below.
 
-Thank you.
-Raghavendra
-> > +         pages >=3D MAX_TLBI_RANGE_PAGES) {                           =
-         \
-> > +             __kvm_tlb_flush_vmid(mmu);                               =
-       \
-> > +             break;                                                   =
-       \
-> > +     }                                                                =
-       \
-> > +                                                                      =
-       \
-> > +     __flush_tlb_range_op(op, start, pages, stride, 0, tlb_level, fals=
-e);    \
-> > +} while (0)
-> > +
-> >  extern void __kvm_flush_vm_context(void);
-> >  extern void __kvm_flush_cpu_context(struct kvm_s2_mmu *mmu);
-> >  extern void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu, phys_addr=
-_t ipa,
-> > --
-> > 2.39.1.519.gcb327c4b5f-goog
-> >
-> >
->
-> --
-> Thanks,
-> Oliver
+w.r.t. the asm-offsets include guards. I took a look at fixing arm64's
+asm-offsets.c to not be problematic, but it requires some invasive refactoring,
+so I'd like to clean that up as a separate series. I don't think that should
+block this series, and I think that the include guards are fine for now.
+
+> ---
+>  arch/arm64/Kconfig                          |  2 ++
+>  samples/ftrace/ftrace-direct-modify.c       | 34 ++++++++++++++++++
+>  samples/ftrace/ftrace-direct-multi-modify.c | 38 +++++++++++++++++++++
+>  samples/ftrace/ftrace-direct-multi.c        | 23 +++++++++++++
+>  samples/ftrace/ftrace-direct-too.c          | 26 ++++++++++++++
+>  samples/ftrace/ftrace-direct.c              | 24 +++++++++++++
+>  6 files changed, 147 insertions(+)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index f3503d0cc1b8..c2bf28099abd 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -194,6 +194,8 @@ config ARM64
+>  		    !CC_OPTIMIZE_FOR_SIZE)
+>  	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY \
+>  		if DYNAMIC_FTRACE_WITH_ARGS
+> +	select HAVE_SAMPLE_FTRACE_DIRECT
+> +	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+>  	select HAVE_EFFICIENT_UNALIGNED_ACCESS
+>  	select HAVE_FAST_GUP
+>  	select HAVE_FTRACE_MCOUNT_RECORD
+> diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
+> index 25fba66f61c0..98d1b7385f08 100644
+> --- a/samples/ftrace/ftrace-direct-modify.c
+> +++ b/samples/ftrace/ftrace-direct-modify.c
+> @@ -2,7 +2,9 @@
+>  #include <linux/module.h>
+>  #include <linux/kthread.h>
+>  #include <linux/ftrace.h>
+> +#ifndef CONFIG_ARM64
+>  #include <asm/asm-offsets.h>
+> +#endif
+>  
+>  extern void my_direct_func1(void);
+>  extern void my_direct_func2(void);
+> @@ -96,6 +98,38 @@ asm (
+>  
+>  #endif /* CONFIG_S390 */
+>  
+> +#ifdef CONFIG_ARM64
+> +
+> +asm (
+> +"	.pushsection    .text, \"ax\", @progbits\n"
+> +"	.type		my_tramp1, @function\n"
+> +"	.globl		my_tramp1\n"
+> +"   my_tramp1:"
+> +"	bti	c\n"
+> +"	sub	sp, sp, #16\n"
+> +"	stp	x9, x30, [sp]\n"
+> +"	bl	my_direct_func1\n"
+> +"	ldp	x30, x9, [sp]\n"
+> +"	add	sp, sp, #16\n"
+> +"	ret	x9\n"
+> +"	.size		my_tramp1, .-my_tramp1\n"
+> +
+> +"	.type		my_tramp2, @function\n"
+> +"	.globl		my_tramp2\n"
+> +"   my_tramp2:"
+> +"	bti	c\n"
+> +"	sub	sp, sp, #16\n"
+> +"	stp	x9, x30, [sp]\n"
+> +"	bl	my_direct_func2\n"
+> +"	ldp	x30, x9, [sp]\n"
+> +"	add	sp, sp, #16\n"
+> +"	ret	x9\n"
+> +"	.size		my_tramp2, .-my_tramp2\n"
+> +"	.popsection\n"
+> +);
+> +
+> +#endif /* CONFIG_ARM64 */
+
+These looks functionally correct, given they'll only be attached to schedule()
+and the direct funcs take no arguments, so there's no arguments to save/restore
+and nothing to shuffle.
+
+As an aside, I believe we'll need to rework the sequences when we add support
+for RELIABLE_STACKTRACE so that the unwinder can reliably acquire the address
+of the instrumented function and its caller, but I think for now it's
+preferable to keep this simple and I'm happy to make that a problem for future
+me.
+
+> diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
+> index f72623899602..e39108eb085d 100644
+> --- a/samples/ftrace/ftrace-direct-multi-modify.c
+> +++ b/samples/ftrace/ftrace-direct-multi-modify.c
+> @@ -2,7 +2,9 @@
+>  #include <linux/module.h>
+>  #include <linux/kthread.h>
+>  #include <linux/ftrace.h>
+> +#ifndef CONFIG_ARM64
+>  #include <asm/asm-offsets.h>
+> +#endif
+>  
+>  extern void my_direct_func1(unsigned long ip);
+>  extern void my_direct_func2(unsigned long ip);
+> @@ -103,6 +105,42 @@ asm (
+>  
+>  #endif /* CONFIG_S390 */
+>  
+> +#ifdef CONFIG_ARM64
+> +
+> +asm (
+> +"	.pushsection    .text, \"ax\", @progbits\n"
+> +"	.type		my_tramp1, @function\n"
+> +"	.globl		my_tramp1\n"
+> +"   my_tramp1:"
+> +"	bti	c\n"
+> +"	sub	sp, sp, #32\n"
+> +"	stp	x9, x30, [sp]\n"
+> +"	str	x0, [sp, #16]\n"
+> +"	bl	my_direct_func1\n"
+> +"	ldp	x30, x9, [sp]\n"
+> +"	ldr	x0, [sp, #16]\n"
+> +"	add	sp, sp, #32\n"
+> +"	ret	x9\n"
+> +"	.size		my_tramp1, .-my_tramp1\n"
+> +
+> +"	.type		my_tramp2, @function\n"
+> +"	.globl		my_tramp2\n"
+> +"   my_tramp2:"
+> +"	bti	c\n"
+> +"	sub	sp, sp, #32\n"
+> +"	stp	x9, x30, [sp]\n"
+> +"	str	x0, [sp, #16]\n"
+> +"	bl	my_direct_func2\n"
+> +"	ldp	x30, x9, [sp]\n"
+> +"	ldr	x0, [sp, #16]\n"
+> +"	add	sp, sp, #32\n"
+> +"	ret	x9\n"
+> +"	.size		my_tramp2, .-my_tramp2\n"
+> +"	.popsection\n"
+> +);
+> +
+> +#endif /* CONFIG_ARM64 */
+
+For both of these trampolines we need to pass the trampoline's return address
+(i.e. where we'll return to in the instrumented function) as the 'ip' argument
+to my_direct_func{1,2}().
+
+In both cases, just before the 'bl my_direct_func{1,2}' we'll need to add:
+
+	mov	x0, x30
+
+[...]
+
+> diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
+> index 1547c2c6be02..5a395d2d2e07 100644
+> --- a/samples/ftrace/ftrace-direct-multi.c
+> +++ b/samples/ftrace/ftrace-direct-multi.c
+> @@ -4,7 +4,9 @@
+>  #include <linux/mm.h> /* for handle_mm_fault() */
+>  #include <linux/ftrace.h>
+>  #include <linux/sched/stat.h>
+> +#ifndef CONFIG_ARM64
+>  #include <asm/asm-offsets.h>
+> +#endif
+>  
+>  extern void my_direct_func(unsigned long ip);
+>  
+> @@ -66,6 +68,27 @@ asm (
+>  
+>  #endif /* CONFIG_S390 */
+>  
+> +#ifdef CONFIG_ARM64
+> +
+> +asm (
+> +"	.pushsection	.text, \"ax\", @progbits\n"
+> +"	.type		my_tramp, @function\n"
+> +"	.globl		my_tramp\n"
+> +"   my_tramp:"
+> +"	bti	c\n"
+> +"	sub	sp, sp, #32\n"
+> +"	stp	x9, x30, [sp]\n"
+> +"	str	x0, [sp, #16]\n"
+> +"	bl	my_direct_func\n"
+> +"	ldp	x30, x9, [sp]\n"
+> +"	ldr	x0, [sp, #16]\n"
+> +"	add	sp, sp, #32\n"
+> +"	ret	x9\n"
+> +"	.size		my_tramp, .-my_tramp\n"
+> +"	.popsection\n"
+> +);
+> +
+> +#endif /* CONFIG_ARM64 */
+>  static struct ftrace_ops direct;
+
+As with ftrace-direct-multi-modify.c, we need to pass the return address of the
+trampoline as the 'ip' argument to my_direct_func1(), so just before the 'bl
+my_direct_func' we'll need to add:
+
+	mov	x0, x30
+
+[...]
+
+> diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
+> index f28e7b99840f..6e93c45fea86 100644
+> --- a/samples/ftrace/ftrace-direct-too.c
+> +++ b/samples/ftrace/ftrace-direct-too.c
+> @@ -3,7 +3,9 @@
+>  
+>  #include <linux/mm.h> /* for handle_mm_fault() */
+>  #include <linux/ftrace.h>
+> +#ifndef CONFIG_ARM64
+>  #include <asm/asm-offsets.h>
+> +#endif
+>  
+>  extern void my_direct_func(struct vm_area_struct *vma,
+>  			   unsigned long address, unsigned int flags);
+
+This gets attached to handle_mm_fault(), whose prototype is currently:
+
+vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+                           unsigned int flags, struct pt_regs *regs)
+
+i.e. it has 4 arguments, in x0 to x3.
+
+> @@ -70,6 +72,30 @@ asm (
+>  
+>  #endif /* CONFIG_S390 */
+>  
+> +#ifdef CONFIG_ARM64
+> +
+> +asm (
+> +"	.pushsection	.text, \"ax\", @progbits\n"
+> +"	.type		my_tramp, @function\n"
+> +"	.globl		my_tramp\n"
+> +"   my_tramp:"
+> +"	bti	c\n"
+> +"	sub	sp, sp, #48\n"
+> +"	stp	x9, x30, [sp]\n"
+> +"	stp	x0, x1, [sp, #16]\n"
+> +"	str	x2, [sp, #32]\n"
+> +"	bl	my_direct_func\n"
+> +"	ldp	x30, x9, [sp]\n"
+> +"	ldp	x0, x1, [sp, #16]\n"
+> +"	ldr	x2, [sp, #32]\n"
+
+So here we need to save+restore x3 also.
+
+We already have the space reserved, so that should just be a matter of using
+stp/ldp for x2 and x3.
+
+> +"	add	sp, sp, #48\n"
+> +"	ret	x9\n"
+> +"	.size		my_tramp, .-my_tramp\n"
+> +"	.popsection\n"
+> +);
+> +
+> +#endif /* CONFIG_ARM64 */
+> +
+>  static struct ftrace_ops direct;
+>  
+>  static int __init ftrace_direct_init(void)
+> diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
+> index d81a9473b585..e5312f9c15d3 100644
+> --- a/samples/ftrace/ftrace-direct.c
+> +++ b/samples/ftrace/ftrace-direct.c
+> @@ -3,7 +3,9 @@
+>  
+>  #include <linux/sched.h> /* for wake_up_process() */
+>  #include <linux/ftrace.h>
+> +#ifndef CONFIG_ARM64
+>  #include <asm/asm-offsets.h>
+> +#endif
+>  
+>  extern void my_direct_func(struct task_struct *p);
+>  
+> @@ -63,6 +65,28 @@ asm (
+>  
+>  #endif /* CONFIG_S390 */
+>  
+> +#ifdef CONFIG_ARM64
+> +
+> +asm (
+> +"	.pushsection	.text, \"ax\", @progbits\n"
+> +"	.type		my_tramp, @function\n"
+> +"	.globl		my_tramp\n"
+> +"   my_tramp:"
+> +"	bti	c\n"
+> +"	sub	sp, sp, #32\n"
+> +"	stp	x9, x30, [sp]\n"
+> +"	str	x0, [sp, #16]\n"
+> +"	bl	my_direct_func\n"
+> +"	ldp	x30, x9, [sp]\n"
+> +"	ldr	x0, [sp, #16]\n"
+> +"	add	sp, sp, #32\n"
+> +"	ret	x9\n"
+> +"	.size		my_tramp, .-my_tramp\n"
+> +"	.popsection\n"
+> +);
+
+This looks fine. Since my_direct_func() is attached to wake_up_process() and
+expects its single argument, saving/restoring x0 is sufficient and we don't
+need any additional register shuffling.
+
+Thanks,
+Mark.
