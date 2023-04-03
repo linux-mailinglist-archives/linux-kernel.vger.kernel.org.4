@@ -2,178 +2,369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B2A6D4F84
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2E76D4F88
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbjDCRt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
+        id S232648AbjDCRuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbjDCRtK (ORCPT
+        with ESMTP id S232054AbjDCRt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:49:10 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB242107;
-        Mon,  3 Apr 2023 10:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680544107; x=1712080107;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=v25kyqtNN8d8QRdIbwVdDGXVyNuQYtW+0hay97cNYhQ=;
-  b=h5b+QuOkGA51RwLHIDSBz9KN83UfhQdGo37sgq7fl2tV8QuhKSduVy5I
-   bkzdNRXo0zzKGbrjRZxtyvgIDfr1+oNNwfwzXxtDrxxoTn74bTMy+sVv8
-   QU+G41wCt9UID/3KHGPGmvE7cOzCAP5sPWn+rQ5fnhToOSthwyrsd2RP+
-   XpYt6BsPU+BS2MYQ5f/+pm1nq2Re5AmMmKwdpJV/cI9O+FUJ0YrCcs/Kl
-   HNM41rUlSp9xeETrJCciGhgtla7r5Un5LsH33zyw7FexME+vJ8ZCSYPcs
-   BZMk8XZbXyBYz7l5lOEtEghA74aRMRYZtk3rVDNcl7vUihJdjBLRHPKX8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="339465232"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="339465232"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 10:45:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="1015804705"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="1015804705"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga005.fm.intel.com with ESMTP; 03 Apr 2023 10:45:55 -0700
-Received: from [10.212.177.123] (kliang2-mobl1.ccr.corp.intel.com [10.212.177.123])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 07CD45804D9;
-        Mon,  3 Apr 2023 10:45:53 -0700 (PDT)
-Message-ID: <bf9ef54d-65da-ce59-3b47-f3dc29a5e052@linux.intel.com>
-Date:   Mon, 3 Apr 2023 13:45:52 -0400
+        Mon, 3 Apr 2023 13:49:57 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133153C18
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:49:23 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id z42so31180733ljq.13
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680544102;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cmh0U8QZH0xaWmRcmSkGM1kVFcibzuua/RqQdb5w48c=;
+        b=pUYKi9COWvM908cqLmR/Stpqm/ekT1k/Ssqy7bUJzUau/ZVCKK/6wI/5u5+5PVoiir
+         /VRKH5esgpWBLfwsE/0M0F+hF6hG0hUEsBtErE9ZUJWAw2JHlcCqYN4pqZv17cWe8LZm
+         5YcjrzBzxJkRZkTp70MTZ0IFN4YI6uJIdDzGPNd7/FJGjcXpJJI9JleN2h6ZERKZUBqY
+         aOvSCvMdUXlQTQDSvBUJGrwQ5TAmOQghmSwI18JCqI8/MOA10wnQil3/Yrk1paT2GsgY
+         XrxfRMvRC/Trfcz0VWv+xOnsfIvBKDvIPHUYyyWCREAjIGZ6lu3Gb4wjKQke88BVqETI
+         ns0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680544102;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cmh0U8QZH0xaWmRcmSkGM1kVFcibzuua/RqQdb5w48c=;
+        b=4s0gHivGObnkpzaw6JKJyH/mPxH7ufTvWXPsn+ZSn1Yz4Yi6e4zaMqvCv7n+kyWAOm
+         LUYgLRzR+CRA6n1B5FHwe5n/psnDpddmzxExOkG+9Tc/F/S2VvfgzW8v7YHNpyAqs+AA
+         2mS77l+2FeDdC3+USsLR1SjqMmuo2DUK4KmSAfS24Z67HLcSrczhOaKkSH0fdALhv/6Z
+         TQkhRY9LhKu9IsB5sKc9nd+fKVDHd2PiGAb64VwdaW/zKn1j+u0X8dvOUAVutfcsRUKa
+         BSUzPFOh3FqH7AB+Md0AeR0tcsMgpkfcbdhL1BouOZTKKiBPpOP+zZkPBendbKQsGPjD
+         ozLg==
+X-Gm-Message-State: AAQBX9feRuERZ89LQqawZgmjnFoMePDVbPLR24I110+U4r0rXJSKbBwc
+        nI0Mk32dFVd8wqtN+MSzPJiKcg==
+X-Google-Smtp-Source: AKy350bO6RBLR5yWbMFgglqYDQA4F446v9NcM5SCkNi19VgH8B47arkq95Jp1Z/wKteCLZAq9Kh1vw==
+X-Received: by 2002:a2e:9e16:0:b0:295:a3aa:e7d8 with SMTP id e22-20020a2e9e16000000b00295a3aae7d8mr91237ljk.29.1680544101964;
+        Mon, 03 Apr 2023 10:48:21 -0700 (PDT)
+Received: from localhost.localdomain (abxj135.neoplus.adsl.tpnet.pl. [83.9.3.135])
+        by smtp.gmail.com with ESMTPSA id n20-20020a2e86d4000000b00295a8c68585sm1863588ljj.56.2023.04.03.10.48.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 10:48:21 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Rob Herring <robh@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: qcom: gcc-qcm2290: Mark RCGs shared where applicable
+Date:   Mon,  3 Apr 2023 19:48:07 +0200
+Message-Id: <20230403174807.345185-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 5/5] docs: perf: Minimal introduction the the CXL PMU
- device and driver
-Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-cxl@vger.kernel.org, peterz@infradead.org
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        will@kernel.org, dan.j.williams@intel.com, linuxarm@huawei.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>
-References: <20230330164556.31533-1-Jonathan.Cameron@huawei.com>
- <20230330164556.31533-6-Jonathan.Cameron@huawei.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230330164556.31533-6-Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The vast majority of shared RCGs were not marked as such. Fix it.
 
+Fixes: 496d1a13d405 ("clk: qcom: Add Global Clock Controller driver for QCM2290")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/clk/qcom/gcc-qcm2290.c | 62 +++++++++++++++++-----------------
+ 1 file changed, 31 insertions(+), 31 deletions(-)
 
-On 2023-03-30 12:45 p.m., Jonathan Cameron wrote:
-> Very basic introduction to the device and the current driver support
-> provided. I expect to expand on this in future versions of this patch
-> set.
-> 
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> --
-> v4: No change
-> ---
->  Documentation/admin-guide/perf/cxl.rst   | 65 ++++++++++++++++++++++++
->  Documentation/admin-guide/perf/index.rst |  1 +
->  2 files changed, 66 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/perf/cxl.rst b/Documentation/admin-guide/perf/cxl.rst
-> new file mode 100644
-> index 000000000000..46235dff4b21
-> --- /dev/null
-> +++ b/Documentation/admin-guide/perf/cxl.rst
-> @@ -0,0 +1,65 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +======================================
-> +CXL Performance Monitoring Unit (CPMU)
-> +======================================
-> +
-> +The CXL rev 3.0 specification provides a definition of CXL Performance
-> +Monitoring Unit in section 13.2: Performance Monitoring.
-> +
-> +CXL components (e.g. Root Port, Switch Upstream Port, End Point) may have
-> +any number of CPMU instances. CPMU capabilities are fully discoverable from
-> +the devices. The specification provides event definitions for all CXL protocol
-> +message types and a set of additional events for things commonly counted on
-> +CXL devices (e.g. DRAM events).
-> +
-> +CPMU driver
-> +===========
-> +
-> +The CPMU driver register a perf PMU with the name cpmu<id> on the CXL bus.
-> +
-> +    /sys/bus/cxl/device/cpmu<id>
-> +
-> +The associated PMU is registered as
-> +
-> +   /sys/bus/event_sources/devices/cpmu<id>
-> +
-> +In common with other CXL bus devices, the id has no specific meaning and the
-> +relationship to specific CXL device should be established via the device parent
-> +of the device on the CXL bus.
-> +
-> +PMU driver provides description of available events and filter options in sysfs.
-> +
-> +The "format" directory describes all formats of the config (event vendor id,
-> +group id and mask) config1 (threshold, filter enables) and config2 (filter
-> +parameters) fields of the perf_event_attr structure.  The "events" directory
-> +describes all documented events show in perf list.
-> +
-> +The events shown in perf list are the most fine grained events with a single
-> +bit of the event mask set. More general events may be enable by setting
-> +multiple mask bits in config. For example, all Device to Host Read Requests
-> +may be captured on a single counter by setting the bits for all of
-> +
-> +* d2h_req_rdcurr
-> +* d2h_req_rdown
-> +* d2h_req_rdshared
-> +* d2h_req_rdany
-> +* d2h_req_rdownnodata
-> +
-> +Example of usage::
-> +
-> +  $#perf list
-> +  cpmu0/clock_ticks/                                 [Kernel PMU event]
-> +  cpmu0/d2h_req_itomwr/                              [Kernel PMU event]
-> +  cpmu0/d2h_req_rdany/                               [Kernel PMU event]
-> +  cpmu0/d2h_req_rdcurr/                              [Kernel PMU event]
-> +  -----------------------------------------------------------
-> +
-> +  $# perf stat -e cpmu0/clock_ticks/ -e cpmu0/d2h_req_itowrm/
-> +
-> +Vendor specific events may also be available and if so can be used via
-> +
-> +  $# perf stat -e cpmu0/vid=VID,gid=GID,mask=MASK/
-> +
-> +The driver does not support sampling. So "perf record" and attaching to
-> +a task are unsupported.
+diff --git a/drivers/clk/qcom/gcc-qcm2290.c b/drivers/clk/qcom/gcc-qcm2290.c
+index 096deff2ba25..48995e50c6bd 100644
+--- a/drivers/clk/qcom/gcc-qcm2290.c
++++ b/drivers/clk/qcom/gcc-qcm2290.c
+@@ -650,7 +650,7 @@ static struct clk_rcg2 gcc_usb30_prim_mock_utmi_clk_src = {
+ 		.name = "gcc_usb30_prim_mock_utmi_clk_src",
+ 		.parent_data = gcc_parents_0,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_0),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -686,7 +686,7 @@ static struct clk_rcg2 gcc_camss_axi_clk_src = {
+ 		.name = "gcc_camss_axi_clk_src",
+ 		.parent_data = gcc_parents_4,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_4),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -706,7 +706,7 @@ static struct clk_rcg2 gcc_camss_cci_clk_src = {
+ 		.name = "gcc_camss_cci_clk_src",
+ 		.parent_data = gcc_parents_9,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_9),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -728,7 +728,7 @@ static struct clk_rcg2 gcc_camss_csi0phytimer_clk_src = {
+ 		.name = "gcc_camss_csi0phytimer_clk_src",
+ 		.parent_data = gcc_parents_5,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_5),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -742,7 +742,7 @@ static struct clk_rcg2 gcc_camss_csi1phytimer_clk_src = {
+ 		.name = "gcc_camss_csi1phytimer_clk_src",
+ 		.parent_data = gcc_parents_5,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_5),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -764,7 +764,7 @@ static struct clk_rcg2 gcc_camss_mclk0_clk_src = {
+ 		.parent_data = gcc_parents_3,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_3),
+ 		.flags = CLK_OPS_PARENT_ENABLE,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -779,7 +779,7 @@ static struct clk_rcg2 gcc_camss_mclk1_clk_src = {
+ 		.parent_data = gcc_parents_3,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_3),
+ 		.flags = CLK_OPS_PARENT_ENABLE,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -794,7 +794,7 @@ static struct clk_rcg2 gcc_camss_mclk2_clk_src = {
+ 		.parent_data = gcc_parents_3,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_3),
+ 		.flags = CLK_OPS_PARENT_ENABLE,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -809,7 +809,7 @@ static struct clk_rcg2 gcc_camss_mclk3_clk_src = {
+ 		.parent_data = gcc_parents_3,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_3),
+ 		.flags = CLK_OPS_PARENT_ENABLE,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -830,7 +830,7 @@ static struct clk_rcg2 gcc_camss_ope_ahb_clk_src = {
+ 		.name = "gcc_camss_ope_ahb_clk_src",
+ 		.parent_data = gcc_parents_6,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_6),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -854,7 +854,7 @@ static struct clk_rcg2 gcc_camss_ope_clk_src = {
+ 		.parent_data = gcc_parents_6,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_6),
+ 		.flags = CLK_SET_RATE_PARENT,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -888,7 +888,7 @@ static struct clk_rcg2 gcc_camss_tfe_0_clk_src = {
+ 		.name = "gcc_camss_tfe_0_clk_src",
+ 		.parent_data = gcc_parents_7,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_7),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -912,7 +912,7 @@ static struct clk_rcg2 gcc_camss_tfe_0_csid_clk_src = {
+ 		.name = "gcc_camss_tfe_0_csid_clk_src",
+ 		.parent_data = gcc_parents_8,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_8),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -926,7 +926,7 @@ static struct clk_rcg2 gcc_camss_tfe_1_clk_src = {
+ 		.name = "gcc_camss_tfe_1_clk_src",
+ 		.parent_data = gcc_parents_7,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_7),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -940,7 +940,7 @@ static struct clk_rcg2 gcc_camss_tfe_1_csid_clk_src = {
+ 		.name = "gcc_camss_tfe_1_csid_clk_src",
+ 		.parent_data = gcc_parents_8,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_8),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -963,7 +963,7 @@ static struct clk_rcg2 gcc_camss_tfe_cphy_rx_clk_src = {
+ 		.parent_data = gcc_parents_10,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_10),
+ 		.flags = CLK_OPS_PARENT_ENABLE,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -984,7 +984,7 @@ static struct clk_rcg2 gcc_camss_top_ahb_clk_src = {
+ 		.name = "gcc_camss_top_ahb_clk_src",
+ 		.parent_data = gcc_parents_4,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_4),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -1006,7 +1006,7 @@ static struct clk_rcg2 gcc_gp1_clk_src = {
+ 		.name = "gcc_gp1_clk_src",
+ 		.parent_data = gcc_parents_2,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_2),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -1020,7 +1020,7 @@ static struct clk_rcg2 gcc_gp2_clk_src = {
+ 		.name = "gcc_gp2_clk_src",
+ 		.parent_data = gcc_parents_2,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_2),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -1034,7 +1034,7 @@ static struct clk_rcg2 gcc_gp3_clk_src = {
+ 		.name = "gcc_gp3_clk_src",
+ 		.parent_data = gcc_parents_2,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_2),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -1054,7 +1054,7 @@ static struct clk_rcg2 gcc_pdm2_clk_src = {
+ 		.name = "gcc_pdm2_clk_src",
+ 		.parent_data = gcc_parents_0,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_0),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -1082,7 +1082,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s0_clk_src_init = {
+ 	.name = "gcc_qupv3_wrap0_s0_clk_src",
+ 	.parent_data = gcc_parents_1,
+ 	.num_parents = ARRAY_SIZE(gcc_parents_1),
+-	.ops = &clk_rcg2_ops,
++	.ops = &clk_rcg2_shared_ops,
+ };
+ 
+ static struct clk_rcg2 gcc_qupv3_wrap0_s0_clk_src = {
+@@ -1098,7 +1098,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s1_clk_src_init = {
+ 	.name = "gcc_qupv3_wrap0_s1_clk_src",
+ 	.parent_data = gcc_parents_1,
+ 	.num_parents = ARRAY_SIZE(gcc_parents_1),
+-	.ops = &clk_rcg2_ops,
++	.ops = &clk_rcg2_shared_ops,
+ };
+ 
+ static struct clk_rcg2 gcc_qupv3_wrap0_s1_clk_src = {
+@@ -1114,7 +1114,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s2_clk_src_init = {
+ 	.name = "gcc_qupv3_wrap0_s2_clk_src",
+ 	.parent_data = gcc_parents_1,
+ 	.num_parents = ARRAY_SIZE(gcc_parents_1),
+-	.ops = &clk_rcg2_ops,
++	.ops = &clk_rcg2_shared_ops,
+ };
+ 
+ static struct clk_rcg2 gcc_qupv3_wrap0_s2_clk_src = {
+@@ -1130,7 +1130,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s3_clk_src_init = {
+ 	.name = "gcc_qupv3_wrap0_s3_clk_src",
+ 	.parent_data = gcc_parents_1,
+ 	.num_parents = ARRAY_SIZE(gcc_parents_1),
+-	.ops = &clk_rcg2_ops,
++	.ops = &clk_rcg2_shared_ops,
+ };
+ 
+ static struct clk_rcg2 gcc_qupv3_wrap0_s3_clk_src = {
+@@ -1146,7 +1146,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s4_clk_src_init = {
+ 	.name = "gcc_qupv3_wrap0_s4_clk_src",
+ 	.parent_data = gcc_parents_1,
+ 	.num_parents = ARRAY_SIZE(gcc_parents_1),
+-	.ops = &clk_rcg2_ops,
++	.ops = &clk_rcg2_shared_ops,
+ };
+ 
+ static struct clk_rcg2 gcc_qupv3_wrap0_s4_clk_src = {
+@@ -1162,7 +1162,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s5_clk_src_init = {
+ 	.name = "gcc_qupv3_wrap0_s5_clk_src",
+ 	.parent_data = gcc_parents_1,
+ 	.num_parents = ARRAY_SIZE(gcc_parents_1),
+-	.ops = &clk_rcg2_ops,
++	.ops = &clk_rcg2_shared_ops,
+ };
+ 
+ static struct clk_rcg2 gcc_qupv3_wrap0_s5_clk_src = {
+@@ -1219,7 +1219,7 @@ static struct clk_rcg2 gcc_sdcc1_ice_core_clk_src = {
+ 		.name = "gcc_sdcc1_ice_core_clk_src",
+ 		.parent_data = gcc_parents_0,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_0),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -1266,7 +1266,7 @@ static struct clk_rcg2 gcc_usb30_prim_master_clk_src = {
+ 		.name = "gcc_usb30_prim_master_clk_src",
+ 		.parent_data = gcc_parents_0,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_0),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -1280,7 +1280,7 @@ static struct clk_rcg2 gcc_usb3_prim_phy_aux_clk_src = {
+ 		.name = "gcc_usb3_prim_phy_aux_clk_src",
+ 		.parent_data = gcc_parents_13,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_13),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+@@ -1303,7 +1303,7 @@ static struct clk_rcg2 gcc_video_venus_clk_src = {
+ 		.parent_data = gcc_parents_14,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_14),
+ 		.flags = CLK_SET_RATE_PARENT,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+ 
+-- 
+2.40.0
 
-The PMU only supports system-wide counting. That's the reason it doesn't
-support per-task profiling. Not because of missing sampling.
-
-Thanks,
-Kan
-> diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
-> index 9de64a40adab..f60be04e4e33 100644
-> --- a/Documentation/admin-guide/perf/index.rst
-> +++ b/Documentation/admin-guide/perf/index.rst
-> @@ -21,3 +21,4 @@ Performance monitor support
->     alibaba_pmu
->     nvidia-pmu
->     meson-ddr-pmu
-> +   cxl
