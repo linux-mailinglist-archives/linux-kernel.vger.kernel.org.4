@@ -2,81 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2653E6D4DF9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5646D4E00
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbjDCQeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
+        id S232891AbjDCQfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbjDCQd4 (ORCPT
+        with ESMTP id S231769AbjDCQfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:33:56 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA4C1987;
-        Mon,  3 Apr 2023 09:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1680539630; i=rwarsow@gmx.de;
-        bh=FHDXb6Pd4oZ7xxmkmem4l6y9GV1NP+qdWUJdvkda0j4=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=ehhF/keBHk9O5cnVDhF0MpuGiMJBKbzqXbFKK44l8U1N3oMbqLcWN+KGogLhz5f9U
-         0mgjjaCmua60vq+dPetlS/E5TzEk3W+d4f5ppXJb8eXdyBEETgPSrHiiMiFUm+twAV
-         wxhE0kNJTkP0cK78s/efAvqYVhFzUQoXgY+hx3wmh3NQ765v/aehkrxAL0PHyeKrET
-         StjdPOTpNcw1zLv9Hy4JbVm78uj4x1P+P1q7mapbnpmnv6X5EAWuTjAvaDMTBauFPr
-         heQak0NqL7jVGomwE0M7NhO58rQD7g+WicowybGbKDp6oQXs/2rgLtobBuOKPlbKXp
-         1tEjOFrVp2uQQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.33.139]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MiacH-1qNdEH3EhD-00fi89; Mon, 03
- Apr 2023 18:33:50 +0200
-Message-ID: <cdf92447-3c2e-a205-0fa7-a55e2e75d0da@gmx.de>
-Date:   Mon, 3 Apr 2023 18:33:50 +0200
+        Mon, 3 Apr 2023 12:35:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245F4A8;
+        Mon,  3 Apr 2023 09:35:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BAF9C21E5B;
+        Mon,  3 Apr 2023 16:35:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680539720; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YumwonmjqV5t8gQykDIe5ctbpkmmD9ZrmoXWSUWe1do=;
+        b=N0VbH0/+8edCmRFNoLs7Nov6WXcDZGyB9J97iFTrRiHXqz+LakqSg32CAN27DF4AynJUnB
+        vLQQRta/XZsWkTZ+dE/8+egPOtY3Z/0K0XvulUL8oleP+EuBeYYM1i9+6MDWZ8o9BwA0x2
+        lWs9+7ZOlxpKoXxG2HxY84tAqA1l2SM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8BC2113416;
+        Mon,  3 Apr 2023 16:35:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xlEyIUgAK2TCYgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 03 Apr 2023 16:35:20 +0000
+Date:   Mon, 3 Apr 2023 18:35:19 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        gscrivan@redhat.com
+Subject: Re: [PATCH 2/3] cgroup/cpuset: Make cpuset_attach_task() skip
+ subpartitions CPUs for top_cpuset
+Message-ID: <20230403163519.6xyb66firoqm5eti@blackpad>
+References: <20230331145045.2251683-1-longman@redhat.com>
+ <20230331145045.2251683-3-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 6.2 000/187] 6.2.10-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:0PQWcxKVA09E7f6N5ILamdrD9vmMHe/gfR5Z6juYGniJNdc3oRK
- t+FriRrKQXNzwicW5YIAwK/dsgkz6XRsM3kKphgQhVHdTaAeDVa3T5lencIBaJ7Rbq2avZB
- 5X8XD5mHrSyldzI1XW0JiMXZ394XnkwkXjdKakDY8LkUoJYCEhfjnI/CE8vXwbJ+fNm6ZzD
- 5l9gbNXjvjkZkj9ynNFJQ==
-UI-OutboundReport: notjunk:1;M01:P0:qsB77XxvXQg=;A5g8uC7kMYcK6Pg4iAH7BBbFEKi
- fig9no5Pvn9gDWmuGNBFvmf/F1hzSUUczfZnhtOMKQq8S/GEgMGmCPv48KyNeeBeHff+GLL87
- 3wPULIo7zaLE2lrNgHpaSvDaWGGFJVVDaXEn/8qbRrUYK6Dat4vWpt5IPNmkYgj6kOuWLcrFO
- 1MEACv0aQfkxpMeSEzvM+JLGhcEB06vqC/iCj71mRMGxC+hKKzLETFQtLNXVoEb3E7ZBTGyKE
- kYoowimBL8ybKUCZ+vz8GI4wQxtIWNKN/4hRU87Iu92c9j8jxA8TjKPel7ywBFBurii/muYd7
- y+Nh9yh3hIWI+pEKDbjlQKw3IoBCt/4GL57WvS2EJ9bkTnjqpZ06VUC8+9Z/unZwL4nGds5RV
- Y6+MBCi1JSvlNrHNiiCLk9DHbFQI4ajW6aS9yscv0J4bje2qU7j03j31123A9muxpi32Df+7f
- KMuYvi848wCnpCtHep+I5ZwaZFyDIUFtIcOVcWrPYfq8bFT3hHyaA/+TPZyUbZ40ulo+bTopm
- FsEIflqF6dz+DoRXQXL178zqvEhxwiqpSFhsme9xl5qKtWyAGRL/E996Sfne0Nn53YLHWxLda
- TxMDcl11T1THORJ+pK84yHOpgJmqswIe7fQSpCRtnCznMR7jSgi8yxo4mt70tnSui8G7P3pV6
- ZwTu5CoeXzFtwUitnTNnhuyQ0pibM0pzRnIzCrECbllcIixlzGN+e7tLDsNsGTMTZJ8wU3EU9
- 1do05NcjYx6h9xuFeiCV+yqmCtmuMaPCi/9Y8oTM3SIdgmsqjjFmc41XrbUKegUJTOBJlaf4H
- w8QKAZRM4hLFmjpIaFJIoSnd+aydMrC09bUvTwvOhLU4t10EnYrus2JUGqRKVYF2QHDmzKy6r
- NckcyxsOlK8xbg4f90HbXMwWStXGxRykpvFfP1tWynOfLCZZ7M5V01OS8y8sznrccQ3pmJ4II
- QY4FkQ==
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dt4gx7d3cwpgnbwk"
+Content-Disposition: inline
+In-Reply-To: <20230331145045.2251683-3-longman@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
 
-6.2.10-rc1
+--dt4gx7d3cwpgnbwk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-compiles, boots and runs here on Intel x86_64
+Hi.
 
-Thanks
+On Fri, Mar 31, 2023 at 10:50:44AM -0400, Waiman Long <longman@redhat.com> =
+wrote:
+> It is found that attaching a task to the top_cpuset does not currently
+> ignore CPUs allocated to subpartitions in cpuset_attach_task(). So the
+> code is changed to fix that.
+>=20
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+Reviewed-by: Michal Koutn=FD <mkoutny@suse.com>
 
+--dt4gx7d3cwpgnbwk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZCsAPwAKCRAkDQmsBEOq
+ue7hAQCSejv7qXqOG2OYhV4G4WEbQ0/ok1yV2453mEPMO20QoQEArOj5iQ9yrLXt
+pXQCdi4gTkstrXHCQ5IzHq1FFQO2jgU=
+=Rr4W
+-----END PGP SIGNATURE-----
+
+--dt4gx7d3cwpgnbwk--
