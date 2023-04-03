@@ -2,72 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010F96D5481
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525F96D5486
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbjDCWGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 18:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
+        id S233723AbjDCWGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 18:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbjDCWGD (ORCPT
+        with ESMTP id S233494AbjDCWGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 18:06:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4954EC1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680559504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jnFtkoqMUBk9VK4xaDY9JMCyJUvcWn5aEBYFQqTdOKA=;
-        b=SpDmDYPGjhKgouA/mZPv6zs+Bljf4MLjwIl3Y5vnHYNUiwgNruBWv9TeoJHi8c2gLpIG+S
-        pv7uA6mRGmBuTyIzBIqmwlhjqaND7hLsgNhuAt0dZFcVW0IDsTx7zHrJy8jW23UDxoM7GQ
-        AQUC/J+ZgNIp29uFs1wE6k8/qNQ9/pc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-529-H5UpbnI2P_GZNe0obnlrBw-1; Mon, 03 Apr 2023 18:05:00 -0400
-X-MC-Unique: H5UpbnI2P_GZNe0obnlrBw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 906571C051A7;
-        Mon,  3 Apr 2023 22:04:59 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4329A1121314;
-        Mon,  3 Apr 2023 22:04:57 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <642ad8b66acfe_302ae1208e7@willemb.c.googlers.com.notmuch>
-References: <642ad8b66acfe_302ae1208e7@willemb.c.googlers.com.notmuch> <64299af9e8861_2d2a20208e6@willemb.c.googlers.com.notmuch> <20230331160914.1608208-1-dhowells@redhat.com> <20230331160914.1608208-16-dhowells@redhat.com> <1818504.1680515446@warthog.procyon.org.uk>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 15/55] ip, udp: Support MSG_SPLICE_PAGES
+        Mon, 3 Apr 2023 18:06:48 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4E726AD;
+        Mon,  3 Apr 2023 15:06:48 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id s19so18486859pgi.0;
+        Mon, 03 Apr 2023 15:06:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680559607; x=1683151607;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oJCa9oZ04Ks8sMazcFO/VKQNTdXem14KycuV76f0rrc=;
+        b=FHX/VJiKxcQNIunXX6dEEzh3e6W+9GpDmGjmr7CIxo0y1LST4Tzaoih3CiVSXBTJn5
+         HBbbIK8BCCN0pK0okxMRS3OFyVfjlFo8BpqPTLva+NvrpfMYfM8X5zOPRmyZ4xhnu9VQ
+         i3jSLwr/1vhkcA6aXT66mAHIbnro4FiRw/8N9C+gQn5xwsM2EvNjPpXatQdPMK9BYcrK
+         wgwgJq6r6ULGp5rZ7YAKtaqlYxp8n3P2Un+12bC0BlusxY5ljFkaQP4JirRfHMU29ezS
+         jRuz2+ouLT58Dy2repjboyQuKAa+k+Ujj/Rd3eTvc35JhJHhziwjIln9zKiY0HbI4fnc
+         e92A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680559607; x=1683151607;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oJCa9oZ04Ks8sMazcFO/VKQNTdXem14KycuV76f0rrc=;
+        b=1u1qo3NH+FtzyOe2KmGEy/ul8f4NeaXY6lYhimWIELi1u/Y8VFQHuPYrz6tWlM5K4h
+         Fo0wMshunFfdYpMBKReo7tEcATNj9TwNlge1ywBCTpi714sLQXYXvj15rKhu2LzpcY6w
+         ubTBdWD96wIBGB7IrnrtWCczzEK5vzY9Z1K9Vwb+bVfZZGbeZUZm3GoDBpN3l/+fIgx4
+         EW7MfhTnb4SUaobOgVbMOmg2ojr47nfqbGfhVAg2bmsK8zM5U1cB52lKmaS5Gygd+CLD
+         TYhgz4WTbfAQph6cVTfSjRYicqo4Zn8qEQgB7Wb1PPRBM3NUTy/xVfW5HNLCPyMWiavU
+         XZ4Q==
+X-Gm-Message-State: AAQBX9fcVE1VgaBOWn4gqr+zeVxQef5OSriawRc3dDA5fUlWcyBWVZVN
+        dvyzhG1A5MMRzlWBhdEPeM1VhKWcNxvHsQ==
+X-Google-Smtp-Source: AKy350ZdXGE6cpbpmVZYo9Rg3/ffEZdfUGFP72Tgn4WpghMdGFVbRqHiowBWfPTd0tPVnKF/cGUnsQ==
+X-Received: by 2002:a62:7bc4:0:b0:5e2:da34:4aaf with SMTP id w187-20020a627bc4000000b005e2da344aafmr172473pfc.4.1680559606801;
+        Mon, 03 Apr 2023 15:06:46 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 9-20020aa79149000000b0062dd28aaca6sm7341178pfi.212.2023.04.03.15.06.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 15:06:46 -0700 (PDT)
+Message-ID: <4cea1e91-f0d4-291f-813d-353f8b9d2a5e@gmail.com>
+Date:   Mon, 3 Apr 2023 15:06:44 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2258797.1680559496.1@warthog.procyon.org.uk>
-Date:   Mon, 03 Apr 2023 23:04:56 +0100
-Message-ID: <2258798.1680559496@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 0/2] Correct gpio-ir-recv wakeup capability
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Young <sean@mess.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Ravi Kumar V <kumarrav@codeaurora.org>,
+        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Matthew Lear <matthew.lear@broadcom.com>
+References: <20230324203833.3540187-1-f.fainelli@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230324203833.3540187-1-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,131 +84,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
-
-> The code already has to avoid allocation in the MSG_ZEROCOPY case. I
-> added alloc_len and paged_len for that purpose.
+On 3/24/23 13:38, Florian Fainelli wrote:
+> This small patch series fixes the gpio-ir-recv binding and driver to
+> first indicate that it can be a wake-up source for the system, and
+> second actually make that happen.
 > 
-> Only the transhdrlen will be copied with getfrag due to
+> Changes in v2:
+> - corrected the indentation of the description for "wakeup-source"
 > 
->     copy = datalen - transhdrlen - fraggap - pagedlen
-> 
-> On next iteration in the loop, when remaining data fits in the skb,
-> there are three cases. The first is skipped due to !NETIF_F_SG. The
-> other two are either copy to page frags or zerocopy page frags.
-> 
-> I think your code should be able to fit in. Maybe easier if it could
-> reuse the existing alloc_new_skb code to copy the transport header, as
-> MSG_ZEROCOPY does, rather than adding a new __ip_splice_alloc branch
-> that short-circuits that. Then __ip_splice_pages also does not need
-> code to copy the initial header. But this is trickier. It's fine to
-> leave as is.
-> 
-> Since your code currently does call continue before executing the rest
-> of that branch, no need to modify any code there? Notably replacing
-> length with initial_length, which itself is initialized to length in
-> all cases expect for MSG_SPLICE_PAGES.
+> Florian Fainelli (2):
+>    dt-bindings: media: gpio-ir-receiver: Document wakeup-souce property
+>    media: rc: gpio-ir-recv: Fix support for wake-up
 
-Okay.  How about the attached?  This seems to work.  Just setting "paged" to
-true seems to do the right thing in __ip_append_data() when allocating /
-setting up the skbuff, and then __ip_splice_pages() is called to add the
-pages.
-
-David
----
-commit 9ac72c83407c8aef4be0c84513ec27bac9cfbcaa
-Author: David Howells <dhowells@redhat.com>
-Date:   Thu Mar 9 14:27:29 2023 +0000
-
-    ip, udp: Support MSG_SPLICE_PAGES
-    
-    Make IP/UDP sendmsg() support MSG_SPLICE_PAGES.  This causes pages to be
-    spliced from the source iterator.
-    
-    This allows ->sendpage() to be replaced by something that can handle
-    multiple multipage folios in a single transaction.
-    
-    Signed-off-by: David Howells <dhowells@redhat.com>
-    cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-    cc: "David S. Miller" <davem@davemloft.net>
-    cc: Eric Dumazet <edumazet@google.com>
-    cc: Jakub Kicinski <kuba@kernel.org>
-    cc: Paolo Abeni <pabeni@redhat.com>
-    cc: Jens Axboe <axboe@kernel.dk>
-    cc: Matthew Wilcox <willy@infradead.org>
-    cc: netdev@vger.kernel.org
-
-diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-index 6109a86a8a4b..fe2e48874191 100644
---- a/net/ipv4/ip_output.c
-+++ b/net/ipv4/ip_output.c
-@@ -956,6 +956,41 @@ csum_page(struct page *page, int offset, int copy)
- 	return csum;
- }
- 
-+/*
-+ * Add (or copy) data pages for MSG_SPLICE_PAGES.
-+ */
-+static int __ip_splice_pages(struct sock *sk, struct sk_buff *skb,
-+			     void *from, int *pcopy)
-+{
-+	struct msghdr *msg = from;
-+	struct page *page = NULL, **pages = &page;
-+	ssize_t copy = *pcopy;
-+	size_t off;
-+	int err;
-+
-+	copy = iov_iter_extract_pages(&msg->msg_iter, &pages, copy, 1, 0, &off);
-+	if (copy <= 0)
-+		return copy ?: -EIO;
-+
-+	err = skb_append_pagefrags(skb, page, off, copy);
-+	if (err < 0) {
-+		iov_iter_revert(&msg->msg_iter, copy);
-+		return err;
-+	}
-+
-+	if (skb->ip_summed == CHECKSUM_NONE) {
-+		__wsum csum;
-+
-+		csum = csum_page(page, off, copy);
-+		skb->csum = csum_block_add(skb->csum, csum, skb->len);
-+	}
-+
-+	skb_len_add(skb, copy);
-+	refcount_add(copy, &sk->sk_wmem_alloc);
-+	*pcopy = copy;
-+	return 0;
-+}
-+
- static int __ip_append_data(struct sock *sk,
- 			    struct flowi4 *fl4,
- 			    struct sk_buff_head *queue,
-@@ -1047,6 +1082,15 @@ static int __ip_append_data(struct sock *sk,
- 				skb_zcopy_set(skb, uarg, &extra_uref);
- 			}
- 		}
-+	} else if ((flags & MSG_SPLICE_PAGES) && length) {
-+		if (inet->hdrincl)
-+			return -EPERM;
-+		if (rt->dst.dev->features & NETIF_F_SG) {
-+			/* We need an empty buffer to attach stuff to */
-+			paged = true;
-+		} else {
-+			flags &= ~MSG_SPLICE_PAGES;
-+		}
- 	}
- 
- 	cork->length += length;
-@@ -1206,6 +1250,10 @@ static int __ip_append_data(struct sock *sk,
- 				err = -EFAULT;
- 				goto error;
- 			}
-+		} else if (flags & MSG_SPLICE_PAGES) {
-+			err = __ip_splice_pages(sk, skb, from, &copy);
-+			if (err < 0)
-+				goto error;
- 		} else if (!zc) {
- 			int i = skb_shinfo(skb)->nr_frags;
- 
+Ping? Someone maintaining this driver?
+-- 
+Florian
 
