@@ -2,95 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322A86D529C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265496D52A7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233398AbjDCUhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 16:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
+        id S233502AbjDCUjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 16:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233419AbjDCUhm (ORCPT
+        with ESMTP id S233252AbjDCUjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 16:37:42 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA95CE78
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 13:37:30 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id jl13so22054564qvb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 13:37:30 -0700 (PDT)
+        Mon, 3 Apr 2023 16:39:25 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D703E7D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 13:39:15 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id v1so30666261wrv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 13:39:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680554250; x=1683146250;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PT2nbduFIoItxBLmb62kwW+aXvG7yZHy5CU0nT4j1ME=;
-        b=KiBR5aW9ZOnqsbUbKLtDpbWeeJbq3Tbnq5AZAMJTtiYPIA/5jcE3rDwPZtJxyTxlSJ
-         8GGPhvLkRgMJ5lW0QxixeJ+SWs0yduj9AlvPcUH5CfGOmHtviZpduGyBFPhP6jDfyYkI
-         VIRp19Ua5SIX7rrEIunWW67v6y2oaA+mrVdlnoZJmPNtIfuetIZeY1R0NyIrDVI5xxtU
-         lfkod/+X+EPZt8SggNwQTfYwqSQRsNosUmelV4vYUz29qlwRT8BbKD3LSsJcghAEo/i/
-         B+v9nAPElFEHUfYk+jLmRsdZoFW4wkMt2JjhJFTYkYNkIHUxTOWOUWZHUj1RCFSYoa6V
-         /qSg==
+        d=linaro.org; s=google; t=1680554354;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8W33znYIAl2DMyLncbJoqCopj/H6Dvst/McCNbNede4=;
+        b=aqN6rHZLCar/09kDSX23dhRO9TE6+zp5ZBhXizjjLoiA2bJ8NgApcvuPz1q2WwsZrD
+         2kFRTjggRG1o9yQaYJuN8bOA10f3SiClaNt99XjI5bWqN7GyPlCf+JjsN7om6K3+lRHC
+         v58+eBgq6Dy/iUV4YZOdWEWbPIpGUlaii/2QSbIuafUr9uJH1s2VaDHLv2xRug/yB69u
+         KQ01ulzTWkt3yGK+I7CRag0Zo/a5tz/L7JFav860fGdUj9GK6wEJ4oxS9j0DANQmBL/E
+         8EDSid2M8ryO4aPHomrjVUF97O8amMTeBRrBai12ixdDITAsCMJ/honqoFEZjsXKi0jw
+         Owug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680554250; x=1683146250;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PT2nbduFIoItxBLmb62kwW+aXvG7yZHy5CU0nT4j1ME=;
-        b=UiSVTp0GQltSfvGn6FhCgNi88Gs3wFLwrmikKHpIl/+y32r4G0y82D4DhJ1EK1L70o
-         Icl+c4qCe5tw323+aa/Sm61LcD2OekEw0G5TL+w1QZrqQGGQA/MdM6TyrpnsFt+QbiJN
-         gW7TWVOVG6+Rxrrf0mlhUTeK06pzs/nNAr3Dip+ad2ZiQNL08LZRFtN3PH2X89J8qWUy
-         gcmpcEHE7mkxNRrbOtKJSV8vuNX945PSNWJ6+3F6i5akAE/eB8eOVjeEXKme2jdJu3+W
-         RUh2dulIqdopqB66cMyhbCFbRVF10g+SvXw+kXUWserDZ0GHuENPMAluqxbF1XHCR31C
-         4weA==
-X-Gm-Message-State: AAQBX9e37N3ftdj11lLC8ageijprxi/oilb0+EHrlhNBo7LUfGY8+DXX
-        3Bw6Yxxv28cI0owHjOowe+E=
-X-Google-Smtp-Source: AKy350bvpFMXKH/owC71BRqSVUGhPeL12LadcTUpCATNvQT1ox6EaHn7ULVaDcY3819mt9u/DL1NZg==
-X-Received: by 2002:ad4:5d4d:0:b0:5e3:d150:3160 with SMTP id jk13-20020ad45d4d000000b005e3d1503160mr63993qvb.16.1680554249786;
-        Mon, 03 Apr 2023 13:37:29 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id nw6-20020a0562143a0600b005dd8b9345basm2885012qvb.82.2023.04.03.13.37.28
+        d=1e100.net; s=20210112; t=1680554354;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8W33znYIAl2DMyLncbJoqCopj/H6Dvst/McCNbNede4=;
+        b=4eqpbJLs2FTYkeDRuwEVcQxpr/om9gkZUIAhXJjdXtKa0tJcuSn6J7Nvl3cGKDahPl
+         342Se89Ez0tj4gFFElhaKp3GlDbRUOSuD4+JK/3RCiTIATUMFes3V4vzRsuooYXkuBof
+         HE0lvkVO+GAGXV8dxyErSV6tam78Yf0uB3Sm0AiVxt1qEbDIbuddIcp5zxwmpzHjqADw
+         W/C9UIjNArMmJ4Gepwi0HfmAsmWvfT6hwUaFRcbakLc8N7bcEmpZIgti5y9e4OVB4B+1
+         CjSLqffFyyKrTn+5MexCLk3BymLviwizI5xn8TguDZZSHlb1KKv++BOAXQFFwqO4E1CN
+         bt/A==
+X-Gm-Message-State: AAQBX9c9zQgyMrPLdftulmXvfaSXhY65YBvY/ay3hl5PH57VHp4Vr9PI
+        +iDbLCQ2+X0uSyHnobA1u2Nr5A==
+X-Google-Smtp-Source: AKy350YyFexgg+NYJQCh9I/uLB6xaL4WoSYOUrK8XcxLQm3830fqtBhPHXAE9Y7PxeJU7wWXoNVzhQ==
+X-Received: by 2002:adf:fa4c:0:b0:2da:75c5:e127 with SMTP id y12-20020adffa4c000000b002da75c5e127mr25515578wrr.23.1680554353766;
+        Mon, 03 Apr 2023 13:39:13 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id z6-20020a5d4d06000000b002e6d4ac31a3sm8183664wrt.72.2023.04.03.13.39.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 13:37:29 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        Zhaoyang Li <lizhaoyang04@hust.edu.cn>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Dan Carpenter <error27@gmail.com>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc: bcm: brcmstb: biuctrl: fix of_iomap leak
-Date:   Mon,  3 Apr 2023 13:37:25 -0700
-Message-Id: <20230403203725.906166-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230327115422.1536615-1-lizhaoyang04@hust.edu.cn>
-References: <20230327115422.1536615-1-lizhaoyang04@hust.edu.cn>
+        Mon, 03 Apr 2023 13:39:13 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 23:39:11 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, abelvesa@kernel.org,
+        peng.fan@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        heiko@sntech.de, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] clk: imx: Remove values for mmask and nmask in
+ struct clk_fractional_divider
+Message-ID: <ZCs5bwy63l8E91AM@linaro.org>
+References: <cover.1680423909.git.christophe.jaillet@wanadoo.fr>
+ <187a2266c3a034a593a151d6e5e6b21118043b5d.1680423909.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <187a2266c3a034a593a151d6e5e6b21118043b5d.1680423909.git.christophe.jaillet@wanadoo.fr>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 19:54:22 +0800, Zhaoyang Li <lizhaoyang04@hust.edu.cn> wrote:
-> Smatch reports:
+On 23-04-02 11:42:05, Christophe JAILLET wrote:
+> Now that fractional_divider clk computes mmask and nmask when needed, there
+> is no more need to provide them explicitly anymore.
 > 
-> drivers/soc/bcm/brcmstb/biuctrl.c:291 setup_hifcpubiuctrl_regs() warn:
-> 'cpubiuctrl_base' from of_iomap() not released on lines: 291.
-> 
-> This is because in setup_hifcpubiuctrl_regs(),
-> cpubiuctrl_base is not released when handle error, which may cause a leak.
-> To fix this, iounmap is added when handle error.
-> 
-> Fixes: 22f7a9116eba ("soc: brcmstb: Correct CPU_CREDIT_REG offset for Brahma-B53 CPUs")
-> Signed-off-by: Zhaoyang Li <lizhaoyang04@hust.edu.cn>
-> Reviewed-by: Dan Carpenter <error27@gmail.com>
-> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
-> ---
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
---
-Florian
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+
+> ---
+>  drivers/clk/imx/clk-composite-7ulp.c | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/drivers/clk/imx/clk-composite-7ulp.c b/drivers/clk/imx/clk-composite-7ulp.c
+> index 4eedd45dbaa8..e208ddc51133 100644
+> --- a/drivers/clk/imx/clk-composite-7ulp.c
+> +++ b/drivers/clk/imx/clk-composite-7ulp.c
+> @@ -19,10 +19,8 @@
+>  #define PCG_CGC_SHIFT	30
+>  #define PCG_FRAC_SHIFT	3
+>  #define PCG_FRAC_WIDTH	1
+> -#define PCG_FRAC_MASK	BIT(3)
+>  #define PCG_PCD_SHIFT	0
+>  #define PCG_PCD_WIDTH	3
+> -#define PCG_PCD_MASK	0x7
+>  
+>  #define SW_RST		BIT(28)
+>  
+> @@ -102,10 +100,8 @@ static struct clk_hw *imx_ulp_clk_hw_composite(const char *name,
+>  		fd->reg = reg;
+>  		fd->mshift = PCG_FRAC_SHIFT;
+>  		fd->mwidth = PCG_FRAC_WIDTH;
+> -		fd->mmask  = PCG_FRAC_MASK;
+>  		fd->nshift = PCG_PCD_SHIFT;
+>  		fd->nwidth = PCG_PCD_WIDTH;
+> -		fd->nmask = PCG_PCD_MASK;
+>  		fd->flags = CLK_FRAC_DIVIDER_ZERO_BASED;
+>  		if (has_swrst)
+>  			fd->lock = &imx_ccm_lock;
+> -- 
+> 2.34.1
+> 
