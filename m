@@ -2,85 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4635B6D5498
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB656D549B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233775AbjDCWO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 18:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
+        id S233784AbjDCWPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 18:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233755AbjDCWOz (ORCPT
+        with ESMTP id S233755AbjDCWPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 18:14:55 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DCB3AAA
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:14:51 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id ek18so123173143edb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 15:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1680560090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pz91yzAU2UAnIEGcuZAN2UBettORvR8cQ9bqohgSsk0=;
-        b=ALO8Qn5xFvNz4rsPDF44hTiNkO4Evw9/Okujyehi/8Walss4GDxeTrJdXNumvKuXhX
-         3CBxSkVdS2peJUdjMCOxgjtSf4ZEVha/oijhlDUGxD4AZOGLW57VjTbBG8Fk4rKq/BUq
-         lZLLFG/4pGHPQ1Q5nFL0sv73HUS3Jz0QyOnmlK5XLMxoiq8xUOeBuFlw+yB6qCpI7iW2
-         hOVu+4Lu7i0Pe6YDLMWw6rDMmsBUjPeIfCK/rhgQ8X2aRpd6VkI+sMxpONP151Lvyrmy
-         v3xZTUTouhFktpwj5xqLsYJhnGaCMxP3Tmk+0djfL1qgJHj5auj0ppFrHyHxrCcnPZfA
-         0VQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680560090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pz91yzAU2UAnIEGcuZAN2UBettORvR8cQ9bqohgSsk0=;
-        b=2nXoVxPnv/YqBJV/yhkiGfKa3Mc+MDvj/IhVndTbpg2b7g8IA7+zAvstyjTogf60N3
-         S+eoJuEy0avDD0zU9xb024JJXbySZnZUShSwboSJITbZAAaaf3OP9dWO2bYYDfGqLyND
-         Xz3FNnH3UDsdxhzW0tWvRfUwLKPZy48g3+qGjoHi9/+n0RdGGzB7U/bgHBIcq0P2IMZk
-         xRTiNIiZboF7maByIqXLlRITtKcTF9aSjb8k7ApTo027PDQkY2W/WR2dyjBT2dRQU2iA
-         jaalmcbdHo3KtShhGVDmNqD/7caMmAr9ODSuqcGdr6Lq6k/TlRN4XUJawSulvkuJuTSI
-         GWbw==
-X-Gm-Message-State: AAQBX9fQo4bTJCSp3m5hPQmlHZRLGc209lQMRy59PFnl/q4AaAy0cZxY
-        opAhgFAHpzFd6pYRH+wpGyTeXjmp5jitFhh0JXa3Kg==
-X-Google-Smtp-Source: AKy350YmRv1iLngkX0mOxnDqYMEfEwwayOWjMkTvHV7B+sEUefsVnWdOIcoeTTZqAnBKtezbUNy00LAlmbCeogBuH3M=
-X-Received: by 2002:a17:906:b55:b0:93f:82cb:fe44 with SMTP id
- v21-20020a1709060b5500b0093f82cbfe44mr114966ejg.11.1680560089996; Mon, 03 Apr
- 2023 15:14:49 -0700 (PDT)
+        Mon, 3 Apr 2023 18:15:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C1A2733;
+        Mon,  3 Apr 2023 15:15:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B7A762741;
+        Mon,  3 Apr 2023 22:15:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88528C433D2;
+        Mon,  3 Apr 2023 22:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680560118;
+        bh=57QA0D3vMKUxVxiGwf9bCE+CVxDRjP2244HhifV2zpw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=auNZJlAFrquPLRfqf4+Mg/ydhzeX03nR2BHZhssNIr60GLrXdRFNwla7sdquGTJoX
+         tBbn5zn2w8ojwIgOPCaItN0L5jGXwCWYg5S1/0qNdQnCSOLYVbN3bVxx/3nd5EoVjW
+         j8zAZJWIbikpAOY/ED/FMva8a8pLbAPt5IXQwkI0uaoVQWYJuID/nk+YyCNjsSB0KP
+         rGPENaVbj+1STeyw2qGcV9iAiQ1dUhB9K2UnXQt3AfHA/InzLMtIws22kBDTSWaBeE
+         mue4cTvAiNQ235Dl8Hm+DOjuHi0KpNfe0owHejloFUH1I/3zGu5xp8rHafdMl5EiID
+         s8+Eu9k14Tg2A==
+Date:   Mon, 3 Apr 2023 23:15:12 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Samin Guo <samin.guo@starfivetech.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        Tommaso Merciai <tomm.merciai@gmail.com>
+Subject: Re: [-net-next v10 5/6] net: stmmac: Add glue layer for StarFive
+ JH7110 SoC
+Message-ID: <20230403-data-dawdler-afaaaf6fa87c@spud>
+References: <20230403065932.7187-1-samin.guo@starfivetech.com>
+ <20230403065932.7187-6-samin.guo@starfivetech.com>
 MIME-Version: 1.0
-References: <20230401200651.1022113-1-joe@isovalent.com> <ZCpMv1UHM1Vn+/ha@debian.me>
-In-Reply-To: <ZCpMv1UHM1Vn+/ha@debian.me>
-From:   Joe Stringer <joe@isovalent.com>
-Date:   Mon, 3 Apr 2023 15:14:39 -0700
-Message-ID: <CADa=RyzmpE-XwOan0B5s20yi58EbM2VUFZDSLaGJQ3nnWgzvWw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/2] docs/bpf: Add table to describe LRU properties
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
-        martin.lau@linux.dev, maxtram95@gmail.com, john.fastabend@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="84nP7Z0ce07Qtixm"
+Content-Disposition: inline
+In-Reply-To: <20230403065932.7187-6-samin.guo@starfivetech.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU3VuLCBBcHIgMiwgMjAyMyBhdCA4OjQ54oCvUE0gQmFnYXMgU2FuamF5YSA8YmFnYXNkb3Rt
-ZUBnbWFpbC5jb20+IHdyb3RlOg0KPg0KPiBPbiBTYXQsIEFwciAwMSwgMjAyMyBhdCAwMTowNjo1
-MFBNIC0wNzAwLCBKb2UgU3RyaW5nZXIgd3JvdGU6DQo+ID4gKz09PT09PT09PT09PT09PT09PT09
-PT09PSA9PT09PT09PT09PT09PT09PT09PT09PT09ID09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09DQo+ID4gK0ZsYWcgICAgICAgICAgICAgICAgICAgICBgYEJQRl9NQVBfVFlQRV9MUlVf
-SEFTSGBgIGBgQlBGX01BUF9UWVBFX0xSVV9QRVJDUFVfSEFTSGBgDQo+ID4gKz09PT09PT09PT09
-PT09PT09PT09PT09PSA9PT09PT09PT09PT09PT09PT09PT09PT09ID09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09DQo+ID4gK2BgQlBGX0ZfTk9fQ09NTU9OX0xSVWBgICBQZXItQ1BVIExS
-VSwgZ2xvYmFsIG1hcCAgIFBlci1DUFUgTFJVLCBwZXItY3B1IG1hcA0KPiA+ICtgYCFCUEZfRl9O
-T19DT01NT05fTFJVYGAgR2xvYmFsIExSVSwgZ2xvYmFsIG1hcCAgICBHbG9iYWwgTFJVLCBwZXIt
-Y3B1IG1hcA0KPiA+ICs9PT09PT09PT09PT09PT09PT09PT09PT0gPT09PT09PT09PT09PT09PT09
-PT09PT09PSA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KPg0KPiBUaGUgaGVhZGVy
-IGNvbHVtbiBlbnRyaWVzIHNob3VsZCBhbHNvIGJlIGJvbGQgKGFzIGFib3ZlIGlzIHR3by13YXkN
-Cj4gdGFibGUpLg0KDQpUaGV5IGxvb2sgYm9sZCB0byBtZSBhbHJlYWR5LCBkbyBJIG5lZWQgdG8g
-dGFrZSBhbnkgYWN0aW9uIGhlcmU/DQo=
+
+--84nP7Z0ce07Qtixm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, Apr 03, 2023 at 02:59:31PM +0800, Samin Guo wrote:
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 6b6b67468b8f..a9684b3c24f9 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19909,6 +19909,7 @@ STARFIVE DWMAC GLUE LAYER
+>  M:	Emil Renner Berthing <kernel@esmil.dk>
+>  M:	Samin Guo <samin.guo@starfivetech.com>
+>  S:	Maintained
+
+> +F:	Documentation/devicetree/bindings/net/dwmac-starfive.c
+
+Funny name you got for a binding there mate!
+
+--84nP7Z0ce07Qtixm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCtP7wAKCRB4tDGHoIJi
+0myQAP9wARDgakX8FcF58KbJswTnvpTw2I1YphYE7uWfxOLrlwD7Bo0T6w52woIL
+AhFB+0TUkn9D0MEdo0+3Cvoz6DRWuww=
+=tani
+-----END PGP SIGNATURE-----
+
+--84nP7Z0ce07Qtixm--
