@@ -2,105 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828986D4027
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8752B6D402C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbjDCJUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S232016AbjDCJU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbjDCJUp (ORCPT
+        with ESMTP id S231935AbjDCJUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:20:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E42A25D;
-        Mon,  3 Apr 2023 02:20:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6EB5B81639;
-        Mon,  3 Apr 2023 09:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6655CC4339C;
-        Mon,  3 Apr 2023 09:20:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680513619;
-        bh=UDNPMuPsDND090IyeyJNHO/ANUFc551BRYCtKd2MvJg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=PYaIENdHn3xPPl2Slb1J4ZRCepFLzznYLvwTIAXPpE0m9xuefMw0ljahRJbmIKbVW
-         7Vyt/EA++I3qqoNlbCJHaOnWKbKjmBDMiTIzB/PJaTe1dPLoi9LxY4kwtZgJaZ6sCX
-         I2yUbYoJ4d0MNMpcxQlP3hayg6n0WZbKC5TfltV0q8S+wFOgSLIbCHK9pCgMPXUI1R
-         4DAO+8L5VWd5cLNc47H8SfBOfPc65+oy+hmHPhOVT2oz0z2eFRDCs8CT239qBUzd+O
-         qaEWLG/FcfJTxhtHCjrRcOlNzWsOEho+70+v13EZZBMbssmbe1eVPFmjl9BkErjCk9
-         4hGzkJ/26vkxw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4E1A2E5EA82;
-        Mon,  3 Apr 2023 09:20:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 3 Apr 2023 05:20:47 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2843E44AC;
+        Mon,  3 Apr 2023 02:20:26 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id A7F68604FA;
+        Mon,  3 Apr 2023 11:20:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680513624; bh=YwMDWlermRYUB+ohGE2pB+S5andxsxN1vsjRKD2AOZU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=az7mOw17rlc+H7p/rz6e0IM2E28pveY3nRjdMz9SS8eQmo/8+l0/+OH3NBZw/GvIB
+         522cIK/o+OoYAAURQ4YDYP0Uq6+McAUVwPlS3697bYNY0G3QSY8SHCh3ycK4mFJuRC
+         ZxQuRw7FT7av/SAW3mGUpvnH/unex8UwzawXc4E4sxOAYEQ5NOgEEt+CjkVA8q2DVR
+         4TtTblwc9LHGU3KNzWl/UyTmqCGSu/axtm0nByb4QDxFSiCROPfvlfqj51i0szqw8m
+         Oa5iscPY+Ha5b1+RwEvMkCwr5mcdYudtc7g/t60MbMfbGwxliMtoiZ58+JSdKpaOkS
+         2MCXrWaUNMbQg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id LSp7U_GhOtvV; Mon,  3 Apr 2023 11:20:22 +0200 (CEST)
+Received: from [10.0.1.57] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id D3D15604F7;
+        Mon,  3 Apr 2023 11:20:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680513622; bh=YwMDWlermRYUB+ohGE2pB+S5andxsxN1vsjRKD2AOZU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=0jvVvtRxGyCkvVqYoPM2xkLrLeqlW0UQNELz4K5xlw0lq+uKuWjoidCwveCYsh5Na
+         N84HG7zO+gzeAl4BCvjR8sssEEIddgJU57PffcJ/8gKltSy3HoWEUb1tGm2AoCTU/Y
+         ArxMsUXhAmVDE5RWTwL5Esd/nlngYG6Doz4kba+DKdqrD87KDV1SGiW2aJ9jXxE9sI
+         sND5DsuTE0raZe310NyP6KvfrgI5AvZa3ojFkFt45fFbN4Gd8LEejQJxv5j/vQoqvp
+         d3Uc2VhmJrbWuXjtwYZPPy0FfF6V6K7pIx5U/T1MSk/CB0BMfgPFaCEVf7VqY3Nbti
+         L5g8PeMeqOvAA==
+Message-ID: <155279c4-3d44-1419-2b8d-a189a2177f0e@alu.unizg.hr>
+Date:   Mon, 3 Apr 2023 11:20:21 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] xhci: Free the command allocated for setting LPM if we
+ return early
+Content-Language: en-US, hr
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, ubuntu-devel-discuss@lists.ubuntu.com,
+        stern@rowland.harvard.edu, arnd@arndb.de, Stable@vger.kernel.org
+References: <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
+ <20230327095019.1017159-1-mathias.nyman@linux.intel.com>
+ <d84fe574-e6cc-ad77-a44c-1eb8df3f2b6b@alu.unizg.hr>
+ <46a9abc1-6121-032f-4416-261af73ac05c@linux.intel.com>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <46a9abc1-6121-032f-4416-261af73ac05c@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] ipv6: Fix an uninit variable access bug in
- __ip6_make_skb()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168051361931.15794.6903951386733937555.git-patchwork-notify@kernel.org>
-Date:   Mon, 03 Apr 2023 09:20:19 +0000
-References: <20230403073417.2240575-1-william.xuanziyang@huawei.com>
-In-Reply-To: <20230403073417.2240575-1-william.xuanziyang@huawei.com>
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-Cc:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dlstevens@us.ibm.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Mon, 3 Apr 2023 15:34:17 +0800 you wrote:
-> Syzbot reported a bug as following:
+On 28.3.2023. 9:57, Mathias Nyman wrote:
+> On 28.3.2023 1.25, Mirsad Goran Todorovac wrote:
+>> On 27. 03. 2023. 11:50, Mathias Nyman wrote:
+>>> The command allocated to set exit latency LPM values need to be freed in
+>>> case the command is never queued. This would be the case if there is no
+>>> change in exit latency values, or device is missing.
+>>>
+>>> Fixes: 5c2a380a5aa8 ("xhci: Allocate separate command structures for each LPM command")
+>>> Cc: <Stable@vger.kernel.org>
+>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>> ---
+>>>   drivers/usb/host/xhci.c | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>> index bdb6dd819a3b..6307bae9cddf 100644
+>>> --- a/drivers/usb/host/xhci.c
+>>> +++ b/drivers/usb/host/xhci.c
+>>> @@ -4442,6 +4442,7 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
+>>>       if (!virt_dev || max_exit_latency == virt_dev->current_mel) {
+>>>           spin_unlock_irqrestore(&xhci->lock, flags);
+>>> +        xhci_free_command(xhci, command);
+>>>           return 0;
+>>>       }
+>>
+>> After more testing, I can confirm that your patch fixes the leak in the original
+>> environment.
 > 
-> =====================================================
-> BUG: KMSAN: uninit-value in arch_atomic64_inc arch/x86/include/asm/atomic64_64.h:88 [inline]
-> BUG: KMSAN: uninit-value in arch_atomic_long_inc include/linux/atomic/atomic-long.h:161 [inline]
-> BUG: KMSAN: uninit-value in atomic_long_inc include/linux/atomic/atomic-instrumented.h:1429 [inline]
-> BUG: KMSAN: uninit-value in __ip6_make_skb+0x2f37/0x30f0 net/ipv6/ip6_output.c:1956
->  arch_atomic64_inc arch/x86/include/asm/atomic64_64.h:88 [inline]
->  arch_atomic_long_inc include/linux/atomic/atomic-long.h:161 [inline]
->  atomic_long_inc include/linux/atomic/atomic-instrumented.h:1429 [inline]
->  __ip6_make_skb+0x2f37/0x30f0 net/ipv6/ip6_output.c:1956
->  ip6_finish_skb include/net/ipv6.h:1122 [inline]
->  ip6_push_pending_frames+0x10e/0x550 net/ipv6/ip6_output.c:1987
->  rawv6_push_pending_frames+0xb12/0xb90 net/ipv6/raw.c:579
->  rawv6_sendmsg+0x297e/0x2e60 net/ipv6/raw.c:922
->  inet_sendmsg+0x101/0x180 net/ipv4/af_inet.c:827
->  sock_sendmsg_nosec net/socket.c:714 [inline]
->  sock_sendmsg net/socket.c:734 [inline]
->  ____sys_sendmsg+0xa8e/0xe70 net/socket.c:2476
->  ___sys_sendmsg+0x2a1/0x3f0 net/socket.c:2530
->  __sys_sendmsg net/socket.c:2559 [inline]
->  __do_sys_sendmsg net/socket.c:2568 [inline]
->  __se_sys_sendmsg net/socket.c:2566 [inline]
->  __x64_sys_sendmsg+0x367/0x540 net/socket.c:2566
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Thanks for testing.
+> Can I add the tags below to the patch?
 > 
-> [...]
+> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+> Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+> 
+> Thanks
+> Mathias
 
-Here is the summary with links:
-  - [net] ipv6: Fix an uninit variable access bug in __ip6_make_skb()
-    https://git.kernel.org/netdev/net/c/ea30388baebc
+Sure, thanks for the thought. Sorry, my Thunderbird has hidden your message,
+I saw it only on Lore and accidentally.
 
-You are awesome, thank you!
+Regards,
+Mirsad
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
 
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
