@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AEC6D4FBC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9686D4FC6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbjDCR5h convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Apr 2023 13:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S232740AbjDCR7z convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Apr 2023 13:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbjDCR5X (ORCPT
+        with ESMTP id S232712AbjDCR7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:57:23 -0400
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FB140C7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:57:13 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id cn12so120693605edb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:57:13 -0700 (PDT)
+        Mon, 3 Apr 2023 13:59:50 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CDE3AAB
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:59:23 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id i5so120860320eda.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:59:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680544632;
+        d=1e100.net; s=20210112; t=1680544670;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JD74zvu5PhDi9TeO5OaVRzWLRZY1j9Wulq+9wskASto=;
-        b=lMh+eeWjpvTmuEQVxs4NF2CDxOiQFY9xw5J++3sbXvTnm5asu1V/U2n5FpZYxgFYXf
-         LV1NWRHnBjv1WsqoCEA/CvaFnEEGamIsgYVYBFNq+biGv5XfIBwaIFakwLfqG5wQ4faV
-         OKNdnOQMONPqG/qpOtjmOEyvVNDtADVyxRpYF5yq/id5JaxcaQoOqnh8mXImvVVzWaIH
-         cdReAa0uWk419GkwG0jXZrxvYjUme7K1IgHP9eaqDz/swf7JlnXruw7f6adXQu+iDeIx
-         PRFkFQIzcpgSZfs7luIWLWJrHQhG6yAd9rZepY8/HVPYSe4moGl6c2vxV5JSK5heKnVG
-         EExA==
-X-Gm-Message-State: AAQBX9ciZyy0FXiaFly5PiHuvbJjaA+4XdlGam8WREI2RASxnD4nHBiO
-        y8bSqcUAdmKcg9S8dg3YPolQcKlQgEFYW8tyxJ8=
-X-Google-Smtp-Source: AKy350aWH+7epuP8/TDN+Zq5JP+yyeahagpujfx8F3WN5d8baUAK5/N28NR8RSW4zaKweUNpbjSIegGzkwu9GVUmq4A=
-X-Received: by 2002:a50:bac1:0:b0:4fa:3c0b:74b with SMTP id
- x59-20020a50bac1000000b004fa3c0b074bmr52259ede.3.1680544632141; Mon, 03 Apr
- 2023 10:57:12 -0700 (PDT)
+        bh=Zdla5rejrcEhOYw74pFRk6pnEtVJwILDYX/iCCA2b94=;
+        b=pD7ENBKbB4y7DRB5Yw5WPEcIRXAfXkOGIgQ6bpx976r+UnJuJCTZ0UuOl2DXn5Z2FB
+         sCHsko4gAjJJz/Ex0+z94f09QDdisIrMU+BQO5fdgIXUAI07Vk/koxWP3etsIN6jZ712
+         wsFodlVtmxDngJmnON2vSbImSIcqXsK386VsLeVZ1bVcDQDXQzcoU8rZc9qg19KHbrjg
+         bZ1TAfiwmZ2MzW65PNTd7deSidgENjReghp0g+i1/8Vn4i3VqdkACwL4UXINdZgFJBeE
+         pzHAPru2Yuc7lIawnk1FyC4C2ORXWl3UWPzN+FkGcVjjw1Ha2Yi7abhPq7x8/UFvv5XD
+         GJqg==
+X-Gm-Message-State: AAQBX9dQ3oPSzgJzheiWndWHNVh/NIRt7Y4YsrYohWqluP8wLS1/6Ewg
+        N3DDgBrbPCtgtWTlCJ6l/3GPCxFnwSB+Qj8qUT4=
+X-Google-Smtp-Source: AKy350Yxcv2qvLT5IbjrOUJPIftoHFiadRnEXdjJet2kfDFjrR1ezhzcUYi010MzDFHRpd0XgPsv9MCjsacR/cjdnh0=
+X-Received: by 2002:a17:907:d02:b0:931:6921:bdbb with SMTP id
+ gn2-20020a1709070d0200b009316921bdbbmr17586102ejc.2.1680544669749; Mon, 03
+ Apr 2023 10:57:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <2023040244-duffel-pushpin-f738@gregkh> <2023040248-customary-release-4aec@gregkh>
-In-Reply-To: <2023040248-customary-release-4aec@gregkh>
+References: <2023040244-duffel-pushpin-f738@gregkh> <2023040249-handball-gruffly-5da7@gregkh>
+In-Reply-To: <2023040249-handball-gruffly-5da7@gregkh>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 3 Apr 2023 19:57:01 +0200
-Message-ID: <CAJZ5v0hiqqKaBd3vDu74V9KwJY6J_w2iLuc_shb+C-LBaArxaA@mail.gmail.com>
-Subject: Re: [PATCH 2/5] driver core: class: make class_register() take a
- const *
+Date:   Mon, 3 Apr 2023 19:57:38 +0200
+Message-ID: <CAJZ5v0hvE8ttVfpCveL8TwL_ApZpaPY-eKXGv09CoCb26p79Gw@mail.gmail.com>
+Subject: Re: [PATCH 3/5] driver core: class: mark the struct class in struct
+ class_interface constant
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -60,9 +60,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Sun, Apr 2, 2023 at 7:59 PM Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
-> Now that the class code is cleaned up to not modify the class pointer
-> registered with it, change class_register() to take a const * to allow
-> the structure to be placed into read-only memory.
+> The struct class pointer in struct class_interface is never modified, so
+> mark it as const so that no one accidentally tries to modify it in the
+> future.
 >
 > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -70,68 +70,36 @@ On Sun, Apr 2, 2023 at 7:59 PM Greg Kroah-Hartman
 Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
 > ---
->  drivers/base/base.h          | 2 +-
->  drivers/base/class.c         | 6 +++---
+>  drivers/base/class.c         | 2 +-
 >  include/linux/device/class.h | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/base/base.h b/drivers/base/base.h
-> index e96f3343fd7c..eb4c0ace9242 100644
-> --- a/drivers/base/base.h
-> +++ b/drivers/base/base.h
-> @@ -54,7 +54,7 @@ struct subsys_private {
->         struct device *dev_root;
->
->         struct kset glue_dirs;
-> -       struct class *class;
-> +       const struct class *class;
->
->         struct lock_class_key lock_key;
->  };
 > diff --git a/drivers/base/class.c b/drivers/base/class.c
-> index 53fc7052340c..05bce79d3d19 100644
+> index 05bce79d3d19..ad8b9f163fd2 100644
 > --- a/drivers/base/class.c
 > +++ b/drivers/base/class.c
-> @@ -93,7 +93,7 @@ static ssize_t class_attr_store(struct kobject *kobj, struct attribute *attr,
->  static void class_release(struct kobject *kobj)
+> @@ -498,7 +498,7 @@ EXPORT_SYMBOL_GPL(class_interface_register);
+>  void class_interface_unregister(struct class_interface *class_intf)
 >  {
->         struct subsys_private *cp = to_subsys_private(kobj);
-> -       struct class *class = cp->class;
-> +       const struct class *class = cp->class;
+>         struct subsys_private *sp;
+> -       struct class *parent = class_intf->class;
+> +       const struct class *parent = class_intf->class;
+>         struct class_dev_iter iter;
+>         struct device *dev;
 >
->         pr_debug("class '%s': release.\n", class->name);
->
-> @@ -110,7 +110,7 @@ static void class_release(struct kobject *kobj)
->  static const struct kobj_ns_type_operations *class_child_ns_type(const struct kobject *kobj)
->  {
->         const struct subsys_private *cp = to_subsys_private(kobj);
-> -       struct class *class = cp->class;
-> +       const struct class *class = cp->class;
->
->         return class->ns_type;
->  }
-> @@ -175,7 +175,7 @@ static void klist_class_dev_put(struct klist_node *n)
->         put_device(dev);
->  }
->
-> -int class_register(struct class *cls)
-> +int class_register(const struct class *cls)
->  {
->         struct subsys_private *cp;
->         struct lock_class_key *key;
 > diff --git a/include/linux/device/class.h b/include/linux/device/class.h
-> index f3c418fa129a..4bf46f9bbb56 100644
+> index 4bf46f9bbb56..53287aa105b8 100644
 > --- a/include/linux/device/class.h
 > +++ b/include/linux/device/class.h
-> @@ -76,7 +76,7 @@ struct class_dev_iter {
->         const struct device_type        *type;
->  };
+> @@ -217,7 +217,7 @@ ssize_t show_class_attr_string(const struct class *class, const struct class_att
 >
-> -int __must_check class_register(struct class *class);
-> +int __must_check class_register(const struct class *class);
->  void class_unregister(const struct class *class);
->  bool class_is_registered(const struct class *class);
+>  struct class_interface {
+>         struct list_head        node;
+> -       struct class            *class;
+> +       const struct class      *class;
 >
+>         int (*add_dev)          (struct device *, struct class_interface *);
+>         void (*remove_dev)      (struct device *, struct class_interface *);
 > --
 > 2.40.0
 >
