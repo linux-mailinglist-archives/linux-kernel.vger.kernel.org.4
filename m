@@ -2,113 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E0F6D4B70
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745536D4CC7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234285AbjDCPIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
+        id S232972AbjDCP4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234194AbjDCPIK (ORCPT
+        with ESMTP id S232662AbjDCPzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:08:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDA64C35;
-        Mon,  3 Apr 2023 08:08:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Apr 2023 11:55:51 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AD030DD
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:55:21 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADF7561A55;
-        Mon,  3 Apr 2023 15:08:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18A37C4339B;
-        Mon,  3 Apr 2023 15:07:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680534482;
-        bh=Zvq9Hzpetq9+ZiBrci0/SnW1z0Ndhco9dW2OQzO42bc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=LPSID/hW1iIiGUMdrfSA+O+e5b98RytK7Y34WEdMUQGE3B5wDApQjkEE5j5LWK8IX
-         iuYzO1CRQem0UBb0MQ+yHt7bysq+oQ0HzTXXWSGs9R2uWVdIVfs9zs//X59D67fOTN
-         kkR8fYsJ0VhLg6hSdwaJ5VI3mSZ2hcwWaB7MRGOqNVPFZmJO17v7EvZSXcaKhGrYJf
-         YOsayAmvzQSvVZqafUNir2ALY1AiobPKEfd52C9PVugNvVLiTefUzF8qh3pqLB9yVC
-         OJF12k5hKshsRfEzqU1EqfYrvbkZDZbVBqMlTzMVEA72PlpFMQICPWceC5MK6a/S41
-         X+dDKoQeE4sJg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-phy@lists.infradead.org,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>
-In-Reply-To: <20230325122444.249507-1-vkoul@kernel.org>
-References: <20230325122444.249507-1-vkoul@kernel.org>
-Subject: Re: (subset) [PATCH v2 00/12] Introduce the SC8180x devices
-Message-Id: <168053447680.47740.2062036242012042206.b4-ty@kernel.org>
-Date:   Mon, 03 Apr 2023 16:07:56 +0100
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4PqwT337Nzz9sSn;
+        Mon,  3 Apr 2023 17:55:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1680537303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fVP0qrByRoh/sDbYz3vxEjtA0pFI+Fsrhbe/3Y6bLB0=;
+        b=bZ0L9oNzOADkEHZGmSgPP69X6mxaO0xn4fTHsMTuWEHKGFXn+Hhx9RepiPO0xwTfjSPKil
+        LottxSqjTIv8qYS+cf+HS6w5QLIvpQPiyWBA3DCCrc2/uNni9mwzHaZJm3fb7RJmvTKu+2
+        BXJ9ajv2ZGjT3ble6tDiTyMWR6wePaYQiHkNNMuPBA0K5MMfdUluVnauYLsWD+HNgonxum
+        3YNzo+RBjUgl3CKS3ASiBDXsnCMxQHYblImZahIV5lJpgRe8BsSO4etSdiX8flSggjckuP
+        owNNJPnhvQz5AllCKv7pDu3Nhh3aXk1hW29QAZZqDxops1hy9tLxpRR1Uscrbg==
+References: <20230331110245.43527-1-me@crly.cz>
+ <20230331110245.43527-4-me@crly.cz> <87h6tya70h.fsf@oltmanns.dev>
+ <CRN65FVKWIUG.1VSDAH8INXQMT@iMac.local>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Roman Beranek <me@crly.cz>
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] drm: sun4i: calculate proper DCLK rate for DSI
+Date:   Mon, 03 Apr 2023 17:08:33 +0200
+In-reply-to: <CRN65FVKWIUG.1VSDAH8INXQMT@iMac.local>
+Message-ID: <87pm8lj709.fsf@oltmanns.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Rspamd-Queue-Id: 4PqwT337Nzz9sSn
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Mar 2023 17:54:32 +0530, Vinod Koul wrote:
-> This introduces Qualcomm SC8180x SoC which features in Lenovo Flex 5G
-> laptop. This also adds support for Primus platform as well as Lenovo Flex 5G
-> laptop.
-> 
-> I would be great if submaintainers can ack the binding patch so that
-> everything can go thru qcom tree
-> 
-> [...]
 
-Applied to
+On 2023-04-03 at 15:52:36 +0200, "Roman Beranek" <me@crly.cz> wrote:
+> On Sun Apr 2, 2023 at 12:49 PM CEST, Frank Oltmanns wrote:
+>>
+>> When apply this to drm-next my panel stays dark. I haven't figured out
+>> yet why, though. The other two patches in this series work fine, i.e.
+>> they have no effect as they are just a refactoring.
+>>
+>> I'm testing this on my pinephone. It's the same with the patch I
+>> submitted. For whatever reason, it no longer works on drm-next.
+>
+> I've reproduced the issue on my PinePhone and noticed that tcon0 had set
+> pll-video0-2x as its parent instead of pll-mipi. Having tried a whole
+> range of pll-video0 rates, I'm now convinced that DSI only works when
+> tcon0 has pll-mipi as its parent.
+>
+> As little a change as setting .clock in the default mode of PP's panel
+> to 73500 can fix it. Better yet, dropping pll-video0-2x from the set
+> of acceptable parents for tcon0 fixes it universally. And that's what
+> megi's kernel does, though the measure was introduced with a different
+> rationale:
+> <https://github.com/megous/linux/commit/7374d5756aa0cc3f11e494e3cbc54f6c7c01e1a8>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+For sake of completeness, the patch you referenced builds on this patch:
+https://github.com/megous/linux/commit/45e0aa8d9e34
 
-Thanks!
+Are you saying that your other boards and panels work without these
+patches?
 
-[08/12] regulator: dt-bindings: qcom,rpmh: Add compatible for PMC8180
-        commit: fc4fef625decc80cf3a72e884a4e37288bfa0f9b
+Best regards,
+  Frank
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+>
+> Roman
