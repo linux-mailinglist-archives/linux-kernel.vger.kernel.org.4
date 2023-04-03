@@ -2,68 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083336D501B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CC36D501E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbjDCSO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
+        id S232195AbjDCSRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjDCSO0 (ORCPT
+        with ESMTP id S231320AbjDCSRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:14:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C922D40;
-        Mon,  3 Apr 2023 11:14:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D1DA62474;
-        Mon,  3 Apr 2023 18:14:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A47EC4339B;
-        Mon,  3 Apr 2023 18:14:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680545653;
-        bh=dZxhtfWNZthe6C4xSPneZtKMKl2XLrfONcmPfYXK2jc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NZstyKQH0+x8/mU9b3+M59+yT3SblfTJS/FVkhjxHos8YUryMzPUtFsi8nSJ4T3Zv
-         +ep2vLyEI98IrmpcyD6Eru2ott753MJDrXx5qtq2b2gP40+2H4LHrSAiI2sxs0DqfN
-         ZEIMgcYQR65Xrs0LocD744pzfk+sIq6ymQyM6OBOIGaZ/z9Z4y4edcGAiDeMumbE/i
-         Ox1QX+bx7l7WJlhGqnvJC+WIxAw8indMjTb3w4tbW70snSUM0sG2MKccdlfvRmJ8po
-         OpiWE1hgFtBNmQ00BcRSyyu5w9c6zB8eoKuCa54h5I0uc5XtEMLRPKQVtQeeAgHwlk
-         O4POQ7nF5cm5g==
-Date:   Mon, 3 Apr 2023 19:14:04 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_ipkumar@quicinc.com
-Subject: Re: [PATCH V2 4/6] regulator: qcom_smd: Add support to define the
- bootup voltage
-Message-ID: <8c513ddc-435e-40ce-b1f8-84eaf8241ed4@sirena.org.uk>
-References: <751e5129-3c11-0156-719e-3fe996a149be@quicinc.com>
- <3f434777-c4b6-272f-1971-f9adf3faefe4@linaro.org>
- <a54d4e1b-d62d-559d-1882-e460e696c056@quicinc.com>
- <ca12735e-d6c8-997e-036f-693cd8a9870f@linaro.org>
- <e19393e3-5898-bff2-cc00-d88c9194c7c2@quicinc.com>
- <6e1f6466-7f2e-7bd5-f6a2-5691a30c4e1f@linaro.org>
- <9989c92c-9949-5531-c7d2-e54882795a68@quicinc.com>
- <69df153d-bdc6-9008-39d6-72f66bab2e38@linaro.org>
- <5914a8db-3644-1c94-00ba-460ba2c26a5d@quicinc.com>
- <3c5a9608-ecd2-a3c0-e866-7d0070e49b89@linaro.org>
+        Mon, 3 Apr 2023 14:17:39 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF978172C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:17:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1680545856;
+        bh=MMINr1wx2F4/gc5fF+IUmCs4/SrHkSmZpW+gy0rM4v8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=vKmibUHnM6T2OpUInYHWDvDvZY+/+IgQXhvr9ODrqryot8PRwb/d+hIv+RyfOyZ3W
+         0OVXGX6Fspi4UGxk3GIC6MYClZ473+SZFuHHNbKEE9/B5wWSBPLs6LdnFmtuEn85rG
+         X4PQYt3jcZl+TiioWKZeRuFD2x/Mvg46vVEjg8RwdsPfREZnXVyYWiU+cC0dT865dh
+         ZcB3mTu3OusUMqApO0L5dsIpquyDfmoInJEGa7DLwFuyx+6orCCcc7xor1v/t9mKha
+         zWI2et+ViutntWGcLacSsxyaeswRqc7pMo/DKI2QYAW85LBMENvRM7+cE3ZGqa2goS
+         XYQz9c+/QGSMw==
+Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PqzdX564HztWT;
+        Mon,  3 Apr 2023 14:17:36 -0400 (EDT)
+Message-ID: <371efe6e-114f-f9fe-b14a-42b34f2ef61f@efficios.com>
+Date:   Mon, 3 Apr 2023 14:17:53 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+3527FmE72Bif88B"
-Content-Disposition: inline
-In-Reply-To: <3c5a9608-ecd2-a3c0-e866-7d0070e49b89@linaro.org>
-X-Cookie: Membership dues are not refundable.
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH] sched: Introduce per-mm/cpu concurrency id state
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
+References: <20230330230911.228720-1-mathieu.desnoyers@efficios.com>
+ <20230331085229.GB186694@ziqianlu-desk2>
+Content-Language: en-US
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20230331085229.GB186694@ziqianlu-desk2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,47 +52,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-03-31 04:52, Aaron Lu wrote:
+> On Thu, Mar 30, 2023 at 07:09:11PM -0400, Mathieu Desnoyers wrote:
+>> Keep track of the currently allocated mm_cid for each mm/cpu rather than
+>> freeing them immediately. This eliminates most atomic ops when context
+>> switching back and forth between threads belonging to different memory
+>> spaces in multi-threaded scenarios (many processes, each with many
+>> threads).
+> 
+> Good news, the lock contention is now gone and back to v6.2 level:
 
---+3527FmE72Bif88B
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Aaron,
 
-On Mon, Apr 03, 2023 at 07:53:48PM +0200, Konrad Dybcio wrote:
-> On 3.04.2023 16:07, Devi Priya wrote:
+Can you please test the updated patch I've sent ? I have updated the
+subject to make it clear that this is a fix for a performance regression,
+improved comments, and it now passes more thorough testing. See:
 
-> > But, when the regulator driver comes up, it tries to bring up the
-> > regulators to the minimum supported voltage provided with the
-> > regulator-min-microvolt property in the DT.
+https://lore.kernel.org/lkml/20230403181342.210896-1-mathieu.desnoyers@efficios.com/
 
-> Right, that exists..=20
+Thanks,
 
-> Mark, do you think it should be updated such that the requests are
-> aggregated before assuming min_uV is "just fine"?
+Mathieu
 
-We can't tell if any consumers are ever going to appear, and the
-regulator having a voltage outside of the constraints is an urgent
-problem we need to fix quickly.  Since we try to bring the voltage to
-the nearest end of the constraint the driver could always change the
-bogus voltage it reports to one that is excessively high, this would
-mean the core will try to bring the voltage down to the maximum rather
-than up to the minimum.  The driver could also look at the constraints
-when guessing at the hardware configuration rather than claiming an out
-of spec voltage, this would mean we wouldn't need to correct anything.
+> 
+> node0_0.profile:     0.07%     0.07%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_1.profile:     0.06%     0.06%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_2.profile:     0.09%     0.09%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_3.profile:     0.08%     0.08%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_4.profile:     0.09%     0.09%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_5.profile:     0.10%     0.10%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_6.profile:     0.10%     0.10%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_7.profile:     0.07%     0.07%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_8.profile:     0.08%     0.08%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_9.profile:     0.06%     0.06%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_0.profile:     0.41%     0.41%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_1.profile:     0.38%     0.38%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_2.profile:     0.44%     0.44%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_3.profile:     5.64%     5.64%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_4.profile:     6.08%     6.08%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_5.profile:     3.45%     3.45%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_6.profile:     2.09%     2.09%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_7.profile:     2.72%     2.72%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_8.profile:     0.16%     0.16%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_9.profile:     0.15%     0.15%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> (those few profiles from node1's cpus that have more than 2% contention
+> are from thermal functions)
+> 
+> Tested-by: Aaron Lu <aaron.lu@intel.com> # lock contention part
 
---+3527FmE72Bif88B
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQrF2wACgkQJNaLcl1U
-h9DUkgf5AeX2hkEfb36b/p7jPZcbfRZXttviLT2LkmjynPWAK8PRiewZ0XNVv4An
-E51IGruDP7nB2ArHnrhCwICAU0r4r6TRSaY3S6xgxhdCZqi+1VHIKhLTYDNHD9/d
-TmCnsqxzC0c3cj9OB8couC3BgfGXOp0pGMuZLzeYlCG+trEbwBu2HnqBGx5L6zBV
-n6jUvhhazcyrVfYaxdDBzxHUM/CPiIY5ez7jEcD4PLXEvlSZFDmE5AZTs28HAZTx
-b5qtdfIrV4D5JYNfU90pg5JB2kcN3Uc1iYuFX7Y40hD778/gG+9xHi3jsGt2L06/
-Vn3MCOS4ssu5v19tKmFquxaxpVcZSA==
-=0SE9
------END PGP SIGNATURE-----
 
---+3527FmE72Bif88B--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
