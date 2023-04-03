@@ -2,216 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233676D50FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1536D5102
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbjDCStT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
+        id S233407AbjDCSuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbjDCStR (ORCPT
+        with ESMTP id S233389AbjDCSuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:49:17 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D941BF3;
-        Mon,  3 Apr 2023 11:49:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UB+APoCSj9NtnZ/DgSPSJVRcZSotTHc4ZLt3wcMcmYKnyT43TAeJTFwD1KpR8tXbP6Ov3EybZs2g/DDMTUgk2Oe/jTEWIl2Uep07dPkwtA83XFxZN8NLkle+GMFda8Y/maOyrM1pygBzWHneSPrbDrfBLNNAQW5JL0aSpLsm3QoJ3Y1zZ/LYuYZDNQMGPO4QZoixAov+bnmtOy7iI+9Q0o122wAgPU7qtjCORgzNSbsmPKV4QZTZJN5nWiPEZMsAE8GHuVYoew9XVzSfVMPU923KGp6QVcgdosoxUA+qOBmBh1BU/0wfJdUbk0lQ0fuiRvYyWH8DaHYePey0NKC7oA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3oA+3Xc0SRG1xTmFuM1mM6ikHs1lQywvdw89vBox+WQ=;
- b=CVxcH+Gv1GyJPD5Qea9Vqr8uwZ9UiI0ttEHPPYbDCeAT4XzkJ+VTRetI0DkRa88ktlrnEKmDBAxAD3WjdYfKuW1eK2l9pobuYreLWGyLNYcXfsbAedS/jXiLv11OlilP+IteDXy4CPPHYah9AADcmV4nClK1aLnL0ow+nOB0iykoijIys1F5KFUCYgmgdaZzh5k4Z0IeSaT0Fyr7em/eB8mxCmk23yB8L7j6RzjgOkWu2GK9y9K0xiyznXzTwWtWkFI5f5Tswm3uGy0uK5l3q8u8M/o+iC4s05k/a/3l3Jn6lpeVkKKpQnl4sofSulMKT9PlfjEVgWeoN5OR+D9Hkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3oA+3Xc0SRG1xTmFuM1mM6ikHs1lQywvdw89vBox+WQ=;
- b=NE1Rp5RH0sidAybmSrhXKxqgRke05XVzwodiSSguqIouoP7UsNv4v29v96E0EB6t/Nys9bgyFsi560En7g1Xwftbhu7cqGICgK4EJG+1o8BmDAE7qzdQniEhRkU2Y94DFtt2EGv+WR2UsZ+lttY+pep6XnuySjseSUZFsQcUMZayaAX5/J36R2Hmo1qgMWXe0y/gFkmpHGbHdY7iRaMkTRhVZnTPCNpT1fCBrm40IUbiosL40QKesDvpJStbc34z5LmSdeOe/nHOvr9LfgUpnK2wvDGv54yifJ5V4q3wRfz0hmv4vIcarWynbF3eJ1iSodwEDYY5qLQ1UO1KGrGgpA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6604.namprd12.prod.outlook.com (2603:10b6:208:3a0::7)
- by DS7PR12MB5839.namprd12.prod.outlook.com (2603:10b6:8:7a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.34; Mon, 3 Apr
- 2023 18:49:13 +0000
-Received: from IA1PR12MB6604.namprd12.prod.outlook.com
- ([fe80::265:64aa:fb3e:288]) by IA1PR12MB6604.namprd12.prod.outlook.com
- ([fe80::265:64aa:fb3e:288%4]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
- 18:49:13 +0000
-Message-ID: <d21063d2-da5b-bb60-93da-0e7f827c8599@nvidia.com>
-Date:   Mon, 3 Apr 2023 11:49:08 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH V4 03/10] dt-bindings: timestamp: Deprecate nvidia,slices
- property
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        robh+dt@kernel.org, timestamp@lists.linux.dev,
-        krzysztof.kozlowski+dt@linaro.org, brgl@bgdev.pl, corbet@lwn.net,
-        gregkh@linuxfoundation.org
-References: <20230323012929.10815-1-dipenp@nvidia.com>
- <20230323012929.10815-4-dipenp@nvidia.com>
- <eb9a922b-82d6-c955-0fac-d6bedb494c68@linaro.org>
-Content-Language: en-US
-X-Nvconfidentiality: public
-From:   Dipen Patel <dipenp@nvidia.com>
-In-Reply-To: <eb9a922b-82d6-c955-0fac-d6bedb494c68@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR17CA0068.namprd17.prod.outlook.com
- (2603:10b6:a03:167::45) To IA1PR12MB6604.namprd12.prod.outlook.com
- (2603:10b6:208:3a0::7)
+        Mon, 3 Apr 2023 14:50:15 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3407810A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:50:13 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id a44so12739402ljr.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 11:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680547811;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=34OsiV+HcR1Gi97aMPkJXnZL+SR4sm/mvS50rqlBF+Q=;
+        b=amoM9RmfbP94Mds/R+ONKjXWMll2NfsHiIZvQ4QegviMRyQS9S6DWUP9+1jgfrPibR
+         BPjT1XTaXj45lw0IKtexiqjMtrsszNEMDDpTb+Xwf+VJaNz/ccbcPuCyIqrmrIiq4ExU
+         oFFPog8fInWwgYWCOUyQmcUu1+tfn4g/nw3qEL4wOf6yMYv3TVfPkKU6nrn0VE5G6mWo
+         +HBUBk7b79AJBcmbpmNCqMZm0px3GvOOWfUsh47SUSxkI5kuqywvbTRpCB/FyB6Plds0
+         DLln4iU/5mpejBwGuuHJMMS5squwgv2VQIvYo2zhIe3153hVQEDL9kp4flna9NfBPkt/
+         VDWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680547811;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=34OsiV+HcR1Gi97aMPkJXnZL+SR4sm/mvS50rqlBF+Q=;
+        b=N2zH7JClImTknzoZCk4UMlhmWuazs+ZRnJWNvcs0e9UVqVeNHSypNfiStu9klCMRSJ
+         nFEvftwfcNSvBnEpE2QAo31C3igN8n2r0sJQzMfSwOLDa0PeoF2ZzI1vdn0JTS8P/8yO
+         yM7L22q+Dw8Q6xOXlRsHILCQaO7tQ7drbGu+EUlg2c5JRAxu+CvHe2Jr6kkcL0SBg0Ov
+         o6VdB97S9B1y1+yMDcbq9iEoPEXpNe7xEqdgDlI1juAs9YC7/nEsDQTLCurHai8t7/gg
+         vwk8GfJD7ySt9rRrsDKyMSood2ib4ih3ixUUMmU5gu39037NXk3ObOeYzXfHVuf3nNsD
+         iqOg==
+X-Gm-Message-State: AAQBX9eHCmK7w1UmnGzFw37gZuJjT+47YzpRQ+CQJRmXyLyjlTiavUmU
+        aJEAeMIZExKFwdoArz9K5ADhVg==
+X-Google-Smtp-Source: AKy350ali/QWGVvd1aGDfLcj89eKxHreHPi0Fm4xFgPrFBNVg6Mf1FVOeMpojAXfWL7BkeZLCQ/sVg==
+X-Received: by 2002:a2e:9ad9:0:b0:29c:9617:842c with SMTP id p25-20020a2e9ad9000000b0029c9617842cmr168893ljj.7.1680547811276;
+        Mon, 03 Apr 2023 11:50:11 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id l16-20020a2e9090000000b0029bd5a0f4a8sm1828099ljg.61.2023.04.03.11.50.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 11:50:10 -0700 (PDT)
+Message-ID: <d279d2fa-e255-1e43-780c-6bdac437469d@linaro.org>
+Date:   Mon, 3 Apr 2023 21:50:10 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6604:EE_|DS7PR12MB5839:EE_
-X-MS-Office365-Filtering-Correlation-Id: 08867a55-a4ef-4907-e016-08db34741e28
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8ed6lsKiHPepBCReAlRqaLiUOC+S++cjSNHGvhpxcZ03JdNujo0iBoXZYXN603fRUrQpbT1kvy4uMhDDRDpMyMGeqgfswbEHbBjQF6KLqfDe7mFOLvtDA17qoNp2J74X/DD9/mCYpMAJyF/icz9grvu8L6iSG4mvx7fkGrVMslmkHfCWhA0Zb8UC7aEdZNGr6J5gd1DLC1HH1nyMCyp6EKuQKulna1WKum1shdDO8GRB74qu04rLLjM2K1u58j4PMICN636mbKaCQQUVZ+yrQw6Rkb/fGfnuhobhZ+uLze8iavrDNrMZ+tIvip75bGvsMDpBcsQnfYb17U7uZoJzUzTIFKw7XMaLMDFqIYAgtW/GxHlvf4vXWlTTVKM72vstLAPoRlNDFoTc7dXb8+IwZyII7UmposrsXkZPTmC46EUnVKwm966e0pgTlMyVu7Gka3+kaspWivbL4CegWmLl//qy/6MOQNGlpZIjgx5EyvR5x/xI18dOKKU+/1t3C5YbVlKRieebrJV+19tE8F4gTJ8JztFPqek8zJNV5lStH/tx6kFbk04GEH0y5N5F4BUBCY7Zm6WaeZa+dBVK5xPzxymcb2GHflQ8oHBxDkTozX4x6Ad/T5ieomvHjYX886k/1czlDCgK1GFWxYFk3klnNFJUVqzcAbW+Dsu7NftdARo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6604.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(136003)(346002)(396003)(376002)(451199021)(31686004)(2906002)(38100700002)(7416002)(5660300002)(921005)(66476007)(66556008)(66946007)(8936002)(41300700001)(8676002)(36756003)(316002)(2616005)(31696002)(83380400001)(53546011)(86362001)(478600001)(186003)(6512007)(6506007)(26005)(6666004)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R2oxb3BTd3JWWSt1NXJERE0xVjJWR2RHVmg0cUc5ZmQrN0RwbmZJRjNyMDhI?=
- =?utf-8?B?dHBpVUFmRW5FSzVxdmZKWmdMNXU5ZVVhWFhvemp6SDg2RGJmRkVuRjhkdStK?=
- =?utf-8?B?V3Z6dExmZUFKZnJPVVVZK1NwdEdReURHQi9vNjUxTXFaeFZGK1ZQSk9PT1dM?=
- =?utf-8?B?NUpuM1p5Yjhrb1YxeFBRbnM4SVhJSS9jVVR4eWp0VHpDSVFkaXVsS3ZZSGoy?=
- =?utf-8?B?NFJMY2NOREJxdDdqOFcyWFROVFZrdk9uRjVhM0FOSk82TjQya2lEYTNNbnpE?=
- =?utf-8?B?ZFk5ZytuQnNxamt2UUxGMDZGY0F0U2RTeGI2SVQrK0hMQTF2UlM2S3dZaTRq?=
- =?utf-8?B?ejRaWWhabTFJeTdwckVJU2xxcWNhSVVWNTNzSTZaUEtIMkllUVRRQkRQVWVp?=
- =?utf-8?B?dERPTmtsS1F0VTJXbmxqOXFwYS9kdnVjS0dOaVoyZXNsQkpzTUUzM1RPeith?=
- =?utf-8?B?Z3lWTEJITmF0b2VrTHdKNVVqaFlaMklWeDdhcUFiUkFNWVI1R1d1eGIzWmFL?=
- =?utf-8?B?ZVpkY3BnRzhhZjBrWmJPTkJuUExjcGR4NUhEUnVIZ0oxQTgzVndVUFpaaTZB?=
- =?utf-8?B?SmtjcjRIZjFuTXU2MWZBOXdVVmdpNktCeXZOS1pRTzBhcjQzTHlhTUp6OXJM?=
- =?utf-8?B?SmxlWXZsR1R3MTN3QmRVUEx1K3lpdDVJbTF2UmRWSnIyKzJoSml5M1JEWkxl?=
- =?utf-8?B?MGRzKzAyNTQ5WDlPeVk3MDlrejhqVXBjU3ZBY3oxbWlxZURDZGdGdzE2Vm9o?=
- =?utf-8?B?YVQxUEVRR2VLWVJXditIY1JqendWSkZXTTN3R2hXYVFUenp3aDdhT3V4ZElH?=
- =?utf-8?B?MnBSYXp1S0IzdWU0OC9OS24xbytCcklUeHFDZmVSZ3ZreWpXTEVDdG1RTEdV?=
- =?utf-8?B?TUE0cnFhWGFmQ3VRZ1o0N0FRd3JmMmV4N0tlOEltWHQxSVFua0lUTkJ0YnFh?=
- =?utf-8?B?VmhlWUNJVk5wamZlQ1MyTGFuRDN6UXN4QnY3dVlkWHJmRUxyTVVwYmZxdFpH?=
- =?utf-8?B?TVF5Qk1zY2ZjRFlLZDBiUS90am1yc0ZiRFNLUWtWSTdxY0xqWkhZQUIwS0hX?=
- =?utf-8?B?RVpKY2NWOC90RC9IVGtZMUlzTGxPd1lUSG1OdFdFSEE3TW45QXN0clBrUUZV?=
- =?utf-8?B?bHlsNEFuRkZKVG8vM1loTEdGQ1pnb1V4S1lsZlh4VUtvK3V2ZjdwL1hMY3B6?=
- =?utf-8?B?Z0FwSm9sR0F1a2NHSklCZ1h3MndzTTZ0NXQvaUZQMWttZjlBekY0TjJyUTlp?=
- =?utf-8?B?Q09QSlphblJDK1hMY2VHZjBYOSs3N2NxOGVhSzhuZlZvVTBiMFV0V3BzR05U?=
- =?utf-8?B?YTAySmFYNHRza1l4dW5Lb2pBeDNWUFlqT3FSbkU0eGw1MWM5UndxQm5Ic05P?=
- =?utf-8?B?aHg1Y0RORWpPYS9LMW1LMHVTbjJrYXA3MXVLWVdnYkhXM2lqSDRGeHFZbi9P?=
- =?utf-8?B?aVAxd21HZGE0SWdHQkxuNHptR3RqSmJsaDlyeFMrb1dRTitVa25ZdFFRSzE3?=
- =?utf-8?B?MUYycWNnVENIUTRCeDlBQ2E4MUhSRjFjeFlPT29vK0V1eTlpQmJKUG0wejFs?=
- =?utf-8?B?YzRlVWVuczkzMHRUVm9OSEVrZmtMRDQ5TitDYzJtY1ArQU9KWlFLeEdRYU14?=
- =?utf-8?B?aTI4bndLeGRPaHViakZuSzNZY1Q4cDhsbXJEckRFNGtIbU9VaHYrTEJKcmRw?=
- =?utf-8?B?dFVLRHJ4M1E3NnRDaGtoTklEWUN6SW1jYXZBSTVtdGZGYnczTzZSY0NESFcv?=
- =?utf-8?B?VTh3c1R3YTdWNFBxdndhUktFbU5SQWpoOTNWSVQvUzVROXNhdTdNM21JUUIr?=
- =?utf-8?B?NDl1K1B0Q3I4Y0dZWFgvTGV3c0g4OVhXOEdveGNIR05HdHpReG5SNjdhdzlK?=
- =?utf-8?B?emxWcGpXVkIyK3RoL1JMcFNHSXJablZuOHZCTE0xTHJTQ29FejBzb1VyUjgr?=
- =?utf-8?B?ZDVDaWcyZ0l6T3pOdHNoSjRFS09ia1NQUE92bmNsVU16WGFXc3lYSWVxOTNy?=
- =?utf-8?B?dGpzeU5lL1pOTmVPRmt0V3hDVE9ES2FpQjZ0VmdJcVArdVAwZ2pROE55UzFI?=
- =?utf-8?B?MVRJWHZkd1B1d3NBb2NuSzR5UXRCWG5BUlBXSFFQekQ4Q2VkN2tZRlNlSDdT?=
- =?utf-8?Q?D4pl0I0IyhLfLwU0lxKGce9Xg?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08867a55-a4ef-4907-e016-08db34741e28
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6604.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 18:49:13.4263
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: T5z7grNbWjso4hxshrvtTdWX6narjt+1IYv9NTWK9ftGH6xS2ht1h/j+FS7XHYEarhYlG6by+D6TjZ1SPjclKw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5839
-X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 4/5] arm64: dts: qcom: sm6350: Add GPU nodes
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+References: <20230315-topic-lagoon_gpu-v1-0-a74cbec4ecfc@linaro.org>
+ <20230315-topic-lagoon_gpu-v1-4-a74cbec4ecfc@linaro.org>
+ <CR8J7A4RGCHZ.293RWUBS367M2@otso>
+ <22cfb674-eb2b-ff77-da87-cf6b520e592d@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <22cfb674-eb2b-ff77-da87-cf6b520e592d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/23 4:05 AM, Krzysztof Kozlowski wrote:
-> On 23/03/2023 02:29, Dipen Patel wrote:
->> The property is not necessary as it is a constant value and can be
->> hardcoded in the driver code.
->>
->> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
->> ---
->>  .../timestamp/nvidia,tegra194-hte.yaml        | 43 ++-----------------
->>  1 file changed, 4 insertions(+), 39 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
->> index 158dbe58c49f..eafc33e9ae2e 100644
->> --- a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
->> +++ b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
->> @@ -42,10 +42,13 @@ properties:
->>  
->>    nvidia,slices:
->>      $ref: /schemas/types.yaml#/definitions/uint32
->> +    deprecated: true
->>      description:
->>        HTE lines are arranged in 32 bit slice where each bit represents different
->>        line/signal that it can enable/configure for the timestamp. It is u32
->> -      property and the value depends on the HTE instance in the chip.
->> +      property and the value depends on the HTE instance in the chip. The AON
->> +      GTE instances for both Tegra194 and Tegra234 has 3 slices. The Tegra194
->> +      LIC instance has 11 slices and Tegra234 LIC has 17 slices.
->>      enum: [3, 11, 17]
->>  
->>    '#timestamp-cells':
->> @@ -56,46 +59,10 @@ properties:
->>        mentioned in the nvidia GPIO device tree binding document.
->>      const: 1
->>  
->> -allOf:
->> -  - if:
->> -      properties:
->> -        compatible:
->> -          contains:
->> -            enum:
->> -              - nvidia,tegra194-gte-aon
->> -              - nvidia,tegra234-gte-aon
->> -    then:
->> -      properties:
->> -        nvidia,slices:
->> -          const: 3
->> -
->> -  - if:
->> -      properties:
->> -        compatible:
->> -          contains:
->> -            enum:
->> -              - nvidia,tegra194-gte-lic
->> -    then:
->> -      properties:
->> -        nvidia,slices:
->> -          const: 11
->> -
->> -  - if:
->> -      properties:
->> -        compatible:
->> -          contains:
->> -            enum:
->> -              - nvidia,tegra234-gte-lic
->> -    then:
->> -      properties:
->> -        nvidia,slices:
->> -          const: 17
+On 18/03/2023 15:45, Konrad Dybcio wrote:
 > 
-> You just added this entire block in previous patch. Adding it there and
-> immediately removing does not make much sense.
-Yes, probably I should just keep that block in this patch as it is since
-there is a deprecate field already introduced by this patch which should be enough. 
+> 
+> On 17.03.2023 09:56, Luca Weiss wrote:
+>> On Thu Mar 16, 2023 at 12:16 PM CET, Konrad Dybcio wrote:
+>>> From: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>>
+>>> Add Adreno, GPU SMMU and GMU nodes to hook up everything that
+>>> the A619 needs to function properly.
+>>>
+>>> Co-developed-by: Luca Weiss <luca.weiss@fairphone.com>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+> [...]
+> 
+>> What about adding interconnect already? I also have opp-peak-kBps
+>> additions in the opp table for that. I'll attach the diff I have at the
+>> end of the email.
+> I believe the GMU takes care of it internally (or at least should)
+> with the bandwidth tables we send in a6xx_hfi.c : a6xx_hfi_send_bw_table()
 
->> -
+We should still declare the interconnects. If at some point we attempt 
+to fill these tables in a proper way, the interconnects will be required 
+to get addresses of the nodes.
+
 > 
 > 
+> [...]
 > 
-> Best regards,
-> Krzysztof
+>>>   
+>>> +		adreno_smmu: iommu@3d40000 {
+>>
+>> This and gmu should be above gpucc @3d90000?
+> Absolutely.
 > 
+> Konrad
+>>
+>>> +			compatible = "qcom,sm6350-smmu-v2", "qcom,adreno-smmu", "qcom,smmu-v2";
+>>> +			reg = <0 0x03d40000 0 0x10000>;
+>>> +			#iommu-cells = <1>;
+>>> +			#global-interrupts = <2>;
+>>> +			interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>,
+>>> +				     <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>,
+>>> +				     <GIC_SPI 364 IRQ_TYPE_LEVEL_HIGH>,
+>>> +				     <GIC_SPI 365 IRQ_TYPE_LEVEL_HIGH>,
+>>> +				     <GIC_SPI 366 IRQ_TYPE_LEVEL_HIGH>,
+>>> +				     <GIC_SPI 367 IRQ_TYPE_LEVEL_HIGH>,
+>>> +				     <GIC_SPI 368 IRQ_TYPE_LEVEL_HIGH>,
+>>> +				     <GIC_SPI 369 IRQ_TYPE_LEVEL_HIGH>,
+>>> +				     <GIC_SPI 370 IRQ_TYPE_LEVEL_HIGH>,
+>>> +				     <GIC_SPI 371 IRQ_TYPE_LEVEL_HIGH>;
+>>> +
+>>> +			clocks = <&gpucc GPU_CC_AHB_CLK>,
+>>> +				 <&gcc GCC_GPU_MEMNOC_GFX_CLK>,
+>>> +				 <&gcc GCC_GPU_SNOC_DVM_GFX_CLK>;
+>>> +			clock-names = "ahb",
+>>> +				      "bus",
+>>> +				      "iface";
+>>> +
+>>> +			power-domains = <&gpucc GPU_CX_GDSC>;
+>>> +		};
+>>> +
+>>> +		gmu: gmu@3d6a000 {
+>>> +			compatible = "qcom,adreno-gmu-619.0", "qcom,adreno-gmu";
+>>> +			reg = <0 0x03d6a000 0 0x31000>,
+>>> +			      <0 0x0b290000 0 0x10000>,
+>>> +			      <0 0x0b490000 0 0x10000>;
+>>> +			reg-names = "gmu",
+>>> +				    "gmu_pdc",
+>>> +				    "gmu_pdc_seq";
+>>> +
+>>> +			interrupts = <GIC_SPI 304 IRQ_TYPE_LEVEL_HIGH>,
+>>> +				     <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>;
+>>> +			interrupt-names = "hfi",
+>>> +					  "gmu";
+>>> +
+>>> +			clocks = <&gpucc GPU_CC_AHB_CLK>,
+>>> +				 <&gpucc GPU_CC_CX_GMU_CLK>,
+>>> +				 <&gpucc GPU_CC_CXO_CLK>,
+>>> +				 <&gcc GCC_DDRSS_GPU_AXI_CLK>,
+>>> +				 <&gcc GCC_GPU_MEMNOC_GFX_CLK>;
+>>> +			clock-names = "ahb",
+>>> +				      "gmu",
+>>> +				      "cxo",
+>>> +				      "axi",
+>>> +				      "memnoc";
+>>> +
+>>> +			power-domains = <&gpucc GPU_CX_GDSC>,
+>>> +					<&gpucc GPU_GX_GDSC>;
+>>> +			power-domain-names = "cx",
+>>> +					     "gx";
+>>> +
+>>> +			iommus = <&adreno_smmu 5>;
+>>> +
+>>> +			operating-points-v2 = <&gmu_opp_table>;
+>>> +
+>>> +			status = "disabled";
+>>> +
+>>> +			gmu_opp_table: opp-table {
+>>> +				compatible = "operating-points-v2";
+>>> +
+>>> +				opp-200000000 {
+>>> +					opp-hz = /bits/ 64 <200000000>;
+>>> +					opp-level = <RPMH_REGULATOR_LEVEL_MIN_SVS>;
+>>> +				};
+>>> +			};
+>>> +		};
+>>> +
+>>>   		mpss: remoteproc@4080000 {
+>>>   			compatible = "qcom,sm6350-mpss-pas";
+>>>   			reg = <0x0 0x04080000 0x0 0x4040>;
+>>>
+>>> -- 
+>>> 2.39.2
+>>
+>> Here's the diff I have for interconnect on top of this:
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+>> index 4954cbc2c0fc..51c5ac679a32 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+>> @@ -1142,6 +1142,8 @@ gpu: gpu@3d00000 {
+>>   			iommus = <&adreno_smmu 0>;
+>>   			operating-points-v2 = <&gpu_opp_table>;
+>>   			qcom,gmu = <&gmu>;
+>> +			interconnects = <&gem_noc MASTER_GRAPHICS_3D 0 &clk_virt SLAVE_EBI_CH0 0>;
+>> +			interconnect-names = "gfx-mem";
+>>   			nvmem-cells = <&gpu_speed_bin>;
+>>   			nvmem-cell-names = "speed_bin";
+>>   
+>> @@ -1157,42 +1159,49 @@ gpu_opp_table: opp-table {
+>>   				opp-850000000 {
+>>   					opp-hz = /bits/ 64 <850000000>;
+>>   					opp-level = <RPMH_REGULATOR_LEVEL_TURBO_L1>;
+>> +					opp-peak-kBps = <8371200>;
+>>   					opp-supported-hw = <0x02>;
+>>   				};
+>>   
+>>   				opp-800000000 {
+>>   					opp-hz = /bits/ 64 <800000000>;
+>>   					opp-level = <RPMH_REGULATOR_LEVEL_TURBO>;
+>> +					opp-peak-kBps = <8371200>;
+>>   					opp-supported-hw = <0x04>;
+>>   				};
+>>   
+>>   				opp-650000000 {
+>>   					opp-hz = /bits/ 64 <650000000>;
+>>   					opp-level = <RPMH_REGULATOR_LEVEL_NOM_L1>;
+>> +					opp-peak-kBps = <6220000>;
+>>   					opp-supported-hw = <0x08>;
+>>   				};
+>>   
+>>   				opp-565000000 {
+>>   					opp-hz = /bits/ 64 <565000000>;
+>>   					opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
+>> +					opp-peak-kBps = <5412000>;
+>>   					opp-supported-hw = <0x10>;
+>>   				};
+>>   
+>>   				opp-430000000 {
+>>   					opp-hz = /bits/ 64 <430000000>;
+>>   					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
+>> +					opp-peak-kBps = <4068000>;
+>>   					opp-supported-hw = <0xff>;
+>>   				};
+>>   
+>>   				opp-355000000 {
+>>   					opp-hz = /bits/ 64 <355000000>;
+>>   					opp-level = <RPMH_REGULATOR_LEVEL_SVS>;
+>> +					opp-peak-kBps = <3072000>;
+>>   					opp-supported-hw = <0xff>;
+>>   				};
+>>   
+>>   				opp-253000000 {
+>>   					opp-hz = /bits/ 64 <253000000>;
+>>   					opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
+>> +					opp-peak-kBps = <2188000>;
+>>   					opp-supported-hw = <0xff>;
+>>   				};
+>>   			};
+>>
+
+-- 
+With best wishes
+Dmitry
 
