@@ -2,83 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AF76D4640
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1EF6D4642
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbjDCNwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        id S232713AbjDCNxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232706AbjDCNwn (ORCPT
+        with ESMTP id S232276AbjDCNxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:52:43 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88071728D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:52:41 -0700 (PDT)
-Received: (Authenticated sender: me@crly.cz)
-        by mail.gandi.net (Postfix) with ESMTPSA id 02CD660007;
-        Mon,  3 Apr 2023 13:52:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crly.cz; s=gm1;
-        t=1680529959;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yjZVA2mMTeWzOtGqbKtDtJ1agsEpiSlCHKJk6KjuyTk=;
-        b=a+axboIp+P2/EKx8WVgBZOoRoRb9hQH4yMUJKl/KYwTUXyWTHkrdOcsRBihMNMuo2dl3QV
-        zWOf2kr4ADe3KnTUNknPdufaa+L4lsOwXiR2y7Gma3pvVwv3JpTkY8iVX7m5RtIHlWCqfj
-        gtlXcAJzUSIjwDYnwLcdHWT6bi2HsK3G6cunNA5Ir3/fkY5mIBklap5LlA1PVfm27uqBIc
-        RM2xnKgFFxAo/EPlKGKCWqf3BP+rWeYJXnEO5ARANwcYxyCRVZd058YKlxfLKQ5MLzUgC6
-        upc7FgQGmjHoLlWXZL9JaTEk2pbSI7L8GYt2tdTN6hhcXvidQ3OevjSfPQHwPA==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 03 Apr 2023 15:52:36 +0200
-Message-Id: <CRN65FVKWIUG.1VSDAH8INXQMT@iMac.local>
-Subject: Re: [PATCH 3/3] drm: sun4i: calculate proper DCLK rate for DSI
-From:   "Roman Beranek" <me@crly.cz>
-To:     "Frank Oltmanns" <frank@oltmanns.dev>
-Cc:     "Maxime Ripard" <mripard@kernel.org>,
-        "Chen-Yu Tsai" <wens@csie.org>, "David Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Samuel Holland" <samuel@sholland.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230331110245.43527-1-me@crly.cz>
- <20230331110245.43527-4-me@crly.cz> <87h6tya70h.fsf@oltmanns.dev>
-In-Reply-To: <87h6tya70h.fsf@oltmanns.dev>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 3 Apr 2023 09:53:15 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF31230E0;
+        Mon,  3 Apr 2023 06:53:10 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso30586666pjb.3;
+        Mon, 03 Apr 2023 06:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680529990;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SW9D8BEM++mU1mqMGl1AFvxnGWHPgMmcAakeggyzyYo=;
+        b=oR5QkpTB3u45hn9geHeHFTG+NzVWvk2PBEEG/1KlzYUVg/1Tb66u8+aOui687oOyCn
+         kC/DpBz7PzQEVWVp7XGzx9QWGtUvlkpbJ3vgSsjuGybxo/wA78fqZHnoBf5uYh6TSnfn
+         34LPanpDc9WgKViJiS4Eet7t3cWGwyNYZnxC5WKUscuXe5Zg2qqBHuyQmONdtyhgJ9Gw
+         Gn11mgsp2XYusvdLdA1pYdpYavod9FNcDuUo1t6CtukgcE431D+ueHXyDSs+8JnsvhwN
+         f2gQ1H+i7CX5ez4lE6xHp4vVl82AdAbexQuiVFPu3kR/wWeUobfDs4wf2SoWCsev9oSI
+         KbVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680529990;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SW9D8BEM++mU1mqMGl1AFvxnGWHPgMmcAakeggyzyYo=;
+        b=SwxrtxIDYVlGpaAe19kmg2f5pE98d3ZqtaPwGBM81nZPgtOrptLXSM5dDu9TUClE2L
+         ExEQjFqsKvVhnl8dap+40lIEc7gK9I7HZPeLwciGJE04DHWDt+oCuF0FEEorXBDgN6kX
+         atGxPZ5U0KjVxoFHU8bI430Wh2yrNkhqhP8s9I8US1F30ap2VK5SXGEllB84JKuvYhGu
+         ev38sIwtIwl9hJOcUpwjAuosizw6KwPckWsWn1bqZZyORiFAIF9kQwMxFkxL8+d5c5FT
+         bpQHH0VUb4zDXvxhawoaTfvdzzaSRRoQ0/FvNr1k3pl+jqoZWC4R+f/nXKbeBJTIhgpG
+         eq+A==
+X-Gm-Message-State: AAQBX9c/E5yyAMV+SxxgIrlixRkBTQliUPcB+R/hpI5eu37eEmtUJmGs
+        PDUy2AEpv7P7StZlyhyVstWahNtgE2oAsQ==
+X-Google-Smtp-Source: AKy350aM7ZRpNAENcPfSAhXTyjKBSD5aUYh7GIre+Z44Z+39FLIXXXAS+1MhS00aQBS8pfmkhXNrAA==
+X-Received: by 2002:a17:90b:3846:b0:236:6a28:f781 with SMTP id nl6-20020a17090b384600b002366a28f781mr41273891pjb.22.1680529990285;
+        Mon, 03 Apr 2023 06:53:10 -0700 (PDT)
+Received: from C02FG34WMD6R.bytedance.net ([61.213.176.14])
+        by smtp.gmail.com with ESMTPSA id nv8-20020a17090b1b4800b00233cde36909sm9802883pjb.21.2023.04.03.06.53.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 06:53:09 -0700 (PDT)
+From:   wuchi <wuchi.zero@gmail.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, ojaswin@linux.ibm.com,
+        ritesh.list@gmail.com
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ext4: simplify 32bit calculation of lblk
+Date:   Mon,  3 Apr 2023 21:53:04 +0800
+Message-Id: <20230403135304.19858-1-wuchi.zero@gmail.com>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun Apr 2, 2023 at 12:49 PM CEST, Frank Oltmanns wrote:
->
-> When apply this to drm-next my panel stays dark. I haven't figured out
-> yet why, though. The other two patches in this series work fine, i.e.
-> they have no effect as they are just a refactoring.
->
-> I'm testing this on my pinephone. It's the same with the patch I
-> submitted. For whatever reason, it no longer works on drm-next.
+commit <ad4fb9cafe100a> (ext4: fix 32bit overflow in ext4_ext_find_goal())
+uses value compare to fix 32bit overflow. Try to simplify that.
 
-I've reproduced the issue on my PinePhone and noticed that tcon0 had set
-pll-video0-2x as its parent instead of pll-mipi. Having tried a whole
-range of pll-video0 rates, I'm now convinced that DSI only works when
-tcon0 has pll-mipi as its parent.
+Signed-off-by: wuchi <wuchi.zero@gmail.com>
+---
+ fs/ext4/extents.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-As little a change as setting .clock in the default mode of PP's panel
-to 73500 can fix it. Better yet, dropping pll-video0-2x from the set
-of acceptable parents for tcon0 fixes it universally. And that's what
-megi's kernel does, though the measure was introduced with a different
-rationale:
-<https://github.com/megous/linux/commit/7374d5756aa0cc3f11e494e3cbc54f6c7c0=
-1e1a8>
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index 3559ea6b0781..324b7d1386e0 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -237,10 +237,7 @@ static ext4_fsblk_t ext4_ext_find_goal(struct inode *inode,
+ 			ext4_fsblk_t ext_pblk = ext4_ext_pblock(ex);
+ 			ext4_lblk_t ext_block = le32_to_cpu(ex->ee_block);
+ 
+-			if (block > ext_block)
+-				return ext_pblk + (block - ext_block);
+-			else
+-				return ext_pblk - (ext_block - block);
++			return ext_pblk + ((signed long long)block - (signed long long)ext_block);
+ 		}
+ 
+ 		/* it looks like index is empty;
+-- 
+2.20.1
 
-Roman
