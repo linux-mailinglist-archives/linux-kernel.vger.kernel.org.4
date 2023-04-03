@@ -2,173 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F906D5524
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 01:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306AB6D5536
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 01:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233852AbjDCXRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 19:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
+        id S233481AbjDCX1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 19:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233752AbjDCXRl (ORCPT
+        with ESMTP id S232745AbjDCX1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 19:17:41 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F189AD7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:17:40 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 185so7372471pgc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 16:17:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680563860;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fL5aL7ueJMbZFfg2C1YEce55qF2blBEt+U5Y2R4F0x8=;
-        b=heQGaq5JSUiONOze0+sgMt3BY4yh1MXR60iNGsJnSnCwUPz3PGzvkoSTCovdOnIanZ
-         Qv5+kttSgXzH/C+6iNGQyhvFen9aa8LT2KHMP7p8elo5gq4sDqoV5wGjjC6X72L385d4
-         KCGXmhKMTjpK75uOwiAmI0M6yd8H4qpM9tapP70G1dQ6avtihVJNYxggCYLGTtIhhdBO
-         yUIaEPWOxdV+43VRFix1Mgb/qMZs/5LvtCunIK5hCLor2bwMMQgXfL1k1N3T3T1h3a5Z
-         4/ZANM55rgv7h1LkUFTu0n0j0iO5fL4ULCQLzTBuJGVXO1im1LTC1mYHpMSaEwPnuxnr
-         d/Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680563860;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fL5aL7ueJMbZFfg2C1YEce55qF2blBEt+U5Y2R4F0x8=;
-        b=kSxd3txs9JMOxaWlF8hAeDLlj1PFIn1WRlrH37IxFHwgHGJekqL5nX/dbXfLSTmIgK
-         WjmM0aiu6WVZnkhDSCSPufZIXDmed+TqgrRPrytcH7ul76g8PaiTKU5u1S4iWV3LcXbM
-         aCNH5EQcm72x3XJphcQtxTNUsMhsC2pDUqvycrENzyqbl58KFVVB7FoDCGEb6B9dW8j+
-         KUzZ3suBrhn5sWtHqUIaOU91BRzVCrkvxCVxp9qo5QrVQXBmzcrqJezvndEOlzVYV2jg
-         1Q1TLbPYf05fzgwfBjtCCZ0uWgUlWHETiw2xLGPIvSiUoPth7F2yr96qmW7sJk6I8y/m
-         mxSw==
-X-Gm-Message-State: AAQBX9c/tWHl1V1cTy3hVPcSgDxk1duMD4h1jvkZLQ5GULYKF7sIA8NX
-        xmih1/VyR6BtV0yhmCJHuBQi57XPErkZYQ06plj0Aw==
-X-Google-Smtp-Source: AKy350YYGanRvcClBEn93vto0mI4p4oBfDFO0zFPG7UTZ/7lVw8xoM9Ae6DqSongpPNh8kvMWVUapf0C7yNdA35C3cU=
-X-Received: by 2002:a63:eb50:0:b0:509:4ac5:7f44 with SMTP id
- b16-20020a63eb50000000b005094ac57f44mr88131pgk.2.1680563860189; Mon, 03 Apr
- 2023 16:17:40 -0700 (PDT)
+        Mon, 3 Apr 2023 19:27:46 -0400
+X-Greylist: delayed 504 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Apr 2023 16:27:44 PDT
+Received: from relay.smtp-ext.broadcom.com (lpdvsmtp11.broadcom.com [192.19.166.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0AD199C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:27:44 -0700 (PDT)
+Received: from lbrmn-lnxub113.ric.broadcom.net (lbrmn-lnxub113.ric.broadcom.net [10.136.13.65])
+        by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 5CDA5C0000F4;
+        Mon,  3 Apr 2023 16:19:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 5CDA5C0000F4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+        s=dkimrelay; t=1680563956;
+        bh=tmSvhqBD1nLln5LQR8/qQKvplJ+bIFJ60+31wQisXAE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ve1ntz29sYqibYb9e9pPUErGrUDBv+0VwFMTKmqSpt6WKmTmJlThml7L2w7GGF11T
+         ZXwd3BBzDcP4314nvHv4gEaTuqyhAAxjAWIsMp94ul0ouW0xDLCbvMm4JhmVEhc4w4
+         9/5mabM7i53V5O+qdtaDMcQtcyMWNIllUUftRJng=
+From:   Scott Branden <scott.branden@broadcom.com>
+To:     BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>
+Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Scott Branden <scott.branden@broadcom.com>
+Subject: [PATCH] checkpatch: improve signature check on empty description
+Date:   Mon,  3 Apr 2023 16:18:21 -0700
+Message-Id: <20230403231821.4737-1-scott.branden@broadcom.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230403201930.2019419-1-rmoar@google.com>
-In-Reply-To: <20230403201930.2019419-1-rmoar@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 3 Apr 2023 16:17:29 -0700
-Message-ID: <CAGS_qxp5NAox7eGqfa48zi5=QEgB48ior-tXwtDFEqCJ=vFCEA@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: add tests for using current KUnit test field
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 1:19=E2=80=AFPM Rae Moar <rmoar@google.com> wrote:
->
-> Create test suite called "kunit_current" to add test coverage for the use
-> of current->kunit_test, which returns the current KUnit test.
->
-> Add two test cases:
-> - kunit_current_test to test current->kunit_test and the method
->   kunit_get_current_test(), which utilizes current->kunit_test.
->
-> - kunit_current_fail_test to test the method
->   kunit_fail_current_test(), which utilizes current->kunit_test.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
+Existing check assumed there could be a single Signed-off-by line which
+should be ignored when checking for an empty commit message.
+Other lines with identifiers "Reported-by:", "Acked-by:", or anything
+invented by the person who constructed the commit were counted as a
+body of the commit message.
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Improve the check for an empty body of the commit message by not counting
+any lines that begin with a $signature or similar formatted line of a
+keyword followed by a colon.
 
-Looks good and runs well here.
-It's nice to have a test for this given kunit_fail_current_test() went
-from a simple function call to now using `kunit_hooks` to do an
-indirect call and relying on the `kunit_running` static key.
+Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+---
+ scripts/checkpatch.pl | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index bd44d12965c9..5922a6df7f5d 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -2901,15 +2901,14 @@ sub process {
+ 		$cnt_lines++ if ($realcnt != 0);
+ 
+ # Verify the existence of a commit log if appropriate
+-# 2 is used because a $signature is counted in $commit_log_lines
+ 		if ($in_commit_log) {
+-			if ($line !~ /^\s*$/) {
+-				$commit_log_lines++;	#could be a $signature
++			if ($line !~ /^\s*($|[a-zA-Z0-9_-]+:)/) {
++				$commit_log_lines++;
+ 			}
+-		} elsif ($has_commit_log && $commit_log_lines < 2) {
++		} elsif ($has_commit_log && $commit_log_lines < 1) {
+ 			WARN("COMMIT_MESSAGE",
+ 			     "Missing commit description - Add an appropriate one\n");
+-			$commit_log_lines = 2;	#warn only once
++			$commit_log_lines = 1;	#warn only once
+ 		}
+ 
+ # Check if the commit log has what seems like a diff which can confuse patch
+-- 
+2.40.0
 
-> ---
->
-> Changes from v1->v2:
-> - Combine two test cases to test both ways of getting current test in
->   kunit_current_test.
-> - Changes to comments.
-> - Add kunit_cleanup to kunit_current_fail_test.
->
->  lib/kunit/kunit-test.c | 42 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 41 insertions(+), 1 deletion(-)
->
-> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-> index b63595d3e241..42e44caa1bdd 100644
-> --- a/lib/kunit/kunit-test.c
-> +++ b/lib/kunit/kunit-test.c
-> @@ -6,6 +6,7 @@
->   * Author: Brendan Higgins <brendanhiggins@google.com>
->   */
->  #include <kunit/test.h>
-> +#include <kunit/test-bug.h>
->
->  #include "try-catch-impl.h"
->
-> @@ -532,7 +533,46 @@ static struct kunit_suite kunit_status_test_suite =
-=3D {
->         .test_cases =3D kunit_status_test_cases,
->  };
->
-> +static void kunit_current_test(struct kunit *test)
-> +{
-> +       /* Check results of both current->kunit_test and
-> +        * kunit_get_current_test() are equivalent to current test.
-> +        */
-> +       KUNIT_EXPECT_PTR_EQ(test, test, current->kunit_test);
-> +       KUNIT_EXPECT_PTR_EQ(test, test, kunit_get_current_test());
-> +}
-> +
-> +static void kunit_current_fail_test(struct kunit *test)
-> +{
-> +       struct kunit fake;
-> +
-> +       kunit_init_test(&fake, "fake test", NULL);
-> +       KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
-> +
-> +       /* Set current->kunit_test to fake test. */
-> +       current->kunit_test =3D &fake;
-> +
-> +       kunit_fail_current_test("This should make `fake` test fail.");
-> +       KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAILU=
-RE);
-> +       kunit_cleanup(&fake);
-> +
-> +       /* Reset current->kunit_test to current test. */
-> +       current->kunit_test =3D test;
-> +}
-> +
-> +static struct kunit_case kunit_current_test_cases[] =3D {
-> +       KUNIT_CASE(kunit_current_test),
-> +       KUNIT_CASE(kunit_current_fail_test),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite kunit_current_test_suite =3D {
-> +       .name =3D "kunit_current",
-> +       .test_cases =3D kunit_current_test_cases,
-> +};
-> +
->  kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suit=
-e,
-> -                 &kunit_log_test_suite, &kunit_status_test_suite);
-> +                 &kunit_log_test_suite, &kunit_status_test_suite,
-> +                 &kunit_current_test_suite);
->
->  MODULE_LICENSE("GPL v2");
->
-> base-commit: 7232282dd47cce6a780c9414bd9baccf232c7686
-> --
-> 2.40.0.348.gf938b09366-goog
->
