@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551B36D3E5B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBF06D3E5F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbjDCHq3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Apr 2023 03:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
+        id S231609AbjDCHsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 03:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjDCHq1 (ORCPT
+        with ESMTP id S229509AbjDCHsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 03:46:27 -0400
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D836F10B;
-        Mon,  3 Apr 2023 00:46:25 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id a11so29327803lji.6;
-        Mon, 03 Apr 2023 00:46:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680507983;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XZqsSeG92QJB+FkeLdPRDqSn7lcMPGjoOntxd0P/7FA=;
-        b=y/pfF2WOcs3dACT2+fn0lyql63awEFKhgvhHAvZrL1r64oKJwGk8B67u33ZVW/yxst
-         0MuI/0od3fv8m6l9VK7jMO7ftJ0BrRZ8PQnC3AAXO1b89twBsgBHDZ7qalk3qDDjzV4J
-         Gq9hCGlfCRM126toP6Hs82B8IpF3dMgbGHCno9OXB0+n2TF8Z7dqbUiku5VtmiqNCkQc
-         i+jaho/S094cJySfSnCMM+QYq7eGMusKydL+fuX8g+Xbo3+sG+xsEJC7IAjBWkHSf83F
-         dQLE1A5japnEK6w6csJFI4Me9/CGJD5luwvXKfCMD73DLWWglX34UuNhxDGJRPLhxXhM
-         d9qw==
-X-Gm-Message-State: AAQBX9cSGxCMFyBbUqEEM5SUizNIhVo4FqsOYSLvuIaVZWQCBzG9VXko
-        o04RD0THT4ZWYxPQPMDcOPfzafjnjwrMxw==
-X-Google-Smtp-Source: AKy350ZNDjKygjfviBsMUOhOKygQhYAdSKrVTkor5iHGmBEzPRGN7xkIfKGokPvsk5xz3B9nJuToMg==
-X-Received: by 2002:a2e:ba09:0:b0:295:b10f:7c9a with SMTP id p9-20020a2eba09000000b00295b10f7c9amr5133016lja.4.1680507983257;
-        Mon, 03 Apr 2023 00:46:23 -0700 (PDT)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id 18-20020a05651c00d200b0029bfcbeac09sm1625009ljr.41.2023.04.03.00.46.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 00:46:23 -0700 (PDT)
-Received: by mail-lj1-f171.google.com with SMTP id 20so29366006lju.0;
-        Mon, 03 Apr 2023 00:46:23 -0700 (PDT)
-X-Received: by 2002:a2e:86d8:0:b0:299:ac1c:d8b3 with SMTP id
- n24-20020a2e86d8000000b00299ac1cd8b3mr10752173ljj.9.1680507983008; Mon, 03
- Apr 2023 00:46:23 -0700 (PDT)
+        Mon, 3 Apr 2023 03:48:00 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA6C1FF5;
+        Mon,  3 Apr 2023 00:47:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680508076; x=1712044076;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zGqIFvsIBpWbq/uZw0Ixb3JhhlFXJPObQzt1HnJSOpc=;
+  b=Y0f3ldBp0OyrL74hEPh0T7eYh3iISzcg+FiP9czbESDeGAFd1Vpabnki
+   sXa9499GpThQDnat8a+ovFGGUN4eH8zgyEEDwQE9JKBriN2OK5yfGT8Kp
+   tn05RtUTM0V2VmjSHEqi7IEgE/deOnNIAsVZH6IB+tyIuV07lnii6VYU7
+   r+NUbqeHkUqS99+0bg37aOMneSCeRB9hj+QDeb29MXu1oUrS3RabRuAgw
+   FSHXIxy1QsYAJytwiPKezNWL31I7Fk6nM4oTeCcvcPpXsPB556EPxuLSr
+   BPvoYjGuIZz4sbaCwiINOt0i2HczoocNX2fnKykgH9jlscox6GNiHlDyx
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,314,1673938800"; 
+   d="asc'?scan'208";a="145174505"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Apr 2023 00:47:54 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 3 Apr 2023 00:47:53 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 3 Apr 2023 00:47:50 -0700
+Date:   Mon, 3 Apr 2023 08:47:35 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Hal Feng <hal.feng@starfivetech.com>
+CC:     Conor Dooley <conor@kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 00/22] Basic clock, reset & device tree support for
+ StarFive JH7110 RISC-V SoC
+Message-ID: <1eda304a-a8e0-4f19-bfe4-8793052f73a9@spud>
+References: <20230401111934.130844-1-hal.feng@starfivetech.com>
+ <acb36897-8085-4f41-9b68-b243467ffc6f@spud>
+ <ce4ee037-c53c-5bd4-8968-437ee21c9c51@starfivetech.com>
 MIME-Version: 1.0
-References: <20230331095545.31823-1-lidaxian@hust.edu.cn> <CAMuHMdV5guFbo76nq27aZjWsYqneOfGNf0Ozyh0C53+VgnXgXw@mail.gmail.com>
- <d2688eb2-d7b6-4e80-a13e-55ed541ac9b8@kili.mountain> <CAMuHMdX2b+GV4+Ee0yQ2hfNCvHaU_jAsnmF28=4ffCmdVy58xg@mail.gmail.com>
- <302d88ca-7d28-4450-8e60-d0bb40f4174d@kili.mountain>
-In-Reply-To: <302d88ca-7d28-4450-8e60-d0bb40f4174d@kili.mountain>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 3 Apr 2023 09:46:09 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVE3Fcb9Rx9bF4NTyGH=gdRY3maNY6S5W7iFFiGrFeOJw@mail.gmail.com>
-Message-ID: <CAMuHMdVE3Fcb9Rx9bF4NTyGH=gdRY3maNY6S5W7iFFiGrFeOJw@mail.gmail.com>
-Subject: Re: [PATCH] soc: renesas: renesas-soc: release 'chipid' from ioremap()
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Li Yang <lidaxian@hust.edu.cn>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="QEXRWawa+Yd/Oc16"
+Content-Disposition: inline
+In-Reply-To: <ce4ee037-c53c-5bd4-8968-437ee21c9c51@starfivetech.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,31 +80,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+--QEXRWawa+Yd/Oc16
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 3, 2023 at 9:34 AM Dan Carpenter <error27@gmail.com> wrote:
-> On Mon, Apr 03, 2023 at 09:12:55AM +0200, Geert Uytterhoeven wrote:
-> > Perhaps we need a different mechanism to annotate error handling code
-> > that cannot ever happen in a real product, so it can be thrown away by
-> > the compiler, while still pleasing the static checkers?  All these
-> > checks and error handling code do affect kernel size.  There are
-> > Linux products running on SoCs with 8 MiB of internal SRAM.
->
-> People sometimes call BUG_ON(!soc_dev_attr).  It's sort of rare these
+On Mon, Apr 03, 2023 at 03:30:32PM +0800, Hal Feng wrote:
+> On Sun, 2 Apr 2023 20:19:41 +0100, Conor Dooley wrote:
+> > On Sat, Apr 01, 2023 at 07:19:12PM +0800, Hal Feng wrote:
 
-BUG_ON() is also not cheap, space-wise (except if CONFIG_BUG=n).
+> > And the rest as riscv-jh7110_clk_reset:
+> > MAINTAINERS: generalise StarFive clk/reset entries
+>=20
+> For this patch, I find something to improve.
+> 1. Could you please help me sort the StarFive entries in MAINTAINERS?
+> "STARFIVE JH71X0 CLOCK DRIVERS" should be added after
+> "STARFIVE JH7110 MMC/SD/SDIO DRIVER".
+>=20
+> 2. A "S" should be added at the end of
+> "STARFIVE JH7100 RESET CONTROLLER DRIVER".
+>=20
+> I have tested your branch and have no comments on the other patches.
 
-> days.  It would be easy to make a function which silences Smatch...
->
->         __system_is_dead();
+Done:
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f405114bf096..0a701632b0b5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19907,6 +19907,12 @@ M:     Emil Renner Berthing <kernel@esmil.dk>
+ S:     Maintained
+ F:     arch/riscv/boot/dts/starfive/
+=20
++STARFIVE JH7110 MMC/SD/SDIO DRIVER
++M:     William Qiu <william.qiu@starfivetech.com>
++S:     Supported
++F:     Documentation/devicetree/bindings/mmc/starfive*
++F:     drivers/mmc/host/dw_mmc-starfive.c
++
+ STARFIVE JH71X0 CLOCK DRIVERS
+ M:     Emil Renner Berthing <kernel@esmil.dk>
+ M:     Hal Feng <hal.feng@starfivetech.com>
+@@ -19915,12 +19921,6 @@ F:     Documentation/devicetree/bindings/clock/sta=
+rfive,jh71*.yaml
+ F:     drivers/clk/starfive/clk-starfive-jh71*
+ F:     include/dt-bindings/clock/starfive?jh71*.h
+=20
+-STARFIVE JH7110 MMC/SD/SDIO DRIVER
+-M:     William Qiu <william.qiu@starfivetech.com>
+-S:     Supported
+-F:     Documentation/devicetree/bindings/mmc/starfive*
+-F:     drivers/mmc/host/dw_mmc-starfive.c
+-
+ STARFIVE JH71X0 PINCTRL DRIVERS
+ M:     Emil Renner Berthing <kernel@esmil.dk>
+ M:     Jianlong Huang <jianlong.huang@starfivetech.com>
+@@ -19931,7 +19931,7 @@ F:      drivers/pinctrl/starfive/pinctrl-starfive-j=
+h71*
+ F:     include/dt-bindings/pinctrl/pinctrl-starfive-jh7100.h
+ F:     include/dt-bindings/pinctrl/starfive,jh7110-pinctrl.h
+=20
+-STARFIVE JH71X0 RESET CONTROLLER DRIVER
++STARFIVE JH71X0 RESET CONTROLLER DRIVERS
+ M:     Emil Renner Berthing <kernel@esmil.dk>
+ M:     Hal Feng <hal.feng@starfivetech.com>
+ S:     Maintained
 
-Gr{oetje,eeting}s,
+ Cheers,
+ Conor.
 
-                        Geert
+--QEXRWawa+Yd/Oc16
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCqElwAKCRB4tDGHoIJi
+0sqbAQCMsACpQzkzhLoKfCAGm331fVF+ABaBHJYSyLnVCVgBVAEAmAp9CCOzimm4
+keaJvJy+j9w82evuGi+U1ktFrXhXDQs=
+=7zTB
+-----END PGP SIGNATURE-----
+
+--QEXRWawa+Yd/Oc16--
