@@ -2,228 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD756D5033
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A068F6D5037
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbjDCSYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
+        id S232912AbjDCSYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbjDCSYG (ORCPT
+        with ESMTP id S232743AbjDCSYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:24:06 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB7C170A;
-        Mon,  3 Apr 2023 11:24:05 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id h14so14414678ilj.0;
-        Mon, 03 Apr 2023 11:24:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680546244; x=1683138244;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BLcYkBQ6zlbiLXorhcUGXvnBxQ6eez111cDSr+vpQ3I=;
-        b=S7qbEl+v2sdnA3rkEm1vOAgL+NUKHBQIEk9qzKAGVoQa+3K7EuSN9AHp+srdKkmEWY
-         VfPDndddKuQTO3cVQx6pZ9aFR6zglYxPNy2r9V267lAm1SASscLaSwVz+mIsExlLFOhh
-         dSk4vdL/xGaaUOtJBTyj9S0aYGSsqRz2wdN86xJf0pbv5ZrJoARtDR6qbSA43TMG9OXc
-         yZVBJL72UEx14eJ1/bMOiglImMp1IlsbjddqH6lvvYLS20/ZRH0Hufc0yCE9Ev/eJf0A
-         qVWaxc1liDA2FN2tC06bC8Q4rQFezWqFNBlTiWRdAcK+yUGxOGMDQOWpaIT+WDdSzNMo
-         Q2DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680546244; x=1683138244;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BLcYkBQ6zlbiLXorhcUGXvnBxQ6eez111cDSr+vpQ3I=;
-        b=4rQDRiM4N39RbR2Y6dlTijHRsRWzfSP7e06eSolGl0XCe4LMP6jEklDIolJcnMjcmS
-         jW7zioEMcKZKIT8FEOBr4qQrq8n1KQXfoCS5K1NGKYgUbVxyP+yM9FTtDl14cHwVZYtd
-         i1T4ux22giqy8GUxn/+ohXpqp4U8XhHJ/4SqUKBaiypaKyvX53UxULppCqj3fBpN9kvu
-         lwpxM4SfsEWpniDmTVTzuNBOge3Sz/W2jiufVB1ALHGjqbZrek8bo4vJsK5NAPsCk3nP
-         vZgLhgnC4iW3Cu8mavG7o1cgq79M0tqHnD14MvGqRxTf55eMpuG9H6ULdAR1sOxAUs18
-         /IrA==
-X-Gm-Message-State: AAQBX9c4r5UVNOJ2suKF3rxkhmMUprpFIPKoYe79C/C4eGtqe3IwcVCJ
-        wdKC7Et8pVQ1ZJXqeP2d9akh4ui+nIWcH0oLPY0=
-X-Google-Smtp-Source: AKy350b3ENLXo3KDjAtD/3eyk+24aIZQL1Zpoc6eQj6JAT14NdrcAFxaQCuw6vmBHfaUgEQ/Ocn/t7Yp80NS7aFVttw=
-X-Received: by 2002:a92:ac03:0:b0:316:fa49:3705 with SMTP id
- r3-20020a92ac03000000b00316fa493705mr14897ilh.1.1680546244503; Mon, 03 Apr
- 2023 11:24:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <f12f9773-77b5-4ba6-9e9e-adbc67ca0110@spud>
-In-Reply-To: <f12f9773-77b5-4ba6-9e9e-adbc67ca0110@spud>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 3 Apr 2023 19:23:37 +0100
-Message-ID: <CA+V-a8s0UViJ0tBSyiL0ZG8iVT3QSW77=VujJJOfiuM8T=9ntg@mail.gmail.com>
-Subject: Re: [PATCH v7 1/6] riscv: mm: dma-noncoherent: Switch using function
- pointers for cache management
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        Mon, 3 Apr 2023 14:24:11 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78682711;
+        Mon,  3 Apr 2023 11:24:09 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pjOqY-0001mn-0U;
+        Mon, 03 Apr 2023 20:24:02 +0200
+Date:   Mon, 3 Apr 2023 19:23:59 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH 15/15] dt-bindings: net: dsa: mediatek,mt7530: add
+ mediatek,mt7988-switch
+Message-ID: <ZCsZv65vDjb8MePG@makrotopia.org>
+References: <cover.1680180959.git.daniel@makrotopia.org>
+ <80a853f182eac24735338f3c1f505e5f580053ca.1680180959.git.daniel@makrotopia.org>
+ <a7ab2828-dc03-4847-c947-c7685841f884@arinc9.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a7ab2828-dc03-4847-c947-c7685841f884@arinc9.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+Hi!
 
-Thank you for the review.
+Now that I see the email, see my reply below.
 
-On Fri, Mar 31, 2023 at 1:24=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
-p.com> wrote:
->
-> Hey,
->
-> I think most of what I wanted to talk about has been raised by Arnd or
-> Geert, so I kinda only have a couple of small comments for you here.
->
-> On Thu, Mar 30, 2023 at 09:42:12PM +0100, Prabhakar wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Currently, selecting which CMOs to use on a given platform is done usin=
-g
-> > and ALTERNATIVE_X() macro. This was manageable when there were just two
-> > CMO implementations, but now that there are more and more platforms com=
-ing
-> > needing custom CMOs, the use of the ALTERNATIVE_X() macro is unmanageab=
-le.
-> >
-> > To avoid such issues this patch switches to use of function pointers
-> > instead of ALTERNATIVE_X() macro for cache management (the only drawbac=
-k
-> > being performance over the previous approach).
-> >
-> > void (*clean_range)(unsigned long addr, unsigned long size);
-> > void (*inv_range)(unsigned long addr, unsigned long size);
-> > void (*flush_range)(unsigned long addr, unsigned long size);
->
-> So, given Arnd has renamed the generic helpers, should we use the
-> writeback/invalidate/writeback & invalidate terminology here too?
-> I think it'd be nice to make the "driver" functions match the generic
-> implementations's names (even though that means not making the
-> instruction naming).
->
-> > The above function pointers are provided to be overridden for platforms
-> > needing CMO.
-> >
-> > Convert ZICBOM and T-HEAD CMO to use function pointers.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Fri, Mar 31, 2023 at 08:27:54AM +0300, Arınç ÜNAL wrote:
+> On 30.03.2023 18:23, Daniel Golle wrote:
+> > Add documentation for the built-in switch which can be found in the
+> > MediaTek MT7988 SoC.
+> > 
+> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 > > ---
-> > v6->v7
-> > * Updated commit description
-> > * Fixed build issues when CONFIG_ERRATA_THEAD_CMO=3Dn
-> > * Used static const struct ptr to register CMO ops
-> > * Dropped riscv_dma_noncoherent_cmo_ops
->
-> > * Moved ZICBOM CMO setup to setup.c
->
-> Why'd you do that?
-> What is the reason that the Zicbom stuff cannot live in
-> dma-noncoherent.[ch] and only expose, say:
-> void riscv_cbom_register_cmo_ops(void)
-> {
->         riscv_noncoherent_register_cache_ops(&zicbom_cmo_ops);
-> }
-> which you then call from setup.c?
->
-Commit abcc445acd ("riscv: move riscv_noncoherent_supported() out of
-ZICBOM probe) moved the zicbom the setup to setup.c hence I moved the
-CMO stuff here. Said that, now I am defaulting to zicbom ops so I have
-mode the functions to dma-noncoherent.c  .
+> >   .../bindings/net/dsa/mediatek,mt7530.yaml     | 26 +++++++++++++++++--
+> >   1 file changed, 24 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> > index 5ae9cd8f99a24..15953f0e9d1a6 100644
+> > --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> > +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> > @@ -11,16 +11,23 @@ maintainers:
+> >     - Landen Chao <Landen.Chao@mediatek.com>
+> >     - DENG Qingfang <dqfext@gmail.com>
+> >     - Sean Wang <sean.wang@mediatek.com>
+> > +  - Daniel Golle <daniel@makrotopia.org>
+> 
+> Please put it in alphabetical order by the first name.
+> 
+> >   description: |
+> > -  There are two versions of MT7530, standalone and in a multi-chip module.
+> > +  There are three versions of MT7530, standalone, in a multi-chip module and
+> > +  built-into a SoC.
+> 
+> I assume you put this to point out the situation with MT7988?
+> 
+> This brings to light an underlying problem with the description as the
+> MT7620 SoCs described below have the MT7530 switch built into the SoC,
+> instead of being part of the MCM.
 
-> > v5->v6
-> > * New patch
-> > ---
-> >  arch/riscv/errata/thead/errata.c         | 76 ++++++++++++++++++++++++
-> >  arch/riscv/include/asm/dma-noncoherent.h | 73 +++++++++++++++++++++++
-> >  arch/riscv/include/asm/errata_list.h     | 53 -----------------
-> >  arch/riscv/kernel/setup.c                | 49 ++++++++++++++-
-> >  arch/riscv/mm/dma-noncoherent.c          | 25 ++++++--
-> >  arch/riscv/mm/pmem.c                     |  6 +-
-> >  6 files changed, 221 insertions(+), 61 deletions(-)
-> >  create mode 100644 arch/riscv/include/asm/dma-noncoherent.h
->
-> > +#ifdef CONFIG_RISCV_ISA_ZICBOM
-> > +
-> > +#define ZICBOM_CMO_OP(_op, _start, _size, _cachesize)                 =
-               \
-> > +     asm volatile("mv a0, %1\n\t"                                     =
-       \
-> > +                  "j 2f\n\t"                                          =
-       \
-> > +                  "3:\n\t"                                            =
-       \
-> > +                  CBO_##_op(a0)                                       =
-       \
-> > +                  "add a0, a0, %0\n\t"                                =
-       \
-> > +                  "2:\n\t"                                            =
-       \
-> > +                  "bltu a0, %2, 3b\n\t"                               =
-       \
-> > +                  : : "r"(_cachesize),                                =
-       \
-> > +                      "r"((unsigned long)(_start) & ~((_cachesize) - 1=
-UL)),  \
-> > +                      "r"((unsigned long)(_start) + (_size))          =
-       \
-> > +                  : "a0")
-> > +
-> > +static void zicbom_cmo_clean_range(unsigned long addr, unsigned long s=
-ize)
-> > +{
-> > +     ZICBOM_CMO_OP(clean, addr, size, riscv_cbom_block_size);
-> > +}
-> > +
-> > +static void zicbom_cmo_flush_range(unsigned long addr, unsigned long s=
-ize)
-> > +{
-> > +     ZICBOM_CMO_OP(flush, addr, size, riscv_cbom_block_size);
-> > +}
-> > +
-> > +static void zicbom_cmo_inval_range(unsigned long addr, unsigned long s=
-ize)
-> > +{
-> > +     ZICBOM_CMO_OP(inval, addr, size, riscv_cbom_block_size);
-> > +}
-> > +
-> > +const struct riscv_cache_ops zicbom_cmo_ops =3D {
-> > +     .clean_range =3D &zicbom_cmo_clean_range,
-> > +     .inv_range =3D &zicbom_cmo_inval_range,
-> > +     .flush_range =3D &zicbom_cmo_flush_range,
-> > +};
-> > +
-> > +static void zicbom_register_cmo_ops(void)
-> > +{
-> > +     riscv_noncoherent_register_cache_ops(&zicbom_cmo_ops);
-> > +}
-> > +#else
-> > +static void zicbom_register_cmo_ops(void) {}
-> > +#endif
->
-> I think all of the above should be prefixed with riscv_cbom to match the
-> other riscv_cbom stuff we already have.
-Just to clarify, the riscv_cbom prefix should just be applied to the
-ZICOM functions and not to T-HEAD?
+That's true, also MT7620A/N are not MCM but rather a single die which
+includes the MT7530 switch afaik.
 
-Cheers,
-Prabhakar
+> 
+> The switch IP on MT7988 is for sure not MT7530 so either fix this and the
+> text below as a separate patch or let me handle it.
+> 
+> >     MT7530 is a part of the multi-chip module in MT7620AN, MT7620DA, MT7620DAN,
+> >     MT7620NN, MT7621AT, MT7621DAT, MT7621ST and MT7623AI SoCs.
+> > +  The MT7988 SoC comes a built-in switch similar to MT7531 as well as 4 Gigabit
+> 
+> s/comes a/comes with a
+> 
+> > +  Ethernet PHYs and the switch registers are directly mapped into SoC's memory
+> > +  map rather than using MDIO. It comes with an internally connected 10G CPU port
+> > +  and 4 user ports connected to the built-in Gigabit Ethernet PHYs.
+> 
+> Are you sure this is not the MT7531 IP built into the SoC, like MT7530 on
+> the MT7620 SoCs? Maybe DENG Qingfang would like to clarify as they did for
+> MT7530.
+
+It's basically MT7531 without port 5, without the SGMII units and with
+different built-in PHYs for port 0~3 (driver for those will follow in
+the next days, I'm still cleaning it).
+
+Similar to other in-SoC switches also the reset routine works a bit
+differently, ie. instead of using a GPIO we use a bit of the reset
+controller, similar to how it works also for MCM.
+
+> 
+> > +
+> >     MT7530 in MT7620AN, MT7620DA, MT7620DAN and MT7620NN SoCs has got 10/100 PHYs
+> >     and the switch registers are directly mapped into SoC's memory map rather than
+> > -  using MDIO. The DSA driver currently doesn't support this.
+> > +  using MDIO. The DSA driver currently doesn't support MT7620 variants.
+> >     There is only the standalone version of MT7531.
+> 
+> Can you put the MT7988 information below here instead.
+> 
+> > @@ -81,6 +88,10 @@ properties:
+> >             Multi-chip module MT7530 in MT7621AT, MT7621DAT and MT7621ST SoCs
+> >           const: mediatek,mt7621
+> > +      - description:
+> > +          Built-in switch of the MT7988 SoC
+> > +        const: mediatek,mt7988-switch
+> > +
+> >     reg:
+> >       maxItems: 1
+> > @@ -268,6 +279,17 @@ allOf:
+> >         required:
+> >           - mediatek,mcm
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          const: mediatek,mt7988-switch
+> > +    then:
+> > +      $ref: "#/$defs/mt7530-dsa-port"
+> 
+> The CPU ports bindings for MT7530 don't match the characteristics of the
+> switch on the MT7988 SoC you described above. We need new definitions for
+> the CPU ports on the switch on the MT7988 SoC.
+> 
+> What's the CPU port number? Does it accept rgmii or only the 10G phy-mode?
+
+CPU port is port 6. Port 5 is unused in MT7988 design.
+It uses an internal 10G link, so I've decided to use 'internal' as phy
+mode which best describes that situation.
+
+> 
+> > +      properties:
+> > +        gpio-controller: false
+> > +        mediatek,mcm: false
+> > +        reset-names: false
+> 
+> I'd rather not add reset-names here and do:
+> 
+>   - if:
+>       required:
+>         - mediatek,mcm
+>     then:
+>       properties:
+>         reset-gpios: false
+> 
+>       required:
+>         - resets
+>         - reset-names
+>     else:
+>       properties:
+>         resets: false
+>         reset-names: false
+> 
+> I can handle this if you'd like.
+
+Oh yes, that would be very nice. I'm definitely not an expert on
+dt-bindings and will probably need several attempts to correctly
+address all of that.
+
+Thank you!
+
+
+Daniel
