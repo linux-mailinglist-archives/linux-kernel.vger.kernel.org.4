@@ -2,88 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98DF6D4CB1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FE46D4CD8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjDCPyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S233115AbjDCP5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbjDCPyH (ORCPT
+        with ESMTP id S232617AbjDCP5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:54:07 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072D235A4;
-        Mon,  3 Apr 2023 08:53:37 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id kc4so28439729plb.10;
-        Mon, 03 Apr 2023 08:53:37 -0700 (PDT)
+        Mon, 3 Apr 2023 11:57:01 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BFF2D79
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:56:41 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id o12so13045025iow.6
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 08:56:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680537215;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1680537399; x=1683129399;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cKTF0BmFIUa1JLXsVVVzhQGo7yEP1rvtiF0Y9gWPb8E=;
-        b=L4VxjwPUo8WCU577qZCEQZ7pu6p8oNyJGyxXFOTQp5zmHJ40pDDjUEWoZvAFMWr3iX
-         IXhsmBYVV4AdZ1cCtSkSWqJbLDs0AYskwC+ekhf21MUBcTOHuyPYrHcUXA2uXYDB5VLI
-         trNo/Qfe4l+xU8uJgND9oZ3yEEMd2JspaHiZOhBGkcsi9V/KmMJ1CmtZMpBAIUkrq+iU
-         BpkttpS2Olw6pBXHactkL2p/xlyok4F6o1qBgQSB1Ti89oxE60tG9NIKtO66/As7KtUU
-         a/9x63J7LoTUlrOlRWk8UnWqN0ukskoztPWhRVb3NA+K1l5PphKlLWGGrGHrSrQIxCya
-         UspA==
+        bh=RFe1zxSzU2I3bvo/3kZcBou8v77SsyPyI2OZuMHbibE=;
+        b=HLfjwWpb2rIC2BwxZ3+wUXnBHQ3XGF6VNw1mOzYBjtFXZJicnn8CitaS9EovRRq4/l
+         ohC67uZGuXXZ3Nct8FzthmGCVoifOU4U70yki5tQV1+vRjIGsGcgnRbbCa+xS2noDZKx
+         ZuYl7nThpYrtmGh3yT6Bf6881TnjYdrhr2/AM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680537215;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680537399; x=1683129399;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cKTF0BmFIUa1JLXsVVVzhQGo7yEP1rvtiF0Y9gWPb8E=;
-        b=J3P3qB7ohRLmawSncEfxzCwt8iCpdpRrgyQdLL1bYmo0sbu5UO/ICjES76z0zz/YV/
-         wC0aEYaaBmFpbbBjkoGTRfPSf2tALkRDN89s2nDK66092n41LSTD7NBEYYw4kmG2AxIX
-         VbL0EZbYXbVS0lKkLlRfZbcR6NKp/L5FQt5U/R48E7E0ChrxHsMLKFDVPQs/CaW/ESMS
-         D8iW2jq02S9TCDNUJY/Jt8W5+puuhQJ85sfRj3NV0SE/6pcdWS4ng67cUL+RUM7k9jtF
-         ZcYN+CCp4LfCOZyNHPvOhcLgIRgsOd0t8+PN/KGikC/1ApuW544OT9Yq/fKa/JEUn/fc
-         ROdw==
-X-Gm-Message-State: AAQBX9dsiAowxw26dnwoALquq2g+j8k9nMj66KYPShPGYhUBJK6QbuaL
-        iwWVuJU8a/I/OFPLemHIX8E=
-X-Google-Smtp-Source: AKy350YjCnyh/uk3o/BCfLEHu1k2UKAWFfWt3QXQRhRponKchCMwhVMVZSp02642w72S69hcs1tUig==
-X-Received: by 2002:a17:903:24d:b0:19e:ecaf:c4b4 with SMTP id j13-20020a170903024d00b0019eecafc4b4mr44639769plh.4.1680537215464;
-        Mon, 03 Apr 2023 08:53:35 -0700 (PDT)
-Received: from pavilion.. ([2409:40f2:100f:dc7:d959:f34f:79da:6535])
-        by smtp.gmail.com with ESMTPSA id jj21-20020a170903049500b001a19196af48sm6777186plb.64.2023.04.03.08.53.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 08:53:35 -0700 (PDT)
-From:   Saalim Quadri <danascape@gmail.com>
-To:     krzysztof.kozlowski@linaro.org
-Cc:     alsa-devel@alsa-project.org, broonie@kernel.org,
-        danascape@gmail.com, daniel.baluta@nxp.com,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com, robh+dt@kernel.org
-Subject: Re: [PATCH v2] ASoC: dt-bindings: wm8510: Convert to dtschema
-Date:   Mon,  3 Apr 2023 21:23:25 +0530
-Message-Id: <20230403155325.5797-1-danascape@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <d6b4df41-02cb-b900-5e8b-8ad08d3d36f1@linaro.org>
-References: <d6b4df41-02cb-b900-5e8b-8ad08d3d36f1@linaro.org>
+        bh=RFe1zxSzU2I3bvo/3kZcBou8v77SsyPyI2OZuMHbibE=;
+        b=fdg6qSi2xL0FF/W97qZh4TssD+T6jzaFyTCpxACnULhr4CmReW6L3jl5iM/JqiStsp
+         1u7vNZcyw8mUZER4mLhlzWgf+/gBbqdL9w8ygfyC5I2IWjCHQBcISjPG8cisEuH+eJ2z
+         37hmRqlQXBXg5RDWqQH5ONFgD+dLliFClpjbwKPZ50qt1f0IDuXGugvFUoxD+Txus9kg
+         98tP+vDMNvBy8isWKgEq5VZ4u0NmTTumqBtsCzvV0Ogi8P5s0JZAGHySDAqW0a14YllW
+         dBUmmFAan9LmhBeP6vxetRagS6e2E8ZSmwQNeNugx2x/HxZatyyF0akpvELmKm7Z3duW
+         I+Pg==
+X-Gm-Message-State: AO0yUKWQHHhDi2o1LGGcbd6YSNuS1bUsLDLcxE+vEmPctuOzMeWycm5I
+        wTEfsO0g0SRz6JBv7XvfVaZ0HPnTqLo4Yjf/CEDYyA==
+X-Google-Smtp-Source: AK7set+dv6kILLgSsW5OhiwMMvsJpDHj0jkLG3ftk9C2Q3IVuihcM3FeeX1WK+8h3sANIAsQbzCsnywxjghQVdTP8nI=
+X-Received: by 2002:a02:9666:0:b0:3a7:e46f:2a32 with SMTP id
+ c93-20020a029666000000b003a7e46f2a32mr14684132jai.6.1680537398876; Mon, 03
+ Apr 2023 08:56:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <00000000000057e9d305f869eaa0@google.com>
+In-Reply-To: <00000000000057e9d305f869eaa0@google.com>
+From:   Rob Clark <robdclark@chromium.org>
+Date:   Mon, 3 Apr 2023 08:56:28 -0700
+Message-ID: <CAJs_Fx6jroBMGNtraHUZ9oBi8ubOS6RmxkF8hKCOQL3Z5vNTDw@mail.gmail.com>
+Subject: Re: [syzbot] [dri?] general protection fault in drm_crtc_next_vblank_start
+To:     syzbot <syzbot+54280c5aea19802490b5@syzkaller.appspotmail.com>
+Cc:     airlied@gmail.com, airlied@redhat.com, christian.koenig@amd.com,
+        daniel.vetter@ffwll.ch, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        sean@poorly.run, sumit.semwal@linaro.org,
+        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.3 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes from V1 -> V2:
-    > Added cirrus opensource as the maintainer
-    > Added missing $ref to dai-common.yaml
-    > Dropped I2C and SPI description
-    > Added sound-dai-cells property
-    > Added 'compatible' as the required property
-    > additionalProperties: false -> unevaluatedProperties: false after adding $ref
-    > Added SPI example
+On Mon, Apr 3, 2023 at 12:57=E2=80=AFAM syzbot
+<syzbot+54280c5aea19802490b5@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    a6d9e3034536 Add linux-next specific files for 20230330
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D1001d1cdc8000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Daceb117f79245=
+08e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D54280c5aea19802=
+490b5
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
+ls for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D13435a2ec80=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D139c9c21c8000=
+0
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/ec1f900ea929/dis=
+k-a6d9e303.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/fabbf89c0d22/vmlinu=
+x-a6d9e303.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/1ed05d6192fa/b=
+zImage-a6d9e303.xz
+>
+> The issue was bisected to:
+>
+> commit d39e48ca80c0960b039cb38633957f0040f63e1a
+> Author: Rob Clark <robdclark@chromium.org>
+> Date:   Fri Sep 3 18:47:54 2021 +0000
+>
+>     drm/atomic-helper: Set fence deadline for vblank
+>
 
-Kind Regards,
+should be fixed by https://patchwork.freedesktop.org/series/115992/
 
-Saalim
+BR,
+-R
+
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D12d260c9c8=
+0000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D11d260c9c8=
+0000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D16d260c9c8000=
+0
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+54280c5aea19802490b5@syzkaller.appspotmail.com
+> Fixes: d39e48ca80c0 ("drm/atomic-helper: Set fence deadline for vblank")
+>
+> [drm] Initialized udl 0.0.1 20120220 for 1-1:0.0 on minor 2
+> [drm] Initialized udl on minor 2
+> udl 1-1:0.0: [drm] *ERROR* Read EDID byte 0 failed err ffffffb9
+> udl 1-1:0.0: [drm] Cannot find any crtc or sizes
+> general protection fault, probably for non-canonical address 0xdffffc0000=
+000028: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000140-0x0000000000000147]
+> CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.3.0-rc4-next-20230330-syzka=
+ller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 03/02/2023
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:drm_crtc_next_vblank_start+0xb3/0x2b0 drivers/gpu/drm/drm_vblan=
+k.c:1003
+> Code: e8 01 00 00 48 69 db 38 02 00 00 48 b8 00 00 00 00 00 fc ff df 49 0=
+3 9d 38 03 00 00 4c 8d ab 44 01 00 00 4c 89 ea 48 c1 ea 03 <0f> b6 14 02 4c=
+ 89 e8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 67
+> RSP: 0018:ffffc900000e6bb0 EFLAGS: 00010207
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: 0000000000000028 RSI: ffffffff849f2afb RDI: ffff888079558338
+> RBP: ffffc900000e6c48 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000000000001 R11: 0000000000000010 R12: ffff8880795590d8
+> R13: 0000000000000144 R14: ffff8880795590d8 R15: dffffc0000000000
+> FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000=
+000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f17191c7688 CR3: 00000000281af000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  set_fence_deadline drivers/gpu/drm/drm_atomic_helper.c:1531 [inline]
+>  drm_atomic_helper_wait_for_fences+0x1b4/0x780 drivers/gpu/drm/drm_atomic=
+_helper.c:1578
+>  drm_atomic_helper_commit drivers/gpu/drm/drm_atomic_helper.c:2007 [inlin=
+e]
+>  drm_atomic_helper_commit+0x1bd/0x370 drivers/gpu/drm/drm_atomic_helper.c=
+:1979
+>  drm_atomic_commit+0x20a/0x300 drivers/gpu/drm/drm_atomic.c:1503
+>  drm_client_modeset_commit_atomic+0x69b/0x7e0 drivers/gpu/drm/drm_client_=
+modeset.c:1045
+>  drm_client_modeset_commit_locked+0x149/0x580 drivers/gpu/drm/drm_client_=
+modeset.c:1148
+>  drm_client_modeset_commit+0x51/0x80 drivers/gpu/drm/drm_client_modeset.c=
+:1174
+>  drm_fb_helper_single_fb_probe drivers/gpu/drm/drm_fb_helper.c:1983 [inli=
+ne]
+>  __drm_fb_helper_initial_config_and_unlock+0x118a/0x1510 drivers/gpu/drm/=
+drm_fb_helper.c:2169
+>  drm_fb_helper_initial_config drivers/gpu/drm/drm_fb_helper.c:2259 [inlin=
+e]
+>  drm_fb_helper_initial_config+0x42/0x60 drivers/gpu/drm/drm_fb_helper.c:2=
+251
+>  drm_fbdev_generic_client_hotplug+0x1ab/0x270 drivers/gpu/drm/drm_fbdev_g=
+eneric.c:281
+>  drm_fbdev_generic_setup+0x127/0x3b0 drivers/gpu/drm/drm_fbdev_generic.c:=
+343
+>  udl_usb_probe+0x120/0x190 drivers/gpu/drm/udl/udl_drv.c:120
+>  usb_probe_interface+0x30f/0x960 drivers/usb/core/driver.c:396
+>  call_driver_probe drivers/base/dd.c:579 [inline]
+>  really_probe+0x240/0xca0 drivers/base/dd.c:658
+>  __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:795
+>  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:825
+>  __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:953
+>  bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+>  __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1025
+>  bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+>  device_add+0x11c4/0x1c50 drivers/base/core.c:3616
+>  usb_set_configuration+0x10ee/0x1af0 drivers/usb/core/message.c:2171
+>  usb_generic_driver_probe+0xcf/0x130 drivers/usb/core/generic.c:238
+>  usb_probe_device+0xd8/0x2c0 drivers/usb/core/driver.c:293
+>  call_driver_probe drivers/base/dd.c:579 [inline]
+>  really_probe+0x240/0xca0 drivers/base/dd.c:658
+>  __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:795
+>  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:825
+>  __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:953
+>  bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+>  __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1025
+>  bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+>  device_add+0x11c4/0x1c50 drivers/base/core.c:3616
+>  usb_new_device+0xcb2/0x19d0 drivers/usb/core/hub.c:2575
+>  hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+>  hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+>  port_event drivers/usb/core/hub.c:5711 [inline]
+>  hub_event+0x2d9e/0x4e40 drivers/usb/core/hub.c:5793
+>  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+>  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+>  kthread+0x33e/0x440 kernel/kthread.c:379
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:drm_crtc_next_vblank_start+0xb3/0x2b0 drivers/gpu/drm/drm_vblan=
+k.c:1003
+> Code: e8 01 00 00 48 69 db 38 02 00 00 48 b8 00 00 00 00 00 fc ff df 49 0=
+3 9d 38 03 00 00 4c 8d ab 44 01 00 00 4c 89 ea 48 c1 ea 03 <0f> b6 14 02 4c=
+ 89 e8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 67
+> RSP: 0018:ffffc900000e6bb0 EFLAGS: 00010207
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: 0000000000000028 RSI: ffffffff849f2afb RDI: ffff888079558338
+> RBP: ffffc900000e6c48 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000000000001 R11: 0000000000000010 R12: ffff8880795590d8
+> R13: 0000000000000144 R14: ffff8880795590d8 R15: dffffc0000000000
+> FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000=
+000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f17191c7688 CR3: 000000002b398000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess):
+>    0:   e8 01 00 00 48          callq  0x48000006
+>    5:   69 db 38 02 00 00       imul   $0x238,%ebx,%ebx
+>    b:   48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
+>   12:   fc ff df
+>   15:   49 03 9d 38 03 00 00    add    0x338(%r13),%rbx
+>   1c:   4c 8d ab 44 01 00 00    lea    0x144(%rbx),%r13
+>   23:   4c 89 ea                mov    %r13,%rdx
+>   26:   48 c1 ea 03             shr    $0x3,%rdx
+> * 2a:   0f b6 14 02             movzbl (%rdx,%rax,1),%edx <-- trapping in=
+struction
+>   2e:   4c 89 e8                mov    %r13,%rax
+>   31:   83 e0 07                and    $0x7,%eax
+>   34:   83 c0 03                add    $0x3,%eax
+>   37:   38 d0                   cmp    %dl,%al
+>   39:   7c 08                   jl     0x43
+>   3b:   84 d2                   test   %dl,%dl
+>   3d:   0f                      .byte 0xf
+>   3e:   85                      .byte 0x85
+>   3f:   67                      addr32
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
