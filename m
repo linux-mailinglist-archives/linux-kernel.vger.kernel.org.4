@@ -2,176 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DE86D4115
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE896D411C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbjDCJsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S232334AbjDCJs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbjDCJrh (ORCPT
+        with ESMTP id S232339AbjDCJsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:47:37 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C16011E97
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:47:19 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id h8so114865521ede.8
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 02:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680515237;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=htPk5PXTOqeqOET7dyhcLS5Nxh2cxnK3mpGnQz9jlEw=;
-        b=SvoeEbbR8OcfvVqTljRORHpbqaNFE7cu/bdh4a3d3VE4NUnwo1J/oyoAPXZ0a+yBUd
-         hIKYw+s6BKEbV0nyzwPXNSkFmbnG6OvxYMeFlUu8hGHeCQjuWipnJzmGn+D0mXZA7nOM
-         /Y+FgreAigmNIHhIlvRuWlr3UDh+bYcY3u4ByQaS7QhPfxvqH4hJAZS0IR9nJoqOfiPU
-         GZLEPeUrjBKgNAEOt9DNXW8PLIhwOk20YHAJALYC7vLuI5K+qpFmK2ZLZAVYgR4bIwAa
-         EhDpTeIbMKoqH9kswhsCWOrMOTkV2nvh1hy+jA9x4KeaKRRkGfWjdQ4iChZRhW1ax7/b
-         vGbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680515237;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=htPk5PXTOqeqOET7dyhcLS5Nxh2cxnK3mpGnQz9jlEw=;
-        b=kqLIOynDL7dXgVN5M/sXCXf6ePT0/Vto+txJPIUA8A1biWEm6+KGKJSuoMBBF3OgEW
-         culbHBrT7oFl6l+mx/RTfcfM1HC8UYqhWSZyayBUiyw//k3ZZxIdwsh0LvSu4FVlKxbQ
-         qUmnYkAzBJVOFxLh40j0PtEFDamX4p42hLx9iasTna+nSSa5sV1APWH/MyXfwp1fEa/1
-         hFitfBQZzdHoS6GHgBCZzxVANHR0cVjlb8S1EiKsLXjw2WWrZRoLiidii3hSJMl9ahzD
-         Q1/fIMkEgRQTGm+k+UYA3pwsMaynI80zL5xjktz8ZCeS2Z2XbZpJMIn/Qa5hQH1GcC1h
-         Hn3Q==
-X-Gm-Message-State: AAQBX9eQ3AblIBUZYkiRTDczAn/Bar9QWb99YikJf+18CU3NhG0Jze9Z
-        gdRoWRmcENi+Z9gM+i0XXtqXPg==
-X-Google-Smtp-Source: AKy350aq2/eAtEYHLJ3R4+ZQV7M03sIMNYL9wBr9zDABKJ8ufu9aCsyLHfIX7yY35iys3sUdYSzvjg==
-X-Received: by 2002:a17:906:6bd5:b0:930:7ae6:9ebd with SMTP id t21-20020a1709066bd500b009307ae69ebdmr35660301ejs.70.1680515237638;
-        Mon, 03 Apr 2023 02:47:17 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
-        by smtp.gmail.com with ESMTPSA id la6-20020a170907780600b009351565d1f5sm4285058ejc.52.2023.04.03.02.47.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 02:47:17 -0700 (PDT)
-Message-ID: <d0b9d8a2-14ae-8c0d-309b-5f5d60d43a1d@linaro.org>
-Date:   Mon, 3 Apr 2023 11:47:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v30 0/7] Add MediaTek SoC DRM (vdosys1) support for mt8195
+        Mon, 3 Apr 2023 05:48:11 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AFD65BB;
+        Mon,  3 Apr 2023 02:48:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mlNqvBfFr8nVWDXnwXXaATG13iLKOW0daZ8uWaUOwwhjuOfgJBaUUs0XjYymK1JRbiycAnD6vhmamLShQIlVS6iW3mhU0YZLpuzYqTh6PimDxJXblw7EoFVCInVfmGnW6cI6UFp0Oo9FHg6lyOf5FjxwKLsoY52Puy7MH1Y0NHXXSCp2FS6xCtmbyio1EmHaX88Hg1PPBDu+xJFGOybaxdOdJinEkBmQdKg6EF65LmOT3+fqmEHg7KnXk8cfUIjVqyyry4V9n2TdpaVfScTthmXtqQMamgBdtvgKbGHnReDk2uC5NQaniEPU/+DJuWEk8XJv632FSfq+k/2rmADthQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0RYgv8N+j3k7nxIQgJvlAaBBYeRpdcVwG6bECK54+4w=;
+ b=GNpeqAfw1o/OQIiwX096CaN4x7MArhNCgnVneW50qvhsjjeZAC/ygNLp1OExTslkXTGvzauxGxhsbYX2YAq68mTDpjDI0/FuyleO4m2SxNaQxjOgBZAJFyQPl3aELBUylm9LIQ2DeOPx9f01ZwQWcur64oZ/W6Z0QDO2nrbqy1zw/fwJia3fUuKaJc0IfPK4OkBBrjjst0g5LK8AbbxQe2WyNASuXwyktv8U94McyDDS5t6QL2NP/4HT/pNfmsprqKev1/tXC7g6DbBRQA5qHES3cNg6fxwkkmT3Kvg68135RoyKou0HZ2rVCZcoFyfCD9UOXf2dmpDScGNQqORDdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0RYgv8N+j3k7nxIQgJvlAaBBYeRpdcVwG6bECK54+4w=;
+ b=tk5Hrcq9yr115iue6UtJQ/j4Qo46BXBSxaX49bib4ij4inCzeDd97j/NJfluzKJPhe6TasdlPQir+00StuGXj/eBqoIkwJvXFDVEDjfMLlEETPBBqpO8UFF1FmJ8EAb0CnaiExoUN22/BN2dfpPzq0LONjpbfVwVO0HOZ/RUjqI=
+Received: from MN2PR12MB4607.namprd12.prod.outlook.com (2603:10b6:208:a1::18)
+ by PH8PR12MB7278.namprd12.prod.outlook.com (2603:10b6:510:222::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.29; Mon, 3 Apr
+ 2023 09:47:59 +0000
+Received: from MN2PR12MB4607.namprd12.prod.outlook.com
+ ([fe80::68bb:3dc7:2fc2:fc00]) by MN2PR12MB4607.namprd12.prod.outlook.com
+ ([fe80::68bb:3dc7:2fc2:fc00%3]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
+ 09:47:58 +0000
+From:   "Harsha, Harsha" <harsha.harsha@amd.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "michals@xilinx.com" <michals@xilinx.com>,
+        "saratcha@xilinx.com" <saratcha@xilinx.com>,
+        "git (AMD-Xilinx)" <git@amd.com>,
+        "Shah, Dhaval (CPG-PSAV)" <dhaval.r.shah@amd.com>
+Subject: RE: [PATCH V2 3/4] crypto: xilinx: Add ZynqMP RSA driver
+Thread-Topic: [PATCH V2 3/4] crypto: xilinx: Add ZynqMP RSA driver
+Thread-Index: AQHZW7b6DfKLwgB1B02PBPlygQUroK8Up9+AgATDHaA=
+Date:   Mon, 3 Apr 2023 09:47:58 +0000
+Message-ID: <MN2PR12MB46070886A98A29851B65133BF3929@MN2PR12MB4607.namprd12.prod.outlook.com>
+References: <20230321053446.4303-1-harsha.harsha@amd.com>
+ <20230321053446.4303-4-harsha.harsha@amd.com>
+ <ZCah3f/Z8nzdHITy@gondor.apana.org.au>
+In-Reply-To: <ZCah3f/Z8nzdHITy@gondor.apana.org.au>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, singo.chang@mediatek.com,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Nancy.Lin" <nancy.lin@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, krzysztof.kozlowski+dt@linaro.org,
-        clang-built-linux@googlegroups.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20230321121859.2355-1-nancy.lin@mediatek.com>
- <17831605-5c9d-9c92-d190-04f91060ace4@collabora.com>
- <CAAOTY_8ZAxVSLnJ1u5snsRgkszV7ixwhjUS2nDimE_Lpj=cUCA@mail.gmail.com>
- <97a5f383-38f5-e8ea-e1d8-489b690e4521@collabora.com>
- <CAAOTY_9_vn-m2jTaaHkFDV+v2-LeaAxtCLNNnOxZq5Httb-TAQ@mail.gmail.com>
- <CAGXv+5FJCuG_zHnaKZ=baNzKAWKLEe3jZnghNAxuGv7i7L6e7Q@mail.gmail.com>
- <CAAOTY_9Dbtubah3ndj9+FeYDh7D42k6-BtHrYMNc=CP6GL6uFA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAAOTY_9Dbtubah3ndj9+FeYDh7D42k6-BtHrYMNc=CP6GL6uFA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN2PR12MB4607:EE_|PH8PR12MB7278:EE_
+x-ms-office365-filtering-correlation-id: 5dca1c10-14c8-46a4-7744-08db342881e5
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Cb2bePvBb+JH4PSNrFbwqg/P+7w9FeecbrU2xfWIuRDPCxlGASJHq7nU8GAbiw4fVo+su456zPGW+TKCj1YPJfiSCi0h5zJ5QsvhGe17vXWSllJhdyzATuUocJeFIXPBipWGiI5gaRa5f2XktC0osZHmPgiJ7bK7rm3qLq51tsVuujI1R3CLwJc2gh43Va1lM5hnCfICW48UhZ5ZorwbbjI6bgXHb1hDs7hRUQU2dHi/uiLCZqVYIMiiOhgPG5VAJFBaBd3ArU7WLE2V8k1mtRFQnbihgSt8mQA/Uwe8QItsfRPF83ZI2xbOaICqNxdNpkE0TpgSg90EYTM7LrjUKuGJczzw/4Q05fmzFsxsqfX9TMwEAhUEPzPBl49P1kWW8KByMnEY9ZMwgXB6YRKTXNQGeUJTbKUMj7EY4CoYGFx5jYkYg5kVQ7WaR3TnR+ce6i+Um9ULaGVU7YJIcjP7aaGcX4u7Uq14xtXUGM8wqOE4VN6TZtLH+VNu3LkX3EkB386coAoieDj9qWpZRciesD1l9CkJiDlcF6hmGXhAK7lzKtbgkjUGVTEqu0Y49bSmwoBC4afANANv2k1pQU8Wz3ey7fV+uQa6x2y9m+g8YbQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4607.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(376002)(136003)(366004)(451199021)(55016003)(41300700001)(8676002)(4326008)(66556008)(478600001)(66946007)(64756008)(66476007)(6916009)(76116006)(66446008)(316002)(8936002)(54906003)(122000001)(52536014)(5660300002)(38100700002)(186003)(53546011)(83380400001)(7696005)(966005)(71200400001)(9686003)(6506007)(26005)(86362001)(2906002)(33656002)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?22fVYKBKzFEZJ3hHvZeZx8m091LoUBMSkkDC7PA+YdvP0mpEc2SMuok6dTYk?=
+ =?us-ascii?Q?fVq5I7zDcEymMRinrtUrT21Kn4YLltmkhB7HaYoVwDKe1y91ECr3SVuWJ7pt?=
+ =?us-ascii?Q?xnyb31evLCFR+kcvHHzjEp9RdovEQZZv/tmVX7k04a4rama8QuQjp7d+A8pf?=
+ =?us-ascii?Q?vtxxn2ApW8Y/BTmy/CjiVQr6toRuqxwryWjTepETPMkVK7DU06AllTZUNQZF?=
+ =?us-ascii?Q?AjTho1gLQUj1S52ccBPTle4Nt4Ifbr3z1YVpzruGwk5LYnL/eDzXrQco+t7j?=
+ =?us-ascii?Q?2imOvVq9PxU7LZD0QpnSJIWc01rUkUJxz1T4EPz/85LnYoAQ3sbuC+2yiLaV?=
+ =?us-ascii?Q?WxDA61xmUkBozgirQw22dFAbXP3ompCfVrS5i6nxGwKVdtGVUiPHtCyqI0Et?=
+ =?us-ascii?Q?qDiQqVlVt4kvMdV8a9x6eMN6ZTxy3DOJPbTDxAxQhM7Y+1vfGcvvcigIl0By?=
+ =?us-ascii?Q?aIzKfmLNbqDS6Kfk7UODUdjkEf9oEPNlZ/2rGF8/f+2erU9ag61qu4rgW49a?=
+ =?us-ascii?Q?dDVITfeWgPoVvdXuQrSrizJ/pJtcaURWNbZ5Elw0dye7In4GhSAgozPw7+6C?=
+ =?us-ascii?Q?Wp4whFLJAUeomJFpeMvJbYkjejchkkXFqLZCTBYQgqEd0iHxDH85XDtfOydJ?=
+ =?us-ascii?Q?NYuut8f9IO/qLtA3qUzt3eldvCfCjxcqfrWnrUgXdEwZmR0h1LS9/6+TYt1n?=
+ =?us-ascii?Q?Q3jvOQKH+PblpyAQCV9qukfXo6HS3esN6YZ4OpkXWA+MOFqXQcq9XzLN2h3q?=
+ =?us-ascii?Q?aEgd84S3x8SWJ933k9WAk6BNerEPTY11Py3UZ62yCz+2C7kJBXn0fWle1u8R?=
+ =?us-ascii?Q?sD17uRxcQVSxns5QjMyksyUVVNUK4dNLOkOJG9JWCrnKrxetj0y5AcDGbo7u?=
+ =?us-ascii?Q?f3ZEPuGipE4ZP6wzjXIKwqkkXLjClqmwmY+erg6M6lw6BJPuvaY2m6gO1TMM?=
+ =?us-ascii?Q?UNqUxjFPOuOkNWPoOweVRCVrpsRjBq726CwL0U/v5dB6zD+mSA+ngjjBae4R?=
+ =?us-ascii?Q?ZrNT3AuzfEbipu8+DhGLOnCmvsl/I5cU/32mpNMQ8lyScgXIZTAuMycGTtyb?=
+ =?us-ascii?Q?HEvCvcstzFifpsxsA7BKZakgGQvgyu23mchYOKruYcXwbsbeo6E1eNfnmGe8?=
+ =?us-ascii?Q?0s2J1wRib3P9o0MqMU5ykcYaYNfsKA97AdjHTw9kKYi3P/JAKAfr2a06JRk9?=
+ =?us-ascii?Q?4L9WFbuOsIs44o30bAKF08VTwbT6b+hZGO60z7P3XWjKqjcLNSRaeXKh6ZQ8?=
+ =?us-ascii?Q?Vy3ONf2tVgYlmDuM9KT7BGtj3HRio56penUxQgsKW97U93gkuyqkWAZvCqmF?=
+ =?us-ascii?Q?n48bjVOnx0VR2H+/ADeFonfRmFA38D9zDmNXD5T9XyjiCirgYZfTSz6SkDW4?=
+ =?us-ascii?Q?W793epuYkyIlKP3kAk/4odcaEFrUtSZSV6dMj21V2XQrjnX9ogBzjvi1Jxrf?=
+ =?us-ascii?Q?XMZLq2QiaS74BRr5CXBRRO52mYsnh7Za+ZEL2WX6CfdYIAAfKpd7uKG2RSAH?=
+ =?us-ascii?Q?qeV/jq4ViNWeoJG/6vQARvJN7oGoAAYeuXSurr60HIwBt47GXYBZpJvAIOpD?=
+ =?us-ascii?Q?6jvxAPi4yffVbWH9mRk=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4607.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5dca1c10-14c8-46a4-7744-08db342881e5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Apr 2023 09:47:58.5341
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QatCGiyTlEW4lY/LQE8eOt0hTEWd5/q3oYk3V1wvzu574GTpAT8EBpc6vC7Zk1tL
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7278
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/2023 05:30, Chun-Kuang Hu wrote:
-> Hi, Chen-yu:
-> 
-> Chen-Yu Tsai <wenst@chromium.org> 於 2023年3月30日 週四 下午7:05寫道：
->>
->> On Mon, Mar 27, 2023 at 11:17 PM Chun-Kuang Hu <chunkuang.hu@kernel.org> wrote:
->>>
->>> Hi, Angelo:
->>>
->>> AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> 於
->>> 2023年3月24日 週五 下午4:38寫道：
->>>>
->>>> Il 24/03/23 00:25, Chun-Kuang Hu ha scritto:
->>>>> Hi, Angelo:
->>>>>
->>>>> AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> 於
->>>>> 2023年3月23日 週四 下午4:58寫道：
->>>>>>
->>>>>> Il 21/03/23 13:18, Nancy.Lin ha scritto:
->>>>>>> The hardware path of vdosys1 with DPTx output need to go through by several modules, such as, OVL_ADAPTOR and MERGE.
->>>>>>>
->>>>>>> Add DRM and these modules support by the patches below:
->>>>>>>
->>>>>>
->>>>>> I've tested v30 again on MT8173, MT8192 and MT8195 based Chromebooks.
->>>>>> Green light from me.
->>>>>
->>>>> I'm curious about how you build code and test on Chromebooks. Do you
->>>>> build in cros environment or pure linux
->>>>> (https://archlinuxarm.org/platforms/armv8/mediatek/acer-chromebook-r13).
->>>>> I've a MT8183 based Chromebook (HP 11a) and I've tried to run a
->>>>> upstream kernel on it. cros is too heavy for me and I doubt I could
->>>>> use it. I've tried the pure linux and could boot up with console, but
->>>>> display does not work. If you use the pure linux environment, could
->>>>> you share how it works?
->>>>>
->>>>
->>>> I haven't tested MT8183 (I don't actually have any 8183 machine in my hands)... but
->>>> yes, I can share my test environment.
->>>>
->>>> I have one MicroSD that I use either in the MicroSD slot of the target machine, or
->>>> in a USB reader; this *single* system is what I boot on *all* Chromebooks that I
->>>> have: one kernel, multiple devicetrees, same Debian-based userspace.
->>>>
->>>> What we have to prepare this bootable media can be found at [1], but beware that
->>>> it currently uses an outdated kernel, so, what I have locally is a symlink to my
->>>> kernel tree.
->>>> You can change/add/remove the devicetree blobs that will get added to the image
->>>> by modifying `chromebook-setup.sh`; before tampering with kernel tree symlink,
->>>> please run that script for the first time, as it will download a cross-compiler,
->>>> a kernel tree (that you will replace for sure) and the (very old) Debian rootfs
->>>> that you can update with `apt-get dist-upgrade` after booting the Chromebook.
->>>>
->>>> If you want to check about possible kernel configuration differences, what I use
->>>> is at [2], so that you can compare.
->>>
->>> Thanks for the information, I would try to compare the kernel config first.
->>
->> Hi CK,
->>
->> Would you consider adding your repo to linux-next? That would let everyone
->> do integration testing, especially automated ones, earlier, before you send
->> your PRs to drm maintainers.
->>
->> You can do so by sending an email to Stephen Rothwell to do so.
-> 
-> I don't understand what this process is. Does it means that I directly
-> upstream patches into linux-next? I prefer that my patches go through
-> drm maintainers' tree. Does any document introduce this process?
-
-All maintainers and sub-maintainers trees are supposed to be fed into
-linux-next.
-
-https://lore.kernel.org/linux-next/20230327124805.3ca4f3cc@canb.auug.org.au/T/#md226a8e714cc731c2ab4ba5ee7eb43fe21a55009
-
-Documentation/process/howto.rst
-Documentation/process/2.Process.rst
+Hi Herbert,
 
 
-Best regards,
-Krzysztof
+> -----Original Message-----
+> From: Herbert Xu <herbert@gondor.apana.org.au>
+> Sent: Friday, March 31, 2023 2:33 PM
+> To: Harsha, Harsha <harsha.harsha@amd.com>
+> Cc: davem@davemloft.net; linux-crypto@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> michals@xilinx.com; saratcha@xilinx.com; git (AMD-Xilinx) <git@amd.com>;
+> Shah, Dhaval (CPG-PSAV) <dhaval.r.shah@amd.com>
+> Subject: Re: [PATCH V2 3/4] crypto: xilinx: Add ZynqMP RSA driver
+>=20
+> On Tue, Mar 21, 2023 at 11:04:45AM +0530, Harsha Harsha wrote:
+> >
+> > +static inline int xilinx_copy_and_save_keypart(u8 **kpbuf, unsigned in=
+t
+> *kplen,
+> > +					       const u8 *buf, size_t sz) {
+> > +	int nskip;
+> > +
+> > +	for (nskip =3D 0; nskip < sz; nskip++)
+> > +		if (buf[nskip])
+> > +			break;
+> > +
+> > +	*kplen =3D sz - nskip;
+> > +	*kpbuf =3D kmemdup(buf + nskip, *kplen, GFP_KERNEL);
+> > +	if (!*kpbuf)
+> > +		return -ENOMEM;
+> > +
+> > +	return 0;
+> > +}
+>=20
+> ...
+>=20
+> > +static int xilinx_rsa_setkey(struct crypto_akcipher *tfm, const void *=
+key,
+> > +			     unsigned int keylen, bool private) {
+> > +	struct xilinx_rsa_tfm_ctx *tctx =3D akcipher_tfm_ctx(tfm);
+> > +	struct rsa_key raw_key;
+> > +	int ret;
+> > +
+> > +	if (private)
+> > +		ret =3D rsa_parse_priv_key(&raw_key, key, keylen);
+> > +	else
+> > +		ret =3D rsa_parse_pub_key(&raw_key, key, keylen);
+> > +	if (ret)
+> > +		goto n_key;
+> > +
+> > +	ret =3D xilinx_copy_and_save_keypart(&tctx->n_buf, &tctx->n_len,
+> > +					   raw_key.n, raw_key.n_sz);
+>=20
+> What happens when you call setkey twice? Wouldn't this leak memory?
 
+Thanks for the review. I will check the behavior and get back to you.
+
+Regards,
+Harsha
+
+>=20
+> Cheers,
+> --
+> Email: Herbert Xu <herbert@gondor.apana.org.au> Home Page:
+> http://gondor.apana.org.au/~herbert/
+> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
