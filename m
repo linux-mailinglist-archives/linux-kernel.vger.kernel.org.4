@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5C66D5401
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5AD6D53FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233615AbjDCVwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 17:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S233609AbjDCVu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 17:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233484AbjDCVv7 (ORCPT
+        with ESMTP id S233626AbjDCVuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:51:59 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E67090
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:51:58 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id m6so22353024qvq.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 14:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1680558717;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sjT5o4xvNfeO0u+mk4eqCgrBLdiXC2jtMg+3Cg0Ah+s=;
-        b=BY6rpDxeKb8DeVdtM+UrqqtBzn9YBmX6bA4aCVzqc15IKltnlC8nzdzXUX2K0Vrc5s
-         rR/AJVkJ/0cZn1OVgnmzyfP4YNtlc58rT+RvyhSRSjBSmb5NfwKoX3UW3LSA8aMNQnQe
-         YAV8wc1lGbzCFiM7EV+aIi7nY68VPP8i17rus=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680558717;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sjT5o4xvNfeO0u+mk4eqCgrBLdiXC2jtMg+3Cg0Ah+s=;
-        b=6b7ha3eiRk/wYfrvXqe5sxleQLXUMWed8b8R9t6SiCSt1cSe/YVfn2/6A2bSIB5IBi
-         PdXRIfLb8CAODfc1D9aYPqa8MnoMHUP58G5Y50zBrA1M71CsJJrF96Jf/RSpHz4DwxSp
-         BPw6WnGNr0BoFXI3Uz0t37XhABgLq+d2FxO6zQH1FGZLGHfniCkjHfttQoGHWVgF7z7j
-         na6bM47yZ8tTPEnOlOGDZUiEOazIq4n2ye1IQmgBlzmvLTjqB8u67wzvievAvS9NqMte
-         9e0I8xs80jj7bIo4NhRwWn1dPbLYprv+k8IukDbtbVAdoh1ciT6ix5ZO+VAVdvDkehgB
-         VaTQ==
-X-Gm-Message-State: AAQBX9dfhS1aCavVnPf4z/x7Bw+EsHWuI7/6YoCqjGuMyy9vbZSZL82i
-        spKGleth8Xis3i1LbOz+X9e9H+JgmdvCGcpfDsQ=
-X-Google-Smtp-Source: AKy350bTaGQ08kEu83u5p/ijNr8qy5I/X/lIvnEcVkcdouB39xLUA34m5/51K/KXWuL6r29WiCrKHw==
-X-Received: by 2002:a05:6214:224a:b0:571:698:eac9 with SMTP id c10-20020a056214224a00b005710698eac9mr39848431qvc.18.1680558717538;
-        Mon, 03 Apr 2023 14:51:57 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-7.dsl.bell.ca. [209.226.106.7])
-        by smtp.gmail.com with ESMTPSA id a14-20020a0ccdce000000b005dd8b93458bsm2927653qvn.35.2023.04.03.14.51.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 14:51:57 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 17:51:55 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     "Kernel.org Bugbot" <bugbot@kernel.org>
-Cc:     aros@gmx.com, regressions@lists.linux.dev, bugs@lists.linux.dev,
-        workflows@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@leemhuis.info, tools@linux.kernel.org
-Subject: Re: Introducing bugbot
-Message-ID: <20230403-favored-subsiding-6e49bd@meerkat>
-References: <gmnswy45efztvcyc3xqymm52h7cdfwjz64go2wy3zyeqcqwb76@36fva4hyip4q>
- <20230403-b217297-6bf5914fb55d@bugzilla.kernel.org>
+        Mon, 3 Apr 2023 17:50:54 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB8610C6;
+        Mon,  3 Apr 2023 14:50:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680558652; x=1712094652;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=BcRLMcu8Iblq5KidLgO+FxXKs6iVdXYPJX2NID33tnU=;
+  b=FSdjMcMY9lv7aXjvENTv/PPA/gRJet5NRd8kRZacg+62ZlzVk3GPTF8e
+   LVjwasOxYzLKZ2UMDC97+tbNkd+fza41/6mQYvoqctFjewI55Ba81jYv6
+   3fSV46A9lS1TGU8+OXqUcEeNj2BoQ+kd2R2nJik/moCNkrPx7PbXr8Gp7
+   J9CbdA5QmKzb29xYlH2Gk7pLcEXp/E2VTJaHCmqFmogLwxu7z5IUy/EX8
+   7i3hZuShPhpzNLM7BEqMS8Yg1We4O56/aC8gmpKVvz3ICh+iKMBviLkUf
+   +BWMg4FmdDCaYYKBvCi2zGwsPn/LAU6TnkcVpjsZYq4g+KV1rphbMt8tM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="343718126"
+X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
+   d="scan'208";a="343718126"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 14:50:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="663352503"
+X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
+   d="scan'208";a="663352503"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 14:50:52 -0700
+Date:   Mon, 3 Apr 2023 14:54:58 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v3 7/7] dmaengine/idxd: Re-enable kernel workqueue under
+ DMA API
+Message-ID: <20230403145458.5c30d5c6@jacob-builder>
+In-Reply-To: <07b7a01f-8a0d-6eca-e436-df5135d679cb@linux.intel.com>
+References: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
+        <20230331231137.1947675-8-jacob.jun.pan@linux.intel.com>
+        <07b7a01f-8a0d-6eca-e436-df5135d679cb@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230403-b217297-6bf5914fb55d@bugzilla.kernel.org>
-X-Spam-Status: No, score=0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOCALPART_IN_SUBJECT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,18 +77,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 09:47:49PM +0000, Kernel.org Bugbot wrote:
-> Hello:
+Hi Baolu,
+
+On Sat, 1 Apr 2023 21:39:32 +0800, Baolu Lu <baolu.lu@linux.intel.com>
+wrote:
+
+> On 2023/4/1 7:11, Jacob Pan wrote:
+> >   static void idxd_disable_system_pasid(struct idxd_device *idxd)
+> >   {
+> > +	struct pci_dev *pdev = idxd->pdev;
+> > +	struct device *dev = &pdev->dev;
+> > +	struct iommu_domain *domain;
+> > +	union gencfg_reg gencfg;
+> > +
+> > +	domain = iommu_get_domain_for_dev(dev);
+> > +	if (!domain || domain->type == IOMMU_DOMAIN_BLOCKED)
+> > +		return;  
 > 
-> This conversation is now tracked by Kernel.org Bugzilla:
-> https://bugzilla.kernel.org/show_bug.cgi?id=217297
+> Out of curiosity, why do you need to check the domain type? And, in
+> which case could the domain for the device be changed to a blocking one?
 > 
-> There is no need to do anything else, just keep talking.
+> Once a driver is bound to the device, the driver "owns" the DMA of the
+> device. No one else could change the domain except the driver itself.
+nothing particular just for precaution, I can drop the check or add a
+warn_on.
 
-Thank you for illustrating the "may explode" bits. :)
+> > +
+> > +	iommu_detach_device_pasid(domain, dev, idxd->pasid);
+> > +	iommu_free_global_pasid(idxd->pasid);
+> >   
+> > -	iommu_sva_unbind_device(idxd->sva);
+> > +	gencfg.bits = ioread32(idxd->reg_base + IDXD_GENCFG_OFFSET);
+> > +	gencfg.user_int_en = 0;
+> > +	iowrite32(gencfg.bits, idxd->reg_base + IDXD_GENCFG_OFFSET);
+> >   	idxd->sva = NULL;
+> > +	idxd->pasid = IOMMU_PASID_INVALID;
+> >   }  
+> 
+> Best regards,
+> baolu
 
-Unfortunately, triggering on key phrases means it gets triggered when you're
-discussing key phrases. I'll make sure that this only happens when the key
-phrase is on the line by itself.
 
--K
+Thanks,
+
+Jacob
