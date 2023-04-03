@@ -2,128 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696436D4422
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F6F6D431A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbjDCMHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S232283AbjDCLNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbjDCMHf (ORCPT
+        with ESMTP id S232117AbjDCLNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:07:35 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB7FA9;
-        Mon,  3 Apr 2023 05:07:31 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 1625724E38D;
-        Mon,  3 Apr 2023 20:07:22 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 3 Apr
- 2023 20:07:22 +0800
-Received: from [192.168.125.145] (183.27.97.179) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 3 Apr
- 2023 20:07:21 +0800
-Message-ID: <8128d57b-17cd-8307-ed8c-2611a5658e18@starfivetech.com>
-Date:   Mon, 3 Apr 2023 20:07:20 +0800
+        Mon, 3 Apr 2023 07:13:04 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DF31A941
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:12:31 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h17so28914754wrt.8
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1680520347;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XDScleNPhVPO54kxOKxQumxr8xmhVAhL3xX9seLkjNI=;
+        b=HgabHVAEwxuQvMaYMbnLI6gcoQaR6MCVEcwO9KWwr+XCrszcTScNEkOgZh53S7rCGL
+         lx0H65pMjpwzz2zOZTxxF+i5WB9RciFYT1s/ORth0tyPdpo60cphbJb08QY15hQC5tnv
+         LJ5cMuSNL6e4s38Qa4zvct2xAA6wj31Zvg8Nc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680520347;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XDScleNPhVPO54kxOKxQumxr8xmhVAhL3xX9seLkjNI=;
+        b=MOxkTBwJh47PezU4+TlhRafTM1wTaBrVBCPIfQC7W6YEN277QtBj/Kzw5PLn2YBkpG
+         2A/OkA8cqbcF76GiauTBfQiaYMVFJohO7medlXbGFtlcCudMMGfyCNXRu+T7SSqLPpsG
+         tFMj1k0Gr9ABs6J1/vHi0RWH/PWXzSnHRWTfH2UANqI7Kfz1Lw9T1ufvmhHPIpgM87wX
+         s6VHbw7wIqg002zH/wJtI5e4YnowemCysQge8TfLeM6YOkchr7Ltl0DNZ3rUm7Co98b+
+         +M/xACktsFAaI1Rqxg+jYGfjnk+IpxipG9/GeBYEA2RfVTriqffE4o7lN/8R184TeUMK
+         +bCQ==
+X-Gm-Message-State: AAQBX9e7muIWEcQ3jBoID4OPhqr6Fsv0p2YurAXNC198DJtAOVxdzJEO
+        /9kzS1wCXrVUuCo/UH+YM/+MmA==
+X-Google-Smtp-Source: AKy350Yqx4cRtTXF3KLY6laEarBP/P2dxp+d9gjJUyfNwHScLSUEItjpvdB0n5IwC7szeH8JhB2hnQ==
+X-Received: by 2002:a5d:67cd:0:b0:2d7:babe:104c with SMTP id n13-20020a5d67cd000000b002d7babe104cmr25864956wrw.15.1680520347373;
+        Mon, 03 Apr 2023 04:12:27 -0700 (PDT)
+Received: from workstation.ehrig.io (tmo-066-125.customers.d1-online.com. [80.187.66.125])
+        by smtp.gmail.com with ESMTPSA id y11-20020adffa4b000000b002c7066a6f77sm9505517wrr.31.2023.04.03.04.12.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 04:12:26 -0700 (PDT)
+From:   Christian Ehrig <cehrig@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     cehrig@cloudflare.com, kernel-team@cloudflare.com,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Kaixi Fan <fankaixi.li@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, netdev@vger.kernel.org,
+        Paul Chaignon <paul@isovalent.com>,
+        Shmulik Ladkani <shmulik@metanetworks.com>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>, Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next v2 0/3] Add FOU support for externally controlled ipip devices
+Date:   Mon,  3 Apr 2023 14:12:06 +0200
+Message-Id: <cover.1680520500.git.cehrig@cloudflare.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v6 2/4] dmaengine: dw-axi-dmac: Add support for StarFive
- JH7110 DMA
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>,
-        <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230322094820.24738-1-walker.chen@starfivetech.com>
- <20230322094820.24738-3-walker.chen@starfivetech.com>
- <ZCbMRdSCf5vKUk/c@matsya>
-Content-Language: en-US
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <ZCbMRdSCf5vKUk/c@matsya>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.179]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.3 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch set adds support for using FOU or GUE encapsulation with
+an ipip device operating in collect-metadata mode and a set of kfuncs
+for controlling encap parameters exposed to a BPF tc-hook.
 
+BPF tc-hooks allow us to read tunnel metadata (like remote IP addresses)
+in the ingress path of an externally controlled tunnel interface via
+the bpf_skb_get_tunnel_{key,opt} bpf-helpers. Packets can then be
+redirected to the same or a different externally controlled tunnel
+interface by overwriting metadata via the bpf_skb_set_tunnel_{key,opt}
+helpers and a call to bpf_redirect. This enables us to redirect packets
+between tunnel interfaces - and potentially change the encapsulation
+type - using only a single BPF program.
 
-On 2023/3/31 20:04, Vinod Koul wrote:
-> On 22-03-23, 17:48, Walker Chen wrote:
->> Add DMA reset operation in device probe and use different configuration
->> on CH_CFG registers according to match data. Update all uses of
->> of_device_is_compatible with of_device_get_match_data.
->> 
->> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
->> ---
->>  .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    | 38 ++++++++++++++++---
->>  drivers/dma/dw-axi-dmac/dw-axi-dmac.h         |  1 +
->>  2 files changed, 34 insertions(+), 5 deletions(-)
->> 
->> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
->> index 4169e1d7d5ca..6cfcb541d8c3 100644
->> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
->> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
->> @@ -21,10 +21,12 @@
->>  #include <linux/kernel.h>
->>  #include <linux/module.h>
->>  #include <linux/of.h>
->> +#include <linux/of_device.h>
->>  #include <linux/of_dma.h>
->>  #include <linux/platform_device.h>
->>  #include <linux/pm_runtime.h>
->>  #include <linux/property.h>
->> +#include <linux/reset.h>
->>  #include <linux/slab.h>
->>  #include <linux/types.h>
->>  
->> @@ -46,6 +48,10 @@
->>  	DMA_SLAVE_BUSWIDTH_32_BYTES	| \
->>  	DMA_SLAVE_BUSWIDTH_64_BYTES)
->>  
->> +#define AXI_DMA_FLAG_HAS_APB_REGS	BIT(0)
->> +#define AXI_DMA_FLAG_HAS_RESETS		BIT(1)
->> +#define AXI_DMA_FLAG_USE_CFG2		BIT(2)
->> +
->>  static inline void
->>  axi_dma_iowrite32(struct axi_dma_chip *chip, u32 reg, u32 val)
->>  {
->> @@ -86,7 +92,8 @@ static inline void axi_chan_config_write(struct axi_dma_chan *chan,
->>  
->>  	cfg_lo = (config->dst_multblk_type << CH_CFG_L_DST_MULTBLK_TYPE_POS |
->>  		  config->src_multblk_type << CH_CFG_L_SRC_MULTBLK_TYPE_POS);
->> -	if (chan->chip->dw->hdata->reg_map_8_channels) {
->> +	if (chan->chip->dw->hdata->reg_map_8_channels &&
->> +	    !chan->chip->dw->hdata->use_cfg2) {
-> 
-> I think this will break existing users.. 
-> 
-> This is set for reg_map_8_channels && use_cfg2, latter being set only
-> for new controller, so what about existing users of these bits?
+Today this approach works fine for a couple of tunnel combinations.
+For example: redirecting packets between Geneve and GRE interfaces or
+GRE and plain ipip interfaces. However, redirecting using FOU or GUE is
+not supported today. The ip_tunnel module does not allow us to egress
+packets using additional UDP encapsulation from an ipip device in
+collect-metadata mode.
 
-Firstly thank you for your comments!
-There is a statement 'use_cfg2 = !!(flags & AXI_DMA_FLAG_USE_CFG2);' to be added in dw_probe function.
-Assuming older/existing platform run this code block, e.g. when compatible is "snps,axi-dma-1.01a", 
-the value of variable 'use_cfg2' is still false, the original logic will not be broken. So other existing
-users are not affected by this.
-Looking forward to your more comments. Thanks!
+Patch 1 lifts this restriction by adding a struct ip_tunnel_encap to
+the tunnel metadata. It can be filled by a new BPF kfunc introduced
+in Patch 2 and evaluated by the ip_tunnel egress path. This will allow
+us to use FOU and GUE encap with externally controlled ipip devices.
 
-Best regards,
-Walker
+Patch 2 introduces two new BPF kfuncs: bpf_skb_{set,get}_fou_encap.
+These helpers can be used to set and get UDP encap parameters from the
+BPF tc-hook doing the packet redirect.
+
+Patch 3 adds BPF tunnel selftests using the two kfuncs.
+
+---
+v2:
+ - Fixes for checkpatch.pl
+ - Fixes for kernel test robot
+
+Christian Ehrig (3):
+  ipip,ip_tunnel,sit: Add FOU support for externally controlled ipip
+    devices
+  bpf,fou: Add bpf_skb_{set,get}_fou_encap kfuncs
+  selftests/bpf: Test FOU kfuncs for externally controlled ipip devices
+
+ include/net/fou.h                             |   2 +
+ include/net/ip_tunnels.h                      |  28 +++--
+ net/ipv4/Makefile                             |   2 +-
+ net/ipv4/fou_bpf.c                            | 119 ++++++++++++++++++
+ net/ipv4/fou_core.c                           |   5 +
+ net/ipv4/ip_tunnel.c                          |  22 +++-
+ net/ipv4/ipip.c                               |   1 +
+ net/ipv6/sit.c                                |   2 +-
+ .../selftests/bpf/progs/test_tunnel_kern.c    | 117 +++++++++++++++++
+ tools/testing/selftests/bpf/test_tunnel.sh    |  81 ++++++++++++
+ 10 files changed, 362 insertions(+), 17 deletions(-)
+ create mode 100644 net/ipv4/fou_bpf.c
+
+-- 
+2.39.2
 
