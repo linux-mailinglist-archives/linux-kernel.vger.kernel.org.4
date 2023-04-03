@@ -2,152 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FBC6D48BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC68B6D48D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233472AbjDCObU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
+        id S233512AbjDCOcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233460AbjDCObP (ORCPT
+        with ESMTP id S233502AbjDCOcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:31:15 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AF8319AC
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:31:13 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 90381320092B;
-        Mon,  3 Apr 2023 10:31:10 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 03 Apr 2023 10:31:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680532270; x=
-        1680618670; bh=B/Do+b9pnKPWS+TxyE4WQ3cBvHCKsM0Md0bJGMcs1Tg=; b=m
-        xRyNbNMS737Q+puOd26TJC0aUjkW+vYMYJO4bqi5XPzV+CibVHguIqAG4O24Rs/l
-        thz43eN8HIV7uLg+vzHg2EvQMo9CPLDUFHpsKBByQS07ex8Zq/l0BI/NXIMZWA0L
-        k4M7DM7fz8Dt1Ofux60e/KLgTx8KccnIXOjFW8qBk0D7K2gJnT0dUQEmFZ2HkOGB
-        dDqjDpU3Mcg8H1uP1eixeDwILA4NUbWF2icMlKl1XJUTbi6f8sCZs/GBEPTS4GuJ
-        glhqUpC5vARROT0T3JiaO19YL5s1oJIEJklFdhpGCFrNyCcngQIJx/w7Nf6I4eqE
-        Z7scNlOTev1wJA7YTTMZg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680532270; x=1680618670; bh=B/Do+b9pnKPWS
-        +TxyE4WQ3cBvHCKsM0Md0bJGMcs1Tg=; b=SXtdgnNvFj1sb/H249OpfeD/MGWVN
-        F2r9NHuzQMOPspIGrKFWd9UetLv3Tn52Y/pOkC7wBaddnjg9eKHdICUKdYiIInZP
-        5guNpxIEoWV3pFE4J50aHyN7syXPPOmifUAU8YkmBzWGp6TYfWh/QtmX/Xigu6V+
-        ltGq6QXr6OntWuGm5F1K7Krat1m9oskxvvPLuf8ZL2HpZzkmrK/YxkHzBZdcTd8m
-        g+6lvmO1MtVh/ygYs9p/HNtqHdEwvW+59kQhkt+AO6OlUg6N/rkakudX4sVLX4Cw
-        7DGj2G1Axl2qT/U2uEz1ddSI8quwwa3YJ2bY//oDpW2hzmhI1/07nZFHg==
-X-ME-Sender: <xms:LeMqZN0euFbeJEAZ4wRim1wryBJTWn0jLgOdxWdYuCD04B8FeO2j1A>
-    <xme:LeMqZEHO0bkHAKpj78N5hyZMl9iBrAWmTFhwBM6rH0YwfrldOmoqgSCoBbATp-BBB
-    Lh8aYid2QRgE3Xg7Ak>
-X-ME-Received: <xmr:LeMqZN6P7xZ9hXiasnw2bHzprJFKX09HALseIAwZLJOC8COiLR3lv7t-W863ECEI6SluBA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:LeMqZK0hzWjhUj8iEKbRyl5xAkUMihtmj1vdm2vEG72MdX-kAigI4A>
-    <xmx:LeMqZAGJWDmf5y1Stw7veuGje0PqAtOR2NSrgxvuLYBoqE-rmBRuFg>
-    <xmx:LeMqZL_Xm6Hc72_RQgySFqxDraRcinVhHBp__uz8FfMrVzKyXVrq7g>
-    <xmx:LuMqZO_R3txir8lOvYeIbrmt_to3IX0htYn7z2tESyWnEMZ0NpM-XA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Apr 2023 10:31:08 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id B136110D7B3; Mon,  3 Apr 2023 17:31:05 +0300 (+03)
-Date:   Mon, 3 Apr 2023 17:31:05 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] x86/mm/iommu/sva: Do not allow to set
- FORCE_TAGGED_SVA bit from outside
-Message-ID: <20230403143105.rj4l5tqn43t3zcnh@box.shutemov.name>
-References: <20230403111020.3136-1-kirill.shutemov@linux.intel.com>
- <20230403111020.3136-3-kirill.shutemov@linux.intel.com>
- <CACT4Y+YoS9e=QVq6iKda5Gv852kVv9OTLaOZ=XCJ65mP0oyAOA@mail.gmail.com>
+        Mon, 3 Apr 2023 10:32:16 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D59D4F8F
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:32:08 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id iw3so28187608plb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:32:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680532328;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tQejbzM8otZssOfEt8r92QXWeGQPsXlAdd7Frf3phW0=;
+        b=YUi/bNdpRGojU9A4bb1p7QnR8PjSqwd6ggYByNiWdYnmTTea43qJgvDXl+FaOvNoxG
+         9uEYiUJzC7MQq4tnzg4Dt1mfidmBKpbMRCMg2gh3PDWgB/qMeaajakil5rOtcj85oFjV
+         C0PwxTwuRssyipJvfNrPQ1fmIR+0v2XxOmmxfDgQSjkh/Um0Yiksh4B3J2XnZvQoiLbN
+         NsJcfXtJNA1soZGkeJW0byaXzI7q0W8D3BJtQICE6tiM/bAGMK3xorK2gsS8RUC8AOOs
+         xV63QOzKFpSEBKKqA7Bf0WDJUYu/fv2+35COSXgSzSaGXRhMsMECSvQLL1Llf4b/RrSx
+         WpoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680532328;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tQejbzM8otZssOfEt8r92QXWeGQPsXlAdd7Frf3phW0=;
+        b=q8OJCpUdlhOUW3Cp36RYkrAhBiHH8Me8XDlPJRnUDpblvxWZuymHhgs5HfwoSmD0qA
+         WKjOuroE0kTLP6v8o8UArfl3HM14kJiGK/heMhgqZyFn5WvabjDktTV7xfaW1pfQObE6
+         Gio20bm5JGeNLDZWdGoURskjlE74HrxHQeFpx8s1E+nsogqlVPawZTYz8A3HT3RVleIy
+         BNGcBGXJ4CnvjCNo6ovBazACYzyfKLMsJ5oIClM067oLC5mPZ13YlTaalJn+kdq7Uy3z
+         kSiyAEuUYAGJszQ2GTBzOdf7Tlk4qnMPCfdgO8PhfZmy6JO1OcMZEuDMAXkxaLo0nJD6
+         YLVQ==
+X-Gm-Message-State: AAQBX9coQkpblfEGDrLbIK3OY4HkzWuSkSeWuzc1zAGGYt1qxhNkAg9X
+        zRS1B1ALDjN4T3mMTpymjQCux+WT33OkLg==
+X-Google-Smtp-Source: AKy350YW8G+aQdUMHxWGFY4AIoBWgodAX8Y1Xa85QcDq0ibMv9X1KMPAl9HpkY4zrl4pgwQbw6awuQ==
+X-Received: by 2002:a17:903:124d:b0:19a:aaac:f4d1 with SMTP id u13-20020a170903124d00b0019aaaacf4d1mr19844628plh.13.1680532327738;
+        Mon, 03 Apr 2023 07:32:07 -0700 (PDT)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id e1-20020a170902d38100b0019ee0ad15b4sm6688525pld.191.2023.04.03.07.32.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 07:32:07 -0700 (PDT)
+Message-ID: <56c49141-c9c4-6b03-7ecf-74f6fdb1209e@gmail.com>
+Date:   Mon, 3 Apr 2023 23:32:04 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+YoS9e=QVq6iKda5Gv852kVv9OTLaOZ=XCJ65mP0oyAOA@mail.gmail.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 12/14] extcon: Use sizeof(*pointer) instead of
+ sizeof(type)
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bumwoo Lee <bw365.lee@samsung.com>,
+        linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
+ <20230322144005.40368-13-andriy.shevchenko@linux.intel.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230322144005.40368-13-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 03:55:09PM +0200, Dmitry Vyukov wrote:
-> On Mon, 3 Apr 2023 at 13:10, Kirill A. Shutemov
-> <kirill.shutemov@linux.intel.com> wrote:
-> >
-> > arch_prctl(ARCH_FORCE_TAGGED_SVA) overrides the default and allows LAM
-> > and SVA to co-exist in the process. It is expected by called by the
-> > process when it knows what it is doing.
-> >
-> > arch_prctl() operates on the current process, but the same code is
-> > reachable from ptrace where it can be called on arbitrary task.
-> >
-> > Make it strict and only allow to set MM_CONTEXT_FORCE_TAGGED_SVA for the
-> > current process.
-> >
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Fixes: 23e5d9ec2bab ("x86/mm/iommu/sva: Make LAM and SVA mutually exclusive")
-> > Suggested-by: Dmitry Vyukov <dvyukov@google.com>
-> > ---
-> >  arch/x86/kernel/process_64.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-> > index c7dfd727c9ec..cefac2d3a9f6 100644
-> > --- a/arch/x86/kernel/process_64.c
-> > +++ b/arch/x86/kernel/process_64.c
-> > @@ -885,6 +885,8 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
-> >         case ARCH_ENABLE_TAGGED_ADDR:
-> >                 return prctl_enable_tagged_addr(task->mm, arg2);
-> >         case ARCH_FORCE_TAGGED_SVA:
-> > +               if (current != task)
-> > +                       return -EINVAL;
+On 23. 3. 22. 23:40, Andy Shevchenko wrote:
+> It is preferred to use sizeof(*pointer) instead of sizeof(type).
+> The type of the variable can change and one needs not change
+> the former (unlike the latter). No functional change intended.
 > 
-> prctl_enable_tagged_addr() checks "task->mm != current->mm".
-> Should we check the same here for consistency? Or also change the
-> check in prctl_enable_tagged_addr().
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/extcon/extcon.c | 17 ++++++-----------
+>  1 file changed, 6 insertions(+), 11 deletions(-)
 > 
-> arch_prctl() can only do task==current, so I guess "current != task"
-> is a more reasonable check for prctl_enable_tagged_addr() as well.
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index 0e04ea185c26..b3f038639cd6 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -1099,9 +1099,7 @@ static int extcon_alloc_cables(struct extcon_dev *edev)
+>  	if (!edev->max_supported)
+>  		return 0;
+>  
+> -	edev->cables = kcalloc(edev->max_supported,
+> -			       sizeof(struct extcon_cable),
+> -			       GFP_KERNEL);
+> +	edev->cables = kcalloc(edev->max_supported, sizeof(*edev->cables), GFP_KERNEL);
 
-As of now, prctl_enable_tagged_addr() doesn't have the task on hands. It
-gets mm as input, so it cannot check the task directly. But functionally
-it is the same check.
+Even if there are strictly not limitation of the number of maximum char
+at the one line, But, I recommend to keep the 80 char at the one line
+for the readability as following.
 
-I would prefer to keep it this way. Unless anyone feels strongly about it.
+-       edev->cables = kcalloc(edev->max_supported, sizeof(*edev->cables), GFP_KERNEL);
++       edev->cables = kcalloc(edev->max_supported,
++                       sizeof(*edev->cables), GFP_KERNEL);
+
+
+>  	if (!edev->cables)
+>  		return -ENOMEM;
+>  
+> @@ -1160,14 +1158,12 @@ static int extcon_alloc_muex(struct extcon_dev *edev)
+>  	for (index = 0; edev->mutually_exclusive[index]; index++)
+>  		;
+>  
+> -	edev->attrs_muex = kcalloc(index + 1,
+> -				   sizeof(struct attribute *),
+> +	edev->attrs_muex = kcalloc(index + 1, sizeof(*edev->attrs_muex),
+>  				   GFP_KERNEL);
+>  	if (!edev->attrs_muex)
+>  		return -ENOMEM;
+>  
+> -	edev->d_attrs_muex = kcalloc(index,
+> -				     sizeof(struct device_attribute),
+> +	edev->d_attrs_muex = kcalloc(index, sizeof(*edev->d_attrs_muex),
+>  				     GFP_KERNEL);
+>  	if (!edev->d_attrs_muex) {
+>  		kfree(edev->attrs_muex);
+> @@ -1213,8 +1209,8 @@ static int extcon_alloc_groups(struct extcon_dev *edev)
+>  		return 0;
+>  
+>  	edev->extcon_dev_type.groups = kcalloc(edev->max_supported + 2,
+> -			sizeof(struct attribute_group *),
+> -			GFP_KERNEL);
+> +					       sizeof(*edev->extcon_dev_type.groups),
+> +					       GFP_KERNEL);
+
+ditto.
+
+        edev->extcon_dev_type.groups = kcalloc(edev->max_supported + 2,
+-                                              sizeof(*edev->extcon_dev_type.groups),
+-                                              GFP_KERNEL);
++                                      sizeof(*edev->extcon_dev_type.groups),
++                                      GFP_KERNEL);
+
+
+>  	if (!edev->extcon_dev_type.groups)
+>  		return -ENOMEM;
+>  
+> @@ -1298,8 +1294,7 @@ int extcon_dev_register(struct extcon_dev *edev)
+>  
+>  	spin_lock_init(&edev->lock);
+>  	if (edev->max_supported) {
+> -		edev->nh = kcalloc(edev->max_supported, sizeof(*edev->nh),
+> -				GFP_KERNEL);
+> +		edev->nh = kcalloc(edev->max_supported, sizeof(*edev->nh), GFP_KERNEL);
+
+-               edev->nh = kcalloc(edev->max_supported, sizeof(*edev->nh), GFP_KERNEL);
++               edev->nh = kcalloc(edev->max_supported,
++                               sizeof(*edev->nh), GFP_KERNEL);
+
+
+>  		if (!edev->nh) {
+>  			ret = -ENOMEM;
+>  			goto err_alloc_nh;
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
+
