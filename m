@@ -2,114 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC8F6D4E77
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF2E6D4E79
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbjDCQzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
+        id S233005AbjDCQzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbjDCQz2 (ORCPT
+        with ESMTP id S233016AbjDCQzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:55:28 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F617172C;
-        Mon,  3 Apr 2023 09:55:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 3 Apr 2023 12:55:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF86270A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:55:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D74C121F41;
-        Mon,  3 Apr 2023 16:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680540924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YjHTDLKnu47Af8/RYRI8Ep8eWiGDBHSZDf7lS1gT7w8=;
-        b=CEfOfG3UaWRbtseNKY9DpsYv+24G2DErlSrzrBLWXwn7D9NOSFcy7jOqZsSWAfOKQNB9vC
-        w0OKgbKTVzYTREfxDKWgjtGaNzyYHCFpfTVzLWYiCgrnFjS4xOKNhnoFEkauyNHAIded4E
-        9b1BuHPOi+OUq7CGt3aCyfpOT1O7Hcs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A5DD01331A;
-        Mon,  3 Apr 2023 16:55:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fxKEJ/wEK2RbbQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 03 Apr 2023 16:55:24 +0000
-Date:   Mon, 3 Apr 2023 18:55:23 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        gscrivan@redhat.com
-Subject: Re: [PATCH 1/3] cgroup/cpuset: Make cpuset_fork() handle
- CLONE_INTO_CGROUP properly
-Message-ID: <20230403165523.aphsec2epqi72k27@blackpad>
-References: <20230331145045.2251683-1-longman@redhat.com>
- <20230331145045.2251683-2-longman@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FB3C621FF
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:55:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5E58C4339C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680540939;
+        bh=wNT8ydu+B8w9w25TmpHLQXo6Alhe2pEtaNIpcppZAM4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=A4OiC/4ODVc+8OY11AoWncwc0JkGJP0q0Z342BCoyCPM60MhcCdsaL6ejo0x5HLsg
+         De1y3QVBrey7/5JD7mqd7eoQR9d2qI2RM8EQsTkkiwITfhQgF8SIMSFA0OaHUyGc/F
+         wPgZgQVj4VYWQRpuWWanoqYh75qJHRRoGDSrtyZ36wopROMG3sKq+7MPYeiNkIRPZU
+         /yQM7KKbsp50JqTTOHhc7S7QbZJ3+TZJefyALVOyyZxsbNvvst+Z6gthiXZbvDXn71
+         7Qwfl3x3qqM4LG4FIWEIlLM8zKKcnP/2r47dr2Dy7F2szP5Ih/lZPGwAlbrWlgHn/K
+         pV4o4Q0wwOMyA==
+Received: by mail-lj1-f182.google.com with SMTP id s20so10730501ljp.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 09:55:39 -0700 (PDT)
+X-Gm-Message-State: AAQBX9e5SL8JKfabP+xjjEbCoHwistKI0qDV2XuV0AG7tLX5AY2/vGDV
+        CgBZZI+M22Yy62ARWOGSCocI9YBvYA6dogSHnA==
+X-Google-Smtp-Source: AKy350Y+5hy4jyEO8jxFXi8A0r7pryHIZvCni5hB+ua3N03GejwOwyTLdV1DdzbNU7/xTYE8OOrN2qBWaJ6mluiW+DM=
+X-Received: by 2002:a2e:90d7:0:b0:2a6:16b4:a554 with SMTP id
+ o23-20020a2e90d7000000b002a616b4a554mr5084652ljg.3.1680540937720; Mon, 03 Apr
+ 2023 09:55:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hqjzbb4yslshnocc"
-Content-Disposition: inline
-In-Reply-To: <20230331145045.2251683-2-longman@redhat.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1680072203-10394-1-git-send-email-xinlei.lee@mediatek.com>
+ <CAAOTY_-bgkkqnfshmdNz-NP7TqdqE9Qdf-PyEOc6iANPmY+bRw@mail.gmail.com> <06038e8711a9214ed020901722c96af5380bee99.camel@mediatek.com>
+In-Reply-To: <06038e8711a9214ed020901722c96af5380bee99.camel@mediatek.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Tue, 4 Apr 2023 00:55:25 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_-Qb_-mzHWwd8MdNrkWy1x3ATGg5SmBbmX4fzka=F3puA@mail.gmail.com>
+Message-ID: <CAAOTY_-Qb_-mzHWwd8MdNrkWy1x3ATGg5SmBbmX4fzka=F3puA@mail.gmail.com>
+Subject: Re: [PATCH] drm/mediatek: dp: change the aux retries times when
+ receiving AUX_DEFER
+To:     =?UTF-8?B?WGlubGVpIExlZSAo5p2O5piV56OKKQ==?= 
+        <Xinlei.Lee@mediatek.com>
+Cc:     "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "airlied@linux.ie" <airlied@linux.ie>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Xinlei:
 
---hqjzbb4yslshnocc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Xinlei Lee (=E6=9D=8E=E6=98=95=E7=A3=8A) <Xinlei.Lee@mediatek.com> =E6=96=
+=BC 2023=E5=B9=B44=E6=9C=883=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=88=
+5:18=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Mon, 2023-04-03 at 11:49 +0800, Chun-Kuang Hu wrote:
+> > External email : Please do not click links or open attachments until
+> > you have verified the sender or the content.
+> >
+> >
+> > Hi, Xinlei:
+> >
+> > <xinlei.lee@mediatek.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=8829=E6=97=A5 =
+=E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=882:43=E5=AF=AB=E9=81=93=EF=BC=9A
+> > >
+> > > From: Xinlei Lee <xinlei.lee@mediatek.com>
+> > >
+> > > DP 1.4a Section 2.8.7.1.5.6.1:
+> > > A DP Source device shall retry at least seven times upon receiving
+> > > AUX_DEFER before giving up the AUX transaction.
+> > >
+> > > The drm_dp_i2c_do_msg() function in the drm_dp_helper.c file will
+> > > judge the status of the msg->reply parameter passed to aux_transfer
+> > > ange-the-aux-retries-times-when-re.patchfor different processing.
+> > >
+> > > Fixes: f70ac097a2cf ("drm/mediatek: Add MT8195 Embedded DisplayPort
+> > > driver")
+> > > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> > > ---
+> > >  drivers/gpu/drm/mediatek/mtk_dp.c | 12 +++++-------
+> > >  1 file changed, 5 insertions(+), 7 deletions(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c
+> > > b/drivers/gpu/drm/mediatek/mtk_dp.c
+> > > index 1f94fcc144d3..767b71da31a4 100644
+> > > --- a/drivers/gpu/drm/mediatek/mtk_dp.c
+> > > +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
+> > > @@ -806,10 +806,9 @@ static int
+> > > mtk_dp_aux_wait_for_completion(struct mtk_dp *mtk_dp, bool is_read)
+> > >  }
+> > >
+> > >  static int mtk_dp_aux_do_transfer(struct mtk_dp *mtk_dp, bool
+> > > is_read, u8 cmd,
+> > > -                                 u32 addr, u8 *buf, size_t length)
+> > > +                                 u32 addr, u8 *buf, size_t length,
+> > > u8 *reply_cmd)
+> > >  {
+> > >         int ret;
+> > > -       u32 reply_cmd;
+> > >
+> > >         if (is_read && (length > DP_AUX_MAX_PAYLOAD_BYTES ||
+> > >                         (cmd =3D=3D DP_AUX_NATIVE_READ && !length)))
+> > > @@ -841,10 +840,10 @@ static int mtk_dp_aux_do_transfer(struct
+> > > mtk_dp *mtk_dp, bool is_read, u8 cmd,
+> > >         /* Wait for feedback from sink device. */
+> > >         ret =3D mtk_dp_aux_wait_for_completion(mtk_dp, is_read);
+> > >
+> > > -       reply_cmd =3D mtk_dp_read(mtk_dp, MTK_DP_AUX_P0_3624) &
+> > > -                   AUX_RX_REPLY_COMMAND_AUX_TX_P0_MASK;
+> > > +       *reply_cmd =3D mtk_dp_read(mtk_dp, MTK_DP_AUX_P0_3624) &
+> > > +                    AUX_RX_REPLY_COMMAND_AUX_TX_P0_MASK;
+> > >
+> > > -       if (ret || reply_cmd) {
+> > > +       if (ret) {
+> > >                 u32 phy_status =3D mtk_dp_read(mtk_dp,
+> > > MTK_DP_AUX_P0_3628) &
+> > >                                  AUX_RX_PHY_STATE_AUX_TX_P0_MASK;
+> > >                 if (phy_status !=3D
+> > > AUX_RX_PHY_STATE_AUX_TX_P0_RX_IDLE) {
+> > > @@ -2070,7 +2069,7 @@ static ssize_t mtk_dp_aux_transfer(struct
+> > > drm_dp_aux *mtk_aux,
+> > >                 ret =3D mtk_dp_aux_do_transfer(mtk_dp, is_read,
+> > > request,
+> > >                                              msg->address +
+> > > accessed_bytes,
+> > >                                              msg->buffer +
+> > > accessed_bytes,
+> > > -                                            to_access);
+> > > +                                            to_access, &msg-
+> > > >reply);
+> > >
+> > >                 if (ret) {
+> > >                         drm_info(mtk_dp->drm_dev,
+> > > @@ -2080,7 +2079,6 @@ static ssize_t mtk_dp_aux_transfer(struct
+> > > drm_dp_aux *mtk_aux,
+> > >                 accessed_bytes +=3D to_access;
+> > >         } while (accessed_bytes < msg->size);
+> > >
+> > > -       msg->reply =3D DP_AUX_NATIVE_REPLY_ACK |
+> > > DP_AUX_I2C_REPLY_ACK;
+> >
+> > In your description, you just mention the retry count is 7 times, but
+> > you does not mention you should change the reply. Why you modify
+> > this?
+> > And where is the 7 times retry?
+> >
+> > Regards,
+> > Chun-Kuang.
+> >
+> > >         return msg->size;
+> > >  err:
+> > >         msg->reply =3D DP_AUX_NATIVE_REPLY_NACK |
+> > > DP_AUX_I2C_REPLY_NACK;
+> > > --
+> > > 2.18.0
+> > >
+>
+> Hi CK:
+>
+> Thanks for your review!
+>
+> This patch is to fix some DP sinks that return AUX_DEFER, and the dp
+> driver does not handle it according to the specification. DP_v1.4a
+> spec 2.8.1.2 describes that if the sink returns AUX_DEFER, DPTX may
+> retry later:
+>
+> The logic before the modification is that reply_cmd returns ETIMEDOUT
+> if it is not AUX_ACK after the read operation, without considering the
+> retry operation when returning AUX_DEFER;
+>
+> The modified logic is to add parameters to mtk_dp_aux_do_transfer() to
+> store the return value of the sink. In the dmr_dp_helper.c file,
+> drm_dp_i2c_do_msg calls aux->transfer and then performs retry
+> operation according to msg->reply. The 7 times specified in the spec
+> are also in this function defined in (max_retries).
 
-On Fri, Mar 31, 2023 at 10:50:43AM -0400, Waiman Long <longman@redhat.com> =
-wrote:
-> By default, the clone(2) syscall spawn a child process into the same
-> cgroup as its parent. With the use of the CLONE_INTO_CGROUP flag
-> introduced by commit ef2c41cf38a7 ("clone3: allow spawning processes
-> into cgroups"), the child will be spawned into a different cgroup which
-> is somewhat similar to writing the child's tid into "cgroup.threads".
->=20
-> The current cpuset_fork() method does not properly handle the
-> CLONE_INTO_CGROUP case where the cpuset of the child may be different
-> from that of its parent.  Update the cpuset_fork() method to treat the
-> CLONE_INTO_CGROUP case similar to cpuset_attach().
+Applied to mediatek-drm-next [1], thanks.
 
-Should .can_fork=3Dcpuset_can_fork in analogy to cpuset_can_attach be also
-devised? (Sorry if I missed that in the previous discussion.)
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-next
 
->=20
-> Since the newly cloned task has not been running yet, its actual
-> memory usage isn't known. So it is not necessary to make change to mm
-> in cpuset_fork().
->=20
-> Fixes: ef2c41cf38a7 ("clone3: allow spawning processes into cgroups")
-> Signed-off-by: Waiman Long <longman@redhat.com>
+Regards,
+Chun-Kuang.
 
-Thanks,
-Michal
-
---hqjzbb4yslshnocc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZCsE9gAKCRAkDQmsBEOq
-uXNEAP4yZWUDQPS5MdBJKxg7KPFXijvx7boOQCgxkNjZYray+wD+JXdFvFEi1rKM
-oOJu9alNdUlt9cXh0vK+1QGgfk7KggQ=
-=9fk7
------END PGP SIGNATURE-----
-
---hqjzbb4yslshnocc--
+>
+> Best Regards!
+> xinlei
