@@ -2,80 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99396D421C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8456D4225
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjDCKeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
+        id S231927AbjDCKfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbjDCKd7 (ORCPT
+        with ESMTP id S231248AbjDCKfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:33:59 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABA8DBC6
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:33:50 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id o20so26881447ljp.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 03:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680518028;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KfUo0fru+wd28kIFWm+j4w66y5teANTbx3Vvk6eQF5U=;
-        b=yoohv5e/xezbYEWRo56wL/ynszQm5bdS5XLo/KUPuBZOPPsla64IfOl2RN6zVhz+RD
-         En1LMcOxAHTu1RQQdNTSNJp7033t1mdrIqTpvNpADI0shTH6gxJ1ebhEuSpSZXKR1ckh
-         pHFvS06oMVmn+QME7LzEjj82B1cAhYRG12xhifmaAe4yXWyak6a817f7RYCiCsror9AE
-         T0ipA5YYjeLVA1oS1k5YULHCFEYv9I8hTTKezcFIz7Pb/0VdwJ7CLueSZ7on8ohX8GWR
-         QCCGvRJXzsESHdHI+93UQf82ejaZsgXF988e8LxU5D6m6sMnlVO3sl6dmyI4P7MvySiD
-         SR8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680518028;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KfUo0fru+wd28kIFWm+j4w66y5teANTbx3Vvk6eQF5U=;
-        b=KXz1+5rgs2Od8QG/X/fNSNrEtdPSuLlXS5UKmtzklzCLjrF+eWnp1kA4vo2JQRLC3R
-         YVNh/DrmqVF0HIG2znij3Wv6ndjBVGeLoyUdyxkJhQwZG6MOrL0LmGCITCx4Y3C9DBIV
-         30bGh7JC7c8faBZbMQsQ6Fx233YARl8P581ZSQyb3ZAoTEqQhTkMqylbGp+IVfr11nSF
-         X+7sDasQeRuHdlQpMGOWCSKK+ofI9XEAqdS4OMWSPgl/v+g7344+BqrHtjI1v5HQhduB
-         gzsZWrKfvtFmxbUGmDBVSDrC0sZPO2RgNgScIopARWlRmTawkwkyMP+LM09c1xtDTkRI
-         vlog==
-X-Gm-Message-State: AAQBX9d8EctAR4F27rvjdrcl7Sv/B9wY/iMbryf7687qlYUlnvEsVdq6
-        hd75yyKtm6tcSwD3Vu0wxiHXzvXs4WRvv1G5zGE=
-X-Google-Smtp-Source: AKy350ar/Ubc0zKI9OpT54QLs4a1MwS2rycinNgMruZXM0+oic2ZCkjMi1NRCACCyCzC8UXkvYz3uQ==
-X-Received: by 2002:a2e:95d4:0:b0:29c:9207:d0a7 with SMTP id y20-20020a2e95d4000000b0029c9207d0a7mr10881352ljh.43.1680518028244;
-        Mon, 03 Apr 2023 03:33:48 -0700 (PDT)
-Received: from [192.168.1.101] (abxj135.neoplus.adsl.tpnet.pl. [83.9.3.135])
-        by smtp.gmail.com with ESMTPSA id m14-20020a2e910e000000b002959d2cc975sm1684870ljg.37.2023.04.03.03.33.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 03:33:47 -0700 (PDT)
-Message-ID: <9e059c75-2854-45ba-9e0b-df69dd355bbf@linaro.org>
-Date:   Mon, 3 Apr 2023 12:33:46 +0200
+        Mon, 3 Apr 2023 06:35:01 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2064.outbound.protection.outlook.com [40.107.105.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCBA2D51;
+        Mon,  3 Apr 2023 03:34:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iHBT8pQpC3CTY2KmVL4kPktSqtsK+k2SmWJXnDEQG2hZQg1sqaQ4iinq3FDGvvAINSty44MS5F9nabopIDiK3tjogvP1CZyflGL93StN1AaaPd0Irq7YMy0+MSDtjtqmU+pgRMglH8bpm7p1Sq0SkaqMh6tXW/eTBAM6h2xIVdNCiG9noLet0/kQPNNEOFHlCYC5cE4sLpbTTMxelwr5fCNvk8LwgxVdM7cMPKXC7zbTTmoLyGD6mE0QSmQE/EB3j0rjOZuTKGEDFThpRmSr2R9zE7e945DohPCMMm8TBZBM2IVpJ0XJIUTQP3ZFoESwaGJ9vTMRgLjVrUlS9J0d6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mwIX9iAQC+1sV9L87xnGUtlMEZo8P1vOTCbO3WtuWmg=;
+ b=Zz3KY4LJJ1G9lFtledtzrueJtE62hwvRNZJ2cybajNimDZ9afqg/kqTRaMsMJPkECMAzUOI8HrGQR4xOrEjpKB9WVNKvFcoxCcvYLgIvXpe0kosyDU7qV+DMITuyiA0jXz17MmbDpss/QUaw0oDsswGPOMk7camnJv5aVebBLjFb/Cx9TNYhe69x1qppQ9DEGe8pgO1MWut6H/3E0OaXIMUJi/F5aKVT4BMx8JvLtd9L01gyJx6wsnIaApPWNIxM+awa2F4AbiveRe4X30Hh34xDVGgMmOKLAeHtXqqjfisF5D7ZoayimWvwvTiMB2nQ5Z0ECADmj6HhrWYIJ8Bnvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mwIX9iAQC+1sV9L87xnGUtlMEZo8P1vOTCbO3WtuWmg=;
+ b=C+GGp43x8KyPjlIZ1JQ8/ZiXKEu33kgrrcSJ227X2V4DtmCh/Q6ds+QYOoXlGBYukCUdQTBYTHrsUVAILDJBsxJ3oUcfkKupCroHLnBOc0QvVp3fZ7uYZ0742HA9zE2TjFWogLGDvq1DpPOK3CBjWLeb4krod/0cPM9qnGn+jIk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by AS4PR04MB9292.eurprd04.prod.outlook.com (2603:10a6:20b:4e7::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.29; Mon, 3 Apr
+ 2023 10:34:56 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::dfa2:5d65:fad:a2a5]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::dfa2:5d65:fad:a2a5%3]) with mapi id 15.20.6254.026; Mon, 3 Apr 2023
+ 10:34:56 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Amritha Nambiar <amritha.nambiar@intel.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 net-next 0/9] Add tc-mqprio and tc-taprio support for preemptible traffic classes
+Date:   Mon,  3 Apr 2023 13:34:31 +0300
+Message-Id: <20230403103440.2895683-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: FR0P281CA0221.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:ac::17) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RESEND PATCH v2 1/1] arm64: dts: qcom: sm6115: Add CPU
- idle-states
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        andersson@kernel.org, bhupesh.linux@gmail.com,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org
-References: <20230330193303.612475-1-bhupesh.sharma@linaro.org>
- <0ff99bb5-4792-270d-b03e-2638939f160f@linaro.org>
- <CAH=2NtzPReiUHuEAW8PsQJvNzOYvb71pZ7SWRbThWdLT7_a0ug@mail.gmail.com>
- <e5b758ed-f279-ecc3-3be4-039c5a19b212@linaro.org>
- <CAH=2NtzXjgQEaTDVZip6GEHhterker2B3c+w_4A5J4W_LDTctA@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAH=2NtzXjgQEaTDVZip6GEHhterker2B3c+w_4A5J4W_LDTctA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AS4PR04MB9292:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f5f9866-75ef-4f07-c876-08db342f1162
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OpHV6mztmIH40zJXGMN776L93GkG4XrvqEDj5VdIxyvFv6hkDDLKLrFwmYZ3vhpbCy5qthIbYbpvfNC+WwaAz3wLj9Sh2qQNQ01CWpDnM+T+Pwj2bH0Yb6X8F16XHo+sz69ckr8U5LkPSwLkD2sVgcICLbJe3r/RCu4loryf6Ia+9gu1TbQUmBNjbJE5aGn3A17o/tJHODMCu8JIcKvt/v8WpW46TibZkUoqLORChRiLXVvbJOR2dlkSjDzbtj3zl4BeysbQzfPF6S2i5qv/J/1+18BGo25404csKHbZzyiBR71Zfl1TZLBgq6k/hxyvtPxhtSpdt4asQCyC7JnLlQXx/PYQXKGA/CGTOnoSzU2MqvqBkru2SRgWh/3Glp5ZZErk6umi4jouxY6FphiWmq/h6boigNg3KBb3sBGgsbbuUYsZOB8HSjX1Asmenz5aFqJa3Jz/wA86/0lXtbNeDR9v6zo0imX8jsrSaYaVBX2fsd4kAz9czYOTXPRTZ4B/pVsXYpZtV3j4ySfT2StRn7t6qi+XipMtcayFLQIJFc+Jh37pVhsiIKYvrutMqppU5xgW72bZfRh4jLtXjZfS/SFR0J8OoKZJ2bbf/XmL4waPO7xH3fN5qQR+fdHKxNb4V/zBrihP9zNjcGUPBEmmcw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(376002)(346002)(366004)(396003)(451199021)(26005)(1076003)(6506007)(186003)(38350700002)(38100700002)(6512007)(86362001)(316002)(54906003)(41300700001)(7416002)(5660300002)(44832011)(66556008)(66476007)(4326008)(66946007)(8676002)(6916009)(478600001)(52116002)(8936002)(6666004)(6486002)(966005)(36756003)(2616005)(2906002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+j7i9XTbOL+L7W+Wxnz2EcAZ0/WkvHRUpZ1Poj0/WrFDpfh7QrArLivOmQhw?=
+ =?us-ascii?Q?d5zTCGBuV51QLjmla0vIIr2WYpYr6bavluMArzQ6YsN+m5WcT330XHOgMcmj?=
+ =?us-ascii?Q?jxPVqbnEY/BwfmUev7HiQFR/RAu+ZXzat9tqANrGmcNE7VUeyMcBAKRk0qO2?=
+ =?us-ascii?Q?U2+0b92TgfKBCTz8AKG4IW11uVvQHnuekFxamTZcSGs59YBdzbAzyvGlYXZV?=
+ =?us-ascii?Q?+BYfCphBT5or6R1yBrNjGpGS1Dpk2YjUvT6LM3tX07XZrFLD7SqZg2CcEBJ8?=
+ =?us-ascii?Q?/rYuG/vy05XlEDG2pdq2Pg3FU4MXTb8+Gw1hYVKylY7i5VUalOtBsUTnq8YD?=
+ =?us-ascii?Q?TWkQkhcyMfNXc8YJniSij8DnKudWKq5gWdbiRxG91Nkyqbxe0CagzR7d8quT?=
+ =?us-ascii?Q?ObmKvTxgwZU8DRM6AEpO6FV4s5fo2aKV4i7XAtriYlLM8k7/G4MaNITGm+Ai?=
+ =?us-ascii?Q?+z45HNAXlQNXukiLTnrkCXZBKqL1FjiGWTlnDm475KkqsMw5ak/9Q4FBR9CD?=
+ =?us-ascii?Q?A9TzdYcVI+eIYo3shSxWx154FhWRb0TtIdeZytmGX+iXcPcTDtipmkrRP8SQ?=
+ =?us-ascii?Q?fGBqd/dw1gVJYcOaxArp9Hsg9pU7tLWqqIKIZ2q7IzEZFOHqIMzJDaQzvb63?=
+ =?us-ascii?Q?Tcia4QJqxZeTkoMk648QH3uaw1cA7w0hXwCwOKWPEtYwyDWfo/VAMWaZfqOv?=
+ =?us-ascii?Q?8MB8/tdoXgVWKU3DdKWTg9ijTHH4/DNRobJr8nfusH6yupmk2vmwLT0r0E/0?=
+ =?us-ascii?Q?HM13ikN7JQfl2pFvZRX/68tx9KLaf790fTPa67WDpKNUYrki97HilvBws/yj?=
+ =?us-ascii?Q?LTDWIF9oLnBGwOEf+CqI/+zvzkqtQnHVsuLgrjkelkEIcxhmoPON26kN5kdF?=
+ =?us-ascii?Q?eEfCB9+exsEsvw1RZXdR3gBQrQkuXEyOxTQbw0mD4e3GUxcF5EAuNvLyY3ei?=
+ =?us-ascii?Q?MTkbsN1dHrUm9FbGzbHGF9NOhIUf4j5ChhCnPIrNZZ67IEcQ6OGt0e36ciqF?=
+ =?us-ascii?Q?rTY/Og5FQMCwsd/VkkTEwAgj5UScqUIjW2JXyzneTHFHN6/9panuYkwrtJLp?=
+ =?us-ascii?Q?kqw9NE0XSEOngt1uLP45/LA9idsLcDtaYNtE6JZ9liSRV+wQKhUQacMrCkOr?=
+ =?us-ascii?Q?wBN/5Foy/4P6LiqrNXWzZzNZM/VHfarHuo+pYalE1lHwQ0Z65v4dUsxPNw/X?=
+ =?us-ascii?Q?0D0OmpM/nuNcYX9RdhgFt816n7LTBV4KzwFsJdkk8cA8maXcElLgfLyR8Wp8?=
+ =?us-ascii?Q?IPD7lsTxSt576Hrl5rCG7ZMhEdDAvUAIeKDl01YJAJngBAptXMSaCHwrXaui?=
+ =?us-ascii?Q?+GqnazuR+rNzcFSf5aJTyDmF0uFE0qjfkzdzV1vYal648frvrQlqp9qtKDUg?=
+ =?us-ascii?Q?KFYJAWSReOpVENAhUzI/hO47GOom/J0Q6EEbbvAJugQ4sF8L0zLlb+3sUoV+?=
+ =?us-ascii?Q?ImPK6h1WWjoJ6GOzSFJDAUOWvlqtOUpoAl0lr/bVJ4SvhGf3qlfJE9Asar2Q?=
+ =?us-ascii?Q?YlPfhTB7eryCIH3lj/TVV9W/u2Ibf+8BUTLM96xwFLSWWBSvlJyiIhtIM+GR?=
+ =?us-ascii?Q?8rUgYPYugq95ZbRLMhpXu7zGdZ3o3jAdVm4+/69KGTbKHfktwqeSn4CYK28N?=
+ =?us-ascii?Q?PA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f5f9866-75ef-4f07-c876-08db342f1162
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 10:34:56.5923
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: S7Iyrt+OFe2648DoIb+QmJMxL7V6x6XqrI4ADOBfAiJHrfdNoGEm7jZP8fuNVXQi6IsSHADdcdxY9Xxr2bvZvw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9292
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,197 +133,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The last RFC in August 2022 contained a proposal for the UAPI of both
+TSN standards which together form Frame Preemption (802.1Q and 802.3):
+https://lore.kernel.org/netdev/20220816222920.1952936-1-vladimir.oltean@nxp.com/
 
+It wasn't clear at the time whether the 802.1Q portion of Frame Preemption
+should be exposed via the tc qdisc (mqprio, taprio) or via some other
+layer (perhaps also ethtool like the 802.3 portion, or dcbnl), even
+though the options were discussed extensively, with pros and cons:
+https://lore.kernel.org/netdev/20220816222920.1952936-3-vladimir.oltean@nxp.com/
 
-On 2.04.2023 07:35, Bhupesh Sharma wrote:
-> On Sun, 2 Apr 2023 at 01:28, Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
->>
->> On 01/04/2023 21:26, Bhupesh Sharma wrote:
->>> Hi Konrad,
->>>
->>> On Sat, 1 Apr 2023 at 17:51, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>>>
->>>>
->>>>
->>>> On 30.03.2023 21:33, Bhupesh Sharma wrote:
->>>>> Add CPU idle-state nodes and power-domains in Qualcomm sm6115 SoC dtsi.
->>>>>
->>>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>>>> ---
->>>>> Changes since v1:
->>>>> - v1 can be viewed here: https://lore.kernel.org/lkml/e5cda4cf-5c2a-a7ed-9e1d-1fe9f2cbef40@linaro.org
->>>>> - Addressed Konrad's comments on v1 and added GDHS and Power Collapse
->>>>>    cluster power states.
->>>>>
->>>>>   arch/arm64/boot/dts/qcom/sm6115.dtsi | 136 +++++++++++++++++++++++++++
->>>>>   1 file changed, 136 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>>> index 2a51c938bbcb..b63395d476ed 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>>> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>>> @@ -45,6 +45,8 @@ CPU0: cpu@0 {
->>>>>                        enable-method = "psci";
->>>>>                        next-level-cache = <&L2_0>;
->>>>>                        qcom,freq-domain = <&cpufreq_hw 0>;
->>>>> +                     power-domains = <&CPU_PD0>;
->>>>> +                     power-domain-names = "psci";
->>>>>                        L2_0: l2-cache {
->>>>>                                compatible = "cache";
->>>>>                                cache-level = <2>;
->>>>> @@ -61,6 +63,8 @@ CPU1: cpu@1 {
->>>>>                        enable-method = "psci";
->>>>>                        next-level-cache = <&L2_0>;
->>>>>                        qcom,freq-domain = <&cpufreq_hw 0>;
->>>>> +                     power-domains = <&CPU_PD1>;
->>>>> +                     power-domain-names = "psci";
->>>>>                };
->>>>>
->>>>>                CPU2: cpu@2 {
->>>>> @@ -73,6 +77,8 @@ CPU2: cpu@2 {
->>>>>                        enable-method = "psci";
->>>>>                        next-level-cache = <&L2_0>;
->>>>>                        qcom,freq-domain = <&cpufreq_hw 0>;
->>>>> +                     power-domains = <&CPU_PD2>;
->>>>> +                     power-domain-names = "psci";
->>>>>                };
->>>>>
->>>>>                CPU3: cpu@3 {
->>>>> @@ -85,6 +91,8 @@ CPU3: cpu@3 {
->>>>>                        enable-method = "psci";
->>>>>                        next-level-cache = <&L2_0>;
->>>>>                        qcom,freq-domain = <&cpufreq_hw 0>;
->>>>> +                     power-domains = <&CPU_PD3>;
->>>>> +                     power-domain-names = "psci";
->>>>>                };
->>>>>
->>>>>                CPU4: cpu@100 {
->>>>> @@ -97,6 +105,8 @@ CPU4: cpu@100 {
->>>>>                        dynamic-power-coefficient = <282>;
->>>>>                        next-level-cache = <&L2_1>;
->>>>>                        qcom,freq-domain = <&cpufreq_hw 1>;
->>>>> +                     power-domains = <&CPU_PD4>;
->>>>> +                     power-domain-names = "psci";
->>>>>                        L2_1: l2-cache {
->>>>>                                compatible = "cache";
->>>>>                                cache-level = <2>;
->>>>> @@ -113,6 +123,8 @@ CPU5: cpu@101 {
->>>>>                        enable-method = "psci";
->>>>>                        next-level-cache = <&L2_1>;
->>>>>                        qcom,freq-domain = <&cpufreq_hw 1>;
->>>>> +                     power-domains = <&CPU_PD5>;
->>>>> +                     power-domain-names = "psci";
->>>>>                };
->>>>>
->>>>>                CPU6: cpu@102 {
->>>>> @@ -125,6 +137,8 @@ CPU6: cpu@102 {
->>>>>                        enable-method = "psci";
->>>>>                        next-level-cache = <&L2_1>;
->>>>>                        qcom,freq-domain = <&cpufreq_hw 1>;
->>>>> +                     power-domains = <&CPU_PD6>;
->>>>> +                     power-domain-names = "psci";
->>>>>                };
->>>>>
->>>>>                CPU7: cpu@103 {
->>>>> @@ -137,6 +151,8 @@ CPU7: cpu@103 {
->>>>>                        enable-method = "psci";
->>>>>                        next-level-cache = <&L2_1>;
->>>>>                        qcom,freq-domain = <&cpufreq_hw 1>;
->>>>> +                     power-domains = <&CPU_PD7>;
->>>>> +                     power-domain-names = "psci";
->>>>>                };
->>>>>
->>>>>                cpu-map {
->>>>> @@ -176,6 +192,68 @@ core3 {
->>>>>                                };
->>>>>                        };
->>>>>                };
->>>>> +
->>>>> +             idle-states {
->>>>> +                     entry-method = "psci";
->>>>> +
->>>>> +                     LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
->>>>> +                             compatible = "arm,idle-state";
->>>>> +                             idle-state-name = "silver-rail-power-collapse";
->>>>> +                             arm,psci-suspend-param = <0x40000003>;
->>>>> +                             entry-latency-us = <290>;
->>>>> +                             exit-latency-us = <376>;
->>>>> +                             min-residency-us = <1182>;
->>>>> +                             local-timer-stop;
->>>>> +                     };
->>>>> +
->>>>> +                     BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
->>>>> +                             compatible = "arm,idle-state";
->>>>> +                             idle-state-name = "gold-rail-power-collapse";
->>>>> +                             arm,psci-suspend-param = <0x40000003>;
->>>>> +                             entry-latency-us = <297>;
->>>>> +                             exit-latency-us = <324>;
->>>>> +                             min-residency-us = <1110>;
->>>>> +                             local-timer-stop;
->>>>> +                     };
->>>>> +             };
->>>>> +
->>>>> +             domain-idle-states {
->>>>> +                     CLUSTER_0_SLEEP_0: cluster-sleep-0-0 {
->>>>> +                             /* GDHS */
->>>>> +                             compatible = "domain-idle-state";
->>>>> +                             arm,psci-suspend-param = <0x40000022>;
->>>> This 0x22 ending seems very sus.
->>>>
->>>> The last nibble represents the core-level power state and the
->>>> penultimate one represents the same at cluster level. A value
->>>> of 2 in that cluster nibble is actually undefined by the PSCI spec,
->>>> whereas the value of 4 (as you have in all of the other idle
->>>> states, including D3G for the perf cluster) corresponds to
->>>> "Retention", so unless there's a very weird nuance in the
->>>> TZ for this SoC, it should probably end in 0x42.
->>>>
->>>> Otherwise I think this LGTM now!
->>>
->>> I am also learning by experiment about the exact values to use here,
->>> as the only ready reckoner of how these values are calculated, seems
->>> to be available via [1].
->>>
->>> Also it seems the downstream code uses the following approach to
->>> calculate the LPM state suspend-param, which for example for
->>> CLUSTER_0_SLEEP_1 states turns out to be:
->>>
->>>      state_id = get_cluster_id(cpu->parent, &affinity_level, from_idle); = 0x40
->>>      power_state = (is-reset << 30) = 0x40000000
->>>      affinity_level = (affinity level & 0x3) << 24 = 0x1000000
->>>      state_id += power_state + affinity_level + psci_id;
->>>
->>>      = 0x40000000 + 0x1000000 + 0x40 + 0x4 = 0x41000044
->>>
->>> For the D3G cases as well, I just used the 'qcom,psci-mode = <2>'
->>> value as provided in downstream code (see [2]), for the overall
->>> calculations.>>>
->>> Also, the only usage of D3G state I could find upstream (in qcom dtsi
->>> files0 is for 'msm8916' (see [3]), which also uses the value with
->>> ending 0x2 -> 'arm,psci-suspend-param = <0x41000032>'
-Yes, the lowest '2' must be correct. I am concerned about the one above
-it (val & 0xf0).
+So the 802.3 portion got submitted separately and finally was accepted:
+https://lore.kernel.org/netdev/20230119122705.73054-1-vladimir.oltean@nxp.com/
 
->>
->> D3G has min-child-idx = 1, so the end PSCI param should be 0x41000023
->> D3 is 0x41000043
-Not sure what that has to do with it. Looking at ancient kernel doc:
+leaving the only remaining question: how do we expose the 802.1Q bits?
 
-qcom,min-child-idx: The minimum level that a child CPU should be in
-	before this level can be chosen. This property is required for all
-        non-default level.
+This series proposes that we use the Qdisc layer, through separate
+(albeit very similar) UAPI in mqprio and taprio, and that both these
+Qdiscs pass the information down to the offloading device driver through
+the common mqprio offload structure (which taprio also passes).
 
-And it looks like the downstream code ensures that we don't just jump
-from "CPU running" to "CPU [some stage of] power collapse".
+An implementation is provided for the NXP LS1028A on-board Ethernet
+endpoint (enetc). Previous versions also contained support for its
+embedded switch (felix), but this needs more work and will be submitted
+separately.
 
+Changes in v4:
+- removed felix driver support
 
-So it looks like this patch may be good after all.. Can you verify with
-sysfs/debugfs that this idle state is being entered correctly?
+Changes in v3:
+- fixed build error caused by "default" switch case with no code
+- reordered patches: bug fix first, driver changes all at the end
+- changed links from patchwork to lore
+- passed extack down to ndo_setup_tc() for mqprio and taprio, and made
+  use of it in ocelot
 
-Konrad
-> 
-> Ok, let me recheck at my end as well.
-> 
-> Thanks
-> Bhupesh
+v2 at:
+https://lore.kernel.org/netdev/20230219135309.594188-1-vladimir.oltean@nxp.com/
+
+Changes in v2:
+- add missing EXPORT_SYMBOL_GPL(ethtool_dev_mm_supported)
+- slightly reword some commit messages
+- move #include <linux/ethtool_netlink.h> to the respective patch in
+  mqprio
+- remove self-evident comment "only for dump and offloading" in mqprio
+
+v1 at:
+https://lore.kernel.org/netdev/20230216232126.3402975-1-vladimir.oltean@nxp.com/
+
+Vladimir Oltean (9):
+  net: ethtool: create and export ethtool_dev_mm_supported()
+  net/sched: mqprio: simplify handling of nlattr portion of TCA_OPTIONS
+  net/sched: mqprio: add extack to mqprio_parse_nlattr()
+  net/sched: mqprio: add an extack message to mqprio_parse_opt()
+  net/sched: pass netlink extack to mqprio and taprio offload
+  net/sched: mqprio: allow per-TC user input of FP adminStatus
+  net/sched: taprio: allow per-TC user input of FP adminStatus
+  net: enetc: rename "mqprio" to "qopt"
+  net: enetc: add support for preemptible traffic classes
+
+ drivers/net/ethernet/freescale/enetc/enetc.c  |  31 ++-
+ drivers/net/ethernet/freescale/enetc/enetc.h  |   1 +
+ .../net/ethernet/freescale/enetc/enetc_hw.h   |   4 +
+ include/linux/ethtool_netlink.h               |   6 +
+ include/net/pkt_sched.h                       |   3 +
+ include/uapi/linux/pkt_sched.h                |  17 ++
+ net/ethtool/mm.c                              |  23 +++
+ net/sched/sch_mqprio.c                        | 187 +++++++++++++++---
+ net/sched/sch_mqprio_lib.c                    |  14 ++
+ net/sched/sch_mqprio_lib.h                    |   2 +
+ net/sched/sch_taprio.c                        |  77 ++++++--
+ 11 files changed, 323 insertions(+), 42 deletions(-)
+
+-- 
+2.34.1
+
