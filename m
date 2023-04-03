@@ -2,180 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6FB6D3FC4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9F26D3FCD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbjDCJLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S231741AbjDCJOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjDCJLj (ORCPT
+        with ESMTP id S231401AbjDCJOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:11:39 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2049.outbound.protection.outlook.com [40.107.105.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA31D769B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:11:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GUap5eICjn7rhGLwCJsyRPDOb8BHnnP8mlAEEd4GSZvT6ZMShjrmLzRfYoJIdamOiUAMXygTuj1NiWJY0ig1Ovm9Ay+TgYCGz8nEExxfiWWx/47znIKCY4loXbCldXP0ad0HiAVQNo/LcKLFjOfjp5SQQd8dlOdMGzgRyBCeDRuQjoaQkz0s3+hjicB8teX3n8TZmXG6VfBb9i02OCbbnLjq2ZA0fodo2NNCq5gc7FpOj076mTRk/ulFnnkEenugsFAkhk8/PkNfS5XdL9OPFyIfc+A28+3h3nkiyv6z8hFQ0XzvuE0W1r3maOyUc6JPFMb2OCygcveqsFtNYnAYKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hfTSvILqXi+5yjoboxODQfr9fm9lo6kFgQRtHhlk2r0=;
- b=Sl/++MvNNYyUiPatyIN15IFEgXkyAtR5RcPgJB9mGdJ0EQb9ZCitRloRO8aR8t+/tiAECUJkVbVKbrfmSePtfSC6FPyHGqus9yHcaXiwBmoC056MLb7Xfm6nbuZowlp/rwmLeApzXaBl6YMnhGIDpjEkgSBTHLCsaTihdMybEnKemC8jpx0tbOck0h+uKLPLYkOTTWAWZbI9NMc6rMxYva6U77kDjBHFZq3wBKfFDqvJ6Yr5D5yjB2dhQ/Cw+ftiEsLaZtAgnF9lLGWh6YlxEv+ZFSf5cUbTPU9TnOJ+9MVBtD8RVzJz8in71pZWtWgYK5GmTIKuBDaOTNST+9GYfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hfTSvILqXi+5yjoboxODQfr9fm9lo6kFgQRtHhlk2r0=;
- b=FcwhDgU0Xf8HDXnw/CAThcxHtLGPo7HAQ1uIvDuVHUqWQ6eWnU/7OJKPkZXqmn2n70Fsp90Tf9MeKSzYcUEWfITG3I/5Ufk81LApwlChv3uY307jtLr4NPBJJ5uE18cBN89ynWy3zVa2vis5WcK6lGpPHgEPCv/fug6C68WX428=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AS8PR04MB7829.eurprd04.prod.outlook.com (2603:10a6:20b:2a7::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
- 2023 09:11:35 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4%4]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
- 09:11:33 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-CC:     Marc Zyngier <maz@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: gic700 shareability question
-Thread-Topic: gic700 shareability question
-Thread-Index: Adlhc42Zc4r7rB9RSWC6TTy/JzkMQACRxD8AAIRnzKAADqPRAAABUspw
-Date:   Mon, 3 Apr 2023 09:11:33 +0000
-Message-ID: <DU0PR04MB941748AA2A21C5FB384A7F4488929@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <DU0PR04MB9417388F9BDD73080294FA8E88889@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <868rfdw797.wl-maz@kernel.org>
- <DU0PR04MB9417FCF524FA0BB9808B4E8088929@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <ZCqPEjxDmI0/kruD@lpieralisi>
-In-Reply-To: <ZCqPEjxDmI0/kruD@lpieralisi>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AS8PR04MB7829:EE_
-x-ms-office365-filtering-correlation-id: 46cd0386-77cd-41dd-9696-08db34236ba0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: D7fMjhcqVQ9JN8fMzSwrCIuAqM2VPcOySk01+zrkN3VRaUgDl/fvOU6gNjmsllOm3Nap4pYqVL4kMYFTe5U5qp2DIoUjdF4C46oLOwQNj3KYXfiuccOX7R6XjfEPENgnn/5CbsvKLMannoPa0/smrKXok+/Io2AE5tHQvmDuQJq8QqVBrhR8+jp1OHgooHvMUi1/omlxQCwI0fitMy7KZ3Kh/TtFZ8QTmxvyJlIRx8rQU34GOO62J4FStmIW2fsgJoFhrA8G5Q8jiuV0DJc6jAdqY/0DLrvxXfYZQyT7YpUKD0slC0q2+kJxj01pzhPVipVidDMm48s1kplknvqX/rq4Xa/zVv6K4W4MraQBbhuZvd92/raYU/DYjg7kyO5glbKcFCf1A5ouOLGs/efV5BtL3UkufRYQoN/1HxfzGWDSuOQFs/fRvrJIPk33h281V8WjrOMW5pv0CdCRV+8kA3j2W+Abm19F8YtGqWn9ZMshxwL04rcS/ub10OWtyp+HbvXqb8g8STk3QX+/JCKmce/NO9KdKYLJcymDgqZBHOXqbPO4HWgBSBBKjxi5DNSN8ie6XSyTKxOvvxDYvVTwHI4070u9//UE9clnm0cByMOxAnLJp3mPrHGRmdW3TOjZ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199021)(86362001)(38070700005)(33656002)(2906002)(55016003)(7696005)(71200400001)(186003)(9686003)(6506007)(26005)(4326008)(6916009)(8676002)(66946007)(76116006)(66556008)(66446008)(66476007)(64756008)(41300700001)(5660300002)(122000001)(38100700002)(54906003)(316002)(478600001)(44832011)(8936002)(7116003)(52536014);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wCJTxlNtpxNVZHKT2DX1azre8HatK/Y+fzilZZ66rugH3Xts7Yq2HlR3eSZ8?=
- =?us-ascii?Q?BBX25kW8UGpJD/TZVYgs22sF/n4KSs4uE3C/DWORDFT4adnAcbLR9rKMfIgd?=
- =?us-ascii?Q?9XD/JMXT3cdtVzPVX+byR2WUmPwKplo/DYkoLqQhAiXBP6fyAoZanWy6Zcdl?=
- =?us-ascii?Q?QZa4r6k2HWYm478/T4mONBCc3VNG1pHH9WS/HXRNZuPM6823LhjXGZqLcAr8?=
- =?us-ascii?Q?a0OtzKeI9GD7hpE86Ihau4X8ku7z88dtGCGuLWimSnudLdFEFPsRyq5A+oQ9?=
- =?us-ascii?Q?DLkMgMpuInE/MCWVTZg/vcf3S1yt/U5xVizMeTQwt9FH5rf34wRZJDrmjgXx?=
- =?us-ascii?Q?u68Kd3cwBNNKQ6rwARTTfCTrC5gyQF0ELrIsFNg7VZkSCvySeK/BdANQe5yl?=
- =?us-ascii?Q?RHt8VI3XaLvKWNiQo8dXj9pIVxsMClbiP3xgRTCy7G37jvaIiFMdjHzMPfh+?=
- =?us-ascii?Q?OLvpbfjdvmsvK0HSVCXdZDxDB6x5LkDvM0P0HZb4eNzHWw3//mxYbJPiVOCa?=
- =?us-ascii?Q?weU2DrhN1uXVDTMHh8gevM3e3ZgBh9PNMbbX+/maF351Y7dzJHhjxozUXObK?=
- =?us-ascii?Q?PIYf86oP3ewj7IwcMF6O2EhFBS3QQWoy+Geaf1wjQxXv5XhGqPcCCZNn1Qx9?=
- =?us-ascii?Q?HUMVD8QppnI4+vxFc9OgLheAbSz0mJL567OhlmtWt+FvXfDNE4Ci7KD+jGb8?=
- =?us-ascii?Q?wpDeGNKxyZJ17uyS2hW1zuglOoWvjuq/ouMHSoCwKbYYv5SSGK8m+PbEucoC?=
- =?us-ascii?Q?B1QYJMHIX/+tylcdRgvspnLDwQXcT6khVg8PkAEilmBbyRBnsu8XpyzslcVz?=
- =?us-ascii?Q?lTXTqnvwD0+TZvegQRuBLAjuUFW8RJtEdyV0HtHtNxd0pGWYCdoFJIjKUKiP?=
- =?us-ascii?Q?ST0k0I4nl9QLwJW9pfCGrRccMsILH980WqBOFL5Oe3tkgzx9o/u7AAl8NIUG?=
- =?us-ascii?Q?0o7R8BYe6+FA7nNe/xOV6aSnWwYG9j2QESQDr1NKLaymMiBbXPc2xGgD2U4o?=
- =?us-ascii?Q?lD4ZHYiJ2kZnBJNfTu1qSEAn0/jhICyCF3EqCd/E1FZhlvQVbLiNSZMQ/bpy?=
- =?us-ascii?Q?ZZpRLFr/vpCmuIYYuBgl1Afye0KO+k54OdH9hzD4e/JnzCr2kMe0RjK0WI4P?=
- =?us-ascii?Q?IBfsmIaBzN4A77Bric/OdJQHrcPP3EWlJxlct891Mkb8QlDTxs3E5t+/Rhol?=
- =?us-ascii?Q?wUq7e+B6g40/RqBTmdVEPbSq3NlAl05m0aGIoWKqGWiTRAxLoLtmUFk2MiVi?=
- =?us-ascii?Q?Jl0dYZDUWEIw4PEhE9OgkmRAXOQXLKNX3b1EsNz7AWHVzolG8jrr+NTO2iLS?=
- =?us-ascii?Q?ZKsMBbEgteBK5v4UCMY0B3FYF7h28PI95pMpIdL13SxaP+7V7MGBdki5wfFO?=
- =?us-ascii?Q?2zMFhc6hYmwHJtPve30knC2Scq4iPbPCwA72XkSTNY8HkAfHPtKklg+hJgHg?=
- =?us-ascii?Q?cuVWa1Q2MqtD47dhIaftmotbGDVbS1qOdmdPQ+LoqTUXMg96Dm0PAt1x2lyf?=
- =?us-ascii?Q?XR9dNK2RE1e7ORQiTocL1p3edUIlKBW23fbuMkNOLnbR8JR8FWux6Wh4p1SN?=
- =?us-ascii?Q?sLWQZ0UyXjTNj+0woQk=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 3 Apr 2023 05:14:01 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CF44EC5;
+        Mon,  3 Apr 2023 02:13:54 -0700 (PDT)
+X-UUID: d5148bbad1ff11edb6b9f13eb10bd0fe-20230403
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=YO7m4iZSxuMCZDbG0DFv2mMLjjrs2tfy545wzpqEnAA=;
+        b=j1jlJ9aKbJ0SmeyRIBSz1UWbDBwoSodvUSmG++bPC89Aj97nxtT1h8TcwCqO9BvJSe4EDLS+FtC4J1vf0mmaMBoG8zwwJ/F71kxOtLTELTnDSh1cW6DrowPf+S7MFWps2v3ehlhadr+6EZfP7bfbBaa08R098X2UKe2zouO7Y3I=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:08fc4d27-9bb6-4141-af31-f0d17847a0d1,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:120426c,CLOUDID:3894b1f7-ddba-41c3-91d9-10eeade8eac7,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: d5148bbad1ff11edb6b9f13eb10bd0fe-20230403
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1745957318; Mon, 03 Apr 2023 17:13:44 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Mon, 3 Apr 2023 17:13:42 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Mon, 3 Apr 2023 17:13:41 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, <nfraprado@collabora.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
+        <jianjiao.zeng@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
+        <chengci.xu@mediatek.com>, <youlin.pei@mediatek.com>,
+        <anan.sun@mediatek.com>
+Subject: [PATCH v6 00/14] Adjust the dma-ranges for MTK IOMMU
+Date:   Mon, 3 Apr 2023 17:13:23 +0800
+Message-ID: <20230403091337.26745-1-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46cd0386-77cd-41dd-9696-08db34236ba0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Apr 2023 09:11:33.6853
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fLL2MoRbz9eNTJ9iBnxR7s7QRXl3jjOtbxc5itW283AX48dP7yk/9mvEwi/0kozXRVzmvGszWHZlP4I+wXraVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7829
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: gic700 shareability question
->=20
-> On Mon, Apr 03, 2023 at 01:36:31AM +0000, Peng Fan wrote:
-> > Hi Marc,
-> >
-> > > Subject: Re: gic700 shareability question
-> > >
-> > > + Lorenzo
-> > >
-> > > On Tue, 28 Mar 2023 13:48:19 +0100,
-> > > Peng Fan <peng.fan@nxp.com> wrote:
-> > > >
-> > > > Hi Marc,
-> > > >
-> > > > We have an SoC that use GIC-700, but not support shareability,
-> > >
-> > > Define this. The IP does support shareability, but your integration
-> doesn't?
-> > >
-> > > > Currently I just hack the code as below. Do you think it is
-> > > > feasible to add firmware bindings such that these can be used to
-> > > > define the correct shareability/cacheability instead of relying on
-> > > > the programmability of the CBASER register?
-> > > >
-> > > > Saying with "broken-shareability", we just clear all the
-> > > > shareability settings.
-> > >
-> > > This is the same thing as the Rockchip crap, so you are in good compa=
-ny.
-> > >
-> > > I've repeatedly stated that this needs to be handled:
-> > >
-> > > - either by describing the full system topology and describe what is
-> > >   in the same inner-shareable domain as the CPUs, which needs to
-> > >   encompass both DT and ACPI (starting with DT seems reasonable),
-> > >
-> >
-> > We will give a look on this. But honestly not have a good idea on how.
->=20
-> It is a longer term fix for the issue, we are looking into this.
->=20
-> > > - or as a SoC specific erratum, but not as a general "sh*t happened"
-> > >   property.
-> >
-> > I will ask the hardware team to create an errata.
-> > >
-> > > AFAIK, Lorenzo is looking into this.
-> >
-> > Lorenzo, are you working on this?
->=20
-> Yes it is being worked on, that does not prevent though an errata
-> workaround to be applied, firmware bindings definitions can take a while =
-to
-> sort out.
+After commit f1ad5338a4d5 ("of: Fix "dma-ranges" handling for bus
+controllers"), the dma-ranges is not allowed for dts leaf node.
+but we still would like to separate the different masters into
+different iova regions. Thus we adjust the internal flow, separate
+the 16GB iova range by the master HW larbid/portid and add the
+dma-ranges property in the parent "soc" node. This also could avoid
+the users forget/abuse the iova regions.
 
-Sure, we need go with errata. Thanks for working on this.
+The commit f1ad5338a4d5 did affect the mt8195 venc, But it is not
+a fatal issue, it could also work well at 0-4GB iova. thus I don't
+add "Fixes:" tag.
 
-Thanks,
-Peng.
->=20
-> Lorenzo
+In this series, I add functions for mt8192/mt8195/mt8186, mt8188 will
+be in its special patchset. and the previous mt8173/mt8183...support
+0-4GB only, no need this function.
+
+Change note:
+v6: Add three patches[9/10/11] for set dma-mask for iommu master devices.
+
+v5: Nothing change. Just rebase on v6.3-rc1.
+
+v4: https://lore.kernel.org/linux-mediatek/20230215062544.8677-1-yong.wu@mediatek.com/
+    Improve the comment in the code from AngeloGioacchino.
+
+v3: https://lore.kernel.org/linux-mediatek/20230214031114.926-1-yong.wu@mediatek.com/
+   Add a new patch only for comment more in the code.
+
+v2: https://lore.kernel.org/linux-mediatek/20230208053643.28249-1-yong.wu@mediatek.com/
+   a) Base on next-20230206 since mt8195 jpeg node is applied which affect
+      this patch.
+   b) Reword the commit message [1/10][2/10] to explain effect.
+
+v1: https://lore.kernel.org/linux-mediatek/20230113060133.9394-1-yong.wu@mediatek.com/
+   Base on v6.2-rc3.
+
+Yong Wu (14):
+  dt-bindings: media: mediatek,vcodec: Remove dma-ranges property
+  dt-bindings: media: mediatek,jpeg: Remove dma-ranges property
+  iommu/mediatek: Improve comment for the current region/bank
+  iommu/mediatek: Get regionid from larb/port id
+  iommu/mediatek: mt8192: Add iova_region_larb_msk
+  iommu/mediatek: mt8195: Add iova_region_larb_msk
+  iommu/mediatek: mt8186: Add iova_region_larb_msk
+  iommu/mediatek: Add a gap for the iova regions
+  iommu/mediatek: Set dma_mask for the master devices
+  media: mtk-jpegdec: Remove the setting for dma_mask
+  media: mediatek: vcodec: Remove the setting for dma_mask
+  arm64: dts: mt8195: Remove the unnecessary dma-ranges
+  arm64: dts: mt8195: Add dma-ranges for the parent "soc" node
+  arm64: dts: mt8186: Add dma-ranges for the parent "soc" node
+
+ .../media/mediatek,mt8195-jpegdec.yaml        |   7 -
+ .../media/mediatek,mt8195-jpegenc.yaml        |   7 -
+ .../media/mediatek,vcodec-decoder.yaml        |   5 -
+ .../media/mediatek,vcodec-encoder.yaml        |   5 -
+ .../media/mediatek,vcodec-subdev-decoder.yaml |   7 -
+ .../bindings/media/mediatek-jpeg-encoder.yaml |   5 -
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |   4 +-
+ drivers/iommu/mtk_iommu.c                     | 145 ++++++++++++++----
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    |   3 -
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   8 -
+ .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |   3 -
+ 12 files changed, 117 insertions(+), 83 deletions(-)
+
+-- 
+2.18.0
+
+
