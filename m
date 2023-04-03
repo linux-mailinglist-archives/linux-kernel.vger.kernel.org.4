@@ -2,114 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC2D6D3C30
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F346D3C32
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbjDCDlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 23:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S231267AbjDCDok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 23:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjDCDld (ORCPT
+        with ESMTP id S230052AbjDCDoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 23:41:33 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75778A55;
-        Sun,  2 Apr 2023 20:41:32 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so29108921pjb.0;
-        Sun, 02 Apr 2023 20:41:32 -0700 (PDT)
+        Sun, 2 Apr 2023 23:44:37 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A3B93CE;
+        Sun,  2 Apr 2023 20:44:37 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id l184so7536316pgd.11;
+        Sun, 02 Apr 2023 20:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680493292;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FXg7HFo8IGOwcXz+xhhxTe6e3AAoC5T1g7VGxj4ZrTU=;
-        b=GQMh9Mc66DJQmu3ozynlsyvpfEs2UHpQQq3PLKnmT5DOBz73qqb2LSX9XWX8O9sNOk
-         LVF7JaOsCdxo4lB8gW09vEx411Dh8psSegvwjBc0H1QBD6TsX1fAm4zbhDfqYdsXrlGO
-         ugeUsJ4Ah/04bj/Tye0jIXFl47Y5UsDp/Iab6YNi2L21rLEMOfUZpGdSRZEYs8+6Wluj
-         lUEqJDdkp8n8fXf/4wIDaRjQdVZGKipQEnBJVDdEENGgEljZCE/chAFyN0b7+pxWqv+j
-         pA+mi6PxK+w72E6M/T0XHUraXxJJKjMQHYpVbXKAQKS56rb/QdhvI9qU3PBez8yLdasw
-         NR2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680493292;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1680493476;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FXg7HFo8IGOwcXz+xhhxTe6e3AAoC5T1g7VGxj4ZrTU=;
-        b=A0OkkuyJltpFR9naf2X1HK74OiJlTscY6Mrd2eJLls+xdGWIGZ4stS8T0caaE3HFpC
-         mf5uFAbJQ8eIslHwNRjNuorfwGWgdLpCFsizPB8EcJcjfDUps20skLPugjOOATgO2DsH
-         rjr2SBRu/AeR+OjH1MW9sJM52ibPQ2D+EkXWLc+/EuHN0W9nbA3Y2onLq6SHpUtZgihn
-         vjr0F26Csb39Xlm9HWI8AD6Agvt99M3o75hNJt4Jbv6qbEORh+uYIcmKWIEHTL7bFrMe
-         xOHgjBZeKwSJfS5HZP6JmIxEfvmil+J1/yYK0apbTGVAi6C/6No77+0MIoOOmoIgzGrS
-         mUNg==
-X-Gm-Message-State: AAQBX9dm3+INJ/mLNe8SUNvxdicBbBuAgSg1/22ru1hGaCgOrVrbFxG0
-        JJ1ZrinCgbxXmqQsefkZEID1Q2VP97c=
-X-Google-Smtp-Source: AKy350Zj8qEaJ+ZabiLCgRpf2zuuu+PDP+ydP0Spb/wnTC7MJGQSvPJqCeW61Xy8SbFBrmDX/0gbIQ==
-X-Received: by 2002:a17:902:f785:b0:19e:2860:3ae8 with SMTP id q5-20020a170902f78500b0019e28603ae8mr39191402pln.33.1680493292013;
-        Sun, 02 Apr 2023 20:41:32 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-12.three.co.id. [116.206.28.12])
-        by smtp.gmail.com with ESMTPSA id v19-20020a1709028d9300b0019d397b0f18sm5455896plo.214.2023.04.02.20.41.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 20:41:31 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 5795110679D; Mon,  3 Apr 2023 10:41:27 +0700 (WIB)
-Date:   Mon, 3 Apr 2023 10:41:27 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     kernel test robot <lkp@intel.com>,
-        Joe Stringer <joe@isovalent.com>, bpf@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
-        martin.lau@linux.dev, maxtram95@gmail.com, john.fastabend@gmail.com
-Subject: Re: [PATCH bpf-next v4 2/2] docs/bpf: Add LRU internals description
- and graph
-Message-ID: <ZCpK5wOI0ZEedhrr@debian.me>
-References: <20230401200651.1022113-2-joe@isovalent.com>
- <202304022107.IwHc05cs-lkp@intel.com>
+        bh=ABIEor5TUeJHEYPxHRe9G0HA55UHNeIWMnGb6d3/ufo=;
+        b=f0TkVixjbShwJwnR/hrlNRRc9BwBH0b435kvRm7U9rP7IKq5Ia1oZXCXK7uEGvQ18d
+         0QRO+414ydA1cOGQgSodGoIGMG0CaO7Iq3oRJvwTV+X3ZZPF0GGMKlaBn+Pi/WXM/31M
+         akn+QLbs+rcWP9z5OlnllAVIyu0u1EkVsTwxRCyq55UHkRbDVqDppMLdld4z+dXfBw7v
+         opyJ/PoHzEYcgpA/00VuHvryvq4ljWoj0cTodmeNWfIrcq8nPBc25HYGNIj1tsauCoJz
+         Ylcqvd2SWYYZrO0GDP6rAE6yn+3bQhdee1JwbKYczl8W5wrD0++tE/OPfhVV6O+p29x/
+         osxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680493476;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ABIEor5TUeJHEYPxHRe9G0HA55UHNeIWMnGb6d3/ufo=;
+        b=pjfEU8gwG3Bf6rLiGyxdMH3QDAU4k1uG2wt3x7LsTBq3KWHoFSNQ/d1lKVE9jDLnFt
+         TDQJqIE9XXGQ+jeO4kCh/7HuQG2pyuSBEJBffFDedxos8wFWFf7CW/1BPZx+JCPTKa9F
+         bx7dg6Hj97zMlpG7fj3tbAhEj5kYM54lAAZ2N8MBdbrJwGQeJEJiedJKWK07AUtMU8/g
+         GpKeLp3g+ZIr4DD9XBE+hc4+/wLuDG8CF1GBzyjMrWGvxTPAl3pOy1CDwEh/UFcU4nS7
+         jvIdE0uXtqoBJSBB/SzTFUNYOdMbvMxm+GQCwVP17V/ndovSChGxWctRlLSnNha33yGa
+         AnQg==
+X-Gm-Message-State: AAQBX9dz4BvBgNVHLYqxhhBeYDFRUd8h370mbyZLot03nXjRpdYW7Kml
+        RIMHgE+FpaYd/e3FqdbR9ZxuWm1hOjMb6s3OIG0=
+X-Google-Smtp-Source: AKy350bWZfPX2SN3YYi/hFG3M2gCBUBYb4wgj6bMZme/ir4hqykgeRQrFyjod1786jAdXSyrywhtwreTcmY1+T2ZsB0=
+X-Received: by 2002:a05:6a00:881:b0:62d:dd8d:56ac with SMTP id
+ q1-20020a056a00088100b0062ddd8d56acmr5249726pfj.0.1680493476386; Sun, 02 Apr
+ 2023 20:44:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ilTwJv3f+pqw84Rg"
-Content-Disposition: inline
-In-Reply-To: <202304022107.IwHc05cs-lkp@intel.com>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230313154132.3684181-1-zyytlz.wz@163.com> <CAAEAJfAjND_Bj9HRBae22eO7cG_Xm=AX93bL+CPEb24-sitWTg@mail.gmail.com>
+In-Reply-To: <CAAEAJfAjND_Bj9HRBae22eO7cG_Xm=AX93bL+CPEb24-sitWTg@mail.gmail.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Mon, 3 Apr 2023 11:44:24 +0800
+Message-ID: <CAJedcCyr2DEux=bSU+4Ksgz69ouEHebhmcmoCa2ysYB1YiOaNQ@mail.gmail.com>
+Subject: Re: [PATCH v3] media: hantro: fix use after free bug in hantro_remove
+ due to race condition
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, p.zabel@pengutronix.de,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        hverkuil@xs4all.nl
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> =E4=BA=8E2023=E5=B9=B43=E6=
+=9C=8831=E6=97=A5=E5=91=A8=E4=BA=94 10:38=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi Zheng,
+>
+> On Mon, Mar 13, 2023 at 12:42=E2=80=AFPM Zheng Wang <zyytlz.wz@163.com> w=
+rote:
+> >
+> > In hantro_probe, vpu->watchdog_work is bound with
+> > hantro_watchdog. Then hantro_end_prepare_run may
+> > be called to start the work.
+> >
+> > If we close the file or remove the module which will
+> > call hantro_release and hantro_remove to make cleanup,
+>
+> It's not possible to close the file or remove the module while a watchdog=
+ is
+> scheduled.
+>
+> That's because the watchdog is active only during a mem2mem job,
+> and the file won't be closed until the job is done.
+>
+> v4l2_m2m_ctx_release calls v4l2_m2m_cancel_jobw
+> which waits until the job is done.
+>
+> If you can confirm it's possible to remove or close the file
+> while a job is running, that would be a driver bug.
+>
+> Thanks for the patch, but it's not needed.
+>
 
---ilTwJv3f+pqw84Rg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Ezequiel,
 
-On Sun, Apr 02, 2023 at 09:47:49PM +0800, kernel test robot wrote:
-> All warnings (new ones prefixed by >>):
->=20
-> >> Warning: Orthogonal edges do not currently handle edge labels. Try usi=
-ng xlabels.
->=20
+Thanks for your detailed analysis. Got it :)
 
-Hi,
+Best regards,
+Zheng
 
-I can't reproduce the warning above. My system has graphviz 2.42.2
-installed (via Debian package). What graphviz version do kernel test
-robot have?
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---ilTwJv3f+pqw84Rg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCpK4wAKCRD2uYlJVVFO
-ozQcAQCj8UTVKu5oY+LWQWX0nnujGgsrcAZl1lt6077X3AedOAEAgYGC9Us8sPRg
-ZPi23Z3f3810sBuRzxVOC9SzIa6oqwc=
-=bziQ
------END PGP SIGNATURE-----
-
---ilTwJv3f+pqw84Rg--
+> Regards,
+> Ezequiel
+>
+> > there may be an unfinished work. The possible sequence
+> > is as follows, which will cause a typical UAF bug.
+> >
+> > The same thing will happen in hantro_release, and use
+> > ctx after freeing it.
+> >
+> > Fix it by canceling the work before cleanup in hantro_release.
+> >
+> > CPU0                  CPU1
+> >
+> >                     |hantro_watchdog
+> > hantro_remove     |
+> >   v4l2_m2m_release  |
+> >     kfree(m2m_dev); |
+> >                     |
+> >                     | v4l2_m2m_get_curr_priv
+> >                     |   m2m_dev->curr_ctx //use
+> >
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > ---
+> > v3:
+> > - use cancel_delayed_work_sync instead of cancel_delayed_work and add i=
+t to
+> > hantro_release suggested by Hans Verkuil
+> >
+> > v2:
+> > - move the cancel-work-related code to hantro_remove suggested by Hans =
+Verkuil
+> > ---
+> >  drivers/media/platform/verisilicon/hantro_drv.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/=
+media/platform/verisilicon/hantro_drv.c
+> > index b0aeedae7b65..86a4c0fa8c7d 100644
+> > --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> > +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> > @@ -597,6 +597,7 @@ static int hantro_release(struct file *filp)
+> >         struct hantro_ctx *ctx =3D
+> >                 container_of(filp->private_data, struct hantro_ctx, fh)=
+;
+> >
+> > +       cancel_delayed_work_sync(&ctx->dev->watchdog_work);
+> >         /*
+> >          * No need for extra locking because this was the last referenc=
+e
+> >          * to this file.
+> > @@ -1099,6 +1100,7 @@ static int hantro_remove(struct platform_device *=
+pdev)
+> >
+> >         v4l2_info(&vpu->v4l2_dev, "Removing %s\n", pdev->name);
+> >
+> > +       cancel_delayed_work_sync(&vpu->watchdog_work);
+> >         media_device_unregister(&vpu->mdev);
+> >         hantro_remove_dec_func(vpu);
+> >         hantro_remove_enc_func(vpu);
+> > --
+> > 2.25.1
+> >
