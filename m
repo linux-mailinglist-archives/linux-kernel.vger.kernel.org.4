@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90556D546B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018C56D546C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbjDCWDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 18:03:48 -0400
+        id S233675AbjDCWDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 18:03:51 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbjDCWDm (ORCPT
+        with ESMTP id S233609AbjDCWDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 18:03:42 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D03270F
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:03:41 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id p9-20020a170902e74900b001a1c7b2e7afso18011386plf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 15:03:41 -0700 (PDT)
+        Mon, 3 Apr 2023 18:03:44 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975261BF3
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:03:43 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5446a91c40cso305705697b3.18
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 15:03:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680559421;
+        d=google.com; s=20210112; t=1680559423;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kId3QKjERA5KglVeO1VKvGvv5azlGeISt3c2gJrYgyo=;
-        b=W/ze/sAlU7O+7GhoVMA+gO+b3zK1GLSBb2wxG7cqOl+9vjmm6QdV40GnYhvFBAr6we
-         6QpU1r1iDXHFCTCDI3KvZCA5Fdx66xMvZLtqAf+RggvSzScbqU6Qb+D3U4BXwhb/OMA1
-         mj7EUoKa/2hKudyISX9IDUT5QtGjglqN6doUhxmfcL1+w5LR9gcm9RCdAs4iQ3yY+fKw
-         8EP2M2Ss5aeWYRlPCW8BW8qsios85nr5jm7RooCKJYkRU/xUY3Tcdg08l4PT4At3QjPp
-         8RJrh+/qwzB7v9VlZ60Az/txlakHCjAKDKadt2/B61f8k1qeYBs4X+ujruMC4SFwxMjN
-         IvmA==
+        bh=9Hf88QAEgRalaH3f7thcio7vExcVqqDxAYa/aCaE9Jc=;
+        b=Qd1B7SbDQyGizezUFQyV/0tO/bOhj44AtZ1VKHtgOG9TbJavAnnMGZmO6zQIpqIoK7
+         5cj24hiW5m5RcceJDQ1KEplDfhRxIe4M8gmfj3L+NZAuLHvyis3MtYjzW6MZhBerb1QT
+         JbsSvLpI6syO5GW80nsYNqGOYj2kCCLCJxDrHY++EHRBCuORnOG3ZRIIIY9qF02f9mrK
+         7QKQBjFz8zSpKFSQE5ME0/wr0Ah4Zv+Tdpoq6l9nLH2lZJPiIROIUeme5UI6HVL7rK6b
+         PMhT9C0HP1QYba587rjt9xa6OsG8uX3e11ytS9ZKFnspyAhVnb6ce2SHS6u9IWMy0H74
+         szug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680559421;
+        d=1e100.net; s=20210112; t=1680559423;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kId3QKjERA5KglVeO1VKvGvv5azlGeISt3c2gJrYgyo=;
-        b=JZm+cP9rP79FBj0yIznPWl6LmmSiTI/fNFMRxHEQdnI1ZHejhfGinWyyzNghPakpDi
-         8DZ7zOQ69wN/fsHe/Hou5D1S6LINbjKg9ocF0ylPBoN2o5SADcz2CwsGk7RKvUdoasxI
-         7BkHHBbSMVtOuNNanpQQ6/L0M4afFWow8HDodUPSRgL0XW7nM+3y38jW++nnauoXiUoE
-         QiCmGMkf4lJ3NQCBJlOi2tbBk5GV3TZjr7iuinFip2zVvjjeejiYXnjY2RbK67Q/PCV/
-         uiTEf2i9t7h32Vo/iT2MaEv5CtfaAllyHZ3Ve60wNAwPPQLR3xJIGBrU962M96jA2qhB
-         Y/wQ==
-X-Gm-Message-State: AAQBX9dZrVdlKUxTzPKNVOGHOKp+zImpTEe/XqjQT1itObWQEGDGK7wb
-        U10Iuy/Er8dyvnC/XWYAIgBpOZNOiDIPMU06
-X-Google-Smtp-Source: AKy350bROYdy/7K8uGxBM0X/ZxH2AG6/5IpCycN9GV2HdX4MbVmRhF2WLCfVj205eUvkzCs7+3h4yAAbVuROFoGd
+        bh=9Hf88QAEgRalaH3f7thcio7vExcVqqDxAYa/aCaE9Jc=;
+        b=3DulaFOOceirPGK7isgrgoRwFREToXZL4+w0qsYE0Zv5YDjWC+A1ANPfxfPr71QFIz
+         OicO5fmMK7jNHzgehbOlddLK+Wxf1o9PLeiwtmVbkW8X6vdZEX02WooqStsX4EFlrbNo
+         ayIOhV2WqI67iGzS4V8ojZE4nfWrfFdUGQIdPvFVknBLxuglR0M/R6ZqSzi/yGNHSZW4
+         jPk2K2hbzFLmCTFe5u8wvlcxVIgvUmqu/vNfjEYo0BSa/jC9KM35+NVunmJ+4UCIq+WP
+         cyr1Q/zqVuOvc+YXrVHhsHTvhqO9EN3t546MNj5p8TlonjYe7p9me01LhNJAtu6nPloR
+         zaSQ==
+X-Gm-Message-State: AAQBX9ehX78i5t+yBQAcM1zq6lkHU2R79AuLyK0X5lEfGJV2yI81CVEZ
+        +LY5o/RmZDANCYIK+g/CU50NMhNdCPHXtQT4
+X-Google-Smtp-Source: AKy350Yk7PN55oyTS/2Ex0GZoWZBdH4qO4jUdn7c2dJd2J2mTTnpo7+qXB1LBcPp06lmU8+Do/T+aXIn4r5a27Uq
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a63:f307:0:b0:50c:bd0:eb8c with SMTP id
- l7-20020a63f307000000b0050c0bd0eb8cmr39435pgh.6.1680559421112; Mon, 03 Apr
- 2023 15:03:41 -0700 (PDT)
-Date:   Mon,  3 Apr 2023 22:03:33 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a81:b60f:0:b0:545:bade:c57e with SMTP
+ id u15-20020a81b60f000000b00545badec57emr288637ywh.5.1680559422857; Mon, 03
+ Apr 2023 15:03:42 -0700 (PDT)
+Date:   Mon,  3 Apr 2023 22:03:34 +0000
 In-Reply-To: <20230403220337.443510-1-yosryahmed@google.com>
 Mime-Version: 1.0
 References: <20230403220337.443510-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230403220337.443510-2-yosryahmed@google.com>
-Subject: [PATCH mm-unstable RFC 1/5] writeback: move wb_over_bg_thresh() call
- outside lock section
+Message-ID: <20230403220337.443510-3-yosryahmed@google.com>
+Subject: [PATCH mm-unstable RFC 2/5] memcg: flush stats non-atomically in mem_cgroup_wb_stats()
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christian Brauner <brauner@kernel.org>,
@@ -77,81 +76,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wb_over_bg_thresh() calls mem_cgroup_wb_stats() which invokes an rstat
-flush, which can be expensive on large systems. Currently,
-wb_writeback() calls wb_over_bg_thresh() within a lock section, so we
-have to make the rstat flush atomically. On systems with a lot of
-cpus/cgroups, this can cause us to disable irqs for a long time,
-potentially causing problems.
-
-Move the call to wb_over_bg_thresh() outside the lock section in
-preparation to make the rstat flush in mem_cgroup_wb_stats() non-atomic.
-The list_empty(&wb->work_list) should be okay outside the lock section
-of wb->list_lock as it is protected by a separate lock (wb->work_lock),
-and wb_over_bg_thresh() doesn't seem like it is modifying any of the b_*
-lists the wb->list_lock is protecting. Also, the loop seems to be
-already releasing and reacquring the lock, so this refactoring looks
-safe.
+The previous patch moved the wb_over_bg_thresh()->mem_cgroup_wb_stats()
+code path in wb_writeback() outside the lock section. We no longer need
+to flush the stats atomically. Flush the stats non-atomically.
 
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 ---
- fs/fs-writeback.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ mm/memcontrol.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-index 195dc23e0d831..012357bc8daa3 100644
---- a/fs/fs-writeback.c
-+++ b/fs/fs-writeback.c
-@@ -2021,7 +2021,6 @@ static long wb_writeback(struct bdi_writeback *wb,
- 	struct blk_plug plug;
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 3d040a5fa7a35..bdd52fe9e7e4b 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -4637,11 +4637,7 @@ void mem_cgroup_wb_stats(struct bdi_writeback *wb, unsigned long *pfilepages,
+ 	struct mem_cgroup *memcg = mem_cgroup_from_css(wb->memcg_css);
+ 	struct mem_cgroup *parent;
  
- 	blk_start_plug(&plug);
--	spin_lock(&wb->list_lock);
- 	for (;;) {
- 		/*
- 		 * Stop writeback when nr_pages has been consumed
-@@ -2046,6 +2045,9 @@ static long wb_writeback(struct bdi_writeback *wb,
- 		if (work->for_background && !wb_over_bg_thresh(wb))
- 			break;
+-	/*
+-	 * wb_writeback() takes a spinlock and calls
+-	 * wb_over_bg_thresh()->mem_cgroup_wb_stats(). Do not sleep.
+-	 */
+-	mem_cgroup_flush_stats_atomic();
++	mem_cgroup_flush_stats();
  
-+
-+		spin_lock(&wb->list_lock);
-+
- 		/*
- 		 * Kupdate and background works are special and we want to
- 		 * include all inodes that need writing. Livelock avoidance is
-@@ -2075,13 +2077,19 @@ static long wb_writeback(struct bdi_writeback *wb,
- 		 * mean the overall work is done. So we keep looping as long
- 		 * as made some progress on cleaning pages or inodes.
- 		 */
--		if (progress)
-+		if (progress) {
-+			spin_unlock(&wb->list_lock);
- 			continue;
-+		}
-+
- 		/*
- 		 * No more inodes for IO, bail
- 		 */
--		if (list_empty(&wb->b_more_io))
-+		if (list_empty(&wb->b_more_io)) {
-+			spin_unlock(&wb->list_lock);
- 			break;
-+		}
-+
- 		/*
- 		 * Nothing written. Wait for some inode to
- 		 * become available for writeback. Otherwise
-@@ -2093,9 +2101,7 @@ static long wb_writeback(struct bdi_writeback *wb,
- 		spin_unlock(&wb->list_lock);
- 		/* This function drops i_lock... */
- 		inode_sleep_on_writeback(inode);
--		spin_lock(&wb->list_lock);
- 	}
--	spin_unlock(&wb->list_lock);
- 	blk_finish_plug(&plug);
- 
- 	return nr_pages - work->nr_pages;
+ 	*pdirty = memcg_page_state(memcg, NR_FILE_DIRTY);
+ 	*pwriteback = memcg_page_state(memcg, NR_WRITEBACK);
 -- 
 2.40.0.348.gf938b09366-goog
 
