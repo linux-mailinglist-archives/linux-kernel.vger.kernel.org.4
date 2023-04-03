@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209B76D438B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A606D4392
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbjDCLc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
+        id S232492AbjDCLgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbjDCLc0 (ORCPT
+        with ESMTP id S232136AbjDCLgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:32:26 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7E659E1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:32:24 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id q19so25920461wrc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:32:24 -0700 (PDT)
+        Mon, 3 Apr 2023 07:36:03 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0439E12CC6
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:35:59 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso17917428wmo.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:35:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680521542;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8oxN6OsSAvDJ/9XUkNDJfOZTdcdSQucx06S047EyHBQ=;
-        b=C6gWZp40tfEpPfYSrgRrnFTseXhT17/N3/Rd1XTWX8SljHQdb+j8qyQzRCnxitNxkA
-         mGbwHFXQb5ITNf+w/UsK+tl7GA4WaEklHtP2Gk9OwGoV3bsBkLWXg6+vzsu+xjPFbcKq
-         istoMqkmpzZZTsjxCqMlUNeuaV+wM4NiuoKM26cYhKEeXGORCVFktJRSeXU6tkQRb9U1
-         fTHAQpbiSbu2xdOJqzmannTP/O0Dmjj025fN1OI4ac9mQVEmT+vQLQuhMcUE5nvLMEYd
-         wWrJ1fH+ucZjqsu2MSSndsASCTdtDEyv8opVMnDUijCXg5DG/y1MPRlxQHr3wfMr1A+h
-         +W8g==
+        d=chromium.org; s=google; t=1680521758;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i0HG+W1Nr/Zm5XRUMWQUndq8bum7JqRDYebIXh9Qbe0=;
+        b=ADin8NDRYe5sQ0hrQPtqSRLSxBB8ihn7EpyAUhlsyrOcCkUj61zdV9iPRft+pFLa0x
+         E09qWvv0++B5plr6iXhNTTdYGo23EMPXVy1xwh6WqY7AGjsf4MFmGNH4LhqH19kBPAP7
+         dVdDRTCTSY0MHjb/HLXDSl+4C4hbkxyfphfSE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680521542;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8oxN6OsSAvDJ/9XUkNDJfOZTdcdSQucx06S047EyHBQ=;
-        b=kZiHIS1Vecwapi090qrx445od/RzWRNXXmPD/92x3a7f34fWkhdXuhHb/d5weZrx2X
-         c35qeHIUlLX6DnccnZC7aNZXbpk6UamEmcXSFpBEjglFJcgdD1MiqZXZi0NZxRIBPE2V
-         pcTzzjbFxygM2FEfXFS/KNXCASh6Z1q04jKMO6JVmN7Zo98u/Ntb1zY84F8P31ileM79
-         oc9B3MfWJ5RbZLOSQ0mRMlxsXOak9dwLbK3O2l2WcweBZ45+qAFy6uIyWLieUPafGJ8V
-         EId12q4eMI8uDN2bM1IOPCpxJ6MR4+2r+0S8n+PXPcJNmMTYj6DGdziD9anGZ9nVlPSA
-         +R3Q==
-X-Gm-Message-State: AAQBX9eGOSvd35zRIpBMT/drGeyYhnNYpiT8uZf2miaiHuAxVaMshLwm
-        N16hfqbz86DIyFOqCY3an8vSIg==
-X-Google-Smtp-Source: AKy350bJaiA62l9quKwVmDV9foxfGXFovA3zqzv8sR+okw5JpFGfalk8OYcb0L9rxeEC7w5V9ffF/w==
-X-Received: by 2002:a5d:4848:0:b0:2ce:a9e9:490b with SMTP id n8-20020a5d4848000000b002cea9e9490bmr24826782wrs.31.1680521542472;
-        Mon, 03 Apr 2023 04:32:22 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:8052:c9eb:6b69:e69a? ([2a05:6e02:1041:c10:8052:c9eb:6b69:e69a])
-        by smtp.googlemail.com with ESMTPSA id r1-20020a5d4941000000b002cfefa50a8esm9527094wrs.98.2023.04.03.04.32.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 04:32:22 -0700 (PDT)
-Message-ID: <6e3c59c3-8ad0-9c53-62a4-7be6f55a7c02@linaro.org>
-Date:   Mon, 3 Apr 2023 13:32:21 +0200
+        d=1e100.net; s=20210112; t=1680521758;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i0HG+W1Nr/Zm5XRUMWQUndq8bum7JqRDYebIXh9Qbe0=;
+        b=D9EmlK/dcXmnWw4brTIC72yPheMFKEWtBECxDsk9SXWUyMm09cV+ObDg93CJx9/Xfz
+         jfpBqwgyemaUJ0De88lixxQeCyvsESBf1zKFmyfamcsUsBxt+XQHAtbFOA3oDgJu4guD
+         ESf6VV+t2saG6BVxX1QxBK6YeIqjQDBNCFomli1Rv/wH22ri9VPQYH/qax6LsHv6Qz/k
+         5ldFu5EmPC5YgSUUc4OIh61MD+wEMk5H+6r2YHabC1N6Y7D2n+DGmqz8gyNWIYEC9YnM
+         B85F+55IsaGI48QiiT0viHhxjKDMvkAdZwnrnk55UcGcDZT4UKK5aKR62B9e0w69AOOK
+         jxYw==
+X-Gm-Message-State: AO0yUKXAj9Pxpe2qfOvWBwnhSg0GScNjsQifhZWy+805Bru0+w9TS4Li
+        5ihoqCnvBYjCxhzIjo79R5LU4Q==
+X-Google-Smtp-Source: AK7set/4kJW+CgDqrDOz4wXVt98om3F+A+nmj93tUu871u1MurFxeTkkxPOfkG6PPH56agG15HqArw==
+X-Received: by 2002:a05:600c:2312:b0:3ee:b3bf:5f7c with SMTP id 18-20020a05600c231200b003eeb3bf5f7cmr27217057wmo.23.1680521758197;
+        Mon, 03 Apr 2023 04:35:58 -0700 (PDT)
+Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:b5a2:4ffd:8524:ac1])
+        by smtp.gmail.com with ESMTPSA id s15-20020a05600c45cf00b003eb2e33f327sm29841410wmo.2.2023.04.03.04.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 04:35:57 -0700 (PDT)
+From:   Florent Revest <revest@chromium.org>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
+        jolsa@kernel.org, xukuohai@huaweicloud.com, lihuafei1@huawei.com,
+        Florent Revest <revest@chromium.org>
+Subject: [PATCH v5 0/4] Add ftrace direct call for arm64
+Date:   Mon,  3 Apr 2023 13:35:48 +0200
+Message-Id: <20230403113552.2857693-1-revest@chromium.org>
+X-Mailer: git-send-email 2.40.0.423.gd6c402a77b-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drivers: thermal: mediatek: fix of_iomap leak in
- mtk_thermal_probe
-Content-Language: en-US
-To:     Kang Chen <void0red@hust.edu.cn>, dzm91@hust.edu.cn
-Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        daniel@makrotopia.org, rdunlap@infradead.org, bchihi@baylibre.com,
-        henry.yen@mediatek.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        hust-os-kernel-patches@googlegroups.com, void0red@gmail.com,
-        error27@gmail.com
-References: <20230403103855.3601901-1-void0red@hust.edu.cn>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230403103855.3601901-1-void0red@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,47 +70,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/2023 12:38, Kang Chen wrote:
-> Smatch reports:
-> 1. mtk_thermal_probe() warn: 'apmixed_base' from of_iomap() not released.
-> 2. mtk_thermal_probe() warn: 'auxadc_base' from of_iomap() not released.
-> 
-> The original code forgets to release iomap resource when handling errors,
-> fix it through unified error handling code at the end of mtk_thermal_probe.
-> 
-> Fixes: 89945047b166 ("thermal: mediatek: Add tsensor support for V2 thermal system")
-> Signed-off-by: Kang Chen <void0red@hust.edu.cn>
-> ---
-> I think the this should be released on the success path but I was too
-> scared of breaking things. Let me know and I will resend if people want
-> me to do that.
-> 
->   drivers/thermal/mediatek/auxadc_thermal.c | 18 ++++++++++++------
->   1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-> index ab730f9552d0..741c7d8151bd 100644
-> --- a/drivers/thermal/mediatek/auxadc_thermal.c
-> +++ b/drivers/thermal/mediatek/auxadc_thermal.c
-> @@ -1149,13 +1149,15 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   
->   	if (auxadc_phys_base == OF_BAD_ADDR) {
->   		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
-> -		return -EINVAL;
-> +		ret = -EINVAL;
-> +		goto err_iounmap_auxadc;
->   	}
+This series adds ftrace direct call support to arm64.
+This makes BPF tracing programs (fentry/fexit/fmod_ret/lsm) work on arm64.
 
-Better to use the devm_of_iomap() variant
+It is meant to be taken by the arm64 tree but it depends on the
+trace-direct-v6.3-rc3 tag of the linux-trace tree:
+  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+That tag was created by Steven Rostedt so the arm64 tree can pull the prior work
+this depends on. [1]
 
-And also take the opportunity to use devm_clk_get_enabled(), remove 
-clk_prepare_enable() and the rollbacking in the err_disable_clk_per*: 
-label sections.
+Thanks to the ftrace refactoring under that tag, an ftrace_ops backing a ftrace
+direct call will only ever point to *one* direct call. This means we can look up
+the direct called trampoline address stored in the ops from the ftrace_caller
+trampoline in the case when the destination would be out of reach of a BL
+instruction at the ftrace callsite. This fixes limitations of previous attempts
+such as [2].
+
+This series has been tested on arm64 with:
+1- CONFIG_FTRACE_SELFTEST
+2- samples/ftrace/*.ko (cf: patch 3)
+3- tools/testing/selftests/bpf/test_progs (cf: patch 4)
+
+Changes since v4 [3]:
+- *Actually* added "BTI C" instructions at the beginning of each ftrace direct
+  call sample (v4 was supposed to do that but I forgot to git commit --amend...)
+
+1: https://lore.kernel.org/all/ZB2Nl7fzpHoq5V20@FVFF77S0Q05N/
+2: https://lore.kernel.org/all/20220913162732.163631-1-xukuohai@huaweicloud.com/
+3: https://lore.kernel.org/bpf/20230403112059.2749695-1-revest@chromium.org/
+
+Florent Revest (4):
+  arm64: ftrace: Add direct call support
+  arm64: ftrace: Simplify get_ftrace_plt
+  arm64: ftrace: Add direct call trampoline samples support
+  selftests/bpf: Update the tests deny list on aarch64
+
+ arch/arm64/Kconfig                           |  6 ++
+ arch/arm64/include/asm/ftrace.h              | 22 +++++
+ arch/arm64/kernel/asm-offsets.c              |  6 ++
+ arch/arm64/kernel/entry-ftrace.S             | 90 ++++++++++++++++----
+ arch/arm64/kernel/ftrace.c                   | 46 +++++++---
+ samples/ftrace/ftrace-direct-modify.c        | 34 ++++++++
+ samples/ftrace/ftrace-direct-multi-modify.c  | 38 +++++++++
+ samples/ftrace/ftrace-direct-multi.c         | 23 +++++
+ samples/ftrace/ftrace-direct-too.c           | 26 ++++++
+ samples/ftrace/ftrace-direct.c               | 24 ++++++
+ tools/testing/selftests/bpf/DENYLIST.aarch64 | 82 ++----------------
+ 11 files changed, 295 insertions(+), 102 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.40.0.423.gd6c402a77b-goog
 
