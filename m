@@ -2,148 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FF36D42E3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E326D4279
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjDCLE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
+        id S231679AbjDCKsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbjDCLEz (ORCPT
+        with ESMTP id S231433AbjDCKsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:04:55 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Apr 2023 04:04:52 PDT
-Received: from helium.impl.it (helium.impl.it [IPv6:2a01:4f8:c0c:b78a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E241F30E4;
-        Mon,  3 Apr 2023 04:04:52 -0700 (PDT)
+        Mon, 3 Apr 2023 06:48:33 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF1C83D7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:48:30 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id s20so9539494ljp.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 03:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680518909;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4n9yhzm1Rmk8D25FTiH0wOJ+GO4nCT0aVo2ehKd/0bI=;
+        b=c0uJzu1LiPBut0N7W8zNzlAV9wmMrZZZpbLe/3ycBlOFIuMn0P5nX3QLN31VNxOVps
+         ppMd6IWf3/FQ99ALwIPjufG53hlW0NOaO9kfCdzuagDp3o5/4+wANyp0vWasLbujmCmA
+         PUvisxJBeLuctt5Y/FnhZ1VbuudXDFYUEwRKj0D1wkz/T09+BkHogFOcvQ7ErrrcDrY2
+         v4SjUKlP9XTkcXhdPM1OlC6kXUqiP4jNSbb+TP4rZOeqN9z12ks8VP3Wa80F83Hbe3zC
+         cTXQhrN5dRWJ7ox445WJftUWLlFDLHPraL+HlIrf9bVUvCGKNGbsMqUOPa6fhkHCjLSM
+         f3uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680518909;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4n9yhzm1Rmk8D25FTiH0wOJ+GO4nCT0aVo2ehKd/0bI=;
+        b=QfBK5Lsl3sEyPjWNeNEqp+jSaekYu8zOd04IltgapbIZTVWydBouEtwssnhXyLgL3+
+         l1kRLTHWtg55/DGtQLxuK7+Ldv7xGMFgh3w6vEmwqZpCZ+A9VeIqIUep4qk841bgGAXU
+         urd3Ovwqrze8darORQuA95wcaCApYsmUihR1iDWXnz4HqjRmZW0e/C9pQpwem7P1x5oq
+         L2MSNYe7/aMPKnApvIBEbv3XvskYmkFM1MZ1wA4qyezDtkGTwnp3wIZ2amYQzFRLjpbf
+         RJ4amoQ4GOf2tacLvrJTy4XFyE9AFtv/db2e6xvlbYmSSKqADi7MqbJksmnZyI8DW11W
+         WjPA==
+X-Gm-Message-State: AAQBX9esSvsQ8//dc/OsIGRtTSt4gqwvgk7OySOUa39ODX4R+nd4MPwg
+        ywO4E5OUM5DN3PSSNOGa4BP6dw==
+X-Google-Smtp-Source: AKy350b9py/sij6PkWPceiL0IU5yAJ5hg6zA+et/1jOZ9VZhnEZINtiQQwxVTa7ptGeT1rQVEva9GQ==
+X-Received: by 2002:a2e:b043:0:b0:295:c491:3b16 with SMTP id d3-20020a2eb043000000b00295c4913b16mr4737035ljl.7.1680518909142;
+        Mon, 03 Apr 2023 03:48:29 -0700 (PDT)
+Received: from [192.168.1.101] (abxj135.neoplus.adsl.tpnet.pl. [83.9.3.135])
+        by smtp.gmail.com with ESMTPSA id g25-20020a2e9cd9000000b00298a8527806sm1688302ljj.93.2023.04.03.03.48.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 03:48:28 -0700 (PDT)
+Message-ID: <463a9885-741e-a44a-c6c2-7cf5b0560d2d@linaro.org>
+Date:   Mon, 3 Apr 2023 12:48:27 +0200
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=impl.it; s=mail;
-        t=1680518784; bh=yiiBJB/HL/vbuNJbGEqXtHTv47wuBBL4QEy8T9nez6k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=O33SscOAJda+GYtlIATC50gPolm+E7ASO6fzicTw5XiVfVG8sZfyeMsjWqDf43+7U
-         CVDpaQGOeqEsFh688PGtoWJM6w6xe1wCQuf/LUHXIhL4rhblPUJDcFeqTXHsBnmIOE
-         1+9RKsv0b67Wri1n2RxGUey9mDp6GVp1zF8a+Ye0=
-Date:   Mon, 03 Apr 2023 12:46:24 +0200
-From:   Benjamin Asbach <asbachb.kernel@impl.it>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Benjamin Asbach <asbachb.kernel@impl.it>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mark Pearson <markpearson@lenovo.com>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Mark Gross <markgross@kernel.org>,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] platform/x86: thinkpad_acpi: Add missing T14s Gen1 type
- to s2idle quirk list
-In-Reply-To: <a192e386-5385-d18a-9816-273e433eb833@redhat.com>
-References: <20230331232447.37204-1-asbachb.kernel@impl.it>
- <a192e386-5385-d18a-9816-273e433eb833@redhat.com>
-Message-ID: <4c4fe8ffd12c289308f9f7f6171a44c0@impl.it>
-X-Sender: asbachb.kernel@impl.it
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v5 05/11] dt-bindings: qcom-qce: Fix compatible
+ combinations for SM8150 and IPQ4019 SoCs
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, rfoss@kernel.org, neil.armstrong@linaro.org
+References: <20230402100509.1154220-1-bhupesh.sharma@linaro.org>
+ <20230402100509.1154220-6-bhupesh.sharma@linaro.org>
+ <21eaeea4-4f2e-5ce5-c75b-d74ded8e6e4c@linaro.org>
+ <CAH=2NtzKGxzmCq2JTajxWoeRFR+mPnFY3YF5mn0tGt30T7SJoQ@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAH=2NtzKGxzmCq2JTajxWoeRFR+mPnFY3YF5mn0tGt30T7SJoQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-03 12:03, Hans de Goede wrote:
-> Hi,
-> 
-> On 4/1/23 01:24, Benjamin Asbach wrote:
->>> Lenovo laptops that contain NVME SSDs across a variety of generations 
->>> have
->>> trouble resuming from suspend to idle when the IOMMU translation 
->>> layer is
->>> active for the NVME storage device.
->>> 
->>> This generally manifests as a large resume delay or page faults. 
->>> These
->>> delays and page faults occur as a result of a Lenovo BIOS specific 
->>> SMI
->>> that runs during the D3->D0 transition on NVME devices.
->> 
->> Link: 
->> https://lore.kernel.org/all/20220503183420.348-1-mario.limonciello@amd.com/
->> 
->> As Lenovo distributes T14s Gen1 laptops with different product names
->> a missing one is added by this patch.
->> 
->> Note: Based on lenovo support page there might be some more variants 
->> which
->> are not represented in s2idle quirk list.
-> 
-> Can you provide some more in info on this? Then Mark can maybe check
-> if we need to add more models ?
 
-Sure. When you go to https://pcsupport.lenovo.com/us/en/ and type in any 
-of the
-models in that quirk list - for example `T14 Gen2` beside `20XK` there's 
-also `20XL`.
-I assume - but cannot confirm - that the other types suffer the same 
-firmware issue.
 
-For my model the issue only arised after I upgraded the original NVMe 
-with a bigger one.
+On 3.04.2023 08:15, Bhupesh Sharma wrote:
+> On Mon, 3 Apr 2023 at 11:06, Vladimir Zapolskiy
+> <vladimir.zapolskiy@linaro.org> wrote:
+>>
+>> On 4/2/23 13:05, Bhupesh Sharma wrote:
+>>> Currently the compatible list available in 'qce' dt-bindings does not
+>>> support SM8150 and IPQ4019 SoCs directly which may lead to potential
+>>> 'dtbs_check' error(s).
+>>>
+>>> Fix the same.
+>>>
+>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>>> ---
+>>>   Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 6 ++++++
+>>>   1 file changed, 6 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+>>> index e375bd981300..90ddf98a6df9 100644
+>>> --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+>>> +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+>>> @@ -24,6 +24,12 @@ properties:
+>>>           deprecated: true
+>>>           description: Kept only for ABI backward compatibility
+>>>
+>>> +      - items:
+>>> +          - enum:
+>>> +              - qcom,ipq4019-qce
+>>> +              - qcom,sm8150-qce
+>>> +          - const: qcom,qce
+>>> +
+>>>         - items:
+>>>             - enum:
+>>>                 - qcom,ipq6018-qce
+>>
+>> Two commit tags given for v2 are missing.
+> 
+> Cannot get your comment. Please be more descriptive.
 
-Greetings,
-Benjamin
+https://lore.kernel.org/linux-arm-msm/333081a2-6b31-3fca-1a95-4273b5a46fb7@linaro.org/
 
-> Mark, generally speaking it may help to do a DMI_EXACT_MATCH on
-> DMI_PRODUCT_VERSION with ThinkPads ? That contains the human
-> readable model string instead of things like "20UJ", and I guess
-> that we want to e.g. apply the s2idle quirk to all "T14s Gen1 AMD"
-> ThinkPads.
+Konrad
 > 
->> 
->> Signed-off-by: Benjamin Asbach <asbachb.kernel@impl.it>
->> Tested-by: Benjamin Asbach <asbachb.kernel@impl.it>
-> 
-> Thank you for your patch, I've applied this patch to my fixes
-> branch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
-> 
-> I will include this patch in my next fixes pull-req to Linus
-> for the current kernel development cycle.
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
-> 
-> 
->> 
->> Link: https://bbs.archlinux.org/viewtopic.php?pid=2084655#p2084655
->> ---
->>  drivers/platform/x86/thinkpad_acpi.c | 9 +++++++++
->>  1 file changed, 9 insertions(+)
->> 
->> diff --git a/drivers/platform/x86/thinkpad_acpi.c 
->> b/drivers/platform/x86/thinkpad_acpi.c
->> index 32c10457399e..57428d7a392d 100644
->> --- a/drivers/platform/x86/thinkpad_acpi.c
->> +++ b/drivers/platform/x86/thinkpad_acpi.c
->> @@ -4478,6 +4478,15 @@ static const struct dmi_system_id fwbug_list[] 
->> __initconst = {
->>  			DMI_MATCH(DMI_PRODUCT_NAME, "20UH"),
->>  		}
->>  	},
->> +	{
->> +		.ident = "T14s Gen1 AMD",
->> +		.driver_data = &quirk_s2idle_bug,
->> +		.matches = {
->> +			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "20UJ"),
->> +		}
->> +	},
->> +
->>  	{
->>  		.ident = "P14s Gen1 AMD",
->>  		.driver_data = &quirk_s2idle_bug,
+> Thanks,
+> Bhupesh
