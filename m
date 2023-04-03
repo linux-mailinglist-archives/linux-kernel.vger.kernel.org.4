@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D886D48E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A271E6D48F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233537AbjDCOct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S233608AbjDCOdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbjDCOcq (ORCPT
+        with ESMTP id S233543AbjDCOdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:32:46 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B6CE55;
-        Mon,  3 Apr 2023 07:32:40 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BBD9B6603105;
-        Mon,  3 Apr 2023 15:32:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680532359;
-        bh=1+OmtAU+X5ofND6+HKtIRQa4thdWvYXhzR1UpKwsmAw=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=liYpJVhXmyjhlDv/Y1XYxp/UX64teQeHTO9Gd0cJEY9Nz4Tk6L3tqoH6NBrb1O+nf
-         CYTgCZrj+BtbzkcMEYCzgQKnDQebi2aZH2FwJkQav9PxmpP8KqMU9ruKrY41pQHpIw
-         M23vaSHAzGEMxkhSeDmMtIaKwua4OFctdCVQtP3gPoMhAOcymu3arJVDiCMCMfPmQZ
-         nGCZO1E2v2TSQRFpGOSjucwF11JCKGaqoxmOKGu5m1VTi/eI55ySNpOdNNGlgLFt6p
-         hoerbHx+M7r1x9WziipAcedknNvKxPOdiVvbM7yRyeM3plnQrBWQLzpU9jmZxFSRh4
-         waWBQk8nFWUmA==
-Message-ID: <dcd79e14-d9df-39c1-5465-4e9d71221659@collabora.com>
-Date:   Mon, 3 Apr 2023 17:32:35 +0300
+        Mon, 3 Apr 2023 10:33:12 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 02F45D4F83
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:33:03 -0700 (PDT)
+Received: (qmail 326274 invoked by uid 1000); 3 Apr 2023 10:33:03 -0400
+Date:   Mon, 3 Apr 2023 10:33:03 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in sisusb_send_bulk_msg/usb_submit_urb
+Message-ID: <f396acba-2241-4f62-98ff-ba97ea1a7139@rowland.harvard.edu>
+References: <00000000000096e4f905f81b2702@google.com>
+ <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
+ <7b1f757b-b626-5d49-354e-343e040b8762@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Convert to DT schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     kernel@collabora.com, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
- <20230403105052.426135-2-cristian.ciocaltea@collabora.com>
- <168052514639.463695.9544022277060710805.robh@kernel.org>
-Content-Language: en-US
-In-Reply-To: <168052514639.463695.9544022277060710805.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7b1f757b-b626-5d49-354e-343e040b8762@suse.com>
+X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/3/23 16:10, Rob Herring wrote:
-> 
-> On Mon, 03 Apr 2023 13:50:51 +0300, Cristian Ciocaltea wrote:
->> Convert the PWM fan bindings to DT schema format.
->>
->> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
->> ---
->>   .../devicetree/bindings/hwmon/pwm-fan.txt     |  68 +----------
->>   .../devicetree/bindings/hwmon/pwm-fan.yaml    | 109 ++++++++++++++++++
->>   2 files changed, 110 insertions(+), 67 deletions(-)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->>
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230403105052.426135-2-cristian.ciocaltea@collabora.com
+On Mon, Apr 03, 2023 at 10:54:05AM +0200, Oliver Neukum wrote:
 > 
 > 
-> pwm-fan: 'cooling-max-state', 'cooling-min-state' do not match any of the regexes: 'pinctrl-[0-9]+'
-> 	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb
+> On 30.03.23 17:34, Alan Stern wrote:
+> > Reference: https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
+> > 
+> > The sisusbvga driver just assumes that the endpoints it uses will be
+> > present, without checking.  I don't know anything about this driver, so
+> > the fix below may not be entirely correct.
 > 
+> Hi,
+> 
+> this patch by itself looks good to me.
+> 
+> But the need for it is problematic. Do we have any vendor specific driver
+> that could get away without an equivalent to this patch without showing
+> an equivalent bug?
 
-The only references to the offending cooling-{min|max}-state are located 
-in a few DTS files. Assuming they are obsolete, may I simply drop them?
+Probably not.  Which is why adding this checking infrastructure to the 
+USB core seems like a good idea, even though implementing it in each of 
+the vendor-specific drivers may take quite a while.
 
-$ git grep "cooling-.*-state"
+>  If so, why do we have a generic matching code, although
+> it is always insufficient?
 
-arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi: cooling-min-state = <0>;
-arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi: cooling-max-state = <3>;
-arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts: cooling-min-state = <0>;
-arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts: cooling-max-state = <3>;
-arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts:        cooling-min-state = <0>;
-arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts:        cooling-max-state = <3>;
-arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dtsi:        cooling-min-state = <0>;
-arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dtsi:        cooling-max-state = <9>;
+(I assume you're referring to usb_match_device() and related routines.)
+
+Not sufficient, perhaps, but necessary.  That is, in addition to 
+checking the available endpoints, we also have to make sure the device 
+has the right vendor ID, product ID, and so on to match the driver.
+
+> What is the purpose of a generic binding interface in sysfs if every probe()
+> method blocks it? Allowing a generic probe looks like a misdesign under these
+> circumstances. You'd really want to add IDs to drivers.
+
+I really don't understand what you're asking.  If you're talking about 
+the "bind" and "unbind" files in /sys/bus/*/drivers/*/, they are there 
+to allow manual binding and unbinding of devices.  Even though only one 
+driver is likely to bind to any particular device.  (Furthermore, all 
+this was true even before we started being careful about checking 
+endpoints numbers and types.)
+
+And we _do_ have IDs in drivers; that's what the .id_table member of 
+struct usb_driver is for.
+
+Alan Stern
