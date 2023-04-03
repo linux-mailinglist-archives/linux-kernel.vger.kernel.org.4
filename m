@@ -2,82 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4506D43D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA1C6D43D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbjDCLuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
+        id S232207AbjDCLua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbjDCLuW (ORCPT
+        with ESMTP id S231906AbjDCLu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:50:22 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CD830F6
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:50:20 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id n10-20020a05600c4f8a00b003ee93d2c914so19315612wmq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680522619;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XWT+QpgzDiawgFvOzomE20UM8yCKCgnlg/Ii3CJcGg8=;
-        b=pf6L7ohsA2TBFFKCeucVct8atRuIdGTIhI8jK+bOEL9MWtZs3Q0Xhbog06cZyXgqml
-         +3EX1/iu4VFUjX2FX2ql0fsR4ZpZhBt4zsGuepa87IdvVKynNIGQaf9PETBR9h0zaM4g
-         3W/YA9+HNmIscbRbk8KJwTTZ4ikDaPEeFsCB5UurYHAW/XXV+nRVzxC5QthspOqXVgdn
-         1YOAG8PQUrVIFmkXQ4U2smElI+gwnGpAGTqPqkjjo6OL3S581S1l87wl+Da0PJEbqRUa
-         mc99xSzUDGz3ZqDIZwGm1/QIeW4xtRT9ZNtI4NWVuqnhUqbyiXYleQcVuE9bett0hvgv
-         bp/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680522619;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XWT+QpgzDiawgFvOzomE20UM8yCKCgnlg/Ii3CJcGg8=;
-        b=tVxNfcSfI8Mp/+fAPvVCGszArj4ytnlSN3/Wg7FXtblFCC9QrOBk6TsVf1RWQlAxtW
-         guRqRWDTQRQJPDCzdn4XmSUpTH4aw9TjY6nlygQIJCjxHsqAPs1Rvb8xWyJhJH9a/oJg
-         QoUn2qJaqmM1vGg2/1j+XBAqhXzkIapzkDjRnnq851vIPNHpQdCEhH+ob2dzjFi4iv2Y
-         DvWOHwCqUIoHriS39XxRE69Xp+xn3D1AJh8btxxKmBKRYLapY7c2kbsSGzGX3mc1eyes
-         r/pMwHhaKqz8FZQjDY1cRy1W9bdQIZYD+eimawS3Wp31dtj6fh+CuZp8rgDUDUkCvPgO
-         e7Qg==
-X-Gm-Message-State: AO0yUKWnzBHC7UBpfXrCRFUezef7qKJY6FTqR0bOqxIBVVcTkX+Cu9pv
-        hH34HBtHYtaps3/e2yjr70SPqGsj8pamvQnBYpM=
-X-Google-Smtp-Source: AK7set8Gv5MLRgaZd8plDxA4DJG3RD4UfkE5S/XFWYKyC+5qeFnN2k5lY7gOzGAT7tXzJzFGN+Df8HtjiVpqEQGhnOs=
-X-Received: by 2002:a7b:cd17:0:b0:3ed:526c:25cb with SMTP id
- f23-20020a7bcd17000000b003ed526c25cbmr8250302wmj.8.1680522619341; Mon, 03 Apr
- 2023 04:50:19 -0700 (PDT)
+        Mon, 3 Apr 2023 07:50:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E4A41114F
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:50:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90E671063;
+        Mon,  3 Apr 2023 04:51:11 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 56B6E3F6C4;
+        Mon,  3 Apr 2023 04:50:26 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     will@kernel.org
+Cc:     mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Jing Zhang <renyu.zj@linux.alibaba.com>
+Subject: [PATCH] perf/arm-cmn: Fix port detection for CMN-700
+Date:   Mon,  3 Apr 2023 12:50:19 +0100
+Message-Id: <68ff05869f6dae06a92c5d320e535d8a2f75a0cd.1680522619.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.39.2.101.g768bb238c484.dirty
 MIME-Version: 1.0
-Received: by 2002:a5d:6411:0:b0:2d4:d74d:fc8b with HTTP; Mon, 3 Apr 2023
- 04:50:18 -0700 (PDT)
-Reply-To: susanmoyamba1@yahoo.com
-From:   Susan Moyamba <barristerartinamza@gmail.com>
-Date:   Mon, 3 Apr 2023 11:50:18 +0000
-Message-ID: <CAJ-GRB6+f5x2o5E5vekPAy1zi044DOHRB3_AcgcFsVZsmYT_ww@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When the "extra device ports" configuration was first added, the
+additional mxp_device_port_connect_info registers were added around the
+existing mxp_mesh_port_connect_info registers. What I missed about
+CMN-700 is that it shuffled them around to remove this discontinuity.
+As such, tweak the definitions and factor out a helper for reading these
+registers so we can deal with this discrepancy easily, which does at
+least allow nicely tidying up the callsites. With this we can then also
+do the nice thing and skip accesses completely rather than relying on
+RES0 behaviour where we know the extra registers aren't defined.
+
+Fixes: 23760a014417 ("perf/arm-cmn: Add CMN-700 support")
+Reported-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+ drivers/perf/arm-cmn.c | 55 ++++++++++++++++++++++--------------------
+ 1 file changed, 29 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+index c9689861be3f..367d41c5d983 100644
+--- a/drivers/perf/arm-cmn.c
++++ b/drivers/perf/arm-cmn.c
+@@ -57,14 +57,12 @@
+ #define CMN_INFO_REQ_VC_NUM		GENMASK_ULL(1, 0)
+ 
+ /* XPs also have some local topology info which has uses too */
+-#define CMN_MXP__CONNECT_INFO_P0	0x0008
+-#define CMN_MXP__CONNECT_INFO_P1	0x0010
+-#define CMN_MXP__CONNECT_INFO_P2	0x0028
+-#define CMN_MXP__CONNECT_INFO_P3	0x0030
+-#define CMN_MXP__CONNECT_INFO_P4	0x0038
+-#define CMN_MXP__CONNECT_INFO_P5	0x0040
++#define CMN_MXP__CONNECT_INFO(p)	(0x0008 + 8 * (p))
+ #define CMN__CONNECT_INFO_DEVICE_TYPE	GENMASK_ULL(4, 0)
+ 
++#define CMN_MAX_PORTS			6
++#define CI700_CONNECT_INFO_P2_5_OFFSET	0x20
++
+ /* PMU registers occupy the 3rd 4KB page of each node's region */
+ #define CMN_PMU_OFFSET			0x2000
+ 
+@@ -396,6 +394,25 @@ static struct arm_cmn_node *arm_cmn_node(const struct arm_cmn *cmn,
+ 	return NULL;
+ }
+ 
++static u32 arm_cmn_device_connect_info(const struct arm_cmn *cmn,
++				       const struct arm_cmn_node *xp, int port)
++{
++	int offset = CMN_MXP__CONNECT_INFO(port);
++
++	if (port >= 2) {
++		if (cmn->model & (CMN600 | CMN650))
++			return 0;
++		/*
++		 * CI-700 may have extra ports, but still has the
++		 * mesh_port_connect_info registers in the way.
++		 */
++		if (cmn->model == CI700)
++			offset += CI700_CONNECT_INFO_P2_5_OFFSET;
++	}
++
++	return readl_relaxed(xp->pmu_base - CMN_PMU_OFFSET + offset);
++}
++
+ static struct dentry *arm_cmn_debugfs;
+ 
+ #ifdef CONFIG_DEBUG_FS
+@@ -469,7 +486,7 @@ static int arm_cmn_map_show(struct seq_file *s, void *data)
+ 	y = cmn->mesh_y;
+ 	while (y--) {
+ 		int xp_base = cmn->mesh_x * y;
+-		u8 port[6][CMN_MAX_DIMENSION];
++		u8 port[CMN_MAX_PORTS][CMN_MAX_DIMENSION];
+ 
+ 		for (x = 0; x < cmn->mesh_x; x++)
+ 			seq_puts(s, "--------+");
+@@ -477,14 +494,9 @@ static int arm_cmn_map_show(struct seq_file *s, void *data)
+ 		seq_printf(s, "\n%d    |", y);
+ 		for (x = 0; x < cmn->mesh_x; x++) {
+ 			struct arm_cmn_node *xp = cmn->xps + xp_base + x;
+-			void __iomem *base = xp->pmu_base - CMN_PMU_OFFSET;
+ 
+-			port[0][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P0);
+-			port[1][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P1);
+-			port[2][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P2);
+-			port[3][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P3);
+-			port[4][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P4);
+-			port[5][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P5);
++			for (p = 0; p < CMN_MAX_PORTS; p++)
++				port[p][x] = arm_cmn_device_connect_info(cmn, xp, p);
+ 			seq_printf(s, " XP #%-2d |", xp_base + x);
+ 		}
+ 
+@@ -2083,18 +2095,9 @@ static int arm_cmn_discover(struct arm_cmn *cmn, unsigned int rgn_offset)
+ 		 * from this, since in that case we will see at least one XP
+ 		 * with port 2 connected, for the HN-D.
+ 		 */
+-		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P0))
+-			xp_ports |= BIT(0);
+-		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P1))
+-			xp_ports |= BIT(1);
+-		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P2))
+-			xp_ports |= BIT(2);
+-		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P3))
+-			xp_ports |= BIT(3);
+-		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P4))
+-			xp_ports |= BIT(4);
+-		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P5))
+-			xp_ports |= BIT(5);
++		for (int p = 0; p < CMN_MAX_PORTS; p++)
++			if (arm_cmn_device_connect_info(cmn, xp, p))
++				xp_ports |= BIT(p);
+ 
+ 		if (cmn->multi_dtm && (xp_ports & 0xc))
+ 			arm_cmn_init_dtm(dtm++, xp, 1);
 -- 
-Good day
+2.39.2.101.g768bb238c484.dirty
 
-How are you doing today. I will like to do business with you.
-
-However, I have investment fund  i will like you to receive and move
-it into your country for investment purposes..
-
-Please kindly get back to me so that i will discuss about the
-transaction and forward you the procedures.
-
-I await for your response together with your details to enable us proceed
-
-Your Sincerely
-Susan Moyamba
