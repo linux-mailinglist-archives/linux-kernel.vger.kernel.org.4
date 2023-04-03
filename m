@@ -2,110 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081B06D4F83
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B2A6D4F84
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbjDCRqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        id S232842AbjDCRt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbjDCRpz (ORCPT
+        with ESMTP id S232750AbjDCRtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:45:55 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A855740C4;
-        Mon,  3 Apr 2023 10:44:33 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so33394278pjb.4;
-        Mon, 03 Apr 2023 10:44:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680543872;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lMejaISgZo/X14mzAcVEleMXRw+S9JCsqKPVR2Pqb9E=;
-        b=MN5PWqJJcDeLW7Mi7FTOujqRf1HNSdLofD2KRByg6HjTFDDpA569Ig5os+InWesOcr
-         Gu9BwpU4YuWOyhRdGJsYB4gg5WMgjptMoOACYsSbtkdOq5Px+rdh3yqGH0ebDii4ZlXQ
-         Q5KV2JNP8TH4KJ/kpKR8yvF8f0ZdEXLiFRQ0Y0jm1oJgoiV9H7Lsp4PC+aJ53U1MfEti
-         OoIS9TkBFM3AoKnKPgwQixLNQYDQHSAvoVWn8mp6Ki3yAvAp2kIRAcN+/hbG2TOSxZ4m
-         aLctnjnogBaiJhmkmLLkF878etMUtUZjoGxEMgo1NuH/dt1ERAw/pN7lKh0Vx/rp8w8b
-         n6qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680543872;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lMejaISgZo/X14mzAcVEleMXRw+S9JCsqKPVR2Pqb9E=;
-        b=wb+W+StugMHXt+kiCuMi/4E7BFhINXGCyVraJ/pBmgqEiVKdDMTO9AfON9RLxcvO4X
-         5xgZqBlud3vFmcV7iR6cJnA1siePrdxfINpFe3KDnAjeTBmciL9Jd5T3BWJiH5cKWmb/
-         6TnbTIwIVLaG48zOEJXPhG5O7zuUEx4oGswr6Z3Wt4ydi8ZmhMRu1hXD4zd6Ycfsm8vZ
-         77JXWutg+it7jcy7A8algRHL6UOoJaoeC86evfTj1/syCiwwfBKszD4G/plv5LlLZk98
-         RaSIPSVp+wIKtUOKfsIasyG/Rh3MjdsZ7uWHMwp+JKCKZfhPGmdW2fjFL9QdMB0+PmSB
-         ktuQ==
-X-Gm-Message-State: AAQBX9fuiXFg6XzNCXaKUM0k+6ZuMvPeS/kKCGK7S6gvpToqhfwYJaJ4
-        VrKd14V3lXCerUvsbEhLdM8=
-X-Google-Smtp-Source: AKy350YtXShHvctrBUnf1VOJUMw1RbAjDXOMG87QyIRxfxsZNlIUqA3IijXEYlvxwureT0bkJrmQvw==
-X-Received: by 2002:a17:902:e847:b0:19e:d6f2:feea with SMTP id t7-20020a170902e84700b0019ed6f2feeamr46661447plg.9.1680543872252;
-        Mon, 03 Apr 2023 10:44:32 -0700 (PDT)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:2:8635:6e96:35c1:c560])
-        by smtp.gmail.com with ESMTPSA id jj21-20020a170903049500b001a19196af48sm6883803plb.64.2023.04.03.10.44.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 10:44:31 -0700 (PDT)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [RFC PATCH V4 17/17] x86/sev: Remove restrict interrupt injection from SNP_FEATURES_IMPL_REQ
-Date:   Mon,  3 Apr 2023 13:44:05 -0400
-Message-Id: <20230403174406.4180472-18-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230403174406.4180472-1-ltykernel@gmail.com>
-References: <20230403174406.4180472-1-ltykernel@gmail.com>
+        Mon, 3 Apr 2023 13:49:10 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB242107;
+        Mon,  3 Apr 2023 10:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680544107; x=1712080107;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=v25kyqtNN8d8QRdIbwVdDGXVyNuQYtW+0hay97cNYhQ=;
+  b=h5b+QuOkGA51RwLHIDSBz9KN83UfhQdGo37sgq7fl2tV8QuhKSduVy5I
+   bkzdNRXo0zzKGbrjRZxtyvgIDfr1+oNNwfwzXxtDrxxoTn74bTMy+sVv8
+   QU+G41wCt9UID/3KHGPGmvE7cOzCAP5sPWn+rQ5fnhToOSthwyrsd2RP+
+   XpYt6BsPU+BS2MYQ5f/+pm1nq2Re5AmMmKwdpJV/cI9O+FUJ0YrCcs/Kl
+   HNM41rUlSp9xeETrJCciGhgtla7r5Un5LsH33zyw7FexME+vJ8ZCSYPcs
+   BZMk8XZbXyBYz7l5lOEtEghA74aRMRYZtk3rVDNcl7vUihJdjBLRHPKX8
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="339465232"
+X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
+   d="scan'208";a="339465232"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 10:45:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="1015804705"
+X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
+   d="scan'208";a="1015804705"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga005.fm.intel.com with ESMTP; 03 Apr 2023 10:45:55 -0700
+Received: from [10.212.177.123] (kliang2-mobl1.ccr.corp.intel.com [10.212.177.123])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 07CD45804D9;
+        Mon,  3 Apr 2023 10:45:53 -0700 (PDT)
+Message-ID: <bf9ef54d-65da-ce59-3b47-f3dc29a5e052@linux.intel.com>
+Date:   Mon, 3 Apr 2023 13:45:52 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v4 5/5] docs: perf: Minimal introduction the the CXL PMU
+ device and driver
+Content-Language: en-US
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-cxl@vger.kernel.org, peterz@infradead.org
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        will@kernel.org, dan.j.williams@intel.com, linuxarm@huawei.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>
+References: <20230330164556.31533-1-Jonathan.Cameron@huawei.com>
+ <20230330164556.31533-6-Jonathan.Cameron@huawei.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230330164556.31533-6-Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <tiala@microsoft.com>
 
-Enabled restrict interrupt injection function. Remove MSR_AMD64_
-SNP_RESTRICTED_INJ from SNP_FEATURES_IMPL_REQ to let kernel boot
-up with this function.
----
- arch/x86/boot/compressed/sev.c | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-index d63ad8f99f83..a5f41301a600 100644
---- a/arch/x86/boot/compressed/sev.c
-+++ b/arch/x86/boot/compressed/sev.c
-@@ -299,7 +299,6 @@ static void enforce_vmpl0(void)
-  */
- #define SNP_FEATURES_IMPL_REQ	(MSR_AMD64_SNP_VTOM |			\
- 				 MSR_AMD64_SNP_REFLECT_VC |		\
--				 MSR_AMD64_SNP_RESTRICTED_INJ |		\
- 				 MSR_AMD64_SNP_ALT_INJ |		\
- 				 MSR_AMD64_SNP_DEBUG_SWAP |		\
- 				 MSR_AMD64_SNP_VMPL_SSS |		\
--- 
-2.25.1
+On 2023-03-30 12:45 p.m., Jonathan Cameron wrote:
+> Very basic introduction to the device and the current driver support
+> provided. I expect to expand on this in future versions of this patch
+> set.
+> 
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
+> --
+> v4: No change
+> ---
+>  Documentation/admin-guide/perf/cxl.rst   | 65 ++++++++++++++++++++++++
+>  Documentation/admin-guide/perf/index.rst |  1 +
+>  2 files changed, 66 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/perf/cxl.rst b/Documentation/admin-guide/perf/cxl.rst
+> new file mode 100644
+> index 000000000000..46235dff4b21
+> --- /dev/null
+> +++ b/Documentation/admin-guide/perf/cxl.rst
+> @@ -0,0 +1,65 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +======================================
+> +CXL Performance Monitoring Unit (CPMU)
+> +======================================
+> +
+> +The CXL rev 3.0 specification provides a definition of CXL Performance
+> +Monitoring Unit in section 13.2: Performance Monitoring.
+> +
+> +CXL components (e.g. Root Port, Switch Upstream Port, End Point) may have
+> +any number of CPMU instances. CPMU capabilities are fully discoverable from
+> +the devices. The specification provides event definitions for all CXL protocol
+> +message types and a set of additional events for things commonly counted on
+> +CXL devices (e.g. DRAM events).
+> +
+> +CPMU driver
+> +===========
+> +
+> +The CPMU driver register a perf PMU with the name cpmu<id> on the CXL bus.
+> +
+> +    /sys/bus/cxl/device/cpmu<id>
+> +
+> +The associated PMU is registered as
+> +
+> +   /sys/bus/event_sources/devices/cpmu<id>
+> +
+> +In common with other CXL bus devices, the id has no specific meaning and the
+> +relationship to specific CXL device should be established via the device parent
+> +of the device on the CXL bus.
+> +
+> +PMU driver provides description of available events and filter options in sysfs.
+> +
+> +The "format" directory describes all formats of the config (event vendor id,
+> +group id and mask) config1 (threshold, filter enables) and config2 (filter
+> +parameters) fields of the perf_event_attr structure.  The "events" directory
+> +describes all documented events show in perf list.
+> +
+> +The events shown in perf list are the most fine grained events with a single
+> +bit of the event mask set. More general events may be enable by setting
+> +multiple mask bits in config. For example, all Device to Host Read Requests
+> +may be captured on a single counter by setting the bits for all of
+> +
+> +* d2h_req_rdcurr
+> +* d2h_req_rdown
+> +* d2h_req_rdshared
+> +* d2h_req_rdany
+> +* d2h_req_rdownnodata
+> +
+> +Example of usage::
+> +
+> +  $#perf list
+> +  cpmu0/clock_ticks/                                 [Kernel PMU event]
+> +  cpmu0/d2h_req_itomwr/                              [Kernel PMU event]
+> +  cpmu0/d2h_req_rdany/                               [Kernel PMU event]
+> +  cpmu0/d2h_req_rdcurr/                              [Kernel PMU event]
+> +  -----------------------------------------------------------
+> +
+> +  $# perf stat -e cpmu0/clock_ticks/ -e cpmu0/d2h_req_itowrm/
+> +
+> +Vendor specific events may also be available and if so can be used via
+> +
+> +  $# perf stat -e cpmu0/vid=VID,gid=GID,mask=MASK/
+> +
+> +The driver does not support sampling. So "perf record" and attaching to
+> +a task are unsupported.
 
+The PMU only supports system-wide counting. That's the reason it doesn't
+support per-task profiling. Not because of missing sampling.
+
+Thanks,
+Kan
+> diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
+> index 9de64a40adab..f60be04e4e33 100644
+> --- a/Documentation/admin-guide/perf/index.rst
+> +++ b/Documentation/admin-guide/perf/index.rst
+> @@ -21,3 +21,4 @@ Performance monitor support
+>     alibaba_pmu
+>     nvidia-pmu
+>     meson-ddr-pmu
+> +   cxl
