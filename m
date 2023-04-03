@@ -2,128 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF2E6D54D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2C76D54D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233456AbjDCWiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 18:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S233523AbjDCWpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 18:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233314AbjDCWiU (ORCPT
+        with ESMTP id S232662AbjDCWpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 18:38:20 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD403A93
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:38:18 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id br6so39969879lfb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 15:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680561497;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FtsOWrQW7hkNYFADGqbjwZ60d4zvSefDrCxExKDl8Ps=;
-        b=hwuZ8XieWgBLN5adU41i6xX2s4eNlMpyUG883h6xHBqIp68TLP0PISWCmEmBxbOFNp
-         La0z50tJWUVSnxmQGKjzd2D0TI3d8OdvzjbH9uwZNYgcJWNoG92y7hvf5wRLkIcNnJkT
-         9xaak/ZDCbwD9kqTd2ISNgfEwhja79Z07uNJPnxcGhHgeZ9/vQGpDOoJeWvRtPZ/2Gxc
-         TvPZiYYuhXrmLzm7gBiYz6zwetuFr+2zYf3U5JHJIDUNZM1JFosfH9/7+5HX0jn7xUye
-         RlhlegeuGZo1+3qU3CEAaNzaV47X5Q9mtT55migZtfvsp6ZvbmSskgy9parZdncdzPQx
-         BKWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680561497;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FtsOWrQW7hkNYFADGqbjwZ60d4zvSefDrCxExKDl8Ps=;
-        b=PVyqptH/eVcqlFqGkST8yA3QE2A3qPZf5aC4u3Tv0GUnGx3H4WdgHRkXLQ2C16B+LZ
-         9OQ1Gci8Yb805NjpEy5nJgEVv8ZAyTHd/snUgFACY7LPD6DMr+26cKYK6D3ObVkvjE+b
-         gx3GfrspBSI/1YnJuFdFYZQJgzOKe53B2m0I2viqEnaL31JkHkSaYtLC6DydrqFIEshp
-         8oWtqbZ49BDYgcxHIq+19JzoW5ZLCjNx41xjNESvoQjZkkanQupl24odQ6iebNNn32dA
-         0d7cYb+bHbtvgPftEcfwbqvheDRSPruXoUyogUU4dE/CQca+lAe+O9iHbbJ5OE7+UVkq
-         mySg==
-X-Gm-Message-State: AAQBX9dZe6oqD9B3EaEPItPE7qQcfvYCPTAHXwb3sF6NsmLyvDPHLkPW
-        0IETY5CEi4NjDpMm5+aXPe9M7A==
-X-Google-Smtp-Source: AKy350YZO6iPPjj1sua6F66RRClLCkmeKk/nQmT2y4PKC2eroOuYFkNzuee/Tto92qVvDnzdKwZi/Q==
-X-Received: by 2002:a05:6512:2192:b0:4e8:3da6:485a with SMTP id b18-20020a056512219200b004e83da6485amr56645lft.68.1680561496989;
-        Mon, 03 Apr 2023 15:38:16 -0700 (PDT)
-Received: from [192.168.1.101] (abxj135.neoplus.adsl.tpnet.pl. [83.9.3.135])
-        by smtp.gmail.com with ESMTPSA id u5-20020ac248a5000000b004e9cad1cd7csm1985379lfg.229.2023.04.03.15.38.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 15:38:16 -0700 (PDT)
-Message-ID: <b2e81e6c-a9fa-0cc1-01ed-1d82297454c4@linaro.org>
-Date:   Tue, 4 Apr 2023 00:38:14 +0200
+        Mon, 3 Apr 2023 18:45:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D0F4229;
+        Mon,  3 Apr 2023 15:45:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC11B62CE9;
+        Mon,  3 Apr 2023 22:45:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FEF4C433EF;
+        Mon,  3 Apr 2023 22:45:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680561919;
+        bh=6UNv3+eqSlkCVjZETzDidbfpnJbVpxsshChed0Ya4sk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=gYKvx2yQmRk0QKdVmq6TZO2J9ADw/a5+B90W63mY2lDs9d0TittJCvPYJordwOYQx
+         pNDwp04ym5zv/Yg+Drvr9bIzhdVt9/X98hC9zq/v9NG2hDnjxS0wFao7VLVGr5r/0v
+         ieRNiS9GSSel464YmlE5nYW+QtcMAEhGvTnTcfKsefTNYicWRTm6y61QJ6Sux9w+u8
+         G5bkeu2bTulBTjVu3taqegj/PVyIlhz7Dx+bN+VOpar931ecw4j4aOjpjHsciHp5ew
+         a3u1Wx7qM+dQRLL07TcaqyF8b+Vw/E1JAO8sNHWZbjMZFM+B+4IMCPV1pJMXPBCsTG
+         GPziX4oAmQolA==
+Date:   Mon, 3 Apr 2023 17:45:17 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Xinghui Li <korantwork@gmail.com>
+Cc:     nirmal.patel@linux.intel.com, kbusch@kernel.org,
+        jonathan.derrick@linux.dev, lpieralisi@kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+Subject: Re: [PATCH v4] PCI: vmd: Add the module param to adjust MSI mode
+Message-ID: <20230403224517.GA3472913@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 4/7] dt-bindings: iommu: arm,smmu: enable clocks for
- sa8775p
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>
-References: <20230328193632.226095-1-brgl@bgdev.pl>
- <20230328193632.226095-5-brgl@bgdev.pl>
- <20230403204127.GA1708388-robh@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230403204127.GA1708388-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEm4hYXLNP6pcCj5Av35sRG6kCOF0H3+a7VfTtFfGduMgcXJhA@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Apr 02, 2023 at 11:02:07PM +0800, Xinghui Li wrote:
+> On Thu, Mar 30, 2023 at 12:31 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Wed, Mar 29, 2023 at 04:57:08PM +0800, Xinghui Li wrote:
+> > > On Wed, Mar 29, 2023 at 5:34 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > It would also be nice to include a hint about why a user would choose
+> > > > "on" or "off".  What is the performance effect?  What sort of I/O
+> > > > scenario would lead you to choose "on" vs "off"?
 
+> > I don't think we need detailed performance numbers, but we need
+> > something like:
+> >
+> >   - "msi_remap=off" improves interrupt handling performance by
+> >     avoiding the VMD MSI-X domain interrupt handler
+> >
+> >   - But "msi_remap=on" is needed when ...?
+> >
+> In the patch I send in last email, We speculate that the VMD
+> Controller aggregate interrupts,
+> making the PCIe port less stressed and improving iops. In this
+> case(lots of 4k random IO), if we enable the VMD MSI
+> remapping, we found the interrupts from VMD Controller's MSI are less
+> and the IOPS is much higher.
 
-On 3.04.2023 22:41, Rob Herring wrote:
-> On Tue, Mar 28, 2023 at 09:36:29PM +0200, Bartosz Golaszewski wrote:
->> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>
->> The KGSL iommu will require the clocks property to be set. Enable it for
-> 
-> Isn't KGSL the name for QCom's adreno vendor driver? What does that have 
-> to do with bindings?
-It's called "KGSL SMMU" (as opposed to the other "APPS SMMU" (Application
-Processor SubSystem) in some places in Qualcommland
+Great, that's useful information about why users would want to use
+this parameter.
 
-Konrad
-> 
->> sa8775p in the bindings.
->>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Robin Murphy <robin.murphy@arm.com>
->> Cc: Joerg Roedel <joro@8bytes.org>
->> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->> ---
->>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 1 -
->>  1 file changed, 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->> index 807cb511fe18..74d5164ed1e8 100644
->> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->> @@ -375,7 +375,6 @@ allOf:
->>                - nvidia,smmu-500
->>                - qcom,qcm2290-smmu-500
->>                - qcom,qdu1000-smmu-500
->> -              - qcom,sa8775p-smmu-500
->>                - qcom,sc7180-smmu-500
->>                - qcom,sc8180x-smmu-500
->>                - qcom,sc8280xp-smmu-500
->> -- 
->> 2.37.2
->>
+Obviously the other half is to mention the reasons why they may not be
+able to use it.  If "msi_remap=off" were *always* safe and desirable,
+we would just do that unconditionally and there would be no point in a
+parameter.
+
+> > > I place the "vmd_config_msi_remap_param" that is VMD MSI-X's mode
+> > > param configuring helper front
+> > > "vmd_enable_domain". So, It will not change the logic disabling
+> > > remapping from ee81ee84f873, such as
+> > > "Currently MSI remapping must be enabled in guest passthrough mode".
+> > > So, if the user config the wrong type, it will not work, and they can
+> > > find it by dmesg.
+> >
+> > That's kind of a problem.  I'm not in favor of something failing and
+> > the user having to debug it via dmesg.  That causes user frustration
+> > and problem reports.
+>
+> What about adding a sysfs node for it in VMD PCI bus dir, which allows
+> users to catch VMD's MSI current working mode?
+
+No, a sysfs node is not the answer to this.  If we *can* avoid a
+non-working situation, we should avoid it.  If users see a non-working
+situation, they will rightly complain, and somebody will have to debug
+it.  We don't want that.
+
+> > I don't know what "guest passthrough mode" is.  Can you detect that
+> > automatically?
+>
+> I quote this from the commit ee81ee84f873's comment, it can be detected by the
+> logic like this:
+> if (!(features & VMD_FEAT_CAN_BYPASS_MSI_REMAP) ||
+> offset[0] || offset[1])
+> I just want to answer your comment: "There's also a hint that some
+> virt configs require it."
+> This patch will not modify the logic of determining whether MSI
+> remapping is enabled
+> when running VMD in Guest.
+
+My point is that apparently guest passthrough mode is relevant and
+maybe it should be part of the commit log about how this parameter
+should be used.
+
+Bjorn
