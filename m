@@ -2,140 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF516D4FB5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21AEC6D4FBC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjDCR5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S232974AbjDCR5h convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Apr 2023 13:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbjDCR5D (ORCPT
+        with ESMTP id S232842AbjDCR5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:57:03 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CA92D4B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:56:57 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id ja10so28844612plb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:56:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680544617;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zvbXO2zEiAAtifGVfeUKcNOUgXd8fePbZNqY6UemQus=;
-        b=NeE9Wk2utSK19PXZCOaD49MN9bJsYQQCqJkMm5dFlVhQ4vvtd39tS83Ayte5UqNH/E
-         hQkOpBGdzyonrza8zrN6BS+EBfh4tDDmQtDTvheNR37l0XGyERQg2SZKou3blg+q+vcY
-         tIadtzWN0DsbYZ8vj716opgE5Ajw9eL2oXL5tJJCei7uAhysaZE4CZl/Nsrw3ykGoQya
-         9EsCld/FHm1EPhsBWCFAjQRGc0NuV3z7k97Jj1l/TipicMXFBzU72JXBXv5uGzIm7GB5
-         Fkr5tmml+hyc8WL47nSRDq4+7FNjAiiTAqenK0YtEagBNuL2pcirKdcqTqU4XSxq417Y
-         lOnQ==
+        Mon, 3 Apr 2023 13:57:23 -0400
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FB140C7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:57:13 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id cn12so120693605edb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:57:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680544617;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zvbXO2zEiAAtifGVfeUKcNOUgXd8fePbZNqY6UemQus=;
-        b=aA+JUBeNXo3WPgpJ/6ZbkrSRAeewUgCUge5A/o/54Ni/XAv2szOoOb8KyOSbcE32B0
-         VsCRodPyPESwPDTCzP2pD6PlQg583F5DjTlZWj92/dPTLDJf5XuL34NCUCwv3f1acG1E
-         qlm+lmecKfaVnA6ELXuRb/ct7+I10d9qL7UKSzaTNTZL1xtLNClforDSO9cgUfTZPR3l
-         Ytuzej0e9tYxJkSOS2m/hr1qbSrgwwQKO5xVNZpUqw52dZUviDY7lrMCmodIPxxJio8x
-         vqLqj4jfE6y5xGqd4ZhyYFba0TWNvtTkw517GXMvojiBqPDnj0V6bzss10iIN6r/Eb2q
-         kMcQ==
-X-Gm-Message-State: AAQBX9elSQuni8vRunJAohXo3kqQuKFLmXShr/BNSBKY3FOxtK+0thg7
-        LoNX22hwBKqqzxxFkWNQ3Fhisg==
-X-Google-Smtp-Source: AKy350Y/o4NlisuKM4QeBSHzVv110kGyt89sAVitu14JA8M02u9XVH+wqGBtQUeplDG2G3rdtxV/Fg==
-X-Received: by 2002:a17:90b:4c10:b0:22c:816e:d67d with SMTP id na16-20020a17090b4c1000b0022c816ed67dmr42609674pjb.24.1680544616942;
-        Mon, 03 Apr 2023 10:56:56 -0700 (PDT)
-Received: from [10.4.252.188] ([139.177.225.226])
-        by smtp.gmail.com with ESMTPSA id bk4-20020a17090b080400b0023d0c2f39f2sm9999175pjb.19.2023.04.03.10.56.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 10:56:56 -0700 (PDT)
-Message-ID: <cb69bf15-6288-e5d9-08c9-cf64187ddd03@bytedance.com>
-Date:   Tue, 4 Apr 2023 01:56:51 +0800
+        d=1e100.net; s=20210112; t=1680544632;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JD74zvu5PhDi9TeO5OaVRzWLRZY1j9Wulq+9wskASto=;
+        b=lMh+eeWjpvTmuEQVxs4NF2CDxOiQFY9xw5J++3sbXvTnm5asu1V/U2n5FpZYxgFYXf
+         LV1NWRHnBjv1WsqoCEA/CvaFnEEGamIsgYVYBFNq+biGv5XfIBwaIFakwLfqG5wQ4faV
+         OKNdnOQMONPqG/qpOtjmOEyvVNDtADVyxRpYF5yq/id5JaxcaQoOqnh8mXImvVVzWaIH
+         cdReAa0uWk419GkwG0jXZrxvYjUme7K1IgHP9eaqDz/swf7JlnXruw7f6adXQu+iDeIx
+         PRFkFQIzcpgSZfs7luIWLWJrHQhG6yAd9rZepY8/HVPYSe4moGl6c2vxV5JSK5heKnVG
+         EExA==
+X-Gm-Message-State: AAQBX9ciZyy0FXiaFly5PiHuvbJjaA+4XdlGam8WREI2RASxnD4nHBiO
+        y8bSqcUAdmKcg9S8dg3YPolQcKlQgEFYW8tyxJ8=
+X-Google-Smtp-Source: AKy350aWH+7epuP8/TDN+Zq5JP+yyeahagpujfx8F3WN5d8baUAK5/N28NR8RSW4zaKweUNpbjSIegGzkwu9GVUmq4A=
+X-Received: by 2002:a50:bac1:0:b0:4fa:3c0b:74b with SMTP id
+ x59-20020a50bac1000000b004fa3c0b074bmr52259ede.3.1680544632141; Mon, 03 Apr
+ 2023 10:57:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.0
-Subject: Re: [External] Re: [PATCH v2] blk-throttle: Fix io statistics for
- cgroup v1
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230401094708.77631-1-hanjinke.666@bytedance.com>
- <20230403153021.z4smxxnxbgdcgcey@blackpad>
-From:   hanjinke <hanjinke.666@bytedance.com>
-In-Reply-To: <20230403153021.z4smxxnxbgdcgcey@blackpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <2023040244-duffel-pushpin-f738@gregkh> <2023040248-customary-release-4aec@gregkh>
+In-Reply-To: <2023040248-customary-release-4aec@gregkh>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 3 Apr 2023 19:57:01 +0200
+Message-ID: <CAJZ5v0hiqqKaBd3vDu74V9KwJY6J_w2iLuc_shb+C-LBaArxaA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] driver core: class: make class_register() take a
+ const *
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Apr 2, 2023 at 7:59 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> Now that the class code is cleaned up to not modify the class pointer
+> registered with it, change class_register() to take a const * to allow
+> the structure to be placed into read-only memory.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-在 2023/4/3 下午11:30, Michal Koutný 写道:
-> On Sat, Apr 01, 2023 at 05:47:08PM +0800, Jinke Han <hanjinke.666@bytedance.com> wrote:
->> From: Jinke Han <hanjinke.666@bytedance.com>
->>
->> After commit f382fb0bcef4 ("block: remove legacy IO schedulers"),
->> blkio.throttle.io_serviced and blkio.throttle.io_service_bytes become
->> the only stable io stats interface of cgroup v1,
-> 
-> There is also blkio.bfq.{io_serviced,io_service_bytes} couple, so it's
-> not the only. Or do you mean stable in terms of used IO scheduler?
-> 
-
-Oh, the stable here means that it always exists, and when the bfq 
-scheduler is not used, the bfq interface may not exist.
-
->> and these statistics are done in the blk-throttle code. But the
->> current code only counts the bios that are actually throttled. When
->> the user does not add the throttle limit,
-> 
-> ... "or the limit doesn't kick in"
-> 
-
-Agree.
-
->> the io stats for cgroup v1 has nothing.
-> 
-> 
->> I fix it according to the statistical method of v2, and made it count
->> all ios accurately.
-> 
-> s/all ios/all bios and split ios/
-> 
-> (IIUC you fix two things)
-> 
->> Fixes: a7b36ee6ba29 ("block: move blk-throtl fast path inline")
-> 
-> Good catch.
-> 
-> Does it also undo the performance gain from that commit? (Or rather,
-> have you observed effect of your patch on v2-only performance?)
-> 
-
-Under v1, this statistical overhead is unavoidable. Under v2, the static 
-key is friendly to judging branches, so I think the performance 
-difference before and after the patch is negligible.
-
->> Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
->> ---
->>   block/blk-cgroup.c   | 6 ++++--
->>   block/blk-throttle.c | 6 ------
->>   block/blk-throttle.h | 9 +++++++++
->>   3 files changed, 13 insertions(+), 8 deletions(-)
-> 
-> The code looks correct.
-> 
-> Thanks,
-> Michal
-
-Thanks.
-
+> ---
+>  drivers/base/base.h          | 2 +-
+>  drivers/base/class.c         | 6 +++---
+>  include/linux/device/class.h | 2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/base/base.h b/drivers/base/base.h
+> index e96f3343fd7c..eb4c0ace9242 100644
+> --- a/drivers/base/base.h
+> +++ b/drivers/base/base.h
+> @@ -54,7 +54,7 @@ struct subsys_private {
+>         struct device *dev_root;
+>
+>         struct kset glue_dirs;
+> -       struct class *class;
+> +       const struct class *class;
+>
+>         struct lock_class_key lock_key;
+>  };
+> diff --git a/drivers/base/class.c b/drivers/base/class.c
+> index 53fc7052340c..05bce79d3d19 100644
+> --- a/drivers/base/class.c
+> +++ b/drivers/base/class.c
+> @@ -93,7 +93,7 @@ static ssize_t class_attr_store(struct kobject *kobj, struct attribute *attr,
+>  static void class_release(struct kobject *kobj)
+>  {
+>         struct subsys_private *cp = to_subsys_private(kobj);
+> -       struct class *class = cp->class;
+> +       const struct class *class = cp->class;
+>
+>         pr_debug("class '%s': release.\n", class->name);
+>
+> @@ -110,7 +110,7 @@ static void class_release(struct kobject *kobj)
+>  static const struct kobj_ns_type_operations *class_child_ns_type(const struct kobject *kobj)
+>  {
+>         const struct subsys_private *cp = to_subsys_private(kobj);
+> -       struct class *class = cp->class;
+> +       const struct class *class = cp->class;
+>
+>         return class->ns_type;
+>  }
+> @@ -175,7 +175,7 @@ static void klist_class_dev_put(struct klist_node *n)
+>         put_device(dev);
+>  }
+>
+> -int class_register(struct class *cls)
+> +int class_register(const struct class *cls)
+>  {
+>         struct subsys_private *cp;
+>         struct lock_class_key *key;
+> diff --git a/include/linux/device/class.h b/include/linux/device/class.h
+> index f3c418fa129a..4bf46f9bbb56 100644
+> --- a/include/linux/device/class.h
+> +++ b/include/linux/device/class.h
+> @@ -76,7 +76,7 @@ struct class_dev_iter {
+>         const struct device_type        *type;
+>  };
+>
+> -int __must_check class_register(struct class *class);
+> +int __must_check class_register(const struct class *class);
+>  void class_unregister(const struct class *class);
+>  bool class_is_registered(const struct class *class);
+>
+> --
+> 2.40.0
+>
