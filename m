@@ -2,82 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDB46D4560
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 868D06D455B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbjDCNMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
+        id S232546AbjDCNLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbjDCNMO (ORCPT
+        with ESMTP id S232299AbjDCNKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:12:14 -0400
-Received: from tretyak2.mcst.ru (tretyak2.mcst.ru [212.5.119.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7A92D45
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:11:55 -0700 (PDT)
-Received: from tretyak2.mcst.ru (localhost [127.0.0.1])
-        by tretyak2.mcst.ru (Postfix) with ESMTP id 02F3B102390;
-        Mon,  3 Apr 2023 16:11:52 +0300 (MSK)
-Received: from frog.lab.sun.mcst.ru (frog.lab.sun.mcst.ru [172.16.4.50])
-        by tretyak2.mcst.ru (Postfix) with ESMTP id F19EE102391;
-        Mon,  3 Apr 2023 16:11:01 +0300 (MSK)
-Received: from artemiev-i.lab.sun.mcst.ru (avior-1 [192.168.53.223])
-        by frog.lab.sun.mcst.ru (8.13.4/8.12.11) with ESMTP id 333DAwDL024350;
-        Mon, 3 Apr 2023 16:10:58 +0300
-From:   Igor Artemiev <Igor.A.Artemiev@mcst.ru>
-To:     David Airlie <airlied@gmail.com>
-Cc:     Igor Artemiev <Igor.A.Artemiev@mcst.ru>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] drm/amd/display: Fix potential null dereference
-Date:   Mon,  3 Apr 2023 16:10:37 +0300
-Message-Id: <20230403131037.1912215-1-Igor.A.Artemiev@mcst.ru>
-X-Mailer: git-send-email 2.39.0.152.ga5737674b6
+        Mon, 3 Apr 2023 09:10:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0AC22EA8;
+        Mon,  3 Apr 2023 06:10:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 307D961AC4;
+        Mon,  3 Apr 2023 13:10:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31201C433D2;
+        Mon,  3 Apr 2023 13:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680527444;
+        bh=3b2ENjjWzb2QJ0MXawu7kgVsFRlkLRrqtQBzOOQHUks=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gggQY+4wprQzVkw7hhfNN6RAyK77n5ZvqKJofkbyHOYZaLLqeTkc0bQCsBuc9ZgSA
+         zgIYPSgcpjcOkS9WS0Ak0wUAiAQcAj+Hsy8m+IObyM1wAEz6M393ZCGBGm9APRkuFX
+         /W6+uephIRORbWgf6P5tOaJjLH0TRYdPN4NkK7v5obnSzqI3u9KPlVcDAVT+KEcmCH
+         lJ2SS93PTAKrcjny40SKb38xMi5AlpcL5HUH92dAdeWsvAPNgj7h75LjYbgaJ0U4BY
+         QzsswF52xa4+1j6+xh90mbfm5b1nUrq9XKJDThvA/lO2CKBUTVG70wI+eeuYWyEzfx
+         XEP+u5VhjM1mQ==
+Date:   Mon, 3 Apr 2023 15:10:40 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH RFC] net: qrtr: correct types of trace event parameters
+Message-ID: <ZCrQUANiiJrYuc3t@kernel.org>
+References: <20230402-qrtr-trace-types-v1-1-da062d368e74@kernel.org>
+ <20230403051436.GA4627@thinkpad>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
-         bases: 20111107 #2745587, check: 20230403 notchecked
-X-AV-Checked: ClamAV using ClamSMTP
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403051436.GA4627@thinkpad>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The adev->dm.dc pointer can be NULL and dereferenced in amdgpu_dm_fini()
-without checking.
+On Mon, Apr 03, 2023 at 10:44:56AM +0530, Manivannan Sadhasivam wrote:
+> On Sun, Apr 02, 2023 at 01:15:33PM +0200, Simon Horman wrote:
+> > The arguments passed to the trace events are of type unsigned int,
+> > however the signature of the events used __le32 parameters.
+> > 
+> > I may be missing the point here, but sparse flagged this and it
+> > does seem incorrect to me.
+> > 
+> >   net/qrtr/ns.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/qrtr.h):
+> >   ./include/trace/events/qrtr.h:11:1: warning: cast to restricted __le32
+> >   ./include/trace/events/qrtr.h:11:1: warning: restricted __le32 degrades to integer
+> >   ./include/trace/events/qrtr.h:11:1: warning: restricted __le32 degrades to integer
+> >   ... (a lot more similar warnings)
+> >   net/qrtr/ns.c:115:47:    expected restricted __le32 [usertype] service
+> >   net/qrtr/ns.c:115:47:    got unsigned int service
+> >   net/qrtr/ns.c:115:61: warning: incorrect type in argument 2 (different base types)
+> >   ... (a lot more similar warnings)
+> > 
+> 
+> You are right. The actual arguments (service, instance, node, port) transferred/
+> received over QRTR are in le32 as per the protocol. But in the NS driver, the
+> arguments passed to the trace events are in the native endian (i.e) before
+> getting typecased to le32 for transmission.
+> 
+> And my intention was to trace the arguments in native endian format only. So
+> this patch indeed fixes the issue.
+> 
+> > Signed-off-by: Simon Horman <horms@kernel.org>
+> 
+> Please add the fixes tag once you remove RFC,
+> 
+> Fixes: dfddb54043f0 ("net: qrtr: Add tracepoint support")
+> 
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-Add a NULL pointer check before calling dc_dmub_srv_destroy(). 
+Hi Manivannan,
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE. 
-
-Fixes: 9a71c7d31734 ("drm/amd/display: Register DMUB service with DC")
-Signed-off-by: Igor Artemiev <Igor.A.Artemiev@mcst.ru>
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index a01fd41643fc..27f7a554874e 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -1854,7 +1854,8 @@ static void amdgpu_dm_fini(struct amdgpu_device *adev)
- 		dc_deinit_callbacks(adev->dm.dc);
- #endif
- 
--	dc_dmub_srv_destroy(&adev->dm.dc->ctx->dmub_srv);
-+	if (adev->dm.dc)
-+		dc_dmub_srv_destroy(&adev->dm.dc->ctx->dmub_srv);
- 
- 	if (dc_enable_dmub_notifications(adev->dm.dc)) {
- 		kfree(adev->dm.dmub_notify);
--- 
-2.30.2
-
+thanks for your review.
+I'll add the tags and drop the RFC designation.
