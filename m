@@ -2,59 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791696D45DB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22506D45DD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbjDCNbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
+        id S232054AbjDCNcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbjDCNbF (ORCPT
+        with ESMTP id S232559AbjDCNb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:31:05 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CC3A9;
-        Mon,  3 Apr 2023 06:31:04 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5A7C366015A6;
-        Mon,  3 Apr 2023 14:31:02 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680528663;
-        bh=M00de/+bvoV9U86ljAmvP+igaGDFeCArUsyDx0C6F+Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k7yAan3K0CvLHCCUoEPCyRmus7Fc9pRo4GyMmVBdbpeb3L4kuTYptEnkefa8tgIYA
-         P18G/pJctn9O5hRkf1aH2hIID0wvQ3md6HcHxbOdWv9JsYhUH4FDG1LNaYUQO00uuP
-         UbU+PdeDCMA/2tVaW2V3/LdDKX3hEIE7p+5udl7gESo3osN7b6YhlOYnWAlyOwjYqK
-         9ubgtWCluN/hKI33Jls+JC3MqgAxbYEd05VwmCS8xP9PtfT6cq0Vvz98hwwXcl2riB
-         I90uGqGdosWbxeKVg2V+MoAn9v3EsQ29ENkBMKY1ZL5uFKnInnBIz1JtB0gdNkrwGj
-         eqiBI3C+bpvEw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     thierry.reding@gmail.com
-Cc:     u.kleine-koenig@pengutronix.de, matthias.bgg@gmail.com,
-        weiqing.kong@mediatek.com, jitao.shi@mediatek.com,
-        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, wenst@chromium.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>
-Subject: [PATCH RESEND 2/2] pwm: mtk-disp: Configure double buffering before reading in .get_state()
-Date:   Mon,  3 Apr 2023 15:30:54 +0200
-Message-Id: <20230403133054.319070-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230403133054.319070-1-angelogioacchino.delregno@collabora.com>
-References: <20230403133054.319070-1-angelogioacchino.delregno@collabora.com>
+        Mon, 3 Apr 2023 09:31:59 -0400
+Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [178.154.239.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028C2A4
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:31:57 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-33.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-33.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:2016:0:640:1006:0])
+        by forward501c.mail.yandex.net (Yandex) with ESMTP id DE4535EF50;
+        Mon,  3 Apr 2023 16:31:55 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-33.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id rVNgRulWlGk0-l4X6HZXH;
+        Mon, 03 Apr 2023 16:31:55 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1680528715;
+        bh=QFh2Qzhmxh/G7C5fjFWTwiJiilCSTiKC1fL8nFAOZyk=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=JAoQkerD3dS1q+fAQJvhjnxFjnuGpEcwxi+rEkPbJe2EBfcckaqmg0wXbQRWQ/ovJ
+         eSjTFr5G0t2Sgz/RWe5Njyoxo6JVQ2x8eK6lgnmxMm5gEctuPUrGNZHa0pY7YFBmID
+         xCraE1i3+FiNMVnkKlltaDke35t/rNbGfRSgRscI=
+Authentication-Results: mail-nwsmtp-smtp-production-main-33.iva.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <07fe91e7-104a-32d0-e59b-c1d2d459fdbe@yandex.ru>
+Date:   Mon, 3 Apr 2023 18:31:52 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: MREMAP_FIXED unmaps dest on error
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     linux-mm@kvack.org,
+        =?UTF-8?Q?Jakub_Mat=c4=9bna?= <matenajakub@gmail.com>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+References: <18c36a78-4082-fab6-c7c9-69a249516803@yandex.ru>
+ <cba955a3-e41e-adce-954a-9a55d6d97065@redhat.com>
+From:   stsp <stsp2@yandex.ru>
+In-Reply-To: <cba955a3-e41e-adce-954a-9a55d6d97065@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,59 +58,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DISP_PWM controller's default behavior is to always use register
-double buffering: all reads/writes are then performed on shadow
-registers instead of working registers and this becomes an issue
-in case our chosen configuration in Linux is different from the
-default (or from the one that was pre-applied by the bootloader).
+Hi,
 
-An example of broken behavior is when the controller is configured
-to use shadow registers, but this driver wants to configure it
-otherwise: what happens is that the .get_state() callback is called
-right after registering the pwmchip and checks whether the PWM is
-enabled by reading the DISP_PWM_EN register;
-At this point, if shadow registers are enabled but their content
-was not committed before booting Linux, we are *not* reading the
-current PWM enablement status, leading to the kernel knowing that
-the hardware is actually enabled when, in reality, it's not.
+03.04.2023 16:58, David Hildenbrand пишет:
+> On 30.03.23 17:48, stsp wrote:
+>> Hello.
+>>
+>> The attached test-case demonstrates a
+>> bug in mremap(). If MREMAP_FIXED is used
+>> over an existing mapping and mremap() fails,
+>> destination area gets unmapped.
+>> AFAIK the failed syscall should have no
+>> observable effects.
+>
+> I remember that holds for various mapping-related syscalls: if 
+> something goes wrong, the end result is not guaranteed to be what we 
+> had before the syscall.
+>
+> For example, if you use mmap(MAP_FIXED) to replace part of an exiting 
+> mapping, we first munmap what's there and then try to mmap the new 
+> mapping. If something goes wrong while doing that, we cannot simple 
+> undo what we already did.
+>
+> Long story short: the semantics of these syscalls has never been to 
+> leave the system in the state as it was before in case anything goes 
+> wrong.
+>
+>
+> As another example, if you do an mprotect() that covers multiple VMAS, 
+> and there is an issue with the last VMA, all but the last VMA will 
+> have their permissions changed.
+>
+Thanks for info.
+Is this documented in a man page?
+I wonder how do you deal with mmap() and
+mprotect() on such occasions. mremap()
+is an extension, but mmap() and mprotect()
+are from posix, so is it a compliant impl?
 
-The aforementioned issue emerged since this driver was fixed with
-commit 0b5ef3429d8f ("pwm: mtk-disp: Fix the parameters calculated
-by the enabled flag of disp_pwm") making it to read the enablement
-status from the right register.
-
-Configure the controller in the .get_state() callback to avoid
-this desync issue and get the backlight properly working again.
-
-Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- drivers/pwm/pwm-mtk-disp.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
-index 82b430d881a2..fe9593f968ee 100644
---- a/drivers/pwm/pwm-mtk-disp.c
-+++ b/drivers/pwm/pwm-mtk-disp.c
-@@ -196,6 +196,16 @@ static int mtk_disp_pwm_get_state(struct pwm_chip *chip,
- 		return err;
- 	}
- 
-+	/*
-+	 * Apply DISP_PWM_DEBUG settings to choose whether to enable or disable
-+	 * registers double buffer and manual commit to working register before
-+	 * performing any read/write operation
-+	 */
-+	if (mdp->data->bls_debug)
-+		mtk_disp_pwm_update_bits(mdp, mdp->data->bls_debug,
-+					 mdp->data->bls_debug_mask,
-+					 mdp->data->bls_debug_mask);
-+
- 	rate = clk_get_rate(mdp->clk_main);
- 	con0 = readl(mdp->base + mdp->data->con0);
- 	con1 = readl(mdp->base + mdp->data->con1);
--- 
-2.39.0
+Also my example shows another bug
+that the VMAs are not merged after I
+restore the protection of one of them,
+allowing them to merge.
 
