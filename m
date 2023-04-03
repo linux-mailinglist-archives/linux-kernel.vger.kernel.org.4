@@ -2,116 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA9A6D4178
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EB36D417D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbjDCKCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
+        id S232011AbjDCKDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232163AbjDCKBv (ORCPT
+        with ESMTP id S232009AbjDCKC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:01:51 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8778524D;
-        Mon,  3 Apr 2023 03:01:49 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id D7606423BA;
-        Mon,  3 Apr 2023 10:01:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1680516108;
-        bh=+HaSZDGbivQJSY7YEFbLidqycutVbcVcWgZLNHkg3sc=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=PEBvY//MxjhXn7GofQK56jt6e0nLl+Cz8rwP5nuTiXfdMcbDcl9MNXNzupCuKIyOS
-         EeWYAjJgQRMUkPkzVUbeKo9E+NXlQ8LiPxACOmWFafGWMFfc8xhPlXlL9Tjenfpv75
-         W31kEJZh3fji0IuhFrEFOPY+AkbrHjz48RQyWPC32fQJOE8VRmENcvKcxg2B2QhZ9d
-         nA9sc+MvZ31pV60s9ZdwnPR7RQ5WBjqadpmcNxYsQbZRFV16grxPLJyeUNT88xaWYc
-         CSxtgq8EkkCoYGtpoa/K39A+gnuBigcUCxasY9M1sDflFEnMRO+0on/e9qorkY7Jbc
-         GEJgHiUoTEwAg==
-From:   Asahi Lina <lina@asahilina.net>
-Date:   Mon, 03 Apr 2023 19:01:12 +0900
-Subject: [PATCH v2 2/2] rust: sync: arc: Add
- UniqueArc<MaybeUninit<T>::assume_init()
+        Mon, 3 Apr 2023 06:02:57 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD412D52;
+        Mon,  3 Apr 2023 03:02:49 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2817D5C0114;
+        Mon,  3 Apr 2023 06:02:49 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 03 Apr 2023 06:02:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680516169; x=
+        1680602569; bh=KAs2cClcytIPI/wu2fz/XtyTfqxpeJmdesR7LFRIvfw=; b=J
+        499p0hPPencZjPib0BH5d3ajQHQAgwnB/MpQ7JRIiU4qYT2NqGLEUePG6uA6234Z
+        +3T4CTUPiQfH4ZBiCDWFHnS4DkvlzonlSGwRrug3Eyld3e1VyBvHQIc1kJSa59NP
+        vvhze5ix0I2PIoddn5sIpFmK262dErsiMVvmbG0Taaf0lPCbwOeqJuqvGskjqc30
+        QcWRju2ycv36wZMY65mkXxDP2MvXYYT125Vh9DIUFJmYW7nG7nY3T1FukmGhRQLE
+        MbEzVoZFccZqKqyWriU4farFj0et2qubH4WcOjwrGVnuF3uibhZXJZ6r7GtxRHzL
+        rq5U0gtxY7h9D8c+RiXEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680516169; x=1680602569; bh=KAs2cClcytIPI
+        /wu2fz/XtyTfqxpeJmdesR7LFRIvfw=; b=QSFQg3S7Q6mmaV36Dv8g9Hx3nbw5N
+        HzZ47pHWVbhm9paMJPgf2vppy30T1LMgpVuOafN9lChgQOabWew7dwA5IlBfJdT+
+        22Uup1afQ9c88vpClFuY5AcZ5qftK7aLnaodJh70T4Lc5Nue9fwRXG64E98DJq8A
+        IM6QJk7jma/7gs008ZZz/Hi0zx7Pqkax+LinpQRcsF+Bpxr7NxKMQeFEEKsaE/0V
+        nS1bv9Fjx/mMRpzu9iGU0rj/mu15665rDHV9TJEhkRfEW/DR5hkCPGQH3ppF6dzi
+        PHqOfycWZjWHeXkg9ngTkDSBYn9hIX7JkGUq4oSqLfGF4FIjd5JxLUsQw==
+X-ME-Sender: <xms:R6QqZJK-IIY7pWvu0J2GPlQmXDN7R9YvdtNXXN41WDHAHJTGXRR56A>
+    <xme:R6QqZFJsthmzMr9WYdL6rvgXIZ-CqvIcqXJTszIFL_Ku3jghf_utgz6xpRAC6TziE
+    C-sn2TlkhKh_aPg-XU>
+X-ME-Received: <xmr:R6QqZBsj9sZF2JT5vze3iTYAGIOM7PCMNyR2IbbGUqn3Q2BInss2lHqfoOAvx6ba17Dplw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedgvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeekvddvjeffheetgedtvdfgieejiedvgeejieet
+    jeehieehveffueekfeehffdvveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:R6QqZKagHubq8LCRXZR2uLZl4PrHr5QQQPSCuPeEEiUomEXHJo0a6g>
+    <xmx:R6QqZAZPq8jLBxwba-_fvVUfieux4O9wDr7QCeYGjJDfRT1Fy7PLTw>
+    <xmx:R6QqZOClXuhpmEe1eZFePDOxoNx_5q8klulCrUcseHkcQPhQFy3yeQ>
+    <xmx:SaQqZHlGG22Y51Mq4RyWgI0OuJM7U-kumeU4Q7kEUpVL0maQfFfB2A>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Apr 2023 06:02:46 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 08AC710D7B3; Mon,  3 Apr 2023 13:02:45 +0300 (+03)
+Date:   Mon, 3 Apr 2023 13:02:44 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCHv9 02/14] mm: Add support for unaccepted memory
+Message-ID: <20230403100244.4sre7ki4ccusiiul@box>
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <20230330114956.20342-3-kirill.shutemov@linux.intel.com>
+ <43234108-fa4f-7583-e3b4-2daa2de89fb0@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230224-rust-arc-v2-2-5c97a865b276@asahilina.net>
-References: <20230224-rust-arc-v2-0-5c97a865b276@asahilina.net>
-In-Reply-To: <20230224-rust-arc-v2-0-5c97a865b276@asahilina.net>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     Andreas Hindborg <a.hindborg@samsung.com>,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Benno Lossin <y86-dev@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680516096; l=1928;
- i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=+HaSZDGbivQJSY7YEFbLidqycutVbcVcWgZLNHkg3sc=;
- b=D/SmqTHwoV04N4AZ+pjn10VxfxZKRJYh1xmzLnOtmSG/S67qFVwAk3MdCshzPNeavWKr3bfxk
- fxnk5n1jxLuCUZL+ITvXD8CsT/RYmCobT9gRBt8mc0zEpd/tyYjEIkt
-X-Developer-Key: i=lina@asahilina.net; a=ed25519;
- pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <43234108-fa4f-7583-e3b4-2daa2de89fb0@suse.cz>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can already create `UniqueArc<MaybeUninit<T>>` instances with
-`UniqueArc::try_new_uninit()` and write to them with `write()`. Add
-the missing unsafe `assume_init()` function to promote it to
-`UniqueArc<T>`, so users can do piece-wise initialization of the
-contents instead of doing it all at once as long as they keep the
-invariants (the same requirements as `MaybeUninit::assume_init()`).
+On Mon, Apr 03, 2023 at 11:26:53AM +0200, Vlastimil Babka wrote:
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
+> 
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-This mirrors the std `Arc::assume_init()` function. In the kernel,
-since we have `UniqueArc`, arguably this only belongs there since most
-use cases will initialize it immediately after creating it, before
-demoting it to `Arc` to share it.
+Thanks!
 
-Co-authored-by: Benno Lossin <y86-dev@protonmail.com>
-Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-Signed-off-by: Asahi Lina <lina@asahilina.net>
----
- rust/kernel/sync/arc.rs | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+> Just a small suggestion below:
+> 
+> > +
+> > +static bool try_to_accept_memory(struct zone *zone, unsigned int order)
+> > +{
+> > +	long to_accept;
+> > +	int ret = false;
+> > +
+> > +	if (!static_branch_unlikely(&zones_with_unaccepted_pages))
+> > +		return false;
+> 
+> 
+> This potentially (depends on what compiler decides) means we'll call this
+> function just to skip the static branch. OTOH forcing it as inline would be
+> wasteful too. So I'd split that away and make the callers do that static
+> branch check inline. Just as deferred_pages_enabled() is used.
 
-diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index b904ed898d3a..b664b41e473d 100644
---- a/rust/kernel/sync/arc.rs
-+++ b/rust/kernel/sync/arc.rs
-@@ -489,6 +489,17 @@ impl<T> UniqueArc<MaybeUninit<T>> {
-     /// Converts a `UniqueArc<MaybeUninit<T>>` into a `UniqueArc<T>` by writing a value into it.
-     pub fn write(mut self, value: T) -> UniqueArc<T> {
-         self.deref_mut().write(value);
-+        // SAFETY: We have just written the contents fully.
-+        unsafe { self.assume_init() }
-+    }
+Like this?
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 07e16e9b49c4..80fe5e4b6cca 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -390,6 +390,7 @@ EXPORT_SYMBOL(nr_online_nodes);
+ static bool page_contains_unaccepted(struct page *page, unsigned int order);
+ static void accept_page(struct page *page, unsigned int order);
+ static bool try_to_accept_memory(struct zone *zone, unsigned int order);
++static inline bool has_unaccepted_memory(void);
+ static bool __free_unaccepted(struct page *page);
+ 
+ int page_group_by_mobility_disabled __read_mostly;
+@@ -3464,8 +3465,10 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
+ 				       gfp_mask)) {
+ 			int ret;
+ 
+-			if (try_to_accept_memory(zone, order))
+-				goto try_this_zone;
++			if (has_unaccepted_memory()) {
++				if (try_to_accept_memory(zone, order))
++					goto try_this_zone;
++			}
+ 
+ #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+ 			/*
+@@ -3519,8 +3522,10 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
+ 
+ 			return page;
+ 		} else {
+-			if (try_to_accept_memory(zone, order))
+-				goto try_this_zone;
++			if (has_unaccepted_memory()) {
++				if (try_to_accept_memory(zone, order))
++					goto try_this_zone;
++			}
+ 
+ #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+ 			/* Try again if zone has deferred pages */
+@@ -7302,9 +7307,6 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
+ 	long to_accept;
+ 	int ret = false;
+ 
+-	if (!static_branch_unlikely(&zones_with_unaccepted_pages))
+-		return false;
+-
+ 	/* How much to accept to get to high watermark? */
+ 	to_accept = high_wmark_pages(zone) -
+ 		    (zone_page_state(zone, NR_FREE_PAGES) -
+@@ -7321,6 +7323,11 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
+ 	return ret;
+ }
+ 
++static inline bool has_unaccepted_memory(void)
++{
++	return static_branch_unlikely(&zones_with_unaccepted_pages);
++}
 +
-+    /// Unsafely assume that `self` is initialized.
-+    ///
-+    /// # Safety
-+    ///
-+    /// The caller guarantees that the value behind this pointer has been initialized. It is
-+    /// *immediate* UB to call this when the value is not initialized.
-+    pub unsafe fn assume_init(self) -> UniqueArc<T> {
-         let inner = ManuallyDrop::new(self).inner.ptr;
-         UniqueArc {
-             // SAFETY: The new `Arc` is taking over `ptr` from `self.inner` (which won't be
-
+ static bool __free_unaccepted(struct page *page)
+ {
+ 	struct zone *zone = page_zone(page);
+@@ -7398,6 +7405,11 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
+ 	return false;
+ }
+ 
++static inline bool has_unaccepted_memory(void)
++{
++	return false;
++}
++
+ static bool __free_unaccepted(struct page *page)
+ {
+ 	BUILD_BUG();
 -- 
-2.40.0
-
+  Kiryl Shutsemau / Kirill A. Shutemov
