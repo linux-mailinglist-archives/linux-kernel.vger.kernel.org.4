@@ -2,123 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 619386D5371
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D336D5373
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233456AbjDCVXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 17:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
+        id S233749AbjDCVYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 17:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233207AbjDCVWr (ORCPT
+        with ESMTP id S233542AbjDCVXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:22:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46013C07
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:22:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B39762C43
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 21:22:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F78C433EF;
-        Mon,  3 Apr 2023 21:22:44 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1pjRdT-000FRa-0Z;
-        Mon, 03 Apr 2023 17:22:43 -0400
-Message-ID: <20230403212242.984727709@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Mon, 03 Apr 2023 17:21:31 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Douglas RAILLARD <douglas.raillard@arm.com>
-Subject: [for-linus][PATCH 6/6] tracing: Error if a trace event has an array for a __field()
-References: <20230403212125.244064799@goodmis.org>
+        Mon, 3 Apr 2023 17:23:51 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867F64C30
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:23:30 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17aceccdcf6so32313375fac.9
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 14:23:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680557009;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X9EPMXOr7/BpSW0fz3V3pwNkNbHFJwN9oEHw10txBko=;
+        b=JSrJHjc8ZlkN946jtgq7pXnminH4yEpKyDgM/gCOAmSADuPaZeN8qyXKh6Lz/tzW1k
+         vTRrhW3M0FG6eVQiT1zs3JO0WEUFCRAZXEmnyUVmCQfh325zdk6HjRCKfWEO5vHZ2RSV
+         GeyPLeOR4EuNwTOZEGuko3LAMXLdC7iuV1Zwrm4P2sKWvXR9ibfS69kHCma4Gu3Go0Bl
+         N0hS3WBTKQ4Fgr4To1R7dFmoSj2mJpzvYRJ4QLoHHQcRjM7UoUVVOXbRWEgE/Yix3v4F
+         qNsnERfOgf0ulmyZMGLFUpMyd/z89HcxRIWryz4ryLmHOlJnDzJUmy8/eUVgYwgz32x+
+         5bJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680557009;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X9EPMXOr7/BpSW0fz3V3pwNkNbHFJwN9oEHw10txBko=;
+        b=K6Kf/uWpam/6nQmlnB0oolE9fIOcro2V90Cb33RYkaJbOoG/9VpwSTo2gz8OYwpXFN
+         lR16dWGeQHpou4p52B3xYjUXe113sqrKS+5KZTOWlTKRFYHYMpeOhx5/D1lMfkQlcd0F
+         280cm/QGsDeRgI9Q73xPCk78QucZ+Qbue3udHsY4R30Lzlb7MvX7OupYJno2UjyBcnKX
+         NpxsSoGx4RYV874YYLcniGG0S8yt7SNTWWVDAUuTFCf72XWQwnFPEYJ68crzpnqmjyBO
+         i4G/pL0I4DkHlBNj4/bbFdTOaiRWKVxq7Y0+yYmhPzIK9cuYUmyXH9338CJdLwVwJ40a
+         IeNA==
+X-Gm-Message-State: AAQBX9dR6lE7WE5zeqpZGZPUwWUIzpFdPfik4Pjr7UuYBYjL99tHwI9J
+        yn4ZIdMCvFbNmMdbVhfZfcZLCnyYmZ6dq9tvKLehzw==
+X-Google-Smtp-Source: AKy350ZxhWGAvzQvHaIIWFH212tmU5Na2D4k/xzxENz1UReTgZm1yspXtLicu2nfaNdqwOwe55eUrkgJerG4aimb47Y=
+X-Received: by 2002:a05:6870:339e:b0:17e:7674:8df0 with SMTP id
+ w30-20020a056870339e00b0017e76748df0mr281290oae.9.1680557008648; Mon, 03 Apr
+ 2023 14:23:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230206172340.2639971-1-rananta@google.com> <20230206172340.2639971-5-rananta@google.com>
+ <ZCTdcJLxWBRXItSM@linux.dev>
+In-Reply-To: <ZCTdcJLxWBRXItSM@linux.dev>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Mon, 3 Apr 2023 14:23:17 -0700
+Message-ID: <CAJHc60xbhyiVieqzeMcB1S7UWw_J3Jyh8PqjA9GLOhudja5nmA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range()
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Wed, Mar 29, 2023 at 5:53=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> On Mon, Feb 06, 2023 at 05:23:37PM +0000, Raghavendra Rao Ananta wrote:
+> > Implement kvm_arch_flush_remote_tlbs_range() for arm64,
+> > such that it can utilize the TLBI range based instructions
+> > if supported.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >  arch/arm64/include/asm/kvm_host.h |  3 +++
+> >  arch/arm64/kvm/mmu.c              | 15 +++++++++++++++
+> >  2 files changed, 18 insertions(+)
+> >
+> > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm=
+/kvm_host.h
+> > index dee530d75b957..211fab0c1de74 100644
+> > --- a/arch/arm64/include/asm/kvm_host.h
+> > +++ b/arch/arm64/include/asm/kvm_host.h
+> > @@ -1002,6 +1002,9 @@ struct kvm *kvm_arch_alloc_vm(void);
+> >  #define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> >  int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+> >
+> > +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
+> > +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,=
+ u64 pages);
+> > +
+> >  static inline bool kvm_vm_is_protected(struct kvm *kvm)
+> >  {
+> >       return false;
+> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > index e98910a8d0af6..409cb187f4911 100644
+> > --- a/arch/arm64/kvm/mmu.c
+> > +++ b/arch/arm64/kvm/mmu.c
+> > @@ -91,6 +91,21 @@ int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+> >       return 0;
+> >  }
+> >
+> > +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,=
+ u64 pages)
+> > +{
+> > +     phys_addr_t start, end;
+> > +
+> > +     if (!system_supports_tlb_range())
+> > +             return -EOPNOTSUPP;
+>
+> There's multiple layers of fallback throughout this series, as it would
+> appear that deep in __kvm_tlb_flush_range() you're blasting the whole
+> VMID if either the range is too large or the feature isn't supported.
+>
+> Is it possible to just normalize on a single spot to gate the use of
+> range-based invalidations? I have a slight preference for doing it deep
+> in the handler, as it keeps the upper layers of code a bit more
+> readable.
+>
+I was a little skeptical on this part, since the
+kvm_arch_flush_remote_tlbs_range() expects to return -EOPNOTSUPP if
+indeed there's no support.
+But I see your point. The if-else in kvm_pgtable_stage2_flush_range()
+seems redundant and I can simply manage this conditions inside
+__kvm_tlb_flush_range_vmid_ipa() itself, but I'll leave the
+kvm_arch_flush_remote_tlbs_range()'s implementation as is. Thoughts?
 
-A __field() in the TRACE_EVENT() macro is used to set up the fields of the
-trace event data. It is for single storage units (word, char, int,
-pointer, etc) and not for complex structures or arrays. Unfortunately,
-there's nothing preventing the build from accepting:
+Thank you.
+Raghavendra
 
-    __field(int, arr[5]);
 
-from building. It will turn into a array value. This use to work fine, as
-the offset and size use to be determined by the macro using the field name,
-but things have changed and the offset and size are now determined by the
-type. So the above would only be size 4, and the next field will be
-located 4 bytes from it (instead of 20).
-
-The proper way to declare static arrays is to use the __array() macro.
-
-Instead of __field(int, arr[5]) it should be __array(int, arr, 5).
-
-Add some macro tricks to the building of a trace event from the
-TRACE_EVENT() macro such that __field(int, arr[5]) will fail to build. A
-comment by the failure will explain why the build failed.
-
-Link: https://lore.kernel.org/lkml/20230306122549.236561-1-douglas.raillard@arm.com/
-Link: https://lore.kernel.org/linux-trace-kernel/20230309221302.642e82d9@gandalf.local.home
-
-Reported-by: Douglas RAILLARD <douglas.raillard@arm.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- include/trace/stages/stage5_get_offsets.h | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
-
-diff --git a/include/trace/stages/stage5_get_offsets.h b/include/trace/stages/stage5_get_offsets.h
-index ac5c24d3beeb..e30a13be46ba 100644
---- a/include/trace/stages/stage5_get_offsets.h
-+++ b/include/trace/stages/stage5_get_offsets.h
-@@ -9,17 +9,30 @@
- #undef __entry
- #define __entry entry
- 
-+/*
-+ * Fields should never declare an array: i.e. __field(int, arr[5])
-+ * If they do, it will cause issues in parsing and possibly corrupt the
-+ * events. To prevent that from happening, test the sizeof() a fictitious
-+ * type called "struct _test_no_array_##item" which will fail if "item"
-+ * contains array elements (like "arr[5]").
-+ *
-+ * If you hit this, use __array(int, arr, 5) instead.
-+ */
- #undef __field
--#define __field(type, item)
-+#define __field(type, item)					\
-+	{ (void)sizeof(struct _test_no_array_##item *); }
- 
- #undef __field_ext
--#define __field_ext(type, item, filter_type)
-+#define __field_ext(type, item, filter_type)			\
-+	{ (void)sizeof(struct _test_no_array_##item *); }
- 
- #undef __field_struct
--#define __field_struct(type, item)
-+#define __field_struct(type, item)				\
-+	{ (void)sizeof(struct _test_no_array_##item *); }
- 
- #undef __field_struct_ext
--#define __field_struct_ext(type, item, filter_type)
-+#define __field_struct_ext(type, item, filter_type)		\
-+	{ (void)sizeof(struct _test_no_array_##item *); }
- 
- #undef __array
- #define __array(type, item, len)
--- 
-2.39.2
+> > +     start =3D start_gfn << PAGE_SHIFT;
+> > +     end =3D (start_gfn + pages) << PAGE_SHIFT;
+> > +
+> > +     kvm_call_hyp(__kvm_tlb_flush_range_vmid_ipa, &kvm->arch.mmu,
+> > +                     start, end, KVM_PGTABLE_MAX_LEVELS - 1, 0);
+> > +     return 0;
+> > +}
+> > +
+> >  static bool kvm_is_device_pfn(unsigned long pfn)
+> >  {
+> >       return !pfn_is_map_memory(pfn);
+> > --
+> > 2.39.1.519.gcb327c4b5f-goog
+> >
+> >
+>
+> --
+> Thanks,
+> Oliver
