@@ -2,48 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1146D3B4D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 03:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1513D6D3B51
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 03:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbjDCBQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 21:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
+        id S230463AbjDCBQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 21:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjDCBQO (ORCPT
+        with ESMTP id S229492AbjDCBQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 21:16:14 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603C2A5D7;
-        Sun,  2 Apr 2023 18:16:11 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PqXyt2cyJz4x1d;
-        Mon,  3 Apr 2023 11:16:06 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680484566;
-        bh=Eq34X4oBsarY8sKOnMd8UcyDXJyKSQMHQGeL0iJVB5o=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NcNmG7ivywHpUHLbL2b2YRk8T7f/34a2/FKp57xpJB+EMx1BRm/SRTsdn1Zied/jR
-         Vy4wph93x8SwXnZR8OVgVvN3QHIShAfOKZhRvMX5XfKGco59FCeWENVO+T+4itTaur
-         VI7T4xNuUxq9Kp6TEx/EffpoBFI0KAQceQvIdF4+Pm444aAMM7b5SnOW2FNfu39Dn8
-         Ue+ISf+WZ/zqd2zM0ZWMCLPBNRtmxkd/9I6oUcjnDcKuWtTjxvmz7MncLo+qND4CDi
-         9OftrnbV0j4gMsxOV4Y96nnYoeDIK3Ok9MI14G3QDolwKfgSQUHWwS52a0UT8ZuFlB
-         KJRse4K45XZBQ==
-Date:   Mon, 3 Apr 2023 11:16:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: linux-next: build failure after merge of the pm tree
-Message-ID: <20230403111605.7658ec62@canb.auug.org.au>
+        Sun, 2 Apr 2023 21:16:57 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE1C5BB2;
+        Sun,  2 Apr 2023 18:16:56 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pj8oQ-0004f3-1u;
+        Mon, 03 Apr 2023 03:16:46 +0200
+Date:   Mon, 3 Apr 2023 02:16:40 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>
+Cc:     Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: [PATCH net-next v2 00/14] net: dsa: add support for MT7988
+Message-ID: <cover.1680483895.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9FIjEAsBv/A+6tFJOfeHpfF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,76 +60,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/9FIjEAsBv/A+6tFJOfeHpfF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The MediaTek MT7988 SoC comes with a built-in switch very similar to
+previous MT7530 and MT7531. However, the switch address space is mapped
+into the SoCs memory space rather than being connected via MDIO.
+Using MMIO simplifies register access and also removes the need for a bus
+lock, and for that reason also makes interrupt handling more light-weight.
 
-Hi all,
+Note that this is different from previous SoCs like MT7621 and MT7623N
+which also came with an integrated MT7530-like switch which yet had to be
+accessed via MDIO.
 
-After merging the pm tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Split-off the part of the driver registering an MDIO driver, then add
+another module acting as MMIO/platform driver.
 
-drivers/virtio/virtio_mmio.c: In function 'vm_find_vqs':
-drivers/virtio/virtio_mmio.c:492:13: error: implicit declaration of functio=
-n 'of_property_read_bool'; did you mean 'fwnode_property_read_bool'? [-Werr=
-or=3Dimplicit-function-declaration]
-  492 |         if (of_property_read_bool(vm_dev->pdev->dev.of_node, "wakeu=
-p-source"))
-      |             ^~~~~~~~~~~~~~~~~~~~~
-      |             fwnode_property_read_bool
+The whole series has been tested on various MediaTek boards:
+ * MT7623A + MT7530 (BPi-R2)
+ * MT7986A + MT7531 (BPi-R3)
+ * MT7988A reference board
 
-Caused by commit (I am pretty sure, but can't see why)
+Changes since v1:
+ * use 'internal' PHY mode where appropriate
+ * use regmap_update_bits in mt7530_rmw
+ * improve dt-bindings
 
-  054e68aae050 ("ACPI: Replace irqdomain.h include with struct declarations=
-")
+Changes since RFC v3:
+ * WARN_ON_ONCE if register read fails
+ * move probing of the reset GPIO and reset controller link out of
+   common  probe function, as they are not actually common
 
-I have applied the following patch for today (and it could be applied
-to the pm tree).
+Changes since RFC v2:
+ * split into many small commits to ease review
+ * introduce helper functions to reduce code duplication
+ * use helpers for locking to make lock-skipping easier and less ugly
+   to implement.
+ * add dt-bindings for mediatek,mt7988-switch
 
-=46rom f920b59d2ca8dcbe8d80f103e109032800c699be Mon Sep 17 00:00:00 2001
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 3 Apr 2023 11:11:09 +1000
-Subject: [PATCH] virtio_mmio: fix up for "ACPI: Replace irqdomain.h include
- with struct declarations"
+Changes since initial RFC:
+ * use regmap for register access and move register access to bus-
+   specific driver
+ * move initialization of MT7531 SGMII PCS to MDIO driver
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/virtio/virtio_mmio.c | 1 +
- 1 file changed, 1 insertion(+)
+Daniel Golle (14):
+  net: dsa: mt7530: make some noise if register read fails
+  net: dsa: mt7530: refactor SGMII PCS creation
+  net: dsa: mt7530: use unlocked regmap accessors
+  net: dsa: mt7530: use regmap to access switch register space
+  net: dsa: mt7530: move SGMII PCS creation to mt7530_probe function
+  net: dsa: mt7530: introduce mutex helpers
+  net: dsa: mt7530: move p5_intf_modes() function to mt7530.c
+  net: dsa: mt7530: introduce mt7530_probe_common helper function
+  net: dsa: mt7530: introduce mt7530_remove_common helper function
+  net: dsa: mt7530: split-off common parts from mt7531_setup
+  net: dsa: mt7530: introduce separate MDIO driver
+  net: dsa: mt7530: skip locking if MDIO bus isn't present
+  net: dsa: mt7530: introduce driver for MT7988 built-in switch
+  dt-bindings: net: dsa: mediatek,mt7530: add mediatek,mt7988-switch
 
-diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-index 3ff746e3f24a..06f1ecff2a3a 100644
---- a/drivers/virtio/virtio_mmio.c
-+++ b/drivers/virtio/virtio_mmio.c
-@@ -55,6 +55,7 @@
- #define pr_fmt(fmt) "virtio-mmio: " fmt
-=20
- #include <linux/acpi.h>
-+#include <linux/of.h>
- #include <linux/dma-mapping.h>
- #include <linux/highmem.h>
- #include <linux/interrupt.h>
---=20
-2.39.2
+ .../bindings/net/dsa/mediatek,mt7530.yaml     |  26 +-
+ MAINTAINERS                                   |   3 +
+ drivers/net/dsa/Kconfig                       |  27 +-
+ drivers/net/dsa/Makefile                      |   2 +
+ drivers/net/dsa/mt7530-mdio.c                 | 271 +++++++++
+ drivers/net/dsa/mt7530-mmio.c                 | 101 ++++
+ drivers/net/dsa/mt7530.c                      | 565 +++++++++---------
+ drivers/net/dsa/mt7530.h                      |  38 +-
+ 8 files changed, 713 insertions(+), 320 deletions(-)
+ create mode 100644 drivers/net/dsa/mt7530-mdio.c
+ create mode 100644 drivers/net/dsa/mt7530-mmio.c
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/9FIjEAsBv/A+6tFJOfeHpfF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+base-commit: 51aaa68222d6c34f0373cf95223ce2f230329e8f
+-- 
+2.40.0
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqKNUACgkQAVBC80lX
-0Gx+rAf+JAA85K3leQJDMrnOUaFhIUABWSXL8Eo3Fh1XgOSnfF+XtJFgkw6Bf7hp
-zUldkJpbw9PogNvUnelhMrLzzXvvY8WXUanp6Da8XujGAMOtXrVEmnfx65pDKf5P
-qBoueyo0CmjMeyULZbeni0bvab8ow2hdOIlffqI6lczNKOfLsyEomgJwkGQxejKN
-8T+PAOMOhBKMKdLokWJ7Mz9HUDlDY4ZL06uryxoQVu8jOW0aOfcFysqyOXJ9kX9w
-/+87pHn6zD6hKXlekXxncnP2LuBVMaO8mccAUS6Wuz7KrxDb+7Ms3fWciFUQL3dJ
-Y5hhSXs/9u618D++hmfc5skBsbAtuA==
-=MgB1
------END PGP SIGNATURE-----
-
---Sig_/9FIjEAsBv/A+6tFJOfeHpfF--
