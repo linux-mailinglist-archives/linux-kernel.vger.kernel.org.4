@@ -2,81 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B8C6D4604
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5D96D4608
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232598AbjDCNmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
+        id S232494AbjDCNnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbjDCNms (ORCPT
+        with ESMTP id S231549AbjDCNnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:42:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C4F10419;
-        Mon,  3 Apr 2023 06:42:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Apr 2023 09:43:35 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F6C1FCB;
+        Mon,  3 Apr 2023 06:43:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ACDD61638;
-        Mon,  3 Apr 2023 13:42:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03780C433D2;
-        Mon,  3 Apr 2023 13:42:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680529366;
-        bh=owyom4CpdsC7GEmcYFEc5y8r7LgfED1mw1+NirsoRf0=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=D5RNrASxmZ7G3Cn8ml/ukv+Y4dVsKQxdjihXNg7D1nsNfa3wD7s257+KBFagv+6Dq
-         q9U+WHYsun/hcLIiN7bkfAyUEWvpy/gldxu3NKZzgvo67lQCs9uqmrBC4UQgiWcvrh
-         ifO0VjLej/cGjSQF3Pl0ZxagLSUx6pu8MTyxtpRsMzBhz+X7Aw/Y5mmxLIwR9eTPKP
-         n3oavfUVfy8haumlJg6kCFuyzGavuKSNBO48h8IETz+Eh5sATqDzNE8tJlM7C2nBCm
-         UM0RoSukVPMzlwqZrMoyj6owrfqZYZbBQddZCnpAg7Z56CxNopVCYW1POBJLV7OnIs
-         WTjrrPF4vNDOA==
-Content-Type: text/plain; charset="utf-8"
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1F8C521D6B;
+        Mon,  3 Apr 2023 13:43:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1680529413; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PYHhbD4MHsOrgjUSCx36DUU/r9Dt3i0n6aCrmkt21ps=;
+        b=TPNVXHVEPbTqKvrgilc4LHktaPlNBN4lfeGo2MCYTNy/y54aVAoXASVa8AO/8qrCvlx7Bw
+        F/OcJLhrSdpUQVK8WTVQVWKdf5LI29HrO2A6sgfXh4gc3R915vcGapkwEdFQH8HTW/BwiW
+        e24kAjh90STHS47LoXPbD5uctHHdAPE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1680529413;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PYHhbD4MHsOrgjUSCx36DUU/r9Dt3i0n6aCrmkt21ps=;
+        b=hfwjJzjGEn9VdgG14TUxyRzf8C5IBckNpnpL7i3pldeLTFJSQXGLzvhQ6HML/EUgvDzmGp
+        JQd6/VUwZl24apCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9E7FF13416;
+        Mon,  3 Apr 2023 13:43:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2VD0JQTYKmRyegAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 03 Apr 2023 13:43:32 +0000
+Message-ID: <4c319a60-c1fb-fe43-65be-9729f0261dab@suse.cz>
+Date:   Mon, 3 Apr 2023 15:43:32 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCHv9 04/14] mm/page_alloc: Add sysfs handle to accept
+ accept_memory
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <20230330114956.20342-5-kirill.shutemov@linux.intel.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230330114956.20342-5-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Subject: Re: wifi: b43legacy: Remove the unused function prev_slot()
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230330021841.67724-1-jiapeng.chong@linux.alibaba.com>
-References: <20230330021841.67724-1-jiapeng.chong@linux.alibaba.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     Larry.Finger@lwfinger.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <168052936227.11825.11333120719656159579.kvalo@kernel.org>
-Date:   Mon,  3 Apr 2023 13:42:43 +0000 (UTC)
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jiapeng Chong <jiapeng.chong@linux.alibaba.com> wrote:
-
-> The function prev_slot is defined in the dma.c file, but not called
-> elsewhere, so remove this unused function.
+On 3/30/23 13:49, Kirill A. Shutemov wrote:
+> Write amount of memory to accept into the new sysfs handle
+> /sys/kernel/mm/page_alloc/accept_memory.
 > 
-> drivers/net/wireless/broadcom/b43legacy/dma.c:130:19: warning: unused function 'prev_slot'.
+> Write 'all' to the handle to accept all memory in the system.
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4642
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
+> It can be used to implement background memory accepting from userspace.
+> It is also useful for debugging.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Patch applied to wireless-next.git, thanks.
+Somewhat similarly to patch 3, I'd think we don't need this patch in
+mainline without clear usecases first, although it's good to post for
+testing/debugging.
 
-e83ce86aa7d9 wifi: b43legacy: Remove the unused function prev_slot()
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230330021841.67724-1-jiapeng.chong@linux.alibaba.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> ---
+>  mm/page_alloc.c | 64 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 509a93b7e5af..07e16e9b49c4 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -7343,6 +7343,45 @@ static bool __free_unaccepted(struct page *page)
+>  	return true;
+>  }
+>  
+> +static ssize_t accept_memory_store(struct kobject *kobj,
+> +				    struct kobj_attribute *attr,
+> +				    const char *buf, size_t count)
+> +{
+> +	unsigned long to_accept = 0;
+> +	struct zone *zone;
+> +	char *retptr;
+> +
+> +	if (sysfs_streq(buf, "all")) {
+> +		to_accept = ULONG_MAX;
+> +	} else {
+> +		to_accept = memparse(buf, &retptr);
+> +
+> +		/* Get rid of trailing whitespace, including '\n' */
+> +		retptr = skip_spaces(retptr);
+> +
+> +		if (*retptr != 0 || to_accept == 0)
+> +			return -EINVAL;
+> +	}
+> +
+> +	for_each_populated_zone(zone) {
+> +		while (try_to_accept_memory_one(zone)) {
+> +			if (to_accept <= PAGE_SIZE << MAX_ORDER)
+> +				return count;
+> +
+> +			to_accept -= PAGE_SIZE << MAX_ORDER;
+> +		}
+> +	}
+> +
+> +	return count;
+> +}
+> +
+> +static struct kobj_attribute accept_memory_attr = __ATTR_WO(accept_memory);
+> +
+> +static struct attribute *page_alloc_attr[] = {
+> +	&accept_memory_attr.attr,
+> +	NULL
+> +};
+> +
+>  #else
+>  
+>  static bool page_contains_unaccepted(struct page *page, unsigned int order)
+> @@ -7366,3 +7405,28 @@ static bool __free_unaccepted(struct page *page)
+>  }
+>  
+>  #endif /* CONFIG_UNACCEPTED_MEMORY */
+> +
+> +static const struct attribute_group page_alloc_attr_group = {
+> +#ifdef CONFIG_UNACCEPTED_MEMORY
+> +	.attrs = page_alloc_attr,
+> +#endif
+> +};
+> +
+> +static int __init page_alloc_init_sysfs(void)
+> +{
+> +	struct kobject *page_alloc_kobj;
+> +	int err;
+> +
+> +	page_alloc_kobj = kobject_create_and_add("page_alloc", mm_kobj);
+> +	if (!page_alloc_kobj)
+> +		return -ENOMEM;
+> +
+> +	err = sysfs_create_group(page_alloc_kobj, &page_alloc_attr_group);
+> +	if (err) {
+> +		kobject_put(page_alloc_kobj);
+> +		return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +late_initcall(page_alloc_init_sysfs);
 
