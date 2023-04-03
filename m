@@ -2,78 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8106D45CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C348D6D45CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbjDCN2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
+        id S232618AbjDCN2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbjDCN2h (ORCPT
+        with ESMTP id S232536AbjDCN2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:28:37 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089BD46AB
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:28:35 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a44so11692241ljr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 06:28:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680528513;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NTBu3T1hJbXzcrjoGIJunNPzVFd+efBZWIx71bT93xk=;
-        b=wQ0g8/V8tDhuICVtLAptLwNJswGIpGOW6dhlyRB3fdbSiFnwK8HpSJuArQuskuSsfH
-         LvY7E6Ne5GR+Tjqmbt23wr9RqB5q4kgeXKguw8SwA+MFnlEgbEzOjvtCQVYj5aoaVqNO
-         lwpevotRMsU9eRkylFiVH+0Jn4LkvPT4JggfOHZoJc/bbYcBXQnI6hfEOaXSbLPH+vsn
-         IixYvcaQ/cVHgIdFDtJAy9wCq8pN/U1lNJSPdihtHJSLckoI0LDZzRHFAh2lrBQY1IZp
-         CD4pjmRNTeaEnaUX/NI4xmOtBZbDGaxJV6cFMel0u9oeknXft25TIYWkNmCqYMIoQhyn
-         HCCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680528513;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NTBu3T1hJbXzcrjoGIJunNPzVFd+efBZWIx71bT93xk=;
-        b=ddYdHzzjBVUGHzL9mJnBHb6zybCUNHb0Wb9/jZFUYS1EsLQd+qfLey9hBW2jtMVNgv
-         D9DmHYV7vSEUvIxiLrXeapdcqNLlj0JkfNstoHdzbOvBVV01JnBgX+qjXCLZrcGwutY4
-         +6oZQ38X93ZqX0miTLsCMvakMDH3FrEKFEZuj1wHE3CWzLzCtb7wEXVggYBYal5nUbTg
-         Ud8giHwL9xDStQ0nitb5o8lpRGN9G9hXIyoc9ENNErWGnI5UxH+PqGaRyoyTnS23uS6r
-         xJVVCXuLIJ5+3Hdce4d8u9jh4ssajx/q6zvqdVfRPt2pyDhU63B6e3DHzEg3ibKezUo6
-         n3tA==
-X-Gm-Message-State: AAQBX9egsVGmxoXxVNsw0fk9OOCmAFYp9RpmOoEwem9RS0WUodZXWOOv
-        ZRPggr6wLv1+2mqBsPw/Ax246w==
-X-Google-Smtp-Source: AKy350bltB/j+7gkyzcUfPeXeSlKDE+w+ZmetH3bB5XqsR5v53b4LkVVARBVVF8mPwYthu4p/dOhxw==
-X-Received: by 2002:a2e:b0c4:0:b0:288:7a51:3882 with SMTP id g4-20020a2eb0c4000000b002887a513882mr10477487ljl.10.1680528513306;
-        Mon, 03 Apr 2023 06:28:33 -0700 (PDT)
-Received: from [192.168.1.101] (abxj135.neoplus.adsl.tpnet.pl. [83.9.3.135])
-        by smtp.gmail.com with ESMTPSA id t15-20020a2e9c4f000000b0029ab1f2b196sm373133ljj.24.2023.04.03.06.28.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 06:28:32 -0700 (PDT)
-Message-ID: <1db568b2-4f1d-736a-1987-6c2b8359a26d@linaro.org>
-Date:   Mon, 3 Apr 2023 15:28:31 +0200
+        Mon, 3 Apr 2023 09:28:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A080310C8;
+        Mon,  3 Apr 2023 06:28:38 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 52D1B1FF8F;
+        Mon,  3 Apr 2023 13:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1680528517; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zHqm72f+Z0I2AzfAbhnKdnJNlmuD9/GdE0RimqxF3Bk=;
+        b=XkFA+dPaXYBCtXjZnIh4szDFpQyFAbgURFtWJRBp72ylru+ubP+sTKd0QLfYl8oVc+Ixfs
+        rNSkSh9+aLOTgj2DaZY3hGjW8HHY0YR7nlDZ2/mRsfW0EDTbJnJQ3Zdnx/UNNDLhzOUctg
+        hHAHydkFgXA0q7O3MJB1VHuIQGbrar0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1680528517;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zHqm72f+Z0I2AzfAbhnKdnJNlmuD9/GdE0RimqxF3Bk=;
+        b=asU5R1Qcu5R93vWGXtOCEMuBatUblI6aSIhFT7IZYcZjU9yCRyubBsXf5VUCB/d+SB+pPS
+        5x4XX0DH2gRwmIBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C19CB1331A;
+        Mon,  3 Apr 2023 13:28:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id I7tWLoTUKmTwcAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 03 Apr 2023 13:28:36 +0000
+Message-ID: <48567ee3-b482-bafd-bd25-cbb8bf3403b2@suse.cz>
+Date:   Mon, 3 Apr 2023 15:28:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: correct Soundwire wakeup
- interrupt name
+ Thunderbird/102.9.0
+Subject: Re: [PATCHv9 11/14] x86/mm: Avoid load_unaligned_zeropad() stepping
+ into unaccepted memory
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230403132328.61414-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230403132328.61414-1-krzysztof.kozlowski@linaro.org>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <20230330114956.20342-12-kirill.shutemov@linux.intel.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230330114956.20342-12-kirill.shutemov@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,39 +100,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3.04.2023 15:23, Krzysztof Kozlowski wrote:
-> The bindings expect second Soundwire interrupt to be "wakeup" (Linux
-> driver takes by index):
-Seems to be a common occurence with drivers that were written a long
-time ago but have been updated for new hw since.. Perhaps something
-like of_irq_get_by_name_idx(..., "name", idx_if_not_found) could
-be useful..
-
-
+On 3/30/23 13:49, Kirill A. Shutemov wrote:
+> load_unaligned_zeropad() can lead to unwanted loads across page boundaries.
+> The unwanted loads are typically harmless. But, they might be made to
+> totally unrelated or even unmapped memory. load_unaligned_zeropad()
+> relies on exception fixup (#PF, #GP and now #VE) to recover from these
+> unwanted loads.
 > 
->   sc8280xp-crd.dtb: soundwire-controller@3330000: interrupt-names:1: 'wakeup' was expected
+> But, this approach does not work for unaccepted memory. For TDX, a load
+> from unaccepted memory will not lead to a recoverable exception within
+> the guest. The guest will exit to the VMM where the only recourse is to
+> terminate the guest.
 > 
-> Fixes: c18773d162a6 ("arm64: dts: qcom: sc8280xp: add SoundWire and LPASS")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> There are three parts to fix this issue and comprehensively avoid access
+> to unaccepted memory. Together these ensure that an extra "guard" page
+> is accepted in addition to the memory that needs to be used.
+> 
+> 1. Implicitly extend the range_contains_unaccepted_memory(start, end)
+>    checks up to end+2M if 'end' is aligned on a 2M boundary. It may
+>    require checking 2M chunk beyond end of RAM. The bitmap allocation is
+>    modified to accommodate this.
+> 2. Implicitly extend accept_memory(start, end) to end+2M if 'end' is
+>    aligned on a 2M boundary.
+> 3. Set PageUnaccepted() on both memory that itself needs to be accepted
+>    *and* memory where the next page needs to be accepted. Essentially,
+>    make PageUnaccepted(page) a marker for whether work needs to be done
+>    to make 'page' usable. That work might include accepting pages in
+>    addition to 'page' itself.
+> 
+> Side note: This leads to something strange. Pages which were accepted
+> 	   at boot, marked by the firmware as accepted and will never
+> 	   _need_ to be accepted might have PageUnaccepted() set on
+> 	   them. PageUnaccepted(page) is a cue to ensure that the next
+> 	   page is accepted before 'page' can be used.
+
+At least the part about PageUnaccepted() is obsolete in v9, no?
+
+> This is an actual, real-world problem which was discovered during TDX
+> testing.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/x86/mm/unaccepted_memory.c         | 39 +++++++++++++++++++++++++
+>  drivers/firmware/efi/libstub/x86-stub.c |  7 +++++
+>  2 files changed, 46 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index af7bee14fa06..cd38320dafda 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -2606,7 +2606,7 @@ swr2: soundwire-controller@3330000 {
->  			reg = <0 0x03330000 0 0x2000>;
->  			interrupts-extended = <&intc GIC_SPI 959 IRQ_TYPE_LEVEL_HIGH>,
->  					      <&intc GIC_SPI 520 IRQ_TYPE_LEVEL_HIGH>;
-> -			interrupt-names = "core", "wake";
-> +			interrupt-names = "core", "wakeup";
+> diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
+> index 1df918b21469..a0a58486eb74 100644
+> --- a/arch/x86/mm/unaccepted_memory.c
+> +++ b/arch/x86/mm/unaccepted_memory.c
+> @@ -23,6 +23,38 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
+>  	bitmap = __va(boot_params.unaccepted_memory);
+>  	range_start = start / PMD_SIZE;
 >  
->  			clocks = <&txmacro>;
->  			clock-names = "iface";
+> +	/*
+> +	 * load_unaligned_zeropad() can lead to unwanted loads across page
+> +	 * boundaries. The unwanted loads are typically harmless. But, they
+> +	 * might be made to totally unrelated or even unmapped memory.
+> +	 * load_unaligned_zeropad() relies on exception fixup (#PF, #GP and now
+> +	 * #VE) to recover from these unwanted loads.
+> +	 *
+> +	 * But, this approach does not work for unaccepted memory. For TDX, a
+> +	 * load from unaccepted memory will not lead to a recoverable exception
+> +	 * within the guest. The guest will exit to the VMM where the only
+> +	 * recourse is to terminate the guest.
+> +	 *
+> +	 * There are three parts to fix this issue and comprehensively avoid
+> +	 * access to unaccepted memory. Together these ensure that an extra
+> +	 * "guard" page is accepted in addition to the memory that needs to be
+> +	 * used:
+> +	 *
+> +	 * 1. Implicitly extend the range_contains_unaccepted_memory(start, end)
+> +	 *    checks up to end+2M if 'end' is aligned on a 2M boundary.
+> +	 *
+> +	 * 2. Implicitly extend accept_memory(start, end) to end+2M if 'end' is
+> +	 *    aligned on a 2M boundary. (immediately following this comment)
+> +	 *
+> +	 * 3. Set PageUnaccepted() on both memory that itself needs to be
+> +	 *    accepted *and* memory where the next page needs to be accepted.
+> +	 *    Essentially, make PageUnaccepted(page) a marker for whether work
+> +	 *    needs to be done to make 'page' usable. That work might include
+> +	 *    accepting pages in addition to 'page' itself.
+> +	 */
+
+And here.
+
+> +	if (!(end % PMD_SIZE))
+> +		end += PMD_SIZE;
+> +
+>  	spin_lock_irqsave(&unaccepted_memory_lock, flags);
+>  	for_each_set_bitrange_from(range_start, range_end, bitmap,
+>  				   DIV_ROUND_UP(end, PMD_SIZE)) {
+> @@ -46,6 +78,13 @@ bool range_contains_unaccepted_memory(phys_addr_t start, phys_addr_t end)
+>  
+>  	bitmap = __va(boot_params.unaccepted_memory);
+>  
+> +	/*
+> +	 * Also consider the unaccepted state of the *next* page. See fix #1 in
+> +	 * the comment on load_unaligned_zeropad() in accept_memory().
+> +	 */
+> +	if (!(end % PMD_SIZE))
+> +		end += PMD_SIZE;
+> +
+>  	spin_lock_irqsave(&unaccepted_memory_lock, flags);
+>  	while (start < end) {
+>  		if (test_bit(start / PMD_SIZE, bitmap)) {
+> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> index 1643ddbde249..1afe7b5b02e1 100644
+> --- a/drivers/firmware/efi/libstub/x86-stub.c
+> +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> @@ -715,6 +715,13 @@ static efi_status_t allocate_unaccepted_bitmap(struct boot_params *params,
+>  		return EFI_SUCCESS;
+>  	}
+>  
+> +	/*
+> +	 * range_contains_unaccepted_memory() may need to check one 2M chunk
+> +	 * beyond the end of RAM to deal with load_unaligned_zeropad(). Make
+> +	 * sure that the bitmap is large enough handle it.
+> +	 */
+> +	max_addr += PMD_SIZE;
+> +
+>  	/*
+>  	 * If unaccepted memory is present, allocate a bitmap to track what
+>  	 * memory has to be accepted before access.
+
