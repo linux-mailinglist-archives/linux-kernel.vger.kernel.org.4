@@ -2,162 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0956D4532
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7636D4536
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbjDCNDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
+        id S232499AbjDCNEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232434AbjDCNDo (ORCPT
+        with ESMTP id S232491AbjDCND5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:03:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592A620C27;
-        Mon,  3 Apr 2023 06:03:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F095BB8198B;
-        Mon,  3 Apr 2023 13:03:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E51C4339B;
-        Mon,  3 Apr 2023 13:03:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680526988;
-        bh=v1Pszh5fW8WyXmnfcFzSWf8zEpFGb5aRngCORZusvag=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V3ArRHOyteVcFRd/xdt0WMXDJEPg9g+QwOtYaV47vHGdMWCMITjMb8H1zlhgjnTKh
-         GZGzgxI+uw/UsjJTYS9Qv8ewz8Iz/3Bafsw7t8rG1a2afWg+aqbPpnJLS4vacPjxB9
-         ZldDcAWyHtdwf42Qyy0lZZ5b/Jvfj+iPPZ0Dq8wRLY1znajqL6wRn471YfO7cxsEgF
-         FAGE9A61odAekWrpouMTguzpWX0K68bhDscqKjF1UnEibudIfJYK+8Rc6MpZ6flBQi
-         a96DECHz49gt2wut/Ssg4y8n69O6gQT0neOJr57Gkp7lnil+b1cnxy/1n/IUNWULCc
-         yHQJywfaLNJFA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pjJqP-0004IS-0m; Mon, 03 Apr 2023 15:03:33 +0200
-Date:   Mon, 3 Apr 2023 15:03:33 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-pmics: fix pon compatible and
- registers
-Message-ID: <ZCrOpWowEjUmltVA@hovoldconsulting.com>
-References: <20230327122948.4323-1-johan+linaro@kernel.org>
- <48f71f9a-0d00-16df-fff8-5aa455918378@linaro.org>
- <ZCqwWwdhhJdOK+5Y@hovoldconsulting.com>
- <5dfb81df-8ae2-eb62-01a2-b26c6b8d2597@linaro.org>
+        Mon, 3 Apr 2023 09:03:57 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C013C39
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:03:47 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id 9-20020a5ea509000000b0074ca36737d2so17483267iog.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 06:03:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680527026; x=1683119026;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UeW8ljnyP6swcMnfaUC9awkjoZoVFaQ6LdG1DUitAXs=;
+        b=rlCzNV0rFdtGSQ2VEWkfFbuxv2Mmo6OCqQWNfqOt6W3EDH7aOTlwRY3YgCIndceCRU
+         qJxbOodDaT5l722kSYqptDaMCpX4Z5YBEAcrXrzrtbVUEnBzSzTKV3sZ+uMjD4ZvdpaQ
+         rKZ+pKHvCVe1colFdx3yKMhPI/DMhxt1mJsTWAlijQVZu+f/kEC04zN7gy9BV1aT6mbU
+         U9fuH3pDDtU7GtJc63StI2QlIatT+6b2cAl5gxqnLb7kIJbeCioz7aQXqG6oVttSbsKg
+         G1gSjALDey2h32wKvITMQp5M/BXaM10kiPbqLllL7sia15hwJ2A8F4uIW/FDFTshBa9T
+         u+Kg==
+X-Gm-Message-State: AAQBX9eIcu3mlPs4OkzwCxWw7A+NkEBkbG6lr8qNN5owA58RGqlMmLZs
+        hZtvxutjk+okluV5QO0FJOZszDKhbYEFKFnWdVM1LgvLAcfm
+X-Google-Smtp-Source: AKy350ZwMHK9GlM9NB+l45StTEeFEY2I9o7NtOhRqFo/jS2Mo2/nF7emiLmnqIYqLlap8/XeB+AaSP8IC5hwqZ064lvA1k92ZIWw
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5dfb81df-8ae2-eb62-01a2-b26c6b8d2597@linaro.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:7b06:0:b0:326:61cb:5f3b with SMTP id
+ w6-20020a927b06000000b0032661cb5f3bmr3181458ilc.3.1680527026483; Mon, 03 Apr
+ 2023 06:03:46 -0700 (PDT)
+Date:   Mon, 03 Apr 2023 06:03:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007301c505f86e3072@google.com>
+Subject: [syzbot] [ntfs3?] UBSAN: shift-out-of-bounds in attr_set_size
+From:   syzbot <syzbot+14a2433710a3affee84e@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 02:33:01PM +0200, Krzysztof Kozlowski wrote:
-> On 03/04/2023 12:54, Johan Hovold wrote:
-> > On Mon, Apr 03, 2023 at 11:18:07AM +0200, Krzysztof Kozlowski wrote:
-> >> On 27/03/2023 14:29, Johan Hovold wrote:
-> >>> The pmk8280 PMIC PON peripheral is gen3 and uses two sets of registers;
-> >>> hlos and pbs.
-> >>>
-> >>> This specifically fixes the following error message during boot when the
-> >>> pbs registers are not defined:
-> >>>
-> >>> 	PON_PBS address missing, can't read HW debounce time
-> >>>
-> >>> Note that this also enables the spurious interrupt workaround introduced
-> >>> by commit 0b65118e6ba3 ("Input: pm8941-pwrkey - add software key press
-> >>> debouncing support") (which may or may not be needed).
-> >>>
-> >>> Fixes: ccd3517faf18 ("arm64: dts: qcom: sc8280xp: Add reference device")
-> >>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> >>> ---
-> >>>  arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 5 +++--
-> >>>  1 file changed, 3 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
-> >>> index c35e7f6bd657..a0ba535bb6c9 100644
-> >>> --- a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
-> >>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
-> >>> @@ -59,8 +59,9 @@ pmk8280: pmic@0 {
-> >>>  		#size-cells = <0>;
-> >>>  
-> >>>  		pmk8280_pon: pon@1300 {
-> >>> -			compatible = "qcom,pm8998-pon";
-> >>> -			reg = <0x1300>;
-> >>> +			compatible = "qcom,pmk8350-pon";
-> >>
-> >> Same comment as Dmitry's. There is no compatible "qcom,pmk8350-pon"
-> >> ccd3517faf18, therefore indicated backport (through AUTOSEL) will lead
-> >> to invalid stable kernel.
-> >>
-> >> You must drop the Fixes tag, because this cannot be backported.
-> > 
-> > That's bullshit. Do you see a stable tag? Is 5.19-stable still active?
-> 
-> Why do you refer to activeness of v5.19? This will go also to v6.0 and v6.1.
+Hello,
 
-6.0 stable is also EOL, and 6.1 has "qcom,pmk8350-pon".
+syzbot found the following issue on:
 
-> > The problem is that the driver was updated before the binding was so the
-> > above mentioned probe error has been there since this file was merged.
-> 
-> I grepped and that commit did not have such compatible. Are you saying
-> that the kernel which was released with this commit already had that
-> compatible in driver (through different merge/tree)?
+HEAD commit:    7e364e56293b Linux 6.3-rc5
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a94395c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d9a438ce47536f0c
+dashboard link: https://syzkaller.appspot.com/bug?extid=14a2433710a3affee84e
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-The pwrkey started printing an error when the PON register was not
-defined in 5.18 so the problem was already there when support for
-sc8280xp was merged. Hence the Fixes tag.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-	0b65118e6ba3 ("Input: pm8941-pwrkey - add software key press debouncing support")
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/54c56bddacf4/disk-7e364e56.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/447e5d1af596/vmlinux-7e364e56.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3e2d1545e7be/bzImage-7e364e56.xz
 
-> > AUTOSEL is crazy and people apparently just ignore it instead of NAKing
-> > when it is suggesting backporting devicetree cleanups (which to be fair
-> > should generally not have Fixes tags in the first place).
-> 
-> Sorry, no clue what do you want to say here... if you are unhappy with
-> AUTOSEL, I am not the one to receive such feedback. Anyway, regardless
-> of AUTOSEL, my concern was that the release containing that commit was
-> not ready to work with that compatible. Isn't this the case here?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+14a2433710a3affee84e@syzkaller.appspotmail.com
 
-You were the one who brought up AUTOSEL, but it's shortcomings should
-not be relevant here and that was my point.
+================================================================================
+UBSAN: shift-out-of-bounds in fs/ntfs3/attrib.c:450:9
+shift exponent 64 is too large for 32-bit type 'u32' (aka 'unsigned int')
+CPU: 1 PID: 1832 Comm: syz-executor.1 Not tainted 6.3.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x3c3/0x420 lib/ubsan.c:387
+ attr_set_size+0x32c2/0x4290 fs/ntfs3/attrib.c:450
+ ntfs_extend_mft+0x188/0x4b0 fs/ntfs3/fsntfs.c:511
+ ntfs_look_free_mft+0x43d/0x10b0 fs/ntfs3/fsntfs.c:589
+ ntfs_create_inode+0x4d7/0x3830 fs/ntfs3/inode.c:1296
+ ntfs_atomic_open+0x3db/0x530 fs/ntfs3/namei.c:424
+ atomic_open fs/namei.c:3279 [inline]
+ lookup_open fs/namei.c:3387 [inline]
+ open_last_lookups fs/namei.c:3484 [inline]
+ path_openat+0x103c/0x3170 fs/namei.c:3712
+ do_filp_open+0x234/0x490 fs/namei.c:3742
+ do_sys_openat2+0x13f/0x500 fs/open.c:1348
+ do_sys_open fs/open.c:1364 [inline]
+ __do_sys_open fs/open.c:1372 [inline]
+ __se_sys_open fs/open.c:1368 [inline]
+ __x64_sys_open+0x225/0x270 fs/open.c:1368
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f99f548c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f99f622e168 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007f99f55abf80 RCX: 00007f99f548c0f9
+RDX: 0000000000000000 RSI: 0000000000060142 RDI: 0000000020000000
+RBP: 00007f99f54e7b39 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd74d2bccf R14: 00007f99f622e300 R15: 0000000000022000
+ </TASK>
+================================================================================
 
-No one is suggesting to backport this patch, but if someone were then
-they need to do just that and *port* it to 5.19 or whatever imaginary
-stable tree you care about which do not have "qcom,pmk8350-pon" (as I
-mentioned below).
 
-> > If 5.19-stable was still active and someone suggested backporting this
-> 
-> Whether v5.19 is active or not, it does not matter. Why would it matter?
-> This will go longterm v6.1 as well!
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-That would be perfectly fine as, again, 6.1 has "qcom,pmk8350-pon".
-
-> > one, they would have to change the compatible string to match the
-> > inconsistent 5.19 kernel. Note that that would need to happen regardless
-> > of whether this patch has a Fixes tag or not.
-> 
-> Any manual backporting of something which is not a fix for older kernel
-> is already risky business and whoever is doing it, he is responsible for
-> the outcome.
-
-Exactly, and the same applies to fixes and arguable scripted backports
-as well.
-
-Johan
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
