@@ -2,71 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6536D4515
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68506D4519
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbjDCNBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
+        id S232011AbjDCNBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbjDCNBH (ORCPT
+        with ESMTP id S231936AbjDCNBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:01:07 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405612D5B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:01:06 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id m16so14284239ybk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 06:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680526865;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4YLJ1r5bdMLsK8dBy54n3Qb5veY9qnBAq1TCcYa+Dx8=;
-        b=RSZfuYH81aTTTFuhFczj95wZbfft2iucFlkpjeH7LbrYx2FOIqWpoS2BcpYe0zc+FX
-         atbYdyjjRM1Yct5sQMhIlPAlcbbrKeH9OPGgUo9ENfZ92F9ehcVvyvYHol5BrQE5HHhW
-         kjtCs4Bj2TBNoWIzhJlRqS+rSfTuDUQTx5lWGeWQTXI7taOSs1BtxEhIze1r8XwGHxYg
-         L2uFPZ4USzG0+N1gN80Li1DhT7G9cQW4klHhP8AF5wt3E8iInUMBQDivG6tXtRud9pA7
-         kaAWT0h75vAYW1cVx7iM1dUpG7lj6lNnJia5rYMKVvfWCvKuclArjzfoou/0zaGHJimi
-         u0ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680526865;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4YLJ1r5bdMLsK8dBy54n3Qb5veY9qnBAq1TCcYa+Dx8=;
-        b=kE6pHutBdICtGYMd9Bv7tV/nT3QygkHJ3Q3X640ruk8YnQSyhcZpVkRwixKGvW7k2x
-         NkwK5at7Ruxb+yQp6iepJKSvO13FHVdjMdkyCsEJ+VmqIbwCnNFYnHUp79g96kzfK6r5
-         00w7+g7Su9kan0XnDxm13SLGgnjsqNQ4GfA3kHFt8VvE7Qm0/L+UO7fJm0Yp14HfEfZB
-         c5sEYe3x2GZUuxEgYGSWTK1swYqGyq6u+9iiqR9O2jEF1ZHLosdTy6KNstd5t9yRAd9U
-         0Yc++NYHTINWiP3Unc7JbA96/WoOwPPb8Wj3SFXGpr9Sdc4xyRs3v1QQ+tfCl0QZJm71
-         rwqQ==
-X-Gm-Message-State: AAQBX9cFjDxmI+zkMqN6XOZcdCfge7ogfnPRDSjfO33I+4pvaW2BPdg/
-        QWTWkLsYEtuLRHD+c9WjwdKqQR+1CF/OYB1cdnU=
-X-Google-Smtp-Source: AKy350ZmAUD/hfo7+b/Uc0EPxmcymTmczI4//qDUSR73IUhQmLucgJ9hxbJb+7nsAzBolXbdv5evf3LMSyRuIh10aUg=
-X-Received: by 2002:a05:6902:920:b0:b76:ae61:b68b with SMTP id
- bu32-20020a056902092000b00b76ae61b68bmr18277120ybb.5.1680526865194; Mon, 03
- Apr 2023 06:01:05 -0700 (PDT)
+        Mon, 3 Apr 2023 09:01:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978A2421A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:01:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47196B819A1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 13:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF45C433EF;
+        Mon,  3 Apr 2023 13:01:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680526874;
+        bh=g/q8ngs4Lu/XegEcYRioVig8rL6D71grOapwpDbVTOo=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=uW0IlYK6d7/1tAI61Dr3NSBAlzyMu4EYjjaQkgTMTR7giO/8fCRs4dKJrrgWWg0h3
+         zUf78t2zcWEvtHugaeP61GQPCSHRXVXKA2cREavEONlTHf9L/DdAK2mm7LLD5twY/L
+         BGb5AKwnAvBm7xP1dC41QcopgaRqDikLiWFe/tYoH866l2WDiDC57lA+SFKdwl0e2R
+         zoQ296bcXnprpBQ6UA7+0YUincMGNmaTTsfQpbAErQjwRWgV7yWbsnICTNWDKbPJ2k
+         TntETNczHo8CNxP8cgK/xinQUc0eTjvYEo/TJ2zxTLgOOxCiI5JNwpzdMtly8tdiCT
+         YscaoAN7/cSiA==
+Message-ID: <b2f84d00-6f6f-8be2-fbfc-0a764fb0b032@kernel.org>
+Date:   Mon, 3 Apr 2023 21:01:08 +0800
 MIME-Version: 1.0
-References: <20230323230755.1094832-1-dmitry.osipenko@collabora.com>
- <20230323230755.1094832-3-dmitry.osipenko@collabora.com> <ZCXF4q81wPcczkqx@arch-x395>
- <3618a293-4f61-b076-0a9c-c70812436431@collabora.com>
-In-Reply-To: <3618a293-4f61-b076-0a9c-c70812436431@collabora.com>
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-Date:   Mon, 3 Apr 2023 14:00:53 +0100
-Message-ID: <CACvgo51GWRCQuiJDVrqo=xzd3frKvs6WNcc755pbu8jNk6t-Rg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] drm/virtio: Support sync objects
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Emil Velikov <emil.velikov@collabora.com>,
-        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        David Airlie <airlied@redhat.com>, kernel@collabora.com,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [f2fs-dev] [RESEND] f2fs: add sanity compress level check for
+ compressed file
+Content-Language: en-US
+From:   Chao Yu <chao@kernel.org>
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Nick Terrell <terrelln@fb.com>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20230330162811.18923-1-frank.li@vivo.com>
+ <d87f168e-6155-3784-48f5-03c551c589f7@kernel.org>
+In-Reply-To: <d87f168e-6155-3784-48f5-03c551c589f7@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,103 +60,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2 Apr 2023 at 18:45, Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> On 3/30/23 20:24, Emil Velikov wrote:
-> > Hi Dmitry,
-> >
-> > Have you considered creating a few DRM helpers for this functionality?
-> >
-> > AFAICT this is the third driver which supports syncobj timelines and
-> > looking at one of the implementations ... it is not great. Note that
-> > this suggestion is _not_ a blocker.
->
-> Would like to see a third driver starting to use the exactly same
-> drm_execbuffer_syncobj struct because UABI part isn't generic, though
-> it's a replica of the MSM driver for now.
->
-> The virtio-gpu is only at the beginning of starting to use sync objects,
-> compared to MSM driver. Will be better to defer the generalization until
-> virtio-gpu will become more mature, like maybe after a year since the
-> time virtio userspace will start using sync objects, IMO.
->
+On 2023/4/3 11:46, Chao Yu wrote:
+> On 2023/3/31 0:28, Yangtao Li wrote:
+>> Commit 3fde13f817e2 ("f2fs: compress: support compress level")
+>> forgot to do basic compress level check, let's add it.
+>>
+>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+>> ---
+>>    fs/f2fs/inode.c             | 94 +++++++++++++++++++++++++------------
+>>    include/linux/zstd_lib.h    |  3 ++
+>>    lib/zstd/compress/clevels.h |  4 --
+>>    3 files changed, 67 insertions(+), 34 deletions(-)
+>>
+>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+>> index bb5b365a195d..e63f75168700 100644
+>> --- a/fs/f2fs/inode.c
+>> +++ b/fs/f2fs/inode.c
+>> @@ -10,6 +10,8 @@
+>>    #include <linux/buffer_head.h>
+>>    #include <linux/writeback.h>
+>>    #include <linux/sched/mm.h>
+>> +#include <linux/lz4.h>
+>> +#include <linux/zstd.h>
+>>    
+>>    #include "f2fs.h"
+>>    #include "node.h"
+>> @@ -202,6 +204,66 @@ void f2fs_inode_chksum_set(struct f2fs_sb_info *sbi, struct page *page)
+>>    	ri->i_inode_checksum = cpu_to_le32(f2fs_inode_chksum(sbi, page));
+>>    }
+>>    
+>> +static bool sanity_check_compress_inode(struct inode *inode,
+>> +			struct f2fs_inode *ri)
+>> +{
+>> +	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+>> +	unsigned char compress_level;
+>> +
+>> +	if (ri->i_compress_algorithm >= COMPRESS_MAX) {
+>> +		set_sbi_flag(sbi, SBI_NEED_FSCK);
+>> +		f2fs_warn(sbi,
+>> +			"%s: inode (ino=%lx) has unsupported compress algorithm: %u, run fsck to fix",
+>> +			__func__, inode->i_ino, ri->i_compress_algorithm);
+>> +		return false;
+>> +	}
+>> +	if (le64_to_cpu(ri->i_compr_blocks) >
+>> +			SECTOR_TO_BLOCK(inode->i_blocks)) {
+>> +		set_sbi_flag(sbi, SBI_NEED_FSCK);
+>> +		f2fs_warn(sbi,
+>> +			"%s: inode (ino=%lx) has inconsistent i_compr_blocks:%llu, i_blocks:%llu, run fsck to fix",
+>> +			__func__, inode->i_ino, le64_to_cpu(ri->i_compr_blocks),
+>> +			SECTOR_TO_BLOCK(inode->i_blocks));
+>> +		return false;
+>> +	}
+>> +	if (ri->i_log_cluster_size < MIN_COMPRESS_LOG_SIZE ||
+>> +		ri->i_log_cluster_size > MAX_COMPRESS_LOG_SIZE) {
+>> +		set_sbi_flag(sbi, SBI_NEED_FSCK);
+>> +		f2fs_warn(sbi,
+>> +			"%s: inode (ino=%lx) has unsupported log cluster size: %u, run fsck to fix",
+>> +			__func__, inode->i_ino, ri->i_log_cluster_size);
+>> +		return false;
+>> +	}
+>> +
+>> +	compress_level = le16_to_cpu(ri->i_compress_flag) >> COMPRESS_LEVEL_OFFSET;
+> 
+> Exceed 80 lines.
 
-I wasn't talking about generic UAPI, but having drm helpers instead.
-The former (as you pointed out) would need time to crystallize. While
-the latter can be done even today.
+Sorry, colunms... out of my mind.
 
-> ...
-> >> +static void virtio_gpu_reset_syncobjs(struct drm_syncobj **syncobjs,
-> >> +                                  uint32_t nr_syncobjs)
-> >> +{
-> >> +    uint32_t i;
-> >> +
-> >> +    for (i = 0; i < nr_syncobjs; i++) {
-> >> +            if (syncobjs[i])
-> >> +                    drm_syncobj_replace_fence(syncobjs[i], NULL);
-> >
-> > Side note: the drm_syncobj_put() called immediately after also calls
-> > replace/reset fence internally. Although reading from the docs, I'm not
-> > sure if relying on that is a wise move.
-> >
-> > Just thought I'd point it out.
->
-> The drm_syncobj_put() doesn't call replace/reset fence until syncobj is
-> freed. We drop the old fence for active/alive in-syncobj here after
-> handling the fence-wait, this makes syncobj reusable, otherwise
-> userpsace would have to re-create syncobjs after each submission.
->
+> 
+>> +	switch (ri->i_compress_algorithm) {
+>> +	case COMPRESS_LZO:
+>> +	case COMPRESS_LZORLE:
+>> +		if (compress_level)
+>> +			goto err;
+>> +		break;
+>> +	case COMPRESS_LZ4:
+>> +		if ((compress_level && compress_level < LZ4HC_MIN_CLEVEL) ||
+>> +				compress_level > LZ4HC_MAX_CLEVEL)
+>> +			goto err;
+>> +		break;
+>> +	case COMPRESS_ZSTD:
+>> +		if (!compress_level || compress_level > ZSTD_MAX_CLEVEL)
+>> +			goto err;
+>> +		break;
+>> +	default:
+>> +		goto err;
+>> +	}
+>> +
+>> +	return true;
+>> +
+>> +err:
+>> +	set_sbi_flag(sbi, SBI_NEED_FSCK);
+>> +	f2fs_warn(sbi, "%s: inode (ino=%lx) has unsupported compress level: %u, run fsck to fix",
+>> +		  __func__, inode->i_ino, compress_level);
+>> +	return false;
+>> +}
+>> +
+>>    static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+>>    {
+>>    	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+>> @@ -285,36 +347,8 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+>>    
+>>    	if (f2fs_has_extra_attr(inode) && f2fs_sb_has_compression(sbi) &&
+>>    			fi->i_flags & F2FS_COMPR_FL &&
+>> -			F2FS_FITS_IN_INODE(ri, fi->i_extra_isize,
+>> -						i_log_cluster_size)) {
+>> -		if (ri->i_compress_algorithm >= COMPRESS_MAX) {
+>> -			set_sbi_flag(sbi, SBI_NEED_FSCK);
+>> -			f2fs_warn(sbi, "%s: inode (ino=%lx) has unsupported "
+>> -				"compress algorithm: %u, run fsck to fix",
+>> -				  __func__, inode->i_ino,
+>> -				  ri->i_compress_algorithm);
+>> -			return false;
+>> -		}
+>> -		if (le64_to_cpu(ri->i_compr_blocks) >
+>> -				SECTOR_TO_BLOCK(inode->i_blocks)) {
+>> -			set_sbi_flag(sbi, SBI_NEED_FSCK);
+>> -			f2fs_warn(sbi, "%s: inode (ino=%lx) has inconsistent "
+>> -				"i_compr_blocks:%llu, i_blocks:%llu, run fsck to fix",
+>> -				  __func__, inode->i_ino,
+>> -				  le64_to_cpu(ri->i_compr_blocks),
+>> -				  SECTOR_TO_BLOCK(inode->i_blocks));
+>> -			return false;
+>> -		}
+>> -		if (ri->i_log_cluster_size < MIN_COMPRESS_LOG_SIZE ||
+>> -			ri->i_log_cluster_size > MAX_COMPRESS_LOG_SIZE) {
+>> -			set_sbi_flag(sbi, SBI_NEED_FSCK);
+>> -			f2fs_warn(sbi, "%s: inode (ino=%lx) has unsupported "
+>> -				"log cluster size: %u, run fsck to fix",
+>> -				  __func__, inode->i_ino,
+>> -				  ri->i_log_cluster_size);
+>> -			return false;
+>> -		}
+>> -	}
+>> +			F2FS_FITS_IN_INODE(ri, fi->i_extra_isize, i_log_cluster_size))
+> 
+> Exceed 80 lines.
 
-I see, thanks.
+Ditto.
 
-> >>
-> >> +    ret = virtio_gpu_parse_deps(&submit);
-> >> +    if (ret)
-> >> +            goto cleanup;
-> >> +
-> >> +    ret = virtio_gpu_parse_post_deps(&submit);
-> >> +    if (ret)
-> >> +            goto cleanup;
-> >> +
-> >
-> > I think we should zero num_(in|out)_syncobjs when the respective parse
-> > fails. Otherwise we get one "cleanup" within the parse function itself
-> > and a second during the cleanup_submit. Haven't looked at it too closely
-> > but I suspect that will trigger an UAF or two.
->
-> There are checks for NULL pointers in the code that will prevent the
-> UAF.  I'll add zeroing of the nums for more consistency.
->
+Thanks,
 
-Riiiight the drm_syncobj is attached to the encapsulating struct
-virtio_gpu_submit _only_ on success.
-By clearing the num variables,  the NULL checks will no longer be
-needed ... in case you'd want to drop that.
-
-Either way - even as-is the code is safe.
-
-> >>      ret = virtio_gpu_install_out_fence_fd(&submit);
-> >>      if (ret)
-> >>              goto cleanup;
-> >> @@ -294,6 +512,7 @@ int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
-> >>              goto cleanup;
-> >>
-> >>      virtio_gpu_submit(&submit);
-> >> +    virtio_gpu_process_post_deps(&submit);
-> >
-> > Any particular reason why the virtio_gpu_reset_syncobjs is deferred to
-> > virtio_gpu_cleanup_submit(). Having it just above the process_post_deps
-> > (similar to msm) allows the reader to get closure about the in syncobjs.
-> >
-> > This is just personal preference, so don't read too much into it.
->
-> The job submission path should be short as possible in general.
-> Technically, virtio_gpu_process_post_deps() should be fast, but since
-> I'm not 100% sure about all the corner cases, it's better to hold until
-> job is sent out.
->
-
-Ack, thanks again
-
--Emil
+> 
+>> +		sanity_check_compress_inode(inode, ri);
+> 
+> Missed to check return value?
+> 
+>>    
+>>    	return true;
+>>    }
+>> diff --git a/include/linux/zstd_lib.h b/include/linux/zstd_lib.h
+>> index 79d55465d5c1..ff55f41c73d3 100644
+>> --- a/include/linux/zstd_lib.h
+>> +++ b/include/linux/zstd_lib.h
+>> @@ -88,6 +88,9 @@ ZSTDLIB_API const char* ZSTD_versionString(void);
+>>    #  define ZSTD_CLEVEL_DEFAULT 3
+>>    #endif
+>>    
+>> +/*-=====  Pre-defined compression levels  =====-*/
+>> +#define ZSTD_MAX_CLEVEL     22
+>> +
+>>    /* *************************************
+>>     *  Constants
+>>     ***************************************/
+>> diff --git a/lib/zstd/compress/clevels.h b/lib/zstd/compress/clevels.h
+>> index d9a76112ec3a..b040d9d29089 100644
+>> --- a/lib/zstd/compress/clevels.h
+>> +++ b/lib/zstd/compress/clevels.h
+>> @@ -14,10 +14,6 @@
+>>    #define ZSTD_STATIC_LINKING_ONLY  /* ZSTD_compressionParameters  */
+>>    #include <linux/zstd.h>
+>>    
+>> -/*-=====  Pre-defined compression levels  =====-*/
+>> -
+>> -#define ZSTD_MAX_CLEVEL     22
+> 
+> Why not zstd_max_clevel()?
+> 
+> Thanks,
+> 
+>> -
+>>    __attribute__((__unused__))
+>>    
+>>    static const ZSTD_compressionParameters ZSTD_defaultCParameters[4][ZSTD_MAX_CLEVEL+1] = {
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
