@@ -2,181 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A0F6D3B9B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 03:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5296D3BA2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 04:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbjDCBtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 21:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
+        id S231263AbjDCCAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 22:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDCBts (ORCPT
+        with ESMTP id S229459AbjDCCAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 21:49:48 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768C56E86;
-        Sun,  2 Apr 2023 18:49:47 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 332LpKsl010601;
-        Mon, 3 Apr 2023 01:49:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2022-7-12;
- bh=AWuB6an8jk6aQjsr6Fxt3z7i3McpThFDjEjBlrzWOnU=;
- b=PYbV+FyH4tF93Fq9MEfegAPs0UvdzQQwvu06sUO2jD/Or3Ur+b+7SCpIn5RGn/MtsgtY
- WbnhC4z0o9lw1QJHzewkcx0DB3tZ6Zgt6Y0HaaNKf/coOy7KeNOfrS7t5l7PPtzws5Zy
- OH7wrOTqFLeLf2vO5q2LDsofKjMyYMQyvqyIfsMQPzC2cfWP0WjKYyFisO3gxXy3z7mi
- V1otgsQFr3xS+zA55s7oVv0DSY5LHt5N0X/FWWxMb/g/5HkEM1OG1GnKWQlZzacuayTE
- lCWJtTH2zarpE/d05+84Ch33VrNTG0REdtJFco8z+eqdgnFuamlrUtWuQoS4ELkwk4GH cQ== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppc7tsx3f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 03 Apr 2023 01:49:36 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 332LbVNW028569;
-        Mon, 3 Apr 2023 01:49:36 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pptumbw90-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 03 Apr 2023 01:49:36 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X8NtAfHsUEhbZ5SjlJZPlnn98/IfgxvNUYnkaIssy+X2CPPo86Es2tGIyeF1dLbWx/veyZ3/GWe9HbqAkAD5vXNaDw9Hr4NANh5Y3F57KqlcW1VIpj6Nr2PrDvEIYOEpFhwx+QYp22IkBjzEJZZJo0nAfl3sLijIHvcXVeh56VNI6KjP2yiqklqKwK/6F8xf8bknOJj77gbUSomDYwrhY1tOWmkpvkOGWB3ap0yxKr+hCVInkItxGxxyTuOp7i1Pv7S0y+zpDbSchAOPQ8tLD2YwItSe27mUCagCghKlZ/wFkmfPAMyew+eUn9vxZpK0ofj9JrgJqVx4kZkiotUCjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AWuB6an8jk6aQjsr6Fxt3z7i3McpThFDjEjBlrzWOnU=;
- b=Ex5H8JptJEUWXB0HAe9J8igescoza9mJh7Xyud9CyToajXIeM15kLWar4PTVT/NXhc9z+4J/+TAffWMOLRo+zSCRfNRLFDQq2bj9K/wF16zQ39AotBZ2zIZXBxr7nRzLZXfDGBY/kHV8LMRBEc1ewKJzxIXN/zI1cqGUzToUgX9QrOTF9IoxgHBeVCA96a1MpvQC6K97I05UMWmTX6esoF9TvAb11GZMOnNLXLVLsmtKhT+v7O7WyoIKD/omv672EKrdChekpHFep8lBqyUteXBduj8cz/1zq0hHImugtXq9sv/040JsJDcvenGySbnelt6Uqxzp0IqkRQUSVv3RHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AWuB6an8jk6aQjsr6Fxt3z7i3McpThFDjEjBlrzWOnU=;
- b=lBRPRWJjsHAdo8rRZuXTZYwbLVouTSWn9LnHTx2QpZgTXddHJr1nrd74G6RMUH61iN3caRU94zlxxyvvrOoEBJ9+xaHFzzWoJ1uIR3WA7ChiLEQ1tx138SNEQXl2d+YUMIwXCxeWhE36gid/zG0wCbitAv+xewRQtJmpKd9QYvc=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by SJ0PR10MB5566.namprd10.prod.outlook.com (2603:10b6:a03:3d0::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.30; Mon, 3 Apr
- 2023 01:49:34 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::6c5c:93c2:3d1:5e98]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::6c5c:93c2:3d1:5e98%6]) with mapi id 15.20.6254.030; Mon, 3 Apr 2023
- 01:49:34 +0000
-To:     Tom Rix <trix@redhat.com>
-Cc:     njavali@marvell.com, mrangankar@marvell.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, nathan@kernel.org,
-        ndesaulniers@google.com, GR-QLogic-Storage-Upstream@marvell.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] [SCSI] qla4xxx: remove unused count variable
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1bkk5wx9w.fsf@ca-mkp.ca.oracle.com>
-References: <20230331175757.1860780-1-trix@redhat.com>
-Date:   Sun, 02 Apr 2023 21:49:24 -0400
-In-Reply-To: <20230331175757.1860780-1-trix@redhat.com> (Tom Rix's message of
-        "Fri, 31 Mar 2023 13:57:57 -0400")
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR06CA0001.apcprd06.prod.outlook.com
- (2603:1096:4:186::21) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        Sun, 2 Apr 2023 22:00:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D619B769B
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 19:00:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82A02B8109E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:00:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25BB6C433EF;
+        Mon,  3 Apr 2023 02:00:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680487249;
+        bh=NbsL0OwUliS+BxW4P3bSbGX+DJ09pBzPxPq3F28QNj4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=pC9Pbd2zZoBVa0yHP/yV4KEQX//WwYakUhZHX5NNzg4XWBpvyslFipoYwdHaYQ8Ii
+         2yKaUGS2+lG4flp0y8NqcNxSfoTySwLRWk5HXlG3TDaIn/GcoY6aL1yZq1UNrdSsjn
+         KM+Th9d6UmsVI4dlutld2ZuHY6m2oHshhLJubJSYJxZb3DKsFSoSO6lA+lnIjJBviS
+         nZih+AKqPMPRU9JYvloCLh+G/sS0Pfjr74Bcb3X5kLqMKc7bVmUm+p9ftcPgJI8dhH
+         /62UCHWikYn06hK37M1I9Y+j53JZH5kXaUeY+d8fId5aQVI+ITUQjshrSW2ysT4d8U
+         qenN3qQdwhVmw==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id B3DA6154047C; Sun,  2 Apr 2023 19:00:48 -0700 (PDT)
+Date:   Sun, 2 Apr 2023 19:00:48 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Feng Tang <feng.tang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: A couple of TSC questions
+Message-ID: <ef61060d-9f40-4b44-9a51-026041fe75e1@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <b2f07f18-b60b-403b-90ff-937ea32963ee@paulmck-laptop>
+ <ZBqOyLByOgvdAve3@feng-clx>
+ <acda3fb5-373a-48b1-b78e-eea18da4ccb0@paulmck-laptop>
+ <ZCD9SnZSUCkE9Ss+@feng-clx>
+ <aaf391d9-98e6-47d8-b402-c90b4a81ae9c@paulmck-laptop>
+ <3daa086c-b4a0-47a9-8bfc-aac4139013c4@paulmck-laptop>
+ <293db107-a572-592f-cc27-e59ab81a4e60@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|SJ0PR10MB5566:EE_
-X-MS-Office365-Filtering-Correlation-Id: 07f9272c-b754-41b3-4959-08db33e5ac91
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OuKd6iuuAfSyov9yd2o1YNmiaR5nquBW7zD8w5glrJDAY9oT6hNufIcyhvRxJ98apMHD+xgkCYjaiEHM8LFyekgpdwn6KOsRXUrV8eHvJ0yyhjCVDF0Eyzp8kws2AQziZClRr0l+LI0tMXTiBZByAYOZ9N40FpQTOGJCTey98psjDcCpoJQA2uy2jHa4LajaRx7gUKnkbfMMvUB6yaSYedgOW4J9OxptacaZyYAFUbv4yO+CaTC2Q+Mqy7QqJiWqC1qq4VlsJzPdV64pmI5faaaNeRvr1EK4L8p6cZIx9PK5lLna0oRqzpRGtukqIjAXEjO9KVF0ShZdG2rNbdBtxqewX+2PbQzmQ8ae4qejAwKRgRXjHK8qxQ7cSe0Y5CI35J+7wqJhX2cRO51mqeigIexnEwPTOuQN8QMgGDrQGDiXvLp4Hh1zm1LJiitasSQCmo1IJ76of71KQmlNQ1j+47BA4voysuO6ywlbLt+m3o20mVJU+85IQ8w6q9Q2Jo5uRw0RmodMXEr168K+MlQGVUsH/dDNPV53bYTP9VsUycu3kLIyNa+wJhWQPYgoMqpogYFHhuLcHsQKo3stYmBm48xItfYX+WHyACLbXhvYfZI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(136003)(366004)(396003)(346002)(451199021)(86362001)(558084003)(2906002)(36916002)(186003)(6512007)(6506007)(26005)(6486002)(6666004)(4326008)(8676002)(6916009)(478600001)(66556008)(66476007)(66946007)(41300700001)(5660300002)(7416002)(38100700002)(316002)(8936002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MPQmPT6jnXfAFM3W9X4ayK65vRnaGlj+kwF/3EY+Yfju8hb+UzKFR/HRE9R0?=
- =?us-ascii?Q?P/d1a0gurFZvIW7W3mhed5KGKYIU1tY79AUWg/0TzGuwkyQdjDFL7U8fezKt?=
- =?us-ascii?Q?Iusg9Z4an3U7qD651NNdc4Ahdiow6JQBxUElClIgvRmjaZH3Pjl/6ZthzpGS?=
- =?us-ascii?Q?GZ5PBoGmmImaWPwcatlWlagGwAyGOD34WAqd3+aX0LgD7rJVvIH882MQM8GC?=
- =?us-ascii?Q?mR25bbMKIZIhNIlSI2Ngi4lcV8cc2u1PeHB5yvcUqjqaoDh2cJA2ACvEFuwq?=
- =?us-ascii?Q?+4O+WFy31vAt56zWV8GfzkXJMrtxGpmjfnOIs6YU3EnNq/yQxWKBRIl5A1j9?=
- =?us-ascii?Q?k09EGznuVcM/pTSsdN4hGemilexzfedWHOheS8H3hEDMUzfSgudTOu4CaRWT?=
- =?us-ascii?Q?s1kKQoe2Q2ilQz1m9HEPwq+WT1Sqh5Kib7rwXAGdvU5Vn9x5O4sBDBqYWBlF?=
- =?us-ascii?Q?LkRzIey5Pm1Nm9tyi9h26PlNclNldq7ThvSKnia7L3rVWzMOFLocl4n4ubyj?=
- =?us-ascii?Q?+23aPvHU2FowfU56GLIuCkwQWsvrwOQe0OOa9HovAmS6RqE7hU1cn4xqg2DW?=
- =?us-ascii?Q?SVl0SFStIZTKVkxPzV4bmiiyHT+GQCb2FPqvr9Rb0GqjX7mO8GJfDPBeIf6/?=
- =?us-ascii?Q?2GOnlYvihMsU/VC0r3Wt61yuHtkBeJ0iMFjdtVo/GPe2zWvoT1ES88/hzgwt?=
- =?us-ascii?Q?YllB/GotfIcLbtRd9ubW0oEuZjKaZ/zfwK8UK3p89CDvpGXYABoEyXWlSAT9?=
- =?us-ascii?Q?G11paIyWCk8VUZIbfp5gsp3HH/N1O51PpKXiPfggIa4Ar8G+ZJZVybqr555w?=
- =?us-ascii?Q?T33BMNxQtDV/3gkVuZustu3r51vcLVRomlXF2Mc9TT1FDvxRrZoXm0W2z8wI?=
- =?us-ascii?Q?5cWwCvf/24f7WmhJbG0dCECXr1WMNVtA8FNSubzQ1Cz1GLIvaJWduLnzILKI?=
- =?us-ascii?Q?N1+mc4ZKjseM05J7YD8wLCWbNsXOKiYRszPAvKoFctWp8+KmJWDRySbrZ671?=
- =?us-ascii?Q?WeFn8RUlH2kJGuHv8KjWjbY3KIPd0beIzm3FxupGaf4CD5crCEboecnXR847?=
- =?us-ascii?Q?bHYUUR3i3HStVqdeHfO7eCfegvyVvEQH4mrz9iy4G/2XKSfJN50W+g/cziVQ?=
- =?us-ascii?Q?10nqtSxPtsdBfYElR1zr4m5LNdcpihcXR541WVBHOd1E2GmXxd3eWpbWm49g?=
- =?us-ascii?Q?rWQJ8xOB/dFZMWcHcKkJSGU2ioSnL2T5MZv68R80sjAyEKvmrgj954EW9pyP?=
- =?us-ascii?Q?vTE1C8SB4Ksa7YWoFSGIQFP15VPgJ08oljXrJeN4WC8gYRhU00nIwjISo/N9?=
- =?us-ascii?Q?tRZR35BOo+5P4+G2K5W52tGsG2DlLuU3sv0t0DpzKjqJ7+zMdkBTpuN4bGoR?=
- =?us-ascii?Q?GfPKhoRBgKcvaQsmEVPj7qH5awgH3cfYeEIt/qqmqve0Xumopx83WF3IXGSz?=
- =?us-ascii?Q?XhL3+gtqDKAYO1kx3FzNAQk+rhnhHGwAnAbh8So7Xbl/rphgO0HOloN11F/w?=
- =?us-ascii?Q?aKmV6Swed7wKqaqToSNdlBBdCcuXs1pmEWlHHUoEIBu7gpTxjaa3kZLrAkYM?=
- =?us-ascii?Q?PVkeJC2keto9jJXuKe/xrDT094KL9zgLtmuiSSj68/e/RlW/00TqY788bwJf?=
- =?us-ascii?Q?vA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?uFifCih7yw6oI5bYT6FEuyRyG4ZTBs99zdkTI8lcJJZlS8vzmHvmbsx872JU?=
- =?us-ascii?Q?oH4pOrlF7xGMJL/d5nARiqysj9WAH6U+x5hB68KomRDcZRbZaE+EGPifi7iQ?=
- =?us-ascii?Q?IVOZGTTVQQFRX6jnyPLu89wnUC7LGI8Mfo3dugb2aiYq/WjKcoXYhmOPpeuT?=
- =?us-ascii?Q?RnkMLK1wq3/GCLXJayrVPFHvtSRauMj7MJU3+QnGDvXR3c1srXqIV3rF3PTA?=
- =?us-ascii?Q?NhHpL03N4ShuSDMJj/SQXtzpAVTTgg8xEjeFY1Cy0+OR/YmAAbGn3zBv+p5G?=
- =?us-ascii?Q?0dEXRknb7SSSSRrJM8My5eTrwKE95oC7SMcjgXYjq0kXw/pVuvtEuV4Wo+kH?=
- =?us-ascii?Q?SqEJvi0taGXR4ZpekSwkCP/qXyKRoo+BCq+sjsu/G5AEmFVsDM6bEIiSuqvb?=
- =?us-ascii?Q?g2xkNUu/lcgaQQ1J1r4OwCNm2Focl+LVF79bCweI1tThL/MmxuVPLiowZoww?=
- =?us-ascii?Q?Me8AcI881S2vOD6sNA6Bt1wJA+HPJFW+hW9GPtB+zFWDIMxIt5o/E4T3zx5z?=
- =?us-ascii?Q?ixJ5NS8BcN6nEqtSP+eh/8Pkg6sptLcvuHWmCwRjO6a8/bxpNmwe8Lexfl4s?=
- =?us-ascii?Q?3qBpvcyPZr0p2HcwJdZbhG9HlMWBiJgBjeyQHgY5wuG9Z5xTkvCIusV0ulHG?=
- =?us-ascii?Q?ACbwWYUgc8Ai7shgNYOWRslv+23q2DPy6kgB2DqAtypg8p13hDPdhzUAogV/?=
- =?us-ascii?Q?kpTPTlPL6vhpWpBYkBKy16FxmL3tHk3mfOZxPDM9XzHDKUWmZQQDMdC0eWNm?=
- =?us-ascii?Q?UHgIDUB304N7E7iVIHJyaE0OHM2WDa/xmKNeS4ZOx93m1tizlpqZ0pP+PKlP?=
- =?us-ascii?Q?KFFZmHnCwvoz2ES9xfM5Vl2ZY29G5+23va6jgH7PbrcDB/ZvUMLfNXQZMlTZ?=
- =?us-ascii?Q?avhnKeVOPItepTnsJ0V1gM5uR8+krB9OcQNaqn2ck6CC3DcYLzXZIohrtVJc?=
- =?us-ascii?Q?iRSL08JTqW5NtVjIBYgK/w=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07f9272c-b754-41b3-4959-08db33e5ac91
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 01:49:34.0463
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wJ6ZxYx28GfcVcGPIm3ZRXoI2KIBKlqfY12NHNMSi1+SfxCmPUiOpRr78FWR/umnd4pboUcvs9RbWGWRrcQKCHaqbh4gKnuKNcntuV/KdE4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5566
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-31_07,2023-03-31_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=825 adultscore=0 phishscore=0 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304030011
-X-Proofpoint-ORIG-GUID: aEivWm-oFjgCOMolCywO6gT4UIG9NfZS
-X-Proofpoint-GUID: aEivWm-oFjgCOMolCywO6gT4UIG9NfZS
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <293db107-a572-592f-cc27-e59ab81a4e60@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Apr 02, 2023 at 09:04:04PM -0400, Waiman Long wrote:
+> 
+> On 3/31/23 13:16, Paul E. McKenney wrote:
+> > On Tue, Mar 28, 2023 at 02:58:54PM -0700, Paul E. McKenney wrote:
+> > > On Mon, Mar 27, 2023 at 10:19:54AM +0800, Feng Tang wrote:
+> > > > On Fri, Mar 24, 2023 at 05:47:33PM -0700, Paul E. McKenney wrote:
+> > > > > On Wed, Mar 22, 2023 at 01:14:48PM +0800, Feng Tang wrote:
+> > [ . . . ]
+> > 
+> > > > > > > Second, we are very occasionally running into console messages like this:
+> > > > > > > 
+> > > > > > > Measured 2 cycles TSC warp between CPUs, turning off TSC clock.
+> > > > > > > 
+> > > > > > > This comes from check_tsc_sync_source() and indicates that one CPU's
+> > > > > > > TSC read produced a later time than a later read from some other CPU.
+> > > > > > > I am beginning to suspect that these can be caused by unscheduled delays
+> > > > > > > in the TSC synchronization code, but figured I should ask you if you have
+> > > > > > > ever seen these.  And of course, if so, what the usual causes might be.
+> > > > > > I haven't seen this error myself or got similar reports. Usually it
+> > > > > > should be easy to detect once happened, as falling back to HPET
+> > > > > > will trigger obvious performance degradation.
+> > > > > And that is exactly what happened.  ;-)
+> > > > > 
+> > > > > > Could you give more detail about when and how it happens, and the
+> > > > > > HW info like how many sockets the platform has.
+> > > > > We are in early days, so I am checking for other experiences.
+> > > > > 
+> > > > > > CC Thomas, Waiman, as they discussed simliar case here:
+> > > > > > https://lore.kernel.org/lkml/87h76ew3sb.ffs@tglx/T/#md4d0a88fb708391654e78312ffa75b481690699f
+> > > > > Fun!  ;-)
+> > > Waiman, do you recall what fraction of the benefit was provided by the
+> > > first patch, that is, the one that grouped the sync_lock, last_tsc,
+> > > max_warp, nr_warps, and random_warps global variables into a single
+> > > struct?
+> 
+> The purpose of the first patch is just to avoid false cacheline sharing
+> between the watchdog cpu and another cpu that happens to access a nearby
+> data in the same cacheline.
+> 
+> Now I realize that I should have followed up with this patch series. The
+> problem reported in that patch series happen on one system only, I believe.
 
-Tom,
+Thus far I am seeing eight systems, but out of a large number.  So this
+is very much preliminary.
 
-> clang with W=1 reports
-> drivers/scsi/qla4xxx/ql4_isr.c:475:11: error: variable
->   'count' set but not used [-Werror,-Wunused-but-set-variable]
->         uint32_t count = 0;
->                  ^
-> This variable is not used so remove it.
+> > And what we are seeing is unlikely to be due to cache-latency-induced
+> > delays.  We see a very precise warp, for example, one system always
+> > has 182 cycles of TSC warp, another 273 cycles, and a third 469 cycles.
+> > Another is at the insanely large value of about 2^64/10, and shows some
+> > variation, but that variation is only about 0.1%.
+> > 
+> > But any given system only sees warp on about half of its reboots.
+> > Perhaps due to the automation sometimes power cycling?
+> > 
+> > There are few enough affected systems that investigation will take
+> > some time.
+> 
+> Maybe the difference in wrap is due to NUMA distance of the running cpu from
+> the node where the data reside. It will be interesting to see if my patch
+> helps.
 
-Applied to 6.4/scsi-staging, thanks!
+Almost all of them are single-socket systems.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+If the problem sticks with a few systems, I should be able to test
+patches no problem.  If it is randomly distributed across the fleet, a
+bit more prework analysis will be called for.  But what is life without
+a challenge?  ;-)
+
+							Thanx, Paul
