@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2646D5245
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA7D6D5247
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbjDCUXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 16:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S232029AbjDCUXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 16:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjDCUXR (ORCPT
+        with ESMTP id S232778AbjDCUXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 3 Apr 2023 16:23:17 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196EE1FEE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC001FD2;
         Mon,  3 Apr 2023 13:23:16 -0700 (PDT)
 Received: from jupiter.universe (dyndsl-091-248-212-192.ewe-ip-backbone.de [91.248.212.192])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D3A316603162;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DDF04660316C;
         Mon,  3 Apr 2023 21:23:14 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1680553395;
-        bh=0AvnUkLP+KMEub7LlbfJLBC/RaxG7cnldhb+34NFfeU=;
+        bh=IaXnd/TmDz+Pb/Lo3qVMIEFOaBSU3EHyiLnXscaJdlo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kqT8QSd5xC5Zn0kxCvSR4k+bV5Mwq/AX6a3Esoh79VDC6EvNEl7QC07blK6+R5/AI
-         Pj5sj5tTks1PhbhhLT3NqBjB6oNf8B5BST4g5XZl+4zzGn8RE0xzn7+ya3OBH0E+QH
-         0ovrdHQ6Ok1XLtALq3T7Fwn+QMgJP5U1gQ8ChzTbkqvYrN03mXtEFSOdK8dIuNL+Az
-         QHh04QCYqdPLmVp5zxq3ZcCTr0CIMONCxUxSjoQunoW0ayIa+2beS0ebtOWflpnpWw
-         8hIkgPL3iKYUrfU/h+oh4GxYvKFv7wqFTKrFd8E05cbWPKglpXXlFpFfVQcTd+1NOF
-         iIBaCwSIY0YGA==
+        b=S3FDcWaNuohQVCrTCsFItK51ce4vVpzyorjjVHaXNJ3P/3sMyu85H+8zVM0NyntzK
+         Qsd1xW2QcRLax4LNEUDacbACP8nX93jDHkxbswcoqpPR9lk9LR03LoxGZuriTm1i6Y
+         q+5tEnFHDT0lFGRaS7wfMdQkDVeWeNa+cKDkivijl1IJW7GQHz3+d/HAxLiIWqzVQK
+         gIQWRQRVUEKaxMMb076UtM09YCv8dPG0cKeXfVPzcGboPrwxrS3YbotxBTKjd47rFu
+         grmtOJCYgByHQOu6udWI7RIsO9/tr/QiaqLqw+LbYXeisOtFGvlQegFwtGyQ3KYcZy
+         etPpQUaor+uNw==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 14F3F4807F2; Mon,  3 Apr 2023 22:23:09 +0200 (CEST)
+        id 16D574807F3; Mon,  3 Apr 2023 22:23:09 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Heiko Stuebner <heiko@sntech.de>, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         kernel@collabora.com
-Subject: [PATCHv2 6/7] phy: phy-rockchip-inno-usb2: simplify phy clock handling
-Date:   Mon,  3 Apr 2023 22:23:06 +0200
-Message-Id: <20230403202307.120562-7-sebastian.reichel@collabora.com>
+Subject: [PATCHv2 7/7] phy: phy-rockchip-inno-usb2: simplify getting match data
+Date:   Mon,  3 Apr 2023 22:23:07 +0200
+Message-Id: <20230403202307.120562-8-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230403202307.120562-1-sebastian.reichel@collabora.com>
 References: <20230403202307.120562-1-sebastian.reichel@collabora.com>
@@ -62,62 +62,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify phyclk handling by using devm_clk_get_optional_enabled to
-acquire and enable the optional clock. This also fixes a resource
-leak in driver remove path and adds proper error handling.
+Simplify the code by directly getting the match data via
+device_get_match_data() instead of open coding its functionality.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
+ drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-index 9f6d09da7fbd..2de1408eaa60 100644
+index 2de1408eaa60..e978c73ba1e5 100644
 --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
 +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-@@ -1390,24 +1390,22 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
- 	if (IS_ERR(rphy->phy_reset))
- 		return PTR_ERR(rphy->phy_reset);
+@@ -1305,7 +1305,6 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
+ 	struct phy_provider *provider;
+ 	struct rockchip_usb2phy *rphy;
+ 	const struct rockchip_usb2phy_cfg *phy_cfgs;
+-	const struct of_device_id *match;
+ 	unsigned int reg;
+ 	int index, ret;
  
--	rphy->clk = of_clk_get_by_name(np, "phyclk");
--	if (!IS_ERR(rphy->clk)) {
--		clk_prepare_enable(rphy->clk);
--	} else {
--		dev_info(&pdev->dev, "no phyclk specified\n");
--		rphy->clk = NULL;
-+	rphy->clk = devm_clk_get_optional_enabled(dev, "phyclk");
-+	if (IS_ERR(rphy->clk)) {
-+		return dev_err_probe(&pdev->dev, PTR_ERR(rphy->clk),
-+				     "failed to get phyclk\n");
- 	}
+@@ -1313,12 +1312,6 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
+ 	if (!rphy)
+ 		return -ENOMEM;
  
- 	ret = rockchip_usb2phy_clk480m_register(rphy);
- 	if (ret) {
- 		dev_err(dev, "failed to register 480m output clock\n");
--		goto disable_clks;
-+		return ret;
- 	}
- 
- 	if (rphy->phy_cfg->phy_tuning) {
- 		ret = rphy->phy_cfg->phy_tuning(rphy);
- 		if (ret)
--			goto disable_clks;
-+			return ret;
- 	}
- 
- 	index = 0;
-@@ -1470,11 +1468,6 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
- 
- put_child:
- 	of_node_put(child_np);
--disable_clks:
--	if (rphy->clk) {
--		clk_disable_unprepare(rphy->clk);
--		clk_put(rphy->clk);
+-	match = of_match_device(dev->driver->of_match_table, dev);
+-	if (!match || !match->data) {
+-		dev_err(dev, "phy configs are not assigned!\n");
+-		return -EINVAL;
 -	}
- 	return ret;
- }
+-
+ 	if (!dev->parent || !dev->parent->of_node) {
+ 		rphy->grf = syscon_regmap_lookup_by_phandle(np, "rockchip,usbgrf");
+ 		if (IS_ERR(rphy->grf)) {
+@@ -1359,12 +1352,15 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
+ 	}
  
+ 	rphy->dev = dev;
+-	phy_cfgs = match->data;
++	phy_cfgs = device_get_match_data(dev);
+ 	rphy->chg_state = USB_CHG_STATE_UNDEFINED;
+ 	rphy->chg_type = POWER_SUPPLY_TYPE_UNKNOWN;
+ 	rphy->irq = platform_get_irq_optional(pdev, 0);
+ 	platform_set_drvdata(pdev, rphy);
+ 
++	if (!phy_cfgs)
++		return dev_err_probe(dev, -EINVAL, "phy configs are not assigned!\n");
++
+ 	ret = rockchip_usb2phy_extcon_register(rphy);
+ 	if (ret)
+ 		return ret;
 -- 
 2.39.2
 
