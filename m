@@ -2,99 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CDF6D4FF4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 938D16D5131
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbjDCSG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
+        id S232870AbjDCTTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 15:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233004AbjDCSGS (ORCPT
+        with ESMTP id S232415AbjDCTTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:06:18 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED5430DB;
-        Mon,  3 Apr 2023 11:06:16 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4AA121EC0441;
-        Mon,  3 Apr 2023 20:06:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680545174;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=3qbeYlzZ5htD71+eg/aidybPGnpGWtpXGTldFE6cOCs=;
-        b=aFa6Bxnm+HGQQmVd6mveiKBmSFclraqZ+peS0OJ2kP8rVAWlygNljqRN0947B3NWgK+PUI
-        c/kvL+sNVHt4tAdAhx1OnFKx1g6B7vHj9Gea3YHCMp5ItNo3HS4j+lSj18xASRR/Uukjpi
-        n2CxFvWcQTACKO2WQ8NDz0L30TNBFkA=
-Date:   Mon, 3 Apr 2023 20:06:08 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V4 12/17] x86/sev: Add a #HV exception handler
-Message-ID: <20230403180608.GBZCsVkMSSClY/qgns@fat_crate.local>
-References: <20230403174406.4180472-1-ltykernel@gmail.com>
- <20230403174406.4180472-13-ltykernel@gmail.com>
+        Mon, 3 Apr 2023 15:19:50 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A5A35A0;
+        Mon,  3 Apr 2023 12:19:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680549571; x=1712085571;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ePxHK6Wg0z1QpCTAloo+BxX7YWBgmbRVAuDqJf/Q7Mc=;
+  b=ixKTztLSaxK+b9tR30Xs9J2IwKQZAp7UjG/ym8LBQ1i3bWvH0kQXeE17
+   rQqAS0dC9jSl5auYlnNMNwzYu2C+ZVdJOJ6kWQAjb/JSnZdHIEoowGnXf
+   luKfQdI7o8hs8PXgcOmDkHDDPSAhIvU63dfk7AGkeSBknDUp9QsNIOWqm
+   k36SSmEvFe0X1uIeZqaArGLgB8FW+tgUDW++AAaQ60x+8yMZK446jEdZM
+   Kneybkqo5JwRXGxAYigUl0bmWw7ewmMmkagLxPf3MD+eijgSzSUk6HlHy
+   NCPb+LmCMEos23W5S0939SsaYKYQMcXQgsqsAelYQZviVBQ+iiY5UFBnJ
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,315,1673938800"; 
+   d="scan'208";a="208642192"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Apr 2023 12:19:17 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 3 Apr 2023 12:19:17 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Mon, 3 Apr 2023 12:19:17 -0700
+From:   Kelvin Cao <kelvin.cao@microchip.com>
+To:     <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <logang@deltatee.com>, <george.ge@microchip.com>
+Subject: [PATCH v2 0/1] Switchtec Switch DMA Engine Driver
+Date:   Mon, 3 Apr 2023 11:06:27 -0700
+Message-ID: <20230403180630.4186061-1-kelvin.cao@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230403174406.4180472-13-ltykernel@gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 01:44:00PM -0400, Tianyu Lan wrote:
-> From: Tianyu Lan <tiala@microsoft.com>
-> 
-> Add a #HV exception handler that uses IST stack.
-> 
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
-> Change since RFC V2:
->        * Remove unnecessary line in the change log.
-> ---
->  arch/x86/entry/entry_64.S             | 60 +++++++++++++++++++++++++++
->  arch/x86/include/asm/cpu_entry_area.h |  6 +++
->  arch/x86/include/asm/idtentry.h       | 39 ++++++++++++++++-
->  arch/x86/include/asm/page_64_types.h  |  1 +
->  arch/x86/include/asm/trapnr.h         |  1 +
->  arch/x86/include/asm/traps.h          |  1 +
->  arch/x86/kernel/cpu/common.c          |  1 +
->  arch/x86/kernel/dumpstack_64.c        |  9 +++-
->  arch/x86/kernel/idt.c                 |  1 +
->  arch/x86/kernel/sev.c                 | 53 +++++++++++++++++++++++
->  arch/x86/kernel/traps.c               | 40 ++++++++++++++++++
->  arch/x86/mm/cpu_entry_area.c          |  2 +
->  12 files changed, 211 insertions(+), 3 deletions(-)
+Hi,
 
-Same comment as here:
+This is v2 of the Switchtec Switch DMA Engine Driver, incorporating
+changes for the review comments of the initial post.
 
-https://lore.kernel.org/r/20230331155714.GCZCcC2pHVZgIHr8k8@fat_crate.local
+Changes in v2:
+  - Move put_device(dma_dev->dev) before kfree(swdma_dev) as dma_dev is
+    part of swdma_dev.
+  - Convert dev_ print calls to pci_ print calls to make the use of
+    print functions consistent within switchtec_dma_create().
+  - Remove some dev_ print calls, which use device pointer as handles,
+    to ensure there's no reference issue when the device is unbound.
+  - Remove unused .driver_data from pci_device_id structure.
+
+Kelvin Cao (1):
+  dmaengine: switchtec-dma: Introduce Switchtec DMA engine PCI driver
+
+ MAINTAINERS                 |    5 +
+ drivers/dma/Kconfig         |    9 +
+ drivers/dma/Makefile        |    1 +
+ drivers/dma/switchtec_dma.c | 1734 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 1749 insertions(+)
+ create mode 100644 drivers/dma/switchtec_dma.c
 
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
