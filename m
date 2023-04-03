@@ -2,74 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CE96D5509
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B576D550D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 01:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233609AbjDCW71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 18:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
+        id S233755AbjDCXCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 19:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232284AbjDCW7Y (ORCPT
+        with ESMTP id S230200AbjDCXCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 18:59:24 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B50FE7C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:59:23 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-752fe6c6d5fso16456639f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 15:59:23 -0700 (PDT)
+        Mon, 3 Apr 2023 19:02:35 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219ABE7C;
+        Mon,  3 Apr 2023 16:02:34 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r11so123506887edd.5;
+        Mon, 03 Apr 2023 16:02:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1680562762;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fkd2TX1vf4QdQsQX67c28kv3YBAJ32wfaLNOMhERik8=;
-        b=byH49yTiJZ/bNBw+blnWrUs2iYagANWxDUZ0B/m9rs2BP1EcbBpqxuy2co+ghBSbIV
-         z39BcU6zrKsPZBOXGRUxpOs5WkPhX8gEHy1fqwKhndy03glJrYNYDVMH2zOnXCiBIMnR
-         z/s3x07FxOMqDcERXWkAV4FxyiDjwsMxcQqjo=
+        d=gmail.com; s=20210112; t=1680562952; x=1683154952;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=idbiGh/Ya6uIX+mzYB2rV5Qhy6GfPEhyNSP1LnCMOvw=;
+        b=F8qCgBXulmMAgA4uX/HvTpCkkTA78It5Ay0WX+wC0m3fdny7VcYr5xK6qhGAvd49em
+         UPUkMFayptoos9n0arvw66ok2KwzSDzK3etIoDz5NDwNBjrMGewFbjt2M7gNaiixQRiB
+         ec8AUsNtIPvUCPvLiJfOqr4UXOaUFydOQrJxbjrM/8Cga871tsTqohCWjMyOjVJcELEl
+         LmLoVKxVN+Vd5kVR+TPDum2eaImaMGZa67tvB+Fxlr0SjpTNCSvGcdp0wkO7TkWb0YvU
+         5se00vVHNeAxT3+NJLtQoFGx7EWuNVY/vzuhfzhdaysj5bddsYxREPn4Fmy1LmN4C3/9
+         eB6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680562762;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fkd2TX1vf4QdQsQX67c28kv3YBAJ32wfaLNOMhERik8=;
-        b=SIf0SaESjp8Rbx2PTb/bajq9oobi88IUaTSDJ0S4kt3b6tVh2fVd/FYCR4ow7UJsES
-         JJyHblDwt1sib9Rj3QklNM+nY3qd1dDhfE4t4bME5hWQx1YgZVue99vgdgCljNrvw39x
-         4FAlcDy1znf8Phkjx5kEaS6HWGS+01QkT+Zxfc9+0VLbMQ2FM/+dICAlEFfA9WCjiuik
-         jBZjqvPTR9O2M6MOiuXwVXKtOVE3bvp6gqwOn7KTx0EL6ilgFsMfquO4T6Mjrg1vYQIE
-         Hwfqb+5YOQEt6pvMEC/ZV5yvPDpjgn6LxINcuQ9oV45qQK1/X3XV/CIoeVhU1mqaE1Hy
-         jjZg==
-X-Gm-Message-State: AAQBX9d2Uvu1Br5leLgoUx4kvAQD0FVukRp4mUkz6wCL5+dOyTzE2UFV
-        vf3ig/CCWYsjHI5zBPhoDAqpiA==
-X-Google-Smtp-Source: AKy350ZRbNyEi4Jdca0Ftmjo2kjCwv02cN2cPgzbKUN8wVvCZu02OWnhv+g9RimOYMYrUzDERgBrNQ==
-X-Received: by 2002:a05:6602:1304:b0:759:485:41d with SMTP id h4-20020a056602130400b007590485041dmr617082iov.0.1680562762719;
-        Mon, 03 Apr 2023 15:59:22 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id q29-20020a02b05d000000b00406356481c0sm2887964jah.57.2023.04.03.15.59.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 15:59:22 -0700 (PDT)
-Message-ID: <d681cdd7-b455-080f-9b19-3510f6bc7a8f@linuxfoundation.org>
-Date:   Mon, 3 Apr 2023 16:59:21 -0600
+        d=1e100.net; s=20210112; t=1680562952; x=1683154952;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=idbiGh/Ya6uIX+mzYB2rV5Qhy6GfPEhyNSP1LnCMOvw=;
+        b=4/WIqT4jMYLRWmGHbNWUChQ5UKMAMrOU9JRJb+WdcARd63KgWRFBalo/leToKE8FxY
+         SH4b1MuA03n7OKG+vngq+yxHXKRQBrO0/hgFI2wP/suYHJQmCKpQItDeYTXqQAVvpbb2
+         MIJjrYDr1M6RKwCbtog/X9BgFW+Xi5BiKOJS97oS+5rBNQNY0KUDGsKW9rBP3ocrbXpm
+         tkqySvkxJtvquECT6dix5VEWNtjhVoWGm3oB4Vlq7O/Uha+Qc5TMIPmYMQtEnbB6a1zu
+         P2kKBJPsSRH7UqBgKb/Zp34iCSLtICpAfv38Fe2zSPk6gLIo22FE7EIvyV53mW1r+aD1
+         ciRQ==
+X-Gm-Message-State: AAQBX9fq0OX6g3ngsABoXA63nDkxKKlsEcMcMmdHPd0YmqynrMvPbtka
+        0tEEXAQTxQQhk4lpuEJuQRP9IjDJ978ASXWBrL4=
+X-Google-Smtp-Source: AKy350YCrvXzZPu5fSnKVuKhW8RUVaKfBxcvGq3LzmM9l5vSftKYD875WlFhD/GHCCiGwm4WqTgscaBr5AtiNV9GQw8=
+X-Received: by 2002:a17:906:f07:b0:924:32b2:e3d1 with SMTP id
+ z7-20020a1709060f0700b0092432b2e3d1mr165085eji.3.1680562952478; Mon, 03 Apr
+ 2023 16:02:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 5.15 00/99] 5.15.106-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230403140356.079638751@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230403140356.079638751@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <168042409059.4051476.8176861613304493950.stgit@firesoul>
+ <168042420344.4051476.9107061652824513113.stgit@firesoul> <CAADnVQ+JEP0sOyOOWbYKHackb4PmNYYcDGXnksucJt2mQGwi7g@mail.gmail.com>
+ <CADRO9jPNbXW2TymTOS+nJGKLgbVtQRzmQTby=p62Ys1Ruf66Lg@mail.gmail.com>
+In-Reply-To: <CADRO9jPNbXW2TymTOS+nJGKLgbVtQRzmQTby=p62Ys1Ruf66Lg@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 3 Apr 2023 16:02:21 -0700
+Message-ID: <CAADnVQKYDzFkcVuh=EKzCQz=h=w95gP-j76Y9cYD7_jvW8MkuA@mail.gmail.com>
+Subject: Re: [PATCH bpf V6 5/5] selftests/bpf: Adjust bpf_xdp_metadata_rx_hash
+ for new arg
+To:     Jesper Brouer <jbrouer@redhat.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        bpf <bpf@vger.kernel.org>, Stanislav Fomichev <sdf@google.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        xdp-hints@xdp-project.net,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "Song, Yoong Siang" <yoong.siang.song@intel.com>,
+        "Ong, Boon Leong" <boon.leong.ong@intel.com>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,29 +95,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/3/23 08:08, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.106 release.
-> There are 99 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.106-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Mon, Apr 3, 2023 at 8:08=E2=80=AFAM Jesper Brouer <jbrouer@redhat.com> w=
+rote:
+>
+>
+>
+> s=C3=B8n. 2. apr. 2023 17.50 skrev Alexei Starovoitov <alexei.starovoitov=
+@gmail.com>:
+>>
+>> On Sun, Apr 2, 2023 at 1:30=E2=80=AFAM Jesper Dangaard Brouer <brouer@re=
+dhat.com> wrote:
+>> >
+>> > Update BPF selftests to use the new RSS type argument for kfunc
+>> > bpf_xdp_metadata_rx_hash.
+>> >
+>> > Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+>> > Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>> > Acked-by: Stanislav Fomichev <sdf@google.com>
+>> > ---
+>> >  .../selftests/bpf/prog_tests/xdp_metadata.c        |    2 ++
+>> >  .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   14 +++++++++--=
+---
+>> >  tools/testing/selftests/bpf/progs/xdp_metadata.c   |    6 +++---
+>> >  tools/testing/selftests/bpf/progs/xdp_metadata2.c  |    7 ++++---
+>> >  tools/testing/selftests/bpf/xdp_hw_metadata.c      |    2 +-
+>> >  tools/testing/selftests/bpf/xdp_metadata.h         |    1 +
+>> >  6 files changed, 20 insertions(+), 12 deletions(-)
+>> >
+>> > diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/t=
+ools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+>> > index aa4beae99f4f..8c5e98da9ae9 100644
+>> > --- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+>> > +++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+>> > @@ -273,6 +273,8 @@ static int verify_xsk_metadata(struct xsk *xsk)
+>> >         if (!ASSERT_NEQ(meta->rx_hash, 0, "rx_hash"))
+>> >                 return -1;
+>> >
+>> > +       ASSERT_EQ(meta->rx_hash_type, 0, "rx_hash_type");
+>> > +
+>> >         xsk_ring_cons__release(&xsk->rx, 1);
+>> >         refill_rx(xsk, comp_addr);
+>> >
+>> > diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/too=
+ls/testing/selftests/bpf/progs/xdp_hw_metadata.c
+>> > index 4c55b4d79d3d..7b3fc12e96d6 100644
+>> > --- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+>> > +++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+>> > @@ -14,8 +14,8 @@ struct {
+>> >
+>> >  extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
+>> >                                          __u64 *timestamp) __ksym;
+>> > -extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
+>> > -                                   __u32 *hash) __ksym;
+>> > +extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *=
+hash,
+>> > +                                   enum xdp_rss_hash_type *rss_type) =
+__ksym;
+>> >
+>> >  SEC("xdp")
+>> >  int rx(struct xdp_md *ctx)
+>> > @@ -74,10 +74,14 @@ int rx(struct xdp_md *ctx)
+>> >         else
+>> >                 meta->rx_timestamp =3D 0; /* Used by AF_XDP as not ava=
+il signal */
+>> >
+>> > -       if (!bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash))
+>> > -               bpf_printk("populated rx_hash with %u", meta->rx_hash)=
+;
+>> > -       else
+>> > +       if (!bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_h=
+ash_type)) {
+>> > +               bpf_printk("populated rx_hash:0x%X type:0x%X",
+>> > +                          meta->rx_hash, meta->rx_hash_type);
+>> > +               if (!(meta->rx_hash_type & XDP_RSS_L4))
+>> > +                       bpf_printk("rx_hash low quality L3 hash type")=
+;
+>> > +       } else {
+>> >                 meta->rx_hash =3D 0; /* Used by AF_XDP as not avail si=
+gnal */
+>> > +       }
+>>
+>> Didn't we agree in the previous thread to remove these printks and
+>> replace them with actual stats that user space can see?
+>
+>
+> This patchset is for bpf-tree RC version of kernel.
+> Thus, we keep changes to a minimum.
+>
+> I/we will do printk work on bpf-next.
+> (Once I get home from vacation next week)
 
-Compiled and booted on my test system. No dmesg regressions.
-
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+Sorry, but I insist on making them in this set.
+We did bigger changes in bpf tree, so size is not an issue.
+I don't want to remember to ping you every week or so to
+remind you to fix this later after bpf gets merged into bpf-next.
+Less work for me and less work for you to do it now.
