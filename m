@@ -2,138 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76FA6D4D31
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD676D4D38
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbjDCQG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
+        id S232299AbjDCQIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232831AbjDCQGu (ORCPT
+        with ESMTP id S231549AbjDCQIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:06:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F62423A;
-        Mon,  3 Apr 2023 09:06:17 -0700 (PDT)
-Received: from [192.168.2.163] (109-252-124-32.nat.spd-mgts.ru [109.252.124.32])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 62445660313D;
-        Mon,  3 Apr 2023 17:06:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680537976;
-        bh=51DH+WEXRTwye3bL60EML5+n6ov/nUbID+1syBtvpVc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=C9GkqTYAX09V3aIvsoWtqW3YPmEWj7zFP3HggswnZ4se7DeHa3lkiNFh+heVl0M8r
-         SMS5ViZbdpkfsdTECVba356upLtrBCtf/hNI9XsK/zgOjLro2s7iXKpiHBPbtwebTl
-         KmGe4nw/TN92clBXluiu6KIIxxbc6dDRGFReFqMARCrijGVwoRa4ZJilHlovsJDHDo
-         j+sCM4MDZKBJqgndI3A4ms85H9GC6k1totnOzsXmlIM9oNQ+l6D08COyCBlP7K9d9N
-         lzCUdaIjaMrO122v9zron59ycQAJAJwca0VO36KRO8MSvgkXEdy+iizwUIUlWzs4uH
-         PbHYXc3qx29gw==
-Message-ID: <f70c6d62-a7fd-c153-932f-16886e46329b@collabora.com>
-Date:   Mon, 3 Apr 2023 19:06:12 +0300
+        Mon, 3 Apr 2023 12:08:15 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3020C2D60
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:07:51 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so33062653pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 09:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680538069;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BKnixP5n5+Zn1kJb+6YOX01TVCjG+8+3f8j/QO7AJFw=;
+        b=V3H8+AJ3GOgAjkJY76fFg82MzOHHzyoqvXzhkD0EA7jIuN/54d114thC7Lp5rUh3df
+         wuqbdE7S3EoWtBXIJzbwKuURS9rtPuCUII8rYExUQARSLuAmoH5c9tZwWQqVml44/Jcv
+         bVrswAJ5dvfrmfWGEZFcpxH2epzsk4bNBPv/L9o8r/BbowC4B2QNg44Z37DMWGCinVor
+         Y6dtHL6P7q79JM+rTw0uFo3kdfK59xFw1xCY5if0r6F2Jehvoxpl6G7OmCahTYDE63WH
+         sPiacw/SeSrMJjXgy34t1+UEe0TAWb822+2bpwWSvnonrgJzOfIdjlaot5um10ycTwVx
+         AhOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680538069;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BKnixP5n5+Zn1kJb+6YOX01TVCjG+8+3f8j/QO7AJFw=;
+        b=sjAcvB1AZ/bbmjfGcaDSKkIQC7ov4WHLhr7lrCVOCLUN2V/jkffdK4TLAzqZBvWQ8+
+         9UYCkSjoKoQdCr+YjAviNi6zH+qYYU18912JcSG7A33wVYO+X5AFCj92PFUQCnN/sZfP
+         DM4DF0KUUFrbS9ge1hTfn9LPUg3gpDWi8i+uoF+yWJ+oNg7m7sDfG7S5x/mbfd0TdEBB
+         Hmrx1+ktkJxKXoDeBoVZmdD46TLVOQueJobMvquoaLF+SA01KrQURGhvnUDTCD23TCHG
+         Z9EJybBe3x5wZR1lOcl/gcp4XWzvgVeDeumBeyQJCN99EJ1JFfA0FGLxhv583IZ42C2G
+         xBxA==
+X-Gm-Message-State: AO0yUKWEPVLwJ26o/pQaQAw8EL/BceQ5mLGWgbc8FgC/K9PZsNKrsPYD
+        roOz4EXTVjVGi20Z6sgANKg=
+X-Google-Smtp-Source: AK7set/GZdIC5QOn9o/FcyqqFSgG9/q68k+OzsO743dI9WPlbAYjMWr8JeyWGWCnZBheZsYC1QwmSg==
+X-Received: by 2002:a05:6a20:c129:b0:cd:1808:87c7 with SMTP id bh41-20020a056a20c12900b000cd180887c7mr30076046pzb.15.1680538069342;
+        Mon, 03 Apr 2023 09:07:49 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
+        by smtp.gmail.com with ESMTPSA id w15-20020aa7858f000000b0062d8c855ee9sm3423190pfn.149.2023.04.03.09.07.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 09:07:40 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/vblank: Simplify drm_dev_has_vblank()
+Date:   Mon,  3 Apr 2023 09:07:35 -0700
+Message-Id: <20230403160735.1211468-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2] soc/tegra: pmc: Support software wake-up for SPE
-Content-Language: en-US
-To:     Petlozu Pravareshwar <petlozup@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        p.zabel@pengutronix.de, ulf.hansson@linaro.org, kkartik@nvidia.com,
-        cai.huoqing@linux.dev, spatra@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Viswanath L <viswanathl@nvidia.com>
-References: <20230330170621.258068-1-petlozup@nvidia.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20230330170621.258068-1-petlozup@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 20:06, Petlozu Pravareshwar wrote:
-> The Sensor Processing Engine(SPE) can trigger a software wake-up of
-> the device. To support this wake-up for the SPE, set SR_CAPTURE_EN
-> bit in WAKE_AOWAKE_CNTRL register associated with the wake-up for
-> the SPE. This SR capturing logic is expected to be enabled for wakes
-> with short pulse signalling requirements.
-> 
-> Signed-off-by: Viswanath L <viswanathl@nvidia.com>
-> Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
-> ---
-> v1->v2:
-> * Rebase the change on latest code.
-> ---
->  drivers/soc/tegra/pmc.c | 24 +++++++++++++++++++++++-
->  1 file changed, 23 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-> index cf4cfbf9f7c5..2a2342eff622 100644
-> --- a/drivers/soc/tegra/pmc.c
-> +++ b/drivers/soc/tegra/pmc.c
-> @@ -3,7 +3,7 @@
->   * drivers/soc/tegra/pmc.c
->   *
->   * Copyright (c) 2010 Google, Inc
-> - * Copyright (c) 2018-2022, NVIDIA CORPORATION. All rights reserved.
-> + * Copyright (c) 2018-2023, NVIDIA CORPORATION. All rights reserved.
->   *
->   * Author:
->   *	Colin Cross <ccross@google.com>
-> @@ -177,6 +177,7 @@
->  /* Tegra186 and later */
->  #define WAKE_AOWAKE_CNTRL(x) (0x000 + ((x) << 2))
->  #define WAKE_AOWAKE_CNTRL_LEVEL (1 << 3)
-> +#define WAKE_AOWAKE_CNTRL_SR_CAPTURE_EN (1 << 1)
->  #define WAKE_AOWAKE_MASK_W(x) (0x180 + ((x) << 2))
->  #define WAKE_AOWAKE_MASK_R(x) (0x300 + ((x) << 2))
->  #define WAKE_AOWAKE_STATUS_W(x) (0x30c + ((x) << 2))
-> @@ -191,6 +192,8 @@
->  #define WAKE_AOWAKE_CTRL 0x4f4
->  #define  WAKE_AOWAKE_CTRL_INTR_POLARITY BIT(0)
->  
-> +#define SW_WAKE_ID		83 /* wake83 */
-> +
->  /* for secure PMC */
->  #define TEGRA_SMC_PMC		0xc2fffe00
->  #define  TEGRA_SMC_PMC_READ	0xaa
-> @@ -355,6 +358,7 @@ struct tegra_pmc_soc {
->  	void (*setup_irq_polarity)(struct tegra_pmc *pmc,
->  				   struct device_node *np,
->  				   bool invert);
-> +	void (*set_wake_filters)(struct tegra_pmc *pmc);
->  	int (*irq_set_wake)(struct irq_data *data, unsigned int on);
->  	int (*irq_set_type)(struct irq_data *data, unsigned int type);
->  	int (*powergate_set)(struct tegra_pmc *pmc, unsigned int id,
-> @@ -2416,6 +2420,17 @@ static int tegra210_pmc_irq_set_type(struct irq_data *data, unsigned int type)
->  	return 0;
->  }
->  
-> +static void tegra186_pmc_set_wake_filters(struct tegra_pmc *pmc)
-> +{
-> +	u32 value;
-> +
-> +	/* SW Wake (wake83) needs SR_CAPTURE filter to be enabled */
-> +	value = readl(pmc->wake + WAKE_AOWAKE_CNTRL(SW_WAKE_ID));
-> +	value |= WAKE_AOWAKE_CNTRL_SR_CAPTURE_EN;
-> +	writel(value, pmc->wake + WAKE_AOWAKE_CNTRL(SW_WAKE_ID));
-> +	dev_dbg(pmc->dev, "WAKE_AOWAKE_CNTRL_83 = 0x%x\n", value);
-> +}
+From: Rob Clark <robdclark@chromium.org>
 
-To me this needs to be moved to the SPE driver, which should get the PMC
-regmap handle and enable wake only when needed, similarly how it's done
-by USB Tegra drivers that also need to configure PMC. Otherwise this
-looks like a hack/workaround.
+What does vblank have to do with num_crtcs?  Well, this was technically
+correct, but you'd have to go look at where num_crtcs is initialized to
+understand why.  Lets just replace it with the simpler and more obvious
+check.
 
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/drm_vblank.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
+index 877e2067534f..ad34c235d853 100644
+--- a/drivers/gpu/drm/drm_vblank.c
++++ b/drivers/gpu/drm/drm_vblank.c
+@@ -575,7 +575,7 @@ EXPORT_SYMBOL(drm_vblank_init);
+  */
+ bool drm_dev_has_vblank(const struct drm_device *dev)
+ {
+-	return dev->num_crtcs != 0;
++	return !!dev->vblank;
+ }
+ EXPORT_SYMBOL(drm_dev_has_vblank);
+ 
 -- 
-Best regards,
-Dmitry
+2.39.2
 
