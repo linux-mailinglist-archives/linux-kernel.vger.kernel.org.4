@@ -2,123 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2540A6D5106
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA00F6D5107
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjDCSvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
+        id S233424AbjDCSvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbjDCSvI (ORCPT
+        with ESMTP id S233413AbjDCSvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:51:08 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522121BFB;
-        Mon,  3 Apr 2023 11:51:07 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3339kfIV023192;
-        Mon, 3 Apr 2023 18:50:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=nt/8bJi9Qxp+v5aglNRxusY+X3VTlioUN3gK3uI0gJE=;
- b=FCloFJ4dJyKD+qbWEkDSZ0PirVjxuv2QsezUmGvO4APuH+UWfvfCjSI7d+GwF8OO4woB
- EdCPlaWmmWAjBo6O/9r5pr159pp57qgquCjW6k1Rj584boqwDe3SayKbzLhTL/ul96Ia
- KKOUnzwwBRIaxUoNzMPhQYpAV0m6Wwtt7g+Yvg2xoCW8wor1kmpmLaSB8Oky7iTl7jve
- wuV239m9s/Gw6e/KMbf6ERWMlDh9qICZ5bx+7fAenEMxYCnDWeUp1wOSfmZWADcBivar
- XzuJeydArr2NWSWhoDAttq75yKFnQ64+sdZymSmyo43dA0aJ11pWJyxt6KWvgFsfeHiO 2Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pqusu1dsf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Apr 2023 18:50:58 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 333Iou6M004019
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 3 Apr 2023 18:50:56 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 3 Apr 2023
- 11:50:55 -0700
-Message-ID: <59e68312-9bd0-73b1-2d18-cd5744588070@quicinc.com>
-Date:   Mon, 3 Apr 2023 12:50:54 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2] PCI: hv: Fix the definition of vector in
- hv_compose_msi_msg()
-Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "quic_carlv@quicinc.com" <quic_carlv@quicinc.com>
-CC:     Boqun Feng <boqun.feng@gmail.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-References: <20221027205256.17678-1-decui@microsoft.com>
- <ZCTsPFb7dBj2IZmo@boqun-archlinux> <ZCT6JEK/yGpKHVLn@boqun-archlinux>
- <SA1PR21MB13354973735A5E727F94A169BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
- <ZCUk_9YQGSfedCOR@kroah.com>
- <SA1PR21MB13350093800BC2C387EE0648BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <SA1PR21MB13350093800BC2C387EE0648BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jbM0HfIxhn9L3qp6398K3X7BVqbYKTf3
-X-Proofpoint-ORIG-GUID: jbM0HfIxhn9L3qp6398K3X7BVqbYKTf3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-03_15,2023-04-03_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- phishscore=0 malwarescore=0 suspectscore=0 spamscore=0 clxscore=1011
- priorityscore=1501 mlxlogscore=878 impostorscore=0 lowpriorityscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304030144
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 3 Apr 2023 14:51:12 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594221BF3
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:51:10 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id p12-20020a25420c000000b00b6eb3c67574so29470090yba.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 11:51:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680547869;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zmvecUsjGJ3uQX4+hCp+ChLUFFiWRrJfULKli9lejus=;
+        b=iXo7QaNo7lnOjhuvr+4xOEIYEqW7I9EsV4BAyp/h+u2o41YXT2LF59fdegZdawF79t
+         /1LwgYO0ezXbRnLVMZt1vnM8W4k+0+powZif1XQ1cXcMmiT/hiws6AD36Xpb42VB7VzW
+         KM/d48roEnbsgARsOlph0g+J/27ipAnZbko/Bba12bUvySpl0Ahh5qkYGDbyeoLCY/l8
+         6+RDpSewGYErIp4oCCT7jpmDeNOh91QPk0VKF7LCmUz1x1Ql9C99XEyaw1LTnnU/5uHB
+         OpwsNgiMh0mchCzgxjDkr9NVi1ibnsZ4uZJmCEVLw41BjKKwvjX608qJRdnrjIqDhO/+
+         qo0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680547869;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zmvecUsjGJ3uQX4+hCp+ChLUFFiWRrJfULKli9lejus=;
+        b=D51CfLRDvKtBDB7tJUXPqQ7nO5h5W9dZW1bG0FU2erzhr72NdiYZF13Wnp48Kekcm6
+         SkYpi8OBErSMEoQOa86+oq2ztPAa9hCPAHxsr+0Mcdp58KiIxgO8jF3FrYLAdeLBo+Ej
+         COLn8DlI1g1ZEpqzCDuZg8pzc1P/J1SAozfDe2AX7le1xm6f81XPzgTPeoFWwoLovnkz
+         I8NiAQMJuFTxAsIKOBTDiCQ7xFCF7af4zu+qjR+HaC/Q346FJqFcj+AR8Vjo22jOXI63
+         e6VErlV/+j03D0H5gy/Kyd8jP+6Ge1I9CZ8btHd2UDW9x0PYnDyYV5V5jgb+XW1bXn2z
+         X9ow==
+X-Gm-Message-State: AAQBX9cU88zHvOQfzdYebmL2Nwt9hCVqflrOAPlWRnxEXdeAguPyOZBz
+        hQ62/qTnivqVAI80BY0s1Ncyj4yGCyeB
+X-Google-Smtp-Source: AKy350Z3AzvX8rv+NPBE59yNqtlhNqwWuGbBM5SLWa6awSTFI6hjDHet4AqJQ1+HUHoSonOM+YbqTAoPUdiV
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9dc:a977:817d:341])
+ (user=irogers job=sendgmr) by 2002:a81:ac08:0:b0:544:8ac7:2608 with SMTP id
+ k8-20020a81ac08000000b005448ac72608mr17860232ywh.6.1680547869643; Mon, 03 Apr
+ 2023 11:51:09 -0700 (PDT)
+Date:   Mon,  3 Apr 2023 11:50:57 -0700
+Message-Id: <20230403185057.1844232-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Subject: [PATCH v1] perf jit: Fix a few memory leaks
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Brian Robbins <brianrob@linux.microsoft.com>,
+        Yuan Can <yuancan@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/2023 1:50 PM, Dexuan Cui wrote:
->> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> ...
->>> e70af8d040d2 has a Fixes tag. Not sure why it's not automatically
->> backported.
->>
->> Because "Fixes:" is not the flag that we are sure to trigger off of.
->> Please read:
->> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
->> for how to do this properly.
-> 
-> Thanks, I just read this again to refresh my memory :-)
-> I remember Sasha has an AI algorithm to pick up patches into the stable
-> tree and a "Fixes" tag should be a strong indicator.
-> 
-> I tired to manually cherry-pick e70af8d040d2 to 5.15.y and got some
-> merge conflicts. Probably that's why Sasha's script didn't automatically
-> do the backport. @Carl, @Jeffrey, may I know if you have some cycles to
-> help backport e70af8d040d2?
+As reported by leak sanitizer.
 
-We might have some cycles this week.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/genelf_debug.c | 48 +++++++++++++++++++++++++---------
+ tools/perf/util/jitdump.c      |  7 ++++-
+ 2 files changed, 41 insertions(+), 14 deletions(-)
 
--Jeff
+diff --git a/tools/perf/util/genelf_debug.c b/tools/perf/util/genelf_debug.c
+index dd40683bd4c0..bdcd37c34b64 100644
+--- a/tools/perf/util/genelf_debug.c
++++ b/tools/perf/util/genelf_debug.c
+@@ -87,6 +87,12 @@ buffer_ext_init(struct buffer_ext *be)
+ 	be->max_sz = 0;
+ }
+ 
++static void
++buffer_ext_exit(struct buffer_ext *be)
++{
++	free(be->data);
++}
++
+ static inline size_t
+ buffer_ext_size(struct buffer_ext *be)
+ {
+@@ -494,21 +500,26 @@ jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_entries
+ 	buffer_ext_init(&da);
+ 
+ 	ret = jit_process_debug_info(code_addr, debug, nr_debug_entries, &dl, &da, &di);
+-	if (ret)
+-		return -1;
++	if (ret) {
++		ret = -1;
++		goto out;
++	}
++
+ 	/*
+ 	 * setup .debug_line section
+ 	 */
+ 	scn = elf_newscn(e);
+ 	if (!scn) {
+ 		warnx("cannot create section");
+-		return -1;
++		ret = -1;
++		goto out;
+ 	}
+ 
+ 	d = elf_newdata(scn);
+ 	if (!d) {
+ 		warnx("cannot get new data");
+-		return -1;
++		ret = -1;
++		goto out;
+ 	}
+ 
+ 	d->d_align = 1;
+@@ -521,7 +532,8 @@ jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_entries
+ 	shdr = elf_getshdr(scn);
+ 	if (!shdr) {
+ 		warnx("cannot get section header");
+-		return -1;
++		ret = -1;
++		goto out;
+ 	}
+ 
+ 	shdr->sh_name = 52; /* .debug_line */
+@@ -536,13 +548,15 @@ jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_entries
+ 	scn = elf_newscn(e);
+ 	if (!scn) {
+ 		warnx("cannot create section");
+-		return -1;
++		ret = -1;
++		goto out;
+ 	}
+ 
+ 	d = elf_newdata(scn);
+ 	if (!d) {
+ 		warnx("cannot get new data");
+-		return -1;
++		ret = -1;
++		goto out;
+ 	}
+ 
+ 	d->d_align = 1;
+@@ -555,7 +569,8 @@ jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_entries
+ 	shdr = elf_getshdr(scn);
+ 	if (!shdr) {
+ 		warnx("cannot get section header");
+-		return -1;
++		ret = -1;
++		goto out;
+ 	}
+ 
+ 	shdr->sh_name = 64; /* .debug_info */
+@@ -570,13 +585,15 @@ jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_entries
+ 	scn = elf_newscn(e);
+ 	if (!scn) {
+ 		warnx("cannot create section");
+-		return -1;
++		ret = -1;
++		goto out;
+ 	}
+ 
+ 	d = elf_newdata(scn);
+ 	if (!d) {
+ 		warnx("cannot get new data");
+-		return -1;
++		ret = -1;
++		goto out;
+ 	}
+ 
+ 	d->d_align = 1;
+@@ -589,7 +606,8 @@ jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_entries
+ 	shdr = elf_getshdr(scn);
+ 	if (!shdr) {
+ 		warnx("cannot get section header");
+-		return -1;
++		ret = -1;
++		goto out;
+ 	}
+ 
+ 	shdr->sh_name = 76; /* .debug_info */
+@@ -603,7 +621,11 @@ jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_entries
+ 	 */
+ 	if (elf_update(e, ELF_C_WRITE) < 0) {
+ 		warnx("elf_update debug failed");
+-		return -1;
++		ret = -1;
+ 	}
+-	return 0;
++out:
++	buffer_ext_exit(&dl);
++	buffer_ext_exit(&di);
++	buffer_ext_exit(&da);
++	return ret;
+ }
+diff --git a/tools/perf/util/jitdump.c b/tools/perf/util/jitdump.c
+index 0e033278fa12..28e49502db5e 100644
+--- a/tools/perf/util/jitdump.c
++++ b/tools/perf/util/jitdump.c
+@@ -235,9 +235,11 @@ jit_open(struct jit_buf_desc *jd, const char *name)
+ 	 */
+ 	strcpy(jd->dir, name);
+ 	dirname(jd->dir);
++	free(buf);
+ 
+ 	return 0;
+ error:
++	free(buf);
+ 	funlockfile(jd->in);
+ 	fclose(jd->in);
+ 	return retval;
+@@ -523,7 +525,7 @@ static int jit_repipe_code_load(struct jit_buf_desc *jd, union jr_entry *jr)
+ 
+ 	ret = perf_event__process_mmap2(tool, event, &sample, jd->machine);
+ 	if (ret)
+-		return ret;
++		goto out;
+ 
+ 	ret = jit_inject_event(jd, event);
+ 	/*
+@@ -532,6 +534,8 @@ static int jit_repipe_code_load(struct jit_buf_desc *jd, union jr_entry *jr)
+ 	if (!ret)
+ 		build_id__mark_dso_hit(tool, event, &sample, NULL, jd->machine);
+ 
++out:
++	free(event);
+ 	return ret;
+ }
+ 
+@@ -874,6 +878,7 @@ jit_process(struct perf_session *session,
+ 	}
+ 
+ 	nsinfo__put(jd.nsi);
++	free(jd.buf);
+ 
+ 	return ret;
+ }
+-- 
+2.40.0.348.gf938b09366-goog
+
