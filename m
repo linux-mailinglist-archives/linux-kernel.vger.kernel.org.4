@@ -2,155 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACAD36D40A0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079DB6D40A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbjDCJbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        id S232087AbjDCJdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbjDCJba (ORCPT
+        with ESMTP id S232084AbjDCJdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:31:30 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3153530F0
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:31:29 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id w9so114689412edc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 02:31:29 -0700 (PDT)
+        Mon, 3 Apr 2023 05:33:33 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A486A60
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:33:28 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id x8-20020a9d3788000000b0069f922cd5ceso15271129otb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 02:33:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680514287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NPh+EMUaLdi2l+M+ekkhJU7AhmrhVeIn6TgP3iXWonE=;
-        b=DFmUo+L+r1nbQLbhsZ74wuyxun8LuYXe6M1hSwvmx7Ez7wmO/cK1hWOXGEoPMiRYMx
-         iQ+fTKC1i7LTsWzkT7Q2EGmLT1k+LPZ7z1hxsDA9/ROAWZhkdWzU8pDjLQLfDHMcHtw1
-         MKGUq+v5v1q5C7iHkHudPEzf4wNVCQvGA3iytlwW4pm/BZKQlw32HDfgFnNvG5ef5HDt
-         qTUDR07pWufV7uD3j0lqvIZDQPIaar9GATF/0QCWkV74x6WC/dz5zaqM+dh76HpgUbDI
-         DE9l6DsEv8Jcp8/yrnOtQPJgeDpDl84bUMuzVGZNkuTlDPQuR4w9zgmzkKeQB5wyv5SW
-         /D6Q==
+        d=ventanamicro.com; s=google; t=1680514404; x=1683106404;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZznhaLgkR5BAQNz1oF8xOUpsQ8iqxB7L0RTGOfw/xU=;
+        b=UbT8vAYvDN6OqpJ+R+oA5J2u0aFC3YpjFuymekDS1vJOIssNIUqJ/Pr3rv0yghLjmE
+         nIxx6L1TUeuDgIDJ019Jf0UeIZ58zJdh6Y2grtRYP1XtOThcq/pq/rx9rxRNbPw5qF1V
+         4nuDEeWZz/UVV7pTd1am8hEkRAUheoHcXvbHlNyStdimjkD1sooaunPwp7euGstILn3n
+         +mY3ZBa5sLKAA5EGL8LopqgiC1TeAMnE+6/66rwt9TGtsPu1M3P9ot92vCMhj5h7q6sw
+         mpmfQYgdfVIH9aSIKIjwU0fOBTTMTg4ynSFui75ag+jt6eXYFd+bKHPVU1SdwYvfwI76
+         gcCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680514287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NPh+EMUaLdi2l+M+ekkhJU7AhmrhVeIn6TgP3iXWonE=;
-        b=Glxlgwzx0e0sn+dcSl4kWuwXJt8qN12ov/QJMlVRdLmUpEVIP4zdFIsnfMYsBk6E1p
-         YwtuAtF739ziPgv1g4DRig2C4NGV1bfKAtT8ATcb5Ge+61RREwdeBGI92nZy7GEt/Oiq
-         2o7jrFkWXZ5r8Yg+Omn+RVwCDEeUaRezGGAZeYqeM1NvCd4f/RW1m2nUsW5QiUarc0DO
-         opRZw0laMGH4ooHaRQpdF64G/SXDb9HZvw8PZlNk59EWEtfgenPpWo9YFPBGC+/G1lKc
-         Mqx0afejo08MjQ1StAzUXHdJa6fLWl3I0gfMTxtVk1hiHe2WXJr+IIS3HQ5wEED7jIGg
-         Ia3Q==
-X-Gm-Message-State: AAQBX9dA8SSuLrg1ckfu4sYdm5smo4vVp0/yxn2/gBhhY5Atby6UAcBt
-        ihQtFSZ0YPi8eRaIu12gMCTrgA==
-X-Google-Smtp-Source: AKy350ZZKIe0XlZ5unRDt/7zn2r/gepDCwan5IHWh/Z2tdxfGiKQQF3K6cy7KtDVd2EBLddBhONZVg==
-X-Received: by 2002:a17:906:d8a9:b0:925:5705:b5b8 with SMTP id qc9-20020a170906d8a900b009255705b5b8mr35741794ejb.58.1680514287645;
-        Mon, 03 Apr 2023 02:31:27 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
-        by smtp.gmail.com with ESMTPSA id e7-20020a170906c00700b0093f83562f09sm4284868ejz.87.2023.04.03.02.31.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 02:31:27 -0700 (PDT)
-Message-ID: <5e487bc2-0a5a-4fa1-bc02-2647fa3a887a@linaro.org>
-Date:   Mon, 3 Apr 2023 11:31:26 +0200
+        d=1e100.net; s=20210112; t=1680514404; x=1683106404;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DZznhaLgkR5BAQNz1oF8xOUpsQ8iqxB7L0RTGOfw/xU=;
+        b=Ay0g6esBFV/Aa9muWfiP1iRJbtYdDghigmfnj9iTWX4ybPeLnKVifFdasuyNiZZMM9
+         vS8Tu+wCTeUI5lszS5+ZEi47c8AAAGVqcacSqK7ULWITodkPzCXYmD2STxUn4UoLNXTG
+         5BTXpm87TyxPjIkV2vvXvM/acxudFW/5bwTydSuKmiK5ZzI0Q/PulCODutUef0fsuuMg
+         PMLkAS0JWyfw5Oix8h6C+xqcKfC03QkE7zXFAmQmiMufmmQXeg+oISXwHaoIEyvhxfZ8
+         yzmygmH9tSyk4JScLi9IsCcXes/8iaSD2fWaUGhUURj9enQqzVWtxZjQDKBZNu8sMQSw
+         QYHA==
+X-Gm-Message-State: AAQBX9cVy5ppCU40IOAiuU+QIy0Q+amcCBHDvJnoIylVjMczQYF14Cxe
+        jAv0LXa3PLjBim6zLzDGqy9S3g==
+X-Google-Smtp-Source: AKy350aA5Ixs2WBzjri+SklllWtPpSloyccBIm2AHc49ql1/dCwqDARVWDxRF+zMDpQSH0NUaUW7RQ==
+X-Received: by 2002:a9d:668:0:b0:6a3:7e52:c3ae with SMTP id 95-20020a9d0668000000b006a37e52c3aemr434930otn.13.1680514404560;
+        Mon, 03 Apr 2023 02:33:24 -0700 (PDT)
+Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
+        by smtp.gmail.com with ESMTPSA id f5-20020a9d6c05000000b006a154373578sm3953953otq.39.2023.04.03.02.33.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 02:33:24 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v3 0/8] RISC-V KVM virtualize AIA CSRs
+Date:   Mon,  3 Apr 2023 15:03:02 +0530
+Message-Id: <20230403093310.2271142-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: watchdog: alphascale-asm9260: convert to DT
- schema
-Content-Language: en-US
-To:     Om Parikh <hack3r-0m@proton.me>, daniel.baluta@nxp.com
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Olof Johansson <olof@lixom.net>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230403004138.326482-1-hack3r-0m@proton.me>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230403004138.326482-1-hack3r-0m@proton.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/2023 02:42, Om Parikh wrote:
-> this patch replaces the txt file and adds YAML bindings file
+The RISC-V AIA specification is now frozen as-per the RISC-V international
+process. The latest frozen specifcation can be found at:
+https://github.com/riscv/riscv-aia/releases/download/1.0-RC3/riscv-interrupts-1.0-RC3.pdf
 
-Do not use "This commit/patch", but imperative mood. See:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+This series implements first phase of AIA virtualization which targets
+virtualizing AIA CSRs. This also provides a foundation for the second
+phase of AIA virtualization which will target in-kernel AIA irqchip
+(including both IMSIC and APLIC).
 
-Use full sentences, so start with capital letter.
+The first two patches are shared with the "Linux RISC-V AIA Support"
+series which adds AIA driver support.
 
-> adhering to the json-schema for alphascale-asm9260. It is a
-> demo patch for potential further contributions to the GSOC
-> project.
+To test this series, use AIA drivers from the "Linux RISC-V AIA Support"
+series and use KVMTOOL from the riscv_aia_v1 branch at:
+https://github.com/avpatel/kvmtool.git
 
-Drop unrelated messages.
+These patches can also be found in the riscv_kvm_aia_csr_v3 branch at:
+https://github.com/avpatel/linux.git
 
-> 
-> (see: https://wiki.linuxfoundation.org/gsoc/2023-gsoc-device-tree-bindings)
+Changes since v2:
+ - Rebased on Linux-6.3-rc5
+ - Split PATCH5 into two separate patches as suggested by Atish.
 
-Drop, not related to Linux kernel.
+Changes since v1:
+ - Addressed from Drew and Conor in PATCH1
+ - Use alphabetical ordering for SMAIA and SSAIA enum in PATCH2
+ - Use GENMASK() in PATCH3
 
-Anyway, send your patches first through you mentor, so we won't have to
-comment on trivial things.
+Anup Patel (8):
+  RISC-V: Add AIA related CSR defines
+  RISC-V: Detect AIA CSRs from ISA string
+  RISC-V: KVM: Drop the _MASK suffix from hgatp.VMID mask defines
+  RISC-V: KVM: Initial skeletal support for AIA
+  RISC-V: KVM: Implement subtype for CSR ONE_REG interface
+  RISC-V: KVM: Add ONE_REG interface for AIA CSRs
+  RISC-V: KVM: Virtualize per-HART AIA CSRs
+  RISC-V: KVM: Implement guest external interrupt line management
 
+ arch/riscv/include/asm/csr.h      | 107 ++++-
+ arch/riscv/include/asm/hwcap.h    |   8 +
+ arch/riscv/include/asm/kvm_aia.h  | 137 +++++++
+ arch/riscv/include/asm/kvm_host.h |  14 +-
+ arch/riscv/include/uapi/asm/kvm.h |  18 +-
+ arch/riscv/kernel/cpu.c           |   2 +
+ arch/riscv/kernel/cpufeature.c    |   2 +
+ arch/riscv/kvm/Makefile           |   1 +
+ arch/riscv/kvm/aia.c              | 624 ++++++++++++++++++++++++++++++
+ arch/riscv/kvm/main.c             |  23 +-
+ arch/riscv/kvm/mmu.c              |   3 +-
+ arch/riscv/kvm/vcpu.c             | 185 +++++++--
+ arch/riscv/kvm/vcpu_insn.c        |   1 +
+ arch/riscv/kvm/vm.c               |   4 +
+ arch/riscv/kvm/vmid.c             |   4 +-
+ 15 files changed, 1077 insertions(+), 56 deletions(-)
+ create mode 100644 arch/riscv/include/asm/kvm_aia.h
+ create mode 100644 arch/riscv/kvm/aia.c
 
-Daniel,
-Are you doing a review of your mentees?
-
-> 
-> Signed-off-by: Om Parikh <hack3r-0m@proton.me>
-> ---
->  .../watchdog/alphascale,asm9260-wdt.yaml      | 76 +++++++++++++++++++
->  .../bindings/watchdog/alphascale-asm9260.txt  | 35 ---------
->  2 files changed, 76 insertions(+), 35 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yaml
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yaml b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yaml
-> new file mode 100644
-> index 000000000000..1f7baaf6b0f3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yaml
-> @@ -0,0 +1,76 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/alphascale,asm9260-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Alphascale asm9260 Watchdog timer
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
-
-Drop quotes.
-
-> +
-> +maintainers:
-> +  - Oleksij Rempel <linux@rempel-privat.de>
-> +  - Olof Johansson <olof@lixom.net>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - alphascale,asm9260
-> +      - alphascale,asm9260devkit
-
-NAK, this does not make any sense. I don't understand what do you want
-to document here. These are boards.
-
-
-Best regards,
-Krzysztof
+-- 
+2.34.1
 
