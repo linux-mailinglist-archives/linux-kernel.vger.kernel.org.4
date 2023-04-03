@@ -2,151 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DFC6D3C1D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6776B6D3C21
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbjDCD0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 23:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S231210AbjDCD3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 23:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDCD0U (ORCPT
+        with ESMTP id S231229AbjDCD2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 23:26:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BD56EB7;
-        Sun,  2 Apr 2023 20:26:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF423611E4;
-        Mon,  3 Apr 2023 03:26:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57913C433A4;
-        Mon,  3 Apr 2023 03:26:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680492373;
-        bh=hrX4wjuNXtUa4it9dS1gD+x/opOelCsgKzVa5rmkya8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lNZ2cNh5LZpMSXs0x/GvA01FLXnCCZrRUi8x0zt9XdLbswQFhwKt1GrMX6DdqCKrV
-         +XIeXxupFEE3HyaVh2Uv9dqBn2fEooSbgytsHRqpxQ557IYsvYpAc1vqR8whoL6iDY
-         179fpo8Q1SlLLItRyriF6rwe+bFJ6BgokR/EvdNeDhMDCoLuunJ5CyTN8xdCDBjIpI
-         fWyn4lUm9XJWSYwnn0eowVtdsr2Nm9CKQ7k+Mosa301wJSbOG3hNwEjAnZXkPfbyDy
-         5YmtOs6xWfmvr5qr50umrnSvWNJ9LnmeowmgVHghW+7yKc55frTA+kLUhP3AJWty7i
-         dXMuJIQC5TbVA==
-Received: by mail-lf1-f53.google.com with SMTP id q16so36199496lfe.10;
-        Sun, 02 Apr 2023 20:26:13 -0700 (PDT)
-X-Gm-Message-State: AAQBX9fBO0Lnjejao9Q6HfXWW371IAFDPwwYTR9qAEe+Dk2qEnYktgnw
-        5iKnd+stkTV5zf4wEeBxwAOmGrugdRlQHuF3Wg==
-X-Google-Smtp-Source: AKy350YF5//fW3gKfi6NnVQPdCCMScWgB0PgA7jqaFFkilLrWcB2n9ijboh/wvLC2SKCsSxOdK5aX4P6/95BuMo1yus=
-X-Received: by 2002:ac2:596a:0:b0:4e8:6261:58c2 with SMTP id
- h10-20020ac2596a000000b004e8626158c2mr9881249lfp.7.1680492371303; Sun, 02 Apr
- 2023 20:26:11 -0700 (PDT)
+        Sun, 2 Apr 2023 23:28:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6839C4681
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 20:28:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680492484;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zEUorhcJCP4eTV5i9gmTOnShTwWQaJkm0+Sy2bx605I=;
+        b=EcMnrGdGSOzCNzHurznwtV7Q+PsCjcNCtDZpJLm2Pv6D5XAv9/rK2A3H8UsQzLYo/5VORH
+        Rf/mQgUwGGqEQMsCRDrvlMdF0vu1WDWAn7SEzacNUvBcxMaRbU87J10c0ryD8eRDHazAoM
+        os0VdSBK2XNU1p8+jT66zt5XF9V0eE4=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-564-QJdC58qBMiSZMZCbLnmOXw-1; Sun, 02 Apr 2023 23:27:55 -0400
+X-MC-Unique: QJdC58qBMiSZMZCbLnmOXw-1
+Received: by mail-pf1-f199.google.com with SMTP id y186-20020a62cec3000000b00627df3d6ec4so12709400pfg.12
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 20:27:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680492475;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zEUorhcJCP4eTV5i9gmTOnShTwWQaJkm0+Sy2bx605I=;
+        b=KQI8n+/0jb9JrdA5LDsdk6O+DcczEhLDpQOXz9LTZhyfkvkG8R01FWzE4Y0T8tXPcf
+         QpnK6JYKL073DRz0EkhPhxbOTyBFWTKgmAcRTgWqCBWW5UhambdcIkVVbXgvrouuuTwT
+         crBeU3DzePFUYf5NJLFaKYwyebx+XVSV2he554+66Y1O6vAO247oQVdPCep1E75k2n1+
+         TsidTLnKkkPJlCg2PoHHpiW015ESw2ZII5QKEmcmbYL8U72tQ9Aak2mkNfdxo7Zjw71Y
+         KGo/Je1LxRawUDpfwzn5BotzHUE3z2QZD7qKpdIKxNSPmIj5NnTwkjFR8vRs+YDh7hNz
+         wsUg==
+X-Gm-Message-State: AO0yUKXfy6tsJDaY5UrQetS+K5hN9wgqNZqbsl43ZjgQaxUznM3F5sve
+        fq7trSGG+ODESVFWy1sNOKYS1EJRvz3qvJcBzQJtxdzTZ88YfeCoplEWmZUAiBm4sHN3+EnjC/A
+        ySQlNetxgHIK2qxMvspkVZm86
+X-Received: by 2002:a05:6a20:8b9d:b0:dd:b941:5d90 with SMTP id m29-20020a056a208b9d00b000ddb9415d90mr29852856pzh.60.1680492474887;
+        Sun, 02 Apr 2023 20:27:54 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+Aw9qy1gCxyVuunFgi76rTmU9rp4S0qoZan45QMX21+8iAVTXQmaKPycUMXPmVQLIdXDUDeA==
+X-Received: by 2002:a05:6a20:8b9d:b0:dd:b941:5d90 with SMTP id m29-20020a056a208b9d00b000ddb9415d90mr29852831pzh.60.1680492474586;
+        Sun, 02 Apr 2023 20:27:54 -0700 (PDT)
+Received: from [10.72.12.66] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id k20-20020aa78214000000b006259e883ee9sm5626335pfi.189.2023.04.02.20.27.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Apr 2023 20:27:54 -0700 (PDT)
+Message-ID: <c99f1f3d-25ac-6f5c-b5f1-26f7bfa513e8@redhat.com>
+Date:   Mon, 3 Apr 2023 11:27:42 +0800
 MIME-Version: 1.0
-References: <20230220-display-v1-0-45cbc68e188b@baylibre.com>
- <20230220-display-v1-1-45cbc68e188b@baylibre.com> <CAAOTY_8G03TpY88hMmUgbq5E6P2Y8h5a4DB5T72qfNG6CA+NQA@mail.gmail.com>
- <c8861fda-63c6-7951-29a7-9d29a73e8f3e@gmail.com>
-In-Reply-To: <c8861fda-63c6-7951-29a7-9d29a73e8f3e@gmail.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 3 Apr 2023 11:25:59 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-2eba2JYZdLPutCkLEWgEgOBrXQ4pqpasxu=d1QMWvUg@mail.gmail.com>
-Message-ID: <CAAOTY_-2eba2JYZdLPutCkLEWgEgOBrXQ4pqpasxu=d1QMWvUg@mail.gmail.com>
-Subject: Re: [PATCH 01/21] dt-bindings: display: mediatek: aal: add binding
- for MT8365 SoC
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Xinlei Lee <xinlei.lee@mediatek.com>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RFC PATCH v2 37/48] ceph: Use sendmsg(MSG_SPLICE_PAGES) rather
+ than sendpage()
+To:     David Howells <dhowells@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org
+References: <7f7947d6-2a03-688b-dc5e-3887553f0106@redhat.com>
+ <20230329141354.516864-1-dhowells@redhat.com>
+ <20230329141354.516864-38-dhowells@redhat.com>
+ <709552.1680158901@warthog.procyon.org.uk>
+Content-Language: en-US
+From:   Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <709552.1680158901@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Matthias:
 
-Matthias Brugger <matthias.bgg@gmail.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=88=
-31=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8810:55=E5=AF=AB=E9=81=93=EF=
-=BC=9A
+On 3/30/23 14:48, David Howells wrote:
+> Xiubo Li <xiubli@redhat.com> wrote:
 >
-> Hi Chun-Kuang Hu,
->
-> On 13/03/2023 16:02, Chun-Kuang Hu wrote:
-> > Hi, Alexandre:
-> >
-> > Alexandre Mergnat <amergnat@baylibre.com> =E6=96=BC 2023=E5=B9=B43=E6=
-=9C=889=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:23=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> >>
-> >> Display Adaptive Ambient Light for MT8365 is compatible with another S=
-oC.
-> >> Then, add MT8365 binding along with MT8183 SoC.
-> >
-> > Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> >
->
-> I'm a bit puzzled that you give your reviewed by while I would have expec=
-ted
-> that you will take the display binding patches. Will you take these or do=
- you
-> want someone else to take them?
+>> BTW, will this two patch depend on the others in this patch series ?
+> Yes.  You'll need patches that affect TCP at least so that TCP supports
+> MSG_SPLICE_PAGES, so 04-08 and perhaps 09.  It's also on top of the patches
+> that remove ITER_PIPE on my iov-extract branch, but I don't think that should
+> affect you.
 
-I usually apply whole series together, and I've question about
-"[07/21] dt-bindings: display: mediatek: dpi: add binding for MT8365"
-in this series. This is just the first version, so maybe I would apply
-partial patches in later version.
+Why I asked this is because I only could see these two ceph relevant 
+patches currently.
 
-Regards,
-Chun-Kuang.
+Thanks
+
+- Xiubo
 
 
+> David
 >
-> Regards,
-> Matthias
->
-> >>
-> >> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> >> ---
-> >>   Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yaml=
- | 1 +
-> >>   1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediat=
-ek,aal.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,a=
-al.yaml
-> >> index d4d585485e7b..d47bc72f09c0 100644
-> >> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.=
-yaml
-> >> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.=
-yaml
-> >> @@ -33,6 +33,7 @@ properties:
-> >>                 - mediatek,mt8186-disp-aal
-> >>                 - mediatek,mt8192-disp-aal
-> >>                 - mediatek,mt8195-disp-aal
-> >> +              - mediatek,mt8365-disp-aal
-> >>             - const: mediatek,mt8183-disp-aal
-> >>
-> >>     reg:
-> >>
-> >> --
-> >> b4 0.10.1
+
