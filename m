@@ -2,133 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110566D4100
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A99646D4103
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbjDCJpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S232321AbjDCJpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbjDCJo5 (ORCPT
+        with ESMTP id S232265AbjDCJpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:44:57 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C708111643;
-        Mon,  3 Apr 2023 02:44:29 -0700 (PDT)
-X-UUID: 073fa346d20411edb6b9f13eb10bd0fe-20230403
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=EHJLyaDloXo64Cbva9s+jdVQPscInXF4sT/C8pUOcqU=;
-        b=RDa7M/psoS9CVrNzXYX+j64JFQ3nozNMmRgVCPVrWDspit1EE7a5iP7dMDRFMPGyUa2pPwbQb4lVQs4H30tXuXdA8b4Sqm3TSciKRceMvBGlES2GsJesf4I2Ac9+ofRoPP303CTROPT3/NhuHVanxh3q48268XmnL3ZnBtc7Ric=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:b58f632c-3e4b-4051-a69c-9b3ed96ccbeb,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:120426c,CLOUDID:c75424b5-beed-4dfc-bd9c-e1b22fa6ccc4,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 073fa346d20411edb6b9f13eb10bd0fe-20230403
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 589057485; Mon, 03 Apr 2023 17:43:46 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Mon, 3 Apr 2023 17:43:44 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Mon, 3 Apr 2023 17:43:44 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <maoguang.meng@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Irui Wang <irui.wang@mediatek.com>
-Subject: [PATCH] media: mediatek: vcodec: Coverity issues in encoder driver
-Date:   Mon, 3 Apr 2023 17:43:42 +0800
-Message-ID: <20230403094342.27498-1-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 3 Apr 2023 05:45:11 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4E8113D1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:44:44 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id A81A65C0158;
+        Mon,  3 Apr 2023 05:44:23 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 03 Apr 2023 05:44:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680515063; x=
+        1680601463; bh=2pcfFIJgR5HmBPHP1v+3gt9ctXXHOFIL+EutshVs9fg=; b=W
+        +3Oj32TsZ2HMHjTi2MPIXNX1TRSAG87+b3XedOPC0NX3IxGAhrO1g3ZUbIkOlTM/
+        eeAOBkOz7Y/WQ0hEljKi2wULs18jUxl75nHL6iPHIL6mxwE9pTWtLmOh4DrEs0Ej
+        JcowUSrUYxlWtI23iEH0BFEPBtsefcpbJsm7ZEC3tdG/5cRFIGbSKyCKFhHeBLRw
+        8jks8bGQrIXWlOP1VizwkFKDeT69SW+NRyoamZE/G50/LeKChndo1gkOcks3n+Q+
+        X5MAhCEXNLXsrrgoEtmDd5RaeTSoD16I42NpEUWuyPokor6EoiXlwNIY/vITQHan
+        V0uJ26+r9EFudbhxJiulg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680515063; x=1680601463; bh=2pcfFIJgR5HmB
+        PHP1v+3gt9ctXXHOFIL+EutshVs9fg=; b=XUmijHB1aMmu3mAcL+QsIFrIp57mR
+        X/0U4XHdR5ZzNLx4NAOiOZ/gMiDZRMMPC63Loxu6TGlcdPatM4jG+bUumC1C19cb
+        DcmfYn3ZwBxHGo7Ybgp+qL94LUpPzzycz9ZqObqFJDN3D8lbQxOcSsrI1yaAFSJo
+        CyGjOF9njKvZ5EkfiVbOO8KqHXUxF35Boh0y+ZKtnBCf4baPO1tSF6YdBVpw2ZjF
+        6gRmqecmynfhfng5vGBPaS7v3iZ8yaqHs9abShZMt5+G0om/bYv4GmtVi/2ESxPk
+        ziy9w08fFihiwtB42PP0xd0T+4M2CVuFT9x8lLnUfxP3sBn5ah3mzz9mw==
+X-ME-Sender: <xms:958qZKo0tesXsfPY5F-kWCFezs8IKKjGu0i16uDKVWEcyOFB0ygR7g>
+    <xme:958qZIpEJmrFJvFHazFDGHxfTKQ6wbzMQhysLugnva5OeVGame2HWTU9GaBMZHCtG
+    -DIb_JwR-hyRBQR7Xs>
+X-ME-Received: <xmr:958qZPOCd2ZDHCpkXOw59pTyWs0LqOe991ovtwNiz5GDZylhN1fnJpKVeHr98skxsFBPug>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeeuveelveevleeggeevudefheeifeegvdejteel
+    jeejtdfgfefgvdeiheeuvdeikeenucffohhmrghinhepphgrshhiugdrhhhmnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhlsehs
+    hhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:958qZJ5_cLde_ZT4E8HqMmazYm0Z0vSI3PmhFyUhsFpAuFr477klsA>
+    <xmx:958qZJ4OehPCLcndBwQop3C2X9BTzZQTKO-paVPrzB-keMe3fwWD6Q>
+    <xmx:958qZJjJqPI9DetB-RJT1YNMGLFhe5DwtugGjju4sBQzBLe0_TSxbA>
+    <xmx:958qZGwX6oo1ZMIWKxpOYm9QfhzoJwGv41XYB892WWHRABgIyG2Xvg>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Apr 2023 05:44:22 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 43B4610D7B3; Mon,  3 Apr 2023 12:44:19 +0300 (+03)
+Date:   Mon, 3 Apr 2023 12:44:19 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv16 11/17] x86/mm/iommu/sva: Make LAM and SVA mutually
+ exclusive
+Message-ID: <20230403094419.zl2ncsd4qyd35fex@box>
+References: <20230312112612.31869-1-kirill.shutemov@linux.intel.com>
+ <20230312112612.31869-12-kirill.shutemov@linux.intel.com>
+ <CACT4Y+bnR=v0vUC_wTpd98Kpfd1KK--daPwjgnBL__r+wbHUkw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+bnR=v0vUC_wTpd98Kpfd1KK--daPwjgnBL__r+wbHUkw@mail.gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CERT-C Characters and Strings:
-check core id is in valid range:
-dev->reg_base[dev->venc_pdata->core_id] evaluates to an address
-that could be at negative offset of an array.
+On Mon, Apr 03, 2023 at 08:18:57AM +0200, Dmitry Vyukov wrote:
+> Hi Kirill,
+> 
+> ARCH_ENABLE_TAGGED_ADDR checks that task->mm == current->mm,
+> shouldn't ARCH_FORCE_TAGGED_SVA check that as well?
 
-CERT-C Expression:
-check buf is not NULL before used:
-Dereferencing buf, which is known to be NULL.
+Do you a particular race in mind? I cannot think of anything right away.
 
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
- .../platform/mediatek/vcodec/mtk_vcodec_enc.c    |  2 +-
- .../mediatek/vcodec/mtk_vcodec_enc_drv.c         | 16 ++++++++++++----
- 2 files changed, 13 insertions(+), 5 deletions(-)
+I guess we can add the check for consistency. But if there's a bug it is a
+different story.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-index d65800a3b89d..db65e77bd373 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-@@ -943,7 +943,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 		 * FIXME: This check is not needed as only active buffers
- 		 * can be marked as done.
- 		 */
--		if (buf->state == VB2_BUF_STATE_ACTIVE) {
-+		if (buf && buf->state == VB2_BUF_STATE_ACTIVE) {
- 			mtk_v4l2_debug(0, "[%d] id=%d, type=%d, %d -> VB2_BUF_STATE_QUEUED",
- 					ctx->id, i, q->type,
- 					(int)buf->state);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-index 9095186d5495..125d5722d07b 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-@@ -89,16 +89,24 @@ static irqreturn_t mtk_vcodec_enc_irq_handler(int irq, void *priv)
- 	struct mtk_vcodec_ctx *ctx;
- 	unsigned long flags;
- 	void __iomem *addr;
-+	int core_id;
- 
- 	spin_lock_irqsave(&dev->irqlock, flags);
- 	ctx = dev->curr_ctx;
- 	spin_unlock_irqrestore(&dev->irqlock, flags);
- 
--	mtk_v4l2_debug(1, "id=%d coreid:%d", ctx->id, dev->venc_pdata->core_id);
--	addr = dev->reg_base[dev->venc_pdata->core_id] +
--				MTK_VENC_IRQ_ACK_OFFSET;
-+	core_id = dev->venc_pdata->core_id;
-+	if (core_id < 0 || core_id >= NUM_MAX_VCODEC_REG_BASE) {
-+		mtk_v4l2_err("Invalid core id: %d, ctx id: %d",
-+			     core_id, ctx->id);
-+		return IRQ_HANDLED;
-+	}
-+
-+	mtk_v4l2_debug(1, "id: %d, core id: %d", ctx->id, core_id);
-+
-+	addr = dev->reg_base[core_id] + MTK_VENC_IRQ_ACK_OFFSET;
- 
--	ctx->irq_status = readl(dev->reg_base[dev->venc_pdata->core_id] +
-+	ctx->irq_status = readl(dev->reg_base[core_id] +
- 				(MTK_VENC_IRQ_STATUS_OFFSET));
- 
- 	clean_irq_status(ctx->irq_status, addr);
+> Also it looks like currently to enable both LAM and SVA.
+> LAM enabling checks for SVA, but SVA doesn't and both are not mutually
+> exclusive.
+
+For LAM we check SVM with mm_valid_pasid() && !test_bit() in
+prctl_enable_tagged_addr().
+
+For SVM we check for LAM with !mm_lam_cr3_mask() || test_bit() in
+arch_pgtable_dma_compat() which called from iommu_sva_alloc_pasid().
+
+Hm?
+
+
 -- 
-2.25.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
