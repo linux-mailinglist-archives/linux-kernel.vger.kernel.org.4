@@ -2,100 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B5A6D3CF2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 07:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8106D3CF4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 07:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbjDCFhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 01:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
+        id S231614AbjDCFke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 01:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjDCFhi (ORCPT
+        with ESMTP id S230332AbjDCFkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 01:37:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646CE93;
-        Sun,  2 Apr 2023 22:37:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21423B8111B;
-        Mon,  3 Apr 2023 05:37:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 768B7C433EF;
-        Mon,  3 Apr 2023 05:37:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680500254;
-        bh=pR7XFOX7xmKil5S7BlV92fu3hw5myWpZZtSP5P9eqII=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rillFw9gIBZy/70BQv1QbuH7ejDsoL3BKOaSU8KoYj5QOqAoZlPYQAEF0J+GQUrvF
-         LAwS8/IhH89Toi6RsO1BYDFKs3FNXhsd2XtjQIAvn5rJBk+MzvuB2NCfJdQ4vIuFAs
-         9lsCJPR5Daf77el5syfvusAfGTO7JfR8IkzfeCjzGv5pUyjuuK6CpCa4g/nkwyFqCr
-         Fx3qy82KsUoNVwjIXWhkFo81KaO3O7i0UC+WSfqJZlU2IAwfL16+HtGl66iEvL/LME
-         qQHFwP38IsxzBeN11z1WD8pm0MYXJAhRSNeJxcjYWc+w52lIM2lkUpRKjXrsr+hwLb
-         8wjNZ90iaNAuw==
-Date:   Mon, 3 Apr 2023 11:07:30 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] bus: mhi: host: Remove duplicate ee check for syserr
-Message-ID: <20230403053730.GI4627@thinkpad>
-References: <1674597444-24543-1-git-send-email-quic_jhugo@quicinc.com>
- <1674597444-24543-2-git-send-email-quic_jhugo@quicinc.com>
+        Mon, 3 Apr 2023 01:40:32 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1F135BD;
+        Sun,  2 Apr 2023 22:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680500431; x=1712036431;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RXJUcYBGFL5MP3coHiaccUxhl+8VNzgubmuD/7J11jc=;
+  b=WpQCMqSDAQPbm2sjrSpla05gnA7MpOwqNc3f1yOrANdIqwYnOgK0mIVZ
+   z5RH4jFnQX24yioEJEEG0EHPj2UKPxH/jbzzonhK13qf+WgoSDBYUNY8B
+   Jb9uor9d96r6W2Fs7vDBbINcXRhQov3sM6BgmuELnDPsAywtxNkoI6Iuu
+   +JIioMP4NnbCtBGKoqXRDx9yh/9fc2+znhtBSM7nUVXCRDFYJloz1Iscr
+   kwNxZT6x8L/TV3q+aoP/zJ9m+oxy2otjzhSf78gfnhO3H5/KmT9y3BgZK
+   PGAkj7i9xGEV9HUkIwrcALJZeARqayJHT0wgqMDH0/qXTmt2ScGUm2/OG
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="340543740"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="340543740"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2023 22:40:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="755108398"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="755108398"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Apr 2023 22:40:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 4DFDC133; Mon,  3 Apr 2023 08:40:30 +0300 (EEST)
+Date:   Mon, 3 Apr 2023 08:40:30 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: [PATCH v1 1/1] thunderbolt: Introduce
+ usb4_port_sb_opcode_err_to_errno() helper
+Message-ID: <20230403054030.GO33314@black.fi.intel.com>
+References: <20230330102342.44090-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1674597444-24543-2-git-send-email-quic_jhugo@quicinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230330102342.44090-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 02:57:23PM -0700, Jeffrey Hugo wrote:
-> If we detect a system error via intvec, we only process the syserr if the
-> current ee is different than the last observed ee.  The reason for this
-> check is to prevent bhie from running multiple times, but with the single
-> queue handling syserr, that is not possible.
+On Thu, Mar 30, 2023 at 01:23:42PM +0300, Andy Shevchenko wrote:
+> The usb4_port_sb_opcode_err_to_errno() converts from USB4 error codes
+> to the Linux errno space. In particular, this makes the intention
+> of the repeating usb4_port_retimer_read() call in the
+> usb4_port_retimer_nvm_authenticate_status() clearer.
 > 
-> The check can cause an issue with device recovery.  If PBL loads a bad SBL
-> via BHI, but that SBL hangs before notifying the host of an ee change,
-> then issuing soc_reset to crash the device and retry (after supplying a
-> fixed SBL) will not recover the device as the host will observe a PBL->PBL
-> transition and not process the syserr.  The device will be stuck until
-> either the driver is reloaded, or the host is rebooted.  Instead, remove
-> the check so that we can attempt to recover the device.
-> 
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-
-- Mani
-
-> Reviewed-by: Carl Vanderlip <quic_carlv@quicinc.com>
-> ---
->  drivers/bus/mhi/host/main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
-> index df0fbfe..0c3a009 100644
-> --- a/drivers/bus/mhi/host/main.c
-> +++ b/drivers/bus/mhi/host/main.c
-> @@ -503,7 +503,7 @@ irqreturn_t mhi_intvec_threaded_handler(int irq_number, void *priv)
->  	}
->  	write_unlock_irq(&mhi_cntrl->pm_lock);
->  
-> -	if (pm_state != MHI_PM_SYS_ERR_DETECT || ee == mhi_cntrl->ee)
-> +	if (pm_state != MHI_PM_SYS_ERR_DETECT)
->  		goto exit_intvec;
->  
->  	switch (ee) {
-> -- 
-> 2.7.4
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+Applied to thunderbolt.git/next, thanks Andy!
