@@ -2,103 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2456D3F5B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063CF6D3F5E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbjDCIqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
+        id S231786AbjDCIqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbjDCIqE (ORCPT
+        with ESMTP id S230090AbjDCIqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:46:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7B37EE9;
-        Mon,  3 Apr 2023 01:46:03 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DD82166030F1;
-        Mon,  3 Apr 2023 09:46:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680511562;
-        bh=Fhgq8JItzHKrMtYr/qUtaRmG44PqEvs1zKAfcmwP4Mg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hqVxJMfPFUt6Y8pTlaaLtksiUT2Dyi+mS6RqvbaN9qfvh2r/2Ru+YSLlfgMWx7hTO
-         ML6CV8bl73mSx8tAG75R/4rYnjMrcILBYH1wHfgDDWNYRX9gVzJyM7vBHPR72aL0Wq
-         oTCC20G2wgRvOXGsEAoQaoklmDSIbIOlBUKze8AMkJJYoBh2WK2JGssPL1kmTcg9tZ
-         ij7csLVAAGh8SHElzNAQN6zKQor6elocz9upqd6GktLYRvVt9BmMCKwWJhKyRdtjNL
-         VWlAKQgtFLy9c8/rD/BJ8o9NtDQCfz+ZSd4Z19sp66Xyk/Ud9vodL0IJQeZQYx/m9r
-         VJm/XldxQAiYw==
-Message-ID: <c6b97f15-fd43-d9c4-8a07-04d4063f8b98@collabora.com>
-Date:   Mon, 3 Apr 2023 10:45:59 +0200
+        Mon, 3 Apr 2023 04:46:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83B757EC2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 01:46:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9EB41063;
+        Mon,  3 Apr 2023 01:47:17 -0700 (PDT)
+Received: from [10.57.54.53] (unknown [10.57.54.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6831B3F840;
+        Mon,  3 Apr 2023 01:46:31 -0700 (PDT)
+Message-ID: <c25f0d12-e820-58b0-b139-b2ca322b6b80@arm.com>
+Date:   Mon, 3 Apr 2023 09:46:29 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: linux-next: build failure after merge of the mediatek tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230403181552.607a8b64@canb.auug.org.au>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230403181552.607a8b64@canb.auug.org.au>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 07/13] coresight: Store pointers to connections rather
+ than an array of them
+To:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
+        quic_jinlmao@quicinc.com, mike.leach@linaro.org
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230329115329.2747724-1-james.clark@arm.com>
+ <20230329115329.2747724-8-james.clark@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20230329115329.2747724-8-james.clark@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/04/23 10:15, Stephen Rothwell ha scritto:
-> Hi all,
+On 29/03/2023 12:53, James Clark wrote:
+> This will allow the same connection object to be referenced via the
+> input connection list in a later commit rather than duplicating them.
 > 
-> After merging the mediatek tree, today's linux-next build (arm64
-> defconfig) failed like this:
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-core.c  | 45 ++++++++++---------
+>   .../hwtracing/coresight/coresight-platform.c  |  8 ++--
+>   drivers/hwtracing/coresight/coresight-priv.h  |  1 +
+>   .../hwtracing/coresight/coresight-tmc-etr.c   |  2 +-
+>   include/linux/coresight.h                     |  2 +-
+>   5 files changed, 31 insertions(+), 27 deletions(-)
 > 
-> aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-> aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_mmsys_update_bits':
-> drivers/soc/mediatek/mtk-mmsys.c:147: undefined reference to `cmdq_pkt_write_mask'
-> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_mmsys_probe':
-> drivers/soc/mediatek/mtk-mmsys.c:386: undefined reference to `cmdq_dev_get_client_reg'
-> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_mutex_enable_by_cmdq':
-> drivers/soc/mediatek/mtk-mutex.c:883: undefined reference to `cmdq_pkt_write'
-> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_mutex_probe':
-> drivers/soc/mediatek/mtk-mutex.c:1023: undefined reference to `cmdq_dev_get_client_reg'
-> 
-> Caused by commit
-> 
->    b34884b4c878 ("soc: mediatek: Cleanup ifdefs for IS_REACHABLE(CONFIG_MTK_CMDQ)")
-> 
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index 12cbb68e8e1c..389f6203c8f0 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -119,7 +119,7 @@ static int coresight_find_link_inport(struct coresight_device *csdev,
+>   	struct coresight_connection *conn;
+>   
+>   	for (i = 0; i < parent->pdata->nr_outconns; i++) {
+> -		conn = &parent->pdata->out_conns[i];
+> +		conn = parent->pdata->out_conns[i];
+>   		if (conn->dest_dev == csdev)
+>   			return conn->dest_port;
+>   	}
+> @@ -137,7 +137,7 @@ static int coresight_find_link_outport(struct coresight_device *csdev,
+>   	struct coresight_connection *conn;
+>   
+>   	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+> -		conn = &csdev->pdata->out_conns[i];
+> +		conn = csdev->pdata->out_conns[i];
+>   		if (conn->dest_dev == child)
+>   			return conn->src_port;
+>   	}
+> @@ -606,7 +606,7 @@ coresight_find_enabled_sink(struct coresight_device *csdev)
+>   	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>   		struct coresight_device *child_dev;
+>   
+> -		child_dev = csdev->pdata->out_conns[i].dest_dev;
+> +		child_dev = csdev->pdata->out_conns[i]->dest_dev;
+>   		if (child_dev)
+>   			sink = coresight_find_enabled_sink(child_dev);
+>   		if (sink)
+> @@ -722,7 +722,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
+>   	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>   		struct coresight_device *child;
+>   
+> -		child = csdev->pdata->out_conns[i].dest_dev;
+> +		child = csdev->pdata->out_conns[i]->dest_dev;
+>   		if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+>   			if (!coresight_get_ref(child))
+>   				goto err;
+> @@ -733,7 +733,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
+>   	for (i--; i >= 0; i--) {
+>   		struct coresight_device *child;
+>   
+> -		child = csdev->pdata->out_conns[i].dest_dev;
+> +		child = csdev->pdata->out_conns[i]->dest_dev;
+>   		if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+>   			coresight_put_ref(child);
+>   	}
+> @@ -752,7 +752,7 @@ static void coresight_drop_device(struct coresight_device *csdev)
+>   	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>   		struct coresight_device *child;
+>   
+> -		child = csdev->pdata->out_conns[i].dest_dev;
+> +		child = csdev->pdata->out_conns[i]->dest_dev;
+>   		if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+>   			coresight_put_ref(child);
+>   	}
+> @@ -794,7 +794,7 @@ static int _coresight_build_path(struct coresight_device *csdev,
+>   	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>   		struct coresight_device *child_dev;
+>   
+> -		child_dev = csdev->pdata->out_conns[i].dest_dev;
+> +		child_dev = csdev->pdata->out_conns[i]->dest_dev;
+>   		if (child_dev &&
+>   		    _coresight_build_path(child_dev, sink, path) == 0) {
+>   			found = true;
+> @@ -964,7 +964,7 @@ coresight_find_sink(struct coresight_device *csdev, int *depth)
+>   		struct coresight_device *child_dev, *sink = NULL;
+>   		int child_depth = curr_depth;
+>   
+> -		child_dev = csdev->pdata->out_conns[i].dest_dev;
+> +		child_dev = csdev->pdata->out_conns[i]->dest_dev;
+>   		if (child_dev)
+>   			sink = coresight_find_sink(child_dev, &child_depth);
+>   
+> @@ -1334,7 +1334,7 @@ static int coresight_orphan_match(struct device *dev, void *data)
+>   	 * an orphan connection whose name matches @csdev, link it.
+>   	 */
+>   	for (i = 0; i < i_csdev->pdata->nr_outconns; i++) {
+> -		conn = &i_csdev->pdata->out_conns[i];
+> +		conn = i_csdev->pdata->out_conns[i];
+>   
+>   		/* We have found at least one orphan connection */
+>   		if (conn->dest_dev == NULL) {
+> @@ -1372,7 +1372,7 @@ static int coresight_fixup_device_conns(struct coresight_device *csdev)
+>   	int i, ret = 0;
+>   
+>   	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+> -		struct coresight_connection *conn = &csdev->pdata->out_conns[i];
+> +		struct coresight_connection *conn = csdev->pdata->out_conns[i];
+>   
+>   		conn->dest_dev =
+>   			coresight_find_csdev_by_fwnode(conn->dest_fwnode);
+> @@ -1406,15 +1406,12 @@ static int coresight_remove_match(struct device *dev, void *data)
+>   	 * a connection whose name matches @csdev, remove it.
+>   	 */
+>   	for (i = 0; i < iterator->pdata->nr_outconns; i++) {
+> -		conn = &iterator->pdata->out_conns[i];
+> +		conn = iterator->pdata->out_conns[i];
+>   
+> -		if (conn->dest_dev == NULL)
+> -			continue;
+> -
+> -		if (csdev->dev.fwnode == conn->dest_fwnode) {
+> +		/* Child_dev being set signifies that the links were made */
+> +		if (csdev->dev.fwnode == conn->dest_fwnode && conn->dest_dev) {
+>   			iterator->orphan = true;
+>   			coresight_remove_links(iterator, conn);
+> -
+>   			conn->dest_dev = NULL;
+>   			/* No need to continue */
+>   			break;
+> @@ -1534,21 +1531,25 @@ void coresight_write64(struct coresight_device *csdev, u64 val, u32 offset)
+>    * to the output port of this device.
+>    */
+>   void coresight_release_platform_data(struct coresight_device *csdev,
+> +				     struct device *dev,
+>   				     struct coresight_platform_data *pdata)
+>   {
+>   	int i;
+> -	struct coresight_connection *conns = pdata->out_conns;
+> +	struct coresight_connection **conns = pdata->out_conns;
+>   
+>   	for (i = 0; i < pdata->nr_outconns; i++) {
+>   		/* If we have made the links, remove them now */
+> -		if (csdev && conns[i].dest_dev)
+> -			coresight_remove_links(csdev, &conns[i]);
+> +		if (csdev && conns[i]->dest_dev)
+> +			coresight_remove_links(csdev, conns[i]);
+>   		/*
+>   		 * Drop the refcount and clear the handle as this device
+>   		 * is going away
+>   		 */
+> -		fwnode_handle_put(conns[i].dest_fwnode);
+> +		fwnode_handle_put(conns[i]->dest_fwnode);
+> +		devm_kfree(dev, conns[i]);
+>   	}
+> +	devm_kfree(dev, pdata->out_conns);
+> +	devm_kfree(dev, pdata);
 
-I can recheck why this happens - otherwise we can simply avoid applying that commit
-if there's no time.
+Is there any particular reason, why we need to do this ? This should
+be done automatically at device teardown, which is bound to happen
+right after this call ?
 
-> I have used the mediatek tree from next-20230331 for today.
-> 
-> There were also the following warnings:
-> 
-> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warning (unit_address_format): /soc/i2c@11010000/accelerometer@0x10: unit name should not have leading "0x"
-> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warning (unit_address_format): /soc/i2c@11010000/magnetometer@0x12: unit name should not have leading "0x"
-> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warning (i2c_bus_reg): /soc/i2c@11010000/accelerometer@0x10: I2C bus unit address format error, expected "10"
-> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warning (i2c_bus_reg): /soc/i2c@11010000/magnetometer@0x12: I2C bus unit address format error, expected "12"
-> 
 
-Matthias, should I send new versions of the commits, addressing this sad overlook
-from my side, or would you fix that, or should I send new commits cleaning that up
-on top?
+>   	if (csdev)
+>   		coresight_remove_conns_sysfs_group(csdev);
+>   }
+> @@ -1665,7 +1666,7 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+>   
+>   err_out:
+>   	/* Cleanup the connection information */
+> -	coresight_release_platform_data(NULL, desc->pdata);
+> +	coresight_release_platform_data(NULL, desc->dev, desc->pdata);
+>   	return ERR_PTR(ret);
+>   }
+>   EXPORT_SYMBOL_GPL(coresight_register);
+> @@ -1678,7 +1679,7 @@ void coresight_unregister(struct coresight_device *csdev)
+>   		cti_assoc_ops->remove(csdev);
+>   	coresight_remove_conns(csdev);
+>   	coresight_clear_default_sink(csdev);
+> -	coresight_release_platform_data(csdev, csdev->pdata);
+> +	coresight_release_platform_data(csdev, csdev->dev.parent, csdev->pdata);
+>   	device_unregister(&csdev->dev);
+>   }
+>   EXPORT_SYMBOL_GPL(coresight_unregister);
+> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
+> index 80ed2e74620b..bea8f1ba309a 100644
+> --- a/drivers/hwtracing/coresight/coresight-platform.c
+> +++ b/drivers/hwtracing/coresight/coresight-platform.c
+> @@ -36,7 +36,7 @@ int coresight_add_out_conn(struct device *dev,
+>   	 * Warn on any existing duplicate output port.
+>   	 */
+>   	for (i = 0; i < pdata->nr_outconns; ++i) {
+> -		conn = &pdata->out_conns[i];
+> +		conn = pdata->out_conns[i];
+>   		/* Output == -1 means ignore the port for example for helpers */
+>   		if (conn->src_port != -1 &&
+>   		    conn->src_port == new_conn->src_port) {
+> @@ -53,7 +53,9 @@ int coresight_add_out_conn(struct device *dev,
+>   	if (!pdata->out_conns)
+>   		return -ENOMEM;
+>   
+> -	pdata->out_conns[pdata->nr_outconns - 1] = *new_conn;
+> +	pdata->out_conns[pdata->nr_outconns - 1] = devm_kmalloc(
+> +		dev, sizeof(struct coresight_connection), GFP_KERNEL);
+> +	*pdata->out_conns[pdata->nr_outconns - 1] = *new_conn;
+>   	return 0;
+>   }
+>   EXPORT_SYMBOL_GPL(coresight_add_out_conn);
+> @@ -859,7 +861,7 @@ coresight_get_platform_data(struct device *dev)
+>   error:
+>   	if (!IS_ERR_OR_NULL(pdata))
+>   		/* Cleanup the connection information */
+> -		coresight_release_platform_data(NULL, pdata);
+> +		coresight_release_platform_data(NULL, dev, pdata);
+>   	return ERR_PTR(ret);
+>   }
+>   EXPORT_SYMBOL_GPL(coresight_get_platform_data);
+> diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
+> index 788ff19c60f6..65ae6d161c57 100644
+> --- a/drivers/hwtracing/coresight/coresight-priv.h
+> +++ b/drivers/hwtracing/coresight/coresight-priv.h
+> @@ -207,6 +207,7 @@ static inline void *coresight_get_uci_data(const struct amba_id *id)
+>   }
+>   
+>   void coresight_release_platform_data(struct coresight_device *csdev,
+> +				     struct device *dev,
+>   				     struct coresight_platform_data *pdata);
+>   struct coresight_device *
+>   coresight_find_csdev_by_fwnode(struct fwnode_handle *r_fwnode);
+> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+> index 61234cb8052a..1bbe5410a23d 100644
+> --- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
+> +++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+> @@ -782,7 +782,7 @@ tmc_etr_get_catu_device(struct tmc_drvdata *drvdata)
+>   		return NULL;
+>   
+>   	for (i = 0; i < etr->pdata->nr_outconns; i++) {
+> -		tmp = etr->pdata->out_conns[i].dest_dev;
+> +		tmp = etr->pdata->out_conns[i]->dest_dev;
+>   		if (tmp && coresight_is_catu_device(tmp))
+>   			return tmp;
+>   	}
+> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+> index ccbc5eafcb6b..7197b07deede 100644
+> --- a/include/linux/coresight.h
+> +++ b/include/linux/coresight.h
+> @@ -111,7 +111,7 @@ struct coresight_platform_data {
+>   	int high_outport;
+>   	int nr_inconns;
+>   	int nr_outconns;
+> -	struct coresight_connection *out_conns;
+> +	struct coresight_connection **out_conns;
 
-Please let me know how to proceed here.
+minor nit: Do we need to update the comment too ?
 
-Thanks,
-Angelo
+Otherwise looks good to me
+Suzuki
+
+>   };
+>   
+>   /**
 
