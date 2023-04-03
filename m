@@ -2,80 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FED6D545F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31506D5462
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233482AbjDCWCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 18:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
+        id S233533AbjDCWDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 18:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbjDCWCX (ORCPT
+        with ESMTP id S232923AbjDCWDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 18:02:23 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5B035A1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:02:21 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id x3so122960982edb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 15:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680559339;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=F17wSJgPs6oA/SZ+cp00EmNuMKwbhVZp0H1mJrng124=;
-        b=H+iTaq4dDU2HeTeabqhjxK2OI5vjtCFkdHHMFMK4HsTFmYt3KCnsWXHeAqxamujYTz
-         zm+WlIe7WZARnGw8LWsoK71YHGIJ4WARr3DC5dpBprn1si2gbI1S1XWRPIMnX14NqwNR
-         YBRYlVV0nGNjeZzWn1HFFq2xOzQCpabAKbS3IoiEegLJRd4i+ZWyAoeObeGd7NEx5OIB
-         fBAUSPH3VyJb+UzwbIJlFFcUWBBoNCm/isZhIp2LU/fRPlYZ5d+fHp1baEi0eOXD4ifk
-         iqNzlYaFdq7rIAkPxF8OzQ3c5FZZn1+KaQ62CeGhPzK8BPKhxrOmX8XE4EfyKxeAjp/g
-         QUjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680559339;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F17wSJgPs6oA/SZ+cp00EmNuMKwbhVZp0H1mJrng124=;
-        b=S8s+IO6e4FUtkVLtYCjedvmbF2+Rka53EcbPCV3EIrz8e4Phba03b4wAEoNdJQ/34J
-         n02YMSBXf/YPGx/t3QFtot3SBNUp58boyAaTcd8tdjsC78JxvVmposT0iVTsVMSQoPPZ
-         r57qK7owB/K196R+SyVwCAqc3wHVcNEqhC8cFyeC+YPT0KZoseP8KjPI2lFeD5DkiLFX
-         +NwaJmOGIlvJSGkRvE7sDLvZZvqLjoBmNe8HuOIrzRxOe2tU6ExJ4V0bJ0/tg4Lx6Mwg
-         E5F7aCSwT0aBr0v5Fl380Z7WfrApkjd8wwTDwrS6my0ZVLmKpHeT7TVisD3W2SrqoJR8
-         v6zA==
-X-Gm-Message-State: AAQBX9dbc0XUqxLDL7NYO4PRGYDh0nUBMbuswg3OTJZje+z8ryio6pxH
-        CFBmdiy+8kqmiedYYLMeErUWkRyJXWdMcgEbjrA=
-X-Google-Smtp-Source: AKy350ZevLGrv8v5GJbwfU/0Lgl1JOYpf20geZ5x9DQPweJLcbmLwqmm5bawXquUaZ2vt/eOc8BgY6VcqpPvZv0Nj94=
-X-Received: by 2002:a17:906:3e4f:b0:93f:faf:6375 with SMTP id
- t15-20020a1709063e4f00b0093f0faf6375mr90160eji.8.1680559339551; Mon, 03 Apr
- 2023 15:02:19 -0700 (PDT)
+        Mon, 3 Apr 2023 18:03:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2551BF3;
+        Mon,  3 Apr 2023 15:03:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA4C162D1C;
+        Mon,  3 Apr 2023 22:03:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32DBBC433D2;
+        Mon,  3 Apr 2023 22:02:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680559381;
+        bh=E+J++Ja453WekURa/wOhcsyf4PVCNOpn1MEHhpca8zk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RewR5IfvGqVZuwU9TjmhMmOMXhm4RivCQkRakbBeB6/eYdRd11AV9bVGBRguvh+TK
+         oZRH6AmThzgzK86LkXaV9E4RldjPxBagsNOYXmurDHJkOCx0myGE9H+wNdm08VQLrP
+         R/L+ko9KttNkmR5RB6a1j5flY0BhtZrY75x8X3Eq1eb1HyySe4ENu9exxBKdupIhDo
+         qQ2fupFjrjCZilZ539sSQeVheDdOWFak0+qFHnZborD15tw7+krhtPbK1q17detcOm
+         XCqcE5MpeYrnTBYXWbmn7pAUKfnOeCQpnz2eUJZPZjezm0Lv6HvSvW1oFOX5lEJkSc
+         N//V/7Dl0YtZQ==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Artem Savkov <asavkov@redhat.com>, bpf@vger.kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Petr Mladek <pmladek@suse.com>,
+        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Viktor Malik <vmalik@redhat.com>
+Subject: [PATCH bpf-next] kallsyms: Disable preemption for find_kallsyms_symbol_value
+Date:   Tue,  4 Apr 2023 00:02:54 +0200
+Message-Id: <20230403220254.2191240-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-From:   Sara Jack <certifiedbusinessdata0@gmail.com>
-Date:   Mon, 3 Apr 2023 17:02:07 -0500
-Message-ID: <CAAM1_GJbr=EmHUgzeQGsxG26K3wsz6oERF=ot-RqyFLcfeiCHQ@mail.gmail.com>
-Subject: RE: RSA Conference North Expo & South Expo Attendees List- 2023
-To:     Sara Jack <certifiedbusinessdata0@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,FILL_THIS_FORM_LONG,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Artem reported suspicious RCU usage [1]. The reason is that verifier
+calls find_kallsyms_symbol_value with preemption enabled which will
+trigger suspicious RCU usage warning in rcu_dereference_sched call.
 
-We are following up to confirm if you are interested in acquiring the
-Visitors/Attendees list of The RSA Conference?
+Disabling preemption in find_kallsyms_symbol_value and adding
+__find_kallsyms_symbol_value function.
 
-RSA Conference
-Number of Attendees: 40,243
-Cost: $ 1,826
+Fixes: 31bf1dbccfb0 ("bpf: Fix attaching fentry/fexit/fmod_ret/lsm to modules")
+[1] https://lore.kernel.org/bpf/ZBrPMkv8YVRiWwCR@samus.usersys.redhat.com/
+Reported-by: Artem Savkov <asavkov@redhat.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ kernel/module/kallsyms.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-Each Contact of the Attendees list contains: Contact Name, Email
-Address, Company Name, URL/Website, Phone No, and Title/Designation.
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index ab2376a1be88..bdc911dbcde5 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -442,7 +442,7 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+ }
+ 
+ /* Given a module and name of symbol, find and return the symbol's value */
+-unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name)
++static unsigned long __find_kallsyms_symbol_value(struct module *mod, const char *name)
+ {
+ 	unsigned int i;
+ 	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
+@@ -466,7 +466,7 @@ static unsigned long __module_kallsyms_lookup_name(const char *name)
+ 	if (colon) {
+ 		mod = find_module_all(name, colon - name, false);
+ 		if (mod)
+-			return find_kallsyms_symbol_value(mod, colon + 1);
++			return __find_kallsyms_symbol_value(mod, colon + 1);
+ 		return 0;
+ 	}
+ 
+@@ -475,7 +475,7 @@ static unsigned long __module_kallsyms_lookup_name(const char *name)
+ 
+ 		if (mod->state == MODULE_STATE_UNFORMED)
+ 			continue;
+-		ret = find_kallsyms_symbol_value(mod, name);
++		ret = __find_kallsyms_symbol_value(mod, name);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -494,6 +494,16 @@ unsigned long module_kallsyms_lookup_name(const char *name)
+ 	return ret;
+ }
+ 
++unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name)
++{
++	unsigned long ret;
++
++	preempt_disable();
++	ret = __find_kallsyms_symbol_value(mod, name);
++	preempt_enable();
++	return ret;
++}
++
+ int module_kallsyms_on_each_symbol(const char *modname,
+ 				   int (*fn)(void *, const char *,
+ 					     struct module *, unsigned long),
+-- 
+2.39.2
 
-Interested? Email me back; I would love to provide more information on the list.
-
-Kind Regards,
-Sara Jack
