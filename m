@@ -2,306 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCE26D4B2E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8326D4B3D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232922AbjDCO4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
+        id S232759AbjDCO6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbjDCO4t (ORCPT
+        with ESMTP id S232955AbjDCO6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:56:49 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5DD11653
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:56:24 -0700 (PDT)
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com [209.85.219.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A0A4E3F23A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1680533782;
-        bh=QKFW1qqDMg7TUFTrK+2Qi6gnM372KB4fmvKMLex5G+Y=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=e9ANU72CTRYwu0GOwrRkAzeD0fZ5jvfAbaNqqfBhxUafmGwWRvWk8TpC2zbke0PT1
-         Ngdi5+LTGtzZeGpXpFliLZMZQnKxRJVF2Vzo2eJTYNjZlbCw0NLRZhTHjkDua82z+q
-         Cv3aqPBydddHQrtnDhr1BVzuSWJxSo43eBzQOzHHsjun2WPgwZzNqy8gZMEy535WNy
-         2sMpDhl34qwrbwI+rJUIZXYY1J8tRgG7mNW7q60ELV+81+4DxejmI60A8FS//1aYHE
-         QKLwTlpS6+aMXXLbFrD0WOtO5n0sPIG8TnRWBXw4VXeBUqJKgUt7nrF7R01HujyVDp
-         /G3sWBYQzgK7w==
-Received: by mail-yb1-f197.google.com with SMTP id m6-20020a056902118600b00aeb1e3dbd1bso28562211ybu.9
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:56:22 -0700 (PDT)
+        Mon, 3 Apr 2023 10:58:46 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08219729A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:58:46 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so32825700pjt.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680533925;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RqtCpVS1sZLg+B1j1ia3uHWu+7Wr1bmfif2WtQYY+9o=;
+        b=TjE8oj61wHg3uZwKzHcwN1kDGoVncguHHSkST0DIdbnlko099m2QRmzDpnajRO52wy
+         iLL4Z3DONA1qW8i0L7twZl1zz4ULLOOOGRfjSYSlNeiNtYovaKZf1FPc386y3tPBiyGq
+         DKI6YlvkY0eIXfDrICLRYQUJBP/ONdl4n7jlv7Rr8Qa6OA0cdGV7dlUQE5vkQgH1R3Ty
+         8MRpRS1CDRE5WDCk42KtB+P0GsKfe3zukh3nuOgibdYXfmkdv2xTjlph41gpj9+MmGJc
+         ZG4Fg2pPuBtEZ1rBYjtx7N3rNAQxdiAVkNk1ki9ZxvR5NTyNjGnJjaQWRSnXhvo2jHMK
+         fMDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680533781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QKFW1qqDMg7TUFTrK+2Qi6gnM372KB4fmvKMLex5G+Y=;
-        b=36WGYXHogcl/PNEBFecGHdRWkLMxVwNBvAE52YVQPT11NtBDwtMg43PaVaYWcWQLAR
-         kRMTP28yfmtAbUIj755E42dCrtZikCpoFFL0lVeJojaDQfl8cQxq/1W0BZ2ZFR8oY3LB
-         qo/xuz+eKimBO4pHVrBT3s5IJP3lzVKgdj47vAMMLH71HDNDSQ+1cSsiSnv6Ary7dhzm
-         blyhoGlQDjMVBTA5S1UYVFCzwJoC8yzNLTbRFx0rer0FCi6mwmb19KlKr/RkhdT0JCpg
-         VwHQznqVYiRYFw5y4JThe64QSQ4iMkINtkyO+tNTAQlNEOzM2XbdKTrPC5wth3VuY3x+
-         Jjnw==
-X-Gm-Message-State: AAQBX9cPVSdnBHmttvmTzfN3oCxLFTS/gmPzdhZFkd/n9506ehnqao7X
-        Nw3UkCrG3Iwq5vd+wQA3FXlv3To1iLdmUrBXi9C5D7/qL/20mBs2IRyBMWIsIr9TPWxvYjzSj+a
-        UXG3JbdyUiErlW2KzqotUw6ZYyEN5uDr+BCF2/08PwhWjwyWhFgwQM6b6Zw==
-X-Received: by 2002:a05:6902:10c3:b0:b75:9519:dbcd with SMTP id w3-20020a05690210c300b00b759519dbcdmr24303925ybu.12.1680533781634;
-        Mon, 03 Apr 2023 07:56:21 -0700 (PDT)
-X-Google-Smtp-Source: AKy350axreC8nTu/BcJvXVvM3Fw+PAeFxvqfZczuCL4AzTyLhRk1OuU+7a3LYDnOFBj9EHxLe1TMvv7nzHP8/hI9TsA=
-X-Received: by 2002:a05:6902:10c3:b0:b75:9519:dbcd with SMTP id
- w3-20020a05690210c300b00b759519dbcdmr24303908ybu.12.1680533781406; Mon, 03
- Apr 2023 07:56:21 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680533925;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RqtCpVS1sZLg+B1j1ia3uHWu+7Wr1bmfif2WtQYY+9o=;
+        b=6Kx3OJUnkyo3Nq6q4BIHwaesvkS4x/NThayilTH8MK+57nhmdsYSPedUcclFuBBVGr
+         L1FCYNbi1zTatUfK2ZnX4boytVDiNexGTSkizDtX9Gev9QE1GE0yPyKBvHc4jB/eL0Ep
+         W++3NpWKj6JzWCzwKM2JnjvsguZF3vumO+gzhj5xm1ebTxQ23TAEtbtb/Ys5TnO2stvg
+         w/ejEWe9zL1E1HEC547fah4qJFQu3orLsw3kKVpPlNLnisZI9NVZze0Jk6Qc2X+/p7JF
+         0VKujcaf3ThSTLWAF30hytlwUULiccuLEVRq1W2DbmSpcD8WGSUJ8xylrjuMkdxhoATE
+         2NAA==
+X-Gm-Message-State: AAQBX9fg/Oy9q5cEN/KFnUueLpZhiySeXA1pOq5zv8adyeQycTwZJKqk
+        AA2J5tyGL7U4zM+c0lXSgsGlKG3mx2UzeA==
+X-Google-Smtp-Source: AKy350Z2ly7JdJElTw4D+PcBloI2mU6uEIrngBnsODjCnn8K2H6io/uOqxky0Id5zo/bJPV/34NOCg==
+X-Received: by 2002:a17:902:da8a:b0:1a2:8c7e:f31f with SMTP id j10-20020a170902da8a00b001a28c7ef31fmr17239477plx.11.1680533925427;
+        Mon, 03 Apr 2023 07:58:45 -0700 (PDT)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id g4-20020a63dd44000000b0050bf1d1cdc8sm6178646pgj.21.2023.04.03.07.58.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 07:58:44 -0700 (PDT)
+Message-ID: <546c0079-6b1c-9a67-a4c6-328eeb8c5ba7@gmail.com>
+Date:   Mon, 3 Apr 2023 23:58:41 +0900
 MIME-Version: 1.0
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
- <20230220193754.470330-8-aleksandr.mikhalitsyn@canonical.com> <e49787bc-fd4f-1fdc-e66b-270ea8367a11@fastmail.fm>
-In-Reply-To: <e49787bc-fd4f-1fdc-e66b-270ea8367a11@fastmail.fm>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Mon, 3 Apr 2023 16:56:10 +0200
-Message-ID: <CAEivzxcdGBJeiLX1qRnNpiDxxCwwVCSax3ADzDfNTXwyWO0sYg@mail.gmail.com>
-Subject: Re: [RFC PATCH 7/9] fuse: add fuse device ioctl(FUSE_DEV_IOC_REINIT)
-To:     Bernd Schubert <bernd.schubert@fastmail.fm>
-Cc:     mszeredi@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        criu@openvz.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 08/14] extcon: Switch to use kasprintf_strarray()
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bumwoo Lee <bw365.lee@samsung.com>,
+        linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
+ <20230322144005.40368-9-andriy.shevchenko@linux.intel.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230322144005.40368-9-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 8:19=E2=80=AFPM Bernd Schubert
-<bernd.schubert@fastmail.fm> wrote:
->
->
->
-> On 2/20/23 20:37, Alexander Mikhalitsyn wrote:
-> > This ioctl aborts fuse connection and then reinitializes it,
-> > sends FUSE_INIT request to allow a new userspace daemon
-> > to pick up the fuse connection.
-> >
-> > Cc: Miklos Szeredi <mszeredi@redhat.com>
-> > Cc: Al Viro <viro@zeniv.linux.org.uk>
-> > Cc: Amir Goldstein <amir73il@gmail.com>
-> > Cc: St=C3=83=C2=A9phane Graber <stgraber@ubuntu.com>
-> > Cc: Seth Forshee <sforshee@kernel.org>
-> > Cc: Christian Brauner <brauner@kernel.org>
-> > Cc: Andrei Vagin <avagin@gmail.com>
-> > Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-> > Cc: linux-fsdevel@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: criu@openvz.org
-> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
-om>
-> > ---
-> >   fs/fuse/dev.c             | 132 +++++++++++++++++++++++++++++++++++++=
-+
-> >   include/uapi/linux/fuse.h |   1 +
-> >   2 files changed, 133 insertions(+)
-> >
-> > diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
-> > index 737764c2295e..0f53ffd63957 100644
-> > --- a/fs/fuse/dev.c
-> > +++ b/fs/fuse/dev.c
-> > @@ -2187,6 +2187,112 @@ void fuse_abort_conn(struct fuse_conn *fc)
-> >   }
-> >   EXPORT_SYMBOL_GPL(fuse_abort_conn);
-> >
-> > +static int fuse_reinit_conn(struct fuse_conn *fc)
-> > +{
-> > +     struct fuse_iqueue *fiq =3D &fc->iq;
-> > +     struct fuse_dev *fud;
-> > +     unsigned int i;
->
-> Assuming you have a malicious daemon that tries to cause bad behavior,
-> only allow one ioctl at at time? I.e. add a value that reinit is in
-> progress? And unset at the end of the function?
+On 23. 3. 22. 23:39, Andy Shevchenko wrote:
+> Since we have a generic helper, switch the module to use it.
+> No functional change intended.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/extcon/extcon.c | 25 +++++++++++--------------
+>  drivers/extcon/extcon.h |  1 +
+>  2 files changed, 12 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index 0d261ec6c473..a63e7eef02fd 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/err.h>
+>  #include <linux/of.h>
+>  #include <linux/slab.h>
+> +#include <linux/string_helpers.h>
+>  #include <linux/sysfs.h>
+>  
+>  #include "extcon.h"
+> @@ -1104,19 +1105,17 @@ static int extcon_alloc_cables(struct extcon_dev *edev)
+>  	if (!edev->cables)
+>  		return -ENOMEM;
+>  
+> +	edev->cable_names = kasprintf_strarray(GFP_KERNEL, "cable", edev->max_supported);
+> +	if (!edev->cable_names) {
+> +		kfree(edev->cables);
+> +		return -ENOMEM;
+> +	}
+> +
+>  	for (index = 0; index < edev->max_supported; index++) {
+>  		cable = &edev->cables[index];
+>  
+> -		str = kasprintf(GFP_KERNEL, "cable.%d", index);
+> -		if (!str) {
+> -			for (index--; index >= 0; index--) {
+> -				cable = &edev->cables[index];
+> -				kfree(cable->attr_g.name);
+> -			}
+> -
+> -			kfree(edev->cables);
+> -			return -ENOMEM;
+> -		}
+> +		str = edev->cable_names[index];
+> +		strreplace(str, '-', '.');
+>  
+>  		cable->edev = edev;
+>  		cable->cable_index = index;
+> @@ -1341,8 +1340,7 @@ int extcon_dev_register(struct extcon_dev *edev)
+>  		kfree(edev->attrs_muex);
+>  	}
+>  err_alloc_muex:
+> -	for (index = 0; index < edev->max_supported; index++)
+> -		kfree(edev->cables[index].attr_g.name);
+> +	kfree_strarray(edev->cable_names, edev->max_supported);
+>  	if (edev->max_supported)
+>  		kfree(edev->cables);
+>  err_alloc_cables:
+> @@ -1387,8 +1385,7 @@ void extcon_dev_unregister(struct extcon_dev *edev)
+>  		kfree(edev->attrs_muex);
+>  	}
+>  
+> -	for (index = 0; index < edev->max_supported; index++)
+> -		kfree(edev->cables[index].attr_g.name);
+> +	kfree_strarray(edev->cable_names, edev->max_supported);
+>  
+>  	if (edev->max_supported) {
+>  		kfree(edev->extcon_dev_type.groups);
+> diff --git a/drivers/extcon/extcon.h b/drivers/extcon/extcon.h
+> index 877c0860e300..5624f65ba17a 100644
+> --- a/drivers/extcon/extcon.h
+> +++ b/drivers/extcon/extcon.h
+> @@ -58,6 +58,7 @@ struct extcon_dev {
+>  	/* /sys/class/extcon/.../cable.n/... */
+>  	struct device_type extcon_dev_type;
+>  	struct extcon_cable *cables;
+> +	char **cable_names;
 
-Have done. Thanks!
->
-> > +
-> > +     if (fc->conn_gen + 1 < fc->conn_gen)
-> > +             return -EOVERFLOW;
-> > +
->
-> Add a comment, like
->
-> /* Unsets fc->connected and fiq->connected and ensures that no new
-> requests can be queued */
->
-> ?
+The extcon cable information should be included in struct extcon_cable
+in order to gather information into one point like encapsulation.
 
-Have done.
+I don't prefer to add 'cable_names'.
 
->
-> > +     fuse_abort_conn(fc);
-> > +     fuse_wait_aborted(fc);
-> > +
-> > +     spin_lock(&fc->lock);
-> > +     if (fc->connected) {
-> > +             spin_unlock(&fc->lock);
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     if (fc->conn_gen + 1 < fc->conn_gen) {
-> > +             spin_unlock(&fc->lock);
-> > +             return -EOVERFLOW;
-> > +     }
-> > +
-> > +     fc->conn_gen++;
-> > +
-> > +     spin_lock(&fiq->lock);
-> > +     if (request_pending(fiq) || fiq->forget_list_tail !=3D &fiq->forg=
-et_list_head) {
-> > +             spin_unlock(&fiq->lock);
-> > +             spin_unlock(&fc->lock);
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     if (&fuse_dev_fiq_ops !=3D fiq->ops) {
-> > +             spin_unlock(&fiq->lock);
-> > +             spin_unlock(&fc->lock);
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +
-> > +     fiq->connected =3D 1;
-> > +     spin_unlock(&fiq->lock);
-> > +
-> > +     spin_lock(&fc->bg_lock);
-> > +     if (!list_empty(&fc->bg_queue)) {
-> > +             spin_unlock(&fc->bg_lock);
-> > +             spin_unlock(&fc->lock);
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     fc->blocked =3D 0;
-> > +     fc->max_background =3D FUSE_DEFAULT_MAX_BACKGROUND;
-> > +     spin_unlock(&fc->bg_lock);
-> > +
-> > +     list_for_each_entry(fud, &fc->devices, entry) {
-> > +             struct fuse_pqueue *fpq =3D &fud->pq;
-> > +
-> > +             spin_lock(&fpq->lock);
-> > +             if (!list_empty(&fpq->io)) {
-> > +                     spin_unlock(&fpq->lock);
-> > +                     spin_unlock(&fc->lock);
-> > +                     return -EINVAL;
-> > +             }
-> > +
-> > +             for (i =3D 0; i < FUSE_PQ_HASH_SIZE; i++) {
-> > +                     if (!list_empty(&fpq->processing[i])) {
-> > +                             spin_unlock(&fpq->lock);
-> > +                             spin_unlock(&fc->lock);
-> > +                             return -EINVAL;
-> > +                     }
-> > +             }
-> > +
-> > +             fpq->connected =3D 1;
-> > +             spin_unlock(&fpq->lock);
-> > +     }
-> > +
-> > +     fuse_set_initialized(fc);
->
-> I'm not sure about this, why not the common way via FUSE_INIT reply?
+>  
+>  	/* /sys/class/extcon/.../mutually_exclusive/... */
+>  	struct attribute_group attr_g_muex;
 
-fuse_send_init will fail, if !fc->initialized (see fuse_block_alloc <-
-fuse_get_req <- fuse_simple_background).
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
->
-> > +
-> > +     /* Background queuing checks fc->connected under bg_lock */
-> > +     spin_lock(&fc->bg_lock);
-> > +     fc->connected =3D 1;
-> > +     spin_unlock(&fc->bg_lock);
-> > +
-> > +     fc->aborted =3D false;
-> > +     fc->abort_err =3D 0;
-> > +
-> > +     /* nullify all the flags */
-> > +     memset(&fc->flags, 0, sizeof(struct fuse_conn_flags));
-> > +
-> > +     spin_unlock(&fc->lock);
-> > +
-> > +     down_read(&fc->killsb);
-> > +     if (!list_empty(&fc->mounts)) {
-> > +             struct fuse_mount *fm;
-> > +
-> > +             fm =3D list_first_entry(&fc->mounts, struct fuse_mount, f=
-c_entry);
-> > +             if (!fm->sb) {
-> > +                     up_read(&fc->killsb);
-> > +                     return -EINVAL;
-> > +             }
-> > +
-> > +             fuse_send_init(fm);
-> > +     }
-> > +     up_read(&fc->killsb);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >   void fuse_wait_aborted(struct fuse_conn *fc)
-> >   {
-> >       /* matches implicit memory barrier in fuse_drop_waiting() */
-> > @@ -2282,6 +2388,32 @@ static long fuse_dev_ioctl(struct file *file, un=
-signed int cmd,
-> >                       }
-> >               }
-> >               break;
-> > +     case FUSE_DEV_IOC_REINIT:
-> > +             struct fuse_conn *fc;
-> > +
-> > +             if (!checkpoint_restore_ns_capable(file->f_cred->user_ns)=
-)
-> > +                     return -EPERM;
-> > +
-> > +             res =3D -EINVAL;
-> > +             fud =3D fuse_get_dev(file);
-> > +
-> > +             /*
-> > +              * Only fuse mounts with an already initialized fuse
-> > +              * connection are supported
-> > +              */
-> > +             if (file->f_op =3D=3D &fuse_dev_operations && fud) {
-> > +                     mutex_lock(&fuse_mutex);
-> > +                     fc =3D fud->fc;
-> > +                     if (fc)
-> > +                             fc =3D fuse_conn_get(fc);
-> > +                     mutex_unlock(&fuse_mutex);
-> > +
-> > +                     if (fc) {
-> > +                             res =3D fuse_reinit_conn(fc);
-> > +                             fuse_conn_put(fc);
-> > +                     }
-> > +             }
-> > +             break;
-> >       default:
-> >               res =3D -ENOTTY;
-> >               break;
-> > diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-> > index 1b9d0dfae72d..3dac67b25eae 100644
-> > --- a/include/uapi/linux/fuse.h
-> > +++ b/include/uapi/linux/fuse.h
-> > @@ -989,6 +989,7 @@ struct fuse_notify_retrieve_in {
-> >   /* Device ioctls: */
-> >   #define FUSE_DEV_IOC_MAGIC          229
-> >   #define FUSE_DEV_IOC_CLONE          _IOR(FUSE_DEV_IOC_MAGIC, 0, uint3=
-2_t)
-> > +#define FUSE_DEV_IOC_REINIT          _IO(FUSE_DEV_IOC_MAGIC, 0)
-> >
-> >   struct fuse_lseek_in {
-> >       uint64_t        fh;
