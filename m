@@ -2,177 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC816D5112
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EB46D5117
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbjDCTD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 15:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
+        id S231982AbjDCTHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 15:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232012AbjDCTDz (ORCPT
+        with ESMTP id S229576AbjDCTHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 15:03:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB972268E;
-        Mon,  3 Apr 2023 12:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680548634; x=1712084634;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=IcxKhVmTn1+y90fcU6NGSpnVWSXokVc8eMUpEzlMbkQ=;
-  b=crZHpmtVgG2MzVelhnNMMmgZbrxHsAb4X1w23zmnbhm5a3BUlfNNcbUr
-   HFTKU+QvzB1Eb208AScHFp6PTPwPMkVxUiPNpWNOqgS1nH/hdJT7V8kmc
-   A+Tt5Lpa3ikMefZCxDurSJ2oByK8ipJHskhnSGle9LnNEatMp+89Ikk5N
-   aDTJRv0U2hdJ175RRaiIaljVo9+ZbngXE66FJGQrhokSrf1gbYS3VX9JY
-   De/oXSbvjXEC1RAcLA7U3UVoUzIKNyCAj43n8746A2/jlyTkizGBoOke3
-   KYj/3ygQQjEogC25XfV1ILxs/nWm+o6veFkK4jbNR6atRn3QGs0OGJu0D
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="321651225"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="321651225"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 12:03:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="1015826478"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="1015826478"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga005.fm.intel.com with ESMTP; 03 Apr 2023 12:03:38 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 3 Apr 2023 12:03:38 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 3 Apr 2023 12:03:38 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 3 Apr 2023 12:03:38 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.105)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 3 Apr 2023 12:03:37 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fDUAbconAfDaWtBGsNmuf2z8xmkEwU8pwk6/Jard0uO1zgavOcZJJFuwteOC4qtLtvuLDB2lLOuRVmTMvBxcJlJBmrtjDy3oAkO0oXl39mmKujgaArHVmkWOlo57uw6Fpkg36abK1aGhvpG9tKy24lYrpQTuuVbDvkg6VfdciBAVrJhi9VQ3FADkraFps0WofgZsF3fwyHaeVhFvOi0YysdcvSJqWuZvqN24QPQnbDhwvaMH7yJodBfosqCMGV7o6w6IJQFjPxVOOnCYaFJOZjIm/iAKFcUFiZWjCKuBxJF7Um0UcCKQACugK1MGbUs7wrAEHW/w1gsGC/gyOmjf+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IcxKhVmTn1+y90fcU6NGSpnVWSXokVc8eMUpEzlMbkQ=;
- b=Vv41Uvn7JpmMzgARqZdwVQs3Kzf2L3e5Smupi1XKupskJ2broG+UwCjuaDNaYwGfR5bUOVEPg7Yd5PHDw+nCV4dsYcN9lMIsVk2xP2E3pR2bA3pml4BEmEg3OwusPEoNVIpBcZf6vOokXJPu4SphIVXGYpw35CivbXjmVzkArrMJxlzLZT8hrduf0Xnj59lIWZIIVMn9qVH9wsM2w16Iy3p3s0ADq/d/p93n7iV87rIX3BoSjYh/Y683ZiWZMND2WRdJNj0cbRi3690SrNj6HFBaSy/bR9n427FIoBmwHqvKWxGWA6XgJGfQNe8DW/1+7thmJy2DnKwSXpwRp2D6vg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by BY1PR11MB8080.namprd11.prod.outlook.com (2603:10b6:a03:528::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
- 2023 19:03:36 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::a47:481:d644:a8b5]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::a47:481:d644:a8b5%7]) with mapi id 15.20.6254.024; Mon, 3 Apr 2023
- 19:03:36 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-CC:     Borislav Petkov <bp@alien8.de>,
-        "Smita.KoralahalliChannabasappa@amd.com" 
-        <Smita.KoralahalliChannabasappa@amd.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [PATCH v3 4/5] x86/mce: Move storm handling to core.
-Thread-Topic: [PATCH v3 4/5] x86/mce: Move storm handling to core.
-Thread-Index: AQHZWPTgJ4wIXq7BtEGVPo9uGmSDaK8IhfAAgAArnhCAACa0kIAJG26AgAgX+oA=
-Date:   Mon, 3 Apr 2023 19:03:36 +0000
-Message-ID: <SJ1PR11MB608315F2F50BFEDF8D01C76FFC929@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <ZBR+GMH0olGoDMGs@yaz-fattaah>
- <20230317172042.117201-1-tony.luck@intel.com>
- <20230317172042.117201-5-tony.luck@intel.com>
- <ZBxvyqb5Mnt13341@yaz-khff.amd.com>
- <SJ1PR11MB60835D7F85097FEF454DD74CFC879@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <SJ1PR11MB6083D33BC6860AB9FE2A292BFC879@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <ZCRYl9c7xgIJ+pJe@yaz-sghr>
-In-Reply-To: <ZCRYl9c7xgIJ+pJe@yaz-sghr>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|BY1PR11MB8080:EE_
-x-ms-office365-filtering-correlation-id: 752863ee-e1b2-43b0-b694-08db347620b1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VBD/qbUV8/0F3J5rw/GlmSKrC+yG3IB0/c78PXbrfftFc5/HdATS4EX/inFk6N+HrS3qKEHDsRuDWZmrxYbt+0gX8s4xKw7P7bbNQ1RobBNuM3vsHyRte4ursq1wqn8ql9RQmnt8KgZ5MR8WXD2Y8h6zOUVuThzYCFirzq9XcRYkNuWEUKhfgeb17U1hcXHFPw9zR9QIa0Mb1qCKslU0nvMBqROGGEK3m4moJGpwL2F4K9io0C49u+R/l+y1HDAPmObMxuVuYPGqN52oKwdy4154JtXbNDbpFbJnClOTrwtScIU1wVYzqvj8sdjyPzz+vZ27Z3zGCicmoF4C8YqbI4dclNW1lcKNf70DXCvVCbPiTwt8t2gnKXnJDIeoNTfvPpIdBhykro6F57PMS+tjehIuC3MaIFdmWMq28AvaGziDUSNfQShL4X/Lhh0z4xufUtYg86f2SD2rKVAuxHUbGLtSrgMiGeDQrV0+OpgZLVq7KUfHb3W2thj/ikIspre9gE2f7XQ8Rfufzc3EQfyt0TfQLs/6BJ1aLosJQZbhV6yZ5bT7pAz1A6XkWy5BPzBrvPOOVNFXRf2V2L5q2GPDdf6dggEpEwrLQc0t+T66Hs7xsHc9lFO0MtAHTx9sdAe1
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(136003)(39860400002)(396003)(346002)(451199021)(86362001)(38070700005)(558084003)(33656002)(2906002)(55016003)(7696005)(71200400001)(186003)(9686003)(6506007)(26005)(4326008)(8676002)(478600001)(66946007)(66556008)(76116006)(66446008)(6916009)(66476007)(64756008)(122000001)(82960400001)(41300700001)(38100700002)(5660300002)(52536014)(316002)(54906003)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?UiAW4KJXaSomCXViFjmADYlRS5kCOf9uRBhzkBWpLQFy1LRzMjduywh6Kblh?=
- =?us-ascii?Q?b+LQmzbfWFpo31oNNWpwsECBr8PBMxYQ9RXypMhFbKztwTW//xAg5ZfemdeN?=
- =?us-ascii?Q?Ewaf/LrZ/9tt1Xei2Du7crtwWQVOXgaqJPXFgyIRITUo/Ubs89JMVThYuDAN?=
- =?us-ascii?Q?bUzbZZIIwrk4XumFAGytb3uKRFyqd7m3PB8YYK6vXV+/+W3vxb1bdFB6XLgN?=
- =?us-ascii?Q?oamyNONlpP1J81lwz2PGD0OLoY8YY98XDrC1IM0Dl5W1ePEZpduoX7mIEhJn?=
- =?us-ascii?Q?yWlCHfsxUbLJxB1Lk27mlZ4i/oMAclf394SGGKzmFIrt4NuDsjUuey/VfD0D?=
- =?us-ascii?Q?8EP6OEL5EBYEnv4My7Mnlt86GereGF1E096FDS7xo8M+3TSLo3OPX7Tr08Jx?=
- =?us-ascii?Q?7l0fPemJCssmh7ujzcNUrmnlv8gdfcu2eKLHZYtivs2VoNwEnhSj01m8CqyD?=
- =?us-ascii?Q?r3a/Cvjz/kj6dRDT6of68skfjtfte8+Jzwjva95BaKVbttqlgNXIFthENEhc?=
- =?us-ascii?Q?rBMipPdxPa+4TYZNSHWMFHzvjqMVjKvXiYlZvZrNocQuo/IGkuHTQg/5pNQg?=
- =?us-ascii?Q?GAZLAWZbiGo5JluGXZ5EOzorQPjZj1YQqPcXNw5AFzT9XVyeTVNz/DCnxBuc?=
- =?us-ascii?Q?UTnrQvLblJVSkL4vRJZ9N3h6EdTcF7w1YtGRO8g3JAEgkMxhBLqxSebGhVu/?=
- =?us-ascii?Q?qFS/4OgwbEs09NLZI1FuyIH9hl805EBFqFls862o+J3p5V6Qyn0tcg1wlvqW?=
- =?us-ascii?Q?ss8IPWbtPjtH6nbbMfvbaMcB4KH0AM7JJj8xxKA6CxmSl0ttQM0buiLbGwkG?=
- =?us-ascii?Q?Pxe4BIcHHrODx41RcMZlY2vmN4tS0/qhrioxRd1L8qhviXpCYGK2H5cGFZI8?=
- =?us-ascii?Q?O2B7Y9/jdsyK6+Xb/PKX4u7WRqOMhCLeXplvFBvgUD/1PXn/T8MMnpFoehiV?=
- =?us-ascii?Q?ReSGWijHzZHL/5p+h10nKmVxURc550J5bzKnHVuy0BdkpEkLqPmXBWsa4CNq?=
- =?us-ascii?Q?WqbfMXZSjdPtK5KxqjKdwEPXkrbZf3EqlVBnLPB4rWE81a+IAXZ9XQov4EvI?=
- =?us-ascii?Q?ZkpGX22n2B2V10u0/SBRS9qd1kxayHNOCtiwiyBJu4Z0zu2e/TwYWkTz5qBf?=
- =?us-ascii?Q?uvxniXT9VIEHEOLgJVq0oMQnlAXUFndWD0og2wWuDeDNNrKv1ECZZNrKdHsy?=
- =?us-ascii?Q?jcT4jbZRNT4Imwps19kU+MS+yy5zn5tpbmPdGStxjm3wJQpb8mYmywC1CIyH?=
- =?us-ascii?Q?beauoBnnWVVg6hA2tiOeunfdN3/pN6D0OSsESHqiwDhk7Qy9oAchCoFWqU50?=
- =?us-ascii?Q?AUK3Oc4wxpijiXHrzR4zDxdHSMmNwvLsoRbFiAgVx6IQv0LTLb04IELXWrlC?=
- =?us-ascii?Q?VhotvrWhNSBcvApaurzgxwFyuQKKDjz5ISSgybJaKJisZ7kTcSDpXZd7quPo?=
- =?us-ascii?Q?U3Apo7ckKu9HoZZ3cSM/y6X964XymgI6g+G81l2UwuFiWEDHwDeX0iyWE0M5?=
- =?us-ascii?Q?bTQo5mcMSzScBbXHNwHwahsGXB15JXW2feoHDqBFEXnLXf/xqR5DHkGpqBR/?=
- =?us-ascii?Q?7/1o0ipSU4PNEf69Bes=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 3 Apr 2023 15:07:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8272701
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 12:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680548790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o312F+8qQ3csr6xoClPXHStqrqRF/NPJb7KBcI61xtc=;
+        b=O464ThtgQvDkQU5NYmfnrWaps7EaQ0ONLeU4Sc32h1VWS3xzWzolINM50Cmnv+AjcMEE4w
+        e9hMIEvHyca1bW1YWpwmKYazbxRBBAtOVuYTylol4l2Sq37742RZV8m1bpIgjsbwTyS6NT
+        FZgu8I7ZRz0h0ZcJPW7LUQP4/yUFteU=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-317-qSuO7SQwNqescrrGDnrtvg-1; Mon, 03 Apr 2023 15:06:29 -0400
+X-MC-Unique: qSuO7SQwNqescrrGDnrtvg-1
+Received: by mail-wm1-f72.google.com with SMTP id iv10-20020a05600c548a00b003ee112e6df1so15164457wmb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 12:06:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680548788;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o312F+8qQ3csr6xoClPXHStqrqRF/NPJb7KBcI61xtc=;
+        b=YogciNSaSz8VIQJiF+RgO3C0bLYaAesJyvMOn1VW1iAEe/0cwxUzjY2d95x6shUxCK
+         yoPVW0fGxyHYRLfWncS4BKRFKy38dZhDQwBKZbw1G0q4l4IZKBJ20Wha1hMLLBCFVNpZ
+         jdzqhcmadgKxcnnfNLSzPT+lUTwuCsN1qUWhtY/LdYNvdxKeaxww6L2u5xORzdUN4qxD
+         ngtzr6RF+8zJ6rufU+IEOImrf/WhzQXB5rv1K0ySv0c8rJHd8c5sTm97G9tCcwYDFprz
+         2ts9QKtvqhwgwhkpftCCEgo4wtizWmRNCTS99PfO38RIxYLFSytW5ApfOY53Q8HwGoFy
+         xS1g==
+X-Gm-Message-State: AAQBX9dEFJGB3NRK6g6q/vPQBbadDD7Rk3fSChF/0RP3yUqfAYkUH3in
+        03zwfc68okSTbuPjBVf0uPjCPKJ5TWyCY+OfF3hhNiYOZpz/vP5RADoFaqJ3a8Yo+nBOuX8o0dY
+        p50ODRD7HKPLjHMMuqrVYAhol
+X-Received: by 2002:a5d:6710:0:b0:2e3:a038:7870 with SMTP id o16-20020a5d6710000000b002e3a0387870mr122126wru.40.1680548788385;
+        Mon, 03 Apr 2023 12:06:28 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bf2K9RhlECDumNV6UhMWL27ufSYHSPWnXBF4+HoFPMkwvRMlQkYdnLEfRr/e6GBdIDL0MKbQ==
+X-Received: by 2002:a5d:6710:0:b0:2e3:a038:7870 with SMTP id o16-20020a5d6710000000b002e3a0387870mr122113wru.40.1680548788048;
+        Mon, 03 Apr 2023 12:06:28 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
+        by smtp.gmail.com with ESMTPSA id r1-20020a5d4941000000b002cfefa50a8esm10380139wrs.98.2023.04.03.12.06.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 12:06:27 -0700 (PDT)
+Message-ID: <b282519e-d43d-026c-3f96-4d7fb287d96b@redhat.com>
+Date:   Mon, 3 Apr 2023 21:06:26 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 752863ee-e1b2-43b0-b694-08db347620b1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Apr 2023 19:03:36.1957
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hQ0DDbT82d93K+1RKiKtqFAMIeFnzrF15E934TqjBs/Kdkcf7ti9tWvsPr/ooL7gS6EPCAGMTdqEd2A6epzKmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR11MB8080
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>
+References: <20230330155707.3106228-1-peterx@redhat.com>
+ <20230330160752.3107283-1-peterx@redhat.com>
+ <fcf40deb-e731-c257-fb77-7fcfddf623b1@redhat.com> <ZCsCRRdnbeNgcSlq@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 16/29] selftests/mm: UFFDIO_API test
+In-Reply-To: <ZCsCRRdnbeNgcSlq@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi Tony,
->
-> Builds, boots, and passes my tests here too.
->
-> Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> Tested-by: Yazen Ghannam <yazen.ghannam@amd.com>
+On 03.04.23 18:43, Peter Xu wrote:
+> On Mon, Apr 03, 2023 at 09:59:50AM +0200, David Hildenbrand wrote:
+>> There is ksft_print_msg, ksft_test_result, ksft_test_result_fail, ... do we
+>> maybe want to convert properly to ksft while already at it?
+> 
+> Yes, I started with trying to use that but found that there're not a lot of
+> things that I can leverage.
+> 
+> Starting with ksft_set_plan() - I think this is something we call first. I
+> want the current unit test to skip everything if UFFD API test failed here,
+> then I need to feed in a dynamic number of "plan" into ksft_set_plan().
+> But I never know after I ran the 1st test..
 
-Yazen,
+In cow.c I did that. Getting the number of tests right can be 
+challenging indeed.
 
-Thanks. I'll add your tags and post a v4 to the mailing list for Boris to r=
-eview.
+Basic "feature availability" checks would go first (is uffd even 
+around?), and depending on that you can set the plan.
 
--Tony
+For everything else, you can skip instead of test, so it will still be 
+accounted towards the plan.
+
+> 
+> I can call ksft_set_plan() later than this, but it misses a few tests which
+> also looks weird.
+
+Yeah, it would be nice to simply make ksft_set_plan() optional. For 
+example, make ksft_print_cnts() skip the comparison if ksft_plan == 0. 
+At least ksft_exit_skip() handles that already in a descend way (below).
+
+> 
+> It also seems to not really help anything at all and not obvious to use.
+> E.g. ksft_finished() will reference ksft_plan then it'll trigger
+> ksft_exit_fail() but here I want to make it SKIP if the 1st test failed
+> simply because the kernel probably doesn't have CONFIG_USERFAULTFD.
+
+You'd simply do that availability check first and then use 
+ksft_exit_skip() in case not available I guess.
+
+> 
+> Another example: I never figured what does x{fail|pass|skip} meant in the
+> header..  e.g. ksft_inc_xfail_cnt() is used nowhere so I cannot reference
+> either.  Then I don't know when I should increase them.
+
+In cow.c I have the following flow:
+
+ksft_print_header();
+ksft_set_plan();
+... tests ...
+err = ksft_get_fail_cnt();
+if (err)
+	ksft_exit_fail_msg();
+return ksft_exit_pass();
+
+That gives me:
+
+# [INFO] detected THP size: 2048 KiB
+# [INFO] detected hugetlb size: 2048 KiB
+# [INFO] detected hugetlb size: 1048576 KiB
+# [INFO] huge zeropage is enabled
+TAP version 13
+1..190
+...
+# Totals: pass:87 fail:0 xfail:0 xpass:0 skip:103 error:0
+
+
+I didn't use xfail or xpass so far, but what I understood is that these 
+are "expected failures" and "expected passes". fail/pass/skip are 
+straight forward. 
+ksft_test_result_fail()/ksft_test_result_pass()/ksft_test_result_skip() 
+are used to set them.
+
+You'd do availability checks before ksft_set_plan() and fail with a 
+ksft_exit_skip() if the kernel doesn't support it. Then, you'd just use 
+ksft_test_result_fail()/ksft_test_result_pass()/ksft_test_result_skip().
+
+> 
+> In short, to make the unit test behave as expected, I figured I'll just
+> write these few helpers and that's good enough for this unit test.  That
+> takes perhaps 5 min anyway and isn't hugely bad for an unit test.
+> 
+> Then I keep the exit code matching kselftests (KSFT_SKIP, etc.).
+> 
+> What I can do here, though, is at least reuse the counters, e.g:
+> 
+>   ksft_inc_pass_cnt() / ksft_inc_fail_cnt()
+> 
+> There's no ksft_inc_skip_cnt() so, maybe, I can just reuse
+> ksft_inc_xskip_cnt() assuming that counts "skip"s?
+> 
+> Let me know if you have better ideas, I'll be happy to switch in that case.
+
+I guess once you start manually increasing/decreasing the cnt, you might 
+be abusing the ksft framework indeed and are better off handling it 
+differently :D
+
+-- 
+Thanks,
+
+David / dhildenb
+
