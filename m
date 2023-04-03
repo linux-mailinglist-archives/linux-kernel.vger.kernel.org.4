@@ -2,131 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9DB6D4B5E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BC66D4B5F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233028AbjDCPGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S233320AbjDCPGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjDCPGo (ORCPT
+        with ESMTP id S232425AbjDCPGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:06:44 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDFF269D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:06:41 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l7so27482831pjg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 08:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680534401;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PtB732qUvTTgNCmRqTe3AjBowm/N/XqcqejYeifOY7U=;
-        b=Kyhp9nbCn7lZVucvnSMo1R+OYBjOieC24CY9MlqgKBm5AF7YAy/9G3IBT5GoKMeXTB
-         YVSYj7KvI46Gix0LR4GixCkBETP1S7tsspJa6eKY1mNfWvAzbq4JOK7lfCYsp+2VQ8QP
-         fv3mloB9nYiVbcQtAg+CeY24/KKMLlYLUCWdyHApJjRObLYeJNgTgJEIDBOUvjwEW9e2
-         wnPkPoIzJuQWJcGXjxQNQNVoOp6LxDZn+lkzzRnYrtGvYXWMq2V1+mUAL3LIQ7aeGbMB
-         fTvMLJArOnGipO+kf/R7DeJ66FhCqFys+srKPii+M3vdJxGfMljKIMRc05Yqlgdyr3az
-         RdZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680534401;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PtB732qUvTTgNCmRqTe3AjBowm/N/XqcqejYeifOY7U=;
-        b=sHhBT4Sq37GtVvE5HFyixSAAlvN/mvqTkEaLiboGPbJ8Y+4eyLQr8/5voigcXMj7B1
-         xRcSeIvFi4VNpkDIFRbB/cZx1aKPVT2ohNMC13+6hkfaNV/idvI/K522C7lvbIPM9JKI
-         Sh6u+PTnwfFm799FVg9pZJp232z5yW23UZU/FgyGwbHixTUjbr4B+kMZAec/Ie6oGRTH
-         TVRwUkr+RTtFdUIj5YJFnKYnvqrRgcVltaloN0PWy4YzM0E4y4vjRTh0uV7cYYV9tMiS
-         Yt+ffqLaPpz9pDs9bjp532wctep7kZTEv/RmUbFjTqUpQz2jlLLvqO3kNhqsq3LPL+g7
-         ghsg==
-X-Gm-Message-State: AAQBX9c79ZnifLRiPHlHpSELaazbJgO1SjI9HkH5xYBN2mIgZNPnA1ky
-        b+QpWuw7yBpW0Ate8qkPrBZ71m0Wtg/6Wg==
-X-Google-Smtp-Source: AKy350ZdcThAKMfiwIoxA8iw3XP0Y6suTUVaij3kBTYRZ8WWkjRcNnfLSlfjAJ5E2LeSbHmFBJS/6g==
-X-Received: by 2002:a17:903:41c6:b0:1a1:b137:4975 with SMTP id u6-20020a17090341c600b001a1b1374975mr48744276ple.49.1680534401169;
-        Mon, 03 Apr 2023 08:06:41 -0700 (PDT)
-Received: from [172.30.1.1] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id c7-20020a656187000000b00513468106d8sm6154359pgv.1.2023.04.03.08.06.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 08:06:40 -0700 (PDT)
-Message-ID: <9b3e8eb1-0e24-322e-641e-a78a12c8c249@gmail.com>
-Date:   Tue, 4 Apr 2023 00:06:37 +0900
+        Mon, 3 Apr 2023 11:06:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5D9191D0
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:06:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0679D61F94
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:06:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0CD2C433D2;
+        Mon,  3 Apr 2023 15:06:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680534409;
+        bh=iPsLfUOydlyRBM14W+1Y54Vdkd9NzvvPvuL3Akt7gro=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mRsYPWkYCNmwTCjgnX9A4Fgng8HytyNJLrHJG55zROJd+xwUXCaIB/Z+2HKftDsVD
+         9BX4RxhBRVkrv1zrwAYZHDE/xXlYxYwBMr91VbEny7S0WD01sXo6VptG4e00uf8yZa
+         5HXaNt5WArUs+4nVo+FmDU+KxudutNURsPf/YvB8flUdvsIeq23eeOv4qVRgqsYw8o
+         PydEPYPhpFxousptAc465o/Qjvtcu9JBlxgegUDLYeuHsPMvwozW9BohIBKiJnhiF9
+         QtvLyGcu2VzvHj+MpqHzUwRUnmLG3YfKH3ntCjrt+RDEUsXYfG5oFdS4BdkbIn8qos
+         CvUrnMlh7drUg==
+Date:   Mon, 3 Apr 2023 20:36:45 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Eddie Hung <eddie.hung@mediatek.com>
+Subject: Re: [PATCH v9 1/2] phy: core: add debugfs files
+Message-ID: <ZCrrhZzj98WdWkd3@matsya>
+References: <20230316071452.9161-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 13/14] extcon: Drop unneeded assignments
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bumwoo Lee <bw365.lee@samsung.com>,
-        linux-kernel@vger.kernel.org
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
- <20230322144005.40368-14-andriy.shevchenko@linux.intel.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20230322144005.40368-14-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316071452.9161-1-chunfeng.yun@mediatek.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23. 3. 22. 23:40, Andy Shevchenko wrote:
-> In one case the assignment is duplicative, in the other,
-> it's better to move it into the loop — the user of it.
+On 16-03-23, 15:14, Chunfeng Yun wrote:
+> Add a debugfs root for phy class, and create a debugfs directory under
+> the root when create phy, then phy drivers can add debugfs files.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
->  drivers/extcon/extcon.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> v9: create a 'phy' debugfs root, add a debugfs entry in struct phy suggested by Vinod;
 > 
-> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-> index b3f038639cd6..edfa0450e605 100644
-> --- a/drivers/extcon/extcon.c
-> +++ b/drivers/extcon/extcon.c
-> @@ -246,7 +246,7 @@ static DEFINE_MUTEX(extcon_dev_list_lock);
+> No v8 sent out;
+> 
+> v2~v7: no changes
+> ---
+>  drivers/phy/phy-core.c  | 14 ++++++++++++++
+>  include/linux/phy/phy.h |  2 ++
+>  2 files changed, 16 insertions(+)
+> 
+> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+> index 9951efc03eaa..05715352881e 100644
+> --- a/drivers/phy/phy-core.c
+> +++ b/drivers/phy/phy-core.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/export.h>
+>  #include <linux/module.h>
+>  #include <linux/err.h>
+> +#include <linux/debugfs.h>
+>  #include <linux/device.h>
+>  #include <linux/slab.h>
+>  #include <linux/of.h>
+> @@ -20,6 +21,7 @@
+>  #include <linux/regulator/consumer.h>
 >  
->  static int check_mutually_exclusive(struct extcon_dev *edev, u32 new_state)
->  {
-> -	int i = 0;
-> +	int i;
+>  static struct class *phy_class;
+> +static struct dentry *phy_debugfs_root;
+>  static DEFINE_MUTEX(phy_provider_mutex);
+>  static LIST_HEAD(phy_provider_list);
+>  static LIST_HEAD(phys);
+> @@ -996,6 +998,8 @@ struct phy *phy_create(struct device *dev, struct device_node *node,
+>  		pm_runtime_no_callbacks(&phy->dev);
+>  	}
 >  
->  	if (!edev->mutually_exclusive)
->  		return 0;
-> @@ -1244,7 +1244,7 @@ static int extcon_alloc_groups(struct extcon_dev *edev)
+> +	phy->debugfs = debugfs_create_dir(dev_name(&phy->dev), phy_debugfs_root);
+> +
+>  	return phy;
+>  
+>  put_dev:
+> @@ -1226,6 +1230,7 @@ static void phy_release(struct device *dev)
+>  
+>  	phy = to_phy(dev);
+>  	dev_vdbg(dev, "releasing '%s'\n", dev_name(dev));
+> +	debugfs_remove_recursive(phy->debugfs);
+>  	regulator_put(phy->pwr);
+>  	ida_simple_remove(&phy_ida, phy->id);
+>  	kfree(phy);
+> @@ -1242,6 +1247,15 @@ static int __init phy_core_init(void)
+>  
+>  	phy_class->dev_release = phy_release;
+>  
+> +	phy_debugfs_root = debugfs_create_dir("phy", NULL);
+> +
+>  	return 0;
+>  }
+>  device_initcall(phy_core_init);
+> +
+> +static void __exit phy_core_exit(void)
+> +{
+> +	debugfs_remove_recursive(phy_debugfs_root);
+
+This should be moved to phy_release() we want the debugfs to be cleaned
+first
+
+> +	class_destroy(phy_class);
+
+hmmm we are missing this already, that might be an issue!
+
+> +}
+> +module_exit(phy_core_exit);
+> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+> index 3a570bc59fc7..f6d607ef0e80 100644
+> --- a/include/linux/phy/phy.h
+> +++ b/include/linux/phy/phy.h
+> @@ -148,6 +148,7 @@ struct phy_attrs {
+>   * @power_count: used to protect when the PHY is used by multiple consumers
+>   * @attrs: used to specify PHY specific attributes
+>   * @pwr: power regulator associated with the phy
+> + * @debugfs: debugfs directory
 >   */
->  int extcon_dev_register(struct extcon_dev *edev)
->  {
-> -	int ret, index = 0;
-> +	int ret, index;
+>  struct phy {
+>  	struct device		dev;
+> @@ -158,6 +159,7 @@ struct phy {
+>  	int			power_count;
+>  	struct phy_attrs	attrs;
+>  	struct regulator	*pwr;
+> +	struct dentry		*debugfs;
+>  };
 >  
->  	ret = create_extcon_class();
->  	if (ret < 0)
-> @@ -1253,7 +1253,7 @@ int extcon_dev_register(struct extcon_dev *edev)
->  	if (!edev || !edev->supported_cable)
->  		return -EINVAL;
->  
-> -	for (; edev->supported_cable[index] != EXTCON_NONE; index++);
-> +	for (index = 0; edev->supported_cable[index] != EXTCON_NONE; index++);
->  
->  	edev->max_supported = index;
->  	if (index > SUPPORTED_CABLE_MAX) {
-
-It has the dependency with patch7. When I try to apply it, the conflict happen.
-When you are sending v2 patches, I'll apply it if there are no conflict.
-[1] [PATCH v1 07/14] extcon: Use unique number for the extcon device ID
-
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+>  /**
+> -- 
+> 2.18.0
 
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
-
+~Vinod
