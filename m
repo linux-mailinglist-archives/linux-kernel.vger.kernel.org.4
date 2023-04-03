@@ -2,171 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBC16D3CB2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 07:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6384D6D3CB4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 07:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjDCFPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 01:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        id S231416AbjDCFQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 01:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjDCFPF (ORCPT
+        with ESMTP id S229751AbjDCFP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 01:15:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE69C5FDB;
-        Sun,  2 Apr 2023 22:15:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Apr 2023 01:15:59 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB20AF11;
+        Sun,  2 Apr 2023 22:15:58 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7377D61490;
-        Mon,  3 Apr 2023 05:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DDEAC433D2;
-        Mon,  3 Apr 2023 05:15:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680498902;
-        bh=Ixr/FFBnESFYocqUR2S5brutidXiL5FXC0yTKcWtPxk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GazujrsRaycMDAoP33HEUQ0JfQ7EMg0bNtPSIQJZat3LWer2Eu2uIckZ9nNpBnNYp
-         OXXbsQuyymB7jgZrClRzUWhjM6HPjHsbJUswwCj6jxaM+Z1psmxYl4PwehOaikiilM
-         xvDmEbw+J/6MWCb/eyyQ1GnTSl7JKfs75iuFk9TPV1K43UPjBAtNGIFiUhQw1KUncq
-         0HU0wq035hQx2DLpOkdINRQCmU6FWpQYMZdMonql8+0ksJnX+JqUc7qP7XzHF4FdNF
-         l/EKnY05EvqGepme2Og3KXyaVFY0JbTdCMceCHRxtXisTmGuBpQuhjBNRazZJh+zuE
-         D/OaXOKyIbxdw==
-Date:   Mon, 3 Apr 2023 10:44:56 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Simon Horman <horms@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH RFC] net: qrtr: correct types of trace event parameters
-Message-ID: <20230403051436.GA4627@thinkpad>
-References: <20230402-qrtr-trace-types-v1-1-da062d368e74@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PqfHc5kTkz4x91;
+        Mon,  3 Apr 2023 15:15:56 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680498957;
+        bh=UyIoMfxCfU6+yE1bUDqSjuh4no72bD9uFpCgENpQkpY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ibQIFpPctPMHH/WGciopeG0oO57qp8kQ+KZkrSHk4qddCGUjfU81q5+KfLeQT7Elm
+         ZOHelLj2MXxDQlM8zi0nU2LdpuPdiYUEmoQUCpT5B6ZcBOGElpOX1iahl9iOpohTio
+         kFsb0S15UsBbB16GAy9dr4aHmNN5Jz+6br+3R1eWiWE2n794vXDZFe1zgrlP/k/4Cb
+         2cpDA8Y0n2lU+c6SpXiXyWVWjR19OpnsvJ+STSYNCGzmkWHUknlCL1fGtktQgdvgi5
+         If7kuE8i1nyvAsIq1y7tEp9cksKu0aRBn2cV5xa/GFETEch5t3UOl7lu767671oZLO
+         F8fZ3AWpf2Z1g==
+Date:   Mon, 3 Apr 2023 15:15:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        namhyung@kernel.org
+Subject: Re: linux-next: build failure after merge of the perf tree
+Message-ID: <20230403151555.401ab99b@canb.auug.org.au>
+In-Reply-To: <ZCQu9+J8/AhAXgNI@kernel.org>
+References: <20230317095025.49aa34f9@canb.auug.org.au>
+        <20230322083956.5c051777@canb.auug.org.au>
+        <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
+        <20230323095437.1ecccec1@canb.auug.org.au>
+        <ZBxTyLqkIaoVhIXU@kernel.org>
+        <20230328123332.0a3e2b6d@canb.auug.org.au>
+        <ZCNES6N7AkskjD0o@kernel.org>
+        <20230329100612.074b18d0@canb.auug.org.au>
+        <ZCQu9+J8/AhAXgNI@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230402-qrtr-trace-types-v1-1-da062d368e74@kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/DPLfQGLSNX.q0_WB1+ICEyF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 01:15:33PM +0200, Simon Horman wrote:
-> The arguments passed to the trace events are of type unsigned int,
-> however the signature of the events used __le32 parameters.
-> 
-> I may be missing the point here, but sparse flagged this and it
-> does seem incorrect to me.
-> 
->   net/qrtr/ns.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/qrtr.h):
->   ./include/trace/events/qrtr.h:11:1: warning: cast to restricted __le32
->   ./include/trace/events/qrtr.h:11:1: warning: restricted __le32 degrades to integer
->   ./include/trace/events/qrtr.h:11:1: warning: restricted __le32 degrades to integer
->   ... (a lot more similar warnings)
->   net/qrtr/ns.c:115:47:    expected restricted __le32 [usertype] service
->   net/qrtr/ns.c:115:47:    got unsigned int service
->   net/qrtr/ns.c:115:61: warning: incorrect type in argument 2 (different base types)
->   ... (a lot more similar warnings)
-> 
+--Sig_/DPLfQGLSNX.q0_WB1+ICEyF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-You are right. The actual arguments (service, instance, node, port) transferred/
-received over QRTR are in le32 as per the protocol. But in the NS driver, the
-arguments passed to the trace events are in the native endian (i.e) before
-getting typecased to le32 for transmission.
+Hi Arnaldo,
 
-And my intention was to trace the arguments in native endian format only. So
-this patch indeed fixes the issue.
+On Wed, 29 Mar 2023 09:28:39 -0300 Arnaldo Carvalho de Melo <acme@kernel.or=
+g> wrote:
+>
+> > [On my arm64 machine:
+> >=20
+> > $ ls -l /sys/kernel/btf/vmlinux
+> > -r--r--r-- 1 root root 5209570 Mar 29 09:52 /sys/kernel/btf/vmlinux
+> >=20
+> > and on my amd64 machine:
+> >=20
+> > $ ls -l /sys/kernel/btf/vmlinux
+> > -r--r--r-- 1 root root 8536946 Mar 29 10:04 /sys/kernel/btf/vmlinux
+> > ] =20
+>=20
+> Everything should be working fine on those machines, right?
 
-> Signed-off-by: Simon Horman <horms@kernel.org>
+Sorry, I don;t build on those machines.
 
-Please add the fixes tag once you remove RFC,
+--=20
+Cheers,
+Stephen Rothwell
 
-Fixes: dfddb54043f0 ("net: qrtr: Add tracepoint support")
+--Sig_/DPLfQGLSNX.q0_WB1+ICEyF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+-----BEGIN PGP SIGNATURE-----
 
-- Mani
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqYQwACgkQAVBC80lX
+0GzAFAgAgbSZ9uRbgIbqImZXotdIqrPxiAT6kFOKcbVrs1GVwcQvaZVRT8fR74Kj
+5nF3KfQLaiTQralpQGhGPZh99Bv0nredIhNtnyUwguC5j38NsAAjLWPJh1GcDvdE
++49ikpVbnEIKculppjN9mOG4qYGlmfHYIr1EV+w7lDImUfP6pPkwCqoSCy+Gm/r4
+LUpAGYG65ONAW385dO+L75wyUL9dQwqcx5NY/CNLRVWL/5tbmi2fn7aAkhGDy2Iw
+vbcPTUNlIdoV36BgPVlboPuL+os0I/fvAQAf4kSdDP8ogJQZxqUaqSWeTpG+RHuA
+gAgfoIuoOK2fxWNST+fJGLkxJBcDLw==
+=Ogf9
+-----END PGP SIGNATURE-----
 
-> ---
->  include/trace/events/qrtr.h | 33 ++++++++++++++++++---------------
->  1 file changed, 18 insertions(+), 15 deletions(-)
-> 
-> diff --git a/include/trace/events/qrtr.h b/include/trace/events/qrtr.h
-> index b1de14c3bb93..441132c67133 100644
-> --- a/include/trace/events/qrtr.h
-> +++ b/include/trace/events/qrtr.h
-> @@ -10,15 +10,16 @@
->  
->  TRACE_EVENT(qrtr_ns_service_announce_new,
->  
-> -	TP_PROTO(__le32 service, __le32 instance, __le32 node, __le32 port),
-> +	TP_PROTO(unsigned int service, unsigned int instance,
-> +		 unsigned int node, unsigned int port),
->  
->  	TP_ARGS(service, instance, node, port),
->  
->  	TP_STRUCT__entry(
-> -		__field(__le32, service)
-> -		__field(__le32, instance)
-> -		__field(__le32, node)
-> -		__field(__le32, port)
-> +		__field(unsigned int, service)
-> +		__field(unsigned int, instance)
-> +		__field(unsigned int, node)
-> +		__field(unsigned int, port)
->  	),
->  
->  	TP_fast_assign(
-> @@ -36,15 +37,16 @@ TRACE_EVENT(qrtr_ns_service_announce_new,
->  
->  TRACE_EVENT(qrtr_ns_service_announce_del,
->  
-> -	TP_PROTO(__le32 service, __le32 instance, __le32 node, __le32 port),
-> +	TP_PROTO(unsigned int service, unsigned int instance,
-> +		 unsigned int node, unsigned int port),
->  
->  	TP_ARGS(service, instance, node, port),
->  
->  	TP_STRUCT__entry(
-> -		__field(__le32, service)
-> -		__field(__le32, instance)
-> -		__field(__le32, node)
-> -		__field(__le32, port)
-> +		__field(unsigned int, service)
-> +		__field(unsigned int, instance)
-> +		__field(unsigned int, node)
-> +		__field(unsigned int, port)
->  	),
->  
->  	TP_fast_assign(
-> @@ -62,15 +64,16 @@ TRACE_EVENT(qrtr_ns_service_announce_del,
->  
->  TRACE_EVENT(qrtr_ns_server_add,
->  
-> -	TP_PROTO(__le32 service, __le32 instance, __le32 node, __le32 port),
-> +	TP_PROTO(unsigned int service, unsigned int instance,
-> +		 unsigned int node, unsigned int port),
->  
->  	TP_ARGS(service, instance, node, port),
->  
->  	TP_STRUCT__entry(
-> -		__field(__le32, service)
-> -		__field(__le32, instance)
-> -		__field(__le32, node)
-> -		__field(__le32, port)
-> +		__field(unsigned int, service)
-> +		__field(unsigned int, instance)
-> +		__field(unsigned int, node)
-> +		__field(unsigned int, port)
->  	),
->  
->  	TP_fast_assign(
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+--Sig_/DPLfQGLSNX.q0_WB1+ICEyF--
