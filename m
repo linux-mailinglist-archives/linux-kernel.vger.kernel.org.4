@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5196D4945
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545B26D4989
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbjDCOgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S233730AbjDCOiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233653AbjDCOgX (ORCPT
+        with ESMTP id S233657AbjDCOir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:36:23 -0400
-Received: from mail-ed1-x564.google.com (mail-ed1-x564.google.com [IPv6:2a00:1450:4864:20::564])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CC617672
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:36:13 -0700 (PDT)
-Received: by mail-ed1-x564.google.com with SMTP id er13so77228953edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:36:13 -0700 (PDT)
+        Mon, 3 Apr 2023 10:38:47 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460FD6A5E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:38:46 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id y35so17616082pgl.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:38:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680532572;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=U5r7YRW0ZNQYQAUWUSjjSl8/aBINAbtHL/3e+twmpks=;
-        b=r9QrjT90BPkxKRltjojacHRrzBGVAyjMvPlwDhL7hO3+MhZunGBQH16KYfsoQWb8UT
-         Nndx/n9S8RG17b8ls9oB7tYUKQIHRSQng5VaC9NU2wfOrLjI06fONzYAMLCY+UAv0/0q
-         df9M4hXqP+nHHYYLwkoLfc31ZkdgVrE7/RY+8=
+        d=gmail.com; s=20210112; t=1680532726;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IyKOUnifa/Kg22j76h04QR7te4Idgi07oXm9sbFwHTc=;
+        b=KGk98ifSovqY1DZzni9nQX86O6dvZhMCGhFiyEk+E6VaCSoZjcC7+TyemNrWo3Mhd2
+         LrzuJtwdh4L5mQcUPTRHiALC6UcPjGrajEecpM1JVZUPf2RLdsbJTgE7AHr2nIvNfmUW
+         VOBG2BkED3Wll2t9g35yGdI5+5DVUFrdX4LGDzYCf7yjvLveGeFqmhAncz2y2nEr7Tgw
+         E249YmpDfnol03jHXu/itbnglHaUQjbMepDHAs+2SubyoPmsiF5gFwW5H9Y1+w+rAhs8
+         uu0Bcgv+KouDZJ1ybtOPl7mWin3BXTyDXQCklBxqcZKM6zK+IiJuNhI+xcwjGGGhHa7Y
+         yEmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680532572;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U5r7YRW0ZNQYQAUWUSjjSl8/aBINAbtHL/3e+twmpks=;
-        b=ENwqIKIcg3bu6Xib0n4AasbtYRDB7/f8v6GfLHOhzAO1/E8z98kpU24SvIUQiX3dRj
-         1i8CfFw3UG7z5YQGrIMJY4z6LcfUVIM3CxjPDKYF8OoEJYpn7vsVSv0CJeimGo9phLMi
-         t35YRO7/fMLSa+1MJ0uRsct05u1Rs99GX4ncXSgu1ffG7T7jvZOCro+hYkhZo5jyUTBN
-         3/Se1wSkeJoS+AkNDNBF9d5bmz+e2HsmzOTX9x8PDnf9QMb8xjzzZi1WcdoQcRLqG9+k
-         2ocwYXUSb00IeVv82RnYUGlh/B8PZJ8s5/6qwEf2awdJCiFbm9wAuL9Lf7l6h9cwR1Ga
-         8ARg==
-X-Gm-Message-State: AAQBX9foC0nzEA5gcPYMzm1AkYGvs4u9s41GTREAEGQlpljdcgj0+u0d
-        GTsVMX5JRF41E88a8db8ynRCNTe4koM2qvHLeaNU/v7jZUQ6
-X-Google-Smtp-Source: AKy350Y8nj7Dmf0M2lIbht8Tt1l0YyX9VpNsVwlG4YnyGlwJGE6ARk5FVdaHVaOvwOjGn9wi3uLrSq5aEun0
-X-Received: by 2002:a17:906:4990:b0:932:20a5:5b with SMTP id p16-20020a170906499000b0093220a5005bmr17548153eju.23.1680532572026;
-        Mon, 03 Apr 2023 07:36:12 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id r6-20020a1709064d0600b008b25260a59dsm3079775eju.290.2023.04.03.07.36.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 07:36:12 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Maxim Mikityanskiy <maximmi@mellanox.com>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] xsk: Fix unaligned descriptor validation
-Date:   Mon,  3 Apr 2023 16:36:01 +0200
-Message-Id: <20230403143601.32168-1-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1680532726;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IyKOUnifa/Kg22j76h04QR7te4Idgi07oXm9sbFwHTc=;
+        b=mZCi1nwQiPjDFz8K0ZwLRLqVdjhaWfTZbaru5UxVJOSAYMLRa+fM83gin5b9Gifcm6
+         vpHWWhE46cd2Od1BW4yJIAOubtgtH31wsMYabD7uOuvRsMe2AKO5iBqMYZjf+76fprIK
+         394w/aWi53o/5zjTmIrYddNkpdsDWCl8E7XYDupo4n1S4ouW7s+wywa86FsFQRcJFBn8
+         c+4SeCyp0Cl/rbOojts0OWGU5LtFTdbeD/CoRWmuiQtwfWja5JM4nddaHy/6PDM1hUBg
+         9O05DmoyH3iglTZ1lK6jH5v0UK8To3eFkRcNya9+xvLQjGMgJKd12sNllwfnT9OAXzxb
+         7OOQ==
+X-Gm-Message-State: AAQBX9dz4RabfKD4wWnkC1/dvXz74LlcekJjrB7BkVZxX0pm1a8qWriE
+        kqd3yJTZHW6p4ABTkHp7mWRhJCd3v1Hpow==
+X-Google-Smtp-Source: AKy350brf4/MqosM9A30E/a84WMe+/DtNcTPaN8L/dQOF+cx3zbrIio0D1AHjaDaKXoe76VB7swmDg==
+X-Received: by 2002:a62:63c2:0:b0:62d:8376:3712 with SMTP id x185-20020a6263c2000000b0062d83763712mr23958519pfb.28.1680532725560;
+        Mon, 03 Apr 2023 07:38:45 -0700 (PDT)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id e24-20020a62ee18000000b0062dcaa50a9asm7033339pfi.58.2023.04.03.07.38.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 07:38:45 -0700 (PDT)
+Message-ID: <6bb15158-829e-f032-dc10-110e831da8c3@gmail.com>
+Date:   Mon, 3 Apr 2023 23:38:41 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 14/14] extcon: Use positive conditional in ternary
+ operator
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bumwoo Lee <bw365.lee@samsung.com>,
+        linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
+ <20230322144005.40368-15-andriy.shevchenko@linux.intel.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230322144005.40368-15-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,54 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure unaligned descriptors that straddle the end of the UMEM are
-considered invalid. Currently, descriptor validation is broken for
-zero-copy mode which only checks descriptors at page granularity.
-Descriptors that cross the end of the UMEM but not a page boundary may
-be therefore incorrectly considered valid. The check needs to happen
-before the page boundary and contiguity checks in
-xp_desc_crosses_non_contig_pg. Do this check in
-xp_unaligned_validate_desc instead like xp_check_unaligned already does.
+On 23. 3. 22. 23:40, Andy Shevchenko wrote:
+> It's easier to parse by a human being the positive conditional.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/extcon/extcon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index edfa0450e605..3e8522d522b4 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -1466,7 +1466,7 @@ EXPORT_SYMBOL_GPL(extcon_get_edev_by_phandle);
+>   */
+>  const char *extcon_get_edev_name(struct extcon_dev *edev)
+>  {
+> -	return !edev ? NULL : edev->name;
+> +	return edev ? edev->name : NULL;
+>  }
+>  EXPORT_SYMBOL_GPL(extcon_get_edev_name);
+>  
 
-Fixes: 2b43470add8c ("xsk: Introduce AF_XDP buffer allocation API")
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- include/net/xsk_buff_pool.h | 9 ++-------
- net/xdp/xsk_queue.h         | 1 +
- 2 files changed, 3 insertions(+), 7 deletions(-)
+It is not fix-up patch and I'm not sure that it is beneficial patch. 
+I will not apply it.
 
-diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index 3e952e569418..d318c769b445 100644
---- a/include/net/xsk_buff_pool.h
-+++ b/include/net/xsk_buff_pool.h
-@@ -180,13 +180,8 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
- 	if (likely(!cross_pg))
- 		return false;
- 
--	if (pool->dma_pages_cnt) {
--		return !(pool->dma_pages[addr >> PAGE_SHIFT] &
--			 XSK_NEXT_PG_CONTIG_MASK);
--	}
--
--	/* skb path */
--	return addr + len > pool->addrs_cnt;
-+	return pool->dma_pages_cnt &&
-+	       !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
- }
- 
- static inline u64 xp_aligned_extract_addr(struct xsk_buff_pool *pool, u64 addr)
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index bfb2a7e50c26..66c6f57c9c44 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -162,6 +162,7 @@ static inline bool xp_unaligned_validate_desc(struct xsk_buff_pool *pool,
- 		return false;
- 
- 	if (base_addr >= pool->addrs_cnt || addr >= pool->addrs_cnt ||
-+	    addr + desc->len > pool->addrs_cnt ||
- 	    xp_desc_crosses_non_contig_pg(pool, addr, desc->len))
- 		return false;
- 
 -- 
-2.39.2
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
