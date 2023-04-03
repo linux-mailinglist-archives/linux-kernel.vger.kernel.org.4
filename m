@@ -2,328 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA696D5169
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FABE6D516B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbjDCTdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 15:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S229642AbjDCTen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 15:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjDCTdr (ORCPT
+        with ESMTP id S231593AbjDCTek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 15:33:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF76E7F;
-        Mon,  3 Apr 2023 12:33:45 -0700 (PDT)
-Received: from jupiter.universe (dyndsl-091-248-212-192.ewe-ip-backbone.de [91.248.212.192])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DE785660313D;
-        Mon,  3 Apr 2023 20:33:43 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680550424;
-        bh=N/cNKrsvkjXxZ3Cgmxcn9TFhixbf9GdSPlug1xbzESs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lfDHpUFkm2wyKlnufwvl47YSnBkluFHTEBRXtU5e3qYMXpwg0TKuFqYbOX6x7mx6x
-         HUKYQk3CL4OnEi20UbgYyewnVlEYQNQc3Qub1prPxuHPfDrhp1qhF0D2EpWfGVuvyt
-         /dOHKvDy3byqNNGi/3bYYkxiHB27Iq7wblhCjVuAqnPnGokCcOYTRQ6WsYMWIPm5gr
-         vdMrppHaUM2clvmm68ip7mc8Gua8AluiUcX8d8ckFJubVZAncsWLr2B9I/yiJodyoy
-         wphUKr8imhzdFIOeZKok8fyRVa5PnOaqnuiQsqdmexxWgVj3OCXyepzf0IW8eK9TzU
-         lBF7n+pRAfy7Q==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id 5039E4807E3; Mon,  3 Apr 2023 21:33:41 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org
-Cc:     Peter Geis <pgwipeout@gmail.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Finley Xiao <finley.xiao@rock-chips.com>,
-        Jagan Teki <jagan@edgeble.ai>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCHv2 2/2] soc: rockchip: power-domain: add rk3588 mem module support
-Date:   Mon,  3 Apr 2023 21:32:50 +0200
-Message-Id: <20230403193250.108693-3-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230403193250.108693-1-sebastian.reichel@collabora.com>
-References: <20230403193250.108693-1-sebastian.reichel@collabora.com>
+        Mon, 3 Apr 2023 15:34:40 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C66B2D7E;
+        Mon,  3 Apr 2023 12:34:13 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id j11so39437597lfg.13;
+        Mon, 03 Apr 2023 12:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680550451;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kIajKJBgadiXZXqYnPUD/TCMgXwlp9reunu5G7CWM+g=;
+        b=QqvGJsF2BvdQegTa5mHU3kr0DQiLCfkAuKcVUKQleCWcQcRr/asIH+ZeINNLVMq2bP
+         Z2ZtZ0uCto6W0MI1K2cdULlLlwwpUD27gJLsZ1LWe+h1fc4uTh3j2o5uI3MlUjd5P97x
+         8s4cKmxcwbxOZMEEkZ79cjc4kQ+V3WtXp/qZ/OKUAdwPa0jMoZLvdavMDpxOu1ErsOlh
+         /1n+uPkyuU5roVFqdZsLXDKQ6iP3eet/dAgxgVXLjxiAnyvUkB8A6WI753KHQczUXria
+         fYzMVgo4DGVVtB37yBs51ogrt9W5ZhT5n6uqeqGyn975ENfHao+2gNDmL9ioXAAig3t3
+         SJDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680550451;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kIajKJBgadiXZXqYnPUD/TCMgXwlp9reunu5G7CWM+g=;
+        b=CPnxUlNdZKOaaJ75gPnDVlUPEknCtupvP4eaFTTlEw6kL0ApYIHXN8D6avSvLkxmsW
+         aqjZphpl/0nxlv53CezhopEDiegqsQMBAEVmOdVCVKSB93bycz1IfiQ9pE+crT9uQMRf
+         9slXiTmSu7ZZn4uk/rlNLHIehjieBvCxmslwGmVc3t0DSATgR5tK/b5hs1bC6mGEECD5
+         LIxFvUva07CMLzi8RBYXRi6MYI3HiGI7gk/gDh0igLjGMYSwAwDeLf8GT2e6o+cIpqps
+         KAT8iuyeE0AEcTOA0HFCLNWZFURcnZoNK8OBLyoH2H14dVSOsxDXuMlGncJSjMdcMaKe
+         We1A==
+X-Gm-Message-State: AAQBX9ediYrRJz0ClqzvLNpKMOXKA6/ZkiSKBI7D4NYS+dpV6DuzZrzR
+        pKkW78qRQ3sm40udrF1FNxALN5xkSJIVD3Uztak=
+X-Google-Smtp-Source: AKy350bG6atjI0AV6NRr4eWR2moSd0wqdyD8mzS7K4ryi4FFnVT4sIEVvUkCBENDrwB04bSJAQ3M4PmP/O5jmTdCV58=
+X-Received: by 2002:a05:6512:39c2:b0:4dc:7e56:9839 with SMTP id
+ k2-20020a05651239c200b004dc7e569839mr8716210lfu.5.1680550451369; Mon, 03 Apr
+ 2023 12:34:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230309201022.9502-1-jorge.lopez2@hp.com> <20230309201022.9502-5-jorge.lopez2@hp.com>
+ <6da33dcc-0526-4398-bf35-655b64d07e20@t-8ch.de> <CAOOmCE_kzVnUr9WoPAEu-e+E5=-RfHUCjj6U7kL_yhqKHsP84g@mail.gmail.com>
+ <f68304f0-c533-434d-9f74-92327cd4a002@t-8ch.de>
+In-Reply-To: <f68304f0-c533-434d-9f74-92327cd4a002@t-8ch.de>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Mon, 3 Apr 2023 14:33:53 -0500
+Message-ID: <CAOOmCE8aQ3YOyheC_U27FtV1xcMgV73eNsr9aooboqijaHENaA@mail.gmail.com>
+Subject: Re: [PATCH v6 4/4] Introduction of HP-BIOSCFG driver [4]
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Boris Brezillon <boris.brezillon@collabora.com>
+Hi Thomas,
 
-On RK3588 it's also possible to power down the memory used by the
-particular power domains via PMU_MEM_PWR_GATE_SFTCON. This adds
-support for this feature.
+Please see my comments below.
 
-Tested-by: Vincent Legoll <vincent.legoll@gmail.com>
-Co-Developed-by: Finley Xiao <finley.xiao@rock-chips.com>
-Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
-Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- drivers/soc/rockchip/pm_domains.c | 160 +++++++++++++++++++++++-------
- 1 file changed, 125 insertions(+), 35 deletions(-)
+> > > > HP BIOS Configuration driver purpose is to provide a driver support=
+ing
+> > > > the latest sysfs class firmware attributes framework allowing the u=
+ser
+> > > > to change BIOS settings and security solutions on HP Inc.=E2=80=99s=
+ commercial
+> > > > notebooks.
+> > >
+> > > Here it says "notebooks", below "PC's". Does it also support
+> > > non-notebook machines?
+> >
+> > The initial release of the driver will be supported for business notebo=
+oks.
+> > Although the driver is not targeted for non-notebooks machines, the
+> > driver was tested on non-notebooks in the event a decision is made to
+> > targets them
+>
+> If it is not intended to support both, maybe the documentation could
+> consistently use "notebook".
 
-diff --git a/drivers/soc/rockchip/pm_domains.c b/drivers/soc/rockchip/pm_domains.c
-index 84bc022f9e5b..e3de49e671dc 100644
---- a/drivers/soc/rockchip/pm_domains.c
-+++ b/drivers/soc/rockchip/pm_domains.c
-@@ -43,8 +43,10 @@ struct rockchip_domain_info {
- 	bool active_wakeup;
- 	int pwr_w_mask;
- 	int req_w_mask;
-+	int mem_status_mask;
- 	int repair_status_mask;
- 	u32 pwr_offset;
-+	u32 mem_offset;
- 	u32 req_offset;
- };
- 
-@@ -54,6 +56,9 @@ struct rockchip_pmu_info {
- 	u32 req_offset;
- 	u32 idle_offset;
- 	u32 ack_offset;
-+	u32 mem_pwr_offset;
-+	u32 chain_status_offset;
-+	u32 mem_status_offset;
- 	u32 repair_status_offset;
- 
- 	u32 core_pwrcnt_offset;
-@@ -119,13 +124,15 @@ struct rockchip_pmu {
- 	.active_wakeup = wakeup,			\
- }
- 
--#define DOMAIN_M_O_R(_name, p_offset, pwr, status, r_status, r_offset, req, idle, ack, wakeup)	\
-+#define DOMAIN_M_O_R(_name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, ack, wakeup)	\
- {							\
- 	.name = _name,					\
- 	.pwr_offset = p_offset,				\
- 	.pwr_w_mask = (pwr) << 16,			\
- 	.pwr_mask = (pwr),				\
- 	.status_mask = (status),			\
-+	.mem_offset = m_offset,				\
-+	.mem_status_mask = (m_status),			\
- 	.repair_status_mask = (r_status),		\
- 	.req_offset = r_offset,				\
- 	.req_w_mask = (req) << 16,			\
-@@ -269,8 +276,8 @@ void rockchip_pmu_unblock(void)
- }
- EXPORT_SYMBOL_GPL(rockchip_pmu_unblock);
- 
--#define DOMAIN_RK3588(name, p_offset, pwr, status, r_status, r_offset, req, idle, wakeup)	\
--	DOMAIN_M_O_R(name, p_offset, pwr, status, r_status, r_offset, req, idle, idle, wakeup)
-+#define DOMAIN_RK3588(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, wakeup)	\
-+	DOMAIN_M_O_R(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, idle, wakeup)
- 
- static bool rockchip_pmu_domain_is_idle(struct rockchip_pm_domain *pd)
- {
-@@ -408,17 +415,92 @@ static bool rockchip_pmu_domain_is_on(struct rockchip_pm_domain *pd)
- 	return !(val & pd->info->status_mask);
- }
- 
-+static bool rockchip_pmu_domain_is_mem_on(struct rockchip_pm_domain *pd)
-+{
-+	struct rockchip_pmu *pmu = pd->pmu;
-+	unsigned int val;
-+
-+	regmap_read(pmu->regmap,
-+		    pmu->info->mem_status_offset + pd->info->mem_offset, &val);
-+
-+	/* 1'b0: power on, 1'b1: power off */
-+	return !(val & pd->info->mem_status_mask);
-+}
-+
-+static bool rockchip_pmu_domain_is_chain_on(struct rockchip_pm_domain *pd)
-+{
-+	struct rockchip_pmu *pmu = pd->pmu;
-+	unsigned int val;
-+
-+	regmap_read(pmu->regmap,
-+		    pmu->info->chain_status_offset + pd->info->mem_offset, &val);
-+
-+	/* 1'b1: power on, 1'b0: power off */
-+	return val & pd->info->mem_status_mask;
-+}
-+
-+static int rockchip_pmu_domain_mem_reset(struct rockchip_pm_domain *pd)
-+{
-+	struct rockchip_pmu *pmu = pd->pmu;
-+	struct generic_pm_domain *genpd = &pd->genpd;
-+	bool is_on;
-+	int ret = 0;
-+
-+	ret = readx_poll_timeout_atomic(rockchip_pmu_domain_is_chain_on, pd, is_on,
-+					is_on == true, 0, 10000);
-+	if (ret) {
-+		dev_err(pmu->dev,
-+			"failed to get chain status '%s', target_on=1, val=%d\n",
-+			genpd->name, is_on);
-+		goto error;
-+	}
-+
-+	udelay(20);
-+
-+	regmap_write(pmu->regmap, pmu->info->mem_pwr_offset + pd->info->pwr_offset,
-+		     (pd->info->pwr_mask | pd->info->pwr_w_mask));
-+	wmb();
-+
-+	ret = readx_poll_timeout_atomic(rockchip_pmu_domain_is_mem_on, pd, is_on,
-+					is_on == false, 0, 10000);
-+	if (ret) {
-+		dev_err(pmu->dev,
-+			"failed to get mem status '%s', target_on=0, val=%d\n",
-+			genpd->name, is_on);
-+		goto error;
-+	}
-+
-+	regmap_write(pmu->regmap, pmu->info->mem_pwr_offset + pd->info->pwr_offset,
-+		     pd->info->pwr_w_mask);
-+	wmb();
-+
-+	ret = readx_poll_timeout_atomic(rockchip_pmu_domain_is_mem_on, pd, is_on,
-+					is_on == true, 0, 10000);
-+	if (ret) {
-+		dev_err(pmu->dev,
-+			"failed to get mem status '%s', target_on=1, val=%d\n",
-+			genpd->name, is_on);
-+	}
-+
-+error:
-+	return ret;
-+}
-+
- static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
- 					     bool on)
- {
- 	struct rockchip_pmu *pmu = pd->pmu;
- 	struct generic_pm_domain *genpd = &pd->genpd;
- 	u32 pd_pwr_offset = pd->info->pwr_offset;
--	bool is_on;
-+	bool is_on, is_mem_on = false;
- 
- 	if (pd->info->pwr_mask == 0)
- 		return;
--	else if (pd->info->pwr_w_mask)
-+
-+	if (on && pd->info->mem_status_mask)
-+		is_mem_on = rockchip_pmu_domain_is_mem_on(pd);
-+
-+	if (pd->info->pwr_w_mask)
- 		regmap_write(pmu->regmap, pmu->info->pwr_offset + pd_pwr_offset,
- 			     on ? pd->info->pwr_w_mask :
- 			     (pd->info->pwr_mask | pd->info->pwr_w_mask));
-@@ -428,6 +510,9 @@ static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
- 
- 	wmb();
- 
-+	if (is_mem_on && rockchip_pmu_domain_mem_reset(pd))
-+		return;
-+
- 	if (readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, pd, is_on,
- 				      is_on == on, 0, 10000)) {
- 		dev_err(pmu->dev,
-@@ -645,7 +730,9 @@ static int rockchip_pm_add_one_domain(struct rockchip_pmu *pmu,
- 	pd->genpd.flags = GENPD_FLAG_PM_CLK;
- 	if (pd_info->active_wakeup)
- 		pd->genpd.flags |= GENPD_FLAG_ACTIVE_WAKEUP;
--	pm_genpd_init(&pd->genpd, NULL, !rockchip_pmu_domain_is_on(pd));
-+	pm_genpd_init(&pd->genpd, NULL,
-+		      !rockchip_pmu_domain_is_on(pd) ||
-+		      (pd->info->mem_status_mask && !rockchip_pmu_domain_is_mem_on(pd)));
- 
- 	pmu->genpd_data.domains[id] = &pd->genpd;
- 	return 0;
-@@ -1024,35 +1111,35 @@ static const struct rockchip_domain_info rk3568_pm_domains[] = {
- };
- 
- static const struct rockchip_domain_info rk3588_pm_domains[] = {
--	[RK3588_PD_GPU]		= DOMAIN_RK3588("gpu",     0x0, BIT(0),  0,       BIT(1),  0x0, BIT(0),  BIT(0),  false),
--	[RK3588_PD_NPU]		= DOMAIN_RK3588("npu",     0x0, BIT(1),  BIT(1),  0,       0x0, 0,       0,       false),
--	[RK3588_PD_VCODEC]	= DOMAIN_RK3588("vcodec",  0x0, BIT(2),  BIT(2),  0,       0x0, 0,       0,       false),
--	[RK3588_PD_NPUTOP]	= DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       BIT(2),  0x0, BIT(1),  BIT(1),  false),
--	[RK3588_PD_NPU1]	= DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       BIT(3),  0x0, BIT(2),  BIT(2),  false),
--	[RK3588_PD_NPU2]	= DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       BIT(4),  0x0, BIT(3),  BIT(3),  false),
--	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       BIT(5),  0x0, BIT(4),  BIT(4),  false),
--	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       BIT(6),  0x0, BIT(5),  BIT(5),  false),
--	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       BIT(7),  0x0, BIT(6),  BIT(6),  false),
--	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       BIT(8),  0x0, BIT(7),  BIT(7),  false),
--	[RK3588_PD_VDPU]	= DOMAIN_RK3588("vdpu",    0x0, BIT(10), 0,       BIT(9),  0x0, BIT(8),  BIT(8),  false),
--	[RK3588_PD_RGA30]	= DOMAIN_RK3588("rga30",   0x0, BIT(11), 0,       BIT(10), 0x0, 0,       0,       false),
--	[RK3588_PD_AV1]		= DOMAIN_RK3588("av1",     0x0, BIT(12), 0,       BIT(11), 0x0, BIT(9),  BIT(9),  false),
--	[RK3588_PD_VI]		= DOMAIN_RK3588("vi",      0x0, BIT(13), 0,       BIT(12), 0x0, BIT(10), BIT(10), false),
--	[RK3588_PD_FEC]		= DOMAIN_RK3588("fec",     0x0, BIT(14), 0,       BIT(13), 0x0, 0,       0,       false),
--	[RK3588_PD_ISP1]	= DOMAIN_RK3588("isp1",    0x0, BIT(15), 0,       BIT(14), 0x0, BIT(11), BIT(11), false),
--	[RK3588_PD_RGA31]	= DOMAIN_RK3588("rga31",   0x4, BIT(0),  0,       BIT(15), 0x0, BIT(12), BIT(12), false),
--	[RK3588_PD_VOP]		= DOMAIN_RK3588("vop",     0x4, BIT(1),  0,       BIT(16), 0x0, BIT(13) | BIT(14), BIT(13) | BIT(14), false),
--	[RK3588_PD_VO0]		= DOMAIN_RK3588("vo0",     0x4, BIT(2),  0,       BIT(17), 0x0, BIT(15), BIT(15), false),
--	[RK3588_PD_VO1]		= DOMAIN_RK3588("vo1",     0x4, BIT(3),  0,       BIT(18), 0x4, BIT(0),  BIT(16), false),
--	[RK3588_PD_AUDIO]	= DOMAIN_RK3588("audio",   0x4, BIT(4),  0,       BIT(19), 0x4, BIT(1),  BIT(17), false),
--	[RK3588_PD_PHP]		= DOMAIN_RK3588("php",     0x4, BIT(5),  0,       BIT(20), 0x4, BIT(5),  BIT(21), false),
--	[RK3588_PD_GMAC]	= DOMAIN_RK3588("gmac",    0x4, BIT(6),  0,       BIT(21), 0x0, 0,       0,       false),
--	[RK3588_PD_PCIE]	= DOMAIN_RK3588("pcie",    0x4, BIT(7),  0,       BIT(22), 0x0, 0,       0,       true),
--	[RK3588_PD_NVM]		= DOMAIN_RK3588("nvm",     0x4, BIT(8),  BIT(24), 0,       0x4, BIT(2),  BIT(18), false),
--	[RK3588_PD_NVM0]	= DOMAIN_RK3588("nvm0",    0x4, BIT(9),  0,       BIT(23), 0x0, 0,       0,       false),
--	[RK3588_PD_SDIO]	= DOMAIN_RK3588("sdio",    0x4, BIT(10), 0,       BIT(24), 0x4, BIT(3),  BIT(19), false),
--	[RK3588_PD_USB]		= DOMAIN_RK3588("usb",     0x4, BIT(11), 0,       BIT(25), 0x4, BIT(4),  BIT(20), true),
--	[RK3588_PD_SDMMC]	= DOMAIN_RK3588("sdmmc",   0x4, BIT(13), 0,       BIT(26), 0x0, 0,       0,       false),
-+	[RK3588_PD_GPU]		= DOMAIN_RK3588("gpu",     0x0, BIT(0),  0,       0x0, 0,       BIT(1),  0x0, BIT(0),  BIT(0),  false),
-+	[RK3588_PD_NPU]		= DOMAIN_RK3588("npu",     0x0, BIT(1),  BIT(1),  0x0, 0,       0,       0x0, 0,       0,       false),
-+	[RK3588_PD_VCODEC]	= DOMAIN_RK3588("vcodec",  0x0, BIT(2),  BIT(2),  0x0, 0,       0,       0x0, 0,       0,       false),
-+	[RK3588_PD_NPUTOP]	= DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       0x0, BIT(11), BIT(2),  0x0, BIT(1),  BIT(1),  false),
-+	[RK3588_PD_NPU1]	= DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       0x0, BIT(12), BIT(3),  0x0, BIT(2),  BIT(2),  false),
-+	[RK3588_PD_NPU2]	= DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       0x0, BIT(13), BIT(4),  0x0, BIT(3),  BIT(3),  false),
-+	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false),
-+	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false),
-+	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false),
-+	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false),
-+	[RK3588_PD_VDPU]	= DOMAIN_RK3588("vdpu",    0x0, BIT(10), 0,       0x0, BIT(18), BIT(9),  0x0, BIT(8),  BIT(8),  false),
-+	[RK3588_PD_RGA30]	= DOMAIN_RK3588("rga30",   0x0, BIT(11), 0,       0x0, BIT(19), BIT(10), 0x0, 0,       0,       false),
-+	[RK3588_PD_AV1]		= DOMAIN_RK3588("av1",     0x0, BIT(12), 0,       0x0, BIT(20), BIT(11), 0x0, BIT(9),  BIT(9),  false),
-+	[RK3588_PD_VI]		= DOMAIN_RK3588("vi",      0x0, BIT(13), 0,       0x0, BIT(21), BIT(12), 0x0, BIT(10), BIT(10), false),
-+	[RK3588_PD_FEC]		= DOMAIN_RK3588("fec",     0x0, BIT(14), 0,       0x0, BIT(22), BIT(13), 0x0, 0,       0,       false),
-+	[RK3588_PD_ISP1]	= DOMAIN_RK3588("isp1",    0x0, BIT(15), 0,       0x0, BIT(23), BIT(14), 0x0, BIT(11), BIT(11), false),
-+	[RK3588_PD_RGA31]	= DOMAIN_RK3588("rga31",   0x4, BIT(0),  0,       0x0, BIT(24), BIT(15), 0x0, BIT(12), BIT(12), false),
-+	[RK3588_PD_VOP]		= DOMAIN_RK3588("vop",     0x4, BIT(1),  0,       0x0, BIT(25), BIT(16), 0x0, BIT(13) | BIT(14), BIT(13) | BIT(14), false),
-+	[RK3588_PD_VO0]		= DOMAIN_RK3588("vo0",     0x4, BIT(2),  0,       0x0, BIT(26), BIT(17), 0x0, BIT(15), BIT(15), false),
-+	[RK3588_PD_VO1]		= DOMAIN_RK3588("vo1",     0x4, BIT(3),  0,       0x0, BIT(27), BIT(18), 0x4, BIT(0),  BIT(16), false),
-+	[RK3588_PD_AUDIO]	= DOMAIN_RK3588("audio",   0x4, BIT(4),  0,       0x0, BIT(28), BIT(19), 0x4, BIT(1),  BIT(17), false),
-+	[RK3588_PD_PHP]		= DOMAIN_RK3588("php",     0x4, BIT(5),  0,       0x0, BIT(29), BIT(20), 0x4, BIT(5),  BIT(21), false),
-+	[RK3588_PD_GMAC]	= DOMAIN_RK3588("gmac",    0x4, BIT(6),  0,       0x0, BIT(30), BIT(21), 0x0, 0,       0,       false),
-+	[RK3588_PD_PCIE]	= DOMAIN_RK3588("pcie",    0x4, BIT(7),  0,       0x0, BIT(31), BIT(22), 0x0, 0,       0,       true),
-+	[RK3588_PD_NVM]		= DOMAIN_RK3588("nvm",     0x4, BIT(8),  BIT(24), 0x4, 0,       0,       0x4, BIT(2),  BIT(18), false),
-+	[RK3588_PD_NVM0]	= DOMAIN_RK3588("nvm0",    0x4, BIT(9),  0,       0x4, BIT(1),  BIT(23), 0x0, 0,       0,       false),
-+	[RK3588_PD_SDIO]	= DOMAIN_RK3588("sdio",    0x4, BIT(10), 0,       0x4, BIT(2),  BIT(24), 0x4, BIT(3),  BIT(19), false),
-+	[RK3588_PD_USB]		= DOMAIN_RK3588("usb",     0x4, BIT(11), 0,       0x4, BIT(3),  BIT(25), 0x4, BIT(4),  BIT(20), true),
-+	[RK3588_PD_SDMMC]	= DOMAIN_RK3588("sdmmc",   0x4, BIT(13), 0,       0x4, BIT(5),  BIT(26), 0x0, 0,       0,       false),
- };
- 
- static const struct rockchip_pmu_info px30_pmu = {
-@@ -1207,6 +1294,9 @@ static const struct rockchip_pmu_info rk3588_pmu = {
- 	.req_offset = 0x10c,
- 	.idle_offset = 0x120,
- 	.ack_offset = 0x118,
-+	.mem_pwr_offset = 0x1a0,
-+	.chain_status_offset = 0x1f0,
-+	.mem_status_offset = 0x1f8,
- 	.repair_status_offset = 0x290,
- 
- 	.num_domains = ARRAY_SIZE(rk3588_pm_domains),
--- 
-2.39.2
+Ok.
+>
+> > > > +             "sure-start"-type specific properties:
+> > > > +
+> > > > +             audit_log_entries:
+> > > > +                                     A read-only file that returns=
+ the events in the log.
+> > > > +
+> > > > +                                     Audit log entry format
+> > > > +
+> > > > +                                     Byte 0-15:   Requested Audit =
+Log entry  (Each Audit log is 16 bytes)
+> > > > +                                     Byte 16-127: Unused
+> > > > +
+> > > > +             audit_log_entry_count:
+> > > > +                                     A read-only file that returns=
+ the number of existing audit log events available to be read.
+> > > > +
+> > > > +                                     [No of entries],[log entry si=
+ze],[Max number of entries supported]
+> > >
+> > > sysfs is based on the idea of "one-value-per-file".
+> > > The two properties above violate this idea.
+> > > Maybe a different interface is needed.
+> > >
+> >
+> > Both properties report a single string separated by semicolon.  This
+> > is not different from listing all elements in a single string
+> > separated by semicolon.
+>
+> The documentation does not mention semicolons.
 
+It should have been documented.  I will update the docs.
+
+>
+> The nice thing about descoping functionality is that we don't need to
+> worry about their details now.
+> Instead it can be added later without haste as the core functionality
+> can already be used by the users.
+>
+> > > Are these properties very important for the first version of this
+> > > driver? If not I would propose to drop them for now and resubmit them
+> > > as separate patches after the main driver has been merged.
+> > >
+> > We want the initial driver to have all predefined properties available
+> > first.   There are plans to add future properties and features which
+> > will be submitted as patches.
+>
+> With "properties" do you mean the bios settings?
+> I agree that all these are good for the initial driver.
+
+Yes.  All those properties are part of BIOS setting and security
+related features.
+>
+> But the audit log, detailed error codes, etc... do not seem integral for
+> the functioning of the driver or for users.
+
+Error codes can be replaced as pr_warn() log when error is not zero.
+Audit_log on the hand, it is part of the initial features we need.to
+have.
+
+>
+> > > > +             HP specific class extensions
+> > > > +             --------------------------------
+> > > > +
+> > > > +What:                /sys/class/firmware-attributes/*/authenticati=
+on/SPM/kek
+> > > > +Date:                March 29
+> > > > +KernelVersion:       5.18
+> > > > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > > > +Description: 'kek' is a write-only file that can be used to config=
+ure the
+> > > > +             RSA public key that will be used by the BIOS to verif=
+y
+> > > > +             signatures when setting the signing key.  When writte=
+n,
+> > > > +             the bytes should correspond to the KEK certificate
+> > > > +             (x509 .DER format containing an OU).  The size of the
+> > > > +             certificate must be less than or equal to 4095 bytes.
+> > > > +
+> > > > +
+> > > > +What:                /sys/class/firmware-attributes/*/authenticati=
+on/SPM/sk
+> > > > +Date:                March 29
+> > > > +KernelVersion:       5.18
+> > > > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > > > +Description: 'sk' is a write-only file that can be used to configu=
+re the RSA
+> > > > +             public key that will be used by the BIOS to verify si=
+gnatures
+> > > > +             when configuring BIOS settings and security features.=
+  When
+> > > > +             written, the bytes should correspond to the modulus o=
+f the
+> > > > +             public key.  The exponent is assumed to be 0x10001.
+> > >
+> > > The names of the files 'SPM', 'kek' and 'sk' are cryptic.
+> >
+> > SPM - Secure Platform Manager
+> > kek -  Key-Encryption-Key (KEK)
+> > sk - Signature Key (SK)
+> >
+> > Those abbreviations were used because they are industry standard and
+> > reduce the  size of the commands.  Any suggestions?
+>
+> Maybe mention the long names once in the documentation "Description".
+
+Ok.  I will do so.
+>
+> > > > +
+> > > > +
+> > > > +What:                /sys/class/firmware-attributes/*/authenticati=
+on/SPM/status
+> > > > +Date:                March 29
+> > > > +KernelVersion:       5.18
+> > > > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > > > +Description: 'status' is a read-only file that returns ASCII text =
+reporting
+> > > > +             the status information.
+> > > > +
+> > > > +               State:  Not Provisioned / Provisioned / Provisionin=
+g in progress
+> > > > +               Version:  Major.   Minor
+> > > > +               Feature Bit Mask: <16-bit unsigned number display i=
+n hex>
+> > > > +               SPM Counter: <16-bit unsigned number display in bas=
+e 10>
+> > > > +               Signing Key Public Key Modulus (base64):
+> > > > +               KEK Public Key Modulus (base64):
+> > >
+> > > This also violates 'one-value-per-file'.
+> > > Can it be split into different files?
+> >
+> > I will split the information in multiple files.
+
+The data reported by status files is gathered by a single WMI called
+(statusbin) and then reported by adding multiple headers (ie Feature
+Bit Mask:).   Do we still need to split the status lines?  Instead of
+making one call, the driver would be making multiple calls to
+'statusbin' routine and then report the appropriate item for the file.
+  The additional complexity is unnecessary.
+
+> >
+> > > This would also remove the need for the statusbin file.
+> > >
+> > Status bin is used by GUI applications where data is managed
+> > accordingly instead of individual lines.
+>
+> Can the GUI applications not use the split files?
+
+The GUI applications could use the split lines but he data is just a
+blob of binary data of sizeof  struct
+secureplatform_provisioning_data.  The lack of headers on the left
+handside ((ie Feature Bit Mask:) will eliminate having to split the
+data read and make multiple calls to the driver.
+
+>
+> > > For the values:
+> > >
+> > > Status: I think symbolic names are better for sysfs:
+> > >         not_provisioned, provisioned, etc.
+> > > Feature Bit Mask: Use names.
+> > > Keys: It would be nicer if these could be shown directly in the files
+> > >       that can be used to configure them.
+> > >
+> > > As before, what is really needed and what can be added later?
+> >
+> > Status is needed when the user enables Secure Platform Manager in BIOS
+> > and  KEK and/or SK are configured.
+>
+> Ok.
+>
+> > >
+> > > > +
+> > > > +
+> > > > +What:                /sys/class/firmware-attributes/*/authenticati=
+on/SPM/statusbin
+> > > > +Date:                March 29
+> > > > +KernelVersion:       5.18
+> > > > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > > > +Description: 'statusbin' is a read-only file that returns identica=
+l status
+> > > > +             information reported by 'status' file in binary forma=
+t.
+> > >
+> > > How does this binary format work?
+> >
+> > Yes.  Status bin is used by GUI applications where data is managed
+> > accordingly instead of individual lines
+>
+> But this format is not documented here at all.
+> So how can we determine if the implementation is correct?
+
+The data gathered by 'statusbin' routine is  struct
+secureplatform_provisioning_data.  The validation is done in two ways.
+the driver validates the return code from WMI call, and the other is
+by inspecting the data reported by 'status' with some additional
+headers..
+
+> > > > +
+> > > > +
+> > > > +What:                /sys/class/firmware-attributes/*/attributes/l=
+ast_error
+> > > > +Date:                March 29
+> > > > +KernelVersion:       5.18
+> > > > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > > > +Description: 'last_error' is a read-only file that returns WMI err=
+or number
+> > > > +             and message reported by last WMI command.
+> > >
+> > > Does this provide much value?
+> > > Or could this error just be logged via pr_warn_ratelimited()?
+> >
+> > It is specially needed to determine if WMI calls reported an error.
+> > This property is similar to the one provided by both Dell and Lenovo
+> > drivers
+>
+> I don't see similar functionality for the other drivers.
+> Instead they seem to just return the error codes from the attribute
+> callbacks.
+
+Ok.  last_error can be replaced as pr_warn() log when error value is not ze=
+ro.
+>
+> This may be useful but it does not seem *necessary* for the first
+> version.
+>
+>
+> Feel free to only submit the patch with the documentation for the next
+> revision. Then we can nail down the interface and initial functionality
+> and you don't always have to adapt the code to the changing interface.
+>
+
+Ok.  I will submit the documentation by it self with the next revision.
+
+Jorge
