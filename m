@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E126D5242
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FAFB6D5246
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbjDCUXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 16:23:22 -0400
+        id S233199AbjDCUXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 16:23:36 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjDCUXP (ORCPT
+        with ESMTP id S232688AbjDCUXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 16:23:15 -0400
+        Mon, 3 Apr 2023 16:23:17 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820711FC7;
-        Mon,  3 Apr 2023 13:23:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA251BF4;
+        Mon,  3 Apr 2023 13:23:16 -0700 (PDT)
 Received: from jupiter.universe (dyndsl-091-248-212-192.ewe-ip-backbone.de [91.248.212.192])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D92E1660314D;
-        Mon,  3 Apr 2023 21:23:11 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CB18D6603161;
+        Mon,  3 Apr 2023 21:23:14 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680553392;
-        bh=OnRUPZdtocjVgABsLzNAIMkVVDG7jrbPY3q8D3exfpA=;
+        s=mail; t=1680553394;
+        bh=skQehSyjADh+Hmg49bUp5beSk9f0LyInxN05A6rHyU4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RpTyaw5dZCTLA6bUtfsMW4QMK2RfkvraqaxmGhkTiBGHD0Hkqv1uaJOwjbekDVfL9
-         VOQ2pyOGg2N8b1sMpYuCAfE+6V7b8/k3wZ6bfb2Z6c1W9CLwwmPJn+3Ug7s9nvmuhN
-         x35/LwjtiD1aWxTrDu/5568fQO8/ALhTfWrgm9OA56783IMKD/MCdLqku3g/B+5KDi
-         eE50tQayUb6okIIIS34ovl+1fI6ZUu4x2/gX1494LfIsOVPwWKcA6oO+nIAEKzol2b
-         7p6Kcdl4PX8J11ABw99EX7ANEbmg/4dlIK30KZ8JOxYqBSYEuSbOO+kJjkNZirhSBK
-         30rCR6IykY75Q==
+        b=SHYEevNO6ngY82LXCjdFut8i94fOG0cnvk/M7cZEM08niT3tjO40ZrXeNnjjOBpxb
+         jg6N6M6OSiPvaziwtffNTRNFF2OahdkBFmTcgTYAWfoHeSkfOrfUAdwV/W4viDcZTD
+         FzYbtaFDhyKoVhKlfitWd7Mqlvf8KAs3clcX69Zy0CIz6iLD2VRSSHPow5zLBErdUl
+         PnhbODflnwY3dBYWvVz2J8Bv0XIU0obDW9hXpTTe+hZGkoquIiciR/oENnnfrcKk7u
+         IpNNodXTGict/hSsxpaf8Bg29l5ogVQnPvFHv6XnZUmGf+j4V3Vf+Fn1CesLofk4ru
+         i1BOVQdriPO0w==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 112CE4807F0; Mon,  3 Apr 2023 22:23:09 +0200 (CEST)
+        id 12F884807F1; Mon,  3 Apr 2023 22:23:09 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Heiko Stuebner <heiko@sntech.de>, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         kernel@collabora.com
-Subject: [PATCHv2 4/7] phy: phy-rockchip-inno-usb2: add reset support
-Date:   Mon,  3 Apr 2023 22:23:04 +0200
-Message-Id: <20230403202307.120562-5-sebastian.reichel@collabora.com>
+Subject: [PATCHv2 5/7] phy: phy-rockchip-inno-usb2: add rk3588 phy tuning support
+Date:   Mon,  3 Apr 2023 22:23:05 +0200
+Message-Id: <20230403202307.120562-6-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230403202307.120562-1-sebastian.reichel@collabora.com>
 References: <20230403202307.120562-1-sebastian.reichel@collabora.com>
@@ -62,98 +62,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add reset handling support, which is needed for proper
-operation with RK3588.
+On RK3588 some registers need to be tweaked to support waking up from
+suspend when a USB device is plugged into a port from a suspended PHY.
+Without this change USB devices only work when they are plugged at
+boot time.
+
+Apart from that it optimizes settings to avoid devices toggling
+between fullspeed and highspeed mode.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 63 +++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
 diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-index b75712bd20c9..3a78c5bf11d4 100644
+index 3a78c5bf11d4..9f6d09da7fbd 100644
 --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
 +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-@@ -24,6 +24,7 @@
- #include <linux/platform_device.h>
- #include <linux/power_supply.h>
- #include <linux/regmap.h>
-+#include <linux/reset.h>
- #include <linux/mfd/syscon.h>
- #include <linux/usb/of.h>
- #include <linux/usb/otg.h>
-@@ -223,6 +224,7 @@ struct rockchip_usb2phy_port {
-  * @clk: clock struct of phy input clk.
-  * @clk480m: clock struct of phy output clk.
-  * @clk480m_hw: clock struct of phy output clk management.
-+ * @phy_reset: phy reset control.
-  * @chg_state: states involved in USB charger detection.
-  * @chg_type: USB charger types.
-  * @dcd_retries: The retry count used to track Data contact
-@@ -239,6 +241,7 @@ struct rockchip_usb2phy {
- 	struct clk	*clk;
- 	struct clk	*clk480m;
- 	struct clk_hw	clk480m_hw;
-+	struct reset_control	*phy_reset;
- 	enum usb_chg_state	chg_state;
- 	enum power_supply_type	chg_type;
- 	u8			dcd_retries;
-@@ -280,6 +283,25 @@ static inline bool property_enabled(struct regmap *base,
- 	return tmp != reg->disable;
- }
+@@ -33,6 +33,8 @@
+ #define SCHEDULE_DELAY		(60 * HZ)
+ #define OTG_SCHEDULE_DELAY	(2 * HZ)
  
-+static int rockchip_usb2phy_reset(struct rockchip_usb2phy *rphy)
-+{
-+	int ret;
++struct rockchip_usb2phy;
 +
-+	ret = reset_control_assert(rphy->phy_reset);
-+	if (ret)
-+		return ret;
-+
-+	udelay(10);
-+
-+	ret = reset_control_deassert(rphy->phy_reset);
-+	if (ret)
-+		return ret;
-+
-+	usleep_range(100, 200);
-+
-+	return 0;
-+}
-+
- static int rockchip_usb2phy_clk480m_prepare(struct clk_hw *hw)
- {
- 	struct rockchip_usb2phy *rphy =
-@@ -534,6 +556,18 @@ static int rockchip_usb2phy_power_on(struct phy *phy)
- 		return ret;
+ enum rockchip_usb2phy_port_id {
+ 	USB2PHY_PORT_OTG,
+ 	USB2PHY_PORT_HOST,
+@@ -163,6 +165,7 @@ struct rockchip_usb2phy_port_cfg {
+  * struct rockchip_usb2phy_cfg - usb-phy configuration.
+  * @reg: the address offset of grf for usb-phy config.
+  * @num_ports: specify how many ports that the phy has.
++ * @phy_tuning: phy default parameters tuning.
+  * @clkout_ctl: keep on/turn off output clk of phy.
+  * @port_cfgs: usb-phy port configurations.
+  * @chg_det: charger detection registers.
+@@ -170,6 +173,7 @@ struct rockchip_usb2phy_port_cfg {
+ struct rockchip_usb2phy_cfg {
+ 	unsigned int	reg;
+ 	unsigned int	num_ports;
++	int (*phy_tuning)(struct rockchip_usb2phy *rphy);
+ 	struct usb2phy_reg	clkout_ctl;
+ 	const struct rockchip_usb2phy_port_cfg	port_cfgs[USB2PHY_NUM_PORTS];
+ 	const struct rockchip_chg_det_reg	chg_det;
+@@ -1400,6 +1404,12 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
+ 		goto disable_clks;
  	}
  
++	if (rphy->phy_cfg->phy_tuning) {
++		ret = rphy->phy_cfg->phy_tuning(rphy);
++		if (ret)
++			goto disable_clks;
++	}
++
+ 	index = 0;
+ 	for_each_available_child_of_node(np, child_np) {
+ 		struct rockchip_usb2phy_port *rport = &rphy->ports[index];
+@@ -1468,6 +1478,55 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static int rk3588_usb2phy_tuning(struct rockchip_usb2phy *rphy)
++{
++	int ret = 0;
++	bool usb3otg = false;
 +	/*
-+	 * For rk3588, it needs to reset phy when exit from
-+	 * suspend mode with common_on_n 1'b1(aka REFCLK_LOGIC,
-+	 * Bias, and PLL blocks are powered down) for lower
-+	 * power consumption. If you don't want to reset phy,
-+	 * please keep the common_on_n 1'b0 to set these blocks
-+	 * remain powered.
++	 * utmi_termselect = 1'b1 (en FS terminations)
++	 * utmi_xcvrselect = 2'b01 (FS transceiver)
 +	 */
++	int suspend_cfg = 0x14;
++
++	if (rphy->phy_cfg->reg == 0x0000 || rphy->phy_cfg->reg == 0x4000) {
++		/* USB2 config for USB3_0 and USB3_1 */
++		suspend_cfg |= 0x01; /* utmi_opmode = 2'b01 (no-driving) */
++		usb3otg = true;
++	} else if (rphy->phy_cfg->reg == 0x8000 || rphy->phy_cfg->reg == 0xc000) {
++		/* USB2 config for USB2_0 and USB2_1 */
++		suspend_cfg |= 0x00; /* utmi_opmode = 2'b00 (normal) */
++	} else {
++		return -EINVAL;
++	}
++
++	/* Deassert SIDDQ to power on analog block */
++	ret = regmap_write(rphy->grf, 0x0008, GENMASK(29, 29) | 0x0000);
++	if (ret)
++		return ret;
++
++	/* Do reset after exit IDDQ mode */
 +	ret = rockchip_usb2phy_reset(rphy);
 +	if (ret)
 +		return ret;
 +
- 	/* waiting for the utmi_clk to become stable */
- 	usleep_range(1500, 2000);
- 
-@@ -1348,6 +1382,10 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
-+	rphy->phy_reset = devm_reset_control_get_optional(dev, "phy");
-+	if (IS_ERR(rphy->phy_reset))
-+		return PTR_ERR(rphy->phy_reset);
++	/* suspend configuration */
++	ret |= regmap_write(rphy->grf, 0x000c, GENMASK(20, 16) | suspend_cfg);
 +
- 	rphy->clk = of_clk_get_by_name(np, "phyclk");
- 	if (!IS_ERR(rphy->clk)) {
- 		clk_prepare_enable(rphy->clk);
++	/* HS DC Voltage Level Adjustment 4'b1001 : +5.89% */
++	ret |= regmap_write(rphy->grf, 0x0004, GENMASK(27, 24) | 0x0900);
++
++	/* HS Transmitter Pre-Emphasis Current Control 2'b10 : 2x */
++	ret |= regmap_write(rphy->grf, 0x0008, GENMASK(20, 19) | 0x0010);
++
++	if (!usb3otg)
++		return ret;
++
++	/* Pullup iddig pin for USB3_0 OTG mode */
++	ret |= regmap_write(rphy->grf, 0x0010, GENMASK(17, 16) | 0x0003);
++
++	return ret;
++}
++
+ static const struct rockchip_usb2phy_cfg rk3228_phy_cfgs[] = {
+ 	{
+ 		.reg = 0x760,
+@@ -1785,6 +1844,7 @@ static const struct rockchip_usb2phy_cfg rk3588_phy_cfgs[] = {
+ 	{
+ 		.reg = 0x0000,
+ 		.num_ports	= 1,
++		.phy_tuning	= rk3588_usb2phy_tuning,
+ 		.clkout_ctl	= { 0x0000, 0, 0, 1, 0 },
+ 		.port_cfgs	= {
+ 			[USB2PHY_PORT_OTG] = {
+@@ -1821,6 +1881,7 @@ static const struct rockchip_usb2phy_cfg rk3588_phy_cfgs[] = {
+ 	{
+ 		.reg = 0x4000,
+ 		.num_ports	= 1,
++		.phy_tuning	= rk3588_usb2phy_tuning,
+ 		.clkout_ctl	= { 0x0000, 0, 0, 1, 0 },
+ 		.port_cfgs	= {
+ 			[USB2PHY_PORT_OTG] = {
+@@ -1857,6 +1918,7 @@ static const struct rockchip_usb2phy_cfg rk3588_phy_cfgs[] = {
+ 	{
+ 		.reg = 0x8000,
+ 		.num_ports	= 1,
++		.phy_tuning	= rk3588_usb2phy_tuning,
+ 		.clkout_ctl	= { 0x0000, 0, 0, 1, 0 },
+ 		.port_cfgs	= {
+ 			[USB2PHY_PORT_HOST] = {
+@@ -1877,6 +1939,7 @@ static const struct rockchip_usb2phy_cfg rk3588_phy_cfgs[] = {
+ 	{
+ 		.reg = 0xc000,
+ 		.num_ports	= 1,
++		.phy_tuning	= rk3588_usb2phy_tuning,
+ 		.clkout_ctl	= { 0x0000, 0, 0, 1, 0 },
+ 		.port_cfgs	= {
+ 			[USB2PHY_PORT_HOST] = {
 -- 
 2.39.2
 
