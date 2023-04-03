@@ -2,110 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB4B6D4FBF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1786D4FB2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232906AbjDCR5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S232566AbjDCR4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232967AbjDCR51 (ORCPT
+        with ESMTP id S232691AbjDCR4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:57:27 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CDA3C30;
-        Mon,  3 Apr 2023 10:57:15 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id D3F1E5C01B0;
-        Mon,  3 Apr 2023 13:57:14 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 03 Apr 2023 13:57:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
-        :content-transfer-encoding:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1680544634; x=1680631034; bh=Fj6jwtuJwwXDKnuKOZE2jK35xWn0Haj++9r
-        GqO2GEwM=; b=BAZHys7RbRPdGlIJk/oh4D4cTsgBFojioQzpjsnMMlfApqULNZq
-        aVN8z9sPPj3McNCxNQy0edHaEI27x7buyh+QJbpkLkoUND1cCoq0CabAeHxn7UX8
-        0pGOA2LK8dUlAtEMTNRA8qVp8rQxFeWLajrqz0kR5JrrcWzot6dM0UsOuaEzUUHX
-        tDk7f2NLtRknHlnZK/+xEoGQyGcIZ6bnq7/MpSdadnBalt3Snygfk7IUteCFEEj+
-        /yTSHGyQPEcUP/x77HdMjwrtieu4Dt1wNg6ozNewpIl2lHoeao4QuNOwYa/bWQcl
-        /0XKhbgapv4AEx2AxMmES44v3a3PRHKROQg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680544634; x=1680631034; bh=Fj6jwtuJwwXDKnuKOZE2jK35xWn0Haj++9r
-        GqO2GEwM=; b=UaZ8qLNTDdE2z5DALS14TvH/SqRfki+TAKLBkrKVjWl7+ee5+TG
-        iCz9npHAt2OV6b72blpMFRKQx9MJgjfMmNbJKGxkVaUK+Mxjgamf6W7/jlGR20kT
-        SSmsaQrKEjMqIgYVbxcr6+U6oeNNvHnpaqAZVzWKvDrXRaO2TRSJ478lf0h5XJOM
-        cpTbqKqNV/f/Rx7Hooef2wTL0mPeM4QmkKozymLmIVK1+pzSQ8c/qFlS2ZJBOJnH
-        UbF/vj7jT+kP2IZUoMfEbZ4LgRA1XWIGUD4sZGozTYxDCTbage0HXA308pyDiQ/l
-        GpaCII5MTFO6WdPfgEoESyyEzKr1M39Bang==
-X-ME-Sender: <xms:ehMrZKf448UhETwWmcEGccGoQdNzeP7nT7jKe_b-azTi9X9gqVhACw>
-    <xme:ehMrZEMFYWetsZ6itz1AMmG-K2-7GKCQQlVq3JvvvWDKP6YLQ6-KnVVBeUhNN0jhX
-    rQsT0_g5HNp0DntOg>
-X-ME-Received: <xmr:ehMrZLjHLRoxJ3yazGL7JS4tEjikSMZdX_g5i76Ne26_joUw3MoV_su2Y-zPwO4tFKd4fZypgcIKdasixzAKESAbNA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfhuffvvehfjggtgfesthejredttdefjeenucfhrhhomheptehl
-    ihgtvgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnh
-    ephfehueeileevjeefkeetvdffveffudeuhffgtedvuefgiefgiedvjeegvdejleejnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
-    esrhihhhhlrdhioh
-X-ME-Proxy: <xmx:ehMrZH_FcDkjguEetl9wU2sidi0NDbAydlqaKqr9YZswThqJbM-BoA>
-    <xmx:ehMrZGv1yzXChok11HwgTmbZlA9OBtbb2vj4bjzHg6k6_4z50DEnrg>
-    <xmx:ehMrZOE84K-tFEf4KsylKW48AD69_Vv6FUeNrtjtpugUyAIYvxI7XQ>
-    <xmx:ehMrZHm4liWIraWoarDaW9gufJuOMba7gH63aOy-XSdU7pGLn198xA>
-Feedback-ID: i56684263:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Apr 2023 13:57:12 -0400 (EDT)
-Message-ID: <2dfbd9ff-3aee-2fb7-8701-c03bd12c090b@ryhl.io>
-Date:   Mon, 3 Apr 2023 19:56:25 +0200
+        Mon, 3 Apr 2023 13:56:44 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D758C2134;
+        Mon,  3 Apr 2023 10:56:29 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id o15-20020a4ae58f000000b00538c0ec9567so4764408oov.1;
+        Mon, 03 Apr 2023 10:56:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680544589;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=QOuaiQSK3BoOYX4eQwnchP+qwhM2uvpCv45NT7W1aF0=;
+        b=NyQ061Xfwh7ujD4Nquc2Xty31UPDwgSkekIesimXAwJc3AhrdwLqIGb/1Tlw2eS03u
+         cDgi8YK0T5RmATq+a0qDe1HbgBccR2xOiWf6vZ+3bweFqkYQyeywvXaEYyXc4meKs22D
+         0mx8oGXsS02q+YyRshJARiNKrhjnkxunt73e7dkwphXtJ9UrJFIFXTCVuAmm5BfN+teh
+         qiXBmbEk3pQYHZ6/tyxkBEIKBK7bhVTAauTFVCfA/c7decEOmU2XqdGcqGXkjNaJTJeQ
+         31eABqsZ0WDDIdHRIMmIvDg4E4fG7gQYSkG2ysYrtZrkSE8MblBkInPi99rPLFYa2eJR
+         2KLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680544589;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QOuaiQSK3BoOYX4eQwnchP+qwhM2uvpCv45NT7W1aF0=;
+        b=3XAW9SiN4fuzl3gmq/LjPXXVSgeTKo4/12Tc5LECgjB2qLewmkjCY/h5Ym78ZpugX7
+         Z9CFgiTDmgjAFfQIGziHlWkLknCDZirF+EJnFv4Ak2UMy00pEIrpwslIX25aYFoUn32W
+         lfGVG0OYFg9nPuGxH2qRabVyGTw9NaALdsgQZxuuvW64QnACcWv1sWQaUnSmgG/82wrM
+         n0EkyCmE1tjTtfSVAQfc/QT49KBRWi5EQRWLtSomP64aAIxpqFXRIuFENhTNSL/teEQY
+         Mmamsbhq6z/Uq58NVkZwPHSKsjclNxit2uk4qA5AW2zgDZ6w6ZaG+vAXNhubDtp/wbGk
+         ARyQ==
+X-Gm-Message-State: AAQBX9dmcWnjFiRxv1B1zZrTEXubzOvLNLk2mqv1IYXbDQnnmHS+6KEO
+        URGGUiOZAKou5J4NBK0doJA=
+X-Google-Smtp-Source: AKy350bTyHc8XmxyYvCTHyDh/t3yPqen0MsWVzSeXuNTibNZnT59EGNTGp0cUJyIAlW8qY9G1SQS5Q==
+X-Received: by 2002:a4a:4152:0:b0:53e:55a8:2a69 with SMTP id x79-20020a4a4152000000b0053e55a82a69mr248695ooa.3.1680544588900;
+        Mon, 03 Apr 2023 10:56:28 -0700 (PDT)
+Received: from neuromancer. (76-244-6-13.lightspeed.rcsntx.sbcglobal.net. [76.244.6.13])
+        by smtp.gmail.com with ESMTPSA id h38-20020a4a9429000000b0051a6cb524b6sm4291364ooi.2.2023.04.03.10.56.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 10:56:28 -0700 (PDT)
+Message-ID: <642b134c.4a0a0220.1d01a.5990@mx.google.com>
+X-Google-Original-Message-ID: <ZCsTSskt2cU+VClg@neuromancer.>
+Date:   Mon, 3 Apr 2023 12:56:26 -0500
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 2/2] arm64: dts: rockchip: rk3588-rock-5b: Add pwm-fan
+References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
+ <20230403105052.426135-3-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-From:   Alice Ryhl <alice@ryhl.io>
-Subject: Re: [PATCH v5 09/15] rust: init: add `PinnedDrop` trait and macros
-To:     Benno Lossin <y86-dev@protonmail.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-References: <20230403154422.168633-1-y86-dev@protonmail.com>
- <20230403160511.174894-2-y86-dev@protonmail.com>
-Content-Language: en-US
-In-Reply-To: <20230403160511.174894-2-y86-dev@protonmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403105052.426135-3-cristian.ciocaltea@collabora.com>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/3/23 18:05, Benno Lossin wrote:
-> The `PinnedDrop` trait that facilitates destruction of pinned types.
-> It has to be implemented via the `#[pinned_drop]` macro, since the
-> `drop` function should not be called by normal code, only by other
-> destructors. It also only works on structs that are annotated with
-> `#[pin_data(PinnedDrop)]`.
-> 
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-> Cc: Alice Ryhl <aliceryhl@google.com>
-> Cc: Andreas Hindborg <a.hindborg@samsung.com>
+On Mon, Apr 03, 2023 at 01:50:52PM +0300, Cristian Ciocaltea wrote:
+> Add the necessary DT changes for the Rock 5B board to enable support for
+> the PWM controlled heat sink fan.
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Honest question, but should we be adding this to the board file if not
+every device has a PWM fan (they all have the socket for the fan, but
+not the fan)? For example I have a passively cooled case that doesn't
+include a fan.
+
+Thank you,
+Chris Morgan.
+
+> 
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> index 95805cb0adfa..bd74d9da2c17 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> @@ -17,6 +17,14 @@ chosen {
+>  		stdout-path = "serial2:1500000n8";
+>  	};
+>  
+> +	fan: pwm-fan {
+> +		compatible = "pwm-fan";
+> +		cooling-levels = <0 95 145 195 255>;
+> +		fan-supply = <&vcc5v0_sys>;
+> +		pwms = <&pwm1 0 50000 0>;
+> +		#cooling-cells = <2>;
+> +	};
+> +
+>  	vcc5v0_sys: vcc5v0-sys-regulator {
+>  		compatible = "regulator-fixed";
+>  		regulator-name = "vcc5v0_sys";
+> @@ -27,6 +35,10 @@ vcc5v0_sys: vcc5v0-sys-regulator {
+>  	};
+>  };
+>  
+> +&pwm1 {
+> +	status = "okay";
+> +};
+> +
+>  &sdhci {
+>  	bus-width = <8>;
+>  	no-sdio;
+> -- 
+> 2.40.0
+> 
