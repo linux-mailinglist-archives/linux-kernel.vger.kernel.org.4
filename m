@@ -2,66 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1EF6D4642
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CF46D4645
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbjDCNxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+        id S232681AbjDCNz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbjDCNxP (ORCPT
+        with ESMTP id S229446AbjDCNzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:53:15 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF31230E0;
-        Mon,  3 Apr 2023 06:53:10 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso30586666pjb.3;
-        Mon, 03 Apr 2023 06:53:10 -0700 (PDT)
+        Mon, 3 Apr 2023 09:55:24 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B004EDF
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:55:23 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id c29so38209036lfv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 06:55:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680529990;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SW9D8BEM++mU1mqMGl1AFvxnGWHPgMmcAakeggyzyYo=;
-        b=oR5QkpTB3u45hn9geHeHFTG+NzVWvk2PBEEG/1KlzYUVg/1Tb66u8+aOui687oOyCn
-         kC/DpBz7PzQEVWVp7XGzx9QWGtUvlkpbJ3vgSsjuGybxo/wA78fqZHnoBf5uYh6TSnfn
-         34LPanpDc9WgKViJiS4Eet7t3cWGwyNYZnxC5WKUscuXe5Zg2qqBHuyQmONdtyhgJ9Gw
-         Gn11mgsp2XYusvdLdA1pYdpYavod9FNcDuUo1t6CtukgcE431D+ueHXyDSs+8JnsvhwN
-         f2gQ1H+i7CX5ez4lE6xHp4vVl82AdAbexQuiVFPu3kR/wWeUobfDs4wf2SoWCsev9oSI
-         KbVg==
+        d=google.com; s=20210112; t=1680530122;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cr44TItuNnAYmCkMRyFWU+nFevs9m8NmW2Lwd9YRKcg=;
+        b=Q2fhX+thL4tkyX0Ki80dZq5Pju+tv40Q8K2n4Y0xnEzkorp4WZf5ud7tBgGXoK7DZK
+         m4r2lxcXXRgGPZMil0ep6eoOUxx1bqk7NeIeSwgqH+5KErGoWIkobnR4ouMXvdLsgR2a
+         GM1+e7Kw+szzLtlXE334gkHp7R+C01/2lSs/eVPhY6F71Dvu5TwdV0LeM8C2Dk4IkM6p
+         ilnDSFA8VA+FhdxyYSrwu7N/68hcn5nWLyU4kuYFHT44MVBt9ttk5atb6BJ2iAnqyTzN
+         mC740GKeL/yu5ecfhLdL6euakyah1dMaI8qsWu7SVvxblCvS5MhSvP8dRkboHNjoTMPh
+         lIdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680529990;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1680530122;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SW9D8BEM++mU1mqMGl1AFvxnGWHPgMmcAakeggyzyYo=;
-        b=SwxrtxIDYVlGpaAe19kmg2f5pE98d3ZqtaPwGBM81nZPgtOrptLXSM5dDu9TUClE2L
-         ExEQjFqsKvVhnl8dap+40lIEc7gK9I7HZPeLwciGJE04DHWDt+oCuF0FEEorXBDgN6kX
-         atGxPZ5U0KjVxoFHU8bI430Wh2yrNkhqhP8s9I8US1F30ap2VK5SXGEllB84JKuvYhGu
-         ev38sIwtIwl9hJOcUpwjAuosizw6KwPckWsWn1bqZZyORiFAIF9kQwMxFkxL8+d5c5FT
-         bpQHH0VUb4zDXvxhawoaTfvdzzaSRRoQ0/FvNr1k3pl+jqoZWC4R+f/nXKbeBJTIhgpG
-         eq+A==
-X-Gm-Message-State: AAQBX9c/E5yyAMV+SxxgIrlixRkBTQliUPcB+R/hpI5eu37eEmtUJmGs
-        PDUy2AEpv7P7StZlyhyVstWahNtgE2oAsQ==
-X-Google-Smtp-Source: AKy350aM7ZRpNAENcPfSAhXTyjKBSD5aUYh7GIre+Z44Z+39FLIXXXAS+1MhS00aQBS8pfmkhXNrAA==
-X-Received: by 2002:a17:90b:3846:b0:236:6a28:f781 with SMTP id nl6-20020a17090b384600b002366a28f781mr41273891pjb.22.1680529990285;
-        Mon, 03 Apr 2023 06:53:10 -0700 (PDT)
-Received: from C02FG34WMD6R.bytedance.net ([61.213.176.14])
-        by smtp.gmail.com with ESMTPSA id nv8-20020a17090b1b4800b00233cde36909sm9802883pjb.21.2023.04.03.06.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 06:53:09 -0700 (PDT)
-From:   wuchi <wuchi.zero@gmail.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, ojaswin@linux.ibm.com,
-        ritesh.list@gmail.com
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ext4: simplify 32bit calculation of lblk
-Date:   Mon,  3 Apr 2023 21:53:04 +0800
-Message-Id: <20230403135304.19858-1-wuchi.zero@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        bh=Cr44TItuNnAYmCkMRyFWU+nFevs9m8NmW2Lwd9YRKcg=;
+        b=pXoQzQwRv3MS26k662XMA27n3rZ99sNmXFxQuVXwALVa5pcJEaQpooIPXuZaNXoRlL
+         gXeMnTlZyJWB6i+aqNIRVu2GoMpdBS/mTissMwOagy1Cvg2eq67zGwLnZyOSfyneWjHx
+         2nl6TZVDS1YxsPicMuTynKC2/IFabNAegK+s6OQTmJQ17Hdd2jAkOXufzApvRbaOSU4H
+         4+W506JLWTijxUVHZFA23bKHSp24a25l8/SalRNN9YR/bcfqVWVe44iNB+VZjxaZ8/QM
+         zjiO5bf0rTvrux2ApwJlNuZ4TP0RQ7xKPYVL4IXTlMiN4vSs/8zeFJohEAWfu0EekTe2
+         qTXQ==
+X-Gm-Message-State: AAQBX9dpAZrs04wrw83ewdrGEXibYhnLqdOD7tb084xLpBkZ5nAwl4zf
+        4LJGLEK844pzxp3w9SBsE9kHMx1pMyC2kdGMj97czg==
+X-Google-Smtp-Source: AKy350YFRak7MV4KuwcbOFrzdYnIESU6ZH4j05logCd/WNnVznAWadJB528qykijbARZewuA+mSaWBSmScEvXBSYUj0=
+X-Received: by 2002:a19:ae04:0:b0:4eb:4160:7ca8 with SMTP id
+ f4-20020a19ae04000000b004eb41607ca8mr777178lfc.6.1680530121691; Mon, 03 Apr
+ 2023 06:55:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230403111020.3136-1-kirill.shutemov@linux.intel.com> <20230403111020.3136-3-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20230403111020.3136-3-kirill.shutemov@linux.intel.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 3 Apr 2023 15:55:09 +0200
+Message-ID: <CACT4Y+YoS9e=QVq6iKda5Gv852kVv9OTLaOZ=XCJ65mP0oyAOA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] x86/mm/iommu/sva: Do not allow to set
+ FORCE_TAGGED_SVA bit from outside
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,30 +83,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit <ad4fb9cafe100a> (ext4: fix 32bit overflow in ext4_ext_find_goal())
-uses value compare to fix 32bit overflow. Try to simplify that.
+On Mon, 3 Apr 2023 at 13:10, Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
+>
+> arch_prctl(ARCH_FORCE_TAGGED_SVA) overrides the default and allows LAM
+> and SVA to co-exist in the process. It is expected by called by the
+> process when it knows what it is doing.
+>
+> arch_prctl() operates on the current process, but the same code is
+> reachable from ptrace where it can be called on arbitrary task.
+>
+> Make it strict and only allow to set MM_CONTEXT_FORCE_TAGGED_SVA for the
+> current process.
+>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Fixes: 23e5d9ec2bab ("x86/mm/iommu/sva: Make LAM and SVA mutually exclusive")
+> Suggested-by: Dmitry Vyukov <dvyukov@google.com>
+> ---
+>  arch/x86/kernel/process_64.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+> index c7dfd727c9ec..cefac2d3a9f6 100644
+> --- a/arch/x86/kernel/process_64.c
+> +++ b/arch/x86/kernel/process_64.c
+> @@ -885,6 +885,8 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+>         case ARCH_ENABLE_TAGGED_ADDR:
+>                 return prctl_enable_tagged_addr(task->mm, arg2);
+>         case ARCH_FORCE_TAGGED_SVA:
+> +               if (current != task)
+> +                       return -EINVAL;
 
-Signed-off-by: wuchi <wuchi.zero@gmail.com>
----
- fs/ext4/extents.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+prctl_enable_tagged_addr() checks "task->mm != current->mm".
+Should we check the same here for consistency? Or also change the
+check in prctl_enable_tagged_addr().
 
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index 3559ea6b0781..324b7d1386e0 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -237,10 +237,7 @@ static ext4_fsblk_t ext4_ext_find_goal(struct inode *inode,
- 			ext4_fsblk_t ext_pblk = ext4_ext_pblock(ex);
- 			ext4_lblk_t ext_block = le32_to_cpu(ex->ee_block);
- 
--			if (block > ext_block)
--				return ext_pblk + (block - ext_block);
--			else
--				return ext_pblk - (ext_block - block);
-+			return ext_pblk + ((signed long long)block - (signed long long)ext_block);
- 		}
- 
- 		/* it looks like index is empty;
--- 
-2.20.1
+arch_prctl() can only do task==current, so I guess "current != task"
+is a more reasonable check for prctl_enable_tagged_addr() as well.
 
+
+
+>                 set_bit(MM_CONTEXT_FORCE_TAGGED_SVA, &task->mm->context.flags);
+>                 return 0;
+>         case ARCH_GET_MAX_TAG_BITS:
+> --
+> 2.39.2
+>
