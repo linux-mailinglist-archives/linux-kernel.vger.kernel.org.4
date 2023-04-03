@@ -2,50 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05156D40A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB0A6D40AA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbjDCJdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S232124AbjDCJd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231945AbjDCJdO (ORCPT
+        with ESMTP id S232107AbjDCJdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:33:14 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2BF6A41
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:33:11 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 01843660000F;
-        Mon,  3 Apr 2023 10:33:09 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680514390;
-        bh=sJIlxPcofMXE4g+TA9XuXQqChciFnVtsLhBgGsHH7X0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oG1QgpQkgYvEvNYOiS69/eroONBerZrbD/v3h9fHlqjcZ2CgeLTZX0Z4thWgbsMqL
-         QoTrmqqwt76a14FmeVGfoC3V5k/RgUf2uONVczJeWZsQHweVm/A2q7fNFYavS5qeat
-         5LfDpDNDtAIAu4+7amlj5dDECjZi1GL1QKlB3DNmmWShWQswPRfbNrqDWeBb+L1Hqz
-         pODs6DZEjSRQcDwPyyv+39EegIAX+sW+sxQLnOlrsQtTkt+1bxKwx+PY0sWmeB5YbJ
-         w73qSgNc/MCAB5Y4eXjw+DGuA7Rhsb9lFMqr2IhFBmU5twYi/S3D4HAGA6v5n6axJq
-         az1iV1na+0Nbw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     matthias.bgg@gmail.com
-Cc:     angelogioacchino.delregno@collabora.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH] soc: mediatek: Kconfig: Add MTK_CMDQ dependency to MTK_MMSYS
-Date:   Mon,  3 Apr 2023 11:33:04 +0200
-Message-Id: <20230403093304.276418-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.0
+        Mon, 3 Apr 2023 05:33:51 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F2C4C13
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:33:37 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-17aceccdcf6so30054045fac.9
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 02:33:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1680514416; x=1683106416;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XgGBfD1W6b+btvEiU+YcKALiNsxE4ZvieFO4n+dcEoQ=;
+        b=SJM6TQ68C68jxCQMu1sVZMERVeg2y5HELtR8dUqkPn9CNxFRSSWP7bABC2PPHLTRUq
+         /RZxhVdmJZJbUV95LK+SkHdKE8GeQuUKSjRhqDQw1xjVV5ixCviTff5KIYHWSGUhjsQm
+         LEIqKBPPlZ06vz4kMpLRCXag9a3aheyT1K5fiXo28KCgyRA5DToOJ+aptwyTTUd2EIUe
+         0wB8cK59oHnFwBVaKnd9o3icPmWgrCFCff3jS0FemEfC70g+jDYZ5EzImJfP9vuTvG7u
+         ZzPo5vGb1lxzy20SMrEbWBgjlNxsJQkgwAOQ1i3Eaw57pg6ozm7IqMpyxF3yLtbZsvPz
+         4nhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680514416; x=1683106416;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XgGBfD1W6b+btvEiU+YcKALiNsxE4ZvieFO4n+dcEoQ=;
+        b=wahCzXPVRCLXSbU2nl80KWzzvv+ie1EV0i8aPld5rWqtgZZX3D2ZkiTOGH8stlMKc6
+         2NtZjB4WRhDKauFDYtxifqMF286yAJNUuIgc0HVZqh4YX0z7CH0EuPQxqcx2XKR2WK8g
+         EZX76ddgPUTK6bXuPFwd/FOS4UASbptxyOHkr162cRNB1g9RL7iEY3WaOxRT/hqaDPun
+         sr/ldvkIQKHGHsKg3g82Yj6J/BZeDyWBXJJqoBc2cGCYLxEkaRHj6BZVAqF90fhIf88K
+         RLu66S4+cdlwviAwkg7yR8I6QOvj4EmsF/g321111V96RdeId+yJDH5kI/aj+Z3Tzv2T
+         9M1Q==
+X-Gm-Message-State: AAQBX9cRJFks7I1ZEC2RcE3nrS/WO8bdOmbFOBtga/sYlQ0gPiiSD9ha
+        AugmgNHJeNRFOgk9XiBRGTFJWA==
+X-Google-Smtp-Source: AK7set+ltL2X5guCtdTgJstf6Dn50g2Ksxi76SfvWGtGURX2OaR9ISpgLg9Bp+05N0nhVsw99aEzOw==
+X-Received: by 2002:a05:6870:14d3:b0:17a:58ba:dbcc with SMTP id l19-20020a05687014d300b0017a58badbccmr19968566oab.59.1680514416574;
+        Mon, 03 Apr 2023 02:33:36 -0700 (PDT)
+Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
+        by smtp.gmail.com with ESMTPSA id f5-20020a9d6c05000000b006a154373578sm3953953otq.39.2023.04.03.02.33.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 02:33:36 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>
+Subject: [PATCH v3 2/8] RISC-V: Detect AIA CSRs from ISA string
+Date:   Mon,  3 Apr 2023 15:03:04 +0530
+Message-Id: <20230403093310.2271142-3-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230403093310.2271142-1-apatel@ventanamicro.com>
+References: <20230403093310.2271142-1-apatel@ventanamicro.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,34 +77,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mtk-mmsys and mutex drivers do have a dependency on MTK_CMDQ,
-even though both can work with *or* without it: since CMDQ support
-can be enabled either as module or as built-in, it is necessary to
-add a depends rule in Kconfig, so that we disallow building both
-mtk-mmsys and mtk-mutex as built-in if mtk-cmdq-helper is built as
-a module, otherwise obvious linker issues appear.
+We have two extension names for AIA ISA support: Smaia (M-mode AIA CSRs)
+and Ssaia (S-mode AIA CSRs).
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+We extend the ISA string parsing to detect Smaia and Ssaia extensions.
+
+Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
 ---
+ arch/riscv/include/asm/hwcap.h | 2 ++
+ arch/riscv/kernel/cpu.c        | 2 ++
+ arch/riscv/kernel/cpufeature.c | 2 ++
+ 3 files changed, 6 insertions(+)
 
-This has no Fixes tag because the commit that can produce the issue that gets
-prevented in this commit is already in the maintainer's tree.
-
- drivers/soc/mediatek/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
-index d6b83a5508ca..a88cf04fc803 100644
---- a/drivers/soc/mediatek/Kconfig
-+++ b/drivers/soc/mediatek/Kconfig
-@@ -76,6 +76,7 @@ config MTK_MMSYS
- 	tristate "MediaTek MMSYS Support"
- 	default ARCH_MEDIATEK
- 	depends on HAS_IOMEM
-+	depends on MTK_CMDQ || MTK_CMDQ=n
- 	help
- 	  Say yes here to add support for the MediaTek Multimedia
- 	  Subsystem (MMSYS).
+diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+index 6263a0de1c6a..9c8ae4399565 100644
+--- a/arch/riscv/include/asm/hwcap.h
++++ b/arch/riscv/include/asm/hwcap.h
+@@ -42,6 +42,8 @@
+ #define RISCV_ISA_EXT_ZBB		30
+ #define RISCV_ISA_EXT_ZICBOM		31
+ #define RISCV_ISA_EXT_ZIHINTPAUSE	32
++#define RISCV_ISA_EXT_SSAIA		33
++#define RISCV_ISA_EXT_SMAIA		34
+ 
+ #define RISCV_ISA_EXT_MAX		64
+ #define RISCV_ISA_EXT_NAME_LEN_MAX	32
+diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+index 8400f0cc9704..7d20036bcc6c 100644
+--- a/arch/riscv/kernel/cpu.c
++++ b/arch/riscv/kernel/cpu.c
+@@ -188,8 +188,10 @@ static struct riscv_isa_ext_data isa_ext_arr[] = {
+ 	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
+ 	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+ 	__RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
++	__RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
+ 	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+ 	__RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
++	__RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
+ 	__RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+ 	__RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
+ 	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index 59d58ee0f68d..1b13a5823b90 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -221,8 +221,10 @@ void __init riscv_fill_hwcap(void)
+ 				}
+ 			} else {
+ 				/* sorted alphabetically */
++				SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SSAIA);
+ 				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
+ 				SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
++				SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SMAIA);
+ 				SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
+ 				SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
+ 				SET_ISA_EXT_MAP("zbb", RISCV_ISA_EXT_ZBB);
 -- 
-2.40.0
+2.34.1
 
