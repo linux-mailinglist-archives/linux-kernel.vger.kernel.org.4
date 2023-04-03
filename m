@@ -2,210 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4741F6D513A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65E66D5145
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbjDCTU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 15:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S231968AbjDCTYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 15:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbjDCTUz (ORCPT
+        with ESMTP id S231411AbjDCTYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 15:20:55 -0400
-Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2100.outbound.protection.outlook.com [40.107.10.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0EA40E6;
-        Mon,  3 Apr 2023 12:20:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a4+BbNyQGBEFS7PoJUWzTYWuCYwM16Ug1haDXPUdbIc21ZCNBU2J5ZoqKKx34+IuBTV6OW00UDA/c3kvxNYRJJ95naJ8H0A+v3KrULIoPlLftieJzNW1vcDkKiJoF/RHVLpZDkyeYcZheeCFOuTq3q37bIW46Mm03n6RVm80yui/AV2LK+HCMgedBtCrR+rEfkr177MpCUEfM6CxcuD2qFh5+8UjV0ZcDCVxf2mMJBWzwNSC9ndC4WEEqiHvk6jkY9IjwPtpYs+30Pc0oV7YFC8RXT8ADO4gzYb2xhLtav1rqNHnUQVYtJLzjhujuzlndtViZ+lNZ6/zJVH+SosRbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hTzI5nnitNAo/mErvZOoPGcXZaGxKaLfamGb4m7gi3c=;
- b=Xrav/5bAZNz/XDFv5qEA32HQWwXq7eyMeQleUFxijiP00LreL3LTEe3IIlSMShaowDrLrtdOlVvoNx79C9zr2sA23QO8AutU8N8za2GiUqurLqlCrpgg1rlfnPxwkvT2PbolGgueTgDMa/IsRcLmcbwSJNWFbH+IWWtuZz9z/7To5QzkjVrwzdONwN2rk2s/Am/AEYvcOkfbi5fPb6WQhHFZHU+tnYCAuy4lhZfLxFpFyGkoTMzOMI2ckdQlwo0G8Fygz9p2E+WfAQlRY89b5LXn1hgbB0WtBLfrpTtnliVqMEfznmeFmRiDA0Ak12Gk8S1DLZTPiLrBKaaN0KI7mA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hTzI5nnitNAo/mErvZOoPGcXZaGxKaLfamGb4m7gi3c=;
- b=g1hPTndcc/FNCkfe3ukk4bLR213zSVUgfNpXDsiw0M8lye6ZwjsaS3qVZ//sNn10rq0c+RgaX1wZ9NMianQNu+IZ94Oeci75bLdyKtEJ134F5S8swBDq4GEb5L/V4Ga0o/pwU13rkdf5zMj407X1q/ZKwZzAsm6bS59hLscNTTc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CWXP265MB2391.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:7c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
- 2023 19:20:18 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::e1a3:5e38:b483:8161]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::e1a3:5e38:b483:8161%5]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
- 19:20:18 +0000
-Date:   Mon, 3 Apr 2023 20:20:15 +0100
-From:   Gary Guo <gary@garyguo.net>
-To:     Alice Ryhl <alice@ryhl.io>
-Cc:     Benno Lossin <y86-dev@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH v5 11/15] rust: init: add `Zeroable` trait and
- `init::zeroed` function
-Message-ID: <20230403202015.22e351bb.gary@garyguo.net>
-In-Reply-To: <dc983245-2de9-2aa4-16c3-ae11a8c20b6f@ryhl.io>
-References: <20230403154422.168633-1-y86-dev@protonmail.com>
-        <20230403160511.174894-4-y86-dev@protonmail.com>
-        <dc983245-2de9-2aa4-16c3-ae11a8c20b6f@ryhl.io>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0698.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:37b::11) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+        Mon, 3 Apr 2023 15:24:49 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178A5E7C;
+        Mon,  3 Apr 2023 12:24:47 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkzcv-3yyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4505:1fdc::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Pr16v6hS3z49Q0d;
+        Mon,  3 Apr 2023 22:24:39 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1680549885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tp5qcqPaxivMIuFMRKaAe5HT8V/qPK5f6UKZnTDqXZs=;
+        b=wj8iMdaB6O5svgBz97QcbFfxl9pOUa1PNhWR6/nMI8DJ/TlBNBIzxaoXQ4xFtAVcllZBGn
+        1h11XWEmzs+t+7S8wZmoH14Ni8IZIiAbMuwhBvBpaZQSxGqHI3PBS4/eRQdeOwpNSUUZ4Q
+        9oD4KR5OR/7ixTFuQJjiBae6kKroRXjgsr1oQ1YHFdRtSRUWdkyXT6ydrbBKs2fI2Nf6at
+        KgPm5BT3ib2zzo+p3tbEYZMZCdzbPUGlXdxIKRq6Wl3LoBqS5w7Tcdh9ze+jq4BX8ZDee1
+        E31/c03A+3U1KSnRAQJPWWdm9O+j4FuxlElRkzejBkCFdfXldIoFoa2cL7+rAQ==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1680549885; a=rsa-sha256;
+        cv=none;
+        b=pTLkgQTxUMn8kAT5W3Z+ogFont60P6E8KePKCXivg0tBgmGITjjXMVNgPLPZmGVszTwkb9
+        8xmV8K+JZuzm7F5CFJy//1r6ial5+VTAqVELsLbmuuAMfOY1FbI3yDkl8ZCGK0ToM5mF6F
+        iXE23DARwHLsLEzlUBnPniLP4sabKK6I8VHkzWvPos67ec7cBwbNsoN6VKbLTay13Lx0Te
+        srYyEk9eLJ72MlypaetY0e3iRJp+oyVh9XtQdLwdV+Gk7bvcCtArTcbo8tYuuL7peYlIWK
+        3MAa6H4E+TVhwLzsPEbZwvIuhCayXj1Up3OmaEuUmeKIlKMxGrnJHjS1tylKqw==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1680549885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tp5qcqPaxivMIuFMRKaAe5HT8V/qPK5f6UKZnTDqXZs=;
+        b=nDY5LUXsU7qY8CejlN+YlEuCBrJE/yaOwuV73ThTDfxvd8Q/gVoeJnKw2jhXh4fy8A7SPX
+        04/1VA27KvucaNF6obkcJs2PPrdTE0lqb28f0pJOkLQXoIeseCKj3IvDUyXnBCVMbpl03s
+        yasLIby0zyRIhZg4rK6kfJ04rUVkkEFvNGm5TZYXULNkyhoQREHpmP/LL8JdsOm0Nmc2LH
+        0bmnev2mHgSMrVvTzXkiub2kKx9ZZcsn7/QC6F+28qWZ7KKjWBErPDIXmgXOy47iBBRRO6
+        0ZiawUTptzsFdcFQ0UPZ510Z4RUtHySIcAMki/r3tFx2/Ka+zwbnh9UJRyw49Q==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 4C2E2634C91;
+        Mon,  3 Apr 2023 22:22:09 +0300 (EEST)
+Date:   Mon, 3 Apr 2023 22:22:08 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Joe Tessler <jrt@google.com>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Benoit Parrot <bparrot@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] media: dt-bindings: Drop unneeded quotes
+Message-ID: <ZCsnYGMkV2Zrw3fJ@valkosipuli.retiisi.eu>
+References: <20230320233944.2920964-1-robh@kernel.org>
+ <ZCaoVwRuxVOTZdI4@valkosipuli.retiisi.eu>
+ <36febd82-85b2-aa4d-c7e0-6343b119e0cc@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWXP265MB2391:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2dbe589-1c3b-402d-9a0b-08db347875c2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1qoz/ExN43JTf63pCViIPPvoBCazVU+HLXYQrz47C+Zaj3kGhg9XikUnavIh+Sq97GxabVDLJ4u4Tx8Gd59HKUd1GNoRKEq9Ve/zd7F3SmwRgQ3sj7m1TEv/KOapUV0IR+JkhI/l//xxraXk3en/bxOTMZwwRh77G/OFJI/iMoWjONkK5guatVlmUrN4oEzJmrwy2vtua8Sn9RVFdhMk7LnykhsfH4zGPFK5Hs2S6XxoHcpmkaDO5Db9GyT0N+aCpAaDcfLNi8NVqoc1nb007gSv/FVIDaDMqsBqnArzECDkEsC39Vl2rFW12V53f1Abrc/l0+Sj1/mSXDCtcpAPq9N/+4QW8ZhPKokbcXGaLHUn945kCaYV4lUGerb4fqpDarnputTiutbhxV6RSoeAKqMncX91gK2d9Ig+dNpoSExuJ3XpM3jdaJOD6eh1PUVpSsYY1msbUKSVgMigqyAxmVgHbAspW9M/pwSXC+EpMXSUweVcW9oV39nR0XQNrTZZL4lp+OasrQuBtdIgYMcXa2/4RWHTSXSBoJ/tOExTUC1iwWZTMke/ixzwDBirtjiOe5iXLlpH6m1Zex9VkG1sLFX0Z1sbG6QiUBzWQF+GOTM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(39830400003)(396003)(376002)(136003)(451199021)(6916009)(66476007)(4326008)(8676002)(316002)(66556008)(66946007)(478600001)(8936002)(54906003)(41300700001)(5660300002)(7416002)(38100700002)(53546011)(186003)(83380400001)(2616005)(6486002)(6666004)(6506007)(6512007)(26005)(1076003)(86362001)(36756003)(2906002)(81973001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XolaOQC0GDomt5K8a4cxIK3qYQ/j5osgFcFakHV238gRFdZEnj6xwb9vFgsO?=
- =?us-ascii?Q?fHEhNAmYMy5vE4M001Bdu14886FFWpap44v5MInap8yF1JJ6wiTgpxz/6oFn?=
- =?us-ascii?Q?GeqxEOVj0Xc5qrVTP7k3nHGtrBUg6MWRhNsJDT9l4JVIvOwKYtTQvUhNSBoC?=
- =?us-ascii?Q?8DMlU4ubkLHvOU2hcxFRagZbhEjfLU8h8zEDF4n7bt9MjOONEB651m7RKm3M?=
- =?us-ascii?Q?nIk4ZESBmQygAv/6l2iOOvdzYyILUkJ13PvrSvr1ERH/NOBIWgsNtQwLmDE3?=
- =?us-ascii?Q?Vh+pTcl/OMzNUpErdmRU5saHc9FK3SaagOPVFdrCFPKOuoHb1FbStN+jcdKf?=
- =?us-ascii?Q?zkvAOrHEhdGub3HUZohVZbZr/SgHKr+trknaQysUGaouPZpqs7e0msQNjAlm?=
- =?us-ascii?Q?zDnI7/e/HEJdn8wThmw8WvEZTEbNA4vIzhLRen06usayE5SwtV/TigP99CGX?=
- =?us-ascii?Q?qP4yp46yQ5VRq1eJFTvoti4O73uupNjIK2+c9uA3PbTK3C971Hb8iCr3ViM/?=
- =?us-ascii?Q?FETT9eIHLbpFmmLctNoscVBQ4Yk4Q9nXtLyUUUdXO6IvD5ErrLf9+0xOGX2h?=
- =?us-ascii?Q?1wkOCfnNu2uBjC2fXkEXDDHI8yCoewzvxDnxudXiodrcqGDLurIbSxFfr+mQ?=
- =?us-ascii?Q?P93QGKmrFduDOgLczJn/SacsHNqxSPl+TbpBU9MpXQxfa2IlIEZbfqk3032r?=
- =?us-ascii?Q?OzOgfT0xXowBlS4wqlAmjeeJmUEn2CBwg9GgPnMHAnv2XOKoZxXCgHrJ4l5m?=
- =?us-ascii?Q?fM4OwvPqm5YgNqukd2VI9SP+K/eSQnFLCSCRrGqi7qgYObfcl/kBATaaZpaL?=
- =?us-ascii?Q?AAF9uq3nW3Ib3GOIzrx6+y1Yn9pyA9k0kYzQs8PDXITFubT/do9znqd2Aozs?=
- =?us-ascii?Q?0Z7cWb6J068h5VuEQw8/+MApHtEyf2r87lw5sNwVoOeE+FNXFEVeyXvkK6pR?=
- =?us-ascii?Q?BNKj+XZ8Jf5BunnVVZ1UsfNn3kVazUK68hnEPyXdmKrxcoFRlbtwe/mKRbCp?=
- =?us-ascii?Q?ZDVCjIhRIMkegq1r34tBMIHyHxwIX2aWw9qv6/+ducnFIm2IoMX3GumsmlJI?=
- =?us-ascii?Q?JMkqKtaRjFNEd4IKVglXZ+jR2dr0NRduGYkHPAohnZgi+ExbiIcvZqZIwPcH?=
- =?us-ascii?Q?CF3FjgoDwbk0grSXt+sjiP7qzxPHId6l4x9srjxKTamFAC1iliJWiXRXYKNO?=
- =?us-ascii?Q?u+wKv829ZCs0oeIQhxCXaQPm7AjNaDYl60QEvZAhTK2ZXJ0ZR3Ti1wXl2Ru8?=
- =?us-ascii?Q?mcuQto88JsQ598EqS4iLeITHanKF9HYMLe7upnZ2qlycsNOBa//l3jjDdir7?=
- =?us-ascii?Q?keqoNy0sXcfjaRe7adIVjMVJYc8jsRGccquDXnCx89JK3IKB5WZ36KZLkFpB?=
- =?us-ascii?Q?EpPo87guFt4ZniZsfTZIw9bzQi8MF1wKNeqaMUpJLXZAx3qoXyxTKeaVx2QN?=
- =?us-ascii?Q?K2vj7AIHZTws0WuECVh5LxYa8HoB1aDGVXHIhox7kldeDJpsL1Aer5GZhxAk?=
- =?us-ascii?Q?tEVUTVwosR/cmfdTawZN0feHHzoAVQaMJ4hFF8ZkSjFFBBuEUrykZDUdSFqO?=
- =?us-ascii?Q?JlVNTYIMiTzfCAqaLLIqIeRpTWHKsof2SR1qptPV?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2dbe589-1c3b-402d-9a0b-08db347875c2
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 19:20:18.0990
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oXI3ofRVYMs7h3+xHnh1JdBOKKih+tV8FSL34rOG49Fg4C//yLW79l5Qj5Q/PEqiMZha3706/sldmofbAOkADw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWXP265MB2391
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <36febd82-85b2-aa4d-c7e0-6343b119e0cc@gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 19:56:29 +0200
-Alice Ryhl <alice@ryhl.io> wrote:
+Hi Stan,
 
-> On 4/3/23 18:05, Benno Lossin wrote:
-> > Add the `Zeroable` trait which marks types that can be initialized by
-> > writing `0x00` to every byte of the type. Also add the `init::zeroed`
-> > function that creates an initializer for a `Zeroable` type that writes
-> > `0x00` to every byte.
+How are you doing?
+
+On Mon, Apr 03, 2023 at 08:26:28PM +0300, Stanimir Varbanov wrote:
+> Hei Sakari,
+> 
+> On 31.03.23 г. 12:31 ч., Sakari Ailus wrote:
+> > Hi Rob,
 > > 
-> > Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-> > Cc: Gary Guo <gary@garyguo.net>
-> > Cc: Alice Ryhl <aliceryhl@google.com>
-> > Cc: Andreas Hindborg <a.hindborg@samsung.com>  
+> > On Mon, Mar 20, 2023 at 06:39:42PM -0500, Rob Herring wrote:
+> > > Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> > > checking for this can be enabled in yamllint.
+> > > 
+> > > Signed-off-by: Rob Herring <robh@kernel.org>
+> > 
+> > This patch contains changes to Qualcomm bindings that have been already
+> > made by other patches by Krzysztof. I think these took some time to get
+> > merged to the media tree.
+> > 
+> > I've dropped those, the result is here:
+> > 
+> > <URL:https://git.linuxtv.org/sailus/media_tree.git/commit/?id=d75cae0884e80bba486f85e82b33a1dae3c9c976>
+> > 
 > 
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> Do you think it will fix this pull request failure?
 > 
-> I have two minor suggestions - take them or leave them.
-> 
-> > +pub fn zeroed<T: Zeroable + Unpin>() -> impl Init<T> {
-> > +    // SAFETY: Because `T: Zeroable`, all bytes zero is a valid bit pattern for `T`
-> > +    // and because we write all zeroes, the memory is initialized.
-> > +    unsafe {
-> > +        init_from_closure(|slot: *mut T| {
-> > +            slot.write_bytes(0, 1);
-> > +            Ok(())
-> > +        })
-> > +    }
-> > +}  
-> 
-> You don't need `T: Unpin` here.
-> 
-> > +macro_rules! impl_zeroable {
-> > +    ($($({$($generics:tt)*})? $t:ty, )*) => {
-> > +        $(unsafe impl$($($generics)*)? Zeroable for $t {})*
-> > +    };
-> > +}
-> > +
-> > +impl_zeroable! {
-> > +    // SAFETY: All primitives that are allowed to be zero.
-> > +    bool,
-> > +    char,
-> > +    u8, u16, u32, u64, u128, usize,
-> > +    i8, i16, i32, i64, i128, isize,
-> > +    f32, f64,
-> > +
-> > +    // SAFETY: These are ZSTs, there is nothing to zero.
-> > +    {<T: ?Sized>} PhantomData<T>, core::marker::PhantomPinned, Infallible, (),
-> > +
-> > +    // SAFETY: Type is allowed to take any value, including all zeros.
-> > +    {<T>} MaybeUninit<T>,
-> > +
-> > +    // SAFETY: All zeros is equivalent to `None` (option layout optimization guarantee).
-> > +    Option<NonZeroU8>, Option<NonZeroU16>, Option<NonZeroU32>, Option<NonZeroU64>,
-> > +    Option<NonZeroU128>, Option<NonZeroUsize>,
-> > +    Option<NonZeroI8>, Option<NonZeroI16>, Option<NonZeroI32>, Option<NonZeroI64>,
-> > +    Option<NonZeroI128>, Option<NonZeroIsize>,
-> > +
-> > +    // SAFETY: All zeros is equivalent to `None` (option layout optimization guarantee).
-> > +    //
-> > +    // In this case we are allowed to use `T: ?Sized`, since all zeros is the `None` variant.
-> > +    {<T: ?Sized>} Option<NonNull<T>>,
-> > +    {<T: ?Sized>} Option<Box<T>>,
-> > +
-> > +    // SAFETY: `null` pointer is valid.
-> > +    //
-> > +    // We cannot use `T: ?Sized`, since the VTABLE pointer part of fat pointers is not allowed to be
-> > +    // null.
-> > +    {<T>} *mut T, {<T>} *const T,
-> > +
-> > +    // SAFETY: `null` pointer is valid and the metadata part of these fat pointers is allowed to be
-> > +    // zero.
-> > +    {<T>} *mut [T], {<T>} *const [T], *mut str, *const str,
-> > +
-> > +    // SAFETY: `T` is `Zeroable`.
-> > +    {<const N: usize, T: Zeroable>} [T; N], {<T: Zeroable>} Wrapping<T>,
-> > +}  
-> 
-> Arguably, it would make sense to just expand this macro. The code 
-> doesn't become that much longer, and it removes the need to understand 
-> the macro.
+> https://lore.kernel.org/all/20230329214310.2503484-1-jenkins@linuxtv.org/
 
-I think it makes sense to use macro for non-generic types (primitives
-and `NonZero`s. It'll be quite verbose if these are just expanded.
+Ah, it seems to be the same issue here.
 
-For the generic ones, I have no preference.
+The patch has been merged via my tree, whereas the rest of the patchset was
+apparently merged by Hans earlier on.
+
+<URL:https://patchwork.linuxtv.org/project/linux-media/list/?series=9531&submitter=&state=*&q=&archive=&delegate=>
+
+-- 
+Kind regards,
+
+Sakari Ailus
