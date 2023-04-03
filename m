@@ -2,134 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BCF6D3B6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 03:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBAC6D3B71
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 03:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbjDCBUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 21:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S230487AbjDCBW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 21:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbjDCBU2 (ORCPT
+        with ESMTP id S230105AbjDCBWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 21:20:28 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77190BDDB;
-        Sun,  2 Apr 2023 18:19:59 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pj8rT-0004p3-1d;
-        Mon, 03 Apr 2023 03:19:55 +0200
-Date:   Mon, 3 Apr 2023 02:19:51 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>
-Cc:     Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: [PATCH net-next v2 14/14] dt-bindings: net: dsa: mediatek,mt7530:
- add mediatek,mt7988-switch
-Message-ID: <dffacdb59aea462c9f7d4242cf9563a04cf79807.1680483896.git.daniel@makrotopia.org>
-References: <cover.1680483895.git.daniel@makrotopia.org>
+        Sun, 2 Apr 2023 21:22:23 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A279AF1A
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 18:21:59 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id eh3so111051560edb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 18:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680484916;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cy9vAKh1SRYsjRJ8W4Bk+i1NkUBPumqbVrEbWjhh5Fc=;
+        b=X9MbgiVAqpAsMwjKEaSh1WtuNTtZP+qfKhbY0jGwZFSScHv16z4rRic/5SO9E0ZMDO
+         Ut0paFXlg6zg1emacna3VdXOs9WevneldVXVYmD5SIUKMdBHqklbqOeBKoRpjIqFG7LR
+         +Q+KvC2qNwDVOQADLPQsDIP3DtuulQIObKkygyz31ooSXCzCl1cia/2+9gZ+6oekvbIb
+         j73kvCPkeVcb5IGBtT3/qA5YGCLUnQZpHjxbFX/oseJOQAjq62SCPBoHOOw1HAKOCsNw
+         JIuBJO5VNcP57WdvS2k7YZve6DiIcSSlmVhwQo10NTAaQsJ8ojwsZLpsZVGR+86vzDxe
+         TbsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680484916;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cy9vAKh1SRYsjRJ8W4Bk+i1NkUBPumqbVrEbWjhh5Fc=;
+        b=VIrUxogHHVNdMLYUORUN2WM8jw2IESjAiffuNExEMQEyGnUk+z/rgLg97FqhGcuRXF
+         kLKx6hKiRKXDx1AlQvnsIbaMsvhNQRxs2ReB9HM6X0Bbb+v36Ef0aI+ZjCsuUgf0ktJM
+         tDZqOOvVHUUN8dky58L0oVcBgzpn+A/OKmcfvKeSOkXWS7Dd4QkNRWVUcIniQWf5uSMz
+         bt69RB8X79e4kdQ/QSe45uILdd6m9GDu30iRfk6sZB/Y6d0BkE1Nd5THmasjEi61nfjW
+         fA61jit1A5wTKx0aSuvhOLaKAv0zci0QmH3lM3PcMRHEYBHlyQ32AAZrTSiLx4pIDYNT
+         pPXQ==
+X-Gm-Message-State: AAQBX9f4HdNHzXdFQbTOm9vNu4YYPKkM8kX7C++hm4cqxuEJyNX2rikz
+        bg68ti6tQDDW67DmP5rySjk=
+X-Google-Smtp-Source: AKy350bNl1jreipDIob/3r+nXH8ZnNBarE8ORo0800gplNiVNhtpMvqSInA6zXj85vzaItVXHL2H/g==
+X-Received: by 2002:a17:906:8053:b0:93b:5f2:36c with SMTP id x19-20020a170906805300b0093b05f2036cmr30131818ejw.61.1680484916462;
+        Sun, 02 Apr 2023 18:21:56 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id b14-20020a17090630ce00b0094596ff8240sm3783596ejb.110.2023.04.02.18.21.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Apr 2023 18:21:56 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 06:21:53 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     outreachy@lists.linux.dev, hvaibhav.linux@gmail.com,
+        johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Alison Schofield <alison.schofield@intel.com>
+Subject: Re: [PATCH 1/2] staging: greybus: add a single exit path to
+ arche_platform_wd_irq()
+Message-ID: <ZCoqMSy1Ary0sAp9@khadija-virtual-machine>
+References: <cover.1680185025.git.kamrankhadijadj@gmail.com>
+ <e670baa9bde47a3bdb02e59ec37a438a62c52dd1.1680185025.git.kamrankhadijadj@gmail.com>
+ <642a1fdcb2648_394c3829469@iweiny-mobl.notmuch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1680483895.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <642a1fdcb2648_394c3829469@iweiny-mobl.notmuch>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the built-in switch which can be found in the
-MediaTek MT7988 SoC.
+On Sun, Apr 02, 2023 at 05:37:48PM -0700, Ira Weiny wrote:
+> Khadija Kamran wrote:
+> > arche_platform_wd_irq() function has two exit paths. To make the code
+> > more readable, use only one exit path.
+> > 
+> > Suggested-by: Alison Schofield <alison.schofield@intel.com>
+> 
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+>
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- .../bindings/net/dsa/mediatek,mt7530.yaml     | 26 +++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+Okay, noted.
 
-diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-index 5ae9cd8f99a24..8d6dfed11d8d6 100644
---- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-@@ -11,16 +11,23 @@ maintainers:
-   - Landen Chao <Landen.Chao@mediatek.com>
-   - DENG Qingfang <dqfext@gmail.com>
-   - Sean Wang <sean.wang@mediatek.com>
-+  - Daniel Golle <daniel@makrotopia.org>
- 
- description: |
--  There are two versions of MT7530, standalone and in a multi-chip module.
-+  There are three versions of MT7530, standalone, in a multi-chip module and
-+  built-into a SoC.
- 
-   MT7530 is a part of the multi-chip module in MT7620AN, MT7620DA, MT7620DAN,
-   MT7620NN, MT7621AT, MT7621DAT, MT7621ST and MT7623AI SoCs.
- 
-+  The MT7988 SoC comes with a built-in switch similar to MT7531 as well as four
-+  Gigabit Ethernet PHYs. The switch registers are directly mapped into the SoC's
-+  memory map rather than using MDIO. The switch got an internally connected 10G
-+  CPU port and 4 user ports connected to the built-in Gigabit Ethernet PHYs.
-+
-   MT7530 in MT7620AN, MT7620DA, MT7620DAN and MT7620NN SoCs has got 10/100 PHYs
-   and the switch registers are directly mapped into SoC's memory map rather than
--  using MDIO. The DSA driver currently doesn't support this.
-+  using MDIO. The DSA driver currently doesn't support MT7620 variants.
- 
-   There is only the standalone version of MT7531.
- 
-@@ -81,6 +88,10 @@ properties:
-           Multi-chip module MT7530 in MT7621AT, MT7621DAT and MT7621ST SoCs
-         const: mediatek,mt7621
- 
-+      - description:
-+          Built-in switch of the MT7988 SoC
-+        const: mediatek,mt7988-switch
-+
-   reg:
-     maxItems: 1
- 
-@@ -268,6 +279,17 @@ allOf:
-       required:
-         - mediatek,mcm
- 
-+  - if:
-+      properties:
-+        compatible:
-+          const: mediatek,mt7988-switch
-+    then:
-+      $ref: "#/$defs/mt7530-dsa-port"
-+      properties:
-+        gpio-controller: false
-+        mediatek,mcm: false
-+        reset-names: false
-+
- unevaluatedProperties: false
- 
- examples:
--- 
-2.40.0
+Also, would it be okay to send a patch revision with the changes or
+should I wait for the feedback on Dan's comment. Here is a link to it:
+https://lore.kernel.org/outreachy/6ce8aa34-e600-4d6a-adad-ead8255342e5@kili.mountain/
 
+Thank you!
+Regards,
+Khadija 
+
+> > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> > ---
+> >  drivers/staging/greybus/arche-platform.c | 7 +++----
+> >  1 file changed, 3 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
+> > index fcbd5f71eff2..a64c1af091b0 100644
+> > --- a/drivers/staging/greybus/arche-platform.c
+> > +++ b/drivers/staging/greybus/arche-platform.c
+> > @@ -153,6 +153,7 @@ static irqreturn_t arche_platform_wd_irq_thread(int irq, void *devid)
+> >  static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+> >  {
+> >  	struct arche_platform_drvdata *arche_pdata = devid;
+> > +	irqreturn_t rc = IRQ_HANDLED;
+> >  	unsigned long flags;
+> >  
+> >  	spin_lock_irqsave(&arche_pdata->wake_lock, flags);
+> > @@ -180,9 +181,7 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+> >  						WD_STATE_COLDBOOT_START) {
+> >  					arche_platform_set_wake_detect_state(arche_pdata,
+> >  									     WD_STATE_COLDBOOT_TRIG);
+> > -					spin_unlock_irqrestore(&arche_pdata->wake_lock,
+> > -							       flags);
+> > -					return IRQ_WAKE_THREAD;
+> > +					rc = IRQ_WAKE_THREAD;
+> >  				}
+> >  			}
+> >  		}
+> > @@ -204,7 +203,7 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+> >  
+> >  	spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
+> >  
+> > -	return IRQ_HANDLED;
+> > +	return rc;
+> >  }
+> >  
+> >  /*
+> > -- 
+> > 2.34.1
+> > 
+> > 
+> 
+> 
