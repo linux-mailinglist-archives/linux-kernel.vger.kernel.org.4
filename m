@@ -2,168 +2,414 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65E66D5145
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE5F6D5148
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbjDCTYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 15:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
+        id S231946AbjDCTY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 15:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjDCTYt (ORCPT
+        with ESMTP id S232004AbjDCTYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 15:24:49 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178A5E7C;
-        Mon,  3 Apr 2023 12:24:47 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkzcv-3yyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4505:1fdc::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Pr16v6hS3z49Q0d;
-        Mon,  3 Apr 2023 22:24:39 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1680549885;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tp5qcqPaxivMIuFMRKaAe5HT8V/qPK5f6UKZnTDqXZs=;
-        b=wj8iMdaB6O5svgBz97QcbFfxl9pOUa1PNhWR6/nMI8DJ/TlBNBIzxaoXQ4xFtAVcllZBGn
-        1h11XWEmzs+t+7S8wZmoH14Ni8IZIiAbMuwhBvBpaZQSxGqHI3PBS4/eRQdeOwpNSUUZ4Q
-        9oD4KR5OR/7ixTFuQJjiBae6kKroRXjgsr1oQ1YHFdRtSRUWdkyXT6ydrbBKs2fI2Nf6at
-        KgPm5BT3ib2zzo+p3tbEYZMZCdzbPUGlXdxIKRq6Wl3LoBqS5w7Tcdh9ze+jq4BX8ZDee1
-        E31/c03A+3U1KSnRAQJPWWdm9O+j4FuxlElRkzejBkCFdfXldIoFoa2cL7+rAQ==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1680549885; a=rsa-sha256;
-        cv=none;
-        b=pTLkgQTxUMn8kAT5W3Z+ogFont60P6E8KePKCXivg0tBgmGITjjXMVNgPLPZmGVszTwkb9
-        8xmV8K+JZuzm7F5CFJy//1r6ial5+VTAqVELsLbmuuAMfOY1FbI3yDkl8ZCGK0ToM5mF6F
-        iXE23DARwHLsLEzlUBnPniLP4sabKK6I8VHkzWvPos67ec7cBwbNsoN6VKbLTay13Lx0Te
-        srYyEk9eLJ72MlypaetY0e3iRJp+oyVh9XtQdLwdV+Gk7bvcCtArTcbo8tYuuL7peYlIWK
-        3MAa6H4E+TVhwLzsPEbZwvIuhCayXj1Up3OmaEuUmeKIlKMxGrnJHjS1tylKqw==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1680549885;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tp5qcqPaxivMIuFMRKaAe5HT8V/qPK5f6UKZnTDqXZs=;
-        b=nDY5LUXsU7qY8CejlN+YlEuCBrJE/yaOwuV73ThTDfxvd8Q/gVoeJnKw2jhXh4fy8A7SPX
-        04/1VA27KvucaNF6obkcJs2PPrdTE0lqb28f0pJOkLQXoIeseCKj3IvDUyXnBCVMbpl03s
-        yasLIby0zyRIhZg4rK6kfJ04rUVkkEFvNGm5TZYXULNkyhoQREHpmP/LL8JdsOm0Nmc2LH
-        0bmnev2mHgSMrVvTzXkiub2kKx9ZZcsn7/QC6F+28qWZ7KKjWBErPDIXmgXOy47iBBRRO6
-        0ZiawUTptzsFdcFQ0UPZ510Z4RUtHySIcAMki/r3tFx2/Ka+zwbnh9UJRyw49Q==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 4C2E2634C91;
-        Mon,  3 Apr 2023 22:22:09 +0300 (EEST)
-Date:   Mon, 3 Apr 2023 22:22:08 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Joe Tessler <jrt@google.com>,
-        Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mon, 3 Apr 2023 15:24:55 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DC42D61;
+        Mon,  3 Apr 2023 12:24:52 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 333JOYr0126980;
+        Mon, 3 Apr 2023 14:24:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680549874;
+        bh=lWWl+d3nWMAemXud+JhzKn1WOyt54pVHPHZSkI85Z8A=;
+        h=From:To:CC:Subject:Date;
+        b=lWT7V/E8lz7Ew0QaceyYfiufCjE7ib4MaqNHZk/WXjFkkqvWYiMYNh163I4B+rd1o
+         QjgSRd0zB0Z5GJI+r+KEtf28MbZxEW5HKfFrXJaW0ACbxHBNMoTufd2uyIVIUMvIO1
+         FYhxZfk88sWNq48+F7vz2Ncth1miwc/AUFLlzTU4=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 333JOYXr105647
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 3 Apr 2023 14:24:34 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
+ Apr 2023 14:24:34 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 3 Apr 2023 14:24:34 -0500
+Received: from ula0226330.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 333JOXH9047746;
+        Mon, 3 Apr 2023 14:24:33 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Stultz <jstultz@google.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Benoit Parrot <bparrot@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] media: dt-bindings: Drop unneeded quotes
-Message-ID: <ZCsnYGMkV2Zrw3fJ@valkosipuli.retiisi.eu>
-References: <20230320233944.2920964-1-robh@kernel.org>
- <ZCaoVwRuxVOTZdI4@valkosipuli.retiisi.eu>
- <36febd82-85b2-aa4d-c7e0-6343b119e0cc@gmail.com>
+        Sumit Semwal <sumit.semwal@linaro.org>
+CC:     <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Davis <afd@ti.com>
+Subject: [PATCH v2] misc: sram: Add DMA-BUF Heap exporting of SRAM areas
+Date:   Mon, 3 Apr 2023 14:24:33 -0500
+Message-ID: <20230403192433.26648-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <36febd82-85b2-aa4d-c7e0-6343b119e0cc@gmail.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stan,
+This new export type exposes to userspace the SRAM area as a DMA-BUF Heap,
+this allows for allocations of DMA-BUFs that can be consumed by various
+DMA-BUF supporting devices.
 
-How are you doing?
+Signed-off-by: Andrew Davis <afd@ti.com>
+---
 
-On Mon, Apr 03, 2023 at 08:26:28PM +0300, Stanimir Varbanov wrote:
-> Hei Sakari,
-> 
-> On 31.03.23 г. 12:31 ч., Sakari Ailus wrote:
-> > Hi Rob,
-> > 
-> > On Mon, Mar 20, 2023 at 06:39:42PM -0500, Rob Herring wrote:
-> > > Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> > > checking for this can be enabled in yamllint.
-> > > 
-> > > Signed-off-by: Rob Herring <robh@kernel.org>
-> > 
-> > This patch contains changes to Qualcomm bindings that have been already
-> > made by other patches by Krzysztof. I think these took some time to get
-> > merged to the media tree.
-> > 
-> > I've dropped those, the result is here:
-> > 
-> > <URL:https://git.linuxtv.org/sailus/media_tree.git/commit/?id=d75cae0884e80bba486f85e82b33a1dae3c9c976>
-> > 
-> 
-> Do you think it will fix this pull request failure?
-> 
-> https://lore.kernel.org/all/20230329214310.2503484-1-jenkins@linuxtv.org/
+Changes from v1:
+ - Use existing DT flags, if both pool(device usable) and export(userspace
+   usable) properties are in the SRAM node then export as a DMA-BUF Heap
+ - Rebase on 6.3-rc5
 
-Ah, it seems to be the same issue here.
+ drivers/misc/Kconfig         |   7 +
+ drivers/misc/Makefile        |   1 +
+ drivers/misc/sram-dma-heap.c | 245 +++++++++++++++++++++++++++++++++++
+ drivers/misc/sram.c          |   6 +
+ drivers/misc/sram.h          |  16 +++
+ 5 files changed, 275 insertions(+)
+ create mode 100644 drivers/misc/sram-dma-heap.c
 
-The patch has been merged via my tree, whereas the rest of the patchset was
-apparently merged by Hans earlier on.
-
-<URL:https://patchwork.linuxtv.org/project/linux-media/list/?series=9531&submitter=&state=*&q=&archive=&delegate=>
-
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index 433aa41977852..8b4c111a6493b 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+@@ -448,6 +448,13 @@ config SRAM
+ config SRAM_EXEC
+ 	bool
+ 
++config SRAM_DMA_HEAP
++	bool "Export on-chip SRAM pools using DMA-Heaps"
++	depends on DMABUF_HEAPS && SRAM
++	help
++	  This driver allows the export of on-chip SRAM marked as both pool
++	  and exportable to userspace using the DMA-Heaps interface.
++
+ config DW_XDATA_PCIE
+ 	depends on PCI
+ 	tristate "Synopsys DesignWare xData PCIe driver"
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index 56de43943cd51..bbdc64aa8af1a 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -47,6 +47,7 @@ obj-$(CONFIG_VMWARE_VMCI)	+= vmw_vmci/
+ obj-$(CONFIG_LATTICE_ECP3_CONFIG)	+= lattice-ecp3-config.o
+ obj-$(CONFIG_SRAM)		+= sram.o
+ obj-$(CONFIG_SRAM_EXEC)		+= sram-exec.o
++obj-$(CONFIG_SRAM_DMA_HEAP)	+= sram-dma-heap.o
+ obj-$(CONFIG_GENWQE)		+= genwqe/
+ obj-$(CONFIG_ECHO)		+= echo/
+ obj-$(CONFIG_CXL_BASE)		+= cxl/
+diff --git a/drivers/misc/sram-dma-heap.c b/drivers/misc/sram-dma-heap.c
+new file mode 100644
+index 0000000000000..c511f4ac1280e
+--- /dev/null
++++ b/drivers/misc/sram-dma-heap.c
+@@ -0,0 +1,245 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * SRAM DMA-Heap userspace exporter
++ *
++ * Copyright (C) 2019-2022 Texas Instruments Incorporated - https://www.ti.com/
++ *	Andrew Davis <afd@ti.com>
++ */
++
++#include <linux/dma-mapping.h>
++#include <linux/err.h>
++#include <linux/genalloc.h>
++#include <linux/io.h>
++#include <linux/mm.h>
++#include <linux/scatterlist.h>
++#include <linux/slab.h>
++#include <linux/dma-buf.h>
++#include <linux/dma-heap.h>
++
++#include "sram.h"
++
++struct sram_dma_heap {
++	struct dma_heap *heap;
++	struct gen_pool *pool;
++};
++
++struct sram_dma_heap_buffer {
++	struct gen_pool *pool;
++	struct list_head attachments;
++	struct mutex attachments_lock;
++	unsigned long len;
++	void *vaddr;
++	phys_addr_t paddr;
++};
++
++struct dma_heap_attachment {
++	struct device *dev;
++	struct sg_table *table;
++	struct list_head list;
++};
++
++static int dma_heap_attach(struct dma_buf *dmabuf,
++			   struct dma_buf_attachment *attachment)
++{
++	struct sram_dma_heap_buffer *buffer = dmabuf->priv;
++	struct dma_heap_attachment *a;
++	struct sg_table *table;
++
++	a = kzalloc(sizeof(*a), GFP_KERNEL);
++	if (!a)
++		return -ENOMEM;
++
++	table = kmalloc(sizeof(*table), GFP_KERNEL);
++	if (!table) {
++		kfree(a);
++		return -ENOMEM;
++	}
++	if (sg_alloc_table(table, 1, GFP_KERNEL)) {
++		kfree(table);
++		kfree(a);
++		return -ENOMEM;
++	}
++	sg_set_page(table->sgl, pfn_to_page(PFN_DOWN(buffer->paddr)), buffer->len, 0);
++
++	a->table = table;
++	a->dev = attachment->dev;
++	INIT_LIST_HEAD(&a->list);
++
++	attachment->priv = a;
++
++	mutex_lock(&buffer->attachments_lock);
++	list_add(&a->list, &buffer->attachments);
++	mutex_unlock(&buffer->attachments_lock);
++
++	return 0;
++}
++
++static void dma_heap_detatch(struct dma_buf *dmabuf,
++			     struct dma_buf_attachment *attachment)
++{
++	struct sram_dma_heap_buffer *buffer = dmabuf->priv;
++	struct dma_heap_attachment *a = attachment->priv;
++
++	mutex_lock(&buffer->attachments_lock);
++	list_del(&a->list);
++	mutex_unlock(&buffer->attachments_lock);
++
++	sg_free_table(a->table);
++	kfree(a->table);
++	kfree(a);
++}
++
++static struct sg_table *dma_heap_map_dma_buf(struct dma_buf_attachment *attachment,
++					     enum dma_data_direction direction)
++{
++	struct dma_heap_attachment *a = attachment->priv;
++	struct sg_table *table = a->table;
++
++	/*
++	 * As this heap is backed by uncached SRAM memory we do not need to
++	 * perform any sync operations on the buffer before allowing device
++	 * domain access. For this reason we use SKIP_CPU_SYNC and also do
++	 * not use or provide begin/end_cpu_access() dma-buf functions.
++	 */
++	if (!dma_map_sg_attrs(attachment->dev, table->sgl, table->nents,
++			      direction, DMA_ATTR_SKIP_CPU_SYNC))
++		return ERR_PTR(-ENOMEM);
++
++	return table;
++}
++
++static void dma_heap_unmap_dma_buf(struct dma_buf_attachment *attachment,
++				   struct sg_table *table,
++				   enum dma_data_direction direction)
++{
++	dma_unmap_sg_attrs(attachment->dev, table->sgl, table->nents,
++			   direction, DMA_ATTR_SKIP_CPU_SYNC);
++}
++
++static void dma_heap_dma_buf_release(struct dma_buf *dmabuf)
++{
++	struct sram_dma_heap_buffer *buffer = dmabuf->priv;
++
++	gen_pool_free(buffer->pool, (unsigned long)buffer->vaddr, buffer->len);
++	kfree(buffer);
++}
++
++static int dma_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
++{
++	struct sram_dma_heap_buffer *buffer = dmabuf->priv;
++	int ret;
++
++	/* SRAM mappings are not cached */
++	vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
++
++	ret = vm_iomap_memory(vma, buffer->paddr, buffer->len);
++	if (ret)
++		pr_err("Could not map buffer to userspace\n");
++
++	return ret;
++}
++
++static int dma_heap_vmap(struct dma_buf *dmabuf, struct iosys_map *map)
++{
++	struct sram_dma_heap_buffer *buffer = dmabuf->priv;
++
++	iosys_map_set_vaddr(map, buffer->vaddr);
++
++	return 0;
++}
++
++static const struct dma_buf_ops sram_dma_heap_buf_ops = {
++	.attach = dma_heap_attach,
++	.detach = dma_heap_detatch,
++	.map_dma_buf = dma_heap_map_dma_buf,
++	.unmap_dma_buf = dma_heap_unmap_dma_buf,
++	.release = dma_heap_dma_buf_release,
++	.mmap = dma_heap_mmap,
++	.vmap = dma_heap_vmap,
++};
++
++struct dma_buf *sram_dma_heap_allocate(struct dma_heap *heap,
++				       unsigned long len,
++				       unsigned long fd_flags,
++				       unsigned long heap_flags)
++{
++	struct sram_dma_heap *sram_dma_heap = dma_heap_get_drvdata(heap);
++	struct sram_dma_heap_buffer *buffer;
++
++	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
++	struct dma_buf *dmabuf;
++	int ret;
++
++	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
++	if (!buffer)
++		return ERR_PTR(-ENOMEM);
++	buffer->pool = sram_dma_heap->pool;
++	INIT_LIST_HEAD(&buffer->attachments);
++	mutex_init(&buffer->attachments_lock);
++	buffer->len = len;
++
++	buffer->vaddr = (void *)gen_pool_alloc(buffer->pool, buffer->len);
++	if (!buffer->vaddr) {
++		ret = -ENOMEM;
++		goto free_buffer;
++	}
++
++	buffer->paddr = gen_pool_virt_to_phys(buffer->pool, (unsigned long)buffer->vaddr);
++	if (buffer->paddr == -1) {
++		ret = -ENOMEM;
++		goto free_pool;
++	}
++
++	/* create the dmabuf */
++	exp_info.exp_name = dma_heap_get_name(heap);
++	exp_info.ops = &sram_dma_heap_buf_ops;
++	exp_info.size = buffer->len;
++	exp_info.flags = fd_flags;
++	exp_info.priv = buffer;
++	dmabuf = dma_buf_export(&exp_info);
++	if (IS_ERR(dmabuf)) {
++		ret = PTR_ERR(dmabuf);
++		goto free_pool;
++	}
++
++	return dmabuf;
++
++free_pool:
++	gen_pool_free(buffer->pool, (unsigned long)buffer->vaddr, buffer->len);
++free_buffer:
++	kfree(buffer);
++
++	return ERR_PTR(ret);
++}
++
++static struct dma_heap_ops sram_dma_heap_ops = {
++	.allocate = sram_dma_heap_allocate,
++};
++
++int sram_add_dma_heap(struct sram_dev *sram,
++		      struct sram_reserve *block,
++		      phys_addr_t start,
++		      struct sram_partition *part)
++{
++	struct sram_dma_heap *sram_dma_heap;
++	struct dma_heap_export_info exp_info;
++
++	dev_info(sram->dev, "Exporting SRAM Heap '%s'\n", block->label);
++
++	sram_dma_heap = kzalloc(sizeof(*sram_dma_heap), GFP_KERNEL);
++	if (!sram_dma_heap)
++		return -ENOMEM;
++	sram_dma_heap->pool = part->pool;
++
++	exp_info.name = kasprintf(GFP_KERNEL, "sram_%s", block->label);
++	exp_info.ops = &sram_dma_heap_ops;
++	exp_info.priv = sram_dma_heap;
++	sram_dma_heap->heap = dma_heap_add(&exp_info);
++	if (IS_ERR(sram_dma_heap->heap)) {
++		int ret = PTR_ERR(sram_dma_heap->heap);
++		kfree(sram_dma_heap);
++		return ret;
++	}
++
++	return 0;
++}
+diff --git a/drivers/misc/sram.c b/drivers/misc/sram.c
+index f0e7f02605eb3..13dcab2062fac 100644
+--- a/drivers/misc/sram.c
++++ b/drivers/misc/sram.c
+@@ -120,6 +120,12 @@ static int sram_add_partition(struct sram_dev *sram, struct sram_reserve *block,
+ 		ret = sram_add_pool(sram, block, start, part);
+ 		if (ret)
+ 			return ret;
++
++		if (block->export) {
++			ret = sram_add_dma_heap(sram, block, start, part);
++			if (ret)
++				return ret;
++		}
+ 	}
+ 	if (block->export) {
+ 		ret = sram_add_export(sram, block, start, part);
+diff --git a/drivers/misc/sram.h b/drivers/misc/sram.h
+index d2058d8c8f1d2..7687c32c09226 100644
+--- a/drivers/misc/sram.h
++++ b/drivers/misc/sram.h
+@@ -61,4 +61,20 @@ static inline int sram_add_protect_exec(struct sram_partition *part)
+ 	return -ENODEV;
+ }
+ #endif /* CONFIG_SRAM_EXEC */
++
++#ifdef CONFIG_SRAM_DMA_HEAP
++int sram_add_dma_heap(struct sram_dev *sram,
++		      struct sram_reserve *block,
++		      phys_addr_t start,
++		      struct sram_partition *part);
++#else
++static inline int sram_add_dma_heap(struct sram_dev *sram,
++				    struct sram_reserve *block,
++				    phys_addr_t start,
++				    struct sram_partition *part)
++{
++	return 0;
++}
++#endif /* CONFIG_SRAM_DMA_HEAP */
++
+ #endif /* __SRAM_H */
 -- 
-Kind regards,
+2.39.2
 
-Sakari Ailus
