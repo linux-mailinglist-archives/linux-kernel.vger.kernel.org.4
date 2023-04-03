@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEE16D3E0B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9091E6D3E0D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjDCHZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 03:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
+        id S231572AbjDCHZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 03:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjDCHZH (ORCPT
+        with ESMTP id S231536AbjDCHZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 03:25:07 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF876769D;
-        Mon,  3 Apr 2023 00:25:04 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3337P3B7027302;
-        Mon, 3 Apr 2023 02:25:03 -0500
+        Mon, 3 Apr 2023 03:25:08 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EB67EE8;
+        Mon,  3 Apr 2023 00:25:07 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3337P6bW112641;
+        Mon, 3 Apr 2023 02:25:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680506703;
-        bh=l1WM7nqhQksZTq1YR4mffsGiXXZP+nU1/yW4cLVhbuA=;
+        s=ti-com-17Q1; t=1680506706;
+        bh=Hvi6qctb3XXG7WV2dOJUbwRkvmIGGv2xKBvV0X641Dc=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=VUSUAUz5n6kjVtrfFk0XNCce1wgTlLyXDO4OUjxfRCxKLxDFsY8gj7ZU8Kt3pJKoP
-         fh/dhYws+gLXDNroOSHsrbucbqLAm0TitewhLygWgHMpAnkF31risS1qrFm5q8UoAd
-         RVUF9YYrXS8TKlMEwlFF8NTmHk+9w7LPXU39INns=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3337P3AP038826
+        b=WkPLUeWDAkm4NopJ6NosEi7QByFe91/WF9SSdvCsYczJjlAIAZNxf4GNiSs5faItA
+         jmBdHIBXSH7Lr1Q6M1MhuWz/4fDZ6DjCoAVCShN8YY7RHeQ+FAvKReCUvEPQC1UfdM
+         FIeOId/nYXq1NvUUYzfD6U/aq0S0cS0a4AnfDMHE=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3337P6ZB067052
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 3 Apr 2023 02:25:03 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 3 Apr 2023 02:25:06 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
- Apr 2023 02:25:03 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2023 02:25:06 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 3 Apr 2023 02:25:03 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3337P2if022941;
-        Mon, 3 Apr 2023 02:25:03 -0500
+ Frontend Transport; Mon, 3 Apr 2023 02:25:06 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3337P5bW031538;
+        Mon, 3 Apr 2023 02:25:05 -0500
 From:   Dhruva Gole <d-gole@ti.com>
 To:     <linux-gpio@vger.kernel.org>
 CC:     Dhruva Gole <d-gole@ti.com>, <linux-kernel@vger.kernel.org>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Keerthy <j-keerthy@ti.com>
-Subject: [PATCH 1/2] gpio: davinci: Do not clear the bank intr enable bit in save_context
-Date:   Mon, 3 Apr 2023 12:54:42 +0530
-Message-ID: <20230403072443.83810-2-d-gole@ti.com>
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 2/2] gpio: davinci: Add irq chip flag to skip set wake
+Date:   Mon, 3 Apr 2023 12:54:43 +0530
+Message-ID: <20230403072443.83810-3-d-gole@ti.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230403072443.83810-1-d-gole@ti.com>
 References: <20230403072443.83810-1-d-gole@ti.com>
@@ -65,35 +63,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interrupt enable bits might be set if we want to use the GPIO as
-wakeup source. Clearing this will mean disabling of interrupts in the GPIO
-banks that we may want to wakeup from.
-Thus remove the line that was clearing this bit from the driver's save
-context function.
+Add the IRQCHIP_SKIP_SET_WAKE flag since there are no special IRQ Wake
+bits that can be set to enable wakeup IRQ.
 
-Cc: Devarsh Thakkar <devarsht@ti.com>
-Fixes: 0651a730924b ("gpio: davinci: Add support for system suspend/resume PM")
+Fixes: 3d9edf09d452 ("[ARM] 4457/2: davinci: GPIO support")
 Signed-off-by: Dhruva Gole <d-gole@ti.com>
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Keerthy <j-keerthy@ti.com>
 ---
- drivers/gpio/gpio-davinci.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/gpio/gpio-davinci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/gpio/gpio-davinci.c b/drivers/gpio/gpio-davinci.c
-index 7fc83057990a..d7595b39e8c4 100644
+index d7595b39e8c4..aaaf61dc2632 100644
 --- a/drivers/gpio/gpio-davinci.c
 +++ b/drivers/gpio/gpio-davinci.c
-@@ -639,9 +639,6 @@ static void davinci_gpio_save_context(struct davinci_gpio_controller *chips,
- 		context->set_falling = readl_relaxed(&g->set_falling);
- 	}
+@@ -322,7 +322,7 @@ static struct irq_chip gpio_irqchip = {
+ 	.irq_enable	= gpio_irq_enable,
+ 	.irq_disable	= gpio_irq_disable,
+ 	.irq_set_type	= gpio_irq_type,
+-	.flags		= IRQCHIP_SET_TYPE_MASKED,
++	.flags		= IRQCHIP_SET_TYPE_MASKED | IRQCHIP_SKIP_SET_WAKE,
+ };
  
--	/* Clear Bank interrupt enable bit */
--	writel_relaxed(0, base + BINTEN);
--
- 	/* Clear all interrupt status registers */
- 	writel_relaxed(GENMASK(31, 0), &g->intstat);
- }
+ static void gpio_irq_handler(struct irq_desc *desc)
 -- 
 2.25.1
 
