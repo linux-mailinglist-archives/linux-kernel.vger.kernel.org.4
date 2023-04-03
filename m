@@ -2,127 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AEE6D5380
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349256D5384
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232853AbjDCVaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 17:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
+        id S232967AbjDCVcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 17:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbjDCVaK (ORCPT
+        with ESMTP id S231484AbjDCVcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:30:10 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5DB173F;
-        Mon,  3 Apr 2023 14:30:09 -0700 (PDT)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 3 Apr 2023 17:32:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB33173F;
+        Mon,  3 Apr 2023 14:32:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2E804660036F;
-        Mon,  3 Apr 2023 22:30:06 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680557407;
-        bh=89fICjanYXC+xkrZxmZS2SkgJF0T/OuXjRoo3D52r70=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QYfo0HacUNTAtvjNKvvgPFM4llq9UPVLoC540U+x2JV+MUhDD8RfP/E1XGMiercQZ
-         xY5/E99mJPx55y1H98dCJxXIAUlGWn6mE/yRmzE+BGCYtcGz1O46MCOAz0aRBSp2O4
-         REx73GOg533mbBeARwDIvdroan/RC5cUiZ1qK/4k1RuJEZiNc4yBhSU3Kkt/0QK/0n
-         636hTgTrMzL6olfi8tKkX/sPaxohFxeoeucI6EhibeiEpdLDNHvJxKeI7IJGGGazgC
-         d0KOWznFvkTaO8b2V4uY4Pevxko+oNUUwfa6i5GN76MKkHLPlzOPtkWlyDoS1S49U6
-         WQtWTcx8o4CgA==
-Date:   Mon, 3 Apr 2023 17:30:02 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, kernel@collabora.com,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] kselftest/alsa: Increase kselftest timeout
-Message-ID: <5302e70d-cb58-4e70-b44f-ff81b138a2e1@notapiano>
-References: <20221214130353.1989075-1-nfraprado@collabora.com>
- <808f35bf-2800-c34b-cae9-4d8eaa11294d@linuxfoundation.org>
- <Y5oSui0udT/6cvSI@sirena.org.uk>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30CD561C55;
+        Mon,  3 Apr 2023 21:32:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB051C433EF;
+        Mon,  3 Apr 2023 21:32:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680557551;
+        bh=/U885SDhNjytagNMIR/JlAaotK6K5qta/BrLuv4adJ0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GDKqaKal65yQRgU4zSAT/ynOdxRO0pRJs63EA2mUkmq2Pb6+Ks0JS6gs3736nCsWI
+         S8rMSNuErU0DBBWnpaOXoJHApDLirhAZ+Kw2MZ+FakIei4VaNTtPsRnDefK2msNG0p
+         N+LsiqEchPYXc/ULK2TmDMX7+5XWJZ8ZUO/nYqFFjA2o5gs4tMF0mmMvbCg3hTztKi
+         K9k78PN6GKJvBoTBRLcyWnuaIeTm4tqfxW1PkYGrrVoKj1BRWPV9HH8kHNoE9+SfL5
+         j510OT2esNWbeK+uH0sK+hvNpeukm2Uvikda33JQ8zszIWYxPoXyycaSHWvuFh4yMN
+         0Q71I+lpBsz4g==
+Date:   Mon, 3 Apr 2023 14:32:29 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, Claudiu Manoil <claudiu.manoil@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Amritha Nambiar <amritha.nambiar@intel.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 0/9] Add tc-mqprio and tc-taprio support for
+ preemptible traffic classes
+Message-ID: <20230403143229.415ede88@kernel.org>
+In-Reply-To: <20230403110458.3l6dh3yc5mtwkdad@skbuf>
+References: <20230403103440.2895683-1-vladimir.oltean@nxp.com>
+        <20230403110458.3l6dh3yc5mtwkdad@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y5oSui0udT/6cvSI@sirena.org.uk>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 06:15:22PM +0000, Mark Brown wrote:
-> On Wed, Dec 14, 2022 at 09:40:02AM -0700, Shuah Khan wrote:
-> > On 12/14/22 06:03, Nícolas F. R. A. Prado wrote:
+On Mon, 3 Apr 2023 14:04:58 +0300 Vladimir Oltean wrote:
+> On another note, this patch set just got superseded in patchwork:
+> https://patchwork.kernel.org/project/netdevbpf/cover/20230403103440.2895683-1-vladimir.oltean@nxp.com/
+> after I submitted an iproute2 patch set with the same name:
+> https://patchwork.kernel.org/project/netdevbpf/cover/20230403105245.2902376-1-vladimir.oltean@nxp.com/
 > 
-> > > The default timeout for kselftests is 45 seconds, but that isn't enough
-> > > time to run pcm-test when there are many PCMs on the device, nor for
-> > > mixer-test when slower control buses and fancier CODECs are present.
-> > > 
-> > > As data points, running pcm-test on mt8192-asurada-spherion takes about
-> > > 1m15s, and mixer-test on rk3399-gru-kevin takes about 2m.
-> > > 
-> > > Set the timeout to 4 minutes to allow both pcm-test and mixer-test to
-> > > run to completion with some slack.
-> 
-> > What I have in mind is that the default run can be limited scope.
-> > Run it on a few controllers and in the report mention that a full
-> > test can be run as needed.
-> 
-> > There are a couple of examples of default vs. full test runs - cpu
-> > and memory hot-lug tests.
-> 
-> For pcm-test it's probably more sensible to refactor things to run
-> multiple PCMs (or at least cards, though that's less relevant in an
-> embedded context) in parallel rather than cut down the test coverage,
-> it's already very limited coverage as things stand.  There is some risk
-> there could be false positives from cross talk between the PCMs but it's
-> probably worth it.
-> 
-> With mixer-test if it's actually taking a long time to run generally
-> this is just identifying that the driver could use some work,
-> implementing runtime power management and a register cache will probably
-> resolve most issues.
+> I think there's a namespacing problem in patchwork's series detection
+> algorithm ("net-next" is not "iproute2-next", and so, it is valid to
+> have both in flight) but I don't know where to look to fix that.
+> Jakub, could you perhaps help, please?
 
-Hi Shuah and Mark,
-
-sorry for the delay, but I'd still like to move forward with this.
-
-Shuah, I've checked the tests you mentioned that have limited scope by default,
-and we could do the same for the alsa kselftest, but I'm not sure I understand
-how this solves the problem here. The fact is that the current timeout is too
-short for a full run of the alsa kselftest on some machines, so we need to
-increase the timeout in any case regardless of there being a limited scope run
-by default or not. Mark implemented the parallelization he mentioned in the
-meantime, but it doesn't help every hardware. The only other option I see is
-reducing the time the PCM is tested for (currently 4 seconds). But I assume that
-number was chosen for a reason.
-
-I'd also like to better understand why we have an arbitrary (45 seconds) default
-timeout. If there are users who want to limit the test duration to an arbitrary
-time even if that means not getting full test coverage, shouldn't such arbitrary
-time be supplied by the users themselves?
-
-And is there any guidance on what are the acceptable exceptions to having a
-longer timeout? Because there seem to be many kselftests which override the
-default timeout with a longer one, even ones that disable it altogether.
-
-I can see the value of having a timeout as the worst case scenario of how long
-the test takes to run, to avoid hanging indefinitely, which is what the tests
-with overriden timeout setting do. For the alsa kselftests that's
-hardware-dependent (number of kcontrols for mixer-test; and number of PCMs and
-working configurations for pcm-test), so we'd either need to guess a high enough
-value for the timeout that all known hardware fits, or allow the timeout to be
-set dynamically during runtime.
-
-Thanks,
-Nícolas
+I revived the series. I'm a bit weary about asking Konstantin to make
+the pw-bot compare tree tags because people change trees all the time
+(especially no tree -> net-next / net) and he would have to filter out
+the version.. It's gonna get wobbly. Let's see if the problem gets more
+common.
