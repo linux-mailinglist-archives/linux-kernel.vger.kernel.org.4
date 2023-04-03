@@ -2,82 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E6D6D44C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997746D4505
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbjDCMqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S232277AbjDCM6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbjDCMqu (ORCPT
+        with ESMTP id S231532AbjDCM6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:46:50 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28CE1286C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:46:43 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id h8so116860646ede.8
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 05:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680526002;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=neR03f3r/PRhjAxKrg/Uky+bO4+qgi4bjtbZrSyz90E=;
-        b=EVf6w8kopeQc5qosEWtBUokCa1r/js/Uos9oLbIUHBl7ks4jjsstI7+flc/COTL7Ha
-         Gkcu5ZQ/QuLXaEE/GKyxNh5PxaUrgnehTafoxe1prUQuiFAL7CgADqWdszPIfPNBF1RH
-         3DN1PUtvGoR8M6bBnPGKTmGXoWLHbGA82jX2dlDjrNuMYLWZDM4TZfd/O2odptXBdZcZ
-         cGtzemu26UNrQ7jGPQjMT/Pz582Bleiq/v3nfWI/767OQinZoMj/yjnba9LncQ1o827p
-         JhoTNa6VbwXiIjw4blmxx01Yo0KG4qFFfNq6fwRdNV9mxFhgI5uBuV2YyE0FM8GELMaO
-         t/kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680526002;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=neR03f3r/PRhjAxKrg/Uky+bO4+qgi4bjtbZrSyz90E=;
-        b=lNMbfurqVrXx4sOlB4GsTJOGp5IApTerByNijxjhcWm72DBdVf72ifF91gnTXiIyk/
-         SOfWh87BacDgnpH3zIuOCi05IonMI/97ot5FuYM5bFFGD6pqSFI2eO10Yg0goWa4BWcf
-         Fhu4TRxd+gDq88qSmXwO2dlRbSoh/zUqZEPQGHMlvVWQGbcrxOfrpeSKZZ/kR15qgH5N
-         LZL9C97lqeJPlyl6W2WxIvqRzWqTZjg9CYt2T5rcYaCwGo+vyi/pcFcMZBclYg+ysATL
-         Xbd6J7qOpzz5AExO23FZzUWuSZyPTYs6cJ2Y5PUiAj7TIctVBy2WJntrsD5ZkYRSsCUv
-         XxNQ==
-X-Gm-Message-State: AAQBX9d65hPZm9bhlsitFAVUsxOJ7UQA1sbqhhxF2JLdLoo0/gdrEbWO
-        /3q5X0Nn4mLwL/Pc9PmVeQqsnA==
-X-Google-Smtp-Source: AKy350aM+WlVOHnlCeNVQ6/mZEeUvJbST8Uv9+hSJYqmAjs6DsIwLFoDwV9YdRcHTJhsJ1wP9roCtA==
-X-Received: by 2002:a17:906:4d0f:b0:8b2:8876:6a3c with SMTP id r15-20020a1709064d0f00b008b288766a3cmr34083927eju.29.1680526002502;
-        Mon, 03 Apr 2023 05:46:42 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
-        by smtp.gmail.com with ESMTPSA id o18-20020a17090608d200b0092973e209f2sm4535108eje.109.2023.04.03.05.46.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 05:46:42 -0700 (PDT)
-Message-ID: <a04ca2bd-72f9-c89a-3fcb-36dd710b107f@linaro.org>
-Date:   Mon, 3 Apr 2023 14:46:41 +0200
+        Mon, 3 Apr 2023 08:58:01 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2054.outbound.protection.outlook.com [40.107.20.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F219A1FF2;
+        Mon,  3 Apr 2023 05:57:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iYPkezwtZPM9nTX5zlrETvjmVbtyRQ2T6uRoK3Hvp6oIbYrRctOVhckkrt1IsVrB5Bh/Tl/mnEg//Co/UdUj0SEJCCrXrDjGm2ArKkMr/n5iiZuLCTJDsN7X4mh3DTMa02slLFTUEBmiC56sKS+ga9stTRs3W3LgeTV4Z3/faZLnIKB9vNxmq8zQ8FjrlUZxrD+dpArbqSSG5Q1SnIS8bTh2vUFgqN8qDBKOiHFwiYuRSrWYAYjIDtTi6Dk9fjCA+8OoZUSs1VVcbUkJTdW7XxhdFfPG3XriaCECWLlGOtTznJ7b2UKY5b5FpYwtQLebnHW6QDAMauC9anhzFb/P8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/RnFsWBQfwyUc7cl6REaM799e0vK6USlYes4uivKgPk=;
+ b=YJd5qjSGdprIozhAsJEDPwomz68QuTgfdqfF8fqnOSTcppusauN1CMZIvjZgGTemlmMPNdWdrGtte8JquScNOmuS7TUrii7QV3OUGhUQTolAY0Y3Kvc5laQFdkV8a+APOhtd8OECUwpxiNNbvU6o/ypGj8OMIWUJJHEITPGSlQ/uwaJYLFOKhgkggrbZkqNVOhS/FG9wG9qNMuYBXj9fxxqHIGi3PZseBK92OfpSdcTl26G8/hMZDK4aikH11COshaF05sgNjXh51gdHEPpgsA4U35NlFGQkx8Q2mwzJwACa1hkhAjEj8GGDgfWlB9tcKYCtT5g5OQqbv7rgJ+6kMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/RnFsWBQfwyUc7cl6REaM799e0vK6USlYes4uivKgPk=;
+ b=f38G6n6BdMdYtJE6WFI37wonlaX8dqiL3tulVSEiws3nLzSVSXv0cKs28aHI32Z6mwRlhstq/C9u483xVvFQ1y5oWpyewCNfZ3LC4FhWZSHIPc1fVJWR46aok9FETeARdQ6x9nGsM6N2kDjm1fYi22nYJHHQDtZVCwu9FJXSEio=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
+ by DU0PR08MB8787.eurprd08.prod.outlook.com (2603:10a6:10:476::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
+ 2023 12:57:54 +0000
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::c445:c8e:be5d:d40e]) by VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::c445:c8e:be5d:d40e%7]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
+ 12:57:54 +0000
+From:   Javier Carrasco <javier.carrasco@wolfvision.net>
+To:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Uwe Kleine-g <u.kleine-koenig@pengutronix.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Javier Carrasco <javier.carrasco@wolfvision.net>
+Subject: [PATCH 0/2] Input: st1232: wakeup in Suspend to idle
+Date:   Mon,  3 Apr 2023 14:47:05 +0200
+Message-Id: <20230403124707.102986-1-javier.carrasco@wolfvision.net>
+X-Mailer: git-send-email 2.37.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR09CA0055.eurprd09.prod.outlook.com
+ (2603:10a6:802:28::23) To VE1PR08MB4974.eurprd08.prod.outlook.com
+ (2603:10a6:803:111::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-pmics: fix pon compatible and
- registers
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230327122948.4323-1-johan+linaro@kernel.org>
- <48f71f9a-0d00-16df-fff8-5aa455918378@linaro.org>
- <ZCqwWwdhhJdOK+5Y@hovoldconsulting.com>
- <5dfb81df-8ae2-eb62-01a2-b26c6b8d2597@linaro.org>
-In-Reply-To: <5dfb81df-8ae2-eb62-01a2-b26c6b8d2597@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|DU0PR08MB8787:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8967b367-ee18-4632-6292-08db344309fc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tg7Ol/nrmqVtmI47CiR1yYPgsnM/2rej2AmT9ZyhubJzUl2cSuXbXvJooWr5uuG3gvxW5ho1WPnGubHAY3zmBLm1En8arhh6cydrUhSwtSuzTDH+J4V6ayX3P1FRQ9jQ/7ItoaOvygVemI00/rX9bZQ2Ug1OtiIGxbcJJhJLi8U+Iw4asClcLcMv0IqCEP6Mfo7Z0RJGqrUFKFMm/19YfjmU13sfgvlRp7Jz03c1EZYvcL6c3Jbx+seEY630pIE/Xo12xr5ikwwU8vRrbTCEVM8jE/2wLzbZ0Ct0FFiJTHHUj4ucM/OgNN/UQTdteysunAwRfY3Vn0l8D/JbLxLtTqlDyzqSvoaHkQEFlm49pkz5yZkpevf+Ut2cFvC1HkqVjq77IU3D7A299yqix/pxsVTKcATZ3B2JzkWJr3sYU9tDyksC4ossxzwx4W7ZFf6kH+4dE5Zu1k+M1xZp2LmpBq5RgDDDNA8f/NVvWhu8UYk6vZQnssqC59QVEdJyzTwYnzUhH/I3eC9yMRP3ICHUkYpVE09Sf+mBnOC28s/0gt97OcuabBMK7LYXkP2BOVd4O/584RsJFYhsqsJzhMHAps6pegmi9vpakqowy2sKbyHffmAEOOsMqx9GoCt0QDIs
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(376002)(366004)(39850400004)(451199021)(2616005)(83380400001)(186003)(52116002)(6486002)(6666004)(478600001)(316002)(107886003)(6512007)(6506007)(2906002)(1076003)(26005)(54906003)(5660300002)(44832011)(15650500001)(36756003)(38100700002)(38350700002)(66556008)(66946007)(66476007)(41300700001)(4326008)(86362001)(8676002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yzFGCJATbSIo2mA6AjU7A+qB3uCgSps86PnaguuZd+VvC7xIbentV4zCu84Q?=
+ =?us-ascii?Q?PAA6Q6rvZU5KNhKqxK9o4Z/GNquuna2497sF9dF+c8aYMB8YRViWOCTU+waY?=
+ =?us-ascii?Q?WH1Kq/eNfGl2V2OQyak50qlQF3YuAzI+oux2/SgfCBPE9BGE4gNPY70N/7yR?=
+ =?us-ascii?Q?rbJQAVfZdzlg87VNrGFpKCTNJCTUyd0/LsBBgJ7syyz8qRbHjEvEzj2vc64D?=
+ =?us-ascii?Q?taaXD3pJZKpH471hKHf9wMgG6bNKPcgqRygP4dJQIQit6S8pYfqPErFylC/s?=
+ =?us-ascii?Q?7plgr61204zIfYI8s2YLG66QY1lqjXyPorLXyXancKWS2fGtS5jEJPnmSXbo?=
+ =?us-ascii?Q?KKK4CmGMZmFnNbo3oMNmeBDa3WrnxE5sIBkAOtDiSgKWGlff+avY6+A9ucX2?=
+ =?us-ascii?Q?q0NwEkwyxfOXFgKqYblRsq1zdWPiXCvd4DKeerT6NfPyZk/Hf9G6LE31BZ6G?=
+ =?us-ascii?Q?K+mGI+vTkl4+okRVsSattu1wnFVuX5JNaipTqGhMLOgChZbrILLSFMq2paDE?=
+ =?us-ascii?Q?CuFj/++vsE13GYuwsYz9FJBFmFmuryRUKueSgzT/R4dJJ1h/eSpwBXh3dF1L?=
+ =?us-ascii?Q?RP2vWF6S2QoaoeGB+3FYyWIHFneHRSzADYc0jpWcPAhhr0KNg6RcIIWelyIq?=
+ =?us-ascii?Q?unkMWt8JzBaeR4bc4FTOv3B/suY+Pfhh7nJVSkNjAbtoN3sFX+i9xbN5FLgy?=
+ =?us-ascii?Q?DUvNQwui5buEoJ6Eqy6y28oOCes6qoYXTK3/sDGdwpLvBxFiRlP6zfLy8M6g?=
+ =?us-ascii?Q?lh1A13TrHCZYYP6h9EtXyTMnQTydQON9LYMqCP8IR3wyzozi58M6Y4yV8ipA?=
+ =?us-ascii?Q?dhgQ4caWTUN66tbNkgnP3rFyJM1rlYF2gcSsmPsnS/6aQh2EVYAW1tiZHAob?=
+ =?us-ascii?Q?ErU+aPs2FtbUuz7xnlhV8ihwyJ4VmfpjEMIsOe16rihFRfUrR3HDRUvFjAts?=
+ =?us-ascii?Q?Tr70zJ9OclJMuG4AmHS4K8RucUweZ9aGqek+kDEpHsxjH/tXU1+eq+C0sXbl?=
+ =?us-ascii?Q?kvqNaWhZSnYau/zq1R6u0QJdTAdAOolJ/cklqVk2XV158bGNj1q48l3FnP1b?=
+ =?us-ascii?Q?3IcQjyqQJlAaZXT/NazuCeLGEooDFCit2J1taBpOPglMh66UQDVANzMEHC1W?=
+ =?us-ascii?Q?23Ng3jn7yrIOz6G+q0yJckF2YkRiVBx2Mt3/upQXJYYDSTtvlqgYRw3J3wIS?=
+ =?us-ascii?Q?PmauHIwO1oKGnDWIBAl9VisHAtlWtKMa9RUd9TppQreQSXrmg5GaTzOjQdsJ?=
+ =?us-ascii?Q?xf5VcJlrMBf999JYw8CuFDQ7WE45pVWaYCGIgRb9NC7vEIhCV2MXk1gAklf4?=
+ =?us-ascii?Q?heoz2r7HWCLgEuyhe1kjZFvkRbYwj1J+lQcRJ2lLL0dfAx0EHBkdP4y5GfBr?=
+ =?us-ascii?Q?G+rw8TNaFJ/5Et7wKY9bxwA/mpVAEpET0svoEjBKKg1NkAPDSfxBq6NtzDJP?=
+ =?us-ascii?Q?KK71eC0goNFgYom3chrquRbYwQCkX4pUpTG6RcjgwlYezKpFcPlV4hloRPUV?=
+ =?us-ascii?Q?xTIR0u7x7hQ3iSUbIWKYc7P9eAYyE1NV4TYDQz3qFTDhsH0lsEAk1Egg+ims?=
+ =?us-ascii?Q?/GuUi03Zk4jy+81VrVQc9OOAhyFSNQt20QRyge8qkAXh/atNbougdNDBnZ0c?=
+ =?us-ascii?Q?rRGeBZ9/n2cGWD+IvKy8lPg=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8967b367-ee18-4632-6292-08db344309fc
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 12:57:53.9461
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jE9kgWJiYgtFJu8FjjsdkeOhV3mYOoeP2IK8xShwNmUc4EiU9gF1t4/Y3fZ9UQIM3yzoTD9IvUbOXbA4oK1p2228DpBhGSGYAEDa8Bh4BKg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB8787
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,70 +117,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/2023 14:33, Krzysztof Kozlowski wrote:
-> On 03/04/2023 12:54, Johan Hovold wrote:
->> On Mon, Apr 03, 2023 at 11:18:07AM +0200, Krzysztof Kozlowski wrote:
->>> On 27/03/2023 14:29, Johan Hovold wrote:
->>>> The pmk8280 PMIC PON peripheral is gen3 and uses two sets of registers;
->>>> hlos and pbs.
->>>>
->>>> This specifically fixes the following error message during boot when the
->>>> pbs registers are not defined:
->>>>
->>>> 	PON_PBS address missing, can't read HW debounce time
->>>>
->>>> Note that this also enables the spurious interrupt workaround introduced
->>>> by commit 0b65118e6ba3 ("Input: pm8941-pwrkey - add software key press
->>>> debouncing support") (which may or may not be needed).
->>>>
->>>> Fixes: ccd3517faf18 ("arm64: dts: qcom: sc8280xp: Add reference device")
->>>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->>>> ---
->>>>  arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 5 +++--
->>>>  1 file changed, 3 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
->>>> index c35e7f6bd657..a0ba535bb6c9 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
->>>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
->>>> @@ -59,8 +59,9 @@ pmk8280: pmic@0 {
->>>>  		#size-cells = <0>;
->>>>  
->>>>  		pmk8280_pon: pon@1300 {
->>>> -			compatible = "qcom,pm8998-pon";
->>>> -			reg = <0x1300>;
->>>> +			compatible = "qcom,pmk8350-pon";
->>>
->>> Same comment as Dmitry's. There is no compatible "qcom,pmk8350-pon"
->>> ccd3517faf18, therefore indicated backport (through AUTOSEL) will lead
->>> to invalid stable kernel.
->>>
->>> You must drop the Fixes tag, because this cannot be backported.
->>
->> That's bullshit. Do you see a stable tag? Is 5.19-stable still active?
-> 
-> Why do you refer to activeness of v5.19? This will go also to v6.0 and v6.1.
-> 
->>
->> The problem is that the driver was updated before the binding was so the
->> above mentioned probe error has been there since this file was merged.
-> 
-> I grepped and that commit did not have such compatible. Are you saying
-> that the kernel which was released with this commit already had that
-> compatible in driver (through different merge/tree)?
+The st1232 touchscreen provides an interrupt line that can be configured
+as a wakeup source, and currently it is possible to use this mechanism in
+"Suspend to RAM" and "Hibernate" power states. 
 
-So I double checked, the commit ccd3517faf18 (which is being "fixed")
-was introduced in v6.0-rc1. v6.0-rc1 did not have "qcom,pmk8350-pon"
-compatible, thus it could not be fixed that way. Therefore this cannot
-be logically fix for that commit from that release.
+Unfortunately, that does not work in "Suspend to idle" (freeze) because
+the device driver disables the interrupts in its suspend callback.
+Given that the interrupt handling prior to entering the mentioned power
+state modes is managed by the power subsystem, the irq enabling/disabling
+can be removed from the touchscreen driver, allowing the device to work
+as a wakeup source in "Suspend to idle".
 
-"Fixes" means that commit has a bug and this is how it should be fixed.
-So v6.0 kernel should be fixed to use "qcom,pmk8350-pon" compatible,
-which is obviously wrong. v6.0 does not support it and the "fix" would
-actually break it (which might be worse or better than original problem,
-but that's independent thing).
+Given that the st1232 device driver does not reflect its wakeup events
+in sysfs, this series also adds pm_wakeup_event to the interrupt
+handler.
 
+These changes have been successfully tested with an ST1624-N32C and a
+Rockchip-based platform.
 
-Best regards,
-Krzysztof
+Javier Carrasco (2):
+  Input: st1232 - remove enable/disable irq in resume/suspend callbacks
+  Input: st1232 - add wake up event counting
+
+ drivers/input/touchscreen/st1232.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+
+-- 
+2.37.2
 
