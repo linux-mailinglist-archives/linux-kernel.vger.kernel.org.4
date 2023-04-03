@@ -2,204 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0340B6D5313
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71526D5318
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbjDCVHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 17:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
+        id S231932AbjDCVJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 17:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233378AbjDCVHl (ORCPT
+        with ESMTP id S232874AbjDCVI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:07:41 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3819F1BD0;
-        Mon,  3 Apr 2023 14:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680556055; x=1712092055;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+YKvwuyVLDMR+sFs/3u3SFfneQIZ0qZ0jxgoSlbNg60=;
-  b=Tkfw2IlO125v9nJbpsh999w7xg4ys5Oe0wtu5whib+FCinOvVjmitfxz
-   WiBcOCxhrLlDa+96DdlvFnmVeohPsTf1HUi9Bmvaz+KEdPArvOeerjBfl
-   yDaTYWdU7VBSbT1lwwLtwQ4UyskuS7Wevmz4xYzEq5Ymo/Y0601FyfoHV
-   dn4+fHnK9xa2aYNCyaMm1KroeSyk+cSwNr/jm8Uc1qA/etVZjbVWP9wPR
-   rGLpjENesKwe7fsO7tBk6X9V9uHQmrXcKUDutoqr29IwfatrfWGcSIWIk
-   Iu96+c4Md56DbbXDrEDhTnntf3AkkWcOiR0nglWjvuyV+2ZJWanMEBgWc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="330590865"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="330590865"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 14:07:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="775354462"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="775354462"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 14:07:25 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        Smita.KoralahalliChannabasappa@amd.com,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v4 5/5] x86/mce: Handle AMD threshold interrupt storms
-Date:   Mon,  3 Apr 2023 14:07:16 -0700
-Message-Id: <20230403210716.347773-6-tony.luck@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230403210716.347773-1-tony.luck@intel.com>
-References: <ZCRYl9c7xgIJ+pJe@yaz-sghr>
- <20230403210716.347773-1-tony.luck@intel.com>
+        Mon, 3 Apr 2023 17:08:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E6B44B7;
+        Mon,  3 Apr 2023 14:08:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85E0A62B58;
+        Mon,  3 Apr 2023 21:08:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B567C433EF;
+        Mon,  3 Apr 2023 21:08:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680556084;
+        bh=PVBPRpr58MiOy6wGa6wE7NRJu02Si3vHn7TkitFaKmw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GAOAo9qXJ3pkmaaM0Y+ukqG15b716d9Lh7iEAUbxl6ajlESrxH+lHJ8EgUk85lhOo
+         osGNYa4toQlDOYpP1C1ULlAHvKEgrtCOFETFyBSGszHqshLk7lP2wjWM6QHleNy7fW
+         wCrihhl6FudfKk3jYJlSG8orIVIT1QdmWQBwdeSoCizDZhBqIrSwwABXr9e4IhWcTJ
+         Pm4EXWgFqZLnW0DEhxPJsywhDtFa371tJNeLXgGKL+5GKRaZ4eOX69g+HUXiEMdh2S
+         /Ff7JmKgkZDoHzfuPvT0T7YO/G4lZBP59rrhI8/jjI4Rp0Xepg3VFOjLBceGFXTq2q
+         +isiBVm0KBjwQ==
+Date:   Mon, 3 Apr 2023 22:07:59 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        techsupport@winsystems.com, pdemetrotion@winsystems.com,
+        quarium@gmail.com, jhentges@accesio.com, jay.dolan@accesio.com
+Subject: Re: [PATCH v5 1/3] regmap: Pass irq_drv_data as a parameter for
+ set_type_config()
+Message-ID: <e6445419-b932-49f7-a401-b11155ad5bb9@sirena.org.uk>
+References: <cover.1679845842.git.william.gray@linaro.org>
+ <5ba9d4c58a4cef138201334ea48e8bc8297a9a1c.1679845842.git.william.gray@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LgISFP/7WOX9dQTd"
+Content-Disposition: inline
+In-Reply-To: <5ba9d4c58a4cef138201334ea48e8bc8297a9a1c.1679845842.git.william.gray@linaro.org>
+X-Cookie: Membership dues are not refundable.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 
-Extend the logic of handling CMCI storms to AMD threshold interrupts.
+--LgISFP/7WOX9dQTd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Rely on the similar approach as of Intel's CMCI to mitigate storms per
-CPU and per bank. But, unlike CMCI, do not set thresholds and reduce
-interrupt rate on a storm. Rather, disable the interrupt on the
-corresponding CPU and bank. Re-enable back the interrupts if enough
-consecutive polls of the bank show no corrected errors (30, as
-programmed by Intel).
+On Sun, Mar 26, 2023 at 12:25:57PM -0400, William Breathitt Gray wrote:
 
-Turning off the threshold interrupts would be a better solution on AMD
-systems as other error severities will still be handled even if the
-threshold interrupts are disabled.
+> Changes in v5:
+>  - Wrap lines to 100 characters rather than 80
 
-[Tony: Small tweak because mce_handle_storm() isn't a pointer now]
+It's good to keep things under 80 where we can.
 
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Tested-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
- arch/x86/kernel/cpu/mce/internal.h |  2 ++
- arch/x86/kernel/cpu/mce/amd.c      | 49 ++++++++++++++++++++++++++++++
- arch/x86/kernel/cpu/mce/core.c     |  3 ++
- 3 files changed, 54 insertions(+)
+>  	int (*set_type_config)(unsigned int **buf, unsigned int type,
+> -			       const struct regmap_irq *irq_data, int idx);
+> +			       const struct regmap_irq *irq_data, int idx, void *irq_drv_data);
+>  	unsigned int (*get_irq_reg)(struct regmap_irq_chip_data *data,
+>  				    unsigned int base, int index);
+>  	void *irq_drv_data;
 
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index d052d80cce7a..f1a48bc2e904 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -224,6 +224,7 @@ extern bool filter_mce(struct mce *m);
- 
- #ifdef CONFIG_X86_MCE_AMD
- extern bool amd_filter_mce(struct mce *m);
-+void mce_amd_handle_storm(int bank, bool on);
- 
- /*
-  * If MCA_CONFIG[McaLsbInStatusSupported] is set, extract ErrAddr in bits
-@@ -251,6 +252,7 @@ static __always_inline void smca_extract_err_addr(struct mce *m)
- 
- #else
- static inline bool amd_filter_mce(struct mce *m) { return false; }
-+static inline void mce_amd_handle_storm(int bank, bool on) {}
- static inline void smca_extract_err_addr(struct mce *m) { }
- #endif
- 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 23c5072fbbb7..cd79295e2a0a 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -468,6 +468,47 @@ static void threshold_restart_bank(void *_tr)
- 	wrmsr(tr->b->address, lo, hi);
- }
- 
-+static void _reset_block(struct threshold_block *block)
-+{
-+	struct thresh_restart tr;
-+
-+	memset(&tr, 0, sizeof(tr));
-+	tr.b = block;
-+	threshold_restart_bank(&tr);
-+}
-+
-+static void toggle_interrupt_reset_block(struct threshold_block *block, bool on)
-+{
-+	if (!block)
-+		return;
-+
-+	block->interrupt_enable = !!on;
-+	_reset_block(block);
-+}
-+
-+void mce_amd_handle_storm(int bank, bool on)
-+{
-+	struct threshold_block *first_block = NULL, *block = NULL, *tmp = NULL;
-+	struct threshold_bank **bp = this_cpu_read(threshold_banks);
-+	unsigned long flags;
-+
-+	if (!bp)
-+		return;
-+
-+	local_irq_save(flags);
-+
-+	first_block = bp[bank]->blocks;
-+	if (!first_block)
-+		goto end;
-+
-+	toggle_interrupt_reset_block(first_block, on);
-+
-+	list_for_each_entry_safe(block, tmp, &first_block->miscj, miscj)
-+		toggle_interrupt_reset_block(block, on);
-+end:
-+	local_irq_restore(flags);
-+}
-+
- static void mce_threshold_block_init(struct threshold_block *b, int offset)
- {
- 	struct thresh_restart tr = {
-@@ -868,6 +909,7 @@ static void amd_threshold_interrupt(void)
- 	struct threshold_block *first_block = NULL, *block = NULL, *tmp = NULL;
- 	struct threshold_bank **bp = this_cpu_read(threshold_banks);
- 	unsigned int bank, cpu = smp_processor_id();
-+	u64 status;
- 
- 	/*
- 	 * Validate that the threshold bank has been initialized already. The
-@@ -881,6 +923,13 @@ static void amd_threshold_interrupt(void)
- 		if (!(per_cpu(bank_map, cpu) & (1 << bank)))
- 			continue;
- 
-+		rdmsrl(mca_msr_reg(bank, MCA_STATUS), status);
-+		track_cmci_storm(bank, status);
-+
-+		/* Return early on an interrupt storm */
-+		if (this_cpu_read(bank_storm[bank]))
-+			return;
-+
- 		first_block = bp[bank]->blocks;
- 		if (!first_block)
- 			continue;
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 820b317b1b85..fac90625d8cb 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -2062,6 +2062,9 @@ void mce_handle_storm(int bank, bool on)
- 	case X86_VENDOR_INTEL:
- 		mce_intel_handle_storm(bank, on);
- 		break;
-+	case X86_VENDOR_AMD:
-+		mce_amd_handle_storm(bank, on);
-+		break;
- 	}
- }
- 
--- 
-2.39.2
+There's no benefit from overflowing here and...
 
+> @@ -1660,7 +1660,8 @@ struct regmap_irq_chip {
+>  unsigned int regmap_irq_get_irq_reg_linear(struct regmap_irq_chip_data *data,
+>  					   unsigned int base, int index);
+>  int regmap_irq_set_type_config_simple(unsigned int **buf, unsigned int type,
+> -				      const struct regmap_irq *irq_data, int idx);
+> +				      const struct regmap_irq *irq_data, int idx,
+> +				      void *irq_drv_data);
+
+...it's not even consistent.
+
+--LgISFP/7WOX9dQTd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQrQC4ACgkQJNaLcl1U
+h9DV/Qf+PRCsw/4s4r8lTZpU3nIiqV1fietBklJFobjST5n8EYp9hxeTLmF/r4x1
+ZbZvAzsJYQu8LuChYTC2lel4jhFFhvlmOcDZcQryNrjvG9y8GKtbaSwWQgo906Px
+GpzazDmchrlrtIfCKgnt3jdcaHkcD3LlxFRAIKXA/XloHjMySTl59F1Zi2ABTGzK
+i+eI0XLLyshbrcYD85c+FhBAq1nj0W1O28TA7z7aVvxQL+Z//Vf4Xk4Oe9jkVVGY
+jHyv5vQ7RhH/IIcu9BBMlmOHHFGFT6serZnJ8bgvnpCesEI4zYHIo+Y5n8OMmfzv
+zJ+X1mDLdB9JulOuDdh4OxEnWy14MA==
+=dRZY
+-----END PGP SIGNATURE-----
+
+--LgISFP/7WOX9dQTd--
