@@ -2,93 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536016D50D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E87F6D50DA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbjDCSkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
+        id S232489AbjDCSku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjDCSkb (ORCPT
+        with ESMTP id S232444AbjDCSkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:40:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB24BC
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:40:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8852761FCA
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 18:40:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC17C433D2;
-        Mon,  3 Apr 2023 18:40:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680547228;
-        bh=Srg17dNP3NaApim/6laEY2JCIVbwu+qkygiafOGB1go=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=rC2SXgARn1yOrQWNIHkV1C24XtLoxNk+yhhZJBphPjO1EJqtnv0iUhgaTGDowoTBM
-         5yWTn+vZ4PRzB3CN3oAlSbj1Ov+WRgcWrnF4+ZbDf3U/2yfW/xbY9A15z6Grzxo0wl
-         zuqL8S27swxCmhi6YHeSoad2+gtyDY1/G3wd/vZJc5UNcTPbP892in+kTvql3RztWK
-         aAP94rLGWPuSU5v5Dm3MKs8z6xqrjrAXQv2Sj/YMVSHPkE925ZWBcS+BFaJMAMgjZY
-         JEp4f1sg3g0wn8XjeHCPAIsDpNrcOj1/kRivj/hCjUU5YJLYZhnOMDwskOKRL/y+do
-         iK6Hswfl+ZdJw==
-Date:   Mon, 3 Apr 2023 19:40:23 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] regmap: Add maple tree based register cache
-Message-ID: <149d2462-a190-4480-a501-d645a84ec1bf@sirena.org.uk>
-References: <20230325-regcache-maple-v3-0-23e271f93dc7@kernel.org>
- <20230325-regcache-maple-v3-2-23e271f93dc7@kernel.org>
- <20230403154508.qia42tyasj4vhtm5@revolver>
- <6f49fdf0-c373-46f7-89bd-f30f0fb68c15@sirena.org.uk>
- <20230403182644.uylyonu6w6l63oze@revolver>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uCJRLG+x40+NiNKG"
-Content-Disposition: inline
-In-Reply-To: <20230403182644.uylyonu6w6l63oze@revolver>
-X-Cookie: Membership dues are not refundable.
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 3 Apr 2023 14:40:47 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C422E115
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:40:45 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id x4-20020a170902ec8400b001a1a5f6f272so17890566plg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 11:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680547245;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=l7KXY8lY6kh4yGHJrlGOwQN4b74JegDEme6RD0OCgco=;
+        b=MmY3StUttrl+Dl0KtrfiUBQYX1fBd6olu28lJlPxriJAesyrYGeWv6rxB4igcoDrrS
+         uCxzoybWGwVCrc4KwE7tXIatVHRsynan93kGhqKUPlW8el7kw8FlXpbKl6K13DlBtDto
+         XlL9eWWTT8IqQPo+92gSOLxNTUA283A7elT3V3+K1t7iDtr/f+02Z6BM4G5/44Fp0j63
+         z/eBYq3xcA8Yf4hFF1seNWEB+EXU3+BFcuSPJPk6Zu/5FCiugkgJjThlQcBlNWI0AuCv
+         JuqiPg6gKulnsFOgJgblvM7b9R9mcszWjoCokybbHOgaJ1QFwMrmoVZHrAat7+GRGwVO
+         UkYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680547245;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l7KXY8lY6kh4yGHJrlGOwQN4b74JegDEme6RD0OCgco=;
+        b=sA1lkJvtjK/RiEjIrCuKRKJhRbz3lA6D0MX/ejagUqXsxta4CJ2ywTro0iVUthdtjp
+         +W8anIFaJn1skGHTUBWWlozb/Zlv+B+UVjHy6ng4V+9d1rr7aG+kZUiWMz1VAoO+8tdP
+         buWCNM6X420Z6/7BaQpSAKWCuzpnvSQG4ue+jEF/kwUwNLAiAy25xHTuPRKCl8B62nUN
+         Ntxi/rbF6sKSVi2B24D6e6wfVoF7Df/GYQppOhYq00ZKy2pb0rBr9lXYkjA1ati/BgAq
+         3MTcpWI29r6SrazRIOTxce73zO5PmEGRy4aQs7UcED9ai0foNFf8aoz0l0YpictnLcqH
+         BYuQ==
+X-Gm-Message-State: AAQBX9cWA5j33h2sAHywFoKnfkcdQso+r5SDKFGpczQE3WsS8qyDAuj7
+        oU5SJ4scewWTGPy1eH8B1NVya0kvOY3C
+X-Google-Smtp-Source: AKy350ZZdr2WR9ZcTjWW1hUH12pOOyW8M+tD+hF6gzQBIwL78qeJrSAkQU0Lm7teFIKEXeaZuysvtGqqeaPZ
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9dc:a977:817d:341])
+ (user=irogers job=sendgmr) by 2002:a17:903:1358:b0:19f:3cc1:e3bd with SMTP id
+ jl24-20020a170903135800b0019f3cc1e3bdmr28764plb.4.1680547244921; Mon, 03 Apr
+ 2023 11:40:44 -0700 (PDT)
+Date:   Mon,  3 Apr 2023 11:40:29 -0700
+Message-Id: <20230403184033.1836023-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Subject: [PATCH v2 0/4] Support for llvm-addr2line
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The addr2line command is started and then addresses piped to it. In
+order to determine the end of a addr2lines output a ',' it output with
+an expectation to get '??\n??:0\n' as a reply. llvm-addr2line differs
+in that ',' generates a reply of ','.
 
---uCJRLG+x40+NiNKG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The approach detects and then caches the addr2line style. When records
+are read the sentinel is detected appropriately.
 
-On Mon, Apr 03, 2023 at 02:26:44PM -0400, Liam R. Howlett wrote:
+Comparing the output there is a little more inline data on my machine
+with llvm-addr2line:
+$ sudo perf record -a -g sleep 1
+$ sudo perf report --addr2line=addr2line > a.txt
+$ sudo perf report --addr2line=llvm-addr2line > b.txt
+$ wc -l a.txt b.txt
+  12386 a.txt
+  12477 b.txt
 
-> What you have will work.  If you need more optimisations later, then we
-> can have another look.
+Some other small changes, switching to the api/io code to avoid file
+streams wrapping the command's stdin/stdout. Ignore SIGPIPE for when
+addr2line exits and writes fail.
 
-Yeah, what's there tests out OK.  In terms of optimisation the baseline
-requirement is that we have to be able to pull values out faster than
-we'd be able to read them from the device so until we're working with
-MMIO devices (which people do use regmap with sometimes but aren't the
-common case) we can typically burn a *lot* of CPU cycles and still be
-doing just fine.  The hot spots are basic read/write of an existing
-cached register, then sync and initial load in of cache defaults.
+v2. Address review comments from Arnaldo and Namhyung, fixing a
+    realloc error path, argument ordering and a comment.
 
---uCJRLG+x40+NiNKG
-Content-Type: application/pgp-signature; name="signature.asc"
+Ian Rogers (4):
+  tools api: Add io__getline
+  perf srcline: Simplify addr2line subprocess
+  perf srcline: Support for llvm-addr2line
+  perf srcline: Avoid addr2line SIGPIPEs
 
------BEGIN PGP SIGNATURE-----
+ tools/lib/api/io.h        |  45 ++++++++++
+ tools/perf/tests/api-io.c |  36 ++++++++
+ tools/perf/util/srcline.c | 171 +++++++++++++++++++++++---------------
+ 3 files changed, 184 insertions(+), 68 deletions(-)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQrHZYACgkQJNaLcl1U
-h9AUrgf/UA/wWHJU2ED6xMclVK69qf4qrvaY+h8h8VonghCw2gV1pNxQ4rAqQ1GB
-i93wOAlCJQNDsGKkFK/TlAYamC/VImoZOQdFv4TOj/BHZ8BkRfCXEekBaODALZxx
-dOQEdC5rqmhUAjbuB2EZBsOEKTHNwjNkmnFXHcYifgbmQ3NcuKEcUxdWa2BNyLHq
-MZ0KIKgBPKMbB5gQGiI3cfNQiNG2omySomm4ipU2J2uQbv4cUy0eR9HqlbiQFmrf
-0Y/qVwJbkNsIWJ8jiPxeX6FAjEYNg3Ei3D20Bam7pbc+X39LpZH8XPQuGK4Khq3g
-yRP1AcqWix27Fh7V4o1zKZibq66QhQ==
-=C0mB
------END PGP SIGNATURE-----
+-- 
+2.40.0.348.gf938b09366-goog
 
---uCJRLG+x40+NiNKG--
