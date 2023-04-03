@@ -2,200 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62F56D3CEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 07:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7391F6D5483
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjDCFct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 01:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S233735AbjDCWGJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Apr 2023 18:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDCFcp (ORCPT
+        with ESMTP id S233615AbjDCWGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 01:32:45 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B65E1987
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 22:32:44 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id i4-20020a6b5404000000b0075ff3fb6f4cso1943986iob.9
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 22:32:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680499963; x=1683091963;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VoxY+rT7GIMQ6klSLscO4dFONaIK7l+LZzBgFk21zk4=;
-        b=zpEDcHCINwxxK5GMt8R5fQa1S4D+yUC2jd82gvl7YiqutDdnjMfwNLGFuvJkVxxvJ/
-         BmRVWvMNkL+wfOGJJ3TuWmClLvChNnFHHuu5VVNpNCk/hQc36YVbp9pym7Jc51Fe3kCh
-         iokNhHTeDE7mNM8icLOYdioRhh04K5HPqvmQ8oh6IXJmCZe3Ml2GKc1H8mSc3gZNKY/c
-         WUYBmktNtycRuK92AhvYEpnnsDh8AnlzSZ9y2ASIHmGTXdHptboptbxItrcxRELysQJG
-         uN3I5kVGYxhyoewzNvISUgYVhx90EwS0NwRnZLA5n+sfjAv6Sue7BqbpXs5vYlWG0qne
-         bfyA==
-X-Gm-Message-State: AAQBX9dQherFdWfinAZwdOVux9Z/2Jxk7/JLmBayAz89f2PhbLusIA2o
-        NDp41nAUIJYT3PtWKdhzgtiHqzh2DfJ1PoS9h4DZ6AwQHHqx
-X-Google-Smtp-Source: AKy350aj9DfWlgtC1q9A7qu7CvsARLR4v7Jhezgx87uS/jDagSjJrQhrXdT3/YSvRBqRGRzVzD0lJ8qhBZ7KWEeUuqDBxr9MxHLu
+        Mon, 3 Apr 2023 18:06:05 -0400
+X-Greylist: delayed 59580 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Apr 2023 15:06:01 PDT
+Received: from host208.bbsn.co.jp (host208.bbsn.co.jp [153.127.68.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0B6E5B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:06:00 -0700 (PDT)
+Received: from [0.4.188.31] ([103.161.96.78])
+        (authenticated bits=0)
+        by host208.bbsn.co.jp (8.13.1/8.13.1) with ESMTP id 3335OsU0011722
+        for <linux-kernel@vger.kernel.org>; Mon, 3 Apr 2023 14:32:59 +0900
+Message-Id: <202304030532.3335OsU0011722@host208.bbsn.co.jp>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-X-Received: by 2002:a5d:84ce:0:b0:75c:d7d7:aba with SMTP id
- z14-20020a5d84ce000000b0075cd7d70abamr6015965ior.0.1680499963480; Sun, 02 Apr
- 2023 22:32:43 -0700 (PDT)
-Date:   Sun, 02 Apr 2023 22:32:43 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005e524d05f867e38d@google.com>
-Subject: [syzbot] [ext4?] KASAN: slab-out-of-bounds Write in
- ext4_write_inline_data_end (2)
-From:   syzbot <syzbot+ba4fa9ce904fefb787d3@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Job vacancy    
+To:     linux-kernel@vger.kernel.org
+From:   "St. Thomas' Hospital UK" <stthomashospitaluk238@gmail.com>
+Date:   Mon, 03 Apr 2023 12:32:53 +0700
+Reply-To: jobsoffer@gstts-nhs-uk.online
+X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL,
+        SPOOFED_FREEMAIL,SPOOF_GMAIL_MID autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+St. Thomas' Hospital UK
 
-syzbot found the following issue on:
+  REF: HR/MED-004/06923
 
-HEAD commit:    da8e7da11e4b Merge tag 'nfsd-6.3-4' of git://git.kernel.or..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15fc9af5c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
-dashboard link: https://syzkaller.appspot.com/bug?extid=ba4fa9ce904fefb787d3
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+St. Thomas' Hospital UK is a large NHS teaching hospital in Central
+London, England. It is one of the institutions that compose the King's
+Health Partners, an academic health science Center. Administratively
+part of the Guy's and St Thomas' NHS Foundation Trust, together with
+Guy's Hospital and King's College Hospital, it provides the location
+of the King's College London GKT School of Medical Education.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+It is ranked amongst the best Ten (10) hospitals in the United Kingdom
+with 840 beds. The hospital has provided healthcare freely or under
+charitable auspices since the 12th century. It is one of London's most
+famous hospitals, associated with names such as Sir Astley Cooper,
+William Cheselden, Florence Nightingale, Linda Richards, Edmund
+Montgomery, Agnes Elizabeth Jones and Sir Harold Ridley. It is a
+prominent London landmark =E2=80=93 largely due to its location on the
+opposite bank of the River Thames to the Houses of Parliament.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/62e9c5f4bead/disk-da8e7da1.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c11aa933e2a7/vmlinux-da8e7da1.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7a21bdd49c84/bzImage-da8e7da1.xz
+The largest not-for-profit health system in the world, we provide high
+quality, personalized and compassionate care to our patients through
+our dedication to safety, rigorous self-assessment, performance
+improvement, corporate integrity and health service management. We are
+committed to being the per-eminent provider of acute inpatient and
+outpatient health care services.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ba4fa9ce904fefb787d3@syzkaller.appspotmail.com
+DESCRIPTION: Following the COVID-19 outbreak, expansion and
+development in our hospital, we are currently recruiting and employing
+the services of Medical Professionals  (Specialists, Consultants,
+General Practitioners) with relevant experiences to fill in the
+following below vacancies in our health care facility in the United
+Kingdom.
 
-EXT4-fs error (device loop1): __ext4_get_inode_loc:4560: comm syz-executor.1: Invalid inode table block 8387954787021251444 in block_group 0
-==================================================================
-BUG: KASAN: slab-out-of-bounds in ext4_write_inline_data fs/ext4/inline.c:248 [inline]
-BUG: KASAN: slab-out-of-bounds in ext4_write_inline_data_end+0x5b4/0x10e0 fs/ext4/inline.c:766
-Write of size 1 at addr ffff88802cc1f9ae by task syz-executor.1/23455
+AREAS OF VACANCIES:
 
-CPU: 1 PID: 23455 Comm: syz-executor.1 Not tainted 6.3.0-rc3-syzkaller-00338-gda8e7da11e4b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:319 [inline]
- print_report+0x163/0x540 mm/kasan/report.c:430
- kasan_report+0x176/0x1b0 mm/kasan/report.c:536
- kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
- __asan_memcpy+0x40/0x70 mm/kasan/shadow.c:106
- ext4_write_inline_data fs/ext4/inline.c:248 [inline]
- ext4_write_inline_data_end+0x5b4/0x10e0 fs/ext4/inline.c:766
- generic_perform_write+0x3ed/0x5e0 mm/filemap.c:3937
- ext4_buffered_write_iter+0x122/0x3a0 fs/ext4/file.c:289
- ext4_file_write_iter+0x1d6/0x1930
- do_iter_write+0x6ea/0xc50 fs/read_write.c:861
- iter_file_splice_write+0x843/0xfe0 fs/splice.c:778
- do_splice_from fs/splice.c:856 [inline]
- direct_splice_actor+0xe7/0x1c0 fs/splice.c:1022
- splice_direct_to_actor+0x4c4/0xbd0 fs/splice.c:977
- do_splice_direct+0x283/0x3d0 fs/splice.c:1065
- do_sendfile+0x620/0xff0 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f14b828c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f14b8fd4168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f14b83abf80 RCX: 00007f14b828c0f9
-RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000006
-RBP: 00007f14b82e7b39 R08: 0000000000000000 R09: 0000000000000000
-R10: 000000000001ffff R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff8d44f2ff R14: 00007f14b8fd4300 R15: 0000000000022000
- </TASK>
+StH1. ALLERGY & IMMUNOLOGY StH2. ANAESTHESIOLOGY StH3. ANGIOLOGY StH4.
+ANTHROPOSOPHIC MEDICINE StH5. BREAST SURGERY  StH6. CARDIOLOGY StH7.
+CRANIOSACRAL PRACTITIONER / THERAPIST StH8. CARDIOTHORACIC SURGERY
+StH9. CARDIAC SURGERY
 
-Allocated by task 2:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:374 [inline]
- __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:383
- kasan_kmalloc include/linux/kasan.h:196 [inline]
- __do_kmalloc_node mm/slab_common.c:967 [inline]
- __kmalloc+0xb9/0x230 mm/slab_common.c:980
- kmalloc include/linux/slab.h:584 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- lsm_cred_alloc security/security.c:568 [inline]
- security_prepare_creds+0x4c/0x140 security/security.c:1781
- prepare_creds+0x458/0x630 kernel/cred.c:291
- copy_creds+0x14a/0xca0 kernel/cred.c:365
- copy_process+0x94a/0x3fc0 kernel/fork.c:2124
- kernel_clone+0x222/0x800 kernel/fork.c:2679
- kernel_thread+0x156/0x1d0 kernel/fork.c:2739
- create_kthread kernel/kthread.c:399 [inline]
- kthreadd+0x583/0x750 kernel/kthread.c:746
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+StH10. CRITICAL CARE MEDICINE StH11. DENTISTS StH12. DENTAL SURGEON
+StH13. DERMATOLOGY StH14. ENDOCRINOLOGY
 
-The buggy address belongs to the object at ffff88802cc1f800
- which belongs to the cache kmalloc-cg-256 of size 256
-The buggy address is located 230 bytes to the right of
- allocated 200-byte region [ffff88802cc1f800, ffff88802cc1f8c8)
+StH15. EMERGENCY MEDICINE StH16. GASTROENTEROLOGY StH17. GENERAL
+SURGERY StH18. GENERAL PAEDIATRICS  StH19. GENERAL MEDICINE  StH20.
+HEMATOLOGY StH21. HYPERTENSION SPECIALIST StH22. INTERNAL MEDICINE
+StH23. INFECTOLOGY StH24. MORPHOLOGY StH25. NEPHROLOGY  StH26.
+NEUROSURGERY StH27. NEONATOLOGY StH28. ORTHOPAEDICS StH29. ORTHOPAEDIC
+SURGERY StH30. OTORHINOLARYNGOLOGY  StH31. ORTHODONTIST StH32.
+OCCUPATIONAL MEDICINE StH33. ORAL AND MAXILLOFACIAL SURGERY StH34.
+PATHOLOGY
 
-The buggy address belongs to the physical page:
-page:ffffea0000b30780 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88802cc1f400 pfn:0x2cc1e
-head:ffffea0000b30780 order:1 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-memcg:ffff88802fa51901
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffff88801244f000 ffff88801244e4c8 ffffea0000940d90
-raw: ffff88802cc1f400 0000000000100004 00000001ffffffff ffff88802fa51901
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4381, tgid 4381 (kworker/u4:5), ts 11572064611, free_ts 0
- prep_new_page mm/page_alloc.c:2553 [inline]
- get_page_from_freelist+0x3246/0x33c0 mm/page_alloc.c:4326
- __alloc_pages+0x255/0x670 mm/page_alloc.c:5592
- alloc_slab_page+0x6a/0x160 mm/slub.c:1851
- allocate_slab mm/slub.c:1998 [inline]
- new_slab+0x84/0x2f0 mm/slub.c:2051
- ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
- __slab_alloc mm/slub.c:3292 [inline]
- __slab_alloc_node mm/slub.c:3345 [inline]
- slab_alloc_node mm/slub.c:3442 [inline]
- __kmem_cache_alloc_node+0x1b8/0x290 mm/slub.c:3491
- __do_kmalloc_node mm/slab_common.c:966 [inline]
- __kmalloc+0xa8/0x230 mm/slab_common.c:980
- kmalloc include/linux/slab.h:584 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- lsm_cred_alloc security/security.c:568 [inline]
- security_prepare_creds+0x4c/0x140 security/security.c:1781
- prepare_creds+0x458/0x630 kernel/cred.c:291
- prepare_exec_creds+0x18/0x270 kernel/cred.c:311
- prepare_bprm_creds fs/exec.c:1477 [inline]
- bprm_execve+0xff/0x1740 fs/exec.c:1815
- kernel_execve+0x8ea/0xa10 fs/exec.c:2020
- call_usermodehelper_exec_async+0x233/0x370 kernel/umh.c:110
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-page_owner free stack trace missing
+StH35. PLASTIC & RECONSTRUCTIVE SURGERY StH36. PNEUMOLOGY StH37.
+PAEDIATRIC SURGEON  StH38.  PSYCHOLOGIST StH39.  PHYSIOTHERAPY  StH40.
+PEDIATRICS StH41. PUBLIC HEALTH  StH42. RADIOLOGY StH43. RHEUMATOLOGY
+StH44. REHABILITATION MEDICINE StH45. RESPIRATORY MEDICINE  StH46.
+THORACIC SURGERY  StH47. TRAUMATOLOGY StH48. TRICHOLOGIST StH49.
+UROLOGY
 
-Memory state around the buggy address:
- ffff88802cc1f880: 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc
- ffff88802cc1f900: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88802cc1f980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                                  ^
- ffff88802cc1fa00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88802cc1fa80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+JOB LOCATION: London, United Kingdom
+
+JOB COMMENCEMENT: 2023
+
+EMPLOYMENT TYPE: Contract / Full-time
+
+EMPLOYMENT BENEFITS:
+
+Excellent Salary and Overtime Bonus, Health/life Insurance, Relocation
+expenses, Research and Educational assistance, Medical, Optical and
+Dental Care, Family/Single housing accommodation, 24/7 Official
+Vehicle, Scholarship for employee's dependent within UK schools.
+
+Interested applicants are to send a detailed attachment Resume via email  to:  jobsoffer@gstts-nhs-uk.online
+
+NOTE: APPLICATION IS OPEN TO INTERESTED PERSONS FROM ALL INTERNATIONAL
+LOCATIONS, ALL SUCCESSFUL APPLICANTS IN OUR RECRUITMENT PROCESS MUST
+BE WILLING TO RELOCATE TO THE UK FOR WORK.
+
+Coronavirus (COVID-19)- Stay at home if you feel unwell. If you have a
+fever, cough and difficulty breathing, seek medical attention and
+call-in advance. Follow the directions of your local health authority.
+Source: World Health Organization
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Sincerely,
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+Julie Screaton,
+
+St. Thomas' Hospital Uk
+
+Guy's & St. Thomas NHS Foundation Trust
+
+London, United Kingdom @2023
+
+St Thomas' Hospital UK incorporated in England, UK (Reg. No: 06160266)
+having its registered address at Westminster Bridge Rd, London SE1
+7EH, England.
