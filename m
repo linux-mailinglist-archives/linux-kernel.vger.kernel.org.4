@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D506D427B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C590D6D4282
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjDCKsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S231671AbjDCKuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbjDCKsm (ORCPT
+        with ESMTP id S231558AbjDCKuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:48:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDB76EB4
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:48:38 -0700 (PDT)
+        Mon, 3 Apr 2023 06:50:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0660C8690;
+        Mon,  3 Apr 2023 03:50:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74215618CF
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:48:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF468C4339C;
-        Mon,  3 Apr 2023 10:48:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B2A0618BC;
+        Mon,  3 Apr 2023 10:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB1B1C433EF;
+        Mon,  3 Apr 2023 10:50:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680518917;
-        bh=pJ9feBPMNK8P98DDjfcVQ3MjOh6JJSDCBELiLFJW0/Q=;
+        s=k20201202; t=1680519004;
+        bh=pNoXpE9oUqa30A0KIh7PGSKM0DPrQpMrz2J5xReqjiw=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AEb+SbfVnEqzy9sAw8S8W7Dsna+2Ti0y0uKakGzBHExV5imlQrA4eK/5pOtUsEKh/
-         0FIPZQJCbogiuLn16oNQT0rvO6DRyV0sFmxfTkh0f+eyTETjSXIf0HibsqYyi0PDdD
-         4Ir66eRPP0GmuRNgHm/rxf8JqzqbzedGxIYeY8ehjWJdfdEUAHOtyvST6cuPXv8sma
-         yBdi3zko892VJ1ewr1u6w02VJHCZty+jHFjJD30AZhETAQpQbj+wEhofprjkGdub/h
-         tseS09F0RDIYIzzg78+ZQuAvR+gzKVySOr3bJ25ZyGuTzsmCWIbhjyGZzwP6pyzN9U
-         pNux/i4VYQxFw==
-Message-ID: <d07884b6-ca82-4e3d-32b0-3ebb0674b64e@kernel.org>
-Date:   Mon, 3 Apr 2023 13:48:33 +0300
+        b=X51H2bz4u4kSFa/6GcJsMQnoOvyO/426SZUpoL9HU1q4GMqaCLSwUYFIKyk6lq2+w
+         PHwC9yF0UZMxinls8SeBj2bDeTTG3uHpORIgzJU+dF1d2T+YPnEQnpz/HiwCDmFT/T
+         xe+9IakCZEjDp8y51tP/X+HLKuLccu3/6mdp6gQpxm26MaUpW/AzR7zk2t3FScQMyN
+         YnzYWA7+swoxzOd9p6EMK9pL7LVXV9YpjNYoK3jExmkt4RURTc894c8V0fF6WCGmtK
+         LqhorJPHaZKgi+yAtZqOETDMh7INlDNOlTwziwm5JLdI8cgRfWAVR9t8LSVljxPMTw
+         uhJURqqWpT8yQ==
+Message-ID: <b49419f3-8519-6d91-c797-f275473b5b7a@kernel.org>
+Date:   Mon, 3 Apr 2023 13:49:58 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] phy: ti: j721e-wiz: Fix unreachable code in
- wiz_mode_select()
+Subject: Re: [PATCH net] net: ethernet: ti: am65-cpsw: Fix mdio cleanup in
+ probe
 Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>, vkoul@kernel.org,
-        kishon@kernel.org
-Cc:     linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srk@ti.com, t-patil@ti.com
-References: <20230403094552.929108-1-s-vadapalli@ti.com>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srk@ti.com
+References: <20230403090321.835877-1-s-vadapalli@ti.com>
 From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230403094552.929108-1-s-vadapalli@ti.com>
+In-Reply-To: <20230403090321.835877-1-s-vadapalli@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-6.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,11 +61,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 03/04/2023 12:45, Siddharth Vadapalli wrote:
-> In the wiz_mode_select() function, the configuration performed for
-> PHY_TYPE_USXGMII is unreachable. Fix it.
+On 03/04/2023 12:03, Siddharth Vadapalli wrote:
+> In the am65_cpsw_nuss_probe() function's cleanup path, the call to
+> of_platform_device_destroy() for the common->mdio_dev device is invoked
+> unconditionally. It is possible that either the MDIO node is not present
+> in the device-tree, or the MDIO node is disabled in the device-tree. In
+> both these cases, the MDIO device is not created, resulting in a NULL
+> pointer dereference when the of_platform_device_destroy() function is
+> invoked on the common->mdio_dev device on the cleanup path.
 > 
-> Fixes: b64a85fb8f53 ("phy: ti: phy-j721e-wiz.c: Add usxgmii support in wiz driver")
+> Fix this by ensuring that the common->mdio_dev device exists, before
+> attempting to invoke of_platform_device_destroy().
+> 
+> Fixes: a45cfcc69a25 ("net: ethernet: ti: am65-cpsw-nuss: use of_platform_device_create() for mdio")
 > Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 
 Reviewed-by: Roger Quadros <rogerq@kernel.org>
