@@ -2,154 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD576D3F7B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1446D3F7F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbjDCIyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        id S231815AbjDCIy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjDCIyL (ORCPT
+        with ESMTP id S230332AbjDCIy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:54:11 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2045.outbound.protection.outlook.com [40.107.105.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC80172B;
-        Mon,  3 Apr 2023 01:54:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GfdYP7UHmcGxfWOnz7j8O8PL4ey2zI1VffD44qGTi3DogN3P2qA+q5Dym9WLkEEBH7hMOA7YvmaLES10Ic5q/lE97RGHRdLx8ODBUGi4iALEBgsTMKvkTfqYvzsRRpYQV2Ht+MtwMY9GUuWDCBBlX2OvIeQKmGxqjA8trMs2IZter6slWFIk027vHrxebsmteKU/TzT14N0oMtgOpb2NziD8vhB8DyJpM0mQgYFHPQ/vGdqgnxw+QMa6qC/7r/HDDzj2xC5L5Gif0zygMcb2m0g4aug3yvTbsqA3nJl7/hXr+AHxwGp9ifY8AwPmMAlG3S1dkKyYexVjJabwdl5pBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rYaY2Wdk3FyM/fCEIyKj2Dxn3JHCEK5g2BJaNs+5dqs=;
- b=LIQqMsQswHaimk5WhTnkYM5wjY0Ahn8ykJYZXNHQzzxr2vZBak1s1YlFV0FrkAyRyZmj0JIFs9V1dhg0n73UdKKHO+tJarx51U71m+YsPUD8MiRHJ4O2sFZeCduDPZlKihaySLQ8reyAixExSNYy5TPGHt0v/Fs9fh3L/GR6SNN7J9gDWERqDy4SJuLdKCl2bw2AjWZ4zlGqr5MgsV3TwVwZ7QH12A7Xvvnq2/myxCuYezBHc82cZXUDkJyUzzlXmMxsOTGKI4uFQFwufTxA8pSc6h4eD/ZKNckYsf511m0/VpHCT7M5GaHd1rVxOXct2pJRM/gtX/Jlla5R+AeHTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rYaY2Wdk3FyM/fCEIyKj2Dxn3JHCEK5g2BJaNs+5dqs=;
- b=tcAaruTogeedVrWv5vqqK/pOpPBhcKGZSflz+zQC8XvUDL5tiJ7hzVzdxZWZS3/CW9R82kpjj13aHgCmBQ4wCydP9jFW9SybPFvXG5KcTMjka8ixsQERnEmo/wN4IKVL+86CFToTET03xWaI7EUICb7Jjjz/znng8bvWy8PvG+E0anhaS1t8tWttLm7hPotJiIEirReCji9w16ciYu4mmNVrDuaNDmHnSr/HVmRuQam9R0+CDf4cXH73uT0HnaYzBXSvJtKkGei9+oWqQy8t/KP2noEI6I+2x377tnzpGtBQ5eLhWjibitXSCBOX6xgJQ5Y8NPK258vc8dzoHmhzAA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by AS4PR04MB9484.eurprd04.prod.outlook.com (2603:10a6:20b:4ed::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
- 2023 08:54:08 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::74bd:991c:527d:aa61]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::74bd:991c:527d:aa61%9]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
- 08:54:08 +0000
-Message-ID: <7b1f757b-b626-5d49-354e-343e040b8762@suse.com>
-Date:   Mon, 3 Apr 2023 10:54:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [syzbot] WARNING in sisusb_send_bulk_msg/usb_submit_urb
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>,
-        Thomas Winischhofer <thomas@winischhofer.net>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-References: <00000000000096e4f905f81b2702@google.com>
- <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
-Content-Language: en-US
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0159.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::19) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        Mon, 3 Apr 2023 04:54:58 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B808C2101;
+        Mon,  3 Apr 2023 01:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680512096; x=1712048096;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=OgVZFnwUeClEFYscei6sBPeRulTSAIUExuFlXZd8o24=;
+  b=MY/YR0jscimVWdkKLtCmeVRV2Kj3ldWsGRDkv5CMYoD1wutRK6s12mXx
+   O14RKzsO/1ZV7SKWKs+mhFRDgF1dTf/XNTLRLmoL+3sicyaTaTdZUFWSt
+   cC9IiffjH4bcfJD9nHF2N4dgupatzLJKnFSUr/xcQfwC8kVwn/1Fbk8of
+   P/uz3hKXt08uHumZhvCF3IZDJBRkQwUtNOR7W8Y88U4FsvtJGJsW4Sb5p
+   cMTNFRLGe2nIALVlYbOiaBnLOzwdII8RwFuHhVhowWonEDYFfAJkXgkqr
+   w16Gjg5hjXQ+l7TmcPaqzKy+j9fRdQwDZUc+mqG8MvKPWv7V4NYWUQj41
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="330416989"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="330416989"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 01:54:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="860114101"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="860114101"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.40.243])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 01:54:51 -0700
+Message-ID: <3ae7d0d9-32c2-3a5f-4f5a-4ba974ebef2b@intel.com>
+Date:   Mon, 3 Apr 2023 11:54:48 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|AS4PR04MB9484:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7d55ab84-473e-4248-b99f-08db3420fbff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0a2WqvK8ofAxr6/rrATyuFa1PTbteMz0xj+EAqh+cCEkXvqQ5efNt0WUx6a+0Xfqt6yjGHZ6k7h9AH7U7Hy6Zcsqre4kVjnAZHQA2QjeJGutfx/7MJx9yY+MP65d59mA7RWbUzhOmAoy0Xs7VNCWWQ7dWZWHvAz7sNFuRJRS9qe6aMxX6BAEwIx2iaQlmy0Wjoos9xgNtOr8laYarv5Q91UVjIjBk/NeH4OxpvAj3pKWi9+lv8uiylRC2DEgVWCAq4hAtf03PTcKpRU05rRgw5TAenKrL9heRzQ46VBOeVbwKY5amGQBFiJHWuW8Y1vsn+8EH14VE1nvKv/wtG5K8ztofQC7VBFvIuWNPjQZN4Sugah6/9Oid6DSFDVvZ3UHFykTE0oAlBtReJ+KusBEKv1tmkfUql7h+ubNhHFZGwQKpbfZX94TLeQVCKcmvmeqNhCNFQfkbRUG7iFGU3IYRcIbX6LVvYffuGsykvhyumEw7c67XhFeVybRuRWGSgR0pJiArB1B64FTff2/ckpxQKVPGJ+JUMixVBOPkqSL/GzOVZdRFHSsBiO1NwYKIQFjwZ8aOHEgO79Q9PETwuLl5p6UbQPfI5dxE1SUyb9jy8D1iVHBKQ98EZBGfbtjW2ATdEjPmfFJGtGDkf6Edy2rUDqRmol2yVScQs5o4MEldN0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199021)(31696002)(86362001)(36756003)(2906002)(31686004)(2616005)(966005)(53546011)(83380400001)(186003)(6512007)(6506007)(6486002)(6666004)(4326008)(8676002)(66946007)(66556008)(66476007)(41300700001)(5660300002)(38100700002)(110136005)(316002)(478600001)(4744005)(8936002)(99710200001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K3liUlFsVTFlVWNncXd1YVFCSlVNVjBWSlVXaW14d2V5d0Q3cmV5NHJWTy9B?=
- =?utf-8?B?QWoyVCtRUjhXVXBka21Pd2RPd2E4SUp4Y3hqR0JFT1VKWFpaMU5td29mL0VP?=
- =?utf-8?B?R2tjZnpBZGZmMGJGRklKVXp3Wjl1ZXp0ZEE1NXArU2dCd0pNSm05U3RpVEMx?=
- =?utf-8?B?U09xT0RzZGt4V0IvY1kvQUFvWVN0TEl3T3BLZ0o2ZkxCaVNMYWJON2hGU3dQ?=
- =?utf-8?B?WHQ2UzhlNytGclMrcGcrR05BOFBlMmhxTmdQdVRaM3FUbkNWQnluTUFMWmlM?=
- =?utf-8?B?Q29OODIxQzdhb21jKy9lUGxjRFphNVlEUUtiRHUwSWRLT0grc1loNm5XSDAr?=
- =?utf-8?B?cGIxR2Jqc0RGNUhrOWxubEV4K0pnZEVkdFdiZEpUbDFLVTRkeTJoV1UyUlBX?=
- =?utf-8?B?NFg4Y2NXaDBlNmlzaDJKbDJXOUUwNTNBM2dZeHBYSzhldytNWFZPUTRocldL?=
- =?utf-8?B?c0NWdFFQZmREcVVGUSt2bXJwV3BLL1N1WjZ3YzJHQVhrZXhaVzNaODZ6NHFp?=
- =?utf-8?B?dDdsUm5QTFNHNW10Z1BCUEg5U0YxQVVaY1hkaWVkNFJUT3liZDZEVGJkVDJN?=
- =?utf-8?B?cWdVY0JUb2Ntc1pnMkNNTXFnVjJYdk1nWlN2VnRJVkNGbld2cjVUWnZBL29D?=
- =?utf-8?B?VHA0WXFDdlk4MEN3YzEvWCs0Qk81S0F2ZnpuQnZpWUp1K1BmR2cxdWM3WTVr?=
- =?utf-8?B?TW8rdFVQem1SeVF1YTVuR3pGQmVkcU96RXNsdGNSTlNYQk80TWp0N1kvRFFW?=
- =?utf-8?B?NGtpM3lPZ3hSMmdWbGgvZW5kM3daWm44NGhZMlJmVVRqeTJVMloyUG9KeFly?=
- =?utf-8?B?S0JHZlRBN2p0ZFFXdytuZHd5b0NKeU9iRXV2K1VISVNVcE1MVHcvRkR0Qjdh?=
- =?utf-8?B?UlZ4Tk1YbUlFandwTVU4OFlzZzJpNVFQeFFvN1FYMHczbTdYa2RzTjlWS29p?=
- =?utf-8?B?OUlKckZWQlRiV3BOZWhpMlFtZTNYME5HUWlFOGlFajk0ckFZa1J0OVNwUEg1?=
- =?utf-8?B?YjZPSnB5S1NuZmh3Tk9aZHlzd1hNKzQzYm1NT2NCT0U4SjVZL3A4RnN1YWFS?=
- =?utf-8?B?c0hoMXpHeXRtSWR1RldZU0M2ekVsNG1xRG8zcW9SQ01XaUZWcUNKK3RSRnVj?=
- =?utf-8?B?aXNhbmpRRVE2a0s0MXpSazhja2o4REVSWWc0ckkyNTdjQ2ZySnczdHE3TE5v?=
- =?utf-8?B?WFJLOTVNZVZBVTl6OU4xcW4xMUdkak1TUlpuUGZIdjBBVDk2TmN2MGl0LzR0?=
- =?utf-8?B?RkNQQ1RiMnIzMGVqSDNVOFg2cHI1L21XYWFld3RCMFRjWHRxL2lzSDEyR01E?=
- =?utf-8?B?N3RTSU9CN3lxRXN0TUFHS3B0M01uS0pNblJDWjl6amRBT01EODNleXY1TnBy?=
- =?utf-8?B?RVl4VnNvTElMd1U1ZWpsV1gyOGorbUhlVndRdnF0eTZYT01mN0Jsc3NRQ0pQ?=
- =?utf-8?B?RkdtTFBRZ0wwZmpDUE1iTkdubVZPT2c0azRDbmFXV21uRmFjcG9KOHNXSFdQ?=
- =?utf-8?B?UUNmMkIwZVNkdGRUN3o1UTdLYWhmS0ZGb2RlQ1I1MFNYVm1BLzZtSkk4TUht?=
- =?utf-8?B?SFBBSXJtSnNIdmJZdSthUmpKaDhGZFQvT0c1UkF3aTVERGNtZ2pwejFMcUZz?=
- =?utf-8?B?Q1lTcGtuRkRDcEp6NkhqWVl3aHU4eDJKL0ZXNFpET201ZU5kZmN1OWIzRk5v?=
- =?utf-8?B?bXNoNlBTbjREOE1rVVc2bHdEdzlXV1JaRTVmWWxsN1JCWWJvRzdIZ0lIU29X?=
- =?utf-8?B?c2NsUldaczhYa2hUSm9aSGtRVzFxeU9iRVlPdTdJT3dRZkF3RzNzYXpwOExN?=
- =?utf-8?B?RkFlNGlDcEo3WEF6NlF6cUlmaDBNOFkvc3FWdnAyL0xPZ1pkUDZ2dm9vd29V?=
- =?utf-8?B?NUU4dGZCT0wrZzBTcHlQVGlJancwSjFnWG9ZcWxWWEczMENIdnZzM3FKTzZ2?=
- =?utf-8?B?VFJBb3ZTVHg4TzE3emowU2hXYlgvV2VOM2JIcVUzMGlqc3UzR0Ntc3ZHVzJn?=
- =?utf-8?B?TGdaVGptOC9QNXc5LzRiOEs2bUxVNTdja2cweGdCNzJrMXdYWG9zdVh3Uncr?=
- =?utf-8?B?b1pzeEwrQW9kNmd5NVlIZUo2Vkl2NFErdURNMXdsWlJUcmozMXhicVdZR1lJ?=
- =?utf-8?B?YXB2N1o4RTFyZ3l2ZjNBdUtTK0x1dWFRWHFZam1CMW1ldFd1K2dpSGRCd29Z?=
- =?utf-8?Q?suS7ivD+pZpqdl9LuYfWT0YcuNgyGq4ZTywGXZF2d9T2?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d55ab84-473e-4248-b99f-08db3420fbff
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 08:54:08.1775
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: v/6Nte38lX2+NTjt/13mO2xQlxw0zLAjV1NzIkvjFDhsxmnClbBPOHNCzKQYy0lazCBhHUHHx4LDK9u+cMZcmQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9484
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.1
+Subject: Re: [PATCH] perf: script: add new output field 'dsoip'
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Changbin Du <changbin.du@huawei.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hui Wang <hw.huiwang@huawei.com>
+References: <20230331084418.3910903-1-changbin.du@huawei.com>
+ <f2eb0299-05cf-72f5-4bb1-c09ebb0a55a1@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <f2eb0299-05cf-72f5-4bb1-c09ebb0a55a1@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 30.03.23 17:34, Alan Stern wrote:
-> Reference: https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
+On 3/04/23 08:28, Adrian Hunter wrote:
+> On 31/03/23 11:44, Changbin Du wrote:
+>> The goal of this change is to achieve consistent output for address. Before
+>> this, the raw ip is printed for non-callchain and binary offset for
+>> callchain. Mostly what we expect is the raw ip.
+>>
+>> This patch does two changes:
+>>   - Always print raw ip for symbols.
+>>   - Add a new 'dsoip' field if we really need the binary offset, and the
 > 
-> The sisusbvga driver just assumes that the endpoints it uses will be
-> present, without checking.  I don't know anything about this driver, so
-> the fix below may not be entirely correct.
+> IP stands for instruction pointer, which is always a memory address,
+> so 'dsoip' does not seem like a good name.  What about 'dso_offset'?
+> 
+>>     offset is appended to dso name.
+>>
+>> Default output now:
+>> $ perf script
+>>        perf-exec 171459 5380927.621499:          1 cycles:  ffffffff8c66e1b8 [unknown] ([unknown])
+>>        perf-exec 171459 5380927.621524:          1 cycles:  ffffffff8c66e1b8 [unknown] ([unknown])
+>>        perf-exec 171459 5380927.621527:          2 cycles:  ffffffff8c66e1b8 [unknown] ([unknown])
+>>        perf-exec 171459 5380927.621530:         17 cycles:  ffffffff8c66e1b8 [unknown] ([unknown])
+>>        perf-exec 171459 5380927.621533:        194 cycles:  ffffffff8c66e1bf [unknown] ([unknown])
+>>        perf-exec 171459 5380927.621536:       2153 cycles:  ffffffff8c6375fe [unknown] ([unknown])
+>>        perf-exec 171459 5380927.621540:      23135 cycles:  ffffffff8d001ac4 [unknown] ([unknown])
+>>        perf-exec 171459 5380927.621555:     224703 cycles:  ffffffff8c7a5153 [unknown] ([unknown])
+>>               ls 171459 5380927.621686:     587397 cycles:  ffffffff8c7c43de [unknown] ([unknown])
+>>               ls 171459 5380927.622016:     653693 cycles:      7fe1e47278c7 _dl_map_object_deps+0x307 (/lib/x86_64-linux-gnu/ld-2.27.so)
+>>               ls 171459 5380927.622382:     633896 cycles:      7fe1e41bd0d0 __wmemchr_ifunc+0x0 (/lib/x86_64-linux-gnu/libc-2.27.so)
+>>               ls 171459 5380927.622737:     608856 cycles:      7fe1e4194594 _int_malloc+0x264 (/lib/x86_64-linux-gnu/libc-2.27.so)
+>>               ls 171459 5380927.623078:     586376 cycles:      55ff5293d27c [unknown] (/bin/ls)
+>>               ls 171459 5380927.623405:     566812 cycles:      55ff5293b202 [unknown] (/bin/ls)
+>>               ls 171459 5380927.623723:     549960 cycles:  ffffffff8c82b138 [unknown] ([unknown])
+>>
+>> Display 'dsoip' field:
+>> $ perf script -F +dsoip
+>>        perf-exec 171459 5380927.621499:          1 cycles:  ffffffff8c66e1b8 [unknown] ([unknown]+0x0)
+>>        perf-exec 171459 5380927.621524:          1 cycles:  ffffffff8c66e1b8 [unknown] ([unknown]+0x0)
+>>        perf-exec 171459 5380927.621527:          2 cycles:  ffffffff8c66e1b8 [unknown] ([unknown]+0x0)
+>>        perf-exec 171459 5380927.621530:         17 cycles:  ffffffff8c66e1b8 [unknown] ([unknown]+0x0)
+>>        perf-exec 171459 5380927.621533:        194 cycles:  ffffffff8c66e1bf [unknown] ([unknown]+0x0)
+>>        perf-exec 171459 5380927.621536:       2153 cycles:  ffffffff8c6375fe [unknown] ([unknown]+0x0)
+>>        perf-exec 171459 5380927.621540:      23135 cycles:  ffffffff8d001ac4 [unknown] ([unknown]+0x0)
+>>        perf-exec 171459 5380927.621555:     224703 cycles:  ffffffff8c7a5153 [unknown] ([unknown]+0x0)
+>>               ls 171459 5380927.621686:     587397 cycles:  ffffffff8c7c43de [unknown] ([unknown]+0x0)
+>>               ls 171459 5380927.622016:     653693 cycles:      7fe1e47278c7 _dl_map_object_deps+0x307 (/lib/x86_64-linux-gnu/ld-2.27.so+0xe8c7)
+>>               ls 171459 5380927.622382:     633896 cycles:      7fe1e41bd0d0 __wmemchr_ifunc+0x0 (/lib/x86_64-linux-gnu/libc-2.27.so+0xbd0d0)
+>>               ls 171459 5380927.622737:     608856 cycles:      7fe1e4194594 _int_malloc+0x264 (/lib/x86_64-linux-gnu/libc-2.27.so+0x94594)
+>>               ls 171459 5380927.623078:     586376 cycles:      55ff5293d27c [unknown] (/bin/ls+0x1227c)
+>>               ls 171459 5380927.623405:     566812 cycles:      55ff5293b202 [unknown] (/bin/ls+0x10202)
+>>               ls 171459 5380927.623723:     549960 cycles:  ffffffff8c82b138 [unknown] ([unknown]+0x0)
+>>
+>> Signed-off-by: Changbin Du <changbin.du@huawei.com>
+>> ---
+>>  tools/perf/Documentation/perf-script.txt |  2 +-
+>>  tools/perf/builtin-script.c              |  5 +++++
+>>  tools/perf/util/evsel_fprintf.c          | 26 ++++++++++++------------
+>>  tools/perf/util/evsel_fprintf.h          | 13 ++++++------
+>>  4 files changed, 26 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
+>> index 777a0d8ba7d1..ef392785f776 100644
+>> --- a/tools/perf/Documentation/perf-script.txt
+>> +++ b/tools/perf/Documentation/perf-script.txt
+>> @@ -130,7 +130,7 @@ OPTIONS
+>>  -F::
+>>  --fields::
+>>          Comma separated list of fields to print. Options are:
+>> -        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, addr, symoff,
+>> +        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, dsoip, addr, symoff,
+>>          srcline, period, iregs, uregs, brstack, brstacksym, flags, bpf-output,
+>>          brstackinsn, brstackinsnlen, brstackoff, callindent, insn, insnlen, synth,
+>>          phys_addr, metric, misc, srccode, ipc, data_page_size, code_page_size, ins_lat,
+>> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+>> index a792214d1af8..a181decf7922 100644
+>> --- a/tools/perf/builtin-script.c
+>> +++ b/tools/perf/builtin-script.c
+>> @@ -133,6 +133,7 @@ enum perf_output_field {
+>>  	PERF_OUTPUT_VCPU            = 1ULL << 38,
+>>  	PERF_OUTPUT_CGROUP          = 1ULL << 39,
+>>  	PERF_OUTPUT_RETIRE_LAT      = 1ULL << 40,
+>> +	PERF_OUTPUT_DSOIP           = 1ULL << 41,
+>>  };
+>>  
+>>  struct perf_script {
+>> @@ -174,6 +175,7 @@ struct output_option {
+>>  	{.str = "ip",    .field = PERF_OUTPUT_IP},
+>>  	{.str = "sym",   .field = PERF_OUTPUT_SYM},
+>>  	{.str = "dso",   .field = PERF_OUTPUT_DSO},
+>> +	{.str = "dsoip", .field = PERF_OUTPUT_DSOIP},
+>>  	{.str = "addr",  .field = PERF_OUTPUT_ADDR},
+>>  	{.str = "symoff", .field = PERF_OUTPUT_SYMOFFSET},
+>>  	{.str = "srcline", .field = PERF_OUTPUT_SRCLINE},
+>> @@ -574,6 +576,9 @@ static void set_print_ip_opts(struct perf_event_attr *attr)
+>>  	if (PRINT_FIELD(DSO))
+>>  		output[type].print_ip_opts |= EVSEL__PRINT_DSO;
+>>  
+>> +	if (PRINT_FIELD(DSOIP))
+>> +		output[type].print_ip_opts |= EVSEL__PRINT_DSOIP;
+>> +
+>>  	if (PRINT_FIELD(SYMOFFSET))
+>>  		output[type].print_ip_opts |= EVSEL__PRINT_SYMOFFSET;
+>>  
+>> diff --git a/tools/perf/util/evsel_fprintf.c b/tools/perf/util/evsel_fprintf.c
+>> index bd22c4932d10..fd1791fab051 100644
+>> --- a/tools/perf/util/evsel_fprintf.c
+>> +++ b/tools/perf/util/evsel_fprintf.c
+>> @@ -116,6 +116,7 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+>>  	int print_ip = print_opts & EVSEL__PRINT_IP;
+>>  	int print_sym = print_opts & EVSEL__PRINT_SYM;
+>>  	int print_dso = print_opts & EVSEL__PRINT_DSO;
+>> +	int print_dsoip = print_opts & EVSEL__PRINT_DSOIP;
+>>  	int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
+>>  	int print_oneline = print_opts & EVSEL__PRINT_ONELINE;
+>>  	int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
+>> @@ -133,7 +134,7 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+>>  		while (1) {
+>>  			struct symbol *sym;
+>>  			struct map *map;
+>> -			u64 addr = 0;
+>> +			u64 dso_ip = 0;
+> 
+> Renaming 'addr' just makes the patch more complicated.
+> Just leave it as 'addr'
+> 
+>>  
+>>  			node = callchain_cursor_current(cursor);
+>>  			if (!node)
+>> @@ -141,6 +142,8 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+>>  
+>>  			sym = node->ms.sym;
+>>  			map = node->ms.map;
+>> +			if (map)
+>> +				dso_ip = map->map_ip(map, node->ip);
+> 
+> There does not seem to be any reason to move these lines of code.
+> 
+>>  
+>>  			if (sym && sym->ignore && print_skip_ignored)
+>>  				goto next;
+>> @@ -150,20 +153,12 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+>>  			if (print_arrow && !first)
+>>  				printed += fprintf(fp, " <-");
+>>  
+>> -			if (map)
+>> -				addr = map->map_ip(map, node->ip);
+>> -
+>> -			if (print_ip) {
+>> -				/* Show binary offset for userspace addr */
+>> -				if (map && !map->dso->kernel)
+> 
+> I would have expected to keep existing functionality unchanged i.e.
+> 
+> -				if (map && !map->dso->kernel)
+> +				if (!print_dsoip && map && !map->dso->kernel)
+> 
+>> -					printed += fprintf(fp, "%c%16" PRIx64, s, addr);
+>> -				else
+>> -					printed += fprintf(fp, "%c%16" PRIx64, s, node->ip);
+>> -			}
+>> +			if (print_ip)
+>> +				printed += fprintf(fp, "%c%16" PRIx64, s, node->ip);
+>>  
+>>  			if (print_sym) {
+>>  				printed += fprintf(fp, " ");
+>> -				node_al.addr = addr;
+>> +				node_al.addr = dso_ip;
+>>  				node_al.map  = map;
+>>  
+>>  				if (print_symoffset) {
+>> @@ -179,11 +174,13 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+>>  			if (print_dso && (!sym || !sym->inlined)) {
+>>  				printed += fprintf(fp, " (");
+>>  				printed += map__fprintf_dsoname(map, fp);
+>> +				if (print_dsoip)
+> 
+> Better to avoid '[unknown]+0x0' i.e.
+> 
+> 				if (print_dsoip && map && map->dso)
+> 
+>> +					printed += fprintf(fp, "+0x%lx", (map && map->dso) ? dso_ip : 0);
+>>  				printed += fprintf(fp, ")");
+>>  			}
+>>  
+>>  			if (print_srcline)
+>> -				printed += map__fprintf_srcline(map, addr, "\n  ", fp);
+>> +				printed += map__fprintf_srcline(map, dso_ip, "\n  ", fp);
+>>  
+>>  			if (sym && sym->inlined)
+>>  				printed += fprintf(fp, " (inlined)");
+>> @@ -214,6 +211,7 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
+>>  	int print_ip = print_opts & EVSEL__PRINT_IP;
+>>  	int print_sym = print_opts & EVSEL__PRINT_SYM;
+>>  	int print_dso = print_opts & EVSEL__PRINT_DSO;
+>> +	int print_dsoip = print_opts & EVSEL__PRINT_DSOIP;
+>>  	int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
+>>  	int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
+>>  	int print_unknown_as_addr = print_opts & EVSEL__PRINT_UNKNOWN_AS_ADDR;
+>> @@ -242,6 +240,8 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
+>>  		if (print_dso) {
+>>  			printed += fprintf(fp, " (");
+>>  			printed += map__fprintf_dsoname(al->map, fp);
+>> +			if (print_dsoip)
+> 
+> Better to avoid '[unknown]+0x0' i.e.
+> 
+> 				if (print_dsoip && al->map && al->map->dso)
+> 
+> 
+>> +				printed += fprintf(fp, "+0x%lx", (al->map && al->map->dso) ? al->addr : 0);
+>>  			printed += fprintf(fp, ")");
+>>  		}
+>>  
+>> diff --git a/tools/perf/util/evsel_fprintf.h b/tools/perf/util/evsel_fprintf.h
+>> index 3093d096c29f..3f282c5840da 100644
+>> --- a/tools/perf/util/evsel_fprintf.h
+>> +++ b/tools/perf/util/evsel_fprintf.h
+>> @@ -20,12 +20,13 @@ int evsel__fprintf(struct evsel *evsel, struct perf_attr_details *details, FILE
+>>  #define EVSEL__PRINT_IP			(1<<0)
+>>  #define EVSEL__PRINT_SYM		(1<<1)
+>>  #define EVSEL__PRINT_DSO		(1<<2)
+>> -#define EVSEL__PRINT_SYMOFFSET		(1<<3)
+>> -#define EVSEL__PRINT_ONELINE		(1<<4)
+>> -#define EVSEL__PRINT_SRCLINE		(1<<5)
+>> -#define EVSEL__PRINT_UNKNOWN_AS_ADDR	(1<<6)
+>> -#define EVSEL__PRINT_CALLCHAIN_ARROW	(1<<7)
+>> -#define EVSEL__PRINT_SKIP_IGNORED	(1<<8)
+>> +#define EVSEL__PRINT_DSOIP		(1<<3)
+>> +#define EVSEL__PRINT_SYMOFFSET		(1<<4)
+>> +#define EVSEL__PRINT_ONELINE		(1<<5)
+>> +#define EVSEL__PRINT_SRCLINE		(1<<6)
+>> +#define EVSEL__PRINT_UNKNOWN_AS_ADDR	(1<<7)
+>> +#define EVSEL__PRINT_CALLCHAIN_ARROW	(1<<8)
+>> +#define EVSEL__PRINT_SKIP_IGNORED	(1<<9)
 
-Hi,
+Also, do these really need to be renumbered?  Why not just
+put:
 
-this patch by itself looks good to me.
+#define EVSEL__PRINT_DSOIP			(1<<9)
 
-But the need for it is problematic. Do we have any vendor specific driver
-that could get away without an equivalent to this patch without showing
-an equivalent bug? If so, why do we have a generic matching code, although
-it is always insufficient?
-
-What is the purpose of a generic binding interface in sysfs if every probe()
-method blocks it? Allowing a generic probe looks like a misdesign under these
-circumstances. You'd really want to add IDs to drivers.
-
-	Regards
-		Oliver
+>>  
+>>  struct addr_location;
+>>  struct perf_event_attr;
+> 
 
