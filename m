@@ -2,109 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8BD6D4999
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587596D49AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbjDCOjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S233780AbjDCOkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233728AbjDCOjX (ORCPT
+        with ESMTP id S233774AbjDCOkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:39:23 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4A91DFB2;
-        Mon,  3 Apr 2023 07:39:22 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 77AF532009FD;
-        Mon,  3 Apr 2023 10:39:19 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 03 Apr 2023 10:39:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680532759; x=
-        1680619159; bh=K2V3JLsEArJXT5TV6MDPru6C5GMHsExu9jhmhSdk+zM=; b=W
-        c5t8NREEIWo1fH4RidMcCeW8vslYrlg8yjoP+fgXapMvSaVtq9OTiDKafp41bgJz
-        oYjPqABrCdeeV2/V1q4c0BxUORxGcYBHOCApDb2YeRDYyzJEXAzT9o5m2O+GId2f
-        AOwiKFEAT8Xze9i4dm37E1ox/z8+Fp68QS5/sUUTygsRqVqWlIPcXISiXSsMcDXO
-        Eqh3kwG9iXvTml4l8bznnUS64eqHWJETGhzsHommuBn632Wy3/YYkMcMmyMgPIwF
-        CvAhcGESsu0siFSXsfTIzDBnXYX/G2dwg2jXI3eLoe/7uylTaKBOBs176DS58Zrq
-        a/zQ4xmUoKX1PMSfaXdOg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680532759; x=1680619159; bh=K2V3JLsEArJXT
-        5TV6MDPru6C5GMHsExu9jhmhSdk+zM=; b=e2w447uusTtu5q54yfFeOZQdnc9b/
-        AJb+1KHufDoeqjk9f1kBNfqBzKSaT52+A7uZpWAB1u5QndFu01DUPparmXsPlxGx
-        WF0vAV3fCvY69KlA++dInfzV4t+6p5b2jO6d0lqD4ePrXihfFXFbmUqUpN4g9cKz
-        E/GaxU82i/JtkkPrcUBc5RNWUQ2mXs4d8xk9Uxy037d9gvl6vmdG6zqHhjj0z3TS
-        limNJ6chj7mBRJ9SV29UXHqJtZNsV8Nuhr88F+0HOXbtmOMT5m4KNU6CGBFgzueV
-        hIKekPqMAkqm81p047aklihTLYEghPR28pLxBAE/YcJ2UfttHkwTmop5Q==
-X-ME-Sender: <xms:FeUqZPgcR0R5uYcMz8fIvtRs2xTFZj3jJovbAIKYeZCtGtPwcDmGwA>
-    <xme:FeUqZMBB5AJvL8CYjz7xMwMTQRl7Bk6pamWbvPKgXpDejfiZqUtjN_ouNX1ivsuBt
-    La6CPAFGtdaDssn-7E>
-X-ME-Received: <xmr:FeUqZPHWomL5Yh6m22PebkDm45jvT5tmJMQK0cPxhSK-fEQ8NNhFfyejRds7DeHgRr1SzA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedgjeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:FeUqZMR2gbXvV65-WXUbBhiEehYP9XAH881P-ukBM_y6mPb7AHdrkw>
-    <xmx:FeUqZMxtx0mdE-o7b9AKZALJVOt4RD8nXtLV7B8R3JWtvwjKAB_v5A>
-    <xmx:FeUqZC6khTcI2U4zi-8BiEPgp0hPpcDGozJRoiFCd_4aCYWgKU_XPw>
-    <xmx:F-UqZF89gh87kchgVURi6j5iIyAKwLcxYz_F9xkw8ECKiXJp0Th1KQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Apr 2023 10:39:17 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 7F0EC10D7B3; Mon,  3 Apr 2023 17:39:15 +0300 (+03)
-Date:   Mon, 3 Apr 2023 17:39:15 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv9 03/14] mm/page_alloc: Fake unaccepted memory
-Message-ID: <20230403143915.uc4tnpgmssvpdqxu@box.shutemov.name>
-References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
- <20230330114956.20342-4-kirill.shutemov@linux.intel.com>
- <835dfe65-d9dd-0b16-37d4-920e97f1bca0@suse.cz>
+        Mon, 3 Apr 2023 10:40:14 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2252A31988
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:40:10 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id i5so118477296eda.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680532809;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EeyT0QKLAdfx1wYIp91BBauMDPF4spiSXYLFvc2Jhew=;
+        b=DNxFne77gr38mPjKD2skrtdATHJqX38RkSDOtn4x784v77WE3WX4Snr1XrMgN8jfDR
+         b1sljIuwWJRMWedD3xC6Zyg5KGjWdIe9N9iefzkL2LJXi7/o+cSu1cAXL/DxMRlPtO4w
+         rEOj+c7dEyl4YJaWmGKZrpq6go+QHFa5F9q54ISmVS8VsvD988/p6N/avfnA1pwFVG9w
+         BLB9xVniMvXWRhCSxsnYO4fQw4UWpDe6m2cZsKRNaNI9SSDUEUWbvo5XVaOKJ9RvAuM4
+         2c7kZ7VLtFiRSP11RXSPgOpSMSW9xl921onVWRPFHl2fhke6llLzcaL/vHWfmt2shENb
+         NpmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680532809;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EeyT0QKLAdfx1wYIp91BBauMDPF4spiSXYLFvc2Jhew=;
+        b=sURC6t3dP8dFl0aPQWozVPKtVwnQzybKfKNgBJv3FDK78c4xP0U7a5X++1G3ZDDRIb
+         dHyAdfp3hHyfUze3HYfG75vkbnYS3KCacv++HdnmtBUAEA9JfV/Rzwfb7DaSOTUqt+HY
+         295wDlJWVLYHG517xePLZcnY2hpDRMNxKo1jHfp1o1Sk+x51PzCyHIlU3zoDaRI2dtqs
+         4M3BlxwcWIUNKH2cNBHFt6/s+CoXuhvF7R6+I9bneNOskw05wschwTWwiT2ssGwNBYZH
+         K4FgFHeBzKxnex6QHQecXzh4i+gAGaou5vsZ6ljmt7yBcWxOCMbqmYjYiGuavOpzgaPs
+         Grsg==
+X-Gm-Message-State: AAQBX9fgS5l9uVnMh5hF9UwhBdSKdH9xhnZLkKjR4QWVnri9/rJixdAb
+        mFMuIv+56EqBIP9RzB8/YV6fhaLZZa4i2TM59ag=
+X-Google-Smtp-Source: AKy350YB6/aTny7rowwDsGnFpzK500CdURAqu/f4FzIVYyZ+gYMKzXuMVnbYkRm2sqqQxnruh9G38DpeyQ+ZbHZpFY8=
+X-Received: by 2002:a50:9e43:0:b0:502:4459:f2b8 with SMTP id
+ z61-20020a509e43000000b005024459f2b8mr12975681ede.8.1680532809061; Mon, 03
+ Apr 2023 07:40:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <835dfe65-d9dd-0b16-37d4-920e97f1bca0@suse.cz>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <CGME20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p3>
+ <20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p3> <ZCrMMQt2xnnZIyz6@alley>
+In-Reply-To: <ZCrMMQt2xnnZIyz6@alley>
+From:   Jaewon Kim <jaewon31.kim@gmail.com>
+Date:   Mon, 3 Apr 2023 23:39:58 +0900
+Message-ID: <CAJrd-Uvzy18SfjjqbqZCPHjw+ujQXsBpvov4b=bfAwZrj=bCAA@mail.gmail.com>
+Subject: Re: [RFC] vsprintf: compile error on %09pK
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Jaewon Kim <jaewon31.kim@samsung.com>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        GyeongHwan Hong <gh21.hong@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,108 +73,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 03:39:53PM +0200, Vlastimil Babka wrote:
-> On 3/30/23 13:49, Kirill A. Shutemov wrote:
-> > For testing purposes, it is useful to fake unaccepted memory in the
-> > system. It helps to understand unaccepted memory overhead to the page
-> > allocator.
-> 
-> Ack on being useful for testing, but the question is if we want to also
-> merge this patch into mainline as it is?
+2023=EB=85=84 4=EC=9B=94 3=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 9:53, Pe=
+tr Mladek <pmladek@suse.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On Mon 2023-04-03 19:46:17, Jaewon Kim wrote:
+> > Hello
+> >
+> > I've just changed %09lx to %09pK on my driver code to hide the address,=
+ but I
+> > faced compiler error. The %9pK without 0 worked.
+>
+> What exactly do you want to achieve, please?
 
-I don't insist on getting it upstream, but it can be handy to debug
-related bugs in the future.
+Hello
 
-> > The patch allows to treat memory above the specified physical memory
-> > address as unaccepted.
-> > 
-> > The change only fakes unaccepted memory for page allocator. Memblock is
-> > not affected.
-> > 
-> > It also assumes that arch-provided accept_memory() on already accepted
-> > memory is a nop.
-> 
-> I guess to be in mainline it would have to at least gracefully handle the
-> case of accept_memory actually not being a nop, and running on a system with
-> actual unaccepted memory (probably by ignoring the parameter in such case).
-> Then also the parameter would have to be documented.
+Thank you for your comment.
 
-As it is written now, accept_memory() is nop on system with real
-unaccepted memory if the memory is already accepted. Arch-specific code
-will check against own records to see if the memory needs accepting. If
-not, just return.
+I wanted to print phys_addr_t  type value only when kptr_restrict sysctl is
+allowed. So I thought I could use %pK for that purpose. And the physical
+address is not that long. I wanted to make that length short like 9 hex.
 
-And the option will not interfere with unaccepted memory declared by EFI
-memmap. It can extend it, but that's it.
+>
+> Note that printk() hashes pointers by default. It means that %p does not
+> print the value but a hash based on the value.
+>
+> If you print the same pointer twice, you will see the same hash, so
+> you know that the pointer is the same. But you do not see the address
+> so that you could not use the value for a security attack.
+>
+> See Documentation/core-api/printk-formats.rst
+>
+> Anyway, the main question if it makes sense to print the pointer value
+> at all. The address is not useful if it can't be compared with
+> other pointers or if the data on the address could not be checked.
+>
+> > Is there restriction on %pK which does now allow %0 ? I've wondered whe=
+ther I
+> > did wrong or it is a printk problem.
+> >
+> > To show easily I tried to add pr_info("%09pK\n", nodemask); in page_all=
+oc.c
+> > Then here's what I did.
+> >
+> > $ ARCH=3Dx86 make x86_64_defconfig ; make mm/page_alloc.o
+> > #
+> > # No change to .config
+> > #
+> >   CALL    scripts/checksyscalls.sh
+> >   DESCEND objtool
+> >   INSTALL libsubcmd_headers
+> >   CC      mm/page_alloc.o
+> > In file included from ./include/asm-generic/bug.h:22:0,
+> >                  from ./arch/x86/include/asm/bug.h:87,
+> >                  from ./include/linux/bug.h:5,
+> >                  from ./include/linux/mmdebug.h:5,
+> >                  from ./include/linux/mm.h:6,
+> >                  from mm/page_alloc.c:19:
+> > mm/page_alloc.c: In function =E2=80=98__alloc_pages=E2=80=99:
+> > ./include/linux/kern_levels.h:5:18: error: '0' flag used with =E2=80=98=
+%p=E2=80=99 gnu_printf format [-Werror=3Dformat=3D]
+> >  #define KERN_SOH "\001"  /* ASCII Start Of Header */
+>
+> As Sergey already wrote. %p does not support any modification flags.
 
-Looks safe to me.
+Okay, then we can't use %09pK. I've just wondered because %9pK works.
 
-> Speaking of documented parameters, I found at least two that seem a more
-> generic variant of this (but I didn't look closely if that makes sense):
-> 
-> efi_fake_mem=   nn[KMG]@ss[KMG]:aa[,nn[KMG]@ss[KMG]:aa,..] [EFI; X86]
->     Add arbitrary attribute to specific memory range by
->     updating original EFI memory map.
-> 
-> memmap=<size>%<offset>-<oldtype>+<newtype>
->     [KNL,ACPI] Convert memory within the specified region
->     from <oldtype> to <newtype>. If "-<oldtype>" is left
-> 
-> Would any of those be usable for this usecase?
+BR
+Jaewon Kim
 
-Oh. I missed them. Will take a closer look.
-
-> 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > ---
-> >  mm/page_alloc.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> > 
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index d62fcb2f28bd..509a93b7e5af 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -7213,6 +7213,8 @@ static DEFINE_STATIC_KEY_FALSE(zones_with_unaccepted_pages);
-> >  
-> >  static bool lazy_accept = true;
-> >  
-> > +static unsigned long fake_unaccepted_start = -1UL;
-> > +
-> >  static int __init accept_memory_parse(char *p)
-> >  {
-> >  	if (!strcmp(p, "lazy")) {
-> > @@ -7227,11 +7229,30 @@ static int __init accept_memory_parse(char *p)
-> >  }
-> >  early_param("accept_memory", accept_memory_parse);
-> >  
-> > +static int __init fake_unaccepted_start_parse(char *p)
-> > +{
-> > +	if (!p)
-> > +		return -EINVAL;
-> > +
-> > +	fake_unaccepted_start = memparse(p, &p);
-> > +
-> > +	if (*p != '\0') {
-> > +		fake_unaccepted_start = -1UL;
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +early_param("fake_unaccepted_start", fake_unaccepted_start_parse);
-> > +
-> >  static bool page_contains_unaccepted(struct page *page, unsigned int order)
-> >  {
-> >  	phys_addr_t start = page_to_phys(page);
-> >  	phys_addr_t end = start + (PAGE_SIZE << order);
-> >  
-> > +	if (start >= fake_unaccepted_start)
-> > +		return true;
-> > +
-> >  	return range_contains_unaccepted_memory(start, end);
-> >  }
-> >  
-> 
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+>
+> Best Regards,
+> Petr
