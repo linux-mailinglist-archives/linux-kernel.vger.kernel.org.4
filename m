@@ -2,55 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5276D41BE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4716D41CC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbjDCKSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
+        id S232284AbjDCKTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbjDCKSS (ORCPT
+        with ESMTP id S232193AbjDCKTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:18:18 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63402695;
-        Mon,  3 Apr 2023 03:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=e3FrLJNdajYAJAcOhz5oBsYPulbF6r76meodxBXCWrU=; b=zUq6hHLjBOsezBf886FSbyKMik
-        ayEzRVzG/xoXdPMHHj0fGSIykqm5TwKLZPPX41PeRYC35HTLXFy5sVCeFva8LGVs4vmm2pUmPLN/O
-        iuLRiII9l6Jvv7V4WUK2zpr7lUjur/9UirQ0hHWVLKZZX1btx6koMJJW9JuCq1YhNGOsW04u+3aaL
-        OFPRJKTestsGDnL56bd04SCVRDiznUA+QEKVXmuY8XvRUgB/vNiSOTFAqxGzbbi/u0ZybPSfrUmL+
-        ovzcHdqAF+c0hUzTLuUYtLMNHb65qJyrjHg3EVuEJyjUlyOMiEllCM1sZ3F2cEpN8Nk6cT/oI96wJ
-        Un19qHIQ==;
-Received: from p200300ccff0449001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff04:4900:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pjHGP-00048Y-OX; Mon, 03 Apr 2023 12:18:14 +0200
-Date:   Mon, 3 Apr 2023 12:18:13 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
-        Andrew Davis <afd@ti.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: omap: Convert omap.txt to yaml
-Message-ID: <20230403121813.55c8aa2a@aktux>
-In-Reply-To: <3865a750-2cd1-c92f-8bd2-22dfeea43769@kernel.org>
-References: <20230401140248.3363674-1-andreas@kemnade.info>
-        <20230401140248.3363674-2-andreas@kemnade.info>
-        <3865a750-2cd1-c92f-8bd2-22dfeea43769@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 3 Apr 2023 06:19:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAB3113D1;
+        Mon,  3 Apr 2023 03:18:58 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 383F41FD68;
+        Mon,  3 Apr 2023 10:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680517137; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a4MoXhe1RG60yL55LAJJODjxOGik5d8SFY4UggIUu04=;
+        b=f3reNnGyU64PHa5HNUCrDzAbyKc0nC6m7ILE6UJTMTjHxkElPrk4lgSIqv7oS3Q9xgY/Hg
+        /VLrUeBAlu9b5NDr4LMcDfNld4Xb149VSq55RLcflhBtwMCJmuHvrN81AYVDRygS4QQW72
+        FO40CbIW+81IA5MAmWtsjVsYWLwADM8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680517137;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a4MoXhe1RG60yL55LAJJODjxOGik5d8SFY4UggIUu04=;
+        b=0j++IB0zvsDolT331j6Xki/sJRKexThn9M0PtBAqAqWQMgBfj6f+XjhvIKrb32XwASwr06
+        xT1cWwJyenOtBJCQ==
+Received: from suse.de (unknown [10.163.43.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 077E02C161;
+        Mon,  3 Apr 2023 10:18:51 +0000 (UTC)
+Date:   Mon, 3 Apr 2023 11:18:49 +0100
+From:   Mel Gorman <mgorman@suse.de>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     David Dai <davidai@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+Message-ID: <20230403101849.z6wengqxkchvpf75@suse.de>
+References: <20230330224348.1006691-1-davidai@google.com>
+ <ZCYuLPlEFUnxPm4A@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <ZCYuLPlEFUnxPm4A@casper.infradead.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,48 +89,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Sun, 2 Apr 2023 13:26:46 +0200
-Krzysztof Kozlowski <krzk@kernel.org> wrote:
-
-> On 01/04/2023 16:02, Andreas Kemnade wrote:
-> > From: Andrew Davis <afd@ti.com>
+On Fri, Mar 31, 2023 at 01:49:48AM +0100, Matthew Wilcox wrote:
+> On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
+> > Hi,
 > > 
-> > Convert omap.txt to yaml.
-> > 
-> > Signed-off-by: Andrew Davis <afd@ti.com>
-> > [various cleanup, adding Epson Moverio BT-200]
-> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>  
+> > This patch series is a continuation of the talk Saravana gave at LPC 2022
+> > titled "CPUfreq/sched and VM guest workload problems" [1][2][3]. The gist
+> > of the talk is that workloads running in a guest VM get terrible task
+> > placement and DVFS behavior when compared to running the same workload in
 > 
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC.  It might happen, that command when run on an older
-> kernel, gives you outdated entries.  Therefore please be sure you base
-> your patches on recent Linux kernel.
+> DVFS?  Some new filesystem, perhaps?
 > 
-> Your CC list is broken in few ways. Just use the script, don't re-invent
-> the addresses.
-> 
-well, I am using the script and added a few adresses obviously missing.
-But maybe I have used the script from an older kernel. The patch was against
-linux-next.
 
-[...]
-> > +      - description: TI DRA7 SoC based platforms
-> > +        items:
-> > +          - enum:
-> > +              - ti,dra718-evm  
-> 
-> This is not correct. Maybe you forgot to fix DTS, but anyway it's
-> confusing to have dra718-evm with dra768 SoC. Is this really proper
-> combination?
-> 
-dra718-evm has a lot of compatibles, no idea if that is sane.
-And to better discuss such things I added the omap mailinglist (with a typo,
-sorry). To avoid that trouble in the future, I added a patch to MAINTAINERS.
+Dynamic Voltage and Frequency Scaling (DVFS) -- it's a well known term in
+cpufreq/cpuidle/schedutil land.
 
-But I think it is better to not convert dra7 stuff for now, then
-it can be discussed by the right people. 
+> > the host. Effectively, no EAS for threads inside VMs. This would make power
+> 
+> EAS?
+> 
 
-Regards,
-Andreas
+Energy Aware Scheduling (EAS) is mostly a kernel/sched thing that has
+an impact on cpufreq and my recollection is that it was discussed at
+conferences long before kernel/sched had any EAS awareness. I don't have
+the full series in my inbox and didn't dig further but patch 1 at least is
+providing additional information to schedutil which impacts CPU frequency
+selection on systems to varying degrees. The full impact would depend on
+what cpufreq driver is in use and the specific hardware so even if the
+series benefits one set of hardware, it's not necessarily a guaranteed win.
+
+> Two unfamiliar and undefined acronyms in your opening paragraph.
+> You're not making me want to read the rest of your opus.
+
+It depends on the audience and mm/ is not the audience.  VM in the title
+refers to Virtual Machine, not Virtual Memory although I confess I originally
+read it as mm/ and wondered initially how mm/ affects DVFS to the extent it
+triggered a "wtf happened in mm/ recently that I completely missed?". This
+series is mostly of concern to scheduler, cpufreq or KVM depending on your
+perspective. For example, on KVM, I'd immediately wonder if the hypercall
+overhead exceeds any benefit from better task placement although the leader
+suggests the answer is "no".  However, it didn't comment (or I didn't read
+carefully enough) on whether MMIO overhead or alternative communication
+methods have constant cost across different hardware or, much more likely,
+depend on the hardware that could potentially opt-in. Various cpufreq
+hardware has very different costs when measuring or alterating CPU frequency
+stuff, even within different generations of chips from the same vendor.
+While the data also shows performance improvements, it doesn't indicate how
+close to bare metal the improvement is. Even if it's 50% faster within a
+VM, how much slower than bare metal is it? In terms of data presentation,
+it might be better to assign bare metal a score of 1 at the best possible
+score and show the VM performance as a relative ratio (1.00 for bare metal,
+0.5 for VM with a vanilla kernel, 0.75 using improved task placement).
+It would also be preferred to have x86-64 data as the hazards the series
+details with impacts arm64 and x86-64 has the additional challenge that
+cpufreq is often managed by the hardware so it should be demonstrated the
+the series "does no harm" on x86-64 for recent generation Intel and AMD
+chips if possible.  The lack of that data doesn't kill the series as a large
+improvement is still very interesting even if it's not perfect and possible
+specific to arm64. If this *was* my area or I happened to be paying close
+attention to it at the time, I would likely favour using hypercalls only at
+the start because it can be used universally and suggest adding alternative
+communication methods later using the same metric "is an alternative method
+of Guest<->Host communication worse, neutral or better at getting close to
+bare metal performance?" I'd also push for the ratio tables as it's easier
+to see at a glance how close to bare metal performance the series achieves.
+Finally, I would look for x86-64 data just in case it causes harm due to
+hypercall overhead on chips that management frequency in firmware.
+
+So while I haven't read the series and only patches 2+6 reached by inbox,
+I understand the point in principle. The scheduler on wakeup paths for bare
+metal also tries to favour recently used CPUs and spurious CPU migration
+even though it is only tangentially related to EAS.  For example, a recently
+used CPUs may still be polling (drivers/cpuidle/poll_state.c:poll_idle)
+or at least not entered a deep C-state so the wakeup penalty is lower.
+
+So whatever critism the series deserves, it's not due to using obscure
+terms that no one in kernel/sched/, drivers/cpuidle of drivers/cpufreq
+would recognise.
+
+-- 
+Mel Gorman
+SUSE Labs
