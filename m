@@ -2,129 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF276D42FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685AE6D42FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbjDCLI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
+        id S232126AbjDCLJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjDCLIy (ORCPT
+        with ESMTP id S232118AbjDCLJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:08:54 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F24F3;
-        Mon,  3 Apr 2023 04:08:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=2I5G0aWxNwP2AuZEd7HJV9PNt405h29TCjS3lS11GQE=; b=tGCSsnfXfckTnukgZgod3OCwsa
-        YnU3b/KQbrvK9i7Qq+Rkjbx4nZ9yBsb3Wbd61buN2wxXFaB9p6jOswox6Dy8BDEv5BIj/DtXeCY+U
-        ljUoSTnuv16a9XP3Qk320OF4TgzfAANoGfajSHx7TpgLrj8qoPypAPU/nwism8gL+8mYDVKjGfQj6
-        fqxf/5Rso9kWci8OIB2ctsYzaCNI7yMjRtHY2MgaxuP1/Py2mzJ9pLRXs/hWzd1J6WsFqYuT3O1M6
-        oBfiaHkJJ3M6GfSsEdoZom3z/zWXdu2yqRw1Qu1VDr2ioCLwRTraXPivM+9uP3H8UfYPneTdr9Yz+
-        hKGCWXvg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39376)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pjI3I-0002eu-Ld; Mon, 03 Apr 2023 12:08:44 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pjI3H-0004AB-3C; Mon, 03 Apr 2023 12:08:43 +0100
-Date:   Mon, 3 Apr 2023 12:08:43 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, rogerq@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srk@ti.com
-Subject: Re: [PATCH net-next v2 1/3] net: ethernet: ti: am65-cpsw: Move mode
- specific config to mac_config()
-Message-ID: <ZCqzuwDLGuBDMHQG@shell.armlinux.org.uk>
-References: <20230403110106.983994-1-s-vadapalli@ti.com>
- <20230403110106.983994-2-s-vadapalli@ti.com>
+        Mon, 3 Apr 2023 07:09:06 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F9412071
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:09:00 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Pqp4m4llGz6J6lN;
+        Mon,  3 Apr 2023 19:07:04 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 3 Apr
+ 2023 12:08:57 +0100
+Date:   Mon, 3 Apr 2023 12:08:56 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Junhao He <hejunhao3@huawei.com>
+CC:     <will@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mark.rutland@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <catalin.marinas@arm.com>, <kernel-team@android.com>,
+        <linuxarm@huawei.com>, <yangyicong@huawei.com>,
+        <f.fangjian@huawei.com>, <shenyang39@huawei.com>,
+        <prime.zeng@hisilicon.com>
+Subject: Re: [PATCH 2/2] drivers/perf: hisi: add NULL check for name
+Message-ID: <20230403120856.000027d7@Huawei.com>
+In-Reply-To: <20230403081423.62460-3-hejunhao3@huawei.com>
+References: <20230403081423.62460-1-hejunhao3@huawei.com>
+        <20230403081423.62460-3-hejunhao3@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403110106.983994-2-s-vadapalli@ti.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 04:31:04PM +0530, Siddharth Vadapalli wrote:
-> Move the interface mode specific configuration to the mac_config()
-> callback am65_cpsw_nuss_mac_config().
+On Mon, 3 Apr 2023 16:14:23 +0800
+Junhao He <hejunhao3@huawei.com> wrote:
+
+> When allocations fails that can be NULL now.
 > 
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> If the name provided is NULL, then the initialization process of the PMU
+> type and dev will be skipped in function perf_pmu_register().
+> Consequently, the PMU will not be able to register into the kernel.
+> Moreover, in the case of unregister the PMU, the function device_del()
+> will need to handle NULL pointers, which potentially can cause issues.
+
+If you could be more specific in what the problem is wrt to a NULL pointer here
+that would be great.  Given there is code to skip the device registration
+without it being an error, I'd expect the release flow to be safe in that condition.
+
+Seems like a sensible change even without that. So with some more info
+feel free to add
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+
+> 
+> So move this allocation above the cpuhp_state_add_instance() and directly
+> return if it does fail.
+> 
+> Signed-off-by: Junhao He <hejunhao3@huawei.com>
 > ---
->  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+>  drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c | 17 ++++++++++-------
+>  drivers/perf/hisilicon/hisi_uncore_hha_pmu.c  |  7 +++++--
+>  drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c  | 11 +++++------
+>  3 files changed, 20 insertions(+), 15 deletions(-)
 > 
-> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> index d17757ecbf42..74e099828978 100644
-> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> @@ -1504,12 +1504,17 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
->  							  phylink_config);
->  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
->  	struct am65_cpsw_common *common = port->common;
-> +	u32 mac_control = 0;
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c b/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
+> index 8a3d74ddcd6d..ffb039d05d07 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
+> @@ -499,13 +499,6 @@ static int hisi_ddrc_pmu_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
 >  
->  	if (common->pdata.extra_modes & BIT(state->interface)) {
-> -		if (state->interface == PHY_INTERFACE_MODE_SGMII)
-> +		if (state->interface == PHY_INTERFACE_MODE_SGMII) {
-> +			mac_control |= CPSW_SL_CTL_EXT_EN;
->  			writel(ADVERTISE_SGMII,
->  			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
-> +		}
+> -	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_DDRC_ONLINE,
+> -				       &ddrc_pmu->node);
+> -	if (ret) {
+> -		dev_err(&pdev->dev, "Error %d registering hotplug;\n", ret);
+> -		return ret;
+> -	}
+> -
+>  	if (ddrc_pmu->identifier >= HISI_PMU_V2)
+>  		name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+>  				      "hisi_sccl%u_ddrc%u_%u",
+> @@ -516,6 +509,16 @@ static int hisi_ddrc_pmu_probe(struct platform_device *pdev)
+>  				      "hisi_sccl%u_ddrc%u", ddrc_pmu->sccl_id,
+>  				      ddrc_pmu->index_id);
 >  
-> +		if (mac_control)
-> +			cpsw_sl_ctl_set(port->slave.mac_sl, mac_control);
->  		writel(AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
->  		       port->sgmii_base + AM65_CPSW_SGMII_CONTROL_REG);
+> +	if (!name)
+> +		return -ENOMEM;
+> +
+> +	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_DDRC_ONLINE,
+> +				       &ddrc_pmu->node);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Error %d registering hotplug;\n", ret);
+> +		return ret;
+> +	}
+> +
+>  	hisi_pmu_init(ddrc_pmu, THIS_MODULE);
+>  
+>  	ret = perf_pmu_register(&ddrc_pmu->pmu, name, -1);
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c b/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c
+> index 5701a84edb0e..15caf99e1eef 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c
+> @@ -510,6 +510,11 @@ static int hisi_hha_pmu_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sccl%u_hha%u",
+> +			      hha_pmu->sccl_id, hha_pmu->index_id);
+> +	if (!name)
+> +		return -ENOMEM;
+> +
+>  	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_HHA_ONLINE,
+>  				       &hha_pmu->node);
+>  	if (ret) {
+> @@ -517,8 +522,6 @@ static int hisi_hha_pmu_probe(struct platform_device *pdev)
+>  		return ret;
 >  	}
-> @@ -1553,8 +1558,7 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
 >  
->  	if (speed == SPEED_1000)
->  		mac_control |= CPSW_SL_CTL_GIG;
-> -	if (interface == PHY_INTERFACE_MODE_SGMII)
-> -		mac_control |= CPSW_SL_CTL_EXT_EN;
-> +	/* TODO: Verify whether in-band is necessary for 10 Mbps RGMII */
->  	if (speed == SPEED_10 && phy_interface_mode_is_rgmii(interface))
->  		/* Can be used with in band mode only */
->  		mac_control |= CPSW_SL_CTL_EXT_EN;
+> -	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sccl%u_hha%u",
+> -			      hha_pmu->sccl_id, hha_pmu->index_id);
+>  	hisi_pmu_init(hha_pmu, THIS_MODULE);
+>  
+>  	ret = perf_pmu_register(&hha_pmu->pmu, name, -1);
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c b/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c
+> index 68596b566344..794dbcd19b7a 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c
+> @@ -544,6 +544,11 @@ static int hisi_l3c_pmu_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sccl%u_l3c%u",
+> +			      l3c_pmu->sccl_id, l3c_pmu->ccl_id);
+> +	if (!name)
+> +		return -ENOMEM;
+> +
+>  	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_L3_ONLINE,
+>  				       &l3c_pmu->node);
+>  	if (ret) {
+> @@ -551,12 +556,6 @@ static int hisi_l3c_pmu_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> -	/*
+> -	 * CCL_ID is used to identify the L3C in the same SCCL which was
+> -	 * used _UID by mistake.
+> -	 */
+> -	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sccl%u_l3c%u",
+> -			      l3c_pmu->sccl_id, l3c_pmu->ccl_id);
+>  	hisi_pmu_init(l3c_pmu, THIS_MODULE);
+>  
+>  	ret = perf_pmu_register(&l3c_pmu->pmu, name, -1);
 
-I'm afraid I can see you haven't thought this patch through properly.
-
-am65_cpsw_nuss_mac_link_down() will call
-cpsw_sl_ctl_reset(port->slave.mac_sl); which has the effect of clearing
-to zero the entire MAC control register. This will clear
-CPSW_SL_CTL_EXT_EN that was set in am65_cpsw_nuss_mac_config() which is
-not what you want to be doing.
-
-Given that we have the 10Mbps issue with RGMII, I think what you want
-to be doing is:
-
-1. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_config() if in SGMII
-   mode, otherwise clear this bit.
-
-2. Clear the mac_control register in am65_cpsw_nuss_mac_link_down()
-   if in RMGII mode, otherwise preserve the state of
-   CPSW_SL_CTL_EXT_EN but clear all other bits.
-
-3. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_link_up() if in
-   RGMII mode and 10Mbps.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
