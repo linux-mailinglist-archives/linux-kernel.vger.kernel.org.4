@@ -2,114 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80F76D3E7F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A67E6D3E7D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjDCH5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 03:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S231702AbjDCH5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 03:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbjDCH5l (ORCPT
+        with ESMTP id S230095AbjDCH5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 03:57:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3DC7685
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 00:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680508616;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NzHpZ5WAiQYV9j8cFvgWd2yh5/Eu+1K2MnoYxqZ9t0M=;
-        b=a15xqE/FIeCRREwGpozybN8UIDWfyv9nen+VAq17ZntfpbnEVcMahYrhbnifrvsgviWjPr
-        AGM9pFWT2JeUQPZdgMFSMyIIkIkZNEgC5GVRgi7hSE9IcV1t3tAmIvuOlxZWmyB1WFjK8i
-        IXSx4Zj5F2+hLUDt8hu9EEKKZ+F4nFs=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-568-21bQ4I8-MPue9_K-QXO-6Q-1; Mon, 03 Apr 2023 03:56:54 -0400
-X-MC-Unique: 21bQ4I8-MPue9_K-QXO-6Q-1
-Received: by mail-wm1-f72.google.com with SMTP id o37-20020a05600c512500b003edd119ec9eso14143380wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 00:56:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680508613;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NzHpZ5WAiQYV9j8cFvgWd2yh5/Eu+1K2MnoYxqZ9t0M=;
-        b=HPEg+6ArxxEcbPYdkTWnoRINJFfjBaoZvzHef0y56Wlo8IjhByOxrWVAiJHPbd+/v9
-         ODcFqTy/T0uxEFYEGSqre5dGWstjTvBwjt38nG8IS4F3SP2qQg2d2k4PtgaK3mV5TyKA
-         IwKXGoBLnlYC1rZRvqilHJmJv4TRtMJjXFKoa7aV9F+0rmcq5IxnCSvgNTvPMLPFoeaN
-         VAKwRtAYmXhWE0nGe1R2VFgKFB9+LBrpL2aZr4bfoH5H+TwcrjSa5uai7wn1neGvWjcl
-         lp1CcetqOcJW2KtBPJcMVI3LfMvZK47bdSPPrdH8ZAZAfit6pcZzv/JL6B9VEx5A47dq
-         4oCg==
-X-Gm-Message-State: AAQBX9fySajsbMCa8VTzSW4OgwR+rFP4VxNr7rpgKVb/eyYsZJVwAmi9
-        2K8mb768GVPhzLtfPbEHMiC93G2k5h3wEsqFxU2E2C1TvabHsyjC0TZq0EAFuGfpJVuHwB8yDe5
-        yV0R8Cg4PHGH+ImD271I8zyuu
-X-Received: by 2002:a5d:5742:0:b0:2d0:c37a:5ebd with SMTP id q2-20020a5d5742000000b002d0c37a5ebdmr25774651wrw.64.1680508613641;
-        Mon, 03 Apr 2023 00:56:53 -0700 (PDT)
-X-Google-Smtp-Source: AKy350byxxRpdTK6BbJbot7lH5iAmTTcmMRSXk6dbIlT+FfyplV1kxbX23F9ngOslpl1pXo/s5CKkQ==
-X-Received: by 2002:a5d:5742:0:b0:2d0:c37a:5ebd with SMTP id q2-20020a5d5742000000b002d0c37a5ebdmr25774630wrw.64.1680508613362;
-        Mon, 03 Apr 2023 00:56:53 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
-        by smtp.gmail.com with ESMTPSA id t17-20020adff611000000b002c5a790e959sm9044849wrp.19.2023.04.03.00.56.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 00:56:53 -0700 (PDT)
-Message-ID: <73e9d113-0418-8a69-83eb-935be531e9e0@redhat.com>
-Date:   Mon, 3 Apr 2023 09:56:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 11/29] selftests/mm: Drop test_uffdio_zeropage_eexist
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        Mon, 3 Apr 2023 03:57:13 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9797FE6;
+        Mon,  3 Apr 2023 00:57:11 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3336QW3w024232;
+        Mon, 3 Apr 2023 07:57:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=YdnMwkUzrc1nb3ZjPZ9/4LYT9dsKuEGu0ZW1tbsxwrM=;
+ b=FC1ifGw/j8tZDR1rlCspjnCxym/ZUD1DtrscT/GzN37qj04nTaXXUN3ss/nVJiq3uwKj
+ hTdwqO0rlbQlyGQgIF6E5n8c+ZBIsDvsPjuxRzpy4OYv087UNAYj4mDhmLgCi6YiW89T
+ LkjsJ8fCmQcBouXYnjXt6Gtpg15hfPUPpWyn6MjS00/tLWQEBcOjfEmbsLk99Ys5+Bbw
+ SxGRiGb5roagY2FuATfki8hilTDwZLY0bMgxIxZWuyVCRhHZCfE6brbN53zQEO2t7M7a
+ Yn/4OwB7t3tkTmzYXn57/NwMZyQfFJq4nKHnkkJdz6GOYQAx/iGr4yVg1wx9dDkzYEfu xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ppxf78pwf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Apr 2023 07:57:04 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3337IYYj028032;
+        Mon, 3 Apr 2023 07:57:03 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ppxf78pvp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Apr 2023 07:57:03 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3332OCEL015082;
+        Mon, 3 Apr 2023 07:57:01 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3ppc8712ya-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Apr 2023 07:57:01 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3337uvs718154174
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 3 Apr 2023 07:56:57 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 78AA820043;
+        Mon,  3 Apr 2023 07:56:57 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 337F020040;
+        Mon,  3 Apr 2023 07:56:57 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  3 Apr 2023 07:56:57 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Alexander Schmidt <alexs@linux.ibm.com>,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-References: <20230330155707.3106228-1-peterx@redhat.com>
- <20230330160717.3107010-1-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230330160717.3107010-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: [PATCH] net/mlx5: stop waiting for PCI link if reset is required
+Date:   Mon,  3 Apr 2023 09:56:56 +0200
+Message-Id: <20230403075657.168294-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CLIiDkG56GBiyFPv8unp_FXTbc_CM9Gh
+X-Proofpoint-ORIG-GUID: zpYQrEWcmu7FPuGX05_3WOtrFlCfYVzO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-03_04,2023-03-31_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ clxscore=1011 malwarescore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304030057
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.23 18:07, Peter Xu wrote:
-> The idea was trying to flip this var in the alarm handler from time to time
-> to test -EEXIST of UFFDIO_ZEROPAGE, but firstly it's only used in the
-> zeropage test so probably only used once, meanwhile we passed
-> "retry==false" so it'll never got tested anyway.
-> 
-> Drop both sides so we always test UFFDIO_ZEROPAGE retries if has_zeropage
-> is set (!hugetlb).
-> 
-> One more thing to do is doing UFFDIO_REGISTER for the alias buffer too,
-> because otherwise the test won't even pass!  We were just lucky that this
-> test never really got ran at all.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
+after an error on the PCI link, the driver does not need to wait
+for the link to become functional again as a reset is required. Stop
+the wait loop in this case to accelerate the recovery flow.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Co-developed-by: Alexander Schmidt <alexs@linux.ibm.com>
+Signed-off-by: Alexander Schmidt <alexs@linux.ibm.com>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/health.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/health.c b/drivers/net/ethernet/mellanox/mlx5/core/health.c
+index f9438d4e43ca..81ca44e0705a 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/health.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/health.c
+@@ -325,6 +325,8 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *dev)
+ 	while (sensor_pci_not_working(dev)) {
+ 		if (time_after(jiffies, end))
+ 			return -ETIMEDOUT;
++		if (pci_channel_offline(dev->pdev))
++			return -EIO;
+ 		msleep(100);
+ 	}
+ 	return 0;
+@@ -332,10 +334,16 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *dev)
+ 
+ static int mlx5_health_try_recover(struct mlx5_core_dev *dev)
+ {
++	int rc;
++
+ 	mlx5_core_warn(dev, "handling bad device here\n");
+ 	mlx5_handle_bad_state(dev);
+-	if (mlx5_health_wait_pci_up(dev)) {
+-		mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
++	rc = mlx5_health_wait_pci_up(dev);
++	if (rc) {
++		if (rc == -ETIMEDOUT)
++			mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
++		else
++			mlx5_core_err(dev, "health recovery flow aborted, PCI channel offline\n");
+ 		return -EIO;
+ 	}
+ 	mlx5_core_err(dev, "starting health recovery flow\n");
+
+base-commit: 7e364e56293bb98cae1b55fd835f5991c4e96e7d
 -- 
-Thanks,
-
-David / dhildenb
+2.37.2
 
