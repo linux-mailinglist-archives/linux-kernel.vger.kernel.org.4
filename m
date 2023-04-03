@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2106D3D93
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45666D3D96
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjDCGuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 02:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
+        id S231538AbjDCGva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 02:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjDCGuX (ORCPT
+        with ESMTP id S230414AbjDCGv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 02:50:23 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0DE2727;
-        Sun,  2 Apr 2023 23:50:20 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id n14so27338425qta.10;
-        Sun, 02 Apr 2023 23:50:20 -0700 (PDT)
+        Mon, 3 Apr 2023 02:51:29 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94CAAF1A
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 23:51:27 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso6494363wmo.0
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 23:51:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680504619;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UY7uVDKavnayiHsQEjZEIVpvQWztlTClif0OZXNLtJQ=;
-        b=YHXAtup2LEtNpxWLo4CQ2SLwadUFQuQOszkc3qRBVI4DoIbAGcRZEs40NdPhwvp7CY
-         EDRpvksBm6tMNFaHqG1EKq/UkFgtAZE70gw9W3Jh64LRGGQkbewJon7Vp/gCl7i1hmmq
-         L3gc2OM/SiAXxFFDTeIB3DNbgb8RI0uvxR+4xHGhogZe36zUKlzWfNAAUw8fSWisT2UL
-         H5bBd379pL9RNS/NOqng6DbLVVBPOmGe5iQI7XOSr4aER+7nMn8Y1VDAvI7WeFYAx7v8
-         YZ9gHrW20FJg3MjcZoeQ9AzPUDu7TDLPEfI9SdxE7tGZYzefLN69VhJq78oWlloQo/UO
-         Yy8Q==
+        d=grsecurity.net; s=grsec; t=1680504686;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Nb8hMsZoL157aXIKNcdvRKkRTkh4KKenB7HdAyviWGg=;
+        b=j5AvQ7aw+jfuQe9QA7St0TuvqSBCPp3SnGq5ZywrBk1Xcejx1HVtTDsGZRexrOrSMy
+         7WSkFVMaTcR/do1t6ddTgjkM/z3nQXfsw0Yy/4Wy0DZZJn3GLXZvcWFjTawKu8BozO7d
+         jCTC+4gnhIvm4bigQ4dXItyldz5BP8U9gF0aVvaxEP/7NJIMal9YxQxsqGZikECJJiKd
+         j/iWZ8NKdAiuckoum79E5lu0W7DNqyEFY9pAq/GV/m6V4X6LzJGLo8bYr+kywDVwxUN8
+         ZgEZktYCmqvKm1BALhIgOpzLyZS476ypdvla3syyKxnkOBacDOB98zfEsT3jRUIT4sct
+         dKwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680504619;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UY7uVDKavnayiHsQEjZEIVpvQWztlTClif0OZXNLtJQ=;
-        b=WhuNyT4/imuAIrRVlB7Y3tNf3S7BqDef8Zrjsk3IihdqB/eLhx2HSfXlOrdfO9spIK
-         cpep/82R0jkFAAMgX3sC9X6Iqcwx4veO+TH/HW0Jz8L1SOs7hEjHKYJX/Nqu0npQTNif
-         kV2k7adphNPW5UDDcAbGGVgAQ0ntiDbIBEXPwTRYYmAvFX++gKELOmLrZsQBa5tiTeUl
-         1i0d7dUsg5LHDfJCimKSuu1csHOblCdpmvQ7Dwuxu7AOwYbriZfWpOkmRnVQZEofUAxv
-         m80JMKkcY4p223jaWLZVpnxE2eWd37enxRcSrKLlZLGBkkPTVBnO8lrPtZKEqhDUYsPl
-         KMbw==
-X-Gm-Message-State: AO0yUKVv7Jefl0xG4PW0EMmvDtJk3pVBguKKOvmKi1vS3THtpRLNIfB5
-        7NNoGiE0Yz5wcbKKfDr+tOM=
-X-Google-Smtp-Source: AK7set9M9SUD7QQ3peFVgNl8rJ4f7gXXjOnpkvefFqRWiS+AQHrpCwPjMXzZfPhpBOskHm66i45zcw==
-X-Received: by 2002:a05:622a:1983:b0:3e0:3d65:19d2 with SMTP id u3-20020a05622a198300b003e03d6519d2mr57959747qtc.20.1680504619179;
-        Sun, 02 Apr 2023 23:50:19 -0700 (PDT)
-Received: from PCBABN.skidata.net ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id d70-20020a376849000000b007467a4d8691sm2569782qkc.47.2023.04.02.23.50.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 23:50:18 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-To:     dmitry.osipenko@collabora.com
-Cc:     bbara93@gmail.com, benjamin.bara@skidata.com, jonathanh@nvidia.com,
-        lee@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        rafael.j.wysocki@intel.com, richard.leitner@linux.dev,
-        treding@nvidia.com, wsa@kernel.org
-Subject: Re: [PATCH v3 4/4] mfd: tps6586x: register restart handler
-Date:   Mon,  3 Apr 2023 08:50:13 +0200
-Message-Id: <20230403065013.520339-1-bbara93@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <6abaa803-1639-b949-3af5-05a341f9b459@collabora.com>
-References: <6abaa803-1639-b949-3af5-05a341f9b459@collabora.com>
+        d=1e100.net; s=20210112; t=1680504686;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nb8hMsZoL157aXIKNcdvRKkRTkh4KKenB7HdAyviWGg=;
+        b=AEUPlvxk132mLe/MOLgQ21VDSfQSBBXVOxOKxPzCBAwI2SQjWjyDQIPkgqtTVJt3tp
+         TWhBhKnIPVT/iVzL7dIxneyOVfUsqhX7H1+rMYOv8vsiR+BuRU7E5hNEIYaoI6jcz2rA
+         ZPOU0PlL60eqlSHbpJlyAYE8KF3j4wQDe2vwRrIZASVAAHeKXXhcfIxP9Zi0wthx/niR
+         QfniEpb2PMQmEDhJXP3ZZEVa3akNzBwkL66H+GHHJ7ZEkwR77cDAiuh2dBXpCc45+w6a
+         XeoTAXFqzUJmYZ3HcgDOrnexIOJ38yOy+G4ey4u76K5hsRPGZLSv3uG/X/+wwYERM++2
+         AY0g==
+X-Gm-Message-State: AO0yUKWlQUPf3cRdxZKY9JA00gSbMn1FCkEn7elSymqw4nIwYw7WOESe
+        k5OqmI8V8htQ/1LIis4BmeoSaA==
+X-Google-Smtp-Source: AK7set/7UhL6zASSvYckJ/LnYFdfFtsSyRAbQKxDmgfTrSMFkgMEUJ+qxFQgvS+Th4E/+wmKblZ6kw==
+X-Received: by 2002:a7b:cd85:0:b0:3ee:96f0:ea3c with SMTP id y5-20020a7bcd85000000b003ee96f0ea3cmr25721582wmj.7.1680504686213;
+        Sun, 02 Apr 2023 23:51:26 -0700 (PDT)
+Received: from ?IPV6:2003:f6:af22:1600:2f4c:bf50:182f:1b04? (p200300f6af2216002f4cbf50182f1b04.dip0.t-ipconnect.de. [2003:f6:af22:1600:2f4c:bf50:182f:1b04])
+        by smtp.gmail.com with ESMTPSA id b39-20020a05600c4aa700b003ed29189777sm17946698wmp.47.2023.04.02.23.51.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Apr 2023 23:51:25 -0700 (PDT)
+Message-ID: <3ee86615-e8ee-801b-7a12-2f007ffbceea@grsecurity.net>
+Date:   Mon, 3 Apr 2023 08:51:24 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: Linux 5.15.103
+Content-Language: en-US, de-DE
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, torvalds@linux-foundation.org,
+        lwn@lwn.net, jslaby@suse.cz,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+References: <1679040264214179@kroah.com>
+ <c359c777-c3af-b4a6-791d-d51916160bf5@grsecurity.net>
+ <ZCLaLWJiIsDV5yGr@kroah.com>
+ <f86cb36e-b331-8b8d-f087-5e2e8a5ae962@grsecurity.net>
+ <ZCgwaWSgnUWAPyiv@sashalap>
+From:   Mathias Krause <minipli@grsecurity.net>
+In-Reply-To: <ZCgwaWSgnUWAPyiv@sashalap>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,14 +84,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the feedback!
+On 01.04.23 15:23, Sasha Levin wrote:
+> On Tue, Mar 28, 2023 at 02:29:11PM +0200, Mathias Krause wrote:
+>> On 28.03.23 14:14, Greg Kroah-Hartman wrote:
+>>> On Tue, Mar 28, 2023 at 02:02:03PM +0200, Mathias Krause wrote:
+>>>> On 17.03.23 09:04, Greg Kroah-Hartman wrote:
+>>>>> I'm announcing the release of the 5.15.103 kernel.
+>>>>>
+>>>>> [...]
+>>>>>
+>>>>> Vitaly Kuznetsov (4):
+>>>>>       KVM: Optimize kvm_make_vcpus_request_mask() a bit
+>>>>>       KVM: Pre-allocate cpumasks for
+>>>>> kvm_make_all_cpus_request_except()
+>>>>>       KVM: nVMX: Don't use Enlightened MSR Bitmap for L3
+>>>>>       KVM: VMX: Introduce vmx_msr_bitmap_l01_changed() helper
+>>>>>
+>>>>
+>>>> That list is missing commit 6470accc7ba9 ("KVM: x86: hyper-v: Avoid
+>>>> calling kvm_make_vcpus_request_mask() with vcpu_mask==NULL") to fulfill
+>>>> the prerequisite of "KVM: Optimize kvm_make_vcpus_request_mask() a
+>>>> bit".
+>>>>
+>>>> Right now the kvm selftests trigger a kernel NULL deref for the hyperv
+>>>> test, making the system hang.
+>>>>
+>>>> Please consider applying commit 6470accc7ba9 for the next v5.15.x
+>>>> release.
+>>>
+>>> It wasn't tagged for the stable kernels, so we didn't pick it up :(
+>>
+>> Neither were any of the above commits. o.O
+>>
+>> Commit 3e48a6349d29 ("KVM: Optimize kvm_make_vcpus_request_mask() a
+>> bit") has this tag, though:
+>>
+>> Stable-dep-of: 2b0128127373 ("KVM: Register /dev/kvm as the _very_ last
+>> thing during initialization")
+>>
+>> I don't know why, though. These two commits have little in common.
+>> Maybe Sasha knows why?
+> 
+> Because you've skipped the commit in the middle of the two you've
+> pointed out :)
+> 
+> 3e48a6349d29 is needed by 0a0ecaf0988b ("KVM: Pre-allocate cpumasks for
+> kvm_make_all_cpus_request_except()"), which in turn is needed by
+> 2b0128127373.
 
-The DS states: "When the reboot request state is set an internal timer TWAIT
-(10ms typ) is started. The reboot request ends when t > TWAIT."
+I see, 0a0ecaf0988b is "needed" by 2b0128127373 to make it apply clean.
+However, there is no functional dependency for 2b0128127373, as it
+simply moves device registration around. By picking all the "required"
+commits to make it apply clean, still functional required commits were
+missed. :(
 
-Therefore, my intention was to wait a little bit before starting the next
-handler in the chain. I can do some tests without the mdelay, but otherwise
-will reduce it to 15ms in the next patch. What do you think about it?
+A simple backport would probably had been the better solution to the
+failed cherry-pick, but I see the original author didn't provide one, so
+some kind off fall-back process kicked in to pick up dependent commits.
+If these would have been announced more visible than by simply adding
+them to the queue, it might had been noticed earlier that a commit is
+missing still.
 
-BR,
-Benjamin
+This is probably just another example of maintainer's time being such a
+scarce resource problem, but the fallback process isn't working flawless
+either :/
+
+Thanks,
+Mathias
