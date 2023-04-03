@@ -2,81 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB046D4DA9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1056D4DAB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232409AbjDCQ1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S231946AbjDCQ2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjDCQ1U (ORCPT
+        with ESMTP id S229716AbjDCQ2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:27:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6EA212A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680539184;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u5Wl/rAGr3UB8Azut2HzGqWLEE5zD9Z8IIRpmvpKtAM=;
-        b=D6lK6I8rnyGeId/K/maMFRPsKIBrkbz7XNeVuQ/ydZK5u4Icngzo+gwdFgiyfV9R9F60zS
-        ZugTj97brXb/t+VBhZve/MP91FlstfLDpFntCyxvr0rTBs6viPmLoVNvZdANpn5K14VkEO
-        zu3cEedUqF2UgT/jMLYYPfT88GM6qSU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-551-tEkfvgnIPfCSmR1t8OPiJA-1; Mon, 03 Apr 2023 12:26:21 -0400
-X-MC-Unique: tEkfvgnIPfCSmR1t8OPiJA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4AE2C85A588;
-        Mon,  3 Apr 2023 16:26:21 +0000 (UTC)
-Received: from napanee.usersys.redhat.com (unknown [10.2.16.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 36A33400F4F;
-        Mon,  3 Apr 2023 16:26:21 +0000 (UTC)
-Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
-        id E8286C04FC; Mon,  3 Apr 2023 12:26:20 -0400 (EDT)
-Date:   Mon, 3 Apr 2023 12:26:20 -0400
-From:   Aristeu Rozanski <aris@redhat.com>
-To:     Darren Hart <darren@os.amperecomputing.com>
-Cc:     Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        "D. Scott Phillips" <scott@os.amperecomputing.com>
-Subject: Re: Error reports at boot time in Ampere Altra machines since
- c733ebb7c
-Message-ID: <20230403162620.26t37wpmyohnuzoo@redhat.com>
-References: <20230302201732.pwnhg46mum6st2bv@redhat.com>
- <865ybizqfi.wl-maz@kernel.org>
- <ZAJMwLMNizPMPzS3@fedora>
- <87mt4th9zq.wl-maz@kernel.org>
- <ZAJXQUY2nSiGMCX8@fedora>
+        Mon, 3 Apr 2023 12:28:31 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4021721
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=rduXwTxKJ2ZRTymjzDI20MsDownWzIgevWq9R+vDxik=; b=TSZEdqgE6wUJVAoZbc98O6N4CN
+        T7zkdbIqBWkyalyEKEMQGpqWsqvIQPbE4PGtJv8WoxR52Zk9JeY/aptDay5H4s4ldoFBE2gtnUm1l
+        X6H2W9UYsVbz37mB17y88zmPqno1Teo7HBxo1a8aYZzhLK2hK17HujPms41XiKW0T80Ict4FT3ibp
+        OXgg+rANBS0Y3vWTvTEHf5B/y5xT97/SD0AG1cZIJHj53nZPk8fomj4gaZazcuRZa0I/ss0Pw2Rch
+        51WoSM3cvTaYL7sEXzzX4hYx5e6esRZMJSRZy9pODPP6GFyQKDTG3GyMW/+8T9iZDnaO68t+4M1GW
+        Xu/DhKvw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pjN2i-00Fxh1-1q;
+        Mon, 03 Apr 2023 16:28:28 +0000
+Message-ID: <ef2ba536-a7ea-7cfb-7cf6-9e0c02aeba80@infradead.org>
+Date:   Mon, 3 Apr 2023 09:28:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAJXQUY2nSiGMCX8@fedora>
-User-Agent: NeoMutt/20220429
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/vblank: Simplify drm_dev_has_vblank()
+Content-Language: en-US
+To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230403160735.1211468-1-robdclark@gmail.com>
+ <ZCr9jrhTyGuZA+Qt@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <ZCr9jrhTyGuZA+Qt@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Darren,
 
-On Fri, Mar 03, 2023 at 12:23:29PM -0800, Darren Hart wrote:
-> Thanks for the detail Marc, let me see what I can learn and will follow up.
 
-any updates on this?
+On 4/3/23 09:23, Ville Syrjälä wrote:
+> On Mon, Apr 03, 2023 at 09:07:35AM -0700, Rob Clark wrote:
+>> From: Rob Clark <robdclark@chromium.org>
+>>
+>> What does vblank have to do with num_crtcs?  Well, this was technically
+>> correct, but you'd have to go look at where num_crtcs is initialized to
+>> understand why.  Lets just replace it with the simpler and more obvious
+>> check.
+>>
+>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>> ---
+>>  drivers/gpu/drm/drm_vblank.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
+>> index 877e2067534f..ad34c235d853 100644
+>> --- a/drivers/gpu/drm/drm_vblank.c
+>> +++ b/drivers/gpu/drm/drm_vblank.c
+>> @@ -575,7 +575,7 @@ EXPORT_SYMBOL(drm_vblank_init);
+>>   */
+>>  bool drm_dev_has_vblank(const struct drm_device *dev)
+>>  {
+>> -	return dev->num_crtcs != 0;
+>> +	return !!dev->vblank;
+> 
+> The compiler knows how to turn things into a boolean.
+>> Or I guess if we want to be a bit more explicit we could
+> write this as
+>  return dev->vblank != NULL;
+> but IIRC that will make checkpatch complain because of
+> someone's personal taste.
 
-Thanks
+checkpatch isn't an absolute thing. :)
 
 -- 
-Aristeu
-
+~Randy
