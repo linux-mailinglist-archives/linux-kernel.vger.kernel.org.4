@@ -2,145 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587596D49AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12206D49E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbjDCOkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
+        id S233825AbjDCOmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233774AbjDCOkO (ORCPT
+        with ESMTP id S233826AbjDCOmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:40:14 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2252A31988
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:40:10 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id i5so118477296eda.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680532809;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EeyT0QKLAdfx1wYIp91BBauMDPF4spiSXYLFvc2Jhew=;
-        b=DNxFne77gr38mPjKD2skrtdATHJqX38RkSDOtn4x784v77WE3WX4Snr1XrMgN8jfDR
-         b1sljIuwWJRMWedD3xC6Zyg5KGjWdIe9N9iefzkL2LJXi7/o+cSu1cAXL/DxMRlPtO4w
-         rEOj+c7dEyl4YJaWmGKZrpq6go+QHFa5F9q54ISmVS8VsvD988/p6N/avfnA1pwFVG9w
-         BLB9xVniMvXWRhCSxsnYO4fQw4UWpDe6m2cZsKRNaNI9SSDUEUWbvo5XVaOKJ9RvAuM4
-         2c7kZ7VLtFiRSP11RXSPgOpSMSW9xl921onVWRPFHl2fhke6llLzcaL/vHWfmt2shENb
-         NpmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680532809;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EeyT0QKLAdfx1wYIp91BBauMDPF4spiSXYLFvc2Jhew=;
-        b=sURC6t3dP8dFl0aPQWozVPKtVwnQzybKfKNgBJv3FDK78c4xP0U7a5X++1G3ZDDRIb
-         dHyAdfp3hHyfUze3HYfG75vkbnYS3KCacv++HdnmtBUAEA9JfV/Rzwfb7DaSOTUqt+HY
-         295wDlJWVLYHG517xePLZcnY2hpDRMNxKo1jHfp1o1Sk+x51PzCyHIlU3zoDaRI2dtqs
-         4M3BlxwcWIUNKH2cNBHFt6/s+CoXuhvF7R6+I9bneNOskw05wschwTWwiT2ssGwNBYZH
-         K4FgFHeBzKxnex6QHQecXzh4i+gAGaou5vsZ6ljmt7yBcWxOCMbqmYjYiGuavOpzgaPs
-         Grsg==
-X-Gm-Message-State: AAQBX9fgS5l9uVnMh5hF9UwhBdSKdH9xhnZLkKjR4QWVnri9/rJixdAb
-        mFMuIv+56EqBIP9RzB8/YV6fhaLZZa4i2TM59ag=
-X-Google-Smtp-Source: AKy350YB6/aTny7rowwDsGnFpzK500CdURAqu/f4FzIVYyZ+gYMKzXuMVnbYkRm2sqqQxnruh9G38DpeyQ+ZbHZpFY8=
-X-Received: by 2002:a50:9e43:0:b0:502:4459:f2b8 with SMTP id
- z61-20020a509e43000000b005024459f2b8mr12975681ede.8.1680532809061; Mon, 03
- Apr 2023 07:40:09 -0700 (PDT)
+        Mon, 3 Apr 2023 10:42:05 -0400
+Received: from smtp.outgoing.loopia.se (smtp.outgoing.loopia.se [93.188.3.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E8D3503B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:42:01 -0700 (PDT)
+Received: from s807.loopia.se (localhost [127.0.0.1])
+        by s807.loopia.se (Postfix) with ESMTP id 196782F83101
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:41:59 +0200 (CEST)
+Received: from s980.loopia.se (unknown [172.22.191.6])
+        by s807.loopia.se (Postfix) with ESMTP id 074F72E28FEB;
+        Mon,  3 Apr 2023 16:41:59 +0200 (CEST)
+Received: from s898.loopia.se (unknown [172.22.191.6])
+        by s980.loopia.se (Postfix) with ESMTP id 015182201610;
+        Mon,  3 Apr 2023 16:41:59 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at amavis.loopia.se
+X-Spam-Score: -1
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
+Received: from s979.loopia.se ([172.22.191.5])
+        by s898.loopia.se (s898.loopia.se [172.22.190.17]) (amavisd-new, port 10024)
+        with LMTP id 3GRwtH2je2cH; Mon,  3 Apr 2023 16:41:58 +0200 (CEST)
+X-Loopia-Auth: user
+X-Loopia-User: richard@bit42.se
+X-Loopia-Originating-IP: 178.174.130.84
+Received: from hypercube.. (h-178-174-130-84.A444.priv.bahnhof.se [178.174.130.84])
+        (Authenticated sender: richard@bit42.se)
+        by s979.loopia.se (Postfix) with ESMTPSA id 5A1FA10BC43C;
+        Mon,  3 Apr 2023 16:41:58 +0200 (CEST)
+From:   Richard Alpe <richard@bit42.se>
+To:     srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        niklas.soderlund+renesas@ragnatech.se,
+        Richard Alpe <richard@bit42.se>
+Subject: [PATCH v4 1/2] dt-bindings: nvmem: Add t1023-sfp efuse support
+Date:   Mon,  3 Apr 2023 16:41:05 +0200
+Message-Id: <20230403144106.2776249-1-richard@bit42.se>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CGME20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p3>
- <20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p3> <ZCrMMQt2xnnZIyz6@alley>
-In-Reply-To: <ZCrMMQt2xnnZIyz6@alley>
-From:   Jaewon Kim <jaewon31.kim@gmail.com>
-Date:   Mon, 3 Apr 2023 23:39:58 +0900
-Message-ID: <CAJrd-Uvzy18SfjjqbqZCPHjw+ujQXsBpvov4b=bfAwZrj=bCAA@mail.gmail.com>
-Subject: Re: [RFC] vsprintf: compile error on %09pK
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Jaewon Kim <jaewon31.kim@samsung.com>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        GyeongHwan Hong <gh21.hong@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1372; h=from:subject; bh=VzTo89ujuhNY+3NfqTRMrVKqY+EPqSGrK3IAKfyJCKA=; b=owEBbQKS/ZANAwAKAaR4ncy5pstaAcsmYgBkKuWAJECsxgXKF7/I8heASdUYkp7ho+i4ldM73iGu Y6FIbPuJAjMEAAEKAB0WIQQsEvAKF4GLpV03omKkeJ3MuabLWgUCZCrlgAAKCRCkeJ3MuabLWuu3EA DEoJCYcGuD0sBMqML69jDHBrQ7I3v+1kP4zhlvjHaOkkwfPz0tsThJ15ijQt1+MrqbvyciQ/gstOhx D8B9eSu8MrVitYlVOyRvU7RZhTNBq9mldHMXH62pSBIL8HpMF1eUEJLRL/1bOrV/gDTLhHHLH+AvAa wKwKBhOzs7uOE+y5JJs3tx7ZxfiwvtcL8872+DZxV0Bp3UVaSmGT5+5qw3SBZYZrB9PWHrg+go0Ki0 n3ahF2DIuU9rF/ysnbsJmwhsPnue+fQSUBI/gcEdaTMY2aLbAqeh0oqei2q7Q7kQznKLycUxdSBHPo ot0EJ4SvoN+/0JkWvWjxbOLuimvErgq+gsDWWZN4S4IM1lJKpyLiIxvFEPqRHYDhvj+shaaPAxiLm6 VJQLY6T3rhtb78J5EYg+7Qrlrp8MENQb/hj/a5lXzAG+DjJ8u7QCWtc5fKijS32ae51T0QU8H2D9t7 XdgJvPyedcKoArE4mX2KyVIdgUttOAWvoTw77V566bi+b1T9EVamL0tPwF/PWepr4r8amyOJ1D3bpv GOsn0Nhsn/PcjJSTCWM9PzC6Q95o+YR78fwUX22nxSWD0Ocy7ljy8/nYIEYN7BiZV2A/GcHLNL8fDS RApX2srpYUD3xNiFiNTFysouVXxcjylSyG8XDNC432nKOdSKbNrjoT/n7JXw==
+X-Developer-Key: i=richard@bit42.se; a=openpgp; fpr=B1C705C6B1BF719CA5CD67398BEE8379084BC511
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023=EB=85=84 4=EC=9B=94 3=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 9:53, Pe=
-tr Mladek <pmladek@suse.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> On Mon 2023-04-03 19:46:17, Jaewon Kim wrote:
-> > Hello
-> >
-> > I've just changed %09lx to %09pK on my driver code to hide the address,=
- but I
-> > faced compiler error. The %9pK without 0 worked.
->
-> What exactly do you want to achieve, please?
+Add a schema for the NVMEM eFuse (SFP) layout on the NXP QorIQ SOC.
 
-Hello
+Signed-off-by: Richard Alpe <richard@bit42.se>
+---
+v3: Updates according to feedback from Krzysztof.
 
-Thank you for your comment.
+ .../bindings/nvmem/fsl,t1023-sfp.yaml         | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/fsl,t1023-sfp.yaml
 
-I wanted to print phys_addr_t  type value only when kptr_restrict sysctl is
-allowed. So I thought I could use %pK for that purpose. And the physical
-address is not that long. I wanted to make that length short like 9 hex.
+diff --git a/Documentation/devicetree/bindings/nvmem/fsl,t1023-sfp.yaml b/Documentation/devicetree/bindings/nvmem/fsl,t1023-sfp.yaml
+new file mode 100644
+index 000000000000..a9d249d4dbba
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/fsl,t1023-sfp.yaml
+@@ -0,0 +1,37 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/fsl,t1023.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP QorIQ eFuse support
++
++maintainers:
++  - Richard Alpe <richard@bit42.se>
++
++description:
++  Read support for the eFuses (SFP) on NXP QorIQ series SoC's.
++
++allOf:
++  - $ref: nvmem.yaml#
++
++properties:
++  compatible:
++    const: fsl,t1023-sfp
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    efuse@e8000 {
++        compatible = "fsl,t1023-sfp";
++        reg = <0xe8000 0x1000>;
++    };
++...
+-- 
+2.34.1
 
->
-> Note that printk() hashes pointers by default. It means that %p does not
-> print the value but a hash based on the value.
->
-> If you print the same pointer twice, you will see the same hash, so
-> you know that the pointer is the same. But you do not see the address
-> so that you could not use the value for a security attack.
->
-> See Documentation/core-api/printk-formats.rst
->
-> Anyway, the main question if it makes sense to print the pointer value
-> at all. The address is not useful if it can't be compared with
-> other pointers or if the data on the address could not be checked.
->
-> > Is there restriction on %pK which does now allow %0 ? I've wondered whe=
-ther I
-> > did wrong or it is a printk problem.
-> >
-> > To show easily I tried to add pr_info("%09pK\n", nodemask); in page_all=
-oc.c
-> > Then here's what I did.
-> >
-> > $ ARCH=3Dx86 make x86_64_defconfig ; make mm/page_alloc.o
-> > #
-> > # No change to .config
-> > #
-> >   CALL    scripts/checksyscalls.sh
-> >   DESCEND objtool
-> >   INSTALL libsubcmd_headers
-> >   CC      mm/page_alloc.o
-> > In file included from ./include/asm-generic/bug.h:22:0,
-> >                  from ./arch/x86/include/asm/bug.h:87,
-> >                  from ./include/linux/bug.h:5,
-> >                  from ./include/linux/mmdebug.h:5,
-> >                  from ./include/linux/mm.h:6,
-> >                  from mm/page_alloc.c:19:
-> > mm/page_alloc.c: In function =E2=80=98__alloc_pages=E2=80=99:
-> > ./include/linux/kern_levels.h:5:18: error: '0' flag used with =E2=80=98=
-%p=E2=80=99 gnu_printf format [-Werror=3Dformat=3D]
-> >  #define KERN_SOH "\001"  /* ASCII Start Of Header */
->
-> As Sergey already wrote. %p does not support any modification flags.
-
-Okay, then we can't use %09pK. I've just wondered because %9pK works.
-
-BR
-Jaewon Kim
-
->
-> Best Regards,
-> Petr
