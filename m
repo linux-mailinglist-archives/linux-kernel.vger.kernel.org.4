@@ -2,137 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663F56D3E25
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21F76D3E27
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjDCHe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 03:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        id S231627AbjDCHeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 03:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjDCHeY (ORCPT
+        with ESMTP id S230028AbjDCHef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 03:34:24 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18180902A;
-        Mon,  3 Apr 2023 00:34:23 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PqjH20M4JzSq41;
-        Mon,  3 Apr 2023 15:30:38 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 3 Apr 2023 15:34:20 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <netdev@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <dlstevens@us.ibm.com>
-Subject: [PATCH net] ipv6: Fix an uninit variable access bug in __ip6_make_skb()
-Date:   Mon, 3 Apr 2023 15:34:17 +0800
-Message-ID: <20230403073417.2240575-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 3 Apr 2023 03:34:35 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9007AB759;
+        Mon,  3 Apr 2023 00:34:33 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id x3so113334710edb.10;
+        Mon, 03 Apr 2023 00:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680507272;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iljKYoYT2ePjzYz9iCguWo2fputM/ySIgsJEj1WtGBA=;
+        b=JwCBZ1C71BCvlADWk9aoGIeWpoywTmjsQBZUzDxTDT/EM3mDHzeEvxJ33aIVs1c+lv
+         a3niccIrb9X480qtVHcGOCGKE84PZPd0OO7vN3qHO21fpyn6xV5M7vWXjIGlwklA/o8B
+         kKNhuMxSN6Pv9se7VcoT3n5MjgrvwNbbv+2gGE6HWk7Up6ddPoTK1ZCeCK/kNB5adkbv
+         8+Ry7zBOByXzq+LLbo0Ui3iYiwmBzpYYn5Rx6GK4xCOVAVf7EuHinsfBX76fkhzEqePx
+         A1jpvuzKC966WbgaGXxMDCPq6aNRWAKCjrDvC3UdQaFWJA//l7Z6yvs2tF5yAkKeivyo
+         Hstg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680507272;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iljKYoYT2ePjzYz9iCguWo2fputM/ySIgsJEj1WtGBA=;
+        b=e5V6bUQ/3Hee16nsvtugjv+z7jt5qhRMz1nxnUO7qY2fZyWIzcJxLBV1b1hYlDne8O
+         X5w5VvXvE6+Fz7g7P1YlaALNu+yXdbNkkVpr1M22Dt2IQfHImr7hKxlkx0ffFoKRRWND
+         eSt+KzJVzc8QKWwHBf7NnFrY2n6fUz83TNyRx3jWCOkHF+MmcCvUWxYu6+eJP6nmNlDS
+         LK9b64B0k+V9NGeoL/76CFQTz94ykvhOrBGyAtYyLmRQ87dlzpaUHrvSWn7nBVS8948H
+         mIsR2keL+FoJS/Fp2ylR43rhQSCAq98YNJpoHmGQEHTmJ6HftS1606fFDY2nOzXcTBO4
+         q3JA==
+X-Gm-Message-State: AAQBX9fMw54k++MQsd1GQFXi5HOnuzvGoBSwvlmXCd0Qtjug18EkKxA3
+        V7Jy0iaAR0NcUHs8w6vOtx4=
+X-Google-Smtp-Source: AKy350ZyL7HCoS+UmhWQw5tsCxNlOY9WrpJgPpl2XGb/3NyoAlgaV2vhSA/j56EdGvqLCwQ4m4DPBQ==
+X-Received: by 2002:a17:906:4f0b:b0:931:59f:d42 with SMTP id t11-20020a1709064f0b00b00931059f0d42mr36891514eju.29.1680507271690;
+        Mon, 03 Apr 2023 00:34:31 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id cw16-20020a170906c79000b0093dce4e6257sm4095134ejb.201.2023.04.03.00.34.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 00:34:30 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 10:34:27 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Li Yang <lidaxian@hust.edu.cn>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc: renesas: renesas-soc: release 'chipid' from
+ ioremap()
+Message-ID: <302d88ca-7d28-4450-8e60-d0bb40f4174d@kili.mountain>
+References: <20230331095545.31823-1-lidaxian@hust.edu.cn>
+ <CAMuHMdV5guFbo76nq27aZjWsYqneOfGNf0Ozyh0C53+VgnXgXw@mail.gmail.com>
+ <d2688eb2-d7b6-4e80-a13e-55ed541ac9b8@kili.mountain>
+ <CAMuHMdX2b+GV4+Ee0yQ2hfNCvHaU_jAsnmF28=4ffCmdVy58xg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdX2b+GV4+Ee0yQ2hfNCvHaU_jAsnmF28=4ffCmdVy58xg@mail.gmail.com>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot reported a bug as following:
+On Mon, Apr 03, 2023 at 09:12:55AM +0200, Geert Uytterhoeven wrote:
+> Hi Dan,
+> 
+> On Mon, Apr 3, 2023 at 6:29 AM Dan Carpenter <error27@gmail.com> wrote:
+> > On Fri, Mar 31, 2023 at 02:13:10PM +0200, Geert Uytterhoeven wrote:
+> > > On Fri, Mar 31, 2023 at 12:14 PM Li Yang <lidaxian@hust.edu.cn> wrote:
+> > > > Smatch reports:
+> > > >
+> > > > drivers/soc/renesas/renesas-soc.c:536 renesas_soc_init() warn:
+> > > > 'chipid' from ioremap() not released on lines: 475.
+> > > >
+> > > > If soc_dev_atrr allocation is failed, function renesas_soc_init()
+> > > > will return without releasing 'chipid' from ioremap().
+> > > >
+> > > > Fix this by adding function iounmap().
+> > > >
+> > > > Fixes: cb5508e47e60 ("soc: renesas: Add support for reading product revision for RZ/G2L family")
+> > > > Signed-off-by: Li Yang <lidaxian@hust.edu.cn>
+> > > > Reviewed-by: Dan Carpenter <error27@gmail.com>
+> > >
+> > > Thanks for your patch!
+> > >
+> > > > --- a/drivers/soc/renesas/renesas-soc.c
+> > > > +++ b/drivers/soc/renesas/renesas-soc.c
+> > > > @@ -471,8 +471,11 @@ static int __init renesas_soc_init(void)
+> > > >         }
+> > > >
+> > > >         soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
+> > > > -       if (!soc_dev_attr)
+> > > > +       if (!soc_dev_attr) {
+> > > > +               if (chipid)
+> > > > +                       iounmap(chipid);
+> > >
+> > > We don't really care, as the system is dead at this point anyway.
+> >
+> > Why even have the check for NULL then?  The kzalloc() is small enough
+> 
+> Because else someone will submit a patch to add that check? ;-)
+> 
+> > to the point where it litterally cannot fail.
+> 
+> I still don't understand how it can be guaranteed that small allocations
+> never fail... "while (1) kmalloc(16, GFP_KERNEL);"
+> 
 
-=====================================================
-BUG: KMSAN: uninit-value in arch_atomic64_inc arch/x86/include/asm/atomic64_64.h:88 [inline]
-BUG: KMSAN: uninit-value in arch_atomic_long_inc include/linux/atomic/atomic-long.h:161 [inline]
-BUG: KMSAN: uninit-value in atomic_long_inc include/linux/atomic/atomic-instrumented.h:1429 [inline]
-BUG: KMSAN: uninit-value in __ip6_make_skb+0x2f37/0x30f0 net/ipv6/ip6_output.c:1956
- arch_atomic64_inc arch/x86/include/asm/atomic64_64.h:88 [inline]
- arch_atomic_long_inc include/linux/atomic/atomic-long.h:161 [inline]
- atomic_long_inc include/linux/atomic/atomic-instrumented.h:1429 [inline]
- __ip6_make_skb+0x2f37/0x30f0 net/ipv6/ip6_output.c:1956
- ip6_finish_skb include/net/ipv6.h:1122 [inline]
- ip6_push_pending_frames+0x10e/0x550 net/ipv6/ip6_output.c:1987
- rawv6_push_pending_frames+0xb12/0xb90 net/ipv6/raw.c:579
- rawv6_sendmsg+0x297e/0x2e60 net/ipv6/raw.c:922
- inet_sendmsg+0x101/0x180 net/ipv4/af_inet.c:827
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- ____sys_sendmsg+0xa8e/0xe70 net/socket.c:2476
- ___sys_sendmsg+0x2a1/0x3f0 net/socket.c:2530
- __sys_sendmsg net/socket.c:2559 [inline]
- __do_sys_sendmsg net/socket.c:2568 [inline]
- __se_sys_sendmsg net/socket.c:2566 [inline]
- __x64_sys_sendmsg+0x367/0x540 net/socket.c:2566
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+I read an lwn article on it and I think I once looked it up to try
+figure out how small the definition of "small" was and it was
+surprisingly large...  But I have no idea.  I think maybe small atomic
+allocations can fail and GFP_KERNEL allocations sleep forever?  (These
+guesses are worthless).
 
-Uninit was created at:
- slab_post_alloc_hook mm/slab.h:766 [inline]
- slab_alloc_node mm/slub.c:3452 [inline]
- __kmem_cache_alloc_node+0x71f/0xce0 mm/slub.c:3491
- __do_kmalloc_node mm/slab_common.c:967 [inline]
- __kmalloc_node_track_caller+0x114/0x3b0 mm/slab_common.c:988
- kmalloc_reserve net/core/skbuff.c:492 [inline]
- __alloc_skb+0x3af/0x8f0 net/core/skbuff.c:565
- alloc_skb include/linux/skbuff.h:1270 [inline]
- __ip6_append_data+0x51c1/0x6bb0 net/ipv6/ip6_output.c:1684
- ip6_append_data+0x411/0x580 net/ipv6/ip6_output.c:1854
- rawv6_sendmsg+0x2882/0x2e60 net/ipv6/raw.c:915
- inet_sendmsg+0x101/0x180 net/ipv4/af_inet.c:827
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- ____sys_sendmsg+0xa8e/0xe70 net/socket.c:2476
- ___sys_sendmsg+0x2a1/0x3f0 net/socket.c:2530
- __sys_sendmsg net/socket.c:2559 [inline]
- __do_sys_sendmsg net/socket.c:2568 [inline]
- __se_sys_sendmsg net/socket.c:2566 [inline]
- __x64_sys_sendmsg+0x367/0x540 net/socket.c:2566
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Perhaps we need a different mechanism to annotate error handling code
+> that cannot ever happen in a real product, so it can be thrown away by
+> the compiler, while still pleasing the static checkers?  All these
+> checks and error handling code do affect kernel size.  There are
+> Linux products running on SoCs with 8 MiB of internal SRAM.
 
-It is because icmp6hdr does not in skb linear region under the scenario
-of SOCK_RAW socket. Access icmp6_hdr(skb)->icmp6_type directly will
-trigger the uninit variable access bug.
+People sometimes call BUG_ON(!soc_dev_attr).  It's sort of rare these
+days.  It would be easy to make a function which silences Smatch...
 
-Use a local variable icmp6_type to carry the correct value in different
-scenarios.
+	__system_is_dead();
 
-Fixes: 14878f75abd5 ("[IPV6]: Add ICMPMsgStats MIB (RFC 4293) [rev 2]")
-Reported-by: syzbot+8257f4dcef79de670baf@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?id=3d605ec1d0a7f2a269a1a6936ac7f2b85975ee9c
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
----
- net/ipv6/ip6_output.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index c314fdde0097..95a55c6630ad 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1965,8 +1965,13 @@ struct sk_buff *__ip6_make_skb(struct sock *sk,
- 	IP6_UPD_PO_STATS(net, rt->rt6i_idev, IPSTATS_MIB_OUT, skb->len);
- 	if (proto == IPPROTO_ICMPV6) {
- 		struct inet6_dev *idev = ip6_dst_idev(skb_dst(skb));
-+		u8 icmp6_type;
- 
--		ICMP6MSGOUT_INC_STATS(net, idev, icmp6_hdr(skb)->icmp6_type);
-+		if (sk->sk_socket->type == SOCK_RAW && !inet_sk(sk)->hdrincl)
-+			icmp6_type = fl6->fl6_icmp_type;
-+		else
-+			icmp6_type = icmp6_hdr(skb)->icmp6_type;
-+		ICMP6MSGOUT_INC_STATS(net, idev, icmp6_type);
- 		ICMP6_INC_STATS(net, idev, ICMP6_MIB_OUTMSGS);
- 	}
- 
--- 
-2.25.1
+regards,
+dan carpenter
 
