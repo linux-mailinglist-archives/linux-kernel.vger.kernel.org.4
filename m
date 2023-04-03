@@ -2,266 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A319F6D43B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC1F6D43B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjDCLlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S231321AbjDCLkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbjDCLlE (ORCPT
+        with ESMTP id S229509AbjDCLkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:41:04 -0400
-Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BC246BD;
-        Mon,  3 Apr 2023 04:41:02 -0700 (PDT)
-Received: from mailer.emlix.com (unknown [81.20.119.6])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 06C785F71F;
-        Mon,  3 Apr 2023 13:41:01 +0200 (CEST)
-From:   Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Edmund Berenson <edmund.berenson@emlix.com>,
-        Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] gpio: max7317: Add gpio expander driver
-Date:   Mon,  3 Apr 2023 13:40:32 +0200
-Message-Id: <20230403114033.8336-2-edmund.berenson@emlix.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230403114033.8336-1-edmund.berenson@emlix.com>
-References: <20230403114033.8336-1-edmund.berenson@emlix.com>
+        Mon, 3 Apr 2023 07:40:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55ACE35AF
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:40:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4B0981063;
+        Mon,  3 Apr 2023 04:41:20 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E9D1F3F6C4;
+        Mon,  3 Apr 2023 04:40:33 -0700 (PDT)
+Message-ID: <e3aa7e66-27d0-034b-7bdf-f4fab1c2df25@arm.com>
+Date:   Mon, 3 Apr 2023 13:40:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH 1/6] sched/fair: Add util_guest for tasks
+Content-Language: en-US
+To:     David Dai <davidai@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+References: <20230330224348.1006691-1-davidai@google.com>
+ <20230330224348.1006691-2-davidai@google.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230330224348.1006691-2-davidai@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for maxim MAX7317 SPI-Interfaced 10 Port
-GPIO Expander.
+Hi David,
 
-v2: adjust driver to use regmap
+On 31/03/2023 00:43, David Dai wrote:
+> For virtualization usecases, util_est and util_avg currently tracked
+> on the host aren't sufficient to accurately represent the workload on
+> vCPU threads, which results in poor frequency selection and performance.
+> For example, when a large workload migrates from a busy vCPU thread to
+> an idle vCPU thread, it incurs additional DVFS ramp-up latencies
+> as util accumulates.
+> 
+> Introduce a new "util_guest" member as an additional PELT signal that's
+> independently updated by the guest. When used, it's max aggregated to
+> provide a boost to both task_util and task_util_est.
+> 
+> Updating task_util and task_util_est will ensure:
+> -Better task placement decisions for vCPU threads on the host
+> -Correctly updating util_est.ewma during dequeue
+> -Additive util with other threads on the same runqueue for more
+> accurate frequency responses
+> 
+> Co-developed-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: David Dai <davidai@google.com>
+> ---
 
-Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
----
- drivers/gpio/Kconfig        |  11 +++
- drivers/gpio/Makefile       |   1 +
- drivers/gpio/gpio-max7317.c | 161 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 173 insertions(+)
- create mode 100644 drivers/gpio/gpio-max7317.c
+[...]
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 13be729710f2..109cf09d8c05 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1615,6 +1615,17 @@ config GPIO_MAX7301
- 	help
- 	  GPIO driver for Maxim MAX7301 SPI-based GPIO expander.
- 
-+config GPIO_MAX7317
-+	tristate "Maxim MAX7317 GPIO expander"
-+	select REGMAP_SPI
-+	help
-+	  GPIO driver for Maxim MAX7317 SPI-based GPIO expander.
-+	  The MAX7317 is a serial-interfaced gpio extender, with
-+	  10 ports.
-+
-+	  This driver can also be built as a module. If so, the module will be
-+	  called gpio-max7317.
-+
- config GPIO_MC33880
- 	tristate "Freescale MC33880 high-side/low-side switch"
- 	help
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index c048ba003367..8dce549bb6c5 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -91,6 +91,7 @@ obj-$(CONFIG_GPIO_MAX7300)		+= gpio-max7300.o
- obj-$(CONFIG_GPIO_MAX7301)		+= gpio-max7301.o
- obj-$(CONFIG_GPIO_MAX730X)		+= gpio-max730x.o
- obj-$(CONFIG_GPIO_MAX732X)		+= gpio-max732x.o
-+obj-$(CONFIG_GPIO_MAX7317)		+= gpio-max7317.o
- obj-$(CONFIG_GPIO_MAX77620)		+= gpio-max77620.o
- obj-$(CONFIG_GPIO_MAX77650)		+= gpio-max77650.o
- obj-$(CONFIG_GPIO_MB86S7X)		+= gpio-mb86s7x.o
-diff --git a/drivers/gpio/gpio-max7317.c b/drivers/gpio/gpio-max7317.c
-new file mode 100644
-index 000000000000..65824efaad6c
---- /dev/null
-+++ b/drivers/gpio/gpio-max7317.c
-@@ -0,0 +1,161 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2021, Lukasz Zemla, Woodward Inc.
-+ */
-+
-+#include <linux/gpio.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <linux/spi/spi.h>
-+
-+#define MAX7317_PIN_NUMBER 10
-+#define REG_CODE_READ_PORTS_7_TO_0	((u8)0x0E)
-+#define REG_CODE_READ_PORTS_9_TO_8	((u8)0x0F)
-+
-+struct max7317 {
-+	struct gpio_chip	chip;
-+	struct regmap		*regmap;
-+	int			direction[MAX7317_PIN_NUMBER];
-+};
-+
-+struct max7317_platform_data {
-+	unsigned int	gpio_base;
-+};
-+
-+static const struct regmap_config max7317_regmap_cfg =  {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+};
-+
-+static int max7317_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct max7317 *ts = gpiochip_get_data(chip);
-+	unsigned int val;
-+	int ret;
-+	u8 reg = (offset < 8) ? REG_CODE_READ_PORTS_7_TO_0 : REG_CODE_READ_PORTS_9_TO_8;
-+
-+	ret = regmap_read(ts->regmap, reg, &val);
-+	if (ret)
-+		return ret;
-+
-+	return val & BIT(offset % 8);
-+}
-+
-+/*
-+ * After writing the register an additional read is performed in order for
-+ * changes to take effect.
-+ */
-+static void max7317_set(struct gpio_chip *chip, unsigned int offset, int value)
-+{
-+	struct max7317 *ts = gpiochip_get_data(chip);
-+
-+	if (regmap_write(ts->regmap, offset, value ? 1 : 0))
-+		dev_err(chip->parent, "Failed to set pin: %d\n", offset);
-+	max7317_get(chip, offset);
-+}
-+
-+static int max7317_direction_input(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct max7317 *ts = gpiochip_get_data(chip);
-+
-+	max7317_set(chip, offset, 1);
-+	ts->direction[offset] = GPIO_LINE_DIRECTION_IN;
-+	return 0;
-+}
-+
-+static int max7317_direction_output(struct gpio_chip *chip, unsigned int offset,
-+				    int value)
-+{
-+	struct max7317 *ts = gpiochip_get_data(chip);
-+
-+	ts->direction[offset] = GPIO_LINE_DIRECTION_OUT;
-+	return 0;
-+}
-+
-+static int max7317_get_direction(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct max7317 *ts = gpiochip_get_data(chip);
-+
-+	return ts->direction[offset];
-+}
-+
-+static int max7317_probe(struct spi_device *spi)
-+{
-+	struct max7317 *ts;
-+	struct device *dev;
-+	struct max7317_platform_data *pdata;
-+	int i;
-+
-+	ts = devm_kzalloc(&spi->dev, sizeof(struct max7317), GFP_KERNEL);
-+	if (!ts)
-+		return -ENOMEM;
-+	dev_set_drvdata(&spi->dev, ts);
-+
-+	pdata = dev_get_platdata(dev);
-+	if (pdata)
-+		ts->chip.base = pdata->gpio_base;
-+	else
-+		ts->chip.base = -1;
-+
-+	ts->chip.label = dev_name(&spi->dev);
-+	ts->chip.direction_input = max7317_direction_input;
-+	ts->chip.get = max7317_get;
-+	ts->chip.direction_output = max7317_direction_output;
-+	ts->chip.set = max7317_set;
-+	ts->chip.get_direction = max7317_get_direction;
-+
-+	ts->chip.ngpio = MAX7317_PIN_NUMBER;
-+	ts->chip.can_sleep = true;
-+	ts->chip.parent = &spi->dev;
-+	ts->chip.owner = THIS_MODULE;
-+
-+	for (i = 0; i < MAX7317_PIN_NUMBER; i++)
-+		ts->direction[i] = GPIO_LINE_DIRECTION_IN;
-+
-+	ts->regmap = devm_regmap_init_spi(spi, &max7317_regmap_cfg);
-+	if (IS_ERR(ts->regmap))
-+		return PTR_ERR(ts->regmap);
-+
-+	return devm_gpiochip_add_data(&spi->dev, &ts->chip, ts);
-+}
-+
-+static void max7317_remove(struct spi_device *spi)
-+{
-+	struct max7317 *ts = dev_get_drvdata(&spi->dev);
-+
-+	if (!ts)
-+		return;
-+
-+	gpiochip_remove(&ts->chip);
-+}
-+
-+static const struct spi_device_id max7317_id[] = {
-+	{ "max7317", 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(spi, max7317_id);
-+
-+static const struct of_device_id max7317_dt_ids[] = {
-+	{ .compatible = "maxim,max7317" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, max7317_dt_ids);
-+
-+static struct spi_driver max7317_driver = {
-+	.driver = {
-+		.name = "max7317",
-+		.of_match_table	= max7317_dt_ids,
-+	},
-+	.probe = max7317_probe,
-+	.remove = max7317_remove,
-+	.id_table = max7317_id,
-+};
-+module_spi_driver(max7317_driver);
-+
-+MODULE_AUTHOR("Lukasz Zemla");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("MAX7317 GPIO-Expander");
--- 
-2.39.2
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 6986ea31c984..998649554344 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4276,14 +4276,16 @@ static int newidle_balance(struct rq *this_rq, struct rq_flags *rf);
+>  
+>  static inline unsigned long task_util(struct task_struct *p)
+>  {
+> -	return READ_ONCE(p->se.avg.util_avg);
+> +	return max(READ_ONCE(p->se.avg.util_avg),
+> +			READ_ONCE(p->se.avg.util_guest));
+>  }
+>  
+>  static inline unsigned long _task_util_est(struct task_struct *p)
+>  {
+>  	struct util_est ue = READ_ONCE(p->se.avg.util_est);
+>  
+> -	return max(ue.ewma, (ue.enqueued & ~UTIL_AVG_UNCHANGED));
+> +	return max_t(unsigned long, READ_ONCE(p->se.avg.util_guest),
+> +			max(ue.ewma, (ue.enqueued & ~UTIL_AVG_UNCHANGED)));
+>  }
 
+I can't see why the existing p->uclamp_req[UCLAMP_MIN].value can't be
+used here instead p->se.avg.util_guest.
+
+I do understand the issue of inheriting uclamp values at fork but don't
+get the not being `additive` thing. We are at task level here.
+
+The fact that you have to max util_avg and util_est directly in
+task_util() and _task_util_est() tells me that there are places where
+this helps and uclamp_task_util() is not called there.
+
+When you say in the cover letter that you tried uclamp_min, how exactly
+did you use it? Did you run the existing mainline or did you use
+uclamp_min as a replacement for util_guest in this patch here?
+
+>  static inline unsigned long task_util_est(struct task_struct *p)
+> @@ -6242,6 +6244,15 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+>  	 */
+>  	util_est_enqueue(&rq->cfs, p);
+>  
+> +	/*
+> +	 * The normal code path for host thread enqueue doesn't take into
+> +	 * account guest task migrations when updating cpufreq util.
+> +	 * So, always update the cpufreq when a vCPU thread has a
+> +	 * non-zero util_guest value.
+> +	 */
+> +	if (READ_ONCE(p->se.avg.util_guest))
+> +		cpufreq_update_util(rq, 0);
+
+
+This is because enqueue_entity() -> update_load_avg() ->
+attach_entity_load_avg() -> cfs_rq_util_change() requires root run-queue
+(&rq->cfs == cfs_rq) to call cpufreq_update_util()?
+
+[...]
