@@ -2,109 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B6E6D4B25
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCE26D4B2E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbjDCOzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
+        id S232922AbjDCO4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbjDCOzS (ORCPT
+        with ESMTP id S232405AbjDCO4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:55:18 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35A51695E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:54:54 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id s6-20020a056e02216600b003264c778ef1so6097071ilv.23
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:54:54 -0700 (PDT)
+        Mon, 3 Apr 2023 10:56:49 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5DD11653
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:56:24 -0700 (PDT)
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com [209.85.219.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A0A4E3F23A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1680533782;
+        bh=QKFW1qqDMg7TUFTrK+2Qi6gnM372KB4fmvKMLex5G+Y=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=e9ANU72CTRYwu0GOwrRkAzeD0fZ5jvfAbaNqqfBhxUafmGwWRvWk8TpC2zbke0PT1
+         Ngdi5+LTGtzZeGpXpFliLZMZQnKxRJVF2Vzo2eJTYNjZlbCw0NLRZhTHjkDua82z+q
+         Cv3aqPBydddHQrtnDhr1BVzuSWJxSo43eBzQOzHHsjun2WPgwZzNqy8gZMEy535WNy
+         2sMpDhl34qwrbwI+rJUIZXYY1J8tRgG7mNW7q60ELV+81+4DxejmI60A8FS//1aYHE
+         QKLwTlpS6+aMXXLbFrD0WOtO5n0sPIG8TnRWBXw4VXeBUqJKgUt7nrF7R01HujyVDp
+         /G3sWBYQzgK7w==
+Received: by mail-yb1-f197.google.com with SMTP id m6-20020a056902118600b00aeb1e3dbd1bso28562211ybu.9
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:56:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680533694; x=1683125694;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vPkeM6iVQmH51RezuW+fSSVO087XA5s1H6NW6olKmYg=;
-        b=OKwnaFG6cFSr766vEQ6LCPNWPuwT9M+VXF8R4C9PX0xvH8ojH/oGgDz/oZf+pbm7rr
-         q5UPhMQ1m2GO+0oFzjmQrSPrUGYrqDRFU+U+I3DbiDThtFs91ex/nLqtWMVyR3taoMj1
-         VYypcDDtCypTvWUcVTjF+lf7xbX8ghzm9iYqIp7uwtZZlGCqss2cmgrDs+c5JQLmoOFx
-         HKMjKaQ0dVbbuK9PRyve271njMCkX4hf2oXqwQwwhbd8efJi0XuS+QLMRtcrNYmS6mkE
-         rPa+xNarblOg+DrnWA4a6ghBnNM3WpOBoGPPBOkQanYET8f+TGt3bGLoP8UYxFZ14LHj
-         cQ9A==
-X-Gm-Message-State: AAQBX9fBCUVk5PEq0nONu5TBX0Bg6oQBHdzXq5D1jTZZ8cYC1FP9tyyf
-        SZimr64vJRpN8UPkwP4sxHYxwA5XkREDv09j8zQdhl4EJsQ8
-X-Google-Smtp-Source: AKy350bJ7Pe47KEb4vQQRIqXVM9pfr+NX+zTWRzXW+KSApy6hrByjHeELRIXUQkGOGzUpsQeEjEjuOOAQ4+VMciJxz7pyS1yvNG0
+        d=1e100.net; s=20210112; t=1680533781;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QKFW1qqDMg7TUFTrK+2Qi6gnM372KB4fmvKMLex5G+Y=;
+        b=36WGYXHogcl/PNEBFecGHdRWkLMxVwNBvAE52YVQPT11NtBDwtMg43PaVaYWcWQLAR
+         kRMTP28yfmtAbUIj755E42dCrtZikCpoFFL0lVeJojaDQfl8cQxq/1W0BZ2ZFR8oY3LB
+         qo/xuz+eKimBO4pHVrBT3s5IJP3lzVKgdj47vAMMLH71HDNDSQ+1cSsiSnv6Ary7dhzm
+         blyhoGlQDjMVBTA5S1UYVFCzwJoC8yzNLTbRFx0rer0FCi6mwmb19KlKr/RkhdT0JCpg
+         VwHQznqVYiRYFw5y4JThe64QSQ4iMkINtkyO+tNTAQlNEOzM2XbdKTrPC5wth3VuY3x+
+         Jjnw==
+X-Gm-Message-State: AAQBX9cPVSdnBHmttvmTzfN3oCxLFTS/gmPzdhZFkd/n9506ehnqao7X
+        Nw3UkCrG3Iwq5vd+wQA3FXlv3To1iLdmUrBXi9C5D7/qL/20mBs2IRyBMWIsIr9TPWxvYjzSj+a
+        UXG3JbdyUiErlW2KzqotUw6ZYyEN5uDr+BCF2/08PwhWjwyWhFgwQM6b6Zw==
+X-Received: by 2002:a05:6902:10c3:b0:b75:9519:dbcd with SMTP id w3-20020a05690210c300b00b759519dbcdmr24303925ybu.12.1680533781634;
+        Mon, 03 Apr 2023 07:56:21 -0700 (PDT)
+X-Google-Smtp-Source: AKy350axreC8nTu/BcJvXVvM3Fw+PAeFxvqfZczuCL4AzTyLhRk1OuU+7a3LYDnOFBj9EHxLe1TMvv7nzHP8/hI9TsA=
+X-Received: by 2002:a05:6902:10c3:b0:b75:9519:dbcd with SMTP id
+ w3-20020a05690210c300b00b759519dbcdmr24303908ybu.12.1680533781406; Mon, 03
+ Apr 2023 07:56:21 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:218d:b0:322:fd25:872c with SMTP id
- j13-20020a056e02218d00b00322fd25872cmr18242499ila.2.1680533694048; Mon, 03
- Apr 2023 07:54:54 -0700 (PDT)
-Date:   Mon, 03 Apr 2023 07:54:54 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ddf5f505f86fbd72@google.com>
-Subject: [syzbot] [block?] WARNING in process_fd_request
-From:   syzbot <syzbot+1d4201dfe9f2386fdc0b@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230220193754.470330-8-aleksandr.mikhalitsyn@canonical.com> <e49787bc-fd4f-1fdc-e66b-270ea8367a11@fastmail.fm>
+In-Reply-To: <e49787bc-fd4f-1fdc-e66b-270ea8367a11@fastmail.fm>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Mon, 3 Apr 2023 16:56:10 +0200
+Message-ID: <CAEivzxcdGBJeiLX1qRnNpiDxxCwwVCSax3ADzDfNTXwyWO0sYg@mail.gmail.com>
+Subject: Re: [RFC PATCH 7/9] fuse: add fuse device ioctl(FUSE_DEV_IOC_REINIT)
+To:     Bernd Schubert <bernd.schubert@fastmail.fm>
+Cc:     mszeredi@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
+        Amir Goldstein <amir73il@gmail.com>,
+        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
+        Seth Forshee <sforshee@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        criu@openvz.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Mar 3, 2023 at 8:19=E2=80=AFPM Bernd Schubert
+<bernd.schubert@fastmail.fm> wrote:
+>
+>
+>
+> On 2/20/23 20:37, Alexander Mikhalitsyn wrote:
+> > This ioctl aborts fuse connection and then reinitializes it,
+> > sends FUSE_INIT request to allow a new userspace daemon
+> > to pick up the fuse connection.
+> >
+> > Cc: Miklos Szeredi <mszeredi@redhat.com>
+> > Cc: Al Viro <viro@zeniv.linux.org.uk>
+> > Cc: Amir Goldstein <amir73il@gmail.com>
+> > Cc: St=C3=83=C2=A9phane Graber <stgraber@ubuntu.com>
+> > Cc: Seth Forshee <sforshee@kernel.org>
+> > Cc: Christian Brauner <brauner@kernel.org>
+> > Cc: Andrei Vagin <avagin@gmail.com>
+> > Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+> > Cc: linux-fsdevel@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: criu@openvz.org
+> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
+om>
+> > ---
+> >   fs/fuse/dev.c             | 132 +++++++++++++++++++++++++++++++++++++=
++
+> >   include/uapi/linux/fuse.h |   1 +
+> >   2 files changed, 133 insertions(+)
+> >
+> > diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
+> > index 737764c2295e..0f53ffd63957 100644
+> > --- a/fs/fuse/dev.c
+> > +++ b/fs/fuse/dev.c
+> > @@ -2187,6 +2187,112 @@ void fuse_abort_conn(struct fuse_conn *fc)
+> >   }
+> >   EXPORT_SYMBOL_GPL(fuse_abort_conn);
+> >
+> > +static int fuse_reinit_conn(struct fuse_conn *fc)
+> > +{
+> > +     struct fuse_iqueue *fiq =3D &fc->iq;
+> > +     struct fuse_dev *fud;
+> > +     unsigned int i;
+>
+> Assuming you have a malicious daemon that tries to cause bad behavior,
+> only allow one ioctl at at time? I.e. add a value that reinit is in
+> progress? And unset at the end of the function?
 
-syzbot found the following issue on:
+Have done. Thanks!
+>
+> > +
+> > +     if (fc->conn_gen + 1 < fc->conn_gen)
+> > +             return -EOVERFLOW;
+> > +
+>
+> Add a comment, like
+>
+> /* Unsets fc->connected and fiq->connected and ensures that no new
+> requests can be queued */
+>
+> ?
 
-HEAD commit:    ffe78bbd5121 Merge tag 'xtensa-20230327' of https://github..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=146bbb71c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d40b592130bb7abb
-dashboard link: https://syzkaller.appspot.com/bug?extid=1d4201dfe9f2386fdc0b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+Have done.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+>
+> > +     fuse_abort_conn(fc);
+> > +     fuse_wait_aborted(fc);
+> > +
+> > +     spin_lock(&fc->lock);
+> > +     if (fc->connected) {
+> > +             spin_unlock(&fc->lock);
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     if (fc->conn_gen + 1 < fc->conn_gen) {
+> > +             spin_unlock(&fc->lock);
+> > +             return -EOVERFLOW;
+> > +     }
+> > +
+> > +     fc->conn_gen++;
+> > +
+> > +     spin_lock(&fiq->lock);
+> > +     if (request_pending(fiq) || fiq->forget_list_tail !=3D &fiq->forg=
+et_list_head) {
+> > +             spin_unlock(&fiq->lock);
+> > +             spin_unlock(&fc->lock);
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     if (&fuse_dev_fiq_ops !=3D fiq->ops) {
+> > +             spin_unlock(&fiq->lock);
+> > +             spin_unlock(&fc->lock);
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +
+> > +     fiq->connected =3D 1;
+> > +     spin_unlock(&fiq->lock);
+> > +
+> > +     spin_lock(&fc->bg_lock);
+> > +     if (!list_empty(&fc->bg_queue)) {
+> > +             spin_unlock(&fc->bg_lock);
+> > +             spin_unlock(&fc->lock);
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     fc->blocked =3D 0;
+> > +     fc->max_background =3D FUSE_DEFAULT_MAX_BACKGROUND;
+> > +     spin_unlock(&fc->bg_lock);
+> > +
+> > +     list_for_each_entry(fud, &fc->devices, entry) {
+> > +             struct fuse_pqueue *fpq =3D &fud->pq;
+> > +
+> > +             spin_lock(&fpq->lock);
+> > +             if (!list_empty(&fpq->io)) {
+> > +                     spin_unlock(&fpq->lock);
+> > +                     spin_unlock(&fc->lock);
+> > +                     return -EINVAL;
+> > +             }
+> > +
+> > +             for (i =3D 0; i < FUSE_PQ_HASH_SIZE; i++) {
+> > +                     if (!list_empty(&fpq->processing[i])) {
+> > +                             spin_unlock(&fpq->lock);
+> > +                             spin_unlock(&fc->lock);
+> > +                             return -EINVAL;
+> > +                     }
+> > +             }
+> > +
+> > +             fpq->connected =3D 1;
+> > +             spin_unlock(&fpq->lock);
+> > +     }
+> > +
+> > +     fuse_set_initialized(fc);
+>
+> I'm not sure about this, why not the common way via FUSE_INIT reply?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1d4201dfe9f2386fdc0b@syzkaller.appspotmail.com
+fuse_send_init will fail, if !fc->initialized (see fuse_block_alloc <-
+fuse_get_req <- fuse_simple_background).
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 29261 at drivers/block/floppy.c:999 schedule_bh drivers/block/floppy.c:999 [inline]
-WARNING: CPU: 0 PID: 29261 at drivers/block/floppy.c:999 process_fd_request+0x6b/0x70 drivers/block/floppy.c:2847
-Modules linked in:
-CPU: 0 PID: 29261 Comm: kworker/u8:17 Not tainted 6.3.0-rc4-syzkaller-00039-gffe78bbd5121 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Workqueue: floppy floppy_shutdown
-RIP: 0010:schedule_bh drivers/block/floppy.c:999 [inline]
-RIP: 0010:process_fd_request+0x6b/0x70 drivers/block/floppy.c:2847
-Code: fc 5b bf 08 00 00 00 48 c7 c2 c0 78 45 8d 48 8b 35 6a a3 ec 0c 48 c7 05 7f 9e ec 0c b0 8c 1c 85 e9 ea 70 36 fc e8 05 6d 66 fc <0f> 0b eb ce 90 48 b8 00 00 00 00 00 fc ff df 41 55 49 89 fd 41 54
-RSP: 0018:ffffc90002f7fcf0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff88801d64ba80 RSI: ffffffff851c6b4b RDI: 0000000000000001
-RBP: 0000000000000282 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: ffffc90002f7fda8
-R13: ffffffff8d457950 R14: ffff88800019f200 R15: ffff888012489000
-FS:  0000000000000000(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000584eb404 CR3: 0000000023f74000 CR4: 0000000000150ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- floppy_shutdown+0x135/0x230 drivers/block/floppy.c:1889
- process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> > +
+> > +     /* Background queuing checks fc->connected under bg_lock */
+> > +     spin_lock(&fc->bg_lock);
+> > +     fc->connected =3D 1;
+> > +     spin_unlock(&fc->bg_lock);
+> > +
+> > +     fc->aborted =3D false;
+> > +     fc->abort_err =3D 0;
+> > +
+> > +     /* nullify all the flags */
+> > +     memset(&fc->flags, 0, sizeof(struct fuse_conn_flags));
+> > +
+> > +     spin_unlock(&fc->lock);
+> > +
+> > +     down_read(&fc->killsb);
+> > +     if (!list_empty(&fc->mounts)) {
+> > +             struct fuse_mount *fm;
+> > +
+> > +             fm =3D list_first_entry(&fc->mounts, struct fuse_mount, f=
+c_entry);
+> > +             if (!fm->sb) {
+> > +                     up_read(&fc->killsb);
+> > +                     return -EINVAL;
+> > +             }
+> > +
+> > +             fuse_send_init(fm);
+> > +     }
+> > +     up_read(&fc->killsb);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >   void fuse_wait_aborted(struct fuse_conn *fc)
+> >   {
+> >       /* matches implicit memory barrier in fuse_drop_waiting() */
+> > @@ -2282,6 +2388,32 @@ static long fuse_dev_ioctl(struct file *file, un=
+signed int cmd,
+> >                       }
+> >               }
+> >               break;
+> > +     case FUSE_DEV_IOC_REINIT:
+> > +             struct fuse_conn *fc;
+> > +
+> > +             if (!checkpoint_restore_ns_capable(file->f_cred->user_ns)=
+)
+> > +                     return -EPERM;
+> > +
+> > +             res =3D -EINVAL;
+> > +             fud =3D fuse_get_dev(file);
+> > +
+> > +             /*
+> > +              * Only fuse mounts with an already initialized fuse
+> > +              * connection are supported
+> > +              */
+> > +             if (file->f_op =3D=3D &fuse_dev_operations && fud) {
+> > +                     mutex_lock(&fuse_mutex);
+> > +                     fc =3D fud->fc;
+> > +                     if (fc)
+> > +                             fc =3D fuse_conn_get(fc);
+> > +                     mutex_unlock(&fuse_mutex);
+> > +
+> > +                     if (fc) {
+> > +                             res =3D fuse_reinit_conn(fc);
+> > +                             fuse_conn_put(fc);
+> > +                     }
+> > +             }
+> > +             break;
+> >       default:
+> >               res =3D -ENOTTY;
+> >               break;
+> > diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> > index 1b9d0dfae72d..3dac67b25eae 100644
+> > --- a/include/uapi/linux/fuse.h
+> > +++ b/include/uapi/linux/fuse.h
+> > @@ -989,6 +989,7 @@ struct fuse_notify_retrieve_in {
+> >   /* Device ioctls: */
+> >   #define FUSE_DEV_IOC_MAGIC          229
+> >   #define FUSE_DEV_IOC_CLONE          _IOR(FUSE_DEV_IOC_MAGIC, 0, uint3=
+2_t)
+> > +#define FUSE_DEV_IOC_REINIT          _IO(FUSE_DEV_IOC_MAGIC, 0)
+> >
+> >   struct fuse_lseek_in {
+> >       uint64_t        fh;
