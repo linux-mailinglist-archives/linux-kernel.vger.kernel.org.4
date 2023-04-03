@@ -2,179 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06856D4594
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1AFE6D4599
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232481AbjDCNWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S232008AbjDCNW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232126AbjDCNWa (ORCPT
+        with ESMTP id S232526AbjDCNWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:22:30 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A41B75A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:22:28 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230403132226euoutp02c689b2599ea99258d6f9960699146eaf~Sb3IdslyA1374413744euoutp02x
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 13:22:26 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230403132226euoutp02c689b2599ea99258d6f9960699146eaf~Sb3IdslyA1374413744euoutp02x
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1680528146;
-        bh=5/+0KaEbpjyZkaLqtYLBQz1+pPqkvr1OOiQOg6+VTQI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r++2oaFN0N0+G2S72qO8e7Cw6GtX3TD1d5DuTTMDG1WzMvdZZCbjPPf5CdK/g82XQ
-         0i0Ws6YK2Ki8ER/EpnURSfsgnkLG91B92CBR6PYPIK182Btxcn7MN6l0oov3BfAmk7
-         IcYiJhbCpv60tSR/+MHwNvetQdvPDop0fg+0ibg4=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230403132225eucas1p2eeb69651b019e4e779166e8b360a7342~Sb3HE0Gyc2688526885eucas1p2X;
-        Mon,  3 Apr 2023 13:22:25 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 2B.F4.09503.113DA246; Mon,  3
-        Apr 2023 14:22:25 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230403132224eucas1p21fd296fbd4af70220331bb19023f4169~Sb3Gsa2HH2688526885eucas1p2W;
-        Mon,  3 Apr 2023 13:22:24 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230403132224eusmtrp2025b29c3cb119969b17b4113d6677db0~Sb3GrwLJb0200802008eusmtrp2L;
-        Mon,  3 Apr 2023 13:22:24 +0000 (GMT)
-X-AuditID: cbfec7f2-e8fff7000000251f-b4-642ad311da86
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 7E.16.08862.013DA246; Mon,  3
-        Apr 2023 14:22:24 +0100 (BST)
-Received: from localhost (unknown [106.210.248.30]) by eusmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230403132224eusmtip14497bed1922f57dfc44ffe4d39a2dff3~Sb3Ge5UWK2612826128eusmtip1B;
-        Mon,  3 Apr 2023 13:22:24 +0000 (GMT)
-From:   Pankaj Raghav <p.raghav@samsung.com>
-To:     axboe@kernel.dk, minchan@kernel.org, martin@omnibond.com,
-        hubcap@omnibond.com, brauner@kernel.org, viro@zeniv.linux.org.uk,
-        senozhatsky@chromium.org, akpm@linux-foundation.org,
-        willy@infradead.org, hch@lst.de
-Cc:     devel@lists.orangefs.org, mcgrof@kernel.org,
-        linux-block@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, gost.dev@samsung.com,
-        linux-fsdevel@vger.kernel.org, Pankaj Raghav <p.raghav@samsung.com>
-Subject: [PATCH v2 3/5] mpage: split bi_end_io callback for reads and writes
-Date:   Mon,  3 Apr 2023 15:22:19 +0200
-Message-Id: <20230403132221.94921-4-p.raghav@samsung.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230403132221.94921-1-p.raghav@samsung.com>
+        Mon, 3 Apr 2023 09:22:36 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1E1558A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:22:32 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id e65so34662495ybh.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 06:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680528152;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=puJQIiNwi0B7OHT+YCNoLm1RVfBbXjaYqHubaytTOZc=;
+        b=iFmu6Bph/r5JtPpy4KiE3uF1FZx4WD1yKmH9pZNGnpcQ+rpE7jJXoHdkumVA8mECJ9
+         1yuVFCPOEZAJvB8kJXc1F2AequweKSrN82RJjtyE2aSxlHiKn5qTmxPsEspfGvjnxcc+
+         xO4OI/xLCUDLiDR6iXCVuF5rWXOkUwipr/nJZ6syWHfavVYl1oBrGXDm9cMRfyY0HS5R
+         LHpXIg53OEKGjqDV8dmXxMElXPSjS96U8N6WMzBQtsbMd2tFuDVmB76E3bEOWSld7FPY
+         a25ESuLO+P8iW9goF0NmubEftjJ0BDJT9c9zkgjjNItMW4hPRPFvcCOQCTUSDEPhXRqD
+         QU8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680528152;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=puJQIiNwi0B7OHT+YCNoLm1RVfBbXjaYqHubaytTOZc=;
+        b=qnT2FEDRiTPwqqyy8S7ufmcGI5lCRY9/DuIEPuXNt0l63xPPprBP9+WtzrEbT8z607
+         DH9KY7DgkWC+WRpWYPYzVykKmGd8fzjCWB45cPWtciMXVTPDS6ICdrmpvPJOQyRTnmvS
+         rJdVrJgt6uqgK+keKGCKalWIkJwwitGFJy8e1r6i2W/kWs0v9QtXkOS0PTYCtjtTqgoI
+         meyjTZnputQa7mPY0zxvX97R/A1d6eslKs5lWbVS43xaQlxOSZZ3wVFfm5bvnQEWskrx
+         aZCV1Tw0BH8KJwD1Dnxo19LVWVszVjZo8qX66Ik39LzT6urZ6v9qKZvSWQ+gAfwEhmS8
+         u5TQ==
+X-Gm-Message-State: AAQBX9d4KaAGX0CP/vxSjM05zb41TK/wOux/fy56C8qNhsefXmPaiSbe
+        9QwcLrSCdvihsWq0jH6hzvJAVX0uWaYd/4JF0zU=
+X-Google-Smtp-Source: AKy350bWysdzXHGZ8/wze3T0qWf/LM4Wl8ayF7vOJuIYnrg0bXgibm9ykvXEhOtu6Wmfpbs5ZM+9QenlXSPq3ioXank=
+X-Received: by 2002:a25:d784:0:b0:b76:3b21:b1dc with SMTP id
+ o126-20020a25d784000000b00b763b21b1dcmr11126480ybg.0.1680528152080; Mon, 03
+ Apr 2023 06:22:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKKsWRmVeSWpSXmKPExsWy7djP87qCl7VSDDY8F7aYs34Nm8Xqu/1s
-        Fq8Pf2K02L95CpPFzQM7mSxWrj7KZNF+t4/JYu8tbYs9e0+yWFzeNYfN4t6a/6wWJ9f/Z7a4
-        MeEpo8Wyr+/ZLT4vbWG32L1xEZvF+b/HWS1+/5jD5iDkMbvhIovH5hVaHpfPlnpsWtXJ5rHp
-        0yR2jxMzfrN4NEy9xeax+2YDm8ev23dYPfq2rGL0+LxJzmPTk7dMATxRXDYpqTmZZalF+nYJ
-        XBmrNvgX/OOp+LvOt4HxGFcXIyeHhICJxPobP9i7GLk4hARWMEo8vvKeCcL5wijx7MoDNgjn
-        M6PE1Ksb2GFaph04AZVYzijRv+kJC4TzglHi36W1QP0cHGwCWhKNnWBzRQRuMUq86ZkNNpdZ
-        4D6jxLzde8GKhAV8JP5szQKZyiKgKtHd+RhsA6+ApcTDh0+htslL7D94lhnE5hSwkmicPpcR
-        okZQ4uRMkMWcQDPlJZq3zmaGqN/OKXHnkTuE7SLxbNNsqDnCEq+Ob4GyZST+75zPBGFXSzy9
-        8ZsZ5DYJgRagb3auZwO5TULAWqLvTA6IySygKbF+lz5EuaPEk/cgI0Eq+CRuvBWEuIBPYtK2
-        6cwQYV6JjjYhiGoliZ0/n0AtlZC43DSHBcL2kPgyeSbzBEbFWUh+mYXkl1kIexcwMq9iFE8t
-        Lc5NTy02zEst1ytOzC0uzUvXS87P3cQITImn/x3/tINx7quPeocYmTgYDzFKcDArifCqdmml
-        CPGmJFZWpRblxxeV5qQWH2KU5mBREufVtj2ZLCSQnliSmp2aWpBaBJNl4uCUamAqttqR/yBv
-        ydQfFxWDgvY2Ho27WX4+RfTF4kd2Hus3ZDlMaVBc0Op+j9P5Vsqki/kNBielS/ustp6VODZb
-        6cdH5dlyOjm2quvXHGDM3xevlSG5zcRS6cj5nTOOlk3vbDh6rC3M5N/db7MeTlq+99RF94lp
-        /urrT3pZ+n2ut7c3O8WhNO1awKq7r3r7Cyz89Hd/M+600jwWmr3XJVyUn6nJ6GPdq4OZKn9k
-        u812zn/4LkDrpsHyNU7sseeFFtku8gis8ruwouvumklRSQbnrx8Tf8V+0jzdiZnh3cr6j/NZ
-        i8TmXamS+lr1wX1+UerFdfoTPjRlzHtjenfvSuHNL+6s8Lb5+f5wy6XSzfP8uHclK7EUZyQa
-        ajEXFScCAKlZdtP4AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrKIsWRmVeSWpSXmKPExsVy+t/xu7oCl7VSDHa1mVnMWb+GzWL13X42
-        i9eHPzFa7N88hcni5oGdTBYrVx9lsmi/28dksfeWtsWevSdZLC7vmsNmcW/Nf1aLk+v/M1vc
-        mPCU0WLZ1/fsFp+XtrBb7N64iM3i/N/jrBa/f8xhcxDymN1wkcVj8wotj8tnSz02repk89j0
-        aRK7x4kZv1k8GqbeYvPYfbOBzePX7TusHn1bVjF6fN4k57HpyVumAJ4oPZui/NKSVIWM/OIS
-        W6VoQwsjPUNLCz0jE0s9Q2PzWCsjUyV9O5uU1JzMstQifbsEvYxVG/wL/vFU/F3n28B4jKuL
-        kZNDQsBEYtqBE2xdjFwcQgJLGSX27j3NDJGQkLi9sIkRwhaW+HOtC6roGaPEkcW9TF2MHBxs
-        AloSjZ3sIHERkPiyC8dZQBxmgeeMEmum/GYGKRIW8JH4szULZBCLgKpEd+djdhCbV8BS4uHD
-        p+wQC+Ql9h88C7aYU8BKonH6XLDFQkA1Xy/eYoWoF5Q4OfMJC4jNDFTfvHU28wRGgVlIUrOQ
-        pBYwMq1iFEktLc5Nzy021CtOzC0uzUvXS87P3cQIjN9tx35u3sE479VHvUOMTByMhxglOJiV
-        RHhVu7RShHhTEiurUovy44tKc1KLDzGaAt09kVlKNDkfmEDySuINzQxMDU3MLA1MLc2MlcR5
-        PQs6EoUE0hNLUrNTUwtSi2D6mDg4pRqYWtk2Z9ofOMXaHtvQfubwJRHfVZ8PmmZeWqcb5Hzo
-        kVoxo6WU6ok0qQXrNh8yXqyT473U8YHE8urqKwX/8qvDTxzqWOdfp56zYetPkcOaxZvjLC5a
-        HbVeobM3/z+DuJDIp6ZPquc2TprcqaF1d0byz92rDJIk754/y+hSW7eW7cK0uqDc5hNF78Pf
-        Z01LvS33cPJWsfNJfjpRhpNWssgHvj5rd+fp2quKvnWbPgvE2y89tEav5cO3F46JS15avTyl
-        817+UuTLfx9eu+g99rWZt69M2bH/5Mt/zD1Hpl27dU8st6F2svtd29rER18jeKPUr7rHz4qI
-        7eo6u9DzoXNJY4nbHb8dp0+ufJif+Xx3rBJLcUaioRZzUXEiAM3/pTloAwAA
-X-CMS-MailID: 20230403132224eucas1p21fd296fbd4af70220331bb19023f4169
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230403132224eucas1p21fd296fbd4af70220331bb19023f4169
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230403132224eucas1p21fd296fbd4af70220331bb19023f4169
-References: <20230403132221.94921-1-p.raghav@samsung.com>
-        <CGME20230403132224eucas1p21fd296fbd4af70220331bb19023f4169@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230323230755.1094832-1-dmitry.osipenko@collabora.com>
+ <20230323230755.1094832-3-dmitry.osipenko@collabora.com> <ZCXF4q81wPcczkqx@arch-x395>
+ <3618a293-4f61-b076-0a9c-c70812436431@collabora.com> <CACvgo51GWRCQuiJDVrqo=xzd3frKvs6WNcc755pbu8jNk6t-Rg@mail.gmail.com>
+In-Reply-To: <CACvgo51GWRCQuiJDVrqo=xzd3frKvs6WNcc755pbu8jNk6t-Rg@mail.gmail.com>
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+Date:   Mon, 3 Apr 2023 14:22:20 +0100
+Message-ID: <CACvgo53bkvDm7CXN_zFETZeuWas50tJys6u+nc5DO_MWK4SZfw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] drm/virtio: Support sync objects
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Emil Velikov <emil.velikov@collabora.com>,
+        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        David Airlie <airlied@redhat.com>, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Split the bi_end_io handler for reads and writes similar to other aops.
-This is a prep patch before we convert end_io handlers to use folios.
+On Mon, 3 Apr 2023 at 14:00, Emil Velikov <emil.l.velikov@gmail.com> wrote:
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
----
- fs/mpage.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+> > > I think we should zero num_(in|out)_syncobjs when the respective parse
+> > > fails. Otherwise we get one "cleanup" within the parse function itself
+> > > and a second during the cleanup_submit. Haven't looked at it too closely
+> > > but I suspect that will trigger an UAF or two.
+> >
+> > There are checks for NULL pointers in the code that will prevent the
+> > UAF.  I'll add zeroing of the nums for more consistency.
+> >
+>
+> Riiiight the drm_syncobj is attached to the encapsulating struct
+> virtio_gpu_submit _only_ on success.
+> By clearing the num variables,  the NULL checks will no longer be
+> needed ... in case you'd want to drop that.
+>
+> Either way - even as-is the code is safe.
+>
 
-diff --git a/fs/mpage.c b/fs/mpage.c
-index 22b9de5ddd68..3a545bf0f184 100644
---- a/fs/mpage.c
-+++ b/fs/mpage.c
-@@ -43,14 +43,28 @@
-  * status of that page is hard.  See end_buffer_async_read() for the details.
-  * There is no point in duplicating all that complexity.
-  */
--static void mpage_end_io(struct bio *bio)
-+static void mpage_read_end_io(struct bio *bio)
- {
- 	struct bio_vec *bv;
- 	struct bvec_iter_all iter_all;
- 
- 	bio_for_each_segment_all(bv, bio, iter_all) {
- 		struct page *page = bv->bv_page;
--		page_endio(page, bio_op(bio),
-+		page_endio(page, REQ_OP_READ,
-+			   blk_status_to_errno(bio->bi_status));
-+	}
-+
-+	bio_put(bio);
-+}
-+
-+static void mpage_write_end_io(struct bio *bio)
-+{
-+	struct bio_vec *bv;
-+	struct bvec_iter_all iter_all;
-+
-+	bio_for_each_segment_all(bv, bio, iter_all) {
-+		struct page *page = bv->bv_page;
-+		page_endio(page, REQ_OP_WRITE,
- 			   blk_status_to_errno(bio->bi_status));
- 	}
- 
-@@ -59,7 +73,11 @@ static void mpage_end_io(struct bio *bio)
- 
- static struct bio *mpage_bio_submit(struct bio *bio)
- {
--	bio->bi_end_io = mpage_end_io;
-+	if (op_is_write(bio_op(bio)))
-+		bio->bi_end_io = mpage_write_end_io;
-+	else
-+		bio->bi_end_io = mpage_read_end_io;
-+
- 	guard_bio_eod(bio);
- 	submit_bio(bio);
- 	return NULL;
--- 
-2.34.1
+Err or not. The NULL check itself will cause NULL pointer deref.
 
+In more detail: in/out syncobjs are memset() to NULL in
+virtio_gpu_init_submit(). The virtio_gpu_parse_(|post_)deps() will
+fail and leave them unchanged. Then virtio_gpu_free_syncobjs() and
+virtio_gpu_reset_syncobjs() will trigger a NULL ptr deref, because
+they are accessing the elements of a the (NULL) array.
+
+Apart from the num_(in|out)_syncobjcs=0, I would drop the NULL checks
+- they give a false sense of security IMHO.
+
+-Emil
