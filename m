@@ -2,147 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407EB6D3C4E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 06:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BC86D3C4B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 06:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjDCEKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 00:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S231277AbjDCEJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 00:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbjDCEKD (ORCPT
+        with ESMTP id S230376AbjDCEJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 00:10:03 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923FEAF2E
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 21:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680494989; x=1712030989;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3I1XMcoWzzyg6EtbtGjBzQu82JNz9MTciBhWpBmDwds=;
-  b=edg5qW0jLPZraYsaQIaZc+ocjuc96m5p9To0/9M+qmK9HPwpQqI8lMAk
-   OlPrEaQPrYidYVNoDSogncf5LHkiO0XJZ+geSaDJruoEIMit1RMZgUsgJ
-   vUi6keOyR5/Cl7wtFh48d3BbovqTcXBV92O9zXRRsrsVGp6aO2ABYQASc
-   ZLyDHgOidwiVpue6dl7I0UQVmz1EraTAV4lFciRdhQmQJxioldphuQgHd
-   WNGXUN0eaqYAv2qG2ajtAeKAtGcOo94CkGmPgyWT4NtNSqippUmtZz210
-   7jr+gNLgx8b31d1RQla3DliTbXVGBEBgoLMDudRkWpbunUcyMFY/5kIUm
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="321463939"
-X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
-   d="scan'208";a="321463939"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2023 21:09:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="685808954"
-X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
-   d="scan'208";a="685808954"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 Apr 2023 21:09:47 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pjBVq-000Nyl-1j;
-        Mon, 03 Apr 2023 04:09:46 +0000
-Date:   Mon, 3 Apr 2023 12:08:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: [tip:locking/rcuref 2/2] include/asm-generic/cmpxchg-local.h:30:42:
- sparse: sparse: cast truncates bits from constant value (e0000000 becomes 0)
-Message-ID: <202304031213.U9LRonKm-lkp@intel.com>
+        Mon, 3 Apr 2023 00:09:26 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E1C7AAF
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 21:09:24 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5463fa0c2bfso197743717b3.1
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 21:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680494964;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IvFnphnDJhIRgXZm0virLekdKTOQfW5+pHsWaTGGeTM=;
+        b=kUeJ2lwf7zRBsYvmzFyuhvCEE7VnpCUYH76GnherL1ruTmM1Q+L5tsiaPdC/GPoqsV
+         htWO6WAJiLZ8g8ZFLB8GefKVE3XzbSa6vOy9Z3lcXegrB6UvIFAKz9/wBfd4mrXlfRrB
+         hDN/hdPEgV4KST6mXOybEp8IObsyB6LY92r0a/qXB1ZGp2/9tDNf2DyvFFdS5U+djt23
+         O8L3WPpxorS17h6DSYn5Itwh2DbSxUWfUYDRF0IAWAZBfMrPKF0ldhBSdk7xmuWk5/IU
+         +z55dONWjivicjeZO+Vu9ijlURBjxHM7awcwYi+c5zKLk2s8LSujyoMdAla/zFmSDweD
+         GI4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680494964;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IvFnphnDJhIRgXZm0virLekdKTOQfW5+pHsWaTGGeTM=;
+        b=PYHxTaE1qR6eVff80LHX1BAS15h6xR2sg/QJIv0bHz2KmA4TFMzbrN1aMgwRIFa7+7
+         mk4ih4QJ5Bi+B4jNrt9lazKuDRbDlcSlQVEbKk/vevzzJWgURkGC+YnpczefvUQSQpSK
+         d5/AvgtwxbWY+2qJc8KsRlZ3WpSR9cYaRTQOCkU6sxSLG4srOPbBleMYvOV3QBX+TG2Y
+         41O4LSeHKcH3o6BrKw3NZGmXtWJJY7mODgOAdpic96Mms5VxgQaOq7PBFq7BdCTFVkdC
+         2Y0ilEiNwhjDjj9THCZDk54Da9bZATEU5yYcRWDNz36Bsrrw+lC+sA/Lc9F0faoqUvf9
+         VYzg==
+X-Gm-Message-State: AAQBX9ffXFmfNGEr3RhZ8MF2LD5k0zqzbA+kOo5eJ6WUPbuVeFEEBBFl
+        r0W9hTv2eKMU7OjoIAvyXw8zjitjI4JOETw2p2liOQ==
+X-Google-Smtp-Source: AKy350b9JFkPWrokQWdHW/mPTI0m5GQey0wVu1tdgM2llpJ1XCUx9QOk9xLJdiiSpZr/zZH11ZwiyYXKVXSHDk5itwo=
+X-Received: by 2002:a81:ac46:0:b0:544:6828:3c09 with SMTP id
+ z6-20020a81ac46000000b0054468283c09mr17689756ywj.0.1680494963814; Sun, 02 Apr
+ 2023 21:09:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Rohit Ner <rohitner@google.com>
+Date:   Mon, 3 Apr 2023 09:39:10 +0530
+Message-ID: <CAGt9f=TBi3qcbhUPymFGjCFeNNZZ0KQoXSUOT5uA6Dn8PMmnWw@mail.gmail.com>
+Subject: [PATCH] spi: spi-loopback-test: Add module param for iteration length
+To:     broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <manugautam@google.com>,
+        Joy Chakraborty <joychakr@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/rcuref
-head:   ee1ee6db07795d9637bc5e8993a8ddcf886541ef
-commit: ee1ee6db07795d9637bc5e8993a8ddcf886541ef [2/2] atomics: Provide rcuref - scalable reference counting
-config: nios2-randconfig-s042-20230402 (https://download.01.org/0day-ci/archive/20230403/202304031213.U9LRonKm-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=ee1ee6db07795d9637bc5e8993a8ddcf886541ef
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip locking/rcuref
-        git checkout ee1ee6db07795d9637bc5e8993a8ddcf886541ef
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash
+SPI test framework is designed to run each test case for
+a list of lengths.
+Introduce a module parameter to limit the iterations
+to a single value among the list of lengths.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304031213.U9LRonKm-lkp@intel.com/
+Signed-off-by: Rohit Ner <rohitner@google.com>
 
-sparse warnings: (new ones prefixed by >>)
-   lib/rcuref.c: note: in included file (through include/asm-generic/cmpxchg.h, arch/nios2/include/generated/asm/cmpxchg.h, include/asm-generic/atomic.h, ...):
->> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (e0000000 becomes 0)
-   include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (e0000000 becomes 0)
+diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
+index 313106eb8d40..675a73cf1579 100644
+--- a/drivers/spi/spi-loopback-test.c
++++ b/drivers/spi/spi-loopback-test.c
+@@ -53,6 +53,12 @@ module_param(no_cs, int, 0);
+ MODULE_PARM_DESC(no_cs,
+                 "if set Chip Select (CS) will not be used");
 
-vim +30 include/asm-generic/cmpxchg-local.h
++/* run tests only for a specific length */
++static int run_only_iter_len = -1;
++module_param(run_only_iter_len, int, 0);
++MODULE_PARM_DESC(run_only_iter_len,
++                "only run tests for a length of this number in
+iterate_len list");
++
+ /* run only a specific test */
+ static int run_only_test = -1;
+ module_param(run_only_test, int, 0);
+@@ -1033,6 +1039,8 @@ int spi_test_run_test(struct spi_device *spi,
+const struct spi_test *test,
 
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07   7  
-aa93685afbefa0 Behan Webster     2012-11-20   8  extern unsigned long wrong_size_cmpxchg(volatile void *ptr)
-aa93685afbefa0 Behan Webster     2012-11-20   9  	__noreturn;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  10  
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  11  /*
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  12   * Generic version of __cmpxchg_local (disables interrupts). Takes an unsigned
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  13   * long parameter, supporting various types of architectures.
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  14   */
-6988631bdfddce Mark Rutland      2021-05-25  15  static inline unsigned long __generic_cmpxchg_local(volatile void *ptr,
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  16  		unsigned long old, unsigned long new, int size)
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  17  {
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  18  	unsigned long flags, prev;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  19  
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  20  	/*
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  21  	 * Sanity checking, compile-time.
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  22  	 */
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  23  	if (size == 8 && sizeof(unsigned long) != 8)
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  24  		wrong_size_cmpxchg(ptr);
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  25  
-5042afe7fe3239 Ingo Molnar       2009-07-03  26  	raw_local_irq_save(flags);
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  27  	switch (size) {
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  28  	case 1: prev = *(u8 *)ptr;
-6246541522845a Matt Evans        2023-02-01  29  		if (prev == (u8)old)
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07 @30  			*(u8 *)ptr = (u8)new;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  31  		break;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  32  	case 2: prev = *(u16 *)ptr;
-6246541522845a Matt Evans        2023-02-01  33  		if (prev == (u16)old)
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  34  			*(u16 *)ptr = (u16)new;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  35  		break;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  36  	case 4: prev = *(u32 *)ptr;
-6246541522845a Matt Evans        2023-02-01  37  		if (prev == (u32)old)
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  38  			*(u32 *)ptr = (u32)new;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  39  		break;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  40  	case 8: prev = *(u64 *)ptr;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  41  		if (prev == old)
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  42  			*(u64 *)ptr = (u64)new;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  43  		break;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  44  	default:
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  45  		wrong_size_cmpxchg(ptr);
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  46  	}
-5042afe7fe3239 Ingo Molnar       2009-07-03  47  	raw_local_irq_restore(flags);
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  48  	return prev;
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  49  }
-068fbad288a2c1 Mathieu Desnoyers 2008-02-07  50  
-
-:::::: The code at line 30 was first introduced by commit
-:::::: 068fbad288a2c18b75b0425fb56d241f018a1cb5 Add cmpxchg_local to asm-generic for per cpu atomic operations
-
-:::::: TO: Mathieu Desnoyers <mathieu.desnoyers@polymtl.ca>
-:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+        for (idx_len = 0; idx_len < SPI_TEST_MAX_ITERATE &&
+             (len = test->iterate_len[idx_len]) != -1; idx_len++) {
++               if ((run_only_iter_len > -1) && len != run_only_iter_len)
++                       continue;
+                FOR_EACH_ALIGNMENT(tx_align) {
+                        FOR_EACH_ALIGNMENT(rx_align) {
+                                /* and run the iteration */
