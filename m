@@ -2,147 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE25A6D4489
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8F46D448B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231875AbjDCMgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
+        id S231961AbjDCMgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjDCMgJ (ORCPT
+        with ESMTP id S231634AbjDCMgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:36:09 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B05B1A7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:36:08 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id n125so34500601ybg.7
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 05:36:08 -0700 (PDT)
+        Mon, 3 Apr 2023 08:36:35 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FF583;
+        Mon,  3 Apr 2023 05:36:34 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r11so116734069edd.5;
+        Mon, 03 Apr 2023 05:36:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680525367;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HTdGFGo72jT0G2z3qfuhKe8NQ7sFzB56HywL+T9phf0=;
-        b=n//QZ4XWVxmdZdtfcxtWZQfogUQH8NZ1n30agZwN8PvCKA7JF1tTnlxPKNBSvQUapS
-         NGdK3ZPoAzF9sLfhlJOlVEdMM/1ZGqM8zB88fVnIWa9uFcSHP1nEdWGwmTMpZ7DzJn7z
-         01vkKnSI4g/jiF4j7qcT2UD9py0cyfh35S+gy/5/tQIgm86dYQj6VOiL93xHLqIPZy1t
-         cd0Z9A4SI+XhNjCW6H+7xiyjvfCrONXKa5xV3RT3eKtqQaQ8VnIQ0h+eICzxYiyZs+th
-         c1EDkx66f29BX5o9rujrr/uhOSC0/MCIKwKvoFqIRXDUVys9ZlSpIij8wWHRBvTVXLpW
-         YZUQ==
+        d=gmail.com; s=20210112; t=1680525393;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mI8z72ys9h7213jm8p1zrgDacfSUNl6g9XbEXB4wrlI=;
+        b=MQjLEdhjuKT+lGjIRKmxaKu4KuHKHlBGeP2wARXS+CrWlTYiICeROVrOrOCOx1G/ef
+         Lt4t89Fj3AS7bdi7Y578v4/h0nspKd44HpbMCfJCdbFzr9jgnGotrVjOl5fJcUuia2qz
+         9QqSRtVxtg32GWWjuUVlPBiJCT9M4q8ml6wgkPzffn6sF+Qiu73APmLsP5c7uIS03kib
+         qdoeCr8kZwWRsv0kclOj5GcnzA8HboHxI6AIGefOFaKFWSMjK+pbrsvDg2/EhTX9sS6C
+         HqCN0BAyCp5rlaIF6+fmjNr5LonAk0d6owaUOfnHUpDEC8ev+wHzkV5ZkPpHFjwsga1X
+         4Ngg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680525367;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HTdGFGo72jT0G2z3qfuhKe8NQ7sFzB56HywL+T9phf0=;
-        b=OGLDSi9ZRA8Q0MU8J9Qlfa97TNbe0EoPVJu4SYU5XSQz3srUQMdk5RgglNjfJI1uKM
-         gXQihw+3FrGO/6ToM+BSL0hVKIFgfEy4vFqcQJWqP1ywDvMLoUD6IlPDLInVXH+aJaoX
-         /h6BNT/XYmXMaA3pdqrrWFxv51dOx69aR0lykx3ZtHhroAPMg3OyObatblSuaqLRT7eR
-         T0wgwRwTyq4JEwVkJV2ir0SbHQ8L15W9WlMebqXIWT3voIyiuKJ8nGsGGw/FicG7R5d3
-         Utenf6zvw72H/SgjOv2pJBvakxDNCLRm4uUwQbIc0ZpAef47HHkTpb5eOtnJy7w3+NP7
-         P4gA==
-X-Gm-Message-State: AAQBX9cIV+rQvtuTJrowg/87X9XDysvInEVY6EpsvQbQd/MVuO911cvH
-        btOp1rScy28NdUKIymn7jrSwTeay2N2sjiefBTSObg==
-X-Google-Smtp-Source: AKy350aGB0ahI/fUaNW0BoHgcBvb/iADnkkKxVOCPgr2PYtuEuuF3boDBTjSZywA5BVAHNPv6R6cANKREHNU8ivW9Sc=
-X-Received: by 2002:a25:344:0:b0:b27:4632:f651 with SMTP id
- 65-20020a250344000000b00b274632f651mr17084702ybd.3.1680525367299; Mon, 03 Apr
- 2023 05:36:07 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680525393;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mI8z72ys9h7213jm8p1zrgDacfSUNl6g9XbEXB4wrlI=;
+        b=3Rj41Ds5YSXFbkLW7nQ0ThZteOA1ysqdlKgKXtODkKB+ISlxQDbQR+5sLNF/g5rpWF
+         bP1oJnh2gpRoXSl1cJq1yq4njKQbb2BjABa+H4aUfE5GXTaVW1Wbz80DLcA+7Nmvp5jc
+         LL544S0e4a7RMiKP6XQY767ELkMw+AZkf5E6M7HwqLQuwkiRUNAz7bC3uW9mlAI+bi+Y
+         NPcKDTG0Sg3BetXS9rb/moZ2GZwpIdukJZ5rgA8jb+i+qhsNJtyrzELSpwVQ5p3s+BLO
+         Md37ICrZKr5FaPmcOJ37ApdKJ4XiG+ZQ3uH3tHt6P3UQTXzXzmXMwEyBJgb4/+RjT9+Q
+         Tuiw==
+X-Gm-Message-State: AAQBX9cExaG4W80+ZCLMzcHxSL7B61O9ce295F0uqmgF3n7a08IIvvx7
+        2WQFCH4KdGqSIQo+7qCss5jCh9IjWNw=
+X-Google-Smtp-Source: AKy350aNaCdCQMP8OiC6dLC+L3XK5X8QMbP0o414svnCma1txj1E/+7yKLhsCmY5hXu60n5rTyzYbw==
+X-Received: by 2002:a17:906:cf89:b0:87b:d3f3:dcf3 with SMTP id um9-20020a170906cf8900b0087bd3f3dcf3mr35421385ejb.35.1680525392919;
+        Mon, 03 Apr 2023 05:36:32 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id bt23-20020a170906b15700b009477a173744sm4496269ejb.38.2023.04.03.05.36.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 05:36:32 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 14:36:30 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Petlozu Pravareshwar <petlozup@nvidia.com>
+Cc:     jonathanh@nvidia.com, p.zabel@pengutronix.de,
+        dmitry.osipenko@collabora.com, ulf.hansson@linaro.org,
+        kkartik@nvidia.com, cai.huoqing@linux.dev, spatra@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Viswanath L <viswanathl@nvidia.com>
+Subject: Re: [PATCH v2] soc/tegra: pmc: Support software wake-up for SPE
+Message-ID: <ZCrITl9ZSPsawOpm@orome>
+References: <20230330170621.258068-1-petlozup@nvidia.com>
 MIME-Version: 1.0
-References: <CAPDyKFrVuQwLfQZKx9x3PNKTYctWi7=e=vnUsdJgJLJ6=1o2iA@mail.gmail.com>
- <03265187-6336-9b1f-ea0d-ecbc3c8546f2@nfschina.com>
-In-Reply-To: <03265187-6336-9b1f-ea0d-ecbc3c8546f2@nfschina.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 3 Apr 2023 14:35:31 +0200
-Message-ID: <CAPDyKFrap_T3B6k=kUqfXCyJaW87sdEfsymmNm_pYRFLeX3n+A@mail.gmail.com>
-Subject: Re: [PATCH v2] mmc: core: remove unnecessary (void*) conversions
-To:     Yu Zhe <yuzhe@nfschina.com>
-Cc:     adrian.hunter@intel.com, quic_sayalil@quicinc.com,
-        quic_luliang@quicinc.com, m.szyprowski@samsung.com,
-        wsa+renesas@sang-engineering.com, yebin10@huawei.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, liqiong@nfschina.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="H4q6Deodu/0Ekunc"
+Content-Disposition: inline
+In-Reply-To: <20230330170621.258068-1-petlozup@nvidia.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 at 14:13, Yu Zhe <yuzhe@nfschina.com> wrote:
->
->
-> > On Tue, 28 Mar 2023 at 05:11, Yu Zhe <yuzhe@nfschina.com> wrote:
-> >> Pointer variables of void * type do not require type cast.
-> >>
-> >> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
-> >> Reviewed-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > Did Marek give his reviewed-by tag offlist? I couldn't find his reply,
-> > just to make sure this is correct?
-> >
-> > Kind regards
-> > Uffe
->
->
-> Sorry, it may be a misuse of "reviewed-by" tag,  "Marek Szyprowski" gave the error
-> report at the previous patch, so, i put the name at reviewed-by tag.
 
-Yes, you shouldn't put his tag like this, unless he explicitly has said so.
+--H4q6Deodu/0Ekunc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For bug reports we use "Reported-by:", but in this case I decided it
-was better to drop the offending commit, which means this isn't
-applicable here.
+On Thu, Mar 30, 2023 at 05:06:21PM +0000, Petlozu Pravareshwar wrote:
+> The Sensor Processing Engine(SPE) can trigger a software wake-up of
+> the device. To support this wake-up for the SPE, set SR_CAPTURE_EN
+> bit in WAKE_AOWAKE_CNTRL register associated with the wake-up for
+> the SPE. This SR capturing logic is expected to be enabled for wakes
+> with short pulse signalling requirements.
+>=20
+> Signed-off-by: Viswanath L <viswanathl@nvidia.com>
+> Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
+> ---
+> v1->v2:
+> * Rebase the change on latest code.
+> ---
+>  drivers/soc/tegra/pmc.c | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
 
-Anyway, there is no need to resend, I will just drop the tag when applying.
+Applied, thanks.
 
-Kind regards
-Uffe
+Thierry
 
->
-> >
-> >> ---
-> >>   drivers/mmc/core/debugfs.c  | 2 +-
-> >>   drivers/mmc/core/mmc_test.c | 6 +++---
-> >>   2 files changed, 4 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/mmc/core/debugfs.c b/drivers/mmc/core/debugfs.c
-> >> index fe6808771bc7..2c97b94aab23 100644
-> >> --- a/drivers/mmc/core/debugfs.c
-> >> +++ b/drivers/mmc/core/debugfs.c
-> >> @@ -246,7 +246,7 @@ DEFINE_DEBUGFS_ATTRIBUTE(mmc_err_state, mmc_err_state_get, NULL, "%llu\n");
-> >>
-> >>   static int mmc_err_stats_show(struct seq_file *file, void *data)
-> >>   {
-> >> -       struct mmc_host *host = (struct mmc_host *)file->private;
-> >> +       struct mmc_host *host = file->private;
-> >>          const char *desc[MMC_ERR_MAX] = {
-> >>                  [MMC_ERR_CMD_TIMEOUT] = "Command Timeout Occurred",
-> >>                  [MMC_ERR_CMD_CRC] = "Command CRC Errors Occurred",
-> >> diff --git a/drivers/mmc/core/mmc_test.c b/drivers/mmc/core/mmc_test.c
-> >> index 156d34b2ed4d..0f6a563103fd 100644
-> >> --- a/drivers/mmc/core/mmc_test.c
-> >> +++ b/drivers/mmc/core/mmc_test.c
-> >> @@ -3045,7 +3045,7 @@ static LIST_HEAD(mmc_test_file_test);
-> >>
-> >>   static int mtf_test_show(struct seq_file *sf, void *data)
-> >>   {
-> >> -       struct mmc_card *card = (struct mmc_card *)sf->private;
-> >> +       struct mmc_card *card = sf->private;
-> >>          struct mmc_test_general_result *gr;
-> >>
-> >>          mutex_lock(&mmc_test_lock);
-> >> @@ -3079,8 +3079,8 @@ static int mtf_test_open(struct inode *inode, struct file *file)
-> >>   static ssize_t mtf_test_write(struct file *file, const char __user *buf,
-> >>          size_t count, loff_t *pos)
-> >>   {
-> >> -       struct seq_file *sf = (struct seq_file *)file->private_data;
-> >> -       struct mmc_card *card = (struct mmc_card *)sf->private;
-> >> +       struct seq_file *sf = file->private_data;
-> >> +       struct mmc_card *card = sf->private;
-> >>          struct mmc_test_card *test;
-> >>          long testcase;
-> >>          int ret;
-> >> --
-> >> 2.11.0
-> >>
+--H4q6Deodu/0Ekunc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQqyE4ACgkQ3SOs138+
+s6E7hg//YszA7cR4dHtbCofh/mlp2CATRSom55hnsqEZUN/LSwswlD24/hIbkrEH
+kqoIkwpYoT5Nb+qIMxVa8jQOnTz/0Wfw3kTm2ofGXesuBddcY08fgCM1FPUhNXfM
+jAkzpK8C01r5+dA3TQdJNOyO3Cy/AujB308zlM/RsIqOZaArkaQaW0/X/IxFWV5l
+lkTewoj0ixETW5s0FRKMn4dYupyLYAc6Emjc5xu6rJ2dLxgujrwaZCVVdlBOqvzC
+lvMf+cgNwlJaFlGD/lR93gBE76EJs7vqMLummebvCZ5dfzhyeRtqIoPHswF52al7
+we7aT+0VdPcEIwRjCroqeUIiklScACnABYtBjvcknIbLhhvM5WkyQOCtN8DbfqkD
+2GG4n33K0xoCo/ugXOXzlONx08UMswM4tZr9DpnQxoDI1m6GS/okfA9ZZX9kwmFs
+THe8BmXapxRrA4zfNHDRtJtbokse0ImQzM3mOWFXsk0PRwF10Daxcym4ubynuABD
+QvBJHtbDtxZmnyi+z8OlmyEkpO9I9e3JyDM5gmqF0+UFOxJk43oZuyeKJozKXPLv
+5rpjtgH00FEtYEIbTXpjGJg7L7hxWCIMReZfrDckB5GCQiQuA1hW02P740S0K+aS
+/HnWBYSD125NqdJRz2CMWe2jEJqAEfw+2O4DBbEFNACi3bPPkr4=
+=89E5
+-----END PGP SIGNATURE-----
+
+--H4q6Deodu/0Ekunc--
