@@ -2,90 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7061E6D4C88
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EF56D4C7C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232902AbjDCPua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
+        id S232662AbjDCPuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232617AbjDCPuL (ORCPT
+        with ESMTP id S232554AbjDCPuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:50:11 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C0030EB;
-        Mon,  3 Apr 2023 08:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680536992; x=1712072992;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RVH6nOCjK5mMwmhujxNK93yJbU7YNiX2duZPr3uivlw=;
-  b=Q8y6LB/BTitfG1C0Yjbv5LG7SL+RWxRj2lQWUwhdz1fJ3KcIt9Pl5Xb5
-   MD/FHRlGaU6KoVKmjFxXP8L9rHIOZA+JPqKgtWasLr1ZXtBgakVf3huJZ
-   gsKmC2eeJVerMoLruUe9Zdi8ABhlHinyaozPfKHCvh/WAryD2a8Qq8CYi
-   fnAhv751cX8ZGYyryGPXWs1AB2UFoFxMH54feJ+zbs5RUFHhcu0KtHi67
-   W7/X3wu3hJ+aPMv3/GKP1DELA1ECpvn+cNvQlq0lJLVH0a/Jy1uLenS8F
-   7dZr+igpOI7ULOylEUMxY4ISYD1Bav2K5dwWMQpAmbpkWO31jAguHYuJj
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="339430321"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="339430321"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 08:48:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="663243337"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="663243337"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.40.243])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 08:48:47 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH 2/2] perf intel-pt: Fix CYC timestamps after standalone CBR
-Date:   Mon,  3 Apr 2023 18:48:31 +0300
-Message-Id: <20230403154831.8651-3-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230403154831.8651-1-adrian.hunter@intel.com>
-References: <20230403154831.8651-1-adrian.hunter@intel.com>
+        Mon, 3 Apr 2023 11:50:00 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C902D71
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:49:35 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id iw3so28448583plb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 08:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680536969;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sjdpEr1kbdCek7+Xx4AMcpWMybctv63LfhzPtH0NYpI=;
+        b=Ffq+9Ao/yKeSVo9K+0CQxyz3aN64b8sLF8aki0lQyNqP3Rgvqt9paDWEKXq4gLoA8V
+         fMVGj5THzkvpBXY4DRwYufLgtmUtpDtU9iIha2pb3Wo3TmV+eIQiCgMVs4AW1F1cDJcK
+         D1pYHuFEnxhgSCTelEMYMQPBC3FGdEH1npol0woxbt/T9ry1dGMOb4/2h0zKbHTapFYE
+         2t8lFHKv7CUA6SqYfFMBKHwaKx3r84BAHtskBADkGyPBt5XWaJZ5uZs0c7kPT4tLyW9Z
+         5N6ezanrfYsWpNFrvPZjKFv8iGQWaZumMCnnChY7UNmbOkPqT6maiV5SMpldBD7U5gO0
+         UMHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680536969;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sjdpEr1kbdCek7+Xx4AMcpWMybctv63LfhzPtH0NYpI=;
+        b=gqN6mGxetwA+wEfI/JtT2G/I3EaHBMd4JUXpfe3SHBpr1Fvqw8GhNDUBT/yASpynpw
+         X3TuhVHRiFxFHCHB+6DFVCctEwcDk4rlN5RJwBUFaZL2WxZdnjR0emJFgB1T5jtYVEc2
+         IYepQI53+0dP9eiQN+kI+LNoNiCwFszV/QpfhXrLxzEYMfYl0hFJSh5eRIP66tCS9WoD
+         u6VS1GCl3acICPygvQIoFQIentEAxFqaPvSsQ6NB8kJVtH7fniHQ4OTWjwCfcptJXXRv
+         W2s/aedhPl385yBzbyjj/qgWXfRg8m7N5FmnbAAoZ74+gYAbV/wtibgtBs4MDOXO2fhx
+         n+eA==
+X-Gm-Message-State: AAQBX9eJZm8VW5+3S+MazUXCjZS0g7PYeiirCBMxGv2+hS0/ViVZNEkB
+        cNTGmIcncIEbzqDJhzIsAY3/pYNv1e3Fl+SM+w==
+X-Google-Smtp-Source: AKy350bLVLkvH5+SJ7RuR133hSaDHPSe+UDoAzkm/zI1o2vRWweDiIcYX69H5D4GqOcdySwY0DDySQ==
+X-Received: by 2002:a17:90b:1b48:b0:23d:2532:ae34 with SMTP id nv8-20020a17090b1b4800b0023d2532ae34mr18497287pjb.2.1680536968965;
+        Mon, 03 Apr 2023 08:49:28 -0700 (PDT)
+Received: from localhost.localdomain ([27.111.75.109])
+        by smtp.gmail.com with ESMTPSA id c10-20020a17090a020a00b0023af4eb597csm9621534pjc.52.2023.04.03.08.49.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 08:49:28 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org,
+        mka@chromium.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 0/1] PCI: qcom: Add support for system suspend and resume
+Date:   Mon,  3 Apr 2023 21:19:21 +0530
+Message-Id: <20230403154922.20704-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After a standalone CBR (not associated with TSC), update the cycles
-reference timestamp and reset the cycle count, so that CYC timestamps are
-calculated relative to that point with the new frequency.
+Hello,
 
-Fixes: cc33618619ce ("perf tools: Add Intel PT support for decoding CYC packets")
-Cc: stable@vger.kernel.org
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- tools/perf/util/intel-pt-decoder/intel-pt-decoder.c | 2 ++
- 1 file changed, 2 insertions(+)
+This series (a single patch) adds the system suspend and resume support
+to the Qualcomm PCIe RC controller.
 
-diff --git a/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c b/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c
-index 0ac860c8dd2b..7145c5890de0 100644
---- a/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c
-+++ b/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c
-@@ -1998,6 +1998,8 @@ static void intel_pt_calc_cbr(struct intel_pt_decoder *decoder)
- 
- 	decoder->cbr = cbr;
- 	decoder->cbr_cyc_to_tsc = decoder->max_non_turbo_ratio_fp / cbr;
-+	decoder->cyc_ref_timestamp = decoder->timestamp;
-+	decoder->cycle_cnt = 0;
- 
- 	intel_pt_mtc_cyc_cnt_cbr(decoder);
- }
+Background
+==========
+
+There were previous attempts [1][2] to add system suspend and resume
+support to this driver.
+
+In previous versions, the controller was put into low power mode by turning
+OFF the resources even if there were active PCIe devices connected. Thanks
+to Qualcomm's internal power topology, the link did not enter L2/L3 state
+and the devices were still powered ON. But during very late end of suspend
+cycle, kernel tried to disable MSIs of the PCIe devices. This caused access
+violations as the resources needed to access the PCIe devices config space
+were turned OFF. Series [1] worked around this issue by not accessing the
+PCIe config space if the link was down in dw_msi_{un}mask_irq() functions.
+But that approach was not accepted.
+
+Then, series [2] implemented the suspend and resume operations using the
+syscore framework that disabled the resources at the end of the suspend
+cycle. But that approach also did not get much acceptance.
+
+Proposal
+========
+
+So the proposal here is to just vote for minimal interconnect bandwidth to
+keep the interconnect path active and not turn OFF the resources if there
+are active PCIe devices connected to the controllers. This avoids the
+access violation issue during suspend and also saves some power due to the
+lower interconnect bandwidth used.
+
+Then if there are no active PCIe devices connected to the controller,
+the resources are turned OFF completely and brought back during resume.
+This also saves power if there are controllers in a system without any
+devices connected.
+
+Testing
+=======
+
+This series has been tested on Lenovo Thinkpad X13s.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/linux-pci/1656055682-18817-1-git-send-email-quic_krichai@quicinc.com/
+[2] https://lore.kernel.org/linux-pci/1663669347-29308-1-git-send-email-quic_krichai@quicinc.com/
+
+Changes in v4:
+
+* Used 1KiB interconnect bandwidth during suspend
+
+Changes in v3:
+
+* Limited comments to 80 column
+* Added error handling in resume_noirq()
+
+Changes in v2:
+
+* Used minimum icc vote to keep data path functional during suspend
+* Collected Ack
+
+Manivannan Sadhasivam (1):
+  PCI: qcom: Add support for system suspend and resume
+
+ drivers/pci/controller/dwc/pcie-qcom.c | 62 ++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+
 -- 
-2.34.1
+2.25.1
 
