@@ -2,226 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C348D6D45CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E307B6D45D2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbjDCN2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
+        id S232054AbjDCN3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232536AbjDCN2k (ORCPT
+        with ESMTP id S232536AbjDCN3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:28:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A080310C8;
-        Mon,  3 Apr 2023 06:28:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 52D1B1FF8F;
-        Mon,  3 Apr 2023 13:28:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1680528517; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zHqm72f+Z0I2AzfAbhnKdnJNlmuD9/GdE0RimqxF3Bk=;
-        b=XkFA+dPaXYBCtXjZnIh4szDFpQyFAbgURFtWJRBp72ylru+ubP+sTKd0QLfYl8oVc+Ixfs
-        rNSkSh9+aLOTgj2DaZY3hGjW8HHY0YR7nlDZ2/mRsfW0EDTbJnJQ3Zdnx/UNNDLhzOUctg
-        hHAHydkFgXA0q7O3MJB1VHuIQGbrar0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1680528517;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zHqm72f+Z0I2AzfAbhnKdnJNlmuD9/GdE0RimqxF3Bk=;
-        b=asU5R1Qcu5R93vWGXtOCEMuBatUblI6aSIhFT7IZYcZjU9yCRyubBsXf5VUCB/d+SB+pPS
-        5x4XX0DH2gRwmIBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C19CB1331A;
-        Mon,  3 Apr 2023 13:28:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id I7tWLoTUKmTwcAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 03 Apr 2023 13:28:36 +0000
-Message-ID: <48567ee3-b482-bafd-bd25-cbb8bf3403b2@suse.cz>
-Date:   Mon, 3 Apr 2023 15:28:36 +0200
+        Mon, 3 Apr 2023 09:29:46 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F3B46AB
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:29:43 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id ew6so117285176edb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 06:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680528582;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fpLbXKYzMSJGl0nnaVR7GArwIh6No1hEQR9TgnQs4vw=;
+        b=onqS7T+LNvKzn2T22Sil+fikZAVGxxXd7JWmG73zGUu9yzK39GAeWKRcC0ES7z33HR
+         5P4Jt80pXWiSIsG+zH9gkagraLCWcJms7OgiVfuRhmL4odQC7b7h2B0h6cXvn9reP0zK
+         PtTxaDzh/X5GpmoZt9UK8/on0vB303HjDu8xMBL28OMF3k3aNiUew1l2VAFEr6PxXdvs
+         1bsJe2PgHsXHIxSrHl2w7kYyWVfbbeampIRoLMj8UwIKeGmesxplVUsfl60NNAOTWLRJ
+         yk77fUHuOa90ybhpzgnGFHrW9cZx+tHqUy2D4UYEsCSDfrqxZu9GHoDFN24srLsLmZyk
+         82Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680528582;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fpLbXKYzMSJGl0nnaVR7GArwIh6No1hEQR9TgnQs4vw=;
+        b=sXlco9sVCLUUcawGmwf50CNLR2U9UxY/qf2iddKMAaSpQVqWqTkeIOALhE/KyYvmfI
+         AToS6yosFj8mT7yKK5Wy3Lg0Xx8d14X38iefs6f/c0wXyJZ9/V3b0ZX3z9QIyMjDsdxH
+         t7joeBl53BvG/YDqKuSTdepSDtToqJZ23EI9PV2OD96kHK7NJnraCOa9GmIK5M9fM+mS
+         FMM9baotPRxxqphUJBwT6wdAXqEJka6ES+Dk+xKQvPd3OzCiD/J4QdvuBE9O5BdP2fEV
+         YJghKTv2cT7ufNAQuIe55sYJpFbiVNfKtpHNtdbIRf/8Hu82RTzfp+tdOxLrLB8hEmAo
+         A9MQ==
+X-Gm-Message-State: AAQBX9dZ6mXIcvMs94LHEwtww9Uwnm+m0kNh/5laa/mZNPW35EJolZ90
+        htvzWQX+SHQpcOW3hEPWXCViiQ==
+X-Google-Smtp-Source: AKy350aUnr53u4VlBi1BhGIcQUZeRsjNte9ibrkIZSqD295bdCJyKMRvsssZd80ikw/VoxAfx0GBYw==
+X-Received: by 2002:a17:906:7e4a:b0:93d:f7a6:219b with SMTP id z10-20020a1709067e4a00b0093df7a6219bmr34943951ejr.65.1680528582197;
+        Mon, 03 Apr 2023 06:29:42 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:ae90:d80:1069:4805])
+        by smtp.gmail.com with ESMTPSA id j10-20020a17090643ca00b0092f38a6d082sm4517252ejn.209.2023.04.03.06.29.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 06:29:41 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Patrick Lai <quic_plai@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: qcom: sm8550: add Soundwire controllers
+Date:   Mon,  3 Apr 2023 15:29:39 +0200
+Message-Id: <20230403132939.62976-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCHv9 11/14] x86/mm: Avoid load_unaligned_zeropad() stepping
- into unaccepted memory
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
- <20230330114956.20342-12-kirill.shutemov@linux.intel.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230330114956.20342-12-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 13:49, Kirill A. Shutemov wrote:
-> load_unaligned_zeropad() can lead to unwanted loads across page boundaries.
-> The unwanted loads are typically harmless. But, they might be made to
-> totally unrelated or even unmapped memory. load_unaligned_zeropad()
-> relies on exception fixup (#PF, #GP and now #VE) to recover from these
-> unwanted loads.
-> 
-> But, this approach does not work for unaccepted memory. For TDX, a load
-> from unaccepted memory will not lead to a recoverable exception within
-> the guest. The guest will exit to the VMM where the only recourse is to
-> terminate the guest.
-> 
-> There are three parts to fix this issue and comprehensively avoid access
-> to unaccepted memory. Together these ensure that an extra "guard" page
-> is accepted in addition to the memory that needs to be used.
-> 
-> 1. Implicitly extend the range_contains_unaccepted_memory(start, end)
->    checks up to end+2M if 'end' is aligned on a 2M boundary. It may
->    require checking 2M chunk beyond end of RAM. The bitmap allocation is
->    modified to accommodate this.
-> 2. Implicitly extend accept_memory(start, end) to end+2M if 'end' is
->    aligned on a 2M boundary.
-> 3. Set PageUnaccepted() on both memory that itself needs to be accepted
->    *and* memory where the next page needs to be accepted. Essentially,
->    make PageUnaccepted(page) a marker for whether work needs to be done
->    to make 'page' usable. That work might include accepting pages in
->    addition to 'page' itself.
-> 
-> Side note: This leads to something strange. Pages which were accepted
-> 	   at boot, marked by the firmware as accepted and will never
-> 	   _need_ to be accepted might have PageUnaccepted() set on
-> 	   them. PageUnaccepted(page) is a cue to ensure that the next
-> 	   page is accepted before 'page' can be used.
+Add nodes for LPASS Soundwire v2.0.0 controllers.  Use labels with
+indices matching downstream DTS, to make any comparisons easier.
 
-At least the part about PageUnaccepted() is obsolete in v9, no?
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> This is an actual, real-world problem which was discovered during TDX
-> testing.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-> ---
->  arch/x86/mm/unaccepted_memory.c         | 39 +++++++++++++++++++++++++
->  drivers/firmware/efi/libstub/x86-stub.c |  7 +++++
->  2 files changed, 46 insertions(+)
-> 
-> diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
-> index 1df918b21469..a0a58486eb74 100644
-> --- a/arch/x86/mm/unaccepted_memory.c
-> +++ b/arch/x86/mm/unaccepted_memory.c
-> @@ -23,6 +23,38 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
->  	bitmap = __va(boot_params.unaccepted_memory);
->  	range_start = start / PMD_SIZE;
->  
-> +	/*
-> +	 * load_unaligned_zeropad() can lead to unwanted loads across page
-> +	 * boundaries. The unwanted loads are typically harmless. But, they
-> +	 * might be made to totally unrelated or even unmapped memory.
-> +	 * load_unaligned_zeropad() relies on exception fixup (#PF, #GP and now
-> +	 * #VE) to recover from these unwanted loads.
-> +	 *
-> +	 * But, this approach does not work for unaccepted memory. For TDX, a
-> +	 * load from unaccepted memory will not lead to a recoverable exception
-> +	 * within the guest. The guest will exit to the VMM where the only
-> +	 * recourse is to terminate the guest.
-> +	 *
-> +	 * There are three parts to fix this issue and comprehensively avoid
-> +	 * access to unaccepted memory. Together these ensure that an extra
-> +	 * "guard" page is accepted in addition to the memory that needs to be
-> +	 * used:
-> +	 *
-> +	 * 1. Implicitly extend the range_contains_unaccepted_memory(start, end)
-> +	 *    checks up to end+2M if 'end' is aligned on a 2M boundary.
-> +	 *
-> +	 * 2. Implicitly extend accept_memory(start, end) to end+2M if 'end' is
-> +	 *    aligned on a 2M boundary. (immediately following this comment)
-> +	 *
-> +	 * 3. Set PageUnaccepted() on both memory that itself needs to be
-> +	 *    accepted *and* memory where the next page needs to be accepted.
-> +	 *    Essentially, make PageUnaccepted(page) a marker for whether work
-> +	 *    needs to be done to make 'page' usable. That work might include
-> +	 *    accepting pages in addition to 'page' itself.
-> +	 */
+---
 
-And here.
+The bindings and driver are here:
+https://lore.kernel.org/linux-arm-msm/20230403132503.62090-1-krzysztof.kozlowski@linaro.org/T/#t
+---
+ arch/arm64/boot/dts/qcom/sm8550.dtsi | 109 +++++++++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-> +	if (!(end % PMD_SIZE))
-> +		end += PMD_SIZE;
-> +
->  	spin_lock_irqsave(&unaccepted_memory_lock, flags);
->  	for_each_set_bitrange_from(range_start, range_end, bitmap,
->  				   DIV_ROUND_UP(end, PMD_SIZE)) {
-> @@ -46,6 +78,13 @@ bool range_contains_unaccepted_memory(phys_addr_t start, phys_addr_t end)
->  
->  	bitmap = __va(boot_params.unaccepted_memory);
->  
-> +	/*
-> +	 * Also consider the unaccepted state of the *next* page. See fix #1 in
-> +	 * the comment on load_unaligned_zeropad() in accept_memory().
-> +	 */
-> +	if (!(end % PMD_SIZE))
-> +		end += PMD_SIZE;
-> +
->  	spin_lock_irqsave(&unaccepted_memory_lock, flags);
->  	while (start < end) {
->  		if (test_bit(start / PMD_SIZE, bitmap)) {
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index 1643ddbde249..1afe7b5b02e1 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -715,6 +715,13 @@ static efi_status_t allocate_unaccepted_bitmap(struct boot_params *params,
->  		return EFI_SUCCESS;
->  	}
->  
-> +	/*
-> +	 * range_contains_unaccepted_memory() may need to check one 2M chunk
-> +	 * beyond the end of RAM to deal with load_unaligned_zeropad(). Make
-> +	 * sure that the bitmap is large enough handle it.
-> +	 */
-> +	max_addr += PMD_SIZE;
-> +
->  	/*
->  	 * If unaccepted memory is present, allocate a bitmap to track what
->  	 * memory has to be accepted before access.
+diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+index dc6150e97d46..c6e5a20930d1 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+@@ -2004,6 +2004,33 @@ lpass_wsa2macro: codec@6aa0000 {
+ 			#sound-dai-cells = <1>;
+ 		};
+ 
++		/* WSA2 */
++		swr3: soundwire-controller@6ab0000 {
++			compatible = "qcom,soundwire-v2.0.0";
++			reg = <0 0x06ab0000 0 0x2000>;
++			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&lpass_wsa2macro>;
++			clock-names = "iface";
++
++			qcom,din-ports = <4>;
++			qcom,dout-ports = <9>;
++
++			qcom,ports-sinterval =		<0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
++			qcom,ports-offset1 =		/bits/ 8 <0x01 0x03 0x05 0x02 0x04 0x15 0x00 0xff 0xff 0x06 0x0d 0xff 0x00>;
++			qcom,ports-offset2 =		/bits/ 8 <0xff 0x07 0x1f 0xff 0x07 0x1f 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
++			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
++			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
++			qcom,ports-word-length =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x18>;
++			qcom,ports-block-pack-mode =	/bits/ 8 <0x00 0x01 0x01 0x00 0x01 0x01 0x00 0x00 0x00 0x01 0x01 0x00 0x00>;
++			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
++			qcom,ports-lane-control =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
++
++			#address-cells = <2>;
++			#size-cells = <0>;
++			#sound-dai-cells = <1>;
++			status = "disabled";
++		};
++
+ 		lpass_rxmacro: codec@6ac0000 {
+ 			compatible = "qcom,sm8550-lpass-rx-macro";
+ 			reg = <0 0x06ac0000 0 0x1000>;
+@@ -2023,6 +2050,32 @@ lpass_rxmacro: codec@6ac0000 {
+ 			#sound-dai-cells = <1>;
+ 		};
+ 
++		swr1: soundwire-controller@6ad0000 {
++			compatible = "qcom,soundwire-v2.0.0";
++			reg = <0 0x06ad0000 0 0x2000>;
++			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&lpass_rxmacro>;
++			clock-names = "iface";
++			label = "RX";
++			qcom,din-ports = <0>;
++			qcom,dout-ports = <10>;
++
++			qcom,ports-sinterval =		<0x03 0x3f 0x1f 0x07 0x00 0x18f 0xff 0xff 0xff 0xff>;
++			qcom,ports-offset1 =		/bits/ 8 <0x00 0x00 0x0b 0x01 0x00 0x00 0xff 0xff 0xff 0xff>;
++			qcom,ports-offset2 =		/bits/ 8 <0x00 0x00 0x0b 0x00 0x00 0x00 0xff 0xff 0xff 0xff>;
++			qcom,ports-hstart =		/bits/ 8 <0xff 0x03 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff>;
++			qcom,ports-hstop =		/bits/ 8 <0xff 0x06 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff>;
++			qcom,ports-word-length =	/bits/ 8 <0x01 0x07 0x04 0xff 0xff 0x0f 0xff 0xff 0xff 0xff>;
++			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0x00 0x01 0xff 0xff 0x00 0xff 0xff 0xff 0xff>;
++			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff 0x00 0x00 0xff 0xff 0xff 0xff>;
++			qcom,ports-lane-control =	/bits/ 8 <0x01 0x00 0x00 0x00 0x00 0x00 0xff 0xff 0xff 0xff>;
++
++			#address-cells = <2>;
++			#size-cells = <0>;
++			#sound-dai-cells = <1>;
++			status = "disabled";
++		};
++
+ 		lpass_txmacro: codec@6ae0000 {
+ 			compatible = "qcom,sm8550-lpass-tx-macro";
+ 			reg = <0 0x06ae0000 0 0x1000>;
+@@ -2061,6 +2114,62 @@ lpass_wsamacro: codec@6b00000 {
+ 			#sound-dai-cells = <1>;
+ 		};
+ 
++		/* WSA */
++		swr0: soundwire-controller@6b10000 {
++			compatible = "qcom,soundwire-v2.0.0";
++			reg = <0 0x06b10000 0 0x2000>;
++			interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&lpass_wsamacro>;
++			clock-names = "iface";
++
++			qcom,din-ports = <4>;
++			qcom,dout-ports = <9>;
++
++			qcom,ports-sinterval =		<0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
++			qcom,ports-offset1 =		/bits/ 8 <0x01 0x03 0x05 0x02 0x04 0x15 0x00 0xff 0xff 0x06 0x0d 0xff 0x00>;
++			qcom,ports-offset2 =		/bits/ 8 <0xff 0x07 0x1f 0xff 0x07 0x1f 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
++			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
++			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
++			qcom,ports-word-length =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x18>;
++			qcom,ports-block-pack-mode =	/bits/ 8 <0x00 0x01 0x01 0x00 0x01 0x01 0x00 0x00 0x00 0x01 0x01 0x00 0x00>;
++			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
++			qcom,ports-lane-control =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
++
++			#address-cells = <2>;
++			#size-cells = <0>;
++			#sound-dai-cells = <1>;
++			status = "disabled";
++		};
++
++		swr2: soundwire-controller@6d30000 {
++			compatible = "qcom,soundwire-v2.0.0";
++			reg = <0 0x06d30000 0 0x2000>;
++			interrupts-extended = <&intc GIC_SPI 496 IRQ_TYPE_LEVEL_HIGH>,
++					      <&intc GIC_SPI 520 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "core", "wakeup";
++
++			clocks = <&lpass_vamacro>;
++			clock-names = "iface";
++			label = "TX";
++
++			qcom,din-ports = <4>;
++			qcom,dout-ports = <0>;
++			qcom,ports-sinterval-low =	/bits/ 8 <0x01 0x01 0x03 0x03>;
++			qcom,ports-offset1 =		/bits/ 8 <0x00 0x00 0x01 0x01>;
++			qcom,ports-offset2 =		/bits/ 8 <0x00 0x00 0x00 0x00>;
++			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff>;
++			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff 0xff>;
++			qcom,ports-word-length =	/bits/ 8 <0xff 0xff 0xff 0xff>;
++			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0xff 0xff 0xff>;
++			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff>;
++			qcom,ports-lane-control =	/bits/ 8 <0x01 0x02 0x00 0x00>;
++
++			#address-cells = <2>;
++			#size-cells = <0>;
++			#sound-dai-cells = <1>;
++			status = "disabled";
++		};
++
+ 		lpass_vamacro: codec@6d44000 {
+ 			compatible = "qcom,sm8550-lpass-va-macro";
+ 			reg = <0 0x06d44000 0 0x1000>;
+-- 
+2.34.1
 
