@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF506D4550
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60096D4557
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbjDCNKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
+        id S232520AbjDCNKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbjDCNKc (ORCPT
+        with ESMTP id S232493AbjDCNKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:10:32 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0404010D7;
-        Mon,  3 Apr 2023 06:10:32 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-17aeb49429eso30693504fac.6;
-        Mon, 03 Apr 2023 06:10:31 -0700 (PDT)
+        Mon, 3 Apr 2023 09:10:34 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6697F10D7;
+        Mon,  3 Apr 2023 06:10:33 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-17aceccdcf6so30662084fac.9;
+        Mon, 03 Apr 2023 06:10:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680527431;
+        d=1e100.net; s=20210112; t=1680527432;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=IrRmGeYtiu3xtbliPCyKu4FAZ3mtENLqOftnzuC5Jdw=;
-        b=vnypm3OrQ2P/swy6F3zybjZKphAShHg/u4LvLTPMkoeHLx/VAfd/hl4SSB+ex/UnNM
-         WM0x2g9njlC87eJe1zl1COrirQw2znRJRY9sy6/d9qqD7G1L6NN4oj5LjT0Z6kgWrTTa
-         MmGoC6B0YYM9Unc4mKwm4Md45gMRGNoKy0rjY40/ag8++fYChAwpKrmBn+1ZN12e1eAY
-         qmoPoqHVUx7tTwnAKoe2hDS7zFbporIFECqFrKXc6ju0bH5zM4O4b/UQtROhWV+6/Hgb
-         5tXamxdJqb2hSopmgX/Ell9YJE7ve0YnnFQGCneyrJYI8pll8WAQIvx7Np6YAimBguxZ
-         8IHA==
-X-Gm-Message-State: AAQBX9cueeIQE28J4UBh4FnWqBbOk1aTM0uRBB70l23LxF9Ru+W+S65U
-        OWf3YPMNrkP2A7gwNvPGBA==
-X-Google-Smtp-Source: AKy350aZVRkmLa4wyx+gLu+VCz3ZeBf2aFA4AM7r4FJgzTTuOAhMIsfP3thR0EVcoMElNZ0YyW07mw==
-X-Received: by 2002:a05:6870:1608:b0:17e:9798:6e34 with SMTP id b8-20020a056870160800b0017e97986e34mr21332218oae.32.1680527431226;
-        Mon, 03 Apr 2023 06:10:31 -0700 (PDT)
+        bh=3ZTdwXMG2el/ea1BKsWEd08tIXIZ8zFxXn8tPBkGQ5A=;
+        b=hFNFr3zrv+30u3lqI/8aQAOvupX4RQ9rUCCak803vyLvtEv6Ce+k6aoiKoYtRp1rIk
+         bAINr9sCe2uWiN3BhovIPZhhI5dWV5myWRjb8mhwHT12c56/4WA/z3QppCckq4CHbav5
+         VzaGyzlsz22hdViZtX0A+dRpXsJDvR4u0S9oc9aEcoIv81knMOj4vSSqijxPOvuh5RiK
+         VEtQZwEhrBT8ISg/RjEnojvzb5wGK8C3wwViRlJDGhIK5cOkmsDk8Pel4GWRRJWzTSGQ
+         Mx4INjePS1/zuHbXKi8fgGjQqCidLMtDfT63N7RclO/vi/k86yRLcT0UX4ng58v+zXZT
+         dCHQ==
+X-Gm-Message-State: AAQBX9e3o/d1AaJMBPeluHFbkUhS3gwJwxlqjvilGNgUqT+GlpEklx5y
+        TKGhm4gYfBBwUdC15zwOxA==
+X-Google-Smtp-Source: AKy350bpXhr4xTknMKxWepZjrNZtrRCKwVKbMunz/PN41Xn3HTuhhAtDnaic+81eg7Onom6tpE9f9w==
+X-Received: by 2002:a05:6870:4587:b0:176:3731:69 with SMTP id y7-20020a056870458700b0017637310069mr7607069oao.24.1680527432711;
+        Mon, 03 Apr 2023 06:10:32 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b2-20020a9d6b82000000b006a32eb9e0dfsm2059598otq.67.2023.04.03.06.10.30
+        by smtp.gmail.com with ESMTPSA id kw17-20020a056870ac1100b001802d3e181fsm3506534oab.14.2023.04.03.06.10.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 06:10:30 -0700 (PDT)
-Received: (nullmailer pid 522005 invoked by uid 1000);
+        Mon, 03 Apr 2023 06:10:32 -0700 (PDT)
+Received: (nullmailer pid 522008 invoked by uid 1000);
         Mon, 03 Apr 2023 13:10:30 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Om Parikh <hack3r-0m@proton.me>
-Cc:     linux-kernel@vger.kernel.org,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+To:     Julien Stephan <jstephan@baylibre.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
+        Florian Sylvestre <fsylvestre@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Olof Johansson <olof@lixom.net>,
-        daniel.baluta@nxp.com
-In-Reply-To: <20230403004138.326482-1-hack3r-0m@proton.me>
-References: <20230403004138.326482-1-hack3r-0m@proton.me>
-Message-Id: <168052512144.461913.16353516589500469297.robh@kernel.org>
-Subject: Re: [PATCH] dt-bindings: watchdog: alphascale-asm9260: convert to
- DT schema
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20230403071929.360911-2-jstephan@baylibre.com>
+References: <20230403071929.360911-1-jstephan@baylibre.com>
+ <20230403071929.360911-2-jstephan@baylibre.com>
+Message-Id: <168052512219.461959.16950455567862466256.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: phy: add mtk-mipi-csi driver
 Date:   Mon, 03 Apr 2023 08:10:30 -0500
 X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -71,21 +75,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 03 Apr 2023 00:42:35 +0000, Om Parikh wrote:
-> this patch replaces the txt file and adds YAML bindings file
-> adhering to the json-schema for alphascale-asm9260. It is a
-> demo patch for potential further contributions to the GSOC
-> project.
+On Mon, 03 Apr 2023 09:19:28 +0200, Julien Stephan wrote:
+> From: Florian Sylvestre <fsylvestre@baylibre.com>
 > 
-> (see: https://wiki.linuxfoundation.org/gsoc/2023-gsoc-device-tree-bindings)
-> 
-> Signed-off-by: Om Parikh <hack3r-0m@proton.me>
+> Signed-off-by: Florian Sylvestre <fsylvestre@baylibre.com>
+> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
 > ---
->  .../watchdog/alphascale,asm9260-wdt.yaml      | 76 +++++++++++++++++++
->  .../bindings/watchdog/alphascale-asm9260.txt  | 35 ---------
->  2 files changed, 76 insertions(+), 35 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yaml
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
+>  .../bindings/phy/mediatek,csi-phy.yaml        | 41 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/mediatek,csi-phy.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -94,11 +93,12 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.example.dtb: /example-0/watchdog@80048000: failed to match any schema with compatible: ['alphascale,asm9260-wdt']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/mediatek,csi-phy.example.dtb: phy@10011800: reg: [[0, 268507136], [0, 96]] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/mediatek,csi-phy.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230403004138.326482-1-hack3r-0m@proton.me
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230403071929.360911-2-jstephan@baylibre.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
