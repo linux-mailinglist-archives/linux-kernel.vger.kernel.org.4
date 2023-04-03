@@ -2,144 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6B56D4EE9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF9A6D4EF4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbjDCR0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
+        id S233163AbjDCR2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233111AbjDCR0o (ORCPT
+        with ESMTP id S233157AbjDCR2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:26:44 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E5F113;
-        Mon,  3 Apr 2023 10:26:39 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id eh3so120265495edb.11;
-        Mon, 03 Apr 2023 10:26:39 -0700 (PDT)
+        Mon, 3 Apr 2023 13:28:43 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7742686
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:28:42 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3e392e10cc4so1227821cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:28:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680542798; x=1683134798;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y+hD9dA0ZbFxuYniLgq410rnyqNfqnu1PjrS/o7Wfzo=;
-        b=butJWZEuLrgW6EYVdXQX7er0f2ttpqKwL1T+MagEvKSjYh1ZWri67cTm2AimwJ0oeT
-         0yAEcubHelx0+crMbFwYZEwev/9QgTzweiRuTsOnsFmJlQF7l0s8NtvKYdEgC7YASkBi
-         wJDNANefgtUl/pYwm5EuCsuEdRMWLlNrYRanIGPkhB+hzk41OlX+qhC+/PYOVd8IU120
-         +x8hdO2z9wX9faXLzBpCf0om18/IMGWUMsVONzVPs//VQjyqUm2/2f4hjfEqwcv8/N2s
-         kc/4XU4k7ldj05CY+zPwi6DkQE4muIHxqLyLgF/UeN1E3iwAPh4FSEGos0H4d2fl4Srt
-         c1+g==
+        d=google.com; s=20210112; t=1680542921;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kpn/KhpcP085eDxsf1VEIL2CtSKS0wIReF1Y4W2z19c=;
+        b=XgJ794ouvra+MVbtDLpmz4jtm+tMYqwW2TkPDR8PKHTT9bEJ3/wRIinznK7/OzP3FV
+         AvV9vUfk8ZDAccFM0CznBH32GyrNOElTkjLU2waU3JF+bRR9xGduqeacTjEkfUgf6ol1
+         nNq7zhy7D/+ID4L9vy+LHwXIxrFib1M1QsDd8uTZeUcSlMrFcQJBGmCCfVlu39bmzdaU
+         422fXqMxcZ/TP/oksICpVJa6gkQrVdi3FLiWZs3UP2+KhgsrRxib6c2GqyfgAXbyRoOf
+         9yQSJOCLzhA74esY+LF1K0g4TzDVhDXQ4fp4pqwl1b/dUPq+OzWDKQRE21P8mrWneBmV
+         iiHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680542798; x=1683134798;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y+hD9dA0ZbFxuYniLgq410rnyqNfqnu1PjrS/o7Wfzo=;
-        b=Wqh7HyyKNE5VsZfB1P/wqHNT90CoQJFCr9JYxHNQXvxrVLGz0dbY8t2RfO6+LnLGx9
-         hWR4g19471ozzAri9t0Ob0nXvAiigFuEPGvDaA4KPIL1XXotMJiqFcavOc3oFg4kBP9R
-         dm+upZyx27yEY4ePCFO9mZwX5grVqnU7WsUlkzSDwhxkGdKFoX2bQtDizu8X8+nmtlnB
-         1SJYJUTgdYCWLfucwEqvGxXfow0erb6LaprgQdo652J/VZ/5u3xBUOc8RJ5QHfj/0biR
-         JSe2liNtc/6XHJ4oo8dG0tubBxYt1wr2dGzjyWaGl3UCC9D7iYZmrhEqOX/MUQunHlET
-         H+Gg==
-X-Gm-Message-State: AAQBX9dcIsJBjrvG5b77XA9gHQuWTbxh2f9RUkDqT+QM4gHrXd5w6FYr
-        tNOxp5MDv1xKDwE8q1PWQwc=
-X-Google-Smtp-Source: AKy350Ytu2/uzMZQ1usmBm61eO1m+4WPscUOFQRGsCNu1cdSg0v/ydxcUnWenLETPMfW9cawQZYtSg==
-X-Received: by 2002:a17:906:3148:b0:930:fa8e:9597 with SMTP id e8-20020a170906314800b00930fa8e9597mr36258140eje.42.1680542797873;
-        Mon, 03 Apr 2023 10:26:37 -0700 (PDT)
-Received: from [192.168.1.45] (hst-221-41.medicom.bg. [84.238.221.41])
-        by smtp.gmail.com with ESMTPSA id bu7-20020a170906a14700b0093348be32cfsm4874651ejb.90.2023.04.03.10.26.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 10:26:37 -0700 (PDT)
-Message-ID: <36febd82-85b2-aa4d-c7e0-6343b119e0cc@gmail.com>
-Date:   Mon, 3 Apr 2023 20:26:28 +0300
+        d=1e100.net; s=20210112; t=1680542921;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kpn/KhpcP085eDxsf1VEIL2CtSKS0wIReF1Y4W2z19c=;
+        b=lLCRKRNPkeCYt4mldV5VAbAfkzMnjvc8pThHeMD57dqfvxzJwR40dx+7JYZPfXzkzY
+         xx7/VsPf30PCJzIweWRaEo+dfMmaJudqsKzdvR7Pt64qLSTo8HZVtDIoonW/RDf1Ohay
+         Z3uYOrhJKSVcPajhipCZy7ULQTfWOBewVyZ1IK9i9zk5ZO2QCje9vVZAPvpwN54gK+bh
+         EvgDH3oklIrzw77prUSaC19FsmdM5iu+UaREhkMD8mpEBdAXg6hkbjJqhYgN77nvQXbd
+         /cLTN38wRCr9/n6cNm0hWwLkJ+eY3KAU2sMjpIRZQYEgp6267QQ5VcPD2t1QibAvAVWI
+         3ocA==
+X-Gm-Message-State: AAQBX9d1cA07yiZUb6nSPyMBmkjFl6Lb1/Onmv2uZHB9S4pf9QYirXvJ
+        4dl77MN1L99o+XCCh0yrg1Rde6akRRLlXIeKhN7SyWC+yRvtHGAqOxs=
+X-Google-Smtp-Source: AKy350bniYi5ynkqBSd9hBEWXjYTcJaAliiQRAyJOa7hZawpnpmnboOy31c1b1qsKam08fr/5HXcNydQ9Xt3VtLO+H0=
+X-Received: by 2002:a05:622a:1813:b0:3b3:20d8:a84 with SMTP id
+ t19-20020a05622a181300b003b320d80a84mr9710qtc.2.1680542921010; Mon, 03 Apr
+ 2023 10:28:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] media: dt-bindings: Drop unneeded quotes
-To:     Sakari Ailus <sakari.ailus@iki.fi>, Rob Herring <robh@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Joe Tessler <jrt@google.com>,
-        Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Benoit Parrot <bparrot@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20230320233944.2920964-1-robh@kernel.org>
- <ZCaoVwRuxVOTZdI4@valkosipuli.retiisi.eu>
-Content-Language: en-US, bg-BG
-From:   Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
-In-Reply-To: <ZCaoVwRuxVOTZdI4@valkosipuli.retiisi.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230331202949.810326-1-namhyung@kernel.org>
+In-Reply-To: <20230331202949.810326-1-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 3 Apr 2023 10:28:28 -0700
+Message-ID: <CAP-5=fWC1v+vsi-qmYXy8VMKXOsscYobucwS3GZw=gycdnAc3w@mail.gmail.com>
+Subject: Re: [PATCHSET 0/9] perf tools: Update pmu scan using openat() (v1)
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hei Sakari,
+On Fri, Mar 31, 2023 at 1:29=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> Hello,
+>
+> This patchset changes PMU info scanning on sysfs using openat()
+> basically.  I got reports of occasional contention on the
+> opening files in sysfs.  While the root cause was a separate
+> issue, I discovered some inefficiencies in the perf code.
+>
+> To scan PMUs, it roughly does something like below:
+>
+>   dir =3D opendir("/sys/bus/event_source/devices");
+>   while (dentry =3D readdir(dir)) {
+>     char buf[PATH_MAX];
+>
+>     snprintf(buf, sizeof(buf), "%s/%s",
+>              "/sys/bus/event_source/devices", dentry->d_name);
+>     fd =3D open(buf, O_RDONLY);
+>     ...
+>   }
+>
+> But this is not good since it needs to copy the string to build the
+> absolute pathname, and it makes redundant pathname walk (from the /sys)
+> in the kernel unnecessarily.  We can use openat(2) to open the file in
+> the given directory.
+>
+> Add a couple of new helper to return the file descriptor of PMU
+> directory so that it can use it with relative paths.
+>
+>  * perf_pmu__event_source_devices_fd()
+>    - returns a fd for the PMU root ("/sys/bus/event_source/devices")
+>
+>  * perf_pmu__pathname_fd()
+>    - returns a fd for "<pmu>/<file>" under the PMU root
+>
+> Now the above code can be converted something like below:
+>
+>   dirfd =3D perf_pmu__event_source_devices_fd();
+>   dir =3D fdopendir(dirfd);
+>   while (dentry =3D readdir(dir)) {
+>     fd =3D openat(dirfd, dentry->d_name, O_RDONLY);
+>     ...
+>   }
+>
+> I added a benchmark for pmu-scan and it showed a slight speedup
+> in the normal case too.
+>
+>   $ ./perf.old bench internals pmu-scan
+>   # Running 'internals/pmu-scan' benchmark:
+>   Computing performance of sysfs PMU event scan for 100 times
+>     Average PMU scanning took: 6670.970 usec (+- 13.022 usec)
+>
+>   $ ./perf.new bench internals pmu-scan
+>   # Running 'internals/pmu-scan' benchmark:
+>   Computing performance of sysfs PMU event scan for 100 times
+>     Average PMU scanning took: 6296.980 usec (+- 14.891 usec)
+>
+> The 5~6% of improvement might be small but it may have bigger impact
+> when the system is contended.
+>
+> You can get the code from 'perf/pmu-scan-v1' branch in
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+>
+> Thanks,
+> Namhyung
 
-On 31.03.23 г. 12:31 ч., Sakari Ailus wrote:
-> Hi Rob,
-> 
-> On Mon, Mar 20, 2023 at 06:39:42PM -0500, Rob Herring wrote:
->> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
->> checking for this can be enabled in yamllint.
->>
->> Signed-off-by: Rob Herring <robh@kernel.org>
-> 
-> This patch contains changes to Qualcomm bindings that have been already
-> made by other patches by Krzysztof. I think these took some time to get
-> merged to the media tree.
-> 
-> I've dropped those, the result is here:
-> 
-> <URL:https://git.linuxtv.org/sailus/media_tree.git/commit/?id=d75cae0884e80bba486f85e82b33a1dae3c9c976>
-> 
+Some nice stack size savings too. The reentrant fix was pre-existing. Serie=
+s:
+Acked-by: Ian Rogers <irogers@google.com>
 
-Do you think it will fix this pull request failure?
+Thanks,
+Ian
 
-https://lore.kernel.org/all/20230329214310.2503484-1-jenkins@linuxtv.org/
-
--- 
-regards,
-Stan
+> Namhyung Kim (9):
+>   perf list: Use relative path for tracepoint scan
+>   perf tools: Fix a asan issue in parse_events_multi_pmu_add()
+>   perf pmu: Add perf_pmu__destroy() function
+>   perf bench: Add pmu-scan benchmark
+>   perf pmu: Use relative path for sysfs scan
+>   perf pmu: Use relative path in perf_pmu__caps_parse()
+>   perf pmu: Use relative path in setup_pmu_alias_list()
+>   perf pmu: Add perf_pmu__{open,scan}_file_at()
+>   perf intel-pt: Use perf_pmu__scan_file_at() if possible
+>
+>  tools/perf/arch/x86/util/intel-pt.c |  52 ++++--
+>  tools/perf/arch/x86/util/pmu.c      |  13 +-
+>  tools/perf/bench/Build              |   1 +
+>  tools/perf/bench/bench.h            |   1 +
+>  tools/perf/bench/pmu-scan.c         | 184 ++++++++++++++++++
+>  tools/perf/builtin-bench.c          |   1 +
+>  tools/perf/tests/pmu.c              |   9 +-
+>  tools/perf/util/parse-events.c      |   2 +-
+>  tools/perf/util/pmu.c               | 278 ++++++++++++++++++++--------
+>  tools/perf/util/pmu.h               |  12 +-
+>  tools/perf/util/print-events.c      |  26 ++-
+>  11 files changed, 466 insertions(+), 113 deletions(-)
+>  create mode 100644 tools/perf/bench/pmu-scan.c
+>
+>
+> base-commit: 417c6adfb155f906f0441cc1034827f6e2b3c372
+> --
+> 2.40.0.348.gf938b09366-goog
+>
