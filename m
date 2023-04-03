@@ -2,43 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A3B6D4264
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9E96D424F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbjDCKnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S232344AbjDCKko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbjDCKmk (ORCPT
+        with ESMTP id S232329AbjDCKkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:42:40 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F254610264;
-        Mon,  3 Apr 2023 03:42:29 -0700 (PDT)
-Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
-        (user=void0red@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 333Ad1oW026913-333Ad1oX026913
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 3 Apr 2023 18:39:01 +0800
-From:   Kang Chen <void0red@hust.edu.cn>
-To:     dzm91@hust.edu.cn
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, daniel@makrotopia.org,
-        rdunlap@infradead.org, bchihi@baylibre.com, henry.yen@mediatek.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        hust-os-kernel-patches@googlegroups.com, void0red@gmail.com,
-        error27@gmail.com, Kang Chen <void0red@hust.edu.cn>
-Subject: [PATCH] drivers: thermal: mediatek: fix of_iomap leak in mtk_thermal_probe
-Date:   Mon,  3 Apr 2023 18:38:55 +0800
-Message-Id: <20230403103855.3601901-1-void0red@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        Mon, 3 Apr 2023 06:40:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D1183C1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:39:51 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 858D91FDD6;
+        Mon,  3 Apr 2023 10:39:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680518383; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Za7Mw6AhwiXl3SjE2sax9Qu/fK3MG3aPrSrkeX6F63Q=;
+        b=GgzUFUtdB02Iast0KzdplKhBzRFuK/3dvWScsjhwaf3iYVYnVqu+rxwDHHKTAoYcXbeySt
+        jrrsFkA6YzMOMh0YZpTacwLL664rdQNqM7za7l8/YA0XmqlmH0A0Cm1Cnn15xaI6M4JgDR
+        EksN5Zo8CJHuSXwm5ei2XCGzBsOJo14=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 282142C1BF;
+        Mon,  3 Apr 2023 10:39:42 +0000 (UTC)
+Date:   Mon, 3 Apr 2023 12:39:39 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v1 1/1] lib/vsprintf: Use isodigit() for the octal number
+ check
+Message-ID: <ZCqs6yt3nID5wuqF@alley>
+References: <20230327142721.48378-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: void0red@hust.edu.cn
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327142721.48378-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,79 +54,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports:
-1. mtk_thermal_probe() warn: 'apmixed_base' from of_iomap() not released.
-2. mtk_thermal_probe() warn: 'auxadc_base' from of_iomap() not released.
+On Mon 2023-03-27 17:27:21, Andy Shevchenko wrote:
+> Use isodigit() to test the octal number instead of homegrown approach.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-The original code forgets to release iomap resource when handling errors,
-fix it through unified error handling code at the end of mtk_thermal_probe.
+JFYI, the patch has been committed into printk/linux.git,
+branch for-6.4.
 
-Fixes: 89945047b166 ("thermal: mediatek: Add tsensor support for V2 thermal system")
-Signed-off-by: Kang Chen <void0red@hust.edu.cn>
----
-I think the this should be released on the success path but I was too
-scared of breaking things. Let me know and I will resend if people want
-me to do that.
-
- drivers/thermal/mediatek/auxadc_thermal.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-index ab730f9552d0..741c7d8151bd 100644
---- a/drivers/thermal/mediatek/auxadc_thermal.c
-+++ b/drivers/thermal/mediatek/auxadc_thermal.c
-@@ -1149,13 +1149,15 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	if (auxadc_phys_base == OF_BAD_ADDR) {
- 		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto err_iounmap_auxadc;
- 	}
- 
- 	apmixedsys = of_parse_phandle(np, "mediatek,apmixedsys", 0);
- 	if (!apmixedsys) {
- 		dev_err(&pdev->dev, "missing apmixedsys node\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto err_iounmap_auxadc;
- 	}
- 
- 	apmixed_base = of_iomap(apmixedsys, 0);
-@@ -1165,17 +1167,18 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	if (apmixed_phys_base == OF_BAD_ADDR) {
- 		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto err_iounmap_apmixed;
- 	}
- 
- 	ret = device_reset_optional(&pdev->dev);
- 	if (ret)
--		return ret;
-+		goto err_iounmap_apmixed;
- 
- 	ret = clk_prepare_enable(mt->clk_auxadc);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
--		return ret;
-+		goto err_iounmap_apmixed;
- 	}
- 
- 	ret = clk_prepare_enable(mt->clk_peri_therm);
-@@ -1220,7 +1223,10 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	clk_disable_unprepare(mt->clk_peri_therm);
- err_disable_clk_auxadc:
- 	clk_disable_unprepare(mt->clk_auxadc);
--
-+err_iounmap_apmixed:
-+	iounmap(apmixed_base);
-+err_iounmap_auxadc:
-+	iounmap(auxadc_base);
- 	return ret;
- }
- 
--- 
-2.34.1
-
+Best Regards,
+Petr
