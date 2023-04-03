@@ -2,152 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45666D3D96
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8E36D3D99
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjDCGva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 02:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S231426AbjDCGwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 02:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjDCGv3 (ORCPT
+        with ESMTP id S229797AbjDCGwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 02:51:29 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94CAAF1A
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 23:51:27 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso6494363wmo.0
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 23:51:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=grsecurity.net; s=grsec; t=1680504686;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Nb8hMsZoL157aXIKNcdvRKkRTkh4KKenB7HdAyviWGg=;
-        b=j5AvQ7aw+jfuQe9QA7St0TuvqSBCPp3SnGq5ZywrBk1Xcejx1HVtTDsGZRexrOrSMy
-         7WSkFVMaTcR/do1t6ddTgjkM/z3nQXfsw0Yy/4Wy0DZZJn3GLXZvcWFjTawKu8BozO7d
-         jCTC+4gnhIvm4bigQ4dXItyldz5BP8U9gF0aVvaxEP/7NJIMal9YxQxsqGZikECJJiKd
-         j/iWZ8NKdAiuckoum79E5lu0W7DNqyEFY9pAq/GV/m6V4X6LzJGLo8bYr+kywDVwxUN8
-         ZgEZktYCmqvKm1BALhIgOpzLyZS476ypdvla3syyKxnkOBacDOB98zfEsT3jRUIT4sct
-         dKwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680504686;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nb8hMsZoL157aXIKNcdvRKkRTkh4KKenB7HdAyviWGg=;
-        b=AEUPlvxk132mLe/MOLgQ21VDSfQSBBXVOxOKxPzCBAwI2SQjWjyDQIPkgqtTVJt3tp
-         TWhBhKnIPVT/iVzL7dIxneyOVfUsqhX7H1+rMYOv8vsiR+BuRU7E5hNEIYaoI6jcz2rA
-         ZPOU0PlL60eqlSHbpJlyAYE8KF3j4wQDe2vwRrIZASVAAHeKXXhcfIxP9Zi0wthx/niR
-         QfniEpb2PMQmEDhJXP3ZZEVa3akNzBwkL66H+GHHJ7ZEkwR77cDAiuh2dBXpCc45+w6a
-         XeoTAXFqzUJmYZ3HcgDOrnexIOJ38yOy+G4ey4u76K5hsRPGZLSv3uG/X/+wwYERM++2
-         AY0g==
-X-Gm-Message-State: AO0yUKWlQUPf3cRdxZKY9JA00gSbMn1FCkEn7elSymqw4nIwYw7WOESe
-        k5OqmI8V8htQ/1LIis4BmeoSaA==
-X-Google-Smtp-Source: AK7set/7UhL6zASSvYckJ/LnYFdfFtsSyRAbQKxDmgfTrSMFkgMEUJ+qxFQgvS+Th4E/+wmKblZ6kw==
-X-Received: by 2002:a7b:cd85:0:b0:3ee:96f0:ea3c with SMTP id y5-20020a7bcd85000000b003ee96f0ea3cmr25721582wmj.7.1680504686213;
-        Sun, 02 Apr 2023 23:51:26 -0700 (PDT)
-Received: from ?IPV6:2003:f6:af22:1600:2f4c:bf50:182f:1b04? (p200300f6af2216002f4cbf50182f1b04.dip0.t-ipconnect.de. [2003:f6:af22:1600:2f4c:bf50:182f:1b04])
-        by smtp.gmail.com with ESMTPSA id b39-20020a05600c4aa700b003ed29189777sm17946698wmp.47.2023.04.02.23.51.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Apr 2023 23:51:25 -0700 (PDT)
-Message-ID: <3ee86615-e8ee-801b-7a12-2f007ffbceea@grsecurity.net>
-Date:   Mon, 3 Apr 2023 08:51:24 +0200
+        Mon, 3 Apr 2023 02:52:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE4F2727
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 23:52:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FA50614FB
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:52:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4493EC433EF;
+        Mon,  3 Apr 2023 06:52:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680504734;
+        bh=a/R10jH30vYnh+1wVVgBZesVEWx9VEabSFxoWE4WGaQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PZjCGGdy918fsCIV2X7ji6gb3Dy7kLUZvge78w6piYQ0DQT26vfQkZHg1ffZkorWO
+         Ep6okNEzf7o5LlKEoBg1ercBGYLyUlE4CNG9/sJ/RlIkr7ADq0Yeov3preu9D67xGd
+         A/Fkj3TPKWa+uU/fkqkeeIODnngpg6TYD0M94porHImd6B20kTGQeIwW9yPuATQd27
+         pg+kp41sRKtr+SaqbATMRdx4khZSNtThQnE0EwW89wGCNUmnquYEW/HQnjl9W2wCLf
+         O9HhPb7WXLGbnP62cMrVTQui4zNO6YrU+zxA5HVieNzHsMNOzS7f71gUYvMGFKbrcs
+         0vPeN8NRU/FWw==
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To:     Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        Conor Dooley <conor@kernel.org>,
+        Yipeng Zou <zouyipeng@huawei.com>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: [PATCH] riscv: entry: Save a0 prior syscall_enter_from_user_mode()
+Date:   Mon,  3 Apr 2023 08:52:07 +0200
+Message-Id: <20230403065207.1070974-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: Linux 5.15.103
-Content-Language: en-US, de-DE
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, torvalds@linux-foundation.org,
-        lwn@lwn.net, jslaby@suse.cz,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-References: <1679040264214179@kroah.com>
- <c359c777-c3af-b4a6-791d-d51916160bf5@grsecurity.net>
- <ZCLaLWJiIsDV5yGr@kroah.com>
- <f86cb36e-b331-8b8d-f087-5e2e8a5ae962@grsecurity.net>
- <ZCgwaWSgnUWAPyiv@sashalap>
-From:   Mathias Krause <minipli@grsecurity.net>
-In-Reply-To: <ZCgwaWSgnUWAPyiv@sashalap>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.04.23 15:23, Sasha Levin wrote:
-> On Tue, Mar 28, 2023 at 02:29:11PM +0200, Mathias Krause wrote:
->> On 28.03.23 14:14, Greg Kroah-Hartman wrote:
->>> On Tue, Mar 28, 2023 at 02:02:03PM +0200, Mathias Krause wrote:
->>>> On 17.03.23 09:04, Greg Kroah-Hartman wrote:
->>>>> I'm announcing the release of the 5.15.103 kernel.
->>>>>
->>>>> [...]
->>>>>
->>>>> Vitaly Kuznetsov (4):
->>>>>       KVM: Optimize kvm_make_vcpus_request_mask() a bit
->>>>>       KVM: Pre-allocate cpumasks for
->>>>> kvm_make_all_cpus_request_except()
->>>>>       KVM: nVMX: Don't use Enlightened MSR Bitmap for L3
->>>>>       KVM: VMX: Introduce vmx_msr_bitmap_l01_changed() helper
->>>>>
->>>>
->>>> That list is missing commit 6470accc7ba9 ("KVM: x86: hyper-v: Avoid
->>>> calling kvm_make_vcpus_request_mask() with vcpu_mask==NULL") to fulfill
->>>> the prerequisite of "KVM: Optimize kvm_make_vcpus_request_mask() a
->>>> bit".
->>>>
->>>> Right now the kvm selftests trigger a kernel NULL deref for the hyperv
->>>> test, making the system hang.
->>>>
->>>> Please consider applying commit 6470accc7ba9 for the next v5.15.x
->>>> release.
->>>
->>> It wasn't tagged for the stable kernels, so we didn't pick it up :(
->>
->> Neither were any of the above commits. o.O
->>
->> Commit 3e48a6349d29 ("KVM: Optimize kvm_make_vcpus_request_mask() a
->> bit") has this tag, though:
->>
->> Stable-dep-of: 2b0128127373 ("KVM: Register /dev/kvm as the _very_ last
->> thing during initialization")
->>
->> I don't know why, though. These two commits have little in common.
->> Maybe Sasha knows why?
-> 
-> Because you've skipped the commit in the middle of the two you've
-> pointed out :)
-> 
-> 3e48a6349d29 is needed by 0a0ecaf0988b ("KVM: Pre-allocate cpumasks for
-> kvm_make_all_cpus_request_except()"), which in turn is needed by
-> 2b0128127373.
+From: Björn Töpel <bjorn@rivosinc.com>
 
-I see, 0a0ecaf0988b is "needed" by 2b0128127373 to make it apply clean.
-However, there is no functional dependency for 2b0128127373, as it
-simply moves device registration around. By picking all the "required"
-commits to make it apply clean, still functional required commits were
-missed. :(
+The RISC-V calling convention passes the first argument, and the
+return value in the a0 register. For this reason, the a0 register
+needs some extra care; When handling syscalls, the a0 register is
+saved into regs->orig_a0, so a0 can be properly restored for,
+e.g. interrupted syscalls.
 
-A simple backport would probably had been the better solution to the
-failed cherry-pick, but I see the original author didn't provide one, so
-some kind off fall-back process kicked in to pick up dependent commits.
-If these would have been announced more visible than by simply adding
-them to the queue, it might had been noticed earlier that a commit is
-missing still.
+This functionality was broken with the introduction of the generic
+entry patches. Here, a0 was saved into orig_a0 after calling
+syscall_enter_from_user_mode(), which can change regs->a0 for some
+paths, incorrectly restoring a0.
 
-This is probably just another example of maintainer's time being such a
-scarce resource problem, but the fallback process isn't working flawless
-either :/
+This is resolved, by saving a0 prior doing the
+syscall_enter_from_user_mode() call.
 
-Thanks,
-Mathias
+Fixes: f0bddf50586d ("riscv: entry: Convert to generic entry")
+Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+Tested-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+---
+ arch/riscv/kernel/traps.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index 1f4e37be7eb3..8c258b78c925 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -270,11 +270,11 @@ asmlinkage __visible __trap_section void do_trap_ecall_u(struct pt_regs *regs)
+ 	if (user_mode(regs)) {
+ 		ulong syscall = regs->a7;
+ 
+-		syscall = syscall_enter_from_user_mode(regs, syscall);
+-
+ 		regs->epc += 4;
+ 		regs->orig_a0 = regs->a0;
+ 
++		syscall = syscall_enter_from_user_mode(regs, syscall);
++
+ 		if (syscall < NR_syscalls)
+ 			syscall_handler(regs, syscall);
+ 		else
+
+base-commit: d34a6b715a23ccd9c9d0bc7a475bea59dc3e28b2
+-- 
+2.37.2
+
