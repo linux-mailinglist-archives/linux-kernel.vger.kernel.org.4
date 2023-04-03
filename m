@@ -2,382 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836136D4FE3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4DE6D4FE6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232750AbjDCSEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
+        id S232910AbjDCSFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbjDCSEX (ORCPT
+        with ESMTP id S232908AbjDCSFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:04:23 -0400
-X-Greylist: delayed 21617 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Apr 2023 11:04:20 PDT
-Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399CF212E;
-        Mon,  3 Apr 2023 11:04:20 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PqzLB3rJbzMqR7q;
-        Mon,  3 Apr 2023 20:04:18 +0200 (CEST)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4PqzL51PS1z20rr;
-        Mon,  3 Apr 2023 20:04:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1680545058;
-        bh=x3pa1ABcp4jbN+EAw819rV8jrTRCvkGXv9lnDc+NOiw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KeqqlNSMZL9G5pjaJxBrHrSPjM6cJXDPxib4Uaw6dYWqwXfJlFDC1Ygk/VwKfsXUE
-         T5ZRSYJSxLJEh7dWy3yL34co4ZRWGkMUmNyPJskms0zI5sgNNvO3sEj73Ig6IwE+xr
-         BMpryzF55hSOtGrnq6V/WD594GMUrre3/plXNt44=
-Message-ID: <f8faa0c2-83aa-ddfa-5a4c-a4dc3c4c7ed9@digikod.net>
-Date:   Mon, 3 Apr 2023 20:04:12 +0200
+        Mon, 3 Apr 2023 14:05:02 -0400
+Received: from sonic303-9.consmr.mail.bf2.yahoo.com (sonic303-9.consmr.mail.bf2.yahoo.com [74.6.131.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008D0212E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:05:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680545101; bh=L2zgD0pqstwm9Xl4ku8Wh58y5CPrucwNmj4CIgJMo7k=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=NvmQBaBTA/FIqX8fam9qtVRqaBBWlg3rr8rGMvzfOqAQmJW6oL7C0LlklUt85wFnb3mICBbBuhFydMCD2hSnZnUQ5b0ibestBuMTp8Mj8SW6XXhGudFtBhKfvJvew+VF0GhQ6JWtzH3TCKRmFvu18u50gZq63J2yDTuvPBprqecsnj3A3J+DXwXuLpCsHExs5EnW9oXfO+Ug24f4Re4sOoOqb5F30PhRWrGQ6TDES0vcWfzoUChXAA0ym5TwUe242VoEacRvKmL45Ts4WATmVqp8Am0ui3iLpOkqRZ6lIfJiNuQF8gTV/l2s58E07CEmCZ5eh8FPWdSXLPZihyxBsw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680545101; bh=Rq8bylJicSEmq9D0pv7x21uD/O3/jbcnEBtv4geXxKd=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=tL8f0DYiYBpzUa4y4CER6fQWqlbyuGBSghEOOWIhmYRk28glDdWTlItos9VMjrEGvcMIIWc4AdTIS2W+BkzfRSlg660Zzo+mhkpmxgho3Xue4bCTcKCG31A9OWQfmmV8rFie9ezAG1wpDh11M9FI63lpv3JquJmjy3NiDJC4VaofomPTztDrd3Rlob2Een6RzsG7HIAZRBEL8MMlLSn4aNwFiEo8zlPtub3Nfw8l2YYXQUcSgrNSWKNEnbIatBtwo2e8nDN0bRK50S2R1i9gQFqcuO7CahjsKJSirk3j90B1/Eh8/MjoZn3tX5QnnxIA6V4jHblG9esycMyKw9Ps6Q==
+X-YMail-OSG: i.J4aD0VM1lFW_WS.gQq.zEanLpKJUaSM41DMPtDjVrChrSBoftDcWHcAlW4.PN
+ b4UKj9.EbMjYu6Fs3rDp7F_fzIDydAggjvkDM8VPbnrz7xw39ojpQhXwFoRAx5XVy0vRrjmWyjqE
+ iiCoiR8gTC5NFQ5vDe7l09fImbnsbCEYX.hrRtHbeHmX3URCDSo_4KNo9ce_1YVikEKrkfU3eEoJ
+ tdZn6rPbJL6Q39GHLvzgHPp09xEzKn_V6sYS37V5JuNtDbseLKekpiv_xkBOafcGk1YWU7wwcVdM
+ TV6yGqSyL4kfAvF0WhzfzQYta3bn5w0aE3hG3tx19fIM_NjUwUa32UZBn7ySCBCqh9RibQy8afUt
+ G9w9fI8W9iZW0fGPpufj8_9VfPGgYUGIqMgDwxn1cNMamYCySX0OtAF1j3qo3giyWkv3.FtwK3.h
+ hqIShDPG1xVPmBNBefq1fNALGAkgZM0W76_hwc0A63H94TxnfbF6zRRGhjjkpcP4yYUeFZXel0j9
+ NaZi6mFZ7hNMefyBSF5vTj31hHL1j7JoWLZTC3ygWx62.GQdj46TT_qbH3Oud61ZJmwrG_and2h6
+ R2xZYOsTxlhSyGx0DLta5oJcnallAS6tHHvChBtuQH1ItDH.N.E96RgJ9eTz.tBRJo4dArlWWgE.
+ t4ljo9lzAKvMlnjLyWqGyUlWiC8gS.afyccPl6PXysgUD1AC7E__xN5EtZJhwke3XOC7VtynhhFQ
+ 6qjlB1fYhCHfduaU7f5N7iowRnhaTlUNjJoS4Y2jh_jRzP7InAUNvG3a8TP_lKz9fSifwu881JEe
+ imsMKHCbfb7O.8AbX3qyRvYjd7p2wF0u9Rmmg9HPl0NgTQHTRQqDNaNsxgCusC0q0pfbWrg2rVUQ
+ jP0EzunOo3t9WsTLNhQEOopcYHO8Pzhj4j3qk5teRxFJsz4tee2iAHXeB9KhiNkZy.OejPhRwLOP
+ ZLC2tlwiZwk_MNG6A2bYAhDITPaenMW9NYcGdJ2rUNa7AJCmBucPj.5E9M0hjfYoI_OW0ZLSG4zn
+ _ICE1DkI.0zbc85MMgwPI.JvpBVlQ_CvPqYMCwAnXGURuwGX4H5Uh_caYrCuCTZmhWZPudQZ2NXM
+ w4NYlFpvpAQDzOH7izrTcdmejf5BWeclBcf9qc_lg3Dn6zWmZJYN9qPYsB9YkN_YbckwxIxW2djW
+ CYH8WyVACg56LhbkBLjkGDCS.g.olU3hbo3kFtFgrcsuJ8ZYxsjNZZ_tAkMlDqlpIa2XFItzMmuF
+ gpRu_Mcn89U7lc88N7lV.IQl6EOoMEYV8xDMWyEdAnlCtn6osz_Wlw341QA.qNAB.mG5xuCaUa2m
+ 5.UmVhiSeEJXs8vmk50mXQaNNQ1a9VySIDkG6urLvoWx28.rEmrtkMM88wNczUab9Z.ZRSArfEhf
+ u9.W.XQlVAmjaTiqk8ZvLmKzpOWTxruk2uSIGPqsScaBN5lLCL85WjJLAjy0V8Z6vYHPIFZbSvxk
+ mM5E3JMDt8oRUxrx783FuCuas3bgz47uzJtlrfThxPAUlHsyLQUBC9.4KEQZgoFcNb.vlxzySGjg
+ HqnIy.tGd8mQAjZ7ozMlqljhAL.MswaHA3ITbgJ6tTgCxm4p8xbVhIZnGmINvWcEnw_ScfmC.Mb7
+ e_SoneLMg90xLB0ZY3dQ8yl1GycyXukYKJzNWODvM..dnN35.Zpb0s68dA4R_n._KO8pBWBNDwbs
+ cLu09US5t9JYalOUBKcjYxW98IT943kZSentrUpDKW5oIPr7UHNn4ZQr2phljsP.4EJ2thDfTQkJ
+ _IkJRDh3SuJ4Q3RPLZ6Ia3SP6VLhUl9Fk7EbYCi0vKwBf_Jfe9P6nhWExDidn0_w9qVTW4426H8E
+ WEeLOhMIn3Hu.VrB5VFjPSzuj5uIe4QNp2_eq9irOiBFN65lCaayyANgJClCerUVO9zjEZZmWLPW
+ ya.5SypVOcD_SC0b84gjnanGjutCqyFcS9fYD1r6xEhSCDCYIoON5A6EJXyovW0dVueovqPx2HA8
+ SAzvF5PfxhheQ_VFlWOWpmaW5tYqhjQVWAQHeX1lA30XKEjpdDb5.a7TLiwGs5EFklzTCcbB0N6.
+ HzCURPbGW61goifIZNij9PrngO72FSiCIl8Q1Ef0CmZ3QJ_D2.pP6lhxLruQ3SZNcDuHyEUrM_ie
+ bxa8wSUtFt9l5O9Knm9yS1rkt5D0tegVGgnIZmYKSUJaqHyzNpYkjcg7e74V.6quo03CdoEryuEJ
+ z7xCEc3m311CzHx4BengdACVRd7S9HxbLmZzq7eCr
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: f9aeebd7-8fa6-4a68-9d75-837c5bdf154a
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.bf2.yahoo.com with HTTP; Mon, 3 Apr 2023 18:05:01 +0000
+Received: by hermes--production-bf1-5f9df5c5c4-qlh82 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 17de45c9a4f5d8e04d145ab4241f8149;
+          Mon, 03 Apr 2023 18:05:00 +0000 (UTC)
+Message-ID: <45e2a7c8-eebd-430b-0177-1b44b5397edd@schaufler-ca.com>
+Date:   Mon, 3 Apr 2023 11:04:57 -0700
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v7 04/11] LSM: syscalls for current process attributes
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v7 07/11] LSM: Helpers for attribute names and filling an
+ lsm_ctx
 Content-Language: en-US
-To:     Casey Schaufler <casey@schaufler-ca.com>, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        paul@paul-moore.com, linux-security-module@vger.kernel.org
 Cc:     jmorris@namei.org, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org
+        linux-api@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
 References: <20230315224704.2672-1-casey@schaufler-ca.com>
- <20230315224704.2672-5-casey@schaufler-ca.com>
- <b63f1957-d3d5-28f9-fd27-c0e629456a9f@digikod.net>
- <521dd15c-1dbb-77ed-0c97-0ea38688e219@schaufler-ca.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <521dd15c-1dbb-77ed-0c97-0ea38688e219@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20230315224704.2672-8-casey@schaufler-ca.com>
+ <544a4809-1a79-9dd7-61a5-5fce1f4a5f10@digikod.net>
+ <539e698a-1ab7-a390-a3a4-6c7e43db4eb6@digikod.net>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <539e698a-1ab7-a390-a3a4-6c7e43db4eb6@digikod.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mailer: WebService/1.1.21284 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 03/04/2023 19:36, Casey Schaufler wrote:
-> On 4/3/2023 5:04 AM, Mickaël Salaün wrote:
+On 4/3/2023 2:54 AM, Mickaël Salaün wrote:
+>
+> On 03/04/2023 11:47, Mickaël Salaün wrote:
 >>
->> On 15/03/2023 23:46, Casey Schaufler wrote:
->>> Create a system call lsm_get_self_attr() to provide the security
->>> module maintained attributes of the current process.
->>> Create a system call lsm_set_self_attr() to set a security
->>> module maintained attribute of the current process.
->>> Historically these attributes have been exposed to user space via
->>> entries in procfs under /proc/self/attr.
+>> On 15/03/2023 23:47, Casey Schaufler wrote:
+>>> Add lsm_name_to_attr(), which translates a text string to a
+>>> LSM_ATTR value if one is available.
 >>>
->>> The attribute value is provided in a lsm_ctx structure. The structure
->>> identifys the size of the attribute, and the attribute value. The format
->>> of the attribute value is defined by the security module. A flags field
->>> is included for LSM specific information. It is currently unused and
->>> must
->>> be 0. The total size of the data, including the lsm_ctx structure and
->>> any
->>> padding, is maintained as well.
+>>> Add lsm_fill_user_ctx(), which fills a struct lsm_ctx, including
+>>> the trailing attribute value.
 >>>
->>> struct lsm_ctx {
->>>           __u64   id;
->>>           __u64   flags;
->>>           __u64   len;
->>>           __u64   ctx_len;
->>>           __u8    ctx[];
->>> };
->>>
->>> Two new LSM hooks are used to interface with the LSMs.
->>> security_getselfattr() collects the lsm_ctx values from the
->>> LSMs that support the hook, accounting for space requirements.
->>> security_setselfattr() identifies which LSM the attribute is
->>> intended for and passes it along.
+>>> All are used in module specific components of LSM system calls.
 >>>
 >>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 >>> ---
->>>    Documentation/userspace-api/lsm.rst | 15 +++++
->>>    include/linux/lsm_hook_defs.h       |  4 ++
->>>    include/linux/lsm_hooks.h           |  9 +++
->>>    include/linux/security.h            | 19 ++++++
->>>    include/linux/syscalls.h            |  5 ++
->>>    include/uapi/linux/lsm.h            | 33 ++++++++++
->>>    kernel/sys_ni.c                     |  4 ++
->>>    security/Makefile                   |  1 +
->>>    security/lsm_syscalls.c             | 55 ++++++++++++++++
->>>    security/security.c                 | 97 +++++++++++++++++++++++++++++
->>>    10 files changed, 242 insertions(+)
->>>    create mode 100644 security/lsm_syscalls.c
+>>>    include/linux/security.h | 13 ++++++++++
+>>>    security/lsm_syscalls.c  | 51
+>>> ++++++++++++++++++++++++++++++++++++++++
+>>>    security/security.c      | 31 ++++++++++++++++++++++++
+>>>    3 files changed, 95 insertions(+)
 >>
 >> [...]
 >>
->>> diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
->>> new file mode 100644
->>> index 000000000000..feee31600219
->>> --- /dev/null
->>> +++ b/security/lsm_syscalls.c
->>> @@ -0,0 +1,55 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/*
->>> + * System calls implementing the Linux Security Module API.
->>> + *
->>> + *  Copyright (C) 2022 Casey Schaufler <casey@schaufler-ca.com>
->>> + *  Copyright (C) 2022 Intel Corporation
->>> + */
->>> +
->>> +#include <asm/current.h>
->>> +#include <linux/compiler_types.h>
->>> +#include <linux/err.h>
->>> +#include <linux/errno.h>
->>> +#include <linux/security.h>
->>> +#include <linux/stddef.h>
->>> +#include <linux/syscalls.h>
->>> +#include <linux/types.h>
->>> +#include <linux/lsm_hooks.h>
->>> +#include <uapi/linux/lsm.h>
->>> +
->>> +/**
->>> + * sys_lsm_set_self_attr - Set current task's security module attribute
->>> + * @attr: which attribute to set
->>> + * @ctx: the LSM contexts
->>> + * @size: size of @ctx
->>> + * @flags: reserved for future use
->>> + *
->>> + * Sets the calling task's LSM context. On success this function
->>> + * returns 0. If the attribute specified cannot be set a negative
->>> + * value indicating the reason for the error is returned.
->>
->> Do you think it is really worth it to implement syscalls that can get
->> and set attributes to several LSMs at the same time, instead of one at
->> a time?
-> 
-> Setting the values for more than one LSM is impractical due to the possibility
-> that the Nth value may fail, and unwinding the N-1 values may not be possible.
-
-Indeed, so unless I missed something, why not passing the LSM ID as a 
-syscall argument for lsm_set_self_attr() and lsm_get_self_attr(), and 
-avoid managing a set of contexts but instead only managing one context 
-at a time (to get or set)?
-
-
-> 
->> LSM-specific tools don't care about other LSMs.
-> 
-> That's part of the problem. Are systemd, dbusd, ps and id LSM specific tools?
-> They shouldn't be.
-> 
->> I still think it would be much simpler (for kernel and user space) to
->> pass an LSM ID to both syscalls. This would avoid dealing with
->> variable arrays of variable element lengths, to both get or set
->> attributes.
-> 
-> ps and id should both work regardless of which and how many LSMs provide
-> context attributes. They shouldn't need to know which LSMs are active in
-> advance. If a new LSM is introduced, they shouldn't need to be updated to
-> support it.
-
-I agree, and making the syscalls simpler doesn't change that.
-
-> 
->>
->> Furthermore, considering the hypotetical LSM_ATTR_MAGICFD that was
->> previously talked about, getting an unknown number of file descriptor
->> doesn't look good neither.
-> 
-> If you have multiple LSM_ATTR_MAGICFD values and can only get one at
-> a time you have to do something convoluted with flags to get them all.
-> I don't see that as a good thing.
-
-Yes, that was another argument to *not* deal with a set of contexts.
-
-
-> 
->>
->>
->>> + */
->>> +SYSCALL_DEFINE4(lsm_set_self_attr, unsigned int, attr, struct
->>> lsm_ctx __user *,
->>> +        ctx, size_t __user, size, u32, flags)
->>> +{
->>> +    return security_setselfattr(attr, ctx, size, flags);
->>> +}
->>> +
->>> +/**
->>> + * sys_lsm_get_self_attr - Return current task's security module
->>> attributes
->>> + * @attr: which attribute to set
->>
->> attribute to *get*
->>
->>> + * @ctx: the LSM contexts
->>> + * @size: size of @ctx, updated on return
->>
->> I suggest to use a dedicated argument to read the allocated size, and
->> another to write the actual/written size.
->>
->> This would not be required with an LSM ID passed to the syscall
->> because attribute sizes should be known by user space, and there is no
->> need to help them probe this information.
->>
->>
->>> + * @flags: reserved for future use
->>> + *
->>> + * Returns the calling task's LSM contexts. On success this
->>> + * function returns the number of @ctx array elements. This value
->>> + * may be zero if there are no LSM contexts assigned. If @size is
->>> + * insufficient to contain the return data -E2BIG is returned and
->>> + * @size is set to the minimum required size.
->>
->> Doing something (updating a buffer) even when returning an error
->> doesn't look right. These sizes should be well-known to user space and
->> part of the ABI/UAPI.
-> 
-> No. The size of attributes is not well known to user space.
-> They are usually text strings. The maximum size will be known,
-> but that's putting additional burden on user space to know
-> about all possible LSMs. It's not always necessary.
-
-Right, I forgot the strings stuff… The lsm_get_self_attr() syscall could 
-then return a ctx_actual_size (as one argument), and a ctx pointer (as 
-another argument). Similarly, the lsm_set_self_attr() syscall could use 
-a dedicated argument for ctx_size and another for the ctx pointer.
-
-> 
->>
->>
->>> In all other cases
->>> + * a negative value indicating the error is returned.
->>> + */
->>> +SYSCALL_DEFINE4(lsm_get_self_attr, unsigned int, attr, struct
->>> lsm_ctx __user *,
->>> +        ctx, size_t __user *, size, u32, flags)
->>> +{
->>> +    return security_getselfattr(attr, ctx, size, flags);
->>> +}
 >>> diff --git a/security/security.c b/security/security.c
->>> index 87c8796c3c46..2c57fe28c4f7 100644
+>>> index 2c57fe28c4f7..f7b814a3940c 100644
 >>> --- a/security/security.c
 >>> +++ b/security/security.c
->>> @@ -2168,6 +2168,103 @@ void security_d_instantiate(struct dentry
->>> *dentry, struct inode *inode)
->>>    }
->>>    EXPORT_SYMBOL(security_d_instantiate);
->>>    +/**
->>> + * security_getselfattr - Read an LSM attribute of the current process.
->>> + * @attr: which attribute to return
->>> + * @ctx: the user-space destination for the information, or NULL
->>> + * @size: the size of space available to receive the data
->>> + * @flags: reserved for future use, must be 0
+>>> @@ -753,6 +753,37 @@ static int lsm_superblock_alloc(struct
+>>> super_block *sb)
+>>>        return 0;
+>>>    }
+>>>    +/**
+>>> + * lsm_fill_user_ctx - Fill a user space lsm_ctx structure
+>>> + * @ctx: an LSM context to be filled
+>>> + * @context: the new context value
+>>> + * @context_size: the size of the new context value
+>>> + * @id: LSM id
+>>> + * @flags: LSM defined flags
 >>> + *
->>> + * Returns the number of attributes found on success, negative value
->>> + * on error. @size is reset to the total size of the data.
->>> + * If @size is insufficient to contain the data -E2BIG is returned.
+>>> + * Fill all of the fields in a user space lsm_ctx structure.
+>>> + * Caller is assumed to have verified that @ctx has enough space
+>>> + * for @context.
+>>> + * Returns 0 on success, -EFAULT on a copyout error.
 >>> + */
->>> +int security_getselfattr(unsigned int __user attr, struct lsm_ctx
->>> __user *ctx,
->>> +             size_t __user *size, u32 __user flags)
+>>> +int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
+>>> +              size_t context_size, u64 id, u64 flags)
 >>> +{
->>> +    struct security_hook_list *hp;
->>> +    void __user *base = (void *)ctx;
->>> +    size_t total = 0;
->>> +    size_t this;
->>> +    size_t left;
->>> +    bool istoobig = false;
->>> +    int count = 0;
->>> +    int rc;
+>>> +    struct lsm_ctx local;
+>>> +    void __user *vc = ctx;
 >>> +
->>> +    if (attr == 0)
->>> +        return -EINVAL;
->>> +    if (flags != 0)
->>> +        return -EINVAL;
->>> +    if (size == NULL)
->>> +        return -EINVAL;
->>> +    if (get_user(left, size))
+>>> +    local.id = id;
+>>> +    local.flags = flags;
+>>> +    local.ctx_len = context_size;
+>>> +    local.len = context_size + sizeof(local);
+>>> +    vc += sizeof(local);
+>>> +    if (copy_to_user(ctx, &local, sizeof(local)))
 >>> +        return -EFAULT;
->>> +
->>> +    hlist_for_each_entry(hp, &security_hook_heads.getselfattr, list) {
->>> +        this = left;
->>> +        if (base)
->>> +            ctx = (struct lsm_ctx __user *)(base + total);
->>> +        rc = hp->hook.getselfattr(attr, ctx, &this, flags);
->>> +        switch (rc) {
->>> +        case -EOPNOTSUPP:
->>> +            rc = 0;
->>> +            continue;
->>> +        case -E2BIG:
->>> +            istoobig = true;
->>> +            left = 0;
->>> +            break;
->>
->> These two error cases could be directly handled by
->> security_getselfattr() instead of relying on each LSM-specific
->> implementations. See my suggestion on patch 7/11 (lsm_get_attr_size).
-> 
-> Yes, they could. My understanding is that Paul wants the LSM layer
-> to be "thin". Where possible and not insane, the logic should be in
-> the LSM, not the infrastructure.
-
-FWIW, since we are defining new syscalls to make user space's life 
-easier, I'm in favor of a well defined common behavior (e.g. returned 
-errno) and factoring common code to make each LSM-specific code thin.
-
-> 
->>
->>
->>> +        case 0:
->>> +            left -= this;
->>> +            break;
->>> +        default:
->>> +            return rc;
->>> +        }
->>> +        total += this;
->>> +        count++;
->>> +    }
->>> +    if (count == 0)
->>> +        return LSM_RET_DEFAULT(getselfattr);
->>> +    if (put_user(total, size))
+>>> +    if (context_size > 0 && copy_to_user(vc, context, context_size))
 >>> +        return -EFAULT;
->>> +    if (rc)
->>> +        return rc;
->>> +    if (istoobig)
->>> +        return -E2BIG;
->>> +    return count;
+>>
+>> Can we do a single copy_to_user() call? That would avoid inconsistent
+>> user space data, could speed up a bit the operation, and make the code
+>> easier to understand. To use the stack, we need to know the maximum size
+>> of context_size for all use cases, which seems reasonable and can be
+>> checked at build time (on each LSM side, and potentially with specific
+>> context type passed as enum instead of context_size) and run time (for
+>> this generic helper).
+>
+> Well, actually the context_size should be inferred from id, and the
+> "local" size should be defined and check at build time against all
+> context ID sizes.
+
+Again, no, I don't see this as an improvement.
+
+>
+>>
+>>
+>>> +    return 0;
 >>> +}
 >>> +
->>> +/**
->>> + * security_setselfattr - Set an LSM attribute on the current process.
->>> + * @attr: which attribute to set
->>> + * @ctx: the user-space source for the information
->>> + * @size: the size of the data
->>> + * @flags: reserved for future use, must be 0
->>> + *
->>> + * Set an LSM attribute for the current process. The LSM, attribute
->>> + * and new value are included in @ctx.
->>> + *
->>> + * Returns 0 on success, an LSM specific value on failure.
->>> + */
->>> +int security_setselfattr(unsigned int __user attr, struct lsm_ctx
->>> __user *ctx,
->>> +             size_t __user size, u32 __user flags)
->>> +{
->>> +    struct security_hook_list *hp;
->>> +    struct lsm_ctx lctx;
->>> +
->>> +    if (flags != 0)
->>> +        return -EINVAL;
->>> +    if (size < sizeof(*ctx))
->>> +        return -EINVAL;
->>> +    if (copy_from_user(&lctx, ctx, sizeof(*ctx)))
->>> +        return -EFAULT;
->>> +
->>> +    hlist_for_each_entry(hp, &security_hook_heads.setselfattr, list)
->>> +        if ((hp->lsmid->id) == lctx.id)
->>> +            return hp->hook.setselfattr(attr, ctx, size, flags);
->>> +
->>> +    return LSM_RET_DEFAULT(setselfattr);
->>> +}
->>> +
->>>    int security_getprocattr(struct task_struct *p, int lsmid, const
->>> char *name,
->>>                 char **value)
->>>    {
+>>>    /*
+>>>     * The default value of the LSM hook is defined in
+>>> linux/lsm_hook_defs.h and
+>>>     * can be accessed with:
