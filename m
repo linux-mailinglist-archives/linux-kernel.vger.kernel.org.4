@@ -2,71 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BFF6D453A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382506D453F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbjDCNFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
+        id S232111AbjDCNHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbjDCNFL (ORCPT
+        with ESMTP id S231553AbjDCNHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:05:11 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5134DA;
-        Mon,  3 Apr 2023 06:05:09 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17aa62d0a4aso30679478fac.4;
-        Mon, 03 Apr 2023 06:05:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680527109;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EUy367G/hkdb7IHkLrR4RAgWXMK4YWzHQhzTa5DUWOE=;
-        b=FXuIC7haw4VuYXVifk+R+3Ll+JAZe0q+XSqYssmGBjcNeig0oGsuyFBLQehyyhBG1Y
-         6jKwrIQ3i+qEKM0OCdO3BswtZ3PrrKU2Soxff6bDiEnviU4bIHods/O6WddKvIiJJd80
-         4zrWetZkv84iLxMMsUb+x9r0u68pVYFg6iYN5HpyOcb3fRqUh7iNGjbG1SGllmi1a7Km
-         mCFBJuick0a1AAAFrdvirAyityYzO9i0gU9XUKBznTF0+M6q2skIn/YWgY76ayDrio8h
-         OO6TGDY0NP6J9A0Y7N8Gx+AtiAp3gRHwlDDJVYxwXmarBzIQqXFcG1OcM8R90AT5f/zD
-         sdcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680527109;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EUy367G/hkdb7IHkLrR4RAgWXMK4YWzHQhzTa5DUWOE=;
-        b=jTBTd7GxYPIKy6o3HRDmgURLNKGFoDXZ0aiTYWwJnQ+Q9IS4B21yZKhjvUEfqlYsfd
-         /BZldLGAlwLvGpLTzls8zB7mHWpFQebKa9oSzLoCL+8SQLr9PHtn/U95wjgMXKYZb9QA
-         hOd1kJ8+R9UkzEagUASBrAUybRZhBpdh83lvdrzeS0q+KpLXtUcESZ+KpwMHSxRCMd9/
-         snpK5fJp2gxde8ir5KmY6Ksnc8FFVPqZvCwj1w7bK9dvR/svNbZk1osXRLcEs5E7CdTq
-         0oFLkDQcILRPr5lb1Ijk3WOuRqYvY2YH6x7EmBnTbHRtP3eFRJDLZo2fwvUzWOdpvOT3
-         Id8g==
-X-Gm-Message-State: AAQBX9dKfN1WNUjyps1TF/oA+JcFVStuQ085F+InAVI5z7rK34XzLRzM
-        aEe3HuAmO4zuxSkGor+Pk4GOHR75uWSvFTE/1fa5AhuvTNY=
-X-Google-Smtp-Source: AKy350aZi3rzyRrIWyxfhkJHE+qA6fgstApfn8FC9Y0cGcJLK7C5kdd2T45lQPkiU+8B2dxj/a8JGFYC31yVrllBHV4=
-X-Received: by 2002:a05:6870:e306:b0:17e:e396:ccd7 with SMTP id
- z6-20020a056870e30600b0017ee396ccd7mr11090106oad.6.1680527109059; Mon, 03 Apr
- 2023 06:05:09 -0700 (PDT)
+        Mon, 3 Apr 2023 09:07:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A2211F;
+        Mon,  3 Apr 2023 06:07:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AD36E1FF6E;
+        Mon,  3 Apr 2023 13:07:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1680527254; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HSoJPiNm6YLdrvyBCRNcHzBUr7oKAdacKl0GHdUtJXA=;
+        b=VWqebsGWD8RAUsjZeeaP7K5SjdgTlp5fwMlBEgdMdHT4jVR3zeZ2tQhOESTQ3eQ0KKwUfe
+        6LqMQ1DTNheF5SqznhydptvbvXLXMBajFHSA6zry0wxZqbEJ8wjaJCDQTXeVSxmKPTsUSy
+        4nJLJVkcm4u7gVWb/VXyAdsRyAhfv8g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1680527254;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HSoJPiNm6YLdrvyBCRNcHzBUr7oKAdacKl0GHdUtJXA=;
+        b=h5q3i5np2j574eqECbyNVp3f1IFao5UeZNBpPDfBsYuTt2l+15XRQsVsYhXLolIoF85mlX
+        ouTblE3ueplUupCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23B561331A;
+        Mon,  3 Apr 2023 13:07:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id adnlB5bPKmS5YwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 03 Apr 2023 13:07:34 +0000
+Message-ID: <2a8278cf-d282-ada6-0161-3b9c6adcb12e@suse.cz>
+Date:   Mon, 3 Apr 2023 15:07:33 +0200
 MIME-Version: 1.0
-References: <20230120003051.9100-1-bb@ti.com> <20230120003051.9100-3-bb@ti.com>
- <0172f045-4bd0-ec5e-35a0-efc80da5ace0@ti.com> <20230131015728.347i3cttyxtitcwi@bryanbrattlof.com>
-In-Reply-To: <20230131015728.347i3cttyxtitcwi@bryanbrattlof.com>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Mon, 3 Apr 2023 15:04:57 +0200
-Message-ID: <CAH9NwWeDSFrF61UC=NENTvQpUU_erGtKrhUzBVQWvA3KjbH_Fg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] arm64: dts: ti: k3-am62-wakeup: add VTM node
-To:     Bryan Brattlof <bb@ti.com>
-Cc:     "Raghavendra, Vignesh" <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ARM Linux Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Keerthy <j-keerthy@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCHv9 02/14] mm: Add support for unaccepted memory
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <20230330114956.20342-3-kirill.shutemov@linux.intel.com>
+ <43234108-fa4f-7583-e3b4-2daa2de89fb0@suse.cz>
+ <20230403100244.4sre7ki4ccusiiul@box>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230403100244.4sre7ki4ccusiiul@box>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,30 +102,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi Vignesh!
->
-> On January 28, 2023 thus sayeth Raghavendra, Vignesh:
-> > Hi Bryan,
-> >
-> > On 1/20/2023 6:00 AM, Bryan Brattlof wrote:
-> > > @@ -94,10 +95,13 @@ cbass_wakeup: bus@2b000000 {
-> > >                     compatible = "simple-bus";
-> > >                     #address-cells = <2>;
-> > >                     #size-cells = <2>;
-> > > -                   ranges = <0x00 0x2b000000 0x00 0x2b000000 0x00 0x00300400>, /* Peripheral Window */
-> > > +                   ranges = <0x00 0x00b00000 0x00 0x00b00000 0x00 0x00002400>, /* VTM */
-> >
-> > You would need to update unit address in node name as well:
-> >                       cbass_wakeup: bus@b00000 {
->
-> Ah! I missed that. I'll get this fixed
+On 4/3/23 12:02, Kirill A. Shutemov wrote:
+> On Mon, Apr 03, 2023 at 11:26:53AM +0200, Vlastimil Babka wrote:
+>> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>> > Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
+>> 
+>> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> 
+> Thanks!
+> 
+>> Just a small suggestion below:
+>> 
+>> > +
+>> > +static bool try_to_accept_memory(struct zone *zone, unsigned int order)
+>> > +{
+>> > +	long to_accept;
+>> > +	int ret = false;
+>> > +
+>> > +	if (!static_branch_unlikely(&zones_with_unaccepted_pages))
+>> > +		return false;
+>> 
+>> 
+>> This potentially (depends on what compiler decides) means we'll call this
+>> function just to skip the static branch. OTOH forcing it as inline would be
+>> wasteful too. So I'd split that away and make the callers do that static
+>> branch check inline. Just as deferred_pages_enabled() is used.
+> 
+> Like this?
 
-Any update on this? Would be great if these changes could make it into
-the next merge window.
+Yep.
 
--- 
-greets
---
-Christian Gmeiner, MSc
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 07e16e9b49c4..80fe5e4b6cca 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -390,6 +390,7 @@ EXPORT_SYMBOL(nr_online_nodes);
+>  static bool page_contains_unaccepted(struct page *page, unsigned int order);
+>  static void accept_page(struct page *page, unsigned int order);
+>  static bool try_to_accept_memory(struct zone *zone, unsigned int order);
+> +static inline bool has_unaccepted_memory(void);
+>  static bool __free_unaccepted(struct page *page);
+>  
+>  int page_group_by_mobility_disabled __read_mostly;
+> @@ -3464,8 +3465,10 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
+>  				       gfp_mask)) {
+>  			int ret;
+>  
+> -			if (try_to_accept_memory(zone, order))
+> -				goto try_this_zone;
+> +			if (has_unaccepted_memory()) {
+> +				if (try_to_accept_memory(zone, order))
+> +					goto try_this_zone;
+> +			}
+>  
+>  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+>  			/*
+> @@ -3519,8 +3522,10 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
+>  
+>  			return page;
+>  		} else {
+> -			if (try_to_accept_memory(zone, order))
+> -				goto try_this_zone;
+> +			if (has_unaccepted_memory()) {
+> +				if (try_to_accept_memory(zone, order))
+> +					goto try_this_zone;
+> +			}
+>  
+>  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+>  			/* Try again if zone has deferred pages */
+> @@ -7302,9 +7307,6 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
+>  	long to_accept;
+>  	int ret = false;
+>  
+> -	if (!static_branch_unlikely(&zones_with_unaccepted_pages))
+> -		return false;
+> -
+>  	/* How much to accept to get to high watermark? */
+>  	to_accept = high_wmark_pages(zone) -
+>  		    (zone_page_state(zone, NR_FREE_PAGES) -
+> @@ -7321,6 +7323,11 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
+>  	return ret;
+>  }
+>  
+> +static inline bool has_unaccepted_memory(void)
+> +{
+> +	return static_branch_unlikely(&zones_with_unaccepted_pages);
+> +}
+> +
+>  static bool __free_unaccepted(struct page *page)
+>  {
+>  	struct zone *zone = page_zone(page);
+> @@ -7398,6 +7405,11 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
+>  	return false;
+>  }
+>  
+> +static inline bool has_unaccepted_memory(void)
+> +{
+> +	return false;
+> +}
+> +
+>  static bool __free_unaccepted(struct page *page)
+>  {
+>  	BUILD_BUG();
 
-https://christian-gmeiner.info/privacypolicy
