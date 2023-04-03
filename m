@@ -2,101 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472FC6D4CEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D066D4CE6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbjDCP70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
+        id S232706AbjDCP7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbjDCP7T (ORCPT
+        with ESMTP id S232204AbjDCP7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:59:19 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCD5E1988;
-        Mon,  3 Apr 2023 08:58:59 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pjMZx-00029z-00; Mon, 03 Apr 2023 17:58:45 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 37208C20E4; Mon,  3 Apr 2023 17:58:04 +0200 (CEST)
-Date:   Mon, 3 Apr 2023 17:58:04 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dengcheng Zhu <dzhu@wavecomp.com>,
-        John Crispin <blogic@openwrt.org>,
-        Qais Yousef <Qais.Yousef@imgtec.com>,
-        "Steven J . Hill" <Steven.Hill@imgtec.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] MIPS: vpe-cmp: remove module owner pointer from struct
- class usage.
-Message-ID: <20230403155804.GA12122@alpha.franken.de>
-References: <2023040242-pursuable-frown-48d8@gregkh>
+        Mon, 3 Apr 2023 11:59:15 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF435211D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:58:56 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id p203so35322077ybb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 08:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112; t=1680537536;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=unIsUUCwc4txNMyZjhgpxEocxG84tqyHjRFLBjZDEuk=;
+        b=GhPLyLGxxFWXv4KJoT1G72kfQdmylMoN/vwQ7DEYGziAzZgkQ+hhDOegWQMdRMpv7k
+         7q3SOzORS68D3A+AVfa56v9+G0XSv/cHlrQmpCQWkD77iuf6X7ZsXOxGdcnpDFvkZSwL
+         x5FJmoqSToEZJGiN+s0B3chBKK183WICuILJnuSYOgCd1AQf8VI58/pfWBL9+erH2BdT
+         u90LRgo+kNswUKE2QhaxhztYqQbd1doOJ38yOpChRK/hNi3fQIw0mjEhm9emObmeE6Qw
+         evNP4oU3tJQ6dyPUc0gV0g/exF/4uOToUzYYFxsdA/Jof24wTUIHkQQVuYWDWw2nkrek
+         QDGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680537536;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=unIsUUCwc4txNMyZjhgpxEocxG84tqyHjRFLBjZDEuk=;
+        b=JpxhkdX7bmeV2CEREoJNoiKjsv+vFxJWbYJs5WP2ii+xZYdUIKWoddRmce/1DxpgEz
+         rOQtYAj7kSX5TBMyKfgF5+JKa1LM660Lihw5GMpchmnJxj6h9wi36FPt5wN4PuAa+9uV
+         6G6WCC7QtGtYYsMeMC6vWcSw3WAbcnfOzKlFu3jkhXacjtK5/xHfBhX1KZ1y4qlDTyXW
+         OblEFiBFh+zzYqwv/KckNWKajlXJJL+hii+hFeg+IH7IOUvDh2eCt4Y1+ajkut4OocjD
+         w1dM1chzGvoULh/n5L74NYtdYCWDy6VKTn2wnefCWd3hJi0iQwIDKdgyvWkHQn6cAMsY
+         Fepw==
+X-Gm-Message-State: AAQBX9eUbeqCQ/zPGI5N9EyG4A1sO1y4afKVaFg4Z/OhvFNt+DLykWBf
+        aBz6M7CINuykKOGn6Uc98Ze+C2M2LKhfy/NAa65m7Q==
+X-Google-Smtp-Source: AKy350bLFW3p22LgBS1P6oapvR2sJy9GZ47ScbIjLakzG27WZ7r2P9ZmpB8r5C4aBomIj1pjagTZn7OmAqHz4+A+uyc=
+X-Received: by 2002:a25:5804:0:b0:a48:4a16:d85e with SMTP id
+ m4-20020a255804000000b00a484a16d85emr22647896ybb.7.1680537535810; Mon, 03 Apr
+ 2023 08:58:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023040242-pursuable-frown-48d8@gregkh>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <0000000000006cf87705f79acf1a@google.com> <20230328184733.6707ef73@kernel.org>
+ <ZCOylfbhuk0LeVff@do-x1extreme> <b4d93f31-846f-3391-db5d-db8682ac3c34@mojatatu.com>
+In-Reply-To: <b4d93f31-846f-3391-db5d-db8682ac3c34@mojatatu.com>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Mon, 3 Apr 2023 11:58:44 -0400
+Message-ID: <CAM0EoMn2LnhdeLcxCFdv+4YshthN=YHLnr1rvv4JoFgNS92hRA@mail.gmail.com>
+Subject: Re: [syzbot] [net?] KASAN: slab-use-after-free Write in mini_qdisc_pair_swap
+To:     Pedro Tammela <pctammela@mojatatu.com>
+Cc:     Seth Forshee <sforshee@digitalocean.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        syzbot <syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, jiri@resnulli.us,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 11:05:45AM +0200, Greg Kroah-Hartman wrote:
-> In commit 6e30a66433af ("driver core: class: remove struct module owner
-> out of struct class"), the module owner pointer was removed from struct
-> class, but this was missed for the mips vpe-cmp code due to lack of
-> build testing (and it being burried under a very unused config
-> settings.)  Fix this up by removing the module pointer to resolve the
-> build error.
-> 
-> Note, there are other problems with the driver model usage in this file
-> (static struct device usage, empty device release function, etc.), so it
-> probably could use some good cleaning up, but odds are this driver
-> really isn't used so hopefully it will just be removed entirely someday
-> soon as part of the general "remove unused arches" cleanup that is
-> slowly happening.
-> 
-> Cc: Dengcheng Zhu <dzhu@wavecomp.com>
-> Cc: John Crispin <blogic@openwrt.org>
-> Cc: Qais Yousef <Qais.Yousef@imgtec.com>
-> Cc: Steven J. Hill <Steven.Hill@imgtec.com>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Yang Yingliang <yangyingliang@huawei.com>
-> Cc: linux-mips@vger.kernel.org
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202304020802.xbRTJKjW-lkp@intel.com/
-> Fixes: 6e30a66433af ("driver core: class: remove struct module owner out of struct class")
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  arch/mips/kernel/vpe-cmp.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/mips/kernel/vpe-cmp.c b/arch/mips/kernel/vpe-cmp.c
-> index 92140edb3ce3..4ef7f49a4c6d 100644
-> --- a/arch/mips/kernel/vpe-cmp.c
-> +++ b/arch/mips/kernel/vpe-cmp.c
-> @@ -79,7 +79,6 @@ static void vpe_device_release(struct device *cd)
->  
->  static struct class vpe_class = {
->  	.name = "vpe",
-> -	.owner = THIS_MODULE,
->  	.dev_release = vpe_device_release,
->  	.dev_groups = vpe_groups,
->  };
-> -- 
-> 2.40.0
+To provide more update:
+Happens on single processor before Seth's patches; and only on
+multi-processor after Seth's patches.
+Theory is: there is a logic bug in the miniqdisc rcu visibility. Feels
+like the freeing of the structure is done without rcu involvement.
+Jiri/Cong maybe you can take a look since youve been dabbling in
+miniqdisc? The reproducer worked for me and Pedro 100% of the time.
 
-I guess this should go the same way as commit 6e30a66433af, therefore
+cheers,
+jamal
 
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+On Wed, Mar 29, 2023 at 3:07=E2=80=AFPM Pedro Tammela <pctammela@mojatatu.c=
+om> wrote:
+>
+> On 29/03/2023 00:37, Seth Forshee wrote:
+> > On Tue, Mar 28, 2023 at 06:47:33PM -0700, Jakub Kicinski wrote:
+> >> Seth, does this looks related to commit 267463823adb ("net: sch:
+> >> eliminate unnecessary RCU waits in mini_qdisc_pair_swap()")
+> >> by any chance?
+> >
+> > I don't see how it could be. The memory being written is part of the
+> > qdisc private memory, and tc_new_tfilter() takes a reference to the
+> > qdisc. If that memory has been freed doesn't it mean that something has
+> > done an unbalanced qdisc_put()?
+> >
+>
+> Reverting Seth's patches (85c0c3eb9a66 and 267463823adb) leads to these
+> traces with the reproducer:
+> [   52.704956][    C0] ------------[ cut here ]------------
+> [   52.705568][    C0] ODEBUG: free active (active state 1) object:0
+> [   52.706542][    C0] WARNING: CPU: 0 PID: 0 at lib/debugobjects.c0
+> [   52.707283][    C0] Modules linked in:
+> [   52.707602][    C0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0
+> [   52.708304][    C0] Hardware name: QEMU Standard PC (i440FX + PI4
+> [   52.709032][    C0] RIP: 0010:debug_print_object+0x196/0x290
+> [   52.709509][    C0] Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85e
+> [   52.711011][    C0] RSP: 0018:ffffc90000007cd0 EFLAGS: 00010282
+> [   52.711510][    C0] RAX: 0000000000000000 RBX: 0000000000000003 0
+> [   52.712125][    C0] RDX: ffffffff8c495800 RSI: ffffffff814b96d7 1
+> [   52.712748][    C0] RBP: 0000000000000001 R08: 0000000000000001 0
+> [   52.713370][    C0] R10: 0000000000000000 R11: 203a47554245444f 0
+> [   52.713983][    C0] R13: ffffffff8aa6e960 R14: 0000000000000000 8
+> [   52.714609][    C0] FS:  0000000000000000(0000) GS:ffff8881f5a000
+> [   52.715356][    C0] CS:  0010 DS: 0000 ES: 0000 CR0: 000000008003
+> [   52.715863][    C0] CR2: 000055914686f020 CR3: 000000011e856000 0
+> [   52.716486][    C0] Call Trace:
+> [   52.716742][    C0]  <IRQ>
+> [   52.716969][    C0]  debug_check_no_obj_freed+0x302/0x420
+> [   52.717423][    C0]  slab_free_freelist_hook+0xec/0x1c0
+> [   52.717848][    C0]  ? rcu_core+0x818/0x1930
+> [   52.718204][    C0]  __kmem_cache_free+0xaf/0x2e0
+> [   52.718590][    C0]  rcu_core+0x818/0x1930
+> [   52.718938][    C0]  ? rcu_report_dead+0x610/0x610
+> [   52.719328][    C0]  __do_softirq+0x1d4/0x8ef
+> [   52.719689][    C0]  __irq_exit_rcu+0x11d/0x190
+> [   52.720062][    C0]  irq_exit_rcu+0x9/0x20
+> [   52.720402][    C0]  sysvec_apic_timer_interrupt+0x97/0xc0
+> [   52.720842][    C0]  </IRQ>
+> [   52.721070][    C0]  <TASK>
+> [   52.721300][    C0]  asm_sysvec_apic_timer_interrupt+0x1a/0x20
+> [   52.721779][    C0] RIP: 0010:default_idle+0xf/0x20
+> [   52.722172][    C0] Code: 89 07 49 c7 c0 08 00 00 00 4d 29 c8 4c5
+> [   52.723631][    C0] RSP: 0018:ffffffff8c407e30 EFLAGS: 00000202
+> [   52.724096][    C0] RAX: 000000000007897f RBX: 0000000000000000 6
+> [   52.724702][    C0] RDX: 0000000000000000 RSI: 0000000000000001 0
+> [   52.725335][    C0] RBP: ffffffff8c495800 R08: 0000000000000001 b
+> [   52.725957][    C0] R10: ffffed103eb46d95 R11: 0000000000000000 0
+> [   52.726550][    C0] R13: 0000000000000000 R14: ffffffff8e7834d0 0
+> [   52.727162][    C0]  ? ct_kernel_exit+0x1d6/0x240
+> [   52.727542][    C0]  default_idle_call+0x67/0xa0
+> [   52.727912][    C0]  do_idle+0x31e/0x3e0
+> [   52.728241][    C0]  ? arch_cpu_idle_exit+0x30/0x30
+> [   52.728635][    C0]  cpu_startup_entry+0x18/0x20
+> [   52.729006][    C0]  rest_init+0x16d/0x2b0
+> [   52.729338][    C0]  ? regulator_has_full_constraints+0x9/0x20
+> [   52.729815][    C0]  ? trace_init_perf_perm_irq_work_exit+0x20/00
+> [   52.730309][    C0]  arch_call_rest_init+0x13/0x30
+> [   52.730703][    C0]  start_kernel+0x352/0x4c0
+> [   52.731087][    C0]  secondary_startup_64_no_verify+0xce/0xdb
+> [   52.731611][    C0]  </TASK>
+> [   52.731870][    C0] Kernel panic - not syncing: kernel: panic_on.
+> [   52.732445][    C0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0
+> [   52.733140][    C0] Hardware name: QEMU Standard PC (i440FX + PI4
+> [   52.733867][    C0] Call Trace:
+> [   52.734143][    C0]  <IRQ>
+> [   52.734380][    C0]  dump_stack_lvl+0xd9/0x150
+> [   52.734769][    C0]  panic+0x684/0x730
+> [   52.735082][    C0]  ? panic_smp_self_stop+0x90/0x90
+> [   52.735322][    C0]  ? show_trace_log_lvl+0x285/0x390
+> [   52.735322][    C0]  ? debug_print_object+0x196/0x290
+> [   52.735322][    C0]  check_panic_on_warn+0xb1/0xc0
+> [   52.735322][    C0]  __warn+0xf2/0x390
+> [   52.735322][    C0]  ? debug_print_object+0x196/0x290
+> [   52.735322][    C0]  report_bug+0x2dd/0x500
+> [   52.735322][    C0]  handle_bug+0x3c/0x70
+> [   52.735322][    C0]  exc_invalid_op+0x18/0x50
+> [   52.735322][    C0]  asm_exc_invalid_op+0x1a/0x20
+> [   52.735322][    C0] RIP: 0010:debug_print_object+0x196/0x290
+> [   52.735322][    C0] Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85e
+> [   52.735322][    C0] RSP: 0018:ffffc90000007cd0 EFLAGS: 00010282
+> [   52.735322][    C0] RAX: 0000000000000000 RBX: 0000000000000003 0
+> [   52.735322][    C0] RDX: ffffffff8c495800 RSI: ffffffff814b96d7 1
+> [   52.735322][    C0] RBP: 0000000000000001 R08: 0000000000000001 0
+> [   52.735322][    C0] R10: 0000000000000000 R11: 203a47554245444f 0
+> [   52.735322][    C0] R13: ffffffff8aa6e960 R14: 0000000000000000 8
+> [   52.735322][    C0]  ? __warn_printk+0x187/0x310
+> [   52.735322][    C0]  debug_check_no_obj_freed+0x302/0x420
+> [   52.735322][    C0]  slab_free_freelist_hook+0xec/0x1c0
+> [   52.735322][    C0]  ? rcu_core+0x818/0x1930
+> [   52.735322][    C0]  __kmem_cache_free+0xaf/0x2e0
+> [   52.735322][    C0]  rcu_core+0x818/0x1930
+> [   52.735322][    C0]  ? rcu_report_dead+0x610/0x610
+> [   52.735322][    C0]  __do_softirq+0x1d4/0x8ef
+> [   52.735322][    C0]  __irq_exit_rcu+0x11d/0x190
+> [   52.735322][    C0]  irq_exit_rcu+0x9/0x20
+> [   52.735322][    C0]  sysvec_apic_timer_interrupt+0x97/0xc0
+> [   52.735322][    C0]  </IRQ>
+> [   52.735322][    C0]  <TASK>
+> [   52.735322][    C0]  asm_sysvec_apic_timer_interrupt+0x1a/0x20
+> [   52.735322][    C0] RIP: 0010:default_idle+0xf/0x20
+> [   52.735322][    C0] Code: 89 07 49 c7 c0 08 00 00 00 4d 29 c8 4c5
+> [   52.735322][    C0] RSP: 0018:ffffffff8c407e30 EFLAGS: 00000202
+> [   52.735322][    C0] RAX: 000000000007897f RBX: 0000000000000000 6
+> [   52.735322][    C0] RDX: 0000000000000000 RSI: 0000000000000001 0
+> [   52.735322][    C0] RBP: ffffffff8c495800 R08: 0000000000000001 b
+> [   52.735322][    C0] R10: ffffed103eb46d95 R11: 0000000000000000 0
+> [   52.735322][    C0] R13: 0000000000000000 R14: ffffffff8e7834d0 0
+> [   52.735322][    C0]  ? ct_kernel_exit+0x1d6/0x240
+> [   52.735322][    C0]  default_idle_call+0x67/0xa0
+> [   52.735322][    C0]  do_idle+0x31e/0x3e0
+> [   52.735322][    C0]  ? arch_cpu_idle_exit+0x30/0x30
+> [   52.735322][    C0]  cpu_startup_entry+0x18/0x20
+> [   52.735322][    C0]  rest_init+0x16d/0x2b0
+> [   52.735322][    C0]  ? regulator_has_full_constraints+0x9/0x20
+> [   52.735322][    C0]  ? trace_init_perf_perm_irq_work_exit+0x20/00
+> [   52.735322][    C0]  arch_call_rest_init+0x13/0x30
+> [   52.735322][    C0]  start_kernel+0x352/0x4c0
+> [   52.735322][    C0]  secondary_startup_64_no_verify+0xce/0xdb
+> [   52.735322][    C0]  </TASK>
+> [   52.735322][    C0] Kernel Offset: disabled
+> [   52.735322][    C0] Rebooting in 86400 seconds..
+>
+>
