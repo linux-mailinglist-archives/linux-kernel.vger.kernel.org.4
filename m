@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BD46D43D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EE06D43E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232199AbjDCLzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        id S232053AbjDCL65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjDCLzd (ORCPT
+        with ESMTP id S229446AbjDCL64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:55:33 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE427A9F;
-        Mon,  3 Apr 2023 04:55:31 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id r11so116253872edd.5;
-        Mon, 03 Apr 2023 04:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680522929;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6a3C4HyVcJ1+hBTRf358qtUIjTetDrrTnCO3IEBZCWU=;
-        b=MarBywG8RwFuY8dvBjXGfCv7rmlthZ83/0XvpN5rXJY0kbQcDBLpazlzrwWxXB4ZRy
-         bHqm+TaDdHAnm9OUkKO3KPhDz/IUWwrt7Np0oZDgUNouJlMBenFwLJmK03saCn65rrvt
-         bYfMDfUzchDyEpSGLR+PbFuW25KHUa6BZwdpaMEjYtTydWSmfhdRFLFaE91v7J9AXFfb
-         HbakQ98LI1f7qa/DCjEtBl4J6tBrY1B0n3pUa6UsVjN7+6CLxmJ0OE7LSwjJZKqpHRO6
-         CjhkSzB3weaMuQI+ITYZB2u0wF8+Ro9+AXHEfj0VrBJDkWp3Gciq5E69Uv9SmVbCXeEc
-         P8vw==
+        Mon, 3 Apr 2023 07:58:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30154691
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:58:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680523089;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OVIwWquixww+JFF4EZop7Ld7XWMwZqHJw07biyoMhrs=;
+        b=D5fF3joTCY0fkbdaP27EX0/SkQL1BTwWcuz5aCesP0xdQERYv41LhhkrW2mHIVRTd3AxXz
+        PybsCgkuCluNKcYAbwQp1xAr2ErDw8/P22ladIbwGG1BIWMJ2d7bVUZkDTTSdIv68WVMgs
+        4A+mWnFEFd6s4Wy6HX1tEh2AeEim+Lo=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-365-3RS8N5dZNcqfRxHCExDAiQ-1; Mon, 03 Apr 2023 07:58:08 -0400
+X-MC-Unique: 3RS8N5dZNcqfRxHCExDAiQ-1
+Received: by mail-wm1-f70.google.com with SMTP id m27-20020a05600c3b1b00b003ee502f1b16so14420374wms.9
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:58:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680522929;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6a3C4HyVcJ1+hBTRf358qtUIjTetDrrTnCO3IEBZCWU=;
-        b=cPVRwxFxTBFK7W1zVE4sYK6JYZTYwEH4ChM2QN8Nfx6C4mw+lVuOtNTQoB5rnyws8t
-         88j8gqAsAKROQSTGjiTcwdSSaEzlsdoCw5BND2jxsCSJ1PfQBW3oSU8AZim9os+cuYRF
-         wC+y6jlHEQk2rV2RDec0N5pPuuh9FbaAKcaLwsyjnYyjEsT8HU1QUKQrdK+cWEfMgBbj
-         IETGjQVvoeri7VkQfZh6B9DBSXROld/Z1iTbpheOsnwoEzA5dRvbmeDEz8CyBnyZvvpi
-         NS+GF1CtmurS5WBVCt2fScQIweB2OQ6d51R3npqYFNbG2q70JFc7gcdeu+mnEDBFvRBi
-         q+LQ==
-X-Gm-Message-State: AAQBX9e2PSC1ijDI3L6tC62bOsnBjRZE6OQUD3CXTSV+eRAe7wulYSWh
-        IKkUSSDpfSnFkQIzmatV8+M=
-X-Google-Smtp-Source: AKy350a9DUZelfyu+kfJC0Zh9d5n3LzN73d8R9FYm5yoVPT0c0C1CXkwH+ICvQYPbIq2EZElLZFdfA==
-X-Received: by 2002:a17:906:5010:b0:92a:77dd:f6f with SMTP id s16-20020a170906501000b0092a77dd0f6fmr37352471ejj.73.1680522929433;
-        Mon, 03 Apr 2023 04:55:29 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id z9-20020a17090665c900b0093fa8c2e877sm4410215ejn.80.2023.04.03.04.55.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 04:55:29 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 14:55:26 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] dsa: marvell: Add support for mv88e6071 and 6020
- switches
-Message-ID: <20230403115526.gpp7aymvnk4gyx6e@skbuf>
-References: <20230309125421.3900962-1-lukma@denx.de>
+        d=1e100.net; s=20210112; t=1680523087;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OVIwWquixww+JFF4EZop7Ld7XWMwZqHJw07biyoMhrs=;
+        b=xpKO1KSwzBjdqWtJqxQPyrTAXbCYcUOetLk6XztSRS15y31nzjsLklOAXsfxSGpXUe
+         lTyDdVF6tGyGlIMC5FvLANTI5igjCOcHdIMfBoWocRqwUx3l4jmeOxE//im58Ds/zCkQ
+         Q/2SQO4Y7SIbBuYY6/QaU0vXYk1b0OfGWUJufq1Tba4rZZy1OF9rVM7wszoO4xPeDD5P
+         3yiXPQyK/xH57g5rIKTJ+IhBM3+EASdDMjlY8T48DSXmDTajyn7jHFPvM9G3pQ2CZMF/
+         OY9jFUijW/wvcxnMDMY97uqAnH1aj8WpLZE9yd88fcf5TgyzLxy4WAk+7zePsNBF///O
+         nneA==
+X-Gm-Message-State: AAQBX9dvJ7P29QP4iWJJFX3sQ48GBfvd0QwpSPIcDUk9treC+MpiriOu
+        vm8uQNEYXRpmEYLXK1sL+C+qFiYZffUYPivajgJS8mCVeS/KKOXlDgyJz8dntfAJgszF7TQSNnB
+        NGIDJhFd2A9TuC3fJurLmPYWq
+X-Received: by 2002:a7b:c4c3:0:b0:3f0:3d47:2cbe with SMTP id g3-20020a7bc4c3000000b003f03d472cbemr9925361wmk.10.1680523086945;
+        Mon, 03 Apr 2023 04:58:06 -0700 (PDT)
+X-Google-Smtp-Source: AKy350auUP6YlKdUMeXPodnB2zUsvo68kS9KkPE7VXHPKr8F7AMGTQxl3KOOakGGn6pcXGVH/lLRFw==
+X-Received: by 2002:a7b:c4c3:0:b0:3f0:3d47:2cbe with SMTP id g3-20020a7bc4c3000000b003f03d472cbemr9925348wmk.10.1680523086654;
+        Mon, 03 Apr 2023 04:58:06 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
+        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003ee1e07a14asm19260533wmq.45.2023.04.03.04.58.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 04:58:05 -0700 (PDT)
+Message-ID: <cba955a3-e41e-adce-954a-9a55d6d97065@redhat.com>
+Date:   Mon, 3 Apr 2023 13:58:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309125421.3900962-1-lukma@denx.de>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     stsp <stsp2@yandex.ru>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     linux-mm@kvack.org,
+        =?UTF-8?Q?Jakub_Mat=c4=9bna?= <matenajakub@gmail.com>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+References: <18c36a78-4082-fab6-c7c9-69a249516803@yandex.ru>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: MREMAP_FIXED unmaps dest on error
+In-Reply-To: <18c36a78-4082-fab6-c7c9-69a249516803@yandex.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Lukasz,
+On 30.03.23 17:48, stsp wrote:
+> Hello.
+> 
+> The attached test-case demonstrates a
+> bug in mremap(). If MREMAP_FIXED is used
+> over an existing mapping and mremap() fails,
+> destination area gets unmapped.
+> AFAIK the failed syscall should have no
+> observable effects.
 
-On Thu, Mar 09, 2023 at 01:54:14PM +0100, Lukasz Majewski wrote:
-> This patch set provides following changes:
-> 
-> - Provide support for mv88e6020 and mv88e6071 switch circuits (the
->   "Link Street" family of products including added earlier to this
->   driver mv88e6250 and mv88e6220).
-> 
-> - Add the max_frame size variable to specify the buffer size for the
->   maximal frame size
-> 
-> - The above change required adjusting all supported devices in the
->   mv88e6xxx driver, as the current value assignment is depending
->   on the set of provided callbacks for each switch circuit - i.e.
->   until now the value was not explicitly specified.
-> 
-> - As the driver for Marvell's mv88e6xxx switches was rather complicated
->   the intermediate function (removed by the end of this patch set)
->   has been introduced. It was supposed to both validate the provided
->   values deduced from the code and leave a trace of the exact
->   methodology used.
+I remember that holds for various mapping-related syscalls: if something 
+goes wrong, the end result is not guaranteed to be what we had before 
+the syscall.
 
-The problem with MTU 1492 has been resolved as commit 7e9517375a14
-("net: dsa: mv88e6xxx: fix max_mtu of 1492 on 6165, 6191, 6220, 6250,
-6290"), is present in net-next, and as such, you are free to resubmit
-this patchset on top of the current net-next.gi/main whenever you feel
-like it, no need to wait for a merge window.
+For example, if you use mmap(MAP_FIXED) to replace part of an exiting 
+mapping, we first munmap what's there and then try to mmap the new 
+mapping. If something goes wrong while doing that, we cannot simple undo 
+what we already did.
+
+Long story short: the semantics of these syscalls has never been to 
+leave the system in the state as it was before in case anything goes wrong.
+
+
+As another example, if you do an mprotect() that covers multiple VMAS, 
+and there is an issue with the last VMA, all but the last VMA will have 
+their permissions changed.
+
+-- 
+Thanks,
+
+David / dhildenb
+
