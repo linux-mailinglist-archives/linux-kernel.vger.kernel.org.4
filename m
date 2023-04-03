@@ -2,122 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5AD6D53FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B3F6D540D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233609AbjDCVu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 17:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
+        id S233585AbjDCVzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 17:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233626AbjDCVuy (ORCPT
+        with ESMTP id S233650AbjDCVzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:50:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB8610C6;
-        Mon,  3 Apr 2023 14:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680558652; x=1712094652;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BcRLMcu8Iblq5KidLgO+FxXKs6iVdXYPJX2NID33tnU=;
-  b=FSdjMcMY9lv7aXjvENTv/PPA/gRJet5NRd8kRZacg+62ZlzVk3GPTF8e
-   LVjwasOxYzLKZ2UMDC97+tbNkd+fza41/6mQYvoqctFjewI55Ba81jYv6
-   3fSV46A9lS1TGU8+OXqUcEeNj2BoQ+kd2R2nJik/moCNkrPx7PbXr8Gp7
-   J9CbdA5QmKzb29xYlH2Gk7pLcEXp/E2VTJaHCmqFmogLwxu7z5IUy/EX8
-   7i3hZuShPhpzNLM7BEqMS8Yg1We4O56/aC8gmpKVvz3ICh+iKMBviLkUf
-   +BWMg4FmdDCaYYKBvCi2zGwsPn/LAU6TnkcVpjsZYq4g+KV1rphbMt8tM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="343718126"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="343718126"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 14:50:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="663352503"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="663352503"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 14:50:52 -0700
-Date:   Mon, 3 Apr 2023 14:54:58 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v3 7/7] dmaengine/idxd: Re-enable kernel workqueue under
- DMA API
-Message-ID: <20230403145458.5c30d5c6@jacob-builder>
-In-Reply-To: <07b7a01f-8a0d-6eca-e436-df5135d679cb@linux.intel.com>
-References: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
-        <20230331231137.1947675-8-jacob.jun.pan@linux.intel.com>
-        <07b7a01f-8a0d-6eca-e436-df5135d679cb@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 3 Apr 2023 17:55:37 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98425E0;
+        Mon,  3 Apr 2023 14:55:34 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pjS8z-00025Z-W2; Mon, 03 Apr 2023 23:55:18 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Chris Morgan <macroalpha82@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 2/2] arm64: dts: rockchip: rk3588-rock-5b: Add pwm-fan
+Date:   Mon, 03 Apr 2023 23:55:17 +0200
+Message-ID: <4981873.LvFx2qVVIh@diego>
+In-Reply-To: <642b134c.4a0a0220.1d01a.5990@mx.google.com>
+References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
+ <20230403105052.426135-3-cristian.ciocaltea@collabora.com>
+ <642b134c.4a0a0220.1d01a.5990@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolu,
-
-On Sat, 1 Apr 2023 21:39:32 +0800, Baolu Lu <baolu.lu@linux.intel.com>
-wrote:
-
-> On 2023/4/1 7:11, Jacob Pan wrote:
-> >   static void idxd_disable_system_pasid(struct idxd_device *idxd)
-> >   {
-> > +	struct pci_dev *pdev = idxd->pdev;
-> > +	struct device *dev = &pdev->dev;
-> > +	struct iommu_domain *domain;
-> > +	union gencfg_reg gencfg;
-> > +
-> > +	domain = iommu_get_domain_for_dev(dev);
-> > +	if (!domain || domain->type == IOMMU_DOMAIN_BLOCKED)
-> > +		return;  
+Am Montag, 3. April 2023, 19:56:26 CEST schrieb Chris Morgan:
+> On Mon, Apr 03, 2023 at 01:50:52PM +0300, Cristian Ciocaltea wrote:
+> > Add the necessary DT changes for the Rock 5B board to enable support for
+> > the PWM controlled heat sink fan.
 > 
-> Out of curiosity, why do you need to check the domain type? And, in
-> which case could the domain for the device be changed to a blocking one?
-> 
-> Once a driver is bound to the device, the driver "owns" the DMA of the
-> device. No one else could change the domain except the driver itself.
-nothing particular just for precaution, I can drop the check or add a
-warn_on.
+> Honest question, but should we be adding this to the board file if not
+> every device has a PWM fan (they all have the socket for the fan, but
+> not the fan)? For example I have a passively cooled case that doesn't
+> include a fan.
 
-> > +
-> > +	iommu_detach_device_pasid(domain, dev, idxd->pasid);
-> > +	iommu_free_global_pasid(idxd->pasid);
-> >   
-> > -	iommu_sva_unbind_device(idxd->sva);
-> > +	gencfg.bits = ioread32(idxd->reg_base + IDXD_GENCFG_OFFSET);
-> > +	gencfg.user_int_en = 0;
-> > +	iowrite32(gencfg.bits, idxd->reg_base + IDXD_GENCFG_OFFSET);
-> >   	idxd->sva = NULL;
-> > +	idxd->pasid = IOMMU_PASID_INVALID;
-> >   }  
-> 
-> Best regards,
-> baolu
+We also set up the sdmmc host without knowing if the user will plug in
+an sd-card ;-) .
+
+So especially in the case where there is a dedicated socket for it,
+as you write, we should definitly add it for the board.
+
+By the way, am I correct in thinking that patch 1 and 2 are actually
+independent of each other? So I'd just pick patch2 for the Rockchip tree
+(as we do have a text-binding) and you can handle the yaml conversion
+in a followup or whatever?
+
+Thanks
+Heiko
 
 
-Thanks,
-
-Jacob
