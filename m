@@ -2,174 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F346D3C32
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC966D3C34
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjDCDok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 23:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
+        id S231278AbjDCDqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 23:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbjDCDoh (ORCPT
+        with ESMTP id S229681AbjDCDqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 23:44:37 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A3B93CE;
-        Sun,  2 Apr 2023 20:44:37 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id l184so7536316pgd.11;
-        Sun, 02 Apr 2023 20:44:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680493476;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ABIEor5TUeJHEYPxHRe9G0HA55UHNeIWMnGb6d3/ufo=;
-        b=f0TkVixjbShwJwnR/hrlNRRc9BwBH0b435kvRm7U9rP7IKq5Ia1oZXCXK7uEGvQ18d
-         0QRO+414ydA1cOGQgSodGoIGMG0CaO7Iq3oRJvwTV+X3ZZPF0GGMKlaBn+Pi/WXM/31M
-         akn+QLbs+rcWP9z5OlnllAVIyu0u1EkVsTwxRCyq55UHkRbDVqDppMLdld4z+dXfBw7v
-         opyJ/PoHzEYcgpA/00VuHvryvq4ljWoj0cTodmeNWfIrcq8nPBc25HYGNIj1tsauCoJz
-         Ylcqvd2SWYYZrO0GDP6rAE6yn+3bQhdee1JwbKYczl8W5wrD0++tE/OPfhVV6O+p29x/
-         osxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680493476;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ABIEor5TUeJHEYPxHRe9G0HA55UHNeIWMnGb6d3/ufo=;
-        b=pjfEU8gwG3Bf6rLiGyxdMH3QDAU4k1uG2wt3x7LsTBq3KWHoFSNQ/d1lKVE9jDLnFt
-         TDQJqIE9XXGQ+jeO4kCh/7HuQG2pyuSBEJBffFDedxos8wFWFf7CW/1BPZx+JCPTKa9F
-         bx7dg6Hj97zMlpG7fj3tbAhEj5kYM54lAAZ2N8MBdbrJwGQeJEJiedJKWK07AUtMU8/g
-         GpKeLp3g+ZIr4DD9XBE+hc4+/wLuDG8CF1GBzyjMrWGvxTPAl3pOy1CDwEh/UFcU4nS7
-         jvIdE0uXtqoBJSBB/SzTFUNYOdMbvMxm+GQCwVP17V/ndovSChGxWctRlLSnNha33yGa
-         AnQg==
-X-Gm-Message-State: AAQBX9dz4BvBgNVHLYqxhhBeYDFRUd8h370mbyZLot03nXjRpdYW7Kml
-        RIMHgE+FpaYd/e3FqdbR9ZxuWm1hOjMb6s3OIG0=
-X-Google-Smtp-Source: AKy350bWZfPX2SN3YYi/hFG3M2gCBUBYb4wgj6bMZme/ir4hqykgeRQrFyjod1786jAdXSyrywhtwreTcmY1+T2ZsB0=
-X-Received: by 2002:a05:6a00:881:b0:62d:dd8d:56ac with SMTP id
- q1-20020a056a00088100b0062ddd8d56acmr5249726pfj.0.1680493476386; Sun, 02 Apr
- 2023 20:44:36 -0700 (PDT)
+        Sun, 2 Apr 2023 23:46:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A0593D1
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 20:46:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3868BB81088
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:46:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D13D0C433EF;
+        Mon,  3 Apr 2023 03:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680493577;
+        bh=V8S6zUdIEBM11OVGVZxlNmpKknApeEtYdclT/G+jciU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aOb6yqLMpzFxaTevR0H2AArJjSI0eNW1/a195Fc/fqB6O39OZhqclypMI6dpVUrOY
+         SzrhSj7aG3z/N0YDZZmCPxm9PP4HMd20PCze0M21qV//B7LLTCD/CuUiHsAkDigohe
+         bl7W/l9LiV71eyrtmja+7GU7oGFnMLLFhIMFBYmFUdjbz19mVfYfnkPGGpkeZAXaAd
+         EPxCDQDEaN03YgFJsn59xXPKu++gZFei0h9sCQO5drUKXRh6KFYQZJwQ8XbH8VD9M4
+         23XstaKOXsBjShh+p50wbYxizbezYc0VHMgCnXR4MurplaVc+5xjYPfEdA6OP7n+4E
+         d/P1WCduknOwA==
+Message-ID: <d87f168e-6155-3784-48f5-03c551c589f7@kernel.org>
+Date:   Mon, 3 Apr 2023 11:46:13 +0800
 MIME-Version: 1.0
-References: <20230313154132.3684181-1-zyytlz.wz@163.com> <CAAEAJfAjND_Bj9HRBae22eO7cG_Xm=AX93bL+CPEb24-sitWTg@mail.gmail.com>
-In-Reply-To: <CAAEAJfAjND_Bj9HRBae22eO7cG_Xm=AX93bL+CPEb24-sitWTg@mail.gmail.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Mon, 3 Apr 2023 11:44:24 +0800
-Message-ID: <CAJedcCyr2DEux=bSU+4Ksgz69ouEHebhmcmoCa2ysYB1YiOaNQ@mail.gmail.com>
-Subject: Re: [PATCH v3] media: hantro: fix use after free bug in hantro_remove
- due to race condition
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, p.zabel@pengutronix.de,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        hverkuil@xs4all.nl
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RESEND] f2fs: add sanity compress level check for compressed
+ file
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Nick Terrell <terrelln@fb.com>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230330162811.18923-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230330162811.18923-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> =E4=BA=8E2023=E5=B9=B43=E6=
-=9C=8831=E6=97=A5=E5=91=A8=E4=BA=94 10:38=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi Zheng,
->
-> On Mon, Mar 13, 2023 at 12:42=E2=80=AFPM Zheng Wang <zyytlz.wz@163.com> w=
-rote:
-> >
-> > In hantro_probe, vpu->watchdog_work is bound with
-> > hantro_watchdog. Then hantro_end_prepare_run may
-> > be called to start the work.
-> >
-> > If we close the file or remove the module which will
-> > call hantro_release and hantro_remove to make cleanup,
->
-> It's not possible to close the file or remove the module while a watchdog=
- is
-> scheduled.
->
-> That's because the watchdog is active only during a mem2mem job,
-> and the file won't be closed until the job is done.
->
-> v4l2_m2m_ctx_release calls v4l2_m2m_cancel_jobw
-> which waits until the job is done.
->
-> If you can confirm it's possible to remove or close the file
-> while a job is running, that would be a driver bug.
->
-> Thanks for the patch, but it's not needed.
->
+On 2023/3/31 0:28, Yangtao Li wrote:
+> Commit 3fde13f817e2 ("f2fs: compress: support compress level")
+> forgot to do basic compress level check, let's add it.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>   fs/f2fs/inode.c             | 94 +++++++++++++++++++++++++------------
+>   include/linux/zstd_lib.h    |  3 ++
+>   lib/zstd/compress/clevels.h |  4 --
+>   3 files changed, 67 insertions(+), 34 deletions(-)
+> 
+> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> index bb5b365a195d..e63f75168700 100644
+> --- a/fs/f2fs/inode.c
+> +++ b/fs/f2fs/inode.c
+> @@ -10,6 +10,8 @@
+>   #include <linux/buffer_head.h>
+>   #include <linux/writeback.h>
+>   #include <linux/sched/mm.h>
+> +#include <linux/lz4.h>
+> +#include <linux/zstd.h>
+>   
+>   #include "f2fs.h"
+>   #include "node.h"
+> @@ -202,6 +204,66 @@ void f2fs_inode_chksum_set(struct f2fs_sb_info *sbi, struct page *page)
+>   	ri->i_inode_checksum = cpu_to_le32(f2fs_inode_chksum(sbi, page));
+>   }
+>   
+> +static bool sanity_check_compress_inode(struct inode *inode,
+> +			struct f2fs_inode *ri)
+> +{
+> +	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> +	unsigned char compress_level;
+> +
+> +	if (ri->i_compress_algorithm >= COMPRESS_MAX) {
+> +		set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +		f2fs_warn(sbi,
+> +			"%s: inode (ino=%lx) has unsupported compress algorithm: %u, run fsck to fix",
+> +			__func__, inode->i_ino, ri->i_compress_algorithm);
+> +		return false;
+> +	}
+> +	if (le64_to_cpu(ri->i_compr_blocks) >
+> +			SECTOR_TO_BLOCK(inode->i_blocks)) {
+> +		set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +		f2fs_warn(sbi,
+> +			"%s: inode (ino=%lx) has inconsistent i_compr_blocks:%llu, i_blocks:%llu, run fsck to fix",
+> +			__func__, inode->i_ino, le64_to_cpu(ri->i_compr_blocks),
+> +			SECTOR_TO_BLOCK(inode->i_blocks));
+> +		return false;
+> +	}
+> +	if (ri->i_log_cluster_size < MIN_COMPRESS_LOG_SIZE ||
+> +		ri->i_log_cluster_size > MAX_COMPRESS_LOG_SIZE) {
+> +		set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +		f2fs_warn(sbi,
+> +			"%s: inode (ino=%lx) has unsupported log cluster size: %u, run fsck to fix",
+> +			__func__, inode->i_ino, ri->i_log_cluster_size);
+> +		return false;
+> +	}
+> +
+> +	compress_level = le16_to_cpu(ri->i_compress_flag) >> COMPRESS_LEVEL_OFFSET;
 
-Hi Ezequiel,
+Exceed 80 lines.
 
-Thanks for your detailed analysis. Got it :)
+> +	switch (ri->i_compress_algorithm) {
+> +	case COMPRESS_LZO:
+> +	case COMPRESS_LZORLE:
+> +		if (compress_level)
+> +			goto err;
+> +		break;
+> +	case COMPRESS_LZ4:
+> +		if ((compress_level && compress_level < LZ4HC_MIN_CLEVEL) ||
+> +				compress_level > LZ4HC_MAX_CLEVEL)
+> +			goto err;
+> +		break;
+> +	case COMPRESS_ZSTD:
+> +		if (!compress_level || compress_level > ZSTD_MAX_CLEVEL)
+> +			goto err;
+> +		break;
+> +	default:
+> +		goto err;
+> +	}
+> +
+> +	return true;
+> +
+> +err:
+> +	set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +	f2fs_warn(sbi, "%s: inode (ino=%lx) has unsupported compress level: %u, run fsck to fix",
+> +		  __func__, inode->i_ino, compress_level);
+> +	return false;
+> +}
+> +
+>   static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+>   {
+>   	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> @@ -285,36 +347,8 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+>   
+>   	if (f2fs_has_extra_attr(inode) && f2fs_sb_has_compression(sbi) &&
+>   			fi->i_flags & F2FS_COMPR_FL &&
+> -			F2FS_FITS_IN_INODE(ri, fi->i_extra_isize,
+> -						i_log_cluster_size)) {
+> -		if (ri->i_compress_algorithm >= COMPRESS_MAX) {
+> -			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> -			f2fs_warn(sbi, "%s: inode (ino=%lx) has unsupported "
+> -				"compress algorithm: %u, run fsck to fix",
+> -				  __func__, inode->i_ino,
+> -				  ri->i_compress_algorithm);
+> -			return false;
+> -		}
+> -		if (le64_to_cpu(ri->i_compr_blocks) >
+> -				SECTOR_TO_BLOCK(inode->i_blocks)) {
+> -			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> -			f2fs_warn(sbi, "%s: inode (ino=%lx) has inconsistent "
+> -				"i_compr_blocks:%llu, i_blocks:%llu, run fsck to fix",
+> -				  __func__, inode->i_ino,
+> -				  le64_to_cpu(ri->i_compr_blocks),
+> -				  SECTOR_TO_BLOCK(inode->i_blocks));
+> -			return false;
+> -		}
+> -		if (ri->i_log_cluster_size < MIN_COMPRESS_LOG_SIZE ||
+> -			ri->i_log_cluster_size > MAX_COMPRESS_LOG_SIZE) {
+> -			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> -			f2fs_warn(sbi, "%s: inode (ino=%lx) has unsupported "
+> -				"log cluster size: %u, run fsck to fix",
+> -				  __func__, inode->i_ino,
+> -				  ri->i_log_cluster_size);
+> -			return false;
+> -		}
+> -	}
+> +			F2FS_FITS_IN_INODE(ri, fi->i_extra_isize, i_log_cluster_size))
 
-Best regards,
-Zheng
+Exceed 80 lines.
 
-> Regards,
-> Ezequiel
->
-> > there may be an unfinished work. The possible sequence
-> > is as follows, which will cause a typical UAF bug.
-> >
-> > The same thing will happen in hantro_release, and use
-> > ctx after freeing it.
-> >
-> > Fix it by canceling the work before cleanup in hantro_release.
-> >
-> > CPU0                  CPU1
-> >
-> >                     |hantro_watchdog
-> > hantro_remove     |
-> >   v4l2_m2m_release  |
-> >     kfree(m2m_dev); |
-> >                     |
-> >                     | v4l2_m2m_get_curr_priv
-> >                     |   m2m_dev->curr_ctx //use
-> >
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > ---
-> > v3:
-> > - use cancel_delayed_work_sync instead of cancel_delayed_work and add i=
-t to
-> > hantro_release suggested by Hans Verkuil
-> >
-> > v2:
-> > - move the cancel-work-related code to hantro_remove suggested by Hans =
-Verkuil
-> > ---
-> >  drivers/media/platform/verisilicon/hantro_drv.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/=
-media/platform/verisilicon/hantro_drv.c
-> > index b0aeedae7b65..86a4c0fa8c7d 100644
-> > --- a/drivers/media/platform/verisilicon/hantro_drv.c
-> > +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-> > @@ -597,6 +597,7 @@ static int hantro_release(struct file *filp)
-> >         struct hantro_ctx *ctx =3D
-> >                 container_of(filp->private_data, struct hantro_ctx, fh)=
-;
-> >
-> > +       cancel_delayed_work_sync(&ctx->dev->watchdog_work);
-> >         /*
-> >          * No need for extra locking because this was the last referenc=
-e
-> >          * to this file.
-> > @@ -1099,6 +1100,7 @@ static int hantro_remove(struct platform_device *=
-pdev)
-> >
-> >         v4l2_info(&vpu->v4l2_dev, "Removing %s\n", pdev->name);
-> >
-> > +       cancel_delayed_work_sync(&vpu->watchdog_work);
-> >         media_device_unregister(&vpu->mdev);
-> >         hantro_remove_dec_func(vpu);
-> >         hantro_remove_enc_func(vpu);
-> > --
-> > 2.25.1
-> >
+> +		sanity_check_compress_inode(inode, ri);
+
+Missed to check return value?
+
+>   
+>   	return true;
+>   }
+> diff --git a/include/linux/zstd_lib.h b/include/linux/zstd_lib.h
+> index 79d55465d5c1..ff55f41c73d3 100644
+> --- a/include/linux/zstd_lib.h
+> +++ b/include/linux/zstd_lib.h
+> @@ -88,6 +88,9 @@ ZSTDLIB_API const char* ZSTD_versionString(void);
+>   #  define ZSTD_CLEVEL_DEFAULT 3
+>   #endif
+>   
+> +/*-=====  Pre-defined compression levels  =====-*/
+> +#define ZSTD_MAX_CLEVEL     22
+> +
+>   /* *************************************
+>    *  Constants
+>    ***************************************/
+> diff --git a/lib/zstd/compress/clevels.h b/lib/zstd/compress/clevels.h
+> index d9a76112ec3a..b040d9d29089 100644
+> --- a/lib/zstd/compress/clevels.h
+> +++ b/lib/zstd/compress/clevels.h
+> @@ -14,10 +14,6 @@
+>   #define ZSTD_STATIC_LINKING_ONLY  /* ZSTD_compressionParameters  */
+>   #include <linux/zstd.h>
+>   
+> -/*-=====  Pre-defined compression levels  =====-*/
+> -
+> -#define ZSTD_MAX_CLEVEL     22
+
+Why not zstd_max_clevel()?
+
+Thanks,
+
+> -
+>   __attribute__((__unused__))
+>   
+>   static const ZSTD_compressionParameters ZSTD_defaultCParameters[4][ZSTD_MAX_CLEVEL+1] = {
