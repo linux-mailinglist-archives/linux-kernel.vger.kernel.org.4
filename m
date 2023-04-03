@@ -2,501 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EF36D48BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C71986D468B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbjDCOb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        id S232479AbjDCOJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233476AbjDCObX (ORCPT
+        with ESMTP id S232359AbjDCOJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:31:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694E835031;
-        Mon,  3 Apr 2023 07:31:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBF82B81C5F;
-        Mon,  3 Apr 2023 14:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B771C433D2;
-        Mon,  3 Apr 2023 14:31:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680532278;
-        bh=PgI8H4mHwIK8nuPnJbzukKmoonrFI26NdVhKB4ZBr0o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bXMFU57h2NiKfOgGZx3uv96RgYS9PWCGOy7dshtnOjQO+CZQ1ntYJvOFLuwuXGbJP
-         HJUUcCN0ZTMAiXWlvui09/092Cyh1eLFiHT/DWbJVZlyhB7Qg5bciY21qa+Ynwn2zs
-         IgBVMHDChHdxq4RZxQ4mo6XatXtzoDBD0Km1aqQ4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 5.15 00/99] 5.15.106-rc1 review
-Date:   Mon,  3 Apr 2023 16:08:23 +0200
-Message-Id: <20230403140356.079638751@linuxfoundation.org>
-X-Mailer: git-send-email 2.40.0
+        Mon, 3 Apr 2023 10:09:43 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B465911E94;
+        Mon,  3 Apr 2023 07:09:22 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 333E8iRt056332;
+        Mon, 3 Apr 2023 09:08:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680530924;
+        bh=USH2nXuQcOKYCww0fLcjqgn77ZzOQl665nR3nKmbAs4=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=gqA8kUUogUT7UoeFNTSJgwyWbvzsjnQB2/1EUrG9vLFCE2Zbm26RHpiZEb5xdgO5t
+         I/HPlrfKAqSUF6gjbuQdG2+mZ0oeSL3riXzGMhc2Fb+PKl6SYiFSFXfKzGTbO+aMww
+         R85oqdwJiA3Gx83hQxZ1tV0rWVqG+m1IUf4qqGZY=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 333E8idb020004
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 3 Apr 2023 09:08:44 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
+ Apr 2023 09:08:44 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 3 Apr 2023 09:08:44 -0500
+Received: from [10.249.131.130] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 333E8eK4017002;
+        Mon, 3 Apr 2023 09:08:41 -0500
+Message-ID: <6aaa3ff4-de08-24f5-b886-de98813ce2c8@ti.com>
+Date:   Mon, 3 Apr 2023 19:38:40 +0530
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.106-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.15.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.15.106-rc1
-X-KernelTest-Deadline: 2023-04-05T14:04+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <rogerq@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net-next v2 1/3] net: ethernet: ti: am65-cpsw: Move mode
+ specific config to mac_config()
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+References: <20230403110106.983994-1-s-vadapalli@ti.com>
+ <20230403110106.983994-2-s-vadapalli@ti.com>
+ <ZCqzuwDLGuBDMHQG@shell.armlinux.org.uk>
+ <3a62f5cf-ebba-1603-50a0-7a873973534d@ti.com>
+ <ZCrQ3lPjEmxXc9a2@shell.armlinux.org.uk>
+ <a6dba95a-03ae-12ec-3ef4-c9544073c7a2@ti.com>
+ <ZCra58qbcwKCXBDR@shell.armlinux.org.uk>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <ZCra58qbcwKCXBDR@shell.armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.15.106 release.
-There are 99 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
 
-Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
-Anything received after that time might be too late.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.106-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.15.106-rc1
-
-Jan Beulich <jbeulich@suse.com>
-    x86/PVH: avoid 32-bit build warning when obtaining VGA console info
-
-Matthieu Baerts <matthieu.baerts@tessares.net>
-    hsr: ratelimit only when errors are printed
-
-Andrii Nakryiko <andrii@kernel.org>
-    libbpf: Fix btf_dump's packed struct determination
-
-Andrii Nakryiko <andrii@kernel.org>
-    selftests/bpf: Add few corner cases to test padding handling of btf_dump
-
-Andrii Nakryiko <andrii@kernel.org>
-    libbpf: Fix BTF-to-C converter's padding logic
-
-Eduard Zingerman <eddyz87@gmail.com>
-    selftests/bpf: Test btf dump for struct with padding only fields
-
-Damien Le Moal <damien.lemoal@opensource.wdc.com>
-    zonefs: Fix error message in zonefs_file_dio_append()
-
-Sean Christopherson <seanjc@google.com>
-    KVM: x86: Purge "highest ISR" cache when updating APICv state
-
-Sean Christopherson <seanjc@google.com>
-    KVM: x86: Inject #GP on x2APIC WRMSR that sets reserved bits 63:32
-
-Sean Christopherson <seanjc@google.com>
-    KVM: VMX: Move preemption timer <=> hrtimer dance to common x86
-
-Heiko Carstens <hca@linux.ibm.com>
-    s390/uaccess: add missing earlyclobber annotations to __clear_user()
-
-Marc Zyngier <maz@kernel.org>
-    KVM: arm64: Disable interrupts while walking userspace PTs
-
-Fangzhi Zuo <Jerry.Zuo@amd.com>
-    drm/amd/display: Add DSC Support for Synaptics Cascaded MST Hub
-
-Lucas Stach <l.stach@pengutronix.de>
-    drm/etnaviv: fix reference leak when mmaping imported buffer
-
-Douglas Raillard <douglas.raillard@arm.com>
-    rcu: Fix rcu_torture_read ftrace event
-
-Max Filippov <jcmvbkbc@gmail.com>
-    xtensa: fix KASAN report for show_stack
-
-huangwenhui <huangwenhuia@uniontech.com>
-    ALSA: hda/realtek: Add quirk for Lenovo ZhaoYang CF4620Z
-
-Tim Crawford <tcrawford@system76.com>
-    ALSA: hda/realtek: Add quirks for some Clevo laptops
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: usb-audio: Fix regression on detection of Roland VS-100
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: hda/conexant: Partial revert of a quirk for Lenovo
-
-Trond Myklebust <trond.myklebust@hammerspace.com>
-    NFSv4: Fix hangs when recovering open state after a server reboot
-
-Jens Axboe <axboe@kernel.dk>
-    powerpc: Don't try to copy PPR for task with NULL pt_regs
-
-Johan Hovold <johan+linaro@kernel.org>
-    pinctrl: at91-pio4: fix domain name assignment
-
-Kornel Dulęba <korneld@chromium.org>
-    pinctrl: amd: Disable and mask interrupts on resume
-
-Josua Mayer <josua@solid-run.com>
-    net: phy: dp83869: fix default value for tx-/rx-internal-delay
-
-Juergen Gross <jgross@suse.com>
-    xen/netback: don't do grant copy across page boundary
-
-Oleksij Rempel <linux@rempel-privat.de>
-    can: j1939: prevent deadlock by moving j1939_sk_errqueue()
-
-Damien Le Moal <damien.lemoal@opensource.wdc.com>
-    zonefs: Always invalidate last cached page on append write
-
-Anand Jain <anand.jain@oracle.com>
-    btrfs: scan device in non-exclusive mode
-
-Filipe Manana <fdmanana@suse.com>
-    btrfs: fix race between quota disable and quota assign ioctls
-
-Hans de Goede <hdegoede@redhat.com>
-    Input: goodix - add Lenovo Yoga Book X90F to nine_bytes_report DMI table
-
-David Disseldorp <ddiss@suse.de>
-    cifs: fix DFS traversal oops without CONFIG_CIFS_DFS_UPCALL
-
-Paulo Alcantara <pc@manguebit.com>
-    cifs: prevent infinite recursion in CIFSGetDFSRefer()
-
-Jason A. Donenfeld <Jason@zx2c4.com>
-    Input: focaltech - use explicitly signed char type
-
-msizanoen <msizanoen@qtmlabs.xyz>
-    Input: alps - fix compatibility with -funsigned-char
-
-Lu Baolu <baolu.lu@linux.intel.com>
-    iommu/vt-d: Allow zero SAGAW if second-stage not supported
-
-Horatiu Vultur <horatiu.vultur@microchip.com>
-    pinctrl: ocelot: Fix alt mode for ocelot
-
-Felix Fietkau <nbd@nbd.name>
-    net: ethernet: mtk_eth_soc: fix flow block refcounting logic
-
-Steffen Bätz <steffen@innosonix.de>
-    net: dsa: mv88e6xxx: Enable IGMP snooping on user ports only
-
-Michael Chan <michael.chan@broadcom.com>
-    bnxt_en: Add missing 200G link speed reporting
-
-Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
-    bnxt_en: Fix typo in PCI id to device description string mapping
-
-Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
-    bnxt_en: Fix reporting of test result in ethtool selftest
-
-Radoslaw Tyl <radoslawx.tyl@intel.com>
-    i40e: fix registers dump after run ethtool adapter self test
-
-Alex Elder <elder@linaro.org>
-    net: ipa: compute DMA pool size properly
-
-Tasos Sahanidis <tasos@tasossah.com>
-    ALSA: ymfpci: Fix BUG_ON in probe function
-
-Tasos Sahanidis <tasos@tasossah.com>
-    ALSA: ymfpci: Create card with device-managed snd_devm_card_new()
-
-Jakob Koschel <jkl820.git@gmail.com>
-    ice: fix invalid check for empty list in ice_sched_assoc_vsi_to_agg()
-
-Junfeng Guo <junfeng.guo@intel.com>
-    ice: add profile conflict check for AVF FDIR
-
-Wolfram Sang <wsa+renesas@sang-engineering.com>
-    smsc911x: avoid PHY being resumed when interface is not up
-
-Sven Auhagen <sven.auhagen@voleatech.de>
-    net: mvpp2: parser fix PPPoE
-
-Sven Auhagen <sven.auhagen@voleatech.de>
-    net: mvpp2: parser fix QinQ
-
-Sven Auhagen <sven.auhagen@voleatech.de>
-    net: mvpp2: classifier flow fix fragmentation flags
-
-Alyssa Ross <hi@alyssa.is>
-    loop: LOOP_CONFIGURE: send uevents for partitions
-
-Christoph Hellwig <hch@lst.de>
-    loop: suppress uevents while reconfiguring the device
-
-Tony Krowiak <akrowiak@linux.ibm.com>
-    s390/vfio-ap: fix memory leak in vfio_ap device driver
-
-Ivan Orlov <ivan.orlov0322@gmail.com>
-    can: bcm: bcm_tx_setup(): fix KMSAN uninit-value in vfs_write
-
-Rajvi Jingar <rajvi.jingar@linux.intel.com>
-    platform/x86/intel/pmc: Alder Lake PCH slp_s0_residency fix
-
-Imre Deak <imre.deak@intel.com>
-    drm/i915/tc: Fix the ICL PHY ownership check in TC-cold state
-
-Vladimir Oltean <vladimir.oltean@nxp.com>
-    net: stmmac: don't reject VLANs when IFF_PROMISC is set
-
-Faicker Mo <faicker.mo@ucloud.cn>
-    net/net_failover: fix txq exceeding warning
-
-Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-    regulator: Handle deferred clk
-
-ChunHao Lin <hau@realtek.com>
-    r8169: fix RTL8168H and RTL8107E rx crc error
-
-Oleksij Rempel <linux@rempel-privat.de>
-    net: dsa: microchip: ksz8863_smi: fix bulk access
-
-SongJingyi <u201912584@hust.edu.cn>
-    ptp_qoriq: fix memory leak in probe()
-
-Jerry Snitselaar <jsnitsel@redhat.com>
-    scsi: mpt3sas: Don't print sense pool info twice
-
-Tomas Henzl <thenzl@redhat.com>
-    scsi: megaraid_sas: Fix crash after a double completion
-
-Íñigo Huguet <ihuguet@redhat.com>
-    sfc: ef10: don't overwrite offload features at NIC reset
-
-Siddharth Kawar <Siddharth.Kawar@microsoft.com>
-    SUNRPC: fix shutdown of NFS TCP client socket
-
-Arseniy Krasnov <avkrasnov@sberdevices.ru>
-    mtd: rawnand: meson: invalidate cache on polling ECC bit
-
-Mark Pearson <mpearson-lenovo@squebb.ca>
-    platform/x86: think-lmi: Add possible_values for ThinkStation
-
-Mark Pearson <mpearson-lenovo@squebb.ca>
-    platform/x86: think-lmi: only display possible_values if available
-
-Mark Pearson <mpearson-lenovo@squebb.ca>
-    platform/x86: think-lmi: use correct possible_values delimiters
-
-Mark Pearson <mpearson-lenovo@squebb.ca>
-    platform/x86: think-lmi: add missing type attribute
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: usb-audio: Fix recursive locking at XRUN during syncing
-
-Álvaro Fernández Rojas <noltari@gmail.com>
-    mips: bmips: BCM6358: disable RAC flush for TP1
-
-Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-    ca8210: Fix unsigned mac_len comparison with zero in ca8210_skb_tx()
-
-Anton Gusev <aagusev@ispras.ru>
-    tracing: Fix wrong return in kprobe_event_gen_test.c
-
-Antti Laakso <antti.laakso@intel.com>
-    tools/power turbostat: fix decoding of HWP_STATUS
-
-Prarit Bhargava <prarit@redhat.com>
-    tools/power turbostat: Fix /dev/cpu_dma_latency warnings
-
-Wei Chen <harperchen1110@gmail.com>
-    fbdev: au1200fb: Fix potential divide by zero
-
-Wei Chen <harperchen1110@gmail.com>
-    fbdev: lxfb: Fix potential divide by zero
-
-Wei Chen <harperchen1110@gmail.com>
-    fbdev: intelfb: Fix potential divide by zero
-
-Wei Chen <harperchen1110@gmail.com>
-    fbdev: nvidia: Fix potential divide by zero
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    sched_getaffinity: don't assume 'cpumask_size()' is fully initialized
-
-Wei Chen <harperchen1110@gmail.com>
-    fbdev: tgafb: Fix potential divide by zero
-
-Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-    ALSA: hda/ca0132: fixup buffer overrun at tuning_ctl_set()
-
-Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-    ALSA: asihpi: check pao in control_message()
-
-Kristian Overskeid <koverskeid@gmail.com>
-    net: hsr: Don't log netdev_err message on unknown prp dst node
-
-Jan Beulich <jbeulich@suse.com>
-    x86/PVH: obtain VGA console info in Dom0
-
-NeilBrown <neilb@suse.de>
-    md: avoid signed overflow in slot_store()
-
-Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
-    ASoC: codecs: tx-macro: Fix for KASAN: slab-out-of-bounds
-
-Herbert Xu <herbert@gondor.apana.org.au>
-    xfrm: Zero padding when dumping algos and encap
-
-Ivan Bornyakov <i.bornyakov@metrotek.ru>
-    bus: imx-weim: fix branch condition evaluates to a garbage value
-
-Namjae Jeon <linkinjeon@kernel.org>
-    ksmbd: don't terminate inactive sessions after a few seconds
-
-Marco Elver <elver@google.com>
-    kcsan: avoid passing -g for test
-
-Anders Roxell <anders.roxell@linaro.org>
-    kernel: kcsan: kcsan_test: build without structleak plugin
-
-Wesley Cheng <quic_wcheng@quicinc.com>
-    usb: dwc3: gadget: Add 1ms delay after end transfer command without IOC
-
-Michael Grzeschik <m.grzeschik@pengutronix.de>
-    usb: dwc3: gadget: move cmd_endtransfer to extra function
-
-Eric Biggers <ebiggers@google.com>
-    fsverity: don't drop pagecache at end of FS_IOC_ENABLE_VERITY
-
-
--------------
-
-Diffstat:
-
- Makefile                                           |   4 +-
- arch/arm64/kvm/mmu.c                               |  45 +++++-
- arch/mips/bmips/dma.c                              |   5 +
- arch/mips/bmips/setup.c                            |   8 +
- arch/powerpc/kernel/ptrace/ptrace-view.c           |   6 +
- arch/s390/lib/uaccess.c                            |   2 +-
- arch/x86/kvm/lapic.c                               |  11 +-
- arch/x86/kvm/vmx/vmx.c                             |   6 -
- arch/x86/kvm/x86.c                                 |  21 +++
- arch/x86/xen/Makefile                              |   2 +-
- arch/x86/xen/enlighten_pv.c                        |   3 +-
- arch/x86/xen/enlighten_pvh.c                       |  13 ++
- arch/x86/xen/vga.c                                 |   5 +-
- arch/x86/xen/xen-ops.h                             |   7 +-
- arch/xtensa/kernel/traps.c                         |  16 +-
- drivers/block/loop.c                               |  21 ++-
- drivers/bus/imx-weim.c                             |   2 +-
- .../amd/display/amdgpu_dm/amdgpu_dm_mst_types.c    |  19 +++
- .../amd/display/amdgpu_dm/amdgpu_dm_mst_types.h    |  12 ++
- drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c        |  10 +-
- drivers/gpu/drm/i915/display/intel_tc.c            |   4 +-
- drivers/input/mouse/alps.c                         |  16 +-
- drivers/input/mouse/focaltech.c                    |   8 +-
- drivers/input/touchscreen/goodix.c                 |  14 +-
- drivers/iommu/intel/dmar.c                         |   3 +-
- drivers/md/md.c                                    |   3 +
- drivers/mtd/nand/raw/meson_nand.c                  |   8 +-
- drivers/net/dsa/microchip/ksz8863_smi.c            |   9 --
- drivers/net/dsa/mv88e6xxx/chip.c                   |   9 +-
- drivers/net/ethernet/broadcom/bnxt/bnxt.c          |   8 +-
- drivers/net/ethernet/broadcom/bnxt/bnxt.h          |   1 +
- drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c  |   3 +
- drivers/net/ethernet/intel/i40e/i40e_diag.c        |  11 +-
- drivers/net/ethernet/intel/i40e/i40e_diag.h        |   2 +-
- drivers/net/ethernet/intel/ice/ice_sched.c         |   8 +-
- drivers/net/ethernet/intel/ice/ice_virtchnl_fdir.c |  73 +++++++++
- drivers/net/ethernet/marvell/mvpp2/mvpp2_cls.c     |  30 ++--
- drivers/net/ethernet/marvell/mvpp2/mvpp2_prs.c     |  86 +++++------
- drivers/net/ethernet/mediatek/mtk_ppe_offload.c    |   3 +-
- drivers/net/ethernet/realtek/r8169_phy_config.c    |   3 +
- drivers/net/ethernet/sfc/ef10.c                    |  38 +++--
- drivers/net/ethernet/sfc/efx.c                     |  17 +-
- drivers/net/ethernet/smsc/smsc911x.c               |   7 +-
- drivers/net/ethernet/stmicro/stmmac/common.h       |   1 -
- drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c  |  61 +-------
- drivers/net/ieee802154/ca8210.c                    |   3 +-
- drivers/net/ipa/gsi_trans.c                        |   2 +-
- drivers/net/net_failover.c                         |   8 +-
- drivers/net/phy/dp83869.c                          |   6 +-
- drivers/net/xen-netback/common.h                   |   2 +-
- drivers/net/xen-netback/netback.c                  |  25 ++-
- drivers/pinctrl/pinctrl-amd.c                      |  36 +++--
- drivers/pinctrl/pinctrl-at91-pio4.c                |   1 -
- drivers/pinctrl/pinctrl-ocelot.c                   |   2 +-
- drivers/platform/x86/intel/pmc/core.c              |  13 +-
- drivers/platform/x86/think-lmi.c                   |  60 +++++++-
- drivers/ptp/ptp_qoriq.c                            |   2 +-
- drivers/regulator/fixed.c                          |   2 +-
- drivers/s390/crypto/vfio_ap_drv.c                  |   3 +-
- drivers/scsi/megaraid/megaraid_sas_fusion.c        |   4 +-
- drivers/scsi/mpt3sas/mpt3sas_base.c                |   5 -
- drivers/usb/dwc3/gadget.c                          |  79 ++++++----
- drivers/video/fbdev/au1200fb.c                     |   3 +
- drivers/video/fbdev/geode/lxfb_core.c              |   3 +
- drivers/video/fbdev/intelfb/intelfbdrv.c           |   3 +
- drivers/video/fbdev/nvidia/nvidia.c                |   2 +
- drivers/video/fbdev/tgafb.c                        |   3 +
- fs/btrfs/ioctl.c                                   |   2 +
- fs/btrfs/qgroup.c                                  |  11 +-
- fs/btrfs/volumes.c                                 |  11 +-
- fs/cifs/cifsfs.h                                   |   5 +-
- fs/cifs/cifssmb.c                                  |   9 +-
- fs/ksmbd/connection.c                              |   4 +-
- fs/ksmbd/connection.h                              |   3 +-
- fs/ksmbd/transport_rdma.c                          |   2 +-
- fs/ksmbd/transport_tcp.c                           |  35 +++--
- fs/nfs/nfs4proc.c                                  |   5 +-
- fs/verity/enable.c                                 |  24 +--
- fs/zonefs/super.c                                  |  16 +-
- include/trace/events/rcu.h                         |   2 +-
- include/xen/interface/platform.h                   |   3 +
- kernel/compat.c                                    |   2 +-
- kernel/kcsan/Makefile                              |   3 +-
- kernel/sched/core.c                                |   4 +-
- kernel/trace/kprobe_event_gen_test.c               |   4 +-
- net/can/bcm.c                                      |  16 +-
- net/can/j1939/transport.c                          |   8 +-
- net/hsr/hsr_framereg.c                             |   2 +-
- net/sunrpc/xprtsock.c                              |   1 +
- net/xfrm/xfrm_user.c                               |  45 +++++-
- sound/core/pcm_lib.c                               |   2 +
- sound/pci/asihpi/hpi6205.c                         |   2 +-
- sound/pci/hda/patch_ca0132.c                       |   4 +-
- sound/pci/hda/patch_conexant.c                     |   6 +-
- sound/pci/hda/patch_realtek.c                      |   5 +
- sound/pci/ymfpci/ymfpci.c                          |   2 +-
- sound/pci/ymfpci/ymfpci_main.c                     |   2 +-
- sound/soc/codecs/lpass-tx-macro.c                  |  11 +-
- sound/usb/endpoint.c                               |  22 ++-
- sound/usb/endpoint.h                               |   4 +-
- sound/usb/format.c                                 |   8 +-
- sound/usb/pcm.c                                    |   2 +-
- tools/lib/bpf/btf_dump.c                           | 154 +++++++++++++------
- tools/power/x86/turbostat/turbostat.8              |   2 +
- tools/power/x86/turbostat/turbostat.c              |   4 +-
- .../bpf/progs/btf_dump_test_case_bitfields.c       |   2 +-
- .../bpf/progs/btf_dump_test_case_packing.c         |  80 +++++++++-
- .../bpf/progs/btf_dump_test_case_padding.c         | 171 ++++++++++++++++++---
- 108 files changed, 1157 insertions(+), 454 deletions(-)
-
-
+On 03-04-2023 19:25, Russell King (Oracle) wrote:
+> On Mon, Apr 03, 2023 at 07:20:21PM +0530, Siddharth Vadapalli wrote:
+>>
+>>
+>> On 03-04-2023 18:43, Russell King (Oracle) wrote:
+>>> On Mon, Apr 03, 2023 at 06:31:52PM +0530, Siddharth Vadapalli wrote:
+>>>>
+>>>>
+>>>> On 03-04-2023 16:38, Russell King (Oracle) wrote:
+>>>>> On Mon, Apr 03, 2023 at 04:31:04PM +0530, Siddharth Vadapalli wrote:
+>>>>>> Move the interface mode specific configuration to the mac_config()
+>>>>>> callback am65_cpsw_nuss_mac_config().
+>>>>>>
+>>>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>>>>> ---
+>>>>>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 10 +++++++---
+>>>>>>  1 file changed, 7 insertions(+), 3 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>> index d17757ecbf42..74e099828978 100644
+>>>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>> @@ -1504,12 +1504,17 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
+>>>>>>  							  phylink_config);
+>>>>>>  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
+>>>>>>  	struct am65_cpsw_common *common = port->common;
+>>>>>> +	u32 mac_control = 0;
+>>>>>>  
+>>>>>>  	if (common->pdata.extra_modes & BIT(state->interface)) {
+>>>>>> -		if (state->interface == PHY_INTERFACE_MODE_SGMII)
+>>>>>> +		if (state->interface == PHY_INTERFACE_MODE_SGMII) {
+>>>>>> +			mac_control |= CPSW_SL_CTL_EXT_EN;
+>>>>>>  			writel(ADVERTISE_SGMII,
+>>>>>>  			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
+>>>>>> +		}
+>>>>>>  
+>>>>>> +		if (mac_control)
+>>>>>> +			cpsw_sl_ctl_set(port->slave.mac_sl, mac_control);
+>>>>>>  		writel(AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
+>>>>>>  		       port->sgmii_base + AM65_CPSW_SGMII_CONTROL_REG);
+>>>>>>  	}
+>>>>>> @@ -1553,8 +1558,7 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
+>>>>>>  
+>>>>>>  	if (speed == SPEED_1000)
+>>>>>>  		mac_control |= CPSW_SL_CTL_GIG;
+>>>>>> -	if (interface == PHY_INTERFACE_MODE_SGMII)
+>>>>>> -		mac_control |= CPSW_SL_CTL_EXT_EN;
+>>>>>> +	/* TODO: Verify whether in-band is necessary for 10 Mbps RGMII */
+>>>>>>  	if (speed == SPEED_10 && phy_interface_mode_is_rgmii(interface))
+>>>>>>  		/* Can be used with in band mode only */
+>>>>>>  		mac_control |= CPSW_SL_CTL_EXT_EN;
+>>>>>
+>>>>> I'm afraid I can see you haven't thought this patch through properly.
+>>>>>
+>>>>> am65_cpsw_nuss_mac_link_down() will call
+>>>>> cpsw_sl_ctl_reset(port->slave.mac_sl); which has the effect of clearing
+>>>>> to zero the entire MAC control register. This will clear
+>>>>> CPSW_SL_CTL_EXT_EN that was set in am65_cpsw_nuss_mac_config() which is
+>>>>> not what you want to be doing.
+>>>>>
+>>>>> Given that we have the 10Mbps issue with RGMII, I think what you want
+>>>>> to be doing is:
+>>>>>
+>>>>> 1. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_config() if in SGMII
+>>>>>    mode, otherwise clear this bit.
+>>>>>
+>>>>> 2. Clear the mac_control register in am65_cpsw_nuss_mac_link_down()
+>>>>>    if in RMGII mode, otherwise preserve the state of
+>>>>>    CPSW_SL_CTL_EXT_EN but clear all other bits.
+>>>>>
+>>>>> 3. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_link_up() if in
+>>>>>    RGMII mode and 10Mbps.
+>>>>
+>>>> I plan to implement it as follows:
+>>>> 1. Add a member "u32 mode_config" to "struct am65_cpsw_slave_data" in
+>>>> "am65-cpsw-nuss.h".
+>>>> 2. In am65_cpsw_nuss_mac_config(), store the value of mac_control in
+>>>> "port->slave.mode_config".
+>>>> 3. In am65_cpsw_nuss_mac_link_down(), after the reset via
+>>>> cpsw_sl_ctl_reset(), execute:
+>>>> cpsw_sl_ctl_set(port->slave.mac_sl, port->slave.mode_config) in order to
+>>>> restore the configuration performed in am65_cpsw_nuss_mac_config().
+>>>>
+>>>> Please let me know in case of any suggestions to implement it in a
+>>>> better manner.
+>>>
+>>> Do you think this complexity is really worth it?
+>>>
+>>> Let's look at what's available:
+>>>
+>>> cpsw_sl_ctl_set() - sets bits in the mac control register
+>>> cpsw_sl_ctl_clr() - clears bits in the mac control register
+>>> cpsw_sl_ctl_reset() - sets the mac control register to zero
+>>>
+>>> So, in mac_config(), we can do:
+>>>
+>>> 	if (interface == SGMII)
+>>> 		cpsw_sl_ctl_set(CPSW_SL_CTL_EXT_EN);
+>>> 	else
+>>> 		cpsw_sl_ctl_clr(CPSW_SL_CTL_EXT_EN);
+>>
+>> While this will work for patch 1/3, once I add support for USXGMII mode
+>> as in patch 3/3, I believe that I have to invert it, beginning by
+>> invoking a cpsw_sl_ctl_clr(CPSW_SL_CTL_EXT_EN) at the start in
+>> mac_config() followed by switching through the modes. If the mode is
+>> SGMII, then I invoke cpsw_sl_ctl_set(CPSW_SL_CTL_EXT_EN), along with the
+>> write to the MR_ADV_ABILITY_REG register to advertise SGMII. If the mode
+>> is USXGMII, then I invoke:
+>> cpsw_sl_ctl_set(CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN)
+> 
+> For patch 1, I did leave out the write for MR_ADV_ABILITY_REG, I had
+> assumed you'd get the idea on that and merge the if() condition you
+> already had with my suggestion above (which isn't literal code!)
+> 
+> In patch 3, you simply need to add:
+> 
+> 	if (interface == USXGMII)
+> 		cpsw_sl_ctl_set(CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN);
+> 	else
+> 		cpsw_sl_ctl_clr(CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN);
+
+Thank you for answering all my questions and sharing your valuable
+feedback. I will implement all the suggestions in the v3 series.
+
+Regards,
+Siddharth.
