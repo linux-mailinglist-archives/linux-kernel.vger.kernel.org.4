@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F936D4D2D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFEE56D4D2F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbjDCQGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
+        id S233186AbjDCQGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233030AbjDCQGR (ORCPT
+        with ESMTP id S233226AbjDCQGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:06:17 -0400
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98ADD3C19;
-        Mon,  3 Apr 2023 09:06:07 -0700 (PDT)
-Date:   Mon, 03 Apr 2023 16:05:56 +0000
+        Mon, 3 Apr 2023 12:06:39 -0400
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2D53AB5;
+        Mon,  3 Apr 2023 09:06:13 -0700 (PDT)
+Date:   Mon, 03 Apr 2023 16:06:02 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
         s=protonmail3; t=1680537965; x=1680797165;
-        bh=XWxRNYRILriG9buCxYWPZvFrye6VcAJ3FED3SsdC9Ao=;
+        bh=S5ndiOTk444R587cz6eQKsLf+C57xcupLszBquLvesM=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=DNemyBNee5laXKlZlC9N3u/jVkMv95G0Y5gTfsiY/jTLdk6pd7mfz1X6r5tcTmeF4
-         VcUlu9g/J2T5F9gpKVvgWSnOOs7PzhTDbR6ZvLyh3Agmwe9Q5RmblclrHZ146+rzwe
-         HlzN5ebC9XdP1sckq0vpMIvpaa+2Untc/k5jPZSfvSkGxucnhlFJzlk40Ww1Ok8hgM
-         ojQ6HkuI27Ro8cDEfiAjC9Xjnq+xS367rd8cMeeCGkBFf471aCOQ8lGtRqT+tM3ZMO
-         YkmsVEZLwqfAkaJux71zb015oyobOFsnzMe//LHWYJduW0ePYwWwCPqp6krjf7c21b
-         NzfMxxS43tyUg==
+        b=D1B+Y+omvyh0YiZ7aLHE5yXMoYPPexH0Sm74LEUhuLk7et6jQjwZBYYklUxQcKwD+
+         opxmhpc8HH5QM3BlB9ofIpTyuqO5g69IsjlfWjFVxLPeQ+8ZQrWf8f/OPf1m5ZNOrS
+         QYcXGHkIsEKLWqaFhz/dK/onb0LRWEyQv5IDrMohCWkSuSKNs3RpoyiFaPuHnwqIMC
+         vQuKijouFY8DAfTDlitS6yMOlKpxwBXzaiwPVONcqU9OqrdovPzsdZxCXOp7z5hdYf
+         uxMFw3djYFtaAM51WSyvs+fvbz6ZudDvB11K4QsC8k02R2YqZw63PFycnh0aLg2sI5
+         0nC2tXzjreQUA==
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -39,8 +39,8 @@ Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>,
         Alice Ryhl <aliceryhl@google.com>,
         Andreas Hindborg <a.hindborg@samsung.com>
-Subject: [PATCH v5 14/15] rust: sync: reduce stack usage of `UniqueArc::try_new_uninit`
-Message-ID: <20230403160511.174894-7-y86-dev@protonmail.com>
+Subject: [PATCH v5 15/15] rust: sync: add functions for initializing `UniqueArc<MaybeUninit<T>>`
+Message-ID: <20230403160511.174894-8-y86-dev@protonmail.com>
 In-Reply-To: <20230403154422.168633-1-y86-dev@protonmail.com>
 References: <20230403154422.168633-1-y86-dev@protonmail.com>
 Feedback-ID: 40624463:user:proton
@@ -57,89 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`UniqueArc::try_new_uninit` calls `Arc::try_new(MaybeUninit::uninit())`.
-This results in the uninitialized memory being placed on the stack,
-which may be arbitrarily large due to the generic `T` and thus could
-cause a stack overflow for large types.
-
-Change the implementation to use the pin-init API which enables in-place
-initialization. In particular it avoids having to first construct and
-then move the uninitialized memory from the stack into the final location.
+Add two functions `init_with` and `pin_init_with` to
+`UniqueArc<MaybeUninit<T>>` to initialize the memory of already allocated
+`UniqueArc`s. This is useful when you want to allocate memory check some
+condition inside of a context where allocation is forbidden and then
+conditionally initialize an object.
 
 Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-Cc: Gary Guo <gary@garyguo.net>
-Cc: Alice Ryhl <aliceryhl@google.com>
-Cc: Andreas Hindborg <a.hindborg@samsung.com>
+Reviewed-by: Gary Guo <gary@garyguo.net>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
 ---
- rust/kernel/lib.rs      |  1 -
- rust/kernel/sync/arc.rs | 16 +++++++++++++---
- 2 files changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 821bd067151c..2d7606135ef6 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -28,7 +28,6 @@
- #[cfg(not(CONFIG_RUST))]
- compile_error!("Missing kernel configuration for conditional compilation")=
-;
-
--#[allow(unused_extern_crates)]
- // Allow proc-macros to refer to `::kernel` inside the `kernel` crate (thi=
-s crate).
- extern crate self as kernel;
+ rust/kernel/sync/arc.rs | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
 diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index 43a53fbe175d..d05caa723718 100644
+index d05caa723718..d1a79cce5e54 100644
 --- a/rust/kernel/sync/arc.rs
 +++ b/rust/kernel/sync/arc.rs
-@@ -18,7 +18,8 @@
- use crate::{
-     bindings,
-     error::{self, Error},
--    init::{InPlaceInit, Init, PinInit},
-+    init::{self, InPlaceInit, Init, PinInit},
-+    try_init,
-     types::{ForeignOwnable, Opaque},
- };
- use alloc::boxed::Box;
-@@ -30,6 +31,7 @@ use core::{
-     pin::Pin,
-     ptr::NonNull,
- };
-+use macros::pin_data;
-
- /// A reference-counted pointer to an instance of `T`.
- ///
-@@ -122,6 +124,7 @@ pub struct Arc<T: ?Sized> {
-     _p: PhantomData<ArcInner<T>>,
- }
-
-+#[pin_data]
- #[repr(C)]
- struct ArcInner<T: ?Sized> {
-     refcount: Opaque<bindings::refcount_t>,
-@@ -502,9 +505,16 @@ impl<T> UniqueArc<T> {
-
-     /// Tries to allocate a new [`UniqueArc`] instance whose contents are =
-not initialised yet.
-     pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>, AllocErro=
-r> {
--        Ok(UniqueArc::<MaybeUninit<T>> {
-+        // INVARIANT: The refcount is initialised to a non-zero value.
-+        let inner =3D Box::try_init::<AllocError>(try_init!(ArcInner {
-+            // SAFETY: There are no safety requirements for this FFI call.
-+            refcount: Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) }),
-+            data <- init::uninit::<T, AllocError>(),
-+        }? AllocError))?;
-+        Ok(UniqueArc {
-             // INVARIANT: The newly-created object has a ref-count of 1.
--            inner: Arc::try_new(MaybeUninit::uninit())?,
-+            // SAFETY: The pointer from the `Box` is valid.
-+            inner: unsafe { Arc::from_inner(Box::leak(inner).into()) },
-         })
+@@ -541,6 +541,30 @@ impl<T> UniqueArc<MaybeUninit<T>> {
+             inner: unsafe { Arc::from_inner(inner.cast()) },
+         }
      }
++
++    /// Initialize `self` using the given initializer.
++    pub fn init_with<E>(mut self, init: impl Init<T, E>) -> core::result::=
+Result<UniqueArc<T>, E> {
++        // SAFETY: The supplied pointer is valid for initialization.
++        match unsafe { init.__init(self.as_mut_ptr()) } {
++            // SAFETY: Initialization completed successfully.
++            Ok(()) =3D> Ok(unsafe { self.assume_init() }),
++            Err(err) =3D> Err(err),
++        }
++    }
++
++    /// Pin-initialize `self` using the given pin-initializer.
++    pub fn pin_init_with<E>(
++        mut self,
++        init: impl PinInit<T, E>,
++    ) -> core::result::Result<Pin<UniqueArc<T>>, E> {
++        // SAFETY: The supplied pointer is valid for initialization and we=
+ will later pin the value
++        // to ensure it does not move.
++        match unsafe { init.__pinned_init(self.as_mut_ptr()) } {
++            // SAFETY: Initialization completed successfully.
++            Ok(()) =3D> Ok(unsafe { self.assume_init() }.into()),
++            Err(err) =3D> Err(err),
++        }
++    }
  }
+
+ impl<T: ?Sized> From<UniqueArc<T>> for Pin<UniqueArc<T>> {
 --
 2.39.2
 
