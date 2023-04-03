@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE826D4001
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFF16D4002
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbjDCJQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
+        id S231947AbjDCJRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231925AbjDCJQk (ORCPT
+        with ESMTP id S231886AbjDCJQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:16:40 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE0A1040D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:16:16 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id k199-20020a2524d0000000b00b7f3a027e50so13119706ybk.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 02:16:16 -0700 (PDT)
+        Mon, 3 Apr 2023 05:16:45 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F01610AA7;
+        Mon,  3 Apr 2023 02:16:22 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id ek18so114543056edb.6;
+        Mon, 03 Apr 2023 02:16:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680513371;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oOBOcidFD52mr0nHF1MZQO6G+xL8UJJoT29DA6+kD5M=;
-        b=U+awEBpsQrO+YcypjIJ44XmrE+Z/5jhRdtWiOZu5SPfWo4nxy4kRiW0ppUZKcHmBFc
-         U7wUdiQ2EkiGOMqyrcE5WNHN55LXhRVjlS67UQxgmnYrU/s4erPOIAVSsNJzQm7uG4Va
-         RFTXD7fT9KQJ5butgxHOwZKepOAtbp+sVf7EITVC8q7KXGgEfkW8Epfq0q6KlRHwHzZ1
-         8gAL/4c2HgyDtOT42vytqGik3ldKOAT3vnKxoiumX9oLbwJhtuSjycc8JDu0N2HcQ5KV
-         rvxzgiieAcPoNgj0roKhXT0tdcH2pqgC8OjKBzNSeLBkUB0KwKq17C/O80Z4xO5HEC6D
-         4Hhw==
+        d=gmail.com; s=20210112; t=1680513380;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=31Wjg/LmLDHA4briEYR2A/3JNw0vmPfLkG9fx2QUjyI=;
+        b=kDStKDmVvvOJM0bR2+MjBZfieu+sJCY9LuX5WxONmwMWwl11Xvezp6WJz4AarJ70AR
+         Hg5CN1+Boj5zbvBxTUdY+IB4HxN/EdzD1g5IfJY1kwXggYdsFENN1My2Zfp5YRl7WRJm
+         xjdNHTvg2nlnMsXolxGzNnXYaaras35U4ftc1ADoG9ALq5O3O16hFveCVojGFR/FPlMr
+         uY542Sx4JlmjI5fAeRb42ZMI3BKKzLB0Tx1OJi2tnIsbp1Rc8s/UNZmkVUW1NBGSkXFg
+         3mNcXkR0iMQft2rGviDuYhleFPbzqbFV+sUNM/z3ERRaiEjjDYUItX1wbnwKNpmf8Hn7
+         PN5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680513371;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oOBOcidFD52mr0nHF1MZQO6G+xL8UJJoT29DA6+kD5M=;
-        b=veJN3vKlphc22FKnM89CiOv8uunknFTOLBxG29vYBbZG0LtvIoXlpRJ3H96gREjMI5
-         649jqvGfcVpjilQgEvO7k95UGyhJb5075fKIMZsnZNKakjZpO4AhAqlkqqleX11VxE1I
-         MV8NQ6RyDeuSjy5hPbjZzB4SiUjo9/Y/FM1NSaA9Xj8ATg1739EBOL1IfGUwUCilgNPk
-         EyYVz9rpxQaG0qlJ6fY1txSJZl9E2QGo8mIxHI6P7Oh0NquhS/dDAto59Pa8iGKvt79V
-         03PbiGhZDiV7kG5isf6f37sT4MfzesjA3YEwSm/KEKnK9XX00UEsD82w9TDvHskdpTd+
-         r+MA==
-X-Gm-Message-State: AAQBX9fFXFpz/BiLgVrfZUsilo/Cav8me6BYvjFUWjFpLzpS+uGzL0tX
-        qoTawCQu5tFHg0ZfnPs7rwPaLnQO8fSTpa3ElA==
-X-Google-Smtp-Source: AKy350asH3jkh9RPehWVzkcrZy5ko5YNd2dBWf3ur6JlNEb8PyxtVSj9rcv/YcPQHLdIMMH23U8d1HYmSTnb07Z3uw==
-X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:326b:2eb7:dac2:a97e])
- (user=peternewman job=sendgmr) by 2002:a81:af23:0:b0:541:8c77:93b1 with SMTP
- id n35-20020a81af23000000b005418c7793b1mr16834275ywh.8.1680513371147; Mon, 03
- Apr 2023 02:16:11 -0700 (PDT)
-Date:   Mon,  3 Apr 2023 11:15:47 +0200
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.423.gd6c402a77b-goog
-Message-ID: <20230403091547.441550-1-peternewman@google.com>
-Subject: [PATCH v5] arm64: pmuv3: dynamically map PERF_COUNT_HW_BRANCH_INSTRUCTIONS
-From:   Peter Newman <peternewman@google.com>
-To:     mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     acme@kernel.org, adrian.hunter@intel.com,
-        alexander.shishkin@linux.intel.com, catalin.marinas@arm.com,
-        eranian@google.com, irogers@google.com, jolsa@kernel.org,
-        mingo@redhat.com, namhyung@kernel.org, peterz@infradead.org,
-        will@kernel.org, Peter Newman <peternewman@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        d=1e100.net; s=20210112; t=1680513380;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=31Wjg/LmLDHA4briEYR2A/3JNw0vmPfLkG9fx2QUjyI=;
+        b=6KM7r3uICYi61aTE6wVO++68W//HKI08ZF+AQNNG8qTgZIyPt7XrGsHMwWX/vSgt6y
+         PSnctWXq9QT07ynGVnriEQgmOP5Ev93ZDv65HJleEUrBfHfTBgoyJc3RQ0lMucLEt2U+
+         E1d0hXBCR5noGdcIOYAANVsmxol7YRYbjHTFB7MsfXFHKfc1ZauLhvr3tueikQ4j/y5b
+         6L5EUShuntrfL1grVwA6cX6LyVrTjfRH4TsrmhOApIQmqNiNW4b7WGTaMflP9KQBw9SD
+         5FUisLuij9M1mcQmYDHMp3+ZdUGQNhoMGeKuTKuDa7agPZ83JRihhLVfLocUze9WxjLz
+         /M9Q==
+X-Gm-Message-State: AAQBX9elzUJjhNvKW1Ip+1WDV9Dg8125B7ban9AgerbbU0tqAjsTr3rD
+        pK4qE+TYxQptFVzwpbrlTS8=
+X-Google-Smtp-Source: AKy350atfEBSrTVKgqBuIzdw/UZRkrKjNrMECkvSgQSsxy/WN1nOkFWrkUvddMqWLQpH1JG8HW51WQ==
+X-Received: by 2002:a17:906:a887:b0:939:e7d6:7c52 with SMTP id ha7-20020a170906a88700b00939e7d67c52mr33738486ejb.20.1680513380242;
+        Mon, 03 Apr 2023 02:16:20 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id l22-20020a1709061c5600b00927f6c799e6sm4243650ejg.132.2023.04.03.02.16.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 02:16:19 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 12:16:16 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     lishuchang@hust.edu.cn
+Cc:     James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: lpfc: fix ioremap issues in
+ 'lpfc_sli4_pci_mem_setup'
+Message-ID: <6df77fb0-6b3d-4e3b-9c5a-40e217e8dae9@kili.mountain>
+References: <20230403074821.5121-1-lishuchang@hust.edu.cn>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="0l+vRQSv3t7ooNLn"
+Content-Disposition: inline
+In-Reply-To: <20230403074821.5121-1-lishuchang@hust.edu.cn>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,112 +77,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephane Eranian <eranian@google.com>
 
-The mapping of perf_events generic hardware events to actual PMU events on
-ARM PMUv3 may not always be correct. This is in particular true for the
-PERF_COUNT_HW_BRANCH_INSTRUCTIONS event. Although the mapping points to an
-architected event, it may not always be available. This can be seen with a
-simple:
+--0l+vRQSv3t7ooNLn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-$ perf stat -e branches sleep 0
- Performance counter stats for 'sleep 0':
+On Mon, Apr 03, 2023 at 03:48:21PM +0800, lishuchang@hust.edu.cn wrote:
+> @@ -12069,9 +12069,11 @@ lpfc_sli4_pci_mem_setup(struct lpfc_hba *phba)
+>  	return 0;
+>  
+>  out_iounmap_all:
+> -	iounmap(phba->sli4_hba.drbl_regs_memmap_p);
+> +	if (!phba->sli4_hba.drbl_regs_memmap_p)
+> +		iounmap(phba->sli4_hba.drbl_regs_memmap_p);
 
-   <not supported>      branches
+The test is reversed still.
 
-       0.001401081 seconds time elapsed
+If you make a mistake, you should write a static checker warning so that
+you never make the same mistake again.  ;)  See attached.
 
-Yet the hardware does have an event that could be used for branches.
 
-Dynamically check for a supported hardware event which can be used for
-PERF_COUNT_HW_BRANCH_INSTRUCTIONS at mapping time.
+>  out_iounmap_ctrl:
+> -	iounmap(phba->sli4_hba.ctrl_regs_memmap_p);
+> +	if (!phba->sli4_hba.ctrl_regs_memmap_p)
 
-And with that:
+Also reversed.
 
-$ perf stat -e branches sleep 0
+> +		iounmap(phba->sli4_hba.ctrl_regs_memmap_p);
+>  out_iounmap_conf:
+>  	iounmap(phba->sli4_hba.conf_regs_memmap_p);
 
- Performance counter stats for 'sleep 0':
+regards,
+dan carpenter
 
-           166,739      branches
 
-       0.000832163 seconds time elapsed
 
-Co-Developed-by: Stephane Eranian <eranian@google.com>
-Signed-off-by: Stephane Eranian <eranian@google.com>
-Co-Developed-by: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Co-Developed-by: Peter Newman <peternewman@google.com>
-Signed-off-by: Peter Newman <peternewman@google.com>
-Link: https://lore.kernel.org/all/YvunKCJHSXKz%2FkZB@FVFF77S0Q05N
----
-v4->v5:
- - update changelog tags
-v3->v4:
- - splice Mark's patch with Stephane's problem statement
-v2->v3:
- - removed prints per Will's suggestion
- 
-[v4] https://lore.kernel.org/lkml/20230327122527.3913496-1-peternewman@google.com/
-[v3] https://lore.kernel.org/all/20220816130221.885920-1-peternewman@google.com/
-[v2] https://lore.kernel.org/lkml/20220324181458.3216262-1-eranian@google.com/
+--0l+vRQSv3t7ooNLn
+Content-Type: text/x-csrc; charset=us-ascii
+Content-Disposition: attachment; filename="check_passing_possible_null.c"
 
- arch/arm64/kernel/perf_event.c | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+/*
+ * Copyright (C) 2023 Oracle.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see http://www.gnu.org/copyleft/gpl.txt
+ */
 
-diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-index dde06c0f97f3..ee63f8e719ea 100644
---- a/arch/arm64/kernel/perf_event.c
-+++ b/arch/arm64/kernel/perf_event.c
-@@ -45,7 +45,6 @@ static const unsigned armv8_pmuv3_perf_map[PERF_COUNT_HW_MAX] = {
- 	[PERF_COUNT_HW_INSTRUCTIONS]		= ARMV8_PMUV3_PERFCTR_INST_RETIRED,
- 	[PERF_COUNT_HW_CACHE_REFERENCES]	= ARMV8_PMUV3_PERFCTR_L1D_CACHE,
- 	[PERF_COUNT_HW_CACHE_MISSES]		= ARMV8_PMUV3_PERFCTR_L1D_CACHE_REFILL,
--	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED,
- 	[PERF_COUNT_HW_BRANCH_MISSES]		= ARMV8_PMUV3_PERFCTR_BR_MIS_PRED,
- 	[PERF_COUNT_HW_BUS_CYCLES]		= ARMV8_PMUV3_PERFCTR_BUS_CYCLES,
- 	[PERF_COUNT_HW_STALLED_CYCLES_FRONTEND]	= ARMV8_PMUV3_PERFCTR_STALL_FRONTEND,
-@@ -1048,6 +1047,28 @@ static void armv8pmu_reset(void *info)
- 	armv8pmu_pmcr_write(pmcr);
- }
- 
-+static int __armv8_pmuv3_map_event_id(struct arm_pmu *armpmu,
-+				      struct perf_event *event)
-+{
-+	if (event->attr.type == PERF_TYPE_HARDWARE &&
-+	    event->attr.config == PERF_COUNT_HW_BRANCH_INSTRUCTIONS) {
-+
-+		if (test_bit(ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED,
-+			     armpmu->pmceid_bitmap))
-+			return ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED;
-+
-+		if (test_bit(ARMV8_PMUV3_PERFCTR_BR_RETIRED,
-+			     armpmu->pmceid_bitmap))
-+			return ARMV8_PMUV3_PERFCTR_BR_RETIRED;
-+
-+		return HW_OP_UNSUPPORTED;
-+	}
-+
-+	return armpmu_map_event(event, &armv8_pmuv3_perf_map,
-+				&armv8_pmuv3_perf_cache_map,
-+				ARMV8_PMU_EVTYPE_EVENT);
-+}
-+
- static int __armv8_pmuv3_map_event(struct perf_event *event,
- 				   const unsigned (*extra_event_map)
- 						  [PERF_COUNT_HW_MAX],
-@@ -1059,9 +1080,7 @@ static int __armv8_pmuv3_map_event(struct perf_event *event,
- 	int hw_event_id;
- 	struct arm_pmu *armpmu = to_arm_pmu(event->pmu);
- 
--	hw_event_id = armpmu_map_event(event, &armv8_pmuv3_perf_map,
--				       &armv8_pmuv3_perf_cache_map,
--				       ARMV8_PMU_EVTYPE_EVENT);
-+	hw_event_id = __armv8_pmuv3_map_event_id(armpmu, event);
- 
- 	/*
- 	 * CHAIN events only work when paired with an adjacent counter, and it
+#include "smatch.h"
+#include "smatch_slist.h"
 
-base-commit: 7e364e56293bb98cae1b55fd835f5991c4e96e7d
--- 
-2.40.0.423.gd6c402a77b-goog
+static int my_id;
 
+static void check_non_null(struct expression *expr, const char *name, struct symbol *sym, void *data)
+{
+	struct sm_state *sm, *tmp;
+	sval_t sval;
+
+	sm = get_sm_state(SMATCH_EXTRA, name, sym);
+	if (!sm)
+		return;
+
+	FOR_EACH_PTR(sm->possible, tmp) {
+		if (!estate_get_single_value(tmp->state, &sval) ||
+		    sval.value != 0)
+			continue;
+		sm_warning("'%s' potentially NULL", name);
+		return;
+	} END_FOR_EACH_PTR(tmp);
+}
+
+void check_passing_possible_null(int id)
+{
+	my_id = id;
+
+	add_function_param_key_hook_early("iounmap", &check_non_null, 0, "$", NULL);
+}
+
+--0l+vRQSv3t7ooNLn--
