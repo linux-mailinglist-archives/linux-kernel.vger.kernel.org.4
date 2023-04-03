@@ -2,117 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BFD6D3FAB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBA16D3FAE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbjDCJCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
+        id S231878AbjDCJDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbjDCJC3 (ORCPT
+        with ESMTP id S231310AbjDCJDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:02:29 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40471024B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:02:11 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5419d4c340aso538233567b3.11
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 02:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680512531;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JhbtcZltj+ypNIMZCagCuTClsnuy+dnZITVz+eknFe0=;
-        b=Y5nv9GAKEk5L0ugkpavxev1XuHuo/DIYsgiHvn8xtDzDiKCALFCZA9Lkpb/EsJXva5
-         qnjInYE3ZQgXFmkE0f9Hck6AC0TP4W0hFdRLVV07ftol7GpvJ4BML7mcfdwJkzKlRGFD
-         wPIX8aeQWgIipGbHef27DcCkbgzUpvQl1AqVf/kmll1b3uARGqeyk1F1UFkPCWgweY98
-         /2XOvTtXlTPIZoVMEm2e68aI5QnjXCp09tEDO+SUltgJQKsH+7jI94KHQzIkb4qcgqo8
-         cdP8xwYuMBRdAr3GY78JTpiR/Sy+/E8RbqA0ZWTlvyUUcQUmnlBDJ6/858x3tH1EaiII
-         8I6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680512531;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JhbtcZltj+ypNIMZCagCuTClsnuy+dnZITVz+eknFe0=;
-        b=w3kl8b4Lv+CRyeFF79dcgt/u6cNfxQ8XG6MTh8EPiN5+SJL6HN+JWNjXoxtoYrLB4+
-         cEyxIZ8auN4NZZMyauGfHsXrn/b0CsZVqu3FEVj+rU324KvyM7bm1dOUWbs6qGm22pBf
-         oGW8mhkE6eoH3nC9rx5aaguAOJVYDsAunjWKDsTC/wgX10On3JqglL6qrboNsKW8/XW6
-         1Am1ow83a4C4U+8aOhZgzEz6owTHK+tuYHvbm6Noxv1J69xhIkZJJBQSJ5Y1b5u2eGSc
-         iuX7cfqx5Ae9nLycDnqQ7ReA/pThzPrPK9OzMV27rueBFhYKKpKsxPvJhEdcIcy1R0qr
-         9j+Q==
-X-Gm-Message-State: AAQBX9doYGSXxtdhyDq6wzOYAB8P6Xe6p9f/rF/GWhgznjRb+5YzAQ7S
-        c2PlxMChLGhnqNvsESH8lBfZhLxe9mYu+xqg9D9DPQ==
-X-Google-Smtp-Source: AKy350ZkpN9yjY1F5nTfy5VE/mrL48bstbRfecVOLioHamgr6vrDgn91occ4GlSBW5859XCRyPBnKjtEmV/heNbNH0Q=
-X-Received: by 2002:a81:b617:0:b0:544:b864:5532 with SMTP id
- u23-20020a81b617000000b00544b8645532mr16893143ywh.3.1680512530770; Mon, 03
- Apr 2023 02:02:10 -0700 (PDT)
+        Mon, 3 Apr 2023 05:03:40 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295435275;
+        Mon,  3 Apr 2023 02:03:38 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33393PK4064865;
+        Mon, 3 Apr 2023 04:03:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680512605;
+        bh=fFKF9EDZaeeQCsF9iF+AfZbQfvLxnFEKa7QmJZTumqM=;
+        h=From:To:CC:Subject:Date;
+        b=LkebCC8R6ZdgmxShYH328e7ENEmpT4bF7tx0gfUwayfU4kEk/UngctpkhFQDbgoga
+         xyxXxHS4BvIWKzfB0IHjgSifOQwMQMkqvF7ZaQtM/MKoF1xfgB1q8AT8FV9E/Qd5wM
+         M6lDvkqJJaR7qG8De3ItZKBM1qOmFtqGr/xaohx0=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33393Puk098920
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 3 Apr 2023 04:03:25 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
+ Apr 2023 04:03:24 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 3 Apr 2023 04:03:24 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33393LOM028016;
+        Mon, 3 Apr 2023 04:03:22 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <rogerq@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH net] net: ethernet: ti: am65-cpsw: Fix mdio cleanup in probe
+Date:   Mon, 3 Apr 2023 14:33:21 +0530
+Message-ID: <20230403090321.835877-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230203-evk-board-support-v4-0-5cffe66a38c0@baylibre.com>
- <7hy1ncydtc.fsf@baylibre.com> <CAFGrd9rKy9a4bUf1dkUtTogtWPFr5eu3jcsdaixi3hs_dWMwrg@mail.gmail.com>
-In-Reply-To: <CAFGrd9rKy9a4bUf1dkUtTogtWPFr5eu3jcsdaixi3hs_dWMwrg@mail.gmail.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Mon, 3 Apr 2023 11:02:00 +0200
-Message-ID: <CAFGrd9qLzcDJO_Fk_-B6XYuuxQzQoYLXmdp0Qj1Tszr0-sqNgw@mail.gmail.com>
-Subject: Re: [PATCH v4 00/11] Improve the MT8365 SoC and EVK board support
-To:     Kevin Hilman <khilman@baylibre.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here a build-able & working branch with dependencies:
-https://gitlab.baylibre.com/baylibre/mediatek/bsp/linux/-/commits/amergnat/=
-i350-evk-board-support
+In the am65_cpsw_nuss_probe() function's cleanup path, the call to
+of_platform_device_destroy() for the common->mdio_dev device is invoked
+unconditionally. It is possible that either the MDIO node is not present
+in the device-tree, or the MDIO node is disabled in the device-tree. In
+both these cases, the MDIO device is not created, resulting in a NULL
+pointer dereference when the of_platform_device_destroy() function is
+invoked on the common->mdio_dev device on the cleanup path.
 
-Regards,
-Alex
+Fix this by ensuring that the common->mdio_dev device exists, before
+attempting to invoke of_platform_device_destroy().
 
-Le ven. 31 mars 2023 =C3=A0 20:45, Alexandre Mergnat
-<amergnat@baylibre.com> a =C3=A9crit :
->
-> You forgot to apply the patches merged by Matthias:
->
-> Changes in v4:
-> - Remove v3 applied patch from the serie:
->   - arm64: dts: mediatek: add ethernet support for mt8365 SoC
->   - arm64: dts: mediatek: add mmc support for mt8365 SoC
->   - arm64: dts: mediatek: add mt6357 device-tree
->   - arm64: dts: mediatek: add pwrap support to mt8365 SoC
->   - arm64: dts: mediatek: Increase the size BL31 reserved memory
->
-> ...
->
-> Changes in v3:
-> - Remove v2 applied patch from the serie:
->   - dt-bindings: mmc: mediatek,mtk-sd: add mt8365
->
-> Regards,
-> Alex
+Fixes: a45cfcc69a25 ("net: ethernet: ti: am65-cpsw-nuss: use of_platform_device_create() for mdio")
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+---
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+index 4e3861c47708..bcea87b7151c 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+@@ -2926,7 +2926,8 @@ static int am65_cpsw_nuss_probe(struct platform_device *pdev)
+ 	am65_cpsw_nuss_phylink_cleanup(common);
+ 	am65_cpts_release(common->cpts);
+ err_of_clear:
+-	of_platform_device_destroy(common->mdio_dev, NULL);
++	if (common->mdio_dev)
++		of_platform_device_destroy(common->mdio_dev, NULL);
+ err_pm_clear:
+ 	pm_runtime_put_sync(dev);
+ 	pm_runtime_disable(dev);
+@@ -2956,7 +2957,8 @@ static int am65_cpsw_nuss_remove(struct platform_device *pdev)
+ 	am65_cpts_release(common->cpts);
+ 	am65_cpsw_disable_serdes_phy(common);
+ 
+-	of_platform_device_destroy(common->mdio_dev, NULL);
++	if (common->mdio_dev)
++		of_platform_device_destroy(common->mdio_dev, NULL);
+ 
+ 	pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+-- 
+2.25.1
+
