@@ -2,169 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A796D44C7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C646D44CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbjDCMry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
+        id S231954AbjDCMsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjDCMrw (ORCPT
+        with ESMTP id S229945AbjDCMsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:47:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB796658F
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:47:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3749143D;
-        Mon,  3 Apr 2023 05:48:33 -0700 (PDT)
-Received: from [10.57.56.209] (unknown [10.57.56.209])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 802EC3F840;
-        Mon,  3 Apr 2023 05:47:48 -0700 (PDT)
-Message-ID: <d2e7837e-a7b0-6fa6-6eee-9ccf487b4f49@arm.com>
-Date:   Mon, 3 Apr 2023 13:47:44 +0100
+        Mon, 3 Apr 2023 08:48:52 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06F5DC
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:48:51 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id D4AC2124;
+        Mon,  3 Apr 2023 14:48:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1680526129;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mxFIPyPfgG3AMigmPNlsaL+7KLePrBjVOrKeoyZBRyM=;
+        b=J0P2Eawz+8IN/Vy894IUZdHtGbi+5IwcT1kjZ//HXf/GhqJwHT4/zS4C5+l1j3xfOVdx5o
+        jJNKPXuwBNIlXBBbVoUqCwU/P9v5qZkH9yUWMIVSCG+Vk29NWCFK2cYkKuAJv8AA+SGkaj
+        yvAKFTvGSe3rCLjuTHRhgjTVVwpUV8Z4itmYk+yFMTheKFB7xVBDboC7LTvtqWGOX0skO0
+        z9x9NeYtS7xZlCUDmv+y0VN1Kc9opgTK2R3B5paq54c1b4YJKaOpiBojBdr5AI03qWoVfD
+        h2xxTNsRN0CWBI11on8d42q9spef9k3zZv0bLuXZZ+jt0M/mjUXQ8CO1SAVSfw==
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] perf/arm-cmn: Fix port detection for CMN-700
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     will@kernel.org
-Cc:     mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Jing Zhang <renyu.zj@linux.alibaba.com>
-References: <68ff05869f6dae06a92c5d320e535d8a2f75a0cd.1680522619.git.robin.murphy@arm.com>
-In-Reply-To: <68ff05869f6dae06a92c5d320e535d8a2f75a0cd.1680522619.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Mon, 03 Apr 2023 14:48:49 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc:     pratyush@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
+        Takahiro.Kuwano@infineon.com, bacem.daassi@infineon.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 05/10] mtd: spi-nor: core: Make
+ spi_nor_set_4byte_addr_mode_brwr public
+In-Reply-To: <20230331074606.3559258-6-tudor.ambarus@linaro.org>
+References: <20230331074606.3559258-1-tudor.ambarus@linaro.org>
+ <20230331074606.3559258-6-tudor.ambarus@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <13319920b52243b46ac6e08bfa681f45@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-03 12:50, Robin Murphy wrote:
-> When the "extra device ports" configuration was first added, the
-> additional mxp_device_port_connect_info registers were added around the
-> existing mxp_mesh_port_connect_info registers. What I missed about
-> CMN-700 is that it shuffled them around to remove this discontinuity.
-> As such, tweak the definitions and factor out a helper for reading these
-> registers so we can deal with this discrepancy easily, which does at
-> least allow nicely tidying up the callsites. With this we can then also
-> do the nice thing and skip accesses completely rather than relying on
-> RES0 behaviour where we know the extra registers aren't defined.
+Am 2023-03-31 09:46, schrieb Tudor Ambarus:
+> This method can be retrieved at BFPT parsing time. The method is
+> described in JESD216 BFPT[SFDP_DWORD(16)], BIT(28) and BIT(20).
 > 
-> Fixes: 23760a014417 ("perf/arm-cmn: Add CMN-700 support")
-> Reported-by: Jing Zhang <renyu.zj@linux.alibaba.com>
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
->   drivers/perf/arm-cmn.c | 55 ++++++++++++++++++++++--------------------
->   1 file changed, 29 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
-> index c9689861be3f..367d41c5d983 100644
-> --- a/drivers/perf/arm-cmn.c
-> +++ b/drivers/perf/arm-cmn.c
-> @@ -57,14 +57,12 @@
->   #define CMN_INFO_REQ_VC_NUM		GENMASK_ULL(1, 0)
->   
->   /* XPs also have some local topology info which has uses too */
-> -#define CMN_MXP__CONNECT_INFO_P0	0x0008
-> -#define CMN_MXP__CONNECT_INFO_P1	0x0010
-> -#define CMN_MXP__CONNECT_INFO_P2	0x0028
-> -#define CMN_MXP__CONNECT_INFO_P3	0x0030
-> -#define CMN_MXP__CONNECT_INFO_P4	0x0038
-> -#define CMN_MXP__CONNECT_INFO_P5	0x0040
-> +#define CMN_MXP__CONNECT_INFO(p)	(0x0008 + 8 * (p))
->   #define CMN__CONNECT_INFO_DEVICE_TYPE	GENMASK_ULL(4, 0)
->   
-> +#define CMN_MAX_PORTS			6
-> +#define CI700_CONNECT_INFO_P2_5_OFFSET	0x20
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-...which of course should be 0x10 for the way the code below ended up, 
-sigh. I'll wait for any further review before resending.
-
-Cheers,
-Robin.
-
-> +
->   /* PMU registers occupy the 3rd 4KB page of each node's region */
->   #define CMN_PMU_OFFSET			0x2000
->   
-> @@ -396,6 +394,25 @@ static struct arm_cmn_node *arm_cmn_node(const struct arm_cmn *cmn,
->   	return NULL;
->   }
->   
-> +static u32 arm_cmn_device_connect_info(const struct arm_cmn *cmn,
-> +				       const struct arm_cmn_node *xp, int port)
-> +{
-> +	int offset = CMN_MXP__CONNECT_INFO(port);
-> +
-> +	if (port >= 2) {
-> +		if (cmn->model & (CMN600 | CMN650))
-> +			return 0;
-> +		/*
-> +		 * CI-700 may have extra ports, but still has the
-> +		 * mesh_port_connect_info registers in the way.
-> +		 */
-> +		if (cmn->model == CI700)
-> +			offset += CI700_CONNECT_INFO_P2_5_OFFSET;
-> +	}
-> +
-> +	return readl_relaxed(xp->pmu_base - CMN_PMU_OFFSET + offset);
-> +}
-> +
->   static struct dentry *arm_cmn_debugfs;
->   
->   #ifdef CONFIG_DEBUG_FS
-> @@ -469,7 +486,7 @@ static int arm_cmn_map_show(struct seq_file *s, void *data)
->   	y = cmn->mesh_y;
->   	while (y--) {
->   		int xp_base = cmn->mesh_x * y;
-> -		u8 port[6][CMN_MAX_DIMENSION];
-> +		u8 port[CMN_MAX_PORTS][CMN_MAX_DIMENSION];
->   
->   		for (x = 0; x < cmn->mesh_x; x++)
->   			seq_puts(s, "--------+");
-> @@ -477,14 +494,9 @@ static int arm_cmn_map_show(struct seq_file *s, void *data)
->   		seq_printf(s, "\n%d    |", y);
->   		for (x = 0; x < cmn->mesh_x; x++) {
->   			struct arm_cmn_node *xp = cmn->xps + xp_base + x;
-> -			void __iomem *base = xp->pmu_base - CMN_PMU_OFFSET;
->   
-> -			port[0][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P0);
-> -			port[1][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P1);
-> -			port[2][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P2);
-> -			port[3][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P3);
-> -			port[4][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P4);
-> -			port[5][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P5);
-> +			for (p = 0; p < CMN_MAX_PORTS; p++)
-> +				port[p][x] = arm_cmn_device_connect_info(cmn, xp, p);
->   			seq_printf(s, " XP #%-2d |", xp_base + x);
->   		}
->   
-> @@ -2083,18 +2095,9 @@ static int arm_cmn_discover(struct arm_cmn *cmn, unsigned int rgn_offset)
->   		 * from this, since in that case we will see at least one XP
->   		 * with port 2 connected, for the HN-D.
->   		 */
-> -		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P0))
-> -			xp_ports |= BIT(0);
-> -		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P1))
-> -			xp_ports |= BIT(1);
-> -		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P2))
-> -			xp_ports |= BIT(2);
-> -		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P3))
-> -			xp_ports |= BIT(3);
-> -		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P4))
-> -			xp_ports |= BIT(4);
-> -		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P5))
-> -			xp_ports |= BIT(5);
-> +		for (int p = 0; p < CMN_MAX_PORTS; p++)
-> +			if (arm_cmn_device_connect_info(cmn, xp, p))
-> +				xp_ports |= BIT(p);
->   
->   		if (cmn->multi_dtm && (xp_ports & 0xc))
->   			arm_cmn_init_dtm(dtm++, xp, 1);
+Reviewed-by: Michael Walle <michael@walle.cc>
