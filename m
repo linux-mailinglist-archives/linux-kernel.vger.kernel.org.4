@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F276A6D5291
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7976D5292
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbjDCUgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 16:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
+        id S233350AbjDCUgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 16:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233322AbjDCUgQ (ORCPT
+        with ESMTP id S231933AbjDCUgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 16:36:16 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6396B40EF;
-        Mon,  3 Apr 2023 13:36:12 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-17aa62d0a4aso32217890fac.4;
-        Mon, 03 Apr 2023 13:36:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680554171;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+FV7kaEhYq8hPkWP8x51YjtButdsWCOy21wJQSXxrNc=;
-        b=BGlRdg6rZMgWmsjAbw9fA2sQDKVXF3k7CUqcw5iez7mzemzqtS5lINkDeR0ykg/Z2A
-         +ZdSKyvyWFjPKO6JngnORcZR7+Gykyyy/xjPSz0w62MJSwvirmY4dd9hXM5VBS0tnTyi
-         n7cR9LRww/HIJ/kkt/XBpihMeHgZoBFIXYaTqOie5NqWJFwbVATmcOGUh4aAkg5HjRJf
-         Kj60pqtndcC8nrtTV+3YpSjwhK8bUANcQFJ5fholi3dbkdaUdxPzP+3DCNJN58DJc4pW
-         VmZcraNdTBzxajsgqREtwZgrGyKyW1xAQGPZgbOcFSDLlbKXPAq7z2E5ceoVUoiNHtHq
-         7djw==
-X-Gm-Message-State: AAQBX9fprjCsmm337uekqradsGlePRdajgM79sl0XM4bgm1guICTGHFH
-        JuDbuNKgEtnpKucINJzgag==
-X-Google-Smtp-Source: AKy350aB1944ukBSjhjdSkpx32AuFktYk5TasyKwQZRi4khTxO6rgxHBV5Rzx3+wZXB2zK2Ppb6XhQ==
-X-Received: by 2002:a05:6870:d210:b0:172:80fd:8482 with SMTP id g16-20020a056870d21000b0017280fd8482mr451861oac.5.1680554171357;
-        Mon, 03 Apr 2023 13:36:11 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id aw20-20020a0568707f9400b0016e49af5815sm3878520oac.51.2023.04.03.13.36.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 13:36:11 -0700 (PDT)
-Received: (nullmailer pid 1703260 invoked by uid 1000);
-        Mon, 03 Apr 2023 20:36:10 -0000
-Date:   Mon, 3 Apr 2023 15:36:10 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     pabeni@redhat.com, linux-kernel@vger.kernel.org, wg@grandegger.com,
-        edumazet@google.com, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, mkl@pengutronix.de, kuba@kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-can@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        davem@davemloft.net
-Subject: Re: [PATCH] dt-bindings: can: fsl,flexcan: add optional
- power-domains property
-Message-ID: <168055416976.1703203.4200432741574181226.robh@kernel.org>
-References: <20230328054602.1974255-1-peng.fan@oss.nxp.com>
+        Mon, 3 Apr 2023 16:36:45 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E71A448E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 13:36:29 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D9C9A1EC01A9;
+        Mon,  3 Apr 2023 22:36:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680554187;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=dURY1xCpHXDLXAfUlVyn8rjCxWMcqqi+PH/vEcs4z5g=;
+        b=ICr5otNGdMU0EdM8Cn5TYhOfU1Ydt/YWGbdIIhReI0kzu/52rRpi/D/kxSXXfA35D2lBj7
+        yx34UcFvFEgkTRbLYLEK40/zhwrtMBq6prlIXKUUeeXfKXCnOp7SjI9mEhgjON3asyB+hc
+        euVlPMWcWWNC476TW8bMOATeRolUeyU=
+Date:   Mon, 3 Apr 2023 22:36:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/amd_nb: Check for invalid SMN reads
+Message-ID: <20230403203623.GDZCs4x5yVReaPVOaS@fat_crate.local>
+References: <20230403164244.471141-1-yazen.ghannam@amd.com>
+ <20230403193245.GCZCsp3RjNZFSE5f9s@fat_crate.local>
+ <abc57738-6ab9-50e6-6c05-5059299d19d1@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230328054602.1974255-1-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <abc57738-6ab9-50e6-6c05-5059299d19d1@amd.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 03, 2023 at 03:40:38PM -0400, Yazen Ghannam wrote:
+> I don't think pci_write_config*() sets the PCI Error response like
+> pci_read_config(), AFAICT.
 
-On Tue, 28 Mar 2023 13:46:02 +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Add optional power-domains property for i.MX8 usage.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+index 4266b64631a4..c4caade434a7 100644
+--- a/arch/x86/kernel/amd_nb.c
++++ b/arch/x86/kernel/amd_nb.c
+@@ -181,6 +181,13 @@ static int __amd_smn_rw(u16 node, u32 address, u32 *value, bool write)
+ 		pr_warn("Error %s SMN address 0x%x.\n",
+ 			(write ? "writing to" : "reading from"), address);
+ 
++	if (!write) {
++		if (PCI_POSSIBLE_ERROR(*value)) {
++			err = -ENODEV;
++			*value = 0;
++		}
++	}
++
+ out_unlock:
+ 	mutex_unlock(&smn_mutex);
+ 
 
-Acked-by: Rob Herring <robh@kernel.org>
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
