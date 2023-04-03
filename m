@@ -2,121 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E476F6D4D58
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A58F6D4D5A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbjDCQQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
+        id S232568AbjDCQRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjDCQQx (ORCPT
+        with ESMTP id S232406AbjDCQRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:16:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B3A1725
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:16:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680538566;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V3WVVlCgDVu+so3CtUZvMFVtwTzfAtjj67XqfHbOtAk=;
-        b=E6S52dVQoKjnxdDXUGoABHN/kng6Quo1jHQcTyxEhawIRmH5YS9/IYDuvMVXk74VUpyRDa
-        e0goexJUVNxwRuuhQq55uHMIic7fjAqKMngKDXT+FfD1SdzUJicQLu+vdEuyMMrtioJHZs
-        Q8KMJWlV+DYLQWok0Ebc1S2b2xdcHNw=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-557-Q7PsTagSP1OkfRWsW2pHRg-1; Mon, 03 Apr 2023 12:16:05 -0400
-X-MC-Unique: Q7PsTagSP1OkfRWsW2pHRg-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3e2daffa0d4so9301731cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 09:16:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680538564;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V3WVVlCgDVu+so3CtUZvMFVtwTzfAtjj67XqfHbOtAk=;
-        b=0l3CYaq/yWYEyncB2mKwk6TXBOzVch02tY+1CO/3NpghbHiCOVkIxvjdbEwDWAdR87
-         OJHjUKNjHmy43ywuY4zvptMCwejx58SB1tHocS1Kt+aeY4l1uXXCDB3eluyEpLKIujlq
-         sLqHSWxRiIw+ryH28ysunw6r/plKL3UyY7qU2KumugyliQtOzsqRRmOyfeQmhDGEcIRO
-         88PleweBV9a9ZRQuMbv1Qai+6ShEnmnNKxi0R3a9M/SB0ETEJ4VAR3DoFjZOl4CdIhCo
-         O75tRRsVumlgtrUNodzD1nRnNfvZzwGZYULJIOVs6/RxNrevi20Sqb/KMj7ZlsfBiIw0
-         LGxw==
-X-Gm-Message-State: AAQBX9c16zjfUjOjsKdzdHvsZol69ClJDcGpqFr/6MP60wsv3rxTJYaq
-        4J1wC9JLH2NTCkEDbj3SaFdpv2mTMAn0r0JI7aJurwRkRsJti195WqtwDMe6eB1QdCZrSergPUA
-        RhctUd6HPBkbpk6wGPiJ3X0OvXqRmHk1d
-X-Received: by 2002:a05:622a:1802:b0:3e2:4280:bc58 with SMTP id t2-20020a05622a180200b003e24280bc58mr25404665qtc.3.1680538564163;
-        Mon, 03 Apr 2023 09:16:04 -0700 (PDT)
-X-Google-Smtp-Source: AKy350auaIF1EPMeG/FZ05u3bLup8PpepYVe1UIip6Lm/q9oxc9sQKzvvEMdN/9/Vh965nKg3bZ3Zw==
-X-Received: by 2002:a05:622a:1802:b0:3e2:4280:bc58 with SMTP id t2-20020a05622a180200b003e24280bc58mr25404641qtc.3.1680538563912;
-        Mon, 03 Apr 2023 09:16:03 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id 203-20020a3707d4000000b00742a23cada8sm2854660qkh.131.2023.04.03.09.16.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 09:16:03 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 12:16:01 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: Re: [PATCH 11/29] selftests/mm: Drop test_uffdio_zeropage_eexist
-Message-ID: <ZCr7wRBuhzupX06j@x1n>
-References: <20230330155707.3106228-1-peterx@redhat.com>
- <20230330160717.3107010-1-peterx@redhat.com>
- <20230401000317.GF12460@monkey>
+        Mon, 3 Apr 2023 12:17:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A181723
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:17:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1777861652
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:17:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F11FC433D2;
+        Mon,  3 Apr 2023 16:17:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680538660;
+        bh=n7zG9i+G0oJqHAkYUbqTXe1DM4QRG8s3OB/teNAHDMo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0SrBk35/VutKtNvwUKP86QW6ZcAgWYk6PohLh6o7XBf4l1Ey6FI4jebMX5cdcIy0C
+         f0NhUQj/pVCKPyPRY4onkN3b0jBsfLFGAiZ3XVtrODgX4Jpjm6bvJNX+xXwg6v/snp
+         l21CLXYakurexNduzHz0F0f5vZanpcDB2+LRBAhU=
+Date:   Mon, 3 Apr 2023 18:17:37 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nipun Gupta <nipun.gupta@amd.com>
+Cc:     linux-kernel@vger.kernel.org, nikhil.agarwal@amd.com, git@amd.com,
+        michal.simek@amd.com, pieter.jansen-van-vuuren@amd.com
+Subject: Re: [PATCH] cdx: change struct bus_type for sysfs rescan callback as
+ constant
+Message-ID: <2023040325-dehydrate-pectin-92fe@gregkh>
+References: <20230403140416.28183-1-nipun.gupta@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230401000317.GF12460@monkey>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230403140416.28183-1-nipun.gupta@amd.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 05:03:17PM -0700, Mike Kravetz wrote:
-> On 03/30/23 12:07, Peter Xu wrote:
-> > The idea was trying to flip this var in the alarm handler from time to time
-> > to test -EEXIST of UFFDIO_ZEROPAGE, but firstly it's only used in the
-> > zeropage test so probably only used once, meanwhile we passed
-> > "retry==false" so it'll never got tested anyway.
-> > 
-> > Drop both sides so we always test UFFDIO_ZEROPAGE retries if has_zeropage
-> > is set (!hugetlb).
-> > 
-> > One more thing to do is doing UFFDIO_REGISTER for the alias buffer too,
-> > because otherwise the test won't even pass!  We were just lucky that this
-> > test never really got ran at all.
-> > 
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  tools/testing/selftests/mm/userfaultfd.c | 20 +++++++++++---------
-> >  1 file changed, 11 insertions(+), 9 deletions(-)
+On Mon, Apr 03, 2023 at 07:34:16PM +0530, Nipun Gupta wrote:
+> As store prototype in struct bus_attribute has been updated
+> to have bus_type as constant, change the CDX sysfs entries to
+> follow the same.
 > 
-> Thanks!  With only passing "retry==false", that code is indeed dead.  I had
-> to read the code again to understand area_dst_alias.  Thanks for taking this
-> on as the code is difficult to understand.
-
-Yes it's very confusing.  I plan to move on the cleanup to remove all these
-global variables at least in the unit tests, but I'll first see how this
-one goes.
-
+> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+> ---
 > 
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> The bus attributes are marked as constant in patch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=75cff725d9566699a670a02b3cfd1c6e9e9ed53e
+> 
+>  drivers/cdx/cdx.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cdx/cdx.c b/drivers/cdx/cdx.c
+> index 67c32cb2c006..38511fd36325 100644
+> --- a/drivers/cdx/cdx.c
+> +++ b/drivers/cdx/cdx.c
+> @@ -363,7 +363,7 @@ static struct attribute *cdx_dev_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(cdx_dev);
+>  
+> -static ssize_t rescan_store(struct bus_type *bus,
+> +static ssize_t rescan_store(const struct bus_type *bus,
+>  			    const char *buf, size_t count)
+>  {
+>  	struct cdx_controller *cdx;
+> -- 
+> 2.17.1
+> 
 
-Thanks,
+Thanks, I'll hold onto this for the -rc1 merge.
 
--- 
-Peter Xu
-
+greg k-h
