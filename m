@@ -2,89 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A926D43C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B62F6D43CC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbjDCLmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S232063AbjDCLrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbjDCLmu (ORCPT
+        with ESMTP id S231878AbjDCLro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:42:50 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654FD5B9A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:42:49 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id y4so116181128edo.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680522168;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kJQgC8vpBuUWGJhcmSIUYP2ioIg7/McJ6PvsYtiX0TE=;
-        b=iDYAFPmDRwMU+VamA8pIZ58oU63tZjtvtsecrSIUt+oBtbA8KN8HVQcvNAAsiFefSf
-         LX5kinSZHaHt3C7yD5JwIdxnrq6ta3wG7lrzniX35KmYnPelrcWZVdIYANXRZdnR9WLr
-         6yiGkovJf0+3739Jh0AcDgGDdvEl+cr9KKyyI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680522168;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kJQgC8vpBuUWGJhcmSIUYP2ioIg7/McJ6PvsYtiX0TE=;
-        b=hRfg7W6Lche2IMJmoO3Gp8OolLsEhKSXQt+Wq4tZyzr6/qyr5o5m4XW9EHZjm7dCEr
-         ihA64glfk5HhYava7leYi6gyb0CNu7o4soDKuwrOnwKz5710gi4N0FaDMddtuaq2zuzO
-         1emSi3zWn14aYl28kDsNIoIcKtB3V5sc2MVJeQlH07JFzSZQRw6AoafV2cEZ7RfFSukB
-         86RVSG5jmSX3VvEZDB7OFhvitm+75ok1T/6fVO2iC+ouJzQES7oDOuMTy9Z8s33Rb+S0
-         kDbo+MwvaxuZTJNqKKei9W/Ss/kw1l5kzqy/FcILLrzGwejnmrwpWW45TiuDf0lt+MvR
-         FD5g==
-X-Gm-Message-State: AAQBX9f4oIbsX7GyyWbtGY3iUQwTbxBwBbGPj2nOxFU2OePhchvqYbsy
-        EPEpRlrmVf13PIHfNFI1taZZbc5bYcrKgUrhm0PFZw==
-X-Google-Smtp-Source: AKy350YiUmrIhgS3KRvmZNctbR+6CUC0vQUYvXEn75Ib+anyPhlAs65KH9rxI+jaGGrCT7L9bwrs9se7qF1/+y3voyw=
-X-Received: by 2002:a50:9e8e:0:b0:4fa:4bc4:ad5b with SMTP id
- a14-20020a509e8e000000b004fa4bc4ad5bmr18336974edf.6.1680522167955; Mon, 03
- Apr 2023 04:42:47 -0700 (PDT)
+        Mon, 3 Apr 2023 07:47:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BA831FF1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:47:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A222F1063;
+        Mon,  3 Apr 2023 04:48:26 -0700 (PDT)
+Received: from [10.57.54.53] (unknown [10.57.54.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FF373F6C4;
+        Mon,  3 Apr 2023 04:47:40 -0700 (PDT)
+Message-ID: <3f090ce3-618d-56d1-1ab6-b38de5c86393@arm.com>
+Date:   Mon, 3 Apr 2023 12:47:38 +0100
 MIME-Version: 1.0
-References: <20230329180502.1884307-1-kal.conley@dectris.com>
- <20230329180502.1884307-5-kal.conley@dectris.com> <CAJ8uoz1cGV1_3HQQddbkExVnm=wngP3ECJZNS5gOtQtfi=mPnA@mail.gmail.com>
- <CAHApi-kV_c-z1zf9M_XyR_Wa=4xi-Cpk1FZT7BFTYQHgU1Bdqg@mail.gmail.com>
- <CAHApi-mp7ymJ2MP_MFK=Rcv--YCz4aqtKArMwF1roRZHh0to1A@mail.gmail.com> <CAJ8uoz25jnBtaKZQ7SbJ_fdihiQTfN_AAtOuB4v-g85SS7QM5g@mail.gmail.com>
-In-Reply-To: <CAJ8uoz25jnBtaKZQ7SbJ_fdihiQTfN_AAtOuB4v-g85SS7QM5g@mail.gmail.com>
-From:   Kal Cutter Conley <kal.conley@dectris.com>
-Date:   Mon, 3 Apr 2023 13:47:28 +0200
-Message-ID: <CAHApi-kNzh1v7O9thi+2epqitE8pjFOn0tTLD1q8GyRuS9JH8w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 04/10] selftests: xsk: Deflakify
- STATS_RX_DROPPED test
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 10/13] coresight: Make refcount a property of the
+ connection
+To:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
+        quic_jinlmao@quicinc.com, mike.leach@linaro.org
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230329115329.2747724-1-james.clark@arm.com>
+ <20230329115329.2747724-11-james.clark@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20230329115329.2747724-11-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> #2 is also a bug fix in my mind, but not #3 as it just adds a test.
->
+On 29/03/2023 12:53, James Clark wrote:
+> This removes the need to do an additional lookup for the total number
+> of ports used and also removes the need to allocate an array of
+> refcounts which is just another representation of a connection array.
+> 
+> This was only used for link type devices, for regular devices a single
+> refcount on the coresight device is used.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-core.c  |  96 +++++++--------
+>   drivers/hwtracing/coresight/coresight-etb10.c |  10 +-
+>   .../hwtracing/coresight/coresight-funnel.c    |  26 +++--
+>   .../hwtracing/coresight/coresight-platform.c  | 109 +-----------------
+>   .../coresight/coresight-replicator.c          |  23 ++--
+>   .../hwtracing/coresight/coresight-tmc-etf.c   |  24 ++--
+>   .../hwtracing/coresight/coresight-tmc-etr.c   |  12 +-
+>   drivers/hwtracing/coresight/coresight-tpda.c  |  23 ++--
+>   drivers/hwtracing/coresight/coresight-tpiu.c  |   4 +-
+>   drivers/hwtracing/coresight/ultrasoc-smb.c    |   8 +-
+>   include/linux/coresight.h                     |  13 ++-
+>   11 files changed, 124 insertions(+), 224 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index be1e8be2459f..baa23aa53971 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -112,8 +112,9 @@ struct coresight_device *coresight_get_percpu_sink(int cpu)
+>   }
+>   EXPORT_SYMBOL_GPL(coresight_get_percpu_sink);
+>   
+> -static int coresight_find_link_inport(struct coresight_device *csdev,
+> -				      struct coresight_device *parent)
+> +static struct coresight_connection *
+> +coresight_find_link_inport(struct coresight_device *csdev,
+> +			   struct coresight_device *parent)
+>   {
+>   	int i;
+>   	struct coresight_connection *conn;
+> @@ -121,17 +122,18 @@ static int coresight_find_link_inport(struct coresight_device *csdev,
+>   	for (i = 0; i < parent->pdata->nr_outconns; i++) {
+>   		conn = parent->pdata->out_conns[i];
+>   		if (conn->dest_dev == csdev)
+> -			return conn->dest_port;
+> +			return conn;
+>   	}
+>   
+>   	dev_err(&csdev->dev, "couldn't find inport, parent: %s, child: %s\n",
+>   		dev_name(&parent->dev), dev_name(&csdev->dev));
+>   
+> -	return -ENODEV;
+> +	return ERR_PTR(-ENODEV);
+>   }
+>   
+> -static int coresight_find_link_outport(struct coresight_device *csdev,
+> -				       struct coresight_device *child)
+> +static struct coresight_connection *
+> +coresight_find_link_outport(struct coresight_device *csdev,
+> +			    struct coresight_device *child)
+>   {
+>   	int i;
+>   	struct coresight_connection *conn;
+> @@ -139,13 +141,13 @@ static int coresight_find_link_outport(struct coresight_device *csdev,
+>   	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>   		conn = csdev->pdata->out_conns[i];
+>   		if (conn->dest_dev == child)
+> -			return conn->src_port;
+> +			return conn;
+>   	}
+>   
+>   	dev_err(&csdev->dev, "couldn't find outport, parent: %s, child: %s\n",
+>   		dev_name(&csdev->dev), dev_name(&child->dev));
+>   
+> -	return -ENODEV;
+> +	return ERR_PTR(-ENODEV);
+>   }
 
-#2 is a bugfix, but if we put this on the "bpf" tree already, then it
-will make a problem for later commits that depend on it which would go
-on bpf-next.
+minor nit: I think the above two functions are exactly similar except 
+for the error message ? And could be unified by fixing the caller ?
+
+coresight_find_connection(src_dev, dst_dev)
+
+
+
+>   
+>   static inline u32 coresight_read_claim_tags(struct coresight_device *csdev)
+> @@ -352,24 +354,24 @@ static int coresight_enable_link(struct coresight_device *csdev,
+>   {
+>   	int ret = 0;
+>   	int link_subtype;
+> -	int inport, outport;
+> +	struct coresight_connection *inconn, *outconn;
+>   
+>   	if (!parent || !child)
+>   		return -EINVAL;
+>   
+> -	inport = coresight_find_link_inport(csdev, parent);
+> -	outport = coresight_find_link_outport(csdev, child);
+> +	inconn = coresight_find_link_inport(csdev, parent);
+> +	outconn = coresight_find_link_outport(csdev, child);
+
+here :
+
+	
+         outconn = coresight_find_connection(csdev, child);
+	inconn = coresight_find_connection(parent, csdev);
+
+>   	link_subtype = csdev->subtype.link_subtype;
+>   
+> -	if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG && inport < 0)
+> -		return inport;
+> -	if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT && outport < 0)
+> -		return outport;
+> +	if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG && IS_ERR(inconn))
+> +		return PTR_ERR(inconn);
+> +	if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT && IS_ERR(outconn))
+> +		return PTR_ERR(outconn);
+>   
+>   	if (link_ops(csdev)->enable) {
+>   		ret = coresight_control_assoc_ectdev(csdev, true);
+>   		if (!ret) {
+> -			ret = link_ops(csdev)->enable(csdev, inport, outport);
+> +			ret = link_ops(csdev)->enable(csdev, inconn, outconn);
+>   			if (ret)
+>   				coresight_control_assoc_ectdev(csdev, false);
+>   		}
+> @@ -385,33 +387,36 @@ static void coresight_disable_link(struct coresight_device *csdev,
+>   				   struct coresight_device *parent,
+>   				   struct coresight_device *child)
+>   {
+> -	int i, nr_conns;
+> +	int i;
+>   	int link_subtype;
+> -	int inport, outport;
+> +	struct coresight_connection *inconn, *outconn;
+>   
+>   	if (!parent || !child)
+>   		return;
+>   
+> -	inport = coresight_find_link_inport(csdev, parent);
+> -	outport = coresight_find_link_outport(csdev, child);
+> +	inconn = coresight_find_link_inport(csdev, parent);
+> +	outconn = coresight_find_link_outport(csdev, child);
+
+similarly here
+
+>   	link_subtype = csdev->subtype.link_subtype;
+>   
+> -	if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG) {
+> -		nr_conns = csdev->pdata->high_inport;
+> -	} else if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT) {
+> -		nr_conns = csdev->pdata->high_outport;
+> -	} else {
+> -		nr_conns = 1;
+> -	}
+> -
+>   	if (link_ops(csdev)->disable) {
+> -		link_ops(csdev)->disable(csdev, inport, outport);
+> +		link_ops(csdev)->disable(csdev, inconn, outconn);
+>   		coresight_control_assoc_ectdev(csdev, false);
+>   	}
+>   
+> -	for (i = 0; i < nr_conns; i++)
+> -		if (atomic_read(&csdev->refcnt[i]) != 0)
+> +	if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG) {
+> +		for (i = 0; i < csdev->pdata->nr_inconns; i++)
+> +			if (atomic_read(&csdev->pdata->in_conns[i]->refcnt) !=
+> +			    0)
+> +				return;
+> +	} else if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT) {
+> +		for (i = 0; i < csdev->pdata->nr_outconns; i++)
+> +			if (atomic_read(&csdev->pdata->out_conns[i]->refcnt) !=
+> +			    0)
+> +				return;
+> +	} else {
+> +		if (atomic_read(&csdev->refcnt) != 0)
+>   			return;
+> +	}
+
+I am slightly concerned about a case where a (practically a corner case,
+but not impossible) replicator-out could be connected to a funnel-in. In
+which case, we might be operating on the same "connection" and could
+mess up with the refcounting and may not do the right thing (e.g, enable
+the funnel - depends on in_conn ref, when the Replicator was enabled -
+touches out_conn ref)
+
+Suzuki
+
+
