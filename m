@@ -2,67 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9E46D5234
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10A96D5248
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 22:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233103AbjDCUUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 16:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
+        id S233284AbjDCUXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 16:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbjDCUUj (ORCPT
+        with ESMTP id S232686AbjDCUXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 16:20:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C7C40D8
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 13:20:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24E2762947
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 20:19:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A6CCC433EF;
-        Mon,  3 Apr 2023 20:19:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1680553175;
-        bh=IiNaMa37JiuQJYqBejdJVnvGJ6ocKdl/z6g1YwT51PA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WPbYEbtWG8H+qMLeGAmOlxHKjiEPMP/sZhVKrkN23iw0+Jld+j6oeLWnouvxAHKi4
-         DYJqu8AHtCyyG1V5ahxS804wjtZ8nTcWYxNlVgTPXRq9p7QqVy4hbpkSC475X1tq//
-         rjuMvZMK33rJWKx4hAtAIsV5CSDccY5R0bQPfUmk=
-Date:   Mon, 3 Apr 2023 13:19:34 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH 0/8] Fix VMA tree modification under mmap read lock
-Message-Id: <20230403131934.e370ca6caded57a5a7977818@linux-foundation.org>
-In-Reply-To: <20230403194443.af3kbawab3d4r5pr@revolver>
-References: <20230327185532.2354250-1-Liam.Howlett@oracle.com>
-        <20230327123515.bce6c1ea3660e9b17db50c33@linux-foundation.org>
-        <20230327194800.fzqfrxfh3nfmqwgk@revolver>
-        <a017acde-7520-743c-963b-94a23c0f30c8@suse.cz>
-        <20230328130230.gdmychfid3aggikd@revolver>
-        <20230403194443.af3kbawab3d4r5pr@revolver>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        Mon, 3 Apr 2023 16:23:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA383589
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 13:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680553353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=S7rPZVgCNxYpms8L6srVacst89M/965rzuu68j74ShQ=;
+        b=MxVFSQXpE1yDvQdRsVgQI5eiMSw8okNEdeYjOIXHu1oKjcDhwDm360EZuekNOyP49fkgkL
+        6wIKjWloCvbos6rNc5E2EjV8TqvSIBEjRDe3e8XncjZf3+W8Y6CPT92Kp/WrZ9gHsdUoXv
+        cBibeH/1KeTDRaVT6tFfoS4XBIIW0a0=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-553--wIjFyGlPCqzb5fjTDrPOA-1; Mon, 03 Apr 2023 16:22:31 -0400
+X-MC-Unique: -wIjFyGlPCqzb5fjTDrPOA-1
+Received: by mail-io1-f72.google.com with SMTP id z65-20020a6bc944000000b007584beb0e28so18460312iof.21
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 13:22:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680553351;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S7rPZVgCNxYpms8L6srVacst89M/965rzuu68j74ShQ=;
+        b=yPJY7/aiGM94jDTKVdp44X/binCnfDEC4a7/OVPjrNBeFu4R+36ZbMjPFTuYExPwhr
+         ppiB7lpionnw/2Bx0p5EiIBKhECh4x+cVn90SnTuy7z+E8FPrl6hG9HTmjzOVKISfMQy
+         E2STqKy3jdJUyOlKq/EMXWobg/FnT5ql9atG7fM9giHimn++NmRiBYk6SMK0FdEOsBfC
+         Im41ylt+zolo/shQZv6W8JicKDjb5Zl9c4u9cnYymYH4xzdkNc5g6ptnOiNumMSxyVXm
+         WEiMG6xYvbzsdfY47GHDebSHHzSe2BUCcH8CSfx169Ye66t3HjG+J2O5yyV3bvlPdL+a
+         JqJg==
+X-Gm-Message-State: AAQBX9crf+TuWHnLjbsISjnX8sQQ72bw99ns2EDDFmM4pjCE+wA6r6u8
+        WZNAr959dI4J2uY6ZbcDxDyCIpYF8JBbEwluoX+xZBWWjH5PIYwedLnvdPdppzFcixi2q/0oN+5
+        K/cS7Azw3GuAKiJiFQ4LxM3Fl
+X-Received: by 2002:a92:d28f:0:b0:325:b60b:e2fc with SMTP id p15-20020a92d28f000000b00325b60be2fcmr259885ilp.5.1680553351114;
+        Mon, 03 Apr 2023 13:22:31 -0700 (PDT)
+X-Google-Smtp-Source: AKy350a8n73fR0AsmRQ+fkeyssYMI9r59U0Zgbvv0cUqAVRqPsNVu/XWz5p7fAdegvqaeMHPjs/SUQ==
+X-Received: by 2002:a92:d28f:0:b0:325:b60b:e2fc with SMTP id p15-20020a92d28f000000b00325b60be2fcmr259865ilp.5.1680553350833;
+        Mon, 03 Apr 2023 13:22:30 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id t8-20020a056638204800b003eafd76dc3fsm2928827jaj.23.2023.04.03.13.22.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 13:22:30 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 14:22:27 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     <jgg@nvidia.com>, <yishaih@nvidia.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <kevin.tian@intel.com>,
+        <tglx@linutronix.de>, <darwi@linutronix.de>, <kvm@vger.kernel.org>,
+        <dave.jiang@intel.com>, <jing2.liu@intel.com>,
+        <ashok.raj@intel.com>, <fenghua.yu@intel.com>,
+        <tom.zanussi@linux.intel.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2 7/8] vfio/pci: Support dynamic MSI-x
+Message-ID: <20230403142227.1328b373.alex.williamson@redhat.com>
+In-Reply-To: <e15d588e-b63f-ab70-f6ae-91ceea8be79a@intel.com>
+References: <cover.1680038771.git.reinette.chatre@intel.com>
+        <419f3ba2f732154d8ae079b3deb02d0fdbe3e258.1680038771.git.reinette.chatre@intel.com>
+        <20230330164050.0069e2a5.alex.williamson@redhat.com>
+        <20230330164214.67ccbdfa.alex.williamson@redhat.com>
+        <688393bf-445c-15c5-e84d-1c16261a4197@intel.com>
+        <20230331162456.3f52b9e3.alex.williamson@redhat.com>
+        <e15d588e-b63f-ab70-f6ae-91ceea8be79a@intel.com>
+Organization: Red Hat
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 15:44:43 -0400 "Liam R. Howlett" <Liam.Howlett@Oracle.com> wrote:
+On Mon, 3 Apr 2023 10:31:23 -0700
+Reinette Chatre <reinette.chatre@intel.com> wrote:
 
-> I just wanted to know where we stand with these patches?
+> Hi Alex,
+> 
+> On 3/31/2023 3:24 PM, Alex Williamson wrote:
+> > On Fri, 31 Mar 2023 10:49:16 -0700
+> > Reinette Chatre <reinette.chatre@intel.com> wrote:  
+> >> On 3/30/2023 3:42 PM, Alex Williamson wrote:  
+> >>> On Thu, 30 Mar 2023 16:40:50 -0600
+> >>> Alex Williamson <alex.williamson@redhat.com> wrote:
+> >>>     
+> >>>> On Tue, 28 Mar 2023 14:53:34 -0700
+> >>>> Reinette Chatre <reinette.chatre@intel.com> wrote:
+> >>>>    
+> 
+> ...
+> 
+> >>>>> +		msix_map.index = vector;
+> >>>>> +		msix_map.virq = irq;
+> >>>>> +		pci_msix_free_irq(pdev, msix_map);
+> >>>>> +	}
+> >>>>> +	vfio_pci_memory_unlock_and_restore(vdev, cmd);
+> >>>>>  out_put_eventfd_ctx:
+> >>>>>  	eventfd_ctx_put(trigger);
+> >>>>>  out_free_name:
+> >>>>>  	kfree(ctx->name);
+> >>>>>  	ctx->name = NULL;
+> >>>>> +out_free_ctx:
+> >>>>> +	if (allow_dyn_alloc && new_ctx)
+> >>>>> +		vfio_irq_ctx_free(vdev, ctx, vector);
+> >>>>>  	return ret;
+> >>>>>  }
+> >>>>>        
+> >>>>
+> >>>> Do we really need the new_ctx test in the above cases?  Thanks,    
+> >>
+> >> new_ctx is not required for correctness but instead is used to keep
+> >> the code symmetric. 
+> >> Specifically, if the user enables MSI-X without providing triggers and
+> >> then later assign triggers then an error path without new_ctx would unwind
+> >> more than done in this function, it would free the context that
+> >> was allocated within vfio_msi_enable().   
+> > 
+> > Seems like we already have that asymmetry, if a trigger is unset we'll
+> > free the ctx allocated by vfio_msi_enable().  Tracking which are  
+> 
+> Apologies, but could you please elaborate on where the asymmetry is? I am
+> not able to see a flow in this solution where the ctx allocated by
+> vfio_msi_enable() is freed if the trigger is unset.
 
-They're in the mm.git hotfixes queue.  I'll be asking Linus
-to pull them this week.
+The user first calls SET_IRQS to enable MSI-X with some number of
+vectors with (potentially) an eventfd for each vector.  The user later
+calls SET_IRQS passing a -1 eventfd for one or more of the vectors with
+an eventfd initialized in the prior step.  Given that we find the ctx,
+the ctx has a trigger, and assuming dynamic allocation is supported, the
+ctx is freed and vfio_msi_set_vector_signal() returns w/o allocating a
+new ctx.  We've de-allocated both the irq and context initialized from
+vfio_msi_enable().
+
+> > allocated where is unnecessarily complex, how about a policy that  
+> 
+> I do not see this as tracking where allocations are made. Instead I
+> see it as containing/compartmentalizing state changes with the goal of
+> making the code easier to understand and maintain. Specifically, new_ctx
+> is used so that if vfio_msi_set_vector_signal() fails, the state 
+> before and after vfio_msi_set_vector_signal() will be the same.
+
+That's not really possible given how we teardown the existing ctx
+before configuring the new one and unwind to disable contexts in
+vfio_msi_set_block()
+
+> I do agree that it makes vfio_msi_set_vector_signal() more complex
+> and I can remove new_ctx if you find that this is unnecessary after
+> considering the motivations behind its use. 
+
+If the goal is to allow the user to swap one eventfd for another, where
+the result will always be the new eventfd on success or the old eventfd
+on error, I don't see that this code does that, or that we've ever
+attempted to make such a guarantee.  If the ioctl errors, I think the
+eventfds are generally deconfigured.   We certainly have the unwind code
+that we discussed earlier that deconfigures all the vectors previously
+touched in the loop (which seems to be another path where we could
+de-allocate from the set of initial ctxs).
+ 
+> > devices supporting vdev->has_dyn_msix only ever have active contexts
+> > allocated?  Thanks,  
+> 
+> What do you see as an "active context"? A policy that is currently enforced
+> is that an allocated context always has an allocated interrupt associated
+> with it. I do not see how this could be expanded to also require an
+> enabled interrupt because interrupt enabling requires a trigger that
+> may not be available.
+
+A context is essentially meant to track a trigger, ie. an eventfd
+provided by the user.  In the static case all the irqs are necessarily
+pre-allocated, therefore we had no reason to consider a dynamic array
+for the contexts.  However, a given context is really only "active" if
+it has a trigger, otherwise it's just a placeholder.  When the
+placeholder is filled by an eventfd, the pre-allocated irq is enabled.
+
+This proposal seems to be a hybrid approach, pre-allocating some
+initial set of irqs and contexts and expecting the differentiation to
+occur only when new vectors are added, though we have some disagreement
+about this per above.  Unfortunately I don't see an API to enable MSI-X
+without some vectors, so some pre-allocation of irqs seems to be
+required regardless.
+
+But if non-active contexts were only placeholders in the pre-dynamic
+world and we now manage them via a dynamic array, why is there any
+pre-allocation of contexts without knowing the nature of the eventfd to
+fill it?  We could have more commonality between cases if contexts are
+always dynamically allocated, which might simplify differentiation of
+the has_dyn_msix cases largely to wrappers allocating and freeing irqs.
+Thanks,
+
+Alex
+
