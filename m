@@ -2,220 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F306D3E90
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063CA6D3E91
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbjDCIDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
+        id S231796AbjDCIDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbjDCIDA (ORCPT
+        with ESMTP id S229945AbjDCIDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:03:00 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5A7210D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 01:02:56 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 3 Apr 2023 04:03:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6180B40F5
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 01:03:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0A9B2219E9;
-        Mon,  3 Apr 2023 08:02:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680508975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YFZ7quOifp4g1vCUBY4cHG7Gzb9r0mqxTr4kn7Wk1tc=;
-        b=XGwyVw5vcNlClhFDfwptGHs4g22VIoSZrrO27YeP90RjPs5oH7iIur6gglPx/iJjEiaAXm
-        pirHUiqv/s6ExtVi9/HnHiNIqjkbEp3dsrI3/WBdgVp8oiEnrBZroM2s3sEVFvQSj66ffz
-        YZUz21ruGxO7E4wSz+oQBHTyF+t1zzo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680508975;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YFZ7quOifp4g1vCUBY4cHG7Gzb9r0mqxTr4kn7Wk1tc=;
-        b=ZeQixqU7QyTv3JrBJolyJjK/GwVnu0y67c4udLmaj8cXoiuvSDyLRFC7lBWkg0viO83Ncs
-        W5l+1UCKga50uoAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C1E1C1331A;
-        Mon,  3 Apr 2023 08:02:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sA2DLi6IKmTeMgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 03 Apr 2023 08:02:54 +0000
-Message-ID: <321a3874-3504-9dec-cb5a-7a8394be46b1@suse.de>
-Date:   Mon, 3 Apr 2023 10:02:54 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D359560F27
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:03:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C1EC4339B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680509008;
+        bh=W2/JGBwBJrkyfmyCw51C1GRh8fsdGQMceG8rzgAssuA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ovlbi3cj+0lW2UmAOWix4zqf6OVDW3sKMSODxC6qej3IbIzcoq1f+lEMNIGIpPw/6
+         PWC99dmvZvueNiEzH7Y7OVzNeKEcAyJKJY9c6MDlu5xH+hLtSgVFue6Zw0BKF5T4bc
+         LoDUQ0aFic/2fqjLCMtw8KZZ7Cmr4Ca606h+/yVahp4FuCg3rA6U7iFkJMW9/a8jmR
+         eo9WGFbrHWe8T3KGefhnJZCNWJiZvU9fvAs6NrXnWZlGfOxNtFbHSrALCciYB3CNiS
+         AjEKyuYEiMcnJ4Rh6uDoQ94KCfvzJ5Vfvww+Hjk0QIokOHSksk8V74gUErn2Q60Rwm
+         NP0ub/KyRhhkw==
+Received: by mail-lj1-f174.google.com with SMTP id o20so26451810ljp.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 01:03:28 -0700 (PDT)
+X-Gm-Message-State: AAQBX9eKQJ5n8J2+LVbr9ZvLvT0y7DNyXjIAXXv4hkzKq6EQ6BmF/nLn
+        hT+8rq8ArGj0gzXP/0GBj/Q5Q55SOqYMFsD4KuY=
+X-Google-Smtp-Source: AKy350aXx5lyi5hVsK5RRdFMjv/v/HpPOisyZtqtmB082po5+/hwztoLHoc/qpbgB8lI4dOAo+NH/Mkmi8Ku3DkR3Ak=
+X-Received: by 2002:a2e:9c11:0:b0:298:bddc:dbbf with SMTP id
+ s17-20020a2e9c11000000b00298bddcdbbfmr10284206lji.2.1680509006250; Mon, 03
+ Apr 2023 01:03:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/vblank: Fix for drivers that do not drm_vblank_init()
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230401153802.1066072-1-robdclark@gmail.com>
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230401153802.1066072-1-robdclark@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------LtYdBgNLup5rLDUU0qOYNau8"
-X-Spam-Status: No, score=-4.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <be46d0ab-8553-4a5d-af46-6fa909c45213@kili.mountain>
+In-Reply-To: <be46d0ab-8553-4a5d-af46-6fa909c45213@kili.mountain>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 3 Apr 2023 10:03:15 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEbaWNNp98GRACR_JUt7JOowU=3BaRKs0ZoOvibnbN_LA@mail.gmail.com>
+Message-ID: <CAMj1kXEbaWNNp98GRACR_JUt7JOowU=3BaRKs0ZoOvibnbN_LA@mail.gmail.com>
+Subject: Re: arch/arm64/kernel/compat_alignment.c:333 do_compat_alignment_fixup()
+ error: uninitialized symbol 'tinst2'.
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     oe-kbuild@lists.linux.dev, lkp@intel.com,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------LtYdBgNLup5rLDUU0qOYNau8
-Content-Type: multipart/mixed; boundary="------------xHDy00R0ff56eNjO5oZ80b5j";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc: Rob Clark <robdclark@chromium.org>, Nathan Chancellor
- <nathan@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, open list <linux-kernel@vger.kernel.org>
-Message-ID: <321a3874-3504-9dec-cb5a-7a8394be46b1@suse.de>
-Subject: Re: [PATCH] drm/vblank: Fix for drivers that do not drm_vblank_init()
-References: <20230401153802.1066072-1-robdclark@gmail.com>
-In-Reply-To: <20230401153802.1066072-1-robdclark@gmail.com>
+On Mon, 3 Apr 2023 at 08:29, Dan Carpenter <error27@gmail.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   00c7b5f4ddc5b346df62b757ec73f9357bb452af
+> commit: 3fc24ef32d3b9368f4c103dcd21d6a3f959b4870 arm64: compat: Implement misalignment fixups for multiword loads
+> config: arm64-randconfig-m041-20230329 (https://download.01.org/0day-ci/archive/20230402/202304021214.gekJ8yRc-lkp@intel.com/config)
+> compiler: aarch64-linux-gcc (GCC) 12.1.0
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Reported-by: Dan Carpenter <error27@gmail.com>
+> | Link: https://lore.kernel.org/r/202304021214.gekJ8yRc-lkp@intel.com/
+>
+> smatch warnings:
+> arch/arm64/kernel/compat_alignment.c:333 do_compat_alignment_fixup() error: uninitialized symbol 'tinst2'.
+>
+> vim +/tinst2 +333 arch/arm64/kernel/compat_alignment.c
+>
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  310  int do_compat_alignment_fixup(unsigned long addr, struct pt_regs *regs)
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  311  {
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  312   union offset_union offset;
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  313   unsigned long instrptr;
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  314   int (*handler)(unsigned long addr, u32 instr, struct pt_regs *regs);
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  315   unsigned int type;
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  316   u32 instr = 0;
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  317   u16 tinstr = 0;
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  318   int isize = 4;
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  319   int thumb2_32b = 0;
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  320   int fault;
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  321
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  322   instrptr = instruction_pointer(regs);
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  323
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  324   if (compat_thumb_mode(regs)) {
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  325           __le16 __user *ptr = (__le16 __user *)(instrptr & ~1);
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  326
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  327           fault = alignment_get_thumb(regs, ptr, &tinstr);
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  328           if (!fault) {
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  329                   if (IS_T32(tinstr)) {
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  330                           /* Thumb-2 32-bit */
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  331                           u16 tinst2;
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01  332                           fault = alignment_get_thumb(regs, ptr + 1, &tinst2);
+> 3fc24ef32d3b93 Ard Biesheuvel 2022-07-01 @333                           instr = ((u32)tinstr << 16) | tinst2;
+>
+> Smatch is complaining that there is no error checking to see if the
+> copy_from_user() fails in alignment_get_thumb.  Eventually the syzbot
+> will learn to detect this as well.
+>
 
---------------xHDy00R0ff56eNjO5oZ80b5j
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+That shouldn't matter.
 
-SGkNCg0KQW0gMDEuMDQuMjMgdW0gMTc6Mzggc2NocmllYiBSb2IgQ2xhcms6DQo+IEZyb206
-IFJvYiBDbGFyayA8cm9iZGNsYXJrQGNocm9taXVtLm9yZz4NCj4gDQo+IFRoaXMgc2hvdWxk
-IGZpeCBhIGNyYXNoIHRoYXQgd2FzIHJlcG9ydGVkIG9uIGFzdCAoYW5kIHBvc3NpYmx5IG90
-aGVyDQo+IGRyaXZlcnMgd2hpY2ggZG8gbm90IGluaXRpYWxpemUgdmJsYW5rKS4NCj4gDQo+
-ICAgICBmYmNvbjogVGFraW5nIG92ZXIgY29uc29sZQ0KPiAgICAgVW5hYmxlIHRvIGhhbmRs
-ZSBrZXJuZWwgTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlIGF0IHZpcnR1YWwgYWRkcmVzcyAw
-MDAwMDAwMDAwMDAwMDc0DQo+ICAgICBNZW0gYWJvcnQgaW5mbzoNCj4gICAgICAgRVNSID0g
-MHgwMDAwMDAwMDk2MDAwMDA0DQo+ICAgICAgIEVDID0gMHgyNTogREFCVCAoY3VycmVudCBF
-TCksIElMID0gMzIgYml0cw0KPiAgICAgICBTRVQgPSAwLCBGblYgPSAwDQo+ICAgICAgIEVB
-ID0gMCwgUzFQVFcgPSAwDQo+ICAgICAgIEZTQyA9IDB4MDQ6IGxldmVsIDAgdHJhbnNsYXRp
-b24gZmF1bHQNCj4gICAgIERhdGEgYWJvcnQgaW5mbzoNCj4gICAgICAgSVNWID0gMCwgSVNT
-ID0gMHgwMDAwMDAwNA0KPiAgICAgICBDTSA9IDAsIFduUiA9IDANCj4gICAgIHVzZXIgcGd0
-YWJsZTogNGsgcGFnZXMsIDQ4LWJpdCBWQXMsIHBnZHA9MDAwMDA4MDAwOWQxNjAwMA0KPiAg
-ICAgWzAwMDAwMDAwMDAwMDAwNzRdIHBnZD0wMDAwMDAwMDAwMDAwMDAwLCBwNGQ9MDAwMDAw
-MDAwMDAwMDAwMA0KPiAgICAgSW50ZXJuYWwgZXJyb3I6IE9vcHM6IDAwMDAwMDAwOTYwMDAw
-MDQgWyMxXSBTTVANCj4gICAgIE1vZHVsZXMgbGlua2VkIGluOiBpcDZ0YWJsZV9uYXQgdHVu
-IG5mdF9maWJfaW5ldCBuZnRfZmliX2lwdjQgbmZ0X2ZpYl9pcHY2IG5mdF9maWIgbmZ0X3Jl
-amVjdF9pbmV0IG5mX3JlamVjdF9pcHY0IG5mX3JlamVjdF9pcHY2IG5mdF9yZWplY3QgbmZ0
-X2N0IG5mdF9jaGFpbl9uYXQgbmZfbmF0IG5mX2Nvbm50cmFjayBuZl9kZWZyYWdfaXB2NiBu
-Zl9kZWZyYWdfaXB2NCByZmtpbGwgaXBfc2V0IG5mX3RhYmxlcyBuZm5ldGxpbmsgcXJ0ciBz
-dW5ycGMgYmluZm10X21pc2MgdmZhdCBmYXQgeGZzIHNuZF91c2JfYXVkaW8gc25kX2h3ZGVw
-IHNuZF91c2JtaWRpX2xpYiBzbmRfc2VxIHNuZF9wY20gc25kX3Jhd21pZGkgc25kX3RpbWVy
-IHNuZF9zZXFfZGV2aWNlIHNuZCBzb3VuZGNvcmUgam95ZGV2IG1jIGlwbWlfc3NpZiBpcG1p
-X2RldmludGYgaXBtaV9tc2doYW5kbGVyIGFybV9zcGVfcG11IGFybV9jbW4gYXJtX2RzdV9w
-bXUgYXJtX2RtYzYyMF9wbXUgY3BwY19jcHVmcmVxIGxvb3AgenJhbSBjcmN0MTBkaWZfY2Ug
-cG9seXZhbF9jZSBudm1lIHBvbHl2YWxfZ2VuZXJpYyBnaGFzaF9jZSBzYnNhX2d3ZHQgaWdi
-IG52bWVfY29yZSBhc3QgbnZtZV9jb21tb24gaTJjX2FsZ29fYml0IHhnZW5lX2h3bW9uIGdw
-aW9fZHdhcGIgc2NzaV9kaF9yZGFjIHNjc2lfZGhfZW1jIHNjc2lfZGhfYWx1YSBpcDZfdGFi
-bGVzIGlwX3RhYmxlcyBkbV9tdWx0aXBhdGggZnVzZQ0KPiAgICAgQ1BVOiAxMiBQSUQ6IDQ2
-OSBDb21tOiBrd29ya2VyLzEyOjEgTm90IHRhaW50ZWQgNi4zLjAtcmMyLTAwMDA4LWdkMzll
-NDhjYTgwYzAgIzENCj4gICAgIEhhcmR3YXJlIG5hbWU6IEFETElOSyBBVkEgRGV2ZWxvcGVy
-IFBsYXRmb3JtL0FWQSBEZXZlbG9wZXIgUGxhdGZvcm0sIEJJT1MgVGlhbm9Db3JlIDIuMDQu
-MTAwLjA3IChTWVM6IDIuMDYuMjAyMjAzMDgpIDA5LzA4LzIwMjINCj4gICAgIFdvcmtxdWV1
-ZTogZXZlbnRzIGZiY29uX3JlZ2lzdGVyX2V4aXN0aW5nX2Zicw0KPiAgICAgcHN0YXRlOiAy
-MDQwMDAwOSAobnpDdiBkYWlmICtQQU4gLVVBTyAtVENPIC1ESVQgLVNTQlMgQlRZUEU9LS0p
-DQo+ICAgICBwYyA6IGRybV9jcnRjX25leHRfdmJsYW5rX3N0YXJ0KzB4MmMvMHg5OA0KPiAg
-ICAgbHIgOiBkcm1fYXRvbWljX2hlbHBlcl93YWl0X2Zvcl9mZW5jZXMrMHg5MC8weDI0MA0K
-PiAgICAgc3AgOiBmZmZmODAwMDBkNTgzOTYwDQo+ICAgICB4Mjk6IGZmZmY4MDAwMGQ1ODM5
-NjAgeDI4OiBmZmZmMDdmZjhmYzE4N2IwIHgyNzogMDAwMDAwMDAwMDAwMDAwMA0KPiAgICAg
-eDI2OiBmZmZmMDdmZjk5YzA4YzAwIHgyNTogMDAwMDAwMDAwMDAwMDAzOCB4MjQ6IGZmZmYw
-N2ZmOTljMGMwMDANCj4gICAgIHgyMzogMDAwMDAwMDAwMDAwMDAwMSB4MjI6IDAwMDAwMDAw
-MDAwMDAwMzggeDIxOiAwMDAwMDAwMDAwMDAwMDAwDQo+ICAgICB4MjA6IGZmZmYwN2ZmOTY0
-MGEyODAgeDE5OiAwMDAwMDAwMDAwMDAwMDAwIHgxODogZmZmZmZmZmZmZmZmZmZmZg0KPiAg
-ICAgeDE3OiAwMDAwMDAwMDAwMDAwMDAwIHgxNjogZmZmZmIyNGQyZWVjZTFjMCB4MTU6IDAw
-MDAwMDMwMzgzMDMxNzgNCj4gICAgIHgxNDogMzAzMjM5MzEwMDAwMDA0OCB4MTM6IDAwMDAw
-MDAwMDAwMDAwMDAgeDEyOiAwMDAwMDAwMDAwMDAwMDAwDQo+ICAgICB4MTE6IDAwMDAwMDAw
-MDAwMDAwMDAgeDEwOiAwMDAwMDAwMDAwMDAwMDAwIHg5IDogZmZmZmIyNGQyZWVlYWNhMA0K
-PiAgICAgeDggOiBmZmZmODAwMDBkNTgzNjI4IHg3IDogMDAwMDA4MDA3Nzc4MzAwMCB4NiA6
-IDAwMDAwMDAwMDAwMDAwMDANCj4gICAgIHg1IDogZmZmZjgwMDAwZDU4NDAwMCB4NCA6IGZm
-ZmYwN2ZmOTljMGMwMDAgeDMgOiAwMDAwMDAwMDAwMDAwMTMwDQo+ICAgICB4MiA6IDAwMDAw
-MDAwMDAwMDAwMDAgeDEgOiBmZmZmODAwMDBkNTgzOWMwIHgwIDogZmZmZjA3ZmY5OWMwY2Mw
-OA0KPiAgICAgQ2FsbCB0cmFjZToNCj4gICAgICBkcm1fY3J0Y19uZXh0X3ZibGFua19zdGFy
-dCsweDJjLzB4OTgNCj4gICAgICBkcm1fYXRvbWljX2hlbHBlcl93YWl0X2Zvcl9mZW5jZXMr
-MHg5MC8weDI0MA0KPiAgICAgIGRybV9hdG9taWNfaGVscGVyX2NvbW1pdCsweGIwLzB4MTg4
-DQo+ICAgICAgZHJtX2F0b21pY19jb21taXQrMHhiMC8weGYwDQo+ICAgICAgZHJtX2NsaWVu
-dF9tb2Rlc2V0X2NvbW1pdF9hdG9taWMrMHgyMTgvMHgyODANCj4gICAgICBkcm1fY2xpZW50
-X21vZGVzZXRfY29tbWl0X2xvY2tlZCsweDY0LzB4MWEwDQo+ICAgICAgZHJtX2NsaWVudF9t
-b2Rlc2V0X2NvbW1pdCsweDM4LzB4NjgNCj4gICAgICBfX2RybV9mYl9oZWxwZXJfcmVzdG9y
-ZV9mYmRldl9tb2RlX3VubG9ja2VkKzB4YjAvMHhmOA0KPiAgICAgIGRybV9mYl9oZWxwZXJf
-c2V0X3BhcisweDQ0LzB4ODgNCj4gICAgICBmYmNvbl9pbml0KzB4MWUwLzB4NGE4DQo+ICAg
-ICAgdmlzdWFsX2luaXQrMHhiYy8weDExOA0KPiAgICAgIGRvX2JpbmRfY29uX2RyaXZlci5p
-c3JhLjArMHgxOTQvMHgzYTANCj4gICAgICBkb190YWtlX292ZXJfY29uc29sZSsweDUwLzB4
-NzANCj4gICAgICBkb19mYmNvbl90YWtlb3ZlcisweDc0LzB4ZjgNCj4gICAgICBkb19mYl9y
-ZWdpc3RlcmVkKzB4MTNjLzB4MTU4DQo+ICAgICAgZmJjb25fcmVnaXN0ZXJfZXhpc3Rpbmdf
-ZmJzKzB4NzgvMHhjMA0KPiAgICAgIHByb2Nlc3Nfb25lX3dvcmsrMHgxZWMvMHg0NzgNCj4g
-ICAgICB3b3JrZXJfdGhyZWFkKzB4NzQvMHg0MTgNCj4gICAgICBrdGhyZWFkKzB4ZWMvMHgx
-MDANCj4gICAgICByZXRfZnJvbV9mb3JrKzB4MTAvMHgyMA0KPiAgICAgQ29kZTogZjk0MDAw
-MDQgYjk0MDkwMTMgZjk0MGEwODIgOWJhMzBhNzMgKGI5NDA3NjYyKQ0KPiAgICAgLS0tWyBl
-bmQgdHJhY2UgMDAwMDAwMDAwMDAwMDAwMCBdLS0tDQo+IA0KPiBSZXBvcnRlZC1ieTogTmF0
-aGFuIENoYW5jZWxsb3IgPG5hdGhhbkBrZXJuZWwub3JnPg0KPiBGaXhlczogZDM5ZTQ4Y2E4
-MGMwICgiZHJtL2F0b21pYy1oZWxwZXI6IFNldCBmZW5jZSBkZWFkbGluZSBmb3IgdmJsYW5r
-IikNCj4gU2lnbmVkLW9mZi1ieTogUm9iIENsYXJrIDxyb2JkY2xhcmtAY2hyb21pdW0ub3Jn
-Pg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vZHJtX3ZibGFuay5jIHwgMTAgKysrKysr
-KystLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
-KC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV92YmxhbmsuYyBi
-L2RyaXZlcnMvZ3B1L2RybS9kcm1fdmJsYW5rLmMNCj4gaW5kZXggMjk5ZmEyYTE5YTkwLi5l
-OThlM2NlZmJhM2EgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fdmJsYW5r
-LmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2RybV92YmxhbmsuYw0KPiBAQCAtOTk2LDEw
-ICs5OTYsMTYgQEAgRVhQT1JUX1NZTUJPTChkcm1fY3J0Y192YmxhbmtfY291bnRfYW5kX3Rp
-bWUpOw0KPiAgIGludCBkcm1fY3J0Y19uZXh0X3ZibGFua19zdGFydChzdHJ1Y3QgZHJtX2Ny
-dGMgKmNydGMsIGt0aW1lX3QgKnZibGFua3RpbWUpDQo+ICAgew0KPiAgIAl1bnNpZ25lZCBp
-bnQgcGlwZSA9IGRybV9jcnRjX2luZGV4KGNydGMpOw0KPiAtCXN0cnVjdCBkcm1fdmJsYW5r
-X2NydGMgKnZibGFuayA9ICZjcnRjLT5kZXYtPnZibGFua1twaXBlXTsNCj4gLQlzdHJ1Y3Qg
-ZHJtX2Rpc3BsYXlfbW9kZSAqbW9kZSA9ICZ2YmxhbmstPmh3bW9kZTsNCj4gKwlzdHJ1Y3Qg
-ZHJtX3ZibGFua19jcnRjICp2Ymxhbms7DQo+ICsJc3RydWN0IGRybV9kaXNwbGF5X21vZGUg
-Km1vZGU7DQo+ICAgCXU2NCB2Ymxhbmtfc3RhcnQ7DQo+ICAgDQo+ICsJaWYgKCFjcnRjLT5k
-ZXYtPnZibGFuaykNCg0KUmF0aGVyIHVzZQ0KDQogICBpZiAoIWRybV9kZXZfaGFzX3ZibGFu
-aygpKQ0KDQpmb3IgdGhpcyB0ZXN0Lg0KDQpXaXRoIHRoYXQgZml4ZWQNCg0KUmV2aWV3ZWQt
-Ynk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQpCZXN0IHJl
-Z2FyZHMNClRob21hcw0KDQo+ICsJCXJldHVybiAtRUlOVkFMOw0KPiArDQo+ICsJdmJsYW5r
-ID0gJmNydGMtPmRldi0+dmJsYW5rW3BpcGVdOw0KPiArCW1vZGUgPSAmdmJsYW5rLT5od21v
-ZGU7DQo+ICsNCj4gICAJaWYgKCF2YmxhbmstPmZyYW1lZHVyX25zIHx8ICF2YmxhbmstPmxp
-bmVkdXJfbnMpDQo+ICAgCQlyZXR1cm4gLUVJTlZBTDsNCj4gICANCg0KLS0gDQpUaG9tYXMg
-WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
-b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
-IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
-OiBJdm8gVG90ZXYNCg==
+        u16 instr = 0;
+        int fault;
 
---------------xHDy00R0ff56eNjO5oZ80b5j--
+        if (user_mode(regs))
+                fault = get_user(instr, ip);
+        else
+                fault = get_kernel_nofault(instr, ip);
 
---------------LtYdBgNLup5rLDUU0qOYNau8
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+        *inst = __mem_to_opcode_thumb16(instr);
 
------BEGIN PGP SIGNATURE-----
+So the *inst assignment is never ambiguous here, regardless of whether
+get_user() fails. The value could be wrong (i.e., get_user may have
+failed after reading only one byte) but the value is never
+uninitialized. Then, the fault value is always propagated so the
+calling function will not succeed spuriously when this happens.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQqiC4FAwAAAAAACgkQlh/E3EQov+BS
-ChAAvAGAQLfPbanZnuZ+JXlVeQDN3aZjeyzsSB66m8Q8H/5n7tTrh5AdS/RDNpSHhvmUXwC7CXKz
-H9L0Qe0QdWeseJlsilPpF+52Fq8ZGzuN8Nf2TiknyYDEeS79mCby7SwBlmHSQBe7HSh7l149CWQ3
-iatuc+IYonk8G59z32e73axEIpKZkdMYAnTlD0JXJVeAdRSvJTSlXp9GjbFQXqDFiSbSoA8jhS1R
-x+ftzj/8G2IE7pRaXCPsQeJ5LcaolrObvjLejlywmoxxcnwJhii9O4iEX1vPyG7Xg6LNeXZpIR+R
-AU214t2VYz7S/+EGl4bY/YRdxNuRvispYoDoYyLGmqy2YJ0ooKiwrqfeVHBRW53aLnypR6KzuG/J
-1l5AdW3wKqL4jnRQA06wWRClnIaNmkiBhWkY65pf2FUTeeh9VgDwEvZdNDDAfVC/MJMxRJiwfkRa
-5q4saeLMKfkFe3B87LJRPHs99FM27tf/6OHXZIbmOdBDrqln8oQx4/VO4P4NRnQZy0rtqYCB5uAY
-VAz+6EuCu2vZnwPoeCJ98LevF15BeP7XYefycqVJDGeUiQm4bLJMk5yAK1bNmvHXNKCrVsJZQT91
-jJDiOgUBr22PDy3r4MiURem4CFRrEcbJzyLxKOazpFIqhz+ic2o1MIoi9KO4uhEWJ7BxDs5o/nZE
-ckI=
-=0rmk
------END PGP SIGNATURE-----
+> Most distro kernels are going to automatically zero out stack variables
+> like tinst2 to prevent undefined behavior.
+>
 
---------------LtYdBgNLup5rLDUU0qOYNau8--
+instr is already zeroed out.
+
+> Presumably this is a fast path.  So setting "u16 tinst2 = 0;" does not
+> affect runtime speed for distro kernels and it might be the best
+> solution.
+>
+
+Performance is not an issue here - this is a misalignment fixup
+handler, which we copied from the 32-bit ARM tree only for compat
+reasons, but anyone who cares about performance would not use
+misaligned accesses or even run 32-bit code on a 64-bit system.
+
+However, given that this code originates in the arch/arm tree, I am
+reluctant make such 'correctness' tweaks while the logic is sound and
+unambiguous.
