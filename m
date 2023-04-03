@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE826D551C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 01:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390486D551F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 01:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbjDCXJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 19:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S233780AbjDCXMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 19:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233386AbjDCXJb (ORCPT
+        with ESMTP id S233160AbjDCXMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 19:09:31 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9BF1FD3
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:09:30 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id s72so2752667pgs.9
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 16:09:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680563370;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xm2mdMYlxgOEAlln4oVgIuGqiZVWlR3x3Kt+Ruv0qD4=;
-        b=KUmiAtMK1/S3dcCVClx3TpnYw38n3sgVtwGXUMel9HRPQxlTPxy7nv7LwGjuSn9C2n
-         5xu3/sJ7DZMTfJLizzmvX9NMSmW1jZ4OigK4G3q1ii/agaRTtYzP4M7VZ7WIO/L/zTW8
-         xBRUy5R+ORUDJhOdnpjyBW4oR6ohWjL3bG9Ub2q6XckGTvRV04pW0I7KpnQmUbFn4hit
-         FxYbgKUgElYXz6vG//abvBVNWgw/4/5CDiES8wS20Q0rCUEeCmwO9ee723hlYqWQF2fp
-         u9mt3FWjMUgNsZNDssNWeZu8fb8VQQjQVXQY3ase8N3uMcxd8kd7GYS4F3KrGfP+2222
-         2FeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680563370;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xm2mdMYlxgOEAlln4oVgIuGqiZVWlR3x3Kt+Ruv0qD4=;
-        b=Hhxh8gXijCfIWho6GI/zPURKZXkm9FEOBd9iGf0Wxkw3v08bdXQlyOef3bb6KFwf0f
-         SH9I5bz1lolE5/lsyNOjKUKchPS0gxXvRmfjKhHAcXSUnoB2kJmoN3TrCgvEz7TYX656
-         ZDwOJkVjNyt9pnf5f/iYB+dW70x7cTch2lhdR69iFLSW3gurlik901xtip5uexnkL9Hl
-         MtCoa2WdYFMAKkRj/r+si2DFd0MEo0uZbVG87yPg2z25an4vc9M6L7v6F+sTa5U/ucQx
-         ejBacy+denUNf19EEK0cIo/ZzCQnXib1qjBABgwysmspdP768k4xhKh/iRjKq0G7h8PP
-         +fDg==
-X-Gm-Message-State: AAQBX9fGoh8vn55lZ7pTpGo4KHDQxDXIrmeglZNcCz/ppfvlRR+PF3Mc
-        Q49CZ6bkUaOjAgINLEqA0p6TyMJP1Qd8EJ4EcuBN6w==
-X-Google-Smtp-Source: AKy350Y4+plIG562XWpintZQc4vACy7i2JVnLqdKGRxFUL/qetr6AIMSFaGLhVh619kAR3WK8hsJBBOa34m1K+jRuko=
-X-Received: by 2002:a63:eb50:0:b0:509:4ac5:7f44 with SMTP id
- b16-20020a63eb50000000b005094ac57f44mr82512pgk.2.1680563370090; Mon, 03 Apr
- 2023 16:09:30 -0700 (PDT)
+        Mon, 3 Apr 2023 19:12:53 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4871BFC;
+        Mon,  3 Apr 2023 16:12:52 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 471A185C54;
+        Tue,  4 Apr 2023 01:12:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1680563570;
+        bh=ZUetAbCZ5vMdVE5GC+DuXDKD9WMm0kE2HOWJEVcf8cY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pg4jY0CUZUCCXwCPABFCmkrSCPlu4hqHZivTsP6g+CR8k74IUC9oFwkz0xG6p9JFB
+         IcWhUah+k9P9OK25G17LrxvsmwvDNUJ82NU5k3Ip1bfBYK67fz9zHTuTG5GRosiXZF
+         riQpQR46aEdlmuM2UIS9/ksz3ANXtvLE7dS7BdE8brDJ8r/RSq3gHZP4L8mHOOoK6G
+         EpiBZLd5z0MLPiYot3jCzPpQtTFh5K7dZhSXMGPti4jsbsF9Ho4h2JV68INnzyFhL2
+         +fs74wls1JdbbaUHixon8HfNSg35fRK5AZ72ImlJ3J2qjCDcl4lK5AOqX51opyMl+8
+         eoss+WSv6dDeQ==
+Message-ID: <e2b5efc4-1b2d-191f-e4ee-5ad7a64c63cd@denx.de>
+Date:   Tue, 4 Apr 2023 01:12:48 +0200
 MIME-Version: 1.0
-References: <20230330220506.1399796-1-rmoar@google.com> <CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr+f+mOVKT1bGvA@mail.gmail.com>
- <CA+GJov5YigvgTf7ThaN9g8nOkoFKzJTiOLYO86cD5yVa2BEieg@mail.gmail.com>
-In-Reply-To: <CA+GJov5YigvgTf7ThaN9g8nOkoFKzJTiOLYO86cD5yVa2BEieg@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 3 Apr 2023 16:09:18 -0700
-Message-ID: <CAGS_qxqbdB-1OFUQWXb7XxODWfOWi5yMUCBFebOLmGOj0rMdyA@mail.gmail.com>
-Subject: Re: [PATCH v1] kunit: add tests for using current KUnit test field
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 1/2] dt-bindings: display: bridge: sn65dsi83: Add DSI
+ video mode
+To:     Francesco Dolcini <francesco@dolcini.it>,
+        Rob Herring <robh@kernel.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
+References: <20230330101752.429804-1-francesco@dolcini.it>
+ <20230330101752.429804-2-francesco@dolcini.it>
+ <20230403210622.GA1740065-robh@kernel.org>
+ <ZCtB8Vu4Brm3G639@francesco-nb.int.toradex.com>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <ZCtB8Vu4Brm3G639@francesco-nb.int.toradex.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-3.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,47 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 12:31=E2=80=AFPM Rae Moar <rmoar@google.com> wrote:
->
-> On Thu, Mar 30, 2023 at 6:21=E2=80=AFPM 'Daniel Latypov' via KUnit Develo=
-pment
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > I've got a few minor comments below, but this otherwise looks good.
-> > I like the idea of testing knuit_fail_current_test().
-> >
-> >
-> > On Thu, Mar 30, 2023 at 3:05=E2=80=AFPM Rae Moar <rmoar@google.com> wro=
-te:
-> > >
-> > > +static void kunit_current_kunit_test_field(struct kunit *test)
-> > > +{
-> > > +       struct kunit *current_test;
-> > > +
-> > > +       /* Check to ensure the result of current->kunit_test
-> > > +        * is equivalent to current test.
-> > > +        */
-> > > +       current_test =3D current->kunit_test;
-> > > +       KUNIT_EXPECT_PTR_EQ(test, test, current_test);
-> >
-> > Perhaps we can combine this and the next test case down to
-> > static void kunit_current_test(struct kunit *test) {
-> >   /* There are two different ways of getting the current test */
-> >   KUNIT_EXPECT_PTR_EQ(test, test, current->kunit_test);
-> >   KUNIT_EXPECT_PTR_EQ(test, test, kunit_get_current_test());
-> > }
-> > ?
->
-> Hi Daniel!
->
-> Yes, I would be happy to combine these for v2. I might want to alter
-> that proposed comment slightly. "Two different ways" seems a bit
-> unclear to me. Maybe: Check results of both current->kunit_test and
-> kunit_get_current_test() are equivalent to current test. What do you
-> think? I might send out a v2 with a proposed comment.
+On 4/3/23 23:15, Francesco Dolcini wrote:
+> On Mon, Apr 03, 2023 at 04:06:22PM -0500, Rob Herring wrote:
+>> On Thu, Mar 30, 2023 at 12:17:51PM +0200, Francesco Dolcini wrote:
+>>> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+>>>
+>>> SN65DSI8[34] device supports burst video mode and non-burst video mode
+>>> with sync events or with sync pulses packet transmission as described in
+>>> the DSI specification.
+>>>
+>>> Add property to select the expected mode, this allows for example to
+>>> select a mode that is compatible with the DSI host interface.
+>>
+>> Why does this need to be in DT?
+> 
+>> The source and sink drivers should know what their capabilities are
+>> and pick the best common one.
+> 
+> Is there a best mode?
 
-What you went with in v2 works for me.
-I'll take a look at the other changes in v2.
+I think yes:
+Burst (is better than) Sync Events (is better than) Sync Pulses
 
-Thanks!
-Daniel
+Burst is most energy efficient, Sync-Pulses is the simplest and least 
+energy efficient and with most constraints.
+
+> Isn't this a decision how do we want the 2 peers
+> to communicate?
+
+I don't think so, I believe the Host and nearest bridge should be able 
+to negotiate their capabilities (mode, link rate, etc.) within the DRM 
+subsystem.
+
+> For the MIPI-DSI Linux/DRM experts: am I missing something? Is there
+> another way to have a DSI video sink to ask for a specific mode?
+
+I'm afraid this is not implemented yet, so ... plumbing needed.
+
+[...]
