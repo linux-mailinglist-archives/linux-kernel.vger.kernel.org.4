@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837C06D4136
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BEE6D4146
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbjDCJuc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Apr 2023 05:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        id S232029AbjDCJv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbjDCJt7 (ORCPT
+        with ESMTP id S230105AbjDCJvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:49:59 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A47125;
-        Mon,  3 Apr 2023 02:49:10 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 1268F24E36E;
-        Mon,  3 Apr 2023 17:48:58 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 3 Apr
- 2023 17:48:57 +0800
-Received: from [192.168.1.218] (180.164.60.184) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 3 Apr
- 2023 17:48:57 +0800
-Message-ID: <9c132e62-7830-90bf-2c3e-1568a54eb6ec@starfivetech.com>
-Date:   Mon, 3 Apr 2023 17:48:56 +0800
+        Mon, 3 Apr 2023 05:51:35 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4748212842;
+        Mon,  3 Apr 2023 02:50:38 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3339nS6j015267;
+        Mon, 3 Apr 2023 04:49:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680515368;
+        bh=JWqD7HtU05H8b0gt0ata2JIxTLhej1uD/J26q5tfgTc=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=XCEwS0ey4LLZ2Ax5do86qNxGR/kjqiLYeoPDMMBLOKGVbsk4DUwaoZSJUdb+PnGml
+         7gzN7OzibtSOosGo2zv8RYd/s+nXJw9+/bbGUp4ts0bHbOvPZnV29N/XGmFvAHhhIz
+         jL2nNDse7IbvXuudV7uAUf2X3c1CjsyrD4N04sBs=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3339nSq3129876
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 3 Apr 2023 04:49:28 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
+ Apr 2023 04:49:28 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 3 Apr 2023 04:49:28 -0500
+Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3339nOm6002655;
+        Mon, 3 Apr 2023 04:49:25 -0500
+Message-ID: <37ec04db-3ed2-49a4-9c0d-b9a00f49a0a4@ti.com>
+Date:   Mon, 3 Apr 2023 15:19:24 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 3/9] media: dt-bindings: cadence-csi2rx: Convert to DT
- schema
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <rogerq@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net-next 2/2] net: ethernet: ti: am65-cpsw: Enable USXGMII
+ mode for J784S4 CPSW9G
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        "Todor Tomov" <todor.too@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <changhuang.liang@starfivetech.com>
-References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
- <20230331121826.96973-4-jack.zhu@starfivetech.com>
- <0aa3a039-daf3-7e05-6da9-258335a5ca20@linaro.org>
-From:   Jack Zhu <jack.zhu@starfivetech.com>
-In-Reply-To: <0aa3a039-daf3-7e05-6da9-258335a5ca20@linaro.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+References: <54c3964b-5dd8-c55e-08db-61df4a07797c@ti.com>
+ <ZCaYve8wYl15YRxh@shell.armlinux.org.uk>
+ <7a9c96f4-6a94-4a2c-18f5-95f7246e10d5@ti.com>
+ <ZCasBMNxaWk2+XVO@shell.armlinux.org.uk>
+ <dea9ae26-e7f2-1052-58cd-f7975165aa96@ti.com>
+ <ZCbAE7IIc8HcOdxl@shell.armlinux.org.uk>
+ <1477e0c3-bb92-72b0-9804-0393c34571d3@ti.com>
+ <be166ab3-29f9-a18d-bbbd-34e7828453e4@ti.com>
+ <ZCqPHM2/qismCaaN@shell.armlinux.org.uk>
+ <5114b342-6727-b27c-bc8c-c770ed4baa31@ti.com>
+ <ZCqVjS7M2F49yS/6@shell.armlinux.org.uk>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <ZCqVjS7M2F49yS/6@shell.armlinux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.3 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,75 +82,169 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/4/1 4:12, Krzysztof Kozlowski wrote:
-> On 31/03/2023 14:18, Jack Zhu wrote:
->> Convert DT bindings document for Cadence MIPI-CSI2 RX controller
->> to DT schema format.
->> 
->> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
->> ---
->>  .../devicetree/bindings/media/cdns,csi2rx.txt | 100 ----------
->>  .../bindings/media/cdns,csi2rx.yaml           | 174 ++++++++++++++++++
->>  MAINTAINERS                                   |   1 +
->>  3 files changed, 175 insertions(+), 100 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
->>  create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt b/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
->> deleted file mode 100644
->> index 6b02a0657ad9..000000000000
->> --- a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
->> +++ /dev/null
->> @@ -1,100 +0,0 @@
->> -Cadence MIPI-CSI2 RX controller
->> -===============================
->> -
->> -The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
->> -lanes in input, and 4 different pixel streams in output.
->> -
->> -Required properties:
->> -  - compatible: must be set to "cdns,csi2rx" and an SoC-specific compatible
+On 03/04/23 14:29, Russell King (Oracle) wrote:
+> On Mon, Apr 03, 2023 at 02:11:08PM +0530, Siddharth Vadapalli wrote:
+>>
+>>
+>> On 03/04/23 14:02, Russell King (Oracle) wrote:
+>>> On Mon, Apr 03, 2023 at 11:57:21AM +0530, Siddharth Vadapalli wrote:
+>>>> Hello Russell,
+>>>>
+>>>> On 31/03/23 19:16, Siddharth Vadapalli wrote:
+>>>>>
+>>>>>
+>>>>> On 31-03-2023 16:42, Russell King (Oracle) wrote:
+>>>>>> On Fri, Mar 31, 2023 at 04:23:16PM +0530, Siddharth Vadapalli wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 31/03/23 15:16, Russell King (Oracle) wrote:
+>>>>>>>> On Fri, Mar 31, 2023 at 02:55:56PM +0530, Siddharth Vadapalli wrote:
+>>>>>>>>> Russell,
+>>>>>>>>>
+>>>>>>>>> On 31/03/23 13:54, Russell King (Oracle) wrote:
+>>>>>>>>>> On Fri, Mar 31, 2023 at 01:35:10PM +0530, Siddharth Vadapalli wrote:
+>>>>>>>>>>> Hello Russell,
+>>>>>>>>>>>
+>>>>>>>>>>> Thank you for reviewing the patch.
+>>>>>>>>>>>
+>>>>>>>>>>> On 31/03/23 13:27, Russell King (Oracle) wrote:
+>>>>>>>>>>>> On Fri, Mar 31, 2023 at 12:21:10PM +0530, Siddharth Vadapalli wrote:
+>>>>>>>>>>>>> TI's J784S4 SoC supports USXGMII mode. Add USXGMII mode to the
+>>>>>>>>>>>>> extra_modes member of the J784S4 SoC data. Additionally, configure the
+>>>>>>>>>>>>> MAC Control register for supporting USXGMII mode. Also, for USXGMII
+>>>>>>>>>>>>> mode, include MAC_5000FD in the "mac_capabilities" member of struct
+>>>>>>>>>>>>> "phylink_config".
+>>>>>>>>>>>>
+>>>>>>>>>>>> I don't think TI "get" phylink at all...
+>>>>>>>>>>>>
+>>>>>>>>>>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>>>>>>>>> index 4b4d06199b45..ab33e6fe5b1a 100644
+>>>>>>>>>>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>>>>>>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>>>>>>>>> @@ -1555,6 +1555,8 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
+>>>>>>>>>>>>>  		mac_control |= CPSW_SL_CTL_GIG;
+>>>>>>>>>>>>>  	if (interface == PHY_INTERFACE_MODE_SGMII)
+>>>>>>>>>>>>>  		mac_control |= CPSW_SL_CTL_EXT_EN;
+>>>>>>>>>>>>> +	if (interface == PHY_INTERFACE_MODE_USXGMII)
+>>>>>>>>>>>>> +		mac_control |= CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN;
+>>>>>>>>>>>>
+>>>>>>>>>>>> The configuration of the interface mode should *not* happen in
+>>>>>>>>>>>> mac_link_up(), but should happen in e.g. mac_config().
+>>>>>>>>>>>
+>>>>>>>>>>> I will move all the interface mode associated configurations to mac_config() in
+>>>>>>>>>>> the v2 series.
+>>>>>>>>>>
+>>>>>>>>>> Looking at the whole of mac_link_up(), could you please describe what
+>>>>>>>>>> effect these bits are having:
+>>>>>>>>>>
+>>>>>>>>>> 	CPSW_SL_CTL_GIG
+>>>>>>>>>> 	CPSW_SL_CTL_EXT_EN
+>>>>>>>>>> 	CPSW_SL_CTL_IFCTL_A
+>>>>>>>>>
+>>>>>>>>> CPSW_SL_CTL_GIG corresponds to enabling Gigabit mode (full duplex only).
+>>>>>>>>> CPSW_SL_CTL_EXT_EN when set enables in-band mode of operation and when cleared
+>>>>>>>>> enables forced mode of operation.
+>>>>>>>>> CPSW_SL_CTL_IFCTL_A is used to set the RMII link speed (0=10 mbps, 1=100 mbps).
+>>>>>>>>
+>>>>>>>> Okay, so I would do in mac_link_up():
+>>>>>>>>
+>>>>>>>> 	/* RMII needs to be manually configured for 10/100Mbps */
+>>>>>>>> 	if (interface == PHY_INTERFACE_MODE_RMII && speed == SPEED_100)
+>>>>>>>> 		mac_control |= CPSW_SL_CTL_IFCTL_A;
+>>>>>>>>
+>>>>>>>> 	if (speed == SPEED_1000)
+>>>>>>>> 		mac_control |= CPSW_SL_CTL_GIG;
+>>>>>>>> 	if (duplex)
+>>>>>>>> 		mac_control |= CPSW_SL_CTL_FULLDUPLEX;
+>>>>>>>>
+>>>>>>>> I would also make mac_link_up() do a read-modify-write operation to
+>>>>>>>> only affect the bits that it is changing.
+>>>>>>>
+>>>>>>> This is the current implementation except for the SGMII mode associated
+>>>>>>> operation that I had recently added. I will fix that. Also, the
+>>>>>>> cpsw_sl_ctl_set() function which writes the mac_control value performs a read
+>>>>>>> modify write operation.
+>>>>>>>
+>>>>>>>>
+>>>>>>>> Now, for SGMII, I would move setting CPSW_SL_CTL_EXT_EN to mac_config()
+>>>>>>>> to enable in-band mode - don't we want in-band mode enabled all the
+>>>>>>>> time while in SGMII mode so the PHY gets the response from the MAC?
+>>>>>>>
+>>>>>>> Thank you for pointing it out. I will move that to mac_config().
+>>>>>>>
+>>>>>>>>
+>>>>>>>> Lastly, for RGMII at 10Mbps, you seem to suggest that you need RGMII
+>>>>>>>> in-band mode enabled for that - but if you need RGMII in-band for
+>>>>>>>> 10Mbps, wouldn't it make sense for the other speeds as well? If so,
+>>>>>>>> wouldn't that mean that CPSW_SL_CTL_EXT_EN can always be set for
+>>>>>>>> RGMII no matter what speed is being used?
+>>>>>>>
+>>>>>>> The CPSW MAC does not support forced mode at 10 Mbps RGMII. For this reason, if
+>>>>>>> RGMII 10 Mbps is requested, it is set to in-band mode.
+>>>>>>
+>>>>>> What I'm saying is that if we have in-band signalling that is reliable
+>>>>>> for a particular interface mode, why not always use it, rather than
+>>>>>> singling out one specific speed as an exception? Does it not work in
+>>>>>> 100Mbps and 1Gbps?
+>>>>
+>>>> While the CPSW MAC supports RGMII in-band status operation, the link partner
+>>>> might not support it. I have also observed that forced mode is preferred to
+>>>> in-band mode as implemented for another driver:
+>>>> commit ade64eb5be9768e40c90ecb01295416abb2ddbac
+>>>> net: dsa: microchip: Disable RGMII in-band status on KSZ9893
+>>>>
+>>>> and in the mail thread at:
+>>>> https://lore.kernel.org/netdev/20200905160647.GJ3164319@lunn.ch/
+>>>> based on Andrew's suggestion, using forced mode appears to be better.
+>>>>
+>>>> Additionally, I have verified that switching to in-band status causes a
+>>>> regression. Thus, I will prefer keeping it in forced mode for 100 and 1000 Mbps
+>>>> RGMII mode which is the existing implementation in the driver. Please let me know.
+>>>
+>>> Okay, so what this seems to mean is if you have a PHY that does not
+>>> support in-band status in RGMII mode, then 10Mbps isn't possible -
+>>> because the MAC requires in-band status mode to select 10Mbps.
+>>> To put it another way, in such a combination, 10Mbps link modes
+>>> should not be advertised, nor should they be reported to userspace
+>>> as being supported.
+>>>
+>>> Is that correct?
+>>
+>> Yes, if the PHY does not support in-band status, 10 Mbps RGMII will not work,
+>> despite the MAC supporting 10 Mbps in-band RGMII. However, I notice the following:
+>> If the RGMII interface speed is set to 10 Mbps via ethtool, but the:
+>> managed = "in-band-status";
+>> property is not mentioned in the device-tree, the interface is able to work with
+>> 10 Mbps mode with the PHY. This is with the CPSW MAC configured for in-band mode
+>> of operation at 10 Mbps RGMII mode. Please let me know what this indicates,
+>> since it appears to me that 10 Mbps is functional in this special case (It might
+>> be an erroneous configuration).
 > 
+> I think you need to check carefully what is going on.
 > 
-> ...
+> Firstly, if you as the MAC is choosing to enable in-band status mode,
+> but phylink isn't using in-band status mode, that is entirely a matter
+> for your MAC driver.
 > 
->> +$id: http://devicetree.org/schemas/media/cdns,csi2rx.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Cadence MIPI-CSI2 RX controller
->> +
->> +maintainers:
->> +  - Maxime Ripard <mripard@kernel.org>
->> +
->> +description:
->> +  The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
->> +  lanes in input, and 4 different pixel streams in output.
->> +
->> +properties:
->> +  compatible:
->> +    const: cdns,csi2rx
+> Secondly, you need to research what the PHY does during the inter-frame
+> time (when in-band status would be transferred). This is when RX_CTL
+> is 0,0, RX_DV is 0, RX_ER is 0.
 > 
-> That's not equivalent conversion and your commit msg does no mention any
-> drops in compatibles.
+> For in-band 10Mbps mode to work, RXD nibbles would need to be x001
+> (middle two bits indicate RX clock = 2.5MHz clock for 10Mbps, lsb
+> indicates link up). MSB determines duplex. Remember that 10Mbps can
+> appear to work with mismatched duplex settings but can cause chaos on
+> networks when it disagrees with what the rest of the network is doing.
 > 
-The equivalent conversion refers to 'an SoC-specific compatible'?
-I'm not sure that, is it enough to add a description (drop an 'SoC-specific compatible')
-to my next version commit message?
+> So, I think before one says "setting in-band mode for 10Mbps with a
+> PHY that doesn't support in-band" really needs caution and research
+> to check what _actually_ ends up happening, and whether it is really
+> correct to do this.
 
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    items:
->> +      - description: CSI2Rx system clock
->> +      - description: Gated Register bank clock for APB interface
->> +      - description: pixel Clock for Stream interface 0
->> +      - description: pixel Clock for Stream interface 1
->> +      - description: pixel Clock for Stream interface 2
->> +      - description: pixel Clock for Stream interface 3
->> +
-> 
-> Best regards,
-> Krzysztof
-> 
+Thank you for the detailed explanation. I will analyze it and fix this. In the
+meanwhile, is it acceptable for me to post the v2 of this series, with the other
+suggestions implemented, while maintaining the status quo for the 10 Mbps RGMII
+configuration in the driver? Please let me know.
+
+Regards,
+Siddharth.
