@@ -2,156 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D8B6D502D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD756D5033
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbjDCSWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
+        id S231985AbjDCSYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbjDCSWs (ORCPT
+        with ESMTP id S231484AbjDCSYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:22:48 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A461FD8;
-        Mon,  3 Apr 2023 11:22:47 -0700 (PDT)
-Received: from [10.10.2.52] (unknown [10.10.2.52])
-        by mail.ispras.ru (Postfix) with ESMTPSA id E321244C1025;
-        Mon,  3 Apr 2023 18:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru E321244C1025
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1680546164;
-        bh=ltjVRaJ5cXWX8C7EGTfWD3PJr6Gb9v0V0uFMoeYcQb8=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=dal+PD4YJPdJfKXl8xvG7qui4Lpf4HImSkXAPNZvTn2WBBZ8r/uI9dLIK5IwSBzLM
-         t0DwBep2Sb6j4wrKYbE03qoNLHUA5rwirtAJfX5RrppuWAcI9mQ7V8HlHeQckVPAkS
-         XEnSfPZF7BA3spb7dGVYLstg0EPS0DHrHs51bcgQ=
-Subject: Re: [PATCH] scsi: initio: Add checks for errors in initio_msgin()
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org,
-        Semyon Verchenko <semverchenko@factor-ts.ru>
-References: <1669410244-5565-1-git-send-email-khoroshilov@ispras.ru>
-From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
-Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
- 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
- kK2E04Fb+Zk1eJvHYRc=
-Message-ID: <409766b3-dcd4-6de8-a2f4-42391aa197b7@ispras.ru>
-Date:   Mon, 3 Apr 2023 21:22:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 3 Apr 2023 14:24:06 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB7C170A;
+        Mon,  3 Apr 2023 11:24:05 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id h14so14414678ilj.0;
+        Mon, 03 Apr 2023 11:24:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680546244; x=1683138244;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BLcYkBQ6zlbiLXorhcUGXvnBxQ6eez111cDSr+vpQ3I=;
+        b=S7qbEl+v2sdnA3rkEm1vOAgL+NUKHBQIEk9qzKAGVoQa+3K7EuSN9AHp+srdKkmEWY
+         VfPDndddKuQTO3cVQx6pZ9aFR6zglYxPNy2r9V267lAm1SASscLaSwVz+mIsExlLFOhh
+         dSk4vdL/xGaaUOtJBTyj9S0aYGSsqRz2wdN86xJf0pbv5ZrJoARtDR6qbSA43TMG9OXc
+         yZVBJL72UEx14eJ1/bMOiglImMp1IlsbjddqH6lvvYLS20/ZRH0Hufc0yCE9Ev/eJf0A
+         qVWaxc1liDA2FN2tC06bC8Q4rQFezWqFNBlTiWRdAcK+yUGxOGMDQOWpaIT+WDdSzNMo
+         Q2DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680546244; x=1683138244;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BLcYkBQ6zlbiLXorhcUGXvnBxQ6eez111cDSr+vpQ3I=;
+        b=4rQDRiM4N39RbR2Y6dlTijHRsRWzfSP7e06eSolGl0XCe4LMP6jEklDIolJcnMjcmS
+         jW7zioEMcKZKIT8FEOBr4qQrq8n1KQXfoCS5K1NGKYgUbVxyP+yM9FTtDl14cHwVZYtd
+         i1T4ux22giqy8GUxn/+ohXpqp4U8XhHJ/4SqUKBaiypaKyvX53UxULppCqj3fBpN9kvu
+         lwpxM4SfsEWpniDmTVTzuNBOge3Sz/W2jiufVB1ALHGjqbZrek8bo4vJsK5NAPsCk3nP
+         vZgLhgnC4iW3Cu8mavG7o1cgq79M0tqHnD14MvGqRxTf55eMpuG9H6ULdAR1sOxAUs18
+         /IrA==
+X-Gm-Message-State: AAQBX9c4r5UVNOJ2suKF3rxkhmMUprpFIPKoYe79C/C4eGtqe3IwcVCJ
+        wdKC7Et8pVQ1ZJXqeP2d9akh4ui+nIWcH0oLPY0=
+X-Google-Smtp-Source: AKy350b3ENLXo3KDjAtD/3eyk+24aIZQL1Zpoc6eQj6JAT14NdrcAFxaQCuw6vmBHfaUgEQ/Ocn/t7Yp80NS7aFVttw=
+X-Received: by 2002:a92:ac03:0:b0:316:fa49:3705 with SMTP id
+ r3-20020a92ac03000000b00316fa493705mr14897ilh.1.1680546244503; Mon, 03 Apr
+ 2023 11:24:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1669410244-5565-1-git-send-email-khoroshilov@ispras.ru>
-Content-Type: text/plain; charset=utf-8
-Content-Language: ru-RU
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <f12f9773-77b5-4ba6-9e9e-adbc67ca0110@spud>
+In-Reply-To: <f12f9773-77b5-4ba6-9e9e-adbc67ca0110@spud>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 3 Apr 2023 19:23:37 +0100
+Message-ID: <CA+V-a8s0UViJ0tBSyiL0ZG8iVT3QSW77=VujJJOfiuM8T=9ntg@mail.gmail.com>
+Subject: Re: [PATCH v7 1/6] riscv: mm: dma-noncoherent: Switch using function
+ pointers for cache management
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.11.2022 00:04, Alexey Khoroshilov wrote:
-> The initio_msgin() calls initio_msgin_accept(), initio_msgin_reject()
-> and initio_msgin_extend(), but does not check if they are succeed.
-> It is not consistent with the other code of the driver.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Fixes: 72d39fea9017 ("[SCSI] initio: Convert into a real Linux driver and update to modern style")
-> Signed-off-by: Semyon Verchenko <semverchenko@factor-ts.ru>
-> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-> ---
->  drivers/scsi/initio.c | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/scsi/initio.c b/drivers/scsi/initio.c
-> index 375261d67619..ee451aa34143 100644
-> --- a/drivers/scsi/initio.c
-> +++ b/drivers/scsi/initio.c
-> @@ -2065,7 +2065,8 @@ static int initio_msgin(struct initio_host * host)
->  		case SAVE_POINTERS:
->  		case RESTORE_POINTERS:
->  		case NOP:
-> -			initio_msgin_accept(host);
-> +			if (initio_msgin_accept(host) == -1)
-> +				return -1;
->  			break;
->  		case MESSAGE_REJECT:	/* Clear ATN first              */
->  			outb((inb(host->addr + TUL_SSignal) & (TSC_SET_ACK | 7)),
-> @@ -2074,20 +2075,24 @@ static int initio_msgin(struct initio_host * host)
->  			if ((active_tc->flags & (TCF_SYNC_DONE | TCF_NO_SYNC_NEGO)) == 0)	/* do sync nego */
->  				outb(((inb(host->addr + TUL_SSignal) & (TSC_SET_ACK | 7)) | TSC_SET_ATN),
->  					host->addr + TUL_SSignal);
-> -			initio_msgin_accept(host);
-> +			if (initio_msgin_accept(host) == -1)
-> +				return -1;
->  			break;
->  		case EXTENDED_MESSAGE:	/* extended msg */
-> -			initio_msgin_extend(host);
-> +			if (initio_msgin_extend(host) == -1)
-> +				return -1;
->  			break;
->  		case IGNORE_WIDE_RESIDUE:
-> -			initio_msgin_accept(host);
-> +			if (initio_msgin_accept(host) == -1)
-> +				return -1;
->  			break;
->  		case COMMAND_COMPLETE:
->  			outb(TSC_FLUSH_FIFO, host->addr + TUL_SCtrl0);
->  			outb(TSC_MSG_ACCEPT, host->addr + TUL_SCmd);
->  			return initio_wait_done_disc(host);
->  		default:
-> -			initio_msgout_reject(host);
-> +			if (initio_msgout_reject(host) == -1)
-> +				return -1;
->  			break;
->  		}
->  		if (host->phase != MSG_IN)
-> 
+Hi Conor,
 
-Just a friendly reminder)
+Thank you for the review.
+
+On Fri, Mar 31, 2023 at 1:24=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
+p.com> wrote:
+>
+> Hey,
+>
+> I think most of what I wanted to talk about has been raised by Arnd or
+> Geert, so I kinda only have a couple of small comments for you here.
+>
+> On Thu, Mar 30, 2023 at 09:42:12PM +0100, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Currently, selecting which CMOs to use on a given platform is done usin=
+g
+> > and ALTERNATIVE_X() macro. This was manageable when there were just two
+> > CMO implementations, but now that there are more and more platforms com=
+ing
+> > needing custom CMOs, the use of the ALTERNATIVE_X() macro is unmanageab=
+le.
+> >
+> > To avoid such issues this patch switches to use of function pointers
+> > instead of ALTERNATIVE_X() macro for cache management (the only drawbac=
+k
+> > being performance over the previous approach).
+> >
+> > void (*clean_range)(unsigned long addr, unsigned long size);
+> > void (*inv_range)(unsigned long addr, unsigned long size);
+> > void (*flush_range)(unsigned long addr, unsigned long size);
+>
+> So, given Arnd has renamed the generic helpers, should we use the
+> writeback/invalidate/writeback & invalidate terminology here too?
+> I think it'd be nice to make the "driver" functions match the generic
+> implementations's names (even though that means not making the
+> instruction naming).
+>
+> > The above function pointers are provided to be overridden for platforms
+> > needing CMO.
+> >
+> > Convert ZICBOM and T-HEAD CMO to use function pointers.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > v6->v7
+> > * Updated commit description
+> > * Fixed build issues when CONFIG_ERRATA_THEAD_CMO=3Dn
+> > * Used static const struct ptr to register CMO ops
+> > * Dropped riscv_dma_noncoherent_cmo_ops
+>
+> > * Moved ZICBOM CMO setup to setup.c
+>
+> Why'd you do that?
+> What is the reason that the Zicbom stuff cannot live in
+> dma-noncoherent.[ch] and only expose, say:
+> void riscv_cbom_register_cmo_ops(void)
+> {
+>         riscv_noncoherent_register_cache_ops(&zicbom_cmo_ops);
+> }
+> which you then call from setup.c?
+>
+Commit abcc445acd ("riscv: move riscv_noncoherent_supported() out of
+ZICBOM probe) moved the zicbom the setup to setup.c hence I moved the
+CMO stuff here. Said that, now I am defaulting to zicbom ops so I have
+mode the functions to dma-noncoherent.c  .
+
+> > v5->v6
+> > * New patch
+> > ---
+> >  arch/riscv/errata/thead/errata.c         | 76 ++++++++++++++++++++++++
+> >  arch/riscv/include/asm/dma-noncoherent.h | 73 +++++++++++++++++++++++
+> >  arch/riscv/include/asm/errata_list.h     | 53 -----------------
+> >  arch/riscv/kernel/setup.c                | 49 ++++++++++++++-
+> >  arch/riscv/mm/dma-noncoherent.c          | 25 ++++++--
+> >  arch/riscv/mm/pmem.c                     |  6 +-
+> >  6 files changed, 221 insertions(+), 61 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/dma-noncoherent.h
+>
+> > +#ifdef CONFIG_RISCV_ISA_ZICBOM
+> > +
+> > +#define ZICBOM_CMO_OP(_op, _start, _size, _cachesize)                 =
+               \
+> > +     asm volatile("mv a0, %1\n\t"                                     =
+       \
+> > +                  "j 2f\n\t"                                          =
+       \
+> > +                  "3:\n\t"                                            =
+       \
+> > +                  CBO_##_op(a0)                                       =
+       \
+> > +                  "add a0, a0, %0\n\t"                                =
+       \
+> > +                  "2:\n\t"                                            =
+       \
+> > +                  "bltu a0, %2, 3b\n\t"                               =
+       \
+> > +                  : : "r"(_cachesize),                                =
+       \
+> > +                      "r"((unsigned long)(_start) & ~((_cachesize) - 1=
+UL)),  \
+> > +                      "r"((unsigned long)(_start) + (_size))          =
+       \
+> > +                  : "a0")
+> > +
+> > +static void zicbom_cmo_clean_range(unsigned long addr, unsigned long s=
+ize)
+> > +{
+> > +     ZICBOM_CMO_OP(clean, addr, size, riscv_cbom_block_size);
+> > +}
+> > +
+> > +static void zicbom_cmo_flush_range(unsigned long addr, unsigned long s=
+ize)
+> > +{
+> > +     ZICBOM_CMO_OP(flush, addr, size, riscv_cbom_block_size);
+> > +}
+> > +
+> > +static void zicbom_cmo_inval_range(unsigned long addr, unsigned long s=
+ize)
+> > +{
+> > +     ZICBOM_CMO_OP(inval, addr, size, riscv_cbom_block_size);
+> > +}
+> > +
+> > +const struct riscv_cache_ops zicbom_cmo_ops =3D {
+> > +     .clean_range =3D &zicbom_cmo_clean_range,
+> > +     .inv_range =3D &zicbom_cmo_inval_range,
+> > +     .flush_range =3D &zicbom_cmo_flush_range,
+> > +};
+> > +
+> > +static void zicbom_register_cmo_ops(void)
+> > +{
+> > +     riscv_noncoherent_register_cache_ops(&zicbom_cmo_ops);
+> > +}
+> > +#else
+> > +static void zicbom_register_cmo_ops(void) {}
+> > +#endif
+>
+> I think all of the above should be prefixed with riscv_cbom to match the
+> other riscv_cbom stuff we already have.
+Just to clarify, the riscv_cbom prefix should just be applied to the
+ZICOM functions and not to T-HEAD?
+
+Cheers,
+Prabhakar
