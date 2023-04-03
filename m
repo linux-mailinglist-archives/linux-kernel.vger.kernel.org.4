@@ -2,83 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6166D4880
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FBC6D48BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233403AbjDCO3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
+        id S233472AbjDCObU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233395AbjDCO3K (ORCPT
+        with ESMTP id S233460AbjDCObP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:29:10 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42194319BC;
-        Mon,  3 Apr 2023 07:29:01 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4dd9da1c068so371235e87.0;
-        Mon, 03 Apr 2023 07:29:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680532139;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hH1xosDA4fhxPoK+LaLX98KXIgYzN1S+FW0AjfW+bw8=;
-        b=CAME34HW9yFFaJHZ7ULEfnMwvsZan4hJr/ZWDR0xLha3apQc4IwWKETlrVaghgt3xV
-         UcrRmDrBUKo6ZvmtXsxFUdRjsQQbMhcYmox/0cgbME+IsDzoQKBuZE+q9SbI2cl6WjTH
-         BaHJ4Su3vP/mRlhn1hahIYdSB1Os23zS4bJIl0txBDlLofBY9pWfudKY/tHYtYWeq29w
-         ojH1l0firSySGu7uB8pL3nL+SXJhOrGJhC4QAsUEypA80pcWRhPSFFr6PBIwib4klKgd
-         ko0SS7GdkCEdOGVbVKDy/atEw8D7vrKRZ8hr4RNqUkDmPBx/JqUnfNf4M46PwK6TugRy
-         c5yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680532139;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hH1xosDA4fhxPoK+LaLX98KXIgYzN1S+FW0AjfW+bw8=;
-        b=ihIggqbsIm2Vsvq1l5sUQa3SBQ2n5GlTCm5KEru/P2O2l/mJcLxrWUwSSplFFs9UAf
-         OH/wknqa9dJQMZDLl8S9ZVxYuzY+ortdX+glQsLPzIeo802m8zSJ11K0OaqkpL3bFj/w
-         5GTCRLaxZqSaNl30ni/UXVFqZhmqB5GF7otQ9sYSH7Q59gKP1jp6OuFVPJtzadmQqjNc
-         KRY1DvsUJavGgv9wattuGHtfl9IUtdt3xyIIuL3dwf4wN7ZhgYRbr+MCoy+bI+cvJ8dq
-         UAzBIjvlIOU6ZinU4rC4rIihMRhByoiP7EbrCRqo8KrUywsd4kmIRvArPTVHP7r49XWT
-         QwfQ==
-X-Gm-Message-State: AAQBX9eD+0htD9mpJXkwegnR6/9LzH8BTOr8t7HJcZ/z5iIJaavy1Dlp
-        9EzmYo7Ui47LY/3abKRVNYA=
-X-Google-Smtp-Source: AKy350YF5i/5sBNYuDwYsmDiEF88n9U1aGk+Td/cMo45pIqZYBQbsV5uAGFuQuFaFQcInSzohbWsdw==
-X-Received: by 2002:a05:651c:2128:b0:295:a024:f3e2 with SMTP id a40-20020a05651c212800b00295a024f3e2mr5011799ljq.5.1680532139341;
-        Mon, 03 Apr 2023 07:28:59 -0700 (PDT)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id h7-20020a2e3a07000000b00299f0194108sm1782309lja.31.2023.04.03.07.28.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 07:28:59 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 17:28:35 +0300
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v13 016/113] KVM: TDX: x86: Add ioctl to get TDX
- systemwide parameters
-Message-ID: <20230403172835.000040eb.zhi.wang.linux@gmail.com>
-In-Reply-To: <24ddf589-34a4-b312-72c1-8176ee3e8b35@intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
-        <cb0ae8b4941aaa45e1e5856dde644f9b2f53d9a6.1678643052.git.isaku.yamahata@intel.com>
-        <20230325104306.00004585@gmail.com>
-        <20230329231722.GA1108448@ls.amr.corp.intel.com>
-        <20230331001803.GE1112017@ls.amr.corp.intel.com>
-        <20230331154432.00001373@gmail.com>
-        <24ddf589-34a4-b312-72c1-8176ee3e8b35@intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 3 Apr 2023 10:31:15 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AF8319AC
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:31:13 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 90381320092B;
+        Mon,  3 Apr 2023 10:31:10 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 03 Apr 2023 10:31:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680532270; x=
+        1680618670; bh=B/Do+b9pnKPWS+TxyE4WQ3cBvHCKsM0Md0bJGMcs1Tg=; b=m
+        xRyNbNMS737Q+puOd26TJC0aUjkW+vYMYJO4bqi5XPzV+CibVHguIqAG4O24Rs/l
+        thz43eN8HIV7uLg+vzHg2EvQMo9CPLDUFHpsKBByQS07ex8Zq/l0BI/NXIMZWA0L
+        k4M7DM7fz8Dt1Ofux60e/KLgTx8KccnIXOjFW8qBk0D7K2gJnT0dUQEmFZ2HkOGB
+        dDqjDpU3Mcg8H1uP1eixeDwILA4NUbWF2icMlKl1XJUTbi6f8sCZs/GBEPTS4GuJ
+        glhqUpC5vARROT0T3JiaO19YL5s1oJIEJklFdhpGCFrNyCcngQIJx/w7Nf6I4eqE
+        Z7scNlOTev1wJA7YTTMZg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680532270; x=1680618670; bh=B/Do+b9pnKPWS
+        +TxyE4WQ3cBvHCKsM0Md0bJGMcs1Tg=; b=SXtdgnNvFj1sb/H249OpfeD/MGWVN
+        F2r9NHuzQMOPspIGrKFWd9UetLv3Tn52Y/pOkC7wBaddnjg9eKHdICUKdYiIInZP
+        5guNpxIEoWV3pFE4J50aHyN7syXPPOmifUAU8YkmBzWGp6TYfWh/QtmX/Xigu6V+
+        ltGq6QXr6OntWuGm5F1K7Krat1m9oskxvvPLuf8ZL2HpZzkmrK/YxkHzBZdcTd8m
+        g+6lvmO1MtVh/ygYs9p/HNtqHdEwvW+59kQhkt+AO6OlUg6N/rkakudX4sVLX4Cw
+        7DGj2G1Axl2qT/U2uEz1ddSI8quwwa3YJ2bY//oDpW2hzmhI1/07nZFHg==
+X-ME-Sender: <xms:LeMqZN0euFbeJEAZ4wRim1wryBJTWn0jLgOdxWdYuCD04B8FeO2j1A>
+    <xme:LeMqZEHO0bkHAKpj78N5hyZMl9iBrAWmTFhwBM6rH0YwfrldOmoqgSCoBbATp-BBB
+    Lh8aYid2QRgE3Xg7Ak>
+X-ME-Received: <xmr:LeMqZN6P7xZ9hXiasnw2bHzprJFKX09HALseIAwZLJOC8COiLR3lv7t-W863ECEI6SluBA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedgjeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:LeMqZK0hzWjhUj8iEKbRyl5xAkUMihtmj1vdm2vEG72MdX-kAigI4A>
+    <xmx:LeMqZAGJWDmf5y1Stw7veuGje0PqAtOR2NSrgxvuLYBoqE-rmBRuFg>
+    <xmx:LeMqZL_Xm6Hc72_RQgySFqxDraRcinVhHBp__uz8FfMrVzKyXVrq7g>
+    <xmx:LuMqZO_R3txir8lOvYeIbrmt_to3IX0htYn7z2tESyWnEMZ0NpM-XA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Apr 2023 10:31:08 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id B136110D7B3; Mon,  3 Apr 2023 17:31:05 +0300 (+03)
+Date:   Mon, 3 Apr 2023 17:31:05 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/mm/iommu/sva: Do not allow to set
+ FORCE_TAGGED_SVA bit from outside
+Message-ID: <20230403143105.rj4l5tqn43t3zcnh@box.shutemov.name>
+References: <20230403111020.3136-1-kirill.shutemov@linux.intel.com>
+ <20230403111020.3136-3-kirill.shutemov@linux.intel.com>
+ <CACT4Y+YoS9e=QVq6iKda5Gv852kVv9OTLaOZ=XCJ65mP0oyAOA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+YoS9e=QVq6iKda5Gv852kVv9OTLaOZ=XCJ65mP0oyAOA@mail.gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,111 +104,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 11:46:15 +0800
-Xiaoyao Li <xiaoyao.li@intel.com> wrote:
-
-> On 3/31/2023 8:44 PM, Zhi Wang wrote:
-> > On Thu, 30 Mar 2023 17:18:03 -0700
-> > Isaku Yamahata <isaku.yamahata@gmail.com> wrote:
-> > 
-> >> On Wed, Mar 29, 2023 at 04:17:22PM -0700,
-> >> Isaku Yamahata <isaku.yamahata@gmail.com> wrote:
-> >>
-> >>> On Sat, Mar 25, 2023 at 10:43:06AM +0200,
-> >>> Zhi Wang <zhi.wang.linux@gmail.com> wrote:
-> >>>
-> >>>> On Sun, 12 Mar 2023 10:55:40 -0700
-> >>>> isaku.yamahata@intel.com wrote:
-> >>>>
-> >>>> Does this have to be a new generic ioctl with a dedicated new x86_ops? SNP
-> >>>> does not use it at all and all the system-scoped ioctl of SNP going through
-> >>>> the CCP driver. So getting system-scope information of TDX/SNP will end up
-> >>>> differently.
-> >>>>
-> >>>> Any thought, Sean? Moving getting SNP system-wide information to
-> >>>> KVM dev ioctl seems not ideal and TDX does not have a dedicated driver like
-> >>>> CCP. Maybe make this ioctl TDX-specific? KVM_TDX_DEV_OP?
-> >>>
-> >>> We only need global parameters of the TDX module, and we don't interact with TDX
-> >>> module at this point.  One alternative is to export those parameters via sysfs.
-> >>> Also the existence of the sysfs node indicates that the TDX module is
-> >>> loaded(initialized?) or not in addition to boot log.  Thus we can drop system
-> >>> scope one.
-> >>> What do you think?
-> >>>
-> > 
-> > I like this idea and the patch below, it feels right for me now. It would be nice
-> > if more folks can chime in and comment.
+On Mon, Apr 03, 2023 at 03:55:09PM +0200, Dmitry Vyukov wrote:
+> On Mon, 3 Apr 2023 at 13:10, Kirill A. Shutemov
+> <kirill.shutemov@linux.intel.com> wrote:
+> >
+> > arch_prctl(ARCH_FORCE_TAGGED_SVA) overrides the default and allows LAM
+> > and SVA to co-exist in the process. It is expected by called by the
+> > process when it knows what it is doing.
+> >
+> > arch_prctl() operates on the current process, but the same code is
+> > reachable from ptrace where it can be called on arbitrary task.
+> >
+> > Make it strict and only allow to set MM_CONTEXT_FORCE_TAGGED_SVA for the
+> > current process.
+> >
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Fixes: 23e5d9ec2bab ("x86/mm/iommu/sva: Make LAM and SVA mutually exclusive")
+> > Suggested-by: Dmitry Vyukov <dvyukov@google.com>
+> > ---
+> >  arch/x86/kernel/process_64.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+> > index c7dfd727c9ec..cefac2d3a9f6 100644
+> > --- a/arch/x86/kernel/process_64.c
+> > +++ b/arch/x86/kernel/process_64.c
+> > @@ -885,6 +885,8 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+> >         case ARCH_ENABLE_TAGGED_ADDR:
+> >                 return prctl_enable_tagged_addr(task->mm, arg2);
+> >         case ARCH_FORCE_TAGGED_SVA:
+> > +               if (current != task)
+> > +                       return -EINVAL;
 > 
-> SYSFS option requires CONFIG_SYSFS, which reqiures CONFIG_KVM_TDX to 
-> select CONFIG_SYSFS.
+> prctl_enable_tagged_addr() checks "task->mm != current->mm".
+> Should we check the same here for consistency? Or also change the
+> check in prctl_enable_tagged_addr().
 > 
-> >>> Regarding to other TDX KVM specific ioctls (KVM_TDX_INIT_VM, KVM_TDX_INIT_VCPU,
-> >>> KVM_TDX_INIT_MEM_REGION, and KVM_TDX_FINALIZE_VM), they are specific to KVM.  So
-> >>> I don't think it can be split out to independent driver.
-> >>
-> > 
-> > They can stay in KVM as they are KVM-specific. SNP also has KVM-specific ioctls
-> > which wraps the SEV driver calls. At this level, both TDX and SNP go their specific
-> > implementation without more abstraction other than KVM_ENCRYPT_MEMORY_OP. Their
-> > strategies are aligned.
-> > 
-> > The problem of the previous approach was the abstraction that no other implementation
-> > is using it. It is like, TDX wants a higher abstraction to cover both TDX and SNP,
-> > but SNP is not using it, which makes the abstraction looks strange.
-> 
-> Note, before this TDX enabling series, KVM_MEMORY_ENCRYPT_OP is a VM 
-> scope ioctl, that only serves for SEV and no other implementation uses 
-> it. I see no reason why cannot introduce a new IOCTL in x86 KVM that 
-> serves only one vendor.
-> 
+> arch_prctl() can only do task==current, so I guess "current != task"
+> is a more reasonable check for prctl_enable_tagged_addr() as well.
 
-My point is: time is different. When KVM_MEMORY_ENCRYPT_OP is there,
-there was *only* one vendor and SEV/SNP didn't know how the future vendor
-is going to use the ioctl. That is a reasonable case an generic ioctl can
-have one vendor to back up.
+As of now, prctl_enable_tagged_addr() doesn't have the task on hands. It
+gets mm as input, so it cannot check the task directly. But functionally
+it is the same check.
 
-The background here is: now another vendor is coming and there are going to
-be two vendors. The two vendors' flows are much clearer than early stage.
-Like, they know which flow is going to be used by each other.
+I would prefer to keep it this way. Unless anyone feels strongly about it.
 
-With these kept in mind, IMHO, it is not appropriate to introduce
-an generic ioctl that only one vendor is going to use, meanwhile
-we have already known another vendor is not going to use it.
-
-Defining a new userspace ABI is a serious thing and it is not an early
-stage anymore. Actually I think it is the best time to see how the
-code infrastructure should be re-purposed at this time. 
-
-> We choose KVM_MEMORY_ENCRYPT_OP for TDX platform scope, just because we 
-> reuse KVM_MEMORY_ENCRYPT_OP for TDX VM-scope and extend it to TDX vcpu 
-> scope. It's just to avoid defining a new IOCTL number.
-> 
-> We can rename it to KVM_GET_CC_CAPABILITIES, and even return different 
-> capabilities based on VM type. And even, if SNP wants to use it, I think 
-> it can wrap SNP driver calls inside this IOCTL?
-> 
-
-I am not opposed to this option as it shows effort to improve it and it
-is constructive. But this needs to be figured out with AMD folks and
-maintainers. E.g. what should be the best CC ioctl scheme for KVM?
-vendor-specific or generic, which brings better benefit for the userspace,
-and less maintenance burden.
-
-Back to the reason why I think a vendor-specific sysinfo interface for TDX
-is necessary:
-
-1) SEV driver has been there for quite some time. Unless people thinks an
-generic CC ioctl scheme is a way to go, then there will be motivation and
-efforts putting on it. The efforts is not only about wrapping SEV ioctls,
-it needs a systematic spec of generic CC ioctl scheme. 
-
-2) TDX doesn't have a driver like SEV and possibly not going to have one in
-the future. For those non-KVM related control flow of TDX in future, they
-can re-use this and stay away from KVM interface. (If vendor-specific
-scheme is the future direction.)
-
-> kvm.ko is special that it needs to serve two vendors. Sometime it's 
-> unaviodable that an interface is only used by one vendor.
-
-I am afraid that in this case it is avoidable right?
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
