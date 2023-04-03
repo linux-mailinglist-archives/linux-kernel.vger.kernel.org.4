@@ -2,143 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDD06D3EDB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B08A6D3EFA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbjDCIWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S231570AbjDCIa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231675AbjDCIWu (ORCPT
+        with ESMTP id S231598AbjDCIaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:22:50 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2060.outbound.protection.outlook.com [40.107.6.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB876199;
-        Mon,  3 Apr 2023 01:22:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c+QXsyV11H+GyQaNyYx/Lx+q66rcz3oR/ssOzEHw1CjzV2f4HXLRuQH3wOUWBQS2IKws8F/qd88oFyG3QjTfKbcuP3jDfsYDvNOK5qtuAOV+vyzZ6ecVTH4AvL+YuHZFDgeEfPnXErFTGNsOXvyafHGT/O9XqH/sx53sx5eNvcfui5tan54M0shLSoi+tIQVf5WOzNFu6iJZrKdvhFssHotO++JqQ3NrEB6kn1IH4W0NRReLDeyF6CnUdvMiZDllebb9KPhNxTP1aLpT+a5MqSRjs00vftQv5tdM2p1dMfHu26O014LrObEshGGhN/acGMBwNmK6nxrD0g6b/bt+7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tCW0g5JNBSvgPpTNessthHsMKD3M1mE1184E4qW6fy0=;
- b=CFjnCCy9N2bcQAx6mtHkxY4jixCzZxesmL4Y5qpBiMMRCX7pEGbVFpBVRbgRDmJkz6m3USP1Kx8SDcUillnKqgy1jFqW5B6E1gYtnWf4l66Ppo7kReJGWMtmvKGWYTuNFa6KmDc45y9PQmWEbcnIQbVqhIVz46AM07XH+wzJXPs9lHB4pADLif2nskTPBDVyh+CMF7lwhlV1k3dPx1SSpmqE9O5KjMzHzzUfalGDe4K2cg8IMzq7R13UjG3tC4+rzZDfMINpg9GqlyNahfUdJwRX9qcUq6YqjMqgQQgdog08Vdjg6hxyILeGA16HKWAEzrzWvZngHnI9b296jSq4ug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tCW0g5JNBSvgPpTNessthHsMKD3M1mE1184E4qW6fy0=;
- b=LItbeeLiWOAUY6Pi5vIwX9ausDLJ1msjYAL0NWXnruTXQ8fv7ocFusoqiRQLts+5zOYIWtI2+opdNbAcSrAdn67wjL62xQZvHVHEMotjfTDqz8asnJD8xt22gSCpCBw8j9UVDAgg/UbVxYSdxePmJ3AHOspCiuX2gTauffpEweQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by PAXPR04MB8878.eurprd04.prod.outlook.com (2603:10a6:102:20d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
- 2023 08:22:46 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4%4]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
- 08:22:46 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com
-Cc:     linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] clk: imx: drop duplicated macro
-Date:   Mon,  3 Apr 2023 16:27:28 +0800
-Message-Id: <20230403082728.3199849-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0024.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::20) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Mon, 3 Apr 2023 04:30:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FC0A49C2;
+        Mon,  3 Apr 2023 01:30:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30DF41063;
+        Mon,  3 Apr 2023 01:31:07 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.57.89])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 807B63F6C4;
+        Mon,  3 Apr 2023 01:30:18 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 09:30:15 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Donglin Peng <pengdonglin@sangfor.com.cn>
+Cc:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
+        will@kernel.org, catalin.marinas@arm.com,
+        rmk+kernel@armlinux.org.uk, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        bp@alien8.de, hpa@zytor.com, chenhuacai@kernel.org,
+        zhangqing@loongson.cn, kernel@xen0n.name, mingo@redhat.com,
+        peterz@infradead.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
+        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
+        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 2/8] tracing: Add documentation for funcgraph-retval
+ and funcgraph-retval-hex
+Message-ID: <ZCqOl1TCHGhbf0hf@FVFF77S0Q05N>
+References: <cover.1680265828.git.pengdonglin@sangfor.com.cn>
+ <a3dcdd61b3ac07eefabc1b11fc18e9fae23d8cbe.1680265828.git.pengdonglin@sangfor.com.cn>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|PAXPR04MB8878:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9dd1e0b5-214f-4a66-0dd2-08db341c9a6d
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8iNOIJa557nFoPS+Gfn6p5DTZElvtb/XUk9GBuL+whmkNThTxKOZrQJ0piJO4aHkgkA2dttDrJX/EG2qhMRS7SkkLiArf7qA5+6UtzoPiauu4Yh4ll4EME/uD590XfZFfj/H1XmifB4L6lBSrO0nPsR8G+5bonWXbe4rZYojM6Qr8h89exBG+1tCDf7yjjy5Wh2SRXJinm16Z+36pNLMzBvQ1bHEXQEI0kuAZR8qxZkRXS5KXY0Ul5INtaWJAkLOaEW7zLWq/FH9hsGSgo3m5tcFJX5eEIo9J7kr10beE5VhESt+jKA/yzpLvYeAGZLpBjbwo73juJUaoYJVLUuIuC865KHCMHfm53glm7NNRXV/0x+OzzCvhaKYsWFQj/fRbLzp7ANBWj45FX4nJF1JcHTOLNxor+JT5yuw3RqDnB0/ueZkXdnZYAs/D3E3h6fYtrNb8yIVxVmDTbCN1jZSSiagv1NZyxs/VmhhLbu/S/CnOdfQrpFghGbjS95KAlE7snbMFAtY7O0REtEgiwg/EXzVnZsVG+aF6jjoCXzhOOXP6Augp81eqTBUt7VdHEf07vamdxBsocprTK7ik8QVXwkkW4Q4Mgm4SXmLfhH+vkIzs6ksiz+tNUR92k55T12E
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(376002)(346002)(366004)(451199021)(86362001)(2906002)(52116002)(2616005)(83380400001)(186003)(6512007)(6506007)(1076003)(26005)(6486002)(6666004)(4326008)(8676002)(478600001)(66556008)(66946007)(66476007)(41300700001)(7416002)(38100700002)(38350700002)(5660300002)(316002)(4744005)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gjlpp33HevE1gP6hBO1YGai0J2IFPQsUV9L3cJk+NoBL46lohXUbMhvcIQ/m?=
- =?us-ascii?Q?a2J4wR2mm6iVaYgWT26F7Iusx0CyYkHQQzX8IYy7h7mjjRN7Sjz/ftLadrBj?=
- =?us-ascii?Q?RSih8dZvcK2zFNYfE5rj7JO+95/ooB/8tBqO52zekT2WAiFv5Pb/rSt1zZv3?=
- =?us-ascii?Q?aoo3Ii4rHZwABag0ypXQI6nK8YAGQMOhvAy3+d3J3NRSEPsivk2i57laGaeg?=
- =?us-ascii?Q?IApy3C8kY+PKfClhrJ/pTQBdbQuxmlPx0F4oqToowJXeiLbfdJ7R6sqpRLF1?=
- =?us-ascii?Q?3pNm9EtgIb8w6SPUr5XSdsmjlGjE/HpqZUDsfYyrwlnzHIFVoHNyXQ/cNnYe?=
- =?us-ascii?Q?Zzk1Lv0rD+Soqq99Pf8B2Hi2gbeTMLQgIzLlm+HNGesBtZaNaOICpu5+o+qz?=
- =?us-ascii?Q?Krh0/KmIam+TDjEj7v/aFcjLi9VYv/IFTXoC7++hH0wOpxUfPIKzqdHGkFVC?=
- =?us-ascii?Q?excnkYXwIjflf/U7mJKksI24txHhJ7yMrYm7mZccq2IJ7engZj1BZJKSjxAl?=
- =?us-ascii?Q?B/uGjB6tNiBem1ddblilHAYG0PCzEkOsL7CEGq7VuhCdQPVVdD/dfcU+bOVi?=
- =?us-ascii?Q?nNIkfLzt0mHemS9T3tAgqxquH/6+wG/+bjWUrx7StxqkU8uVBF1RRpT1BO3t?=
- =?us-ascii?Q?zHrxi5QAASj8P+DRPdk9NREMjzXXPzrVSx8YCe/pLfTwgO3Mjt6/olW7akC+?=
- =?us-ascii?Q?bx9ic349+cSJM+kF+46fYpeZer+/FY4C0p8RsJYSx7d/0zWTe4Q71dXVBQJq?=
- =?us-ascii?Q?HpPqzYrie1ZCFXSM+BvrmPMhzworhnaLJTVqoGxgu8rcNkhm+VXNUt2thE6+?=
- =?us-ascii?Q?KCFL89ZHQbM5f9C3y4g2JYabmaScYeLQTslsDqgTj1VWHFPfJuCsQtp/UM+o?=
- =?us-ascii?Q?39R+sLjNrS5pEx4FJ1+tQHCXQp09XZJgRMFO6rpjJdeaQUDNBl7bSJrTZgfl?=
- =?us-ascii?Q?EXMrqMDnoEXIroezftIF5RaW+8ZYdwnvhRxHM6Uv3GrXnIBusqxkvcoNj51s?=
- =?us-ascii?Q?AgTJtsYeysVIr6RIz2hSPlH3fe1e/rimfxNJqtkL3YyQ4SDro1MQKX6kSdaA?=
- =?us-ascii?Q?DmwkJhHG2vaqF7nHMhmEQqs9QtbVOxRbrtsmYkFj8kFP9AQobbzi1hM5FmJ1?=
- =?us-ascii?Q?MT/RqMOzp6JJoxpgVUTxkIoKduaxdCzOsNDGKvgwIINdT4Kmr2Q2YtHnk0/h?=
- =?us-ascii?Q?9bbzXF/upKCtxCcvaOJHvMF3RP+wPW5umFO42N2dCcOBapiDICN+KhOgR2d2?=
- =?us-ascii?Q?SVIwW8Ji36nxPDSjTm08keJupyUNugVBwG50BmCy0V4qhsQXkEwXLWS6s1GH?=
- =?us-ascii?Q?w/xCwZXBqKP+Nnpvgf4U8RA8tQ1E9nna6BRJqA598ZVHhfW0g6ERSOmoq+XV?=
- =?us-ascii?Q?DfjH/tmcuw/9obd/FLyyXNpOoXNnvpqYCylhvr7l+WHPrHWZlSvjzITWEJCy?=
- =?us-ascii?Q?7qOjm/FpxssYSVzBmPN1D81oIslBFN3R46yLfVG0JpZYG9Y+Q7/LOwhBE78u?=
- =?us-ascii?Q?GnBsx3ojeQgHG14Kr299GWYs0yCO6rW7PfXboo/SKVMKQorDnLTPBwzVwVq4?=
- =?us-ascii?Q?BvaDqeqFua0P+Eu40+eyAFocvf3q5ixEk3pP+BG+?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9dd1e0b5-214f-4a66-0dd2-08db341c9a6d
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 08:22:46.1409
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EKH0TvZ8+oi8ZsthNKDCUwP/ZKZALyd/AiZR8wDHtB6syDtgvwtN7KEa8w8v3c6S0AKWKr4LBe8G01DszwlgfQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8878
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a3dcdd61b3ac07eefabc1b11fc18e9fae23d8cbe.1680265828.git.pengdonglin@sangfor.com.cn>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On Fri, Mar 31, 2023 at 05:47:38AM -0700, Donglin Peng wrote:
+> Add documentation for the two newly introduced options for the
+> function_graph tracer. The funcgraph-retval option is used to
+> control whether or not to display the return value, while the
+> funcgraph-retval-hex option is used to control the display
+> format of the return value.
+> 
+> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
+> ---
+> v9:
+>  - Update limitation description
+> 
+> v7:
+>  - Rename trace option 'graph_retval_hex' to 'funcgraph-retval-hex'
+>  - Update documentation description
+> 
+> v6:
+>  - Modify the limitations for funcgraph-retval
+>  - Optimize the English expression
+> 
+> v5:
+>  - Describe the limitations of funcgraph-retval
+> ---
+>  Documentation/trace/ftrace.rst | 74 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+> 
+> diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+> index b927fb2b94dc..f572ae419219 100644
+> --- a/Documentation/trace/ftrace.rst
+> +++ b/Documentation/trace/ftrace.rst
+> @@ -1328,6 +1328,19 @@ Options for function_graph tracer:
+>  	only a closing curly bracket "}" is displayed for
+>  	the return of a function.
+>  
+> +  funcgraph-retval
+> +	When set, the return value of each traced function
+> +	will be printed after an equal sign "=". By default
+> +	this is off.
+> +
+> +  funcgraph-retval-hex
+> +	When set, the return value will always be printed
+> +	in hexadecimal format. If the option is not set and
+> +	the return value is an error code, it will be printed
+> +	in signed decimal format; otherwise it will also be
+> +	printed in hexadecimal format. By default, this option
+> +	is off.
+> +
+>    sleep-time
+>  	When running function graph tracer, to include
+>  	the time a task schedules out in its function.
+> @@ -2673,6 +2686,67 @@ It is default disabled.
+>      0)   1.757 us    |        } /* kmem_cache_free() */
+>      0)   2.861 us    |      } /* putname() */
+>  
+> +The return value of each traced function can be displayed after
+> +an equal sign "=". When encountering system call failures, it
+> +can be verfy helpful to quickly locate the function that first
+> +returns an error code.
+> +
+> +	- hide: echo nofuncgraph-retval > trace_options
+> +	- show: echo funcgraph-retval > trace_options
+> +
+> +  Example with funcgraph-retval::
+> +
+> +    1)               |    cgroup_migrate() {
+> +    1)   0.651 us    |      cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
+> +    1)               |      cgroup_migrate_execute() {
+> +    1)               |        cpu_cgroup_can_attach() {
+> +    1)               |          cgroup_taskset_first() {
+> +    1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
+> +    1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
+> +    1)   0.380 us    |          sched_rt_can_attach(); /* = 0x0 */
+> +    1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
+> +    1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
+> +    1)   7.143 us    |    } /* cgroup_migrate = -22 */
+> +
+> +The above example shows that the function cpu_cgroup_can_attach
+> +returned the error code -22 firstly, then we can read the code
+> +of this function to get the root cause.
+> +
+> +When the option funcgraph-retval-hex is not set, the return value can
+> +be displayed in a smart way. Specifically, if it is an error code,
+> +it will be printed in signed decimal format, otherwise it will
+> +printed in hexadecimal format.
+> +
+> +	- smart: echo nofuncgraph-retval-hex > trace_options
+> +	- hexadecimal always: echo funcgraph-retval-hex > trace_options
+> +
+> +  Example with funcgraph-retval-hex::
+> +
+> +    1)               |      cgroup_migrate() {
+> +    1)   0.651 us    |        cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
+> +    1)               |        cgroup_migrate_execute() {
+> +    1)               |          cpu_cgroup_can_attach() {
+> +    1)               |            cgroup_taskset_first() {
+> +    1)   0.732 us    |              cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
+> +    1)   1.232 us    |            } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
+> +    1)   0.380 us    |            sched_rt_can_attach(); /* = 0x0 */
+> +    1)   2.335 us    |          } /* cpu_cgroup_can_attach = 0xffffffea */
+> +    1)   4.369 us    |        } /* cgroup_migrate_execute = 0xffffffea */
+> +    1)   7.143 us    |      } /* cgroup_migrate = 0xffffffea */
+> +
+> +At present, there are some limitations when using the funcgraph-retval
+> +option, and these limitations will be eliminated in the future:
+> +
+> +- Even if the function return type is void, a return value will still
+> +  be printed, and you can just ignore it.
+> +
+> +- Even if return values are stored in multiple registers, only the
+> +  value contained in the first register will be recorded and printed.
+> +  To illustrate, in the x86 architecture, eax and edx are used to store
+> +  a 64-bit return value, with the lower 32 bits saved in eax and the
+> +  upper 32 bits saved in edx. However, only the value stored in eax
+> +  will be recorded and printed.
 
-Drop duplicated macro definition
+With some procedure call standards (e.g. arm64's AAPCS64), when a type is
+smaller than a GPR it's up to the consumer to perform the narrowing, and the
+upport bits may contain UNKNOWN values. For example, with a u8 in a 64-bit GPR,
+bits [3:8] may contain arbitrary values.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/clk/imx/clk.h | 3 ---
- 1 file changed, 3 deletions(-)
+It's probably worth noting that this means *some* manual processing will always
+be necessary for such cases.
 
-diff --git a/drivers/clk/imx/clk.h b/drivers/clk/imx/clk.h
-index 3d94722bbf99..055bc9197fb4 100644
---- a/drivers/clk/imx/clk.h
-+++ b/drivers/clk/imx/clk.h
-@@ -153,9 +153,6 @@ extern struct imx_fracn_gppll_clk imx_fracn_gppll;
- #define imx_clk_pllv2(name, parent, base) \
- 	to_clk(imx_clk_hw_pllv2(name, parent, base))
- 
--#define imx_clk_mux_flags(name, reg, shift, width, parents, num_parents, flags) \
--	to_clk(imx_clk_hw_mux_flags(name, reg, shift, width, parents, num_parents, flags))
--
- #define imx_clk_hw_gate(name, parent, reg, shift) \
- 	imx_clk_hw_gate_flags(name, parent, reg, shift, 0)
- 
--- 
-2.37.1
+That's mostly visible around where largelr types get truncated (whether
+explciitly or implicitly), e.g.
 
+	u8 narrow_to_u8(u64 val)
+	{
+		// implicitly truncated
+		return val;
+	}
+
+... could be compiled to:
+
+	narrow_to_u8:
+		< ... ftrace instrumentation ... >
+		RET
+
+... and so:
+	
+	narrow_to_u8(0x123456789abcdef);
+
+... might be recorded as returning 0x123456789abcdef rather than 0xef.
+
+
+That can happen in surprising ways, e.g.
+
+	int error_if_not_4g_aligned(u64 val)
+	{
+		if (val & GENMASK(63, 32))
+			return -EINVAL;
+
+		return 0;
+	}
+
+... could be compiled to:
+
+	error_if_not_4g_aligned:
+		CBNZ	w0, .Lnot_aligned
+		RET				// bits [31:0] are zero, bits
+						// [63:32] are UNKNOWN
+	.Lnot_aligned:
+		MOV	x0, #-EINVAL
+		RET
+
+.... and so:
+
+	error_if_not_4g_aligned(SZ_8G)
+
+... could return with bits [63:32] non-zero
+
+Thanks,
+Mark.
