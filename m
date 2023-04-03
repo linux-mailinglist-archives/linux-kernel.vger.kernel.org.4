@@ -2,349 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C0C6D41BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDCF6D41BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbjDCKSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
+        id S232212AbjDCKSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbjDCKSE (ORCPT
+        with ESMTP id S232118AbjDCKSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:18:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 745881043C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:17:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 885F41063;
-        Mon,  3 Apr 2023 03:18:40 -0700 (PDT)
-Received: from [10.57.54.53] (unknown [10.57.54.53])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 35E863F840;
-        Mon,  3 Apr 2023 03:17:54 -0700 (PDT)
-Message-ID: <a25804a5-c949-098e-43de-9c9046fdb2de@arm.com>
-Date:   Mon, 3 Apr 2023 11:17:52 +0100
+        Mon, 3 Apr 2023 06:18:17 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727CAEFAC;
+        Mon,  3 Apr 2023 03:18:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pqn0G2lPqz4x4r;
+        Mon,  3 Apr 2023 20:18:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680517086;
+        bh=ru5t21vmlUCJYLbm/kwT474oscAtcYuhx1bI+RTdVmI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bZAKXePH/eHH+pyxxQd39poz/AVjbg8Pxkv2kumzmt8ISh7mCIjRuHsN/AbvA4LA4
+         YCCAw04+Ta5nlMhkbTmwwKGiR067v6fRUdbtjstosxFYkV53+Z/piz/LlU03OC8VI3
+         19NeJX0Rsf+0P9NKLWPOF9lMCBm0sS/UocKUY1tFsAkWQ/KfiK/nkM5JUd7o2SC+xT
+         JtcnpQLZRAnVkGUqSU0oC9+5afXEdsKJRk7/MCkqdAU+ZvYdAj6cT55rdM3j/rwP2H
+         Zv1QYa4DXdVrwE0Ji1zFDWbnW9OV+2bYC32g4QR4jiJr2mTGz9/tOQxL/iUMA/LprJ
+         FTbLSYs+DLhcQ==
+Date:   Mon, 3 Apr 2023 20:18:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Rob Herring <robh@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the pm tree
+Message-ID: <20230403201801.02839c9a@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v3 09/13] coresight: Store in-connections as well as
- out-connections
-To:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
-        quic_jinlmao@quicinc.com, mike.leach@linaro.org
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20230329115329.2747724-1-james.clark@arm.com>
- <20230329115329.2747724-10-james.clark@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230329115329.2747724-10-james.clark@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/42w0VrcIT_O2t+VtyAP99_3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2023 12:53, James Clark wrote:
-> This will allow CATU to get its associated ETR in a generic way where
-> currently the enable path has some hard coded searches which avoid
-> the need to store input connections.
-> 
-> This also means that the full search for connected devices on removal
-> can be replaced with a loop through only the input and output devices.
-> 
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->   drivers/hwtracing/coresight/coresight-core.c  | 79 ++++++++-----------
->   .../hwtracing/coresight/coresight-platform.c  | 31 +++++++-
->   drivers/hwtracing/coresight/coresight-sysfs.c |  7 --
->   include/linux/coresight.h                     | 26 ++++++
->   4 files changed, 90 insertions(+), 53 deletions(-)
-> 
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> index 2f4aa15ef8f9..be1e8be2459f 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -1349,6 +1349,16 @@ static int coresight_orphan_match(struct device *dev, void *data)
->   			if (ret)
->   				return ret;
->   
-> +			/*
-> +			 * Install the device connection. This also indicates that
-> +			 * the links are operational on both ends.
-> +			 */
-> +			conn->dest_dev = csdev;
-> +			conn->src_dev = i_csdev;
-> +
-> +			ret = coresight_add_in_conn(conn);
-> +			if (ret)
-> +				return ret;
+--Sig_/42w0VrcIT_O2t+VtyAP99_3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Do we need to clean up this "conn" in case of an error here ?
+Hi all,
 
->   		} else {
->   			/* This component still has an orphan */
->   			still_orphan = true;
-> @@ -1370,58 +1380,36 @@ static int coresight_fixup_orphan_conns(struct coresight_device *csdev)
->   			 csdev, coresight_orphan_match);
->   }
->   
-> -static int coresight_remove_match(struct device *dev, void *data)
-> +/* coresight_remove_conns - Remove other device's references to this device */
-> +static void coresight_remove_conns(struct coresight_device *csdev)
->   {
-> -	int i;
-> -	struct coresight_device *csdev, *iterator;
-> +	int i, j;
->   	struct coresight_connection *conn;
->   
-> -	csdev = data;
-> -	iterator = to_coresight_device(dev);
-> -
-> -	/* No need to check oneself */
-> -	if (csdev == iterator)
-> -		return 0;
-> +	/* Remove input references on output devices */
+After merging the pm tree, today's linux-next build (powerpc allyesconfig)
+failed like this:
 
-minor nit: The term "output devices" is a bit confusing.
-Could we simplify it as :
+In file included from drivers/char/tpm/tpm_atmel.c:18:
+drivers/char/tpm/tpm_atmel.h: In function 'atmel_get_base_addr':
+drivers/char/tpm/tpm_atmel.h:50:14: error: implicit declaration of function=
+ 'of_find_node_by_name'; did you mean 'bus_find_device_by_name'? [-Werror=
+=3Dimplicit-function-declaration]
+   50 |         dn =3D of_find_node_by_name(NULL, "tpm");
+      |              ^~~~~~~~~~~~~~~~~~~~
+      |              bus_find_device_by_name
+drivers/char/tpm/tpm_atmel.h:50:12: error: assignment to 'struct device_nod=
+e *' from 'int' makes pointer from integer without a cast [-Werror=3Dint-co=
+nversion]
+   50 |         dn =3D of_find_node_by_name(NULL, "tpm");
+      |            ^
+drivers/char/tpm/tpm_atmel.h:55:14: error: implicit declaration of function=
+ 'of_device_is_compatible'; did you mean 'fwnode_device_is_compatible'? [-W=
+error=3Dimplicit-function-declaration]
+   55 |         if (!of_device_is_compatible(dn, "AT97SC3201")) {
+      |              ^~~~~~~~~~~~~~~~~~~~~~~
+      |              fwnode_device_is_compatible
+drivers/char/tpm/tpm_atmel.h:56:17: error: implicit declaration of function=
+ 'of_node_put' [-Werror=3Dimplicit-function-declaration]
+   56 |                 of_node_put(dn);
+      |                 ^~~~~~~~~~~
+drivers/char/tpm/tpm_atmel.h:60:15: error: implicit declaration of function=
+ 'of_get_property' [-Werror=3Dimplicit-function-declaration]
+   60 |         reg =3D of_get_property(dn, "reg", &reglen);
+      |               ^~~~~~~~~~~~~~~
+drivers/char/tpm/tpm_atmel.h:60:13: error: assignment to 'const unsigned in=
+t *' from 'int' makes pointer from integer without a cast [-Werror=3Dint-co=
+nversion]
+   60 |         reg =3D of_get_property(dn, "reg", &reglen);
+      |             ^
+drivers/char/tpm/tpm_atmel.h:61:18: error: implicit declaration of function=
+ 'of_n_addr_cells' [-Werror=3Dimplicit-function-declaration]
+   61 |         naddrc =3D of_n_addr_cells(dn);
+      |                  ^~~~~~~~~~~~~~~
+drivers/char/tpm/tpm_atmel.h:62:18: error: implicit declaration of function=
+ 'of_n_size_cells' [-Werror=3Dimplicit-function-declaration]
+   62 |         nsizec =3D of_n_size_cells(dn);
+      |                  ^~~~~~~~~~~~~~~
+drivers/perf/arm_dmc620_pmu.c:710:36: error: array type has incomplete elem=
+ent type 'struct acpi_device_id'
+  710 | static const struct acpi_device_id dmc620_acpi_match[] =3D {
+      |                                    ^~~~~~~~~~~~~~~~~
+drivers/perf/arm_dmc620_pmu.c:710:36: error: 'dmc620_acpi_match' defined bu=
+t not used [-Werror=3Dunused-variable]
+drivers/perf/alibaba_uncore_drw_pmu.c:757:36: error: array type has incompl=
+ete element type 'struct acpi_device_id'
+  757 | static const struct acpi_device_id ali_drw_acpi_match[] =3D {
+      |                                    ^~~~~~~~~~~~~~~~~~
+drivers/perf/alibaba_uncore_drw_pmu.c:757:36: error: 'ali_drw_acpi_match' d=
+efined but not used [-Werror=3Dunused-variable]
 
-	/*
-	 * Remove the input connection references from the
-	 * destination device for each output connection.
-	 */
+Caused by commit
 
-> +	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
-> +		conn = csdev->pdata->out_conns[i];
-> +		if (!conn->dest_dev)
-> +			continue;
->   
-> -	/*
-> -	 * Circle throuch all the connection of that component.  If we find
-> -	 * a connection whose name matches @csdev, remove it.
-> -	 */
-> -	for (i = 0; i < iterator->pdata->nr_outconns; i++) {
-> -		conn = iterator->pdata->out_conns[i];
-> -
-> -		/* Child_dev being set signifies that the links were made */
-> -		if (csdev->dev.fwnode == conn->dest_fwnode && conn->dest_dev) {
-> -			iterator->orphan = true;
-> -			coresight_remove_links(iterator, conn);
-> -			conn->dest_dev = NULL;
-> -			/* No need to continue */
-> -			break;
-> -		}
-> +		for (j = 0; j < conn->dest_dev->pdata->nr_inconns; ++j)
-> +			if (conn->dest_dev->pdata->in_conns[j] == conn) {
-> +				conn->dest_dev->pdata->in_conns[j] = NULL;
-> +				break;
-> +			}
->   	}
->   
-> -	/*
-> -	 * Returning '0' ensures that all known component on the
-> -	 * bus will be checked.
-> -	 */
-> -	return 0;
-> -}
-> +	/* Remove output connections on input devices */
+  054e68aae050 ("ACPI: Replace irqdomain.h include with struct declarations=
+")
 
-Similarly here :
+I have applied the following fixup patch:
 
-	/*
-	 * For all input connections, remove references in
-	 * the output connection.
-	 */
-> +	for (i = 0; i < csdev->pdata->nr_inconns; ++i) {
-> +		conn = csdev->pdata->in_conns[i];
-> +		/* Input conns array is sparse */
-> +		if (!conn)
-> +			continue;
->   
-> -/*
-> - * coresight_remove_conns - Remove references to this given devices
-> - * from the connections of other devices.
-> - */
-> -static void coresight_remove_conns(struct coresight_device *csdev)
-> -{
-> -	/*
-> -	 * Another device will point to this device only if there is
-> -	 * an output port connected to this one. i.e, if the device
-> -	 * doesn't have at least one input port, there is no point
-> -	 * in searching all the devices.
-> -	 */
-> -	if (csdev->pdata->high_inport)
-> -		bus_for_each_dev(&coresight_bustype, NULL,
-> -				 csdev, coresight_remove_match);
-> +		conn->src_dev->orphan = true;
-> +		coresight_remove_links(conn->src_dev, conn);
-> +		conn->dest_dev = NULL;
-> +	}
->   }
->   
->   /**
-> @@ -1531,6 +1519,7 @@ void coresight_release_platform_data(struct coresight_device *csdev,
->   		devm_kfree(dev, conns[i]);
->   	}
->   	devm_kfree(dev, pdata->out_conns);
-> +	devm_kfree(dev, pdata->in_conns);
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 3 Apr 2023 19:58:19 +1000
+Subject: [PATCH] more fixups for "ACPI: Replace irqdomain.h include with
+ struct declarations"
 
-As mentioned earlier, this is not required.
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/char/tpm/tpm_atmel.h          | 2 ++
+ drivers/perf/alibaba_uncore_drw_pmu.c | 1 +
+ drivers/perf/arm_dmc620_pmu.c         | 1 +
+ 3 files changed, 4 insertions(+)
 
->   	devm_kfree(dev, pdata);
->   	if (csdev)
->   		coresight_remove_conns_sysfs_group(csdev);
-> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
-> index bea8f1ba309a..59583df2dc44 100644
-> --- a/drivers/hwtracing/coresight/coresight-platform.c
-> +++ b/drivers/hwtracing/coresight/coresight-platform.c
-> @@ -60,6 +60,35 @@ int coresight_add_out_conn(struct device *dev,
->   }
->   EXPORT_SYMBOL_GPL(coresight_add_out_conn);
->   
-> +/*
-> + * Add an input connection reference to @out_conn in the target's in_conns array
-> + *
-> + * @out_conn: Existing output connection to store as an input on the
-> + *	      connection's remote device.
-> + */
-> +int coresight_add_in_conn(struct coresight_connection *out_conn)
-> +{
-> +	int i;
-> +	struct device *dev = out_conn->dest_dev->dev.parent;
-> +	struct coresight_platform_data *pdata = out_conn->dest_dev->pdata;
-> +
-> +	for (i = 0; i < pdata->nr_inconns; ++i)
-> +		if (!pdata->in_conns[i]) {
-> +			pdata->in_conns[i] = out_conn;
-> +			return 0;
-> +		}
-> +
-> +	pdata->nr_inconns++;
-> +	pdata->in_conns =
-> +		devm_krealloc_array(dev, pdata->in_conns, pdata->nr_inconns,
-> +				    sizeof(*pdata->in_conns), GFP_KERNEL);
-> +	if (!pdata->in_conns)
-> +		return -ENOMEM;
-> +	pdata->in_conns[pdata->nr_inconns - 1] = out_conn;
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_add_in_conn);
-> +
->   static struct device *
->   coresight_find_device_by_fwnode(struct fwnode_handle *fwnode)
->   {
-> @@ -230,7 +259,7 @@ static int of_coresight_get_cpu(struct device *dev)
->   
->   /*
->    * of_coresight_parse_endpoint : Parse the given output endpoint @ep
-> - * and fill the connection information in @conn
-> + * and fill the connection information in @in_conn and @out_conn
-
-We don't do anything about the in_conn here ? So this looks a bit
-odd.
+diff --git a/drivers/char/tpm/tpm_atmel.h b/drivers/char/tpm/tpm_atmel.h
+index ba37e77e8af3..0129d76a4fa3 100644
+--- a/drivers/char/tpm/tpm_atmel.h
++++ b/drivers/char/tpm/tpm_atmel.h
+@@ -26,6 +26,8 @@ struct tpm_atmel_priv {
+=20
+ #ifdef CONFIG_PPC64
+=20
++#include <linux/of.h>
++
+ #include <asm/prom.h>
+=20
+ #define atmel_getb(priv, offset) readb(priv->iobase + offset)
+diff --git a/drivers/perf/alibaba_uncore_drw_pmu.c b/drivers/perf/alibaba_u=
+ncore_drw_pmu.c
+index 5c5be9fc1b15..208b1fe1d247 100644
+--- a/drivers/perf/alibaba_uncore_drw_pmu.c
++++ b/drivers/perf/alibaba_uncore_drw_pmu.c
+@@ -28,6 +28,7 @@
+ #include <linux/printk.h>
+ #include <linux/rculist.h>
+ #include <linux/refcount.h>
++#include <linux/mod_devicetable.h>
+=20
+=20
+ #define ALI_DRW_PMU_COMMON_MAX_COUNTERS			16
+diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
+index 5de06f9a4dd3..3a006b34b515 100644
+--- a/drivers/perf/arm_dmc620_pmu.c
++++ b/drivers/perf/arm_dmc620_pmu.c
+@@ -27,6 +27,7 @@
+ #include <linux/printk.h>
+ #include <linux/rculist.h>
+ #include <linux/refcount.h>
++#include <linux/mod_devicetable.h>
+=20
+ #define DMC620_PA_SHIFT					12
+ #define DMC620_CNT_INIT					0x80000000
+--=20
+2.39.2
 
 
-Rest looks good to me.
 
-Suzuki
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/42w0VrcIT_O2t+VtyAP99_3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
->    *
->    * Parses the local port, remote device name and the remote port.
->    *
-> diff --git a/drivers/hwtracing/coresight/coresight-sysfs.c b/drivers/hwtracing/coresight/coresight-sysfs.c
-> index a4a8e8e642e8..464ba5e1343b 100644
-> --- a/drivers/hwtracing/coresight/coresight-sysfs.c
-> +++ b/drivers/hwtracing/coresight/coresight-sysfs.c
-> @@ -173,12 +173,6 @@ int coresight_make_links(struct coresight_device *orig,
->   			break;
->   
->   		conn->link = link;
-> -
-> -		/*
-> -		 * Install the device connection. This also indicates that
-> -		 * the links are operational on both ends.
-> -		 */
-> -		conn->dest_dev = target;
->   		return 0;
->   	} while (0);
->   
-> @@ -202,5 +196,4 @@ void coresight_remove_links(struct coresight_device *orig,
->   	devm_kfree(&orig->dev, conn->link->orig_name);
->   	devm_kfree(&orig->dev, conn->link);
->   	conn->link = NULL;
-> -	conn->dest_dev = NULL;
->   }
-> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-> index 7197b07deede..aa36680fd264 100644
-> --- a/include/linux/coresight.h
-> +++ b/include/linux/coresight.h
-> @@ -105,6 +105,9 @@ union coresight_dev_subtype {
->    * @nr_inconns: Number of elements for the input connections.
->    * @nr_outconns: Number of elements for the output connections.
->    * @out_conns:	Array of nr_outconns connections from this component.
-> + * @in_conns: Sparse array of in_conns. Sparse because the source
-> + *	      device owns the connection so when it's unloaded the
-> + *	      connection leaves an empty slot.
->    */
->   struct coresight_platform_data {
->   	int high_inport;
-> @@ -112,6 +115,7 @@ struct coresight_platform_data {
->   	int nr_inconns;
->   	int nr_outconns;
->   	struct coresight_connection **out_conns;
-> +	struct coresight_connection **in_conns;
->   };
->   
->   /**
-> @@ -172,6 +176,26 @@ struct coresight_desc {
->    * @dest_dev:	a @coresight_device representation of the component
->   		connected to @src_port. NULL until the device is created
->    * @link: Representation of the connection as a sysfs link.
-> + *
-> + * The full connection structure looks like this, where in_conns store
-> + * references to same connection as the source device's out_conns.
-> + *
-> + * +-----------------------------+   +-----------------------------+
-> + * |coresight_device             |   |coresight_connection         |
-> + * |-----------------------------|   |-----------------------------|
-> + * |                             |   |                             |
-> + * |                             |   |                  remote_dev*|<--
-> + * |pdata->out_conns[nr_outconns]|<->|src_dev*                     |   |
-> + * |                             |   |                             |   |
-> + * +-----------------------------+   +-----------------------------+   |
-> + *                                                                     |
-> + *                                   +-----------------------------+   |
-> + *                                   |coresight_device             |   |
-> + *                                   |------------------------------   |
-> + *                                   |                             |   |
-> + *                                   |  pdata->in_conns[nr_inconns]|<--
-> + *                                   |                             |
-> + *                                   +-----------------------------+
->    */
->   struct coresight_connection {
->   	int src_port;
-> @@ -179,6 +203,7 @@ struct coresight_connection {
->   	struct fwnode_handle *dest_fwnode;
->   	struct coresight_device *dest_dev;
->   	struct coresight_sysfs_link *link;
-> +	struct coresight_device *src_dev;
->   };
->   
->   /**
-> @@ -614,5 +639,6 @@ struct coresight_platform_data *coresight_get_platform_data(struct device *dev);
->   int coresight_add_out_conn(struct device *dev,
->   			   struct coresight_platform_data *pdata,
->   			   const struct coresight_connection *new_conn);
-> +int coresight_add_in_conn(struct coresight_connection *conn);
->   
->   #endif		/* _LINUX_COREISGHT_H */
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqp9kACgkQAVBC80lX
+0GyFzwf+IbCP/bBYmKBeioQ0d/k0ev2xVd2UbK86K9Vnj/MAph3qxPqgY4JVnh2L
+NpHiiQCXfJPk652kXtVYWbPK2rnRtX2pUtV1Di4WbM2BtyQBRvReJwzLW0XZMLX5
+7n2Hdoc226hQ/XnVKllkGDz5jKH9+N7n6b6TPEbYPnGZOEeaVBdFlvp/KajuBdjJ
+6L4goxT9eok87Ae/squvKxgUh5iRPpEpCsUPSDOTc4Dz7MKLPuQgtZWMmchy8mjc
+MV3n/tySrL+Zn+9V9EraOHK1ERvFni4m7U1Ivsy5w7k0GeX+lDTQTGX5dqlDEJXt
+Vh7TaLppMmr8LuiCm+zEZyYBSV1hPQ==
+=yGVs
+-----END PGP SIGNATURE-----
+
+--Sig_/42w0VrcIT_O2t+VtyAP99_3--
