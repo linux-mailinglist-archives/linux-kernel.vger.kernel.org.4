@@ -2,56 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442006D4665
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1D86D4668
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232768AbjDCODF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S232479AbjDCOEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbjDCODD (ORCPT
+        with ESMTP id S230044AbjDCOEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:03:03 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E947EEE;
-        Mon,  3 Apr 2023 07:02:59 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PqsvP55X1zSmns;
-        Mon,  3 Apr 2023 21:59:13 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 3 Apr 2023 22:02:56 +0800
-Message-ID: <e2b97584-4305-8dac-51f0-12656c295bc9@huawei.com>
-Date:   Mon, 3 Apr 2023 22:02:56 +0800
+        Mon, 3 Apr 2023 10:04:44 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2081.outbound.protection.outlook.com [40.107.212.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F04B170F
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:04:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kysREfUSaRlmHrb84g4iw/QWEM/Oz8PHP3TkPrP+cYt9RYuMzQ9W3rq9gkjaEcnA77ghcbVxxnGbA93gnwNhygKTDtxwVssm59AOiYbEu8d9P7StHP+CjNjGtReQV8o3dYOGjGTQnJFPoZI0eba7yznl4+gua9LCacKPy4daIFAl36msceFqdeY5/ZY4I1pgT7bQrDi6jD3qrmzSEad35quXw70wc2iU8Ozs5/NZ1dlluQW2rxv7wfS1Ozs/MT7Oz6WXCoWh7DkXcUtPwKGhPEUz8P+DxNeg0P8SYWyKJzWDaEHwrSA6FhPSre/z2oM4jpNqAwHtk1XW16Qs1FTtVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q7DhGdpw8hz08O337spbyEK9LgSVlWUSkHK2i35rVBQ=;
+ b=L84JjZ2Zjii/ari2TDoXzNksVC0VoMrcja8qKC9DUrDG6MqriCDRPob17qlvtsBUo+W90t8U3P1XaDk56Hrnq7eCPJRUxCXZHk7mI3YNzfcG6/myRRft+Baa567oALGM3s3h7iYwepElux0Xnx08KWhBho2YD6soY+6zpHa6u8ubeZKkc7pXyeCQxXSekevhyYwf1VMz9Zm+r41TtJxTlFCtUvCTIa28/cP2ZUNXl77KZGIcOW87huaMqaY45djhS3BXecl3T9nUF/pa7M6ZmnnU9cqGwWOSSIcDC9GepmcA3B0McXydsubDhHMgoN277arfK+ayo2UFxg/vD/34aw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q7DhGdpw8hz08O337spbyEK9LgSVlWUSkHK2i35rVBQ=;
+ b=CeL1YIRxRhGm1NCaH3Sf8JVWx+94deGGF6W5eifHkD9DRGqIFMRaVqB/nN+dh/edUaN0SZZ7/87+glUlfWqXuyov8aSL3N0U+ALGFb9Xyrjw/X1H+NWFIEG3TT0MY5FISeN2XcvBWwjKgDrOPVHH9u7u+kEUOq1lD8uRSya+0Z8=
+Received: from BN8PR07CA0010.namprd07.prod.outlook.com (2603:10b6:408:ac::23)
+ by SA1PR12MB8842.namprd12.prod.outlook.com (2603:10b6:806:378::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
+ 2023 14:04:38 +0000
+Received: from BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ac:cafe::e3) by BN8PR07CA0010.outlook.office365.com
+ (2603:10b6:408:ac::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22 via Frontend
+ Transport; Mon, 3 Apr 2023 14:04:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT048.mail.protection.outlook.com (10.13.177.117) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6277.26 via Frontend Transport; Mon, 3 Apr 2023 14:04:38 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 3 Apr
+ 2023 09:04:38 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 3 Apr
+ 2023 09:04:37 -0500
+Received: from xhdipdslab41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Mon, 3 Apr 2023 09:04:35 -0500
+From:   Nipun Gupta <nipun.gupta@amd.com>
+To:     <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
+        <nikhil.agarwal@amd.com>
+CC:     <git@amd.com>, <michal.simek@amd.com>,
+        <pieter.jansen-van-vuuren@amd.com>,
+        Nipun Gupta <nipun.gupta@amd.com>
+Subject: [PATCH] cdx: change struct bus_type for sysfs rescan callback as constant
+Date:   Mon, 3 Apr 2023 19:34:16 +0530
+Message-ID: <20230403140416.28183-1-nipun.gupta@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] ext4: only update i_reserved_data_blocks on successful
- block allocation
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20230325063443.1839558-1-libaokun1@huawei.com>
- <20230327124700.mnldh4sosp3ptbls@quack3>
- <a4ee8f3e-9428-ebb1-c0b4-9348075902b6@huawei.com>
- <20230328100037.vy23wsnl437ujdoh@quack3>
- <7410b9be-da2d-57e0-c4f8-19900df2c440@huawei.com>
- <20230329162228.evbppkkcbbbnaeeo@quack3>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230329162228.evbppkkcbbbnaeeo@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT048:EE_|SA1PR12MB8842:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9db192c4-cff4-4629-2155-08db344c5ce1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jsFgdo6YHeCiCBDi7l4Xvbli3DY/8YEHSISGP8fMoqFlgAE5jzK2H4tNeozSirfUkSNg7iCnPbEdcgUcMp/ej6onGE4jvBmG2P+r9X3QaAdUB5W/Pq1J1eHMMfq4FaWASfSzgN0RErTmH7d+F/2xp1e5un9NB0qN7F/tM4NXkDN4lUPxJPn1oQL6iC03Qo1X0jlFKEzq/InVzZKsT3U3x1tBZ8jpoZFgv8k9UOVwuvr80IqyaTyfm57tJLEzxqMKw5FZq67FScpH5rvnY2gTwqNbqt3BRFGZSYIWGfEDlfIMwDsC8542uqqkAzavhBvM+bX70wwqRCTw1jYBuM3acws7635cOyInEySaHqn2WCvIlJNDb7yj3wjLTsxF4vIXj28OTnAnCWMjt5wprh93fNTBqIcpxyEf1V7FcuM98Hk88ohGGmcM2Nhb28fMJ+gJ/aFfJbYOK4zMcE8b8kzakGE1LEMew6U0OUylq8VUfaOr+wuPWY6D+dP7B3O25gRaiRoCUMlnQf4gtx819y/wiLE6sto7uF7zqHNY3wooBbndKvsalbSbWvIHQtobC0kfCNg/uUr9XMqP6gukQbY6lvVk8D7056CArLoox/bU2rd2amo9SpsSL5mlWhmHBjo3p46XCfLEi5Y67UnFle17ExTCxcNv5mf/FzJMlZdLb0qVLSvZI7d091FFF6VdZUp79jfjDgCdAYgg4nMC2ltl+h4doR+eObzTSD3x7lw9KRI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199021)(40470700004)(46966006)(36840700001)(2906002)(44832011)(81166007)(356005)(5660300002)(4744005)(82740400003)(70206006)(8936002)(70586007)(41300700001)(4326008)(8676002)(36860700001)(40460700003)(36756003)(1076003)(110136005)(54906003)(316002)(2616005)(47076005)(6636002)(82310400005)(83380400001)(336012)(426003)(86362001)(478600001)(40480700001)(966005)(186003)(6666004)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 14:04:38.3005
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9db192c4-cff4-4629-2155-08db344c5ce1
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8842
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,171 +102,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/30 0:22, Jan Kara wrote:
-> On Wed 29-03-23 15:23:19, Baokun Li wrote:
->> On 2023/3/28 18:00, Jan Kara wrote:
->>> On Mon 27-03-23 21:09:42, Baokun Li wrote:
->>>> On 2023/3/27 20:47, Jan Kara wrote:
->>>>> On Sat 25-03-23 14:34:43, Baokun Li wrote:
->>>>>> In our fault injection test, we create an ext4 file, migrate it to
->>>>>> non-extent based file, then punch a hole and finally trigger a WARN_ON
->>>>>> in the ext4_da_update_reserve_space():
->>>>>>
->>>>>> EXT4-fs warning (device sda): ext4_da_update_reserve_space:369:
->>>>>> ino 14, used 11 with only 10 reserved data blocks
->>>>>>
->>>>>> When writing back a non-extent based file, if we enable delalloc, the
->>>>>> number of reserved blocks will be subtracted from the number of blocks
->>>>>> mapped by ext4_ind_map_blocks(), and the extent status tree will be
->>>>>> updated. We update the extent status tree by first removing the old
->>>>>> extent_status and then inserting the new extent_status. If the block range
->>>>>> we remove happens to be in an extent, then we need to allocate another
->>>>>> extent_status with ext4_es_alloc_extent().
->>>>>>
->>>>>>           use old    to remove   to add new
->>>>>>        |----------|------------|------------|
->>>>>>                  old extent_status
->>>>>>
->>>>>> The problem is that the allocation of a new extent_status failed due to a
->>>>>> fault injection, and __es_shrink() did not get free memory, resulting in
->>>>>> a return of -ENOMEM. Then do_writepages() retries after receiving -ENOMEM,
->>>>>> we map to the same extent again, and the number of reserved blocks is again
->>>>>> subtracted from the number of blocks in that extent. Since the blocks in
->>>>>> the same extent are subtracted twice, we end up triggering WARN_ON at
->>>>>> ext4_da_update_reserve_space() because used > ei->i_reserved_data_blocks.
->>>>> Hum, but this second call to ext4_map_blocks() should find already allocated
->>>>> blocks in the indirect block and thus should not be subtracting
->>>>> ei->i_reserved_data_blocks for the second time. What am I missing?
->>>>>
->>>>> 								Honza
->>>>>
->>>> ext4_map_blocks
->>>>     1. Lookup extent status tree firstly
->>>>          goto found;
->>>>     2. get the block without requesting a new file system block.
->>>> found:
->>>>     3. ceate and map the block
->>>>
->>>> When we call ext4_map_blocks() for the second time, we directly find the
->>>> corresponding blocks in the extent status tree, and then go directly to step
->>>> 3,
->>>> because our flag is brand new and therefore does not contain EXT4_MAP_MAPPED
->>>> but contains EXT4_GET_BLOCKS_CREATE, thus subtracting
->>>> ei->i_reserved_data_blocks
->>>> for the second time.
->>> Ah, I see. Thanks for explanation. But then the problem is deeper than just
->>> a mismatch in number of reserved delalloc block. The problem really is that
->>> if extent status tree update fails, we have inconsistency between what is
->>> stored in the extent status tree and what is stored on disk. And that can
->>> cause even data corruption issues in some cases.
->> The scenario we encountered was this:
->> ```
->> write:
->>      ext4_es_insert_delayed_block
->>      [0/16) 576460752303423487 (U,D)
->> writepages:
->>      alloc lblk 11 pblk 35328
->>      [0/16) 576460752303423487 (U,D)
->>      -- remove block 11 from extent
->>        [0/11) 576460752303423487 (U,D,R)  +  (Newly allocated)[12/4)
->> 549196775151 (U,D,R)
->>        --Failure to allocate memory for a new extent will undo as:
->>              [0/16) 576460752303423487 (U,D,R)
-> Yes, this is what I was expecting. So now extent status tree is
-> inconsistent with the on-disk allocation info because the block 11 is
-> already allocated on disk but recorded as unallocated in the extent status
-> tree.
+As store prototype in struct bus_attribute has been updated
+to have bus_type as constant, change the CDX sysfs entries to
+follow the same.
 
-Yes! There is an inconsistency here, but do_writepages finds that the 
-writeback
-returns -ENOMEM and keeps retrying until it succeeds, at which point the
-above inconsistency does not exist.
+Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+---
 
-> If the similar problem happened say when we punch a hole into a middle of a
-> written extent and so block on disk got freed but extent status tree would
-> still record it as allocated, user would be able to access freed block thus
-> potentially exposing sensitive data.
+The bus attributes are marked as constant in patch:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=75cff725d9566699a670a02b3cfd1c6e9e9ed53e
 
-ext4_punch_hole
-   // remove extents in extents status tree
-   ext4_es_remove_extent
-   // remove extents tree on disk
-   ext4_ext_remove_space
+ drivers/cdx/cdx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In this scenario, we always try to delete the extents in the in-memory 
-extents
-status tree first, and then delete the extents tree on disk. So even if 
-we fail in
-deleting extents in memory, there is no inconsistency, am I missing 
-something?
-
->
->>      -- if success insert block 11 to extent status tree
->>        [0/11) 576460752303423487 (U,D,R) + (Newly allocated)[11/1) 35328 (W)
->> + [12/4) 549196775151 (U,D,R)
->>
->> U: UNWRITTEN
->> D: DELAYED
->> W: WRITTEN
->> R: REFERENCED
->> ```
->>
->> When we fail to allocate a new extent, we don't map buffer and we don't do
->> io_submit, so why is the extent tree in memory inconsistent with the one
->> stored on disk? Am I missing something?
->>
->> I would appreciate it if you could explain under what cases and what kind of
->> data corruption issues can be caused.
-> See above.
->
->>> And this should also fix the problem you've hit because in case of
->>> allocation failure we may just end up with removed extent from the extent
->>> status tree and thus we refetch info from the disk and find out blocks are
->>> already allocated.
->> Reloading extent tree from disk I don't quite understand here, how do we
->> handle reserved blocks? could you explain it in more detail?
->>
->> Logically, I think it is still necessary to update i_reserved_data_blocks
->> only after a successful allocation. This is also done in
->> ext4_ext_map_blocks().
-> I guess there is some misunderstanding here. Both with
-> ext4_ext_map_blocks() and ext4_ind_map_blocks() we end up updating
-> i_reserved_data_blocks only after the blocks are successfully allocated and
-> inserted in the respective data structure but *before* updating extent
-> status tree. If extent status tree operation fails, we currently get
-> inconsistency between extent status tree and on-disk info in both cases
-> AFAICS. Am I missing something?
->
-> 								Honza
-
-Yes, our code is indeed designed to only update the number of reserved 
-blocks
-after the block allocation is complete. We have different treatment for 
-extent
-based file and non-extent based file in commit 5f634d064c70 ("ext4: Fix 
-quota
-accounting error with fallocate").
-
-For extent based file, we update the number of reserved blocks before the
-"got_allocated_blocks" tag after the blocks are successfully allocated in
-ext4_ext_map_blocks().
-
-For the non-extent based file we update the number of reserved blocks after
-ext4_ind_map_blocks() is executed, which leads to the problem that when 
-we call
-ext4_ind_map_blocks() to create a block, it does not always create a block.
-For example, if the extents status tree we encountered earlier does not 
-match
-the extents tree on disk, this is of course a problem in itself, but in 
-terms of code
-logic, updating the number of reserved blocks as ext4_ext_map_blocks() does
-can prevent us from trying to create a block and not creating it, 
-resulting in an
-incorrect number of reserved blocks.
-
-
-Thank you very much for your patient explanation!
+diff --git a/drivers/cdx/cdx.c b/drivers/cdx/cdx.c
+index 67c32cb2c006..38511fd36325 100644
+--- a/drivers/cdx/cdx.c
++++ b/drivers/cdx/cdx.c
+@@ -363,7 +363,7 @@ static struct attribute *cdx_dev_attrs[] = {
+ };
+ ATTRIBUTE_GROUPS(cdx_dev);
+ 
+-static ssize_t rescan_store(struct bus_type *bus,
++static ssize_t rescan_store(const struct bus_type *bus,
+ 			    const char *buf, size_t count)
+ {
+ 	struct cdx_controller *cdx;
 -- 
-With Best Regards,
-Baokun Li
-.
+2.17.1
+
