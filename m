@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADCF6D3C7B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 06:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5566D3C7D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 06:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbjDCEkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 00:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
+        id S231425AbjDCEku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 00:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjDCEkM (ORCPT
+        with ESMTP id S229670AbjDCEks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 00:40:12 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599328A41;
-        Sun,  2 Apr 2023 21:40:11 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso29184029pjb.2;
-        Sun, 02 Apr 2023 21:40:11 -0700 (PDT)
+        Mon, 3 Apr 2023 00:40:48 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6098A4A;
+        Sun,  2 Apr 2023 21:40:47 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so29210306pjb.0;
+        Sun, 02 Apr 2023 21:40:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680496811;
+        d=gmail.com; s=20210112; t=1680496847;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oWa3A9u2SS5Q8YbZBTRIXS8A5TC3Tq3MbIfMqvPdelg=;
-        b=le1R8hH/pKR8tqVCfK9mbKFd55WDIQm2WoEb9AQwuIn7tbjj/nz6XQCc/fomw31HcW
-         h5gmYvlDhO0UougcctR6CEntD8bYHut/1/9VbqIO0aSk0ZHBJ6lTENzFNBeu2JHGPxH6
-         h0OpR6U8zWa30HKnTeCA2Fyt5HF00xBMFPMmvcEegzc3gNv8OHoCqF6QZ6UZNQC67pfD
-         ZAWavlCRQeslD5geIrHbL643S/ia7du17wO7HVjsnDPB/7wvTGhmd8hUhYDFc/vpXT/1
-         576+ooC0gfY/Jkn8Y8uX0NMl7f5F4lsg+HIkRNvsVtdOolaisVtw5XvUTm/meNZjukAO
-         gZjA==
+        bh=agyl9pNXNvbaNwQwfiQ30HYhuh0VP1fCUWLtFvhHSws=;
+        b=l0iTAlQZA49O55zJpMhBjWFVpJnHqoAi97I4XxTnoXtf+E9NgXOeyl7Fmu0XlxdaJN
+         Ix7RNpjVYwFwVBkftN/xQ17cvKB8WMRpsw1K4YNQCaU0GzdecYX67eysWfbszHkhvD9I
+         7qzus4LLxLw+8uG6gS1y6nJev+9ARyajX8KiogwVeZWojwLv6mHjO8T+kDT8yI/nWQ08
+         tdJW+ndyGXfJ/G6YK5toYFl7BYt55sMM3pL2408TbQ0gEcQPO7u2sHqYN1x6X+g+RimP
+         /j9YZFAVibBYYOWJEuRRCpR9+cAFUgWwh74DhiZiqU+U3oNjFAz6RSdsAeOrbwDiBIJd
+         oxxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680496811;
+        d=1e100.net; s=20210112; t=1680496847;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oWa3A9u2SS5Q8YbZBTRIXS8A5TC3Tq3MbIfMqvPdelg=;
-        b=mzwrPVQF/dfpyCJD8WbF4Cfwl9dPEZ6CcpwMCAQpgK5lCQajrmP7juW60+ns26HZxU
-         hp3FFH/z5UgwFFavQzYSjbwpQnxYDnhjizds2eB43aS++V4uf2Xooh+1oJslrzOjMJPj
-         CRJl80NTaScxvSCReims6FKWg8YJwiMBqdtfPYLns3BqV5yzt9ZwvfnqrB4J+Gy7xGOM
-         C/bdDA2QL4KLYCKgTl4Held9u6LJu6KVTET6vh/oQZxLrvMN05RKpw2z+paeTdbC3OBD
-         4KJ0lsLR5mOkmPicx825qUQdWr4DeAFCbcVrDoBjdIPKh9lz1EO6LoMhiEZcshU0+Vms
-         cXiQ==
-X-Gm-Message-State: AO0yUKVZz7okn9VTwxCM2ZHpNu3cuy3b5QaqPp8AK1/l1Jt5umRWLhNW
-        caHeqF1ZR/gPaY4XhMAvOfs=
-X-Google-Smtp-Source: AK7set/1AghPsFZdDlr4Rs+W9S+fG6H5YKyWq+SsMMEGMeycdFi2nMOBGxw/wQ7zUEtNtx415Yc3/w==
-X-Received: by 2002:a05:6a20:2921:b0:da:c7e:6ec0 with SMTP id t33-20020a056a20292100b000da0c7e6ec0mr29182144pzf.25.1680496810572;
-        Sun, 02 Apr 2023 21:40:10 -0700 (PDT)
+        bh=agyl9pNXNvbaNwQwfiQ30HYhuh0VP1fCUWLtFvhHSws=;
+        b=3d1+RSfOxZmEZMwGastD0EHHrAQSDDVumLEp3Vnj6cLz07vwwk1ItC8C41kk7BQhzm
+         AzDLPciuhG02GLitssiqHPPzPAuxQLdxSe5nvfyDH0LFEhzroVExM2gNOnomn2x0h0mp
+         9DOojjQApASY1es0wiAwX5DsxmZqUWfkpcLcHoDEP9WCbr4av81nHDDeH1Y3SpAw16N5
+         if0QQtRJ7dHCzVdbrN4x6SAP6k6s+H4Og31T9fMwAuZozkbh9G+pUCtZIvZ/lPfMLmfi
+         gHfpPNhx2jc+eYnHI2UIu4/6ECO4k5Oi2gtsu4BrRmJen7wRL6UOrtg1r+qii+Rm6rkv
+         fdYg==
+X-Gm-Message-State: AO0yUKW/Euhr+z15Q3EU3rKwKW8mBsSPY1SRoYWDjp09VDzWGtd1e3mZ
+        zar0wREfHTfNAoFgwfb3wxo=
+X-Google-Smtp-Source: AK7set8LR9NfsmXTc0xrmBsbF5ga7JuHoX4k5dzmfgi5fPv8CDRkEObErLpxqrBJpekMDRquC4KcgA==
+X-Received: by 2002:a05:6a20:4f88:b0:d3:78ab:77c3 with SMTP id gh8-20020a056a204f8800b000d378ab77c3mr31650627pzb.48.1680496847080;
+        Sun, 02 Apr 2023 21:40:47 -0700 (PDT)
 Received: from google.com ([2620:15c:9d:2:9a1d:5e0:d8f3:bc01])
-        by smtp.gmail.com with ESMTPSA id y1-20020a056a001c8100b0062d7fb53652sm5701928pfw.38.2023.04.02.21.40.09
+        by smtp.gmail.com with ESMTPSA id bw11-20020a056a00408b00b0056283e2bdbdsm5698077pfb.138.2023.04.02.21.40.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 21:40:09 -0700 (PDT)
-Date:   Sun, 2 Apr 2023 21:40:06 -0700
+        Sun, 02 Apr 2023 21:40:46 -0700 (PDT)
+Date:   Sun, 2 Apr 2023 21:40:43 -0700
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     hns@goldelico.com, richard.leitner@linux.dev,
-        christophe.jaillet@wanadoo.fr, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Subject: Re: [PATCH v5] Input: tsc2007 - enable cansleep pendown GPIO
-Message-ID: <ZCpYplW002Eku7Fl@google.com>
-References: <20230328-tsc2007-sleep-v5-1-fc55e76d0ced@skidata.com>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
+        linux-amarula@amarulasolutions.com,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH 0/9] Input: edt-ft5x06 - convert to use regmap API
+Message-ID: <ZCpYy1f/84nC1Tx8@google.com>
+References: <20230402200951.1032513-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328-tsc2007-sleep-v5-1-fc55e76d0ced@skidata.com>
+In-Reply-To: <20230402200951.1032513-1-dario.binacchi@amarulasolutions.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -73,19 +77,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 10:00:14AM +0200, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
+On Sun, Apr 02, 2023 at 10:09:42PM +0200, Dario Binacchi wrote:
 > 
-> When a hard IRQ is triggered, the soft IRQ, which decides if an actual
-> pen down happened, should always be triggered. This enables the usage of
-> "can_sleep" GPIO chips as "pen down" GPIO, as the value is not read
-> during the hard IRQ anymore. This might be the case if the GPIO chip is
-> an expander behind i2c.
+> This series converts the driver to use the regmap API for accessing the
+> registers of the different models it manages, making the driver code more
+> generic.
+> The series has been tested on the following touchscreen models:
+> - M06
+> - M09
+> - M12
+> - EP0430MLF0M
+> - generic ft5x06 (05)
 > 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-> Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+> The series also includes some code cleaning and optimization patches.
 
-Applied, thank you.
+Applied the lot, thank you.
 
 -- 
 Dmitry
