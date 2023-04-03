@@ -2,265 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2F56D4BB2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1EB6D4BB8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbjDCPV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
+        id S232716AbjDCPWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjDCPV4 (ORCPT
+        with ESMTP id S230192AbjDCPW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:21:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2DE10D5;
-        Mon,  3 Apr 2023 08:21:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BB9161C12;
-        Mon,  3 Apr 2023 15:21:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B54C4339C;
-        Mon,  3 Apr 2023 15:21:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680535312;
-        bh=LKyj2hwPi42lkcaWN3TMXoQR+q6WYCbdhvtoyLpvRzk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=efq5ine+EsMFH+WcS5cjeha3Dry9tfLq3C8DRkJhnQrIpYlm7DOfWmNv2Bjun+nlF
-         skJ5Xix2JZ8m02L27GMmQkrcTi4Ste4xFWP4VUnkHql7+fM2PYYvX1Pv4ZDs2wa+Zx
-         FVcJ1epYo1ITKpgy0wkdRAjAmjK+j6r4ZmwEIHWvz0cDbjWc+tnz4lprVhBIIctxgR
-         YZMv+njBtzNhqMzBfGS+FZEmseYz1lj5CK0bw1SM5zo0Xz4nV3de8nZRmdWJW235hq
-         hE5ckzXtq5Cht0yWYrMK9JoeaLwClA2lCXlybofbFFBONxBOuJ/sluhGFc07EFRYYn
-         rOexfBdNBnLxw==
-Received: by mail-lj1-f170.google.com with SMTP id o20so27810655ljp.3;
-        Mon, 03 Apr 2023 08:21:52 -0700 (PDT)
-X-Gm-Message-State: AAQBX9f0O/ncEeTaOp5Xjd7x+f9DNFpgjSMgpWUuEQBqQ+DWUa2e2ogs
-        vPw3rDMtoBCDlZlOBdQLfiHe4EEzVjQJYbm1gw==
-X-Google-Smtp-Source: AKy350aTiBCcmkf5yaiSw9a/oh0FWNKIycpSVHuTeBKMLpgJoW35W0t7pwb2F74OQGePnsI1l2Satrcxa386y3dUOtA=
-X-Received: by 2002:a2e:9792:0:b0:2a3:fc8:711b with SMTP id
- y18-20020a2e9792000000b002a30fc8711bmr10925454lji.10.1680535310524; Mon, 03
- Apr 2023 08:21:50 -0700 (PDT)
+        Mon, 3 Apr 2023 11:22:28 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2080.outbound.protection.outlook.com [40.107.21.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D529910D5
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:22:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8Fm1Uo53/3gGGZJepT8vaeCo4l18njpzvb7kDWJf9eg=;
+ b=SVOsCXlSLj/kgaSe9sG0AXX6g8lNOL9Ug9FzNY3GklT5CEvruaeF/Mglp1N6/wx+R5jle5u/yMfz+QeBSsFFA2RUiVgqQuG2VkILYGtYFT34h2EWWkBE+TRXSILZ6msB+B+otaF9mwk4VkQn2no2CJ7oi4ItUbx3AC4nhfjsW0ih69USK88QFWcVPDTax1n/3KCGjGvPwNb7wQD2YK/rXL13Yd/s98fpvqAfrTemzo0L+rtNnrqMa9wGjKmpeCL+AsvnjGTtJuOerA/T9nHyMwLuu0Rg57r3gSIXoVMyGO8ZtoK3RKTWYUvWIQcM02hYtSRWzLHxVsI96Hxoi4atsg==
+Received: from AM6P191CA0050.EURP191.PROD.OUTLOOK.COM (2603:10a6:209:7f::27)
+ by DU0PR03MB8368.eurprd03.prod.outlook.com (2603:10a6:10:3bc::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.30; Mon, 3 Apr
+ 2023 15:22:24 +0000
+Received: from AM6EUR05FT040.eop-eur05.prod.protection.outlook.com
+ (2603:10a6:209:7f:cafe::f3) by AM6P191CA0050.outlook.office365.com
+ (2603:10a6:209:7f::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22 via Frontend
+ Transport; Mon, 3 Apr 2023 15:22:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.83)
+ smtp.mailfrom=seco.com; dkim=pass (signature was verified)
+ header.d=seco.com;dmarc=pass action=none header.from=seco.com;
+Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
+ 20.160.56.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=20.160.56.83; helo=inpost-eu.tmcas.trendmicro.com; pr=C
+Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.83) by
+ AM6EUR05FT040.mail.protection.outlook.com (10.233.241.165) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.43 via Frontend Transport; Mon, 3 Apr 2023 15:22:23 +0000
+Received: from outmta (unknown [192.168.82.132])
+        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id 9344A2008088F;
+        Mon,  3 Apr 2023 15:22:23 +0000 (UTC)
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (unknown [104.47.18.109])
+        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id 59F3920080073;
+        Mon,  3 Apr 2023 15:22:56 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IOjTSVrEh7DKV/mVWjNnNC8gDdXuJM610p+UynK8/s9H/7ZH1SjHJeCojTSqK2yxW2I/67aDP67328Vxv2whUBmD6d4GZSkqC3fMw8qu5SzszYnM9Y3aVx9Yrs2jEp+jM8m9L83L5I0O26+ezMIUdMEWroApM+a77jMoKVydysGwjLtMolSo77ON7erF9PpuLaigv6Xxzr3snXAbJ8WBonaOkcCBtLWch5wydSUaok4AYFDWXzmeplt1hCNU70ra+TWisHabnW7qQyuXv0PoxpwyOFDUPo+s8J5qpKEUzSL/HyJ7b7WXtvYKukl1ZCqda3EsFjWHcMk8x/SimHIFjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8Fm1Uo53/3gGGZJepT8vaeCo4l18njpzvb7kDWJf9eg=;
+ b=fa6oteTtAExkqzUf3tUvXHFA7OIU4tUicXX4rq9D9Jcf1CjFzd3MvWfOOQbrl+uWwnqRfz8DEQiW+PbNBe3w2UA293NYlEB1roxbM3+FUUIL+bwNwHzob+QV/yRpXoxygZSsTTt3EXusFxozHGNGkXAl5HFxOATqPi82j0PqS40OglJHGa9SX13nKwEh7mnxybO1p4uPpAU9o8bl7A1K4gKQOLG8ahTX5JwxSOyr0hF13dsFzAHneHxsXLh9BWhEThEKA4iFnHqYs3IG69nig1rPOkEliZ73URLmXJClLTKNO6wy/XB1KbsEuL8TLpvY5ZABJkxp3YGuqkH4P0Fg+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8Fm1Uo53/3gGGZJepT8vaeCo4l18njpzvb7kDWJf9eg=;
+ b=SVOsCXlSLj/kgaSe9sG0AXX6g8lNOL9Ug9FzNY3GklT5CEvruaeF/Mglp1N6/wx+R5jle5u/yMfz+QeBSsFFA2RUiVgqQuG2VkILYGtYFT34h2EWWkBE+TRXSILZ6msB+B+otaF9mwk4VkQn2no2CJ7oi4ItUbx3AC4nhfjsW0ih69USK88QFWcVPDTax1n/3KCGjGvPwNb7wQD2YK/rXL13Yd/s98fpvqAfrTemzo0L+rtNnrqMa9wGjKmpeCL+AsvnjGTtJuOerA/T9nHyMwLuu0Rg57r3gSIXoVMyGO8ZtoK3RKTWYUvWIQcM02hYtSRWzLHxVsI96Hxoi4atsg==
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
+ by PAWPR03MB9641.eurprd03.prod.outlook.com (2603:10a6:102:2e1::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.30; Mon, 3 Apr
+ 2023 15:22:18 +0000
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::2226:eb03:a8c:a7e5]) by DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::2226:eb03:a8c:a7e5%2]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
+ 15:22:17 +0000
+Message-ID: <7bd6967a-7f0b-575f-d972-3bf98fab5a6a@seco.com>
+Date:   Mon, 3 Apr 2023 11:22:12 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 1/2] soc: fsl: qbman: Always disable interrupts when
+ taking cgr_lock
+Content-Language: en-US
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Li Yang <leoyang.li@nxp.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        Scott Wood <oss@buserror.net>,
+        Camelia Groza <camelia.groza@nxp.com>,
+        linux-kernel@vger.kernel.org, Roy Pledge <roy.pledge@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>
+References: <20230331151413.1684105-1-sean.anderson@seco.com>
+ <20230403140247.ugb23hqrha2kjup2@skbuf>
+From:   Sean Anderson <sean.anderson@seco.com>
+In-Reply-To: <20230403140247.ugb23hqrha2kjup2@skbuf>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BLAPR03CA0083.namprd03.prod.outlook.com
+ (2603:10b6:208:329::28) To DB9PR03MB8847.eurprd03.prod.outlook.com
+ (2603:10a6:10:3dd::13)
 MIME-Version: 1.0
-References: <20230403071929.360911-1-jstephan@baylibre.com> <20230403071929.360911-3-jstephan@baylibre.com>
-In-Reply-To: <20230403071929.360911-3-jstephan@baylibre.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 3 Apr 2023 23:21:38 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-SJKPkq+saOrQHKYDpZ3cr0350bYNTSpTMwdoApV+Jvw@mail.gmail.com>
-Message-ID: <CAAOTY_-SJKPkq+saOrQHKYDpZ3cr0350bYNTSpTMwdoApV+Jvw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] phy: mtk-mipi-csi: add driver for CSI phy
-To:     Julien Stephan <jstephan@baylibre.com>
-Cc:     Phi-bang Nguyen <pnguyen@baylibre.com>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DRM DRIVERS FOR MEDIATEK" 
-        <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,UPPERCASE_50_75 autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|PAWPR03MB9641:EE_|AM6EUR05FT040:EE_|DU0PR03MB8368:EE_
+X-MS-Office365-Filtering-Correlation-Id: b8031a8c-b35b-4ac8-abce-08db345739cb
+X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: XPYT4TfaU/Ef1ueXnkAhcCzxmvy0xDSQmwPGybmbpw+IIhL02350eQ5SXb4KLhzxtPBCMywFjSZQSAMxInlycI2QViufeUZ7ssz7NxIwBghpeRnQxaqu6Ic5cuxgYTmgIFGoYNc1kreT0m0vwQivKNJIU88aSDZOXukA+z0HoSivf8gOulR6zguzy+TpH5KaI9dyUgcomDLB0bhMnETAK+y4F1Cj3cCldKScV89D2ZKao64M+EJ/CsQvBAJIyCZeo/jxen9Yrsb4z9eVq5LvWPzx1p9eFJ5qilCLewlSbtpVpB1voFheGsNRQIAdbW3Nwmw64+VTvglvInMqd8YOiaBGghoVRsUdgjnx26Miwvxmo3pFDzlgSICFWOnKZcC+ZSzt+HOd9kgCdmCkXTXswoIjKo1IhPgmiRfmlASnxw5PMm/RbbnHo+SJ73g/uZ0jXtZGjyv6O2ae7iKm2syjW0YwCx7IvXJJnJw61zAL4E0aFF6RlZLqD8C3MOvlv5wAxFhTKqFxjAlzF5UAEn1ZDMSrgVH98DTaIlmQTGHdqU5lxHPDNjChGI6Gq36ogzYiRQEyHSKhsoPWofFKv4u3jqXeE0mmnB74ugrRR//l1FR2NPVqBBYWfEs//Tqn68IgYf91Ek7zrqGJs4Vn+Zt38rgyuv4CcOCOXOkIbnAW+08IWRgGUt8QfFpNeMfuxJaL
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39850400004)(366004)(346002)(376002)(396003)(451199021)(7416002)(186003)(53546011)(6512007)(6506007)(26005)(44832011)(4744005)(6666004)(31686004)(54906003)(478600001)(38100700002)(52116002)(38350700002)(36756003)(66556008)(86362001)(66946007)(66476007)(83380400001)(6916009)(8676002)(4326008)(316002)(31696002)(2906002)(41300700001)(5660300002)(6486002)(8936002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR03MB9641
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM6EUR05FT040.eop-eur05.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 58f333cc-2101-4ed2-6f37-08db345735d6
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s6mkr6et1WZeuGy8PfBFyGPbRrzxSvgEF1Nh8tj1BQsuwv/YplKecCMR7AL/yeCRnU4aN75LZHli90V1RTTtT4Dnn2gnyZWVMBPJmjtBbNseHJSNwxQDabox9hdzADSWd+0R9lNyAjJCe5IZUMSh2gHkUwREMRIL/YPD8+pjOOSv2MYkRrWzhDOEzAZ+Mq1z60IyFWi1OkPmyPNZzcvsuq/k9ha2/78LLGXj3Agj0UsLUY6Dx43EbM94njXR9UyPLDft99oYysstkpDZXojWXVaM1u77cE5VFcLbmBkZOimLAOFaNivYf2YRMNV4FVkX/9Xzf0uetSDacpRyRx/LzycQFWLt7Se4oZfWc1Ov5B0gEgAzlMMoFc/AqYiqQFaVYiomLHIrLfa0vF5QdSLJORm4DoT5RjpQdp2RI5umudA+bmf8PFq8SZ4Sl6PQ4SdYXC7ZYOa+h4qpgTqXDZntHaKEsXSOE9fwkOA670WoabdesvQ7THJ1PsJLdwEAKLYMvozDSly94KWBahc+TkcArqzTDvK+0E8Eya062EI0VrAgXgYz5wCk+0Wn+P54dzPPiM+Nt2fqEE1SZaHnTjXk7Lghr/9oHxeOkBvhSiRN7SHsigGMuMbzYq17nyXj8vFcdG0UwCrr6G3Xr9upcTvTOWRAPGe0tClFnWrkBLLj2tbYBcYk/9tJBspPwGifzsOGNncva3TO8mAcL9+BqcLNerul8Vm4gyl62+kTpzAWp3xv8I4q3VKh4NnKrN3ArDpnc+P+BaMMt+nDfIbx72tx8Q==
+X-Forefront-Antispam-Report: CIP:20.160.56.83;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230028)(346002)(136003)(396003)(376002)(39850400004)(451199021)(36840700001)(46966006)(40470700004)(6916009)(4326008)(41300700001)(40460700003)(356005)(82740400003)(7596003)(7636003)(36860700001)(82310400005)(86362001)(83380400001)(53546011)(47076005)(336012)(2616005)(186003)(6512007)(6506007)(26005)(34020700004)(5660300002)(54906003)(316002)(478600001)(44832011)(8676002)(7416002)(8936002)(70586007)(70206006)(2906002)(6666004)(6486002)(4744005)(40480700001)(31686004)(36756003)(31696002)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 15:22:23.9036
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8031a8c-b35b-4ac8-abce-08db345739cb
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.83];Helo=[inpost-eu.tmcas.trendmicro.com]
+X-MS-Exchange-CrossTenant-AuthSource: AM6EUR05FT040.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR03MB8368
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Julien:
+On 4/3/23 10:02, Vladimir Oltean wrote:
+> On Fri, Mar 31, 2023 at 11:14:12AM -0400, Sean Anderson wrote:
+>> smp_call_function_single disables IRQs when executing the callback. To
+>> prevent deadlocks, we must disable IRQs when taking cgr_lock elsewhere.
+>> This is already done by qman_update_cgr and qman_delete_cgr; fix the
+>> other lockers.
+>> 
+>> Fixes: c535e923bb97 ("soc/fsl: Introduce DPAA 1.x QMan device driver")
+> 
+> If you've identified smp_call_function_single() as the problem, then the
+> true issue seems to lie in commit 96f413f47677 ("soc/fsl/qbman: fix
+> issue in qman_delete_cgr_safe()") and not in the initial commit, no?
 
-Julien Stephan <jstephan@baylibre.com> =E6=96=BC 2023=E5=B9=B44=E6=9C=883=
-=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:20=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> From: Phi-bang Nguyen <pnguyen@baylibre.com>
->
-> This is a new driver that supports the MIPI CSI CD-PHY for mediatek
-> mt8365 soc
->
-> Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
-> Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
-> [Julien Stephan: use regmap]
-> [Julien Stephan: use GENMASK]
-> Co-developed-by: Julien Stephan <jstephan@baylibre.com>
-> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
-> ---
->  .../bindings/phy/mediatek,csi-phy.yaml        |   9 +-
->  MAINTAINERS                                   |   1 +
->  drivers/phy/mediatek/Kconfig                  |   8 +
->  drivers/phy/mediatek/Makefile                 |   2 +
->  .../phy/mediatek/phy-mtk-mipi-csi-rx-reg.h    | 435 ++++++++++++++++++
->  drivers/phy/mediatek/phy-mtk-mipi-csi.c       | 392 ++++++++++++++++
->  6 files changed, 845 insertions(+), 2 deletions(-)
->  create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi-rx-reg.h
->  create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi.c
->
+Yes, that seems better. I did a blame and saw that qman_delete_cgr_safe
+had been around since the initial driver, but I didn't realize it worked
+in a different way back then.
 
-[snip]
+--Sean
 
-> +
-> +#define MIPI_RX_ANA04_CSIxA                                             =
-       0x0004
-
-Useless, so drop this.
-
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_LPRX_VTH_SEL_SHIFT              =
-       0
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_LPRX_VTH_SEL_MASK               =
-       GENMASK(2, 0)
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_LPRX_VTL_SEL_SHIFT              =
-       4
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_LPRX_VTL_SEL_MASK               =
-       GENMASK(6, 4)
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_HSDET_VTH_SEL_SHIFT             =
-       8
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_HSDET_VTH_SEL_MASK              =
-       GENMASK(10, 8)
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_HSDET_VTL_SEL_SHIFT             =
-       12
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_HSDET_VTL_SEL_MASK              =
-       GENMASK(14, 12)
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_VREF_SEL_SHIFT                  =
-       16
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_VREF_SEL_MASK                   =
-       GENMASK(19, 16)
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_MON_VREF_SEL_SHIFT              =
-       24
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_BG_MON_VREF_SEL_MASK               =
-       GENMASK(27, 24)
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_FORCE_HSRT_EN_SHIFT                =
-       28
-> +#define MIPI_RX_ANA04_CSIxA_RG_CSIxA_FORCE_HSRT_EN_MASK                 =
-               BIT(28)
-> +
-> +#define MIPI_RX_ANA08_CSIxA                                             =
-       0x0008
-
-Ditto.
-
-> +#define MIPI_RX_ANA08_CSIxA_RG_CSIxA_L0P_T0A_HSRT_CODE_SHIFT            =
-       0
-> +#define MIPI_RX_ANA08_CSIxA_RG_CSIxA_L0P_T0A_HSRT_CODE_MASK             =
-       GENMASK(4, 0)
-> +#define MIPI_RX_ANA08_CSIxA_RG_CSIxA_L0N_T0B_HSRT_CODE_SHIFT            =
-       8
-> +#define MIPI_RX_ANA08_CSIxA_RG_CSIxA_L0N_T0B_HSRT_CODE_MASK             =
-       GENMASK(12, 8)
-> +#define MIPI_RX_ANA08_CSIxA_RG_CSIxA_L1P_T0C_HSRT_CODE_SHIFT            =
-       16
-> +#define MIPI_RX_ANA08_CSIxA_RG_CSIxA_L1P_T0C_HSRT_CODE_MASK             =
-       GENMASK(20, 16)
-> +#define MIPI_RX_ANA08_CSIxA_RG_CSIxA_L1N_T1A_HSRT_CODE_SHIFT            =
-       24
-> +#define MIPI_RX_ANA08_CSIxA_RG_CSIxA_L1N_T1A_HSRT_CODE_MASK             =
-       GENMASK(28, 24)
-> +
-> +#define MIPI_RX_ANA0C_CSIxA                                             =
-       0x000c
-
-Ditto.
-
-> +#define MIPI_RX_ANA0C_CSIxA_RG_CSIxA_L2P_T1B_HSRT_CODE_SHIFT            =
-       0
-> +#define MIPI_RX_ANA0C_CSIxA_RG_CSIxA_L2P_T1B_HSRT_CODE_MASK             =
-       GENMASK(4, 0)
-> +#define MIPI_RX_ANA0C_CSIxA_RG_CSIxA_L2N_T1C_HSRT_CODE_SHIFT            =
-       8
-> +#define MIPI_RX_ANA0C_CSIxA_RG_CSIxA_L2N_T1C_HSRT_CODE_MASK             =
-       GENMASK(12, 8)
-> +
-> +#define MIPI_RX_ANA10_CSIxA                                             =
-       0x0010
-
-Ditto.
-
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L0_DELAYCAL_EN_SHIFT          =
-       0
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L0_DELAYCAL_EN_MASK           =
-       BIT(0)
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L0_DELAYCAL_RSTB_SHIFT        =
-       1
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L0_DELAYCAL_RSTB_MASK         =
-               BIT(1)
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L0_VREF_SEL_SHIFT             =
-       2
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L0_VREF_SEL_MASK              =
-       GENMASK(7, 2)
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L1_DELAYCAL_EN_SHIFT          =
-       8
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L1_DELAYCAL_EN_MASK           =
-       BIT(8)
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L1_DELAYCAL_RSTB_SHIFT        =
-       9
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L1_DELAYCAL_RSTB_MASK         =
-               BIT(9)
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L1_VREF_SEL_SHIFT             =
-       10
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L1_VREF_SEL_MASK              =
-       GENMASK(15, 10)
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L2_DELAYCAL_EN_SHIFT          =
-       16
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L2_DELAYCAL_EN_MASK           =
-       BIT(16)
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L2_DELAYCAL_RSTB_SHIFT        =
-       17
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L2_DELAYCAL_RSTB_MASK         =
-               BIT(17)
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L2_VREF_SEL_SHIFT             =
-       18
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSIxA_DPHY_L2_VREF_SEL_MASK              =
-       GENMASK(23, 18)
-> +/* C-PHY fields are only available in CSIx. */
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSI0A_CPHY_T0_CDR_DELAYCAL_EN_SHIFT      =
-       24
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSI0A_CPHY_T0_CDR_DELAYCAL_EN_MASK       =
-       BIT(24)
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSI0A_CPHY_T0_CDR_DELAYCAL_RSTB_SHIFT    =
-       25
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSI0A_CPHY_T0_CDR_DELAYCAL_RSTB_MASK     =
-       BIT(25)
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSI0A_CPHY_T0_VREF_SEL_SHIFT             =
-       26
-> +#define MIPI_RX_ANA10_CSIxA_RG_CSI0A_CPHY_T0_VREF_SEL_MASK              =
-       GENMASK(31, 26)
-> +
-> +#define MIPI_RX_ANA14_CSIxA                                             =
-       0x0014
-
-Ditto.
-
-Regards,
-Chun-Kuang.
-
-
-> +/* C-PHY fields are only available in CSIx. */
-> +#define MIPI_RX_ANA14_CSIxA_RG_CSI0A_CPHY_T1_CDR_DELAYCAL_EN_SHIFT      =
-       0
-> +#define MIPI_RX_ANA14_CSIxA_RG_CSI0A_CPHY_T1_CDR_DELAYCAL_EN_MASK       =
-       BIT(0)
-> +#define MIPI_RX_ANA14_CSIxA_RG_CSI0A_CPHY_T1_CDR_DELAYCAL_RSTB_SHIFT    =
-       1
-> +#define MIPI_RX_ANA14_CSIxA_RG_CSI0A_CPHY_T1_CDR_DELAYCAL_RSTB_MASK     =
-       BIT(1)
-> +#define MIPI_RX_ANA14_CSIxA_RG_CSI0A_CPHY_T1_VREF_SEL_SHIFT             =
-       2
-> +#define MIPI_RX_ANA14_CSIxA_RG_CSI0A_CPHY_T1_VREF_SEL_MASK              =
-       GENMASK(7, 2)
-> +
+> Anyway,
+> 
+> Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
