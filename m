@@ -2,132 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9116D464B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5322B6D464C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232744AbjDCN4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S232745AbjDCN4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbjDCN4o (ORCPT
+        with ESMTP id S232749AbjDCN4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:56:44 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61427195;
-        Mon,  3 Apr 2023 06:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1680530175; i=frank-w@public-files.de;
-        bh=Xb/Aqcr8/6tCqOXQhpDwDqrXqkHQUMERdzS8z5C5aaE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=WVgWtMLNJip3AWjjsW3c2NEI8/oR0kJHkFcWc8LIzEOS5noCTYVSWlKivGM7TXk1c
-         sK3FeMkjgroYVQ3pq9/jXOA/krprjV0Bo5aBA+WYVI5C6LTCvEImrFpQchEzyDb1yx
-         a3aBhQKOsaZCzFlOuvmHSkvCx8qwAPPxF7E0pFZcRRjCz/QjfXqOQd2YxVPo7YM0kq
-         KEhaRcLyaEOp80/+npwZJ3jiasFpzsOFHWlvY/uy92PCK7FaLBVkQkdDvwNyalxwfo
-         DvWZQIHjFOzeCwyadhDttGjYi1HXl4etdfE3/DRigXd5yjn/hCt8DDvIyFpOcSScDQ
-         qzxZURiAEGDMQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.152.94] ([217.61.152.94]) by web-mail.gmx.net
- (3c-app-gmx-bap35.server.lan [172.19.172.105]) (via HTTP); Mon, 3 Apr 2023
- 15:56:15 +0200
+        Mon, 3 Apr 2023 09:56:47 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9D635BB
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:56:41 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id x15so27277630pjk.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 06:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680530201;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XwtKbntfzXP2y+F0GxcVhJw+QB/Lj55Ci5OMf8SD9og=;
+        b=icMm/PgpFIhMB8AthGyMVnaPDHSIrTDWD2zcYBe0GbIT1kfzK6WPpYNjvQ3P237bSc
+         w7k9Y17ihmJMieofIbOnZG7A1V+uaNAiroxbouvsQEc1Rfazex0D+WIeiU7EBnJyqVJD
+         wX2/g34SzJm5CtrmWAhBk2kM4S4rvn1kLrlPIwdHPewAEoxVBO0JV7TV4y2PDJ42+t9i
+         Wmh17r9D+pyJHXLN/DoOkzXQBQKcfyqD00Ft9qg8xsNJhn10JfDu+qYtsYlRbj3aUkAJ
+         QZmhPi1oNO4rIPoG1EtzaRh8LxLc8tICFIf3eeQRvLJ+uDKpaDcjnGAmwPaiso1DPrpY
+         a5mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680530201;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XwtKbntfzXP2y+F0GxcVhJw+QB/Lj55Ci5OMf8SD9og=;
+        b=W574crAAgJkyyfACB5lvQqdDKSDyuyQKWhyf7gBHChMXhQW52jZvW2mb6bY8Ja42z1
+         GJ6ihiPXOnV9E0UjiKcbDJDq7YCxoaxxjMILAr8DJdxmrsdQzl67ykJXb42g92yxGquj
+         a7vgcmU5BONB50NPcCinm8mkmnArx8gMLG9oBw39vdDkUMpx9Zz5wmUe/O8NM1I2Ai+1
+         maRJf/3/NZudwHJ2vNZO86tANoKbe0EICJmfWjwRlxNZjqObXuNw4e3w8ECpwStFvqF/
+         +TeB3AAGLzdqJ8/LvxFkh+IK5NB7xxjQ1GJNlj1gx5FRiX5uGWx9BtJGDB4nEvnwbtiK
+         bGDw==
+X-Gm-Message-State: AAQBX9efvQ92mxXpr8ZqQA9OOjyXkiDoHPe273WHzY+777xbZZ0PSRCz
+        jmLZSu6yvwLjyoPJHwpk0WymfG/jC7vPhw==
+X-Google-Smtp-Source: AKy350ZycLZMOk3YPS4HhAsLnuuP/bUQpfAh9p9U/WSjil4gcAaLJJRr6kJMnMIFcaRmj4lb8as4NA==
+X-Received: by 2002:a17:903:28c4:b0:1a2:8f43:5449 with SMTP id kv4-20020a17090328c400b001a28f435449mr13033082plb.54.1680530200777;
+        Mon, 03 Apr 2023 06:56:40 -0700 (PDT)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id ju1-20020a170903428100b001a2574813b8sm6174859plb.278.2023.04.03.06.56.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 06:56:40 -0700 (PDT)
+Message-ID: <294ce7fa-3256-72aa-b3f7-07fce2e3d43a@gmail.com>
+Date:   Mon, 3 Apr 2023 22:56:37 +0900
 MIME-Version: 1.0
-Message-ID: <trinity-f48dda5c-6787-4732-978a-a409bbb0a74d-1680530175673@3c-app-gmx-bap35>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Aw: Re: [RFC] arm64: dts: use size of reserved partition for bl2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 06/14] extcon: Allow name to be assigned outside of the
+ framework
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bumwoo Lee <bw365.lee@samsung.com>,
+        linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
+ <20230322144005.40368-7-andriy.shevchenko@linux.intel.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230322144005.40368-7-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 3 Apr 2023 15:56:15 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <601a8435-8e2a-2c25-5fe3-40be62269469@collabora.com>
-References: <20230403105818.29624-1-linux@fw-web.de>
- <601a8435-8e2a-2c25-5fe3-40be62269469@collabora.com>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:1JUsxUleXcKrPCYwE3ay4MIocxMSb4QWHITw42EQ/QR0OVKQS9PGhbSC81u83cP4k1dMp
- S1et19Ypg4uLyI/QckCamlb8kcfn1bY4ymdZGUt3Ph7J38bdfIThEnQiirBQ6gDDvAfpskDhC+P6
- iAaYJxwyc3Ig+PTlA5twYw1xpSilLarg7i3GTbuHqFpqyBgCdnHX6WwQ+lK3PVIU4Auvh9i7MFsR
- 8HzZea3gQDUcfZU9yxOEsCuh6ks7UdS2t6Umh1jTB9ziiDqmfpdBfdAzSirOnHnF8S1u0fg2yuGG
- Vw=
-UI-OutboundReport: notjunk:1;M01:P0:jg4AmhsdSds=;mWrtOAomhXxgFe3ThMYoz+s7nVN
- UuwqaM8J8aThcXwF6VoXk7wWF86T5cbejRDTAscqE70dN6DVg8E/hbaOApM9Js/Fj06u7OPBg
- 6RvF+zfTf7ndIiqqJVngOJMK01wmtK/ks5CPPuihiK0qKKIQo4L5BkxCefcCfoggy8VzL8vz5
- jUnILjCxNfiAlQLRxG4z8c2xaKZYrGwfyEdLs0Kn+fCf505U5h8WHRamHwgbjAZPPMfWv37kD
- r7J6OXsLD4QF9lmQZgIAzUISCBc1KpG0H3M1sl9mlUx9mW4rm25w6J9bsYL4c5S1r9sb9dRSr
- +wUoLpj0DFhK1ulSPiZ9abTnlBSV1M0fI1odhYuaaP+ULGffm1/8e3qR7VjCnNhSWarH4rd/a
- oItMUBls4M4r+zQWlMEmM5dQVzKWjknmYCVSh4OkdocNRZmsbeFNlUN6vBvWqdATlvVAKowIa
- 5VZ5FpSJpn9dgxzWNmew5FStWODYHIM8UbrB31WAGL7J7SaSKy1kngfjYvoTiOc8ZIXNG2VLa
- DZA6YIdkOL8SrpOvtyeYa/wSwLq0QtAhq3JARS/F5YarnjRsd6IJcTW7FV+T4kWx1W9uLz010
- 1camxgAhtwkgpCHT1qSS6rxcapHJymGBOG0AeVQISr6GrSjHxcqbJOLoWW+8il8Qs5QekwQOG
- lW0xPUBY16DQyG51Il7TTjUOeAbhM9Z/F4m6AJAZxLgkmHs18Ab6VsqZn43rZhZ02/vA81yHr
- aor2OlljU+S+V+JvVwc5/aPNxYey30TGMD+tW1TQE+efQoMwB3aag4VqhFhKq2zQTkLcWe/0f
- WawLAgD/5bBkNVgGvh48HFEwGo+Cz69aBk6LjPV0ryBqjQdgm3Ehw+FCuzQl7U4BpRRLv6Qqk
- 6XB0KjI07hnPTIA==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Gesendet: Montag, 03. April 2023 um 14:43 Uhr
-> Von: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.c=
-om>
-> Il 03/04/23 12:58, Frank Wunderlich ha scritto:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> >
-> > To store uncompressed bl2 more space is required than partition is
-> > actually defined.
-> >
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
->
-> If this doesn't get changed anymore, I'm fine with it... but a question =
-arises:
-> did you send patches to add your BPI-r3 board(s) to upstream u-boot?
+On 23. 3. 22. 23:39, Andy Shevchenko wrote:
+> The documentation states that name of the extcon can be assigned
+> outside of the framework, however code does something different.
+> Fix the code to be aligned with the documentation.
 
-currently i use the rfb dts for r3 in uboot: arch/arm/dts/mt7986a-sd-rfb.d=
-ts
+Actually, it is not possible to initialize the name outside of the framework
+because commit 20f7b53dfc24 ("extcon: Move struct extcon_cable from header file to core")
+moved the 'struct extcon_dev' into drivers/extcon/extcon.c in order to prevent
+the direct accessing of struct extcon_dev.
 
-this file in upstream uboot has no partitions defined
+Instead of this patch, need to change the description of struct extcon_dev.
 
-https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/dts/mt7986a-sd=
--rfb.dts#L144
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/extcon/extcon.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index ac84f4aafc69..14e66e21597f 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -1269,10 +1269,10 @@ int extcon_dev_register(struct extcon_dev *edev)
+>  	edev->dev.class = extcon_class;
+>  	edev->dev.release = extcon_dev_release;
+>  
+> -	edev->name = dev_name(edev->dev.parent);
+> -	if (IS_ERR_OR_NULL(edev->name)) {
+> -		dev_err(&edev->dev,
+> -			"extcon device name is null\n");
+> +	if (!edev->name)
+> +		edev->name = dev_name(edev->dev.parent);
+> +	if (!edev->name) {
+> +		dev_err(&edev->dev, "extcon device name is null\n");
+>  		return -EINVAL;
+>  	}
+>  	dev_set_name(&edev->dev, "extcon%lu",
 
-but i added them there too and i wrote content by offsets to main device (=
-not to partitions).
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
-https://github.com/frank-w/u-boot/blob/2023-04-bpi/arch/arm/dts/mt7986a-sd=
--rfb.dts#L154
-
-so yes basicly it needs to be send there too, maybe as additional dts.
-
-regards Frank
-
-> > ---
-> > I used the definition i got from mtk used in their SDK uboot.
-> >
-> > Openwrt uses also the first reserved partition to give bl2 more
-> > space:
-> >
-> > https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dblob;f=3Dtarget/l=
-inux/mediatek/dts/mt7986a-bananapi-bpi-r3-nor.dts;h=3Df597b869abc80d1a73f4=
-4ebb85ad4da17376bb52;hb=3DHEAD#l22
-> >
-> > so imho it should be same in mainline to not require complex bl2
-> > compression.
->
-> Regards,
-> Angelo
->
->
