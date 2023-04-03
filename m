@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB62A6D4549
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C20946D4554
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232481AbjDCNIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
+        id S232531AbjDCNKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbjDCNIv (ORCPT
+        with ESMTP id S232499AbjDCNKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:08:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAA110D7;
-        Mon,  3 Apr 2023 06:08:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4965660A71;
-        Mon,  3 Apr 2023 13:08:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33109C433D2;
-        Mon,  3 Apr 2023 13:08:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680527326;
-        bh=LAV//JPbB9QVvq/VUV4Ckfl5qCzolGCOQod4gC5PLk4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i13zJ0watYt53sX+Fy1N0c16JMQAbdjExUC21m9z/Srw+VNTZbw+j5VeMdka59AZQ
-         u23bWaMKgVaW3VQqECqfzuTv5hL/evKC1UITFmO7XM5q0JsZcZjg9y6l2p9Ic4hL2t
-         SPtKDuNoNs4pb02/dL5eEcWBAhb+e9U6QPYnukjU=
-Date:   Mon, 3 Apr 2023 15:08:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     pbonzini@redhat.com, stable@vger.kernel.org, seanjc@google.com,
-        joro@8bytes.org, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, suravee.suthikulpanit@amd.com,
-        kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mlevitsk@redhat.com,
-        joneslee@google.com,
-        syzbot+b6a74be92b5063a0f1ff@syzkaller.appspotmail.com
-Subject: Re: [PATCH][for stable/linux-5.15.y] KVM: VMX: Move preemption timer
- <=> hrtimer dance to common x86
-Message-ID: <2023040335-backlash-tubeless-7d21@gregkh>
-References: <20230329151747.2938509-1-tudor.ambarus@linaro.org>
+        Mon, 3 Apr 2023 09:10:36 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EA32D45;
+        Mon,  3 Apr 2023 06:10:35 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id x8-20020a9d3788000000b0069f922cd5ceso15567113otb.12;
+        Mon, 03 Apr 2023 06:10:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680527434;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0c6y0klJZIlR38JQvtzWomooCiiJ+Ub0Wtb8gTfWb6E=;
+        b=7OJ28S0ZttxpZ3nnFb/b2mMrrL95kH4W2T6149quOHu5ymCn94Q7aUHY6YQJ/ebczk
+         5edsHPC0nchaqC9IsFJYIKELB8X7Rkg9MbArW69aX7ElrwftIfKbOkIPIpG1vccthC4s
+         cypro/9//8Vpz6iSkvEgRJ7H37ykBm8LOR2fQgrVnm9k38sterJmo0VeZlQoRQ7FpfT5
+         te7fXoTXOE0fiFKNZpr2D0OEnx+wX8HKt4R1q5epH3aqzjECtaURHsL67+PBi4mOB6/u
+         aHIqDjrfF4ginLMzSAGsEISVJUlX50LQfT6QwhB2BlrYIJSTdtBwIBDVgl14N61gphOg
+         iVoQ==
+X-Gm-Message-State: AO0yUKVZKcDi49kOC22tEJa4CQ5CxG5mbiiHaqM+NrCHkdrdYuVsqhNs
+        Y9DLwNida47U4EMaEJzm5vxM+h7kqA==
+X-Google-Smtp-Source: AK7set9uze4lqSyJ3xkKEcHa56jWK0pv1GNxAJixs2X/EkgOgvxyRgyidMAPmlj6kHkuggnQE4xfMw==
+X-Received: by 2002:a05:6830:1bcf:b0:69b:7f5b:c657 with SMTP id v15-20020a0568301bcf00b0069b7f5bc657mr17464458ota.14.1680527434129;
+        Mon, 03 Apr 2023 06:10:34 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x5-20020a056830114500b006a2fd720f82sm3067379otq.7.2023.04.03.06.10.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 06:10:33 -0700 (PDT)
+Received: (nullmailer pid 522012 invoked by uid 1000);
+        Mon, 03 Apr 2023 13:10:30 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329151747.2938509-1-tudor.ambarus@linaro.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     kernel@collabora.com, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20230403105052.426135-2-cristian.ciocaltea@collabora.com>
+References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
+ <20230403105052.426135-2-cristian.ciocaltea@collabora.com>
+Message-Id: <168052514639.463695.9544022277060710805.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Convert to DT schema
+Date:   Mon, 03 Apr 2023 08:10:30 -0500
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 03:17:47PM +0000, Tudor Ambarus wrote:
-> From: Sean Christopherson <seanjc@google.com>
+
+On Mon, 03 Apr 2023 13:50:51 +0300, Cristian Ciocaltea wrote:
+> Convert the PWM fan bindings to DT schema format.
 > 
-> commit 98c25ead5eda5e9d41abe57839ad3e8caf19500c upstream.
-> 
-> Handle the switch to/from the hypervisor/software timer when a vCPU is
-> blocking in common x86 instead of in VMX.  Even though VMX is the only
-> user of a hypervisor timer, the logic and all functions involved are
-> generic x86 (unless future CPUs do something completely different and
-> implement a hypervisor timer that runs regardless of mode).
-> 
-> Handling the switch in common x86 will allow for the elimination of the
-> pre/post_blocks hooks, and also lets KVM switch back to the hypervisor
-> timer if and only if it was in use (without additional params).  Add a
-> comment explaining why the switch cannot be deferred to kvm_sched_out()
-> or kvm_vcpu_block().
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Message-Id: <20211208015236.1616697-8-seanjc@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> [ta: Fix conflicts in vmx_pre_block and vmx_post_block as per Paolo's
-> suggestion. Add Reported-by and Link tags.]
-> Reported-by: syzbot+b6a74be92b5063a0f1ff@syzkaller.appspotmail.com
-> Link: https://syzkaller.appspot.com/bug?id=489beb3d76ef14cc6cd18125782dc6f86051a605
-> Tested-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 > ---
->  arch/x86/kvm/vmx/vmx.c |  6 ------
->  arch/x86/kvm/x86.c     | 21 +++++++++++++++++++++
->  2 files changed, 21 insertions(+), 6 deletions(-)
+>  .../devicetree/bindings/hwmon/pwm-fan.txt     |  68 +----------
+>  .../devicetree/bindings/hwmon/pwm-fan.yaml    | 109 ++++++++++++++++++
+>  2 files changed, 110 insertions(+), 67 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> 
 
-Now queued up, thanks.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-greg k-h
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230403105052.426135-2-cristian.ciocaltea@collabora.com
+
+
+pwm-fan: 'cooling-max-state', 'cooling-min-state' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb
+
