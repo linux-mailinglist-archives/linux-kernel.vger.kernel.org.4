@@ -2,83 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106126D4CF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D546D4CFB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232736AbjDCQBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
+        id S233109AbjDCQBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232932AbjDCQA7 (ORCPT
+        with ESMTP id S233127AbjDCQBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:00:59 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9E71BF1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:00:43 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EAAAF60005;
-        Mon,  3 Apr 2023 16:00:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680537642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5awF1RFpMHZWDaLIMt0lSfQ4rxtozrqLH4YEjfHnBJE=;
-        b=bQZaqeVOcY6cRrjX4mEaZ/ofaVrTXuj2j8gFm+gs0+PymUy9VbKEYhKo0va1jh3caNXv77
-        Txi33VuJF5l4fz6OYN2+qqHsqptFOO4tPeijLV9T67gh1g8r/XwIsPVdM9WbUYS6yOBVdB
-        OKbcpqKBaRl5T+EIG+n8jITprCm1x6SCan0WJS3++PUqSQkxZpuh9LopwxnUJbW1XllPFW
-        DVzweHOl5Xb3VW9EkeYwfiKFVRSHGEpuqqq3hLg9jveCZp7AFYNOIXoUKMX/7AuDs2xTsb
-        iM9UvAngaE55Ov+71vXFipOEYvm9+4ygW+N98Ud9eUh/D37B589mHcWAa5O/6A==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Felix Matouschek <felix@matouschek.org>, kernel@kempniu.pl
-Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        kernel@sberdevices.ru
-Subject: Re: [PATCH v4] mtd: spinand: add support for ESMT F50x1G41LB
-Date:   Mon,  3 Apr 2023 18:00:38 +0200
-Message-Id: <20230403160039.144916-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230329114240.378722-1-mmkurbanov@sberdevices.ru>
-References: 
+        Mon, 3 Apr 2023 12:01:11 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F47E8
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:00:56 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id i189-20020a6b3bc6000000b00758a1ed99c2so18118257ioa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 09:00:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680537655; x=1683129655;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XENesBsTsU74N3xfCyWfV4bNRGTQ6uvKt1Bti6poCrs=;
+        b=OKQF3K1BJtncWNQZs/CaCeyMe6qlPfmFyu1zOEqDTEXYjVB75mCFm6Hepv9QkjCJiC
+         22OY5WdEss7byjISOUhy+ISbUNcNnijnfYhAZKbZlju4qUxEDFWx78/nEy/Hr/pWn4py
+         +OEQxXbd4JIEAVqpZOy+qXSWgRPF18H45mFFc4vjkbRz3sF2IsKiuhpDe+lUCcZZKkqh
+         gh+KpqJaM3HjZsVbRj5EuZPFpkGGzQqvbCNEDTv7AnRbMssLUwKLHAD9ZOpuypgcQhWa
+         Lxq4BzuWuhjEVUml7mpq/1tzCeIJj8IYbntTfMUoH4OWQOWYGVCsPs5RFwYMQJUBNNGd
+         iH1Q==
+X-Gm-Message-State: AAQBX9e31Vc9Mh4vw5Ve4K0INqcfK6uI50c1TmsfiB6eydrngYkTTs8a
+        c9uJsWk7Cb8bDdVggmH1QV177w0zoblIs1dEf1Zn3c/KNbXy
+X-Google-Smtp-Source: AKy350YzWVQ79GIVWccMGTckSG2bbsFhrcm3U+O/3yjbJNXWNn3jvmXa8/vmak2qK0hmIOz5IYV6xs5EvvS5us8MCSc3rkWofFT1
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'd74c36480a679b27ce8a70c2e88fed31b86323d9'
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:ecc:b0:325:f785:6a6 with SMTP id
+ i12-20020a056e020ecc00b00325f78506a6mr15270093ilk.6.1680537655756; Mon, 03
+ Apr 2023 09:00:55 -0700 (PDT)
+Date:   Mon, 03 Apr 2023 09:00:55 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000000d1d705f870aaee@google.com>
+Subject: [syzbot] Monthly block report
+From:   syzbot <syzbot+list7f409556e0cf60fa6f76@syzkaller.appspotmail.com>
+To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-29 at 11:42:40 UTC, Martin Kurbanov wrote:
-> From: Chuanhong Guo <gch981213@gmail.com>
-> 
-> This patch adds support for ESMT F50L1G41LB and F50D1G41LB.
-> It seems that ESMT likes to use random JEDEC ID from other vendors.
-> Their 1G chips uses 0xc8 from GigaDevice and 2G/4G chips uses 0x2c from
-> Micron. For this reason, the ESMT entry is named esmt_c8 with explicit
-> JEDEC ID in variable name.
-> 
-> Datasheets:
-> https://www.esmt.com.tw/upload/pdf/ESMT/datasheets/F50L1G41LB(2M).pdf
-> https://www.esmt.com.tw/upload/pdf/ESMT/datasheets/F50D1G41LB(2M).pdf
-> 
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> Tested-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
+Hello block maintainers/developers,
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
+This is a 30-day syzbot report for the block subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/block
 
-Miquel
+During the period, 2 new issues were detected and 1 were fixed.
+In total, 24 issues are still open and 73 have been fixed so far.
+
+Some of the still happening issues:
+
+Crashes Repro Title
+343     Yes   INFO: task hung in blkdev_put (4)
+              https://syzkaller.appspot.com/bug?extid=9a29d5e745bd7523c851
+173     Yes   WARNING in copy_page_from_iter
+              https://syzkaller.appspot.com/bug?extid=63dec323ac56c28e644f
+71      Yes   INFO: task hung in blkdev_fallocate
+              https://syzkaller.appspot.com/bug?extid=39b75c02b8be0a061bfc
+21      Yes   WARNING in blk_register_tracepoints
+              https://syzkaller.appspot.com/bug?extid=c54ded83396afee31eb1
+14      Yes   INFO: task hung in blkdev_get_by_dev (5)
+              https://syzkaller.appspot.com/bug?extid=6229476844294775319e
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
