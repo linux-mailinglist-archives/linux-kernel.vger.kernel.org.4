@@ -2,83 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653E86D4CED
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DF16D4CEE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233035AbjDCP7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S233077AbjDCP7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233108AbjDCP73 (ORCPT
+        with ESMTP id S232960AbjDCP7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:59:29 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8D313A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:59:15 -0700 (PDT)
+        Mon, 3 Apr 2023 11:59:30 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317D82D63;
+        Mon,  3 Apr 2023 08:59:20 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 08001100005;
-        Mon,  3 Apr 2023 15:59:08 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id B977220005;
+        Mon,  3 Apr 2023 15:59:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680537553;
+        t=1680537558;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dp03hIsI/cteiZu/GdKKxTFMnCgcRr2K9r6OCmhzmao=;
-        b=RkfJH0jxjTJbojxm6hZEW6QIsItd/M0lbu7oquAWovMfXF9HWSz/5twP19Fqk7EjCBQ4ex
-        ppeyUMt7OQYwMYGw2k/vXXASwwhJnarKdxskLhF52jJI+SIbfzCsT5UfNkeOot9CckPMgB
-        mRo7UC81lpN01Qm/PiNwGZOkGWzvEGGXtHItWWZRNPLqz1Ftinkj+euD1TGXzpEALwdmwZ
-        KP9hb2nWnneCreUVmeGwcrZ6E6mtx80rlmUL5ktn4AKjXD8YlpcCTDe14ip10pEa3zCIUS
-        iiFdnId9tEyAcW3dGgWiK2lVIF4extNt8sxnzhstwEiFCUzLVf3WekTfABZqXQ==
+        bh=mz4VHGXz6DS1YgoT5sffndIrCMbK1I9V2lRSBl4Rl/8=;
+        b=FDaIT0gY7prNMxDiZ5XpwX2vX+R724wNbtq5lBzGawcDsjFAIm3noHaiBmFyEczsbTo0cy
+        Or9jsPVom4iDkSbnxVTVwQBQOm5fPzaDhVw2LJxRVjv7YGjpjAGHBf+iXEYtGsdRC+9I0w
+        UiJC8mTkpr/AxetoJr2mwzzsef02hu72P19FvxLwXmG8lqNK1IvC+9grejJWZ9eurUeevS
+        qYfxM/5wZ4g9Xq3P1yjeiEYsNroAM24M7kwu+Y0/cwEMzzRHnkdedW3HuUtHgy1GrXbpNX
+        k/XdS3dcygnI47pi+5HHYeUGNqDPfEy9c4U7dz54Y4CeDlBjCMcxneeRi8WwsA==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>
-Cc:     linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [PATCH v2] mtd: rawnand: meson: fix bitmask for length in command word
-Date:   Mon,  3 Apr 2023 17:59:08 +0200
-Message-Id: <20230403155908.137562-1-miquel.raynal@bootlin.com>
+To:     Bang Li <libang.linuxer@gmail.com>, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] mtdblock: tolerate corrected bit-flips
+Date:   Mon,  3 Apr 2023 17:59:16 +0200
+Message-Id: <20230403155917.137591-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <3794ffbf-dfea-e96f-1f97-fe235b005e19@sberdevices.ru>
+In-Reply-To: <20230328163012.4264-1-libang.linuxer@gmail.com>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'93942b70461574ca7fc3d91494ca89b16a4c64c7'
+X-linux-mtd-patch-commit: b'0c3089601f064d80b3838eceb711fcac04bceaad'
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-29 at 07:47:26 UTC, Arseniy Krasnov wrote:
-> Valid mask is 0x3FFF, without this patch the following problems were
-> found:
+On Tue, 2023-03-28 at 16:30:12 UTC, Bang Li wrote:
+> mtd_read() may return -EUCLEAN in case of corrected bit-flips.This
+> particular condition should not be treated like an error.
 > 
-> 1) [    0.938914] Could not find a valid ONFI parameter page, trying
->                   bit-wise majority to recover it
->    [    0.947384] ONFI parameter recovery failed, aborting
-> 
-> 2) Read with disabled ECC mode was broken.
-> 
-> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
-> Cc: <Stable@vger.kernel.org>
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> Signed-off-by: Bang Li <libang.linuxer@gmail.com>
+> Fixes: e47f68587b82 ("mtd: check for max_bitflips in mtd_read_oob()")
+> Cc: <stable@vger.kernel.org> # v3.7
+> Acked-by: Richard Weinberger <richard@nod.at>
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
 
