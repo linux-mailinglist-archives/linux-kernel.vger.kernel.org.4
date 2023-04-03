@@ -2,156 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A675A6D5017
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083336D501B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbjDCSOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
+        id S232433AbjDCSO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbjDCSN4 (ORCPT
+        with ESMTP id S231716AbjDCSO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:13:56 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28961BC1;
-        Mon,  3 Apr 2023 11:13:54 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pjOgd-0001gS-2R;
-        Mon, 03 Apr 2023 20:13:47 +0200
-Date:   Mon, 3 Apr 2023 19:13:43 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH net-next v2 00/14] net: dsa: add support for MT7988
-Message-ID: <ZCsXV7MkcUJldQbf@makrotopia.org>
-References: <cover.1680483895.git.daniel@makrotopia.org>
- <53d89480-936d-25b1-6422-cda7769de369@arinc9.com>
- <ZCsQIylAgh-rxjfu@makrotopia.org>
- <73ce771f-3a13-b1c7-659d-7e1c236fdd0b@arinc9.com>
+        Mon, 3 Apr 2023 14:14:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C922D40;
+        Mon,  3 Apr 2023 11:14:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D1DA62474;
+        Mon,  3 Apr 2023 18:14:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A47EC4339B;
+        Mon,  3 Apr 2023 18:14:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680545653;
+        bh=dZxhtfWNZthe6C4xSPneZtKMKl2XLrfONcmPfYXK2jc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NZstyKQH0+x8/mU9b3+M59+yT3SblfTJS/FVkhjxHos8YUryMzPUtFsi8nSJ4T3Zv
+         +ep2vLyEI98IrmpcyD6Eru2ott753MJDrXx5qtq2b2gP40+2H4LHrSAiI2sxs0DqfN
+         ZEIMgcYQR65Xrs0LocD744pzfk+sIq6ymQyM6OBOIGaZ/z9Z4y4edcGAiDeMumbE/i
+         Ox1QX+bx7l7WJlhGqnvJC+WIxAw8indMjTb3w4tbW70snSUM0sG2MKccdlfvRmJ8po
+         OpiWE1hgFtBNmQ00BcRSyyu5w9c6zB8eoKuCa54h5I0uc5XtEMLRPKQVtQeeAgHwlk
+         O4POQ7nF5cm5g==
+Date:   Mon, 3 Apr 2023 19:14:04 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_ipkumar@quicinc.com
+Subject: Re: [PATCH V2 4/6] regulator: qcom_smd: Add support to define the
+ bootup voltage
+Message-ID: <8c513ddc-435e-40ce-b1f8-84eaf8241ed4@sirena.org.uk>
+References: <751e5129-3c11-0156-719e-3fe996a149be@quicinc.com>
+ <3f434777-c4b6-272f-1971-f9adf3faefe4@linaro.org>
+ <a54d4e1b-d62d-559d-1882-e460e696c056@quicinc.com>
+ <ca12735e-d6c8-997e-036f-693cd8a9870f@linaro.org>
+ <e19393e3-5898-bff2-cc00-d88c9194c7c2@quicinc.com>
+ <6e1f6466-7f2e-7bd5-f6a2-5691a30c4e1f@linaro.org>
+ <9989c92c-9949-5531-c7d2-e54882795a68@quicinc.com>
+ <69df153d-bdc6-9008-39d6-72f66bab2e38@linaro.org>
+ <5914a8db-3644-1c94-00ba-460ba2c26a5d@quicinc.com>
+ <3c5a9608-ecd2-a3c0-e866-7d0070e49b89@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+3527FmE72Bif88B"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <73ce771f-3a13-b1c7-659d-7e1c236fdd0b@arinc9.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <3c5a9608-ecd2-a3c0-e866-7d0070e49b89@linaro.org>
+X-Cookie: Membership dues are not refundable.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 08:50:11PM +0300, Arınç ÜNAL wrote:
-> On 3.04.2023 20:42, Daniel Golle wrote:
-> > Hi Arınç,
-> > 
-> > On Mon, Apr 03, 2023 at 08:08:19PM +0300, Arınç ÜNAL wrote:
-> > > On 3.04.2023 04:16, Daniel Golle wrote:
-> > > > The MediaTek MT7988 SoC comes with a built-in switch very similar to
-> > > > previous MT7530 and MT7531. However, the switch address space is mapped
-> > > > into the SoCs memory space rather than being connected via MDIO.
-> > > > Using MMIO simplifies register access and also removes the need for a bus
-> > > > lock, and for that reason also makes interrupt handling more light-weight.
-> > > > 
-> > > > Note that this is different from previous SoCs like MT7621 and MT7623N
-> > > > which also came with an integrated MT7530-like switch which yet had to be
-> > > > accessed via MDIO.
-> > > > 
-> > > > Split-off the part of the driver registering an MDIO driver, then add
-> > > > another module acting as MMIO/platform driver.
-> > > > 
-> > > > The whole series has been tested on various MediaTek boards:
-> > > >    * MT7623A + MT7530 (BPi-R2)
-> > > >    * MT7986A + MT7531 (BPi-R3)
-> > > >    * MT7988A reference board
-> > > 
-> > > You did not address the incorrect information I pointed out here. Now that
-> > 
-> > I'm sorry, that was certainly not intentional and I may have missed
-> > your comments. Actually it doesn't look like they have made it to the
-> > netdev list archive or patchwork either.
-> > 
-> > > the patch series is applied, people reading this on the merge branch commit
-> > > will be misled by the misinformation.
-> > 
-> > I've changed Kconfig stuff according to your recommendation and also
-> > addressed possible misleading USXGMII and 10GBase-KR support by
-> > introducing MT7988-specific functions and using 'internal' PHY mode.
-> > So which of your comments have not been addressed?
-> 
-> https://lore.kernel.org/netdev/c11c86e4-5f8e-5b9b-1db5-e3861b2bade6@arinc9.com/
 
-Strange that both emails didn't make it into patchwork.
+--+3527FmE72Bif88B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> > 
-> > > 
-> > > > 
-> > > > Changes since v1:
-> > > >    * use 'internal' PHY mode where appropriate
-> > > >    * use regmap_update_bits in mt7530_rmw
-> > > >    * improve dt-bindings
-> > > 
-> > > As a maintainer of the said dt-bindings, I pointed out almost 7 things for
-> > > you to change. Of those 7 points, you only did one, a trivial grammar
-> > > change. The patch series is applied now so one of us maintainers (you are
-> > > one too now) need to fix it with additional patches.
-> > 
-> > I was also surprised the series made it to net-next so quickly, but it
-> > wasn't me applying it, I merly posted v2 with all comments I received
-> > addressed.
-> > 
-> > Me and supposedly also netdevbpf maintainers use patchwork to track
-> > patches and whether comments have been addressed. Can you point me to
-> > emails with the comments which haven't been addressed there? Looking in
-> > patchwork for the dt-bindings patch [1] I don't see any comments there.
-> 
-> https://lore.kernel.org/netdev/a7ab2828-dc03-4847-c947-c7685841f884@arinc9.com/
-> 
-> > 
-> > 
-> > Thank you for reviewing!
-> > 
-> > 
-> > Daniel
-> > 
-> > 
-> > [1]: See patchwork tracking for RFCv3, v1 and v2. Prior to RFCv3 the series
-> > didn't have the dt-bindings addition, I introduced it with RFCv3 when splitting
-> > the series into many small changes:
-> > https://patchwork.kernel.org/project/netdevbpf/patch/9b504e3e88807bfb62022c0877451933d30abeb5.1680105013.git.daniel@makrotopia.org/
-> > https://patchwork.kernel.org/project/netdevbpf/patch/fef2cb2fe3d2b70fa46e93107a0c862f53bb3bfa.1680180959.git.daniel@makrotopia.org/
-> > https://patchwork.kernel.org/project/netdevbpf/patch/dffacdb59aea462c9f7d4242cf9563a04cf79807.1680483896.git.daniel@makrotopia.org/
-> 
-> Although I've been a maintainer for the dt-bindings schema for quite some
-> time, I was somehow missed as a recipient on RFC v3.
+On Mon, Apr 03, 2023 at 07:53:48PM +0200, Konrad Dybcio wrote:
+> On 3.04.2023 16:07, Devi Priya wrote:
 
-Yeah, that was my mistake. get_maintainers.pl comes up with unreadable
-unicode garbage, probably something is wrong in my local Perl setup.
-So I always manually replace your name with readable UTF-8, but I missed
-that for RFC v3.
+> > But, when the regulator driver comes up, it tries to bring up the
+> > regulators to the minimum supported voltage provided with the
+> > regulator-min-microvolt property in the DT.
+
+> Right, that exists..=20
+
+> Mark, do you think it should be updated such that the requests are
+> aggregated before assuming min_uV is "just fine"?
+
+We can't tell if any consumers are ever going to appear, and the
+regulator having a voltage outside of the constraints is an urgent
+problem we need to fix quickly.  Since we try to bring the voltage to
+the nearest end of the constraint the driver could always change the
+bogus voltage it reports to one that is excessively high, this would
+mean the core will try to bring the voltage down to the maximum rather
+than up to the minimum.  The driver could also look at the constraints
+when guessing at the hardware configuration rather than claiming an out
+of spec voltage, this would mean we wouldn't need to correct anything.
+
+--+3527FmE72Bif88B
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQrF2wACgkQJNaLcl1U
+h9DUkgf5AeX2hkEfb36b/p7jPZcbfRZXttviLT2LkmjynPWAK8PRiewZ0XNVv4An
+E51IGruDP7nB2ArHnrhCwICAU0r4r6TRSaY3S6xgxhdCZqi+1VHIKhLTYDNHD9/d
+TmCnsqxzC0c3cj9OB8couC3BgfGXOp0pGMuZLzeYlCG+trEbwBu2HnqBGx5L6zBV
+n6jUvhhazcyrVfYaxdDBzxHUM/CPiIY5ez7jEcD4PLXEvlSZFDmE5AZTs28HAZTx
+b5qtdfIrV4D5JYNfU90pg5JB2kcN3Uc1iYuFX7Y40hD778/gG+9xHi3jsGt2L06/
+Vn3MCOS4ssu5v19tKmFquxaxpVcZSA==
+=0SE9
+-----END PGP SIGNATURE-----
+
+--+3527FmE72Bif88B--
