@@ -2,133 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A9B6D4BF9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 366EE6D4C02
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232828AbjDCPc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38550 "EHLO
+        id S232877AbjDCPfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbjDCPc0 (ORCPT
+        with ESMTP id S232858AbjDCPfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:32:26 -0400
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63AB1BE1;
-        Mon,  3 Apr 2023 08:32:24 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4Pqvys1Crfz9sQh;
-        Mon,  3 Apr 2023 17:32:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
-        s=MBO0001; t=1680535941;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R40Rix/QmgERLDCtcuTTsrzPbEXoZNeuV8Sj3dITv3w=;
-        b=SnMfsaQYEjQGTtwHiyel9wE0jWJzPmcxF/fEGDoRKO1szaY9G+b+13CZFKQUVkQVOcBUpY
-        T1uQjzQDYn8nviqlduXWdkPJVUYu8ZUqKjt4TXsUPBtjlQqfcZp2mLyK4Nqpv3CaKridb4
-        g5wPgNpJl5M5tUez+fiOMDaP3dhhA4IUfmFu5+17EaJu3HqiFQzB9I5wznFvSnW0w6pTZJ
-        82aZU0F4+zUxI6WfohmmiMm9IoJjmmy7nLDG6MIH5u9qvl3Nw/so8IVzYpaZMEhVaOnTbQ
-        AHZclSCpKsxrPOhLIvjPEdaDCa6DdsRyCu8Vy8MoJIMAvPQ+tGdjJas5NnWzVw==
-Message-ID: <2d9d001f14036caf4f6d47448d4d2fdb0b188101.camel@dylanvanassche.be>
-Subject: Re: [PATCH v4 4/6] dts: qcom: arm64: qcom: sdm845: use defines for
- VMIDs
-From:   Dylan Van Assche <me@dylanvanassche.be>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Date:   Mon, 03 Apr 2023 17:32:17 +0200
-In-Reply-To: <ea03bfb6-34c4-45e2-c179-74ecafad559f@linaro.org>
-References: <20230401173523.15244-1-me@dylanvanassche.be>
-         <20230401173523.15244-5-me@dylanvanassche.be>
-         <ea03bfb6-34c4-45e2-c179-74ecafad559f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 3 Apr 2023 11:35:07 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E379B1BE1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:35:05 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id c18so28378416ple.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 08:35:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680536105;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fR2s9+JDNNa1uEdAtZHMM34i2EJ2xvvS10PJPUpk8Tw=;
+        b=JeEDSZDdrhUuzUy391WQWKkkvpcdSBaOtDd6sAfXdgcQ0si3zVaG88tzCJbsDWfpqE
+         /oiggCHPIWfK8U+lMtNOrAqJQgCDxFhVmkKjISMu9m3FeCArnhwiN58oCX0cd5ihNmVB
+         dt5+py3or0hapeKq3ptfUgORdG6Ym8ZNkZbmU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680536105;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fR2s9+JDNNa1uEdAtZHMM34i2EJ2xvvS10PJPUpk8Tw=;
+        b=sLacMPr/1Avi9JEtmpBmw13VGniyonCqcqqddeZhx/oPqkOOWswwC921ZzS1FkFyGF
+         rksZMSsDDU+EJMcrFxglZnurKINj55QaVvvInpu+2PVxalw//vi+9l6s3SuYSx48nT9V
+         ddIMbosKAZjYzcuY6DJjJEFDXFI3bE9JyWTBezONNSWC3DuKJUmoyRBpickBUSRejNl9
+         r/ogYWIu2wHHZFko3vSqFUWVorWM7jLxQiASzvVRvpdjhyhK4gvsR+QgZGESO9WMRJ2n
+         kzg8c3UFHzx95Q8WK4/nssxhArnfhazvD8Iq9LF6tJeNWAoZVmSHz3+QzbszYK1k8nLx
+         Py2A==
+X-Gm-Message-State: AAQBX9dwnvDjN9vZ9RevGNb/l+icncermgxT12NdTYwlYE2JG1HnHTc3
+        PWB7tf9L5mYyP+AHVa/UehOMBw==
+X-Google-Smtp-Source: AKy350bwl32I78BgAl9N4MzmN3dvEOxV4sQ+JOgKQSF9qprd8wneNSZznscrcTCeXOmUCL/RBqng+g==
+X-Received: by 2002:a17:902:e847:b0:19e:d6f2:feea with SMTP id t7-20020a170902e84700b0019ed6f2feeamr46232340plg.9.1680536105355;
+        Mon, 03 Apr 2023 08:35:05 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id t12-20020a170902bc4c00b001a1d4a985eesm6698057plz.228.2023.04.03.08.35.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 08:35:03 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 00:34:58 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Jaewon Kim <jaewon31.kim@gmail.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Jaewon Kim <jaewon31.kim@samsung.com>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        GyeongHwan Hong <gh21.hong@samsung.com>
+Subject: Re: [RFC] vsprintf: compile error on %09pK
+Message-ID: <20230403153458.GE12892@google.com>
+References: <CGME20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p3>
+ <20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p3>
+ <ZCrMMQt2xnnZIyz6@alley>
+ <CAJrd-Uvzy18SfjjqbqZCPHjw+ujQXsBpvov4b=bfAwZrj=bCAA@mail.gmail.com>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 4Pqvys1Crfz9sQh
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJrd-Uvzy18SfjjqbqZCPHjw+ujQXsBpvov4b=bfAwZrj=bCAA@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On (23/04/03 23:39), Jaewon Kim wrote:
+[..]
+> 
+> Okay, then we can't use %09pK. I've just wondered because %9pK works.
 
-On Mon, 2023-04-03 at 11:20 +0200, Krzysztof Kozlowski wrote:
-> On 01/04/2023 19:35, Dylan Van Assche wrote:
-> > Use VMID defines for SLPI's FastRPC node in the Qualcomm SDM845 DTS
-> > instead of hardcoded magic values.
-> >=20
-> > Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
-> > ---
-> > =C2=A0arch/arm64/boot/dts/qcom/sdm845.dtsi | 4 +++-
-> > =C2=A01 file changed, 3 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > index 1f25a7f4e02b..dc4b553cbe2e 100644
-> > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > @@ -13,6 +13,7 @@
-> > =C2=A0#include <dt-bindings/clock/qcom,rpmh.h>
-> > =C2=A0#include <dt-bindings/clock/qcom,videocc-sdm845.h>
-> > =C2=A0#include <dt-bindings/dma/qcom-gpi.h>
-> > +#include <dt-bindings/firmware/qcom,scm.h>
-> > =C2=A0#include <dt-bindings/gpio/gpio.h>
-> > =C2=A0#include <dt-bindings/interconnect/qcom,osm-l3.h>
-> > =C2=A0#include <dt-bindings/interconnect/qcom,sdm845.h>
-> > @@ -3372,7 +3373,8 @@ fastrpc {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0qcom,glink-channels =3D
-> > "fastrpcglink-apps-dsp";
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0label =3D "sdsp";
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0qcom,non-secure-domain;
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0qcom,vmids =3D <0x3 0xF 0x5
-> > 0x6>;
->=20
-> Didn't you just add it in previous patch? Don't add incorrect code
-> which
-> you immediately change.
->=20
+This is not per printk / kernel, Wformat warnings come from the
+compiler.
 
-Both are similar, the code is in fact the same. I followed what Konrad
-suggested in v3 to make a patch on top:
+Per C11 (7.21.6 6):
+ 0  For d, i, o, u, x, X, a, A, e, E, f, F, g, and G conversions, leading zeros
+    (following any indication of sign or base) are used to pad to the field width
+    rather than performing space padding
+    ...
+    For other conversions, the behavior is undefined.
 
-> Please use the recently-introduced header and depend on (and
-make a patch atop)
-
-https://lore.kernel.org/linux-devicetree/20230330165322.118279-1-me@dylanva=
-nassche.be/T/#mab3c3421157acb0a4811dad5bb62d7349a9d4008
-
-I can squash this patch in the FastRPC node one, that would make it
-disappear. Let me know what you prefer and I will do it in v5 :)
-
-> Best regards,
-> Krzysztof
->=20
-
-Kind regards,
-Dylan Van Assche
+So using 0 for p should trigger an undefined behavior as far as the
+standard C concerned. Unless I'm missing something.
