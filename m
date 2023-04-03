@@ -2,105 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4D76D448E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6946D4493
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbjDCMhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S232212AbjDCMiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbjDCMhl (ORCPT
+        with ESMTP id S231821AbjDCMiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:37:41 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B64F7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:37:39 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id m16so14204363ybk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 05:37:39 -0700 (PDT)
+        Mon, 3 Apr 2023 08:38:12 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821C1358D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:38:11 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id b20so116758696edd.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 05:38:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680525459;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tyEzNjODUF0EMEwKR3BoiHKcKfk7fD3xoSv4d3W2u5c=;
-        b=RI9kx2Qyn5Tkt66uOxL/BVxqYIXdLMg+u9Wyy8PZYWxpRNyTnhKpQC0SuydgUHv9UG
-         /CvLd6a+pycq/HgJvGmlh3AeSWu9iBKz1pByMx/SKscum26IvOSVU30QWQwi9Rmj8CgM
-         V7zc5z2+5/YlHX4CwF+TgxrvSmX41e4xZhdbeiFqCxkN78k2WpOd7NXGqqLrCObamLyU
-         S2X7+5skM76FEqWmXFAHDTyH2yeJFJbd2IWlGJAc6YFO1RFt5HLV/5WQBoGUrr6cmgYs
-         T9riVWUviYu62qGAZIJUtHv7UpytVKmM9gH/uVUdv46iWJT/e5Abz871escBoSbNwkKC
-         mfGg==
+        d=linaro.org; s=google; t=1680525490;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qpyLniNan8kXaWmdK0bPB2p3FPHPkCqFQCXNF67g44w=;
+        b=FpBaA6xbw0CpGMMiVJLqnlfsDevhHDaVIP+Bzng9cI/bE40CyZJI+ZxU882eMNS/b8
+         9R/wd+LV9AJsUzDKy228ECHJJ0GT8Gvy7X5kAvttYpYtyad5FVR/EwMf4fJeiD9ZJow4
+         vOP5DGfnfZrIcazDpDH08u//HXiaMU70H5tY+rfqwOCTkVJnXXTjwYugUTNztf4PHi2l
+         85dPDwlyU7us7eYNoFtfogUlFAnlICMQo+e0PGrgHQUb7A8V9ziHgPvK/q+2np+lhJDR
+         BPFRWT5Cb9jlFQ9kkejwJTgttSRbUfOyd9FDgW4/GVyUz9HOCAX28xuyWTUKuK+LSVKy
+         VxSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680525459;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tyEzNjODUF0EMEwKR3BoiHKcKfk7fD3xoSv4d3W2u5c=;
-        b=MDzkm7o8kUN6XVYfmCOesykSNPgkfc96GwNOzPmROxz5BxfKkOcHFsDCQhyQIn4/zx
-         NrPI3Xn93DUThqoRYqAAIhOouF7qTqVowdkHYC6anBPdSWGEtFo75jJ3m+f6gPoadjfc
-         O5Hqe+lif/Pl45QbbsyMvSmU2UaYTyg1IiAWD2OKKw6CzSCbJdvzCJb0EmuUlQAsG54l
-         jlOoIkUNtevF9CXUsajONyLD7a4s3ZBGHeB4yb2OLLlUAewUXXgfU/zl/eEDq50k4Qih
-         /JLswVXwz4ugKvZgVJjZqhsxXDcPuwLS9sxsZLTURDnFAHs1NoWBrSWu0CLYSK53N/iE
-         TE4A==
-X-Gm-Message-State: AAQBX9cZXEfMuwqeHhr/IEIV1MSX4oT3fTjZfxhX1AQ/g1K+ZiMQOIHO
-        ENlaDfBdCFBXu2huxxEZILt2F6X0Ui3AX8w1YC01XA==
-X-Google-Smtp-Source: AKy350aUMZOkAO/yuOaW4hyECahwaHSCVDgAQ+x4o/yvMb2omtowEEWvK3Hbp4gEXOg4cbegKispbPEvBbOHZlP5mGs=
-X-Received: by 2002:a05:6902:70a:b0:b6e:361a:c86 with SMTP id
- k10-20020a056902070a00b00b6e361a0c86mr19072022ybt.3.1680525458952; Mon, 03
- Apr 2023 05:37:38 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680525490;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qpyLniNan8kXaWmdK0bPB2p3FPHPkCqFQCXNF67g44w=;
+        b=j/STcn5Hb94BDKxNafwfB9H390Aw5u++plknqnfju7utr9hIs+OhUzgVQmZNYWnmE1
+         wDvEAgPN/RILQ+MHi8CVas/XtjMqn12CRDssURv+ClxEewNn5I43R4Ep8xplrGxEsxD7
+         xNDsJ+Pwm+NLDu6iN4phN9L+C8vcaBqyxNj+mjwBPnujlxtvJT3NPSzju9IBnBVW3SHU
+         WMBZPlCvgxtcq0vIZM+EswCM0WduUk4/5ndQKFMPO7uwTIbvxlfgn7p2fEnQROaavSbQ
+         By+MERXCmfELL8gGDdbwNYzEIXTFx/Wgk3HgVVkUvHJhF3jWY0G7A0JjilKD1qX25h6d
+         uzbQ==
+X-Gm-Message-State: AAQBX9dPtjBgdX9a7pLBk8yYPWc8EK6DCo3V/xUiY6RVRq1TVAu34jzw
+        TGsPEgTGVduY693jbBhiGUMHYQ==
+X-Google-Smtp-Source: AKy350aPJ9GmzIXqmf5TkKiPoxebAeXc8qJaZQ0yylyUqd1bbN2VZH0uOeImlJ0Sy0ZPjkyWPYBRTg==
+X-Received: by 2002:a17:906:d1cf:b0:8b1:7aaa:4c25 with SMTP id bs15-20020a170906d1cf00b008b17aaa4c25mr37745413ejb.29.1680525489952;
+        Mon, 03 Apr 2023 05:38:09 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
+        by smtp.gmail.com with ESMTPSA id 15-20020a170906328f00b0093e6f40d124sm4487670ejw.139.2023.04.03.05.38.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 05:38:09 -0700 (PDT)
+Message-ID: <2beba334-1c5e-0f68-1d32-57006b4a3321@linaro.org>
+Date:   Mon, 3 Apr 2023 14:38:08 +0200
 MIME-Version: 1.0
-References: <20230328060740.1984239-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20230328060740.1984239-1-peng.fan@oss.nxp.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 3 Apr 2023 14:37:03 +0200
-Message-ID: <CAPDyKFpeiHunqfBB0BgSmG2NH7d6V3sfMw=d=dWz6wd4GmYZyg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: ref sdhci-common.yaml
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: gpio: max7317: add spi gpio extender
+ documentation
+Content-Language: en-US
+To:     Edmund Berenson <edmund.berenson@emlix.com>
+Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230403114033.8336-1-edmund.berenson@emlix.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230403114033.8336-1-edmund.berenson@emlix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023 at 08:02, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
->
-> From: Peng Fan <peng.fan@nxp.com>
->
-> Since the esdhc controller is sdhci compatible, the fsl-imx-esdhc.yaml
-> should ref sdhci-common.yaml to use 'sdhci-caps-mask' property.
->
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+On 03/04/2023 13:40, Edmund Berenson wrote:
+> Add driver documentation for the maxim max7317 spi
+> gpio expander.
 
-Applied for next, thanks!
+Subject: drop second/last, redundant "documentation". The "dt-bindings"
+prefix is already stating that these are bindings and documentation.
 
-Kind regards
-Uffe
-
-
+> 
+> Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+> Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
 > ---
->  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> index 7f721fbfb009..fbfd822b9270 100644
-> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> @@ -10,7 +10,7 @@ maintainers:
->    - Shawn Guo <shawnguo@kernel.org>
->
->  allOf:
-> -  - $ref: mmc-controller.yaml
-> +  - $ref: sdhci-common.yaml#
->
->  description: |
->    The Enhanced Secure Digital Host Controller on Freescale i.MX family
-> --
-> 2.37.1
->
+
+This is v2, so where is the changelog? No cover letter, either.
+
+>  .../bindings/gpio/gpio-max7317.yaml           | 50 +++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/gpio-max7317.yaml
+
+Filename must be like compatible. "gpio" is not a vendor prefix.
+maxim,max7317.yaml
+
+
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-max7317.yaml b/Documentation/devicetree/bindings/gpio/gpio-max7317.yaml
+> new file mode 100644
+> index 000000000000..ad5a796c704e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/gpio-max7317.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/gpio-max7317.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Maxim MAX7317 SPI-Interfaced I/O Expander
+> +
+> +maintainers:
+> +  - Edmund Berenson <edmund.berenson@emlix.com>
+> +
+> +description:
+> +  Bindings for 10-Port Maxim MAX7317 SPI GPIO expanders.
+
+Describe the hardware, not the "bindings". Drop "Bindings for".
+
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max7317
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+
+Use consistent quotes, either ' or ".
+
+> +    const: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - gpio-controller
+> +  - "#gpio-cells"
+> +
+> +unevaluatedProperties: false
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+
+Fix ordering. allOf goes either before properties or before
+unevaluatedProps. See for example example-schema.
+
+> +
+> +examples:
+> +  - |
+> +    spi {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+
+Use 4 spaces for example indentation.
+
+> +
+
+
+Best regards,
+Krzysztof
+
