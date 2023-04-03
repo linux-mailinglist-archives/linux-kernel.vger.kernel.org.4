@@ -2,116 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9075A6D4651
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993DC6D4652
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbjDCN51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        id S232479AbjDCN61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbjDCN5X (ORCPT
+        with ESMTP id S229780AbjDCN6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:57:23 -0400
-Received: from p3plwbeout26-04.prod.phx3.secureserver.net (p3plsmtp26-04-2.prod.phx3.secureserver.net [216.69.139.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3776E1BF62
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:57:18 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.143])
-        by :WBEOUT: with ESMTP
-        id jKgOpwxkjJzPrjKgPpDhO5; Mon, 03 Apr 2023 06:57:17 -0700
-X-CMAE-Analysis: v=2.4 cv=OJjiYQWB c=1 sm=1 tr=0 ts=642adb3d
- a=EhJYbXVJKsomWlz4CTV+qA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=dKHAf1wccvYA:10 a=v52JICOvAAAA:20
- a=4ao_m9BdAAAA:8 a=WCF8PDb0v4YLkHPhQUUA:9 a=QEXdDO2ut3YA:10
- a=MsgbvsnFcLE8lbaOJhbn:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  jKgOpwxkjJzPr
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
-        by smtp03.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1pjKgA-00005A-Od; Mon, 03 Apr 2023 14:57:05 +0100
-Message-ID: <ab1c2512-7dd6-5246-7213-077022a85c2f@squashfs.org.uk>
-Date:   Mon, 3 Apr 2023 14:57:02 +0100
+        Mon, 3 Apr 2023 09:58:25 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257A0C179
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:58:24 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so30627699pjt.5
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 06:58:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680530303;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zI6MB2YZ4BE718nFORNJOvUurlul7DR51vzr2mzoofs=;
+        b=pKi04bNY65I+lrYbuC1t89tt0XygwX4aQnSkqgs6XMNTANLuX58P48JHVQlCSi4+I4
+         8zXG2Y8Dl/rd4ex0vj1vk0y4lJglCsCRuj6xfTEYlsZNGGQepBGpWDUZi+osc9SQTdaz
+         y5GCPqHZmOwVCF2SRvMGIz0++PbkvODeyqDfeE8zoGZbVm/fZpgC8UI+tE5qqckcL+bY
+         q55CDbWTyGIOhpoCe+2DHwjqCQ3YjTrx4ZUPxIolUdMrmJhQxQPeziiCi24ZLgIX8a1R
+         I9h+HhWTBuaCv9iPkyKkIBjl5ShLW4wbKRDMfyHfSL8eWX21GXTdm22Q1gMLipcTQcdL
+         2IIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680530303;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zI6MB2YZ4BE718nFORNJOvUurlul7DR51vzr2mzoofs=;
+        b=HMRXMkNo3+SbLqPfjs4Dxc/Qm8+mzZ8gz2ZfuNgzE7GTGsmZudbdv4WTS+sVGe9ELH
+         oD2/vFZPN7kfUtQHUDzuDXqO5Y+xlf6R6Dw01uXG+HojUt1chs156W0o4UwHgeOx6TBs
+         fZKifKUpftr/JcA0UZUvI8KAJXs7uwlebEboOkMb+oIAc3jQbusBoFtlKr47H4V0n+1A
+         SvmNtEdHBcvCkeEKZx+MiT/K6BAAfjnwQXP9bPVYkLEabJb0OhnxWtaQvEBTAX7fjh4f
+         X2Uoy9ObVAmqT+Fwi7ATb005sZUWLgqX0zLpfou9Sxle80xxbKwdeUs8ZcMn46VlvEV9
+         zRdw==
+X-Gm-Message-State: AO0yUKVVP+3h+sZfO+Vzj3Po1q9HB/38fX0jo+ORaLLLVCORuDEkUxKD
+        r5tFyPT/HYP4E5i/yAE1DHGYDv7iqqItWQ==
+X-Google-Smtp-Source: AK7set93PE4nBrgJSGX1bny64aBaQoeJcSv4troyHaC0zVv12F/aDHMNbVFTu4ToucpSmc2AfzkdAA==
+X-Received: by 2002:a05:6a20:6d05:b0:d5:1c74:27af with SMTP id fv5-20020a056a206d0500b000d51c7427afmr30054334pzb.29.1680530303493;
+        Mon, 03 Apr 2023 06:58:23 -0700 (PDT)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id q11-20020a631f4b000000b004fbd021bad6sm6042653pgm.38.2023.04.03.06.58.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 06:58:23 -0700 (PDT)
+Message-ID: <60b019dc-ea62-0c63-983e-cc1918bfe419@gmail.com>
+Date:   Mon, 3 Apr 2023 22:58:20 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 1/2] block: Rework bio_for_each_segment_all()
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        willy@infradead.org, axboe@kernel.dk,
-        Ming Lei <ming.lei@redhat.com>
-References: <20230327174402.1655365-1-kent.overstreet@linux.dev>
- <20230327174402.1655365-2-kent.overstreet@linux.dev>
- <52a5bd5c-d3a1-71d7-e1e5-7965501818bd@squashfs.org.uk>
- <ZCXNDQ6Eslhj+9g5@moria.home.lan>
- <4753802a-685f-ab56-fed2-22d6eb4cfccd@squashfs.org.uk>
- <5ab59623-4317-5aff-5173-d7285b5b224c@squashfs.org.uk>
- <ZCeW6j44aHGI/v5Q@moria.home.lan>
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <ZCeW6j44aHGI/v5Q@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 00/14] extcon: Core cleanups and documentation fixes
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bumwoo Lee <bw365.lee@samsung.com>,
+        linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfK3f+MDVXoFRtin485DFFzlIRVdxg0qVA+GWjA05vGW2VyzcJIPoCK0uGIhCXDqApniUXrj2Tdan4gdcgZiw474qLG22fi4KZGfdS91yTNjLwLY6d3wY
- rWvKpfFFzFcsYMhfQj/g4rBr52mOMNpMCDxNC2o45p0loZV5pZAmxC8+JGkj/1ENDO45wb1Yark8w2DfGVgkV34ggESOTjglpFQPEgKkFUHsAvoT7DvFFoow
- SiM+O2gImWKVlb/yvHJkjQ==
-X-Spam-Status: No, score=-1.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/04/2023 03:28, Kent Overstreet wrote:
-> On Fri, Mar 31, 2023 at 02:10:15AM +0100, Phillip Lougher wrote:
->> On 30/03/2023 19:59, Phillip Lougher wrote:
->>> On 30/03/2023 18:55, Kent Overstreet wrote:
->>>> On Wed, Mar 29, 2023 at 05:50:27PM +0100, Phillip Lougher wrote:
->>>>> There is a problem with the above code, on testing I get the following
->>>>> results:
->>>>>
->>>>> Index 78018785329, offset 49, bvec.bv_len 1024: In same bio,
->>>>> metadata length
->>>>> 32780
->>>>
->>>> Could you share how you're doing your testing? I set up a basic test
->>>> (created images using every compression type, tested reading them) and
->>>> so far I'm not able to reproduce this.
->>>
->>> I use a very large Squashfs file that triggers the edge case.
->>>
->>> That is too big to post, and so I'll see if I can artifically generate
->>> a small Squashfs filesystem that triggers the edge case.
->>>
->>> Phillip
->>>
->>>
->>
->> Hi,
->>
->> This is a Google drive link to a file that triggers the issue.
->>
->> https://drive.google.com/file/d/1-3-a1BKq62hZGQ6ynioreMSWFMuCV9B4/view?usp=sharing
->>
->> To reproduce the issue
->>
->> % mount -t squashfs <the file> /mnt -o errors=panic
->>
->> then either one of the following will produce a panic
->>
->> % ls /mnt
->> % find /mnt -type f | xargs wc > /dev/null
-> 
-> Appears to be fixed now - updated version of the patchset is at
-> https://evilpiepirate.org/git/bcachefs.git bio_folio_iter
-> 
-> Can you confirm, then I'll mail out the updated series?
+Hi,
 
-Thw updated patch-set fixes the issues seen.
+I recommend that use the "./scripts/get_maintainer.pl" script
+to get the accurate maintainer list to send the patches.
 
-Phillip
+
+On 23. 3. 22. 23:39, Andy Shevchenko wrote:
+> A few fixes to the documentation and some cleanups against extcon core
+> module.
+> 
+> Andy Shevchenko (14):
+>   extcon: Fix kernel doc of property fields to avoid warnings
+>   extcon: Fix kernel doc of property capability fields to avoid warnings
+>   extcon: Use DECLARE_BITMAP() to declare bit arrays
+>   extcon: use sysfs_emit() to instead of sprintf()
+>   extcon: Amend kernel documentation of struct extcon_dev
+>   extcon: Allow name to be assigned outside of the framework
+>   extcon: Use unique number for the extcon device ID
+>   extcon: Switch to use kasprintf_strarray()
+>   extcon: Use device_match_of_node() helper
+>   extcon: use dev_of_node(dev) instead of dev->of_node
+>   extcon: Remove dup device name in the message and unneeded error check
+>   extcon: Use sizeof(*pointer) instead of sizeof(type)
+>   extcon: Drop unneeded assignments
+>   extcon: Use positive conditional in ternary operator
+> 
+>  drivers/extcon/extcon.c | 126 +++++++++++++++++++++-------------------
+>  drivers/extcon/extcon.h |   9 ++-
+>  2 files changed, 71 insertions(+), 64 deletions(-)
+> 
+
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
