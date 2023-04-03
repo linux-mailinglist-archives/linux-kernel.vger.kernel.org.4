@@ -2,120 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465796D50D6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536016D50D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjDCSid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
+        id S232206AbjDCSkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjDCSib (ORCPT
+        with ESMTP id S229780AbjDCSkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:38:31 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF54C1FEA
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:38:13 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id y4so121170069edo.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 11:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680547092;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CySdEehWspubmXAcFc/gUkZ6ALWiIO8Dims2v4pC7cI=;
-        b=XxNS02hVI+u4D2pE7UGlx7ntA7oWIlCwkuRm3Gyu0E+L6ULQyC+6ShlqR4ekLzDFlT
-         pRslLrKcSR/9KsmwaW7cNkZ4sBLMBrrx13XQF615coXajYG/D2tRgvu66pGLfEkrm/C8
-         2A12Wh9pO54frQbFLcjovLAct7UkfQ9S1TjuUtOPvPyfN9wP6JUhxmt2lMVWqNnXPliV
-         rx/sm1EdhuYRfJXOSQ0ApUnyqwfYJXx+sqa2wWwvgay1iMPZZRXTCENV4sZ6NYwUwRpY
-         /YoYeDYiuIdE9FWPQg9xmmoXwmNDiV7gsagK762uIJSgjXuFP8gohz0DLGqClEWw0WV8
-         4NmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680547092;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CySdEehWspubmXAcFc/gUkZ6ALWiIO8Dims2v4pC7cI=;
-        b=E9GaVrqy+QPrbs0EMg73lwnM57fQeKH4mWURnlfFkEXeu5mCwF9joxOrI4VYWCSZya
-         XrnprY2v+QNuGDZr4K01V+OQ+8RTfl2x8FBycI0MOLsIaLI75ioEBKa9gv9iI9tSp3eO
-         9EqbxFcgEPKW1EnRbUIcs/EGubWJuNGEAwQD8zRGt28d0sjH6lNndl2Ku9PgUQUHz2Qy
-         UwVcF+SsDfvJcIYaQMYsZknKIxkP2Mspgbrfg/MAz1olxk9PKzjtM5zFb8TXz4mfO7Ka
-         owe3TNCa0kp/qL/h6IU396zxwpPU/hyuUa93XiD9V6y54P4tH/7D5DXClAGJNyz+BbF/
-         oqPA==
-X-Gm-Message-State: AAQBX9fK7eYzajHG52FZehaPiXmFEodZX5nSsayRdiczejnwcfAXk/ax
-        RPZLhTp+3pCHu4AnNFeoDIXLjQ==
-X-Google-Smtp-Source: AKy350a21SUvVW8zkI0jUgi5Fki72Pdn7B89a65yFrUkCNuucXQuzP/aqKcsR7vvEISiRfXbpBAEfA==
-X-Received: by 2002:a17:907:8c83:b0:939:a610:fc32 with SMTP id td3-20020a1709078c8300b00939a610fc32mr38202123ejc.53.1680547092335;
-        Mon, 03 Apr 2023 11:38:12 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
-        by smtp.gmail.com with ESMTPSA id t17-20020a1709060c5100b00927341bf69dsm4868907ejf.88.2023.04.03.11.38.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 11:38:11 -0700 (PDT)
-Message-ID: <ac0a61cc-942e-191a-76f2-855b482247ff@linaro.org>
-Date:   Mon, 3 Apr 2023 20:38:10 +0200
+        Mon, 3 Apr 2023 14:40:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB24BC
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:40:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8852761FCA
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 18:40:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC17C433D2;
+        Mon,  3 Apr 2023 18:40:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680547228;
+        bh=Srg17dNP3NaApim/6laEY2JCIVbwu+qkygiafOGB1go=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=rC2SXgARn1yOrQWNIHkV1C24XtLoxNk+yhhZJBphPjO1EJqtnv0iUhgaTGDowoTBM
+         5yWTn+vZ4PRzB3CN3oAlSbj1Ov+WRgcWrnF4+ZbDf3U/2yfW/xbY9A15z6Grzxo0wl
+         zuqL8S27swxCmhi6YHeSoad2+gtyDY1/G3wd/vZJc5UNcTPbP892in+kTvql3RztWK
+         aAP94rLGWPuSU5v5Dm3MKs8z6xqrjrAXQv2Sj/YMVSHPkE925ZWBcS+BFaJMAMgjZY
+         JEp4f1sg3g0wn8XjeHCPAIsDpNrcOj1/kRivj/hCjUU5YJLYZhnOMDwskOKRL/y+do
+         iK6Hswfl+ZdJw==
+Date:   Mon, 3 Apr 2023 19:40:23 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] regmap: Add maple tree based register cache
+Message-ID: <149d2462-a190-4480-a501-d645a84ec1bf@sirena.org.uk>
+References: <20230325-regcache-maple-v3-0-23e271f93dc7@kernel.org>
+ <20230325-regcache-maple-v3-2-23e271f93dc7@kernel.org>
+ <20230403154508.qia42tyasj4vhtm5@revolver>
+ <6f49fdf0-c373-46f7-89bd-f30f0fb68c15@sirena.org.uk>
+ <20230403182644.uylyonu6w6l63oze@revolver>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH RFC 14/20] dt-bindings: pinctrl: oxnas,pinctrl: remove
- obsolete bindings
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sebastian Reichel <sre@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
- <20230331-topic-oxnas-upstream-remove-v1-14-5bd58fd1dd1f@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-14-5bd58fd1dd1f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uCJRLG+x40+NiNKG"
+Content-Disposition: inline
+In-Reply-To: <20230403182644.uylyonu6w6l63oze@revolver>
+X-Cookie: Membership dues are not refundable.
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2023 10:34, Neil Armstrong wrote:
-> Due to lack of maintainance and stall of development for a few years now,
-> and since no new features will ever be added upstream, remove the
-> OX810 and OX820 pinctrl bindings.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../devicetree/bindings/pinctrl/oxnas,pinctrl.txt  | 56 -------------
 
+--uCJRLG+x40+NiNKG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Mon, Apr 03, 2023 at 02:26:44PM -0400, Liam R. Howlett wrote:
 
-Best regards,
-Krzysztof
+> What you have will work.  If you need more optimisations later, then we
+> can have another look.
 
+Yeah, what's there tests out OK.  In terms of optimisation the baseline
+requirement is that we have to be able to pull values out faster than
+we'd be able to read them from the device so until we're working with
+MMIO devices (which people do use regmap with sometimes but aren't the
+common case) we can typically burn a *lot* of CPU cycles and still be
+doing just fine.  The hot spots are basic read/write of an existing
+cached register, then sync and initial load in of cache defaults.
+
+--uCJRLG+x40+NiNKG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQrHZYACgkQJNaLcl1U
+h9AUrgf/UA/wWHJU2ED6xMclVK69qf4qrvaY+h8h8VonghCw2gV1pNxQ4rAqQ1GB
+i93wOAlCJQNDsGKkFK/TlAYamC/VImoZOQdFv4TOj/BHZ8BkRfCXEekBaODALZxx
+dOQEdC5rqmhUAjbuB2EZBsOEKTHNwjNkmnFXHcYifgbmQ3NcuKEcUxdWa2BNyLHq
+MZ0KIKgBPKMbB5gQGiI3cfNQiNG2omySomm4ipU2J2uQbv4cUy0eR9HqlbiQFmrf
+0Y/qVwJbkNsIWJ8jiPxeX6FAjEYNg3Ei3D20Bam7pbc+X39LpZH8XPQuGK4Khq3g
+yRP1AcqWix27Fh7V4o1zKZibq66QhQ==
+=C0mB
+-----END PGP SIGNATURE-----
+
+--uCJRLG+x40+NiNKG--
