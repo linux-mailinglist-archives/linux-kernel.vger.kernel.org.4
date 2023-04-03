@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E59C6D3F27
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795E66D3F2D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbjDCIic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
+        id S231725AbjDCIin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbjDCIia (ORCPT
+        with ESMTP id S231741AbjDCIii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:38:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF80C2D61;
-        Mon,  3 Apr 2023 01:38:24 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 943051F8D9;
-        Mon,  3 Apr 2023 08:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680511103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZnIw06JprC7dy+OnhMRvOYKEzAkA2puzGDnOPlmZGCQ=;
-        b=LDAThqfAUeP8YfeXSMx0SCHxnohK7Gj/nCpVhVUNjqwdqETlqzrvBDKy6zQjJyHIXkNUrb
-        W6q2FQW0lYcUVVPC3UdRINlfnj6L5qLDp56/Q/IMjloPT68YokJAyiWkMM1I2SWlg8W3Ab
-        mdMS9LC6dZdFbLNpceTPxyFhjNTS7Bo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6879B1331A;
-        Mon,  3 Apr 2023 08:38:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id k4RGF3+QKmQQSAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 03 Apr 2023 08:38:23 +0000
-Date:   Mon, 3 Apr 2023 10:38:22 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>, Tejun Heo <tj@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v2 4/9] cgroup: rstat: add WARN_ON_ONCE() if flushing
- outside task context
-Message-ID: <ZCqQfuprGreGYwFA@dhcp22.suse.cz>
-References: <ZCU1Bp+5bKNJzWIu@dhcp22.suse.cz>
- <CAJD7tka0CmRvcvB0k8DZuid1vC9OK_mFriHHbXNTUkVE7OjaTA@mail.gmail.com>
- <ZCU+8lSi+e4WgT3F@dhcp22.suse.cz>
- <CAJD7tkaKd9Bcb2-e83Q-kzF7G+crr1U+7uqUPBARXWq-LpyKvw@mail.gmail.com>
- <ZCVFA78lDj2/Uy0C@dhcp22.suse.cz>
- <CAJD7tkbjmBaXghQ+14Hy28r2LoWSim+LEjOPxaamYeA_kr2uVw@mail.gmail.com>
- <ZCVKqN2nDkkQFvO0@dhcp22.suse.cz>
- <CAJD7tkYEOVRcXs-Ag3mWn69EwE4rjFt9j5MAcTGCNE8BuhTd+A@mail.gmail.com>
- <ZCa9sixp3GJcjf8Y@dhcp22.suse.cz>
- <CAJD7tka-2vNn25=NdrKQoMf4ntdbWtojY0k4eAa-c9D+v7J=HQ@mail.gmail.com>
+        Mon, 3 Apr 2023 04:38:38 -0400
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C527A98;
+        Mon,  3 Apr 2023 01:38:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VfFpU8U_1680511110;
+Received: from 30.97.57.8(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VfFpU8U_1680511110)
+          by smtp.aliyun-inc.com;
+          Mon, 03 Apr 2023 16:38:31 +0800
+Message-ID: <1d74e886-89af-bbbb-9bae-37d20ce07fb2@linux.alibaba.com>
+Date:   Mon, 3 Apr 2023 16:38:30 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJD7tka-2vNn25=NdrKQoMf4ntdbWtojY0k4eAa-c9D+v7J=HQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH V5 16/16] block: ublk_drv: apply io_uring FUSED_CMD for
+ supporting zero copy
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Bernd Schubert <bschubert@ddn.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org, Stefan Hajnoczi <stefanha@redhat.com>,
+        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Dan Williams <dan.j.williams@intel.com>
+References: <20230328150958.1253547-1-ming.lei@redhat.com>
+ <20230328150958.1253547-17-ming.lei@redhat.com>
+ <2e3c20e0-a0be-eaf3-b288-c3c8fa31d1fa@linux.alibaba.com>
+ <ZCP+L0ADCxHo5vSg@ovpn-8-26.pek2.redhat.com>
+ <08b047a8-c577-a717-81a8-db8fca8ebab6@linux.alibaba.com>
+ <ZCQYVhStekJXpvK1@ovpn-8-26.pek2.redhat.com>
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+In-Reply-To: <ZCQYVhStekJXpvK1@ovpn-8-26.pek2.redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 31-03-23 12:03:47, Yosry Ahmed wrote:
-> On Fri, Mar 31, 2023 at 4:02 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Thu 30-03-23 01:53:38, Yosry Ahmed wrote:
-> > [...]
-> > > Maybe we can add a primitive like might_sleep() for this, just food for thought.
-> >
-> > I do not think it is the correct to abuse might_sleep if the function
-> > itself doesn't sleep. If it does might_sleep is already involved.
+On 2023/3/29 18:52, Ming Lei wrote:
+> On Wed, Mar 29, 2023 at 06:01:16PM +0800, Ziyang Zhang wrote:
+>> On 2023/3/29 17:00, Ming Lei wrote:
+>>> On Wed, Mar 29, 2023 at 10:57:53AM +0800, Ziyang Zhang wrote:
+>>>> On 2023/3/28 23:09, Ming Lei wrote:
+>>>>> Apply io_uring fused command for supporting zero copy:
+>>>>>
+>>>>
+>>>> [...]
+>>>>
+>>>>>  
+>>>>> @@ -1374,7 +1533,12 @@ static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+>>>>>  	if (!ubq || ub_cmd->q_id != ubq->q_id)
+>>>>>  		goto out;
+>>>>>  
+>>>>> -	if (ubq->ubq_daemon && ubq->ubq_daemon != current)
+>>>>> +	/*
+>>>>> +	 * The fused command reads the io buffer data structure only, so it
+>>>>> +	 * is fine to be issued from other context.
+>>>>> +	 */
+>>>>> +	if ((ubq->ubq_daemon && ubq->ubq_daemon != current) &&
+>>>>> +			(cmd_op != UBLK_IO_FUSED_SUBMIT_IO))
+>>>>>  		goto out;
+>>>>>  
+>>>>
+>>>> Hi Ming,
+>>>>
+>>>> What is your use case that fused io_uring cmd is issued from another thread?
+>>>> I think it is good practice to operate one io_uring instance in one thread
+>>>> only.
+>>>
+>>> So far we limit io command has to be issued from the queue context,
+>>> which is still not friendly from userspace viewpoint, the reason is
+>>> that we can't get io_uring exit notification and ublk's use case is
+>>> very special since the queued io command may not be completed forever,
+>>
+>> OK, so UBLK_IO_FUSED_SUBMIT_IO is guaranteed to be completed because it is
+>> not queued. FETCH_REQ and COMMIT_AMD_FETCH are queued io commands and could
+>> not be completed forever so they have to be issued from ubq_daemon. Right?
 > 
-> Oh, sorry if I wasn't clear, I did not mean to reuse might_sleep() --
-> I meant introducing a new similar debug primitive that shouts if irqs
-> are disabled.
+> Yeah, any io command should be issued from ubq daemon context.
+> 
+>>
+>> BTW, maybe NEED_GET_DATA can be issued from other context...
+> 
+> So far it won't be supported.
+> 
+> As I mentioned in the link, if io_uring can provide io_uring exit
+> callback, we may relax this limit.
+> 
 
-This is circling back to original concerns about arbitrary decision to
-care about IRQs. Is this really any different from spin locks or preempt
-disabled critical sections preventing any scheduling and potentially
-triggereing soft lockups?
--- 
-Michal Hocko
-SUSE Labs
+Hi, Ming
+
+Sorry, I do not understand... I think UBLK_IO_NEED_GET_DATA is normal IO just like
+UBLK_IO_FUSED_SUBMIT_IO. It is issued from one pthread(ubq_daemon for now) and
+is completed just in time(not queued). So I think we can allow UBLK_IO_NEED_GET_DATA
+to be issued from other context.
