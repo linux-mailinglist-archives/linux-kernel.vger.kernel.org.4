@@ -2,135 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5626D42CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E35D6D42D9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbjDCLBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
+        id S231494AbjDCLDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbjDCLBf (ORCPT
+        with ESMTP id S231248AbjDCLDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:01:35 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451F9EB7C;
-        Mon,  3 Apr 2023 04:01:34 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 333B1Kow089198;
-        Mon, 3 Apr 2023 06:01:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680519680;
-        bh=Gq892BO5Nd7eJ/TYJ42yvxXpfOxGBtiDTJO8KV3Uvx8=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=vJ/PpNoIJ53PoED8WuQjupEHSNVgKjhXzoURaqpo90MKSSFFE3MCKNNveY90UB40Z
-         lPW1l4RaCxd9f+yqbkjH9JqiuTTyxkeMbx1P9j6ygtvHq6J8zl9UMa7pHjUeFnUpcV
-         qKQspohs5dKlMNT2NIWDbjp7zZbl2UkN/1byjFRw=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 333B1Kcx013344
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 3 Apr 2023 06:01:20 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
- Apr 2023 06:01:20 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 3 Apr 2023 06:01:20 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 333B17wr101591;
-        Mon, 3 Apr 2023 06:01:17 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <linux@armlinux.org.uk>, <pabeni@redhat.com>, <rogerq@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH net-next v2 3/3] net: ethernet: ti: am65-cpsw: Enable USXGMII mode for J784S4 CPSW9G
-Date:   Mon, 3 Apr 2023 16:31:06 +0530
-Message-ID: <20230403110106.983994-4-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230403110106.983994-1-s-vadapalli@ti.com>
-References: <20230403110106.983994-1-s-vadapalli@ti.com>
+        Mon, 3 Apr 2023 07:03:15 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3157F11EB0
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:02:55 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Pqnxk5RLnz6J6q1;
+        Mon,  3 Apr 2023 19:00:58 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 3 Apr
+ 2023 12:02:52 +0100
+Date:   Mon, 3 Apr 2023 12:02:51 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Junhao He <hejunhao3@huawei.com>
+CC:     <will@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mark.rutland@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <catalin.marinas@arm.com>, <kernel-team@android.com>,
+        <linuxarm@huawei.com>, <yangyicong@huawei.com>,
+        <f.fangjian@huawei.com>, <shenyang39@huawei.com>,
+        <prime.zeng@hisilicon.com>
+Subject: Re: [PATCH 1/2] drivers/perf: hisi: Remove redundant initialized of
+ pmu->name
+Message-ID: <20230403120251.00003fd7@Huawei.com>
+In-Reply-To: <20230403081423.62460-2-hejunhao3@huawei.com>
+References: <20230403081423.62460-1-hejunhao3@huawei.com>
+        <20230403081423.62460-2-hejunhao3@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TI's J784S4 SoC supports USXGMII mode. Add USXGMII mode to the
-extra_modes member of the J784S4 SoC data.
+On Mon, 3 Apr 2023 16:14:22 +0800
+Junhao He <hejunhao3@huawei.com> wrote:
 
-Additionally, convert the IF statement in am65_cpsw_nuss_mac_config() to
-SWITCH statement to scale for new modes. Configure MAC control register
-for supporting USXGMII mode and add MAC_5000FD in the "mac_capabilities"
-member of struct "phylink_config".
+> "pmu->name" is initialized by perf_pmu_register() function, so remove
+> the redundant initialized in hisi_pmu_init().
+> 
+> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+LGTM
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 6c118a9abb2f..f4d4f987563c 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -1507,10 +1507,20 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
- 	u32 mac_control = 0;
- 
- 	if (common->pdata.extra_modes & BIT(state->interface)) {
--		if (state->interface == PHY_INTERFACE_MODE_SGMII) {
-+		switch (state->interface) {
-+		case PHY_INTERFACE_MODE_SGMII:
- 			mac_control |= CPSW_SL_CTL_EXT_EN;
- 			writel(ADVERTISE_SGMII,
- 			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
-+			break;
-+
-+		case PHY_INTERFACE_MODE_USXGMII:
-+			mac_control |= CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN;
-+			break;
-+
-+		default:
-+			/* No special configuration is required for other modes */
-+			break;
- 		}
- 
- 		if (mac_control)
-@@ -2161,7 +2171,8 @@ am65_cpsw_nuss_init_port_ndev(struct am65_cpsw_common *common, u32 port_idx)
- 	/* Configuring Phylink */
- 	port->slave.phylink_config.dev = &port->ndev->dev;
- 	port->slave.phylink_config.type = PHYLINK_NETDEV;
--	port->slave.phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_10 | MAC_100 | MAC_1000FD;
-+	port->slave.phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_10 | MAC_100 |
-+						      MAC_1000FD | MAC_5000FD;
- 	port->slave.phylink_config.mac_managed_pm = true; /* MAC does PM */
- 
- 	switch (port->slave.phy_if) {
-@@ -2179,6 +2190,7 @@ am65_cpsw_nuss_init_port_ndev(struct am65_cpsw_common *common, u32 port_idx)
- 
- 	case PHY_INTERFACE_MODE_QSGMII:
- 	case PHY_INTERFACE_MODE_SGMII:
-+	case PHY_INTERFACE_MODE_USXGMII:
- 		if (common->pdata.extra_modes & BIT(port->slave.phy_if)) {
- 			__set_bit(port->slave.phy_if,
- 				  port->slave.phylink_config.supported_interfaces);
-@@ -2804,7 +2816,7 @@ static const struct am65_cpsw_pdata j784s4_cpswxg_pdata = {
- 	.quirks = 0,
- 	.ale_dev_id = "am64-cpswxg",
- 	.fdqring_mode = K3_RINGACC_RING_MODE_MESSAGE,
--	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII),
-+	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII) | BIT(PHY_INTERFACE_MODE_USXGMII),
- };
- 
- static const struct of_device_id am65_cpsw_nuss_of_mtable[] = {
--- 
-2.25.1
+> ---
+>  drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c  | 2 +-
+>  drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c | 2 +-
+>  drivers/perf/hisilicon/hisi_uncore_hha_pmu.c  | 2 +-
+>  drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c  | 2 +-
+>  drivers/perf/hisilicon/hisi_uncore_pa_pmu.c   | 2 +-
+>  drivers/perf/hisilicon/hisi_uncore_pmu.c      | 4 +---
+>  drivers/perf/hisilicon/hisi_uncore_pmu.h      | 3 +--
+>  drivers/perf/hisilicon/hisi_uncore_sllc_pmu.c | 2 +-
+>  8 files changed, 8 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+> index 4c67d57217a7..40f1bc9f9b91 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+> @@ -316,7 +316,7 @@ static int hisi_cpa_pmu_probe(struct platform_device *pdev)
+>  	if (!name)
+>  		return -ENOMEM;
+>  
+> -	hisi_pmu_init(cpa_pmu, name, THIS_MODULE);
+> +	hisi_pmu_init(cpa_pmu, THIS_MODULE);
+>  
+>  	/* Power Management should be disabled before using CPA PMU. */
+>  	hisi_cpa_pmu_disable_pm(cpa_pmu);
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c b/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
+> index 8c3ffcbfd4c0..8a3d74ddcd6d 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
+> @@ -516,7 +516,7 @@ static int hisi_ddrc_pmu_probe(struct platform_device *pdev)
+>  				      "hisi_sccl%u_ddrc%u", ddrc_pmu->sccl_id,
+>  				      ddrc_pmu->index_id);
+>  
+> -	hisi_pmu_init(ddrc_pmu, name, THIS_MODULE);
+> +	hisi_pmu_init(ddrc_pmu, THIS_MODULE);
+>  
+>  	ret = perf_pmu_register(&ddrc_pmu->pmu, name, -1);
+>  	if (ret) {
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c b/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c
+> index 806698b9eabf..5701a84edb0e 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_hha_pmu.c
+> @@ -519,7 +519,7 @@ static int hisi_hha_pmu_probe(struct platform_device *pdev)
+>  
+>  	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sccl%u_hha%u",
+>  			      hha_pmu->sccl_id, hha_pmu->index_id);
+> -	hisi_pmu_init(hha_pmu, name, THIS_MODULE);
+> +	hisi_pmu_init(hha_pmu, THIS_MODULE);
+>  
+>  	ret = perf_pmu_register(&hha_pmu->pmu, name, -1);
+>  	if (ret) {
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c b/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c
+> index 5b2c35f1658a..68596b566344 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c
+> @@ -557,7 +557,7 @@ static int hisi_l3c_pmu_probe(struct platform_device *pdev)
+>  	 */
+>  	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sccl%u_l3c%u",
+>  			      l3c_pmu->sccl_id, l3c_pmu->ccl_id);
+> -	hisi_pmu_init(l3c_pmu, name, THIS_MODULE);
+> +	hisi_pmu_init(l3c_pmu, THIS_MODULE);
+>  
+>  	ret = perf_pmu_register(&l3c_pmu->pmu, name, -1);
+>  	if (ret) {
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> index afe3419f3f6d..71b6687d6696 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> @@ -412,7 +412,7 @@ static int hisi_pa_pmu_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> -	hisi_pmu_init(pa_pmu, name, THIS_MODULE);
+> +	hisi_pmu_init(pa_pmu, THIS_MODULE);
+>  	ret = perf_pmu_register(&pa_pmu->pmu, name, -1);
+>  	if (ret) {
+>  		dev_err(pa_pmu->dev, "PMU register failed, ret = %d\n", ret);
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> index f1b0f5e1a28f..2823f381930d 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> @@ -531,12 +531,10 @@ int hisi_uncore_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+>  }
+>  EXPORT_SYMBOL_GPL(hisi_uncore_pmu_offline_cpu);
+>  
+> -void hisi_pmu_init(struct hisi_pmu *hisi_pmu, const char *name,
+> -		   struct module *module)
+> +void hisi_pmu_init(struct hisi_pmu *hisi_pmu, struct module *module)
+>  {
+>  	struct pmu *pmu = &hisi_pmu->pmu;
+>  
+> -	pmu->name               = name;
+>  	pmu->module             = module;
+>  	pmu->task_ctx_nr        = perf_invalid_context;
+>  	pmu->event_init         = hisi_uncore_pmu_event_init;
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.h b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> index f8e3cc6903d7..07890a8e96ca 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> @@ -121,6 +121,5 @@ ssize_t hisi_uncore_pmu_identifier_attr_show(struct device *dev,
+>  int hisi_uncore_pmu_init_irq(struct hisi_pmu *hisi_pmu,
+>  			     struct platform_device *pdev);
+>  
+> -void hisi_pmu_init(struct hisi_pmu *hisi_pmu, const char *name,
+> -		   struct module *module);
+> +void hisi_pmu_init(struct hisi_pmu *hisi_pmu, struct module *module);
+>  #endif /* __HISI_UNCORE_PMU_H__ */
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_sllc_pmu.c b/drivers/perf/hisilicon/hisi_uncore_sllc_pmu.c
+> index 1e354433776a..6fe534a665ed 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_sllc_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_sllc_pmu.c
+> @@ -445,7 +445,7 @@ static int hisi_sllc_pmu_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> -	hisi_pmu_init(sllc_pmu, name, THIS_MODULE);
+> +	hisi_pmu_init(sllc_pmu, THIS_MODULE);
+>  
+>  	ret = perf_pmu_register(&sllc_pmu->pmu, name, -1);
+>  	if (ret) {
 
