@@ -2,177 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 206726D3BD3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 04:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C266D3BD6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 04:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjDCCdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 22:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        id S230474AbjDCCf0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 2 Apr 2023 22:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDCCda (ORCPT
+        with ESMTP id S229492AbjDCCfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 22:33:30 -0400
-Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A21AF1C;
-        Sun,  2 Apr 2023 19:33:29 -0700 (PDT)
-Received: from [10.128.10.193] (unknown [117.133.56.22])
-        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 3C5025805A8;
-        Mon,  3 Apr 2023 10:33:10 +0800 (CST)
-Message-ID: <f4eabd56-2f91-05fc-b882-9dd8328f87ae@sangfor.com.cn>
-Date:   Mon, 3 Apr 2023 10:33:09 +0800
+        Sun, 2 Apr 2023 22:35:25 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6C0AF1C;
+        Sun,  2 Apr 2023 19:35:23 -0700 (PDT)
+Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PqZfQ6KdYznZTZ;
+        Mon,  3 Apr 2023 10:31:58 +0800 (CST)
+Received: from dggpeml500019.china.huawei.com (7.185.36.137) by
+ dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 3 Apr 2023 10:35:21 +0800
+Received: from dggpeml500019.china.huawei.com ([7.185.36.137]) by
+ dggpeml500019.china.huawei.com ([7.185.36.137]) with mapi id 15.01.2507.023;
+ Mon, 3 Apr 2023 10:35:21 +0800
+From:   michenyuan <michenyuan@huawei.com>
+To:     Simon Horman <simon.horman@corigine.com>
+CC:     "isdn@linux-pingi.de" <isdn@linux-pingi.de>,
+        "marcel@holtmann.org" <marcel@holtmann.org>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cmtp: fix argument error
+Thread-Topic: [PATCH] cmtp: fix argument error
+Thread-Index: Adll1MciwMdgoDOLek2T0qfWz++fNA==
+Date:   Mon, 3 Apr 2023 02:35:21 +0000
+Message-ID: <9b58282ff4ed4d2daad72539466c685d@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.184.199]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v10 8/8] selftests/ftrace: Add funcgraph-retval test case
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     rostedt@goodmis.org, linux@armlinux.org.uk, mark.rutland@arm.com,
-        will@kernel.org, catalin.marinas@arm.com,
-        rmk+kernel@armlinux.org.uk, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        bp@alien8.de, hpa@zytor.com, chenhuacai@kernel.org,
-        zhangqing@loongson.cn, kernel@xen0n.name, mingo@redhat.com,
-        peterz@infradead.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <cover.1680265828.git.pengdonglin@sangfor.com.cn>
- <ba23c2429f1ef798946ce65e21c7a7a2bff0019e.1680265828.git.pengdonglin@sangfor.com.cn>
- <20230402070406.177f09cc34f9860baf3e6ec2@kernel.org>
-Content-Language: en-US
-From:   Donglin Peng <pengdonglin@sangfor.com.cn>
-In-Reply-To: <20230402070406.177f09cc34f9860baf3e6ec2@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTU9LVh8fS0pNTk5KGEhJGFUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpKS0hKTFVKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PyI6Mhw*Fz0KEjo4Kig4OkMw
-        UUsKFEtVSlVKTUNLT0NCSkJJS0hOVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFNSktDNwY+
-X-HM-Tid: 0a8744f6185f2eb7kusn3c5025805a8
-X-HM-MType: 1
-X-Spam-Status: No, score=-2.4 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/2 6:04, Masami Hiramatsu (Google) wrote:
-> On Fri, 31 Mar 2023 05:47:44 -0700
-> Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
-> 
->> Add a test case for the funcgraph-retval and funcgraph-retval-hex
->> trace options.
->>
->> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
->> ---
->> v10:
->>   - Fix issues in selftest
->>
->> v8:
->>   - Fix issues in selftest
->> ---
->>   .../ftrace/test.d/ftrace/fgraph-retval.tc     | 43 +++++++++++++++++++
->>   1 file changed, 43 insertions(+)
->>   create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc
->>
->> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc
->> new file mode 100644
->> index 000000000000..5819aa2dd6ad
->> --- /dev/null
->> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-retval.tc
->> @@ -0,0 +1,43 @@
->> +#!/bin/sh
->> +# SPDX-License-Identifier: GPL-2.0
->> +# description: ftrace - function graph print function return value
->> +# requires: options/funcgraph-retval options/funcgraph-retval-hex function_graph:tracer
->> +
->> +# Make sure that funcgraph-retval works
->> +
->> +fail() { # msg
->> +    echo $1
->> +    exit_fail
->> +}
->> +
->> +disable_tracing
->> +clear_trace
->> +
->> +read PID _ < /proc/self/stat
-> 
-> You can use "$$" for self pid.
+Thank you for your suggestion.
 
-Yeah, I will fix it.
+This bug may not cause serious security problem. Function 'bt_sock_unregister' takes its parameter as an index and nulls the corresponding element of 'bt_proto' which is an array of pointers. When 'bt_proto' dereferences each element, it would check whether the element is empty or not. Therefore, the problem of null pointer deference does not occur.
 
-> 
->> +[ -f set_ftrace_pid ] && echo ${PID} > set_ftrace_pid
->> +[ -f set_ftrace_filter ] && echo proc_reg_write > set_ftrace_filter
->> +[ -f set_graph_function ] && echo proc_reg_write > set_graph_function
-> 
-> You should set the required files for this test, so that the test result
-> is always same. BTW, you need to set either 'set_ftrace_filter' or
-> 'set_graph_function'.
+This bug is observed by manually code review.
 
-Yes, but I discovered that set_ftrace_filter and set_graph_function rely 
-on the CONFIG_DYNAMIC_FTRACE configuration, which means that these two 
-files are not present when CONFIG_DYNAMIC_FTRACE is disabled, even if 
-CONFIG_FUNCTION_GRAPH_RETVAL is enabled. Therefore, I think that these 
-two trace files are not necessary for this test.
+----------
 
-I will modify the above like this:
+On Fri, Mar 31, 2023 at 02:45:20PM +0800, Chenyuan Mi wrote:
+> Fix this issue by using BTPROTO_CMTP as argument instead of BTPROTO_HIDP.
 
-[ -f set_ftrace_pid ] && echo $$ > set_ftrace_pid
-[ -f set_ftrace_filter ] && echo proc_reg_write > set_ftrace_filter
+Thanks for your patch. Some things you may want to consider:
 
-> 
->> +echo function_graph > current_tracer
->> +echo funcgraph-retval > trace_options
->> +
->> +set +e
->> +enable_tracing
->> +echo > /proc/interrupts
->> +disable_tracing
->> +set -e
->> +
->> +: "Test printing the error code in signed decimal format"
->> +echo nofuncgraph-retval-hex > trace_options
-> 
-> echo 0 > options/funcgraph-retval-hex
-> 
-> If you require 'options/funcgraph-retval-hex' file, you can use the
-> file to set it or clear it.
+* I think it would be good to describe what the effect of this problem is,
+  if it can be observed. And if not, say so. I think it would
+  also be useful to state how the problem was found. F.e. using a tool, or
+  by inspection.
 
-Yeah.
+* As this is described as a fix, it should probably have a fixes tag.
+  I think it would be:
 
-> 
->> +count=`cat trace | grep 'proc_reg_write' | grep '= -5' | wc -l`
->> +if [ $count -eq 0 ]; then
->> +    fail "Return value can not be printed in signed decimal format"
->> +fi
->> +
->> +: "Test printing the error code in hexadecimal format"
->> +echo funcgraph-retval-hex > trace_options
-> 
-> Ditto.
+Fixes: 8c8de589cedd ("Bluetooth: Added /proc/net/cmtp via bt_procfs_init()")
+> Signed-off-by: Chenyuan Mi <michenyuan@huawei.com>
+> ---
+>  net/bluetooth/cmtp/sock.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks.
+Code change looks good.
 
-> 
-> Thanks,
-> 
->> +count=`cat trace | grep 'proc_reg_write' | grep 'fffffffb' | wc -l`
->> +if [ $count -eq 0 ]; then
->> +    fail "Return value can not be printed in hexadecimal format"
->> +fi
->> +
->> +exit 0
->> -- 
->> 2.25.1
->>
-> 
-> 
-
+> diff --git a/net/bluetooth/cmtp/sock.c b/net/bluetooth/cmtp/sock.c 
+> index 96d49d9fae96..cf4370055ce2 100644
+> --- a/net/bluetooth/cmtp/sock.c
+> +++ b/net/bluetooth/cmtp/sock.c
+> @@ -250,7 +250,7 @@ int cmtp_init_sockets(void)
+>  	err = bt_procfs_init(&init_net, "cmtp", &cmtp_sk_list, NULL);
+>  	if (err < 0) {
+>  		BT_ERR("Failed to create CMTP proc file");
+> -		bt_sock_unregister(BTPROTO_HIDP);
+> +		bt_sock_unregister(BTPROTO_CMTP);
+>  		goto error;
+>  	}
+>  
+> --
+> 2.25.1
