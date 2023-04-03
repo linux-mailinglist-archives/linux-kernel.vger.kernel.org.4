@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2C76D4769
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B635A6D47DB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233088AbjDCOTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
+        id S233201AbjDCOXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbjDCOTf (ORCPT
+        with ESMTP id S233194AbjDCOXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:19:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44722CAE9;
-        Mon,  3 Apr 2023 07:19:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 924F9B81BB1;
-        Mon,  3 Apr 2023 14:19:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EBF7CC433AC;
-        Mon,  3 Apr 2023 14:19:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680531571;
-        bh=xos0D3fdVMOEBHPjf3QnnSL9IaeLNOEWbSRuMsqb6NY=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=cPreWi25h4D37MPFSspPF5ffsqnkBojuJ5TzxQnHk17vm7sRyLPUIerYtGP+BS7Dx
-         r5DRnHyjThyLYxwaYT55jmk/dgguYVlsvITMUe6g1xHqQMUF3FUJ4DZs8ccLNCCTSi
-         uRlm/ujyrhzAz2rjmTjTduiGRUaoSQuikOKUS3LI+8IEzY67QU3xv3G8W9Yo69//O5
-         br3dX+6di28hbNGqgjYlB8Q+t7z5GiUGhqyM1W4j1GcPbxC5f9BzbKivpCsv7zTfJA
-         clJJKjogFCNbDl75C+YaWhSBRz3TqPqd9CTjl5qaSXK9Q9dkvOcPlqJW5FofmyR2iZ
-         70dpLEJJ/ou8g==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id DCBF2C76188;
-        Mon,  3 Apr 2023 14:19:30 +0000 (UTC)
-From:   Sasha Finkelstein via B4 Relay 
-        <devnull+fnkl.kernel.gmail.com@kernel.org>
-Date:   Mon, 03 Apr 2023 16:19:23 +0200
-Subject: [PATCH RESEND v9 5/5] MAINTAINERS: Add entries for Apple PWM
- driver
+        Mon, 3 Apr 2023 10:23:51 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69E52BEEE;
+        Mon,  3 Apr 2023 07:23:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680531823; x=1712067823;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=d+7GW0xqFSdr1OFAq6MEZ1mOV9kfrb5q8KOSBwbJMEc=;
+  b=TSPxpXP2vbLHII1WR9y/YEtDLnAsqTV4nfgX3JIJX6VqjNQ7HYEuZ4Vk
+   YGA/PkCGANFadD2qIac21ty7mWGWaadUSjbqaAopZBW5SeCsrZRIt5qU6
+   gq2Tme43aw3utUYEta3iFVBxaERZRdKKF/rGQgMGb20cdQpVBEgYLWO71
+   gqF1t6CBKrhsEMUgQyoag+Iwcaqs+UXfA/0c9WJm62kIj79yARDt/Hn2t
+   1i5/751DS5Y697kqIMa6Kpl+GCxM4usu2h7UkZsJ3dVWR5fZtxX9ZUDt4
+   13ON6jjZXunT2P3BXRHeN2N8NHvJMiODNlMt47gQ+c20+6AVBwxCB2ViJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="321572858"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="321572858"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 07:23:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="685988645"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="685988645"
+Received: from ssidhu-mobl.amr.corp.intel.com (HELO [10.212.178.109]) ([10.212.178.109])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 07:23:27 -0700
+Message-ID: <700a9c1b-5967-4e0c-0a15-8e2ab968dac6@intel.com>
+Date:   Mon, 3 Apr 2023 07:23:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 0/7] x86/entry: Atomic statck switching for IST
+Content-Language: en-US
+To:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        "H. Peter Anvin" <hpa@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Asit Mallick <asit.k.mallick@intel.com>,
+        Cfir Cohen <cfir@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Kaplan <David.Kaplan@amd.com>,
+        David Rientjes <rientjes@google.com>,
+        Dirk Hohndel <dirkhh@vmware.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jiri Slaby <jslaby@suse.cz>, Joerg Roedel <joro@8bytes.org>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mike Stunes <mstunes@vmware.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Luck <tony.luck@intel.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, x86@kernel.org
+References: <20230403140605.540512-1-jiangshanlai@gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230403140605.540512-1-jiangshanlai@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230214-fpwm-v9-5-f3094107b16b@gmail.com>
-References: <20230214-fpwm-v9-0-f3094107b16b@gmail.com>
-In-Reply-To: <20230214-fpwm-v9-0-f3094107b16b@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        - <asahi@lists.linux.dev>,
-        Sasha Finkelstein <fnkl.kernel@gmail.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680531567; l=1107;
- i=fnkl.kernel@gmail.com; s=20230213; h=from:subject:message-id;
- bh=LLne2FY01Cv3xyTc7PhP8exvB0cc4KD6LuWejuJIf7s=;
- b=MR4jjRFtVJL+7RMElEN4l2EhDD5LBOXeL1lW+mDBdzPVj20NpMVkY8UoGEZgo4pCAZz9arb3m
- PvRgRQJ70jjAeY+jXcCaTpL3Hma9PwWktzylk8d/Nc/GwNrBEaFCy0n
-X-Developer-Key: i=fnkl.kernel@gmail.com; a=ed25519;
- pk=7LFSAJtxIWAs9LzCIyX0sSvCZy2wQTyEIu1zch6o804=
-X-Endpoint-Received: by B4 Relay for fnkl.kernel@gmail.com/20230213 with auth_id=28
-X-Original-From: Sasha Finkelstein <fnkl.kernel@gmail.com>
-Reply-To: <fnkl.kernel@gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,37 +90,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Finkelstein <fnkl.kernel@gmail.com>
+On 4/3/23 07:05, Lai Jiangshan wrote:
+> 2.3 #VE
+> -------
+> 
+> The approach for fixing the kernel mode #VE recursion issue is to just
+> NOT use IST for #VE although #VE is also considered to be one of the
+> super exceptions and had raised some worries:
+> https://lore.kernel.org/lkml/YCEQiDNSHTGBXBcj@hirez.programming.kicks-ass.net/
+> https://lore.kernel.org/lkml/CALCETrU9XypKbj-TrXLB3CPW6=MZ__5ifLz0ckbB=c=Myegn9Q@mail.gmail.com/
+> https://lore.kernel.org/lkml/1843debc-05e8-4d10-73e4-7ddce3b3eae2@intel.com/
+> 
+> To remit the worries,  SEPT_VE_DISABLE is forced used currently and
+> also disables its abilities (accept-on-demand or memory balloon which
+> is critical to lightweight VMs like Kata Containers):
+> https://lore.kernel.org/lkml/YCb0%2FDg28uI7TRD%2F@google.com/
 
-Add the MAINTAINERS entries for the driver
+You don't need #VE for accept-on-demand.  Pages go through _very_
+well-defined software choke points before they get used *and* before
+they get ballooned.  Thus:
 
-Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
-Acked-by: Sven Peter <sven@svenpeter.dev>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+> https://lore.kernel.org/lkml/20230330114956.20342-3-kirill.shutemov@linux.intel.com/
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d5bc223f305..7c0b7c2bb55f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1955,6 +1955,7 @@ F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
- F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
- F:	Documentation/devicetree/bindings/power/apple*
-+F:	Documentation/devicetree/bindings/pwm/pwm-apple.yaml
- F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
- F:	arch/arm64/boot/dts/apple/
- F:	drivers/bluetooth/hci_bcm4377.c
-@@ -1970,6 +1971,7 @@ F:	drivers/mailbox/apple-mailbox.c
- F:	drivers/nvme/host/apple.c
- F:	drivers/nvmem/apple-efuses.c
- F:	drivers/pinctrl/pinctrl-apple-gpio.c
-+F:	drivers/pwm/pwm-apple.c
- F:	drivers/soc/apple/*
- F:	drivers/watchdog/apple_wdt.c
- F:	include/dt-bindings/interrupt-controller/apple-aic.h
+BTW, _who_ considers #VE to be a "super exception"?  Can you explain how
+it is any more "super" than #PF?  #PF can recurse.  You can take #PF in
+the entry paths.
 
--- 
-Git-143)
-
+I kinda don't think you should be using TDX and #VE as part of the
+justification for this series.
