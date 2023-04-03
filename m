@@ -2,94 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796F16D40D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0589C6D40D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbjDCJkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
+        id S229843AbjDCJku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbjDCJj1 (ORCPT
+        with ESMTP id S231425AbjDCJka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:39:27 -0400
-Received: from pi.fatal.se (andreasfatal-1-pt.tunnel.tserv3.fmt2.ipv6.he.net [IPv6:2001:470:1f04:f16::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC2484C2B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:38:22 -0700 (PDT)
-Received: by pi.fatal.se (Postfix, from userid 1000)
-        id 25A062A1A3; Mon,  3 Apr 2023 11:38:12 +0200 (CEST)
-Date:   Mon, 3 Apr 2023 11:38:12 +0200
-From:   Andreas Henriksson <andreas@fatal.se>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Jun Li <jun.li@nxp.com>, "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Xu Yang <xu.yang_2@nxp.com>
-Subject: Re: [PATCH] arm64: dts: imx8mp-evk: add dual-role usb port1 support
-Message-ID: <20230403093812.rjj2wkusajsx5mwi@fatal.se>
-References: <20230323105826.2058003-1-m.felsch@pengutronix.de>
- <PA4PR04MB964081F4DB2E16D8E300B08389849@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <20230327084947.dcguxgyo2lfen2ms@fatal.se>
- <20230330143813.teid36w24a4esjsx@pengutronix.de>
+        Mon, 3 Apr 2023 05:40:30 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934D4D337;
+        Mon,  3 Apr 2023 02:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680514803; x=1712050803;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jFKq8L4uhXOKBPkBPlGji3aE5ZbKk+WcLtn0OrClLrI=;
+  b=pm1G3SUkc0VryYxxRVITXOU+/hnASTNQqKq0A89T0yqsVqMmSWcZVFKn
+   Lktc24QWyJHWUS81iDZS9ZgSC5CqnLjKvkUKghkP4O0ir6jHf0gfDSUO3
+   lOJQFaUC7zaAyoFiXwhFVUTSoCYXsCB2vkgHoRI+wlVBP8f0z2i86aZwS
+   R6npFRZovNnJoAu9nbSYaIQWELw1QFertBprotyRAT/SlypOww1aH1ytw
+   17Ay0eErlNniRt3f/lZVelVVcHH9jVY5OShEo4T83V7h4ll+eDYEIp01N
+   mQpCTe0NCtc0Vl8HKZwZ8PhTVVx5hYUYKN1da7dCsTZ/BdsRzlTI92f7h
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,314,1673938800"; 
+   d="asc'?scan'208";a="219147455"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Apr 2023 02:40:02 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 3 Apr 2023 02:40:02 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 3 Apr 2023 02:40:00 -0700
+Date:   Mon, 3 Apr 2023 10:39:46 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+CC:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, <kvm@vger.kernel.org>,
+        <kvm-riscv@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Atish Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH v3 2/8] RISC-V: Detect AIA CSRs from ISA string
+Message-ID: <20230403-80af54e80a34fc70fad04e0c@wendy>
+References: <20230403093310.2271142-1-apatel@ventanamicro.com>
+ <20230403093310.2271142-3-apatel@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="OGdrsm9wa6bk/U+d"
 Content-Disposition: inline
-In-Reply-To: <20230330143813.teid36w24a4esjsx@pengutronix.de>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230403093310.2271142-3-apatel@ventanamicro.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Marco Felsch,
+--OGdrsm9wa6bk/U+d
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Mar 30, 2023 at 04:38:13PM +0200, Marco Felsch wrote:
-> Hi,
-> 
-> On 23-03-27, Andreas Henriksson wrote:
-[...]
-> > / {
-> >     gpio-sbu-mux {
-> >         compatible = "gpio-sbu-mux";
-[...]
-> I didn't tested it but at the moment I don't see the problem with my
-> patch. 
+On Mon, Apr 03, 2023 at 03:03:04PM +0530, Anup Patel wrote:
 
-As Jun Li helpfully explained my patch is not correct, so don't bother.
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index 59d58ee0f68d..1b13a5823b90 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -221,8 +221,10 @@ void __init riscv_fill_hwcap(void)
+>  				}
+>  			} else {
+>  				/* sorted alphabetically */
+                                   ^^^^^^^^^^^^^^^^^^^^^
 
-I don't have a problem with your patch, was just trying to share
-what I had done.
+> +				SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SSAIA);
+>  				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
+>  				SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
+> +				SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SMAIA);
 
-I've since learned that the board I'll be working on will not even have
-SS, so I will not pursue SBU. I'll most likely use your patches instead
-as they seem simpler than what I did and should fully meet my needs for
-an usb port that works in both host and device mode.
+This entry has been added in an incorrect order chief :/
 
-Not that it matters, but +1 from me on applying your patches.
-(If people are hesitant to do it because of lack of SS, then maybe
-that could be adressed by adding a comment setting the expectations?)
+>  				SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
+>  				SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
+>  				SET_ISA_EXT_MAP("zbb", RISCV_ISA_EXT_ZBB);
 
-> Sure the ID pin is not connected but if I understood it correctly
-> (please correct me) the tcpc will handle the orientation. I can set the
-> mode to device from user-space which worked. I didn't verified the
-> SuperSpeed mode nor the host mode since I don't have a USB-C flash
-> drive.
-> 
-> Without the patch the port is just unused albeit the port is really
-> useful for bootloaders like barebox to provide a usbgadget/fastboot
-> device to flash the system.
-> 
-> Regards,
->   Marco
 
-Regards,
-Andreas Henriksson
+--OGdrsm9wa6bk/U+d
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCqe4QAKCRB4tDGHoIJi
+0gt+AQC9yRaN+dKTHz7fyAJWu/44+2C9yyyQhdoeOwofaMhPEAD/W0Yk90pvYVJv
+dura6pOmVWifrUHBvPFooyq5BM5GIQA=
+=h69e
+-----END PGP SIGNATURE-----
+
+--OGdrsm9wa6bk/U+d--
