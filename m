@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6626D5039
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A376D5043
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233033AbjDCSYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
+        id S232141AbjDCS0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbjDCSYS (ORCPT
+        with ESMTP id S231643AbjDCS0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:24:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDCA358A;
-        Mon,  3 Apr 2023 11:24:11 -0700 (PDT)
+        Mon, 3 Apr 2023 14:26:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DDE170A;
+        Mon,  3 Apr 2023 11:26:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B694F625F0;
-        Mon,  3 Apr 2023 18:24:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A064C433D2;
-        Mon,  3 Apr 2023 18:24:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52AAD625BD;
+        Mon,  3 Apr 2023 18:26:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E35DC433D2;
+        Mon,  3 Apr 2023 18:26:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680546250;
-        bh=IFwDoOCJAmZKDpBjepwRj63nEv0Sg9V6Tqt9SLsZuBE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ANz1ZmAe1zlqCH5XQ/q6n9Iuvt0kmI50Mw9O7eIBV0HjfJr+k/06vGfPlMPG8i8Mf
-         cXO8+OEDmcsGRIPZLLcGBlrDfW+Ud7nUyCWgt3bPLDUR6a2syh4PENhC6CFuOKUAju
-         1t2WhV2rR1qeqciD29ZUIGNyJ2E3CMxpsS8Lku+SOkNKnUOcgdQRu1lsQ/XLcXZ+nf
-         D+cW2XiFydMbcWKMQ/r8FHSesjDHLaDYwN9f/XbVlWgGBcVfs7GXQROoKY22cs7EfO
-         BWtj/hiG0Q4SbouvHbUlBN1NPNqtTtSgQEq2eguB1iyKqFpu3G24tN1NdzuReeq/tU
-         FYxEbnzRbJnkw==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     jgg@ziepe.ca, Yang Li <yang.lee@linux.alibaba.com>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-In-Reply-To: <20230331010633.63261-1-yang.lee@linux.alibaba.com>
-References: <20230331010633.63261-1-yang.lee@linux.alibaba.com>
-Subject: Re: [PATCH -next] RDMA/cma: Remove NULL check before dev_{put, hold}
-Message-Id: <168054624617.6296.18087414911653959045.b4-ty@kernel.org>
-Date:   Mon, 03 Apr 2023 21:24:06 +0300
+        s=k20201202; t=1680546397;
+        bh=9cTbP+OwoBmN9lO7JnS56Gimu901xUlOBcJBWXc836g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h5r4/M7Vm7P7FUqKuVcFelGPTC8sFySfyH5iBCpaUzJ2L4I+y6RbVwW+++vwx7l7r
+         A/DimKxXuLS8iBKzRW7vBMh0tViOSXMfSz1i1qbq9kldUMOsE8Pqi4nEo+rq6YpkaR
+         dglxEiC90tvw1WZDm3DYpWNdU85NT1q1XI+PW6OUIUH4+9GABf06kkCHICtBcGh6/3
+         sfEvu9t3B2HsM/+LAFEdRgKMwrulib1fP2ImcW3nkeABf9e4O6UvYtma4T7qH2fwhb
+         LSjovmMIIw9SO+2vHWfzKlTwynDwx88d0B81fCQXLDW9xSAOuBsbcMbbKp2/uRPrhG
+         xPTNcl5LD18SQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0C8004052D; Mon,  3 Apr 2023 15:26:35 -0300 (-03)
+Date:   Mon, 3 Apr 2023 15:26:35 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 0/2] perf intel-pt: Two small fixes for stable
+Message-ID: <ZCsaW/uqxR2cN6b3@kernel.org>
+References: <20230403154831.8651-1-adrian.hunter@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-a055d
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403154831.8651-1-adrian.hunter@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,22 +57,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 31 Mar 2023 09:06:33 +0800, Yang Li wrote:
-> The call netdev_{put, hold} of dev_{put, hold} will check NULL,
-> so there is no need to check before using dev_{put, hold},
-> remove it to silence the warnings:
+Em Mon, Apr 03, 2023 at 06:48:29PM +0300, Adrian Hunter escreveu:
+> Hi
 > 
-> ./drivers/infiniband/core/cma.c:713:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
-> ./drivers/infiniband/core/cma.c:2433:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
+> Here are 2 small fixes for stable.
 > 
-> [...]
+> 
+> Adrian Hunter (2):
+>       perf auxtrace: Fix address filter entire kernel size
+>       perf intel-pt: Fix CYC timestamps after standalone CBR
 
-Applied, thanks!
+Thanks, applied.
 
-[1/1] RDMA/cma: Remove NULL check before dev_{put, hold}
-      https://git.kernel.org/rdma/rdma/c/08ebf57f6e1d73
+- Arnaldo
 
-Best regards,
+ 
+>  tools/perf/util/auxtrace.c                          | 5 ++++-
+>  tools/perf/util/intel-pt-decoder/intel-pt-decoder.c | 2 ++
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> 
+> Regards
+> Adrian
+
 -- 
-Leon Romanovsky <leon@kernel.org>
+
+- Arnaldo
