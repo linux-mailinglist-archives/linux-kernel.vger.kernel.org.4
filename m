@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF72B6D4FB4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C6D6D4FB6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbjDCR5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
+        id S232135AbjDCR5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232585AbjDCR47 (ORCPT
+        with ESMTP id S232705AbjDCR5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:56:59 -0400
+        Mon, 3 Apr 2023 13:57:03 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E3B359C;
-        Mon,  3 Apr 2023 10:56:53 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 165E95C0130;
-        Mon,  3 Apr 2023 13:56:53 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAC72134;
+        Mon,  3 Apr 2023 10:56:58 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 994395C0050;
+        Mon,  3 Apr 2023 13:56:57 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 03 Apr 2023 13:56:53 -0400
+  by compute6.internal (MEProxy); Mon, 03 Apr 2023 13:56:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
         :content-transfer-encoding:content-type:content-type:date:date
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1680544613; x=1680631013; bh=d1S59PhxnSj4AeYVzX+B9aGqvJsridFhmS7
-        IXjbfIZo=; b=KZykcpbBuIJLw9Uo/KL7sPShQgMgLCvpu3Z+NwWljc66P4xKOv4
-        BBfOzuXasuB+7U7COdKKTDN8wnG4E5A8o6zKh0OLDEt5ZALAk7nsN1U+r/z7bzDC
-        cNNuicBQe+EfMr2wgxOjgQlGWk5Uu1Y9JIsmvvkUszmQn63xuoadF7v5VjYw0B4b
-        D3xemzxPYSW16eLAmzT4+Oelsuex72THHpPhZ8aiMlNhJdycC51SnWqDd14S29tu
-        iaa+DZyL9h/ZLwbhb1TauM5KU2mVTzZ4PaDL2NJ50oGBwitYqqpRDrwbi8vFIsKW
-        +6RGE6fu9NHxLO47ZDkylcQ7vhKKBdZBaLg==
+        1680544617; x=1680631017; bh=8RIO0uCEvz64g3NovXvBT0P64254DQg2kzJ
+        W/e/1H9A=; b=jSKHpUw6brenmYW3Gb7aIeWXZkuijj4LRomLcC71oncTnIcL1FD
+        N1Nwf8iX4RPNNxcZ7t1VWwCMLdVDUDIELi441qJIXwf9WkjbeVGtFmcigqC9YMGT
+        cFdogfR8YYARUEwFgUW02SHwIzEXTPn8Y1Q+G/+yBXLURzp5ckdSE54CWrNQfOdW
+        MNhJwJiqy95Th1xgPdgzC6hPUBhT/evth83okCu+DoMOPVOy+otJXkv60fyICJzx
+        yQW7nTxMHPXqiEGz8+rAwEvVLVi1DGINJkr+tcyN1XcKzOhSm4zIOr6QU58NtlZE
+        /weEv6+klXcXvQg+up/phQJyzzsTneW8+Ug==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:content-type:date:date:feedback-id:feedback-id
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680544613; x=1680631013; bh=d1S59PhxnSj4AeYVzX+B9aGqvJsridFhmS7
-        IXjbfIZo=; b=FeneOD923NqNa8Oc5AB/Uo5uVwnHd2eynK+6giVE3gOpMXt9YdL
-        fK+E6TMjjOi0ktaeNthWLMlo/C0k745F5iwrZD/gUJKSdUaayTxFSbsHWnJ2u0rq
-        vl5L9CYKEdlLKuVijGBFj3/X6yr5peA3VwNmvxn9gTo5gb5ZIjUftoBJF9Ba154m
-        +gG6+l5NY0JKepTyqTllFqY+9b4CqjPugpJLPZsDLQNbs0E98hoGIvAzJllyKKYp
-        7eG7azKvQ6f4KAVC+/v+DQx+PNh5PIdti8uyRTVKME49nhf5tJH9EmipVXdVqFNC
-        /0JyBs9xSAyT4uDCkKlwLy2sDhnL8/0cE6w==
-X-ME-Sender: <xms:ZBMrZCsGPSVrz1pbC5O4IHjZYLD0wmGytDyJzdtGXVfY85wLDdHoJQ>
-    <xme:ZBMrZHdeIPB5hr7uApbYAXbUMEMpoq07iem5AxCTlw9ScJAf1O_wCZxaoYhCg8hh3
-    HiZAqIaEFx0G2Egxw>
-X-ME-Received: <xmr:ZBMrZNx6u5Fbj9vlHVv0s1gilYsfbW2r2A6xZ30Zfuw8zyQ4-DBjLsQLG7x4usSc7fjR3kwAOrgCgbCkC3MrQNWdnA>
+        1680544617; x=1680631017; bh=8RIO0uCEvz64g3NovXvBT0P64254DQg2kzJ
+        W/e/1H9A=; b=UYj9CGd0OnGazN/2vnUvxW+90loTPEZwp+b06GWOmSKdD+E7ZIl
+        A4rea3i9vbpPYmW2q4dhdgerVe8af1ZXPMPHY9/BSSKr7/535EPFKTDGJdesvCkP
+        Ho1SZlYsqr8l9T9k7rU3Q8cX1gIR0CydKja3xnteUBgpzMqKIoQ11/sC0OZPug1m
+        o6IddIlSN/vMzvSVmidHbG7Th3/k9sWs4gvK3p18Pt9clheZk57LToXvHNhyE9ts
+        upmPk2KaHx2aFJ+nUofZ9vZqNiKClA1Mk8pPGdOnRYgzvVNTrKZy6I7l07Gxhxw0
+        KqXsXhhbgFbQw7EzcXFqEYHu3O6xqFfCvDg==
+X-ME-Sender: <xms:aRMrZLAubeWUIo_OGBbS6Iujbikrg5GHly5wRxogPWuqfwseR_mqjQ>
+    <xme:aRMrZBgdpblWLwDx4OrjPq5txThwQ1Y6kwgvm-E8Iw7ha7orq6OWwjDwx4YmzNwg1
+    e4xALU9uno_v-ZSUQ>
+X-ME-Received: <xmr:aRMrZGlL8fzsj8UuG6pknKJz5hlXFsknzCfrFSHAYmhzccKLAJaL6atWQ9o1M83k-3BEawfwI7GjYg-__CuUnHiXDA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedguddvtdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpefkffggfgfhuffvvehfjggtgfesthejredttdefjeenucfhrhhomheptehl
     ihgtvgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnh
     ephfehueeileevjeefkeetvdffveffudeuhffgtedvuefgiefgiedvjeegvdejleejnecu
-    vehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
     esrhihhhhlrdhioh
-X-ME-Proxy: <xmx:ZRMrZNNj6MzEpyZBnvqI6qq7R15sNd9GqarSZjbQ_jdK3Zs9inAbeA>
-    <xmx:ZRMrZC_XaUX4WwBpZMAFdJfree684Ap1FvEyF2aB3gEAII99jofGng>
-    <xmx:ZRMrZFV1n0d8iwL7aEoduc63dPlQEtzozbQ1lQmsabr7Y3h_1JUZZw>
-    <xmx:ZRMrZD2TQCVoF9Cg2TBkB-EYGxBJsWwl7Tf6G0emjX6IcY6POfqDhw>
+X-ME-Proxy: <xmx:aRMrZNzdLFTTfMEauKcOYrrKX8c4PDhu_cCqHY60dYlQKhY022ByVQ>
+    <xmx:aRMrZATjgbG_sDzb6S5fceCGajvcT_GAKN16ikh23UIrc79VGz7Xqw>
+    <xmx:aRMrZAbd2YZ8KYF39He8JEQRd62StmdB641qZ5LKxl4yDxOB-Yn5-g>
+    <xmx:aRMrZFI-9wMe4aM309tVI9EF4Vgx2FKL9ea9fsWeUUnVy3VXWMfFzA>
 Feedback-ID: i56684263:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Apr 2023 13:56:50 -0400 (EDT)
-Message-ID: <40ca0d4a-a46f-787f-d227-1d64cdb3adc3@ryhl.io>
-Date:   Mon, 3 Apr 2023 19:56:11 +0200
+ 3 Apr 2023 13:56:54 -0400 (EDT)
+Message-ID: <f50f9ef6-56c3-7ef3-9978-e30a55c55267@ryhl.io>
+Date:   Mon, 3 Apr 2023 19:56:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
 From:   Alice Ryhl <alice@ryhl.io>
-Subject: Re: [PATCH v5 02/15] rust: macros: add `quote!` macro
+Subject: Re: [PATCH v5 03/15] rust: sync: change error type of constructor
+ functions
 To:     Benno Lossin <y86-dev@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev, Andreas Hindborg <a.hindborg@samsung.com>,
@@ -80,9 +81,9 @@ Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
 References: <20230403154422.168633-1-y86-dev@protonmail.com>
- <20230403154422.168633-3-y86-dev@protonmail.com>
+ <20230403154422.168633-4-y86-dev@protonmail.com>
 Content-Language: en-US
-In-Reply-To: <20230403154422.168633-3-y86-dev@protonmail.com>
+In-Reply-To: <20230403154422.168633-4-y86-dev@protonmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -96,16 +97,13 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 4/3/23 17:44, Benno Lossin wrote:
-> From: Gary Guo <gary@garyguo.net>
+> Change the error type of the constructors of `Arc` and `UniqueArc` to be
+> `AllocError` instead of `Error`. This makes the API more clear as to
+> what can go wrong when calling `try_new` or its variants.
 > 
-> Add the `quote!` macro for creating `TokenStream`s directly via the
-> given Rust tokens. It also supports repetitions using iterators.
-> 
-> It will be used by the pin-init API proc-macros to generate code.
-> 
-> Signed-off-by: Gary Guo <gary@garyguo.net>
 > Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
 > Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
+> Cc: Gary Guo <gary@garyguo.net>
 > Cc: Alice Ryhl <aliceryhl@google.com>
 
 Reviewed-by: Alice Ryhl <aliceryhl@google.com>
