@@ -2,87 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AB46D4E93
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF8E6D4E5C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbjDCRBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
+        id S232745AbjDCQuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbjDCRBn (ORCPT
+        with ESMTP id S231958AbjDCQuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:01:43 -0400
-X-Greylist: delayed 361 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Apr 2023 10:01:41 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFACFEC;
-        Mon,  3 Apr 2023 10:01:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1680540578; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=JZCEDBqe94ZP+XqIriJZ9uXVomODIgXyqxwS8soNUd+f9GhPpFdeE/SXyTTIFXa0Xj
-    T/T3/8cotjDzA1bM8actFKRfgtiDSWqBeNCgIcjJui04H7ZoutCv53GMvqSvPRtMwIDx
-    neDm0UBZ18vFOnVjvwVdC3p40fgpPN0Qn52nIdgAC8b+OLgftcAFy5cRj92sDeMxoSzI
-    oh0CVu29QPbQvAhtM0NiDRQtQeG/VpsbY0kty2kiidW5MV3LKitCM9/PMeySkpXSMUE+
-    r3Lj3wZJWeng+F+z37Ua0TaLqApxQfe8dizuSwPuP9PkJezptHejQqtsB6efA2oJjCJl
-    bOzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1680540578;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=KSDue1p+VZ4KJNR/gP4suPyEpJHTiWImzDH5HEo47SU=;
-    b=hu/xe9sFUw0clqQLDtC4bYCRbCzkuHRobuzDAP1gxhB4PQGXrnlP4cj+SVJ+KDW1FJ
-    eMXr3p2Th/IFfjl81pZkHvaMFRyVPPrTOvBTGPLv+mwrGhySo7OBQw1aiLYDTYjZ9IDq
-    jNZpvcBScbli7X04m+GJRcvr7C4hYH/sZK6dAPZepnPGDnP752KQXMoOZ2VuiDFiNmk1
-    ZXujvkt3xqQFxZFAqCTEsnxYfriTuW0l7H89XpmjTDgydC/GWSCc7pCpBbL1kdDpvkX/
-    Bs+dh7blyUTIAQOWQzsvdh4167gE+9I85fqvhwWg57Hdo0PDGft06E1KK97ULyHu1lXw
-    tFJw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1680540578;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=KSDue1p+VZ4KJNR/gP4suPyEpJHTiWImzDH5HEo47SU=;
-    b=cO5xUHnF7ezpPDzISHKDwgEMxGdBaip7ULpF/GlLF/BYS7DnQC7DTRjvpvyIPVU1o7
-    MLsiCSNsbGJlPzRYW20jsZTPKoaMeLuVKPydzTCdzKFPSfeKH1klrnWRwaQzHEsj/lMg
-    KCUIxEKgK2yIHyzbMaCXrKt276TzNdlDWExurlXyNgfuJO8ykJtplggdiraTuk7aFsPH
-    2OAmLzMyBACczjz43AoZEX4CxlP9sqNtxP8tbitsyxa21Yko9XiFEH4rWQjZfGr3tnms
-    TXPwHho5AlSz6pQfuG2SAGWAHeVAkUhXCI3zpQBNPQhvOYe/AL16vJm8dmv8ZHa6wuxJ
-    bUxQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1680540578;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=KSDue1p+VZ4KJNR/gP4suPyEpJHTiWImzDH5HEo47SU=;
-    b=zIJDepv/2+iWSrU0G6sBAC2zWD6JY19BJza19zwpEZea8J++xTgYbEscTfhLOiBXzS
-    zKQxz0/9chqCiH0hvnBQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGYk/8="
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id C9fe35z33Gnc0HT
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Mon, 3 Apr 2023 18:49:38 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v2 1/7] iio: adc: palmas: remove adc_wakeupX_data
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20230402164247.3089146-2-risca@dalakolonin.se>
-Date:   Mon, 3 Apr 2023 18:49:36 +0200
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
-        pgoudagunta@nvidia.com, jic23@kernel.org, lars@metafoo.de,
-        linux-omap@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <ED6919A6-CE57-4C31-9AE5-2C31D288A810@goldelico.com>
-References: <20230402164247.3089146-1-risca@dalakolonin.se>
- <20230402164247.3089146-2-risca@dalakolonin.se>
-To:     =?utf-8?Q?Patrik_Dahlstr=C3=B6m?= <risca@dalakolonin.se>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE
+        Mon, 3 Apr 2023 12:50:01 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5EEE4
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:49:59 -0700 (PDT)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230403164956epoutp0195c49888ec0694216cb0409e56b0fcc5~SesSrRdaF2775727757epoutp01p
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:49:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230403164956epoutp0195c49888ec0694216cb0409e56b0fcc5~SesSrRdaF2775727757epoutp01p
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1680540596;
+        bh=4vl4MneEdX/I/cATp5aqPnhcg1IjYaveQ7Hh5V32xLY=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=s2MK158LH4aGvXXiEpRZQh4wmh5VIS8dOYoSnxIGNzDl3zH4m6OqLLQE6nH0mjdiG
+         q9Mp04n/75Qu+mmR2/dv+e3MrqKa+5HbzCilWiMccjtRYJ5h8x06VYXP8sBeqrXBC2
+         18uZ+uVgSk5xemsJjT4RW4rxV3fUPG+afU4iu2/o=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20230403164955epcas5p195f1750d7cd4bfb53d694e573d1f1154~SesSN2lva2280422804epcas5p1X;
+        Mon,  3 Apr 2023 16:49:55 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.176]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4PqxhL32snz4x9Pt; Mon,  3 Apr
+        2023 16:49:54 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        58.80.55678.2B30B246; Tue,  4 Apr 2023 01:49:54 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230403164954epcas5p479e24f0be726ba8ae0b4439d5c9aec04~SesQ0kobc1090310903epcas5p4d;
+        Mon,  3 Apr 2023 16:49:54 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230403164954epsmtrp140b039c58fcf608a0c59c4322aeaaa0e~SesQz3mWj0733307333epsmtrp1F;
+        Mon,  3 Apr 2023 16:49:54 +0000 (GMT)
+X-AuditID: b6c32a4a-909fc7000000d97e-6f-642b03b2e5b1
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FB.03.18071.1B30B246; Tue,  4 Apr 2023 01:49:53 +0900 (KST)
+Received: from alimakhtar04 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230403164951epsmtip11f29f0837703acfdf7a3090bdfe5a4cc~SesOSXQk72305723057epsmtip1-;
+        Mon,  3 Apr 2023 16:49:50 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>,
+        "'Thomas Gleixner'" <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>
+Cc:     "'Vincent Whitchurch'" <vincent.whitchurch@axis.com>,
+        "'kernel test robot'" <lkp@intel.com>,
+        "'Dan Carpenter'" <error27@gmail.com>
+In-Reply-To: <20230403094017.9556-1-krzysztof.kozlowski@linaro.org>
+Subject: RE: [PATCH] clocksource/drivers/exynos_mct: explicitly return 0 for
+ shared timer
+Date:   Mon, 3 Apr 2023 22:19:48 +0530
+Message-ID: <039c01d9664c$5070aed0$f1520c70$@samsung.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQLFTgOcK4F+54gjrrz1BLD8nfdf7gIYFz+/rTE62hA=
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFJsWRmVeSWpSXmKPExsWy7bCmlu4mZu0Ug1UnRCzmfZa1eLTMz2Lv
+        663sFpseX2O1uLxrDpvFjPP7mCxeNT9is9i8aSqzxflt/g6cHtfXBXjsnHWX3WPxnpdMHneu
+        7WHzeHfuHLvH5iX1Hp83yQWwR2XbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp
+        5CXmptoqufgE6Lpl5gBdpaRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMCnQK07M
+        LS7NS9fLSy2xMjQwMDIFKkzIzuhu2MJecE6gouHJbdYGxme8XYycHBICJhJd53ezdzFycQgJ
+        7GaUOHHuO5TziVHiwNdFzBDON0aJdzPeM8G0TPh6lwkisZdRovlHDyOE85JRYsL5vWBVbAK6
+        EjsWt7GBJEQEOpkktjd+A6tiFuhglLhx+z8jSBWngLPEocsrWEFsYYFoiZ7Xv8C6WQRUJD5u
+        nQZWwytgKdHQ95MFwhaUODnzCZjNLCAvsf3tHGaImxQkfj5dBjZHRMBKYntrByNEjbjEy6NH
+        wD6SEFjLIdH65x8jRIOLxL7dv1khbGGJV8e3sEPYUhIv+9uAbA4g20Ni0R8piHCGxNvl66Fa
+        7SUOXJnDAlLCLKApsX6XPsQqPone30+YIDp5JTrahCCqVSWa311lgbClJSZ2d7PCDO+8nTKB
+        UXEWkr9mIflrFpL7ZyHsWsDIsopRMrWgODc9tdi0wCgvtRwe4cn5uZsYwYlWy2sH48MHH/QO
+        MTJxMB5ilOBgVhLhVe3SShHiTUmsrEotyo8vKs1JLT7EaAoM7InMUqLJ+cBUn1cSb2hiaWBi
+        ZmZmYmlsZqgkzqtuezJZSCA9sSQ1OzW1ILUIpo+Jg1OqgSlCwcz57/Zgo/KwjNupp9n/eBmW
+        9h/v28jy4txUNudjuo57fCRmXvkhdXDmPLXNq5PV9uqb5f+25/kTOs88dtnUS7termXdxyc8
+        y2uvptyyylcsbsz/rq7j0urT3La08dklv017Qyu3JSuqLtocJKGtt5lfP9w6M/pTitAXYeEC
+        pd7c4wHrH55m05eOO2v+ac3DRG7VrfP55Ks1aqfe8rznuObl1lNzhTfdTM069Fc77EVsa+30
+        +wLHu29KrOQ5OW2X07KOShHRuMWXgg9+WLF//a3zNdd28YcXTd+3xHPrMjnGqN4jJ74oyuWz
+        C6WtY7A+uF9zXcq311+TowOPaMhfLv5dtML8+ptXpzTPiT9WYinOSDTUYi4qTgQAIlTXVT0E
+        AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEIsWRmVeSWpSXmKPExsWy7bCSnO5GZu0UgyfTLC3mfZa1eLTMz2Lv
+        663sFpseX2O1uLxrDpvFjPP7mCxeNT9is9i8aSqzxflt/g6cHtfXBXjsnHWX3WPxnpdMHneu
+        7WHzeHfuHLvH5iX1Hp83yQWwR3HZpKTmZJalFunbJXBldDdsYS84J1DR8OQ2awPjM94uRk4O
+        CQETiQlf7zJ1MXJxCAnsZpR41n2GBSIhLXF94wR2CFtYYuW/52C2kMBzRoll5yNBbDYBXYkd
+        i9vYQJpFBHqZJFYvuAbmMAt0MUqcvtfDCDF2ClDH6pesIC2cAs4Shy6vALOFBSIlds09yghi
+        swioSHzcOg3M5hWwlGjo+8kCYQtKnJz5BMjmAJqqJ9G2EayEWUBeYvvbOcwQ1ylI/Hy6DGyk
+        iICVxPbWDqgacYmXR4+wT2AUnoVk0iyESbOQTJqFpGMBI8sqRsnUguLc9NxiwwLDvNRyveLE
+        3OLSvHS95PzcTYzgaNPS3MG4fdUHvUOMTByMhxglOJiVRHhVu7RShHhTEiurUovy44tKc1KL
+        DzFKc7AoifNe6DoZLySQnliSmp2aWpBaBJNl4uCUamBqvSrrmsG4f/fUrt/2/jk6AZJb/HW2
+        Lom8XLNv+uSAVx3yU1NOW4kd2fKj2mPL/SlpWkW95ocnX3rnv+zIn2/7jeVX77VX3NL3VDRl
+        eYsgexsTX5yhwm4eu8snRZ4t+KI/PauZJ8nOrcvCb5fj1WONn9xep7otvlbweas1w4mW4x/Z
+        FymVOTPeMzh5cc7qNSu9NPavrIz91MBycfZiC4bsaXzsQv+ai1o+31B31Lis7FnWqfeg/sWV
+        xo4a/qzH2dM0hN461e6cuyziYv7VqY92RnQZaro41UWdfuI9XbYn8OBC7bQPPHpa3e94n96V
+        Wc1ufjxuzrPv5mKqgf2x1X9+c9vo3HyxQ8biLV/fhpVKLMUZiYZazEXFiQAm5kN7JQMAAA==
+X-CMS-MailID: 20230403164954epcas5p479e24f0be726ba8ae0b4439d5c9aec04
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230403094023epcas5p3cb0690c9984ce4d80ede8483a312be4d
+References: <CGME20230403094023epcas5p3cb0690c9984ce4d80ede8483a312be4d@epcas5p3.samsung.com>
+        <20230403094017.9556-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,162 +124,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Patrik,
+Hello Krzysztof
 
-> Am 02.04.2023 um 18:42 schrieb Patrik Dahlstr=C3=B6m =
-<risca@dalakolonin.se>:
->=20
-> It does not seem to be used by anyone and later patches in this series
-> are made simpler by first removing this. There is now a lot of dead =
-code
-> that cannot be reached, until later patches revive it. Arguably, this =
-is
-> preferred over removing the code only to add it again.
->=20
-> Signed-off-by: Patrik Dahlstr=C3=B6m <risca@dalakolonin.se>
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Sent: Monday, April 3, 2023 3:10 PM
+> To: Daniel Lezcano <daniel.lezcano@linaro.org>; Thomas Gleixner
+> <tglx@linutronix.de>; Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org>;
+> Alim Akhtar <alim.akhtar@samsung.com>; linux-kernel@vger.kernel.org;
+> linux-arm-kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org
+> Cc: Vincent Whitchurch <vincent.whitchurch@axis.com>; kernel test robot
+> <lkp@intel.com>; Dan Carpenter <error27@gmail.com>
+> Subject: [PATCH] clocksource/drivers/exynos_mct: explicitly return 0 for
+> shared timer
+> 
+> For a shared timers, the mct_init_dt() should not initialize the clock
+even with
+> global comparator.  This is not an error, thus the function should simply
+> return 0, not 'ret'.
+> 
+> This also fixes smatch warning:
+> 
+>   drivers/clocksource/exynos_mct.c:635 mct_init_dt() warn: missing error
+> code? 'ret'
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://lore.kernel.org/r/202304021446.46XVKag0-lkp@intel.com/
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
-> drivers/iio/adc/palmas_gpadc.c | 50 ++++------------------------------
-> include/linux/mfd/palmas.h     |  8 ------
-> 2 files changed, 6 insertions(+), 52 deletions(-)
->=20
-> diff --git a/drivers/iio/adc/palmas_gpadc.c =
-b/drivers/iio/adc/palmas_gpadc.c
-> index 24d7c096e4b8..943ac579eb1f 100644
-> --- a/drivers/iio/adc/palmas_gpadc.c
-> +++ b/drivers/iio/adc/palmas_gpadc.c
-> @@ -76,6 +76,12 @@ static struct palmas_gpadc_info palmas_gpadc_info[] =
-=3D {
-> 	PALMAS_ADC_INFO(IN15, 0, 0, 0, 0, INVALID, INVALID, true),
-> };
->=20
-> +struct palmas_adc_wakeup_property {
-> +	int adc_channel_number;
-> +	int adc_high_threshold;
-> +	int adc_low_threshold;
-> +};
-> +
-> /*
->  * struct palmas_gpadc - the palmas_gpadc structure
->  * @ch0_current:	channel 0 current source setting
-> @@ -492,11 +498,6 @@ static int palmas_gpadc_get_adc_dt_data(struct =
-platform_device *pdev,
-> 	return 0;
-> }
->=20
-> -static void palmas_disable_wakeup(void *dev)
 
-something seems to be mixed up here.
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-There is no palmas_disable_wakeup() upstream that can be removed. So =
-this patch
-can not be applied as 1/7 to any upstream kernel.
+>  drivers/clocksource/exynos_mct.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clocksource/exynos_mct.c
+> b/drivers/clocksource/exynos_mct.c
+> index bfd60093ee1c..ef8cb1b71be4 100644
+> --- a/drivers/clocksource/exynos_mct.c
+> +++ b/drivers/clocksource/exynos_mct.c
+> @@ -677,17 +677,17 @@ static int __init mct_init_dt(struct device_node
+> *np, unsigned int int_type)
+>  	if (ret)
+>  		return ret;
+> 
+>  	/*
+>  	 * When the FRC is shared with a main processor, this secondary
+>  	 * processor cannot use the global comparator.
+>  	 */
+>  	if (frc_shared)
+> -		return ret;
+> +		return 0;
+> 
+>  	return exynos4_clockevent_init();
+>  }
+> 
+> 
+>  static int __init mct_init_spi(struct device_node *np)  {
+>  	return mct_init_dt(np, MCT_INT_SPI);
+> --
+> 2.34.1
 
-Please rebase your series on either linus/master or linux-next/master.
-
-BR,
-Nikolaus
-
-> -{
-> -	device_wakeup_disable(dev);
-> -}
-> -
-> static int palmas_gpadc_probe(struct platform_device *pdev)
-> {
-> 	struct palmas_gpadc *adc;
-> @@ -547,36 +548,6 @@ static int palmas_gpadc_probe(struct =
-platform_device *pdev)
-> 		return dev_err_probe(adc->dev, ret,
-> 				     "request irq %d failed\n", =
-adc->irq);
->=20
-> -	if (gpadc_pdata->adc_wakeup1_data) {
-> -		memcpy(&adc->wakeup1_data, =
-gpadc_pdata->adc_wakeup1_data,
-> -			sizeof(adc->wakeup1_data));
-> -		adc->wakeup1_enable =3D true;
-> -		adc->irq_auto_0 =3D  platform_get_irq(pdev, 1);
-> -		ret =3D devm_request_threaded_irq(&pdev->dev, =
-adc->irq_auto_0,
-> -						NULL, =
-palmas_gpadc_irq_auto,
-> -						IRQF_ONESHOT,
-> -						"palmas-adc-auto-0", =
-adc);
-> -		if (ret < 0)
-> -			return dev_err_probe(adc->dev, ret,
-> -					     "request auto0 irq %d =
-failed\n",
-> -					     adc->irq_auto_0);
-> -	}
-> -
-> -	if (gpadc_pdata->adc_wakeup2_data) {
-> -		memcpy(&adc->wakeup2_data, =
-gpadc_pdata->adc_wakeup2_data,
-> -				sizeof(adc->wakeup2_data));
-> -		adc->wakeup2_enable =3D true;
-> -		adc->irq_auto_1 =3D  platform_get_irq(pdev, 2);
-> -		ret =3D devm_request_threaded_irq(&pdev->dev, =
-adc->irq_auto_1,
-> -						NULL, =
-palmas_gpadc_irq_auto,
-> -						IRQF_ONESHOT,
-> -						"palmas-adc-auto-1", =
-adc);
-> -		if (ret < 0)
-> -			return dev_err_probe(adc->dev, ret,
-> -					     "request auto1 irq %d =
-failed\n",
-> -					     adc->irq_auto_1);
-> -	}
-> -
-> 	/* set the current source 0 (value 0/5/15/20 uA =3D> 0..3) */
-> 	if (gpadc_pdata->ch0_current <=3D 1)
-> 		adc->ch0_current =3D PALMAS_ADC_CH0_CURRENT_SRC_0;
-> @@ -616,15 +587,6 @@ static int palmas_gpadc_probe(struct =
-platform_device *pdev)
-> 			palmas_gpadc_calibrate(adc, i);
-> 	}
->=20
-> -	if (adc->wakeup1_enable || adc->wakeup2_enable) {
-> -		device_wakeup_enable(&pdev->dev);
-> -		ret =3D devm_add_action_or_reset(&pdev->dev,
-> -					       palmas_disable_wakeup,
-> -					       &pdev->dev);
-> -		if (ret)
-> -			return ret;
-> -	}
-> -
-> 	return 0;
-> }
->=20
-> diff --git a/include/linux/mfd/palmas.h b/include/linux/mfd/palmas.h
-> index 1e61c7e9f50d..55f22adb1a9e 100644
-> --- a/include/linux/mfd/palmas.h
-> +++ b/include/linux/mfd/palmas.h
-> @@ -129,12 +129,6 @@ struct palmas_pmic_driver_data {
-> 			    struct regulator_config config);
-> };
->=20
-> -struct palmas_adc_wakeup_property {
-> -	int adc_channel_number;
-> -	int adc_high_threshold;
-> -	int adc_low_threshold;
-> -};
-> -
-> struct palmas_gpadc_platform_data {
-> 	/* Channel 3 current source is only enabled during conversion */
-> 	int ch3_current;	/* 0: off; 1: 10uA; 2: 400uA; 3: 800 uA =
-*/
-> @@ -153,8 +147,6 @@ struct palmas_gpadc_platform_data {
-> 	int start_polarity;
->=20
-> 	int auto_conversion_period_ms;
-> -	struct palmas_adc_wakeup_property *adc_wakeup1_data;
-> -	struct palmas_adc_wakeup_property *adc_wakeup2_data;
-> };
->=20
-> struct palmas_reg_init {
-> --=20
-> 2.25.1
->=20
 
