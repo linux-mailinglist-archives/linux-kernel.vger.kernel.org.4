@@ -2,329 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8736D3CE5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 07:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62F56D3CEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 07:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbjDCF3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 01:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
+        id S230192AbjDCFct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 01:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231620AbjDCF2j (ORCPT
+        with ESMTP id S229454AbjDCFcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 01:28:39 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EEE3C11
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 22:28:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1680499714; i=efault@gmx.de;
-        bh=X0m4oG7P+r66TTwWmjlCrqTEIHQMeCECbqJYnJoMyv8=;
-        h=X-UI-Sender-Class:Subject:From:To:Date;
-        b=Zu28eBpLAUmToNLv3jx5t7V2/VBr8itjKVhZ3VcwK8PPoOn47sBLV8xMekaRm+8kq
-         FWZgheSBNuDYIQnK6Y/dB0J56mqs2cX1uasQmtUPddH04lG4xO5Xysf79nyHSlV6eG
-         H1uvSoeven1kOzm6Dg5ZcBGk3OZilOw1XDJBuoDxpU32csGKoKNpSYkYZeFjajSI6L
-         PI9c1qBNkPY8OczZgFqM6ZvEsQKoy081q2m1kvTjesnuyZzRgTv4h1gRUVOwI51IFC
-         0ACbiyZP/zhiXzLX1CjJXKUzJOHcxdluFiKKs9kb/ptKNFTEkecQBKOf99ZKSA00eS
-         d9J7++06ha0YA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from homer.fritz.box ([185.146.48.203]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mnpns-1qBNu423iM-00pJSo; Mon, 03
- Apr 2023 07:28:34 +0200
-Message-ID: <731b3e6ac649f797417fd1e107223da73bb9e9d1.camel@gmx.de>
-Subject: [hacklet] perf sched: Add report latency max/sum fields and body
- filter options
-From:   Mike Galbraith <efault@gmx.de>
-To:     lkml <linux-kernel@vger.kernel.org>
-Date:   Mon, 03 Apr 2023 07:28:34 +0200
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Mon, 3 Apr 2023 01:32:45 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B65E1987
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 22:32:44 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id i4-20020a6b5404000000b0075ff3fb6f4cso1943986iob.9
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 22:32:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680499963; x=1683091963;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VoxY+rT7GIMQ6klSLscO4dFONaIK7l+LZzBgFk21zk4=;
+        b=zpEDcHCINwxxK5GMt8R5fQa1S4D+yUC2jd82gvl7YiqutDdnjMfwNLGFuvJkVxxvJ/
+         BmRVWvMNkL+wfOGJJ3TuWmClLvChNnFHHuu5VVNpNCk/hQc36YVbp9pym7Jc51Fe3kCh
+         iokNhHTeDE7mNM8icLOYdioRhh04K5HPqvmQ8oh6IXJmCZe3Ml2GKc1H8mSc3gZNKY/c
+         WUYBmktNtycRuK92AhvYEpnnsDh8AnlzSZ9y2ASIHmGTXdHptboptbxItrcxRELysQJG
+         uN3I5kVGYxhyoewzNvISUgYVhx90EwS0NwRnZLA5n+sfjAv6Sue7BqbpXs5vYlWG0qne
+         bfyA==
+X-Gm-Message-State: AAQBX9dQherFdWfinAZwdOVux9Z/2Jxk7/JLmBayAz89f2PhbLusIA2o
+        NDp41nAUIJYT3PtWKdhzgtiHqzh2DfJ1PoS9h4DZ6AwQHHqx
+X-Google-Smtp-Source: AKy350aj9DfWlgtC1q9A7qu7CvsARLR4v7Jhezgx87uS/jDagSjJrQhrXdT3/YSvRBqRGRzVzD0lJ8qhBZ7KWEeUuqDBxr9MxHLu
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:eTsdQfC4tUsIMd2/EK2uNqrgBZcpt0ofe2SOcjPiULdK/MTpcFk
- ljbAVax21b3mY8srPtCYbM87lOIhOkMhGD56oiZthcZxsVZ7aa0FjxvxqmhBxafnnGAdmwT
- yjGfjcNqq26A69pLVPcwI/2xA3fofXNLeMYO9/3Z54U+F5a8UUzNjdtHKVTGPJzvdbDZZPU
- vngCISiAtZfEJG+wOl1tQ==
-UI-OutboundReport: notjunk:1;M01:P0:oJ+FX/3uCcU=;ctvPEQ0F5tfUkiMQXTPi0pBbKaQ
- d7iD+ReM2FeXycgbD0MZTQLGebl6BmLScw3eRS+0Gf4d0tSKK3AvhYkrxfuNqD1HqaQVmiuBN
- 3wPYgsBFh6IBFMABLVu7MQB/Dx57D/xRVhLFdrOGvQgHLhcuFFwcowA+cJ758EHmbq2qzmX25
- /fJN19NQIREjO5+7+Vyhpjv0JoWTda/hH1usAGR2BimuGTaW+sUPbb8NibpA1XuSPiCOCif2N
- POdNeBWgw59+l0klSg4T6I/mZc6wIjFnyH5dsyL/d5T+Astvr9LCR7E6ezFdmG5X53lcp7mE+
- 9p3wqdLrLWXUdDHtnzklKtS6uP98XgistHHedSkdFZTZW0a+oebn80k5hwRrWjrop5UvexAKN
- WBScjO/rNl6cDHbDg8A7uCMpqlOGLc+m4xfllguq2qjTNZpUTheOYd1N86sgfNIIdCbnhi/Au
- dB+0/QnfrAgXu0dN6kfZSrsbc91ec4xMrOPSk5A9UlsZ+jEKGQJ5Uzv3Wq5vbfkQzhhvElI9w
- px8p6rb47Gp4gAlb4pl1IaRAYJhlqBCIFVUw/TnZyxTPXtNBAvKXFBR1aaN0Pm+iln+xtKMQe
- aoFO1PAaQjhG45ELc7smJvr6uTmjFGgs4mUdRf1ZnuJ0wMXS0Qye8DXNrGKW9Ik6D7UY0xrWB
- PvPWfiPO47VvdkwEsfoaPero1OjpTvt9r82veTt7Z854Qzv583FDlioAd6QGXOQwsGW2qUCIE
- zYWo8zLRRVvdzg9GrhyChUA1VHU80UgE66h8JUan7f+GmcTWKy5JUgDw/ZBQ1Mk+F/w8xwW02
- 4EI3whoLWGsn9pmMvZzp3E4VFs9hLbhmaDCbISWakoAmHEWIgmRRlQvD0HTU3uiLf+0OcBS+J
- 5Rg7zAGCAMeM5IvoDyOJSq52AtncZWuJdLjD7i5p1J7VS2sUnn2jkHm4Umj2BSOFNd6LPxh5/
- H1EV8z+96BBRcOnlkEfQ3/5+g68=
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:84ce:0:b0:75c:d7d7:aba with SMTP id
+ z14-20020a5d84ce000000b0075cd7d70abamr6015965ior.0.1680499963480; Sun, 02 Apr
+ 2023 22:32:43 -0700 (PDT)
+Date:   Sun, 02 Apr 2023 22:32:43 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005e524d05f867e38d@google.com>
+Subject: [syzbot] [ext4?] KASAN: slab-out-of-bounds Write in
+ ext4_write_inline_data_end (2)
+From:   syzbot <syzbot+ba4fa9ce904fefb787d3@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dunno if anyone else will find this useful, but who knows.  After a
-recent bout of repetitive perf sched data frobing, I felt motivated to
-can and condense a few keystrokes.  It's dressed up a bit like a patch,
-but that's to inspire future leaky self to recall its excuse for
-existing, $subject is correctly speeled :)
+Hello,
 
-Anyone trying it should dig up and apply the below first, as perf sched
-is kinda busted without it.
-[PATCH v4] perf sched: Fix sched latency analysis incorrect
+syzbot found the following issue on:
 
-perf sched: Add report latency max/sum fields and body filter options
+HEAD commit:    da8e7da11e4b Merge tag 'nfsd-6.3-4' of git://git.kernel.or..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15fc9af5c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
+dashboard link: https://syzkaller.appspot.com/bug?extid=ba4fa9ce904fefb787d3
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-When using perf sched lat, I almost always have to do some gymnastics to
-concentrate the output, so I dug up a 2017 hacklet to tally wait time,
-and added some basic conveniences to it.  'G' 'S' and 'T' are new, as
-are the 'sum' sort key and associated output field.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-The footer is always full report regardless of body trimming, and grew
-max latency and latency tally fields.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/62e9c5f4bead/disk-da8e7da1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c11aa933e2a7/vmlinux-da8e7da1.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7a21bdd49c84/bzImage-da8e7da1.xz
 
- Usage: perf sched latency [<options>]
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ba4fa9ce904fefb787d3@syzkaller.appspotmail.com
 
-    -C, --CPU <n>         CPU to profile on
-    -G, --greater <n>     only output entries with a ms field >=3D N ms
-    -p, --pids            latency stats per pid instead of per comm
-    -s, --sort <key[,key2...]>
-                          sort by key(s): runtime, switch, avg, max or sum
-    -S, --summary <n>     summarize the top N lines of sorted entries
-    -T, --truncate        truncate the max delay start/end fields
+EXT4-fs error (device loop1): __ext4_get_inode_loc:4560: comm syz-executor.1: Invalid inode table block 8387954787021251444 in block_group 0
+==================================================================
+BUG: KASAN: slab-out-of-bounds in ext4_write_inline_data fs/ext4/inline.c:248 [inline]
+BUG: KASAN: slab-out-of-bounds in ext4_write_inline_data_end+0x5b4/0x10e0 fs/ext4/inline.c:766
+Write of size 1 at addr ffff88802cc1f9ae by task syz-executor.1/23455
 
-That '-G' is meant as a simple noise filter. Say during a PornHub vs
-Kbuild recording, you capture a bunch of tasks that weren't involved
-enough in either competing activity to generate a 4 digit time tally,
-with -G 1000, signal to noise improves.
+CPU: 1 PID: 23455 Comm: syz-executor.1 Not tainted 6.3.0-rc3-syzkaller-00338-gda8e7da11e4b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:319 [inline]
+ print_report+0x163/0x540 mm/kasan/report.c:430
+ kasan_report+0x176/0x1b0 mm/kasan/report.c:536
+ kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
+ __asan_memcpy+0x40/0x70 mm/kasan/shadow.c:106
+ ext4_write_inline_data fs/ext4/inline.c:248 [inline]
+ ext4_write_inline_data_end+0x5b4/0x10e0 fs/ext4/inline.c:766
+ generic_perform_write+0x3ed/0x5e0 mm/filemap.c:3937
+ ext4_buffered_write_iter+0x122/0x3a0 fs/ext4/file.c:289
+ ext4_file_write_iter+0x1d6/0x1930
+ do_iter_write+0x6ea/0xc50 fs/read_write.c:861
+ iter_file_splice_write+0x843/0xfe0 fs/splice.c:778
+ do_splice_from fs/splice.c:856 [inline]
+ direct_splice_actor+0xe7/0x1c0 fs/splice.c:1022
+ splice_direct_to_actor+0x4c4/0xbd0 fs/splice.c:977
+ do_splice_direct+0x283/0x3d0 fs/splice.c:1065
+ do_sendfile+0x620/0xff0 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f14b828c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f14b8fd4168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007f14b83abf80 RCX: 00007f14b828c0f9
+RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000006
+RBP: 00007f14b82e7b39 R08: 0000000000000000 R09: 0000000000000000
+R10: 000000000001ffff R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff8d44f2ff R14: 00007f14b8fd4300 R15: 0000000000022000
+ </TASK>
 
-Signed-off-by: Mike Galbraith <efault@gmx.de>
-=2D--
- tools/perf/builtin-sched.c |   94 ++++++++++++++++++++++++++++++++++++---=
-------
- 1 file changed, 77 insertions(+), 17 deletions(-)
+Allocated by task 2:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:383
+ kasan_kmalloc include/linux/kasan.h:196 [inline]
+ __do_kmalloc_node mm/slab_common.c:967 [inline]
+ __kmalloc+0xb9/0x230 mm/slab_common.c:980
+ kmalloc include/linux/slab.h:584 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ lsm_cred_alloc security/security.c:568 [inline]
+ security_prepare_creds+0x4c/0x140 security/security.c:1781
+ prepare_creds+0x458/0x630 kernel/cred.c:291
+ copy_creds+0x14a/0xca0 kernel/cred.c:365
+ copy_process+0x94a/0x3fc0 kernel/fork.c:2124
+ kernel_clone+0x222/0x800 kernel/fork.c:2679
+ kernel_thread+0x156/0x1d0 kernel/fork.c:2739
+ create_kthread kernel/kthread.c:399 [inline]
+ kthreadd+0x583/0x750 kernel/kthread.c:746
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 
-=2D-- a/tools/perf/builtin-sched.c
-+++ b/tools/perf/builtin-sched.c
-@@ -188,6 +188,9 @@ struct perf_sched {
- 	struct mutex	 start_work_mutex;
- 	struct mutex	 work_done_wait_mutex;
- 	int		 profile_cpu;
-+	int		 lat_minimum;
-+	int		 lat_summary;
-+	bool		 lat_truncate;
- /*
-  * Track the current task - that way we can know whether there's any
-  * weird events, such as a task being switched away that is not current.
-@@ -224,6 +227,8 @@ struct perf_sched {
- 	u64		 run_avg;
- 	u64		 all_runtime;
- 	u64		 all_count;
-+	u64		 all_lat;
-+	u64		 max_lat;
- 	u64		 cpu_last_switched[MAX_CPUS];
- 	struct rb_root_cached atom_root, sorted_atom_root, merged_atom_root;
- 	struct list_head sort_list, cmp_pid;
-@@ -1341,11 +1346,12 @@ static int latency_migrate_task_event(st
- 	return err;
- }
+The buggy address belongs to the object at ffff88802cc1f800
+ which belongs to the cache kmalloc-cg-256 of size 256
+The buggy address is located 230 bytes to the right of
+ allocated 200-byte region [ffff88802cc1f800, ffff88802cc1f8c8)
 
--static void output_lat_thread(struct perf_sched *sched, struct work_atoms=
- *work_list)
-+static void output_lat_thread(struct perf_sched *sched, struct work_atoms=
- *work_list,
-+			      bool summarize)
- {
- 	int i;
- 	int ret;
--	u64 avg;
-+	u64 avg, min =3D sched->lat_minimum * NSEC_PER_MSEC;
- 	char max_lat_start[32], max_lat_end[32];
+The buggy address belongs to the physical page:
+page:ffffea0000b30780 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88802cc1f400 pfn:0x2cc1e
+head:ffffea0000b30780 order:1 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+memcg:ffff88802fa51901
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffff88801244f000 ffff88801244e4c8 ffffea0000940d90
+raw: ffff88802cc1f400 0000000000100004 00000001ffffffff ffff88802fa51901
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4381, tgid 4381 (kworker/u4:5), ts 11572064611, free_ts 0
+ prep_new_page mm/page_alloc.c:2553 [inline]
+ get_page_from_freelist+0x3246/0x33c0 mm/page_alloc.c:4326
+ __alloc_pages+0x255/0x670 mm/page_alloc.c:5592
+ alloc_slab_page+0x6a/0x160 mm/slub.c:1851
+ allocate_slab mm/slub.c:1998 [inline]
+ new_slab+0x84/0x2f0 mm/slub.c:2051
+ ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
+ __slab_alloc mm/slub.c:3292 [inline]
+ __slab_alloc_node mm/slub.c:3345 [inline]
+ slab_alloc_node mm/slub.c:3442 [inline]
+ __kmem_cache_alloc_node+0x1b8/0x290 mm/slub.c:3491
+ __do_kmalloc_node mm/slab_common.c:966 [inline]
+ __kmalloc+0xa8/0x230 mm/slab_common.c:980
+ kmalloc include/linux/slab.h:584 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ lsm_cred_alloc security/security.c:568 [inline]
+ security_prepare_creds+0x4c/0x140 security/security.c:1781
+ prepare_creds+0x458/0x630 kernel/cred.c:291
+ prepare_exec_creds+0x18/0x270 kernel/cred.c:311
+ prepare_bprm_creds fs/exec.c:1477 [inline]
+ bprm_execve+0xff/0x1740 fs/exec.c:1815
+ kernel_execve+0x8ea/0xa10 fs/exec.c:2020
+ call_usermodehelper_exec_async+0x233/0x370 kernel/umh.c:110
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+page_owner free stack trace missing
 
- 	if (!work_list->nb_atoms)
-@@ -1358,6 +1364,18 @@ static void output_lat_thread(struct per
+Memory state around the buggy address:
+ ffff88802cc1f880: 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc
+ ffff88802cc1f900: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88802cc1f980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                                  ^
+ ffff88802cc1fa00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88802cc1fa80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
- 	sched->all_runtime +=3D work_list->total_runtime;
- 	sched->all_count   +=3D work_list->nb_atoms;
-+	sched->all_lat +=3D work_list->total_lat;
-+	if (sched->max_lat < work_list->max_lat)
-+		sched->max_lat =3D work_list->max_lat;
-+
-+	/* Toss lines that don't meet the user's significance criteria. */
-+	if (min > work_list->total_runtime && min > work_list->total_lat &&
-+	    min > work_list->max_lat)
-+		return;
-+
-+	/* We've reached the user's TLDNR threshold, so we're done. */
-+	if (summarize && sched->lat_summary-- <=3D 0)
-+		return;
 
- 	if (work_list->num_merged > 1)
- 		ret =3D printf("  %s:(%d) ", thread__comm_str(work_list->thread), work_=
-list->num_merged);
-@@ -1371,11 +1389,14 @@ static void output_lat_thread(struct per
- 	timestamp__scnprintf_usec(work_list->max_lat_start, max_lat_start, sizeo=
-f(max_lat_start));
- 	timestamp__scnprintf_usec(work_list->max_lat_end, max_lat_end, sizeof(ma=
-x_lat_end));
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--	printf("|%11.3f ms |%9" PRIu64 " | avg:%8.3f ms | max:%8.3f ms | max sta=
-rt: %12s s | max end: %12s s\n",
--	      (double)work_list->total_runtime / NSEC_PER_MSEC,
--		 work_list->nb_atoms, (double)avg / NSEC_PER_MSEC,
--		 (double)work_list->max_lat / NSEC_PER_MSEC,
--		 max_lat_start, max_lat_end);
-+	printf("|%11.3f ms |%9" PRIu64 " | avg:%8.3f ms | max:%8.3f ms | sum:%9.=
-3f ms |",
-+	       (double)work_list->total_runtime / NSEC_PER_MSEC,
-+	       work_list->nb_atoms, (double)avg / NSEC_PER_MSEC,
-+	       (double)work_list->max_lat / NSEC_PER_MSEC,
-+	       (double)work_list->total_lat / NSEC_PER_MSEC);
-+	if (!sched->lat_truncate)
-+		printf(" max start: %12s s | max end: %12s s |", max_lat_start, max_lat=
-_end);
-+	printf("\n");
- }
-
- static int pid_cmp(struct work_atoms *l, struct work_atoms *r)
-@@ -1420,6 +1441,16 @@ static int max_cmp(struct work_atoms *l,
- 	return 0;
- }
-
-+static int sum_cmp(struct work_atoms *l, struct work_atoms *r)
-+{
-+	if (l->total_lat < r->total_lat)
-+		return -1;
-+	if (l->total_lat > r->total_lat)
-+		return 1;
-+
-+	return 0;
-+}
-+
- static int switch_cmp(struct work_atoms *l, struct work_atoms *r)
- {
- 	if (l->nb_atoms < r->nb_atoms)
-@@ -1451,6 +1482,10 @@ static int sort_dimension__add(const cha
- 		.name =3D "max",
- 		.cmp  =3D max_cmp,
- 	};
-+	static struct sort_dimension sum_sort_dimension =3D {
-+		.name =3D "sum",
-+		.cmp  =3D sum_cmp,
-+	};
- 	static struct sort_dimension pid_sort_dimension =3D {
- 		.name =3D "pid",
- 		.cmp  =3D pid_cmp,
-@@ -1467,6 +1502,7 @@ static int sort_dimension__add(const cha
- 		&pid_sort_dimension,
- 		&avg_sort_dimension,
- 		&max_sort_dimension,
-+		&sum_sort_dimension,
- 		&switch_sort_dimension,
- 		&runtime_sort_dimension,
- 	};
-@@ -3199,6 +3235,9 @@ static void perf_sched__merge_lat(struct
- static int perf_sched__lat(struct perf_sched *sched)
- {
- 	struct rb_node *next;
-+	bool summarize =3D sched->lat_summary > 0;
-+	char buf[2][255];
-+	int truncate;
-
- 	setup_pager();
-
-@@ -3208,26 +3247,38 @@ static int perf_sched__lat(struct perf_s
- 	perf_sched__merge_lat(sched);
- 	perf_sched__sort_lat(sched);
-
--	printf("\n -------------------------------------------------------------=
---------------------------------------------------------------------------=
-----\n");
--	printf("  Task                  |   Runtime ms  | Switches | Avg delay m=
-s    | Max delay ms    | Max delay start           | Max delay end        =
-  |\n");
--	printf(" ---------------------------------------------------------------=
---------------------------------------------------------------------------=
---\n");
-+
-+	/* Header. */
-+	strcpy(buf[0], "--------------------------------------------------------=
---------------------------------------------------");
-+	strcpy(buf[1], " Task                  |   Runtime ms  | Switches | Avg =
-delay ms    | Max delay ms    | Sum delay ms     |");
-+	/* The last footer line is always a short line, so may need a trim. */
-+	truncate =3D strlen(buf[0]);
-+	if (!sched->lat_truncate) {
-+		strcat(buf[0], "-----------------------------------------------------")=
-;
-+		strcat(buf[1], " Max delay start           | Max delay end           |"=
-);
-+	}
-+	printf("\n %s\n %s\n %s\n", buf[0], buf[1], buf[0]);
-
- 	next =3D rb_first_cached(&sched->sorted_atom_root);
-
-+	/* Body. */
- 	while (next) {
- 		struct work_atoms *work_list;
-
- 		work_list =3D rb_entry(next, struct work_atoms, node);
--		output_lat_thread(sched, work_list);
-+		output_lat_thread(sched, work_list, summarize);
- 		next =3D rb_next(next);
- 		thread__zput(work_list->thread);
- 	}
-
--	printf(" ---------------------------------------------------------------=
---------------------------------------------------\n");
--	printf("  TOTAL:                |%11.3f ms |%9" PRIu64 " |\n",
--		(double)sched->all_runtime / NSEC_PER_MSEC, sched->all_count);
--
--	printf(" ---------------------------------------------------\n");
-+	/* Footer. */
-+	sprintf(buf[1], " TOTAL:                |%11.3f ms |%9" PRIu64 " |      =
-           |%13.3f ms |%14.3f ms |",
-+		(double)sched->all_runtime / NSEC_PER_MSEC, sched->all_count,
-+		(double)sched->max_lat / NSEC_PER_MSEC,
-+		(double)sched->all_lat / NSEC_PER_MSEC);
-+	printf(" %s\n %s\n", buf[0], buf[1]);
-+	buf[0][truncate] =3D '\0';
-+	printf(" %s\n", buf[0]);
-
- 	print_bad_events(sched);
- 	printf("\n");
-@@ -3478,6 +3529,9 @@ int cmd_sched(int argc, const char **arg
- 		.skip_merge           =3D 0,
- 		.show_callchain	      =3D 1,
- 		.max_stack            =3D 5,
-+		.lat_summary          =3D 0,
-+		.lat_minimum          =3D 0,
-+		.lat_truncate         =3D false,
- 	};
- 	const struct option sched_options[] =3D {
- 	OPT_STRING('i', "input", &input_name, "file",
-@@ -3491,11 +3545,17 @@ int cmd_sched(int argc, const char **arg
- 	};
- 	const struct option latency_options[] =3D {
- 	OPT_STRING('s', "sort", &sched.sort_order, "key[,key2...]",
--		   "sort by key(s): runtime, switch, avg, max"),
-+		   "sort by key(s): runtime, switch, avg, max or sum"),
- 	OPT_INTEGER('C', "CPU", &sched.profile_cpu,
- 		    "CPU to profile on"),
- 	OPT_BOOLEAN('p', "pids", &sched.skip_merge,
- 		    "latency stats per pid instead of per comm"),
-+	OPT_INTEGER('G', "greater", &sched.lat_minimum,
-+		   "only output entries with a ms field >=3D N ms"),
-+	OPT_INTEGER('S', "summary", &sched.lat_summary,
-+		   "summarize the top N lines of sorted entries"),
-+	OPT_BOOLEAN('T', "truncate", &sched.lat_truncate,
-+		   "truncate the max delay start/end fields"),
- 	OPT_PARENT(sched_options)
- 	};
- 	const struct option replay_options[] =3D {
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
