@@ -2,127 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8752B6D402C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F6A6D402D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjDCJU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
+        id S232034AbjDCJVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbjDCJUr (ORCPT
+        with ESMTP id S231655AbjDCJUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:20:47 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2843E44AC;
-        Mon,  3 Apr 2023 02:20:26 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id A7F68604FA;
-        Mon,  3 Apr 2023 11:20:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680513624; bh=YwMDWlermRYUB+ohGE2pB+S5andxsxN1vsjRKD2AOZU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=az7mOw17rlc+H7p/rz6e0IM2E28pveY3nRjdMz9SS8eQmo/8+l0/+OH3NBZw/GvIB
-         522cIK/o+OoYAAURQ4YDYP0Uq6+McAUVwPlS3697bYNY0G3QSY8SHCh3ycK4mFJuRC
-         ZxQuRw7FT7av/SAW3mGUpvnH/unex8UwzawXc4E4sxOAYEQ5NOgEEt+CjkVA8q2DVR
-         4TtTblwc9LHGU3KNzWl/UyTmqCGSu/axtm0nByb4QDxFSiCROPfvlfqj51i0szqw8m
-         Oa5iscPY+Ha5b1+RwEvMkCwr5mcdYudtc7g/t60MbMfbGwxliMtoiZ58+JSdKpaOkS
-         2MCXrWaUNMbQg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id LSp7U_GhOtvV; Mon,  3 Apr 2023 11:20:22 +0200 (CEST)
-Received: from [10.0.1.57] (grf-nat.grf.hr [161.53.83.23])
-        by domac.alu.hr (Postfix) with ESMTPSA id D3D15604F7;
-        Mon,  3 Apr 2023 11:20:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680513622; bh=YwMDWlermRYUB+ohGE2pB+S5andxsxN1vsjRKD2AOZU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=0jvVvtRxGyCkvVqYoPM2xkLrLeqlW0UQNELz4K5xlw0lq+uKuWjoidCwveCYsh5Na
-         N84HG7zO+gzeAl4BCvjR8sssEEIddgJU57PffcJ/8gKltSy3HoWEUb1tGm2AoCTU/Y
-         ArxMsUXhAmVDE5RWTwL5Esd/nlngYG6Doz4kba+DKdqrD87KDV1SGiW2aJ9jXxE9sI
-         sND5DsuTE0raZe310NyP6KvfrgI5AvZa3ojFkFt45fFbN4Gd8LEejQJxv5j/vQoqvp
-         d3Uc2VhmJrbWuXjtwYZPPy0FfF6V6K7pIx5U/T1MSk/CB0BMfgPFaCEVf7VqY3Nbti
-         L5g8PeMeqOvAA==
-Message-ID: <155279c4-3d44-1419-2b8d-a189a2177f0e@alu.unizg.hr>
-Date:   Mon, 3 Apr 2023 11:20:21 +0200
+        Mon, 3 Apr 2023 05:20:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1798CEB70;
+        Mon,  3 Apr 2023 02:20:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1CFBB8163F;
+        Mon,  3 Apr 2023 09:20:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E8FDC433A1;
+        Mon,  3 Apr 2023 09:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680513625;
+        bh=HOvs3Az/e1R8EGkt90B9hBsreIGgQ7JOuGysC4UKjs0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=a4vvq4tiYCIbHg8kEzXlq4iWWS2DhfthAnJuWPrZyDRH0+2b4YnfiMd+B/2XpruM7
+         9nnvvXRFJpL3ShmpilVGF/FPGxFgJeOThfVa7qxhTYYkAjybc8UvOq1joWCbiPOO8o
+         JUdSB6BxwtbLRevsjrsRsx9CzrWG4yLc1lNMihPr8AOCik2//7cxJ9qT/CJyZjNiIg
+         e/9IOSmyRl0vfPnzTygQLHhdL6CgEiMcHznrgEiA8D6ySPR8pSn77K634pL3rpAsjw
+         YoPpa3xsYaj6mSMWyJnMNKxi7Ub52C+ZBXV9TUIhLkc9QzKIorMv6ZcmMbLXXA+gdp
+         dcYhpfsGP7x5Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C1D9E5EA84;
+        Mon,  3 Apr 2023 09:20:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] xhci: Free the command allocated for setting LPM if we
- return early
-Content-Language: en-US, hr
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, ubuntu-devel-discuss@lists.ubuntu.com,
-        stern@rowland.harvard.edu, arnd@arndb.de, Stable@vger.kernel.org
-References: <b86fcdbd-f1c6-846f-838f-b7679ec4e2b4@linux.intel.com>
- <20230327095019.1017159-1-mathias.nyman@linux.intel.com>
- <d84fe574-e6cc-ad77-a44c-1eb8df3f2b6b@alu.unizg.hr>
- <46a9abc1-6121-032f-4416-261af73ac05c@linux.intel.com>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <46a9abc1-6121-032f-4416-261af73ac05c@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net-next v2 00/14] net: dsa: add support for MT7988
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168051362530.15794.2568241679390947127.git-patchwork-notify@kernel.org>
+Date:   Mon, 03 Apr 2023 09:20:25 +0000
+References: <cover.1680483895.git.daniel@makrotopia.org>
+In-Reply-To: <cover.1680483895.git.daniel@makrotopia.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, sean.wang@mediatek.com,
+        Landen.Chao@mediatek.com, dqfext@gmail.com, p.zabel@pengutronix.de,
+        linux@armlinux.org.uk, arinc.unal@arinc9.com,
+        Sam.Shih@mediatek.com, lorenzo@kernel.org, john@phrozen.org,
+        nbd@nbd.name
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.3.2023. 9:57, Mathias Nyman wrote:
-> On 28.3.2023 1.25, Mirsad Goran Todorovac wrote:
->> On 27. 03. 2023. 11:50, Mathias Nyman wrote:
->>> The command allocated to set exit latency LPM values need to be freed in
->>> case the command is never queued. This would be the case if there is no
->>> change in exit latency values, or device is missing.
->>>
->>> Fixes: 5c2a380a5aa8 ("xhci: Allocate separate command structures for each LPM command")
->>> Cc: <Stable@vger.kernel.org>
->>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->>> ---
->>>   drivers/usb/host/xhci.c | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->>> index bdb6dd819a3b..6307bae9cddf 100644
->>> --- a/drivers/usb/host/xhci.c
->>> +++ b/drivers/usb/host/xhci.c
->>> @@ -4442,6 +4442,7 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
->>>       if (!virt_dev || max_exit_latency == virt_dev->current_mel) {
->>>           spin_unlock_irqrestore(&xhci->lock, flags);
->>> +        xhci_free_command(xhci, command);
->>>           return 0;
->>>       }
->>
->> After more testing, I can confirm that your patch fixes the leak in the original
->> environment.
-> 
-> Thanks for testing.
-> Can I add the tags below to the patch?
-> 
-> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> 
-> Thanks
-> Mathias
+Hello:
 
-Sure, thanks for the thought. Sorry, my Thunderbird has hidden your message,
-I saw it only on Lore and accidentally.
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-Regards,
-Mirsad
+On Mon, 3 Apr 2023 02:16:40 +0100 you wrote:
+> The MediaTek MT7988 SoC comes with a built-in switch very similar to
+> previous MT7530 and MT7531. However, the switch address space is mapped
+> into the SoCs memory space rather than being connected via MDIO.
+> Using MMIO simplifies register access and also removes the need for a bus
+> lock, and for that reason also makes interrupt handling more light-weight.
+> 
+> Note that this is different from previous SoCs like MT7621 and MT7623N
+> which also came with an integrated MT7530-like switch which yet had to be
+> accessed via MDIO.
+> 
+> [...]
 
+Here is the summary with links:
+  - [net-next,v2,01/14] net: dsa: mt7530: make some noise if register read fails
+    https://git.kernel.org/netdev/net-next/c/b6f56cddb5f5
+  - [net-next,v2,02/14] net: dsa: mt7530: refactor SGMII PCS creation
+    https://git.kernel.org/netdev/net-next/c/9ecc00164dc2
+  - [net-next,v2,03/14] net: dsa: mt7530: use unlocked regmap accessors
+    https://git.kernel.org/netdev/net-next/c/1bd099c49f65
+  - [net-next,v2,04/14] net: dsa: mt7530: use regmap to access switch register space
+    https://git.kernel.org/netdev/net-next/c/a08c045580e0
+  - [net-next,v2,05/14] net: dsa: mt7530: move SGMII PCS creation to mt7530_probe function
+    https://git.kernel.org/netdev/net-next/c/6de285229773
+  - [net-next,v2,06/14] net: dsa: mt7530: introduce mutex helpers
+    https://git.kernel.org/netdev/net-next/c/1557c679f71c
+  - [net-next,v2,07/14] net: dsa: mt7530: move p5_intf_modes() function to mt7530.c
+    https://git.kernel.org/netdev/net-next/c/25d15dee34a1
+  - [net-next,v2,08/14] net: dsa: mt7530: introduce mt7530_probe_common helper function
+    https://git.kernel.org/netdev/net-next/c/37c9c0d8d0b2
+  - [net-next,v2,09/14] net: dsa: mt7530: introduce mt7530_remove_common helper function
+    https://git.kernel.org/netdev/net-next/c/720d73635176
+  - [net-next,v2,10/14] net: dsa: mt7530: split-off common parts from mt7531_setup
+    https://git.kernel.org/netdev/net-next/c/7f54cc9772ce
+  - [net-next,v2,11/14] net: dsa: mt7530: introduce separate MDIO driver
+    https://git.kernel.org/netdev/net-next/c/cb675afcddbb
+  - [net-next,v2,12/14] net: dsa: mt7530: skip locking if MDIO bus isn't present
+    https://git.kernel.org/netdev/net-next/c/54d4147a121c
+  - [net-next,v2,13/14] net: dsa: mt7530: introduce driver for MT7988 built-in switch
+    https://git.kernel.org/netdev/net-next/c/110c18bfed41
+  - [net-next,v2,14/14] dt-bindings: net: dsa: mediatek,mt7530: add mediatek,mt7988-switch
+    https://git.kernel.org/netdev/net-next/c/386f5fc9061b
+
+You are awesome, thank you!
 -- 
-Mirsad Todorovac
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb
-Republic of Croatia, the European Union
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
 
