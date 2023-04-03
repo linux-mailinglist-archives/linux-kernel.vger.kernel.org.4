@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366FC6D4CF4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106126D4CF7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233080AbjDCQAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
+        id S232736AbjDCQBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbjDCP7r (ORCPT
+        with ESMTP id S232932AbjDCQA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:59:47 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A9DC4;
-        Mon,  3 Apr 2023 08:59:34 -0700 (PDT)
+        Mon, 3 Apr 2023 12:00:59 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9E71BF1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:00:43 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6CAD2FF808;
-        Mon,  3 Apr 2023 15:59:29 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id EAAAF60005;
+        Mon,  3 Apr 2023 16:00:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680537573;
+        t=1680537642;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZxzAESz2itDatQ0g4Gg/O8O4nZ6xBxSu0J0zCMfdfVI=;
-        b=UEulIjSPWvrG4xKO+EsYpQG7wm/RETkk/NF4U9FqG5BeatPS1smcKB4ReIS4Cr80SuJsQz
-        jQsNlPtcEnHgZKp/eQjpEdJdX6R/1x3Gq93kD9xPuGoUelcom2n9nsh3R6dvfrb3YJULNA
-        L39IunvtJK2lKoqJe48mv6X1k7Orwh/WOlHi8LwNMjwBHIcfiLifNOoznjWsmQD62r8wV0
-        XYOidDqFnvIZtubqH0TjsGAkCaFkXSssElf2WHGdm+R5pyWouLJyCppYi/4tGF4GZcxMUR
-        mlkqIFQCMdecXXOxbW1ecIDMjubAIChU3DfbsbJrZbb2fZImxD+J7NJEx38DYQ==
+        bh=5awF1RFpMHZWDaLIMt0lSfQ4rxtozrqLH4YEjfHnBJE=;
+        b=bQZaqeVOcY6cRrjX4mEaZ/ofaVrTXuj2j8gFm+gs0+PymUy9VbKEYhKo0va1jh3caNXv77
+        Txi33VuJF5l4fz6OYN2+qqHsqptFOO4tPeijLV9T67gh1g8r/XwIsPVdM9WbUYS6yOBVdB
+        OKbcpqKBaRl5T+EIG+n8jITprCm1x6SCan0WJS3++PUqSQkxZpuh9LopwxnUJbW1XllPFW
+        DVzweHOl5Xb3VW9EkeYwfiKFVRSHGEpuqqq3hLg9jveCZp7AFYNOIXoUKMX/7AuDs2xTsb
+        iM9UvAngaE55Ov+71vXFipOEYvm9+4ygW+N98Ud9eUh/D37B589mHcWAa5O/6A==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Christophe Kerello <christophe.kerello@foss.st.com>,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: Re: [PATCH v3 1/2] mtd: rawnand: stm32_fmc2: remove unsupported EDO mode
-Date:   Mon,  3 Apr 2023 17:59:29 +0200
-Message-Id: <20230403155929.137657-1-miquel.raynal@bootlin.com>
+To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        Felix Matouschek <felix@matouschek.org>, kernel@kempniu.pl
+Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        kernel@sberdevices.ru
+Subject: Re: [PATCH v4] mtd: spinand: add support for ESMT F50x1G41LB
+Date:   Mon,  3 Apr 2023 18:00:38 +0200
+Message-Id: <20230403160039.144916-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230328155819.225521-2-christophe.kerello@foss.st.com>
+In-Reply-To: <20230329114240.378722-1-mmkurbanov@sberdevices.ru>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'f71e0e329c152c7f11ddfd97ffc62aba152fad3f'
+X-linux-mtd-patch-commit: b'd74c36480a679b27ce8a70c2e88fed31b86323d9'
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-03-28 at 15:58:18 UTC, Christophe Kerello wrote:
-> Remove the EDO mode support from as the FMC2 controller does not
-> support the feature.
+On Wed, 2023-03-29 at 11:42:40 UTC, Martin Kurbanov wrote:
+> From: Chuanhong Guo <gch981213@gmail.com>
 > 
-> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
-> Fixes: 2cd457f328c1 ("mtd: rawnand: stm32_fmc2: add STM32 FMC2 NAND flash controller driver")
-> Cc: stable@vger.kernel.org #v5.4+
-> Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> This patch adds support for ESMT F50L1G41LB and F50D1G41LB.
+> It seems that ESMT likes to use random JEDEC ID from other vendors.
+> Their 1G chips uses 0xc8 from GigaDevice and 2G/4G chips uses 0x2c from
+> Micron. For this reason, the ESMT entry is named esmt_c8 with explicit
+> JEDEC ID in variable name.
+> 
+> Datasheets:
+> https://www.esmt.com.tw/upload/pdf/ESMT/datasheets/F50L1G41LB(2M).pdf
+> https://www.esmt.com.tw/upload/pdf/ESMT/datasheets/F50D1G41LB(2M).pdf
+> 
+> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+> Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> Tested-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
 
 Miquel
