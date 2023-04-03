@@ -2,124 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7636D4536
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F07826D4511
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232499AbjDCNEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
+        id S232202AbjDCM76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbjDCND5 (ORCPT
+        with ESMTP id S232089AbjDCM7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:03:57 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C013C39
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:03:47 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id 9-20020a5ea509000000b0074ca36737d2so17483267iog.7
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 06:03:47 -0700 (PDT)
+        Mon, 3 Apr 2023 08:59:52 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6B040F0
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:59:50 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id y4so117046805edo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 05:59:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1680526789;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dWMhy/t539IzUjxTQlxZzF55vJj38fXw5CgiiST7WoI=;
+        b=EIMfkueJsSyGSK+8OPBVlrRE1m7H37jVvs3YRP8wgnjjjRYhCkyZw9/mpLD8XtG0p6
+         iYyw3yyXtJ2gIgLf+G3BBfv3U9NkkwcMMp2PCwbaozw0ZL9r7HaagO/zFa5Q3Le1/ROw
+         Z7mTY9gOCIuGDV7f8rX3OPnzLs42QOvsnasDU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680527026; x=1683119026;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UeW8ljnyP6swcMnfaUC9awkjoZoVFaQ6LdG1DUitAXs=;
-        b=rlCzNV0rFdtGSQ2VEWkfFbuxv2Mmo6OCqQWNfqOt6W3EDH7aOTlwRY3YgCIndceCRU
-         qJxbOodDaT5l722kSYqptDaMCpX4Z5YBEAcrXrzrtbVUEnBzSzTKV3sZ+uMjD4ZvdpaQ
-         rKZ+pKHvCVe1colFdx3yKMhPI/DMhxt1mJsTWAlijQVZu+f/kEC04zN7gy9BV1aT6mbU
-         U9fuH3pDDtU7GtJc63StI2QlIatT+6b2cAl5gxqnLb7kIJbeCioz7aQXqG6oVttSbsKg
-         G1gSjALDey2h32wKvITMQp5M/BXaM10kiPbqLllL7sia15hwJ2A8F4uIW/FDFTshBa9T
-         u+Kg==
-X-Gm-Message-State: AAQBX9eIcu3mlPs4OkzwCxWw7A+NkEBkbG6lr8qNN5owA58RGqlMmLZs
-        hZtvxutjk+okluV5QO0FJOZszDKhbYEFKFnWdVM1LgvLAcfm
-X-Google-Smtp-Source: AKy350ZwMHK9GlM9NB+l45StTEeFEY2I9o7NtOhRqFo/jS2Mo2/nF7emiLmnqIYqLlap8/XeB+AaSP8IC5hwqZ064lvA1k92ZIWw
+        d=1e100.net; s=20210112; t=1680526789;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dWMhy/t539IzUjxTQlxZzF55vJj38fXw5CgiiST7WoI=;
+        b=CSQcmtRt/uCpP5eU3hSErsSHlZRkXQEiOXVL3EtQLwFbC/vKsRO2B7pwkAVAmrna/u
+         dbuZdS6SlSBwb6lzZ3Bw3nLxhJwAt6cC5wscvnJadvRqLe1vEeB3RV6c1+gozS4TCp2F
+         dBEYM1+66LmuTy1t7LBDcZWO/lk+T6HgUKrKVPSe5hQteHGfFyCCm1EXSTlp5pmfbeDa
+         inrBX6ucliRmBlnpPV8ShV337T2IAUWMQj/KXV/AZZAyulR5MSPRWMmnEInx7NmTkDdo
+         PE+9BV8meyefUTG/JTvOnVtGQe2StUqSar6oxwjnDqHdMsGWb4yJCpjmOTzB1cKFzDFi
+         pQAQ==
+X-Gm-Message-State: AAQBX9cjdZIhg0f8DmhIlQqkXLHDQdNuD5SkKfDU054zFcvfJZuOzN+H
+        xacePAyB1u2zRjPSuMr9BSiDxRjGjI/fAHTtoAkw9Q==
+X-Google-Smtp-Source: AKy350buzM/6fGqG9ifTA/zHfPscPJQRPN9Aaudu77e/ZrcnbirUhnCLxw1InMJ7FFXja1clKzLlL1EHhV8lpgNhmyM=
+X-Received: by 2002:a17:907:3f96:b0:8f1:4cc5:f14c with SMTP id
+ hr22-20020a1709073f9600b008f14cc5f14cmr19885345ejc.0.1680526789038; Mon, 03
+ Apr 2023 05:59:49 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:7b06:0:b0:326:61cb:5f3b with SMTP id
- w6-20020a927b06000000b0032661cb5f3bmr3181458ilc.3.1680527026483; Mon, 03 Apr
- 2023 06:03:46 -0700 (PDT)
-Date:   Mon, 03 Apr 2023 06:03:46 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007301c505f86e3072@google.com>
-Subject: [syzbot] [ntfs3?] UBSAN: shift-out-of-bounds in attr_set_size
-From:   syzbot <syzbot+14a2433710a3affee84e@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
+References: <20230403120318.30992-1-kal.conley@dectris.com>
+In-Reply-To: <20230403120318.30992-1-kal.conley@dectris.com>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Mon, 3 Apr 2023 15:04:29 +0200
+Message-ID: <CAHApi-=9Rgss=8spbOm=V0UBS+_XesmFUZVhDK20RWdTSXRa5Q@mail.gmail.com>
+Subject: Re: [PATCH bpf] selftests: xsk: Add xskxceiver.h dependency to Makefile
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    7e364e56293b Linux 6.3-rc5
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13a94395c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d9a438ce47536f0c
-dashboard link: https://syzkaller.appspot.com/bug?extid=14a2433710a3affee84e
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/54c56bddacf4/disk-7e364e56.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/447e5d1af596/vmlinux-7e364e56.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3e2d1545e7be/bzImage-7e364e56.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+14a2433710a3affee84e@syzkaller.appspotmail.com
-
-================================================================================
-UBSAN: shift-out-of-bounds in fs/ntfs3/attrib.c:450:9
-shift exponent 64 is too large for 32-bit type 'u32' (aka 'unsigned int')
-CPU: 1 PID: 1832 Comm: syz-executor.1 Not tainted 6.3.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_shift_out_of_bounds+0x3c3/0x420 lib/ubsan.c:387
- attr_set_size+0x32c2/0x4290 fs/ntfs3/attrib.c:450
- ntfs_extend_mft+0x188/0x4b0 fs/ntfs3/fsntfs.c:511
- ntfs_look_free_mft+0x43d/0x10b0 fs/ntfs3/fsntfs.c:589
- ntfs_create_inode+0x4d7/0x3830 fs/ntfs3/inode.c:1296
- ntfs_atomic_open+0x3db/0x530 fs/ntfs3/namei.c:424
- atomic_open fs/namei.c:3279 [inline]
- lookup_open fs/namei.c:3387 [inline]
- open_last_lookups fs/namei.c:3484 [inline]
- path_openat+0x103c/0x3170 fs/namei.c:3712
- do_filp_open+0x234/0x490 fs/namei.c:3742
- do_sys_openat2+0x13f/0x500 fs/open.c:1348
- do_sys_open fs/open.c:1364 [inline]
- __do_sys_open fs/open.c:1372 [inline]
- __se_sys_open fs/open.c:1368 [inline]
- __x64_sys_open+0x225/0x270 fs/open.c:1368
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f99f548c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f99f622e168 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007f99f55abf80 RCX: 00007f99f548c0f9
-RDX: 0000000000000000 RSI: 0000000000060142 RDI: 0000000020000000
-RBP: 00007f99f54e7b39 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd74d2bccf R14: 00007f99f622e300 R15: 0000000000022000
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I will resubmit this against bpf-next.
