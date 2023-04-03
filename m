@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A296D4433
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB0E6D443B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjDCMQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
+        id S231626AbjDCMRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbjDCMQa (ORCPT
+        with ESMTP id S229446AbjDCMRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:16:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AC5113F2;
-        Mon,  3 Apr 2023 05:16:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D890C61888;
-        Mon,  3 Apr 2023 12:16:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B61C433EF;
-        Mon,  3 Apr 2023 12:16:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680524165;
-        bh=t8WBdW45+1Hqn/jcQvHAdYy51f3JmJMvVFmk48M7AiU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ivU9ezAkyEv2NnkR6ifcx9U961kKK2Qpk/PEiUrNlg5AWDDk7AzT3pIA88+jP5vAx
-         wozi35njaonVEe+ZTVPEBIqGqS046LxdsPAUc1jP4wiS7a6t3lDzjwG2btjx2Syi+7
-         +Ec5sBYZZ2DLlXUUKeU8Z04sL3FFCbXYK8M+5KtAT4Sj8REUcxY6o8vdJaCc4lVhcJ
-         RN7yWhvbqezyDzivNJOwHfnKHfNlhHwvUPJfh9H+57FOA+gLj/NEB/jOAaPrp+jX+P
-         cMmwsxbwCMYE6YULuOAKLekMvCap7SUsuiKw+id9m8hyeHdBNcVzMNWMJh5m+8BuEq
-         A3qtr8eDVzpiw==
-Message-ID: <9ecab48e-e828-0a03-2bc7-678e555bc80d@kernel.org>
-Date:   Mon, 3 Apr 2023 15:15:59 +0300
+        Mon, 3 Apr 2023 08:17:50 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADFC1025F;
+        Mon,  3 Apr 2023 05:17:48 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 4C03824DFFD;
+        Mon,  3 Apr 2023 20:17:41 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 3 Apr
+ 2023 20:17:41 +0800
+Received: from [192.168.125.145] (183.27.97.179) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 3 Apr
+ 2023 20:17:40 +0800
+Message-ID: <670fbeaf-334b-b6d7-d48c-0828c5f1d841@starfivetech.com>
+Date:   Mon, 3 Apr 2023 20:17:39 +0800
 MIME-Version: 1.0
-Subject: Re: [PATCH v5 10/11] arm64: dts: qcom: sm8350: Add Crypto Engine
- support
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, konrad.dybcio@linaro.org,
-        vladimir.zapolskiy@linaro.org, rfoss@kernel.org,
-        neil.armstrong@linaro.org
-References: <20230402100509.1154220-1-bhupesh.sharma@linaro.org>
- <20230402100509.1154220-11-bhupesh.sharma@linaro.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v1 1/3] dt-bindings: sound: Add TDM for StarFive JH7110
 Content-Language: en-US
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20230402100509.1154220-11-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+References: <20230329153320.31390-1-walker.chen@starfivetech.com>
+ <20230329153320.31390-2-walker.chen@starfivetech.com>
+ <c999da90-1cb9-c767-23bc-c28d37708cf2@linaro.org>
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <c999da90-1cb9-c767-23bc-c28d37708cf2@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Originating-IP: [183.27.97.179]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.3 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,56 +61,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bhupesh,
 
-On 2.04.23 13:05, Bhupesh Sharma wrote:
-> Add crypto engine (CE) and CE BAM related nodes and definitions to
-> 'sm8350.dtsi'.
+
+On 2023/3/30 15:39, Krzysztof Kozlowski wrote:
+> On 29/03/2023 17:33, Walker Chen wrote:
+>> Add bindings to describe the TDM driver for the StarFive JH7110 SoC.
+>> 
+>> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+>> ---
+>>  .../bindings/sound/starfive,jh7110-tdm.yaml   | 95 +++++++++++++++++++
+>>  1 file changed, 95 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml b/Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
+>> new file mode 100644
+>> index 000000000000..d65b9ed781ef
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
+>> @@ -0,0 +1,95 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/sound/starfive,jh7110-tdm.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: StarFive JH7110 TDM Controller
+>> +
+>> +description: |
+>> +  The TDM Controller is a Time Division Multiplexed audio interface
+>> +  integrated in StarFive JH7110 SoC, allowing up to 8 channels of
+>> +  audio over a serial interface. The TDM controller can operate both
+>> +  in master and slave mode.
+>> +
+>> +maintainers:
+>> +  - Walker Chen <walker.chen@starfivetech.com>
+>> +
 > 
-> Co-developed-by and Signed-off-by: Robert Foss <rfoss@kernel.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8350.dtsi | 22 ++++++++++++++++++++++
->   1 file changed, 22 insertions(+)
+> Missing allOf: with $ref to dai-common.
+
+Indeed missing allOf, thank you for kind reminding.
+
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> index 7fbc288eca58..090ee07d1800 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> @@ -1730,6 +1730,28 @@ ufs_mem_phy_lanes: phy@1d87400 {
->   			};
->   		};
->   
-> +		cryptobam: dma-controller@1dc4000 {
-> +			compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
-> +			reg = <0 0x01dc4000 0 0x24000>;
-> +			interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
-> +			#dma-cells = <1>;
-> +			qcom,ee = <0>;
-> +			qcom,controlled-remotely;
-> +			iommus = <&apps_smmu 0x594 0x0011>,
-> +				 <&apps_smmu 0x596 0x0011>;
-> +		};
-> +
-> +		crypto: crypto@1dfa000 {
-> +			compatible = "qcom,sm8350-qce", "qcom,sm8150-qce", "qcom,qce";
-> +			reg = <0 0x01dfa000 0 0x6000>;
-> +			dmas = <&cryptobam 4>, <&cryptobam 5>;
-> +			dma-names = "rx", "tx";
-> +			iommus = <&apps_smmu 0x594 0x0011>,
-> +				 <&apps_smmu 0x596 0x0011>;
-> +			interconnects = <&aggre2_noc MASTER_CRYPTO &mc_virt SLAVE_EBI1>;
-> +			interconnect-names = "memory";
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - starfive,jh7110-tdm
+>> +
+>> +  reg:
+>> +    maxItems: 1
+> 
+> (...)
+> 
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +  - clock-names
+>> +  - resets
+>> +  - dmas
+>> +  - dma-names
+>> +  - "#sound-dai-cells"
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    tdm: tdm@10090000 {
+> 
+> Drop tdm label, not used.
 
-We switched to #interconnect-cells = <2> (since commit 4f287e31ff5f), so maybe #include
-dt-bindings/interconnect/qcom,icc.h and add the tags.
+Ok, will drop it.
 
-BR,
-Georgi
+Best regards,
+Walker
 
-> +		};
-> +
->   		ipa: ipa@1e40000 {
->   			compatible = "qcom,sm8350-ipa";
->   
 
