@@ -2,250 +2,548 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B716D4688
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328726D4773
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbjDCOJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
+        id S233128AbjDCOUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbjDCOJT (ORCPT
+        with ESMTP id S233112AbjDCOUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:09:19 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0BE11155;
-        Mon,  3 Apr 2023 07:08:49 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 333ApJiC011099;
-        Mon, 3 Apr 2023 14:08:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=LgV6ci84HwDCeMcXUGHKEVSK5rE6V5bpam5wuhCZUts=;
- b=gztSjCsJEaMSR1rdmX2C64ULt6oxVyfeZgcKS+i4yCG1DgGVLjPzaYkUmmDzTSegXDTU
- LI4YPt0yvwp52+skmsiRusYmGBnLHTOIIwg5Z9b/tVJbfItEMQkL9mFI+FOEwQRFkt7m
- DSHMRZiGObmj9sI+kJSXv6Mh0UHSQn0EUtAnrZ1CzKdTNM3iSMcn2cTSwg4LPCbx/C/G
- /Je77wJVAJppiQEGf1zN82Zg7f+cuscjg6QMDD79IM4oRaAM3y//9BnPdB+BH61aKG/6
- Y0T6LlXlitxOGO34NX8UcAivy7xsU0CCY3ioMC1Ov5dDbffqWfGv/4zp2qfuulPXnGFV ug== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pqwdrrem7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Apr 2023 14:08:00 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 333E7xhf028661
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 3 Apr 2023 14:07:59 GMT
-Received: from [10.50.12.146] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 3 Apr 2023
- 07:07:53 -0700
-Message-ID: <5914a8db-3644-1c94-00ba-460ba2c26a5d@quicinc.com>
-Date:   Mon, 3 Apr 2023 19:37:27 +0530
+        Mon, 3 Apr 2023 10:20:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D7B2D7FC;
+        Mon,  3 Apr 2023 07:19:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C295861D15;
+        Mon,  3 Apr 2023 14:19:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7403C433EF;
+        Mon,  3 Apr 2023 14:19:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680531583;
+        bh=apldveYs5q3hIhLENyLcdUom315KWHfnAHoyZvI314Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OJ0DJKqYTz13oE0g7gn1eG8ImohorMSj2GVKuaL79YxJhxSwcEPQP7YcPaeDAiPUO
+         mosiFQKZjrmmmPlzHaA1yobCLK0/SGMQBoCWeE2GL3Aflx24UuAkwNvHpHtx4wqdgO
+         F3nNTgH9V6NWiIeT9Km25iGU3NJblQxKa3jAPDBA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 5.4 000/104] 5.4.240-rc1 review
+Date:   Mon,  3 Apr 2023 16:07:52 +0200
+Message-Id: <20230403140403.549815164@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V2 4/6] regulator: qcom_smd: Add support to define the
- bootup voltage
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_srichara@quicinc.com>,
-        <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_ipkumar@quicinc.com>
-References: <20230217142030.16012-1-quic_devipriy@quicinc.com>
- <20230217142030.16012-5-quic_devipriy@quicinc.com>
- <907628d1-b88d-5ac6-ed9d-7f63e2875738@linaro.org>
- <Y/aeu5ua7cY5cGON@sirena.org.uk>
- <39f73580-f263-de0e-6819-89c3f4c75c3a@quicinc.com>
- <8ce07abd-2d02-69d2-8dc6-fe11525aecda@linaro.org>
- <11b05b9f-b969-6648-2204-2da5f8465c96@quicinc.com>
- <751e5129-3c11-0156-719e-3fe996a149be@quicinc.com>
- <3f434777-c4b6-272f-1971-f9adf3faefe4@linaro.org>
- <a54d4e1b-d62d-559d-1882-e460e696c056@quicinc.com>
- <ca12735e-d6c8-997e-036f-693cd8a9870f@linaro.org>
- <e19393e3-5898-bff2-cc00-d88c9194c7c2@quicinc.com>
- <6e1f6466-7f2e-7bd5-f6a2-5691a30c4e1f@linaro.org>
- <9989c92c-9949-5531-c7d2-e54882795a68@quicinc.com>
- <69df153d-bdc6-9008-39d6-72f66bab2e38@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <69df153d-bdc6-9008-39d6-72f66bab2e38@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.240-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.4.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.4.240-rc1
+X-KernelTest-Deadline: 2023-04-05T14:04+00:00
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: T5Y7y9S3MGXDmzMA2iA94d1Oe3g_h7nd
-X-Proofpoint-ORIG-GUID: T5Y7y9S3MGXDmzMA2iA94d1Oe3g_h7nd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-03_11,2023-04-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 phishscore=0 spamscore=0 adultscore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=999 suspectscore=0 clxscore=1011
- bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304030103
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is the start of the stable review cycle for the 5.4.240 release.
+There are 104 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
+
+Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
+Anything received after that time might be too late.
+
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.240-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.4.240-rc1
+
+Andreas Gruenbacher <agruenba@redhat.com>
+    gfs2: Always check inode size of inline inodes
+
+Cristian Marussi <cristian.marussi@arm.com>
+    firmware: arm_scmi: Fix device node validation for mailbox transport
+
+Eric Dumazet <edumazet@google.com>
+    net: sched: fix race condition in qdisc_graft()
+
+Eric Dumazet <edumazet@google.com>
+    net_sched: add __rcu annotation to netdev->qdisc
+
+Ye Bin <yebin10@huawei.com>
+    ext4: fix kernel BUG in 'ext4_write_inline_data_end()'
+
+Anand Jain <anand.jain@oracle.com>
+    btrfs: scan device in non-exclusive mode
+
+Heiko Carstens <hca@linux.ibm.com>
+    s390/uaccess: add missing earlyclobber annotations to __clear_user()
+
+Lucas Stach <l.stach@pengutronix.de>
+    drm/etnaviv: fix reference leak when mmaping imported buffer
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: usb-audio: Fix regression on detection of Roland VS-100
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda/conexant: Partial revert of a quirk for Lenovo
+
+Trond Myklebust <trond.myklebust@hammerspace.com>
+    NFSv4: Fix hangs when recovering open state after a server reboot
+
+Johan Hovold <johan+linaro@kernel.org>
+    pinctrl: at91-pio4: fix domain name assignment
+
+Juergen Gross <jgross@suse.com>
+    xen/netback: don't do grant copy across page boundary
+
+Hans de Goede <hdegoede@redhat.com>
+    Input: goodix - add Lenovo Yoga Book X90F to nine_bytes_report DMI table
+
+David Disseldorp <ddiss@suse.de>
+    cifs: fix DFS traversal oops without CONFIG_CIFS_DFS_UPCALL
+
+Paulo Alcantara <pc@manguebit.com>
+    cifs: prevent infinite recursion in CIFSGetDFSRefer()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    Input: focaltech - use explicitly signed char type
+
+msizanoen <msizanoen@qtmlabs.xyz>
+    Input: alps - fix compatibility with -funsigned-char
+
+Horatiu Vultur <horatiu.vultur@microchip.com>
+    pinctrl: ocelot: Fix alt mode for ocelot
+
+Lorenzo Bianconi <lorenzo@kernel.org>
+    net: mvneta: make tx buffer array agnostic
+
+Steffen Bätz <steffen@innosonix.de>
+    net: dsa: mv88e6xxx: Enable IGMP snooping on user ports only
+
+Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
+    bnxt_en: Fix typo in PCI id to device description string mapping
+
+Radoslaw Tyl <radoslawx.tyl@intel.com>
+    i40e: fix registers dump after run ethtool adapter self test
+
+Tony Krowiak <akrowiak@linux.ibm.com>
+    s390/vfio-ap: fix memory leak in vfio_ap device driver
+
+Ivan Orlov <ivan.orlov0322@gmail.com>
+    can: bcm: bcm_tx_setup(): fix KMSAN uninit-value in vfs_write
+
+Faicker Mo <faicker.mo@ucloud.cn>
+    net/net_failover: fix txq exceeding warning
+
+Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+    regulator: Handle deferred clk
+
+Colin Ian King <colin.king@canonical.com>
+    regulator: fix spelling mistake "Cant" -> "Can't"
+
+SongJingyi <u201912584@hust.edu.cn>
+    ptp_qoriq: fix memory leak in probe()
+
+Tomas Henzl <thenzl@redhat.com>
+    scsi: megaraid_sas: Fix crash after a double completion
+
+Arseniy Krasnov <avkrasnov@sberdevices.ru>
+    mtd: rawnand: meson: invalidate cache on polling ECC bit
+
+Álvaro Fernández Rojas <noltari@gmail.com>
+    mips: bmips: BCM6358: disable RAC flush for TP1
+
+Christoph Hellwig <hch@lst.de>
+    dma-mapping: drop the dev argument to arch_sync_dma_for_*
+
+Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+    ca8210: Fix unsigned mac_len comparison with zero in ca8210_skb_tx()
+
+Wei Chen <harperchen1110@gmail.com>
+    fbdev: au1200fb: Fix potential divide by zero
+
+Wei Chen <harperchen1110@gmail.com>
+    fbdev: lxfb: Fix potential divide by zero
+
+Wei Chen <harperchen1110@gmail.com>
+    fbdev: intelfb: Fix potential divide by zero
+
+Wei Chen <harperchen1110@gmail.com>
+    fbdev: nvidia: Fix potential divide by zero
+
+Linus Torvalds <torvalds@linux-foundation.org>
+    sched_getaffinity: don't assume 'cpumask_size()' is fully initialized
+
+Wei Chen <harperchen1110@gmail.com>
+    fbdev: tgafb: Fix potential divide by zero
+
+Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+    ALSA: hda/ca0132: fixup buffer overrun at tuning_ctl_set()
+
+Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+    ALSA: asihpi: check pao in control_message()
+
+NeilBrown <neilb@suse.de>
+    md: avoid signed overflow in slot_store()
+
+Ivan Bornyakov <i.bornyakov@metrotek.ru>
+    bus: imx-weim: fix branch condition evaluates to a garbage value
+
+Eric Biggers <ebiggers@google.com>
+    fsverity: don't drop pagecache at end of FS_IOC_ENABLE_VERITY
+
+Jan Kara via Ocfs2-devel <ocfs2-devel@oss.oracle.com>
+    ocfs2: fix data corruption after failed write
+
+George Kennedy <george.kennedy@oracle.com>
+    tun: avoid double free in tun_free_netdev
+
+Vincent Guittot <vincent.guittot@linaro.org>
+    sched/fair: Sanitize vruntime of entity being migrated
+
+Zhang Qiao <zhangqiao22@huawei.com>
+    sched/fair: sanitize vruntime of entity being placed
+
+Mikulas Patocka <mpatocka@redhat.com>
+    dm crypt: add cond_resched() to dmcrypt_write()
+
+Jiasheng Jiang <jiasheng@iscas.ac.cn>
+    dm stats: check for and propagate alloc_percpu failure
+
+Wei Chen <harperchen1110@gmail.com>
+    i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer()
+
+Ryusuke Konishi <konishi.ryusuke@gmail.com>
+    nilfs2: fix kernel-infoleak in nilfs_ioctl_wrap_copy()
+
+Felix Fietkau <nbd@nbd.name>
+    wifi: mac80211: fix qos on mesh interfaces
+
+Xu Yang <xu.yang_2@nxp.com>
+    usb: chipidea: core: fix possible concurrent when switch role
+
+Xu Yang <xu.yang_2@nxp.com>
+    usb: chipdea: core: fix return -EINVAL if request role is the same with current role
+
+Pawel Laszczak <pawell@cadence.com>
+    usb: cdns3: Fix issue with using incorrect PCI device function
+
+Coly Li <colyli@suse.de>
+    dm thin: fix deadlock when swapping to thin device
+
+Lin Ma <linma@zju.edu.cn>
+    igb: revert rtnl_lock() that causes deadlock
+
+Nathan Huckleberry <nhuck@google.com>
+    fsverity: Remove WQ_UNBOUND from fsverity read workqueue
+
+Alvin Šipraga <alsi@bang-olufsen.dk>
+    usb: gadget: u_audio: don't let userspace block driver unbind
+
+Joel Selvaraj <joelselvaraj.oss@gmail.com>
+    scsi: core: Add BLIST_SKIP_VPD_PAGES for SKhynix H28U74301AMR
+
+Shyam Prasad N <sprasad@microsoft.com>
+    cifs: empty interface list when server doesn't support query interfaces
+
+Al Viro <viro@zeniv.linux.org.uk>
+    sh: sanitize the flags on sigreturn
+
+Enrico Sau <enrico.sau@gmail.com>
+    net: usb: qmi_wwan: add Telit 0x1080 composition
+
+Enrico Sau <enrico.sau@gmail.com>
+    net: usb: cdc_mbim: avoid altsetting toggling for Telit FE990
+
+Jakob Koschel <jkl820.git@gmail.com>
+    scsi: lpfc: Avoid usage of list iterator variable after loop
+
+Adrien Thierry <athierry@redhat.com>
+    scsi: ufs: core: Add soft dependency on governor_simpleondemand
+
+Maurizio Lombardi <mlombard@redhat.com>
+    scsi: target: iscsi: Fix an error message in iscsi_check_key()
+
+Lorenz Bauer <lorenz.bauer@isovalent.com>
+    selftests/bpf: check that modifier resolves after pointer
+
+Michael Schmitz <schmitzmic@gmail.com>
+    m68k: Only force 030 bus error if PC not in exception table
+
+Alexander Aring <aahringo@redhat.com>
+    ca8210: fix mac_len negative array access
+
+Alexandre Ghiti <alex@ghiti.fr>
+    riscv: Bump COMMAND_LINE_SIZE value to 1024
+
+Mario Limonciello <mario.limonciello@amd.com>
+    thunderbolt: Use const qualifier for `ring_interrupt_index`
+
+Yaroslav Furman <yaro330@gmail.com>
+    uas: Add US_FL_NO_REPORT_OPCODES for JMicron JMS583Gen 2
+
+Nilesh Javali <njavali@marvell.com>
+    scsi: qla2xxx: Perform lockless command completion in abort path
+
+Frank Crawford <frank@crawford.emu.id.au>
+    hwmon (it87): Fix voltage scaling for chips with 10.9mV ADCs
+
+Tzung-Bi Shih <tzungbi@kernel.org>
+    platform/chrome: cros_ec_chardev: fix kernel data leak from ioctl
+
+Zheng Wang <zyytlz.wz@163.com>
+    Bluetooth: btsdio: fix use after free bug in btsdio_remove due to unfinished work
+
+Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+    Bluetooth: btqcomsmd: Fix command timeout after setting BD address
+
+Liang He <windhl@126.com>
+    net: mdio: thunder: Add missing fwnode_handle_put()
+
+Arınç ÜNAL <arinc.unal@arinc9.com>
+    net: dsa: mt7530: move setting ssc_delta to PHY_INTERFACE_MODE_TRGMII case
+
+Roger Pau Monne <roger.pau@citrix.com>
+    hvc/xen: prevent concurrent accesses to the shared ring
+
+Caleb Sander <csander@purestorage.com>
+    nvme-tcp: fix nvme_tcp_term_pdu to match spec
+
+Zhang Changzhong <zhangchangzhong@huawei.com>
+    net/sonic: use dma_mapping_error() for error check
+
+Eric Dumazet <edumazet@google.com>
+    erspan: do not use skb_mac_header() in ndo_start_xmit()
+
+Li Zetao <lizetao1@huawei.com>
+    atm: idt77252: fix kmemleak when rmmod idt77252
+
+Maher Sanalla <msanalla@nvidia.com>
+    net/mlx5: Read the TC mapping of all priorities on ETS query
+
+Daniel Borkmann <daniel@iogearbox.net>
+    bpf: Adjust insufficient default bpf_jit_limit
+
+David Howells <dhowells@redhat.com>
+    keys: Do not cache key in task struct if key is requested from kernel thread
+
+Geoff Levand <geoff@infradead.org>
+    net/ps3_gelic_net: Use dma_mapping_error
+
+Geoff Levand <geoff@infradead.org>
+    net/ps3_gelic_net: Fix RX sk_buff length
+
+Zheng Wang <zyytlz.wz@163.com>
+    net: qcom/emac: Fix use after free bug in emac_remove due to race condition
+
+Zheng Wang <zyytlz.wz@163.com>
+    xirc2ps_cs: Fix use after free bug in xirc2ps_detach
+
+Daniil Tatianin <d-tatianin@yandex-team.ru>
+    qed/qed_sriov: guard against NULL derefs from qed_iov_get_vf_info
+
+Szymon Heidrich <szymon.heidrich@gmail.com>
+    net: usb: smsc95xx: Limit packet length to skb->len
+
+Yu Kuai <yukuai3@huawei.com>
+    scsi: scsi_dh_alua: Fix memleak for 'qdata' in alua_activate()
+
+Alexander Stein <alexander.stein@ew.tq-group.com>
+    i2c: imx-lpi2c: check only for enabled interrupt flags
+
+Akihiko Odaki <akihiko.odaki@daynix.com>
+    igbvf: Regard vf reset nack as success
+
+Gaosheng Cui <cuigaosheng1@huawei.com>
+    intel/igbvf: free irq on the error path in igbvf_request_msix()
+
+Alexander Lobakin <aleksander.lobakin@intel.com>
+    iavf: fix non-tunneled IPv6 UDP packet type and hashing
+
+Alexander Lobakin <aleksander.lobakin@intel.com>
+    iavf: fix inverted Rx hash condition leading to disabled hash
+
+Zheng Wang <zyytlz.wz@163.com>
+    power: supply: da9150: Fix use after free bug in da9150_charger_remove due to race condition
+
+Hangyu Hua <hbh25y@gmail.com>
+    net: tls: fix possible race condition between do_tls_getsockopt_conf() and do_tls_setsockopt_conf()
 
 
-On 3/28/2023 1:58 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 28.03.2023 08:12, Devi Priya wrote:
->>
->>
->> On 3/27/2023 2:56 PM, Konrad Dybcio wrote:
->>>
->>>
->>> On 27.03.2023 10:40, Devi Priya wrote:
->>>>
->>>>
->>>> On 3/18/2023 7:38 PM, Konrad Dybcio wrote:
->>>>>
->>>>>
->>>>> On 14.03.2023 18:15, Devi Priya wrote:
->>>>>>
->>>>>>
->>>>>> On 3/8/2023 3:57 PM, Konrad Dybcio wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 7.03.2023 07:55, Devi Priya wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>> On 3/6/2023 6:39 PM, Devi Priya wrote:
->>>>>>>>>
->>>>>>>>>
->>>>>>>>> On 3/3/2023 6:57 PM, Konrad Dybcio wrote:
->>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> On 3.03.2023 14:21, Devi Priya wrote:
->>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> On 2/23/2023 4:31 AM, Mark Brown wrote:
->>>>>>>>>>>> On Wed, Feb 22, 2023 at 11:11:42PM +0100, Konrad Dybcio wrote:
->>>>>>>>>>>>
->>>>>>>>>>>>> Thinking about it again, this seems like something that could be
->>>>>>>>>>>>> generalized and introduced into regulator core.. Hardcoding this
->>>>>>>>>>>>> will not end well.. Not to mention it'll affect all mp5496-using
->>>>>>>>>>>>> boards that are already upstream.
->>>>>>>>>>>>
->>>>>>>>>>>>> WDYT about regulator-init-microvolts Mark?
->>>>>>>>>>>>
->>>>>>>>>>>> The overwhelming majority of devices that have variable voltages
->>>>>>>>>>>> support readback, these Qualcomm firmware devices are pretty much
->>>>>>>>>>>> unique in this regard.  We don't want a general property to set a
->>>>>>>>>>>> specific voltage since normally we should be using the
->>>>>>>>>>>> constraints and don't normally need to adjust things immediately
->>>>>>>>>>>> since we can tell what the current voltage is.
->>>>>>>>>>>>
->>>>>>>>>>>> This is pretty much just going to be a device specific bodge,
->>>>>>>>>>>> ideally something that does know what the voltage is would be
->>>>>>>>>>>> able to tell us at runtime but if that's not possible then
->>>>>>>>>>>> there's no good options.  If the initial voltage might vary based
->>>>>>>>>>>> on board then a device specific DT property might be less
->>>>>>>>>>>> terrible, if it's determined by the regulator the current code
->>>>>>>>>>>> seems fine.  Or just leave the current behavour, if the
->>>>>>>>>>>> constraints are accurate then hopefully a temporary dip in
->>>>>>>>>>>> voltage is just inelegant rather than an issue.  Indeed the
->>>>>>>>>>>> current behaviour might well save power if you've got a voltage
->>>>>>>>>>>> range configured and nothing actually ever gets round to setting
->>>>>>>>>>>> the voltage (which is depressingly common, people seem keen on
->>>>>>>>>>>> setting voltage ranges even when the voltage is never varied in
->>>>>>>>>>>> practice).
->>>>>>>>>>>
->>>>>>>>>>> Hi Mark, The initial bootup voltage is actually blown into the OTP register of the PMIC and it remains the same across boards for IPQ9574 SoC.
->>>>>>>>>> But what about IPQ6018 which also uses MP5496? That's also gonna
->>>>>>>>>> set the voltage on there, it may be too high/low..
->>>>>>>> For IPQ6018, the bootup voltage is the same as that of IPQ9574 which is
->>>>>>>> 875mV
->>>>>>> Okay, but what about any other design that employs or may employ
->>>>>>> MP5496 in the future?
->>>>>>>
->>>>>>>>>>
->>>>>>>>>>       Initially the SoC runs at 800MHz with a voltage of 875mV set by the bootloaders. As kernel does not know the initial voltage, during regulator registration the framework considers the current voltage to be zero and tries to bring up the regulator to minimum supported voltage of 600mV. This causes the dip which might be of concern in SS parts where the voltage might be insufficient leading to silent reboots.
->>>>>>>>>> That's an SoC-specific thing, the same regulator can be used with
->>>>>>>>>> many different ones. We can't just assume it'll always be like this.
->>>>>>>>>> I see the problem, but I believe this is not the correct solution
->>>>>>>> Okay, As we had discussions on reading back the voltage & the generic
->>>>>>>> DT property, do you suggest any other possible solutions here?
->>>>>>> Due to the sudden influx of various IPQ SoCs on the mailing list lately
->>>>>>> I have no idea if it concerned this one too, but at least one of them
->>>>>>> was said not to use RPM for controlling the clocks. If that's the case,
->>>>>>> I see no reason at all to use it for scaling the regulators, the PMIC
->>>>>>> could be addressed directly over I2C as a normal device. You'd probably
->>>>>>> want to keep VDD_[CM]X scaling through rpmpd, but it's easily done by
->>>>>>> simply not registering the CX/MX registers as children of the I2C
->>>>>>> regulator IC.
->>>>>>
->>>>>> IPQ9574 SoC has RPM and uses it for controlling the regulators.
->>>>>> Currently, the RPM firmware does not have read support implemented
->>>>>> and so, we were not able to read the bootup voltage.
->>>>>> As we randomly saw silent reboots when the kernel boots up,
->>>>>> do you think we could proceed with this change for time being
->>>>>> and revisit the same when any SoC in the future employs MP5496?
->>>>> I'm still thinking about a cleaner fix because hardcoding voltages
->>>>> in kernel is just dangerous. Could you check whether attaching a CPU
->>>>> supply and adding an OPP table where each level has an opp-microvolt
->>>>> property would resolve your issue?
->>>>>
->>>>> Konrad
->>>> Yes, Understood! We already have the CPU supply and OPP table where
->>>> each level has an opp-microvolt property changes in place and it did
->>>> not help in our case.
->>> Ouch. That totally sounds like a bug.. Would you be willing to dig
->>> a bit further into why this happens?
->> As the regulator registration happens before the cpu freq scaling comes
->> into picture, having an OPP table did not help to set the bootup voltage
-> I see, but the order should not affect it. If your regulator driver
-> returns -EPROBE_DEFER, so should the cpufreq one.
-> 
-> Konrad
-Sorry konrad, don't exactly get your point here.
-The cpufreq driver depends on the regulator driver to be probed as
-the regulator serves as the cpu-supply.
-But, when the regulator driver comes up, it tries to bring up the
-regulators to the minimum supported voltage provided with the
-regulator-min-microvolt property in the DT.
+-------------
 
-The regulator being the CPU only supply, updating the
-regulator-min-microvolt with SVS voltage (725000uV) would ideally help
-us with the issue. That way, we could update the DT and drop this patch.
+Diffstat:
 
-This approach seems quite ideal to us. Shall we proceed with it if we 
-don't foresee any issues?
+ Makefile                                           |   4 +-
+ arch/arc/mm/dma.c                                  |   8 +-
+ arch/arm/mm/dma-mapping.c                          |   8 +-
+ arch/arm/xen/mm.c                                  |  12 +--
+ arch/arm64/mm/dma-mapping.c                        |   8 +-
+ arch/c6x/mm/dma-coherent.c                         |  14 +--
+ arch/csky/mm/dma-mapping.c                         |   8 +-
+ arch/hexagon/kernel/dma.c                          |   4 +-
+ arch/ia64/mm/init.c                                |   4 +-
+ arch/m68k/kernel/dma.c                             |   4 +-
+ arch/m68k/kernel/traps.c                           |   4 +-
+ arch/microblaze/kernel/dma.c                       |  14 +--
+ arch/mips/bmips/dma.c                              |   7 +-
+ arch/mips/bmips/setup.c                            |   8 ++
+ arch/mips/jazz/jazzdma.c                           |  17 ++--
+ arch/mips/mm/dma-noncoherent.c                     |  12 +--
+ arch/nds32/kernel/dma.c                            |   8 +-
+ arch/nios2/mm/dma-mapping.c                        |   8 +-
+ arch/openrisc/kernel/dma.c                         |   2 +-
+ arch/parisc/kernel/pci-dma.c                       |   8 +-
+ arch/powerpc/mm/dma-noncoherent.c                  |   8 +-
+ arch/riscv/include/uapi/asm/setup.h                |   8 ++
+ arch/s390/lib/uaccess.c                            |   2 +-
+ arch/sh/include/asm/processor_32.h                 |   1 +
+ arch/sh/kernel/dma-coherent.c                      |   6 +-
+ arch/sh/kernel/signal_32.c                         |   3 +
+ arch/sparc/kernel/ioport.c                         |   4 +-
+ arch/xtensa/kernel/pci-dma.c                       |   8 +-
+ drivers/atm/idt77252.c                             |  11 +++
+ drivers/bluetooth/btqcomsmd.c                      |  17 +++-
+ drivers/bluetooth/btsdio.c                         |   1 +
+ drivers/bus/imx-weim.c                             |   2 +-
+ drivers/firmware/arm_scmi/driver.c                 |  37 +++++++
+ drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c        |  10 +-
+ drivers/hwmon/it87.c                               |   4 +-
+ drivers/i2c/busses/i2c-imx-lpi2c.c                 |   4 +
+ drivers/i2c/busses/i2c-xgene-slimpro.c             |   3 +
+ drivers/input/mouse/alps.c                         |  16 +--
+ drivers/input/mouse/focaltech.c                    |   8 +-
+ drivers/input/touchscreen/goodix.c                 |  14 ++-
+ drivers/iommu/dma-iommu.c                          |  10 +-
+ drivers/md/dm-crypt.c                              |   1 +
+ drivers/md/dm-stats.c                              |   7 +-
+ drivers/md/dm-stats.h                              |   2 +-
+ drivers/md/dm-thin.c                               |   2 +
+ drivers/md/dm.c                                    |   4 +-
+ drivers/md/md.c                                    |   3 +
+ drivers/mtd/nand/raw/meson_nand.c                  |   8 +-
+ drivers/net/dsa/mt7530.c                           |   9 +-
+ drivers/net/dsa/mv88e6xxx/chip.c                   |   9 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          |   8 +-
+ drivers/net/ethernet/intel/i40e/i40e_diag.c        |  11 ++-
+ drivers/net/ethernet/intel/i40e/i40e_diag.h        |   2 +-
+ drivers/net/ethernet/intel/iavf/iavf_common.c      |   2 +-
+ drivers/net/ethernet/intel/iavf/iavf_txrx.c        |   2 +-
+ drivers/net/ethernet/intel/igb/igb_main.c          |   2 -
+ drivers/net/ethernet/intel/igbvf/netdev.c          |   8 +-
+ drivers/net/ethernet/intel/igbvf/vf.c              |  13 ++-
+ drivers/net/ethernet/marvell/mvneta.c              |  66 ++++++++-----
+ drivers/net/ethernet/mellanox/mlx5/core/en_dcbnl.c |   6 +-
+ drivers/net/ethernet/natsemi/sonic.c               |   4 +-
+ drivers/net/ethernet/qlogic/qed/qed_sriov.c        |   5 +-
+ drivers/net/ethernet/qualcomm/emac/emac.c          |   6 ++
+ drivers/net/ethernet/toshiba/ps3_gelic_net.c       |  41 ++++----
+ drivers/net/ethernet/toshiba/ps3_gelic_net.h       |   5 +-
+ drivers/net/ethernet/xircom/xirc2ps_cs.c           |   5 +
+ drivers/net/ieee802154/ca8210.c                    |   5 +-
+ drivers/net/net_failover.c                         |   8 +-
+ drivers/net/phy/mdio-thunder.c                     |   1 +
+ drivers/net/tun.c                                  | 109 +++++++++++----------
+ drivers/net/usb/cdc_mbim.c                         |   5 +
+ drivers/net/usb/qmi_wwan.c                         |   1 +
+ drivers/net/usb/smsc95xx.c                         |   6 ++
+ drivers/net/xen-netback/common.h                   |   2 +-
+ drivers/net/xen-netback/netback.c                  |  25 ++++-
+ drivers/pinctrl/pinctrl-at91-pio4.c                |   1 -
+ drivers/pinctrl/pinctrl-ocelot.c                   |   2 +-
+ drivers/platform/chrome/cros_ec_chardev.c          |   2 +-
+ drivers/power/supply/da9150-charger.c              |   1 +
+ drivers/ptp/ptp_qoriq.c                            |   2 +-
+ drivers/regulator/fixed.c                          |   4 +-
+ drivers/s390/crypto/vfio_ap_drv.c                  |   3 +-
+ drivers/scsi/device_handler/scsi_dh_alua.c         |   6 +-
+ drivers/scsi/lpfc/lpfc_sli.c                       |   8 +-
+ drivers/scsi/megaraid/megaraid_sas_fusion.c        |   4 +-
+ drivers/scsi/qla2xxx/qla_os.c                      |  11 +++
+ drivers/scsi/scsi_devinfo.c                        |   1 +
+ drivers/scsi/ufs/ufshcd.c                          |   1 +
+ drivers/target/iscsi/iscsi_target_parameters.c     |  12 ++-
+ drivers/thunderbolt/nhi.c                          |   2 +-
+ drivers/tty/hvc/hvc_xen.c                          |  19 +++-
+ drivers/usb/cdns3/cdns3-pci-wrap.c                 |   5 +
+ drivers/usb/chipidea/ci.h                          |   2 +
+ drivers/usb/chipidea/core.c                        |  11 ++-
+ drivers/usb/chipidea/otg.c                         |   5 +-
+ drivers/usb/gadget/function/u_audio.c              |   2 +-
+ drivers/usb/storage/unusual_uas.h                  |   7 ++
+ drivers/video/fbdev/au1200fb.c                     |   3 +
+ drivers/video/fbdev/geode/lxfb_core.c              |   3 +
+ drivers/video/fbdev/intelfb/intelfbdrv.c           |   3 +
+ drivers/video/fbdev/nvidia/nvidia.c                |   2 +
+ drivers/video/fbdev/tgafb.c                        |   3 +
+ drivers/xen/swiotlb-xen.c                          |   8 +-
+ fs/btrfs/volumes.c                                 |  11 ++-
+ fs/cifs/cifsfs.h                                   |   5 +-
+ fs/cifs/cifssmb.c                                  |   9 +-
+ fs/cifs/smb2ops.c                                  |   2 +-
+ fs/ext4/inode.c                                    |   3 +-
+ fs/gfs2/aops.c                                     |   2 -
+ fs/gfs2/bmap.c                                     |   3 -
+ fs/gfs2/glops.c                                    |   3 +
+ fs/nfs/nfs4proc.c                                  |   5 +-
+ fs/nilfs2/ioctl.c                                  |   2 +-
+ fs/ocfs2/aops.c                                    |  18 +++-
+ fs/verity/enable.c                                 |  24 ++---
+ fs/verity/verify.c                                 |  12 +--
+ include/linux/dma-noncoherent.h                    |  20 ++--
+ include/linux/netdevice.h                          |   2 +-
+ include/linux/nvme-tcp.h                           |   5 +-
+ include/xen/swiotlb-xen.h                          |   8 +-
+ kernel/bpf/core.c                                  |   2 +-
+ kernel/compat.c                                    |   2 +-
+ kernel/dma/direct.c                                |  14 +--
+ kernel/sched/core.c                                |   7 +-
+ kernel/sched/fair.c                                |  54 +++++++++-
+ net/can/bcm.c                                      |  16 +--
+ net/core/rtnetlink.c                               |   6 +-
+ net/ipv4/ip_gre.c                                  |   4 +-
+ net/ipv6/ip6_gre.c                                 |   4 +-
+ net/mac80211/wme.c                                 |   6 +-
+ net/sched/cls_api.c                                |   6 +-
+ net/sched/sch_api.c                                |  25 ++---
+ net/sched/sch_generic.c                            |  22 +++--
+ net/tls/tls_main.c                                 |   9 +-
+ security/keys/request_key.c                        |   9 +-
+ sound/pci/asihpi/hpi6205.c                         |   2 +-
+ sound/pci/hda/patch_ca0132.c                       |   4 +-
+ sound/pci/hda/patch_conexant.c                     |   6 +-
+ sound/usb/format.c                                 |   8 +-
+ tools/testing/selftests/bpf/test_btf.c             |  28 ++++++
+ 140 files changed, 834 insertions(+), 399 deletions(-)
 
-Thanks,
-Devi Priya
 
->>>
->>> Konrad
->>>> We have now planned to update the regulator-min-microvolt property
->>>> with the SVS voltage (725000uV) in the board DT such that the regulators
->>>> are brought up with the nominal voltage which would be sufficient
->>>> for all the corner parts operating at 800MHz.
->>>>
->>>> That way, we would update the DT and drop this patch in the next spin.
->>>>
->>>> Thanks,
->>>> Devi Priya
->>>>>>>
->>>>>>> Konrad
->>>>>>>>>>
->>>>>>>>>> Konrad
->>>>>>>>>>>
->>>>>>>>>>> Best Regards,
->>>>>>>>>>> Devi Priya
