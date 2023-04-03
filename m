@@ -2,272 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE136D424D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686D86D425E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjDCKkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
+        id S232409AbjDCKlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjDCKjv (ORCPT
+        with ESMTP id S231886AbjDCKlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:39:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5378212BE6;
-        Mon,  3 Apr 2023 03:39:21 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 333AE6dw024727;
-        Mon, 3 Apr 2023 10:37:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=CFuKEPFFQM7kQzgTrYjPL4AY7Pi37UZRMecFHRosweE=;
- b=U+Osj3dttd61Gqkleo8NodD0T4dqNYPSeEQx1MUa1nPU+/OtvwYkQz6LRHalAtrN0vBb
- ESZKWdyxWgGyUifAqZIGH74kJid1NxqYHjbNoxJJiJGybzaPyLqUjxxVd6o1vnvz+TR4
- QGJ44mq3lvCpI/qxWhpzmw69mKIw1HcGeVSaXU0Z1LYpnOo/d+RAMgzueyf0QWpzORN7
- hdtusqCqf/tmafHx4x3qsmDpsG1eM13aHhzMYfINO856vZLFQ9G5EM/IIIQnuANtdLO+
- pSS7+Jo6rzdTRnOQe0csEiLkPJXZMSbp+LmOkj0OxxhUDQp6SNfnDG/Gnns8eRYry2Cq fg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pqvv1rmy1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Apr 2023 10:37:58 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 333Abvcj030774;
-        Mon, 3 Apr 2023 10:37:57 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pqvv1rmxm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Apr 2023 10:37:57 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3339YsoI024983;
-        Mon, 3 Apr 2023 10:37:57 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3ppc87ju0y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Apr 2023 10:37:57 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 333Abtd316712304
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 3 Apr 2023 10:37:56 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D9BAF58163;
-        Mon,  3 Apr 2023 10:37:55 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55CE758158;
-        Mon,  3 Apr 2023 10:37:50 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.66.117])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  3 Apr 2023 10:37:49 +0000 (GMT)
-Message-ID: <ef1ff552e16eadf5bc8d6219d463b35511103c38.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 3/4] evm: Align evm_inode_init_security() definition
- with LSM infrastructure
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, reiserfs-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 03 Apr 2023 06:37:48 -0400
-In-Reply-To: <ca6d4080b0f234b5321d965fb1350bfcd291646e.camel@huaweicloud.com>
-References: <20230329130415.2312521-1-roberto.sassu@huaweicloud.com>
-         <20230329130415.2312521-4-roberto.sassu@huaweicloud.com>
-         <CAHC9VhSDVv30ce2652kridRU7iaQQ19tiGubWpyP0mi7pf+JJw@mail.gmail.com>
-         <bfe74fff24a5a7a8059acc00c29ac957bf0b7880.camel@huaweicloud.com>
-         <ca6d4080b0f234b5321d965fb1350bfcd291646e.camel@huaweicloud.com>
+        Mon, 3 Apr 2023 06:41:23 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6C212BC1;
+        Mon,  3 Apr 2023 03:40:59 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 185so6004249pgc.10;
+        Mon, 03 Apr 2023 03:40:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680518459;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AFuL6ChpVUUgBPgyIo4zUUMh6LlZPDJPlmBW1Q5qZg8=;
+        b=ddMKekAjo8HdAcsOLoioX/xPvxdrkFFaA0B/cyLzxbLFI8Ln0goCY8ygu65HhlUsB1
+         ikjJVip5ACJzg1hqxGMkAU79CDtu6uNxFUGwCW9t2MFWBjL28chDTjBMnyO10xZN3Htv
+         i1pa0Euntl5mXtZiTBfPpS4MCQf83EDcDWNILPcC9R/baVe7S3zyJEicYsOGqAjEEVnT
+         rgXZkcuvEWsJMFA3797m7ITbF8XPjs7lK/rVFnkVVIf+0zE+w3GIR5JviqkxlAlgaDeN
+         fRei51a+S/c0lArUA/F7hsZ6Lh7aovQBggoEMhYqdh4N+w474XbXYbwwlIbZVSxEkd8q
+         9Khw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680518459;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AFuL6ChpVUUgBPgyIo4zUUMh6LlZPDJPlmBW1Q5qZg8=;
+        b=XRLQmjjYPUbPKvnVAU51EEXGivmuFC5ryyELMQaWOJAy1dUHuVmTZR+Yf4QvsWoTKx
+         3sz6hV0I54mjMPxqfmyutOdfVgB1VM5NO8yHHhnYiTRxxQtQONbvNlM+sB0M5oJwjH2b
+         68eGuNx8hyAwk6HbxDu4jiLG4V1UIf4i9Uud+X7BYLwm615pgMQkWUyqe9NYSqG8tAmU
+         ToBQMh9pRPudhJS30fm9sUufTISN9JW1INKwwy+WBt5kcGLzOu/OAzN6lmxggY2T2azX
+         kD8Y0zRyxaMeBLd4Y/66NLCAKgG21G/Z3hD3bZaPq8BJC//lqHDgDHs0Z/xVONrpyubX
+         ABIg==
+X-Gm-Message-State: AAQBX9ePKhL63S5X87C1RGdpdfKGOEbdeLAj6rAtfmqHvzwYhyB0j8iE
+        KF0+bdy0qQa4gKcKZfrO3RVNRWKw2ye3lG9Yq+M=
+X-Google-Smtp-Source: AKy350ZgcbNdLWCD2SElCx52IwknONkFSjpKh+B1fGuP38l/SArhy1jlY2KFg4e89kIFLn72ByaxCAoDab+K4//dXV8=
+X-Received: by 2002:a05:6a00:99f:b0:62b:113b:72d7 with SMTP id
+ u31-20020a056a00099f00b0062b113b72d7mr16244491pfg.3.1680518458919; Mon, 03
+ Apr 2023 03:40:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230331163058.5688-1-sebastian.reichel@collabora.com>
+ <CAEwRq=q=W57W33nYe_uUDQb0cf7QkFoa0rO+EWdsuUGTN7k_Vg@mail.gmail.com> <22215580.EfDdHjke4D@diego>
+In-Reply-To: <22215580.EfDdHjke4D@diego>
+From:   Vincent Legoll <vincent.legoll@gmail.com>
+Date:   Mon, 3 Apr 2023 12:38:12 +0200
+Message-ID: <CAEwRq=rmd=m1YybLYU9zTLGjwkvQze9fkX3WQhF+2RWWWfAKig@mail.gmail.com>
+Subject: Re: [PATCHv1 0/2] Improve RK3588 clocks and power domains support
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-rockchip@lists.infradead.org,
+        Peter Geis <pgwipeout@gmail.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Finley Xiao <finley.xiao@rock-chips.com>,
+        Jagan Teki <jagan@edgeble.ai>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4HnafZ_8XDHqvoCwkEGm4_Y9zfImSkbC
-X-Proofpoint-ORIG-GUID: dDlv3V5Bnc7q_d3CLfPITjeLxvL5-_yX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-03_06,2023-04-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- suspectscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 spamscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304030080
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-31 at 14:18 +0200, Roberto Sassu wrote:
-> On Fri, 2023-03-31 at 09:32 +0200, Roberto Sassu wrote:
-> > On Thu, 2023-03-30 at 18:55 -0400, Paul Moore wrote:
-> > > On Wed, Mar 29, 2023 at 9:05 AM Roberto Sassu
-> > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > 
-> > > > Change the evm_inode_init_security() definition to align with the LSM
-> > > > infrastructure. Keep the existing behavior of including in the HMAC
-> > > > calculation only the first xattr provided by LSMs.
-> > > > 
-> > > > Changing the evm_inode_init_security() definition requires passing the
-> > > > xattr array allocated by security_inode_init_security(), and the number of
-> > > > xattrs filled by previously invoked LSMs.
-> > > > 
-> > > > Use the newly introduced lsm_find_xattr_slot() to position EVM correctly in
-> > > > the xattrs array, like a regular LSM, and to increment the number of filled
-> > > > slots. For now, the LSM infrastructure allocates enough xattrs slots to
-> > > > store the EVM xattr, without using the reservation mechanism.
-> > > > 
-> > > > Finally, make evm_inode_init_security() return value compatible with the
-> > > > inode_init_security hook conventions, i.e. return -EOPNOTSUPP if it is not
-> > > > setting an xattr.
-> > > > 
-> > > > EVM is a bit tricky, because xattrs is both an input and an output. If it
-> > > > was just output, EVM should have returned zero if xattrs is NULL. But,
-> > > > since xattrs is also input, EVM is unable to do its calculations, so return
-> > > > -EOPNOTSUPP and handle this error in security_inode_init_security().
-> > > 
-> > > I don't quite understand why EVM would return EOPNOTSUPP if it is
-> > > enabled but there are not xattrs to measure.  It seems like EVM should
-> > > return success/0 in the no-xattr case; there were no xattrs to
-> > > measure, so it succeeded in measuring nothing.  Am I missing
-> > > something?
-> > 
-> > From a very quick look at what other LSMs do, it seems that they return
-> > zero even if they are not initialized.
-> > 
-> > So, it makes sense to return zero also here.
-> 
-> Oh, actually there was a reason to do that. If an LSM does not wish to
-> provide an xattr, it should return -EOPNOTSUPP.
+On Mon, Apr 3, 2023 at 12:23=E2=80=AFPM Heiko St=C3=BCbner <heiko@sntech.de=
+> wrote:
+> If you want to check more, try
+> # mkdir /debug
+> # mount none /debug -t debugfs
+> [or do this to a location of your choice, I guess the standard is under /=
+proc]
+>
+> # cat /debug/pm_genpd/pm_genpd_summary
+>
+> and check the runtime_status field.
 
-In general, the original purpose of -EOPNOTSUPP was to indicate that
-the filesystem itself did not support security xattrs.  This can be
-seen in evm_verify_hmac(), which returns different values (e.g.
-INTEGRITY_NOLABEL, INTEGRITY_NOXATTRS, INTEGRITY_UNKNOWN) based on
-whether security.evm or any protected security xattrs exist.
+Here it is:
 
-> 
-> As we are not checking this convention anymore, it is probably fine to
-> return zero. I already made the change, will send the new version
-> shortly.
+domain                          status          children
+            performance
+    /device                                             runtime status
+---------------------------------------------------------------------------=
+-------------------
+sdmmc                           off-0
+            0
+    /devices/platform/fe2c0000.mmc                      suspended
+            0
+audio                           off-0
+            0
+sdio                            off-0
+            0
+pcie                            off-0
+            0
+gmac                            on
+            0
+    /devices/platform/fe1b0000.ethernet                 active
+            0
+usb                             off-0
+            0
+rga31                           off-0
+            0
+fec                             off-0
+            0
+isp1                            off-0
+            0
+vi                              off-0
+            0
+                                                isp1, fec
+vo1                             off-0
+            0
+vo0                             off-0
+            0
+vop                             off-0
+            0
+                                                vo0
+rga30                           off-0
+            0
+av1                             off-0
+            0
+vdpu                            off-0
+            0
+                                                av1, rkvdec0, rkvdec1, rga3=
+0
+venc1                           off-0
+            0
+venc0                           off-0
+            0
+                                                venc1
+rkvdec1                         off-0
+            0
+rkvdec0                         off-0
+            0
+vcodec                          off-0
+            0
+                                                rkvdec0, rkvdec1, venc0
+gpu                             off-0
+            0
+npu2                            off-0
+            0
+npu1                            off-0
+            0
+nputop                          off-0
+            0
+                                                npu1, npu2
+npu                             off-0
+            0
+                                                nputop
 
-For security xattr initialization, agreed.
+Don't know how to interpret this though...
 
-Mimi
+> Also you could provide a email-reply with a
+>
+> Tested-by: Your Name <your-email>
 
-> 
-> > 
-> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > ---
-> > > >  include/linux/evm.h               | 14 ++++++++------
-> > > >  security/integrity/evm/evm_main.c | 18 +++++++++++-------
-> > > >  security/security.c               |  6 +++---
-> > > >  3 files changed, 22 insertions(+), 16 deletions(-)
-> > > > 
-> > > > diff --git a/include/linux/evm.h b/include/linux/evm.h
-> > > > index 7dc1ee74169..3c0e8591b69 100644
-> > > > --- a/include/linux/evm.h
-> > > > +++ b/include/linux/evm.h
-> > > > @@ -56,9 +56,10 @@ static inline void evm_inode_post_set_acl(struct dentry *dentry,
-> > > >  {
-> > > >         return evm_inode_post_setxattr(dentry, acl_name, NULL, 0);
-> > > >  }
-> > > > -extern int evm_inode_init_security(struct inode *inode,
-> > > > -                                  const struct xattr *xattr_array,
-> > > > -                                  struct xattr *evm);
-> > > > +extern int evm_inode_init_security(struct inode *inode, struct inode *dir,
-> > > > +                                  const struct qstr *qstr,
-> > > > +                                  struct xattr *xattrs,
-> > > > +                                  int *num_filled_xattrs);
-> > > >  extern bool evm_revalidate_status(const char *xattr_name);
-> > > >  extern int evm_protected_xattr_if_enabled(const char *req_xattr_name);
-> > > >  extern int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
-> > > > @@ -157,9 +158,10 @@ static inline void evm_inode_post_set_acl(struct dentry *dentry,
-> > > >         return;
-> > > >  }
-> > > > 
-> > > > -static inline int evm_inode_init_security(struct inode *inode,
-> > > > -                                         const struct xattr *xattr_array,
-> > > > -                                         struct xattr *evm)
-> > > > +static inline int evm_inode_init_security(struct inode *inode, struct inode *dir,
-> > > > +                                         const struct qstr *qstr,
-> > > > +                                         struct xattr *xattrs,
-> > > > +                                         int *num_filled_xattrs)
-> > > >  {
-> > > >         return 0;
-> > > >  }
-> > > > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-> > > > index cf24c525558..9e75759150c 100644
-> > > > --- a/security/integrity/evm/evm_main.c
-> > > > +++ b/security/integrity/evm/evm_main.c
-> > > > @@ -21,6 +21,7 @@
-> > > >  #include <linux/evm.h>
-> > > >  #include <linux/magic.h>
-> > > >  #include <linux/posix_acl_xattr.h>
-> > > > +#include <linux/lsm_hooks.h>
-> > > > 
-> > > >  #include <crypto/hash.h>
-> > > >  #include <crypto/hash_info.h>
-> > > > @@ -864,23 +865,26 @@ void evm_inode_post_setattr(struct dentry *dentry, int ia_valid)
-> > > >  /*
-> > > >   * evm_inode_init_security - initializes security.evm HMAC value
-> > > >   */
-> > > > -int evm_inode_init_security(struct inode *inode,
-> > > > -                                const struct xattr *lsm_xattr,
-> > > > -                                struct xattr *evm_xattr)
-> > > > +int evm_inode_init_security(struct inode *inode, struct inode *dir,
-> > > > +                           const struct qstr *qstr, struct xattr *xattrs,
-> > > > +                           int *num_filled_xattrs)
-> > > >  {
-> > > >         struct evm_xattr *xattr_data;
-> > > > +       struct xattr *evm_xattr;
-> > > >         int rc;
-> > > > 
-> > > > -       if (!(evm_initialized & EVM_INIT_HMAC) ||
-> > > > -           !evm_protected_xattr(lsm_xattr->name))
-> > > > -               return 0;
-> > > > +       if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs ||
-> > > > +           !evm_protected_xattr(xattrs->name))
-> > > > +               return -EOPNOTSUPP;
-> > > > +
-> > > > +       evm_xattr = lsm_find_xattr_slot(xattrs, num_filled_xattrs);
-> > > > 
-> > > >         xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
-> > > >         if (!xattr_data)
-> > > >                 return -ENOMEM;
-> > > > 
-> > > >         xattr_data->data.type = EVM_XATTR_HMAC;
-> > > > -       rc = evm_init_hmac(inode, lsm_xattr, xattr_data->digest);
-> > > > +       rc = evm_init_hmac(inode, xattrs, xattr_data->digest);
-> > > >         if (rc < 0)
-> > > >                 goto out;
-> > > > 
-> > > > diff --git a/security/security.c b/security/security.c
-> > > > index be33d643a81..22ab4fb7ebf 100644
-> > > > --- a/security/security.c
-> > > > +++ b/security/security.c
-> > > > @@ -1674,9 +1674,9 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
-> > > >         if (!num_filled_xattrs)
-> > > >                 goto out;
-> > > > 
-> > > > -       ret = evm_inode_init_security(inode, new_xattrs,
-> > > > -                                     new_xattrs + num_filled_xattrs);
-> > > > -       if (ret)
-> > > > +       ret = evm_inode_init_security(inode, dir, qstr, new_xattrs,
-> > > > +                                     &num_filled_xattrs);
-> > > > +       if (ret && ret != -EOPNOTSUPP)
-> > > >                 goto out;
-> > > >         ret = initxattrs(inode, new_xattrs, fs_data);
-> > > >  out:
-> > > > --
-> > > > 2.25.1
-> > > > 
-> 
+You can add my:
 
+Tested-by: Vincent Legoll <vincent.legoll@gmail.com>
 
+Regards
+
+--=20
+Vincent Legoll
