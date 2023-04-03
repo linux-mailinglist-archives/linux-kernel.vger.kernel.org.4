@@ -2,87 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35896D3E8B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6050D6D3E8D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbjDCIBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+        id S231788AbjDCICl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbjDCIBl (ORCPT
+        with ESMTP id S229659AbjDCICj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:01:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D281FF7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 01:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680508854;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7ZVSpNV+BDI0cGpEAjlsP+qfsorb2sHTxV+V9nP6fMk=;
-        b=hV0q8OMgP7WhD/J6E6yDGb/FWCUt3JOPY7E9OE6YmKMOZH6daj9LwB0f3UrS3epX301CWJ
-        90yWaJ5ozD3GDd2FpJbn2QpnQ6vifaPpJSE4JeNdgvbAT5lbjdTYAN7jXCv5M2VM0tiq8G
-        Y3Qq3MMbbXPRJdFFRKl5TN7LU8/2CXg=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-483-qiGHHpFXM2mLE2LGUaFcRw-1; Mon, 03 Apr 2023 04:00:52 -0400
-X-MC-Unique: qiGHHpFXM2mLE2LGUaFcRw-1
-Received: by mail-wm1-f72.google.com with SMTP id d11-20020a05600c34cb00b003ee89ce8cc3so14130550wmq.7
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 01:00:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680508852;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7ZVSpNV+BDI0cGpEAjlsP+qfsorb2sHTxV+V9nP6fMk=;
-        b=eJj/lH7cu30i2z93LH0wJS3eV8Ft9m6g5RqKgCI3ePHG0JRhDfsPuxum/DbvQJN0F7
-         Gevcn7WCRrFm5LPmW/8bg+//Qf1VF1O0wPoJiJ2eUtOdgUfJbtItwiT3dLIvfe2eePwJ
-         HfdyCfJWxCycGeer8XGmkMBMpVWED0awM/upZTaGLGs10/CurpyM0xJUFfpNZj/bq1AD
-         rRbPujVR5m9G0HzquDQv//cXByYaIjZo7ak1f4ZUEe3qK0KJyfx/kXCX+kmqawmrmyB3
-         JuDEqsIJFihlQrsFKneanfkRAQncXplwdasPsZTcTp2Y30zYDxm3PBffsy8ttd3UCm6g
-         MYrA==
-X-Gm-Message-State: AAQBX9e01Knw3Vc/IJ/jb6WRdcknZqrd5fxm1a0n72TEviAFaJtwD5cT
-        Ec6PWbwEsmTcVZpxY0JgdAYplupMP4d2xNjeNGTieBNTEaCUmuGE9sRkqPcqMglp2oeWSm5IhUD
-        pDDAcRPWv2ssQwGiMA6RoV1pG
-X-Received: by 2002:a1c:7405:0:b0:3ef:62cd:1eb with SMTP id p5-20020a1c7405000000b003ef62cd01ebmr22822799wmc.7.1680508851894;
-        Mon, 03 Apr 2023 01:00:51 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bwmtu9rK901WmqifFz8QsJqu6Ft8ILRFdJiU7GK6K7EesJBFcey9gkdJeTosjvqrE6LlC1eQ==
-X-Received: by 2002:a1c:7405:0:b0:3ef:62cd:1eb with SMTP id p5-20020a1c7405000000b003ef62cd01ebmr22822772wmc.7.1680508851567;
-        Mon, 03 Apr 2023 01:00:51 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
-        by smtp.gmail.com with ESMTPSA id 24-20020a05600c029800b003ed246c1d28sm11160957wmk.44.2023.04.03.01.00.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 01:00:50 -0700 (PDT)
-Message-ID: <c901682e-6b4b-71e7-78b4-c46d1acb5dee@redhat.com>
-Date:   Mon, 3 Apr 2023 10:00:49 +0200
+        Mon, 3 Apr 2023 04:02:39 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFC41725;
+        Mon,  3 Apr 2023 01:02:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R831e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VfFRiwW_1680508954;
+Received: from 30.24.98.140(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VfFRiwW_1680508954)
+          by smtp.aliyun-inc.com;
+          Mon, 03 Apr 2023 16:02:35 +0800
+Message-ID: <4301a7be-354f-183d-a828-01445434a1b3@linux.alibaba.com>
+Date:   Mon, 3 Apr 2023 16:02:34 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 15/29] selftests/mm: uffd_open_{dev|sys}()
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/swap: fix swap_info_struct race between swapoff and
+ get_swap_pages()
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>
-References: <20230330155707.3106228-1-peterx@redhat.com>
- <20230330160749.3107270-1-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230330160749.3107270-1-peterx@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
+ <ZCpRtASqL5z5QphY@casper.infradead.org>
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+In-Reply-To: <ZCpRtASqL5z5QphY@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,18 +45,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.23 18:07, Peter Xu wrote:
-> Provide two helpers to open an uffd handle.  Drop the error checks around
-> SKIPs because it's inside an errexit() anyway, which IMHO doesn't really
-> help much if the test will not continue.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+On 4/3/23 12:10 PM, Matthew Wilcox wrote:
+> On Sun, Apr 02, 2023 at 06:19:20AM +0800, Rongwei Wang wrote:
+>> Without this modification, a core will wait (mostly)
+>> 'swap_info_struct->lock' when completing
+>> 'del_from_avail_list(p)'. Immediately, other cores
+>> soon calling 'add_to_avail_list()' to add the same
+>> object again when acquiring the lock that released
+>> by former. It's not the desired result but exists
+>> indeed. This case can be described as below:
+> This feels like a very verbose way of saying
+>
+> "The si->lock must be held when deleting the si from the
+> available list.  Otherwise, another thread can re-add the
+> si to the available list, which can lead to memory corruption.
+> The only place we have found where this happens is in the
+> swapoff path."
+It looks better than mine. Sorry for my confusing description, it will 
+be fixed in the next version.
+>
+>> +++ b/mm/swapfile.c
+>> @@ -2610,8 +2610,12 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
+>>   		spin_unlock(&swap_lock);
+>>   		goto out_dput;
+>>   	}
+>> -	del_from_avail_list(p);
+>> +	/*
+>> +	 * Here lock is used to protect deleting and SWP_WRITEOK clearing
+>> +	 * can be seen concurrently.
+>> +	 */
+> This comment isn't necessary.  But I would add a lockdep assert inside
+> __del_from_avail_list() that p->lock is held.
 
--- 
-Thanks,
+Thanks. Actually, I have this line in previous test version, but delete 
+for saving one line of code.
 
-David / dhildenb
+I will update here as you said.
 
+
+Thanks for your time.
+
+>
+>>   	spin_lock(&p->lock);
+>> +	del_from_avail_list(p);
+>>   	if (p->prio < 0) {
+>>   		struct swap_info_struct *si = p;
+>>   		int nid;
+>> -- 
+>> 2.27.0
+>>
+>>
