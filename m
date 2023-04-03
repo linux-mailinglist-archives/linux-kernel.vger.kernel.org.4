@@ -2,214 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6276D3B61
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 03:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6F36D3B62
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 03:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjDCBTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 21:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
+        id S231265AbjDCBTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 21:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbjDCBTQ (ORCPT
+        with ESMTP id S231202AbjDCBTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 21:19:16 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4EDB44E;
-        Sun,  2 Apr 2023 18:18:45 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pj8qJ-0004ki-02;
-        Mon, 03 Apr 2023 03:18:43 +0200
-Date:   Mon, 3 Apr 2023 02:18:39 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>
-Cc:     Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: [PATCH net-next v2 08/14] net: dsa: mt7530: introduce
- mt7530_probe_common helper function
-Message-ID: <3b22c333979ca2d3e933b957766112fabbd369c6.1680483896.git.daniel@makrotopia.org>
-References: <cover.1680483895.git.daniel@makrotopia.org>
+        Sun, 2 Apr 2023 21:19:20 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914CBC659
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 18:18:50 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id ek18so111146450edb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 18:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680484729;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PCe8S/ZbFd32iadHpAz74xiVMxjzJpl0e1TXToqxByE=;
+        b=dLHXvYgHmYqyccRY2uuFhwOgBFDIo3F86iRmdDZTyn3rMWnUpbyXL2IekVDNFxr2oy
+         u6TuP7SrkKFnHxfVHdJZ7ALGLUsx29yYq5vrB6Y6kSkBz/YEk5gicWb9Gm7yZm7oWao6
+         2C/tyOTc8OStItqLrr4KgiRt4/sxgNsjUTWrYwnPvLOAmcVHHqp4p8fdIsIHuApgsmNE
+         MRoC9BcsDspMkS+B5N5+rLj8VATdwg1do9oqvOmC5AZmx7z1hMaAJ53ERkxk1HqAv1p0
+         j9kaXJIY1Jp/mHR3rM3vR3BVCtDU1t9VrDxT/4jwVHjNC501+b8Gs+4sPOSKoCnYg0bk
+         pUXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680484729;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PCe8S/ZbFd32iadHpAz74xiVMxjzJpl0e1TXToqxByE=;
+        b=IMAeLA6CA+mox1/E7Npy4qnlfdtrj1rC+HS7B2cYXlLyCnoDJR9KLb+mfzrb+eyxs8
+         Fa3j1oEW387jyc6ElB8KDYcM9KvURFilq9Cq0XT7glQ9i+OjjFuEaR40i/4k3E94qweb
+         Z1gfz6LjwlS5wv3X/TOlRHJe/G2sioApAvPjYEvdAGu7CkXhL3f5qhin+70v50APH8xg
+         /hR8jsfK8Om4D6BUQ1cxKI5tsnCgDdSVxaDdJJvSW5iJgsYE0sazNetHaHiMKk6jJh2r
+         iTKjW9AsfLxnUd8TOTuu/PEeG0wSEOfbbY1GXVcxHHzM1OQcrl5II1A0WFeqKtY7TO8w
+         dX/Q==
+X-Gm-Message-State: AAQBX9cVO54xBg2Ii0+q1gWhc3DYOEaCKAEsrZDDXqs9sHyRYSWa/r/J
+        ++Fe74HIspORdDVJh9Ati8mS2fmFEVrbjA==
+X-Google-Smtp-Source: AKy350YWt3CDxWTeY0hg8BwCbo95PeMJlu9paedE93oDJkKi6SgsUSRjo0xEjz8VrWMiCMbDvVsWgg==
+X-Received: by 2002:a17:906:7193:b0:931:7adf:547e with SMTP id h19-20020a170906719300b009317adf547emr35949132ejk.70.1680484728696;
+        Sun, 02 Apr 2023 18:18:48 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id dx1-20020a170906a84100b0093048a8bd31sm3792039ejb.68.2023.04.02.18.18.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Apr 2023 18:18:48 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 06:18:45 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     outreachy@lists.linux.dev, hvaibhav.linux@gmail.com,
+        johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] improve arche_platform_wd_irq() function
+Message-ID: <ZCopdYy7wMGEVx5P@khadija-virtual-machine>
+References: <cover.1680185025.git.kamrankhadijadj@gmail.com>
+ <642a1f88bd232_394c38294a5@iweiny-mobl.notmuch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1680483895.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <642a1f88bd232_394c38294a5@iweiny-mobl.notmuch>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move commonly used parts from mt7530_probe into new mt7530_probe_common
-helper function which will be used by both, mt7530_probe and the
-to-be-introduced mt7988_probe.
+On Sun, Apr 02, 2023 at 05:36:24PM -0700, Ira Weiny wrote:
+> Khadija Kamran wrote:
+> > Improve arche_platform_wd_irq() function to minimize indentation and fix
+> > checkpatch issues.
+> 
+> Minor point but the cover should have
+> 
+> 'staging: greybus: ...'
+> 
+> ... for the subject.
+>
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/net/dsa/mt7530.c | 98 ++++++++++++++++++++++------------------
- 1 file changed, 54 insertions(+), 44 deletions(-)
+Hey Ira,
 
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index 1215d5e4dd38a..a60ed8706ce35 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -3142,44 +3142,21 @@ static const struct of_device_id mt7530_of_match[] = {
- MODULE_DEVICE_TABLE(of, mt7530_of_match);
- 
- static int
--mt7530_probe(struct mdio_device *mdiodev)
-+mt7530_probe_common(struct mt7530_priv *priv)
- {
--	static struct regmap_config *regmap_config;
--	struct mt7530_priv *priv;
--	struct device_node *dn;
--	int ret;
--
--	dn = mdiodev->dev.of_node;
--
--	priv = devm_kzalloc(&mdiodev->dev, sizeof(*priv), GFP_KERNEL);
--	if (!priv)
--		return -ENOMEM;
-+	struct device *dev = priv->dev;
- 
--	priv->ds = devm_kzalloc(&mdiodev->dev, sizeof(*priv->ds), GFP_KERNEL);
-+	priv->ds = devm_kzalloc(dev, sizeof(*priv->ds), GFP_KERNEL);
- 	if (!priv->ds)
- 		return -ENOMEM;
- 
--	priv->ds->dev = &mdiodev->dev;
-+	priv->ds->dev = dev;
- 	priv->ds->num_ports = MT7530_NUM_PORTS;
- 
--	/* Use medatek,mcm property to distinguish hardware type that would
--	 * casues a little bit differences on power-on sequence.
--	 */
--	priv->mcm = of_property_read_bool(dn, "mediatek,mcm");
--	if (priv->mcm) {
--		dev_info(&mdiodev->dev, "MT7530 adapts as multi-chip module\n");
--
--		priv->rstc = devm_reset_control_get(&mdiodev->dev, "mcm");
--		if (IS_ERR(priv->rstc)) {
--			dev_err(&mdiodev->dev, "Couldn't get our reset line\n");
--			return PTR_ERR(priv->rstc);
--		}
--	}
--
- 	/* Get the hardware identifier from the devicetree node.
- 	 * We will need it for some of the clock and regulator setup.
- 	 */
--	priv->info = of_device_get_match_data(&mdiodev->dev);
-+	priv->info = of_device_get_match_data(dev);
- 	if (!priv->info)
- 		return -EINVAL;
- 
-@@ -3193,23 +3170,53 @@ mt7530_probe(struct mdio_device *mdiodev)
- 		return -EINVAL;
- 
- 	priv->id = priv->info->id;
-+	priv->dev = dev;
-+	priv->ds->priv = priv;
-+	priv->ds->ops = &mt7530_switch_ops;
-+	mutex_init(&priv->reg_mutex);
-+	dev_set_drvdata(dev, priv);
- 
--	if (priv->id == ID_MT7530) {
--		priv->core_pwr = devm_regulator_get(&mdiodev->dev, "core");
--		if (IS_ERR(priv->core_pwr))
--			return PTR_ERR(priv->core_pwr);
-+	return 0;
-+}
- 
--		priv->io_pwr = devm_regulator_get(&mdiodev->dev, "io");
--		if (IS_ERR(priv->io_pwr))
--			return PTR_ERR(priv->io_pwr);
--	}
-+static int
-+mt7530_probe(struct mdio_device *mdiodev)
-+{
-+	static struct regmap_config *regmap_config;
-+	struct mt7530_priv *priv;
-+	struct device_node *dn;
-+	int ret;
-+
-+	dn = mdiodev->dev.of_node;
- 
--	/* Not MCM that indicates switch works as the remote standalone
-+	priv = devm_kzalloc(&mdiodev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->bus = mdiodev->bus;
-+	priv->dev = &mdiodev->dev;
-+
-+	ret = mt7530_probe_common(priv);
-+	if (ret)
-+		return ret;
-+
-+	/* Use medatek,mcm property to distinguish hardware type that would
-+	 * cause a little bit differences on power-on sequence.
-+	 * Not MCM that indicates switch works as the remote standalone
- 	 * integrated circuit so the GPIO pin would be used to complete
- 	 * the reset, otherwise memory-mapped register accessing used
- 	 * through syscon provides in the case of MCM.
- 	 */
--	if (!priv->mcm) {
-+	priv->mcm = of_property_read_bool(dn, "mediatek,mcm");
-+	if (priv->mcm) {
-+		dev_info(&mdiodev->dev, "MT7530 adapts as multi-chip module\n");
-+
-+		priv->rstc = devm_reset_control_get(&mdiodev->dev, "mcm");
-+		if (IS_ERR(priv->rstc)) {
-+			dev_err(&mdiodev->dev, "Couldn't get our reset line\n");
-+			return PTR_ERR(priv->rstc);
-+		}
-+	} else {
- 		priv->reset = devm_gpiod_get_optional(&mdiodev->dev, "reset",
- 						      GPIOD_OUT_LOW);
- 		if (IS_ERR(priv->reset)) {
-@@ -3218,12 +3225,15 @@ mt7530_probe(struct mdio_device *mdiodev)
- 		}
- 	}
- 
--	priv->bus = mdiodev->bus;
--	priv->dev = &mdiodev->dev;
--	priv->ds->priv = priv;
--	priv->ds->ops = &mt7530_switch_ops;
--	mutex_init(&priv->reg_mutex);
--	dev_set_drvdata(&mdiodev->dev, priv);
-+	if (priv->id == ID_MT7530) {
-+		priv->core_pwr = devm_regulator_get(&mdiodev->dev, "core");
-+		if (IS_ERR(priv->core_pwr))
-+			return PTR_ERR(priv->core_pwr);
-+
-+		priv->io_pwr = devm_regulator_get(&mdiodev->dev, "io");
-+		if (IS_ERR(priv->io_pwr))
-+			return PTR_ERR(priv->io_pwr);
-+	}
- 
- 	regmap_config = devm_kzalloc(&mdiodev->dev, sizeof(*regmap_config),
- 				     GFP_KERNEL);
--- 
-2.40.0
+Sorry, my bad! I missed it by mistake.
 
+Regards,
+Khadija
+
+> The function name is nice but it is a pain to look in the code to know
+> what part of the kernel this series is for.
+> 
+> Ira
+> 
+> > 
+> > Khadija Kamran (2):
+> >   staging: greybus: add a single exit path to arche_platform_wd_irq()
+> >   staging: greybus: refactor arche_platform_wd_irq()
+> > 
+> >  drivers/staging/greybus/arche-platform.c | 84 ++++++++++++------------
+> >  1 file changed, 43 insertions(+), 41 deletions(-)
+> > 
+> > -- 
+> > 2.34.1
+> > 
+> > 
+> 
+> 
