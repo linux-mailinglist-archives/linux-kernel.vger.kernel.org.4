@@ -2,115 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7296D4241
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB3B6D4247
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbjDCKiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
+        id S231593AbjDCKjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbjDCKhp (ORCPT
+        with ESMTP id S229509AbjDCKjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:37:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB3112CC6;
-        Mon,  3 Apr 2023 03:36:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B78B61892;
-        Mon,  3 Apr 2023 10:35:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8271C433EF;
-        Mon,  3 Apr 2023 10:35:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680518150;
-        bh=85MRH2+l503eK5l0LF+Zu620qHQWK59g5PiItRKZf7o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=vQ1L4qyC2EwczDh0CP3gVr5E26DwJseI8Wn/kWS+bfPXVaW3rObDtc5Ef8GiXJJBo
-         7vuO9iaicULZ2EFMvk+3ynLlSamu1js7Pq4d7eMZs7Jy12Wv7vVquwIo8/bdZL0nWb
-         faJClZhI3osujKIPXQ/uyOphCjelrme90RUdomY4x0t3cT33DpMn21HpTArKD8h3jT
-         CipKiblzKuq6EdJLKQ+E5uy5Qyfdrr5ks3Yu2mhLmOaG3XM0SV2o+QPwAsu/aRFuks
-         P03SYFS0gscfaNbV1KCGjo0pgy0xAVXqG1BUZPfR1aqQKCN+QUeoJffegbjP6k1U0K
-         L7+wahKfknzhw==
-Message-ID: <11d12eea-e70f-8bf8-ed1e-f82cf95a20ee@kernel.org>
-Date:   Mon, 3 Apr 2023 12:35:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: omap: Convert omap.txt to yaml
-Content-Language: en-US
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
-        Andrew Davis <afd@ti.com>
-References: <20230401140248.3363674-1-andreas@kemnade.info>
- <20230401140248.3363674-2-andreas@kemnade.info>
- <3865a750-2cd1-c92f-8bd2-22dfeea43769@kernel.org>
- <20230403121813.55c8aa2a@aktux>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230403121813.55c8aa2a@aktux>
-Content-Type: text/plain; charset=UTF-8
+        Mon, 3 Apr 2023 06:39:17 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09918113FD;
+        Mon,  3 Apr 2023 03:38:41 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33390Miu029440;
+        Mon, 3 Apr 2023 10:36:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=6Znlgc7WgH1YZnYgmuzPeUYORB1yzDqcHa2rVABuxc4=;
+ b=IUYkLbtVR7usaQuKXuG914mA0g/1veQghrL12MU8R3zQaCrcNzfisFbQlAuWLfDsp277
+ G50YhmEr4jviXpf3hHMoPzTFGWXEu2u7rjSFTaJ0NA5U3F8amhqLSdwaaN1k+nQqRW/J
+ V9RSL9OAsCX3SVYu+k56mVQzJi1cfUlmcdLZfA81+x54ZnbnazUJ0Q9fxyh9tXXCgHbw
+ O49BSpBBeaD8YulWRdokV46Dq2+BxsG3CpHgaz42v7tgWqjPlQgmZcyQIXsRlw+lvQfG
+ TtvMGGt3nlWDEngOR2NQP+Xv9OgdnED7glvQfMv1eXuuhN+VxqpCxiigrZZzZvvMdfxS 7Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ppxfpmdve-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Apr 2023 10:36:42 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3339xDUV039018;
+        Mon, 3 Apr 2023 10:36:42 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ppxfpmduv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Apr 2023 10:36:42 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3339ESW0024232;
+        Mon, 3 Apr 2023 10:36:41 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3ppc882t8p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Apr 2023 10:36:41 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 333Aae4t6816460
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 3 Apr 2023 10:36:40 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 64C1658084;
+        Mon,  3 Apr 2023 10:36:40 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2CA1D58073;
+        Mon,  3 Apr 2023 10:36:35 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.66.117])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  3 Apr 2023 10:36:34 +0000 (GMT)
+Message-ID: <3b6c773045d73ba1dcdb80dd9c6b7afcbd62cc42.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 0/4] evm: Do HMAC of multiple per LSM xattrs for new
+ inodes
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Mon, 03 Apr 2023 06:36:33 -0400
+In-Reply-To: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
+References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: sxJ74yMfVWLH41Y5N-hjWHNpZVqNXdwZ
+X-Proofpoint-GUID: IA7nyyfi-xTkiObYp5aOGV0h4F5zZvU5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-03_06,2023-04-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 bulkscore=0 clxscore=1011 mlxscore=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=587 spamscore=0 malwarescore=0 priorityscore=1501
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304030080
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/2023 12:18, Andreas Kemnade wrote:
-> Hi,
+On Fri, 2023-03-31 at 14:32 +0200, Roberto Sassu wrote:
+
+> Changelog
 > 
-> On Sun, 2 Apr 2023 13:26:46 +0200
-> Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> v9:
+> - Ensure in reiserfs_security_write() that the full xattr name is not
+>   larger than XATTR_NAME_MAX
+> - Rename num_filled_xattrs to xattr_count everywhere (suggested by Paul)
+> - Rename lsm_find_xattr_slot() to lsm_get_xattr_slot() and add a proper
+>   documentation (suggested by Paul)
+> - Return zero instead of -EOPNOTSUPP in evm_inode_init_security()
+>   (suggested by Paul)
+> - Remove additional checks of new_xattrs array in
+>   security_inode_init_security() (suggested by Paul)
+> - Handle the !initxattrs case similarly to the initxattrs case, except for
+>   not allocating the new_xattrs array in the former (suggested by Paul)
+> - Remove local variable xattr in security_inode_init_security(), and use
+>   xattr_count instead for loop termination (suggested by Paul)
 > 
->> On 01/04/2023 16:02, Andreas Kemnade wrote:
->>> From: Andrew Davis <afd@ti.com>
->>>
->>> Convert omap.txt to yaml.
->>>
->>> Signed-off-by: Andrew Davis <afd@ti.com>
->>> [various cleanup, adding Epson Moverio BT-200]
->>> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>  
->>
->> Please use scripts/get_maintainers.pl to get a list of necessary people
->> and lists to CC.  It might happen, that command when run on an older
->> kernel, gives you outdated entries.  Therefore please be sure you base
->> your patches on recent Linux kernel.
->>
->> Your CC list is broken in few ways. Just use the script, don't re-invent
->> the addresses.
->>
-> well, I am using the script and added a few adresses obviously missing.
+> v8:
+> - Add a new reiserfs patch to write the full xattr name
+> - Add num_filled_xattrs parameter to inode_init_security hook (suggested by
+>   Paul) and evm_inode_init_security()
+> - Change default return value of inode_init_security hook to -EOPNOTSUPP
+> - Rename lbs_xattr field of lsm_blob_sizes to lbs_xattr_count
+> - Introduce lsm_find_xattr_slot() helper
+> - Rename lsm_xattr parameter of evm_init_hmac() to xattrs
+> - Retrieve the EVM xattr slot with lsm_find_xattr_slot() and double check
+>   with the xattr array terminator
+> - Remove security_check_compact_filled_xattrs() (suggested by Paul)
 
-And one of them (omap@kernel) was invalid which made it impossible to
-reply to you...
+Much better without security_check_compact_filled_xattrs().  Thank you!
 
-
-> But maybe I have used the script from an older kernel. The patch was against
-> linux-next.
+> - Update security_inode_init_security() documentation
+> - Ensure that inode_init_security hook incremented the number of filled
+>   slots if it returned zero
+> - Ensure that xattr name and value are non-NULL in the filled slots
+> - Add the xattr name assignment after the xattr value one (suggested by
+>   Paul)
+> - Drop patches 1 - 3 (already in lsm/next)
 > 
-> [...]
->>> +      - description: TI DRA7 SoC based platforms
->>> +        items:
->>> +          - enum:
->>> +              - ti,dra718-evm  
->>
->> This is not correct. Maybe you forgot to fix DTS, but anyway it's
->> confusing to have dra718-evm with dra768 SoC. Is this really proper
->> combination?
->>
-> dra718-evm has a lot of compatibles, no idea if that is sane.
-> And to better discuss such things I added the omap mailinglist (with a typo,
-> sorry). To avoid that trouble in the future, I added a patch to MAINTAINERS.
-> 
-> But I think it is better to not convert dra7 stuff for now, then
-> it can be discussed by the right people. 
 
+-- 
+thanks,
 
-Best regards,
-Krzysztof
+Mimi
 
