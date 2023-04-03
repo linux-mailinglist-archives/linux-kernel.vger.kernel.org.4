@@ -2,135 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C8E6D49EA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B746D49DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233876AbjDCOmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S233822AbjDCOly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233848AbjDCOmL (ORCPT
+        with ESMTP id S233807AbjDCOlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:42:11 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3105BD4F83;
-        Mon,  3 Apr 2023 07:42:06 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8795A5C01AF;
-        Mon,  3 Apr 2023 10:42:03 -0400 (EDT)
-Received: from imap52 ([10.202.2.102])
-  by compute5.internal (MEProxy); Mon, 03 Apr 2023 10:42:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1680532923; x=1680619323; bh=rj
-        BzK4bqda2K1WGZTsXB0Lni4GKPBs2HscuZF79VyyI=; b=SmemwuPcoklrrvEXqS
-        BrabVIA3zZVR7SGYHn52RyRDE6Y2njto17W7k4VqF/KOogBgUjnfxvoc1iX+XV3B
-        s0YvQ3TXJIDrdytqSNtt6+MMd6qBWgPK8y6xnOG+wy56Oflr33UUxWzxJFmVdNbW
-        SAZvxf0mwV541DPSfgFCqeC7jNcURJWwM0oDsSohpdyzVYFQrMeRogFRmtei0Cr4
-        t0+mBYC/BbLS6sroTyLcKh2b6ISMXT3NtuGQDAxviDzGSm7m95KnMXFi4vsiPIjQ
-        pxwOKK+2hNtNSsfJiAoU6iqCvQ8xBxwVOn253ftk8bTYlj4H/JsxR2htIz4sL1HP
-        gVAg==
+        Mon, 3 Apr 2023 10:41:52 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A4017AFC;
+        Mon,  3 Apr 2023 07:41:51 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 7FC7F3200988;
+        Mon,  3 Apr 2023 10:41:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 03 Apr 2023 10:41:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680532908; x=
+        1680619308; bh=gznKa3yGoCt8Goz7+aNTxbO0je1v7BnetZnQWLBv3m8=; b=o
+        TMzF3h8fqD4Hr+u+SGzGA0Ur8/Y9/Q3c4AroJGsrzhp4CXEXhjDFvHF2D7Ga4JO0
+        0mTvQAy+T6cULh0bota0uXvyC/4XBLkbcVGLofAiJwZ+NNDNqXa2VDxnXaKwEoMy
+        RvCoSbvfOo1WqsA5DnvD/Tir9EteclNV0b29Cs89PpUZ07AzJBbi7I/4cV3YoPZr
+        UUPYfkU3Udzi+8lmmL64Xvm17yOUVvJvNHnn7CFFG/WzAGdg6ldrFqbykEDavhBv
+        Q3CGSj78QyAbRM7a63UuNHbX1tfl5iOu7Ta542SCXiuT4CZpfGFGi6PKWdn+HPoO
+        PswQfqT4BUuywllAqtq9w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680532923; x=1680619323; bh=rjBzK4bqda2K1
-        WGZTsXB0Lni4GKPBs2HscuZF79VyyI=; b=YsQ9zZE08Su9giUVRnPRZZ5sFsB05
-        Z7FwuuMzSzthS8Fe32MUgOAzsveP9jmqvjuv+IJvJz/gsHoeqQsE/aQU8CWvlAaK
-        jQ0fzvQaTRPThZ3rlz1m4EgVZ2VXiMtJxLrRTzv+xIixFvf+nQuqbj/ZUGV+oPQk
-        /PRvPNme20VW1SsO4Ar0YrLuLxWpLJPHvOaA3nVYuaQRu9HZCihMDCgsjFf8aUYu
-        AIYYpfqzNF3jJ3blYzyQMQJbeZW8XpAHn0KouBsZK2+WLVAN7gmbZrFUUHlFMwvC
-        i9AVixzhDdYCFTcVB8Rr29NNVI9UWGZwjJif63fsx6h2P8ct8Zk26CznQ==
-X-ME-Sender: <xms:uuUqZI8ORerDlZQeHAk5q7tNTnCa5uptTGedSNR5ZH4cYchStBHRiw>
-    <xme:uuUqZAvJRYAXkwUbitVOidJFaqtgyNsn211HkJo70aAj95KeJUpEhYoKceBEsCs1B
-    HN7AgTVIAGJz7KyV7c>
+        :x-sasl-enc; s=fm2; t=1680532908; x=1680619308; bh=gznKa3yGoCt8G
+        oz7+aNTxbO0je1v7BnetZnQWLBv3m8=; b=bShkCqZGwS8zZdhXEPHQ3r7MVQ8bx
+        hnsGYGDvOjuEQOzHg109pbmfwEumWtDJqakrlDry6IrpCOnOTL9RtAGkhs6IYGty
+        Ao+UQq+ACegOHgkQrBqw8cgfb8m4naRsPto1xPRqVU9wZ0qcIuR+NMvo+XmYX8cM
+        Ka0I+BS58Wec1nb4iiXMgBSGuo+XMW1bTn54B8GlRRwz0Q/n7omrMPI+UEdWmW4e
+        2IJpXRxTxISwm+STIgF4YPISYem1K5Cb7NloDeFLl3Zdo238yvPOdCZRzDkaiJ/v
+        08QTXzvw22othm6tqHDgOq9J5xo7L/0DzgGrGksg8N0DINQMm4sZnwTJg==
+X-ME-Sender: <xms:q-UqZFPWOjPmyuthpKHN0aVg57ao-2qg8oRrOenYiHZlxRqgdeKIng>
+    <xme:q-UqZH_vFYPpH0QLX696cqgZAgPn2ZXJx_SWPChdQ9mCi9CZw8qKBa9PNk1wDRkh2
+    ONvY5f74MGVohXg1i4>
+X-ME-Received: <xmr:q-UqZERr92dmZDBZlZEKLvYtcWlPdxLYYVdgLTawY09j56j-Uklx6AdAAAXf3uDmJrm2bw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedgjeelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfofgr
-    rhhkucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssg
-    drtggrqeenucggtffrrghtthgvrhhnpeeivedtkeeftdefhfdugfelgeehieeivdefffek
-    jeetuddvueeijefgjeekudevtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhhpvggrrhhs
-    ohhnqdhlvghnohhvohesshhquhgvsggsrdgtrg
-X-ME-Proxy: <xmx:uuUqZODT2id2Zms1h6giqJw8tmhC6xSo5uuHNiKCBbD5BPI2nl2dFQ>
-    <xmx:uuUqZIfi6mkZmQe5caXOSFF6eMWdvSPVxN4svKFDymww3lfweW3jgg>
-    <xmx:uuUqZNOBP0MQ6W7Tg33mcT5XG6O_EdfdbjVcFuYI-yHHE2ZZRZ06Tg>
-    <xmx:u-UqZJA13-nhU3MgmfNzERhmLzSAI3k1peJB7Evn2U1QDoYWh-FHmg>
-Feedback-ID: ibe194615:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DA9F1C6009B; Mon,  3 Apr 2023 10:42:02 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
-Mime-Version: 1.0
-Message-Id: <ca667f1a-6e65-4d00-8015-bdd4c9f8de51@app.fastmail.com>
-In-Reply-To: <a192e386-5385-d18a-9816-273e433eb833@redhat.com>
-References: <20230331232447.37204-1-asbachb.kernel@impl.it>
- <a192e386-5385-d18a-9816-273e433eb833@redhat.com>
-Date:   Mon, 03 Apr 2023 10:41:42 -0400
-From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
-To:     "Hans de Goede" <hdegoede@redhat.com>,
-        "Benjamin Asbach" <asbachb.kernel@impl.it>
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        "Mark Pearson" <markpearson@lenvo.com>,
-        "Henrique de Moraes Holschuh" <hmh@hmh.eng.br>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        ibm-acpi-devel@lists.sourceforge.net,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] platform/x86: thinkpad_acpi: Add missing T14s Gen1 type to s2idle
- quirk list
-Content-Type: text/plain
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:q-UqZBswS661F4t4lfp7xhOMCCtggYM-DhBxOhrAINANc9e9AthhcA>
+    <xmx:q-UqZNeBY8JkuDRX1MqJBE35XLU-QRIfhPs5ygpjE_4jCsMD7vLkxw>
+    <xmx:q-UqZN0OINDMQS7vtEJKu0vH0nD-TByna4pmReKqiQm5I0hbPF9abw>
+    <xmx:rOUqZJogSkHGBd6YCXCIQdgfK6kg0TIXg0dS1kT-5qmaCprKED2DBw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Apr 2023 10:41:46 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 29EE210D7B3; Mon,  3 Apr 2023 17:41:45 +0300 (+03)
+Date:   Mon, 3 Apr 2023 17:41:45 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv9 04/14] mm/page_alloc: Add sysfs handle to accept
+ accept_memory
+Message-ID: <20230403144145.wss3nudvyyd4xtih@box.shutemov.name>
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <20230330114956.20342-5-kirill.shutemov@linux.intel.com>
+ <4c319a60-c1fb-fe43-65be-9729f0261dab@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4c319a60-c1fb-fe43-65be-9729f0261dab@suse.cz>
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans
+On Mon, Apr 03, 2023 at 03:43:32PM +0200, Vlastimil Babka wrote:
+> On 3/30/23 13:49, Kirill A. Shutemov wrote:
+> > Write amount of memory to accept into the new sysfs handle
+> > /sys/kernel/mm/page_alloc/accept_memory.
+> > 
+> > Write 'all' to the handle to accept all memory in the system.
+> > 
+> > It can be used to implement background memory accepting from userspace.
+> > It is also useful for debugging.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> 
+> Somewhat similarly to patch 3, I'd think we don't need this patch in
+> mainline without clear usecases first, although it's good to post for
+> testing/debugging.
 
-On Mon, Apr 3, 2023, at 6:03 AM, Hans de Goede wrote:
-> Hi,
->
-> On 4/1/23 01:24, Benjamin Asbach wrote:
->>> Lenovo laptops that contain NVME SSDs across a variety of generations have
->>> trouble resuming from suspend to idle when the IOMMU translation layer is
->>> active for the NVME storage device.
->>>
->>> This generally manifests as a large resume delay or page faults. These
->>> delays and page faults occur as a result of a Lenovo BIOS specific SMI
->>> that runs during the D3->D0 transition on NVME devices.
->> 
->> Link: https://lore.kernel.org/all/20220503183420.348-1-mario.limonciello@amd.com/
->> 
->> As Lenovo distributes T14s Gen1 laptops with different product names
->> a missing one is added by this patch.
->> 
->> Note: Based on lenovo support page there might be some more variants which
->> are not represented in s2idle quirk list.
->
-> Can you provide some more in info on this? Then Mark can maybe check
-> if we need to add more models ?
->
-> Mark, generally speaking it may help to do a DMI_EXACT_MATCH on
-> DMI_PRODUCT_VERSION with ThinkPads ? That contains the human
-> readable model string instead of things like "20UJ", and I guess
-> that we want to e.g. apply the s2idle quirk to all "T14s Gen1 AMD"
-> ThinkPads.
+I thought about it as a way to implement #3 from 02/14 commit message:
+users who want to accept all memory in background can use the mechanism.
 
-Sadly that won't work :(
- - The same ID is used for multiple platform names and those can change by geography (for instance China often calls things differently) or if WWAN supported, etc. 
- - They use the same platform name for Intel and AMD in a few cases (not all). And this match should only be done for the AMD platforms.
+But, again, we can leave out until later.
 
-For every platform there are two IDs. In this case the T14s G1 has 20UH and 20UJ. I need to figure out when each is used - I thought only the first one was in released platforms but it seems that's not the case from this patch. I need to understand how/why.
-
-For models impacted - there are a couple missing from the list that I would expect to see there as they're the same generation: X13 G1 and L15 G2 (and a possible ? against L14/L15 G1). I'm also a bit cautious as the E-series might need to show up here - but I don't know those platforms as well..
-And depending on the two IDs...some of the platforms may need doubling up. Urgh.
-
-Mark
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
