@@ -2,240 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6C66D41B8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C0C6D41BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbjDCKRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S232157AbjDCKSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbjDCKRo (ORCPT
+        with ESMTP id S232151AbjDCKSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:17:44 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CAE72B7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:17:41 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id h25so37369193lfv.6
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 03:17:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680517060;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CYWunT6ljLivd4wOmJltu2pTDnUfXFoW1kvmT3KC1QE=;
-        b=CJvXvyFr0yjtxSqivXbkpCcvc0H/CT5Eonky3l6Mk2azf7riTYbT0oGepNmOI5QSO2
-         tvM80d2CMcceuNCXKmGgPLz8IRukbwQe1e31W0LUXMvs6giQbKJvWRqO5BtHwA+Np/uq
-         grWXum+E2Enovwah7JyDoAn5cKkG6x5kMNLSXezWYvF8p2fewdS1idyv1c9h8ssYOo5e
-         hysZIAcY33b8LZMGAmwNsEOz81sxCq0IRvoKX3XcgA9/4uIv8l85EeX7Xrk07v3qY2Fg
-         t4kM9anM315HOmrHtSAifarscYiTw2qNpyLUzZ+GNMLLB7q/QyFrJYyfAFL3D2kxWlts
-         kx3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680517060;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CYWunT6ljLivd4wOmJltu2pTDnUfXFoW1kvmT3KC1QE=;
-        b=0qDjParitqFO0eVvna8KCrV5yuYdU88ioOYRHsLIy8ws0jha+iNPHQ0FejTSX90H9Y
-         l8ez4iiVD5hS/jM6V/Ez4lXlBbAAtd2DDvJT6XB3XnTYMgCpinXxREMDcfJy0+Ms6pjG
-         8pUSaTBD4Q0BZdW9Lqx51gnlYsAIjXIMorbkyGxxUs7/V2+Xk15ZloC74I6Vkq3o9qVv
-         +wbjSkh0VXvbMtNelvrxMGJrrMrm85UTH1jwkgN8pV0oSlerK6QMrmr4eZMTxJrqOHrQ
-         rfuQbtsTdL79uV87vcbRfCnsR3LszBW+HwcQx13v2KAPfo850lwfyKL9IcMAucUu7Muv
-         IZrA==
-X-Gm-Message-State: AAQBX9eeeR2Nm9i5yjRIa6AHeYnHeNBRbJ2868ll2fKHK6N8PxxG1AjU
-        ni6ZcOwJDLMsvG92zK8AeiJFUg==
-X-Google-Smtp-Source: AKy350YJmY7LxwUOQLiwMFFgX8lclMVAm4rfogfN3uFeeeJtrG3sPerJemo+C2+/Lq4iTju333wZBw==
-X-Received: by 2002:a05:6512:4dd:b0:4eb:c24:2066 with SMTP id w29-20020a05651204dd00b004eb0c242066mr7869572lfq.68.1680517060196;
-        Mon, 03 Apr 2023 03:17:40 -0700 (PDT)
-Received: from [192.168.1.101] (abxj135.neoplus.adsl.tpnet.pl. [83.9.3.135])
-        by smtp.gmail.com with ESMTPSA id u26-20020ac2519a000000b004e8483bff82sm1709319lfi.271.2023.04.03.03.17.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 03:17:39 -0700 (PDT)
-Message-ID: <97316d33-29b9-700f-8766-df538b133f35@linaro.org>
-Date:   Mon, 3 Apr 2023 12:17:38 +0200
+        Mon, 3 Apr 2023 06:18:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 745881043C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:17:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 885F41063;
+        Mon,  3 Apr 2023 03:18:40 -0700 (PDT)
+Received: from [10.57.54.53] (unknown [10.57.54.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 35E863F840;
+        Mon,  3 Apr 2023 03:17:54 -0700 (PDT)
+Message-ID: <a25804a5-c949-098e-43de-9c9046fdb2de@arm.com>
+Date:   Mon, 3 Apr 2023 11:17:52 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8350-nagara: Unify status
- property placement
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230321-topic-sagami_dp-v1-0-340c8bce4276@linaro.org>
- <20230321-topic-sagami_dp-v1-4-340c8bce4276@linaro.org>
- <i5tsdvn45peivo7tegmg3q4mhsz2ly2kfs64kezeykn2bbosd5@ugfqrjqumljd>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <i5tsdvn45peivo7tegmg3q4mhsz2ly2kfs64kezeykn2bbosd5@ugfqrjqumljd>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 09/13] coresight: Store in-connections as well as
+ out-connections
+To:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
+        quic_jinlmao@quicinc.com, mike.leach@linaro.org
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230329115329.2747724-1-james.clark@arm.com>
+ <20230329115329.2747724-10-james.clark@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20230329115329.2747724-10-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 29/03/2023 12:53, James Clark wrote:
+> This will allow CATU to get its associated ETR in a generic way where
+> currently the enable path has some hard coded searches which avoid
+> the need to store input connections.
+> 
+> This also means that the full search for connected devices on removal
+> can be replaced with a loop through only the input and output devices.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-core.c  | 79 ++++++++-----------
+>   .../hwtracing/coresight/coresight-platform.c  | 31 +++++++-
+>   drivers/hwtracing/coresight/coresight-sysfs.c |  7 --
+>   include/linux/coresight.h                     | 26 ++++++
+>   4 files changed, 90 insertions(+), 53 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index 2f4aa15ef8f9..be1e8be2459f 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -1349,6 +1349,16 @@ static int coresight_orphan_match(struct device *dev, void *data)
+>   			if (ret)
+>   				return ret;
+>   
+> +			/*
+> +			 * Install the device connection. This also indicates that
+> +			 * the links are operational on both ends.
+> +			 */
+> +			conn->dest_dev = csdev;
+> +			conn->src_dev = i_csdev;
+> +
+> +			ret = coresight_add_in_conn(conn);
+> +			if (ret)
+> +				return ret;
+
+Do we need to clean up this "conn" in case of an error here ?
+
+>   		} else {
+>   			/* This component still has an orphan */
+>   			still_orphan = true;
+> @@ -1370,58 +1380,36 @@ static int coresight_fixup_orphan_conns(struct coresight_device *csdev)
+>   			 csdev, coresight_orphan_match);
+>   }
+>   
+> -static int coresight_remove_match(struct device *dev, void *data)
+> +/* coresight_remove_conns - Remove other device's references to this device */
+> +static void coresight_remove_conns(struct coresight_device *csdev)
+>   {
+> -	int i;
+> -	struct coresight_device *csdev, *iterator;
+> +	int i, j;
+>   	struct coresight_connection *conn;
+>   
+> -	csdev = data;
+> -	iterator = to_coresight_device(dev);
+> -
+> -	/* No need to check oneself */
+> -	if (csdev == iterator)
+> -		return 0;
+> +	/* Remove input references on output devices */
+
+minor nit: The term "output devices" is a bit confusing.
+Could we simplify it as :
+
+	/*
+	 * Remove the input connection references from the
+	 * destination device for each output connection.
+	 */
+
+> +	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+> +		conn = csdev->pdata->out_conns[i];
+> +		if (!conn->dest_dev)
+> +			continue;
+>   
+> -	/*
+> -	 * Circle throuch all the connection of that component.  If we find
+> -	 * a connection whose name matches @csdev, remove it.
+> -	 */
+> -	for (i = 0; i < iterator->pdata->nr_outconns; i++) {
+> -		conn = iterator->pdata->out_conns[i];
+> -
+> -		/* Child_dev being set signifies that the links were made */
+> -		if (csdev->dev.fwnode == conn->dest_fwnode && conn->dest_dev) {
+> -			iterator->orphan = true;
+> -			coresight_remove_links(iterator, conn);
+> -			conn->dest_dev = NULL;
+> -			/* No need to continue */
+> -			break;
+> -		}
+> +		for (j = 0; j < conn->dest_dev->pdata->nr_inconns; ++j)
+> +			if (conn->dest_dev->pdata->in_conns[j] == conn) {
+> +				conn->dest_dev->pdata->in_conns[j] = NULL;
+> +				break;
+> +			}
+>   	}
+>   
+> -	/*
+> -	 * Returning '0' ensures that all known component on the
+> -	 * bus will be checked.
+> -	 */
+> -	return 0;
+> -}
+> +	/* Remove output connections on input devices */
+
+Similarly here :
+
+	/*
+	 * For all input connections, remove references in
+	 * the output connection.
+	 */
+> +	for (i = 0; i < csdev->pdata->nr_inconns; ++i) {
+> +		conn = csdev->pdata->in_conns[i];
+> +		/* Input conns array is sparse */
+> +		if (!conn)
+> +			continue;
+>   
+> -/*
+> - * coresight_remove_conns - Remove references to this given devices
+> - * from the connections of other devices.
+> - */
+> -static void coresight_remove_conns(struct coresight_device *csdev)
+> -{
+> -	/*
+> -	 * Another device will point to this device only if there is
+> -	 * an output port connected to this one. i.e, if the device
+> -	 * doesn't have at least one input port, there is no point
+> -	 * in searching all the devices.
+> -	 */
+> -	if (csdev->pdata->high_inport)
+> -		bus_for_each_dev(&coresight_bustype, NULL,
+> -				 csdev, coresight_remove_match);
+> +		conn->src_dev->orphan = true;
+> +		coresight_remove_links(conn->src_dev, conn);
+> +		conn->dest_dev = NULL;
+> +	}
+>   }
+>   
+>   /**
+> @@ -1531,6 +1519,7 @@ void coresight_release_platform_data(struct coresight_device *csdev,
+>   		devm_kfree(dev, conns[i]);
+>   	}
+>   	devm_kfree(dev, pdata->out_conns);
+> +	devm_kfree(dev, pdata->in_conns);
+
+As mentioned earlier, this is not required.
+
+>   	devm_kfree(dev, pdata);
+>   	if (csdev)
+>   		coresight_remove_conns_sysfs_group(csdev);
+> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
+> index bea8f1ba309a..59583df2dc44 100644
+> --- a/drivers/hwtracing/coresight/coresight-platform.c
+> +++ b/drivers/hwtracing/coresight/coresight-platform.c
+> @@ -60,6 +60,35 @@ int coresight_add_out_conn(struct device *dev,
+>   }
+>   EXPORT_SYMBOL_GPL(coresight_add_out_conn);
+>   
+> +/*
+> + * Add an input connection reference to @out_conn in the target's in_conns array
+> + *
+> + * @out_conn: Existing output connection to store as an input on the
+> + *	      connection's remote device.
+> + */
+> +int coresight_add_in_conn(struct coresight_connection *out_conn)
+> +{
+> +	int i;
+> +	struct device *dev = out_conn->dest_dev->dev.parent;
+> +	struct coresight_platform_data *pdata = out_conn->dest_dev->pdata;
+> +
+> +	for (i = 0; i < pdata->nr_inconns; ++i)
+> +		if (!pdata->in_conns[i]) {
+> +			pdata->in_conns[i] = out_conn;
+> +			return 0;
+> +		}
+> +
+> +	pdata->nr_inconns++;
+> +	pdata->in_conns =
+> +		devm_krealloc_array(dev, pdata->in_conns, pdata->nr_inconns,
+> +				    sizeof(*pdata->in_conns), GFP_KERNEL);
+> +	if (!pdata->in_conns)
+> +		return -ENOMEM;
+> +	pdata->in_conns[pdata->nr_inconns - 1] = out_conn;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(coresight_add_in_conn);
+> +
+>   static struct device *
+>   coresight_find_device_by_fwnode(struct fwnode_handle *fwnode)
+>   {
+> @@ -230,7 +259,7 @@ static int of_coresight_get_cpu(struct device *dev)
+>   
+>   /*
+>    * of_coresight_parse_endpoint : Parse the given output endpoint @ep
+> - * and fill the connection information in @conn
+> + * and fill the connection information in @in_conn and @out_conn
+
+We don't do anything about the in_conn here ? So this looks a bit
+odd.
 
 
-On 2.04.2023 17:19, Marijn Suijten wrote:
-> On 2023-03-21 23:12:31, Konrad Dybcio wrote:
-> 
-> When you get to resending this, change sm8350-nagara in the title to
-> sm8350-sagami :)
-Even I confuse them, they just look too alike! ;)
+Rest looks good to me.
 
-Konrad
-> 
-> - Marijn
-> 
->> As we're heading towards getting the status property last everywhere,
->> take care of it for SM8350 SONY Sagami.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  .../boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 30 ++++++++++------------
->>  1 file changed, 14 insertions(+), 16 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
->> index b2baa81baf5e..95b1ba4ce470 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
->> @@ -189,8 +189,8 @@ vph_pwr: vph-pwr-regulator {
->>  };
->>  
->>  &adsp {
->> -	status = "okay";
->>  	firmware-name = "qcom/sm8350/Sony/sagami/adsp.mbn";
->> +	status = "okay";
->>  };
->>  
->>  &apps_rsc {
->> @@ -542,27 +542,27 @@ pmr735a_l7: ldo7 {
->>  };
->>  
->>  &cdsp {
->> -	status = "okay";
->>  	firmware-name = "qcom/sm8350/Sony/sagami/cdsp.mbn";
->> +	status = "okay";
->>  };
->>  
->>  &i2c1 {
->> -	status = "okay";
->>  	clock-frequency = <1000000>;
->> +	status = "okay";
->>  
->>  	/* Some subset of SONY IMX663 camera sensor @ 38 */
->>  };
->>  
->>  &i2c4 {
->> -	status = "okay";
->>  	clock-frequency = <400000>;
->> +	status = "okay";
->>  
->>  	/* Samsung Touchscreen (needs I2C GPI DMA) @ 48 */
->>  };
->>  
->>  &i2c11 {
->> -	status = "okay";
->>  	clock-frequency = <1000000>;
->> +	status = "okay";
->>  
->>  	cs35l41_l: speaker-amp@40 {
->>  		compatible = "cirrus,cs35l41";
->> @@ -596,31 +596,31 @@ cs35l41_r: speaker-amp@41 {
->>  };
->>  
->>  &i2c12 {
->> -	status = "okay";
->>  	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
->>  	clock-frequency = <100000>;
->> +	status = "okay";
->>  
->>  	/* AMS TCS3490 RGB+IR color sensor @ 72 */
->>  };
->>  
->>  &i2c13 {
->> -	status = "okay";
->>  	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
->>  	clock-frequency = <100000>;
->> +	status = "okay";
->>  
->>  	/* Qualcomm PM8008i/PM8008j (?) @ 8, 9, c, d */
->>  };
->>  
->>  &i2c15 {
->> -	status = "okay";
->>  	clock-frequency = <400000>;
->> +	status = "okay";
->>  
->>  	/* NXP SN1X0 NFC @ 28 */
->>  };
->>  
->>  &i2c17 {
->> -	status = "okay";
->>  	clock-frequency = <1000000>;
->> +	status = "okay";
->>  
->>  	/* Cirrus Logic CS40L25A boosted haptics driver @ 40 */
->>  };
->> @@ -652,8 +652,8 @@ mdss_dp_altmode: endpoint {
->>  };
->>  
->>  &mpss {
->> -	status = "okay";
->>  	firmware-name = "qcom/sm8350/Sony/sagami/modem.mbn";
->> +	status = "okay";
->>  };
->>  
->>  &pm8350_gpios {
->> @@ -719,8 +719,8 @@ &pon_pwrkey {
->>  };
->>  
->>  &pon_resin {
->> -	status = "okay";
->>  	linux,code = <KEY_VOLUMEUP>;
->> +	status = "okay";
->>  };
->>  
->>  &qupv3_id_0 {
->> @@ -748,8 +748,8 @@ &sdhc_2 {
->>  };
->>  
->>  &slpi {
->> -	status = "okay";
->>  	firmware-name = "qcom/sm8350/Sony/sagami/slpi.mbn";
->> +	status = "okay";
->>  };
->>  
->>  &spi14 {
->> @@ -1038,16 +1038,14 @@ usb_1_dwc3_ss: endpoint {
->>  };
->>  
->>  &usb_1_hsphy {
->> -	status = "okay";
->> -
->>  	vdda-pll-supply = <&pm8350_l5>;
->>  	vdda18-supply = <&pm8350c_l1>;
->>  	vdda33-supply = <&pm8350_l2>;
->> +	status = "okay";
->>  };
->>  
->>  &usb_1_qmpphy {
->> -	status = "okay";
->> -
->>  	vdda-phy-supply = <&pm8350_l6>;
->>  	vdda-pll-supply = <&pm8350_l1>;
->> +	status = "okay";
->>  };
->>
->> -- 
->> 2.40.0
->>
+Suzuki
+
+
+>    *
+>    * Parses the local port, remote device name and the remote port.
+>    *
+> diff --git a/drivers/hwtracing/coresight/coresight-sysfs.c b/drivers/hwtracing/coresight/coresight-sysfs.c
+> index a4a8e8e642e8..464ba5e1343b 100644
+> --- a/drivers/hwtracing/coresight/coresight-sysfs.c
+> +++ b/drivers/hwtracing/coresight/coresight-sysfs.c
+> @@ -173,12 +173,6 @@ int coresight_make_links(struct coresight_device *orig,
+>   			break;
+>   
+>   		conn->link = link;
+> -
+> -		/*
+> -		 * Install the device connection. This also indicates that
+> -		 * the links are operational on both ends.
+> -		 */
+> -		conn->dest_dev = target;
+>   		return 0;
+>   	} while (0);
+>   
+> @@ -202,5 +196,4 @@ void coresight_remove_links(struct coresight_device *orig,
+>   	devm_kfree(&orig->dev, conn->link->orig_name);
+>   	devm_kfree(&orig->dev, conn->link);
+>   	conn->link = NULL;
+> -	conn->dest_dev = NULL;
+>   }
+> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+> index 7197b07deede..aa36680fd264 100644
+> --- a/include/linux/coresight.h
+> +++ b/include/linux/coresight.h
+> @@ -105,6 +105,9 @@ union coresight_dev_subtype {
+>    * @nr_inconns: Number of elements for the input connections.
+>    * @nr_outconns: Number of elements for the output connections.
+>    * @out_conns:	Array of nr_outconns connections from this component.
+> + * @in_conns: Sparse array of in_conns. Sparse because the source
+> + *	      device owns the connection so when it's unloaded the
+> + *	      connection leaves an empty slot.
+>    */
+>   struct coresight_platform_data {
+>   	int high_inport;
+> @@ -112,6 +115,7 @@ struct coresight_platform_data {
+>   	int nr_inconns;
+>   	int nr_outconns;
+>   	struct coresight_connection **out_conns;
+> +	struct coresight_connection **in_conns;
+>   };
+>   
+>   /**
+> @@ -172,6 +176,26 @@ struct coresight_desc {
+>    * @dest_dev:	a @coresight_device representation of the component
+>   		connected to @src_port. NULL until the device is created
+>    * @link: Representation of the connection as a sysfs link.
+> + *
+> + * The full connection structure looks like this, where in_conns store
+> + * references to same connection as the source device's out_conns.
+> + *
+> + * +-----------------------------+   +-----------------------------+
+> + * |coresight_device             |   |coresight_connection         |
+> + * |-----------------------------|   |-----------------------------|
+> + * |                             |   |                             |
+> + * |                             |   |                  remote_dev*|<--
+> + * |pdata->out_conns[nr_outconns]|<->|src_dev*                     |   |
+> + * |                             |   |                             |   |
+> + * +-----------------------------+   +-----------------------------+   |
+> + *                                                                     |
+> + *                                   +-----------------------------+   |
+> + *                                   |coresight_device             |   |
+> + *                                   |------------------------------   |
+> + *                                   |                             |   |
+> + *                                   |  pdata->in_conns[nr_inconns]|<--
+> + *                                   |                             |
+> + *                                   +-----------------------------+
+>    */
+>   struct coresight_connection {
+>   	int src_port;
+> @@ -179,6 +203,7 @@ struct coresight_connection {
+>   	struct fwnode_handle *dest_fwnode;
+>   	struct coresight_device *dest_dev;
+>   	struct coresight_sysfs_link *link;
+> +	struct coresight_device *src_dev;
+>   };
+>   
+>   /**
+> @@ -614,5 +639,6 @@ struct coresight_platform_data *coresight_get_platform_data(struct device *dev);
+>   int coresight_add_out_conn(struct device *dev,
+>   			   struct coresight_platform_data *pdata,
+>   			   const struct coresight_connection *new_conn);
+> +int coresight_add_in_conn(struct coresight_connection *conn);
+>   
+>   #endif		/* _LINUX_COREISGHT_H */
+
