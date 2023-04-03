@@ -2,137 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B746D49DF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7786D4A09
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233822AbjDCOly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
+        id S233896AbjDCOne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233807AbjDCOlw (ORCPT
+        with ESMTP id S233863AbjDCOn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:41:52 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A4017AFC;
-        Mon,  3 Apr 2023 07:41:51 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 7FC7F3200988;
-        Mon,  3 Apr 2023 10:41:48 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 03 Apr 2023 10:41:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680532908; x=
-        1680619308; bh=gznKa3yGoCt8Goz7+aNTxbO0je1v7BnetZnQWLBv3m8=; b=o
-        TMzF3h8fqD4Hr+u+SGzGA0Ur8/Y9/Q3c4AroJGsrzhp4CXEXhjDFvHF2D7Ga4JO0
-        0mTvQAy+T6cULh0bota0uXvyC/4XBLkbcVGLofAiJwZ+NNDNqXa2VDxnXaKwEoMy
-        RvCoSbvfOo1WqsA5DnvD/Tir9EteclNV0b29Cs89PpUZ07AzJBbi7I/4cV3YoPZr
-        UUPYfkU3Udzi+8lmmL64Xvm17yOUVvJvNHnn7CFFG/WzAGdg6ldrFqbykEDavhBv
-        Q3CGSj78QyAbRM7a63UuNHbX1tfl5iOu7Ta542SCXiuT4CZpfGFGi6PKWdn+HPoO
-        PswQfqT4BUuywllAqtq9w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680532908; x=1680619308; bh=gznKa3yGoCt8G
-        oz7+aNTxbO0je1v7BnetZnQWLBv3m8=; b=bShkCqZGwS8zZdhXEPHQ3r7MVQ8bx
-        hnsGYGDvOjuEQOzHg109pbmfwEumWtDJqakrlDry6IrpCOnOTL9RtAGkhs6IYGty
-        Ao+UQq+ACegOHgkQrBqw8cgfb8m4naRsPto1xPRqVU9wZ0qcIuR+NMvo+XmYX8cM
-        Ka0I+BS58Wec1nb4iiXMgBSGuo+XMW1bTn54B8GlRRwz0Q/n7omrMPI+UEdWmW4e
-        2IJpXRxTxISwm+STIgF4YPISYem1K5Cb7NloDeFLl3Zdo238yvPOdCZRzDkaiJ/v
-        08QTXzvw22othm6tqHDgOq9J5xo7L/0DzgGrGksg8N0DINQMm4sZnwTJg==
-X-ME-Sender: <xms:q-UqZFPWOjPmyuthpKHN0aVg57ao-2qg8oRrOenYiHZlxRqgdeKIng>
-    <xme:q-UqZH_vFYPpH0QLX696cqgZAgPn2ZXJx_SWPChdQ9mCi9CZw8qKBa9PNk1wDRkh2
-    ONvY5f74MGVohXg1i4>
-X-ME-Received: <xmr:q-UqZERr92dmZDBZlZEKLvYtcWlPdxLYYVdgLTawY09j56j-Uklx6AdAAAXf3uDmJrm2bw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedgjeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:q-UqZBswS661F4t4lfp7xhOMCCtggYM-DhBxOhrAINANc9e9AthhcA>
-    <xmx:q-UqZNeBY8JkuDRX1MqJBE35XLU-QRIfhPs5ygpjE_4jCsMD7vLkxw>
-    <xmx:q-UqZN0OINDMQS7vtEJKu0vH0nD-TByna4pmReKqiQm5I0hbPF9abw>
-    <xmx:rOUqZJogSkHGBd6YCXCIQdgfK6kg0TIXg0dS1kT-5qmaCprKED2DBw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Apr 2023 10:41:46 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 29EE210D7B3; Mon,  3 Apr 2023 17:41:45 +0300 (+03)
-Date:   Mon, 3 Apr 2023 17:41:45 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv9 04/14] mm/page_alloc: Add sysfs handle to accept
- accept_memory
-Message-ID: <20230403144145.wss3nudvyyd4xtih@box.shutemov.name>
-References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
- <20230330114956.20342-5-kirill.shutemov@linux.intel.com>
- <4c319a60-c1fb-fe43-65be-9729f0261dab@suse.cz>
+        Mon, 3 Apr 2023 10:43:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD2918258
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:42:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680532942;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K+EPWgU2x5V4hfg46aLK3WZjBP8GTm1fIwNbw6N/r0w=;
+        b=H9Y2vcgxcpxrvIQj+DKzpRKBA1oZhYOdZ7lGRHKymFdjl+zqShuvwZ57xy2BzwcgdFDYG5
+        /7eofS+7SO0bDGuhM4lhM7HTHDzf5fMl3nsY6GLQi6heVp9tbMNIBvHXApQRL7DFtDfz6Y
+        +0OtmOqCY+ZREd84sz944RBysvgB7CE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-26-HcZVqk0iN06tvnzLG2XdLA-1; Mon, 03 Apr 2023 10:42:19 -0400
+X-MC-Unique: HcZVqk0iN06tvnzLG2XdLA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7598E884EC5;
+        Mon,  3 Apr 2023 14:42:18 +0000 (UTC)
+Received: from rotkaeppchen (unknown [10.39.192.158])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 09E7C492C13;
+        Mon,  3 Apr 2023 14:42:16 +0000 (UTC)
+Date:   Mon, 3 Apr 2023 16:42:13 +0200
+From:   Philipp Rudo <prudo@redhat.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Baoquan He <bhe@redhat.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Ross Zwisler <zwisler@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Simon Horman <horms@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] kexec: Support purgatories with .text.hot
+ sections
+Message-ID: <20230403164213.108093ec@rotkaeppchen>
+In-Reply-To: <20230321-kexec_clang16-v5-1-5563bf7c4173@chromium.org>
+References: <20230321-kexec_clang16-v5-0-5563bf7c4173@chromium.org>
+        <20230321-kexec_clang16-v5-1-5563bf7c4173@chromium.org>
+Organization: Red Hat inc.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4c319a60-c1fb-fe43-65be-9729f0261dab@suse.cz>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 03:43:32PM +0200, Vlastimil Babka wrote:
-> On 3/30/23 13:49, Kirill A. Shutemov wrote:
-> > Write amount of memory to accept into the new sysfs handle
-> > /sys/kernel/mm/page_alloc/accept_memory.
-> > 
-> > Write 'all' to the handle to accept all memory in the system.
-> > 
-> > It can be used to implement background memory accepting from userspace.
-> > It is also useful for debugging.
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Hi Ricardo,
+
+On Thu, 30 Mar 2023 11:44:47 +0200
+Ricardo Ribalda <ribalda@chromium.org> wrote:
+
+> Clang16 links the purgatory text in two sections:
 > 
-> Somewhat similarly to patch 3, I'd think we don't need this patch in
-> mainline without clear usecases first, although it's good to post for
-> testing/debugging.
+>   [ 1] .text             PROGBITS         0000000000000000  00000040
+>        00000000000011a1  0000000000000000  AX       0     0     16
+>   [ 2] .rela.text        RELA             0000000000000000  00003498
+>        0000000000000648  0000000000000018   I      24     1     8
+>   ...
+>   [17] .text.hot.        PROGBITS         0000000000000000  00003220
+>        000000000000020b  0000000000000000  AX       0     0     1
+>   [18] .rela.text.hot.   RELA             0000000000000000  00004428
+>        0000000000000078  0000000000000018   I      24    17     8
+> 
+> And both of them have their range [sh_addr ... sh_addr+sh_size] on the
+> area pointed by `e_entry`.
+> 
+> This causes that image->start is calculated twice, once for .text and
+> another time for .text.hot. The second calculation leaves image->start
+> in a random location.
+> 
+> Because of this, the system crashes immediately after:
+> 
+> kexec_core: Starting new kernel
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_puragory")
+> Reviewed-by: Ross Zwisler <zwisler@google.com>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  kernel/kexec_file.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index f1a0e4e3fb5c..c7a0e51a6d87 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -901,10 +901,22 @@ static int kexec_purgatory_setup_sechdrs(struct purgatory_info *pi,
+>  		}
+>  
+>  		offset = ALIGN(offset, align);
+> +
+> +		/*
+> +		 * Check if the segment contains the entry point, if so,
+> +		 * calculate the value of image->start based on it.
+> +		 * If the compiler has produced more than one .text section
+> +		 * (Eg: .text.hot), they are generally after the main .text
+> +		 * section, and they shall not be used to calculate
+> +		 * image->start. So do not re-calculate image->start if it
+> +		 * is not set to the initial value, and warn the user so they
+> +		 * have a chance to fix their purgatory's linker script.
+> +		 */
+>  		if (sechdrs[i].sh_flags & SHF_EXECINSTR &&
+>  		    pi->ehdr->e_entry >= sechdrs[i].sh_addr &&
+>  		    pi->ehdr->e_entry < (sechdrs[i].sh_addr
+> -					 + sechdrs[i].sh_size)) {
+> +					 + sechdrs[i].sh_size) &&
+> +		    !WARN_ON(kbuf->image->start != pi->ehdr->e_entry)) {
 
-I thought about it as a way to implement #3 from 02/14 commit message:
-users who want to accept all memory in background can use the mechanism.
+Looks good to me. I'm not sure if it is better to use WARN_ON_ONCE to
+avoid spamming the log when there are more than two .text sections or
+when you reload the kernel. But that's only a rare corner case. So no
+strong opinion from my side. Either way 
 
-But, again, we can leave out until later.
+Reviewed-by: Philipp Rudo <prudo@redhat.com>
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+>  			kbuf->image->start -= sechdrs[i].sh_addr;
+>  			kbuf->image->start += kbuf->mem + offset;
+>  		}
+> 
+
