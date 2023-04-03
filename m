@@ -2,169 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED466D4FC9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CED66D4FD3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232750AbjDCSAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51754 "EHLO
+        id S232748AbjDCSBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232871AbjDCSAB (ORCPT
+        with ESMTP id S232911AbjDCSBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:00:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EBD171E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:59:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A4C061E75
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 17:59:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E3E1C433EF;
-        Mon,  3 Apr 2023 17:59:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680544744;
-        bh=khDYkXvty0Ffs3qj1iEECXU0QHcjnVT1YU5sAurqjBc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TwP+fz7R4y7fEgk7DFITpHPKnhIBPIZHj3VKXNyCQjTlNtEnTvCLRbNrSmYsOBXib
-         8CIIH5uQPfwOE62ebPFU/GtZ7vnCCQs31qAJGrjcApvhzvmLQcaMIZBCkmuBOAy8f8
-         2hmxxClwdlVoqJsIUlBorabLbh5SjWWIqEBFbkqvhw5iCg7xNQcXeMfaZ9t0Lgi50h
-         PG4M3pwMBM6XKoVxqR5KHiEMSsjou78vX2NOJwj70nyS5m1b6ftTV6wpYdZsNSZNel
-         I0PT0ETSK+UFfgx6GKwOsVRvfhNJb7MqZgDwWKf1wenFDLq6FPFMyIBxltXSJfTyxB
-         xskj06dFIsFew==
-Date:   Mon, 3 Apr 2023 10:59:02 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] f2fs: fix to check readonly condition correctly
-Message-ID: <ZCsT5mRsZJqPXBzz@google.com>
-References: <20230402112825.42486-1-chao@kernel.org>
+        Mon, 3 Apr 2023 14:01:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EDD128
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:00:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680544790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=WlvpCHWMmiZdlbkC384yczmvM52H5PXcaJ7qF3TTD/w=;
+        b=CeC03JbiKUFO0kWdPZ1lEw6exgPagtVAvsc1jGLqW+N9TgtyZ6PIDyeb9MC4Ja8G2lP4k8
+        2+cTda1EXxAUAgpyOCBt0LkJMTdBFgEjgk5Q5BsIAEs4qIPb2FSWyW4/wQm3lP2vN1pbn8
+        3FaEpS2WYQYn4WzJBfsL6Ce08/JXlZE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-86-GjVcFpb4M-GD_6Snvv_wkA-1; Mon, 03 Apr 2023 13:59:49 -0400
+X-MC-Unique: GjVcFpb4M-GD_6Snvv_wkA-1
+Received: by mail-wm1-f69.google.com with SMTP id k1-20020a05600c1c8100b003ee6dbceb81so15105826wms.5
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:59:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680544788;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WlvpCHWMmiZdlbkC384yczmvM52H5PXcaJ7qF3TTD/w=;
+        b=dTOqxICQvOgvzMasQPtLIHPhqkniokL5jWJQ9PewViz/1bQ9BOprpvUZpF92swWgOC
+         IR1Bdx7aiADFYvF8xdGsLfMN/4O4qlTe+wBSY9wkMcaEn8SfyU5L95EbsDVo8jouWFM6
+         5/UtPPn7Gv4Sw3QAAFv+KV7vLoRK1FiOuYqWwYY6w8uGY4rTwuDOgSYLy1DgcVyZnaEB
+         lXeopG3+x7OaCtTz2m2cua0vNOpG490zBMMI5p11/u2YbVVv5teIFoe87QPi4iA5sS/i
+         3/B5jo8fhempb/xxaW4FYmdzVLRUVJm2n9wBJ6CiOETYWMYoaiEfyuY2T1D53IVwgWZQ
+         z1hg==
+X-Gm-Message-State: AAQBX9eS8QLw8YeRJ6g+93Rf7ZFsVlug0kAxkjLDEmGjtUA5tE0P8zw8
+        whzICD2kBUDW4Gilrzn9k0FiB7jOm9fA+vn8+Fgn7lX9BAK/vye5jKh+W3UnulZaVr6WdNol/50
+        qOTa5wSSi47fy0tyrKB68sb5/fMlhrQhEky1iUNPiYK2CDz4OTlcsFzE+sUwDeY+IeFRyR5TKse
+        zvLrs94FU=
+X-Received: by 2002:a05:6000:6:b0:2d4:a1c1:d1a2 with SMTP id h6-20020a056000000600b002d4a1c1d1a2mr28010989wrx.63.1680544788135;
+        Mon, 03 Apr 2023 10:59:48 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZVhLfsp00dFS4OanJ+69SLvb6/rmvbMxDG1wlE2yhnABSUEGPFBZ+MotkgKKbOd+iYsvqjyw==
+X-Received: by 2002:a05:6000:6:b0:2d4:a1c1:d1a2 with SMTP id h6-20020a056000000600b002d4a1c1d1a2mr28010964wrx.63.1680544787794;
+        Mon, 03 Apr 2023 10:59:47 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm10222763wru.65.2023.04.03.10.59.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 10:59:47 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Peter Robinson <pbrobinson@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jarrah Gosbell <kernel@undef.tools>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martijn Braam <martijn@brixit.nl>, Ondrej Jirman <megi@xff.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH] arm64: dts: rockchip: Change serial baud rate for Pinephone Pro to 1.5 MB
+Date:   Mon,  3 Apr 2023 19:59:37 +0200
+Message-Id: <20230403175937.2842085-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230402112825.42486-1-chao@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/02, Chao Yu wrote:
-> This patch does below changes:
-> 
-> - If f2fs enables readonly feature or device is readonly, allow to
-> mount readonly mode only
-> - Introduce f2fs_dev_is_readonly() to indicate whether image or device
-> is readonly
-> - remove unnecessary f2fs_hw_is_readonly() in f2fs_write_checkpoint()
-> and f2fs_convert_inline_inode()
-> - enable FLUSH_MERGE only if f2fs is mounted as rw and image/device
-> is writable
+This baud rate is set for the device by mainline u-boot and is also what
+is set in the Pinebook Pro Device Tree, which is a device similar to the
+PinePhone Pro but with a different form factor.
 
-What is the problem to solve here?
+Otherwise, the baud rate of the firmware and Linux don't match by default
+and a 'console=ttyS2,1500000n8' kernel command line parameter is required
+to have proper output for both.
 
-> 
-> Signed-off-by: Chao Yu <chao@kernel.org>
-> ---
->  fs/f2fs/checkpoint.c |  2 +-
->  fs/f2fs/f2fs.h       | 10 +++++-----
->  fs/f2fs/inline.c     |  3 +--
->  fs/f2fs/super.c      | 13 +++++++------
->  4 files changed, 14 insertions(+), 14 deletions(-)
-> 
-> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-> index 8e1db5752fff..1eef597ed393 100644
-> --- a/fs/f2fs/checkpoint.c
-> +++ b/fs/f2fs/checkpoint.c
-> @@ -1604,7 +1604,7 @@ int f2fs_write_checkpoint(struct f2fs_sb_info *sbi, struct cp_control *cpc)
->  	unsigned long long ckpt_ver;
->  	int err = 0;
->  
-> -	if (f2fs_readonly(sbi->sb) || f2fs_hw_is_readonly(sbi))
-> +	if (f2fs_readonly(sbi->sb))
->  		return -EROFS;
->  
->  	if (unlikely(is_sbi_flag_set(sbi, SBI_CP_DISABLED))) {
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index 2d4a7ef62537..7de95133478a 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -4446,6 +4446,11 @@ static inline bool f2fs_hw_is_readonly(struct f2fs_sb_info *sbi)
->  	return false;
->  }
->  
-> +static inline bool f2fs_dev_is_readonly(struct f2fs_sb_info *sbi)
-> +{
-> +	return f2fs_sb_has_readonly(sbi) || f2fs_hw_is_readonly(sbi);
-> +}
-> +
->  static inline bool f2fs_lfs_mode(struct f2fs_sb_info *sbi)
->  {
->  	return F2FS_OPTION(sbi).fs_mode == FS_MODE_LFS;
-> @@ -4546,11 +4551,6 @@ static inline void f2fs_handle_page_eio(struct f2fs_sb_info *sbi, pgoff_t ofs,
->  	}
->  }
->  
-> -static inline bool f2fs_is_readonly(struct f2fs_sb_info *sbi)
-> -{
-> -	return f2fs_sb_has_readonly(sbi) || f2fs_readonly(sbi->sb);
-> -}
-> -
->  #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
->  #define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
->  
-> diff --git a/fs/f2fs/inline.c b/fs/f2fs/inline.c
-> index 72269e7efd26..2c36f2dc2317 100644
-> --- a/fs/f2fs/inline.c
-> +++ b/fs/f2fs/inline.c
-> @@ -203,8 +203,7 @@ int f2fs_convert_inline_inode(struct inode *inode)
->  	struct page *ipage, *page;
->  	int err = 0;
->  
-> -	if (!f2fs_has_inline_data(inode) ||
-> -			f2fs_hw_is_readonly(sbi) || f2fs_readonly(sbi->sb))
-> +	if (!f2fs_has_inline_data(inode) || f2fs_readonly(sbi->sb))
->  		return 0;
->  
->  	err = f2fs_dquot_initialize(inode);
-> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> index d016f398fcad..db7649010c12 100644
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@ -1382,15 +1382,16 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
->  		return -EINVAL;
->  	}
->  
-> -	if (f2fs_is_readonly(sbi) && test_opt(sbi, FLUSH_MERGE)) {
-> +	if (f2fs_dev_is_readonly(sbi) && !f2fs_readonly(sbi->sb)) {
-> +		f2fs_err(sbi, "Allow to mount readonly mode only");
-> +		return -EROFS;
-> +	}
-> +
-> +	if (f2fs_readonly(sbi->sb) && test_opt(sbi, FLUSH_MERGE)) {
->  		f2fs_err(sbi, "FLUSH_MERGE not compatible with readonly mode");
->  		return -EINVAL;
->  	}
->  
-> -	if (f2fs_sb_has_readonly(sbi) && !f2fs_readonly(sbi->sb)) {
-> -		f2fs_err(sbi, "Allow to mount readonly mode only");
-> -		return -EROFS;
-> -	}
->  	return 0;
->  }
->  
-> @@ -2122,7 +2123,7 @@ static void default_options(struct f2fs_sb_info *sbi)
->  	set_opt(sbi, MERGE_CHECKPOINT);
->  	F2FS_OPTION(sbi).unusable_cap = 0;
->  	sbi->sb->s_flags |= SB_LAZYTIME;
-> -	if (!f2fs_is_readonly(sbi))
-> +	if (!f2fs_readonly(sbi->sb) && !f2fs_dev_is_readonly(sbi))
->  		set_opt(sbi, FLUSH_MERGE);
->  	if (f2fs_hw_support_discard(sbi) || f2fs_hw_should_discard(sbi))
->  		set_opt(sbi, DISCARD);
-> -- 
-> 2.36.1
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
+
+I tried to instead get rid of the baud rate altogether, as suggested by
+Peter Robinson. AFAIU that should just pick whatever bad rate has been
+using by the early console.
+
+But neither using 'stdout-path = "serial2" nor 'stdout-path = &uart2'
+worked for me.
+
+In both cases I didn't have any output unless setting a baud rate using
+the 'console='param.
+
+ arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+index a0795a2b1cb1..6bbe65bd5bd4 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+@@ -26,7 +26,7 @@ aliases {
+ 	};
+ 
+ 	chosen {
+-		stdout-path = "serial2:115200n8";
++		stdout-path = "serial2:1500000n8";
+ 	};
+ 
+ 	gpio-keys {
+
+base-commit: 3adf89324a2b2a9dbc2c12d8895021e7e34e3346
+-- 
+2.40.0
+
