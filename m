@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EB36D417D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E41AD6D4180
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjDCKDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
+        id S231809AbjDCKDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbjDCKC5 (ORCPT
+        with ESMTP id S231558AbjDCKDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:02:57 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD412D52;
-        Mon,  3 Apr 2023 03:02:49 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2817D5C0114;
-        Mon,  3 Apr 2023 06:02:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 03 Apr 2023 06:02:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680516169; x=
-        1680602569; bh=KAs2cClcytIPI/wu2fz/XtyTfqxpeJmdesR7LFRIvfw=; b=J
-        499p0hPPencZjPib0BH5d3ajQHQAgwnB/MpQ7JRIiU4qYT2NqGLEUePG6uA6234Z
-        +3T4CTUPiQfH4ZBiCDWFHnS4DkvlzonlSGwRrug3Eyld3e1VyBvHQIc1kJSa59NP
-        vvhze5ix0I2PIoddn5sIpFmK262dErsiMVvmbG0Taaf0lPCbwOeqJuqvGskjqc30
-        QcWRju2ycv36wZMY65mkXxDP2MvXYYT125Vh9DIUFJmYW7nG7nY3T1FukmGhRQLE
-        MbEzVoZFccZqKqyWriU4farFj0et2qubH4WcOjwrGVnuF3uibhZXJZ6r7GtxRHzL
-        rq5U0gtxY7h9D8c+RiXEQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680516169; x=1680602569; bh=KAs2cClcytIPI
-        /wu2fz/XtyTfqxpeJmdesR7LFRIvfw=; b=QSFQg3S7Q6mmaV36Dv8g9Hx3nbw5N
-        HzZ47pHWVbhm9paMJPgf2vppy30T1LMgpVuOafN9lChgQOabWew7dwA5IlBfJdT+
-        22Uup1afQ9c88vpClFuY5AcZ5qftK7aLnaodJh70T4Lc5Nue9fwRXG64E98DJq8A
-        IM6QJk7jma/7gs008ZZz/Hi0zx7Pqkax+LinpQRcsF+Bpxr7NxKMQeFEEKsaE/0V
-        nS1bv9Fjx/mMRpzu9iGU0rj/mu15665rDHV9TJEhkRfEW/DR5hkCPGQH3ppF6dzi
-        PHqOfycWZjWHeXkg9ngTkDSBYn9hIX7JkGUq4oSqLfGF4FIjd5JxLUsQw==
-X-ME-Sender: <xms:R6QqZJK-IIY7pWvu0J2GPlQmXDN7R9YvdtNXXN41WDHAHJTGXRR56A>
-    <xme:R6QqZFJsthmzMr9WYdL6rvgXIZ-CqvIcqXJTszIFL_Ku3jghf_utgz6xpRAC6TziE
-    C-sn2TlkhKh_aPg-XU>
-X-ME-Received: <xmr:R6QqZBsj9sZF2JT5vze3iTYAGIOM7PCMNyR2IbbGUqn3Q2BInss2lHqfoOAvx6ba17Dplw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpeekvddvjeffheetgedtvdfgieejiedvgeejieet
-    jeehieehveffueekfeehffdvveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:R6QqZKagHubq8LCRXZR2uLZl4PrHr5QQQPSCuPeEEiUomEXHJo0a6g>
-    <xmx:R6QqZAZPq8jLBxwba-_fvVUfieux4O9wDr7QCeYGjJDfRT1Fy7PLTw>
-    <xmx:R6QqZOClXuhpmEe1eZFePDOxoNx_5q8klulCrUcseHkcQPhQFy3yeQ>
-    <xmx:SaQqZHlGG22Y51Mq4RyWgI0OuJM7U-kumeU4Q7kEUpVL0maQfFfB2A>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Apr 2023 06:02:46 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 08AC710D7B3; Mon,  3 Apr 2023 13:02:45 +0300 (+03)
-Date:   Mon, 3 Apr 2023 13:02:44 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv9 02/14] mm: Add support for unaccepted memory
-Message-ID: <20230403100244.4sre7ki4ccusiiul@box>
-References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
- <20230330114956.20342-3-kirill.shutemov@linux.intel.com>
- <43234108-fa4f-7583-e3b4-2daa2de89fb0@suse.cz>
+        Mon, 3 Apr 2023 06:03:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DF22D50
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:02:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680516177;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rjmzd/YE21ORQOPGQC93EsHd4KdzCGtkIKV/EHIywtI=;
+        b=iigfHDu0REgVzskNoAQ3Z592sHpZKLBaOi/xlGyLseOGgvectEXCrRIi3FKECCngHXC49z
+        RYgXNKbDuQbJxFZFto5/m6aM6TamhXg6Ywl43J194UAl4z+YSwugxA8BFf6gYBQ8Hphd0R
+        6QMkr0Pk6CLy1P6ypai9AceWtSzHTEY=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-434-O0cHSy3NNritxFiiYG3Xjw-1; Mon, 03 Apr 2023 06:02:56 -0400
+X-MC-Unique: O0cHSy3NNritxFiiYG3Xjw-1
+Received: by mail-ed1-f71.google.com with SMTP id a27-20020a50c31b000000b0050047ecf4bfso40546977edb.19
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 03:02:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680516175;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rjmzd/YE21ORQOPGQC93EsHd4KdzCGtkIKV/EHIywtI=;
+        b=4biZU09DExvli7ZoIPFB/LeYs3R64ugibpoGEwdBqmxRy64lU7s01e4EIYTUK7513E
+         8jWIxxg0HMHTISqQ/P6zRDZ3SuoGdv4rzaRJP9f4+nMBGQZyMMeBVpKfydvJ99D/34qg
+         lg1Em1Cd5QPe7aY1NYWZ06rdF+GPe4SkzGMZzUI19yUCzgTsk5vUJqlXydB6t3nVXYCU
+         DjJ/yYIjQrINrbRTq06vXZQAzlkwjLvof1dhndqZe7zydF5YxYoUFXK8ZCb6qJdVkbEB
+         8s34hmYFpI0fPXIfOC6sNbfIUAyVwglTUKG/Q7jOFgDmnJScqOst2y6pQm/YyauyGeFR
+         TW4Q==
+X-Gm-Message-State: AAQBX9ef7NftYW+ePOKips6kI7tNAcVOuRvJjFnfN/KDE47ejyuopFRX
+        rpCUKvXtrKG2Xk34QsbddwzK0SwDRSSc2nen+o1duP87gsK3TWtDXkE4jb9DQ9O8xOe9QUiOPsG
+        TKkAm07vtgHp4DX/V+Gl+VBlp
+X-Received: by 2002:a17:906:2350:b0:8a9:e330:3a23 with SMTP id m16-20020a170906235000b008a9e3303a23mr33600701eja.26.1680516175801;
+        Mon, 03 Apr 2023 03:02:55 -0700 (PDT)
+X-Google-Smtp-Source: AKy350agIn0Z0BbxQrKaHifZIEBKc5yhaJP+oZ1IQ62dW0fNCJWsj/pNyk/lJ7Zxx4QPY7mHa5cEMw==
+X-Received: by 2002:a17:906:2350:b0:8a9:e330:3a23 with SMTP id m16-20020a170906235000b008a9e3303a23mr33600677eja.26.1680516175495;
+        Mon, 03 Apr 2023 03:02:55 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id m24-20020a17090679d800b00946c1068b14sm4248587ejo.120.2023.04.03.03.02.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 03:02:54 -0700 (PDT)
+Message-ID: <12a26960-1cc8-80df-e284-d0fa4768f558@redhat.com>
+Date:   Mon, 3 Apr 2023 12:02:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43234108-fa4f-7583-e3b4-2daa2de89fb0@suse.cz>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] platform/x86: thinkpad_acpi: Add missing T14s Gen1 type
+ to s2idle quirk list
+Content-Language: en-US, nl
+To:     Benjamin Asbach <asbachb.kernel@impl.it>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Mark Pearson <markpearson@lenvo.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230331232447.37204-1-asbachb.kernel@impl.it>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230331232447.37204-1-asbachb.kernel@impl.it>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,104 +86,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 11:26:53AM +0200, Vlastimil Babka wrote:
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
-> 
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Hi,
 
-Thanks!
-
-> Just a small suggestion below:
+On 4/1/23 01:24, Benjamin Asbach wrote:
+>> Lenovo laptops that contain NVME SSDs across a variety of generations have
+>> trouble resuming from suspend to idle when the IOMMU translation layer is
+>> active for the NVME storage device.
+>>
+>> This generally manifests as a large resume delay or page faults. These
+>> delays and page faults occur as a result of a Lenovo BIOS specific SMI
+>> that runs during the D3->D0 transition on NVME devices.
 > 
-> > +
-> > +static bool try_to_accept_memory(struct zone *zone, unsigned int order)
-> > +{
-> > +	long to_accept;
-> > +	int ret = false;
-> > +
-> > +	if (!static_branch_unlikely(&zones_with_unaccepted_pages))
-> > +		return false;
+> Link: https://lore.kernel.org/all/20220503183420.348-1-mario.limonciello@amd.com/
 > 
+> As Lenovo distributes T14s Gen1 laptops with different product names
+> a missing one is added by this patch.
 > 
-> This potentially (depends on what compiler decides) means we'll call this
-> function just to skip the static branch. OTOH forcing it as inline would be
-> wasteful too. So I'd split that away and make the callers do that static
-> branch check inline. Just as deferred_pages_enabled() is used.
+> Note: Based on lenovo support page there might be some more variants which
+> are not represented in s2idle quirk list.
 
-Like this?
+Can you provide some more in info on this? Then Mark can maybe check
+if we need to add more models ?
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 07e16e9b49c4..80fe5e4b6cca 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -390,6 +390,7 @@ EXPORT_SYMBOL(nr_online_nodes);
- static bool page_contains_unaccepted(struct page *page, unsigned int order);
- static void accept_page(struct page *page, unsigned int order);
- static bool try_to_accept_memory(struct zone *zone, unsigned int order);
-+static inline bool has_unaccepted_memory(void);
- static bool __free_unaccepted(struct page *page);
- 
- int page_group_by_mobility_disabled __read_mostly;
-@@ -3464,8 +3465,10 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
- 				       gfp_mask)) {
- 			int ret;
- 
--			if (try_to_accept_memory(zone, order))
--				goto try_this_zone;
-+			if (has_unaccepted_memory()) {
-+				if (try_to_accept_memory(zone, order))
-+					goto try_this_zone;
-+			}
- 
- #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
- 			/*
-@@ -3519,8 +3522,10 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
- 
- 			return page;
- 		} else {
--			if (try_to_accept_memory(zone, order))
--				goto try_this_zone;
-+			if (has_unaccepted_memory()) {
-+				if (try_to_accept_memory(zone, order))
-+					goto try_this_zone;
-+			}
- 
- #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
- 			/* Try again if zone has deferred pages */
-@@ -7302,9 +7307,6 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
- 	long to_accept;
- 	int ret = false;
- 
--	if (!static_branch_unlikely(&zones_with_unaccepted_pages))
--		return false;
--
- 	/* How much to accept to get to high watermark? */
- 	to_accept = high_wmark_pages(zone) -
- 		    (zone_page_state(zone, NR_FREE_PAGES) -
-@@ -7321,6 +7323,11 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
- 	return ret;
- }
- 
-+static inline bool has_unaccepted_memory(void)
-+{
-+	return static_branch_unlikely(&zones_with_unaccepted_pages);
-+}
-+
- static bool __free_unaccepted(struct page *page)
- {
- 	struct zone *zone = page_zone(page);
-@@ -7398,6 +7405,11 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
- 	return false;
- }
- 
-+static inline bool has_unaccepted_memory(void)
-+{
-+	return false;
-+}
-+
- static bool __free_unaccepted(struct page *page)
- {
- 	BUILD_BUG();
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Mark, generally speaking it may help to do a DMI_EXACT_MATCH on
+DMI_PRODUCT_VERSION with ThinkPads ? That contains the human
+readable model string instead of things like "20UJ", and I guess
+that we want to e.g. apply the s2idle quirk to all "T14s Gen1 AMD"
+ThinkPads.
+
+> 
+> Signed-off-by: Benjamin Asbach <asbachb.kernel@impl.it>
+> Tested-by: Benjamin Asbach <asbachb.kernel@impl.it>
+
+Thank you for your patch, I've applied this patch to my fixes
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
+
+Note it will show up in my fixes branch once I've pushed my
+local branch there, which might take a while.
+
+I will include this patch in my next fixes pull-req to Linus
+for the current kernel development cycle.
+
+Regards,
+
+Hans
+
+
+
+
+
+> 
+> Link: https://bbs.archlinux.org/viewtopic.php?pid=2084655#p2084655
+> ---
+>  drivers/platform/x86/thinkpad_acpi.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+> index 32c10457399e..57428d7a392d 100644
+> --- a/drivers/platform/x86/thinkpad_acpi.c
+> +++ b/drivers/platform/x86/thinkpad_acpi.c
+> @@ -4478,6 +4478,15 @@ static const struct dmi_system_id fwbug_list[] __initconst = {
+>  			DMI_MATCH(DMI_PRODUCT_NAME, "20UH"),
+>  		}
+>  	},
+> +	{
+> +		.ident = "T14s Gen1 AMD",
+> +		.driver_data = &quirk_s2idle_bug,
+> +		.matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "20UJ"),
+> +		}
+> +	},
+> +
+>  	{
+>  		.ident = "P14s Gen1 AMD",
+>  		.driver_data = &quirk_s2idle_bug,
+
