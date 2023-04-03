@@ -2,103 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CD16D4F3A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BC06D4F40
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbjDCRn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48928 "EHLO
+        id S231845AbjDCRoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbjDCRnX (ORCPT
+        with ESMTP id S229780AbjDCRoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:43:23 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2385B1BE4;
-        Mon,  3 Apr 2023 10:43:19 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-17aaa51a911so31646723fac.5;
-        Mon, 03 Apr 2023 10:43:19 -0700 (PDT)
+        Mon, 3 Apr 2023 13:44:12 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615C92107;
+        Mon,  3 Apr 2023 10:44:10 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id r7-20020a17090b050700b002404be7920aso29376348pjz.5;
+        Mon, 03 Apr 2023 10:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680543850;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HMv3NS5XhEsCAYXWn3ESVcr5ieV886jiRxfmDBuVIfU=;
+        b=pd1ROCDaZ68jHr6hwCKXbIOlrkY3nPjTdhPGucgfsoGilpiVmMcR99mHCcfucQcqlm
+         86hgl0ZH0w+tscwx2mNOHTdhjjZW5SAlbnwL6mu3IiGTs6iGfP162z75etA6IP05fs4J
+         TcG00AOBfOpGNlkYQUrD1gFYMyrCuD9JrFQAkpwdy1LuNnTCihD6aSDhbDXp3ql5wlzF
+         YZ9FHQxDYlfw0A8KQ9tAz5Ty/QY6jd93msexD583ggLVqfcWq4Cojs9P4wRVf2D2JGM6
+         D3Z4lkkc9L5wb2WCnTW5QplxoGmpBAZM5ROpnQwJN9oarMsWQ7L6t+XvyLQws8Lda1xx
+         ZYag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680543798;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QfCEXsX57cKsNPyz9FIcs+msmqH1YDEBuOkXOBloeRg=;
-        b=nMk6b5oFcMR39sSLb6sAK1itQ5B2LvGUAalCRXZ2v3AjCwMFJ67HFEcfL8u37ExDUq
-         bMRhUW3pnBNabfubNleyv2E82uFplE7tIU5D0JQtxOwtufC1E1xG94zlbkltM9h5uxR3
-         8HMq3xqh0FKrYERLFUPy+4jaLIEnwTk2/b1W0gXeeCOqguCIlqVFXFUShlHzvKdJb5NT
-         iYzfW3e9LIB+L/0FB2pM5QDwJ1/2yg473ZaaSK8x9vRQVEoSWxPw4FbiCVx5uvgt2zhv
-         hEHj/dI9l3ClVll5cScqJYgL3ex68uO6/RmKvfS5OcME3+IOIQGIw4HV0oymMLsDgMbf
-         XGRw==
-X-Gm-Message-State: AAQBX9ewzRa3qS80V4pLfxfgJYe1yF0aJZoc/rCDHwizcHXfpVJG3Vh7
-        vlreeTA6qec3rilEtLCLebjRfj63PQ==
-X-Google-Smtp-Source: AKy350Z5Nh2a+sZhW/OKkwgpoM3sxb1RVzAh3FhLu0s0aPGxUXzZ5Jv+jtJU/d5ztBsPQzSEZ5TGww==
-X-Received: by 2002:a05:6870:808c:b0:17a:f93c:c00 with SMTP id q12-20020a056870808c00b0017af93c0c00mr106341oab.5.1680543798259;
-        Mon, 03 Apr 2023 10:43:18 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ud9-20020a0568714bc900b001727d67f2dbsm3698973oab.40.2023.04.03.10.43.16
+        d=1e100.net; s=20210112; t=1680543850;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HMv3NS5XhEsCAYXWn3ESVcr5ieV886jiRxfmDBuVIfU=;
+        b=5Io+9//sQJEhCzB8mkFvBCAc6T/Q8q8rEgEkJwy9+u1bNprhgthIsfWq3BdxpvU/RD
+         OfsNhqhWi3RN4A4soIp9mPzhOTrTfCMKBUrmXDHLJed5fHpGeulIfaN+xE8HCMmjVLpf
+         K+i/FSw5n7hHXxwG9oliJ2ta4mM4js0lO3XEJFRrSpaSOxqoM4up4kBbEtSONzitHSHP
+         VMANy6FnmnvXdAAmyWyl4GVtgJf0awUtUUSC4zCFIA/+e6EwfJMK+9gxLGPpRtkzZ9Qq
+         qUhKiuNASZ1+zEfTvKQ3VlfuEPLZinPL1uVuXikwlKsVJU2jGuvyDnoD8T1gtrWS/2ug
+         oEAg==
+X-Gm-Message-State: AAQBX9fV4qg6OPAmpaDZFeZPic2PyUDuA902JQYtryBk6klL8zJ/Qjlv
+        wjKNAkqWZ1sjcYsq296yKWE=
+X-Google-Smtp-Source: AKy350aE5mgMIF7xAkJwwvpqwaSOclhTbYdem6aF5HYRPLcF7xZXGn9vhmIsZSFKydeMPYrYJ9Lb1g==
+X-Received: by 2002:a17:903:32cc:b0:1a1:f5dd:2dde with SMTP id i12-20020a17090332cc00b001a1f5dd2ddemr43879613plr.44.1680543849575;
+        Mon, 03 Apr 2023 10:44:09 -0700 (PDT)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:2:8635:6e96:35c1:c560])
+        by smtp.gmail.com with ESMTPSA id jj21-20020a170903049500b001a19196af48sm6883803plb.64.2023.04.03.10.44.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 10:43:17 -0700 (PDT)
-Received: (nullmailer pid 1138631 invoked by uid 1000);
-        Mon, 03 Apr 2023 17:43:16 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Mon, 03 Apr 2023 10:44:09 -0700 (PDT)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
+Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [RFC PATCH V4 00/17] x86/hyperv/sev: Add AMD sev-snp enlightened guest support on hyperv
+Date:   Mon,  3 Apr 2023 13:43:48 -0400
+Message-Id: <20230403174406.4180472-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Richard Alpe <richard@bit42.se>
-Cc:     robh+dt@kernel.org, niklas.soderlund+renesas@ragnatech.se,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        srinivas.kandagatla@linaro.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230403144106.2776249-1-richard@bit42.se>
-References: <20230403144106.2776249-1-richard@bit42.se>
-Message-Id: <168054369774.1136152.1343135724254132804.robh@kernel.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: nvmem: Add t1023-sfp efuse support
-Date:   Mon, 03 Apr 2023 12:43:16 -0500
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Tianyu Lan <tiala@microsoft.com>
 
-On Mon, 03 Apr 2023 16:41:05 +0200, Richard Alpe wrote:
-> Add a schema for the NVMEM eFuse (SFP) layout on the NXP QorIQ SOC.
-> 
-> Signed-off-by: Richard Alpe <richard@bit42.se>
-> ---
-> v3: Updates according to feedback from Krzysztof.
-> 
->  .../bindings/nvmem/fsl,t1023-sfp.yaml         | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/nvmem/fsl,t1023-sfp.yaml
-> 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This patchset is to add AMD sev-snp enlightened guest
+support on hyperv. Hyperv uses Linux direct boot mode
+to boot up Linux kernel and so it needs to pvalidate
+system memory by itself.
 
-yamllint warnings/errors:
+In hyperv case, there is no boot loader and so cc blob
+is prepared by hypervisor. In this series, hypervisor
+set the cc blob address directly into boot parameter
+of Linux kernel. If the magic number on cc blob address
+is valid, kernel will read cc blob.
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/nvmem/fsl,t1023-sfp.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/nvmem/fsl,t1023-sfp.yaml#
+Shared memory between guests and hypervisor should be
+decrypted and zero memory after decrypt memory. The data
+in the target address. It maybe smearedto avoid smearing
+data.
 
-doc reference errors (make refcheckdocs):
+Introduce #HV exception support in AMD sev snp code and
+#HV handler.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230403144106.2776249-1-richard@bit42.se
+Change since v3:
+       - Replace struct sev_es_save_area with struct vmcb_save_area
+       - Move smp, cpu and memory enumerating code from mshyperv.c to ivm.c
+       - Handle nested entry case of do_exc_hv() case.
+       - Check NMI event when irq is disabled
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Change since v2:
+       - Remove validate kernel memory code at boot stage
+       - Split #HV page patch into two parts
+       - Remove HV-APIC change due to enable x2apic from
+       	 host side
+       - Rework vmbus code to handle error of decrypt page
+       - Spilt memory and cpu initialization patch. 
+Change since v1:
+       - Remove boot param changes for cc blob address and
+       use setup head to pass cc blob info
+       - Remove unnessary WARN and BUG check
+       - Add system vector table map in the #HV exception
+       - Fix interrupt exit issue when use #HV exception
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Ashish Kalra (2):
+  x86/sev: optimize system vector processing invoked from #HV exception
+  x86/sev: Fix interrupt exit code paths from #HV exception
 
-pip3 install dtschema --upgrade
+Tianyu Lan (15):
+  x86/hyperv: Add sev-snp enlightened guest static key
+  Drivers: hv: vmbus: Decrypt vmbus ring buffer
+  x86/hyperv: Set Virtual Trust Level in VMBus init message
+  x86/hyperv: Use vmmcall to implement Hyper-V hypercall in sev-snp
+    enlightened guest
+  clocksource/drivers/hyper-v: decrypt hyperv tsc page in sev-snp
+    enlightened guest
+  x86/hyperv: decrypt VMBus pages for sev-snp enlightened guest
+  drivers: hv: Decrypt percpu hvcall input arg page in sev-snp
+    enlightened guest
+  x86/hyperv: Initialize cpu and memory for sev-snp enlightened guest
+  x86/hyperv: SEV-SNP enlightened guest don't support legacy rtc
+  x86/hyperv: Add smp support for sev-snp guest
+  x86/hyperv: Add hyperv-specific handling for VMMCALL under SEV-ES
+  x86/sev: Add a #HV exception handler
+  x86/sev: Add Check of #HV event in path
+  x86/hyperv/sev: Add AMD sev-snp enlightened guest support on hyperv
+  x86/sev: Remove restrict interrupt injection from
+    SNP_FEATURES_IMPL_REQ
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+ arch/x86/boot/compressed/sev.c        |   1 -
+ arch/x86/entry/entry_64.S             |  84 ++++++
+ arch/x86/hyperv/hv_init.c             |  42 +++
+ arch/x86/hyperv/ivm.c                 | 181 ++++++++++++
+ arch/x86/include/asm/cpu_entry_area.h |   6 +
+ arch/x86/include/asm/hyperv-tlfs.h    |   7 +
+ arch/x86/include/asm/idtentry.h       | 105 ++++++-
+ arch/x86/include/asm/irqflags.h       |  11 +
+ arch/x86/include/asm/mem_encrypt.h    |   2 +
+ arch/x86/include/asm/mshyperv.h       |  81 ++++-
+ arch/x86/include/asm/page_64_types.h  |   1 +
+ arch/x86/include/asm/sev.h            |  13 +
+ arch/x86/include/asm/svm.h            |  15 +-
+ arch/x86/include/asm/trapnr.h         |   1 +
+ arch/x86/include/asm/traps.h          |   1 +
+ arch/x86/include/asm/x86_init.h       |   2 +
+ arch/x86/include/uapi/asm/svm.h       |   4 +
+ arch/x86/kernel/cpu/common.c          |   1 +
+ arch/x86/kernel/cpu/mshyperv.c        |  42 ++-
+ arch/x86/kernel/dumpstack_64.c        |   9 +-
+ arch/x86/kernel/idt.c                 |   1 +
+ arch/x86/kernel/sev.c                 | 407 ++++++++++++++++++++++----
+ arch/x86/kernel/traps.c               |  42 +++
+ arch/x86/kernel/vmlinux.lds.S         |   7 +
+ arch/x86/kernel/x86_init.c            |   4 +-
+ arch/x86/mm/cpu_entry_area.c          |   2 +
+ drivers/clocksource/hyperv_timer.c    |   2 +-
+ drivers/hv/connection.c               |   1 +
+ drivers/hv/hv.c                       |  42 ++-
+ drivers/hv/hv_common.c                |  27 +-
+ include/asm-generic/hyperv-tlfs.h     |  19 ++
+ include/asm-generic/mshyperv.h        |   2 +
+ include/linux/hyperv.h                |   4 +-
+ 33 files changed, 1092 insertions(+), 77 deletions(-)
+
+-- 
+2.25.1
 
