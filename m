@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A844E6D4F1D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CDC6D4F1C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbjDCRg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
+        id S231991AbjDCRg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231687AbjDCRgk (ORCPT
+        with ESMTP id S231643AbjDCRgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 3 Apr 2023 13:36:40 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2F02D53
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:36:34 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id a11so31172457lji.6
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:36:34 -0700 (PDT)
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4C12D60
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:36:36 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id c29so39106611lfv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:36:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680543393;
+        d=linaro.org; s=google; t=1680543394;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7V+9COwDub12Y3ZvDhgfcwHpXceDSmjh1tUTcAgEHS4=;
-        b=zXBrJ72slB5px1JpcOlFvSmJULBMHnXlzAiZpBwZcmFmIEA6bF7DzJykzJCiHU6fN5
-         6F3eB5pt4thY/PEKfAe3s6sstG25+dpDMSO4oT7zqkcJmzXKHAmko4q8hYDsei5WYpoi
-         Aa8IL2nsFMP3KxGXkWOncIVKgQTCp5hz32e9BFWxb9pmYXpYq9H2Hnelnhr7O/fHzo4w
-         Ta9mM6DFR/utEJ+Zr4J9zyOzcmbvNXtosjhB61CAkDesGFO8r5gPnRuc+8iuHy1RcdK5
-         3ZLDE41ezBI1xthzwpCIu+cQfLptwWrvhnxNtCIHqhu41uMZTJQRHLcOkhIua1LHq3Qx
-         uxHA==
+        bh=vmqF5uM49YwjmXrtdFGNdflHs9PzMdLYC/ZaykFH++8=;
+        b=aU9AScITIaFsobLTZ2tfGUL6k6GuH9JuuFNA+RcQL85ghH2jBtJ4xtoZu4nPoQHdg2
+         Djv7uB3mfAG7cxxxCNR7wahtT6sg+zEe+viwPCWe9B1qP9Y4G1csaBrrusDa47ApgeX6
+         cXkxBnSFfERdLKTzUoHLINh77ns0rwJqLVRYFNj5TvygSnkejx9BAWefo1i8k7hjQsQi
+         IxjbJ/9wWnu6tBZhy3aScsgBqI856tDnt5Hhbw6XRZCtREBvxTP0/NMv8Lc2hD0Fk11K
+         mZ3kIaGhjXc9bAXMiHCMFExkotb3ww9IkQrkiLKpT3NrVvrBK7Wi3/Lx8J5+Iixevt51
+         6ZAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680543393;
+        d=1e100.net; s=20210112; t=1680543394;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7V+9COwDub12Y3ZvDhgfcwHpXceDSmjh1tUTcAgEHS4=;
-        b=luvD70EcyvVyA1pp6WeaoIEukzpJtCILVDcO8wt0QXvNI7tn/NWEBpZ249yV/gSFVx
-         nHgc3rRgbX/CzwsK+/oI5+nRlm+YfRI3X+qV5/pFQdsuns5M3TLRwe7J8aGK7J2Y0UtX
-         MyKPZqN0tWtXQVCUamRBZlZ77tdm2jVUosyDB+h5naK2C+Q4teyM3XiY7MKwhO+xZK8j
-         yLz7muaaXxlIygQTp70iQ+AtVS9C5xJjoOe3jbhZU8yoTpVI0V59TmdsFXNKiOidmmiW
-         6KVHpCRLh5ZVytKWYX25Ew9EVNe7FiDYjpTAgvRU0MGGZIT+lvkMJ/sGxaAmoB9CJaxK
-         7kIg==
-X-Gm-Message-State: AAQBX9e5owjX6FUyi6ZVtsAZIY+RH3ZKwPyEQqggUu7CN2rsJyZdrFL/
-        KPA8KabiTXlAXtzw4eTkcHqLDw==
-X-Google-Smtp-Source: AKy350ZAZpreyc60F+kA9NA4/pFAhKbFs5ED9kYSDBIbwJmjpdt2nYmz7W5mVxdaD5pk15hrzll/3w==
-X-Received: by 2002:a2e:8086:0:b0:2a6:2894:c1e6 with SMTP id i6-20020a2e8086000000b002a62894c1e6mr70116ljg.28.1680543393030;
-        Mon, 03 Apr 2023 10:36:33 -0700 (PDT)
+        bh=vmqF5uM49YwjmXrtdFGNdflHs9PzMdLYC/ZaykFH++8=;
+        b=ItA004A9fV8/pw3/LsGKGjEmQtN2X10AQz8BI4W33AE3GI44m4Y+VQIlVUFyqDU3SN
+         xBIu/gNvh4LLB/JcLhoPLzrmHgOrqsjRkoitzHilY4waDEM0/HVtDSmupKmCnWht0DKV
+         NFbD496Czya1RLkYSjl4e9YtXrG9CE+IslVkgr8iwN4WGHgvrQliSsY36hVBYlQDANpf
+         0WDCE2EjAERjH9YT2PoPOKq/0WcrehmvGtAdDot6lKNiqMpg2T/au9tv26uoHhZxrBEQ
+         FBKiAJaxbKrdy4W8QgKWeWBVOikDDui4qsdls5TFEwN2pwqmPN+A4IRkfGNoDZFsBwB8
+         9VRQ==
+X-Gm-Message-State: AAQBX9eXILH9aMuPiq7lV9wenkpQNOUU3kDGh+PHv3RNPDlGpLJywDSr
+        H44sDd9jhqHA2UaZ04xPgyMPdg==
+X-Google-Smtp-Source: AKy350bfH/K5pOu6tXQpn01UYlLoaYTNlAmEezLfIRBp/DQQJhdWacmk4eiIUUTx7ngecZq3IhZ79g==
+X-Received: by 2002:ac2:494e:0:b0:4eb:18d:91df with SMTP id o14-20020ac2494e000000b004eb018d91dfmr9182457lfi.27.1680543394449;
+        Mon, 03 Apr 2023 10:36:34 -0700 (PDT)
 Received: from [192.168.1.101] (abxj135.neoplus.adsl.tpnet.pl. [83.9.3.135])
-        by smtp.gmail.com with ESMTPSA id v2-20020a056512096200b004cc5f44747dsm1871094lft.220.2023.04.03.10.36.31
+        by smtp.gmail.com with ESMTPSA id v2-20020a056512096200b004cc5f44747dsm1871094lft.220.2023.04.03.10.36.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 10:36:32 -0700 (PDT)
+        Mon, 03 Apr 2023 10:36:34 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 03 Apr 2023 19:36:03 +0200
-Subject: [PATCH 5/9] arm64: dts: qcom: qcm2290: Add thermal zones
+Date:   Mon, 03 Apr 2023 19:36:04 +0200
+Subject: [PATCH 6/9] arm64: dts: qcom: qcm2290: Add SMP2P
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230403-topic-rb1_qcm-v1-5-ca849b62ba07@linaro.org>
+Message-Id: <20230403-topic-rb1_qcm-v1-6-ca849b62ba07@linaro.org>
 References: <20230403-topic-rb1_qcm-v1-0-ca849b62ba07@linaro.org>
 In-Reply-To: <20230403-topic-rb1_qcm-v1-0-ca849b62ba07@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -72,11 +72,11 @@ Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
         linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680543384; l=6064;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680543384; l=1704;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=ZBHwGxxehL+0owRFdXHZJ0e8cp4AHvcKk4/jCwnA2m0=;
- b=+3Qrae1rdVWhCWGKLtdGUrAoOyfgfvuVOYG1WtQEZyS9f5PZdZHtpfJiR+jIsqg5coyl3+GAJfqL
- 6e8eCfJEB8kFZWJBBt/+B/F0ONWo6oPRDbsaMQ/617XgeoyaALE8
+ bh=OGOuJIzvBxSjLJP6dlMoCklt4FuOEYlGVcFCNEeXnhc=;
+ b=gcARjhXadoILMfjW+UfvpmFyip6l3NNYKNW/ChYwC5yC5/C2B6W1VjfBTaVwP9U8GySBnkRhpYSK
+ GNnQMadvAZ/wJIe4ksmwJHGbHwZpGqatRmS41HoKQERgWZjzuHwV
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -88,296 +88,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add thermal zones associated with the TSENS sensors.
+Add SMP2P nodes on QCM2290.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/qcm2290.dtsi | 272 ++++++++++++++++++++++++++++++++++
- 1 file changed, 272 insertions(+)
+ arch/arm64/boot/dts/qcom/qcm2290.dtsi | 52 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/qcm2290.dtsi b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-index edfa18190454..1ea558bc35dc 100644
+index 1ea558bc35dc..228a1d94501b 100644
 --- a/arch/arm64/boot/dts/qcom/qcm2290.dtsi
 +++ b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-@@ -1132,6 +1132,278 @@ cpufreq_hw: cpufreq@f521000 {
+@@ -287,6 +287,58 @@ rpmpd_opp_turbo_plus: opp8 {
  		};
  	};
  
-+	thermal-zones {
-+		mapss-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
++	smp2p-adsp {
++		compatible = "qcom,smp2p";
++		qcom,smem = <443>, <429>;
 +
-+			thermal-sensors = <&tsens0 0>;
++		interrupts = <GIC_SPI 279 IRQ_TYPE_EDGE_RISING>;
 +
-+			trips {
-+				mapss_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
++		mboxes = <&apcs_glb 10>;
 +
-+				mapss_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
++		qcom,local-pid = <0>;
++		qcom,remote-pid = <2>;
 +
-+				mapss_crit: mapss-crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
++		adsp_smp2p_out: master-kernel {
++			qcom,entry-name = "master-kernel";
++			#qcom,smem-state-cells = <1>;
 +		};
 +
-+		video-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+
-+			thermal-sensors = <&tsens0 1>;
-+
-+			trips {
-+				video_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				video_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				video_crit: video-crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		wlan-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+
-+			thermal-sensors = <&tsens0 2>;
-+
-+			trips {
-+				wlan_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				wlan_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				wlan_crit: wlan-crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpuss0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+
-+			thermal-sensors = <&tsens0 3>;
-+
-+			trips {
-+				cpuss0_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpuss0_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpuss0_crit: cpuss0-crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpuss1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+
-+			thermal-sensors = <&tsens0 4>;
-+
-+			trips {
-+				cpuss1_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpuss1_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpuss1_crit: cpuss1-crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		mdm0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+
-+			thermal-sensors = <&tsens0 5>;
-+
-+			trips {
-+				mdm0_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				mdm0_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				mdm0_crit: mdm0-crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		mdm1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+
-+			thermal-sensors = <&tsens0 6>;
-+
-+			trips {
-+				mdm1_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				mdm1_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				mdm1_crit: mdm1-crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		gpu-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+
-+			thermal-sensors = <&tsens0 7>;
-+
-+			trips {
-+				gpu_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				gpu_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				gpu_crit: gpu-crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		hm-center-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+
-+			thermal-sensors = <&tsens0 8>;
-+
-+			trips {
-+				hm_center_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				hm_center_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				hm_center_crit: hm-center-crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		camera-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+
-+			thermal-sensors = <&tsens0 9>;
-+
-+			trips {
-+				camera_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				camera_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				camera_crit: camera-crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
++		adsp_smp2p_in: slave-kernel {
++			qcom,entry-name = "slave-kernel";
++			interrupt-controller;
++			#interrupt-cells = <2>;
 +		};
 +	};
 +
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupts = <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++	smp2p-mpss {
++		compatible = "qcom,smp2p";
++		qcom,smem = <435>, <428>;
++
++		interrupts = <GIC_SPI 70 IRQ_TYPE_EDGE_RISING>;
++
++		mboxes = <&apcs_glb 14>;
++
++		qcom,local-pid = <0>;
++		qcom,remote-pid = <1>;
++
++		modem_smp2p_out: master-kernel {
++			qcom,entry-name = "master-kernel";
++			#qcom,smem-state-cells = <1>;
++		};
++
++		modem_smp2p_in: slave-kernel {
++			qcom,entry-name = "slave-kernel";
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		wlan_smp2p_in: wlan-wpss-to-ap {
++			qcom,entry-name = "wlan";
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++	};
++
+ 	soc: soc@0 {
+ 		compatible = "simple-bus";
+ 		#address-cells = <2>;
 
 -- 
 2.40.0
