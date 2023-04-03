@@ -2,126 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1826D3C8F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 06:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F79A6D3C90
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 06:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjDCEu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 00:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
+        id S231329AbjDCEvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 00:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjDCEuy (ORCPT
+        with ESMTP id S229670AbjDCEvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 00:50:54 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56B08A4A;
-        Sun,  2 Apr 2023 21:50:52 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id d11-20020a05600c3acb00b003ef6e6754c5so13494341wms.5;
-        Sun, 02 Apr 2023 21:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680497451;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KmuBUFzQUjaxZVU+S/+mOcmOc0AOV31J3v1NKMouK28=;
-        b=PGK/Fk4wYOsAWep6nEBI2HWHAGlmmQr9MHVl7DMSGeFoHAdU0dwbFTq9HO9wrXfLok
-         HUULIuqfTTkJpJfQJa6vhojoVJnzzaCnp4StcdPc0oH+djaJXj+OK6J5XNsc99gjLUDB
-         eAMV0TIIoDDkhm3s5ZrySlTZ8X9AxVFLLzPz8PGFe/Tv/yWdz9jnL+DTXafyU4kQnC8Q
-         a8H0PInP4F6/AEd52TJkWlq4JKhhsC8gYUv8m5N/Gyur+swg2s2RqdQlNLYXpfwkuDAF
-         d7CFcef+z3GNLRrW/TJtM+fGvyJ4HrFeN/vUFBAg7H0HIGagF+Bn6HaRlk7AhHNZcy7N
-         oSRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680497451;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KmuBUFzQUjaxZVU+S/+mOcmOc0AOV31J3v1NKMouK28=;
-        b=P80FC3G4bhuv9A5AC9/fcAXFMVJZsxfGbtwsHxe82aD6o0wYhtMHDBGtVx7EzlYQs6
-         9TBmmB8hMeRNuAFziJGDnPq3yh6BpgazuEyzaEaY/FpIAqRObXdzyx42DR1ux4OFtZkH
-         g8gW/UGC4UKJLfMdTv0Ng99P+qcqrkzO8aPfuvZtl4MlKLcXXj62KW+lR77EFkFi78wx
-         Pbwk+92lR4XEc/FIBXJW08x08AEQus8nkNf+RpeMBsblbNpI8FMy8gI1KQbZL4OzWhXv
-         ho/PcuWtWe9ycGzEC8vpvGucwewMAQiHA3O0q+rAwV/LWnosSD3lphy1FQ/rHw/wgUjV
-         0NHQ==
-X-Gm-Message-State: AO0yUKVTgMbD5Dr7Ml+/tAo7NQKZSq5ROGohYGH6YK9NxRqb7aiHyrFY
-        SkRilJZutXLmCWgIOGEzigE=
-X-Google-Smtp-Source: AK7set8ZQ9YczPJ94tVG7x+s4l8T7g2se9y9PUJGHUMtSjgLZlVwkUZj0mxGW1e7LgB+9x+f4k0jOg==
-X-Received: by 2002:a7b:ca4a:0:b0:3ed:d64f:ec30 with SMTP id m10-20020a7bca4a000000b003edd64fec30mr24501671wml.33.1680497450934;
-        Sun, 02 Apr 2023 21:50:50 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id u17-20020a05600c19d100b003dd1bd0b915sm18158191wmq.22.2023.04.02.21.50.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 21:50:50 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 07:50:45 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     ye.xingchen@zte.com.cn, lpieralisi@kernel.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] PCI: mt7621: Use dev_err_probe()
-Message-ID: <2e4f27f0-a4ac-4523-8f90-695a62973bd0@kili.mountain>
-References: <202303231145121987818@zte.com.cn>
- <CAMhs-H_-kQ0FGP3L1xJ=ec_xJ59a2OztMLLjEQmQfYFOEa4DfA@mail.gmail.com>
+        Mon, 3 Apr 2023 00:51:10 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F61CB775;
+        Sun,  2 Apr 2023 21:51:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680497468; x=1712033468;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wktO4jGj6Olw+xf9VLolWIuo0fOfy/aVqpJj2kX8sZA=;
+  b=nvJ35yr3A9LdL2JwI90nqf5NiD2tY68Eofi83kmNXqC/VePhkyeJOioh
+   vsG2XpKv6dbjkK9YEVly7GV778k15Jd3t/QrdtPneRY/vl7zKpoQKJd4m
+   mQrrfhhZn38+F9I9BzVS7PXnq8fjF2Cs6TjLinhZMpq4X15bjZocoTEED
+   wvPSYVlUPIM/m90ayxAsIIHB+jIsBE48WvdFGuSCDxraGVKrF9KSDm7On
+   XbZ17NRGVvTPsoYRvUN96bXHQ4Q9r3BzQmO//6iapqReAdzncEAxvOa3Q
+   yBDIE4i2cZYZfaZkw5Ld5flJ/vBvkB3lI30EDdId78r8Z9w9O8Zdnenov
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="343499588"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="343499588"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2023 21:51:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="688368267"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="688368267"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.40.243])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2023 21:51:04 -0700
+Message-ID: <eb1c058c-f84f-ae94-ced6-92f22b6d9b69@intel.com>
+Date:   Mon, 3 Apr 2023 07:51:01 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMhs-H_-kQ0FGP3L1xJ=ec_xJ59a2OztMLLjEQmQfYFOEa4DfA@mail.gmail.com>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.1
+Subject: Re: [PATCH 9/9] perf intel-pt: Use perf_pmu__scan_file_at() if
+ possible
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>
+References: <20230331202949.810326-1-namhyung@kernel.org>
+ <20230331202949.810326-10-namhyung@kernel.org>
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230331202949.810326-10-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 07:23:26AM +0100, Sergio Paracuellos wrote:
-> Hi,
+On 31/03/23 23:29, Namhyung Kim wrote:
+> Intel-PT calls perf_pmu__scan_file() a lot, let's use relative address
+> when it accesses multiple files at one place.
 > 
-> On Thu, Mar 23, 2023 at 4:45 AM <ye.xingchen@zte.com.cn> wrote:
-> >
-> > From: Ye Xingchen <ye.xingchen@zte.com.cn>
-> >
-> > Replace the open-code with dev_err_probe() to simplify the code.
-> >
-> > Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-> > ---
-> >  drivers/pci/controller/pcie-mt7621.c | 7 +++----
-> >  1 file changed, 3 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
-> > index 63a5f4463a9f..964de0e8c6a0 100644
-> > --- a/drivers/pci/controller/pcie-mt7621.c
-> > +++ b/drivers/pci/controller/pcie-mt7621.c
-> > @@ -220,10 +220,9 @@ static int mt7621_pcie_parse_port(struct mt7621_pcie *pcie,
-> >         }
-> >
-> >         port->pcie_rst = of_reset_control_get_exclusive(node, NULL);
-> > -       if (PTR_ERR(port->pcie_rst) == -EPROBE_DEFER) {
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-So the theory here is that -EPROBE_DEFER is recoverable but other errors
-are not so we just ignore them?  Error pointers will trigger a WARN() in
-mt7621_control_assert/deassert().
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-
-> > --
-> > 2.25.1
+> ---
+>  tools/perf/arch/x86/util/intel-pt.c | 52 ++++++++++++++++++-----------
+>  1 file changed, 32 insertions(+), 20 deletions(-)
 > 
-> Also, this is not a probe(), so I don't see a point of using
-> dev_err_probe() here.
-
-It's a weird thing to return -EPROBE_DEFER from something which is not
-a probe function...  Someone told me I should write a Smatch check for
-it but I never got around to doing that.
-
-In this case, I guess the user is supposed to see the error message and
-manually fix the probe order?  The dev_err_probe() will change the error
-message into a debug message so the user will not see it and will not be
-able to fix it.  So using dev_err_probe() will break things for the
-user.
-
-regards,
-dan carpenter
+> diff --git a/tools/perf/arch/x86/util/intel-pt.c b/tools/perf/arch/x86/util/intel-pt.c
+> index 1e39a034cee9..2cff11de9d8a 100644
+> --- a/tools/perf/arch/x86/util/intel-pt.c
+> +++ b/tools/perf/arch/x86/util/intel-pt.c
+> @@ -194,16 +194,19 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
+>  	int pos = 0;
+>  	u64 config;
+>  	char c;
+> +	int dirfd;
+> +
+> +	dirfd = perf_pmu__event_source_devices_fd();
+>  
+>  	pos += scnprintf(buf + pos, sizeof(buf) - pos, "tsc");
+>  
+> -	if (perf_pmu__scan_file(intel_pt_pmu, "caps/mtc", "%d",
+> -				&mtc) != 1)
+> +	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/mtc", "%d",
+> +				   &mtc) != 1)
+>  		mtc = 1;
+>  
+>  	if (mtc) {
+> -		if (perf_pmu__scan_file(intel_pt_pmu, "caps/mtc_periods", "%x",
+> -					&mtc_periods) != 1)
+> +		if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/mtc_periods", "%x",
+> +					   &mtc_periods) != 1)
+>  			mtc_periods = 0;
+>  		if (mtc_periods) {
+>  			mtc_period = intel_pt_pick_bit(mtc_periods, 3);
+> @@ -212,13 +215,13 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
+>  		}
+>  	}
+>  
+> -	if (perf_pmu__scan_file(intel_pt_pmu, "caps/psb_cyc", "%d",
+> -				&psb_cyc) != 1)
+> +	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/psb_cyc", "%d",
+> +				   &psb_cyc) != 1)
+>  		psb_cyc = 1;
+>  
+>  	if (psb_cyc && mtc_periods) {
+> -		if (perf_pmu__scan_file(intel_pt_pmu, "caps/psb_periods", "%x",
+> -					&psb_periods) != 1)
+> +		if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/psb_periods", "%x",
+> +					   &psb_periods) != 1)
+>  			psb_periods = 0;
+>  		if (psb_periods) {
+>  			psb_period = intel_pt_pick_bit(psb_periods, 3);
+> @@ -227,8 +230,8 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
+>  		}
+>  	}
+>  
+> -	if (perf_pmu__scan_file(intel_pt_pmu, "format/pt", "%c", &c) == 1 &&
+> -	    perf_pmu__scan_file(intel_pt_pmu, "format/branch", "%c", &c) == 1)
+> +	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "format/pt", "%c", &c) == 1 &&
+> +	    perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "format/branch", "%c", &c) == 1)
+>  		pos += scnprintf(buf + pos, sizeof(buf) - pos, ",pt,branch");
+>  
+>  	pr_debug2("%s default config: %s\n", intel_pt_pmu->name, buf);
+> @@ -236,6 +239,7 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
+>  	intel_pt_parse_terms(intel_pt_pmu->name, &intel_pt_pmu->format, buf,
+>  			     &config);
+>  
+> +	close(dirfd);
+>  	return config;
+>  }
+>  
+> @@ -488,7 +492,7 @@ static void intel_pt_valid_str(char *str, size_t len, u64 valid)
+>  	}
+>  }
+>  
+> -static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu,
+> +static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu, int dirfd,
+>  				    const char *caps, const char *name,
+>  				    const char *supported, u64 config)
+>  {
+> @@ -498,11 +502,11 @@ static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu,
+>  	u64 bits;
+>  	int ok;
+>  
+> -	if (perf_pmu__scan_file(intel_pt_pmu, caps, "%llx", &valid) != 1)
+> +	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, caps, "%llx", &valid) != 1)
+>  		valid = 0;
+>  
+>  	if (supported &&
+> -	    perf_pmu__scan_file(intel_pt_pmu, supported, "%d", &ok) == 1 && !ok)
+> +	    perf_pmu__scan_file_at(intel_pt_pmu, dirfd, supported, "%d", &ok) == 1 && !ok)
+>  		valid = 0;
+>  
+>  	valid |= 1;
+> @@ -531,37 +535,45 @@ static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu,
+>  static int intel_pt_validate_config(struct perf_pmu *intel_pt_pmu,
+>  				    struct evsel *evsel)
+>  {
+> -	int err;
+> +	int err, dirfd;
+>  	char c;
+>  
+>  	if (!evsel)
+>  		return 0;
+>  
+> +	dirfd = perf_pmu__event_source_devices_fd();
+> +	if (dirfd < 0)
+> +		return dirfd;
+> +
+>  	/*
+>  	 * If supported, force pass-through config term (pt=1) even if user
+>  	 * sets pt=0, which avoids senseless kernel errors.
+>  	 */
+> -	if (perf_pmu__scan_file(intel_pt_pmu, "format/pt", "%c", &c) == 1 &&
+> +	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "format/pt", "%c", &c) == 1 &&
+>  	    !(evsel->core.attr.config & 1)) {
+>  		pr_warning("pt=0 doesn't make sense, forcing pt=1\n");
+>  		evsel->core.attr.config |= 1;
+>  	}
+>  
+> -	err = intel_pt_val_config_term(intel_pt_pmu, "caps/cycle_thresholds",
+> +	err = intel_pt_val_config_term(intel_pt_pmu, dirfd, "caps/cycle_thresholds",
+>  				       "cyc_thresh", "caps/psb_cyc",
+>  				       evsel->core.attr.config);
+>  	if (err)
+> -		return err;
+> +		goto out;
+>  
+> -	err = intel_pt_val_config_term(intel_pt_pmu, "caps/mtc_periods",
+> +	err = intel_pt_val_config_term(intel_pt_pmu, dirfd, "caps/mtc_periods",
+>  				       "mtc_period", "caps/mtc",
+>  				       evsel->core.attr.config);
+>  	if (err)
+> -		return err;
+> +		goto out;
+>  
+> -	return intel_pt_val_config_term(intel_pt_pmu, "caps/psb_periods",
+> +	err = intel_pt_val_config_term(intel_pt_pmu, dirfd, "caps/psb_periods",
+>  					"psb_period", "caps/psb_cyc",
+>  					evsel->core.attr.config);
+> +
+> +out:
+> +	close(dirfd);
+> +	return err;
+>  }
+>  
+>  static void intel_pt_config_sample_mode(struct perf_pmu *intel_pt_pmu,
 
