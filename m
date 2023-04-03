@@ -2,161 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAF16D4B0E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C636D4B11
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbjDCOwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
+        id S234141AbjDCOxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbjDCOwD (ORCPT
+        with ESMTP id S234021AbjDCOxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:52:03 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680FC29BC3
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:51:48 -0700 (PDT)
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com [209.85.219.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D7A163F209
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:51:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1680533506;
-        bh=XBz1zna37ysInm5qeEZxPeU0HrWb4OHRI+Pz2i9OGHc=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=EVMKtHfeo9w2BCyQ5NKlN4QMuQSsmvkucegdGs4VAB+Lu8g903ab6XduoqoICUR9P
-         KgUR6izjsY74hSczmjI5Y7OdGHNOxNr1yFWWr7DtSzzCTfUjseKaLhcHlzVgc0tW9z
-         U9Ue65+30/sCFF66ng1xQSjtCl4Q9Xwf8J/P9rz89QMMKDFrg6kNmZDrXzXrxhZxkT
-         PqeZGM5Ns9QbPICMEoAFE2fKnyiFFU4MhA//fHHx0zFDpo8MKBjDPEyzJOa9IJ9cur
-         eZTTiplpREu2lah9Ln2amewkzunnUSEXqmlg5bg6cSpiam6Twt2XF4A9AOZvmp63YO
-         HwwwPlIEGkjEg==
-Received: by mail-yb1-f198.google.com with SMTP id m6-20020a056902118600b00aeb1e3dbd1bso28549219ybu.9
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:51:46 -0700 (PDT)
+        Mon, 3 Apr 2023 10:53:21 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B2328E86
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:52:50 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so30799336pjl.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680533569;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L58ore7rc3KMeRRhxz4jXT8BuC5rytou4tTyy0BwwyA=;
+        b=nmefKah4ce2DwgPcLC+BopmlMgQb9z5tPcoNgJj79IWE3OSVCsvu2vl+rpsyNkpolZ
+         R86TW2GHzYKPU2YHCqIfcpNfVlgUsKR7t9WPvDGPLCPX9aGs4y+AMlv1FvsBTdyYVWbQ
+         pVUnLjy2x51qtg7mP7f2GMq+YToSPFzv4q7rW1LHEf+SLe/UrUzuiFmfufbVjr7FPGDL
+         hTK00Bga/19iW3FPmnWmBhrkYhVlJinshAbN1FVcfUqOHJXQJm36HrLp8Ru15JoqSEsC
+         //weI0lyfVuC8yQdlUapBMQPT66O8+WoHZVEaBCLV5yLDuRuFOVpno1T3TP7QP5SHPUr
+         cYtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680533506;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XBz1zna37ysInm5qeEZxPeU0HrWb4OHRI+Pz2i9OGHc=;
-        b=CoRBogFhw5kBTRMRiPg7pQDhC+ECIKJqRWTnQiYgIyPUszEA3sENEKON1Cnpqz4cow
-         P4RXeKvJ13OtPq4SUuEWSv1mZjqa3Qagryq4JDNW8GBQoweNqcUtL28GdUgrMz8rNkmV
-         4zHEYE19iJfIOEyfNRT8I1nlbclqpJ6oEX8du3HUhBjGwBDUkDqjnI63BQPEAfAhWMWQ
-         aeljISMnfF6oYoX2DcIKUHk8lHs1r66A6b6qRifiouM4UPDTXyLKub4pJFqHPWZtYYYP
-         ubO7hNCRW3cZE4N/+P+eRhHUHC6dd+pMjcmtfSaSJix6iSj/mTPDT8cnk5h/759+Uq3f
-         GtSw==
-X-Gm-Message-State: AAQBX9coyHFIOQj3PSGIiG4jE7yMZ/lx0aO1WIe97B7yF1xn0a13wTtw
-        cpXqNCJkpiHzdR0OQML1lli6mM1VliKKsfXJDfvAv3aNlJ7VVRRtTbOjbAYUQBTfSv7PS6Tnb9p
-        8TcxukDWzFcynRG1rQS6CK7i5ytPMWPJXDljIH1/8mrcnPmQngzc7F4AAFw==
-X-Received: by 2002:a25:d784:0:b0:b76:3b21:b1dc with SMTP id o126-20020a25d784000000b00b763b21b1dcmr11288519ybg.0.1680533505808;
-        Mon, 03 Apr 2023 07:51:45 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aqgVvrDZpj3W0dpqiva+R1snhDKUQ7qQHwf84isS5iLyZponbAZ23XQDzrn0oLSQL21JAYXzfwIO48DtPuJpY=
-X-Received: by 2002:a25:d784:0:b0:b76:3b21:b1dc with SMTP id
- o126-20020a25d784000000b00b763b21b1dcmr11288511ybg.0.1680533505602; Mon, 03
- Apr 2023 07:51:45 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680533569;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L58ore7rc3KMeRRhxz4jXT8BuC5rytou4tTyy0BwwyA=;
+        b=w10dVfTOiODqrxO66nn90wdqIE8NXcNSshYdGLhpE1r1RBr6NJB4AM/J6xxzKceya6
+         Www52X3Rvx3tFwf6AV6nkpP5xSNrUfDQpgYwYVwyJl0vjskENwy9E+9A38zKmQFVZ4qX
+         Yo+czeBdJbypsOxiDeP1gLanKedThEO7cKTpS9ljVYO3J4rbqw6vqrOoV8QHJqtbkZrf
+         8ETB6NUtVY6KU5aA4Oe+8HCPnSBlsCl3p3RedBENbuEhNs8E4tI/pVCcDZ3GMntZER3Y
+         +tOfhtRN1x9yHyEeN5pBsaSC43S/DAW7ufpZavRod2jrrDp3ShDD/DD0hqXpx8pZtc//
+         DP1A==
+X-Gm-Message-State: AAQBX9cWoI9Aen2CqVKeQDxjMYjOqaBK4b92LK7BP98iEbJFXiR/VPAB
+        yYDCQdAHEJYeLKqzsR0hDYI=
+X-Google-Smtp-Source: AKy350afAU/ENwmLgD/WAv9nlH8fc1cb5hHzoHXfQxWgDsYx0gwRqSnaOrNXqkEcSff6KWDHwRFeug==
+X-Received: by 2002:a17:903:228f:b0:1a2:185f:f199 with SMTP id b15-20020a170903228f00b001a2185ff199mr44658983plh.63.1680533569387;
+        Mon, 03 Apr 2023 07:52:49 -0700 (PDT)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id h7-20020a170902748700b0019f0ef910f7sm6685366pll.123.2023.04.03.07.52.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 07:52:48 -0700 (PDT)
+Message-ID: <f0a40f3a-2ff6-5529-ad84-1c66f7e381ea@gmail.com>
+Date:   Mon, 3 Apr 2023 23:52:46 +0900
 MIME-Version: 1.0
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
- <20230220193754.470330-8-aleksandr.mikhalitsyn@canonical.com>
- <381a19bb-d17e-b48b-8259-6287dbe170df@fastmail.fm> <CAEivzxf8HKs2FJwTohzGVcb0TRNy9QJbEALC3dni3zx+tOb9Gg@mail.gmail.com>
-In-Reply-To: <CAEivzxf8HKs2FJwTohzGVcb0TRNy9QJbEALC3dni3zx+tOb9Gg@mail.gmail.com>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Mon, 3 Apr 2023 16:51:34 +0200
-Message-ID: <CAEivzxdjjJmwPaxe5miWPxun_ZCRt-wjuCCA2nzOWWyzZZUuOg@mail.gmail.com>
-Subject: Re: [RFC PATCH 7/9] fuse: add fuse device ioctl(FUSE_DEV_IOC_REINIT)
-To:     Bernd Schubert <bernd.schubert@fastmail.fm>
-Cc:     mszeredi@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        criu@openvz.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 07/14] extcon: Use unique number for the extcon device
+ ID
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bumwoo Lee <bw365.lee@samsung.com>,
+        linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
+ <20230322144005.40368-8-andriy.shevchenko@linux.intel.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230322144005.40368-8-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 3:09=E2=80=AFPM Aleksandr Mikhalitsyn
-<aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> On Fri, Mar 3, 2023 at 8:26=E2=80=AFPM Bernd Schubert
-> <bernd.schubert@fastmail.fm> wrote:
-> >
-> >
-> >
-> > On 2/20/23 20:37, Alexander Mikhalitsyn wrote:
-> > > This ioctl aborts fuse connection and then reinitializes it,
-> > > sends FUSE_INIT request to allow a new userspace daemon
-> > > to pick up the fuse connection.
-> > >
-> > > Cc: Miklos Szeredi <mszeredi@redhat.com>
-> > > Cc: Al Viro <viro@zeniv.linux.org.uk>
-> > > Cc: Amir Goldstein <amir73il@gmail.com>
-> > > Cc: St=C3=83=C2=A9phane Graber <stgraber@ubuntu.com>
-> > > Cc: Seth Forshee <sforshee@kernel.org>
-> > > Cc: Christian Brauner <brauner@kernel.org>
-> > > Cc: Andrei Vagin <avagin@gmail.com>
-> > > Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-> > > Cc: linux-fsdevel@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Cc: criu@openvz.org
-> > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical=
-.com>
-> > > ---
-> > >   fs/fuse/dev.c             | 132 +++++++++++++++++++++++++++++++++++=
-+++
-> > >   include/uapi/linux/fuse.h |   1 +
-> > >   2 files changed, 133 insertions(+)
-> > >
-> > > diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
-> > > index 737764c2295e..0f53ffd63957 100644
-> > > --- a/fs/fuse/dev.c
-> > > +++ b/fs/fuse/dev.c
-> > > @@ -2187,6 +2187,112 @@ void fuse_abort_conn(struct fuse_conn *fc)
-> > >   }
-> > >   EXPORT_SYMBOL_GPL(fuse_abort_conn);
-> > >
-> > > +static int fuse_reinit_conn(struct fuse_conn *fc)
-> > > +{
-> > > +     struct fuse_iqueue *fiq =3D &fc->iq;
-> > > +     struct fuse_dev *fud;
-> > > +     unsigned int i;
-> > > +
-> > > +     if (fc->conn_gen + 1 < fc->conn_gen)
-> > > +             return -EOVERFLOW;
-> > > +
-> > > +     fuse_abort_conn(fc);
-> > > +     fuse_wait_aborted(fc);
-> >
-> > Shouldn't this also try to flush all data first?
+On 23. 3. 22. 23:39, Andy Shevchenko wrote:
+> The use of atomic variable is still racy when we do not control which
+> device has been unregistered and there is a (theoretical) possibility
+> of the overflow that may cause a duplicate extcon device ID number
+> to be allocated next time a device is registered.
+> 
+> Replace above mentioned approach by using IDA framework.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/extcon/extcon.c | 15 ++++++++++++---
+>  drivers/extcon/extcon.h |  2 ++
+>  2 files changed, 14 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index 14e66e21597f..0d261ec6c473 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -16,6 +16,7 @@
+>  
+>  #include <linux/module.h>
+>  #include <linux/types.h>
+> +#include <linux/idr.h>
+>  #include <linux/init.h>
+>  #include <linux/device.h>
+>  #include <linux/fs.h>
+> @@ -238,6 +239,7 @@ struct extcon_cable {
+>  
+>  static struct class *extcon_class;
+>  
+> +static DEFINE_IDA(extcon_dev_ids);
+>  static LIST_HEAD(extcon_dev_list);
+>  static DEFINE_MUTEX(extcon_dev_list_lock);
+>  
+> @@ -1248,7 +1250,6 @@ static int extcon_alloc_groups(struct extcon_dev *edev)
+>  int extcon_dev_register(struct extcon_dev *edev)
+>  {
+>  	int ret, index = 0;
+> -	static atomic_t edev_no = ATOMIC_INIT(-1);
+>  
+>  	ret = create_extcon_class();
+>  	if (ret < 0)
+> @@ -1275,8 +1276,14 @@ int extcon_dev_register(struct extcon_dev *edev)
+>  		dev_err(&edev->dev, "extcon device name is null\n");
+>  		return -EINVAL;
+>  	}
+> -	dev_set_name(&edev->dev, "extcon%lu",
+> -			(unsigned long)atomic_inc_return(&edev_no));
+> +
+> +	ret = ida_simple_get(&extcon_dev_ids, 0, INT_MAX, GFP_KERNEL);
 
-Dear Bernd,
 
-I've reviewed this place 2nd time and I'm not sure that we have to
-perform any flushing there, because userspace daemon can be dead or
-stuck.
-Technically, if userspace knows that daemon is alive then it can call
-fsync/sync before doing reinit.
+ida_simple_get and ida_simple_remove are deprecated on 
+commit 3264ceec8f17 ("lib/idr.c: document that ida_simple_{get,remove}()
+are deprecated"). Instead of them, better to use ida_alloc and ida_free 
+according to the comments.
 
-What do you think about it?
 
-Kind regards,
-Alex
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	edev->id = ret;
+> +
+> +	dev_set_name(&edev->dev, "extcon%d", edev->id);
+>  
+>  	ret = extcon_alloc_cables(edev);
+>  	if (ret < 0)
+> @@ -1368,6 +1375,8 @@ void extcon_dev_unregister(struct extcon_dev *edev)
+>  		return;
+>  	}
+>  
+> +	ida_simple_remove(&extcon_dev_ids, edev->id);
 
->
-> I think we should. Thanks for pointing to that!
->
-> I've read all your comments and I'll prepare -v2 series soon.
->
-> Thanks a lot, Bernd!
->
-> >
+ditto.
+
+> +
+>  	device_unregister(&edev->dev);
+>  
+>  	if (edev->mutually_exclusive && edev->max_supported) {
+> diff --git a/drivers/extcon/extcon.h b/drivers/extcon/extcon.h
+> index 15616446140d..877c0860e300 100644
+> --- a/drivers/extcon/extcon.h
+> +++ b/drivers/extcon/extcon.h
+> @@ -20,6 +20,7 @@
+>   *			{0x3, 0x6, 0x5, 0}. If it is {0xFFFFFFFF, 0}, there
+>   *			can be no simultaneous connections.
+>   * @dev:		Device of this extcon.
+> + * @id:			Unique device ID of this extcon.
+>   * @state:		Attach/detach state of this extcon. Do not provide at
+>   *			register-time.
+>   * @nh_all:		Notifier for the state change events for all supported
+> @@ -46,6 +47,7 @@ struct extcon_dev {
+>  
+>  	/* Internal data. Please do not set. */
+>  	struct device dev;
+> +	int id;
+>  	struct raw_notifier_head nh_all;
+>  	struct raw_notifier_head *nh;
+>  	struct list_head entry;
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
+
