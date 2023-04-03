@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4DC6D4A7E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341E56D4A7C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234071AbjDCOrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S234065AbjDCOro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234063AbjDCOrX (ORCPT
+        with ESMTP id S234060AbjDCOrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:47:23 -0400
+        Mon, 3 Apr 2023 10:47:21 -0400
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224CD28EAE
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:46:43 -0700 (PDT)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CBE29BE2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:46:42 -0700 (PDT)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EA9873F246
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:45:47 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4F6233F57D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:45:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1680533148;
-        bh=N1lNLcfnab/Xak3vE1BXdEngtUghqVUaWAQgAOaQ90I=;
+        s=20210705; t=1680533150;
+        bh=CML0MX+E6RHRMEZDuKLkjuHXCZn0KNZeg1m8eYp9u4Q=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version:Content-Type;
-        b=plq84R7Z9jKFbIRv8EFmGTOulD5ur48J4seBXMRPakcSxy97onxVI2xse4tzpet8u
-         7HR2+Nh8jSnNutWb+z8XD5d/nDDUyTYYkEjUIcdW0X8N57cHYp42ChVtqXXpspSaBj
-         7rsZDhThH6jfe/r5O6AuFNGogtM9yPPHSwUhPMURgh0vu1VrnAUxLyuRU7wjbtKjtB
-         ync77zd/Am1CBtIuyqj4FnVz9OQeX7alutCXIu945gdthH5Y1wX7mPtfJio7VAWCPL
-         Uz/g0KE2pDDAXHkeuTA2G/YVNv7rLD3+hPWA10Fge8o1m39yitJ0lod6LR2E8Vm6fO
-         KUYQXtIVOUOFQ==
-Received: by mail-ed1-f72.google.com with SMTP id a40-20020a509eab000000b005024c025bf4so29334093edf.14
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:45:47 -0700 (PDT)
+        b=b7OYEYkG1Xf77jtOGLCV/1MDNd/skiChtKPzO0+m/hc2hjPKjb64I7fmXOg7UtNGX
+         GXBuuFIo4Rj6BVIt1IhYkCkFY4n6SeTwLiJmyn+zxtw5rEkZJ5mlwrxGTQkjRnFO74
+         4Jrz/BQWKXE9eI7PfvEBT9ZMM3IO1vG1FcD8sXyUIcG4z85Zr8FmB4rtB/10d9vgzg
+         DivbyFHxmG6bn4DlGHX/qHV/yrm4aOMpYfj5IPIkvnjFQQ/x+b8uvsnByF0SKpr6MC
+         eNym/Ed/5dWC2zl94otk5Y2LM67Khy7MiT0yMxdQp5Z/484f7Ccajgtpvehr4mmgfu
+         qFIvWYpvyXWSQ==
+Received: by mail-ed1-f71.google.com with SMTP id v1-20020a50d581000000b0050291cda08aso7957470edi.15
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:45:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680533147;
+        d=1e100.net; s=20210112; t=1680533149;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N1lNLcfnab/Xak3vE1BXdEngtUghqVUaWAQgAOaQ90I=;
-        b=u4KQ6S0DWD7WrTXdeoU31PQWidmcjPphS+GtyH6ALH3aLz+cldx60h+fwRc5XPqx/p
-         Vz0S5BIqSs94CDlrVp1f2LnchVt06WKuZxH27+Y9tIW8/x7s2Cq520pZarNrANV/HKzM
-         9gpjOG6+dHw3ZrzfNZj7GyV5E8ZChs0Z8NNjim62HaZJTx5h/HkCuwx099U6wdJV81JX
-         N+F0ENr5eBVy8ZbGSrb3LXVRWJMN+JOJpObiI+E5bnXGNTzdoZRTzEF+ohsRqiYpPYA5
-         2x8bhok1hVN/90TwgfDxKSj2Dy/oP4DjTjkzDpQd0Ide9LvcmZCff/EhpPcjE4djeua0
-         kvyw==
-X-Gm-Message-State: AAQBX9ckwN+SYcnN1fNdtoXxb0fxCzJAWgnsPQ3NTfu+PcE5KtswiAZh
-        ei68OxTA+hsHR5vQkpV2o4L3CRJiK+RCbM5D7rNW7oBd6kj3PBUHNdxkO5hIcEd0/oD/pMY8oS5
-        QlUSIH6sPWKZGxw5TMHVeGXzBxuCMA6r5kpFmrrubGQ==
-X-Received: by 2002:a17:907:d487:b0:93f:fbe:c388 with SMTP id vj7-20020a170907d48700b0093f0fbec388mr34735174ejc.27.1680533147536;
-        Mon, 03 Apr 2023 07:45:47 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bcO0nfWshaXRLgIpS2eZis0PuIuWt4U+aoRv7PYgiFEjJZmPa6l00ijPySY3vFOAzJmjYOZQ==
-X-Received: by 2002:a17:907:d487:b0:93f:fbe:c388 with SMTP id vj7-20020a170907d48700b0093f0fbec388mr34735154ejc.27.1680533147248;
-        Mon, 03 Apr 2023 07:45:47 -0700 (PDT)
+        bh=CML0MX+E6RHRMEZDuKLkjuHXCZn0KNZeg1m8eYp9u4Q=;
+        b=QK9sN9hTUIeEt/clzcntwWd/aFPekw5v8FQrk05d9el8MEQn6+Pr/7ZllNKNvUKYbx
+         FQwuZRJTieaoZw/aD1R/BwnZe/I57/nrf5oR4hXExVf/flqHAbSSK47fDI+rWRSoyo5n
+         Yxfk3dOirC9myscJ0awjTpt7cHdLwq00uU5NdEAs2VKd8uRMoOwRy5rO40COcmikSeGX
+         9yN7PbI08PQTSjWvHTro7eRTlVWTbiSXr3Sxl3wJzStsfIxm+ChOCN5dh7if2MBIaHD8
+         PWlT8v27q5gi0LI/FCtLZZoUDMyXHH2xS9uUhKRA+GM0bRV0m1cLT0EfNPs3GH1WuNS1
+         yyZQ==
+X-Gm-Message-State: AAQBX9f4A2fiPxkTFe0zJdhOmH6hWfzKYxkcTYv27ONAhmmLb594GDy/
+        vpJvX3L68clXMKBJdcwiYonp9wkX8L77Cs+Cmy00PCBh63v7KI1cPE8n1d/WoNaOZMdy457l2yP
+        GoNDFC1rPhrilg0UYdQ+huiLpfMmslMzLZWEKZA6sJA==
+X-Received: by 2002:a05:6402:215:b0:502:9c52:447f with SMTP id t21-20020a056402021500b005029c52447fmr4105688edv.17.1680533148976;
+        Mon, 03 Apr 2023 07:45:48 -0700 (PDT)
+X-Google-Smtp-Source: AKy350btyKXZRMoX7/M0+6dUdIKd3K9ydJ1W9baKVdPNFK7DJGhr7naoKrIONWiKDmdxp0+zXVLfPg==
+X-Received: by 2002:a05:6402:215:b0:502:9c52:447f with SMTP id t21-20020a056402021500b005029c52447fmr4105680edv.17.1680533148816;
+        Mon, 03 Apr 2023 07:45:48 -0700 (PDT)
 Received: from amikhalitsyn.. (ip5f5bd076.dynamic.kabel-deutschland.de. [95.91.208.118])
-        by smtp.gmail.com with ESMTPSA id i5-20020a50d745000000b004fa19f5ba99sm4735804edj.79.2023.04.03.07.45.46
+        by smtp.gmail.com with ESMTPSA id i5-20020a50d745000000b004fa19f5ba99sm4735804edj.79.2023.04.03.07.45.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 07:45:46 -0700 (PDT)
+        Mon, 03 Apr 2023 07:45:48 -0700 (PDT)
 From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 To:     mszeredi@redhat.com
 Cc:     flyingpeng@tencent.com,
@@ -72,9 +72,9 @@ Cc:     flyingpeng@tencent.com,
         Bernd Schubert <bschubert@ddn.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         criu@openvz.org
-Subject: [RFC PATCH v2 7/9] fuse: add fuse device ioctl(FUSE_DEV_IOC_REINIT)
-Date:   Mon,  3 Apr 2023 16:45:15 +0200
-Message-Id: <20230403144517.347517-8-aleksandr.mikhalitsyn@canonical.com>
+Subject: [RFC PATCH v2 8/9] namespace: add sb_revalidate_bindmounts helper
+Date:   Mon,  3 Apr 2023 16:45:16 +0200
+Message-Id: <20230403144517.347517-9-aleksandr.mikhalitsyn@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230403144517.347517-1-aleksandr.mikhalitsyn@canonical.com>
 References: <20230403144517.347517-1-aleksandr.mikhalitsyn@canonical.com>
@@ -90,9 +90,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This ioctl aborts fuse connection and then reinitializes it,
-sends FUSE_INIT request to allow a new userspace daemon
-to pick up the fuse connection.
+Useful if for some reason bindmounts root dentries get invalidated
+but it's needed to revalidate existing bindmounts without remounting.
 
 Cc: Miklos Szeredi <mszeredi@redhat.com>
 Cc: Al Viro <viro@zeniv.linux.org.uk>
@@ -108,207 +107,132 @@ Cc: linux-kernel@vger.kernel.org
 Cc: criu@openvz.org
 Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 ---
- fs/fuse/dev.c             | 152 ++++++++++++++++++++++++++++++++++++++
- fs/fuse/fuse_i.h          |   3 +
- include/uapi/linux/fuse.h |   1 +
- 3 files changed, 156 insertions(+)
+ fs/namespace.c                | 90 +++++++++++++++++++++++++++++++++++
+ include/linux/mnt_namespace.h |  3 ++
+ 2 files changed, 93 insertions(+)
 
-diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
-index b4501a10c379..93a457c90b49 100644
---- a/fs/fuse/dev.c
-+++ b/fs/fuse/dev.c
-@@ -2187,6 +2187,132 @@ void fuse_abort_conn(struct fuse_conn *fc)
+diff --git a/fs/namespace.c b/fs/namespace.c
+index bc0f15257b49..b74d00d6abb0 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -568,6 +568,96 @@ static int mnt_make_readonly(struct mount *mnt)
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(fuse_abort_conn);
  
-+static int fuse_reinit_conn(struct fuse_conn *fc)
++struct bind_mount_list_item {
++	struct list_head list;
++	struct vfsmount *mnt;
++};
++
++/*
++ * sb_revalidate_bindmounts - Relookup/reset bindmounts root dentries
++ *
++ * Useful if for some reason bindmount root dentries get invalidated
++ * but it's needed to revalidate existing bindmounts without remounting.
++ */
++int sb_revalidate_bindmounts(struct super_block *sb)
 +{
-+	struct fuse_iqueue *fiq = &fc->iq;
-+	struct fuse_dev *fud;
-+	unsigned int i;
++	struct mount *mnt;
++	struct bind_mount_list_item *bmnt, *next;
++	int err = 0;
++	struct vfsmount *root_mnt = NULL;
++	LIST_HEAD(mnt_to_update);
++	char *buf;
 +
-+	spin_lock(&fc->lock);
-+	if (fc->reinit_in_progress) {
-+		spin_unlock(&fc->lock);
-+		return -EBUSY;
-+	}
++	buf = (char *) __get_free_page(GFP_KERNEL);
++	if (!buf)
++		return -ENOMEM;
 +
-+	if (fc->conn_gen + 1 < fc->conn_gen) {
-+		spin_unlock(&fc->lock);
-+		return -EOVERFLOW;
-+	}
++	lock_mount_hash();
++	list_for_each_entry(mnt, &sb->s_mounts, mnt_instance) {
++		/* we only want to touch bindmounts */
++		if (mnt->mnt.mnt_root == sb->s_root) {
++			if (!root_mnt)
++				root_mnt = mntget(&mnt->mnt);
 +
-+	fc->reinit_in_progress = true;
-+	spin_unlock(&fc->lock);
-+
-+	/*
-+	 * Unsets fc->connected and fiq->connected and
-+	 * ensures that no new requests can be queued
-+	 */
-+	fuse_abort_conn(fc);
-+	fuse_wait_aborted(fc);
-+
-+	spin_lock(&fc->lock);
-+	if (fc->connected) {
-+		fc->reinit_in_progress = false;
-+		spin_unlock(&fc->lock);
-+		return -EINVAL;
-+	}
-+
-+	fc->conn_gen++;
-+
-+	spin_lock(&fiq->lock);
-+	if (request_pending(fiq) || fiq->forget_list_tail != &fiq->forget_list_head) {
-+		spin_unlock(&fiq->lock);
-+		fc->reinit_in_progress = false;
-+		spin_unlock(&fc->lock);
-+		return -EINVAL;
-+	}
-+
-+	if (&fuse_dev_fiq_ops != fiq->ops) {
-+		spin_unlock(&fiq->lock);
-+		fc->reinit_in_progress = false;
-+		spin_unlock(&fc->lock);
-+		return -EOPNOTSUPP;
-+	}
-+
-+	fiq->connected = 1;
-+	spin_unlock(&fiq->lock);
-+
-+	spin_lock(&fc->bg_lock);
-+	if (!list_empty(&fc->bg_queue)) {
-+		spin_unlock(&fc->bg_lock);
-+		fc->reinit_in_progress = false;
-+		spin_unlock(&fc->lock);
-+		return -EINVAL;
-+	}
-+
-+	fc->blocked = 0;
-+	fc->max_background = FUSE_DEFAULT_MAX_BACKGROUND;
-+	spin_unlock(&fc->bg_lock);
-+
-+	list_for_each_entry(fud, &fc->devices, entry) {
-+		struct fuse_pqueue *fpq = &fud->pq;
-+
-+		spin_lock(&fpq->lock);
-+		if (!list_empty(&fpq->io)) {
-+			spin_unlock(&fpq->lock);
-+			fc->reinit_in_progress = false;
-+			spin_unlock(&fc->lock);
-+			return -EINVAL;
++			continue;
 +		}
 +
-+		for (i = 0; i < FUSE_PQ_HASH_SIZE; i++) {
-+			if (!list_empty(&fpq->processing[i])) {
-+				spin_unlock(&fpq->lock);
-+				fc->reinit_in_progress = false;
-+				spin_unlock(&fc->lock);
-+				return -EINVAL;
-+			}
++		bmnt = kzalloc(sizeof(struct bind_mount_list_item), GFP_NOWAIT | __GFP_NOWARN);
++		if (!bmnt) {
++			err = -ENOMEM;
++			goto exit;
 +		}
 +
-+		fpq->connected = 1;
-+		spin_unlock(&fpq->lock);
++		bmnt->mnt = mntget(&mnt->mnt);
++		list_add_tail(&bmnt->list, &mnt_to_update);
++	}
++	unlock_mount_hash();
++
++	/* TODO: get rid of this limitation */
++	if (!root_mnt) {
++		err = -ENOENT;
++		goto exit;
 +	}
 +
-+	fuse_set_initialized(fc);
++	list_for_each_entry_safe(bmnt, next, &mnt_to_update, list) {
++		struct vfsmount *cur_mnt = bmnt->mnt;
++		struct path path;
++		struct dentry *old_root;
++		char *p;
 +
-+	/* Background queuing checks fc->connected under bg_lock */
-+	spin_lock(&fc->bg_lock);
-+	fc->connected = 1;
-+	spin_unlock(&fc->bg_lock);
++		p = dentry_path(cur_mnt->mnt_root, buf, PAGE_SIZE);
++		if (IS_ERR(p))
++			goto exit;
 +
-+	fc->aborted = false;
-+	fc->abort_err = 0;
++		/* TODO: are these lookup flags fully safe and correct? */
++		err = vfs_path_lookup(root_mnt->mnt_root, root_mnt,
++				p, LOOKUP_FOLLOW|LOOKUP_AUTOMOUNT|LOOKUP_REVAL, &path);
++		if (err)
++			goto exit;
 +
-+	/* nullify all the flags */
-+	memset(&fc->flags, 0, sizeof(struct fuse_conn_flags));
++		/* replace bindmount root dentry */
++		lock_mount_hash();
++		old_root = cur_mnt->mnt_root;
++		cur_mnt->mnt_root = dget(path.dentry);
++		dput(old_root);
++		unlock_mount_hash();
 +
-+	spin_unlock(&fc->lock);
-+
-+	down_read(&fc->killsb);
-+	if (!list_empty(&fc->mounts)) {
-+		struct fuse_mount *fm;
-+
-+		fm = list_first_entry(&fc->mounts, struct fuse_mount, fc_entry);
-+		if (!fm->sb) {
-+			up_read(&fc->killsb);
-+			return -EINVAL;
-+		}
-+
-+		fuse_send_init(fm);
++		path_put(&path);
 +	}
-+	up_read(&fc->killsb);
 +
-+	spin_lock(&fc->lock);
-+	fc->reinit_in_progress = false;
-+	spin_unlock(&fc->lock);
++exit:
++	free_page((unsigned long) buf);
++	mntput(root_mnt);
++	list_for_each_entry_safe(bmnt, next, &mnt_to_update, list) {
++		list_del(&bmnt->list);
++		mntput(bmnt->mnt);
++		kfree(bmnt);
++	}
 +
-+	return 0;
++	return err;
 +}
++EXPORT_SYMBOL_GPL(sb_revalidate_bindmounts);
 +
- void fuse_wait_aborted(struct fuse_conn *fc)
+ int sb_prepare_remount_readonly(struct super_block *sb)
  {
- 	/* matches implicit memory barrier in fuse_drop_waiting() */
-@@ -2282,6 +2408,32 @@ static long fuse_dev_ioctl(struct file *file, unsigned int cmd,
- 			}
- 		}
- 		break;
-+	case FUSE_DEV_IOC_REINIT:
-+		struct fuse_conn *fc;
-+
-+		if (!checkpoint_restore_ns_capable(file->f_cred->user_ns))
-+			return -EPERM;
-+
-+		res = -EINVAL;
-+		fud = fuse_get_dev(file);
-+
-+		/*
-+		 * Only fuse mounts with an already initialized fuse
-+		 * connection are supported
-+		 */
-+		if (file->f_op == &fuse_dev_operations && fud) {
-+			mutex_lock(&fuse_mutex);
-+			fc = fud->fc;
-+			if (fc)
-+				fc = fuse_conn_get(fc);
-+			mutex_unlock(&fuse_mutex);
-+
-+			if (fc) {
-+				res = fuse_reinit_conn(fc);
-+				fuse_conn_put(fc);
-+			}
-+		}
-+		break;
- 	default:
- 		res = -ENOTTY;
- 		break;
-diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index 90c5b3459864..8f2c0f969f6f 100644
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -752,6 +752,9 @@ struct fuse_conn {
- 	/** Connection aborted via sysfs */
- 	bool aborted;
+ 	struct mount *mnt;
+diff --git a/include/linux/mnt_namespace.h b/include/linux/mnt_namespace.h
+index 8f882f5881e8..20ac29e702f5 100644
+--- a/include/linux/mnt_namespace.h
++++ b/include/linux/mnt_namespace.h
+@@ -3,6 +3,7 @@
+ #define _NAMESPACE_H_
+ #ifdef __KERNEL__
  
-+	/** Connection reinit in progress */
-+	bool reinit_in_progress;
-+
- 	/** Connection failed (version mismatch).  Cannot race with
- 	    setting other bitfields since it is only set once in INIT
- 	    reply, before any other request, and never cleared */
-diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-index b3fcab13fcd3..325da23431ef 100644
---- a/include/uapi/linux/fuse.h
-+++ b/include/uapi/linux/fuse.h
-@@ -992,6 +992,7 @@ struct fuse_notify_retrieve_in {
- /* Device ioctls: */
- #define FUSE_DEV_IOC_MAGIC		229
- #define FUSE_DEV_IOC_CLONE		_IOR(FUSE_DEV_IOC_MAGIC, 0, uint32_t)
-+#define FUSE_DEV_IOC_REINIT		_IO(FUSE_DEV_IOC_MAGIC, 0)
++struct super_block;
+ struct mnt_namespace;
+ struct fs_struct;
+ struct user_namespace;
+@@ -13,6 +14,8 @@ extern struct mnt_namespace *copy_mnt_ns(unsigned long, struct mnt_namespace *,
+ extern void put_mnt_ns(struct mnt_namespace *ns);
+ extern struct ns_common *from_mnt_ns(struct mnt_namespace *);
  
- struct fuse_lseek_in {
- 	uint64_t	fh;
++extern int sb_revalidate_bindmounts(struct super_block *sb);
++
+ extern const struct file_operations proc_mounts_operations;
+ extern const struct file_operations proc_mountinfo_operations;
+ extern const struct file_operations proc_mountstats_operations;
 -- 
 2.34.1
 
