@@ -2,204 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A068F6D5037
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFC06D5034
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232912AbjDCSYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S232825AbjDCSYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbjDCSYL (ORCPT
+        with ESMTP id S232094AbjDCSYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:24:11 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78682711;
-        Mon,  3 Apr 2023 11:24:09 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pjOqY-0001mn-0U;
-        Mon, 03 Apr 2023 20:24:02 +0200
-Date:   Mon, 3 Apr 2023 19:23:59 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH 15/15] dt-bindings: net: dsa: mediatek,mt7530: add
- mediatek,mt7988-switch
-Message-ID: <ZCsZv65vDjb8MePG@makrotopia.org>
-References: <cover.1680180959.git.daniel@makrotopia.org>
- <80a853f182eac24735338f3c1f505e5f580053ca.1680180959.git.daniel@makrotopia.org>
- <a7ab2828-dc03-4847-c947-c7685841f884@arinc9.com>
+        Mon, 3 Apr 2023 14:24:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A41170A;
+        Mon,  3 Apr 2023 11:24:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CE8E625C4;
+        Mon,  3 Apr 2023 18:24:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26910C433EF;
+        Mon,  3 Apr 2023 18:24:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680546245;
+        bh=UeZr5YfS0Yaf22ilGxKJbw+QT9yD62PihrxxHaRSgTg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=TCdSd8Wrnkf00o30c4E3aJ09Rbsc6zlmDsTZli3Wi6n8Ivqomk473wt8qV58OLDMH
+         rYL8OqMCoSK5mXr590SCgS+QS88RB5/Zg5LW/qhvWxkSOJ4+tubYDcNB5PstwvvcU6
+         5ypEfCmQRciO72a52CuWZx29YIyN7DyYtyPWn+a+ADcauaM2KlHMSCt3xFotT/qmH2
+         DHjkGVHFUHvxsHBMMkU+F28BzpsX+0kbf8+ZUqIKJ0zwE1vJagU0/96w2gISGlsyNe
+         tFlcz4vIwA4vYTqjLuT0igvId0tpmhvfCjqttM883erTnpTjxlFS0HN4E+HcbOvz3X
+         liEKe4ltb4JaA==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        nathan@kernel.org, ndesaulniers@google.com,
+        Tom Rix <trix@redhat.com>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+In-Reply-To: <20230330235800.1845815-1-trix@redhat.com>
+References: <20230330235800.1845815-1-trix@redhat.com>
+Subject: Re: [PATCH] IB/qib: remove unused cnt variable
+Message-Id: <168054624148.6296.6352837498286911660.b4-ty@kernel.org>
+Date:   Mon, 03 Apr 2023 21:24:01 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a7ab2828-dc03-4847-c947-c7685841f884@arinc9.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-a055d
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
 
-Now that I see the email, see my reply below.
+On Thu, 30 Mar 2023 19:58:00 -0400, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/infiniband/hw/qib/qib_file_ops.c:487:20: error: variable
+>   'cnt' set but not used [-Werror,-Wunused-but-set-variable]
+>         u32 tid, ctxttid, cnt, limit, tidcnt;
+>                           ^
+> drivers/infiniband/hw/qib/qib_file_ops.c:1771:9: error: variable
+>   'cnt' set but not used [-Werror,-Wunused-but-set-variable]
+>         int i, cnt = 0, maxtid = ctxt_tidbase + dd->rcvtidcnt;
+>                ^
+> This variable is not used so remove it.
+> 
+> [...]
 
-On Fri, Mar 31, 2023 at 08:27:54AM +0300, Arınç ÜNAL wrote:
-> On 30.03.2023 18:23, Daniel Golle wrote:
-> > Add documentation for the built-in switch which can be found in the
-> > MediaTek MT7988 SoC.
-> > 
-> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > ---
-> >   .../bindings/net/dsa/mediatek,mt7530.yaml     | 26 +++++++++++++++++--
-> >   1 file changed, 24 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> > index 5ae9cd8f99a24..15953f0e9d1a6 100644
-> > --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> > +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> > @@ -11,16 +11,23 @@ maintainers:
-> >     - Landen Chao <Landen.Chao@mediatek.com>
-> >     - DENG Qingfang <dqfext@gmail.com>
-> >     - Sean Wang <sean.wang@mediatek.com>
-> > +  - Daniel Golle <daniel@makrotopia.org>
-> 
-> Please put it in alphabetical order by the first name.
-> 
-> >   description: |
-> > -  There are two versions of MT7530, standalone and in a multi-chip module.
-> > +  There are three versions of MT7530, standalone, in a multi-chip module and
-> > +  built-into a SoC.
-> 
-> I assume you put this to point out the situation with MT7988?
-> 
-> This brings to light an underlying problem with the description as the
-> MT7620 SoCs described below have the MT7530 switch built into the SoC,
-> instead of being part of the MCM.
+Applied, thanks!
 
-That's true, also MT7620A/N are not MCM but rather a single die which
-includes the MT7530 switch afaik.
+[1/1] IB/qib: remove unused cnt variable
+      https://git.kernel.org/rdma/rdma/c/e7706c4bbfe88f
 
-> 
-> The switch IP on MT7988 is for sure not MT7530 so either fix this and the
-> text below as a separate patch or let me handle it.
-> 
-> >     MT7530 is a part of the multi-chip module in MT7620AN, MT7620DA, MT7620DAN,
-> >     MT7620NN, MT7621AT, MT7621DAT, MT7621ST and MT7623AI SoCs.
-> > +  The MT7988 SoC comes a built-in switch similar to MT7531 as well as 4 Gigabit
-> 
-> s/comes a/comes with a
-> 
-> > +  Ethernet PHYs and the switch registers are directly mapped into SoC's memory
-> > +  map rather than using MDIO. It comes with an internally connected 10G CPU port
-> > +  and 4 user ports connected to the built-in Gigabit Ethernet PHYs.
-> 
-> Are you sure this is not the MT7531 IP built into the SoC, like MT7530 on
-> the MT7620 SoCs? Maybe DENG Qingfang would like to clarify as they did for
-> MT7530.
-
-It's basically MT7531 without port 5, without the SGMII units and with
-different built-in PHYs for port 0~3 (driver for those will follow in
-the next days, I'm still cleaning it).
-
-Similar to other in-SoC switches also the reset routine works a bit
-differently, ie. instead of using a GPIO we use a bit of the reset
-controller, similar to how it works also for MCM.
-
-> 
-> > +
-> >     MT7530 in MT7620AN, MT7620DA, MT7620DAN and MT7620NN SoCs has got 10/100 PHYs
-> >     and the switch registers are directly mapped into SoC's memory map rather than
-> > -  using MDIO. The DSA driver currently doesn't support this.
-> > +  using MDIO. The DSA driver currently doesn't support MT7620 variants.
-> >     There is only the standalone version of MT7531.
-> 
-> Can you put the MT7988 information below here instead.
-> 
-> > @@ -81,6 +88,10 @@ properties:
-> >             Multi-chip module MT7530 in MT7621AT, MT7621DAT and MT7621ST SoCs
-> >           const: mediatek,mt7621
-> > +      - description:
-> > +          Built-in switch of the MT7988 SoC
-> > +        const: mediatek,mt7988-switch
-> > +
-> >     reg:
-> >       maxItems: 1
-> > @@ -268,6 +279,17 @@ allOf:
-> >         required:
-> >           - mediatek,mcm
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          const: mediatek,mt7988-switch
-> > +    then:
-> > +      $ref: "#/$defs/mt7530-dsa-port"
-> 
-> The CPU ports bindings for MT7530 don't match the characteristics of the
-> switch on the MT7988 SoC you described above. We need new definitions for
-> the CPU ports on the switch on the MT7988 SoC.
-> 
-> What's the CPU port number? Does it accept rgmii or only the 10G phy-mode?
-
-CPU port is port 6. Port 5 is unused in MT7988 design.
-It uses an internal 10G link, so I've decided to use 'internal' as phy
-mode which best describes that situation.
-
-> 
-> > +      properties:
-> > +        gpio-controller: false
-> > +        mediatek,mcm: false
-> > +        reset-names: false
-> 
-> I'd rather not add reset-names here and do:
-> 
->   - if:
->       required:
->         - mediatek,mcm
->     then:
->       properties:
->         reset-gpios: false
-> 
->       required:
->         - resets
->         - reset-names
->     else:
->       properties:
->         resets: false
->         reset-names: false
-> 
-> I can handle this if you'd like.
-
-Oh yes, that would be very nice. I'm definitely not an expert on
-dt-bindings and will probably need several attempts to correctly
-address all of that.
-
-Thank you!
-
-
-Daniel
+Best regards,
+-- 
+Leon Romanovsky <leon@kernel.org>
