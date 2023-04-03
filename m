@@ -2,260 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517416D3B33
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 02:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24536D3B35
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 02:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjDCAyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 20:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
+        id S230430AbjDCAzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 20:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDCAyx (ORCPT
+        with ESMTP id S230380AbjDCAzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 20:54:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9491693F9;
-        Sun,  2 Apr 2023 17:54:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C8B6B81063;
-        Mon,  3 Apr 2023 00:54:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A6D8C433AA;
-        Mon,  3 Apr 2023 00:54:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680483289;
-        bh=DaAK/KJ9Sxive90qkMpJzTL0+rm8LML3yNxkEv5unjs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fhxj7mAjt8HWjA2QS85FafdG4xT9gTww7WnP6uwoZ3XscYPNpMUYvCW22cVGOJrWr
-         d77UJg3LfXmI0Q9+8JENWFCHUfWqWixNI0iqpyRzUn7BpOtYj6jDhTlvxXMX6nP/K6
-         skaJWSvc+vlKzU2FuSEvIyKUcNNLbzas9nkq11twWDdX6QyOE0Jn9PtjK491vv62K2
-         g7gLBEqV4a/1d/CTmLZa0qIK2CPyjQiFdekeKCaarlMBwxbnLqdJEeQf7Ot7d8V388
-         RNqNRPv1KNUJgVGcXr37ZKmgFs+Scq1Pjz3uB4OEYKalia5+j7wlKAdvsc422KQfzK
-         64eulwTQ03SOg==
-Received: by mail-ed1-f50.google.com with SMTP id cn12so111028231edb.4;
-        Sun, 02 Apr 2023 17:54:48 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eWKtfuxPWijTIjI5YJMDGDIxaz+KuqE3zrdcDek+SLXMaC1EpT
-        pzCo4g+Woq6dTiuTgg6fckpR/JFFKL2SspYlCxQ=
-X-Google-Smtp-Source: AKy350Y3MsClOTP8ZkPw0uaS0RqqG3xR4PTrm3d8m6ATj8GvN/Rp/4Pm5dyJdZKN/Yb6d7Unx5etaGlBLGm7vu8iIkc=
-X-Received: by 2002:a17:906:28da:b0:8d8:4578:18e0 with SMTP id
- p26-20020a17090628da00b008d8457818e0mr16855332ejd.10.1680483287114; Sun, 02
- Apr 2023 17:54:47 -0700 (PDT)
+        Sun, 2 Apr 2023 20:55:07 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E614AD27;
+        Sun,  2 Apr 2023 17:55:03 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id d17so27604173wrb.11;
+        Sun, 02 Apr 2023 17:55:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680483302; x=1683075302;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=HSGBXzMogo2CcbWE7eakS4vEGfL4+gqcdYd/Ldm/rAg=;
+        b=eafBRC4arnUdu4CZZRpPbUTje0YomlHF4z1mIL47WOVELsvypxxXwLtB94krP4Bi+q
+         CY0pQ5O6s7YlXumc9zC25N+N9Z5Lv23jvBAStP/hAevWAZaYQJ3XuQW/rWN/hHX7lR/P
+         H7796IZZ6FTtyO7pM25CwBIdZWmcFSIXu7CYn9+8fyzshBkI/SAatRJ0ajyjqt11LUTM
+         DS1MAHhWx5cq1XX4KTuUoFrNzGHxdXAMSDdJaC+OhTvCEZ2jcPJpiC0Hjzdg8Q0WVTS+
+         DN1EnURsPWnldrEDh1zyJntlYOybSDKhYYrPj7rsfbWqZDiuCNeslolXLKe3LGK+WULZ
+         zJhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680483302; x=1683075302;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HSGBXzMogo2CcbWE7eakS4vEGfL4+gqcdYd/Ldm/rAg=;
+        b=qpk53jsN7nD9lnOl60QQh3966vc2A1lPt+4svU48iCzqtk5JwJE9mbKj49LNCk49kz
+         i3CSFlLjSgbWH6Q1L7O2IqghLnBY4mbS3V9a9Bq6uM3kHqELOtC+DNIvvPMn4jzxzK3X
+         6NL0sWEpmaHZ0A3Guv5zC4nGH0zddN/7IRPrLOHpOf1hTn5w4ISMgAD7wtF0NikDhP+G
+         3JY5KBkPsKKc6R7nsdT8SoCpkUOCs5E/q3JEXb4nH31lPVG7YglNxIamQeWaoD97h+hR
+         OK/rnttYmmVa/rRjYaq1mEAiaMR1mBPFluqRXTL9B/LpGtPTbPH9bwKrCRDDAOttpaY+
+         Edzw==
+X-Gm-Message-State: AAQBX9cDhMoOn4+3zlREh/y+wLdGiRbNTQH4dEwiA4opHdsuynJB+J44
+        L7me6EYD0ijJDfHIedclEGYdA8II5P0=
+X-Google-Smtp-Source: AKy350ap7yVTYufKRM+ljze9linea41lbhLGLpXpROnqhvgIMzLiVDVUDdlOeO6VBMppdO163sVewg==
+X-Received: by 2002:a5d:5104:0:b0:2cf:ea5d:f607 with SMTP id s4-20020a5d5104000000b002cfea5df607mr24680737wrt.17.1680483301769;
+        Sun, 02 Apr 2023 17:55:01 -0700 (PDT)
+Received: from [192.168.0.160] ([170.253.51.134])
+        by smtp.gmail.com with ESMTPSA id i2-20020a05600c290200b003edc11c2ecbsm10468767wmd.4.2023.04.02.17.55.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Apr 2023 17:55:01 -0700 (PDT)
+Message-ID: <3f33c6d4-fdbe-e3b4-675a-64f61c35fdb1@gmail.com>
+Date:   Mon, 3 Apr 2023 02:54:53 +0200
 MIME-Version: 1.0
-References: <cover.1680265828.git.pengdonglin@sangfor.com.cn> <2f5d47ce9f7cf35ee2d292def7106169b9e41dc5.1680265828.git.pengdonglin@sangfor.com.cn>
-In-Reply-To: <2f5d47ce9f7cf35ee2d292def7106169b9e41dc5.1680265828.git.pengdonglin@sangfor.com.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 3 Apr 2023 08:54:36 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H69EHXx54Btm0JXSdJ+WJxfqWr_KzcD-Cpq1ph6z9WWug@mail.gmail.com>
-Message-ID: <CAAhV-H69EHXx54Btm0JXSdJ+WJxfqWr_KzcD-Cpq1ph6z9WWug@mail.gmail.com>
-Subject: Re: [PATCH v10 7/8] LoongArch: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
-To:     Donglin Peng <pengdonglin@sangfor.com.cn>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
-        mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
-        rmk+kernel@armlinux.org.uk, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        bp@alien8.de, hpa@zytor.com, zhangqing@loongson.cn,
-        kernel@xen0n.name, mingo@redhat.com, peterz@infradead.org,
-        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     linux-man <linux-man@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        Marcos Fouces <marcos@debian.org>, Sam James <sam@gentoo.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+Subject: man-pages-6.04 released
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------vJajRKsgVicqx7GTA0wHdJ0Q"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------vJajRKsgVicqx7GTA0wHdJ0Q
+Content-Type: multipart/mixed; boundary="------------zUKni7UaHA0NJSF6KUSv0r1p";
+ protected-headers="v1"
+From: Alejandro Colomar <alx.manpages@gmail.com>
+To: linux-man <linux-man@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ GNU C Library <libc-alpha@sourceware.org>, Marcos Fouces
+ <marcos@debian.org>, Sam James <sam@gentoo.org>,
+ Jonathan Corbet <corbet@lwn.net>, Michael Kerrisk <mtk.manpages@gmail.com>
+Message-ID: <3f33c6d4-fdbe-e3b4-675a-64f61c35fdb1@gmail.com>
+Subject: man-pages-6.04 released
 
-On Fri, Mar 31, 2023 at 8:48=E2=80=AFPM Donglin Peng <pengdonglin@sangfor.c=
-om.cn> wrote:
->
-> The previous patch ("function_graph: Support recording and printing
-> the return value of function") has laid the groundwork for the for
-> the funcgraph-retval, and this modification makes it available on
-> the LoongArch platform.
->
-> We introduce a new structure called fgraph_ret_regs for the LoongArch
-> platform to hold return registers and the frame pointer. We then fill
-> its content in the return_to_handler and pass its address to the
-> function ftrace_return_to_handler to record the return value.
->
-> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
-> ---
-> v10:
->  - Fix code style issues for LoongArch
->  - Use CONFIG_FUNCTION_GRAPH_TRACER to control fgraph_ret_regs definition
->
-> v9:
->  - Fix stack pointer align issues
->  - Update the commit message
->
-> v8:
->  - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
-> ---
->  arch/loongarch/Kconfig              |  1 +
->  arch/loongarch/include/asm/ftrace.h | 22 ++++++++++++++++++++++
->  arch/loongarch/kernel/asm-offsets.c | 15 ++++++++++++++-
->  arch/loongarch/kernel/mcount.S      | 14 ++++++++------
->  arch/loongarch/kernel/mcount_dyn.S  | 15 ++++++++-------
->  5 files changed, 53 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 7fd51257e0ed..4bf60132869b 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -99,6 +99,7 @@ config LOONGARCH
->         select HAVE_FAST_GUP
->         select HAVE_FTRACE_MCOUNT_RECORD
->         select HAVE_FUNCTION_ARG_ACCESS_API
-> +       select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
->         select HAVE_FUNCTION_GRAPH_TRACER
->         select HAVE_FUNCTION_TRACER
->         select HAVE_GENERIC_VDSO
-> diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include=
-/asm/ftrace.h
-> index 3418d32d4fc7..22797b7504b5 100644
-> --- a/arch/loongarch/include/asm/ftrace.h
-> +++ b/arch/loongarch/include/asm/ftrace.h
-> @@ -63,4 +63,26 @@ void ftrace_graph_func(unsigned long ip, unsigned long=
- parent_ip,
->
->  #endif /* CONFIG_FUNCTION_TRACER */
->
-> +#ifndef __ASSEMBLY__
-> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> +struct fgraph_ret_regs {
-> +       /* a0 - a1 */
-> +       unsigned long regs[2];
-> +
-> +       unsigned long fp;
-> +       unsigned long __unused;
-> +};
-> +
-> +static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_r=
-et_regs *ret_regs)
-> +{
-> +       return ret_regs->regs[0];
-> +}
-> +
-> +static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_=
-ret_regs *ret_regs)
-> +{
-> +       return ret_regs->fp;
-> +}
-> +#endif /* ifdef CONFIG_FUNCTION_GRAPH_TRACER */
-> +#endif
-> +
->  #endif /* _ASM_LOONGARCH_FTRACE_H */
-> diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/=
-asm-offsets.c
-> index 4bdb203fc66e..505e4bf59603 100644
-> --- a/arch/loongarch/kernel/asm-offsets.c
-> +++ b/arch/loongarch/kernel/asm-offsets.c
-> @@ -12,6 +12,7 @@
->  #include <asm/cpu-info.h>
->  #include <asm/ptrace.h>
->  #include <asm/processor.h>
-> +#include <asm/ftrace.h>
->
->  void output_ptreg_defines(void)
->  {
-> @@ -264,7 +265,7 @@ void output_smpboot_defines(void)
->  #ifdef CONFIG_HIBERNATION
->  void output_pbe_defines(void)
->  {
-> -       COMMENT(" Linux struct pbe offsets. ");
-> +       COMMENT("Linux struct pbe offsets.");
->         OFFSET(PBE_ADDRESS, pbe, address);
->         OFFSET(PBE_ORIG_ADDRESS, pbe, orig_address);
->         OFFSET(PBE_NEXT, pbe, next);
-> @@ -272,3 +273,15 @@ void output_pbe_defines(void)
->         BLANK();
->  }
->  #endif
-> +
-> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> +void output_fgraph_ret_regs_defines(void)
-> +{
-> +       COMMENT("LoongArch fgraph_ret_regs offsets.");
-> +       OFFSET(FGRET_REGS_A0, fgraph_ret_regs, regs[0]);
-> +       OFFSET(FGRET_REGS_A1, fgraph_ret_regs, regs[1]);
-> +       OFFSET(FGRET_REGS_FP, fgraph_ret_regs, fp);
-> +       DEFINE(FGRET_REGS_SIZE, sizeof(struct fgraph_ret_regs));
-> +       BLANK();
-> +}
-> +#endif
-> diff --git a/arch/loongarch/kernel/mcount.S b/arch/loongarch/kernel/mcoun=
-t.S
-> index 8cdc1563cd33..cb8e5803de4b 100644
-> --- a/arch/loongarch/kernel/mcount.S
-> +++ b/arch/loongarch/kernel/mcount.S
-> @@ -79,18 +79,20 @@ SYM_FUNC_START(ftrace_graph_caller)
->  SYM_FUNC_END(ftrace_graph_caller)
->
->  SYM_FUNC_START(return_to_handler)
-> -       PTR_ADDI        sp, sp, -2 * SZREG
-> -       PTR_S           a0, sp, 0
-> -       PTR_S           a1, sp, SZREG
-> +       PTR_ADDI        sp, sp, -FGRET_REGS_SIZE
-> +       PTR_S           a0, sp, FGRET_REGS_A0
-> +       PTR_S           a1, sp, FGRET_REGS_A1
-> +       PTR_S           zero, sp, FGRET_REGS_FP
->
-> +       move            a0, sp
->         bl              ftrace_return_to_handler
->
->         /* Restore the real parent address: a0 -> ra */
->         move            ra, a0
->
-> -       PTR_L           a0, sp, 0
-> -       PTR_L           a1, sp, SZREG
-> -       PTR_ADDI        sp, sp, 2 * SZREG
-> +       PTR_L           a0, sp, FGRET_REGS_A0
-> +       PTR_L           a1, sp, FGRET_REGS_A1
-> +       PTR_ADDI        sp, sp, FGRET_REGS_SIZE
->         jr              ra
->  SYM_FUNC_END(return_to_handler)
->  #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-> diff --git a/arch/loongarch/kernel/mcount_dyn.S b/arch/loongarch/kernel/m=
-count_dyn.S
-> index bbabf06244c2..ec24ae1de741 100644
-> --- a/arch/loongarch/kernel/mcount_dyn.S
-> +++ b/arch/loongarch/kernel/mcount_dyn.S
-> @@ -131,18 +131,19 @@ SYM_CODE_END(ftrace_graph_caller)
->
->  SYM_CODE_START(return_to_handler)
->         /* Save return value regs */
-> -       PTR_ADDI        sp, sp, -2 * SZREG
-> -       PTR_S           a0, sp, 0
-> -       PTR_S           a1, sp, SZREG
-> +       PTR_ADDI        sp, sp, -FGRET_REGS_SIZE
-> +       PTR_S           a0, sp, FGRET_REGS_A0
-> +       PTR_S           a1, sp, FGRET_REGS_A1
-> +       PTR_S           zero, sp, FGRET_REGS_FP
->
-> -       move            a0, zero
-> +       move            a0, sp
->         bl              ftrace_return_to_handler
->         move            ra, a0
->
->         /* Restore return value regs */
-> -       PTR_L           a0, sp, 0
-> -       PTR_L           a1, sp, SZREG
-> -       PTR_ADDI        sp, sp, 2 * SZREG
-> +       PTR_L           a0, sp, FGRET_REGS_A0
-> +       PTR_L           a1, sp, FGRET_REGS_A1
-> +       PTR_ADDI        sp, sp, FGRET_REGS_SIZE
->
->         jr              ra
->  SYM_CODE_END(return_to_handler)
-> --
-> 2.25.1
->
+--------------zUKni7UaHA0NJSF6KUSv0r1p
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Gidday!
+
+I'm proud to announce:
+
+	man-pages-6.04 - manual pages for GNU/Linux
+
+The release tarball is already available at <kernel.org>.
+
+Tarball download:
+	<https://mirrors.edge.kernel.org/pub/linux/docs/man-pages/>
+Git repository:
+	<https://git.kernel.org/cgit/docs/man-pages/man-pages.git/>
+
+The most notable changes in the release are:
+
+-  New APIs have been documented in proc(5) (KPF_PGTABLE), landlock(7)
+   (LANDLOCK_ACCESS_FS_REFER, LANDLOCK_ACCESS_FS_TRUNCATE), and udp(7)
+   (UDP_GRO, UDP_SEGMENT).
+
+-  C89 information has been restored.  Information about old standards
+   and systems has been moved to a new HISTORY section.  VERSIONS has
+   been repurposed, and STANDARDS has been simplified.  Some functions
+   have been marked as deprecated, according to their standards.
+
+-  The build system has been improved to allow several operations that
+   distributions usually perform, such as installing compressed pages,
+   installing link pages as symlinks, or moving mandirs.
+
+Thanks you all for contributing!
+
+Cheers,
+
+Alex
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D Changes in m=
+an-pages-6.04 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+
+
+Released: 2023-04-03, Aldaya
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes, reports, notes,
+ideas, and discussions that have been incorporated in changes in
+this release:
+
+Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
+Alejandro Colomar <alx@kernel.org>
+Andrew Clayton <andrew@digital-domain.net>
+Brian Inglis <Brian.Inglis@Shaw.ca>
+"Carlos O'Donell" <carlos@redhat.com>
+Christian Brauner <brauner@kernel.org>
+Christoph Lameter <cl@linux.com>
+Dmitry Goncharov <dgoncharov@users.sf.net>
+"Dmitry V. Levin" <ldv@strace.io>
+Elliott Hughes <enh@google.com>
+Elvira Khabirova <lineprinter0@gmail.com>
+Fotios Valasiadis <fvalasiad@gmail.com>
+"G. Branden Robinson" <g.branden.robinson@gmail.com>
+Guy Shefy <guyshefyb@gmail.com>
+G=C3=BCnther Noack <gnoack3000@gmail.com>
+Helge Kreutzmann <debian@helgefjell.de>
+Iker Pedrosa <ipedrosa@redhat.com>
+Jack Pearson <jack@pearson.onl>
+Jakub Wilk <jwilk@jwilk.net>
+Marco Bonelli <marco@mebeim.net>
+Matt Jolly <Matt.Jolly@footclan.ninja>
+Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+Nate Eldredge <nate@thatsmathematics.com>
+Oskari Pirhonen <xxc3ncoredxx@gmail.com>
+Patrick Reader <_@pxeger.com>
+Paul Eggert <eggert@cs.ucla.edu>
+Paul Smith <psmith@gnu.org>
+Ralph Corderoy <ralph@inputplus.co.uk>
+Rodrigo Campos <rodrigo@sdfg.com.ar>
+Samanta Navarro <ferivoz@riseup.net>
+Serge Hallyn <serge@hallyn.com>
+Simon Horman <simon.horman@corigine.com>
+Timo Stark <t.stark@nginx.com>
+Tom Schwindl <schwindl@posteo.de>
+"Valentin V. Bartenev" <vbartenev@gmail.com>
+Vincent Lefevre <vincent@vinc17.net>
+Vladislav Ivanishin <vlad@ispras.ru>
+Willem de Bruijn <willemb@google.com>
+Wu Zhenyu <wuzhenyu@ustc.edu>
+Yedidyah Bar David <didi@redhat.com>
+Younes Manton <younes.m@gmail.com>
+<imachug@yandex.ru>
+<pabeni@redhat.com>
+
+
+Apologies if I missed anyone!
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+proc.5
+	KPF_PGTABLE			(Linux 4.18)
+
+landlock.7
+	LANDLOCK_ACCESS_FS_REFER	(Linux 5.19)
+	LANDLOCK_ACCESS_FS_TRUNCATE	(Linux 6.02)
+
+udp.7
+	UDP_GRO				(Linux 5.0)
+	UDP_SEGMENT			(Linux 4.18)
+
+
+Global changes
+--------------
+
+-  Sections:
+   -  Add HISTORY.
+   -  HISTORY: Restore C89 references.
+   -  Repurpose VERSIONS.
+   -  Simplify STANDARDS.
+   -  SYNOPSIS: Mark several functions as deprecated.
+
+-  Build system:
+   -  Support installing in different mandirs
+      (e.g., man3typedir=3D'/usr/share/man/man3').
+   -  Support installing compressed pages (Z=3D'.gz').
+   -  Support installing link pages as symlinks (LINK_PAGES=3D'symlink').=
+
+
+
+Changes to individual pages
+---------------------------
+
+The manual pages (and other files in the repository) have been improved
+beyond what this changelog covers.  To learn more about changes applied
+to individual pages, use git(1).
+
+
+--=20
+<http://www.alejandro-colomar.es/>
+GPG key fingerprint: A9348594CE31283A826FBDD8D57633D441E25BB5
+
+--------------zUKni7UaHA0NJSF6KUSv0r1p--
+
+--------------vJajRKsgVicqx7GTA0wHdJ0Q
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmQqI90ACgkQnowa+77/
+2zICIg/+Oh10/MKK6FjIo7sCXDxE9gPSOVf5rLjogjSQIk4pApoyTtNOupegedMa
+1JlStM3FgabIx43UQRAsS+EHKlzPCeCcp+upn0YfhK+ceTcNCmIxn0CWG9vk3Cij
+hYvvQpAdkmOIiQdhQpsk6kUHQahdKR87Tkry8dO/GZDrwf3aBp26osfWVhjR9Ts4
+kq/OaKHBTS7mMVeftV0hSDqBgoGGbhZd/BaMvrqY+L0fXcvp5rc4FXe9IvrW/0yb
+7JrSvLBgufm2hx09hN9BC0rLVJCHeYVLoYL0uvY1UH5XekejucSgrViAzR8KdJw8
+3JdyMV4GjTDymG2aHingKvQoKwEd8I6YP7o6RpHoDtpjXm/J+ylcSDumRoPcyi2k
+7wUIkaKSekwcn9HLoQxNCD333GrxArzSS3fmtqDavgfXqltOaLkaf2+pElg2ISsx
+c4wvVj0jpWmf/YHzqT/kuvOEvKMt9RTORqPBJ10oyZn5EJsZYwidVcMFREvCKnl3
+R42EOg+gNK26nOO+lYbi9KEDJ1H02QEbaFbzlYNS0VG8+987S2OI770XM6f2A9Qs
+8kRb5F00ra0edUWrYIrxfPxl1UBf72IH2SuQatNTzcLGvlcfZ7Actktcb4QaGPXT
+LK7LFUg2Ujy5Mcs8V6GTAMqHi7ojbucGiAViWYPAoTn/JXRSfbQ=
+=TtnO
+-----END PGP SIGNATURE-----
+
+--------------vJajRKsgVicqx7GTA0wHdJ0Q--
