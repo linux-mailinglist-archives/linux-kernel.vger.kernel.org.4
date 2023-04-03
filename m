@@ -2,49 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CC36D501E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE966D5026
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbjDCSRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
+        id S232433AbjDCSVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbjDCSRj (ORCPT
+        with ESMTP id S229689AbjDCSVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:17:39 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF978172C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:17:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1680545856;
-        bh=MMINr1wx2F4/gc5fF+IUmCs4/SrHkSmZpW+gy0rM4v8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=vKmibUHnM6T2OpUInYHWDvDvZY+/+IgQXhvr9ODrqryot8PRwb/d+hIv+RyfOyZ3W
-         0OVXGX6Fspi4UGxk3GIC6MYClZ473+SZFuHHNbKEE9/B5wWSBPLs6LdnFmtuEn85rG
-         X4PQYt3jcZl+TiioWKZeRuFD2x/Mvg46vVEjg8RwdsPfREZnXVyYWiU+cC0dT865dh
-         ZcB3mTu3OusUMqApO0L5dsIpquyDfmoInJEGa7DLwFuyx+6orCCcc7xor1v/t9mKha
-         zWI2et+ViutntWGcLacSsxyaeswRqc7pMo/DKI2QYAW85LBMENvRM7+cE3ZGqa2goS
-         XYQz9c+/QGSMw==
-Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PqzdX564HztWT;
-        Mon,  3 Apr 2023 14:17:36 -0400 (EDT)
-Message-ID: <371efe6e-114f-f9fe-b14a-42b34f2ef61f@efficios.com>
-Date:   Mon, 3 Apr 2023 14:17:53 -0400
+        Mon, 3 Apr 2023 14:21:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EC71FD0;
+        Mon,  3 Apr 2023 11:21:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E427D6259F;
+        Mon,  3 Apr 2023 18:21:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A31C433D2;
+        Mon,  3 Apr 2023 18:21:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680546070;
+        bh=hS/VW/TmI+v9QWd3BkT134CkMeiHYQz/F42CtU77k/M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mlFtLysxR/1n/VdHAV3icMCupfxFR65LyXMYSMwKqCe6l+LADE+L7gN5AmBIrOMVM
+         cpihKXbrJsAxJ1GG70v9/Amx9j1UCvMEhehd9KfyNvzNEFkxCq0ZttpP/GJe7zMLRT
+         7sPljFIXVjwyBwynzHaOklVv17QGvz0on7TXi9Zax4OLVeFoDupHyjC9pXlioTV2eJ
+         I6E/X1q+bDT3BVZCywPU6DVKgZwYhJBrk8CUK6HjR+Ns9vqfCJMpOKVb1/yE5vPlEz
+         RAi+AzAHk9hGLMBwYOQnIAJ6tQwn3IpoICAWL37rl8rem2rqZXh3nBDB39nlYJ4PP8
+         ZttOWWK1r875w==
+Date:   Mon, 3 Apr 2023 21:21:05 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Alexander Schmidt <alexs@linux.ibm.com>,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net/mlx5: stop waiting for PCI link if reset is required
+Message-ID: <20230403182105.GC4514@unreal>
+References: <20230403075657.168294-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH] sched: Introduce per-mm/cpu concurrency id state
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
-References: <20230330230911.228720-1-mathieu.desnoyers@efficios.com>
- <20230331085229.GB186694@ziqianlu-desk2>
-Content-Language: en-US
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230331085229.GB186694@ziqianlu-desk2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403075657.168294-1-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,59 +60,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-31 04:52, Aaron Lu wrote:
-> On Thu, Mar 30, 2023 at 07:09:11PM -0400, Mathieu Desnoyers wrote:
->> Keep track of the currently allocated mm_cid for each mm/cpu rather than
->> freeing them immediately. This eliminates most atomic ops when context
->> switching back and forth between threads belonging to different memory
->> spaces in multi-threaded scenarios (many processes, each with many
->> threads).
+On Mon, Apr 03, 2023 at 09:56:56AM +0200, Niklas Schnelle wrote:
+> after an error on the PCI link, the driver does not need to wait
+> for the link to become functional again as a reset is required. Stop
+> the wait loop in this case to accelerate the recovery flow.
 > 
-> Good news, the lock contention is now gone and back to v6.2 level:
-
-Hi Aaron,
-
-Can you please test the updated patch I've sent ? I have updated the
-subject to make it clear that this is a fix for a performance regression,
-improved comments, and it now passes more thorough testing. See:
-
-https://lore.kernel.org/lkml/20230403181342.210896-1-mathieu.desnoyers@efficios.com/
-
-Thanks,
-
-Mathieu
-
+> Co-developed-by: Alexander Schmidt <alexs@linux.ibm.com>
+> Signed-off-by: Alexander Schmidt <alexs@linux.ibm.com>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/net/ethernet/mellanox/mlx5/core/health.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
 > 
-> node0_0.profile:     0.07%     0.07%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node0_1.profile:     0.06%     0.06%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node0_2.profile:     0.09%     0.09%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node0_3.profile:     0.08%     0.08%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node0_4.profile:     0.09%     0.09%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node0_5.profile:     0.10%     0.10%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node0_6.profile:     0.10%     0.10%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node0_7.profile:     0.07%     0.07%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node0_8.profile:     0.08%     0.08%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node0_9.profile:     0.06%     0.06%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node1_0.profile:     0.41%     0.41%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node1_1.profile:     0.38%     0.38%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node1_2.profile:     0.44%     0.44%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node1_3.profile:     5.64%     5.64%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node1_4.profile:     6.08%     6.08%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node1_5.profile:     3.45%     3.45%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node1_6.profile:     2.09%     2.09%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node1_7.profile:     2.72%     2.72%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node1_8.profile:     0.16%     0.16%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> node1_9.profile:     0.15%     0.15%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
-> (those few profiles from node1's cpus that have more than 2% contention
-> are from thermal functions)
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/health.c b/drivers/net/ethernet/mellanox/mlx5/core/health.c
+> index f9438d4e43ca..81ca44e0705a 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/health.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/health.c
+> @@ -325,6 +325,8 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *dev)
+>  	while (sensor_pci_not_working(dev)) {
+
+According to the comment in sensor_pci_not_working(), this loop is
+supposed to wait till PCI will be ready again. Otherwise, already in
+first iteration, we will bail out with pci_channel_offline() error.
+
+Thanks
+
+>  		if (time_after(jiffies, end))
+>  			return -ETIMEDOUT;
+> +		if (pci_channel_offline(dev->pdev))
+> +			return -EIO;
+>  		msleep(100);
+>  	}
+>  	return 0;
+> @@ -332,10 +334,16 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *dev)
+>  
+>  static int mlx5_health_try_recover(struct mlx5_core_dev *dev)
+>  {
+> +	int rc;
+> +
+>  	mlx5_core_warn(dev, "handling bad device here\n");
+>  	mlx5_handle_bad_state(dev);
+> -	if (mlx5_health_wait_pci_up(dev)) {
+> -		mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
+> +	rc = mlx5_health_wait_pci_up(dev);
+> +	if (rc) {
+> +		if (rc == -ETIMEDOUT)
+> +			mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
+> +		else
+> +			mlx5_core_err(dev, "health recovery flow aborted, PCI channel offline\n");
+>  		return -EIO;
+>  	}
+>  	mlx5_core_err(dev, "starting health recovery flow\n");
 > 
-> Tested-by: Aaron Lu <aaron.lu@intel.com> # lock contention part
-
-
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+> base-commit: 7e364e56293bb98cae1b55fd835f5991c4e96e7d
+> -- 
+> 2.37.2
+> 
