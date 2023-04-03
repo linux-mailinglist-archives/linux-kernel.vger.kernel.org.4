@@ -2,46 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BFB6D3C4F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 06:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76116D3C51
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 06:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbjDCEKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 00:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
+        id S231339AbjDCELg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 00:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjDCEKo (ORCPT
+        with ESMTP id S230057AbjDCELd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 00:10:44 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C107AAF;
-        Sun,  2 Apr 2023 21:10:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pxnbcc+yV5tR7zrYoF+1u6CiypRWPoqNMC+J6J/tgjI=; b=lLaewpnqM1XlP4DOm9MjzmZnic
-        /DjAUjPqc39NkMTAGQcTTRpkRdi+bGH4nji5BIWQjte51kFRNnJMNBvuqcBtxs55O+/Td9SPEfYFK
-        Imc9Ee3PRlbgjvlYDLzKIqFuc90x1ykBnHMfsVOeZH8z482t6fquvlrR6wBA/MGjLG54NKI56oGik
-        L4/5UCxrgQJKwYdMbPrueqOyVYpV8iooLjvtt85pzMlgKz+mEJh/HZmrRzark5Ao8wp94Pe06ksmE
-        /cERlyfcuvHibyXNk9x76iiUeBj0LTHIU7OQ1e0+/RDZNDNUTZ/tH4P+IronBH5HIbO9F7BxkV9Z7
-        KahAKSnA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pjBWW-00DmMZ-Hj; Mon, 03 Apr 2023 04:10:28 +0000
-Date:   Mon, 3 Apr 2023 05:10:28 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-stable@vger.kernel.org
-Subject: Re: [PATCH] mm/swap: fix swap_info_struct race between swapoff and
- get_swap_pages()
-Message-ID: <ZCpRtASqL5z5QphY@casper.infradead.org>
-References: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
+        Mon, 3 Apr 2023 00:11:33 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52A2975A
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 21:11:31 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id u10so26760502plz.7
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 21:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680495091;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=27R2g+sDxLnJbDwWfWYA6YvPE6yIAlipgv7jbis7U+s=;
+        b=dNAh6oWQL1OjTONlMSwNjlJYn5Yxg6cmRBJz7nMigaC37SGOPa4dri4N42TbSBj5e8
+         WgGlczwduegU8rOxnWef/451vnzJKtJ/Tk5p8A/zkNHvDrXaxeqzmO25QDKQkNlPJkOo
+         XHhJPHQxiosq4A1PgMQrG7boSS8gJ+1gy4QVqe0SFjuLh0xVSRJVYatYXtU56hD1xi+9
+         wKbIkFT/fcYH/ReXKBuO6uD3PamO1Mjqn9z1XbyhZ19/EYlW5UOGeEcyVZpE9Osz1c9f
+         68of/mLTZZZZNtDVdNZcnxxbMd56OSNnLp7iwilVNqJdPG17CavxgfvUXD5h6EyNwVoI
+         2klw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680495091;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=27R2g+sDxLnJbDwWfWYA6YvPE6yIAlipgv7jbis7U+s=;
+        b=CVIvB2e0klCo/p1iSJVL6+A/gUxwwd7L+7/NKaJRY8XZ3JMBuf5zcBTdomA90A6Alp
+         OuEyRs66Z/2uD/kroTfwhKbRJ+y6A5OyinPf/OTplpV1nylzaUwEiwfKT4N796+A73nr
+         BD2n8JIiSVBCwvcduL9zJZdmvQpaEaIfISCiL2sZ942pYR1JncEGFDUhycv3gUvjY4PE
+         PuqkBQtdmimwGg4FRZ96cleqyGOU8RjywxzYCFe/7KUt9w1yDxN2HYMTBJW8H2s3fkUc
+         I0BzYJAUGbcRdsvjSz5fACJS4M3tARdWISu5Z0yodNXfZGmoBvs27vLc6GXa6kt/MJGn
+         KP6g==
+X-Gm-Message-State: AAQBX9coK9ZTYM2umdXcGBc+3zRmqACn+UriidTrg7zohRrwgpQqDDRp
+        r5BR7JnNh36Y2MV61/amS6/rnQ==
+X-Google-Smtp-Source: AKy350YwzuzyRj+w5kp3XyurszaZueCAoASG5JZZVqH5GPU/gaGxYBiQGJR9NQvs2wur6RTAeo2u+Q==
+X-Received: by 2002:a17:90b:3a83:b0:23b:569d:fe41 with SMTP id om3-20020a17090b3a8300b0023b569dfe41mr39572506pjb.7.1680495091198;
+        Sun, 02 Apr 2023 21:11:31 -0700 (PDT)
+Received: from localhost ([122.172.85.168])
+        by smtp.gmail.com with ESMTPSA id a17-20020a170902ee9100b0019edc1b9eb2sm5475303pld.238.2023.04.02.21.11.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Apr 2023 21:11:30 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 09:41:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yajun Deng <yajun.deng@linux.dev>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: Fix policy->freq_table is NULL in
+ __cpufreq_driver_target()
+Message-ID: <20230403041128.jrsvbm4ddxdyhddg@vireshk-i7>
+References: <20230329133600.908723-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <20230329133600.908723-1-yajun.deng@linux.dev>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,43 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 06:19:20AM +0800, Rongwei Wang wrote:
-> Without this modification, a core will wait (mostly)
-> 'swap_info_struct->lock' when completing
-> 'del_from_avail_list(p)'. Immediately, other cores
-> soon calling 'add_to_avail_list()' to add the same
-> object again when acquiring the lock that released
-> by former. It's not the desired result but exists
-> indeed. This case can be described as below:
-
-This feels like a very verbose way of saying
-
-"The si->lock must be held when deleting the si from the
-available list.  Otherwise, another thread can re-add the
-si to the available list, which can lead to memory corruption.
-The only place we have found where this happens is in the
-swapoff path."
-
-> +++ b/mm/swapfile.c
-> @@ -2610,8 +2610,12 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
->  		spin_unlock(&swap_lock);
->  		goto out_dput;
+On 29-03-23, 21:36, Yajun Deng wrote:
+> __resolve_freq() may be return target_freq if policy->freq_table is
+> NULL. In this case, it should return -EINVAL before __target_index().
+> 
+> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+> ---
+>  drivers/cpufreq/cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index c0e5be0fe2d6..308a3df1a940 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2299,7 +2299,7 @@ int __cpufreq_driver_target(struct cpufreq_policy *policy,
+>  		return cpufreq_driver->target(policy, target_freq, relation);
 >  	}
-> -	del_from_avail_list(p);
-> +	/*
-> +	 * Here lock is used to protect deleting and SWP_WRITEOK clearing
-> +	 * can be seen concurrently.
-> +	 */
+>  
+> -	if (!cpufreq_driver->target_index)
+> +	if (!cpufreq_driver->target_index || !policy->freq_table)
+>  		return -EINVAL;
 
-This comment isn't necessary.  But I would add a lockdep assert inside
-__del_from_avail_list() that p->lock is held.
+Hi,
 
->  	spin_lock(&p->lock);
-> +	del_from_avail_list(p);
->  	if (p->prio < 0) {
->  		struct swap_info_struct *si = p;
->  		int nid;
-> -- 
-> 2.27.0
-> 
-> 
+I have sent an alternate patch [1] for this, please try it.
+
+-- 
+viresh
+
+[1] https://lore.kernel.org/all/53d4ed4e5b18a59a48790434f8146fb207e11c49.1680494945.git.viresh.kumar@linaro.org/
