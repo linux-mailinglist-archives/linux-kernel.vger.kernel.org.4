@@ -2,175 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDF26D4EE2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534F86D4EE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbjDCRZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
+        id S233106AbjDCR0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233079AbjDCRZV (ORCPT
+        with ESMTP id S232340AbjDCR0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:25:21 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D37CEB
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:25:19 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id o24-20020a05600c511800b003ef59905f26so18547603wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:25:19 -0700 (PDT)
+        Mon, 3 Apr 2023 13:26:15 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162B2F9
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:26:14 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-17ab3a48158so31610834fac.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:26:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680542718;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uJI+R7Z2OIlFqVuwYWesbGzyliYONi9PcdnjVEKDM1o=;
-        b=n1quY7QqUla1CplzUDYkiQ/27vTXjJRjzVQEvjeb+uaNXP/M7Phaim99ZCXxkMShMp
-         YqRhsALQleSLEIbfBWl/lOOhFUJI7S6j73gamrYhmjuYBJ9Sr/ORnl+h4hJ4kpbzue2r
-         tsENu+oE1gOY4u1+Gn2gigXmGtZoH4zbri/qRhjXykYLaVXx9rEhKTL4ng/LaIGwCzbI
-         awQczryb4NoalCjVLGre6jrV0N5fWV9PH84TuulLReYJXlL0xo1QBumUlI2Z2k2fN2k7
-         takPOyr9GQFYMLIbcoHybFP/YvG44IXLlmxPcuzja0I+FCOuHdZSn1BVdaJlhrlUnNG6
-         oybg==
+        d=google.com; s=20210112; t=1680542773;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qd9vNo8gmYRz8Z2M2O7ElfQfkdlOYiM1xlJu96lXJAs=;
+        b=oX8NBYb547UrM6ZoqymNw1EdsaXNXl8OfwHwQLHx77p13cWWg7QxpeSNTbBJQzK7zN
+         GORcfbDwlQG/J8YJ/Udb5aZvAsZpBIlCzL5NbfC07p+OldQfiBWgQjJ8edDqp5/JEwGN
+         Vlja5+ZGYN22+5FeGnB3oCd/Aa+fHf5RSjiYxKABYg15BXJODLZ9FdRg3q60s7f5oIII
+         1ZaKJSwt6SqvgmHP3cde1MNJOh0BUK71PwH06e/+YCLXpBZJKUOFuthBS6ylbRdFUA5Q
+         ivFv1wsc705bWl5a4i6xDG64+T17HQ0h/Kz7lLpBDTcuufNYWZl//dh86SgqnSl/k0nU
+         YYGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680542718;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uJI+R7Z2OIlFqVuwYWesbGzyliYONi9PcdnjVEKDM1o=;
-        b=iWVHYTv6W+yki9PBN4xp/akNHKgEgsg+BAoZfZTGpo8X+gy7XddPmsBkbzDZfIS+N3
-         DwuSNorplHVpn99q9CVHdsSQqMbZ+sliWy0Q8O0XwNRG82zaEBDa3t4VsWF0NIIVwkW4
-         q9wYhFKsZ4HFNYLXguAfpEsFykws7q4qeyv1NlYiwO1+3QQ2zxiqNeDEZdZLrzWgAFH+
-         JExXcDZHkkXLFsWwovwOrE2NSBD2DNtTlVnk9e6geQ82UFhWMHULrzg/Q0XkIsXfHH65
-         T+jFtCdNVQG3bBJ2Aa3ZKjRK8cFWkGQ9AWj1P/PpWu950iUPFBP5SQfsHpSw8TFKlg1D
-         dN1Q==
-X-Gm-Message-State: AAQBX9dPaDJaitCYsSzRsRX1I+nI5aptXcLvMn30Qmtw9o38/uIr0lwH
-        mFCk2HPK3GHXeKKNzxBcF7XmMkqRoQoJjeZUuEF/BQ==
-X-Google-Smtp-Source: AKy350arJwJZmf6GVJKgYAqtK3M80H/h0YB5IchzMw/j7dNdVnxhUoZAx0FpTRuSfsdgq1F0LivXm+9/d34VX5Qsqhg=
-X-Received: by 2002:a05:600c:291:b0:3f0:4429:2eb5 with SMTP id
- 17-20020a05600c029100b003f044292eb5mr59662wmk.5.1680542718041; Mon, 03 Apr
- 2023 10:25:18 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680542773;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qd9vNo8gmYRz8Z2M2O7ElfQfkdlOYiM1xlJu96lXJAs=;
+        b=qDtFPRTVIMFHgbj4/m7YvE8uAcFTxLkc7hqRoYVS+x5/KxHcWRgDNZWcuU8rLk7h9X
+         TD9yuIQo7/4s7hqru6fNp4DBVCAyfFrfMyKhjuMdMwpqcppqgTVkvz7JlSGw+jRx06VM
+         RZvDzvdSX7GHCGZuCDveDvoHxA+oInSTk/4rvjp4SDY+5l+cs0ee514XrYrdQtdDsX57
+         1opTsMG5TqSAXH8hG598KAeuvYvnIn6396y6haEfIzhGfbYqhUtBRAJksslqD9TcyB+C
+         ACpLY5KnCLblqGCceyluHyUb2e5Y3t9KwVYCAVK9zg0f3vpqThBEGCltn6wTvxkjiifH
+         w+Hw==
+X-Gm-Message-State: AAQBX9dMYSUMpWFizg3AdbXzSOiW26V63Hle+Uk58zM5+uhqC0bLcDlF
+        YD3YUFjHP+GqHxPC999GAmSqJSO4901gWDBW16oHVg==
+X-Google-Smtp-Source: AKy350ZvpCTIPloJRcOFoCrQ+HT6tXfd4a3GZ/Vtv3sZwoG6TcgOwSNV226vkhToXbFZYP2WlIqpnoj9PF1pwnBRTZc=
+X-Received: by 2002:a05:6870:96a2:b0:17e:d94f:90d9 with SMTP id
+ o34-20020a05687096a200b0017ed94f90d9mr7605490oaq.3.1680542773212; Mon, 03 Apr
+ 2023 10:26:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230328022733.29910-1-tinghan.shen@mediatek.com>
- <20230328022733.29910-12-tinghan.shen@mediatek.com> <848971ea-b142-d088-df6f-74ee2d807950@gmail.com>
-In-Reply-To: <848971ea-b142-d088-df6f-74ee2d807950@gmail.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Mon, 3 Apr 2023 11:25:07 -0600
-Message-ID: <CANLsYkw1viJTWzFZ3gCjFoEwm-TjF0QCLLqqwYGvLjW0fE+6rg@mail.gmail.com>
-Subject: Re: [PATCH v9 11/11] arm64: dts: mediatek: mt8195: Add SCP 2nd core
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230206172340.2639971-1-rananta@google.com> <20230206172340.2639971-3-rananta@google.com>
+ <ZCTjirkCgBkT65eP@linux.dev>
+In-Reply-To: <ZCTjirkCgBkT65eP@linux.dev>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Mon, 3 Apr 2023 10:26:01 -0700
+Message-ID: <CAJHc60y1BLQC4c0qXCuqF7JfewBC_fG2xuH0Wj0AHJh9x3CK5g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] KVM: arm64: Add FEAT_TLBIRANGE support
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Mar 2023 at 05:00, Matthias Brugger <matthias.bgg@gmail.com> wrote:
->
->
->
-> On 28/03/2023 04:27, Tinghan Shen wrote:
-> > Rewrite the MT8195 SCP device node as a cluster and
-> > add the SCP 2nd core in it.
-> >
-> > Since the SCP device node is changed to multi-core structure,
-> > enable SCP cluster to enable probing SCP core 0.
-> >
-> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->
-> As this is a bigger change I'd prefer to take it through my tree once the driver
-> and dt-bindings changes are merged. Given the fact, maybe it would make sense to
-> take 2/11 through my tree as well.
->
+Hi Oliver,
 
-Might as well take the whole thing through your tree, which I'm
-totally fine with.  But when that happens, you will also have to pick
-up other potential patches that touch these files.  We'll sort it out.
-
-> Regards,
-> Matthias
+On Wed, Mar 29, 2023 at 6:19=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
 >
+> On Mon, Feb 06, 2023 at 05:23:35PM +0000, Raghavendra Rao Ananta wrote:
+> > Define a generic function __kvm_tlb_flush_range() to
+> > invalidate the TLBs over a range of addresses. The
+> > implementation accepts 'op' as a generic TLBI operation.
+> > Upcoming patches will use this to implement IPA based
+> > TLB invalidations (ipas2e1is).
+> >
+> > If the system doesn't support FEAT_TLBIRANGE, the
+> > implementation falls back to flushing the pages one by one
+> > for the range supplied.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
 > > ---
-> >   .../boot/dts/mediatek/mt8195-cherry.dtsi      |  6 +++-
-> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 32 ++++++++++++++-----
-> >   2 files changed, 29 insertions(+), 9 deletions(-)
+> >  arch/arm64/include/asm/kvm_asm.h | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
 > >
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-> > index 56749cfe7c33..31415d71b6a4 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-> > @@ -933,7 +933,11 @@
-> >       interrupts-extended = <&pio 222 IRQ_TYPE_LEVEL_HIGH>;
-> >   };
+> > diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/=
+kvm_asm.h
+> > index 43c3bc0f9544d..995ff048e8851 100644
+> > --- a/arch/arm64/include/asm/kvm_asm.h
+> > +++ b/arch/arm64/include/asm/kvm_asm.h
+> > @@ -221,6 +221,24 @@ DECLARE_KVM_NVHE_SYM(__per_cpu_end);
+> >  DECLARE_KVM_HYP_SYM(__bp_harden_hyp_vecs);
+> >  #define __bp_harden_hyp_vecs CHOOSE_HYP_SYM(__bp_harden_hyp_vecs)
 > >
-> > -&scp {
-> > +&scp_cluster {
-> > +     status = "okay";
-> > +};
+> > +#define __kvm_tlb_flush_range(op, mmu, start, end, level, tlb_level) d=
+o {    \
+> > +     unsigned long pages, stride;                                     =
+       \
+> > +                                                                      =
+       \
+> > +     stride =3D kvm_granule_size(level);                              =
+         \
+>
+> Hmm... There's a rather subtle and annoying complication here that I
+> don't believe is handled.
+>
+> Similar to what I said in the last spin of the series, there is no
+> guarantee that a range of IPAs is mapped at the exact same level
+> throughout. Dirty logging and memslots that aren't hugepage aligned
+> could lead to a mix of mapping levels being used within a range of the
+> IPA space.
+>
+Unlike the comment on v1, the level/stride here is used to jump the
+addresses in case the system doesn't support TLBIRANGE. The TTL hint
+is 0.
+That being said, do you think we can always assume the least possible
+stride (say, 4k) and hardcode it?
+With respect to alignment, since the function is only called while
+breaking the table PTE,  do you think it'll still be a problem even if
+we go with the least granularity stride?
+
+> > +     start =3D round_down(start, stride);                             =
+         \
+> > +     end =3D round_up(end, stride);                                   =
+         \
+> > +     pages =3D (end - start) >> PAGE_SHIFT;                           =
+         \
+> > +                                                                      =
+       \
+> > +     if ((!system_supports_tlb_range() &&                             =
+       \
+> > +          (end - start) >=3D (MAX_TLBI_OPS * stride)) ||              =
+         \
+>
+> Doesn't checking for TLBIRANGE above eliminate the need to test against
+> MAX_TLBI_OPS?
+>
+Derived from __flush_tlb_range(), I think the condition is used to
+just flush everything if the range is too large to iterate and flush
+when the system doesn't support TLBIRANGE. Probably to prevent
+soft-lockups?
+
+Thank you.
+Raghavendra
+> > +         pages >=3D MAX_TLBI_RANGE_PAGES) {                           =
+         \
+> > +             __kvm_tlb_flush_vmid(mmu);                               =
+       \
+> > +             break;                                                   =
+       \
+> > +     }                                                                =
+       \
+> > +                                                                      =
+       \
+> > +     __flush_tlb_range_op(op, start, pages, stride, 0, tlb_level, fals=
+e);    \
+> > +} while (0)
 > > +
-> > +&scp_c0 {
-> >       status = "okay";
+> >  extern void __kvm_flush_vm_context(void);
+> >  extern void __kvm_flush_cpu_context(struct kvm_s2_mmu *mmu);
+> >  extern void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu, phys_addr=
+_t ipa,
+> > --
+> > 2.39.1.519.gcb327c4b5f-goog
 > >
-> >       firmware-name = "mediatek/mt8195/scp.img";
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > index 8fc527570791..5fe5fb32261e 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > @@ -826,14 +826,30 @@
-> >                       clocks = <&infracfg_ao CLK_INFRA_AO_GCE2>;
-> >               };
 > >
-> > -             scp: scp@10500000 {
-> > -                     compatible = "mediatek,mt8195-scp";
-> > -                     reg = <0 0x10500000 0 0x100000>,
-> > -                           <0 0x10720000 0 0xe0000>,
-> > -                           <0 0x10700000 0 0x8000>;
-> > -                     reg-names = "sram", "cfg", "l1tcm";
-> > -                     interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +             scp_cluster: scp@10500000 {
-> > +                     compatible = "mediatek,mt8195-scp-dual";
-> > +                     reg = <0 0x10720000 0 0xe0000>, <0 0x10700000 0 0x8000>;
-> > +                     reg-names = "cfg", "l1tcm";
-> > +                     #address-cells = <1>;
-> > +                     #size-cells = <1>;
-> > +                     ranges = <0 0 0x10500000 0x100000>;
-> >                       status = "disabled";
-> > +
-> > +                     scp_c0: scp@0 {
-> > +                             compatible = "mediatek,scp-core";
-> > +                             reg = <0x0 0xa0000>;
-> > +                             reg-names = "sram";
-> > +                             interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +                             status = "disabled";
-> > +                     };
-> > +
-> > +                     scp_c1: scp@a0000 {
-> > +                             compatible = "mediatek,scp-core";
-> > +                             reg = <0xa0000 0x20000>;
-> > +                             reg-names = "sram";
-> > +                             interrupts = <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +                             status = "disabled";
-> > +                     };
-> >               };
-> >
-> >               scp_adsp: clock-controller@10720000 {
-> > @@ -2309,7 +2325,7 @@
-> >                                <&iommu_vdo M4U_PORT_L19_VENC_REF_LUMA>,
-> >                                <&iommu_vdo M4U_PORT_L19_VENC_REF_CHROMA>;
-> >                       interrupts = <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH 0>;
-> > -                     mediatek,scp = <&scp>;
-> > +                     mediatek,scp = <&scp_c0>;
-> >                       clocks = <&vencsys CLK_VENC_VENC>;
-> >                       clock-names = "venc_sel";
-> >                       assigned-clocks = <&topckgen CLK_TOP_VENC>;
+>
+> --
+> Thanks,
+> Oliver
