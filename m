@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0589C6D40D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 944D56D40D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjDCJku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
+        id S232194AbjDCJlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbjDCJka (ORCPT
+        with ESMTP id S232032AbjDCJkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:40:30 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934D4D337;
-        Mon,  3 Apr 2023 02:40:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1680514803; x=1712050803;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jFKq8L4uhXOKBPkBPlGji3aE5ZbKk+WcLtn0OrClLrI=;
-  b=pm1G3SUkc0VryYxxRVITXOU+/hnASTNQqKq0A89T0yqsVqMmSWcZVFKn
-   Lktc24QWyJHWUS81iDZS9ZgSC5CqnLjKvkUKghkP4O0ir6jHf0gfDSUO3
-   lOJQFaUC7zaAyoFiXwhFVUTSoCYXsCB2vkgHoRI+wlVBP8f0z2i86aZwS
-   R6npFRZovNnJoAu9nbSYaIQWELw1QFertBprotyRAT/SlypOww1aH1ytw
-   17Ay0eErlNniRt3f/lZVelVVcHH9jVY5OShEo4T83V7h4ll+eDYEIp01N
-   mQpCTe0NCtc0Vl8HKZwZ8PhTVVx5hYUYKN1da7dCsTZ/BdsRzlTI92f7h
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,314,1673938800"; 
-   d="asc'?scan'208";a="219147455"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Apr 2023 02:40:02 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 3 Apr 2023 02:40:02 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 3 Apr 2023 02:40:00 -0700
-Date:   Mon, 3 Apr 2023 10:39:46 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-CC:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, <kvm@vger.kernel.org>,
-        <kvm-riscv@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Atish Patra <atishp@rivosinc.com>
-Subject: Re: [PATCH v3 2/8] RISC-V: Detect AIA CSRs from ISA string
-Message-ID: <20230403-80af54e80a34fc70fad04e0c@wendy>
-References: <20230403093310.2271142-1-apatel@ventanamicro.com>
- <20230403093310.2271142-3-apatel@ventanamicro.com>
+        Mon, 3 Apr 2023 05:40:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D4A111E8A;
+        Mon,  3 Apr 2023 02:40:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 456AA1063;
+        Mon,  3 Apr 2023 02:41:01 -0700 (PDT)
+Received: from [10.57.56.209] (unknown [10.57.56.209])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E7A83F840;
+        Mon,  3 Apr 2023 02:40:15 -0700 (PDT)
+Message-ID: <d232392a-dadb-ec53-9613-d9b561fe1e87@arm.com>
+Date:   Mon, 3 Apr 2023 10:40:11 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="OGdrsm9wa6bk/U+d"
-Content-Disposition: inline
-In-Reply-To: <20230403093310.2271142-3-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] perf/arm-cmn: fix regitster offset of
+ CMN_MXP__CONNECT_INFO_P2-5
+Content-Language: en-GB
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        Ruidong Tian <tianruidong@linux.alibaba.com>
+References: <1680169620-26012-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <3b95e362-300a-12af-0d55-76672c60be9f@arm.com>
+ <ZCqD/HlIRgewdnwA@FVFF77S0Q05N>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ZCqD/HlIRgewdnwA@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,43 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---OGdrsm9wa6bk/U+d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 2023-04-03 08:45, Mark Rutland wrote:
+> On Thu, Mar 30, 2023 at 11:34:22AM +0100, Robin Murphy wrote:
+>> On 2023-03-30 10:47, Jing Zhang wrote:
+>>> In the CMN700 specification, it is described that the address offset
+>>> of the mxp_device_connect_info_p0-5 register is 16'h8 + #{8*index}.
+>>> Therefore, the address offset of the CMN_MXP__CONNECT_INFO_P2-5 macro
+>>> defined in the code is wrong, which causes the cmn700 topology map
+>>> incorrect printed in debugfs.
+>>>
+>>> So correct the address offset value to make the cmn700 topology map
+>>> correct in debugfs.
+>>>
+>>> Fixes: 60d1504070c2 ("perf/arm-cmn: Support new IP features")
+>>
+>> Ugh, these offsets are correct for CI-700, so strictly that commit is fine.
+>> What I failed to notice is that CMN-700 shuffled the mesh_port_connect_info
+>> registers out of the way, so it's commit 23760a014417 which should have
+>> added more handling for this difference.
+> 
+> I'm assuming that means that this patch breaks !CMN-700 ?
+> 
+> i.e. a more substantial fix is necessary, and it's not just a matter of
+> changing the Fixes tag.
 
-On Mon, Apr 03, 2023 at 03:03:04PM +0530, Anup Patel wrote:
+Yes, indeed. I have half an idea, and the plan for this week was to work 
+on other CMN stuff anyway, so I'll see what I can cook up.
 
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 59d58ee0f68d..1b13a5823b90 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -221,8 +221,10 @@ void __init riscv_fill_hwcap(void)
->  				}
->  			} else {
->  				/* sorted alphabetically */
-                                   ^^^^^^^^^^^^^^^^^^^^^
-
-> +				SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SSAIA);
->  				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
->  				SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
-> +				SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SMAIA);
-
-This entry has been added in an incorrect order chief :/
-
->  				SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
->  				SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
->  				SET_ISA_EXT_MAP("zbb", RISCV_ISA_EXT_ZBB);
-
-
---OGdrsm9wa6bk/U+d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCqe4QAKCRB4tDGHoIJi
-0gt+AQC9yRaN+dKTHz7fyAJWu/44+2C9yyyQhdoeOwofaMhPEAD/W0Yk90pvYVJv
-dura6pOmVWifrUHBvPFooyq5BM5GIQA=
-=h69e
------END PGP SIGNATURE-----
-
---OGdrsm9wa6bk/U+d--
+Cheers,
+Robin.
