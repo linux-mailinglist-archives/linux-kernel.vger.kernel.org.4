@@ -2,57 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C646D44CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF636D44C1
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjDCMsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41714 "EHLO
+        id S232395AbjDCMqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjDCMsw (ORCPT
+        with ESMTP id S232241AbjDCMp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:48:52 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06F5DC
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:48:51 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id D4AC2124;
-        Mon,  3 Apr 2023 14:48:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1680526129;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mxFIPyPfgG3AMigmPNlsaL+7KLePrBjVOrKeoyZBRyM=;
-        b=J0P2Eawz+8IN/Vy894IUZdHtGbi+5IwcT1kjZ//HXf/GhqJwHT4/zS4C5+l1j3xfOVdx5o
-        jJNKPXuwBNIlXBBbVoUqCwU/P9v5qZkH9yUWMIVSCG+Vk29NWCFK2cYkKuAJv8AA+SGkaj
-        yvAKFTvGSe3rCLjuTHRhgjTVVwpUV8Z4itmYk+yFMTheKFB7xVBDboC7LTvtqWGOX0skO0
-        z9x9NeYtS7xZlCUDmv+y0VN1Kc9opgTK2R3B5paq54c1b4YJKaOpiBojBdr5AI03qWoVfD
-        h2xxTNsRN0CWBI11on8d42q9spef9k3zZv0bLuXZZ+jt0M/mjUXQ8CO1SAVSfw==
+        Mon, 3 Apr 2023 08:45:58 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CA67D8C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:45:56 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id cn12so116861782edb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 05:45:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1680525954;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=riaahXQBertKmx+xq8cDyjwCTBDh/mDGE8BYFdxvDOM=;
+        b=AeSvW6k+w78JQQFr9P84dSFQCVc5yWUTGPRgEnDHdFwlVw9CYaiBmcDl62NmVB2m+P
+         q+wT/xqMJAOOqGvy4SL9Dnl6o8rkx79ToJ8CGJwSjyLEDHJwnID7BQmCiq3QOUFdDqu2
+         dO8LrYKTbRXrjZiyz6EIV2UCzBJDpu3oCb9pA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680525954;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=riaahXQBertKmx+xq8cDyjwCTBDh/mDGE8BYFdxvDOM=;
+        b=aOXZMKaCHWX8Ge9oypbF8MN8NAp/BtywzwHLugKM7AzEWv7ShaoGUrUZGe+Rb+9A9X
+         w8gumrYENdsYxjsI/wrrSMa8ndGSX2YBcVCedGBT4GUcTqmstGJ9GnDiIs2KnRxKVQuh
+         A53L1KJBptvkiMYREUgpYTxTVKs0PVind4ye8PmIWDP0UBM3Q9zwIpb0i2BCDe449Ioe
+         fK2m6LaJvwna4ZtYp2OBL3Q6W06kKOIN0fMAUAxrVKTf37uVo2Lkuu6315b0mb3AQYoP
+         Yxw5++qYjinaa/sni7UjhFJoiiviEqA4D3SbIYvvx3wNw9ZZ/KixPii797a5XAYERAyI
+         JxOA==
+X-Gm-Message-State: AAQBX9fhSdqAc7eYP1iFDyhg47KyDoLwP0nhrPnL60vAiT5cUyUvgmel
+        oBuS2wmUA4fbfoBqsYMoATBvOseWcCR1U4SbtxbnWQ==
+X-Google-Smtp-Source: AKy350aP1ukG9/ndrpQD+GGShI9OQ5v16FM6kUzhb3kdhVgjodsHmgZPsLsStm33czUEzkZ7t/sTNPgmYme8DnWkACI=
+X-Received: by 2002:a50:cd47:0:b0:4fc:532e:215d with SMTP id
+ d7-20020a50cd47000000b004fc532e215dmr18039003edj.6.1680525954661; Mon, 03 Apr
+ 2023 05:45:54 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Mon, 03 Apr 2023 14:48:49 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     pratyush@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
-        Takahiro.Kuwano@infineon.com, bacem.daassi@infineon.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 05/10] mtd: spi-nor: core: Make
- spi_nor_set_4byte_addr_mode_brwr public
-In-Reply-To: <20230331074606.3559258-6-tudor.ambarus@linaro.org>
-References: <20230331074606.3559258-1-tudor.ambarus@linaro.org>
- <20230331074606.3559258-6-tudor.ambarus@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <13319920b52243b46ac6e08bfa681f45@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230329180502.1884307-1-kal.conley@dectris.com>
+ <20230329180502.1884307-7-kal.conley@dectris.com> <CAJ8uoz0a3gJgWDxP0zPLsiWzUZHmGqRbrumdRq2Gv1HdVm4ObQ@mail.gmail.com>
+In-Reply-To: <CAJ8uoz0a3gJgWDxP0zPLsiWzUZHmGqRbrumdRq2Gv1HdVm4ObQ@mail.gmail.com>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Mon, 3 Apr 2023 14:50:34 +0200
+Message-ID: <CAHApi-mCm1hWyc1jfB3isPqWqaJUuqn7vN1hfSgPb741ngJK9g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 06/10] xsk: Add check for unaligned
+ descriptors that overrun UMEM
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maxim Mikityanskiy <maximmi@mellanox.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,10 +78,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-03-31 09:46, schrieb Tudor Ambarus:
-> This method can be retrieved at BFPT parsing time. The method is
-> described in JESD216 BFPT[SFDP_DWORD(16)], BIT(28) and BIT(20).
-> 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+>
+> Let me just check that I understand the conditions under which this
+> occurs. When selecting unaligned mode, there is no check that the size
+> is divisible by the chunk_size as is the case in aligned mode. So we
+> can register a umem that is for example 15 4K pages plus 100 bytes and
+> in this case the second to last page will be marked as contiguous
+> (with the CONTIG_MASK) and a packet of length 300 starting at 15*4K -
+> 100 will be marked as valid even though it extends 100 bytes outside
+> the umem which ends at 15*4K + 100. Did I get this correctly? If so,
+> some more color in the commit message would be highly appreciated.
 
-Reviewed-by: Michael Walle <michael@walle.cc>
+Yes. You don't even need to cross the page. For example, if you have a
+packet length of 300 _within_ the final page then it could go past the
+end of the umem. In this case, the CONTIG_MASK would not even be
+looked at. The explanation is in the next commit message with the
+test. I will improve the commit message here though.
