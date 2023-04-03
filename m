@@ -2,263 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9886D4D0D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03186D4D10
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbjDCQDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S233151AbjDCQDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233139AbjDCQDe (ORCPT
+        with ESMTP id S233132AbjDCQDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:03:34 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E86B1FF2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:03:31 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 21E381EC063F;
-        Mon,  3 Apr 2023 18:03:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680537810;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sb/Hhj4OHpVhM7izMhMuZxG/aHMI5JmXLhBwrgGnMRY=;
-        b=jN7tAishzzwoq/Zyv6jX1n1AlSd8qlGLrnaehHgjIbnlxGAQ6AT+UXiTPsUgdWZD+qx+sf
-        mi9pZj/7fgta71QIYpHCjzZ0uEvB36N7sH38ir+c8/maeHdgM7KfPbutAwmlA4fGA5a0hb
-        2Aq0/dTya4OAE5ApvIgIM5hcimJXSsg=
-Date:   Mon, 3 Apr 2023 18:03:23 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v5 03/15] x86/mtrr: replace some constants with defines
-Message-ID: <20230403160323.GAZCr4y14GvOA4dZID@fat_crate.local>
-References: <20230401063652.23522-1-jgross@suse.com>
- <20230401063652.23522-4-jgross@suse.com>
+        Mon, 3 Apr 2023 12:03:52 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B99326AB
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:03:46 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id c29so38755093lfv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 09:03:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680537824;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i9G7aUowxIC2TBL5HvvDup5cDrl4CSux698J80MD/8k=;
+        b=uIuUI+rmy1bPu//mD4dW34NHS+3aO0fhNH8DA5pUy3oSxt8KOJulSPjI/PGtr+QaJh
+         kyGSEwYdBMLnwV9nsQGy1lu4O/ov+W0NDHbKEqOZJcMYkbGy1z4h8U+A0nl+ocxKeY0e
+         h3Z1Fu8uDEioFps7Tgp3kh64AQCpTLOEi7/K1rEZUbvJidGgyNDdLq47kZlYo20pAS7R
+         B0T2PIQthYwyhSB7xROyLIq9L4CDyCHqkEf3kCey+LRRkLchmvqk5vilnWwoO0F4Dwmq
+         VRd8lNm0mSau2R2Vc3ZwNDILjqTDyxLg8Ma7OxWEqUwBdEw3Wbrk/rRkkajBRws5Uf/V
+         46jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680537824;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i9G7aUowxIC2TBL5HvvDup5cDrl4CSux698J80MD/8k=;
+        b=oWa93fyycjPbKcnskyvLwJQK+qCvsPARWeS6lkOVfLfTVciDTfGGTqyi/TauT4NNug
+         ELUG0qxM/N1Ag55Bz0HiUg2rOdfdvuNRZsQYS09mf/BeVBAD/v/5hRJBuJqoW7L4cyCn
+         X+QydNBmZq8+ARx3sonZh3qszMKxEqfSrMA/DHg2ea1alx/XzMZsG4arno91U1tuwRwf
+         okxKEA8kAKmNOYOL0NY6S+wOJLMz6nel/jlPChAP1bFoN8NS6QPJNhXAuVQlTPldOJS2
+         zou77DUNs3nrnRlbuPL0odnEqsl1TDFYMeEF46nlHGioL5e1W1gjh43MvG53VoMcdyQO
+         wd3w==
+X-Gm-Message-State: AAQBX9evs0Nje/frtD/plUfudIb1qYH2BODsD9iapL/OAQGbNyyw7lww
+        0jO9MQuyFEsX0UbaUI1yfIXwHiEWVLQmJUucUR78CA==
+X-Google-Smtp-Source: AKy350az+bKy+0p6MVj7KoxWXqsKroiMkmUS8blupoO/H+L43R3XSOKiqKnUViXlnuNJA1p+bvFeCUDIUPdet5qQB6Y=
+X-Received: by 2002:a19:ae04:0:b0:4eb:4160:7ca8 with SMTP id
+ f4-20020a19ae04000000b004eb41607ca8mr918972lfc.6.1680537824444; Mon, 03 Apr
+ 2023 09:03:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230401063652.23522-4-jgross@suse.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230403114033.8336-1-edmund.berenson@emlix.com> <20230403114033.8336-2-edmund.berenson@emlix.com>
+In-Reply-To: <20230403114033.8336-2-edmund.berenson@emlix.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 3 Apr 2023 18:03:32 +0200
+Message-ID: <CAMRc=MdMd15pDs6WehbQAGKXXm5-C7E2Or0smmD68izvevy62w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] gpio: max7317: Add gpio expander driver
+To:     Edmund Berenson <edmund.berenson@emlix.com>
+Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 01, 2023 at 08:36:40AM +0200, Juergen Gross wrote:
-> @@ -643,10 +646,12 @@ static bool set_mtrr_var_ranges(unsigned int index, struct mtrr_var_range *vr)
->  	unsigned int lo, hi;
->  	bool changed = false;
->  
-> +#define BASE_MASK	(MTRR_BASE_TYPE_MASK | (size_and_mask << PAGE_SHIFT))
-> +#define MASK_MASK	(MTRR_MASK_VALID | (size_and_mask << PAGE_SHIFT))
+On Mon, Apr 3, 2023 at 1:41=E2=80=AFPM Edmund Berenson
+<edmund.berenson@emlix.com> wrote:
+>
+> Add driver for maxim MAX7317 SPI-Interfaced 10 Port
+> GPIO Expander.
+>
+> v2: adjust driver to use regmap
+>
+> Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+> Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
+> ---
+>  drivers/gpio/Kconfig        |  11 +++
+>  drivers/gpio/Makefile       |   1 +
+>  drivers/gpio/gpio-max7317.c | 161 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 173 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-max7317.c
+>
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 13be729710f2..109cf09d8c05 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -1615,6 +1615,17 @@ config GPIO_MAX7301
+>         help
+>           GPIO driver for Maxim MAX7301 SPI-based GPIO expander.
+>
+> +config GPIO_MAX7317
+> +       tristate "Maxim MAX7317 GPIO expander"
+> +       select REGMAP_SPI
+> +       help
+> +         GPIO driver for Maxim MAX7317 SPI-based GPIO expander.
+> +         The MAX7317 is a serial-interfaced gpio extender, with
+> +         10 ports.
+> +
+> +         This driver can also be built as a module. If so, the module wi=
+ll be
+> +         called gpio-max7317.
+> +
+>  config GPIO_MC33880
+>         tristate "Freescale MC33880 high-side/low-side switch"
+>         help
+> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+> index c048ba003367..8dce549bb6c5 100644
+> --- a/drivers/gpio/Makefile
+> +++ b/drivers/gpio/Makefile
+> @@ -91,6 +91,7 @@ obj-$(CONFIG_GPIO_MAX7300)            +=3D gpio-max7300=
+.o
+>  obj-$(CONFIG_GPIO_MAX7301)             +=3D gpio-max7301.o
+>  obj-$(CONFIG_GPIO_MAX730X)             +=3D gpio-max730x.o
+>  obj-$(CONFIG_GPIO_MAX732X)             +=3D gpio-max732x.o
+> +obj-$(CONFIG_GPIO_MAX7317)             +=3D gpio-max7317.o
+>  obj-$(CONFIG_GPIO_MAX77620)            +=3D gpio-max77620.o
+>  obj-$(CONFIG_GPIO_MAX77650)            +=3D gpio-max77650.o
+>  obj-$(CONFIG_GPIO_MB86S7X)             +=3D gpio-mb86s7x.o
+> diff --git a/drivers/gpio/gpio-max7317.c b/drivers/gpio/gpio-max7317.c
+> new file mode 100644
+> index 000000000000..65824efaad6c
+> --- /dev/null
+> +++ b/drivers/gpio/gpio-max7317.c
+> @@ -0,0 +1,161 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2021, Lukasz Zemla, Woodward Inc.
+> + */
+> +
+> +#include <linux/gpio.h>
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
+> +#include <linux/spi/spi.h>
+> +
+> +#define MAX7317_PIN_NUMBER 10
+> +#define REG_CODE_READ_PORTS_7_TO_0     ((u8)0x0E)
+> +#define REG_CODE_READ_PORTS_9_TO_8     ((u8)0x0F)
+> +
+> +struct max7317 {
 
-No, "MASK_MASK" is too much. :-)
+Please call it max7317_gpio or something similar.
 
-Anyway, so I started looking at this and here's what I'm seeing on my
-machine even with the old code:
+> +       struct gpio_chip        chip;
+> +       struct regmap           *regmap;
+> +       int                     direction[MAX7317_PIN_NUMBER];
 
-        rdmsr(MTRRphysBase_MSR(index), lo, hi);
-        if ((vr->base_lo & 0xfffff0ffUL) != (lo & 0xfffff0ffUL)
-            || (vr->base_hi & (size_and_mask >> (32 - PAGE_SHIFT))) !=
-                (hi & (size_and_mask >> (32 - PAGE_SHIFT)))) {
+Don't use tabs in structs, it doesn't really add to readability in
+small declarations.
+
+> +};
+> +
+> +struct max7317_platform_data {
+> +       unsigned int    gpio_base;
+> +};
+> +
+> +static const struct regmap_config max7317_regmap_cfg =3D  {
+> +       .reg_bits =3D 8,
+> +       .val_bits =3D 8,
+> +};
+> +
+> +static int max7317_get(struct gpio_chip *chip, unsigned int offset)
+> +{
+> +       struct max7317 *ts =3D gpiochip_get_data(chip);
+> +       unsigned int val;
+> +       int ret;
+> +       u8 reg =3D (offset < 8) ? REG_CODE_READ_PORTS_7_TO_0 : REG_CODE_R=
+EAD_PORTS_9_TO_8;
+> +
+> +       ret =3D regmap_read(ts->regmap, reg, &val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return val & BIT(offset % 8);
+> +}
+> +
+> +/*
+> + * After writing the register an additional read is performed in order f=
+or
+> + * changes to take effect.
+> + */
+> +static void max7317_set(struct gpio_chip *chip, unsigned int offset, int=
+ value)
+> +{
+> +       struct max7317 *ts =3D gpiochip_get_data(chip);
+> +
+> +       if (regmap_write(ts->regmap, offset, value ? 1 : 0))
+> +               dev_err(chip->parent, "Failed to set pin: %d\n", offset);
+> +       max7317_get(chip, offset);
+
+Don't you need to protect both the write and read operations from
+concurrent access here?
 
 
-size_and_mask:		0x0000000ffff00000
-the shifted version:	0x000000000000ffff
+> +}
+> +
+> +static int max7317_direction_input(struct gpio_chip *chip, unsigned int =
+offset)
+> +{
+> +       struct max7317 *ts =3D gpiochip_get_data(chip);
+> +
+> +       max7317_set(chip, offset, 1);
+> +       ts->direction[offset] =3D GPIO_LINE_DIRECTION_IN;
+> +       return 0;
+> +}
+> +
+> +static int max7317_direction_output(struct gpio_chip *chip, unsigned int=
+ offset,
+> +                                   int value)
+> +{
+> +       struct max7317 *ts =3D gpiochip_get_data(chip);
+> +
+> +       ts->direction[offset] =3D GPIO_LINE_DIRECTION_OUT;
+> +       return 0;
+> +}
+> +
+> +static int max7317_get_direction(struct gpio_chip *chip, unsigned int of=
+fset)
+> +{
+> +       struct max7317 *ts =3D gpiochip_get_data(chip);
+> +
+> +       return ts->direction[offset];
+> +}
+> +
+> +static int max7317_probe(struct spi_device *spi)
+> +{
+> +       struct max7317 *ts;
+> +       struct device *dev;
+> +       struct max7317_platform_data *pdata;
 
-which is bits [15:0]
+Where does this come from?
 
-Now, looking at MTRRphysBase_MSR's definition, the high 32 bits are:
+> +       int i;
+> +
+> +       ts =3D devm_kzalloc(&spi->dev, sizeof(struct max7317), GFP_KERNEL=
+);
+> +       if (!ts)
+> +               return -ENOMEM;
+> +       dev_set_drvdata(&spi->dev, ts);
+> +
+> +       pdata =3D dev_get_platdata(dev);
+> +       if (pdata)
+> +               ts->chip.base =3D pdata->gpio_base;
 
-[63 ... reserved ... ][ max_addr ... 32 ]
+Don't encourage setting a hard-coded base via platform data. Please
+use -1 unconditionally in new drivers.
 
-and that second slice: from max_addr to the 32nd bit of the whole MSR is
-the second part of PhysBase.
+> +       else
+> +               ts->chip.base =3D -1;
+> +
+> +       ts->chip.label =3D dev_name(&spi->dev);
+> +       ts->chip.direction_input =3D max7317_direction_input;
+> +       ts->chip.get =3D max7317_get;
+> +       ts->chip.direction_output =3D max7317_direction_output;
+> +       ts->chip.set =3D max7317_set;
+> +       ts->chip.get_direction =3D max7317_get_direction;
+> +
+> +       ts->chip.ngpio =3D MAX7317_PIN_NUMBER;
+> +       ts->chip.can_sleep =3D true;
+> +       ts->chip.parent =3D &spi->dev;
+> +       ts->chip.owner =3D THIS_MODULE;
+> +
+> +       for (i =3D 0; i < MAX7317_PIN_NUMBER; i++)
+> +               ts->direction[i] =3D GPIO_LINE_DIRECTION_IN;
+> +
+> +       ts->regmap =3D devm_regmap_init_spi(spi, &max7317_regmap_cfg);
+> +       if (IS_ERR(ts->regmap))
+> +               return PTR_ERR(ts->regmap);
+> +
+> +       return devm_gpiochip_add_data(&spi->dev, &ts->chip, ts);
+> +}
+> +
+> +static void max7317_remove(struct spi_device *spi)
+> +{
+> +       struct max7317 *ts =3D dev_get_drvdata(&spi->dev);
+> +
+> +       if (!ts)
+> +               return;
+> +
+> +       gpiochip_remove(&ts->chip);
 
-max_addr aka phys_addr comes from:
+This is clearly wrong - you registered the chip using
+devm_gpiochip_add_data() precisely to avoid having to call
+gpiochip_remove(). And checking for !it makes no sense either - you
+should have set it yourself, which you didn't.
 
-	phys_addr = cpuid_eax(0x80000008) & 0xff;
+Bart
 
-on that machine, that value is 48.
-
-Which means, the physaddr slice should be [48 .. 32], i.e.,
-
-	0x0001ffff00000000
-
-and when you shift that by 32 so that it can be ANDed with the high
-portion of the MSR, it becomes
-
-0x000000000001ffff
-
-i.e., bit 16 is set too.
-
-And that max address can be up to 51:
-
-"Range Physical Base-Address (PhysBase)—Bits 51:12. The memory-range base-address in
-physical-address space. PhysBase is aligned on a 4-Kbyte (or greater) address in the 52-bit
-physical-address space supported by the AMD64 architecture. PhysBase represents the most-
-significant 40-address bits of the physical address. Physical-address
-bits 11:0 are assumed to be 0."
-
-Long story short, size_and_mask needs to be done from
-
-	size_and_mask = ~size_or_mask & 0xfffff00000ULL;
-
-to
-
-	size_and_mask = ~size_or_mask & GENMASK_ULL(phys_addr, 20);
-
-size_or_mask bits already took into consideration the phys_addr:
-
-	size_or_mask = SIZE_OR_MASK_BITS(phys_addr);
-
-and size_and_mask needs to do it too.
-
-Right?
-
-I'll test this on the boxes here everywhere. I guess this gets hit only
-on boxes where the phys_addr of the variable MTRRs goes over the 16
-bits.
-
-As to this patch: please make all the bit and mask definitions you're
-adding as close to the MTRR bit and mask definition names in the
-APM+SDM. I've started this already (ontop of yours):
-
----
-
-diff --git a/arch/x86/include/asm/mtrr.h b/arch/x86/include/asm/mtrr.h
-index 4e59f7854950..a768a8716980 100644
---- a/arch/x86/include/asm/mtrr.h
-+++ b/arch/x86/include/asm/mtrr.h
-@@ -28,7 +28,7 @@
- 
- /* Defines for hardware MTRR registers. */
- #define MTRR_CONFIG_NUM_VAR_MASK	GENMASK(7, 0)
--#define MTRR_CONFIG_HAVE_FIXED		BIT_MASK(8)
-+#define MTRR_CAP_FIX			BIT_MASK(8)
- #define MTRR_CONFIG_HAVE_WC		BIT_MASK(10)
- 
- #define MTRR_DEFTYPE_TYPE_MASK		GENMASK(7, 0)
-@@ -39,9 +39,9 @@
- #define MTRR_DEFTYPE_DISABLE_MASK	~(MTRR_DEFTYPE_TYPE_MASK |	\
- 					  MTRR_DEFTYPE_ENABLE_MASK)
- 
--#define MTRR_BASE_TYPE_MASK		GENMASK_ULL(7, 0)
-+#define MTRR_BASE_TYPE_MASK		GENMASK(7, 0)
- 
--#define MTRR_MASK_VALID			BIT_ULL_MASK(11)
-+#define MTRR_PHYS_MASK_VALID		BIT_ULL_MASK(11)
- 
- /*
-  * The following functions are for use by other drivers that cannot use
-@@ -140,9 +140,7 @@ struct mtrr_gentry32 {
- 
- /* Bit fields for enabled in struct mtrr_state_type */
- #define MTRR_STATE_SHIFT		10
--#define MTRR_STATE_MTRR_FIXED_ENABLED	\
--			(MTRR_DEFTYPE_FIXED_ENABLED >> MTRR_STATE_SHIFT)
--#define MTRR_STATE_MTRR_ENABLED		\
--			(MTRR_DEFTYPE_ENABLED >> MTRR_STATE_SHIFT)
-+#define MTRR_STATE_MTRR_FIXED_ENABLED	(MTRR_DEFTYPE_FIXED_ENABLED >> MTRR_STATE_SHIFT)
-+#define MTRR_STATE_MTRR_ENABLED		(MTRR_DEFTYPE_ENABLED >> MTRR_STATE_SHIFT)
- 
- #endif /* _ASM_X86_MTRR_H */
-diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
-index 9a12da76635c..8f8b7775a5ac 100644
---- a/arch/x86/kernel/cpu/mtrr/generic.c
-+++ b/arch/x86/kernel/cpu/mtrr/generic.c
-@@ -171,7 +171,7 @@ static u8 mtrr_type_lookup_variable(u64 start, u64 end, u64 *partial_end,
- 	for (i = 0; i < num_var_ranges; ++i) {
- 		unsigned short start_state, end_state, inclusive;
- 
--		if (!(mtrr_state.var_ranges[i].mask_lo & MTRR_MASK_VALID))
-+		if (!(mtrr_state.var_ranges[i].mask_lo & MTRR_PHYS_MASK_VALID))
- 			continue;
- 
- 		base = (((u64)mtrr_state.var_ranges[i].base_hi) << 32) +
-@@ -223,8 +223,7 @@ static u8 mtrr_type_lookup_variable(u64 start, u64 end, u64 *partial_end,
- 		if ((start & mask) != (base & mask))
- 			continue;
- 
--		curr_match = mtrr_state.var_ranges[i].base_lo &
--			     MTRR_BASE_TYPE_MASK;
-+		curr_match = mtrr_state.var_ranges[i].base_lo & MTRR_BASE_TYPE_MASK;
- 		if (prev_match == MTRR_TYPE_INVALID) {
- 			prev_match = curr_match;
- 			continue;
-@@ -426,7 +425,7 @@ static void __init print_mtrr_state(void)
- 	high_width = (__ffs64(size_or_mask) - (32 - PAGE_SHIFT) + 3) / 4;
- 
- 	for (i = 0; i < num_var_ranges; ++i) {
--		if (mtrr_state.var_ranges[i].mask_lo & MTRR_MASK_VALID)
-+		if (mtrr_state.var_ranges[i].mask_lo & MTRR_PHYS_MASK_VALID)
- 			pr_debug("  %u base %0*X%05X000 mask %0*X%05X000 %s\n",
- 				 i,
- 				 high_width,
-@@ -454,7 +453,7 @@ bool __init get_mtrr_state(void)
- 	vrs = mtrr_state.var_ranges;
- 
- 	rdmsr(MSR_MTRRcap, lo, dummy);
--	mtrr_state.have_fixed = !!(lo & MTRR_CONFIG_HAVE_FIXED);
-+	mtrr_state.have_fixed = !!(lo & MTRR_CAP_FIX);
- 
- 	for (i = 0; i < num_var_ranges; i++)
- 		get_mtrr_var_range(i, &vrs[i]);
-@@ -463,8 +462,7 @@ bool __init get_mtrr_state(void)
- 
- 	rdmsr(MSR_MTRRdefType, lo, dummy);
- 	mtrr_state.def_type = lo & MTRR_DEFTYPE_TYPE_MASK;
--	mtrr_state.enabled = (lo & MTRR_DEFTYPE_ENABLE_MASK) >>
--			     MTRR_STATE_SHIFT;
-+	mtrr_state.enabled = (lo & MTRR_DEFTYPE_ENABLE_MASK) >> MTRR_STATE_SHIFT;
- 
- 	if (amd_special_default_mtrr()) {
- 		unsigned low, high;
-@@ -576,8 +574,7 @@ static void generic_get_mtrr(unsigned int reg, unsigned long *base,
- 	get_cpu();
- 
- 	rdmsr(MTRRphysMask_MSR(reg), mask_lo, mask_hi);
--
--	if ((mask_lo & MTRR_MASK_VALID) == 0) {
-+	if (!(mask_lo & MTRR_PHYS_MASK_VALID)) {
- 		/*  Invalid (i.e. free) range */
- 		*base = 0;
- 		*size = 0;
-@@ -647,7 +644,7 @@ static bool set_mtrr_var_ranges(unsigned int index, struct mtrr_var_range *vr)
- 	bool changed = false;
- 
- #define BASE_MASK	(MTRR_BASE_TYPE_MASK | (size_and_mask << PAGE_SHIFT))
--#define MASK_MASK	(MTRR_MASK_VALID | (size_and_mask << PAGE_SHIFT))
-+#define MASK_MASK	(MTRR_PHYS_MASK_VALID | (size_and_mask << PAGE_SHIFT))
- 
- 	rdmsr(MTRRphysBase_MSR(index), lo, hi);
- 	if ((vr->base_lo & BASE_MASK) != (lo & BASE_MASK)
-@@ -770,7 +767,7 @@ static void generic_set_mtrr(unsigned int reg, unsigned long base,
- 	} else {
- 		vr->base_lo = base << PAGE_SHIFT | type;
- 		vr->base_hi = (base & size_and_mask) >> (32 - PAGE_SHIFT);
--		vr->mask_lo = -size << PAGE_SHIFT | MTRR_MASK_VALID;
-+		vr->mask_lo = -size << PAGE_SHIFT | MTRR_PHYS_MASK_VALID;
- 		vr->mask_hi = (-size & size_and_mask) >> (32 - PAGE_SHIFT);
- 
- 		mtrr_wrmsr(MTRRphysBase_MSR(reg), vr->base_lo, vr->base_hi);
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> +}
+> +
+> +static const struct spi_device_id max7317_id[] =3D {
+> +       { "max7317", 0 },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(spi, max7317_id);
+> +
+> +static const struct of_device_id max7317_dt_ids[] =3D {
+> +       { .compatible =3D "maxim,max7317" },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(of, max7317_dt_ids);
+> +
+> +static struct spi_driver max7317_driver =3D {
+> +       .driver =3D {
+> +               .name =3D "max7317",
+> +               .of_match_table =3D max7317_dt_ids,
+> +       },
+> +       .probe =3D max7317_probe,
+> +       .remove =3D max7317_remove,
+> +       .id_table =3D max7317_id,
+> +};
+> +module_spi_driver(max7317_driver);
+> +
+> +MODULE_AUTHOR("Lukasz Zemla");
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("MAX7317 GPIO-Expander");
+> --
+> 2.39.2
+>
