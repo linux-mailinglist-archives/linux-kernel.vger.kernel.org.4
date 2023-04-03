@@ -2,187 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F706D3C2B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5FD6D3C2D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjDCDfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 23:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        id S231156AbjDCDir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 23:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjDCDfe (ORCPT
+        with ESMTP id S230192AbjDCDin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 23:35:34 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC5972BC
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 20:35:32 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id s72so850885pgs.9
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 20:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680492932;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/D4pTl4jFzV4jgHwDP3sW1Lt1J55i00u3GAQnSTJoQQ=;
-        b=mDPqR5a6pMJJzyPRzXU8LTfrkGs2hUub739GYGKZRnBQ3D3+Ev6tXSvvmYnmW9n3Kb
-         W2cX8vNKSBSi9J0xnBiyb+hP5dayw9BPQD2Ydg+TZJEoWR1vux7je3WmHI4SlbWJ72Oo
-         WuMjgWDoECvTFfbeVmUL/yYP1xNm8EQvhBORJeYfAB4c0VWZ3LhrdyBn6yDivKSe7NJC
-         N0czeT3FUw/4IYpfTApoYqjk0nYpTfT25LQPu4svY2oEYhRSqqufDzzrDxteGJ2boTYy
-         xYYnlTV1LkQAhro3RadcySCGSI1+sB5a4TI+Ksp8ZQcWCSRDl+XI1LYO2AxhPhpwZRoE
-         PKbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680492932;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/D4pTl4jFzV4jgHwDP3sW1Lt1J55i00u3GAQnSTJoQQ=;
-        b=GKiyttrRPLxxsgWf7mPbzLBw6ndaehi632j5pQr/TBI3VNyuLYAE98jPSKMG5aIq5H
-         aF+iVuo0t1+QDZISxJJfeLvJc4vwXQrFf6QrPS+kLhjbtdWxOsZY3IG8+XJ1Mf68+bvh
-         v2Frax1O+URpWKRjzNOX/GJ0j9FJe05wKyHumBTg6+esJl7ZanNlZMWZQ/JF+e1uwa80
-         JYUEtSXDDM7sT0b7mhuu5kMYGk0v5ZAMyIm9iQkubW7BVCCF+bJidzmMqOjdFopltOBd
-         tHwDDspAiTUUaR9FlEcQ+/IGNikQt8KjXJR3KlVOlxuXlHWfCRtOpvdYmHdFjkyzDds7
-         Pt7Q==
-X-Gm-Message-State: AAQBX9dS29QFW7yTHTmots3u+zlf0K45yBxlwiuoX5kPmoLhW3gM3RmP
-        P15LY/fNzk38e868w6EdexGKWA==
-X-Google-Smtp-Source: AKy350ZcXokqcVbSfXh0/U/C+8KTXx9rbwWKFpC4NaX5XoDdZvPnEORMc6ZhHnuCbOGGp7xwcmH40g==
-X-Received: by 2002:a62:1c45:0:b0:626:1523:b10d with SMTP id c66-20020a621c45000000b006261523b10dmr35575121pfc.4.1680492931885;
-        Sun, 02 Apr 2023 20:35:31 -0700 (PDT)
-Received: from localhost ([122.172.85.168])
-        by smtp.gmail.com with ESMTPSA id 9-20020aa79149000000b0062dd28aaca6sm5614107pfi.212.2023.04.02.20.35.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 20:35:31 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 09:05:29 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH resent] cpufreq: sparc: Fix exception handling in two
- functions
-Message-ID: <20230403033529.x6n3ihhkypwizq3b@vireshk-i7>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <b3cce5b3-2e68-180c-c293-74d4d9d4032c@web.de>
- <2d125f3e-4de6-cfb4-2d21-6e1ec04bc412@web.de>
+        Sun, 2 Apr 2023 23:38:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335FA8A55
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 20:38:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 187FCCE0E9A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:38:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BFABC433EF;
+        Mon,  3 Apr 2023 03:38:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680493118;
+        bh=YG0HLmOg1AwXo9vc4n8opH1/k+AHcpd/p8Qd4KDGf0o=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=KepNx+6UjLcJOYFZAdxE8VjgWXgUmYqt+zbhMdFzBgquOaNzDYmHXln2roIbWYwI4
+         V/jFlzW9omx+3uY6elGqx0QMPYC4UUqOnlTu6fEPF9f+IeN7Ei2ObIumSVzBmo1Np/
+         V56/XaNimp+IHbd+7BLZKVjCg7HWyEYoUY4XjTpK+E5dZ4HJsb1aD6DggaVH8tOstm
+         UXAdbTxXUckN24qfMaJD9CCzrvwJEV0ttABIIp3ih/rG2C3jGm9V8XaMDST8adu9bX
+         GdAa9Q3PLsqFNSwC/S0GhwukWdn/Np6Y6EsiKmwSqvTgdRaI94fAw74EbumZnyPlwg
+         18sKm5RPLPBXQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id B76B1154047C; Sun,  2 Apr 2023 20:38:37 -0700 (PDT)
+Date:   Sun, 2 Apr 2023 20:38:37 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Feng Tang <feng.tang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: A couple of TSC questions
+Message-ID: <b2436d38-771b-499d-b6a6-2c42a98df659@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <b2f07f18-b60b-403b-90ff-937ea32963ee@paulmck-laptop>
+ <ZBqOyLByOgvdAve3@feng-clx>
+ <acda3fb5-373a-48b1-b78e-eea18da4ccb0@paulmck-laptop>
+ <ZCD9SnZSUCkE9Ss+@feng-clx>
+ <aaf391d9-98e6-47d8-b402-c90b4a81ae9c@paulmck-laptop>
+ <3daa086c-b4a0-47a9-8bfc-aac4139013c4@paulmck-laptop>
+ <293db107-a572-592f-cc27-e59ab81a4e60@redhat.com>
+ <ef61060d-9f40-4b44-9a51-026041fe75e1@paulmck-laptop>
+ <d0be6b59-11ee-f899-19e5-b84eba003ac8@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2d125f3e-4de6-cfb4-2d21-6e1ec04bc412@web.de>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <d0be6b59-11ee-f899-19e5-b84eba003ac8@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-03-23, 15:02, Markus Elfring wrote:
-> Date: Sat, 18 Mar 2023 11:40:11 +0100
+On Sun, Apr 02, 2023 at 10:05:51PM -0400, Waiman Long wrote:
+> On 4/2/23 22:00, Paul E. McKenney wrote:
+> > On Sun, Apr 02, 2023 at 09:04:04PM -0400, Waiman Long wrote:
+> > > On 3/31/23 13:16, Paul E. McKenney wrote:
+> > > > On Tue, Mar 28, 2023 at 02:58:54PM -0700, Paul E. McKenney wrote:
+> > > > > On Mon, Mar 27, 2023 at 10:19:54AM +0800, Feng Tang wrote:
+> > > > > > On Fri, Mar 24, 2023 at 05:47:33PM -0700, Paul E. McKenney wrote:
+> > > > > > > On Wed, Mar 22, 2023 at 01:14:48PM +0800, Feng Tang wrote:
+> > > > [ . . . ]
+> > > > 
+> > > > > > > > > Second, we are very occasionally running into console messages like this:
+> > > > > > > > > 
+> > > > > > > > > Measured 2 cycles TSC warp between CPUs, turning off TSC clock.
+> > > > > > > > > 
+> > > > > > > > > This comes from check_tsc_sync_source() and indicates that one CPU's
+> > > > > > > > > TSC read produced a later time than a later read from some other CPU.
+> > > > > > > > > I am beginning to suspect that these can be caused by unscheduled delays
+> > > > > > > > > in the TSC synchronization code, but figured I should ask you if you have
+> > > > > > > > > ever seen these.  And of course, if so, what the usual causes might be.
+> > > > > > > > I haven't seen this error myself or got similar reports. Usually it
+> > > > > > > > should be easy to detect once happened, as falling back to HPET
+> > > > > > > > will trigger obvious performance degradation.
+> > > > > > > And that is exactly what happened.  ;-)
+> > > > > > > 
+> > > > > > > > Could you give more detail about when and how it happens, and the
+> > > > > > > > HW info like how many sockets the platform has.
+> > > > > > > We are in early days, so I am checking for other experiences.
+> > > > > > > 
+> > > > > > > > CC Thomas, Waiman, as they discussed simliar case here:
+> > > > > > > > https://lore.kernel.org/lkml/87h76ew3sb.ffs@tglx/T/#md4d0a88fb708391654e78312ffa75b481690699f
+> > > > > > > Fun!  ;-)
+> > > > > Waiman, do you recall what fraction of the benefit was provided by the
+> > > > > first patch, that is, the one that grouped the sync_lock, last_tsc,
+> > > > > max_warp, nr_warps, and random_warps global variables into a single
+> > > > > struct?
+> > > The purpose of the first patch is just to avoid false cacheline sharing
+> > > between the watchdog cpu and another cpu that happens to access a nearby
+> > > data in the same cacheline.
+> > > 
+> > > Now I realize that I should have followed up with this patch series. The
+> > > problem reported in that patch series happen on one system only, I believe.
+> > Thus far I am seeing eight systems, but out of a large number.  So this
+> > is very much preliminary.
+> > 
+> > > > And what we are seeing is unlikely to be due to cache-latency-induced
+> > > > delays.  We see a very precise warp, for example, one system always
+> > > > has 182 cycles of TSC warp, another 273 cycles, and a third 469 cycles.
+> > > > Another is at the insanely large value of about 2^64/10, and shows some
+> > > > variation, but that variation is only about 0.1%.
+> > > > 
+> > > > But any given system only sees warp on about half of its reboots.
+> > > > Perhaps due to the automation sometimes power cycling?
+> > > > 
+> > > > There are few enough affected systems that investigation will take
+> > > > some time.
+> > > Maybe the difference in wrap is due to NUMA distance of the running cpu from
+> > > the node where the data reside. It will be interesting to see if my patch
+> > > helps.
+> > Almost all of them are single-socket systems.
+> > 
+> > If the problem sticks with a few systems, I should be able to test
+> > patches no problem.  If it is randomly distributed across the fleet, a
+> > bit more prework analysis will be called for.  But what is life without
+> > a challenge?  ;-)
 > 
-> The label “err_out” was used to jump to another pointer check despite of
-> the detail in the implementation of the functions “us2e_freq_init”
-> and “us3_freq_init” that it was determined already that the corresponding
-> variable contained a null pointer (because of a failed memory allocation).
-> 
-> 1. Use additional labels.
-> 
-> 2. Reorder jump targets at the end.
-> 
-> 3. Delete an extra pointer check which became unnecessary
->    with this refactoring.
-> 
-> 
-> This issue was detected by using the Coccinelle software.
-> 
-> Fixes: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac ("Linux-2.6.12-rc2")
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
->  drivers/cpufreq/sparc-us2e-cpufreq.c | 12 ++++++------
->  drivers/cpufreq/sparc-us3-cpufreq.c  | 12 ++++++------
->  2 files changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/sparc-us2e-cpufreq.c b/drivers/cpufreq/sparc-us2e-cpufreq.c
-> index 92acbb25abb3..8534d8b1af56 100644
-> --- a/drivers/cpufreq/sparc-us2e-cpufreq.c
-> +++ b/drivers/cpufreq/sparc-us2e-cpufreq.c
-> @@ -324,12 +324,12 @@ static int __init us2e_freq_init(void)
->  		ret = -ENOMEM;
->  		driver = kzalloc(sizeof(*driver), GFP_KERNEL);
->  		if (!driver)
-> -			goto err_out;
-> +			goto reset_freq_table;
+> If it is happening on a single socket system, maybe it is caused by false
+> cacheline sharing. It is hard to tell unless we find a way to reproduce it.
 
-I would just return error from here.
+But multiple times on a given system with exactly the same number of
+clock cycles of warp each time?  It should be entertaining tracking this
+one down.  ;-)
 
-> 
->  		us2e_freq_table = kzalloc((NR_CPUS * sizeof(*us2e_freq_table)),
->  			GFP_KERNEL);
->  		if (!us2e_freq_table)
-> -			goto err_out;
-> +			goto free_driver;
-> 
->  		driver->init = us2e_freq_cpu_init;
->  		driver->verify = cpufreq_generic_frequency_table_verify;
-> @@ -346,11 +346,11 @@ static int __init us2e_freq_init(void)
->  		return 0;
-> 
->  err_out:
-> -		if (driver) {
-> -			kfree(driver);
-> -			cpufreq_us2e_driver = NULL;
-> -		}
->  		kfree(us2e_freq_table);
-> +free_driver:
-> +		kfree(driver);
-> +		cpufreq_us2e_driver = NULL;
-> +reset_freq_table:
->  		us2e_freq_table = NULL;
+I will take a few scans of the fleet over the coming week and see if
+there is any consistency.  Here is hoping...
 
-This wasn't set at this point, no point clearing it here. Also this
-clearing of global variables isn't required at all, as after this
-point no other function shall get called.
-
-similar comments for the other file.
-
->  		return ret;
->  	}
-> diff --git a/drivers/cpufreq/sparc-us3-cpufreq.c b/drivers/cpufreq/sparc-us3-cpufreq.c
-> index e41b35b16afd..325f61bb2e40 100644
-> --- a/drivers/cpufreq/sparc-us3-cpufreq.c
-> +++ b/drivers/cpufreq/sparc-us3-cpufreq.c
-> @@ -172,12 +172,12 @@ static int __init us3_freq_init(void)
->  		ret = -ENOMEM;
->  		driver = kzalloc(sizeof(*driver), GFP_KERNEL);
->  		if (!driver)
-> -			goto err_out;
-> +			goto reset_freq_table;
-> 
->  		us3_freq_table = kzalloc((NR_CPUS * sizeof(*us3_freq_table)),
->  			GFP_KERNEL);
->  		if (!us3_freq_table)
-> -			goto err_out;
-> +			goto free_driver;
-> 
->  		driver->init = us3_freq_cpu_init;
->  		driver->verify = cpufreq_generic_frequency_table_verify;
-> @@ -194,11 +194,11 @@ static int __init us3_freq_init(void)
->  		return 0;
-> 
->  err_out:
-> -		if (driver) {
-> -			kfree(driver);
-> -			cpufreq_us3_driver = NULL;
-> -		}
->  		kfree(us3_freq_table);
-> +free_driver:
-> +		kfree(driver);
-> +		cpufreq_us3_driver = NULL;
-> +reset_freq_table:
->  		us3_freq_table = NULL;
->  		return ret;
->  	}
-> --
-> 2.40.0
-
--- 
-viresh
+							Thanx, Paul
