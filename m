@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C506D449A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C736D449C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbjDCMni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
+        id S232195AbjDCMnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjDCMng (ORCPT
+        with ESMTP id S232297AbjDCMnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:43:36 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B8465BC
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:43:33 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 3 Apr 2023 08:43:42 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF0B9767;
+        Mon,  3 Apr 2023 05:43:41 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 66D17124;
-        Mon,  3 Apr 2023 14:43:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1680525810;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SYJViz/4N8t4+5Nr3/NhnXJXAfSKnQcLVADtXN8P48w=;
-        b=ANttNXQG44x5Lkium/ohFLGpqpx8IiwF8YqUbGDtEMecMjsz/eauOOkCjF+4vn36LeeT4Q
-        rZHO4DC18tYBLtwudcZDqGQafJOG1Ry7zfq45yg/QdXoiQxmW24zfrGbTWpc7n4cEgYYHQ
-        0FlaIi+inBilF4F1c1L81aKAyEUpOLcvsYshlM/ZQ8w4cbXgNYT0fRd1/ugomXhaNZXro3
-        IF6oxFQasTfr0ye/9XOASI95jbNHHOWxkyzEyVvfJSB7hfk2EaxPndwAYdc+BtkZf32Erw
-        gZ2tIgEjsnVQ15/PMnu0SNHaY5VniNt8mkHQMX3do44fyyZkiCEH28jCL0AQdA==
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 107476603105;
+        Mon,  3 Apr 2023 13:43:40 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680525820;
+        bh=pfKKC24shtvA/rXAR9B/Z1hLIkyt7OJi4x4sgnOzJ4w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=E+aRNVEux5sMeLcJ+vqHmQ5aDu98LjC4Bo2QRef0rixMvao06HXBb+qFWc+tSis7K
+         Liy8m21xm8aQetY1koAG4OJFoStg9e/TQCy4NSEN7UqfGpjxNcebUI2Di5pdEQSIWE
+         82falL+mlPGFsCKcrEPSEqiDARZ33Ks0IFi8YixFnxRaN9P7jLwBgPpcGAyM04KAcy
+         Of85MiIOq4BkW/IqSim9YFPMf0vJTJB8/r+4nIvR7WzYs6GoTZMxYQ3XnhfKAvu/RB
+         RBIZQt3gXzvDoQ3XAOZESH5at6jdwGmx0B6jflGyeTfaYKdJqZ+U9w2HsxzqPv3ncm
+         DsrKSa9YYwyOg==
+Message-ID: <601a8435-8e2a-2c25-5fe3-40be62269469@collabora.com>
+Date:   Mon, 3 Apr 2023 14:43:37 +0200
 MIME-Version: 1.0
-Date:   Mon, 03 Apr 2023 14:43:30 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     pratyush@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
-        Takahiro.Kuwano@infineon.com, bacem.daassi@infineon.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 01/10] mtd: spi-nor: core: Move generic method to core
- - micron_st_nor_set_4byte_addr_mode
-In-Reply-To: <20230331074606.3559258-2-tudor.ambarus@linaro.org>
-References: <20230331074606.3559258-1-tudor.ambarus@linaro.org>
- <20230331074606.3559258-2-tudor.ambarus@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <4543c6475a6e2852435a1707ee70ebe9@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RFC] arm64: dts: use size of reserved partition for bl2
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230403105818.29624-1-linux@fw-web.de>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230403105818.29624-1-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,10 +62,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-03-31 09:45, schrieb Tudor Ambarus:
-> This method is described in JESD216 BFPT[SFDP_DWORD(16)], BIT(30) and
-> BIT(22). Move the method to core.
+Il 03/04/23 12:58, Frank Wunderlich ha scritto:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> To store uncompressed bl2 more space is required than partition is
+> actually defined.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 
-Reviewed-by: Michael Walle <michael@walle.cc>
+If this doesn't get changed anymore, I'm fine with it... but a question arises:
+did you send patches to add your BPI-r3 board(s) to upstream u-boot?
+
+
+> ---
+> I used the definition i got from mtk used in their SDK uboot.
+> 
+> Openwrt uses also the first reserved partition to give bl2 more
+> space:
+> 
+> https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/mediatek/dts/mt7986a-bananapi-bpi-r3-nor.dts;h=f597b869abc80d1a73f44ebb85ad4da17376bb52;hb=HEAD#l22
+> 
+> so imho it should be same in mainline to not require complex bl2
+> compression.
+
+Regards,
+Angelo
+
