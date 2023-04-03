@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D250D6D4D74
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC626D4D77
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbjDCQWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
+        id S231245AbjDCQWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbjDCQW3 (ORCPT
+        with ESMTP id S232566AbjDCQWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:22:29 -0400
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031041FFE;
-        Mon,  3 Apr 2023 09:22:28 -0700 (PDT)
-Received: from smtp2.mailbox.org (unknown [10.196.197.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 3 Apr 2023 12:22:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9772137;
+        Mon,  3 Apr 2023 09:22:50 -0700 (PDT)
+Received: from [192.168.1.90] (unknown [188.27.34.213])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Pqx4c1Qtvz9sVx;
-        Mon,  3 Apr 2023 18:22:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
-        s=MBO0001; t=1680538944;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IqsGAlOKDgMXPJVdU76RuqgAlnJFlh/BsAIGdRjS90w=;
-        b=ed3eIAsMaw7HSDsIraOG/6swtIGagh0B7aDeFpe0V+pjj2REcr18/V4lnKXa7TK3kmCUIw
-        lZnFECbfEN9ZMbC1TrV00ameGHAjiJJ5FSM5rxCKJ659mWsFHenvwExwsIVLBnzBnOsKZL
-        oxQ6x8SD/m47IWQiMOcZpEQOMP1NAlvWZGP8I20A/JaCJ7zgPFlOASVo57uZZ2za1yWz5+
-        4yazb8Ixs52uSotRPZba17we9dHvgNLRBT3bKuVNgr7rhuFldZ/8N4jMhH4je3GNmKxtns
-        LcwANuEyTX7BOJUjrpHNg5UINsqMR/5WNZSKgjF21/M8fBvt2f5+O0l57xWNmw==
-Message-ID: <744f2ddc80ba9d9216ecd90b97e08aa5bd5452cd.camel@dylanvanassche.be>
-Subject: Re: [PATCH v4 4/6] dts: qcom: arm64: qcom: sdm845: use defines for
- VMIDs
-From:   Dylan Van Assche <me@dylanvanassche.be>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Date:   Mon, 03 Apr 2023 18:22:21 +0200
-In-Reply-To: <bf7b5218-56ba-5525-fcb8-7be71b114a79@linaro.org>
-References: <20230401173523.15244-1-me@dylanvanassche.be>
-         <20230401173523.15244-5-me@dylanvanassche.be>
-         <ea03bfb6-34c4-45e2-c179-74ecafad559f@linaro.org>
-         <2d9d001f14036caf4f6d47448d4d2fdb0b188101.camel@dylanvanassche.be>
-         <bf7b5218-56ba-5525-fcb8-7be71b114a79@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0CCED66030F1;
+        Mon,  3 Apr 2023 17:22:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680538968;
+        bh=KZFxkxlJwNymS68Q84h+uC4PbGDB/VlWh4Zh9RnB1Mk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aVWszbJnKMu1vphEXT7Y+ZUFkCAEfH4uCwtlsHcGw7FoGzU49BlqzoL+v+dHCIA2+
+         zHM9S/TnBX900XiTtNOAWEp16glpjZNb2V99cfxjYQfgmwe5CTYRPBlNrw6q14OlQ4
+         4YukySR3AR+WUwzEOUGniclING2u0kIsnfEL9R7vGxbGx4CFML/eIlzJD6PkBlC2B+
+         c1652NuqCZ0FHZZ1u7vuYPcIpJdacmMWvVxz2Npzpxt41nP1YYQzTzyQ7EVDt+rots
+         BlyaHNTtrRYKy0zZ6QJGpGFDhitfQG4RnpGK/GB4i1J0O/sNB0j8tkPQWkhcqI0efq
+         bElzJAvst3PaQ==
+Message-ID: <49c226ff-08a3-a7ca-59bd-f0b9cea865e3@collabora.com>
+Date:   Mon, 3 Apr 2023 19:22:45 +0300
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Convert to DT schema
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     kernel@collabora.com, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
+ <20230403105052.426135-2-cristian.ciocaltea@collabora.com>
+ <168052514639.463695.9544022277060710805.robh@kernel.org>
+ <dcd79e14-d9df-39c1-5465-4e9d71221659@collabora.com>
+ <79396eed-18ab-bcee-5c7e-c3e5e61f32c3@collabora.com>
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <79396eed-18ab-bcee-5c7e-c3e5e61f32c3@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,85 +67,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 4/3/23 17:43, AngeloGioacchino Del Regno wrote:
+> Il 03/04/23 16:32, Cristian Ciocaltea ha scritto:
+>> On 4/3/23 16:10, Rob Herring wrote:
+>>>
+>>> On Mon, 03 Apr 2023 13:50:51 +0300, Cristian Ciocaltea wrote:
+>>>> Convert the PWM fan bindings to DT schema format.
+>>>>
+>>>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+>>>> ---
+>>>>    .../devicetree/bindings/hwmon/pwm-fan.txt     |  68 +----------
+>>>>    .../devicetree/bindings/hwmon/pwm-fan.yaml    | 109
+>>>> ++++++++++++++++++
+>>>>    2 files changed, 110 insertions(+), 67 deletions(-)
+>>>>    create mode 100644
+>>>> Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+>>>>
+>>>
+>>> Running 'make dtbs_check' with the schema in this patch gives the
+>>> following warnings. Consider if they are expected or the schema is
+>>> incorrect. These may not be new warnings.
+>>>
+>>> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+>>> This will change in the future.
+>>>
+>>> Full log is available here:
+>>> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230403105052.426135-2-cristian.ciocaltea@collabora.com
+>>>
+>>>
+>>> pwm-fan: 'cooling-max-state', 'cooling-min-state' do not match any of
+>>> the regexes: 'pinctrl-[0-9]+'
+>>>     arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
+>>>     arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb
+>>>
+>>
+>> The only references to the offending cooling-{min|max}-state are located
+>> in a few DTS files. Assuming they are obsolete, may I simply drop them?
+>>
+> 
+> If they're obsolete, you can mark them as `deprecated: true` in the
+> binding, but
+> dropping them entirely would be an ABI breakage, so no, you can't.
 
-On Mon, 2023-04-03 at 17:47 +0200, Krzysztof Kozlowski wrote:
-> On 03/04/2023 17:32, Dylan Van Assche wrote:
-> > Hi Krzysztof,
-> >=20
-> > On Mon, 2023-04-03 at 11:20 +0200, Krzysztof Kozlowski wrote:
-> > > On 01/04/2023 19:35, Dylan Van Assche wrote:
-> > > > Use VMID defines for SLPI's FastRPC node in the Qualcomm SDM845
-> > > > DTS
-> > > > instead of hardcoded magic values.
-> > > >=20
-> > > > Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
-> > > > ---
-> > > > =C2=A0arch/arm64/boot/dts/qcom/sdm845.dtsi | 4 +++-
-> > > > =C2=A01 file changed, 3 insertions(+), 1 deletion(-)
-> > > >=20
-> > > > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > > > b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > > > index 1f25a7f4e02b..dc4b553cbe2e 100644
-> > > > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > > > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > > > @@ -13,6 +13,7 @@
-> > > > =C2=A0#include <dt-bindings/clock/qcom,rpmh.h>
-> > > > =C2=A0#include <dt-bindings/clock/qcom,videocc-sdm845.h>
-> > > > =C2=A0#include <dt-bindings/dma/qcom-gpi.h>
-> > > > +#include <dt-bindings/firmware/qcom,scm.h>
-> > > > =C2=A0#include <dt-bindings/gpio/gpio.h>
-> > > > =C2=A0#include <dt-bindings/interconnect/qcom,osm-l3.h>
-> > > > =C2=A0#include <dt-bindings/interconnect/qcom,sdm845.h>
-> > > > @@ -3372,7 +3373,8 @@ fastrpc {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0qcom,glink-channels =3D
-> > > > "fastrpcglink-apps-dsp";
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0label =3D "sdsp";
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0qcom,non-secure-domain;
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0qcom,vmids =3D <0x3 0xF
-> > > > 0x5
-> > > > 0x6>;
-> > >=20
-> > > Didn't you just add it in previous patch? Don't add incorrect
-> > > code
-> > > which
-> > > you immediately change.
-> > >=20
-> >=20
-> > Both are similar, the code is in fact the same. I followed what
-> > Konrad
-> > suggested in v3 to make a patch on top:
->=20
-> I don't understand. Device nodes are similar, but they are different?
-> If
-> you add a line in patch X and change it in patch X+1, then something
-> is
-> wrong. Isn't this the case here or these are different device nodes?
->=20
+From the pwm-fan driver point of view, the properties are not supported
+and I couldn't find any indication that they could have been used in the
+past.
 
-They are the same node.
-In the original patch the values are hex values, but Konrad asked to
-make a patch on top depending on the qcom scm header which has these
-magic hex values with defines.
-I can make the defines as default, no problem. Will do in v5.
+Hence I'm not sure adding them to the binding is the proper way to
+handle this issue.
 
-Kind regards,
-Dylan
+Thanks,
+Cristian
 
->=20
-> Best regards,
-> Krzysztof
->=20
-
+> Regards,
+> Angelo
+> 
+>> $ git grep "cooling-.*-state"
+>>
+>> arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi:
+>> cooling-min-state = <0>;
+>> arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi:
+>> cooling-max-state = <3>;
+>> arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts:
+>> cooling-min-state = <0>;
+>> arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts:
+>> cooling-max-state = <3>;
+>> arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts:        cooling-min-state = <0>;
+>> arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts:        cooling-max-state = <3>;
+>> arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dtsi:       
+>> cooling-min-state = <0>;
+>> arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dtsi:       
+>> cooling-max-state = <9>;
+>>
+> 
+> 
+> 
