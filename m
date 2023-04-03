@@ -2,144 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23046D3E63
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041656D3E66
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjDCHs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 03:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S231713AbjDCHtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 03:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjDCHsz (ORCPT
+        with ESMTP id S231753AbjDCHtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 03:48:55 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0411644AE;
-        Mon,  3 Apr 2023 00:48:53 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3336VYA2031952;
-        Mon, 3 Apr 2023 09:48:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=lbrDY8Ppljv7KIzDAhEp83EYJqZkiErv5p1W4oG7g5k=;
- b=PM/TjdUTTRv7HcYJYnvyYOweQIo3jLh3k9NJFkAB/TU53eldc3KtqlJn2GA/vcU9x4Hr
- lFX2bQ64LeKl8TT0frZPCFoMUgYmp3uaEDwqkL6JDbP9IGaMONiQbZe5kmvZ9/KdXzNG
- oZfzCJ69+8DyX5+wrFBNb+/ehOkzUqrf2DidTOTGFW4qsk4ZBp8WcMTYBUFwE2eHam3/
- DAen+x9N5TUv2ncdxTG+aCjfzpFRwtvV5fkiabI9EpKDCRizZv9rwfDkIsgfLDpERtgz
- d7oplG72nWe8hzUy12lFw7Ctz1PKmj8ZrNqVnz7nWgHi30CVRLAryy63/4E9aQjkPMhG jw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ppbgm11ev-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Apr 2023 09:48:29 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3109010002A;
-        Mon,  3 Apr 2023 09:48:28 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2AD5B2122F3;
-        Mon,  3 Apr 2023 09:48:28 +0200 (CEST)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Mon, 3 Apr
- 2023 09:48:27 +0200
-Message-ID: <509b45f9-b6f1-d6a1-c76f-1047efc2334c@foss.st.com>
-Date:   Mon, 3 Apr 2023 09:48:26 +0200
+        Mon, 3 Apr 2023 03:49:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249D14496
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 00:48:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680508117;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gg+D4CsPnhSBX6Ep/vVZ03qpNvjb7Nx0ShML5od8/7w=;
+        b=dpK8+CCEYMOjVW1FKWdtH4lgkac6A33uwEw0dVCcVp2gKueB/eJery2K5qYv8fdetpO9RK
+        Hxa2GD11D65BEVqiDawXGT7hk1xR4yY1MF/qKT3Mt16DN/8ZtKxFs226tiokXB8JXX7tze
+        KGw1lP6Gqoem56PWJg7BlxqDc0rxEmc=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-230-SDjpBhyTPDCKmESRoQEiog-1; Mon, 03 Apr 2023 03:48:34 -0400
+X-MC-Unique: SDjpBhyTPDCKmESRoQEiog-1
+Received: by mail-wr1-f70.google.com with SMTP id l11-20020adfc78b000000b002db44581302so2979808wrg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 00:48:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680508113;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gg+D4CsPnhSBX6Ep/vVZ03qpNvjb7Nx0ShML5od8/7w=;
+        b=69ggDYqL5sdh4b2DKmD9am6/02AHmHh5ktmepXGZBZOrRDRHfb3TD+UQPbHzxsQf0+
+         YHQ8aGJ8Tekgg5ZJiOeP8kthaSDj2uErrmcvZDtPHpABVLjLYsqJ3+qUb+0rEhNxJEVW
+         4lG7vmm1AoxtZtDo97XuZCE3BNpFvZtUMQfyHq2mg6LdicRtIgbMLrWZMe8Eg+my29od
+         mgfwM77TxU98xSo3DMUVKQYZULmS1g5ij2l5PolrfvkyjpZRkiZ3jB9wH/Fpa9/APZAZ
+         SPzzW5L0QMhX95GshbuIa7xh2tetg607Q3NxODapPVwC1Q67ipcqWSuWFgcnNapgFB9x
+         mTkQ==
+X-Gm-Message-State: AO0yUKXbEqNS6y/rHYbjZfe31SeCrjAfzYV7w/DgfyumIy8MMcXekwLk
+        FIeAIO+ntClGX151UnULnZ5S/w/v/2vlXa2flD2FwA0dqp32JakSnbN0LCcJHXc0Q3Y2gOyYKTQ
+        6wFV5LKezkePKmYhHyU85jY3V
+X-Received: by 2002:a05:600c:2043:b0:3ee:4678:dde with SMTP id p3-20020a05600c204300b003ee46780ddemr26761754wmg.27.1680508113587;
+        Mon, 03 Apr 2023 00:48:33 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+hIQJPk9AeYQ1jOGL8hezQ5AK7xpXic1LUhQyAL2YtCFuergW3icXKd9hRk2LAG4cOh0BRKQ==
+X-Received: by 2002:a05:600c:2043:b0:3ee:4678:dde with SMTP id p3-20020a05600c204300b003ee46780ddemr26761730wmg.27.1680508113216;
+        Mon, 03 Apr 2023 00:48:33 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
+        by smtp.gmail.com with ESMTPSA id q13-20020a7bce8d000000b003ef71d541cbsm11216347wmj.1.2023.04.03.00.48.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 00:48:32 -0700 (PDT)
+Message-ID: <cf4595d5-8b6c-efee-a721-c908bb3e3a5d@redhat.com>
+Date:   Mon, 3 Apr 2023 09:48:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1] ARM: dts: stm32: prtt1c: Add PoDL PSE regulator nodes
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 01/29] Revert "userfaultfd: don't fail on unrecognized
+ features"
 Content-Language: en-US
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-CC:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@pengutronix.de>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230323123242.3763673-1-o.rempel@pengutronix.de>
- <1a2d16c8-8c16-5fcc-7906-7b454a81922f@foss.st.com>
- <20230328110247.GE15196@pengutronix.de>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230328110247.GE15196@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-03_04,2023-03-31_01,2023-02-09_01
-X-Spam-Status: No, score=-3.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        linux-stable <stable@vger.kernel.org>
+References: <20230330155707.3106228-1-peterx@redhat.com>
+ <20230330155707.3106228-2-peterx@redhat.com>
+ <CAJHvVcgDZBi6pH0BD12sQ3T+7Kr9exX1QU3-YLTd1voYhVBN0w@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAJHvVcgDZBi6pH0BD12sQ3T+7Kr9exX1QU3-YLTd1voYhVBN0w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oleksij
-
-On 3/28/23 13:02, Oleksij Rempel wrote:
-> On Tue, Mar 28, 2023 at 11:58:34AM +0200, Alexandre TORGUE wrote:
->> Hi Oleksij
+On 30.03.23 21:04, Axel Rasmussen wrote:
+> On Thu, Mar 30, 2023 at 8:57 AM Peter Xu <peterx@redhat.com> wrote:
 >>
->> On 3/23/23 13:32, Oleksij Rempel wrote:
->>> This commit introduces Power over Data Line (PoDL) Power Source
->>> Equipment (PSE) regulator nodes to the PRTT1C devicetree. The addition
->>> of these nodes enables support for PoDL in PRTT1C devices, allowing
->>> power delivery and data transmission over a single twisted pair.
->>>
->>> The new PoDL PSE regulator nodes provide voltage capability information
->>> of the current board design, which can be used as a hint for system
->>> administrators when configuring and managing power settings. This
->>> update enhances the versatility and simplifies the power management of
->>> PRTT1C devices while ensuring compatibility with connected Powered
->>> Devices (PDs).
->>>
->>> After applying this patch, the power delivery can be controlled from
->>> user space with a patched [1] ethtool version using the following commands:
->>>     ethtool --set-pse t1l2 podl-pse-admin-control enable
->>> to enable power delivery, and
->>>     ethtool --show-pse t1l2
->>> to display the PoDL PSE settings.
->>>
->>> By integrating PoDL PSE support into the PRTT1C devicetree, users can
->>> benefit from streamlined power and data connections in their
->>> deployments, improving overall system efficiency and reducing cabling
->>> complexity.
->>>
->>> [1] https://lore.kernel.org/all/20230317093024.1051999-1-o.rempel@pengutronix.de/
->>>
->>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
->>> ---
+>> This is a proposal to revert commit 914eedcb9ba0ff53c33808.
 >>
->> Please, fix the introduction of those new yaml validation errors:
+>> I found this when writting a simple UFFDIO_API test to be the first unit
+>> test in this set.  Two things breaks with the commit:
 >>
->> arch/arm/boot/dts/stm32mp151a-prtt1c.dtb: ethernet-pse-1: $nodename:0:
->> 'ethernet-pse-1' does not match '^ethernet-pse(@.*)?$'
->>          From schema:
->> /Documentation/devicetree/bindings/net/pse-pd/podl-pse-regulator.yaml
->> arch/arm/boot/dts/stm32mp151a-prtt1c.dtb: ethernet-pse-2: $nodename:0:
->> 'ethernet-pse-2' does not match '^ethernet-pse(@.*)?$'
->>          From schema: /local/home/frq08678/STLINUX/kernel/my-kernel/stm32/Documentation/devicetree/bindings/net/pse-pd/podl-pse-regulator.yaml
+>>    - UFFDIO_API check was lost and missing.  According to man page, the
+>>    kernel should reject ioctl(UFFDIO_API) if uffdio_api.api != 0xaa.  This
+>>    check is needed if the api version will be extended in the future, or
+>>    user app won't be able to identify which is a new kernel.
 > 
-> Using ethernet-pse@1 will require to use "reg" or "ranges" properties.
-> Which makes no sense in this use case. I need to fix the schema instead by
-> allowing this patter with following regex: "^ethernet-pse(@.*|-[0-9a-f])*$"
+> 100% agreed, this was a mistake.
 > 
-> Should I send schema fix together with this patch?
+>>
+>>    - Feature flags checks were removed, which means UFFDIO_API with a
+>>    feature that does not exist will also succeed.  According to the man
+>>    page, we should (and it makes sense) to reject ioctl(UFFDIO_API) if
+>>    unknown features passed in.
+> 
+> I still strongly disagree with reverting this part, my feeling is
+> still that doing so makes things more complicated for no reason.
+> 
+> Re: David's point, it's clearly wrong to change semantics so a thing
+> that used to work now fails. But this instead makes it more permissive
+> - existing userspace programs continue to work as-is, but *also* one
+> can achieve the same thing more simply (combine probing +
+> configuration into one step). I don't see any problem with that,
+> generally.
+> 
+> But, if David and others don't find my argument convincing, it isn't
+> the end of the world. It just means I have to go update my userspace
+> code to be a bit more complicated. :)
 
-Yes you can. As soon as Rob or Krzysztof review it I'll apply both on 
-stm32-next.
 
-Thanks
-Alex
+I'd probably find it more convincing if we'd started out with that 
+approach ;) . User space would have to deal with the behavior of old 
+kernels either way already? IOW, old kernels would reject the new flags, 
+new kernels would not reject them but mask them out. So changing that 
+behavior after the effects is somewhat suboptimal IMHO ... and rather 
+makes things more complicated.
 
+-- 
+Thanks,
 
-
-
-> Regards,
-> Oleksij
+David / dhildenb
 
