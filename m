@@ -2,102 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367716D45D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAF26D45D9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbjDCNa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S232621AbjDCNbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbjDCNaz (ORCPT
+        with ESMTP id S231816AbjDCNbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:30:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B42A4;
-        Mon,  3 Apr 2023 06:30:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Apr 2023 09:31:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839E81FC1;
+        Mon,  3 Apr 2023 06:31:03 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4B0661B44;
-        Mon,  3 Apr 2023 13:30:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD924C433D2;
-        Mon,  3 Apr 2023 13:30:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680528653;
-        bh=gkl9GJzTmsB5rcAcfYLEeF2AGlRRvqNK46WjzttEC+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y4heVgHxnHHk+SR9DYW1yfI1s8uJMUtEql8IsErHkwN1QcZvm9puL+Hl/9ZV53BUk
-         cE3mH8laTXfuRBwINC4vjQHrNcbwzi6IFO+1bmRSNc9blc9TsGYZRknRJj1g+VuEtf
-         V2/EXiWZVsxSsaQyDDBHAl+1vxspuWjraNrsv5Qs=
-Date:   Mon, 3 Apr 2023 15:30:51 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Cai Xinchen <caixinchen1@huawei.com>
-Cc:     longman@redhat.com, lizefan.x@bytedance.com, tj@kernel.org,
-        hannes@cmpxchg.org, sashal@kernel.org, mkoutny@suse.com,
-        zhangqiao22@huawei.com, juri.lelli@redhat.com,
-        penguin-kernel@i-love.sakura.ne.jp, stable@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4.19 0/3] Backport patches to fix threadgroup_rwsem
- <-> cpus_read_lock() deadlock
-Message-ID: <2023040343-dingbat-undermine-3b2d@gregkh>
-References: <20230320011507.129441-1-caixinchen1@huawei.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AF2216600013;
+        Mon,  3 Apr 2023 14:31:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680528661;
+        bh=Ud9yCIjB8jwMmXsFScRcYrf42votU0cIRo7MP8MJdsY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DztboHq63LfR00xbNZy1e6rjnslVuZLtPvi5e9+0B3QHJSGFlmpKpR7lqvd4UoV6C
+         dKAU34GLYM2wh8nQVA1bJBDoYheifd7teJ8akpt9aMnyPVj4S39D3QA0/YZMhV54PO
+         F/gn56tFNb+fgVkvIBu0I5LAv+hgX7OhQT+aemWf+xTuyr/s/AWeMo7YbbqEZCzav9
+         sHhsv/ztLZoXRNzuMn+hHs/VoO/STx8O0gkruTB2PFpwguiK06jgFegBjMoDHj4wty
+         DfEWRYuaJ4vL8g6oAaBfBrpzl02RnL/nW5FxH5BPXt1aFyW/QgZ/nO612BBiDnSa7Q
+         GJyLSknky4+Xg==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     thierry.reding@gmail.com
+Cc:     u.kleine-koenig@pengutronix.de, matthias.bgg@gmail.com,
+        weiqing.kong@mediatek.com, jitao.shi@mediatek.com,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, wenst@chromium.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH RESEND 0/2] pwm: mtk-disp: Fix backlight configuration at boot
+Date:   Mon,  3 Apr 2023 15:30:52 +0200
+Message-Id: <20230403133054.319070-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320011507.129441-1-caixinchen1@huawei.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 01:15:04AM +0000, Cai Xinchen wrote:
-> I am very sorry. My gcc version is 7.5 and it does not report error.
-> 
-> We have a deadlock problem which can be solved by commit 4f7e7236435ca
-> ("cgroup: Fix threadgroup_rwsem <-> cpus_read_lock() deadlock").
-> However, it makes lock order of cpus_read_lock and cpuset_mutex
-> wrong in v4.19. The call sequence is as follows:
-> cgroup_procs_write()
->         cgroup_procs_write_start()
->                 get_online_cpus(); // cpus_read_lock()
->                 percpu_down_write(&cgroup_threadgroup_rwsem)
->         cgroup_attach_task
->                 cgroup_migrate
->                         cgroup_migrate_execute
->                                 ss->attach (cpust_attach)
->                                         mutex_lock(&cpuset_mutex)
-> it seems hard to make cpus_read_lock is locked before
-> cgroup_threadgroup_rwsem and cpuset_mutex is locked before
-> cpus_read_lock unless backport the commit d74b27d63a8beb
-> ("cgroup/cpuset: Change cpuset_rwsem and hotplug lock order")
-> 
-> Changes in v2:
->         * Add #include <linux/cpu.h> in kernel/cgroup/cgroup.c to
->          avoid some compile error.
->         * Exchange get_online_cpus() location in cpuset_attach to
->          keep cpu_hotplug_lock->cpuset_mutex order, although it will
->           be remove by ("cgroup: Fix threadgroup_rwsem <->
->          cpus_read_lock() deadlock")
-> 
-> Juri Lelli (1):
->   cgroup/cpuset: Change cpuset_rwsem and hotplug lock order
-> 
-> Tejun Heo (1):
->   cgroup: Fix threadgroup_rwsem <-> cpus_read_lock() deadlock
-> 
-> Tetsuo Handa (1):
->   cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all()
-> 
->  include/linux/cpuset.h    |  8 +++----
->  kernel/cgroup/cgroup-v1.c |  3 +++
->  kernel/cgroup/cgroup.c    | 50 +++++++++++++++++++++++++++++++++++----
->  kernel/cgroup/cpuset.c    | 25 ++++++++++++--------
->  4 files changed, 67 insertions(+), 19 deletions(-)
+Since the pwm-mtk-disp driver was fixed to get PWM_EN state from the
+right register, an old two-wrongs-make-one-right issue emerged: as a
+result, MT8192 Asurada Spherion got no backlight at boot unless a
+suspend/resume cycle was performed.
+Also, the backlight would sometimes not get updated with the requested
+value, requiring the user to change it back and forth until it worked.
 
-Now queued up, thanks.
+This series fixes both of the aforementioned issues found on MT8192
+and similar issues on MT8183 Chromebooks.
 
-greg k-h
+AngeloGioacchino Del Regno (2):
+  pwm: mtk-disp: Disable shadow registers before setting backlight
+    values
+  pwm: mtk-disp: Configure double buffering before reading in
+    .get_state()
+
+ drivers/pwm/pwm-mtk-disp.c | 34 +++++++++++++++++++++++-----------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
+
+-- 
+2.39.0
+
