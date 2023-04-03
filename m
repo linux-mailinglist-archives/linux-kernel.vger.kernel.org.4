@@ -2,211 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76B16D3D51
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EC66D3D55
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 08:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbjDCG1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 02:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
+        id S231408AbjDCG2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 02:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDCG1x (ORCPT
+        with ESMTP id S230095AbjDCG2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 02:27:53 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF42C869B;
-        Sun,  2 Apr 2023 23:27:51 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3336RQjm013056;
-        Mon, 3 Apr 2023 01:27:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680503246;
-        bh=IUjGDRnpRzPURCV8uSTZlVgPtZ8lAY7F0OvRLdEU+aM=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=CfaFxK6qbYDNWlbgSSFb9bNnYY5VOW5Wcd2i7FhxaSb8m8FW4zJWxUY9rnB9E/TNu
-         GcGpYYjzDvUrVhbRYmhqtJYPPiTZ32ZRFaou5Fkmhid8Uw+HnxSqrfc6D3uXyg2bOU
-         YxbMtHaeQh6wAk9SZMZX0xu2kl8Mkj48lPjrkoSA=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3336RQrG028255
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 3 Apr 2023 01:27:26 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
- Apr 2023 01:27:25 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 3 Apr 2023 01:27:25 -0500
-Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3336RM9E011886;
-        Mon, 3 Apr 2023 01:27:22 -0500
-Message-ID: <be166ab3-29f9-a18d-bbbd-34e7828453e4@ti.com>
-Date:   Mon, 3 Apr 2023 11:57:21 +0530
+        Mon, 3 Apr 2023 02:28:30 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBB91729
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 23:28:29 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id u38so18307086pfg.10
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 23:28:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1680503308;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8EZusFPyKlVLlAuor8AkBQgzEgMdx910d6xeQgDfz4M=;
+        b=fIWatEyLoScrepvqscXmHq9GJz2vt6UKbk2sx3R0X+13Ep7wmpbX4g8JC2uMSoe6XB
+         KcNhgN4ewZZlPO461eyunk4MsIBmHCgOz8gx3BA3plKGpVJRV+F7PDSdfyqqobevZIvL
+         K0sMWYD2YsXXsMFonhLk1/F+kJOnS33tGMao7Z67GJsryB9P70aGe6xBSFwppQAG4TAa
+         7xNcZVIYgsDXpTkAM2Wi1Z+gXhellW906rdkj9Xei1JeDf7G1KbSKsLQke+ekM5c8Vqh
+         hC8nUD+Bb5M5f/wv1rkqjPqr8iMHkU0OAXOLFI7fjQzzUsQrusXthvFiDY7bzfMon2ZK
+         TXVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680503308;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8EZusFPyKlVLlAuor8AkBQgzEgMdx910d6xeQgDfz4M=;
+        b=DWOvNSMxaE0UAEcRIEt8P+g5PUvw6iZUuLIgKdT2MumMfeDRCuYCwTKwUzhFdxNa8F
+         ptZH+likD3QmKhQoAg6hssEvDAXW0H7IccPlq077N4sG5Ff4aWWDoD0/bNrR6+b9gxiA
+         pGslqgD58oTU/rTmAcKK0AC28XVimut7pRPyDvnO0SqBxcBuS8Fckb65RBfqJUXNUyDI
+         ouFfa5goXQRfAkCSUpQT2NEYzvwwFQLjRnBe7KC6A3NnOGeCO51DjBidWmVpM9BLp4Jl
+         +NrK7mlExYkpsFrmwTrWmV++bvCO9JuDS3HHLSjmQqSjKIzbUHTjIOY0jzdKzdmYVsly
+         mXKg==
+X-Gm-Message-State: AAQBX9eQhKfTEtDFlifUT5XgLiuWg2soOvWtSQZrtcwQYTXvcUIiST1j
+        6HInii4JolTQtok9rLy/sIVIGg==
+X-Google-Smtp-Source: AKy350ZnTBEW9Zpd0Fn5hv+VcvWBXlRzv4xlVmZ3piblvUgpvHgtuUQpA8IsT1/HfkkszbAuZksayw==
+X-Received: by 2002:a62:6346:0:b0:626:cc72:51a7 with SMTP id x67-20020a626346000000b00626cc7251a7mr34281634pfb.9.1680503308511;
+        Sun, 02 Apr 2023 23:28:28 -0700 (PDT)
+Received: from GL4FX4PXWL.bytedance.net ([139.177.225.248])
+        by smtp.gmail.com with ESMTPSA id k14-20020aa7820e000000b00625ee4c50eesm6013919pfi.77.2023.04.02.23.28.24
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 02 Apr 2023 23:28:28 -0700 (PDT)
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+To:     glider@google.com, elver@google.com, dvyukov@google.com,
+        akpm@linux-foundation.org
+Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Peng Zhang <zhangpeng.00@bytedance.com>
+Subject: [PATCH] mm: kfence: Improve the performance of __kfence_alloc() and __kfence_free()
+Date:   Mon,  3 Apr 2023 14:27:57 +0800
+Message-Id: <20230403062757.74057-1-zhangpeng.00@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <rogerq@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH net-next 2/2] net: ethernet: ti: am65-cpsw: Enable USXGMII
- mode for J784S4 CPSW9G
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-References: <20230331065110.604516-1-s-vadapalli@ti.com>
- <20230331065110.604516-3-s-vadapalli@ti.com>
- <ZCaSXQFZ/e/JIDEj@shell.armlinux.org.uk>
- <54c3964b-5dd8-c55e-08db-61df4a07797c@ti.com>
- <ZCaYve8wYl15YRxh@shell.armlinux.org.uk>
- <7a9c96f4-6a94-4a2c-18f5-95f7246e10d5@ti.com>
- <ZCasBMNxaWk2+XVO@shell.armlinux.org.uk>
- <dea9ae26-e7f2-1052-58cd-f7975165aa96@ti.com>
- <ZCbAE7IIc8HcOdxl@shell.armlinux.org.uk>
- <1477e0c3-bb92-72b0-9804-0393c34571d3@ti.com>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <1477e0c3-bb92-72b0-9804-0393c34571d3@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Russell,
+In __kfence_alloc() and __kfence_free(), we will set and check canary.
+Assuming that the size of the object is close to 0, nearly 4k memory
+accesses are required because setting and checking canary is executed
+byte by byte.
 
-On 31/03/23 19:16, Siddharth Vadapalli wrote:
-> 
-> 
-> On 31-03-2023 16:42, Russell King (Oracle) wrote:
->> On Fri, Mar 31, 2023 at 04:23:16PM +0530, Siddharth Vadapalli wrote:
->>>
->>>
->>> On 31/03/23 15:16, Russell King (Oracle) wrote:
->>>> On Fri, Mar 31, 2023 at 02:55:56PM +0530, Siddharth Vadapalli wrote:
->>>>> Russell,
->>>>>
->>>>> On 31/03/23 13:54, Russell King (Oracle) wrote:
->>>>>> On Fri, Mar 31, 2023 at 01:35:10PM +0530, Siddharth Vadapalli wrote:
->>>>>>> Hello Russell,
->>>>>>>
->>>>>>> Thank you for reviewing the patch.
->>>>>>>
->>>>>>> On 31/03/23 13:27, Russell King (Oracle) wrote:
->>>>>>>> On Fri, Mar 31, 2023 at 12:21:10PM +0530, Siddharth Vadapalli wrote:
->>>>>>>>> TI's J784S4 SoC supports USXGMII mode. Add USXGMII mode to the
->>>>>>>>> extra_modes member of the J784S4 SoC data. Additionally, configure the
->>>>>>>>> MAC Control register for supporting USXGMII mode. Also, for USXGMII
->>>>>>>>> mode, include MAC_5000FD in the "mac_capabilities" member of struct
->>>>>>>>> "phylink_config".
->>>>>>>>
->>>>>>>> I don't think TI "get" phylink at all...
->>>>>>>>
->>>>>>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>>>>>> index 4b4d06199b45..ab33e6fe5b1a 100644
->>>>>>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>>>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>>>>>> @@ -1555,6 +1555,8 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
->>>>>>>>>  		mac_control |= CPSW_SL_CTL_GIG;
->>>>>>>>>  	if (interface == PHY_INTERFACE_MODE_SGMII)
->>>>>>>>>  		mac_control |= CPSW_SL_CTL_EXT_EN;
->>>>>>>>> +	if (interface == PHY_INTERFACE_MODE_USXGMII)
->>>>>>>>> +		mac_control |= CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN;
->>>>>>>>
->>>>>>>> The configuration of the interface mode should *not* happen in
->>>>>>>> mac_link_up(), but should happen in e.g. mac_config().
->>>>>>>
->>>>>>> I will move all the interface mode associated configurations to mac_config() in
->>>>>>> the v2 series.
->>>>>>
->>>>>> Looking at the whole of mac_link_up(), could you please describe what
->>>>>> effect these bits are having:
->>>>>>
->>>>>> 	CPSW_SL_CTL_GIG
->>>>>> 	CPSW_SL_CTL_EXT_EN
->>>>>> 	CPSW_SL_CTL_IFCTL_A
->>>>>
->>>>> CPSW_SL_CTL_GIG corresponds to enabling Gigabit mode (full duplex only).
->>>>> CPSW_SL_CTL_EXT_EN when set enables in-band mode of operation and when cleared
->>>>> enables forced mode of operation.
->>>>> CPSW_SL_CTL_IFCTL_A is used to set the RMII link speed (0=10 mbps, 1=100 mbps).
->>>>
->>>> Okay, so I would do in mac_link_up():
->>>>
->>>> 	/* RMII needs to be manually configured for 10/100Mbps */
->>>> 	if (interface == PHY_INTERFACE_MODE_RMII && speed == SPEED_100)
->>>> 		mac_control |= CPSW_SL_CTL_IFCTL_A;
->>>>
->>>> 	if (speed == SPEED_1000)
->>>> 		mac_control |= CPSW_SL_CTL_GIG;
->>>> 	if (duplex)
->>>> 		mac_control |= CPSW_SL_CTL_FULLDUPLEX;
->>>>
->>>> I would also make mac_link_up() do a read-modify-write operation to
->>>> only affect the bits that it is changing.
->>>
->>> This is the current implementation except for the SGMII mode associated
->>> operation that I had recently added. I will fix that. Also, the
->>> cpsw_sl_ctl_set() function which writes the mac_control value performs a read
->>> modify write operation.
->>>
->>>>
->>>> Now, for SGMII, I would move setting CPSW_SL_CTL_EXT_EN to mac_config()
->>>> to enable in-band mode - don't we want in-band mode enabled all the
->>>> time while in SGMII mode so the PHY gets the response from the MAC?
->>>
->>> Thank you for pointing it out. I will move that to mac_config().
->>>
->>>>
->>>> Lastly, for RGMII at 10Mbps, you seem to suggest that you need RGMII
->>>> in-band mode enabled for that - but if you need RGMII in-band for
->>>> 10Mbps, wouldn't it make sense for the other speeds as well? If so,
->>>> wouldn't that mean that CPSW_SL_CTL_EXT_EN can always be set for
->>>> RGMII no matter what speed is being used?
->>>
->>> The CPSW MAC does not support forced mode at 10 Mbps RGMII. For this reason, if
->>> RGMII 10 Mbps is requested, it is set to in-band mode.
->>
->> What I'm saying is that if we have in-band signalling that is reliable
->> for a particular interface mode, why not always use it, rather than
->> singling out one specific speed as an exception? Does it not work in
->> 100Mbps and 1Gbps?
+canary is now defined like this:
+KFENCE_CANARY_PATTERN(addr) ((u8)0xaa ^ (u8)((unsigned long)(addr) & 0x7))
 
-While the CPSW MAC supports RGMII in-band status operation, the link partner
-might not support it. I have also observed that forced mode is preferred to
-in-band mode as implemented for another driver:
-commit ade64eb5be9768e40c90ecb01295416abb2ddbac
-net: dsa: microchip: Disable RGMII in-band status on KSZ9893
+Observe that canary is only related to the lower three bits of the
+address, so every 8 bytes of canary are the same. We can access 8-byte
+canary each time instead of byte-by-byte, thereby optimizing nearly 4k
+memory accesses to 4k/8 times.
 
-and in the mail thread at:
-https://lore.kernel.org/netdev/20200905160647.GJ3164319@lunn.ch/
-based on Andrew's suggestion, using forced mode appears to be better.
+Use the bcc tool funclatency to measure the latency of __kfence_alloc()
+and __kfence_free(), the numbers (deleted the distribution of latency)
+is posted below. Though different object sizes will have an impact on the
+measurement, we ignore it for now and assume the average object size is
+roughly equal.
 
-Additionally, I have verified that switching to in-band status causes a
-regression. Thus, I will prefer keeping it in forced mode for 100 and 1000 Mbps
-RGMII mode which is the existing implementation in the driver. Please let me know.
+Before playing patch:
+__kfence_alloc:
+avg = 5055 nsecs, total: 5515252 nsecs, count: 1091
+__kfence_free:
+avg = 5319 nsecs, total: 9735130 nsecs, count: 1830
 
-Regards,
-Siddharth.
+After playing patch:
+__kfence_alloc:
+avg = 3597 nsecs, total: 6428491 nsecs, count: 1787
+__kfence_free:
+avg = 3046 nsecs, total: 3415390 nsecs, count: 1121
 
-> 
-> In-band RGMII is supported for speeds of 10, 100 and 1000 Mbps.
-> Unfortunately, I am not aware of the reason why RGMII at speeds 100 and
-> 1000 Mbps was implemented in the driver in forced mode. As suggested by
-> you, I will work on implementing it in in-band mode for all speeds and
-> verify that it works, following which I will post the v2 of this series,
-> with the following changes based on your feedback:
-> 1. All interface mode specific configuration will be moved to mac_config().
-> 2. Since CPSW MAC supports USXGMII mode, MAC_5000FD will be added to the
-> list of mac_capabilites unconditionally, unlike the current implementation.
-> 3. In-band mode of operation will be enabled for all interface modes by
-> default.
-> 
-> Regards,
-> Siddharth.
+The numbers indicate that there is ~30% - ~40% performance improvement.
+
+Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+---
+ mm/kfence/core.c   | 71 +++++++++++++++++++++++++++++++++-------------
+ mm/kfence/kfence.h | 10 ++++++-
+ mm/kfence/report.c |  2 +-
+ 3 files changed, 62 insertions(+), 21 deletions(-)
+
+diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+index 79c94ee55f97..0b1b1298c738 100644
+--- a/mm/kfence/core.c
++++ b/mm/kfence/core.c
+@@ -297,20 +297,13 @@ metadata_update_state(struct kfence_metadata *meta, enum kfence_object_state nex
+ 	WRITE_ONCE(meta->state, next);
+ }
+ 
+-/* Write canary byte to @addr. */
+-static inline bool set_canary_byte(u8 *addr)
+-{
+-	*addr = KFENCE_CANARY_PATTERN(addr);
+-	return true;
+-}
+-
+ /* Check canary byte at @addr. */
+ static inline bool check_canary_byte(u8 *addr)
+ {
+ 	struct kfence_metadata *meta;
+ 	unsigned long flags;
+ 
+-	if (likely(*addr == KFENCE_CANARY_PATTERN(addr)))
++	if (likely(*addr == KFENCE_CANARY_PATTERN_U8(addr)))
+ 		return true;
+ 
+ 	atomic_long_inc(&counters[KFENCE_COUNTER_BUGS]);
+@@ -323,11 +316,27 @@ static inline bool check_canary_byte(u8 *addr)
+ 	return false;
+ }
+ 
+-/* __always_inline this to ensure we won't do an indirect call to fn. */
+-static __always_inline void for_each_canary(const struct kfence_metadata *meta, bool (*fn)(u8 *))
++static inline void set_canary(const struct kfence_metadata *meta)
+ {
+ 	const unsigned long pageaddr = ALIGN_DOWN(meta->addr, PAGE_SIZE);
+-	unsigned long addr;
++	unsigned long addr = pageaddr;
++
++	/*
++	 * The canary may be written to part of the object memory, but it does
++	 * not affect it. The user should initialize the object before using it.
++	 */
++	for (; addr < meta->addr; addr += sizeof(u64))
++		*((u64 *)addr) = KFENCE_CANARY_PATTERN_U64;
++
++	addr = ALIGN_DOWN(meta->addr + meta->size, sizeof(u64));
++	for (; addr - pageaddr < PAGE_SIZE; addr += sizeof(u64))
++		*((u64 *)addr) = KFENCE_CANARY_PATTERN_U64;
++}
++
++static inline void check_canary(const struct kfence_metadata *meta)
++{
++	const unsigned long pageaddr = ALIGN_DOWN(meta->addr, PAGE_SIZE);
++	unsigned long addr = pageaddr;
+ 
+ 	/*
+ 	 * We'll iterate over each canary byte per-side until fn() returns
+@@ -339,14 +348,38 @@ static __always_inline void for_each_canary(const struct kfence_metadata *meta,
+ 	 */
+ 
+ 	/* Apply to left of object. */
+-	for (addr = pageaddr; addr < meta->addr; addr++) {
+-		if (!fn((u8 *)addr))
++	for (; meta->addr - addr >= sizeof(u64); addr += sizeof(u64)) {
++		if (unlikely(*((u64 *)addr) != KFENCE_CANARY_PATTERN_U64))
+ 			break;
+ 	}
+ 
+-	/* Apply to right of object. */
+-	for (addr = meta->addr + meta->size; addr < pageaddr + PAGE_SIZE; addr++) {
+-		if (!fn((u8 *)addr))
++	/*
++	 * If the canary is damaged in a certain 64 bytes, or the canay memory
++	 * cannot be completely covered by multiple consecutive 64 bytes, it
++	 * needs to be checked one by one.
++	 */
++	for (; addr < meta->addr; addr++) {
++		if (unlikely(!check_canary_byte((u8 *)addr)))
++			break;
++	}
++
++	/*
++	 * Apply to right of object.
++	 * For easier implementation, check from high address to low address.
++	 */
++	addr = pageaddr + PAGE_SIZE - sizeof(u64);
++	for (; addr >= meta->addr + meta->size ; addr -= sizeof(u64)) {
++		if (unlikely(*((u64 *)addr) != KFENCE_CANARY_PATTERN_U64))
++			break;
++	}
++
++	/*
++	 * Same as above, checking byte by byte, but here is the reverse of
++	 * the above.
++	 */
++	addr = addr + sizeof(u64) - 1;
++	for (; addr >= meta->addr + meta->size; addr--) {
++		if (unlikely(!check_canary_byte((u8 *)addr)))
+ 			break;
+ 	}
+ }
+@@ -434,7 +467,7 @@ static void *kfence_guarded_alloc(struct kmem_cache *cache, size_t size, gfp_t g
+ #endif
+ 
+ 	/* Memory initialization. */
+-	for_each_canary(meta, set_canary_byte);
++	set_canary(meta);
+ 
+ 	/*
+ 	 * We check slab_want_init_on_alloc() ourselves, rather than letting
+@@ -495,7 +528,7 @@ static void kfence_guarded_free(void *addr, struct kfence_metadata *meta, bool z
+ 	alloc_covered_add(meta->alloc_stack_hash, -1);
+ 
+ 	/* Check canary bytes for memory corruption. */
+-	for_each_canary(meta, check_canary_byte);
++	check_canary(meta);
+ 
+ 	/*
+ 	 * Clear memory if init-on-free is set. While we protect the page, the
+@@ -751,7 +784,7 @@ static void kfence_check_all_canary(void)
+ 		struct kfence_metadata *meta = &kfence_metadata[i];
+ 
+ 		if (meta->state == KFENCE_OBJECT_ALLOCATED)
+-			for_each_canary(meta, check_canary_byte);
++			check_canary(meta);
+ 	}
+ }
+ 
+diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
+index 600f2e2431d6..2aafc46a4aaf 100644
+--- a/mm/kfence/kfence.h
++++ b/mm/kfence/kfence.h
+@@ -21,7 +21,15 @@
+  * lower 3 bits of the address, to detect memory corruptions with higher
+  * probability, where similar constants are used.
+  */
+-#define KFENCE_CANARY_PATTERN(addr) ((u8)0xaa ^ (u8)((unsigned long)(addr) & 0x7))
++#define KFENCE_CANARY_PATTERN_U8(addr) ((u8)0xaa ^ (u8)((unsigned long)(addr) & 0x7))
++
++/*
++ * Define a continuous 8-byte canary starting from a multiple of 8. The canary
++ * of each byte is only related to the lowest three bits of its address, so the
++ * canary of every 8 bytes is the same. 64-bit memory can be filled and checked
++ * at a time instead of byte by byte to improve performance.
++ */
++#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^ (u64)(0x0706050403020100))
+ 
+ /* Maximum stack depth for reports. */
+ #define KFENCE_STACK_DEPTH 64
+diff --git a/mm/kfence/report.c b/mm/kfence/report.c
+index 60205f1257ef..197430a5be4a 100644
+--- a/mm/kfence/report.c
++++ b/mm/kfence/report.c
+@@ -168,7 +168,7 @@ static void print_diff_canary(unsigned long address, size_t bytes_to_show,
+ 
+ 	pr_cont("[");
+ 	for (cur = (const u8 *)address; cur < end; cur++) {
+-		if (*cur == KFENCE_CANARY_PATTERN(cur))
++		if (*cur == KFENCE_CANARY_PATTERN_U8(cur))
+ 			pr_cont(" .");
+ 		else if (no_hash_pointers)
+ 			pr_cont(" 0x%02x", *cur);
+-- 
+2.20.1
+
