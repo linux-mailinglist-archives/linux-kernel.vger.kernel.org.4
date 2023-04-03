@@ -2,129 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31506D5462
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB486D5467
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbjDCWDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 18:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        id S233485AbjDCWDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 18:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232923AbjDCWDD (ORCPT
+        with ESMTP id S233294AbjDCWDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 18:03:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2551BF3;
-        Mon,  3 Apr 2023 15:03:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA4C162D1C;
-        Mon,  3 Apr 2023 22:03:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32DBBC433D2;
-        Mon,  3 Apr 2023 22:02:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680559381;
-        bh=E+J++Ja453WekURa/wOhcsyf4PVCNOpn1MEHhpca8zk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RewR5IfvGqVZuwU9TjmhMmOMXhm4RivCQkRakbBeB6/eYdRd11AV9bVGBRguvh+TK
-         oZRH6AmThzgzK86LkXaV9E4RldjPxBagsNOYXmurDHJkOCx0myGE9H+wNdm08VQLrP
-         R/L+ko9KttNkmR5RB6a1j5flY0BhtZrY75x8X3Eq1eb1HyySe4ENu9exxBKdupIhDo
-         qQ2fupFjrjCZilZ539sSQeVheDdOWFak0+qFHnZborD15tw7+krhtPbK1q17detcOm
-         XCqcE5MpeYrnTBYXWbmn7pAUKfnOeCQpnz2eUJZPZjezm0Lv6HvSvW1oFOX5lEJkSc
-         N//V/7Dl0YtZQ==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Artem Savkov <asavkov@redhat.com>, bpf@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Petr Mladek <pmladek@suse.com>,
-        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        Viktor Malik <vmalik@redhat.com>
-Subject: [PATCH bpf-next] kallsyms: Disable preemption for find_kallsyms_symbol_value
-Date:   Tue,  4 Apr 2023 00:02:54 +0200
-Message-Id: <20230403220254.2191240-1-jolsa@kernel.org>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 3 Apr 2023 18:03:42 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2ED26A2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:03:40 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 20-20020a630514000000b0050bed8b0b61so8899491pgf.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 15:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680559419;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Oudpa17NQV9icHAF4JVW0zNdSUdsNavz+h9FQ4FdLBA=;
+        b=gmD3EzUX38OVjaGFgrpka4qXeIu+V1DoGMvDe0eWXeLuVA1CJdcNcSnyr+n+EpIa7P
+         3MzjOnSmoFXG3JxX7Cs0Wn8GkvgBkLa16nyiWlhViz9Kto3HXhbMSTrrqLF92l4pjOwM
+         Bl/A9PadEA4W2+qgRGAzaoQf4/LsxKQq3zYjYpbh+vXPlDzaJ4S4K1nV++HobeWezLIl
+         5VMhWDSPBl0YL4XGy/N1tyENDpHWNaUPOK4Xcs933WjQ4R2VnAzEP/q0VSAq3rp+G1sc
+         XYLTFN0b46pCsuwvdg0Q0NbrDy9LoUkmRlggmmc6W32L6LZuB1HPkybaEDU5BBFcgTTW
+         Tt7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680559419;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Oudpa17NQV9icHAF4JVW0zNdSUdsNavz+h9FQ4FdLBA=;
+        b=B8CEGfW2t8cdJ6k1utbI3PAvFHhLyfV8r+1pL2Hr0GzPhhyvwfa4wvajf3hqgouKJq
+         fcwd4u8hA55WkAGMkI8Dw6Xp8LQ8M2Pkn+Mw98vHXb+O1Ss5zm3/tuh1YV9+92eG3kJ9
+         7YXR1FeCXQDDD9A3BgKIIDdD3p4EwhlJxiofhm84HIIoaCUD2f9PQ/di+q3CwRz6NoZ0
+         X8AoGAqD92txq7y8OVWs0Hyw6Qjcbxq9Vo65n2QujmekqcTJxpY0pWlNmyH3ycakNOzX
+         7NnlxgPHfwOVv9eI8sTt6BveJAQka1Bb8eXoj9Bq/5FwM7DJGnUJTaXDLiUVFeK/auYr
+         +RBw==
+X-Gm-Message-State: AAQBX9e5SILrfWT5HlnkzjLjoNAnYj5q+7aube4W0crKezejJhS4XKXj
+        H+rb5sbssW7EB30zS3ho5JspOAlP5YyLu2Ug
+X-Google-Smtp-Source: AKy350bKjU+buVnqVou7mkcDlyP7x8rTHIyL9RVPi5Km1Z/toXrwbT5kmEIGX491iMh7wgy+1apIE3kjSSGe4OaY
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a17:902:9b91:b0:1a1:9015:4d5c with SMTP
+ id y17-20020a1709029b9100b001a190154d5cmr211513plp.3.1680559419448; Mon, 03
+ Apr 2023 15:03:39 -0700 (PDT)
+Date:   Mon,  3 Apr 2023 22:03:32 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Message-ID: <20230403220337.443510-1-yosryahmed@google.com>
+Subject: [PATCH mm-unstable RFC 0/5] cgroup: eliminate atomic rstat
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Artem reported suspicious RCU usage [1]. The reason is that verifier
-calls find_kallsyms_symbol_value with preemption enabled which will
-trigger suspicious RCU usage warning in rcu_dereference_sched call.
+A previous patch series ([1] currently in mm-unstable) changed most
+atomic rstat flushing contexts to become non-atomic. This was done to
+avoid an expensive operation that scales with # cgroups and # cpus to
+happen with irqs disabled and scheduling not permitted. There were two
+remaining atomic flushing contexts after that series. This series tries
+to eliminate them as well, eliminating atomic rstat flushing completely.
 
-Disabling preemption in find_kallsyms_symbol_value and adding
-__find_kallsyms_symbol_value function.
+The two remaining atomic flushing contexts are:
+(a) wb_over_bg_thresh()->mem_cgroup_wb_stats()
+(b) mem_cgroup_threshold()->mem_cgroup_usage()
 
-Fixes: 31bf1dbccfb0 ("bpf: Fix attaching fentry/fexit/fmod_ret/lsm to modules")
-[1] https://lore.kernel.org/bpf/ZBrPMkv8YVRiWwCR@samus.usersys.redhat.com/
-Reported-by: Artem Savkov <asavkov@redhat.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- kernel/module/kallsyms.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+For (a), flushing needs to be atomic as wb_writeback() calls
+wb_over_bg_thresh() with a spinlock held. However, it seems like the
+call to wb_over_bg_thresh() doesn't need to be protected by that
+spinlock, so this series proposes a refactoring that moves the call
+outside the lock criticial section and makes the stats flushing
+in mem_cgroup_wb_stats() non-atomic.
 
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index ab2376a1be88..bdc911dbcde5 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -442,7 +442,7 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- }
- 
- /* Given a module and name of symbol, find and return the symbol's value */
--unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name)
-+static unsigned long __find_kallsyms_symbol_value(struct module *mod, const char *name)
- {
- 	unsigned int i;
- 	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
-@@ -466,7 +466,7 @@ static unsigned long __module_kallsyms_lookup_name(const char *name)
- 	if (colon) {
- 		mod = find_module_all(name, colon - name, false);
- 		if (mod)
--			return find_kallsyms_symbol_value(mod, colon + 1);
-+			return __find_kallsyms_symbol_value(mod, colon + 1);
- 		return 0;
- 	}
- 
-@@ -475,7 +475,7 @@ static unsigned long __module_kallsyms_lookup_name(const char *name)
- 
- 		if (mod->state == MODULE_STATE_UNFORMED)
- 			continue;
--		ret = find_kallsyms_symbol_value(mod, name);
-+		ret = __find_kallsyms_symbol_value(mod, name);
- 		if (ret)
- 			return ret;
- 	}
-@@ -494,6 +494,16 @@ unsigned long module_kallsyms_lookup_name(const char *name)
- 	return ret;
- }
- 
-+unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name)
-+{
-+	unsigned long ret;
-+
-+	preempt_disable();
-+	ret = __find_kallsyms_symbol_value(mod, name);
-+	preempt_enable();
-+	return ret;
-+}
-+
- int module_kallsyms_on_each_symbol(const char *modname,
- 				   int (*fn)(void *, const char *,
- 					     struct module *, unsigned long),
+For (b), flushing needs to be atomic as mem_cgroup_threshold() is called
+with irqs disabled. We only flush the stats when calculating the root
+usage, as it is approximated as the sum of some memcg stats (file, anon,
+and optionally swap) instead of the conventional page counter. This
+series proposes changing this calculation to use the global stats
+instead, eliminating the need for a memcg stat flush.
+
+After these 2 contexts are eliminated, we no longer need
+mem_cgroup_flush_stats_atomic() or cgroup_rstat_flush_atomic(). We can
+remove them and simplify the code.
+
+Yosry Ahmed (5):
+  writeback: move wb_over_bg_thresh() call outside lock section
+  memcg: flush stats non-atomically in mem_cgroup_wb_stats()
+  memcg: calculate root usage from global state
+  memcg: remove mem_cgroup_flush_stats_atomic()
+  cgroup: remove cgroup_rstat_flush_atomic()
+
+ fs/fs-writeback.c          | 16 +++++++----
+ include/linux/cgroup.h     |  1 -
+ include/linux/memcontrol.h |  5 ----
+ kernel/cgroup/rstat.c      | 26 ++++--------------
+ mm/memcontrol.c            | 54 ++++++++------------------------------
+ 5 files changed, 27 insertions(+), 75 deletions(-)
+
 -- 
-2.39.2
+2.40.0.348.gf938b09366-goog
 
