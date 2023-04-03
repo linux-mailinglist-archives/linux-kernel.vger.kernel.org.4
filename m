@@ -2,126 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623736D4D70
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A106D4D6F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbjDCQWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
+        id S232555AbjDCQVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbjDCQV6 (ORCPT
+        with ESMTP id S231836AbjDCQVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:21:58 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26242710
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:21:49 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id ek18so119604020edb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 09:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1680538908; x=1683130908;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xFwQPWx8Ux6bh8rA+x2qSR6v2JLfRrPIjTrTWUE6sUM=;
-        b=ENGJ8avArfyET27ycBUe9OwP9G5sEQAmMsBbS80rXSTWqWIMm1MBXCHjxpwZPAQafC
-         PSh2T6xEQUIhzbczONjNgjv/ijWV54F+WCaSvNJ71SVJqRx/a2iT1QTRCQIbUcpqpBbC
-         XgQH4i5o1DUUgJfHz/1iyxfEEQW0htHa/oWx0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680538908; x=1683130908;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xFwQPWx8Ux6bh8rA+x2qSR6v2JLfRrPIjTrTWUE6sUM=;
-        b=dD7TyFoLj+SPEtSjaO89ry/4svYU4YZcA3fESdaDOQbrtMOmmGE1Z2OneZGhYDzuY5
-         nvjv4+K79nXO7BxbUequaKtrY54AZ8jRpamgat5kA8KZ4Kq3bKkFN5lO8xtO0Jhxesuu
-         a9DMuF8ffv6WATe6weV2yUiYWASMYC/N5FH0O6uqtg9tBhwrEuhOHzQc1nYgXm/iZprD
-         r0YE4vy7qROXuZB9mhyZIs7XmYvIkbDm9tmhiKG5tSf1pPqtCH4wN54+BVXodWFwmHBF
-         26E3SBOc+0VwBLtVFeNjZBogs0Y8u7sI5DzayWInLmBphZXM1qVTNS0moVOwBX1wiF8s
-         8vqQ==
-X-Gm-Message-State: AAQBX9c0RycVrv9oqNnraZhv+RuP6xBL9OEIISZ0ga4w1PrWhcDzOGop
-        eGMoR3jgHfy6egyXz7G2S3dQnaB1HZPPamGehHWlxA==
-X-Google-Smtp-Source: AKy350b7GHrd9acQS6qYefXsi4zFzi0d8fYy/Bvs/jhS1hrQi+PUMQZcC8B5DmoVqFa1hvMAFKx+yA==
-X-Received: by 2002:a05:6402:1acf:b0:502:9289:51e5 with SMTP id ba15-20020a0564021acf00b00502928951e5mr6822590edb.14.1680538908044;
-        Mon, 03 Apr 2023 09:21:48 -0700 (PDT)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id c30-20020a50d65e000000b004af70c546dasm4812549edj.87.2023.04.03.09.21.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 09:21:46 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id cn12so119599758edb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 09:21:45 -0700 (PDT)
-X-Received: by 2002:a17:907:3e16:b0:932:da0d:9375 with SMTP id
- hp22-20020a1709073e1600b00932da0d9375mr11670367ejc.4.1680538904942; Mon, 03
- Apr 2023 09:21:44 -0700 (PDT)
+        Mon, 3 Apr 2023 12:21:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7F3170C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:21:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68D916211C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:21:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 723CBC433EF;
+        Mon,  3 Apr 2023 16:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680538891;
+        bh=s/h9BxcKiHCWDLpRMf/OxHcfV+3/cmpO+wdtHk8dx9k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ItTLRmpc/AKSD7fGCTzArFPVOVs1SdvwB4iP5dIPOx7YxjQFjLCxCB6H5P757Z28V
+         UJeH1fNjndM2vu0bFuSlGA99VEslIY01Vznl2H+fqiGQR//nBIG+MyMVnqC7IdwuSk
+         S2GDdtpfhKhCx6OzrhJfwOF7rl24AzReK4x7Lm24JO96e0P6iAR5RKPc7R7idrIDiH
+         CeSFMBuXf6GPzVwDaFJ3wBiRrY9WvNuRHFSRhlb7BQPVCZ0ApSiZG0AYoXswhe5CKM
+         G3TKTVXi9WoVP0LsqpUM7aLMnbz6eVwgsqUAbh62Essc/tl4GVwhBLUJaOxi21w0qB
+         2sadR7e3s7Uuw==
+Date:   Mon, 3 Apr 2023 17:21:27 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Yipeng Zou <zouyipeng@huawei.com>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: Re: [PATCH] riscv: entry: Save a0 prior
+ syscall_enter_from_user_mode()
+Message-ID: <20230403-crisping-animosity-04ed8a45c625@spud>
+References: <20230403065207.1070974-1-bjorn@kernel.org>
 MIME-Version: 1.0
-References: <20230403140605.540512-1-jiangshanlai@gmail.com> <20230403140605.540512-3-jiangshanlai@gmail.com>
-In-Reply-To: <20230403140605.540512-3-jiangshanlai@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 3 Apr 2023 09:21:27 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whY8tkKJoFjzP1-kR5rqCmgTEiX2i+GJgjdJcn+q+3HTQ@mail.gmail.com>
-Message-ID: <CAHk-=whY8tkKJoFjzP1-kR5rqCmgTEiX2i+GJgjdJcn+q+3HTQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/7] x86/entry: Add IST main stack
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        "H. Peter Anvin" <hpa@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Asit Mallick <asit.k.mallick@intel.com>,
-        Cfir Cohen <cfir@google.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        David Kaplan <David.Kaplan@amd.com>,
-        David Rientjes <rientjes@google.com>,
-        Dirk Hohndel <dirkhh@vmware.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jiri Slaby <jslaby@suse.cz>, Joerg Roedel <joro@8bytes.org>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        Mike Stunes <mstunes@vmware.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Tony Luck <tony.luck@intel.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, x86@kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="R7iREP1gQeGxJksL"
+Content-Disposition: inline
+In-Reply-To: <20230403065207.1070974-1-bjorn@kernel.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 7:05=E2=80=AFAM Lai Jiangshan <jiangshanlai@gmail.co=
-m> wrote:
->
-> diff --git a/Documentation/x86/kernel-stacks.rst b/Documentation/x86/kern=
-el-stacks.rst
-> index 6b0bcf027ff1..be89acf302da 100644
-> --- a/Documentation/x86/kernel-stacks.rst
-> +++ b/Documentation/x86/kernel-stacks.rst
-> @@ -105,6 +105,8 @@ The currently assigned IST stacks are:
->    middle of switching stacks.  Using IST for MCE events avoids making
->    assumptions about the previous state of the kernel stack.
->
-> +* ESTACK_IST. bla bla
+
+--R7iREP1gQeGxJksL
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Apr 03, 2023 at 08:52:07AM +0200, Bj=F6rn T=F6pel wrote:
+> From: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
+>=20
+> The RISC-V calling convention passes the first argument, and the
+> return value in the a0 register. For this reason, the a0 register
+> needs some extra care; When handling syscalls, the a0 register is
+> saved into regs->orig_a0, so a0 can be properly restored for,
+> e.g. interrupted syscalls.
+>=20
+> This functionality was broken with the introduction of the generic
+> entry patches. Here, a0 was saved into orig_a0 after calling
+> syscall_enter_from_user_mode(), which can change regs->a0 for some
+> paths, incorrectly restoring a0.
+>=20
+> This is resolved, by saving a0 prior doing the
+> syscall_enter_from_user_mode() call.
+>=20
+> Fixes: f0bddf50586d ("riscv: entry: Convert to generic entry")
+> Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> Tested-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> Signed-off-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
+
+As you pointed out, v12 did indeed have this ordering, so *deep breath*
+Reported-by: Conor Dooley <conor.dooley@microchip.com>
+Link: https://lore.kernel.org/linux-riscv/60ee7c26-1a70-427d-beaf-92e2989fc=
+479@spud/
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks for fixing this Bj=F6rn!
+> ---
+>  arch/riscv/kernel/traps.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index 1f4e37be7eb3..8c258b78c925 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -270,11 +270,11 @@ asmlinkage __visible __trap_section void do_trap_ec=
+all_u(struct pt_regs *regs)
+>  	if (user_mode(regs)) {
+>  		ulong syscall =3D regs->a7;
+> =20
+> -		syscall =3D syscall_enter_from_user_mode(regs, syscall);
+> -
+>  		regs->epc +=3D 4;
+>  		regs->orig_a0 =3D regs->a0;
+> =20
+> +		syscall =3D syscall_enter_from_user_mode(regs, syscall);
 > +
->  For more details see the Intel IA32 or AMD AMD64 architecture manuals.
+>  		if (syscall < NR_syscalls)
+>  			syscall_handler(regs, syscall);
+>  		else
+>=20
+> base-commit: d34a6b715a23ccd9c9d0bc7a475bea59dc3e28b2
+> --=20
+> 2.37.2
+>=20
 
-Maybe the cover letter description could be used here, rather than the
-"bla bla" placeholder?
+--R7iREP1gQeGxJksL
+Content-Type: application/pgp-signature; name="signature.asc"
 
-              Linus
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCr9AwAKCRB4tDGHoIJi
+0uChAP9U8xmkAUQFANUtusPF/nQKVwoeUIJlqkQQzmUlIl6dZQEA2Rg5robA6oPH
+5h312z8HKnb5QE9lXkT3WQea0531eQA=
+=Ks/G
+-----END PGP SIGNATURE-----
+
+--R7iREP1gQeGxJksL--
