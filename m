@@ -2,158 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA3F6D3EC3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4386D3EE1
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbjDCIQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S231751AbjDCIXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbjDCIQo (ORCPT
+        with ESMTP id S231736AbjDCIXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:16:44 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2088.outbound.protection.outlook.com [40.107.21.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34FB76B7;
-        Mon,  3 Apr 2023 01:16:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I5WVBrgi6wCLaxc3zJioZGQSMy82+mE0IjxXewnpGJrBM6RrBLMn1tbWYYG/4wmt3miIqoRkWyA32O28vqFWd2vbIKC/0GHf+dw1iNv/c7ma0gGKi0Dhv6gqnP+eUwi1P1V+RHTggWYCxgMYBy9eG+1tcZ2qj1unmL40yHXegjTFeudaAIs/InRyMLOLVGGG1+ZvbZSJU7aYG7djfzKQNsZbhSjtV/jhthhaSJ/yKHRSR0uWlvUa35eez8jxDnrot8RhveN0DdxP5OY/GX8gdJkc190Fk9/QWsIM00SsL/8VNDCTcEDF6hWTTp6IDhARuv6bxV+ivWp2l1Z34a/WhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9KciKSwftmbsOf26wG1Zc6yOal9BRgEfsKcqPjjJw68=;
- b=KmZ3l/1F8Fk7m3z3w30pn1UFdbDJk7K2DpIGYZYZhwFyCp2gbfO3Fy++JLoAKaNDfzvvBWLOX6SkUO/1BMXJdGpFIAjN3+2xZM9TN/UmZIowF58aQkeO2uX6UazPYVpstjvBUnc5yhcZtWV6O0n8aHVSBXCi6dfLlMAkpRCBCAp5ATr1JRi+WHc5FkbNlHKajYJeALBbaN9/G2aweZCl0cPtKrxrC8nZ4w2eYSsZXcPQjo6fZlp7LiRWsXP4BsaGhS49N5gJYjvoloT4AGtiE6dQfMSn/V+0l0ZUZd/scwf1QL2kBeVye2EV+IuQcYWTBcAeUP2QB/JH3s/N+aUZ3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9KciKSwftmbsOf26wG1Zc6yOal9BRgEfsKcqPjjJw68=;
- b=NkGGvEJ/h9pNPQkPQOn8VvNK1rc/QiVDAZFSv09lXN3MWOFl+dv8+z82qTkjMo3qbNaV5N/FGnS2by5018V05D3xQkEIDc1OluOg/kTGG4pc2ZDGfxTFVBhBw/Ol/JXTi0Iqm1hgJBKPoRN5HqC+bm/RkFAT9waN96+caVJgdOs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AS1PR04MB9381.eurprd04.prod.outlook.com (2603:10a6:20b:4db::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.29; Mon, 3 Apr
- 2023 08:16:34 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4%4]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
- 08:16:34 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com
-Cc:     linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V2] clk: imx: imx6sx: spdif clock rate is too high for asrc
-Date:   Mon,  3 Apr 2023 16:21:38 +0800
-Message-Id: <20230403082138.3195452-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0050.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::12) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Mon, 3 Apr 2023 04:23:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC65210E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 01:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680510135;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jQzDBAQKeqgfsxxyrlkQCm/LEl+p6ixMadQZXFxQxwQ=;
+        b=DH96VbS/Bh39d25dhM7mlCuxUSfTRufIuIwy10l0l2s395UNQPg5XoKLi+oED/8ofH1Uq1
+        chs/6lnWAfpVpxgzf7k/swQvGm11gMUL0YPhTGIiH/sUSa24ziB3+cyVx5unHN+wVChmAS
+        EWM5H/zujEK8SiJNnJF2rM0uh6L3R1Q=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-459--pRKt8B-PHy9SEMWAamwPw-1; Mon, 03 Apr 2023 04:21:52 -0400
+X-MC-Unique: -pRKt8B-PHy9SEMWAamwPw-1
+Received: by mail-wm1-f70.google.com with SMTP id m7-20020a05600c4f4700b003ee7e120bdfso14154565wmq.6
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 01:21:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680510111;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jQzDBAQKeqgfsxxyrlkQCm/LEl+p6ixMadQZXFxQxwQ=;
+        b=AlB9dpPtL13N6ju+QjI/9qUN0jpw6C9p4brcrtCQGuDKYJD6GH7raH4pBu49urLBLr
+         VMH/JbK64nNUncwqjtshyXw2geuF7V8iFMEGp4LrmJw1RaLeENvV9LtnV6dFhSHuDWH7
+         GEjg5sRmSIQ0xw76/V1kTXjdD304OikDqrB0feR8ZRaWAzMQLreYvh6JMlrop+Hl3ztg
+         u8yUgdbbKI5E2hG8UF23Q1DzlYb1Q+2IhVrRBcBi0wy5Kx+Ud4LCtcyxrgniofQai7qO
+         rLTfnrAz8hAANKjab9ql0x3TRg1zXa3KqSVPLGMqgdLMwJNQRr/Uv1nwanIKmClZOV/5
+         3Z9Q==
+X-Gm-Message-State: AO0yUKX8Q4aMhJ/ny5KYhuKNo7pifErxkclquToDwG8qaz3sqi4PLelW
+        9HVazEh8Fa2wxJbSAXeM9shP2npcmCmzfd6ycBUDFZo/pK1TRfWXsXDVR2C75CC4z+B8Rz7OZb4
+        3WEJ71UMXI/IhmVqqMkmwSUlN
+X-Received: by 2002:a05:600c:20d:b0:3ee:672d:caae with SMTP id 13-20020a05600c020d00b003ee672dcaaemr26843807wmi.36.1680510111655;
+        Mon, 03 Apr 2023 01:21:51 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/AgkVl4NRObZrwop/hyYIrLuclF7oALAw2adBku9J1XTbgT5nDnZVWZTlkdOAVCBUc2F54wA==
+X-Received: by 2002:a05:600c:20d:b0:3ee:672d:caae with SMTP id 13-20020a05600c020d00b003ee672dcaaemr26843772wmi.36.1680510111270;
+        Mon, 03 Apr 2023 01:21:51 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
+        by smtp.gmail.com with ESMTPSA id c2-20020adfe702000000b002d6f285c0a2sm9135348wrm.42.2023.04.03.01.21.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 01:21:50 -0700 (PDT)
+Message-ID: <f0232380-4171-f4d3-f1a6-07993e551b46@redhat.com>
+Date:   Mon, 3 Apr 2023 10:21:48 +0200
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AS1PR04MB9381:EE_
-X-MS-Office365-Filtering-Correlation-Id: 36b9379a-ddcd-472a-cf78-08db341bbcde
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: g0bzg5AZ4mkK2YynX+UsHjl1TKuN36WYO9Mk6oCnMT6JPs4EhtEBRKSRiESKfsx/JY7S7nncECDe56pc6JoP7VKTTuGhxrtmgLJyAwTMfKhPvPcqz/PB/eBVp4QYaG5rFVwI62VrgcoZDP76pn55ugHqmLmAQ0megxNWUIPg5lC308hzJC8pC6nxyMCOZDyd+X9k18aMLw1erwSCZcJjviw/G0AAp12tHwjrmkhnNu/pUL5OYRVAWg8docf8f3DNEi2oVZqW+8D+nKGYfNwKTZIikDPZn2X6TXBklmd9pMsmZUg+q7Gxj+nT08N3RYc92qpTco0ixFlyEFSgtUr2d3UiSBVkmdPkULTA8WYvds9eHB8Eca0+Tmh5gUKH/OhXYXWDC96nudUzT93hNoYrLsYWK2rjlGdku6/DjFghIePrgQz31G11PnxiGVI1D6NP+89we/bLcLjMCwUfHY9tWmIBL9TG3QRl85l0cTgDqUkj23yI89F6Hh9Jkm7g1crMJOT19jGmQlqwJgvMFyOqJA/QXIuNn63yMNW8lhrNKiIBEgMEncnIg97DusiyInSfOLPz9fD4WpX9wict7DkIQcrSHBTr5JwX6GfC2ynsfh+ky0bisgot+278lO5mUuHj0cEQtMitEgTgdSXslZJHRg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(376002)(346002)(39860400002)(396003)(451199021)(86362001)(2906002)(66899021)(52116002)(2616005)(83380400001)(186003)(26005)(1076003)(6486002)(6512007)(6506007)(8676002)(4326008)(478600001)(66946007)(66476007)(41300700001)(66556008)(5660300002)(7416002)(38100700002)(38350700002)(54906003)(316002)(8936002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aJxdLfuMTXLxy65JGGeaD/gC0PQ4/V65ZVOlTulUNWGdYW1IwL4SX409vju3?=
- =?us-ascii?Q?cIUGXJ3GLW8v/Q77ehfrHk/lH61nsdORDU3jQT0WZdBjRX1e24UgjsgVsNdK?=
- =?us-ascii?Q?/SH68VicYj+SlzrC0nQYqn3+dNhsmKVe7WQeLe4+cohzlPYw3Y0yDudHRQy/?=
- =?us-ascii?Q?WVvi3nOdMi5QuNhn+I+epx4RJOkjkR9zoOaNtG6dL4w6fr0xlOaaEoE40UOm?=
- =?us-ascii?Q?HOCbg6fMLQXIRq1J9E4JPGgT4PyI2Tpq5ALKPWj0GJDKqx5AH+h7rAzLg/hb?=
- =?us-ascii?Q?LaswmB5gSVZgS+Vm4YSFLKJ0UL3+jUpRxyH6fE7Yxa6vw8K8lImF2lzYuVdy?=
- =?us-ascii?Q?rlhMbRaUCw9ix7KOvzkBTdHbRTf2PKTLiL3DVULv0T7PS2BQ1RdR+T+MW3eZ?=
- =?us-ascii?Q?urmhK2M7n10Q3S7Z0JKMescjnZrJDfHHC1xaQm+W9YCMjT8o8QowiBCZe0g7?=
- =?us-ascii?Q?UedofoaR63sByoLDJidbtDVPQsElo0j09xFkBSlxKMviNjRtz+lHfqBA3AiE?=
- =?us-ascii?Q?TkdiqyCByWeSyxopx7KoYxluyuSYzX7hNepGOf9BXYvRzxEx5qJs2WM3Hvp8?=
- =?us-ascii?Q?+AxTNPz6HhlCh1xC77zKijZXQmi24WSP6hNuSuqjYRb50YE0r997PUYpczAn?=
- =?us-ascii?Q?K4BkoIwZwz6pmp5v1TqKatoMGBqOyJX7Yv6ARneLVoek+J4H7nRFIVw48p+X?=
- =?us-ascii?Q?XSpZ9TfDiBm2TIO5BLV609onhF90GLbjAgYU8cmQRl5LGKb2FqgcpNQbvaPN?=
- =?us-ascii?Q?mgkdAtMn6lnUBSKo7SlsvM83CNp7Yvu1T+aA+R56VgxIXPKEAYD6tNrK/fUf?=
- =?us-ascii?Q?b4K8oaxo0PCnM8NH/8S8c3FknCYLid93knSC7Nhi/yappq3NSPKCJ3/e2wEh?=
- =?us-ascii?Q?RfR5Tcopa2SRb+JOnuRCcu8Hd+H6bQfCWOP8SjVnsIF1gPrUo916+Gh5uqvh?=
- =?us-ascii?Q?PCqYUvSxzCbQgNSvM3pdAAXSXwck2cfb7yAmMQW0xFYRcuWgMG1AzdGNkCd5?=
- =?us-ascii?Q?NvEUtaTO7A/VMiMTfmuewllQB9D+xaj1uPcDwpASg9mHFxWoWth0fraCTI+o?=
- =?us-ascii?Q?IFZkQuY0Y4uX1rH7NbTpg4Ct5LJ4zBaFpdAxcqggovPdqUEeCHRhKamw0l3Z?=
- =?us-ascii?Q?jXV9oPuboxwbc8Ik/zKa5UjkPVPv7q/kWAadGJ9+H39NkpSXWHhKTLRtUs7l?=
- =?us-ascii?Q?+ojZJupNb7uyje+v3hVpf9W97PDzeakXr7D2z85nS2tnLjH6mmjhCRJRnkA4?=
- =?us-ascii?Q?mw+BQclYQlG7yY7KLEmNoKPk/x1L6IahseuUgzztSOmf91GxfAv+aFuVff1w?=
- =?us-ascii?Q?wBoqqtcXtWyo7Yq5Izot9Pqz88HY2BUyGKmY5K3AfGNub20QUBSlo0LsvIhx?=
- =?us-ascii?Q?kje/8G4rzMNcx5xnJc2KYYyk7uoYSKteyaloCjj97Z5Hh5eWxJ49OF4NBWEf?=
- =?us-ascii?Q?Xy3u8M4tH8PaFqvRzmN0SGbR5Zby0i0/jG2x1FzSdosqVexNuZc3kXY83uVq?=
- =?us-ascii?Q?ILV3ctUrLfhSkjGtdtviFNOrgoYGnjgAHwpATOZU6BIQh8i021Y4yhvkTSwq?=
- =?us-ascii?Q?nQurW/h/DmVUo8fG4JAu2HiFJ3b2RU+q5xzOkrqs?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36b9379a-ddcd-472a-cf78-08db341bbcde
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 08:16:34.2120
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kOqBhVXX25HWBTZlT7zw/jlDCR4P14+JZ908s5BJvV2E20f9P3CYgHBoNrBhdCHrem5cFkC1eUBMBjIDoOAtiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9381
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        qemu-devel@nongnu.org
+Cc:     aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
+        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de,
+        chao.p.peng@linux.intel.com, corbet@lwn.net, dave.hansen@intel.com,
+        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
+        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
+        joro@8bytes.org, jun.nakajima@intel.com,
+        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
+        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
+        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
+        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
+        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
+        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
+        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
+        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
+References: <cover.1680306489.git.ackerleytng@google.com>
+ <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
+ mount for memfd_restricted
+In-Reply-To: <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
+On 01.04.23 01:50, Ackerley Tng wrote:
+> By default, the backing shmem file for a restrictedmem fd is created
+> on shmem's kernel space mount.
+> 
+> With this patch, an optional tmpfs mount can be specified via an fd,
+> which will be used as the mountpoint for backing the shmem file
+> associated with a restrictedmem fd.
+> 
+> This will help restrictedmem fds inherit the properties of the
+> provided tmpfs mounts, for example, hugepage allocation hints, NUMA
+> binding hints, etc.
+> 
+> Permissions for the fd passed to memfd_restricted() is modeled after
+> the openat() syscall, since both of these allow creation of a file
+> upon a mount/directory.
+> 
+> Permission to reference the mount the fd represents is checked upon fd
+> creation by other syscalls (e.g. fsmount(), open(), or open_tree(),
+> etc) and any process that can present memfd_restricted() with a valid
+> fd is expected to have obtained permission to use the mount
+> represented by the fd. This behavior is intended to parallel that of
+> the openat() syscall.
+> 
+> memfd_restricted() will check that the tmpfs superblock is
+> writable, and that the mount is also writable, before attempting to
+> create a restrictedmem file on the mount.
+> 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+>   include/linux/syscalls.h           |  2 +-
+>   include/uapi/linux/restrictedmem.h |  8 ++++
+>   mm/restrictedmem.c                 | 74 +++++++++++++++++++++++++++---
+>   3 files changed, 77 insertions(+), 7 deletions(-)
+>   create mode 100644 include/uapi/linux/restrictedmem.h
+> 
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index f9e9e0c820c5..a23c4c385cd3 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
+>   asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
+>   					    unsigned long home_node,
+>   					    unsigned long flags);
+> -asmlinkage long sys_memfd_restricted(unsigned int flags);
+> +asmlinkage long sys_memfd_restricted(unsigned int flags, int mount_fd);
+> 
+>   /*
+>    * Architecture-specific system calls
+> diff --git a/include/uapi/linux/restrictedmem.h b/include/uapi/linux/restrictedmem.h
+> new file mode 100644
+> index 000000000000..22d6f2285f6d
+> --- /dev/null
+> +++ b/include/uapi/linux/restrictedmem.h
+> @@ -0,0 +1,8 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#ifndef _UAPI_LINUX_RESTRICTEDMEM_H
+> +#define _UAPI_LINUX_RESTRICTEDMEM_H
+> +
+> +/* flags for memfd_restricted */
+> +#define RMFD_USERMNT		0x0001U
 
-spdif clock is one of the asrc clock source, which is used
-for ideal ratio mode. when set to 98.304MHz, it cause the
-divider of asrc input clock and output clock exceed the
-maximum value, and asrc driver saturate the value to maximum
-value, which will cause the ASRC's performance very bad.
-So we need to set spdif clock to a proper rate. which make asrc
-divider not exceed maximum value, at least one of divider not
-exceed maximum value.
-The target is spdif clock rate / output(or input) sample rate
-less than 1024(which is maximum divider).
+I wonder if we can come up with a more expressive prefix than RMFD. 
+Sounds more like "rm fd" ;) Maybe it should better match the 
+"memfd_restricted" syscall name, like "MEMFD_RSTD_USERMNT".
 
-Fixes: f1541e15e38e ("clk: imx6sx: Switch to clk_hw based API")
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
 
-V2:
- Add Fixes tag
+> +
+> +#endif /* _UAPI_LINUX_RESTRICTEDMEM_H */
+> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
+> index c5d869d8c2d8..f7b62364a31a 100644
+> --- a/mm/restrictedmem.c
+> +++ b/mm/restrictedmem.c
+> @@ -1,11 +1,12 @@
+>   // SPDX-License-Identifier: GPL-2.0
+> -#include "linux/sbitmap.h"
 
- drivers/clk/imx/clk-imx6sx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Looks like an unrelated change?
 
-diff --git a/drivers/clk/imx/clk-imx6sx.c b/drivers/clk/imx/clk-imx6sx.c
-index 7cf86707bc39..3face052527d 100644
---- a/drivers/clk/imx/clk-imx6sx.c
-+++ b/drivers/clk/imx/clk-imx6sx.c
-@@ -520,7 +520,7 @@ static void __init imx6sx_clocks_init(struct device_node *ccm_node)
- 	clk_set_rate(hws[IMX6SX_CLK_PLL4_AUDIO_DIV]->clk, 393216000);
- 
- 	clk_set_parent(hws[IMX6SX_CLK_SPDIF_SEL]->clk, hws[IMX6SX_CLK_PLL4_AUDIO_DIV]->clk);
--	clk_set_rate(hws[IMX6SX_CLK_SPDIF_PODF]->clk, 98304000);
-+	clk_set_rate(hws[IMX6SX_CLK_SPDIF_PODF]->clk, 24576000);
- 
- 	clk_set_parent(hws[IMX6SX_CLK_AUDIO_SEL]->clk, hws[IMX6SX_CLK_PLL3_USB_OTG]->clk);
- 	clk_set_rate(hws[IMX6SX_CLK_AUDIO_PODF]->clk, 24000000);
+> +#include <linux/namei.h>
+>   #include <linux/pagemap.h>
+>   #include <linux/pseudo_fs.h>
+>   #include <linux/shmem_fs.h>
+>   #include <linux/syscalls.h>
+>   #include <uapi/linux/falloc.h>
+>   #include <uapi/linux/magic.h>
+> +#include <uapi/linux/restrictedmem.h>
+>   #include <linux/restrictedmem.h>
+> 
+>   struct restrictedmem {
+> @@ -189,19 +190,20 @@ static struct file *restrictedmem_file_create(struct file *memfd)
+>   	return file;
+>   }
+> 
+> -SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
+> +static int restrictedmem_create(struct vfsmount *mount)
+>   {
+>   	struct file *file, *restricted_file;
+>   	int fd, err;
+> 
+> -	if (flags)
+> -		return -EINVAL;
+> -
+>   	fd = get_unused_fd_flags(0);
+>   	if (fd < 0)
+>   		return fd;
+> 
+> -	file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+> +	if (mount)
+> +		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem", 0, VM_NORESERVE);
+> +	else
+> +		file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+> +
+>   	if (IS_ERR(file)) {
+>   		err = PTR_ERR(file);
+>   		goto err_fd;
+> @@ -223,6 +225,66 @@ SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
+>   	return err;
+>   }
+> 
+> +static bool is_shmem_mount(struct vfsmount *mnt)
+> +{
+> +	return mnt && mnt->mnt_sb && mnt->mnt_sb->s_magic == TMPFS_MAGIC;
+> +}
+> +
+> +static bool is_mount_root(struct file *file)
+> +{
+> +	return file->f_path.dentry == file->f_path.mnt->mnt_root;
+> +}
+
+I'd inline at least that function, pretty self-explaining.
+
+> +
+> +static int restrictedmem_create_on_user_mount(int mount_fd)
+> +{
+> +	int ret;
+> +	struct fd f;
+> +	struct vfsmount *mnt;
+> +
+> +	f = fdget_raw(mount_fd);
+> +	if (!f.file)
+> +		return -EBADF;
+> +
+> +	ret = -EINVAL;
+> +	if (!is_mount_root(f.file))
+> +		goto out;
+> +
+> +	mnt = f.file->f_path.mnt;
+> +	if (!is_shmem_mount(mnt))
+> +		goto out;
+> +
+> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = mnt_want_write(mnt);
+> +	if (unlikely(ret))
+> +		goto out;
+> +
+> +	ret = restrictedmem_create(mnt);
+> +
+> +	mnt_drop_write(mnt);
+> +out:
+> +	fdput(f);
+> +
+> +	return ret;
+> +}
+> +
+> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
+> +{
+> +	if (flags & ~RMFD_USERMNT)
+> +		return -EINVAL;
+> +
+> +	if (flags == RMFD_USERMNT) {
+> +		if (mount_fd < 0)
+> +			return -EINVAL;
+> +
+> +		return restrictedmem_create_on_user_mount(mount_fd);
+> +	} else {
+> +		return restrictedmem_create(NULL);
+> +	}
+
+
+You can drop the else case:
+
+if (flags == RMFD_USERMNT) {
+	...
+	return restrictedmem_create_on_user_mount(mount_fd);
+}
+return restrictedmem_create(NULL);
+
+
+I do wonder if you want to properly check for a flag instead of 
+comparing values. Results in a more natural way to deal with flags:
+
+if (flags & RMFD_USERMNT) {
+
+}
+
+> +}
+> +
+>   int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
+>   		       struct restrictedmem_notifier *notifier, bool exclusive)
+>   {
+
+The "memfd_restricted" vs. "restrictedmem" terminology is a bit 
+unfortunate, but not your fault here.
+
+
+I'm not a FS person, but it does look good to me.
+
 -- 
-2.37.1
+Thanks,
+
+David / dhildenb
 
