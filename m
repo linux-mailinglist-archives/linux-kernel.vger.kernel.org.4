@@ -2,128 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6836D54C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12316D54C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233816AbjDCW3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 18:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S233671AbjDCW3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 18:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbjDCW2r (ORCPT
+        with ESMTP id S233825AbjDCW3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 18:28:47 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7B130F5;
-        Mon,  3 Apr 2023 15:28:46 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso20730041wms.1;
-        Mon, 03 Apr 2023 15:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680560925;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D59V0g1YvYLKaUmx+LEoYjgFSrxRUczBZA1IoL7nlYU=;
-        b=ETUrq2dY/Th4/JHEziKKqYHg+tGm411FZ0fvvHq7s2C38in0y6R3FaxLNn9Kj4sfr5
-         hMJgMJxsbvF+BQgibzC+VXG3bGSBAb1bW4IvDlePIroB7DzmvbD6AWL2l9Z+RxPcY2WH
-         e3sRnk04MJf9JH+FTi70FLSupZ6xGpBWo6zhyM9EZJ3bUjmIhDmWb96l+t7TFGW18cS4
-         XhCagKRR19FhXNYIQfhhdh3fFJuSMOK5zHlYLX6Y/ZnRF/FdaP4FCYLzfxbyA7ummcqS
-         lt4TjRqAoKPJLEu67p5KRYcTNockAGGP5JK2eJ2/xlawuQsKJgzPEOO4uoLNh7wk8jwv
-         q2GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680560925;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D59V0g1YvYLKaUmx+LEoYjgFSrxRUczBZA1IoL7nlYU=;
-        b=UIOGUYrI5cptsyBsVxcEDel0+U9d7fDepWhniWn/D2I04MIXfGYsH1vsKugXnJY33x
-         aiWfasUTSRsAIKtHsJiqj97xsYD+PuU534JUpqoAZQevDHq35qFH9e4rMUqRh7COEGyD
-         sPYzjbU5fwST190Z4pBnfKZa7aWGkV2yab7RECsoFQ7HGEY3EwZtkbzOq9zWdp6yJE4C
-         5wIXV0tlP6owbBtWVI/AztI0aS7vO4wpMeodfwp96ycsX3lykM/oB3VLxtKCtKmC47bf
-         qJNqspofckPKIEhjxJhftsKlXPUFS4bIUwAl4l9TVh5hp0ffM3RviAWldIFQkmqRLHah
-         y6rw==
-X-Gm-Message-State: AAQBX9dTRWt/OJ7StJXg7zTIQ1H4xi4T9EpofWusQ9fT9e4U+ff3KNnL
-        ctEeJe1er3IRrh3mshaqTGoDMDtpwLI=
-X-Google-Smtp-Source: AKy350ZVfZY+bYiGepG6A9AZTHxDk2DIr9A7q/H3Bvhr9tEy2Ebxbza9JcTDslpZpvZNO6szjA4rCA==
-X-Received: by 2002:a1c:6a19:0:b0:3ed:2ae9:6c75 with SMTP id f25-20020a1c6a19000000b003ed2ae96c75mr593443wmc.37.1680560925406;
-        Mon, 03 Apr 2023 15:28:45 -0700 (PDT)
-Received: from lucifer.home (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.googlemail.com with ESMTPSA id u17-20020a05600c19d100b003dd1bd0b915sm20731309wmq.22.2023.04.03.15.28.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 15:28:44 -0700 (PDT)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [RFC PATCH 3/3] mm: perform the mapping_map_writable() check after call_mmap()
-Date:   Mon,  3 Apr 2023 23:28:32 +0100
-Message-Id: <c814a3694f09896e4ec85cbca74069ea6174ebb6.1680560277.git.lstoakes@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <cover.1680560277.git.lstoakes@gmail.com>
-References: <cover.1680560277.git.lstoakes@gmail.com>
+        Mon, 3 Apr 2023 18:29:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD7E3C20;
+        Mon,  3 Apr 2023 15:28:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DBF461ACA;
+        Mon,  3 Apr 2023 22:28:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56056C433D2;
+        Mon,  3 Apr 2023 22:28:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680560934;
+        bh=dUz9bFHM1/W08SV+atyctj1Gbnb27waf243Vro09vkY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=bU3/Sp0CaIXSC7j9aCciJcpVaFoq2U8kY0wmG5H/7jUJNHpa44QRNsEC+u/BmmnZX
+         SRf+0KDek5cZX/1iQhgSPNk9nMJXSphlnnU0vHntzfyvxXUtc6nF/rISvjBJS4YT3+
+         mqhnFo9jSOTJLwGnyV5UaeD+AAcm7TQB5Ays9FkzDQ/TOwydRWTp0I60rIHKcG6otW
+         D+k7MnRUxLBGImH1ffgZ3Z0gFIT4MyFJbeU/9mv0eboyJPu7q3E4WlEYAP6Hxbs19Q
+         w6DccQEPu0C5JdU05pdYYMKM1Fmdzz22P6Z3z3APjB2e3VKns7k8SABHFR23cGIQfZ
+         EnovVP1jztJqg==
+Date:   Mon, 3 Apr 2023 17:28:52 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ron Lee <ron.lee.intel@gmail.com>
+Cc:     bhelgaas@google.com, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, lmajczak@google.com, rajatja@google.com,
+        Ron Lee <ron.lee@intel.com>
+Subject: Re: [PATCH v3] PCI: Fix up L1SS capability for Intel Apollo Lake
+ PCIe bridge
+Message-ID: <20230403222852.GA3471710@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206143540.15325-1-ron.lee@intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order for a F_SEAL_WRITE sealed memfd mapping to have an opportunity to
-clear VM_MAYWRITE, we must be able to invoke the appropriate vm_ops->mmap()
-handler to do so. We would otherwise fail the mapping_map_writable() check
-before we had the opportunity to avoid it.
+On Mon, Feb 06, 2023 at 10:35:40PM +0800, Ron Lee wrote:
+> On Google Coral and Reef family Chromebooks with Intel Apollo Lake
+> SoC, the PCIe bridge lost its L1 PM Substates capability after resumed
+> from D3cold. This patch save the capability header and the pointer
+> offset to the L1SS capability after this bridge initialized, and
+> recover them every time resuming from D3cold.
+> 
+> Link:https://lore.kernel.org/linux-pci/CAFJ_xbq0cxcH-cgpXLU4Mjk30+muWyWm1aUZGK7iG53yaLBaQg@mail.gmail.com/T/#u
+> Signed-off-by: Ron Lee <ron.lee@intel.com>
+> ---
+> Change from v2: traverse the capability link list to find the L1SS capability header
+> and pointer offset to the L1SS capability, save them after the bridge initialized and 
+> restore them after resuming from D3cold.
+> 
+>  drivers/pci/quirks.c | 41 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 285acc4aaccc..4e1c8c4c7e9a 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -5992,3 +5992,44 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2d, dpc_log_size);
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2f, dpc_log_size);
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a31, dpc_log_size);
+>  #endif
+> +
+> +#ifdef CONFIG_PCIEASPM
+> +static u16 pos_to_l1ss;
+> +static u32 l1ss_header;
+> +static void chromeos_save_apl_pci_l1ss_capability(struct pci_dev *pdev)
+> +{
+> +	u32 header;
+> +	int pos = PCI_CFG_SPACE_SIZE;
+> +
+> +	while (pos) {
+> +		pci_read_config_dword(pdev, pos, &header);
+> +		if (PCI_EXT_CAP_NEXT(header) == pdev->l1ss)
+> +			pos_to_l1ss = pos;
+> +		else if (PCI_EXT_CAP_ID(header) == PCI_EXT_CAP_ID_L1SS)
+> +			l1ss_header = header;
+> +
+> +		pos = PCI_EXT_CAP_NEXT(header);
+> +	}
+> +}
+> +
+> +static void chromeos_fixup_apl_pci_l1ss_capability(struct pci_dev *pdev)
+> +{
+> +	u32 header;
+> +
+> +	if (!pos_to_l1ss || !l1ss_header)
+> +		return;
+> +
+> +	pci_info(pdev, "Fixup L1SS Capability\n");
+> +	/* Fixup the header of L1SS Capability if missing */
+> +	pci_read_config_dword(pdev, pdev->l1ss, &header);
+> +	if (PCI_EXT_CAP_ID(header) != PCI_EXT_CAP_ID_L1SS)
+> +		pci_write_config_dword(pdev, pdev->l1ss, l1ss_header);
+> +
+> +	/* Fixup the link to L1SS Capability if missing*/
+> +	pci_read_config_dword(pdev, pos_to_l1ss, &header);
+> +	if (PCI_EXT_CAP_NEXT(header) != pdev->l1ss)
+> +		pci_write_config_dword(pdev, pos_to_l1ss, pdev->l1ss << 20);
+> +}
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_save_apl_pci_l1ss_capability);
+> +DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_fixup_apl_pci_l1ss_capability);
+> +#endif
 
-This patch moves this check after the call_mmap() invocation. Only memfd
-actively denies write access causing a potential failure here (in
-memfd_add_seals()), so there should be no impact on non-memfd cases.
+What do you think of the possible revision below?
 
-This patch makes the userland-visible change that MAP_SHARED, PROT_READ
-mappings of an F_SEAL_WRITE sealed memfd mapping will now succeed.
+  - Moved to arch/x86/pci/fixup.c since this is x86-only.
+  - Save prev cap offset & header, L1SS offset & header.  This means
+    we can fix up even when CONFIG_PCIEASPM is not enabled, we can
+    restore the entire previous cap header (not just the link), and
+    should be safe since only one device per system should match the
+    Device ID.
 
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
----
- mm/mmap.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Bjorn
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index c96dcce90772..a166e9f3c474 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2596,17 +2596,17 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 	vma->vm_pgoff = pgoff;
+commit e082cb8ab59f ("PCI: Fix up L1SS capability for Intel Apollo Lake Root Port")
+parent 52589007b243
+Author: Ron Lee <ron.lee.intel@gmail.com>
+Date:   Mon Apr 3 16:30:16 2023 -0500
+
+    PCI: Fix up L1SS capability for Intel Apollo Lake Root Port
+    
+    On Google Coral and Reef family Chromebooks with Intel Apollo Lake
+    SoC, firmware clobbers the headers of the L1 PM Substates capability and
+    the previous capability when returning from D3cold to D0.
+    
+    Save those headers at enumeration-time and restore them at resume.
+    
+    Link: https://lore.kernel.org/linux-pci/CAFJ_xbq0cxcH-cgpXLU4Mjk30+muWyWm1aUZGK7iG53yaLBaQg@mail.gmail.com/T/#u
+
+diff --git a/arch/x86/pci/fixup.c b/arch/x86/pci/fixup.c
+index 615a76d70019..ad0dfb22b4a6 100644
+--- a/arch/x86/pci/fixup.c
++++ b/arch/x86/pci/fixup.c
+@@ -824,3 +824,61 @@ static void rs690_fix_64bit_dma(struct pci_dev *pdev)
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x7910, rs690_fix_64bit_dma);
  
- 	if (file) {
--		if (is_shared_maywrite(vm_flags)) {
--			error = mapping_map_writable(file->f_mapping);
--			if (error)
--				goto free_vma;
--		}
--
- 		vma->vm_file = get_file(file);
- 		error = call_mmap(file, vma);
- 		if (error)
- 			goto unmap_and_free_vma;
- 
-+		if (vma_is_shared_maywrite(vma)) {
-+			error = mapping_map_writable(file->f_mapping);
-+			if (error)
-+				goto unmap_and_free_vma;
+ #endif
++
++/*
++ * When returning from D3cold to D0, firmware on some Google Coral and Reef
++ * family Chromebooks with Intel Apollo Lake SoC clobbers the headers of
++ * both the L1 PM Substates capability and the previous capability for the
++ * "Celeron N3350/Pentium N4200/Atom E3900 Series PCI Express Port B #1".
++ *
++ * Save those values at enumeration-time and restore them at resume.
++ */
++
++static u16 prev_cap, l1ss_cap;
++static u32 prev_header, l1ss_header;
++
++static void chromeos_save_apl_pci_l1ss_capability(struct pci_dev *dev)
++{
++	int pos = PCI_CFG_SPACE_SIZE, prev = 0;
++	u32 header, pheader = 0;
++
++	while (pos) {
++		pci_read_config_dword(dev, pos, &header);
++		if (PCI_EXT_CAP_ID(header) == PCI_EXT_CAP_ID_L1SS) {
++			prev_cap = prev;
++			prev_header = pheader;
++			l1ss_cap = pos;
++			l1ss_header = header;
 +		}
 +
- 		/*
- 		 * Expansion is handled above, merging is handled below.
- 		 * Drivers should not alter the address of the VMA.
--- 
-2.40.0
-
++		prev = pos;
++		prev_header = header;
++		pos = PCI_EXT_CAP_NEXT(header);
++	}
++}
++
++static void chromeos_fixup_apl_pci_l1ss_capability(struct pci_dev *dev)
++{
++	u32 header;
++
++	if (!prev_cap || !prev_header || !l1ss_cap || !l1ss_header)
++		return;
++
++	/* Fixup the header of L1SS Capability if missing */
++	pci_read_config_dword(dev, l1ss_cap, &header);
++	if (header != l1ss_header) {
++		pci_write_config_dword(dev, l1ss_cap, l1ss_header);
++		pci_info(dev, "restore L1SS Capability header (was %#010x now %#010x)\n",
++			 header, l1ss_header);
++	}
++
++	/* Fixup the link to L1SS Capability if missing */
++	pci_read_config_dword(dev, prev_cap, &header);
++	if (header != prev_header) {
++		pci_write_config_dword(dev, prev_cap, prev_header);
++		pci_info(dev, "restore previous Capability header (was %#010x now %#010x)\n",
++			 header, prev_header);
++	}
++}
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_save_apl_pci_l1ss_capability);
++DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_fixup_apl_pci_l1ss_capability);
