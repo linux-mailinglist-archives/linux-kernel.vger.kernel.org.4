@@ -2,81 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D546D4CFB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3646D4CFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbjDCQBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54474 "EHLO
+        id S233127AbjDCQBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233127AbjDCQBL (ORCPT
+        with ESMTP id S233149AbjDCQBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:01:11 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F47E8
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:00:56 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id i189-20020a6b3bc6000000b00758a1ed99c2so18118257ioa.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 09:00:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680537655; x=1683129655;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XENesBsTsU74N3xfCyWfV4bNRGTQ6uvKt1Bti6poCrs=;
-        b=OKQF3K1BJtncWNQZs/CaCeyMe6qlPfmFyu1zOEqDTEXYjVB75mCFm6Hepv9QkjCJiC
-         22OY5WdEss7byjISOUhy+ISbUNcNnijnfYhAZKbZlju4qUxEDFWx78/nEy/Hr/pWn4py
-         +OEQxXbd4JIEAVqpZOy+qXSWgRPF18H45mFFc4vjkbRz3sF2IsKiuhpDe+lUCcZZKkqh
-         gh+KpqJaM3HjZsVbRj5EuZPFpkGGzQqvbCNEDTv7AnRbMssLUwKLHAD9ZOpuypgcQhWa
-         Lxq4BzuWuhjEVUml7mpq/1tzCeIJj8IYbntTfMUoH4OWQOWYGVCsPs5RFwYMQJUBNNGd
-         iH1Q==
-X-Gm-Message-State: AAQBX9e31Vc9Mh4vw5Ve4K0INqcfK6uI50c1TmsfiB6eydrngYkTTs8a
-        c9uJsWk7Cb8bDdVggmH1QV177w0zoblIs1dEf1Zn3c/KNbXy
-X-Google-Smtp-Source: AKy350YzWVQ79GIVWccMGTckSG2bbsFhrcm3U+O/3yjbJNXWNn3jvmXa8/vmak2qK0hmIOz5IYV6xs5EvvS5us8MCSc3rkWofFT1
+        Mon, 3 Apr 2023 12:01:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19509198C;
+        Mon,  3 Apr 2023 09:01:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61990620B9;
+        Mon,  3 Apr 2023 16:01:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 716DFC433EF;
+        Mon,  3 Apr 2023 16:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680537700;
+        bh=S0wrhQf1xkX4hkrC4Q9bMLfjBCQPk4ChYmPap7j4OeE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G46Hf5wKA8mrDrgtLiYeTG6invMxAmJPmBUkXKilTqvvQzh+He1Mza4H6IF3uj/0h
+         A55wWuyW3dTBJ9vQbys6HNu4qkxSiEu9WjgpjgGOSuHSYonTg7s7U0vQyb5GG6SZtV
+         jbLVCjzCwmAxkUyU8EywMhTzFCgZWeL8Zg5eIDMI=
+Date:   Mon, 3 Apr 2023 18:01:38 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Apr 3
+Message-ID: <2023040305-childlike-stew-4f8e@gregkh>
+References: <20230403202412.66d43f13@canb.auug.org.au>
+ <20230403155147.GA239124@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:ecc:b0:325:f785:6a6 with SMTP id
- i12-20020a056e020ecc00b00325f78506a6mr15270093ilk.6.1680537655756; Mon, 03
- Apr 2023 09:00:55 -0700 (PDT)
-Date:   Mon, 03 Apr 2023 09:00:55 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000000d1d705f870aaee@google.com>
-Subject: [syzbot] Monthly block report
-From:   syzbot <syzbot+list7f409556e0cf60fa6f76@syzkaller.appspotmail.com>
-To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403155147.GA239124@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello block maintainers/developers,
+On Mon, Apr 03, 2023 at 08:51:47AM -0700, Nathan Chancellor wrote:
+> Hi Stephen (and Greg, just as an FYI):
+> 
+> On Mon, Apr 03, 2023 at 08:24:12PM +1000, Stephen Rothwell wrote:
+> 
+> ...
+> 
+> > Merging driver-core/driver-core-next (43ba3d4af7a7 pktcdvd: simplify the class_pktcdvd logic)
+> 
+> ...
+> 
+> > Merging char-misc/char-misc-next (48a6c7bced2a cdx: add device attributes)
+> 
+> There is a semantic conflict between these two trees:
+> 
+>   drivers/cdx/cdx.c:393:8: error: incompatible function pointer types initializing 'ssize_t (*)(const struct bus_type *, const char *, size_t)' (aka 'long (*)(const struct bus_type *, const char *, unsigned long)') with an expression of type
+>    'ssize_t (struct bus_type *, const char *, size_t)' (aka 'long (struct bus_type *, const char *, unsigned long)') [-Wincompatible-function-pointer-types]
+>   static BUS_ATTR_WO(rescan);
+>          ^~~~~~~~~~~~~~~~~~~
+>   include/linux/device/bus.h:129:42: note: expanded from macro 'BUS_ATTR_WO'
+>           struct bus_attribute bus_attr_##_name = __ATTR_WO(_name)
+>                                                   ^~~~~~~~~~~~~~~~
+>   include/linux/sysfs.h:135:11: note: expanded from macro '__ATTR_WO'
+>           .store  = _name##_store,                                        \
+>                     ^~~~~~~~~~~~~
+>   <scratch space>:30:1: note: expanded from here
+>   rescan_store
+>   ^~~~~~~~~~~~
+>   1 error generated.
+> 
+> caused by commit 75cff725d956 ("driver core: bus: mark the struct
+> bus_type for sysfs callbacks as constant") in the driver-core tree
+> interacting with commit 2959ab247061 ("cdx: add the cdx bus driver") in
+> the char-misc tree. The following diff fixes it for me, could it be
+> applied to the merge of the char-misc tree (if I am reading the order of
+> your merges correctly)?
+> 
+> If there is a better or more appropriate way to report this, please let
+> me know.
+> 
+> Cheers,
+> Nathan
+> 
+> diff --git a/drivers/cdx/cdx.c b/drivers/cdx/cdx.c
+> index 67c32cb2c006..38511fd36325 100644
+> --- a/drivers/cdx/cdx.c
+> +++ b/drivers/cdx/cdx.c
+> @@ -363,7 +363,7 @@ static struct attribute *cdx_dev_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(cdx_dev);
+>  
+> -static ssize_t rescan_store(struct bus_type *bus,
+> +static ssize_t rescan_store(const struct bus_type *bus,
+>  			    const char *buf, size_t count)
+>  {
+>  	struct cdx_controller *cdx;
 
-This is a 30-day syzbot report for the block subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/block
 
-During the period, 2 new issues were detected and 1 were fixed.
-In total, 24 issues are still open and 73 have been fixed so far.
+A patch was already sent for this:
+	https://lore.kernel.org/r/20230403140416.28183-1-nipun.gupta@amd.com
 
-Some of the still happening issues:
+and yeah, I knew this would happen, I'll fix it up when the trees go to
+Linus for -rc1.
 
-Crashes Repro Title
-343     Yes   INFO: task hung in blkdev_put (4)
-              https://syzkaller.appspot.com/bug?extid=9a29d5e745bd7523c851
-173     Yes   WARNING in copy_page_from_iter
-              https://syzkaller.appspot.com/bug?extid=63dec323ac56c28e644f
-71      Yes   INFO: task hung in blkdev_fallocate
-              https://syzkaller.appspot.com/bug?extid=39b75c02b8be0a061bfc
-21      Yes   WARNING in blk_register_tracepoints
-              https://syzkaller.appspot.com/bug?extid=c54ded83396afee31eb1
-14      Yes   INFO: task hung in blkdev_get_by_dev (5)
-              https://syzkaller.appspot.com/bug?extid=6229476844294775319e
+thanks,
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+greg k-h
