@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8F46D448B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4D76D448E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbjDCMgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
+        id S232155AbjDCMhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbjDCMgf (ORCPT
+        with ESMTP id S232049AbjDCMhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:36:35 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FF583;
-        Mon,  3 Apr 2023 05:36:34 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id r11so116734069edd.5;
-        Mon, 03 Apr 2023 05:36:34 -0700 (PDT)
+        Mon, 3 Apr 2023 08:37:41 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B64F7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:37:39 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id m16so14204363ybk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 05:37:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680525393;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mI8z72ys9h7213jm8p1zrgDacfSUNl6g9XbEXB4wrlI=;
-        b=MQjLEdhjuKT+lGjIRKmxaKu4KuHKHlBGeP2wARXS+CrWlTYiICeROVrOrOCOx1G/ef
-         Lt4t89Fj3AS7bdi7Y578v4/h0nspKd44HpbMCfJCdbFzr9jgnGotrVjOl5fJcUuia2qz
-         9QqSRtVxtg32GWWjuUVlPBiJCT9M4q8ml6wgkPzffn6sF+Qiu73APmLsP5c7uIS03kib
-         qdoeCr8kZwWRsv0kclOj5GcnzA8HboHxI6AIGefOFaKFWSMjK+pbrsvDg2/EhTX9sS6C
-         HqCN0BAyCp5rlaIF6+fmjNr5LonAk0d6owaUOfnHUpDEC8ev+wHzkV5ZkPpHFjwsga1X
-         4Ngg==
+        d=linaro.org; s=google; t=1680525459;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tyEzNjODUF0EMEwKR3BoiHKcKfk7fD3xoSv4d3W2u5c=;
+        b=RI9kx2Qyn5Tkt66uOxL/BVxqYIXdLMg+u9Wyy8PZYWxpRNyTnhKpQC0SuydgUHv9UG
+         /CvLd6a+pycq/HgJvGmlh3AeSWu9iBKz1pByMx/SKscum26IvOSVU30QWQwi9Rmj8CgM
+         V7zc5z2+5/YlHX4CwF+TgxrvSmX41e4xZhdbeiFqCxkN78k2WpOd7NXGqqLrCObamLyU
+         S2X7+5skM76FEqWmXFAHDTyH2yeJFJbd2IWlGJAc6YFO1RFt5HLV/5WQBoGUrr6cmgYs
+         T9riVWUviYu62qGAZIJUtHv7UpytVKmM9gH/uVUdv46iWJT/e5Abz871escBoSbNwkKC
+         mfGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680525393;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mI8z72ys9h7213jm8p1zrgDacfSUNl6g9XbEXB4wrlI=;
-        b=3Rj41Ds5YSXFbkLW7nQ0ThZteOA1ysqdlKgKXtODkKB+ISlxQDbQR+5sLNF/g5rpWF
-         bP1oJnh2gpRoXSl1cJq1yq4njKQbb2BjABa+H4aUfE5GXTaVW1Wbz80DLcA+7Nmvp5jc
-         LL544S0e4a7RMiKP6XQY767ELkMw+AZkf5E6M7HwqLQuwkiRUNAz7bC3uW9mlAI+bi+Y
-         NPcKDTG0Sg3BetXS9rb/moZ2GZwpIdukJZ5rgA8jb+i+qhsNJtyrzELSpwVQ5p3s+BLO
-         Md37ICrZKr5FaPmcOJ37ApdKJ4XiG+ZQ3uH3tHt6P3UQTXzXzmXMwEyBJgb4/+RjT9+Q
-         Tuiw==
-X-Gm-Message-State: AAQBX9cExaG4W80+ZCLMzcHxSL7B61O9ce295F0uqmgF3n7a08IIvvx7
-        2WQFCH4KdGqSIQo+7qCss5jCh9IjWNw=
-X-Google-Smtp-Source: AKy350aNaCdCQMP8OiC6dLC+L3XK5X8QMbP0o414svnCma1txj1E/+7yKLhsCmY5hXu60n5rTyzYbw==
-X-Received: by 2002:a17:906:cf89:b0:87b:d3f3:dcf3 with SMTP id um9-20020a170906cf8900b0087bd3f3dcf3mr35421385ejb.35.1680525392919;
-        Mon, 03 Apr 2023 05:36:32 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id bt23-20020a170906b15700b009477a173744sm4496269ejb.38.2023.04.03.05.36.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 05:36:32 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 14:36:30 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Petlozu Pravareshwar <petlozup@nvidia.com>
-Cc:     jonathanh@nvidia.com, p.zabel@pengutronix.de,
-        dmitry.osipenko@collabora.com, ulf.hansson@linaro.org,
-        kkartik@nvidia.com, cai.huoqing@linux.dev, spatra@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Viswanath L <viswanathl@nvidia.com>
-Subject: Re: [PATCH v2] soc/tegra: pmc: Support software wake-up for SPE
-Message-ID: <ZCrITl9ZSPsawOpm@orome>
-References: <20230330170621.258068-1-petlozup@nvidia.com>
+        d=1e100.net; s=20210112; t=1680525459;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tyEzNjODUF0EMEwKR3BoiHKcKfk7fD3xoSv4d3W2u5c=;
+        b=MDzkm7o8kUN6XVYfmCOesykSNPgkfc96GwNOzPmROxz5BxfKkOcHFsDCQhyQIn4/zx
+         NrPI3Xn93DUThqoRYqAAIhOouF7qTqVowdkHYC6anBPdSWGEtFo75jJ3m+f6gPoadjfc
+         O5Hqe+lif/Pl45QbbsyMvSmU2UaYTyg1IiAWD2OKKw6CzSCbJdvzCJb0EmuUlQAsG54l
+         jlOoIkUNtevF9CXUsajONyLD7a4s3ZBGHeB4yb2OLLlUAewUXXgfU/zl/eEDq50k4Qih
+         /JLswVXwz4ugKvZgVJjZqhsxXDcPuwLS9sxsZLTURDnFAHs1NoWBrSWu0CLYSK53N/iE
+         TE4A==
+X-Gm-Message-State: AAQBX9cZXEfMuwqeHhr/IEIV1MSX4oT3fTjZfxhX1AQ/g1K+ZiMQOIHO
+        ENlaDfBdCFBXu2huxxEZILt2F6X0Ui3AX8w1YC01XA==
+X-Google-Smtp-Source: AKy350aUMZOkAO/yuOaW4hyECahwaHSCVDgAQ+x4o/yvMb2omtowEEWvK3Hbp4gEXOg4cbegKispbPEvBbOHZlP5mGs=
+X-Received: by 2002:a05:6902:70a:b0:b6e:361a:c86 with SMTP id
+ k10-20020a056902070a00b00b6e361a0c86mr19072022ybt.3.1680525458952; Mon, 03
+ Apr 2023 05:37:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="H4q6Deodu/0Ekunc"
-Content-Disposition: inline
-In-Reply-To: <20230330170621.258068-1-petlozup@nvidia.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
+References: <20230328060740.1984239-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20230328060740.1984239-1-peng.fan@oss.nxp.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 3 Apr 2023 14:37:03 +0200
+Message-ID: <CAPDyKFpeiHunqfBB0BgSmG2NH7d6V3sfMw=d=dWz6wd4GmYZyg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: ref sdhci-common.yaml
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 28 Mar 2023 at 08:02, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> Since the esdhc controller is sdhci compatible, the fsl-imx-esdhc.yaml
+> should ref sdhci-common.yaml to use 'sdhci-caps-mask' property.
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
---H4q6Deodu/0Ekunc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied for next, thanks!
 
-On Thu, Mar 30, 2023 at 05:06:21PM +0000, Petlozu Pravareshwar wrote:
-> The Sensor Processing Engine(SPE) can trigger a software wake-up of
-> the device. To support this wake-up for the SPE, set SR_CAPTURE_EN
-> bit in WAKE_AOWAKE_CNTRL register associated with the wake-up for
-> the SPE. This SR capturing logic is expected to be enabled for wakes
-> with short pulse signalling requirements.
->=20
-> Signed-off-by: Viswanath L <viswanathl@nvidia.com>
-> Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
+Kind regards
+Uffe
+
+
 > ---
-> v1->v2:
-> * Rebase the change on latest code.
-> ---
->  drivers/soc/tegra/pmc.c | 24 +++++++++++++++++++++++-
->  1 file changed, 23 insertions(+), 1 deletion(-)
-
-Applied, thanks.
-
-Thierry
-
---H4q6Deodu/0Ekunc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQqyE4ACgkQ3SOs138+
-s6E7hg//YszA7cR4dHtbCofh/mlp2CATRSom55hnsqEZUN/LSwswlD24/hIbkrEH
-kqoIkwpYoT5Nb+qIMxVa8jQOnTz/0Wfw3kTm2ofGXesuBddcY08fgCM1FPUhNXfM
-jAkzpK8C01r5+dA3TQdJNOyO3Cy/AujB308zlM/RsIqOZaArkaQaW0/X/IxFWV5l
-lkTewoj0ixETW5s0FRKMn4dYupyLYAc6Emjc5xu6rJ2dLxgujrwaZCVVdlBOqvzC
-lvMf+cgNwlJaFlGD/lR93gBE76EJs7vqMLummebvCZ5dfzhyeRtqIoPHswF52al7
-we7aT+0VdPcEIwRjCroqeUIiklScACnABYtBjvcknIbLhhvM5WkyQOCtN8DbfqkD
-2GG4n33K0xoCo/ugXOXzlONx08UMswM4tZr9DpnQxoDI1m6GS/okfA9ZZX9kwmFs
-THe8BmXapxRrA4zfNHDRtJtbokse0ImQzM3mOWFXsk0PRwF10Daxcym4ubynuABD
-QvBJHtbDtxZmnyi+z8OlmyEkpO9I9e3JyDM5gmqF0+UFOxJk43oZuyeKJozKXPLv
-5rpjtgH00FEtYEIbTXpjGJg7L7hxWCIMReZfrDckB5GCQiQuA1hW02P740S0K+aS
-/HnWBYSD125NqdJRz2CMWe2jEJqAEfw+2O4DBbEFNACi3bPPkr4=
-=89E5
------END PGP SIGNATURE-----
-
---H4q6Deodu/0Ekunc--
+>  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> index 7f721fbfb009..fbfd822b9270 100644
+> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> @@ -10,7 +10,7 @@ maintainers:
+>    - Shawn Guo <shawnguo@kernel.org>
+>
+>  allOf:
+> -  - $ref: mmc-controller.yaml
+> +  - $ref: sdhci-common.yaml#
+>
+>  description: |
+>    The Enhanced Secure Digital Host Controller on Freescale i.MX family
+> --
+> 2.37.1
+>
