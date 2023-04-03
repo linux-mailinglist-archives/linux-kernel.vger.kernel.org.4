@@ -2,110 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545B26D4989
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8BD6D4999
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbjDCOiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
+        id S233752AbjDCOjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233657AbjDCOir (ORCPT
+        with ESMTP id S233728AbjDCOjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:38:47 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460FD6A5E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:38:46 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id y35so17616082pgl.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:38:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680532726;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IyKOUnifa/Kg22j76h04QR7te4Idgi07oXm9sbFwHTc=;
-        b=KGk98ifSovqY1DZzni9nQX86O6dvZhMCGhFiyEk+E6VaCSoZjcC7+TyemNrWo3Mhd2
-         LrzuJtwdh4L5mQcUPTRHiALC6UcPjGrajEecpM1JVZUPf2RLdsbJTgE7AHr2nIvNfmUW
-         VOBG2BkED3Wll2t9g35yGdI5+5DVUFrdX4LGDzYCf7yjvLveGeFqmhAncz2y2nEr7Tgw
-         E249YmpDfnol03jHXu/itbnglHaUQjbMepDHAs+2SubyoPmsiF5gFwW5H9Y1+w+rAhs8
-         uu0Bcgv+KouDZJ1ybtOPl7mWin3BXTyDXQCklBxqcZKM6zK+IiJuNhI+xcwjGGGhHa7Y
-         yEmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680532726;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IyKOUnifa/Kg22j76h04QR7te4Idgi07oXm9sbFwHTc=;
-        b=mZCi1nwQiPjDFz8K0ZwLRLqVdjhaWfTZbaru5UxVJOSAYMLRa+fM83gin5b9Gifcm6
-         vpHWWhE46cd2Od1BW4yJIAOubtgtH31wsMYabD7uOuvRsMe2AKO5iBqMYZjf+76fprIK
-         394w/aWi53o/5zjTmIrYddNkpdsDWCl8E7XYDupo4n1S4ouW7s+wywa86FsFQRcJFBn8
-         c+4SeCyp0Cl/rbOojts0OWGU5LtFTdbeD/CoRWmuiQtwfWja5JM4nddaHy/6PDM1hUBg
-         9O05DmoyH3iglTZ1lK6jH5v0UK8To3eFkRcNya9+xvLQjGMgJKd12sNllwfnT9OAXzxb
-         7OOQ==
-X-Gm-Message-State: AAQBX9dz4RabfKD4wWnkC1/dvXz74LlcekJjrB7BkVZxX0pm1a8qWriE
-        kqd3yJTZHW6p4ABTkHp7mWRhJCd3v1Hpow==
-X-Google-Smtp-Source: AKy350brf4/MqosM9A30E/a84WMe+/DtNcTPaN8L/dQOF+cx3zbrIio0D1AHjaDaKXoe76VB7swmDg==
-X-Received: by 2002:a62:63c2:0:b0:62d:8376:3712 with SMTP id x185-20020a6263c2000000b0062d83763712mr23958519pfb.28.1680532725560;
-        Mon, 03 Apr 2023 07:38:45 -0700 (PDT)
-Received: from [172.30.1.1] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id e24-20020a62ee18000000b0062dcaa50a9asm7033339pfi.58.2023.04.03.07.38.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 07:38:45 -0700 (PDT)
-Message-ID: <6bb15158-829e-f032-dc10-110e831da8c3@gmail.com>
-Date:   Mon, 3 Apr 2023 23:38:41 +0900
+        Mon, 3 Apr 2023 10:39:23 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4A91DFB2;
+        Mon,  3 Apr 2023 07:39:22 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 77AF532009FD;
+        Mon,  3 Apr 2023 10:39:19 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 03 Apr 2023 10:39:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680532759; x=
+        1680619159; bh=K2V3JLsEArJXT5TV6MDPru6C5GMHsExu9jhmhSdk+zM=; b=W
+        c5t8NREEIWo1fH4RidMcCeW8vslYrlg8yjoP+fgXapMvSaVtq9OTiDKafp41bgJz
+        oYjPqABrCdeeV2/V1q4c0BxUORxGcYBHOCApDb2YeRDYyzJEXAzT9o5m2O+GId2f
+        AOwiKFEAT8Xze9i4dm37E1ox/z8+Fp68QS5/sUUTygsRqVqWlIPcXISiXSsMcDXO
+        Eqh3kwG9iXvTml4l8bznnUS64eqHWJETGhzsHommuBn632Wy3/YYkMcMmyMgPIwF
+        CvAhcGESsu0siFSXsfTIzDBnXYX/G2dwg2jXI3eLoe/7uylTaKBOBs176DS58Zrq
+        a/zQ4xmUoKX1PMSfaXdOg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680532759; x=1680619159; bh=K2V3JLsEArJXT
+        5TV6MDPru6C5GMHsExu9jhmhSdk+zM=; b=e2w447uusTtu5q54yfFeOZQdnc9b/
+        AJb+1KHufDoeqjk9f1kBNfqBzKSaT52+A7uZpWAB1u5QndFu01DUPparmXsPlxGx
+        WF0vAV3fCvY69KlA++dInfzV4t+6p5b2jO6d0lqD4ePrXihfFXFbmUqUpN4g9cKz
+        E/GaxU82i/JtkkPrcUBc5RNWUQ2mXs4d8xk9Uxy037d9gvl6vmdG6zqHhjj0z3TS
+        limNJ6chj7mBRJ9SV29UXHqJtZNsV8Nuhr88F+0HOXbtmOMT5m4KNU6CGBFgzueV
+        hIKekPqMAkqm81p047aklihTLYEghPR28pLxBAE/YcJ2UfttHkwTmop5Q==
+X-ME-Sender: <xms:FeUqZPgcR0R5uYcMz8fIvtRs2xTFZj3jJovbAIKYeZCtGtPwcDmGwA>
+    <xme:FeUqZMBB5AJvL8CYjz7xMwMTQRl7Bk6pamWbvPKgXpDejfiZqUtjN_ouNX1ivsuBt
+    La6CPAFGtdaDssn-7E>
+X-ME-Received: <xmr:FeUqZPHWomL5Yh6m22PebkDm45jvT5tmJMQK0cPxhSK-fEQ8NNhFfyejRds7DeHgRr1SzA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedgjeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:FeUqZMR2gbXvV65-WXUbBhiEehYP9XAH881P-ukBM_y6mPb7AHdrkw>
+    <xmx:FeUqZMxtx0mdE-o7b9AKZALJVOt4RD8nXtLV7B8R3JWtvwjKAB_v5A>
+    <xmx:FeUqZC6khTcI2U4zi-8BiEPgp0hPpcDGozJRoiFCd_4aCYWgKU_XPw>
+    <xmx:F-UqZF89gh87kchgVURi6j5iIyAKwLcxYz_F9xkw8ECKiXJp0Th1KQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Apr 2023 10:39:17 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 7F0EC10D7B3; Mon,  3 Apr 2023 17:39:15 +0300 (+03)
+Date:   Mon, 3 Apr 2023 17:39:15 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv9 03/14] mm/page_alloc: Fake unaccepted memory
+Message-ID: <20230403143915.uc4tnpgmssvpdqxu@box.shutemov.name>
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <20230330114956.20342-4-kirill.shutemov@linux.intel.com>
+ <835dfe65-d9dd-0b16-37d4-920e97f1bca0@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 14/14] extcon: Use positive conditional in ternary
- operator
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bumwoo Lee <bw365.lee@samsung.com>,
-        linux-kernel@vger.kernel.org
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
- <20230322144005.40368-15-andriy.shevchenko@linux.intel.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20230322144005.40368-15-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <835dfe65-d9dd-0b16-37d4-920e97f1bca0@suse.cz>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23. 3. 22. 23:40, Andy Shevchenko wrote:
-> It's easier to parse by a human being the positive conditional.
+On Mon, Apr 03, 2023 at 03:39:53PM +0200, Vlastimil Babka wrote:
+> On 3/30/23 13:49, Kirill A. Shutemov wrote:
+> > For testing purposes, it is useful to fake unaccepted memory in the
+> > system. It helps to understand unaccepted memory overhead to the page
+> > allocator.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/extcon/extcon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-> index edfa0450e605..3e8522d522b4 100644
-> --- a/drivers/extcon/extcon.c
-> +++ b/drivers/extcon/extcon.c
-> @@ -1466,7 +1466,7 @@ EXPORT_SYMBOL_GPL(extcon_get_edev_by_phandle);
->   */
->  const char *extcon_get_edev_name(struct extcon_dev *edev)
->  {
-> -	return !edev ? NULL : edev->name;
-> +	return edev ? edev->name : NULL;
->  }
->  EXPORT_SYMBOL_GPL(extcon_get_edev_name);
->  
+> Ack on being useful for testing, but the question is if we want to also
+> merge this patch into mainline as it is?
 
-It is not fix-up patch and I'm not sure that it is beneficial patch. 
-I will not apply it.
+I don't insist on getting it upstream, but it can be handy to debug
+related bugs in the future.
+
+> > The patch allows to treat memory above the specified physical memory
+> > address as unaccepted.
+> > 
+> > The change only fakes unaccepted memory for page allocator. Memblock is
+> > not affected.
+> > 
+> > It also assumes that arch-provided accept_memory() on already accepted
+> > memory is a nop.
+> 
+> I guess to be in mainline it would have to at least gracefully handle the
+> case of accept_memory actually not being a nop, and running on a system with
+> actual unaccepted memory (probably by ignoring the parameter in such case).
+> Then also the parameter would have to be documented.
+
+As it is written now, accept_memory() is nop on system with real
+unaccepted memory if the memory is already accepted. Arch-specific code
+will check against own records to see if the memory needs accepting. If
+not, just return.
+
+And the option will not interfere with unaccepted memory declared by EFI
+memmap. It can extend it, but that's it.
+
+Looks safe to me.
+
+> Speaking of documented parameters, I found at least two that seem a more
+> generic variant of this (but I didn't look closely if that makes sense):
+> 
+> efi_fake_mem=   nn[KMG]@ss[KMG]:aa[,nn[KMG]@ss[KMG]:aa,..] [EFI; X86]
+>     Add arbitrary attribute to specific memory range by
+>     updating original EFI memory map.
+> 
+> memmap=<size>%<offset>-<oldtype>+<newtype>
+>     [KNL,ACPI] Convert memory within the specified region
+>     from <oldtype> to <newtype>. If "-<oldtype>" is left
+> 
+> Would any of those be usable for this usecase?
+
+Oh. I missed them. Will take a closer look.
+
+> 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > ---
+> >  mm/page_alloc.c | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> > 
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index d62fcb2f28bd..509a93b7e5af 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -7213,6 +7213,8 @@ static DEFINE_STATIC_KEY_FALSE(zones_with_unaccepted_pages);
+> >  
+> >  static bool lazy_accept = true;
+> >  
+> > +static unsigned long fake_unaccepted_start = -1UL;
+> > +
+> >  static int __init accept_memory_parse(char *p)
+> >  {
+> >  	if (!strcmp(p, "lazy")) {
+> > @@ -7227,11 +7229,30 @@ static int __init accept_memory_parse(char *p)
+> >  }
+> >  early_param("accept_memory", accept_memory_parse);
+> >  
+> > +static int __init fake_unaccepted_start_parse(char *p)
+> > +{
+> > +	if (!p)
+> > +		return -EINVAL;
+> > +
+> > +	fake_unaccepted_start = memparse(p, &p);
+> > +
+> > +	if (*p != '\0') {
+> > +		fake_unaccepted_start = -1UL;
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +early_param("fake_unaccepted_start", fake_unaccepted_start_parse);
+> > +
+> >  static bool page_contains_unaccepted(struct page *page, unsigned int order)
+> >  {
+> >  	phys_addr_t start = page_to_phys(page);
+> >  	phys_addr_t end = start + (PAGE_SIZE << order);
+> >  
+> > +	if (start >= fake_unaccepted_start)
+> > +		return true;
+> > +
+> >  	return range_contains_unaccepted_memory(start, end);
+> >  }
+> >  
+> 
 
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
-
+  Kiryl Shutsemau / Kirill A. Shutemov
