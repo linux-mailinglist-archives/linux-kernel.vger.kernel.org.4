@@ -2,114 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBA36D4D3D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3B06D4D41
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjDCQJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
+        id S232340AbjDCQKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbjDCQJE (ORCPT
+        with ESMTP id S230108AbjDCQKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:09:04 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3C9D1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:08:59 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso33066330pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 09:08:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680538138;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FReLfJ5RyVdrbXiYpGSEiw2ngxGjYmfHewo4jwkGSLo=;
-        b=lg/XksLHRF0mCqn5cd62/i93K/9XsNi/UKaXq2wmKqKs+ZOLTGDg++Rp2XG8BFoP+R
-         QspmHdp9B5qi8/2jNRqBwRVGinzRnYobyqmSkdR8qmZEECBJ5wyargRS3hQEOdgTUPWi
-         mVPBHsuMqaqKe/PW28NCJac9OuqQSVqjiLsYu/+y7C+AmgeC6bfEd3pFxNAj3IFzAfWj
-         wA2f1ooIt6rlDzI7TQTt9pEUOuNoFS7bpNmHSmx2geGVubaq4VgSf3jygYaqi0BccZDX
-         J+ujIkpxnpMJj8fJpWyDtMBBeoxapyPm4bnBVv48weLyMscZIg9NkywvMG8GBJzgOsZ1
-         efZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680538138;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FReLfJ5RyVdrbXiYpGSEiw2ngxGjYmfHewo4jwkGSLo=;
-        b=BLVVmRyeioj4itqdbLz0uR+yM68JIQEHY2NMs+OaKV9eXohSQ5uoyab6mXnzqzvsNc
-         ukBB9fva8grgpLQ+s41g6Q7vUX3CpEbkbW5aNZdfzXPYpX4ZSZuH2CFbbITCgJ2AIxNr
-         MLrT4f2IwJitsDJ59NxqB5bRNZvv/tdyQLaO9lJ8Oj0HiOFUZbszVeOnfShF1vdxducq
-         iflhLuLlv/Me2yhw6f9H1LKRKvcJbrgFPeJwzNtKweT14tV2tO7fQ4KcWnEAr+o+a8XS
-         IwSee1HLjpAm+U+Aeg/UelPGnAcDNBP04pv+jKMWOaEXu7ubvoIU52MvAbjsvQSujZIN
-         A/3A==
-X-Gm-Message-State: AAQBX9eKIvEmxtAe/sLR30oYC9IrzpmpvHO8Is+Emb8qg590xd7Mmkxs
-        OVd2yPMHkNXjZV/vp1+gzsLr
-X-Google-Smtp-Source: AKy350YTQOFeFPqGkXZukS9T2TYmxtydivmfM+gu0zZDzHiY5SbmtSdDu8RkO4nUco4wSwkrrnO+SQ==
-X-Received: by 2002:a05:6a20:8c05:b0:de:808e:8f3d with SMTP id j5-20020a056a208c0500b000de808e8f3dmr19411536pzh.13.1680538138603;
-        Mon, 03 Apr 2023 09:08:58 -0700 (PDT)
-Received: from thinkpad ([27.111.75.109])
-        by smtp.gmail.com with ESMTPSA id f23-20020aa782d7000000b005cd81a74821sm7133449pfn.152.2023.04.03.09.08.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 09:08:58 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 21:38:52 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
-        agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        konrad.dybcio@somainline.org, amit.pundir@linaro.org,
-        regressions@leemhuis.info, sumit.semwal@linaro.org,
-        catalin.marinas@arm.com, robin.murphy@arm.com
-Subject: Re: [PATCH V4 00/11] Fix XPU violation during modem metadata
- authentication
-Message-ID: <20230403160852.GD11346@thinkpad>
-References: <20230117085840.32356-1-quic_sibis@quicinc.com>
- <20230327161857.GA32697@willie-the-truck>
+        Mon, 3 Apr 2023 12:10:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28482D1;
+        Mon,  3 Apr 2023 09:10:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D547121ED0;
+        Mon,  3 Apr 2023 16:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1680538243; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YGPfSRWoGSI5fAPyYyzDsXwKPDOG1dsimMuY8Qfc4g0=;
+        b=L7bZBbv+W6HfeLim3yfUjNHW01j9/SIIBfNVR04wJqM33iPUcmbg6ebLUe8kkXMTc65khp
+        3IaivgE/Er8L7xX4jJ3LvlpT65CirVnK7FRZENHiOPhHe8lFo4GRoNOZqD5s7FANDQNjrQ
+        YFbsVwG67dMxOa1CDsW88PwRqvt6Av0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1680538243;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YGPfSRWoGSI5fAPyYyzDsXwKPDOG1dsimMuY8Qfc4g0=;
+        b=G0ospTt3eSGE7rc+rl9ghc7DxVIPQ968VED0M1W6bgoFt5ZKchg1Jp9l8iFpLJ4uD9BbW7
+        Q6mEs4I2YimtoTCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C3DCE13416;
+        Mon,  3 Apr 2023 16:10:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kA3BL4P6KmTTVQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 03 Apr 2023 16:10:43 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 558EBA0732; Mon,  3 Apr 2023 18:10:43 +0200 (CEST)
+Date:   Mon, 3 Apr 2023 18:10:43 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH v2] fs/buffer: Remove redundant assignment to err
+Message-ID: <20230403161043.tecfvgmhacs4j3qp@quack3>
+References: <20230323023259.6924-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230327161857.GA32697@willie-the-truck>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230323023259.6924-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 05:18:57PM +0100, Will Deacon wrote:
-> Hi Sibi,
+On Thu 23-03-23 10:32:59, Jiapeng Chong wrote:
+> Variable 'err' set but not used.
 > 
-> On Tue, Jan 17, 2023 at 02:28:29PM +0530, Sibi Sankar wrote:
-> > The memory region allocated using dma_alloc_attr with no kernel mapping
-> > attribute set would still be a part of the linear kernel map. Any access
-> > to this region by the application processor after assigning it to the
-> > remote Q6 will result in a XPU violation. Fix this by replacing the
-> > dynamically allocated memory region with a no-map carveout and unmap the
-> > modem metadata memory region before passing control to the remote Q6.
-> > The addition of the carveout and memunmap is required only on SoCs that
-> > mandate memory protection before transferring control to Q6, hence the
-> > driver falls back to dynamic memory allocation in the absence of the
-> > modem metadata carveout.
+> fs/buffer.c:2613:2: warning: Value stored to 'err' is never read.
 > 
-> [...]
-> 
-> >   remoteproc: qcom_q6v5_mss: Use a carveout to authenticate modem
-> >     headers
-> 
-> With this change now merged, am I ok to downgrade the arm64
-> arch_dma_prep_coherent() back to a clean?
-> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4589
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-I think you can. If something breaks, we will fix it (without reverting) ;)
+I don't think the patch is quite correct (Christian, please drop it if I'm
+correct). See below:
 
-- Mani
+> diff --git a/fs/buffer.c b/fs/buffer.c
+> index d759b105c1e7..b3eb905f87d6 100644
+> --- a/fs/buffer.c
+> +++ b/fs/buffer.c
+> @@ -2580,7 +2580,7 @@ int block_truncate_page(struct address_space *mapping,
+>  	struct inode *inode = mapping->host;
+>  	struct page *page;
+>  	struct buffer_head *bh;
+> -	int err;
+> +	int err = 0;
+>  
+>  	blocksize = i_blocksize(inode);
+>  	length = offset & (blocksize - 1);
+> @@ -2593,9 +2593,8 @@ int block_truncate_page(struct address_space *mapping,
+>  	iblock = (sector_t)index << (PAGE_SHIFT - inode->i_blkbits);
+>  	
+>  	page = grab_cache_page(mapping, index);
+> -	err = -ENOMEM;
+>  	if (!page)
+> -		goto out;
+> +		return -ENOMEM;
+>  
+>  	if (!page_has_buffers(page))
+>  		create_empty_buffers(page, blocksize, 0);
+> @@ -2609,7 +2608,6 @@ int block_truncate_page(struct address_space *mapping,
+>  		pos += blocksize;
+>  	}
+>  
+> -	err = 0;
+>  	if (!buffer_mapped(bh)) {
+>  		WARN_ON(bh->b_size != blocksize);
+>  		err = get_block(inode, iblock, bh, 0);
+> @@ -2633,12 +2631,11 @@ int block_truncate_page(struct address_space *mapping,
+>  
+>  	zero_user(page, offset, length);
+>  	mark_buffer_dirty(bh);
+> -	err = 0;
 
-> Thanks,
-> 
-> Will
+There is:
 
+        if (!buffer_uptodate(bh) && !buffer_delay(bh) && !buffer_unwritten(bh))
+                err = -EIO;
+
+above this assignment. So now we'll be returning -EIO if
+block_truncate_page() needs to read the block AFAICT. Did this pass fstests
+with some filesystem exercising this code (ext2 driver comes to mind)?
+
+								Honza
 -- 
-மணிவண்ணன் சதாசிவம்
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
