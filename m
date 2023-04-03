@@ -2,138 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BEC6D518D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7219D6D51A5
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbjDCTuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 15:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S232254AbjDCTyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 15:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjDCTuR (ORCPT
+        with ESMTP id S232648AbjDCTym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 15:50:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07FA2D4C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 12:50:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HGctQB0MsRBtisRk2++z/+GWlNTueM1Ui8YvixFhQlY=; b=X60NF2viHjNcrKZmmtR7mlOIcZ
-        1Y36Pe07ymKNMV3a8raWrlb4MRrCcrdjoAvIbIQjODociXLvioH6LYHzwVlwfWsvJq+Coq+a/0z/B
-        cslo4SZh7ylCbnShU+ddLnjAk0nBSLoWs32ZKkGIAbvH2yttKqc7lXMcYSOWSd/dkFhurl+0xKNX0
-        2gzCwU/YVPspZTaLjZf6xB7foALpxqVWfVraXkGPwiT1Nn/4ptB2CYzNFQb9qpeeVUrymrRKh9Tt0
-        2WSTo+eQKqG+msljYC8OzkjMwNhCnm+5sQ4ESwLx/A81NxHyIciWE+1QzEz+kzcR0GJ0bZUGMIsmV
-        QcRYx6yg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pjQB8-00ES6a-Ln; Mon, 03 Apr 2023 19:49:22 +0000
-Date:   Mon, 3 Apr 2023 20:49:22 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com,
-        michalechner92@googlemail.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v3 26/35] mm: fall back to mmap_lock if vma->anon_vma is
- not yet set
-Message-ID: <ZCstwjKhn76/mxIa@casper.infradead.org>
-References: <20230216051750.3125598-1-surenb@google.com>
- <20230216051750.3125598-27-surenb@google.com>
- <Y+5Pb4hGmV1YtNQp@casper.infradead.org>
- <CAJuCfpHR8k0GsrYPMjSBVLAbu3EZgDU081+5CnR1td0cLEyDFw@mail.gmail.com>
- <CAJuCfpHODBAV=riSPyvcmLbZVtXSdxrw2GMy8VOjvDV9yCyX8A@mail.gmail.com>
- <Y++l181MMw+T70yt@casper.infradead.org>
- <CAJuCfpG_ZWJs3mZkL0z7m-bBe1SmeoTZydfFocZaRbHob_89Hg@mail.gmail.com>
+        Mon, 3 Apr 2023 15:54:42 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7732D7D;
+        Mon,  3 Apr 2023 12:54:41 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 333IwZW3028930;
+        Mon, 3 Apr 2023 19:54:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=sI/KI1M9WQUoAVI3hQPJq/s8QurLUTf4o+gm5JkNNQA=;
+ b=N2ewvnT3s8M9V2Lwdkm7rNVGamgSVPdSxvG5A1epj0zqanQawo8xCnkvphzMR9tz7d1P
+ Nm0SZP2gHoxl6U34HAoVB8aPyZHMacqW8t43mTmeWf1nNfdTyLCv2NT5FjH4sB/cH32Q
+ u22hmPrfhwyawnhq7CWu9eYtur8JDaHEO6HlJfvhB2yg2R0D2yob1CNylD4f2Qcq+x8+
+ cQkfnHW5NC7b6rHMPDJ+jfGXPh7WWFfwmtCjGytjICHaBR5LecZ8+6WbTQkrM+1VKFuo
+ HHQ3GjI2VJfOdFplEgnGVkdWaUSa+4zwVZk1rD3aikbz8Rt5MJzPqKWfTWowTJ0Xgj+L 3Q== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pqwdrsabq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Apr 2023 19:54:13 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 333Jrvnn032472
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 3 Apr 2023 19:53:57 GMT
+Received: from [10.110.44.117] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 3 Apr 2023
+ 12:53:55 -0700
+Message-ID: <6d55e7af-4d68-2872-f407-268c3a4e95c8@quicinc.com>
+Date:   Mon, 3 Apr 2023 12:53:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpG_ZWJs3mZkL0z7m-bBe1SmeoTZydfFocZaRbHob_89Hg@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 1/2] check-uapi: Introduce check-uapi.sh
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>
+CC:     <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        <kernel-team@android.com>, <libabigail@sourceware.org>,
+        Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+References: <20230327174140.8169-1-quic_johmoo@quicinc.com>
+ <20230327174140.8169-2-quic_johmoo@quicinc.com>
+From:   John Moon <quic_johmoo@quicinc.com>
+In-Reply-To: <20230327174140.8169-2-quic_johmoo@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Dc6jDXDEQnbtZ_OZatM18cZwm3cJBrCH
+X-Proofpoint-ORIG-GUID: Dc6jDXDEQnbtZ_OZatM18cZwm3cJBrCH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-03_15,2023-04-03_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 phishscore=0 spamscore=0 adultscore=0 mlxscore=0
+ priorityscore=1501 mlxlogscore=694 suspectscore=0 clxscore=1011
+ bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304030154
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 08:10:35AM -0800, Suren Baghdasaryan wrote:
-> On Fri, Feb 17, 2023 at 8:05 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Thu, Feb 16, 2023 at 06:14:59PM -0800, Suren Baghdasaryan wrote:
-> > > On Thu, Feb 16, 2023 at 11:43 AM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > >
-> > > > On Thu, Feb 16, 2023 at 7:44 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > >
-> > > > > On Wed, Feb 15, 2023 at 09:17:41PM -0800, Suren Baghdasaryan wrote:
-> > > > > > When vma->anon_vma is not set, page fault handler will set it by either
-> > > > > > reusing anon_vma of an adjacent VMA if VMAs are compatible or by
-> > > > > > allocating a new one. find_mergeable_anon_vma() walks VMA tree to find
-> > > > > > a compatible adjacent VMA and that requires not only the faulting VMA
-> > > > > > to be stable but also the tree structure and other VMAs inside that tree.
-> > > > > > Therefore locking just the faulting VMA is not enough for this search.
-> > > > > > Fall back to taking mmap_lock when vma->anon_vma is not set. This
-> > > > > > situation happens only on the first page fault and should not affect
-> > > > > > overall performance.
-> > > > >
-> > > > > I think I asked this before, but don't remember getting an aswer.
-> > > > > Why do we defer setting anon_vma to the first fault?  Why don't we
-> > > > > set it up at mmap time?
-> > > >
-> > > > Yeah, I remember that conversation Matthew and I could not find the
-> > > > definitive answer at the time. I'll look into that again or maybe
-> > > > someone can answer it here.
-> > >
-> > > After looking into it again I'm still under the impression that
-> > > vma->anon_vma is populated lazily (during the first page fault rather
-> > > than at mmap time) to avoid doing extra work for areas which are never
-> > > faulted. Though I might be missing some important detail here.
-> >
-> > How often does userspace call mmap() and then _never_ fault on it?
-> > I appreciate that userspace might mmap() gigabytes of address space and
-> > then only end up using a small amount of it, so populating it lazily
-> > makes sense.  But creating a region and never faulting on it?  The only
-> > use-case I can think of is loading shared libraries:
-> >
-> > openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
-> > (...)
-> > mmap(NULL, 1970000, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f0ce612e000
-> > mmap(0x7f0ce6154000, 1396736, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x26000) = 0x7f0ce6154000
-> > mmap(0x7f0ce62a9000, 339968, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x17b000) = 0x7f0ce62a9000
-> > mmap(0x7f0ce62fc000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1ce000) = 0x7f0ce62fc000
-> > mmap(0x7f0ce6302000, 53072, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f0ce6302000
-> >
-> > but that's a file-backed VMA, not an anon VMA.
+On 3/27/2023 10:41 AM, John Moon wrote:
+> While the kernel community has been good at maintaining backwards
+> compatibility with kernel UAPIs, it would be helpful to have a tool
+> to check if a commit introduces changes that break backwards
+> compatibility.
 > 
-> Might the case of dup_mmap() while forking be the reason why a VMA in
-> the child process might be never used while parent uses it (or visa
-> versa)? Again, I'm not sure this is the reason but I can find no other
-> good explanation.
+> To that end, introduce check-uapi.sh: a simple shell script that
+> checks for changes to UAPI headers using libabigail.
+> 
+> libabigail is "a framework which aims at helping developers and
+> software distributors to spot some ABI-related issues like interface
+> incompatibility in ELF shared libraries by performing a static
+> analysis of the ELF binaries at hand."
+> 
+> The script uses one of libabigail's tools, "abidiff", to compile the
+> changed header before and after the commit to detect any changes.
+> 
+> abidiff "compares the ABI of two shared libraries in ELF format. It
+> emits a meaningful report describing the differences between the two
+> ABIs."
+> 
+> The script also includes the ability to check the compatibility of
+> all UAPI headers across commits. This allows developers to inspect
+> the stability of the UAPIs over time.
+> 
+> Signed-off-by: John Moon <quic_johmoo@quicinc.com>
+> ---
+>      - Refactored to exclusively check headers installed by make
+>        headers_install. This simplified the code dramatically and removed
+>        the need to perform complex git diffs.
+>      - Removed the "-m" flag. Since we're checking all installed headers
+>        every time, a flag to check only modified files didn't make sense.
+>      - Added info message when usr/include/Makefile is not present that
+>        it's likely because that file was only introduced in v5.3.
+>      - Changed default behavior of log file. Now, the script will not
+>        create a log file unless you pass "-l <file>".
+>      - Simplified exit handler.
+>      - Added -j $MAX_THREADS to make headers_install to improve speed.
+>      - Cleaned up variable references.
 
-I found an explanation!  Well, a partial one.  If we MAP_PRIVATE a file
-mapping (like, er those ones up there) and only take read faults on it,
-we can postpone allocation of the anon_vma indefinitely.  But once we
-take a write fault in that VMA, we need to allocate an anon_vma for it
-so that we can track the anonymous pages that have been allocated to
-satisfy the copy-on-write (see do_cow_fault()).
 
-However, I think in that caase, we could probably skip the
-find_mergeable_anon_vma() step.  We don't today; we check whether
-a->vm_file == b->vm_file in anon_vma_compatible, but I wonder if that
-triggers often.
+Hi Masahiro, just a friendly reminder about this patch. I believe we've 
+addressed all of your comments from previous reviews and we're looking 
+forward to your feedback on this version.
 
+Thanks so much!
+
+- John
