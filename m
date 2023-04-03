@@ -2,102 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECDA6D50DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A486D50ED
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233293AbjDCSlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
+        id S233378AbjDCSqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbjDCSl3 (ORCPT
+        with ESMTP id S233358AbjDCSqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:41:29 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047E911D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:41:18 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-546422bd3ceso124306957b3.21
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 11:41:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680547277;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8W0bFO1La/7HK/HpWnbmeoTx54QZk6D+Z078ZNMeyCg=;
-        b=m6LfHyI56ByW91W423utUqnJXSW4puezbyRvLd6hsvF1zXWMY7ZofDsdmw/fYmx7FE
-         sJe5baFpA9RtIsAPV/TuuKyopzHqf8x5UkNGMNP+GpGoiGynVSQnFjaM+qXQySgIvwx+
-         PpviiDCXQkgIgjISkk1CcHi80s4Dp3E3eRHHQqKOqoDDJgMb1sSV6jObKGSiFd96xoaz
-         efTEqDOKLltwL2YvagCx265klOH3KpeZ04hy6yRfwooPWtXeqEVIBeKYS7iklOuGYFB+
-         pE3VKKQoBOJHo7uXBa68D7TOgCN2ChVGEJEngsRm7GT4i0MP++uce4te53qFdGmSdqL+
-         GkJA==
+        Mon, 3 Apr 2023 14:46:18 -0400
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FDD2106;
+        Mon,  3 Apr 2023 11:46:14 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id r40-20020a05683044a800b006a14270bc7eso12812494otv.6;
+        Mon, 03 Apr 2023 11:46:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680547277;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8W0bFO1La/7HK/HpWnbmeoTx54QZk6D+Z078ZNMeyCg=;
-        b=IPkSkgpDnNljxDWhE7qC/pIqvWYQvDjmTPUBjju2rojlR73rON/UwN0ZD6Extf029T
-         PWr94MHDhTDYSMruMZKF9m7uCYCUrF2RTH6S9MjR/T4H5iWBeZRF5dm7ICn5U8578US9
-         ge75S44eAyT7Dm5ZwHvvl9bC5OuGvuPBxKfwoWdCPdkvMVzuKTzZrHdHCRzoXjQB3liG
-         xvMR4y65T65dUm/HjU3ftN3evxYhkCQNea7nZy6bL6rOpvupslKJ3DOvMb+W9DhzP1rI
-         2CTHKxP6kURjULP8Um7voEy0D9bSHrxtWljXY7obzdjxkfXCwDIoCuf8aqvUCs1O2AsN
-         auUQ==
-X-Gm-Message-State: AAQBX9dUGReCM5Tkv11G0mMlELuK+HNrgEnlKGMS55W6W8N8+tu7QQ8F
-        HboXy4jmIoZPPk+T5GEGkFDg58wqs0Ro
-X-Google-Smtp-Source: AKy350YA7iS2fx3kOTsfSZF1PwKeWeZXwx2DADzFWTKQU5tx6UHKq2lzlgfua94c/o+4RdLMBwIC0QQq9qCc
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9dc:a977:817d:341])
- (user=irogers job=sendgmr) by 2002:a25:d9c7:0:b0:b46:4a5e:365f with SMTP id
- q190-20020a25d9c7000000b00b464a5e365fmr131859ybg.8.1680547277315; Mon, 03 Apr
- 2023 11:41:17 -0700 (PDT)
-Date:   Mon,  3 Apr 2023 11:40:33 -0700
-In-Reply-To: <20230403184033.1836023-1-irogers@google.com>
-Message-Id: <20230403184033.1836023-5-irogers@google.com>
-Mime-Version: 1.0
-References: <20230403184033.1836023-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v2 4/4] perf srcline: Avoid addr2line SIGPIPEs
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1680547573;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wy0NcaxMPjAd0Cjp8anGLQ+ZJvJT6IQ/gKneu1y1dn4=;
+        b=RUCI2YU5l1jF7/0EiY/CpchLdFe4V2JlDTdyH59Sywc1uALECZtS33AanlTXUM+o3E
+         N9waLui/RWD+714E8VEhDhk5jk3E87vyZ6ugc73voPrl4NTc3OMQPuchV6mZR2rt3L51
+         /dd1UzKPY/eonld+UEtLwC16eSM3MCGmWFgGppGCc+2/99H1MiiLdHh75/sdMZgPS75z
+         kYKioG2vNdB3nAE0fSIHY0v2yuq8dY/Q6XZTFNEeBwU2iqvA6njGQuKpQbH+SGs1X6f3
+         pRXAUAcBYJJkr5+zVXKo2t/A0KrrEhNMWltdPU0k8ESPYLB1yvc3s748pPjhAw5O0cpS
+         cbRw==
+X-Gm-Message-State: AAQBX9fq+NJtKn9TmUXsZdjMoRsyZhFV/k5mecYE7hZ0unglXMpiFpd6
+        PbrgfDW5M9fHsUVihczeJA==
+X-Google-Smtp-Source: AKy350YjgozHOEC2dvNCQI9uebQk/eVsGBSXpTw8cGc1ZFM5R8OSBSr2dBzvQAQoRblbFeGR9A8sDg==
+X-Received: by 2002:a9d:77d3:0:b0:69a:5407:e563 with SMTP id w19-20020a9d77d3000000b0069a5407e563mr10154194otl.16.1680547573599;
+        Mon, 03 Apr 2023 11:46:13 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b11-20020a056830104b00b006a1287ccce6sm4540387otp.31.2023.04.03.11.46.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 11:46:12 -0700 (PDT)
+Received: (nullmailer pid 1356073 invoked by uid 1000);
+        Mon, 03 Apr 2023 18:46:11 -0000
+Date:   Mon, 3 Apr 2023 13:46:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [net-next PATCH v6 16/16] arm: mvebu: dt: Add PHY LED support
+ for 370-rd WAN port
+Message-ID: <20230403184611.GA1352384-robh@kernel.org>
+References: <20230327141031.11904-1-ansuelsmth@gmail.com>
+ <20230327141031.11904-17-ansuelsmth@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327141031.11904-17-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ignore SIGPIPEs when addr2line is configured.
+On Mon, Mar 27, 2023 at 04:10:31PM +0200, Christian Marangi wrote:
+> From: Andrew Lunn <andrew@lunn.ch>
+> 
+> The WAN port of the 370-RD has a Marvell PHY, with one LED on
+> the front panel. List this LED in the device tree.
+> 
+> Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  arch/arm/boot/dts/armada-370-rd.dts | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/armada-370-rd.dts b/arch/arm/boot/dts/armada-370-rd.dts
+> index be005c9f42ef..15b36aa34ef4 100644
+> --- a/arch/arm/boot/dts/armada-370-rd.dts
+> +++ b/arch/arm/boot/dts/armada-370-rd.dts
+> @@ -20,6 +20,7 @@
+>  /dts-v1/;
+>  #include <dt-bindings/input/input.h>
+>  #include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/leds/common.h>
+>  #include <dt-bindings/gpio/gpio.h>
+>  #include "armada-370.dtsi"
+>  
+> @@ -135,6 +136,19 @@ &mdio {
+>  	pinctrl-names = "default";
+>  	phy0: ethernet-phy@0 {
+>  		reg = <0>;
+> +		leds {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			led@0 {
+> +				reg = <0>;
+> +				label = "WAN";
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/srcline.c | 2 ++
- 1 file changed, 2 insertions(+)
+WAN or
 
-diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
-index f4fcdada821b..cfca03abd6f8 100644
---- a/tools/perf/util/srcline.c
-+++ b/tools/perf/util/srcline.c
-@@ -473,6 +473,8 @@ static enum a2l_style addr2line_configure(struct child_process *a2l)
- 				ch = io__get_char(&io);
- 			} while (ch > 0 && ch != '\n');
- 		}
-+		/* Ignore SIGPIPE in the event addr2line exits. */
-+		signal(SIGPIPE, SIG_IGN);
- 	}
- 	return style;
- }
--- 
-2.40.0.348.gf938b09366-goog
+> +				color = <LED_COLOR_ID_WHITE>;
+> +				function = LED_FUNCTION_LAN;
 
+LAN?
+
+> +				function-enumerator = <1>;
+> +				linux,default-trigger = "netdev";
+> +			};
+> +		};
+>  	};
+>  
+>  	switch: switch@10 {
+> -- 
+> 2.39.2
+> 
