@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55676D4691
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1336D4693
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbjDCOKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
+        id S232852AbjDCOLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbjDCOKt (ORCPT
+        with ESMTP id S232828AbjDCOLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:10:49 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113342C9E3
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:10:24 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so32660060pjp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:10:24 -0700 (PDT)
+        Mon, 3 Apr 2023 10:11:06 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278142C9F1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:10:50 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id f22so23999113plr.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:10:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680531021;
+        d=gmail.com; s=20210112; t=1680531049;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=w1GEvhS4uRiEVRZXgLcLYYS/OtgUwrFKxy5oSfzg+/Y=;
-        b=kKr3OsBDUSVPf4Rra45o1mucc1a49rCm0GktJRyU4LUwWUvXXF79awYIxT5uAubeUw
-         1PNZbq+kyLsddWxVbyDRwnzc0c3mGSdsZWCAvXoqIbEzWPrY7vIBR9rqUricdDIA34z9
-         VE3lLu2IKtiGzwZsKzEzmSqPsctZXsB1ltw/YR7zio0K8sxc5nWg+Bi5KG9V90GGkvHG
-         IVdaOcnEQqKV5TSErf4rmlse2HKEUVH1oWauNiZfcSP2o4iyZr9hir3VpjI/5eWP/Ylq
-         n+NmcOHacmagYhLlyQygJCCEd6Qw0Oa+333KWbOFRiZW2BY29SXOTcNUWxNWTrBW2/CU
-         smAw==
+        bh=VdH5SytCYu18Erl2+hmHazDSFaLa7orTkkF1JcQxu1k=;
+        b=LDhjBozkMLnjU7v1cWqHrIQSxC3UY9ucBinTC9heGnsbd9All6lkEQ0Y3ZEW0CkGXk
+         vUBefuaTtbVPnK6z/7bAMPBSHhnEZfpapX/gRJrV2mYqfGcuJOFIauh+Dhp2ZHZnLjH4
+         qxfD4JYESPLBL7opNSSK/eeWhU8050XTKQNAUA/ZWPyB/pdLRDJA3+0zsX3/kcwcWSBy
+         seGvkdg6yF5fW6gv56OzF7gLVQ5dhwr6YWreS4Z3J/1NMnECHAtMSMCo/xFZOc51DVGA
+         xOwJpbuOloD+9l5eZ08WMTPRTK25AalXot8WP/cB3aRCnKgBjEBzJDNyQ5yjf8TcbUCw
+         45YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680531021;
+        d=1e100.net; s=20210112; t=1680531049;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w1GEvhS4uRiEVRZXgLcLYYS/OtgUwrFKxy5oSfzg+/Y=;
-        b=3R1sMDxx/KXIfNAoZ7/8LrffRe8TReoNakjr4YmMVaKscoJzYsmiyKy8kokS2U52tY
-         PNbV/FTNvXV2qZO1AyMPEq7RBGC/rGAiOxDCbGo+VPfQAkLokNx4A3tZcAQABQMXa/1g
-         JNignxgfnr2cUPpnLsAko9zazkVRlsacfF0v+pIBNmJ9IYraUbSHmbpqMAcVQ87YQNxT
-         jlZP2MIzkEfo3cLR3Rrby0sy1tv2p7uXwoo+xNIAGvop238OEm3A3e3GnWRMtI236aND
-         hbAfHoBS903kfK9t0j3i5fvzHQ2tmqbqesD3game8OOKcZyOmimfD72nSFDdjXs3BOUS
-         0URw==
-X-Gm-Message-State: AAQBX9dJ2XF+PjaLIIWizKslGd9o+idXVOidBk9F42pJqf4u8SLDtKb4
-        N1MFqnvYtgcpuqvsqkyKMAkZ322DExZJJg==
-X-Google-Smtp-Source: AKy350Z9G/83+yE2mM/oZ6KTxOeN26MIyU7M0/11/wDLLoaf9VGWeOQiFbNBJOUkqiKJu2tXqcuNsw==
-X-Received: by 2002:a17:902:ecc4:b0:1a1:d949:a52d with SMTP id a4-20020a170902ecc400b001a1d949a52dmr45645205plh.65.1680531021282;
-        Mon, 03 Apr 2023 07:10:21 -0700 (PDT)
+        bh=VdH5SytCYu18Erl2+hmHazDSFaLa7orTkkF1JcQxu1k=;
+        b=S/Slo/U5Eq5BQo9U/hiInXe6eVBl6XmUDgwHMbKht4EJ1QLTWoClmpYhwfNA+FYpdi
+         6UtjVCuCJz99akUCeW577q2XWjy1OlDTPkRX54PjpzXDOzBpB7MZgZapt2ksoTG4/Vy3
+         SuUH0F8YPzrK66I2ABcPIY5ckOLb8E3v5mBzAXolYtWR0bKoFfvkf0F02tBxCOhsIHKV
+         HqGU3nwDFsXr3uZmTHZdXIUnz+pBKbHsr2+h/tWQ1i78Rzi+HQr+10Hm2R1UO251wpBP
+         WQyQk9nMr/jKf6FBLbwYGLWp84k5vXN82Pnqmqta39snGOyrD9muoTllp5t8VpGeHeNX
+         UkRA==
+X-Gm-Message-State: AAQBX9exS61P2u0rQXZD2RovUTRm9V/7GibkKoPIUDbakRcQFIMB9jAP
+        FrisPj3kd1nwikrtz0zNRsE=
+X-Google-Smtp-Source: AKy350bNnfG9E9czfhxziDy0Le2R53vTud7kVVrlhUdKFBAoPTAaS0ARJTz0rZOL0OnylNCKhtp62g==
+X-Received: by 2002:a17:902:f2ca:b0:1a1:c54c:1a36 with SMTP id h10-20020a170902f2ca00b001a1c54c1a36mr29741894plc.63.1680531049224;
+        Mon, 03 Apr 2023 07:10:49 -0700 (PDT)
 Received: from [172.30.1.1] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id v12-20020a1709029a0c00b001a1d5d47105sm6677079plp.53.2023.04.03.07.10.18
+        by smtp.gmail.com with ESMTPSA id y11-20020a170903010b00b0019a5aa7eab0sm6659001plc.54.2023.04.03.07.10.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 07:10:20 -0700 (PDT)
-Message-ID: <cf82c26b-14ec-166f-c34c-e27b1e33238b@gmail.com>
-Date:   Mon, 3 Apr 2023 23:10:17 +0900
+        Mon, 03 Apr 2023 07:10:48 -0700 (PDT)
+Message-ID: <357a3ca5-8719-37b8-fd22-657e31a0ce16@gmail.com>
+Date:   Mon, 3 Apr 2023 23:10:45 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v1 04/14] extcon: use sysfs_emit() to instead of sprintf()
+Subject: Re: [PATCH v1 05/14] extcon: Amend kernel documentation of struct
+ extcon_dev
 Content-Language: en-US
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Bumwoo Lee <bw365.lee@samsung.com>,
@@ -63,9 +64,9 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>
 References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
- <20230322144005.40368-5-andriy.shevchenko@linux.intel.com>
+ <20230322144005.40368-6-andriy.shevchenko@linux.intel.com>
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20230322144005.40368-5-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230322144005.40368-6-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -79,67 +80,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 23. 3. 22. 23:39, Andy Shevchenko wrote:
-> Follow the advice of the Documentation/filesystems/sysfs.rst that
-> show() should only use sysfs_emit() or sysfs_emit_at() when formatting
-> the value to be returned to user space.
+> First of all, the @lock description is missing. Add it.
+> Second, correct the terminator value for the mutual exclusive
+> cabling.
 > 
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/extcon/extcon.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
+>  drivers/extcon/extcon.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-> index 70e9755ba2bc..ac84f4aafc69 100644
-> --- a/drivers/extcon/extcon.c
-> +++ b/drivers/extcon/extcon.c
-> @@ -370,12 +370,12 @@ static ssize_t state_show(struct device *dev, struct device_attribute *attr,
->  	struct extcon_dev *edev = dev_get_drvdata(dev);
->  
->  	if (edev->max_supported == 0)
-> -		return sprintf(buf, "%u\n", edev->state);
-> +		return sysfs_emit(buf, "%u\n", edev->state);
->  
->  	for (i = 0; i < edev->max_supported; i++) {
-> -		count += sprintf(buf + count, "%s=%d\n",
-> -				extcon_info[edev->supported_cable[i]].name,
-> -				 !!(edev->state & BIT(i)));
-> +		count += sysfs_emit_at(buf, count, "%s=%d\n",
-> +				       extcon_info[edev->supported_cable[i]].name,
-> +				       !!(edev->state & BIT(i)));
->  	}
->  
->  	return count;
-> @@ -387,7 +387,7 @@ static ssize_t name_show(struct device *dev, struct device_attribute *attr,
->  {
->  	struct extcon_dev *edev = dev_get_drvdata(dev);
->  
-> -	return sprintf(buf, "%s\n", edev->name);
-> +	return sysfs_emit(buf, "%s\n", edev->name);
->  }
->  static DEVICE_ATTR_RO(name);
->  
-> @@ -398,8 +398,8 @@ static ssize_t cable_name_show(struct device *dev,
->  						  attr_name);
->  	int i = cable->cable_index;
->  
-> -	return sprintf(buf, "%s\n",
-> -			extcon_info[cable->edev->supported_cable[i]].name);
-> +	return sysfs_emit(buf, "%s\n",
-> +			  extcon_info[cable->edev->supported_cable[i]].name);
->  }
->  
->  static ssize_t cable_state_show(struct device *dev,
-> @@ -410,8 +410,8 @@ static ssize_t cable_state_show(struct device *dev,
->  
->  	int i = cable->cable_index;
->  
-> -	return sprintf(buf, "%d\n",
-> -		extcon_get_state(cable->edev, cable->edev->supported_cable[i]));
-> +	return sysfs_emit(buf, "%d\n",
-> +			  extcon_get_state(cable->edev, cable->edev->supported_cable[i]));
->  }
->  
->  /**
+> diff --git a/drivers/extcon/extcon.h b/drivers/extcon/extcon.h
+> index 93b5e0306966..15616446140d 100644
+> --- a/drivers/extcon/extcon.h
+> +++ b/drivers/extcon/extcon.h
+> @@ -13,8 +13,8 @@
+>   *			are disabled.
+>   * @mutually_exclusive:	Array of mutually exclusive set of cables that cannot
+>   *			be attached simultaneously. The array should be
+> - *			ending with NULL or be NULL (no mutually exclusive
+> - *			cables). For example, if it is { 0x7, 0x30, 0}, then,
+> + *			ending with 0 or be NULL (no mutually exclusive cables).
+> + *			For example, if it is {0x7, 0x30, 0}, then,
+>   *			{0, 1}, {0, 1, 2}, {0, 2}, {1, 2}, or {4, 5} cannot
+>   *			be attached simulataneously. {0x7, 0} is equivalent to
+>   *			{0x3, 0x6, 0x5, 0}. If it is {0xFFFFFFFF, 0}, there
+> @@ -27,7 +27,7 @@
+>   * @nh:			Notifier for the state change events from this extcon
+>   * @entry:		To support list of extcon devices so that users can
+>   *			search for extcon devices based on the extcon name.
+> - * @lock:
+> + * @lock:		Protects device state and serialises device registration
+>   * @max_supported:	Internal value to store the number of cables.
+>   * @extcon_dev_type:	Device_type struct to provide attribute_groups
+>   *			customized for each extcon device.
+
 
 Applied it.
 
