@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBA46D4F90
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFA26D4F8D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjDCRvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S231416AbjDCRvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232183AbjDCRv2 (ORCPT
+        with ESMTP id S230527AbjDCRv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:51:28 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C85F2724;
-        Mon,  3 Apr 2023 10:50:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1680544220; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=QDL7TOiFOS7WUYxSU8dSnOPrWgppYx8KT3RI8ZuSWwDWaCTwoucBYIjAXuGxneoHuTXO2k0Csy6Ds1drNhsoZxi8jiOrEk5LqV/5dtWogs9zInsVHVWrg3cwiKdCxYkUKf76fJwr0JMxjTzw2vLxKHfpCOs9L9HDq+e8WaAbgtk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1680544220; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=uO8wqfElcb1z3v0LAGna76ya2fLufvATKsG5PxIgHEY=; 
-        b=kG4SsvsESsFJ5+aN820NZLSBEpIarCKt+TgPXY3sKfbTTV0bCtf4R6Pqlqvjit8CZEvFon6ugt2Q+7t6D1ne5/0WVSdIFJLnXKtrnu81KP+ddhM/Eb0AFJ8iYURcV96alyW7nPW3tVD424bclKgWjHPGtyH1BT0q9m5t6Ro4K2A=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1680544220;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=uO8wqfElcb1z3v0LAGna76ya2fLufvATKsG5PxIgHEY=;
-        b=K2zpsW8fVBnG0jb/9bzHM1lyYDjNkrQVx61ISfKpADo3m0s4HCRn07dfPzj9Rly8
-        Kl/DfvOpwruj9LrHvyHA0lgoV4ELDaezSu+TKX4fnUX2/5X47Lnu726pZwvbjEScqt5
-        ymWlURfcXt4D0kfg/WDg1KadrErklYVadGsbRh8o=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1680544219268224.82519150142696; Mon, 3 Apr 2023 10:50:19 -0700 (PDT)
-Message-ID: <73ce771f-3a13-b1c7-659d-7e1c236fdd0b@arinc9.com>
-Date:   Mon, 3 Apr 2023 20:50:11 +0300
+        Mon, 3 Apr 2023 13:51:26 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250B3269A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:50:54 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-177ca271cb8so31680228fac.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680544253;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8RHAwAS5sJDxIzhA3f2qW4W6/P4D/N6yDGJtxJ46p5g=;
+        b=AV5GuUIGOiGGG0p8pCT62rVfnsr/wU8LAIGVHyyYU1jBwbYCRppaYyolYu6VfJkrs/
+         7adEk3gH0kyV84icCqCzT+Nq9EEC0FRqrqLsm3ULJuhlpEZkAvMUumPvJ3AOlhxtdZEq
+         TO0GFVFL5u/LeGClWdCYQoAqMzDpzR2o9VjanMCp6Pl6shRl1gW02YFClelxgIeKIDgO
+         9CYLI/mmUj/1A4timsLBO+a5ZfH5g5bahWr+zgyxjR0y+x8hmnTrw6VSJYq07SItIitS
+         BySiXxU2uJ2yDgRVVujO214aayzHLG06VaLv3D+d6LByZ6b1VT5AyxlzsZtFcjB+GRYj
+         zHnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680544253;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8RHAwAS5sJDxIzhA3f2qW4W6/P4D/N6yDGJtxJ46p5g=;
+        b=eFgL4RoLELq2dhOrf8Dojf3wOblS2/FRYQ+bk+2LoHxEG51FlrKxksyOVVyczwgeUT
+         lQOPdGmOweYMzklZ0rfqMSZNPhn1mqzTdE4spVqEibmsck3I+ixqcYwH8wtmxbPtxxjQ
+         bWul3A4V3YIsRjI1S3ZG8p7SI2WBUxml6iIJEW81nYkY0wwnYzfG6jYc/3g8UK2vkKvz
+         SR5ZvKa4NlrFucUGAJeizDUTZQHelbgcsJ6LLAxk0nbwZhoACFRzOnmqaYAtHVk7Z7NL
+         sGnSho9kjDkFYZumHlhBv9aTGYa+piy2BxWwaBupaKFlfXVlR7a6JuplSG9wefZJr+l9
+         KR1g==
+X-Gm-Message-State: AAQBX9f95LE0wzjSY/8O766OKsGu7BunHLzxafrB/YzFrMiO13y+Qztv
+        iuJUNl0UW9ZY2HFLeC56Z8cCwrAwgM2aN4XEUhA=
+X-Google-Smtp-Source: AKy350YFFENSyFl8lsfKlgFMxJuVJvdrqWh3SxKEy/O2evSD9TI96nsxbFb2L5SOQdvLB6R/ey12qLWimCjQV02e6eQ=
+X-Received: by 2002:a05:6870:b016:b0:17f:5b1a:20ce with SMTP id
+ y22-20020a056870b01600b0017f5b1a20cemr55569oae.5.1680544253257; Mon, 03 Apr
+ 2023 10:50:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH net-next v2 00/14] net: dsa: add support for MT7988
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-References: <cover.1680483895.git.daniel@makrotopia.org>
- <53d89480-936d-25b1-6422-cda7769de369@arinc9.com>
- <ZCsQIylAgh-rxjfu@makrotopia.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <ZCsQIylAgh-rxjfu@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230403160314.1210533-1-robdclark@gmail.com> <20230403162541.GA3195909@dev-arch.thelio-3990X>
+In-Reply-To: <20230403162541.GA3195909@dev-arch.thelio-3990X>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 3 Apr 2023 10:50:34 -0700
+Message-ID: <CAF6AEGsdT95-uAKcv2+hdMLKd2xwfPeN+FMuDTRMc-Ps7WbRjw@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/vblank: Fix for drivers that do not drm_vblank_init()
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,85 +75,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3.04.2023 20:42, Daniel Golle wrote:
-> Hi Arınç,
-> 
-> On Mon, Apr 03, 2023 at 08:08:19PM +0300, Arınç ÜNAL wrote:
->> On 3.04.2023 04:16, Daniel Golle wrote:
->>> The MediaTek MT7988 SoC comes with a built-in switch very similar to
->>> previous MT7530 and MT7531. However, the switch address space is mapped
->>> into the SoCs memory space rather than being connected via MDIO.
->>> Using MMIO simplifies register access and also removes the need for a bus
->>> lock, and for that reason also makes interrupt handling more light-weight.
->>>
->>> Note that this is different from previous SoCs like MT7621 and MT7623N
->>> which also came with an integrated MT7530-like switch which yet had to be
->>> accessed via MDIO.
->>>
->>> Split-off the part of the driver registering an MDIO driver, then add
->>> another module acting as MMIO/platform driver.
->>>
->>> The whole series has been tested on various MediaTek boards:
->>>    * MT7623A + MT7530 (BPi-R2)
->>>    * MT7986A + MT7531 (BPi-R3)
->>>    * MT7988A reference board
->>
->> You did not address the incorrect information I pointed out here. Now that
-> 
-> I'm sorry, that was certainly not intentional and I may have missed
-> your comments. Actually it doesn't look like they have made it to the
-> netdev list archive or patchwork either.
-> 
->> the patch series is applied, people reading this on the merge branch commit
->> will be misled by the misinformation.
-> 
-> I've changed Kconfig stuff according to your recommendation and also
-> addressed possible misleading USXGMII and 10GBase-KR support by
-> introducing MT7988-specific functions and using 'internal' PHY mode.
-> So which of your comments have not been addressed?
+On Mon, Apr 3, 2023 at 9:25=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> On Mon, Apr 03, 2023 at 09:03:14AM -0700, Rob Clark wrote:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > This should fix a crash that was reported on ast (and possibly other
+> > drivers which do not initialize vblank).
+> >
+> >    fbcon: Taking over console
+> >    Unable to handle kernel NULL pointer dereference at virtual address =
+0000000000000074
+> >    Mem abort info:
+> >      ESR =3D 0x0000000096000004
+> >      EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+> >      SET =3D 0, FnV =3D 0
+> >      EA =3D 0, S1PTW =3D 0
+> >      FSC =3D 0x04: level 0 translation fault
+> >    Data abort info:
+> >      ISV =3D 0, ISS =3D 0x00000004
+> >      CM =3D 0, WnR =3D 0
+> >    user pgtable: 4k pages, 48-bit VAs, pgdp=3D0000080009d16000
+> >    [0000000000000074] pgd=3D0000000000000000, p4d=3D0000000000000000
+> >    Internal error: Oops: 0000000096000004 [#1] SMP
+> >    Modules linked in: ip6table_nat tun nft_fib_inet nft_fib_ipv4 nft_fi=
+b_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft=
+_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill =
+ip_set nf_tables nfnetlink qrtr sunrpc binfmt_misc vfat fat xfs snd_usb_aud=
+io snd_hwdep snd_usbmidi_lib snd_seq snd_pcm snd_rawmidi snd_timer snd_seq_=
+device snd soundcore joydev mc ipmi_ssif ipmi_devintf ipmi_msghandler arm_s=
+pe_pmu arm_cmn arm_dsu_pmu arm_dmc620_pmu cppc_cpufreq loop zram crct10dif_=
+ce polyval_ce nvme polyval_generic ghash_ce sbsa_gwdt igb nvme_core ast nvm=
+e_common i2c_algo_bit xgene_hwmon gpio_dwapb scsi_dh_rdac scsi_dh_emc scsi_=
+dh_alua ip6_tables ip_tables dm_multipath fuse
+> >    CPU: 12 PID: 469 Comm: kworker/12:1 Not tainted 6.3.0-rc2-00008-gd39=
+e48ca80c0 #1
+> >    Hardware name: ADLINK AVA Developer Platform/AVA Developer Platform,=
+ BIOS TianoCore 2.04.100.07 (SYS: 2.06.20220308) 09/08/2022
+> >    Workqueue: events fbcon_register_existing_fbs
+> >    pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
+> >    pc : drm_crtc_next_vblank_start+0x2c/0x98
+> >    lr : drm_atomic_helper_wait_for_fences+0x90/0x240
+> >    sp : ffff80000d583960
+> >    x29: ffff80000d583960 x28: ffff07ff8fc187b0 x27: 0000000000000000
+> >    x26: ffff07ff99c08c00 x25: 0000000000000038 x24: ffff07ff99c0c000
+> >    x23: 0000000000000001 x22: 0000000000000038 x21: 0000000000000000
+> >    x20: ffff07ff9640a280 x19: 0000000000000000 x18: ffffffffffffffff
+> >    x17: 0000000000000000 x16: ffffb24d2eece1c0 x15: 0000003038303178
+> >    x14: 3032393100000048 x13: 0000000000000000 x12: 0000000000000000
+> >    x11: 0000000000000000 x10: 0000000000000000 x9 : ffffb24d2eeeaca0
+> >    x8 : ffff80000d583628 x7 : 0000080077783000 x6 : 0000000000000000
+> >    x5 : ffff80000d584000 x4 : ffff07ff99c0c000 x3 : 0000000000000130
+> >    x2 : 0000000000000000 x1 : ffff80000d5839c0 x0 : ffff07ff99c0cc08
+> >    Call trace:
+> >     drm_crtc_next_vblank_start+0x2c/0x98
+> >     drm_atomic_helper_wait_for_fences+0x90/0x240
+> >     drm_atomic_helper_commit+0xb0/0x188
+> >     drm_atomic_commit+0xb0/0xf0
+> >     drm_client_modeset_commit_atomic+0x218/0x280
+> >     drm_client_modeset_commit_locked+0x64/0x1a0
+> >     drm_client_modeset_commit+0x38/0x68
+> >     __drm_fb_helper_restore_fbdev_mode_unlocked+0xb0/0xf8
+> >     drm_fb_helper_set_par+0x44/0x88
+> >     fbcon_init+0x1e0/0x4a8
+> >     visual_init+0xbc/0x118
+> >     do_bind_con_driver.isra.0+0x194/0x3a0
+> >     do_take_over_console+0x50/0x70
+> >     do_fbcon_takeover+0x74/0xf8
+> >     do_fb_registered+0x13c/0x158
+> >     fbcon_register_existing_fbs+0x78/0xc0
+> >     process_one_work+0x1ec/0x478
+> >     worker_thread+0x74/0x418
+> >     kthread+0xec/0x100
+> >     ret_from_fork+0x10/0x20
+> >    Code: f9400004 b9409013 f940a082 9ba30a73 (b9407662)
+> >    ---[ end trace 0000000000000000 ]---
+> >
+> > v2: Use drm_dev_has_vblank()
+> >
+> > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > Fixes: d39e48ca80c0 ("drm/atomic-helper: Set fence deadline for vblank"=
+)
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+>
+> Still appears to work for me:
+>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-https://lore.kernel.org/netdev/c11c86e4-5f8e-5b9b-1db5-e3861b2bade6@arinc9.com/
+Thanks for confirming
 
-> 
->>
->>>
->>> Changes since v1:
->>>    * use 'internal' PHY mode where appropriate
->>>    * use regmap_update_bits in mt7530_rmw
->>>    * improve dt-bindings
->>
->> As a maintainer of the said dt-bindings, I pointed out almost 7 things for
->> you to change. Of those 7 points, you only did one, a trivial grammar
->> change. The patch series is applied now so one of us maintainers (you are
->> one too now) need to fix it with additional patches.
-> 
-> I was also surprised the series made it to net-next so quickly, but it
-> wasn't me applying it, I merly posted v2 with all comments I received
-> addressed.
-> 
-> Me and supposedly also netdevbpf maintainers use patchwork to track
-> patches and whether comments have been addressed. Can you point me to
-> emails with the comments which haven't been addressed there? Looking in
-> patchwork for the dt-bindings patch [1] I don't see any comments there.
+BR,
+-R
 
-https://lore.kernel.org/netdev/a7ab2828-dc03-4847-c947-c7685841f884@arinc9.com/
-
-> 
-> 
-> Thank you for reviewing!
-> 
-> 
-> Daniel
-> 
-> 
-> [1]: See patchwork tracking for RFCv3, v1 and v2. Prior to RFCv3 the series
-> didn't have the dt-bindings addition, I introduced it with RFCv3 when splitting
-> the series into many small changes:
-> https://patchwork.kernel.org/project/netdevbpf/patch/9b504e3e88807bfb62022c0877451933d30abeb5.1680105013.git.daniel@makrotopia.org/
-> https://patchwork.kernel.org/project/netdevbpf/patch/fef2cb2fe3d2b70fa46e93107a0c862f53bb3bfa.1680180959.git.daniel@makrotopia.org/
-> https://patchwork.kernel.org/project/netdevbpf/patch/dffacdb59aea462c9f7d4242cf9563a04cf79807.1680483896.git.daniel@makrotopia.org/
-
-Although I've been a maintainer for the dt-bindings schema for quite 
-some time, I was somehow missed as a recipient on RFC v3.
-
-Arınç
+>
+> > ---
+> >  drivers/gpu/drm/drm_vblank.c | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.=
+c
+> > index 299fa2a19a90..877e2067534f 100644
+> > --- a/drivers/gpu/drm/drm_vblank.c
+> > +++ b/drivers/gpu/drm/drm_vblank.c
+> > @@ -996,10 +996,16 @@ EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
+> >  int drm_crtc_next_vblank_start(struct drm_crtc *crtc, ktime_t *vblankt=
+ime)
+> >  {
+> >       unsigned int pipe =3D drm_crtc_index(crtc);
+> > -     struct drm_vblank_crtc *vblank =3D &crtc->dev->vblank[pipe];
+> > -     struct drm_display_mode *mode =3D &vblank->hwmode;
+> > +     struct drm_vblank_crtc *vblank;
+> > +     struct drm_display_mode *mode;
+> >       u64 vblank_start;
+> >
+> > +     if (!drm_dev_has_vblank(crtc->dev))
+> > +             return -EINVAL;
+> > +
+> > +     vblank =3D &crtc->dev->vblank[pipe];
+> > +     mode =3D &vblank->hwmode;
+> > +
+> >       if (!vblank->framedur_ns || !vblank->linedur_ns)
+> >               return -EINVAL;
+> >
+> > --
+> > 2.39.2
+> >
