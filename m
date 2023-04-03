@@ -2,128 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CED66D4FD3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5496D4FD8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbjDCSBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S232910AbjDCSBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232911AbjDCSBA (ORCPT
+        with ESMTP id S232950AbjDCSBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:01:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EDD128
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:00:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680544790;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WlvpCHWMmiZdlbkC384yczmvM52H5PXcaJ7qF3TTD/w=;
-        b=CeC03JbiKUFO0kWdPZ1lEw6exgPagtVAvsc1jGLqW+N9TgtyZ6PIDyeb9MC4Ja8G2lP4k8
-        2+cTda1EXxAUAgpyOCBt0LkJMTdBFgEjgk5Q5BsIAEs4qIPb2FSWyW4/wQm3lP2vN1pbn8
-        3FaEpS2WYQYn4WzJBfsL6Ce08/JXlZE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-86-GjVcFpb4M-GD_6Snvv_wkA-1; Mon, 03 Apr 2023 13:59:49 -0400
-X-MC-Unique: GjVcFpb4M-GD_6Snvv_wkA-1
-Received: by mail-wm1-f69.google.com with SMTP id k1-20020a05600c1c8100b003ee6dbceb81so15105826wms.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 10:59:49 -0700 (PDT)
+        Mon, 3 Apr 2023 14:01:24 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A55F3AAF;
+        Mon,  3 Apr 2023 11:01:12 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id r17-20020a05683002f100b006a131458abfso13500844ote.2;
+        Mon, 03 Apr 2023 11:01:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680544788;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WlvpCHWMmiZdlbkC384yczmvM52H5PXcaJ7qF3TTD/w=;
-        b=dTOqxICQvOgvzMasQPtLIHPhqkniokL5jWJQ9PewViz/1bQ9BOprpvUZpF92swWgOC
-         IR1Bdx7aiADFYvF8xdGsLfMN/4O4qlTe+wBSY9wkMcaEn8SfyU5L95EbsDVo8jouWFM6
-         5/UtPPn7Gv4Sw3QAAFv+KV7vLoRK1FiOuYqWwYY6w8uGY4rTwuDOgSYLy1DgcVyZnaEB
-         lXeopG3+x7OaCtTz2m2cua0vNOpG490zBMMI5p11/u2YbVVv5teIFoe87QPi4iA5sS/i
-         3/B5jo8fhempb/xxaW4FYmdzVLRUVJm2n9wBJ6CiOETYWMYoaiEfyuY2T1D53IVwgWZQ
-         z1hg==
-X-Gm-Message-State: AAQBX9eS8QLw8YeRJ6g+93Rf7ZFsVlug0kAxkjLDEmGjtUA5tE0P8zw8
-        whzICD2kBUDW4Gilrzn9k0FiB7jOm9fA+vn8+Fgn7lX9BAK/vye5jKh+W3UnulZaVr6WdNol/50
-        qOTa5wSSi47fy0tyrKB68sb5/fMlhrQhEky1iUNPiYK2CDz4OTlcsFzE+sUwDeY+IeFRyR5TKse
-        zvLrs94FU=
-X-Received: by 2002:a05:6000:6:b0:2d4:a1c1:d1a2 with SMTP id h6-20020a056000000600b002d4a1c1d1a2mr28010989wrx.63.1680544788135;
-        Mon, 03 Apr 2023 10:59:48 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZVhLfsp00dFS4OanJ+69SLvb6/rmvbMxDG1wlE2yhnABSUEGPFBZ+MotkgKKbOd+iYsvqjyw==
-X-Received: by 2002:a05:6000:6:b0:2d4:a1c1:d1a2 with SMTP id h6-20020a056000000600b002d4a1c1d1a2mr28010964wrx.63.1680544787794;
-        Mon, 03 Apr 2023 10:59:47 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm10222763wru.65.2023.04.03.10.59.46
+        d=1e100.net; s=20210112; t=1680544871;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n+2HyVBZpgIAk4A8UQ7TPXHjOeuEm1wa0e7V0v5arzY=;
+        b=D+mf2KUY3Qb17H/BgD9gHZYhHxG91N05+An1M6TiE7loZwLVgRwbAMzGi2kftDTkY/
+         0yi+UJ2D4D3sdyPupBNvviknCfiuCDrKMEuMTxWw7aUWAjWbuZaCv2QwIuE3kphjsBtj
+         2/zIc5yUSgLl4QzlhtI/FNlA972TQnZsQPYrYm9rhHXMb3IfDntWygpZBV79QgLVCKJi
+         qzYjDcz4hnXrxoPBbbfLjPeyGxsfD5IL82eioISgLkENqmVMDHQky8edGiybVS4CRTdl
+         5Wjygu+wcQ55wLmbcCrHJwJTlCNY7Xnlw8fx+LVMhfX74/Pe3Gk65/OEiDpqL0w957eJ
+         d8xA==
+X-Gm-Message-State: AAQBX9cN3Iyc5deHrM9QlrX3Fp5boWC+ajKyrvG4STstCUMXXgIEXaEc
+        PuDdizaw9orhQzHXAtrhAA==
+X-Google-Smtp-Source: AKy350YbposOHjUqSKPLp1r0c5pZmS2vrYBOO8PRSBJMRbIsZ8g5xLashYmoygD9IWOODdA8MPrzFQ==
+X-Received: by 2002:a9d:63c5:0:b0:697:a381:a8f8 with SMTP id e5-20020a9d63c5000000b00697a381a8f8mr41722otl.3.1680544871315;
+        Mon, 03 Apr 2023 11:01:11 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d11-20020a9d5e0b000000b006a3170fe3efsm2707835oti.27.2023.04.03.10.59.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 10:59:47 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Peter Robinson <pbrobinson@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jarrah Gosbell <kernel@undef.tools>,
+        Mon, 03 Apr 2023 10:59:56 -0700 (PDT)
+Received: (nullmailer pid 1164679 invoked by uid 1000);
+        Mon, 03 Apr 2023 17:59:39 -0000
+Date:   Mon, 3 Apr 2023 12:59:39 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martijn Braam <martijn@brixit.nl>, Ondrej Jirman <megi@xff.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH] arm64: dts: rockchip: Change serial baud rate for Pinephone Pro to 1.5 MB
-Date:   Mon,  3 Apr 2023 19:59:37 +0200
-Message-Id: <20230403175937.2842085-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.40.0
+        Russell King <linux@armlinux.org.uk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH RFC 06/20] dt-bindings: clk: oxnas: remove obsolete
+ bindings
+Message-ID: <20230403175939.GA1162106-robh@kernel.org>
+References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
+ <20230331-topic-oxnas-upstream-remove-v1-6-5bd58fd1dd1f@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-6-5bd58fd1dd1f@linaro.org>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This baud rate is set for the device by mainline u-boot and is also what
-is set in the Pinebook Pro Device Tree, which is a device similar to the
-PinePhone Pro but with a different form factor.
+On Fri, Mar 31, 2023 at 10:34:44AM +0200, Neil Armstrong wrote:
+> Due to lack of maintainance and stall of development for a few years now,
 
-Otherwise, the baud rate of the firmware and Linux don't match by default
-and a 'console=ttyS2,1500000n8' kernel command line parameter is required
-to have proper output for both.
+I can't spell it either, but checkpatch tells me it is: maintenance
 
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+> and since no new features will ever be added upstream, remove the
+> OX810 and OX820 clock bindings.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../devicetree/bindings/clock/oxnas,stdclk.txt     | 28 ----------------------
+>  1 file changed, 28 deletions(-)
 
-I tried to instead get rid of the baud rate altogether, as suggested by
-Peter Robinson. AFAIU that should just pick whatever bad rate has been
-using by the early console.
+Always great to see fewer bindings. 
 
-But neither using 'stdout-path = "serial2" nor 'stdout-path = &uart2'
-worked for me.
-
-In both cases I didn't have any output unless setting a baud rate using
-the 'console='param.
-
- arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-index a0795a2b1cb1..6bbe65bd5bd4 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-@@ -26,7 +26,7 @@ aliases {
- 	};
- 
- 	chosen {
--		stdout-path = "serial2:115200n8";
-+		stdout-path = "serial2:1500000n8";
- 	};
- 
- 	gpio-keys {
-
-base-commit: 3adf89324a2b2a9dbc2c12d8895021e7e34e3346
--- 
-2.40.0
-
+Rob
