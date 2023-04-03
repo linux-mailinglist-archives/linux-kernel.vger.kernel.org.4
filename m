@@ -2,102 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F22506D45DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6427E6D45E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbjDCNcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S232621AbjDCNeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbjDCNb7 (ORCPT
+        with ESMTP id S232624AbjDCNeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:31:59 -0400
-Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [178.154.239.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028C2A4
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:31:57 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-33.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-33.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:2016:0:640:1006:0])
-        by forward501c.mail.yandex.net (Yandex) with ESMTP id DE4535EF50;
-        Mon,  3 Apr 2023 16:31:55 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-33.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id rVNgRulWlGk0-l4X6HZXH;
-        Mon, 03 Apr 2023 16:31:55 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1680528715;
-        bh=QFh2Qzhmxh/G7C5fjFWTwiJiilCSTiKC1fL8nFAOZyk=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=JAoQkerD3dS1q+fAQJvhjnxFjnuGpEcwxi+rEkPbJe2EBfcckaqmg0wXbQRWQ/ovJ
-         eSjTFr5G0t2Sgz/RWe5Njyoxo6JVQ2x8eK6lgnmxMm5gEctuPUrGNZHa0pY7YFBmID
-         xCraE1i3+FiNMVnkKlltaDke35t/rNbGfRSgRscI=
-Authentication-Results: mail-nwsmtp-smtp-production-main-33.iva.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <07fe91e7-104a-32d0-e59b-c1d2d459fdbe@yandex.ru>
-Date:   Mon, 3 Apr 2023 18:31:52 +0500
+        Mon, 3 Apr 2023 09:34:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116124488
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 06:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680528810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JyfxTuY5/xh7VPseiqigRtNycTkUaZEskRcra14ejzk=;
+        b=jUUMJJVxXLbD/VPkd3BGINRuvm+AQsttMmRA/pBsYm3pMovmmUTwN06FBw6YHS71JpQ9qT
+        0ijOlbarHav5PmwCUHf886S5Ep3aQ9sEhjcrIe6MViKH43mo/+U02Ds8p0YmhKAslk7+XE
+        Kc/2fP1u9CrIzmLD8IqBBOO+/Ov2HHs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-yneao8GaMLGZi3nbwK5j0Q-1; Mon, 03 Apr 2023 09:33:27 -0400
+X-MC-Unique: yneao8GaMLGZi3nbwK5j0Q-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E32C2A5957F;
+        Mon,  3 Apr 2023 13:33:27 +0000 (UTC)
+Received: from plouf.local (unknown [10.45.224.142])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DFE04175AD;
+        Mon,  3 Apr 2023 13:33:25 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     linux-input@vger.kernel.org, Bastien Nocera <hadess@hadess.net>
+Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+In-Reply-To: <20230302130117.3975-1-hadess@hadess.net>
+References: <20230302130117.3975-1-hadess@hadess.net>
+Subject: Re: [PATCH 1/2] HID: logitech-hidpp: Don't use the USB serial for
+ USB devices
+Message-Id: <168052880551.319947.16770302494731931983.b4-ty@redhat.com>
+Date:   Mon, 03 Apr 2023 15:33:25 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: MREMAP_FIXED unmaps dest on error
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     linux-mm@kvack.org,
-        =?UTF-8?Q?Jakub_Mat=c4=9bna?= <matenajakub@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-References: <18c36a78-4082-fab6-c7c9-69a249516803@yandex.ru>
- <cba955a3-e41e-adce-954a-9a55d6d97065@redhat.com>
-From:   stsp <stsp2@yandex.ru>
-In-Reply-To: <cba955a3-e41e-adce-954a-9a55d6d97065@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 02 Mar 2023 14:01:16 +0100, Bastien Nocera wrote:
+> For devices that support the 0x0003 feature (Device Information) version 4,
+> set the serial based on the output of that feature, rather than relying
+> on the usbhid code setting the USB serial.
+> 
+> This should allow the serial when connected through USB to (nearly)
+> match the one when connected through a unifying receiver.
+> 
+> [...]
 
-03.04.2023 16:58, David Hildenbrand пишет:
-> On 30.03.23 17:48, stsp wrote:
->> Hello.
->>
->> The attached test-case demonstrates a
->> bug in mremap(). If MREMAP_FIXED is used
->> over an existing mapping and mremap() fails,
->> destination area gets unmapped.
->> AFAIK the failed syscall should have no
->> observable effects.
->
-> I remember that holds for various mapping-related syscalls: if 
-> something goes wrong, the end result is not guaranteed to be what we 
-> had before the syscall.
->
-> For example, if you use mmap(MAP_FIXED) to replace part of an exiting 
-> mapping, we first munmap what's there and then try to mmap the new 
-> mapping. If something goes wrong while doing that, we cannot simple 
-> undo what we already did.
->
-> Long story short: the semantics of these syscalls has never been to 
-> leave the system in the state as it was before in case anything goes 
-> wrong.
->
->
-> As another example, if you do an mprotect() that covers multiple VMAS, 
-> and there is an issue with the last VMA, all but the last VMA will 
-> have their permissions changed.
->
-Thanks for info.
-Is this documented in a man page?
-I wonder how do you deal with mmap() and
-mprotect() on such occasions. mremap()
-is an extension, but mmap() and mprotect()
-are from posix, so is it a compliant impl?
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git (for-6.4/logitech-hidpp), thanks!
 
-Also my example shows another bug
-that the VMAs are not merged after I
-restore the protection of one of them,
-allowing them to merge.
+[1/2] HID: logitech-hidpp: Don't use the USB serial for USB devices
+      https://git.kernel.org/hid/hid/c/7ad1fe0da0fa
+[2/2] HID: logitech-hidpp: Reconcile USB and Unifying serials
+      https://git.kernel.org/hid/hid/c/5b3691d15e04
+
+Cheers,
+-- 
+Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
