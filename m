@@ -2,46 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3086D4E5E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CCB6D4E62
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjDCQun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
+        id S232935AbjDCQvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbjDCQum (ORCPT
+        with ESMTP id S232825AbjDCQvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:50:42 -0400
+        Mon, 3 Apr 2023 12:51:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A75E4
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:50:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1302186;
+        Mon,  3 Apr 2023 09:51:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F85F61961
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:50:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E816AC433EF;
-        Mon,  3 Apr 2023 16:50:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50B8E61E92;
+        Mon,  3 Apr 2023 16:51:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BA629C433D2;
+        Mon,  3 Apr 2023 16:51:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680540641;
-        bh=0ob/hFAIfCGbkHjr+Z2bHwcAANgfDHKR2sqmW+DCfRo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nGV7GIESm8duFk1qFhH2HHFziJEwQBrM6CVfBvifvGUxrnFb8s2XDLN40E3yzEh4M
-         Eo/B+QGGHGtOgYPLtnoj3Dfj3vLccX8L9dRW9VbjVbxkQ1c7FXNBUislHZjJH/EvQG
-         80Wpcw6SdzvNyEEU2QThKuSDz6aEhDN8AL9VsWZEmFQ66Wg00JvasgoY4Os4tyaURt
-         VYYU7NqPORiFY8NanHsnmniCQC2uTRkYt5K7nX813Vaqrr8rXjUdFrUDPM7RWPz4vD
-         WUzO3UNylaDjd8JNv4KKcsulrcB/xppBGpLuTbBqc0B3CV2c8NJ3z3RyVJSOCyll0K
-         rPx3WIrIYayfQ==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH] f2fs: fix null pointer panic in tracepoint in __replace_atomic_write_block
-Date:   Mon,  3 Apr 2023 09:50:38 -0700
-Message-Id: <20230403165038.3018949-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1680540678;
+        bh=7e8Tl7hvfn6U4ZWD4kurl8I6KmecwzxwRF5MbcFRC2k=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=SMFj/7hmMB0OeTHdixOGJpqG7GKFC09pGLZsPJIcuKT/rFAieaJ2gIWaqhcYWpoR5
+         W8MHEpdIrtHITCnpN1QM3nx7/6iOZBVSxmjpyMfMg67gtIlZ2Gbaccc7APwvz0gkdy
+         BDcHqHNOVYR+TT3HjSPis3nlE6SfzXWlcEHOadeV+G3i8pFVNUqh0al3gWAjc7/96Z
+         O7QQe8McSDoAGW9wdLJ+QaCQWTQTKcpoQrhVi6gT8+4LKW+ElNjsH2yKAlDc6pDLje
+         liaCGGsCUWlgK0o1sjn/IS6iiRAsOnSEIsRbTDlhhAEfMZGcWr4Oges8wNThd/adut
+         4/NFHfJgwpPIw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9E117C41670;
+        Mon,  3 Apr 2023 16:51:18 +0000 (UTC)
+Subject: Re: [GIT PULL] vfs fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230403-hardener-elevate-44493c0e466b@brauner>
+References: <20230403-hardener-elevate-44493c0e466b@brauner>
+X-PR-Tracked-List-Id: <linux-fsdevel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230403-hardener-elevate-44493c0e466b@brauner>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/vfs.misc.fixes.v6.3-rc6
+X-PR-Tracked-Commit-Id: cb2239c198ad9fbd5aced22cf93e45562da781eb
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 148341f0a2f53b5e8808d093333d85170586a15d
+Message-Id: <168054067863.29791.2106328294277907380.pr-tracker-bot@kernel.org>
+Date:   Mon, 03 Apr 2023 16:51:18 +0000
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -51,26 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We got a kernel panic if old_addr is NULL.
+The pull request you sent on Mon,  3 Apr 2023 13:04:58 +0200:
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/segment.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/vfs.misc.fixes.v6.3-rc6
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 72bce3808394..2439d7029e64 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -257,7 +257,7 @@ static int __replace_atomic_write_block(struct inode *inode, pgoff_t index,
- 	f2fs_put_dnode(&dn);
- 
- 	trace_f2fs_replace_atomic_write_block(inode, F2FS_I(inode)->cow_inode,
--					index, *old_addr, new_addr, recover);
-+			index, old_addr ? *old_addr : 0, new_addr, recover);
- 	return 0;
- }
- 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/148341f0a2f53b5e8808d093333d85170586a15d
+
+Thank you!
+
 -- 
-2.40.0.348.gf938b09366-goog
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
