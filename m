@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034EA6D433C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFE56D4340
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbjDCLRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S232303AbjDCLSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232349AbjDCLRR (ORCPT
+        with ESMTP id S232265AbjDCLSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:17:17 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607941DF80
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:16:56 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso32207810pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680520615;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ke1BmpJax0dFxDzlH+fS+VmzwhJuJbFy2IGCh2H/H80=;
-        b=do6CEDVjMR71jqF0bpSY9nVTAnaHoU/UV9pX90cv0snUMn6ZJpMxCCfot2PUitZoc5
-         pEuoGjhoDLKX9C6YmLu1zhyJjjpdMcheApGJQxUn+43jMWvW1GVGR5gMzDxk+Dryzfg5
-         nowHGujOvTKHYjNjqhmSRlcM2LT0ZIa6+R1lc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680520615;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ke1BmpJax0dFxDzlH+fS+VmzwhJuJbFy2IGCh2H/H80=;
-        b=XY7RbV1hXhgtoUzM6OF0/GohGLGefQpou5M2LiWapdplnfpoy/7REKer0Sxy21UJMO
-         fWpt1U6Va9P+6pxuyFAODuqW1YB81O2SmpBrDKgEf/Ysc0vqJOVEJaqpQpZjZ8mhQW2s
-         LcDs9fJ1c4nfDVWi0bar57pzO0zvS362Q0kwCm7SpdcWWeTk/QlwOgCcrSlhC/YfLGG7
-         hmkk3+LRfeXACLivrC0GTLkCBuvdjfMLxe4WkT2Ed5NIPV6UDffJW8k53sjPamwYiZpH
-         pziR0XiZjlP/S6OjI74KQXqDsTW+OrF9v5DOiubPalNS3pdeZZgNqjBHXraYj24N77g9
-         +bxQ==
-X-Gm-Message-State: AAQBX9efE6q9ru634vIGzX6QwyYJCSxIGFyUz3ikKfFSIGRdUMTkcUZo
-        neHh6e92SqTbraOv3AprVgWVhQUhQZHtzidPcOLxFA==
-X-Google-Smtp-Source: AKy350a0m8UMHP75L6OmsSj6MDl520edXzfsPgoQs+rXUr4+WE0UzLlQtsiZsOVTXM31l2z3Sxh1PKzALboC62Ci13M=
-X-Received: by 2002:a17:902:d70c:b0:1a1:def4:a030 with SMTP id
- w12-20020a170902d70c00b001a1def4a030mr6366338ply.0.1680520615096; Mon, 03 Apr
- 2023 04:16:55 -0700 (PDT)
+        Mon, 3 Apr 2023 07:18:11 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105867DA8;
+        Mon,  3 Apr 2023 04:18:06 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 333BHqM2092732;
+        Mon, 3 Apr 2023 06:17:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680520672;
+        bh=bYhcyFvgcpJ9BPr8J6LZgLhC/TZiRbK1lHHFBaXBodU=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=C7lsuUtAupiXitiX2Xd293T7EijikjPHFLL90yAT5+NBpgPF53NiMB/BXgo9rX5eq
+         bJVMZ2bMa8U6PKYaRM3JNHQ1vwirWjRnQlFCGG+ToayKMKlgQdTdsWdeyolgxZh3tO
+         D5oJkhG0g1C16Qq1cNw7moo/FVr/hKSeGu0Ss8D8=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 333BHqRN023741
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 3 Apr 2023 06:17:52 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
+ Apr 2023 06:17:52 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 3 Apr 2023 06:17:52 -0500
+Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 333BHnXu092633;
+        Mon, 3 Apr 2023 06:17:49 -0500
+Message-ID: <4d322eb3-987e-4a20-0c24-7074064f5a97@ti.com>
+Date:   Mon, 3 Apr 2023 16:47:48 +0530
 MIME-Version: 1.0
-References: <20230401234144.3719742-1-xukuohai@huaweicloud.com>
-In-Reply-To: <20230401234144.3719742-1-xukuohai@huaweicloud.com>
-From:   Florent Revest <revest@chromium.org>
-Date:   Mon, 3 Apr 2023 13:16:44 +0200
-Message-ID: <CABRcYmJ7Oi6fpU76aNFpEwa94sZ+O7q6M1k-LMB0f0iXbFXGZQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf, arm64: Fixed a BTI error on returning to
- patched function
-To:     Xu Kuohai <xukuohai@huaweicloud.com>
-Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <rogerq@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net-next v2 1/3] net: ethernet: ti: am65-cpsw: Move mode
+ specific config to mac_config()
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+References: <20230403110106.983994-1-s-vadapalli@ti.com>
+ <20230403110106.983994-2-s-vadapalli@ti.com>
+ <ZCqzuwDLGuBDMHQG@shell.armlinux.org.uk>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <ZCqzuwDLGuBDMHQG@shell.armlinux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,123 +72,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 1, 2023 at 12:43=E2=80=AFPM Xu Kuohai <xukuohai@huaweicloud.com=
-> wrote:
->
-> From: Xu Kuohai <xukuohai@huawei.com>
->
-> When BPF_TRAMP_F_CALL_ORIG is set, bpf trampoline uses BLR to jump
-> back to the instruction next to call site to call the patched function.
-> For BTI-enabled kernel, the instruction next to call site is usually
-> PACIASP, in this case, it's safe to jump back with BLR. But when
-> the call site is not followed by a PACIASP or bti, a BTI exception
-> is triggered.
->
-> Here is a fault log:
->
->  Unhandled 64-bit el1h sync exception on CPU0, ESR 0x0000000034000002 -- =
-BTI
->  CPU: 0 PID: 263 Comm: test_progs Tainted: GF
->  Hardware name: linux,dummy-virt (DT)
->  pstate: 40400805 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=3D-c)
->  pc : bpf_fentry_test1+0xc/0x30
->  lr : bpf_trampoline_6442573892_0+0x48/0x1000
->  sp : ffff80000c0c3a50
->  x29: ffff80000c0c3a90 x28: ffff0000c2e6c080 x27: 0000000000000000
->  x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000050
->  x23: 0000000000000000 x22: 0000ffffcfd2a7f0 x21: 000000000000000a
->  x20: 0000ffffcfd2a7f0 x19: 0000000000000000 x18: 0000000000000000
->  x17: 0000000000000000 x16: 0000000000000000 x15: 0000ffffcfd2a7f0
->  x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
->  x11: 0000000000000000 x10: ffff80000914f5e4 x9 : ffff8000082a1528
->  x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0101010101010101
->  x5 : 0000000000000000 x4 : 00000000fffffff2 x3 : 0000000000000001
->  x2 : ffff8001f4b82000 x1 : 0000000000000000 x0 : 0000000000000001
->  Kernel panic - not syncing: Unhandled exception
->  CPU: 0 PID: 263 Comm: test_progs Tainted: GF
->  Hardware name: linux,dummy-virt (DT)
->  Call trace:
->   dump_backtrace+0xec/0x144
->   show_stack+0x24/0x7c
->   dump_stack_lvl+0x8c/0xb8
->   dump_stack+0x18/0x34
->   panic+0x1cc/0x3ec
->   __el0_error_handler_common+0x0/0x130
->   el1h_64_sync_handler+0x60/0xd0
->   el1h_64_sync+0x78/0x7c
->   bpf_fentry_test1+0xc/0x30
->   bpf_fentry_test1+0xc/0x30
->   bpf_prog_test_run_tracing+0xdc/0x2a0
->   __sys_bpf+0x438/0x22a0
->   __arm64_sys_bpf+0x30/0x54
->   invoke_syscall+0x78/0x110
->   el0_svc_common.constprop.0+0x6c/0x1d0
->   do_el0_svc+0x38/0xe0
->   el0_svc+0x30/0xd0
->   el0t_64_sync_handler+0x1ac/0x1b0
->   el0t_64_sync+0x1a0/0x1a4
->  Kernel Offset: disabled
->  CPU features: 0x0000,00034c24,f994fdab
->  Memory Limit: none
->
-> And the instruction next to call site of bpf_fentry_test1 is ADD,
-> not PACIASP:
->
-> <bpf_fentry_test1>:
->         bti     c
->         nop
->         nop
->         add     w0, w0, #0x1
->         paciasp
->
-> For bpf prog, jit always puts a PACIASP after call site for BTI-enabled
-> kernel, so there is no problem.
->
-> To fix it, replace BLR with RET to bypass the branch target check.
->
-> Fixes: efc9909fdce0 ("bpf, arm64: Add bpf trampoline for arm64")
-> Reported-by: Florent Revest <revest@chromium.org>
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+Hello Russell,
 
-Thank you Xu! It does fix the BTI Oops I observed :)
+Thank you for reviewing the patch.
 
-Tested-by: Florent Revest <revest@chromium.org>
-Acked-by: Florent Revest <revest@chromium.org>
+On 03/04/23 16:38, Russell King (Oracle) wrote:
+> On Mon, Apr 03, 2023 at 04:31:04PM +0530, Siddharth Vadapalli wrote:
+>> Move the interface mode specific configuration to the mac_config()
+>> callback am65_cpsw_nuss_mac_config().
+>>
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> ---
+>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 10 +++++++---
+>>  1 file changed, 7 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>> index d17757ecbf42..74e099828978 100644
+>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>> @@ -1504,12 +1504,17 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
+>>  							  phylink_config);
+>>  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
+>>  	struct am65_cpsw_common *common = port->common;
+>> +	u32 mac_control = 0;
+>>  
+>>  	if (common->pdata.extra_modes & BIT(state->interface)) {
+>> -		if (state->interface == PHY_INTERFACE_MODE_SGMII)
+>> +		if (state->interface == PHY_INTERFACE_MODE_SGMII) {
+>> +			mac_control |= CPSW_SL_CTL_EXT_EN;
+>>  			writel(ADVERTISE_SGMII,
+>>  			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
+>> +		}
+>>  
+>> +		if (mac_control)
+>> +			cpsw_sl_ctl_set(port->slave.mac_sl, mac_control);
+>>  		writel(AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
+>>  		       port->sgmii_base + AM65_CPSW_SGMII_CONTROL_REG);
+>>  	}
+>> @@ -1553,8 +1558,7 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
+>>  
+>>  	if (speed == SPEED_1000)
+>>  		mac_control |= CPSW_SL_CTL_GIG;
+>> -	if (interface == PHY_INTERFACE_MODE_SGMII)
+>> -		mac_control |= CPSW_SL_CTL_EXT_EN;
+>> +	/* TODO: Verify whether in-band is necessary for 10 Mbps RGMII */
+>>  	if (speed == SPEED_10 && phy_interface_mode_is_rgmii(interface))
+>>  		/* Can be used with in band mode only */
+>>  		mac_control |= CPSW_SL_CTL_EXT_EN;
+> 
+> I'm afraid I can see you haven't thought this patch through properly.
+> 
+> am65_cpsw_nuss_mac_link_down() will call
+> cpsw_sl_ctl_reset(port->slave.mac_sl); which has the effect of clearing
+> to zero the entire MAC control register. This will clear
+> CPSW_SL_CTL_EXT_EN that was set in am65_cpsw_nuss_mac_config() which is
+> not what you want to be doing.
 
-> ---
->  arch/arm64/net/bpf_jit.h      | 4 ++++
->  arch/arm64/net/bpf_jit_comp.c | 3 ++-
->  2 files changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-> index a6acb94ea3d6..c2edadb8ec6a 100644
-> --- a/arch/arm64/net/bpf_jit.h
-> +++ b/arch/arm64/net/bpf_jit.h
-> @@ -281,4 +281,8 @@
->  /* DMB */
->  #define A64_DMB_ISH aarch64_insn_gen_dmb(AARCH64_INSN_MB_ISH)
->
-> +/* ADR */
-> +#define A64_ADR(Rd, offset) \
-> +       aarch64_insn_gen_adr(0, offset, Rd, AARCH64_INSN_ADR_TYPE_ADR)
-> +
->  #endif /* _BPF_JIT_H */
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
-c
-> index 62f805f427b7..b26da8efa616 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -1900,7 +1900,8 @@ static int prepare_trampoline(struct jit_ctx *ctx, =
-struct bpf_tramp_image *im,
->                 restore_args(ctx, args_off, nargs);
->                 /* call original func */
->                 emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
-> -               emit(A64_BLR(A64_R(10)), ctx);
-> +               emit(A64_ADR(A64_LR, AARCH64_INSN_SIZE * 2), ctx);
-> +               emit(A64_RET(A64_R(10)), ctx);
->                 /* store return value */
->                 emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
->                 /* reserve a nop for bpf_tramp_image_put */
-> --
-> 2.30.2
->
+Right! I missed noticing this. It appeared to me that simply moving the code
+from mac_link_up() to mac_config() would suffice. However, as rightly pointed
+out by you, it doesn't account for the case where the interface state is toggled.
+
+> 
+> Given that we have the 10Mbps issue with RGMII, I think what you want
+> to be doing is:
+> 
+> 1. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_config() if in SGMII
+>    mode, otherwise clear this bit.
+> 
+> 2. Clear the mac_control register in am65_cpsw_nuss_mac_link_down()
+>    if in RMGII mode, otherwise preserve the state of
+>    CPSW_SL_CTL_EXT_EN but clear all other bits.
+> 
+> 3. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_link_up() if in
+>    RGMII mode and 10Mbps.
+> 
+
+I will implement these changes and post the v3 series. Thank you for the
+feedback. Please let me know if I may add a "Suggested-by" tag.
+
+Regards,
+Siddharth.
