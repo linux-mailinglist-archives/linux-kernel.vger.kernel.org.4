@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BF36D4A69
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4DC6D4A7E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234089AbjDCOqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
+        id S234071AbjDCOrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234015AbjDCOqf (ORCPT
+        with ESMTP id S234063AbjDCOrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:46:35 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A3F3503C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:46:18 -0700 (PDT)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        Mon, 3 Apr 2023 10:47:23 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224CD28EAE
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:46:43 -0700 (PDT)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A5DAB3F855
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:45:45 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EA9873F246
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:45:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1680533145;
-        bh=Lg0DTuk088FU5MRineNk5kP+9dFQFrGExo9YX6St3wI=;
+        s=20210705; t=1680533148;
+        bh=N1lNLcfnab/Xak3vE1BXdEngtUghqVUaWAQgAOaQ90I=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version:Content-Type;
-        b=FYjtv+G8Z7RtbLghHZjhsQYgNo+31Ay7F2e+mURsYInPgE9643OAym4SOVt8v6Llu
-         O0G8IKgHPDu/wEWnA2i1AAc3mJlpLPcvC5KytlR8IKfmxPCeuSdvOPzpyLhg4RflLH
-         mZLJXvxQYegS7S6PsytEAX+/B8HH4ePnb+6s5wOrvOJBIFoPT4r2G18MUe2vTXt9Au
-         rZMv9/lMEi9nPZ8icW+kT+y4dO0wV6PormQWSpLbwuWj24xaS+QT1I1LGXez7M4UKb
-         4k5AjDW3o5Re5yMffPw4fZk0Pgw3bR1hziP2bQ9NjltjcXKAVKiQZgNQhVu+VpIlJW
-         MK2IGjBQ+z6UQ==
-Received: by mail-ed1-f70.google.com with SMTP id m18-20020a50d7d2000000b00501dfd867a4so41940087edj.20
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:45:45 -0700 (PDT)
+        b=plq84R7Z9jKFbIRv8EFmGTOulD5ur48J4seBXMRPakcSxy97onxVI2xse4tzpet8u
+         7HR2+Nh8jSnNutWb+z8XD5d/nDDUyTYYkEjUIcdW0X8N57cHYp42ChVtqXXpspSaBj
+         7rsZDhThH6jfe/r5O6AuFNGogtM9yPPHSwUhPMURgh0vu1VrnAUxLyuRU7wjbtKjtB
+         ync77zd/Am1CBtIuyqj4FnVz9OQeX7alutCXIu945gdthH5Y1wX7mPtfJio7VAWCPL
+         Uz/g0KE2pDDAXHkeuTA2G/YVNv7rLD3+hPWA10Fge8o1m39yitJ0lod6LR2E8Vm6fO
+         KUYQXtIVOUOFQ==
+Received: by mail-ed1-f72.google.com with SMTP id a40-20020a509eab000000b005024c025bf4so29334093edf.14
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:45:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680533145;
+        d=1e100.net; s=20210112; t=1680533147;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Lg0DTuk088FU5MRineNk5kP+9dFQFrGExo9YX6St3wI=;
-        b=o4n9I2XuGkXV31ckQcCbv4IuYgqvmFoW0wNvYwPQBB5LA2PsUvyIRuOxnKjsBROQQb
-         MFs6MA1o2Kg6L0r2nLMrjxJD9ajeXHIC/6Wrdiqq5gDiAv7FT3A3apef6VVt335Cdmb+
-         QjZ8Y0m8RlFEvW3e/25D7WaVpnxGgO0VMLJZayXeaDCsE5w/VhBcyf5BmEGM+HSckwNT
-         cBWWWfAirfxVg83ggkXndfA4FeIiZWu0TuWOC5GQcUO9DbpdrQnlaW4s1WJPO8WBpXBV
-         51lQqGwWYCLKxqPKlZX0mkHUVNjWuHwS5V+wzyNCVAz3EpnKlrnv9EgLA+E2M1CqfXhR
-         coVA==
-X-Gm-Message-State: AAQBX9dXkIl1p4g0ms4zGz7bef9jBooDix/w2Nb409dJ+HiIlBfrlC9m
-        iFOxxVQOA69mRQZ5nWP2XMCJybj0iwqTKwR+EQoSZlw4MVMmdxrECfqze2cYgDOkuCfuDN/PUy8
-        AxG7MAeT8fZ8ojlnanOl4a1ZECpuubdl09DjfRhiTHQ==
-X-Received: by 2002:a05:6402:1356:b0:4fb:1c02:8750 with SMTP id y22-20020a056402135600b004fb1c028750mr36144457edw.23.1680533145465;
-        Mon, 03 Apr 2023 07:45:45 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Zq9NOfsIGTkMXthV8xuxQjLZrHkEdhyDX0z3mfVu+XCOoBZ37ngbNJ94dYxEkf7R02tDRqxg==
-X-Received: by 2002:a05:6402:1356:b0:4fb:1c02:8750 with SMTP id y22-20020a056402135600b004fb1c028750mr36144442edw.23.1680533145306;
-        Mon, 03 Apr 2023 07:45:45 -0700 (PDT)
+        bh=N1lNLcfnab/Xak3vE1BXdEngtUghqVUaWAQgAOaQ90I=;
+        b=u4KQ6S0DWD7WrTXdeoU31PQWidmcjPphS+GtyH6ALH3aLz+cldx60h+fwRc5XPqx/p
+         Vz0S5BIqSs94CDlrVp1f2LnchVt06WKuZxH27+Y9tIW8/x7s2Cq520pZarNrANV/HKzM
+         9gpjOG6+dHw3ZrzfNZj7GyV5E8ZChs0Z8NNjim62HaZJTx5h/HkCuwx099U6wdJV81JX
+         N+F0ENr5eBVy8ZbGSrb3LXVRWJMN+JOJpObiI+E5bnXGNTzdoZRTzEF+ohsRqiYpPYA5
+         2x8bhok1hVN/90TwgfDxKSj2Dy/oP4DjTjkzDpQd0Ide9LvcmZCff/EhpPcjE4djeua0
+         kvyw==
+X-Gm-Message-State: AAQBX9ckwN+SYcnN1fNdtoXxb0fxCzJAWgnsPQ3NTfu+PcE5KtswiAZh
+        ei68OxTA+hsHR5vQkpV2o4L3CRJiK+RCbM5D7rNW7oBd6kj3PBUHNdxkO5hIcEd0/oD/pMY8oS5
+        QlUSIH6sPWKZGxw5TMHVeGXzBxuCMA6r5kpFmrrubGQ==
+X-Received: by 2002:a17:907:d487:b0:93f:fbe:c388 with SMTP id vj7-20020a170907d48700b0093f0fbec388mr34735174ejc.27.1680533147536;
+        Mon, 03 Apr 2023 07:45:47 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bcO0nfWshaXRLgIpS2eZis0PuIuWt4U+aoRv7PYgiFEjJZmPa6l00ijPySY3vFOAzJmjYOZQ==
+X-Received: by 2002:a17:907:d487:b0:93f:fbe:c388 with SMTP id vj7-20020a170907d48700b0093f0fbec388mr34735154ejc.27.1680533147248;
+        Mon, 03 Apr 2023 07:45:47 -0700 (PDT)
 Received: from amikhalitsyn.. (ip5f5bd076.dynamic.kabel-deutschland.de. [95.91.208.118])
-        by smtp.gmail.com with ESMTPSA id i5-20020a50d745000000b004fa19f5ba99sm4735804edj.79.2023.04.03.07.45.43
+        by smtp.gmail.com with ESMTPSA id i5-20020a50d745000000b004fa19f5ba99sm4735804edj.79.2023.04.03.07.45.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 07:45:44 -0700 (PDT)
+        Mon, 03 Apr 2023 07:45:46 -0700 (PDT)
 From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 To:     mszeredi@redhat.com
 Cc:     flyingpeng@tencent.com,
@@ -72,9 +72,9 @@ Cc:     flyingpeng@tencent.com,
         Bernd Schubert <bschubert@ddn.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         criu@openvz.org
-Subject: [RFC PATCH v2 6/9] fuse: take fuse connection generation into account
-Date:   Mon,  3 Apr 2023 16:45:14 +0200
-Message-Id: <20230403144517.347517-7-aleksandr.mikhalitsyn@canonical.com>
+Subject: [RFC PATCH v2 7/9] fuse: add fuse device ioctl(FUSE_DEV_IOC_REINIT)
+Date:   Mon,  3 Apr 2023 16:45:15 +0200
+Message-Id: <20230403144517.347517-8-aleksandr.mikhalitsyn@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230403144517.347517-1-aleksandr.mikhalitsyn@canonical.com>
 References: <20230403144517.347517-1-aleksandr.mikhalitsyn@canonical.com>
@@ -90,16 +90,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- modify dentry revalidation algorithm to check inode/connection
-generations. If them are not equal then perform revalidation.
-
-remark: during forced dentry revalidation we are sending FUSE_LOOKUP
-request to the userspace daemon and if it return the same inode after
-lookup then we can "upgrade" inode connection generation without
-invalidating it.
-
-- don't send FUSE_FSYNC, FUSE_RELEASE, etc requests to the userspace
-daemon about stale inodes (this can confuse libfuse)
+This ioctl aborts fuse connection and then reinitializes it,
+sends FUSE_INIT request to allow a new userspace daemon
+to pick up the fuse connection.
 
 Cc: Miklos Szeredi <mszeredi@redhat.com>
 Cc: Al Viro <viro@zeniv.linux.org.uk>
@@ -115,94 +108,207 @@ Cc: linux-kernel@vger.kernel.org
 Cc: criu@openvz.org
 Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 ---
- fs/fuse/dir.c    |  4 +++-
- fs/fuse/file.c   | 13 ++++++++++---
- fs/fuse/fuse_i.h |  3 ++-
- fs/fuse/inode.c  |  2 +-
- 4 files changed, 16 insertions(+), 6 deletions(-)
+ fs/fuse/dev.c             | 152 ++++++++++++++++++++++++++++++++++++++
+ fs/fuse/fuse_i.h          |   3 +
+ include/uapi/linux/fuse.h |   1 +
+ 3 files changed, 156 insertions(+)
 
-diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-index bfbe59e8fce2..d0fdf7289d56 100644
---- a/fs/fuse/dir.c
-+++ b/fs/fuse/dir.c
-@@ -213,7 +213,8 @@ static int fuse_dentry_revalidate(struct dentry *entry, unsigned int flags)
- 	inode = d_inode_rcu(entry);
- 	if (inode && fuse_is_bad(inode))
- 		goto invalid;
--	else if (time_before64(fuse_dentry_time(entry), get_jiffies_64()) ||
-+	else if ((inode && fuse_stale_inode_conn(inode)) ||
-+		 time_before64(fuse_dentry_time(entry), get_jiffies_64()) ||
- 		 (flags & (LOOKUP_EXCL | LOOKUP_REVAL | LOOKUP_RENAME_TARGET))) {
- 		struct fuse_entry_out outarg;
- 		FUSE_ARGS(args);
-@@ -255,6 +256,7 @@ static int fuse_dentry_revalidate(struct dentry *entry, unsigned int flags)
- 			}
- 			spin_lock(&fi->lock);
- 			fi->nlookup++;
-+			fi->conn_gen = READ_ONCE(get_fuse_conn(inode)->conn_gen);
- 			spin_unlock(&fi->lock);
- 		}
- 		kfree(forget);
-diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-index 742f90b4e638..b977d087b925 100644
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -111,8 +111,14 @@ static void fuse_file_put(struct fuse_file *ff, bool sync, bool isdir)
- 	if (refcount_dec_and_test(&ff->count)) {
- 		struct fuse_args *args = &ff->release_args->args;
+diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
+index b4501a10c379..93a457c90b49 100644
+--- a/fs/fuse/dev.c
++++ b/fs/fuse/dev.c
+@@ -2187,6 +2187,132 @@ void fuse_abort_conn(struct fuse_conn *fc)
+ }
+ EXPORT_SYMBOL_GPL(fuse_abort_conn);
  
--		if (isdir ? ff->fm->fc->flags.no_opendir : ff->fm->fc->flags.no_open) {
--			/* Do nothing when client does not implement 'open' */
-+		if (fuse_stale_ff(ff) ||
-+		    (isdir ? ff->fm->fc->flags.no_opendir : ff->fm->fc->flags.no_open)) {
-+			/*
-+			 * Do nothing when client does not implement 'open' OR
-+			 * file descriptor was opened in the previous connection generation,
-+			 * so, current daemon likely not aware of this FD, let's just skip
-+			 * FUSE_RELEASE(DIR) request.
-+			 */
- 			fuse_release_end(ff->fm, args, 0);
- 		} else if (sync) {
- 			fuse_simple_request(ff->fm, args);
-@@ -598,9 +604,10 @@ static int fuse_fsync(struct file *file, loff_t start, loff_t end,
++static int fuse_reinit_conn(struct fuse_conn *fc)
++{
++	struct fuse_iqueue *fiq = &fc->iq;
++	struct fuse_dev *fud;
++	unsigned int i;
++
++	spin_lock(&fc->lock);
++	if (fc->reinit_in_progress) {
++		spin_unlock(&fc->lock);
++		return -EBUSY;
++	}
++
++	if (fc->conn_gen + 1 < fc->conn_gen) {
++		spin_unlock(&fc->lock);
++		return -EOVERFLOW;
++	}
++
++	fc->reinit_in_progress = true;
++	spin_unlock(&fc->lock);
++
++	/*
++	 * Unsets fc->connected and fiq->connected and
++	 * ensures that no new requests can be queued
++	 */
++	fuse_abort_conn(fc);
++	fuse_wait_aborted(fc);
++
++	spin_lock(&fc->lock);
++	if (fc->connected) {
++		fc->reinit_in_progress = false;
++		spin_unlock(&fc->lock);
++		return -EINVAL;
++	}
++
++	fc->conn_gen++;
++
++	spin_lock(&fiq->lock);
++	if (request_pending(fiq) || fiq->forget_list_tail != &fiq->forget_list_head) {
++		spin_unlock(&fiq->lock);
++		fc->reinit_in_progress = false;
++		spin_unlock(&fc->lock);
++		return -EINVAL;
++	}
++
++	if (&fuse_dev_fiq_ops != fiq->ops) {
++		spin_unlock(&fiq->lock);
++		fc->reinit_in_progress = false;
++		spin_unlock(&fc->lock);
++		return -EOPNOTSUPP;
++	}
++
++	fiq->connected = 1;
++	spin_unlock(&fiq->lock);
++
++	spin_lock(&fc->bg_lock);
++	if (!list_empty(&fc->bg_queue)) {
++		spin_unlock(&fc->bg_lock);
++		fc->reinit_in_progress = false;
++		spin_unlock(&fc->lock);
++		return -EINVAL;
++	}
++
++	fc->blocked = 0;
++	fc->max_background = FUSE_DEFAULT_MAX_BACKGROUND;
++	spin_unlock(&fc->bg_lock);
++
++	list_for_each_entry(fud, &fc->devices, entry) {
++		struct fuse_pqueue *fpq = &fud->pq;
++
++		spin_lock(&fpq->lock);
++		if (!list_empty(&fpq->io)) {
++			spin_unlock(&fpq->lock);
++			fc->reinit_in_progress = false;
++			spin_unlock(&fc->lock);
++			return -EINVAL;
++		}
++
++		for (i = 0; i < FUSE_PQ_HASH_SIZE; i++) {
++			if (!list_empty(&fpq->processing[i])) {
++				spin_unlock(&fpq->lock);
++				fc->reinit_in_progress = false;
++				spin_unlock(&fc->lock);
++				return -EINVAL;
++			}
++		}
++
++		fpq->connected = 1;
++		spin_unlock(&fpq->lock);
++	}
++
++	fuse_set_initialized(fc);
++
++	/* Background queuing checks fc->connected under bg_lock */
++	spin_lock(&fc->bg_lock);
++	fc->connected = 1;
++	spin_unlock(&fc->bg_lock);
++
++	fc->aborted = false;
++	fc->abort_err = 0;
++
++	/* nullify all the flags */
++	memset(&fc->flags, 0, sizeof(struct fuse_conn_flags));
++
++	spin_unlock(&fc->lock);
++
++	down_read(&fc->killsb);
++	if (!list_empty(&fc->mounts)) {
++		struct fuse_mount *fm;
++
++		fm = list_first_entry(&fc->mounts, struct fuse_mount, fc_entry);
++		if (!fm->sb) {
++			up_read(&fc->killsb);
++			return -EINVAL;
++		}
++
++		fuse_send_init(fm);
++	}
++	up_read(&fc->killsb);
++
++	spin_lock(&fc->lock);
++	fc->reinit_in_progress = false;
++	spin_unlock(&fc->lock);
++
++	return 0;
++}
++
+ void fuse_wait_aborted(struct fuse_conn *fc)
  {
- 	struct inode *inode = file->f_mapping->host;
- 	struct fuse_conn *fc = get_fuse_conn(inode);
-+	struct fuse_file *ff = file->private_data;
- 	int err;
- 
--	if (fuse_is_bad(inode))
-+	if (fuse_stale_ff(ff) || fuse_is_bad(inode))
- 		return -EIO;
- 
- 	inode_lock(inode);
+ 	/* matches implicit memory barrier in fuse_drop_waiting() */
+@@ -2282,6 +2408,32 @@ static long fuse_dev_ioctl(struct file *file, unsigned int cmd,
+ 			}
+ 		}
+ 		break;
++	case FUSE_DEV_IOC_REINIT:
++		struct fuse_conn *fc;
++
++		if (!checkpoint_restore_ns_capable(file->f_cred->user_ns))
++			return -EPERM;
++
++		res = -EINVAL;
++		fud = fuse_get_dev(file);
++
++		/*
++		 * Only fuse mounts with an already initialized fuse
++		 * connection are supported
++		 */
++		if (file->f_op == &fuse_dev_operations && fud) {
++			mutex_lock(&fuse_mutex);
++			fc = fud->fc;
++			if (fc)
++				fc = fuse_conn_get(fc);
++			mutex_unlock(&fuse_mutex);
++
++			if (fc) {
++				res = fuse_reinit_conn(fc);
++				fuse_conn_put(fc);
++			}
++		}
++		break;
+ 	default:
+ 		res = -ENOTTY;
+ 		break;
 diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index 943d5011dfa0..90c5b3459864 100644
+index 90c5b3459864..8f2c0f969f6f 100644
 --- a/fs/fuse/fuse_i.h
 +++ b/fs/fuse/fuse_i.h
-@@ -957,7 +957,8 @@ static inline bool fuse_stale_inode(const struct inode *inode, int generation,
- 				    struct fuse_attr *attr)
- {
- 	return inode->i_generation != generation ||
--		inode_wrong_type(inode, attr->mode);
-+		inode_wrong_type(inode, attr->mode) ||
-+		fuse_stale_inode_conn(inode);
- }
+@@ -752,6 +752,9 @@ struct fuse_conn {
+ 	/** Connection aborted via sysfs */
+ 	bool aborted;
  
- static inline void fuse_make_bad(struct inode *inode)
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 389bea6e4a69..26a4149f6db7 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -124,7 +124,7 @@ static void fuse_evict_inode(struct inode *inode)
- 			fuse_dax_inode_cleanup(inode);
- 		if (fi->nlookup) {
- 			fuse_queue_forget(fc, fi->forget, fi->nodeid,
--					  fi->nlookup, false);
-+					  fi->nlookup, fuse_stale_inode_conn(inode));
- 			fi->forget = NULL;
- 		}
- 	}
++	/** Connection reinit in progress */
++	bool reinit_in_progress;
++
+ 	/** Connection failed (version mismatch).  Cannot race with
+ 	    setting other bitfields since it is only set once in INIT
+ 	    reply, before any other request, and never cleared */
+diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+index b3fcab13fcd3..325da23431ef 100644
+--- a/include/uapi/linux/fuse.h
++++ b/include/uapi/linux/fuse.h
+@@ -992,6 +992,7 @@ struct fuse_notify_retrieve_in {
+ /* Device ioctls: */
+ #define FUSE_DEV_IOC_MAGIC		229
+ #define FUSE_DEV_IOC_CLONE		_IOR(FUSE_DEV_IOC_MAGIC, 0, uint32_t)
++#define FUSE_DEV_IOC_REINIT		_IO(FUSE_DEV_IOC_MAGIC, 0)
+ 
+ struct fuse_lseek_in {
+ 	uint64_t	fh;
 -- 
 2.34.1
 
