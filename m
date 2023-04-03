@@ -2,77 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7DE6D3E14
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6126D3E1F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbjDCH2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 03:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S231553AbjDCHax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 03:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDCH2T (ORCPT
+        with ESMTP id S231593AbjDCHau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 03:28:19 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD50F7DB2;
-        Mon,  3 Apr 2023 00:28:17 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id x20so29264585ljq.9;
-        Mon, 03 Apr 2023 00:28:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680506896;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Z7+97WKxhaBZWqT2fRaCXRxBwes2Zi13jHx+iYSxGs=;
-        b=idYrn8EUCkqHNnmXyNPNxdyUlS3fmHWveQzAXhbvux8GTR433oKNEPexFQgDgpk2Yr
-         zm42j/zSJpxJGm3ZPNUrjfECw0nDjeZsFmrebhgMPPqp+yiVsjNn+30VeFZ9nUTJ1Wgt
-         AjoN7JO7PYn6SfFRZqV21tjjn7ILPM/65GZJc4kAaJn+QFOMFYEetq4AYNwSbdayxYfm
-         PooBUeKKy7Dqpf5F8wVBwooL7NjI85sU/UOUuxCsKn7azQA4iqd5lBu18tVxuCwelm9v
-         VE3/S6LTEZ6zlcQcUor5/Gh2v78ZgUinxSHjuYyzexnc+p8qHia3PoPWprFPzR0VFnjb
-         qRjw==
+        Mon, 3 Apr 2023 03:30:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0378C83E0
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 00:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680507002;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nWUExWagVX656w1EVGsZGTKDtHF/b0n+CImW2plVgjs=;
+        b=IfohvKsSqX7rPbhJY1UXqsax8nxQcvWY+u9oIEMiTBx7JdyMTgj4xRIe2byt/9kknH+u5n
+        UgnOOsthwqQ8U5t9/TOIcOtPvubmIYhvHsno+FXARTyiGwBKtxAOtL3Eo7t//f3XrR6JG/
+        +3hSWxGtPBWhn4LheA0hI5KBx909/ps=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-108-wt-a3zsyMvG4zxE3Jb-Uww-1; Mon, 03 Apr 2023 03:30:01 -0400
+X-MC-Unique: wt-a3zsyMvG4zxE3Jb-Uww-1
+Received: by mail-wr1-f69.google.com with SMTP id j17-20020adfb311000000b002d660153278so3036626wrd.20
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 00:30:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680506896;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3Z7+97WKxhaBZWqT2fRaCXRxBwes2Zi13jHx+iYSxGs=;
-        b=mIeZq2wOstleh0Ha6jsFXjtyKLudFGLXdp9k6fOKOGCxcYhmk5cpAY43TL32afWEQF
-         glq2Hu/XPc22OzMAOAI6yHRTVgM2Of5/9ucRi9MWfzdukA+JUX8vyY0heie9sP1Ag7cX
-         40ptA12BL9S5UhdIOAJET18NuVsunQygMl/3+SW4n4dlXi/l42uz/AkmikaLWraQTKvD
-         9QALOzo08d+TlnTxqxv8wfikpxBInT6Y4ExRBLa5c3LOy1BzMW9oPx1/7gHquwG/vuYr
-         sqcYIznLp5LWQpOyN8AG9DSxV/4C8rhfnTTwC1BC41BBUSjvFxdiWD6uySHf9FasI7Nt
-         +vpw==
-X-Gm-Message-State: AAQBX9dscQY63F8b9c+QQZlG8PCnF0SIfKFVl5ZC9NP84ZyFAHPQyXYl
-        xgWInAsmz6Tu5LWFcfqpnTM=
-X-Google-Smtp-Source: AKy350b3znMPqswTiznmCSs/gy7Ca3Q8RySjF6Zr0LPobzITHf3HUrk2A0RpVbG4tbi2jZzY/oZ59g==
-X-Received: by 2002:a2e:320a:0:b0:298:b03d:5715 with SMTP id y10-20020a2e320a000000b00298b03d5715mr10788120ljy.25.1680506895887;
-        Mon, 03 Apr 2023 00:28:15 -0700 (PDT)
-Received: from pc636 (host-90-233-209-177.mobileonline.telia.com. [90.233.209.177])
-        by smtp.gmail.com with ESMTPSA id y16-20020a2e7d10000000b00299fe6c262csm1610749ljc.77.2023.04.03.00.28.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 00:28:15 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Mon, 3 Apr 2023 09:28:12 +0200
-To:     Ziwei Dai <ziwei.dai@unisoc.com>
-Cc:     Ziwei Dai <ziwei.dai@unisoc.com>, paulmck@kernel.org,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, rostedt@goodmis.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shuang.wang@unisoc.com,
-        yifan.xin@unisoc.com, ke.wang@unisoc.com, xuewen.yan@unisoc.com,
-        zhiguo.niu@unisoc.com, zhaoyang.huang@unisoc.com
-Subject: Re: [PATCH V2] rcu: Make sure new krcp free business is handled
- after the wanted rcu grace period.
-Message-ID: <ZCqADKQnMlJgGwM1@pc636>
-References: <1680266529-28429-1-git-send-email-ziwei.dai@unisoc.com>
- <ZCb14DWFDKyuuhyi@pc638.lan>
+        d=1e100.net; s=20210112; t=1680507000;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nWUExWagVX656w1EVGsZGTKDtHF/b0n+CImW2plVgjs=;
+        b=rdxiQGJgeIgSYdg6rOdtCGGlYqLTer6P1GWs4iawNA9HyDwNzAjipcrCeeuwMzGK6h
+         /zx8Bx5+YaFwpAEg+EVZcFyE07uaxPwejy7uIdIQVfra6SYqO6RVBheOjuZfPxPrP3ts
+         E0weH+eEa6HdD+TjJD1z3URfwe1BTS5TUkOEYIRigTeQroSLvsvCCLjktSDvK6NMWCN3
+         M/0JKx0ovo7gueIfh4iDDZ9xhWcwLoniAdEJbSTZX/dMxoi/OEngLxuTRRc5RnVhNBwY
+         baeMfiM6vVKiyg2YX018tO6QUrpQB1qV+zPTtrszNtNaZ5yKgJ7kBQ0ZX6hfLATFFMTZ
+         vkeQ==
+X-Gm-Message-State: AO0yUKUdvk9US4xsFHe2GJ3RPLY19e9EnWXhZR+hYIN/iZFUXFZN9wuJ
+        G1gIhyXmGEedTEFqgCs1ERNhpAcrCjtnBPcaJ7AbxKLLx84xNbj6poXO8AP3OxBKvkAHV+QvFiV
+        0Ws+G7pDqtKDZ+qgLXziJmIyAGRkWQnNk
+X-Received: by 2002:a1c:4b09:0:b0:3ed:1f9c:af12 with SMTP id y9-20020a1c4b09000000b003ed1f9caf12mr27138311wma.22.1680506999869;
+        Mon, 03 Apr 2023 00:29:59 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/3IMtRpZ1SJxXyUz7jYIt+isjmplQwS+1rFMbpAePhy6wNg4p18ZoFNBqFDo8+tUpWAUBYsg==
+X-Received: by 2002:a1c:4b09:0:b0:3ed:1f9c:af12 with SMTP id y9-20020a1c4b09000000b003ed1f9caf12mr27138297wma.22.1680506999575;
+        Mon, 03 Apr 2023 00:29:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
+        by smtp.gmail.com with ESMTPSA id i22-20020a05600c355600b003ede6540190sm18727435wmq.0.2023.04.03.00.29.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 00:29:58 -0700 (PDT)
+Message-ID: <5618f454-7a88-0443-59e7-df9780e9fa50@redhat.com>
+Date:   Mon, 3 Apr 2023 09:29:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCb14DWFDKyuuhyi@pc638.lan>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration
+ entry
+Content-Language: en-US
+To:     Yang Shi <shy828301@gmail.com>, Vlastimil Babka <vbabka@suse.cz>
+Cc:     kirill.shutemov@linux.intel.com, jannh@google.com,
+        willy@infradead.org, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20220203182641.824731-1-shy828301@gmail.com>
+ <132ba4a4-3b1d-329d-1db4-f102eea2fd08@suse.cz>
+ <9ba70a5e-4e12-0e9f-a6a4-d955bf25d0fe@redhat.com>
+ <64ec7939-0733-7925-0ec0-d333e62c5f21@suse.cz>
+ <CAHbLzkoZctsJf92Lw3wKMuSqT7-aje0SiAjc6JVW5Z3bNS1JNg@mail.gmail.com>
+ <efab25ef-c29c-3671-5f26-060bba76d481@suse.cz>
+ <CAHbLzkomXCwabFrNaNyuGBozmindHqVD0ki4n75XJ2V8Uw=9rw@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAHbLzkomXCwabFrNaNyuGBozmindHqVD0ki4n75XJ2V8Uw=9rw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,126 +91,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 05:01:52PM +0200, Uladzislau Rezki wrote:
-> On Fri, Mar 31, 2023 at 08:42:09PM +0800, Ziwei Dai wrote:
-> > In kfree_rcu_monitor(), new free business at krcp is attached to any free
-> > channel at krwp. kfree_rcu_monitor() is responsible to make sure new free
-> > business is handled after the rcu grace period. But if there is any none-free
-> > channel at krwp already, that means there is an on-going rcu work,
-> > which will cause the kvfree_call_rcu()-triggered free business is done
-> > before the wanted rcu grace period ends.
-> > 
-> > This commit ignore krwp which has non-free channel at kfree_rcu_monitor(),
-> > to fix the issue that kvfree_call_rcu() loses effectiveness.
-> > 
-> > Below is the css_set obj "from_cset" use-after-free case caused by
-> > kvfree_call_rcu() losing effectiveness.
-> > CPU 0 calls rcu_read_lock(), then use "from_cset", then hard irq comes,
-> > the task is schedule out.
-> > CPU 1 calls kfree_rcu(cset, rcu_head), willing to free "from_cset" after new gp.
-> > But "from_cset" is freed right after current gp end. "from_cset" is reallocated.
-> > CPU 0 's task arrives back, references "from_cset"'s member, which causes crash.
-> > 
-> > CPU 0					CPU 1
-> > count_memcg_event_mm()
-> > |rcu_read_lock()  <---
-> > |mem_cgroup_from_task()
-> >  |// css_set_ptr is the "from_cset" mentioned on CPU 1
-> >  |css_set_ptr = rcu_dereference((task)->cgroups)
-> >  |// Hard irq comes, current task is scheduled out.
-> > 
-> > 					cgroup_attach_task()
-> > 					|cgroup_migrate()
-> > 					|cgroup_migrate_execute()
-> > 					|css_set_move_task(task, from_cset, to_cset, true)
-> > 					|cgroup_move_task(task, to_cset)
-> > 					|rcu_assign_pointer(.., to_cset)
-> > 					|...
-> > 					|cgroup_migrate_finish()
-> > 					|put_css_set_locked(from_cset)
-> > 					|from_cset->refcount return 0
-> > 					|kfree_rcu(cset, rcu_head) // means to free from_cset after new gp
-> > 					|add_ptr_to_bulk_krc_lock()
-> > 					|schedule_delayed_work(&krcp->monitor_work, ..)
-> > 
-> > 					kfree_rcu_monitor()
-> > 					|krcp->bulk_head[0]'s work attached to krwp->bulk_head_free[]
-> > 					|queue_rcu_work(system_wq, &krwp->rcu_work)
-> > 					|if rwork->rcu.work is not in WORK_STRUCT_PENDING_BIT state,
-> > 					|call_rcu(&rwork->rcu, rcu_work_rcufn) <--- request a new gp
-> > 
-> > 					// There is a perious call_rcu(.., rcu_work_rcufn)
-> > 					// gp end, rcu_work_rcufn() is called.
-> > 					rcu_work_rcufn()
-> > 					|__queue_work(.., rwork->wq, &rwork->work);
-> > 
-> > 					|kfree_rcu_work()
-> > 					|krwp->bulk_head_free[0] bulk is freed before new gp end!!!
-> > 					|The "from_cset" is freed before new gp end.
-> > 
-> > // the task is scheduled in after many ms.
-> >  |css_set_ptr->subsys[(subsys_id) <--- Caused kernel crash, because css_set_ptr is freed.
-> > 
-> > v2: Use helper function instead of inserted code block at kfree_rcu_monitor().
-> > 
-> > Fixes: c014efeef76a ("rcu: Add multiple in-flight batches of kfree_rcu() work")
-> > Signed-off-by: Ziwei Dai <ziwei.dai@unisoc.com>
-> > ---
-> >  kernel/rcu/tree.c | 27 +++++++++++++++++++--------
-> >  1 file changed, 19 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > index 8e880c0..7b95ee9 100644
-> > --- a/kernel/rcu/tree.c
-> > +++ b/kernel/rcu/tree.c
-> > @@ -3024,6 +3024,18 @@ static void kfree_rcu_work(struct work_struct *work)
-> >  	return !!READ_ONCE(krcp->head);
-> >  }
-> >  
-> > +static bool
-> > +need_wait_for_krwp_work(struct kfree_rcu_cpu_work *krwp)
-> > +{
-> > +	int i;
-> > +
-> > +	for (i = 0; i < FREE_N_CHANNELS; i++)
-> > +		if (!list_empty(&krwp->bulk_head_free[i]))
-> > +			return true;
-> > +
-> > +	return !!krwp->head_free;
-> > +}
-> > +
-> >  static int krc_count(struct kfree_rcu_cpu *krcp)
-> >  {
-> >  	int sum = atomic_read(&krcp->head_count);
-> > @@ -3107,15 +3119,14 @@ static void kfree_rcu_monitor(struct work_struct *work)
-> >  	for (i = 0; i < KFREE_N_BATCHES; i++) {
-> >  		struct kfree_rcu_cpu_work *krwp = &(krcp->krw_arr[i]);
-> >  
-> > -		// Try to detach bulk_head or head and attach it over any
-> > -		// available corresponding free channel. It can be that
-> > -		// a previous RCU batch is in progress, it means that
-> > -		// immediately to queue another one is not possible so
-> > -		// in that case the monitor work is rearmed.
-> > -		if ((!list_empty(&krcp->bulk_head[0]) && list_empty(&krwp->bulk_head_free[0])) ||
-> > -			(!list_empty(&krcp->bulk_head[1]) && list_empty(&krwp->bulk_head_free[1])) ||
-> > -				(READ_ONCE(krcp->head) && !krwp->head_free)) {
-> > +		// Try to detach bulk_head or head and attach it, only when
-> > +		// all channels are free.  Any channel is not free means at krwp
-> > +		// there is on-going rcu work to handle krwp's free business.
-> > +		if (need_wait_for_krwp_work(krwp))
-> > +			continue;
-> >  
-> > +		// kvfree_rcu_drain_ready() might handle this krcp, if so give up.
-> > +		if (need_offload_krc(krcp)) {
-> >  			// Channel 1 corresponds to the SLAB-pointer bulk path.
-> >  			// Channel 2 corresponds to vmalloc-pointer bulk path.
-> >  			for (j = 0; j < FREE_N_CHANNELS; j++) {
-> > -- 
-> > 1.9.1
-> > 
-> It looks correct to me. I will test it over weekend.
+On 24.03.23 21:12, Yang Shi wrote:
+> On Fri, Mar 24, 2023 at 4:25 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> On 3/23/23 21:45, Yang Shi wrote:
+>>> On Thu, Mar 23, 2023 at 3:11 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>>>
+>>> Out of curiosity, is there any public link for this CVE? Google search
+>>> can't find it.
+>>
+>> Only this one is live so far, AFAIK
+>>
+>> https://bugzilla.redhat.com/show_bug.cgi?id=2180936
 > 
-Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> Thank you.
 
---
-Uladzislau Rezki
+There is now
+
+https://access.redhat.com/security/cve/cve-2023-1582
+
+-- 
+Thanks,
+
+David / dhildenb
+
