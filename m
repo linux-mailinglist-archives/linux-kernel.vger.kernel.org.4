@@ -2,110 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D806D4175
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A9C6D4176
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbjDCKBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S231859AbjDCKCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbjDCKA4 (ORCPT
+        with ESMTP id S231971AbjDCKBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:00:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DCB3A9B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:00:55 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pjGzU-0006Ex-Sr; Mon, 03 Apr 2023 12:00:44 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pjGzT-0001wu-Dc; Mon, 03 Apr 2023 12:00:43 +0200
-Date:   Mon, 3 Apr 2023 12:00:43 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-wireless@vger.kernel.org, tony0620emma@gmail.com,
-        kvalo@kernel.org, pkshih@realtek.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: Re: [PATCH v3 1/3] wifi: rtw88: Move register access from
- rtw_bf_assoc() outside the RCU
-Message-ID: <20230403100043.GT19113@pengutronix.de>
-References: <20230108211324.442823-1-martin.blumenstingl@googlemail.com>
- <20230108211324.442823-2-martin.blumenstingl@googlemail.com>
- <20230331125906.GF15436@pengutronix.de>
- <CAFBinCB8B4-oYaFY4p-20_PCWh_6peq75O9JjV6ZusVXPKSaDw@mail.gmail.com>
+        Mon, 3 Apr 2023 06:01:48 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24B049DA;
+        Mon,  3 Apr 2023 03:01:41 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: linasend@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id DEC7242037;
+        Mon,  3 Apr 2023 10:01:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1680516100;
+        bh=5iG+gKdxqfqrOEbvILYGGdMiMNN4NG28/z/pH6bZA08=;
+        h=From:Subject:Date:To:Cc;
+        b=bfMEkvcp6B3G05vneL/GYZA6QOpF/jpx112ukqVEMsHbb8aOTEfzfgYpAeAsU3rMj
+         3d7BMrBu+jZBw2zliSfttuKVx5ud8RIjx5rutmrxXgxySnSMNdusoKPjmIjq/MVu7V
+         DtBgdekW8DdaP500+4c+dHEyo/ZhqqP8890xkAVM0bfRrjuo86gSYtzcNK21NaJYbi
+         D3bcKuRiLaD4Vu4uRb6WU4ZTKybdCV0wYEDQy//8s3UUp7cySH72MHFPuHWS1CqCBu
+         aAVUamVpSsymmpIlcZfTMkeb7exWHH2OzzAckNT3gNYsESyYdohJEUX9fte6kpTn3g
+         Wz7TQbfH9CNBw==
+From:   Asahi Lina <lina@asahilina.net>
+Subject: [PATCH v2 0/2] rust: sync: Arc: Any downcasting and assume_init()
+Date:   Mon, 03 Apr 2023 19:01:10 +0900
+Message-Id: <20230224-rust-arc-v2-0-5c97a865b276@asahilina.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCB8B4-oYaFY4p-20_PCWh_6peq75O9JjV6ZusVXPKSaDw@mail.gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOajKmQC/22NSw6CMBCGr2Jm7RDaYmNceQ/DYiijncQUM8VGQ
+ 7i7hbXL738ukFmFM1wOCygXyTKlCvZ4gBApPRhlrAy2ta61tkN95xlJAw7kgvU8duwJanygzDg
+ opRC3QvGNQw1ms17Kd/nsL7e+cpQ8T/rdT4vZ1D/7xWCLJ39mJm8cdeZKmaI8JVGTeIZ+XdcfW
+ a1geL8AAAA=
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     Andreas Hindborg <a.hindborg@samsung.com>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Benno Lossin <y86-dev@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680516096; l=1090;
+ i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
+ bh=5iG+gKdxqfqrOEbvILYGGdMiMNN4NG28/z/pH6bZA08=;
+ b=nkt1UWwOCWdkdM7BD3JwGd6hwT66+1JyRfcoXByFQvi0Zq6G+g3lbhQSXfIf+fefXIB1o4rvA
+ pT1Sg/44QLUDO3xd9pAflcjuqRhchfbf4LzWoYrLFVdRM8DKbEAORvy
+X-Developer-Key: i=lina@asahilina.net; a=ed25519;
+ pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+Hi everyone,
 
-On Sat, Apr 01, 2023 at 11:30:40PM +0200, Martin Blumenstingl wrote:
-> Hi Sascha,
-> 
-> On Fri, Mar 31, 2023 at 2:59 PM Sascha Hauer <s.hauer@pengutronix.de> wrote:
-> >
-> > On Sun, Jan 08, 2023 at 10:13:22PM +0100, Martin Blumenstingl wrote:
-> > > USB and (upcoming) SDIO support may sleep in the read/write handlers.
-> > > Shrink the RCU critical section so it only cover the call to
-> > > ieee80211_find_sta() and finding the ic_vht_cap/vht_cap based on the
-> > > found station. This moves the chip's BFEE configuration outside the
-> > > rcu_read_lock section and thus prevent "scheduling while atomic" or
-> > > "Voluntary context switch within RCU read-side critical section!"
-> > > warnings when accessing the registers using an SDIO card (which is
-> > > where this issue has been spotted in the real world - but it also
-> > > affects USB cards).
-> >
-> > Unfortunately this introduces a regression on my RTW8821CU chip. With
-> > this it constantly looses connection to the AP and reconnects shortly
-> > after:
-> Sorry to hear this! This is odd and unfortunately I don't understand
-> the reason for this.
-> rtw_bf_assoc() is only called from
-> drivers/net/wireless/realtek/rtw88/mac80211.c with rtwdev->mutex held.
-> So I don't think that it's a race condition.
-> 
-> There's a module parameter which lets you enable/disable BF support:
-> $ git grep rtw_bf_support drivers/net/wireless/realtek/rtw88/ | grep param
-> drivers/net/wireless/realtek/rtw88/main.c:module_param_named(support_bf,
-> rtw_bf_support, bool, 0644);
+This short series is part of the set of dependencies for the drm/asahi
+Apple M1/M2 GPU driver.
 
-I was a bit too fast reporting this. Yes, there seems to be a problem
-with the RTW8821CU, but it doesn't seem to be related to this patch.
+The two patches simply add two missing features to the kernel Arc
+implementation which are present in the Rust std version: `Any`
+downcasting and `assume_init()`.
 
-Sorry for the noise.
+Signed-off-by: Asahi Lina <lina@asahilina.net>
+---
+Changes in v2:
+- #1: Moved the new function to a separate file, to keep the licensing
+  clearer.
+- #2: Replaced the safety comment with Benno's, from his pin-init series
+  (we both wrote the same patch).
+- Link to v1: https://lore.kernel.org/r/20230224-rust-arc-v1-0-568eea613a41@asahilina.net
 
-The chipset seems to have problems with one access point that I have and
-I can see these problems with or without the patch. Maybe NetworkManager
-decided to connect to another accesspoint without me noticing it, making
-it look to me as if this patch was guilty.
+---
+Asahi Lina (2):
+      rust: sync: arc: Implement Arc<dyn Any + Send + Sync>::downcast()
+      rust: sync: arc: Add UniqueArc<MaybeUninit<T>::assume_init()
+ rust/kernel/sync/arc.rs            | 13 +++++++++++++
+ rust/kernel/sync/arc/std_vendor.rs | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230224-rust-arc-ba3c26ed4e6a
 
-Sascha
+Thank you,
+~~ Lina
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
