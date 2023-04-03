@@ -2,182 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D366D50E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FF76D50B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 20:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233352AbjDCSo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 14:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
+        id S233209AbjDCSfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 14:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232386AbjDCSo1 (ORCPT
+        with ESMTP id S233242AbjDCSfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:44:27 -0400
-Received: from sonic304-15.consmr.mail.bf2.yahoo.com (sonic304-15.consmr.mail.bf2.yahoo.com [74.6.128.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663D510A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:44:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680547465; bh=wpTgHGzfxkxOToAdK3NH6iOJYYle5WxajOZcS2SxIyE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=tpT66Cewjt9Y05Jgi7/zmlADeqwvYqDhHJjeGxAqxwHc8JvfKA118GUZVmcVAWPVa6fmtYZkkoOC+BDC2McYlYuEvgnmp8WE9wTOXatNxNf3OI4Dkurneru7X1Jc+V9rNvFehVHZcNtrA2Ue+PWxTv7u/DH3v4j0jTVtTcxI4JxYRkdK0Bpc0GK66BVTxnWQv6cNOrM6vGYUsgyusgLMdAwiqHkmV437YO4yXmE+smAHopquMKIMHXzn0vxu1zPG/6lLiF6rFHTj6Nof2saeASNt+zNlaHfeXwelcYOhmciqWfbNUnECpnAuIVjohawHDucpKa2j2lrw2f4YwuOGBg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680547465; bh=VXbsrmb33bkGiYZk7p6InHCtZ28VXjoqGRMBZCh1fRX=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=rJjx/jkwqfVVMZsiw6vAQbRQ8UV7x9pEwowb87dntLL9ebnNqDkaglHny3qmL17TE1X1eDbd3z+ORKv+HAw/MrimFiEj5VaW89Jp+wr8dgwsS1O6afwINat9HYfpkYW4dyXAxf6aWV+ExICl4HDT9aqgvl2JLwcQC/jdgENvLU3epPsGqn3mPQ5hrY3WpsPzO9AezIwyVRZj3JKK5caCSv+XIbw/T87uxVvh8p6Fj2hljob4uat1mRF1Qi46+uBDEp0DOPaKOe7wZsYKFzB51P9FqBcPEusn+nBso7aFA8N0wtiSX4SwM2V9Utx6NomeFAKZOxIx2+kl1Vq9/oAK2Q==
-X-YMail-OSG: 0LwdmCsVM1mTKreM.P2XqpeuybfQI6rpIJMq6S9k.JBWMqPxa93zORXEoMGO3xz
- YTb12fFd_yRalPh7UUgTPrBT6QUDSMs1XLfb6lCToAN0EbDMO8e5drSNZFNJ_bE4.4dtK_7jkkWv
- bHwaHCJZuXSZ_hihf.bfOfzg1wnXAJYQ_l0UUvf1LktQVndmutG9ZM8pRbk7TjdFDV_BFp4HW29v
- XYpcCUeo1xB.cvQr0i4GwXwGVjIR9PR8imygg1wTRY0qrXNmeWV6AYAk8ioHfqmzkuXd17gTgnnO
- jBM..AbhmwY01dBrll1FKwOKAsWwWvnFyV40JWf39YhHqVQj06s.KkviY7RyGOrwRAP2sQfc.Zg1
- dbxo1KPbs_9EMXkc1P2mV1Y3o6cLNszEjP2.cZkyaFjtgpyo.o0pay3FfPgv1weT1GcfjNa0GA6c
- cgmgkFBEy5RSw6r3hmJ2Kuo69T5Fg8KmSTm8OliO20CUqGcoMChY12gyybhnWhWy7HnlymAjiAWS
- Nm604H243n2onDPnS0saNaOwcUTmdy6eDvi2T0L9PAjHG8eUfmwS1cTxjofCj.VDarIq64qmq4Aq
- 7KoKfh8jYGH2D50__SgrE57V3EW6L66j0dz6y1LB4XelGf6EBvp2UW7zkhDTJc6guZCG_WvL2Ey5
- xanxKJvNkHrEYffJ28iRfph7EzyzzxlWaBdMUNXRGILcXP65F1onLIqTWPLwjjuy2Q5j5x3ko9RK
- 0MGm1s5x_mGBEBmc2G27DQGj7T6CmbgKRY3Uo_Fifg_V7g5c.oToa31aC_nri0e1EpOvJanWJ29U
- 4OLKnoWOcfKyWQu_LkPvsvQ527Mlt2jNbqe19tM9pdl7wIvky7enE.TNBBDMjvHepbQ4w1nqH3Xb
- YeIAJPFyfThK2MjAdiA_UMqFN34wmNCNR7NDsorcl4g4zsova0v4QbWWdT.iF7lcU20QvsM1dUQf
- 1wsNQvJxnaXZX1ZK1LSd7_2abtvEhu5HiRLObtIsYZ39HuiUY_ld4Lkdf5JZP7.ksy5tfyE3YbiS
- vUmjo9hF4Dg25eKQl7Txno_uKH9rqkip.77X9gad5Oo8EC8Yhh1rylSJ0sIuByliVdNkV67cGBei
- cTlEIc4P7_9X_e91oHvw0gh6sTzGl0yvnX_v83PxU5fykNRgsgfkwbiKa4Z_PURmk_XA5F8ojm.7
- iz6K1ta1E1_HHgbOXJpr8AcQ2Eq5dE7GqQ64P3AtYRHfRDIsTemUwhMXDcZRUXdgmN0w5Ze4Aadf
- bzpPdyo2pF3XKSoRdb5FTmAux6S4gn8KCQW2UDHG.1T_fE6bX5yRJGylf4UzJW_BOUqDBcQeftM3
- R8L2eECuead_CBEBm_Dly5.zGkSR8elNvWCA0knL9UO_Py2xYAbx0KpHWu_zLdroyTErD9Ja8P6H
- XmaMI2O4i5Zgxg1EbulUbof4Z.cuG8RrLvaYvOGX4wakTVE4kRboKfrxI05GOXJdr_rZ7vtBTb4Q
- XF4k9mCm6UxAOemvbb2KIJ7hBKkxcdljxlsMN4gULFiVSOxX.Oi6.RPMBEcQzD4DmeMETsANk3SZ
- pvV0R.pSPCyEWN2VEvbIHlDcEQm6uSs.pA0y3jMdUOqGry7cVhGBZX.b7Dj2gmm_k59wKk571jhi
- U6mE18Y.TshTLX3emhr1h3962zQmEN6zqwvqWM1YHaZgD9q9ScmKcNb0_Bi8WkSxKqsDaXR35HbF
- 4_YwbVn0r4Zh8AXE_IphmFF02FzfBlj2_ejNlnOBZHBmSpNKhNfGczcEmbhcdWRH8wzn50SUVnS1
- uzvj1tEZhpouuU5UtGomd3KP7ECxV4I4forB9lsCxBIbGAH8emtmuJzWZmnma7d4i27QdgNgkbiQ
- Ctfv.5UZMBx1oeUihThLDWYtYK.DIr0Jq.wTUzEhHR7vJHiAAAsV5v5txx_3_mrSpcbmgcFN1S_q
- PPtZvQFrR59eCpZqA1sPhOpB0mAbsK_97PH.9LMPHTsI8PzAGQCqNyD47WpOCx0d1waoj12g3M3_
- uHU3cJQKTgNSetLlNjlItfj.Uafqf_w97YGqwsYM9VbS2gUXvILn.fDVRGOl205zuqNLlDOUI4e3
- 90GyocrZvJ9VpqxDZrPb5IAYWMlePyiJtL4qixOtekY5j0LAz6Fi2o3JsQuH1daVa4G_XENrXFxh
- ONzJQSW2pnJGAZG7u7ZBYW8CNvqNlRge1sIgMGiyv5zHm5NdowQMwhpEfVPynkjvGdEugdSZD60o
- tKiyZrF5a7Ut34bE7TsKuh9wi1Dw1v_0boYrGUG.SACGPWYskU7CBHDziy4RyB0N2KkiuONytoc2
- M.Smao1jvV96hMHwXfw--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 7b5a653f-deae-4fe6-ad1b-625f8db54753
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.bf2.yahoo.com with HTTP; Mon, 3 Apr 2023 18:44:25 +0000
-Received: by hermes--production-bf1-5f9df5c5c4-dxcv9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID af00eb186ab4bd0725e08329263794c3;
-          Mon, 03 Apr 2023 18:33:53 +0000 (UTC)
-Message-ID: <186c5de2-a07c-7401-bf8e-863defaff5ba@schaufler-ca.com>
-Date:   Mon, 3 Apr 2023 11:33:51 -0700
+        Mon, 3 Apr 2023 14:35:38 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB833C19
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 11:35:06 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id w9so121094063edc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 11:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680546905;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ueGbaW2O+Qwz3FkYgXkwgtIxdt5rpvOVab1WmVRUhSY=;
+        b=LUhiSNSR1HYwkvfRr64wDu/aXbdSfatLXVuH0q5ognTmyktUbLzd6mRBhDOciDRefm
+         8EAJZ4JcaI020aGXQRQUC05yN/d4SHCCTowEMoxS21hnCH96GomWI8PNHQme5fDt+Py4
+         jI7V50GLVlCYGR3QJ8cDSFQZ5eqgPZD4K3Ym2g6npRGyIyhZGWLX3IBPWDypLktIH9rE
+         jRKBVd9tC8YcTFvy1mbHK25CSKU/kKL93qdD9EnjAn+mwH7kWD/8E0KLs55JqOds+h1r
+         sPpY9/rya2DtOV5Dz6pZTh6dwvMzUYxncbE5EzRq48VS28+Q/rcCxn70n9sWvuT5+K4D
+         yTYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680546905;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ueGbaW2O+Qwz3FkYgXkwgtIxdt5rpvOVab1WmVRUhSY=;
+        b=RyWw6fWUJHaaFS9ENn8Eefa+VkgQg9H3NLa3KgCllsOJdAqPIbAqg1a0VPs/MDf+ZK
+         vLE4g2NQuYsbjs6N7gFNrfCirSXZq8if6Yp35DiA+nTPmDGBY5aiyyVFN4YvD7fLrQ9k
+         N8pAQEzIj4YgaMJiCFy5ZAEBnTOq3+QQ3BxeXDWpS1zWD1bUrdyfiasn2gr3XGS5jjrk
+         8W1odVOsErxx+dKO7wYlXhCxLKv63/3myW9NWiFPiPTXPrVooakTySW2eRrVQCSlb2YJ
+         IjCEqYIRaJIgjL+reHrNZfQLJhqgJIdjBxMehP2rO5j9hOaW4N0ZytjlxN2Eea7OIf+2
+         PQow==
+X-Gm-Message-State: AAQBX9daBjuNcpVsnVxng0A/JMlvwT0Mac0E+EKJLGV3r28M0T6U18+h
+        v2Pc9+ZGatOdggNHNfNYCeBA8g==
+X-Google-Smtp-Source: AKy350YibgRgb9sIiYtrSA3BqsPmJ+XsScK2P+gSvuEkworRBgH+4OIRqNiq20c5bctw0bWeBIuncg==
+X-Received: by 2002:a17:906:ecf4:b0:930:2e1c:97ba with SMTP id qt20-20020a170906ecf400b009302e1c97bamr37859577ejb.5.1680546904762;
+        Mon, 03 Apr 2023 11:35:04 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
+        by smtp.gmail.com with ESMTPSA id xh12-20020a170906da8c00b00947ccb6150bsm4164275ejb.102.2023.04.03.11.35.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 11:35:04 -0700 (PDT)
+Message-ID: <a785c232-a3c0-dea2-fc60-f8394c0db95f@linaro.org>
+Date:   Mon, 3 Apr 2023 20:35:03 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v7 07/11] LSM: Helpers for attribute names and filling an
- lsm_ctx
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V3 1/4] MAINTAINERS: Add fragment for Xilinx watchdog
+ driver
 Content-Language: en-US
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        paul@paul-moore.com, linux-security-module@vger.kernel.org
-Cc:     jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
-References: <20230315224704.2672-1-casey@schaufler-ca.com>
- <20230315224704.2672-8-casey@schaufler-ca.com>
- <544a4809-1a79-9dd7-61a5-5fce1f4a5f10@digikod.net>
- <bbd6abb7-7443-0f34-788b-0e441dc5afee@schaufler-ca.com>
- <6af85c04-0388-026a-e4ee-08d9aad6b86a@digikod.net>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <6af85c04-0388-026a-e4ee-08d9aad6b86a@digikod.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Srinivas Neeli <srinivas.neeli@amd.com>,
+        shubhrajyoti.datta@amd.com, michal.simek@amd.com,
+        srinivas.goud@amd.com, wim@linux-watchdog.org, linux@roeck-us.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        git@amd.com, git@xilinx.com, neelisrinivas18@gmail.com
+References: <20230331074117.356339-1-srinivas.neeli@amd.com>
+ <20230331074117.356339-2-srinivas.neeli@amd.com>
+ <d9aade73-1bce-c2a3-f9da-883a5388527f@linaro.org>
+In-Reply-To: <d9aade73-1bce-c2a3-f9da-883a5388527f@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.21284 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/3/2023 11:06 AM, Mickaël Salaün wrote:
->
-> On 03/04/2023 20:03, Casey Schaufler wrote:
->> On 4/3/2023 2:47 AM, Mickaël Salaün wrote:
->>>
->>> On 15/03/2023 23:47, Casey Schaufler wrote:
->>>> Add lsm_name_to_attr(), which translates a text string to a
->>>> LSM_ATTR value if one is available.
->>>>
->>>> Add lsm_fill_user_ctx(), which fills a struct lsm_ctx, including
->>>> the trailing attribute value.
->>>>
->>>> All are used in module specific components of LSM system calls.
->>>>
->>>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->>>> ---
->>>>    include/linux/security.h | 13 ++++++++++
->>>>    security/lsm_syscalls.c  | 51
->>>> ++++++++++++++++++++++++++++++++++++++++
->>>>    security/security.c      | 31 ++++++++++++++++++++++++
->>>>    3 files changed, 95 insertions(+)
->>>
->>> [...]
->>>
->>>> diff --git a/security/security.c b/security/security.c
->>>> index 2c57fe28c4f7..f7b814a3940c 100644
->>>> --- a/security/security.c
->>>> +++ b/security/security.c
->>>> @@ -753,6 +753,37 @@ static int lsm_superblock_alloc(struct
->>>> super_block *sb)
->>>>        return 0;
->>>>    }
->>>>    +/**
->>>> + * lsm_fill_user_ctx - Fill a user space lsm_ctx structure
->>>> + * @ctx: an LSM context to be filled
->>>> + * @context: the new context value
->>>> + * @context_size: the size of the new context value
->>>> + * @id: LSM id
->>>> + * @flags: LSM defined flags
->>>> + *
->>>> + * Fill all of the fields in a user space lsm_ctx structure.
->>>> + * Caller is assumed to have verified that @ctx has enough space
->>>> + * for @context.
->>>> + * Returns 0 on success, -EFAULT on a copyout error.
->>>> + */
->>>> +int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
->>>> +              size_t context_size, u64 id, u64 flags)
->>>> +{
->>>> +    struct lsm_ctx local;
->>>> +    void __user *vc = ctx;
->>>> +
->>>> +    local.id = id;
->>>> +    local.flags = flags;
->>>> +    local.ctx_len = context_size;
->>>> +    local.len = context_size + sizeof(local);
->>>> +    vc += sizeof(local);
->>>> +    if (copy_to_user(ctx, &local, sizeof(local)))
->>>> +        return -EFAULT;
->>>> +    if (context_size > 0 && copy_to_user(vc, context, context_size))
->>>> +        return -EFAULT;
->>>
->>> Can we do a single copy_to_user() call?
+On 03/04/2023 20:30, Krzysztof Kozlowski wrote:
+> On 31/03/2023 09:41, Srinivas Neeli wrote:
+>> Added entry for Xilinx xps-timebase watchdog driver.
 >>
->> It would be possible, but would require allocating memory and copying
->> the context. I don't see that as an improvement.
+>> Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
+>> ---
+>> Changes in V3:
+>> -None
+>> ---
+>>  MAINTAINERS | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
 >>
->>> That would avoid inconsistent user space data, could speed up a bit
->>> the operation, and make the code easier to understand. To use the
->>> stack, we need to know the maximum size of context_size for all use
->>> cases, which seems reasonable and can be checked at build time (on
->>> each LSM side, and potentially with specific context type passed as
->>> enum instead of context_size) and run time (for this generic helper).
->>
->> Knowning the maximum size of attributes for all LSMs and hard coding
->> that here would make maintaining this code really painful.
->
-> Hmm, I forgot about variable-length strings, but maybe a reasonable
-> common maximum size (that could fit on the stack) could be found?
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index d8287eb2ab4a..4ed139d56913 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -23071,6 +23071,14 @@ F:	Documentation/devicetree/bindings/media/xilinx/
+>>  F:	drivers/media/platform/xilinx/
+>>  F:	include/uapi/linux/xilinx-v4l2-controls.h
+>>  
+>> +XILINX WATCHDOG DRIVER
+>> +M:	Srinivas Neeli <srinivas.neeli@amd.com>
+>> +R:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+>> +R:	Michal Simek <michal.simek@amd.com>
+>> +S:	Maintained
+>> +F:	Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
+>> +F:	drivers/watchdog/of_xilinx_wdt.c
+> 
+> Your patchset is not bisectable. These files do not exist.
 
-Putting a maximum size limit on LSM attributes just to reduce the
-number of copy_to_user() calls in this helper function does not make
-a whole lot of sense to me.
+Ah, I was too fast in judging this. It seems you document existing
+driver, although nothing in commit msg suggests it.
 
->
->>
->>>
->>>
->>>> +    return 0;
->>>> +}
->>>> +
->>>>    /*
->>>>     * The default value of the LSM hook is defined in
->>>> linux/lsm_hook_defs.h and
->>>>     * can be accessed with:
+Best regards,
+Krzysztof
+
