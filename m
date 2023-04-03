@@ -2,89 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309016D4476
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A176D4479
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbjDCMcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
+        id S231730AbjDCMdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjDCMcw (ORCPT
+        with ESMTP id S232237AbjDCMdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:32:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A5D18F8A;
-        Mon,  3 Apr 2023 05:32:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 665D860DCB;
-        Mon,  3 Apr 2023 12:32:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D24C4339B;
-        Mon,  3 Apr 2023 12:32:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680525151;
-        bh=ulRUO8fEKtK/fjgnpqilfVtOG7bGfaNe2DcuHFEQvow=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MxjHLqvp/wt7HJ/F9QbFK6KWaWwpZFxvvTYu/GSbf6mOMipizMMWyzbcIMGwIXbSa
-         PA7vML9GO7CztqywOEP+WeOVjiAAur7/z1zx3mF43VjGkIZfA25ks/voXfgkwZ6fRw
-         GnghkpJgKjaJ9I3NBW8afx61VWKSw20ogLBGp8CnntJCNF1plBybvSshB2KSBRDaLN
-         OmMX5OfUqoWLkSCzgx4mIJ1TCHA9P7Q3B7wyMnSxvUGhjEkeBvG0p+BwxvTAqoZr9M
-         fV1D7wbQGu0wM6NFeTeoWJDD1Arf42feCLn8Czf5ToXR7luCZBD117hs/X5KPQ3Rz5
-         GX76CF3Ah8u9Q==
-From:   rfoss@kernel.org
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Francesco Dolcini <francesco@dolcini.it>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        dri-devel@lists.freedesktop.org,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>
-Cc:     Robert Foss <rfoss@kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v1] drm/bridge: lt8912b: Fix DSI Video Mode
-Date:   Mon,  3 Apr 2023 14:32:17 +0200
-Message-Id: <168052510957.3322285.11626143716583284143.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230330093131.424828-1-francesco@dolcini.it>
-References: <20230330093131.424828-1-francesco@dolcini.it>
+        Mon, 3 Apr 2023 08:33:07 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817E66E95
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:33:04 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id y4so116748371edo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 05:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680525183;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M3OGvuUvXrUbBF160+4HtZaEXZGNPa/djYQZa+YmEk0=;
+        b=GQAg4nQK5Mvc5pc1scKeKwqGxKWdcJAQIireqHmi2z897c26Z1EPM7SnikuV28WL8+
+         qbOjjrBo8P+JaMjcevGe9EXGgzk/7YCe3XXnLe7Pl0qXtivK5oCSdWlgVa9Mn6uzzzK9
+         I5BYa0KRd4/xG6CeC7ZVsa0ecVsOHqiSUkVLb4DAnJEwAlwqJ76AVDwvgtXtmv58y5Z2
+         4otMlJu3DwoJSpUccU8g5d62du/df1hYJ4rd4+0tSBkIN5PlNkl3kfj05LVWK57GDsUe
+         YY/L2eQxXXKzGlbD/UUCixtewGRYpnvSbdcuP/ps7vfonFYOeHEEzUB17QnZnmCoL1S6
+         dT5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680525183;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M3OGvuUvXrUbBF160+4HtZaEXZGNPa/djYQZa+YmEk0=;
+        b=4DtU1pGM63YM4J481aMqMhe+QOIymcHnqIXCmDyj3kpkZji3twhwrb3byZmz4Ev23y
+         TA0s8D3xXIdnIAilMrMjrSEEPoB2Rmwhni68FM+QyDVNEy1yrINPl25R2ycc1vf4Wpit
+         0jKPM5PTxruaeVOURNFeqzLMnrkkFVcjfoJD4FrJsq/ZwECG83wDuOom/oeRXDLIOUSx
+         kS89qUO2vY0O5+30aRcMhTOOfBirNyL/ISSzJ3eO/buGoGjWEZXeA+wW0gELnWAwZNs5
+         8A1xl2NJBdUZVFELsTeroMwIoY5FZI5i4JQJIxj0+G8XZ+rrxUjBey6QtKaBsv4hvYWK
+         pA8Q==
+X-Gm-Message-State: AAQBX9evKa6rrbg38oDPH7JnqqwSJY//k0ul2MzVYTFwk8q/lNjgYBCS
+        PLaEBV7CiamIUweR09dX/NG2qA==
+X-Google-Smtp-Source: AKy350YWPGhRz66/fnA00kTRX8hQfJh5cfNX+Jb8eBFOij0y1td86P+SO8mYT55Cfitf32/7Z066pQ==
+X-Received: by 2002:a17:907:f90:b0:8fd:2f01:86c0 with SMTP id kb16-20020a1709070f9000b008fd2f0186c0mr40959251ejc.2.1680525182925;
+        Mon, 03 Apr 2023 05:33:02 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
+        by smtp.gmail.com with ESMTPSA id h12-20020a1709063c0c00b00947eafc76fbsm3464230ejg.144.2023.04.03.05.33.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 05:33:02 -0700 (PDT)
+Message-ID: <5dfb81df-8ae2-eb62-01a2-b26c6b8d2597@linaro.org>
+Date:   Mon, 3 Apr 2023 14:33:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-pmics: fix pon compatible and
+ registers
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230327122948.4323-1-johan+linaro@kernel.org>
+ <48f71f9a-0d00-16df-fff8-5aa455918378@linaro.org>
+ <ZCqwWwdhhJdOK+5Y@hovoldconsulting.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZCqwWwdhhJdOK+5Y@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Foss <rfoss@kernel.org>
-
-On Thu, 30 Mar 2023 11:31:31 +0200, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+On 03/04/2023 12:54, Johan Hovold wrote:
+> On Mon, Apr 03, 2023 at 11:18:07AM +0200, Krzysztof Kozlowski wrote:
+>> On 27/03/2023 14:29, Johan Hovold wrote:
+>>> The pmk8280 PMIC PON peripheral is gen3 and uses two sets of registers;
+>>> hlos and pbs.
+>>>
+>>> This specifically fixes the following error message during boot when the
+>>> pbs registers are not defined:
+>>>
+>>> 	PON_PBS address missing, can't read HW debounce time
+>>>
+>>> Note that this also enables the spurious interrupt workaround introduced
+>>> by commit 0b65118e6ba3 ("Input: pm8941-pwrkey - add software key press
+>>> debouncing support") (which may or may not be needed).
+>>>
+>>> Fixes: ccd3517faf18 ("arm64: dts: qcom: sc8280xp: Add reference device")
+>>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+>>> ---
+>>>  arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 5 +++--
+>>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+>>> index c35e7f6bd657..a0ba535bb6c9 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+>>> @@ -59,8 +59,9 @@ pmk8280: pmic@0 {
+>>>  		#size-cells = <0>;
+>>>  
+>>>  		pmk8280_pon: pon@1300 {
+>>> -			compatible = "qcom,pm8998-pon";
+>>> -			reg = <0x1300>;
+>>> +			compatible = "qcom,pmk8350-pon";
+>>
+>> Same comment as Dmitry's. There is no compatible "qcom,pmk8350-pon"
+>> ccd3517faf18, therefore indicated backport (through AUTOSEL) will lead
+>> to invalid stable kernel.
+>>
+>> You must drop the Fixes tag, because this cannot be backported.
 > 
-> LT8912 DSI port supports only Non-Burst mode video operation with Sync
-> Events and continuous clock on clock lane, correct dsi mode flags
-> according to that removing MIPI_DSI_MODE_VIDEO_BURST flag.
+> That's bullshit. Do you see a stable tag? Is 5.19-stable still active?
+
+Why do you refer to activeness of v5.19? This will go also to v6.0 and v6.1.
+
 > 
+> The problem is that the driver was updated before the binding was so the
+> above mentioned probe error has been there since this file was merged.
+
+I grepped and that commit did not have such compatible. Are you saying
+that the kernel which was released with this commit already had that
+compatible in driver (through different merge/tree)?
+
 > 
-> [...]
+> AUTOSEL is crazy and people apparently just ignore it instead of NAKing
+> when it is suggesting backporting devicetree cleanups (which to be fair
+> should generally not have Fixes tags in the first place).
 
-Applied, thanks!
+Sorry, no clue what do you want to say here... if you are unhappy with
+AUTOSEL, I am not the one to receive such feedback. Anyway, regardless
+of AUTOSEL, my concern was that the release containing that commit was
+not ready to work with that compatible. Isn't this the case here?
 
-Repo: https://cgit.freedesktop.org/drm/drm-misc/
+> 
+> If 5.19-stable was still active and someone suggested backporting this
 
+Whether v5.19 is active or not, it does not matter. Why would it matter?
+This will go longterm v6.1 as well!
 
-[1/1] drm/bridge: lt8912b: Fix DSI Video Mode
-      commit: f435b7ef3b360d689df2ffa8326352cd07940d92
+> one, they would have to change the compatible string to match the
+> inconsistent 5.19 kernel. Note that that would need to happen regardless
+> of whether this patch has a Fixes tag or not.
 
+Any manual backporting of something which is not a fix for older kernel
+is already risky business and whoever is doing it, he is responsible for
+the outcome.
 
-
-Rob
+Best regards,
+Krzysztof
 
