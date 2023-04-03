@@ -2,425 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6436D4CC8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CED6D4C87
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbjDCP4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
+        id S230115AbjDCPu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbjDCPzy (ORCPT
+        with ESMTP id S232696AbjDCPuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:55:54 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCD83A85;
-        Mon,  3 Apr 2023 08:55:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1680536903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8PmkZdIE9FdBhRGx72/sSOhDClhx1FbzE4O+lf4iMcM=;
-        b=v87QroxueeO0YCfxdu0pF1xJuArsC0IP3ZOO9nK0wsf3sliLSUuDXcMoFI4vtoWFKqIXci
-        pwNK4YZimP0gO1fZER+tmONttpzCVbXYeafzeiKzS18/7WPikxoICX0hFErjvw63SKc7dV
-        VSH1pzCWw0WqB3OJpK8ExkY/vxBXhr4=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <noname.nuno@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 09/11] iio: buffer-dma: Enable support for DMABUFs
-Date:   Mon,  3 Apr 2023 17:47:58 +0200
-Message-Id: <20230403154800.215924-10-paul@crapouillou.net>
-In-Reply-To: <20230403154800.215924-1-paul@crapouillou.net>
-References: <20230403154800.215924-1-paul@crapouillou.net>
+        Mon, 3 Apr 2023 11:50:10 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A71211D;
+        Mon,  3 Apr 2023 08:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680536991; x=1712072991;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lpndtpDoQ6ntDhYxFuneHaPm1MmrThQtg4Ammg2mcdo=;
+  b=Wr/QqZChYbAV2NHidS7uYPmn5vWiAZ98C1BsdsiGt+NhiHRACok9rcan
+   BQ9hr9LvTTdBjfoTbwdAKcX2dyKzxGh7qKOHX17AsAlGq2GEeGqxJj+hT
+   kgG6fZBalvIcbCXPfdBspQ/SwwGtfGOt6kwhyrriE787nYMf2d6X4A4Nl
+   Q1PMzQLNiqq1ZqcSTygb2ov3lB5OOizgX6hCrFsGnE1Qx61Tr2hA2NxcP
+   IS4BBYuQdy2FYpfXr+Gioc//ilbzFbNfi5+mJJY5ifbDOGH+tRdIeIYWj
+   Vl88pjmAhlLl+e2bwiOG1f+sj4HuDIYX41oaP4SYJjwR73FZJ+FmlXDnj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="339430281"
+X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
+   d="scan'208";a="339430281"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 08:48:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="663243319"
+X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
+   d="scan'208";a="663243319"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.40.243])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 08:48:42 -0700
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 0/2] perf intel-pt: Two small fixes for stable
+Date:   Mon,  3 Apr 2023 18:48:29 +0300
+Message-Id: <20230403154831.8651-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
-X-Spam: Yes
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement iio_dma_buffer_attach_dmabuf(), iio_dma_buffer_detach_dmabuf()
-and iio_dma_buffer_transfer_dmabuf(), which can then be used by the IIO
-DMA buffer implementations.
+Hi
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Here are 2 small fixes for stable.
 
----
-v3: Update code to provide the functions that will be used as callbacks
-for the new IOCTLs.
----
- drivers/iio/buffer/industrialio-buffer-dma.c | 157 +++++++++++++++++--
- include/linux/iio/buffer-dma.h               |  24 +++
- 2 files changed, 168 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/iio/buffer/industrialio-buffer-dma.c b/drivers/iio/buffer/industrialio-buffer-dma.c
-index e14814e0d4c8..422bd784fd1e 100644
---- a/drivers/iio/buffer/industrialio-buffer-dma.c
-+++ b/drivers/iio/buffer/industrialio-buffer-dma.c
-@@ -14,6 +14,7 @@
- #include <linux/poll.h>
- #include <linux/iio/buffer_impl.h>
- #include <linux/iio/buffer-dma.h>
-+#include <linux/dma-buf.h>
- #include <linux/dma-mapping.h>
- #include <linux/sizes.h>
- 
-@@ -94,14 +95,24 @@ static void iio_buffer_block_release(struct kref *kref)
- {
- 	struct iio_dma_buffer_block *block = container_of(kref,
- 		struct iio_dma_buffer_block, kref);
-+	struct iio_dma_buffer_queue *queue = block->queue;
- 
--	WARN_ON(block->state != IIO_BLOCK_STATE_DEAD);
-+	WARN_ON(block->fileio && block->state != IIO_BLOCK_STATE_DEAD);
- 
--	dma_free_coherent(block->queue->dev, PAGE_ALIGN(block->size),
--					block->vaddr, block->phys_addr);
-+	mutex_lock(&queue->lock);
- 
--	iio_buffer_put(&block->queue->buffer);
-+	if (block->fileio) {
-+		dma_free_coherent(queue->dev, PAGE_ALIGN(block->size),
-+				  block->vaddr, block->phys_addr);
-+		queue->num_fileio_blocks--;
-+	}
-+
-+	queue->num_blocks--;
- 	kfree(block);
-+
-+	mutex_unlock(&queue->lock);
-+
-+	iio_buffer_put(&queue->buffer);
- }
- 
- static void iio_buffer_block_get(struct iio_dma_buffer_block *block)
-@@ -163,7 +174,7 @@ static struct iio_dma_buffer_queue *iio_buffer_to_queue(struct iio_buffer *buf)
- }
- 
- static struct iio_dma_buffer_block *iio_dma_buffer_alloc_block(
--	struct iio_dma_buffer_queue *queue, size_t size)
-+	struct iio_dma_buffer_queue *queue, size_t size, bool fileio)
- {
- 	struct iio_dma_buffer_block *block;
- 
-@@ -171,13 +182,16 @@ static struct iio_dma_buffer_block *iio_dma_buffer_alloc_block(
- 	if (!block)
- 		return NULL;
- 
--	block->vaddr = dma_alloc_coherent(queue->dev, PAGE_ALIGN(size),
--		&block->phys_addr, GFP_KERNEL);
--	if (!block->vaddr) {
--		kfree(block);
--		return NULL;
-+	if (fileio) {
-+		block->vaddr = dma_alloc_coherent(queue->dev, PAGE_ALIGN(size),
-+						  &block->phys_addr, GFP_KERNEL);
-+		if (!block->vaddr) {
-+			kfree(block);
-+			return NULL;
-+		}
- 	}
- 
-+	block->fileio = fileio;
- 	block->size = size;
- 	block->state = IIO_BLOCK_STATE_DONE;
- 	block->queue = queue;
-@@ -186,6 +200,9 @@ static struct iio_dma_buffer_block *iio_dma_buffer_alloc_block(
- 
- 	iio_buffer_get(&queue->buffer);
- 
-+	queue->num_blocks++;
-+	queue->num_fileio_blocks += fileio;
-+
- 	return block;
- }
- 
-@@ -223,6 +240,9 @@ void iio_dma_buffer_block_done(struct iio_dma_buffer_block *block)
- 	_iio_dma_buffer_block_done(block);
- 	spin_unlock_irqrestore(&queue->list_lock, flags);
- 
-+	if (!block->fileio)
-+		iio_buffer_signal_dmabuf_done(block->attach, 0);
-+
- 	iio_buffer_block_put_atomic(block);
- 	iio_dma_buffer_queue_wake(queue);
- }
-@@ -249,10 +269,14 @@ void iio_dma_buffer_block_list_abort(struct iio_dma_buffer_queue *queue,
- 		list_del(&block->head);
- 		block->bytes_used = 0;
- 		_iio_dma_buffer_block_done(block);
-+
-+		if (!block->fileio)
-+			iio_buffer_signal_dmabuf_done(block->attach, -EINTR);
- 		iio_buffer_block_put_atomic(block);
- 	}
- 	spin_unlock_irqrestore(&queue->list_lock, flags);
- 
-+	queue->fileio.enabled = false;
- 	iio_dma_buffer_queue_wake(queue);
- }
- EXPORT_SYMBOL_GPL(iio_dma_buffer_block_list_abort);
-@@ -273,6 +297,12 @@ static bool iio_dma_block_reusable(struct iio_dma_buffer_block *block)
- 	}
- }
- 
-+static bool iio_dma_buffer_fileio_mode(struct iio_dma_buffer_queue *queue)
-+{
-+	return queue->fileio.enabled ||
-+		queue->num_blocks == queue->num_fileio_blocks;
-+}
-+
- /**
-  * iio_dma_buffer_request_update() - DMA buffer request_update callback
-  * @buffer: The buffer which to request an update
-@@ -299,6 +329,12 @@ int iio_dma_buffer_request_update(struct iio_buffer *buffer)
- 
- 	mutex_lock(&queue->lock);
- 
-+	queue->fileio.enabled = iio_dma_buffer_fileio_mode(queue);
-+
-+	/* If DMABUFs were created, disable fileio interface */
-+	if (!queue->fileio.enabled)
-+		goto out_unlock;
-+
- 	/* Allocations are page aligned */
- 	if (PAGE_ALIGN(queue->fileio.block_size) == PAGE_ALIGN(size))
- 		try_reuse = true;
-@@ -329,7 +365,7 @@ int iio_dma_buffer_request_update(struct iio_buffer *buffer)
- 			block = queue->fileio.blocks[i];
- 			if (block->state == IIO_BLOCK_STATE_DEAD) {
- 				/* Could not reuse it */
--				iio_buffer_block_put(block);
-+				iio_buffer_block_put_atomic(block);
- 				block = NULL;
- 			} else {
- 				block->size = size;
-@@ -339,7 +375,7 @@ int iio_dma_buffer_request_update(struct iio_buffer *buffer)
- 		}
- 
- 		if (!block) {
--			block = iio_dma_buffer_alloc_block(queue, size);
-+			block = iio_dma_buffer_alloc_block(queue, size, true);
- 			if (!block) {
- 				ret = -ENOMEM;
- 				goto out_unlock;
-@@ -391,7 +427,7 @@ static void iio_dma_buffer_fileio_free(struct iio_dma_buffer_queue *queue)
- 	for (i = 0; i < ARRAY_SIZE(queue->fileio.blocks); i++) {
- 		if (!queue->fileio.blocks[i])
- 			continue;
--		iio_buffer_block_put(queue->fileio.blocks[i]);
-+		iio_buffer_block_put_atomic(queue->fileio.blocks[i]);
- 		queue->fileio.blocks[i] = NULL;
- 	}
- 	queue->fileio.active_block = NULL;
-@@ -412,8 +448,12 @@ static void iio_dma_buffer_submit_block(struct iio_dma_buffer_queue *queue,
- 
- 	block->state = IIO_BLOCK_STATE_ACTIVE;
- 	iio_buffer_block_get(block);
-+
- 	ret = queue->ops->submit(queue, block);
- 	if (ret) {
-+		if (!block->fileio)
-+			iio_buffer_signal_dmabuf_done(block->attach, ret);
-+
- 		/*
- 		 * This is a bit of a problem and there is not much we can do
- 		 * other then wait for the buffer to be disabled and re-enabled
-@@ -645,6 +685,97 @@ size_t iio_dma_buffer_data_available(struct iio_buffer *buf)
- }
- EXPORT_SYMBOL_GPL(iio_dma_buffer_data_available);
- 
-+struct iio_dma_buffer_block *
-+iio_dma_buffer_attach_dmabuf(struct iio_buffer *buffer,
-+			     struct dma_buf_attachment *attach)
-+{
-+	struct iio_dma_buffer_queue *queue = iio_buffer_to_queue(buffer);
-+	struct iio_dma_buffer_block *block;
-+	int err;
-+
-+	mutex_lock(&queue->lock);
-+
-+	/*
-+	 * If the buffer is enabled and in fileio mode new blocks can't be
-+	 * allocated.
-+	 */
-+	if (queue->fileio.enabled) {
-+		err = -EBUSY;
-+		goto err_unlock;
-+	}
-+
-+	block = iio_dma_buffer_alloc_block(queue, attach->dmabuf->size, false);
-+	if (!block) {
-+		err = -ENOMEM;
-+		goto err_unlock;
-+	}
-+
-+	block->attach = attach;
-+
-+	/* Free memory that might be in use for fileio mode */
-+	iio_dma_buffer_fileio_free(queue);
-+
-+	mutex_unlock(&queue->lock);
-+
-+	return block;
-+
-+err_unlock:
-+	mutex_unlock(&queue->lock);
-+	return ERR_PTR(err);
-+}
-+EXPORT_SYMBOL_GPL(iio_dma_buffer_attach_dmabuf);
-+
-+void iio_dma_buffer_detach_dmabuf(struct iio_buffer *buffer,
-+				  struct iio_dma_buffer_block *block)
-+{
-+	block->state = IIO_BLOCK_STATE_DEAD;
-+	iio_buffer_block_put_atomic(block);
-+}
-+EXPORT_SYMBOL_GPL(iio_dma_buffer_detach_dmabuf);
-+
-+static int iio_dma_can_enqueue_block(struct iio_dma_buffer_block *block)
-+{
-+	struct iio_dma_buffer_queue *queue = block->queue;
-+
-+	/* If in fileio mode buffers can't be enqueued. */
-+	if (queue->fileio.enabled)
-+		return -EBUSY;
-+
-+	switch (block->state) {
-+	case IIO_BLOCK_STATE_QUEUED:
-+		return -EPERM;
-+	case IIO_BLOCK_STATE_DONE:
-+		return 0;
-+	default:
-+		return -EBUSY;
-+	}
-+}
-+
-+int iio_dma_buffer_enqueue_dmabuf(struct iio_buffer *buffer,
-+				  struct iio_dma_buffer_block *block,
-+				  struct sg_table *sgt,
-+				  size_t size, bool cyclic)
-+{
-+	struct iio_dma_buffer_queue *queue = iio_buffer_to_queue(buffer);
-+	int ret = 0;
-+
-+	mutex_lock(&queue->lock);
-+	ret = iio_dma_can_enqueue_block(block);
-+	if (ret < 0)
-+		goto out_mutex_unlock;
-+
-+	block->bytes_used = size;
-+	block->cyclic = cyclic;
-+	block->sg_table = sgt;
-+
-+	iio_dma_buffer_enqueue(queue, block);
-+
-+out_mutex_unlock:
-+	mutex_unlock(&queue->lock);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(iio_dma_buffer_enqueue_dmabuf);
-+
- /**
-  * iio_dma_buffer_set_bytes_per_datum() - DMA buffer set_bytes_per_datum callback
-  * @buffer: Buffer to set the bytes-per-datum for
-diff --git a/include/linux/iio/buffer-dma.h b/include/linux/iio/buffer-dma.h
-index 490b93f76fa8..e5e5817e99db 100644
---- a/include/linux/iio/buffer-dma.h
-+++ b/include/linux/iio/buffer-dma.h
-@@ -16,6 +16,8 @@
- struct iio_dma_buffer_queue;
- struct iio_dma_buffer_ops;
- struct device;
-+struct dma_buf_attachment;
-+struct sg_table;
- 
- /**
-  * enum iio_block_state - State of a struct iio_dma_buffer_block
-@@ -41,6 +43,7 @@ enum iio_block_state {
-  * @queue: Parent DMA buffer queue
-  * @kref: kref used to manage the lifetime of block
-  * @state: Current state of the block
-+ * @fileio: True if this buffer is used for fileio mode
-  */
- struct iio_dma_buffer_block {
- 	/* May only be accessed by the owner of the block */
-@@ -63,6 +66,11 @@ struct iio_dma_buffer_block {
- 	 * queue->list_lock if the block is not owned by the core.
- 	 */
- 	enum iio_block_state state;
-+
-+	bool fileio;
-+
-+	struct dma_buf_attachment *attach;
-+	struct sg_table *sg_table;
- };
- 
- /**
-@@ -72,6 +80,7 @@ struct iio_dma_buffer_block {
-  * @pos: Read offset in the active block
-  * @block_size: Size of each block
-  * @next_dequeue: index of next block that will be dequeued
-+ * @enabled: Whether the buffer is operating in fileio mode
-  */
- struct iio_dma_buffer_queue_fileio {
- 	struct iio_dma_buffer_block *blocks[2];
-@@ -80,6 +89,7 @@ struct iio_dma_buffer_queue_fileio {
- 	size_t block_size;
- 
- 	unsigned int next_dequeue;
-+	bool enabled;
- };
- 
- /**
-@@ -95,6 +105,8 @@ struct iio_dma_buffer_queue_fileio {
-  *   the DMA controller
-  * @incoming: List of buffers on the incoming queue
-  * @active: Whether the buffer is currently active
-+ * @num_blocks: Total number of DMA blocks
-+ * @num_fileio_blocks: Number of DMA blocks for fileio mode
-  * @fileio: FileIO state
-  */
- struct iio_dma_buffer_queue {
-@@ -107,6 +119,8 @@ struct iio_dma_buffer_queue {
- 	struct list_head incoming;
- 
- 	bool active;
-+	unsigned int num_blocks;
-+	unsigned int num_fileio_blocks;
- 
- 	struct iio_dma_buffer_queue_fileio fileio;
- };
-@@ -149,4 +163,14 @@ static inline size_t iio_dma_buffer_space_available(struct iio_buffer *buffer)
- 	return iio_dma_buffer_data_available(buffer);
- }
- 
-+struct iio_dma_buffer_block *
-+iio_dma_buffer_attach_dmabuf(struct iio_buffer *buffer,
-+			     struct dma_buf_attachment *attach);
-+void iio_dma_buffer_detach_dmabuf(struct iio_buffer *buffer,
-+				  struct iio_dma_buffer_block *block);
-+int iio_dma_buffer_enqueue_dmabuf(struct iio_buffer *buffer,
-+				  struct iio_dma_buffer_block *block,
-+				  struct sg_table *sgt,
-+				  size_t size, bool cyclic);
-+
- #endif
--- 
-2.39.2
+Adrian Hunter (2):
+      perf auxtrace: Fix address filter entire kernel size
+      perf intel-pt: Fix CYC timestamps after standalone CBR
 
+ tools/perf/util/auxtrace.c                          | 5 ++++-
+ tools/perf/util/intel-pt-decoder/intel-pt-decoder.c | 2 ++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+
+Regards
+Adrian
