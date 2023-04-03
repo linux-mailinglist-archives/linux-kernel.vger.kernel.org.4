@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B936D5511
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 01:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D1F6D5510
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 01:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233797AbjDCXD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 19:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
+        id S233773AbjDCXDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 19:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233784AbjDCXD0 (ORCPT
+        with ESMTP id S233762AbjDCXDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 19:03:26 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9A71716
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:03:24 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id d3so8832359ybu.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 16:03:24 -0700 (PDT)
+        Mon, 3 Apr 2023 19:03:07 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9AD90
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:02:57 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id n1so15403048ili.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 16:02:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680563003;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/UqlrjHaq21iiGBIQ42uRCqTTkgo3ssXPeC+pvC2mpk=;
-        b=YXF6ct2am7WoKSfbts4DI3hdBCAldklbdhzonbI2heK3aoEG7hZhdcI/bAD4GMwf/l
-         2vGdgZlpR3lkJjX6ulynKiH4aUoUyKl3MUNn9IYYdlO05Ad2q4S4IL4ihCUlS6XxpP/A
-         tMTFJC67oxjeOxfQJ5bZSC4kGZvRJ2tRIPeKUBXHz0VoZVVvjENsfUE93yNQWhXTzZRp
-         XAkf0u+p4+4me7LrRLHTrUOqzlscXY8yBbBKcA5PnfJM+lih6UkmNUXQfDWyf4Nu9VMd
-         1G6gE+qVJ7GioYqH1Wf9ardZ/QvbVpN03mcWYRfgPpaMFWG39USSqctJ/E1YhMwUjERs
-         bPCA==
+        d=linuxfoundation.org; s=google; t=1680562976;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2DJUnpvToW+YdaGaIjOCej5ju9qtc5BUSfOsOwGVCeU=;
+        b=cibzMPWLipxjGJW474of9k5eZIZmb3VDh/W8OYCGm+K6Ura/lICW2BXQ8s71A5AI+K
+         8ec5/EIHODyoIw2+7bu/VjX3d5DrMNXMMHRfRt57NjXGg+ogXzD4Hxn6Pxv8rOIjgMlD
+         inqcQlsX6tqvcoSkhqKjqSC//JPZTs8RAWdhc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680563003;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/UqlrjHaq21iiGBIQ42uRCqTTkgo3ssXPeC+pvC2mpk=;
-        b=7rI04+ejfc/6Cwq7oaP7D8jru801J9goLErdhOKqhcluGyxZp29PJCqIHEdxMOJr2I
-         HT9RaGjk1mevkm1O85TH3yTjFxX/RD2EpBaQAWM3RIZOxZLuF1ihu3G4J6fSafo/iIEU
-         vLt+bPa7hkQiqDBQ/NSc+0aDxc3dZLVufG/+bQSALUp0QpuTcOrLd+dnt/OVmZhf8ApA
-         2o6zPsek3rTN/+IiKBVU8L6jCGvLpAmmHxSqxM9r1t6WLSIIsAOj0fAIOCnMmrDhATOV
-         /hWcyzQjW1bNLoK7yACiLmH95tMJMoaVWk70o9VA+sCELK0On3Su5bbA2q/7TxfrVtP5
-         8AnA==
-X-Gm-Message-State: AAQBX9f2Qw+bl0fg8hU1mD1aDeYMi1lancvjyZRrtL63qkJS0HmtXuw5
-        Pi8oX7D0sGbL7qU+GniKIgxHHSPyicz+o1UwIJnTRA==
-X-Google-Smtp-Source: AKy350a7+WUqYPzL1iHQeB+Smx71zLrW8+QcNi7UEx8a0U3oM1Svz9j/afNcWg6iaFDuEy2ZVeRiNGzDM5hig/fQlvo=
-X-Received: by 2002:a25:e00a:0:b0:b6c:48c3:3c1c with SMTP id
- x10-20020a25e00a000000b00b6c48c33c1cmr561444ybg.13.1680563003401; Mon, 03 Apr
- 2023 16:03:23 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680562976;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2DJUnpvToW+YdaGaIjOCej5ju9qtc5BUSfOsOwGVCeU=;
+        b=sJKVdixEh1/sRWEPKdKICJCOzf+Pknd5zCH3/lS+gFMm432eJAnlO0/nEP0dGYbmMq
+         kMGK9voThEocrj1978q7K5OXDTIMa0TflZ9f8PCt0VbWSQ8yypxpn/cA3IbaRjfOy31N
+         utX32fAIdYzOmGH4eHK70Wf04b5vVFu4KgSd07737VSiImltZ1EI4y0YEB56jY8mzg3U
+         BcB+6DjLOOL2jb3gukOcIj9/9TKDboo8V8ocgRxyK5hvKTKpLDO8nFndwny37UeCO2gq
+         HmayIKJRS/5BYWz42120wym99IgO1zML7MJtUY6L13EKExalSzWpALk5cqhlutTAHYdI
+         GSPQ==
+X-Gm-Message-State: AAQBX9dEPBg+rqgoNzXL4wVNjECAwqMlsRpYuH+4D3C9QSeXgG1+wYcO
+        8jo2DOvVA+2mClcXPRka+LdWSw==
+X-Google-Smtp-Source: AKy350YHQsG6dRFgRMo1YTtY8mehsEEl+9emNZMA9fHQ84PPSQInKrEHswOPdfuT07hDnjfdpUIs/Q==
+X-Received: by 2002:a92:7b14:0:b0:326:8404:4534 with SMTP id w20-20020a927b14000000b0032684044534mr503619ilc.0.1680562976326;
+        Mon, 03 Apr 2023 16:02:56 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id r17-20020a056e02109100b00325c21a9e44sm2878638ilj.13.2023.04.03.16.02.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 16:02:56 -0700 (PDT)
+Message-ID: <e3b97e7f-52be-4608-912e-3924e8f92926@linuxfoundation.org>
+Date:   Mon, 3 Apr 2023 17:02:55 -0600
 MIME-Version: 1.0
-References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-9-vipinsh@google.com>
- <ecd28c71-6f3d-d5bb-cd39-ab80edc549ab@intel.com>
-In-Reply-To: <ecd28c71-6f3d-d5bb-cd39-ab80edc549ab@intel.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Mon, 3 Apr 2023 16:02:47 -0700
-Message-ID: <CAHVum0cOG62gstGK_W9r1vgjJ5P7_Eswek9SCmEA=E_hexaysw@mail.gmail.com>
-Subject: Re: [Patch v4 08/18] KVM: x86/mmu: Track unused mmu_shadowed_info_cache
- pages count via global counter
-To:     "Yang, Weijiang" <weijiang.yang@intel.com>
-Cc:     jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, seanjc@google.com,
-        pbonzini@redhat.com, bgardon@google.com, dmatlack@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 5.10 000/173] 5.10.177-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230403140414.174516815@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230403140414.174516815@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,24 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 9:53=E2=80=AFPM Yang, Weijiang <weijiang.yang@intel=
-.com> wrote:
->
->
-> On 3/7/2023 6:41 AM, Vipin Sharma wrote:
-> > Add unused pages in mmu_shadowed_info_cache to global MMU unused page
-> > cache counter i.e. kvm_total_unused_cached_pages. These pages will be
-> > freed by MMU shrinker in future commit.
->
-> This patch mainly renames some functions,  but the commit log doesn't
-> reflect what
->
-> this patch does. Please change the commit log or squash the patch.
->
->
+On 4/3/23 08:06, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.177 release.
+> There are 173 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.177-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-This is not just function renaming, it is using a function which does
-page accounting. I will expand the commit log to capture more details
-instead of squashing.
+Compiled and booted on my test system. No dmesg regressions.
 
-Thanks
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
