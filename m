@@ -2,112 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8098A6D512D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 360676D5137
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232969AbjDCTTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 15:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
+        id S232934AbjDCTUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 15:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjDCTS7 (ORCPT
+        with ESMTP id S233294AbjDCTUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 15:18:59 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C78A272A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 12:18:57 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id b20so121551394edd.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 12:18:57 -0700 (PDT)
+        Mon, 3 Apr 2023 15:20:08 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FCF272A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 12:19:44 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id eh3so121489753edb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 12:19:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680549535;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=isNsv3u/WQPEGUOOn7ipyGSt/sVwBsBoCyFZmevpR+Q=;
-        b=oSx1/Bg9t4iE/8RYMxxAqE2JSP/6d8fKHXSEznlg0X9Wtd4TQT4nsqJC3BbBXU4PJd
-         VAzTteCSNA1+kz0wmDVcOYWVn2/i128zqERw5e48FtoiMEaa07vr916bRe4hpnGejuHS
-         KiqsyYQPRyxNJuBkpnIvaotRKaQAn9u6wVvANC+Dl2NV5xVqQ3pOJJvL7jCw9TkAraHj
-         QoEp+tO8zMzTSNS9xJ6z2YPmznG8Gu56fL9IOeFDgZPrcAFl62PHyBO25D/ac4PNfINd
-         LQdCGuJzRULst8sTuNbd5yhEyjyqTQ77Nl749wZYfYpdVDcbj8HE/VlkdxXPyzBrMAC5
-         z5lw==
+        d=linaro.org; s=google; t=1680549583;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rO01+3k4fzVS/CqC5YjvddkQFJufKZJtp6FmS8S3Vzg=;
+        b=Yi7A7zkfu+IHMbck2/TitvdJ6L4cw+Vm0TPV9ZEdJNaXE2NYh5wdbS816CRXVg1CxL
+         o5p0DvQniMBWegtUeBvP+ZarG3PhT4+CAPAcgwSsl69C+lJqOuCiahmTb9xJ4WAjR7T3
+         BWJz6rzqv40oWo/QS0xLlgDHKMUE0ozRFQQorBjzztoMXAVWRojOe1homea76gTy/GA6
+         Vxd/XrKS4xy2JybNYgoqpiM2XMbBxbYzFClQ1AdvWbdRZgEYbSGI7SlMede0+eaOSIud
+         lxNFqCwLwfj8hj81cTDnFqUvaUjD4sCMZOgFUTRWabMMu25FVvYPyOjf+AToCzO0oPQc
+         aFeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680549535;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=isNsv3u/WQPEGUOOn7ipyGSt/sVwBsBoCyFZmevpR+Q=;
-        b=EA1ERDQ7AkuBdGTf1fRprROJZonhRg+7YpURDPDydPxHaGh0FGX2qaepu8wW4xkBc4
-         oriuS5wo5iVX2pJ2CJ5QQFiCYhXaC1VadTHIrL316KWUBbo4ueyhcHhzA3u6FPV/DCWk
-         ALHMqY03cQk6LAHgcQGfgKF0oEbuNaq1o7YowZAXPGloLQD3w3IxDmXFbukuNb/UcC2d
-         xnfokHjHCsbSHGIuE0hkEJaYTvFZAJTnRGRTpBC24t2OX1gQtw7aED9IcWirMG5JU0HO
-         QdesJHWjXdF5tYFLE/VyWZDsnkemy0I4GvJ7kE7y6dacDQyeO4wTnTeAUcdgzDrYaBdU
-         sZrA==
-X-Gm-Message-State: AAQBX9eteTRjN8n4K1naUb12OuOUPEyp6B7vfS1WkWAF/OMMQWoAcoIZ
-        4x4XzGgySJrmk6CJG9MGPVIBUw==
-X-Google-Smtp-Source: AKy350bEFlIs0Zt/epbZLmsUfrkUJFQ+rThFaH41NpSM7LltpP6Ks3vxjZ12jWv067Ir2NFzU9VXSQ==
-X-Received: by 2002:a05:6402:2045:b0:501:d532:d84e with SMTP id bc5-20020a056402204500b00501d532d84emr207146edb.39.1680549535263;
-        Mon, 03 Apr 2023 12:18:55 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:ae90:d80:1069:4805])
-        by smtp.gmail.com with ESMTPSA id n19-20020a509353000000b004c09527d62dsm5022999eda.30.2023.04.03.12.18.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 12:18:54 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20210112; t=1680549583;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rO01+3k4fzVS/CqC5YjvddkQFJufKZJtp6FmS8S3Vzg=;
+        b=gXFClN4ElymKPzhm/l8dhx9xkPnHGljlZZBej29+zeuJupTHnRLFeFzHojdT/JLjdG
+         qjQYZQYeO5/GKKTAI5EEf/nBz7qdeec5Re7BgGleXsgjLhMF14KjoyunMCc+bUce5wrq
+         mfiyBE3mONKXuJ1y43u56zMoBUd5+9Gl3mOLOdl6mUdGFzu4RGdc33QC8GtbmwnmM4VT
+         /P6zTQKGUGiSsD/hR2NbsQVvDOkbaetssN2F0nKNSc23swTQRYoK88qPgEsL+n6+Qg0W
+         RPD6yLwY1+HRxHwvamgQ7TXKcQ7EzPkRgn8Wgl9dlsWSIrEAdaYa8Yph9YcqfGvC8L1j
+         f+nQ==
+X-Gm-Message-State: AAQBX9dts+9ELUQR9OoBtEgEhk7j/oIMGCgq7nBGdYYyjPkf2VfXXecN
+        7u+/O7/dDVXjiv1kNloVIOQTGQ==
+X-Google-Smtp-Source: AKy350bqVpOgQVbWoSPL7MpqchC8QTkyqwgB6DRPSqU1gag0Z4fSDQBJAF/ATSBK3zN8Uba0NWmgGQ==
+X-Received: by 2002:a17:907:25cb:b0:946:f79b:e785 with SMTP id ae11-20020a17090725cb00b00946f79be785mr22215288ejc.2.1680549582892;
+        Mon, 03 Apr 2023 12:19:42 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
+        by smtp.gmail.com with ESMTPSA id h23-20020a170906261700b008e0bb004976sm4882835ejc.134.2023.04.03.12.19.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 12:19:41 -0700 (PDT)
+Message-ID: <d8f3432a-b364-e939-c1f2-b4d55b1586e9@linaro.org>
+Date:   Mon, 3 Apr 2023 21:19:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: usb: mtk-xhci: add an optional frame
+ count clock
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Roger Quadros <rogerq@kernel.org>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/3] dt-bindings: usb: ti,keystone-dwc3: drop assigned-clocks
-Date:   Mon,  3 Apr 2023 21:18:50 +0200
-Message-Id: <20230403191850.374839-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230403191850.374839-1-krzysztof.kozlowski@linaro.org>
-References: <20230403191850.374839-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org,
+        Tianping Fang <tianping.fang@mediatek.com>
+References: <20230403060232.25699-1-chunfeng.yun@mediatek.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230403060232.25699-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The meta schema from DT schema already defines assigned-clocks, so there
-is no need for device schema to mention it at all.  There are also no
-benefits of having it here.
+On 03/04/2023 08:02, Chunfeng Yun wrote:
+> Add optional clock 'frmcnt_ck' used on 4nm or advanced process SoC
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml          | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> index c119caa9ad16..ee8167fbc541 100644
+> --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> @@ -77,6 +77,7 @@ properties:
+>        - description: Mcu bus clock for register access
+>        - description: DMA bus clock for data transfer
+>        - description: controller clock
+> +      - description: frame count clock
+>  
+>    clock-names:
+>      minItems: 1
+> @@ -86,14 +87,15 @@ properties:
+>        - const: mcu_ck
+>        - const: dma_ck
+>        - const: xhci_ck
+> +      - const: frmcnt_ck
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/usb/ti,keystone-dwc3.yaml         | 8 --------
- 1 file changed, 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml b/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
-index c1f0194ad0d5..9252d893f694 100644
---- a/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
-@@ -34,14 +34,6 @@ properties:
-     minItems: 1
-     maxItems: 2
- 
--  assigned-clocks:
--    minItems: 1
--    maxItems: 2
--
--  assigned-clock-parents:
--    minItems: 1
--    maxItems: 2
--
-   power-domains:
-     maxItems: 1
-     description: Should contain a phandle to a PM domain provider node
--- 
-2.34.1
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+>  
+>    assigned-clocks:
+>      minItems: 1
+> -    maxItems: 5
+> +    maxItems: 6
+
+But these should be dropped:
+https://lore.kernel.org/linux-devicetree/20230403191850.374839-1-krzysztof.kozlowski@linaro.org/T/#t
+
+>  
+>    assigned-clock-parents:
+>      minItems: 1
+> -    maxItems: 5
+> +    maxItems: 6
+>  
+>    phys:
+>      description:
+
+Best regards,
+Krzysztof
 
