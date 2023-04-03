@@ -2,150 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E656D414A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E676D414F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbjDCJwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S231470AbjDCJwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjDCJvy (ORCPT
+        with ESMTP id S231626AbjDCJwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:51:54 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on20625.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe13::625])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B981512041;
-        Mon,  3 Apr 2023 02:51:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nLjQFj2XnHOu8RZOk7MOYpo7ixvksMMw+IxJWd1j8WdoYsSA2QYQYDTp7azH9Kfc/7HYaUgVV8X8ShjZ0A7RxTLGKfonlMWgJCZxHkS49urMDscsPpavvWZblVO5PyIkOvCa0H9osdQCKoxwwVaal+vbpcbvUovyVtIKx13YFd8PwWSsv9bLJxIu7RC888YwqiBOpp3McismFmZAX/CWj9zl+hNt9yRV8YMkbb03POAHQHLyhEaLZt1goE+MzveUBp0G9O+umwDUZlRY/F0RnyVbXY+sLl5u9glW7parsYYHWWVDgpLTSromqsvGmN9VPADkKOIN7yx70EknhnfOgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/R4mUyeMwZMcAEMyUYp0mDC6q1e99ogOPSNzMY8U4sQ=;
- b=XPxVmojLeUwAGZ955TOopSXzjFWWyZdpe9NxmGZ4pKFP8FefvMUrbZBVzxjgcO3FyoL3NjT0lS6zMV46XNLP9c5jV2Sp0v4HR1Mras41/PcpU6P5OCTcmVGtFC0gD5j0QDEK2hnuyIX0rKIs6a5QedtfUFRGHxISUTZtiS4lQ1nfI5JPJHvixWxN2y+WVzhZLh3XG8d0CeCtQ2QSE6im8wAzKiPgBT/6ymcxjeoCjFP5U2BaUF2DSZyQt+RTakwDJ14baYrssH4s14haRfic0/iGBG1yeP4CqX59dV6WySF74Yat473SFDcR38ABQhJCa55fQ4hMfe2SSQMlVhcJoQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/R4mUyeMwZMcAEMyUYp0mDC6q1e99ogOPSNzMY8U4sQ=;
- b=UxILv6z0UDa8kK8lCghUljJd8IFalkl9YpYF6nSkBrj7ftx3fVQCU8T/woMcn5hn5awjLKjuXxktdVaknQKO5qqLkPya4l0jg5uOL6USsCD8l1/zpkIESXxGpI9nLLrIVvqO1gx4eiL5wSr+VFGKm079UTXr586Mh0WjD8eZaXk=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by PAXPR04MB8877.eurprd04.prod.outlook.com (2603:10a6:102:20c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
- 2023 09:50:23 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4%4]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
- 09:50:23 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "abelvesa@kernel.org" <abelvesa@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [PATCH V2 6/7] dt-binding: clock: imx93: add NIC, A55 and ARM PLL
- CLK
-Thread-Topic: [PATCH V2 6/7] dt-binding: clock: imx93: add NIC, A55 and ARM
- PLL CLK
-Thread-Index: AQHZZfsbXTNf5q63tEi1ZKgXG4oYXa8ZVYmAgAABslA=
-Date:   Mon, 3 Apr 2023 09:50:23 +0000
-Message-ID: <DU0PR04MB94177F4910F7C47B2CCE867588929@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20230403071309.3113513-1-peng.fan@oss.nxp.com>
- <20230403071309.3113513-7-peng.fan@oss.nxp.com>
- <14d7b3ab-5ac6-61dc-a538-62993edadae6@linaro.org>
-In-Reply-To: <14d7b3ab-5ac6-61dc-a538-62993edadae6@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|PAXPR04MB8877:EE_
-x-ms-office365-filtering-correlation-id: 7c1ceff8-7ccf-4708-3976-08db3428d873
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sfR5mizKV3xMfCC+OIOxh+nwP7C7DRZ50pPUV4zFvrsGQsbLI8BJhXw2G1gjrhl2Liy93mlK2fnOdd0fJehsYbo2p5G8dDEwgY3GtvwjxwJWyubuCbIn5ZALUbhsVaJnaUxpIqfqoR/fZsXvznd5KcE6ofJY+s9tRVgmp+FWNj3HvM/AZtcpSY7jWZxldcx0z5IyFyyHgaCJmNeVOhd0+q2RDlF0KEhovgBZF+zJ2gPX4Yoc7wonIkB+OW4qeZtWSUf40d3w4bBY7iqDLb5pF3ke+gCGazqVqcQtIDRcYeSlQSbQJ2OXNF8hsD3VpdO/81ZJqO0Pa5bx+yGpFTr0LbFBqcbSNSzwRncSXG7I7XoVt+RzCpPB3tLlWJS10FafkJ0KuRIDXNu1Egna1ki3W6OFpbhyknK7r9SpbF8rItkXcd8YLU6IpmXnFetWvnz7IZjOXTiujaWNgpl/chbPwv7Klwhwg1nD0dvXyHs3BwhgHCcWExL6ecZ2xv33C9MEDqys+Al0rvVWAzkxBWoHkkC/Go+7la/IiZtK821l/yRExnhu2ZYr1zMwqkS/zMqt7oV47w66/vDe+v5SX0IcXTSlDst0lUYhPLpgPojKAQiM4JQxnuf7G15uft/F4Q0Xpj74wCbgcmKpZqU9QhnlCg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(451199021)(55016003)(8676002)(4326008)(66476007)(66556008)(64756008)(66446008)(66946007)(76116006)(478600001)(316002)(110136005)(54906003)(52536014)(8936002)(4744005)(44832011)(921005)(7416002)(41300700001)(38100700002)(122000001)(5660300002)(53546011)(186003)(83380400001)(7696005)(71200400001)(6506007)(26005)(9686003)(86362001)(33656002)(2906002)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NWs1c3Z2N3I3ZzYzcHRkMEFkdHdndUlBOUErQlNzR2c2dURMKzMzWWZ2ZTBv?=
- =?utf-8?B?d2J0bkdnVlBRWDZtMEIxYTFmWXhRSjlWTmZtYlh2TmVoM281N3F0VmVEOU52?=
- =?utf-8?B?WkZCWEVsTHg2UnFudjFyTUs1My9hWlVNY1YwQkpQVDRmQjJianl3SlVqd3ZJ?=
- =?utf-8?B?b2FMNVNSWHZZT0ppVDU5R3JERFRtbXlKUk5ZVGY3SGZhQlhrU3lBSktHelNM?=
- =?utf-8?B?UXZKaFNSSHRPR1RsY1V3aVFzTWovc3ZvN1hYWnVVS1pIdGZMMFY5Q0xKZUlS?=
- =?utf-8?B?eUQrV05tVmZITEtCRSs5SmZ6cWhOSHp2MUtsSlhDOGxVNWttQS9LZ1p3aHZH?=
- =?utf-8?B?TmxWbW1sVlh0QloyL2J1NG82NFBLVEZJemNHbkE5dmQ0Y1pxN2puc20rdTVV?=
- =?utf-8?B?SmQySG04M2hPVXUyaW9XOTZmcHBydFhTU2ZLOWoyZ3RyOHp6SllhamsxTVFO?=
- =?utf-8?B?bjBRM28vKzdISTJHTCtyZWp1QkhqSzRRWkJubEczVHFoM21uRHJJTENNbEtC?=
- =?utf-8?B?Nk5sSzQvcS9qWldnbEhUTGZ0WG9EZHM1b2J1QmhzQmg3SE4rTm9HOCtpcTB1?=
- =?utf-8?B?OFN3UXN0NkZXeVdDekdyK2lNZFdtbHRCc3FVQlhMZnZTbVJrVUwwb1JsWWMz?=
- =?utf-8?B?UTBDZkdzeTg0Z0hSUnpOOUcvajFHd29Eai9rOWpwSGxSamFtVE5pVHhKb294?=
- =?utf-8?B?YjN1Q01pK1c1aGlBZFhDVkpob3V0YnB4a3JQNkt1djlJak1ET2s0RjhiVEox?=
- =?utf-8?B?NExGNW56SGw1N21KWE9nVldMeEN5dTRTSHFwamxabzhER1hUaVBRbVZIYk1G?=
- =?utf-8?B?SVJJZC9wMFZaSEVXRXVsWmJnVGQ1dk5NY1B2M1dOdUxpbUl2Z1VBT2tyMWdD?=
- =?utf-8?B?TXJVVXBOTmNNM2srYlIvZW92VVF2MTk5SXVFNDF1WTZwQVBSeDZKaVVSaVhy?=
- =?utf-8?B?NU9HK252dWVwR01ENEZhck5OOTZxNXpYSnJYOWJkRmRWbVJkNnJQY2k5Sjkv?=
- =?utf-8?B?Y1hna0ZwV0xraDk0VDFEVFBnUFlJTndacXB1TUE2Q21mY1NBU1QxZHB4NHNp?=
- =?utf-8?B?WjJDL0pKQmU2TVY3bEpiN3RkK3R0dmJtM21EeG1jMGVSSVNmb0pOWXpnSHVx?=
- =?utf-8?B?SnFhSXBCWFZ1a093YVh0QTdvSDVEdERHMXJCcHREd2YzS2hpeDQzUHVVelMw?=
- =?utf-8?B?WHhKSFljYVR5bWU4S3BDdGRhVnpjSEFLTFFlakhhanZxV0h4MXdRMkd0NVlx?=
- =?utf-8?B?c2ErL2xmTXVkUUZ1SUxHTkRvbFZEVC9acWZsYWtpTDVpbUxUb0Y4L1RJeXlB?=
- =?utf-8?B?U205YVJ6UWJrZjhneFhGYzVyOEh3aTdlRFpnbHFCTmkvSE5LSnQ5ZjFINXUz?=
- =?utf-8?B?ZE9KaUhBc1g3ci9UcG9XN0ZGaHFZU0VqZFF1MUsreEYrMlA2TmkvR0pVSkRu?=
- =?utf-8?B?c0hjNkJYcEsvMUdCKy9CTU9lWUN2TmordE1ublg4ZnNMZFVWWkZqRWpzUVNn?=
- =?utf-8?B?OTZRZzFnWExhbEhJWXFzWjZ6bkdBa3k5cFRIUlJaOGluUEpuWllZWXFJQTh1?=
- =?utf-8?B?ZnBEaVMweGlvczVnYWlsdDZsZzg2RlJ0dGFncnVuWVorcEJ0ZjBVbTFmWWpt?=
- =?utf-8?B?aE5RSGdVa3lzMXE5cU1VZFNmL2xad0dOd1FVcFk3UXpEMWQ1a2cyZmFVZllW?=
- =?utf-8?B?eklUR0RrV01haitrV3NaWEMxdG90c2lnWVp6a3lLcXpMK0F1dFNlaXUvSW5X?=
- =?utf-8?B?d0lNVzhhVnlYVmpTVHhTblAwZ1paZWYvQnhieGlTYmFnZ29xVXp1aHlUQlA0?=
- =?utf-8?B?dUFESjl3UnVTaGJoOFlQb3JnZUZrL2xOcFBoRUFYVzdIb1gzTjlDQVlqZUlO?=
- =?utf-8?B?a0JkSFZQK2FqUlcyZkNxbUZWRlN1WFNiblUxNitmRS8wdldqOTdCK1E5b0Rz?=
- =?utf-8?B?R1hKTFg1ME85UzVmMTdBRFIycDc1bVAxWUVvc091TzRxRGI5QlVCWkVrOE9w?=
- =?utf-8?B?S0hNK0cvQVlsK0xXbFk1QisxUW1wYzV2UTEvT1RyUlRDd0lhUzNwRlM1UDRp?=
- =?utf-8?B?Z0pJK1FocWFQWTJTemJhU1NpbU5TeWNBNWdLWE9zTHZqVjNVWGJJVFMvY0JR?=
- =?utf-8?Q?eN/I=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 3 Apr 2023 05:52:20 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711F51A952
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 02:51:28 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id p204so34004374ybc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 02:51:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680515477;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Myr4SOqgp/Xpahg3zCPICN65Lgc87yWnRIomS6rycc=;
+        b=GPcW7yzc6Y3bgT6bww3ltcw04qeqvy7Edi1PSy8xetx51klIvNb25DddZh7qOtn3Zt
+         448OEueWdAmkqADKKH62h/yzixUrtHA6dR42cFmPLzdVaBDsp/KOsRe0GAWqq1PoJXCy
+         645onHrED3MlyzhcnBubHx2u0FPdbNNhO8uY/0H0lghBj1Dw1m6LdH5dOtwHKT28stVw
+         AGSuCPHUldU87zv1oRIgR9R/8XG/kNdVZ01e6dpfX9CFc3h8cLXx5mHlo6LjgeAjox4N
+         /nLgluJt8hJPLiDyWJO1Sym+V/I+TnNXDo5pjejXwAd/1gAwNL+0D7FudQ3hmq9CgRjV
+         EBPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680515477;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5Myr4SOqgp/Xpahg3zCPICN65Lgc87yWnRIomS6rycc=;
+        b=yMv67t35lRWUJKSTAA4KiGCu99nkELrCdOqSB1tgHo8HZ2solxaxbINocBEUql/pef
+         90xIOX9/cl5tLgb4bSIQrJxEXiwy98hZXPfPuh7lhcaW7hTjCzaPvBLe3MtLHxoWJngX
+         tftkMceVgEvXARVU89+RbXvYvxo8KcXS8B8sMbi8pmRKPBhbbptIZXRjJprbc3I/dqFk
+         9pnGFTFSIC8umZFYy7R4rKJOqju9NY6MeYvP1FlMFw4acNYncTLXEDk+FCAloq6EgqSP
+         uXFqBwjCIUOPxytCFMgvQNQHrUF7MDAFIOSYufscd2WQ1uSWjHK/0htVdMXprOfkOTpY
+         Kpcg==
+X-Gm-Message-State: AAQBX9dcLCjVieQdlxjRqjaZ3753ELA2jIDhPKIaiXaC4crHv+u61cWu
+        N4txOU0TnhI7JA/SlV+vqEnqs0wTgwRiSpSTRRUDhw==
+X-Google-Smtp-Source: AKy350bNjes3lUCW0Puu0SEvzQIxGEKTB7f/ZKo170GPrpIIbQT+S2NOobt6fb58J1TXjFuBWJuKofuApgAGg2knmPw=
+X-Received: by 2002:a25:abee:0:b0:b68:7a4a:5258 with SMTP id
+ v101-20020a25abee000000b00b687a4a5258mr22948859ybi.3.1680515477454; Mon, 03
+ Apr 2023 02:51:17 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c1ceff8-7ccf-4708-3976-08db3428d873
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Apr 2023 09:50:23.7784
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zTBkAqQshxAFqZCTq00fmfSWHRECsQaugMYzdiTWqsSNKPd5uHHZ89LZmmBTdTsY/2O2n0ar3M3/fmuUHigr+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8877
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        T_SPF_PERMERROR autolearn=no autolearn_force=no version=3.4.6
+References: <20230329202148.71107-1-dennis@kernel.org> <ZCTOMVjW+pnZVGsQ@snowbird>
+ <CAPDyKFrcdJuyA9B-JDReacT2z1ircDoY4oTXZQ8AVFk6UEFYsw@mail.gmail.com> <ZCclEE6Qw3on7/eO@snowbird>
+In-Reply-To: <ZCclEE6Qw3on7/eO@snowbird>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 3 Apr 2023 11:50:41 +0200
+Message-ID: <CAPDyKFqc33gUYXpY==jbNrOiba2_xUYLs-bv0RTYYU5d8T0VBA@mail.gmail.com>
+Subject: Re: [PATCH v2] mmc: inline the first mmc_scan() on mmc_start_host()
+To:     Dennis Zhou <dennis@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBTdWJqZWN0OiBSZTogW1BBVENIIFYyIDYvN10gZHQtYmluZGluZzogY2xvY2s6IGlteDkzOiBh
-ZGQgTklDLCBBNTUgYW5kIEFSTQ0KPiBQTEwgQ0xLDQo+IA0KPiBPbiAwMy8wNC8yMDIzIDA5OjEz
-LCBQZW5nIEZhbiAoT1NTKSB3cm90ZToNCj4gPiBGcm9tOiBQZW5nIEZhbiA8cGVuZy5mYW5Abnhw
-LmNvbT4NCj4gPg0KPiA+IEFkZCBpLk1YOTMgTklDLCBBNTUgYW5kIEFSTSBQTEwgQ0xLLg0KPiA+
-DQo+IA0KPiBGaXggc3ViamVjdCBpbiBhbGwgeW91ciBwYXRjaHNldHMuDQoNCk15IGJhZCwgYWxy
-ZWFkeSBmaXhlZCBhbmQgcG9zdGVkIG5ldyB2ZXJzaW9uIHBhdGNoZXMuDQoNClRoYW5rcywNClBl
-bmcuDQoNCj4gDQo+IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQoNCg==
+On Fri, 31 Mar 2023 at 20:23, Dennis Zhou <dennis@kernel.org> wrote:
+>
+> Hi Ulf,
+>
+> On Fri, Mar 31, 2023 at 02:43:10PM +0200, Ulf Hansson wrote:
+> > On Thu, 30 Mar 2023 at 01:48, Dennis Zhou <dennis@kernel.org> wrote:
+> > >
+> > > When using dm-verity with a data partition on an emmc device, dm-verity
+> > > races with the discovery of attached emmc devices. This is because mmc's
+> > > probing code sets up the host data structure then a work item is
+> > > scheduled to do discovery afterwards. To prevent this race on init,
+> > > let's inline the first call to detection, __mm_scan(), and let
+> > > subsequent detect calls be handled via the workqueue.
+> >
+> > In principle, I don't mind the changes in $subject patch, as long as
+> > it doesn't hurt the overall initialization/boot time. Especially, we
+> > may have more than one mmc-slot being used, so this needs to be well
+> > tested.
+> >
+>
+> I unfortunately don't have a device with multiple mmcs available. Is
+> this something you could help me with?
+
+Yes, I can help to test. Allow me a few days to see what I can do.
+
+Note that, just having one eMMC and one SD card should work too. It
+doesn't have to be multiple eMMCs.
+
+>
+> > Although, more importantly, I fail to understand how this is going to
+> > solve the race condition. Any I/O request to an eMMC or SD requires
+> > the mmc block device driver to be up and running too, which is getting
+> > probed from a separate module/driver that's not part of mmc_rescan().
+>
+> I believe the call chain is something like this:
+>
+> __mmc_rescan()
+>     mmc_rescan_try_freq()
+>         mmc_attach_mmc()
+>             mmc_add_card()
+>                 device_add()
+>                     bus_probe_device()
+>                         mmc_blk_probe()
+>
+> The initial calling of this is the host probe. So effectively if there
+> is a card attached, we're inlining the device_add() call for the card
+> attached rather than waiting for the workqueue item to kick off.
+>
+> dm is a part of late_initcall() while mmc is a module_init(), when built
+> in becoming a device_initcall(). So this solves a race via the initcall
+> chain. In the current state, device_initcall() finishes and we move onto
+> the late_initcall() phase. But now, dm is racing with the workqueue to
+> init the attached emmc device.
+
+You certainly have a point!
+
+This should work when the mmc blk module is built-in. Even if that
+doesn't solve the entire problem, it should be a step in the right
+direction.
+
+I will give it some more thinking and run some tests at my side, then
+I will get back to you again.
+
+Kind regards
+Uffe
+
+> >
+> > >
+> > > Signed-off-by: Dennis Zhou <dennis@kernel.org>
+> > > ---
+> > > Sigh.. fix missing static declaration.
+> > >
+> > >  drivers/mmc/core/core.c | 15 +++++++++++----
+> > >  1 file changed, 11 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
+> > > index 368f10405e13..fda7ee57dee3 100644
+> > > --- a/drivers/mmc/core/core.c
+> > > +++ b/drivers/mmc/core/core.c
+> > > @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_card *card, sector_t *gpt_sector)
+> > >  }
+> > >  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
+> > >
+> > > -void mmc_rescan(struct work_struct *work)
+> > > +static void __mmc_rescan(struct mmc_host *host)
+> > >  {
+> > > -       struct mmc_host *host =
+> > > -               container_of(work, struct mmc_host, detect.work);
+> > >         int i;
+> > >
+> > >         if (host->rescan_disable)
+> > > @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
+> > >                 mmc_schedule_delayed_work(&host->detect, HZ);
+> > >  }
+> > >
+> > > +void mmc_rescan(struct work_struct *work)
+> > > +{
+> > > +       struct mmc_host *host =
+> > > +               container_of(work, struct mmc_host, detect.work);
+> > > +
+> > > +       __mmc_rescan(host);
+> > > +}
+> > > +
+> > >  void mmc_start_host(struct mmc_host *host)
+> > >  {
+> > >         host->f_init = max(min(freqs[0], host->f_max), host->f_min);
+> > > @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
+> > >         }
+> > >
+> > >         mmc_gpiod_request_cd_irq(host);
+> > > -       _mmc_detect_change(host, 0, false);
+> > > +       host->detect_change = 1;
+> > > +       __mmc_rescan(host);
+> > >  }
+> > >
+> > >  void __mmc_stop_host(struct mmc_host *host)
+> > > --
+> > > 2.40.0
+> > >
