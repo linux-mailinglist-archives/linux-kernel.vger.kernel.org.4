@@ -2,194 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD636D4351
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 578B36D4354
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjDCLVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
+        id S232410AbjDCLVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjDCLVE (ORCPT
+        with ESMTP id S232278AbjDCLVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:21:04 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E6E4224
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:21:02 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id er13so74876344edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:21:02 -0700 (PDT)
+        Mon, 3 Apr 2023 07:21:30 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE3211641
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:21:23 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id q19so25885684wrc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:21:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680520861;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pSGbPNvPB+JspcMZAM7knRh0d6tq6zqNpiPGf74AOAk=;
-        b=GSRqITYHxQvX4a+vFTAh0mGJOK8s75BHXaBTK7FjohiEENwEwJqpv8RnAt+DKFC4B0
-         PqYcfmzIduKRaEguCAIwu782Mn0U2Qmil6Rm2zwZiijMpb9zvKEBbzNeMQcS4KFhw/4B
-         v4nDpR9kcOl1pRePVbJm5lXI4c5DcEFfZL/z0R0lxAwKwvDiEUw0ns31TeUfu+gtrVuM
-         ZLrSCh/GlaGIt47LB3SCWmzqHaK+cn7Q76Eg8Oi1g09acL1Jd5j5ct71GBwbe3V0hi5P
-         PpToOZeh7QkcVUK9z7gxx4fiXZ7k6gcEZ6scoKIwMfcuPibX6J4Cl+OpD/JcGZmj7T1U
-         Lr9w==
+        d=chromium.org; s=google; t=1680520882;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yfXbK+ehjb3x3tftRCKApX1xRkjQHv0ANTDTDP3NxOc=;
+        b=LP5ajRRnzT235CHmQ0lWGzS01yRL1tgN2As0C6a9k+8kESyhDzgjyXI8/BDjLJaUTJ
+         WsvByzsfaG8Sorgy//fxlbYOVC0mNesRhPJwZdh9m0lkowm6Q44RL+WC5zrfnawtMqAp
+         spVLCXyWFMFo1ZXSL+bQvrMPVbziP+EyTRhcA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680520861;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pSGbPNvPB+JspcMZAM7knRh0d6tq6zqNpiPGf74AOAk=;
-        b=6ZJaDRIRqua8kX58gKSFVadcAvzJW5F7YirTnxQgGVLK6POUt+8FhKGpAzkKw68iEi
-         LfEAzYsaxZMMpFBbkUKdsVvzKfRSKxz4+UjaOZZo6xPOp9hhkpZL1n4YjpjFil3UHJWF
-         bjTWohe1GDE+KSSiPOiQHMEbALc7kRrSaAl27CKIv2yWOjbApWVJQFCjFUjljxVVkZI7
-         q/pRp+KL6Z0aQz0I8MXPG+f8ichZpEVcNeBbqtQ9AeXEL4dW1eCOlDX0YksvjqpoEhqo
-         68ndCohkW32tMnnIsYPRdouJNHiNRshBhIGSMvpALYSG9IoeD6YyQLdP42vaTUQTv7W1
-         Vrxw==
-X-Gm-Message-State: AAQBX9f9M/8tn80vPhDrg00udeOrJ0J8Cb45ZZTTnSnaLMwWSV7f8a5R
-        V0llG/PnXHZhLaMda5bwVMk=
-X-Google-Smtp-Source: AKy350Y758ypGm4nbge2JI3sswU+UqJX9IukkLLnBaBtKLA2khnktn53Px0p8a/quttJT+79zP8qbg==
-X-Received: by 2002:a17:906:1cc5:b0:931:42d2:a77f with SMTP id i5-20020a1709061cc500b0093142d2a77fmr34597474ejh.15.1680520860851;
-        Mon, 03 Apr 2023 04:21:00 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id kx6-20020a170907774600b009310d4dece9sm4402997ejc.62.2023.04.03.04.20.58
+        d=1e100.net; s=20210112; t=1680520882;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yfXbK+ehjb3x3tftRCKApX1xRkjQHv0ANTDTDP3NxOc=;
+        b=6LJglmMSOrmTapPc+0zZXF5a8d0dfg0QF48caXiBIT4qCKqlyQveH1S0s5mUVxkOmQ
+         JVlkOG8ErkVHt3WoenToUTzlKezyWBvvqpNWMimSxrbFDpNYJ3ODB/cBbRHGI4uOdvg3
+         UcSqUdMsJBsJ9sU+AWiBrdRxhKXMHLUU0b2Ngg1ilqBD2+Yq8Sum5njZ4vW4p1/ytcZY
+         R44CLUnvkexSL4WEaMTHKoBkmvklUguoATVPQ3sUP6M2KfR4tNVyK24pNoCS3PJBAbeA
+         E4QOj3e2WDLFdeSy2Tszh6sCcyTrqsvAwtxeIMTFwu8e4Dsqe0GGMIVdhcBYdxN4SJKA
+         secA==
+X-Gm-Message-State: AAQBX9ckNV1INsfkCoKiotwOJd6wBbs1A5l3Ex8mU/q4XZhfz5H/1SEQ
+        o9a/nSvGsgOkjt+eZRLK4cnl9g==
+X-Google-Smtp-Source: AKy350YH8mOD0Si3cDk+4jVUPMTXC/FAXN6Jt/A0MkgFu+t8zSiQuC5DogJ94PDR//YD6KjdIBX/GQ==
+X-Received: by 2002:adf:e90c:0:b0:2cf:eeae:88c3 with SMTP id f12-20020adfe90c000000b002cfeeae88c3mr28245477wrm.32.1680520881678;
+        Mon, 03 Apr 2023 04:21:21 -0700 (PDT)
+Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:b5a2:4ffd:8524:ac1])
+        by smtp.gmail.com with ESMTPSA id u13-20020adfeb4d000000b002daeb108304sm9510031wrn.33.2023.04.03.04.21.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 04:21:00 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 14:20:55 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Joseph Qi <joseph.qi@linux.alibaba.com>, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev
-Cc:     oe-kbuild@lists.linux.dev,
-        Heming Zhao via Ocfs2-devel <ocfs2-devel@oss.oracle.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: fs/ocfs2/super.c:1809 ocfs2_mount_volume() warn: missing error
- code 'status'
-Message-ID: <1e7d7076-ddd6-41b3-b824-673986c35477@kili.mountain>
-References: <9e1d6835-34fc-49cd-869e-d99d9b546d17@kili.mountain>
- <4154b815-3be4-53de-1bc0-ca87ecb925a4@linux.alibaba.com>
+        Mon, 03 Apr 2023 04:21:21 -0700 (PDT)
+From:   Florent Revest <revest@chromium.org>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
+        jolsa@kernel.org, xukuohai@huaweicloud.com, lihuafei1@huawei.com,
+        Florent Revest <revest@chromium.org>
+Subject: [PATCH v4 0/4] Add ftrace direct call for arm64
+Date:   Mon,  3 Apr 2023 13:20:55 +0200
+Message-Id: <20230403112059.2749695-1-revest@chromium.org>
+X-Mailer: git-send-email 2.40.0.423.gd6c402a77b-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4154b815-3be4-53de-1bc0-ca87ecb925a4@linux.alibaba.com>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, the kbuild bot is not supposed to send duplicate warnings.  I
-don't know why it was sent again...
+This series adds ftrace direct call support to arm64.
+This makes BPF tracing programs (fentry/fexit/fmod_ret/lsm) work on arm64.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7b50567bdcad8925ca1e075feb7171c12015afd1
-commit: 0737e01de9c411e4db87dcedf4a9789d41b1c5c1 ocfs2: ocfs2_mount_volume does cleanup job before return error
-date:   11 months ago
-:::::: branch date: 15 hours ago
-       ^^^^^^^^^^^^^^^^^^^^^^^^^
-Something happened on Apr 1.
+It is meant to be taken by the arm64 tree but it depends on the
+trace-direct-v6.3-rc3 tag of the linux-trace tree:
+  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+That tag was created by Steven Rostedt so the arm64 tree can pull the prior work
+this depends on. [1]
 
-:::::: commit date: 11 months ago
-config: arm64-randconfig-m041-20230329 (https://download.01.org/0day-ci/archive/20230401/202304012244.gX4H4rBO-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
+Thanks to the ftrace refactoring under that tag, an ftrace_ops backing a ftrace
+direct call will only ever point to *one* direct call. This means we can look up
+the direct called trampoline address stored in the ops from the ftrace_caller
+trampoline in the case when the destination would be out of reach of a BL
+instruction at the ftrace callsite. This fixes limitations of previous attempts
+such as [2].
 
-regards,
-dan carpenter
+This series has been tested on arm64 with:
+1- CONFIG_FTRACE_SELFTEST
+2- samples/ftrace/*.ko (cf: patch 3)
+3- tools/testing/selftests/bpf/test_progs (cf: patch 4)
 
-On Mon, Apr 03, 2023 at 07:07:37PM +0800, Joseph Qi wrote:
-> Hi,
-> IIRC, we've discussed this before.
-> Success return is expected in case of 'hard readonly'.
-> So this a false positive report.
-> 
-> Thanks,
-> Joseph
-> 
-> On 4/3/23 2:14 PM, Dan Carpenter wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   7b50567bdcad8925ca1e075feb7171c12015afd1
-> > commit: 0737e01de9c411e4db87dcedf4a9789d41b1c5c1 ocfs2: ocfs2_mount_volume does cleanup job before return error
-> > config: arm64-randconfig-m041-20230329 (https://download.01.org/0day-ci/archive/20230401/202304012244.gX4H4rBO-lkp@intel.com/config)
-> > compiler: aarch64-linux-gcc (GCC) 12.1.0
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Reported-by: Dan Carpenter <error27@gmail.com>
-> > | Link: https://lore.kernel.org/r/202304012244.gX4H4rBO-lkp@intel.com/
-> > 
-> > smatch warnings:
-> > fs/ocfs2/super.c:1809 ocfs2_mount_volume() warn: missing error code 'status'
-> > 
-> > vim +/status +1809 fs/ocfs2/super.c
-> > 
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1803  static int ocfs2_mount_volume(struct super_block *sb)
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1804  {
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1805  	int status = 0;
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1806  	struct ocfs2_super *osb = OCFS2_SB(sb);
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1807  
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1808  	if (ocfs2_is_hard_readonly(osb))
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29 @1809  		goto out;
-> > 
-> > Hard to tell if this should be an error path or not...  Canonical
-> > problem with do nothing gotos.
-> > 
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1810  
-> > 5500ab4ed3b8f0 Gang He                     2019-03-05  1811  	mutex_init(&osb->obs_trim_fs_mutex);
-> > 5500ab4ed3b8f0 Gang He                     2019-03-05  1812  
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1813  	status = ocfs2_dlm_init(osb);
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1814  	if (status < 0) {
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1815  		mlog_errno(status);
-> > a52370b3b182f7 Gang He                     2018-01-31  1816  		if (status == -EBADR && ocfs2_userspace_stack(osb))
-> > a52370b3b182f7 Gang He                     2018-01-31  1817  			mlog(ML_ERROR, "couldn't mount because cluster name on"
-> > a52370b3b182f7 Gang He                     2018-01-31  1818  			" disk does not match the running cluster name.\n");
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1819  		goto out;
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1820  	}
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1821  
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1822  	status = ocfs2_super_lock(osb, 1);
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1823  	if (status < 0) {
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1824  		mlog_errno(status);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1825  		goto out_dlm;
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1826  	}
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1827  
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1828  	/* This will load up the node map and add ourselves to it. */
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1829  	status = ocfs2_find_slot(osb);
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1830  	if (status < 0) {
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1831  		mlog_errno(status);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1832  		goto out_super_lock;
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1833  	}
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1834  
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1835  	/* load all node-local system inodes */
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1836  	status = ocfs2_init_local_system_inodes(osb);
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1837  	if (status < 0) {
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1838  		mlog_errno(status);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1839  		goto out_super_lock;
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1840  	}
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1841  
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1842  	status = ocfs2_check_volume(osb);
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1843  	if (status < 0) {
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1844  		mlog_errno(status);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1845  		goto out_system_inodes;
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1846  	}
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1847  
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1848  	status = ocfs2_truncate_log_init(osb);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1849  	if (status < 0) {
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1850  		mlog_errno(status);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1851  		goto out_system_inodes;
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1852  	}
-> > c271c5c22b0a7c Sunil Mushran               2006-12-05  1853  
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1854  	ocfs2_super_unlock(osb, 1);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1855  	return 0;
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1856  
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1857  out_system_inodes:
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1858  	if (osb->local_alloc_state == OCFS2_LA_ENABLED)
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1859  		ocfs2_shutdown_local_alloc(osb);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1860  	ocfs2_release_system_inodes(osb);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1861  	/* before journal shutdown, we should release slot_info */
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1862  	ocfs2_free_slot_info(osb);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1863  	ocfs2_journal_shutdown(osb);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1864  out_super_lock:
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1865  	ocfs2_super_unlock(osb, 1);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1866  out_dlm:
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1867  	ocfs2_dlm_shutdown(osb, 0);
-> > 0737e01de9c411 Heming Zhao via Ocfs2-devel 2022-04-29  1868  out:
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1869  	return status;
-> > ccd979bdbce9fb Mark Fasheh                 2005-12-15  1870  }
-> > 
+Changes since v3 [3]:
+- Added "BTI C" instructions at the beginning of each ftrace direct call sample
+- Added Mark Rutland's Acked-by to patch 2
+
+1: https://lore.kernel.org/all/ZB2Nl7fzpHoq5V20@FVFF77S0Q05N/
+2: https://lore.kernel.org/all/20220913162732.163631-1-xukuohai@huaweicloud.com/
+3: https://lore.kernel.org/bpf/20230324171451.2752302-1-revest@chromium.org/
+
+Florent Revest (4):
+  arm64: ftrace: Add direct call support
+  arm64: ftrace: Simplify get_ftrace_plt
+  arm64: ftrace: Add direct call trampoline samples support
+  selftests/bpf: Update the tests deny list on aarch64
+
+ arch/arm64/Kconfig                           |  6 ++
+ arch/arm64/include/asm/ftrace.h              | 22 +++++
+ arch/arm64/kernel/asm-offsets.c              |  6 ++
+ arch/arm64/kernel/entry-ftrace.S             | 90 ++++++++++++++++----
+ arch/arm64/kernel/ftrace.c                   | 46 +++++++---
+ samples/ftrace/ftrace-direct-modify.c        | 32 +++++++
+ samples/ftrace/ftrace-direct-multi-modify.c  | 36 ++++++++
+ samples/ftrace/ftrace-direct-multi.c         | 22 +++++
+ samples/ftrace/ftrace-direct-too.c           | 25 ++++++
+ samples/ftrace/ftrace-direct.c               | 23 +++++
+ tools/testing/selftests/bpf/DENYLIST.aarch64 | 82 ++----------------
+ 11 files changed, 288 insertions(+), 102 deletions(-)
+
+-- 
+2.40.0.423.gd6c402a77b-goog
+
