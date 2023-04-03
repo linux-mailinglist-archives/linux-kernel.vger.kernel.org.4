@@ -2,145 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523F26D3C04
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA6C6D3C07
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjDCDHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 23:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
+        id S230484AbjDCDMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 23:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjDCDHb (ORCPT
+        with ESMTP id S229498AbjDCDMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 23:07:31 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB1C65A9
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 20:07:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680491250; x=1712027250;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GcmrPwQweEDsU0TZJLAO5H0U9qjIpMTqPTXgYTBWRRs=;
-  b=c5b65u6b/Vnd0WzclWStUas/ZZC79q639p4Q8uKXCVBe/fYDYtCeBKsm
-   upBKxcLRSJ8dMkZHjbiBDAQDW9690tRgNYDzIzjlCfd1jOSfllsBz5T74
-   opNlstFXcp558lkdpl+5Xg41QpSoipj6XMu2WXDA7S5hBJ3ZqDG2iHW08
-   nvvin+2ubfwVgUZT3WUFw165rnyA6kEwjyjVCLSXYg4LORy/hmSxszjgt
-   pahcech2BAMnAQ6hq0RHl4yziP/TF4Yl+MW85rL5lrNrNEGZ1Cy9lcALs
-   TppoJZ5yTgEXPuEOnJTIPQOGO9V89GOmtQxTaV/tT9LdKAjXJFI9krZHr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="428084309"
-X-IronPort-AV: E=Sophos;i="5.98,313,1673942400"; 
-   d="scan'208";a="428084309"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2023 20:07:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="663048941"
-X-IronPort-AV: E=Sophos;i="5.98,313,1673942400"; 
-   d="scan'208";a="663048941"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.209.19.220])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2023 20:07:29 -0700
-Date:   Sun, 2 Apr 2023 20:07:27 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, outreachy@lists.linux.dev,
-        hvaibhav.linux@gmail.com, johan@kernel.org, elder@kernel.org,
-        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] staging: greybus: add a single exit path to
- arche_platform_wd_irq()
-Message-ID: <ZCpC7wpDsUFZVWkQ@aschofie-mobl2>
-References: <cover.1680185025.git.kamrankhadijadj@gmail.com>
- <e670baa9bde47a3bdb02e59ec37a438a62c52dd1.1680185025.git.kamrankhadijadj@gmail.com>
- <642a1fdcb2648_394c3829469@iweiny-mobl.notmuch>
- <ZCoqMSy1Ary0sAp9@khadija-virtual-machine>
+        Sun, 2 Apr 2023 23:12:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E776A5E
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 20:12:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C087B810DB
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:12:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE2EC433EF
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:12:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680491554;
+        bh=Ap+BpBTEBvJlF+gYmcxKPrUbwIF2D8NME4iCc6mm8XI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ox9yXbG4kq8D2Laabb25D1FCQq+ipQrdmcgXDds+jeRkctXVetC4ohfLigpI3pM7q
+         UBbZfJNnO7TcOFVZg6F1J5QMHR70sK6FAMZ6z3bS866sVWfXOEAAyfwX9OzheUgXyB
+         Ui1s6kDcqRLAzPRTMiz845zRNsvovUXTFjI6wudl8OycNMqPXs6XhLRR94PFhMVBD8
+         khhbaz986L0vFh3fVKtcCjdD1HkpdIXzUQC4w2Y7ehrEDSfqbc195QK6K5+jbndSeo
+         qVtkOBfGlA1bErTk1Uh2QICYD8jKCh38vCywt7XrkPzJtGAy9Zp7gpWz3DpR7cGpEc
+         iX/ynfmWLFaTQ==
+Received: by mail-lf1-f44.google.com with SMTP id br6so36171396lfb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 20:12:34 -0700 (PDT)
+X-Gm-Message-State: AAQBX9clNbfsyqnnc8SfgX6PXlZwOnKdMuz9H6UUTFJ40/7OyVbXvp3u
+        I6tRajdJ3igHdNNSJuvuW2eQPimGc9/0Y31f5Q==
+X-Google-Smtp-Source: AKy350boR7KBqqJZ6IIHymcrLLLozW883feUdZ6Y2V3HnUd9E4OfcuL63cyZJDY0w5iiNe1NgefP4M7Cd9UwzPb3jmM=
+X-Received: by 2002:ac2:50d9:0:b0:4ea:fa15:5bce with SMTP id
+ h25-20020ac250d9000000b004eafa155bcemr10220977lfm.7.1680491552651; Sun, 02
+ Apr 2023 20:12:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCoqMSy1Ary0sAp9@khadija-virtual-machine>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230330032614.18837-1-nancy.lin@mediatek.com> <20230330032614.18837-2-nancy.lin@mediatek.com>
+In-Reply-To: <20230330032614.18837-2-nancy.lin@mediatek.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Mon, 3 Apr 2023 11:12:20 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_8hU9j2KfFcpvhz-TRzrz0hiSTiPgy_yHqEQ8VWvoYzTg@mail.gmail.com>
+Message-ID: <CAAOTY_8hU9j2KfFcpvhz-TRzrz0hiSTiPgy_yHqEQ8VWvoYzTg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] drm/mediatek: Add mdp_rdma get format function
+To:     "Nancy.Lin" <nancy.lin@mediatek.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        singo.chang@mediatek.com, shawn.sung@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 06:21:53AM +0500, Khadija Kamran wrote:
-> On Sun, Apr 02, 2023 at 05:37:48PM -0700, Ira Weiny wrote:
-> > Khadija Kamran wrote:
-> > > arche_platform_wd_irq() function has two exit paths. To make the code
-> > > more readable, use only one exit path.
-> > > 
-> > > Suggested-by: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> >
-> 
-> Okay, noted.
-> 
-> Also, would it be okay to send a patch revision with the changes or
-> should I wait for the feedback on Dan's comment. Here is a link to it:
-> https://lore.kernel.org/outreachy/6ce8aa34-e600-4d6a-adad-ead8255342e5@kili.mountain/
+Hi, Nancy:
 
-Khadija,
+Nancy.Lin <nancy.lin@mediatek.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=8830=E6=
+=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8811:26=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> Add mdp_rdma get_format and get_num_formats function.
 
-It's customary to wait for folks to respond to your follow ups, and
-address  all the current feedback before sending out a new revision.
+For the series, applied to mediatek-drm-next [1], thanks.
 
-Ira asked a question about using positive instead of negative logic.
-I probably steered you down the negative logic path, perhaps it can
-be flipped to a more preferable positive logic. 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-next
 
-Alison
+Regards,
+Chun-Kuang.
 
-
-
-> 
-> Thank you!
-> Regards,
-> Khadija 
-> 
-> > > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> > > ---
-> > >  drivers/staging/greybus/arche-platform.c | 7 +++----
-> > >  1 file changed, 3 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
-> > > index fcbd5f71eff2..a64c1af091b0 100644
-> > > --- a/drivers/staging/greybus/arche-platform.c
-> > > +++ b/drivers/staging/greybus/arche-platform.c
-> > > @@ -153,6 +153,7 @@ static irqreturn_t arche_platform_wd_irq_thread(int irq, void *devid)
-> > >  static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
-> > >  {
-> > >  	struct arche_platform_drvdata *arche_pdata = devid;
-> > > +	irqreturn_t rc = IRQ_HANDLED;
-> > >  	unsigned long flags;
-> > >  
-> > >  	spin_lock_irqsave(&arche_pdata->wake_lock, flags);
-> > > @@ -180,9 +181,7 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
-> > >  						WD_STATE_COLDBOOT_START) {
-> > >  					arche_platform_set_wake_detect_state(arche_pdata,
-> > >  									     WD_STATE_COLDBOOT_TRIG);
-> > > -					spin_unlock_irqrestore(&arche_pdata->wake_lock,
-> > > -							       flags);
-> > > -					return IRQ_WAKE_THREAD;
-> > > +					rc = IRQ_WAKE_THREAD;
-> > >  				}
-> > >  			}
-> > >  		}
-> > > @@ -204,7 +203,7 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
-> > >  
-> > >  	spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
-> > >  
-> > > -	return IRQ_HANDLED;
-> > > +	return rc;
-> > >  }
-> > >  
-> > >  /*
-> > > -- 
-> > > 2.34.1
-> > > 
-> > > 
-> > 
-> > 
+>
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_disp_drv.h |  3 +++
+>  drivers/gpu/drm/mediatek/mtk_mdp_rdma.c | 24 ++++++++++++++++++++++++
+>  2 files changed, 27 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/me=
+diatek/mtk_disp_drv.h
+> index 0d28b2e2069c..17b169530beb 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> @@ -152,4 +152,7 @@ void mtk_mdp_rdma_start(struct device *dev, struct cm=
+dq_pkt *cmdq_pkt);
+>  void mtk_mdp_rdma_stop(struct device *dev, struct cmdq_pkt *cmdq_pkt);
+>  void mtk_mdp_rdma_config(struct device *dev, struct mtk_mdp_rdma_cfg *cf=
+g,
+>                          struct cmdq_pkt *cmdq_pkt);
+> +const u32 *mtk_mdp_rdma_get_formats(struct device *dev);
+> +size_t mtk_mdp_rdma_get_num_formats(struct device *dev);
+> +
+>  #endif
+> diff --git a/drivers/gpu/drm/mediatek/mtk_mdp_rdma.c b/drivers/gpu/drm/me=
+diatek/mtk_mdp_rdma.c
+> index eecfa98ff52e..e06db6e56b5f 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_mdp_rdma.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_mdp_rdma.c
+> @@ -62,6 +62,20 @@
+>  #define RDMA_CSC_FULL709_TO_RGB                        5
+>  #define RDMA_CSC_BT601_TO_RGB                  6
+>
+> +static const u32 formats[] =3D {
+> +       DRM_FORMAT_XRGB8888,
+> +       DRM_FORMAT_ARGB8888,
+> +       DRM_FORMAT_BGRX8888,
+> +       DRM_FORMAT_BGRA8888,
+> +       DRM_FORMAT_ABGR8888,
+> +       DRM_FORMAT_XBGR8888,
+> +       DRM_FORMAT_RGB888,
+> +       DRM_FORMAT_BGR888,
+> +       DRM_FORMAT_RGB565,
+> +       DRM_FORMAT_UYVY,
+> +       DRM_FORMAT_YUYV,
+> +};
+> +
+>  enum rdma_format {
+>         RDMA_INPUT_FORMAT_RGB565 =3D 0,
+>         RDMA_INPUT_FORMAT_RGB888 =3D 1,
+> @@ -219,6 +233,16 @@ void mtk_mdp_rdma_config(struct device *dev, struct =
+mtk_mdp_rdma_cfg *cfg,
+>                            MDP_RDMA_MF_CLIP_SIZE, FLD_MF_CLIP_H);
+>  }
+>
+> +const u32 *mtk_mdp_rdma_get_formats(struct device *dev)
+> +{
+> +       return formats;
+> +}
+> +
+> +size_t mtk_mdp_rdma_get_num_formats(struct device *dev)
+> +{
+> +       return ARRAY_SIZE(formats);
+> +}
+> +
+>  int mtk_mdp_rdma_clk_enable(struct device *dev)
+>  {
+>         struct mtk_mdp_rdma *rdma =3D dev_get_drvdata(dev);
+> --
+> 2.18.0
+>
