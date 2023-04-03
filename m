@@ -2,106 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0800D6D44DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F180B6D44E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232112AbjDCMvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S232413AbjDCMvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232418AbjDCMvM (ORCPT
+        with ESMTP id S232381AbjDCMvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:51:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E00DDC;
-        Mon,  3 Apr 2023 05:51:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6756F61A78;
-        Mon,  3 Apr 2023 12:51:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A59C433D2;
-        Mon,  3 Apr 2023 12:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680526267;
-        bh=AJEjoPDvOiW9O7K74lmqI5HZy8RzM1Zgtt3tX3ncQVU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=idZVmq4o2EB52wKthrVNjlBfK6yyo6TDGbGtIp/0DZUo8D/XZqfEYeFONbXR7VQcu
-         VWDcTUChhGJIfAQgze424L7gve3jiz6eINVeL2APdtQoqC3DZ8a8/leoXFd6Z9lTH9
-         6CSOVnq4/zrdewmZ8cuBwS0orRjspEArZmm6tIxxrnwlIeNmX16toMfeNvXB7sp2I7
-         ntvbVfxhFSc/SNOTSRUVcI7NiNLheJVIybVj7D7EImiBm5Y1fKzzA8iFcu5fa9L/5k
-         u4rVVpPYiLz6j7lRrzcqSg6VnVB5/HOaB1DaTC34MEDL17KMy4S1iR90wk1ArWiyLR
-         WL2TwHszaikqQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Patrick Lai <quic_plai@quicinc.com>
-In-Reply-To: <20230327132254.147975-1-krzysztof.kozlowski@linaro.org>
-References: <20230327132254.147975-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH v3 00/10] ASoC: add audio digital codecs for
- Qualcomm SM8550
-Message-Id: <168052626277.36561.10428671254225734348.b4-ty@kernel.org>
-Date:   Mon, 03 Apr 2023 13:51:02 +0100
+        Mon, 3 Apr 2023 08:51:22 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD6D12BC0
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:51:21 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id w9so116900739edc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 05:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680526280;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hBlBY9aCp2fwzyEA3oA1ESp/NxFfdWBUjHz7ismdq/M=;
+        b=ZgDUT7kABXnlv7ZQy4O22yoBe5x0gdxIJSPzzUUMzlIO5weoHEy2JCOq5RW2GY5rbq
+         5asiMAUFK8koBo2l1hA312FmopSKyS7g5ZyXWL6olYKt9ZhyzYRvUsMFwKcNWkfQuSHv
+         8z2k+U3SIQiKC4viWXe1fDRNbOkwQMpew12eeiUQh944BJlypM6VsggRjGZERoQg2mUo
+         AdxZf/G1WNImdAEtsy4nPnkVH4j+eOaLhR5km+LMMoeSABMjdKxt8x85oAAVq08zGJZL
+         v4NmXtYZiJIQMrTP3jrj28JF/FfH+xWjZDgMDeLtBVbcO8W0p20iylXL2ru3Ry3/hC1k
+         CxeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680526280;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hBlBY9aCp2fwzyEA3oA1ESp/NxFfdWBUjHz7ismdq/M=;
+        b=3+SL4dvD9WoHAHjSfAP5ma0gPHe1SKu6fRggCWNwDtSzaScQ3kS0yqoMccACwPB2xz
+         kVE+e0bUctaxc17A6xH+FMF3Pie6+5EevveoDWwa8XRKMD505ESx+CDzCgWeoOuzvd64
+         knG/R5myPIoZYM7nv+tCM9z5mitj2qzCcBLGgaaP44oQS2m+a0KtysfoTFXX8BBUn+x9
+         TslJdG8wZY/bkw/ZD9wNGaJc+tT7l6NLvdZIxU6JPpHqD3HDtAqNxnTN+9m6URsd6/TS
+         TIT29CekEqagmmoxK6yfekPOJha1cECr3JJZuYSevl9TL4D/IhN5vg6PyFxqInxLXNAF
+         oeJg==
+X-Gm-Message-State: AAQBX9dT+dMeDlPdqfUiY+UoijFLjhwgR79xTWeLwgQhYQ9wBF6w2OBc
+        K2RAimGYqZxp9/0AthT2HIRUfA==
+X-Google-Smtp-Source: AKy350bf4uQa4MoKau0zxjWPD5Tb7xiBU+NP/AwFSxCBzCP0E607DlXYpS/wBX3Q3Wt3HJlCE2oxtg==
+X-Received: by 2002:aa7:c98b:0:b0:4cd:e84d:1e74 with SMTP id c11-20020aa7c98b000000b004cde84d1e74mr39732285edt.0.1680526279821;
+        Mon, 03 Apr 2023 05:51:19 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
+        by smtp.gmail.com with ESMTPSA id n19-20020a509353000000b004c09527d62dsm4621217eda.30.2023.04.03.05.51.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 05:51:19 -0700 (PDT)
+Message-ID: <d6b4df41-02cb-b900-5e8b-8ad08d3d36f1@linaro.org>
+Date:   Mon, 3 Apr 2023 14:51:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] ASoC: dt-bindings: wm8510: Convert to dtschema
+Content-Language: en-US
+To:     Saalim Quadri <danascape@gmail.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, daniel.baluta@nxp.com
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230403105237.3854-1-danascape@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230403105237.3854-1-danascape@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 15:22:44 +0200, Krzysztof Kozlowski wrote:
-> This patchset can be merged as is - no dependencies.
+On 03/04/2023 12:52, Saalim Quadri wrote:
+> Convert the WM8510 audio CODEC bindings to DT schema
 > 
-> Changes since v2
-> ================
-> 1. Rebase.
-> 2. New patch: ASoC: dt-bindings: qcom,lpass-va-macro: Add missing NPL clock.
-> 3. Add Rb tags.
+> Signed-off-by: Saalim Quadri <danascape@gmail.com>
+> ---
+> Changes:
+> V1 - V2: Fixup issues mentioned by Krzysztof
+
+So what changed?
+
+>          Add SPI and I2C examples
+
+Why?
+
 > 
-> [...]
+>  .../devicetree/bindings/sound/wlf,wm8510.yaml | 52 +++++++++++++++++++
+>  .../devicetree/bindings/sound/wm8510.txt      | 18 -------
+>  2 files changed, 52 insertions(+), 18 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8510.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/sound/wm8510.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8510.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8510.yaml
+> new file mode 100644
+> index 000000000000..418a82f65531
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/wlf,wm8510.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/wlf,wm8510.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: WM8510 audio CODEC
+> +
+> +maintainers:
+> +  - patches@opensource.cirrus.com
+> +
+> +allOf:
+> +  - $ref: dai-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: wlf,wm8510
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#sound-dai-cells":
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    spi {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        
+> +        codec@0 {
+> +            compatible = "wlf,wm8510";
+> +            reg = <0>;
+> +        };
+> +    };
+> +
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        codec@1a {
 
-Applied to
+Drop second example. It is the same.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Thanks!
-
-[07/10] ASoC: dt-bindings: qcom,lpass-va-macro: Add missing NPL clock
-        commit: cfad817095e111b640c7d538b9f182d2535ee065
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Best regards,
+Krzysztof
 
