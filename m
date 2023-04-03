@@ -2,159 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F516D3C01
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523F26D3C04
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 05:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjDCDGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Apr 2023 23:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
+        id S230420AbjDCDHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Apr 2023 23:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjDCDGH (ORCPT
+        with ESMTP id S229670AbjDCDHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Apr 2023 23:06:07 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D86C659D;
-        Sun,  2 Apr 2023 20:06:02 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id n14so27030311qta.10;
-        Sun, 02 Apr 2023 20:06:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680491161;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MVpHSWVPXPhCwMSet+5Qdfvz4A3AKximww2ubzxMDls=;
-        b=NCEPTZzp7vT2RjILBwPZ851j1Z87CT9aGjL5VIUzghm3DTaDr06vg9TsQ46OM8Yvst
-         eV2TNhziUC9veM8Bo+VY9ih7tx2q2oVKwTauiKQVtfrDRnLtX8jGLDe+p03VVRtENDFq
-         5N7wiXi+8RJ4YqmPZXGDZZhmGfm+Xj7Gpw4l9QwK6et/NHiG5MOwOHkrLBvAjBzb/9vi
-         cYi3XYdz5uNenMAu3JfXr+X1ENUvfukTEfVf2QPMcIZj9n5XNHTNNW5kWEaygwYZLqJ1
-         zAoOcJPCXxNE5fpEgU4WHCScABiutyzpkqdbIDiEdRH49cTtjSnMJuwYXX7yR7f4yw3o
-         gqZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680491161;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MVpHSWVPXPhCwMSet+5Qdfvz4A3AKximww2ubzxMDls=;
-        b=A/PWRHnezP2zgqhPF83UBot1b2uKvSY7sIgGhYa6l/ZWyPHWWWglYbgVC2+trUb3pU
-         XgiQWav1gjP2K7XhUuvFz0vTh/f0QehfF+vDJ4ojJN/krkEzIVNZYTyLqQuy01N4yvHF
-         E6/HtdfSgn6SruEap/dmEUUtGgNHQ4N9Big1hhjevCvHQg3QevGilngVJwHl7t2+lvVf
-         lNPFty4OHTZN25NOnrLrJB7BwaBt2/pxPC/2ubi3/TVv1EPJdqE77Tke6mwgSFrqljWt
-         SlNdam3TkZoPSJOaDUC6ZmtiUamrZrTjWAUJ34b1S1h2oOSyOyBuE6BumvhekqhMGkze
-         aetg==
-X-Gm-Message-State: AO0yUKW4UOCgRpQ9OemeOkDw4pLqcFYngVDRxLWLKSMjpPOLYXQ37qk8
-        YajhZAq+Zg1e3FKZW+ei0mZHtZ3hWy+3QMGEbVM=
-X-Google-Smtp-Source: AK7set/5mrV03m94+BlvYg6XHx+gP0ePwpQMiR7cBCL5RAycNI0TGe1Sqm2+ZsRCG7/zvMEzmxG3BBUc6BLS7VWgZKI=
-X-Received: by 2002:a05:622a:1a02:b0:3e3:f70f:fb13 with SMTP id
- f2-20020a05622a1a0200b003e3f70ffb13mr12426978qtb.6.1680491161713; Sun, 02 Apr
- 2023 20:06:01 -0700 (PDT)
+        Sun, 2 Apr 2023 23:07:31 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB1C65A9
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 20:07:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680491250; x=1712027250;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GcmrPwQweEDsU0TZJLAO5H0U9qjIpMTqPTXgYTBWRRs=;
+  b=c5b65u6b/Vnd0WzclWStUas/ZZC79q639p4Q8uKXCVBe/fYDYtCeBKsm
+   upBKxcLRSJ8dMkZHjbiBDAQDW9690tRgNYDzIzjlCfd1jOSfllsBz5T74
+   opNlstFXcp558lkdpl+5Xg41QpSoipj6XMu2WXDA7S5hBJ3ZqDG2iHW08
+   nvvin+2ubfwVgUZT3WUFw165rnyA6kEwjyjVCLSXYg4LORy/hmSxszjgt
+   pahcech2BAMnAQ6hq0RHl4yziP/TF4Yl+MW85rL5lrNrNEGZ1Cy9lcALs
+   TppoJZ5yTgEXPuEOnJTIPQOGO9V89GOmtQxTaV/tT9LdKAjXJFI9krZHr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="428084309"
+X-IronPort-AV: E=Sophos;i="5.98,313,1673942400"; 
+   d="scan'208";a="428084309"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2023 20:07:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="663048941"
+X-IronPort-AV: E=Sophos;i="5.98,313,1673942400"; 
+   d="scan'208";a="663048941"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.209.19.220])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2023 20:07:29 -0700
+Date:   Sun, 2 Apr 2023 20:07:27 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, outreachy@lists.linux.dev,
+        hvaibhav.linux@gmail.com, johan@kernel.org, elder@kernel.org,
+        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] staging: greybus: add a single exit path to
+ arche_platform_wd_irq()
+Message-ID: <ZCpC7wpDsUFZVWkQ@aschofie-mobl2>
+References: <cover.1680185025.git.kamrankhadijadj@gmail.com>
+ <e670baa9bde47a3bdb02e59ec37a438a62c52dd1.1680185025.git.kamrankhadijadj@gmail.com>
+ <642a1fdcb2648_394c3829469@iweiny-mobl.notmuch>
+ <ZCoqMSy1Ary0sAp9@khadija-virtual-machine>
 MIME-Version: 1.0
-References: <20230326092208.13613-1-laoar.shao@gmail.com> <CAPhsuW43EiH0tVKU8s+JwV_V6EBETTDyXsAmMzAftpVtcgLHag@mail.gmail.com>
- <CALOAHbCqCb3xmSpNe1Qvm75GBY4ZEGrAOHfVJvpZV5t=akTTgQ@mail.gmail.com> <20230402233740.haxb7lgfavcoe27f@dhcp-172-26-102-232.dhcp.thefacebook.com>
-In-Reply-To: <20230402233740.haxb7lgfavcoe27f@dhcp-172-26-102-232.dhcp.thefacebook.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Mon, 3 Apr 2023 11:05:25 +0800
-Message-ID: <CALOAHbBj-+xY5jGLynUrg1GfSftZ+LT5DkADKz_+8+tL2kWMSw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Song Liu <song@kernel.org>, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCoqMSy1Ary0sAp9@khadija-virtual-machine>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 7:37=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Mar 28, 2023 at 11:47:31AM +0800, Yafang Shao wrote:
-> > On Tue, Mar 28, 2023 at 3:04=E2=80=AFAM Song Liu <song@kernel.org> wrot=
-e:
-> > >
-> > > On Sun, Mar 26, 2023 at 2:22=E2=80=AFAM Yafang Shao <laoar.shao@gmail=
-.com> wrote:
-> > > >
-> > > > Currently only CAP_SYS_ADMIN can iterate BPF object IDs and convert=
- IDs
-> > > > to FDs, that's intended for BPF's security model[1]. Not only does =
-it
-> > > > prevent non-privilidged users from getting other users' bpf program=
-, but
-> > > > also it prevents the user from iterating his own bpf objects.
-> > > >
-> > > > In container environment, some users want to run bpf programs in th=
-eir
-> > > > containers. These users can run their bpf programs under CAP_BPF an=
-d
-> > > > some other specific CAPs, but they can't inspect their bpf programs=
- in a
-> > > > generic way. For example, the bpftool can't be used as it requires
-> > > > CAP_SYS_ADMIN. That is very inconvenient.
-> > >
-> > > Agreed that it is important to enable tools like bpftool without
-> > > CAP_SYS_ADMIN. However, I am not sure whether we need a new
-> > > namespace for this. Can we reuse some existing namespace for this?
-> > >
+On Mon, Apr 03, 2023 at 06:21:53AM +0500, Khadija Kamran wrote:
+> On Sun, Apr 02, 2023 at 05:37:48PM -0700, Ira Weiny wrote:
+> > Khadija Kamran wrote:
+> > > arche_platform_wd_irq() function has two exit paths. To make the code
+> > > more readable, use only one exit path.
+> > > 
+> > > Suggested-by: Alison Schofield <alison.schofield@intel.com>
+> > 
+> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 > >
-> > It seems we can't.
->
-> Yafang,
->
-> It's a Nack.
->
-> The only thing you've been trying to "solve" with bpf namespace is to
-> allow 'bpftool prog show' iterate progs in the "namespace" without CAP_SY=
-S_ADMIN.
-> The concept of bpf namespace is not even close to be thought through.
+> 
+> Okay, noted.
+> 
+> Also, would it be okay to send a patch revision with the changes or
+> should I wait for the feedback on Dan's comment. Here is a link to it:
+> https://lore.kernel.org/outreachy/6ce8aa34-e600-4d6a-adad-ead8255342e5@kili.mountain/
 
-Right, it is more likely a PoC in its current state.
+Khadija,
 
-> Others pointed out the gaps in the design. Like bpffs. There are plenty.
-> Please do not send patches like this in the future.
+It's customary to wait for folks to respond to your follow ups, and
+address  all the current feedback before sending out a new revision.
 
-The reason I sent it with an early state is that I want to get some
-early feedback from the community ahead of the LSF/MM/BPF workshop,
-then I can improve it based on these feedbacks and present it more
-specifically at the workshop. Then the discussion will be more
-effective.
+Ira asked a question about using positive instead of negative logic.
+I probably steered you down the negative logic path, perhaps it can
+be flipped to a more preferable positive logic. 
 
-> You need to start with describing the problem you want to solve,
-> then propose _several_ solutions, describe their pros and cons,
-> solicit feedback, present at the conferences (like LSFMMBPF or LPC),
-> and when the community agrees that 1. problem is worth solving,
-> 2. the solution makes sense, only then work on patches.
->
+Alison
 
-I would like to give a short discussion on the BPF namespace if
-everything goes fine.
 
-> "In container environment, some users want to run bpf programs in their c=
-ontainers."
-> is something Song brought up at LSFMMBPF a year ago.
-> At that meeting most of the folks agreed that there is a need to run bpf
-> in containers and make sure that the effect of bpf prog is limited to a c=
-ontainer.
-> This new namespace that creates virtual IDs for progs and maps doesn't co=
-me
-> close in solving this task.
 
-Currently in our production environment, all the containers running
-bpf programs are privileged, that is risky. So actually the goal of
-the BPF namespace is to make them (or part of them) non-privileged.
-But some of the abilities of these bpf programs will be lost in this
-procedure, like the debug-bility with bpftool, so we need to fix it.
-Agree with you that this goal is far from making bpf programs safely
-running in a container environment.
-
---=20
-Regards
-Yafang
+> 
+> Thank you!
+> Regards,
+> Khadija 
+> 
+> > > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> > > ---
+> > >  drivers/staging/greybus/arche-platform.c | 7 +++----
+> > >  1 file changed, 3 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
+> > > index fcbd5f71eff2..a64c1af091b0 100644
+> > > --- a/drivers/staging/greybus/arche-platform.c
+> > > +++ b/drivers/staging/greybus/arche-platform.c
+> > > @@ -153,6 +153,7 @@ static irqreturn_t arche_platform_wd_irq_thread(int irq, void *devid)
+> > >  static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+> > >  {
+> > >  	struct arche_platform_drvdata *arche_pdata = devid;
+> > > +	irqreturn_t rc = IRQ_HANDLED;
+> > >  	unsigned long flags;
+> > >  
+> > >  	spin_lock_irqsave(&arche_pdata->wake_lock, flags);
+> > > @@ -180,9 +181,7 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+> > >  						WD_STATE_COLDBOOT_START) {
+> > >  					arche_platform_set_wake_detect_state(arche_pdata,
+> > >  									     WD_STATE_COLDBOOT_TRIG);
+> > > -					spin_unlock_irqrestore(&arche_pdata->wake_lock,
+> > > -							       flags);
+> > > -					return IRQ_WAKE_THREAD;
+> > > +					rc = IRQ_WAKE_THREAD;
+> > >  				}
+> > >  			}
+> > >  		}
+> > > @@ -204,7 +203,7 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+> > >  
+> > >  	spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
+> > >  
+> > > -	return IRQ_HANDLED;
+> > > +	return rc;
+> > >  }
+> > >  
+> > >  /*
+> > > -- 
+> > > 2.34.1
+> > > 
+> > > 
+> > 
+> > 
