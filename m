@@ -2,191 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4D76D4649
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9116D464B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbjDCN4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S232744AbjDCN4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbjDCN4A (ORCPT
+        with ESMTP id S232299AbjDCN4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:56:00 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711BF2706;
-        Mon,  3 Apr 2023 06:55:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cOmxQf/XohzQNc1y5zh+u/LIlyyFogpvuBcXFkIatHs=; b=URJqNH7Rivp8gJDAiwyB6mCoIy
-        k+OV9TsBUl6zrXJdh1g1kG8iO/9y8ZfdI8h5o34bT4+SU7tyXjLjR+gJ9uUEiSFcGQuFWnLfTCpx6
-        1VEWmbwB0a+V4mbFOCI+jzV9EE3fIjGni9SV1P8OBiXAo+YpgFW/Vv6ETXhM5ahGWbzmzmcW2Pw4g
-        22u3J/cGTLLHWjyLZIObT0EZlC6gkPAZHCkqa2I75MO4mERzluyF8+51SUO0Y/6qTzoKMjkwSJ98t
-        eYoLvrE8E9clC3hZTjdTtoyFvMn+3Cfv1LpUJQoK6/rys/TPycRxdij9spOkDo6wscfRQlDM7dB3V
-        Si0RCsOg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48436)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pjKf2-0002s6-TQ; Mon, 03 Apr 2023 14:55:52 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pjKf1-0004IF-S6; Mon, 03 Apr 2023 14:55:51 +0100
-Date:   Mon, 3 Apr 2023 14:55:51 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, rogerq@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srk@ti.com
-Subject: Re: [PATCH net-next v2 1/3] net: ethernet: ti: am65-cpsw: Move mode
- specific config to mac_config()
-Message-ID: <ZCra58qbcwKCXBDR@shell.armlinux.org.uk>
-References: <20230403110106.983994-1-s-vadapalli@ti.com>
- <20230403110106.983994-2-s-vadapalli@ti.com>
- <ZCqzuwDLGuBDMHQG@shell.armlinux.org.uk>
- <3a62f5cf-ebba-1603-50a0-7a873973534d@ti.com>
- <ZCrQ3lPjEmxXc9a2@shell.armlinux.org.uk>
- <a6dba95a-03ae-12ec-3ef4-c9544073c7a2@ti.com>
+        Mon, 3 Apr 2023 09:56:44 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61427195;
+        Mon,  3 Apr 2023 06:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1680530175; i=frank-w@public-files.de;
+        bh=Xb/Aqcr8/6tCqOXQhpDwDqrXqkHQUMERdzS8z5C5aaE=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=WVgWtMLNJip3AWjjsW3c2NEI8/oR0kJHkFcWc8LIzEOS5noCTYVSWlKivGM7TXk1c
+         sK3FeMkjgroYVQ3pq9/jXOA/krprjV0Bo5aBA+WYVI5C6LTCvEImrFpQchEzyDb1yx
+         a3aBhQKOsaZCzFlOuvmHSkvCx8qwAPPxF7E0pFZcRRjCz/QjfXqOQd2YxVPo7YM0kq
+         KEhaRcLyaEOp80/+npwZJ3jiasFpzsOFHWlvY/uy92PCK7FaLBVkQkdDvwNyalxwfo
+         DvWZQIHjFOzeCwyadhDttGjYi1HXl4etdfE3/DRigXd5yjn/hCt8DDvIyFpOcSScDQ
+         qzxZURiAEGDMQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.152.94] ([217.61.152.94]) by web-mail.gmx.net
+ (3c-app-gmx-bap35.server.lan [172.19.172.105]) (via HTTP); Mon, 3 Apr 2023
+ 15:56:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a6dba95a-03ae-12ec-3ef4-c9544073c7a2@ti.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <trinity-f48dda5c-6787-4732-978a-a409bbb0a74d-1680530175673@3c-app-gmx-bap35>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Aw: Re: [RFC] arm64: dts: use size of reserved partition for bl2
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 3 Apr 2023 15:56:15 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <601a8435-8e2a-2c25-5fe3-40be62269469@collabora.com>
+References: <20230403105818.29624-1-linux@fw-web.de>
+ <601a8435-8e2a-2c25-5fe3-40be62269469@collabora.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:1JUsxUleXcKrPCYwE3ay4MIocxMSb4QWHITw42EQ/QR0OVKQS9PGhbSC81u83cP4k1dMp
+ S1et19Ypg4uLyI/QckCamlb8kcfn1bY4ymdZGUt3Ph7J38bdfIThEnQiirBQ6gDDvAfpskDhC+P6
+ iAaYJxwyc3Ig+PTlA5twYw1xpSilLarg7i3GTbuHqFpqyBgCdnHX6WwQ+lK3PVIU4Auvh9i7MFsR
+ 8HzZea3gQDUcfZU9yxOEsCuh6ks7UdS2t6Umh1jTB9ziiDqmfpdBfdAzSirOnHnF8S1u0fg2yuGG
+ Vw=
+UI-OutboundReport: notjunk:1;M01:P0:jg4AmhsdSds=;mWrtOAomhXxgFe3ThMYoz+s7nVN
+ UuwqaM8J8aThcXwF6VoXk7wWF86T5cbejRDTAscqE70dN6DVg8E/hbaOApM9Js/Fj06u7OPBg
+ 6RvF+zfTf7ndIiqqJVngOJMK01wmtK/ks5CPPuihiK0qKKIQo4L5BkxCefcCfoggy8VzL8vz5
+ jUnILjCxNfiAlQLRxG4z8c2xaKZYrGwfyEdLs0Kn+fCf505U5h8WHRamHwgbjAZPPMfWv37kD
+ r7J6OXsLD4QF9lmQZgIAzUISCBc1KpG0H3M1sl9mlUx9mW4rm25w6J9bsYL4c5S1r9sb9dRSr
+ +wUoLpj0DFhK1ulSPiZ9abTnlBSV1M0fI1odhYuaaP+ULGffm1/8e3qR7VjCnNhSWarH4rd/a
+ oItMUBls4M4r+zQWlMEmM5dQVzKWjknmYCVSh4OkdocNRZmsbeFNlUN6vBvWqdATlvVAKowIa
+ 5VZ5FpSJpn9dgxzWNmew5FStWODYHIM8UbrB31WAGL7J7SaSKy1kngfjYvoTiOc8ZIXNG2VLa
+ DZA6YIdkOL8SrpOvtyeYa/wSwLq0QtAhq3JARS/F5YarnjRsd6IJcTW7FV+T4kWx1W9uLz010
+ 1camxgAhtwkgpCHT1qSS6rxcapHJymGBOG0AeVQISr6GrSjHxcqbJOLoWW+8il8Qs5QekwQOG
+ lW0xPUBY16DQyG51Il7TTjUOeAbhM9Z/F4m6AJAZxLgkmHs18Ab6VsqZn43rZhZ02/vA81yHr
+ aor2OlljU+S+V+JvVwc5/aPNxYey30TGMD+tW1TQE+efQoMwB3aag4VqhFhKq2zQTkLcWe/0f
+ WawLAgD/5bBkNVgGvh48HFEwGo+Cz69aBk6LjPV0ryBqjQdgm3Ehw+FCuzQl7U4BpRRLv6Qqk
+ 6XB0KjI07hnPTIA==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 07:20:21PM +0530, Siddharth Vadapalli wrote:
-> 
-> 
-> On 03-04-2023 18:43, Russell King (Oracle) wrote:
-> > On Mon, Apr 03, 2023 at 06:31:52PM +0530, Siddharth Vadapalli wrote:
-> >>
-> >>
-> >> On 03-04-2023 16:38, Russell King (Oracle) wrote:
-> >>> On Mon, Apr 03, 2023 at 04:31:04PM +0530, Siddharth Vadapalli wrote:
-> >>>> Move the interface mode specific configuration to the mac_config()
-> >>>> callback am65_cpsw_nuss_mac_config().
-> >>>>
-> >>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> >>>> ---
-> >>>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 10 +++++++---
-> >>>>  1 file changed, 7 insertions(+), 3 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >>>> index d17757ecbf42..74e099828978 100644
-> >>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >>>> @@ -1504,12 +1504,17 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
-> >>>>  							  phylink_config);
-> >>>>  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
-> >>>>  	struct am65_cpsw_common *common = port->common;
-> >>>> +	u32 mac_control = 0;
-> >>>>  
-> >>>>  	if (common->pdata.extra_modes & BIT(state->interface)) {
-> >>>> -		if (state->interface == PHY_INTERFACE_MODE_SGMII)
-> >>>> +		if (state->interface == PHY_INTERFACE_MODE_SGMII) {
-> >>>> +			mac_control |= CPSW_SL_CTL_EXT_EN;
-> >>>>  			writel(ADVERTISE_SGMII,
-> >>>>  			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
-> >>>> +		}
-> >>>>  
-> >>>> +		if (mac_control)
-> >>>> +			cpsw_sl_ctl_set(port->slave.mac_sl, mac_control);
-> >>>>  		writel(AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
-> >>>>  		       port->sgmii_base + AM65_CPSW_SGMII_CONTROL_REG);
-> >>>>  	}
-> >>>> @@ -1553,8 +1558,7 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
-> >>>>  
-> >>>>  	if (speed == SPEED_1000)
-> >>>>  		mac_control |= CPSW_SL_CTL_GIG;
-> >>>> -	if (interface == PHY_INTERFACE_MODE_SGMII)
-> >>>> -		mac_control |= CPSW_SL_CTL_EXT_EN;
-> >>>> +	/* TODO: Verify whether in-band is necessary for 10 Mbps RGMII */
-> >>>>  	if (speed == SPEED_10 && phy_interface_mode_is_rgmii(interface))
-> >>>>  		/* Can be used with in band mode only */
-> >>>>  		mac_control |= CPSW_SL_CTL_EXT_EN;
-> >>>
-> >>> I'm afraid I can see you haven't thought this patch through properly.
-> >>>
-> >>> am65_cpsw_nuss_mac_link_down() will call
-> >>> cpsw_sl_ctl_reset(port->slave.mac_sl); which has the effect of clearing
-> >>> to zero the entire MAC control register. This will clear
-> >>> CPSW_SL_CTL_EXT_EN that was set in am65_cpsw_nuss_mac_config() which is
-> >>> not what you want to be doing.
-> >>>
-> >>> Given that we have the 10Mbps issue with RGMII, I think what you want
-> >>> to be doing is:
-> >>>
-> >>> 1. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_config() if in SGMII
-> >>>    mode, otherwise clear this bit.
-> >>>
-> >>> 2. Clear the mac_control register in am65_cpsw_nuss_mac_link_down()
-> >>>    if in RMGII mode, otherwise preserve the state of
-> >>>    CPSW_SL_CTL_EXT_EN but clear all other bits.
-> >>>
-> >>> 3. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_link_up() if in
-> >>>    RGMII mode and 10Mbps.
-> >>
-> >> I plan to implement it as follows:
-> >> 1. Add a member "u32 mode_config" to "struct am65_cpsw_slave_data" in
-> >> "am65-cpsw-nuss.h".
-> >> 2. In am65_cpsw_nuss_mac_config(), store the value of mac_control in
-> >> "port->slave.mode_config".
-> >> 3. In am65_cpsw_nuss_mac_link_down(), after the reset via
-> >> cpsw_sl_ctl_reset(), execute:
-> >> cpsw_sl_ctl_set(port->slave.mac_sl, port->slave.mode_config) in order to
-> >> restore the configuration performed in am65_cpsw_nuss_mac_config().
-> >>
-> >> Please let me know in case of any suggestions to implement it in a
-> >> better manner.
-> > 
-> > Do you think this complexity is really worth it?
-> > 
-> > Let's look at what's available:
-> > 
-> > cpsw_sl_ctl_set() - sets bits in the mac control register
-> > cpsw_sl_ctl_clr() - clears bits in the mac control register
-> > cpsw_sl_ctl_reset() - sets the mac control register to zero
-> > 
-> > So, in mac_config(), we can do:
-> > 
-> > 	if (interface == SGMII)
-> > 		cpsw_sl_ctl_set(CPSW_SL_CTL_EXT_EN);
-> > 	else
-> > 		cpsw_sl_ctl_clr(CPSW_SL_CTL_EXT_EN);
-> 
-> While this will work for patch 1/3, once I add support for USXGMII mode
-> as in patch 3/3, I believe that I have to invert it, beginning by
-> invoking a cpsw_sl_ctl_clr(CPSW_SL_CTL_EXT_EN) at the start in
-> mac_config() followed by switching through the modes. If the mode is
-> SGMII, then I invoke cpsw_sl_ctl_set(CPSW_SL_CTL_EXT_EN), along with the
-> write to the MR_ADV_ABILITY_REG register to advertise SGMII. If the mode
-> is USXGMII, then I invoke:
-> cpsw_sl_ctl_set(CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN)
+> Gesendet: Montag, 03. April 2023 um 14:43 Uhr
+> Von: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.c=
+om>
+> Il 03/04/23 12:58, Frank Wunderlich ha scritto:
+> > From: Frank Wunderlich <frank-w@public-files.de>
+> >
+> > To store uncompressed bl2 more space is required than partition is
+> > actually defined.
+> >
+> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+>
+> If this doesn't get changed anymore, I'm fine with it... but a question =
+arises:
+> did you send patches to add your BPI-r3 board(s) to upstream u-boot?
 
-For patch 1, I did leave out the write for MR_ADV_ABILITY_REG, I had
-assumed you'd get the idea on that and merge the if() condition you
-already had with my suggestion above (which isn't literal code!)
+currently i use the rfb dts for r3 in uboot: arch/arm/dts/mt7986a-sd-rfb.d=
+ts
 
-In patch 3, you simply need to add:
+this file in upstream uboot has no partitions defined
 
-	if (interface == USXGMII)
-		cpsw_sl_ctl_set(CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN);
-	else
-		cpsw_sl_ctl_clr(CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN);
+https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/dts/mt7986a-sd=
+-rfb.dts#L144
 
-Thanks.
+but i added them there too and i wrote content by offsets to main device (=
+not to partitions).
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+https://github.com/frank-w/u-boot/blob/2023-04-bpi/arch/arm/dts/mt7986a-sd=
+-rfb.dts#L154
+
+so yes basicly it needs to be send there too, maybe as additional dts.
+
+regards Frank
+
+> > ---
+> > I used the definition i got from mtk used in their SDK uboot.
+> >
+> > Openwrt uses also the first reserved partition to give bl2 more
+> > space:
+> >
+> > https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dblob;f=3Dtarget/l=
+inux/mediatek/dts/mt7986a-bananapi-bpi-r3-nor.dts;h=3Df597b869abc80d1a73f4=
+4ebb85ad4da17376bb52;hb=3DHEAD#l22
+> >
+> > so imho it should be same in mainline to not require complex bl2
+> > compression.
+>
+> Regards,
+> Angelo
+>
+>
