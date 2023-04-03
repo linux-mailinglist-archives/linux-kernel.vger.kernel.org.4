@@ -2,78 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A9D6D3F3A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D526D3F3B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjDCIlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S231773AbjDCImD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbjDCIlb (ORCPT
+        with ESMTP id S231761AbjDCIl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:41:31 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D25F7A96;
-        Mon,  3 Apr 2023 01:41:28 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3338fDiA060195;
-        Mon, 3 Apr 2023 03:41:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680511273;
-        bh=T9A2pM3JjcyPu1X6ZFo4ztB36jbGIbbaklmXO/SWmcs=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=ZH0BlIm4tvdmvLh61T32CSVr0RHKoSUUti6fClncXlixfyLbMDvWbTpgk0kNWF/xo
-         LquKibjXZE8JbS9y2BnKbLMyAn6H/VJiDJ48jBKF9JrLdh9XyqF0GGTKt2fipEWqt2
-         EKTFU2fTVBWtP2Sz49oaiMiMEjeytj2XTKHDZrR4=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3338fDhN019262
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 3 Apr 2023 03:41:13 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 3
- Apr 2023 03:41:12 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 3 Apr 2023 03:41:12 -0500
-Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3338f9pK107643;
-        Mon, 3 Apr 2023 03:41:09 -0500
-Message-ID: <5114b342-6727-b27c-bc8c-c770ed4baa31@ti.com>
-Date:   Mon, 3 Apr 2023 14:11:08 +0530
+        Mon, 3 Apr 2023 04:41:59 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788C4EB70
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 01:41:49 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id h8so114152009ede.8
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 01:41:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1680511307;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=QTJlPe83VxVN/a/064MffW70nIdppbk/yJjbPFL4b3k=;
+        b=2LfxvaU3LlfabrRlPEyZCExJAxNv+/yycGqARiUwnciKzD5fIHuqXS864XRArjAQ8h
+         lrQgJcIOqR+nw3z3IjSxe4UmHBdCwwyGguBXplfv9d4bctz+iCX4NON6F6Y+bu+tje3z
+         fFWiIybNVXTfUehTV5zfYnLaTG/mg4ubFJ7K8luth9p801eSrnkYjyl5JlYkvcMGF6s9
+         M9rB/ho9d/oBu9KuxQEGkrEAyzIIhC0d0sjVteUVU+WTqG7g/D3NJ3r74CMETNI/uB/v
+         hTnKtpvgOJ1AllPKfEOPJwiEEGFF+mmbP939fQXD5n62EZUkuItGVb/VRa8CDskHRtib
+         pZLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680511307;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QTJlPe83VxVN/a/064MffW70nIdppbk/yJjbPFL4b3k=;
+        b=ikokMFlAr7P0bUgSl9oRUikn5YwJIgpmO9Y72jshMyWVdWBYL/wAxTjs7U2Qid0ItM
+         /bwXwVViYGNbY4W6IzuDNVO60XbP+joZWZYI9pxKlGf13weaOlzLITfBzeLXBaIbPR3A
+         q7nCB0b84GQCXUkG7PPO0z1JyMkARpnOYCPJuJoWUsm0PKJp598j+FHycEMgRZkayqGq
+         ihLzfIVYFN9MCulSWWgOJsPIuaiT/nNpsywkWwobMDS5Siz+wj64x1gjkFPjWYm3xqE+
+         IXwFoSUPCTleUoqzl3i+3y1mv/gGgDjCmeXBsWI7poqjWeTPmdjVTlOv5SQAhclQfPrP
+         eWDg==
+X-Gm-Message-State: AAQBX9fG1Z1xAUjIim8TLTL4Hsf/acoJx+KCydbonoCFLrnJjjCaQLAp
+        gwR0+68wxItHnH+rbCr9mUI2LQ==
+X-Google-Smtp-Source: AKy350ZPPxzS2GLb6MswkF7dL8Zh45iApF2+VGCigEs0XX4EroIHgdYu+N2dNA7hB5dczJUBUbVarg==
+X-Received: by 2002:a17:906:aeda:b0:931:20fd:3d09 with SMTP id me26-20020a170906aeda00b0093120fd3d09mr19595275ejb.17.1680511307670;
+        Mon, 03 Apr 2023 01:41:47 -0700 (PDT)
+Received: from localhost ([79.142.230.34])
+        by smtp.gmail.com with ESMTPSA id ld4-20020a1709079c0400b009486efb9192sm1535169ejc.11.2023.04.03.01.41.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 01:41:47 -0700 (PDT)
+References: <20230331215053.585759-1-y86-dev@protonmail.com>
+ <20230331215053.585759-4-y86-dev@protonmail.com>
+User-agent: mu4e 1.9.18; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     y86-dev@protonmail.com
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>
+Subject: Re: [PATCH v4 03/15] rust: sync: change error type of constructor
+ functions
+Date:   Mon, 03 Apr 2023 10:41:08 +0200
+In-reply-to: <20230331215053.585759-4-y86-dev@protonmail.com>
+Message-ID: <87y1n9jr1x.fsf@metaspace.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <rogerq@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH net-next 2/2] net: ethernet: ti: am65-cpsw: Enable USXGMII
- mode for J784S4 CPSW9G
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-References: <20230331065110.604516-3-s-vadapalli@ti.com>
- <ZCaSXQFZ/e/JIDEj@shell.armlinux.org.uk>
- <54c3964b-5dd8-c55e-08db-61df4a07797c@ti.com>
- <ZCaYve8wYl15YRxh@shell.armlinux.org.uk>
- <7a9c96f4-6a94-4a2c-18f5-95f7246e10d5@ti.com>
- <ZCasBMNxaWk2+XVO@shell.armlinux.org.uk>
- <dea9ae26-e7f2-1052-58cd-f7975165aa96@ti.com>
- <ZCbAE7IIc8HcOdxl@shell.armlinux.org.uk>
- <1477e0c3-bb92-72b0-9804-0393c34571d3@ti.com>
- <be166ab3-29f9-a18d-bbbd-34e7828453e4@ti.com>
- <ZCqPHM2/qismCaaN@shell.armlinux.org.uk>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <ZCqPHM2/qismCaaN@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,140 +80,67 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+y86-dev@protonmail.com writes:
 
-On 03/04/23 14:02, Russell King (Oracle) wrote:
-> On Mon, Apr 03, 2023 at 11:57:21AM +0530, Siddharth Vadapalli wrote:
->> Hello Russell,
->>
->> On 31/03/23 19:16, Siddharth Vadapalli wrote:
->>>
->>>
->>> On 31-03-2023 16:42, Russell King (Oracle) wrote:
->>>> On Fri, Mar 31, 2023 at 04:23:16PM +0530, Siddharth Vadapalli wrote:
->>>>>
->>>>>
->>>>> On 31/03/23 15:16, Russell King (Oracle) wrote:
->>>>>> On Fri, Mar 31, 2023 at 02:55:56PM +0530, Siddharth Vadapalli wrote:
->>>>>>> Russell,
->>>>>>>
->>>>>>> On 31/03/23 13:54, Russell King (Oracle) wrote:
->>>>>>>> On Fri, Mar 31, 2023 at 01:35:10PM +0530, Siddharth Vadapalli wrote:
->>>>>>>>> Hello Russell,
->>>>>>>>>
->>>>>>>>> Thank you for reviewing the patch.
->>>>>>>>>
->>>>>>>>> On 31/03/23 13:27, Russell King (Oracle) wrote:
->>>>>>>>>> On Fri, Mar 31, 2023 at 12:21:10PM +0530, Siddharth Vadapalli wrote:
->>>>>>>>>>> TI's J784S4 SoC supports USXGMII mode. Add USXGMII mode to the
->>>>>>>>>>> extra_modes member of the J784S4 SoC data. Additionally, configure the
->>>>>>>>>>> MAC Control register for supporting USXGMII mode. Also, for USXGMII
->>>>>>>>>>> mode, include MAC_5000FD in the "mac_capabilities" member of struct
->>>>>>>>>>> "phylink_config".
->>>>>>>>>>
->>>>>>>>>> I don't think TI "get" phylink at all...
->>>>>>>>>>
->>>>>>>>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>>>>>>>> index 4b4d06199b45..ab33e6fe5b1a 100644
->>>>>>>>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>>>>>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>>>>>>>> @@ -1555,6 +1555,8 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
->>>>>>>>>>>  		mac_control |= CPSW_SL_CTL_GIG;
->>>>>>>>>>>  	if (interface == PHY_INTERFACE_MODE_SGMII)
->>>>>>>>>>>  		mac_control |= CPSW_SL_CTL_EXT_EN;
->>>>>>>>>>> +	if (interface == PHY_INTERFACE_MODE_USXGMII)
->>>>>>>>>>> +		mac_control |= CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN;
->>>>>>>>>>
->>>>>>>>>> The configuration of the interface mode should *not* happen in
->>>>>>>>>> mac_link_up(), but should happen in e.g. mac_config().
->>>>>>>>>
->>>>>>>>> I will move all the interface mode associated configurations to mac_config() in
->>>>>>>>> the v2 series.
->>>>>>>>
->>>>>>>> Looking at the whole of mac_link_up(), could you please describe what
->>>>>>>> effect these bits are having:
->>>>>>>>
->>>>>>>> 	CPSW_SL_CTL_GIG
->>>>>>>> 	CPSW_SL_CTL_EXT_EN
->>>>>>>> 	CPSW_SL_CTL_IFCTL_A
->>>>>>>
->>>>>>> CPSW_SL_CTL_GIG corresponds to enabling Gigabit mode (full duplex only).
->>>>>>> CPSW_SL_CTL_EXT_EN when set enables in-band mode of operation and when cleared
->>>>>>> enables forced mode of operation.
->>>>>>> CPSW_SL_CTL_IFCTL_A is used to set the RMII link speed (0=10 mbps, 1=100 mbps).
->>>>>>
->>>>>> Okay, so I would do in mac_link_up():
->>>>>>
->>>>>> 	/* RMII needs to be manually configured for 10/100Mbps */
->>>>>> 	if (interface == PHY_INTERFACE_MODE_RMII && speed == SPEED_100)
->>>>>> 		mac_control |= CPSW_SL_CTL_IFCTL_A;
->>>>>>
->>>>>> 	if (speed == SPEED_1000)
->>>>>> 		mac_control |= CPSW_SL_CTL_GIG;
->>>>>> 	if (duplex)
->>>>>> 		mac_control |= CPSW_SL_CTL_FULLDUPLEX;
->>>>>>
->>>>>> I would also make mac_link_up() do a read-modify-write operation to
->>>>>> only affect the bits that it is changing.
->>>>>
->>>>> This is the current implementation except for the SGMII mode associated
->>>>> operation that I had recently added. I will fix that. Also, the
->>>>> cpsw_sl_ctl_set() function which writes the mac_control value performs a read
->>>>> modify write operation.
->>>>>
->>>>>>
->>>>>> Now, for SGMII, I would move setting CPSW_SL_CTL_EXT_EN to mac_config()
->>>>>> to enable in-band mode - don't we want in-band mode enabled all the
->>>>>> time while in SGMII mode so the PHY gets the response from the MAC?
->>>>>
->>>>> Thank you for pointing it out. I will move that to mac_config().
->>>>>
->>>>>>
->>>>>> Lastly, for RGMII at 10Mbps, you seem to suggest that you need RGMII
->>>>>> in-band mode enabled for that - but if you need RGMII in-band for
->>>>>> 10Mbps, wouldn't it make sense for the other speeds as well? If so,
->>>>>> wouldn't that mean that CPSW_SL_CTL_EXT_EN can always be set for
->>>>>> RGMII no matter what speed is being used?
->>>>>
->>>>> The CPSW MAC does not support forced mode at 10 Mbps RGMII. For this reason, if
->>>>> RGMII 10 Mbps is requested, it is set to in-band mode.
->>>>
->>>> What I'm saying is that if we have in-band signalling that is reliable
->>>> for a particular interface mode, why not always use it, rather than
->>>> singling out one specific speed as an exception? Does it not work in
->>>> 100Mbps and 1Gbps?
->>
->> While the CPSW MAC supports RGMII in-band status operation, the link partner
->> might not support it. I have also observed that forced mode is preferred to
->> in-band mode as implemented for another driver:
->> commit ade64eb5be9768e40c90ecb01295416abb2ddbac
->> net: dsa: microchip: Disable RGMII in-band status on KSZ9893
->>
->> and in the mail thread at:
->> https://lore.kernel.org/netdev/20200905160647.GJ3164319@lunn.ch/
->> based on Andrew's suggestion, using forced mode appears to be better.
->>
->> Additionally, I have verified that switching to in-band status causes a
->> regression. Thus, I will prefer keeping it in forced mode for 100 and 1000 Mbps
->> RGMII mode which is the existing implementation in the driver. Please let me know.
-> 
-> Okay, so what this seems to mean is if you have a PHY that does not
-> support in-band status in RGMII mode, then 10Mbps isn't possible -
-> because the MAC requires in-band status mode to select 10Mbps.
-> To put it another way, in such a combination, 10Mbps link modes
-> should not be advertised, nor should they be reported to userspace
-> as being supported.
-> 
-> Is that correct?
+> From: Benno Lossin <y86-dev@protonmail.com>
+>
+> Change the error type of the constructors of `Arc` and `UniqueArc` to be
+> `AllocError` instead of `Error`. This makes the API more clear as to
+> what can go wrong when calling `try_new` or its variants.
+>
+> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+> Cc: Gary Guo <gary@garyguo.net>
+> Cc: Andreas Hindborg <a.hindborg@samsung.com>
+> Cc: Alice Ryhl <aliceryhl@google.com>
+> ---
 
-Yes, if the PHY does not support in-band status, 10 Mbps RGMII will not work,
-despite the MAC supporting 10 Mbps in-band RGMII. However, I notice the following:
-If the RGMII interface speed is set to 10 Mbps via ethtool, but the:
-managed = "in-band-status";
-property is not mentioned in the device-tree, the interface is able to work with
-10 Mbps mode with the PHY. This is with the CPSW MAC configured for in-band mode
-of operation at 10 Mbps RGMII mode. Please let me know what this indicates,
-since it appears to me that 10 Mbps is functional in this special case (It might
-be an erroneous configuration).
+Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
 
-Regards,
-Siddharth.
+>  rust/kernel/sync/arc.rs | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> index f2f1c83d72ba..aa7135f0f238 100644
+> --- a/rust/kernel/sync/arc.rs
+> +++ b/rust/kernel/sync/arc.rs
+> @@ -17,11 +17,11 @@
+>
+>  use crate::{
+>      bindings,
+> -    error::Result,
+>      types::{ForeignOwnable, Opaque},
+>  };
+>  use alloc::boxed::Box;
+>  use core::{
+> +    alloc::AllocError,
+>      marker::{PhantomData, Unsize},
+>      mem::{ManuallyDrop, MaybeUninit},
+>      ops::{Deref, DerefMut},
+> @@ -149,7 +149,7 @@ unsafe impl<T: ?Sized + Sync + Send> Sync for Arc<T> {}
+>
+>  impl<T> Arc<T> {
+>      /// Constructs a new reference counted instance of `T`.
+> -    pub fn try_new(contents: T) -> Result<Self> {
+> +    pub fn try_new(contents: T) -> Result<Self, AllocError> {
+>          // INVARIANT: The refcount is initialised to a non-zero value.
+>          let value = ArcInner {
+>              // SAFETY: There are no safety requirements for this FFI call.
+> @@ -469,7 +469,7 @@ pub struct UniqueArc<T: ?Sized> {
+>
+>  impl<T> UniqueArc<T> {
+>      /// Tries to allocate a new [`UniqueArc`] instance.
+> -    pub fn try_new(value: T) -> Result<Self> {
+> +    pub fn try_new(value: T) -> Result<Self, AllocError> {
+>          Ok(Self {
+>              // INVARIANT: The newly-created object has a ref-count of 1.
+>              inner: Arc::try_new(value)?,
+> @@ -477,7 +477,7 @@ impl<T> UniqueArc<T> {
+>      }
+>
+>      /// Tries to allocate a new [`UniqueArc`] instance whose contents are not initialised yet.
+> -    pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>> {
+> +    pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>, AllocError> {
+>          Ok(UniqueArc::<MaybeUninit<T>> {
+>              // INVARIANT: The newly-created object has a ref-count of 1.
+>              inner: Arc::try_new(MaybeUninit::uninit())?,
+
