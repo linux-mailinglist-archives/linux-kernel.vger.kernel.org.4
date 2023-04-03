@@ -2,152 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFAD6D53D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5E26D53F4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbjDCVpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 17:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
+        id S233744AbjDCVtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 17:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbjDCVpi (ORCPT
+        with ESMTP id S233558AbjDCVsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:45:38 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBB849D9;
-        Mon,  3 Apr 2023 14:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680558305; x=1712094305;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kNRta8Lnta0mBFF+JAUbDr7was+Q3+2h+SR8Tx/D7kI=;
-  b=gakw99Og2P4emYXvml4wnQnqtInWQ5t5N6tFTcdfUTgFIwi9owWc9iPm
-   8GZ1JfkoCLgow6126a3Sd6un4wRHn8Q2vczixEbjtsM/fr4ofp15fDaaE
-   lkFEOoGo6N4RVBMQgibvSLGsyVGaXPDwzRF1x5Jy1Zs1U47dyR/TyVqMn
-   itjFKdgIpB51MMy4bOdkaqtspVdaupW7OIge11o3InGj3s+GogoVKNf69
-   TF3RVnYjLqSROKT+Ydci7KD8Fkx1q1Bm/EhK3TE19Ma5rJHhqWo5lHt83
-   d1K1atb3CN2XxChpFy8RlTAfhZJXdC3AVHvcpdjhAcVky4cGC27vm58lG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="404776413"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="404776413"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 14:44:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="755406809"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="755406809"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 14:44:21 -0700
-Date:   Mon, 3 Apr 2023 14:48:27 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v3 6/7] iommu/vt-d: Implement set_dev_pasid domain op
-Message-ID: <20230403144827.7b2c1ccb@jacob-builder>
-In-Reply-To: <a63e70cc-8890-bb99-3326-0b19e81ea92e@linux.intel.com>
-References: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
-        <20230331231137.1947675-7-jacob.jun.pan@linux.intel.com>
-        <a63e70cc-8890-bb99-3326-0b19e81ea92e@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 3 Apr 2023 17:48:52 -0400
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2541FDC;
+        Mon,  3 Apr 2023 14:48:39 -0700 (PDT)
+Received: by mail-oo1-f47.google.com with SMTP id m6-20020a4ae846000000b0053b9059edd5so4864604oom.3;
+        Mon, 03 Apr 2023 14:48:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680558519;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wrphn2RbQxhqb4KnvKWMrPJ8i5lbLoF9mCmsVowmwkg=;
+        b=dQ5nS698k9OhHk0Tvx2SpY/D+cCpd5/J3pfIF7O9NliTzHuk6sbG25fYnjyM5bgVIi
+         oiZ58+OyR+UIc/AWdsQSDVxN6nXjZtlN7AMk4f5O41Hr9GMjCwTJ2zvc0/hEV9fe3sKf
+         Zc7gulW+WJyxhqkk0W6XflCvtaUN3gs3ohJ9q4WJ3/EfIhn9po8R0AT092k9STaVfoHj
+         4gLoNTn5r5wts6YQaCrjM6molAbyIT/OhW2MtnG1xfk/ZjIn9V8/ngUMAajvQm2UBVh3
+         hanaSAat6cwxKGRkeHs1ljPyKt0B7iX0tpnTpI5G5YoTWH3DtHPDJeDoObj51PY2Dt9x
+         pGIQ==
+X-Gm-Message-State: AAQBX9euhph1sCwHpyToYrHoqmdeQogtWrZXrb9caBD/v8Zi39TKJXyI
+        Jqs/KZJEkE4QDRy825hi4g==
+X-Google-Smtp-Source: AKy350bjK0iTokfHBX3EJX8gHNogmylb/8/qT4XjwPfgChu7PTa1Yi9Ja5tOQ1XLB74XQSBBBWF+Mw==
+X-Received: by 2002:a4a:2c0e:0:b0:537:f9d4:a44c with SMTP id o14-20020a4a2c0e000000b00537f9d4a44cmr420692ooo.5.1680558518842;
+        Mon, 03 Apr 2023 14:48:38 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w129-20020a4a5d87000000b005414543377asm1113130ooa.20.2023.04.03.14.48.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 14:48:38 -0700 (PDT)
+Received: (nullmailer pid 1932535 invoked by uid 1000);
+        Mon, 03 Apr 2023 21:48:37 -0000
+Date:   Mon, 3 Apr 2023 16:48:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jack Zhu <jack.zhu@starfivetech.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
+Subject: Re: [PATCH v3 1/9] media: dt-bindings: Add bindings for JH7110
+ Camera Subsystem
+Message-ID: <20230403214837.GA1925690-robh@kernel.org>
+References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
+ <20230331121826.96973-2-jack.zhu@starfivetech.com>
+ <91874e63-553f-ced5-ce32-309ac2ebf6e5@linaro.org>
+ <b8d25a66-6464-78fe-b39b-ebb8a7f1a99c@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b8d25a66-6464-78fe-b39b-ebb8a7f1a99c@starfivetech.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolu,
-
-On Sat, 1 Apr 2023 21:48:36 +0800, Baolu Lu <baolu.lu@linux.intel.com>
-wrote:
-
-> On 2023/4/1 7:11, Jacob Pan wrote:
-> > Devices that use ENQCMDS to submit work on buffers mapped by DMA API
-> > must attach a PASID to the default domain of the device. In preparation
-> > for this use case, this patch implements set_dev_pasid() for the
-> > default_domain_ops.
-> > 
-> > If the device context has not been set up prior to this call, this will
-> > set up the device context in addition to PASID attachment.
-> > 
-> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > ---
-> >   drivers/iommu/intel/iommu.c | 21 +++++++++++++++++++++
-> >   1 file changed, 21 insertions(+)
-> > 
-> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> > index 52b9d0d3a02c..1ad9c5a4bd8f 100644
-> > --- a/drivers/iommu/intel/iommu.c
-> > +++ b/drivers/iommu/intel/iommu.c
-> > @@ -4784,6 +4784,26 @@ static void intel_iommu_remove_dev_pasid(struct
-> > device *dev, ioasid_t pasid) domain_detach_iommu(dmar_domain,
-> > info->iommu); }
-> >   
-> > +static int intel_iommu_attach_device_pasid(struct iommu_domain *domain,
-> > +					   struct device *dev,
-> > ioasid_t pasid) +{
-> > +	struct device_domain_info *info = dev_iommu_priv_get(dev);
-> > +	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-> > +	struct intel_iommu *iommu = info->iommu;
-> > +	int ret;
-> > +
-> > +	if (!pasid_supported(iommu))
-> > +		return -ENODEV;  
+On Mon, Apr 03, 2023 at 05:14:25PM +0800, Jack Zhu wrote:
 > 
-> As the domain ID will be set to the pasid entry, need to get a refcount
-> of the domain ID. Call domain_attach_iommu() here, and release it after
-> the pasid entry is torn down.
-dmar_domain_attach_device_pasid() below will call domain_attach_iommu() and
-release in intel_iommu_remove_dev_pasid(). The previous patch has
-consolidated the code path with device attachment.
-would it be sufficient?
-
-> > +	ret = prepare_domain_attach_device(domain, dev);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return dmar_domain_attach_device_pasid(dmar_domain, dev,
-> > pasid); +}
-> > +
-> > +
-> > +
-> >   const struct iommu_ops intel_iommu_ops = {
-> >   	.capable		= intel_iommu_capable,
-> >   	.domain_alloc		= intel_iommu_domain_alloc,
-> > @@ -4803,6 +4823,7 @@ const struct iommu_ops intel_iommu_ops = {
-> >   #endif
-> >   	.default_domain_ops = &(const struct iommu_domain_ops) {
-> >   		.attach_dev		=
-> > intel_iommu_attach_device,
-> > +		.set_dev_pasid          =
-> > intel_iommu_attach_device_pasid, .map_pages		=
-> > intel_iommu_map_pages, .unmap_pages		=
-> > intel_iommu_unmap_pages, .iotlb_sync_map		=
-> > intel_iommu_iotlb_sync_map,  
 > 
-> Best regards,
-> baolu
+> On 2023/4/1 4:09, Krzysztof Kozlowski wrote:
+> > On 31/03/2023 14:18, Jack Zhu wrote:
+> >> Add the bindings documentation for Starfive JH7110 Camera Subsystem
+> >> which is used for handing image sensor data.
+> >> 
+> >> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+> >> ---
+> >>  .../bindings/media/starfive,jh7110-camss.yaml | 159 ++++++++++++++++++
+> >>  MAINTAINERS                                   |   7 +
+> >>  2 files changed, 166 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> >> 
+> >> diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> >> new file mode 100644
+> >> index 000000000000..0235c70e7793
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> >> @@ -0,0 +1,159 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> >> +
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/media/starfive,jh7110-camss.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: Starfive SoC CAMSS ISP
+> >> +
+> >> +maintainers:
+> >> +  - Jack Zhu <jack.zhu@starfivetech.com>
+> >> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
+> >> +
+> >> +description:
+> >> +  The Starfive CAMSS ISP is a Camera interface for Starfive JH7110 SoC. It
+> >> +  consists of a VIN controller (Video In Controller, a top-level control until)
+> >> +  and an ISP.
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    const: starfive,jh7110-camss
+> >> +
+> >> +  reg:
+> >> +    maxItems: 2
+> >> +
+> >> +  reg-names:
+> >> +    items:
+> >> +      - const: syscon
+> >> +      - const: isp
+> >> +
+> >> +  clocks:
+> >> +    maxItems: 7
+> >> +
+> >> +  clock-names:
+> >> +    items:
+> >> +      - const: apb_func
+> >> +      - const: wrapper_clk_c
+> >> +      - const: dvp_inv
+> >> +      - const: axiwr
+> >> +      - const: mipi_rx0_pxl
+> >> +      - const: ispcore_2x
+> >> +      - const: isp_axi
+> >> +
+> >> +  resets:
+> >> +    maxItems: 6
+> >> +
+> >> +  reset-names:
+> >> +    items:
+> >> +      - const: wrapper_p
+> >> +      - const: wrapper_c
+> >> +      - const: axird
+> >> +      - const: axiwr
+> >> +      - const: isp_top_n
+> >> +      - const: isp_top_axi
+> >> +
+> >> +  power-domains:
+> >> +    items:
+> >> +      - description: JH7110 ISP Power Domain Switch Controller.
+> >> +
+> >> +  interrupts:
+> >> +    maxItems: 4
+> >> +
+> >> +  ports:
+> >> +    $ref: /schemas/graph.yaml#/properties/ports
+> >> +
+> >> +    properties:
+> >> +      port@0:
+> >> +        $ref: /schemas/graph.yaml#/properties/port
+> >> +        unevaluatedProperties: false
+> >> +        description:
+> >> +          Input port for receiving DVP data.
+> >> +
+> >> +        properties:
+> >> +          endpoint:
+> >> +            $ref: video-interfaces.yaml#
+> > 
+> > I don't think we use video-interfaces with port. Are you sure this works
+> > fine? Please extend the example with appropriate properties to check...
+> > 
+> Thank you for your review.
+> the following change, is it OK?
 
+What Krzysztof meant is port@0 needs to $ref '$defs/port-base' rather 
+then 'properties/port' to work with video-interfaces.yaml. If you made 
+that change, then this is fine.
 
-Thanks,
+> 
+> endpoint:
+>             $ref: video-interfaces.yaml#
+>             unevaluatedProperties: false
+>             
+>             properties:
+>               bus-width:
+>                 const: 8
+> 
+>               data-shift:
+>                 const: 2
+> 
+> in example:
+> 	port@0 {
+>                 reg = <0>;
+>                 vin_from_sc2235: endpoint {
+>                     remote-endpoint = <&sc2235_to_vin>;
+>                     bus-width = <8>;
+>                     data-shift = <2>;
+>                     hsync-active = <1>;
+>                     vsync-active = <0>;
+>                     pclk-sample = <1>;
+>                 };
+> 	};
+> 
+> 
+> >> +            unevaluatedProperties: false
+> >> +
+> >> +      port@1:
+> >> +        $ref: /schemas/graph.yaml#/properties/port
+> >> +        unevaluatedProperties: false
+> >> +        description:
+> >> +          Input port for receiving CSI data.
+> >> +
+> >> +        properties:
+> >> +          endpoint:
+> >> +            $ref: video-interfaces.yaml#
+> >> +            unevaluatedProperties: false
+> > 
+> > Same concerns here.
+> > 
+> for port@1, We don't use any properties as the allwinner,sun6i-a31-isp.yaml file.
+> Use the following modification, I don't know if it is ok?
 
-Jacob
+Yes.
+ 
+> port@1:
+>         $ref: /schemas/graph.yaml#/properties/port
+>         description: Input port for receiving CSI data.
+
+Rob
