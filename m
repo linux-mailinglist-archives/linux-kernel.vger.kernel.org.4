@@ -2,47 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7026D4B69
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C6F6D4B6A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234250AbjDCPIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        id S232605AbjDCPII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234158AbjDCPHz (ORCPT
+        with ESMTP id S234194AbjDCPH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:07:55 -0400
+        Mon, 3 Apr 2023 11:07:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465F518276
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:07:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E4C1CBA7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:07:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84CF561FD9
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:07:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4266C4339B;
-        Mon,  3 Apr 2023 15:07:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B8EF61A55
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:07:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72277C433EF;
+        Mon,  3 Apr 2023 15:07:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680534470;
-        bh=lf4upq3FdpRAqhv049TEQuv0s9Un/cwgAomIIpEaq0s=;
+        s=k20201202; t=1680534473;
+        bh=BSS3Ft8JQ9etJOn1zN0oTwzUaes1AtJBsgymC/v4kdc=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=iKoGuZuQuiB2AATagOH6QT06cLYsL9IFURw0gD3/EwCcErabq2543tv9bsmViTDXB
-         Ntl5DHlpgqVlZXvPmNd4vL6bsf1c03/hKV9DR5mtxuPdMqGgIMY0cbn29J/u68TUef
-         KU+pa+ddaDhqh8/zSWnYh9K7fdhpkUmCXXPvN5+q3Ik+VlkvZ3T0iAOPFPAW1cTsxZ
-         F0cOEI5nr96DvY+HgbJsiOsz9gjO22nE/nfp5/3pr9d53mF7/3AMweg9QiIKo+9vGF
-         DxRzecYn4/dw3M9u13AIKY5euxw/Bn9SgPflEgvmIk6vs3ehdH6OhK1tAAWikPn7ij
-         i2LrEc+qA57WQ==
+        b=LH6/UPc2zLS065s2+tZPcVdZUiadCX0D0+ucwbowf+9GAdMeVXzEUGVjxqu6zBBlu
+         PxGDkfaLD4x0nPXajNRS7WcMTdKpyQ74urU0X29Xc4DeJTHLLpP/8o4ch58oA4nZtI
+         3HCO81N1V9Ko9cJMH4tH3EAPvUPRGEkdB295IcU1lfq9sKwoBmhMSlCTNMpEGgJZHX
+         VIBB9CXQyFAXAjisMPGJDoLg2PLMITWOfOh/tNThpFHBiiJrO1tUc6EXj/GqEbXvht
+         YpXJ/9kftMUe9VMfRs7aK4bHQuJ1e54oQsnT6oR4q/KhNJTh6mg+dbNlmQbiCkVHZG
+         AQe0G0fPoHYUw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org,
-        Simon Trimmer <simont@opensource.cirrus.com>
-In-Reply-To: <20230328131018.6820-1-rf@opensource.cirrus.com>
-References: <20230328131018.6820-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH v2] firmware: cs_dsp: Add a debugfs entry containing
- control details
-Message-Id: <168053446957.47553.1396193248539137592.b4-ty@kernel.org>
-Date:   Mon, 03 Apr 2023 16:07:49 +0100
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+In-Reply-To: <20230329080418.1100-1-allen-kh.cheng@mediatek.com>
+References: <20230329080418.1100-1-allen-kh.cheng@mediatek.com>
+Subject: Re: [PATCH] ASoC: mediatek: mt8186: Move some prints to debug
+ level
+Message-Id: <168053447118.47553.13821701231639468315.b4-ty@kernel.org>
+Date:   Mon, 03 Apr 2023 16:07:51 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -56,18 +62,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023 14:10:18 +0100, Richard Fitzgerald wrote:
-> The file named 'controls' in the DSP's debugfs root contains a
-> formatted table describing the controls defined within the loaded DSP
-> firmware, it is of the form
+On Wed, 29 Mar 2023 16:04:18 +0800, Allen-KH Cheng wrote:
+> There are many log messages scattered throughout the mt8186 sound
+> drivers, and they are frequently triggered.
 > 
->   name: len region:offset addr fwname algid ctltype flags en dirty
+> To avoid spamming the console, move these messages to the debug level.
 > 
-> Where flags is represented as a character for each flag if set, or '-',
-> enabled is whether the control is enabled or disabled and dirty is
-> whether the control value is set in the cache but not the hardware.
 > 
-> [...]
 
 Applied to
 
@@ -75,8 +76,8 @@ Applied to
 
 Thanks!
 
-[1/1] firmware: cs_dsp: Add a debugfs entry containing control details
-      commit: 7a3f924cee4bdfe85eda4e636213e79d3fda6182
+[1/1] ASoC: mediatek: mt8186: Move some prints to debug level
+      commit: 3af24372964a8f999d62427c0585d9a4693ae4e4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
