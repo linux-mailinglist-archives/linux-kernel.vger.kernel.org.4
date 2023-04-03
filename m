@@ -2,116 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE666D4C92
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC18F6D4CA8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbjDCPvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S232204AbjDCPxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232617AbjDCPuw (ORCPT
+        with ESMTP id S233075AbjDCPwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:50:52 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5489F3A97;
-        Mon,  3 Apr 2023 08:50:29 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so32999106pjb.4;
-        Mon, 03 Apr 2023 08:50:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680537029;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DB5H55fJR1VLr/WAs2lRo3o9WITN/lrYSz7m0J6ndKo=;
-        b=OaJikLqLCncWm6Ezv97cOQQbPjqf76juh9puB9T99izatTGfSA4GZm5JgyuSKVu2il
-         06/IolluwQcUwf4kmZcK+UcNeepPS6JF46DuK0pUhVZ4e+xfEuzF/dtgUJGfXOd0psjK
-         XJKLqckxE4FrzYGHbll4X8T2Uq+q4rBQbfVPSg+AS9+aJUh5JsPAN+pnECLVgldsCIgp
-         EIimK5dr62rldl3N21MbF3mzp+dkAHOPjCTBKuETGQhmtevIBvbJL4ICEZ7gbU0iqbIq
-         9oq9XtUB+ipaiiOBfUc0BtIuLNVZ+QhklbZACgCDqDSTbx5xnjOWIMIVOEr892JXcnUT
-         5O/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680537029;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DB5H55fJR1VLr/WAs2lRo3o9WITN/lrYSz7m0J6ndKo=;
-        b=fQ4m/Y22wFWNAZxBU6E7jgxHC+eDqVKRGvuwQp8Puw/rNbrcaSpBtgNrtFh/QcWSpW
-         KLnCdp0npN9Up5IYz63Dj7mw8r1ton79MWSGSf1R2PVtFPQrIHu9XQj93cXOB72EKPUy
-         C+i8Sw2PtceSJbWC7ncD3M8fDqVFsG0d1rrdeEtmiuHuM/aQ3DBmAGB7ElvB85RejtUy
-         f9vhN9t2J5TvH7DWXbWzvCPOrR19Fri3BXDOdl2eTgEu4vsA5cfmexYwgBNrvq3VFRp3
-         oTgA0I5DET7DpqVFHpfFRYXaUzp84oBPgey4ls8zAcTYD6GUCQSautKeRBbsaAmOuSUJ
-         toxw==
-X-Gm-Message-State: AO0yUKVAh8LX3xtzS1LSiWRSa9loSUOk7hxCaL/JDxpsI//ku2wgwyQ9
-        B9TdNWhuQDbAQZwa4+kNLGI=
-X-Google-Smtp-Source: AK7set/9V06hsGqN7e2BIK0qRdb+PwZ+DtMj99zmbrQcWUTe7rVPgoJViW4rjIjgCrxAEo34Ikadlg==
-X-Received: by 2002:a05:6a20:2e90:b0:da:2fdf:385e with SMTP id bj16-20020a056a202e9000b000da2fdf385emr31150977pzb.49.1680537028548;
-        Mon, 03 Apr 2023 08:50:28 -0700 (PDT)
-Received: from [192.168.0.128] ([98.97.115.185])
-        by smtp.googlemail.com with ESMTPSA id r14-20020a62e40e000000b00627ee6dcb84sm7058242pfh.203.2023.04.03.08.50.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 08:50:28 -0700 (PDT)
-Message-ID: <30549453e8a40bb4f80f84e1a1427149b6b8b9e8.camel@gmail.com>
-Subject: Re: [PATCH] net: Added security socket
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     Denis Arefev <arefev@swemel.ru>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, trufanov@swemel.ru, vfh@swemel.ru
-Date:   Mon, 03 Apr 2023 08:50:26 -0700
-In-Reply-To: <20230403124323.26961-1-arefev@swemel.ru>
-References: <20230403124323.26961-1-arefev@swemel.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Mon, 3 Apr 2023 11:52:49 -0400
+Received: from out-31.mta0.migadu.com (out-31.mta0.migadu.com [91.218.175.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96B0448B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:52:21 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 11:51:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1680537095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g2gJhk2EudPdDf1rhN0+Yqo19FdGtI3AE5kQt4njseU=;
+        b=xvC3EoZpCjRIKJSK/hMwRQRQLoIWADFK/Lxj5KYc3TL23GHTWhquFpjxEiiIy/Ch8MjEuw
+        MwwFvPIR7ofTcOYm5vwb8vNmt1FJzlw8x3sfWJD8pdQaZ9Y6G6yDyGciA0PezYCox2paBw
+        EflYNGdHo2WjJQYRlkhAE5h/kg318tU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        willy@infradead.org, axboe@kernel.dk
+Subject: Re: [PATCH 2/2] block: Rework bio_for_each_folio_all()
+Message-ID: <ZCr1/K03uGF3neCY@moria.home.lan>
+References: <20230327174402.1655365-1-kent.overstreet@linux.dev>
+ <20230327174402.1655365-3-kent.overstreet@linux.dev>
+ <ZCrtEWEYGdGN++wX@infradead.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCrtEWEYGdGN++wX@infradead.org>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-04-03 at 15:43 +0300, Denis Arefev wrote:
-> 	Added security_socket_connect
-> 	in kernel_connect
->=20
-> Signed-off-by: Denis Arefev <arefev@swemel.ru>
-> ---
->  net/socket.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->=20
-> diff --git a/net/socket.c b/net/socket.c
-> index 9c92c0e6c4da..9afa2b44a9e5 100644
-> --- a/net/socket.c
-> +++ b/net/socket.c
-> @@ -3526,6 +3526,12 @@ EXPORT_SYMBOL(kernel_accept);
->  int kernel_connect(struct socket *sock, struct sockaddr *addr, int addrl=
-en,
->  		   int flags)
->  {
-> +	int err;
-> +
-> +	err =3D security_socket_connect(sock, (struct sockaddr *)addr, addrlen)=
-;
-> +	if (err)
-> +		return err;
-> +
->  	return sock->ops->connect(sock, addr, addrlen, flags);
->  }
->  EXPORT_SYMBOL(kernel_connect);
+On Mon, Apr 03, 2023 at 08:13:21AM -0700, Christoph Hellwig wrote:
+> On Mon, Mar 27, 2023 at 01:44:02PM -0400, Kent Overstreet wrote:
+> > +	bio_for_each_folio_all(fv, bio, iter)
+> > +		iomap_finish_folio_read(fv.fv_folio, fv.fv_offset, fv.fv_len, error);
+> 
+> Please avoid the overly long lines.  Also if we pass all arguments
+> of the folio_vec we might as ell just pass that folio_vec anyway.
+> 
+> > -	BUG_ON(iter->idx > bio->bi_vcnt || (iter->idx == bio->bi_vcnt && iter->done));
+> > +	BUG_ON(iter->idx > bio->bi_vcnt ||
+> > +	       (iter->idx == bio->bi_vcnt && iter->done));
+> 
+> Seems like this should be folded into the previous patch.  Also I
+> generally prefer to avoid top-level || in asserts and just do multiple
+> asserts, as that shows which condition triggered.
 
-Why would we need to be adding this? If we are already operating within
-kernel space it seems like it would be more problematic than not to
-have to push items out to userspace for security. Assuming an attacker
-is operating at the kernel level the system is already compromised is
-it not?
-
-Also assuming we do need this why are we only dealing with connect when
-we should probably also be looking at all the other kernel socket calls
-then as well?
-
+It should be folded in, but it's logically the same assert (advance
+past the end of the iter) so not worth the increased code size.
