@@ -2,171 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAD96D4B27
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B6E6D4B25
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234152AbjDCOze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S232256AbjDCOzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232919AbjDCOzV (ORCPT
+        with ESMTP id S234184AbjDCOzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:55:21 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F9F29BEF;
-        Mon,  3 Apr 2023 07:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1680533693; i=frank-w@public-files.de;
-        bh=gkNhZo5WW9JiUEfy4bmabMQloAjSbFROujFS1ASy7wI=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=FnNK3+zZEsxo9v5MO1V6kmIwFfs2pS1tnIpJ1svTVnTBSAQuR0LWBAWJOm+SVwloC
-         dCnzlyxWJD5KMqoREQCANsLU9G8JgjW9drqHkPFDsvh9jfBJcJjRQF82M1zwNAv4s1
-         +1WffXDpxap/TFB2HIzSLuyxlEacS+1CWi6vk2SozpglnnVKQZhT01mEEaNlVN+KPA
-         l6FdBnJflSCplFhlRfn9AmMxph/FGHyHroOQ+8BXxKc/UIxPM31dTeHbCCCzyB9n1c
-         RWjWumHl+3Kx7nKAjDH4zfAKuTJghAJqQ/4viWyQK6MLLZqmUwoJC55vAboVJ0kdLX
-         p4cWNUT+NMztw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.152.94] ([217.61.152.94]) by web-mail.gmx.net
- (3c-app-gmx-bap35.server.lan [172.19.172.105]) (via HTTP); Mon, 3 Apr 2023
- 16:54:53 +0200
+        Mon, 3 Apr 2023 10:55:18 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35A51695E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:54:54 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id s6-20020a056e02216600b003264c778ef1so6097071ilv.23
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:54:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680533694; x=1683125694;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vPkeM6iVQmH51RezuW+fSSVO087XA5s1H6NW6olKmYg=;
+        b=OKwnaFG6cFSr766vEQ6LCPNWPuwT9M+VXF8R4C9PX0xvH8ojH/oGgDz/oZf+pbm7rr
+         q5UPhMQ1m2GO+0oFzjmQrSPrUGYrqDRFU+U+I3DbiDThtFs91ex/nLqtWMVyR3taoMj1
+         VYypcDDtCypTvWUcVTjF+lf7xbX8ghzm9iYqIp7uwtZZlGCqss2cmgrDs+c5JQLmoOFx
+         HKMjKaQ0dVbbuK9PRyve271njMCkX4hf2oXqwQwwhbd8efJi0XuS+QLMRtcrNYmS6mkE
+         rPa+xNarblOg+DrnWA4a6ghBnNM3WpOBoGPPBOkQanYET8f+TGt3bGLoP8UYxFZ14LHj
+         cQ9A==
+X-Gm-Message-State: AAQBX9fBCUVk5PEq0nONu5TBX0Bg6oQBHdzXq5D1jTZZ8cYC1FP9tyyf
+        SZimr64vJRpN8UPkwP4sxHYxwA5XkREDv09j8zQdhl4EJsQ8
+X-Google-Smtp-Source: AKy350bJ7Pe47KEb4vQQRIqXVM9pfr+NX+zTWRzXW+KSApy6hrByjHeELRIXUQkGOGzUpsQeEjEjuOOAQ4+VMciJxz7pyS1yvNG0
 MIME-Version: 1.0
-Message-ID: <trinity-cdcc1156-f62c-40ac-b064-c2592e29e9eb-1680533693486@3c-app-gmx-bap35>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Aw: Re:  Re: [RFC] arm64: dts: use size of reserved partition for
- bl2
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 3 Apr 2023 16:54:53 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <0f43fa98-4fe6-bc9c-ed8d-be7cec0dda42@collabora.com>
-References: <20230403105818.29624-1-linux@fw-web.de>
- <601a8435-8e2a-2c25-5fe3-40be62269469@collabora.com>
- <trinity-f48dda5c-6787-4732-978a-a409bbb0a74d-1680530175673@3c-app-gmx-bap35>
- <0f43fa98-4fe6-bc9c-ed8d-be7cec0dda42@collabora.com>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:eQxPOhKQxRCjG+y+jb7ldEpx7Cd2jWY2jXjipOo/8vv/3VqJyHQ+OR9DxI+jxPbv/eOWv
- wBSGVypHtet6WG5zHJd8c4qlq7DxpFCLwNDZo+9+Mt2O/xUQuTJJUvBQW114xcy61NoEKMzRRXeJ
- xyLu4D/z+1RGKo7DRoYEg2QhFM3mArz4YcRFkRQHGXIbvEW79cWzUV/D3BuyO8xKCRYBk/WMMB7r
- ZqyB64IVHNvwIUKTUXlgD2Ngk3UaLTThtPuYgleO8KbtIloJfgMJsnfquH0/LfVNYaxMBG9Ku+cb
- Es=
-UI-OutboundReport: notjunk:1;M01:P0:ONbDQDeXwwc=;EmsoxrBGcGtICvod1XbsvYeF8hk
- NASSFUo53pUcG9GdMsv7cMgyoy7oDFoL+VHy1Dzy24j0gtNX21x/Tsi/Y2SDgxeUgeOXCZf7w
- ko9vX6iptgPC/sXgVvV26v2RXgMtr995wsrzPvgPAoXOLgkxd+h4KOlp/RBEu7GB9rZjfmHZl
- DW2N2gXnrFg3sCOr/QrXjn7+h9mitt4ypqmnb4STc7xqOy82oAB0BlpNMMkyQxl01Xvju2puk
- lK9t66ZKdRzijMxmRUH7ZMr6iZxuATwFZNhtX4MZ7dVjnE3Yag1tC5EO2AQOnWUSxNjTzczeZ
- 0QuuKOwiNSym15jEnP+n8J19nXVnlp5oUDOC+Y9d7Wm/VipGdmT/DrxKyJoL/vbN101YrJowr
- 2HKZ75RLgdfdYl+x4rmcov6r8CfiVySj0Cs+UjK3FR8HkV3fgWeP+/+h9+mf7q+FhhY4sTqhB
- bZOkwewf8+7ViYEY50n7lzBtGDQ1Mk/NCDBqumZbuasMRX9EJxjBcCf7LFg39tWJ03eI6FneS
- rzTWdUSTAipwHFcguKoIsrzaf0+PTzxdZGYZquDjFoQ74dz7oB1iepmCegOqOd58xlb7ixwum
- um3/AlvS2rf2mTaxfG+jv9FejJNbD48ji89EgjjSP3y88iireZDyBhZ2URJyenoffpK63qQ/L
- pX1iID6ffw89/EZGR9/gImGLBY0HngehqhwoSjqtXxKc2KUwN2h9FtExTJ3lnipc/xrbhmY7G
- 4TjIQaS3TeNEDqbAj984SKJ8TQsaGeKz1XSfb6hdHkkM6fVanSC81EVoDQuo+useil2H5Faz5
- kefX/BiWBXy5FFsIpSzIm2wA==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:218d:b0:322:fd25:872c with SMTP id
+ j13-20020a056e02218d00b00322fd25872cmr18242499ila.2.1680533694048; Mon, 03
+ Apr 2023 07:54:54 -0700 (PDT)
+Date:   Mon, 03 Apr 2023 07:54:54 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ddf5f505f86fbd72@google.com>
+Subject: [syzbot] [block?] WARNING in process_fd_request
+From:   syzbot <syzbot+1d4201dfe9f2386fdc0b@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Gesendet: Montag, 03. April 2023 um 16:04 Uhr
-> Von: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.c=
-om>
-> An: "Frank Wunderlich" <frank-w@public-files.de>
-> Cc: "Frank Wunderlich" <linux@fw-web.de>, linux-mediatek@lists.infradead=
-.org, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski" <krzysztof=
-.kozlowski+dt@linaro.org>, "Matthias Brugger" <matthias.bgg@gmail.com>, de=
-vicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@l=
-ists.infradead.org
-> Betreff: Re: Aw: Re: [RFC] arm64: dts: use size of reserved partition fo=
-r bl2
->
-> Il 03/04/23 15:56, Frank Wunderlich ha scritto:
-> >> Gesendet: Montag, 03. April 2023 um 14:43 Uhr
-> >> Von: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabor=
-a.com>
-> >> Il 03/04/23 12:58, Frank Wunderlich ha scritto:
-> >>> From: Frank Wunderlich <frank-w@public-files.de>
-> >>>
-> >>> To store uncompressed bl2 more space is required than partition is
-> >>> actually defined.
-> >>>
-> >>> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> >>
-> >> If this doesn't get changed anymore, I'm fine with it... but a questi=
-on arises:
-> >> did you send patches to add your BPI-r3 board(s) to upstream u-boot?
-> >
-> > currently i use the rfb dts for r3 in uboot: arch/arm/dts/mt7986a-sd-r=
-fb.dts
-> >
-> > this file in upstream uboot has no partitions defined
-> >
-> > https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/dts/mt7986=
-a-sd-rfb.dts#L144
-> >
-> > but i added them there too and i wrote content by offsets to main devi=
-ce (not to partitions).
-> >
-> > https://github.com/frank-w/u-boot/blob/2023-04-bpi/arch/arm/dts/mt7986=
-a-sd-rfb.dts#L154
-> >
-> > so yes basicly it needs to be send there too, maybe as additional dts.
-> >
->
-> I strongly encourage you to send this change to u-boot as well as changi=
-ng the
-> kernel devicetree... and when you do, you can add a reference to the lis=
-t and/or
-> commit @ u-boot on the commit that you'll send here for the kernel... bu=
-t there's
-> another question...
+Hello,
 
-imho uboot needs an own dts for the board (copy from rfb) for this because=
- of another change
-(tick_dly) and i have no rfb for testing.
+syzbot found the following issue on:
 
-> ...what happens if you run the kernel on a device with an older partitio=
-n layout?
-> Does anything break?
-> I don't think that anything does, since this is read-only anyway, but ju=
-st to be
-> sure... :-)
+HEAD commit:    ffe78bbd5121 Merge tag 'xtensa-20230327' of https://github..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=146bbb71c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d40b592130bb7abb
+dashboard link: https://syzkaller.appspot.com/bug?extid=1d4201dfe9f2386fdc0b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
-i have no information about the second partition from the old layout...it =
-was only named reserved.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-as openwrt also uses 0x40000 it should be save to use this value here.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1d4201dfe9f2386fdc0b@syzkaller.appspotmail.com
 
-if the bl2 does not fit into the bl2-partition (cut off), board simply doe=
-s not boot,
-thats why i want to increase it now. my current bl2 is 197K for nor and i =
-had this problem.
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 29261 at drivers/block/floppy.c:999 schedule_bh drivers/block/floppy.c:999 [inline]
+WARNING: CPU: 0 PID: 29261 at drivers/block/floppy.c:999 process_fd_request+0x6b/0x70 drivers/block/floppy.c:2847
+Modules linked in:
+CPU: 0 PID: 29261 Comm: kworker/u8:17 Not tainted 6.3.0-rc4-syzkaller-00039-gffe78bbd5121 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Workqueue: floppy floppy_shutdown
+RIP: 0010:schedule_bh drivers/block/floppy.c:999 [inline]
+RIP: 0010:process_fd_request+0x6b/0x70 drivers/block/floppy.c:2847
+Code: fc 5b bf 08 00 00 00 48 c7 c2 c0 78 45 8d 48 8b 35 6a a3 ec 0c 48 c7 05 7f 9e ec 0c b0 8c 1c 85 e9 ea 70 36 fc e8 05 6d 66 fc <0f> 0b eb ce 90 48 b8 00 00 00 00 00 fc ff df 41 55 49 89 fd 41 54
+RSP: 0018:ffffc90002f7fcf0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff88801d64ba80 RSI: ffffffff851c6b4b RDI: 0000000000000001
+RBP: 0000000000000282 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffffc90002f7fda8
+R13: ffffffff8d457950 R14: ffff88800019f200 R15: ffff888012489000
+FS:  0000000000000000(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000584eb404 CR3: 0000000023f74000 CR4: 0000000000150ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ floppy_shutdown+0x135/0x230 drivers/block/floppy.c:1889
+ process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-> Besides, you have to fix the commit description, but you knew that alrea=
-dy.
 
-sorry missed the mt7986: part in title, or did you mean another part?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-i put the additional information below --- to not be visible when patch wi=
-ll be applied.
-
-> P.S.: When you post a RFC, giving it the right commit title helps someti=
-mes! :-P
-
-yes, missed the mt7986-part here, just wanted to hear comments first if th=
-isis the right way
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
