@@ -2,206 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382506D453F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561AB6D4543
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 15:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbjDCNHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 09:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
+        id S232155AbjDCNHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 09:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbjDCNHh (ORCPT
+        with ESMTP id S232201AbjDCNHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:07:37 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A2211F;
-        Mon,  3 Apr 2023 06:07:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 3 Apr 2023 09:07:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619301C1D0;
+        Mon,  3 Apr 2023 06:07:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AD36E1FF6E;
-        Mon,  3 Apr 2023 13:07:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1680527254; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HSoJPiNm6YLdrvyBCRNcHzBUr7oKAdacKl0GHdUtJXA=;
-        b=VWqebsGWD8RAUsjZeeaP7K5SjdgTlp5fwMlBEgdMdHT4jVR3zeZ2tQhOESTQ3eQ0KKwUfe
-        6LqMQ1DTNheF5SqznhydptvbvXLXMBajFHSA6zry0wxZqbEJ8wjaJCDQTXeVSxmKPTsUSy
-        4nJLJVkcm4u7gVWb/VXyAdsRyAhfv8g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1680527254;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HSoJPiNm6YLdrvyBCRNcHzBUr7oKAdacKl0GHdUtJXA=;
-        b=h5q3i5np2j574eqECbyNVp3f1IFao5UeZNBpPDfBsYuTt2l+15XRQsVsYhXLolIoF85mlX
-        ouTblE3ueplUupCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23B561331A;
-        Mon,  3 Apr 2023 13:07:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id adnlB5bPKmS5YwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 03 Apr 2023 13:07:34 +0000
-Message-ID: <2a8278cf-d282-ada6-0161-3b9c6adcb12e@suse.cz>
-Date:   Mon, 3 Apr 2023 15:07:33 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16580B81A07;
+        Mon,  3 Apr 2023 13:07:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B1FC4339B;
+        Mon,  3 Apr 2023 13:07:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680527258;
+        bh=HyvmVdwLecMO/5pUko/0/tVvzcisFGvSd1666M2+4IE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q7nkhqhQZVhwhxxyFShS6DIWUj5uxvjgO4J2SWkzfBjgvXOn6Oz7P2n65rlSWXfWs
+         auIAcQ4KoXdq/8jmUs8vw5Ox94NIaIME2aejfKJYrI4a7aO8ERT1Iw9MVdjt7tqyvJ
+         cOqMMc4BXshX8D1CYwCSSHUeDnugPKpbPIuqimsY=
+Date:   Mon, 3 Apr 2023 15:07:36 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        "quic_jhugo@quicinc.com" <quic_jhugo@quicinc.com>,
+        "quic_carlv@quicinc.com" <quic_carlv@quicinc.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "helgaas@kernel.org" <helgaas@kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH v2] PCI: hv: Fix the definition of vector in
+ hv_compose_msi_msg()
+Message-ID: <2023040305-evaluator-come-fcb8@gregkh>
+References: <20221027205256.17678-1-decui@microsoft.com>
+ <ZCTsPFb7dBj2IZmo@boqun-archlinux>
+ <ZCT6JEK/yGpKHVLn@boqun-archlinux>
+ <SA1PR21MB13354973735A5E727F94A169BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCHv9 02/14] mm: Add support for unaccepted memory
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
- <20230330114956.20342-3-kirill.shutemov@linux.intel.com>
- <43234108-fa4f-7583-e3b4-2daa2de89fb0@suse.cz>
- <20230403100244.4sre7ki4ccusiiul@box>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230403100244.4sre7ki4ccusiiul@box>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SA1PR21MB13354973735A5E727F94A169BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/3/23 12:02, Kirill A. Shutemov wrote:
-> On Mon, Apr 03, 2023 at 11:26:53AM +0200, Vlastimil Babka wrote:
->> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
->> > Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
->> 
->> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+On Thu, Mar 30, 2023 at 03:23:45AM +0000, Dexuan Cui wrote:
+> > From: Boqun Feng <boqun.feng@gmail.com>
+> > Sent: Wednesday, March 29, 2023 7:56 PM
+> > To: Dexuan Cui <decui@microsoft.com>
+> >  ...
+> > On Wed, Mar 29, 2023 at 06:56:12PM -0700, Boqun Feng wrote:
+> > > [Cc stable]
+> > >
+> > > On Thu, Oct 27, 2022 at 01:52:56PM -0700, Dexuan Cui wrote:
+> > > > The local variable 'vector' must be u32 rather than u8: see the
+> > > > struct hv_msi_desc3.
+> > > >
+> > > > 'vector_count' should be u16 rather than u8: see struct hv_msi_desc,
+> > > > hv_msi_desc2 and hv_msi_desc3.
+> > > >
+> > >
+> > > Dexuan, I think this patch should only be in 5.15, because...
+> > >
+> > 
+> > Sorry, I meant:
+> > 
+> > "this patch should also be backported in 5.15"
+> > 
+> > Regards,
+> > Boqun
+> > 
+> > > > Fixes: a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
+> > >
+> > > ^^^ this commit is already in 5.15.y (commit id 92dcb50f7f09).
+> > >
+> > > Upstream id e70af8d040d2b7904dca93d942ba23fb722e21b1
+> > > Cc: <stable@vger.kernel.org> # 5.15.x
 > 
-> Thanks!
+> The faulty commit a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
+> is in all the stable branches, even including 4.14.y, so yes, the commit
+> e70af8d040d2 ("PCI: hv: Fix the definition of vector in hv_compose_msi_msg()")
+> should be backported to all the stable branches as well, including
+> v5.15.y, v5.10.y, v5.4.y, v4.19.y, v4.14.y.
 > 
->> Just a small suggestion below:
->> 
->> > +
->> > +static bool try_to_accept_memory(struct zone *zone, unsigned int order)
->> > +{
->> > +	long to_accept;
->> > +	int ret = false;
->> > +
->> > +	if (!static_branch_unlikely(&zones_with_unaccepted_pages))
->> > +		return false;
->> 
->> 
->> This potentially (depends on what compiler decides) means we'll call this
->> function just to skip the static branch. OTOH forcing it as inline would be
->> wasteful too. So I'd split that away and make the callers do that static
->> branch check inline. Just as deferred_pages_enabled() is used.
-> 
-> Like this?
+> e70af8d040d2 has a Fixes tag. Not sure why it's not automatically backported.
 
-Yep.
+Also, the most obvious reason, it does NOT apply there!  If this needs
+to go to 5.15.y and older, please send working backports of it.
 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 07e16e9b49c4..80fe5e4b6cca 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -390,6 +390,7 @@ EXPORT_SYMBOL(nr_online_nodes);
->  static bool page_contains_unaccepted(struct page *page, unsigned int order);
->  static void accept_page(struct page *page, unsigned int order);
->  static bool try_to_accept_memory(struct zone *zone, unsigned int order);
-> +static inline bool has_unaccepted_memory(void);
->  static bool __free_unaccepted(struct page *page);
->  
->  int page_group_by_mobility_disabled __read_mostly;
-> @@ -3464,8 +3465,10 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
->  				       gfp_mask)) {
->  			int ret;
->  
-> -			if (try_to_accept_memory(zone, order))
-> -				goto try_this_zone;
-> +			if (has_unaccepted_memory()) {
-> +				if (try_to_accept_memory(zone, order))
-> +					goto try_this_zone;
-> +			}
->  
->  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
->  			/*
-> @@ -3519,8 +3522,10 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
->  
->  			return page;
->  		} else {
-> -			if (try_to_accept_memory(zone, order))
-> -				goto try_this_zone;
-> +			if (has_unaccepted_memory()) {
-> +				if (try_to_accept_memory(zone, order))
-> +					goto try_this_zone;
-> +			}
->  
->  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
->  			/* Try again if zone has deferred pages */
-> @@ -7302,9 +7307,6 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
->  	long to_accept;
->  	int ret = false;
->  
-> -	if (!static_branch_unlikely(&zones_with_unaccepted_pages))
-> -		return false;
-> -
->  	/* How much to accept to get to high watermark? */
->  	to_accept = high_wmark_pages(zone) -
->  		    (zone_page_state(zone, NR_FREE_PAGES) -
-> @@ -7321,6 +7323,11 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
->  	return ret;
->  }
->  
-> +static inline bool has_unaccepted_memory(void)
-> +{
-> +	return static_branch_unlikely(&zones_with_unaccepted_pages);
-> +}
-> +
->  static bool __free_unaccepted(struct page *page)
->  {
->  	struct zone *zone = page_zone(page);
-> @@ -7398,6 +7405,11 @@ static bool try_to_accept_memory(struct zone *zone, unsigned int order)
->  	return false;
->  }
->  
-> +static inline bool has_unaccepted_memory(void)
-> +{
-> +	return false;
-> +}
-> +
->  static bool __free_unaccepted(struct page *page)
->  {
->  	BUILD_BUG();
+thanks,
 
+greg k-h
