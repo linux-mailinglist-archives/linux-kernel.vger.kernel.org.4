@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D676D5323
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2416D5328
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbjDCVKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 17:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        id S233591AbjDCVLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 17:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjDCVKj (ORCPT
+        with ESMTP id S233599AbjDCVK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:10:39 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C2540FB
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:10:33 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-544781e30easo299827317b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 14:10:33 -0700 (PDT)
+        Mon, 3 Apr 2023 17:10:56 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9DD40E0
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:10:41 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id i7-20020a626d07000000b005d29737db06so13948691pfc.15
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 14:10:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680556233;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=//UNXaJkupvybnqihLH4tdqWJ1GBF5jwORbNrJVaSe0=;
-        b=DRJF5cXOTsS/LZ3KebaxwMU0lc+/Jej3UYvboCeBtV0/WfX5QeUiusCTJoc0zC5Jcg
-         plMqOo2BQ1DA2CiYL85EH72m8Z9j399rXmblNDptRZ6wZg88Xufy2+xgJ69IS5gvNH6f
-         c85XRj8egUNY+GDJqpn93HrPEL1UvZKZ9IssnAbFg4QX+e5CWiaD9X2JCFGkpbOnngHm
-         Fmojfh0UYAw/hTEjQ27CLKzeQgxXPVpYaxb6m93X/4TcnfeVj9wjfFqZWwmhinm57aID
-         XyhQuJah8J81c8Fx6SUf9bbbQGOl42FPpbagJBqB4Znerfv0vT+pUUxP+wD0hCICjoY5
-         Vckg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680556233;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20210112; t=1680556241;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=//UNXaJkupvybnqihLH4tdqWJ1GBF5jwORbNrJVaSe0=;
-        b=pB4L5c8XP8vORZTiie7x2ewhM/iFmjE5TlfFKByaZjO6V9EDwvaZNOOtjniQc5CAlG
-         iAAxhMqfTl1yKb0G+gqxtQ4kBhNgpJX8dzlHyelpXM4if1XFOpcjdfvBm/aUu/UUBmI8
-         sWIlOwpGsyXXJsCYQoVViBQlH1c0MhkiffrcM8mpn5uiuMAJ8dOrtVw5BoMXPTHfnI9C
-         1ITALh3hEtmaoOq5+oCVolZvCW2yYTC0HMHeVeVGfy0RM3fK3zr18/WSU6/OfM6wuWP/
-         rTBC127TPK6046sKZAXZzDU0DjNZrye6URh+sxt5ktExk9o1ORd+1IZoZde5D6Tn/r5P
-         akUQ==
-X-Gm-Message-State: AAQBX9c54AV6VwaSzpemhsP8CVi5tb6vjMSMqLX+m2M40OawDupR1MB5
-        ZEKMTMcScOp9NMyHUj2y1ZFzdDen3+Fs
-X-Google-Smtp-Source: AKy350ZMp6ACZsErvCTEuiH+Z2OfEa4+QAIsUPiMcyrTzl+g73Co0rLafAmmVelLlQrhJVZfeRkJmPAJhVGP
+        bh=Zyk/CdJwNDC7IKrexRQvFlKvUXUTz4IaEWXwnZLm3Y4=;
+        b=ddG8fNo5spuvyPOm/6zV9FW1MqK9o8EJEtSo0/692esK9CiDrNwKs/lzRFenCPL6dt
+         uVVmjIAa0LkKeevBhrEUkSr5eVPi2VDC74LnAjBDdsn18VT8MLMHWHs+NTlsoeeCFNrL
+         4JUXBEEETmiTR9PO1X1KCc/Z4Ar9C5XgNSG7AXpQnBQF68+TGaSGkGRJt11m65j4rIFv
+         Ko/YrvdhDAQg1ThqYuI10M/ZbPKFUe9wcAUDekvdO4d4ruy4zBWbgRcTPZkL/qLpR5Nu
+         cCyRF1zxHZFjI9amVej3IkoGtRH9SaUNsGLldxoWpQJMMYbs5s/hHwY0HEVMzk6INCpq
+         8Xww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680556241;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zyk/CdJwNDC7IKrexRQvFlKvUXUTz4IaEWXwnZLm3Y4=;
+        b=DXe05Rdb4gxkuehouH8jZfiptZcPL8zokk9+z/0xM2BBIdjahsv9tD/IS1YYqq+1ef
+         i1cUEYow6PWAYDiErrLBaZc4svDUhdFv/eNvI7RhY8W89jTfzF8LfL3XREUl+CAVdmH9
+         fTabeA+E/5jRYTznMDlzNkAV13PS6udxXJX6lBjvO7ZrwBojP02AfzqpjD3R5e7uiP4e
+         NUFTATfcqnmli7pbNvw7I+ZbrJNg+IfnjsmOY8ZHB46hPzIsCxfPo/Df2JIaqoe9oqU+
+         B4GILnOLWPh/9M0tYPsgaoqeIk7kkGiBtbm6q6joKysLB+MfD8mIp0JKvlP82E5nbVam
+         iVaQ==
+X-Gm-Message-State: AAQBX9d6qG94u87hF6xTt5rJTBFotefFhm1Zo4IdueT3F+j2VRrSEG4I
+        QwmX3ji2vsx1IadjvOO2Ua0FjDTdQ2jX
+X-Google-Smtp-Source: AKy350ZLLTJV9gZYfLhEsplLJBqBSYCwNggDCwuKE12GZfHAxLeZsKfejAdI9dZPfCOPI3h1P+FsKmJhaDgG
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9dc:a977:817d:341])
- (user=irogers job=sendgmr) by 2002:a25:778a:0:b0:b82:410e:daae with SMTP id
- s132-20020a25778a000000b00b82410edaaemr333778ybc.9.1680556233240; Mon, 03 Apr
- 2023 14:10:33 -0700 (PDT)
-Date:   Mon,  3 Apr 2023 14:10:20 -0700
-Message-Id: <20230403211021.1892231-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a05:6a00:179f:b0:625:cf6d:b272 with SMTP
+ id s31-20020a056a00179f00b00625cf6db272mr21131pfg.6.1680556241365; Mon, 03
+ Apr 2023 14:10:41 -0700 (PDT)
+Date:   Mon,  3 Apr 2023 14:10:21 -0700
+In-Reply-To: <20230403211021.1892231-1-irogers@google.com>
+Message-Id: <20230403211021.1892231-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230403211021.1892231-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v1 1/2] perf build: Allow C++ demangle without libelf
+Subject: [PATCH v1 2/2] perf build: Warn for BPF skeletons if endian mismatches
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -74,26 +76,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cxa demangle support isn't dependent on libelf and so we no longer
-need to disable demangling if libelf isn't present.
+Done as a warning as I'm not fully confident of the test's robustness
+of comparing the macro definition of __BYTE_ORDER__.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.config | 1 -
- 1 file changed, 1 deletion(-)
+ tools/perf/Makefile.config | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
 diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 236d763181c5..dd203f0a2b7e 100644
+index dd203f0a2b7e..4be817ea4a59 100644
 --- a/tools/perf/Makefile.config
 +++ b/tools/perf/Makefile.config
-@@ -412,7 +412,6 @@ endif
+@@ -659,14 +659,17 @@ ifndef NO_BPF_SKEL
+   $(call feature_check,clang-bpf-co-re)
+   ifeq ($(feature-clang-bpf-co-re), 0)
+     dummy := $(error: ERROR: BPF skeletons unsupported. clang too old/not installed or build with NO_BPF_SKEL=1.)
+-  else
+-    ifeq ($(filter -DHAVE_LIBBPF_SUPPORT, $(CFLAGS)),)
+-      dummy := $(error: ERROR: BPF skeletons unsupported. BPF skeleton support requires libbpf or build with NO_BPF_SKEL=1.)
+-    else
+-      $(call detected,CONFIG_PERF_BPF_SKEL)
+-      CFLAGS += -DHAVE_BPF_SKEL
+-    endif
+   endif
++  ifeq ($(filter -DHAVE_LIBBPF_SUPPORT, $(CFLAGS)),)
++    dummy := $(error: ERROR: BPF skeletons unsupported. BPF skeleton support requires libbpf or build with NO_BPF_SKEL=1.)
++  endif
++  host_byte_order=$(echo ""|$(HOSTCC) -dM -E -|grep __BYTE_ORDER__)
++  target_byte_order=$(echo ""|$(CC) -dM -E -|grep __BYTE_ORDER__)
++  ifneq ($(host_byte_order), $(target_byte_order))
++    $(warning Possibly mismatched host and target endianness may break BPF skeletons)
++  endif
++  $(call detected,CONFIG_PERF_BPF_SKEL)
++  CFLAGS += -DHAVE_BPF_SKEL
+ endif
  
- ifdef NO_LIBELF
-   NO_DWARF := 1
--  NO_DEMANGLE := 1
-   NO_LIBUNWIND := 1
-   NO_LIBDW_DWARF_UNWIND := 1
-   NO_LIBBPF := 1
+ dwarf-post-unwind := 1
 -- 
 2.40.0.348.gf938b09366-goog
 
