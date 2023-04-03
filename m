@@ -2,168 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B79F76D5527
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 01:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F906D5524
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 01:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbjDCXTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 19:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S233852AbjDCXRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 19:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233876AbjDCXTM (ORCPT
+        with ESMTP id S233752AbjDCXRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 19:19:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4FC1FD7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:18:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680563908;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BFLHr8TD8RfqA6eplD+afVyXuh6c0xOW13sUk0OaDso=;
-        b=XQ0vwKe3OvxCpKXD8eDjfoSqdESY+0ISLfc1P9jFib1rIplnPopKDtWOhbUrmPMWw8vNNV
-        au58YYFA7TyCw+wlpTP0jwur/Fwpq7+zP8ZiDKwa7XwB4h/8C+bs9+3l3T5i8k5aS4f59+
-        Nl7wTRTq1MFfhaPdDXo1txS2oyj0MeQ=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-571-dWMuBxMjO9mz88oi2bhARQ-1; Mon, 03 Apr 2023 19:18:27 -0400
-X-MC-Unique: dWMuBxMjO9mz88oi2bhARQ-1
-Received: by mail-qt1-f198.google.com with SMTP id w13-20020ac857cd000000b003e37d3e6de2so20916482qta.16
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 16:18:26 -0700 (PDT)
+        Mon, 3 Apr 2023 19:17:41 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F189AD7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 16:17:40 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 185so7372471pgc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 16:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680563860;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fL5aL7ueJMbZFfg2C1YEce55qF2blBEt+U5Y2R4F0x8=;
+        b=heQGaq5JSUiONOze0+sgMt3BY4yh1MXR60iNGsJnSnCwUPz3PGzvkoSTCovdOnIanZ
+         Qv5+kttSgXzH/C+6iNGQyhvFen9aa8LT2KHMP7p8elo5gq4sDqoV5wGjjC6X72L385d4
+         KCGXmhKMTjpK75uOwiAmI0M6yd8H4qpM9tapP70G1dQ6avtihVJNYxggCYLGTtIhhdBO
+         yUIaEPWOxdV+43VRFix1Mgb/qMZs/5LvtCunIK5hCLor2bwMMQgXfL1k1N3T3T1h3a5Z
+         4/ZANM55rgv7h1LkUFTu0n0j0iO5fL4ULCQLzTBuJGVXO1im1LTC1mYHpMSaEwPnuxnr
+         d/Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680563906;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680563860;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BFLHr8TD8RfqA6eplD+afVyXuh6c0xOW13sUk0OaDso=;
-        b=rAsBOKP6kOHVkRfahG5wTAJsMgozKkCgZpXyM7+EyeqisDkvF4jXKI9fue1rWbzOSM
-         1rYwM3vkpGPcR7ifxHGt264Yvsi+dBwJ1uNDZWILgutQdCr0GBbmDgZbhMEEa81AJ84u
-         quxSzckvJTjFHitwKc9PIh2vTWw/G31HC9L/L8h1ePnJ48lBSic3kaDK2lL2Ichll4DG
-         m65oNj5E60diLbZMleN7xBdFPUz0FFrhhv3R8kryuFw9TrsA2Wnrus7Ye+qqzHY7Oztq
-         5lDHpDOaga1m7bLzEeFxzCe11y2OSmEtx81EmLFrEBlmt9VhWqe/3mBB5rrZLUch4Pgi
-         jCDw==
-X-Gm-Message-State: AAQBX9c/CVvPJG9QpQwgJs9SiDAfNTcVpljdRVse/SoYElKvt0cEc420
-        kFH4QmPwPWMHSfRRDrnY7HspDFKxVBP+bsZYWT3pS5yVODwxgQtDjJXtgwlIU9vab0W5D9G5FfC
-        B6rebnuGVoLLMWLCvZJ7l6yJzvaCgGKtqGcAqXpL1IGUGNvjAF0oocIFmJFGxm9542pKt973cBN
-        M8HvwOUOo=
-X-Received: by 2002:ad4:5dcb:0:b0:5b6:eef9:b8f7 with SMTP id m11-20020ad45dcb000000b005b6eef9b8f7mr778708qvh.6.1680563905878;
-        Mon, 03 Apr 2023 16:18:25 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z6BgYgGucfGKREPBAxx1VLlrIXk8leHEc8OtAlDEGX+cpBZbJtwN4DICEvNgHx2cM+TfCeSA==
-X-Received: by 2002:ad4:5dcb:0:b0:5b6:eef9:b8f7 with SMTP id m11-20020ad45dcb000000b005b6eef9b8f7mr778686qvh.6.1680563905606;
-        Mon, 03 Apr 2023 16:18:25 -0700 (PDT)
-Received: from thinkpad-p1.kanata.rendec.net (cpe00fc8d79db03-cm00fc8d79db00.cpe.net.fido.ca. [72.137.118.218])
-        by smtp.gmail.com with ESMTPSA id v6-20020ad45346000000b005e231177992sm2670207qvs.74.2023.04.03.16.18.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 16:18:25 -0700 (PDT)
-From:   Radu Rendec <rrendec@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 2/2] cacheinfo: Add arm64 early level initializer implementation
-Date:   Mon,  3 Apr 2023 19:15:51 -0400
-Message-Id: <20230403231551.1090704-3-rrendec@redhat.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230403231551.1090704-1-rrendec@redhat.com>
-References: <20230403231551.1090704-1-rrendec@redhat.com>
+        bh=fL5aL7ueJMbZFfg2C1YEce55qF2blBEt+U5Y2R4F0x8=;
+        b=kSxd3txs9JMOxaWlF8hAeDLlj1PFIn1WRlrH37IxFHwgHGJekqL5nX/dbXfLSTmIgK
+         WjmM0aiu6WVZnkhDSCSPufZIXDmed+TqgrRPrytcH7ul76g8PaiTKU5u1S4iWV3LcXbM
+         aCNH5EQcm72x3XJphcQtxTNUsMhsC2pDUqvycrENzyqbl58KFVVB7FoDCGEb6B9dW8j+
+         KUzZ3suBrhn5sWtHqUIaOU91BRzVCrkvxCVxp9qo5QrVQXBmzcrqJezvndEOlzVYV2jg
+         1Q1TLbPYf05fzgwfBjtCCZ0uWgUlWHETiw2xLGPIvSiUoPth7F2yr96qmW7sJk6I8y/m
+         mxSw==
+X-Gm-Message-State: AAQBX9c/tWHl1V1cTy3hVPcSgDxk1duMD4h1jvkZLQ5GULYKF7sIA8NX
+        xmih1/VyR6BtV0yhmCJHuBQi57XPErkZYQ06plj0Aw==
+X-Google-Smtp-Source: AKy350YYGanRvcClBEn93vto0mI4p4oBfDFO0zFPG7UTZ/7lVw8xoM9Ae6DqSongpPNh8kvMWVUapf0C7yNdA35C3cU=
+X-Received: by 2002:a63:eb50:0:b0:509:4ac5:7f44 with SMTP id
+ b16-20020a63eb50000000b005094ac57f44mr88131pgk.2.1680563860189; Mon, 03 Apr
+ 2023 16:17:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230403201930.2019419-1-rmoar@google.com>
+In-Reply-To: <20230403201930.2019419-1-rmoar@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 3 Apr 2023 16:17:29 -0700
+Message-ID: <CAGS_qxp5NAox7eGqfa48zi5=QEgB48ior-tXwtDFEqCJ=vFCEA@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: add tests for using current KUnit test field
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds an architecture specific early cache level detection
-handler for arm64. This is basically the CLIDR_EL1 based detection that
-was previously done (only) in init_cache_level().
+On Mon, Apr 3, 2023 at 1:19=E2=80=AFPM Rae Moar <rmoar@google.com> wrote:
+>
+> Create test suite called "kunit_current" to add test coverage for the use
+> of current->kunit_test, which returns the current KUnit test.
+>
+> Add two test cases:
+> - kunit_current_test to test current->kunit_test and the method
+>   kunit_get_current_test(), which utilizes current->kunit_test.
+>
+> - kunit_current_fail_test to test the method
+>   kunit_fail_current_test(), which utilizes current->kunit_test.
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
 
-This is part of a patch series that attempts to further the work in
-commit 5944ce092b97 ("arch_topology: Build cacheinfo from primary CPU").
-Previously, in the absence of any DT/ACPI cache info, architecture
-specific cache detection and info allocation for secondary CPUs would
-happen in non-preemptible context during early CPU initialization and
-trigger a "BUG: sleeping function called from invalid context" splat on
-an RT kernel.
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-This patch does not solve the problem completely for RT kernels. It
-relies on the assumption that on most systems, the CPUs are symmetrical
-and therefore have the same number of cache leaves. The cacheinfo memory
-is allocated early (on the primary CPU), relying on the new handler. If
-later (when CLIDR_EL1 based detection runs again on the secondary CPU)
-the initial assumption proves to be wrong and the CPU has in fact more
-leaves, the cacheinfo memory is reallocated, and that still triggers a
-splat on an RT kernel.
+Looks good and runs well here.
+It's nice to have a test for this given kunit_fail_current_test() went
+from a simple function call to now using `kunit_hooks` to do an
+indirect call and relying on the `kunit_running` static key.
 
-In other words, asymmetrical CPU systems *must* still provide cacheinfo
-data in DT/ACPI to avoid the splat on RT kernels (unless secondary CPUs
-happen to have less leaves than the primary CPU). But symmetrical CPU
-systems (the majority) can now get away without the additional DT/ACPI
-data and rely on CLIDR_EL1 based detection.
 
-Signed-off-by: Radu Rendec <rrendec@redhat.com>
----
- arch/arm64/kernel/cacheinfo.c | 32 ++++++++++++++++++++++++--------
- 1 file changed, 24 insertions(+), 8 deletions(-)
-
-diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinfo.c
-index c307f69e9b55..520d17e4ebe9 100644
---- a/arch/arm64/kernel/cacheinfo.c
-+++ b/arch/arm64/kernel/cacheinfo.c
-@@ -38,21 +38,37 @@ static void ci_leaf_init(struct cacheinfo *this_leaf,
- 	this_leaf->type = type;
- }
- 
--int init_cache_level(unsigned int cpu)
-+static void detect_cache_level(unsigned int *level, unsigned int *leaves)
- {
--	unsigned int ctype, level, leaves;
--	int fw_level, ret;
--	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
-+	unsigned int ctype;
- 
--	for (level = 1, leaves = 0; level <= MAX_CACHE_LEVEL; level++) {
--		ctype = get_cache_type(level);
-+	for (*level = 1, *leaves = 0; *level <= MAX_CACHE_LEVEL; (*level)++) {
-+		ctype = get_cache_type(*level);
- 		if (ctype == CACHE_TYPE_NOCACHE) {
--			level--;
-+			(*level)--;
- 			break;
- 		}
- 		/* Separate instruction and data caches */
--		leaves += (ctype == CACHE_TYPE_SEPARATE) ? 2 : 1;
-+		*leaves += (ctype == CACHE_TYPE_SEPARATE) ? 2 : 1;
- 	}
-+}
-+
-+int early_cache_level(unsigned int cpu)
-+{
-+	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
-+
-+	detect_cache_level(&this_cpu_ci->num_levels, &this_cpu_ci->num_leaves);
-+
-+	return 0;
-+}
-+
-+int init_cache_level(unsigned int cpu)
-+{
-+	unsigned int level, leaves;
-+	int fw_level, ret;
-+	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
-+
-+	detect_cache_level(&level, &leaves);
- 
- 	if (acpi_disabled) {
- 		fw_level = of_find_last_cache_level(cpu);
--- 
-2.39.2
-
+> ---
+>
+> Changes from v1->v2:
+> - Combine two test cases to test both ways of getting current test in
+>   kunit_current_test.
+> - Changes to comments.
+> - Add kunit_cleanup to kunit_current_fail_test.
+>
+>  lib/kunit/kunit-test.c | 42 +++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 41 insertions(+), 1 deletion(-)
+>
+> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+> index b63595d3e241..42e44caa1bdd 100644
+> --- a/lib/kunit/kunit-test.c
+> +++ b/lib/kunit/kunit-test.c
+> @@ -6,6 +6,7 @@
+>   * Author: Brendan Higgins <brendanhiggins@google.com>
+>   */
+>  #include <kunit/test.h>
+> +#include <kunit/test-bug.h>
+>
+>  #include "try-catch-impl.h"
+>
+> @@ -532,7 +533,46 @@ static struct kunit_suite kunit_status_test_suite =
+=3D {
+>         .test_cases =3D kunit_status_test_cases,
+>  };
+>
+> +static void kunit_current_test(struct kunit *test)
+> +{
+> +       /* Check results of both current->kunit_test and
+> +        * kunit_get_current_test() are equivalent to current test.
+> +        */
+> +       KUNIT_EXPECT_PTR_EQ(test, test, current->kunit_test);
+> +       KUNIT_EXPECT_PTR_EQ(test, test, kunit_get_current_test());
+> +}
+> +
+> +static void kunit_current_fail_test(struct kunit *test)
+> +{
+> +       struct kunit fake;
+> +
+> +       kunit_init_test(&fake, "fake test", NULL);
+> +       KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
+> +
+> +       /* Set current->kunit_test to fake test. */
+> +       current->kunit_test =3D &fake;
+> +
+> +       kunit_fail_current_test("This should make `fake` test fail.");
+> +       KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAILU=
+RE);
+> +       kunit_cleanup(&fake);
+> +
+> +       /* Reset current->kunit_test to current test. */
+> +       current->kunit_test =3D test;
+> +}
+> +
+> +static struct kunit_case kunit_current_test_cases[] =3D {
+> +       KUNIT_CASE(kunit_current_test),
+> +       KUNIT_CASE(kunit_current_fail_test),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite kunit_current_test_suite =3D {
+> +       .name =3D "kunit_current",
+> +       .test_cases =3D kunit_current_test_cases,
+> +};
+> +
+>  kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suit=
+e,
+> -                 &kunit_log_test_suite, &kunit_status_test_suite);
+> +                 &kunit_log_test_suite, &kunit_status_test_suite,
+> +                 &kunit_current_test_suite);
+>
+>  MODULE_LICENSE("GPL v2");
+>
+> base-commit: 7232282dd47cce6a780c9414bd9baccf232c7686
+> --
+> 2.40.0.348.gf938b09366-goog
+>
