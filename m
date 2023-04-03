@@ -2,115 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2CC6D4418
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A326D441B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbjDCMFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
+        id S232336AbjDCMFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbjDCMFO (ORCPT
+        with ESMTP id S231995AbjDCMFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:05:14 -0400
-Received: from mail-lj1-x264.google.com (mail-lj1-x264.google.com [IPv6:2a00:1450:4864:20::264])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032D5A273
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:05:00 -0700 (PDT)
-Received: by mail-lj1-x264.google.com with SMTP id a44so11430402ljr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 05:04:59 -0700 (PDT)
+        Mon, 3 Apr 2023 08:05:19 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2310103
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 05:05:11 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x3so116266074edb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 05:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680523498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
-        b=owWYS1VVibUABjXX7VSbtvRh0XtK1zmGJqqs+aa0pqCH5H4x0JQhsXiwVyNu+HHeyY
-         37mKtGwGmRcsh6ob2/NSrbFsxSqlE2ZztPtJJ869q7Zq07tIFXnzdIv7YbJ2ZKoCHlmw
-         e88iSnpzMFdgVnavEgGXPliO2xm0td647Oo5Q=
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112; t=1680523510;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aTnNv9XdGhYjOU9CcATjnOwylj3cx5IlVTw/VdMJWrc=;
+        b=1QVT5ZwH445IL+4hcb90apKtOn9XWo8AG3e4epOeRhuDSB0LUCiPjbbmuJyWq+tRZb
+         u/IgbDyskrFey489XvB7OkvalYU8dGfnykhLS+cPZEjA+onfYSoFNvsj9aT8jfL9ZoBd
+         gdzujFLSCOHiz4INorE7Di1m7BdejjdBE3XQhUtdBf69R0gbrkScWTUYd0Skvyxa+Y/h
+         aNbQSGo2iTrlLmWazm+hpPGmlATA71GLVf63Wd0caLF+ijf1VOzcsd/o3avhyjbRtYq0
+         MuJYMYq42icLOP0yB4Z3MMXeDh43gbbTPuT52FO9H2rlufmD9yYqDL4uZwCdQYxmYNZ6
+         Y9iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680523498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
-        b=0l++5AlBNyrFBq3XrEjU0uoC8hEFHvvi/GZbYrDzVLNZG5s44xjxL/d2rNlu3Um+Xn
-         g3CHkx/VLk4IW/UJRze/1FVCPNqPpJpRlrJxP16WOS6Vv9bikQcLfi9j29V/0yBVFa/P
-         bHyLTIo644ulNJjEMz+nupsyQbiWoHB4Z5xPzJh4qRpORzkMGgoUopfYrrKEmhJ15qiy
-         xk4thoiHl+JAQRRY4rjvKJ2y3KJ6YZytXBSyQU6nyGACHFGENHJbpTexsLOPdRriHTrD
-         xBSmzKjxLlzsu4KW2ul4Hwv14XeOplnxi0ITzURm79sPjm4MZN2KmQd2zxB2RG042Y7L
-         K1UA==
-X-Gm-Message-State: AAQBX9cnpNkacZfitk/775MTrS1I3Wx3ctnvbElszjuP6IenwuDn/im7
-        da+oAO7kChmWQ9Ko6w2XN2wiQ9N37XvBpV3iscL3F+BVLZr9
-X-Google-Smtp-Source: AKy350YerD1mBS1N0DhMKmHhnV36wHp/bArUw8WNCwFwDem7NnjRkJ70Xq8ME/XUvVF7/+TWaOidByobHMw/
-X-Received: by 2002:a2e:8786:0:b0:2a6:389f:d0d0 with SMTP id n6-20020a2e8786000000b002a6389fd0d0mr653005lji.37.1680523498077;
-        Mon, 03 Apr 2023 05:04:58 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id bg27-20020a05651c0b9b00b002905c01ea6dsm2299495ljb.31.2023.04.03.05.04.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 05:04:58 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Weqaar Janjua <weqaar.janjua@gmail.com>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] selftests: xsk: Disable IPv6 on VETH1
-Date:   Mon,  3 Apr 2023 14:04:51 +0200
-Message-Id: <20230403120451.31041-1-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1680523510;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aTnNv9XdGhYjOU9CcATjnOwylj3cx5IlVTw/VdMJWrc=;
+        b=3Dl/1qDRoXEQ5DzwW0Dy/S1fe+jABAvSzybGw7En2SVIVF05v+ysAPE6OaRxfp+g6H
+         QcXKyWIatGWmw04JRqqppAx5zYYgGYa1JHUT3eVRAmvkr0q6O1nUd2p+blqkkge6C2Ue
+         BlGMsOsnuIWdFG+8cbttnTbTyTJtAK6tHn2/FtT0nmO+OjsUvZEU8YcOCspshlAANCOr
+         YYUlp17dKk6UuVkXzQNCeihMG06iNnQjgQwy+SSbZdT4Xx5deCv4emVNZEywMSeXjanA
+         BsLMfVqKuQtLHKAggdYdh+hDzD81yaJZ1/a2Vg6bD8l0rfJr5FpnFOETGY5L/hsaxjR7
+         /PXQ==
+X-Gm-Message-State: AAQBX9fYgOWET3gJtNuT51jfmOhY7pak56j5JadoU/2jtNT2S03DaTfr
+        MJvI0r1CY6Eu7n5D1sBX0S6IUz1faqn1en3ddU6How==
+X-Google-Smtp-Source: AKy350YucQu0o4XWT9/o4B6ERGyItJAJlV74UNbolWd6EWP1LnSHsHXRJcMFXLDM0cgX2h5Cra/y5okQv4y+6QYR1CY=
+X-Received: by 2002:a17:906:7c54:b0:932:6a66:fc43 with SMTP id
+ g20-20020a1709067c5400b009326a66fc43mr17062399ejp.13.1680523510364; Mon, 03
+ Apr 2023 05:05:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230403093310.2271142-1-apatel@ventanamicro.com>
+ <20230403093310.2271142-7-apatel@ventanamicro.com> <osrpjiywxtkgxb5i6mfvxzfrzrnjv75uqzvlu3fouo4mqsktgj@blcmyjt3twqg>
+In-Reply-To: <osrpjiywxtkgxb5i6mfvxzfrzrnjv75uqzvlu3fouo4mqsktgj@blcmyjt3twqg>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 3 Apr 2023 17:34:57 +0530
+Message-ID: <CAAhSdy1JEQBiO55iCy97arO63VjGc+NicUvvwzTpK97W97LmJg@mail.gmail.com>
+Subject: Re: [PATCH v3 6/8] RISC-V: KVM: Add ONE_REG interface for AIA CSRs
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change fixes flakiness in the BIDIRECTIONAL test:
+On Mon, Apr 3, 2023 at 5:01=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
+m> wrote:
+>
+> On Mon, Apr 03, 2023 at 03:03:08PM +0530, Anup Patel wrote:
+> > We implement ONE_REG interface for AIA CSRs as a separate subtype
+> > under the CSR ONE_REG interface.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/uapi/asm/kvm.h | 8 ++++++++
+> >  arch/riscv/kvm/vcpu.c             | 8 ++++++++
+> >  2 files changed, 16 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uap=
+i/asm/kvm.h
+> > index 182023dc9a51..cbc3e74fa670 100644
+> > --- a/arch/riscv/include/uapi/asm/kvm.h
+> > +++ b/arch/riscv/include/uapi/asm/kvm.h
+> > @@ -79,6 +79,10 @@ struct kvm_riscv_csr {
+> >       unsigned long scounteren;
+> >  };
+> >
+> > +/* AIA CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+> > +struct kvm_riscv_aia_csr {
+> > +};
+> > +
+> >  /* TIMER registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+> >  struct kvm_riscv_timer {
+> >       __u64 frequency;
+> > @@ -107,6 +111,7 @@ enum KVM_RISCV_ISA_EXT_ID {
+> >       KVM_RISCV_ISA_EXT_ZIHINTPAUSE,
+> >       KVM_RISCV_ISA_EXT_ZICBOM,
+> >       KVM_RISCV_ISA_EXT_ZBB,
+>
+> Looks like this patch is also based on "[PATCH] RISC-V: KVM: Allow Zbb
+> extension for Guest/VM"
 
-    # [is_pkt_valid] expected length [60], got length [90]
-    not ok 1 FAIL: SKB BUSY-POLL BIDIRECTIONAL
+Yes, do you want me to change the order of dependency?
 
-When IPv6 is enabled, the interface will periodically send MLDv1 and
-MLDv2 packets. These packets can cause the BIDIRECTIONAL test to fail
-since it uses VETH0 for RX.
-
-For other tests, this was not a problem since they only receive on VETH1
-and IPv6 was already disabled on VETH0.
-
-Fixes: a89052572ebb ("selftests/bpf: Xsk selftests framework")
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- tools/testing/selftests/bpf/test_xsk.sh | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
-index b077cf58f825..377fb157a57c 100755
---- a/tools/testing/selftests/bpf/test_xsk.sh
-+++ b/tools/testing/selftests/bpf/test_xsk.sh
-@@ -116,6 +116,7 @@ setup_vethPairs() {
- 	ip link add ${VETH0} numtxqueues 4 numrxqueues 4 type veth peer name ${VETH1} numtxqueues 4 numrxqueues 4
- 	if [ -f /proc/net/if_inet6 ]; then
- 		echo 1 > /proc/sys/net/ipv6/conf/${VETH0}/disable_ipv6
-+		echo 1 > /proc/sys/net/ipv6/conf/${VETH1}/disable_ipv6
- 	fi
- 	if [[ $verbose -eq 1 ]]; then
- 	        echo "setting up ${VETH1}"
--- 
-2.39.2
-
+Regards,
+Anup
