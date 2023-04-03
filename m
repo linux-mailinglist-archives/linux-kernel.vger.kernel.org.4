@@ -2,204 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D64226D4088
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B156D4091
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 11:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbjDCJ06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 05:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55788 "EHLO
+        id S232067AbjDCJ1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 05:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjDCJ04 (ORCPT
+        with ESMTP id S232050AbjDCJ1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 05:26:56 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8844813D;
-        Mon,  3 Apr 2023 02:26:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 386091F8D9;
-        Mon,  3 Apr 2023 09:26:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1680514014; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 3 Apr 2023 05:27:21 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B416919B4;
+        Mon,  3 Apr 2023 02:27:17 -0700 (PDT)
+Received: (Authenticated sender: kory.maincent@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0E166240019;
+        Mon,  3 Apr 2023 09:27:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1680514035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dD5mb90+GHm9wBE5Mlt3//7atUZgg8lKi994A27Sm5Q=;
-        b=2S4SKiU+vFQ91fvzKCZ6togVsV3AMf8gjnEsEmFgV5+OIrAYALI9m7J4sLWXI84YzHMAHt
-        uD0vbXNmpAZekxEe2CM8bfdTotRG867XyeuglywITPGd4CBg7e0vH/7Vdnu1PTCbdQsXg+
-        4TZI4gHOMi091dpGlfZIs2lIR7n47Co=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1680514014;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dD5mb90+GHm9wBE5Mlt3//7atUZgg8lKi994A27Sm5Q=;
-        b=qg+E357xtXrxgek5i3iRfTZh2Dk/r2o6MikDtk1VGmCFUTOYw0jOHyxSByKtZmlfUqHQbz
-        6ANQNJJ4CgBPjVCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 80B1A13416;
-        Mon,  3 Apr 2023 09:26:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lfuoHt2bKmS9YQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 03 Apr 2023 09:26:53 +0000
-Message-ID: <43234108-fa4f-7583-e3b4-2daa2de89fb0@suse.cz>
-Date:   Mon, 3 Apr 2023 11:26:53 +0200
+        bh=xDTA5M0TPTdxazkjSb14CfP6TBrXBGZGlLYwzOvQD1Q=;
+        b=Rj7qgoRWo77w1eixf97yibFJqGOVzruQFnRqYeJrwQOEaKrZK91izbnm1xCSwgLaTrZzGF
+        f2KUZIg3GDP3YiEHAjOReM6DsVLuxXGg1X650YFUQ3ACdOyFKIJzYAnkzxzz7TR5pwH95c
+        3XpI64BNPyHSM2qt4JncDZ41eE+lTrhqqhexTnJAEw/uMdDV6PhuhiYfLFp3qIorxca+Rs
+        dBgpVCmo6cH3T38ugemL0x45W6RirrQWfVtF9sCQvY8e4OWP/ZEyxoIlIKNpoZP6b0n6um
+        SK8kjGphtZ6qoYKvHeCAYTql449Lyb2HcYD8TU8TNVWjXRHQjq4xPRyRmHRmQw==
+Date:   Mon, 3 Apr 2023 11:27:02 +0200
+From:   =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Max Georgiev <glipus@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Michael Walle <michael@walle.cc>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Minghao Chi <chi.minghao@zte.com.cn>,
+        Jie Wang <wangjie125@huawei.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Marco Bonelli <marco@mebeim.net>
+Subject: Re: [PATCH v3 3/5] net: Let the active time stamping layer be
+ selectable.
+Message-ID: <20230403112702.46e03c37@kmaincent-XPS-13-7390>
+In-Reply-To: <20230402171249.ntszn3wwvkjuyesg@skbuf>
+References: <20230310113533.l7flaoli7y3bmlnr@skbuf>
+        <b4ebfd3770ffa5ad1233d2b5e79499ee@walle.cc>
+        <20230310131529.6bahmi4obryy5dsx@soft-dev3-1>
+        <20230310164451.ls7bbs6pdzs4m6pw@skbuf>
+        <20230313084059.GA11063@pengutronix.de>
+        <20230316160920.53737d1c@kmaincent-XPS-13-7390>
+        <20230317152150.qahrr6w5x4o3eysz@skbuf>
+        <20230317120744.5b7f1666@kernel.org>
+        <CAP5jrPHep12hRbbcb5gXrZB5w_uzmVpEp4EhpfqW=9zC+zcu9A@mail.gmail.com>
+        <20230330143824.43eb0c56@kmaincent-XPS-13-7390>
+        <20230402171249.ntszn3wwvkjuyesg@skbuf>
+Organization: bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCHv9 02/14] mm: Add support for unaccepted memory
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
- <20230330114956.20342-3-kirill.shutemov@linux.intel.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230330114956.20342-3-kirill.shutemov@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 13:49, Kirill A. Shutemov wrote:
-> UEFI Specification version 2.9 introduces the concept of memory
-> acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
-> SEV-SNP, require memory to be accepted before it can be used by the
-> guest. Accepting happens via a protocol specific to the Virtual Machine
-> platform.
-> 
-> There are several ways kernel can deal with unaccepted memory:
-> 
->  1. Accept all the memory during the boot. It is easy to implement and
->     it doesn't have runtime cost once the system is booted. The downside
->     is very long boot time.
-> 
->     Accept can be parallelized to multiple CPUs to keep it manageable
->     (i.e. via DEFERRED_STRUCT_PAGE_INIT), but it tends to saturate
->     memory bandwidth and does not scale beyond the point.
-> 
->  2. Accept a block of memory on the first use. It requires more
->     infrastructure and changes in page allocator to make it work, but
->     it provides good boot time.
-> 
->     On-demand memory accept means latency spikes every time kernel steps
->     onto a new memory block. The spikes will go away once workload data
->     set size gets stabilized or all memory gets accepted.
-> 
->  3. Accept all memory in background. Introduce a thread (or multiple)
->     that gets memory accepted proactively. It will minimize time the
->     system experience latency spikes on memory allocation while keeping
->     low boot time.
-> 
->     This approach cannot function on its own. It is an extension of #2:
->     background memory acceptance requires functional scheduler, but the
->     page allocator may need to tap into unaccepted memory before that.
-> 
->     The downside of the approach is that these threads also steal CPU
->     cycles and memory bandwidth from the user's workload and may hurt
->     user experience.
-> 
-> The patch implements #1 and #2 for now. #2 is the default. Some
-> workloads may want to use #1 with accept_memory=eager in kernel
-> command line. #3 can be implemented later based on user's demands.
-> 
-> Support of unaccepted memory requires a few changes in core-mm code:
-> 
->   - memblock has to accept memory on allocation;
-> 
->   - page allocator has to accept memory on the first allocation of the
->     page;
-> 
-> Memblock change is trivial.
-> 
-> The page allocator is modified to accept pages. New memory gets accepted
-> before putting pages on free lists. It is done lazily: only accept new
-> pages when we run out of already accepted memory. The memory gets
-> accepted until the high watermark is reached.
+On Sun, 2 Apr 2023 20:12:49 +0300
+Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
 
-Great.
+> On Thu, Mar 30, 2023 at 02:38:24PM +0200, K=C3=B6ry Maincent wrote:
+> > Hello Max,
+> >=20
+> > On Fri, 17 Mar 2023 13:43:34 -0600
+> > Max Georgiev <glipus@gmail.com> wrote:
+> >  =20
+> > > Jakub,
+> > >=20
+> > > I started working on a patch introducing NDO functions for hw
+> > > timestamping, but unfortunately put it on hold.
+> > > Let me finish it and send it out for review. =20
+> >=20
+> > What is your timeline for it? Do you think of sending it in the followi=
+ngs
+> > weeks, months, years? If you don't have much time ask for help, I am not
+> > really a PTP core expert but I would gladly work with you on this. =20
+>=20
+> K=C3=B6ry, I believe you can start looking at that PHY driver whitelist
+> (for changing the default timestamping layer) in parallel with Maxim's
+> ndo_hwtstamp_set() effort, since they shouldn't depend on each other?
 
-> Architecture has to provide two helpers if it wants to support
-> unaccepted memory:
-> 
->  - accept_memory() makes a range of physical addresses accepted.
-> 
->  - range_contains_unaccepted_memory() checks anything within the range
->    of physical addresses requires acceptance.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
+Yes, that's true. I will also update the change from ioctl to netlink to ha=
+ndle
+the PTP layer selection.
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-
-Just a small suggestion below:
-
-> +
-> +static bool try_to_accept_memory(struct zone *zone, unsigned int order)
-> +{
-> +	long to_accept;
-> +	int ret = false;
-> +
-> +	if (!static_branch_unlikely(&zones_with_unaccepted_pages))
-> +		return false;
-
-
-This potentially (depends on what compiler decides) means we'll call this
-function just to skip the static branch. OTOH forcing it as inline would be
-wasteful too. So I'd split that away and make the callers do that static
-branch check inline. Just as deferred_pages_enabled() is used.
-
-> +	/* How much to accept to get to high watermark? */
-> +	to_accept = high_wmark_pages(zone) -
-> +		    (zone_page_state(zone, NR_FREE_PAGES) -
-> +		    __zone_watermark_unusable_free(zone, order, 0));
-> +
-> +	/* Accept at least one page */
-> +	do {
-> +		if (!try_to_accept_memory_one(zone))
-> +			break;
-> +		ret = true;
-> +		to_accept -= MAX_ORDER_NR_PAGES;
-> +	} while (to_accept > 0);
-> +
-> +	return ret;
-> +}
-
+K=C3=B6ry
