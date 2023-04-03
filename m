@@ -2,227 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F086D4E94
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436246D4E97
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbjDCRB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S233082AbjDCRCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233065AbjDCRBy (ORCPT
+        with ESMTP id S233038AbjDCRCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:01:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287A9273B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 10:01:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B47D6621FF
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 17:01:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0BF2C433EF;
-        Mon,  3 Apr 2023 17:01:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680541311;
-        bh=uXrZJiH0Mtmp4FJT/dtY3hRjJPCArV5RlY1AapJidO4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GstMxDwBfLTP7CnUqQWzbmyCUD9N6dcIxML3Sg6jEvhiAWT9YVSneVEYe/x3D0W7O
-         K0VEo4bibHaIHld938XOz5I5HsH9d6V+Q9GEwcvQnEYmTJeEUbMNtAx3SfQ2eh/NeB
-         iE2fohoHYwlK6tk3uacoXObGvS+EPvefR6RYJoqfHZAWd4I4Lp9y9BY28haCMvRAIF
-         vzrbXT5LPo2esg/IyE6RC1Z+fx5824Ln59xpb/pFxpx3G7J8fssie8Q/K1zR+KEc92
-         W68QNlW7VuL/7ZuujaHJ+0Zhu1Co0MaVDqLX+iE2cDwJxSiubNAZ5Zb0QZcgXtPj6b
-         gwqmm+DytPBUQ==
-Date:   Mon, 3 Apr 2023 10:01:49 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     yonggil.song@samsung.com,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] f2fs: Fix system crash due to lack of free space in
- LFS
-Message-ID: <ZCsGfTM1SjLblTVG@google.com>
-References: <CGME20230321001251epcms2p4c1fd48495643dbfca2cf82a433490bb8@epcms2p4>
- <20230321001251epcms2p4c1fd48495643dbfca2cf82a433490bb8@epcms2p4>
- <48f18a16-c6d8-3df4-55c5-11546e7dde35@kernel.org>
+        Mon, 3 Apr 2023 13:02:15 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2074.outbound.protection.outlook.com [40.107.93.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F402A30C8;
+        Mon,  3 Apr 2023 10:02:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZKCHR7rg1dmn0RK5UUWju5baUMJmWv9V8oqsmopZtJm2KPE+5EC60pRpwuKV1IH/Tn9rFPd9+PEfCH8o2vum0Hnmnx+p2aXWOXDpbPYq6+M+VJQVOEJLxRlIzW2YweaylX5a2LAkFyR84USONjLQoiSkyWjRUTO52qUYIZEArcx6TZoAO+wnCFpbHnxVkYTb3yikToRdlYDvhTi4gllNDHSBwHc+cjS3/5qDllLi/WK1hpuMzDToV55EasghJMrGgfXajhnIC3/o4p80JxxvMSBYMiViq3RKsXPAW9y6j/9fQz0fqwy+h2ev5FtJ/2D8gWnvIcxyMfU+ScFccB4nng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=E3IH1Nzcd6gzsA9/jZZTVaIfxHlmlIytlxbWDXUY8xQ=;
+ b=F9xITY2+TCti+6Lp0MbrfmPPCkcYXP/dRIZO6wxfNwIzq/anUTPf/Q1Trrt6+rivfmlu1pzgtldGQHQWhF99ac3s9fTtBnmTykP6t0lFvqjhPAjHellWtwWIhha/szmX1yXZqI7wVhFPygv/LyLMPDK2OeV3ewMQ3j9J3zvg4Jwd63uU32DZjRHyUr85ysgM4+coprD9lH3UL9hiw9CGzZ6s3cAjF5gG0Y8D5xkMJdLQ0rJF/GS6UzCNddBIVIcpVuASblkMj1s2yvTUTFXxkZh7WQmjWB9rC24fXn5gFkBEdc/AJYNiVLd8K1wSi5QVXWpaUOmrWcm47Gbi6NI2fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=E3IH1Nzcd6gzsA9/jZZTVaIfxHlmlIytlxbWDXUY8xQ=;
+ b=UErNbMwX4/sf0QR4YcUa4kfTczs2xNMTCPuy2afhA1X/XLveet+dODKiuOJKEnLqIXNf6ZyEZCSkX2PGFtVnlxPg+BlETE2sReHlb58FnmjtHbenPr0Yd628zXH9vAsqXolib/Qnog4vTmzf/fPnkv6HGR7aUeF0dkdpvRa1ERI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by DM4PR12MB5310.namprd12.prod.outlook.com (2603:10b6:5:39e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Mon, 3 Apr
+ 2023 17:02:06 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::e62f:89e5:df27:9e45]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::e62f:89e5:df27:9e45%6]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
+ 17:02:05 +0000
+Message-ID: <5aed9905-78ed-4c3c-9212-3bb826cd5846@amd.com>
+Date:   Mon, 3 Apr 2023 13:02:02 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Cc:     yazen.ghannam@amd.com, bp@alien8.de, tony.luck@intel.com,
+        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] EDAC/amd64: clean up some inconsistent indentings
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>
+References: <20230330012057.114811-1-yang.lee@linux.alibaba.com>
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+In-Reply-To: <20230330012057.114811-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BN0PR04CA0141.namprd04.prod.outlook.com
+ (2603:10b6:408:ed::26) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <48f18a16-c6d8-3df4-55c5-11546e7dde35@kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|DM4PR12MB5310:EE_
+X-MS-Office365-Filtering-Correlation-Id: f2628fe1-21b0-4759-df90-08db346526f4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c/RW2G8hKMUzpNjoL7YCeu0ZhU/I6JkIhb9ekBcj3NeQzjCE283ZOu0if5JZELIVNofA5gs8zQtB9+/KsBppquwHySgI7BLPafj0SKiK7RAjWIIli7cdBZv4KN/syxJVn6gprNp1wTSFi2R/gF6iVE5MRTq5mBSup5NqwAfBdu5LmtsLQTLmbD7OE1BDsMTzk1wYNcgLARkJBKWesPEm+V5Heyr/QpW6NT5rh2NravC5kt8nYT3Kr+o9b46GKSjTy+E9aYSnL0hQ/fuAN+/O6fhrGNcyutpv6N/EUWTth9lYapMPFsUFwEIBYlgr7XUxWIaJy+Qzc1cE22tPDAWB+ZGenS8VQ/cuplKEhAg2mkbtalRgiEeQs6+sESIakyfdq3yeKnLJBAgnUnJN5dUGLaHMgWNFYs4ehM09TeUZ8dWJKvivLWx5Wtz6iZsuMJqvUGr18SX7aT8VYBWLOISAbPFohd5CB1G1lfwMk3INfUQ2k9hVxln9wE5QyRt+leufdnpBJGFHi7gPsnTo+XpynZI1nESoRs7TI4ZaJcKVl/Ypi5lMJkLVkyvXqhtsnyPt7eSyWrxalKDGEexFLhbN5+dSg3/bQjbjR9cwg6K2SQbNX9svijadxT6YQBMjJ670
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(136003)(39860400002)(346002)(451199021)(966005)(31686004)(6666004)(186003)(26005)(53546011)(2906002)(5660300002)(31696002)(86362001)(8936002)(4744005)(44832011)(478600001)(6512007)(66946007)(66476007)(316002)(6916009)(4326008)(6506007)(83380400001)(41300700001)(2616005)(36756003)(38100700002)(8676002)(66556008)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eUdZanlOaXRtekRhOWNLY0tFcE1IRkFTU3QzNHpkdFZHR0pCOGlsODZCY04r?=
+ =?utf-8?B?OXZNN3ZXZlloUFVXdStnVjNONTlQQ0JONElWOWNMRVFBSHJ6TTlGNUs0Q2l1?=
+ =?utf-8?B?YnZnaHJWY3JEREtsMHZ1Nm5nMEtESUU3UndFUkx1NXZJeWdlR3ZCMEt3SjNR?=
+ =?utf-8?B?T2hlNDJwNGViOWs1bVZnK1RoN0RRN2ZWQ2s4NVp6dThYNGxtbkN4eXc4S1lI?=
+ =?utf-8?B?clhaVFVJWERlaFRuT01ZWTdua1BpVzdkVkVKVktpbXRYS3ZROUR2UFE3YnZ5?=
+ =?utf-8?B?SGd5NlhWOWI0N3RXTGpPczlCUk5tNFNkRFdvNHg5bWdZN0wxcWkvLzhhYUVM?=
+ =?utf-8?B?dFFSUVo4Y1MyMjQ4SkpWa1pyS3J1NHJCODVrSHN6ajBTTkg1STZxdWFGRjJN?=
+ =?utf-8?B?aVpJaWw1V2pQQTdkZEJTVjBZeXJWeDVVelVpa0htS1AwR1ZIbDFYakxnL1RL?=
+ =?utf-8?B?YVMxOUM3S2t2aU5tQlc2cEpiVUtTeUV0RGVpc1htb2FqSWtTUUhjNGdkNkhs?=
+ =?utf-8?B?U1FXVmxDd2s0RXFycEt6cXhaQnB0WHU5WGpvT3JocFc3Q2dSeEs2d2Z2YmVx?=
+ =?utf-8?B?SFlVM1cvMUYyVEZNSFJVT2hjbk02ckthWGg1WmxCSU1LTSt4NDA2QkFOSjcr?=
+ =?utf-8?B?Wks5Y1NDb3dyRjBCeXA2Umh6Z2dBZjFtT2NiTGorYVVzMmVieHJqZUdCU2hO?=
+ =?utf-8?B?MS9yUDdROGdvNGlyVm9MUXJqNVhwMENLdWV3dDBkOFc4UDM2amxzZ05QTVp1?=
+ =?utf-8?B?aldsMWxoNWQ5ZzRESWZlamE2RFlyUG5LWi9YVGc3SzlnL0NJVURjY1lPM29j?=
+ =?utf-8?B?aEVkODJrWmRPWXM4RDNZN0hDd2xDaXl5UWx2aUhmUVAxNGdFNDJ1U1Y5eEpr?=
+ =?utf-8?B?eGtweThTWmFveTFCVk9oWnR3SUxNT0pqMUtubDdiZ0dOWFZPN08rQ0dhMWFB?=
+ =?utf-8?B?SnlMNmVMVW4yOUZyVGRHRmlVM0dZcHY0NlliRmNQUXJJSUlDWXA2L0xncXRk?=
+ =?utf-8?B?OWg0V3ZGbHdCN25mN3kzT1F6Mko0WUJqVUFrYWxKaTJLNlA2b2I4Sm1PT0Rz?=
+ =?utf-8?B?UlJ5S3crQkxURUZxWXFFUjRTODdKb2k2N2YzTy92R1NxQ2EzTVpuNW9MYnVO?=
+ =?utf-8?B?N3V5cnM3OWpPV2V0VGg1OHFhYmxtV3B5VXFvQ1hyWHR5dWl4cUFsYlZySDRE?=
+ =?utf-8?B?RkVZYUdMcTR2Y0NGMUFFZk02U0lramZVbUxtSlpHcm5MRnhROVlFd1ZhK001?=
+ =?utf-8?B?Rm1rS0lqejB4ZDlabjRDWXZWV0FTODFyOWNhMHRmdXhRbUFNaW9RQk9DcC9B?=
+ =?utf-8?B?OUV1U2FsZmRSVFBzQ0V6Z3VOS0ZDRStwb1UvanV4enBpSDYydFpCZHk1dGhB?=
+ =?utf-8?B?QzVnWmtwZUdyU1pwRnZ3RXBiNFZqaXAveEFJWVJXZ1pPQmVwZnZaV3FubmNt?=
+ =?utf-8?B?R2I5TkF4eVl0eWVSdlhQS3cvaFhRZG1qZ3AvWHhkT25WT1d6TDAvOU9seGFz?=
+ =?utf-8?B?eW5LRmo2dTZjWGN6cURobjZTeEJYMkl0ckE4bEFQUDR5SDhCTTBBaGhoUUlS?=
+ =?utf-8?B?dzlzNjlPVGUzQ3Mvb3BBdlo1VVJ2bUltSGNEWVdEb1M0V3BHNkRGZmtRcjg2?=
+ =?utf-8?B?cnhvaHBjZFNPbTRZLytFTnYyNWZvUWcxQkhIQXIybkxxY1E1VHpUV3o1Z3Vr?=
+ =?utf-8?B?VDdJWmZEd0IxSXBZMjUrd2xwc3g3dnFCbEJ1aWt3NzB0ZVFDUHVGWUh6cEZJ?=
+ =?utf-8?B?Q0tyYURzMmIrbTBPNTJQcWdwUWhoa2tHM2JLQlJrTW9LTldlOWRFNXZyVzlH?=
+ =?utf-8?B?TStJTGxFN0hYRHcwRXQwb2lFKzJLa3MwMW95NWVpcWVCMGU2SGZ1Uk5ScDlo?=
+ =?utf-8?B?eU1UQTM0UEMwTktBRnNiLzRwSitWcmRET1ZsbjRyZWFMaWJTSnJHRlpsTksx?=
+ =?utf-8?B?VENFZjhjOW1vZFlHbTNBNmhyRWZUTEFQbWpqQnI5MDNkdmxJcDF5K0lIdFlx?=
+ =?utf-8?B?OVdEZ0tmNEhBQmpOeTJidGNpbGtObS9KTVZ3QTJQanFLeCtpZW8wTUlRbUs4?=
+ =?utf-8?B?N0l3SmJPb3A1K2N3V25KcGowOE9wSnloZU9EVlREeGp6eWdLS0ZvTWNZUGRh?=
+ =?utf-8?Q?Nx/m3T17pcx+XczKu0AE2DkkL?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2628fe1-21b0-4759-df90-08db346526f4
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 17:02:05.4928
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lCLKrnG7DJV5qohyS5dW3+0mj3vLJrHiqr1RZe/z6/Hifah3t0vF0OP1KwgooF022cRb+OMF02vqkPEd19MScQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5310
+X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01, Chao Yu wrote:
-> On 2023/3/21 8:12, Yonggil Song wrote:
-> > When f2fs tries to checkpoint during foreground gc in LFS mode, system
-> > crash occurs due to lack of free space if the amount of dirty node and
-> > dentry pages generated by data migration exceeds free space.
-> > The reproduction sequence is as follows.
-> > 
-> >   - 20GiB capacity block device (null_blk)
-> >   - format and mount with LFS mode
-> >   - create a file and write 20,000MiB
-> >   - 4k random write on full range of the file
-> > 
-> >   RIP: 0010:new_curseg+0x48a/0x510 [f2fs]
-> >   Code: 55 e7 f5 89 c0 48 0f af c3 48 8b 5d c0 48 c1 e8 20 83 c0 01 89 43 6c 48 83 c4 28 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc <0f> 0b f0 41 80 4f 48 04 45 85 f6 0f 84 ba fd ff ff e9 ef fe ff ff
-> >   RSP: 0018:ffff977bc397b218 EFLAGS: 00010246
-> >   RAX: 00000000000027b9 RBX: 0000000000000000 RCX: 00000000000027c0
-> >   RDX: 0000000000000000 RSI: 00000000000027b9 RDI: ffff8c25ab4e74f8
-> >   RBP: ffff977bc397b268 R08: 00000000000027b9 R09: ffff8c29e4a34b40
-> >   R10: 0000000000000001 R11: ffff977bc397b0d8 R12: 0000000000000000
-> >   R13: ffff8c25b4dd81a0 R14: 0000000000000000 R15: ffff8c2f667f9000
-> >   FS: 0000000000000000(0000) GS:ffff8c344ec80000(0000) knlGS:0000000000000000
-> >   CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >   CR2: 000000c00055d000 CR3: 0000000e30810003 CR4: 00000000003706e0
-> >   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> >   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> >   Call Trace:
-> >   <TASK>
-> >   allocate_segment_by_default+0x9c/0x110 [f2fs]
-> >   f2fs_allocate_data_block+0x243/0xa30 [f2fs]
-> >   ? __mod_lruvec_page_state+0xa0/0x150
-> >   do_write_page+0x80/0x160 [f2fs]
-> >   f2fs_do_write_node_page+0x32/0x50 [f2fs]
-> >   __write_node_page+0x339/0x730 [f2fs]
-> >   f2fs_sync_node_pages+0x5a6/0x780 [f2fs]
-> >   block_operations+0x257/0x340 [f2fs]
-> >   f2fs_write_checkpoint+0x102/0x1050 [f2fs]
-> >   f2fs_gc+0x27c/0x630 [f2fs]
-> >   ? folio_mark_dirty+0x36/0x70
-> >   f2fs_balance_fs+0x16f/0x180 [f2fs]
-> > 
-> > This patch adds checking whether free sections are enough before checkpoint
-> > during gc.
-> > 
-> > Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
-> > ---
-> >   fs/f2fs/gc.c      | 10 ++++++++--
-> >   fs/f2fs/gc.h      |  2 ++
-> >   fs/f2fs/segment.h | 27 ++++++++++++++++++++++-----
-> >   3 files changed, 32 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> > index 4546e01b2ee0..dd563866d3c9 100644
-> > --- a/fs/f2fs/gc.c
-> > +++ b/fs/f2fs/gc.c
-> > @@ -1773,6 +1773,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
-> >   		.iroot = RADIX_TREE_INIT(gc_list.iroot, GFP_NOFS),
-> >   	};
-> >   	unsigned int skipped_round = 0, round = 0;
-> > +	unsigned int need_lower = 0, need_upper = 0;
-> >   	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
-> >   				gc_control->nr_free_secs,
-> > @@ -1858,8 +1859,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
-> >   		}
-> >   	}
-> > -	/* Write checkpoint to reclaim prefree segments */
-> > -	if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
-> > +	ret = get_need_secs(sbi, &need_lower, &need_upper);
+On 3/29/23 21:20, Yang Li wrote:
+> drivers/edac/amd64_edac.c:1279 umc_determine_edac_cap() warn: inconsistent indenting
 > 
-> Can we avoid calling has_curseg_enough_space() for this case?
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4639
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
 
-Why? :P
+Hi Yang,
 
-> 
-> Maybe we can add one parameter curseg_no_space for get_need_secs() to get
-> result of has_curseg_enough_space()?
-> 
-> static inline void get_need_secs(struct f2fs_sb_info *sbi,
-> 				unsigned int *lower, unsigned int *upper,
-> 				bool *curseg_no_space);
-> {
-> ...
-> 	*lower = node_secs + dent_secs;
-> 	*upper = *lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
-> 
-> 	if (curseg_no_space)
-> 		*curseg_no_space =
-> 			!has_curseg_enough_space(sbi, node_blocks, dent_blocks);
-> }
-> 
-> Then we can use get_need_secs(, , NULL) in f2fs_gc(),
-> and use get_need_secs(, , &curseg_no_space) in has_not_enough_free_secs()?
-> 
-> Thoughts?
-> 
-> Thanks,
-> 
-> > +
-> > +	/*
-> > +	 * Write checkpoint to reclaim prefree segments.
-> > +	 * We need more three extra sections for writer's data/node/dentry.
-> > +	 */
-> > +	if (free_sections(sbi) <= need_upper + NR_GC_CHECKPOINT_SECS &&
-> >   				prefree_segments(sbi)) {
-> >   		ret = f2fs_write_checkpoint(sbi, &cpc);
-> >   		if (ret)
-> > diff --git a/fs/f2fs/gc.h b/fs/f2fs/gc.h
-> > index 19b956c2d697..e81d22bf3772 100644
-> > --- a/fs/f2fs/gc.h
-> > +++ b/fs/f2fs/gc.h
-> > @@ -30,6 +30,8 @@
-> >   /* Search max. number of dirty segments to select a victim segment */
-> >   #define DEF_MAX_VICTIM_SEARCH 4096 /* covers 8GB */
-> > +#define NR_GC_CHECKPOINT_SECS (3)	/* data/node/dentry sections */
-> > +
-> >   struct f2fs_gc_kthread {
-> >   	struct task_struct *f2fs_gc_task;
-> >   	wait_queue_head_t gc_wait_queue_head;
-> > diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-> > index be8f2d7d007b..52a6d1ed4f24 100644
-> > --- a/fs/f2fs/segment.h
-> > +++ b/fs/f2fs/segment.h
-> > @@ -605,8 +605,12 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
-> >   	return true;
-> >   }
-> > -static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
-> > -					int freed, int needed)
-> > +/*
-> > + * calculate needed sections for dirty node/dentry
-> > + * and call has_curseg_enough_space
-> > + */
-> > +static inline bool get_need_secs(struct f2fs_sb_info *sbi,
-> > +				  unsigned int *lower, unsigned int *upper)
-> >   {
-> >   	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
-> >   					get_pages(sbi, F2FS_DIRTY_DENTS) +
-> > @@ -616,20 +620,33 @@ static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
-> >   	unsigned int dent_secs = total_dent_blocks / CAP_BLKS_PER_SEC(sbi);
-> >   	unsigned int node_blocks = total_node_blocks % CAP_BLKS_PER_SEC(sbi);
-> >   	unsigned int dent_blocks = total_dent_blocks % CAP_BLKS_PER_SEC(sbi);
-> > +
-> > +	*lower = node_secs + dent_secs;
-> > +	*upper = *lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
-> > +
-> > +	return !has_curseg_enough_space(sbi, node_blocks, dent_blocks);
-> > +}
-> > +
-> > +static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
-> > +					int freed, int needed)
-> > +{
-> >   	unsigned int free, need_lower, need_upper;
-> > +	bool curseg_enough;
-> >   	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
-> >   		return false;
-> > +	curseg_enough = get_need_secs(sbi, &need_lower, &need_upper);
-> > +
-> >   	free = free_sections(sbi) + freed;
-> > -	need_lower = node_secs + dent_secs + reserved_sections(sbi) + needed;
-> > -	need_upper = need_lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
-> > +	need_lower += (needed + reserved_sections(sbi));
-> > +	need_upper += (needed + reserved_sections(sbi));
-> >   	if (free > need_upper)
-> >   		return false;
-> >   	else if (free <= need_lower)
-> >   		return true;
-> > -	return !has_curseg_enough_space(sbi, node_blocks, dent_blocks);
-> > +	return curseg_enough;
-> >   }
-> >   static inline bool f2fs_is_checkpoint_ready(struct f2fs_sb_info *sbi)
+Thanks for the patch.
+
+It looks like this issue was introduced with the following commit.
+
+f6a4b4a1aa16 ("EDAC/amd64: Split determine_edac_cap() into dct/umc functions")
+
+Can you please include a Fixes tag and describe your changes in the commit message?
+
+Thanks,
+Yazen
