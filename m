@@ -2,314 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754246D41A8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CC06D41AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbjDCKQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S231839AbjDCKQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjDCKQK (ORCPT
+        with ESMTP id S230269AbjDCKQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:16:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D0765BC;
-        Mon,  3 Apr 2023 03:16:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FB526179B;
-        Mon,  3 Apr 2023 10:16:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DF2C433AA;
-        Mon,  3 Apr 2023 10:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680516967;
-        bh=5HFO1/RS3+GfhEvCCUbP0dlLKdHoh/rzuLr+Hm1DWRc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tMVrA1iW3mfBUp6m3x9ahp3O1uvEXmZ9qoCzeBdhKRrSuSckrkcHK7B/1I1PkoGVD
-         +E3Sws/4kGXbZ538hkiZNnOotQCG+6anbV9ddH9+t/M6NxcpqqaI4d223UEi0SbMlh
-         AWTRy4fd6QbC3U57sc7+Z6GNt55f6+x0N9lm+rqiEAyyOLXW5YF2XeHdXdfDppoYwi
-         RV2+6qyixo0Kda0KRZhWzoTc08QMwCetagk3Uc549pMPEBlzr62nyO3LpnFVvOmFD7
-         y3eFCiFPP+hyo8pSgorw8RLLaSX5wWH+W7HkIyGqat9JQTpzSj8iVRw59ih/IyO4Q0
-         7i29cV5h5HBCA==
-Received: by mail-lf1-f45.google.com with SMTP id q16so37331653lfe.10;
-        Mon, 03 Apr 2023 03:16:07 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eMohcz1ONMzRQIOu9IfboZ3YNMfsTjw6MSPag+/Q7ylKI9ksiL
-        H1qY/blQDUv3Q9mxitdRHm8YEl0g9Zbqz2Rh6w==
-X-Google-Smtp-Source: AKy350a6AWS0wXlKuF5pe+AmTsaAEGr6dp/NJrmnFPufQQTE7JlMBuNWDF4zk2dhoeM1A4qjskgjTlKotAgPQvIU9cg=
-X-Received: by 2002:ac2:43ce:0:b0:4eb:2643:d5cf with SMTP id
- u14-20020ac243ce000000b004eb2643d5cfmr4522340lfl.7.1680516965357; Mon, 03 Apr
- 2023 03:16:05 -0700 (PDT)
+        Mon, 3 Apr 2023 06:16:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0A9983D4
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 03:16:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CCB851063;
+        Mon,  3 Apr 2023 03:17:13 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C08963F840;
+        Mon,  3 Apr 2023 03:16:27 -0700 (PDT)
+Message-ID: <612a9010-6a76-6df3-9223-651e956d7cb8@arm.com>
+Date:   Mon, 3 Apr 2023 11:16:26 +0100
 MIME-Version: 1.0
-References: <20230403071929.360911-1-jstephan@baylibre.com> <20230403071929.360911-3-jstephan@baylibre.com>
-In-Reply-To: <20230403071929.360911-3-jstephan@baylibre.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 3 Apr 2023 18:15:53 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_8h0gROVKOVNrTpJGKgZhJbQ1A6EaZT+vpb5bJaYqYaFg@mail.gmail.com>
-Message-ID: <CAAOTY_8h0gROVKOVNrTpJGKgZhJbQ1A6EaZT+vpb5bJaYqYaFg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] phy: mtk-mipi-csi: add driver for CSI phy
-To:     Julien Stephan <jstephan@baylibre.com>
-Cc:     Phi-bang Nguyen <pnguyen@baylibre.com>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DRM DRIVERS FOR MEDIATEK" 
-        <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,UPPERCASE_50_75 autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 07/13] coresight: Store pointers to connections rather
+ than an array of them
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
+        mike.leach@linaro.org
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230329115329.2747724-1-james.clark@arm.com>
+ <20230329115329.2747724-8-james.clark@arm.com>
+ <c25f0d12-e820-58b0-b139-b2ca322b6b80@arm.com>
+Content-Language: en-US
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <c25f0d12-e820-58b0-b139-b2ca322b6b80@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Julien:
 
-Julien Stephan <jstephan@baylibre.com> =E6=96=BC 2023=E5=B9=B44=E6=9C=883=
-=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:20=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> From: Phi-bang Nguyen <pnguyen@baylibre.com>
->
-> This is a new driver that supports the MIPI CSI CD-PHY for mediatek
-> mt8365 soc
->
-> Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
-> Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
-> [Julien Stephan: use regmap]
-> [Julien Stephan: use GENMASK]
-> Co-developed-by: Julien Stephan <jstephan@baylibre.com>
-> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
-> ---
->  .../bindings/phy/mediatek,csi-phy.yaml        |   9 +-
->  MAINTAINERS                                   |   1 +
->  drivers/phy/mediatek/Kconfig                  |   8 +
->  drivers/phy/mediatek/Makefile                 |   2 +
->  .../phy/mediatek/phy-mtk-mipi-csi-rx-reg.h    | 435 ++++++++++++++++++
->  drivers/phy/mediatek/phy-mtk-mipi-csi.c       | 392 ++++++++++++++++
->  6 files changed, 845 insertions(+), 2 deletions(-)
->  create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi-rx-reg.h
->  create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi.c
->
 
-[snip]
+On 03/04/2023 09:46, Suzuki K Poulose wrote:
+> On 29/03/2023 12:53, James Clark wrote:
+>> This will allow the same connection object to be referenced via the
+>> input connection list in a later commit rather than duplicating them.
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-core.c  | 45 ++++++++++---------
+>>   .../hwtracing/coresight/coresight-platform.c  |  8 ++--
+>>   drivers/hwtracing/coresight/coresight-priv.h  |  1 +
+>>   .../hwtracing/coresight/coresight-tmc-etr.c   |  2 +-
+>>   include/linux/coresight.h                     |  2 +-
+>>   5 files changed, 31 insertions(+), 27 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-core.c
+>> b/drivers/hwtracing/coresight/coresight-core.c
+>> index 12cbb68e8e1c..389f6203c8f0 100644
+>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>> @@ -119,7 +119,7 @@ static int coresight_find_link_inport(struct
+>> coresight_device *csdev,
+>>       struct coresight_connection *conn;
+>>         for (i = 0; i < parent->pdata->nr_outconns; i++) {
+>> -        conn = &parent->pdata->out_conns[i];
+>> +        conn = parent->pdata->out_conns[i];
+>>           if (conn->dest_dev == csdev)
+>>               return conn->dest_port;
+>>       }
+>> @@ -137,7 +137,7 @@ static int coresight_find_link_outport(struct
+>> coresight_device *csdev,
+>>       struct coresight_connection *conn;
+>>         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>> -        conn = &csdev->pdata->out_conns[i];
+>> +        conn = csdev->pdata->out_conns[i];
+>>           if (conn->dest_dev == child)
+>>               return conn->src_port;
+>>       }
+>> @@ -606,7 +606,7 @@ coresight_find_enabled_sink(struct
+>> coresight_device *csdev)
+>>       for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>>           struct coresight_device *child_dev;
+>>   -        child_dev = csdev->pdata->out_conns[i].dest_dev;
+>> +        child_dev = csdev->pdata->out_conns[i]->dest_dev;
+>>           if (child_dev)
+>>               sink = coresight_find_enabled_sink(child_dev);
+>>           if (sink)
+>> @@ -722,7 +722,7 @@ static int coresight_grab_device(struct
+>> coresight_device *csdev)
+>>       for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>>           struct coresight_device *child;
+>>   -        child = csdev->pdata->out_conns[i].dest_dev;
+>> +        child = csdev->pdata->out_conns[i]->dest_dev;
+>>           if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+>>               if (!coresight_get_ref(child))
+>>                   goto err;
+>> @@ -733,7 +733,7 @@ static int coresight_grab_device(struct
+>> coresight_device *csdev)
+>>       for (i--; i >= 0; i--) {
+>>           struct coresight_device *child;
+>>   -        child = csdev->pdata->out_conns[i].dest_dev;
+>> +        child = csdev->pdata->out_conns[i]->dest_dev;
+>>           if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+>>               coresight_put_ref(child);
+>>       }
+>> @@ -752,7 +752,7 @@ static void coresight_drop_device(struct
+>> coresight_device *csdev)
+>>       for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>>           struct coresight_device *child;
+>>   -        child = csdev->pdata->out_conns[i].dest_dev;
+>> +        child = csdev->pdata->out_conns[i]->dest_dev;
+>>           if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+>>               coresight_put_ref(child);
+>>       }
+>> @@ -794,7 +794,7 @@ static int _coresight_build_path(struct
+>> coresight_device *csdev,
+>>       for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>>           struct coresight_device *child_dev;
+>>   -        child_dev = csdev->pdata->out_conns[i].dest_dev;
+>> +        child_dev = csdev->pdata->out_conns[i]->dest_dev;
+>>           if (child_dev &&
+>>               _coresight_build_path(child_dev, sink, path) == 0) {
+>>               found = true;
+>> @@ -964,7 +964,7 @@ coresight_find_sink(struct coresight_device
+>> *csdev, int *depth)
+>>           struct coresight_device *child_dev, *sink = NULL;
+>>           int child_depth = curr_depth;
+>>   -        child_dev = csdev->pdata->out_conns[i].dest_dev;
+>> +        child_dev = csdev->pdata->out_conns[i]->dest_dev;
+>>           if (child_dev)
+>>               sink = coresight_find_sink(child_dev, &child_depth);
+>>   @@ -1334,7 +1334,7 @@ static int coresight_orphan_match(struct
+>> device *dev, void *data)
+>>        * an orphan connection whose name matches @csdev, link it.
+>>        */
+>>       for (i = 0; i < i_csdev->pdata->nr_outconns; i++) {
+>> -        conn = &i_csdev->pdata->out_conns[i];
+>> +        conn = i_csdev->pdata->out_conns[i];
+>>             /* We have found at least one orphan connection */
+>>           if (conn->dest_dev == NULL) {
+>> @@ -1372,7 +1372,7 @@ static int coresight_fixup_device_conns(struct
+>> coresight_device *csdev)
+>>       int i, ret = 0;
+>>         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>> -        struct coresight_connection *conn = &csdev->pdata->out_conns[i];
+>> +        struct coresight_connection *conn = csdev->pdata->out_conns[i];
+>>             conn->dest_dev =
+>>               coresight_find_csdev_by_fwnode(conn->dest_fwnode);
+>> @@ -1406,15 +1406,12 @@ static int coresight_remove_match(struct
+>> device *dev, void *data)
+>>        * a connection whose name matches @csdev, remove it.
+>>        */
+>>       for (i = 0; i < iterator->pdata->nr_outconns; i++) {
+>> -        conn = &iterator->pdata->out_conns[i];
+>> +        conn = iterator->pdata->out_conns[i];
+>>   -        if (conn->dest_dev == NULL)
+>> -            continue;
+>> -
+>> -        if (csdev->dev.fwnode == conn->dest_fwnode) {
+>> +        /* Child_dev being set signifies that the links were made */
+>> +        if (csdev->dev.fwnode == conn->dest_fwnode && conn->dest_dev) {
+>>               iterator->orphan = true;
+>>               coresight_remove_links(iterator, conn);
+>> -
+>>               conn->dest_dev = NULL;
+>>               /* No need to continue */
+>>               break;
+>> @@ -1534,21 +1531,25 @@ void coresight_write64(struct coresight_device
+>> *csdev, u64 val, u32 offset)
+>>    * to the output port of this device.
+>>    */
+>>   void coresight_release_platform_data(struct coresight_device *csdev,
+>> +                     struct device *dev,
+>>                        struct coresight_platform_data *pdata)
+>>   {
+>>       int i;
+>> -    struct coresight_connection *conns = pdata->out_conns;
+>> +    struct coresight_connection **conns = pdata->out_conns;
+>>         for (i = 0; i < pdata->nr_outconns; i++) {
+>>           /* If we have made the links, remove them now */
+>> -        if (csdev && conns[i].dest_dev)
+>> -            coresight_remove_links(csdev, &conns[i]);
+>> +        if (csdev && conns[i]->dest_dev)
+>> +            coresight_remove_links(csdev, conns[i]);
+>>           /*
+>>            * Drop the refcount and clear the handle as this device
+>>            * is going away
+>>            */
+>> -        fwnode_handle_put(conns[i].dest_fwnode);
+>> +        fwnode_handle_put(conns[i]->dest_fwnode);
+>> +        devm_kfree(dev, conns[i]);
+>>       }
+>> +    devm_kfree(dev, pdata->out_conns);
+>> +    devm_kfree(dev, pdata);
+> 
+> Is there any particular reason, why we need to do this ? This should
+> be done automatically at device teardown, which is bound to happen
+> right after this call ?
+> 
 
-> +static int mtk_mipi_phy_power_on(struct phy *phy)
-> +{
-> +       struct mtk_mipi_dphy_port *port =3D phy_get_drvdata(phy);
-> +       struct mtk_mipi_dphy *priv =3D port->dev;
-> +       struct regmap *regmap_base =3D port->regmap_base;
-> +       struct regmap *regmap_4d1c =3D port->regmap_4d1c;
-> +       int ret =3D 0;
-> +
-> +       mutex_lock(&priv->lock);
-> +
-> +       switch (port->id) {
-> +       case MTK_MIPI_PHY_PORT_0:
-> +               if (priv->ports[MTK_MIPI_PHY_PORT_0A].active ||
-> +                   priv->ports[MTK_MIPI_PHY_PORT_0B].active)
-> +                       ret =3D -EBUSY;
-> +               break;
-> +
-> +       case MTK_MIPI_PHY_PORT_0A:
-> +       case MTK_MIPI_PHY_PORT_0B:
-> +               if (priv->ports[MTK_MIPI_PHY_PORT_0].active)
-> +                       ret =3D -EBUSY;
-> +               break;
-> +       }
-> +
-> +       if (!ret)
-> +               port->active =3D true;
-> +
-> +       mutex_unlock(&priv->lock);
-> +
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       /* Set analog phy mode to DPHY */
-> +       if (port->is_cdphy)
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSI0A_CPHY_EN, 0);
-> +
-> +       if (port->is_4d1c) {
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L0_CKMODE_EN, 0);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L0_CKSEL, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L1_CKMODE_EN, 0);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L1_CKSEL, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L2_CKMODE_EN, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L2_CKSEL, 1);
-> +       } else {
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L0_CKMODE_EN, 0);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L0_CKSEL, 0);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L1_CKMODE_EN, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L1_CKSEL, 0);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L2_CKMODE_EN, 0);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L2_CKSEL, 0);
-> +       }
-> +
-> +       if (port->is_4d1c) {
-> +               if (port->is_cdphy)
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA00_CSIxA,
-> +                                  RG_CSI0A_CPHY_EN, 0);
-> +
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L0_CKMODE_EN, 0);
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L0_CKSEL, 1);
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L1_CKMODE_EN, 0);
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L1_CKSEL, 1);
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L2_CKMODE_EN, 0);
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_DPHY_L2_CKSEL, 1);
-> +       }
-> +
-> +       /* Byte clock invert */
-> +       REGMAP_BIT(regmap_base, MIPI_RX_ANAA8_CSIxA,
-> +                  RG_CSIxA_CDPHY_L0_T0_BYTECK_INVERT, 1);
-> +       REGMAP_BIT(regmap_base, MIPI_RX_ANAA8_CSIxA,
-> +                  RG_CSIxA_DPHY_L1_BYTECK_INVERT, 1);
-> +       REGMAP_BIT(regmap_base, MIPI_RX_ANAA8_CSIxA,
-> +                  RG_CSIxA_CDPHY_L2_T1_BYTECK_INVERT, 1);
-> +
-> +       if (port->is_4d1c) {
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANAA8_CSIxA,
-> +                          RG_CSIxA_CDPHY_L0_T0_BYTECK_INVERT, 1);
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANAA8_CSIxA,
-> +                          RG_CSIxA_DPHY_L1_BYTECK_INVERT, 1);
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANAA8_CSIxA,
-> +                          RG_CSIxA_CDPHY_L2_T1_BYTECK_INVERT, 1);
-> +       }
-> +
-> +       /* Start ANA EQ tuning */
-> +       if (port->is_cdphy) {
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA18_CSIxA,
-> +                          RG_CSI0A_L0_T0AB_EQ_IS, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA18_CSIxA,
-> +                          RG_CSI0A_L0_T0AB_EQ_BW, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA1C_CSIxA,
-> +                          RG_CSI0A_L1_T1AB_EQ_IS, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA1C_CSIxA,
-> +                          RG_CSI0A_L1_T1AB_EQ_BW, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA20_CSI0A,
-> +                          RG_CSI0A_L2_T1BC_EQ_IS, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA20_CSI0A,
-> +                          RG_CSI0A_L2_T1BC_EQ_BW, 1);
-> +
-> +               if (port->is_4d1c) {
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA18_CSIxA,
-> +                                  RG_CSI0A_L0_T0AB_EQ_IS, 1);
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA18_CSIxA,
-> +                                  RG_CSI0A_L0_T0AB_EQ_BW, 1);
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA1C_CSIxA,
-> +                                  RG_CSI0A_L1_T1AB_EQ_IS, 1);
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA1C_CSIxA,
-> +                                  RG_CSI0A_L1_T1AB_EQ_BW, 1);
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA20_CSI0A,
-> +                                  RG_CSI0A_L2_T1BC_EQ_IS, 1);
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA20_CSI0A,
-> +                                  RG_CSI0A_L2_T1BC_EQ_BW, 1);
-> +               }
-> +       } else {
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA18_CSIxA,
-> +                          RG_CSI1A_L0_EQ_IS, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA18_CSIxA,
-> +                          RG_CSI1A_L0_EQ_BW, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA18_CSIxA,
-> +                          RG_CSI1A_L1_EQ_IS, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA18_CSIxA,
-> +                          RG_CSI1A_L1_EQ_BW, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA1C_CSIxA,
-> +                          RG_CSI1A_L2_EQ_IS, 1);
-> +               REGMAP_BIT(regmap_base, MIPI_RX_ANA1C_CSIxA,
-> +                          RG_CSI1A_L2_EQ_BW, 1);
-> +
-> +               if (port->is_4d1c) {
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA18_CSIxA,
-> +                                  RG_CSI1A_L0_EQ_IS, 1);
+I think they're not actually freed because connections are added before
+the coresight device is created using the 'parent' of the device which
+never goes away:
 
-RG_CSI1A_L0_EQ_IS is identical to RG_CSI0A_L0_T0AB_EQ_IS, and ditto
-for below register. I think the function of each bitwise register is
-the same. Define only one copy of the these register, don't duplicate
-the same thing.
+  struct coresight_device *coresight_register(struct coresight_desc *desc) {
+    ...
+    csdev->dev.parent = desc->dev;
 
-Regards,
-Chun-Kuang.
+Another reason is that's is a good way to catch errors. There are so
+many different devices floating around that without an explicit free,
+it's very easy to pass the wrong one and be inconsistent. With the free
+it gives you a warning if it's mismatched.
 
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA18_CSIxA,
-> +                                  RG_CSI1A_L0_EQ_BW, 1);
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA18_CSIxA,
-> +                                  RG_CSI1A_L1_EQ_IS, 1);
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA18_CSIxA,
-> +                                  RG_CSI1A_L1_EQ_BW, 1);
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA1C_CSIxA,
-> +                                  RG_CSI1A_L2_EQ_IS, 1);
-> +                       REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA1C_CSIxA,
-> +                                  RG_CSI1A_L2_EQ_BW, 1);
-> +               }
-> +       }
-> +
-> +       /* End ANA EQ tuning */
-> +       regmap_write(regmap_base, MIPI_RX_ANA40_CSIxA, 0x90);
-> +
-> +       REGMAP_BIT(regmap_base, MIPI_RX_ANA24_CSIxA,
-> +                  RG_CSIxA_RESERVE, 0x40);
-> +       if (port->is_4d1c)
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA24_CSIxA,
-> +                          RG_CSIxA_RESERVE, 0x40);
-> +       REGMAP_BIT(regmap_base, MIPI_RX_WRAPPER80_CSIxA,
-> +                  CSR_CSI_RST_MODE, 0);
-> +       if (port->is_4d1c)
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_WRAPPER80_CSIxA,
-> +                          CSR_CSI_RST_MODE, 0);
-> +       /* ANA power on */
-> +       REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                  RG_CSIxA_BG_CORE_EN, 1);
-> +       if (port->is_4d1c)
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_BG_CORE_EN, 1);
-> +       usleep_range(20, 40);
-> +       REGMAP_BIT(regmap_base, MIPI_RX_ANA00_CSIxA,
-> +                  RG_CSIxA_BG_LPF_EN, 1);
-> +       if (port->is_4d1c)
-> +               REGMAP_BIT(regmap_4d1c, MIPI_RX_ANA00_CSIxA,
-> +                          RG_CSIxA_BG_LPF_EN, 1);
-> +
-> +       return 0;
-> +}
-> +
+But either way, now that we know that they're not freed maybe we should
+fix that isntead? Although apart from doing a full copy of pdata into
+the coresight device I'm not sure how it can be done. Then I suppose we
+could remove these frees, although I still think the error catching is
+good. It's also not strictly related to this fix so maybe it can be a
+second fix.
+
+> 
+>>       if (csdev)
+>>           coresight_remove_conns_sysfs_group(csdev);
+>>   }
+>> @@ -1665,7 +1666,7 @@ struct coresight_device
+>> *coresight_register(struct coresight_desc *desc)
+>>     err_out:
+>>       /* Cleanup the connection information */
+>> -    coresight_release_platform_data(NULL, desc->pdata);
+>> +    coresight_release_platform_data(NULL, desc->dev, desc->pdata);
+>>       return ERR_PTR(ret);
+>>   }
+>>   EXPORT_SYMBOL_GPL(coresight_register);
+>> @@ -1678,7 +1679,7 @@ void coresight_unregister(struct
+>> coresight_device *csdev)
+>>           cti_assoc_ops->remove(csdev);
+>>       coresight_remove_conns(csdev);
+>>       coresight_clear_default_sink(csdev);
+>> -    coresight_release_platform_data(csdev, csdev->pdata);
+>> +    coresight_release_platform_data(csdev, csdev->dev.parent,
+>> csdev->pdata);
+>>       device_unregister(&csdev->dev);
+>>   }
+>>   EXPORT_SYMBOL_GPL(coresight_unregister);
+>> diff --git a/drivers/hwtracing/coresight/coresight-platform.c
+>> b/drivers/hwtracing/coresight/coresight-platform.c
+>> index 80ed2e74620b..bea8f1ba309a 100644
+>> --- a/drivers/hwtracing/coresight/coresight-platform.c
+>> +++ b/drivers/hwtracing/coresight/coresight-platform.c
+>> @@ -36,7 +36,7 @@ int coresight_add_out_conn(struct device *dev,
+>>        * Warn on any existing duplicate output port.
+>>        */
+>>       for (i = 0; i < pdata->nr_outconns; ++i) {
+>> -        conn = &pdata->out_conns[i];
+>> +        conn = pdata->out_conns[i];
+>>           /* Output == -1 means ignore the port for example for
+>> helpers */
+>>           if (conn->src_port != -1 &&
+>>               conn->src_port == new_conn->src_port) {
+>> @@ -53,7 +53,9 @@ int coresight_add_out_conn(struct device *dev,
+>>       if (!pdata->out_conns)
+>>           return -ENOMEM;
+>>   -    pdata->out_conns[pdata->nr_outconns - 1] = *new_conn;
+>> +    pdata->out_conns[pdata->nr_outconns - 1] = devm_kmalloc(
+>> +        dev, sizeof(struct coresight_connection), GFP_KERNEL);
+>> +    *pdata->out_conns[pdata->nr_outconns - 1] = *new_conn;
+>>       return 0;
+>>   }
+>>   EXPORT_SYMBOL_GPL(coresight_add_out_conn);
+>> @@ -859,7 +861,7 @@ coresight_get_platform_data(struct device *dev)
+>>   error:
+>>       if (!IS_ERR_OR_NULL(pdata))
+>>           /* Cleanup the connection information */
+>> -        coresight_release_platform_data(NULL, pdata);
+>> +        coresight_release_platform_data(NULL, dev, pdata);
+>>       return ERR_PTR(ret);
+>>   }
+>>   EXPORT_SYMBOL_GPL(coresight_get_platform_data);
+>> diff --git a/drivers/hwtracing/coresight/coresight-priv.h
+>> b/drivers/hwtracing/coresight/coresight-priv.h
+>> index 788ff19c60f6..65ae6d161c57 100644
+>> --- a/drivers/hwtracing/coresight/coresight-priv.h
+>> +++ b/drivers/hwtracing/coresight/coresight-priv.h
+>> @@ -207,6 +207,7 @@ static inline void *coresight_get_uci_data(const
+>> struct amba_id *id)
+>>   }
+>>     void coresight_release_platform_data(struct coresight_device *csdev,
+>> +                     struct device *dev,
+>>                        struct coresight_platform_data *pdata);
+>>   struct coresight_device *
+>>   coresight_find_csdev_by_fwnode(struct fwnode_handle *r_fwnode);
+>> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c
+>> b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+>> index 61234cb8052a..1bbe5410a23d 100644
+>> --- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
+>> +++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+>> @@ -782,7 +782,7 @@ tmc_etr_get_catu_device(struct tmc_drvdata *drvdata)
+>>           return NULL;
+>>         for (i = 0; i < etr->pdata->nr_outconns; i++) {
+>> -        tmp = etr->pdata->out_conns[i].dest_dev;
+>> +        tmp = etr->pdata->out_conns[i]->dest_dev;
+>>           if (tmp && coresight_is_catu_device(tmp))
+>>               return tmp;
+>>       }
+>> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+>> index ccbc5eafcb6b..7197b07deede 100644
+>> --- a/include/linux/coresight.h
+>> +++ b/include/linux/coresight.h
+>> @@ -111,7 +111,7 @@ struct coresight_platform_data {
+>>       int high_outport;
+>>       int nr_inconns;
+>>       int nr_outconns;
+>> -    struct coresight_connection *out_conns;
+>> +    struct coresight_connection **out_conns;
+> 
+> minor nit: Do we need to update the comment too ?
+> 
+
+Will do
+
+> Otherwise looks good to me
+> Suzuki
+> 
+>>   };
+>>     /**
+> 
