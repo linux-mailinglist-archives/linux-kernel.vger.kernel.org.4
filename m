@@ -2,102 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB616D3CBA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 07:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CCE6D3CBC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 07:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjDCFSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 01:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S230200AbjDCFSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 01:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjDCFSE (ORCPT
+        with ESMTP id S231447AbjDCFSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 01:18:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D81955A7;
-        Sun,  2 Apr 2023 22:18:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Apr 2023 01:18:06 -0400
+Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2289055A7;
+        Sun,  2 Apr 2023 22:18:05 -0700 (PDT)
+Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC529614AC;
-        Mon,  3 Apr 2023 05:18:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD540C433D2;
-        Mon,  3 Apr 2023 05:18:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680499082;
-        bh=Ry7b3/8RKxj+1luWeOjO0avmB+5u5dLjGt3zcnvaVn4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XjB+HVnPEgcwhnLAcYDTS25EspHJqwb5NR3ehZXCyNHLNOpnm86IVK9dzLlZkAU88
-         4DkXuvE7Ncr5avdB8aYtmwPbfJgRKnJXkrKRimeBT16J25XmbHSkZKXyH/NOvK+pRc
-         FJfWCkxY7olQKKpu44eOUcpVI3onDC5hs1Hb6N2KwtMt9slk/eiqP+FU8IuvFy3lKX
-         /A0/nq4zGBEMwK2hYDcBI58CfFq0+kS7r0LL6BAIFoVNF8iU7u6PiQUonHIaF/t7Ga
-         6T4toYalOS+z4N81wlUHC4NmGbcKA3lp+mOfcB1mhnmH9DBPV/oWCvAYn2ZE5SbIhi
-         4ehYlLfrJw86w==
-Date:   Mon, 3 Apr 2023 10:47:57 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bus: mhi: host: Use ERANGE for BHIOFF/BHIEOFF range check
-Message-ID: <20230403051757.GC4627@thinkpad>
-References: <1679674860-28229-1-git-send-email-quic_jhugo@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1679674860-28229-1-git-send-email-quic_jhugo@quicinc.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 5F7A075DCB;
+        Mon,  3 Apr 2023 05:18:04 +0000 (UTC)
+Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
+        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id 4D197609E9;
+        Mon,  3 Apr 2023 05:18:04 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.2
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.4 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
+        by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
+        with ESMTP id Uzuq-yi2qnTN; Mon,  3 Apr 2023 05:18:04 +0000 (UTC)
+Received: from [192.168.48.17] (host-184-164-23-94.dyn.295.ca [184.164.23.94])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: dgilbert@interlog.com)
+        by mail.ca.inter.net (Postfix) with ESMTPSA id AD13060529;
+        Mon,  3 Apr 2023 05:18:03 +0000 (UTC)
+Message-ID: <95019bca-c018-d417-b40f-558dfb51b0e4@interlog.com>
+Date:   Mon, 3 Apr 2023 01:18:03 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCH v3 06/11] scsi: scsi_debug: Dynamically allocate
+ sdebug_queued_cmd
+Content-Language: en-CA
+To:     John Garry <john.g.garry@oracle.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bvanassche@acm.org
+References: <20230327074310.1862889-1-john.g.garry@oracle.com>
+ <20230327074310.1862889-7-john.g.garry@oracle.com>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+In-Reply-To: <20230327074310.1862889-7-john.g.garry@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 10:21:00AM -0600, Jeffrey Hugo wrote:
-> If the BHIOFF or BHIEOFF range checks fail, they return EINVAL.  ERANGE
-> is a better error code since it implies an out of range condition.
+On 2023-03-27 03:43, John Garry wrote:
+> Eventually we will drop the sdebug_queue struct as it is not really
+> required, so start with making the sdebug_queued_cmd dynamically allocated
+> for the lifetime of the scsi_cmnd in the driver.
 > 
-> Suggested-by: Manivannan Sadhasivam <mani@kernel.org>
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> As an interim measure, make sdebug_queued_cmd.sd_dp a pointer to struct
+> sdebug_defer. Also keep a value of the index allocated in
+> sdebug_queued_cmd.qc_arr in struct sdebug_queued_cmd.
+> 
+> To deal with an races in accessing the scsi cmnd allocated struct
+> sdebug_queued_cmd, add a spinlock for the scsi command in its priv area.
+> Races may be between scheduling a command for completion, aborting a
+> command, and the command actually completing and freeing the struct
+> sdebug_queued_cmd.
+> 
+> Signed-off-by: John Garry <john.g.garry@oracle.com>
+Acked-by: Douglas Gilbert <dgilbert@interlog.com>
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Thanks.
 
-- Mani
-
-> ---
-> 
-> This feels more like a style change than fixing a bug, so I'm being
-> conservative and intentionally not listing a fixes tag.
-> 
->  drivers/bus/mhi/host/init.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-> index b46a082..f72fcb6 100644
-> --- a/drivers/bus/mhi/host/init.c
-> +++ b/drivers/bus/mhi/host/init.c
-> @@ -1112,7 +1112,7 @@ int mhi_prepare_for_power_up(struct mhi_controller *mhi_cntrl)
->  	if (bhi_off >= mhi_cntrl->reg_len) {
->  		dev_err(dev, "BHI offset: 0x%x is out of range: 0x%zx\n",
->  			bhi_off, mhi_cntrl->reg_len);
-> -		ret = -EINVAL;
-> +		ret = -ERANGE;
->  		goto error_reg_offset;
->  	}
->  	mhi_cntrl->bhi = mhi_cntrl->regs + bhi_off;
-> @@ -1129,7 +1129,7 @@ int mhi_prepare_for_power_up(struct mhi_controller *mhi_cntrl)
->  			dev_err(dev,
->  				"BHIe offset: 0x%x is out of range: 0x%zx\n",
->  				bhie_off, mhi_cntrl->reg_len);
-> -			ret = -EINVAL;
-> +			ret = -ERANGE;
->  			goto error_reg_offset;
->  		}
->  		mhi_cntrl->bhie = mhi_cntrl->regs + bhie_off;
-> -- 
-> 2.7.4
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
