@@ -2,103 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EFC6D54E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EA26D54F3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbjDCWvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 18:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
+        id S233330AbjDCWxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 18:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbjDCWvk (ORCPT
+        with ESMTP id S232284AbjDCWxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 18:51:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFD03ABF
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:51:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Apr 2023 18:53:15 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA3F19A9;
+        Mon,  3 Apr 2023 15:52:58 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E631062B8D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 22:51:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56743C433EF;
-        Mon,  3 Apr 2023 22:51:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680562288;
-        bh=nCHk3zkvWXwY10cczA6sRnQuIsGC+f6S2QWO3f6TtSA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=k+H1E3v9KPcuvuvUuQBBW2BO21aPZplS0jyY9MsNd4oz8IgDdyYDucwIyM5K8m1Qw
-         7jfixJSGkO3jKGDHNPIG4AO20rLHYAwREtYw/b1FYv+hfO6hlNv344Ec3i84te65l5
-         yf8nFjrGDhogTn5mabLnsZdzBi4cTmYG0DUS4KRvqFZ/QMVi3yRKhFQEZYsP/qyNzn
-         Nt6iMp/T2KQ5tjD6MBqbdacuo0tURaW4sZ7Kz7KSYgXUmnnO790/z8IZDcONWc6c/Y
-         L43rtjojajfBuHhppauFI7Y3ETpyBxn5QjrlGWGcsyvvZEWqt0u7HpuCT8s59XtGt1
-         oZDGNDa7rX9Hg==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id D5FBA15404B4; Mon,  3 Apr 2023 15:51:27 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 15:51:27 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH] perf: Optimize perf_pmu_migrate_context()
-Message-ID: <db6f2ad0-fe47-4574-9290-a1be5f349368@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230403090858.GT4253@hirez.programming.kicks-ass.net>
- <87sfdgr55p.ffs@tglx>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pr5l875Gbz4x4r;
+        Tue,  4 Apr 2023 08:52:52 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680562373;
+        bh=SYaIKZ+ajoRiBsT2jMRGQlpJDQte1oTrH+VBxkS6uWc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ui0dmZO32c2bFn6/PIml5CJzHrk0aVQj+r4eRzHLiiXf0ujjvb6C8o6yWhG/mjgWN
+         62OXGWpSnJanH+WXn09UvLUL4zOhukQcmjua/8O5tXbvAUkciHchWqIXqjdg5Q+J5p
+         h1CbiwpbQyhkALN+QQU0N9WtbTnRczCQuauR38gUKy2Oc8mWTULgxvaiDJNJIx2FRo
+         WtV/UJg81hcte65dx1vB7crII4EQoFUunDUUC93op0qNqIJACf0P8fuYsVC38/XZhH
+         4MHXPDuJxR5JkwnbOU7pKJPNJ2yMWA3ZLEHjIdNEoXUwo2Eh8IVNDkiardlBm7p2nY
+         Ged2ZqXRghtAA==
+Date:   Tue, 4 Apr 2023 08:52:50 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Apr 3
+Message-ID: <20230404085224.21843f6e@canb.auug.org.au>
+In-Reply-To: <2023040305-childlike-stew-4f8e@gregkh>
+References: <20230403202412.66d43f13@canb.auug.org.au>
+        <20230403155147.GA239124@dev-arch.thelio-3990X>
+        <2023040305-childlike-stew-4f8e@gregkh>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87sfdgr55p.ffs@tglx>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/t1Iy2OJH1p5M2l_wF3K7gWE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 12:07:30AM +0200, Thomas Gleixner wrote:
-> On Mon, Apr 03 2023 at 11:08, Peter Zijlstra wrote:
-> > Thomas reported that offlining CPUs spends a lot of time in
-> > synchronize_rcu() as called from perf_pmu_migrate_context() even though
-> > he's not actually using uncore events.
-> 
-> That happens when offlining CPUs from a socket > 0 in the same order how
-> those CPUs have been brought up. On socket 0 this is not observable
-> unless the bogus CPU0 offlining hack is enabled.
-> 
-> If the offlining happens in the reverse order then all is shiny.
-> 
-> The reason is that the first online CPU on a socket gets the uncore
-> events assigned and when it is offlined then those are moved to the next
-> online CPU in the same socket.
-> 
-> On a SKL-X with 56 threads per sockets this results in a whopping _1_
-> second delay per thread (except for the last one which shuts down the
-> per socket uncore events with no delay because there are no users) due
-> to 62 times of pointless synchronize_rcu() invocations where each takes
-> ~16ms on a HZ=250 kernel.
-> 
-> Which in turn is interesting because that machine is completely idle
-> other than running the offline muck...
-> 
-> > Turns out, the thing is unconditionally waiting for RCU, even if there's
-> > no actual events to migrate.
-> >
-> > Fixes: 0cda4c023132 ("perf: Introduce perf_pmu_migrate_context()")
-> > Reported-by: Thomas Gleixner <tglx@linutronix.de>
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Tested-by: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+--Sig_/t1Iy2OJH1p5M2l_wF3K7gWE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yow!  ;-)
+Hi Greg,
 
-Assuming that all the events run under RCU protection, as in preemption
-disabled:
+On Mon, 3 Apr 2023 18:01:38 +0200 Greg Kroah-Hartman <gregkh@linuxfoundatio=
+n.org> wrote:
+>
+> On Mon, Apr 03, 2023 at 08:51:47AM -0700, Nathan Chancellor wrote:
+> > Hi Stephen (and Greg, just as an FYI):
+> >=20
+> > On Mon, Apr 03, 2023 at 08:24:12PM +1000, Stephen Rothwell wrote:
+> >=20
+> > ...
+> >  =20
+> > > Merging driver-core/driver-core-next (43ba3d4af7a7 pktcdvd: simplify =
+the class_pktcdvd logic) =20
+> >=20
+> > ...
+> >  =20
+> > > Merging char-misc/char-misc-next (48a6c7bced2a cdx: add device attrib=
+utes) =20
+> >=20
+> > There is a semantic conflict between these two trees:
+> >=20
+> >   drivers/cdx/cdx.c:393:8: error: incompatible function pointer types i=
+nitializing 'ssize_t (*)(const struct bus_type *, const char *, size_t)' (a=
+ka 'long (*)(const struct bus_type *, const char *, unsigned long)') with a=
+n expression of type
+> >    'ssize_t (struct bus_type *, const char *, size_t)' (aka 'long (stru=
+ct bus_type *, const char *, unsigned long)') [-Wincompatible-function-poin=
+ter-types]
+> >   static BUS_ATTR_WO(rescan);
+> >          ^~~~~~~~~~~~~~~~~~~
+> >   include/linux/device/bus.h:129:42: note: expanded from macro 'BUS_ATT=
+R_WO'
+> >           struct bus_attribute bus_attr_##_name =3D __ATTR_WO(_name)
+> >                                                   ^~~~~~~~~~~~~~~~
+> >   include/linux/sysfs.h:135:11: note: expanded from macro '__ATTR_WO'
+> >           .store  =3D _name##_store,                                   =
+     \
+> >                     ^~~~~~~~~~~~~
+> >   <scratch space>:30:1: note: expanded from here
+> >   rescan_store
+> >   ^~~~~~~~~~~~
+> >   1 error generated.
+> >=20
+> > caused by commit 75cff725d956 ("driver core: bus: mark the struct
+> > bus_type for sysfs callbacks as constant") in the driver-core tree
+> > interacting with commit 2959ab247061 ("cdx: add the cdx bus driver") in
+> > the char-misc tree. The following diff fixes it for me, could it be
+> > applied to the merge of the char-misc tree (if I am reading the order of
+> > your merges correctly)?
+> >=20
+> > If there is a better or more appropriate way to report this, please let
+> > me know.
+> >=20
+> > Cheers,
+> > Nathan
+> >=20
+> > diff --git a/drivers/cdx/cdx.c b/drivers/cdx/cdx.c
+> > index 67c32cb2c006..38511fd36325 100644
+> > --- a/drivers/cdx/cdx.c
+> > +++ b/drivers/cdx/cdx.c
+> > @@ -363,7 +363,7 @@ static struct attribute *cdx_dev_attrs[] =3D {
+> >  };
+> >  ATTRIBUTE_GROUPS(cdx_dev);
+> > =20
+> > -static ssize_t rescan_store(struct bus_type *bus,
+> > +static ssize_t rescan_store(const struct bus_type *bus,
+> >  			    const char *buf, size_t count)
+> >  {
+> >  	struct cdx_controller *cdx; =20
+>=20
+>=20
+> A patch was already sent for this:
+> 	https://lore.kernel.org/r/20230403140416.28183-1-nipun.gupta@amd.com
 
-Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+I will apply that to the chat-misc tree merge from today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/t1Iy2OJH1p5M2l_wF3K7gWE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQrWMIACgkQAVBC80lX
+0GzjxAgAiaKsnm1hcxS5FDhw4tg18TgFTO4lNGGIiYxYW2lRTcgRW3/KawdsH9S6
+zNaBTcVV06FVnMZW4oMc6I0aTSvwUCvbkfpNQYoDLpv4TEnjGOWRbLxhZE078MYx
+LLnkm/nJJE+zAZJPX4ec2KKzkbKxNVmwOsZ62EJeLAXreaB0z1aeG4fW8/gyEzOM
+b7EnX8v4bsxSrvRsC2EHTKSswMympAJdkEQOKNOtdNUI8rF7/h7Ewb+m096MFo8B
+m/jqaVrEl7gKs+eJTAlH05pRwsnQSvZ09lO49qmOLsZHnaboWHIzj02gSddTumzY
+3wmipIm+eaCqEkrBagRpABsw5z+Fkg==
+=2Awa
+-----END PGP SIGNATURE-----
+
+--Sig_/t1Iy2OJH1p5M2l_wF3K7gWE--
