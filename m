@@ -2,154 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40E06D537D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44AEE6D5380
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbjDCV25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 17:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        id S232853AbjDCVaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 17:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbjDCV24 (ORCPT
+        with ESMTP id S231513AbjDCVaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:28:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513A0198A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:28:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680557294;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tf7MHv60vp2k26fwOLDFA2jNT1TsKbPHn/4l+Hwjf/s=;
-        b=Q+7N8Eqx/QzYCWwXUMqJ4GNrNgd0Z35DVYQIQ3N6f/4M/evJtzQO+ctaFkSRdYdV/20MiV
-        gxWrt0l/lS122kejwaiObUYQlrc3xgdKqPhtRayvvVt6McuyKN2wC7C+qr79UgFmQrfbFp
-        CemeA5q5XYvNoTydL7OzwTUz87Iuleo=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-117-v_uA91hIMgCsvHBimYaYHw-1; Mon, 03 Apr 2023 17:28:13 -0400
-X-MC-Unique: v_uA91hIMgCsvHBimYaYHw-1
-Received: by mail-il1-f200.google.com with SMTP id h1-20020a92d841000000b0031b4d3294dfso20009544ilq.9
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 14:28:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680557292;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Tf7MHv60vp2k26fwOLDFA2jNT1TsKbPHn/4l+Hwjf/s=;
-        b=3+7cmFvhaFqJ7ZJ12WHB0/PwJtapoWFUsw78nCFicJdKeNC+P/jtHLLHUgFsUKOC9t
-         ov0gSAydKWuVwLlA6hxfTaSKnhcaaIPmAG9CRABuJScAIt1jLcvYzdtIc9zRG8gGjj3w
-         BJXnihbz11+nEufqqzEmbHut+tC5dLZnPorlSLD371d84dpP/TQgCXY2as0WNguVysBm
-         DOT+09M10dJb5QxDOMyrUyaJz6l8lmHpZOKC6T8atBzY2dBvfmThCCXG+7BJPX/30lnN
-         UJljnI5uvwVbWULFxHi17G8zz5z7i9A7SrwL53o4W9YTf5nrXPJx2pVkcrpT+AkFQaRI
-         7OEw==
-X-Gm-Message-State: AAQBX9ffa5l8UQ9Grwl3it5Gzi7EfS+5806nJ9v2LrzxWGgcynNroRaF
-        gBuKSIJfYr7Y8tYvnxlu1aObLdciDbdmACq6cTvIHiWQN5rLaKy7hnkkvf2Ab7epCh0fRF5i6VE
-        vgRtRzclHhSW5CLNZ7TI0UqFrx1tci7Sc
-X-Received: by 2002:a5e:a616:0:b0:753:786a:c003 with SMTP id q22-20020a5ea616000000b00753786ac003mr635331ioi.3.1680557292183;
-        Mon, 03 Apr 2023 14:28:12 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZeBK8jTQpKRj3YBDYuYCPItaKYhl3sLPkbYtcifrm13UX1o2MlMCVl8RcR5FlNr5W/UN0JmA==
-X-Received: by 2002:a5e:a616:0:b0:753:786a:c003 with SMTP id q22-20020a5ea616000000b00753786ac003mr635315ioi.3.1680557291980;
-        Mon, 03 Apr 2023 14:28:11 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id v11-20020a056638250b00b00408df9534c9sm2774141jat.130.2023.04.03.14.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 14:28:11 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 15:28:09 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Nipun Gupta <nipun.gupta@amd.com>
-Cc:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <git@amd.com>, <harpreet.anand@amd.com>, <michal.simek@amd.com>
-Subject: Re: [PATCH] vfio/cdx: add support for CDX bus
-Message-ID: <20230403152809.239a4988.alex.williamson@redhat.com>
-In-Reply-To: <20230403142525.29494-1-nipun.gupta@amd.com>
-References: <20230403142525.29494-1-nipun.gupta@amd.com>
-Organization: Red Hat
+        Mon, 3 Apr 2023 17:30:10 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5DB173F;
+        Mon,  3 Apr 2023 14:30:09 -0700 (PDT)
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2E804660036F;
+        Mon,  3 Apr 2023 22:30:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680557407;
+        bh=89fICjanYXC+xkrZxmZS2SkgJF0T/OuXjRoo3D52r70=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QYfo0HacUNTAtvjNKvvgPFM4llq9UPVLoC540U+x2JV+MUhDD8RfP/E1XGMiercQZ
+         xY5/E99mJPx55y1H98dCJxXIAUlGWn6mE/yRmzE+BGCYtcGz1O46MCOAz0aRBSp2O4
+         REx73GOg533mbBeARwDIvdroan/RC5cUiZ1qK/4k1RuJEZiNc4yBhSU3Kkt/0QK/0n
+         636hTgTrMzL6olfi8tKkX/sPaxohFxeoeucI6EhibeiEpdLDNHvJxKeI7IJGGGazgC
+         d0KOWznFvkTaO8b2V4uY4Pevxko+oNUUwfa6i5GN76MKkHLPlzOPtkWlyDoS1S49U6
+         WQtWTcx8o4CgA==
+Date:   Mon, 3 Apr 2023 17:30:02 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, kernel@collabora.com,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] kselftest/alsa: Increase kselftest timeout
+Message-ID: <5302e70d-cb58-4e70-b44f-ff81b138a2e1@notapiano>
+References: <20221214130353.1989075-1-nfraprado@collabora.com>
+ <808f35bf-2800-c34b-cae9-4d8eaa11294d@linuxfoundation.org>
+ <Y5oSui0udT/6cvSI@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y5oSui0udT/6cvSI@sirena.org.uk>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 19:55:25 +0530
-Nipun Gupta <nipun.gupta@amd.com> wrote:
-> diff --git a/drivers/vfio/cdx/Makefile b/drivers/vfio/cdx/Makefile
-> new file mode 100644
-> index 000000000000..82e4ef412c0f
-> --- /dev/null
-> +++ b/drivers/vfio/cdx/Makefile
-...
-> +static int vfio_cdx_mmap_mmio(struct vfio_cdx_region region,
-> +			      struct vm_area_struct *vma)
-> +{
-> +	u64 size = vma->vm_end - vma->vm_start;
-> +	u64 pgoff, base;
-> +
-> +	pgoff = vma->vm_pgoff &
-> +		((1U << (VFIO_CDX_OFFSET_SHIFT - PAGE_SHIFT)) - 1);
-> +	base = pgoff << PAGE_SHIFT;
-> +
-> +	if (region.size < PAGE_SIZE || base + size > region.size)
-> +		return -EINVAL;
-> +
-> +	vma->vm_pgoff = (region.addr >> PAGE_SHIFT) + pgoff;
-> +	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
-> +
-> +	return remap_pfn_range(vma, vma->vm_start, vma->vm_pgoff,
-> +			       size, vma->vm_page_prot);
-> +}
-> +
-> +static int vfio_cdx_mmap(struct vfio_device *core_vdev,
-> +			 struct vm_area_struct *vma)
-> +{
-> +	struct vfio_cdx_device *vdev =
-> +		container_of(core_vdev, struct vfio_cdx_device, vdev);
-> +	struct cdx_device *cdx_dev = vdev->cdx_dev;
-> +	unsigned int index;
-> +
-> +	index = vma->vm_pgoff >> (VFIO_CDX_OFFSET_SHIFT - PAGE_SHIFT);
-> +
-> +	if (vma->vm_end < vma->vm_start)
-> +		return -EINVAL;
-> +	if (vma->vm_start & ~PAGE_MASK)
-> +		return -EINVAL;
-> +	if (vma->vm_end & ~PAGE_MASK)
-> +		return -EINVAL;
-> +	if (!(vma->vm_flags & VM_SHARED))
-> +		return -EINVAL;
-> +	if (index >= cdx_dev->res_count)
-> +		return -EINVAL;
-> +
-> +	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_MMAP))
-> +		return -EINVAL;
-> +
-> +	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_READ) &&
-> +	    (vma->vm_flags & VM_READ))
-> +		return -EINVAL;
-> +
-> +	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_WRITE) &&
-> +	    (vma->vm_flags & VM_WRITE))
-> +		return -EINVAL;
-> +
-> +	vma->vm_private_data = cdx_dev;
-> +
-> +	return vfio_cdx_mmap_mmio(vdev->regions[index], vma);
-> +}
+On Wed, Dec 14, 2022 at 06:15:22PM +0000, Mark Brown wrote:
+> On Wed, Dec 14, 2022 at 09:40:02AM -0700, Shuah Khan wrote:
+> > On 12/14/22 06:03, Nícolas F. R. A. Prado wrote:
+> 
+> > > The default timeout for kselftests is 45 seconds, but that isn't enough
+> > > time to run pcm-test when there are many PCMs on the device, nor for
+> > > mixer-test when slower control buses and fancier CODECs are present.
+> > > 
+> > > As data points, running pcm-test on mt8192-asurada-spherion takes about
+> > > 1m15s, and mixer-test on rk3399-gru-kevin takes about 2m.
+> > > 
+> > > Set the timeout to 4 minutes to allow both pcm-test and mixer-test to
+> > > run to completion with some slack.
+> 
+> > What I have in mind is that the default run can be limited scope.
+> > Run it on a few controllers and in the report mention that a full
+> > test can be run as needed.
+> 
+> > There are a couple of examples of default vs. full test runs - cpu
+> > and memory hot-lug tests.
+> 
+> For pcm-test it's probably more sensible to refactor things to run
+> multiple PCMs (or at least cards, though that's less relevant in an
+> embedded context) in parallel rather than cut down the test coverage,
+> it's already very limited coverage as things stand.  There is some risk
+> there could be false positives from cross talk between the PCMs but it's
+> probably worth it.
+> 
+> With mixer-test if it's actually taking a long time to run generally
+> this is just identifying that the driver could use some work,
+> implementing runtime power management and a register cache will probably
+> resolve most issues.
 
-I see discussion of MMIO_REGIONS_ENABLE controlling host access to the
-device in mc_cdx_pcol.h.  Is a user of vfio-cdx able to manipulate
-whether MMIO space of the device is enabled?  If so, what's the system
-response to accessing MMIO through the mmap while disabled?  Is MMIO
-space accessible even through calling the RESET ioctl?  Is there a
-public specification somewhere for CDX?  Thanks,
+Hi Shuah and Mark,
 
-Alex
+sorry for the delay, but I'd still like to move forward with this.
 
+Shuah, I've checked the tests you mentioned that have limited scope by default,
+and we could do the same for the alsa kselftest, but I'm not sure I understand
+how this solves the problem here. The fact is that the current timeout is too
+short for a full run of the alsa kselftest on some machines, so we need to
+increase the timeout in any case regardless of there being a limited scope run
+by default or not. Mark implemented the parallelization he mentioned in the
+meantime, but it doesn't help every hardware. The only other option I see is
+reducing the time the PCM is tested for (currently 4 seconds). But I assume that
+number was chosen for a reason.
+
+I'd also like to better understand why we have an arbitrary (45 seconds) default
+timeout. If there are users who want to limit the test duration to an arbitrary
+time even if that means not getting full test coverage, shouldn't such arbitrary
+time be supplied by the users themselves?
+
+And is there any guidance on what are the acceptable exceptions to having a
+longer timeout? Because there seem to be many kselftests which override the
+default timeout with a longer one, even ones that disable it altogether.
+
+I can see the value of having a timeout as the worst case scenario of how long
+the test takes to run, to avoid hanging indefinitely, which is what the tests
+with overriden timeout setting do. For the alsa kselftests that's
+hardware-dependent (number of kcontrols for mixer-test; and number of PCMs and
+working configurations for pcm-test), so we'd either need to guess a high enough
+value for the timeout that all known hardware fits, or allow the timeout to be
+set dynamically during runtime.
+
+Thanks,
+Nícolas
