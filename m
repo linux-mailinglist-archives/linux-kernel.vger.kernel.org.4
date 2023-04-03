@@ -2,282 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9B46D43C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC686D43CA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbjDCLnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47428 "EHLO
+        id S231906AbjDCLrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232068AbjDCLmy (ORCPT
+        with ESMTP id S231444AbjDCLrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:42:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC9A44B9
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680522115;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lAA4ki3zB9Sc2BvyQKZ9CRE+NZTe+gbrNnzSl5hXPoY=;
-        b=eDDu1FXQnaxQ7D2fMRZd3N9ADlSLmH2ydr+8qbEVD+yCQ4WX7VkZJcVz39N4f+3a1SOsiJ
-        Cv84CtcbbqVinyjFs84MYavngPUmzxkcdUO9WJmBs8dXwY0Bmc3B7G26B9SQHgF8cQtGZb
-        hXvBhu/plo9oAwwwP3Ka4DqQBtn0Lzo=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-663-18G9xPh4P8OvGuSWOSnzJg-1; Mon, 03 Apr 2023 07:41:54 -0400
-X-MC-Unique: 18G9xPh4P8OvGuSWOSnzJg-1
-Received: by mail-qk1-f199.google.com with SMTP id t23-20020a374617000000b0074a4dba4b5aso304943qka.16
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:41:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680522114;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lAA4ki3zB9Sc2BvyQKZ9CRE+NZTe+gbrNnzSl5hXPoY=;
-        b=J3CPgPrhD0uQjUhOzukewoDPvraFuHOIkcONt2HMi0eYMQDghBS0hGigV/nxaVdvXp
-         LHvSVLy03DYDwHzuczv8kYM7L8Ee/7LaYVMf1QePe1vRl8TxnaNeeeXzmOLbg0HirdSV
-         iiNpnrTpbaNY5Dk+Xo2WOcRwswvpiblXL6/oyNgHniBpNWZ3hNeh0Np7HwMChxXejN0x
-         RtibEMh+W5kz4p4ufjvge73HizT0EEguQ+YcG8sTkzmSufXIjNXVML2JW9jLg5bBmY9A
-         qGZnVgCwNhQ1darPRaoYVGRDC3iZqJkWnns3lGax4JuUd1jaQ4jU/U/oIrrs5j9QSgpJ
-         5NMQ==
-X-Gm-Message-State: AAQBX9ePP71rxJ47qSDV03h8SyqWv+d0Hb/LXCMxyDdzReDP18ragIYS
-        DskpyKyzKN0pO7wl7QCwjiXnkThVtXOKpKnpJ7bKU7GaDHHY+63DflL83wSb03CnSLF8/rfVpZ5
-        3XTd7hyeG47qT09D5PkHlhPxo
-X-Received: by 2002:a05:622a:1894:b0:3e4:d3cc:4211 with SMTP id v20-20020a05622a189400b003e4d3cc4211mr24722782qtc.3.1680522113840;
-        Mon, 03 Apr 2023 04:41:53 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Zm+ljI2xLE3+R2zfgshdK/1RT6/i2PIKSmeBthGqj7JRT8S9rzTz9oz3P0oT2TC9+sLWvRog==
-X-Received: by 2002:a05:622a:1894:b0:3e4:d3cc:4211 with SMTP id v20-20020a05622a189400b003e4d3cc4211mr24722749qtc.3.1680522113541;
-        Mon, 03 Apr 2023 04:41:53 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-227-151.dyn.eolo.it. [146.241.227.151])
-        by smtp.gmail.com with ESMTPSA id o15-20020a05620a228f00b0073b8512d2dbsm2694344qkh.72.2023.04.03.04.41.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 04:41:53 -0700 (PDT)
-Message-ID: <352c24ff0c1b3a9f63062c21bbee0dca1b9ebfff.camel@redhat.com>
-Subject: Re: [PATCH v4 2/2] gro: optimise redundant parsing of packets
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Richard Gobert <richardbgobert@gmail.com>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
-        alexanderduyck@fb.com, lucien.xin@gmail.com, lixiaoyan@google.com,
-        iwienand@redhat.com, leon@kernel.org, ye.xingchen@zte.com.cn,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 03 Apr 2023 13:41:49 +0200
-In-Reply-To: <20230322193309.GA32681@debian>
-References: <20230320163703.GA27712@debian> <20230320170009.GA27961@debian>
-         <889f2dc5e646992033e0d9b0951d5a42f1907e07.camel@redhat.com>
-         <CANn89iK_bsPoaRVe+FNZ7LF_eLbz2Af6kju4j9TVHtbgkpcn5g@mail.gmail.com>
-         <20230322193309.GA32681@debian>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Mon, 3 Apr 2023 07:47:17 -0400
+Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [IPv6:2001:1600:4:17::190e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D780F1FF1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:47:14 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Pqpz46kG2zMqR6Y;
+        Mon,  3 Apr 2023 13:47:12 +0200 (CEST)
+Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Pqpz22sdDzMpqjL;
+        Mon,  3 Apr 2023 13:47:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1680522432;
+        bh=l/Miq1FXcuzbR9T4SFEdiVhywd+ZoHuDueWC1NgtO10=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=parMgoYOeYZBV33/rJmJ+eAckFCZZpy5lx7PAuQfzAOBTgtwZdaa1gNnPCiHnV/j/
+         0e8VE5xQzF5hJjMMvL5TcYZoPAxf+pMVCT4+24NSF2SeOz+2KMdg+K4NkzU70S6nO1
+         XgaXeFdMsajoahOpGUvZ/v4zaLVmH3yBfS61mpks=
+Message-ID: <40081d47-14f3-b86c-59e3-6f78aeae4e2b@digikod.net>
+Date:   Mon, 3 Apr 2023 13:47:09 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [PATCH v7 07/11] LSM: Helpers for attribute names and filling an
+ lsm_ctx
+Content-Language: en-US
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+To:     Casey Schaufler <casey@schaufler-ca.com>, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org
+Cc:     jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org
+References: <20230315224704.2672-1-casey@schaufler-ca.com>
+ <20230315224704.2672-8-casey@schaufler-ca.com>
+ <544a4809-1a79-9dd7-61a5-5fce1f4a5f10@digikod.net>
+ <539e698a-1ab7-a390-a3a4-6c7e43db4eb6@digikod.net>
+In-Reply-To: <539e698a-1ab7-a390-a3a4-6c7e43db4eb6@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-22 at 20:33 +0100, Richard Gobert wrote:
-> > On Wed, Mar 22, 2023 at 2:59 AM Paolo Abeni <pabeni@redhat.com>
-> > wrote:
-> > >=20
-> > > On Mon, 2023-03-20 at 18:00 +0100, Richard Gobert wrote:
-> > > > Currently the IPv6 extension headers are parsed twice: first in
-> > > > ipv6_gro_receive, and then again in ipv6_gro_complete.
-> > > >=20
-> > > > By using the new ->transport_proto field, and also storing the
-> > > > size of the
-> > > > network header, we can avoid parsing extension headers a second
-> > > > time in
-> > > > ipv6_gro_complete (which saves multiple memory dereferences and
-> > > > conditional
-> > > > checks inside ipv6_exthdrs_len for a varying amount of
-> > > > extension headers in
-> > > > IPv6 packets).
-> > > >=20
-> > > > The implementation had to handle both inner and outer layers in
-> > > > case of
-> > > > encapsulation (as they can't use the same field). I've applied
-> > > > a similar
-> > > > optimisation to Ethernet.
-> > > >=20
-> > > > Performance tests for TCP stream over IPv6 with a varying
-> > > > amount of
-> > > > extension headers demonstrate throughput improvement of ~0.7%.
-> > >=20
-> > > I'm surprised that the improvement is measurable: for large
-> > > aggregate
-> > > packets a single ipv6_exthdrs_len() call is avoided out of tens
-> > > calls
-> > > for the individual pkts. Additionally such figure is comparable
-> > > to
-> > > noise level in my tests.
->=20
-> It's not simple but I made an effort to make a quiet environment.
-> Correct configuration allows for this kind of measurements to be made
-> as the test is CPU bound and noise is a variance that can be reduced
-> with=20
-> enough samples.
->=20
-> Environment example: (100Gbit NIC (mlx5), physical machine, i9 12th
-> gen)
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0# power-management and hyperthreading disabled in=
- BIOS
-> =C2=A0=C2=A0=C2=A0=C2=A0# sysctl preallocate net mem
-> =C2=A0=C2=A0=C2=A0=C2=A0echo 0 > /sys/devices/system/cpu/cpufreq/boost # =
-disable
-> turboboost
-> =C2=A0=C2=A0=C2=A0=C2=A0ethtool -A enp1s0f0np0 rx off tx off autoneg off =
-# no PAUSE
-> frames
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0# Single core performance
-> =C2=A0=C2=A0=C2=A0=C2=A0for x in /sys/devices/system/cpu/cpu[1-9]*/online=
-; do echo 0
-> >"$x"; done
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0./network-testing-master/bin/netfilter_unload_mod=
-ules.sh
-> 2>/dev/null # unload netfilter
-> =C2=A0=C2=A0=C2=A0=C2=A0tuned-adm profile latency-performance
-> =C2=A0=C2=A0=C2=A0=C2=A0cpupower frequency-set -f 2200MHz # Set core to s=
-pecific
-> frequency
-> =C2=A0=C2=A0=C2=A0=C2=A0systemctl isolate rescue-ssh.target
-> =C2=A0=C2=A0=C2=A0=C2=A0# and kill all processes besides init
->=20
-> > > This adds a couple of additional branches for the common (no
-> > > extensions
-> > > header) case.
->=20
-> The additional branch in ipv6_gro_receive would be negligible or even
-> non-existent for a branch predictor in the common case
-> (non-encapsulated packets).
-> I could wrap it with a likely macro if you wish.
-> Inside ipv6_gro_complete a couple of branches are saved for the
-> common
-> case as demonstrated below.
->=20
-> original code ipv6_gro_complete (ipv6_exthdrs_len is inlined):
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0// if (skb->encapsulation)
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c4962b:	f6 87 81 00 00 00 20 	testb=20
-> $0x20,0x81(%rdi)
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c49632:	74 2a                	je   =20
-> ffffffff81c4965e <ipv6_gro_complete+0x3e>
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0...
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0// nhoff +=3D sizeof(*iph) + ipv6_exthdrs_len(iph=
-, &ops);
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c4969c:	eb 1b                	jmp  =20
-> ffffffff81c496b9 <ipv6_gro_complete+0x99>    <-- jump to beginning of
-> for loop
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c4968e:   b8 28 00 00 00          mov  =
-  $0x28,%eax
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c49693:   31 f6                   xor  =
-  %esi,%esi
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c49695:   48 c7 c7 c0 28 aa 82    mov  =
-=20
-> $0xffffffff82aa28c0,%rdi
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c4969c:   eb 1b                   jmp  =
-=20
-> ffffffff81c496b9 <ipv6_gro_complete+0x99>
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c4969e:   f6 41 18 01             testb=
-=20
-> $0x1,0x18(%rcx)
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496a2:   74 34                   je   =
-=20
-> ffffffff81c496d8 <ipv6_gro_complete+0xb8>    <--- 3rd conditional
-> check: !((*opps)->flags & INET6_PROTO_GSO_EXTHDR)
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496a4:   48 98                   cltq =
-=20
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496a6:   48 01 c2                add  =
-  %rax,%rdx
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496a9:   0f b6 42 01             movzb=
-l 0x1(%rdx),%eax
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496ad:   0f b6 0a                movzb=
-l (%rdx),%ecx
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496b0:   8d 04 c5 08 00 00 00    lea  =
-=20
-> 0x8(,%rax,8),%eax
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496b7:   01 c6                   add  =
-  %eax,%esi
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496b9:   85 c9                   test =
-  %ecx,%ecx   =20
-> <--- for loop starts here
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496bb:   74 e7                   je   =
-=20
-> ffffffff81c496a4 <ipv6_gro_complete+0x84>    <--- 1st conditional
-> check: proto !=3D NEXTHDR_HOP
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496bd:   48 8b 0c cf             mov  =
-=20
-> (%rdi,%rcx,8),%rcx
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496c1:   48 85 c9                test =
-  %rcx,%rcx
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81c496c4:   75 d8                   jne  =
-=20
-> ffffffff81c4969e <ipv6_gro_complete+0x7e>    <--- 2nd conditional
-> check: unlikely(!(*opps))
-> =C2=A0=C2=A0=C2=A0=C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0... (indirect call ops->callbacks.gro_complete)
->=20
-> ipv6_exthdrs_len contains a loop which has 3 conditional checks.
-> For the common (no extensions header) case, in the new code, *all 3
-> branches are completely avoided*
->=20
-> patched code ipv6_gro_complete:
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0// if (skb->encapsulation)
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81befe58:   f6 83 81 00 00 00 20    testb=
-=20
-> $0x20,0x81(%rbx)
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81befe5f:   74 78                   je   =
-=20
-> ffffffff81befed9 <ipv6_gro_complete+0xb9>
-> =C2=A0=C2=A0=C2=A0=C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0...
-> =C2=A0=C2=A0=C2=A0=C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0// else
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81befed9:	0f b6 43 50          	movzbl
-> 0x50(%rbx),%eax
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81befedd:	0f b7 73 4c          	movzwl
-> 0x4c(%rbx),%esi
-> =C2=A0=C2=A0=C2=A0=C2=A0ffffffff81befee1:	48 8b 0c c5 c0 3f a9 	mov    -
-> 0x7d56c040(,%rax,8),%rcx
-> =C2=A0=C2=A0=C2=A0=C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0... (indirect call ops->callbacks.gro_complete)
->=20
-> Thus, the patch is beneficial for both the common case and the ext
-> hdr
-> case. I would appreciate a second consideration :)
 
-A problem with the above analysis is that it does not take in
-consideration the places where the new branch are added:
-eth_gro_receive() and ipv6_gro_receive().
+On 03/04/2023 11:54, Mickaël Salaün wrote:
+> 
+> On 03/04/2023 11:47, Mickaël Salaün wrote:
+>>
+>> On 15/03/2023 23:47, Casey Schaufler wrote:
+>>> Add lsm_name_to_attr(), which translates a text string to a
+>>> LSM_ATTR value if one is available.
+>>>
+>>> Add lsm_fill_user_ctx(), which fills a struct lsm_ctx, including
+>>> the trailing attribute value.
+>>>
+>>> All are used in module specific components of LSM system calls.
+>>>
+>>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>>> ---
+>>>     include/linux/security.h | 13 ++++++++++
+>>>     security/lsm_syscalls.c  | 51 ++++++++++++++++++++++++++++++++++++++++
+>>>     security/security.c      | 31 ++++++++++++++++++++++++
+>>>     3 files changed, 95 insertions(+)
+>>
+>> [...]
+>>
+>>> diff --git a/security/security.c b/security/security.c
+>>> index 2c57fe28c4f7..f7b814a3940c 100644
+>>> --- a/security/security.c
+>>> +++ b/security/security.c
+>>> @@ -753,6 +753,37 @@ static int lsm_superblock_alloc(struct super_block *sb)
+>>>     	return 0;
+>>>     }
+>>>     
+>>> +/**
+>>> + * lsm_fill_user_ctx - Fill a user space lsm_ctx structure
+>>> + * @ctx: an LSM context to be filled
+>>> + * @context: the new context value
+>>> + * @context_size: the size of the new context value
+>>> + * @id: LSM id
+>>> + * @flags: LSM defined flags
+>>> + *
+>>> + * Fill all of the fields in a user space lsm_ctx structure.
+>>> + * Caller is assumed to have verified that @ctx has enough space
+>>> + * for @context.
+>>> + * Returns 0 on success, -EFAULT on a copyout error.
+>>> + */
+>>> +int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
+>>> +		      size_t context_size, u64 id, u64 flags)
+>>> +{
+>>> +	struct lsm_ctx local;
+>>> +	void __user *vc = ctx;
+>>> +
+>>> +	local.id = id;
+>>> +	local.flags = flags;
+>>> +	local.ctx_len = context_size;
+>>> +	local.len = context_size + sizeof(local);
+>>> +	vc += sizeof(local);
+>>> +	if (copy_to_user(ctx, &local, sizeof(local)))
+>>> +		return -EFAULT;
+>>> +	if (context_size > 0 && copy_to_user(vc, context, context_size))
+>>> +		return -EFAULT;
+>>
+>> Can we do a single copy_to_user() call? That would avoid inconsistent
+>> user space data, could speed up a bit the operation, and make the code
+>> easier to understand. To use the stack, we need to know the maximum size
+>> of context_size for all use cases, which seems reasonable and can be
+>> checked at build time (on each LSM side, and potentially with specific
+>> context type passed as enum instead of context_size) and run time (for
+>> this generic helper).
+> 
+> Well, actually the context_size should be inferred from id, and the
+> "local" size should be defined and check at build time against all
+> context ID sizes.
 
-Note that such functions are called for each packet on the wire:
-multiple times for each aggregate packets.=20
+@ctx_len should already be known by user space according to the LSM ID 
+and the requested attribute. @len should already be known by user space 
+because lsm_ctx is part of the ABI.
 
-The above is likely not measurable in terms on pps delta, but the added
-CPU cycles spent for the common case are definitely there. In my
-opinion that outlast the benefit for the extensions header case.
+The only reason I can think of the rationale for @len and @ctx_len is 
+that struct lsm_ctx could gain more fields. If this happen, they would 
+then need to be inserted before @ctx. This would make this struct 
+lsm_ctx too flexible and complex for user space to parse correctly (e.g. 
+for strace, gdb).
 
-Cheers,
+I don't see where we could use @flags instead of relying on a new 
+attribute type.
 
-Paolo
+I think security_getselfattr() and lsm_fill_user_ctx() could be changed 
+to avoid each LSM to pass their own ID to lsm_fill_user_ctx(). We could 
+have a lsm_get_attr_size(lsm_id, attr) helper (called by 
+security_getselfattr) to group these relations, based on fixed values, 
+exposed in the UAPI, and checked at build time with the size of the 
+related LSM-specific attribute type. This would also allow to factor out 
+the total size calculation needed before calling the getselfattr() 
+implementers, and then rely on a common consistent behavior. That could 
+also be used to not call getselfattr() implementers if they don't handle 
+a specific attribute, and then remove their related error handling for 
+this case.
 
-p.s. please refrain from off-list ping. That is ignored by most and
-considered rude by some.
+For now, the getselfattr() hook (not the related syscall) doesn't need 
+to pass a "flags" argument to each LSM because there is no use of it.
 
+
+> 
+>>
+>>
+>>> +	return 0;
+>>> +}
+>>> +
+>>>     /*
+>>>      * The default value of the LSM hook is defined in linux/lsm_hook_defs.h and
+>>>      * can be accessed with:
