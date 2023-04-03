@@ -2,196 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B193D6D4C3F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721C26D4C40
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 17:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjDCPop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 11:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
+        id S232741AbjDCPo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 11:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbjDCPon (ORCPT
+        with ESMTP id S232369AbjDCPox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 11:44:43 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5392D49;
-        Mon,  3 Apr 2023 08:44:41 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id t19so28697797qta.12;
-        Mon, 03 Apr 2023 08:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680536680;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kclZcPGzLT8qD+FxOEEZz3AYIvik9LusU8EytUnJ65w=;
-        b=R3kQPYI0RGcmUaPVY9ZIhhTYXdPCCoxzw+W2mUQdu4i9JRrSWH9k3cWB0QhAmHHnmt
-         dZJr7j+pVgxWHkz3ontXO/DVjylkzGjkqDdOpxYt14UN1QZbp6u43IfLuWq5rf2vHBSP
-         K1guvuQ9Lpwt1dlMFR+VVWxzIA7aJxey5FOwniB6pbhnLOrDA4e4KCZ7i4mMfmXDvRI1
-         jb/yxiRZrYggjckx+1v+ddNbcOFwQr69aSqeWv4OuV1PpcL/SeSHY+6bALXy82daUU63
-         FpuP257J5GtF8JuD2oFDKtNk2HwS617p8B9KHsU5aeIIfe36FY/DG25tABwDF9aDPlnZ
-         uvLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680536680;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kclZcPGzLT8qD+FxOEEZz3AYIvik9LusU8EytUnJ65w=;
-        b=jK8PvoNJTUq3UIDKq27NK2niwWbQmHO+SyyCTONMG0yeFPEJ+p5LFPUrOj/Z5nwFo8
-         eSEA1E9ySEFQpB9OKXsaPFjQgqvRAkHNsJ+DlXGmrZGjfEmiuJZBqZ/W0g8R7PDJ42SZ
-         DCw0eeScykL1VF9Uqyvbs42I+7/sZPsJ9b/eFDZN3Eo5VaIgLlR30ehE826DHHVuAwD6
-         Qg5nezGajB97RdLHMB0lZSzQh5U3R5kj4lNgszjLIgyKjQzYJMDVB+TMRFmrtPMbC7Jw
-         yBSAL3WM1DU65OeltAAz8ROQAgmo/B+49cDTGYe2CZkyfRcMQYR9EArSnIeljJuOMXBw
-         iXlg==
-X-Gm-Message-State: AAQBX9c+bLbrLubGFHc19PGdlPPzeq0ugJxgEediYHowxQC9byiAaNJJ
-        0YdCBD8k5BMzjdw5bcgX8QQ=
-X-Google-Smtp-Source: AKy350a4pXXSBX2zmejuRMoR7fs0yhKdvJH71TAvkzpfOEYoHftV3Ksp0JQJM2xQSG89xm/ZkC6hkg==
-X-Received: by 2002:a05:622a:1ba7:b0:3e6:38b6:88f5 with SMTP id bp39-20020a05622a1ba700b003e638b688f5mr22401490qtb.25.1680536680239;
-        Mon, 03 Apr 2023 08:44:40 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id bn29-20020a05620a2add00b00743592b4745sm2840494qkb.109.2023.04.03.08.44.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 08:44:39 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 25D4A27C0054;
-        Mon,  3 Apr 2023 11:44:39 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 03 Apr 2023 11:44:39 -0400
-X-ME-Sender: <xms:ZvQqZLU-6mPuai5kHi2iQpimfzNuUYUsjb54TU608RjXadqy_3UIsA>
-    <xme:ZvQqZDlt5Qs8AIx2qIoT7pKYaxjUIrgRbzW-mrt1MR1mb3A7b2O8oiyA1qL1CTqZQ
-    _FGNXgzaSnQzS-1Gw>
-X-ME-Received: <xmr:ZvQqZHYPvUaH0ISFUpcOAck-EVHDlBt6vZl1WgIlX_1DAmrYJO_VoCblINisFZ9X9qL8Zit7hI0XMOKWKuJi4lgz8ONKDEKDEnU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedgledvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:ZvQqZGUFD9Q1XbmHX3eLnB1qVQwZGqsuOTZLlPdeY-iqzhQsVdbDBA>
-    <xmx:ZvQqZFnOnZRu2tQGAMr9s8C4UNNo7PlET6bn0i2Py8AYcrkmhx7IrQ>
-    <xmx:ZvQqZDduh_eDtCU45ZyQxbi5f9G1UAmbWUWuksUTyqTMYFPwbOX5JA>
-    <xmx:Z_QqZLd8wbdnu9R8XA-RTyUlrl00oEReIS1NPmzHU428KkUMAOJDcA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Apr 2023 11:44:38 -0400 (EDT)
-Date:   Mon, 3 Apr 2023 08:44:36 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Gary Guo <gary@garyguo.net>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Mon, 3 Apr 2023 11:44:53 -0400
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776AE2D6A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 08:44:51 -0700 (PDT)
+Date:   Mon, 03 Apr 2023 15:44:39 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1680536689; x=1680795889;
+        bh=2TYOlIjO0toD/0pYOCFIPCuvZ5f4czPXBpq/bW9y2lw=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=A5QsS7sQvg/A4uhuNLWUYMRWfRBldVlHj4QhDHK5QkZ0yYfo+YQ//Cu9kpQJRyr6g
+         tUhvttVHuDAoZNkGBq1eplb3vhsDo2POrlwhR7iVzpn+xSHtXgAWvWuPbEmS68QBOn
+         zEern+wpqfO53lJt6zwzAcGJKGjfLPB2tEkxTWX5KDXVZ74VKXVbvu78z07a7QDWIM
+         mJPekL9OC2/AU5JE8De238mGfSshIQ5N/zj1MChI9nLZ1OGWN8IUM0zeseSx9Q3RVG
+         B/ihN7j/zddEp/xs+gJybX3wZg4OizKIQYdfjt5gcC87wqqyqKdDMMYpADPyyd/fV8
+         irKbiR+XkvyRA==
+To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH 03/13] rust: lock: introduce `Mutex`
-Message-ID: <ZCr0ZDlvlFHFIRbh@Boquns-Mac-mini.local>
-References: <20230330043954.562237-1-wedsonaf@gmail.com>
- <20230330043954.562237-3-wedsonaf@gmail.com>
- <20230330130108.GE124812@hirez.programming.kicks-ass.net>
- <ZCXZMNj7aOKbC7Ev@boqun-archlinux>
- <20230403082052.GR4253@hirez.programming.kicks-ass.net>
- <ZCrZkUaoslXHpige@wedsonaf-dev>
- <20230403162529.7bef76e6.gary@garyguo.net>
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>
+Subject: [PATCH v5 00/15] Rust pin-init API for pinned initialization of structs
+Message-ID: <20230403154422.168633-1-y86-dev@protonmail.com>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403162529.7bef76e6.gary@garyguo.net>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 04:25:29PM +0100, Gary Guo wrote:
-> On Mon, 3 Apr 2023 10:50:09 -0300
-> Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
-> 
-> > On Mon, Apr 03, 2023 at 10:20:52AM +0200, Peter Zijlstra wrote:
-> > > On Thu, Mar 30, 2023 at 11:47:12AM -0700, Boqun Feng wrote:  
-> > > > On Thu, Mar 30, 2023 at 03:01:08PM +0200, Peter Zijlstra wrote:  
-> > > > > On Thu, Mar 30, 2023 at 01:39:44AM -0300, Wedson Almeida Filho wrote:  
-> > > > > > From: Wedson Almeida Filho <walmeida@microsoft.com>
-> > > > > > 
-> > > > > > This is the `struct mutex` lock backend and allows Rust code to use the
-> > > > > > kernel mutex idiomatically.  
-> > > > > 
-> > > > > What, if anything, are the plans to support the various lockdep
-> > > > > annotations? Idem for the spinlock thing in the other patch I suppose.  
-> > > > 
-> > > > FWIW:
-> > > > 
-> > > > *	At the init stage, SpinLock and Mutex in Rust use initializers
-> > > > 	that are aware of the lockdep, so everything (lockdep_map and
-> > > > 	lock_class) is all set up.
-> > > > 
-> > > > *	At acquire or release time, Rust locks just use ffi to call C
-> > > > 	functions that have lockdep annotations in them, so lockdep
-> > > > 	should just work.
-> > > >   
-> > > 
-> > > ffi is what the C++ world calls RAII ?  
-> > 
-> > No, ffi is 'foreign function interface', it just means that the caller will use
-> > the same ABI as the callee.
-> > 
-> > > But yes, I got that far, but I wondered about things like
-> > > spin_lock_nested(&foo, SINGLE_DEPTH_NESTING) and other such 'advanced'
-> > > annotations.
-> > > 
-> > > Surely we're going to be needing them at some point. I suppose you can
-> > > do the single depth nesting one with a special guard type (or whatever
-> > > you call that in the rust world) ?  
-> > 
-> > I haven't looked at all the advanced annotations, but something like
-> > spin_lock_nested/mutex_lock_nested can be exposed as a lock_nested() associated
-> > function of the `Lock` type, so one would do:
-> > 
-> >   let guard = my_mutex.lock_nested(SINGLE_DEPTH_NESTING);
-> >   // Do something with data protected by my_mutex.
-> 
-> I don't think an additional function would work. It's not okay to
-> perform both nested locking and non-nested locking on the same lock
+This is the fifth version of the pin-init API. See [1] for v4.
 
-Note that lock_nested() here is simply a lockdep concept, it means
-locking nested under the same lock class (key), not lock instance, for
-example:
+The tree at [2] contains these patches applied on top of 6.3-rc1.
+The Rust-doc documentation of the pin-init API can be found at [3].
 
-	spinlock_t X1;
-	spinlock_t X2;
+These patches are a long way coming, since I held a presentation on
+safe pinned initialization at Kangrejos [4]. And my discovery of this
+problem was almost a year ago [5].
 
-	// X1 and X2 are of the same lock class X
-	spin_lock(&X1);
-	spin_lock(&X2); // lockdep will report a deadlock.
+- #1 enables the `pin_macro` feature which is already stable in Rust
+  version 1.68.
+- #2 adds a utility macro `quote!` for proc-macros. This macro converts
+  the typed characters directly into Rust tokens that are the output of
+  proc-macros. It is used by the pin-init API proc-macros.
+- #3 changes the `Err` types of the constructor functions of `Arc` and
+  `UniqueArc` to `AllocError`.
+- #4 adds the `assume_init` function to `UniqueArc<MaybeUninit<T>>` that
+  unsafely assumes the pointee to be initialized and returns a
+  `UniqueArc<T>`. `UniqueArc::write` is modified to use this new function.
+  Later patches use it as well.
+- #5 adds `Opaque::raw_get` to access the value inside of an `Opaque` from
+  a raw pointer only.
+- #6-11 introduce the pin-init API. The commit message of #4 details the
+  problem it solves and lays out the overall architecture. The
+  implementation details are fairly complex; however, this is required to
+  provide a safe API for users -- reducing the amount of `unsafe` code is a
+  key goal of the Rust support in the kernel. An example of the
+  before/after difference from the point of view of users is provided in
+  the commit message. It is a goal to at some point have pin-init as a
+  language feature of Rust. A first step in this direction is the Field
+  Projection RFC [6].
+- #12 adds important traits and macros from pin-init to the prelude.
+- #13 adds functions for easier initialization of `Opaque<T>` via
+  FFI and raw pointer initializer functions. This is necessary when writing
+  Rust wrappers and will be used by Wedson's `sync` module patches.
+- #14 improves the `UniqueArc::try_new_uninit` function by using the
+  pin-init API. The old version first allocated uninitialized memory on the
+  stack and then moved it into the location in the heap. The new version
+  directly allocates this on the heap.
+- #15 adds functions for initializing already allocated `UniqueArc`s, this
+  will be used by the Android Binder driver.
 
-	// However, if we know that X1 and X2 has some ordering to lock,
-	// e.g. X1 is the lock for a directory and X2 is the lock for
-	// the file in the directory, we can
-	spin_lock(&X1);
-	spin_lock_nested(&X2, SINGLE_DEPTH_NESTING);
+--
 
-	// and lockdep won't complain.
+Changelog:
 
-There is some design space here for Rust, since we may be able to put
-the nested information in the type.
+v4 -> v5:
+- Add `pin_macro` to `rust_allowed_features`.
+- Improve wording of commit message #6.
+- Remove `PinInit` as a supertrait from `Init`, instead add a blanket impl:
+  `impl PinInit<T, E> for Init<T, E>`.
+- Fix `BigBuf` example on `try_init!`.
+- Fix imports in `arc.rs`.
 
-Regards,
-Boqun
+v3 -> v4:
+- Improve documentation.
+- Fixing doc-tests imports, comments and full paths in macro examples.
+- Implement `Zeroable` for many more types.
+- Fix unsoundness: `Zeroable` allowed to create fat pointers with a null
+  VTABLE pointer.
+- Split fallible components from `stack_pin_init!` into
+  `stack_try_pin_init!`.
+- Move `Invariant` type alias and `InitClosure` into `__internal`.
+- Change the error type of the constructor functions of `Arc` and
+  `UniqueArc` to `AllocError`.
+- Add `try` variants to `InPlaceInit` to allow custom error types.
+- Make `StackInit::init` a safe function.
+- Rename `OnlyCallFromDrop::create` to `OnlyCallFromDrop::new`.
+- Enable the `pin_macro` feature for use inside of `stack_pin_init!`.
+- Make `quote!` and `quote_spanned!` use absolute paths.
 
-> because non-nested locking will give you a mutable reference, and
-> getting another reference from nested lock guard would violate aliasing
-> rules.
-> 
-> A new lock type would be needed for nested locking, and guard of it can
-> only hand out immutable reference.
-> 
-> Best,
-> Gary
+v2 -> v3:
+- Split the big original commit into six smaller commits.
+- Use `PinnedDrop` in the `RawFoo` code example.
+- Move the `init::common::ffi_init` functions to `Opaque::ffi_init`.
+- Move all `#[doc(hidden)]`, internal types into the new `__internal`
+  module.
+- Specify safety guarantees and requirements of the initializer macros.
+- Add a detailed example of what the expanded code of the various macros
+  looks like.
+- Require generics in the initializer macros to use turbofish syntax
+  (`::<>`).
+- Refactor the internals of the initializer macros, this way they have
+  better type inference and generic arguments can be omitted more often.
+- Replace `init::from_value` with a blanket impl of the initializer traits
+  for ordinary objects.
+- Add initializing functions for already allocated `UniqueArc`s.
+- Add `Opaque::manual_init` functions akin to `ffi_init`, but they take an
+  `extern "Rust" fn` instead.
+- Documentation and inline comment improvements.
+
+v1 -> v2:
+- Split the common module and `UniqueArc::assume_init` into their own
+  commits.
+- Change the generics syntax of `pin_init!` to reflect normal struct
+  generic syntax.
+- Replace `PinnedDrop::__ensure_no_unsafe_op_in_drop` with an only unsafely
+  creatable token.
+- Hide `StackInit<T>` in the docs, because it is internal API.
+- Improve macro internals of `pin_init!` according to Gary's review.
+- Add check for `PhantomPinned` fields without a `#[pin]` attribute in
+  `#[pin_data]`, as those fields will not have the intended effect.
+- Add docs to `quote.rs`.
+
+[1] https://lore.kernel.org/rust-for-linux/20230331215053.585759-1-y86-dev@=
+protonmail.com/
+[2] https://github.com/y86-dev/linux.git patch/pinned-init-v5
+[3] https://rust-for-linux.github.io/docs/pinned-init/kernel/init
+[4] https://kangrejos.com
+[5] https://github.com/Rust-for-Linux/linux/issues/772
+[6] https://github.com/rust-lang/rfcs/pull/3318
+
+Benno Lossin (14):
+  rust: enable the `pin_macro` feature
+  rust: sync: change error type of constructor functions
+  rust: sync: add `assume_init` to `UniqueArc`
+  rust: types: add `Opaque::raw_get`
+  rust: add pin-init API core
+  rust: init: add initialization macros
+  rust: init/sync: add `InPlaceInit` trait to pin-initialize smart
+    pointers
+  rust: init: add `PinnedDrop` trait and macros
+  rust: init: add `stack_pin_init!` macro
+  rust: init: add `Zeroable` trait and `init::zeroed` function
+  rust: prelude: add `pin-init` API items to prelude
+  rust: types: add common init-helper functions for `Opaque`
+  rust: sync: reduce stack usage of `UniqueArc::try_new_uninit`
+  rust: sync: add functions for initializing `UniqueArc<MaybeUninit<T>>`
+
+Gary Guo (1):
+  rust: macros: add `quote!` macro
+
+ rust/kernel/init.rs            | 1430 ++++++++++++++++++++++++++++++++
+ rust/kernel/init/__internal.rs |  222 +++++
+ rust/kernel/init/macros.rs     |  971 ++++++++++++++++++++++
+ rust/kernel/lib.rs             |    7 +
+ rust/kernel/prelude.rs         |    6 +-
+ rust/kernel/sync/arc.rs        |   81 +-
+ rust/kernel/types.rs           |   55 ++
+ rust/macros/lib.rs             |   80 ++
+ rust/macros/pin_data.rs        |   79 ++
+ rust/macros/pinned_drop.rs     |   49 ++
+ rust/macros/quote.rs           |  143 ++++
+ scripts/Makefile.build         |    2 +-
+ 12 files changed, 3117 insertions(+), 8 deletions(-)
+ create mode 100644 rust/kernel/init.rs
+ create mode 100644 rust/kernel/init/__internal.rs
+ create mode 100644 rust/kernel/init/macros.rs
+ create mode 100644 rust/macros/pin_data.rs
+ create mode 100644 rust/macros/pinned_drop.rs
+ create mode 100644 rust/macros/quote.rs
+
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+--
+2.39.2
+
+
