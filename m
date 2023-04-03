@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076BB6D4704
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569456D469D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbjDCOQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
+        id S232846AbjDCOMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbjDCOQQ (ORCPT
+        with ESMTP id S229981AbjDCOLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:16:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139D427831;
-        Mon,  3 Apr 2023 07:16:14 -0700 (PDT)
+        Mon, 3 Apr 2023 10:11:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EB62C9EA;
+        Mon,  3 Apr 2023 07:11:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FD08B81B75;
-        Mon,  3 Apr 2023 14:16:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D41E0C433EF;
-        Mon,  3 Apr 2023 14:16:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA73C61C32;
+        Mon,  3 Apr 2023 14:11:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97C1DC433EF;
+        Mon,  3 Apr 2023 14:11:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680531371;
-        bh=+EoHqSpcXyTr0zoPZKwlecASOowl6/65cvBJ/wBFFyo=;
+        s=korg; t=1680531090;
+        bh=hgFNF5r4ZO3zQk5eT00ijKNaRexeCeD2LFQhJOdR1ak=;
         h=From:To:Cc:Subject:Date:From;
-        b=QmYBpMO/NywqmJW4yzIHbF/1kUWcLizTJd+RVI/hzqPuJdbTdm6wIqpQOmbImxqMS
-         KtIpBVBNoXmrOYoel05UveIxlhpioc8iyDluZHmqvt0IROFCU1jGnZSLOBo0VvM7xH
-         YV9jtmV9BYERDY4XSpW2NFOqyOyxKJoqXQZ9CY9k=
+        b=kTvTBsqqYU7wayWS6/2I4HUTU6zXVBo+c2qVwQHchV0hGLy26PonW2RqmzAB/5dMs
+         t6btXLmgPcImH/kQvhpkCqz/EXzrj4oDxoTHhVb6lIM0iCFDCbM4b9abQY3cq/gzsp
+         oE/6gRWv3MKNcnw9juQv72hcaL28oS/44qJ22pc0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,19 +38,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 4.19 00/84] 4.19.280-rc1 review
-Date:   Mon,  3 Apr 2023 16:08:01 +0200
-Message-Id: <20230403140353.406927418@linuxfoundation.org>
+Subject: [PATCH 4.14 00/66] 4.14.312-rc1 review
+Date:   Mon,  3 Apr 2023 16:08:08 +0200
+Message-Id: <20230403140351.636471867@linuxfoundation.org>
 X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.280-rc1.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.312-rc1.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.19.y
+X-KernelTest-Branch: linux-4.14.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.19.280-rc1
+X-KernelTest-Version: 4.14.312-rc1
 X-KernelTest-Deadline: 2023-04-05T14:03+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -63,8 +63,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.19.280 release.
-There are 84 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 4.14.312 release.
+There are 66 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
@@ -72,9 +72,9 @@ Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.280-rc1.gz
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.312-rc1.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
 and the diffstat can be found below.
 
 thanks,
@@ -85,25 +85,13 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.19.280-rc1
+    Linux 4.14.312-rc1
 
-Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-    cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all()
-
-Tejun Heo <tj@kernel.org>
-    cgroup: Fix threadgroup_rwsem <-> cpus_read_lock() deadlock
-
-Juri Lelli <juri.lelli@redhat.com>
-    cgroup/cpuset: Change cpuset_rwsem and hotplug lock order
+Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+    ca8210: Fix unsigned mac_len comparison with zero in ca8210_skb_tx()
 
 Jamal Hadi Salim <jhs@mojatatu.com>
     net: sched: cbq: dont intepret cls results when asked to drop
-
-Andreas Gruenbacher <agruenba@redhat.com>
-    gfs2: Always check inode size of inline inodes
-
-Cristian Marussi <cristian.marussi@arm.com>
-    firmware: arm_scmi: Fix device node validation for mailbox transport
 
 Ye Bin <yebin10@huawei.com>
     ext4: fix kernel BUG in 'ext4_write_inline_data_end()'
@@ -132,20 +120,8 @@ Juergen Gross <jgross@suse.com>
 David Disseldorp <ddiss@suse.de>
     cifs: fix DFS traversal oops without CONFIG_CIFS_DFS_UPCALL
 
-Paulo Alcantara <pc@manguebit.com>
-    cifs: prevent infinite recursion in CIFSGetDFSRefer()
-
 Jason A. Donenfeld <Jason@zx2c4.com>
     Input: focaltech - use explicitly signed char type
-
-msizanoen <msizanoen@qtmlabs.xyz>
-    Input: alps - fix compatibility with -funsigned-char
-
-Lorenzo Bianconi <lorenzo@kernel.org>
-    net: mvneta: make tx buffer array agnostic
-
-Steffen Bätz <steffen@innosonix.de>
-    net: dsa: mv88e6xxx: Enable IGMP snooping on user ports only
 
 Radoslaw Tyl <radoslawx.tyl@intel.com>
     i40e: fix registers dump after run ethtool adapter self test
@@ -155,9 +131,6 @@ Ivan Orlov <ivan.orlov0322@gmail.com>
 
 Tomas Henzl <thenzl@redhat.com>
     scsi: megaraid_sas: Fix crash after a double completion
-
-Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-    ca8210: Fix unsigned mac_len comparison with zero in ca8210_skb_tx()
 
 Wei Chen <harperchen1110@gmail.com>
     fbdev: au1200fb: Fix potential divide by zero
@@ -186,14 +159,8 @@ Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 NeilBrown <neilb@suse.de>
     md: avoid signed overflow in slot_store()
 
-Ivan Bornyakov <i.bornyakov@metrotek.ru>
-    bus: imx-weim: fix branch condition evaluates to a garbage value
-
 Jan Kara via Ocfs2-devel <ocfs2-devel@oss.oracle.com>
     ocfs2: fix data corruption after failed write
-
-George Kennedy <george.kennedy@oracle.com>
-    tun: avoid double free in tun_free_netdev
 
 Vincent Guittot <vincent.guittot@linaro.org>
     sched/fair: Sanitize vruntime of entity being migrated
@@ -219,9 +186,6 @@ Xu Yang <xu.yang_2@nxp.com>
 Xu Yang <xu.yang_2@nxp.com>
     usb: chipdea: core: fix return -EINVAL if request role is the same with current role
 
-Coly Li <colyli@suse.de>
-    dm thin: fix deadlock when swapping to thin device
-
 Lin Ma <linma@zju.edu.cn>
     igb: revert rtnl_lock() that causes deadlock
 
@@ -230,9 +194,6 @@ Alvin Šipraga <alsi@bang-olufsen.dk>
 
 Joel Selvaraj <joelselvaraj.oss@gmail.com>
     scsi: core: Add BLIST_SKIP_VPD_PAGES for SKhynix H28U74301AMR
-
-Shyam Prasad N <sprasad@microsoft.com>
-    cifs: empty interface list when server doesn't support query interfaces
 
 Al Viro <viro@zeniv.linux.org.uk>
     sh: sanitize the flags on sigreturn
@@ -279,12 +240,6 @@ Liang He <windhl@126.com>
 Roger Pau Monne <roger.pau@citrix.com>
     hvc/xen: prevent concurrent accesses to the shared ring
 
-Zhang Changzhong <zhangchangzhong@huawei.com>
-    net/sonic: use dma_mapping_error() for error check
-
-Eric Dumazet <edumazet@google.com>
-    erspan: do not use skb_mac_header() in ndo_start_xmit()
-
 Li Zetao <lizetao1@huawei.com>
     atm: idt77252: fix kmemleak when rmmod idt77252
 
@@ -327,15 +282,6 @@ Gaosheng Cui <cuigaosheng1@huawei.com>
 Alexander Lobakin <aleksander.lobakin@intel.com>
     iavf: fix inverted Rx hash condition leading to disabled hash
 
-Jesse Brandeburg <jesse.brandeburg@intel.com>
-    iavf: diet and reformat
-
-Jesse Brandeburg <jesse.brandeburg@intel.com>
-    intel-ethernet: rename i40evf to iavf
-
-Paweł Jabłoński <pawel.jablonski@intel.com>
-    i40evf: Change a VF mac without reloading the VF driver
-
 Zheng Wang <zyytlz.wz@163.com>
     power: supply: da9150: Fix use after free bug in da9150_charger_remove due to race condition
 
@@ -344,130 +290,78 @@ Zheng Wang <zyytlz.wz@163.com>
 
 Diffstat:
 
- Documentation/networking/00-INDEX                  |    4 +-
- Documentation/networking/{i40evf.txt => iavf.txt}  |   16 +-
- MAINTAINERS                                        |    2 +-
- Makefile                                           |    4 +-
- arch/m68k/kernel/traps.c                           |    4 +-
- arch/riscv/include/uapi/asm/setup.h                |    8 +
- arch/s390/lib/uaccess.c                            |    2 +-
- arch/sh/include/asm/processor_32.h                 |    1 +
- arch/sh/kernel/signal_32.c                         |    3 +
- drivers/atm/idt77252.c                             |   11 +
- drivers/bluetooth/btqcomsmd.c                      |   17 +-
- drivers/bluetooth/btsdio.c                         |    1 +
- drivers/bus/imx-weim.c                             |    2 +-
- drivers/firmware/arm_scmi/driver.c                 |   37 +
- drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c        |   10 +-
- drivers/hwmon/it87.c                               |    4 +-
- drivers/i2c/busses/i2c-imx-lpi2c.c                 |    4 +
- drivers/i2c/busses/i2c-xgene-slimpro.c             |    3 +
- drivers/input/mouse/alps.c                         |   16 +-
- drivers/input/mouse/focaltech.c                    |    8 +-
- drivers/md/dm-crypt.c                              |    1 +
- drivers/md/dm-stats.c                              |    7 +-
- drivers/md/dm-stats.h                              |    2 +-
- drivers/md/dm-thin.c                               |    2 +
- drivers/md/dm.c                                    |    4 +-
- drivers/md/md.c                                    |    3 +
- drivers/net/dsa/mv88e6xxx/chip.c                   |    9 +-
- drivers/net/ethernet/intel/Kconfig                 |   15 +-
- drivers/net/ethernet/intel/Makefile                |    2 +-
- drivers/net/ethernet/intel/i40e/i40e_diag.c        |   11 +-
- drivers/net/ethernet/intel/i40e/i40e_diag.h        |    2 +-
- drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |    8 +-
- drivers/net/ethernet/intel/i40evf/Makefile         |   16 -
- .../net/ethernet/intel/i40evf/i40e_adminq_cmd.h    | 2717 --------------------
- drivers/net/ethernet/intel/i40evf/i40e_hmc.h       |  215 --
- drivers/net/ethernet/intel/i40evf/i40e_lan_hmc.h   |  158 --
- drivers/net/ethernet/intel/i40evf/i40e_prototype.h |  130 -
- drivers/net/ethernet/intel/i40evf/i40e_register.h  |  313 ---
- drivers/net/ethernet/intel/i40evf/i40e_type.h      | 1496 -----------
- drivers/net/ethernet/intel/iavf/Makefile           |   15 +
- .../ethernet/intel/{i40evf => iavf}/i40e_adminq.c  |   27 -
- .../ethernet/intel/{i40evf => iavf}/i40e_adminq.h  |    0
- drivers/net/ethernet/intel/iavf/i40e_adminq_cmd.h  |  528 ++++
- .../ethernet/intel/{i40evf => iavf}/i40e_alloc.h   |    0
- .../ethernet/intel/{i40evf => iavf}/i40e_common.c  |  338 ---
- .../ethernet/intel/{i40evf => iavf}/i40e_devids.h  |    0
- .../ethernet/intel/{i40evf => iavf}/i40e_osdep.h   |    0
- drivers/net/ethernet/intel/iavf/i40e_prototype.h   |   71 +
- drivers/net/ethernet/intel/iavf/i40e_register.h    |   68 +
- .../ethernet/intel/{i40evf => iavf}/i40e_status.h  |    0
- .../ethernet/intel/{i40evf => iavf}/i40e_trace.h   |    0
- .../ethernet/intel/{i40evf => iavf}/i40e_txrx.c    |    2 +-
- .../ethernet/intel/{i40evf => iavf}/i40e_txrx.h    |    0
- drivers/net/ethernet/intel/iavf/i40e_type.h        |  719 ++++++
- .../net/ethernet/intel/{i40evf => iavf}/i40evf.h   |    0
- .../intel/{i40evf => iavf}/i40evf_client.c         |    0
- .../intel/{i40evf => iavf}/i40evf_client.h         |    0
- .../intel/{i40evf => iavf}/i40evf_ethtool.c        |    0
- .../ethernet/intel/{i40evf => iavf}/i40evf_main.c  |    7 +-
- .../intel/{i40evf => iavf}/i40evf_virtchnl.c       |   11 +-
- drivers/net/ethernet/intel/igb/igb_main.c          |    2 -
- drivers/net/ethernet/intel/igbvf/netdev.c          |    8 +-
- drivers/net/ethernet/intel/igbvf/vf.c              |   13 +-
- drivers/net/ethernet/marvell/mvneta.c              |   66 +-
- drivers/net/ethernet/mellanox/mlx5/core/en_dcbnl.c |    6 +-
- drivers/net/ethernet/natsemi/sonic.c               |    4 +-
- drivers/net/ethernet/qlogic/qed/qed_sriov.c        |    5 +-
- drivers/net/ethernet/qualcomm/emac/emac.c          |    6 +
- drivers/net/ethernet/toshiba/ps3_gelic_net.c       |   41 +-
- drivers/net/ethernet/toshiba/ps3_gelic_net.h       |    5 +-
- drivers/net/ethernet/xircom/xirc2ps_cs.c           |    5 +
- drivers/net/ieee802154/ca8210.c                    |    5 +-
- drivers/net/phy/mdio-thunder.c                     |    1 +
- drivers/net/tun.c                                  |  109 +-
- drivers/net/usb/cdc_mbim.c                         |    5 +
- drivers/net/usb/qmi_wwan.c                         |    1 +
- drivers/net/usb/smsc95xx.c                         |    6 +
- drivers/net/xen-netback/common.h                   |    2 +-
- drivers/net/xen-netback/netback.c                  |   25 +-
- drivers/pinctrl/pinctrl-at91-pio4.c                |    1 -
- drivers/power/supply/da9150-charger.c              |    1 +
- drivers/scsi/device_handler/scsi_dh_alua.c         |    6 +-
- drivers/scsi/megaraid/megaraid_sas_fusion.c        |    4 +-
- drivers/scsi/scsi_devinfo.c                        |    1 +
- drivers/scsi/ufs/ufshcd.c                          |    1 +
- drivers/target/iscsi/iscsi_target_parameters.c     |   12 +-
- drivers/thunderbolt/nhi.c                          |    2 +-
- drivers/tty/hvc/hvc_xen.c                          |   19 +-
- drivers/usb/chipidea/ci.h                          |    2 +
- drivers/usb/chipidea/core.c                        |   11 +-
- drivers/usb/chipidea/otg.c                         |    5 +-
- drivers/usb/gadget/function/u_audio.c              |    2 +-
- drivers/usb/host/ohci-pxa27x.c                     |    2 +-
- drivers/usb/storage/unusual_uas.h                  |    7 +
- drivers/video/fbdev/au1200fb.c                     |    3 +
- drivers/video/fbdev/geode/lxfb_core.c              |    3 +
- drivers/video/fbdev/intelfb/intelfbdrv.c           |    3 +
- drivers/video/fbdev/nvidia/nvidia.c                |    2 +
- drivers/video/fbdev/tgafb.c                        |    3 +
- fs/cifs/cifsfs.h                                   |    5 +-
- fs/cifs/cifssmb.c                                  |    9 +-
- fs/cifs/smb2ops.c                                  |    2 +-
- fs/ext4/inode.c                                    |    3 +-
- fs/gfs2/aops.c                                     |    2 -
- fs/gfs2/bmap.c                                     |    3 -
- fs/gfs2/glops.c                                    |    3 +
- fs/nilfs2/ioctl.c                                  |    2 +-
- fs/ocfs2/aops.c                                    |   18 +-
- include/linux/cpuset.h                             |    8 +-
- kernel/bpf/core.c                                  |    2 +-
- kernel/cgroup/cgroup-v1.c                          |    3 +
- kernel/cgroup/cgroup.c                             |   50 +-
- kernel/cgroup/cpuset.c                             |   25 +-
- kernel/compat.c                                    |    2 +-
- kernel/sched/core.c                                |    7 +-
- kernel/sched/fair.c                                |   54 +-
- net/can/bcm.c                                      |   16 +-
- net/ipv4/ip_gre.c                                  |    4 +-
- net/ipv6/ip6_gre.c                                 |    4 +-
- net/sched/sch_cbq.c                                |    4 +-
- sound/pci/asihpi/hpi6205.c                         |    2 +-
- sound/pci/hda/patch_ca0132.c                       |    4 +-
- sound/pci/hda/patch_conexant.c                     |    6 +-
- sound/usb/format.c                                 |    8 +-
- 124 files changed, 2054 insertions(+), 5651 deletions(-)
+ Makefile                                           |  4 +-
+ arch/m68k/kernel/traps.c                           |  4 +-
+ arch/riscv/include/uapi/asm/setup.h                |  8 ++++
+ arch/s390/lib/uaccess.c                            |  2 +-
+ arch/sh/include/asm/processor_32.h                 |  1 +
+ arch/sh/kernel/signal_32.c                         |  3 ++
+ drivers/atm/idt77252.c                             | 11 +++++
+ drivers/bluetooth/btqcomsmd.c                      | 17 ++++++-
+ drivers/bluetooth/btsdio.c                         |  1 +
+ drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c        | 10 +++-
+ drivers/hwmon/it87.c                               |  4 +-
+ drivers/i2c/busses/i2c-imx-lpi2c.c                 |  4 ++
+ drivers/i2c/busses/i2c-xgene-slimpro.c             |  3 ++
+ drivers/input/mouse/focaltech.c                    |  8 ++--
+ drivers/md/dm-crypt.c                              |  1 +
+ drivers/md/dm-stats.c                              |  7 ++-
+ drivers/md/dm-stats.h                              |  2 +-
+ drivers/md/dm.c                                    |  4 +-
+ drivers/md/md.c                                    |  3 ++
+ drivers/net/ethernet/intel/i40e/i40e_diag.c        | 11 +++--
+ drivers/net/ethernet/intel/i40e/i40e_diag.h        |  2 +-
+ drivers/net/ethernet/intel/i40evf/i40e_txrx.c      |  2 +-
+ drivers/net/ethernet/intel/igb/igb_main.c          |  2 -
+ drivers/net/ethernet/intel/igbvf/netdev.c          |  8 +++-
+ drivers/net/ethernet/intel/igbvf/vf.c              | 13 ++++--
+ drivers/net/ethernet/mellanox/mlx5/core/en_dcbnl.c |  6 ++-
+ drivers/net/ethernet/qlogic/qed/qed_sriov.c        |  5 +-
+ drivers/net/ethernet/qualcomm/emac/emac.c          |  6 +++
+ drivers/net/ethernet/toshiba/ps3_gelic_net.c       | 41 ++++++++--------
+ drivers/net/ethernet/toshiba/ps3_gelic_net.h       |  5 +-
+ drivers/net/ethernet/xircom/xirc2ps_cs.c           |  5 ++
+ drivers/net/ieee802154/ca8210.c                    |  5 +-
+ drivers/net/phy/mdio-thunder.c                     |  1 +
+ drivers/net/usb/cdc_mbim.c                         |  5 ++
+ drivers/net/usb/qmi_wwan.c                         |  1 +
+ drivers/net/usb/smsc95xx.c                         |  6 +++
+ drivers/net/xen-netback/common.h                   |  2 +-
+ drivers/net/xen-netback/netback.c                  | 25 +++++++++-
+ drivers/pinctrl/pinctrl-at91-pio4.c                |  1 -
+ drivers/power/supply/da9150-charger.c              |  1 +
+ drivers/scsi/device_handler/scsi_dh_alua.c         |  6 ++-
+ drivers/scsi/megaraid/megaraid_sas_fusion.c        |  4 +-
+ drivers/scsi/scsi_devinfo.c                        |  1 +
+ drivers/scsi/ufs/ufshcd.c                          |  1 +
+ drivers/target/iscsi/iscsi_target_parameters.c     | 12 +++--
+ drivers/thunderbolt/nhi.c                          |  2 +-
+ drivers/tty/hvc/hvc_xen.c                          | 19 +++++++-
+ drivers/usb/chipidea/ci.h                          |  2 +
+ drivers/usb/chipidea/core.c                        | 11 ++++-
+ drivers/usb/chipidea/otg.c                         |  5 +-
+ drivers/usb/gadget/function/u_audio.c              |  2 +-
+ drivers/usb/host/ohci-pxa27x.c                     |  2 +-
+ drivers/usb/storage/unusual_uas.h                  |  7 +++
+ drivers/video/fbdev/au1200fb.c                     |  3 ++
+ drivers/video/fbdev/geode/lxfb_core.c              |  3 ++
+ drivers/video/fbdev/intelfb/intelfbdrv.c           |  3 ++
+ drivers/video/fbdev/nvidia/nvidia.c                |  2 +
+ drivers/video/fbdev/tgafb.c                        |  3 ++
+ fs/cifs/cifsfs.h                                   |  5 +-
+ fs/ext4/inode.c                                    |  3 +-
+ fs/nilfs2/ioctl.c                                  |  2 +-
+ fs/ocfs2/aops.c                                    | 18 +++++++-
+ kernel/bpf/core.c                                  |  2 +-
+ kernel/compat.c                                    |  2 +-
+ kernel/sched/core.c                                |  7 ++-
+ kernel/sched/fair.c                                | 54 ++++++++++++++++++++--
+ net/can/bcm.c                                      | 16 ++++---
+ net/sched/sch_cbq.c                                |  4 +-
+ sound/pci/asihpi/hpi6205.c                         |  2 +-
+ sound/pci/hda/patch_ca0132.c                       |  4 +-
+ sound/pci/hda/patch_conexant.c                     |  6 ++-
+ sound/usb/format.c                                 |  8 +++-
+ 72 files changed, 370 insertions(+), 101 deletions(-)
 
 
