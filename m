@@ -2,160 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4926D43FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959AA6D4404
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 14:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbjDCMB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 08:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
+        id S232049AbjDCMCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 08:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbjDCMBZ (ORCPT
+        with ESMTP id S231514AbjDCMCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:01:25 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38732AD0B;
-        Mon,  3 Apr 2023 05:01:18 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 333AUcqv000936;
-        Mon, 3 Apr 2023 12:01:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=qcppdkim1;
- bh=oKC+z/vsgd9nK6ZAdlYqZIsqHfju2k6905n/7eXOxQ0=;
- b=jAzGoPYsSizKIWrDAmmtGn6VkpZgv6m3yiyV/QVNhGpBEwPKOk1hnK1FNl9VO4yYDtj1
- 4eZjq1TOfamNpLQnccO4hf9elWI8B/VPAJHPUVyHr4bSyYgIN23m5X2PRxP3HP0q6bsJ
- pybtG3um6Z1fgx9u2Hai0nndeYOwSti69sWi+y/WS9IXngc1nvDTmfFMhn+8UM6e8edm
- 9DnCdV0FOV/w3wP/q4WsJTVOzfX4eNJuUV/psrQm4PiwhhzZKdmDGlmiBuUOtngzz+vm
- z7Vr3Av5j7p3fhLWMWns0HpyVLto1x6Yx2s71tgVSQsFQPYJwDG8r9k1YOo8AcXuYlLe Ig== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pqw36r5qj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Apr 2023 12:01:14 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A/SOaxuUCPR8JLoi3LAJ8QP5ERPJULLwdQLcjSIzc/+PttS7ytl46be3Y6r7f6CxYzPru0GZvQILygYtdDj8rOUA3LIoep8UIfoWzsjuqMRTWHNC2l2uARxo4U7WenjeEx2yn+3WAyVhYwDenKu+Eok1Q2nQ/CL2gHJ7eUPqBSUbqrzDl2GMtciiLCAiedBP9zqTIObAtlm9wCatDAEHbca+Pn0ljqIrBOfwzsLz8c8ZCGQWqpVYiRFkhvgAQ6tanXoGpTVBKVKmy6KnUn2HtHN+BbyETmRN7VGVUDFcwa7gbO7Jhmd6aEgWuwURylP8Lus8ujemoelN581ZPHARNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oKC+z/vsgd9nK6ZAdlYqZIsqHfju2k6905n/7eXOxQ0=;
- b=R2B3QEmGO9NX/t4ymNRahjUoxPtOnaTJdrK/Kj4L2ppx0pGqY0JGiGjhoSZnzYVl/oN2oz5OiAKTEBI6wKFjEkX0HbSmaZwvpTzyNwtOkqnVzjQhyikArKp1F2gFplUxe1qmDb/mLW9beTfBofDWoY5xYmYcQmOX/FHJUUR8pWuPpWViLLRh1oTlXWtKF5gIL+x32WRMVpbx1MVcyOQYy0cahCAxbsPFP+rLDB17fAerjqYT10fxt7OJJPyRA3HmrDs2vFCdJPphwfraWPyFxo+raX2z8nTMinXdPsIw4GlyRP5lap9h2agX5gX5rMNEM9Cvn4riktGfFezgIZ4qSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=qti.qualcomm.com; dmarc=pass action=none
- header.from=qti.qualcomm.com; dkim=pass header.d=qti.qualcomm.com; arc=none
-Received: from BN0PR02MB8173.namprd02.prod.outlook.com (2603:10b6:408:166::9)
- by CO6PR02MB8723.namprd02.prod.outlook.com (2603:10b6:303:136::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.29; Mon, 3 Apr
- 2023 12:01:11 +0000
-Received: from BN0PR02MB8173.namprd02.prod.outlook.com
- ([fe80::5c51:5ca0:fa24:f4f5]) by BN0PR02MB8173.namprd02.prod.outlook.com
- ([fe80::5c51:5ca0:fa24:f4f5%2]) with mapi id 15.20.6222.035; Mon, 3 Apr 2023
- 12:01:11 +0000
-From:   Vinod Polimera <vpolimer@qti.qualcomm.com>
-To:     "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>
-CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "Vishnuvardhan Prodduturi (QUIC)" <quic_vproddut@quicinc.com>,
-        "Bjorn Andersson (QUIC)" <quic_bjorande@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-Subject: RE: [PATCH v1 3/3] msm: skip the atomic commit of self refresh while
- PSR running
-Thread-Topic: [PATCH v1 3/3] msm: skip the atomic commit of self refresh while
- PSR running
-Thread-Index: AQHZY9j6eXup0EW52Ui7OLHjVldwx68U+rsAgASA5YA=
-Date:   Mon, 3 Apr 2023 12:01:10 +0000
-Message-ID: <BN0PR02MB8173E9FF869F7EEFCE1F5410E4929@BN0PR02MB8173.namprd02.prod.outlook.com>
-References: <1680271114-1534-1-git-send-email-quic_vpolimer@quicinc.com>
- <1680271114-1534-4-git-send-email-quic_vpolimer@quicinc.com>
- <CAA8EJppc3LDQy2RgVZbWki4Y-_FOTK67Y8RfK5Bm9gqdfqMjqQ@mail.gmail.com>
-In-Reply-To: <CAA8EJppc3LDQy2RgVZbWki4Y-_FOTK67Y8RfK5Bm9gqdfqMjqQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN0PR02MB8173:EE_|CO6PR02MB8723:EE_
-x-ms-office365-filtering-correlation-id: d17df0c9-d832-48d8-4836-08db343b1dcf
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: H9x2fRMQL6MU57InefbZMCFo/f5oU7LpRNLEq6fV5zIo3LZBFiQfWnOsbZOfahhGZHcLz5Bsd17iLiJpPkxbvkkxnCjmqICXW2xq8fjIVlet2a5P3fdP1J3f6co9iYvoPjIaNqo9KPKKBVrn7zJcZuEEg4jmExyDN1kJ2irs5KKau6mkexnN2DI+8J65vuM6SQGjKx+8DAh5n0kTk+q7Y5c1K9GQtljlhv/rZBWpdhnr+8qaYOhHjhnDnDPc4QMaQR/suR7iEtYwJOp+M578Db6U4/ThBuDFH2PeGU41O+tUfaPllT41zv19hgN5Dd4C/Ny4s8AxOGZ/4LzBgLPFB+y36ljK96CJx15xe0kDMk84Uz9QCFQuO8MIpiOrIfBqo7w15PI6DFcWp4rAkezuJqkcv7AUYu7ul8ZtsWIP1tNg4IlXadIPPrpq5+NmRDdcCNFMQMWTxZre7NPTuq68C1i4PP5J2WtknmR4OJZOjOAeUsBE4yr8Qc+pEvDmzxWegeOmIGp+114SSLCATRdBzHvYOaTeIum2IIhcL1kW3ho5G/ShtK1mudg9aOGiC/NQH39a8jo1vIqOxR7rQvs0JSA14e7CqNSoosNDIS+MTaI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR02MB8173.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(366004)(376002)(346002)(451199021)(38100700002)(966005)(122000001)(55016003)(6506007)(9686003)(186003)(107886003)(26005)(52536014)(2906002)(33656002)(5660300002)(8936002)(478600001)(54906003)(38070700005)(71200400001)(64756008)(66476007)(7696005)(66556008)(66446008)(66946007)(4326008)(76116006)(41300700001)(316002)(86362001)(110136005)(8676002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cWtwVi8zWjhGa2FLUkQ3WEw5Snh0bmJubWNTcG9XcDhNTDBoZm9xTFZoMVpw?=
- =?utf-8?B?T2ZQaDNwSlY0ck9XZU5PV3plOENnQmZocXVOc3ZqSXNNbzRvOUx6M2IxRXRP?=
- =?utf-8?B?M1N4NXVUbmozNnJjaE9tZEFKWU5TNTgxQmtaaG1hcEpmclk2T3J2WUNrOVdn?=
- =?utf-8?B?QjF4UzlMVENYVXQxYXY4TWxYaWZNOWNsSy9NVUFCc29CK3pJMWpJQ0JjS1BS?=
- =?utf-8?B?cWNubXZYN0VMY3hzSWJWYVR1ZFBxVU0zNVBxYndIZ1RmZUNNcHRKQTNnbkcx?=
- =?utf-8?B?V2d5VUdIMCtlR0JXQ2tNejVQN3N2NGRxa2cwd09RWjlMYTM0SzhIQllubHFV?=
- =?utf-8?B?ZW5taDVwWlk4eFFCa1lrK1oxOVg2STNna0kxTm9LU1J4NHBXWTNUblRnS3JH?=
- =?utf-8?B?TFN4YSsybm1BUUUrT2FhV25SOVhlYk5wbHhWSm9jeFZhOTlqbE1qK2tmZWpT?=
- =?utf-8?B?ZUNCSG03cE1VSVJ1Q1pnNFVvdzREV1BxNEplSDBickhlR1A4anpQd3Y4Q28y?=
- =?utf-8?B?V0w0RzRZY29XUkhGbGU3dGlRSGlCQUg1SG9NS21kdG9KQjRINUpGL2xwOVdZ?=
- =?utf-8?B?YUdudDZYaTRKOTdwSS9UdHJpMjJqeEx5N3hQaUN5dlBOemtlbVgzSzRwZDZP?=
- =?utf-8?B?REN3UGFoMjUwbGpCNnBWS2g0SEpveXZpY0RVMkpWem1RY25Wc2tLeGZTeU0v?=
- =?utf-8?B?TTlSdHJjSStYejRRai9pUGlhSUVyLzNoS2JGZGpFeDZWYVlmY0pSdzUrb0ti?=
- =?utf-8?B?OVpMclpHRDl6QWJReWZWcmdYQkJxcXJsVHBEMXBEWkVXR0U1YkNvc1RLY0pZ?=
- =?utf-8?B?enR2ZHZOZEJ3RFhmRjNlRzFKMW5HNlovT3NRamVKbk9CbUZGZnNMeHhMcHlE?=
- =?utf-8?B?QjBibzJnSGhYenhTMnBZZTVGSHRZbjQ1dXNCL0ZGdDl2VGZkVnNYMkhLL0lG?=
- =?utf-8?B?ZzB3bks4bmxmMHpZNGc3UTUwa3FETitzZllnS1M0SDk5dHVyUktXTmZmaUtL?=
- =?utf-8?B?Y2RXeDkrOWhlQ0J3QzUzblc5VGRwVXVNZFFPNHhIY1Z5VklWSURZNXlZaFo5?=
- =?utf-8?B?MDlldHoyYWdHTzVRVFFBYUpOenB0S09JaVZ5c2k4c09OSktkRDZKOEpiQ01o?=
- =?utf-8?B?OEdIWXYrbzFSSFRMNXJBVWM0UWQ0VlBqZW9RUjNnMloxZ01LUGhvenVZUGQy?=
- =?utf-8?B?MThieDBTUFZXZ0h4QWthNVhBUmNFY2hiQnZCUHFlSGpBc0NBM1I3MVlCbmlu?=
- =?utf-8?B?eVFKejNEeXFOMFBna3B6dk1wUmJHOUJzRysvT3l4aTc5eTIrYUcxeldXemxH?=
- =?utf-8?B?RzE4c3NONzBnKzBmTnZpMUhNVFZCZ29CcWd4ZVdVaVN0dzVsOHhBYkVNQldU?=
- =?utf-8?B?eUtFMjhUL3JIZzE4UzBCRkxUVGo5Y1pnN2haR0ExeVR5SWZqdm44TWxWYzZy?=
- =?utf-8?B?Y0ZSaWF6emt5a0hseC9SY1hEd2RRcis2MmR4R28xYkRCYmZKQ3ROUUcyL1c5?=
- =?utf-8?B?VGRRckZVWFF4MXkzZG5BaEtlaURuY1dNeVNBWXk0UzBDNTVENlZlUmUxMXgx?=
- =?utf-8?B?MmZQdTEwajZ4TXNVWi85alptakZCU2oxb0NtemFHVkhOM1ZvcFd5MEpUaDZ0?=
- =?utf-8?B?SjdFU29SUjhtTTZQZVZyYjhhRis2dzE1RWNvY2xiNlRQeUhzblJUOVJoVFpw?=
- =?utf-8?B?TnFoRVNMNkNJc2YrcXpiWUVHVDNBaysvNHE1c05BNWNWTFUzMHVNM0puczVy?=
- =?utf-8?B?b1g4N2lhS3RNOXZ6SitGZW9YOCt1bDBGV1ZsTnBmbExKM0lyQnQraG5aNUNG?=
- =?utf-8?B?YW1rS292L003SzZNUHVFb0oxWFNaQy9BTGdXQVJ6K0RxTUdYeCtIZ05lKytk?=
- =?utf-8?B?V1VYWjllQnhtTndCQWd5ZE1zZG45OHgrOGpncWZhVDlLSkF5Y09uOXdjS0dv?=
- =?utf-8?B?TXRVTXNWdmR4Tk02MGVuc1hKQktNOFFDdSt0UTF0Vkp0UFowTUk5R3MvOSt6?=
- =?utf-8?B?UEVnYVd1bFcrUXRtU0VrME00b0Qzc1M5TUtCZWdMUXRQVnFybEh6TXFadDU0?=
- =?utf-8?B?Nkg1SlQ4NWVBcDBPRlhzVnVhZ2c1QjNLbkxxVVQrdXZtcUFCNDdTK09MS1pI?=
- =?utf-8?Q?5yfxXkl1Yh4FSYu1y9UZ3qb3j?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 1N/T6j86p2OgEutA+YoxPMfgZWPz9a+EzSizAlV76euLBehq6gRtey2eHDeObUaCsAwRwx/DCi7Xtukw0OWWh+xq0AKJ5n4M7Ks0oObbwZ4ptUsbgO87qXYFsZgGUjGLd7mkRkRq0fEe4UKd08qvhMV7v7gsCRIqKynW22dNlwWM8ql+bPqf6kZ4xpNQ7i7GhtUyEvmscYwA5cmcfteng9KHTYBRE0WQDTG5hCqcActk5pL0blMWMmgdxSrDOCA6+GnmR5sz9smWAwjtTXjruiKKIVGJ6WL3TGEopVWvP6E4e3+lJIWKKvEAno1JtJHXO5bSzvIy+KyObomy+/JArT32STPPUWE4whpolK/9WvQGnjtcWhuhXyBRmPXtEYtlUbgL+AYKmE2vdmWdDkDJWYTumYg5Duaa20etHax0cRiiHo8JvWAkNaROl3N5PzU8v/szo0mRqwhXGKObHC+ED0FbRPnyS7l9DSuWfD+tRQdHcoWfQY3iloDINE2fQ/+JDA8SPpERxaW2KqLP2a+i8gtCF+FnbxyDXyVe4vNH/gg1pzm8DZrhUL+yX9SP9WZAaNdJ8iodU2JqZOCuWJjXFJUPtKf6TyOogayVMYl7+6UL1nfW18czDbTSjLCFyUIahudjIt1E/ZN37gml2N2eJCVyPxomFGsaBcx6ci3fTElGCBmoSnA+fl+ESszSRPGcBXgXijqiMNAVWM38w1dy28z+IFi1xVuHNH7ZthiskJ2KyY7aFwPUEMVcH8p2PMewlYrO0gX9+vC0OIT3ZJKUiaTsGz4SGs/Ur/1JRZr3ib5PZGhIq7M99zdoSJcOPUbo9EPKkilJEwNaHbOOWOf/5cv8iGb/HH7/GnHpTG1hgHgirJTVuYdh0/anfghsGt4yhmEoe6YQr4/+FeE1DlruYWKhwz2uVM/+GXSUfU2Jkwg=
-X-OriginatorOrg: qti.qualcomm.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR02MB8173.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d17df0c9-d832-48d8-4836-08db343b1dcf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Apr 2023 12:01:11.0398
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rwNRxlko5befV3WdrzWh0IH6R3geio0khkrx3iKaSxKNSXjrws12ACsgTnhibZc60JgSohdVEBEVyM/0TMGOXb0fPqNj7LAFrzGLC/IXiII=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR02MB8723
-X-Proofpoint-ORIG-GUID: t9is_NCaUWuXlBIV5h4qHy48KnPVnNTr
-X-Proofpoint-GUID: t9is_NCaUWuXlBIV5h4qHy48KnPVnNTr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-03_08,2023-04-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
- phishscore=0 clxscore=1015 malwarescore=0 adultscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304030090
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        Mon, 3 Apr 2023 08:02:44 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6074CB44E;
+        Mon,  3 Apr 2023 05:02:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680523361; x=1712059361;
+  h=from:to:cc:subject:date:message-id;
+  bh=ZI7rLzr90CLZLrYSzPzGfo6WtmaFexPHseJ/2EPOhpE=;
+  b=WGhcL/2jh2eR0X/QHS+ABxyCz51DLMG679sQl8hCEhAypeAkU29PR/cB
+   zXY1SV26Su9MpaYTeFKdWw80N1zm9P7Fh0K0M/aeCdX9GGvpH4Cbltukk
+   ej8nioo3bAZ3bxJHKVDQxoNndCW55nAeEIIitdF4pBp3jEbpoYqvggDGS
+   6L/+GDh0H4TXqx73n6aIzb5OQQZTG2JXzOchFDWD7QUnY7FCuG3/na+QE
+   iX4FUxQgwM4AEImbajBZOSYmrEJN0OMmAYbsHamvv5PDxpKggf/sgMdzk
+   D3MZZvHQmjcrkvJOkMzeREIOGqfgDKlOKYZ+9OBnqXPjTo3Rwfp0d8yt6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="330449276"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="330449276"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 05:02:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="775158717"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="775158717"
+Received: from inlubt0316.iind.intel.com ([10.191.20.213])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Apr 2023 05:02:36 -0700
+From:   lakshmi.sowjanya.d@intel.com
+To:     linus.walleij@linaro.org
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        furong.zhou@intel.com, kris.pan@intel.com, pandith.n@intel.com,
+        kenchappa.demakkanavar@intel.com, lakshmi.sowjanya.d@intel.com
+Subject: [PATCH v1 1/2] pinctrl: Remove Intel Thunder Bay pinctrl driver
+Date:   Mon,  3 Apr 2023 17:32:34 +0530
+Message-Id: <20230403120235.939-1-lakshmi.sowjanya.d@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -163,43 +58,1361 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiBGcmksIDMxIE1hciAyMDIzIGF0IDE2OjU5LCBWaW5vZCBQb2xpbWVyYSA8cXVpY192cG9s
-aW1lckBxdWljaW5jLmNvbT4NCj4gd3JvdGU6DQo+ID4NCj4gPiBJbiBjZXJ0YWluIENQVSBzdHJl
-c3MgY29uZGl0aW9ucywgdGhlcmUgY2FuIGJlIGEgZGVsYXkgaW4gc2NoZWR1bGluZyBjb21taXQN
-Cj4gPiB3b3JrIGFuZCBpdCB3YXMgb2JzZXJ2ZWQgdGhhdCBQU1IgY29tbWl0IGZyb20gYSBkaWZm
-ZXJlbnQgd29yayBxdWV1ZQ0KPiB3YXMNCj4gPiBzY2hlZHVsZWQuIEF2b2lkIHRoZXNlIGNvbW1p
-dHMgYXMgZGlzcGxheSBpcyBhbHJlYWR5IGluIFBTUiBtb2RlLg0KPiA+DQo+ID4gU2lnbmVkLW9m
-Zi1ieTogVmlub2QgUG9saW1lcmEgPHF1aWNfdnBvbGltZXJAcXVpY2luYy5jb20+DQo+ID4gLS0t
-DQo+ID4gIGRyaXZlcnMvZ3B1L2RybS9tc20vbXNtX2F0b21pYy5jIHwgMyArKysNCj4gPiAgMSBm
-aWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvZ3B1L2RybS9tc20vbXNtX2F0b21pYy5jDQo+IGIvZHJpdmVycy9ncHUvZHJtL21zbS9tc21f
-YXRvbWljLmMNCj4gPiBpbmRleCA2NDVmZTUzLi5mODE0MWJiIDEwMDY0NA0KPiA+IC0tLSBhL2Ry
-aXZlcnMvZ3B1L2RybS9tc20vbXNtX2F0b21pYy5jDQo+ID4gKysrIGIvZHJpdmVycy9ncHUvZHJt
-L21zbS9tc21fYXRvbWljLmMNCj4gPiBAQCAtMTkyLDYgKzE5Miw5IEBAIGludCBtc21fYXRvbWlj
-X2NoZWNrKHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsDQo+IHN0cnVjdCBkcm1fYXRvbWljX3N0YXRl
-ICpzdGF0ZSkNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICBuZXdfY3J0Y19zdGF0ZS0+bW9k
-ZV9jaGFuZ2VkID0gdHJ1ZTsNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICBzdGF0ZS0+YWxs
-b3dfbW9kZXNldCA9IHRydWU7DQo+ID4gICAgICAgICAgICAgICAgIH0NCj4gPiArDQo+ID4gKyAg
-ICAgICAgICAgICAgIGlmIChvbGRfY3J0Y19zdGF0ZS0+c2VsZl9yZWZyZXNoX2FjdGl2ZSAmJiBu
-ZXdfY3J0Y19zdGF0ZS0NCj4gPnNlbGZfcmVmcmVzaF9hY3RpdmUpDQo+ID4gKyAgICAgICAgICAg
-ICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+IA0KPiBFSU5WQUwgaGVyZSBtZWFucyB0aGF0
-IGF0b21pY19jaGVjayB3aWxsIGZhaWwgaWYgYm90aCBvbGQgYW5kIG5ldw0KPiBzdGF0ZXMgYXJl
-IGluIFNSIG1vZGUuIEZvciBleGFtcGxlLCB0aGVyZSBtaWdodCBiZSBhIG1vZGUgc2V0IGZvcg0K
-PiBhbm90aGVyIENSVEMgKHdoaWxlIGtlZXBpbmcgdGhpcyBvbmUgaW4gU1IgbW9kZSkuIEkgZG9u
-J3QgdGhpbmsgdGhpcw0KPiBpcyBjb3JyZWN0LiBXZSBzaG91bGQgc2tpcC9zaG9ydGN1dCB0aGUg
-Y29tbWl0LCB0aGF0J3MgdHJ1ZS4gQnV0IEkNCj4gZG91YnQgdGhhdCByZXR1cm5pbmcgYW4gZXJy
-b3IgaGVyZSBpcyBhIHByb3BlciB3YXkgdG8gZG8gdGhpcy4gUGxlYXNlDQo+IGNvcnJlY3QgbWUg
-aWYgSSdtIHdyb25nLg0KDQpJZiB0aGVyZSBpcyBhIG1vZGVzZXQgb24gc2FtZSBjcnRjIHdpdGgg
-YSBkaWZmZXJlbnQgY29ubmVjdG9yLiBUaGUgbmV3X2NydGNfc3RhdGUgd2lsbCBub3QgaGF2ZSBz
-ZWxmX3JlZnJlc2hfYWN0aXZlIHNldC4NClNlbGZfcmVmcmVzaF9hY3RpdmUgaXMgc2V0IGZyb20g
-dGhlIGhlbHBlciBsaWJyYXJ5LCB3aGljaCB3aWxsIGR1cGxpY2F0ZSB0aGUgb2xkX3N0YXRlIGFu
-ZCBqdXN0IGFkZHMgc2VsZl9yZWZyZXNoX2FjdGl2ZSB0byB0cnVlIGFuZCBhY3RpdmUgdG8gZmFs
-c2UuDQpzbyB3ZSBjYW4gYmUgY29uZmlkZW50IHRoYXQgaWYgd2UgYXJlIGNoZWNraW5nIGZvciBz
-ZWxmX3JlZnJlc2hfYWN0aXZlIHN0YXR1cyB0aGVuIGl0IHNob3VsZCBiZSBjb21pbmcgZnJvbSB0
-aGUgbGlicmFyeSBjYWxsLg0KDQpBbHNvIHRoZSBFSU5WQUwgaXMgcmV0dXJuZWQgdG8gdGhlIHNl
-bGZfcmVmcmVzaCBsaWJyYXJ5IEFQSSBhbmQgdGhlIGZ1bmN0aW9uIHdpbGwgYmUgcmV0aXJlZC4N
-CkFuZCBzZWxmX3JlZnJlc2hfYWN0aXZlIGlzIGNsZWFyZWQgb24gZXZlcnkgY29tbWl0IDogaHR0
-cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvbmV4dC9saW51eC1u
-ZXh0LmdpdC90cmVlL2RyaXZlcnMvZ3B1L2RybS9kcm1fYXRvbWljX3N0YXRlX2hlbHBlci5jI24x
-NTgNCg0KVGhlIGFib3ZlIGlzIHRydWUgZm9yIGRpZmZlcmVudCBjcnRjIGFzIHdlbGwuDQpwbGVh
-c2UgbGV0IG1lIGtub3cgeW91ciBjb21tZW50cy4NCg0KVGhhbmtzLA0KVmlub2QuDQogDQo=
+From: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+
+Remove Thunder Bay specific code as the product got cancelled
+and there are no end customers or users.
+
+Signed-off-by: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+---
+ drivers/pinctrl/Kconfig              |   19 -
+ drivers/pinctrl/Makefile             |    1 -
+ drivers/pinctrl/pinctrl-thunderbay.c | 1294 --------------------------
+ 3 files changed, 1314 deletions(-)
+ delete mode 100644 drivers/pinctrl/pinctrl-thunderbay.c
+
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index dcb53c4a9584..d430adcf17f1 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -480,25 +480,6 @@ config PINCTRL_TB10X
+ 	depends on OF && ARC_PLAT_TB10X
+ 	select GPIOLIB
+ 
+-config PINCTRL_THUNDERBAY
+-	tristate "Generic pinctrl and GPIO driver for Intel Thunder Bay SoC"
+-	depends on ARCH_THUNDERBAY || (ARM64 && COMPILE_TEST)
+-	depends on HAS_IOMEM
+-	select PINMUX
+-	select PINCONF
+-	select GENERIC_PINCONF
+-	select GENERIC_PINCTRL_GROUPS
+-	select GENERIC_PINMUX_FUNCTIONS
+-	select GPIOLIB
+-	select GPIOLIB_IRQCHIP
+-	select GPIO_GENERIC
+-	help
+-	  This selects pin control driver for the Intel Thunder Bay SoC.
+-	  It provides pin config functions such as pull-up, pull-down,
+-	  interrupt, drive strength, sec lock, Schmitt trigger, slew
+-	  rate control and direction control. This module will be
+-	  called as pinctrl-thunderbay.
+-
+ config PINCTRL_ZYNQ
+ 	bool "Pinctrl driver for Xilinx Zynq"
+ 	depends on ARCH_ZYNQ
+diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+index d5939840bb2a..a1a04a439800 100644
+--- a/drivers/pinctrl/Makefile
++++ b/drivers/pinctrl/Makefile
+@@ -48,7 +48,6 @@ obj-$(CONFIG_PINCTRL_ST) 	+= pinctrl-st.o
+ obj-$(CONFIG_PINCTRL_STMFX) 	+= pinctrl-stmfx.o
+ obj-$(CONFIG_PINCTRL_SX150X)	+= pinctrl-sx150x.o
+ obj-$(CONFIG_PINCTRL_TB10X)	+= pinctrl-tb10x.o
+-obj-$(CONFIG_PINCTRL_THUNDERBAY) += pinctrl-thunderbay.o
+ obj-$(CONFIG_PINCTRL_ZYNQMP)	+= pinctrl-zynqmp.o
+ obj-$(CONFIG_PINCTRL_ZYNQ)	+= pinctrl-zynq.o
+ 
+diff --git a/drivers/pinctrl/pinctrl-thunderbay.c b/drivers/pinctrl/pinctrl-thunderbay.c
+deleted file mode 100644
+index 7a5ff955877c..000000000000
+--- a/drivers/pinctrl/pinctrl-thunderbay.c
++++ /dev/null
+@@ -1,1294 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Intel Thunder Bay SOC pinctrl/GPIO driver
+- *
+- * Copyright (C) 2021 Intel Corporation
+- */
+-
+-#include <linux/device.h>
+-#include <linux/err.h>
+-#include <linux/gpio/driver.h>
+-#include <linux/init.h>
+-#include <linux/interrupt.h>
+-#include <linux/io.h>
+-#include <linux/irq.h>
+-#include <linux/module.h>
+-#include <linux/of.h>
+-#include <linux/of_irq.h>
+-
+-#include <linux/pinctrl/pinconf.h>
+-#include <linux/pinctrl/pinconf-generic.h>
+-#include <linux/pinctrl/pinctrl.h>
+-#include <linux/pinctrl/pinmux.h>
+-
+-#include <linux/platform_device.h>
+-#include <linux/slab.h>
+-#include <linux/spinlock.h>
+-
+-#include "core.h"
+-#include "pinconf.h"
+-#include "pinctrl-utils.h"
+-#include "pinmux.h"
+-
+-/* Bit 0:2 and 4:6 should be used for mode selection */
+-#define THB_GPIO_PINMUX_MODE_0			0x00
+-#define THB_GPIO_PINMUX_MODE_1			0x11
+-#define THB_GPIO_PINMUX_MODE_2			0x22
+-#define THB_GPIO_PINMUX_MODE_3			0x33
+-#define THB_GPIO_PINMUX_MODE_4			0x44
+-
+-#define THB_GPIO_PORT_SELECT_MASK		BIT(8)
+-#define THB_GPIO_PAD_DIRECTION_MASK		BIT(10)
+-#define THB_GPIO_SPU_MASK			BIT(11)
+-#define THB_GPIO_PULL_ENABLE_MASK		BIT(12)
+-#define THB_GPIO_PULL_UP_MASK			BIT(13)
+-#define THB_GPIO_PULL_DOWN_MASK			BIT(14)
+-#define THB_GPIO_ENAQ_MASK			BIT(15)
+-/* bit 16-19: Drive Strength for the Pad */
+-#define THB_GPIO_DRIVE_STRENGTH_MASK		(0xF0000)
+-#define THB_GPIO_SLEW_RATE_MASK			BIT(20)
+-#define THB_GPIO_SCHMITT_TRIGGER_MASK		BIT(21)
+-
+-#define THB_GPIO_REG_OFFSET(pin_num)			((pin_num) * (0x4))
+-#define THB_MAX_MODE_SUPPORTED				(5u)
+-#define THB_MAX_NPINS_SUPPORTED				(67u)
+-
+-/* store Pin status */
+-static u32 thb_pinx_status[THB_MAX_NPINS_SUPPORTED];
+-
+-struct thunderbay_mux_desc {
+-	u8 mode;
+-	const char *name;
+-};
+-
+-#define THUNDERBAY_PIN_DESC(pin_number, pin_name, ...) {        \
+-	.number = pin_number,                           \
+-	.name = pin_name,                               \
+-	.drv_data = &(struct thunderbay_mux_desc[]) {   \
+-			__VA_ARGS__, { } },             \
+-}
+-
+-#define THUNDERBAY_MUX(pin_mode, pin_function) {                \
+-	.mode = pin_mode,                               \
+-	.name = pin_function,                           \
+-}
+-
+-struct thunderbay_pin_soc {
+-	const struct pinctrl_pin_desc           *pins;
+-	unsigned int                            npins;
+-};
+-
+-/**
+- * struct thunderbay_pinctrl - Intel Thunderbay pinctrl structure
+- * @pctrl: Pointer to the pin controller device
+- * @base0: First register base address
+- * @dev: Pointer to the device structure
+- * @chip: GPIO chip used by this pin controller
+- * @soc: Pin control configuration data based on SoC
+- * @ngroups: Number of pin groups available
+- * @nfuncs: Number of pin functions available
+- */
+-struct thunderbay_pinctrl {
+-	struct pinctrl_dev              *pctrl;
+-	void __iomem                    *base0;
+-	struct device                   *dev;
+-	struct gpio_chip                chip;
+-	const struct thunderbay_pin_soc *soc;
+-	unsigned int                    ngroups;
+-	unsigned int                    nfuncs;
+-};
+-
+-static const struct pinctrl_pin_desc thunderbay_pins[] = {
+-	THUNDERBAY_PIN_DESC(0, "GPIO0",
+-			    THUNDERBAY_MUX(0X0, "I2C0_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(1, "GPIO1",
+-			    THUNDERBAY_MUX(0X0, "I2C0_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(2, "GPIO2",
+-			    THUNDERBAY_MUX(0X0, "I2C1_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(3, "GPIO3",
+-			    THUNDERBAY_MUX(0X0, "I2C1_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(4, "GPIO4",
+-			    THUNDERBAY_MUX(0X0, "I2C2_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(5, "GPIO5",
+-			    THUNDERBAY_MUX(0X0, "I2C2_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(6, "GPIO6",
+-			    THUNDERBAY_MUX(0X0, "I2C3_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(7, "GPIO7",
+-			    THUNDERBAY_MUX(0X0, "I2C3_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(8, "GPIO8",
+-			    THUNDERBAY_MUX(0X0, "I2C4_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(9, "GPIO9",
+-			    THUNDERBAY_MUX(0X0, "I2C4_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(10, "GPIO10",
+-			    THUNDERBAY_MUX(0X0, "UART0_M0"),
+-			    THUNDERBAY_MUX(0X1, "RT0_DSU_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(11, "GPIO11",
+-			    THUNDERBAY_MUX(0X0, "UART0_M0"),
+-			    THUNDERBAY_MUX(0X1, "RT0_DSU_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(12, "GPIO12",
+-			    THUNDERBAY_MUX(0X0, "UART0_M0"),
+-			    THUNDERBAY_MUX(0X1, "RT1_DSU_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(13, "GPIO13",
+-			    THUNDERBAY_MUX(0X0, "UART0_M0"),
+-			    THUNDERBAY_MUX(0X1, "RT1_DSU_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(14, "GPIO14",
+-			    THUNDERBAY_MUX(0X0, "UART1_M0"),
+-			    THUNDERBAY_MUX(0X1, "RT2_DSU_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "TRIGGER_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(15, "GPIO15",
+-			    THUNDERBAY_MUX(0X0, "UART1_M0"),
+-			    THUNDERBAY_MUX(0X1, "RT2_DSU_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "TRIGGER_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(16, "GPIO16",
+-			    THUNDERBAY_MUX(0X0, "UART1_M0"),
+-			    THUNDERBAY_MUX(0X1, "RT3_DSU_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(17, "GPIO17",
+-			    THUNDERBAY_MUX(0X0, "UART1_M0"),
+-			    THUNDERBAY_MUX(0X1, "RT3_DSU_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(18, "GPIO18",
+-			    THUNDERBAY_MUX(0X0, "SPI0_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(19, "GPIO19",
+-			    THUNDERBAY_MUX(0X0, "SPI0_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(20, "GPIO20",
+-			    THUNDERBAY_MUX(0X0, "SPI0_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_TRACE_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(21, "GPIO21",
+-			    THUNDERBAY_MUX(0X0, "SPI0_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_TRACE_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(22, "GPIO22",
+-			    THUNDERBAY_MUX(0X0, "SPI1_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M0"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(23, "GPIO23",
+-			    THUNDERBAY_MUX(0X0, "SPI1_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(24, "GPIO24",
+-			    THUNDERBAY_MUX(0X0, "SPI1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_TRACE_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(25, "GPIO25",
+-			    THUNDERBAY_MUX(0X0, "SPI1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_TRACE_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(26, "GPIO26",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(27, "GPIO27",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(28, "GPIO28",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(29, "GPIO29",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(30, "GPIO30",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(31, "GPIO31",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(32, "GPIO32",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(33, "GPIO33",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(34, "GPIO34",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DIG_VIEW_0"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(35, "GPIO35",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DIG_VIEW_1"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(36, "GPIO36",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "CPR_IO_OUT_CLK_0"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(37, "GPIO37",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "CPR_IO_OUT_CLK_1"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(38, "GPIO38",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "CPR_IO_OUT_CLK_2"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(39, "GPIO39",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "CPR_IO_OUT_CLK_3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(40, "GPIO40",
+-			    THUNDERBAY_MUX(0X0, "ETHER0_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(41, "GPIO41",
+-			    THUNDERBAY_MUX(0X0, "POWER_INTERRUPT_MAX_PLATFORM_POWER_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(42, "GPIO42",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(43, "GPIO43",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(44, "GPIO44",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(45, "GPIO45",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(46, "GPIO46",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(47, "GPIO47",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(48, "GPIO48",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(49, "GPIO49",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DEBUG_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(50, "GPIO50",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DIG_VIEW_0"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(51, "GPIO51",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "DIG_VIEW_1"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(52, "GPIO52",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "CPR_IO_OUT_CLK_0"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(53, "GPIO53",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "CPR_IO_OUT_CLK_1"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(54, "GPIO54",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "CPR_IO_OUT_CLK_2"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(55, "GPIO55",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "CPR_IO_OUT_CLK_3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(56, "GPIO56",
+-			    THUNDERBAY_MUX(0X0, "ETHER1_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "POWER_INTERRUPT_ICCMAX_VDDD_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(57, "GPIO57",
+-			    THUNDERBAY_MUX(0X0, "POWER_INTERRUPT_ICCMAX_VPU_M0"),
+-			    THUNDERBAY_MUX(0X1, "TPIU_DATA_M1"),
+-			    THUNDERBAY_MUX(0X2, "TPIU_DATA_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(58, "GPIO58",
+-			    THUNDERBAY_MUX(0X0, "THERMTRIP_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(59, "GPIO59",
+-			    THUNDERBAY_MUX(0X0, "THERMTRIP_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(60, "GPIO60",
+-			    THUNDERBAY_MUX(0X0, "SMBUS_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(61, "GPIO61",
+-			    THUNDERBAY_MUX(0X0, "SMBUS_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "POWER_INTERRUPT_ICCMAX_VDDD_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(62, "GPIO62",
+-			    THUNDERBAY_MUX(0X0, "PLATFORM_RESET_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(63, "GPIO63",
+-			    THUNDERBAY_MUX(0X0, "PLATFORM_RESET_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(64, "GPIO64",
+-			    THUNDERBAY_MUX(0X0, "PLATFORM_SHUTDOWN_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(65, "GPIO65",
+-			    THUNDERBAY_MUX(0X0, "PLATFORM_SHUTDOWN_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-	THUNDERBAY_PIN_DESC(66, "GPIO66",
+-			    THUNDERBAY_MUX(0X0, "POWER_INTERRUPT_ICCMAX_MEDIA_M0"),
+-			    THUNDERBAY_MUX(0X1, "EMPTY_M1"),
+-			    THUNDERBAY_MUX(0X2, "EMPTY_M2"),
+-			    THUNDERBAY_MUX(0X3, "EMPTY_M3"),
+-			    THUNDERBAY_MUX(0X4, "GPIO_M4")),
+-};
+-
+-static const struct thunderbay_pin_soc thunderbay_data = {
+-	.pins	= thunderbay_pins,
+-	.npins  = ARRAY_SIZE(thunderbay_pins),
+-};
+-
+-static u32 thb_gpio_read_reg(struct gpio_chip *chip, unsigned int pinnr)
+-{
+-	struct thunderbay_pinctrl *tpc = gpiochip_get_data(chip);
+-
+-	return readl(tpc->base0 + THB_GPIO_REG_OFFSET(pinnr));
+-}
+-
+-static u32 thb_gpio_write_reg(struct gpio_chip *chip, unsigned int pinnr, u32 value)
+-{
+-	struct thunderbay_pinctrl *tpc = gpiochip_get_data(chip);
+-
+-	writel(value, (tpc->base0 + THB_GPIO_REG_OFFSET(pinnr)));
+-	return 0;
+-}
+-
+-static int thb_read_gpio_data(struct gpio_chip *chip, unsigned int offset, unsigned int pad_dir)
+-{
+-	int data_offset;
+-	u32 data_reg;
+-
+-	/* as per GPIO Spec = pad_dir 0:input, 1:output */
+-	data_offset = 0x2000u + (offset / 32);
+-	if (!pad_dir)
+-		data_offset += 4;
+-	data_reg = thb_gpio_read_reg(chip, data_offset);
+-
+-	return data_reg & BIT(offset % 32);
+-}
+-
+-static int thb_write_gpio_data(struct gpio_chip *chip, unsigned int offset, unsigned int value)
+-{
+-	int data_offset;
+-	u32 data_reg;
+-
+-	data_offset = 0x2000u + (offset / 32);
+-
+-	data_reg = thb_gpio_read_reg(chip, data_offset);
+-
+-	if (value > 0)
+-		data_reg |= BIT(offset % 32);
+-	else
+-		data_reg &= ~BIT(offset % 32);
+-
+-	return thb_gpio_write_reg(chip, data_offset, data_reg);
+-}
+-
+-static int thunderbay_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
+-{
+-	u32 reg = thb_gpio_read_reg(chip, offset);
+-
+-	/* Return direction only if configured as GPIO else negative error */
+-	if (reg & THB_GPIO_PORT_SELECT_MASK)
+-		return !(reg & THB_GPIO_PAD_DIRECTION_MASK);
+-	return -EINVAL;
+-}
+-
+-static int thunderbay_gpio_set_direction_input(struct gpio_chip *chip, unsigned int offset)
+-{
+-	u32 reg = thb_gpio_read_reg(chip, offset);
+-
+-	/* set pin as input only if it is GPIO else error */
+-	if (reg & THB_GPIO_PORT_SELECT_MASK) {
+-		reg &= (~THB_GPIO_PAD_DIRECTION_MASK);
+-		thb_gpio_write_reg(chip, offset, reg);
+-		return 0;
+-	}
+-	return -EINVAL;
+-}
+-
+-static void thunderbay_gpio_set_value(struct gpio_chip *chip, unsigned int offset, int value)
+-{
+-	u32 reg = thb_gpio_read_reg(chip, offset);
+-
+-	/* update pin value only if it is GPIO-output else error */
+-	if ((reg & THB_GPIO_PORT_SELECT_MASK) && (reg & THB_GPIO_PAD_DIRECTION_MASK))
+-		thb_write_gpio_data(chip, offset, value);
+-}
+-
+-static int thunderbay_gpio_set_direction_output(struct gpio_chip *chip,
+-						unsigned int offset, int value)
+-{
+-	u32 reg = thb_gpio_read_reg(chip, offset);
+-
+-	/* set pin as output only if it is GPIO else error */
+-	if (reg & THB_GPIO_PORT_SELECT_MASK) {
+-		reg |= THB_GPIO_PAD_DIRECTION_MASK;
+-		thb_gpio_write_reg(chip, offset, reg);
+-		thunderbay_gpio_set_value(chip, offset, value);
+-		return 0;
+-	}
+-	return -EINVAL;
+-}
+-
+-static int thunderbay_gpio_get_value(struct gpio_chip *chip, unsigned int offset)
+-{
+-	u32 reg = thb_gpio_read_reg(chip, offset);
+-	int gpio_dir = 0;
+-
+-	/* Read pin value only if it is GPIO else error */
+-	if (reg & THB_GPIO_PORT_SELECT_MASK) {
+-		/* 0=in, 1=out */
+-		gpio_dir = (reg & THB_GPIO_PAD_DIRECTION_MASK) > 0;
+-
+-		/* Returns negative value when pin is configured as PORT */
+-		return thb_read_gpio_data(chip, offset, gpio_dir);
+-	}
+-	return -EINVAL;
+-}
+-
+-static int thunderbay_gpiochip_probe(struct thunderbay_pinctrl *tpc)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	int ret;
+-
+-	chip->label		= dev_name(tpc->dev);
+-	chip->parent		= tpc->dev;
+-	chip->request		= gpiochip_generic_request;
+-	chip->free		= gpiochip_generic_free;
+-	chip->get_direction	= thunderbay_gpio_get_direction;
+-	chip->direction_input	= thunderbay_gpio_set_direction_input;
+-	chip->direction_output  = thunderbay_gpio_set_direction_output;
+-	chip->get		= thunderbay_gpio_get_value;
+-	chip->set               = thunderbay_gpio_set_value;
+-	chip->set_config	= gpiochip_generic_config;
+-	/* identifies the first GPIO number handled by this chip; or,
+-	 * if negative during registration, requests dynamic ID allocation.
+-	 * Please pass -1 as base to let gpiolib select the chip base in all possible cases.
+-	 * We want to get rid of the static GPIO number space in the long run.
+-	 */
+-	chip->base		= -1;
+-	/* Number of GPIOs handled by this controller; the last GPIO handled is (base + ngpio - 1)*/
+-	chip->ngpio		= THB_MAX_NPINS_SUPPORTED;
+-
+-	/* Register/add Thunder Bay GPIO chip with Linux framework */
+-	ret = gpiochip_add_data(chip, tpc);
+-	if (ret)
+-		dev_err(tpc->dev, "Failed to add gpiochip\n");
+-	return ret;
+-}
+-
+-static int thunderbay_request_gpio(struct pinctrl_dev *pctldev,
+-				   struct pinctrl_gpio_range *range,
+-				   unsigned int pin)
+-{
+-	struct thunderbay_pinctrl *tpc = pinctrl_dev_get_drvdata(pctldev);
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg = 0;
+-
+-	if (thb_pinx_status[pin] == 0u) {
+-		reg = thb_gpio_read_reg(chip, pin);
+-		/* Updates PIN configuration as GPIO and sets GPIO to MODE-4*/
+-		reg |= (THB_GPIO_PORT_SELECT_MASK | THB_GPIO_PINMUX_MODE_4);
+-		thb_gpio_write_reg(chip, pin, reg);
+-
+-		/* update pin status as busy */
+-		thb_pinx_status[pin] = 1u;
+-
+-		return 0;
+-	}
+-	return -EINVAL;
+-}
+-
+-static void thunderbay_free_gpio(struct pinctrl_dev *pctldev,
+-				 struct pinctrl_gpio_range *range,
+-				 unsigned int pin)
+-{
+-	struct thunderbay_pinctrl *tpc = pinctrl_dev_get_drvdata(pctldev);
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg = 0;
+-
+-	if (thb_pinx_status[pin] == 1u) {
+-		reg = thb_gpio_read_reg(chip, pin);
+-
+-		/* Updates PIN configuration from GPIO to PORT */
+-		reg &= (~THB_GPIO_PORT_SELECT_MASK);
+-
+-		/* Change Port/gpio mode to default mode-0 */
+-		reg &= (~THB_GPIO_PINMUX_MODE_4);
+-
+-		thb_gpio_write_reg(chip, pin, reg);
+-
+-		/* update pin status as free */
+-		thb_pinx_status[pin] = 0u;
+-	}
+-}
+-
+-static int thb_pinctrl_set_mux(struct pinctrl_dev *pctldev,
+-			       unsigned int func_select, unsigned int group_select)
+-{
+-	struct thunderbay_pinctrl *tpc = pinctrl_dev_get_drvdata(pctldev);
+-	struct gpio_chip *chip = &tpc->chip;
+-	struct function_desc *function;
+-	unsigned int i, pin_mode;
+-	struct group_desc *group;
+-	int ret = -EINVAL;
+-	u32 reg = 0u;
+-
+-	group = pinctrl_generic_get_group(pctldev, group_select);
+-	if (!group)
+-		return -EINVAL;
+-
+-	function = pinmux_generic_get_function(pctldev, func_select);
+-	if (!function)
+-		return -EINVAL;
+-
+-	pin_mode = *(unsigned int *)(function->data);
+-
+-	/* Change modes for pins in the selected group */
+-	for (i = 0; i < group->num_pins; i++) {
+-		reg = thb_gpio_read_reg(chip, group->pins[i]);
+-
+-		switch (pin_mode) {
+-		case 0u:
+-			reg |= THB_GPIO_PINMUX_MODE_0;
+-			break;
+-		case 1u:
+-			reg |= THB_GPIO_PINMUX_MODE_1;
+-			break;
+-		case 2u:
+-			reg |= THB_GPIO_PINMUX_MODE_2;
+-			break;
+-		case 3u:
+-			reg |= THB_GPIO_PINMUX_MODE_3;
+-			break;
+-		case 4u:
+-			reg |= THB_GPIO_PINMUX_MODE_4;
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
+-
+-		ret = thb_gpio_write_reg(chip, group->pins[i], reg);
+-		if (~ret) {
+-			/* update pin status as busy */
+-			thb_pinx_status[group->pins[i]] = 1u;
+-		}
+-	}
+-	return ret;
+-}
+-
+-static int thunderbay_build_groups(struct thunderbay_pinctrl *tpc)
+-{
+-	struct group_desc *thunderbay_groups;
+-	int i;
+-
+-	tpc->ngroups = tpc->soc->npins;
+-	thunderbay_groups = devm_kcalloc(tpc->dev, tpc->ngroups,
+-					 sizeof(*thunderbay_groups), GFP_KERNEL);
+-	if (!thunderbay_groups)
+-		return -ENOMEM;
+-
+-	for (i = 0; i < tpc->ngroups; i++) {
+-		struct group_desc *group = thunderbay_groups + i;
+-		const struct pinctrl_pin_desc *pin_info = thunderbay_pins + i;
+-
+-		group->name = pin_info->name;
+-		group->pins = (int *)&pin_info->number;
+-		pinctrl_generic_add_group(tpc->pctrl, group->name,
+-					  group->pins, 1, NULL);
+-	}
+-	return 0;
+-}
+-
+-static int thunderbay_add_functions(struct thunderbay_pinctrl *tpc, struct function_desc *funcs)
+-{
+-	int i;
+-
+-	/* Assign the groups for each function */
+-	for (i = 0; i < tpc->nfuncs; i++) {
+-		struct function_desc *func = &funcs[i];
+-		const char **group_names;
+-		unsigned int grp_idx = 0;
+-		int j;
+-
+-		group_names = devm_kcalloc(tpc->dev, func->num_group_names,
+-					   sizeof(*group_names), GFP_KERNEL);
+-		if (!group_names)
+-			return -ENOMEM;
+-
+-		for (j = 0; j < tpc->soc->npins; j++) {
+-			const struct pinctrl_pin_desc *pin_info = &thunderbay_pins[j];
+-			struct thunderbay_mux_desc *pin_mux;
+-
+-			for (pin_mux = pin_info->drv_data; pin_mux->name; pin_mux++) {
+-				if (!strcmp(pin_mux->name, func->name))
+-					group_names[grp_idx++] = pin_info->name;
+-			}
+-		}
+-
+-		func->group_names = group_names;
+-	}
+-
+-	/* Add all functions */
+-	for (i = 0; i < tpc->nfuncs; i++) {
+-		pinmux_generic_add_function(tpc->pctrl,
+-					    funcs[i].name,
+-					    funcs[i].group_names,
+-					    funcs[i].num_group_names,
+-					    funcs[i].data);
+-	}
+-
+-	return 0;
+-}
+-
+-static int thunderbay_build_functions(struct thunderbay_pinctrl *tpc)
+-{
+-	struct function_desc *thunderbay_funcs;
+-	void *ptr;
+-	int pin;
+-	int ret;
+-
+-	/*
+-	 * Allocate maximum possible number of functions. Assume every pin
+-	 * being part of 8 (hw maximum) globally unique muxes.
+-	 */
+-	tpc->nfuncs = 0;
+-	thunderbay_funcs = kcalloc(tpc->soc->npins * 8,
+-				   sizeof(*thunderbay_funcs), GFP_KERNEL);
+-	if (!thunderbay_funcs)
+-		return -ENOMEM;
+-
+-	/* Setup 1 function for each unique mux */
+-	for (pin = 0; pin < tpc->soc->npins; pin++) {
+-		const struct pinctrl_pin_desc *pin_info = thunderbay_pins + pin;
+-		struct thunderbay_mux_desc *pin_mux;
+-
+-		for (pin_mux = pin_info->drv_data; pin_mux->name; pin_mux++) {
+-			struct function_desc *func;
+-
+-			/* Check if we already have function for this mux */
+-			for (func = thunderbay_funcs; func->name; func++) {
+-				if (!strcmp(pin_mux->name, func->name)) {
+-					func->num_group_names++;
+-					break;
+-				}
+-			}
+-
+-			if (!func->name) {
+-				func->name = pin_mux->name;
+-				func->num_group_names = 1;
+-				func->data = (int *)&pin_mux->mode;
+-				tpc->nfuncs++;
+-			}
+-		}
+-	}
+-
+-	/* Reallocate memory based on actual number of functions */
+-	ptr = krealloc(thunderbay_funcs,
+-		       tpc->nfuncs * sizeof(*thunderbay_funcs), GFP_KERNEL);
+-	if (!ptr)
+-		return -ENOMEM;
+-
+-	thunderbay_funcs = ptr;
+-	ret = thunderbay_add_functions(tpc, thunderbay_funcs);
+-
+-	kfree(thunderbay_funcs);
+-	return ret;
+-}
+-
+-static int thunderbay_pinconf_set_tristate(struct thunderbay_pinctrl *tpc,
+-					   unsigned int pin, u32 config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	if (config > 0)
+-		reg |= THB_GPIO_ENAQ_MASK;
+-	else
+-		reg &= ~THB_GPIO_ENAQ_MASK;
+-
+-	return thb_gpio_write_reg(chip, pin, reg);
+-}
+-
+-static int thunderbay_pinconf_get_tristate(struct thunderbay_pinctrl *tpc,
+-					   unsigned int pin, u32 *config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	*config = (reg & THB_GPIO_ENAQ_MASK) > 0;
+-
+-	return 0;
+-}
+-
+-static int thunderbay_pinconf_set_pulldown(struct thunderbay_pinctrl *tpc,
+-					   unsigned int pin, u32 config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	if (config > 0)
+-		reg |= THB_GPIO_PULL_DOWN_MASK;
+-	else
+-		reg &= ~THB_GPIO_PULL_DOWN_MASK;
+-
+-	return thb_gpio_write_reg(chip, pin, reg);
+-}
+-
+-static int thunderbay_pinconf_get_pulldown(struct thunderbay_pinctrl *tpc,
+-					   unsigned int pin, u32 *config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg = 0;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	*config = ((reg & THB_GPIO_PULL_DOWN_MASK) > 0) ? 1 : 0;
+-
+-	return 0;
+-}
+-
+-static int thunderbay_pinconf_set_pullup(struct thunderbay_pinctrl *tpc,
+-					 unsigned int pin, u32 config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	if (config > 0)
+-		reg &= ~THB_GPIO_PULL_UP_MASK;
+-	else
+-		reg |= THB_GPIO_PULL_UP_MASK;
+-
+-	return thb_gpio_write_reg(chip, pin, reg);
+-}
+-
+-static int thunderbay_pinconf_get_pullup(struct thunderbay_pinctrl *tpc,
+-					 unsigned int pin, u32 *config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	*config = ((reg & THB_GPIO_PULL_UP_MASK) == 0) ? 1 : 0;
+-
+-	return 0;
+-}
+-
+-static int thunderbay_pinconf_set_opendrain(struct thunderbay_pinctrl *tpc,
+-					    unsigned int pin, u32 config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	if (config > 0)
+-		reg &= ~THB_GPIO_PULL_ENABLE_MASK;
+-	else
+-		reg |= THB_GPIO_PULL_ENABLE_MASK;
+-
+-	return thb_gpio_write_reg(chip, pin, reg);
+-}
+-
+-static int thunderbay_pinconf_get_opendrain(struct thunderbay_pinctrl *tpc,
+-					    unsigned int pin, u32 *config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	*config = ((reg & THB_GPIO_PULL_ENABLE_MASK) == 0) ? 1 : 0;
+-
+-	return 0;
+-}
+-
+-static int thunderbay_pinconf_set_pushpull(struct thunderbay_pinctrl *tpc,
+-					   unsigned int pin, u32 config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	if (config > 0)
+-		reg |= THB_GPIO_PULL_ENABLE_MASK;
+-	else
+-		reg &= ~THB_GPIO_PULL_ENABLE_MASK;
+-
+-	return thb_gpio_write_reg(chip, pin, reg);
+-}
+-
+-static int thunderbay_pinconf_get_pushpull(struct thunderbay_pinctrl *tpc,
+-					   unsigned int pin, u32 *config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	*config = ((reg & THB_GPIO_PULL_ENABLE_MASK) > 0) ? 1 : 0;
+-
+-	return 0;
+-}
+-
+-static int thunderbay_pinconf_set_drivestrength(struct thunderbay_pinctrl *tpc,
+-						unsigned int pin, u32 config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-
+-	/* Drive Strength: 0x0 to 0xF */
+-	if (config <= 0xF) {
+-		reg = (reg | config);
+-		return thb_gpio_write_reg(chip, pin, reg);
+-	}
+-
+-	return -EINVAL;
+-}
+-
+-static int thunderbay_pinconf_get_drivestrength(struct thunderbay_pinctrl *tpc,
+-						unsigned int pin, u32 *config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	reg = (reg & THB_GPIO_DRIVE_STRENGTH_MASK) >> 16;
+-	*config = (reg > 0) ? reg : 0;
+-
+-	return 0;
+-}
+-
+-static int thunderbay_pinconf_set_schmitt(struct thunderbay_pinctrl *tpc,
+-					  unsigned int pin, u32 config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	if (config > 0)
+-		reg |= THB_GPIO_SCHMITT_TRIGGER_MASK;
+-	else
+-		reg &= ~THB_GPIO_SCHMITT_TRIGGER_MASK;
+-
+-	return thb_gpio_write_reg(chip, pin, reg);
+-}
+-
+-static int thunderbay_pinconf_get_schmitt(struct thunderbay_pinctrl *tpc,
+-					  unsigned int pin, u32 *config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	*config = ((reg & THB_GPIO_SCHMITT_TRIGGER_MASK) > 0) ? 1 : 0;
+-
+-	return 0;
+-}
+-
+-static int thunderbay_pinconf_set_slew_rate(struct thunderbay_pinctrl *tpc,
+-					    unsigned int pin, u32 config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg = 0;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	if (config > 0)
+-		reg |= THB_GPIO_SLEW_RATE_MASK;
+-	else
+-		reg &= ~THB_GPIO_SLEW_RATE_MASK;
+-
+-	return thb_gpio_write_reg(chip, pin, reg);
+-}
+-
+-static int thunderbay_pinconf_get_slew_rate(struct thunderbay_pinctrl *tpc,
+-					    unsigned int pin, u32 *config)
+-{
+-	struct gpio_chip *chip = &tpc->chip;
+-	u32 reg;
+-
+-	reg = thb_gpio_read_reg(chip, pin);
+-	*config = ((reg & THB_GPIO_SLEW_RATE_MASK) > 0) ? 1 : 0;
+-
+-	return 0;
+-}
+-
+-static int thunderbay_pinconf_get(struct pinctrl_dev *pctldev, unsigned int pin,
+-				  unsigned long *config)
+-{
+-	struct thunderbay_pinctrl *tpc = pinctrl_dev_get_drvdata(pctldev);
+-	enum pin_config_param param = pinconf_to_config_param(*config);
+-	u32 arg;
+-	int ret;
+-
+-	switch (param) {
+-	case PIN_CONFIG_BIAS_HIGH_IMPEDANCE:
+-		ret = thunderbay_pinconf_get_tristate(tpc, pin, &arg);
+-		break;
+-
+-	case PIN_CONFIG_BIAS_PULL_DOWN:
+-		ret = thunderbay_pinconf_get_pulldown(tpc, pin, &arg);
+-		break;
+-
+-	case PIN_CONFIG_BIAS_PULL_UP:
+-		ret = thunderbay_pinconf_get_pullup(tpc, pin, &arg);
+-		break;
+-
+-	case PIN_CONFIG_DRIVE_OPEN_DRAIN:
+-		ret = thunderbay_pinconf_get_opendrain(tpc, pin, &arg);
+-		break;
+-
+-	case PIN_CONFIG_DRIVE_PUSH_PULL:
+-		ret = thunderbay_pinconf_get_pushpull(tpc, pin, &arg);
+-		break;
+-
+-	case PIN_CONFIG_DRIVE_STRENGTH:
+-		ret = thunderbay_pinconf_get_drivestrength(tpc, pin, &arg);
+-		break;
+-
+-	case PIN_CONFIG_INPUT_SCHMITT_ENABLE:
+-		ret = thunderbay_pinconf_get_schmitt(tpc, pin, &arg);
+-		break;
+-
+-	case PIN_CONFIG_SLEW_RATE:
+-		ret = thunderbay_pinconf_get_slew_rate(tpc, pin, &arg);
+-		break;
+-
+-	default:
+-		return -ENOTSUPP;
+-	}
+-
+-	*config = pinconf_to_config_packed(param, arg);
+-
+-	return ret;
+-}
+-
+-static int thunderbay_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+-				  unsigned long *configs, unsigned int num_configs)
+-{
+-	struct thunderbay_pinctrl *tpc = pinctrl_dev_get_drvdata(pctldev);
+-	enum pin_config_param param;
+-	unsigned int pinconf;
+-	int ret = 0;
+-	u32 arg;
+-
+-	for (pinconf = 0; pinconf < num_configs; pinconf++) {
+-		param = pinconf_to_config_param(configs[pinconf]);
+-		arg = pinconf_to_config_argument(configs[pinconf]);
+-
+-		switch (param) {
+-		case PIN_CONFIG_BIAS_HIGH_IMPEDANCE:
+-			ret = thunderbay_pinconf_set_tristate(tpc, pin, arg);
+-			break;
+-
+-		case PIN_CONFIG_BIAS_PULL_DOWN:
+-			ret = thunderbay_pinconf_set_pulldown(tpc, pin, arg);
+-			break;
+-
+-		case PIN_CONFIG_BIAS_PULL_UP:
+-			ret = thunderbay_pinconf_set_pullup(tpc, pin, arg);
+-			break;
+-
+-		case PIN_CONFIG_DRIVE_OPEN_DRAIN:
+-			ret = thunderbay_pinconf_set_opendrain(tpc, pin, arg);
+-			break;
+-
+-		case PIN_CONFIG_DRIVE_PUSH_PULL:
+-			ret = thunderbay_pinconf_set_pushpull(tpc, pin, arg);
+-			break;
+-
+-		case PIN_CONFIG_DRIVE_STRENGTH:
+-			ret = thunderbay_pinconf_set_drivestrength(tpc, pin, arg);
+-			break;
+-
+-		case PIN_CONFIG_INPUT_SCHMITT_ENABLE:
+-			ret = thunderbay_pinconf_set_schmitt(tpc, pin, arg);
+-			break;
+-
+-		case PIN_CONFIG_SLEW_RATE:
+-			ret = thunderbay_pinconf_set_slew_rate(tpc, pin, arg);
+-			break;
+-
+-		default:
+-			return -ENOTSUPP;
+-		}
+-	}
+-	return ret;
+-}
+-
+-static const struct pinctrl_ops thunderbay_pctlops = {
+-	.get_groups_count = pinctrl_generic_get_group_count,
+-	.get_group_name   = pinctrl_generic_get_group_name,
+-	.get_group_pins   = pinctrl_generic_get_group_pins,
+-	.dt_node_to_map   = pinconf_generic_dt_node_to_map_all,
+-	.dt_free_map	  = pinconf_generic_dt_free_map,
+-};
+-
+-static const struct pinmux_ops thunderbay_pmxops = {
+-	.get_functions_count	= pinmux_generic_get_function_count,
+-	.get_function_name	= pinmux_generic_get_function_name,
+-	.get_function_groups	= pinmux_generic_get_function_groups,
+-	.set_mux		= thb_pinctrl_set_mux,
+-	.gpio_request_enable	= thunderbay_request_gpio,
+-	.gpio_disable_free	= thunderbay_free_gpio,
+-};
+-
+-static const struct pinconf_ops thunderbay_confops = {
+-	.is_generic		= true,
+-	.pin_config_get		= thunderbay_pinconf_get,
+-	.pin_config_set		= thunderbay_pinconf_set,
+-};
+-
+-static struct pinctrl_desc thunderbay_pinctrl_desc = {
+-	.name		= "thunderbay-pinmux",
+-	.pctlops	= &thunderbay_pctlops,
+-	.pmxops		= &thunderbay_pmxops,
+-	.confops	= &thunderbay_confops,
+-	.owner		= THIS_MODULE,
+-};
+-
+-static const struct of_device_id thunderbay_pinctrl_match[] = {
+-	{
+-		.compatible = "intel,thunderbay-pinctrl",
+-		.data = &thunderbay_data
+-	},
+-	{}
+-};
+-
+-static int thunderbay_pinctrl_probe(struct platform_device *pdev)
+-{
+-	const struct of_device_id *of_id;
+-	struct device *dev = &pdev->dev;
+-	struct thunderbay_pinctrl *tpc;
+-	int ret;
+-
+-	of_id = of_match_node(thunderbay_pinctrl_match, pdev->dev.of_node);
+-	if (!of_id)
+-		return -ENODEV;
+-
+-	tpc = devm_kzalloc(dev, sizeof(*tpc), GFP_KERNEL);
+-	if (!tpc)
+-		return -ENOMEM;
+-
+-	tpc->dev = dev;
+-	tpc->soc = of_id->data;
+-
+-	tpc->base0 = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(tpc->base0))
+-		return PTR_ERR(tpc->base0);
+-
+-	thunderbay_pinctrl_desc.pins = tpc->soc->pins;
+-	thunderbay_pinctrl_desc.npins = tpc->soc->npins;
+-
+-	/* Register pinctrl */
+-	tpc->pctrl = devm_pinctrl_register(dev, &thunderbay_pinctrl_desc, tpc);
+-	if (IS_ERR(tpc->pctrl))
+-		return PTR_ERR(tpc->pctrl);
+-
+-	/* Setup pinmux groups */
+-	ret = thunderbay_build_groups(tpc);
+-	if (ret)
+-		return ret;
+-
+-	/* Setup pinmux functions */
+-	ret = thunderbay_build_functions(tpc);
+-	if (ret)
+-		return ret;
+-
+-	/* Setup GPIO */
+-	ret = thunderbay_gpiochip_probe(tpc);
+-	if (ret < 0)
+-		return ret;
+-
+-	platform_set_drvdata(pdev, tpc);
+-
+-	return 0;
+-}
+-
+-static struct platform_driver thunderbay_pinctrl_driver = {
+-	.driver = {
+-		.name = "thunderbay-pinctrl",
+-		.of_match_table = thunderbay_pinctrl_match,
+-	},
+-	.probe = thunderbay_pinctrl_probe,
+-};
+-
+-builtin_platform_driver(thunderbay_pinctrl_driver);
+-
+-MODULE_AUTHOR("Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>");
+-MODULE_AUTHOR("Kiran Kumar S <kiran.kumar1.s@intel.com>");
+-MODULE_DESCRIPTION("Intel Thunder Bay Pinctrl/GPIO Driver");
+-MODULE_LICENSE("GPL v2");
+-- 
+2.17.1
+
