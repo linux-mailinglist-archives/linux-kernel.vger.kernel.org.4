@@ -2,190 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97736D5161
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACBB26D5163
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 21:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjDCTbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 15:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S231538AbjDCTcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 15:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbjDCTbV (ORCPT
+        with ESMTP id S230125AbjDCTcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 15:31:21 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E588610D8
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 12:31:19 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id z83so36159390ybb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 12:31:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680550279;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G4Sb4aNB4Tm57pBv/LH7p9W/GH8iszsqK1rV9TrOUZc=;
-        b=nYYDFFKAXmmdC1bVg5DC83TMEBHx4jZsXCuTbeSRd8ZjWy7iLQuvcjEfL7ofTaEL8/
-         YjElsr+7BynO6vwxnqa6LDCIkwnoID+0edRZfbXJ6xQ9PikFF/p9v9zH4SMjPHdSZhHR
-         PteRSNhbrK1xsTF/haX4qChzd9AKqn283LYh2DbsCVlOSt4ToBEgeRUmxAeuiepQd0ON
-         AUvIS8eAhyWe8MfEi9yDqJQgx/5HZPhgk7PRr/wBgGHTRAxgVcm+aRcIKIEv2uRmFXHx
-         dZTrQrRkPbB/gusO/u2KCC3MIytz+zDdRjvmVaq4WjXlQurWo+RcHLvuOVDEvPGTZjq+
-         UYrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680550279;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G4Sb4aNB4Tm57pBv/LH7p9W/GH8iszsqK1rV9TrOUZc=;
-        b=f0LEvKZbJBRyeqv/TV3uwFBgtx8HaVMOsQ6/SllFjo2xzPRMW8uJIA2bhnsvvlkQbf
-         jzT7X4gJ/m3Ju8v1fqrxZw2eA5ndUQxwTJwUN6NTvwHMC/YCIkvdawBfnIQCQq/sWMjx
-         xxUjND+oeht1lSINe4ga+mAs0Hei6pa5tAOVsU/so9tolniWjKZfj8laTwWv3cn3Nlon
-         MOsvgbc8Kfnx+VLOakXHJU04nySWBFCDg6ETJV2rCd3kw0CXKODL5m3Fd8HD618kPRI7
-         BCgotTSIZ7RUb3dcSicUnWa/Nlnn2zlOCpFwosI8Mr4IyFY4aoZvV+SiJelxD/k4beLZ
-         cn4g==
-X-Gm-Message-State: AAQBX9ffUyXd+bpJZNHJ0DqyayrVoNUYmN4zj5b2/gomwvc9eH0Jqnpe
-        x3T2O5kzFxWXegD10w9RRXgNKjiQp0iscXFQltvDAg==
-X-Google-Smtp-Source: AKy350aq+ygmaZETXBk4Ok7WJ46vMroire3QtHu2bsnyoLx8f3qCdFh0YLqHpPyuKsAO/SZQv2WCV0d7HGlCm9DrY6Q=
-X-Received: by 2002:a25:3141:0:b0:b73:caa7:f06f with SMTP id
- x62-20020a253141000000b00b73caa7f06fmr224227ybx.5.1680550279039; Mon, 03 Apr
- 2023 12:31:19 -0700 (PDT)
+        Mon, 3 Apr 2023 15:32:53 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11C21A1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 12:32:51 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7064B1EC01E0;
+        Mon,  3 Apr 2023 21:32:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680550370;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=dVDZhweLWsTSv9fCvQmUSvuBXWZan9fh4o49G/RYkag=;
+        b=o5eVZze3bFP2YFld2fvQ9vb7TaCW1W1i/hJl5MSIy98rViO/GMoKY6w+gLIhpQ/8JHwTYq
+        jyLgMYY0ZZhoMkU6rYm2LPXYulcQfMN/yhOML0Vtw+kyZXQx1fPm27D1G2JlU7qRMN7Tjt
+        +x9OWNtIymwUKsUTl5oSIsi7QGXpwFE=
+Date:   Mon, 3 Apr 2023 21:32:45 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/amd_nb: Check for invalid SMN reads
+Message-ID: <20230403193245.GCZCsp3RjNZFSE5f9s@fat_crate.local>
+References: <20230403164244.471141-1-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-References: <20230330220506.1399796-1-rmoar@google.com> <CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr+f+mOVKT1bGvA@mail.gmail.com>
-In-Reply-To: <CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr+f+mOVKT1bGvA@mail.gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Mon, 3 Apr 2023 15:31:04 -0400
-Message-ID: <CA+GJov5YigvgTf7ThaN9g8nOkoFKzJTiOLYO86cD5yVa2BEieg@mail.gmail.com>
-Subject: Re: [PATCH v1] kunit: add tests for using current KUnit test field
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230403164244.471141-1-yazen.ghannam@amd.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 6:21=E2=80=AFPM 'Daniel Latypov' via KUnit Developm=
-ent
-<kunit-dev@googlegroups.com> wrote:
->
-> I've got a few minor comments below, but this otherwise looks good.
-> I like the idea of testing knuit_fail_current_test().
->
->
-> On Thu, Mar 30, 2023 at 3:05=E2=80=AFPM Rae Moar <rmoar@google.com> wrote=
-:
-> >
-> > +static void kunit_current_kunit_test_field(struct kunit *test)
-> > +{
-> > +       struct kunit *current_test;
-> > +
-> > +       /* Check to ensure the result of current->kunit_test
-> > +        * is equivalent to current test.
-> > +        */
-> > +       current_test =3D current->kunit_test;
-> > +       KUNIT_EXPECT_PTR_EQ(test, test, current_test);
->
-> Perhaps we can combine this and the next test case down to
-> static void kunit_current_test(struct kunit *test) {
->   /* There are two different ways of getting the current test */
->   KUNIT_EXPECT_PTR_EQ(test, test, current->kunit_test);
->   KUNIT_EXPECT_PTR_EQ(test, test, kunit_get_current_test());
-> }
-> ?
+On Mon, Apr 03, 2023 at 04:42:44PM +0000, Yazen Ghannam wrote:
+>  int amd_smn_read(u16 node, u32 address, u32 *value)
+>  {
+> -	return __amd_smn_rw(node, address, value, false);
+> +	int err = __amd_smn_rw(node, address, value, false);
+> +
+> +	if (PCI_POSSIBLE_ERROR(*value)) {
+> +		err = -ENODEV;
+> +		*value = 0;
+> +	}
 
-Hi Daniel!
+Why not put this check in __amd_smn_rw()?
 
-Yes, I would be happy to combine these for v2. I might want to alter
-that proposed comment slightly. "Two different ways" seems a bit
-unclear to me. Maybe: Check results of both current->kunit_test and
-kunit_get_current_test() are equivalent to current test. What do you
-think? I might send out a v2 with a proposed comment.
+-- 
+Regards/Gruss,
+    Boris.
 
->
-> > +}
-> > +
-> > +static void kunit_current_get_current_test(struct kunit *test)
-> > +{
-> > +       struct kunit *current_test1, *current_test2;
-> > +
-> > +       /* Check to ensure the result of kunit_get_current_test()
-> > +        * is equivalent to current test.
-> > +        */
-> > +       current_test1 =3D kunit_get_current_test();
-> > +       KUNIT_EXPECT_PTR_EQ(test, test, current_test1);
-> > +
-> > +       /* Check to ensure the result of kunit_get_current_test()
-> > +        * is equivalent to current->kunit_test.
-> > +        */
-> > +       current_test2 =3D current->kunit_test;
-> > +       KUNIT_EXPECT_PTR_EQ(test, current_test1, current_test2);
->
-> > +}
-> > +
-> > +static void kunit_current_fail_current_test(struct kunit *test)
-> > +{
-> > +       struct kunit fake;
-> > +
-> > +       /* Initialize fake test and set as current->kunit_test. */
->
-> Nit: I think the code is self-explanatory enough that we can drop this co=
-mment.
->
-
-I agree the "initialize fake test" comment is self-explanatory. But if
-we keep the comment regarding resetting the current test, I think we
-should mark when we set the test as a fake with a comment as well.
-
-> > +       kunit_init_test(&fake, "fake test", NULL);
-> > +       KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
-> > +       current->kunit_test =3D &fake;
-> > +
-> > +       /* Fail current test and expect status of fake test to be faile=
-d. */
->
-> Nit: I think this comment could also be dropped or maybe shortened to
->   kunit_fail_current_test("This should make `fake` fail");
->
-
-This first option seems good to me.
-
-> or
->   /* Now kunit_fail_current_test() should modify `fake`, not `test` */
->   kunit_fail_current_test("This should make `fake` fail");
->
-> > +       kunit_fail_current_test("This test is supposed to fail.");
-> > +       KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAI=
-LURE);
-> > +
->
-> Hmm, should we try calling
->   kunit_cleanup(&fake);
-> ?
->
-> Right now this does resource cleanups, but we might have other state
-> to cleanup for our `fake` test object in the future.
->
-
-I would be fine to add this here if it is wanted.
-
-Thanks Daniel for the comments!
-
-Rae
-
-> Daniel
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr%2Bf%2BmOVKT1bGvA%40mail.=
-gmail.com.
+https://people.kernel.org/tglx/notes-about-netiquette
