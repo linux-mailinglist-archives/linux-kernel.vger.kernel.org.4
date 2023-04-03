@@ -2,109 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71526D5318
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979DF6D531B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 23:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjDCVJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 17:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S233571AbjDCVJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 17:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbjDCVI7 (ORCPT
+        with ESMTP id S233348AbjDCVJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:08:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E6B44B7;
-        Mon,  3 Apr 2023 14:08:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85E0A62B58;
-        Mon,  3 Apr 2023 21:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B567C433EF;
-        Mon,  3 Apr 2023 21:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680556084;
-        bh=PVBPRpr58MiOy6wGa6wE7NRJu02Si3vHn7TkitFaKmw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GAOAo9qXJ3pkmaaM0Y+ukqG15b716d9Lh7iEAUbxl6ajlESrxH+lHJ8EgUk85lhOo
-         osGNYa4toQlDOYpP1C1ULlAHvKEgrtCOFETFyBSGszHqshLk7lP2wjWM6QHleNy7fW
-         wCrihhl6FudfKk3jYJlSG8orIVIT1QdmWQBwdeSoCizDZhBqIrSwwABXr9e4IhWcTJ
-         Pm4EXWgFqZLnW0DEhxPJsywhDtFa371tJNeLXgGKL+5GKRaZ4eOX69g+HUXiEMdh2S
-         /Ff7JmKgkZDoHzfuPvT0T7YO/G4lZBP59rrhI8/jjI4Rp0Xepg3VFOjLBceGFXTq2q
-         +isiBVm0KBjwQ==
-Date:   Mon, 3 Apr 2023 22:07:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        techsupport@winsystems.com, pdemetrotion@winsystems.com,
-        quarium@gmail.com, jhentges@accesio.com, jay.dolan@accesio.com
-Subject: Re: [PATCH v5 1/3] regmap: Pass irq_drv_data as a parameter for
- set_type_config()
-Message-ID: <e6445419-b932-49f7-a401-b11155ad5bb9@sirena.org.uk>
-References: <cover.1679845842.git.william.gray@linaro.org>
- <5ba9d4c58a4cef138201334ea48e8bc8297a9a1c.1679845842.git.william.gray@linaro.org>
+        Mon, 3 Apr 2023 17:09:08 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE035468C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:08:41 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-17997ccf711so32342161fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 14:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680556121;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YYO5Q9xcDwGhhJXwP7FhrHqIG5oPNHWFCyDP0fw34Y4=;
+        b=Y+c7CV1lEypt/5pYzPsfM7H6xqM1xlMSw00MLh5URT4GZp3Qz/oAOCw7tmiVCBD9d0
+         lOL7E+YSRE4yfLUD2cPLIDVejl2iVVLOFRR9C5bzvDQKBZU+pAvpukErA/0uON+5K4vZ
+         feMOQm/ZL0IViZ3yXz2IWT9nzOmWI6VI20HrX3xzr96v3iPWn2qdJ3JT/ci35k55+4AS
+         dUbO1D7L7MoEWP5gK1HQaO+GT38Ze1wKUCKn29AgOrSzobpWebzc3/swww7WhUN4jtzV
+         4E2Xyg0Z9cqrDb16SdXGdT3x4l9Vr2nMEgnzb0HhcEIpm7ClFNKSylXj10qvjsouY1Pc
+         p9pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680556121;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YYO5Q9xcDwGhhJXwP7FhrHqIG5oPNHWFCyDP0fw34Y4=;
+        b=Q1qP3rmW7o77+nr2zUvaYkuPdzcI8N//Qs/nqLtMn8vuNqbRLu8qPgj7OoD2IXTNDT
+         ZtcRIMtOx8Cryd5PcOqBkSgsKKKx5LYxiYRkTyB0ws4vS+AQsDtWbTf8lDSAI0uJVgJD
+         ZhRi9LhK0PaoxzNCIW90O/NbDw7bl5Ytk2T0R3gn+a6A6EKufho+BY/16VW1WoU0psSt
+         EaXQHqHrR5FE5FKsK1qV2seMHJclNd7ikNOnG6r1zMn/+ndnrrDm38MuGJeCNTtSMKoK
+         KOppKECaawugOpXg//pQHIxxYUW2X8KS/ywjrZH0cOCey+9KcDSF2pW7ujngxNZt05VR
+         emKQ==
+X-Gm-Message-State: AAQBX9fEd/2mO37+VWYhG6j7QfOI56fjN2V31d44cQc3K0ffa1R++knX
+        NAjOK7vUr/SueZMQF/1KD6xBHXvVj4e8/T+X2QelqQ==
+X-Google-Smtp-Source: AKy350Z8MUinKXoco8X7G+BSkzc5PLWN0vKx/ieX8QMuJqevauIUuCxuxxsgGlclYqFlvQe44I4ErC2LpzBXkonie/o=
+X-Received: by 2002:a05:6870:3c07:b0:177:b9c0:bcba with SMTP id
+ gk7-20020a0568703c0700b00177b9c0bcbamr8642835oab.3.1680556120926; Mon, 03 Apr
+ 2023 14:08:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LgISFP/7WOX9dQTd"
-Content-Disposition: inline
-In-Reply-To: <5ba9d4c58a4cef138201334ea48e8bc8297a9a1c.1679845842.git.william.gray@linaro.org>
-X-Cookie: Membership dues are not refundable.
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230206172340.2639971-1-rananta@google.com> <20230206172340.2639971-4-rananta@google.com>
+ <ZCTe5koj8fOgbrYO@linux.dev>
+In-Reply-To: <ZCTe5koj8fOgbrYO@linux.dev>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Mon, 3 Apr 2023 14:08:29 -0700
+Message-ID: <CAJHc60x-ZHN=ZQemZp0wkj5jp-Ys8024YDQmWhmKn3NgZ0HHCQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] KVM: arm64: Implement __kvm_tlb_flush_range_vmid_ipa()
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 29, 2023 at 5:59=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> On Mon, Feb 06, 2023 at 05:23:36PM +0000, Raghavendra Rao Ananta wrote:
+> > Define  __kvm_tlb_flush_range_vmid_ipa() (for VHE and nVHE)
+>
+> bikeshed: Personally, I find that range implies it takes an address as an
+> argument already. Maybe just call it __kvm_tlb_flush_vmid_range()
+>
+Hmm, since TLBI instructions takes-in a variety of ranges, VA or IPA,
+I just thought of extending the '_ipa' to make things clear. Moreover
+it aligns with the existing __kvm_tlb_flush_vmid_ipa(). WDYT?
 
---LgISFP/7WOX9dQTd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thank you.
+Raghavendra
 
-On Sun, Mar 26, 2023 at 12:25:57PM -0400, William Breathitt Gray wrote:
-
-> Changes in v5:
->  - Wrap lines to 100 characters rather than 80
-
-It's good to keep things under 80 where we can.
-
->  	int (*set_type_config)(unsigned int **buf, unsigned int type,
-> -			       const struct regmap_irq *irq_data, int idx);
-> +			       const struct regmap_irq *irq_data, int idx, void *irq_drv_data);
->  	unsigned int (*get_irq_reg)(struct regmap_irq_chip_data *data,
->  				    unsigned int base, int index);
->  	void *irq_drv_data;
-
-There's no benefit from overflowing here and...
-
-> @@ -1660,7 +1660,8 @@ struct regmap_irq_chip {
->  unsigned int regmap_irq_get_irq_reg_linear(struct regmap_irq_chip_data *data,
->  					   unsigned int base, int index);
->  int regmap_irq_set_type_config_simple(unsigned int **buf, unsigned int type,
-> -				      const struct regmap_irq *irq_data, int idx);
-> +				      const struct regmap_irq *irq_data, int idx,
-> +				      void *irq_drv_data);
-
-...it's not even consistent.
-
---LgISFP/7WOX9dQTd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQrQC4ACgkQJNaLcl1U
-h9DV/Qf+PRCsw/4s4r8lTZpU3nIiqV1fietBklJFobjST5n8EYp9hxeTLmF/r4x1
-ZbZvAzsJYQu8LuChYTC2lel4jhFFhvlmOcDZcQryNrjvG9y8GKtbaSwWQgo906Px
-GpzazDmchrlrtIfCKgnt3jdcaHkcD3LlxFRAIKXA/XloHjMySTl59F1Zi2ABTGzK
-i+eI0XLLyshbrcYD85c+FhBAq1nj0W1O28TA7z7aVvxQL+Z//Vf4Xk4Oe9jkVVGY
-jHyv5vQ7RhH/IIcu9BBMlmOHHFGFT6serZnJ8bgvnpCesEI4zYHIo+Y5n8OMmfzv
-zJ+X1mDLdB9JulOuDdh4OxEnWy14MA==
-=dRZY
------END PGP SIGNATURE-----
-
---LgISFP/7WOX9dQTd--
+> > to flush a range of stage-2 page-tables using IPA in one go.
+> > If the system supports FEAT_TLBIRANGE, the following patches
+> > would conviniently replace global TLBI such as vmalls12e1is
+> > in the map, unmap, and dirty-logging paths with ripas2e1is
+> > instead.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >  arch/arm64/include/asm/kvm_asm.h   |  3 +++
+> >  arch/arm64/kvm/hyp/nvhe/hyp-main.c | 12 ++++++++++++
+> >  arch/arm64/kvm/hyp/nvhe/tlb.c      | 28 ++++++++++++++++++++++++++++
+> >  arch/arm64/kvm/hyp/vhe/tlb.c       | 24 ++++++++++++++++++++++++
+> >  4 files changed, 67 insertions(+)
+> >
+> > diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/=
+kvm_asm.h
+> > index 995ff048e8851..80a8ea85e84f8 100644
+> > --- a/arch/arm64/include/asm/kvm_asm.h
+> > +++ b/arch/arm64/include/asm/kvm_asm.h
+> > @@ -79,6 +79,7 @@ enum __kvm_host_smccc_func {
+> >       __KVM_HOST_SMCCC_FUNC___pkvm_init_vm,
+> >       __KVM_HOST_SMCCC_FUNC___pkvm_init_vcpu,
+> >       __KVM_HOST_SMCCC_FUNC___pkvm_teardown_vm,
+> > +     __KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_range_vmid_ipa,
+> >  };
+> >
+> >  #define DECLARE_KVM_VHE_SYM(sym)     extern char sym[]
+> > @@ -243,6 +244,8 @@ extern void __kvm_flush_vm_context(void);
+> >  extern void __kvm_flush_cpu_context(struct kvm_s2_mmu *mmu);
+> >  extern void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu, phys_addr=
+_t ipa,
+> >                                    int level);
+> > +extern void __kvm_tlb_flush_range_vmid_ipa(struct kvm_s2_mmu *mmu, phy=
+s_addr_t start,
+> > +                                             phys_addr_t end, int leve=
+l, int tlb_level);
+> >  extern void __kvm_tlb_flush_vmid(struct kvm_s2_mmu *mmu);
+> >
+> >  extern void __kvm_timer_set_cntvoff(u64 cntvoff);
+> > diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-main.c b/arch/arm64/kvm/hyp/nv=
+he/hyp-main.c
+> > index 728e01d4536b0..5787eee4c9fe4 100644
+> > --- a/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> > +++ b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> > @@ -125,6 +125,17 @@ static void handle___kvm_tlb_flush_vmid_ipa(struct=
+ kvm_cpu_context *host_ctxt)
+> >       __kvm_tlb_flush_vmid_ipa(kern_hyp_va(mmu), ipa, level);
+> >  }
+> >
+> > +static void handle___kvm_tlb_flush_range_vmid_ipa(struct kvm_cpu_conte=
+xt *host_ctxt)
+> > +{
+> > +     DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
+> > +     DECLARE_REG(phys_addr_t, start, host_ctxt, 2);
+> > +     DECLARE_REG(phys_addr_t, end, host_ctxt, 3);
+> > +     DECLARE_REG(int, level, host_ctxt, 4);
+> > +     DECLARE_REG(int, tlb_level, host_ctxt, 5);
+> > +
+> > +     __kvm_tlb_flush_range_vmid_ipa(kern_hyp_va(mmu), start, end, leve=
+l, tlb_level);
+> > +}
+> > +
+> >  static void handle___kvm_tlb_flush_vmid(struct kvm_cpu_context *host_c=
+txt)
+> >  {
+> >       DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
+> > @@ -315,6 +326,7 @@ static const hcall_t host_hcall[] =3D {
+> >       HANDLE_FUNC(__kvm_vcpu_run),
+> >       HANDLE_FUNC(__kvm_flush_vm_context),
+> >       HANDLE_FUNC(__kvm_tlb_flush_vmid_ipa),
+> > +     HANDLE_FUNC(__kvm_tlb_flush_range_vmid_ipa),
+> >       HANDLE_FUNC(__kvm_tlb_flush_vmid),
+> >       HANDLE_FUNC(__kvm_flush_cpu_context),
+> >       HANDLE_FUNC(__kvm_timer_set_cntvoff),
+> > diff --git a/arch/arm64/kvm/hyp/nvhe/tlb.c b/arch/arm64/kvm/hyp/nvhe/tl=
+b.c
+> > index d296d617f5896..7398dd00445e7 100644
+> > --- a/arch/arm64/kvm/hyp/nvhe/tlb.c
+> > +++ b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> > @@ -109,6 +109,34 @@ void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *m=
+mu,
+> >       __tlb_switch_to_host(&cxt);
+> >  }
+> >
+> > +void __kvm_tlb_flush_range_vmid_ipa(struct kvm_s2_mmu *mmu, phys_addr_=
+t start,
+> > +                                     phys_addr_t end, int level, int t=
+lb_level)
+> > +{
+> > +     struct tlb_inv_context cxt;
+> > +
+> > +     dsb(ishst);
+> > +
+> > +     /* Switch to requested VMID */
+> > +     __tlb_switch_to_guest(mmu, &cxt);
+> > +
+> > +     __kvm_tlb_flush_range(ipas2e1is, mmu, start, end, level, tlb_leve=
+l);
+> > +
+> > +     /*
+> > +      * Range-based ipas2e1is flushes only Stage-2 entries, and since =
+the
+> > +      * VA isn't available for Stage-1 entries, flush the entire stage=
+-1.
+> > +      */
+>
+> nit: if we are going to preserve some of the commentary over in
+> __kvm_tlb_flush_vmid_ipa(), I would prefer just an exact copy/paste.
+> But, FWIW, I think you can just elide the clarifying comments altogether
+> since the relationship between stage-1 and stage-2 invalidations is
+> already documented.
+>
+> > +     dsb(ish);
+> > +     __tlbi(vmalle1is);
+> > +     dsb(ish);
+> > +     isb();
+> > +
+> > +     /* See the comment below in __kvm_tlb_flush_vmid_ipa() */
+>
+> Same comment as above.
+>
+> --
+> Thanks,
+> Oliver
