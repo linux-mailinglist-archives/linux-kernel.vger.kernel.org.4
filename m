@@ -2,317 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4386D3EE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D4A6D3ED9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 10:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbjDCIXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 04:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
+        id S231697AbjDCIW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 04:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbjDCIXT (ORCPT
+        with ESMTP id S230269AbjDCIW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 04:23:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC65210E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 01:22:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680510135;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jQzDBAQKeqgfsxxyrlkQCm/LEl+p6ixMadQZXFxQxwQ=;
-        b=DH96VbS/Bh39d25dhM7mlCuxUSfTRufIuIwy10l0l2s395UNQPg5XoKLi+oED/8ofH1Uq1
-        chs/6lnWAfpVpxgzf7k/swQvGm11gMUL0YPhTGIiH/sUSa24ziB3+cyVx5unHN+wVChmAS
-        EWM5H/zujEK8SiJNnJF2rM0uh6L3R1Q=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-459--pRKt8B-PHy9SEMWAamwPw-1; Mon, 03 Apr 2023 04:21:52 -0400
-X-MC-Unique: -pRKt8B-PHy9SEMWAamwPw-1
-Received: by mail-wm1-f70.google.com with SMTP id m7-20020a05600c4f4700b003ee7e120bdfso14154565wmq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 01:21:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680510111;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jQzDBAQKeqgfsxxyrlkQCm/LEl+p6ixMadQZXFxQxwQ=;
-        b=AlB9dpPtL13N6ju+QjI/9qUN0jpw6C9p4brcrtCQGuDKYJD6GH7raH4pBu49urLBLr
-         VMH/JbK64nNUncwqjtshyXw2geuF7V8iFMEGp4LrmJw1RaLeENvV9LtnV6dFhSHuDWH7
-         GEjg5sRmSIQ0xw76/V1kTXjdD304OikDqrB0feR8ZRaWAzMQLreYvh6JMlrop+Hl3ztg
-         u8yUgdbbKI5E2hG8UF23Q1DzlYb1Q+2IhVrRBcBi0wy5Kx+Ud4LCtcyxrgniofQai7qO
-         rLTfnrAz8hAANKjab9ql0x3TRg1zXa3KqSVPLGMqgdLMwJNQRr/Uv1nwanIKmClZOV/5
-         3Z9Q==
-X-Gm-Message-State: AO0yUKX8Q4aMhJ/ny5KYhuKNo7pifErxkclquToDwG8qaz3sqi4PLelW
-        9HVazEh8Fa2wxJbSAXeM9shP2npcmCmzfd6ycBUDFZo/pK1TRfWXsXDVR2C75CC4z+B8Rz7OZb4
-        3WEJ71UMXI/IhmVqqMkmwSUlN
-X-Received: by 2002:a05:600c:20d:b0:3ee:672d:caae with SMTP id 13-20020a05600c020d00b003ee672dcaaemr26843807wmi.36.1680510111655;
-        Mon, 03 Apr 2023 01:21:51 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/AgkVl4NRObZrwop/hyYIrLuclF7oALAw2adBku9J1XTbgT5nDnZVWZTlkdOAVCBUc2F54wA==
-X-Received: by 2002:a05:600c:20d:b0:3ee:672d:caae with SMTP id 13-20020a05600c020d00b003ee672dcaaemr26843772wmi.36.1680510111270;
-        Mon, 03 Apr 2023 01:21:51 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
-        by smtp.gmail.com with ESMTPSA id c2-20020adfe702000000b002d6f285c0a2sm9135348wrm.42.2023.04.03.01.21.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 01:21:50 -0700 (PDT)
-Message-ID: <f0232380-4171-f4d3-f1a6-07993e551b46@redhat.com>
-Date:   Mon, 3 Apr 2023 10:21:48 +0200
+        Mon, 3 Apr 2023 04:22:26 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C51FF759;
+        Mon,  3 Apr 2023 01:21:57 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 08873604F2;
+        Mon,  3 Apr 2023 10:21:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680510115; bh=VR2LCqV2q9HM27fPvLYDKiWzVBKaBoH1u3xFXAzaijY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mSX2x3Kuu63fMrLgRWEHuQUFIILw8lmBZLsBlwL3aM9kMGdKWUImmZUkweSKJOKbg
+         LTiCvPMd/J+JljHj9t9FbrWATv+TxRsWZYU1fmIUUjXZ0q3XS7PRxtwgD7i5xhLp51
+         NFUHMNGBS2BHjOrz2p2T8D0IzSxTKhmgmkEU1UuWmLRYbuiQv3oo2nFCvWIpR5II0m
+         0jdX9l3RG1g10pbvH7k5jDOWuDOZ0vKtBQHW8QC51hrmwsS6vrlqxBc1InZ2uiVR6C
+         CBmXLBAcaC8ryVNg3SI1AUWn/SHmFuduN9HT/CHuiLkNlm0F7Oc/xnzvmY+0YwVWmT
+         BqHGqQpTXbHgA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FmoxYBoraDrP; Mon,  3 Apr 2023 10:21:52 +0200 (CEST)
+Received: from [10.0.1.57] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id A5172604F0;
+        Mon,  3 Apr 2023 10:21:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680510112; bh=VR2LCqV2q9HM27fPvLYDKiWzVBKaBoH1u3xFXAzaijY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=xI0ezHIhxyFIypwTZrhe/C1do7yN5sViTFM4PEHn9xTjfSRn2IylInrTfjLIt8DSc
+         b+zlrTAYjXxyWmEJTqP94JfQl2ht39/+HKGKOFI3ixjTQ6aX8BB/TGCDeSJwZe7MQJ
+         IKBIahQn2ogfKcXzdfRSd/WSrQSKphrEefxcQCEaeIjH4Rdm8SJ3vKa9TbQfXq6UVa
+         +Re13tyI9w6Mn/nYydjenKX8qFShfkiHmD3Uoi8vblZ07Z00elycb14SQ3cwki0S7C
+         AxHzbHTdNkDDGvzUWwzeDmEjgN49YUbOMj41DR7Fd57AzyNr4/9zJgkKWk6yVT/0lY
+         9zIPGF1we5yhw==
+Message-ID: <d976e978-6555-4adf-40fd-06870864a1aa@alu.unizg.hr>
+Date:   Mon, 3 Apr 2023 10:21:50 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Content-Language: en-US
-To:     Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        qemu-devel@nongnu.org
-Cc:     aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
-        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de,
-        chao.p.peng@linux.intel.com, corbet@lwn.net, dave.hansen@intel.com,
-        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
-        joro@8bytes.org, jun.nakajima@intel.com,
-        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
-        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
-        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
-        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
-        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
-        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
-        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
-References: <cover.1680306489.git.ackerleytng@google.com>
- <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
- mount for memfd_restricted
-In-Reply-To: <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
+Subject: Re: [PATCH v2 2/2] platform/x86: think-lmi: Clean up display of
+ current_value on Thinkstation
+Content-Language: en-US, hr
+To:     Mark Pearson <mpearson-lenovo@squebb.ca>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, W_Armin@gmx.de,
+        linux@weissschuh.net, Mario.Limonciello@amd.com,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <mpearson-lenovo@squebb.ca>
+ <20230403013120.2105-1-mpearson-lenovo@squebb.ca>
+ <20230403013120.2105-2-mpearson-lenovo@squebb.ca>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230403013120.2105-2-mpearson-lenovo@squebb.ca>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.04.23 01:50, Ackerley Tng wrote:
-> By default, the backing shmem file for a restrictedmem fd is created
-> on shmem's kernel space mount.
+On 3.4.2023. 3:31, Mark Pearson wrote:
+> On ThinkStations on retrieving the attribute value the BIOS appends the
+> possible values to the string.
+> Clean up the display in the current_value_show function so the options
+> part is not displayed.
 > 
-> With this patch, an optional tmpfs mount can be specified via an fd,
-> which will be used as the mountpoint for backing the shmem file
-> associated with a restrictedmem fd.
-> 
-> This will help restrictedmem fds inherit the properties of the
-> provided tmpfs mounts, for example, hugepage allocation hints, NUMA
-> binding hints, etc.
-> 
-> Permissions for the fd passed to memfd_restricted() is modeled after
-> the openat() syscall, since both of these allow creation of a file
-> upon a mount/directory.
-> 
-> Permission to reference the mount the fd represents is checked upon fd
-> creation by other syscalls (e.g. fsmount(), open(), or open_tree(),
-> etc) and any process that can present memfd_restricted() with a valid
-> fd is expected to have obtained permission to use the mount
-> represented by the fd. This behavior is intended to parallel that of
-> the openat() syscall.
-> 
-> memfd_restricted() will check that the tmpfs superblock is
-> writable, and that the mount is also writable, before attempting to
-> create a restrictedmem file on the mount.
-> 
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Fixes: a40cd7ef22fb ("platform/x86: think-lmi: Add WMI interface support on Lenovo platforms")
+> Reported by Mario Limoncello <Mario.Limonciello@amd.com>
+> Link: https://github.com/fwupd/fwupd/issues/5077#issuecomment-1488730526
+> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 > ---
->   include/linux/syscalls.h           |  2 +-
->   include/uapi/linux/restrictedmem.h |  8 ++++
->   mm/restrictedmem.c                 | 74 +++++++++++++++++++++++++++---
->   3 files changed, 77 insertions(+), 7 deletions(-)
->   create mode 100644 include/uapi/linux/restrictedmem.h
+> Changes in v2: For some reason v2 doesn't apply cleanly so rebased and
+> started again. Hopefully this one works
 > 
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index f9e9e0c820c5..a23c4c385cd3 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
->   asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
->   					    unsigned long home_node,
->   					    unsigned long flags);
-> -asmlinkage long sys_memfd_restricted(unsigned int flags);
-> +asmlinkage long sys_memfd_restricted(unsigned int flags, int mount_fd);
+>   drivers/platform/x86/think-lmi.c | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
 > 
->   /*
->    * Architecture-specific system calls
-> diff --git a/include/uapi/linux/restrictedmem.h b/include/uapi/linux/restrictedmem.h
-> new file mode 100644
-> index 000000000000..22d6f2285f6d
-> --- /dev/null
-> +++ b/include/uapi/linux/restrictedmem.h
-> @@ -0,0 +1,8 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _UAPI_LINUX_RESTRICTEDMEM_H
-> +#define _UAPI_LINUX_RESTRICTEDMEM_H
-> +
-> +/* flags for memfd_restricted */
-> +#define RMFD_USERMNT		0x0001U
-
-I wonder if we can come up with a more expressive prefix than RMFD. 
-Sounds more like "rm fd" ;) Maybe it should better match the 
-"memfd_restricted" syscall name, like "MEMFD_RSTD_USERMNT".
-
-
-> +
-> +#endif /* _UAPI_LINUX_RESTRICTEDMEM_H */
-> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
-> index c5d869d8c2d8..f7b62364a31a 100644
-> --- a/mm/restrictedmem.c
-> +++ b/mm/restrictedmem.c
-> @@ -1,11 +1,12 @@
->   // SPDX-License-Identifier: GPL-2.0
-> -#include "linux/sbitmap.h"
-
-Looks like an unrelated change?
-
-> +#include <linux/namei.h>
->   #include <linux/pagemap.h>
->   #include <linux/pseudo_fs.h>
->   #include <linux/shmem_fs.h>
->   #include <linux/syscalls.h>
->   #include <uapi/linux/falloc.h>
->   #include <uapi/linux/magic.h>
-> +#include <uapi/linux/restrictedmem.h>
->   #include <linux/restrictedmem.h>
-> 
->   struct restrictedmem {
-> @@ -189,19 +190,20 @@ static struct file *restrictedmem_file_create(struct file *memfd)
->   	return file;
->   }
-> 
-> -SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
-> +static int restrictedmem_create(struct vfsmount *mount)
+> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+> index 87f832142d8d..78dc82bda4dd 100644
+> --- a/drivers/platform/x86/think-lmi.c
+> +++ b/drivers/platform/x86/think-lmi.c
+> @@ -920,7 +920,7 @@ static ssize_t display_name_show(struct kobject *kobj, struct kobj_attribute *at
+>   static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
 >   {
->   	struct file *file, *restricted_file;
->   	int fd, err;
-> 
-> -	if (flags)
-> -		return -EINVAL;
+>   	struct tlmi_attr_setting *setting = to_tlmi_attr_setting(kobj);
+> -	char *item, *value;
+> +	char *item, *value, *p;
+>   	int ret;
+>   
+>   	ret = tlmi_setting(setting->index, &item, LENOVO_BIOS_SETTING_GUID);
+> @@ -931,9 +931,12 @@ static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *a
+>   	value = strpbrk(item, ",");
+>   	if (!value || value == item || !strlen(value + 1))
+>   		ret = -EINVAL;
+> -	else
+> +	else {
+> +		/* On Workstations remove the Options part after the value */
+> +		p = strchrnul(value, ';');
+> +		*p = '\0';
+>   		ret = sysfs_emit(buf, "%s\n", value + 1);
 > -
->   	fd = get_unused_fd_flags(0);
->   	if (fd < 0)
->   		return fd;
-> 
-> -	file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
-> +	if (mount)
-> +		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem", 0, VM_NORESERVE);
-> +	else
-> +		file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
-> +
->   	if (IS_ERR(file)) {
->   		err = PTR_ERR(file);
->   		goto err_fd;
-> @@ -223,6 +225,66 @@ SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
->   	return err;
->   }
-> 
-> +static bool is_shmem_mount(struct vfsmount *mnt)
-> +{
-> +	return mnt && mnt->mnt_sb && mnt->mnt_sb->s_magic == TMPFS_MAGIC;
-> +}
-> +
-> +static bool is_mount_root(struct file *file)
-> +{
-> +	return file->f_path.dentry == file->f_path.mnt->mnt_root;
-> +}
-
-I'd inline at least that function, pretty self-explaining.
-
-> +
-> +static int restrictedmem_create_on_user_mount(int mount_fd)
-> +{
-> +	int ret;
-> +	struct fd f;
-> +	struct vfsmount *mnt;
-> +
-> +	f = fdget_raw(mount_fd);
-> +	if (!f.file)
-> +		return -EBADF;
-> +
-> +	ret = -EINVAL;
-> +	if (!is_mount_root(f.file))
-> +		goto out;
-> +
-> +	mnt = f.file->f_path.mnt;
-> +	if (!is_shmem_mount(mnt))
-> +		goto out;
-> +
-> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
-> +	if (ret)
-> +		goto out;
-> +
-> +	ret = mnt_want_write(mnt);
-> +	if (unlikely(ret))
-> +		goto out;
-> +
-> +	ret = restrictedmem_create(mnt);
-> +
-> +	mnt_drop_write(mnt);
-> +out:
-> +	fdput(f);
-> +
-> +	return ret;
-> +}
-> +
-> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
-> +{
-> +	if (flags & ~RMFD_USERMNT)
-> +		return -EINVAL;
-> +
-> +	if (flags == RMFD_USERMNT) {
-> +		if (mount_fd < 0)
-> +			return -EINVAL;
-> +
-> +		return restrictedmem_create_on_user_mount(mount_fd);
-> +	} else {
-> +		return restrictedmem_create(NULL);
 > +	}
+>   	kfree(item);
+>   
+>   	return ret;
 
+I can confirm the build against the Torvalds 6.3-rc5 tree and Armin's patch
+applied w these.
 
-You can drop the else case:
+[root@pc-mtodorov kernel]# uname -rms
+Linux 6.3.0-rc5-mt-20230401-00005-g10de4cefccf7 x86_64
+[root@pc-mtodorov kernel]# cat /sys/kernel/debug/kmemleak
+[root@pc-mtodorov kernel]# echo scan > !$
+echo scan > /sys/kernel/debug/kmemleak
+[root@pc-mtodorov kernel]# cat /sys/kernel/debug/kmemleak
+[root@pc-mtodorov kernel]# echo scan > /sys/kernel/debug/kmemleak
+[root@pc-mtodorov kernel]# cat /sys/kernel/debug/kmemleak
+[root@pc-mtodorov kernel]# echo scan > /sys/kernel/debug/kmemleak
+[root@pc-mtodorov kernel]# cat /sys/kernel/debug/kmemleak
+[root@pc-mtodorov kernel]#
 
-if (flags == RMFD_USERMNT) {
-	...
-	return restrictedmem_create_on_user_mount(mount_fd);
-}
-return restrictedmem_create(NULL);
+The leak is apparently gone in the original setup that reproduced the leak.
 
+At your convenience, you can please add
 
-I do wonder if you want to properly check for a flag instead of 
-comparing values. Results in a more natural way to deal with flags:
+Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-if (flags & RMFD_USERMNT) {
+Have a nice day.
 
-}
-
-> +}
-> +
->   int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
->   		       struct restrictedmem_notifier *notifier, bool exclusive)
->   {
-
-The "memfd_restricted" vs. "restrictedmem" terminology is a bit 
-unfortunate, but not your fault here.
-
-
-I'm not a FS person, but it does look good to me.
+Best regards,
+Mirsad
 
 -- 
-Thanks,
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
 
-David / dhildenb
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
