@@ -2,87 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113156D4FB7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA796D4FB9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 19:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbjDCR5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 13:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        id S232575AbjDCR52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 13:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232755AbjDCR5I (ORCPT
+        with ESMTP id S232894AbjDCR5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:57:08 -0400
+        Mon, 3 Apr 2023 13:57:17 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4D91FF9;
-        Mon,  3 Apr 2023 10:57:02 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id D411E5C00FD;
-        Mon,  3 Apr 2023 13:57:01 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8A73A9D;
+        Mon,  3 Apr 2023 10:57:07 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id A8CCC5C0050;
+        Mon,  3 Apr 2023 13:57:06 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 03 Apr 2023 13:57:01 -0400
+  by compute5.internal (MEProxy); Mon, 03 Apr 2023 13:57:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
         :content-transfer-encoding:content-type:content-type:date:date
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1680544621; x=1680631021; bh=kFfxasQMqACHhdRBnxpY8CNWnpG5XzzT/yB
-        z49wzpc0=; b=VZRTxaNrDgaIaBViRoC3xzGTJiPlyTjoVaNUX6Ns6nV1sWKMHDk
-        IkZ0ddIw6sxULWNXaxBJDrBePV47QGD7FDHJeAxkEdeGzWrLHjQnObwzaMWtY396
-        2WVufl6fl+NfsOfufjUrqQ2nPQ/apBw95P0Yw05fEZ6Ju2s+ePU2X66nV12kku9g
-        gULv53G1ghRCEgkFIMZos3ajsOaXz1+POgNa8Tjb11hJz0agiSioQIMnyyGO6YHV
-        SsdmcgriTDZ9FJEE2g5FZXJNmZATfzLAvJ3e9XdzgCCq6uMfoazAceanoppfe5Xv
-        mYu/JW/CPc7cUu5lAyyB/aqcBTKNlEEw9qw==
+        1680544626; x=1680631026; bh=zquIB4O70SLQT/QPGcACFv3gsmoOH4kMknn
+        BEMc9nds=; b=B60GAjD9jzWAK6fJX0WJP2dXxBM4Q97zwSQSJp9q/rahF/nL9M3
+        CXPonV4yiWQeFht+LCghiTs7b2sK1ORSr1BQ3dYjX2jmeM3Azh53nVAmwBdrSgyl
+        3wFLgn/ILoaOoEcdZ30CbbKgFmBwlGpW2b43fgQu+7bAYT6tgxpPFBB6Twc9SDex
+        hdAcPe8hbGPFs9iXATZKaIxi0rlqXIrCd9LedFKFQQXAQcR3RFzJNFxaF21bAbRM
+        uYtn1ky0QIFwt4UveZrCY82J9oY6wysRUIP8UUAUzo9ePCE+VjtmPlXuzoeFPwaT
+        kya1efmE67m1ZaDrLVItudBfCDzj074k68A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:content-type:date:date:feedback-id:feedback-id
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680544621; x=1680631021; bh=kFfxasQMqACHhdRBnxpY8CNWnpG5XzzT/yB
-        z49wzpc0=; b=Hn26aqzc/D3AWDs+Wved3Hye70pWkPMDybsAvv0G7xEUMpgTxIp
-        G/dHDAih0QFsuBRt6WfEumphKO11dAWdopRNPS5/j6zGzV5wT17KNWHgogcJbu8D
-        J1BtCSgk/wMLoe0+MST4+HG8B5oFY4iUUHZHfvADJPQpPDdJtg1I+SpPH/VnAXiq
-        lpsv0Lhbb2WOZuUpqUIOE8lTvrmt0itAnQlCVfWie0DKXxZn102gFZ4U/F8mNFIp
-        uyrkqGa9WlrEcy6g2q5xuYopkrwpo6VWBTNFv49t4AzkBtDw4gSPXoBIgHDr4zTr
-        NhKd8RURSHW/OFgEaFi7dPF4Awf5wMjU+1A==
-X-ME-Sender: <xms:bRMrZOmetHZ01PsaCM2Te_BzQ15P0hm7IXTAIObxk7QuA2X4IjuKPA>
-    <xme:bRMrZF0bb6btyZiKQojMYvjwRe3DVsBIrmmqLSod904C8j9-Dprm-9YxRia5qTvQC
-    LnSKom-OEPjgrCA2w>
-X-ME-Received: <xmr:bRMrZMqMAIe2V7Z1p-vyWh7id7WzEkLprm_kMRLRPmMKVm740AWkp9iWNYIrmCDXf2vgBcXR_iP-eu7MPJafb3gk3A>
+        1680544626; x=1680631026; bh=zquIB4O70SLQT/QPGcACFv3gsmoOH4kMknn
+        BEMc9nds=; b=GBIr/QT8ZO07yJXys6q/tRl0kwanzQMUAgKlPP8kJUXBdz/A9LO
+        f9uLTNvrlAXo1HrR3MJ+MSwpgbW7bqs4QgtjagRXaQZZ6wLmJK4XTFTFxK552nry
+        bA9aZXwqFgPY+QqRvjxUlR0b7mnmJq5B+tfn/T6NEtuKzho4uh2RX+c/kb4HNXZd
+        IylElVnjWTAqD5XbVj9UZFEk/ix3ewZijWdUSW42X7+76T0+sScieTT6UlOnOZIo
+        vatm1PYMmvQjHluQiieuNRlTLr+tzMy3H9ejzUg3ZUO4s9srfBpIDsPlDTBcw2ua
+        bUmmcW9+Sx4ETT5CZNDXPvW8gxlE3a3JkBA==
+X-ME-Sender: <xms:chMrZDWNpUQv_TGV42TiXawP7r1M5Y_rFopOtzjTL_12VRjq6ILX2g>
+    <xme:chMrZLnZLGI92twqpi7Fw4BciiL3Nf4e19uqfz8emEFVVhq-RxRC1rZmvvadS9VkD
+    fhZbuUdqSx-HF7RVw>
+X-ME-Received: <xmr:chMrZPZBoTRQ7n-Wu3Mg_-0ASt7nkQuDiaYXznpDEuTP5QmaK-4DhEfMjl9_1INlc7pmFvq2wIZI-XbUHn9Qo2URhw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeijedguddvtdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpefkffggfgfhuffvvehfjggtgfesthejredttdefjeenucfhrhhomheptehl
     ihgtvgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnh
     ephfehueeileevjeefkeetvdffveffudeuhffgtedvuefgiefgiedvjeegvdejleejnecu
-    vehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
     esrhihhhhlrdhioh
-X-ME-Proxy: <xmx:bRMrZCna1DSNis7VLlcZciuYae1V1yWg5GcZVvhD3WSdNq1dAORrYg>
-    <xmx:bRMrZM19saLTA2xILoy7k3Ldiy8GE2bjqYC_7FSZM6k2WW3Tf31DQw>
-    <xmx:bRMrZJtae_xjqByP7wdz7NjZ_gTAWBrrerhFkJyp1ksiAEE448tT4A>
-    <xmx:bRMrZFsdVyOiZT6MHwx-hO4zLzfKsLJZuCfhddxexHgWZQk-ALCgXw>
+X-ME-Proxy: <xmx:chMrZOWFl7HfLJ0FHoJM3VYM0S1CFLPmG-U5QZepIpX-tVxsM8Oxxg>
+    <xmx:chMrZNmELwEldhw7Q3zoyjPKhjCxR4RMV63IvE6vqjtl-uREONfP9Q>
+    <xmx:chMrZLciiVl7ln5ZLfR7syke-SLk75gjmFNEhelXKVPw2QAAlu7Bgg>
+    <xmx:chMrZGf_1M7Ng53T3Tr7HaMogqeiveM_iYJP_Z5-SyuG2UNfaD-AZA>
 Feedback-ID: i56684263:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Apr 2023 13:56:59 -0400 (EDT)
-Message-ID: <320e4b6f-fbb5-3b4c-1e9d-009d7156239a@ryhl.io>
-Date:   Mon, 3 Apr 2023 19:56:18 +0200
+ 3 Apr 2023 13:57:03 -0400 (EDT)
+Message-ID: <62df1021-ad53-9fd9-d8b8-cc7a21ca36a7@ryhl.io>
+Date:   Mon, 3 Apr 2023 19:56:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
 From:   Alice Ryhl <alice@ryhl.io>
-Subject: Re: [PATCH v5 06/15] rust: add pin-init API core
+Subject: Re: [PATCH v5 07/15] rust: init: add initialization macros
 To:     Benno Lossin <y86-dev@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Andreas Hindborg <a.hindborg@samsung.com>,
-        Alice Ryhl <aliceryhl@google.com>,
+        patches@lists.linux.dev, Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
         Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
 References: <20230403154422.168633-1-y86-dev@protonmail.com>
- <20230403154422.168633-7-y86-dev@protonmail.com>
+ <20230403154422.168633-8-y86-dev@protonmail.com>
 Content-Language: en-US
-In-Reply-To: <20230403154422.168633-7-y86-dev@protonmail.com>
+In-Reply-To: <20230403154422.168633-8-y86-dev@protonmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -96,29 +96,25 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 4/3/23 17:45, Benno Lossin wrote:
-> This API is used to facilitate safe pinned initialization of structs. It
-> replaces cumbersome `unsafe` manual initialization with elegant safe macro
-> invocations.
+> Add the following initializer macros:
+> - `#[pin_data]` to annotate structurally pinned fields of structs,
+>    needed for `pin_init!` and `try_pin_init!` to select the correct
+>    initializer of fields.
+> - `pin_init!` create a pin-initializer for a struct with the
+>    `Infallible` error type.
+> - `try_pin_init!` create a pin-initializer for a struct with a custom
+>    error type (`kernel::error::Error` is the default).
+> - `init!` create an in-place-initializer for a struct with the
+>    `Infallible` error type.
+> - `try_init!` create an in-place-initializer for a struct with a custom
+>    error type (`kernel::error::Error` is the default).
 > 
-> Due to the size of this change it has been split into six commits:
-> 1. This commit introducing the basic public interface: traits and
->     functions to represent and create initializers.
-> 2. Adds the `#[pin_data]`, `pin_init!`, `try_pin_init!`, `init!` and
->     `try_init!` macros along with their internal types.
-> 3. Adds the `InPlaceInit` trait that allows using an initializer to create
->     an object inside of a `Box<T>` and other smart pointers.
-> 4. Adds the `PinnedDrop` trait and adds macro support for it in
->     the `#[pin_data]` macro.
-> 5. Adds the `stack_pin_init!` macro allowing to pin-initialize a struct on
->     the stack.
-> 6. Adds the `Zeroable` trait and `init::zeroed` function to initialize
->     types that have `0x00` in all bytes as a valid bit pattern.
+> Also add their needed internal helper traits and structs.
 > 
 > Co-developed-by: Gary Guo <gary@garyguo.net>
 > Signed-off-by: Gary Guo <gary@garyguo.net>
 > Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-> Cc: Andreas Hindborg <a.hindborg@samsung.com>
 > Cc: Alice Ryhl <aliceryhl@google.com>
-> Cc: Wedson Almeida Filho <wedsonaf@gmail.com>
+> Cc: Andreas Hindborg <a.hindborg@samsung.com>
 
 Reviewed-by: Alice Ryhl <aliceryhl@google.com>
