@@ -2,173 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643F66D4D0B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9886D4D0D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbjDCQD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
+        id S233142AbjDCQDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232706AbjDCQD0 (ORCPT
+        with ESMTP id S233139AbjDCQDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:03:26 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD8D1BF0
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:03:23 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id d8so17798268pgm.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 09:03:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680537803;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q8FCpB8VyTDa7xGIymJSP6quiMHLu0BKl13MUGC5tEo=;
-        b=gOhjFd7SdsYOhqpl/CalWTPCh/GEwqqpFOM9QKtFC2do73lAMrnxi1lJQEbeMeWmXf
-         sUZ7UAcq4ZydjNz/uEwPa9WUHGP+YqJ04RdoI5sVtL7Kgm80g76twyR5vidufyKXX0tc
-         h+e1NbzxsMTqKQT7MUZ839V2blta7bm38J+LJ6fdDEP24FRue934eF2iz37D7GfZX7nU
-         8th9FGDbvuZTE64Q79+RCO+z8uenbHRHTkaEouHkcOej1BLAyrCJnIgmXxLWY9vaVA/6
-         7JOXhIAwfNNCIQS8z4t8BEaIpibn3alFpg5zRQG7gGCLXEFfxWjsJKWzhZ4TsbvvrSMl
-         m85w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680537803;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q8FCpB8VyTDa7xGIymJSP6quiMHLu0BKl13MUGC5tEo=;
-        b=xq+rQu+mAVwqIfNLoth3lNCL1mC5vzJPdUtd+Ki9rFJFF+MpX72PXpqjLSAh5Xmwt3
-         R+/TWQ9oWYjcukqBqd/rmekC5oYDNsgYBfnPkiCSiC/xKMuCzvGgXS6mSBXgrf7bvYF2
-         cjLyj3vLvkZCbkdNYngyzfbqmoRQX9JfZuOQl2Uan+VhWet3x2d7JF8hJ4sgDB+3vwpt
-         PyS+XeX9QMxeFoGxN+NYmva8OXVfMutf7biCXd4FTSs0FrJkY06Qi2U57TYDKo9NcgR9
-         BgWH7xLbprcfeIKmsqLtVeauioTcCZ8JFbTCaNh0LpFhqtk60/q/qaoyxXN229B6OVdo
-         aFOA==
-X-Gm-Message-State: AAQBX9dq3N1lzm5EP//XRQ1RCwpDxAIiTHxPxHyJMH/4RjLbkSYfNfPQ
-        6KhjTFmxcAcF306kL0QpwEbIXPJGluk=
-X-Google-Smtp-Source: AKy350YbeUY426zgKjrmIxAH6Cu9UU4/ZLgkV7KRrsPLXo4+cjKIvkNL/SepWMMHEKyqIN6YO54nKw==
-X-Received: by 2002:aa7:950d:0:b0:625:e728:4c5f with SMTP id b13-20020aa7950d000000b00625e7284c5fmr36478928pfp.22.1680537803214;
-        Mon, 03 Apr 2023 09:03:23 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id z15-20020aa791cf000000b006237b9c1f14sm7115336pfa.121.2023.04.03.09.03.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 09:03:20 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] drm/vblank: Fix for drivers that do not drm_vblank_init()
-Date:   Mon,  3 Apr 2023 09:03:14 -0700
-Message-Id: <20230403160314.1210533-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 3 Apr 2023 12:03:34 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E86B1FF2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:03:31 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 21E381EC063F;
+        Mon,  3 Apr 2023 18:03:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680537810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sb/Hhj4OHpVhM7izMhMuZxG/aHMI5JmXLhBwrgGnMRY=;
+        b=jN7tAishzzwoq/Zyv6jX1n1AlSd8qlGLrnaehHgjIbnlxGAQ6AT+UXiTPsUgdWZD+qx+sf
+        mi9pZj/7fgta71QIYpHCjzZ0uEvB36N7sH38ir+c8/maeHdgM7KfPbutAwmlA4fGA5a0hb
+        2Aq0/dTya4OAE5ApvIgIM5hcimJXSsg=
+Date:   Mon, 3 Apr 2023 18:03:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v5 03/15] x86/mtrr: replace some constants with defines
+Message-ID: <20230403160323.GAZCr4y14GvOA4dZID@fat_crate.local>
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-4-jgross@suse.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230401063652.23522-4-jgross@suse.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Sat, Apr 01, 2023 at 08:36:40AM +0200, Juergen Gross wrote:
+> @@ -643,10 +646,12 @@ static bool set_mtrr_var_ranges(unsigned int index, struct mtrr_var_range *vr)
+>  	unsigned int lo, hi;
+>  	bool changed = false;
+>  
+> +#define BASE_MASK	(MTRR_BASE_TYPE_MASK | (size_and_mask << PAGE_SHIFT))
+> +#define MASK_MASK	(MTRR_MASK_VALID | (size_and_mask << PAGE_SHIFT))
 
-This should fix a crash that was reported on ast (and possibly other
-drivers which do not initialize vblank).
+No, "MASK_MASK" is too much. :-)
 
-   fbcon: Taking over console
-   Unable to handle kernel NULL pointer dereference at virtual address 0000000000000074
-   Mem abort info:
-     ESR = 0x0000000096000004
-     EC = 0x25: DABT (current EL), IL = 32 bits
-     SET = 0, FnV = 0
-     EA = 0, S1PTW = 0
-     FSC = 0x04: level 0 translation fault
-   Data abort info:
-     ISV = 0, ISS = 0x00000004
-     CM = 0, WnR = 0
-   user pgtable: 4k pages, 48-bit VAs, pgdp=0000080009d16000
-   [0000000000000074] pgd=0000000000000000, p4d=0000000000000000
-   Internal error: Oops: 0000000096000004 [#1] SMP
-   Modules linked in: ip6table_nat tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc binfmt_misc vfat fat xfs snd_usb_audio snd_hwdep snd_usbmidi_lib snd_seq snd_pcm snd_rawmidi snd_timer snd_seq_device snd soundcore joydev mc ipmi_ssif ipmi_devintf ipmi_msghandler arm_spe_pmu arm_cmn arm_dsu_pmu arm_dmc620_pmu cppc_cpufreq loop zram crct10dif_ce polyval_ce nvme polyval_generic ghash_ce sbsa_gwdt igb nvme_core ast nvme_common i2c_algo_bit xgene_hwmon gpio_dwapb scsi_dh_rdac scsi_dh_emc scsi_dh_alua ip6_tables ip_tables dm_multipath fuse
-   CPU: 12 PID: 469 Comm: kworker/12:1 Not tainted 6.3.0-rc2-00008-gd39e48ca80c0 #1
-   Hardware name: ADLINK AVA Developer Platform/AVA Developer Platform, BIOS TianoCore 2.04.100.07 (SYS: 2.06.20220308) 09/08/2022
-   Workqueue: events fbcon_register_existing_fbs
-   pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-   pc : drm_crtc_next_vblank_start+0x2c/0x98
-   lr : drm_atomic_helper_wait_for_fences+0x90/0x240
-   sp : ffff80000d583960
-   x29: ffff80000d583960 x28: ffff07ff8fc187b0 x27: 0000000000000000
-   x26: ffff07ff99c08c00 x25: 0000000000000038 x24: ffff07ff99c0c000
-   x23: 0000000000000001 x22: 0000000000000038 x21: 0000000000000000
-   x20: ffff07ff9640a280 x19: 0000000000000000 x18: ffffffffffffffff
-   x17: 0000000000000000 x16: ffffb24d2eece1c0 x15: 0000003038303178
-   x14: 3032393100000048 x13: 0000000000000000 x12: 0000000000000000
-   x11: 0000000000000000 x10: 0000000000000000 x9 : ffffb24d2eeeaca0
-   x8 : ffff80000d583628 x7 : 0000080077783000 x6 : 0000000000000000
-   x5 : ffff80000d584000 x4 : ffff07ff99c0c000 x3 : 0000000000000130
-   x2 : 0000000000000000 x1 : ffff80000d5839c0 x0 : ffff07ff99c0cc08
-   Call trace:
-    drm_crtc_next_vblank_start+0x2c/0x98
-    drm_atomic_helper_wait_for_fences+0x90/0x240
-    drm_atomic_helper_commit+0xb0/0x188
-    drm_atomic_commit+0xb0/0xf0
-    drm_client_modeset_commit_atomic+0x218/0x280
-    drm_client_modeset_commit_locked+0x64/0x1a0
-    drm_client_modeset_commit+0x38/0x68
-    __drm_fb_helper_restore_fbdev_mode_unlocked+0xb0/0xf8
-    drm_fb_helper_set_par+0x44/0x88
-    fbcon_init+0x1e0/0x4a8
-    visual_init+0xbc/0x118
-    do_bind_con_driver.isra.0+0x194/0x3a0
-    do_take_over_console+0x50/0x70
-    do_fbcon_takeover+0x74/0xf8
-    do_fb_registered+0x13c/0x158
-    fbcon_register_existing_fbs+0x78/0xc0
-    process_one_work+0x1ec/0x478
-    worker_thread+0x74/0x418
-    kthread+0xec/0x100
-    ret_from_fork+0x10/0x20
-   Code: f9400004 b9409013 f940a082 9ba30a73 (b9407662)
-   ---[ end trace 0000000000000000 ]---
+Anyway, so I started looking at this and here's what I'm seeing on my
+machine even with the old code:
 
-v2: Use drm_dev_has_vblank()
+        rdmsr(MTRRphysBase_MSR(index), lo, hi);
+        if ((vr->base_lo & 0xfffff0ffUL) != (lo & 0xfffff0ffUL)
+            || (vr->base_hi & (size_and_mask >> (32 - PAGE_SHIFT))) !=
+                (hi & (size_and_mask >> (32 - PAGE_SHIFT)))) {
 
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Fixes: d39e48ca80c0 ("drm/atomic-helper: Set fence deadline for vblank")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+
+size_and_mask:		0x0000000ffff00000
+the shifted version:	0x000000000000ffff
+
+which is bits [15:0]
+
+Now, looking at MTRRphysBase_MSR's definition, the high 32 bits are:
+
+[63 ... reserved ... ][ max_addr ... 32 ]
+
+and that second slice: from max_addr to the 32nd bit of the whole MSR is
+the second part of PhysBase.
+
+max_addr aka phys_addr comes from:
+
+	phys_addr = cpuid_eax(0x80000008) & 0xff;
+
+on that machine, that value is 48.
+
+Which means, the physaddr slice should be [48 .. 32], i.e.,
+
+	0x0001ffff00000000
+
+and when you shift that by 32 so that it can be ANDed with the high
+portion of the MSR, it becomes
+
+0x000000000001ffff
+
+i.e., bit 16 is set too.
+
+And that max address can be up to 51:
+
+"Range Physical Base-Address (PhysBase)—Bits 51:12. The memory-range base-address in
+physical-address space. PhysBase is aligned on a 4-Kbyte (or greater) address in the 52-bit
+physical-address space supported by the AMD64 architecture. PhysBase represents the most-
+significant 40-address bits of the physical address. Physical-address
+bits 11:0 are assumed to be 0."
+
+Long story short, size_and_mask needs to be done from
+
+	size_and_mask = ~size_or_mask & 0xfffff00000ULL;
+
+to
+
+	size_and_mask = ~size_or_mask & GENMASK_ULL(phys_addr, 20);
+
+size_or_mask bits already took into consideration the phys_addr:
+
+	size_or_mask = SIZE_OR_MASK_BITS(phys_addr);
+
+and size_and_mask needs to do it too.
+
+Right?
+
+I'll test this on the boxes here everywhere. I guess this gets hit only
+on boxes where the phys_addr of the variable MTRRs goes over the 16
+bits.
+
+As to this patch: please make all the bit and mask definitions you're
+adding as close to the MTRR bit and mask definition names in the
+APM+SDM. I've started this already (ontop of yours):
+
 ---
- drivers/gpu/drm/drm_vblank.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
-index 299fa2a19a90..877e2067534f 100644
---- a/drivers/gpu/drm/drm_vblank.c
-+++ b/drivers/gpu/drm/drm_vblank.c
-@@ -996,10 +996,16 @@ EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
- int drm_crtc_next_vblank_start(struct drm_crtc *crtc, ktime_t *vblanktime)
- {
- 	unsigned int pipe = drm_crtc_index(crtc);
--	struct drm_vblank_crtc *vblank = &crtc->dev->vblank[pipe];
--	struct drm_display_mode *mode = &vblank->hwmode;
-+	struct drm_vblank_crtc *vblank;
-+	struct drm_display_mode *mode;
- 	u64 vblank_start;
+diff --git a/arch/x86/include/asm/mtrr.h b/arch/x86/include/asm/mtrr.h
+index 4e59f7854950..a768a8716980 100644
+--- a/arch/x86/include/asm/mtrr.h
++++ b/arch/x86/include/asm/mtrr.h
+@@ -28,7 +28,7 @@
  
-+	if (!drm_dev_has_vblank(crtc->dev))
-+		return -EINVAL;
-+
-+	vblank = &crtc->dev->vblank[pipe];
-+	mode = &vblank->hwmode;
-+
- 	if (!vblank->framedur_ns || !vblank->linedur_ns)
- 		return -EINVAL;
+ /* Defines for hardware MTRR registers. */
+ #define MTRR_CONFIG_NUM_VAR_MASK	GENMASK(7, 0)
+-#define MTRR_CONFIG_HAVE_FIXED		BIT_MASK(8)
++#define MTRR_CAP_FIX			BIT_MASK(8)
+ #define MTRR_CONFIG_HAVE_WC		BIT_MASK(10)
  
+ #define MTRR_DEFTYPE_TYPE_MASK		GENMASK(7, 0)
+@@ -39,9 +39,9 @@
+ #define MTRR_DEFTYPE_DISABLE_MASK	~(MTRR_DEFTYPE_TYPE_MASK |	\
+ 					  MTRR_DEFTYPE_ENABLE_MASK)
+ 
+-#define MTRR_BASE_TYPE_MASK		GENMASK_ULL(7, 0)
++#define MTRR_BASE_TYPE_MASK		GENMASK(7, 0)
+ 
+-#define MTRR_MASK_VALID			BIT_ULL_MASK(11)
++#define MTRR_PHYS_MASK_VALID		BIT_ULL_MASK(11)
+ 
+ /*
+  * The following functions are for use by other drivers that cannot use
+@@ -140,9 +140,7 @@ struct mtrr_gentry32 {
+ 
+ /* Bit fields for enabled in struct mtrr_state_type */
+ #define MTRR_STATE_SHIFT		10
+-#define MTRR_STATE_MTRR_FIXED_ENABLED	\
+-			(MTRR_DEFTYPE_FIXED_ENABLED >> MTRR_STATE_SHIFT)
+-#define MTRR_STATE_MTRR_ENABLED		\
+-			(MTRR_DEFTYPE_ENABLED >> MTRR_STATE_SHIFT)
++#define MTRR_STATE_MTRR_FIXED_ENABLED	(MTRR_DEFTYPE_FIXED_ENABLED >> MTRR_STATE_SHIFT)
++#define MTRR_STATE_MTRR_ENABLED		(MTRR_DEFTYPE_ENABLED >> MTRR_STATE_SHIFT)
+ 
+ #endif /* _ASM_X86_MTRR_H */
+diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
+index 9a12da76635c..8f8b7775a5ac 100644
+--- a/arch/x86/kernel/cpu/mtrr/generic.c
++++ b/arch/x86/kernel/cpu/mtrr/generic.c
+@@ -171,7 +171,7 @@ static u8 mtrr_type_lookup_variable(u64 start, u64 end, u64 *partial_end,
+ 	for (i = 0; i < num_var_ranges; ++i) {
+ 		unsigned short start_state, end_state, inclusive;
+ 
+-		if (!(mtrr_state.var_ranges[i].mask_lo & MTRR_MASK_VALID))
++		if (!(mtrr_state.var_ranges[i].mask_lo & MTRR_PHYS_MASK_VALID))
+ 			continue;
+ 
+ 		base = (((u64)mtrr_state.var_ranges[i].base_hi) << 32) +
+@@ -223,8 +223,7 @@ static u8 mtrr_type_lookup_variable(u64 start, u64 end, u64 *partial_end,
+ 		if ((start & mask) != (base & mask))
+ 			continue;
+ 
+-		curr_match = mtrr_state.var_ranges[i].base_lo &
+-			     MTRR_BASE_TYPE_MASK;
++		curr_match = mtrr_state.var_ranges[i].base_lo & MTRR_BASE_TYPE_MASK;
+ 		if (prev_match == MTRR_TYPE_INVALID) {
+ 			prev_match = curr_match;
+ 			continue;
+@@ -426,7 +425,7 @@ static void __init print_mtrr_state(void)
+ 	high_width = (__ffs64(size_or_mask) - (32 - PAGE_SHIFT) + 3) / 4;
+ 
+ 	for (i = 0; i < num_var_ranges; ++i) {
+-		if (mtrr_state.var_ranges[i].mask_lo & MTRR_MASK_VALID)
++		if (mtrr_state.var_ranges[i].mask_lo & MTRR_PHYS_MASK_VALID)
+ 			pr_debug("  %u base %0*X%05X000 mask %0*X%05X000 %s\n",
+ 				 i,
+ 				 high_width,
+@@ -454,7 +453,7 @@ bool __init get_mtrr_state(void)
+ 	vrs = mtrr_state.var_ranges;
+ 
+ 	rdmsr(MSR_MTRRcap, lo, dummy);
+-	mtrr_state.have_fixed = !!(lo & MTRR_CONFIG_HAVE_FIXED);
++	mtrr_state.have_fixed = !!(lo & MTRR_CAP_FIX);
+ 
+ 	for (i = 0; i < num_var_ranges; i++)
+ 		get_mtrr_var_range(i, &vrs[i]);
+@@ -463,8 +462,7 @@ bool __init get_mtrr_state(void)
+ 
+ 	rdmsr(MSR_MTRRdefType, lo, dummy);
+ 	mtrr_state.def_type = lo & MTRR_DEFTYPE_TYPE_MASK;
+-	mtrr_state.enabled = (lo & MTRR_DEFTYPE_ENABLE_MASK) >>
+-			     MTRR_STATE_SHIFT;
++	mtrr_state.enabled = (lo & MTRR_DEFTYPE_ENABLE_MASK) >> MTRR_STATE_SHIFT;
+ 
+ 	if (amd_special_default_mtrr()) {
+ 		unsigned low, high;
+@@ -576,8 +574,7 @@ static void generic_get_mtrr(unsigned int reg, unsigned long *base,
+ 	get_cpu();
+ 
+ 	rdmsr(MTRRphysMask_MSR(reg), mask_lo, mask_hi);
+-
+-	if ((mask_lo & MTRR_MASK_VALID) == 0) {
++	if (!(mask_lo & MTRR_PHYS_MASK_VALID)) {
+ 		/*  Invalid (i.e. free) range */
+ 		*base = 0;
+ 		*size = 0;
+@@ -647,7 +644,7 @@ static bool set_mtrr_var_ranges(unsigned int index, struct mtrr_var_range *vr)
+ 	bool changed = false;
+ 
+ #define BASE_MASK	(MTRR_BASE_TYPE_MASK | (size_and_mask << PAGE_SHIFT))
+-#define MASK_MASK	(MTRR_MASK_VALID | (size_and_mask << PAGE_SHIFT))
++#define MASK_MASK	(MTRR_PHYS_MASK_VALID | (size_and_mask << PAGE_SHIFT))
+ 
+ 	rdmsr(MTRRphysBase_MSR(index), lo, hi);
+ 	if ((vr->base_lo & BASE_MASK) != (lo & BASE_MASK)
+@@ -770,7 +767,7 @@ static void generic_set_mtrr(unsigned int reg, unsigned long base,
+ 	} else {
+ 		vr->base_lo = base << PAGE_SHIFT | type;
+ 		vr->base_hi = (base & size_and_mask) >> (32 - PAGE_SHIFT);
+-		vr->mask_lo = -size << PAGE_SHIFT | MTRR_MASK_VALID;
++		vr->mask_lo = -size << PAGE_SHIFT | MTRR_PHYS_MASK_VALID;
+ 		vr->mask_hi = (-size & size_and_mask) >> (32 - PAGE_SHIFT);
+ 
+ 		mtrr_wrmsr(MTRRphysBase_MSR(reg), vr->base_lo, vr->base_hi);
+
+Thx.
+
 -- 
-2.39.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
