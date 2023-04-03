@@ -2,145 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF866D41D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D816D41D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 12:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbjDCKT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 06:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        id S231448AbjDCKUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 06:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbjDCKTT (ORCPT
+        with ESMTP id S231553AbjDCKUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 06:19:19 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B2112BF3;
-        Mon,  3 Apr 2023 03:19:07 -0700 (PDT)
-Received: from [192.168.2.163] (109-252-124-32.nat.spd-mgts.ru [109.252.124.32])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7E3D56601F5E;
-        Mon,  3 Apr 2023 11:19:04 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680517146;
-        bh=oUsrnUvVWFNCO2I8SuCXiTW/AVZU2rkXoBafHs5oU3Y=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=lULd60iyGYARm3PqzyHmdn7asLZYd2d8dPWIEjvXyMF07YzyTnsdvZi2dYUGyyKAu
-         hmW8XBPJQ6/iNKJHewWO+8Ak6W2rS3OU/OVGVuet7EP1bZyS1GNzWJz8c1D/Ip+QLK
-         LN/UrIG7gufbNIC48TTRIRA99cicPtqUQT7ij8l6h/yE2i1Jt468aGCYN6B6ZSPq6V
-         NB0nVByIN7hCp3ntdWTkFDGH9uP7rozub9VgUCThwJg6vLpuPNZpnl+83FFlS5pOuL
-         5iEzz4yl/t408u97uSNIW7ZmNXhyVTF0D6zS6/I4Rov2Y+ceq8S1Pn9+WjLchRvvIg
-         nb8/Tklw6SA6A==
-Message-ID: <80cdf100-ef3c-23ae-5adf-bcf97fa85e72@collabora.com>
-Date:   Mon, 3 Apr 2023 13:19:01 +0300
+        Mon, 3 Apr 2023 06:20:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4D2A12875;
+        Mon,  3 Apr 2023 03:19:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A5C41063;
+        Mon,  3 Apr 2023 03:20:37 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.57.89])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18E933F840;
+        Mon,  3 Apr 2023 03:19:50 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 11:19:48 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg()
+ fallbacks
+Message-ID: <ZCqoRNU8EJhKJVEu@FVFF77S0Q05N>
+References: <20230305205628.27385-1-ubizjak@gmail.com>
+ <20230305205628.27385-2-ubizjak@gmail.com>
+ <ZB2v+avNt52ac/+w@FVFF77S0Q05N>
+ <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
+ <ZB3MR8lGbnea9ui6@FVFF77S0Q05N>
+ <ZB3QtDYuWdpiD5qk@FVFF77S0Q05N>
+ <CAFULd4aFUF5k=QJD8tDp4qzm2iBF7=rNvp1SJWrg44X5hTFxtQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 0/7] Move dma-buf mmap() reservation locking down to
- exporters
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <jstultz@google.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        kernel@collabora.com
-References: <20230402164826.752842-1-dmitry.osipenko@collabora.com>
-In-Reply-To: <20230402164826.752842-1-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFULd4aFUF5k=QJD8tDp4qzm2iBF7=rNvp1SJWrg44X5hTFxtQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/2/23 19:48, Dmitry Osipenko wrote:
-> This patchset makes dma-buf exporters responisble for taking care of
-> the reservation lock. I also included patch that moves drm-shmem to use
-> reservation lock, to let CI test the whole set. I'm going to take all
-> the patches via the drm-misc tree, please give an ack.
+On Sun, Mar 26, 2023 at 09:28:38PM +0200, Uros Bizjak wrote:
+> On Fri, Mar 24, 2023 at 5:33 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > On Fri, Mar 24, 2023 at 04:14:22PM +0000, Mark Rutland wrote:
+> > > On Fri, Mar 24, 2023 at 04:43:32PM +0100, Uros Bizjak wrote:
+> > > > On Fri, Mar 24, 2023 at 3:13 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> > > > >
+> > > > > On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote:
+> > > > > > Cast _oldp to the type of _ptr to avoid incompatible-pointer-types warning.
+> > > > >
+> > > > > Can you give an example of where we are passing an incompatible pointer?
+> > > >
+> > > > An example is patch 10/10 from the series, which will fail without
+> > > > this fix when fallback code is used. We have:
+> > > >
+> > > > -       } while (local_cmpxchg(&rb->head, offset, head) != offset);
+> > > > +       } while (!local_try_cmpxchg(&rb->head, &offset, head));
+> > > >
+> > > > where rb->head is defined as:
+> > > >
+> > > > typedef struct {
+> > > >    atomic_long_t a;
+> > > > } local_t;
+> > > >
+> > > > while offset is defined as 'unsigned long'.
+> > >
+> > > Ok, but that's because we're doing the wrong thing to start with.
+> > >
+> > > Since local_t is defined in terms of atomic_long_t, we should define the
+> > > generic local_try_cmpxchg() in terms of atomic_long_try_cmpxchg(). We'll still
+> > > have a mismatch between 'long *' and 'unsigned long *', but then we can fix
+> > > that in the callsite:
+> > >
+> > >       while (!local_try_cmpxchg(&rb->head, &(long *)offset, head))
+> >
+> > Sorry, that should be:
+> >
+> >         while (!local_try_cmpxchg(&rb->head, (long *)&offset, head))
 > 
-> Previous policy stated that dma-buf core takes the lock around mmap()
-> callback. Which meant that both importers and exporters shouldn't touch
-> the reservation lock in the mmap() code path. This worked well until
-> Intel-CI found a deadlock problem in a case of self-imported dma-buf [1].
+> The fallbacks are a bit more complicated than above, and are different
+> from atomic_try_cmpxchg.
 > 
-> The problem happens when userpace mmaps a self-imported dma-buf, i.e.
-> mmaps the dma-buf FD. DRM core treats self-imported dma-bufs as own GEMs
-> [2]. There is no way to differentiate a prime GEM from a normal GEM for
-> drm-shmem in drm_gem_shmem_mmap(), which resulted in a deadlock problem
-> for drm-shmem mmap() code path once it's switched to use reservation lock.
+> Please note in patch 2/10, the falbacks when arch_try_cmpxchg_local
+> are not defined call arch_cmpxchg_local. Also in patch 2/10,
+> try_cmpxchg_local is introduced, where it calls
+> arch_try_cmpxchg_local. Targets (and generic code) simply define (e.g.
+> :
 > 
-> It was difficult to fix the drm-shmem problem without adjusting dma-buf
-> locking policy. In parctice not much changed from importers perspective
-> because previosly dma-buf was taking the lock in between of importers
-> and exporters. Now this lock is shifted down to exporters.
+> #define local_cmpxchg(l, o, n) \
+>        (cmpxchg_local(&((l)->a.counter), (o), (n)))
+> +#define local_try_cmpxchg(l, po, n) \
+> +       (try_cmpxchg_local(&((l)->a.counter), (po), (n)))
 > 
-> [1] https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_114671v2/shard-snb5/igt@prime_vgem@sync@rcs0.html
-> [2] https://elixir.bootlin.com/linux/v6.3-rc4/source/drivers/gpu/drm/drm_prime.c#L924
-> 
-> Dmitry Osipenko (7):
->   Revert "media: videobuf2: Assert held reservation lock for dma-buf
->     mmapping"
->   Revert "dma-buf/heaps: Assert held reservation lock for dma-buf
->     mmapping"
->   Revert "udmabuf: Assert held reservation lock for dma-buf mmapping"
->   Revert "fastrpc: Assert held reservation lock for dma-buf mmapping"
->   Revert "drm: Assert held reservation lock for dma-buf mmapping"
->   dma-buf: Change locking policy for mmap()
->   drm/shmem-helper: Switch to reservation lock
-> 
->  drivers/dma-buf/dma-buf.c                     |  17 +-
->  drivers/dma-buf/heaps/cma_heap.c              |   3 -
->  drivers/dma-buf/heaps/system_heap.c           |   3 -
->  drivers/dma-buf/udmabuf.c                     |   2 -
->  drivers/gpu/drm/drm_gem_shmem_helper.c        | 217 ++++++++----------
->  drivers/gpu/drm/drm_prime.c                   |   2 -
->  drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   2 -
->  drivers/gpu/drm/lima/lima_gem.c               |   8 +-
->  drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c     |   2 -
->  drivers/gpu/drm/panfrost/panfrost_drv.c       |   7 +-
->  .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |   6 +-
->  drivers/gpu/drm/panfrost/panfrost_mmu.c       |  19 +-
->  drivers/gpu/drm/tegra/gem.c                   |   2 -
->  .../common/videobuf2/videobuf2-dma-contig.c   |   3 -
->  .../media/common/videobuf2/videobuf2-dma-sg.c |   3 -
->  .../common/videobuf2/videobuf2-vmalloc.c      |   3 -
->  drivers/misc/fastrpc.c                        |   3 -
->  include/drm/drm_gem_shmem_helper.h            |  14 +-
->  18 files changed, 123 insertions(+), 193 deletions(-)
-> 
+> which is part of the local_t API. Targets should either define all
+> these #defines, or none. There are no partial fallbacks as is the case
+> with atomic_t.
 
-Intel's IGT passed[1] (see Tests section) with the new locking policy,
-which failed previously for the "drm/shmem-helper: Switch to reservation
-lock" patch.
+Whether or not there are fallbacks is immaterial.
 
-[1] https://patchwork.freedesktop.org/series/116000/
+In those cases, architectures can just as easily write C wrappers, e.g.
 
--- 
-Best regards,
-Dmitry
+long local_cmpxchg(local_t *l, long old, long new)
+{
+	return cmpxchg_local(&l->a.counter, old, new);
+}
 
+long local_try_cmpxchg(local_t *l, long *old, long new)
+{
+	return try_cmpxchg_local(&l->a.counter, old, new);
+}
+
+> The core of the local_h API is in the local.h header. If the target
+> doesn't define its own local.h header, then asm-generic/local.h is
+> used that does exactly what you propose above regarding the usage of
+> atomic functions.
+> 
+> OTOH, when the target defines its own local.h, then the above
+> target-dependent #define path applies. The target should define its
+> own arch_try_cmpxchg_local, otherwise a "generic" target-dependent
+> fallback that calls target arch_cmpxchg_local applies. In the case of
+> x86, patch 9/10 enables new instruction by defining
+> arch_try_cmpxchg_local.
+> 
+> FYI, the patch sequence is carefully chosen so that x86 also exercises
+> fallback code between different patches in the series.
+> 
+> Targets are free to define local_t to whatever they like, but for some
+> reason they all define it to:
+> 
+> typedef struct {
+>     atomic_long_t a;
+> } local_t;
+
+Yes, which is why I used atomic_long() above.
+
+> so they have to dig the variable out of the struct like:
+> 
+> #define local_cmpxchg(l, o, n) \
+>      (cmpxchg_local(&((l)->a.counter), (o), (n)))
+> 
+> Regarding the mismatch of 'long *' vs 'unsigned long *': x86
+> target-specific code does for try_cmpxchg:
+> 
+> #define __raw_try_cmpxchg(_ptr, _pold, _new, size, lock) \
+> ({ \
+> bool success; \
+> __typeof__(_ptr) _old = (__typeof__(_ptr))(_pold); \
+> __typeof__(*(_ptr)) __old = *_old; \
+> __typeof__(*(_ptr)) __new = (_new); \
+> 
+> so, it *does* cast the "old" pointer to the type of "ptr". The generic
+> code does *not*. This difference is dangerous, since the compilation
+> of some code involving try_cmpxchg will compile OK for x86 but will
+> break for other targets that use try_cmpxchg fallback templates (I was
+> the unlucky one that tripped on this in the past). Please note that
+> this problem is not specific to the proposed local_try_cmpxchg series,
+> but affects the existing try_cmpxchg API.
+
+I understand the problem of arch code differing from generic code, and that we
+want to have *a* consistent behaviour for hte API.
+
+What I'm saying is that the behaviour we should aim for is where the 'old'
+pointer has a specific type (long), and we always require that, as we do for
+the various atomic_*() APIs of which local_*() is a cousin.
+
+> Also, I don't think that "fixing" callsites is the right thing to do.
+
+Why? What's wrong with doing that?
+
+The documentation in Documentation/core-api/local_ops.rst says:
+
+    The ``local_t`` type is defined as an opaque ``signed long``
+
+So the obvious and least surprising thing is for the local_*() functions to use
+'long' for values and 'long *' for pointers to values.
+
+Requiring a cast in a few places is not the end of the world.
+
+> The generic code should follow x86 and cast the "old" pointer to the
+> type of "ptr" inside the fallback.
+
+Why?
+
+I disagree, and think it's far better to be strict by default. That way,
+accidental usage of the wrong type will be caught by the compiler, and if
+someone *really* wants to use a differently type then can use a cast in the
+callsite, which makes it really obvious when that is happening.
+
+I appreciate that may require some preparatory cleanup, but I think that's a
+small price to pay for having this in a clearer and more maintainable state.
+
+> > The fundamenalthing I'm trying to say is that the
+> > atomic/atomic64/atomic_long/local/local64 APIs should be type-safe, and for
+> > their try_cmpxchg() implementations, the type signature should be:
+> >
+> >         ${atomictype}_try_cmpxchg(${atomictype} *ptr, ${inttype} *old, ${inttype} new)
+> 
+> This conversion should be performed also for the cmpxchg family of
+> functions, if desired at all. try_cmpxchg fallback is just cmpxchg
+> with some extra code around.
+
+FWIW, I agree that we *should* make try_cmpxchg() check that ptr and old
+pointer are the same type.
+
+However, I don't think that's a prerequisite for doing so for
+local_try_cmpxchg().
+
+Plese make local_try_cmpxchg() have a proper type-safe C prototype, as we do
+with the atomic*_try_cmpxchg() APIs.
+
+Thanks,
+Mark,
