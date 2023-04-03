@@ -2,118 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5589B6D3C87
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 06:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 965586D3C97
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 06:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjDCElk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 00:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42556 "EHLO
+        id S230447AbjDCEzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 00:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbjDCEle (ORCPT
+        with ESMTP id S229545AbjDCEzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 00:41:34 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B502F8A5C;
-        Sun,  2 Apr 2023 21:41:33 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PqdWv2fd2z4xD8;
-        Mon,  3 Apr 2023 14:41:30 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680496892;
-        bh=W6GP7q6wi5GJwj7Dq38b9nmo+P5VQXSeAtja9XIG3Uc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=g0nfWgnGj3VP8OVsM5Ry5OyxGrYsrRiC9qCTlkfrLQeMuhu6vN3wLZe+OGKbrhucb
-         ntlqK4qZAR4F1KoheUEVhuvif8YwHuahLsbJlGFOnURZTwgfIy7wp8oDc3DSkQmOwh
-         1mwor4mHSTrSFGnk04GlZIxnKyZfHByqY56NObfyy+ChnFLQyHqTbLrwi5OYh677vL
-         Lz1nU++bZATpcY79dlUKzX46e+NX8QxAy8SCUrV0DFnUCfojB0Je7+pcRJMRc1z7Jl
-         DXU/vJDLgNbqaCyftk4As50kPIZ5HcYmfg8eSs2vvX2pAbbavkQ08QlQ6f1gR/Uc2w
-         O22YJajdcZWog==
-Date:   Mon, 3 Apr 2023 14:41:29 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Beau Belgrave <beaub@linux.microsoft.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the ftrace tree with the iommu tree
-Message-ID: <20230403144129.250c7095@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DvWvXKmidxV1SDWJWy8u9Xk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 3 Apr 2023 00:55:39 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0C18A5E;
+        Sun,  2 Apr 2023 21:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680497738; x=1712033738;
+  h=from:to:cc:subject:date:message-id;
+  bh=1OSTKI3yBXEYfZimWNNa4GWltj4cjgdQ0bHGtSCpFcc=;
+  b=hiu79L/gBVhPNTwTdrxWDKObXjC8KbRhnPxFJ9dv1WiovkdQ9bnBWMUT
+   PjXwOL8pFHI84874tBpUPILdBnX4nLsSyJ7q5OAIYKkBh8x8O3VE2PoeW
+   gS57VUzLhy+0YzN4OtbmyO/01iMdvdyzEbMKxiC+OtnjCbc7sZw2DpnBh
+   2RTR7JLO31R62q+DNkreekA9C0BPuBTBnNnXF2mvStWkieXsZuVJsZpBJ
+   UWJ8KqoWItmD0Uqz1qmO0VrssBEKwD9i18qU2ZT6NKRkwNNX+3trIPkQl
+   I23lLIXZLQLRTz4MhFA4ubib9KGduIXEgxWdMI2xWMKYRkJvdUru9OM6t
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="344362539"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="344362539"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2023 21:55:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="829421514"
+X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
+   d="scan'208";a="829421514"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by fmsmga001.fm.intel.com with ESMTP; 02 Apr 2023 21:55:37 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shuah@kernel.org, luto@kernel.org, dave.hansen@intel.com,
+        tglx@linutronix.de, bp@suse.de, jun.miao@windriver.com,
+        chang.seok.bae@intel.com
+Subject: [PATCH v1 0/4] selftests/x86: Improve signal test code
+Date:   Sun,  2 Apr 2023 21:43:36 -0700
+Message-Id: <20230403044340.1312-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=0.5 required=5.0 tests=AC_FROM_MANY_DOTS,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/DvWvXKmidxV1SDWJWy8u9Xk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
 Hi all,
 
-Today's linux-next merge of the ftrace tree got a conflict in:
+This is a cleanup series to consolidate a common signal setup code.
+Right now quite a bit of duplicated code is there in an unorganized
+way. Here is a rework of that signal-related code:
 
-  kernel/fork.c
+(1) Consolidate the signal handler helpers
 
-between commit:
+  They have been exactly copied everywhere. Place them in the shared
+  code. Then, remove those duplicates.
 
-  cd3891158a77 ("iommu/sva: Move PASID helpers to sva code")
+(2) Simplify altstack code
 
-from the iommu tree and commit:
+  Most cases require just a usable alternate stack. So, there is a
+  chance to simplify them all. Abstract the entire setup code to one
+  setup call. Then, it can reduce the amount of code there.
 
-  fd593511cdfc ("tracing/user_events: Track fork/exec/exit for mm lifetime")
+  For testing sigaltstack() specifically, another helper is provided
+  that excludes the syscall part.
 
-from the ftrace tree.
+The series also includes some preparatory changes for them:
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+* Along with the rework, some existing problem was uncovered. A couple
+  of tests look to free the altstack memory even before the signal
+  delivery. Adjust the memory cleanup to resolve this issue.
 
---=20
-Cheers,
-Stephen Rothwell
+* Also resolve a define conflict separately before including the
+  refactored header.
 
-diff --cc kernel/fork.c
-index 4a8f43aa554d,efb1f2257772..000000000000
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@@ -97,7 -97,7 +97,8 @@@
-  #include <linux/io_uring.h>
-  #include <linux/bpf.h>
-  #include <linux/stackprotector.h>
- +#include <linux/iommu.h>
-+ #include <linux/user_events.h>
- =20
-  #include <asm/pgalloc.h>
-  #include <linux/uaccess.h>
+Then, there is another selftest fix that I posted:
+  https://lore.kernel.org/lkml/20230330233520.21937-1-chang.seok.bae@intel.com/
+which has a conflict with this. As the fix should go first, this
+cleanup series is based on it.
 
---Sig_/DvWvXKmidxV1SDWJWy8u9Xk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+FWIW, at the moment, the new x86 selftest cases -- lam and
+test_shadow_stack do not conflict with this.
 
------BEGIN PGP SIGNATURE-----
+Here is the repository where this series can be found:
+  git://github.com/intel/amx-linux.git selftest-signal
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqWPoACgkQAVBC80lX
-0Gz72Af+KiLZCohIEh+MgCSTaUO0nXgpchD9kQAyCk/thFxLvtNBuZ8zU/HheIhP
-S4XnCEWwdcqQdu/iAiq+sgdT99a0171M3cBzkhczQ+kpNNFsH4lvPfGpDByAQ9rv
-uroJn7O9HBPP+nYgqC6GlrU2udwN1mT7eNjJTQ6KMTqvovKstY38lOCJ99RSYWvJ
-1KYYO4oSogiBf1CBBzA+4b5UzPzyXCQZs43/XWO3QBhBx1LnW1OcPeHEDVxSr7/9
-6ce1ET6bXFiJQNx3L0EDkJ6h+qYRmZ6Q2OIgoR0c8whMkzIDBAOMJWXtqxXLrhgE
-ouo1wIj5KVIK0A5vnmjWaoYEaBpjHw==
-=XIXx
------END PGP SIGNATURE-----
+Thanks,
+Chang
 
---Sig_/DvWvXKmidxV1SDWJWy8u9Xk--
+Chang S. Bae (4):
+  selftests/x86: Fix the altstack free
+  selftests/x86/mov_ss_trap: Include processor-flags.h
+  selftests/x86: Consolidate signal handler helpers
+  selftests/x86: Refactor altstack setup code
+
+ tools/testing/selftests/x86/Makefile          |  16 ++-
+ tools/testing/selftests/x86/amx.c             |  67 +++--------
+ .../selftests/x86/corrupt_xstate_header.c     |  15 +--
+ tools/testing/selftests/x86/entry_from_vm86.c |  25 +---
+ tools/testing/selftests/x86/fsgsbase.c        |  25 +---
+ tools/testing/selftests/x86/helpers.c         | 110 ++++++++++++++++++
+ tools/testing/selftests/x86/helpers.h         |  10 ++
+ tools/testing/selftests/x86/ioperm.c          |  26 +----
+ tools/testing/selftests/x86/iopl.c            |  26 +----
+ tools/testing/selftests/x86/ldt_gdt.c         |  19 +--
+ tools/testing/selftests/x86/mov_ss_trap.c     |  26 +----
+ tools/testing/selftests/x86/ptrace_syscall.c  |  24 +---
+ tools/testing/selftests/x86/sigaltstack.c     |  67 +++--------
+ tools/testing/selftests/x86/sigreturn.c       |  35 +-----
+ .../selftests/x86/single_step_syscall.c       |  36 +-----
+ .../testing/selftests/x86/syscall_arg_fault.c |  24 +---
+ tools/testing/selftests/x86/syscall_nt.c      |  13 ---
+ tools/testing/selftests/x86/sysret_rip.c      |  24 +---
+ tools/testing/selftests/x86/test_vsyscall.c   |  13 ---
+ tools/testing/selftests/x86/unwind_vdso.c     |  13 ---
+ 20 files changed, 205 insertions(+), 409 deletions(-)
+ create mode 100644 tools/testing/selftests/x86/helpers.c
+
+-- 
+2.17.1
+
