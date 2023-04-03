@@ -2,74 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F06D6D4DE7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F026D4DEC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbjDCQdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S232789AbjDCQdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbjDCQc7 (ORCPT
+        with ESMTP id S232869AbjDCQdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:32:59 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAF02D44;
-        Mon,  3 Apr 2023 09:32:43 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-545cb3c9898so487069637b3.7;
-        Mon, 03 Apr 2023 09:32:43 -0700 (PDT)
+        Mon, 3 Apr 2023 12:33:12 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51B61997;
+        Mon,  3 Apr 2023 09:33:08 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id ix20so28602481plb.3;
+        Mon, 03 Apr 2023 09:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680539563;
+        d=gmail.com; s=20210112; t=1680539588;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YVyyKhZhVKFELaIeQcqrXX4LwNgdwjSlp3Qd8NQAQ4Y=;
-        b=alovpYhaZ6LPgZSHYZtdkBDDP0URHuvySe8G9XIGLclC488EV1E3u8rlGcp9dZbnFJ
-         /i8Lzo6P6svFjgqn96yjhxT0ADCbnoj2Px0Gowwg4kddCMBKZwm3AmjpfV+9Gkh1WaV3
-         Z97HoGa5/whNh0FKrEWHg/Svs0YwBmikaDdmu7JOj1JqIRkjxiafRgY58IWwyeOxGfHk
-         qxn0OLjqQ1rLbUhR6XiXIjMbK3SGCGFnx64x3b0ilnbiCCWmir8GsI6733wJ47xX31MP
-         8LOYK1RonB8ftVBLCb7+O1MaQS79d0rkBJUTkpeJKXOg2rDoN4sEoZgmxBq1BSBKjYCH
-         gitQ==
+        bh=/JyY9VZwYc39EnA1aZWuXOPQGLxKvuatHXzEFodZCZQ=;
+        b=FACJfAv6gr+vK3e3XeLN4xvpkGnKPBmnv+fv9jvnfnCHgf1bczHB6AYubASZaeKnWO
+         rNNLZE8IYRJ8BRbD/fGBhWTtRFr3kbxLQ2xZm5LIjwTrnobuLcRsF8oLHPd9FFDE798F
+         xwQG589j0RfUlH8NV2IT1h5SUeHtadiEVA1anBsEmyeoUrEP9NQoL2K1rl0CH2YyBYQX
+         iosbiKl+uG6JEkZ0gGwW2PZhs5seT17+QAjCwCRmZqpEsomA3wV9DiXEKnPA0Q8gFISG
+         BbZtS2wxXdRwc5mpG6kJxKWbjjDpI9JOyMmNvUEM2h8g5h+Sv/L25nAcudz8NqBFkMpL
+         R7jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680539563;
+        d=1e100.net; s=20210112; t=1680539588;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YVyyKhZhVKFELaIeQcqrXX4LwNgdwjSlp3Qd8NQAQ4Y=;
-        b=XjCR5RwvgIsj8lhg3gKeFncsN7nTqbrqhTOXaoLn7E/Xe6EbBulGndGfjUfdSU3XC5
-         /WFBIa0Pzs4bIXd4ylQt9JwFtP4nrU5o4VQw/X5dLfE8BGSNUD5l6HK5oJnANlYBjxrK
-         87p8euwBulBvyZZPgB7Y5Mf1uI1spYGqOpw7jBrqip98EbstkWBRmxAPSkwWzEFXk0gZ
-         30Ox/8kDjVBeDdRDYZHdXc19UEen2umtT6iHkxnPb4jghe4QrvtemgJSzv7jNLl2haOf
-         DzIenZuGlEN4UvOL3Ai1afZixXZYLfzkt8QMFOIESWcdzA2aTWj5nHoYvK0h+8RZ3L2N
-         sTGw==
-X-Gm-Message-State: AAQBX9fE2EM+vc93KKUp2Bj4hTZ8CaQpBIXzomxDRmHZbL4Q5bmw6GRk
-        3AxSaZySSRx+2mSMChmHAKTUtpDBF3N6c51HTns=
-X-Google-Smtp-Source: AKy350aADD43LM+6Fyr445lMNk19yeKF5hWPrYO4YfT7Tju/V/ectKNIFIvehRrqfUvXOPFrQuLZ31r3hVYGzRsmpTo=
-X-Received: by 2002:a81:ac46:0:b0:533:8f19:4576 with SMTP id
- z6-20020a81ac46000000b005338f194576mr18159721ywj.0.1680539562651; Mon, 03 Apr
- 2023 09:32:42 -0700 (PDT)
+        bh=/JyY9VZwYc39EnA1aZWuXOPQGLxKvuatHXzEFodZCZQ=;
+        b=zFendd71o5w/I1uyQsCZh+626pPfKau5PGtWEg/KYMx49mfBZV55m0vAiYNTgMgdpW
+         QSCYyEBKF2ZxIeSwMwndjTLq+uzM8lQftObxFIGoXkqdbV3RaaQZ35K4BepCEXQv3y91
+         8RqKkZwAmPLyvpJj1Na2eyWkoJ8hjgRT/wt0nZ431O7gpTY6v1zxYexAcE/Ezv49/7QC
+         N4LJvI4SU3MNZYU7OvmYuaF2E7zSf1SfSxx73ArhTSV/w8jwWxIPMTENIPt9Pdyw75Ma
+         plK4zCWwbYXrBcbL724fO+nrq7UAx6La5kvlIsVVLbLGewq06HFpwc06cVUIt53I1FNe
+         F4OQ==
+X-Gm-Message-State: AAQBX9e43qGHgsRORiGDcsCl9bu7MfqF6glBVx9s0EykL62c69kZECCJ
+        cI+0TZ7eCv+pGZ6b5Jisqu+Yq7lQgfZkXMNMPXM=
+X-Google-Smtp-Source: AKy350bsjMqV4NZgmlAE2raeLsIsDcysn41kaYxCjcPrDjA9fvGH+CkiSf3cG9CL3vzkpEB75b+yuh9BvTkAmAFp99U=
+X-Received: by 2002:a17:902:ef94:b0:1a1:c109:3700 with SMTP id
+ iz20-20020a170902ef9400b001a1c1093700mr12819974plb.7.1680539587819; Mon, 03
+ Apr 2023 09:33:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230307102441.94417-1-conor.dooley@microchip.com>
- <CANiq72=i9je2864iTvZBFnhVLhF7Cema7EPCcdWOJ3mr62SqDg@mail.gmail.com> <a6220e52-9934-422b-9b05-95705b8fd684@spud>
-In-Reply-To: <a6220e52-9934-422b-9b05-95705b8fd684@spud>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 3 Apr 2023 18:32:31 +0200
-Message-ID: <CANiq72=FN3zB-gajQYDxXmnmx7J0UNstFuexSCOg8Oe2fnG=yw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-riscv@lists.infradead.org, conor@kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
+References: <20230403140605.540512-1-jiangshanlai@gmail.com> <700a9c1b-5967-4e0c-0a15-8e2ab968dac6@intel.com>
+In-Reply-To: <700a9c1b-5967-4e0c-0a15-8e2ab968dac6@intel.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Tue, 4 Apr 2023 00:32:55 +0800
+Message-ID: <CAJhGHyBSxZbsjkaZ-zkVUJ6fkcpAKEszxLh49VZQ3hxO95Cn6g@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/7] x86/entry: Atomic statck switching for IST
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        "H. Peter Anvin" <hpa@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Asit Mallick <asit.k.mallick@intel.com>,
+        Cfir Cohen <cfir@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Kaplan <David.Kaplan@amd.com>,
+        David Rientjes <rientjes@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jiri Slaby <jslaby@suse.cz>, Joerg Roedel <joro@8bytes.org>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mike Stunes <mstunes@vmware.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Luck <tony.luck@intel.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -82,14 +94,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 10:24=E2=80=AFAM Conor Dooley
-<conor.dooley@microchip.com> wrote:
+On Mon, Apr 3, 2023 at 10:23=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
+ wrote:
 >
-> Aye, but that does not mean that I am entitled to add someone else's!
+> On 4/3/23 07:05, Lai Jiangshan wrote:
+> > 2.3 #VE
+> > -------
+> >
+> > The approach for fixing the kernel mode #VE recursion issue is to just
+> > NOT use IST for #VE although #VE is also considered to be one of the
+> > super exceptions and had raised some worries:
+> > https://lore.kernel.org/lkml/YCEQiDNSHTGBXBcj@hirez.programming.kicks-a=
+ss.net/
+> > https://lore.kernel.org/lkml/CALCETrU9XypKbj-TrXLB3CPW6=3DMZ__5ifLz0ckb=
+B=3Dc=3DMyegn9Q@mail.gmail.com/
+> > https://lore.kernel.org/lkml/1843debc-05e8-4d10-73e4-7ddce3b3eae2@intel=
+.com/
+> >
+> > To remit the worries,  SEPT_VE_DISABLE is forced used currently and
+> > also disables its abilities (accept-on-demand or memory balloon which
+> > is critical to lightweight VMs like Kata Containers):
+> > https://lore.kernel.org/lkml/YCb0%2FDg28uI7TRD%2F@google.com/
+>
+> You don't need #VE for accept-on-demand.  Pages go through _very_
+> well-defined software choke points before they get used *and* before
+> they get ballooned.  Thus:
+>
+> > https://lore.kernel.org/lkml/20230330114956.20342-3-kirill.shutemov@lin=
+ux.intel.com/
+>
 
-Yeah, definitely! I meant that, from what you said, it sounded like
-adding the `Co-developed-by` was OK without the other (i.e. due to the
-"too" in your sentence).
+Thanks for the information.
 
-Cheers,
-Miguel
+I will have a look to see how it supports memory balloons.
+
+And if accept-on-demand were supported, do we still need this
+CONFIG_UNACCEPTED_MEMORY?
+
+> BTW, _who_ considers #VE to be a "super exception"?  Can you explain how
+> it is any more "super" than #PF?  #PF can recurse.  You can take #PF in
+> the entry paths.
+>
+> I kinda don't think you should be using TDX and #VE as part of the
+> justification for this series.
+
+You are right, #VE is not a super exception anymore since SEPT_VE_DISABLE
+is forced set in the Linux kernel and it is nothing to do with this series.
+
+But #VE was once thought to be a super exception (I will correct the
+sentence in the cover letter), so it is worth mentioning it.
+
+And since SEPT_VE_DISABLE is configurable, it would allow some paranoids
+to have a try with SEPT_VE_DISABLE=3Dfalse even without FRED.
+The paranoids can try it with IST #VE.
+
+Thanks
+Lai
