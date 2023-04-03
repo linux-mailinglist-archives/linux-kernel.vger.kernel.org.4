@@ -2,87 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4226D3E6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788AC6D3E6E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 09:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjDCHw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 03:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
+        id S231765AbjDCHw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 03:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbjDCHw5 (ORCPT
+        with ESMTP id S231757AbjDCHwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 03:52:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32A14496
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 00:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680508328;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CfmV+wOFXKnns71ZOpClIvudOSxllLkZj/NQ9wc0uAk=;
-        b=LN0NxH6ybla/RUE5J6xMJJ64jUi+gubOtVze1cdeC+kZxQW200oQB/n2m6ABLQMOsdhSLC
-        wXpnUqXwmpnEEfxgeD2yVQlNE6s6GAy4Q1ybF4IOWGPo5QCqVW69JiA5k+AfwfWJlavOxn
-        /vkSoHs0gPWND8bLxhWg1hpYCHH7JQ4=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-549-V6t9re3VP_6DKft8iYAx_w-1; Mon, 03 Apr 2023 03:52:07 -0400
-X-MC-Unique: V6t9re3VP_6DKft8iYAx_w-1
-Received: by mail-wm1-f72.google.com with SMTP id bi27-20020a05600c3d9b00b003ef6ee937b8so10911037wmb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 00:52:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680508326;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CfmV+wOFXKnns71ZOpClIvudOSxllLkZj/NQ9wc0uAk=;
-        b=4H3XcXXrooSc/MNq8O39qKOe7rgDDA4Qsq/pnFXsVN3yVUhD7voJiNDPlBBH9Skq0H
-         Csr6zfK1Hnn84g14GozsTQJi+20MgzpHA4t+mPSOpVBiX9fLuBbBMmG5KPTaby8NGGG9
-         bIzLBhNRZ0t20+2BIfeHCO6Oc6D2GQl9+v51Pr35zmH41EEX5bx1/GCM1NzKzWjLBdGd
-         tyAb25FNNhpHdrZTl7W0szpQdp3JvjwKbubx5jKjGhdSzkghzVo5QVjvf/ei5sYz4hbj
-         3M86MKS0uMzF9IyAI9t/dv+qTidkk+ZmQ5WjoFMCuesRD9Yu+ybGV5XCpk0JAX62nO7Q
-         cwKQ==
-X-Gm-Message-State: AAQBX9cAdMNsJ0vzgJU8JDkT+fn6Muo6K3wSPVH5n4u6PxvPRxHKU3MK
-        GKfMJyDGGQLqA4igQ+tb9YHfGWwurA7hL2rd/yPpCgBFJFIqe+2G2i4Lp4FdWjx1qKm0R92owXq
-        O/P5sp7z5hORIZxi9sgI5jZWj
-X-Received: by 2002:a5d:614f:0:b0:2e6:348:5fef with SMTP id y15-20020a5d614f000000b002e603485fefmr6981497wrt.55.1680508326251;
-        Mon, 03 Apr 2023 00:52:06 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YqLcTh2LZs5/yGfLsZQWC9Iu45ir7MER2QuysXaRjXJoRZXf8xhePIp7+tIWoLGscvCbRR6g==
-X-Received: by 2002:a5d:614f:0:b0:2e6:348:5fef with SMTP id y15-20020a5d614f000000b002e603485fefmr6981489wrt.55.1680508325978;
-        Mon, 03 Apr 2023 00:52:05 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
-        by smtp.gmail.com with ESMTPSA id d8-20020a5d6448000000b002c70d97af78sm8982549wrw.85.2023.04.03.00.52.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 00:52:05 -0700 (PDT)
-Message-ID: <7e052a12-f3e6-9bce-0611-13a3944207d5@redhat.com>
-Date:   Mon, 3 Apr 2023 09:52:04 +0200
+        Mon, 3 Apr 2023 03:52:25 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DED4497;
+        Mon,  3 Apr 2023 00:52:24 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pqjm63MYxz4x91;
+        Mon,  3 Apr 2023 17:52:22 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680508342;
+        bh=gYZb2Jae79Q2X9AMaXBamBMC65TqmsvEJ7/ULlv42u4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WghE64ENgNrMe7IJ73bmFvnYK5QfSgEc6RQK3E4pyDzGOrpSoHhGQ+N6BjdG9Wxh3
+         1P3M8SLKjcsUNhkD9j5OJfqmsg6Olic1/FCMHx9IAYBlE0i7vZnfYGPBAXv8oQPPqx
+         VWEQnVeBMBH02DBUh0GORjpads5VfmgVXfDcyqXsinK61k5tc3GhtR0y21VqG8OtbN
+         ivccOviKOd3AyEbR60CywdDeHNiqgR9kH8gUYyKiIHtSvB8mLCLx7GQFVL4BmQrIQ6
+         RTxXSgSPAqQYdofNPnBBrh47G6nBf56kHH7Vo7EP0Idj3F39jAYDePMJ6+9fAG78ro
+         NA14g9DtEkcoA==
+Date:   Mon, 3 Apr 2023 17:52:20 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mediatek tree
+Message-ID: <20230403175220.5b946b60@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 05/29] selftests/mm: Use TEST_GEN_PROGS where proper
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-References: <20230330155707.3106228-1-peterx@redhat.com>
- <20230330160654.3106929-1-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230330160654.3106929-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: multipart/signed; boundary="Sig_/ORo+bPMd59BzFlyCypou/Cc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,23 +52,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.23 18:06, Peter Xu wrote:
-> TEST_GEN_PROGS and TEST_GEN_FILES are used randomly in the mm/Makefile to
-> specify programs that need to build.  Logically all these binaries should
-> all fall into TEST_GEN_PROGS.
-> 
-> Replace those TEST_GEN_FILES with TEST_GEN_PROGS, so that we can reference
-> all the tests easily later.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
+--Sig_/ORo+bPMd59BzFlyCypou/Cc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, makes sense
+Hi all,
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+After merging the mediatek tree, today's linux-next build (arm64
+defconfig) failed like this:
 
--- 
-Thanks,
+Error: arch/arm64/boot/dts/mediatek/mt6795.dtsi:647.21-22 syntax error
+FATAL ERROR: Unable to parse input tree
 
-David / dhildenb
+Maybe caused by commit
 
+  a7c7f1fe2fde ("arm64: dts: mediatek: mt6795: Add MMSYS node for multimedi=
+a clocks")
+
+but I don't know how.
+
+I have reverted that commit (and the following 2) for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ORo+bPMd59BzFlyCypou/Cc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqhbQACgkQAVBC80lX
+0GxvqggAlRfOKhcdZxFOTbZZHW4fslt+m75QsWlUr8RND82j2BuYCTNRBCiiSJZY
+d6i1TprLWa21G7rf22+P/rtLyE9bh+SBr65GI9yP5v/pRo5GiSlg4YCUoCCrFqmt
+uQ4aMC0FLo10KlMs0RCbh5hNsXkj8kfH5o0v+P07UPFUO9xx1jmszpRk+BjiGpDA
++qix9hgIp0hAvd9XqOjgPh/WxtkmWbjsAqj0Ibr4Z2PvjkF5vvFB4aZDBHmkZy4u
+fkeD5xE24MKJIT9sFfPaTw6No08p03YBfsVPyrNX6sQYUyGVz2AfD2yPIOuULOcg
+CZcJKKb0N4CvcVMA6zEiehMdqzlWEQ==
+=QETh
+-----END PGP SIGNATURE-----
+
+--Sig_/ORo+bPMd59BzFlyCypou/Cc--
