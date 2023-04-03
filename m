@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507236D5487
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4876D5493
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 00:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbjDCWHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 18:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        id S233718AbjDCWOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 18:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbjDCWHf (ORCPT
+        with ESMTP id S233471AbjDCWOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 18:07:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA703E5B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:07:33 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680559651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vAvtMfEQqqct4AWZHCiEowGKxwaBoH/2w4q0y2AQHjE=;
-        b=0xfgb68oTrIMfQ+CVG2z3/7V2K9K8a+MUmGW6RuRBoj4J5PIhRg8T7mcNHVjEg2Qst6TaA
-        4uW8/+AbrEagGfu+DxzBeqSl9bQ5yqNftjufOC0+UzUv7edyUZIGEMDHU/sCqBwqAL3bAo
-        0/uf/5IWDXiFu39Zt13qiK5Wj8osrAhRnHiS9co40BYB73qL3+npyh8Tf7YZrKa3DKEDZ0
-        TIgdTSEvT3cdNRFjbgatNTRVJQovb5NbLWp4BhtRZFYLiv2KaJoK4IKFglCikzFybYuD8x
-        JpNx5Fz42EnHREKOqqlLAGw1x3UfpoYJ5PMbF1ZP5KZ1AClp9iG2HeWQs86N0A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680559651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vAvtMfEQqqct4AWZHCiEowGKxwaBoH/2w4q0y2AQHjE=;
-        b=nDbHfK4Ete28h4npijXgkjZ/0jFIH9+CNpGGW0vR0I4qXRjJrv6CwBgK1/ojhisLtw72l7
-        MdoXpwFKdRvIj2Bw==
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH] perf: Optimize perf_pmu_migrate_context()
-In-Reply-To: <20230403090858.GT4253@hirez.programming.kicks-ass.net>
-References: <20230403090858.GT4253@hirez.programming.kicks-ass.net>
-Date:   Tue, 04 Apr 2023 00:07:30 +0200
-Message-ID: <87sfdgr55p.ffs@tglx>
+        Mon, 3 Apr 2023 18:14:32 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A40B26A1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 15:14:30 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id ew6so123051096edb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 15:14:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1680560069;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I2gU0xPDdb0K1FdwRxRILyU2Pj+Ds548w8HpDbFE5RI=;
+        b=Z3NoYUpuN+51H4YiZ+UYdsc87GFYIQAyh0NSDMG3zS8LomdR8E6aRi5E3S2QdnrBb/
+         kjJIHm4IDH/Dj6cbTU7p9/qUFM4kYQSdN5SVTjL+KqSXSUlNP7qimcsU97bKdXIY9Rs4
+         vToz6xxm5tqyKeXovpsrjRyG1yGl5SHXsHE5QKphWSICeqHV56OBzlRXGs7E1S0heM+f
+         xjGQ8RewuNiyTV2gBrN3/HoBEcGcYzZYUaIHUrynX5B6VqlRyO6ek4HhVE7BYnr53FbU
+         4fG9hlG1x8/596/5W6OtaOCOH2VT3OrODJo0B4feYHD5cLkjOy+ZpxQXP5U0CEhveQBu
+         XRNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680560069;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I2gU0xPDdb0K1FdwRxRILyU2Pj+Ds548w8HpDbFE5RI=;
+        b=jLK0OboWyo9PXS9/RsEBHDqO1o299Kkp6GlKo9MGty6CCuuFVoPeR9XWhTHgE8bRdI
+         v6ZeIivMWE0bRWoitZP8uJVEqKN17z6ilRS1GsfkbeHUbWgotXDsrlJl+MamR4NVdBvw
+         r6AjfzLA7WSas6QH23WAVCDbddUjtVMsKLxAqePnmYyICCzIZqXvXYDrKwV+JLHnhuCh
+         RoAAPDUOqKpYKQNX8w4wYxMMNcEjBZnmxs+6RSklB0xGeH7B0juthEnz7ufLAeZfQ/NV
+         R2ou/ZTKxMpzkjmpV4cfH8kCZNwHLy0nFDYPzcIc5yHAO68e4Y233BVA9nn7bYe4vXNy
+         0mbQ==
+X-Gm-Message-State: AAQBX9dskAbi53KAeWzv9MMVlhBfjtJPUwwMJlABZgjxrnQ5dlQqtAT+
+        LFYDxpP7nITEOoKXc22uezGuIo07oiQnocyY4rUyQQ==
+X-Google-Smtp-Source: AKy350YZ1CZ0S5BzS52EaZnwqGrMGvgVImHG39BdJiwjlssHdwEMxh/stb+LlVhPZyYrsD8ZkSJhQYiO+WNXK1nF+ZI=
+X-Received: by 2002:a17:906:b55:b0:93f:82cb:fe44 with SMTP id
+ v21-20020a1709060b5500b0093f82cbfe44mr114553ejg.11.1680560068875; Mon, 03 Apr
+ 2023 15:14:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+References: <20230401200651.1022113-2-joe@isovalent.com> <202304022107.IwHc05cs-lkp@intel.com>
+ <ZCpK5wOI0ZEedhrr@debian.me> <ZCqTMq3sHMrx2boI@mail.gmail.com>
+In-Reply-To: <ZCqTMq3sHMrx2boI@mail.gmail.com>
+From:   Joe Stringer <joe@isovalent.com>
+Date:   Mon, 3 Apr 2023 15:14:17 -0700
+Message-ID: <CADa=Ryw2BNupx9GH8cMTKLbgTZD6sLLAHdsmwr0AiEwa9DOsZA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/2] docs/bpf: Add LRU internals description
+ and graph
+To:     Maxim Mikityanskiy <maxtram95@gmail.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>, bpf@vger.kernel.org,
+        oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
+        martin.lau@linux.dev, john.fastabend@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,36 +73,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03 2023 at 11:08, Peter Zijlstra wrote:
-> Thomas reported that offlining CPUs spends a lot of time in
-> synchronize_rcu() as called from perf_pmu_migrate_context() even though
-> he's not actually using uncore events.
+I can reproduce this issue, will fix it up.
 
-That happens when offlining CPUs from a socket > 0 in the same order how
-those CPUs have been brought up. On socket 0 this is not observable
-unless the bogus CPU0 offlining hack is enabled.
+$ dot -V
+dot - graphviz version 2.43.0 (0
 
-If the offlining happens in the reverse order then all is shiny.
-
-The reason is that the first online CPU on a socket gets the uncore
-events assigned and when it is offlined then those are moved to the next
-online CPU in the same socket.
-
-On a SKL-X with 56 threads per sockets this results in a whopping _1_
-second delay per thread (except for the last one which shuts down the
-per socket uncore events with no delay because there are no users) due
-to 62 times of pointless synchronize_rcu() invocations where each takes
-~16ms on a HZ=250 kernel.
-
-Which in turn is interesting because that machine is completely idle
-other than running the offline muck...
-
-> Turns out, the thing is unconditionally waiting for RCU, even if there's
-> no actual events to migrate.
+On Mon, Apr 3, 2023 at 1:49=E2=80=AFAM Maxim Mikityanskiy <maxtram95@gmail.=
+com> wrote:
 >
-> Fixes: 0cda4c023132 ("perf: Introduce perf_pmu_migrate_context()")
-> Reported-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Tested-by: Thomas Gleixner <tglx@linutronix.de>
-
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> On Mon, 03 Apr 2023 at 10:41:27 +0700, Bagas Sanjaya wrote:
+> > On Sun, Apr 02, 2023 at 09:47:49PM +0800, kernel test robot wrote:
+> > > All warnings (new ones prefixed by >>):
+> > >
+> > > >> Warning: Orthogonal edges do not currently handle edge labels. Try=
+ using xlabels.
+> > >
+> >
+> > Hi,
+> >
+> > I can't reproduce the warning above. My system has graphviz 2.42.2
+> > installed (via Debian package). What graphviz version do kernel test
+> > robot have?
+>
+> I have the same warning on Arch Linux.
+>
+> $ dot --version
+> dot - graphviz version 7.1.0 (0)
