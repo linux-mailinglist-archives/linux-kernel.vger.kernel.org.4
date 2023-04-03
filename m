@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7306D4A5F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71686D4A7F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 16:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbjDCOqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 10:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S234139AbjDCOrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 10:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233996AbjDCOq1 (ORCPT
+        with ESMTP id S234069AbjDCOrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 10:46:27 -0400
+        Mon, 3 Apr 2023 10:47:23 -0400
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC78280F2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:46:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A0D29BE8
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 07:46:44 -0700 (PDT)
 Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 129113F23A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:45:39 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 92AE53F327
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 14:45:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1680533139;
-        bh=bVeWuEcFFA9BOaey9u9VyyM5TuRxdAhm6TBxfMNpyiQ=;
+        s=20210705; t=1680533148;
+        bh=mIRd3G7EmqzBYzec9Xklmi0CbHz6DDwl1OuXrzwAvTA=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version:Content-Type;
-        b=ShYw+yvJL3g/L8PFFXuhOLMPSmHDcwKtiig9o+g++ghQw5cyNK5YLs1v/t0eeO+5M
-         pVi+aMy3pt6lzrIFAnqeA9YKnyiXRRjjfmeHJc2+hqUc2mrSKz5AlO/HMyWmuvzWYe
-         kEWpW4V9lU1nJuTfbaGCyBvv5guwZ3xPpCLSAhQ0bepQEysnDWYE+bIJ9mxuEVgXAV
-         VAVDj70o5s5AtOk22X04GNoQGCjSzqmCOq6W//FZV9XzeYFGvGnsM0pUMwGkCRQuwk
-         fMfbtHQq3yC2JwgP/g0fBi+VknXyPgkGB3xJeGDjYwTZOS0gOg7Sr0gYNZn28wJ/EE
-         pIlrdoSwLaAUA==
-Received: by mail-ed1-f71.google.com with SMTP id x35-20020a50baa6000000b005021d1b1e9eso41907530ede.13
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:45:39 -0700 (PDT)
+        b=lGB7KEMA+Bvahdxr6tUIYznJ0MsIdOopPdZXoM3XiWo22EeZFpnC7Hkx1pobC1JfG
+         eNRIppJQYPSNykhO4TD36GXVBcyUtt9KYnHJHWWrxHr7X+TJWjPJlPFIJNdFAX9rYW
+         vEq5aJ0TtB4VGa8Y6E7W4N0VPh4yiuDzmGiWKhieuMCTVQNRmwgzepnloMmLEmmEGU
+         9GDtZ9o2lp4OIRHnC8ZU2JnFWdcPFbPLlx1nzuSJ03rC8xu61s4eT1htw8zQIlKmn/
+         nhPqt/PkvEiJButikBeIATMUiddb3srhmHndhSPC/jPGxrWD+CJADCnWvpGHaYgzmG
+         nqwFf5WmiSZFg==
+Received: by mail-ed1-f71.google.com with SMTP id b1-20020aa7dc01000000b004ad062fee5eso41220795edu.17
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 07:45:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680533139;
+        d=1e100.net; s=20210112; t=1680533140;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bVeWuEcFFA9BOaey9u9VyyM5TuRxdAhm6TBxfMNpyiQ=;
-        b=DlJ+Aa4yFhekeuL3Tik2tN9HnqPJX0vpbWge+5aBIRR9ItPOe8g34X0bOgYnG+aSln
-         EwNOe7j9C2jPWm5sa2X3PMnzeqhrBHxxxskqjB2VbmgiuX5IpJQDV7asg0VxSc+X0SAM
-         Y+Eb8XZ0Yj9DxoReX/ZRVGBLBLC9WKLzVzfz7wY4WCP9TlIvCKY7q67B8zgUGn3HrlWE
-         y0nU9i8vTIpH96yU12DvmL9gNKKQpGOF76f97BUQcvX/MZWeB7UNp8ObdEaEDgGgAGMt
-         xasn+/UjEI3lzxF486C2l3ar58xW73R0QJwGMkEo8MsU8MFKiwNJDtAd0CSkEW3AvIZe
-         GvbA==
-X-Gm-Message-State: AAQBX9cPgPOP+/B2WUPxIhus1OL6GNhpMDEfUtnd5Gt7y4gSGX9bFt+k
-        0t5Cc1ySYR8u2BrhR/AJRaskPUZN3H0zTww8wRrQnPMDmIkegjwRG1R3hODOJJD9Gr4ZKJerMae
-        d9mjfiAvyTyFfG2Arn50ZCxNkIE6zkDCCnDtH5mxxEw==
-X-Received: by 2002:a05:6402:8d9:b0:4fe:19cb:4788 with SMTP id d25-20020a05640208d900b004fe19cb4788mr32810324edz.42.1680533138915;
-        Mon, 03 Apr 2023 07:45:38 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bS7ivnPsfOURPfqkG6FOqAtwZfDP530jIkSKpQXVUZ0EH3RYfr+0dokF69qX0VO76OHuKjPA==
-X-Received: by 2002:a05:6402:8d9:b0:4fe:19cb:4788 with SMTP id d25-20020a05640208d900b004fe19cb4788mr32810305edz.42.1680533138636;
-        Mon, 03 Apr 2023 07:45:38 -0700 (PDT)
+        bh=mIRd3G7EmqzBYzec9Xklmi0CbHz6DDwl1OuXrzwAvTA=;
+        b=i2u4j+y/5YaJWPImy4jdj7z7ORuMyDWu0PaaLtuAQDpMOCr3zGPjAUYpCvI4+5GQMr
+         t6Bd8MBzZs7ck3O13tCtOyjVc1kZrF0yP+B9H+d4OZfBH9qdHUyNnCGpyPbKBLe8OsZM
+         rS4CeGNNHCG9aXF2+lDJHbpb/Am4Ywhg51/YT8hobUcW0LVZIg4P6YrC+e2qTb100Uit
+         CsiE9Rzf/GByphkrTom/FluLpbiBJZRrNEC2VER4Sg5+6C8QA5/estUSsy0sgb3oYmmS
+         JRY1btAYzAuAeZDNAhe8kn2h5Szyq1iZDY0xbPl33qCAAfNjTfWocQZ1KmYqai7Ku54U
+         3diw==
+X-Gm-Message-State: AAQBX9f+q8amIfXvg6VkeO6Qlr8vbvp5gcqRqAixKLVIA/AXtGh27t94
+        7mdGQZ3ouhzv6cNRusBBcbrfRrrQ8cYbnYRbjL0f0Ctfn8ghvq1YoTL9UBbBoOx41ePL0BF4gxJ
+        fNCghO92jRLlOsfMGxkNN3F6fZCNIgq2LKeI6JYeCXg==
+X-Received: by 2002:a17:906:8a41:b0:930:18f5:d016 with SMTP id gx1-20020a1709068a4100b0093018f5d016mr35370791ejc.15.1680533140352;
+        Mon, 03 Apr 2023 07:45:40 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bW1EY67CnMn+SBmXdtOOQwiMe+PQQAcAXChGCQUsD08TkK73YGtH/fhfZKhNQS0qprBkqadA==
+X-Received: by 2002:a17:906:8a41:b0:930:18f5:d016 with SMTP id gx1-20020a1709068a4100b0093018f5d016mr35370775ejc.15.1680533140205;
+        Mon, 03 Apr 2023 07:45:40 -0700 (PDT)
 Received: from amikhalitsyn.. (ip5f5bd076.dynamic.kabel-deutschland.de. [95.91.208.118])
-        by smtp.gmail.com with ESMTPSA id i5-20020a50d745000000b004fa19f5ba99sm4735804edj.79.2023.04.03.07.45.37
+        by smtp.gmail.com with ESMTPSA id i5-20020a50d745000000b004fa19f5ba99sm4735804edj.79.2023.04.03.07.45.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 07:45:38 -0700 (PDT)
+        Mon, 03 Apr 2023 07:45:39 -0700 (PDT)
 From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 To:     mszeredi@redhat.com
 Cc:     flyingpeng@tencent.com,
@@ -72,9 +72,9 @@ Cc:     flyingpeng@tencent.com,
         Bernd Schubert <bschubert@ddn.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         criu@openvz.org
-Subject: [RFC PATCH v2 2/9] fuse: add const qualifiers to common fuse helpers
-Date:   Mon,  3 Apr 2023 16:45:10 +0200
-Message-Id: <20230403144517.347517-3-aleksandr.mikhalitsyn@canonical.com>
+Subject: [RFC PATCH v2 3/9] fuse: add fuse connection generation
+Date:   Mon,  3 Apr 2023 16:45:11 +0200
+Message-Id: <20230403144517.347517-4-aleksandr.mikhalitsyn@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230403144517.347517-1-aleksandr.mikhalitsyn@canonical.com>
 References: <20230403144517.347517-1-aleksandr.mikhalitsyn@canonical.com>
@@ -90,6 +90,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+We will use connection generation to detect stale inodes
+from the "old" fuse daemon and invalidate/revalidate them.
+
+There is no functional changes.
+
 Cc: Miklos Szeredi <mszeredi@redhat.com>
 Cc: Al Viro <viro@zeniv.linux.org.uk>
 Cc: Amir Goldstein <amir73il@gmail.com>
@@ -104,70 +109,104 @@ Cc: linux-kernel@vger.kernel.org
 Cc: criu@openvz.org
 Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 ---
- fs/fuse/fuse_i.h | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ fs/fuse/file.c   |  1 +
+ fs/fuse/fuse_i.h | 29 +++++++++++++++++++++++++++++
+ fs/fuse/inode.c  |  2 ++
+ 3 files changed, 32 insertions(+)
 
+diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+index de37a3a06a71..1e36cd9490c6 100644
+--- a/fs/fuse/file.c
++++ b/fs/fuse/file.c
+@@ -79,6 +79,7 @@ struct fuse_file *fuse_file_alloc(struct fuse_mount *fm)
+ 	init_waitqueue_head(&ff->poll_wait);
+ 
+ 	ff->kh = atomic64_inc_return(&fm->fc->khctr);
++	ff->conn_gen = READ_ONCE(fm->fc->conn_gen);
+ 
+ 	return ff;
+ }
 diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index 69af0acecb69..6d3d3ca4f136 100644
+index 6d3d3ca4f136..8d4276d7ab1e 100644
 --- a/fs/fuse/fuse_i.h
 +++ b/fs/fuse/fuse_i.h
-@@ -870,32 +870,32 @@ struct fuse_mount {
- 	struct list_head fc_entry;
+@@ -161,6 +161,9 @@ struct fuse_inode {
+ 	 */
+ 	struct fuse_inode_dax *dax;
+ #endif
++
++	/** Fuse connection (fuse_conn) generation when inode was allocated */
++	u32 conn_gen;
  };
  
--static inline struct fuse_mount *get_fuse_mount_super(struct super_block *sb)
-+static inline struct fuse_mount *get_fuse_mount_super(const struct super_block *sb)
- {
- 	return sb->s_fs_info;
- }
+ /** FUSE inode state bits */
+@@ -232,6 +235,9 @@ struct fuse_file {
  
--static inline struct fuse_conn *get_fuse_conn_super(struct super_block *sb)
-+static inline struct fuse_conn *get_fuse_conn_super(const struct super_block *sb)
- {
- 	return get_fuse_mount_super(sb)->fc;
- }
+ 	/** Has flock been performed on this file? */
+ 	bool flock:1;
++
++	/** Fuse connection (fuse_conn) generation when file was allocated */
++	u32 conn_gen;
+ };
  
--static inline struct fuse_mount *get_fuse_mount(struct inode *inode)
-+static inline struct fuse_mount *get_fuse_mount(const struct inode *inode)
- {
- 	return get_fuse_mount_super(inode->i_sb);
- }
+ /** One input argument of a request */
+@@ -847,6 +853,18 @@ struct fuse_conn {
  
--static inline struct fuse_conn *get_fuse_conn(struct inode *inode)
-+static inline struct fuse_conn *get_fuse_conn(const struct inode *inode)
- {
- 	return get_fuse_mount_super(inode->i_sb)->fc;
- }
+ 	/* New writepages go into this bucket */
+ 	struct fuse_sync_bucket __rcu *curr_bucket;
++
++	/**
++	 * Connection generation.
++	 * Used to determine if inodes/files were created with an "old"
++	 * fuse connection and have to be invalidated. So, all requests
++	 * related to these inodes should fail with -EIO.
++	 *
++	 * CHECKME: do we really need conn_gen for struct fuse_file?
++	 * Right now it's only needed for fuse_file_put(), where we have
++	 * no access to the inode in some cases.
++	 */
++	u32 conn_gen;
+ };
  
--static inline struct fuse_inode *get_fuse_inode(struct inode *inode)
-+static inline struct fuse_inode *get_fuse_inode(const struct inode *inode)
- {
- 	return container_of(inode, struct fuse_inode, inode);
- }
- 
--static inline u64 get_node_id(struct inode *inode)
-+static inline u64 get_node_id(const struct inode *inode)
- {
- 	return get_fuse_inode(inode)->nodeid;
- }
-@@ -905,7 +905,7 @@ static inline int invalid_nodeid(u64 nodeid)
- 	return !nodeid || nodeid == FUSE_ROOT_ID;
- }
- 
--static inline u64 fuse_get_attr_version(struct fuse_conn *fc)
-+static inline u64 fuse_get_attr_version(const struct fuse_conn *fc)
- {
+ /*
+@@ -910,6 +928,17 @@ static inline u64 fuse_get_attr_version(const struct fuse_conn *fc)
  	return atomic64_read(&fc->attr_version);
  }
-@@ -923,7 +923,7 @@ static inline void fuse_make_bad(struct inode *inode)
- 	set_bit(FUSE_I_BAD, &get_fuse_inode(inode)->state);
- }
  
--static inline bool fuse_is_bad(struct inode *inode)
-+static inline bool fuse_is_bad(const struct inode *inode)
++static inline bool fuse_stale_ff(const struct fuse_file *ff)
++{
++	return unlikely(READ_ONCE(ff->fm->fc->conn_gen) != ff->conn_gen);
++}
++
++static inline bool fuse_stale_inode_conn(const struct inode *inode)
++{
++	return unlikely(READ_ONCE(get_fuse_conn(inode)->conn_gen) !=
++			get_fuse_inode(inode)->conn_gen);
++}
++
+ static inline bool fuse_stale_inode(const struct inode *inode, int generation,
+ 				    struct fuse_attr *attr)
  {
- 	return unlikely(test_bit(FUSE_I_BAD, &get_fuse_inode(inode)->state));
- }
+diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+index 3de950104f15..009fe5bbb855 100644
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@ -77,6 +77,7 @@ static struct inode *fuse_alloc_inode(struct super_block *sb)
+ 	fi->attr_version = 0;
+ 	fi->orig_ino = 0;
+ 	fi->state = 0;
++	fi->conn_gen = READ_ONCE(get_fuse_conn_super(sb)->conn_gen);
+ 	mutex_init(&fi->mutex);
+ 	spin_lock_init(&fi->lock);
+ 	fi->forget = fuse_alloc_forget();
+@@ -848,6 +849,7 @@ void fuse_conn_init(struct fuse_conn *fc, struct fuse_mount *fm,
+ 	fc->user_ns = get_user_ns(user_ns);
+ 	fc->max_pages = FUSE_DEFAULT_MAX_PAGES_PER_REQ;
+ 	fc->max_pages_limit = FUSE_MAX_MAX_PAGES;
++	fc->conn_gen = 1;
+ 
+ 	INIT_LIST_HEAD(&fc->mounts);
+ 	list_add(&fm->fc_entry, &fc->mounts);
 -- 
 2.34.1
 
