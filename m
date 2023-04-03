@@ -2,117 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA436D3CF0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 07:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B5A6D3CF2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 07:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbjDCFgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 01:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S231599AbjDCFhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 01:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjDCFgn (ORCPT
+        with ESMTP id S230332AbjDCFhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 01:36:43 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEDC93
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Apr 2023 22:36:42 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id g19so23363468lfr.9
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Apr 2023 22:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680500200;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zNisbyazzEuiDoc493Vd97NOzyQn4Z3XdTw9SUjbEVs=;
-        b=FKMn4FIKmR76VOUgJbP6Az952xGQ89BUZaCITbwcATVHFfCmKI50/fFP0aTiU12xYX
-         TlvL3BpFrG1DNVu7tESCh+WqKUXjFtQVDJSQZpiuWs6NxzLY3dtNH/hRfJbe7EjyAJh2
-         A2NAKH+2+v0QQgeNbY2miGvOYSQ36I1t5Wx82wtx6DhaHGYnwCZicqCm3tOqRG6Ph7tU
-         bFPfzYuiJnZPX1c9piXYoe6dbBWr/NJ3/4mJOnqWKmqxufvLYOpSwTo0lFuuHhXeCjfE
-         4xsS0KNngHWT9SNIAx+5CwI4d2onCCkFiVtgJE3HrDO0SSWQxWuqMrpKDN88fcHmwI3U
-         /UDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680500200;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zNisbyazzEuiDoc493Vd97NOzyQn4Z3XdTw9SUjbEVs=;
-        b=X/1/UCtW2cp+Z8V3qS0WnhSpW6DCvY7ztqvOq934Ryrsk98O3P6rdGuEMKutNrU5ZH
-         tDPNKJqcJNsepNhsHwMET5KK8Kk+/OQPyy6EfWeMeoitdZGHZg8KnBokp40iyqFt1slC
-         x9V0CtUTD2b9dKqD3noN3GVzvAkGbmSMPEEw1zqEA3IYQci5rKAxx4qSU8sjk4Sr0kh7
-         Ql939/I+vC31K8RFAua62/JbRyW4Aue2H/PWBHGcPgWkm4LYhFMv7OLhKHgrZdqsYLfs
-         Y2H1CNlbICAdeA6EBb9hLIHTS/uBIBWO5yq/9O2r/ffGISn+7k7Ml7n9gIVNSGPF9TD6
-         NyNQ==
-X-Gm-Message-State: AAQBX9eMEhmSRT7CqDGNQThupXmERYgCQFoI1Xw34SuGabq0tUjz6cmN
-        tMOJ3X7i8e3j26mJsjcLFw+J1g==
-X-Google-Smtp-Source: AKy350bvhQIqIFG6nLBH4pVgxB/u6kZnVKvq8YYr6y6Rrl71vml3LsIIAr3DDcYH6vn+My/tNbY7qQ==
-X-Received: by 2002:ac2:5311:0:b0:4d2:c70a:fe0a with SMTP id c17-20020ac25311000000b004d2c70afe0amr2797282lfh.2.1680500200412;
-        Sun, 02 Apr 2023 22:36:40 -0700 (PDT)
-Received: from [10.8.0.2] (mleia.com. [178.79.152.223])
-        by smtp.gmail.com with ESMTPSA id z19-20020ac25df3000000b004eb274b3a43sm1593811lfq.134.2023.04.02.22.36.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Apr 2023 22:36:39 -0700 (PDT)
-Message-ID: <21eaeea4-4f2e-5ce5-c75b-d74ded8e6e4c@linaro.org>
-Date:   Mon, 3 Apr 2023 08:36:21 +0300
+        Mon, 3 Apr 2023 01:37:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646CE93;
+        Sun,  2 Apr 2023 22:37:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21423B8111B;
+        Mon,  3 Apr 2023 05:37:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 768B7C433EF;
+        Mon,  3 Apr 2023 05:37:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680500254;
+        bh=pR7XFOX7xmKil5S7BlV92fu3hw5myWpZZtSP5P9eqII=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rillFw9gIBZy/70BQv1QbuH7ejDsoL3BKOaSU8KoYj5QOqAoZlPYQAEF0J+GQUrvF
+         LAwS8/IhH89Toi6RsO1BYDFKs3FNXhsd2XtjQIAvn5rJBk+MzvuB2NCfJdQ4vIuFAs
+         9lsCJPR5Daf77el5syfvusAfGTO7JfR8IkzfeCjzGv5pUyjuuK6CpCa4g/nkwyFqCr
+         Fx3qy82KsUoNVwjIXWhkFo81KaO3O7i0UC+WSfqJZlU2IAwfL16+HtGl66iEvL/LME
+         qQHFwP38IsxzBeN11z1WD8pm0MYXJAhRSNeJxcjYWc+w52lIM2lkUpRKjXrsr+hwLb
+         8wjNZ90iaNAuw==
+Date:   Mon, 3 Apr 2023 11:07:30 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] bus: mhi: host: Remove duplicate ee check for syserr
+Message-ID: <20230403053730.GI4627@thinkpad>
+References: <1674597444-24543-1-git-send-email-quic_jhugo@quicinc.com>
+ <1674597444-24543-2-git-send-email-quic_jhugo@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH v5 05/11] dt-bindings: qcom-qce: Fix compatible
- combinations for SM8150 and IPQ4019 SoCs
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, konrad.dybcio@linaro.org, rfoss@kernel.org,
-        neil.armstrong@linaro.org
-References: <20230402100509.1154220-1-bhupesh.sharma@linaro.org>
- <20230402100509.1154220-6-bhupesh.sharma@linaro.org>
-Content-Language: en-US
-From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20230402100509.1154220-6-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1674597444-24543-2-git-send-email-quic_jhugo@quicinc.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/2/23 13:05, Bhupesh Sharma wrote:
-> Currently the compatible list available in 'qce' dt-bindings does not
-> support SM8150 and IPQ4019 SoCs directly which may lead to potential
-> 'dtbs_check' error(s).
+On Tue, Jan 24, 2023 at 02:57:23PM -0700, Jeffrey Hugo wrote:
+> If we detect a system error via intvec, we only process the syserr if the
+> current ee is different than the last observed ee.  The reason for this
+> check is to prevent bhie from running multiple times, but with the single
+> queue handling syserr, that is not possible.
 > 
-> Fix the same.
+> The check can cause an issue with device recovery.  If PBL loads a bad SBL
+> via BHI, but that SBL hangs before notifying the host of an ee change,
+> then issuing soc_reset to crash the device and retry (after supplying a
+> fixed SBL) will not recover the device as the host will observe a PBL->PBL
+> transition and not process the syserr.  The device will be stuck until
+> either the driver is reloaded, or the host is rebooted.  Instead, remove
+> the check so that we can attempt to recover the device.
 > 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+
+- Mani
+
+> Reviewed-by: Carl Vanderlip <quic_carlv@quicinc.com>
 > ---
->   Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 6 ++++++
->   1 file changed, 6 insertions(+)
+>  drivers/bus/mhi/host/main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> index e375bd981300..90ddf98a6df9 100644
-> --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> @@ -24,6 +24,12 @@ properties:
->           deprecated: true
->           description: Kept only for ABI backward compatibility
->   
-> +      - items:
-> +          - enum:
-> +              - qcom,ipq4019-qce
-> +              - qcom,sm8150-qce
-> +          - const: qcom,qce
-> +
->         - items:
->             - enum:
->                 - qcom,ipq6018-qce
+> diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
+> index df0fbfe..0c3a009 100644
+> --- a/drivers/bus/mhi/host/main.c
+> +++ b/drivers/bus/mhi/host/main.c
+> @@ -503,7 +503,7 @@ irqreturn_t mhi_intvec_threaded_handler(int irq_number, void *priv)
+>  	}
+>  	write_unlock_irq(&mhi_cntrl->pm_lock);
+>  
+> -	if (pm_state != MHI_PM_SYS_ERR_DETECT || ee == mhi_cntrl->ee)
+> +	if (pm_state != MHI_PM_SYS_ERR_DETECT)
+>  		goto exit_intvec;
+>  
+>  	switch (ee) {
+> -- 
+> 2.7.4
+> 
 
-Two commit tags given for v2 are missing.
-
---
-Best wishes,
-Vladimir
+-- 
+மணிவண்ணன் சதாசிவம்
