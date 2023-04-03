@@ -2,147 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E5F6D4D26
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9EE6D4D28
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 18:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbjDCQFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 12:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S233183AbjDCQFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 12:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbjDCQF1 (ORCPT
+        with ESMTP id S232301AbjDCQFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 12:05:27 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBE92114;
-        Mon,  3 Apr 2023 09:05:20 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 3D0407DB;
-        Mon,  3 Apr 2023 16:05:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3D0407DB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1680537920; bh=XfDtjdL03UON+Z3Zz6rkWcdyGXWekaxVNb7/+FX5L8U=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=sVrUAqyYPK7wSsQ8IJs1cDsAqIQ/9M607jLg0H46pR87YlOzoTwtrvkB5Ca9++4eV
-         rVRylq4QWLWdF+KrHhSq6nK3BOogOa7QkuajwHrpYdID0IN0ATCQeTnHBKW0dNL/ua
-         Z4ughGpDPqsftpwEvFcM/7JwtMRuh3ghV4Nb420mH8KwQO09ssHZB86HkrJblm2U1L
-         mz9CGfPXhE5r8LjPc3zqHXmLKYagH/mxqcAFkf723WAb6gwyTaLktx4tB5apj6BR+T
-         K+6Ra6vhXGLyk+MErb7swJ4Lq6p0uzTbi8MLv8XfBleCma21sb2mq8Au/ieY2dCj+3
-         uqlbQ3tHjxg4A==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Nuno =?utf-8?Q?S=C3=A1?= <noname.nuno@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Paul Cercueil <paul@crapouillou.net>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 11/11] Documentation: iio: Document high-speed DMABUF
- based API
-In-Reply-To: <20230403154955.216148-2-paul@crapouillou.net>
-References: <20230403154800.215924-1-paul@crapouillou.net>
- <20230403154955.216148-1-paul@crapouillou.net>
- <20230403154955.216148-2-paul@crapouillou.net>
-Date:   Mon, 03 Apr 2023 10:05:19 -0600
-Message-ID: <87zg7p7xz4.fsf@meer.lwn.net>
+        Mon, 3 Apr 2023 12:05:45 -0400
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10EC1FD7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 09:05:43 -0700 (PDT)
+Date:   Mon, 03 Apr 2023 16:05:22 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1680537941; x=1680797141;
+        bh=P8epafKhZXNsBb4h/KIdTrILNE/pnVEGDygcW+mztsA=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=r16AsU4NDng+C6NhWCe/YhavkKGPFLBu/XrA8YWh0M4qQ+0cpsWHWjBHL0LAff40u
+         lhrsjDCuoZJj+RpXduVodd6ueJ/AZJ+OQAEx7iNynynr4dP82Tpc65UEVpM1Yk5QBQ
+         E5fIkp5T5rMKIUn5wqP/tNElUeta7YHlTaLWCi+IagfyHFA8jYs5Oe/P7sFj05aoFe
+         dVYb5ZpjQ9l7o6vFRYsElQA463EAjuFdg0tMnL4AKlFKpV++m4O/1hQek529RI3UgU
+         wY9gBdV1c8K0Vjs3xdPLd3Lthq/MnuJfXwe4xUZ7+eb5xGzxbt1ymPxACLMcLy1iEz
+         y2HDMF3N9MEkg==
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        Alice Ryhl <aliceryhl@google.com>
+Subject: [PATCH v5 08/15] rust: init/sync: add `InPlaceInit` trait to pin-initialize smart pointers
+Message-ID: <20230403160511.174894-1-y86-dev@protonmail.com>
+In-Reply-To: <20230403154422.168633-1-y86-dev@protonmail.com>
+References: <20230403154422.168633-1-y86-dev@protonmail.com>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul Cercueil <paul@crapouillou.net> writes:
+The `InPlaceInit` trait that provides two functions, for initializing
+using `PinInit<T, E>` and `Init<T>`. It is implemented by `Arc<T>`,
+`UniqueArc<T>` and `Box<T>`.
 
-One nit:
+Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+Cc: Andreas Hindborg <a.hindborg@samsung.com>
+Cc: Alice Ryhl <aliceryhl@google.com>
+Cc: Gary Guo <gary@garyguo.net>
+---
+ rust/kernel/init.rs     | 128 ++++++++++++++++++++++++++++++++++++----
+ rust/kernel/sync/arc.rs |  24 ++++++++
+ 2 files changed, 139 insertions(+), 13 deletions(-)
 
-> Document the new DMABUF based API.
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
->
-> ---
-> v2: - Explicitly state that the new interface is optional and is
->       not implemented by all drivers.
->     - The IOCTLs can now only be called on the buffer FD returned by
->       IIO_BUFFER_GET_FD_IOCTL.
->     - Move the page up a bit in the index since it is core stuff and not
->       driver-specific.
-> v3: Update the documentation to reflect the new API.
-> ---
->  Documentation/iio/dmabuf_api.rst | 59 ++++++++++++++++++++++++++++++++
->  Documentation/iio/index.rst      |  2 ++
->  2 files changed, 61 insertions(+)
->  create mode 100644 Documentation/iio/dmabuf_api.rst
->
-> diff --git a/Documentation/iio/dmabuf_api.rst b/Documentation/iio/dmabuf_api.rst
-> new file mode 100644
-> index 000000000000..4d70372c7ebd
-> --- /dev/null
-> +++ b/Documentation/iio/dmabuf_api.rst
-> @@ -0,0 +1,59 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +===================================
-> +High-speed DMABUF interface for IIO
-> +===================================
-> +
-> +1. Overview
-> +===========
-> +
-> +The Industrial I/O subsystem supports access to buffers through a
-> +file-based interface, with read() and write() access calls through the
-> +IIO device's dev node.
-> +
-> +It additionally supports a DMABUF based interface, where the userspace
-> +can attach DMABUF objects (externally created) to a IIO buffer, and
-> +subsequently use them for data transfers.
-> +
-> +A userspace application can then use this interface to share DMABUF
-> +objects between several interfaces, allowing it to transfer data in a
-> +zero-copy fashion, for instance between IIO and the USB stack.
-> +
-> +The userspace application can also memory-map the DMABUF objects, and
-> +access the sample data directly. The advantage of doing this vs. the
-> +read() interface is that it avoids an extra copy of the data between the
-> +kernel and userspace. This is particularly useful for high-speed devices
-> +which produce several megabytes or even gigabytes of data per second.
-> +It does however increase the userspace-kernelspace synchronization
-> +overhead, as the DMA_BUF_SYNC_START and DMA_BUF_SYNC_END IOCTLs have to
-> +be used for data integrity.
-> +
-> +2. User API
-> +===========
-> +
-> +As part of this interface, three new IOCTLs have been added. These three
-> +IOCTLs have to be performed on the IIO buffer's file descriptor,
-> +obtained using the IIO_BUFFER_GET_FD_IOCTL() ioctl.
-> +
-> +``IIO_BUFFER_DMABUF_ATTACH_IOCTL(int)``
-> +----------------------------------------------------------------
-> +
-> +Attach the DMABUF object, identified by its file descriptor, to the IIO
-> +buffer. Returns zero on success, and a negative errno value on error.
+diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
+index ecef0376d726..6499cf5c9c20 100644
+--- a/rust/kernel/init.rs
++++ b/rust/kernel/init.rs
+@@ -114,10 +114,16 @@
+ //! [`impl Init<T, E>`]: Init
+ //! [`Opaque`]: kernel::types::Opaque
+ //! [`pin_data`]: ::macros::pin_data
+-//! [`UniqueArc<T>`]: kernel::sync::UniqueArc
 
-Rather than abusing subsections, this would be better done as a
-description list:
++use crate::{
++    error::{self, Error},
++    sync::UniqueArc,
++};
+ use alloc::boxed::Box;
+-use core::{cell::Cell, convert::Infallible, marker::PhantomData, mem::Mayb=
+eUninit, ptr};
++use core::{
++    alloc::AllocError, cell::Cell, convert::Infallible, marker::PhantomDat=
+a, mem::MaybeUninit,
++    pin::Pin, ptr,
++};
 
-  IIO_BUFFER_DMABUF_ATTACH_IOCTL(int)
-      Attach the DMABUF object, identified by its file descriptor, to
-      the IIO buffer. Returns zero on success, and a negative errno
-      value on error.
+ #[doc(hidden)]
+ pub mod __internal;
+@@ -309,7 +315,6 @@ pub mod macros;
+ ///
+ /// [`try_pin_init!`]: kernel::try_pin_init
+ /// [`NonNull<Self>`]: core::ptr::NonNull
+-/// [`Error`]: kernel::error::Error
+ // For a detailed example of how this macro works, see the module document=
+ation of the hidden
+ // module `__internal` inside of `init/__internal.rs`.
+ #[macro_export]
+@@ -363,8 +368,6 @@ macro_rules! pin_init {
+ ///     }
+ /// }
+ /// ```
+-///
+-/// [`Error`]: kernel::error::Error
+ // For a detailed example of how this macro works, see the module document=
+ation of the hidden
+ // module `__internal` inside of `init/__internal.rs`.
+ #[macro_export]
+@@ -586,8 +589,6 @@ macro_rules! try_pin_init {
+ ///
+ /// This initializer is for initializing data in-place that might later be=
+ moved. If you want to
+ /// pin-initialize, use [`pin_init!`].
+-///
+-/// [`Error`]: kernel::error::Error
+ // For a detailed example of how this macro works, see the module document=
+ation of the hidden
+ // module `__internal` inside of `init/__internal.rs`.
+ #[macro_export]
+@@ -635,8 +636,6 @@ macro_rules! init {
+ ///     }
+ /// }
+ /// ```
+-///
+-/// [`Error`]: kernel::error::Error
+ // For a detailed example of how this macro works, see the module document=
+ation of the hidden
+ // module `__internal` inside of `init/__internal.rs`.
+ #[macro_export]
+@@ -842,7 +841,8 @@ macro_rules! try_init {
+ /// A pin-initializer for the type `T`.
+ ///
+ /// To use this initializer, you will need a suitable memory location that=
+ can hold a `T`. This can
+-/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`].
++/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Use the [`InPlaceInit::pi=
+n_init`] function of a
++/// smart pointer like [`Arc<T>`] on this.
+ ///
+ /// Also see the [module description](self).
+ ///
+@@ -861,7 +861,6 @@ macro_rules! try_init {
+ ///
+ /// [`Arc<T>`]: crate::sync::Arc
+ /// [`Arc::pin_init`]: crate::sync::Arc::pin_init
+-/// [`UniqueArc<T>`]: kernel::sync::UniqueArc
+ #[must_use =3D "An initializer must be used in order to create its value."=
+]
+ pub unsafe trait PinInit<T: ?Sized, E =3D Infallible>: Sized {
+     /// Initializes `slot`.
+@@ -878,7 +877,8 @@ pub unsafe trait PinInit<T: ?Sized, E =3D Infallible>: =
+Sized {
+ /// An initializer for `T`.
+ ///
+ /// To use this initializer, you will need a suitable memory location that=
+ can hold a `T`. This can
+-/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Because [`PinInit<T, E>`]=
+ is a super trait, you can
++/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Use the [`InPlaceInit::in=
+it`] function of a smart
++/// pointer like [`Arc<T>`] on this. Because [`PinInit<T, E>`] is a super =
+trait, you can
+ /// use every function that takes it as well.
+ ///
+ /// Also see the [module description](self).
+@@ -903,7 +903,6 @@ pub unsafe trait PinInit<T: ?Sized, E =3D Infallible>: =
+Sized {
+ /// move the pointee after initialization.
+ ///
+ /// [`Arc<T>`]: crate::sync::Arc
+-/// [`UniqueArc<T>`]: kernel::sync::UniqueArc
+ #[must_use =3D "An initializer must be used in order to create its value."=
+]
+ pub unsafe trait Init<T: ?Sized, E =3D Infallible>: Sized {
+     /// Initializes `slot`.
+@@ -982,3 +981,106 @@ unsafe impl<T> Init<T> for T {
+         Ok(())
+     }
+ }
++
++/// Smart pointer that can initialize memory in-place.
++pub trait InPlaceInit<T>: Sized {
++    /// Use the given pin-initializer to pin-initialize a `T` inside of a =
+new smart pointer of this
++    /// type.
++    ///
++    /// If `T: !Unpin` it will not be able to move afterwards.
++    fn try_pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
++    where
++        E: From<AllocError>;
++
++    /// Use the given pin-initializer to pin-initialize a `T` inside of a =
+new smart pointer of this
++    /// type.
++    ///
++    /// If `T: !Unpin` it will not be able to move afterwards.
++    fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
++    where
++        Error: From<E>,
++    {
++        // SAFETY: We delegate to `init` and only change the error type.
++        let init =3D unsafe {
++            pin_init_from_closure(|slot| init.__pinned_init(slot).map_err(=
+|e| Error::from(e)))
++        };
++        Self::try_pin_init(init)
++    }
++
++    /// Use the given initializer to in-place initialize a `T`.
++    fn try_init<E>(init: impl Init<T, E>) -> Result<Self, E>
++    where
++        E: From<AllocError>;
++
++    /// Use the given initializer to in-place initialize a `T`.
++    fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
++    where
++        Error: From<E>,
++    {
++        // SAFETY: We delegate to `init` and only change the error type.
++        let init =3D unsafe {
++            init_from_closure(|slot| init.__pinned_init(slot).map_err(|e| =
+Error::from(e)))
++        };
++        Self::try_init(init)
++    }
++}
++
++impl<T> InPlaceInit<T> for Box<T> {
++    #[inline]
++    fn try_pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
++    where
++        E: From<AllocError>,
++    {
++        let mut this =3D Box::try_new_uninit()?;
++        let slot =3D this.as_mut_ptr();
++        // SAFETY: When init errors/panics, slot will get deallocated but =
+not dropped,
++        // slot is valid and will not be moved, because we pin it later.
++        unsafe { init.__pinned_init(slot)? };
++        // SAFETY: All fields have been initialized.
++        Ok(unsafe { this.assume_init() }.into())
++    }
++
++    #[inline]
++    fn try_init<E>(init: impl Init<T, E>) -> Result<Self, E>
++    where
++        E: From<AllocError>,
++    {
++        let mut this =3D Box::try_new_uninit()?;
++        let slot =3D this.as_mut_ptr();
++        // SAFETY: When init errors/panics, slot will get deallocated but =
+not dropped,
++        // slot is valid.
++        unsafe { init.__init(slot)? };
++        // SAFETY: All fields have been initialized.
++        Ok(unsafe { this.assume_init() })
++    }
++}
++
++impl<T> InPlaceInit<T> for UniqueArc<T> {
++    #[inline]
++    fn try_pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
++    where
++        E: From<AllocError>,
++    {
++        let mut this =3D UniqueArc::try_new_uninit()?;
++        let slot =3D this.as_mut_ptr();
++        // SAFETY: When init errors/panics, slot will get deallocated but =
+not dropped,
++        // slot is valid and will not be moved, because we pin it later.
++        unsafe { init.__pinned_init(slot)? };
++        // SAFETY: All fields have been initialized.
++        Ok(unsafe { this.assume_init() }.into())
++    }
++
++    #[inline]
++    fn try_init<E>(init: impl Init<T, E>) -> Result<Self, E>
++    where
++        E: From<AllocError>,
++    {
++        let mut this =3D UniqueArc::try_new_uninit()?;
++        let slot =3D this.as_mut_ptr();
++        // SAFETY: When init errors/panics, slot will get deallocated but =
+not dropped,
++        // slot is valid.
++        unsafe { init.__init(slot)? };
++        // SAFETY: All fields have been initialized.
++        Ok(unsafe { this.assume_init() })
++    }
++}
+diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+index eee7008e5e3e..43a53fbe175d 100644
+--- a/rust/kernel/sync/arc.rs
++++ b/rust/kernel/sync/arc.rs
+@@ -17,6 +17,8 @@
 
-Thanks,
+ use crate::{
+     bindings,
++    error::{self, Error},
++    init::{InPlaceInit, Init, PinInit},
+     types::{ForeignOwnable, Opaque},
+ };
+ use alloc::boxed::Box;
+@@ -163,6 +165,28 @@ impl<T> Arc<T> {
+         // `Arc` object.
+         Ok(unsafe { Self::from_inner(Box::leak(inner).into()) })
+     }
++
++    /// Use the given initializer to in-place initialize a `T`.
++    ///
++    /// If `T: !Unpin` it will not be able to move afterwards.
++    #[inline]
++    pub fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Self>
++    where
++        Error: From<E>,
++    {
++        UniqueArc::pin_init(init).map(|u| u.into())
++    }
++
++    /// Use the given initializer to in-place initialize a `T`.
++    ///
++    /// This is equivalent to [`pin_init`], since an [`Arc`] is always pin=
+ned.
++    #[inline]
++    pub fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
++    where
++        Error: From<E>,
++    {
++        UniqueArc::init(init).map(|u| u.into())
++    }
+ }
 
-jon
+ impl<T: ?Sized> Arc<T> {
+--
+2.39.2
+
+
