@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF626D42FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF276D42FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Apr 2023 13:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjDCLIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 07:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S232054AbjDCLI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 07:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbjDCLIM (ORCPT
+        with ESMTP id S230090AbjDCLIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:08:12 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107E330FB
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 04:08:07 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id y14so28934308wrq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 04:08:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680520085;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bptug0IUr53yiSheFLOI8G2Iif+jS74EZZFVW0ghq4Y=;
-        b=vreEWXlZbzmDkdbQfhaSTbAF0zBCQML/+uh0/XT61CID87nHXYxLi2ptmfsWCR7FZS
-         rd+JBdYxMW4T1r4QbUMScNhtx09lwBNSecJlAIr7j8sZOkodTCCRv4NJpv78+eoMDyJo
-         LleEmISnMK5nUIbsrLrudbyB+Ai4e5sO/70RXb5RiEhfeD997/YARfoTge/hXktX6sNS
-         bs7Iq8IVtp4DrRq8Xd5HvvELojLB+4y8IDSuhxW9T3gbrjdLf+6Jg7/bUJ4tk88bM6JA
-         LcBMnByuGe+3t9LxG+4fuK0E9ipAglBRPcPRiUGuJAVcmovEUl4jA5/JeFvT1zzxAB+y
-         ViPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680520085;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bptug0IUr53yiSheFLOI8G2Iif+jS74EZZFVW0ghq4Y=;
-        b=G/v7b028IDS7A25oOw5TT5vyx7UOuzNtTa4vvd8vWXv/z8V7YyPq8/lLBvPt6gsiI+
-         ycRHybmJABBF+DiwANIM9b+K4LKCMTUBOE1evkYUPq6RNr3b9vwwgUUJMAwn/I8UVd1K
-         rs/eb82tQ5UGghbW3S/QaGe9bQCxQDY1MRg/1ZMUxFm6WtSNG6QgQTTB2cVfL+b2y34d
-         lAmsUhckSJbJZ9gn/AokCw98GEsaWatlhu2Uvy8QANFVN4weYOezmVLiVgS869a0xN/c
-         bBqai42fHN55h0Y3JGennB5Uaw6nUw+rkF5H1Y96tpgFkb7EcAUolYma+G1OADHJmhrm
-         FmGw==
-X-Gm-Message-State: AAQBX9fobRAdzF+i6z08jqbweeBk9xmlWp+N7qx4DrKA4skJb8GRENxv
-        wjtJbmxEbCRK69Jey/42jzEq1anD3EMswEw22Nz2uA==
-X-Google-Smtp-Source: AKy350a35YO64iiFVjm8L45Px3SvEHZQujkKj79U+2xxdb5LSQringWJf/gKcgWkxVo+4wghHg8fc88lKlahPBMtNCg=
-X-Received: by 2002:adf:fccb:0:b0:2ce:a8d6:570f with SMTP id
- f11-20020adffccb000000b002cea8d6570fmr7454599wrs.4.1680520085453; Mon, 03 Apr
- 2023 04:08:05 -0700 (PDT)
+        Mon, 3 Apr 2023 07:08:54 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F24F3;
+        Mon,  3 Apr 2023 04:08:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2I5G0aWxNwP2AuZEd7HJV9PNt405h29TCjS3lS11GQE=; b=tGCSsnfXfckTnukgZgod3OCwsa
+        YnU3b/KQbrvK9i7Qq+Rkjbx4nZ9yBsb3Wbd61buN2wxXFaB9p6jOswox6Dy8BDEv5BIj/DtXeCY+U
+        ljUoSTnuv16a9XP3Qk320OF4TgzfAANoGfajSHx7TpgLrj8qoPypAPU/nwism8gL+8mYDVKjGfQj6
+        fqxf/5Rso9kWci8OIB2ctsYzaCNI7yMjRtHY2MgaxuP1/Py2mzJ9pLRXs/hWzd1J6WsFqYuT3O1M6
+        oBfiaHkJJ3M6GfSsEdoZom3z/zWXdu2yqRw1Qu1VDr2ioCLwRTraXPivM+9uP3H8UfYPneTdr9Yz+
+        hKGCWXvg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39376)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pjI3I-0002eu-Ld; Mon, 03 Apr 2023 12:08:44 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pjI3H-0004AB-3C; Mon, 03 Apr 2023 12:08:43 +0100
+Date:   Mon, 3 Apr 2023 12:08:43 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, rogerq@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srk@ti.com
+Subject: Re: [PATCH net-next v2 1/3] net: ethernet: ti: am65-cpsw: Move mode
+ specific config to mac_config()
+Message-ID: <ZCqzuwDLGuBDMHQG@shell.armlinux.org.uk>
+References: <20230403110106.983994-1-s-vadapalli@ti.com>
+ <20230403110106.983994-2-s-vadapalli@ti.com>
 MIME-Version: 1.0
-References: <20230402100509.1154220-1-bhupesh.sharma@linaro.org>
- <20230402100509.1154220-6-bhupesh.sharma@linaro.org> <21eaeea4-4f2e-5ce5-c75b-d74ded8e6e4c@linaro.org>
- <CAH=2NtzKGxzmCq2JTajxWoeRFR+mPnFY3YF5mn0tGt30T7SJoQ@mail.gmail.com> <463a9885-741e-a44a-c6c2-7cf5b0560d2d@linaro.org>
-In-Reply-To: <463a9885-741e-a44a-c6c2-7cf5b0560d2d@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Mon, 3 Apr 2023 16:37:54 +0530
-Message-ID: <CAH=2NtxgxrybNDm7HOBtMjcMk6WM5dMko2GWo8H8Z6F1HgKLrQ@mail.gmail.com>
-Subject: Re: [PATCH v5 05/11] dt-bindings: qcom-qce: Fix compatible
- combinations for SM8150 and IPQ4019 SoCs
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, rfoss@kernel.org, neil.armstrong@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403110106.983994-2-s-vadapalli@ti.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,57 +61,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 at 16:18, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 3.04.2023 08:15, Bhupesh Sharma wrote:
-> > On Mon, 3 Apr 2023 at 11:06, Vladimir Zapolskiy
-> > <vladimir.zapolskiy@linaro.org> wrote:
-> >>
-> >> On 4/2/23 13:05, Bhupesh Sharma wrote:
-> >>> Currently the compatible list available in 'qce' dt-bindings does not
-> >>> support SM8150 and IPQ4019 SoCs directly which may lead to potential
-> >>> 'dtbs_check' error(s).
-> >>>
-> >>> Fix the same.
-> >>>
-> >>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> >>> ---
-> >>>   Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 6 ++++++
-> >>>   1 file changed, 6 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> >>> index e375bd981300..90ddf98a6df9 100644
-> >>> --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> >>> +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> >>> @@ -24,6 +24,12 @@ properties:
-> >>>           deprecated: true
-> >>>           description: Kept only for ABI backward compatibility
-> >>>
-> >>> +      - items:
-> >>> +          - enum:
-> >>> +              - qcom,ipq4019-qce
-> >>> +              - qcom,sm8150-qce
-> >>> +          - const: qcom,qce
-> >>> +
-> >>>         - items:
-> >>>             - enum:
-> >>>                 - qcom,ipq6018-qce
-> >>
-> >> Two commit tags given for v2 are missing.
-> >
-> > Cannot get your comment. Please be more descriptive.
+On Mon, Apr 03, 2023 at 04:31:04PM +0530, Siddharth Vadapalli wrote:
+> Move the interface mode specific configuration to the mac_config()
+> callback am65_cpsw_nuss_mac_config().
+> 
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> ---
+>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> index d17757ecbf42..74e099828978 100644
+> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> @@ -1504,12 +1504,17 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
+>  							  phylink_config);
+>  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
+>  	struct am65_cpsw_common *common = port->common;
+> +	u32 mac_control = 0;
+>  
+>  	if (common->pdata.extra_modes & BIT(state->interface)) {
+> -		if (state->interface == PHY_INTERFACE_MODE_SGMII)
+> +		if (state->interface == PHY_INTERFACE_MODE_SGMII) {
+> +			mac_control |= CPSW_SL_CTL_EXT_EN;
+>  			writel(ADVERTISE_SGMII,
+>  			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
+> +		}
+>  
+> +		if (mac_control)
+> +			cpsw_sl_ctl_set(port->slave.mac_sl, mac_control);
+>  		writel(AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
+>  		       port->sgmii_base + AM65_CPSW_SGMII_CONTROL_REG);
+>  	}
+> @@ -1553,8 +1558,7 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
+>  
+>  	if (speed == SPEED_1000)
+>  		mac_control |= CPSW_SL_CTL_GIG;
+> -	if (interface == PHY_INTERFACE_MODE_SGMII)
+> -		mac_control |= CPSW_SL_CTL_EXT_EN;
+> +	/* TODO: Verify whether in-band is necessary for 10 Mbps RGMII */
+>  	if (speed == SPEED_10 && phy_interface_mode_is_rgmii(interface))
+>  		/* Can be used with in band mode only */
+>  		mac_control |= CPSW_SL_CTL_EXT_EN;
 
-> https://lore.kernel.org/linux-arm-msm/333081a2-6b31-3fca-1a95-4273b5a46fb7@linaro.org/
+I'm afraid I can see you haven't thought this patch through properly.
 
-I think Krzysztof mentioned (here:
-https://lore.kernel.org/linux-arm-msm/d5821429-032d-e1e6-3a4e-ca19eb4a60ed@linaro.org/)
-and I also agree that there is no need to split the enum into const.
+am65_cpsw_nuss_mac_link_down() will call
+cpsw_sl_ctl_reset(port->slave.mac_sl); which has the effect of clearing
+to zero the entire MAC control register. This will clear
+CPSW_SL_CTL_EXT_EN that was set in am65_cpsw_nuss_mac_config() which is
+not what you want to be doing.
 
-Also, I will add the 'Fixes: 00f3bc2db351 ("dt-bindings: qcom-qce: Add
-new SoC compatible strings for Qualcomm QCE IP")' tag in the next
-version (waiting for more comments before spinning a new version).
+Given that we have the 10Mbps issue with RGMII, I think what you want
+to be doing is:
 
-Regards,
-Bhupesh
+1. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_config() if in SGMII
+   mode, otherwise clear this bit.
+
+2. Clear the mac_control register in am65_cpsw_nuss_mac_link_down()
+   if in RMGII mode, otherwise preserve the state of
+   CPSW_SL_CTL_EXT_EN but clear all other bits.
+
+3. Set CPSW_SL_CTL_EXT_EN in am65_cpsw_nuss_mac_link_up() if in
+   RGMII mode and 10Mbps.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
