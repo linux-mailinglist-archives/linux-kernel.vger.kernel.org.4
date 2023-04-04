@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99E16D6A6B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF976D6A6C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236137AbjDDRXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        id S236143AbjDDRXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236044AbjDDRXB (ORCPT
+        with ESMTP id S236037AbjDDRXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:23:01 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0746D49FE
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:22:38 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id eh3so133535940edb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:22:37 -0700 (PDT)
+        Tue, 4 Apr 2023 13:23:04 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30444C31
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:22:39 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id eg48so133479556edb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:22:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680628956;
+        d=linaro.org; s=google; t=1680628958;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ri+KMEjNpTYZIPFjCFx+/7TZlMVFVOLpk39qoMQAgfg=;
-        b=g47Eyvoz8Tk4i6j/vn+dxRpCAVTVdVE4TXuZg8PzIVfppbGwgy0MDR4Q77wPYhebqR
-         VhvVS0bNDuSwevinLOYXyqQyXo03ehN1IlnCR1AIOYDR9MZo8Ql/6J+MjQcER2clQCZV
-         FIvzBf0BdZbsBozUTG0hKqW+1xLjW603Lr5n/L8TCBqLe7L6/idbTNC2yEcajq+ldAv6
-         y2IKQKF+OH6QEBwXdd/5DAaSxnyDXpjhq4d4uRmSn2K5ZBGsNWHTz7Lq1HutUidrzzFB
-         Vtj9GOMms3yPOeOEVjcQRyxSEYY9D/Cct9YQ98WFbwmuJOWo3uPaCrCv//Kjsxec4yrN
-         GJFw==
+        bh=noPcVt8MFW5+Mm9H/HyU71uvDzzOIqHZ/NpeCMsQhko=;
+        b=iLfxn/uxA0aYPa9LCLk2Vg6ug1TsTBWbvbl4cNXqH02+8X+95m/w83e9Ib2ruwpCGn
+         cc9PUVjXKz7rfIJxhvovXLBU/9mxiS2YVIxFAMZ1pbJgVGf+/mN9MteI1M366YqZG3fx
+         HvBdQEW/DRVerX+aRbMYL6SPo5B+g5iO4qoL9BLptnMT6ii3JQz3h57KofRnYwwbBO/Q
+         AZTRa+41MMrSq6LAACKltVSesbODBnw2t3o85WCT9G1O9wUcCrv9KuoCH8Z0XGaBowxS
+         hCGPKdpFC4J3/Bju3F20SEIo+4fMq7nDYGsc0YqS5ddItnVUEMQPxAGuk/tpp4XuLQv8
+         jU7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680628956;
+        d=1e100.net; s=20210112; t=1680628958;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ri+KMEjNpTYZIPFjCFx+/7TZlMVFVOLpk39qoMQAgfg=;
-        b=Q82n4nxq8hKyUjLNENe3/3p90okUst75x6WLHkdnKAMBAq+XIkc3XvtZN0+qN3Zi18
-         wrmqdkc3alI/4PU3K4PdTPMNjFUSd44eCSSrNLvtnwoLx88RIWJTi9kkdE/U1BffBw4R
-         KtUpERFzlP4UEU693vRndWofhJo14y18odIC+Mo1vKGw35U0iugT6Y2HoARkQ2JDy/YD
-         MUxqVw3vDbX/u+7gdMeoJtYyKCwvkdUipEFPY30nxCIKgRLj31JzhCwfkKrtSkfftuwZ
-         RZc+dc0D4khUXDQuNUZ+TAbkVG9kGqbtqqd3HdPujhSzOi5NtLCxyVpGRGkMsJeCqc6R
-         18Xg==
-X-Gm-Message-State: AAQBX9eJRpJBatRAFHEV/AgTKR2jeV3Uao+Eu+8I9a/zeiwg079HViLW
-        gJjzenGARVXhj/4ZyVOreaS1CQ==
-X-Google-Smtp-Source: AKy350Zu1ynxaL+pFI0WvSJjMsGmvmskIY7obMu4Bm5IQbZ86beTly4vL4lxC2Xyzvj2TgNUA+AwwA==
-X-Received: by 2002:a17:906:3e06:b0:930:3840:1c4d with SMTP id k6-20020a1709063e0600b0093038401c4dmr325039eji.32.1680628956558;
-        Tue, 04 Apr 2023 10:22:36 -0700 (PDT)
+        bh=noPcVt8MFW5+Mm9H/HyU71uvDzzOIqHZ/NpeCMsQhko=;
+        b=tLRRA0V0D4LZcvuJ9R8c/94cbJ1it1EqhWMLA8CDR4LZGtLgTRZ6ZztoCyVQfSEokR
+         0ndqtfoE1/YO5irY09pPisou3FzpiWYoT90EF6qzevAEzv+28WAcUklbm1bFxF9f9EiF
+         7oxbYAHm9yhlh5UFmqvz2P6xAeFxAbUuawINka7yM9M4ne9McoEjaTdfaEpcGPtvpWE/
+         biJA2D08UloV4t3dNSsIFgm4BWSgWinlNqrCRQVIsr6vZO9YrHh547TzERsM9P1RU3fa
+         QakMwBQ+T8BvYhdgDx5koSpW/GFH86g4BazejNxc1d3ajtegH8rQW5isQozGPZ2e7cei
+         GMGw==
+X-Gm-Message-State: AAQBX9eMdBPp10XtqP038WNhoRVi10XReUTAFQqSHRg2tYGmAdpmbESq
+        juEQ2bAVRJt87yw6ii2NUHCKOA==
+X-Google-Smtp-Source: AKy350aUnCsI0OW1OMpIgQDSjnqYbtKtqCZcgg9rd1TRcPNCj+b3Vy0Uk3G5nRLYrzTMgARThTuMCg==
+X-Received: by 2002:a17:906:1714:b0:932:290d:12e4 with SMTP id c20-20020a170906171400b00932290d12e4mr324013eje.25.1680628958467;
+        Tue, 04 Apr 2023 10:22:38 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.22.35
+        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.22.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 10:22:35 -0700 (PDT)
+        Tue, 04 Apr 2023 10:22:37 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Rob Herring <robh@kernel.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 11/40] usb: ulpi: Use of_request_module()
-Date:   Tue,  4 Apr 2023 18:21:19 +0100
-Message-Id: <20230404172148.82422-12-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 12/40] of: device: Kill of_device_request_module()
+Date:   Tue,  4 Apr 2023 18:21:20 +0100
+Message-Id: <20230404172148.82422-13-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
 References: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
@@ -76,33 +75,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-There is a new helper supposed to replace of_device_request_module(),
-called of_request_module(). They are both strictly equivalent, besides
-the fact the latter receives a "struct device_node" directly. Use it.
+A new helper has been introduced, of_request_module(). Users have been
+converted, this helper can now be deleted.
 
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/usb/common/ulpi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/of/device.c       | 9 ---------
+ include/linux/of_device.h | 6 ------
+ 2 files changed, 15 deletions(-)
 
-diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-index a98b2108376a..6977cf380838 100644
---- a/drivers/usb/common/ulpi.c
-+++ b/drivers/usb/common/ulpi.c
-@@ -229,7 +229,7 @@ static int ulpi_read_id(struct ulpi *ulpi)
- 	request_module("ulpi:v%04xp%04x", ulpi->id.vendor, ulpi->id.product);
- 	return 0;
- err:
--	of_device_request_module(&ulpi->dev);
-+	of_request_module(ulpi->dev.of_node);
- 	return 0;
+diff --git a/drivers/of/device.c b/drivers/of/device.c
+index 874a2e1f6308..0f00f1b80708 100644
+--- a/drivers/of/device.c
++++ b/drivers/of/device.c
+@@ -246,15 +246,6 @@ const void *of_device_get_match_data(const struct device *dev)
+ }
+ EXPORT_SYMBOL(of_device_get_match_data);
+ 
+-int of_device_request_module(struct device *dev)
+-{
+-	if (!dev)
+-		return -ENODEV;
+-
+-	return of_request_module(dev->of_node);
+-}
+-EXPORT_SYMBOL_GPL(of_device_request_module);
+-
+ /**
+  * of_device_modalias - Fill buffer with newline terminated modalias string
+  * @dev:	Calling device
+diff --git a/include/linux/of_device.h b/include/linux/of_device.h
+index f4b57614979d..ce20d8b00b3e 100644
+--- a/include/linux/of_device.h
++++ b/include/linux/of_device.h
+@@ -33,7 +33,6 @@ extern void of_device_unregister(struct platform_device *ofdev);
+ extern const void *of_device_get_match_data(const struct device *dev);
+ 
+ extern ssize_t of_device_modalias(struct device *dev, char *str, ssize_t len);
+-extern int of_device_request_module(struct device *dev);
+ 
+ extern void of_device_uevent(const struct device *dev, struct kobj_uevent_env *env);
+ extern int of_device_uevent_modalias(const struct device *dev, struct kobj_uevent_env *env);
+@@ -78,11 +77,6 @@ static inline int of_device_modalias(struct device *dev,
+ 	return -ENODEV;
  }
  
+-static inline int of_device_request_module(struct device *dev)
+-{
+-	return -ENODEV;
+-}
+-
+ static inline int of_device_uevent_modalias(const struct device *dev,
+ 				   struct kobj_uevent_env *env)
+ {
 -- 
 2.25.1
 
