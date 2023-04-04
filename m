@@ -2,73 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796BD6D6858
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FE46D686B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbjDDQGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
+        id S235837AbjDDQI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjDDQGx (ORCPT
+        with ESMTP id S235710AbjDDQIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:06:53 -0400
-Received: from out-10.mta1.migadu.com (out-10.mta1.migadu.com [95.215.58.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5D83AB9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:06:52 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 12:06:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1680624410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iW8EWSoTFtp5xBF6TezwF5Hnaz1uauxqPercJ/2f6tQ=;
-        b=ab1021gupMK5rvMkPNefXvjtl1+Fv5lfQqqrMPanoZzkvBFey+fWlReH9nHMNXVooGgGIB
-        YsIvHT+I8jlHJGMHn9aI3d0924xHjpC81n0IKfZw8sg1AK2B4fmDvJvb5871nj8cMT11XT
-        eyZOCqNxEJhAocH/elctZdg3GJ8TZEQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        willy@infradead.org
-Subject: Re: [PATCH 0/2] bio iter improvements
-Message-ID: <ZCxLGLdcN5wYnxfr@moria.home.lan>
-References: <20230327174402.1655365-1-kent.overstreet@linux.dev>
- <ZCIVLQ6Klrps6k1g@infradead.org>
- <ZCNN2GE3WBjMkLkH@moria.home.lan>
- <ZCrsbv+zKGf4jvUm@infradead.org>
- <ZCsAhDpsiNWpiAxS@moria.home.lan>
- <ZCxAIR8pxOfSE6OR@infradead.org>
- <ZCxGdj3JKl2RPUJW@moria.home.lan>
- <2bbdb38b-a3ac-5127-23c0-56badd113538@kernel.dk>
+        Tue, 4 Apr 2023 12:08:55 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E48EEC;
+        Tue,  4 Apr 2023 09:08:52 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VfMLb4X_1680624527;
+Received: from 30.120.152.113(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VfMLb4X_1680624527)
+          by smtp.aliyun-inc.com;
+          Wed, 05 Apr 2023 00:08:48 +0800
+Message-ID: <6dad8c2f-b896-3cc0-26c1-37f5fff406bd@linux.alibaba.com>
+Date:   Wed, 5 Apr 2023 00:08:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2bbdb38b-a3ac-5127-23c0-56badd113538@kernel.dk>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] mm/swap: fix swap_info_struct race between swapoff and
+ get_swap_pages()
+Content-Language: en-US
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org, bagasdotme@gmail.com,
+        willy@infradead.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
+ <20230404154716.23058-1-rongwei.wang@linux.alibaba.com>
+In-Reply-To: <20230404154716.23058-1-rongwei.wang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 10:01:58AM -0600, Jens Axboe wrote:
-> >> Starting to get personal instead tends to not help to convince your
-> >> reviewers that it's really useful in general.
-> > 
-> > I know you and others like to talk a lot about what you want as
-> > maintainers and reviewers - but I find that the people who are the
-> > loudest and the most authoritarian in that respect tend not to be the
-> > people who drive discussions forward in productive ways.
-> 
-> One issue is certainly that nobody wants to engage with people that
-> instantly try and make this personal, or just uncomfortable in general.
+Hello
 
-Yeah, you like to respond to technical discussion with a *plonk*.
+I have fix up some stuff base on Patch v1. And in order to help all 
+readers and reviewers to
 
-*eyeroll*
+reproduce this bug, share a reproducer here:
 
-Christoph can handle himself, he doesn't need you defending him.
+swap_bomb.sh
+
+#!/usr/bin/env bash
+
+stress-ng -a 1 --class vm -t 12h --metrics --times -x 
+bigheap,stackmmap,mlock,vm-splice,mmapaddr,mmapfixed,mmapfork,mmaphuge,mmapmany,mprotect,mremap,msync,msyncmany,physpage,tmpfs,vm-addr,vm-rw,brk,vm-segv,userfaultfd,malloc,stack,munmap,dev-shm,bad-altstack,shm-sysv,pageswap,madvise,vm,shm,env,mmap 
+--verify -v &
+stress-ng -a 1 --class vm -t 12h --metrics --times -x 
+bigheap,stackmmap,mlock,vm-splice,mmapaddr,mmapfixed,mmapfork,mmaphuge,mmapmany,mprotect,mremap,msync,msyncmany,physpage,tmpfs,vm-addr,vm-rw,brk,vm-segv,userfaultfd,malloc,stack,munmap,dev-shm,bad-altstack,shm-sysv,pageswap,madvise,vm,shm,env,mmap 
+--verify -v &
+stress-ng -a 1 --class vm -t 12h --metrics --times -x 
+bigheap,stackmmap,mlock,vm-splice,mmapaddr,mmapfixed,mmapfork,mmaphuge,mmapmany,mprotect,mremap,msync,msyncmany,physpage,tmpfs,vm-addr,vm-rw,brk,vm-segv,userfaultfd,malloc,stack,munmap,dev-shm,bad-altstack,shm-sysv,pageswap,madvise,vm,shm,env,mmap 
+--verify -v &
+stress-ng -a 1 --class vm -t 12h --metrics --times -x 
+bigheap,stackmmap,mlock,vm-splice,mmapaddr,mmapfixed,mmapfork,mmaphuge,mmapmany,mprotect,mremap,msync,msyncmany,physpage,tmpfs,vm-addr,vm-rw,brk,vm-segv,userfaultfd,malloc,stack,munmap,dev-shm,bad-altstack,shm-sysv,pageswap,madvise,vm,shm,env,mmap 
+--verify -v
+
+
+madvise_shared.c
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/mman.h>
+#include <unistd.h>
+
+#define MSIZE (1024 * 1024 * 2)
+
+int main()
+{
+         char *shm_addr;
+         unsigned long i;
+
+         while (1) {
+                 // Map shared memory segment
+                 shm_addr =
+                     mmap(NULL, MSIZE, PROT_READ | PROT_WRITE,
+                          MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+                 if (shm_addr == MAP_FAILED) {
+                         perror("Failed to map shared memory segment");
+                         exit(EXIT_FAILURE);
+                 }
+
+                 for (i = 0; i < MSIZE; i++) {
+                         shm_addr[i] = 1;
+                 }
+
+                 // Advise kernel on usage pattern of shared memory
+                 if (madvise(shm_addr, MSIZE, MADV_PAGEOUT) == -1) {
+                         perror
+                             ("Failed to advise kernel on shared memory 
+usage");
+                         exit(EXIT_FAILURE);
+                 }
+
+                 for (i = 0; i < MSIZE; i++) {
+                         shm_addr[i] = 1;
+                 }
+
+                 // Advise kernel on usage pattern of shared memory
+                 if (madvise(shm_addr, MSIZE, MADV_PAGEOUT) == -1) {
+                         perror
+                             ("Failed to advise kernel on shared memory 
+usage");
+                         exit(EXIT_FAILURE);
+                 }
+                 // Use shared memory
+                 printf("Hello, shared memory: 0x%lx\n", shm_addr);
+
+                 // Unmap shared memory segment
+                 if (munmap(shm_addr, MSIZE) == -1) {
+                         perror("Failed to unmap shared memory segment");
+                         exit(EXIT_FAILURE);
+                 }
+         }
+
+         return 0;
+}
+
+The bug will reproduce more quickly (about 2~5 minutes) if concurrent 
+more swap_bomb.sh and madvise_shared.
+
+Thanks.
+
+
+change log:
+
+v1 -> v2
+
+* fix up some commits and add assert_spin_locked(&p->lock) inside 
+__delete_from_avail_list() (suggested by Matthew Wilcox and Bagas Sanjaya)
+
+
+On 4/4/23 11:47 PM, Rongwei Wang wrote:
+> The si->lock must be held when deleting the si from
+> the available list.  Otherwise, another thread can
+> re-add the si to the available list, which can lead
+> to memory corruption. The only place we have found
+> where this happens is in the swapoff path. This case
+> can be described as below:
+>
+> core 0                       core 1
+> swapoff
+>
+> del_from_avail_list(si)      waiting
+>
+> try lock si->lock            acquire swap_avail_lock
+>                               and re-add si into
+>                               swap_avail_head
+>
+> acquire si->lock but
+> missing si already be
+> added again, and continuing
+> to clear SWP_WRITEOK, etc.
+>
+> It can be easily found a massive warning messages can
+> be triggered inside get_swap_pages() by some special
+> cases, for example, we call madvise(MADV_PAGEOUT) on
+> blocks of touched memory concurrently, meanwhile, run
+> much swapon-swapoff operations (e.g. stress-ng-swap).
+>
+> However, in the worst case, panic can be caused by the
+> above scene. In swapoff(), the memory used by si could
+> be kept in swap_info[] after turning off a swap. This
+> means memory corruption will not be caused immediately
+> until allocated and reset for a new swap in the swapon
+> path. A panic message caused:
+> (with CONFIG_PLIST_DEBUG enabled)
+>
+> ------------[ cut here ]------------
+> top: 00000000e58a3003, n: 0000000013e75cda, p: 000000008cd4451a
+> prev: 0000000035b1e58a, n: 000000008cd4451a, p: 000000002150ee8d
+> next: 000000008cd4451a, n: 000000008cd4451a, p: 000000008cd4451a
+> WARNING: CPU: 21 PID: 1843 at lib/plist.c:60 plist_check_prev_next_node+0x50/0x70
+> Modules linked in: rfkill(E) crct10dif_ce(E)...
+> CPU: 21 PID: 1843 Comm: stress-ng Kdump: ... 5.10.134+
+> Hardware name: Alibaba Cloud ECS, BIOS 0.0.0 02/06/2015
+> pstate: 60400005 (nZCv daif +PAN -UAO -TCO BTYPE=--)
+> pc : plist_check_prev_next_node+0x50/0x70
+> lr : plist_check_prev_next_node+0x50/0x70
+> sp : ffff0018009d3c30
+> x29: ffff0018009d3c40 x28: ffff800011b32a98
+> x27: 0000000000000000 x26: ffff001803908000
+> x25: ffff8000128ea088 x24: ffff800011b32a48
+> x23: 0000000000000028 x22: ffff001800875c00
+> x21: ffff800010f9e520 x20: ffff001800875c00
+> x19: ffff001800fdc6e0 x18: 0000000000000030
+> x17: 0000000000000000 x16: 0000000000000000
+> x15: 0736076307640766 x14: 0730073007380731
+> x13: 0736076307640766 x12: 0730073007380731
+> x11: 000000000004058d x10: 0000000085a85b76
+> x9 : ffff8000101436e4 x8 : ffff800011c8ce08
+> x7 : 0000000000000000 x6 : 0000000000000001
+> x5 : ffff0017df9ed338 x4 : 0000000000000001
+> x3 : ffff8017ce62a000 x2 : ffff0017df9ed340
+> x1 : 0000000000000000 x0 : 0000000000000000
+> Call trace:
+>   plist_check_prev_next_node+0x50/0x70
+>   plist_check_head+0x80/0xf0
+>   plist_add+0x28/0x140
+>   add_to_avail_list+0x9c/0xf0
+>   _enable_swap_info+0x78/0xb4
+>   __do_sys_swapon+0x918/0xa10
+>   __arm64_sys_swapon+0x20/0x30
+>   el0_svc_common+0x8c/0x220
+>   do_el0_svc+0x2c/0x90
+>   el0_svc+0x1c/0x30
+>   el0_sync_handler+0xa8/0xb0
+>   el0_sync+0x148/0x180
+> irq event stamp: 2082270
+>
+> Now, si->lock locked before calling 'del_from_avail_list()'
+> to make sure other thread see the si had been deleted
+> and SWP_WRITEOK cleared together, will not reinsert again.
+>
+> This problem exists in versions after stable 5.10.y.
+>
+> Cc: stable@vger.kernel.org
+> Tested-by: Yongchen Yin <wb-yyc939293@alibaba-inc.com>
+> Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
+> ---
+>   mm/swapfile.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index 62ba2bf577d7..2c718f45745f 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -679,6 +679,7 @@ static void __del_from_avail_list(struct swap_info_struct *p)
+>   {
+>   	int nid;
+>   
+> +	assert_spin_locked(&p->lock);
+>   	for_each_node(nid)
+>   		plist_del(&p->avail_lists[nid], &swap_avail_heads[nid]);
+>   }
+> @@ -2434,8 +2435,8 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
+>   		spin_unlock(&swap_lock);
+>   		goto out_dput;
+>   	}
+> -	del_from_avail_list(p);
+>   	spin_lock(&p->lock);
+> +	del_from_avail_list(p);
+>   	if (p->prio < 0) {
+>   		struct swap_info_struct *si = p;
+>   		int nid;
