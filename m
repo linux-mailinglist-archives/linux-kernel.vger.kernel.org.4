@@ -2,91 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09A26D5FE9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4226D5FEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234529AbjDDMKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
+        id S234799AbjDDMKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234504AbjDDMJB (ORCPT
+        with ESMTP id S234360AbjDDMJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Apr 2023 08:09:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4B64220;
-        Tue,  4 Apr 2023 05:03:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9193040D7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:03:50 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3F4FE22A03;
+        Tue,  4 Apr 2023 12:03:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680609829; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Br0Z4alxU7wp3Rhk+RTaZgwypk6DPbZKhOnMSVJGT24=;
+        b=QqjCuJgfjT1BWsndH125Lho+YjEk1oOumDbtnuy9/lGIQHFI/92h9SK+lz/3+9YQJSYh/1
+        ZPhC+rRzQr5qcJjSuGWdjfbCd+gfPXLgHjS7wqgtESoRI23jCb7Vd1fr6q0xPeItTGrWU3
+        WIJK8oOxV/wHkUEtUWIESj8RqC1AXpc=
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A36F61774;
-        Tue,  4 Apr 2023 12:03:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60A6C4339E;
-        Tue,  4 Apr 2023 12:03:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680609810;
-        bh=oxjQvXBiMtX0M82oh4PK7j3KaNk995eVAXcg7XjUDMo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H2yluT70VrrXTiykWvAVpFjUKwC/S61zinZbFbR+NhTZu8rCkxmUHhPtlAqlZrB5v
-         BKP0u/ye9XwzAV+YYDE8v1xtr9GvkUO2yfGb6hfiTZeB9kasrb7ZWbXK0TvRvY/6U2
-         SrEYMq+1VtvitH3QqWTqlA/sX6CbnNpAvQuk5CAg=
-Date:   Tue, 4 Apr 2023 14:03:27 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maxim Levitsky <maximlevitsky@gmail.com>,
-        Alex Dubov <oakad@yahoo.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Kay Sievers <kay.sievers@vrfy.org>, stable <stable@kernel.org>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: Re: [RESEND PATCH] memstick: fix memory leak if card device is never
- registered
-Message-ID: <2023040411-outhouse-faceless-60e8@gregkh>
-References: <20230401200327.16800-1-gregkh@linuxfoundation.org>
- <CAPDyKFq3VUVM2-ATNykGyutMoNDO3EkbT2foZBQjxzKr7cTnFg@mail.gmail.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 2B2A32C142;
+        Tue,  4 Apr 2023 12:03:47 +0000 (UTC)
+Date:   Tue, 4 Apr 2023 14:03:47 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Jaewon Kim <jaewon31.kim@samsung.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        'Jaewon Kim' <jaewon31.kim@gmail.com>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        GyeongHwan Hong <gh21.hong@samsung.com>
+Subject: Re: [RFC] vsprintf: compile error on %09pK
+Message-ID: <ZCwSIy5Tm0jAe1Ww@alley>
+References: <694722c9409b43808cfbc1fc9e495016@AcuMS.aculab.com>
+ <20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p3>
+ <ZCrMMQt2xnnZIyz6@alley>
+ <CAJrd-Uvzy18SfjjqbqZCPHjw+ujQXsBpvov4b=bfAwZrj=bCAA@mail.gmail.com>
+ <CGME20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p6>
+ <20230404101201epcms1p615a6365e64fc6e0a0fa203d41404940c@epcms1p6>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFq3VUVM2-ATNykGyutMoNDO3EkbT2foZBQjxzKr7cTnFg@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230404101201epcms1p615a6365e64fc6e0a0fa203d41404940c@epcms1p6>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 01:54:03PM +0200, Ulf Hansson wrote:
-> On Sat, 1 Apr 2023 at 22:03, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
+On Tue 2023-04-04 19:12:01, Jaewon Kim wrote:
+> >From: Jaewon Kim
+> >> Sent: 03 April 2023 15:40
+> >...
+> >> I wanted to print phys_addr_t  type value only when kptr_restrict sysctl is
+> >> allowed. So I thought I could use %pK for that purpose. And the physical
+> >> address is not that long. I wanted to make that length short like 9 hex.
 > >
-> > When calling dev_set_name() memory is allocated for the name for the
-> > struct device.  Once that structure device is registered, or attempted
-> > to be registerd, with the driver core, the driver core will handle
-> > cleaning up that memory when the device is removed from the system.
-> >
-> > Unfortunatly for the memstick code, there is an error path that causes
-> > the struct device to never be registered, and so the memory allocated in
-> > dev_set_name will be leaked.  Fix that leak by manually freeing it right
-> > before the memory for the device is freed.
-> >
-> > Cc: Maxim Levitsky <maximlevitsky@gmail.com>
-> > Cc: Alex Dubov <oakad@yahoo.com>
-> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Hans de Goede <hdegoede@redhat.com>
-> > Cc: Kay Sievers <kay.sievers@vrfy.org>
-> > Cc: linux-mmc@vger.kernel.org
-> > Fixes: 0252c3b4f018 ("memstick: struct device - replace bus_id with dev_name(),
-> > Cc: stable <stable@kernel.org>
-> > Co-developed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Co-developed-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+> >Isn't that is the wrong format for physical addresses anyway?
+> >They can be larger than virtual ones (eg x86 with PAE).
 > 
-> Applied for fixes and by adding Mirsad's sob tag (according to the
-> other thread [1]), thanks!
+> Yeah, correct. I just used %pK to hide physical address, I thought it could be
+> leak in security perspective. Could you give me advice how I can hide the
+> address by default and look the address if kptr_restrict allow it?
 
-Wonderful, thanks for picking up that tag, and the patch.
+Could you please send a patch that would show what value you want to print?
 
-greg k-h
+The initial mail mentioned converting %09lx to %09pK in some driver.
+Then it included a warning when compiling from mm/page_alloc.o
+
+Honestly, I think that you could just use %pK or %p. IMHO, it does not
+make sense to optimize it for the length.
+
+Anyway, there is still the question if the address is really worth
+printing. Will it really help to locate a potential problem?
+
+Best Regards,
+Petr
