@@ -2,162 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079B86D5DE0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB846D5DE6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234524AbjDDKrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 06:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S234527AbjDDKsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 06:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234418AbjDDKrE (ORCPT
+        with ESMTP id S233904AbjDDKsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 06:47:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4951BD9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:47:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 4 Apr 2023 06:48:09 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D491981
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:48:07 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6E9463169
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:47:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 674D4C433EF;
-        Tue,  4 Apr 2023 10:47:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680605222;
-        bh=JPysGGnjPgbO37ueoLHh8BTscsjnrGxScIvFiCFfWmE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NFExaqm1mj5IDOgU1XgXIB2mUqyeogLfTPoTKFQX8GDMXSjqSwmCPNYh7vs+Jifut
-         LsRpNfb7K/mP9UFHLTYdfeblz46J20zF/WNZ75tLCZjgaHOf0l17FUkSsLZByY3GvG
-         8Tz5WQK7wpYcJGW3LUunkp+5flwTYD49AhFBxcS17c2INK07AmkiOTCk45kV6PtXMd
-         HMbGF+w67fFW7enkVzTnu5Mg/i15gtEZ2AcRG3NPAZPzdBn5Pyt+I4P2SEp210BKsD
-         AtVt7ql2/9fOX1njdXsw/7w5NuHLg2Xk+sbwm//L6WDhRODKAkWjmgT2A64cIlCfLE
-         jB9eB2oiufEOw==
-Message-ID: <08259184-d3c1-cb46-9751-e32e1bc6eb87@kernel.org>
-Date:   Tue, 4 Apr 2023 18:46:59 +0800
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 65B3B660000E;
+        Tue,  4 Apr 2023 11:48:05 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680605286;
+        bh=AAPNaHX0V1PialVkpX+4zJQpYY6tpjp8IWS8ZSYvSmQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CXHh+puIkl5QU4tQoD0D1dPauiD9KWhgyP1q9dOW/XApTnvtC/AYSM7nmdrRBGvZi
+         BSJgZEg4YbcVcvloFl2tg418BQq6B79yqeV6msXTk9Psz5SCrzvswQ2RVplfeTHc29
+         g3Xjznd2yVN6Nj8TfftDGeEwR3z0B7A96+rKxCihiFW5r1rDKYO+ZNZJktvcqfOrJy
+         M7iMgCrRIYghjXYq/X4rPjA47xEUihUQZHzb4tERhl9AqOFDqraWqcv6h/T6R+e0N6
+         vzi5G4kySbHyWYn6Ts7IK4d2wQosAprUDTVeI/27hgl9tEYDcHSQMwc0x67DRO1joY
+         IdWzYbjR9K6TQ==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+        wenst@chromium.org
+Subject: [PATCH v3 0/9] MediaTek DisplayPort: support eDP and aux-bus
+Date:   Tue,  4 Apr 2023 12:47:51 +0200
+Message-Id: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] f2fs: fix to trigger a checkpoint in the end of
- foreground garbage collection
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230324071028.336982-1-chao@kernel.org>
- <ZCsXRin7symPxIrn@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <ZCsXRin7symPxIrn@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/4 2:13, Jaegeuk Kim wrote:
-> On 03/24, Chao Yu wrote:
->> In order to reclaim free blocks in prefree sections before latter use.
-> 
-> We were supposed to do checkpoint as is?
+Changes in v3:
+ - Added DPTX AUX block initialization before trying to communicate
+   to stop relying on the bootloader keeping it initialized before
+   booting Linux.
+ - Fixed commit description for patch [09/09] and removed commented
+   out code (that slipped from dev phase.. sorry!).
 
-It seems commit 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc")
-changed that logic? It caused that if has_not_enough_free_secs() returns false,
-it missed to call f2fs_write_checkpoint() before exit f2fs_gc()?
+This series adds "real" support for eDP in the mtk-dp DisplayPort driver.
 
-@@ -1110,15 +1116,23 @@ gc_more:
-  	if (gc_type == FG_GC)
-  		sbi->cur_victim_sec = NULL_SEGNO;
+Explaining the "real":
+Before this change, the DisplayPort driver did support eDP to some
+extent, but it was treating it entirely like a regular DP interface
+which is partially fine, after all, embedded DisplayPort *is* actually
+DisplayPort, but there might be some differences to account for... and
+this is for both small performance improvements and, more importantly,
+for correct functionality in some systems.
 
--	if (!sync) {
--		if (has_not_enough_free_secs(sbi, sec_freed, 0)) {
--			if (skipped_round > MAX_SKIP_ATOMIC_COUNT &&
--				skipped_round * 2 >= round)
--				f2fs_drop_inmem_pages_all(sbi, true);
-+	if (sync)
-+		goto stop;
-+
-+	if (has_not_enough_free_secs(sbi, sec_freed, 0)) {
-+		if (skipped_round <= MAX_SKIP_GC_COUNT ||
-+					skipped_round * 2 < round) {
-  			segno = NULL_SEGNO;
-  			goto gc_more;
-  		}
+Functionality first:
 
-+		if (first_skipped < last_skipped &&
-+				(last_skipped - first_skipped) >
-+						sbi->skipped_gc_rwsem) {
-+			f2fs_drop_inmem_pages_all(sbi, true);
-+			segno = NULL_SEGNO;
-+			goto gc_more;
-+		}
-  		if (gc_type == FG_GC)
-  			ret = f2fs_write_checkpoint(sbi, &cpc);
-  	}
+One of the common differences found in various boards implementing eDP
+and machines using an eDP panel is that many times the HPD line is not
+connected. This *must* be accounted for: at startup, this specific IP
+will raise a HPD interrupt (which should maybe be ignored... as it does
+not appear to be a "real" event...) that will make the eDP panel to be
+detected and to actually work but, after a suspend-resume cycle, there
+will be no HPD interrupt (as there's no HPD line in my case!) producing
+a functionality issue - specifically, the DP Link Training fails because
+the panel doesn't get powered up, then it stays black and won't work
+until rebooting the machine (or removing and reinserting the module I
+think, but I haven't tried that).
 
-> 
->>
->> Fixes: 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc")
->> Signed-off-by: Chao Yu <chao@kernel.org>
->> ---
->>   fs/f2fs/f2fs.h    | 1 +
->>   fs/f2fs/gc.c      | 8 ++++++++
->>   fs/f2fs/segment.c | 1 +
->>   3 files changed, 10 insertions(+)
->>
->> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
->> index 53a005b420cf..b1515375cb4c 100644
->> --- a/fs/f2fs/f2fs.h
->> +++ b/fs/f2fs/f2fs.h
->> @@ -1269,6 +1269,7 @@ struct f2fs_gc_control {
->>   	unsigned int victim_segno;	/* target victim segment number */
->>   	int init_gc_type;		/* FG_GC or BG_GC */
->>   	bool no_bg_gc;			/* check the space and stop bg_gc */
->> +	bool reclaim_space;		/* trigger checkpoint to reclaim space */
->>   	bool should_migrate_blocks;	/* should migrate blocks */
->>   	bool err_gc_skipped;		/* return EAGAIN if GC skipped */
->>   	unsigned int nr_free_secs;	/* # of free sections to do GC */
->> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
->> index 2996d38aa89c..5a451d3d512d 100644
->> --- a/fs/f2fs/gc.c
->> +++ b/fs/f2fs/gc.c
->> @@ -132,6 +132,7 @@ static int gc_thread_func(void *data)
->>   
->>   		gc_control.init_gc_type = sync_mode ? FG_GC : BG_GC;
->>   		gc_control.no_bg_gc = foreground;
->> +		gc_control.reclaim_space = foreground;
->>   		gc_control.nr_free_secs = foreground ? 1 : 0;
->>   
->>   		/* if return value is not zero, no victim was selected */
->> @@ -1880,6 +1881,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->>   				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
->>   		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
->>   			goto go_gc_more;
->> +
->> +		/*
->> +		 * trigger a checkpoint in the end of foreground garbage
->> +		 * collection.
->> +		 */
->> +		if (gc_control->reclaim_space)
->> +			ret = f2fs_write_checkpoint(sbi, &cpc);
->>   		goto stop;
->>   	}
->>   
->> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
->> index 6c11789da884..b62af2ae1685 100644
->> --- a/fs/f2fs/segment.c
->> +++ b/fs/f2fs/segment.c
->> @@ -421,6 +421,7 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
->>   				.victim_segno = NULL_SEGNO,
->>   				.init_gc_type = BG_GC,
->>   				.no_bg_gc = true,
->> +				.reclaim_space = true,
->>   				.should_migrate_blocks = false,
->>   				.err_gc_skipped = false,
->>   				.nr_free_secs = 1 };
->> -- 
->> 2.25.1
+Now for.. both:
+eDP panels are *e*DP because they are *not* removable (in the sense that
+you can't unplug the cable without disassembling the machine, in which
+case, the machine shall be powered down..!): this (correct) assumption
+makes us able to solve some issues and to also gain a little performance
+during PM operations.
+
+What was done here is:
+ - Caching the EDID if the panel is eDP: we're always going to read the
+   same data everytime, so we can just cache that (as it's small enough)
+   shortening PM resume times for the eDP driver instance;
+ - Always return connector_status_connected if it's eDP: non-removable
+   means connector_status_disconnected can't happen during runtime...
+   this also saves us some time and even power, as we won't have to
+   perform yet another power cycle of the HW;
+ - Added aux-bus support!
+   This makes us able to rely on panel autodetection from the EDID,
+   avoiding to add more and more panel timings to panel-edp and, even
+   better, allowing to use one panel node in devicetrees for multiple
+   variants of the same machine since, at that point, it's not important
+   to "preventively know" what panel we have (eh, it's autodetected...!).
+
+This was tested on a MT8195 Cherry Tomato Chromebook (panel-edp on aux-bus)
+
+
+P.S.: For your own testing commodity, here's a reference devicetree:
+&edp_tx {
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&edptx_pins_default>;
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@0 {
+			reg = <0>;
+			edp_in: endpoint {
+				remote-endpoint = <&dp_intf0_out>;
+			};
+		};
+
+		port@1 {
+			reg = <1>;
+			edp_out: endpoint {
+				data-lanes = <0 1 2 3>;
+				remote-endpoint = <&panel_in>;
+			};
+		};
+	};
+
+	aux-bus {
+		panel: panel {
+			compatible = "edp-panel";
+			power-supply = <&pp3300_disp_x>;
+			backlight = <&backlight_lcd0>;
+			port {
+				panel_in: endpoint {
+					remote-endpoint = <&edp_out>;
+				};
+			};
+		};
+	};
+};
+
+AngeloGioacchino Del Regno (9):
+  drm/mediatek: dp: Cache EDID for eDP panel
+  drm/mediatek: dp: Move AUX and panel poweron/off sequence to function
+  drm/mediatek: dp: Always return connected status for eDP in .detect()
+  drm/mediatek: dp: Always set cable_plugged_in at resume for eDP panel
+  drm/mediatek: dp: Change logging to dev for mtk_dp_aux_transfer()
+  drm/mediatek: dp: Enable event interrupt only when bridge attached
+  drm/mediatek: dp: Use devm variant of drm_bridge_add()
+  drm/mediatek: dp: Move AUX_P0 setting to
+    mtk_dp_initialize_aux_settings()
+  drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
+
+ drivers/gpu/drm/mediatek/mtk_dp.c | 186 +++++++++++++++++++-----------
+ 1 file changed, 116 insertions(+), 70 deletions(-)
+
+-- 
+2.40.0
+
