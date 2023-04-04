@@ -2,109 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524086D59E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3696D59F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbjDDHoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 03:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S233392AbjDDHtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjDDHow (ORCPT
+        with ESMTP id S233555AbjDDHtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 03:44:52 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A727E57;
-        Tue,  4 Apr 2023 00:44:50 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 79E5640002;
-        Tue,  4 Apr 2023 07:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680594288;
+        Tue, 4 Apr 2023 03:49:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9979CE57
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 00:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680594546;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=BYz2JgYiereU0Wk7c9RqlcSNQDMCeypHl3FQ4vU0Rfg=;
-        b=hnatSd6ZQXMYxpRjRnCkBRfXnuPuselbfg287WSvQIvIOGA8lvVNsZC2ff2jpyOzs/EYwc
-        L8qqitijje8at2kRpt0+7c8GQbBKTvKlLeJqUE/WCnwfft4JOiUsbTOes6wr6VLOmfLbyz
-        WoJm8L89WP0NPCHtUSK73VavI09TnIcehI5IjQdKS9rNzoVDpyfjLUtPxMGrMD6cRHWnH8
-        XSaKt4yzFRZtHyPnui/h7pR8zJQ2kM5rdCJqnoN/TLn7C+O/mm2CvL0WKoxcljbAjTVxSb
-        Dsl4ro7UNt/OyrG/QEuw0E/W+FEZWXgSJFy/b6MivaXJGMxiAtUGLS0ekU6AXg==
-Date:   Tue, 4 Apr 2023 09:44:46 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
-        jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: add max313xx RTCs
-Message-ID: <2023040407444619bf5596@mail.local>
-References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
- <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
- <dd6f0842-519f-1bc9-f7f5-459863dc3dcd@linaro.org>
- <202304040710049c9cc01a@mail.local>
- <996b49ab-5e2e-76bc-efb1-38c6384871f6@linaro.org>
+        bh=Im5L/NmV1DuxZwE4hnbXnlwO/3Ionh4NNqvKa/4qFqc=;
+        b=ekmWt4HAsKnGU5fQv2glL6t/LKcSTn7n8YGxTZ6Z+gFobGUxuByarVbUV9U/IyIzEpy26H
+        mls2JQJ/kKiuaq4TxNUdF85Ujl0sAP49TPclU0eVk8b4C2WiAauOadw2ZBrCW6t83RbsPd
+        6eyhNlMNlPDzlXq2p6k2jUmrx4NkftE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-jwH89YmNPK-iUr1YjTs6Bg-1; Tue, 04 Apr 2023 03:49:03 -0400
+X-MC-Unique: jwH89YmNPK-iUr1YjTs6Bg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4F2431C0A59B;
+        Tue,  4 Apr 2023 07:49:03 +0000 (UTC)
+Received: from ovpn-8-16.pek2.redhat.com (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 432FA440BC;
+        Tue,  4 Apr 2023 07:48:55 +0000 (UTC)
+Date:   Tue, 4 Apr 2023 15:48:50 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Bernd Schubert <bschubert@ddn.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>, ming.lei@redhat.com
+Subject: Re: [PATCH V6 00/17] io_uring/ublk: add generic IORING_OP_FUSED_CMD
+Message-ID: <ZCvWYoDk0dnJbHhW@ovpn-8-16.pek2.redhat.com>
+References: <20230330113630.1388860-1-ming.lei@redhat.com>
+ <ZConr0f8e/mEL0Cl@ovpn-8-18.pek2.redhat.com>
+ <d696eb70-9dac-9334-7aec-1b5af62442e3@kernel.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <996b49ab-5e2e-76bc-efb1-38c6384871f6@linaro.org>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <d696eb70-9dac-9334-7aec-1b5af62442e3@kernel.dk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2023 09:21:56+0200, Krzysztof Kozlowski wrote:
-> On 04/04/2023 09:10, Alexandre Belloni wrote:
+Hello Jens and Everyone,
+
+On Sun, Apr 02, 2023 at 07:24:17PM -0600, Jens Axboe wrote:
+> On 4/2/23 7:11?PM, Ming Lei wrote:
+> > On Thu, Mar 30, 2023 at 07:36:13PM +0800, Ming Lei wrote:
+> >> Hello Jens and Guys,
 > >>
-> >>> +      RTC can be used as a clock source through its clock output pin when
-> >>> +      supplied.
-> >>> +    const: 0
-> >>> +
-> >>> +  clocks:
-> >>> +    description: |
+> >> Add generic fused command, which can include one primary command and multiple
+> >> secondary requests. This command provides one safe way to share resource between
+> >> primary command and secondary requests, and primary command is always
+> >> completed after all secondary requests are done, and resource lifetime
+> >> is bound with primary command.
 > >>
-> >> Do not need '|'.
+> >> With this way, it is easy to support zero copy for ublk/fuse device, and
+> >> there could be more potential use cases, such as offloading complicated logic
+> >> into userspace, or decouple kernel subsystems.
 > >>
-> >>> +      RTC uses this clock for clock input when supplied. Clock has to provide
-> >>> +      one of these four frequencies: 1Hz, 50Hz, 60Hz or 32.768kHz.
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  aux-voltage-chargeable:
-> >>> +    enum: [0, 1, 2]
-> >>> +    description: |
-> >>> +      Enables trickle charger.
-> >>> +      0: Charger is disabled (default)
-> >>> +      1: Charger is enabled
-> >>> +      2: Charger is enabled with a diode
+> >> Follows ublksrv code, which implements zero copy for loop, nbd and
+> >> qcow2 targets with fused command:
 > >>
-> >> 2 is not an allowed value. I asked to drop this property. It is coming
-> >> from rtc.yaml. I also do not understand "with a diode". So otherwise it
-> >> is charging with, I don't know, FET?
+> >> https://github.com/ming1/ubdsrv/tree/fused-cmd-zc-for-v6
+> >>
+> >> All three(loop, nbd and qcow2) ublk targets have supported zero copy by passing:
+> >>
+> >> 	ublk add -t [loop|nbd|qcow2] -z .... 
+> >>
+> >> Also add liburing test case for covering fused command based on miniublk
+> >> of blktest.
+> >>
+> >> https://github.com/ming1/liburing/tree/fused_cmd_miniublk_for_v6
+> >>
+> >> Performance improvement is obvious on memory bandwidth related workloads,
+> >> such as, 1~2X improvement on 64K/512K BS IO test on loop with ramfs backing file.
+> >> ublk-null shows 5X IOPS improvement on big BS test when the copy is avoided.
+> >>
+> >> Please review and consider for v6.4.
+> >>
+> >> V6:
+> >> 	- re-design fused command, and make it more generic, moving sharing buffer
+> >> 	as one plugin of fused command, so in future we can implement more plugins
+> >> 	- document potential other use cases of fused command
+> >> 	- drop support for builtin secondary sqe in SQE128, so all secondary
+> >> 	  requests has standalone SQE
+> >> 	- make fused command as one feature
+> >> 	- cleanup & improve naming
 > > 
-> > No, what is not explained here (and maybe not unsterstood by the
-> > submitter) is that the RTC has an extra diode so, 
+> > Hi Jens,
+> > 
+> > Can you apply ublk cleanup patches 7~11 on for-6.4? For others, we may
+> > delay to 6.5, and I am looking at other approach too.
 > 
-> Value of 2 is still not allowed and if the patch was tested, it would be
-> clearly visible. Unfortunately patch was not tested...
-> 
-> > charging will always
-> > enable a diode, select a resistor and then have or not an extra diode.
-> > Figure2 of the MAX31329 datasheet is great.
-> 
-> So the diode is in the max313xx? Then why enabling it is a property of
-> DT? Either this should be inferred from compatible or is even a policy,
-> not a DT property. Just because device has a register for something, is
-> not an argument that "something" should be in DT.
+> Done - and yes, we're probably looking at 6.5 for the rest. But that's
 
-Well, it depends on the battery that is installed on the board so it
-makes sense to have it in DT.
+Thanks!
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> fine, I'd rather end up with the right interface than try and rush one.
+
+Also I'd provide one summery about this work here so that it may help
+for anyone interested in this work, follows three approaches we have
+tried or proposed:
+
+1) splice can't do this job[1][2]
+
+2) fused command in this patchset
+- it is more like sendfile() or copy_file_range(), because the internal
+  buffer isn't exposed outside
+
+- v6 becomes a bit more generic, the theory is that one SQE list is submitted
+as a whole request logically; the 1st sqe is the primary command, which
+provides buffer for others, and is responsible for submitting other SQEs
+(secondary)in this list; the primary command isn't completed until all secondary
+requests are done
+
+- this approach solves two problems efficiently in one simple way:
+
+	a) buffer lifetime issue, and buffer lifetime is same with primary command, so
+	all secondary OPs can be submitted & completely safely
+
+	b) request dependency issue, all secondary requests depend on primary command,
+	and secondary request itself could be independent, we start to allow to submit
+	secondary request in non-async style, and all secondary requests can be issued
+	concurrently
+
+- this approach is simple, because we don't expose buffer outside, and
+  buffer is just shared among these secondary requests; meantime
+  internal buffer saves us complicated OPs' dependency issue, avoid
+  contention by registering buffer anywhere between submission and
+  completion code path
+
+- the drawback is that we add one new SQE usage/model of primary SQE and
+  secondary SQEs, and the whole logical request in concept, which is
+  like sendfile() or copy_file_range()
+
+3) register transient buffers for OPs[3]
+- it is more like splice(), which is flexible and could be more generic, but
+internal pipe buffer is added to pipe which is visible outside, so the
+implementation becomes complicated; and it should be more than splice(),
+because the io buffer needs to be shared among multiple OPs
+
+- inefficiently & complicated
+
+	a) buffer has to be added to one global container(suppose it is
+	io_uring context pipe) by ADD_BUF OP, and either buffer needs to be removed after
+	consumer OPs are completed, or DEL_OP is run for removing buffer explicitly, so
+	either contention on the io_uring pipe is added, or another new dependency is
+	added(DEL_OP depends on all normal OPs)
+
+	b) ADD_BUF OP is needed, and normal OPs have to depend on this new
+	OP by IOSQE_IO_LINK, then all normal OPs will be submitted in async way,
+	even worse, each normal OP has to be issued one by one, because io_uring
+	isn't capable of handling 1:N dependency issue[5]
+
+    c) if DEL_BUF OP is needed, then it is basically not possible
+	to solve 1:N dependency any more, given DEL_BUF starts to depends on the previous
+	N OPs; otherwise, contention on pipe is inevitable.
+
+	d) solving 1:N dependency issue generically
+
+- advantage
+
+Follows current io_uring SQE usage, and looks more generic/flexible,
+like splice().
+
+4) others approaches or suggestions?
+
+Any idea is welcome as usual.
+
+
+Finally from problem viewpoint, if the problem domain is just ublk/fuse zero copy
+or other similar problems[6], fused command might be the simpler & more efficient
+approach, compared with approach 3). However, are there any other problems we
+want to cover by one more generic/flexible interface? If not, would we
+like to pay the complexity & inefficiency for one kind of less generic
+problem?
+
+
+[1] https://lore.kernel.org/linux-block/ZCQnHwrXvSOQHfAC@ovpn-8-26.pek2.redhat.com/T/#m1bfa358524b6af94731bcd5be28056f9f4408ecf
+[2] https://github.com/ming1/linux/blob/my_v6.3-io_uring_fuse_cmd_v6/Documentation/block/ublk.rst#zero-copy
+[3] https://lore.kernel.org/linux-block/ZCQnHwrXvSOQHfAC@ovpn-8-26.pek2.redhat.com/T/#mbe428dfeb0417487cd1db7e6dabca7399a3c265b
+[4] https://lore.kernel.org/linux-block/ZCQnHwrXvSOQHfAC@ovpn-8-26.pek2.redhat.com/T/#md035ffa4c6b69e85de2ab145418a9849a3b33741
+[5] https://lore.kernel.org/linux-block/20230330113630.1388860-5-ming.lei@redhat.com/T/#m5e0c282ad26d9f3d8e519645168aeb3a19b5740b
+[6] https://lore.kernel.org/linux-block/20230330113630.1388860-5-ming.lei@redhat.com/T/#me5cca4db606541fae452d625780635fcedcd5c6c
+
+Thanks,
+Ming
+
