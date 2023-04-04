@@ -2,83 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75F96D6AE5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04986D6AE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235334AbjDDRtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
+        id S235215AbjDDRwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbjDDRtK (ORCPT
+        with ESMTP id S232888AbjDDRwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:49:10 -0400
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903A41FDA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:48:27 -0700 (PDT)
-Received: by mail-qv1-f41.google.com with SMTP id on15so10950611qvb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:48:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680630506;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mb4UlbgNUBjFEiIuxVNvAB9dErFsvyXvvy0R6TUZ3Og=;
-        b=Sj5jDxkYzRgaqnqi5URFmqEqk4tLDhWqGTkhmtvyUlzrNNfYySQ2DBS8+uNdjX2NvJ
-         w7c0Vcze36VSnsbwLxTY4q8SdKzD8jv1df68Aj3pLU0ohyvAJLJDNlPU7OV35rygU9CG
-         K7XRn6Nfo7OcVRO3IjfE4aSwHdI9RVRcF1gwUOqUhigic2PsQIRNVGQ7TVoUWBFSPmMu
-         fVHjoxJiz7RlmdDnYwqIczExMIsIrIb+FYcIp0af/lGBYR0E8fvViygiiAk7Bk3UVcQz
-         fC7emvS0WUgW7P2awR44Opi79sZBXVLNruv1SZu+j/2TyE/rbsrTv2FkKStzMUctekdt
-         ZyKg==
-X-Gm-Message-State: AAQBX9c1U2HjBaoCBo3qC5WFAFldzzVwQiYrobcMmH3C27A8exn0Xux0
-        izhj/w8Cf/kdC1mLdahzrD7hJK/hyp725dGWkfG5
-X-Google-Smtp-Source: AKy350a/8D9NxKsEY8kuTWND8t08XKRZNRiPqVXk15c5G0YDBaTT31CfCtDZqcD3EWyLnQhy9dLOWw==
-X-Received: by 2002:a05:6214:27ea:b0:5ce:6636:a45 with SMTP id jt10-20020a05621427ea00b005ce66360a45mr5360407qvb.25.1680630506534;
-        Tue, 04 Apr 2023 10:48:26 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id o207-20020a3741d8000000b007486052d731sm3343606qka.10.2023.04.04.10.48.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 10:48:26 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 13:48:24 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     agk@redhat.com, dm-devel@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: dm: Add error information printing for dm_register_target()
-Message-ID: <ZCxi6A5iXt5N0HNL@redhat.com>
-References: <20230318131633.41573-1-frank.li@vivo.com>
+        Tue, 4 Apr 2023 13:52:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34196211F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:51:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680630675;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=iZSxHS25wevEedcDipS2H4ThAisXjNv5NMwYYVZhTik=;
+        b=PV14edYTRTYLvQtAW9mP7es4vHkUNfbq2KUoProLsn4mTnVR1hLmbh+Cm1LT2gQwGmmhtH
+        VxGcUr2Yp3esJQkwQf1DVyb0CdL4G1b3T8VAry5rU7kbAgqZCc56oiq8xbAOk3cvaJtLQV
+        S4q7QDayTm5d0DZxierqAlR6zzUe+Mk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-382-7avhQwGWMBeSkS5kZLCfZA-1; Tue, 04 Apr 2023 13:51:11 -0400
+X-MC-Unique: 7avhQwGWMBeSkS5kZLCfZA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3C66B857FB8;
+        Tue,  4 Apr 2023 17:51:07 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F5E440C6EC4;
+        Tue,  4 Apr 2023 17:51:07 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM changes for 6.4-rc5
+Date:   Tue,  4 Apr 2023 13:51:06 -0400
+Message-Id: <20230404175106.757011-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230318131633.41573-1-frank.li@vivo.com>
-X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18 2023 at  9:16P -0400,
-Yangtao Li <frank.li@vivo.com> wrote:
+Linus,
 
-> Ensure that all error handling branches print error information. In this
-> way, when this function fails, the upper-layer functions can directly
-> return an error code without missing debugging information. Otherwise,
-> the error message will be printed redundantly or missing. BTW, remove
-> redundant printing information.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+The following changes since commit 9e347ba03029e10e6405f8c3a7a91a5597943ed9:
 
-Hi,
+  Merge tag 'kvm-riscv-fixes-6.3-1' of https://github.com/kvm-riscv/linux into HEAD (2023-03-27 10:04:07 -0400)
 
-I've picked this up with a few changes (your patch caused me to look
-closer at some of the target code and we had some missed cleanup):
-https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/commit/?h=dm-6.4&id=6827af4a9a9f5bb664c42abf7c11af4978d72201
-https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/commit/?h=dm-6.4&id=6b79a428c02769f2a11f8ae76bf866226d134887
+are available in the Git repository at:
 
-So I rebased your patch and tweaked it slightly (and splitting it), see:
-https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/commit/?h=dm-6.4&id=e6c908b5d86faf3dbcf314b1c07c342268e32def
-https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/commit/?h=dm-6.4&id=2a455a0b418f972d61b68f9321b7d1892c16b4f7
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-Thanks,
-Mike
+for you to fetch changes up to fb5015bc8b733323b58f015b88e4f316010ec856:
+
+  docs: kvm: x86: Fix broken field list (2023-04-04 13:22:05 -0400)
+
+----------------------------------------------------------------
+PPC:
+
+* Hide KVM_CAP_IRQFD_RESAMPLE if XIVE is enabled
+
+s390:
+
+* Fix handling of external interrupts in protected guests
+
+x86:
+
+* Resample the pending state of IOAPIC interrupts when unmasking them
+
+* Fix usage of Hyper-V "enlightened TLB" on AMD
+
+* Small fixes to real mode exceptions
+
+* Suppress pending MMIO write exits if emulator detects exception
+
+Documentation:
+
+* Fix rST syntax
+
+----------------------------------------------------------------
+Alexey Kardashevskiy (1):
+      KVM: PPC: Make KVM_CAP_IRQFD_RESAMPLE platform dependent
+
+Dmytro Maluka (2):
+      KVM: irqfd: Make resampler_list an RCU list
+      KVM: x86/ioapic: Resample the pending state of an IRQ when unmasking
+
+Jeremi Piotrowski (1):
+      KVM: SVM: Flush Hyper-V TLB when required
+
+Nico Boehr (1):
+      KVM: s390: pv: fix external interruption loop not always detected
+
+Paolo Bonzini (1):
+      Merge tag 'kvm-s390-master-6.3-1' of https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux into HEAD
+
+Sean Christopherson (3):
+      KVM: x86: Suppress pending MMIO write exits if emulator detects exception
+      KVM: x86: Clear "has_error_code", not "error_code", for RM exception injection
+      KVM: nVMX: Do not report error code when synthesizing VM-Exit from Real Mode
+
+Takahiro Itazuri (1):
+      docs: kvm: x86: Fix broken field list
+
+ Documentation/virt/kvm/api.rst  |  4 ++--
+ arch/arm64/kvm/arm.c            |  1 +
+ arch/powerpc/kvm/powerpc.c      |  6 ++++++
+ arch/s390/kvm/intercept.c       | 32 ++++++++++++++++++++++++--------
+ arch/s390/kvm/kvm-s390.c        |  1 +
+ arch/x86/kvm/ioapic.c           | 36 +++++++++++++++++++++++++++++++++---
+ arch/x86/kvm/kvm_onhyperv.h     |  5 +++++
+ arch/x86/kvm/svm/svm.c          | 37 ++++++++++++++++++++++++++++++++++---
+ arch/x86/kvm/svm/svm_onhyperv.h | 15 +++++++++++++++
+ arch/x86/kvm/vmx/nested.c       |  7 ++++++-
+ arch/x86/kvm/x86.c              | 14 ++++++++++++--
+ include/linux/kvm_host.h        | 11 +++++++++++
+ include/linux/kvm_irqfd.h       |  2 +-
+ virt/kvm/eventfd.c              | 49 +++++++++++++++++++++++++++++++++++++++++--------
+ virt/kvm/kvm_main.c             |  1 -
+ 15 files changed, 192 insertions(+), 29 deletions(-)
+
