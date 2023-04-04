@@ -2,147 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE7A6D67AB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFF46D67BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235932AbjDDPkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 11:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
+        id S235923AbjDDPmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 11:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235788AbjDDPkf (ORCPT
+        with ESMTP id S235920AbjDDPmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 11:40:35 -0400
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6464F5259;
-        Tue,  4 Apr 2023 08:40:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1680622817; bh=gUC07j0BF6Ats3pO8KtZR2khuJGxBN6yLNKDq0ZvG30=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=INqbPpsh/s/pyXwwSr3hAKvrhnRGaA9cMvlZ93RrKGcfJFPGWN20zK6g1VSjZpqex
-         4FXM4fWK4Amlp3oeQBN9XLKYT+xwH4j7d7+TvRFW8l2TCfytSWp6vpnm3J8ypwmRIX
-         kwF8qWypcZFyJJkX9LdNAihL+BOQnlcQoZDNZaBI=
-Date:   Tue, 4 Apr 2023 17:40:17 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        linux-kernel@vger.kernel.org,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Jarrah Gosbell <kernel@undef.tools>,
+        Tue, 4 Apr 2023 11:42:05 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFDD4EFD;
+        Tue,  4 Apr 2023 08:41:45 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id bm2so24534849oib.4;
+        Tue, 04 Apr 2023 08:41:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680622888;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aNQOdzZ/V7NvMnW5O/EqRI3wlzCe7fljKi3y+C+9QXo=;
+        b=xAxmfSN/Prxzvlyv0+9D+XV4OU7hMPcuw4hAQAJHCROG3akLPCJqcPDhKHbMX/oSxZ
+         AYdJCklpY+8rX/4OiZCLiWZS4CGQl92magyhVNv7P4wfQOIzESQ5aw8vSiPoP8qIB2NH
+         DhucXBmueklZTrx4cletyiOIV92wpGeYjprhzK4daVT+E5Rz3cgh5h/iaWPNBO0P8rzt
+         MS4ATJyAboHsHgxmCyaGur2sbzG+kOuGBvJNETr00XaU8ibjcgF6pcGxD/rsdVi5yVHb
+         Sugmtz6z5yaoMaXGmF0VnVUZFDrUWxM5MZRF4QzZne8c4mpgafbKHYQJ49BTqqmqoPBo
+         HSgA==
+X-Gm-Message-State: AAQBX9cR5XnxJ4Py7fKuv0SSBC0sHoCUWQGB5Vmd6OhTCRYwDRQ7bhrt
+        PJ+/7kazU9FUiX/4Un8oJw==
+X-Google-Smtp-Source: AKy350blqL+5JHsKCSL16VJrrTgOnLJqUvIw2dBKN9tnDOxf87QqwzhiV4Eyr08RM0Pm1kUPqkJTjA==
+X-Received: by 2002:a05:6808:2785:b0:389:4a00:f672 with SMTP id es5-20020a056808278500b003894a00f672mr1321505oib.22.1680622888090;
+        Tue, 04 Apr 2023 08:41:28 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g188-20020a4a5bc5000000b005252e5b6604sm5584615oob.36.2023.04.04.08.41.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 08:41:27 -0700 (PDT)
+Received: (nullmailer pid 4038093 invoked by uid 1000);
+        Tue, 04 Apr 2023 15:41:26 -0000
+Date:   Tue, 4 Apr 2023 10:41:26 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martijn Braam <martijn@brixit.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH] arm64: dts: rockchip: Change serial baud rate for
- Pinephone Pro to 1.5 MB
-Message-ID: <20230404154017.7n6rcgqyv3edfahd@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        linux-kernel@vger.kernel.org, Peter Robinson <pbrobinson@gmail.com>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Jarrah Gosbell <kernel@undef.tools>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martijn Braam <martijn@brixit.nl>, Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20230403175937.2842085-1-javierm@redhat.com>
- <3738011.44csPzL39Z@diego>
- <20230404123646.5iiznbhnyoama5pp@core>
- <87r0szd9q2.fsf@minerva.mail-host-address-is-not-set>
+        Rob Herring <robh+dt@kernel.org>, vincent.guittot@linaro.org,
+        nicola.mazzucato@arm.com, souvik.chakravarty@arm.com,
+        sudeep.holla@arm.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: firmware: arm,scmi: Support
+ mailboxes unidirectional channels
+Message-ID: <168062288561.4038038.6938372058010065786.robh@kernel.org>
+References: <20230404115026.2828149-1-cristian.marussi@arm.com>
+ <20230404115026.2828149-2-cristian.marussi@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87r0szd9q2.fsf@minerva.mail-host-address-is-not-set>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230404115026.2828149-2-cristian.marussi@arm.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 04:04:53PM +0200, Javier Martinez Canillas wrote:
-> Ondřej Jirman <megi@xff.cz> writes:
-> 
-> > On Tue, Apr 04, 2023 at 09:51:11AM +0200, Heiko Stübner wrote:
-> >> Hi,
-> >> 
-> >> Am Montag, 3. April 2023, 19:59:37 CEST schrieb Javier Martinez Canillas:
-> >> > This baud rate is set for the device by mainline u-boot and is also what
-> >> > is set in the Pinebook Pro Device Tree, which is a device similar to the
-> >> > PinePhone Pro but with a different form factor.
-> >> > 
-> >> > Otherwise, the baud rate of the firmware and Linux don't match by default
-> >> > and a 'console=ttyS2,1500000n8' kernel command line parameter is required
-> >> > to have proper output for both.
-> >> 
-> >> The interesting question is always if this will break someone else's setup.
-> >> I've never really understood the strange setting of 1.5MBps, but on the
-> >> other hand it _is_ a reality on most boards.
-> >
-> > Normal users of the phone probably run with UART console disabled, because
-> > UART is muxed with audio jack output and to enable it they have to add
-> > console=ttyS2 to the kernel command line and flip a physical switch inside
-> > the phone.
-> >
-> > Fortunately, not sepcifying stdout-path baud rate in the options part
-> > of the string, will make the serial driver probe for the baud rate from
-> > the previous boot stage and make the user happy by keeping whatever was
-> > already set in the bootloader.
-> >
-> 
-> As mentioned in the first email of this thread, I tried that but it didn't
-> work for me. Either using stdout-path = "serial2"; or stdout-path = &uart2;
-> gives me no serial output with console=ttyS2, I needed to specify the baud
-> rate explicitly (i.e: console=ttyS2,1500000n8).
-> 
-> >   https://elixir.bootlin.com/linux/latest/source/drivers/tty/serial/8250/8250_port.c#L3496
-> >
-> 
-> Is that helper really used by the serial driver in the PinePhone Pro?
-> (drivers/tty/serial/8250/8250_dw.c), I was meaning to dig why just ttyS2
-> was not working but decided that could be a follow-up patch.
 
-It's called by univ8250_console_setup in 8250_core.c But looking at it again,
-this may only be used to match console=uart.
-
-  https://elixir.bootlin.com/linux/latest/source/drivers/tty/serial/8250/8250_core.c#L638
-
-Bummer.
-
-> Since chaging to 1.5 MBps seemed to have merits on its own, decided to
-> post this patch anyways in the meantime.
+On Tue, 04 Apr 2023 12:50:25 +0100, Cristian Marussi wrote:
+> SCMI defines two kinds of communication channels between the agent and the
+> platform: one bidirectional 'a2p' channel used by the agent to send SCMI
+> commands and synchronously receive the related replies, and an optional
+> 'p2a' unidirectional channel used to asynchronously receive delayed
+> responses and notifications emitted from the platform.
 > 
-> > So we can make the kernel just keep the baudrate setup from the previous
-> > boot stage by:
-> >
-> > 	stdout-path = "serial2";
-> >
+> When configuring an SCMI transport based on mailboxes, the current binding
+> supports only mailboxes providing bidirectional channels: in such a case
+> one mailbox channel can be easily assigned to each SCMI channel as above
+> described.
 > 
-> Did it work for you? Maybe I'm doing something silly but as mentioned it
-> didn't work for me with upstream u-boot.
+> In case, instead, to have to deal with mailboxes providing only distinct
+> unidirectional channels, it becomes necessary to extend the binding in
+> order to be able to bind 2 distinct unidirectional mailbox channels to the
+> same SCMI 'a2p' channel.
+> 
+> Bidirectional and unidirectional channels support for the SCMI mailbox
+> transport can coexist by carefully considering the effective combination
+> of defined 'mboxes' and 'shmem' descriptors.
+> 
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: devicetree@vger.kernel.org
+> 
+> v2 --> v3
+> - coalesced oneOf entries using proper minItems
+> - removed unidirectional channels example
+> v1 --> v2
+> - added mbox-names unidirectional definitions and example
+> ---
+>  .../bindings/firmware/arm,scmi.yaml           | 48 +++++++++++++++----
+>  1 file changed, 38 insertions(+), 10 deletions(-)
+> 
 
-I was just eyeballing the code. I didn't test it.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-kind regards,
-	o.
-
-> > regards,
-> > 	o.
-> >
-> 
-> -- 
-> Best regards,
-> 
-> Javier Martinez Canillas
-> Core Platforms
-> Red Hat
-> 
