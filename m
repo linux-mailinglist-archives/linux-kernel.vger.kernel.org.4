@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8C16D5C2D
+	by mail.lfdr.de (Postfix) with ESMTP id 3AABC6D5C2B
 	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234295AbjDDJnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
+        id S234224AbjDDJnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234305AbjDDJnP (ORCPT
+        with ESMTP id S234310AbjDDJnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:43:15 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF051BEA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:43:13 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id c29so41632161lfv.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 02:43:13 -0700 (PDT)
+        Tue, 4 Apr 2023 05:43:16 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8771BF1
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:43:14 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id k37so41665840lfv.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 02:43:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680601391;
+        d=linaro.org; s=google; t=1680601392;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=E1U3mznWUSnJq2x7KzrZeo74yHwZxjse8U63SQkTN4k=;
-        b=eX5ZeFcrDyeOZ/+cmIw1GthasxB336QssKMWmkFVFjzUzquTWCGLPH0q1EZGkx57D7
-         lMBTV4GQvDuLwdcpX7uMkCsYiT15dsHdEflv9g0w1W+ahbDSVxbyUvz5gUTVJ5sYN5nd
-         gGSkMJIKgzuEsvJpz5qvVuUa9tXPAIFLLMxBUS9ZN6aJGEJa88cvLFIhVRzr7cFD3xO4
-         V/C0tVGfceLtY5T6HC9Bg5fuMQSPe39vC9gft3my7IAoHhwOGoYe386nE0RCa7Nph0FF
-         HFz4nkApA+T03Chl0EFnlvCZrI+HrbjlWiHUeCW0UG/pPXcOb+msKYSk3REigmMJsDvV
-         tYCQ==
+        bh=OEIEuBxKK8j0WCwoJQ18kuVBxSDA3HKgR75PLHwlYjY=;
+        b=QUgnZEVbU8qkLDF2ntyTZYUEn81xMGQMTF+In3pJjOtoHeA+wHfgBjiPJd3SQo2ubS
+         EdNjEPTsTPejVfxjcQyDuBp9bw6lcgMwOYJ0hzaw94espyf5V34EXkl/ZpBlcv3D9D83
+         +0V2+XrzqywGLnbVfh9drT5aX/q5V4zCL36sADRuJeqAfcn/NLlq8m4DdSrZY3wG0Zi/
+         q8FBEDa9RQuvXQZ0GWlpOlmM6ZZK4U1qYzUppqfAYv14x6YsE1Ip3xn/3V6DSPeA1aCF
+         FhyY2tH7hm6RIvEb2q12iB15E5zC2jQ355mxMbjoyJAliFKlrL3/5gyw+cCOHZfsai7x
+         J1Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680601391;
+        d=1e100.net; s=20210112; t=1680601392;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E1U3mznWUSnJq2x7KzrZeo74yHwZxjse8U63SQkTN4k=;
-        b=ucHHd5+1AImvREDep9Iw/1dRuH3rAwYWh4hGg9JnTSkcqMUxylbEzwMyC7BmilCZ36
-         KMSF0/lnCHlOTLoIV3O3m3Au1af7rG8GNYzL4JklIHAFSLcydUaPCdHR16xZIc5wseuv
-         UfhX8p/6+toFxgcmuf5Iyi4kDTPW7Pqv+K5tAGs0k5vxI6v2eUcdXjbwKALIXBOn9dWy
-         GDKzTt9Q/xDKGe3EIcUvtEWGbZiKVbaAYg7yUEqSPjg/eTeXULritfTiZZ1RLPtO/0xF
-         4HIE91lLyCzeXfmuq+H20KHq6sD4o/eoz30cKY+iTAZAVU8nx5ZNHS5EUWP5i6RLpVug
-         7AxA==
-X-Gm-Message-State: AAQBX9efCR+2DHA+635s9sOCoM4Yi1TDlxN9/T8ymHLWlDjECOsinU+v
-        tQJbgW5QDFd3W3QLJHSEaiF8Ww==
-X-Google-Smtp-Source: AKy350a7DLDlAx2wATbxYZ+yV4+OnJfCSexEHHMxv0+zsfQNpGxjvujPBQwRFlw396afIThPkSlLDg==
-X-Received: by 2002:a05:6512:118d:b0:4eb:2b62:134f with SMTP id g13-20020a056512118d00b004eb2b62134fmr4661753lfr.16.1680601391634;
-        Tue, 04 Apr 2023 02:43:11 -0700 (PDT)
+        bh=OEIEuBxKK8j0WCwoJQ18kuVBxSDA3HKgR75PLHwlYjY=;
+        b=b/65aUyq8mtUQUmVlZKfMOC6e36HWWz+ZDBMxPcm/rjJAO87cbCdniifmjEPjpXo0Z
+         xfADFwDZUrG7TPt86wv1LiYKsZp8GsM8EH6Vm0IcBfkJqND5KF2kleCWXLOH5RTgoywj
+         XAEI2CqZyhXwkPfyAdjI6+sf57XBowN5eouWI5JrpATWh+Aij7LSyuf5lufRMabmh+i2
+         uG9UiWzVWM7burKVoGxy2NOT5s/qKrX3Z+H83wG/3rATgVpKWikLGEzCX7kyREhIxOSa
+         BYgkMWDHCKW9kBxl4D5J0tYEj+W3f4q352u/JmHH88R7q5rwz+Gl/UmT9zeiFzc2VEP2
+         cBLQ==
+X-Gm-Message-State: AAQBX9fAiRCKzi1AJ2O9T7IGgZMxOL7EPAuNKD3zwCth9MD9P3CGKy0x
+        7jWU91llko+8LgZvD0qM4mkulg==
+X-Google-Smtp-Source: AKy350Y1n4D3ouEbNQ+64kQoJU+ffHbBrLRRh0g8NH1+mtywafqluhvvLZ5sB6bllrfgJQ3/14bcqQ==
+X-Received: by 2002:a19:ad04:0:b0:4cb:4362:381d with SMTP id t4-20020a19ad04000000b004cb4362381dmr457830lfc.62.1680601392722;
+        Tue, 04 Apr 2023 02:43:12 -0700 (PDT)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id l25-20020a19c219000000b004eb258f73a9sm2218443lfc.163.2023.04.04.02.43.10
+        by smtp.gmail.com with ESMTPSA id l25-20020a19c219000000b004eb258f73a9sm2218443lfc.163.2023.04.04.02.43.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 02:43:11 -0700 (PDT)
+        Tue, 04 Apr 2023 02:43:12 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 04 Apr 2023 11:43:04 +0200
-Subject: [PATCH 2/9] pinctrl: nsp: Convert to immutable irq_chip
+Date:   Tue, 04 Apr 2023 11:43:05 +0200
+Subject: [PATCH 3/9] pinctrl: armada-37xx: Convert to immutable irq_chip
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230403-immutable-irqchips-v1-2-503788a7f6e6@linaro.org>
+Message-Id: <20230403-immutable-irqchips-v1-3-503788a7f6e6@linaro.org>
 References: <20230403-immutable-irqchips-v1-0-503788a7f6e6@linaro.org>
 In-Reply-To: <20230403-immutable-irqchips-v1-0-503788a7f6e6@linaro.org>
 To:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
@@ -95,78 +95,93 @@ intuition.
 Cc: Marc Zyngier <maz@kernel.org>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/pinctrl/bcm/pinctrl-nsp-gpio.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ drivers/pinctrl/mvebu/pinctrl-armada-37xx.c | 34 ++++++++++++++++++++---------
+ 1 file changed, 24 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/pinctrl/bcm/pinctrl-nsp-gpio.c b/drivers/pinctrl/bcm/pinctrl-nsp-gpio.c
-index 3c792bf03bda..5045a7e57f1d 100644
---- a/drivers/pinctrl/bcm/pinctrl-nsp-gpio.c
-+++ b/drivers/pinctrl/bcm/pinctrl-nsp-gpio.c
-@@ -60,7 +60,6 @@ struct nsp_gpio {
- 	struct device *dev;
- 	void __iomem *base;
- 	void __iomem *io_ctrl;
--	struct irq_chip irqchip;
- 	struct gpio_chip gc;
- 	struct pinctrl_dev *pctl;
- 	struct pinctrl_desc pctldesc;
-@@ -193,6 +192,7 @@ static void nsp_gpio_irq_mask(struct irq_data *d)
- 	raw_spin_lock_irqsave(&chip->lock, flags);
- 	nsp_gpio_irq_set_mask(d, false);
- 	raw_spin_unlock_irqrestore(&chip->lock, flags);
-+	gpiochip_disable_irq(gc, irqd_to_hwirq(d));
+diff --git a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+index 261b46841b9f..67c6751a6f06 100644
+--- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
++++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+@@ -23,6 +23,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ #include <linux/regmap.h>
++#include <linux/seq_file.h>
+ #include <linux/slab.h>
+ #include <linux/string_helpers.h>
+ 
+@@ -101,7 +102,6 @@ struct armada_37xx_pinctrl {
+ 	const struct armada_37xx_pin_data	*data;
+ 	struct device			*dev;
+ 	struct gpio_chip		gpio_chip;
+-	struct irq_chip			irq_chip;
+ 	raw_spinlock_t			irq_lock;
+ 	struct pinctrl_desc		pctl;
+ 	struct pinctrl_dev		*pctl_dev;
+@@ -548,6 +548,7 @@ static void armada_37xx_irq_mask(struct irq_data *d)
+ 	val = readl(info->base + reg);
+ 	writel(val & ~d->mask, info->base + reg);
+ 	raw_spin_unlock_irqrestore(&info->irq_lock, flags);
++	gpiochip_disable_irq(chip, irqd_to_hwirq(d));
  }
  
- static void nsp_gpio_irq_unmask(struct irq_data *d)
-@@ -201,6 +201,7 @@ static void nsp_gpio_irq_unmask(struct irq_data *d)
- 	struct nsp_gpio *chip = gpiochip_get_data(gc);
+ static void armada_37xx_irq_unmask(struct irq_data *d)
+@@ -557,6 +558,7 @@ static void armada_37xx_irq_unmask(struct irq_data *d)
+ 	u32 val, reg = IRQ_EN;
  	unsigned long flags;
  
-+	gpiochip_enable_irq(gc, irqd_to_hwirq(d));
- 	raw_spin_lock_irqsave(&chip->lock, flags);
- 	nsp_gpio_irq_set_mask(d, true);
- 	raw_spin_unlock_irqrestore(&chip->lock, flags);
-@@ -258,6 +259,16 @@ static int nsp_gpio_irq_set_type(struct irq_data *d, unsigned int type)
++	gpiochip_enable_irq(chip, irqd_to_hwirq(d));
+ 	armada_37xx_irq_update_reg(&reg, d);
+ 	raw_spin_lock_irqsave(&info->irq_lock, flags);
+ 	val = readl(info->base + reg);
+@@ -729,11 +731,30 @@ static unsigned int armada_37xx_irq_startup(struct irq_data *d)
  	return 0;
  }
  
-+static const struct irq_chip nsp_gpio_irq_chip = {
-+	.name = "gpio-a",
-+	.irq_ack = nsp_gpio_irq_ack,
-+	.irq_mask = nsp_gpio_irq_mask,
-+	.irq_unmask = nsp_gpio_irq_unmask,
-+	.irq_set_type = nsp_gpio_irq_set_type,
++static void armada_37xx_irq_print_chip(struct irq_data *d, struct seq_file *p)
++{
++	struct gpio_chip *chip = irq_data_get_irq_chip_data(d);
++	struct armada_37xx_pinctrl *info = gpiochip_get_data(chip);
++
++	seq_printf(p, info->data->name);
++}
++
++static const struct irq_chip armada_37xx_irqchip = {
++	.irq_ack = armada_37xx_irq_ack,
++	.irq_mask = armada_37xx_irq_mask,
++	.irq_unmask = armada_37xx_irq_unmask,
++	.irq_set_wake = armada_37xx_irq_set_wake,
++	.irq_set_type = armada_37xx_irq_set_type,
++	.irq_startup = armada_37xx_irq_startup,
++	.irq_print_chip = armada_37xx_irq_print_chip,
 +	.flags = IRQCHIP_IMMUTABLE,
 +	GPIOCHIP_IRQ_RESOURCE_HELPERS,
 +};
 +
- static int nsp_gpio_direction_input(struct gpio_chip *gc, unsigned gpio)
+ static int armada_37xx_irqchip_register(struct platform_device *pdev,
+ 					struct armada_37xx_pinctrl *info)
  {
- 	struct nsp_gpio *chip = gpiochip_get_data(gc);
-@@ -650,14 +661,6 @@ static int nsp_gpio_probe(struct platform_device *pdev)
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq > 0) {
- 		struct gpio_irq_chip *girq;
--		struct irq_chip *irqc;
--
--		irqc = &chip->irqchip;
--		irqc->name = "gpio-a";
--		irqc->irq_ack = nsp_gpio_irq_ack;
--		irqc->irq_mask = nsp_gpio_irq_mask;
--		irqc->irq_unmask = nsp_gpio_irq_unmask;
--		irqc->irq_set_type = nsp_gpio_irq_set_type;
+ 	struct gpio_chip *gc = &info->gpio_chip;
+-	struct irq_chip *irqchip = &info->irq_chip;
+ 	struct gpio_irq_chip *girq = &gc->irq;
+ 	struct device_node *np = to_of_node(gc->fwnode);
+ 	struct device *dev = &pdev->dev;
+@@ -751,14 +772,7 @@ static int armada_37xx_irqchip_register(struct platform_device *pdev,
+ 	if (IS_ERR(info->base))
+ 		return PTR_ERR(info->base);
  
- 		val = readl(chip->base + NSP_CHIP_A_INT_MASK);
- 		val = val | NSP_CHIP_A_GPIO_INT_BIT;
-@@ -673,7 +676,7 @@ static int nsp_gpio_probe(struct platform_device *pdev)
- 		}
- 
- 		girq = &chip->gc.irq;
--		girq->chip = irqc;
-+		gpio_irq_chip_set_chip(girq, &nsp_gpio_irq_chip);
- 		/* This will let us handle the parent IRQ in the driver */
- 		girq->parent_handler = NULL;
- 		girq->num_parents = 0;
+-	irqchip->irq_ack = armada_37xx_irq_ack;
+-	irqchip->irq_mask = armada_37xx_irq_mask;
+-	irqchip->irq_unmask = armada_37xx_irq_unmask;
+-	irqchip->irq_set_wake = armada_37xx_irq_set_wake;
+-	irqchip->irq_set_type = armada_37xx_irq_set_type;
+-	irqchip->irq_startup = armada_37xx_irq_startup;
+-	irqchip->name = info->data->name;
+-	girq->chip = irqchip;
++	gpio_irq_chip_set_chip(girq, &armada_37xx_irqchip);
+ 	girq->parent_handler = armada_37xx_irq_handler;
+ 	/*
+ 	 * Many interrupts are connected to the parent interrupt
 
 -- 
 2.34.1
