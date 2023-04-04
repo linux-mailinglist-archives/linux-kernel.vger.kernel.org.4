@@ -2,274 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E65E6D63D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD426D63DB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235411AbjDDNt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
+        id S235216AbjDDNu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235320AbjDDNtQ (ORCPT
+        with ESMTP id S234953AbjDDNu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 09:49:16 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0744D4202
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:49:12 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pjh25-0000W9-9N; Tue, 04 Apr 2023 15:49:09 +0200
-Message-ID: <906d4d0e-b487-00a5-9399-7d1edc5e20a4@leemhuis.info>
-Date:   Tue, 4 Apr 2023 15:49:08 +0200
+        Tue, 4 Apr 2023 09:50:56 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5B7101
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:50:53 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id cn12so28202483qtb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 06:50:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1680616252;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uAemJB9AYv7ntFQDcoxLkRGzoNUZzlSqsw0pxvVXNfg=;
+        b=x7StyDfRBY2FU7Vdkq0UbK1RLu2DwdcVlVGJtWnlyT1CpjJOx5m0Eb/EOVMbiZvOLv
+         EDS6ILhmwYiWXDqmQuCuMd5uSXyzWBqAKJvNbYVKa9+dA317OqgpcK6GIyGqPrHotiy3
+         fBiDXjpVFWYc/QXL95ZnbobufX0HBithd/dWg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680616252;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uAemJB9AYv7ntFQDcoxLkRGzoNUZzlSqsw0pxvVXNfg=;
+        b=30Addyi32ulNc7vfIhgq6ygyJ/sTMC/Ihe2JXD0bSNOV6Ud5NanfkCLxRmnpwYDYYq
+         Vj6MifbnYa0yMattOYKI0n9vUi9FojVcO4pYWTO0y6IlW/NzdQn4xOLTpWraWtoUA1KC
+         q0XGmcnEFQ6EhM/CpO1oKkEjBaFUpaeaVquIwWcTyU4rMRYvJwEw0VnamXBj+31eiBYy
+         /xmOYSCoCEHHA9UCV8Kw3KWu3vEumrYf/W3XjSP/UJWbRfQMvjYQqMqHdA4nVHBzoaD1
+         rd5fZhSnNSr/twZp3cYgwimsRuqXYwlGRweJnzCaIFRFOvQY4s/C5HOQvAIVdrKJx+4z
+         V6FQ==
+X-Gm-Message-State: AAQBX9dnksCym7OvDd//aFuzKOmmZgq5Ynll/0gd079TjsmHJzxP1O/C
+        MFZmmoqL1hyNzVtWciqNOuHyyQ==
+X-Google-Smtp-Source: AKy350ajxCqBQXBxHTQ7+Lda4ZRJNgGw6ZevTKXwfhlW0PN+Tk9WA1A5RDB2g29QJjq+9k099RLmTA==
+X-Received: by 2002:ac8:5782:0:b0:3dc:ce21:6f87 with SMTP id v2-20020ac85782000000b003dcce216f87mr3396137qta.11.1680616252252;
+        Tue, 04 Apr 2023 06:50:52 -0700 (PDT)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id i25-20020ac860d9000000b003bd0f0b26b0sm3248608qtm.77.2023.04.04.06.50.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 06:50:51 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 13:50:50 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
+        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, efault@gmx.de
+Subject: Re: [PATCH 14/17] sched/eevdf: Better handle mixed slice length
+Message-ID: <20230404135050.GA471948@google.com>
+References: <20230328092622.062917921@infradead.org>
+ <20230328110354.562078801@infradead.org>
+ <CAKfTPtAkFBw5zt0+WK7dWBUE9OrbOOExG8ueUE6ogdCEQZhpXQ@mail.gmail.com>
+ <20230404092936.GD284733@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: Probing nvme disks fails on Upstream kernels on powerpc Maxconfig
-Content-Language: en-US, de-DE
-To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        sachinp@linux.vnet.ibm.com,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <20230323095333.GI1005120@linux.vnet.ibm.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <20230323095333.GI1005120@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680616153;e0778b0a;
-X-HE-SMSGID: 1pjh25-0000W9-9N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404092936.GD284733@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[CCing the regression list, as it should be in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
+On Tue, Apr 04, 2023 at 11:29:36AM +0200, Peter Zijlstra wrote:
+> On Fri, Mar 31, 2023 at 05:26:51PM +0200, Vincent Guittot wrote:
+> > On Tue, 28 Mar 2023 at 13:06, Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > In the case where (due to latency-nice) there are different request
+> > > sizes in the tree, the smaller requests tend to be dominated by the
+> > > larger. Also note how the EEVDF lag limits are based on r_max.
+> > >
+> > > Therefore; add a heuristic that for the mixed request size case, moves
+> > > smaller requests to placement strategy #2 which ensures they're
+> > > immidiately eligible and and due to their smaller (virtual) deadline
+> > > will cause preemption.
+> > >
+> > > NOTE: this relies on update_entity_lag() to impose lag limits above
+> > > a single slice.
+> > >
+> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > ---
+> > >  kernel/sched/fair.c     |   14 ++++++++++++++
+> > >  kernel/sched/features.h |    1 +
+> > >  kernel/sched/sched.h    |    1 +
+> > >  3 files changed, 16 insertions(+)
+> > >
+> > > --- a/kernel/sched/fair.c
+> > > +++ b/kernel/sched/fair.c
+> > > @@ -616,6 +616,7 @@ avg_vruntime_add(struct cfs_rq *cfs_rq,
+> > >         s64 key = entity_key(cfs_rq, se);
+> > >
+> > >         cfs_rq->avg_vruntime += key * weight;
+> > > +       cfs_rq->avg_slice += se->slice * weight;
+> > >         cfs_rq->avg_load += weight;
+> > >  }
+> > >
+> > > @@ -626,6 +627,7 @@ avg_vruntime_sub(struct cfs_rq *cfs_rq,
+> > >         s64 key = entity_key(cfs_rq, se);
+> > >
+> > >         cfs_rq->avg_vruntime -= key * weight;
+> > > +       cfs_rq->avg_slice -= se->slice * weight;
+> > >         cfs_rq->avg_load -= weight;
+> > >  }
+> > >
+> > > @@ -4832,6 +4834,18 @@ place_entity(struct cfs_rq *cfs_rq, stru
+> > >                 lag = se->vlag;
+> > >
+> > >                 /*
+> > > +                * For latency sensitive tasks; those that have a shorter than
+> > > +                * average slice and do not fully consume the slice, transition
+> > > +                * to EEVDF placement strategy #2.
+> > > +                */
+> > > +               if (sched_feat(PLACE_FUDGE) &&
+> > > +                   cfs_rq->avg_slice > se->slice * cfs_rq->avg_load) {
+> > > +                       lag += vslice;
+> > > +                       if (lag > 0)
+> > > +                               lag = 0;
+> > 
+> > By using different lag policies for tasks, doesn't this create
+> > unfairness between tasks ?
+> 
+> Possibly, I've just not managed to trigger it yet -- if it is an issue
+> it can be fixed by ensuring we don't place the entity before its
+> previous vruntime just like the sleeper hack later on.
+> 
+> > I wanted to stress this situation with a simple use case but it seems
+> > that even without changing the slice, there is a fairness problem:
+> > 
+> > Task A always run
+> > Task B loops on : running 1ms then sleeping 1ms
+> > default nice and latency nice prio bot both
+> > each task should get around 50% of the time.
+> > 
+> > The fairness is ok with tip/sched/core
+> > but with eevdf, Task B only gets around 30%
+> > 
+> > I haven't identified the problem so far
+> 
+> Heh, this is actually the correct behaviour. If you have a u=1 and a
+> u=.5 task, you should distribute time on a 2:1 basis, eg. 67% vs 33%.
 
-On 23.03.23 10:53, Srikar Dronamraju wrote:
-> 
-> I am unable to boot upstream kernels from v5.16 to the latest upstream
-> kernel on a maxconfig system. (Machine config details given below)
-> 
-> At boot, we see a series of messages like the below.
-> 
-> dracut-initqueue[13917]: Warning: dracut-initqueue: timeout, still waiting for following initqueue hooks:
-> dracut-initqueue[13917]: Warning: /lib/dracut/hooks/initqueue/finished/devexists-\x2fdev\x2fdisk\x2fby-uuid\x2f93dc0767-18aa-467f-afa7-5b4e9c13108a.sh: "if ! grep -q After=remote-fs-pre.target /run/systemd/generator/systemd-cryptsetup@*.service 2>/dev/null; then
-> dracut-initqueue[13917]:     [ -e "/dev/disk/by-uuid/93dc0767-18aa-467f-afa7-5b4e9c13108a" ]
-> dracut-initqueue[13917]: fi"
+Splitting like that sounds like starvation of the sleeper to me. If something
+sleeps a lot, it will get even less CPU time on an average than it would if
+there was no contention from the u=1 task.
 
-Alexey, did you look into this? This is apparently caused by a commit of
-yours (see quoted part below) that Michael applied. Looks like it fell
-through the cracks from here, but maybe I'm missing something.
+And also CGroups will be even more weird than it already is in such a world,
+2 different containers will not get CPU time distributed properly- say if
+tasks in one container sleep a lot and tasks in another container are CPU
+bound.
 
-Anyway, for the rest of this mail:
+thanks,
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
+ - Joel
 
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
-
-#regzbot ^introduced 387273118714
-#regzbot title powerps/pseries/dma: Probing nvme disks fails on powerpc
-Maxconfig
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (the parent of this mail). See page linked in footer for
-details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
-
-> journalctl shows the below warning.
-> 
->  WARNING: CPU: 242 PID: 1219 at /home/srikar/work/linux.git/arch/powerpc/kernel/iommu.c:227 iommu_range_alloc+0x3d4/0x450
->  Modules linked in: lpfc(E+) nvmet_fc(E) nvmet(E) configfs(E) qla2xxx(E+) nvme_fc(E) nvme_fabrics(E) vmx_crypto(E) gf128mul(E) xhci_pci(E) xhci_pci_renesas(E) xhci_hcd(E) ipr(E+) nvme(E) usbcore(E) libata(E) nvme_core(E) t10_pi(E) scsi_transport_fc(E) usb_common(E) btrfs(E) blake2b_generic(E) libcrc32c(E) crc32c_vpmsum(E) xor(E) raid6_pq(E) sg(E) dm_multipath(E) dm_mod(E) scsi_dh_rdac(E) scsi_dh_emc(E) scsi_dh_alua(E) scsi_mod(E) scsi_common(E)
->  CPU: 242 PID: 1219 Comm: kworker/u3843:0 Tainted: G        W   EL    5.15.0-sp4+ #33 91e1c36ffe385108bbe4a3834506a047dc78552d
->  Workqueue: nvme-reset-wq nvme_reset_work [nvme]
->  NIP:  c00000000005a134 LR: c00000000005a128 CTR: 0000000000000000
->  REGS: c00007fd4c7eb580 TRAP: 0700   Tainted: G        W   EL     (5.15.0-sp4+)
->  MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 24002424  XER: 00000000
->  CFAR: c00000000020972c IRQMASK: 0
->  GPR00: c00000000005a128 c00007fd4c7eb820 c000000002aa4b00 0000000000000001
->  GPR04: c00000000273d648 0000000000000003 00000bfbcb210000 c000000002d88390
->  GPR08: 0000000000000000 0000000000000000 00000000000000f2 c000000002b05240
->  GPR12: 0000000000002000 c0000bfbdfffcb00 0000000000000000 c00007fd4c9d1c40
->  GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
->  GPR20: 0000000000000000 0000000000000000 c000000002bab580 0000000000000000
->  GPR24: c0000000073b30c8 0000000000000000 0000000000000000 0000000000000000
->  GPR28: c00007fd71330000 0000000000000000 0000000000000001 0000000000010000
->  NIP [c00000000005a134] iommu_range_alloc+0x3d4/0x450
->  LR [c00000000005a128] iommu_range_alloc+0x3c8/0x450
->  Call Trace:
->  [c00007fd4c7eb820] [c00000000005a128] iommu_range_alloc+0x3c8/0x450 (unreliable)
->  [c00007fd4c7eb8e0] [c00000000005a580] iommu_alloc+0x60/0x170
->  [c00007fd4c7eb930] [c00000000005bd4c] iommu_alloc_coherent+0x11c/0x1d0
->  [c00007fd4c7eb9d0] [c0000000000597e8] dma_iommu_alloc_coherent+0x38/0x50
->  [c00007fd4c7eb9f0] [c000000000249ce8] dma_alloc_attrs+0x128/0x180
->  [c00007fd4c7eba60] [c0080001093210d8] nvme_alloc_queue+0x90/0x2b0 [nvme]
->  [c00007fd4c7ebac0] [c008000109326034] nvme_reset_work+0x44c/0x1870 [nvme]
->  [c00007fd4c7ebc30] [c0000000001870b8] process_one_work+0x388/0x730
->  [c00007fd4c7ebd10] [c0000000001874d8] worker_thread+0x78/0x5b0
->  [c00007fd4c7ebda0] [c0000000001945cc] kthread+0x1bc/0x1d0
->  [c00007fd4c7ebe10] [c00000000000cee4] ret_from_kernel_thread+0x5c/0x64
->  Instruction dump:
->  60000000 7b693e24 7d304a14 e9490100 f9490110 4bfffd44 3c62fe39 3863f0f8
->  481af5d5 60000000 2fa30000 419e0050 <0fe00000> f9c10030 f9e10038 fa010040
->  ---[ end trace 01e0ce48acf1df9b ]---
->  nvme nvme0: Removing after probe failure status: -12
-> 
-> Please note we are failing to probe nvme disks.
-> 
-> This corresponds to the below code in iommu_range_alloc() function.
-> /* Sanity check */
-> if (unlikely(npages == 0)) {
-> 	if (printk_ratelimit())
-> 		WARN_ON(1);
-> 	return DMA_MAPPING_ERROR;
-> }
-> 
-> So we are seeing npages to be 0.
-> 
-> We see similar messages for all the 4 nvme disks.  Now since the nvme probe
-> is failing, the kernel fails to boot as all the root/boot and other
-> partitions are carved out of nvme disks.
-> 
-> Do note, this problem happens only on cold boot or on reboot. There are no
-> problems when kernels are kexeced.
-> 
-> git bisect shows Commit 387273118714 ("powerps/pseries/dma: Add support for
-> 2M IOMMU page size") as the cause of the regression.
-> 
-> git bisect start
-> # bad: [df0cc57e057f18e44dac8e6c18aba47ab53202f9] Linux 5.16
-> git bisect bad df0cc57e057f18e44dac8e6c18aba47ab53202f9
-> # good: [8bb7eca972ad531c9b149c0a51ab43a417385813] Linux 5.15
-> git bisect good 8bb7eca972ad531c9b149c0a51ab43a417385813
-> # good: [2219b0ceefe835b92a8a74a73fe964aa052742a2] Merge tag 'soc-5.16' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-> git bisect good 2219b0ceefe835b92a8a74a73fe964aa052742a2
-> # bad: [206825f50f908771934e1fba2bfc2e1f1138b36a] Merge tag 'mtd/for-5.16' of git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux
-> git bisect bad 206825f50f908771934e1fba2bfc2e1f1138b36a
-> # good: [5cd4dc44b8a0f656100e3b6916cf73b1623299eb] Merge tag 'staging-5.16-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
-> git bisect good 5cd4dc44b8a0f656100e3b6916cf73b1623299eb
-> # bad: [5af06603c4090617be216a9185193a7be3ca60af] Merge branch 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid
-> git bisect bad 5af06603c4090617be216a9185193a7be3ca60af
-> # good: [5c904c66ed4e86c31ac7c033b64274cebed04e0e] Merge tag 'char-misc-5.16-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc
-> git bisect good 5c904c66ed4e86c31ac7c033b64274cebed04e0e
-> # good: [7e113d01f5f9fe6ad018d8289239d0bbb41311d7] Merge tag 'iommu-updates-v5.16' of git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu
-> git bisect good 7e113d01f5f9fe6ad018d8289239d0bbb41311d7
-> # bad: [5c0b0c676ac2d84f69568715af91e45b610fe17a] Merge tag 'powerpc-5.16-1' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux
-> git bisect bad 5c0b0c676ac2d84f69568715af91e45b610fe17a
-> # bad: [fef071be57dc43679a32d5b0e6ee176d6f12e9f2] powerpc/dcr: Use cmplwi instead of 3-argument cmpli
-> git bisect bad fef071be57dc43679a32d5b0e6ee176d6f12e9f2
-> # bad: [a97dd9e2f760c6996a8f1385ddab0bfef325b364] powerpc/fsl_booke: Enable reloading of TLBCAM without switching to AS1
-> git bisect bad a97dd9e2f760c6996a8f1385ddab0bfef325b364
-> # bad: [983f9101740641434cea4f2e172175ff4b0276ad] powerpc/cpuhp: BUG -> WARN conversion in offline path
-> git bisect bad 983f9101740641434cea4f2e172175ff4b0276ad
-> # bad: [7eff9bc00ddf1e2281dff575884b7f676c85b006] powerpc/mem: Fix arch/powerpc/mm/mem.c:53:12: error: no previous prototype for 'create_section_mapping'
-> git bisect bad 7eff9bc00ddf1e2281dff575884b7f676c85b006
-> # bad: [494f238a3861863d908af7b98a369f6d8a986c85] powerpc/476: Fix sparse report
-> git bisect bad 494f238a3861863d908af7b98a369f6d8a986c85
-> # bad: [3c2172c1c47b4079c29f0e6637d764a99355ebcd] powerpc/85xx: Fix oops when mpc85xx_smp_guts_ids node cannot be found
-> git bisect bad 3c2172c1c47b4079c29f0e6637d764a99355ebcd
-> # bad: [3872731187141d5d0a5c4fb30007b8b9ec36a44d] powerps/pseries/dma: Add support for 2M IOMMU page size
-> git bisect bad 3872731187141d5d0a5c4fb30007b8b9ec36a44d
-> # first bad commit: [3872731187141d5d0a5c4fb30007b8b9ec36a44d] powerps/pseries/dma: Add support for 2M IOMMU page size
-> 
-> After reverting the commit, I am able to boot into the machine.
-> 
-> $ lscpu
-> Architecture:                    ppc64le
-> Byte Order:                      Little Endian
-> CPU(s):                          1920
-> On-line CPU(s) list:             0-1919
-> Model name:                      POWER10 (architected), altivec supported
-> Model:                           2.0 (pvr 0080 0200)
-> Thread(s) per core:              8
-> Core(s) per socket:              15
-> Socket(s):                       16
-> Hypervisor vendor:               pHyp
-> Virtualization type:             para
-> L1d cache:                       15 MiB (480 instances)
-> L1i cache:                       22.5 MiB (480 instances)
-> L2 cache:                        480 MiB (480 instances)
-> L3 cache:                        1.9 GiB (480 instances)
-> NUMA node(s):                    16
-> NUMA node0 CPU(s):               0-119
-> NUMA node1 CPU(s):               120-239
-> NUMA node2 CPU(s):               240-359
-> NUMA node3 CPU(s):               360-479
-> NUMA node4 CPU(s):               480-599
-> NUMA node5 CPU(s):               600-719
-> NUMA node6 CPU(s):               720-839
-> NUMA node7 CPU(s):               840-959
-> NUMA node8 CPU(s):               960-1079
-> NUMA node9 CPU(s):               1080-1199
-> NUMA node10 CPU(s):              1200-1319
-> NUMA node11 CPU(s):              1320-1439
-> NUMA node12 CPU(s):              1440-1559
-> NUMA node13 CPU(s):              1560-1679
-> NUMA node14 CPU(s):              1680-1799
-> NUMA node15 CPU(s):              1800-1919
-> 
-> $ lspci
-> 0010:01:00.0 Ethernet controller: Mellanox Technologies MT27710 Family [ConnectX-4 Lx]
-> 0010:01:00.1 Ethernet controller: Mellanox Technologies MT27710 Family [ConnectX-4 Lx]
-> 0012:01:00.0 Fibre Channel: Emulex Corporation LPe31000/LPe32000 Series 16Gb/32Gb Fibre Channel Adapter (rev 01)
-> 0012:01:00.1 Fibre Channel: Emulex Corporation LPe31000/LPe32000 Series 16Gb/32Gb Fibre Channel Adapter (rev 01)
-> 0013:01:00.0 RAID bus controller: IBM PCI-E IPR SAS Adapter (ASIC) (rev 02)
-> 0014:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller (rev 02)
-> 0016:01:00.0 Fibre Channel: QLogic Corp. ISP2714-based 16/32Gb Fibre Channel to PCIe Adapter (rev 01)
-> 0016:01:00.1 Fibre Channel: QLogic Corp. ISP2714-based 16/32Gb Fibre Channel to PCIe Adapter (rev 01)
-> 0016:01:00.2 Fibre Channel: QLogic Corp. ISP2714-based 16/32Gb Fibre Channel to PCIe Adapter (rev 01)
-> 0016:01:00.3 Fibre Channel: QLogic Corp. ISP2714-based 16/32Gb Fibre Channel to PCIe Adapter (rev 01)
-> 0018:01:00.0 Non-Volatile memory controller: Samsung Electronics Co Ltd NVMe SSD Controller PM9A1/PM9A3/980PRO
-> 0023:01:00.0 RAID bus controller: IBM PCI-E IPR SAS Adapter (ASIC) (rev 02)
-> 0028:01:00.0 Non-Volatile memory controller: Samsung Electronics Co Ltd NVMe SSD Controller PM9A1/PM9A3/980PRO
-> 0033:01:00.0 Ethernet controller: Mellanox Technologies MT27710 Family [ConnectX-4 Lx]
-> 0033:01:00.1 Ethernet controller: Mellanox Technologies MT27710 Family [ConnectX-4 Lx]
-> 0038:01:00.0 Non-Volatile memory controller: Samsung Electronics Co Ltd NVMe SSD Controller PM9A1/PM9A3/980PRO
-> 0043:01:00.0 Ethernet controller: Broadcom Inc. and subsidiaries NetXtreme II BCM57810 10 Gigabit Ethernet (rev 10)
-> 0043:01:00.1 Ethernet controller: Broadcom Inc. and subsidiaries NetXtreme II BCM57810 10 Gigabit Ethernet (rev 10)
-> 0048:01:00.0 Non-Volatile memory controller: Samsung Electronics Co Ltd NVMe SSD Controller PM9A1/PM9A3/980PRO
-> 
-> $ df
-> Filesystem       1K-blocks     Used   Available Use% Mounted on
-> devtmpfs              4096        0        4096   0% /dev
-> tmpfs          32511249472        0 32511249472   0% /dev/shm
-> tmpfs          13004499840    19968 13004479872   1% /run
-> tmpfs                 4096        0        4096   0% /sys/fs/cgroup
-> /dev/nvme0n1p2    41943040 18486848    23400448  45% /
-> /dev/nvme0n1p2    41943040 18486848    23400448  45% /.snapshots
-> /dev/nvme0n1p2    41943040 18486848    23400448  45% /var
-> /dev/nvme0n1p2    41943040 18486848    23400448  45% /usr/local
-> /dev/nvme0n1p2    41943040 18486848    23400448  45% /srv
-> /dev/nvme0n1p2    41943040 18486848    23400448  45% /opt
-> /dev/nvme0n1p2    41943040 18486848    23400448  45% /root
-> /dev/nvme0n1p2    41943040 18486848    23400448  45% /tmp
-> /dev/nvme0n1p2    41943040 18486848    23400448  45% /boot/grub2/powerpc-ieee1275
-> /dev/nvme0n1p3   739098844 19459884   719638960   3% /home
-> tmpfs           6502249856       64  6502249792   1% /run/user/1005
-> 
