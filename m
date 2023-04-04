@@ -2,242 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957866D59A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8026D59B9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjDDHbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 03:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        id S233910AbjDDHdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233675AbjDDHat (ORCPT
+        with ESMTP id S230038AbjDDHdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 03:30:49 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30510109;
-        Tue,  4 Apr 2023 00:30:48 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id on15so9603363qvb.7;
-        Tue, 04 Apr 2023 00:30:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680593447;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=TZN8A3N6qzEZaoi8BzshL3M0v/LkVxLjd9SUgn/F4m0=;
-        b=Z45Ni9JMHRQQs5YoPsYhPZe4Xa5TB1rBf7FeN0TOcSv3+G86Eyopl0QcDkZkFh37V5
-         I0ZzmZmT18FtgMXWwguRM9kkD8DbrHC8Krq7eRWsY2EMF8Tj4MFKgtaL7z803T1ECTKO
-         wl7Se8wwD/cpdFrJZbKNNyOTr/GSlRXX5K30LhU/F9qFe+tK7PtZMCtMEABkeuNWIKJi
-         rGa4/6fzcRyCHxpapmPRulp3KZLmdMYaxkvyO02fRh7CgNStCkq7URn0CV7k6ms6MrHK
-         bMaLrOJd6Mq0aK6gUhnLwwclUhoOys0lCjxpMMq5KUwc++8S/+bUA0xlSn/wLDkboCc1
-         rZLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680593447;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TZN8A3N6qzEZaoi8BzshL3M0v/LkVxLjd9SUgn/F4m0=;
-        b=gfbUSXXu1xBBNjDMTYTc0FGU5BgIrsNKmiVzwG0x4sflfAs6nzyeaF4Zw6T19dUW0+
-         4lBh976Qa3VP9dERFfW+CWDJ1FVsVsgIPVvKZ56tlMx2hgLEyTNymsWhIpN4FA53qKp9
-         yqrDUBpJ4iCtAOzIe2I/IiMFeXyQk2UJamthDqbJIsJEqQ70/o8iNo+J25LEYAaNY/6V
-         Gb5CK4HWSHHAbbj5T7sTBM3TDo/yJI5neJPBu1rHXnKAOwPnwRcurewdrTvc1evbf/pS
-         EOPRl0AOH85TKKDPYV/J0zSh7+Kqi8XZus66gADGEN4XMBmtfPMFYOQzfz+VCvLu631Q
-         2pYg==
-X-Gm-Message-State: AAQBX9dlqs33Idp2UxPY3sH8vDfCHcewSAFr3KaymE98ksb4Ey+B0xkp
-        GkJydvflNt5y9JCYNQYcZdI=
-X-Google-Smtp-Source: AKy350ZZTK8EyWBlgpOOHa/n+UcpfqnqFBaUStB7knvn6NivhjEo+3LJe7zMz/pq/JMgZU8grLC3ig==
-X-Received: by 2002:a05:6214:1c8d:b0:5cc:e059:efa3 with SMTP id ib13-20020a0562141c8d00b005cce059efa3mr2059486qvb.23.1680593447228;
-        Tue, 04 Apr 2023 00:30:47 -0700 (PDT)
-Received: from ?IPv6:2003:f6:ef05:8700:853c:3ba5:d710:3c1d? (p200300f6ef058700853c3ba5d7103c1d.dip0.t-ipconnect.de. [2003:f6:ef05:8700:853c:3ba5:d710:3c1d])
-        by smtp.gmail.com with ESMTPSA id om30-20020a0562143d9e00b005dd8b934576sm3232903qvb.14.2023.04.04.00.30.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 00:30:46 -0700 (PDT)
-Message-ID: <798e1ff0651da8e4b113d30bf8cec2a7a0e6898f.camel@gmail.com>
-Subject: Re: [PATCH v3 07/11] iio: core: Add new DMABUF interface
- infrastructure
-From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        dmaengine@vger.kernel.org, linux-media@vger.kernel.org
-Date:   Tue, 04 Apr 2023 09:32:50 +0200
-In-Reply-To: <20230403154800.215924-8-paul@crapouillou.net>
-References: <20230403154800.215924-1-paul@crapouillou.net>
-         <20230403154800.215924-8-paul@crapouillou.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.4 
+        Tue, 4 Apr 2023 03:33:13 -0400
+Received: from mail22.mail.schwarz (mail22.mail.schwarz [185.124.192.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9068126;
+        Tue,  4 Apr 2023 00:33:09 -0700 (PDT)
+X-SCHWARZ-TO: linux-kernel@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ edumazet@google.com, netdev@vger.kernel.org, pshelar@ovn.org,
+ dev@openvswitch.org, davem@davemloft.net
+X-SCHWARZ-ENVELOPEFROM: felix.huettner@mail.schwarz
+Received: from unknown (HELO kernel-bug-kernel-bug) ([45.129.43.133])
+  by mail22.mail.schwarz with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 07:33:06 +0000
+Date:   Tue, 4 Apr 2023 07:33:06 +0000
+From:   Felix Huettner <felix.huettner@mail.schwarz>
+To:     netdev@vger.kernel.org, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org
+Cc:     pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+        pshelar@ovn.org, davem@davemloft.net, luca.czesla@mail.schwarz
+Subject: [PATCH net v2] net: openvswitch: fix race on port output
+Message-ID: <ZCvSskSPwFv6kYrD@kernel-bug-kernel-bug>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTA0LTAzIGF0IDE3OjQ3ICswMjAwLCBQYXVsIENlcmN1ZWlsIHdyb3RlOgo+
-IEFkZCB0aGUgbmVjZXNzYXJ5IGluZnJhc3RydWN0dXJlIHRvIHRoZSBJSU8gY29yZSB0byBzdXBw
-b3J0IGEgbmV3Cj4gb3B0aW9uYWwgRE1BQlVGIGJhc2VkIGludGVyZmFjZS4KPiAKPiBXaXRoIHRo
-aXMgbmV3IGludGVyZmFjZSwgRE1BQlVGIG9iamVjdHMgKGV4dGVybmFsbHkgY3JlYXRlZCkgY2Fu
-IGJlCj4gYXR0YWNoZWQgdG8gYSBJSU8gYnVmZmVyLCBhbmQgc3Vic2VxdWVudGx5IHVzZWQgZm9y
-IGRhdGEgdHJhbnNmZXIuCj4gCj4gQSB1c2Vyc3BhY2UgYXBwbGljYXRpb24gY2FuIHRoZW4gdXNl
-IHRoaXMgaW50ZXJmYWNlIHRvIHNoYXJlIERNQUJVRgo+IG9iamVjdHMgYmV0d2VlbiBzZXZlcmFs
-IGludGVyZmFjZXMsIGFsbG93aW5nIGl0IHRvIHRyYW5zZmVyIGRhdGEgaW4gYQo+IHplcm8tY29w
-eSBmYXNoaW9uLCBmb3IgaW5zdGFuY2UgYmV0d2VlbiBJSU8gYW5kIHRoZSBVU0Igc3RhY2suCj4g
-Cj4gVGhlIHVzZXJzcGFjZSBhcHBsaWNhdGlvbiBjYW4gYWxzbyBtZW1vcnktbWFwIHRoZSBETUFC
-VUYgb2JqZWN0cywgYW5kCj4gYWNjZXNzIHRoZSBzYW1wbGUgZGF0YSBkaXJlY3RseS4gVGhlIGFk
-dmFudGFnZSBvZiBkb2luZyB0aGlzIHZzLiB0aGUKPiByZWFkKCkgaW50ZXJmYWNlIGlzIHRoYXQg
-aXQgYXZvaWRzIGFuIGV4dHJhIGNvcHkgb2YgdGhlIGRhdGEgYmV0d2Vlbgo+IHRoZQo+IGtlcm5l
-bCBhbmQgdXNlcnNwYWNlLiBUaGlzIGlzIHBhcnRpY3VsYXJseSB1c2VyZnVsIGZvciBoaWdoLXNw
-ZWVkCj4gZGV2aWNlcyB3aGljaCBwcm9kdWNlIHNldmVyYWwgbWVnYWJ5dGVzIG9yIGV2ZW4gZ2ln
-YWJ5dGVzIG9mIGRhdGEgcGVyCj4gc2Vjb25kLgo+IAo+IEFzIHBhcnQgb2YgdGhlIGludGVyZmFj
-ZSwgMyBuZXcgSU9DVExzIGhhdmUgYmVlbiBhZGRlZDoKPiAKPiBJSU9fQlVGRkVSX0RNQUJVRl9B
-VFRBQ0hfSU9DVEwoaW50IGZkKToKPiDCoEF0dGFjaCB0aGUgRE1BQlVGIG9iamVjdCBpZGVudGlm
-aWVkIGJ5IHRoZSBnaXZlbiBmaWxlIGRlc2NyaXB0b3IgdG8KPiB0aGUKPiDCoGJ1ZmZlci4KPiAK
-PiBJSU9fQlVGRkVSX0RNQUJVRl9ERVRBQ0hfSU9DVEwoaW50IGZkKToKPiDCoERldGFjaCB0aGUg
-RE1BQlVGIG9iamVjdCBpZGVudGlmaWVkIGJ5IHRoZSBnaXZlbiBmaWxlIGRlc2NyaXB0b3IKPiBm
-cm9tCj4gwqB0aGUgYnVmZmVyLiBOb3RlIHRoYXQgY2xvc2luZyB0aGUgSUlPIGJ1ZmZlcidzIGZp
-bGUgZGVzY3JpcHRvciB3aWxsCj4gwqBhdXRvbWF0aWNhbGx5IGRldGFjaCBhbGwgcHJldmlvdXNs
-eSBhdHRhY2hlZCBETUFCVUYgb2JqZWN0cy4KPiAKPiBJSU9fQlVGRkVSX0RNQUJVRl9FTlFVRVVF
-X0lPQ1RMKHN0cnVjdCBpaW9fZG1hYnVmICopOgo+IMKgUmVxdWVzdCBhIGRhdGEgdHJhbnNmZXIg
-dG8vZnJvbSB0aGUgZ2l2ZW4gRE1BQlVGIG9iamVjdC4gSXRzIGZpbGUKPiDCoGRlc2NyaXB0b3Is
-IGFzIHdlbGwgYXMgdGhlIHRyYW5zZmVyIHNpemUgYW5kIGZsYWdzIGFyZSBwcm92aWRlZCBpbgo+
-IHRoZQo+IMKgImlpb19kbWFidWYiIHN0cnVjdHVyZS4KPiAKPiBUaGVzZSB0aHJlZSBJT0NUTHMg
-aGF2ZSB0byBiZSBwZXJmb3JtZWQgb24gdGhlIElJTyBidWZmZXIncyBmaWxlCj4gZGVzY3JpcHRv
-ciwgb2J0YWluZWQgdXNpbmcgdGhlIElJT19CVUZGRVJfR0VUX0ZEX0lPQ1RMKCkgaW9jdGwuCj4g
-Cj4gU2lnbmVkLW9mZi1ieTogUGF1bCBDZXJjdWVpbCA8cGF1bEBjcmFwb3VpbGxvdS5uZXQ+Cj4g
-Cj4gLS0tCj4gdjI6IE9ubHkgYWxsb3cgdGhlIG5ldyBJT0NUTHMgb24gdGhlIGJ1ZmZlciBGRCBj
-cmVhdGVkIHdpdGgKPiDCoMKgwqAgSUlPX0JVRkZFUl9HRVRfRkRfSU9DVEwoKS4KPiAKPiB2Mzog
-LSBHZXQgcmlkIG9mIHRoZSBvbGQgSU9DVExzLiBUaGUgSUlPIHN1YnN5c3RlbSBkb2VzIG5vdCBj
-cmVhdGUgb3IKPiDCoMKgwqAgbWFuYWdlIERNQUJVRnMgYW55bW9yZSwgYW5kIG9ubHkgYXR0YWNo
-ZXMvZGV0YWNoZXMgZXh0ZXJuYWxseQo+IMKgwqDCoCBjcmVhdGVkIERNQUJVRnMuCj4gwqDCoMKg
-IC0gQWRkIElJT19CVUZGRVJfRE1BQlVGX0NZQ0xJQyB0byB0aGUgc3VwcG9ydGVkIGZsYWdzLgo+
-IC0tLQo+IMKgZHJpdmVycy9paW8vaW5kdXN0cmlhbGlvLWJ1ZmZlci5jIHwgNDAyCj4gKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrCj4gwqBpbmNsdWRlL2xpbnV4L2lpby9idWZmZXJfaW1w
-bC5owqDCoCB8wqAgMjIgKysKPiDCoGluY2x1ZGUvdWFwaS9saW51eC9paW8vYnVmZmVyLmjCoMKg
-IHzCoCAyMiArKwo+IMKgMyBmaWxlcyBjaGFuZ2VkLCA0NDYgaW5zZXJ0aW9ucygrKQo+IAo+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL2lpby9pbmR1c3RyaWFsaW8tYnVmZmVyLmMKPiBiL2RyaXZlcnMv
-aWlvL2luZHVzdHJpYWxpby1idWZmZXIuYwo+IGluZGV4IDgwYzc4YmQ2YmJlZi4uNWQ4OGUwOThi
-M2U3IDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvaWlvL2luZHVzdHJpYWxpby1idWZmZXIuYwo+ICsr
-KyBiL2RyaXZlcnMvaWlvL2luZHVzdHJpYWxpby1idWZmZXIuYwo+IEBAIC0xMywxMCArMTMsMTQg
-QEAKPiDCoCNpbmNsdWRlIDxsaW51eC9rZXJuZWwuaD4KPiDCoCNpbmNsdWRlIDxsaW51eC9leHBv
-cnQuaD4KPiDCoCNpbmNsdWRlIDxsaW51eC9kZXZpY2UuaD4KPiArI2luY2x1ZGUgPGxpbnV4L2Rt
-YS1idWYuaD4KPiArI2luY2x1ZGUgPGxpbnV4L2RtYS1mZW5jZS5oPgo+ICsjaW5jbHVkZSA8bGlu
-dXgvZG1hLXJlc3YuaD4KPiDCoCNpbmNsdWRlIDxsaW51eC9maWxlLmg+Cj4gwqAjaW5jbHVkZSA8
-bGludXgvZnMuaD4KPiDCoCNpbmNsdWRlIDxsaW51eC9jZGV2Lmg+Cj4gwqAjaW5jbHVkZSA8bGlu
-dXgvc2xhYi5oPgo+ICsjaW5jbHVkZSA8bGludXgvbW0uaD4KPiDCoCNpbmNsdWRlIDxsaW51eC9w
-b2xsLmg+Cj4gwqAjaW5jbHVkZSA8bGludXgvc2NoZWQvc2lnbmFsLmg+Cj4gwqAKPiBAQCAtMjgs
-MTEgKzMyLDQxIEBACj4gwqAjaW5jbHVkZSA8bGludXgvaWlvL2J1ZmZlci5oPgo+IMKgI2luY2x1
-ZGUgPGxpbnV4L2lpby9idWZmZXJfaW1wbC5oPgo+IMKgCj4gKyNkZWZpbmUgRE1BQlVGX0VOUVVF
-VUVfVElNRU9VVF9NUyA1MDAwCj4gKwo+ICtzdHJ1Y3QgaWlvX2RtYV9mZW5jZTsKPiArCj4gK3N0
-cnVjdCBpaW9fZG1hYnVmX3ByaXYgewo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBsaXN0X2hlYWQg
-ZW50cnk7Cj4gK8KgwqDCoMKgwqDCoMKgc3RydWN0IGtyZWYgcmVmOwo+ICsKPiArwqDCoMKgwqDC
-oMKgwqBzdHJ1Y3QgaWlvX2J1ZmZlciAqYnVmZmVyOwo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBp
-aW9fZG1hX2J1ZmZlcl9ibG9jayAqYmxvY2s7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoHU2NCBjb250
-ZXh0Owo+ICvCoMKgwqDCoMKgwqDCoHNwaW5sb2NrX3QgbG9jazsKPiArCj4gK8KgwqDCoMKgwqDC
-oMKgc3RydWN0IGRtYV9idWZfYXR0YWNobWVudCAqYXR0YWNoOwo+ICvCoMKgwqDCoMKgwqDCoHN0
-cnVjdCBpaW9fZG1hX2ZlbmNlICpmZW5jZTsKPiArfTsKPiArCj4gK3N0cnVjdCBpaW9fZG1hX2Zl
-bmNlIHsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgZG1hX2ZlbmNlIGJhc2U7Cj4gK8KgwqDCoMKg
-wqDCoMKgc3RydWN0IGlpb19kbWFidWZfcHJpdiAqcHJpdjsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1
-Y3Qgc2dfdGFibGUgKnNndDsKPiArwqDCoMKgwqDCoMKgwqBlbnVtIGRtYV9kYXRhX2RpcmVjdGlv
-biBkaXI7Cj4gK307Cj4gKwo+IMKgc3RhdGljIGNvbnN0IGNoYXIgKiBjb25zdCBpaW9fZW5kaWFu
-X3ByZWZpeFtdID0gewo+IMKgwqDCoMKgwqDCoMKgwqBbSUlPX0JFXSA9ICJiZSIsCj4gwqDCoMKg
-wqDCoMKgwqDCoFtJSU9fTEVdID0gImxlIiwKPiDCoH07Cj4gwqAKPiArc3RhdGljIGlubGluZSBz
-dHJ1Y3QgaWlvX2RtYV9mZW5jZSAqdG9faWlvX2RtYV9mZW5jZShzdHJ1Y3QKPiBkbWFfZmVuY2Ug
-KmZlbmNlKQo+ICt7Cj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIGNvbnRhaW5lcl9vZihmZW5jZSwg
-c3RydWN0IGlpb19kbWFfZmVuY2UsIGJhc2UpOwo+ICt9Cj4gKwoKS2luZCBvZiBhIG5pdHBpY2sg
-YnV0IEkgb25seSBzZWUgdGhpcyBiZWluZyB1c2VkIG9uY2Ugc28gSSB3b3VsZCBtYXliZQp1c2Ug
-cGxhaW4gJ2NvbnRhaW5lcl9vZigpJyBhcyB5b3UgYXJlIGFscmVhZHkgZG9pbmcgZm9yOgoKLi4u
-ID0gY29udGFpbmVyX29mKHJlZiwgc3RydWN0IGlpb19kbWFidWZfcHJpdiwgcmVmKTsKClNvIEkg
-d291bGQgYXQgbGVhc3QgYWR2b2NhdGUgZm9yIGNvbnNpc3RlbmN5LiBJIHdvdWxkIGFsc28gcHJv
-YmFibHkKZGl0Y2ggdGhlIGlubGluZSBidXQgSSBndWVzcyB0aGF0IGlzIG1vcmUgYSBtYXR0ZXIg
-b2Ygc3R5bGUvcHJlZmVyZW5jZS4KCj4gwqBzdGF0aWMgYm9vbCBpaW9fYnVmZmVyX2lzX2FjdGl2
-ZShzdHJ1Y3QgaWlvX2J1ZmZlciAqYnVmKQo+IMKgewo+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4g
-IWxpc3RfZW1wdHkoJmJ1Zi0+YnVmZmVyX2xpc3QpOwo+IEBAIC0zMjksNiArMzYzLDcgQEAgdm9p
-ZCBpaW9fYnVmZmVyX2luaXQoc3RydWN0IGlpb19idWZmZXIgKmJ1ZmZlcikKPiDCoHsKPiAKCi4u
-LgoKPiArwqDCoMKgwqDCoMKgwqBwcml2ID0gYXR0YWNoLT5pbXBvcnRlcl9wcml2Owo+ICvCoMKg
-wqDCoMKgwqDCoGxpc3RfZGVsX2luaXQoJnByaXYtPmVudHJ5KTsKPiArCj4gK8KgwqDCoMKgwqDC
-oMKgaWlvX2J1ZmZlcl9kbWFidWZfcHV0KGF0dGFjaCk7Cj4gK8KgwqDCoMKgwqDCoMKgaWlvX2J1
-ZmZlcl9kbWFidWZfcHV0KGF0dGFjaCk7Cj4gKwoKSXMgdGhpcyBpbnRlbmRlZD8gTG9va3Mgc3Vz
-cGljaW91cy4uLgoKPiArb3V0X2RtYWJ1Zl9wdXQ6Cj4gK8KgwqDCoMKgwqDCoMKgZG1hX2J1Zl9w
-dXQoZG1hYnVmKTsKPiArCj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIHJldDsKPiArfQo+ICsKPiAr
-c3RhdGljIGNvbnN0IGNoYXIgKgo+ICtpaW9fYnVmZmVyX2RtYV9mZW5jZV9nZXRfZHJpdmVyX25h
-bWUoc3RydWN0IGRtYV9mZW5jZSAqZmVuY2UpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqByZXR1cm4g
-ImlpbyI7Cj4gK30KPiArCj4gK3N0YXRpYyB2b2lkIGlpb19idWZmZXJfZG1hX2ZlbmNlX3JlbGVh
-c2Uoc3RydWN0IGRtYV9mZW5jZSAqZmVuY2UpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qg
-aWlvX2RtYV9mZW5jZSAqaWlvX2ZlbmNlID0gdG9faWlvX2RtYV9mZW5jZShmZW5jZSk7Cj4gKwo+
-ICvCoMKgwqDCoMKgwqDCoGtmcmVlKGlpb19mZW5jZSk7Cj4gK30KPiArCj4gK3N0YXRpYyBjb25z
-dCBzdHJ1Y3QgZG1hX2ZlbmNlX29wcyBpaW9fYnVmZmVyX2RtYV9mZW5jZV9vcHMgPSB7Cj4gK8Kg
-wqDCoMKgwqDCoMKgLmdldF9kcml2ZXJfbmFtZcKgwqDCoMKgwqDCoMKgwqA9Cj4gaWlvX2J1ZmZl
-cl9kbWFfZmVuY2VfZ2V0X2RyaXZlcl9uYW1lLAo+ICvCoMKgwqDCoMKgwqDCoC5nZXRfdGltZWxp
-bmVfbmFtZcKgwqDCoMKgwqDCoD0KPiBpaW9fYnVmZmVyX2RtYV9mZW5jZV9nZXRfZHJpdmVyX25h
-bWUsCj4gK8KgwqDCoMKgwqDCoMKgLnJlbGVhc2XCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoD0gaWlvX2J1ZmZlcl9kbWFfZmVuY2VfcmVsZWFzZSwKPiArfTsKPiArCj4gK3N0YXRpYyBp
-bnQgaWlvX2J1ZmZlcl9lbnF1ZXVlX2RtYWJ1ZihzdHJ1Y3QgaWlvX2Rldl9idWZmZXJfcGFpciAq
-aWIsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IGlpb19kbWFidWYgX191c2VyCj4gKmlpb19kbWFi
-dWZfcmVxLAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJvb2wgbm9uYmxvY2spCj4gK3sKPiArwqDCoMKgwqDC
-oMKgwqBzdHJ1Y3QgaWlvX2J1ZmZlciAqYnVmZmVyID0gaWItPmJ1ZmZlcjsKPiArwqDCoMKgwqDC
-oMKgwqBzdHJ1Y3QgaWlvX2RtYWJ1ZiBpaW9fZG1hYnVmOwo+ICvCoMKgwqDCoMKgwqDCoHN0cnVj
-dCBkbWFfYnVmX2F0dGFjaG1lbnQgKmF0dGFjaDsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgaWlv
-X2RtYWJ1Zl9wcml2ICpwcml2Owo+ICvCoMKgwqDCoMKgwqDCoGVudW0gZG1hX2RhdGFfZGlyZWN0
-aW9uIGRpcjsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgaWlvX2RtYV9mZW5jZSAqZmVuY2U7Cj4g
-K8KgwqDCoMKgwqDCoMKgc3RydWN0IGRtYV9idWYgKmRtYWJ1ZjsKPiArwqDCoMKgwqDCoMKgwqBz
-dHJ1Y3Qgc2dfdGFibGUgKnNndDsKPiArwqDCoMKgwqDCoMKgwqB1bnNpZ25lZCBsb25nIHRpbWVv
-dXQ7Cj4gK8KgwqDCoMKgwqDCoMKgYm9vbCBkbWFfdG9fcmFtOwo+ICvCoMKgwqDCoMKgwqDCoGJv
-b2wgY3ljbGljOwo+ICvCoMKgwqDCoMKgwqDCoGludCByZXQ7Cj4gKwo+ICvCoMKgwqDCoMKgwqDC
-oGlmIChjb3B5X2Zyb21fdXNlcigmaWlvX2RtYWJ1ZiwgaWlvX2RtYWJ1Zl9yZXEsCj4gc2l6ZW9m
-KGlpb19kbWFidWYpKSkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1F
-RkFVTFQ7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGlmIChpaW9fZG1hYnVmLmZsYWdzICYgfklJT19C
-VUZGRVJfRE1BQlVGX1NVUFBPUlRFRF9GTEFHUykKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgcmV0dXJuIC1FSU5WQUw7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGN5Y2xpYyA9IGlpb19k
-bWFidWYuZmxhZ3MgJiBJSU9fQlVGRkVSX0RNQUJVRl9DWUNMSUM7Cj4gKwo+ICvCoMKgwqDCoMKg
-wqDCoC8qIEN5Y2xpYyBmbGFnIGlzIG9ubHkgc3VwcG9ydGVkIG9uIG91dHB1dCBidWZmZXJzICov
-Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKGN5Y2xpYyAmJiBidWZmZXItPmRpcmVjdGlvbiAhPSBJSU9f
-QlVGRkVSX0RJUkVDVElPTl9PVVQpCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJl
-dHVybiAtRUlOVkFMOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBkbWFidWYgPSBkbWFfYnVmX2dldChp
-aW9fZG1hYnVmLmZkKTsKPiArwqDCoMKgwqDCoMKgwqBpZiAoSVNfRVJSKGRtYWJ1ZikpCj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiBQVFJfRVJSKGRtYWJ1Zik7Cj4gKwo+
-ICvCoMKgwqDCoMKgwqDCoGlmICghaWlvX2RtYWJ1Zi5ieXRlc191c2VkIHx8IGlpb19kbWFidWYu
-Ynl0ZXNfdXNlZCA+IGRtYWJ1Zi0KPiA+c2l6ZSkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqByZXQgPSAtRUlOVkFMOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBn
-b3RvIGVycl9kbWFidWZfcHV0Owo+ICvCoMKgwqDCoMKgwqDCoH0KPiArCj4gK8KgwqDCoMKgwqDC
-oMKgYXR0YWNoID0gaWlvX2J1ZmZlcl9maW5kX2F0dGFjaG1lbnQoaWItPmluZGlvX2RldiwgZG1h
-YnVmKTsKPiArwqDCoMKgwqDCoMKgwqBpZiAoSVNfRVJSKGF0dGFjaCkpIHsKPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gUFRSX0VSUihhdHRhY2gpOwo+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIGVycl9kbWFidWZfcHV0Owo+ICvCoMKgwqDCoMKgwqDC
-oH0KPiArCj4gK8KgwqDCoMKgwqDCoMKgcHJpdiA9IGF0dGFjaC0+aW1wb3J0ZXJfcHJpdjsKPiAr
-Cj4gK8KgwqDCoMKgwqDCoMKgZG1hX3RvX3JhbSA9IGJ1ZmZlci0+ZGlyZWN0aW9uID09IElJT19C
-VUZGRVJfRElSRUNUSU9OX0lOOwo+ICvCoMKgwqDCoMKgwqDCoGRpciA9IGRtYV90b19yYW0gPyBE
-TUFfRlJPTV9ERVZJQ0UgOiBETUFfVE9fREVWSUNFOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBzZ3Qg
-PSBkbWFfYnVmX21hcF9hdHRhY2htZW50KGF0dGFjaCwgZGlyKTsKPiArwqDCoMKgwqDCoMKgwqBp
-ZiAoSVNfRVJSKHNndCkpIHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0ID0g
-UFRSX0VSUihzZ3QpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwcl9lcnIoIlVu
-YWJsZSB0byBtYXAgYXR0YWNobWVudDogJWRcbiIsIHJldCk7CgpkZXZfZXJyKCk/IFdlIHNob3Vs
-ZCBiZSBhYmxlIHRvIHJlYWNoIHRoZSBpaW9fZGV2Cgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBnb3RvIGVycl9hdHRhY2htZW50X3B1dDsKPiArwqDCoMKgwqDCoMKgwqB9Cj4gKwo+
-ICvCoMKgwqDCoMKgwqDCoGZlbmNlID0ga21hbGxvYyhzaXplb2YoKmZlbmNlKSwgR0ZQX0tFUk5F
-TCk7Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKCFmZW5jZSkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqByZXQgPSAtRU5PTUVNOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBnb3RvIGVycl91bm1hcF9hdHRhY2htZW50Owo+ICvCoMKgwqDCoMKgwqDCoH0KPiArCj4gCgou
-Li4KCj4gwqBzdGF0aWMgY29uc3Qgc3RydWN0IGZpbGVfb3BlcmF0aW9ucyBpaW9fYnVmZmVyX2No
-cmRldl9maWxlb3BzID0gewo+IMKgwqDCoMKgwqDCoMKgwqAub3duZXIgPSBUSElTX01PRFVMRSwK
-PiDCoMKgwqDCoMKgwqDCoMKgLmxsc2VlayA9IG5vb3BfbGxzZWVrLAo+IMKgwqDCoMKgwqDCoMKg
-wqAucmVhZCA9IGlpb19idWZmZXJfcmVhZCwKPiDCoMKgwqDCoMKgwqDCoMKgLndyaXRlID0gaWlv
-X2J1ZmZlcl93cml0ZSwKPiArwqDCoMKgwqDCoMKgwqAudW5sb2NrZWRfaW9jdGwgPSBpaW9fYnVm
-ZmVyX2NocmRldl9pb2N0bCwKPiArwqDCoMKgwqDCoMKgwqAuY29tcGF0X2lvY3RsID0gY29tcGF0
-X3B0cl9pb2N0bCwKPiDCoMKgwqDCoMKgwqDCoMKgLnBvbGwgPSBpaW9fYnVmZmVyX3BvbGwsCj4g
-wqDCoMKgwqDCoMKgwqDCoC5yZWxlYXNlID0gaWlvX2J1ZmZlcl9jaHJkZXZfcmVsZWFzZSwKPiDC
-oH07CgpIbW1tLCB3aGF0IGFib3V0IHRoZSBsZWdhY3kgYnVmZmVyPyBXZSBzaG91bGQgYWxzbyBz
-dXBwb3J0IHRoaXMKaW50ZXJmYWNlIHVzaW5nIGl0LCByaWdodD8gT3RoZXJ3aXNlLCB1c2luZyBv
-bmUgb2YgdGhlIG5ldyBJT0NUTCBpbgppaW9fZGV2aWNlX2J1ZmZlcl9pb2N0bCgpIChvciAvZGV2
-L2lpbzpkZXZpY2UwKSB3aWxsIGVycm9yIG91dC4KCi0gTnVubyBTw6EKCg==
+assume the following setup on a single machine:
+1. An openvswitch instance with one bridge and default flows
+2. two network namespaces "server" and "client"
+3. two ovs interfaces "server" and "client" on the bridge
+4. for each ovs interface a veth pair with a matching name and 32 rx and
+   tx queues
+5. move the ends of the veth pairs to the respective network namespaces
+6. assign ip addresses to each of the veth ends in the namespaces (needs
+   to be the same subnet)
+7. start some http server on the server network namespace
+8. test if a client in the client namespace can reach the http server
+
+when following the actions below the host has a chance of getting a cpu
+stuck in a infinite loop:
+1. send a large amount of parallel requests to the http server (around
+   3000 curls should work)
+2. in parallel delete the network namespace (do not delete interfaces or
+   stop the server, just kill the namespace)
+
+there is a low chance that this will cause the below kernel cpu stuck
+message. If this does not happen just retry.
+Below there is also the output of bpftrace for the functions mentioned
+in the output.
+
+The series of events happening here is:
+1. the network namespace is deleted calling
+   `unregister_netdevice_many_notify` somewhere in the process
+2. this sets first `NETREG_UNREGISTERING` on both ends of the veth and
+   then runs `synchronize_net`
+3. it then calls `call_netdevice_notifiers` with `NETDEV_UNREGISTER`
+4. this is then handled by `dp_device_event` which calls
+   `ovs_netdev_detach_dev` (if a vport is found, which is the case for
+   the veth interface attached to ovs)
+5. this removes the rx_handlers of the device but does not prevent
+   packages to be sent to the device
+6. `dp_device_event` then queues the vport deletion to work in
+   background as a ovs_lock is needed that we do not hold in the
+   unregistration path
+7. `unregister_netdevice_many_notify` continues to call
+   `netdev_unregister_kobject` which sets `real_num_tx_queues` to 0
+8. port deletion continues (but details are not relevant for this issue)
+9. at some future point the background task deletes the vport
+
+If after 7. but before 9. a packet is send to the ovs vport (which is
+not deleted at this point in time) which forwards it to the
+`dev_queue_xmit` flow even though the device is unregistering.
+In `skb_tx_hash` (which is called in the `dev_queue_xmit`) path there is
+a while loop (if the packet has a rx_queue recorded) that is infinite if
+`dev->real_num_tx_queues` is zero.
+
+To prevent this from happening we update `do_output` to handle devices
+without carrier the same as if the device is not found (which would
+be the code path after 9. is done).
+
+Additionally we now produce a warning in `skb_tx_hash` if we will hit
+the inifinite loop.
+
+bpftrace (first word is function name):
+
+__dev_queue_xmit server: real_num_tx_queues: 1, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 1
+netdev_core_pick_tx server: addr: 0xffff9f0a46d4a000 real_num_tx_queues: 1, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 1
+dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 2, reg_state: 1
+synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
+synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
+synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
+synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
+dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 6, reg_state: 2
+ovs_netdev_detach_dev server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, reg_state: 2
+netdev_rx_handler_unregister server: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024, reg_state: 2
+synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
+netdev_rx_handler_unregister ret server: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024, reg_state: 2
+dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 27, reg_state: 2
+dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 22, reg_state: 2
+dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 18, reg_state: 2
+netdev_unregister_kobject: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024
+synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
+ovs_vport_send server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
+__dev_queue_xmit server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
+netdev_core_pick_tx server: addr: 0xffff9f0a46d4a000 real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
+broken device server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024
+ovs_dp_detach_port server: real_num_tx_queues: 0 cpu 9, pid: 9124, tid: 9124, reg_state: 2
+synchronize_rcu_expedited: cpu 9, pid: 33604, tid: 33604
+
+stuck message:
+
+watchdog: BUG: soft lockup - CPU#5 stuck for 26s! [curl:1929279]
+Modules linked in: veth pktgen bridge stp llc ip_set_hash_net nft_counter xt_set nft_compat nf_tables ip_set_hash_ip ip_set nfnetlink_cttimeout nfnetlink openvswitch nsh nf_conncount nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 tls binfmt_misc nls_iso8859_1 input_leds joydev serio_raw dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua sch_fq_codel drm efi_pstore virtio_rng ip_tables x_tables autofs4 btrfs blake2b_generic zstd_compress raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor raid6_pq libcrc32c raid1 raid0 multipath linear hid_generic usbhid hid crct10dif_pclmul crc32_pclmul ghash_clmulni_intel aesni_intel virtio_net ahci net_failover crypto_simd cryptd psmouse libahci virtio_blk failover
+CPU: 5 PID: 1929279 Comm: curl Not tainted 5.15.0-67-generic #74-Ubuntu
+Hardware name: OpenStack Foundation OpenStack Nova, BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+RIP: 0010:netdev_pick_tx+0xf1/0x320
+Code: 00 00 8d 48 ff 0f b7 c1 66 39 ca 0f 86 e9 01 00 00 45 0f b7 ff 41 39 c7 0f 87 5b 01 00 00 44 29 f8 41 39 c7 0f 87 4f 01 00 00 <eb> f2 0f 1f 44 00 00 49 8b 94 24 28 04 00 00 48 85 d2 0f 84 53 01
+RSP: 0018:ffffb78b40298820 EFLAGS: 00000246
+RAX: 0000000000000000 RBX: ffff9c8773adc2e0 RCX: 000000000000083f
+RDX: 0000000000000000 RSI: ffff9c8773adc2e0 RDI: ffff9c870a25e000
+RBP: ffffb78b40298858 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff9c870a25e000
+R13: ffff9c870a25e000 R14: ffff9c87fe043480 R15: 0000000000000000
+FS:  00007f7b80008f00(0000) GS:ffff9c8e5f740000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7b80f6a0b0 CR3: 0000000329d66000 CR4: 0000000000350ee0
+Call Trace:
+ <IRQ>
+ netdev_core_pick_tx+0xa4/0xb0
+ __dev_queue_xmit+0xf8/0x510
+ ? __bpf_prog_exit+0x1e/0x30
+ dev_queue_xmit+0x10/0x20
+ ovs_vport_send+0xad/0x170 [openvswitch]
+ do_output+0x59/0x180 [openvswitch]
+ do_execute_actions+0xa80/0xaa0 [openvswitch]
+ ? kfree+0x1/0x250
+ ? kfree+0x1/0x250
+ ? kprobe_perf_func+0x4f/0x2b0
+ ? flow_lookup.constprop.0+0x5c/0x110 [openvswitch]
+ ovs_execute_actions+0x4c/0x120 [openvswitch]
+ ovs_dp_process_packet+0xa1/0x200 [openvswitch]
+ ? ovs_ct_update_key.isra.0+0xa8/0x120 [openvswitch]
+ ? ovs_ct_fill_key+0x1d/0x30 [openvswitch]
+ ? ovs_flow_key_extract+0x2db/0x350 [openvswitch]
+ ovs_vport_receive+0x77/0xd0 [openvswitch]
+ ? __htab_map_lookup_elem+0x4e/0x60
+ ? bpf_prog_680e8aff8547aec1_kfree+0x3b/0x714
+ ? trace_call_bpf+0xc8/0x150
+ ? kfree+0x1/0x250
+ ? kfree+0x1/0x250
+ ? kprobe_perf_func+0x4f/0x2b0
+ ? kprobe_perf_func+0x4f/0x2b0
+ ? __mod_memcg_lruvec_state+0x63/0xe0
+ netdev_port_receive+0xc4/0x180 [openvswitch]
+ ? netdev_port_receive+0x180/0x180 [openvswitch]
+ netdev_frame_hook+0x1f/0x40 [openvswitch]
+ __netif_receive_skb_core.constprop.0+0x23d/0xf00
+ __netif_receive_skb_one_core+0x3f/0xa0
+ __netif_receive_skb+0x15/0x60
+ process_backlog+0x9e/0x170
+ __napi_poll+0x33/0x180
+ net_rx_action+0x126/0x280
+ ? ttwu_do_activate+0x72/0xf0
+ __do_softirq+0xd9/0x2e7
+ ? rcu_report_exp_cpu_mult+0x1b0/0x1b0
+ do_softirq+0x7d/0xb0
+ </IRQ>
+ <TASK>
+ __local_bh_enable_ip+0x54/0x60
+ ip_finish_output2+0x191/0x460
+ __ip_finish_output+0xb7/0x180
+ ip_finish_output+0x2e/0xc0
+ ip_output+0x78/0x100
+ ? __ip_finish_output+0x180/0x180
+ ip_local_out+0x5e/0x70
+ __ip_queue_xmit+0x184/0x440
+ ? tcp_syn_options+0x1f9/0x300
+ ip_queue_xmit+0x15/0x20
+ __tcp_transmit_skb+0x910/0x9c0
+ ? __mod_memcg_state+0x44/0xa0
+ tcp_connect+0x437/0x4e0
+ ? ktime_get_with_offset+0x60/0xf0
+ tcp_v4_connect+0x436/0x530
+ __inet_stream_connect+0xd4/0x3a0
+ ? kprobe_perf_func+0x4f/0x2b0
+ ? aa_sk_perm+0x43/0x1c0
+ inet_stream_connect+0x3b/0x60
+ __sys_connect_file+0x63/0x70
+ __sys_connect+0xa6/0xd0
+ ? setfl+0x108/0x170
+ ? do_fcntl+0xe8/0x5a0
+ __x64_sys_connect+0x18/0x20
+ do_syscall_64+0x5c/0xc0
+ ? __x64_sys_fcntl+0xa9/0xd0
+ ? exit_to_user_mode_prepare+0x37/0xb0
+ ? syscall_exit_to_user_mode+0x27/0x50
+ ? do_syscall_64+0x69/0xc0
+ ? __sys_setsockopt+0xea/0x1e0
+ ? exit_to_user_mode_prepare+0x37/0xb0
+ ? syscall_exit_to_user_mode+0x27/0x50
+ ? __x64_sys_setsockopt+0x1f/0x30
+ ? do_syscall_64+0x69/0xc0
+ ? irqentry_exit+0x1d/0x30
+ ? exc_page_fault+0x89/0x170
+ entry_SYSCALL_64_after_hwframe+0x61/0xcb
+RIP: 0033:0x7f7b8101c6a7
+Code: 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 2a 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 18 89 54 24 0c 48 89 34 24 89
+RSP: 002b:00007ffffd6b2198 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7b8101c6a7
+RDX: 0000000000000010 RSI: 00007ffffd6b2360 RDI: 0000000000000005
+RBP: 0000561f1370d560 R08: 00002795ad21d1ac R09: 0030312e302e302e
+R10: 00007ffffd73f080 R11: 0000000000000246 R12: 0000561f1370c410
+R13: 0000000000000000 R14: 0000000000000005 R15: 0000000000000000
+ </TASK>
+
+Fixes: 7f8a436eaa2c ("openvswitch: Add conntrack action")
+Co-developed-by: Luca Czesla <luca.czesla@mail.schwarz>
+Signed-off-by: Luca Czesla <luca.czesla@mail.schwarz>
+Signed-off-by: Felix Huettner <felix.huettner@mail.schwarz>
+---
+v2:
+  - replace BUG_ON with DEBUG_NET_WARN_ON_ONCE
+  - use netif_carrier_ok() instead of checking for NETREG_REGISTERED
+v1: https://lore.kernel.org/netdev/ZCaXfZTwS9MVk8yZ@kernel-bug-kernel-bug/
+
+ net/core/dev.c            | 1 +
+ net/openvswitch/actions.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 253584777101..37b26017f458 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -3199,6 +3199,7 @@ static u16 skb_tx_hash(const struct net_device *dev,
+ 	}
+
+ 	if (skb_rx_queue_recorded(skb)) {
++		DEBUG_NET_WARN_ON_ONCE(unlikely(qcount == 0));
+ 		hash = skb_get_rx_queue(skb);
+ 		if (hash >= qoffset)
+ 			hash -= qoffset;
+diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
+index ca3ebfdb3023..a8cf9a88758e 100644
+--- a/net/openvswitch/actions.c
++++ b/net/openvswitch/actions.c
+@@ -913,7 +913,7 @@ static void do_output(struct datapath *dp, struct sk_buff *skb, int out_port,
+ {
+ 	struct vport *vport = ovs_vport_rcu(dp, out_port);
+
+-	if (likely(vport)) {
++	if (likely(vport && netif_carrier_ok(vport->dev))) {
+ 		u16 mru = OVS_CB(skb)->mru;
+ 		u32 cutlen = OVS_CB(skb)->cutlen;
+
+--
+2.40.0
+
 
