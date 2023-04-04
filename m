@@ -2,205 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE786D5738
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 05:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D356D5736
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 05:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbjDDDaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 23:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
+        id S232971AbjDDD3V convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Apr 2023 23:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbjDDDaE (ORCPT
+        with ESMTP id S232736AbjDDD3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 23:30:04 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8BD19AE
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 20:30:02 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so32609675pjt.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 20:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680579002;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8SCrUqeM1P3yGd529t2hRwHdcjRZtPKILDnamTlQUXQ=;
-        b=CzqiQOeOa+ta+hA2U1HMCdV6+eZQDEMhIqvt65+TtWpqkDFS4BFWCkl4/bTULAA388
-         fQDLo0/Y0eea8yR+ddCvHR9jG0D64iLIfYciavMNkE5S4mZdXwrLt68g+1b6vQYc5rjt
-         kep1qzVuyw6u+L4/uTehRgKVusRBYQ4m+1fZiEUZvu0z5SM8gh/cDFR6NQcSo3yCeGV9
-         kXmw/lwo/9ahE+XOGSV0G20phPROjvn155wOg4/ADwu/ZsuKMt3oMkrlcrKYH7oVs2Hu
-         HaBMGFFNzlU6aAcuXs+PwOCT033QSCyZGt+K3wptCzdPXSLKxlEQ8IyUmhEtL+Fdx9Ah
-         +DFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680579002;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8SCrUqeM1P3yGd529t2hRwHdcjRZtPKILDnamTlQUXQ=;
-        b=yq54bFhHpHMh355prAAwNj6u+2vlkH0yfS/BxP9Z6CcKaLjTeyG31KfIeNLy+Uw9Bc
-         5G5uG1BBDYGvXmWXwAtMiQyhvBwWPb9Ku9GCT59afA8S1HOG1NB2nJxWusTr/77pZbps
-         idCT7bdcadcXy/qL6ArsMEvRKYzDAAlyZ4ZH3i/DNDLkQhD3pxZpFFM1fOgC5VIBPSdU
-         49aiFufklMJUEYUU/CZo+W1Cu9l0sg13L7oqFrvMtp+oZbzZtkM027m+h3ieRAUnyy1G
-         SJRUMhJ0PsOVV0m4WDjZBRip5dR8j1/JxHRW37nV07P7ee9qkPqzv7vxswq7JIkbJJAz
-         qobA==
-X-Gm-Message-State: AAQBX9e9Gz+mpSoXJKTnkYnnUZ6kUvh78rwF3rgx+qnGTfwShF4IFFgD
-        bLCas7wtbzCKerOBFCzUyfc=
-X-Google-Smtp-Source: AKy350Yff+5F1amie00s7tLoMAqgIv1zZEfcaKS3xqpJN07eq8Ra+GLIW13XiS1cmeFbmR2OSqUx5g==
-X-Received: by 2002:a17:90a:5314:b0:23d:3a3f:950b with SMTP id x20-20020a17090a531400b0023d3a3f950bmr1311028pjh.22.1680579002199;
-        Mon, 03 Apr 2023 20:30:02 -0700 (PDT)
-Received: from localhost.localdomain ([103.117.248.198])
-        by smtp.gmail.com with ESMTPSA id js2-20020a17090b148200b002339491ead6sm10577019pjb.5.2023.04.03.20.30.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 20:30:01 -0700 (PDT)
-From:   Weizhao Ouyang <o451686892@gmail.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Weizhao Ouyang <o451686892@gmail.com>
-Subject: [PATCH] f2fs: use common implementation of file type
-Date:   Tue,  4 Apr 2023 11:28:44 +0800
-Message-Id: <20230404032844.3596879-1-o451686892@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 3 Apr 2023 23:29:17 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7089199C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 20:29:12 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 15C8724E258;
+        Tue,  4 Apr 2023 11:29:10 +0800 (CST)
+Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 4 Apr
+ 2023 11:29:10 +0800
+Received: from localhost.localdomain (183.27.97.179) by EXMBX067.cuchost.com
+ (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 4 Apr
+ 2023 11:29:09 +0800
+From:   Mason Huo <mason.huo@starfivetech.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        "Mason Huo" <mason.huo@starfivetech.com>,
+        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+        Sia Jee Heng <jeeheng.sia@starfivetech.com>
+Subject: [PATCH v5] irqchip/irq-sifive-plic: Add syscore callbacks for hibernation
+Date:   Tue, 4 Apr 2023 11:29:08 +0800
+Message-ID: <20230404032908.89638-1-mason.huo@starfivetech.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.97.179]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX067.cuchost.com
+ (172.16.6.67)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use common implementation of file type conversion helpers.
+The priority and enable registers of plic will be reset
+during hibernation power cycle in poweroff mode,
+add the syscore callbacks to save/restore those registers.
 
-Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
+Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
+Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+Reviewed-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/r/202302140709.CdkxgtPi-lkp@intel.com/
 ---
- fs/f2fs/dir.c           | 39 +++------------------------------------
- fs/f2fs/f2fs.h          |  1 -
- fs/f2fs/inline.c        |  2 +-
- include/linux/f2fs_fs.h | 15 ---------------
- 4 files changed, 4 insertions(+), 53 deletions(-)
+ drivers/irqchip/irq-sifive-plic.c | 93 ++++++++++++++++++++++++++++++-
+ 1 file changed, 91 insertions(+), 2 deletions(-)
 
-diff --git a/fs/f2fs/dir.c b/fs/f2fs/dir.c
-index 9ccdbe120425..225672e9469c 100644
---- a/fs/f2fs/dir.c
-+++ b/fs/f2fs/dir.c
-@@ -42,39 +42,6 @@ static unsigned int bucket_blocks(unsigned int level)
- 		return 4;
+diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+index ff47bd0dec45..e1484905b7bd 100644
+--- a/drivers/irqchip/irq-sifive-plic.c
++++ b/drivers/irqchip/irq-sifive-plic.c
+@@ -17,6 +17,7 @@
+ #include <linux/of_irq.h>
+ #include <linux/platform_device.h>
+ #include <linux/spinlock.h>
++#include <linux/syscore_ops.h>
+ #include <asm/smp.h>
+ 
+ /*
+@@ -67,6 +68,8 @@ struct plic_priv {
+ 	struct irq_domain *irqdomain;
+ 	void __iomem *regs;
+ 	unsigned long plic_quirks;
++	unsigned int nr_irqs;
++	unsigned long *prio_save;
+ };
+ 
+ struct plic_handler {
+@@ -78,6 +81,7 @@ struct plic_handler {
+ 	 */
+ 	raw_spinlock_t		enable_lock;
+ 	void __iomem		*enable_base;
++	u32			*enable_save;
+ 	struct plic_priv	*priv;
+ };
+ static int plic_parent_irq __ro_after_init;
+@@ -229,6 +233,71 @@ static int plic_irq_set_type(struct irq_data *d, unsigned int type)
+ 	return IRQ_SET_MASK_OK;
  }
  
--static unsigned char f2fs_filetype_table[F2FS_FT_MAX] = {
--	[F2FS_FT_UNKNOWN]	= DT_UNKNOWN,
--	[F2FS_FT_REG_FILE]	= DT_REG,
--	[F2FS_FT_DIR]		= DT_DIR,
--	[F2FS_FT_CHRDEV]	= DT_CHR,
--	[F2FS_FT_BLKDEV]	= DT_BLK,
--	[F2FS_FT_FIFO]		= DT_FIFO,
--	[F2FS_FT_SOCK]		= DT_SOCK,
--	[F2FS_FT_SYMLINK]	= DT_LNK,
--};
--
--static unsigned char f2fs_type_by_mode[S_IFMT >> S_SHIFT] = {
--	[S_IFREG >> S_SHIFT]	= F2FS_FT_REG_FILE,
--	[S_IFDIR >> S_SHIFT]	= F2FS_FT_DIR,
--	[S_IFCHR >> S_SHIFT]	= F2FS_FT_CHRDEV,
--	[S_IFBLK >> S_SHIFT]	= F2FS_FT_BLKDEV,
--	[S_IFIFO >> S_SHIFT]	= F2FS_FT_FIFO,
--	[S_IFSOCK >> S_SHIFT]	= F2FS_FT_SOCK,
--	[S_IFLNK >> S_SHIFT]	= F2FS_FT_SYMLINK,
--};
--
--static void set_de_type(struct f2fs_dir_entry *de, umode_t mode)
--{
--	de->file_type = f2fs_type_by_mode[(mode & S_IFMT) >> S_SHIFT];
--}
--
--unsigned char f2fs_get_de_type(struct f2fs_dir_entry *de)
--{
--	if (de->file_type < F2FS_FT_MAX)
--		return f2fs_filetype_table[de->file_type];
--	return DT_UNKNOWN;
--}
--
- /* If @dir is casefolded, initialize @fname->cf_name from @fname->usr_fname. */
- int f2fs_init_casefolded_name(const struct inode *dir,
- 			      struct f2fs_filename *fname)
-@@ -485,7 +452,7 @@ void f2fs_set_link(struct inode *dir, struct f2fs_dir_entry *de,
- 	lock_page(page);
- 	f2fs_wait_on_page_writeback(page, type, true, true);
- 	de->ino = cpu_to_le32(inode->i_ino);
--	set_de_type(de, inode->i_mode);
-+	de->file_type = fs_umode_to_ftype(inode->i_mode);
- 	set_page_dirty(page);
++static int plic_irq_suspend(void)
++{
++	unsigned int i, cpu;
++	u32 __iomem *reg;
++	struct plic_priv *priv;
++
++	priv = per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
++
++	for (i = 0; i < priv->nr_irqs; i++)
++		if (readl(priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID))
++			__set_bit(i, priv->prio_save);
++		else
++			__clear_bit(i, priv->prio_save);
++
++	for_each_cpu(cpu, cpu_present_mask) {
++		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
++
++		if (!handler->present)
++			continue;
++
++		raw_spin_lock(&handler->enable_lock);
++		for (i = 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
++			reg = handler->enable_base + i * sizeof(u32);
++			handler->enable_save[i] = readl(reg);
++		}
++		raw_spin_unlock(&handler->enable_lock);
++	}
++
++	return 0;
++}
++
++static void plic_irq_resume(void)
++{
++	unsigned int i, index, cpu;
++	u32 __iomem *reg;
++	struct plic_priv *priv;
++
++	priv = per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
++
++	for (i = 0; i < priv->nr_irqs; i++) {
++		index = BIT_WORD(i);
++		writel((priv->prio_save[index] & BIT_MASK(i)) ? 1 : 0,
++		       priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
++	}
++
++	for_each_cpu(cpu, cpu_present_mask) {
++		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
++
++		if (!handler->present)
++			continue;
++
++		raw_spin_lock(&handler->enable_lock);
++		for (i = 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
++			reg = handler->enable_base + i * sizeof(u32);
++			writel(handler->enable_save[i], reg);
++		}
++		raw_spin_unlock(&handler->enable_lock);
++	}
++}
++
++static struct syscore_ops plic_irq_syscore_ops = {
++	.suspend	= plic_irq_suspend,
++	.resume		= plic_irq_resume,
++};
++
+ static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
+ 			      irq_hw_number_t hwirq)
+ {
+@@ -345,6 +414,7 @@ static int __init __plic_init(struct device_node *node,
+ 	u32 nr_irqs;
+ 	struct plic_priv *priv;
+ 	struct plic_handler *handler;
++	unsigned int cpu;
  
- 	dir->i_mtime = dir->i_ctime = current_time(dir);
-@@ -699,7 +666,7 @@ void f2fs_update_dentry(nid_t ino, umode_t mode, struct f2fs_dentry_ptr *d,
- 	de->name_len = cpu_to_le16(name->len);
- 	memcpy(d->filename[bit_pos], name->name, name->len);
- 	de->ino = cpu_to_le32(ino);
--	set_de_type(de, mode);
-+	de->file_type = fs_umode_to_ftype(mode);
- 	for (i = 0; i < slots; i++) {
- 		__set_bit_le(bit_pos + i, (void *)d->bitmap);
- 		/* avoid wrong garbage data for readdir */
-@@ -1036,7 +1003,7 @@ int f2fs_fill_dentries(struct dir_context *ctx, struct f2fs_dentry_ptr *d,
- 			continue;
- 		}
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+@@ -363,15 +433,21 @@ static int __init __plic_init(struct device_node *node,
+ 	if (WARN_ON(!nr_irqs))
+ 		goto out_iounmap;
  
--		d_type = f2fs_get_de_type(de);
-+		d_type = fs_ftype_to_dtype(de->file_type);
++	priv->nr_irqs = nr_irqs;
++
++	priv->prio_save = bitmap_alloc(nr_irqs, GFP_KERNEL);
++	if (!priv->prio_save)
++		goto out_free_priority_reg;
++
+ 	nr_contexts = of_irq_count(node);
+ 	if (WARN_ON(!nr_contexts))
+-		goto out_iounmap;
++		goto out_free_priority_reg;
  
- 		de_name.name = d->filename[bit_pos];
- 		de_name.len = le16_to_cpu(de->name_len);
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index b0ab2062038a..3f39d162d858 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -3489,7 +3489,6 @@ int f2fs_get_tmpfile(struct mnt_idmap *idmap, struct inode *dir,
- /*
-  * dir.c
-  */
--unsigned char f2fs_get_de_type(struct f2fs_dir_entry *de);
- int f2fs_init_casefolded_name(const struct inode *dir,
- 			      struct f2fs_filename *fname);
- int f2fs_setup_filename(struct inode *dir, const struct qstr *iname,
-diff --git a/fs/f2fs/inline.c b/fs/f2fs/inline.c
-index 72269e7efd26..4638fee16a91 100644
---- a/fs/f2fs/inline.c
-+++ b/fs/f2fs/inline.c
-@@ -497,7 +497,7 @@ static int f2fs_add_inline_entries(struct inode *dir, void *inline_dentry)
- 		fname.hash = de->hash_code;
+ 	error = -ENOMEM;
+ 	priv->irqdomain = irq_domain_add_linear(node, nr_irqs + 1,
+ 			&plic_irqdomain_ops, priv);
+ 	if (WARN_ON(!priv->irqdomain))
+-		goto out_iounmap;
++		goto out_free_priority_reg;
  
- 		ino = le32_to_cpu(de->ino);
--		fake_mode = f2fs_get_de_type(de) << S_SHIFT;
-+		fake_mode = fs_ftype_to_dtype(de->file_type) << S_DT_SHIFT;
+ 	for (i = 0; i < nr_contexts; i++) {
+ 		struct of_phandle_args parent;
+@@ -441,6 +517,11 @@ static int __init __plic_init(struct device_node *node,
+ 		handler->enable_base = priv->regs + CONTEXT_ENABLE_BASE +
+ 			i * CONTEXT_ENABLE_SIZE;
+ 		handler->priv = priv;
++
++		handler->enable_save =  kcalloc(DIV_ROUND_UP(nr_irqs, 32),
++						sizeof(*handler->enable_save), GFP_KERNEL);
++		if (!handler->enable_save)
++			goto out_free_enable_reg;
+ done:
+ 		for (hwirq = 1; hwirq <= nr_irqs; hwirq++) {
+ 			plic_toggle(handler, hwirq, 0);
+@@ -461,11 +542,19 @@ static int __init __plic_init(struct device_node *node,
+ 				  plic_starting_cpu, plic_dying_cpu);
+ 		plic_cpuhp_setup_done = true;
+ 	}
++	register_syscore_ops(&plic_irq_syscore_ops);
  
- 		err = f2fs_add_regular_entry(dir, &fname, NULL, ino, fake_mode);
- 		if (err)
-diff --git a/include/linux/f2fs_fs.h b/include/linux/f2fs_fs.h
-index 1701f25117ea..d80195d226ab 100644
---- a/include/linux/f2fs_fs.h
-+++ b/include/linux/f2fs_fs.h
-@@ -585,21 +585,6 @@ struct f2fs_dentry_block {
- 	__u8 filename[NR_DENTRY_IN_BLOCK][F2FS_SLOT_LEN];
- } __packed;
+ 	pr_info("%pOFP: mapped %d interrupts with %d handlers for"
+ 		" %d contexts.\n", node, nr_irqs, nr_handlers, nr_contexts);
+ 	return 0;
  
--/* file types used in inode_info->flags */
--enum {
--	F2FS_FT_UNKNOWN,
--	F2FS_FT_REG_FILE,
--	F2FS_FT_DIR,
--	F2FS_FT_CHRDEV,
--	F2FS_FT_BLKDEV,
--	F2FS_FT_FIFO,
--	F2FS_FT_SOCK,
--	F2FS_FT_SYMLINK,
--	F2FS_FT_MAX
--};
--
--#define S_SHIFT 12
--
- #define	F2FS_DEF_PROJID		0	/* default project ID */
- 
- #endif  /* _LINUX_F2FS_FS_H */
++out_free_enable_reg:
++	for_each_cpu(cpu, cpu_present_mask) {
++		handler = per_cpu_ptr(&plic_handlers, cpu);
++		kfree(handler->enable_save);
++	}
++out_free_priority_reg:
++	kfree(priv->prio_save);
+ out_iounmap:
+ 	iounmap(priv->regs);
+ out_free_priv:
 -- 
-2.25.1
+2.39.2
 
