@@ -2,145 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CCD6D606D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B756D60DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234737AbjDDMdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
+        id S234772AbjDDMh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233431AbjDDMdu (ORCPT
+        with ESMTP id S234645AbjDDMhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:33:50 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F71990
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:33:48 -0700 (PDT)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230404123346epoutp0417eacf017ede978236fb21d0e36ad201~Su17NHuTL3243032430epoutp04E
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:33:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230404123346epoutp0417eacf017ede978236fb21d0e36ad201~Su17NHuTL3243032430epoutp04E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1680611626;
-        bh=CyluXGQ/M50MWKT/ymzRne/5E932eD39ooQcgkhBmfs=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=KLQuf2jw34smeS2aJvc+EmHxrxVcGdhEoBK7xGnBkKxhw/efVi6X9UBoN1JWF4krS
-         oZ3wRYw0pzCyLWbWDU2z7wcNJb/OC/bhxAJAvydYLWVgnBV5nmCj8TAKNcXf86sQ1t
-         BNTVwsdEJgajRVbZY9CkLfTUHWFobrwEBefUfbWs=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20230404123346epcas1p42412041191e78ddf51f9dec9562d8951~Su16paRWH2695126951epcas1p4G;
-        Tue,  4 Apr 2023 12:33:46 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.38.247]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4PrRyK5tHRz4x9Pr; Tue,  4 Apr
-        2023 12:33:45 +0000 (GMT)
-X-AuditID: b6c32a38-5fbfa70000029402-2f-642c19290181
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BA.FC.37890.9291C246; Tue,  4 Apr 2023 21:33:45 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [RFC] vsprintf: compile error on %09pK
-Reply-To: jaewon31.kim@samsung.com
-Sender: Jaewon Kim <jaewon31.kim@samsung.com>
-From:   Jaewon Kim <jaewon31.kim@samsung.com>
-To:     Petr Mladek <pmladek@suse.com>,
-        Jaewon Kim <jaewon31.kim@samsung.com>
-CC:     David Laight <David.Laight@aculab.com>,
-        'Jaewon Kim' <jaewon31.kim@gmail.com>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        GyeongHwan Hong <gh21.hong@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <ZCwSIy5Tm0jAe1Ww@alley>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230404123345epcms1p1518b92632293f3f0bd7d12a29ba7c3e2@epcms1p1>
-Date:   Tue, 04 Apr 2023 21:33:45 +0900
-X-CMS-MailID: 20230404123345epcms1p1518b92632293f3f0bd7d12a29ba7c3e2
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJJsWRmVeSWpSXmKPExsWy7bCmvq6mpE6KQeMtPYuXhzQtdizdzGSx
-        5fcbRovuzTMZLXrfv2KyuLxrDpvFvTX/WS3+P/7KarF74yI2B06P/tlT2DxmN1xk8dg56y67
-        x6ZPk9g9+rasYvRYv+Uqi8fnTXIB7FHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaW
-        FuZKCnmJuam2Si4+AbpumTlAlykplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswK
-        9IoTc4tL89L18lJLrAwNDIxMgQoTsjO2nmxkKvjHWzHph0AD4xSuLkZODgkBE4nPh5cwdjFy
-        cQgJ7GCUaPw3lbWLkYODV0BQ4u8OYZAaYQFjiRWHzzOD2EICShJnf1xhh4jrSjR1r2YBsdkE
-        tCXeL5jECmKLCHhKnDrbxgQyk1lgMZPEgasTWCCW8UrMaH8KZUtLbF++lRHE5hRQleg69AUq
-        Lipxc/Vbdhj7/bH5jBC2iETrvbPMELagxIOfuxlh5vw5/pwNwi6WWNb5gAnCrpFYcW4VVNxc
-        ouHtSjCbV8BXov3RXjCbBWjvvG/noPa6SJya1gX2ALOAvMT2t3OYQeHALKApsX6XPkSJosTO
-        33MZYV5p2PibHZ3NLMAn8e5rDytMfMe8J1DnqEm0PPsKFZeR+PvvGesERqVZiJCehWTxLITF
-        CxiZVzGKpRYU56anFhsWmMDjNjk/dxMjOI1qWexgnPv2g94hRiYOxkOMEhzMSiK8ql1aKUK8
-        KYmVValF+fFFpTmpxYcYTYFensgsJZqcD0zkeSXxhiaWBiZmRiYWxpbGZkrivF+eaqcICaQn
-        lqRmp6YWpBbB9DFxcEo1MMm/c9ZUck5h15CqlGJQVYyKECtu+b1D/uDD8k8ctw2/fNu25fUm
-        N7EXVds/zCpwDm65rajfJ5+26pro8XfeyxWqXf7YTtH6vEzuco5DP9P2GeF7QvdtbDnacu1n
-        WO1zXUNdC45HQVdlrxxf1mbJX/6Ze8vOvLV++tstTNJtDWqzHjun2QkdyJXbcHjnacGYCctW
-        HV0xUYlB9ctnhuuFyrbHW0LjePVvGTuZHso6wPyJV27f1MtrXNwKMz58D83cMCHizX37u1Ml
-        ap7FX7+gZ95u78vn99Zf5hCDwva3byv2Jj1mj5Pd3L/iXWbLRJtpAr6Pq5Mss8R62jkPb20S
-        WHpnE3thtVcak8ki4T+pSizFGYmGWsxFxYkAWyO9ciwEAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42
-References: <ZCwSIy5Tm0jAe1Ww@alley>
-        <694722c9409b43808cfbc1fc9e495016@AcuMS.aculab.com>
-        <20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p3>
-        <ZCrMMQt2xnnZIyz6@alley>
-        <CAJrd-Uvzy18SfjjqbqZCPHjw+ujQXsBpvov4b=bfAwZrj=bCAA@mail.gmail.com>
-        <20230404101201epcms1p615a6365e64fc6e0a0fa203d41404940c@epcms1p6>
-        <CGME20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p1>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 4 Apr 2023 08:37:21 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C655135A1
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:36:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pjft5-00085U-4q; Tue, 04 Apr 2023 14:35:47 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pjft3-008v3a-DB; Tue, 04 Apr 2023 14:35:45 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pjft2-00AVgL-In; Tue, 04 Apr 2023 14:35:44 +0200
+Date:   Tue, 4 Apr 2023 14:35:44 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Brian Masney <bmasney@redhat.com>
+Cc:     kernel test robot <lkp@intel.com>, jic23@kernel.org,
+        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        andriy.shevchenko@linux.intel.com, trix@redhat.com,
+        lars@metafoo.de, nathan@kernel.org, ndesaulniers@google.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hslester96@gmail.com
+Subject: Re: [PATCH] iio: light: tsl2772: fix reading proximity-diodes from
+ device tree
+Message-ID: <20230404123544.6m5juesxwf4tklkm@pengutronix.de>
+References: <20230404011455.339454-1-bmasney@redhat.com>
+ <202304041451.gj8oasQp-lkp@intel.com>
+ <ZCwGP6rBLgbDGvkv@x1>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="czfim3jbpqegyq4m"
+Content-Disposition: inline
+In-Reply-To: <ZCwGP6rBLgbDGvkv@x1>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On Tue 2023-04-04 19:12:01, Jaewon Kim wrote:
->> >From: Jaewon Kim
->> >> Sent: 03 April 2023 15:40
->> >...
->> >> I wanted to print phys_addr_t  type value only when kptr_restrict sysctl is
->> >> allowed. So I thought I could use %pK for that purpose. And the physical
->> >> address is not that long. I wanted to make that length short like 9 hex.
->> >
->> >Isn't that is the wrong format for physical addresses anyway?
->> >They can be larger than virtual ones (eg x86 with PAE).
->> 
->> Yeah, correct. I just used %pK to hide physical address, I thought it could be
->> leak in security perspective. Could you give me advice how I can hide the
->> address by default and look the address if kptr_restrict allow it?
->
->Could you please send a patch that would show what value you want to print?
->
->The initial mail mentioned converting %09lx to %09pK in some driver.
->Then it included a warning when compiling from mm/page_alloc.o
->
-                                                                                                                                                       O
-Oh I just found something I'm interested. I was printing rmem->base and
-rmem->name and wanted to hide the rmem->base. The commit aeb9267eb6b1 
-("of: reserved-mem: print out reserved-mem details during boot - v6.3-rc1")
-just used %pa. If %pa is not good enough in security perspecitve, I think
-I can use %pa.
 
-Yes it was just my curiosity. I don't actually need the length.
+--czfim3jbpqegyq4m
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm OK now.
-Thank you 
+Hello Brian,
 
->Honestly, I think that you could just use %pK or %p. IMHO, it does not
->make sense to optimize it for the length.
->
->Anyway, there is still the question if the address is really worth
->printing. Will it really help to locate a potential problem?
->
->Best Regards,
->Petr
+On Tue, Apr 04, 2023 at 07:13:03AM -0400, Brian Masney wrote:
+> This doesn't contain the code that's in iio/togreg [1], and that's why
+> the build failed. I originally developed / built this against
+> next-20230330. I just checked linus/master, next-20230404, iio/testing,
+> and all have the expected code that defines prox_diode_mask.
+>=20
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/tree/dr=
+ivers/iio/light/tsl2772.c?h=3Dtogreg#n593
+
+You might want to make use of the --base parameter to git format-patch
+for you next submission. With that the auto builders have a chance to
+test on the right tree.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--czfim3jbpqegyq4m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQsGZ8ACgkQj4D7WH0S
+/k61mwf/ThD/ELYPWS+2DGG+2K5E/kOiiSJCCu985Ejv52/bRiUU9GH9VVFOoPU5
+BmHaG2iqF8nbShTHifTEdA0bTCa6A+ipCx12P4ztQEI4AIgY9zoiqZ2sWbUiAM4r
+hEdEPRy2fF6b5FUarVBNN3ySxgmika/6O3+VMG+T0SGwg8tqgCRpB0jGsOLvCjKa
+V4xCW7UvkgSWz2MyIdlfI5aoea18sSMZpREWsNFjevyB9b+jZ9WC46PQS37TidUA
+4Y59J5acABYXE1Ou/8BJGWT3Qbc1cgYiKnZbjOXVRNZNFM3gSb3qlH9hKXYAgSqa
+ff4wQKOyGv1nIGJgI8WqfxqdCuflJg==
+=E1z2
+-----END PGP SIGNATURE-----
+
+--czfim3jbpqegyq4m--
