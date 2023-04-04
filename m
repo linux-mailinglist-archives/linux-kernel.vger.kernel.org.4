@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE126D6FEB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 00:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECA86D6FEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 00:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236602AbjDDWJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 18:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
+        id S236431AbjDDWJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 18:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236498AbjDDWJc (ORCPT
+        with ESMTP id S236581AbjDDWJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 18:09:32 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046BB2D4B;
-        Tue,  4 Apr 2023 15:09:31 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so35410082pjz.1;
-        Tue, 04 Apr 2023 15:09:30 -0700 (PDT)
+        Tue, 4 Apr 2023 18:09:52 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42963421F;
+        Tue,  4 Apr 2023 15:09:50 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id j13so32066920pjd.1;
+        Tue, 04 Apr 2023 15:09:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680646170;
+        d=gmail.com; s=20210112; t=1680646190;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ypW3uCkatd85laSwJoEHyhvz6A6Q9ytym+XuTNT93dU=;
-        b=JoPIXnG83ROdZ1kq4xk1n+ZIq8MPvMAtV87d4GO9cK1Ht5tNTGA78J92/9fyfQ8qOz
-         zOkXvSQyi0fCdcUqwDCF1aySQtYSj47zHGZnMA6yXhwZv9AQyrF4VswADo/gInOgv8cV
-         EDAQSv8DIu5lKaQgYKo3yqqGWLmwn21LgwsYD2Hyci1hzAh6UsJvZJCr+689gc8dKlqn
-         eS1k5e6m5h04Bp+/UQ/F13SBvUKzlkK5oXRvgxzxk3Kk5KyPaC5gueNPmztxsO+0cjDR
-         KyU54efHq5YIukhd5Dzmoy4gKq97Wol87Sn4yfXNtziL0Ij6a9VFiH9OrZ1WyDfc4cc6
-         lwxQ==
+        bh=FhW41Lz+Mez52y9+7Sqb35hmOmVdAZ3fg2uw11nAPAE=;
+        b=gUnEta5Yb6BtuCcTbAobNapAGPwc0djL/m8TaRV6zg1dmzIbN9ViSxcJdaPoUxzS4b
+         lqAg8chb72IJSS+FDlhtOK8Q6TNt1dX6HhF5uUTVwsIiKbA7yXZaggFVpSNKPB/kpfG5
+         UGE6OA1h2UEWP7hBlWDMJIm6VAA88W4h5iUein/TQ4pBlGSVHPr+4gtWEGZz1NccX+1O
+         pzrByG745s8cPaG1Bv9BjxgAeCG+TOnfx7Zf8ZthRcuoQ7uY/PzreoHfTKIwH39L6NMf
+         +ihHktT0J0n+iD3LRnqvnglDvtpJ0jraXnTyclvvFj3bOpjrIKalZFNddiclc0ueDpSP
+         hxZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680646170;
+        d=1e100.net; s=20210112; t=1680646190;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ypW3uCkatd85laSwJoEHyhvz6A6Q9ytym+XuTNT93dU=;
-        b=hI+WXQpcrNmGUXSy6/l80cLBs2s8yvweemGmdIbpblnGLkS5dPInQpkF7LR5+QWtzk
-         C3SscGx5peHymdT02Mah7xeilIFQlbtuqGyZpJUrG/fYnXsOTTNgZ3VKAQm/Ks4w9Xyi
-         +Dk5yj68GgaNDNPT8UJ5Cfa3ZxXRxv5zACLQp8fqt0b/IsX9qzaVVL5a0BDD2iH8dfhH
-         m39s5llClKnW5Y407C/sJM4j66i6mwRJ48nYjI51ZYyHLa98coKzXyfFQu9dCzqj2oVW
-         WvJseYoNIOfjy+eOqiIxKHAxqpXjkaXhvEEb5b/gU+U6v/gLGyQ1lLfvFlxzsW+Sy3RF
-         waOA==
-X-Gm-Message-State: AAQBX9fTDw/lqE/9LymvHGi0QRAlUo1YNZc+U7eGKDyoO4K0nD1I/EON
-        7cPgTzGKCu/trLXwZAfwG5p8AkkkigfLAcmBbsw=
-X-Google-Smtp-Source: AKy350auMB5aAW5vcPRu5Z3zk0kCG0J70wFTxHDdx38zTGhfy79hnQwCL23EHjo5fAbzVlHyZYpeRiAzV27aaZOYeGI=
-X-Received: by 2002:a17:902:8604:b0:1a0:48ff:539c with SMTP id
- f4-20020a170902860400b001a048ff539cmr1636900plo.11.1680646170341; Tue, 04 Apr
- 2023 15:09:30 -0700 (PDT)
+        bh=FhW41Lz+Mez52y9+7Sqb35hmOmVdAZ3fg2uw11nAPAE=;
+        b=CrGrfHtBlvOjjTF4xStir0n6IHEnpwk3c3p5eO2cvlgiQBpqqsEyjqfDBMM3joe5qG
+         wRZopbF0XAfy0CnoEAghgb+GkQ3ZRkk2bor9fCvOCYfhdAWAso+xFNX1nU29fbt9IA5+
+         nKxWq5kCGr6inhS1j9pJrybfQwtwYqOO0LucM2SkCTFEg/Mnedk0YoXhQtR62FmH/D4f
+         U+89JyTOkp1mdXLBAxMKPP8x2AInWn3BANFPxu7g00JJV0fRiAZtwR6kvzNELpQqdifj
+         v5sOZ0obEfKV62ewg+7YvBUw/1fdQ74J8jtksoeCmu5I81OHtmtdwmbxF2I4p1mGfZ4L
+         jC1Q==
+X-Gm-Message-State: AAQBX9dY5SJI6FRkol+3Rv5sY3RsdJDF7XBcvF9TqKOr51m220K4M4XH
+        aEJOX7WDa8AhcjNP8G5me1EKYZ9diAyeVLtwZrY=
+X-Google-Smtp-Source: AKy350bBMyaLkYHcsUf3JTXKneddX4ZVx0+3AX9RSmsTAdcXvoVPs11LPU8Ekd9MaEE01X2e0f3RDUQs/sOmoWXiTBE=
+X-Received: by 2002:a17:90b:e09:b0:240:228:95bd with SMTP id
+ ge9-20020a17090b0e0900b00240022895bdmr1533929pjb.5.1680646189645; Tue, 04 Apr
+ 2023 15:09:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230404084308.813-1-zhangqing@loongson.cn> <20230404084308.813-2-zhangqing@loongson.cn>
-In-Reply-To: <20230404084308.813-2-zhangqing@loongson.cn>
+References: <20230404084308.813-1-zhangqing@loongson.cn>
+In-Reply-To: <20230404084308.813-1-zhangqing@loongson.cn>
 From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 5 Apr 2023 00:09:19 +0200
-Message-ID: <CA+fCnZf-segLxa3QxStd6v15ZCge=3=3rOL-9Q_eMc-y2j1nhg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] kasan: Add (pmd|pud)_init for LoongArch
- zero_(pud|p4d)_populate process
+Date:   Wed, 5 Apr 2023 00:09:38 +0200
+Message-ID: <CA+fCnZentBDXuyyrZFzPLpt8Vdfo7YyAyxbgb506LFrR+v-D9Q@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] kasan: Add __HAVE_ARCH_SHADOW_MAP to support arch
+ specific mapping
 To:     Qing Zhang <zhangqing@loongson.cn>
 Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -83,74 +83,69 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Tue, Apr 4, 2023 at 10:43=E2=80=AFAM Qing Zhang <zhangqing@loongson.cn> =
 wrote:
 >
-> Loongarch populate pmd/pud with invalid_pmd_table/invalid_pud_table in
-> pagetable_init, So pmd_init/pud_init(p) is required, define them as __wea=
-k
-> in mm/kasan/init.c, like mm/sparse-vmemmap.c.
+> Like the LoongArch, which has many holes between different segments
+> and valid address space(256T available) is insufficient to map all
+> these segments to kasan shadow memory with the common formula provided
+> by kasan core, We need architecture specific mapping formula,different
+> segments are mapped individually, and only limited length of space of
+> that specific segment is mapped to shadow.
+>
+> Therefore, when the incoming address is converted to a shadow, we need
+> to add a condition to determine whether it is valid.
 >
 > Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
 > ---
->  mm/kasan/init.c | 18 ++++++++++++++----
->  1 file changed, 14 insertions(+), 4 deletions(-)
+>  include/linux/kasan.h | 2 ++
+>  mm/kasan/kasan.h      | 6 ++++++
+>  2 files changed, 8 insertions(+)
 >
-> diff --git a/mm/kasan/init.c b/mm/kasan/init.c
-> index cc64ed6858c6..a7fa223b96e4 100644
-> --- a/mm/kasan/init.c
-> +++ b/mm/kasan/init.c
-> @@ -139,6 +139,10 @@ static int __ref zero_pmd_populate(pud_t *pud, unsig=
-ned long addr,
->         return 0;
+> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+> index f7ef70661ce2..3b91b941873d 100644
+> --- a/include/linux/kasan.h
+> +++ b/include/linux/kasan.h
+> @@ -54,11 +54,13 @@ extern p4d_t kasan_early_shadow_p4d[MAX_PTRS_PER_P4D]=
+;
+>  int kasan_populate_early_shadow(const void *shadow_start,
+>                                 const void *shadow_end);
+>
+> +#ifndef __HAVE_ARCH_SHADOW_MAP
+>  static inline void *kasan_mem_to_shadow(const void *addr)
+>  {
+>         return (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT)
+>                 + KASAN_SHADOW_OFFSET;
+>  }
+> +#endif
+>
+>  int kasan_add_zero_shadow(void *start, unsigned long size);
+>  void kasan_remove_zero_shadow(void *start, unsigned long size);
+> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+> index a61eeee3095a..033335c13b25 100644
+> --- a/mm/kasan/kasan.h
+> +++ b/mm/kasan/kasan.h
+> @@ -291,16 +291,22 @@ struct kasan_stack_ring {
+>
+>  #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
+>
+> +#ifndef __HAVE_ARCH_SHADOW_MAP
+>  static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
+>  {
+>         return (void *)(((unsigned long)shadow_addr - KASAN_SHADOW_OFFSET=
+)
+>                 << KASAN_SHADOW_SCALE_SHIFT);
+>  }
+> +#endif
+>
+>  static __always_inline bool addr_has_metadata(const void *addr)
+>  {
+> +#ifdef __HAVE_ARCH_SHADOW_MAP
+> +       return (kasan_mem_to_shadow((void *)addr) !=3D NULL);
+> +#else
+>         return (kasan_reset_tag(addr) >=3D
+>                 kasan_shadow_to_mem((void *)KASAN_SHADOW_START));
+> +#endif
 >  }
 >
-> +void __weak __meminit pmd_init(void *addr)
-> +{
-> +}
-> +
->  static int __ref zero_pud_populate(p4d_t *p4d, unsigned long addr,
->                                 unsigned long end)
->  {
-> @@ -166,8 +170,9 @@ static int __ref zero_pud_populate(p4d_t *p4d, unsign=
-ed long addr,
->                                 if (!p)
->                                         return -ENOMEM;
->                         } else {
-> -                               pud_populate(&init_mm, pud,
-> -                                       early_alloc(PAGE_SIZE, NUMA_NO_NO=
-DE));
-> +                               p =3D early_alloc(PAGE_SIZE, NUMA_NO_NODE=
-);
-> +                               pmd_init(p);
-> +                               pud_populate(&init_mm, pud, p);
->                         }
->                 }
->                 zero_pmd_populate(pud, addr, next);
-> @@ -176,6 +181,10 @@ static int __ref zero_pud_populate(p4d_t *p4d, unsig=
-ned long addr,
->         return 0;
->  }
->
-> +void __weak __meminit pud_init(void *addr)
-> +{
-> +}
-> +
->  static int __ref zero_p4d_populate(pgd_t *pgd, unsigned long addr,
->                                 unsigned long end)
->  {
-> @@ -207,8 +216,9 @@ static int __ref zero_p4d_populate(pgd_t *pgd, unsign=
-ed long addr,
->                                 if (!p)
->                                         return -ENOMEM;
->                         } else {
-> -                               p4d_populate(&init_mm, p4d,
-> -                                       early_alloc(PAGE_SIZE, NUMA_NO_NO=
-DE));
-> +                               p =3D early_alloc(PAGE_SIZE, NUMA_NO_NODE=
-);
-> +                               pud_init(p);
-> +                               p4d_populate(&init_mm, p4d, p);
->                         }
->                 }
->                 zero_pud_populate(p4d, addr, next);
+>  /**
 > --
 > 2.20.1
 >
