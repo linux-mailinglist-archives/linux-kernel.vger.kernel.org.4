@@ -2,121 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC416D57CC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 06:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9706D57CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 06:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232935AbjDDE4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 00:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
+        id S233212AbjDDE4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 00:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjDDE4Z (ORCPT
+        with ESMTP id S233169AbjDDE4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 00:56:25 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0DD1BF3;
-        Mon,  3 Apr 2023 21:56:22 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (fp76f193f3.tkyc206.ap.nuro.jp [118.241.147.243])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D24398B;
-        Tue,  4 Apr 2023 06:56:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1680584181;
-        bh=tvygH40QS7v4O7ryyN1WeXuGuP9sZPM/73Xs4pA/gm8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WGjH4jNb7Pdv2bGfIVKKtHcqXhsrdp0btfA3Doe5tUf7/8oGD+erEkMv768B0treh
-         Dqoug+OF6S79PJpKusSeUC7MvaxMW33hotSkfUhFbIjzfkeXpC8/gYy7caAgXKp1ls
-         4mkKelePFw27juProC2CcgbIlSAeQVS142EfKhy0=
-Date:   Tue, 4 Apr 2023 07:56:27 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jack Zhu <jack.zhu@starfivetech.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
-Subject: Re: [PATCH v3 4/9] media: dt-bindings: cadence-csi2rx: Add resets
- property
-Message-ID: <20230404045627.GM16648@pendragon.ideasonboard.com>
-References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
- <20230331121826.96973-5-jack.zhu@starfivetech.com>
+        Tue, 4 Apr 2023 00:56:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD131BE1;
+        Mon,  3 Apr 2023 21:56:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AF3462772;
+        Tue,  4 Apr 2023 04:56:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A8F8C433EF;
+        Tue,  4 Apr 2023 04:56:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680584197;
+        bh=DEj7fP4yjaJYRm0hK8YbMkOV78W9FUtbKMsN0uDAz4Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jsIPPz2U4XtabVsmSKvsFRyZNqWTmmtZnTtO9J4sNtkztz51JGfaiKxbX/TaNOBuU
+         fGdbIrMUQIuT29BDoTnmA4nen1n8MQyf9DtBq8coohhLPVIeHHxf3KZmiIxNtC+pz1
+         MRjh/4fID5Zimdum/pVMkX9cqCwkEuiXkuE0txlnR6zsfIdBAShAqNF2OKWttQPuVS
+         VVG7yKFr5/VFKT28MfXCLQTY9fw6+njKgXSqvyOivk4LZk7J1xy1R3kUJ87ShjPSsW
+         zezg11hu1DSVrS+AM5AwGx465qyX6lQGE5aTiFx8MIFEwhtGhqRh5sHVZcUpwMLOOM
+         BMsComMRqpm1g==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        "Garmin . Chang" <Garmin.Chang@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] clk: mediatek: Use right match table, include mod_devicetable
+Date:   Mon,  3 Apr 2023 21:56:36 -0700
+Message-Id: <20230404045636.1114141-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230331121826.96973-5-jack.zhu@starfivetech.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jack,
+This is copy/pasta that breaks modular builds. Fix the match table to
+use the right pointer, or the right device table type. And while we're
+including the header, fix the order to be linux, dt-bindings, and
+finally local.
 
-Thank you for the patch.
+Cc: Garmin.Chang <Garmin.Chang@mediatek.com>
+Cc: Chen-Yu Tsai <wenst@chromium.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Fixes: f42b9e9a43e3 ("clk: mediatek: Add MT8188 wpesys clock support")
+Fixes: 0d2f2cefba64 ("clk: mediatek: Add MT8188 adsp clock support")
+Fixes: e4aaa60eae16 ("clk: mediatek: Add MT8188 vdosys0 clock support")
+Fixes: cfa4609f9bbe ("clk: mediatek: Add MT8188 vdosys1 clock support")
+Fixes: bb87c1109ce2 ("clk: mediatek: Add MT8188 vencsys clock support")
+Fixes: f42b9e9a43e3 ("clk: mediatek: Add MT8188 wpesys clock support")
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304011039.UBDX1UOT-lkp@intel.com/
+Link: https://lore.kernel.org/oe-kbuild-all/202304020649.QO2HlpD5-lkp@intel.com/
+Link: https://lore.kernel.org/oe-kbuild-all/202304021055.WDhQPcoS-lkp@intel.com/
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/mediatek/clk-mt8188-adsp_audio26m.c | 6 ++++--
+ drivers/clk/mediatek/clk-mt8188-imp_iic_wrap.c  | 6 ++++--
+ drivers/clk/mediatek/clk-mt8188-vdo0.c          | 4 +++-
+ drivers/clk/mediatek/clk-mt8188-vdo1.c          | 4 +++-
+ drivers/clk/mediatek/clk-mt8188-venc.c          | 6 ++++--
+ drivers/clk/mediatek/clk-mt8188-wpe.c           | 2 +-
+ 6 files changed, 19 insertions(+), 9 deletions(-)
 
-On Fri, Mar 31, 2023 at 08:18:21PM +0800, Jack Zhu wrote:
-> Add resets property for Cadence MIPI-CSI2 RX controller
-> 
-> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  .../bindings/media/cdns,csi2rx.yaml           | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-> index 89f414eeef47..f8da4a35e98e 100644
-> --- a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-> +++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-> @@ -38,6 +38,24 @@ properties:
->        - const: pixel_if2_clk
->        - const: pixel_if3_clk
->  
-> +  resets:
-> +    items:
-> +      - description: CSI2Rx system reset
-> +      - description: Gated Register bank reset for APB interface
-> +      - description: pixel reset for Stream interface 0
-> +      - description: pixel reset for Stream interface 1
-> +      - description: pixel reset for Stream interface 2
-> +      - description: pixel reset for Stream interface 3
-> +
-> +  reset-names:
-> +    items:
-> +      - const: sys
-> +      - const: reg_bank
-> +      - const: pixel_if0
-> +      - const: pixel_if1
-> +      - const: pixel_if2
-> +      - const: pixel_if3
-> +
->    phys:
->      maxItems: 1
->      description: MIPI D-PHY
-> @@ -120,6 +138,12 @@ examples:
->          clock-names = "sys_clk", "p_clk",
->                        "pixel_if0_clk", "pixel_if1_clk",
->                        "pixel_if2_clk", "pixel_if3_clk";
-> +        resets = <&bytereset 9>, <&bytereset 4>,
-> +                 <&corereset 5>, <&corereset 6>,
-> +                 <&corereset 7>, <&corereset 8>;
-> +        reset-names = "sys", "reg_bank",
-> +                      "pixel_if0", "pixel_if1",
-> +                      "pixel_if2", "pixel_if3";
->          phys = <&csi_phy>;
->          phy-names = "dphy";
->  
-
+diff --git a/drivers/clk/mediatek/clk-mt8188-adsp_audio26m.c b/drivers/clk/mediatek/clk-mt8188-adsp_audio26m.c
+index b3c31ffff931..808f2ad3b7ee 100644
+--- a/drivers/clk/mediatek/clk-mt8188-adsp_audio26m.c
++++ b/drivers/clk/mediatek/clk-mt8188-adsp_audio26m.c
+@@ -4,10 +4,12 @@
+  * Author: Garmin Chang <garmin.chang@mediatek.com>
+  */
+ 
+-#include <dt-bindings/clock/mediatek,mt8188-clk.h>
+ #include <linux/clk-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+ 
++#include <dt-bindings/clock/mediatek,mt8188-clk.h>
++
+ #include "clk-gate.h"
+ #include "clk-mtk.h"
+ 
+@@ -34,7 +36,7 @@ static const struct of_device_id of_match_clk_mt8188_adsp_audio26m[] = {
+ 	{ .compatible = "mediatek,mt8188-adsp-audio26m", .data = &adsp_audio26m_desc },
+ 	{ /* sentinel */ }
+ };
+-MODULE_DEVICE_TABLE(platform, of_match_clk_mt8188_adsp_audio26m);
++MODULE_DEVICE_TABLE(of, of_match_clk_mt8188_adsp_audio26m);
+ 
+ static struct platform_driver clk_mt8188_adsp_audio26m_drv = {
+ 	.probe = mtk_clk_simple_probe,
+diff --git a/drivers/clk/mediatek/clk-mt8188-imp_iic_wrap.c b/drivers/clk/mediatek/clk-mt8188-imp_iic_wrap.c
+index 2238d2984320..da41a3c59919 100644
+--- a/drivers/clk/mediatek/clk-mt8188-imp_iic_wrap.c
++++ b/drivers/clk/mediatek/clk-mt8188-imp_iic_wrap.c
+@@ -4,10 +4,12 @@
+  * Author: Garmin Chang <garmin.chang@mediatek.com>
+  */
+ 
+-#include <dt-bindings/clock/mediatek,mt8188-clk.h>
+ #include <linux/clk-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+ 
++#include <dt-bindings/clock/mediatek,mt8188-clk.h>
++
+ #include "clk-gate.h"
+ #include "clk-mtk.h"
+ 
+@@ -65,7 +67,7 @@ static const struct of_device_id of_match_clk_mt8188_imp_iic_wrap[] = {
+ 	{ .compatible = "mediatek,mt8188-imp-iic-wrap-en", .data = &imp_iic_wrap_en_desc },
+ 	{ /* sentinel */ }
+ };
+-MODULE_DEVICE_TABLE(platform, of_match_clk_mt8188_imp_iic_wrap);
++MODULE_DEVICE_TABLE(of, of_match_clk_mt8188_imp_iic_wrap);
+ 
+ static struct platform_driver clk_mt8188_imp_iic_wrap_drv = {
+ 	.probe = mtk_clk_simple_probe,
+diff --git a/drivers/clk/mediatek/clk-mt8188-vdo0.c b/drivers/clk/mediatek/clk-mt8188-vdo0.c
+index 0c61c2dc4337..d2be44c2f3f5 100644
+--- a/drivers/clk/mediatek/clk-mt8188-vdo0.c
++++ b/drivers/clk/mediatek/clk-mt8188-vdo0.c
+@@ -4,10 +4,12 @@
+  * Author: Garmin Chang <garmin.chang@mediatek.com>
+  */
+ 
+-#include <dt-bindings/clock/mediatek,mt8188-clk.h>
+ #include <linux/clk-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+ 
++#include <dt-bindings/clock/mediatek,mt8188-clk.h>
++
+ #include "clk-gate.h"
+ #include "clk-mtk.h"
+ 
+diff --git a/drivers/clk/mediatek/clk-mt8188-vdo1.c b/drivers/clk/mediatek/clk-mt8188-vdo1.c
+index 99fcf6d7b1ab..2ef8cae2e16e 100644
+--- a/drivers/clk/mediatek/clk-mt8188-vdo1.c
++++ b/drivers/clk/mediatek/clk-mt8188-vdo1.c
+@@ -4,10 +4,12 @@
+  * Author: Garmin Chang <garmin.chang@mediatek.com>
+  */
+ 
+-#include <dt-bindings/clock/mediatek,mt8188-clk.h>
+ #include <linux/clk-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+ 
++#include <dt-bindings/clock/mediatek,mt8188-clk.h>
++
+ #include "clk-gate.h"
+ #include "clk-mtk.h"
+ 
+diff --git a/drivers/clk/mediatek/clk-mt8188-venc.c b/drivers/clk/mediatek/clk-mt8188-venc.c
+index 6f6589ccd5a0..245367f33fa5 100644
+--- a/drivers/clk/mediatek/clk-mt8188-venc.c
++++ b/drivers/clk/mediatek/clk-mt8188-venc.c
+@@ -4,10 +4,12 @@
+  * Author: Garmin Chang <garmin.chang@mediatek.com>
+  */
+ 
+-#include <dt-bindings/clock/mediatek,mt8188-clk.h>
+ #include <linux/clk-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+ 
++#include <dt-bindings/clock/mediatek,mt8188-clk.h>
++
+ #include "clk-gate.h"
+ #include "clk-mtk.h"
+ 
+@@ -39,7 +41,7 @@ static const struct of_device_id of_match_clk_mt8188_venc1[] = {
+ 	{ .compatible = "mediatek,mt8188-vencsys", .data = &venc1_desc },
+ 	{ /* sentinel */ }
+ };
+-MODULE_DEVICE_TABLE(platform, of_match_clk_mt8188_venc1);
++MODULE_DEVICE_TABLE(of, of_match_clk_mt8188_venc1);
+ 
+ static struct platform_driver clk_mt8188_venc1_drv = {
+ 	.probe = mtk_clk_simple_probe,
+diff --git a/drivers/clk/mediatek/clk-mt8188-wpe.c b/drivers/clk/mediatek/clk-mt8188-wpe.c
+index 5abded13cece..c372ff703f9c 100644
+--- a/drivers/clk/mediatek/clk-mt8188-wpe.c
++++ b/drivers/clk/mediatek/clk-mt8188-wpe.c
+@@ -88,7 +88,7 @@ static const struct of_device_id of_match_clk_mt8188_wpe[] = {
+ 	{ .compatible = "mediatek,mt8188-wpesys-vpp0", .data = &wpe_vpp0_desc },
+ 	{ /* sentinel */ }
+ };
+-MODULE_DEVICE_TABLE(platform, clk_mt8188_vpp1_id_table);
++MODULE_DEVICE_TABLE(platform, of_match_clk_mt8188_wpe);
+ 
+ static struct platform_driver clk_mt8188_wpe_drv = {
+ 	.probe = mtk_clk_simple_probe,
 -- 
-Regards,
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
 
-Laurent Pinchart
