@@ -2,147 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED69D6D6B5D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC566D6B5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236197AbjDDSR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 14:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S235253AbjDDSRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 14:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236006AbjDDSRW (ORCPT
+        with ESMTP id S234462AbjDDSRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 14:17:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715FE49E2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 11:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680632194;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IteB3h1IFF9JrrwNNhJrcSxfFKVKvFn7WIKCluRji64=;
-        b=T+aNbcTj0PM/4p7mCXMgq544SU8syIAaVzklZpnQiUMQnYz7EG8Aux7Um+kYCegnj/TKCo
-        OqxjrWt4KnE457XBa44g+ZUUDdrzqcJtSRbb9ME3/+yvXjC6qnM1WP6SDb/hwhnTkNyzQ8
-        DAcKd5FOIpGuO84sGZocwJUYmIQyF1w=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-DV7IfD2iNcqA6_MRJvX7_A-1; Tue, 04 Apr 2023 14:16:32 -0400
-X-MC-Unique: DV7IfD2iNcqA6_MRJvX7_A-1
-Received: by mail-ed1-f70.google.com with SMTP id c11-20020a509f8b000000b00501e2facf47so47429472edf.16
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 11:16:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680632191;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IteB3h1IFF9JrrwNNhJrcSxfFKVKvFn7WIKCluRji64=;
-        b=pRK6b0ph8yOJjMce+FDw6/ap13F/7UhybdzBa7S+s05q8TSfw4UYSSfTEr3MWIDDLm
-         IHHWS+MdVVjm0AX/oc5ac2qSAiOY7Nu3MkbHQiwhp7hxOW91iyGXdSowwGPL71jL0fLe
-         /qe4rOZJHxdT6HT++VFymvtNlItLDVQKHuiohLCLu5H193WWZsQ+RL3q1S178osFvJAF
-         DEY3rV3ZfvZjCBB2IH3MWk0smdmddL05fQ3CIE/qS/aul+Ljz4aNR3if3O0KYSxX2LCC
-         CYA83Ovxch9VHiuYzn2dtrcDBneFcZUg/Kzl/PKllag1Ikwoy1xoyp6GueR78SLzuNYw
-         SyFA==
-X-Gm-Message-State: AAQBX9da2o0Nxo5k/lNVYu+2GUZxObJPe7mCcgA/ohaT9MxL4uwAxcJX
-        IHFifnJvicdbKSCu6BPl9Srw+qifKnOpKtnC5AFxCGA0TmJrPGqZ0j+wxBF8vsTts13yfaZyeZY
-        ii4BQXX+rzEQURsaav67k4dm1
-X-Received: by 2002:a17:906:4714:b0:84d:4e4f:1f85 with SMTP id y20-20020a170906471400b0084d4e4f1f85mr344223ejq.59.1680632191697;
-        Tue, 04 Apr 2023 11:16:31 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZCgo8S1M18VZAugvOWFRDnPyPjTek7bcWsZJ7qMIVGPNRWD16Sn2oW1a2cmFO9+19n6ACQMQ==
-X-Received: by 2002:a17:906:4714:b0:84d:4e4f:1f85 with SMTP id y20-20020a170906471400b0084d4e4f1f85mr344205ejq.59.1680632191371;
-        Tue, 04 Apr 2023 11:16:31 -0700 (PDT)
-Received: from redhat.com ([2.52.139.22])
-        by smtp.gmail.com with ESMTPSA id g1-20020a170906394100b00933356c681esm6266002eje.150.2023.04.04.11.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 11:16:30 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 14:16:26 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
-Cc:     Viktor Prutyanov <viktor@daynix.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "yan@daynix.com" <yan@daynix.com>
-Subject: Re: [PATCH v6] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
-Message-ID: <20230404141501-mutt-send-email-mst@kernel.org>
-References: <20230324195029.2410503-1-viktor@daynix.com>
- <AM0PR04MB4723A8D079076FA56AB45845D48C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+        Tue, 4 Apr 2023 14:17:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA9310D1;
+        Tue,  4 Apr 2023 11:17:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B41F63836;
+        Tue,  4 Apr 2023 18:17:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F83EC433EF;
+        Tue,  4 Apr 2023 18:17:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680632235;
+        bh=vecS1rMZwna2jwd0r4is1sU1FGqAK45eMK1pf6rma2g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D5YgiPUjRdkDNfKFybm84mcNTEYwvACfjLNgiCxWqnR1yi8J9AqW5xzssUQDcVOfx
+         a/QMi5iooEOgxTPoVTH1YeDPcjouaJ68r6QNiGFjGX/ZyNR/lJ68Cc2sir/k1C6CrI
+         YUT/FYGBun4FCR29ObWT2D8xg30rbQz8bspTaDNuMg8cN63pe/FJKDoTWxJo4+JDd7
+         dik1Co50BM1tYOkI0NGPfrZUy9Sn+ve3x3VWuek2jk4LqrtIDfS59LZv+XT3GvuqgK
+         qF+2RhAf0EWC7Za4Me67yL/PDXuZYc4dyclaTMzWCPoSAJxSFzppoPaZXuCiNtrBMf
+         AhTEue0YsMNCw==
+Date:   Tue, 4 Apr 2023 19:17:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, quic_msavaliy@quicinc.com,
+        dianders@chromium.org, mka@chromium.org, swboyd@chromium.org,
+        quic_vtanuku@quicinc.com
+Subject: Re: [PATCH 2/2] spi: spi-qcom-qspi: Add DMA mode support
+Message-ID: <d784dab7-a1a6-4db7-aa13-e39e9904f342@sirena.org.uk>
+References: <1680631400-28865-1-git-send-email-quic_vnivarth@quicinc.com>
+ <1680631400-28865-3-git-send-email-quic_vnivarth@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kDrRpbySrwTW+T6a"
 Content-Disposition: inline
-In-Reply-To: <AM0PR04MB4723A8D079076FA56AB45845D48C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1680631400-28865-3-git-send-email-quic_vnivarth@quicinc.com>
+X-Cookie: Being ugly isn't illegal.  Yet.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 08:17:49AM +0000, Alvaro Karsz wrote:
-> Hi Viktor,
-> 
-> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > index 4c3bb0ddeb9b..f9c6604352b4 100644
-> > --- a/drivers/virtio/virtio_ring.c
-> > +++ b/drivers/virtio/virtio_ring.c
-> > @@ -2752,6 +2752,23 @@ void vring_del_virtqueue(struct virtqueue *_vq)
-> >  }
-> >  EXPORT_SYMBOL_GPL(vring_del_virtqueue);
-> > 
-> > +u32 vring_notification_data(struct virtqueue *_vq)
-> > +{
-> > +       struct vring_virtqueue *vq = to_vvq(_vq);
-> > +       u16 next;
-> > +
-> > +       if (vq->packed_ring)
-> > +               next = (vq->packed.next_avail_idx &
-> > +                               ~(-(1 << VRING_PACKED_EVENT_F_WRAP_CTR))) |
-> > +                       vq->packed.avail_wrap_counter <<
-> > +                               VRING_PACKED_EVENT_F_WRAP_CTR;
-> > +       else
-> > +               next = vq->split.avail_idx_shadow;
-> > +
-> > +       return next << 16 | _vq->index;
-> > +}
-> > +EXPORT_SYMBOL_GPL(vring_notification_data);
-> > +
-> >  /* Manipulates transport-specific feature bits. */
-> >  void vring_transport_features(struct virtio_device *vdev)
-> >  {
-> > @@ -2771,6 +2788,8 @@ void vring_transport_features(struct virtio_device *vdev)
-> >                         break;
-> >                 case VIRTIO_F_ORDER_PLATFORM:
-> >                         break;
-> > +               case VIRTIO_F_NOTIFICATION_DATA:
-> > +                       break;
-> 
-> This function is used by virtio_vdpa as well (drivers/virtio/virtio_vdpa.c:virtio_vdpa_finalize_features).
-> A vDPA device can offer this feature and it will be accepted, even though VIRTIO_F_NOTIFICATION_DATA is not a thing for the vDPA transport at the moment.
-> 
-> I don't know if this is bad, since offering VIRTIO_F_NOTIFICATION_DATA is meaningless for a vDPA device at the moment.
-> 
-> I submitted a patch adding support for vDPA transport.
-> https://lore.kernel.org/virtualization/20230402081034.1021886-1-alvaro.karsz@solid-run.com/T/#u
 
-Hmm.  So it seems we need to first apply yours then this patch,
-is that right? Or the other way around? What is the right way to make it not break bisect?
-Do you mind including this patch with yours in a patchset
-in the correct order?
+--kDrRpbySrwTW+T6a
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Tue, Apr 04, 2023 at 11:33:20PM +0530, Vijaya Krishna Nivarthi wrote:
 
+A few quick review comments, mostly coding style though.
 
+> +struct qspi_cmd_desc {
+> +	uint32_t data_address;
+> +	uint32_t next_descriptor;
+> +	uint32_t direction:1;
+> +	uint32_t multi_io_mode:3;
+> +	uint32_t reserved1:4;
+> +	uint32_t fragment:1;
+> +	uint32_t reserved2:7;
+> +	uint32_t length:16;
+> +	//------------------------//
 
-> >                 default:
-> >                         /* We don't understand this bit. */
-> >                         __virtio_clear_bit(vdev, i);
-> 
+What does this mean?
 
+> +	uint8_t *bounce_src;
+> +	uint8_t *bounce_dst;
+> +	uint32_t bounce_length;
+> +};
+
+> +
+> +#define QSPI_MAX_NUM_DESC 5
+>  struct qspi_xfer {
+
+Missing blank line after the define...
+
+> +	for (ii = 0; ii < sgt->nents; ii++)
+> +		sg_total_len += sg_dma_len(sgt->sgl + ii);
+
+Why are we calling the iterator ii here?
+
+> +	if (ctrl->xfer.dir == QSPI_READ)
+> +		byte_ptr = (uint8_t *)xfer->rx_buf;
+> +	else
+> +		byte_ptr = (uint8_t *)xfer->tx_buf;
+
+If we need to cast to or from void * there's some sort of problem.
+
+> +/* Switch to DMA if transfer length exceeds this */
+> +#define QSPI_MAX_BYTES_FIFO 64
+> +#define NO_TX_DATA_DELAY_FOR_DMA 1
+> +#define DMA_CONDITIONAL (xfer->len > QSPI_MAX_BYTES_FIFO)
+> +
+
+DMA_CONDITIONAL absolutely should not be a define, this just makes
+things harder to read.  Just have everything call can_dma() when needed.
+
+> +#if NO_TX_DATA_DELAY_FOR_DMA
+> +		mstr_cfg &= ~(TX_DATA_OE_DELAY_MSK | TX_DATA_DELAY_MSK);
+> +#endif
+
+Why would we add extra delays if we don't need them, might someone set
+this and if so when?
+
+> +	if (ctrl->xfer_mode == QSPI_FIFO) {
+
+> +	} else if (ctrl->xfer_mode == QSPI_DMA) {
+
+>  	}
+
+This should be a switch statement.
+
+--kDrRpbySrwTW+T6a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQsaaMACgkQJNaLcl1U
+h9BZfQf9E/FbfM9Y8h2lD6huqt78OFAf4jE1tjFt0kIcwXUTKo8u2VXaJ8sshPn5
+rIlF+ebk/XkQ1XkEyxP/oaCj8W5Jnut1nIjMAkjKrwjN/vrHN8O/HO5C9A0SXq3p
+uxefYwl9dgHK15YL+GpqD+syqm1KglJKE57uJGcV/FMD3UraYXrxBU0LH+nHCkR8
+fK7tGA0V6YyMazCSXCP9gmd5FL/kdriaX+arH/WErKhxFeLsd4aiqwNSXsV0S9My
+xbWwJd55w0umfou96GNxqblH5CCyQSFjBdhu34EKXTr3nNnX3a5WT25tE+xWfcAf
+EUqHBrMNpvUHv9xGonWDnEicW50ylA==
+=qQMD
+-----END PGP SIGNATURE-----
+
+--kDrRpbySrwTW+T6a--
