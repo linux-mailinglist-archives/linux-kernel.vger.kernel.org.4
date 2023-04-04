@@ -2,98 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0612B6D591A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4572B6D5917
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233728AbjDDHDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 03:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
+        id S233724AbjDDHCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbjDDHDP (ORCPT
+        with ESMTP id S233128AbjDDHCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 03:03:15 -0400
-X-Greylist: delayed 14194 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Apr 2023 00:03:13 PDT
-Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25F922D72;
-        Tue,  4 Apr 2023 00:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
-        Content-Type; bh=hLbeGhYUN7RnG6++2RqONKQkGZVwfn8OaLboDI884hQ=;
-        b=ZjTO67EfPOZHIeqnL6m+MPONfHpZAHvRG9KZP6VJqIuAtJ3vi7Ez5DLs+Ly7HK
-        suGBNPgX3xeE0/wMXGeV+I0ywRm1UhD89xE/lgvBn+KFDrGSH7A/GIiDb/J/N/5D
-        rojzmrs8irpchHUbN7oPXure5hos7Pss2Hrg51E1pLZrg=
-Received: from [172.20.125.11] (unknown [116.128.244.169])
-        by zwqz-smtp-mta-g0-1 (Coremail) with SMTP id _____wBnX89myytkEaGrAw--.283S2;
-        Tue, 04 Apr 2023 15:01:59 +0800 (CST)
-Message-ID: <940e1807-7e89-4de0-ee69-9346d231a59f@126.com>
-Date:   Tue, 4 Apr 2023 15:01:58 +0800
+        Tue, 4 Apr 2023 03:02:40 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABB21BEB;
+        Tue,  4 Apr 2023 00:02:39 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id d22so19022287pgw.2;
+        Tue, 04 Apr 2023 00:02:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680591759;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zu1/4ofEiUpEr/nAZ126vJD9LVR8thpY1qUm9I5vgVo=;
+        b=kJxouxIrSPXmym/6d+rodZfz0ak6JgSQio5etru4EHlJOlC837ebiCDoJ8ysW3uk/2
+         MGagPJdRWdpE90Xl9VwPV/+vlcI4sUXarRuETDoUPcEERavtzp5kXj3dapgnYXL0+XsD
+         a1AMDW3xVFnQe+dHw3gLQKzqnQU97jgVCfMHv5XfhLyqLvRMx4XpVGb6yHp+oblKIZO1
+         krqniqdv0H4NbdhQzPEh2uh1Z/hU6bFxBC66ZJ6gu9r/5dopJGHf+cSHaD01nqWRdFT2
+         4poZc+AF00Bd/bcL1w4qYdVSXf77EfqvX9e0l+whZjOAUcP4HWPC9ueO/D8qiYbutwbU
+         RjpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680591759;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zu1/4ofEiUpEr/nAZ126vJD9LVR8thpY1qUm9I5vgVo=;
+        b=G9CFo/4usS8kyskj1kj05mSr7bpzQaceBRJVX+x4QWmKmO3Vg5KamfBfyu6zZ1Zahm
+         u90zjPEm+bDrZgY9usINQZ78eedYoQ4rim6Z0a7XGHQ9U4pxdlpVyiDpe4atprIjCzHg
+         NNpO4UJxIJYpiuHtycW6S5y9cTpcTucvuXyeq9xS0DHOxDf8wYGVXq6y4cf3Te+0Zl4M
+         aIo9Dvrvb3P7d+J+MrfOleh8S4N8sgZAU1mg3TPNkH86O3kQ6GaYfuybZ+19DqUfSvmi
+         hBeYlFruw6S696Ub59+yWaVtXw/ZP8KG31w8i2+eiBfZMHRANNH9sruA+6QW3MGG2tk0
+         xRaw==
+X-Gm-Message-State: AAQBX9ey7CMg05rvLYSeno9eng0NtvPDLCDqcvD9YuXnMVk4jV2L88nJ
+        7s+W+ZplPhc6Pcf6s3wDPdET46CRVw51/UvPkIU9kpWJJGsCTg==
+X-Google-Smtp-Source: AKy350ZNRj0xjX8FoXDbKXqut6Jzs3vhi8ZFnTBOtNbW5V4SpV4JWOoels8/aM6vlwaYr8dwDBVCN2qIxbLq5H4AoEM=
+X-Received: by 2002:a05:6a00:cc3:b0:626:1eb8:31d7 with SMTP id
+ b3-20020a056a000cc300b006261eb831d7mr683117pfv.1.1680591758362; Tue, 04 Apr
+ 2023 00:02:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] RDMA/hfi: add a judgment on the availability of cpumask
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linkui Xiao <xiaolinkui@kylinos.cn>
-References: <20230404030525.24020-1-xiaolinkui@126.com>
- <20230404060522.GH4514@unreal>
-Content-Language: en-US
-From:   xiaolinkui <xiaolinkui@126.com>
-In-Reply-To: <20230404060522.GH4514@unreal>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: _____wBnX89myytkEaGrAw--.283S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Gw1fKFW8Wry5CrW8uF1xXwb_yoW8JF4rpF
-        4fWa1j9ay5Xay0ga1ktay3ArZ8tayfJ3yqyFyqyw18XF98X3ZrX345K3WF9r97Gr4ku3WS
-        qF4DXFs0kF4xAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j17KsUUUUU=
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: p0ld0z5lqn3xa6rslhhfrp/1tbiig9H1lpEDPhFrQAAsW
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1679019847-1401-1-git-send-email-caelli@tencent.com>
+ <ZCuQO3A6FX305KTJ@debian.me> <3d994c05-492d-f9f4-161d-123a68d4e87a@gmail.com>
+In-Reply-To: <3d994c05-492d-f9f4-161d-123a68d4e87a@gmail.com>
+From:   caelli <juanfengpy@gmail.com>
+Date:   Tue, 4 Apr 2023 15:02:27 +0800
+Message-ID: <CAPmgiUJhocwGweOYmJcYY47CONwJAqgLA7AdDzD=Quepd6u5cw@mail.gmail.com>
+Subject: Re: [PATCH v7] tty: fix hang on tty device with no_room set
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Hui Li <caelli@tencent.com>, stable@vger.kernel.org,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your reply.
+> Where do you find this hanging pty? Seems like the wording makes me
+> confused. Maybe you mean "It is possible to hang pty device. In that
+> case, ..."
 
-When CONFIG_CPUMASK_OFFSTACK=y, "ret" will be false if diff==NULL.
+Thanks for your reply, I will correct messages like this:
 
-However, when CONFIG_CPUMASK_OFFSTACK=n, these two are not necessarily 
-equivalent.
+"It is possible to hang pty devices in this case, the reader
+was blocking at epoll on master side, the writer was ..."
 
-Thanks
-
-On 4/4/23 14:05, Leon Romanovsky wrote:
-> On Tue, Apr 04, 2023 at 11:05:25AM +0800, xiaolinkui wrote:
->> From: Linkui Xiao <xiaolinkui@kylinos.cn>
->>
->> When CONFIG_CPUMASK_OFFSTACK is n, cpumask may fail to allocate, cpumask may
->> be NULL, and performing a bitmap operation on cpumask may cause problems at
->> this time.
->>
->> Of course, this is a unlikely event.
->>
->> Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
->> ---
->>   drivers/infiniband/hw/hfi1/affinity.c | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/infiniband/hw/hfi1/affinity.c b/drivers/infiniband/hw/hfi1/affinity.c
->> index 77ee77d4000f..3caa861f4d1d 100644
->> --- a/drivers/infiniband/hw/hfi1/affinity.c
->> +++ b/drivers/infiniband/hw/hfi1/affinity.c
->> @@ -1047,16 +1047,16 @@ int hfi1_get_proc_affinity(int node)
->>   	 */
->>   
->>   	ret = zalloc_cpumask_var(&diff, GFP_KERNEL);
->> -	if (!ret)
->> +	if (!ret || unlikely(!diff))
-> Why do you think that check of "ret" is not enough?
-> "ret" will be false if diff == NULL.
+Bagas Sanjaya <bagasdotme@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=884=E6=
+=97=A5=E5=91=A8=E4=BA=8C 10:55=E5=86=99=E9=81=93=EF=BC=9A
 >
-> Thanks
-
+> On 4/4/23 09:49, Bagas Sanjaya wrote:
+> > On Fri, Mar 17, 2023 at 10:24:07AM +0800, juanfengpy@gmail.com wrote:
+> >> We have met a hang on pty device, the reader was blocking
+> >> at epoll on master side, the writer was sleeping at wait_woken
+> >> inside n_tty_write on slave side, and the write buffer on
+> >> tty_port was full, we found that the reader and writer would
+> >> never be woken again and blocked forever.
+> >
+> > Where do you find this hanging pty? Seems like the wording makes me
+> > confused. Maybe you mean "It is possible to hang pty device. In that
+> > case, ..."
+> >
+>
+> Oops, I forgot to Cc: LKML.
+>
+> --
+> An old man doll... just what I always wanted! - Clara
+>
