@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0033E6D6AFB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A526D6AFD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235812AbjDDRzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S235862AbjDDR4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235672AbjDDRzt (ORCPT
+        with ESMTP id S235899AbjDDRz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:55:49 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850EB35A6;
-        Tue,  4 Apr 2023 10:55:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680630947; x=1712166947;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=ftIB+tKx2BRDAIoJzyNRehniJ6AZq5kLCytThxBFL2I=;
-  b=cRoigRy71IUqyqno/OJ8arnQ3cT2A/ZMSjIhi8srvDUAnh8avqFlk44j
-   2C+Qh+nxyo4sVZzzXtn00VIH6fkTuZESx0odTS/PF7wwJi+O9FxPgeVim
-   vT1OrWZu6ZW1+5X/4by74Lm7PJiXyTq2LOJDPyns2OuuqKX1B4GxmvINY
-   Ve1RFkbdS+db+77gqvikVbKhWmQtrCnViN4PVoF6Gf3VvEIO7JymUhPbm
-   ScxKjCr4mhXVbXdqZSgYTKBLqzsANhVX1G16NQz2uwCEooLPOVo0EKqP5
-   7tnrYhuNBS49SCgFnIh0tBTHW93v1RUVu0eRYecyuSmuK1JSxZYJPnerc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="405029064"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="405029064"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 10:55:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="775733761"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="775733761"
-Received: from vukivan-mobl2.amr.corp.intel.com ([10.212.38.37])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 10:55:29 -0700
-Message-ID: <a32bbd493a8d9decc275c327d40e15985e11b0be.camel@linux.intel.com>
-Subject: Re: [PATCH] thermal/drivers/intel/int340x: Add DLVR support
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 04 Apr 2023 10:55:28 -0700
-In-Reply-To: <CAJZ5v0gSfNpPx_6daiHSrzozeqU7iMnErbMhD6fBU9w3EtYhJw@mail.gmail.com>
-References: <20230331165336.1047102-1-srinivas.pandruvada@linux.intel.com>
-         <CAJZ5v0jocwROiayCpkp2CrmOFrBSShO5zPicWZQzaM+rj_25zg@mail.gmail.com>
-         <221ff60648e0e76920cb5054e9cfb98ec77612b1.camel@linux.intel.com>
-         <CAJZ5v0gSfNpPx_6daiHSrzozeqU7iMnErbMhD6fBU9w3EtYhJw@mail.gmail.com>
+        Tue, 4 Apr 2023 13:55:59 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C995E49E2;
+        Tue,  4 Apr 2023 10:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=ONN1widH5Qtf7uAuoBh252hI4mEZ9k+7s+ZgWeKSXzM=;
+        t=1680630953; x=1681840553; b=tPIWdRQr4eY1sv2hMQTIF7vRfMNImyWcyCrBXSf1bKv1xdj
+        S1h9gfQinaT7X1aIBDZZHdvxTwviuKmwrkk81ErUafgsSXmmnIOT2M/kDphyKSXfPFtEpbjzWJUJb
+        FownlQURVp5uEcmAF9BC8EkqGZWXVnQP7LlI56wv6hiBYar416qc0Eek5l/RegcbzFRHi3PKkPvqg
+        dXgR9tsEITS186LlQDjGVfAa6/NSuNNIJEdAL+bctOLOtDdIGyqoEuR+rkoTkyH3SAV6x2QhT++K3
+        HyIMutoVN9f5/zAJDeYMuOix775pYZm+4X1BH2fR8+AMJ5gcrjETB5WN/R08U6FQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <benjamin@sipsolutions.net>)
+        id 1pjksW-006Bx4-12;
+        Tue, 04 Apr 2023 19:55:32 +0200
+Message-ID: <4d9b16aa28d4eb6c9d5a158e112abfedbfa2cd4b.camel@sipsolutions.net>
+Subject: Re: [RFC PATCH v2 1/3] kunit: Add kunit_add_action() to defer a
+ call until test exit
+From:   Benjamin Berg <benjamin@sipsolutions.net>
+To:     Maxime Ripard <maxime@cerno.tech>, David Gow <davidgow@google.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Date:   Tue, 04 Apr 2023 19:55:30 +0200
+In-Reply-To: <20230404133231.ingzo7xy7lejpqqb@houat>
+References: <20230331080411.981038-1-davidgow@google.com>
+         <20230331080411.981038-2-davidgow@google.com>
+         <20230404133231.ingzo7xy7lejpqqb@houat>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,91 +66,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-04-04 at 18:46 +0200, Rafael J. Wysocki wrote:
-> On Tue, Apr 4, 2023 at 6:39=E2=80=AFPM srinivas pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> >=20
-> > On Mon, 2023-04-03 at 20:37 +0200, Rafael J. Wysocki wrote:
-> > > On Fri, Mar 31, 2023 at 6:53=E2=80=AFPM Srinivas Pandruvada
-> > > <srinivas.pandruvada@linux.intel.com> wrote:
-> > > >=20
-> > > > Add support for DLVR (Digital Linear Voltage Regulator)
-> > > > attributes,
-> > > > which can be used to control RFIM.
-> > > > Here instead of "fivr" another directory "dlvr" is created with
-> > > > DLVR
-> > > > attributes:
-> > > >=20
-> > > > /sys/bus/pci/devices/0000:00:04.0/dlvr
-> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_freq_mhz
-> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_freq_select
-> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_hardware_rev
-> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_pll_busy
-> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_rfim_enable
-> > > > =E2=94=94=E2=94=80=E2=94=80 dlvr_spread_spectrum_pct
-> > > >=20
-> > > > Attributes
-> > > > dlvr_freq_mhz (RO):
-> > > > Current DLVR PLL frequency in MHz.
-> > > >=20
-> > > > dlvr_freq_select (RW):
-> > > > Sets DLVR PLL clock frequency.
-> > > >=20
-> > > > dlvr_hardware_rev (RO):
-> > > > DLVR hardware revision.
-> > > >=20
-> > > > dlvr_pll_busy (RO):
-> > > > PLL can't accept frequency change when set.
-> > > >=20
-> > > > dlvr_rfim_enable (RW):
-> > > > 0: Disable RF frequency hopping, 1: Enable RF frequency
-> > > > hopping.
-> > > >=20
-> > > > dlvr_spread_spectrum_pct (RW)
-> > > > A write to this register updates the DLVR spread spectrum
-> > > > percent
-> > > > value.
-> > >=20
-> > > How is this attribute going to be used by user space in practice?
-> >=20
-> > Spread spectrum percent helps to reduce the DLVR clock noise to
-> > meet
-> > regulatory compliance. This spreading % increases bandwidth of
-> > signal
-> > transmission and hence reduces the effects of interference, noise,
-> > and
-> > signal fading.
->=20
-> The above information should be added to the documentation I think.
->=20
-> Still, I would like to know when user space is going to write to it
-> and how it is going to find out what value to write.
-As specified in the
-https://docs.kernel.org/driver-api/thermal/intel_dptf.html
-This is all related to reduce interference with WiFi radio frequencies.
+Hi,
 
-The algorithm should be read current dlvr_freq_mhz,
-dlvr_spread_spectrum_pct, current WiFi frequency (channel has a fix
-freq), find the error in WiFi frame error rates (From WiFi module), and
-do small adjustment +- to dlvr_freq. While changing the dlvr
-frequencies you may induce more interference so you spread the signal
-to reduce S/N ratio using this percent knob.
-
+On Tue, 2023-04-04 at 15:32 +0200, Maxime Ripard wrote:
+> [SNIP]
+> > +/**
+> > + * kunit_add_action() - Defer an 'action' (function call) until the te=
+st ends.
+> > + * @test: Test case to associate the action with.
+> > + * @func: The function to run on test exit
+> > + * @ctx: Data passed into @func
+> > + * @internal_gfp: gfp to use for internal allocations, if unsure, use =
+GFP_KERNEL
+> > + *
+> > + * Defer the execution of a function until the test exits, either norm=
+ally or
+> > + * due to a failure.=C2=A0 @ctx is passed as additional context. All f=
+unctions
+> > + * registered with kunit_add_action() will execute in the opposite ord=
+er to that
+> > + * they were registered in.
+> > + *
+> > + * This is useful for cleaning up allocated memory and resources.
+> > + *
+> > + * Returns:
+> > + *=C2=A0=C2=A0 An opaque "cancellation token", or NULL on error. Pass =
+this token to
+> > + *=C2=A0=C2=A0 kunit_remove_action_token() in order to cancel the defe=
+rred execution of
+> > + *=C2=A0=C2=A0 func().
+> > + */
+> > +struct kunit_action_ctx *kunit_add_action(struct kunit *test, kunit_de=
+fer_function_t func,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 void *ctx, gfp_t intern=
+al_gfp);
 >=20
-> > > Also should it be split like the frequency one (for consistency)?
-> >=20
-> > This is a RW field and is applied immediately unlike frequency,
-> > where
-> > it is two step process. First you specify and enable and then see
-> > the
-> > effect. So they are two fields.
+> Do we expect any other context than GFP_KERNEL?
 >=20
-> I was talking about dlvr_freq_mhz (RO) and dlvr_freq_select (RW).=C2=A0
-> I'm
-> not sure how the above is related to them TBH.
-The frequency is the base signal to which interference must be reduced.
-A good explanation for this technique
-https://www.eetimes.com/tutorial-on-spread-spectrum-technology/
+> If so, then maybe we can have kunit_add_action() assume GFP_KERNEL and
+> add a variant for the odd case where we would actually need a different
+> GFP flag.
 
-Thanks,
-Srinivas
+Does anything other than GFP_KERNEL make sense? I would assume these
+functions should only ever be called from a kunit context, i.e. the
+passed test is guaranteed to be identical to the value returned by
+kunit_get_current_test().
+
+That said, I am happy with merging this in this form. I feel the right
+thing here is a patch (with corresponding spatch) that changes all of
+the related APIs to remove the gfp argument.
+
+> > +/**
+> > + * kunit_remove_action_token() - Cancel a deferred action.
+> > + * @test: Test case the action is associated with.
+> > + * @cancel_token: The cancellation token returned by kunit_add_action(=
+)
+> > + *
+> > + * Prevent an action deferred using kunit_add_action() from executing =
+when the
+> > + * test ends.
+> > + *
+> > + * You can also use the (test, function, context) triplet to remove an=
+ action
+> > + * with kunit_remove_action().
+> > + */
+> > +void kunit_remove_action_token(struct kunit *test, struct kunit_action=
+_ctx *cancel_token);
+>=20
+> It's not clear to me why we still need the token. If
+> kunit_remove_action() works fine, why would we need to store the token?
+>=20
+> Can't we just make kunit_add_action() return an int to indicate whether
+> it failed or not, and that's it?
+>=20
+> > [SNIP]
+>=20
+> One thing worth pointing is that if kunit_add_action() fails, the
+> cleanup function passed as an argument won't run.
+>=20
+> So, if the kzalloc call ever fails, patch 2 will leak its res->data()
+> resource for example.
+>=20
+> devm (and drmm) handles this using a variant called
+> devm_add_action_or_reset, we should either provide the same variant or
+> just go for that behavior by default.
+
+Both version of the function would need a return value. An alternative
+might be to make assertions part of the API. But as with dropping the
+gfp argument, that seems like a more intrusive change that needs to
+happen independently.
+
+Anyway, I am fine with action_or_reset as the default and possibly the
+only behaviour. I expect that every API user will want an assertion
+that checks for failure here anyway.
+
+Benjamin
+
+
+If kunit_* functions can assert in error conditions, then the example
+
+void test_func(struct kunit *test)
+{
+  char u8 *buf =3D kunit_kzalloc(test, 1024, GFP_KERNEL);
+  struct sk_buff *skb_a;
+  struct sk_buff *skb_b;
+  /* Further variables */
+
+  KUNIT_ASSERT_NOT_NULL(test, buf);
+
+  skb_a =3D skb_alloc(1024, GFP_KERNEL);
+  KUNIT_ASSERT_NOT_NULL(test, skb_a);
+  if (kunit_add_cleanup(test, (kunit_defer_function_t) kfree_skb, skb_a))
+    KUNIT_ASSERT_FAILURE("Failed to add cleanup");
+
+  /* Or, maybe: */
+  skb_b =3D skb_alloc(1024, GFP_KERNEL);
+  KUNIT_ASSERT_NOT_NULL(test, skb_b);
+  KUNIT_ASSERT_EQ(test, 0,
+                  kunit_add_cleanup(test,
+                                    (kunit_defer_function_t) kfree_skb,
+                                    skb_b));
+
+  /* run code that may assert */
+}
+
+
+could be shortened to (with a trivial kunit_skb_alloc helper)
+
+void test_func(struct kunit *test)
+{
+  char u8 *buf =3D kunit_kzalloc(test, 1024, GFP_KERNEL);
+  struct sk_buff *skb_a =3D kunit_skb_alloc(1024, GFP_KERNEL);
+  struct sk_buff *skb_b =3D kunit_skb_alloc(1024, GFP_KERNEL);
+  /* Further variables */
+
+  /* run code that may assert */
+}
+
+I should just post a patch for the existing API and see what people say
+then ...
