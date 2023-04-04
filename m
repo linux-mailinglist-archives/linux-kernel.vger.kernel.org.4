@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8199F6D64E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954D96D638B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235588AbjDDOMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
+        id S235250AbjDDNns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235500AbjDDOMK (ORCPT
+        with ESMTP id S234453AbjDDNnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:12:10 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5823AB9;
-        Tue,  4 Apr 2023 07:12:06 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTmX1Qxvz67XcG;
-        Tue,  4 Apr 2023 21:55:24 +0800 (CST)
-Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
- lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 4 Apr 2023 14:56:09 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Robert Richter <rric@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Frank Li <Frank.li@nxp.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Liang Kan <kan.liang@linux.intel.com>
-Subject: [PATCH 27/32] ARM: imx: Assign parents for mmdc event_source devices
-Date:   Tue, 4 Apr 2023 14:42:20 +0100
-Message-ID: <20230404134225.13408-28-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
-References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
+        Tue, 4 Apr 2023 09:43:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBF03C0F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680615775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eOn+GooQef0PZGSR4LECkucKGIH5iRWxz3Wp3EiY8Go=;
+        b=Q4A1PZMH/3oWU8Y0Vqw0Y+aFINdfkLgQH1AbhBRs8BO71OVwa2nScDgG6Ea6MHSzerMwWd
+        92qTPq/kCT5YW2NUP3ec4+DAUkycxageMHg32hGpr+ELYJBYXMRVPgpf9YIxxYbTliNJ7v
+        CvvPy1ox6VpqUTXVx3uFeW6fb+fK1sw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-5BjHu8A0ORC4zh0ZPovsnQ-1; Tue, 04 Apr 2023 09:42:50 -0400
+X-MC-Unique: 5BjHu8A0ORC4zh0ZPovsnQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E0B332A59564;
+        Tue,  4 Apr 2023 13:42:48 +0000 (UTC)
+Received: from ypodemsk.tlv.csb (unknown [10.39.194.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 41AAB2166B29;
+        Tue,  4 Apr 2023 13:42:40 +0000 (UTC)
+From:   Yair Podemsky <ypodemsk@redhat.com>
+To:     linux@armlinux.org.uk, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, davem@davemloft.net, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org,
+        peterz@infradead.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        frederic@kernel.org, ardb@kernel.org,
+        juerg.haefliger@canonical.com, rmk+kernel@armlinux.org.uk,
+        geert+renesas@glider.be, tony@atomide.com,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        nick.hawkins@hpe.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, mtosatti@redhat.com, vschneid@redhat.com,
+        dhildenb@redhat.com
+Cc:     ypodemsk@redhat.com, alougovs@redhat.com
+Subject: [PATCH 0/3] send tlb_remove_table_smp_sync IPI only to necessary CPUs
+Date:   Tue,  4 Apr 2023 16:42:21 +0300
+Message-Id: <20230404134224.137038-1-ypodemsk@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,29 +74,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the PMU device appears directly under /sys/devices/
-Only root busses should appear there, so instead assign the pmu->dev
-parent to be the platform device.
+Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
+indiscriminately, this causes unnecessary work and delays notable in
+real-time use-cases and isolated cpus.
+By limiting the IPI to only be sent to cpus referencing the effected
+mm and in kernel mode latency is improved.
+a config to differentiate architectures that support mm_cpumask from
+those that don't will allow safe usage of this feature.
 
-Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
-Cc: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
----
- arch/arm/mach-imx/mmdc.c | 1 +
- 1 file changed, 1 insertion(+)
+Yair Podemsky (3):
+  arch: Introduce ARCH_HAS_CPUMASK_BITS
+  mm/mmu_gather: send tlb_remove_table_smp_sync IPI only to MM CPUs
+  mm/mmu_gather: send tlb_remove_table_smp_sync IPI only to CPUs in
+    kernel mode
 
-diff --git a/arch/arm/mach-imx/mmdc.c b/arch/arm/mach-imx/mmdc.c
-index b9efe9da06e0..a015e0ea915d 100644
---- a/arch/arm/mach-imx/mmdc.c
-+++ b/arch/arm/mach-imx/mmdc.c
-@@ -436,6 +436,7 @@ static int mmdc_pmu_init(struct mmdc_pmu *pmu_mmdc,
- {
- 	*pmu_mmdc = (struct mmdc_pmu) {
- 		.pmu = (struct pmu) {
-+			.parent		= dev,
- 			.task_ctx_nr    = perf_invalid_context,
- 			.attr_groups    = attr_groups,
- 			.event_init     = mmdc_pmu_event_init,
 -- 
-2.37.2
+2.31.1
 
