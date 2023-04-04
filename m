@@ -2,105 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4416D5629
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 03:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00BD6D562D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 03:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbjDDBfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 21:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
+        id S232723AbjDDBhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 21:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233011AbjDDBe6 (ORCPT
+        with ESMTP id S229687AbjDDBhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 21:34:58 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F581B0;
-        Mon,  3 Apr 2023 18:34:51 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Pr9Kz2Gg3z4f3nJh;
-        Tue,  4 Apr 2023 09:34:47 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgCHgR+3fitktWF6GA--.58991S3;
-        Tue, 04 Apr 2023 09:34:48 +0800 (CST)
-Subject: Re: [PATCH v4 5/5] md: protect md_thread with rcu
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230402091236.976723-1-yukuai1@huaweicloud.com>
- <20230402091236.976723-6-yukuai1@huaweicloud.com>
- <84680f93-5936-4a80-fe9e-aed988654e28@deltatee.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <441acd06-606c-8f63-fd69-f7bc82841746@huaweicloud.com>
-Date:   Tue, 4 Apr 2023 09:34:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 3 Apr 2023 21:37:45 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44FDB8;
+        Mon,  3 Apr 2023 18:37:43 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4E9E65C01BE;
+        Mon,  3 Apr 2023 21:37:41 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 03 Apr 2023 21:37:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680572261; x=1680658661; bh=GQ
+        rl89O1RAwOi5BoeGN0zQm5w3SNwrUnoP1QapVDans=; b=Z/QqfEdMmmJs0ljPwO
+        u7xPN5DG1HwhElSf3kR9ewWFdEVSNVOMjljR3qZMjlL0zMdTo2meEEeFapiDRS/C
+        Q859oCSFUv77gWgj0BiE2TdfR2ABGh4JL2oSiwpu7Xb8TZdf3AN7ze1VulOIz0cv
+        gEDK9ymmuQXAE094cV6BBnIbANDso9P+LWxMm1YFMXsdSFCzi3RMgACW696EMQtV
+        zpcvJQo2yOw7gI/m4c6+7otm8e0DhZXLKioODJbxpVCiO63ONe1qnQo6DD5Ihs6j
+        bOPrLvrd2kFf6RdEJqQ03X9PJ+OAyHE7BRhtcXZ7KSr+/4L84LDOE6bSMuDOUEOL
+        oUOg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680572261; x=1680658661; bh=GQrl89O1RAwOi
+        5BoeGN0zQm5w3SNwrUnoP1QapVDans=; b=DYNxPFQEd2dHK5hFs2GRIQh3VTwnQ
+        2uSxRajzjH+iqoMetCdRxBELRp0lnlKNSRJH7eOrNYHFwtu90aOuSPkDHqEUd6BR
+        CtbyTWGxIX+oEQ1mAQMfXxr50MZ9XK6/EO56pVtMXo2VDqSgh8IZlFpQ+Ht6gL35
+        1yFRWmBdHKndipTVg3nnmIdGF/j8btKudP+pBK6dNsnGHQ2E16lpX8QDkiYNpDh7
+        PrUh92ZaCAsGdWs7EwtK8DPd9xznTi0n+u68CRx2h4bThEmKKFgCeSiCOvu9bHU7
+        4Mle4VpPn3NTe6eC5W5eXBTGJ5rZA8UbNigNT2uXkWdmdW8YOSNK3bbxw==
+X-ME-Sender: <xms:ZH8rZGb91I3MBWSDC8j6mfcsTd75kl5YOa1tDEMkmmJ0HXUL6SfALQ>
+    <xme:ZH8rZJakVxWa7sH0-oHOkOCMndiu7DOOO_Au9V3wUtXxGCMx_68zCr4oHYsiu87Ll
+    9XoT241EtnrArSnJao>
+X-ME-Received: <xmr:ZH8rZA8w2JmA-8WmIGUrCWgxeFyhs9qL67D3QSAAf8zKkzUe-VjNinEhaGO7KlGaVqSBnCZaZYiMjOcKW6V6Rn5UYcOdM1JKq1zy>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeikedgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheprfgvthgv
+    rhcujfhuthhtvghrvghruceophgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvg
+    htqeenucggtffrrghtthgvrhhnpeefgfejvefgudfhfeevudekueegtdeutdejhffhhfdv
+    keejhfehheefgfehteejffenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehpvght
+    vghrrdhhuhhtthgvrhgvrhesfihhohdqthdrnhgvth
+X-ME-Proxy: <xmx:ZH8rZIpc8VAac85-Pk0xYRWvNvEkoizA-2hSyLexTyCn4Me8gWbL6Q>
+    <xmx:ZH8rZBonZIelrhHpvpK528rwxTCEBDHjfNkFPnX5_Syk8GhZwjPxvg>
+    <xmx:ZH8rZGSepLkFeRphgw1fKcc-IyzKQ_J3dP6cTP6I94Kc42hdQCC6tQ>
+    <xmx:ZX8rZC65VOuQkhuJxh1lV6bqplT4Vn9GwTAP4PUMe2RZYkMyMk--ng>
+Feedback-ID: i7ce144cd:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Apr 2023 21:37:35 -0400 (EDT)
+Date:   Tue, 4 Apr 2023 11:37:31 +1000
+From:   Peter Hutterer <peter.hutterer@who-t.net>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Candle Sun <candle.sun@unisoc.com>,
+        Jose Torreguitar <jtguitar@google.com>,
+        Roderick Colenbrander <roderick.colenbrander@sony.com>,
+        Silvan Jegen <s.jegen@gmail.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>,
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Jason Gerecke <killertofu@gmail.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>
+Subject: Re: [PATCH 00/11] selftests: hid: import the tests from hid-tools
+Message-ID: <20230404013731.GA38303@quokka>
+References: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
+ <20230403162024.sespaq5iwbjan4xl@mail.corp.redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <84680f93-5936-4a80-fe9e-aed988654e28@deltatee.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgCHgR+3fitktWF6GA--.58991S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw15Xr4xCFy8Aw4UJr1kZrb_yoW8XrWfpF
-        s8KFyj9r4DJryUZF4UCan5Ja4Fvr4SvFy3G34DK3s8Aas3Gws5tFy7uryFvr4fur95Ka47
-        Xa1YqFn5Cryqyr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
-        UU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.3 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403162024.sespaq5iwbjan4xl@mail.corp.redhat.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Logan!
-
-在 2023/04/03 23:53, Logan Gunthorpe 写道:
->>   
->>   /* caller need to make sured returned md_thread won't be freed */
->> -static inline struct md_thread *get_md_thread(struct md_thread *t)
->> +static inline struct md_thread *get_md_thread(struct md_thread __rcu *t)
->>   {
->> -	return t;
->> +	return rcu_access_pointer(t);
+On Mon, Apr 03, 2023 at 06:20:24PM +0200, Benjamin Tissoires wrote:
+> On Feb 17 2023, Benjamin Tissoires wrote:
+> > I have been running hid-tools for a while, but it was in its own
+> > separate repository for multiple reasons. And the past few weeks
+> > I finally managed to make the kernel tests in that repo in a
+> > state where we can merge them in the kernel tree directly:
+> > 
+> > - the tests run in ~2 to 3 minutes
+> > - the tests are way more reliable than previously
+> > - the tests are mostly self-contained now (to the exception
+> >   of the Sony ones)
+> > 
+> > To be able to run the tests we need to use the latest release
+> > of hid-tools, as this project still keeps the HID parsing logic
+> > and is capable of generating the HID events.
+> > 
+> > The series also ensures we can run the tests with vmtest.sh,
+> > allowing for a quick development and test in the tree itself.
+> > 
+> > This should allow us to require tests to be added to a series
+> > when we see fit and keep them alive properly instead of having
+> > to deal with 2 repositories.
+> > 
+> > In Cc are all of the people who participated in the elaboration
+> > of those tests, so please send back a signed-off-by for each
+> > commit you are part of.
+> > 
+> > This series applies on top of the for-6.3/hid-bpf branch, which
+> > is the one that added the tools/testing/selftests/hid directory.
+> > Given that this is unlikely this series will make the cut for
+> > 6.3, we might just consider this series to be based on top of
+> > the future 6.3-rc1.
+> > 
+> > Cheers,
+> > Benjamin
+> > 
+> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > ---
 > 
-> This should not be using rcu_access_pointer(). That function is only
-> appropriate when the value of t is not being dereferenced. This should
-> be using rcu_dereference_protected() with some reasoning as to why it's
-> safe to use this function. It might make sense to open code this for
-> every call site if the reasoning is different in each location.
-> Preferrably the second argument in the check should be some lockdep
-> condition that ensures this. If that's not possible, a comment
-> explaining the reasoning why it is safe in all the call sites should be
-> added here.
+> Jiri, do you mind if I push that code in the hid tree with the following
+> changes:
+> - Peter privately gave me his signed-off-by
 
-Yes, it's right rcu_dereference_protected() should be used here, I need
-to take a look at each call site from patch 3 and figure out if they're
-safe without rcu protection.
+Apologies, this fell off my list after the initial ack in a meeting with
+Benjamin. This time publicly:
+  Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+for the relevant commits.
 
+Cheers,
+  Peter
+
+
+> - I included changes from https://gitlab.freedesktop.org/libevdev/hid-tools/-/merge_requests/143
+>   to fix the failing sony tests in v6.3
 > 
-> On one hand this is looking like my idea of using RCU is producing more
-> churn than the spin lock. On the other hand I think it's cleaning up and
-> documenting more unsafe use cases (like other potentially unsafe
-> accesses of the the thread pointer). So I still think the RCU is a good
-> approach here.
-
-Yes, some other unsafe accesses is protected now in this patch. I'll
-send a new version soon.
-
-Thanks,
-Kuai
-
+> I am not a big fan of sending a v2 because the ML are not happy with the
+> amount of changes...
+> 
+> Cheers,
+> Benjamin
+> 
+> > Benjamin Tissoires (11):
+> >       selftests: hid: make vmtest rely on make
+> >       selftests: hid: import hid-tools hid-core tests
+> >       selftests: hid: import hid-tools hid-gamepad tests
+> >       selftests: hid: import hid-tools hid-keyboards tests
+> >       selftests: hid: import hid-tools hid-mouse tests
+> >       selftests: hid: import hid-tools hid-multitouch and hid-tablets tests
+> >       selftests: hid: import hid-tools wacom tests
+> >       selftests: hid: import hid-tools hid-apple tests
+> >       selftests: hid: import hid-tools hid-ite tests
+> >       selftests: hid: import hid-tools hid-sony and hid-playstation tests
+> >       selftests: hid: import hid-tools usb-crash tests
+> > 
+> >  tools/testing/selftests/hid/Makefile               |   12 +
+> >  tools/testing/selftests/hid/config                 |   11 +
+> >  tools/testing/selftests/hid/hid-apple.sh           |    7 +
+> >  tools/testing/selftests/hid/hid-core.sh            |    7 +
+> >  tools/testing/selftests/hid/hid-gamepad.sh         |    7 +
+> >  tools/testing/selftests/hid/hid-ite.sh             |    7 +
+> >  tools/testing/selftests/hid/hid-keyboard.sh        |    7 +
+> >  tools/testing/selftests/hid/hid-mouse.sh           |    7 +
+> >  tools/testing/selftests/hid/hid-multitouch.sh      |    7 +
+> >  tools/testing/selftests/hid/hid-sony.sh            |    7 +
+> >  tools/testing/selftests/hid/hid-tablet.sh          |    7 +
+> >  tools/testing/selftests/hid/hid-usb_crash.sh       |    7 +
+> >  tools/testing/selftests/hid/hid-wacom.sh           |    7 +
+> >  tools/testing/selftests/hid/run-hid-tools-tests.sh |   28 +
+> >  tools/testing/selftests/hid/settings               |    3 +
+> >  tools/testing/selftests/hid/tests/__init__.py      |    2 +
+> >  tools/testing/selftests/hid/tests/base.py          |  345 ++++
+> >  tools/testing/selftests/hid/tests/conftest.py      |   81 +
+> >  .../selftests/hid/tests/descriptors_wacom.py       | 1360 +++++++++++++
+> >  .../selftests/hid/tests/test_apple_keyboard.py     |  440 +++++
+> >  tools/testing/selftests/hid/tests/test_gamepad.py  |  209 ++
+> >  tools/testing/selftests/hid/tests/test_hid_core.py |  154 ++
+> >  .../selftests/hid/tests/test_ite_keyboard.py       |  166 ++
+> >  tools/testing/selftests/hid/tests/test_keyboard.py |  485 +++++
+> >  tools/testing/selftests/hid/tests/test_mouse.py    |  977 +++++++++
+> >  .../testing/selftests/hid/tests/test_multitouch.py | 2088 ++++++++++++++++++++
+> >  tools/testing/selftests/hid/tests/test_sony.py     |  282 +++
+> >  tools/testing/selftests/hid/tests/test_tablet.py   |  872 ++++++++
+> >  .../testing/selftests/hid/tests/test_usb_crash.py  |  103 +
+> >  .../selftests/hid/tests/test_wacom_generic.py      |  844 ++++++++
+> >  tools/testing/selftests/hid/vmtest.sh              |   25 +-
+> >  31 files changed, 8554 insertions(+), 10 deletions(-)
+> > ---
+> > base-commit: 2f7f4efb9411770b4ad99eb314d6418e980248b4
+> > change-id: 20230217-import-hid-tools-tests-dc0cd4f3c8a8
+> > 
+> > Best regards,
+> > -- 
+> > Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > 
+> 
