@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC166D5F67
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E7F6D5F69
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbjDDLqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S234819AbjDDLqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 07:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234432AbjDDLqR (ORCPT
+        with ESMTP id S234790AbjDDLqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:46:17 -0400
+        Tue, 4 Apr 2023 07:46:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEB519A4
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 04:46:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E7EFF;
+        Tue,  4 Apr 2023 04:46:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 446B960B8B
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 11:46:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD2BC433EF;
-        Tue,  4 Apr 2023 11:46:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DA2263293;
+        Tue,  4 Apr 2023 11:46:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05F18C433D2;
+        Tue,  4 Apr 2023 11:46:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680608775;
-        bh=Bmx5sWZYWn9mDaaceeFQaRkfTZSSwMr0volPaPsmVPE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JTKl6eWVuRI/sxuD+oMgd3NswMX2ev/vilHfLcrJYT2Ggz2JnKn5iFFDHQCOoA9c1
-         vNsKfAddGnVCHusf58JdLZWEGG+6n7JA78mTQE/aolADlKm3lRTbktO/UvGYYjOvwg
-         SOHrO/oQvfPe4Myp68NewTFC8JqQ2Q8XQ2jaiBnTCLYnOhGTrTs6Djmqkqt/M138Kx
-         vAIbF4C3t6SyO1a8GhCQ6ykaN41xO4KEqlwV6L2d1cXAeBSCwsrdi+5Htzq3Jhg6B5
-         MERVmNbl0XlU0N84FjnwNWrtHik8FwIqxMIZkO0sNz5NJKX/P00Y4wK06BVUpLfoEI
-         O2Vqfu1jH/lbw==
-Message-ID: <076b5775-18eb-05b3-b803-c54420b3e5fe@kernel.org>
-Date:   Tue, 4 Apr 2023 14:46:11 +0300
+        s=k20201202; t=1680608791;
+        bh=RHCs8FphgqOMMWc0BCoMg/a16dbHn72xyUKpV1s96HU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pJBvY7VDPPEbSY7kL6tl4DGnbEZo0yrwkM4oAcyc/8vXICAUPShFvBOICNYF3ye0M
+         247NnTkfHBhivIeoQEWVZ2YWJ5gRlWBfeUpaI8QaFyvd4/71ulYBmJoKBnj66e/1WZ
+         9MBLKcR3JRIQogsAkATJ1ZVXiXsqp6EH+SdDkPUYfL5tUnxgQxO8FiNrvL1hVEx0Xe
+         vsAJ2oym40KfGNFWWqQEYCjm60OfD4tPkJX1Ji6cF6FSQMz+2s10FsdpOmO5y2jLEt
+         kMhPx3eUpz3SjK2LB3RnZj1bdNw8ieNdpg432ZOUCSOF5rMzymE1JFLvSLucMHY1CK
+         UTRXv6zWXdSTw==
+Date:   Tue, 4 Apr 2023 12:46:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     ye.xingchen@zte.com.cn
+Cc:     peter.ujfalusi@gmail.com, jarkko.nikula@bitmer.com,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: ti: =?iso-8859-1?Q?omap-?=
+ =?iso-8859-1?Q?dmic=3A_use=A0devm=5Fplatform=5Fioremap=5Fresource=5Fbynam?=
+ =?iso-8859-1?B?ZSgp?=
+Message-ID: <48369cd0-cac8-421e-8691-e730a619d928@sirena.org.uk>
+References: <202303221410035741246@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] ARM: multi_v7_defconfig: make USB_DWC3 as a module
- instead of built-in
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Nishanth Menon <nm@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>
-References: <20230404084259.13752-1-rogerq@kernel.org>
- <283f8f4c-9f8d-48b1-b161-3b712104583b@app.fastmail.com>
- <0ffa9690-9709-669c-b44d-dbb93446ec95@linaro.org>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <0ffa9690-9709-669c-b44d-dbb93446ec95@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8bHbsp7cSqyHRWkg"
+Content-Disposition: inline
+In-Reply-To: <202303221410035741246@zte.com.cn>
+X-Cookie: FACILITY REJECTED 100044200000
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,34 +60,33 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--8bHbsp7cSqyHRWkg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 04/04/2023 13:01, Krzysztof Kozlowski wrote:
-> On 04/04/2023 10:51, Arnd Bergmann wrote:
->> On Tue, Apr 4, 2023, at 10:42, Roger Quadros wrote:
->>> USB_DWC3 is not required for boot on most platforms make it
->>> as a module instead of built-in.
->>>
->>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->>> ---
->>
->> Does this save a significant amount of vmlinux size? Since this
+On Wed, Mar 22, 2023 at 02:10:03PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+>=20
+> Convert platform_get_resource_byname(),devm_ioremap_resource() to a single
+> call to devm_platform_ioremap_resource_byname(), as this is exactly what
+> this function does.
 
-vmlinux size reduces by ~529KB
+This doesn't apply against current code, please check and resend.
 
->> is a fairly common USB driver, I think it does help to have it
->> built-in for users booting from USB_STORAGE or nfsroot over
->> USB_USBNET, which are both built-in and not uncommon.
+--8bHbsp7cSqyHRWkg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-OK.
+-----BEGIN PGP SIGNATURE-----
 
-> 
-> Especially that sometimes, at least for arm64 defconfig, we added as
-> built-in less critical pieces (RENESAS_ETHER_SWITCH, MARVELL_10G_PHY,
-> HTE_TEGRA194, SM_VIDEOCC_8250 and other non-core clock controllers).
-> This change will require several systems to update their initrd to
-> include USB.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQsDhAACgkQJNaLcl1U
+h9Azgwf/bZGUQm4wOkmEdAXrBeNHI6JSXBqe+aLgVAVjMpYhHvFlp952bmZ5toBW
+VeTFZ8tkjLJZ4x+9xFot3Q5ohBg/WVmfC2PHAf2UdFWdemogpmype3GtCRScfUKb
+pAX+GHOGZlHsHMBb5+2mtFT50LFGSW7wfK2NCw7VkNcahj/157huhZX3HR84bMJt
+FZJ/xu7WWZTSL+3FX8RgeVc2Orp6TwbujXGbQOh0ETrn4Py4hSVIxJfwtPlGQb7R
+UbiINWoLhuuWLiVlOboPHx0QiNJyJWFboj4eI50GkFPK4OCH36vzdgkzON85Uewy
+Fg3bd6Jk1B7/h02FQKzvnqGlibBCCA==
+=2nf1
+-----END PGP SIGNATURE-----
 
-OK. Please ignore this patch and the arm64 defconfig one as well. ;)
-
-cheers,
--roger
+--8bHbsp7cSqyHRWkg--
