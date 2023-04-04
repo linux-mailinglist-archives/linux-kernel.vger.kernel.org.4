@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB8E6D6335
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95806D6376
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235276AbjDDNh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S235394AbjDDNjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235229AbjDDNhv (ORCPT
+        with ESMTP id S235332AbjDDNjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 09:37:51 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A46F1BD0;
-        Tue,  4 Apr 2023 06:37:50 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id x17so42465624lfu.5;
-        Tue, 04 Apr 2023 06:37:50 -0700 (PDT)
+        Tue, 4 Apr 2023 09:39:10 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465F63C0F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:38:42 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id n14so15420992plc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 06:38:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680615468;
+        d=chromium.org; s=google; t=1680615521;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6eXqdv5R87UkWerUpADSYoTnH9yUbvTu+QxPfj9tLIA=;
-        b=U0zCF63H3O415nTgouxCcn5kmjVydu0JtlOM4Di2O9rMVKWCuU+SscNmFFUnV9zUl+
-         UnbmaZHgCOQ7+Ab216xHn5DLH3RCQSFSpMzGayzRMohf4jbY2XhBbWPU6XHMgd2Pxzsz
-         hk042GrPpRNijD3iOjVVEwvKONZYbrlVOZW045OZSGx6eUkKNNo9xMf9fxiXfRhZlAcA
-         v4YBubXVdnd9y8MWBvYwLljGHt46B82qtO5FJ6ZF/6lAitKwMlZNoKEcEbjTlGSdMh6R
-         ARhSOrWbMupM64rs8NXMiYZlW0eaQ64A2k6gP6/pb7cZ2uoG4RGlL1MhfEpMWB+bhGQr
-         GfaA==
+        bh=llENXJnfou0jHlwcAitFpF80zmdqqymKntlBX6KuEaQ=;
+        b=FPA8lS3Ld7kyxA/NPoVx4VmFI259DulnGq3/aKGnqhSQal98slT+yBh+SodYuqVjzZ
+         +FCbV0ArxBQOv5btNRCdRdbIZyCaotK2e6WbI0mb2iYu0t8xulPfxTvq1mmTf7pNP2dG
+         rX2mWXujKUkKEPkTfs+hBkka0J7MPLvC1kBN4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680615468;
+        d=1e100.net; s=20210112; t=1680615521;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6eXqdv5R87UkWerUpADSYoTnH9yUbvTu+QxPfj9tLIA=;
-        b=jk45b5Tguf3X9t/Tthm9ML8PsqFpG5+H9zVPzrfTdzXK6zi7tv0+/GAwxEPymc0y7P
-         n6M2MW07N35TNtrfXNwIOB9a9GV3q7GX4TEg2az9NtHgoVOWgekEsCGCSl2kcwL/PezX
-         cIO3exgKNk66mZyrYosOohaHv8rLgIFl/2hi5YiaV4YJamPG7VqLSfSUPdMLZloMq8ZM
-         FW/zpC9vEpmpYLcwU//p8ygQ6BnPSXOK3QF33ct116AGVWC4SzAV8rcQgfy3z0j543eD
-         +IvaDs4ttdTUgbhCm58jW8TJcImukd/EjtlhANJUg0M+tvBRdldd4o+G1bIk63vsh1KW
-         y3WQ==
-X-Gm-Message-State: AAQBX9eC9YpqL+xPyl8Hq6MtLE3SeL+EA39aXqARF1eyQiIYhcoZT6un
-        NRcAGqEhzlJXbYdIG/nRYi36G5Tcb7Awa7DdZIc=
-X-Google-Smtp-Source: AKy350ZEAT1iGbbnRn4oiCOcUJdthP/lFaoMOdybQzNCgzOXKAR70jKI+paKyFbAceTGtY/nCUeMaRW8ef3QjV4FsNA=
-X-Received: by 2002:ac2:592b:0:b0:4d5:ca32:9bd6 with SMTP id
- v11-20020ac2592b000000b004d5ca329bd6mr741155lfi.2.1680615468201; Tue, 04 Apr
- 2023 06:37:48 -0700 (PDT)
+        bh=llENXJnfou0jHlwcAitFpF80zmdqqymKntlBX6KuEaQ=;
+        b=YEWN5KABNDafI15rYfV+rw0R2jkzGEQA6ymL67iSQfEAXwJT1sk1KjdgL6RvCsX7ry
+         L//NoyY8jqHPXdd2mf7gicta4HPAKr/Zr4YcfxYZDCustEhZNwAIPZFcqla+d7YuqC4c
+         DpxmVLsvt/uldayOIV6KZTFmrus572cSapFuSKmgbYWV386xz7sCs/94MEvxdUVNtNdO
+         NGpFrg9YGAvqSpB1gnoYGfJyK5MkJcaLAiAw/4whRc2MX+aXanvpSKEJ7dZ3G9ZoQltw
+         dVngC/QdG1StxmfOUezS+4tISPWu2DmDvXeQFpVNnPDhwt+JRvMtK60Ar2LH+dsHuHwY
+         6X3w==
+X-Gm-Message-State: AAQBX9cVqt1bldmxeeo6A8oS5a1NeP653FJu/VlPMePvGbnICV0iQXHx
+        jtKub9zVUcltncAtMKCix3Ku8hULtuXE68sSXRW9Uw==
+X-Google-Smtp-Source: AKy350b1tmpN2kP03lwA2YUIAI8vuYXWL2d7aNm1yEKP8eq8boem9oM3plC8rDv4swzoK98EZ9sMMLztSt/QkW7+o50=
+X-Received: by 2002:a17:90a:a886:b0:23b:36cc:f347 with SMTP id
+ h6-20020a17090aa88600b0023b36ccf347mr947229pjq.9.1680615520948; Tue, 04 Apr
+ 2023 06:38:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230403211548.6253-1-jorge.lopez2@hp.com> <ZCuMkdb6jeL4S8hz@debian.me>
-In-Reply-To: <ZCuMkdb6jeL4S8hz@debian.me>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Tue, 4 Apr 2023 08:37:30 -0500
-Message-ID: <CAOOmCE-5NHkYcmBP1GGpr=sEoxF9jkjj1LevekEm8R0wbrM4xQ@mail.gmail.com>
-Subject: Re: [PATCH v7] Introduction-of-HP-BIOSCFG-driver-documentation
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     hdegoede@redhat.com,
-        Linux x86 Platform Drivers 
-        <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>
+References: <20230403113552.2857693-1-revest@chromium.org> <20230403113552.2857693-4-revest@chromium.org>
+ <ZCsMQ/6MI49st2oW@FVFF77S0Q05N.cambridge.arm.com>
+In-Reply-To: <ZCsMQ/6MI49st2oW@FVFF77S0Q05N.cambridge.arm.com>
+From:   Florent Revest <revest@chromium.org>
+Date:   Tue, 4 Apr 2023 15:38:29 +0200
+Message-ID: <CABRcYmJXQ6DpfNJ_P1Aros3QZ9+fZuvF-WgHc=YDRnUSUj__FQ@mail.gmail.com>
+Subject: Re: [PATCH v5 3/4] arm64: ftrace: Add direct call trampoline samples support
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
+        xukuohai@huaweicloud.com, lihuafei1@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,21 +71,297 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bagas,
-
+On Mon, Apr 3, 2023 at 7:26=E2=80=AFPM Mark Rutland <mark.rutland@arm.com> =
+wrote:
 >
-> Where is the rest of patches if this is a series? Had they been merged?
+> On Mon, Apr 03, 2023 at 01:35:51PM +0200, Florent Revest wrote:
+> > The ftrace samples need per-architecture trampoline implementations
+> > to save and restore argument registers around the calls to
+> > my_direct_func* and to restore polluted registers (eg: x30).
+> >
+> > These samples also include <asm/asm-offsets.h> which, on arm64, is not
+> > necessary and redefines previously defined macros (resulting in
+> > warnings) so these includes are guarded by !CONFIG_ARM64.
+> >
+> > Signed-off-by: Florent Revest <revest@chromium.org>
 >
+> Overall this looks pretty good!
+>
+> I spotted a few bugs below while testing, and I've suggested some fixups =
+below.
+>
+> w.r.t. the asm-offsets include guards. I took a look at fixing arm64's
+> asm-offsets.c to not be problematic, but it requires some invasive refact=
+oring,
+> so I'd like to clean that up as a separate series. I don't think that sho=
+uld
+> block this series, and I think that the include guards are fine for now.
 
-There is only one change as requested by  Thomas Wei=C3=9Fschuh
+Sounds great! Thank you Mark :)
 
-> Feel free to ONLY submit the patch with the documentation for the next
-> revision. Then we can nail down the interface and initial functionality
-> and you don't always have to adapt the code to the changing interface.
+> > ---
+> >  arch/arm64/Kconfig                          |  2 ++
+> >  samples/ftrace/ftrace-direct-modify.c       | 34 ++++++++++++++++++
+> >  samples/ftrace/ftrace-direct-multi-modify.c | 38 +++++++++++++++++++++
+> >  samples/ftrace/ftrace-direct-multi.c        | 23 +++++++++++++
+> >  samples/ftrace/ftrace-direct-too.c          | 26 ++++++++++++++
+> >  samples/ftrace/ftrace-direct.c              | 24 +++++++++++++
+> >  6 files changed, 147 insertions(+)
+> >
+> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index f3503d0cc1b8..c2bf28099abd 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -194,6 +194,8 @@ config ARM64
+> >                   !CC_OPTIMIZE_FOR_SIZE)
+> >       select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY \
+> >               if DYNAMIC_FTRACE_WITH_ARGS
+> > +     select HAVE_SAMPLE_FTRACE_DIRECT
+> > +     select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+> >       select HAVE_EFFICIENT_UNALIGNED_ACCESS
+> >       select HAVE_FAST_GUP
+> >       select HAVE_FTRACE_MCOUNT_RECORD
+> > diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftr=
+ace-direct-modify.c
+> > index 25fba66f61c0..98d1b7385f08 100644
+> > --- a/samples/ftrace/ftrace-direct-modify.c
+> > +++ b/samples/ftrace/ftrace-direct-modify.c
+> > @@ -2,7 +2,9 @@
+> >  #include <linux/module.h>
+> >  #include <linux/kthread.h>
+> >  #include <linux/ftrace.h>
+> > +#ifndef CONFIG_ARM64
+> >  #include <asm/asm-offsets.h>
+> > +#endif
+> >
+> >  extern void my_direct_func1(void);
+> >  extern void my_direct_func2(void);
+> > @@ -96,6 +98,38 @@ asm (
+> >
+> >  #endif /* CONFIG_S390 */
+> >
+> > +#ifdef CONFIG_ARM64
+> > +
+> > +asm (
+> > +"    .pushsection    .text, \"ax\", @progbits\n"
+> > +"    .type           my_tramp1, @function\n"
+> > +"    .globl          my_tramp1\n"
+> > +"   my_tramp1:"
+> > +"    bti     c\n"
+> > +"    sub     sp, sp, #16\n"
+> > +"    stp     x9, x30, [sp]\n"
+> > +"    bl      my_direct_func1\n"
+> > +"    ldp     x30, x9, [sp]\n"
+> > +"    add     sp, sp, #16\n"
+> > +"    ret     x9\n"
+> > +"    .size           my_tramp1, .-my_tramp1\n"
+> > +
+> > +"    .type           my_tramp2, @function\n"
+> > +"    .globl          my_tramp2\n"
+> > +"   my_tramp2:"
+> > +"    bti     c\n"
+> > +"    sub     sp, sp, #16\n"
+> > +"    stp     x9, x30, [sp]\n"
+> > +"    bl      my_direct_func2\n"
+> > +"    ldp     x30, x9, [sp]\n"
+> > +"    add     sp, sp, #16\n"
+> > +"    ret     x9\n"
+> > +"    .size           my_tramp2, .-my_tramp2\n"
+> > +"    .popsection\n"
+> > +);
+> > +
+> > +#endif /* CONFIG_ARM64 */
+>
+> These looks functionally correct, given they'll only be attached to sched=
+ule()
+> and the direct funcs take no arguments, so there's no arguments to save/r=
+estore
+> and nothing to shuffle.
+>
+> As an aside, I believe we'll need to rework the sequences when we add sup=
+port
+> for RELIABLE_STACKTRACE so that the unwinder can reliably acquire the add=
+ress
+> of the instrumented function and its caller, but I think for now it's
+> preferable to keep this simple and I'm happy to make that a problem for f=
+uture
+> me.
 
-Perhaps, I misunderstood Thomas request.   I will address a few other
-comments and will submit all files again.
+Ah, interesting. I'd be happy to help when that time comes! :)
 
-Regards,
+> > diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftra=
+ce/ftrace-direct-multi-modify.c
+> > index f72623899602..e39108eb085d 100644
+> > --- a/samples/ftrace/ftrace-direct-multi-modify.c
+> > +++ b/samples/ftrace/ftrace-direct-multi-modify.c
+> > @@ -2,7 +2,9 @@
+> >  #include <linux/module.h>
+> >  #include <linux/kthread.h>
+> >  #include <linux/ftrace.h>
+> > +#ifndef CONFIG_ARM64
+> >  #include <asm/asm-offsets.h>
+> > +#endif
+> >
+> >  extern void my_direct_func1(unsigned long ip);
+> >  extern void my_direct_func2(unsigned long ip);
+> > @@ -103,6 +105,42 @@ asm (
+> >
+> >  #endif /* CONFIG_S390 */
+> >
+> > +#ifdef CONFIG_ARM64
+> > +
+> > +asm (
+> > +"    .pushsection    .text, \"ax\", @progbits\n"
+> > +"    .type           my_tramp1, @function\n"
+> > +"    .globl          my_tramp1\n"
+> > +"   my_tramp1:"
+> > +"    bti     c\n"
+> > +"    sub     sp, sp, #32\n"
+> > +"    stp     x9, x30, [sp]\n"
+> > +"    str     x0, [sp, #16]\n"
+> > +"    bl      my_direct_func1\n"
+> > +"    ldp     x30, x9, [sp]\n"
+> > +"    ldr     x0, [sp, #16]\n"
+> > +"    add     sp, sp, #32\n"
+> > +"    ret     x9\n"
+> > +"    .size           my_tramp1, .-my_tramp1\n"
+> > +
+> > +"    .type           my_tramp2, @function\n"
+> > +"    .globl          my_tramp2\n"
+> > +"   my_tramp2:"
+> > +"    bti     c\n"
+> > +"    sub     sp, sp, #32\n"
+> > +"    stp     x9, x30, [sp]\n"
+> > +"    str     x0, [sp, #16]\n"
+> > +"    bl      my_direct_func2\n"
+> > +"    ldp     x30, x9, [sp]\n"
+> > +"    ldr     x0, [sp, #16]\n"
+> > +"    add     sp, sp, #32\n"
+> > +"    ret     x9\n"
+> > +"    .size           my_tramp2, .-my_tramp2\n"
+> > +"    .popsection\n"
+> > +);
+> > +
+> > +#endif /* CONFIG_ARM64 */
+>
+> For both of these trampolines we need to pass the trampoline's return add=
+ress
+> (i.e. where we'll return to in the instrumented function) as the 'ip' arg=
+ument
+> to my_direct_func{1,2}().
+>
+> In both cases, just before the 'bl my_direct_func{1,2}' we'll need to add=
+:
+>
+>         mov     x0, x30
 
-Jorge
+Oopsie, yes! Very good catch!
+
+> > diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftra=
+ce-direct-multi.c
+> > index 1547c2c6be02..5a395d2d2e07 100644
+> > --- a/samples/ftrace/ftrace-direct-multi.c
+> > +++ b/samples/ftrace/ftrace-direct-multi.c
+> > @@ -4,7 +4,9 @@
+> >  #include <linux/mm.h> /* for handle_mm_fault() */
+> >  #include <linux/ftrace.h>
+> >  #include <linux/sched/stat.h>
+> > +#ifndef CONFIG_ARM64
+> >  #include <asm/asm-offsets.h>
+> > +#endif
+> >
+> >  extern void my_direct_func(unsigned long ip);
+> >
+> > @@ -66,6 +68,27 @@ asm (
+> >
+> >  #endif /* CONFIG_S390 */
+> >
+> > +#ifdef CONFIG_ARM64
+> > +
+> > +asm (
+> > +"    .pushsection    .text, \"ax\", @progbits\n"
+> > +"    .type           my_tramp, @function\n"
+> > +"    .globl          my_tramp\n"
+> > +"   my_tramp:"
+> > +"    bti     c\n"
+> > +"    sub     sp, sp, #32\n"
+> > +"    stp     x9, x30, [sp]\n"
+> > +"    str     x0, [sp, #16]\n"
+> > +"    bl      my_direct_func\n"
+> > +"    ldp     x30, x9, [sp]\n"
+> > +"    ldr     x0, [sp, #16]\n"
+> > +"    add     sp, sp, #32\n"
+> > +"    ret     x9\n"
+> > +"    .size           my_tramp, .-my_tramp\n"
+> > +"    .popsection\n"
+> > +);
+> > +
+> > +#endif /* CONFIG_ARM64 */
+> >  static struct ftrace_ops direct;
+>
+> As with ftrace-direct-multi-modify.c, we need to pass the return address =
+of the
+> trampoline as the 'ip' argument to my_direct_func1(), so just before the =
+'bl
+> my_direct_func' we'll need to add:
+>
+>         mov     x0, x30
+
+Will do :)
+
+> > diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace=
+-direct-too.c
+> > index f28e7b99840f..6e93c45fea86 100644
+> > --- a/samples/ftrace/ftrace-direct-too.c
+> > +++ b/samples/ftrace/ftrace-direct-too.c
+> > @@ -3,7 +3,9 @@
+> >
+> >  #include <linux/mm.h> /* for handle_mm_fault() */
+> >  #include <linux/ftrace.h>
+> > +#ifndef CONFIG_ARM64
+> >  #include <asm/asm-offsets.h>
+> > +#endif
+> >
+> >  extern void my_direct_func(struct vm_area_struct *vma,
+> >                          unsigned long address, unsigned int flags);
+>
+> This gets attached to handle_mm_fault(), whose prototype is currently:
+>
+> vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long addr=
+ess,
+>                            unsigned int flags, struct pt_regs *regs)
+>
+> i.e. it has 4 arguments, in x0 to x3.
+>
+> > @@ -70,6 +72,30 @@ asm (
+> >
+> >  #endif /* CONFIG_S390 */
+> >
+> > +#ifdef CONFIG_ARM64
+> > +
+> > +asm (
+> > +"    .pushsection    .text, \"ax\", @progbits\n"
+> > +"    .type           my_tramp, @function\n"
+> > +"    .globl          my_tramp\n"
+> > +"   my_tramp:"
+> > +"    bti     c\n"
+> > +"    sub     sp, sp, #48\n"
+> > +"    stp     x9, x30, [sp]\n"
+> > +"    stp     x0, x1, [sp, #16]\n"
+> > +"    str     x2, [sp, #32]\n"
+> > +"    bl      my_direct_func\n"
+> > +"    ldp     x30, x9, [sp]\n"
+> > +"    ldp     x0, x1, [sp, #16]\n"
+> > +"    ldr     x2, [sp, #32]\n"
+>
+> So here we need to save+restore x3 also.
+>
+> We already have the space reserved, so that should just be a matter of us=
+ing
+> stp/ldp for x2 and x3.
+
+That's also a very good catch. It looks like it's an issue for the
+sample trampoline on x86_64 as well, I'll fix it too in a separate
+patch as part of v6. (if i understand s390 asm correctly, the stmg
+already saves all arg registers in one instruction so s390 doesn't
+need to change)
