@@ -2,108 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4046D5B08
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0646D5B10
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233882AbjDDIkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 04:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S233923AbjDDImU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 04:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233526AbjDDIkU (ORCPT
+        with ESMTP id S230193AbjDDImK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 04:40:20 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5D91BE3;
-        Tue,  4 Apr 2023 01:40:18 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id w9so127445396edc.3;
-        Tue, 04 Apr 2023 01:40:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680597616;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0g1zh4gal+KFE+knYqoXUdddS5/tpwNhgt+RevVrSxE=;
-        b=AU3CBFODpkyNLNVHkwO6BWoeZXz61njrlDJWOR0z8vx/+1PeusFEIkZFlLjasZ34aF
-         pCzYxERfZasTk2LuqmYCIoYSVE7EC5SzIW9qjqvPAJgGjZ/teLYf7pg3/Sj4I+PjQKBM
-         wOpOKcnHUWjbRM2m7OfDoK6EW88Boj2gRzGH57DYFfweSefpTP1MmvGTT4o1lUfiEERC
-         OmDuq7INpTgDveg5v/1KKaCMqnAD8+J0GpKoqS7YjBWo4h9Fl88YV0n9t2qO7nfrY6r4
-         N/a/IdDN5o5ZPUuFdifbwjU1Nv8fUGN14B+IXPJdDWx6fYWEzfAnZ4MPz11s8S6Te34O
-         MvqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680597616;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0g1zh4gal+KFE+knYqoXUdddS5/tpwNhgt+RevVrSxE=;
-        b=f5tHoXIjYgNdXOpk57j0eyKpDJIdcIa0Yq9bvSuJAq29DeZ5HO3yDMzI675GuBspsH
-         5dpyWMb4BhoVggSDJ5bt7WNaoRCwNsUm3vOQ4nnzKW+oygaEWQsCscgACtgWYbjgUG6I
-         MCu+n2yaZGg2Kaq0keRBb2V9az5Cl/xcYMLTNLdMwjULLlbPLNuyILTtWGyr8j3jGMJG
-         RRFd28Y72C9Z4+UhVs/mlNrk8cVRkPdwYUEQ2/k9NHY3OAz0rh8M6m96EzEfAwKkR39u
-         GcBA25ZvNTtMrXHPpEBZISe4ZmCvrIJUaB51SkoI6N5zVH1ai2Fu88TAiFIyy5sGhens
-         dXlA==
-X-Gm-Message-State: AAQBX9e2DQ3/LVmJN2hnjh6xz7Bz59GIaRd7DD+AfMrrEvikrVn4goNK
-        o9dmuJqpOvmtgLFra0yjujic+fukV3o7tQ8s
-X-Google-Smtp-Source: AKy350bbGCk0nU42wqlFMXm5MfKxnTxLJjembj7J7w4vX+oZfI09DyrsNhCV7y2GvSoXHbI0RR9r/A==
-X-Received: by 2002:a05:6402:2044:b0:501:d43e:d1e6 with SMTP id bc4-20020a056402204400b00501d43ed1e6mr2180381edb.4.1680597616461;
-        Tue, 04 Apr 2023 01:40:16 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id r19-20020a50c013000000b004fd29e87535sm5555239edb.14.2023.04.04.01.40.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 01:40:15 -0700 (PDT)
-Message-ID: <4235f3f7-bae5-1f5e-582e-077bc5d03306@gmail.com>
-Date:   Tue, 4 Apr 2023 16:40:01 +0800
+        Tue, 4 Apr 2023 04:42:10 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C1A21BFE;
+        Tue,  4 Apr 2023 01:42:04 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Ax69nZ4itkOl0WAA--.34269S3;
+        Tue, 04 Apr 2023 16:42:01 +0800 (CST)
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxwOTW4itkYRYVAA--.55009S2;
+        Tue, 04 Apr 2023 16:41:59 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2 0/6] LoongArch: Add kernel address sanitizer support 
+Date:   Tue,  4 Apr 2023 16:41:42 +0800
+Message-Id: <20230404084148.744-1-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH REBASED] KVM: x86: SVM: Fix one redefine issue about
- VMCB_AVIC_APIC_BAR_MASK
-Content-Language: en-US
-To:     "Paolo Bonzini - Distinguished Engineer (kernel-recipes.org) (KVM HoF)" 
-        <pbonzini@redhat.com>, Xinghui Li <korantli@tencent.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        korantwork@gmail.com, seanjc@google.com, tglx@linutronix.de,
-        mingo@redhat.com, mlevitsk@redhat.com
-References: <20230403095200.1391782-1-korantwork@gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20230403095200.1391782-1-korantwork@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxwOTW4itkYRYVAA--.55009S2
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxZFyfuryDuw4kZr4rXw4kXrb_yoWrJrWkpa
+        9rur95GF48Grs2yrn7t34Uur13J3Z3Kay2qFyay34rCF43Wr10vryv9ryDZF9rG3y8JFy0
+        qw4rG3Z8XFWYyaDanT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
+        JbIYCTnIWIevJa73UjIFyTuYvjxUsw0eDUUUU
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/2023 5:52 pm, korantwork@gmail.com wrote:
-> From: Xinghui Li <korantli@tencent.com>
-> 
-> VMCB_AVIC_APIC_BAR_MASK is defined twice with the same value in svm.h,
-> which is meaningless. Delete the duplicate one.
-> 
-> Fixes: 391503528257 ("KVM: x86: SVM: move avic definitions from AMD's spec to svm.h")
-> Signed-off-by: Xinghui Li <korantli@tencent.com>
+Kernel Address Sanitizer (KASAN) is a dynamic memory safety error detector
+designed to find out-of-bounds and use-after-free bugs, Generic KASAN is
+supported on LoongArch now.
 
-Reviewed-by: Like Xu <likexu@tencent.com>
+1/8 of kernel addresses reserved for shadow memory. But for LoongArch,
+There are a lot of holes between different segments and valid address
+space(256T available) is insufficient to map all these segments to kasan
+shadow memory with the common formula provided by kasan core, saying
+addr >> KASAN_SHADOW_SCALE_SHIFT) + KASAN_SHADOW_OFFSET
 
-Do we have any tool to find out more similar issues across numerous subsystems ?
+So LoongArch has a ARCH specific mapping formula,different segments
+are mapped individually, and only limited length of space of that
+specific segment is mapped to shadow.
 
-> ---
->   arch/x86/include/asm/svm.h | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-> index 770dcf75eaa9..e236b896f8b4 100644
-> --- a/arch/x86/include/asm/svm.h
-> +++ b/arch/x86/include/asm/svm.h
-> @@ -278,7 +278,6 @@ static_assert((AVIC_MAX_PHYSICAL_ID & AVIC_PHYSICAL_MAX_INDEX_MASK) == AVIC_MAX_
->   static_assert((X2AVIC_MAX_PHYSICAL_ID & AVIC_PHYSICAL_MAX_INDEX_MASK) == X2AVIC_MAX_PHYSICAL_ID);
->   
->   #define AVIC_HPA_MASK	~((0xFFFULL << 52) | 0xFFF)
-> -#define VMCB_AVIC_APIC_BAR_MASK		0xFFFFFFFFFF000ULL
->   
->   
->   struct vmcb_seg {
+At early boot stage the whole shadow region populated with just
+one physical page (kasan_early_shadow_page). Later, this page is
+reused as readonly zero shadow for some memory that Kasan currently
+don't track.
+After mapping the physical memory, pages for shadow memory are
+allocated and mapped.
+
+Functions like memset/memmove/memcpy do a lot of memory accesses.
+If bad pointer passed to one of these function it is important
+to catch this. Compiler's instrumentation cannot do this since
+these functions are written in assembly.
+KASan replaces memory functions with manually instrumented variants.
+Original functions declared as weak symbols so strong definitions
+in mm/kasan/kasan.c could replace them. Original functions have aliases
+with '__' prefix in name, so we could call non-instrumented variant
+if needed.
+
+Changes v1 -> v2:
+Suggested by Andrey:
+- Make two separate patches for changes to public files.
+- Removes unnecessary judgments in check_region_inline.
+- Add pud/pmd_init __weak define.
+- Add Empty function kasan_(early)_init when CONFIG_KASAN turned off.
+Suggested by Huacai:
+- Split the simplified relocation patch.
+Suggested by Youling:
+- Add ARCH_HAS_FORTIFY_SOURCE in Kconfig and split into separate patches.
+- update `Documentation/translations/zh_CN/dev-tools/kasan.rst`.
+- Use macros to avoid using magic values directly.
+- Modify patch sequence.
+- Remove redundant tab.
+- Modify submission information.
+
+Qing Zhang (6):
+  LoongArch: Simplified randomization layout after jump new kernel
+    processing
+  LoongArch: Fix _CONST64_(x) as unsigned
+  LoongArch: Add kernel address sanitizer support
+  kasan: Add __HAVE_ARCH_SHADOW_MAP to support arch specific mapping
+  kasan: Add (pmd|pud)_init for LoongArch zero_(pud|p4d)_populate
+    process
+  LoongArch: Add ARCH_HAS_FORTIFY_SOURCE
+
+ Documentation/dev-tools/kasan.rst             |   4 +-
+ .../features/debug/KASAN/arch-support.txt     |   2 +-
+ .../translations/zh_CN/dev-tools/kasan.rst    |   2 +-
+ arch/loongarch/Kconfig                        |   8 +
+ arch/loongarch/include/asm/addrspace.h        |   4 +-
+ arch/loongarch/include/asm/kasan.h            | 125 +++++++++
+ arch/loongarch/include/asm/pgtable.h          |   7 +
+ arch/loongarch/include/asm/setup.h            |   2 +-
+ arch/loongarch/include/asm/string.h           |  20 ++
+ arch/loongarch/kernel/Makefile                |   3 +
+ arch/loongarch/kernel/head.S                  |  12 +-
+ arch/loongarch/kernel/relocate.c              |   8 +-
+ arch/loongarch/kernel/setup.c                 |   4 +
+ arch/loongarch/lib/memcpy.S                   |   4 +-
+ arch/loongarch/lib/memmove.S                  |  13 +-
+ arch/loongarch/lib/memset.S                   |   4 +-
+ arch/loongarch/mm/Makefile                    |   2 +
+ arch/loongarch/mm/kasan_init.c                | 255 ++++++++++++++++++
+ arch/loongarch/vdso/Makefile                  |   4 +
+ include/linux/kasan.h                         |   2 +
+ mm/kasan/init.c                               |  18 +-
+ mm/kasan/kasan.h                              |   6 +
+ 22 files changed, 481 insertions(+), 28 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/kasan.h
+ create mode 100644 arch/loongarch/mm/kasan_init.c
+
+-- 
+2.20.1
+
