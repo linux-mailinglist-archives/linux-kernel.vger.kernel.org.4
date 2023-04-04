@@ -2,93 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D346D66B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A986D66B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234948AbjDDPEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 11:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
+        id S235215AbjDDPET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 11:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231661AbjDDPEG (ORCPT
+        with ESMTP id S235139AbjDDPER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 11:04:06 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E96F35BD
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 08:04:04 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id hg25-20020a05600c539900b003f05a99a841so2362906wmb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 08:04:04 -0700 (PDT)
+        Tue, 4 Apr 2023 11:04:17 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758443C3D;
+        Tue,  4 Apr 2023 08:04:16 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id x37so19815099pga.1;
+        Tue, 04 Apr 2023 08:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680620643;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JBdBtzyHFd6lc83YrQIneyeohpNPTJ/y3GLkeIJnfvo=;
-        b=gkpaUlEImekGGm0xeTEjW/sQV7ex2AWGhlLK447E4ZfuKspHi6VwBheI3NIGcQxJRm
-         wD2o1vYPxVT5hXvusr8G5O11sBeKOkAay9cpQIurpmU86sryhDrBYL17lkjWCguGZrtz
-         emLFUqUlZcoDLML3HklU6z19yXOsrh74oN9O6QsqbhILv5Xv+kKxWgZsxgBSnsczwJuM
-         pvXfOMmpwz3WbDCw2n2qfy40UD+zc3+Rv7XfNUX6kvHOvYCqMdDdgMsSH2oZqjrxyw9w
-         7cdGd4UXjjkFQDmo11zUBb6SLI0ErWduKUWK2Ac5UK/VMiVEA6P1LpLiV9h0nAmzIOD0
-         7o8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680620643;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1680620656;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JBdBtzyHFd6lc83YrQIneyeohpNPTJ/y3GLkeIJnfvo=;
-        b=DYJUJ/ubUilz1++K7WwPT+mYrQz6GqZqrXhC31tajErGMlsp+HYefFB2xfxEBwHXIo
-         yM0aXEn/QnYdnddEWzHM+vyf5QOair0e8rEzOCFWuE+f0gU7b6DeiMU6O53kCIIdgaa9
-         TNjz0r9FcvFMdFnzmXi16p3NEHfQr5ai/b8rp5vRTAzKDan0oXbnQipT/xQkxqVoEreX
-         VFz0PPXVL/XwhYgcsk69JLOm8GXdOHKlkRpn717N7IOQazWTo2nMxQ/5V6o+T9AfI4Mb
-         waYhUxiCtEnJ61EOfbbZqkQ/9tgzVSJDhtBnIcYESGyFbxoh8Ksu7RGN9cTcH0Z7QO3N
-         6JPQ==
-X-Gm-Message-State: AAQBX9f3DOCiZADFfumrBWrWVebDTWTSmsrz4GUBsiytW+4+drELWDn0
-        8SiFyRUHi1yly1rN0UmMPYYWvWIPIpgVqQ==
-X-Google-Smtp-Source: AKy350bNnmlpCILUHmdUFYCLAb/iqR3do08Nj32nLRxLYpqec4RmcscQRBFttmaJwosh4wJ7chwjog==
-X-Received: by 2002:a05:600c:3646:b0:3ed:9ed7:d676 with SMTP id y6-20020a05600c364600b003ed9ed7d676mr2446609wmq.13.1680620642903;
-        Tue, 04 Apr 2023 08:04:02 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05600c510500b003ef5bb63f13sm23180970wms.10.2023.04.04.08.04.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 08:04:02 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 18:03:58 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Philip Li <philip.li@intel.com>
-Cc:     Joseph Qi <joseph.qi@linux.alibaba.com>, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, oe-kbuild@lists.linux.dev,
-        Heming Zhao via Ocfs2-devel <ocfs2-devel@oss.oracle.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: fs/ocfs2/super.c:1809 ocfs2_mount_volume() warn: missing error
- code 'status'
-Message-ID: <c6304335-9b5f-4082-b804-e754cf77ce0c@kili.mountain>
-References: <9e1d6835-34fc-49cd-869e-d99d9b546d17@kili.mountain>
- <4154b815-3be4-53de-1bc0-ca87ecb925a4@linux.alibaba.com>
- <1e7d7076-ddd6-41b3-b824-673986c35477@kili.mountain>
- <ZCw5Ucw5CS6nXosr@rli9-mobl>
+        bh=7VGuVc9iWmN4VQupgkCqNpttr0xfto+0leXdufB0lGw=;
+        b=mU6DmiDhAZ7UKCCNlA9Mtptj6wsDlsEuRXLNXv+C6PjQQ9+eohPqqbUSBjYq+/4Y9T
+         QiprHnZ+yMpXkAwaQcl3tiCq6dpc+Uedhzbl2DhoUL9k3RFW8VHXn/NtowIgjn0cqoM8
+         TS0JAaQBY2ey+rD9zftcrrWOMy+58aHXAZmG2otfCc3NJU4hF5AVLD0+pXERrjk3V3NJ
+         SEV+sddGs1ZAAvGy5AbGcz5D7MozmdIUqFukGurdCKUl52OfAowZJqTdc+UPizJboWhP
+         SC7XZi0QhILRISAMbMXQ9xDm8/OM5igATyLqIvX64XFLy0NhvKXGBiMfKLkIljHE0Pn1
+         gjAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680620656;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7VGuVc9iWmN4VQupgkCqNpttr0xfto+0leXdufB0lGw=;
+        b=7HYIFmUcTbzFANvcIThxWkn8GtoCof2ZqkRbOmCeIg/CnhNYXO6ALDiK4gp2Bya5vL
+         Mxn6R+hMhNTtVVVTeXTxkKRmQBI5KOilfZYalilslEIjJWpZHA3RMAdwy1j7kuvcVhyx
+         /sFRl0Xn/WE1jAjztFnCXtDIGmbYzVmsm2JMp5a98bjAQYo0vFFm22eCwbLL17CFYIKi
+         /5o9qD1E16Zoau4t1UN01hoc2jZfGm0aSwqMG8NwM4vNrKFUgIuziyzaAdLI66+tIOQO
+         050r4NE4IkK6kNdaaYsxiJp0FWLmc1KOVd9f5hxrRaeeEL0Z9nZmT8i7r3g8bLMl3HOZ
+         fKow==
+X-Gm-Message-State: AAQBX9eJyWi/XIWar8bV8NvU00cxLwd0rlDeNqmfkK9D/lBUK1LrIMwF
+        e4z3Vouc/BmCCkogCX4JDidaz+cp0Z9Df6uqDCo=
+X-Google-Smtp-Source: AKy350YmOuTFOmWeT7kjqpqgAOLQymxtocjWP1PXl0+xBXseHoBxU6EgnEB1xSvqvADaoRwE6vE+yx/8hNIwIi0K7NI=
+X-Received: by 2002:a05:6a00:22d5:b0:625:a545:3292 with SMTP id
+ f21-20020a056a0022d500b00625a5453292mr1419728pfj.0.1680620655557; Tue, 04 Apr
+ 2023 08:04:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCw5Ucw5CS6nXosr@rli9-mobl>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <30549453e8a40bb4f80f84e1a1427149b6b8b9e8.camel@gmail.com> <20230404080024.31121-1-arefev@swemel.ru>
+In-Reply-To: <20230404080024.31121-1-arefev@swemel.ru>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Tue, 4 Apr 2023 08:04:04 -0700
+Message-ID: <CAKgT0Udf_tMn-oeE_Oqu3P+ZqD0Pg65EGoSOoF0qfHeHynU5jw@mail.gmail.com>
+Subject: Re: [PATCH] net: Added security socket
+To:     Denis Arefev <arefev@swemel.ru>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, trufanov@swemel.ru, vfh@swemel.ru
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 10:50:57PM +0800, Philip Li wrote:
-> On Mon, Apr 03, 2023 at 02:20:55PM +0300, Dan Carpenter wrote:
-> > Sorry, the kbuild bot is not supposed to send duplicate warnings.  I
-> > don't know why it was sent again...
-> 
-> Sorry about this, we should ignore this commit in the bot. Now it is configured
-> to avoid the false positive report.
-> 
+On Tue, Apr 4, 2023 at 1:00=E2=80=AFAM Denis Arefev <arefev@swemel.ru> wrot=
+e:
+>
+> Hi Alexander. I understand your concern.
+> That's right kernel_connect is in kernel space,
+> but kernel_connect is used in RPC requests (/net/sunrpc/xprtsock.c),
+> and the RPC protocol is used by the NFS server.
+> Note kernel_sendmsg is already protected.
 
-Fantastic.  Thanks, Philip!
+Can you add a write-up about the need for this in the patch
+description? Your patch description described what you are doing but
+not the why. My main concern is that your patch may end up causing
+issues that could later be reverted by someone if they don't
+understand the motivation behind why you are making this change.
 
-regards,
-dan carpenter
+Calling out things like the fact that you are trying to add security
+to RPC sockets would be useful and would make it easier for patch
+review as people more familiar with the security code could also tell
+you if this is the correct approach to this or not.
 
+Thanks,
+
+- Alex
