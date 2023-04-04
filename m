@@ -2,125 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647C36D57EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5116D57EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbjDDFTF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Apr 2023 01:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51712 "EHLO
+        id S233301AbjDDFTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 01:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233035AbjDDFTA (ORCPT
+        with ESMTP id S233282AbjDDFTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 01:19:00 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BF71BF8;
-        Mon,  3 Apr 2023 22:18:59 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id g16so3288367iom.11;
-        Mon, 03 Apr 2023 22:18:59 -0700 (PDT)
+        Tue, 4 Apr 2023 01:19:30 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34FD2139
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 22:19:19 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id h34so22464074uag.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 22:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680585559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=clcP9IEhfBzHUgmu2eabXxj1HhcsLZSikrHXTq7mjew=;
+        b=WqZh3ZQqkwMnYTHL9/Hn12la9xxjFiBj6hogHmP0n5N8XpJ6byQtOhn4Cy7wHm5BC1
+         sKjUkHR1TFtRgmI8WRConujPh4o04Z6IvkMkgawdcX2AlECufnrZcdsbF+g9Yh2qdgJi
+         a64NOsXc+vQbSHvxD7m3RqEcYhV7KV/FrXdxId2zLa/xw/DXIUbJ6dXjY59L62OhFdRC
+         A2hZjXx1gGQondx67YMuYhNt86/ybzqRf26yRE6LjQ9WJ6FphqZ+Hmuvi6YWzTT7cx4h
+         AToCTRYmsKvmqHoJgjRQsWN/4Y+lCv0EbCt//2ASVavCEGKRl6m7tvzIs34yh+eFR/XC
+         LOKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680585538; x=1683177538;
+        d=1e100.net; s=20210112; t=1680585559;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=n+z2DtIXlnX8JchPJicDuk6IiWR6KVUfDtLG8QXJzFo=;
-        b=aoUKVeqpk6YbPAVSDNSEnPcoe8h9qnzh+2F8xnXiiMag5e6MSLYh9Rt0r9Pe9OoR4O
-         m1tXg3WRC6mrJLTsa9BrN9OC8ntmfcAFXyxcW4I32Gjob7L1xW8+KjcId92dh9LvYIVW
-         c+1lkHdO6ENDk66bd6IjBGbToXh5qZD4pNgWZj0UJRgM9B28xp1Y0KSWDRmDMopyR+yg
-         Odz6/u6MsJgEfl0Ujmoz1lii/hl1rsrH7nJEsGk8SVhffCxXP6WmFBoWfjnamKJiz4pR
-         KmwtuKMafg+IsH/UhXg3N9btTz9Z/FB5D2ctHmRu1qxJ0xshklwpEeEW+KiM4vBs0MAP
-         ipyg==
-X-Gm-Message-State: AAQBX9dN1zRoMSWJGIWXC1HD5bMTS0CMBXnhlm/qoZVV50VYdIkKkKBV
-        +Yl8hXsQj4chNVJsm29HGuFBnMWe2ynVyYgnHbQ=
-X-Google-Smtp-Source: AKy350bBvTyWsO4MYoAA2TbNVAjasEfvOmD1ErXgo3dwhUR1n6WX/4f4etHN0Prhw4chjc8ELJOPyhM4X69infy65mU=
-X-Received: by 2002:a6b:7e03:0:b0:753:568:358e with SMTP id
- i3-20020a6b7e03000000b007530568358emr1416961iom.20.1680585538552; Mon, 03 Apr
- 2023 22:18:58 -0700 (PDT)
+        bh=clcP9IEhfBzHUgmu2eabXxj1HhcsLZSikrHXTq7mjew=;
+        b=3/mZNmKO4RpKYWJ0Iu2gW05gMBuk9gxTU884vZ3pKUjTJgn48ri487nJQ0yUNjcAHK
+         /9CguKHD4A9DDXzwGBkf1xoY2WeSTURprHbwZ3A2VAl7eG1Xa+C8ooLh3HtKCV1Eroqz
+         OidkhPwqE6UW4Miy8NDMYgY+GybcftueOqYX6FMm3ECuYw5qCvv3Oi9l1uewR0q2H9HF
+         IHc57tBFD4vZk0PIbfJN8+wySwYQoKxb/nLvu8ikbejaAXN5E3UDIE7IUFv8SeJ1kcZx
+         9FARvaqPdhEU3+kkHAZvXBKkXr1FluL962zGn535Rir0YpAIerg1hP8mB/BCTXu4zJx5
+         O0dA==
+X-Gm-Message-State: AAQBX9cXxdVv8ENxjEAtjQy+weYCXmLqadJxO63ZSz+AKX8LyvwMd/YU
+        ls3fGNyWY4V2N6yd1V/HSe7RrL0t/9NPz+kIJHpsPQ==
+X-Google-Smtp-Source: AKy350biw/EtOjp4EPoVplJeSd1seQsfwdamzCoQOFSHghz995LymiXjKViuwHdeCcdV4H5EQ7xcmvCMF8i/LYNb2AI=
+X-Received: by 2002:ab0:5485:0:b0:755:9b3:fef8 with SMTP id
+ p5-20020ab05485000000b0075509b3fef8mr651393uaa.2.1680585558616; Mon, 03 Apr
+ 2023 22:19:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230403184033.1836023-1-irogers@google.com> <ZCs1/skb2XqDYrYF@kernel.org>
-In-Reply-To: <ZCs1/skb2XqDYrYF@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 3 Apr 2023 22:18:47 -0700
-Message-ID: <CAM9d7chDz9dNpB+vywLMNxyc9p=wLaJp4qUYwfu6y88tEDYLLw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Support for llvm-addr2line
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+References: <20230403140353.406927418@linuxfoundation.org>
+In-Reply-To: <20230403140353.406927418@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 4 Apr 2023 10:49:07 +0530
+Message-ID: <CA+G9fYsPfDX3HB=7WDYsKDCygHg51bOo+Gi54QdfgMkZR=JC3g@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/84] 4.19.280-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, 3 Apr 2023 at 19:46, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.280 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.280-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Mon, Apr 3, 2023 at 1:24 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
->
-> Em Mon, Apr 03, 2023 at 11:40:29AM -0700, Ian Rogers escreveu:
-> > The addr2line command is started and then addresses piped to it. In
-> > order to determine the end of a addr2lines output a ',' it output with
-> > an expectation to get '??\n??:0\n' as a reply. llvm-addr2line differs
-> > in that ',' generates a reply of ','.
-> >
-> > The approach detects and then caches the addr2line style. When records
-> > are read the sentinel is detected appropriately.
-> >
-> > Comparing the output there is a little more inline data on my machine
-> > with llvm-addr2line:
-> > $ sudo perf record -a -g sleep 1
-> > $ sudo perf report --addr2line=addr2line > a.txt
-> > $ sudo perf report --addr2line=llvm-addr2line > b.txt
-> > $ wc -l a.txt b.txt
-> >   12386 a.txt
-> >   12477 b.txt
-> >
-> > Some other small changes, switching to the api/io code to avoid file
-> > streams wrapping the command's stdin/stdout. Ignore SIGPIPE for when
-> > addr2line exits and writes fail.
-> >
-> > v2. Address review comments from Arnaldo and Namhyung, fixing a
-> >     realloc error path, argument ordering and a comment.
->
-> Added to local repo, build testing, will be in tmp.perf-tools-next soon.
->
-> - Arnaldo
->
-> > Ian Rogers (4):
-> >   tools api: Add io__getline
-> >   perf srcline: Simplify addr2line subprocess
-> >   perf srcline: Support for llvm-addr2line
-> >   perf srcline: Avoid addr2line SIGPIPEs
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Thanks,
-Namhyung
+## Build
+* kernel: 4.19.280-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: e4a87ad39c9847a7bfb3415dabc4c56e738bc93a
+* git describe: v4.19.279-85-ge4a87ad39c98
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.279-85-ge4a87ad39c98
 
+## Test Regressions (compared to v4.19.279)
 
-> >
-> >  tools/lib/api/io.h        |  45 ++++++++++
-> >  tools/perf/tests/api-io.c |  36 ++++++++
-> >  tools/perf/util/srcline.c | 171 +++++++++++++++++++++++---------------
-> >  3 files changed, 184 insertions(+), 68 deletions(-)
-> >
-> > --
-> > 2.40.0.348.gf938b09366-goog
-> >
->
-> --
->
-> - Arnaldo
+## Metric Regressions (compared to v4.19.279)
+
+## Test Fixes (compared to v4.19.279)
+
+## Metric Fixes (compared to v4.19.279)
+
+## Test result summary
+total: 92995, pass: 70324, fail: 3023, skip: 19502, xfail: 146
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 108 total, 107 passed, 1 failed
+* arm64: 34 total, 33 passed, 1 failed
+* i386: 20 total, 19 passed, 1 failed
+* mips: 22 total, 22 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 24 total, 24 passed, 0 failed
+* s390: 6 total, 6 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 28 total, 27 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
