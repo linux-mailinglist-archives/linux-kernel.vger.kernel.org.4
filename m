@@ -2,84 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F1B6D6856
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4576D676F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235348AbjDDQGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S235597AbjDDPeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 11:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjDDQG2 (ORCPT
+        with ESMTP id S235265AbjDDPeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:06:28 -0400
-X-Greylist: delayed 1664 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Apr 2023 09:06:27 PDT
-Received: from baldur.buserror.net (baldur.buserror.net [165.227.176.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A5F3AB9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:06:27 -0700 (PDT)
-Received: from [2601:447:c680:c050::6c59]
-        by baldur.buserror.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <oss@buserror.net>)
-        id 1pjif1-009Iut-PN; Tue, 04 Apr 2023 10:33:28 -0500
-Message-ID: <48dacc58c7c04ba8a005d8edd56744c8455f007e.camel@buserror.net>
-From:   Crystal Wood <oss@buserror.net>
-To:     Sean Anderson <sean.anderson@seco.com>,
-        Li Yang <leoyang.li@nxp.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Camelia Groza <camelia.groza@nxp.com>,
-        linux-kernel@vger.kernel.org, Roy Pledge <roy.pledge@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>
-Date:   Tue, 04 Apr 2023 10:33:26 -0500
-In-Reply-To: <20230404145557.2356894-2-sean.anderson@seco.com>
-References: <20230404145557.2356894-1-sean.anderson@seco.com>
-         <20230404145557.2356894-2-sean.anderson@seco.com>
-Organization: Red Hat
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Tue, 4 Apr 2023 11:34:09 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E5A211D;
+        Tue,  4 Apr 2023 08:34:08 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334DItm1004091;
+        Tue, 4 Apr 2023 17:33:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=DqoMUOl84qAxYmLCh80KNtJg5Ir0IEjSOZQgQ2rfR+U=;
+ b=bRdm1ozxGy4JGpSVk7F+O5uEnVZiZ+VDq12thED6jcLIjSA3AjMlfGEJISx273k6Om2q
+ dXIhG33FLPCjTWp4o2OYsmnT6dlDXvZ+Bcltp3E9IT6H4uQ+jz0fgZqdCqkUQGjVBBj7
+ lQnSs3lZHAzkAgn5Sm88+QhE7EptAhuvLvMsr9ZKUzJECkH+tv2aOOuuXQvj9EpNxlQf
+ IZoAmr3yBawR//Gn50P34rPcPge+vkF0esZGdFm/ZXW2Ru9UV4zLjZ6nMqogKZrXbZ4Q
+ jO3fEOXwh5DNv4G/i46osQQz7JiWXi2V/hd2GV+g0z9+dr4CIH7ySEw+jd0h1KUzS9KV Jw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3prmny0sjm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 17:33:56 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D089710002A;
+        Tue,  4 Apr 2023 17:33:55 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C51152248CF;
+        Tue,  4 Apr 2023 17:33:55 +0200 (CEST)
+Received: from [10.252.11.89] (10.252.11.89) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 4 Apr
+ 2023 17:33:52 +0200
+Message-ID: <14e897f3-1d11-f4d2-ad04-d328e7a57564@foss.st.com>
+Date:   Tue, 4 Apr 2023 17:33:37 +0200
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2601:447:c680:c050::6c59
-X-SA-Exim-Rcpt-To: sean.anderson@seco.com, leoyang.li@nxp.com, linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com, camelia.groza@nxp.com, linux-kernel@vger.kernel.org, roy.pledge@nxp.com, davem@davemloft.net
-X-SA-Exim-Mail-From: oss@buserror.net
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/5] ARM: dts: stm32: Remove the st,syscfg-tz property
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>
+References: <20230331154651.3107173-1-arnaud.pouliquen@foss.st.com>
+ <20230331154651.3107173-3-arnaud.pouliquen@foss.st.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Organization: STMicroelectronics
+In-Reply-To: <20230331154651.3107173-3-arnaud.pouliquen@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.252.11.89]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-04_07,2023-04-04_04,2023-02-09_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 2/2] soc: fsl: qbman: Use raw spinlock for cgr_lock
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on baldur.buserror.net)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIzLTA0LTA0IGF0IDEwOjU1IC0wNDAwLCBTZWFuIEFuZGVyc29uIHdyb3RlOgoK
-PiBAQCAtMTQ1NiwxMSArMTQ1NiwxMSBAQCBzdGF0aWMgdm9pZCBxbV9jb25nZXN0aW9uX3Rhc2so
-c3RydWN0IHdvcmtfc3RydWN0Cj4gKndvcmspCj4gwqDCoMKgwqDCoMKgwqDCoHVuaW9uIHFtX21j
-X3Jlc3VsdCAqbWNyOwo+IMKgwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgcW1hbl9jZ3IgKmNncjsKPiDC
-oAo+IC3CoMKgwqDCoMKgwqDCoHNwaW5fbG9ja19pcnEoJnAtPmNncl9sb2NrKTsKPiArwqDCoMKg
-wqDCoMKgwqByYXdfc3Bpbl9sb2NrX2lycSgmcC0+Y2dyX2xvY2spOwo+IMKgwqDCoMKgwqDCoMKg
-wqBxbV9tY19zdGFydCgmcC0+cCk7Cj4gwqDCoMKgwqDCoMKgwqDCoHFtX21jX2NvbW1pdCgmcC0+
-cCwgUU1fTUNDX1ZFUkJfUVVFUllDT05HRVNUSU9OKTsKPiDCoMKgwqDCoMKgwqDCoMKgaWYgKCFx
-bV9tY19yZXN1bHRfdGltZW91dCgmcC0+cCwgJm1jcikpIHsKPiAtwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgc3Bpbl91bmxvY2tfaXJxKCZwLT5jZ3JfbG9jayk7Cj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoHJhd19zcGluX3VubG9ja19pcnEoJnAtPmNncl9sb2NrKTsKCnFt
-X21jX3Jlc3VsdF90aW1lb3V0KCkgc3BpbnMgd2l0aCBhIHRpbWVvdXQgb2YgMTAgbXMgd2hpY2gg
-aXMgdmVyeQppbmFwcHJvcHJpYXRlIGZvciBhIHJhdyBsb2NrLiAgV2hhdCBpcyB0aGUgYWN0dWFs
-IGV4cGVjdGVkIHVwcGVyIGJvdW5kPwoKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oGRldl9jcml0KHAtPmNvbmZpZy0+ZGV2LCAiUVVFUllDT05HRVNUSU9OIHRpbWVvdXRcbiIpOwo+
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcW1hbl9wX2lycXNvdXJjZV9hZGQocCwg
-UU1fUElSUV9DU0NJKTsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybjsK
-PiBAQCAtMTQ3Niw3ICsxNDc2LDcgQEAgc3RhdGljIHZvaWQgcW1fY29uZ2VzdGlvbl90YXNrKHN0
-cnVjdCB3b3JrX3N0cnVjdAo+ICp3b3JrKQo+IMKgwqDCoMKgwqDCoMKgwqBsaXN0X2Zvcl9lYWNo
-X2VudHJ5KGNnciwgJnAtPmNncl9jYnMsIG5vZGUpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBpZiAoY2dyLT5jYiAmJiBxbWFuX2NncnNfZ2V0KCZjLCBjZ3ItPmNncmlkKSkKPiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjZ3ItPmNiKHAs
-IGNnciwgcW1hbl9jZ3JzX2dldCgmcnIsIGNnci0+Y2dyaWQpKTsKPiAtwqDCoMKgwqDCoMKgwqBz
-cGluX3VubG9ja19pcnEoJnAtPmNncl9sb2NrKTsKPiArwqDCoMKgwqDCoMKgwqByYXdfc3Bpbl91
-bmxvY2tfaXJxKCZwLT5jZ3JfbG9jayk7Cj4gwqDCoMKgwqDCoMKgwqDCoHFtYW5fcF9pcnFzb3Vy
-Y2VfYWRkKHAsIFFNX1BJUlFfQ1NDSSk7Cj4gwqB9CgpUaGUgY2FsbGJhY2sgbG9vcCBpcyBhbHNv
-IGEgYml0IGNvbmNlcm5pbmcuLi4KCi1DcnlzdGFsCgo=
+
+
+On 3/31/23 17:46, Arnaud Pouliquen wrote:
+> Since the introduction of the SCMI server for the management
+> of the MCU hold boot in OPTEE, management of the hold boot by smc call
+> is deprecated.
+> Clean the st,syscfg-tz  which allows to determine if the trust
+> zone is enable.
+
+
+Please don't waste time to review the commit message above!
+
+The subject and the commit message is not aligned with the commit update
+
+I need to rework it in a V2. I'm waiting few days before sending the V2,
+allowing people to comment V1.
+
+For V2 I will probably copy/past the commit message of:
+
+[PATCH 1/5] dt-bindings: remoteproc: st,stm32-rproc: Rework reset declarations
+
+Regards,
+Arnaud
+
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
+>  arch/arm/boot/dts/stm32mp151.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+> index 4e437d3f2ed6..25626797db94 100644
+> --- a/arch/arm/boot/dts/stm32mp151.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp151.dtsi
+> @@ -1820,8 +1820,8 @@ m4_rproc: m4@10000000 {
+>  			      <0x30000000 0x40000>,
+>  			      <0x38000000 0x10000>;
+>  			resets = <&rcc MCU_R>;
+> +			reset-names = "mcu_rst";
+>  			st,syscfg-holdboot = <&rcc 0x10C 0x1>;
+> -			st,syscfg-tz = <&rcc 0x000 0x1>;
+>  			st,syscfg-pdds = <&pwr_mcu 0x0 0x1>;
+>  			st,syscfg-rsc-tbl = <&tamp 0x144 0xFFFFFFFF>;
+>  			st,syscfg-m4-state = <&tamp 0x148 0xFFFFFFFF>;
 
