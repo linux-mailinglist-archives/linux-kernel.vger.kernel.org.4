@@ -2,210 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33E16D5AE7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD0B6D5AD1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbjDDI1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 04:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S234237AbjDDIZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 04:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbjDDI1a (ORCPT
+        with ESMTP id S234188AbjDDIZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 04:27:30 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2511FEA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 01:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680596785; x=1712132785;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=JeH6EePPOixkZw/uLEkmwzjhQXoU1ShYzTkzFHQrkys=;
-  b=fOlbMaHj8XWVhxoPJ9m0Emrqp45mQc6MfRQ2WsMGYXrKCcP2jO4vjJ93
-   8lMP0pBUop8AVC/vcTjBERLIWgme/Z3e8gvn96KakUMjk1vt/J0Stwro5
-   Oh6fFIyDbrzxF/P/01gtkAnTevUlPrL2rKRP0Oi0lWtmF1/7fxw/DSNHr
-   wE7XqXBfEahm8iVc8bjmLIFash+rfA3kdPZmJkPlnGqba2rG9dS6FAR/x
-   tb5c8l7EIYzL9A5Y2HK5wucsyKj8j0K5fidMk/kwdIwDpG0LW/FcgBrhI
-   lV20GbMb+6dFDt5RRjB4zttutEV/MeqjWvrtYF6PzG6om31i6eazMXftw
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="322516773"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="322516773"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 01:25:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="688802888"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="688802888"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Apr 2023 01:25:37 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 4 Apr 2023 01:25:36 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 4 Apr 2023 01:25:36 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Tue, 4 Apr 2023 01:25:36 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.170)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Tue, 4 Apr 2023 01:25:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OnUjk4tNxOPf8xEv4qG5edyVounF6OqgvKeuqQadQu9B1+hrICLHQVXpP3cNS7ygsE5bKQn1DvCyLmgmw+SAsJ4xyMBJSIv9nw7M7l2v4gLAFURgeGzwEfpKvko3OlVMifGB7IrlwFbLORFVpIdQ9irxn4T/kJYmM6fz6lMNLyfTxFpf/A9f60Tdp2NwCxF2Or/uyR0XvwcpmfWxTgEje71BI31J/P7CjM1n8RX96p0ErAQUDDaZIYrnuxAqDxT2buEtnwa90u2P11/s4rkmHYE35WNVKM8dgIJs1kdqjafHu5fldRTZy/0/Gu2YbqklpDZFcwYKQxVqgV7aztFzPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/4wbMBlSMGP9AINVtPv38lN7VF5ArzQ7PsRUHEfdbLc=;
- b=NBdugJlfExvesn+4+V67xRHHuFrS0AbFb+NHDJdIIBG+4/UODM0UWAlJeprExRtOmFs0Hd7F0iKV4ilQY5Zf6zbzZfaL9DS36eAle8jsu3j2R0PVjuEP1OYH6VaiT4x9PZWKm/KbF7oYuNbfvum7vPdEcp/BQOOIO9w+7zcXQ4wwVWY+ASpU6JM9U6yazpFUWEI0KEbcI9cnqOEJZpIgW9i0e4bnX94k1XMbWbj1Hb6KRUiNzXf7g2lrybSO/NkCzcDeqPJ4npyfvd0NqC2is4MFpkvN9du3a/gwbP/klRaR5d1Sb8GSYCo51cD1pvepqiu8j9Ym7LO9pfOtGfEt/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
- by DM8PR11MB5653.namprd11.prod.outlook.com (2603:10b6:8:25::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.35; Tue, 4 Apr 2023 08:25:34 +0000
-Received: from MN0PR11MB6206.namprd11.prod.outlook.com
- ([fe80::9bf2:9ab9:c6e0:1b2f]) by MN0PR11MB6206.namprd11.prod.outlook.com
- ([fe80::9bf2:9ab9:c6e0:1b2f%3]) with mapi id 15.20.6254.035; Tue, 4 Apr 2023
- 08:25:33 +0000
-Date:   Tue, 4 Apr 2023 16:25:04 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Aaron Lu <aaron.lu@intel.com>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        "Mel Gorman" <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Nitin Tekchandani <nitin.tekchandani@intel.com>,
-        Waiman Long <longman@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] sched/fair: Make tg->load_avg per node
-Message-ID: <ZCve4JaH8EhxBcwQ@chenyu5-mobl1>
-References: <20230327053955.GA570404@ziqianlu-desk2>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230327053955.GA570404@ziqianlu-desk2>
-X-ClientProxiedBy: SG2PR03CA0120.apcprd03.prod.outlook.com
- (2603:1096:4:91::24) To MN0PR11MB6206.namprd11.prod.outlook.com
- (2603:10b6:208:3c6::8)
+        Tue, 4 Apr 2023 04:25:16 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8CD19B6;
+        Tue,  4 Apr 2023 01:25:13 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 1357F582072;
+        Tue,  4 Apr 2023 04:25:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 04 Apr 2023 04:25:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680596713; x=
+        1680603913; bh=ucaJdjXCvIGCze6KDfbsPlFe2n6TgL3UUQGpg9tF7po=; b=I
+        DSiBq2VrNCBC6QDxMURGV8kNtJO9gautIsomo38gXtIcakYN8v07Vw2OYXsSxfn/
+        aME2qwMeJzDNTlSp3qzI9uRMEP3f+Py0rAVeAXat7UyeKEzqp3FPlm0aIf9IsYjU
+        VJMXwkd4SeUH00xSxDFBjlctr/KE/jVpLD7/h5Z7c2HZosqmXl8ah69koYjVKfMT
+        EKGrhBzG7kgvGD167S1ZyDIT9zruuzRj0k6xLwq1xP8PbiKquj2w/Trgcl4nMdZn
+        pEn9oeVAmcytzq5luBhkXUbiTk4DEACjFw2INXfbGWz9X3yl0QxMdplcJtecGdDv
+        w/IPQCjLyN72kjsv7QPJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680596713; x=1680603913; bh=ucaJdjXCvIGCz
+        e6KDfbsPlFe2n6TgL3UUQGpg9tF7po=; b=KxjPvdshfxbt2/6hFUHYrRjGmYUQI
+        AacryrBkFC92hJLW6LUXwVPG8eoE6c9/ToxcviVUPXwT9n6U9KUtitW12VQTgEPM
+        dtWOhdv0rYR6MoluiNosghIZDNR9g+Xn7iMiDrGkNh+VsX9uFKovlLDYM4XsFMtn
+        BxmQ+xNwM/IVoJHAXQenfwwYITbs+6mK6YhZpuLJlps+FR2JJDBBaN5137529WCO
+        G6WozEo2zY2g0o+poTxy+XKEesh2njzFQJghOtV/BlkD90rQ1c1qkjfLVq8/8Nsj
+        cZR1ZPsKHFr0W0XueC5rcVZqlM9mpJNRHSnNgFCxUbirqS4tT4YcQT3vw==
+X-ME-Sender: <xms:594rZFsDdlfX3C3UBbehL30vE9YfyLf7XUtU0hKYnmKgT4UOtgLOcQ>
+    <xme:594rZOdLHY59ptztN9KpTQEq7XwkbjmkQqY0vzVa_GylWcd_Y6rxwruI_4HTO2_s5
+    2qQMdMxhutCwm-0Qlc>
+X-ME-Received: <xmr:594rZIwz_xb5yM2dG1h_WtLjuLqY2FJ1LNGUP70yWmzAIeKm4ZHovzbraDlUXc3NCuzxBQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:594rZMMm7ERGOuRf6j0KEPnsIaOnJLLIAtNtQtvW9Kw28ObNyP2O4w>
+    <xmx:594rZF93Z5UZUB6gYgYG8-jATfACy8p3b0q_hraVNF4DpZz1KDIypw>
+    <xmx:594rZMXJx4DaW1I1BdTCKFNDqbrKkl3kR0g6UZ4xsMVfMaN14WwR3w>
+    <xmx:6d4rZEDiAVOUK62NR-3AI4m0fzW6ULVpFZqPWyawWzV3iixQHl6osw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Apr 2023 04:25:10 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 5730E10CC3C; Tue,  4 Apr 2023 11:25:07 +0300 (+03)
+Date:   Tue, 4 Apr 2023 11:25:07 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
+        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
+        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
+        corbet@lwn.net, dave.hansen@intel.com, david@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
+        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
+        joro@8bytes.org, jun.nakajima@intel.com,
+        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
+        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
+        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
+        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
+        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
+        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
+        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
+        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
+Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
+ mount for memfd_restricted
+Message-ID: <20230404082507.sbyfahwc4gdupmya@box.shutemov.name>
+References: <cover.1680306489.git.ackerleytng@google.com>
+ <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|DM8PR11MB5653:EE_
-X-MS-Office365-Filtering-Correlation-Id: 23878ab0-e729-47f1-c4bd-08db34e628d5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4jzrH8xeKgkHyBnnVfZX4nQjcynVkhCV/0NgCnsAS+OfIusQDF3+aybb7la6FNw7M2gd9DrsD6oGMoUbOb8oNy0IUQXFPmNoPqUNbtkxA4LJrLCFPIHqBLxTSQLKNK6JLMUE+45kUpknGGIkpkrywFcyB4k3iktvVtC+MZXzOHXzXCipAer9Vr40IKUiqIqAKINhh1qOtmkNM0e8fReq6RDjnTk7+UYw8NYNnX1YSrUjFlcfa1Vu+hkQHdWNkcPVLuguek+vKXQVHWcM7gdj05ZbQlFJEr94iuhVbSpuN+n8x8tzOfhROQJbOWYP4gfADokr9fWlfF44/TiV7lS70P9kY9HvNacCNOhqTh2gKyL1b7rNCeTjNUAxm0ynxNEPigSJXJRzForVK3u9MO+qpZVTXwyYrqsta60CVCUtxunLaVmO0gIXA585qQB2g23NeQ9AhWOEXkYf7QbXZYuGhf3pJYjHnGw3GvyUe56Ik5nHWab8lN4eNZ3TS3G7Boe5xe0tL3LlfOUGgpttY2lMD4JZgN5DhpyVSMW1a+Mcrz0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(376002)(366004)(396003)(136003)(39860400002)(451199021)(6486002)(966005)(82960400001)(6512007)(53546011)(83380400001)(9686003)(6506007)(38100700002)(6666004)(186003)(26005)(2906002)(8936002)(5660300002)(6862004)(7416002)(478600001)(6636002)(54906003)(66476007)(4326008)(66556008)(66946007)(41300700001)(8676002)(316002)(86362001)(33716001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FdPyKnQBq9PLbq9AaMcGmUfIKfqKQ0NCPNspnQsUb57Ya1ndQrXdTWGFVzdI?=
- =?us-ascii?Q?iN3AnvoQS6dzn5nvWqb6+gzhXSz4LYS8UbZwPC8/uvyhXKOlFpLbkboC4GjW?=
- =?us-ascii?Q?W0bdNVOcJcUULrv3BQXq/XJkyO8li2dS0x+0wZLHE2kVkjmTMzTohBRvtb4b?=
- =?us-ascii?Q?khpyjRAo8q7CCRKKNcz90yInunn+E/ALo4urIQP1wm5eJ/NljeJGWcdngdYU?=
- =?us-ascii?Q?w8ozc9USFIdogN1p3lt8tyL+FB/AjkgoNTtvxNnJ8OGCfP806vgWnVHOCfRP?=
- =?us-ascii?Q?EWOUmTBEi0iaXzOY8OGlKLCgn83D82acRXZ/chdGH5bbjqAoX4mRQ+wG3cJG?=
- =?us-ascii?Q?ml0NWZoc2J/9lp+87/YbEilN+O3ZPrl2AHXjFjLA3cRu8/YS6OxX9RsjOE4Q?=
- =?us-ascii?Q?qwvr6yHkhJJXb+VND/Of3yi75ILURQPTAmk+3YJK2kxQVl//ITKIAAkKe6MO?=
- =?us-ascii?Q?w/78eYxdzx3Lu36wj4PbB3npgTpY4LAqe74FXpcY50OmDB+v3sD7Up61PtzQ?=
- =?us-ascii?Q?kJWL/NXQN59XIs0SNbIyPUkKYUkinqSE94WScURo0UGPOQn5/jKfO/ZQQMGl?=
- =?us-ascii?Q?ZQ6XqmTQzOtJdOxjJkBv4ID54XF92y0ntXRPSchuTJzHyKV1ca2A2KZML9Oo?=
- =?us-ascii?Q?XxHsaAL6edju8dA8wgjQF2uoKWUJ03OZ1PahsV8LoFljCh+hy+Gd9caCr502?=
- =?us-ascii?Q?g0lyl8EK1chhAa2cj0ySJjRP3/jSnYvAxKpz02QDMY7QdLM6fn36JZj11JE4?=
- =?us-ascii?Q?NnZC6iPaR7rrspcT0AP0rPwvouqEma0/mX5ZGrE6CYb4bnamv/Y8cZum/vGV?=
- =?us-ascii?Q?XYplhLfptNaoEjOYwQ4lLoYnUCJ5t6XLCacisHvuc6Iirn0FGRBTqrIVYZ2D?=
- =?us-ascii?Q?9k7b/a8JGXUXpJAw3H4GPVHwe/TMGQMp1MH94CuyzrnJ8kLiuPGLDi1m/yOu?=
- =?us-ascii?Q?KOOvNhXOiLPCCOJAXlW4nY+WDQ7PNhjhH0sEirbm7NmxCaqeN4TlwYi4bL8i?=
- =?us-ascii?Q?0h1alqaoSYsxH5YcnDNz5l6WaX23mQLej1HTAoFmtE25FLIj2XEsxiwZ9KRm?=
- =?us-ascii?Q?GoOSbCr0HTFpEXaCRTRucE/xaEyXn+lP9NEAdCpbZ7K4qjDihNpIGTohbE0B?=
- =?us-ascii?Q?jF2zgM1Cm+BuUyH9Vmif1nIhwd7LsGc51toaNR3k9jz2E/S3Ege7lzMpmnuN?=
- =?us-ascii?Q?pUf1ifjluLfkoeTTdHRWi5wA0ZwLR0fda+gNdvAg8YYwxnamCoCKlNu//kS4?=
- =?us-ascii?Q?ZI+8W/bQpczxTNvLQeu39nxZPU1f+HTRFRaGxJbMKlcTQaZimvlY7HPyQJuQ?=
- =?us-ascii?Q?RyFJjZK2ia6e8b0bXyeJPu7xXDY45ko/pNQ433L/QRq5GA3FSWqiPC8Loo1i?=
- =?us-ascii?Q?EYfokNgpgAlxFeJXjPUQ6fWpHm8pJNdiIhjXmRbpmWXLmAQNvSEfiJLB/Lh0?=
- =?us-ascii?Q?qpmLe4c1s4QcdCrCUrH7A/QwNynsb4yOSrnJvyXOr9NC5Z8EXZZRr7SRQE09?=
- =?us-ascii?Q?Lv3eAc0e9CO81Mg8NSUcrfwV9pW0K+96+7x5U9QQwaqvhyKywv7Ux5Mem0am?=
- =?us-ascii?Q?UKX+S0LcD35hzS6v4XzT5nfWuCifw6YiGISFRDgq?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23878ab0-e729-47f1-c4bd-08db34e628d5
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 08:25:33.7183
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 73kk7ocxWHXC3ORSgJin5/oHMhNWYCMA/KIm4luR8vLbjbb7yJxIR1N4Xebxorn7v1V8yuq2BnXkviUEWr1y5w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5653
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-27 at 13:39:55 +0800, Aaron Lu wrote:
-> When using sysbench to benchmark Postgres in a single docker instance
-> with sysbench's nr_threads set to nr_cpu, it is observed there are times
-> update_cfs_group() and update_load_avg() shows noticeable overhead on
-> cpus of one node of a 2sockets/112core/224cpu Intel Sapphire Rapids:
+On Fri, Mar 31, 2023 at 11:50:39PM +0000, Ackerley Tng wrote:
+> By default, the backing shmem file for a restrictedmem fd is created
+> on shmem's kernel space mount.
 > 
->     10.01%     9.86%  [kernel.vmlinux]        [k] update_cfs_group
->      7.84%     7.43%  [kernel.vmlinux]        [k] update_load_avg
+> With this patch, an optional tmpfs mount can be specified via an fd,
+> which will be used as the mountpoint for backing the shmem file
+> associated with a restrictedmem fd.
 > 
-> While cpus of the other node normally sees a lower cycle percent:
+> This will help restrictedmem fds inherit the properties of the
+> provided tmpfs mounts, for example, hugepage allocation hints, NUMA
+> binding hints, etc.
 > 
->      4.46%     4.36%  [kernel.vmlinux]        [k] update_cfs_group
->      4.02%     3.40%  [kernel.vmlinux]        [k] update_load_avg
+> Permissions for the fd passed to memfd_restricted() is modeled after
+> the openat() syscall, since both of these allow creation of a file
+> upon a mount/directory.
 > 
-> Annotate shows the cycles are mostly spent on accessing tg->load_avg
-> with update_load_avg() being the write side and update_cfs_group() being
-> the read side.
+> Permission to reference the mount the fd represents is checked upon fd
+> creation by other syscalls (e.g. fsmount(), open(), or open_tree(),
+> etc) and any process that can present memfd_restricted() with a valid
+> fd is expected to have obtained permission to use the mount
+> represented by the fd. This behavior is intended to parallel that of
+> the openat() syscall.
 > 
-> The reason why only cpus of one node has bigger overhead is: task_group
-> is allocated on demand from a slab and whichever cpu happens to do the
-> allocation, the allocated tg will be located on that node and accessing
-> to tg->load_avg will have a lower cost for cpus on the same node and
-> a higer cost for cpus of the remote node.
+> memfd_restricted() will check that the tmpfs superblock is
+> writable, and that the mount is also writable, before attempting to
+> create a restrictedmem file on the mount.
 > 
-> Tim Chen told me that PeterZ once mentioned a way to solve a similar
-> problem by making a counter per node so do the same for tg->load_avg.
-> After this change, the worst number I saw during a 5 minutes run from
-> both nodes are:
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+>  include/linux/syscalls.h           |  2 +-
+>  include/uapi/linux/restrictedmem.h |  8 ++++
+>  mm/restrictedmem.c                 | 74 +++++++++++++++++++++++++++---
+>  3 files changed, 77 insertions(+), 7 deletions(-)
+>  create mode 100644 include/uapi/linux/restrictedmem.h
 > 
->      2.77%     2.11%  [kernel.vmlinux]        [k] update_load_avg
->      2.72%     2.59%  [kernel.vmlinux]        [k] update_cfs_group
->
-The same issue was found when running netperf on this platform.
-According to the perf profile:
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index f9e9e0c820c5..a23c4c385cd3 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
+>  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
+>  					    unsigned long home_node,
+>  					    unsigned long flags);
+> -asmlinkage long sys_memfd_restricted(unsigned int flags);
+> +asmlinkage long sys_memfd_restricted(unsigned int flags, int mount_fd);
+> 
+>  /*
+>   * Architecture-specific system calls
+> diff --git a/include/uapi/linux/restrictedmem.h b/include/uapi/linux/restrictedmem.h
+> new file mode 100644
+> index 000000000000..22d6f2285f6d
+> --- /dev/null
+> +++ b/include/uapi/linux/restrictedmem.h
+> @@ -0,0 +1,8 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#ifndef _UAPI_LINUX_RESTRICTEDMEM_H
+> +#define _UAPI_LINUX_RESTRICTEDMEM_H
+> +
+> +/* flags for memfd_restricted */
+> +#define RMFD_USERMNT		0x0001U
+> +
+> +#endif /* _UAPI_LINUX_RESTRICTEDMEM_H */
+> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
+> index c5d869d8c2d8..f7b62364a31a 100644
+> --- a/mm/restrictedmem.c
+> +++ b/mm/restrictedmem.c
+> @@ -1,11 +1,12 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -#include "linux/sbitmap.h"
+> +#include <linux/namei.h>
+>  #include <linux/pagemap.h>
+>  #include <linux/pseudo_fs.h>
+>  #include <linux/shmem_fs.h>
+>  #include <linux/syscalls.h>
+>  #include <uapi/linux/falloc.h>
+>  #include <uapi/linux/magic.h>
+> +#include <uapi/linux/restrictedmem.h>
+>  #include <linux/restrictedmem.h>
+> 
+>  struct restrictedmem {
+> @@ -189,19 +190,20 @@ static struct file *restrictedmem_file_create(struct file *memfd)
+>  	return file;
+>  }
+> 
+> -SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
+> +static int restrictedmem_create(struct vfsmount *mount)
+>  {
+>  	struct file *file, *restricted_file;
+>  	int fd, err;
+> 
+> -	if (flags)
+> -		return -EINVAL;
+> -
+>  	fd = get_unused_fd_flags(0);
+>  	if (fd < 0)
+>  		return fd;
+> 
+> -	file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+> +	if (mount)
+> +		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem", 0, VM_NORESERVE);
+> +	else
+> +		file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+> +
+>  	if (IS_ERR(file)) {
+>  		err = PTR_ERR(file);
+>  		goto err_fd;
+> @@ -223,6 +225,66 @@ SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
+>  	return err;
+>  }
+> 
+> +static bool is_shmem_mount(struct vfsmount *mnt)
+> +{
+> +	return mnt && mnt->mnt_sb && mnt->mnt_sb->s_magic == TMPFS_MAGIC;
+> +}
+> +
+> +static bool is_mount_root(struct file *file)
+> +{
+> +	return file->f_path.dentry == file->f_path.mnt->mnt_root;
+> +}
+> +
+> +static int restrictedmem_create_on_user_mount(int mount_fd)
+> +{
+> +	int ret;
+> +	struct fd f;
+> +	struct vfsmount *mnt;
+> +
+> +	f = fdget_raw(mount_fd);
+> +	if (!f.file)
+> +		return -EBADF;
+> +
+> +	ret = -EINVAL;
+> +	if (!is_mount_root(f.file))
+> +		goto out;
+> +
+> +	mnt = f.file->f_path.mnt;
+> +	if (!is_shmem_mount(mnt))
+> +		goto out;
+> +
+> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
 
-11.90%    11.84%  swapper          [kernel.kallsyms]   [k] update_cfs_group
-9.79%     9.43%  swapper           [kernel.kallsyms]   [k] update_load_avg
+Why MAY_EXEC?
 
-these two functions took quite some cycles.
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = mnt_want_write(mnt);
+> +	if (unlikely(ret))
+> +		goto out;
+> +
+> +	ret = restrictedmem_create(mnt);
+> +
+> +	mnt_drop_write(mnt);
+> +out:
+> +	fdput(f);
+> +
+> +	return ret;
+> +}
 
-1. cpufreq governor set to performance, turbo disabled, C6 disabled
-2. launches 224 instances of netperf, and each instance is:
-   netperf -4 -H 127.0.0.1 -t UDP_RR/TCP_RR -c -C -l 100 & 
-3. perf record -ag sleep 4
+We need review from fs folks. Look mostly sensible, but I have no
+experience in fs.
 
-Also the test script could be downloaded via
-https://github.com/yu-chen-surf/schedtests.git
+> +
+> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
+> +{
+> +	if (flags & ~RMFD_USERMNT)
+> +		return -EINVAL;
+> +
+> +	if (flags == RMFD_USERMNT) {
+> +		if (mount_fd < 0)
+> +			return -EINVAL;
+> +
+> +		return restrictedmem_create_on_user_mount(mount_fd);
+> +	} else {
+> +		return restrictedmem_create(NULL);
+> +	}
 
+Maybe restructure with single restrictedmem_create() call?
 
-thanks,
-Chenyu
+	struct vfsmount *mnt = NULL;
+
+	if (flags == RMFD_USERMNT) {
+		...
+		mnt = ...();
+	}
+
+	return restrictedmem_create(mnt);
+> +}
+> +
+>  int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
+>  		       struct restrictedmem_notifier *notifier, bool exclusive)
+>  {
+> --
+> 2.40.0.348.gf938b09366-goog
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
