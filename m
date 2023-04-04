@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B2E6D68E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787F36D68E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234885AbjDDQaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
+        id S235223AbjDDQa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbjDDQaM (ORCPT
+        with ESMTP id S235359AbjDDQaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Apr 2023 12:30:12 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E864685
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:30:09 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id r29so33417308wra.13
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 09:30:09 -0700 (PDT)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FB446BC
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:30:10 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id q19so30379141wrc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 09:30:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680625807;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680625808;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RBNri8YkynclVYwoBklQprwBa6iRmkrRnEEZ57sGW7s=;
-        b=b7QPSFIRLZWuSwErIjXPg8XFGT2FBNUXe5LCta9x8zNLcel6vlGHrVw0LsChCTCVsj
-         AtTFrdZfbxSS5g1PQyhzqrY/O1HIi+TO59Mm564sv/lWAJIge0EJWk1JOmmw08YH9oXj
-         2miV83a179yRVjzgH8z5pVcSjykDfpno6MOmQ0zWl1ulDj6DmPvN2Vk0udCd6d6egFp0
-         TuJBwe8fGF4qmOArdi61E8O4oN0tsC7RHkXDTiOHyQn5Eslc/dAs6wDJmOPqFX0UA9XP
-         IOQfgnoeZ9gBVi9123H/OGtgu3V1HpZrTvBP6B9h9cPavd5JfwO5xre9HJ2JIj9lzyCy
-         D6/Q==
+        bh=3fPm8iQsu3PXiX9UtaaXxTfcyhiLnzUQ0oS0z/eHP0Q=;
+        b=5E1/4PXVI7xXROdgc5cyA/ZMG0OFPxq4oeWNkd0Rw8a6F2q1/paBLSCJXDfRzd0bsS
+         /WnfsJ30PiYsL8G05UGSKwitdTtTl46Vn+1RduG1Y8VsdnZzycM7dQActoFlKLpTnc0g
+         BUVs8Zk3dVojT21P9//DRM/0GC+GNemGV0jM449uICgCb4SSCpL5xxKYNi1eXdMf6zMU
+         Yr/pSzoG5gmNVmUQc5KXWUdwxpoD7f7xxCPWoLLQcutUxTPSXz0wKgjABs3n1QZDnRmq
+         tbJ1g7QUuOruh/NBYTy2G0yvT3UJ0TOKKGX280/VfcEia2YSjRi3oAw8mhFg/tXUNFmg
+         QGig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1680625808;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RBNri8YkynclVYwoBklQprwBa6iRmkrRnEEZ57sGW7s=;
-        b=QbBGo5QTB0zLCj9fAh9PbroRHrn1q2YaLnwpVk54HDqGi0HHNqvZftZR30ll/9XeqJ
-         YImYwBv5gNn2NX8iChAeFB5qpbVO1vZnTqBOxNp5s4Uwnee1DecSCtUT4bLBlNdBEL1X
-         XvNUhA78L0VHIZEqryaH/0Bk9xP0KmZuVcrZmks0IKxvlFj+Muht9BXAsNFwKeLgjcfG
-         jJmVy/ohLopXSnOoL4BC6qsEdlx1GELJwfA+FeGsxg8et/eKtuyeT6U6cQjdhi26gsC+
-         RetPrXdAWepbqP2Gd2sRaMeo4Gdn1EWVwVfQTVAqiVpL8IjtzXvoEkAaH7FbFmvdjElL
-         jFkQ==
-X-Gm-Message-State: AAQBX9fLgsVUryIxaEz93qQw/i6Qh7doElJQbZRdW30WidlM3ykrSY3P
-        x/SulW4uhUphkWnpzXP+v7nLrA==
-X-Google-Smtp-Source: AKy350aZrkStOHE3/rNCMGCA7ZZbrEZnj5QmJpF6x+bIHaF/DIglv94GiA0cPOPu5E/jCP3+B8wZZw==
-X-Received: by 2002:adf:f504:0:b0:2d8:1a74:9b94 with SMTP id q4-20020adff504000000b002d81a749b94mr2271019wro.68.1680625807739;
-        Tue, 04 Apr 2023 09:30:07 -0700 (PDT)
+        bh=3fPm8iQsu3PXiX9UtaaXxTfcyhiLnzUQ0oS0z/eHP0Q=;
+        b=R2CdGusyKsa4wg+fLBHNc+xvZ5GGJPtbjPKbr91lLmW2oaekOMBvo180MGq/2UHFSa
+         IXs3AibBJswRlLhDye57daFcBEuG776DomZ4PfQrfsDRKZB3JWoIctsen0EVc5YkYUis
+         KFSQaamIzzSodoKo5gXqW/IG8AhLwM+6pdLB1GTotRP4UR7sAUK5UsgE0yMxhZGYlkdW
+         H5c6hM6+l23hL51bQdy6+9DHnTC3PUc3aped8s//1ZjKnT1ciM6BK2y1wEsO27/sYhWD
+         wVcUBuGY85358PhT7IaOAY+y3Omjuv94Cfg/W5z+hIY7wEW7eo5uAN67Wt6gn7GH6Bh8
+         +WZw==
+X-Gm-Message-State: AAQBX9cWwqUdKpTSdjRexTr0tujiA6LeorXyv/O7W4DMv+oG2VIVhk5q
+        02v/mNvdFLGgVhJbaII+L5+6zQ==
+X-Google-Smtp-Source: AKy350bwZoqlEwBDskiE/IRsA/yOqgpI3H9hlO1N+VWFVxHr4VsbBmVTxxuq7vjbwzpT/l0hydSY0Q==
+X-Received: by 2002:a05:6000:150:b0:2e3:7dba:2ba6 with SMTP id r16-20020a056000015000b002e37dba2ba6mr18924wrx.6.1680625808715;
+        Tue, 04 Apr 2023 09:30:08 -0700 (PDT)
 Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id o7-20020adfe807000000b002e4cd2ec5c7sm12694528wrm.86.2023.04.04.09.30.06
+        by smtp.googlemail.com with ESMTPSA id o7-20020adfe807000000b002e4cd2ec5c7sm12694528wrm.86.2023.04.04.09.30.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 09:30:07 -0700 (PDT)
+        Tue, 04 Apr 2023 09:30:08 -0700 (PDT)
 From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Tue, 04 Apr 2023 18:29:49 +0200
-Subject: [PATCH v3 1/3] dt-bindings: pinctrl: mediatek: deprecate custom
- drive strength property
+Date:   Tue, 04 Apr 2023 18:29:50 +0200
+Subject: [PATCH v3 2/3] dt-bindings: pinctrl: mediatek: deprecate custom
+ bias pull properties for mt8365
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-cleanup-pinctrl-binding-v3-1-6f56d5c7a8de@baylibre.com>
+Message-Id: <20230327-cleanup-pinctrl-binding-v3-2-6f56d5c7a8de@baylibre.com>
 References: <20230327-cleanup-pinctrl-binding-v3-0-6f56d5c7a8de@baylibre.com>
 In-Reply-To: <20230327-cleanup-pinctrl-binding-v3-0-6f56d5c7a8de@baylibre.com>
 To:     Linus Walleij <linus.walleij@linaro.org>,
@@ -74,19 +74,19 @@ Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         Alexandre Mergnat <amergnat@baylibre.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3361; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=4xeMETQ7de8kyAEZcE0zaBq7ZmTpxY4WtvuqGUwV7yE=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkLFCNdWrj6CahMuPiWgdQAJwKwga4xOpbZOc6aCRP
- Om+lme2JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCxQjQAKCRArRkmdfjHURU8mEA
- CeaF9knaja2TNK9zBPlYjowTWhAiATJgs49BPXeDsISohsxk5daDywxWNhJvUjgvHeOQBzc7Yq1rW0
- Pg1rRLdPeMvHmw5XJ6mOcQNDA0Cx31nYE8wWVNH08jWQWuKRAD0i54eYvvl86Pzkg3htfbAjS3Br7T
- 8tYa/L8eFxDCq8PLNk7eBfQqWLiPyk8UQhL0ieRBWJajUlYFjgAYWmw0ZksCY6JZPQBIdFX+HKolt0
- yG+yr/xJOxueTvxUxHSfk96x8Vr7eqfoNo7YF9DZA2BlvuLz4DLg92UeWuQ6VMS8m2HpmNquutggB6
- touIkJscb84k2PyTD19Zmps1aexjake7OTalGQDbjTbERe04HD5H1swoZDrKpSCLonypbWcRo8Jyhb
- Dtcq5OhQqMAEwSOn0RYixV4kZVVE1IYo1cfZZOp6flImb9E7Yj062mvZ0XgVIVNLMjmVFTcnckO4N1
- 8swSJ7caqZkTaHjtoVNtSGGoRzpnqp1gGdm1RGDr14ZwEia96DNV6lkxrh+ZdlV43ZLVhj04vRGseY
- DE7dcRgVjCgKuaVXk1gwOGwHxHNVbeHt5ZLjbWw82XWzDrCQDQzYn3W/3Z6QEtYndMXM9weL1XaJvZ
- NXhJ+93tVeCLoKBjQa8bKG+k0x+v8UK+H69eljGQ2BPvtCtvE8dk2Y0neq3Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3521; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=cP3MabLj1zpNPUMZqw1OhrEkYXQOUITPoTif+rF9fUo=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkLFCNrywDsoe4jiH3UnujVAgYQWtf/M/OJ9ie74fS
+ SEm2uuOJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCxQjQAKCRArRkmdfjHURUAGD/
+ 4rxS8wtQEth/9IobGOHJfI/HINziRRF1RJfBwgOrmugJEiX5KDAXwrdpCMZUoiaeTT1hSRssT2fnj9
+ fslNrLhBRsa3cz6OGGifGYS8apFf5sK3Quy27OudNuU6F+Rg7ruxz2PqKaR+UvhCIKMuwJ7Tyw62EC
+ YGfJl+ZstFxNXNDVR26cpvxyH45/ZNhKCdxHr0mJBsal17l28k2Ri34lNtcOgidN+DaxljMcr9k1FB
+ Xj0G7ki9izG9/ODbKW0KtMXRtLP9cMNPqoFPp1QNiBWFxEul1MXgkpHmzGbrrSaRzaUEqGvVoyjGEk
+ iUduZQLARerRovAoKlE/wH7CCqIGX7wIgwdsPfd1YnsRPGNfqbEis7RXkPLLVlnoxjwP3JfO+xyan+
+ /f8UuUS4cmwGUyWi4KLo7cjQqMjyPj1CM+h+uegVWOc3laYlAFf/oES4iZCpEBIvu3GbnXN4VY9umf
+ 42JEpI6tuznQuCXt5Q1KAhzt4exAywjLRt4gsyOtiWeBAfrN4wYuStiFULb9BZQyKZLEcjdb9ueAOM
+ G9QVEmXUGI2ej+bEP/Ni0zMPb1HfY1c8eWir+Zvc/cZhcZsMMayXHWe9Caaohw5+WLuJu+1dANWoN6
+ 4khAKkueNtCUTCeI/9iaOOcVFhS5+peIYwmHnMQT33BgGOo5ZJhbxOYtX2kA==
 X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
  fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
 X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -98,80 +98,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Deprecate mediatek,drive-strength-adv which shall not exist, that was an
-unnecessary property that leaked upstream from downstream kernels and
-there's no reason to use it.
-
-The generic property drive-strength-microamp should be used instead.
+In order to be more generic, "mediatek,pull-up-adv" and
+"mediatek,pull-down-adv" should be deprecated. Use "bias-pull-up" and
+"bias-pull-down" instead.
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 ---
- .../devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml      | 8 ++++++--
- .../devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml      | 6 +++++-
- 2 files changed, 11 insertions(+), 3 deletions(-)
+ .../bindings/pinctrl/mediatek,mt8365-pinctrl.yaml  | 36 ++++++++++++++++++----
+ 1 file changed, 30 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
-index bf67d4672455..ff24cf29eea7 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
-@@ -110,8 +110,13 @@ patternProperties:
-           drive-strength:
-             enum: [2, 4, 6, 8, 10, 12, 14, 16]
- 
-+          drive-strength-microamp:
-+            enum: [125, 250, 500, 1000]
-+
-           mediatek,drive-strength-adv:
-+            deprecated: true
-             description: |
-+              DEPRECATED: Please use drive-strength-microamp instead.
-               Describe the specific driving setup property.
-               For I2C pins, the existing generic driving setup can only support
-               2/4/6/8/10/12/14/16mA driving. But in specific driving setup, they
-@@ -217,7 +222,7 @@ examples:
-               pinmux = <PINMUX_GPIO48__FUNC_SCL5>,
-                 <PINMUX_GPIO49__FUNC_SDA5>;
-               mediatek,pull-up-adv = <3>;
--              mediatek,drive-strength-adv = <7>;
-+              drive-strength-microamp = <1000>;
-             };
-           };
- 
-@@ -226,7 +231,6 @@ examples:
-               pinmux = <PINMUX_GPIO50__FUNC_SCL3>,
-                 <PINMUX_GPIO51__FUNC_SDA3>;
-               mediatek,pull-down-adv = <2>;
--              mediatek,drive-strength-adv = <4>;
-             };
-           };
-         };
 diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
-index 5aa8ba4cb547..dce9fd1a6a72 100644
+index dce9fd1a6a72..75d74b92c767 100644
 --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
-@@ -91,8 +91,13 @@ patternProperties:
+@@ -72,12 +72,32 @@ patternProperties:
+           bias-disable: true
  
-           input-schmitt-disable: true
- 
-+          drive-strength-microamp:
-+            enum: [125, 250, 500, 1000]
+           bias-pull-up:
+-            description:
+-              Besides generic pinconfig options, it can be used as the pull up
+-              settings for 2 pull resistors, R0 and R1. User can configure those
+-              special pins.
+-
+-          bias-pull-down: true
++            oneOf:
++              - type: boolean
++              - enum: [100, 101, 102, 103]
++                description: Pull up R1/R0 type define value.
++            description: |
++              For pull up type is normal, it don't need add R1/R0 define.
++              For pull up type is R1/R0 type, it can add value to set different
++              resistance. Valid arguments are described as below:
++              100: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
++              101: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
++              102: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
++              103: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
 +
-           mediatek,drive-strength-adv:
++          bias-pull-down:
++            oneOf:
++              - type: boolean
++              - enum: [100, 101, 102, 103]
++                description: Pull down R1/R0 type define value.
++            description: |
++              For pull down type is normal, it don't need add R1/R0 define.
++              For pull down type is R1/R0 type, it can add value to set
++              different resistance. Valid arguments are described as below:
++              100: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
++              101: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
++              102: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
++              103: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
+ 
+           input-enable: true
+ 
+@@ -123,7 +143,9 @@ patternProperties:
+             enum: [0, 1, 2, 3, 4, 5, 6, 7]
+ 
+           mediatek,pull-up-adv:
 +            deprecated: true
              description: |
-+              DEPRECATED: Please use drive-strength-microamp instead.
-               Describe the specific driving setup property.
-               For I2C pins, the existing generic driving setup can only support
-               2/4/6/8/10/12/14/16mA driving. But in specific driving setup, they
-@@ -191,7 +196,6 @@ examples:
-           pins {
-             pinmux = <MT8365_PIN_59_SDA1__FUNC_SDA1_0>, <MT8365_PIN_60_SCL1__FUNC_SCL1_0>;
-             mediatek,pull-up-adv = <3>;
--            mediatek,drive-strength-adv = <00>;
-             bias-pull-up;
-           };
-         };
++              DEPRECATED: Please use bias-pull-up instead.
+               Pull up setings for 2 pull resistors, R0 and R1. User can
+               configure those special pins. Valid arguments are described as
+               below:
+@@ -135,7 +157,9 @@ patternProperties:
+             enum: [0, 1, 2, 3]
+ 
+           mediatek,pull-down-adv:
++            deprecated: true
+             description: |
++              DEPRECATED: Please use bias-pull-down instead.
+               Pull down settings for 2 pull resistors, R0 and R1. User can
+               configure those special pins. Valid arguments are described as
+               below:
 
 -- 
 2.25.1
