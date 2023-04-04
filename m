@@ -2,247 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2566D6667
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791736D6623
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235032AbjDDO5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
+        id S233375AbjDDO4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233828AbjDDO4s (ORCPT
+        with ESMTP id S233121AbjDDO4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:56:48 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2041.outbound.protection.outlook.com [40.107.20.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32524EE9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:56:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q8yvtBCZD9P8Se9ALiAo9HFkUAu77SHsj3CkpFvRPm0=;
- b=g3Nn+7ataJpPtcrZaP/A0dmhgRyMKdROSHMAUcjptQ9vvm6acD71vgtY0NxL1Yf2Lff95QVo39X5Y8Bbf56kp9lwPCqyUQJQF1JIHoL0W3yoeLZzPVO9IPXlcw2wCC972yHROcru+q0n1mv2IpwlxK3cvdQ0ACRbMIwAkO1ySTHVkU/LKWF+9z5LpmFmEqpLjfa0DG28uoZuiU2J/yX7COTHxU3ZV4un12ec2X05iMJxcti4nZo4V6h6ZuPB6jhCz20sdAGM3qf172JLXJ/wNmGXlj7ptxarFTW68B0OvfqYQC/+CpQUwqnoZbBNZT0VwNAF3pD362i9ESgb8okReg==
-Received: from FR3P281CA0125.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:94::7) by
- PAXPR03MB8273.eurprd03.prod.outlook.com (2603:10a6:102:23c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.30; Tue, 4 Apr
- 2023 14:56:21 +0000
-Received: from VI1EUR05FT058.eop-eur05.prod.protection.outlook.com
- (2603:10a6:d10:94:cafe::5b) by FR3P281CA0125.outlook.office365.com
- (2603:10a6:d10:94::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.28 via Frontend
- Transport; Tue, 4 Apr 2023 14:56:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.86)
- smtp.mailfrom=seco.com; dkim=pass (signature was verified)
- header.d=seco.com;dmarc=pass action=none header.from=seco.com;
-Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
- 20.160.56.86 as permitted sender) receiver=protection.outlook.com;
- client-ip=20.160.56.86; helo=inpost-eu.tmcas.trendmicro.com; pr=C
-Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.86) by
- VI1EUR05FT058.mail.protection.outlook.com (10.233.243.88) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.45 via Frontend Transport; Tue, 4 Apr 2023 14:56:20 +0000
-Received: from outmta (unknown [192.168.82.135])
-        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id 8EA132008026E;
-        Tue,  4 Apr 2023 14:56:20 +0000 (UTC)
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (unknown [104.47.11.46])
-        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id 3F0F22008006F;
-        Tue,  4 Apr 2023 14:56:52 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CNGCFtcXs872mkyhxeyrvloxZso53+PPjYb8PC66rjw27L4HPZF6DIo9cIsqrf6sjCJOooTfncXD3b6Qe9+F/+lCyzE2O8dkXJfqgrGZsV1tqKQGrrDDGDZdpj9lLuEA4qCVEAxcEEf4DqMtJ9oYm3QeCOZp4atlyV+uR6YHxidre+i89R8A8+IHJ3AQoA/bqdsCGzq1rQ4XVtmetWCBgFqyVAadTfVaFPrdwl12KaLYlhhm9sbqnfReZnNPMr4S+zLgWVm2gLZ/XY6+pXER6XLbWypBlPVM1U3QtgmCMuqzBuE1wyCa+Pid/5Pw0k/rF/vB7xqUmcbT1qhlf0WJQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q8yvtBCZD9P8Se9ALiAo9HFkUAu77SHsj3CkpFvRPm0=;
- b=dydAC3boNHiFNlsncKJ6+65Sziy559ismg8umftUyn2Hb6dfjAVlqRWAqIgN44M+H3ceg73fxgIGRS3m+Gkvxa1BmmBffWHG5rysjjrbpTh3WdVC5UoGhSOXlK2frZS6Kmxg1wzyDR3BhnsWXquUacM7+6b3/UvE4MPjPV5RwSUa2oUB4cVWE2P7m3V+r7v4hD1pMgA31Px7NFAM5p+JOrxS7earUnZGz2nN/pt/8VWp1StiqfY7lyehYFfiQsR58VFDoWjPCYocFqD3QLTfR7ZuUiKoYpOLgjywaEKdqCaaIu/hlXyK8Pfigy+hUTSvJsbb3zE/4ywocpuMtw+2Og==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q8yvtBCZD9P8Se9ALiAo9HFkUAu77SHsj3CkpFvRPm0=;
- b=g3Nn+7ataJpPtcrZaP/A0dmhgRyMKdROSHMAUcjptQ9vvm6acD71vgtY0NxL1Yf2Lff95QVo39X5Y8Bbf56kp9lwPCqyUQJQF1JIHoL0W3yoeLZzPVO9IPXlcw2wCC972yHROcru+q0n1mv2IpwlxK3cvdQ0ACRbMIwAkO1ySTHVkU/LKWF+9z5LpmFmEqpLjfa0DG28uoZuiU2J/yX7COTHxU3ZV4un12ec2X05iMJxcti4nZo4V6h6ZuPB6jhCz20sdAGM3qf172JLXJ/wNmGXlj7ptxarFTW68B0OvfqYQC/+CpQUwqnoZbBNZT0VwNAF3pD362i9ESgb8okReg==
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by DB9PR03MB8824.eurprd03.prod.outlook.com (2603:10a6:10:3df::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Tue, 4 Apr
- 2023 14:56:15 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2226:eb03:a8c:a7e5]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2226:eb03:a8c:a7e5%2]) with mapi id 15.20.6254.033; Tue, 4 Apr 2023
- 14:56:12 +0000
-From:   Sean Anderson <sean.anderson@seco.com>
-To:     Li Yang <leoyang.li@nxp.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Camelia Groza <camelia.groza@nxp.com>,
-        linux-kernel@vger.kernel.org, Roy Pledge <roy.pledge@nxp.com>,
-        Scott Wood <oss@buserror.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH v3 2/2] soc: fsl: qbman: Use raw spinlock for cgr_lock
-Date:   Tue,  4 Apr 2023 10:55:57 -0400
-Message-Id: <20230404145557.2356894-2-sean.anderson@seco.com>
-X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
-In-Reply-To: <20230404145557.2356894-1-sean.anderson@seco.com>
-References: <20230404145557.2356894-1-sean.anderson@seco.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BL1PR13CA0285.namprd13.prod.outlook.com
- (2603:10b6:208:2bc::20) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+        Tue, 4 Apr 2023 10:56:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9960944A3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:56:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2717F63566
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 14:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 877F3C4339B;
+        Tue,  4 Apr 2023 14:56:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680620160;
+        bh=SVH2dh+HVYe/5Vm2v3qjfkUVs6Ot9HAd64OGkX5hv1k=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=EexVTaqIZJ74/J3HivD6tEB4u25xjUu5YkC6DJzF/LubnyJSEo93685NPxLxSDol0
+         Ng7Qby/7fiI0m1Y91qtfb/QUhdzPGLalyLg4bwkjG5A8M7IdtftbQx9pa8vQVnEXt3
+         HKMrrjP42j25DTOCN8P/WzRiScuxl9pt+yPeXDT/ldQeeb8Vfn34NyEVSFw7Gn4jro
+         +oe+Xp50nahJr4X6QO5ukPlk0diUbX1zCcRcKCKywYb0rqheCPsG3IwhLhUcGXRNSt
+         D7LkKYKNo70v44Xxj4SYP/67UDee15LtZbomG4dE9Rp3D0VYgLEms5jsHWUdPot0vl
+         pibh1WQiiUDWw==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 1B96515404B4; Tue,  4 Apr 2023 07:56:00 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 07:56:00 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     oe-kbuild@lists.linux.dev, lkp@intel.com,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [paulmck-rcu:dev.2023.03.30a 28/35] kernel/rcu/tree.c:2149
+ rcu_do_batch() error: uninitialized symbol 'jlimit'.
+Message-ID: <74e96b6e-38ac-41aa-9da6-54ba5452e702@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <90f95e84-842c-4273-90a3-93afd5353fd2@kili.mountain>
+ <322a0530-42ea-46dc-8226-e1fbefe2dffa@paulmck-laptop>
+ <e7650b46-851f-4341-a43f-33efe47fc65d@kili.mountain>
+ <acd9ff41-1242-4772-a7b3-2d29c4c31261@paulmck-laptop>
+ <fabd9e96-7b05-43d2-a9f6-2e379948b271@kili.mountain>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|DB9PR03MB8824:EE_|VI1EUR05FT058:EE_|PAXPR03MB8273:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1a593f6e-3733-428f-d2aa-08db351cc09b
-X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: xUW4ja8IG8w4JmzXu2S+ZHnhwUhVc5gGpM99x/KK/RkTc0JDsSaeb9ujUUdUX5LE8xMUsKEDcAFulBJEFqtnUVSlgwn8X5sofSj05HJu6lZB7vNl67aXtr9G/0crbVPO7cj31grEv9PhXouiL+CsgejgAD2ktIo0vUQUQQZtQzc9OSrg42oCHoCf9lkXqV5V3xB5gkD29se1Kk6u10jxLPl3dYq4H41Gq8oZ6L+pv3ak3L6IuOHb28WpNSTV6+iC7uHUdiFPbeB5LqKY5gQ2PAu0ypz1zD70P56+lvn6tZZ88lqr6er1Dea5TcQbLeQnCWDBRhm2SP10vxv3wmMrqwAQdQX2JmIo9izZKQKC2m2z77+ujNPHq7bfGVXqs5zgPqeYm0swWrKOaofBbUR0zwBZC7IUL4AT6WRiR9FyoG6HvYxTyQTKMnp8AS3poICEFt3uitwg68Uuidus/Aqry/hBAXkwYtuWlz3wuOb6RZ+S4wkVBaOwX6LHd+XurMO/isM3AfDg3KAxbJtSpnRhAg4av2ZDWPh9nfv/Z3Qb7cbSMi30HYlb05LrqcubUGGxBDJoSHwxsGd0l8Ltx/EY8DzRoYHD7xN7hXW95c9KG2g=
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(39850400004)(396003)(376002)(136003)(451199021)(66476007)(966005)(2906002)(86362001)(44832011)(36756003)(6666004)(107886003)(83380400001)(66556008)(4326008)(26005)(6486002)(52116002)(1076003)(2616005)(8676002)(186003)(316002)(6512007)(7416002)(38100700002)(66946007)(38350700002)(6506007)(8936002)(54906003)(41300700001)(478600001)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB8824
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR05FT058.eop-eur05.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 1fb96465-5a10-426c-5540-08db351cbb5e
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1UCPZgnayjAjBJT2XTGjx9Fii3PXzSZa64HvO4q6zZo4vRRw8XnAMHdZHCksdK/HfoT79Qu60Tn5UdSk4EUX/sVMxg066tXWCGj1nW+EXfwncv6Zt/Wzz2htFaLAUHGkK/OBnXJgkQlfrM+7J/8l5Erlq4KdGEj0OZj994CJYBGx8PgwtvMLJxKYfKtsm9L1w8BfznQ/ZsdPk+fDxRyRDQfNibrfGYmSvGRtvepkLK/1ksS5KYK0oNyd50gmATQmxDE3rgkYyxbiY2YDfBhXHfh7aOeq7QDhRAAH+DLv39X1Ok8PvJdWVwqfs82bnn4rm48qJOyJK5pY57+h1WU/T+zE9ezKC58zc1lY9u9chb29Lqv53z2eDJdHjC04EVV+HB1vwiGk0JzUuVOd+rW8lHK02qrn7JNHgOPQj3IpwNvasGUim1quxN35WOHvzNNwDXI3dy8B/FPi14afplrn2HSIB1I+RrI10kqbWGLTDamdsTgrwo6rKhNJJLt3K+Hox/Ykr5nDHhiLEilULeyhoTvnyB/jkJNnYeXkjXK2AT1UIGbACJVPnG95mDZa67XkvGsNtdjFbqkO53GFB53dqvkVsuG01H7XEriAR03te1jPBbxFjj69J8avRZUfGUzgFq3VKnPAasQUYs5zk1UMTB9xKI15DD+h+FJWuQNiL+L+N0xrH2hlgfdPmTw+pl6OzTBvVuAgl33vzJdn8nkwvY1vyF+gxV+/TnmZyKt/ZEU=
-X-Forefront-Antispam-Report: CIP:20.160.56.86;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230028)(39850400004)(396003)(346002)(136003)(376002)(451199021)(46966006)(40470700004)(36840700001)(40460700003)(8676002)(26005)(6506007)(1076003)(6512007)(107886003)(966005)(186003)(36860700001)(47076005)(83380400001)(8936002)(5660300002)(2616005)(336012)(70586007)(6486002)(4326008)(70206006)(2906002)(7416002)(54906003)(478600001)(6666004)(41300700001)(44832011)(36756003)(40480700001)(316002)(82740400003)(82310400005)(86362001)(356005)(7596003)(7636003)(34070700002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 14:56:20.8913
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a593f6e-3733-428f-d2aa-08db351cc09b
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.86];Helo=[inpost-eu.tmcas.trendmicro.com]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR05FT058.eop-eur05.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR03MB8273
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fabd9e96-7b05-43d2-a9f6-2e379948b271@kili.mountain>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cgr_lock may be locked with interrupts already disabled by
-smp_call_function_single. As such, we must use a raw spinlock to avoid
-problems on PREEMPT_RT kernels. Although this bug has existed for a
-while, it was not apparent until commit ef2a8d5478b9 ("net: dpaa: Adjust
-queue depth on rate change") which invokes smp_call_function_single via
-qman_update_cgr_safe every time a link goes up or down.
+On Tue, Apr 04, 2023 at 05:43:54PM +0300, Dan Carpenter wrote:
+> On Tue, Apr 04, 2023 at 06:47:18AM -0700, Paul E. McKenney wrote:
+> > On Tue, Apr 04, 2023 at 07:43:22AM +0300, Dan Carpenter wrote:
+> > > On Mon, Apr 03, 2023 at 09:18:58PM -0700, Paul E. McKenney wrote:
+> > > > On Tue, Apr 04, 2023 at 07:04:06AM +0300, Dan Carpenter wrote:
+> > > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.03.30a
+> > > > > head:   e222f9a512539c3f4093a55d16624d9da614800b
+> > > > > commit: a63baab5f60110f3631c98b55d59066f1c68c4f7 [28/35] rcu: Employ jiffies-based backstop to callback time limit
+> > > > > config: openrisc-randconfig-m031-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041113.A5sNFc2y-lkp@intel.com/config)
+> > > > > compiler: or1k-linux-gcc (GCC) 12.1.0
+> > > > > 
+> > > > > If you fix the issue, kindly add following tag where applicable
+> > > > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > > > | Reported-by: Dan Carpenter <error27@gmail.com>
+> > > > > | Link: https://lore.kernel.org/r/202304041113.A5sNFc2y-lkp@intel.com/
+> > > > > 
+> > > > > smatch warnings:
+> > > > > kernel/rcu/tree.c:2149 rcu_do_batch() error: uninitialized symbol 'jlimit'.
+> > > > > 
+> > > > > vim +/jlimit +2149 kernel/rcu/tree.c
+> > > > > 
+> > > > > 5bb5d09cc4f868 kernel/rcu/tree.c Paul E. McKenney        2018-07-03  2065  static void rcu_do_batch(struct rcu_data *rdp)
+> > > > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2066  {
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2067  	long bl;
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2068  	long count = 0;
+> > > > > b5374b2df0ac1c kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2069  	int div;
+> > > > > b4e6039e8af8c2 kernel/rcu/tree.c Joel Fernandes (Google  2020-11-18  2070) 	bool __maybe_unused empty;
+> > > > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2071  	unsigned long flags;
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2072  	unsigned long jlimit;
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2073  	bool jlimit_check = false;
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2074  	long pending;
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2075  	struct rcu_cblist rcl = RCU_CBLIST_INITIALIZER(rcl);
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2076  	struct rcu_head *rhp;
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2077  	long tlimit = 0;
+> > > > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2078  
+> > > > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2079  	/* If no callbacks are ready, just return. */
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2080  	if (!rcu_segcblist_ready_cbs(&rdp->cblist)) {
+> > > > > 3c779dfef2c452 kernel/rcu/tree.c Paul E. McKenney        2018-07-05  2081  		trace_rcu_batch_start(rcu_state.name,
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2082  				      rcu_segcblist_n_cbs(&rdp->cblist), 0);
+> > > > > 3c779dfef2c452 kernel/rcu/tree.c Paul E. McKenney        2018-07-05  2083  		trace_rcu_batch_end(rcu_state.name, 0,
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2084  				    !rcu_segcblist_empty(&rdp->cblist),
+> > > > > 4968c300e1fa53 kernel/rcutree.c  Paul E. McKenney        2011-12-07  2085  				    need_resched(), is_idle_task(current),
+> > > > > 5103850654fdc6 kernel/rcu/tree.c Zqiang                  2022-04-29  2086  				    rcu_is_callbacks_kthread(rdp));
+> > > > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2087  		return;
+> > > > > 29c00b4a1d9e27 kernel/rcutree.c  Paul E. McKenney        2011-06-17  2088  	}
+> > > > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2089  
+> > > > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2090  	/*
+> > > > > 7b65dfa32dca1b kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2091  	 * Extract the list of ready callbacks, disabling IRQs to prevent
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2092  	 * races with call_rcu() from interrupt handlers.  Leave the
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2093  	 * callback counts, as rcu_barrier() needs to be conservative.
+> > > > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2094  	 */
+> > > > > 7b65dfa32dca1b kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2095  	rcu_nocb_lock_irqsave(rdp, flags);
+> > > > > 8146c4e2e2c197 kernel/rcutree.c  Paul E. McKenney        2012-01-10  2096  	WARN_ON_ONCE(cpu_is_offline(smp_processor_id()));
+> > > > > 253cbbff621407 kernel/rcu/tree.c Paul E. McKenney        2022-11-14  2097  	pending = rcu_segcblist_get_seglen(&rdp->cblist, RCU_DONE_TAIL);
+> > > > > b5374b2df0ac1c kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2098  	div = READ_ONCE(rcu_divisor);
+> > > > > b5374b2df0ac1c kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2099  	div = div < 0 ? 7 : div > sizeof(long) * 8 - 2 ? sizeof(long) * 8 - 2 : div;
+> > > > > b5374b2df0ac1c kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2100  	bl = max(rdp->blimit, pending >> div);
+> > > > > 70c461b1465c5e kernel/rcu/tree.c Paul E. McKenney        2023-03-21  2101  	if ((in_serving_softirq() || rdp->rcu_cpu_kthread_status == RCU_KTHREAD_RUNNING) &&
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2102  	    (IS_ENABLED(CONFIG_RCU_DOUBLE_CHECK_CB_TIME) || unlikely(bl > 100))) {
+> > > > >                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > > > > jlimit is only initialized if one of these conditions is met.
+> > > > > 
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2103  		const long npj = NSEC_PER_SEC / HZ;
+> > > > > a2b354b9950bb8 kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2104  		long rrn = READ_ONCE(rcu_resched_ns);
+> > > > > a2b354b9950bb8 kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2105  
+> > > > > a2b354b9950bb8 kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2106  		rrn = rrn < NSEC_PER_MSEC ? NSEC_PER_MSEC : rrn > NSEC_PER_SEC ? NSEC_PER_SEC : rrn;
+> > > > > a2b354b9950bb8 kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2107  		tlimit = local_clock() + rrn;
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2108  		jlimit = jiffies + (rrn + npj + 1) / npj;
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2109  		jlimit_check = true;
+> > > > > a2b354b9950bb8 kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2110  	}
+> > > > > 3c779dfef2c452 kernel/rcu/tree.c Paul E. McKenney        2018-07-05  2111  	trace_rcu_batch_start(rcu_state.name,
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2112  			      rcu_segcblist_n_cbs(&rdp->cblist), bl);
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2113  	rcu_segcblist_extract_done_cbs(&rdp->cblist, &rcl);
+> > > > > 344e219d7d2b28 kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2114  	if (rcu_rdp_is_offloaded(rdp))
+> > > > > 7f36ef82e5cf0b kernel/rcu/tree.c Paul E. McKenney        2019-05-28  2115  		rdp->qlen_last_fqs_check = rcu_segcblist_n_cbs(&rdp->cblist);
+> > > > > 3afe7fa535491e kernel/rcu/tree.c Joel Fernandes (Google  2020-11-14  2116) 
+> > > > > 3afe7fa535491e kernel/rcu/tree.c Joel Fernandes (Google  2020-11-14  2117) 	trace_rcu_segcb_stats(&rdp->cblist, TPS("SegCbDequeued"));
+> > > > > 5d6742b37727e1 kernel/rcu/tree.c Paul E. McKenney        2019-05-15  2118  	rcu_nocb_unlock_irqrestore(rdp, flags);
+> > > > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2119  
+> > > > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2120  	/* Invoke callbacks. */
+> > > > > 6a949b7af82db7 kernel/rcu/tree.c Paul E. McKenney        2019-07-28  2121  	tick_dep_set_task(current, TICK_DEP_BIT_RCU);
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2122  	rhp = rcu_cblist_dequeue(&rcl);
+> > > > > 3afe7fa535491e kernel/rcu/tree.c Joel Fernandes (Google  2020-11-14  2123) 
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2124  	for (; rhp; rhp = rcu_cblist_dequeue(&rcl)) {
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2125) 		rcu_callback_t f;
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2126) 
+> > > > > 6bc335828056f3 kernel/rcu/tree.c Joel Fernandes (Google  2020-11-03  2127) 		count++;
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2128  		debug_rcu_head_unqueue(rhp);
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2129) 
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2130) 		rcu_lock_acquire(&rcu_callback_map);
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2131) 		trace_rcu_invoke_callback(rcu_state.name, rhp);
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2132) 
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2133) 		f = rhp->func;
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2134) 		WRITE_ONCE(rhp->func, (rcu_callback_t)0L);
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2135) 		f(rhp);
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2136) 
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2137) 		rcu_lock_release(&rcu_callback_map);
+> > > > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2138) 
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2139  		/*
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2140  		 * Stop only if limit reached and CPU has something to do.
+> > > > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2141  		 */
+> > > > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2142  		if (in_serving_softirq()) {
+> > > > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2143  			if (count >= bl && (need_resched() || !is_idle_task(current)))
+> > > > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2144  				break;
+> > > > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2145  			/*
+> > > > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2146  			 * Make sure we don't spend too much time here and deprive other
+> > > > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2147  			 * softirq vectors of CPU cycles.
+> > > > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2148  			 */
+> > > > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31 @2149  			if (rcu_do_batch_check_time(count, tlimit, jlimit_check, jlimit))
+> > > > >                                                                                                                                                          ^^^^^^
+> > > > > Uninitialized?
+> > > > 
+> > > > Except that in rcu_do_batch_check_time(), jlimit is referenced only if
+> > > > jlimit_check is set, which it is only if jlimit is initialized.
+> > > > 
+> > > > I suppose that I could unconditionally initialize jlimit to (say) zero
+> > > > to shut this up, but is there a better way to communicate the intent
+> > > > to the tooling?
+> > > > 
+> > > > Or am I confused and there is a real use of the uninitialized value?
+> > > > 
+> > > > 							Thanx, Paul
+> > > 
+> > > I'm going to guess that on distro kernels they're going to automatically
+> > > initialize stack variables to zero.  So it's not a bad option.
+> > > 
+> > > The other thing is that rcu_do_batch_check_time() is always going to be
+> > > inlined.  So this is officially a false positive.  If it weren't inlined
+> > > then passing uninitialized data is a bug regardless of whether or not
+> > > it's used.
+> > > 
+> > > It's also totally okay to just ignore this false positive.
+> > 
+> > Would another approach be would to pass the address of jlimit in to
+> > rcu_do_batch_check_time()?  Taking the address of local variables usually
+> > suppresses some optimizations, though perhaps not important ones.
+> 
+> That would work for Smatch but it seems like an ugly approach.  Better
+> to just ignore it.
 
-Fixes: 96f413f47677 ("soc/fsl/qbman: fix issue in qman_delete_cgr_safe()")
-Reported-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Link: https://lore.kernel.org/all/20230323153935.nofnjucqjqnz34ej@skbuf/
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-Reviewed-by: Camelia Groza <camelia.groza@nxp.com>
-Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
+Very well, you got it!  ;-)
 
-Changes in v3:
-- Change blamed commit to something more appropriate
-
- drivers/soc/fsl/qbman/qman.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/soc/fsl/qbman/qman.c b/drivers/soc/fsl/qbman/qman.c
-index 1bf1f1ea67f0..7a1558aba523 100644
---- a/drivers/soc/fsl/qbman/qman.c
-+++ b/drivers/soc/fsl/qbman/qman.c
-@@ -991,7 +991,7 @@ struct qman_portal {
- 	/* linked-list of CSCN handlers. */
- 	struct list_head cgr_cbs;
- 	/* list lock */
--	spinlock_t cgr_lock;
-+	raw_spinlock_t cgr_lock;
- 	struct work_struct congestion_work;
- 	struct work_struct mr_work;
- 	char irqname[MAX_IRQNAME];
-@@ -1281,7 +1281,7 @@ static int qman_create_portal(struct qman_portal *portal,
- 		/* if the given mask is NULL, assume all CGRs can be seen */
- 		qman_cgrs_fill(&portal->cgrs[0]);
- 	INIT_LIST_HEAD(&portal->cgr_cbs);
--	spin_lock_init(&portal->cgr_lock);
-+	raw_spin_lock_init(&portal->cgr_lock);
- 	INIT_WORK(&portal->congestion_work, qm_congestion_task);
- 	INIT_WORK(&portal->mr_work, qm_mr_process_task);
- 	portal->bits = 0;
-@@ -1456,11 +1456,11 @@ static void qm_congestion_task(struct work_struct *work)
- 	union qm_mc_result *mcr;
- 	struct qman_cgr *cgr;
- 
--	spin_lock_irq(&p->cgr_lock);
-+	raw_spin_lock_irq(&p->cgr_lock);
- 	qm_mc_start(&p->p);
- 	qm_mc_commit(&p->p, QM_MCC_VERB_QUERYCONGESTION);
- 	if (!qm_mc_result_timeout(&p->p, &mcr)) {
--		spin_unlock_irq(&p->cgr_lock);
-+		raw_spin_unlock_irq(&p->cgr_lock);
- 		dev_crit(p->config->dev, "QUERYCONGESTION timeout\n");
- 		qman_p_irqsource_add(p, QM_PIRQ_CSCI);
- 		return;
-@@ -1476,7 +1476,7 @@ static void qm_congestion_task(struct work_struct *work)
- 	list_for_each_entry(cgr, &p->cgr_cbs, node)
- 		if (cgr->cb && qman_cgrs_get(&c, cgr->cgrid))
- 			cgr->cb(p, cgr, qman_cgrs_get(&rr, cgr->cgrid));
--	spin_unlock_irq(&p->cgr_lock);
-+	raw_spin_unlock_irq(&p->cgr_lock);
- 	qman_p_irqsource_add(p, QM_PIRQ_CSCI);
- }
- 
-@@ -2440,7 +2440,7 @@ int qman_create_cgr(struct qman_cgr *cgr, u32 flags,
- 	preempt_enable();
- 
- 	cgr->chan = p->config->channel;
--	spin_lock_irq(&p->cgr_lock);
-+	raw_spin_lock_irq(&p->cgr_lock);
- 
- 	if (opts) {
- 		struct qm_mcc_initcgr local_opts = *opts;
-@@ -2477,7 +2477,7 @@ int qman_create_cgr(struct qman_cgr *cgr, u32 flags,
- 	    qman_cgrs_get(&p->cgrs[1], cgr->cgrid))
- 		cgr->cb(p, cgr, 1);
- out:
--	spin_unlock_irq(&p->cgr_lock);
-+	raw_spin_unlock_irq(&p->cgr_lock);
- 	put_affine_portal();
- 	return ret;
- }
-@@ -2512,7 +2512,7 @@ int qman_delete_cgr(struct qman_cgr *cgr)
- 		return -EINVAL;
- 
- 	memset(&local_opts, 0, sizeof(struct qm_mcc_initcgr));
--	spin_lock_irqsave(&p->cgr_lock, irqflags);
-+	raw_spin_lock_irqsave(&p->cgr_lock, irqflags);
- 	list_del(&cgr->node);
- 	/*
- 	 * If there are no other CGR objects for this CGRID in the list,
-@@ -2537,7 +2537,7 @@ int qman_delete_cgr(struct qman_cgr *cgr)
- 		/* add back to the list */
- 		list_add(&cgr->node, &p->cgr_cbs);
- release_lock:
--	spin_unlock_irqrestore(&p->cgr_lock, irqflags);
-+	raw_spin_unlock_irqrestore(&p->cgr_lock, irqflags);
- 	put_affine_portal();
- 	return ret;
- }
-@@ -2577,9 +2577,9 @@ static int qman_update_cgr(struct qman_cgr *cgr, struct qm_mcc_initcgr *opts)
- 	if (!p)
- 		return -EINVAL;
- 
--	spin_lock_irqsave(&p->cgr_lock, irqflags);
-+	raw_spin_lock_irqsave(&p->cgr_lock, irqflags);
- 	ret = qm_modify_cgr(cgr, 0, opts);
--	spin_unlock_irqrestore(&p->cgr_lock, irqflags);
-+	raw_spin_unlock_irqrestore(&p->cgr_lock, irqflags);
- 	put_affine_portal();
- 	return ret;
- }
--- 
-2.35.1.1320.gc452695387.dirty
-
+							Thanx, Paul
