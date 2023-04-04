@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2186D697B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAACE6D697F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234916AbjDDQx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        id S234792AbjDDQxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232948AbjDDQxV (ORCPT
+        with ESMTP id S234777AbjDDQxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:53:21 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2234EDA;
-        Tue,  4 Apr 2023 09:53:06 -0700 (PDT)
+        Tue, 4 Apr 2023 12:53:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5AE4EC5;
+        Tue,  4 Apr 2023 09:53:08 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 13D8822B58;
-        Tue,  4 Apr 2023 16:53:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680627185; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9A75E20689;
+        Tue,  4 Apr 2023 16:53:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680627186; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=78dQWLSB6oQp4OcUU5xJyej+ZlYTHH1wrdIzEgJYSsQ=;
-        b=AXF5c/dk9Oa+GjjICmzmuB6PdDFIqMq0D64a/vp8FEl4X3u9F/MK2eSQStBWJXaj+t2ig0
-        v/FLLWmV+dPujEALGpJYdGC/H6OWDg0ZHBEBjNB/u2nOaSp6jplDCz2St2CKE5heJJ6c+q
-        TfqWh4UXdbewmSisCwegelBi1iwGQCQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680627185;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=78dQWLSB6oQp4OcUU5xJyej+ZlYTHH1wrdIzEgJYSsQ=;
-        b=MXtXJVXm7P++lHLtS21Jj0xKTK/H5v7ZWHuEqmUC5FE66w45nsTVeNt6G9IAzNW+U36395
-        FjX6fIXJRK+tjyCA==
+        bh=Ll6vzEKQtu1d/iiPFBcw95nX9gIYgOaKMZRWVNUtfkM=;
+        b=OnTsPuWsvR8SUopMCtCWMTgT2XxI3U2ix4/z/djlxuJpDe5rTy1vlqUc7rIQ79SwyWU+Ba
+        aNQWpCYDuFeaj6SA/BU2bvIIYzm8uWKKX3KtU5qWEj3+h5Nzr/fpy+by5cNlp77YPmMqCo
+        FWnVjkGyLQXqBJ8fQCYb63lUO4hLKBw=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7688D1391A;
-        Tue,  4 Apr 2023 16:53:04 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4C4161391A;
+        Tue,  4 Apr 2023 16:53:06 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id bQc3CfBVLGTOMAAAMHmgww
-        (envelope-from <krisman@suse.de>); Tue, 04 Apr 2023 16:53:04 +0000
-From:   Gabriel Krisman Bertazi <krisman@suse.de>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/11] io_uring/rsrc: cache struct io_rsrc_node
-Organization: SUSE
-References: <cover.1680187408.git.asml.silence@gmail.com>
-        <7f5eb1b89e8dcf93739607c79bbf7aec1784cbbe.1680187408.git.asml.silence@gmail.com>
-        <87cz4p1083.fsf@suse.de>
-        <6eaadad2-d6a6-dfbb-88aa-8ae68af2f89d@gmail.com>
-        <87wn2wzcv3.fsf@suse.de>
-        <4cc86e76-46b7-09ce-65f9-cd27ffe4b26e@gmail.com>
-        <87h6tvzm0g.fsf@suse.de>
-        <1e9a6dd5-b8c4-ef63-bf76-075ba0d42093@kernel.dk>
-Date:   Tue, 04 Apr 2023 13:53:01 -0300
-In-Reply-To: <1e9a6dd5-b8c4-ef63-bf76-075ba0d42093@kernel.dk> (Jens Axboe's
-        message of "Tue, 4 Apr 2023 09:52:55 -0600")
-Message-ID: <87cz4jzj0y.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        id +w65EfJVLGTSMAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 04 Apr 2023 16:53:06 +0000
+Date:   Tue, 4 Apr 2023 18:53:05 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH v3 6/8] workingset: memcg: sleep when flushing stats in
+ workingset_refault()
+Message-ID: <20230404165305.ffs7uscqpndnfytn@blackpad>
+References: <20230330191801.1967435-1-yosryahmed@google.com>
+ <20230330191801.1967435-7-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qfkseaqkxxqkcz24"
+Content-Disposition: inline
+In-Reply-To: <20230330191801.1967435-7-yosryahmed@google.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -77,63 +74,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jens Axboe <axboe@kernel.dk> writes:
 
-> On 4/4/23 9:48?AM, Gabriel Krisman Bertazi wrote:
->> Pavel Begunkov <asml.silence@gmail.com> writes:
->> 
->>> On 4/1/23 01:04, Gabriel Krisman Bertazi wrote:
->>>> Pavel Begunkov <asml.silence@gmail.com> writes:
->> 
->>>>> I didn't try it, but kmem_cache vs kmalloc, IIRC, doesn't bring us
->>>>> much, definitely doesn't spare from locking, and the overhead
->>>>> definitely wasn't satisfactory for requests before.
->>>> There is no locks in the fast path of slub, as far as I know.  it has
->>>> a
->>>> per-cpu cache that is refilled once empty, quite similar to the fastpath
->>>> of this cache.  I imagine the performance hit in slub comes from the
->>>> barrier and atomic operations?
->>>
->>> Yeah, I mean all kinds of synchronisation. And I don't think
->>> that's the main offender here, the test is single threaded without
->>> contention and the system was mostly idle.
->>>
->>>> kmem_cache works fine for most hot paths of the kernel.  I think this
->>>
->>> It doesn't for io_uring. There are caches for the net side and now
->>> in the block layer as well. I wouldn't say it necessarily halves
->>> performance but definitely takes a share of CPU.
->> 
->> Right.  My point is that all these caches (block, io_uring) duplicate
->> what the slab cache is meant to do.  Since slab became a bottleneck, I'm
->> looking at how to improve the situation on their side, to see if we can
->> drop the caching here and in block/.
->
-> That would certainly be a worthy goal, and I do agree that these caches
-> are (largely) working around deficiencies. One important point that you
-> may miss is that most of this caching gets its performance from both
-> avoiding atomics in slub, but also because we can guarantee that both
-> alloc and free happen from process context. The block IRQ bits are a bit
-> different, but apart from that, it's true elsewhere. Caching that needs
-> to even disable IRQs locally generally doesn't beat out slub by much,
-> the big wins are the cases where we know free+alloc is done in process
-> context.
+--qfkseaqkxxqkcz24
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, I noticed that.  I was thinking of exposing a flag at kmem_cache
-creation-time to tell slab the user promises not to use it in IRQ
-context, so it doesn't need to worry about nested invocation in the
-allocation/free path.  Then, for those caches, have a
-kmem_cache_alloc_locked variant, where the synchronization is maintained
-by the caller (i.e. by ->uring_lock here), so it can manipulate the
-cache without atomics.
+On Thu, Mar 30, 2023 at 07:17:59PM +0000, Yosry Ahmed <yosryahmed@google.co=
+m> wrote:
+> In workingset_refault(), we call
+> mem_cgroup_flush_stats_atomic_ratelimited() to read accurate stats
+> within an RCU read section and with sleeping disallowed. Move the
+> call above the RCU read section to make it non-atomic.
+>=20
+> Flushing is an expensive operation that scales with the number of cpus
+> and the number of cgroups in the system, so avoid doing it atomically
+> where possible.
 
-I was looking at your implementation of the block cache for inspiration
-and saw how you kept a second list for IRQ.  I'm thinking how to fit a
-similar change inside slub.  But for now, I want to get the simpler
-case, which is all io_uring need.
+I understand why one does not process the whole flushing load in one go
+in general.
+However, I remember there were reports of workingset_refault() being
+sensitive to latencies (hence the ratelimited call was created).
 
-I'll try to get a prototype before lsfmm and see if I get the MM folks
-input there.
+Is there any consideration on impact of this here?
+(Or are there other cond_resched() precendents on this path? Should it
+be mentioned like in the vmscan (7/8) commit?)
 
--- 
-Gabriel Krisman Bertazi
+Thanks,
+Michal
+
+--qfkseaqkxxqkcz24
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZCxV7gAKCRAkDQmsBEOq
+uUD+AQD8wXXi9jmmMAZsQDelWPQkkod/PwIlrMWJ7mxxhDrGEwEAqpLPmU1ZnE0x
+eJvubQemadydJAWDGZe8mox2qJ3iLAY=
+=AwCK
+-----END PGP SIGNATURE-----
+
+--qfkseaqkxxqkcz24--
