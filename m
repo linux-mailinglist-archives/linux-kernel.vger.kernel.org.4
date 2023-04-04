@@ -2,66 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2606D5829
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116B26D582C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233370AbjDDFrw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Apr 2023 01:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
+        id S233384AbjDDFsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 01:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjDDFrv (ORCPT
+        with ESMTP id S233234AbjDDFso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 01:47:51 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF8610E7;
-        Mon,  3 Apr 2023 22:47:50 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id o12so13877930iow.6;
-        Mon, 03 Apr 2023 22:47:50 -0700 (PDT)
+        Tue, 4 Apr 2023 01:48:44 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92A71713
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 22:48:42 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id fi11so2446513edb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 22:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680587321;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zFT6IXN6PaGwozBWnj+vlreMrnoSTPvDNmEflqNWMF8=;
+        b=za43rz5tmdMWbq49OjteZ33/ozPFMqpB/iR/ogfLLEIchWSl3vff+h+iR2Bt2mQqLq
+         C7Ye32RwE8nV8Ueh5qMFY4jirg5WU58gUd+KJM6oqskADo+NQa/DQ5Xla7ZTr2p2jwyV
+         k74XUrfAhIMeEIP6K/1aCf2pr+IuJ9XpJ9c3bqkD54jIh3PtF60ECVMEqDwnxqAZ8zbQ
+         CTMLVqBDv/Xryi0NmDyDBwWKp/Cjp4FqLV9pwwuKQ1JXHNExvmB0Rf5tedfQsrPBr0xw
+         GMn/md0LtJv3GGRSnYbdL78pIJSebqOF+fJOY6sUGOkR+QCBHoiyuQD/7zhoySzCNUpm
+         GqUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680587269; x=1683179269;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xNz+tor2PT8Dbq65kqmNewapvxNXvpyZu0fSYT9vvkg=;
-        b=03+CVV3UY2YlwmhI/hhAUsTfD2ZWja/ela+A+pzl86tZusXGDb8LTC7x3PvTrhayX9
-         0FaJUP/9PYuagfpjsy/argEdz8NkOI0BJm0xyti8sPmAjQGwtIvKU4D4j8PfvlrCbJMs
-         tkBNlVRQvwtyFMv0shwXINRBoTEssQ0Qaqh4hs/nEpkz48fBtv+1FzcT/db12df6tyKo
-         MvskOyhrzuVB62gmP/mcXzRyxS81i9rAbU7UKI2rwoYPSqlB2lrjPX7IBO3TY0P9F50N
-         wjR36zPXhSIUhmmtPhL569x9iP+oHqjyAHqS4BYnZ7dIbX7h4vuz+LPmuE2aRaqf0V9j
-         qJgQ==
-X-Gm-Message-State: AAQBX9fgQ5+/LVg0Jl0E+VhXRvsJd/9tPXC3WjYSPhKJxxm0P7+ek/yv
-        /e/jMvUiHm2MhUi+Z+GJGWQvi3LCVh+LGgmDNPQ=
-X-Google-Smtp-Source: AKy350bYd8OQ4OgcesTf2t3y16sqqc7o75Oy1CdW1IDubFekOL0QL3zle3DhKo76y8/vwrZU3V0TN3byJcR/6nwiysE=
-X-Received: by 2002:a5d:9f15:0:b0:760:932:b2fd with SMTP id
- q21-20020a5d9f15000000b007600932b2fdmr1441378iot.12.1680587269125; Mon, 03
- Apr 2023 22:47:49 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680587321;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zFT6IXN6PaGwozBWnj+vlreMrnoSTPvDNmEflqNWMF8=;
+        b=qNZ6UYBguPCnHgRBG3nQf3U9k1ZRcxti/83EgTg+blRHxOP1pmcEtEOsnlC6IV89/9
+         KdSttB/s41rS0mBwOrm/5yON4FX5W59+xrhQpnBteE/wKPjlLEttNOzQQRq8b+PDKniS
+         Wmw6qAOZOIj/Pm+WEnnhaV8zNtMLA/23Pm+kxmV3ZQ90YknLU9vlsrF/Z/wFqvvnyNa6
+         IQFOPN1/25f1FHP+q8Yaa7ElxZ5j8VMTbEXoV3Fg3DiHmOMO8qfBdUMDnWOljHZXSU8Y
+         IJ7weXtBu2d+1mJVWiSI8u24vQk2/gB5I1c76ijkT3TyAZRliCjbYEZOslsf2c9MbWn1
+         FOqQ==
+X-Gm-Message-State: AAQBX9d407CkpSzUjyWM0BoroCFsfUlDPTKdobEBvlnVJqUw38yemz+r
+        p4S3ajwGrzDisCDmlmdhkODoy84Z3p4fvwi1at4=
+X-Google-Smtp-Source: AKy350aFspxX3/ClFdKBoL4Wf1Kvbgx+s9AkV8KoGPldaxLkkSqRcR6YiYY7WeviG/7/iD2jAR50cA==
+X-Received: by 2002:aa7:c90d:0:b0:4fd:2363:16fa with SMTP id b13-20020aa7c90d000000b004fd236316famr1250104edt.41.1680587321395;
+        Mon, 03 Apr 2023 22:48:41 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:233a:5c18:b527:381e? ([2a02:810d:15c0:828:233a:5c18:b527:381e])
+        by smtp.gmail.com with ESMTPSA id b12-20020a50cccc000000b004fc01b0aa55sm5397192edj.4.2023.04.03.22.48.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 22:48:41 -0700 (PDT)
+Message-ID: <07548c7b-fa71-032d-add1-559743f16d9d@linaro.org>
+Date:   Tue, 4 Apr 2023 07:48:40 +0200
 MIME-Version: 1.0
-References: <20230316133557.868731-1-asavkov@redhat.com> <CAM9d7ciT7Wtmxt0_2ZVv4nbAb1KoeX_itTSAhz8B9T41-NeZYQ@mail.gmail.com>
- <ZBQZoyJc7mhUrL8n@samus.usersys.redhat.com> <CAM9d7ch9NjnaB5dB6fO7WKdwPd8M9DmNpdu4-V-8R+96ssxMvA@mail.gmail.com>
- <ZBtalEw0qKQFlVWR@kernel.org> <8f7077e8-bcce-a13f-48d3-92a3cb80b02a@intel.com>
- <20230331085224.GA688995@samus.usersys.redhat.com> <ZCs3WX4klUpe+aso@kernel.org>
-In-Reply-To: <ZCs3WX4klUpe+aso@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 3 Apr 2023 22:47:37 -0700
-Message-ID: <CAM9d7cgOA97n10FPz0Bwjtmfon1En+CN2K7CYL3fQ6nrjBqF9Q@mail.gmail.com>
-Subject: Re: [PATCH 0/1] perf report: append inlines to non-dwarf callchains
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Artem Savkov <asavkov@redhat.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Milian Wolff <milian.wolff@kdab.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] dt-bindings: watchdog: alphascale-asm9260: convert to DT
+ schema
+Content-Language: en-US
+To:     hack3r-0m <hack3r-0m@proton.me>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Olof Johansson <olof@lixom.net>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230403004138.326482-1-hack3r-0m@proton.me>
+ <20230404022015.754177-1-hack3r-0m@proton.me>
+ <WaJw8WW0_x3pP2NOWf11aNOJx0xB-gZuE9bMTmydhniI0kSNa5M2oJkCp5PNZR9O1ySeV7RRLRf8rkpfiqd_P2udBHGf58x9bHSUZ7Vl4vU=@proton.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <WaJw8WW0_x3pP2NOWf11aNOJx0xB-gZuE9bMTmydhniI0kSNa5M2oJkCp5PNZR9O1ySeV7RRLRf8rkpfiqd_P2udBHGf58x9bHSUZ7Vl4vU=@proton.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,PDS_TONAME_EQ_TOLOCAL_SHORT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,84 +84,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 1:30 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
->
-> Em Fri, Mar 31, 2023 at 10:52:24AM +0200, Artem Savkov escreveu:
-> > On Thu, Mar 30, 2023 at 08:06:20AM +0300, Adrian Hunter wrote:
-> > > On 22/03/23 21:44, Arnaldo Carvalho de Melo wrote:
-> > > > Em Wed, Mar 22, 2023 at 11:18:49AM -0700, Namhyung Kim escreveu:
-> > > >> On Fri, Mar 17, 2023 at 12:41 AM Artem Savkov <asavkov@redhat.com> wrote:
-> > > >>>
-> > > >>> On Thu, Mar 16, 2023 at 02:26:18PM -0700, Namhyung Kim wrote:
-> > > >>>> Hello,
-> > > >>>>
-> > > >>>> On Thu, Mar 16, 2023 at 6:36 AM Artem Savkov <asavkov@redhat.com> wrote:
-> > > >>>>>
-> > > >>>>> In an email to Arnaldo Andrii Nakryiko suggested that perf can get
-> > > >>>>> information about inlined functions from dwarf when available and then
-> > > >>>>> add it to userspace stacktraces even in framepointer or lbr mode.
-> > > >>>>> Looking closer at perf it turned out all required bits and pieces are
-> > > >>>>> already there and inline information can be easily added to both
-> > > >>>>> framepointer and lbr callchains by adding an append_inlines() call to
-> > > >>>>> add_callchain_ip().
-> > > >>>>
-> > > >>>> Looks great!  Have you checked it with perf report -g callee ?
-> > > >>>> I'm not sure the ordering of inlined functions is maintained
-> > > >>>> properly.  Maybe you can use --no-children too to simplify
-> > > >>>> the output.
-> > > >>>
-> > > >>> Thanks for the suggestion. I actually have another test program with
-> > > >>> functions being numbered rather than (creatively) named, so it might be
-> > > >>> easier to use it to figure out ordering. Here's the code:
-> > > >>
-> > > >> Yep, looks good.
-> > > >>
-> > > >> Acked-by: Namhyung Kim <namhyung@kernel.org>
-> > > >
-> > > > So, I'll apply this shorter patch instead, ok?
-> > > >
-> > > > - Arnaldo
-> > > >
-> > > > diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> > > > index 803c9d1803dd26ef..abf6167f28217fe6 100644
-> > > > --- a/tools/perf/util/machine.c
-> > > > +++ b/tools/perf/util/machine.c
-> > > > @@ -44,6 +44,7 @@
-> > > >  #include <linux/zalloc.h>
-> > > >
-> > > >  static void __machine__remove_thread(struct machine *machine, struct thread *th, bool lock);
-> > > > +static int append_inlines(struct callchain_cursor *cursor, struct map_symbol *ms, u64 ip);
-> > > >
-> > > >  static struct dso *machine__kernel_dso(struct machine *machine)
-> > > >  {
-> > > > @@ -2322,6 +2323,10 @@ static int add_callchain_ip(struct thread *thread,
-> > > >   ms.maps = al.maps;
-> > > >   ms.map = al.map;
-> > > >   ms.sym = al.sym;
-> > > > +
-> > > > + if (append_inlines(cursor, &ms, ip) == 0)
-> > > > +         return 0;
-> > > > +
-> > > >   srcline = callchain_srcline(&ms, al.addr);
-> > > >   return callchain_cursor_append(cursor, ip, &ms,
-> > > >                                  branch, flags, nr_loop_iter,
-> > >
-> > > This seems to be breaking --branch-history.  I am not sure
-> > > append_inlines() makes sense for branches.  Maybe this should be:
-> > >
-> > >     if (!branch && !append_inlines(cursor, &ms, ip))
-> > >             return 0;
-> > >
-> >
-> > Right. So when cllchain_cursor is appended through append_inlines it
-> > always discards branch information, even for the non-inlined function.
-> > So adding !branch makes sense to me. Does anyone else see any problems
-> > with that?
->
-> I'm no expert in this specific area, so for now till we get to a
-> conclusion on this, I'll follow Andi's suggestion and revert this patch.
+On 04/04/2023 04:32, hack3r-0m wrote:
+> Thanks for the feedback, I have incorporated the fixes in the patch. Warnings generated from `checkpatch.pl` script seems to be false positive in this case.
+> 
 
-I think we can simply apply Adrian's patch above.
+I don't know what do you refer to. You top posted and answered to
+duplicated email?
 
-Thanks,
-Namhyung
+Best regards,
+Krzysztof
+
