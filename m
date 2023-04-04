@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3371C6D5A8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEA06D5A95
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234080AbjDDIQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 04:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        id S234108AbjDDIRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 04:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234120AbjDDIQU (ORCPT
+        with ESMTP id S233615AbjDDIRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 04:16:20 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3841BF3;
-        Tue,  4 Apr 2023 01:16:10 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id d22so19118413pgw.2;
-        Tue, 04 Apr 2023 01:16:10 -0700 (PDT)
+        Tue, 4 Apr 2023 04:17:49 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA3010C0
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 01:17:47 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id er13so86200542edb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 01:17:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680596170;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JS2FebHY5XwGhoN8TK3eRaOmFfR0S3vZkA1YVoRMUIs=;
-        b=lmQlXPLcQk6v+53GmQWwPGiWFGaxgNywsTVDf6emWF3qMsGLzWEkolbpW9Wab/+Hng
-         ccDnoRU2CF0+FUZYKm83Zx2yEpqaXvwbZ4Clbna+TkGtx+HYHVRSW9VgVbpUJ44Il3pC
-         XPzn2hwAk18MrT79n+0FBTOUaMqTqgTqq7Je4wE8/GIw2zsSkEirfbcZzI4jyiVhFt9W
-         40B7+jPgS34L2Yo6zaLeLBP9f918xVTSNj8JJt9udTXHGg6HovC3fdUrEEJ7UAsbnI13
-         FN/nUeN8Cm/35c6RXqjpY3DJ6aw+osJNV6HpSvvcsrhPc0w3oGEhApmgaCMfQlQsG1lk
-         NyaA==
+        d=linaro.org; s=google; t=1680596266;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=csVvkhT6MaVLbsUjZrgKGXypyh9Z79Wm9AsNuXlC+Tw=;
+        b=u5SW6/j99gN7rv7rKP8viYG+qodyH02DXjGfAhiYbslyDCRpoLBbyuH8EnWYqU4MMY
+         zbLKyHJsoGwkdihBPaqXybBE3ru8Tt9XEsl+WSBynPEJh373ISEoCVrUtvOwlRL3J9ls
+         zyh0+rLYTozYAqDK4Q17QZ527WfWBbWaZrMZJGav6fL4npEME5fZFmHRuCNcqhp1Mx0F
+         ViFlaRSVGh3y5Sk+7QseiU4WkhJw/WpWr21iwRKewnNDrRfK7xPaN3bc2qvjR6xABDxu
+         oxJQm75rlgV2RMQ2n0pAe3JziKRl5KQXZBxH7N6FpCaM7/wQy/BPTOwRNFLvaBdk2Ip/
+         e5UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680596170;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JS2FebHY5XwGhoN8TK3eRaOmFfR0S3vZkA1YVoRMUIs=;
-        b=hd73ZIoYN46Fx/up1xuiLgoybTXNXd5thgoaMWDAJUhypKbLjUR2hTc5KvSEtLlLrj
-         pmLQpqXPZidX7R8raiSNl3BEw5KUlbbLxA2TPKVCwjn3EzkAer9BkzWUkQ7IJR/A4Ltu
-         iYFrWG+w80kw4GM0tNa6eFVGCUyZ5Bpx2J6dSqc4LE5xuLDdUna5ruI5XB4Ld58ju04F
-         WdJVrazhYArOfbXUfrSO4q64Il/ud+T3FS4so5iI7R8CrCtmAAtWc1VuIZSTfxvErxl/
-         GKlZugfThenPECdT8VT/ejXXmlo4AqpGD5LKThxqtuIWYKqnynVl0G2D0BBSsH0AGmqz
-         mFxw==
-X-Gm-Message-State: AAQBX9f7FYpnwrPz7BhhztMl9ONzFqyshOeoKYEtnxlxwdmyeOGNAdLg
-        WF3iDsOGF0ncDFVo6djNYa4=
-X-Google-Smtp-Source: AKy350Z4lly1T9IcXIhHUYSMRnTU3AptmLhEk+dLJn8of07Eqd+zRBjpehfcp30hgdrCUe2+X/xYCA==
-X-Received: by 2002:a62:6203:0:b0:62a:9d6f:98dc with SMTP id w3-20020a626203000000b0062a9d6f98dcmr1296816pfb.11.1680596169931;
-        Tue, 04 Apr 2023 01:16:09 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-10.three.co.id. [180.214.232.10])
-        by smtp.gmail.com with ESMTPSA id e14-20020a62aa0e000000b00622e01989cbsm1028070pff.176.2023.04.04.01.16.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 01:16:09 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 181A41067AD; Tue,  4 Apr 2023 15:16:05 +0700 (WIB)
-Date:   Tue, 4 Apr 2023 15:16:05 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, aros@gmx.com,
-        linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
-        tools@linux.kernel.org
-Subject: Re: Introducing bugbot
-Message-ID: <ZCvcxVJBl/6pRMAw@debian.me>
-References: <gmnswy45efztvcyc3xqymm52h7cdfwjz64go2wy3zyeqcqwb76@36fva4hyip4q>
- <b38de7ff-3de1-cd4a-a532-66642aea587c@leemhuis.info>
+        d=1e100.net; s=20210112; t=1680596266;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=csVvkhT6MaVLbsUjZrgKGXypyh9Z79Wm9AsNuXlC+Tw=;
+        b=oUbd81C+XyFTwwQl4cKSu2/ECaExB4ts9ZCksSbxtQbVurLGR/7hNPubmOujDru/v5
+         O7NH1pAHh/nn1ZA3/n5PH2gle1oKCj93EL6rtmZB43el5Is3azI3NVnv1qfPyjp5/+Vu
+         4jmg5r5SqxW0VlYz94fBNIJ9rPERToWt0lTEyKw2yA7AAQzEjA6hVjYIQ3RidI+kP5zk
+         0CATLD4v6yD6Txe6IWlkMojQJpdPurErL9qcolNhCkkaGpLBByGECJjZFzTMEfiWWJMb
+         klEddQhoWEx8mbgdZVCWYBYGDmDXTDaTaB+nWvoZsFJRZT+tg05nyieUUsjwu5c0G0PW
+         olww==
+X-Gm-Message-State: AAQBX9f4dOe+Y99opmmJyknhMMbxUTapmKV1optcyy623wB+V9NQwKjt
+        xfZGkzd8bY6hHg4YXlvekqxMJg==
+X-Google-Smtp-Source: AKy350ZjdQ/ZfKRN5K6cThQ5389TacCmIKnpzI0DFmA1lMsqy03gk8/y0ABgplSsVnnGwi8NBdGkxg==
+X-Received: by 2002:a17:906:7ac9:b0:93d:b767:9fea with SMTP id k9-20020a1709067ac900b0093db7679feamr1473012ejo.31.1680596266294;
+        Tue, 04 Apr 2023 01:17:46 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:233a:5c18:b527:381e? ([2a02:810d:15c0:828:233a:5c18:b527:381e])
+        by smtp.gmail.com with ESMTPSA id t12-20020a170906608c00b0093d0867a65csm5693940ejj.175.2023.04.04.01.17.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 01:17:45 -0700 (PDT)
+Message-ID: <9422ab57-8512-0177-76fa-76347626f941@linaro.org>
+Date:   Tue, 4 Apr 2023 10:17:45 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XVlanjBueVby0D6k"
-Content-Disposition: inline
-In-Reply-To: <b38de7ff-3de1-cd4a-a532-66642aea587c@leemhuis.info>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V2] dt-bindings: input: pwm-beeper: convert to dt schema
+Content-Language: en-US
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Cc:     "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230403090640.3237060-1-peng.fan@oss.nxp.com>
+ <9dc60868-b3f2-e30f-f4fe-d2fbd551d948@linaro.org>
+ <DU0PR04MB9417000982CDDF5B75E309F488939@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DU0PR04MB9417000982CDDF5B75E309F488939@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 04/04/2023 08:44, Peng Fan wrote:
 
---XVlanjBueVby0D6k
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 04, 2023 at 07:58:40AM +0200, Thorsten Leemhuis wrote:
-> How does one make bugbot forward a bug to everyone in the signed-off-by
-> chain of a commit that caused a regression, which might or might not
-> have a bugzilla account?  When the reporter performed a bisection these
-> are the primary contacts that need to be reached out to, but the
-> maintainers and lists for the subsystem obviously should be CCed.
+>>
+>>> +
+>>> +  beeper-hz:
+>>> +    description: bell frequency in Hz
+>>> +    minimum: 1
+>>> +    maximum: 4
+>>
+>> default is 1000, so how constraints can be lower than default? Also - missing
+>> default.
+> [Peng Fan] 
+> I am not sure what maximum value should be set. Previously I set 256, Rob
+> questioned it.
 
-The logic should be similar as on finding commit signers in
-get_maintainer.pl.
+Yep, because 256 is power of 2, so really does not look correct. It is
+still lower than default, right?
 
---=20
-An old man doll... just what I always wanted! - Clara
+Best regards,
+Krzysztof
 
---XVlanjBueVby0D6k
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCvcwAAKCRD2uYlJVVFO
-o2uhAQCMyE+Ey5rq+16PrdKhShHXPwd8HI5Q80T81YsEud+RHgEAtU2tL23X0loi
-hZWkyQ2/YpWj5RbjIBL9u5mAgL1EkAs=
-=kk/f
------END PGP SIGNATURE-----
-
---XVlanjBueVby0D6k--
