@@ -2,120 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6D06D69B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82146D69B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235071AbjDDQ7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S230331AbjDDRAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjDDQ7n (ORCPT
+        with ESMTP id S235713AbjDDRAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:59:43 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0058BB8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:59:42 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id d3so11612387ybu.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 09:59:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680627582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+M9AvHAoqRC62i9d3G/DOubPisEKm8TEzbug9rmEdMY=;
-        b=PWkaJuH8u5Q/hy9Fp7MvpFk8hSAodOXWzwkbw211lCE9HVJlRG0fhNGdfRkWWBSbrQ
-         Ly41tFgckBhJTguoHbKG3jmdlEjEpuK6RS5Sw2uV5VUiOqhc27REHiyKTzpyiucNrWrw
-         Dx+ZExsODNz1e9AMO+Dzc4H7oXjuVBgjJONLyJ/fVF6FJLs81Ww2Dezz+hz8f/F8MrOM
-         oNMnX78N58o486HkPfgdLIM9CrV0PHUn/16hX1z0aFlqhF8PnT3eUm9VLcI6Y8kEE149
-         4d5ylfFpnU+fZWmly4YwdBwdX8yOjT97bUXrSVz5wdSqAWxtC8xs37j1OqVaBur6+kd1
-         Z0fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680627582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+M9AvHAoqRC62i9d3G/DOubPisEKm8TEzbug9rmEdMY=;
-        b=4mmITk8FAgDLAYSCb713CBtJEHDr4lmETpr5Dc84OWwNmCXuNRYr1/l7ZULGciru30
-         tj9yNS/eL3LftCMmT01T6LZGGpEaWQPYGcZjn4tvhWlJmGDMGbnTegKd+qRw3Z2oGxzP
-         9lydbD1GWyYcxjVWTun2/2XwGsGQgMdCOE3fcWnh6JqzQrz0O4tMoHc2NC67Md+0H+H6
-         Bdl2Aq721Tru/faSzJCv0QvRtP+utTJBZvss/6CF0phVDghOM0xoL4Lswl66aSYZbP/6
-         Tect18wqDT0tKrf3zOWUxr8IttDokenMr402qpgaZa4qGo2988qPmTxrRkDcbXkVLSRA
-         IWuw==
-X-Gm-Message-State: AAQBX9djNdVa2elJ+cBpk+k9O9wvWED5wtSPtxiAzpZ0asNRsp/a4U5M
-        W6+IykzksEgclyZRLffaTrQrIWC2F9BfKjdKwLpDpw==
-X-Google-Smtp-Source: AKy350YUNAPrmjw8i/CT5c1T5FyMcBkwEJ2ZrKH4otI8LZ6P+7/aZOmJ95PkvmyVQqCxRCExYlSDIVFVw2oBh5Klkfc=
-X-Received: by 2002:a25:9:0:b0:b26:884:c35e with SMTP id 9-20020a250009000000b00b260884c35emr45420yba.4.1680627581890;
- Tue, 04 Apr 2023 09:59:41 -0700 (PDT)
+        Tue, 4 Apr 2023 13:00:17 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82602D1;
+        Tue,  4 Apr 2023 10:00:16 -0700 (PDT)
+Received: from [192.168.0.5] (unknown [71.212.161.12])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D7FD0210DD99;
+        Tue,  4 Apr 2023 10:00:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D7FD0210DD99
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680627616;
+        bh=eekB3bYoQqC3IJ2D872oRGGQeEcgPYH1G+tXq6FWN2A=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YiOICRBkseLaRSK7TUNqQ3yPBKOdljXbZ7yV6NAxoxVfjIQCj+2tXmsKJfwu3IdVm
+         1t9Wrg4ZUWgjCSBOwaYFCgWNCg/8PIs+KLf6LzqKOEftMR1tXfA6Cmrz15ZiTYO+bQ
+         vtH5IFH06p9aMbbPlxhyxxeVNbTTLbPZ0LkBVVmI=
+Message-ID: <2543a6aa-adc0-b471-6281-38130b4d6a08@linux.microsoft.com>
+Date:   Tue, 4 Apr 2023 10:00:15 -0700
 MIME-Version: 1.0
-References: <20230404032311.146506-1-gehao@kylinos.cn>
-In-Reply-To: <20230404032311.146506-1-gehao@kylinos.cn>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 4 Apr 2023 09:59:05 -0700
-Message-ID: <CAHVum0fR0JZ0gA2oPXRufKok+YydcDnu+k3gF7cTUvvxn16GAQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH] selftest/vmx_nested_tsc_scaling_test: fix fp leak
-To:     Hao Ge <gehao@kylinos.cn>
-Cc:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
-        dmatlack@google.com, coltonlewis@google.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gehao618@163.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] PCI: hv: Use nested hypercall for retargeting interrupts
+Content-Language: en-US
+To:     Jinank Jain <jinankjain@linux.microsoft.com>,
+        jinankjain@microsoft.com, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com
+Cc:     linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230404113546.856813-1-jinankjain@linux.microsoft.com>
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <20230404113546.856813-1-jinankjain@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 8:24=E2=80=AFPM Hao Ge <gehao@kylinos.cn> wrote:
->
-> Fix stable_tsc_check_supported fopen but not fclose
->
-> Signed-off-by: Hao Ge <gehao@kylinos.cn>
+Reviewed-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 
-I will recommend to expand the commit log to something more descriptive lik=
-e:
-
-KVM: selftests: Close opened file descriptor in stable_tsc_check_supported(=
-)
-
-Close the "current_clocksource" file descriptor before returning or
-exiting from stable_tsc_check_supported() in
-vmx_nested_tsc_scaling_test
-
+On 4/4/2023 4:35 AM, Jinank Jain wrote:
+> In case of nested MSHV, retargeting interrupt hypercall should be sent
+> to L0 hypervisor instead of L1 hypervisor.
+> 
+> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
 > ---
->  .../selftests/kvm/x86_64/vmx_nested_tsc_scaling_test.c    | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/x86_64/vmx_nested_tsc_scaling_te=
-st.c b/tools/testing/selftests/kvm/x86_64/vmx_nested_tsc_scaling_test.c
-> index d427eb146bc5..fa03c8d1ce4e 100644
-> --- a/tools/testing/selftests/kvm/x86_64/vmx_nested_tsc_scaling_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/vmx_nested_tsc_scaling_test.c
-> @@ -126,12 +126,16 @@ static void stable_tsc_check_supported(void)
->                 goto skip_test;
->
->         if (fgets(buf, sizeof(buf), fp) =3D=3D NULL)
-> -               goto skip_test;
-> +               goto close_fp;
->
->         if (strncmp(buf, "tsc", sizeof(buf)))
-> -               goto skip_test;
-> +               goto close_fp;
->
-> +       fclose(fp);
->         return;
-> +
-> +close_fp:
-> +       fclose(fp);
->  skip_test:
->         print_skip("Kernel does not use TSC clocksource - assuming that h=
-ost TSC is not stable");
->         exit(KSFT_SKIP);
-> --
+>  drivers/pci/controller/pci-hyperv.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index f33370b75628..2123f632ecf7 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -704,8 +704,14 @@ static void hv_arch_irq_unmask(struct irq_data *data)
+>  		}
+>  	}
+>  
+> -	res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT | (var_size << 17),
+> -			      params, NULL);
+> +	if (hv_nested)
+> +		res = hv_do_nested_hypercall(HVCALL_RETARGET_INTERRUPT |
+> +					     (var_size << 17),
+> +					     params, NULL);
+> +	else
+> +		res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT |
+> +				      (var_size << 17),
+> +				      params, NULL);
+>  
+>  exit_unlock:
+>  	spin_unlock_irqrestore(&hbus->retarget_msi_interrupt_lock, flags);
 
-Other than commit log, Reviewed-by: Vipin Sharma <vipinsh@google.com>
