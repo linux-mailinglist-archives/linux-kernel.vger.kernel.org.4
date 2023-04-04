@@ -2,140 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF536D5A75
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF5C6D5A7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbjDDILq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 04:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S234043AbjDDIN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 04:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbjDDILU (ORCPT
+        with ESMTP id S234039AbjDDIN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 04:11:20 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1975D1BFB;
-        Tue,  4 Apr 2023 01:11:18 -0700 (PDT)
-X-UUID: 43bd0ea0d2c011eda9a90f0bb45854f4-20230404
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=3wEaoqC2uVpKwjysc4h3Pq7cma8qpw1BEVmgLuijeno=;
-        b=W3GQevhlAUOI5S+n+w7D+Sjrncv4HztBIvMS87QwGcbuOhhauh2Wayfr+Um+1uTDl/WzdYlaLfo+TTpXtbe1IYFnKmQ4CS85tH4mvDBOZIjj9qdJmXOse0iVhlCfS8a8es5OSrTsn/FR05Wl6HNMtSp++HSB6rseQ5I1CVbVCYw=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:dbaaf889-9cf7-4ae0-8196-cbdfb40883aa,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:120426c,CLOUDID:3cb336b5-beed-4dfc-bd9c-e1b22fa6ccc4,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 43bd0ea0d2c011eda9a90f0bb45854f4-20230404
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2043590714; Tue, 04 Apr 2023 16:11:13 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Tue, 4 Apr 2023 16:11:11 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Tue, 4 Apr 2023 16:11:10 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v4,8/8] media: mediatek: vcodec: Add dbgfs help function
-Date:   Tue, 4 Apr 2023 16:11:02 +0800
-Message-ID: <20230404081102.30713-9-yunfei.dong@mediatek.com>
+        Tue, 4 Apr 2023 04:13:27 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81A42133;
+        Tue,  4 Apr 2023 01:13:04 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3348C2hY026278;
+        Tue, 4 Apr 2023 03:12:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680595922;
+        bh=TqZ5qDDcfhD6dFOZqTpAdYtWhunUPEFwnBfFY1A7eHE=;
+        h=From:To:CC:Subject:Date;
+        b=Xo7da6GYAnGNIAIQ+RZ1I/yvOh5k4jhmUheikcR7roDblKurto+gLGZV2XTsZD7EJ
+         Z+pC7kA2I7/N981GJGeCRVsuXvDsaN/7jdz/L3srddmcabSs4TZUcWqTeXxE422ZUy
+         LOatSOEZWqjmlcDnT76+NuDbjWQz9xAbP+hv0Fas=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3348C2gw028878
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 4 Apr 2023 03:12:02 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 4
+ Apr 2023 03:12:01 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 4 Apr 2023 03:12:01 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3348BxjR035955;
+        Tue, 4 Apr 2023 03:11:59 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <peter.ujfalusi@gmail.com>, <vkoul@kernel.org>
+CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <vigneshr@ti.com>, <s-vadapalli@ti.com>
+Subject: [PATCH] dmaengine: ti: k3-udma-glue: do not create glue dma devices for udma channels
+Date:   Tue, 4 Apr 2023 13:41:58 +0530
+Message-ID: <20230404081158.1266530-1-s-vadapalli@ti.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230404081102.30713-1-yunfei.dong@mediatek.com>
-References: <20230404081102.30713-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Getting dbgfs help information with command "echo -help > vdec".
+From: Grygorii Strashko <grygorii.strashko@ti.com>
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+In case K3 DMA glue layer is using UDMA channels (AM65/J721E/J7200) it
+doesn't need to create own DMA devices per RX/TX channels as they are never
+used and just waste resources. The UDMA based platforms are coherent and
+UDMA device iteslf is used for DMA memory management.
+
+Hence, update K3 DMA glue layer to create K3 DMA glue DMA devices per RX/TX
+channels only in case of PKTDMA (AM64) where coherency configurable per DMA
+channel.
+
+Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 ---
- .../mediatek/vcodec/mtk_vcodec_dbgfs.c        | 24 ++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
+ drivers/dma/ti/k3-udma-glue.c | 70 +++++++++++++++++------------------
+ 1 file changed, 34 insertions(+), 36 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-index 237d0dc8a1fc..2372fc449b45 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-@@ -52,6 +52,23 @@ static void mtk_vdec_dbgfs_get_format_type(struct mtk_vcodec_ctx *ctx, char *buf
- 	*used += curr_len;
- }
- 
-+static void mtk_vdec_dbgfs_get_help(char *buf, int *used, int total)
-+{
-+	int curr_len;
-+
-+	curr_len = snprintf(buf + *used, total - *used,
-+			    "help: (1: echo -'info' > vdec 2: cat vdec)\n");
-+	*used += curr_len;
-+
-+	curr_len = snprintf(buf + *used, total - *used,
-+			    "\t-picinfo: get resolution\n");
-+	*used += curr_len;
-+
-+	curr_len = snprintf(buf + *used, total - *used,
-+			    "\t-format: get output & capture queue format\n");
-+	*used += curr_len;
-+}
-+
- static ssize_t mtk_vdec_dbgfs_write(struct file *filp, const char __user *ubuf,
- 				    size_t count, loff_t *ppos)
- {
-@@ -84,6 +101,11 @@ static ssize_t mtk_vdec_dbgfs_read(struct file *filp, char __user *ubuf,
- 	if (!buf)
- 		return -ENOMEM;
- 
-+	if (strstr(dbgfs->dbgfs_buf, "-help")) {
-+		mtk_vdec_dbgfs_get_help(buf, &used_len, total_len);
-+		goto read_buffer;
-+	}
-+
- 	if (strstr(dbgfs->dbgfs_buf, "-picinfo"))
- 		dbgfs_index[MTK_VDEC_DBGFS_PICINFO] = true;
- 
-@@ -110,7 +132,7 @@ static ssize_t mtk_vdec_dbgfs_read(struct file *filp, char __user *ubuf,
- 			mtk_vdec_dbgfs_get_format_type(ctx, buf, &used_len, total_len);
+diff --git a/drivers/dma/ti/k3-udma-glue.c b/drivers/dma/ti/k3-udma-glue.c
+index 789193ed0386..b0c9572b0d02 100644
+--- a/drivers/dma/ti/k3-udma-glue.c
++++ b/drivers/dma/ti/k3-udma-glue.c
+@@ -293,19 +293,18 @@ struct k3_udma_glue_tx_channel *k3_udma_glue_request_tx_chn(struct device *dev,
  	}
- 	mutex_unlock(&dbgfs->dbgfs_lock);
+ 	tx_chn->udma_tchan_id = xudma_tchan_get_id(tx_chn->udma_tchanx);
+ 
+-	tx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
+-	tx_chn->common.chan_dev.parent = xudma_get_device(tx_chn->common.udmax);
+-	dev_set_name(&tx_chn->common.chan_dev, "tchan%d-0x%04x",
+-		     tx_chn->udma_tchan_id, tx_chn->common.dst_thread);
+-	ret = device_register(&tx_chn->common.chan_dev);
+-	if (ret) {
+-		dev_err(dev, "Channel Device registration failed %d\n", ret);
+-		put_device(&tx_chn->common.chan_dev);
+-		tx_chn->common.chan_dev.parent = NULL;
+-		goto err;
+-	}
 -
-+read_buffer:
- 	ret = simple_read_from_buffer(ubuf, count, ppos, buf, used_len);
- 	kfree(buf);
- 	return ret;
+ 	if (xudma_is_pktdma(tx_chn->common.udmax)) {
++		tx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
++		tx_chn->common.chan_dev.parent = xudma_get_device(tx_chn->common.udmax);
++		dev_set_name(&tx_chn->common.chan_dev, "tchan%d-0x%04x",
++			     tx_chn->udma_tchan_id, tx_chn->common.dst_thread);
++		ret = device_register(&tx_chn->common.chan_dev);
++		if (ret) {
++			dev_err(dev, "Channel Device registration failed %d\n", ret);
++			tx_chn->common.chan_dev.parent = NULL;
++			goto err;
++		}
++
+ 		/* prepare the channel device as coherent */
+ 		tx_chn->common.chan_dev.dma_coherent = true;
+ 		dma_coerce_mask_and_coherent(&tx_chn->common.chan_dev,
+@@ -912,19 +911,18 @@ k3_udma_glue_request_rx_chn_priv(struct device *dev, const char *name,
+ 	}
+ 	rx_chn->udma_rchan_id = xudma_rchan_get_id(rx_chn->udma_rchanx);
+ 
+-	rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
+-	rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
+-	dev_set_name(&rx_chn->common.chan_dev, "rchan%d-0x%04x",
+-		     rx_chn->udma_rchan_id, rx_chn->common.src_thread);
+-	ret = device_register(&rx_chn->common.chan_dev);
+-	if (ret) {
+-		dev_err(dev, "Channel Device registration failed %d\n", ret);
+-		put_device(&rx_chn->common.chan_dev);
+-		rx_chn->common.chan_dev.parent = NULL;
+-		goto err;
+-	}
+-
+ 	if (xudma_is_pktdma(rx_chn->common.udmax)) {
++		rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
++		rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
++		dev_set_name(&rx_chn->common.chan_dev, "rchan%d-0x%04x",
++			     rx_chn->udma_rchan_id, rx_chn->common.src_thread);
++		ret = device_register(&rx_chn->common.chan_dev);
++		if (ret) {
++			dev_err(dev, "Channel Device registration failed %d\n", ret);
++			rx_chn->common.chan_dev.parent = NULL;
++			goto err;
++		}
++
+ 		/* prepare the channel device as coherent */
+ 		rx_chn->common.chan_dev.dma_coherent = true;
+ 		dma_coerce_mask_and_coherent(&rx_chn->common.chan_dev,
+@@ -1044,19 +1042,19 @@ k3_udma_glue_request_remote_rx_chn(struct device *dev, const char *name,
+ 		goto err;
+ 	}
+ 
+-	rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
+-	rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
+-	dev_set_name(&rx_chn->common.chan_dev, "rchan_remote-0x%04x",
+-		     rx_chn->common.src_thread);
+-	ret = device_register(&rx_chn->common.chan_dev);
+-	if (ret) {
+-		dev_err(dev, "Channel Device registration failed %d\n", ret);
+-		put_device(&rx_chn->common.chan_dev);
+-		rx_chn->common.chan_dev.parent = NULL;
+-		goto err;
+-	}
+-
+ 	if (xudma_is_pktdma(rx_chn->common.udmax)) {
++		rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
++		rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
++		dev_set_name(&rx_chn->common.chan_dev, "rchan_remote-0x%04x",
++			     rx_chn->common.src_thread);
++
++		ret = device_register(&rx_chn->common.chan_dev);
++		if (ret) {
++			dev_err(dev, "Channel Device registration failed %d\n", ret);
++			rx_chn->common.chan_dev.parent = NULL;
++			goto err;
++		}
++
+ 		/* prepare the channel device as coherent */
+ 		rx_chn->common.chan_dev.dma_coherent = true;
+ 		dma_coerce_mask_and_coherent(&rx_chn->common.chan_dev,
 -- 
-2.18.0
+2.25.1
 
