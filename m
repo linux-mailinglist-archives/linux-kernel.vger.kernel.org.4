@@ -2,56 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A0E6D59C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC0A6D59CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233701AbjDDHhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 03:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
+        id S233968AbjDDHim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233928AbjDDHha (ORCPT
+        with ESMTP id S233928AbjDDHii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 03:37:30 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85111BC
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 00:37:27 -0700 (PDT)
-Received: from booty.fritz.box (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id E8061FF806;
-        Tue,  4 Apr 2023 07:37:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680593846;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dYxgRiKBiyC9aBkvrnxyDE3aBRygWQf6CKuf5len1Ks=;
-        b=fTrVC7oiQFon1yRW4lDxVOkJPJ6zVmR4++6L3cF5Cy+lHiaimfr9mKysHIqcuOmnKc+XHb
-        X8mEoNpBsTgLvpMcdqWrhdiodv9kyKfUyC2IeHyyLfNv/+kHuYS/FgmcMTuK2JzEaN7h48
-        5BZn/onnmGu2jScMQeBk/hAs/UE76ripctN96fK94wUqzF1LG+0v1mxDMEPnlA5IoT3KJ5
-        Fxag6WwA2jsLAidrRzbv4AnUzbGHjzwaP08sp0ux5aeagYXKPo8zsxCbEQ68Zmk9XKj/QS
-        g0MOKpvY9xjJXi9r7H+neKvzdpHbPGcJ4uibTUXA1kSMzbN/II46YDpRFiTNsA==
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Marek Vasut <marex@denx.de>,
-        linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH] drm: bridge: ldb: add support for using channel 1 only
-Date:   Tue,  4 Apr 2023 09:37:20 +0200
-Message-Id: <20230404073720.1465552-1-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 4 Apr 2023 03:38:38 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67CCE4B;
+        Tue,  4 Apr 2023 00:38:36 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id m8so7487892wmq.5;
+        Tue, 04 Apr 2023 00:38:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680593915;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7OPjciRLwMHzrpkP/JLZ5TGhptBRPIPredzioRJHX4w=;
+        b=LjG87Qf/LusnAHBQcLt5iMm6daTkauyUVhbkTevUU2bCOCGeF6Cy0OjbfKgxdZxRUO
+         RCSG4vzFOYTb2nueOxQQxahtcXkvG3gBNqMk/rOFWxGMhtUUPX9Xmin9n6AHg25ktzOf
+         8Tvc1QMdjwslm8a69pTd0JI7l2zIP+HPBoEKtjCa5xWhf5O7tOMW/HIfWVBhkTwOR0Qk
+         FlSVYoOde7vPhhlfKsorcGjPGrEXrVSehb66hePZIsft0DcG1/zWc8C9xerBdqBOv3+C
+         z9RrB+FWaOsEXT8IODgtD5PjwxPSzQxDWzT5HXR5f2WEBV9NKhBVp/ujeIbz4d9CllgS
+         EeSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680593915;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7OPjciRLwMHzrpkP/JLZ5TGhptBRPIPredzioRJHX4w=;
+        b=efpib6afSQuxDHJdAteiyCEM/p5X4c+YE7JVqtcFX9cEDwL/T0p7u4gLzClwSu7rEh
+         zjc3Sm0gN1okewst9lSuR48Oejc46azsiKfZxXbK3m5+Cfb+w3XQC3xeihdpoLbM6sQA
+         win3U4Wh4mblvPPi41Hwx7z9OUuohTHm8h/EU8LNATdoS5DLZiSXxN99QiQC3LTlyFHN
+         tzRwU3Ri/QYPuaU+2wfQzAxicnMqD8K0wuWJkSI6mhJTRwr/pWwjrf1f/DSQDyjdJMzN
+         wiBqDuaop67Pg3fjCE0vFxqhSVZZMno0bkRG/lCk6QUGWuUCFEU4b6zF4OINYpvwO83k
+         YaTQ==
+X-Gm-Message-State: AAQBX9cZBw/XFgtT9n0KGczsUb2IC/HxS/00Dto/dw8HL28ADiWSr9uD
+        0D72faQMZgf4fKCf18eIUuM=
+X-Google-Smtp-Source: AKy350ZCV2nvTnoQCtczvrkw2U3Z7onC+yh+07G2gg9mYBNEeEPGmnKtZ+BTSVktI7Jsmk9vk3O2cQ==
+X-Received: by 2002:a05:600c:2285:b0:3ed:29db:cb80 with SMTP id 5-20020a05600c228500b003ed29dbcb80mr1458974wmf.18.1680593915096;
+        Tue, 04 Apr 2023 00:38:35 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id g19-20020a05600c311300b003ee74c25f12sm21534994wmo.35.2023.04.04.00.38.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 00:38:34 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 4 Apr 2023 09:38:32 +0200
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Rob Herring <robh@kernel.org>, Leo Yan <leo.yan@linaro.org>,
+        German Gomez <german.gomez@arm.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] perf pmu: Make parser reentrant
+Message-ID: <ZCvT+OvZKQqsw8mh@krava>
+References: <20230403172031.1759781-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403172031.1759781-1-irogers@google.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,209 +86,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The LDB driver currently checks whether dual mode is used, otherwise it
-assumes only channel 0 is in use. Add support for using only channel 1. In
-device tree terms, this means linking port 2 only.
+On Mon, Apr 03, 2023 at 10:20:31AM -0700, Ian Rogers wrote:
+> By default bison uses global state for compatibility with yacc. Make
+> the parser reentrant so that it may be used in asynchronous and
+> multithreaded situations.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-Doing this cleanly requires changing the logic of the probe functions from
-this:
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
- 1. use of_graph_get_remote_node() on port 1 to find the panel
- 2. use drm_of_lvds_get_dual_link_pixel_order() to detect dual mode
+jirka
 
-to this:
-
- 1. use of_graph_get_remote_node() twice to find remote ports
- 2. reuse the result of the above to know whether each channel is enabled
-    and to find the panel
- 3. if (both channels as enabled)
-        use drm_of_lvds_get_dual_link_pixel_order() to detect dual mode
-
-Also add a dev_dbg() to log the detected mode and log an error in case no
-panel was found (no channel enabled).
-
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
- drivers/gpu/drm/bridge/fsl-ldb.c | 112 ++++++++++++++++++-------------
- 1 file changed, 67 insertions(+), 45 deletions(-)
-
-diff --git a/drivers/gpu/drm/bridge/fsl-ldb.c b/drivers/gpu/drm/bridge/fsl-ldb.c
-index 6bac160b395b..d844fb946981 100644
---- a/drivers/gpu/drm/bridge/fsl-ldb.c
-+++ b/drivers/gpu/drm/bridge/fsl-ldb.c
-@@ -84,10 +84,16 @@ struct fsl_ldb {
- 	struct drm_bridge *panel_bridge;
- 	struct clk *clk;
- 	struct regmap *regmap;
--	bool lvds_dual_link;
- 	const struct fsl_ldb_devdata *devdata;
-+	bool ch0_enabled;
-+	bool ch1_enabled;
- };
- 
-+static bool fsl_ldb_is_dual(const struct fsl_ldb *fsl_ldb)
-+{
-+	return (fsl_ldb->ch0_enabled && fsl_ldb->ch1_enabled);
-+}
-+
- static inline struct fsl_ldb *to_fsl_ldb(struct drm_bridge *bridge)
- {
- 	return container_of(bridge, struct fsl_ldb, bridge);
-@@ -95,7 +101,7 @@ static inline struct fsl_ldb *to_fsl_ldb(struct drm_bridge *bridge)
- 
- static unsigned long fsl_ldb_link_frequency(struct fsl_ldb *fsl_ldb, int clock)
- {
--	if (fsl_ldb->lvds_dual_link)
-+	if (fsl_ldb_is_dual(fsl_ldb))
- 		return clock * 3500;
- 	else
- 		return clock * 7000;
-@@ -177,28 +183,25 @@ static void fsl_ldb_atomic_enable(struct drm_bridge *bridge,
- 	clk_prepare_enable(fsl_ldb->clk);
- 
- 	/* Program LDB_CTRL */
--	reg = LDB_CTRL_CH0_ENABLE;
--
--	if (fsl_ldb->lvds_dual_link)
--		reg |= LDB_CTRL_CH1_ENABLE | LDB_CTRL_SPLIT_MODE;
--
--	if (lvds_format_24bpp) {
--		reg |= LDB_CTRL_CH0_DATA_WIDTH;
--		if (fsl_ldb->lvds_dual_link)
--			reg |= LDB_CTRL_CH1_DATA_WIDTH;
--	}
--
--	if (lvds_format_jeida) {
--		reg |= LDB_CTRL_CH0_BIT_MAPPING;
--		if (fsl_ldb->lvds_dual_link)
--			reg |= LDB_CTRL_CH1_BIT_MAPPING;
--	}
--
--	if (mode->flags & DRM_MODE_FLAG_PVSYNC) {
--		reg |= LDB_CTRL_DI0_VSYNC_POLARITY;
--		if (fsl_ldb->lvds_dual_link)
--			reg |= LDB_CTRL_DI1_VSYNC_POLARITY;
--	}
-+	reg =
-+		(fsl_ldb->ch0_enabled ? LDB_CTRL_CH0_ENABLE : 0) |
-+		(fsl_ldb->ch1_enabled ? LDB_CTRL_CH1_ENABLE : 0) |
-+		(fsl_ldb_is_dual(fsl_ldb) ? LDB_CTRL_SPLIT_MODE : 0);
-+
-+	if (lvds_format_24bpp)
-+		reg |=
-+			(fsl_ldb->ch0_enabled ? LDB_CTRL_CH0_DATA_WIDTH : 0) |
-+			(fsl_ldb->ch1_enabled ? LDB_CTRL_CH1_DATA_WIDTH : 0);
-+
-+	if (lvds_format_jeida)
-+		reg |=
-+			(fsl_ldb->ch0_enabled ? LDB_CTRL_CH0_BIT_MAPPING : 0) |
-+			(fsl_ldb->ch1_enabled ? LDB_CTRL_CH1_BIT_MAPPING : 0);
-+
-+	if (mode->flags & DRM_MODE_FLAG_PVSYNC)
-+		reg |=
-+			(fsl_ldb->ch0_enabled ? LDB_CTRL_DI0_VSYNC_POLARITY : 0) |
-+			(fsl_ldb->ch1_enabled ? LDB_CTRL_DI1_VSYNC_POLARITY : 0);
- 
- 	regmap_write(fsl_ldb->regmap, fsl_ldb->devdata->ldb_ctrl, reg);
- 
-@@ -210,9 +213,9 @@ static void fsl_ldb_atomic_enable(struct drm_bridge *bridge,
- 	/* Wait for VBG to stabilize. */
- 	usleep_range(15, 20);
- 
--	reg |= LVDS_CTRL_CH0_EN;
--	if (fsl_ldb->lvds_dual_link)
--		reg |= LVDS_CTRL_CH1_EN;
-+	reg |=
-+		(fsl_ldb->ch0_enabled ? LVDS_CTRL_CH0_EN : 0) |
-+		(fsl_ldb->ch1_enabled ? LVDS_CTRL_CH1_EN : 0);
- 
- 	regmap_write(fsl_ldb->regmap, fsl_ldb->devdata->lvds_ctrl, reg);
- }
-@@ -265,7 +268,7 @@ fsl_ldb_mode_valid(struct drm_bridge *bridge,
- {
- 	struct fsl_ldb *fsl_ldb = to_fsl_ldb(bridge);
- 
--	if (mode->clock > (fsl_ldb->lvds_dual_link ? 160000 : 80000))
-+	if (mode->clock > (fsl_ldb_is_dual(fsl_ldb) ? 160000 : 80000))
- 		return MODE_CLOCK_HIGH;
- 
- 	return MODE_OK;
-@@ -286,7 +289,7 @@ static int fsl_ldb_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct device_node *panel_node;
--	struct device_node *port1, *port2;
-+	struct device_node *remote1, *remote2;
- 	struct drm_panel *panel;
- 	struct fsl_ldb *fsl_ldb;
- 	int dual_link;
-@@ -311,10 +314,23 @@ static int fsl_ldb_probe(struct platform_device *pdev)
- 	if (IS_ERR(fsl_ldb->regmap))
- 		return PTR_ERR(fsl_ldb->regmap);
- 
--	/* Locate the panel DT node. */
--	panel_node = of_graph_get_remote_node(dev->of_node, 1, 0);
--	if (!panel_node)
--		return -ENXIO;
-+	/* Locate the remote ports and the panel node */
-+	remote1 = of_graph_get_remote_node(dev->of_node, 1, 0);
-+	remote2 = of_graph_get_remote_node(dev->of_node, 2, 0);
-+	fsl_ldb->ch0_enabled = (remote1 != NULL);
-+	fsl_ldb->ch1_enabled = (remote2 != NULL);
-+	panel_node = of_node_get(remote1 ? remote1 : remote2);
-+	of_node_put(remote1);
-+	of_node_put(remote2);
-+
-+	if (!fsl_ldb->ch0_enabled && !fsl_ldb->ch1_enabled) {
-+		of_node_put(panel_node);
-+		return dev_err_probe(dev, -ENXIO, "No panel node found");
-+	}
-+
-+	dev_dbg(dev, "Using %s\n",
-+		fsl_ldb_is_dual(fsl_ldb) ? "dual mode" :
-+		fsl_ldb->ch0_enabled ? "channel 0" : "channel 1");
- 
- 	panel = of_drm_find_panel(panel_node);
- 	of_node_put(panel_node);
-@@ -325,20 +341,26 @@ static int fsl_ldb_probe(struct platform_device *pdev)
- 	if (IS_ERR(fsl_ldb->panel_bridge))
- 		return PTR_ERR(fsl_ldb->panel_bridge);
- 
--	/* Determine whether this is dual-link configuration */
--	port1 = of_graph_get_port_by_id(dev->of_node, 1);
--	port2 = of_graph_get_port_by_id(dev->of_node, 2);
--	dual_link = drm_of_lvds_get_dual_link_pixel_order(port1, port2);
--	of_node_put(port1);
--	of_node_put(port2);
- 
--	if (dual_link == DRM_LVDS_DUAL_LINK_EVEN_ODD_PIXELS) {
--		dev_err(dev, "LVDS channel pixel swap not supported.\n");
--		return -EINVAL;
--	}
-+	if (fsl_ldb_is_dual(fsl_ldb)) {
-+		struct device_node *port1, *port2;
-+
-+		port1 = of_graph_get_port_by_id(dev->of_node, 1);
-+		port2 = of_graph_get_port_by_id(dev->of_node, 2);
-+		dual_link = drm_of_lvds_get_dual_link_pixel_order(port1, port2);
-+		of_node_put(port1);
-+		of_node_put(port2);
- 
--	if (dual_link == DRM_LVDS_DUAL_LINK_ODD_EVEN_PIXELS)
--		fsl_ldb->lvds_dual_link = true;
-+		if (dual_link < 0)
-+			return dev_err_probe(dev, dual_link,
-+					     "Error getting dual link configuration");
-+
-+		/* Only DRM_LVDS_DUAL_LINK_ODD_EVEN_PIXELS is supported */
-+		if (dual_link == DRM_LVDS_DUAL_LINK_EVEN_ODD_PIXELS) {
-+			dev_err(dev, "LVDS channel pixel swap not supported.\n");
-+			return -EINVAL;
-+		}
-+	}
- 
- 	platform_set_drvdata(pdev, fsl_ldb);
- 
--- 
-2.34.1
-
+> ---
+>  tools/perf/util/pmu.c | 17 ++++++++++++-----
+>  tools/perf/util/pmu.h |  2 +-
+>  tools/perf/util/pmu.l | 17 ++++++++++++-----
+>  tools/perf/util/pmu.y |  5 ++++-
+>  4 files changed, 29 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> index e3aae731bd6f..8ef2532428a4 100644
+> --- a/tools/perf/util/pmu.c
+> +++ b/tools/perf/util/pmu.c
+> @@ -24,6 +24,8 @@
+>  #include "evsel.h"
+>  #include "pmu.h"
+>  #include "pmus.h"
+> +#include "pmu-bison.h"
+> +#include "pmu-flex.h"
+>  #include "parse-events.h"
+>  #include "print-events.h"
+>  #include "header.h"
+> @@ -57,9 +59,6 @@ struct perf_pmu_format {
+>  	struct list_head list;
+>  };
+>  
+> -int perf_pmu_parse(struct list_head *list, char *name);
+> -extern FILE *perf_pmu_in;
+> -
+>  static bool hybrid_scanned;
+>  
+>  /*
+> @@ -79,6 +78,7 @@ int perf_pmu__format_parse(char *dir, struct list_head *head)
+>  	while (!ret && (evt_ent = readdir(format_dir))) {
+>  		char path[PATH_MAX];
+>  		char *name = evt_ent->d_name;
+> +		void *scanner;
+>  		FILE *file;
+>  
+>  		if (!strcmp(name, ".") || !strcmp(name, ".."))
+> @@ -91,8 +91,15 @@ int perf_pmu__format_parse(char *dir, struct list_head *head)
+>  		if (!file)
+>  			break;
+>  
+> -		perf_pmu_in = file;
+> -		ret = perf_pmu_parse(head, name);
+> +		ret = perf_pmu_lex_init(&scanner);
+> +		if (ret) {
+> +			fclose(file);
+> +			break;
+> +		}
+> +
+> +		perf_pmu_set_in(file, scanner);
+> +		ret = perf_pmu_parse(head, name, scanner);
+> +		perf_pmu_lex_destroy(scanner);
+>  		fclose(file);
+>  	}
+>  
+> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+> index 24cf69ab32cd..52c37081c880 100644
+> --- a/tools/perf/util/pmu.h
+> +++ b/tools/perf/util/pmu.h
+> @@ -206,7 +206,7 @@ int perf_pmu__check_alias(struct perf_pmu *pmu, struct list_head *head_terms,
+>  			  struct perf_pmu_info *info);
+>  struct list_head *perf_pmu__alias(struct perf_pmu *pmu,
+>  				  struct list_head *head_terms);
+> -void perf_pmu_error(struct list_head *list, char *name, char const *msg);
+> +void perf_pmu_error(struct list_head *list, char *name, void *scanner, char const *msg);
+>  
+>  int perf_pmu__new_format(struct list_head *list, char *name,
+>  			 int config, unsigned long *bits);
+> diff --git a/tools/perf/util/pmu.l b/tools/perf/util/pmu.l
+> index 58b4926cfaca..67b247be693b 100644
+> --- a/tools/perf/util/pmu.l
+> +++ b/tools/perf/util/pmu.l
+> @@ -1,4 +1,6 @@
+>  %option prefix="perf_pmu_"
+> +%option reentrant
+> +%option bison-bridge
+>  
+>  %{
+>  #include <stdlib.h>
+> @@ -6,16 +8,21 @@
+>  #include "pmu.h"
+>  #include "pmu-bison.h"
+>  
+> -static int value(int base)
+> +char *perf_pmu_get_text(yyscan_t yyscanner);
+> +YYSTYPE *perf_pmu_get_lval(yyscan_t yyscanner);
+> +
+> +static int value(yyscan_t scanner, int base)
+>  {
+> +	YYSTYPE *yylval = perf_pmu_get_lval(scanner);
+> +	char *text = perf_pmu_get_text(scanner);
+>  	long num;
+>  
+>  	errno = 0;
+> -	num = strtoul(perf_pmu_text, NULL, base);
+> +	num = strtoul(text, NULL, base);
+>  	if (errno)
+>  		return PP_ERROR;
+>  
+> -	perf_pmu_lval.num = num;
+> +	yylval->num = num;
+>  	return PP_VALUE;
+>  }
+>  
+> @@ -25,7 +32,7 @@ num_dec         [0-9]+
+>  
+>  %%
+>  
+> -{num_dec}	{ return value(10); }
+> +{num_dec}	{ return value(yyscanner, 10); }
+>  config		{ return PP_CONFIG; }
+>  -		{ return '-'; }
+>  :		{ return ':'; }
+> @@ -35,7 +42,7 @@ config		{ return PP_CONFIG; }
+>  
+>  %%
+>  
+> -int perf_pmu_wrap(void)
+> +int perf_pmu_wrap(void *scanner __maybe_unused)
+>  {
+>  	return 1;
+>  }
+> diff --git a/tools/perf/util/pmu.y b/tools/perf/util/pmu.y
+> index e675d79a0274..dff4e892ac4d 100644
+> --- a/tools/perf/util/pmu.y
+> +++ b/tools/perf/util/pmu.y
+> @@ -1,6 +1,8 @@
+> -
+> +%define api.pure full
+>  %parse-param {struct list_head *format}
+>  %parse-param {char *name}
+> +%parse-param {void *scanner}
+> +%lex-param {void* scanner}
+>  
+>  %{
+>  
+> @@ -78,6 +80,7 @@ PP_VALUE
+>  
+>  void perf_pmu_error(struct list_head *list __maybe_unused,
+>  		    char *name __maybe_unused,
+> +		    void *scanner __maybe_unused,
+>  		    char const *msg __maybe_unused)
+>  {
+>  }
+> -- 
+> 2.40.0.348.gf938b09366-goog
+> 
