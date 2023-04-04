@@ -2,202 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CF06D687F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5396D6883
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235920AbjDDQLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        id S235981AbjDDQL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235913AbjDDQLF (ORCPT
+        with ESMTP id S235944AbjDDQLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:11:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B04A30F7;
-        Tue,  4 Apr 2023 09:11:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA155636AE;
-        Tue,  4 Apr 2023 16:11:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C854CC433D2;
-        Tue,  4 Apr 2023 16:11:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680624663;
-        bh=eKiqHkoBVo1AQRx10HafTawauui+/7aWix/7MTRPGrA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=nkcQpc5NRHDKcALdEO/kD1vJ7JRnALrRH75LPh2TDOMavdcMgvCuVznC7x8x+ecKt
-         1/q7prAN9eClvaAU3c0+dUWFvcRO66V04KGg+gYkb+YrMhjTw0ASpXENR+YKBHmeia
-         3Q5pvbnqrK/uCSEeFKclNxI3vwOX0dUud1/pCQiZ36qwD28S6odWh3QMAvbBbgMd/s
-         C/Qhj0iZpFO3X/jYT9y3J5qKvtPSjj/GrdFNEZo1J9pLwcjwlot2Tv6qfpoajNxUA+
-         o+rmP5HeMIpXk0J+ytkWwcX3yLOfhBvsgasfRd7/C7/NUehmnMEdxtOqmb8yLnHceu
-         ZoK1FHXZYisVQ==
-Date:   Tue, 4 Apr 2023 11:11:01 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v8 0/7] Add pci_dev_for_each_resource() helper and update
- users
-Message-ID: <20230404161101.GA3554747@bhelgaas>
+        Tue, 4 Apr 2023 12:11:21 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA34F469D;
+        Tue,  4 Apr 2023 09:11:19 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id x15so31063631pjk.2;
+        Tue, 04 Apr 2023 09:11:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680624679;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CLSNpBLE1zZj2pYIUNEhwYsUjIS5zTtbyz1C7DwdTc8=;
+        b=a3wZ8DLBM+5b6x83GzLyseUCS2NaCJ1RHsOkEEJklmRMDa67BWIjsTj3PxWwocGCG7
+         6imk0mip5Tzb68Vya/2wPqZ4M4KHcjf2C8i68L9t0PCf7oyoi9kc6HavLVzktZ0jQzip
+         TUqAbQFbE3HTVyZK7HKfOPBvOvHdSQVnaH/qSOAi7piFTMOgQE9uK3mO9wmlIgHUklTC
+         H2Rjf747c0m9aT0EOyKossmx75acKjl4ngbVW5Y8La6GGy0fI3dfwEM9SyLy5z2LVqbk
+         yLbYJHZ9aLe0NgxWtu7dEV/rW0v7XqSQr3YdwSqlrj8jfEVBUdmLPrjTjVrhIORRsvU/
+         GCBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680624679;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CLSNpBLE1zZj2pYIUNEhwYsUjIS5zTtbyz1C7DwdTc8=;
+        b=4Khg+HPVhTp8d9O7kJB1MSIbtcC/I+U5sqw7AdOSzUXAjUhu43wZhXLdfkdCEevmpQ
+         exdACCYcgRZQXqkV9QJ0/rULWFMS2zaGtMtdUAVgWjq0TJi1JTuno3dF5FxVEIxHZ6A5
+         WrhI0q+/GSGMIgcL88Vvl0LPGBNwozYKEh5RUQfaRlCrhKBnCAqOB/BQM8hnrSdmSMgA
+         mt9TZRcFM0TuqOxp6x3eEJXUG/zIasZkuUF9LncRwakBUSRqY50abyU3PAywS/iydCxG
+         DqjiGxPVcdrg4salEx5k1XTOVBl6UYX0X2rmFfqKI32WzR4u+28XIqHIiPSnJdqby1ro
+         sGIQ==
+X-Gm-Message-State: AAQBX9fBcJTDUJhefe2uPZLNO34JV8q+KPQgzLWTvPFheawfWov432j7
+        gEFQ4cppQYbjb9t8YOnY2Zw=
+X-Google-Smtp-Source: AKy350and3Y73d+IQ7L9nx8YhlsQ1wChDracxJniTYlJXyPMirizEFteA2SQxqK8jX6sKRzSYD/bFA==
+X-Received: by 2002:a05:6a20:7a04:b0:e4:9940:d7c9 with SMTP id t4-20020a056a207a0400b000e49940d7c9mr2197897pzh.39.1680624678948;
+        Tue, 04 Apr 2023 09:11:18 -0700 (PDT)
+Received: from [192.168.0.128] ([98.97.112.205])
+        by smtp.googlemail.com with ESMTPSA id 13-20020aa7924d000000b006262520ac59sm8937614pfp.127.2023.04.04.09.11.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 09:11:18 -0700 (PDT)
+Message-ID: <903f658b47d8b02695d9cd7d43b5d9cfb0558490.camel@gmail.com>
+Subject: Re: [PATCH net 1/1] net: stmmac: Add queue reset into
+ stmmac_xdp_open() function
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     Song Yoong Siang <yoong.siang.song@intel.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, stable@vger.kernel.org
+Date:   Tue, 04 Apr 2023 09:11:17 -0700
+In-Reply-To: <20230404044823.3226144-1-yoong.siang.song@intel.com>
+References: <20230404044823.3226144-1-yoong.siang.song@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330162434.35055-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 07:24:27PM +0300, Andy Shevchenko wrote:
-> Provide two new helper macros to iterate over PCI device resources and
-> convert users.
-> 
-> Looking at it, refactor existing pci_bus_for_each_resource() and convert
-> users accordingly.
-> 
-> Note, the amount of lines grew due to the documentation update.
-> 
-> Changelog v8:
-> - fixed issue with pci_bus_for_each_resource() macro (LKP)
-> - due to above added a new patch to document how it works
-> - moved the last patch to be #2 (Philippe)
-> - added tags (Philippe)
-> 
-> Changelog v7:
-> - made both macros to share same name (Bjorn)
+On Tue, 2023-04-04 at 12:48 +0800, Song Yoong Siang wrote:
+> Queue reset was moved out from __init_dma_rx_desc_rings() and
+> __init_dma_tx_desc_rings() functions. Thus, the driver fails to transmit
+> and receive packet after XDP prog setup.
+>=20
+> This commit adds the missing queue reset into stmmac_xdp_open() function.
+>=20
+> Fixes: f9ec5723c3db ("net: ethernet: stmicro: stmmac: move queue reset to=
+ dedicated functions")
+> Cc: <stable@vger.kernel.org> # 6.0+
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 3e5bbfe3c41b..e4c27eb17bd2 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -6630,6 +6630,8 @@ int stmmac_xdp_open(struct net_device *dev)
+>  		goto init_error;
+>  	}
+> =20
+> +	stmmac_reset_queues_param(priv);
+> +
+>  	/* DMA CSR Channel configuration */
+>  	for (chan =3D 0; chan < dma_csr_ch; chan++) {
+>  		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
 
-I didn't actually request the same name for both; I would have had no
-idea how to even do that :)
+Looks good to me.
 
-v6 had:
+Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
 
-  pci_dev_for_each_resource_p(dev, res)
-  pci_dev_for_each_resource(dev, res, i)
-
-and I suggested:
-
-  pci_dev_for_each_resource(dev, res)
-  pci_dev_for_each_resource_idx(dev, res, i)
-
-because that pattern is used elsewhere.  But you figured out how to do
-it, and having one name is even better, so thanks for that extra work!
-
-> - split out the pci_resource_n() conversion (Bjorn)
-> 
-> Changelog v6:
-> - dropped unused variable in PPC code (LKP)
-> 
-> Changelog v5:
-> - renamed loop variable to minimize the clash (Keith)
-> - addressed smatch warning (Dan)
-> - addressed 0-day bot findings (LKP)
-> 
-> Changelog v4:
-> - rebased on top of v6.3-rc1
-> - added tag (Krzysztof)
-> 
-> Changelog v3:
-> - rebased on top of v2 by Mika, see above
-> - added tag to pcmcia patch (Dominik)
-> 
-> Changelog v2:
-> - refactor to have two macros
-> - refactor existing pci_bus_for_each_resource() in the same way and
->   convert users
-> 
-> Andy Shevchenko (6):
->   kernel.h: Split out COUNT_ARGS() and CONCATENATE()
->   PCI: Introduce pci_resource_n()
->   PCI: Document pci_bus_for_each_resource() to avoid confusion
->   PCI: Allow pci_bus_for_each_resource() to take less arguments
->   EISA: Convert to use less arguments in pci_bus_for_each_resource()
->   pcmcia: Convert to use less arguments in pci_bus_for_each_resource()
-> 
-> Mika Westerberg (1):
->   PCI: Introduce pci_dev_for_each_resource()
-> 
->  .clang-format                             |  1 +
->  arch/alpha/kernel/pci.c                   |  5 +-
->  arch/arm/kernel/bios32.c                  | 16 +++--
->  arch/arm/mach-dove/pcie.c                 | 10 ++--
->  arch/arm/mach-mv78xx0/pcie.c              | 10 ++--
->  arch/arm/mach-orion5x/pci.c               | 10 ++--
->  arch/mips/pci/ops-bcm63xx.c               |  8 +--
->  arch/mips/pci/pci-legacy.c                |  3 +-
->  arch/powerpc/kernel/pci-common.c          | 21 +++----
->  arch/powerpc/platforms/4xx/pci.c          |  8 +--
->  arch/powerpc/platforms/52xx/mpc52xx_pci.c |  5 +-
->  arch/powerpc/platforms/pseries/pci.c      | 16 ++---
->  arch/sh/drivers/pci/pcie-sh7786.c         | 10 ++--
->  arch/sparc/kernel/leon_pci.c              |  5 +-
->  arch/sparc/kernel/pci.c                   | 10 ++--
->  arch/sparc/kernel/pcic.c                  |  5 +-
->  drivers/eisa/pci_eisa.c                   |  4 +-
->  drivers/pci/bus.c                         |  7 +--
->  drivers/pci/hotplug/shpchp_sysfs.c        |  8 +--
->  drivers/pci/pci.c                         |  3 +-
->  drivers/pci/probe.c                       |  2 +-
->  drivers/pci/remove.c                      |  5 +-
->  drivers/pci/setup-bus.c                   | 37 +++++-------
->  drivers/pci/setup-res.c                   |  4 +-
->  drivers/pci/vgaarb.c                      | 17 ++----
->  drivers/pci/xen-pcifront.c                |  4 +-
->  drivers/pcmcia/rsrc_nonstatic.c           |  9 +--
->  drivers/pcmcia/yenta_socket.c             |  3 +-
->  drivers/pnp/quirks.c                      | 29 ++++-----
->  include/linux/args.h                      | 13 ++++
->  include/linux/kernel.h                    |  8 +--
->  include/linux/pci.h                       | 72 +++++++++++++++++++----
->  32 files changed, 190 insertions(+), 178 deletions(-)
->  create mode 100644 include/linux/args.h
-
-Applied 2-7 to pci/resource for v6.4, thanks, I really like this!
-
-I omitted
-
-  [1/7] kernel.h: Split out COUNT_ARGS() and CONCATENATE()"
-
-only because it's not essential to this series and has only a trivial
-one-line impact on include/linux/pci.h.
-
-Bjorn
