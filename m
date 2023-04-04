@@ -2,140 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53B36D6F11
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 118A46D6F12
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234988AbjDDVjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45454 "EHLO
+        id S236482AbjDDVjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236454AbjDDVjG (ORCPT
+        with ESMTP id S236421AbjDDVjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:39:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2218D3A8C;
-        Tue,  4 Apr 2023 14:39:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 4 Apr 2023 17:39:22 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA8D40FF;
+        Tue,  4 Apr 2023 14:39:20 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9C226375E;
-        Tue,  4 Apr 2023 21:39:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B6EC433D2;
-        Tue,  4 Apr 2023 21:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680644344;
-        bh=XOaw+ianizkDnYdonJkTw/dihp/a3DtdF6mVStpByng=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hgNvRurcBL7n/ioKUCt9Nw9UtdE4zMZA4C94FXvLwsgHcT+kZpgBSUWQr+G/zO270
-         XWWgEKhJ6H3Dgo0+h5GDZDEZ9S+NIaSQFpRMpu4aXDrqmohup0CdgaAfVHdQ9BplhV
-         mfMqX8ZIhHE2Zmy8IxCFYlI5Ul6GeEUhV3ilxBg1RIeGvXN3ICXZQDx77KYAaT2kPf
-         IJ4n8Td/i9q8bKNSQPWBlHF9SHdIVnyfqhLNmPHk6yPWkW/mEE2+Fbu4dCEb9IdbFv
-         CcYO1+2/7ApcZLHCvAL05nDlVi+MLMJexbYt/UVK06s+AjO/nHQNF5TVsyM90l8b07
-         b9QgBLaaCOIOQ==
-Date:   Tue, 4 Apr 2023 22:38:56 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Weili Qian <qianweili@huawei.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Len Brown <lenb@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH V4 19/23] RISC-V: Add ACPI initialization in setup_arch()
-Message-ID: <20230404-escalator-fridge-daf9aaffad12@spud>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-20-sunilvl@ventanamicro.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3BA411FDBE;
+        Tue,  4 Apr 2023 21:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1680644359;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c6rnFBcBWfr2aiT8YSmtZUrPXOfzsUgPS2qkwzrhBQs=;
+        b=Juq+gzubV1kWRI+fBWdnbjM58H1OERRfulwEMts4fHSuASfQ6Bv5GcNBosDDlj6v44k+FH
+        YSaIOuVjmrWSPAWP8psqWWbYgFn8mcPY78ij01RsT+NQ3BSiOX6tMOxeQdoqy9rlhLQWBm
+        1TVDUf0V/hGk4KQxFn4f9W/78Dx0wE0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1680644359;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c6rnFBcBWfr2aiT8YSmtZUrPXOfzsUgPS2qkwzrhBQs=;
+        b=ujFyYHLB72/95xHjjUrl1gOKROPgRo1Zmn5OLJ7fk9tgPzotZGvKHOiVFGqPvThXoxtKY2
+        ke/9GUrfIP3HAvCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D42713920;
+        Tue,  4 Apr 2023 21:39:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tiFWAgeZLGS+LQAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 04 Apr 2023 21:39:19 +0000
+Date:   Tue, 4 Apr 2023 23:39:17 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Introducing bugbot
+Message-ID: <20230404213917.GG19619@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <gmnswy45efztvcyc3xqymm52h7cdfwjz64go2wy3zyeqcqwb76@36fva4hyip4q>
+ <022e2ef8-2a94-3109-ab90-9ee980915887@gmx.com>
+ <20230404-uncrown-detonate-8bc1ac@meerkat>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="DDYTghOmxEGb/QCp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230404182037.863533-20-sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230404-uncrown-detonate-8bc1ac@meerkat>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 04, 2023 at 01:35:34PM -0400, Konstantin Ryabitsev wrote:
+> On Tue, Apr 04, 2023 at 04:16:08PM +0000, Artem S. Tashkinov wrote:
+> > I love everything about what you've done except I've got a minor feature
+> > request for the kernel bugzilla and this new workflow specifically.
+> 
+> Great to hear.
+> 
+> > Let's have a bot which polls open bug reports every 3-6 months with this
+> > question:
+> > 
+> > "Is this still an issue in the current kernel? Please leave a comment or
+> > this bug report will be closed due to inactivity".
+> 
+> I plan to do it slightly differently -- there will be a "housekeeping" command
+> running daily that will auto-close bugs that haven't seen any activity for a
+> defined period (90 days, for example), with a message like:
+> 
+> "This bug is now closed due to inactivity. Please reopen if this issue is
+> still relevant with the latest kernel version."
 
---DDYTghOmxEGb/QCp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Will there be a way to opt out of this? I'd rather see any bug closed
+after an inspection from a human, I find the auto-close messages a bit
+rude and I've read similar sentiment from others. The upstream bugzilla
+is a best-effort level of support so it's true that bugs are left open
+for months, sometimes years unfortunately, but I've seen many cases where
+the report is valid or the "fix" is to improve documentation.
 
-On Tue, Apr 04, 2023 at 11:50:33PM +0530, Sunil V L wrote:
-> Initialize the ACPI core for RISC-V during boot.
->=20
-> ACPI tables and interpreter are initialized based on
-> the information passed from the firmware and the value of
-> the kernel parameter 'acpi'.
->=20
-> With ACPI support added for RISC-V, the kernel parameter 'acpi'
-> is also supported on RISC-V. Hence, update the documentation.
->=20
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-> +	/* Parse the ACPI tables for possible boot-time configuration */
-> +	acpi_boot_table_init();
-> +	if (acpi_disabled) {
-> +		if (IS_ENABLED(CONFIG_BUILTIN_DTB)) {
-> +			unflatten_and_copy_device_tree();
-> +		} else {
-> +			if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
-> +				unflatten_device_tree();
-> +			else
-> +				pr_err("No DTB found in kernel mappings\n");
-> +		}
-> +	} else {
-> +		early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa)));
-
-I'm probably forgetting something, but this seems very non-obvious to
-me:
-Why are you running early_init_dt_verify() when ACPI is enabled?
-I think that one deserves a comment so that next time someone looks at
-this (that doesn't live in ACPI land) they've know exactly why this is
-like it is.
-
-Doubly so since this is likely to change with some of Alex's bits moving
-the dtb back into the fixmap.
-
-Cheers,
-Conor.
-
---DDYTghOmxEGb/QCp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCyY7wAKCRB4tDGHoIJi
-0ineAP9dZt8LzP73Mz2ZBF25vpCS8jxlJLO9KoLcg8eN+crkiwD+JxJx2myjXj1D
-jLO/jiH2JZVRpKsN4XE2HwxmyjOrxwQ=
-=T2nq
------END PGP SIGNATURE-----
-
---DDYTghOmxEGb/QCp--
+If we had enough people routinely going through the reports then some
+sort of reminders would make sense but we don't. I take the bug
+reports a task pool if there aren't more pressing things to do, which
+may not be the same way how others use bugzilla.k.org so I'd be fine
+with opting out of the auto-close or maybe out of any bugbot
+interactions.
