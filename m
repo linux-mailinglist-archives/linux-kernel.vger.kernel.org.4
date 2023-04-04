@@ -2,264 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC466D6E6A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2406D6D6E64
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236370AbjDDUu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 16:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
+        id S236329AbjDDUuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 16:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236350AbjDDUuZ (ORCPT
+        with ESMTP id S232313AbjDDUuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 16:50:25 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2434C25;
-        Tue,  4 Apr 2023 13:50:24 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id ix20so32518178plb.3;
-        Tue, 04 Apr 2023 13:50:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680641423;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lglI8SHFdENU7LxVGQcu2UFVz8VugpbHJeSn7gO+RPc=;
-        b=Nrw6i/FJkS+fqTHL9se7KaV8CBQ8xPVRt4LMvU2Do9i/mTfZSgWVYiqA/pz4ECapQQ
-         tCpnUOnnfw0CQgEFR/FRbB9ejV68iU6P0vReR7IiHWMWh7XWRvd/zt3D7oPfgKzu8ZVL
-         PFBGzhqG/eQ1Wg6dC/pz5EitUrx3E0FtWzBZHDob4owJKiqepla9rrMevQICz2jTD6sB
-         IxCbiS3TOw5KrDKlwAMI7w2UXHiOSgdPeq6lxmP+5+46AFNq0b6/co31Vf/ozknj+8zJ
-         x1LZzrI54HRvbU9F97DUHeoGyEX15x6ETRsdEZyk/TEk+xCTpDfq4O7jGHmFkSr5In1k
-         FRow==
+        Tue, 4 Apr 2023 16:50:19 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F90AC;
+        Tue,  4 Apr 2023 13:50:18 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id b19so25205964oib.7;
+        Tue, 04 Apr 2023 13:50:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680641423;
+        d=1e100.net; s=20210112; t=1680641418;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lglI8SHFdENU7LxVGQcu2UFVz8VugpbHJeSn7gO+RPc=;
-        b=ZzNcOg0l55KuBHStiSkxAWJ5pitgMY5BT93oTM+8qbvsE+5Jc19EYhxJKVf/tpE5K3
-         MCd0eENVb+7Oy0nEIvA/eCv64eFSX+mGWnxloyv5KyYkVmpKosJbMSe24Sy2rsN535BP
-         kDZLMNdpwYt8ZyMwzm3lfyKl0rMuk7X/f6lYWAFqlMfuFfXJfdX9Guj+bkcM0nwBFF1Q
-         2MyltgG6dP31ecckpRnsJhQ8rWcqMAFzpT+2P+UtL6l4RaC+fT8QrG+EE7XnQYuzIXtS
-         2gDGl1p8AnrrkhBy1lfGecHv3t1cYO13kViszZDUTor+RAojRgTogdUaiD70bYH/5yHP
-         wQ1Q==
-X-Gm-Message-State: AAQBX9fDT5VNtuY/jYyru6aDkygI1T862rmUgJ881QWMzhIOEwtkc9N9
-        GOd2u6SdGGwXXbYeofxXREqldmcFpqCO+QUL
-X-Google-Smtp-Source: AKy350YCVMZqXw6ZiGurBjzNmoYBsAbAsOz/1gvcWpAAID0BsOihl1waiyFK0dykig976XfgWdUntw==
-X-Received: by 2002:a17:903:244f:b0:1a1:ce5d:5a15 with SMTP id l15-20020a170903244f00b001a1ce5d5a15mr4998933pls.50.1680641423186;
-        Tue, 04 Apr 2023 13:50:23 -0700 (PDT)
-Received: from lunar.aeonazure.com ([182.2.143.216])
-        by smtp.gmail.com with ESMTPSA id d9-20020a170902728900b0019f2328bef8sm8818551pll.34.2023.04.04.13.50.19
+        bh=cuM6Q6XsNQriUPvaV/azpo/EuSP1O+QRacD+aarjr5s=;
+        b=hg5IOD7kVdbQk8PCjZo82JdaXood30U6qlXNNj4ihEJbm60k14VWdgHkcOgnNxgf9G
+         8sKY+aA8UBhAh+F3pOhE4sKpu11Ahsmj5gMqKzdzGI+p19n+U2ekCkGL1iKvVBo2edD2
+         G0bnqr5NNBMErWh9giSzboc876fjPTs9UDoGrl85mgMgFEyWmQlzKfRbCBSVmnRstnBI
+         Vr/baQ/ZmxxHm7xDtGCqoz7OGuzQNVdBmAnVREPHT7otrGNDBRID07vbEuQwsCxWQXCU
+         tlb/OKjHO0l18gSIEoUBnowJIbiu7oNkayvNnFY1UELFgBRxaCTbbi23cKO5hDBloIcH
+         djSg==
+X-Gm-Message-State: AAQBX9fCsln2eTfqfWWlKn7hRVfgcVMzd5zGlFlRae1i0SmXsG2Z5OjG
+        S2PSpkQHKNJH/Ryv3nm474A1+OTBBg==
+X-Google-Smtp-Source: AKy350avONUpmrgeg1TMxpSIXnQKKstOT4RgBKsLEkLEaYzGD2/sfVJtO7hTe4RmMvzhMwWBTuyO+w==
+X-Received: by 2002:a05:6808:23c9:b0:386:94f0:cb27 with SMTP id bq9-20020a05680823c900b0038694f0cb27mr2960463oib.39.1680641417982;
+        Tue, 04 Apr 2023 13:50:17 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z184-20020a4a49c1000000b005252d376caesm5930652ooa.22.2023.04.04.13.50.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 13:50:22 -0700 (PDT)
-From:   Shaun Tancheff <shaun.tancheff@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>
-Cc:     Shaun Tancheff <shaun.tancheff@hpe.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH] memcg-v1: Enable setting memory min, low, high
-Date:   Wed,  5 Apr 2023 03:50:13 +0700
-Message-Id: <20230404205013.31520-1-shaun.tancheff@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 04 Apr 2023 13:50:17 -0700 (PDT)
+Received: (nullmailer pid 644399 invoked by uid 1000);
+        Tue, 04 Apr 2023 20:50:16 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: iio: temperature: ltc2983: Fix child node unevaluated properties
+Date:   Tue,  4 Apr 2023 15:50:13 -0500
+Message-Id: <20230404205014.644336-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaun Tancheff <shaun.tancheff@hpe.com>
+The child node schemas are missing 'unevaluatedProperties' constraints,
+so any unknown properties are allowed. The current structure with
+multiple patternProperties schemas doesn't work for
+unevaluatedProperties as each sub-schema is evaluated independently. To
+fix this, move the sub-schema for all child nodes to a $defs entry and
+reference it from each named child node.
 
-For users that are unable to update to memcg-v2 this
-provides a method where memcg-v1 can more effectively
-apply enough memory pressure to effectively throttle
-filesystem I/O or otherwise minimize being memcg oom
-killed at the expense of reduced performance.
-
-This patch extends the memcg-v1 legacy sysfs entries
-with:
-    limit_in_bytes.min, limit_in_bytes.low and
-    limit_in_bytes.high
-Since old software will need to be updated to take
-advantage of the new files a secondary method
-of setting min, low and high based on a percentage
-of the limit is also provided. The percentages
-are determined by module parameters.
-
-The available module parameters can be set at
-kernel boot time, for example:
-   memcontrol.memcg_min=10
-   memcontrol.memcg_low=30
-   memcontrol.memcg_high=80
-
-Would set min to 10%, low to 30% and high to 80% of
-the value written to:
-  /sys/fs/cgroup/memory/<grp>/memory.limit_in_bytes
-
-Signed-off-by: Shaun Tancheff <shaun.tancheff@hpe.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- mm/memcontrol.c | 84 ++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 83 insertions(+), 1 deletion(-)
+ .../bindings/iio/temperature/adi,ltc2983.yaml | 65 +++++++++++--------
+ 1 file changed, 38 insertions(+), 27 deletions(-)
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 5abffe6f8389..eec6e6ed92f8 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -73,6 +73,18 @@
+diff --git a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
+index f44fc32ce87e..e04f961ab92c 100644
+--- a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
++++ b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
+@@ -18,6 +18,28 @@ description: |
+   https://www.analog.com/media/en/technical-documentation/data-sheets/29861fa.pdf
+   https://www.analog.com/media/en/technical-documentation/data-sheets/ltm2985.pdf
  
- #include <trace/events/vmscan.h>
++$defs:
++  sensor-node:
++    type: object
++    description: Sensor node common constraints
++
++    properties:
++      reg:
++        description:
++          Channel number. Connects the sensor to the channel with this number
++          of the device.
++        minimum: 1
++        maximum: 20
++
++      adi,sensor-type:
++        description: Type of sensor connected to the device.
++        $ref: /schemas/types.yaml#/definitions/uint32
++
++    required:
++      - reg
++      - adi,sensor-type
++
++
+ properties:
+   compatible:
+     oneOf:
+@@ -64,28 +86,10 @@ properties:
+     const: 0
  
-+static unsigned int memcg_v1_min_default_percent;
-+module_param_named(memcg_min, memcg_v1_min_default_percent, uint, 0600);
-+MODULE_PARM_DESC(memcg_min, "memcg v1 min default percent");
+ patternProperties:
+-  "@([0-9a-f]+)$":
+-    type: object
+-    description: Sensor.
+-
+-    properties:
+-      reg:
+-        description:
+-          Channel number. Connects the sensor to the channel with this number
+-          of the device.
+-        minimum: 1
+-        maximum: 20
+-
+-      adi,sensor-type:
+-        description: Type of sensor connected to the device.
+-        $ref: /schemas/types.yaml#/definitions/uint32
+-
+-    required:
+-      - reg
+-      - adi,sensor-type
+-
+   "^thermocouple@":
+-    type: object
++    $ref: '#/$defs/sensor-node'
++    unevaluatedProperties: false
 +
-+static unsigned int memcg_v1_low_default_percent;
-+module_param_named(memcg_low, memcg_v1_low_default_percent, uint, 0600);
-+MODULE_PARM_DESC(memcg_low, "memcg v1 low default percent");
-+
-+static unsigned int memcg_v1_high_default_percent;
-+module_param_named(memcg_high, memcg_v1_high_default_percent, uint, 0600);
-+MODULE_PARM_DESC(memcg_high, "memcg v1 high default percent");
-+
- struct cgroup_subsys memory_cgrp_subsys __read_mostly;
- EXPORT_SYMBOL(memory_cgrp_subsys);
+     description: Thermocouple sensor.
  
-@@ -208,6 +220,7 @@ enum res_type {
- 	_MEMSWAP,
- 	_KMEM,
- 	_TCP,
-+	_MEM_V1,
- };
+     properties:
+@@ -141,7 +145,9 @@ patternProperties:
+             - adi,custom-thermocouple
  
- #define MEMFILE_PRIVATE(x, val)	((x) << 16 | (val))
-@@ -3689,6 +3702,9 @@ enum {
- 	RES_MAX_USAGE,
- 	RES_FAILCNT,
- 	RES_SOFT_LIMIT,
-+	RES_LIMIT_MIN,
-+	RES_LIMIT_LOW,
-+	RES_LIMIT_HIGH,
- };
+   "^diode@":
+-    type: object
++    $ref: '#/$defs/sensor-node'
++    unevaluatedProperties: false
++
+     description: Diode sensor.
  
- static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
-@@ -3699,6 +3715,7 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
+     properties:
+@@ -184,7 +190,8 @@ patternProperties:
+         default: 0
  
- 	switch (MEMFILE_TYPE(cft->private)) {
- 	case _MEM:
-+	case _MEM_V1:
- 		counter = &memcg->memory;
- 		break;
- 	case _MEMSWAP:
-@@ -3729,6 +3746,12 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
- 		return counter->failcnt;
- 	case RES_SOFT_LIMIT:
- 		return (u64)memcg->soft_limit * PAGE_SIZE;
-+	case RES_LIMIT_MIN:
-+		return (u64)READ_ONCE(memcg->memory.min);
-+	case RES_LIMIT_LOW:
-+		return (u64)READ_ONCE(memcg->memory.low);
-+	case RES_LIMIT_HIGH:
-+		return (u64)READ_ONCE(memcg->memory.high);
- 	default:
- 		BUG();
- 	}
-@@ -3828,6 +3851,35 @@ static int memcg_update_tcp_max(struct mem_cgroup *memcg, unsigned long max)
- 	return ret;
- }
+   "^rtd@":
+-    type: object
++    $ref: '#/$defs/sensor-node'
++    unevaluatedProperties: false
+     description: RTD sensor.
  
-+static inline void mem_cgroup_v1_set_defaults(struct mem_cgroup *memcg,
-+					       u64 nr_pages)
-+{
-+	u64 max = (u64)(PAGE_COUNTER_MAX * PAGE_SIZE) / PAGE_SIZE;
-+	u64 min, low, high;
-+
-+	if (mem_cgroup_is_root(memcg) || max == nr_pages)
-+		return;
-+
-+	min = READ_ONCE(memcg->memory.min);
-+	low = READ_ONCE(memcg->memory.low);
-+	if (min || low)
-+		return;
-+
-+	if (!min && memcg_v1_min_default_percent) {
-+		min = (nr_pages * memcg_v1_min_default_percent) / 100;
-+		page_counter_set_min(&memcg->memory, min);
-+	}
-+	if (!low && memcg_v1_low_default_percent) {
-+		low = (nr_pages * memcg_v1_low_default_percent) / 100;
-+		page_counter_set_low(&memcg->memory, low);
-+	}
-+	high = READ_ONCE(memcg->memory.high);
-+	if (high == PAGE_COUNTER_MAX && memcg_v1_high_default_percent) {
-+		high = (nr_pages * memcg_v1_high_default_percent) / 100;
-+		page_counter_set_high(&memcg->memory, high);
-+	}
-+}
-+
- /*
-  * The user of this function is...
-  * RES_LIMIT.
-@@ -3851,6 +3903,11 @@ static ssize_t mem_cgroup_write(struct kernfs_open_file *of,
- 			break;
- 		}
- 		switch (MEMFILE_TYPE(of_cft(of)->private)) {
-+		case _MEM_V1:
-+			ret = mem_cgroup_resize_max(memcg, nr_pages, false);
-+			if (!ret)
-+				mem_cgroup_v1_set_defaults(memcg, nr_pages);
-+			break;
- 		case _MEM:
- 			ret = mem_cgroup_resize_max(memcg, nr_pages, false);
- 			break;
-@@ -4999,6 +5056,13 @@ static int mem_cgroup_slab_show(struct seq_file *m, void *p)
- }
- #endif
+     properties:
+@@ -282,7 +289,8 @@ patternProperties:
+             - adi,custom-rtd
  
-+static ssize_t memory_min_write(struct kernfs_open_file *of,
-+				char *buf, size_t nbytes, loff_t off);
-+static ssize_t memory_low_write(struct kernfs_open_file *of,
-+				char *buf, size_t nbytes, loff_t off);
-+static ssize_t memory_high_write(struct kernfs_open_file *of,
-+				 char *buf, size_t nbytes, loff_t off);
-+
- static struct cftype mem_cgroup_legacy_files[] = {
- 	{
- 		.name = "usage_in_bytes",
-@@ -5013,10 +5077,28 @@ static struct cftype mem_cgroup_legacy_files[] = {
- 	},
- 	{
- 		.name = "limit_in_bytes",
--		.private = MEMFILE_PRIVATE(_MEM, RES_LIMIT),
-+		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT),
- 		.write = mem_cgroup_write,
- 		.read_u64 = mem_cgroup_read_u64,
- 	},
-+	{
-+		.name = "limit_in_bytes.min",
-+		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_MIN),
-+		.write = memory_min_write,
-+		.read_u64 = mem_cgroup_read_u64,
-+	},
-+	{
-+		.name = "limit_in_bytes.low",
-+		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_LOW),
-+		.write = memory_low_write,
-+		.read_u64 = mem_cgroup_read_u64,
-+	},
-+	{
-+		.name = "limit_in_bytes.high",
-+		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_HIGH),
-+		.write = memory_high_write,
-+		.read_u64 = mem_cgroup_read_u64,
-+	},
- 	{
- 		.name = "soft_limit_in_bytes",
- 		.private = MEMFILE_PRIVATE(_MEM, RES_SOFT_LIMIT),
+   "^thermistor@":
+-    type: object
++    $ref: '#/$defs/sensor-node'
++    unevaluatedProperties: false
+     description: Thermistor sensor.
+ 
+     properties:
+@@ -383,7 +391,8 @@ patternProperties:
+             - adi,custom-thermistor
+ 
+   "^adc@":
+-    type: object
++    $ref: '#/$defs/sensor-node'
++    unevaluatedProperties: false
+     description: Direct ADC sensor.
+ 
+     properties:
+@@ -397,7 +406,8 @@ patternProperties:
+         type: boolean
+ 
+   "^temp@":
+-    type: object
++    $ref: '#/$defs/sensor-node'
++    unevaluatedProperties: false
+     description: Active analog temperature sensor.
+ 
+     properties:
+@@ -426,7 +436,8 @@ patternProperties:
+       - adi,custom-temp
+ 
+   "^rsense@":
+-    type: object
++    $ref: '#/$defs/sensor-node'
++    unevaluatedProperties: false
+     description: Sense resistor sensor.
+ 
+     properties:
 -- 
-2.34.1
+2.39.2
 
