@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3156D5B06
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4046D5B08
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbjDDIjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 04:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S233882AbjDDIkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 04:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbjDDIjB (ORCPT
+        with ESMTP id S233526AbjDDIkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 04:39:01 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019321BE3;
-        Tue,  4 Apr 2023 01:38:57 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id x20so32957075ljq.9;
-        Tue, 04 Apr 2023 01:38:57 -0700 (PDT)
+        Tue, 4 Apr 2023 04:40:20 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5D91BE3;
+        Tue,  4 Apr 2023 01:40:18 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id w9so127445396edc.3;
+        Tue, 04 Apr 2023 01:40:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680597536;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MrdlODl0H5+PHsF6BIcaDQCeLLNaLHz3VtBPnGOz2PM=;
-        b=P0REh2WHl1EKDfiroTLCUjD8DYaPTCETRF2VE6q/v0KXm1MRsyL2PPEr8IZ1EyjEsJ
-         f3pvaaiZqU37OTrWSWjfughTHizj1fTrSP4rmWk3/HSpEpuUnuqR7ZWT84NFeh++RL8G
-         RYsROggoSa/r34SF2Zo+u5Fc2dZZc2OS5ap1g9ttg7gvSaZzrjzmYD+jc4dSkiWVvp43
-         28CTxNr2658fyb1Qzitz8a8VFRCQoD+jt5sQAhzYINMPMZH+i8zh/bk2dRp2diRjTeXQ
-         ZkwA5kOx7WGdVgf6lQJqMWTdRt6eNuDp+VqtLWpXmaS9vtKJFSqcNvUV5YqWxzk5JOm4
-         bvMg==
+        d=gmail.com; s=20210112; t=1680597616;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0g1zh4gal+KFE+knYqoXUdddS5/tpwNhgt+RevVrSxE=;
+        b=AU3CBFODpkyNLNVHkwO6BWoeZXz61njrlDJWOR0z8vx/+1PeusFEIkZFlLjasZ34aF
+         pCzYxERfZasTk2LuqmYCIoYSVE7EC5SzIW9qjqvPAJgGjZ/teLYf7pg3/Sj4I+PjQKBM
+         wOpOKcnHUWjbRM2m7OfDoK6EW88Boj2gRzGH57DYFfweSefpTP1MmvGTT4o1lUfiEERC
+         OmDuq7INpTgDveg5v/1KKaCMqnAD8+J0GpKoqS7YjBWo4h9Fl88YV0n9t2qO7nfrY6r4
+         N/a/IdDN5o5ZPUuFdifbwjU1Nv8fUGN14B+IXPJdDWx6fYWEzfAnZ4MPz11s8S6Te34O
+         MvqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680597536;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MrdlODl0H5+PHsF6BIcaDQCeLLNaLHz3VtBPnGOz2PM=;
-        b=RgDw9dv5jU/jf78Iaet+k7KwlhtuBZUc95TmOfOKd/IqihOG8+IguXHB3LeGJTJey4
-         750jKFMBhoGRMRwAEPNQJoSgo5L75jSsr34n62VPKh1AfYj03YF+3rJ7lwPRgFai0NQf
-         cZF3LqLTy7f6ZZP52qDl+DHVq71XUuxnIJRA6kBBW9FDH6inhjqJha2YbUr08VKVJic0
-         mrWeDi8v7nKEtsWprnOzl2Q/X81mKLmRx9Pk7GmmiMNCaldHYMfCIP2rOkpRLeuV8bgv
-         3Dho+i6urjPHHFpUTE2jc/cgjHEh5QxOG/R5x6JkiT5TV5SMPhAVgQOn8XVsCvZL6SX3
-         JqBw==
-X-Gm-Message-State: AAQBX9f46gc0TnuCEXpXLcgD7k/2sDQ3EnReKdDKeHTATN00trVxzKL1
-        XDtj4pNgmDsAz2JT1LLu/VqaTXTB4o2TmtPeUZk=
-X-Google-Smtp-Source: AKy350YRWO8o83HonQhxyVR1qlxipGouFXslbqo/1KCmYgWBSiIBPGp83XNapgz6XMi3g+DZj0t5McHHLhoEyS/hIwA=
-X-Received: by 2002:a2e:a307:0:b0:295:93eb:bab1 with SMTP id
- l7-20020a2ea307000000b0029593ebbab1mr743896lje.1.1680597536075; Tue, 04 Apr
- 2023 01:38:56 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680597616;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0g1zh4gal+KFE+knYqoXUdddS5/tpwNhgt+RevVrSxE=;
+        b=f5tHoXIjYgNdXOpk57j0eyKpDJIdcIa0Yq9bvSuJAq29DeZ5HO3yDMzI675GuBspsH
+         5dpyWMb4BhoVggSDJ5bt7WNaoRCwNsUm3vOQ4nnzKW+oygaEWQsCscgACtgWYbjgUG6I
+         MCu+n2yaZGg2Kaq0keRBb2V9az5Cl/xcYMLTNLdMwjULLlbPLNuyILTtWGyr8j3jGMJG
+         RRFd28Y72C9Z4+UhVs/mlNrk8cVRkPdwYUEQ2/k9NHY3OAz0rh8M6m96EzEfAwKkR39u
+         GcBA25ZvNTtMrXHPpEBZISe4ZmCvrIJUaB51SkoI6N5zVH1ai2Fu88TAiFIyy5sGhens
+         dXlA==
+X-Gm-Message-State: AAQBX9e2DQ3/LVmJN2hnjh6xz7Bz59GIaRd7DD+AfMrrEvikrVn4goNK
+        o9dmuJqpOvmtgLFra0yjujic+fukV3o7tQ8s
+X-Google-Smtp-Source: AKy350bbGCk0nU42wqlFMXm5MfKxnTxLJjembj7J7w4vX+oZfI09DyrsNhCV7y2GvSoXHbI0RR9r/A==
+X-Received: by 2002:a05:6402:2044:b0:501:d43e:d1e6 with SMTP id bc4-20020a056402204400b00501d43ed1e6mr2180381edb.4.1680597616461;
+        Tue, 04 Apr 2023 01:40:16 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id r19-20020a50c013000000b004fd29e87535sm5555239edb.14.2023.04.04.01.40.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 01:40:15 -0700 (PDT)
+Message-ID: <4235f3f7-bae5-1f5e-582e-077bc5d03306@gmail.com>
+Date:   Tue, 4 Apr 2023 16:40:01 +0800
 MIME-Version: 1.0
-References: <20230403175937.2842085-1-javierm@redhat.com> <3738011.44csPzL39Z@diego>
- <d7efebcc-5b5b-185e-bec8-b6b9d5d27d93@undef.tools> <87h6twdpi7.fsf@minerva.mail-host-address-is-not-set>
-In-Reply-To: <87h6twdpi7.fsf@minerva.mail-host-address-is-not-set>
-From:   Peter Robinson <pbrobinson@gmail.com>
-Date:   Tue, 4 Apr 2023 09:38:44 +0100
-Message-ID: <CALeDE9M4eNq1sfQ-UcNZr8naYThmLFxDpt=zj8WkCSzHPUY8ug@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: rockchip: Change serial baud rate for
- Pinephone Pro to 1.5 MB
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Jarrah <kernel@undef.tools>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        linux-kernel@vger.kernel.org, Caleb Connolly <kc@postmarketos.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martijn Braam <martijn@brixit.nl>, Ondrej Jirman <megi@xff.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH REBASED] KVM: x86: SVM: Fix one redefine issue about
+ VMCB_AVIC_APIC_BAR_MASK
+Content-Language: en-US
+To:     "Paolo Bonzini - Distinguished Engineer (kernel-recipes.org) (KVM HoF)" 
+        <pbonzini@redhat.com>, Xinghui Li <korantli@tencent.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        korantwork@gmail.com, seanjc@google.com, tglx@linutronix.de,
+        mingo@redhat.com, mlevitsk@redhat.com
+References: <20230403095200.1391782-1-korantwork@gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <20230403095200.1391782-1-korantwork@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 9:24=E2=80=AFAM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> Jarrah <kernel@undef.tools> writes:
->
-> > Hi,
-> >
-> > On 4/4/23 17:51, Heiko St=C3=BCbner wrote:
-> >> The interesting question is always if this will break someone else's s=
-etup.
-> >> I've never really understood the strange setting of 1.5MBps, but on th=
-e
-> >> other hand it _is_ a reality on most boards.
-> >>
-> >> Personally I don't care that much either way, but would like a comment
-> >> from the other people working on that device - if possible.
-> >
-> >
-> > I don't have a strong opinion either way, but I would note that
-> > Tow-Boot[0] which later models of this device ship with uses 115200,
-> > meaning that this would put the device out of sync with the default
-> > u-boot implementation from the factory.
-> >
->
-> Probably we can't change then because it would break the setup of people
-> using Tow-Boot as a bootloader.
->
-> > At least for me it's been convenient to have both the PP and PPP use th=
-e
-> > same settings while debugging.
-> >
->
-> Agreed, all my other boards use 115200 as well, the only exceptions are
-> the Rockpro64 and PinePhone Pro for me.
+On 3/4/2023 5:52 pm, korantwork@gmail.com wrote:
+> From: Xinghui Li <korantli@tencent.com>
+> 
+> VMCB_AVIC_APIC_BAR_MASK is defined twice with the same value in svm.h,
+> which is meaningless. Delete the duplicate one.
+> 
+> Fixes: 391503528257 ("KVM: x86: SVM: move avic definitions from AMD's spec to svm.h")
+> Signed-off-by: Xinghui Li <korantli@tencent.com>
 
-All Rockchips devices use 1.5m except a chromebook and the Puma, and
-this device.
+Reviewed-by: Like Xu <likexu@tencent.com>
+
+Do we have any tool to find out more similar issues across numerous subsystems ?
+
+> ---
+>   arch/x86/include/asm/svm.h | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+> index 770dcf75eaa9..e236b896f8b4 100644
+> --- a/arch/x86/include/asm/svm.h
+> +++ b/arch/x86/include/asm/svm.h
+> @@ -278,7 +278,6 @@ static_assert((AVIC_MAX_PHYSICAL_ID & AVIC_PHYSICAL_MAX_INDEX_MASK) == AVIC_MAX_
+>   static_assert((X2AVIC_MAX_PHYSICAL_ID & AVIC_PHYSICAL_MAX_INDEX_MASK) == X2AVIC_MAX_PHYSICAL_ID);
+>   
+>   #define AVIC_HPA_MASK	~((0xFFFULL << 52) | 0xFFF)
+> -#define VMCB_AVIC_APIC_BAR_MASK		0xFFFFFFFFFF000ULL
+>   
+>   
+>   struct vmcb_seg {
