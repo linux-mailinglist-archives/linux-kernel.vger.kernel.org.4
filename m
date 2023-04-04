@@ -2,51 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63D86D6E2E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9FD6D6E31
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236087AbjDDUki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 16:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
+        id S236164AbjDDUlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 16:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjDDUkf (ORCPT
+        with ESMTP id S229743AbjDDUlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 16:40:35 -0400
+        Tue, 4 Apr 2023 16:41:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8550035B1
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 13:40:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3AB4220
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 13:41:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 127BA63991
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 20:40:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71034C433D2;
-        Tue,  4 Apr 2023 20:40:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29FBB6399F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 20:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F91BC4339E
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 20:41:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680640833;
-        bh=GZzrd7gOa64jUTIaoFzxbHp98pGdRRFmB1z7I0zLUA0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=HFAZpygRHcIFM/maQyUZ3a+oraiiZQDkpB4gl8mwrnlo7CCTzuMakoTwL5XpBEdYz
-         c8RoE5bfUvqguQX/tU7u40iWQBQa/YLR3pF2dr7i7mZIh+SHe+P5FYP25QEeuuY4o7
-         Lx2Rq8HOODG98+jGE7tnpcUiCP1GM78VeDebe6s9bXzAkE4t3AvSsDqBguOSgJ6XMj
-         G5rqW2MuGOCtcUe1oYeq1s3+oNu4tLXhwnIL59+9sn/sLgPugpuXE9R5KFAnw28KAc
-         jczlyx8ump/BBAqcF+hF3ygvmn1ue7KdLXZDUNTqmJIbosQ2yy9G6m9DmpN5xC81VF
-         8ibuhwbm5GM4A==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 04D0015404B4; Tue,  4 Apr 2023 13:40:33 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 13:40:32 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux@weissschuh.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] tools/nolibc: add testcases for vfprintf
-Message-ID: <eec66609-4baa-4412-863e-5beb704982d2@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230402184806.12440-1-w@1wt.eu>
- <530708ce-92af-41ad-84da-a691a518852b@paulmck-laptop>
+        s=k20201202; t=1680640875;
+        bh=2L7K7JZ9AGmWjR6Gal62R9AiYNqUSYJgex9m0wAx9S0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PClS8jkRSpcvKV7sLWhskZgYJkw5W1WgqHnpGhGhk9EiHLdpk/UAJnbUywHwtnBrc
+         27UYdzDPU55rzQUJBnv/2RpJq2/+L8LRpfIQcFdtnjP7fEhLeKn/mpjHRhUIwLqqwp
+         MCT+CN0qE3/l/sNJZn6XK9bEdybugR3XncGNJeFX9CHJz1pnst4jMHDCgoHUrVVE7/
+         eyx8rkTCbc/hqu+73cYX9ItLGVmevlsSkokmFBxyhRaFQ0Ghzp7P/qWSog8+0vbQXk
+         ziaq1icJlYT499U5sdSat9Rhyt2tZJ+CsMA85oJYpxTvFlV6FuxN+lIs2qKtnlis+r
+         3nyYHAF2PNpww==
+Received: by mail-lf1-f54.google.com with SMTP id h11so36972300lfu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 13:41:15 -0700 (PDT)
+X-Gm-Message-State: AAQBX9dC3sOU0BmLT1QEFlGc2sN1BLYXleAewzMy/u3w9IZkEtLVW3TV
+        90U31EPUf0v+iaiok7J65gseonk2H8lg+PCBLhE=
+X-Google-Smtp-Source: AKy350bzfOXJoKaOVmVsaEmS2fKeO5rQ+REjpKtpc1GAYh6FsMYi6nsTQIR74ZXHXc5USiHHEpTphoaDjbXu4uvuPcc=
+X-Received: by 2002:ac2:4c89:0:b0:4db:1c2a:a96e with SMTP id
+ d9-20020ac24c89000000b004db1c2aa96emr1157988lfl.9.1680640873498; Tue, 04 Apr
+ 2023 13:41:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <530708ce-92af-41ad-84da-a691a518852b@paulmck-laptop>
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <cover.1680628986.git.thomas.lendacky@amd.com> <1d38d28c2731075d66ac65b56b813a138900f638.1680628986.git.thomas.lendacky@amd.com>
+ <20230404174506.pjdikxvk2fsyy4au@box.shutemov.name> <bc9e6d82-c7c1-47dc-e91f-57d9b4e2bb0a@intel.com>
+ <20230404180917.4fsgkzcdhqvph6io@box.shutemov.name> <CAMj1kXF0XyEOuSUDqgsLSYK8GSkGN1xK3RQ525+BxhG+7+vnCA@mail.gmail.com>
+ <20230404202445.6qkl7hz67qgievqz@box.shutemov.name>
+In-Reply-To: <20230404202445.6qkl7hz67qgievqz@box.shutemov.name>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 4 Apr 2023 22:41:02 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFrm74+zNcSpHJ1kw38PTMOFk1cTx_EAoGFHaG1fYzRTQ@mail.gmail.com>
+Message-ID: <CAMj1kXFrm74+zNcSpHJ1kw38PTMOFk1cTx_EAoGFHaG1fYzRTQ@mail.gmail.com>
+Subject: Re: [PATCH v7 6/6] x86/efi: Safely enable unaccepted memory in UEFI
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Min M. Xu" <min.m.xu@intel.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jiewen Yao <jiewen.yao@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -56,43 +81,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 02:24:04PM -0700, Paul E. McKenney wrote:
-> On Sun, Apr 02, 2023 at 08:48:02PM +0200, Willy Tarreau wrote:
-> > Hello Paul,
-> > 
-> > Thomas added new tests for vfprintf(), which is a good idea because it
-> > was a new implementation, we use it a lot in the tests so we'd rather
-> > make sure it works! This required to implement support for memfd_create()
-> > that is used to collect the output into a buffer, as well as to complete
-> > a little bit the minimalistic FILE emulation with fileno(), fdopen(),
-> > fflush() and fclose(). The result is neat and works equally on glibc and
-> > nolibc. We just had to cheat on the pointer test because for NULL nolibc
-> > prints "0x0" while glibc prints "(nil)" so we check 0x1 instead to avoid
-> > this special case.
-> > 
-> > Finally Thomas added a new target to the makefile to ease building the
-> > test against the default libc. This should help detect incompatibilities
-> > when new features are added.
-> > 
-> > I've tested it locally with my libc and against all supported architectures
-> > (userland tests only), and all tests passed.
-> > 
-> > This can be added to your dev tree for 6.5 on top of the previous series.
-> 
-> Looks like some useful code to make testing more comprehensive, thank
-> you both!  Queued and pushed.
+On Tue, 4 Apr 2023 at 22:24, Kirill A. Shutemov <kirill@shutemov.name> wrote:
+>
+> On Tue, Apr 04, 2023 at 09:49:52PM +0200, Ard Biesheuvel wrote:
+> > On Tue, 4 Apr 2023 at 20:09, Kirill A. Shutemov <kirill@shutemov.name> wrote:
+> > >
+> > > On Tue, Apr 04, 2023 at 10:57:52AM -0700, Dave Hansen wrote:
+> > > > On 4/4/23 10:45, Kirill A. Shutemov wrote:
+> > > > > I still think it is a bad idea.
+> > > > >
+> > > > > As I asked before, please include my
+> > > > >
+> > > > > Nacked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > > > >
+> > > > > into the patch.
+> > > >
+> > > > I was pretty opposed to this when I first saw it too.  But, Tom and
+> > > > company have worn down my opposition a bit.
+> > > >
+> > > > The fact is that we have upstream kernels out there with SEV-SNP support
+> > > > that don't know anything about unaccepted memory.  They're either
+> > > > relegated to using the pre-accepted memory (4GB??) or _some_ entity
+> > > > needs to accept the memory.  That entity obviously can't be the kernel
+> > > > unless we backport unaccepted memory support.
+> > > >
+> > > > This both lets the BIOS be the page-accepting entity _and_ allows the
+> > > > entity to delegate that to the kernel when it needs to.
+> > > >
+> > > > As much as I want to nak this and pretend that that those existing
+> > > > kernel's don't exist, my powers of self-delusion do have their limits.
+> > > >
+> > > > If our AMD friends don't do this, what is their alternative?
+> > >
+> > > The alternative is coordination on the host side: VMM can load a BIOS that
+> > > pre-accepts all memory if the kernel is older.
+> > >
+> >
+> > And how does one identify such a kernel? How does the VMM know which
+> > kernel the guest is going to load after it boots?
+>
+> VMM has to know what it is running. Yes, it is cumbersome. But enabling
+> phase for a feature is often rough. It will get smoother overtime.
+>
 
-And finally tested:
+So how does the VMM get informed about what it is running? How does it
+distinguish between kernels that support unaccepted memory and ones
+that don't? And how does it predict which kernel a guest is going to
+load?
 
-Kernel: arch/x86/boot/bzImage is ready  (#7)
-make[1]: Leaving directory '/home/git/linux-build'
-133 test(s) passed.
-
-  CC      nolibc-test
-133 test(s) passed.
-
-So good agreement between user and kernel, anyway.  Usermode tests
-note that two of the tests are skipped (chroot_root and link_blah).
-Kernelmode tests all say "[OK]".
-
-							Thanx, Paul
+If the solution you described many times addresses these questions,
+could you please share a link?
