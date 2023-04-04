@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451946D6A88
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0365B6D6A85
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236215AbjDDRZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
+        id S236156AbjDDRZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236227AbjDDRYI (ORCPT
+        with ESMTP id S236207AbjDDRX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:24:08 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C934655B4
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:23:20 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id ek18so133640288edb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:23:20 -0700 (PDT)
+        Tue, 4 Apr 2023 13:23:58 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802235FDF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:23:17 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id ek18so133640503edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:23:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680628996;
+        d=linaro.org; s=google; t=1680628997;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eFCSoVeAEvW5gqvvfyLsUBPVai0I20mD5NqsmqyKO4g=;
-        b=mVyLnmuqaNREuo9+slU9EpCW4KbVi+jpmRzd6bfeMDD4VX6qlkaxaDd0bwZSka5vvm
-         JR1FXxPwVzg4HhVd7cgVm64FcE6Znq+fNlRrGCw6pun4B4qnhYy0EzQZRfH7ARx/0+Rx
-         4j7tbMi0D7WrOfELszxamwDTPwtEmoCywcncKakPK4qYjZLID7kKaUZneHyIxrbhKeEd
-         D25qPg8DBmoLVxFDIiPvPrs1kGss4Px4YVjfphzvl9wZyfrTQkdRo6b79/Kx53L65ESH
-         JzjUuh0uXUcjtYyvNviSaojDqcOfDHvulJf+NBOr5rkIU1XiiKYagtqoil/nBD6KTtus
-         Pk6Q==
+        bh=sWNaFjjalHwpYTlFI10ff7cViPg4jdonFx6GrJYQjf8=;
+        b=qTt1wU5ZCDaAEz5fBVWHiMsHvtaUHaWDjMbKnjrfv95y8t6TugeagPxy+QM+fNLRrL
+         NOedmsRO1sTNoOD9WI4dfMw9hT7ShcSxr79ms6aH0zdwHcuGnf56fN+/nFvmtWAtK5Uq
+         tpaGZ+CAXBBqTB5L1rfgpwJ864/vZkwR/rM3g0E+TiyBmbElaHC2cOahEj2YesXiX/9G
+         7sn5xhW57/fw8Nu92zc9pg5rdgQWtOtArWFxvArSrKl/NJN3E0WHxrAJRf04PNKfBi25
+         MUgM0Q+ioBg7NFYWi+mGYhWGN3dXKvqTEQ7/m6nxZK7jSq//G7MQ+KMgka9YhpgzbWh9
+         /SMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680628996;
+        d=1e100.net; s=20210112; t=1680628997;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eFCSoVeAEvW5gqvvfyLsUBPVai0I20mD5NqsmqyKO4g=;
-        b=b27aGtY5BxP+TL5n1hyfofv1A1+1zxi9oLwD0t8eCBa2n0k4lItn2YNZJhghh0p7jN
-         8aMJSpWp5MZ4zZgy0zAyOZ+72Wejyrch2mnuxUjnbi7jhdaSrlPpEBBjEcww54Sz0goE
-         XmL7zAKmReqxurbcydhrYKlbLf0inL3jN7xP3AVdWbCWszDwwlQKpbNLk0JgtEj12TeQ
-         gu8LdvQMSmoZDHC9M96MX1RVjItPj/l0m5xdzJtJ0JJ9UwalNdCKwHXPC6CBn7e4u8be
-         PDuJCVY/SEv4c1PQiV+TAMMQebv7B8v2or2/cgND/ohiL+bxJ3HAs+6XnEXLKUPcq/E8
-         OIiA==
-X-Gm-Message-State: AAQBX9cJ7Sd6otsoGZb7fXh22rwwjBxjJ4DeG5xnTsx4LB6Fk9TgWZyQ
-        rSqZoB1BeaB+7jtqIw/bBByqAQ==
-X-Google-Smtp-Source: AKy350Z3dEzSmhm63+DEj4K065hahnDk2jWcYnRWk2BngeT47M+vGcI4GKSb2gYg5f5Ad+ukzVm5bw==
-X-Received: by 2002:a17:906:2b49:b0:939:e928:5323 with SMTP id b9-20020a1709062b4900b00939e9285323mr243457ejg.54.1680628995937;
-        Tue, 04 Apr 2023 10:23:15 -0700 (PDT)
+        bh=sWNaFjjalHwpYTlFI10ff7cViPg4jdonFx6GrJYQjf8=;
+        b=1v6CLKG824yo8iTnKp9JdAounemVmqRqCBeUUhdN1lsNXelUZ5HGOsBiPRZ3dl6Upa
+         eahPTcbhK8YassQB3M0kCzwkC83jO9l8+YQRwOn7ej11tF89p5eWIAocq775UvwcRN2z
+         +JWblSqSoS27PRcBnZIp0WZWF0MbHt2NBhZpwsrCppF0NHCSKjhgs9V5lC02F+LTBtaY
+         bjrFhWLZmQXmq4T1JHb/WjPwZgqDmWfEp0SXdWncOxcjSl7YBRid1C6iuCEjJTPy+iNP
+         6IoxdWKKH0hbGi4bnrc/X5psaMubjmaaB7a5Vp14SMwCygxTpJwRt2oXOZOl/YiVkVoP
+         bIeQ==
+X-Gm-Message-State: AAQBX9fhJYBQdqoNvOz7I38Ro7UlWwChET02UMIk1atMRbSaXVN+Pms2
+        3SGRz3gikpCfRhikT0ORWNfzoQ==
+X-Google-Smtp-Source: AKy350ZBRe4bdYk1W67YW57UF0cZmvQp8VXkUcHNgIADK+bT/Zd2bV+erfY6GpZ+e8KjuprszH1KXw==
+X-Received: by 2002:a17:907:9607:b0:930:3916:df19 with SMTP id gb7-20020a170907960700b009303916df19mr485434ejc.5.1680628997109;
+        Tue, 04 Apr 2023 10:23:17 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.23.14
+        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.23.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 10:23:15 -0700 (PDT)
+        Tue, 04 Apr 2023 10:23:16 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 39/40] nvmem: layouts: onie-tlv: Drop wrong module alias
-Date:   Tue,  4 Apr 2023 18:21:47 +0100
-Message-Id: <20230404172148.82422-40-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 40/40] nvmem: layouts: sl28vpd: set varaiable sl28vpd_layout storage-class-specifier to static
+Date:   Tue,  4 Apr 2023 18:21:48 +0100
+Message-Id: <20230404172148.82422-41-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
 References: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
@@ -72,27 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Tom Rix <trix@redhat.com>
 
-The MODULE_ALIAS macro is misused here as it carries the
-description. There is currently no relevant alias to provide so let's
-just drop it.
+smatch reports
+drivers/nvmem/layouts/sl28vpd.c:144:21: warning: symbol
+  'sl28vpd_layout' was not declared. Should it be static?
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+This variable is only used in one file so it should be static.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/layouts/onie-tlv.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/nvmem/layouts/sl28vpd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvmem/layouts/onie-tlv.c b/drivers/nvmem/layouts/onie-tlv.c
-index 661093de33b4..59fc87ccfcff 100644
---- a/drivers/nvmem/layouts/onie-tlv.c
-+++ b/drivers/nvmem/layouts/onie-tlv.c
-@@ -242,4 +242,3 @@ module_nvmem_layout_driver(onie_tlv_layout);
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Miquel Raynal <miquel.raynal@bootlin.com>");
- MODULE_DESCRIPTION("NVMEM layout driver for Onie TLV table parsing");
--MODULE_ALIAS("NVMEM layout driver for Onie TLV table parsing");
+diff --git a/drivers/nvmem/layouts/sl28vpd.c b/drivers/nvmem/layouts/sl28vpd.c
+index 9cc1715c2fd5..05671371f631 100644
+--- a/drivers/nvmem/layouts/sl28vpd.c
++++ b/drivers/nvmem/layouts/sl28vpd.c
+@@ -141,7 +141,7 @@ static const struct of_device_id sl28vpd_of_match_table[] = {
+ };
+ MODULE_DEVICE_TABLE(of, sl28vpd_of_match_table);
+ 
+-struct nvmem_layout sl28vpd_layout = {
++static struct nvmem_layout sl28vpd_layout = {
+ 	.name = "sl28-vpd",
+ 	.of_match_table = sl28vpd_of_match_table,
+ 	.add_cells = sl28vpd_add_cells,
 -- 
 2.25.1
 
