@@ -2,64 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDB86D6AB7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 618856D6ABC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236005AbjDDRgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
+        id S235420AbjDDRgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235833AbjDDRgE (ORCPT
+        with ESMTP id S234979AbjDDRgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:36:04 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852724216
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:35:38 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id h3so5634811qtu.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:35:38 -0700 (PDT)
+        Tue, 4 Apr 2023 13:36:36 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC6C5FD9;
+        Tue,  4 Apr 2023 10:36:14 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id ny16so923460qvb.4;
+        Tue, 04 Apr 2023 10:36:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1680629736;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R19pDDlxEBqwP4WCwxhzBg+mcLiYnMRVxRJpokPqHX4=;
-        b=bUUDxGt4LptYFJ32xj1qDLwvla/b4T89Nyh/qXyxss01mkOHxqUPLYtggziGR9z5Q6
-         rJsXskKlBIMEKAHdzj2dmQksxr7d2TO2h+CzeogS0ZwMrAQyNJQTF7RT1FoZX+KP0TOQ
-         uzKO5NKOnFcc+uVbVv/maP6fZCujH372RBHTs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680629736;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1680629773; x=1683221773;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R19pDDlxEBqwP4WCwxhzBg+mcLiYnMRVxRJpokPqHX4=;
-        b=2wDMcA8TxyiaQb5au6KNuNjVeiEyWeB3Im6nMmK2wM92CpMUnYxl11CwLJfLAvQDtI
-         yh/FbaJxI63Q68FdZUiijc7KcbBOGUxvFDESiwP6mm061bC2BdYCzJzxfTiiK+TIllGs
-         Bmgqb3COCbBekg55LmLtCF5TWn9zTiBKKmtnU/SqeSRtXecwvtRmzUf3wKaO7G3f7Y+u
-         RlVkKJi0nbYi4104HJSmBdHwZEN6hyip52ikKxvhwoqGAG8Ia15ULxTzKbjwx/u+6QWJ
-         xmkFAy65jN/wrv/wQoLx1oIctINs7iZI1QRT4B1V3a92iIGQbQpS0si3tyzXpowvNu7B
-         IjnQ==
-X-Gm-Message-State: AAQBX9fZnkmgS1c2YaohkCTNLxiI/owWzE8FYGX1Zz60Gh6Kx4tpDa7N
-        Xn2fS7TSpUxtCB72q3zG1LizqxAXNa90uyROukg=
-X-Google-Smtp-Source: AKy350ajeyotBg9jvJBOVc1c8jIKI7pCvJuNqMmFFCwaJbU2MxjtKJDIHg1k8WCl321CX9d1PRQx/A==
-X-Received: by 2002:a05:622a:110f:b0:3bd:1a4f:96b5 with SMTP id e15-20020a05622a110f00b003bd1a4f96b5mr307410qty.47.1680629736272;
-        Tue, 04 Apr 2023 10:35:36 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-7.dsl.bell.ca. [209.226.106.7])
-        by smtp.gmail.com with ESMTPSA id m17-20020ae9e011000000b00746b2ca65edsm3702859qkk.75.2023.04.04.10.35.35
+        bh=4Z1DSaq3VFchGKzMkuppKkMuZ02nBNd6ugtDdxGTU1k=;
+        b=f5gX2wkqrAoiMblcAQuuJb8lAFGg23a2sQHkp6HtVaJg8FDt2ejL5nTg1wHkUJvrui
+         jaaEEnLdaxr69bom2j9BD9wRgQgSArQP7KUL22iOL2NM0bGEsqBXBZoWgyeNW0KpnlVq
+         SMjoGHIMxlFjMmWnwdLP0cisFpmszR0uefaLEboVei3ol7U8Jp3PmQRh091YPdIvxgol
+         4Kled2XQqKbOunVH9s6yqb8iQbezNK7IJUKeSSWqqmzsoP8AF9wHC1hhM0IijQXpG3oy
+         ATKK/WTaFZGvkz26pkXdfYEjGwkkH2dWTsgLjOINF2TZHj3Z3qLrFIqs9JEP+DqBHFS3
+         aTMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680629773; x=1683221773;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4Z1DSaq3VFchGKzMkuppKkMuZ02nBNd6ugtDdxGTU1k=;
+        b=q6HGaXmPQEYOnJB4/pQPqMimABzl76TrYq3+uAdFR6nTRK1phKJoQtDmV2LXxxnAXm
+         I5gyfJJ/rk4VRHpXrhlDADzgbJSQUequqiRGgO3iGbwkiKb0RYcmlWWcLqM8NnpBOUlT
+         2F/XClj9MYe8mYc6LsIMyaZYPIeN6tcnY3rNliEbvILTh0/VzULwrCd0aDyki+36y3Vn
+         Nj7rq5h/I9bcVWrNqChatfO9IlqG8asWQTSV4Lfzm0LJm/eXar6R6f2poOyQ5zdbgcr7
+         ly4wIdVc9dJEjVyuesfpsJIg7/1ARu3u/8CcD+xUXREqVULs+hPQF4C0D46s4MrifWDE
+         csoQ==
+X-Gm-Message-State: AAQBX9fyVrqRmCFI2226+X6El2l9En2HEx1mSYcqr9+vrrbbC0JXfs28
+        TbxFNT9K0BqJEXbLmX3/xDY=
+X-Google-Smtp-Source: AKy350Z23k8fMVTzMdrsIJFMN4WdkO04DiDvcgHJCEHpVKeNB/JKhOJwLjldeAZHPeYbENi695HiOA==
+X-Received: by 2002:a05:6214:e6b:b0:5ba:852:272c with SMTP id jz11-20020a0562140e6b00b005ba0852272cmr4398157qvb.8.1680629773236;
+        Tue, 04 Apr 2023 10:36:13 -0700 (PDT)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id kr22-20020a0562142b9600b005e45f6cb74bsm836386qvb.79.2023.04.04.10.36.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 10:35:35 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 13:35:34 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     "Artem S. Tashkinov" <aros@gmx.com>
-Cc:     workflows@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Introducing bugbot
-Message-ID: <20230404-uncrown-detonate-8bc1ac@meerkat>
-References: <gmnswy45efztvcyc3xqymm52h7cdfwjz64go2wy3zyeqcqwb76@36fva4hyip4q>
- <022e2ef8-2a94-3109-ab90-9ee980915887@gmx.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <022e2ef8-2a94-3109-ab90-9ee980915887@gmx.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Tue, 04 Apr 2023 10:36:12 -0700 (PDT)
+Date:   Tue, 04 Apr 2023 13:36:12 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     David Howells <dhowells@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Message-ID: <642c600c428d2_339347208d8@willemb.c.googlers.com.notmuch>
+In-Reply-To: <2688906.1680628610@warthog.procyon.org.uk>
+References: <642c5731a7cc5_337e2c208b0@willemb.c.googlers.com.notmuch>
+ <642ad8b66acfe_302ae1208e7@willemb.c.googlers.com.notmuch>
+ <64299af9e8861_2d2a20208e6@willemb.c.googlers.com.notmuch>
+ <20230331160914.1608208-1-dhowells@redhat.com>
+ <20230331160914.1608208-16-dhowells@redhat.com>
+ <1818504.1680515446@warthog.procyon.org.uk>
+ <2258798.1680559496@warthog.procyon.org.uk>
+ <2688906.1680628610@warthog.procyon.org.uk>
+Subject: Re: [PATCH v3 15/55] ip, udp: Support MSG_SPLICE_PAGES
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,33 +92,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 04:16:08PM +0000, Artem S. Tashkinov wrote:
-> I love everything about what you've done except I've got a minor feature
-> request for the kernel bugzilla and this new workflow specifically.
-
-Great to hear.
-
-> Let's have a bot which polls open bug reports every 3-6 months with this
-> question:
+David Howells wrote:
+> Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
 > 
-> "Is this still an issue in the current kernel? Please leave a comment or
-> this bug report will be closed due to inactivity".
-
-I plan to do it slightly differently -- there will be a "housekeeping" command
-running daily that will auto-close bugs that haven't seen any activity for a
-defined period (90 days, for example), with a message like:
-
-"This bug is now closed due to inactivity. Please reopen if this issue is
-still relevant with the latest kernel version."
-
-> By doing this we could make the bugzilla a whole more relevant and effective
-> tool instead of having a ton of bug reports no one cares about or can even
-> confirm.
+> > > Okay.  How about the attached?  This seems to work.  Just setting "paged" to
+> > > true seems to do the right thing in __ip_append_data() when allocating /
+> > > setting up the skbuff, and then __ip_splice_pages() is called to add the
+> > > pages.
+> > 
+> > If this works, much preferred. Looks great to me.
 > 
-> I would only exclude the bug reports of type "Enhancement".
+> :-)
+> 
+> > As said, then __ip_splice_pages() probably no longer needs the
+> > preamble to copy initial header bytes.
+> 
+> Sorry, what?  It only attaches pages extracted from the iterator.
 
-I wouldn't, because these aren't bugs and shouldn't be filed in bugzilla. I
-would just advise the person who opened the bug where they should send an
-email with their ideas and then close with "RESOLVED/MOVED".
-
--K
+Ehm indeed. Never mind.
