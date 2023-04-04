@@ -2,111 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F026D6A7F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F310F6D6A53
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236270AbjDDRYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S235966AbjDDRVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236118AbjDDRXv (ORCPT
+        with ESMTP id S235916AbjDDRVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:23:51 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB1D525D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:23:07 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id cn12so133624026edb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:23:07 -0700 (PDT)
+        Tue, 4 Apr 2023 13:21:48 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C34F9;
+        Tue,  4 Apr 2023 10:21:43 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so34713459pjb.0;
+        Tue, 04 Apr 2023 10:21:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680628986;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uvAzoe1b3cbHk9YpQHH8E4MaQt9Ov/zayig/gEAkSYY=;
-        b=FejMfnLgJLRtcGzWR6AUIdcnn41XEKgD68h25XfjtAKnbiIwJV1bm5ynjnN/2rRfuW
-         ipuIi+JZZqMRx35LuiihXedJpHzuELyijxgAFyy+SSWwnSm5GFH1R+g6Gwi7cBZTH+e1
-         LwrGtZrlKgqZIHXqBD3ZJghrj3vtzkdQxSCmpCbPWQmXbFH+uTRyWioM53z5CbydYaXM
-         zWbz7fWoO8Un2B7IG4tgSu+KxfvQ6+l/JFy+wTlqZKQE35vJYdzaSkchiKf5JcJpdwHx
-         oUw1pMmPYaiwpT0MQ1tZBdNueJcg7J4rgNIkDpa3RcwhALp+rXKNI8NoyccXvcJrjx4T
-         /UoQ==
+        d=gmail.com; s=20210112; t=1680628902; x=1683220902;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZiBMCUFMw1ZDjB+YrQkeZxAt4DJ2+vedDb0Fa2LgdvQ=;
+        b=kGCKFdF1iNrmyIH2cBWz0Q7pkjddKmSppklppuCOY8LbV7b69uEhrel4aS+73Uy+E0
+         9LB5IUGOHpJL40tPrbFJs//NQGHzk65YP6fETCejP1/st7X4HqTFMWM9q5f10ALilMuU
+         NbTqoqFNC7JvmY4P+uc+O+ivIWaW1DLEyY5pOjNoaZehIgXEw46g51nYiiap7vXO1B/N
+         fTmXo9/GYEoNAWhvbm/tkVafIvAY1kIXbEROuibRmmkhQtQKsyQDP8BMdk3fd40vqbYV
+         wfNOPHNo0w6qejQr5c3qwFRTvyJxSeeK4XhzZx6sRmU9x25wfrO1DEJGh7Ezve1fb+ih
+         9VgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680628986;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uvAzoe1b3cbHk9YpQHH8E4MaQt9Ov/zayig/gEAkSYY=;
-        b=42B8w2qi1z4GpHcDkYQQuxHWeMYXr70VwqMV4rHsCRxQbp5MrCxKjc9ewLuxRMxUsM
-         3DJdssdMHVbAii4INPiZJDSNUzrcAdW2WZDni5YznR5YDjbAhcAJv5gEOx4pZZ7eCEJU
-         SFbp/lHBtqXkI4tTTXAVgcZOb012tW5bHB1SR+QO9ySeQFd3vPSeYfMicCWfXwLH8ReT
-         xh2yqsJw4f3XMfsJl691XLIJWMqpNigIGSgouW09V6yuOFY+yu35mgHeaTutB9LxM9E0
-         i7HgAP/I3AGws1VwsHPE3G3y5QW0VvLF4ISDVkMxgF/V/0HTFBi8tgdxzsAkxJot0hsA
-         m6rw==
-X-Gm-Message-State: AAQBX9c9ecZE9PCcgFgYWfor26RQ6kL4BIhl/INwcwyQO76YpD/j3dtO
-        +VxFpI78nKS1YF4AW86qgrgBeA==
-X-Google-Smtp-Source: AKy350a7ukTbSV4sHBKuqpeH7f3yaADFNC85upAJVD0nscoxc1trtoS1mW16cVomAIS5crwk+TsVig==
-X-Received: by 2002:a17:906:c253:b0:88c:6345:d0e7 with SMTP id bl19-20020a170906c25300b0088c6345d0e7mr330912ejb.36.1680628985932;
-        Tue, 04 Apr 2023 10:23:05 -0700 (PDT)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.23.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 10:23:05 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 31/40] nvmem: nintendo-otp: Use devm_platform_ioremap_resource()
-Date:   Tue,  4 Apr 2023 18:21:39 +0100
-Message-Id: <20230404172148.82422-32-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
-References: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
+        d=1e100.net; s=20210112; t=1680628902; x=1683220902;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZiBMCUFMw1ZDjB+YrQkeZxAt4DJ2+vedDb0Fa2LgdvQ=;
+        b=2j0RBT+UTzAM8l42ExVcak3ZIz869YiceVn+4B0/H7rBkTwIbV7N8lfQjBgnWUB1TN
+         NlR13rv/nswtaGpBBtzXtAg+08b+WlTg6DjI2ppW+yv+RAbYXrddhki9iWKYCRXQijDh
+         SnVvAMcj3WMlCiay0tzLXVoID8vLbYTxI48c//XXhnupHz4MQCEN6I/oT3H3xiUUcCFl
+         fniWkoLAGSQ1DenBwkz9CKGWF64SwRMTcFD67K0djGVxBzXdpBbVqq6XHp/uOlZ576wx
+         26gxTvx6i41OcRHarndRMzVkMdEQo9JB2I9bULYYXQakLFfeBs/UcstUlqEuJUD4qM/s
+         XITw==
+X-Gm-Message-State: AAQBX9eRxtOPH8snjRdihmE+Obj8WAeMMP3ahSy+nq3Hfs2zmqm4rD1A
+        PA2Mqpi9ne30aM1wGndpEmE=
+X-Google-Smtp-Source: AKy350aVMal1RU9eiSmBLW0rJxH/MrWDy+/ZJBHjFSrh5IJ8d5fjaHlNLVfbMVxA5NfnCN2G7OkWZw==
+X-Received: by 2002:a17:902:e353:b0:1a0:428b:d8c5 with SMTP id p19-20020a170902e35300b001a0428bd8c5mr2914493plc.45.1680628902448;
+        Tue, 04 Apr 2023 10:21:42 -0700 (PDT)
+Received: from [10.69.71.131] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id g14-20020a1709029f8e00b00198b01b412csm8544231plq.303.2023.04.04.10.21.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 10:21:41 -0700 (PDT)
+Message-ID: <052a7a73-ea48-a4ff-f8cb-b30a40ac4b70@gmail.com>
+Date:   Tue, 4 Apr 2023 10:21:39 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 5.4 000/104] 5.4.240-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230403140403.549815164@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230403140403.549815164@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Li <yang.lee@linux.alibaba.com>
 
-According to commit 7945f929f1a7 ("drivers: provide
-devm_platform_ioremap_resource()"), convert platform_get_resource(),
-devm_ioremap_resource() to a single call to use
-devm_platform_ioremap_resource(), as this is exactly what this function
-does.
 
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- drivers/nvmem/nintendo-otp.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On 4/3/2023 7:07 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.240 release.
+> There are 104 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.240-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-diff --git a/drivers/nvmem/nintendo-otp.c b/drivers/nvmem/nintendo-otp.c
-index 33961b17f9f1..355e7f1fc6d5 100644
---- a/drivers/nvmem/nintendo-otp.c
-+++ b/drivers/nvmem/nintendo-otp.c
-@@ -76,7 +76,6 @@ static int nintendo_otp_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	const struct of_device_id *of_id =
- 		of_match_device(nintendo_otp_of_table, dev);
--	struct resource *res;
- 	struct nvmem_device *nvmem;
- 	struct nintendo_otp_priv *priv;
- 
-@@ -92,8 +91,7 @@ static int nintendo_otp_probe(struct platform_device *pdev)
- 	if (!priv)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	priv->regs = devm_ioremap_resource(dev, res);
-+	priv->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(priv->regs))
- 		return PTR_ERR(priv->regs);
- 
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.25.1
-
+Florian
