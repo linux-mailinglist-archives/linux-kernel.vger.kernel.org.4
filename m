@@ -2,149 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0EA6D61C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9125B6D61C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234433AbjDDNAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S234588AbjDDNBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234191AbjDDM77 (ORCPT
+        with ESMTP id S234504AbjDDNB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:59:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B9E1722
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:59:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50B306327D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:59:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5A6FC433D2;
-        Tue,  4 Apr 2023 12:59:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680613197;
-        bh=fodprQ7jZamAExd0tbBd2YeF/mqBlgT3HS3YDEqP/l4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GsdaYq2XFlMx+HRvmxtB553rQGPAFzIitFwP2bR8792kgZHHJkKIDD1tuvAOo3mAq
-         9G5Y6RynxSl++UooCpq+Rnwf7wHwZgkaruW/hmNK7CqH07UAEdkZFT2zgsJmQkZJdL
-         uGYXGTgCHMnoTe6shJjfAY4kge5cr2rQHKbrCiWKGGXH310ZWRySsDTNEvi7Sdcf4t
-         dmEj3sLy1XlR5OifDfOgkFItqtFvvVt26ulD1Bmj0NjETRNvw6e7S3+GwqkQzNZKB0
-         ymTqu+9LLL/Jz9lZeliGLQ+3lqksloFK3c4mOmz3Z9wqFsuLEPaBtVXEoUTrxQgEek
-         TJbj10D5cC+Dw==
-Message-ID: <87cc8d92-0345-bc4b-60e8-1ca016691371@kernel.org>
-Date:   Tue, 4 Apr 2023 15:59:53 +0300
+        Tue, 4 Apr 2023 09:01:29 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114221BC7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:01:28 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id e12so23213752uaa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 06:01:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680613287;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AKuT2jdlAG+SgHXtPwT8kZwDya2VIJf4E3a+udNrV1U=;
+        b=UVu37TzURWNtOLler24i+dYYA6JmTJHIBsMzMcAxh+2FFaw06F+PKN4gICXbWGrAhT
+         aYUR7CT0QjUMik+CvKtNvuLcV0JIFV1Esdb35EIU5bXYVOEiZAT/sRHCJDqwjPHLRZk1
+         gnb3FKzHoB3mvBEmHXANFTaRalrPYLFOeWe/tRkoVUjaKKdURnI/Sfoywtj+qiumn6JQ
+         5b5cx0l6AtytMhl9cPSSd6Wm4wAjP6Ef2sHeZh7r0qXIv80fWcPmIN7wLRCxVpMJTg0D
+         1gJCfA5e6b6pSYKdy0UOvzG0EzCjbhyDsRqZCZw276sCXYdVHYG6x7t+OEVqQCiM14N9
+         LG9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680613287;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AKuT2jdlAG+SgHXtPwT8kZwDya2VIJf4E3a+udNrV1U=;
+        b=oSOnQncRM3VxZT3XI1qO4PoBSSnY4sHq1y+0FrzePunMGmeuOxSUqg40jzG/91xuG9
+         XbuA/NyQucmLsNEdSghlk4+lESo2JsZ3MLyMCusX0jf8g/EwH3QEte2EngCfS01d1BS8
+         VVqQpG1T5acRE3i6WdxR1DycpKWJkZNN5xbXT8qugeuDrw2RuRa5Fic1vSo6UGlaKY4/
+         cCeINFBRw4cpKMVfYk5rDM5+wuldE/HOUFXwe8qsAPGKjki7kppk6zTRTMBFfrQEAfce
+         zdR1cAb+bb1fF7OZihCz3UJpzS4v4UxDXRqqV+AYYJ97ptSvyBunRtJtivIi90viI8Td
+         /X9w==
+X-Gm-Message-State: AAQBX9fcFsrmU8J2/cTZLrkAi9VHfEO+Q0iENiyW7WBhcGwa9CgXLKbw
+        kc+dTppufq4kYDqkQ1mxHP97JhHsdbef2dvOPSZnOg==
+X-Google-Smtp-Source: AKy350ZpaUQox2idaCi2bd7ek2lLeGMJEmRBZJpd+DvuzTfp0Jexh82Kfp6VQxs8ZCtJIMUzcUlSwJtwx2rOxZoLa9g=
+X-Received: by 2002:a1f:90c9:0:b0:43c:6ef1:7116 with SMTP id
+ s192-20020a1f90c9000000b0043c6ef17116mr2183840vkd.0.1680613286831; Tue, 04
+ Apr 2023 06:01:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] ARM: multi_v7_defconfig: make USB_DWC3 as a module
- instead of built-in
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Nishanth Menon <nm@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>
-References: <20230404084259.13752-1-rogerq@kernel.org>
- <283f8f4c-9f8d-48b1-b161-3b712104583b@app.fastmail.com>
- <0ffa9690-9709-669c-b44d-dbb93446ec95@linaro.org>
- <076b5775-18eb-05b3-b803-c54420b3e5fe@kernel.org>
- <08b12571-5ca6-4e3d-8c56-5fc48827d17a@app.fastmail.com>
-Content-Language: en-US
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <08b12571-5ca6-4e3d-8c56-5fc48827d17a@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230403140415.090615502@linuxfoundation.org>
+In-Reply-To: <20230403140415.090615502@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 4 Apr 2023 18:31:15 +0530
+Message-ID: <CA+G9fYsjKH8SqfNwaa0grQjaB2KbaJCTmMAzuxdLLKiK_qA5Zg@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/181] 6.1.23-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 3 Apr 2023 at 20:05, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.23 release.
+> There are 181 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.23-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
-On 04/04/2023 15:14, Arnd Bergmann wrote:
-> On Tue, Apr 4, 2023, at 13:46, Roger Quadros wrote:
->> On 04/04/2023 13:01, Krzysztof Kozlowski wrote:
->>> On 04/04/2023 10:51, Arnd Bergmann wrote:
->>>> On Tue, Apr 4, 2023, at 10:42, Roger Quadros wrote:
->>>>> USB_DWC3 is not required for boot on most platforms make it
->>>>> as a module instead of built-in.
->>>>>
->>>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->>>>> ---
->>>>
->>>> Does this save a significant amount of vmlinux size? Since this
->>
->> vmlinux size reduces by ~529KB
-> 
-> That seems really high, so I had a look at what's going on.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-It was based on the configuration we are using at TI.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-(as built-in)
+## Build
+* kernel: 6.1.23-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: 01cd0041b7a5a573cba99332d1c30a82999d7fc1
+* git describe: v6.1.22-182-g01cd0041b7a5
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
+2-182-g01cd0041b7a5
 
-$ size vmlinux
-   text	   data	    bss	    dec	    hex	filename
-14616949	5285870	 491776	20394595	1373263	vmlinux
-$ ls -l vmlinux
--rwxrwxr-x 1 roger roger 120866544 Apr  4 15:54 vmlinux
+## Test Regressions (compared to v6.1.22)
 
-(as module)
+## Metric Regressions (compared to v6.1.22)
 
-$ size vmlinux
-   text	   data	    bss	    dec	    hex	filename
-14550571	5258106	 491776	20300453	135c2a5	vmlinux
-$ ls -l vmlinux
--rwxrwxr-x 1 roger roger 120324528 Apr  4 15:52 vmlinux
+## Test Fixes (compared to v6.1.22)
 
+## Metric Fixes (compared to v6.1.22)
 
-$ diff built-in-config module-config
-5547c5547
-< CONFIG_USB_XHCI_PLATFORM=y
----
-> CONFIG_USB_XHCI_PLATFORM=m
-5614c5614
-< CONFIG_USB_DWC3=y
----
-> CONFIG_USB_DWC3=m
+## Test result summary
+total: 168890, pass: 147321, fail: 4018, skip: 17196, xfail: 355
 
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 149 total, 148 passed, 1 failed
+* arm64: 52 total, 51 passed, 1 failed
+* i386: 39 total, 36 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 36 passed, 2 failed
+* riscv: 16 total, 15 passed, 1 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 44 total, 44 passed, 0 failed
 
-> 
-> Testing this on multi_v7_defconfig with gcc-13, I only see
-> 163KB difference in (uncompressed) vmlinux file size, or 140KB
-> in the output of 'size vmlinux'. This still seems high, and
-> looking more closely I find that a lot of that is for either
-> Gadget mode or debugfs, while the driver itself is not all
-> that big (most of the host logic is in the xhci driver).
-> 
-> Turning off gadget mode altogether would save 248KB
-> in 'size vmlinux' output, but would also prevent us
-> from enabling gadget driver modules, which is not great
-> either.
-> 
-> I tried setting CONFIG_USB_GADGET=m, but that makes
-> DWC3 and DWC2 host-only and turns CHIPIDEA into a loadable
-> module, so we probably don't want to do that either:
-> 
-> -CONFIG_USB_EHCI_HCD_OMAP=y
-> +CONFIG_USB_EHCI_HCD_OMAP=m
-> -CONFIG_USB_DWC3_DUAL_ROLE=y
-> +CONFIG_USB_DWC3_HOST=y
-> +CONFIG_USB_DWC2_HOST=y
-> -CONFIG_USB_DWC2_DUAL_ROLE=y
-> -CONFIG_USB_CHIPIDEA=y
-> +CONFIG_USB_CHIPIDEA=m
-> -CONFIG_USB_ISP1761_UDC=y
-> -CONFIG_USB_ISP1760_DUAL_ROLE=y
-> +CONFIG_USB_ISP1760_HOST_ROLE=y
-> 
->     Arnd
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
 
-cheers,
--roger
+--
+Linaro LKFT
+https://lkft.linaro.org
