@@ -2,107 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FCD6D55C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 03:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DCC6D55C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 03:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbjDDBPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 21:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
+        id S229596AbjDDBQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 21:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjDDBPw (ORCPT
+        with ESMTP id S232367AbjDDBQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 21:15:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C72B2101
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 18:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680570905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=TSYL1BZlYm691L/hIPylGQ0hs5V7ipUIWqwof30ZZdE=;
-        b=Slp+ZmmxIEDJw0dr0arbVUIE1OnkMz8AO1nnPczt90VgwHCDQVHIeLgT9VaQ+yyt3QDpq4
-        i/ehpGXPL1Gi9SMPt3fkWPaMwpA1hHKKxhhWtXH58EX5YfT59+gfZreqDzAsgIz640V1XE
-        MRT4l5TWfCzGKrZjnTFePI5eVWRFPdc=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-557-o9oh0XNzNPOGHEQiieFzng-1; Mon, 03 Apr 2023 21:15:04 -0400
-X-MC-Unique: o9oh0XNzNPOGHEQiieFzng-1
-Received: by mail-qv1-f71.google.com with SMTP id a10-20020a0ccdca000000b005d70160fbb0so13878725qvn.21
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 18:15:04 -0700 (PDT)
+        Mon, 3 Apr 2023 21:16:40 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4D53A88
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 18:16:39 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id j7so37010125ybg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 18:16:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1680570998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vGiaFksFSaheeSde0BsYTvnZXngn5YeoDcWA6oijxt8=;
+        b=t8qU/g36MbxLbPDs4ovoSBWkfgEBYQsmo/Ey66cg9lK/ctcGz2JTsub5bp+p1Z8UKD
+         t5BguesPm9phjiPnPDGW2MZhO20R6cJf4JOZpk8p1KkRhPnrp5ObFWWzmCoSYZktljwe
+         SCY644kOkNA+AAoYKMxlOhmzDfiWhb8Ir8AXg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680570903;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TSYL1BZlYm691L/hIPylGQ0hs5V7ipUIWqwof30ZZdE=;
-        b=fMDpgB1aFU7VLvAWwBUT8ulLeUfmsYfNwVRfLdD8X8e+iKNP4fsRmo6tCVenHfqhUW
-         QpC3YcF/qumZ5Avv+n0Z5fVRz0UY6XIDnuRVw+sZI9YHh23fx3lvwqlf2NUeoSIbC1Sc
-         m8K9qzvedN2ZClOaRe7d1bxY1+vusc/R9IgmN0UGINcp5ITtzySSVwhU1iinXfr9QH2X
-         zzTd7cMjtLS/R6gKgur8E8Yb0wKIQwvnlzZMMUcvfFDWCKqNe0Bj1CrlsHsEI9RYyTwT
-         gPNu8iZFdCZwjTbNo2Epdi07zZ3c12m+7TmmhKKQwuyqmfrPa2cdyivTxcmPAFYIwSvI
-         7hjg==
-X-Gm-Message-State: AAQBX9fY44pRWqLLktFN6IUWQiNre4+MqaNNS2QFOIgdlWccB6BCvaJD
-        YtiEi9ilcYLVi9R63mc2sRo8udEhpld35aDNrf0CLsDjHEnclwEGuri2freKqzVALc5dFNvODml
-        s1n/rMwJ1rPmm9lA3Mho1Ery9
-X-Received: by 2002:a05:622a:38a:b0:3e4:ee22:a50e with SMTP id j10-20020a05622a038a00b003e4ee22a50emr964225qtx.7.1680570903644;
-        Mon, 03 Apr 2023 18:15:03 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YsLbWLWr5isuULSaje0HfJTg3w21vMJIabPGBUBuVjvosJ9+6FCPfpIcKBSdDq3UYLsgnu6A==
-X-Received: by 2002:a05:622a:38a:b0:3e4:ee22:a50e with SMTP id j10-20020a05622a038a00b003e4ee22a50emr964205qtx.7.1680570903369;
-        Mon, 03 Apr 2023 18:15:03 -0700 (PDT)
-Received: from x1.. (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id o26-20020ac841da000000b003de4e646d63sm2919574qtm.32.2023.04.03.18.15.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 18:15:02 -0700 (PDT)
-From:   Brian Masney <bmasney@redhat.com>
-To:     jic23@kernel.org
-Cc:     andriy.shevchenko@linux.intel.com, trix@redhat.com,
-        lars@metafoo.de, nathan@kernel.org, ndesaulniers@google.com,
-        u.kleine-koenig@pengutronix.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hslester96@gmail.com
-Subject: [PATCH] iio: light: tsl2772: fix reading proximity-diodes from device tree
-Date:   Mon,  3 Apr 2023 21:14:55 -0400
-Message-Id: <20230404011455.339454-1-bmasney@redhat.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1680570998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vGiaFksFSaheeSde0BsYTvnZXngn5YeoDcWA6oijxt8=;
+        b=eDVnVISY10GCT3Bxe2NIW+gRETHhgIQCb1XrazkGqC/JaDPmk6Wha4FxgWZxFbwaOn
+         R7j3wdEDpwgj1jlN/RnmPSlIjamuFc1E5MdftprSAlDbRvVGr46RrjlOjkzwL+4eeUnx
+         qwXt+wiEehyhFinx5N19sEWIAYNi3JqAKgs+Qul1EBw0RJ4bOmCjD4srYcws8xycEg8l
+         4A7fROTfWFRQQBy7eU7CfQyXztYiufr94fEaFrc0VhJzQct9dQBzl28g5Pnf0ndjwHna
+         M9Zppvbj/kKR2JU7DvrRxBgOhbZyi0N3RWmhcUaJmCKO8gHHK4u8Kb+OVSonJGL6CLEH
+         0TPg==
+X-Gm-Message-State: AAQBX9ddRvxiTzvl8XpYu1a2topyJOU04omo0/4jwWa0BOJqREM4CnJ5
+        4YwCJJ+/8tRs6aLzg3FQLSoea5rK1VZ5XfHc/SULMw==
+X-Google-Smtp-Source: AKy350bn07AV9D6vzgoHHOHGQCkZq7RhOd3FLHXIkNjToKXXsAd+R2CJjiGmdTMfIBeybUuPxhCBFlT7qckjdFRxhpU=
+X-Received: by 2002:a25:d842:0:b0:b6a:2590:6c7f with SMTP id
+ p63-20020a25d842000000b00b6a25906c7fmr663134ybg.2.1680570998340; Mon, 03 Apr
+ 2023 18:16:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <f1b6cd5f-f0b7-4748-abd5-0dcfef0ce126@paulmck-laptop>
+ <20230330224726.662344-4-paulmck@kernel.org> <20230404003508.GA254019@google.com>
+ <bad21a93-6d1d-4069-b84b-d3dc1a6cf456@paulmck-laptop>
+In-Reply-To: <bad21a93-6d1d-4069-b84b-d3dc1a6cf456@paulmck-laptop>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 3 Apr 2023 21:16:27 -0400
+Message-ID: <CAEXW_YS-b-NyAQAR1kRy__QNo8sjHc0oYavLGqGbjitQvU7OCg@mail.gmail.com>
+Subject: Re: [PATCH rcu 04/20] srcu: Begin offloading srcu_struct fields to srcu_update
+To:     paulmck@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org, hch@lst.de,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tsl2772_read_prox_diodes() will correctly parse the properties from
-device tree to determine which proximity diode(s) to read from, however
-it didn't actually set this value on the struct tsl2772_settings. Let's
-go ahead and fix that.
+On Mon, Apr 3, 2023 at 9:06=E2=80=AFPM Paul E. McKenney <paulmck@kernel.org=
+> wrote:
+[..]
+> > In other words, if init_srcu_struct_nodes() returns false, then passing=
+ along
+> > the return value of init_srcu_struct_nodes() back to the caller of
+> > init_srcu_struct_fields() depends on whether is_static =3D true or fals=
+e. That
+> > seems a bit wrong to me, init_srcu_struct_fields() should always return
+> > -ENOMEM  when init_srcu_struct_nodes() fails to allocate memory IMHO, w=
+hether
+> > is_static is true or not.
+> >
+> > Sorry if I missed something subtle, and if the code is correct to begin=
+ with.
+> > Also I feel the return paths could be made better to also fix the above=
+ issue
+> > I mentioned. How about the following diff on top of the series, would i=
+t
+> > work?
+>
+> Your restructuring looks like an excellent step forward, but given the la=
+te
+> date, it might be best to avoid being in a rush.
+>
+> I -could- make the following small patch:
+>
+>         if (READ_ONCE(ssp->srcu_sup->srcu_size_state) =3D=3D SRCU_SIZE_SM=
+ALL && SRCU_SIZING_IS_INIT()) {
+>                 if (!init_srcu_struct_nodes(ssp, GFP_ATOMIC)) {
+>                         if (!ssp->srcu_sup->sda_is_static) {
+>                                 free_percpu(ssp->sda);
+>                                 ssp->sda =3D NULL;
+>                                 kfree(ssp->srcu_sup);
+>                         }
+>                         return -ENOMEM;
+>                 } else {
+>                         WRITE_ONCE(ssp->srcu_sup->srcu_size_state, SRCU_S=
+IZE_BIG);
+>                 }
+>         }
+>
+> Except that this is a pre-existing bug that as far as we know no one
+> is hitting, so the risk doesn't seem to stack up.  After all, if you
+> are hitting memory exhaustion at boot or on module load, this bug is
+> probably the least of your problems.  Even this fix looks to be v6.5
+> material to me.
+>
+> So would you be willing to send a patch like the above that fixes the
+> bug, and another like you have below to get a better error-path
+> structure?  No hurry, the end of this month is perfectly fine.
 
-Reported-by: Tom Rix <trix@redhat.com>
-Link: https://lore.kernel.org/lkml/20230327120823.1369700-1-trix@redhat.com/
-Fixes: 94cd1113aaa0 ("iio: tsl2772: add support for reading proximity led settings from device tree")
-Signed-off-by: Brian Masney <bmasney@redhat.com>
----
- drivers/iio/light/tsl2772.c | 1 +
- 1 file changed, 1 insertion(+)
+Yes, I am happy to send patches along these lines by the end of the
+month. I will make a note to do so.
 
-diff --git a/drivers/iio/light/tsl2772.c b/drivers/iio/light/tsl2772.c
-index ad50baa0202c..e823c145f679 100644
---- a/drivers/iio/light/tsl2772.c
-+++ b/drivers/iio/light/tsl2772.c
-@@ -601,6 +601,7 @@ static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
- 			return -EINVAL;
- 		}
- 	}
-+	chip->settings.prox_diode = prox_diode_mask;
- 
- 	return 0;
- }
--- 
-2.39.2
+> And again, good catch!
 
+Thanks!
+
+- Joel
