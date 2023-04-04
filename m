@@ -2,51 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E666D6AD5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B66976D6AD8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234830AbjDDRmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
+        id S235191AbjDDRpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbjDDRl7 (ORCPT
+        with ESMTP id S231348AbjDDRpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:41:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54552B4;
-        Tue,  4 Apr 2023 10:41:58 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPv6:2405:201:0:21ea:73f6:2283:f432:3936])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: shreeya)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D8B84660316F;
-        Tue,  4 Apr 2023 18:41:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680630117;
-        bh=eFM2DUmpK4asUDysohdMR8TB/pdKK8LNKe1onXMI9bA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dF06nkY6DUIwqs6bK/i6huSbsWUJnRAQzdGsSgZ9Lij0bIyX/5pJuOnBfoATxes1f
-         0V6qIt/tE42Owec+9MZN4pypNXcazIegoFDsDa/W25Tyga2aK1IUphv5uHSF2MyUdA
-         2k/e3M7BaMgesqF3luOqyCPH7bXb0y5zoizPYw852OJf12iUy1IhillZzBUbx9sWAr
-         D66skznvlg8tzGansrW8ZNE7JLZ5I9d+4c/PFP5sxVZ58vXYWNdpaTjsJPwj/dE2TH
-         IXQ8Uf18ys/RC9WpyPerbfmjcrcnnmollE4cz890q7Bm/Qmn33Uir76Gd9+wPqVINR
-         MbXxrKloJfchw==
-From:   Shreeya Patel <shreeya.patel@collabora.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Shreeya Patel <shreeya.patel@collabora.com>,
-        Christopher Obbard <chris.obbard@collabora.com>
-Subject: [PATCH v2] arm64: dts: rockchip: Enable RTC support for Rock 5B
-Date:   Tue,  4 Apr 2023 23:11:21 +0530
-Message-Id: <20230404174121.38727-1-shreeya.patel@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 4 Apr 2023 13:45:17 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0C6E5
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:45:16 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 204353200A04;
+        Tue,  4 Apr 2023 13:45:11 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 04 Apr 2023 13:45:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680630310; x=
+        1680716710; bh=2+mKOd/D+OGq/iB3bIRF165wax6xoNQdOA3L1ENc7Vg=; b=G
+        R5SQwiLhvoMF/3kzl4ZZfUdv4+NGH5D+c510pmAmxn3aMNsavOjGAb0d4iGhhAya
+        vQm3HPqYw+g6WlVxQU7nVfzah7eNs7p7YtCM2SwsV35n1x0ajX2rjSYyjCIFHTNh
+        34sC6vr+8THvQvsaSmHAi4KbPFCcADy4wcY9rtYpdrct7M1ehJzgbi1WPLDRYZJG
+        ecpjjkpwv2A7gW8RucjWEDSP3Sds/FlbN68p/L1qbdaaY/PRKGTRj2l8FfpbCqiY
+        +HIhfW18mcpEHfloY0XDkM490r3XCmuoa2jchdD1KQHHdhtbCXpg3vdtN68vpuaN
+        SIWuYW5RgzSBhYRdnnHmA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680630310; x=1680716710; bh=2+mKOd/D+OGq/
+        iB3bIRF165wax6xoNQdOA3L1ENc7Vg=; b=oSA9VAWYV7eDP4vevZajABFjzprAf
+        FbhiJaqOxTFIOwmX8RhcHbPfS85x8xmASoe0969MwKHN2ctH5mJGtfPCdFji5ltP
+        Jgv2tUJqzRKVquqGncYU8W7sMXsw6YwZ8PSS2TuBtLB1scEZEs67qfRu66Bz0E+q
+        Uh/BXIBXFouEv/AD3pQ2rdiyIjdYU9kA+b5YFYvPAiPHBh00LVtyepWpKeajP6T8
+        gOq7+yXOxCwqVQAoBAmDubXR5Gw/Z7qxPyFgG2yUb4/S0AIGPlIpARajMLFCzeMr
+        WHH/x+8UforfBvugkFOu1930LlQpcZzjzSSk0vKZFEic6mAFbUCquXCKA==
+X-ME-Sender: <xms:JWIsZO-ahClJfl2orCydWEhh-9A5iE72V7oackIg8Tm6gsVvm19-dg>
+    <xme:JWIsZOvN8i45LK3UTMDa_lX-OxW0SXhGTZ1WPCTpyVcnuc-oGZ0CUc9c4hVp3oOXu
+    0v-9kI5-latGTYiNXA>
+X-ME-Received: <xmr:JWIsZEAnZ7jfLf-i6GXxaZxezWPUXT_Ujmx7EpJJgBxpjgVH-nqkg2gdJGqzrezNYthvpg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhi
+    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueeh
+    tedttdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:JWIsZGeiEiU-5J7ZOuLO6syVCFpx4C8HHhA3JS8fGJwRMY0sTg4TqQ>
+    <xmx:JWIsZDN0D8z6hEaPSlHk3UWy5G74eKdxHxW2aFhApr0bp7T47eYfYQ>
+    <xmx:JWIsZAno5J6FGsrkJUnvQs-LW5-sR6oguPt4HTzEiGZr8NkU4m0xkg>
+    <xmx:JmIsZOHxv6vBCHuHGcpOywDuODbGc7aZ6FXu1yMPgdewkt3nENkwBA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Apr 2023 13:45:09 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 7330C10C775; Tue,  4 Apr 2023 20:45:06 +0300 (+03)
+Date:   Tue, 4 Apr 2023 20:45:06 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biescheuvel <ardb@kernel.org>,
+        "Min M. Xu" <min.m.xu@intel.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jiewen Yao <jiewen.yao@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v7 6/6] x86/efi: Safely enable unaccepted memory in UEFI
+Message-ID: <20230404174506.pjdikxvk2fsyy4au@box.shutemov.name>
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <cover.1680628986.git.thomas.lendacky@amd.com>
+ <1d38d28c2731075d66ac65b56b813a138900f638.1680628986.git.thomas.lendacky@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d38d28c2731075d66ac65b56b813a138900f638.1680628986.git.thomas.lendacky@amd.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,50 +102,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT node to enable RTC support for Rock 5B board.
+On Tue, Apr 04, 2023 at 12:23:06PM -0500, Tom Lendacky wrote:
+> From: Dionna Glaze <dionnaglaze@google.com>
+> 
+> The UEFI v2.9 specification includes a new memory type to be used in
+> environments where the OS must accept memory that is provided from its
+> host. Before the introduction of this memory type, all memory was
+> accepted eagerly in the firmware. In order for the firmware to safely
+> stop accepting memory on the OS's behalf, the OS must affirmatively
+> indicate support to the firmware. This is only a problem for AMD
+> SEV-SNP, since Linux has had support for it since 5.19. The other
+> technology that can make use of unaccepted memory, Intel TDX, does not
+> yet have Linux support, so it can strictly require unaccepted memory
+> support as a dependency of CONFIG_TDX and not require communication with
+> the firmware.
+> 
+> Enabling unaccepted memory requires calling a 0-argument enablement
+> protocol before ExitBootServices. This call is only made if the kernel
+> is compiled with UNACCEPTED_MEMORY=y
+> 
+> This protocol will be removed after the end of life of the first LTS
+> that includes it, in order to give firmware implementations an
+> expiration date for it. When the protocol is removed, firmware will
+> strictly infer that a SEV-SNP VM is running an OS that supports the
+> unaccepted memory type. At the earliest convenience, when unaccepted
+> memory support is added to Linux, SEV-SNP may take strict dependence in
+> it. After the firmware removes support for the protocol, this patch
+> should be reverted.
+> 
+>   [tl: address some checkscript warnings]
+> 
+> Cc: Ard Biescheuvel <ardb@kernel.org>
+> Cc: "Min M. Xu" <min.m.xu@intel.com>
+> Cc: Gerd Hoffmann <kraxel@redhat.com>
+> Cc: James Bottomley <jejb@linux.ibm.com>
+> Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+> Cc: Jiewen Yao <jiewen.yao@intel.com>
+> Cc: Erdem Aktas <erdemaktas@google.com>
+> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+> Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
 
-Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-Reviewed-by: Christopher Obbard <chris.obbard@collabora.com>
----
- .../boot/dts/rockchip/rk3588-rock-5b.dts      | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
+I still think it is a bad idea.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-index 95805cb0adfa..fcb5af09e49b 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-@@ -27,6 +27,31 @@ vcc5v0_sys: vcc5v0-sys-regulator {
- 	};
- };
- 
-+&i2c6 {
-+	status = "okay";
-+
-+	hym8563: hym8563@51 {
-+		compatible = "haoyu,hym8563";
-+		reg = <0x51>;
-+		#clock-cells = <0>;
-+		clock-frequency = <32768>;
-+		clock-output-names = "hym8563";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&hym8563_int>;
-+		interrupt-parent = <&gpio0>;
-+		interrupts = <RK_PB0 IRQ_TYPE_LEVEL_LOW>;
-+		wakeup-source;
-+	};
-+};
-+
-+&pinctrl {
-+	hym8563 {
-+		hym8563_int: hym8563-int {
-+			rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+};
-+
- &sdhci {
- 	bus-width = <8>;
- 	no-sdio;
+As I asked before, please include my
+
+Nacked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+
+into the patch.
+
 -- 
-2.30.2
-
+  Kiryl Shutsemau / Kirill A. Shutemov
