@@ -2,134 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8770A6D6413
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F9C6D6417
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235642AbjDDNzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S235589AbjDDNzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235450AbjDDNz1 (ORCPT
+        with ESMTP id S235579AbjDDNz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 09:55:27 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B166A449E
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:54:55 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id z17so21871133vsf.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 06:54:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google; t=1680616495;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8vxdDefvvddT/9lK9tLNVI9aT2fK3kIsSFEfydgZYtk=;
-        b=Ya/wbST62b8bezjGJ+GdV4aX4VVQ7bkrHG4sJ3MmhiRJGFpPveN8pZ+WsGjh7iPiK0
-         toe9rgOKSkw8ZZNtv0JgB/3gyOzpK0o+PRkaObp9GXfbSuj/X8Z5l7mTdA6ukeRBSZ1t
-         /Fl227fhx8K4bOyxVBwKplIoQgC5hp0E4BMBvkh204o4HFeppj1CCcjA1tL1dUpJVgX3
-         XVgJZgAJcZZoq/p7FlWb8kvNbB1zUD2pFP1YQKm5Icpitm/bP1mjGEwoSgFGIY38I/nu
-         b/KHayT+HcLzKVwzBvnsLO3ZoIxGbUdy5VEAUR0AuGtSPbVnRIR1mdI+gsjyZm0g4qyk
-         bC8Q==
+        Tue, 4 Apr 2023 09:55:28 -0400
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658611990;
+        Tue,  4 Apr 2023 06:55:01 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id o25-20020a9d4119000000b006a11eb19f8eso16171306ote.5;
+        Tue, 04 Apr 2023 06:55:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680616495;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8vxdDefvvddT/9lK9tLNVI9aT2fK3kIsSFEfydgZYtk=;
-        b=SL4l+Hah/A3F/tUj42K/uO5FZ45RRdwe5s3Q8+q/QxWhZStA3SkktaEuzpyquqwnMa
-         QBtSAzl77R8d878NScPy2+tf4zTJkVVq7acYCW3qOkZ4Fm8JQg5z9SUNkiaTCL6oBNhp
-         XBO0Mg2UpN1CLiNLU2IwRO6j4zwznhzxy1ot7eZ1rYJk4ugUI0I5oGqIoDUl25ZHYOQg
-         cuY28pJbtbOCrS85EByrZVfMN6brvRqo+WSeLFTxptFau80UzL8VdEomM69wx6244+aH
-         zYdKBQPwitM8Kv11PEg5hHVMrQ7rm4uP9oTJ+1OciYmSXNYAsEhe621ltw57/A6bdaMM
-         hawQ==
-X-Gm-Message-State: AAQBX9en8jfW3mfSxgJUSyPg5N7Q8YHgR98Lv7TlwMy2/W9ztHlKFFw8
-        91emzU+JoqkTL+GLAGuR3uCUzR7GSoxYhlMDap978w==
-X-Google-Smtp-Source: AKy350a5f/7rix1Bx/HaEfgI4ImxkcUz7pSb82+guYOFsa97EzdFAQARipypD435dAL1dHUwvcHFcauKCK+dFMJ2rPw=
-X-Received: by 2002:a67:c812:0:b0:416:2ad3:35ba with SMTP id
- u18-20020a67c812000000b004162ad335bamr2335152vsk.1.1680616494759; Tue, 04 Apr
- 2023 06:54:54 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680616500;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BJEw1H1pkfdI8k8tgnJUG93r+dsLUB9hI2v6VwBw+Ws=;
+        b=DoPgYxT62+Lbzb9yAnxIgEb8Gj9zP+Gh5RhliY4t42KEjJU8J6zlnE7ohwk2bL2FDa
+         SfRIbSOsWUh/3+iTcKIJkjFLpSno9dXuRFuzeQOGZMk2BUX1BsFb/bt4bNcFQRSGpX8d
+         VyRZ0L0a3GNCJcUi7B68nXjTDoiajQofIhJaeHCE4ejQztZj2jG/uCBEJCLK3iD38nNy
+         kqCJS7jIsYw6DBrW63fSeKQOjxcXOOY41DdGy7zcIR2Sd6U5IDNNJa/8um3F3Jz1iktY
+         fMkFPOt7Z3NytpghyBwalHUTsBNmZWUCY8AfMOtDqt2ZARWADNmcMdq1rV4WNNameUNe
+         AJvg==
+X-Gm-Message-State: AAQBX9cl2/DFg3CWd0/GyjFT7cbNOxZQ+Q1ZS2xIxS01WEZCW7gvBvvp
+        2WgG8gTCObl+5MojTw/HEg==
+X-Google-Smtp-Source: AKy350b+cqls0gSn2TeHIm4sRXtpjFeVIsHj7uZEjkZFzNbY1hEuGkXE9PfxqXau8Y9ylqfSGtmm+g==
+X-Received: by 2002:a9d:75cd:0:b0:699:896e:c9e1 with SMTP id c13-20020a9d75cd000000b00699896ec9e1mr1102300otl.34.1680616500607;
+        Tue, 04 Apr 2023 06:55:00 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s18-20020a056830149200b0069faca091acsm5499334otq.54.2023.04.04.06.54.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 06:55:00 -0700 (PDT)
+Received: (nullmailer pid 3797380 invoked by uid 1000);
+        Tue, 04 Apr 2023 13:54:59 -0000
+Date:   Tue, 4 Apr 2023 08:54:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Convert to DT schema
+Message-ID: <20230404135459.GA3793612-robh@kernel.org>
+References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
+ <20230403105052.426135-2-cristian.ciocaltea@collabora.com>
+ <168052514639.463695.9544022277060710805.robh@kernel.org>
+ <dcd79e14-d9df-39c1-5465-4e9d71221659@collabora.com>
+ <79396eed-18ab-bcee-5c7e-c3e5e61f32c3@collabora.com>
+ <49c226ff-08a3-a7ca-59bd-f0b9cea865e3@collabora.com>
 MIME-Version: 1.0
-References: <20230125-tfp410_i2c-v3-0-a85d5f0f50f1@criticallink.com>
- <20230125-tfp410_i2c-v3-2-a85d5f0f50f1@criticallink.com> <4a22e085-b339-aa43-518e-d528c5f76de4@linaro.org>
-In-Reply-To: <4a22e085-b339-aa43-518e-d528c5f76de4@linaro.org>
-From:   Jon Cormier <jcormier@criticallink.com>
-Date:   Tue, 4 Apr 2023 09:54:43 -0400
-Message-ID: <CADL8D3Zhn1iFo0fn-VSw5DTvh3UNmCLAFKviKOOa-+F64tRFTA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] drm/bridge: tfp410: Fix logic to configured polled HPD
-To:     neil.armstrong@linaro.org
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Michael Williamson <michael.williamson@criticallink.com>,
-        Bob Duke <bduke@criticallink.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <49c226ff-08a3-a7ca-59bd-f0b9cea865e3@collabora.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 5:00=E2=80=AFAM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
->
-> Hi,
->
-> On 20/02/2023 23:10, Jonathan Cormier wrote:
-> > From: Michael Williamson <michael.williamson@criticallink.com>
-> >
-> > The logic to configure polling (vs async/irq notification) of hot-plug
-> > events was not correct.  If the connected bridge requires polling,
-> > then inform the upstream bridge we also require polling.
-> >
-> > Signed-off-by: Michael Williamson <michael.williamson@criticallink.com>
-> > Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
-> > ---
-> >   drivers/gpu/drm/bridge/ti-tfp410.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/ti-tfp410.c b/drivers/gpu/drm/bridg=
-e/ti-tfp410.c
-> > index bb3f8d0ff207..41007d05d584 100644
-> > --- a/drivers/gpu/drm/bridge/ti-tfp410.c
-> > +++ b/drivers/gpu/drm/bridge/ti-tfp410.c
-> > @@ -155,7 +155,7 @@ static int tfp410_attach(struct drm_bridge *bridge,
-> >               return -ENODEV;
-> >       }
-> >
-> > -     if (dvi->next_bridge->ops & DRM_BRIDGE_OP_DETECT)
-> > +     if (dvi->next_bridge->ops & DRM_BRIDGE_OP_HPD)
-> >               dvi->connector.polled =3D DRM_CONNECTOR_POLL_HPD;
-> >       else
-> >               dvi->connector.polled =3D DRM_CONNECTOR_POLL_CONNECT | DR=
-M_CONNECTOR_POLL_DISCONNECT;
-> >
->
-> A Fixes tag is probably needed here ?
-Thanks will do
->
-> With that:
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+On Mon, Apr 03, 2023 at 07:22:45PM +0300, Cristian Ciocaltea wrote:
+> On 4/3/23 17:43, AngeloGioacchino Del Regno wrote:
+> > Il 03/04/23 16:32, Cristian Ciocaltea ha scritto:
+> >> On 4/3/23 16:10, Rob Herring wrote:
+> >>>
+> >>> On Mon, 03 Apr 2023 13:50:51 +0300, Cristian Ciocaltea wrote:
+> >>>> Convert the PWM fan bindings to DT schema format.
+> >>>>
+> >>>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> >>>> ---
+> >>>>    .../devicetree/bindings/hwmon/pwm-fan.txt     |  68 +----------
+> >>>>    .../devicetree/bindings/hwmon/pwm-fan.yaml    | 109
+> >>>> ++++++++++++++++++
+> >>>>    2 files changed, 110 insertions(+), 67 deletions(-)
+> >>>>    create mode 100644
+> >>>> Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> >>>>
+> >>>
+> >>> Running 'make dtbs_check' with the schema in this patch gives the
+> >>> following warnings. Consider if they are expected or the schema is
+> >>> incorrect. These may not be new warnings.
+> >>>
+> >>> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> >>> This will change in the future.
+> >>>
+> >>> Full log is available here:
+> >>> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230403105052.426135-2-cristian.ciocaltea@collabora.com
+> >>>
+> >>>
+> >>> pwm-fan: 'cooling-max-state', 'cooling-min-state' do not match any of
+> >>> the regexes: 'pinctrl-[0-9]+'
+> >>>     arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
+> >>>     arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb
+> >>>
+> >>
+> >> The only references to the offending cooling-{min|max}-state are located
+> >> in a few DTS files. Assuming they are obsolete, may I simply drop them?
+> >>
+> > 
+> > If they're obsolete, you can mark them as `deprecated: true` in the
+> > binding, but
+> > dropping them entirely would be an ABI breakage, so no, you can't.
+> 
+> >From the pwm-fan driver point of view, the properties are not supported
+> and I couldn't find any indication that they could have been used in the
+> past.
+> 
+> Hence I'm not sure adding them to the binding is the proper way to
+> handle this issue.
 
+They can be omitted.
 
+Rob
 
-
---=20
-Jonathan Cormier
-Software Engineer
-
-Voice:  315.425.4045 x222
-
-
-
-http://www.CriticalLink.com
-6712 Brooklawn Parkway, Syracuse, NY 13211
