@@ -2,91 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB766D69DA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AF16D69DF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235466AbjDDRIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S235667AbjDDRJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjDDRIf (ORCPT
+        with ESMTP id S235609AbjDDRI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:08:35 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC1355B7;
-        Tue,  4 Apr 2023 10:08:15 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id cm7-20020a056830650700b006a11f365d13so16386788otb.0;
-        Tue, 04 Apr 2023 10:08:15 -0700 (PDT)
+        Tue, 4 Apr 2023 13:08:56 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FFD94;
+        Tue,  4 Apr 2023 10:08:44 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id r14so19039427oiw.12;
+        Tue, 04 Apr 2023 10:08:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680628095;
+        d=1e100.net; s=20210112; t=1680628124;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5kyfGfHQKgkYy16DyfpdvEbx6sQQJifapGZEB9kHD60=;
-        b=129cSKXlK0ZO7L7KgdEnMdj5ciq3oWEU7dcIh1iYO5/IL0nO9uEEDhT5CiSt7ryTDA
-         ub7jwE2qA0WJl1vk39Q+w9VPi66sfANApZjXN7O7tby9AYmnyK3LmrP7J9s7qFCNKBOy
-         JuOB1PFacv34sSIQ11Tzjx/5HBIxzkpkFjAiocneiv/u0s/ctS8CMu0z8axJrTY4kjXh
-         6evrleuTm11WRgjjF8oTqLYL6j4LHnmFo/R7IZw8Kb5GPUA4FTsCq1hfnJYuvvKwBsIB
-         CsL9R5yiPwLKwidvOrgz3/y/ZB1nTy2S5fLZnIrYZtAdwHyb+Ji7izy+Wc8P/BIFHQyc
-         IsNA==
-X-Gm-Message-State: AAQBX9cDltQP/OB5Us1on5nhIff/B2FncJUzsvnNwBs5Rd+/6PNCyi5J
-        YioQ4mDpQuUPY3XQNLFgjQ==
-X-Google-Smtp-Source: AKy350bmJMrR1r7FrJGxefej2KGuvmYkx3SzlJzTOaJo3fly2J6n9OiGiUI/5C16CZmpe5LaLx5AEg==
-X-Received: by 2002:a9d:7b4e:0:b0:69f:2774:b60 with SMTP id f14-20020a9d7b4e000000b0069f27740b60mr1694681oto.8.1680628095187;
-        Tue, 04 Apr 2023 10:08:15 -0700 (PDT)
+        bh=OaNiABUcvVtmqheZOblHu0qpT7KFyONMzcxJR5viS78=;
+        b=UR42Xl+s+zzAo/Ayti0JAOpjf1ZiPhVWuwdz9u2f3ETTAq5FVJ2DqUbjdzWkabu2TC
+         cKk+CV9j7UdjvAUN2lfb/ul9Y+JuT5NT6kXeU0UlhqhHl+CWyvOKwE7NyF/BEmJpxVgB
+         p1gtdDsGwjv9Qpl06vx4W/TffIGxi4JSfNaLWgOdef2mZLY+97mHwx93al8i9Vdt0Fue
+         1q9wWoxtBzhUSpHgXsHCaxOZxQJ8xuqVRRmH6g/5ziCcm4t6iOEzGpono/ngY/YyuBwq
+         3/2u2rzNg0Q/hgXGSYVWEnZ47W2QzLLaqtOnfYZ3AfdqUhuBn1GkRP8VTBCrFFojLjhJ
+         PrQg==
+X-Gm-Message-State: AAQBX9fSqUnH4MSJ+eMw2Pz9Feh7b3SWqbB0gu8n1PX1IZp1X+bIeDZX
+        9QWjj/iKR8ubIi+t2olENg==
+X-Google-Smtp-Source: AKy350YfBZrfqcW8PEMfVNBBRRfK7rLxbfeh5SefSwbtVkxAw/f8hlOJB1kpUb6wE9T+az73emC35w==
+X-Received: by 2002:a05:6808:c8:b0:384:1e0c:fbbf with SMTP id t8-20020a05680800c800b003841e0cfbbfmr1455403oic.40.1680628124037;
+        Tue, 04 Apr 2023 10:08:44 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x9-20020a05683000c900b006a30260ccfdsm4494944oto.11.2023.04.04.10.08.14
+        by smtp.gmail.com with ESMTPSA id z127-20020aca3385000000b00383cc29d6b2sm5358287oiz.51.2023.04.04.10.08.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 10:08:14 -0700 (PDT)
-Received: (nullmailer pid 115563 invoked by uid 1000);
-        Tue, 04 Apr 2023 17:08:14 -0000
-Date:   Tue, 4 Apr 2023 12:08:14 -0500
+        Tue, 04 Apr 2023 10:08:43 -0700 (PDT)
+Received: (nullmailer pid 121579 invoked by uid 1000);
+        Tue, 04 Apr 2023 17:08:42 -0000
+Date:   Tue, 4 Apr 2023 12:08:42 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
+To:     Jassi Brar <jassisinghbrar@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Qin Jian <qinjian@cqplus1.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: reset: Drop unneeded quotes
-Message-ID: <20230404170814.GC49361-robh@kernel.org>
-References: <20230322173508.3971182-1-robh@kernel.org>
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] dt-bindings: mailbox: Drop unneeded quotes
+Message-ID: <20230404170842.GD49361-robh@kernel.org>
+References: <20230322173449.3970718-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322173508.3971182-1-robh@kernel.org>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+In-Reply-To: <20230322173449.3970718-1-robh@kernel.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 12:35:07PM -0500, Rob Herring wrote:
+On Wed, Mar 22, 2023 at 12:34:48PM -0500, Rob Herring wrote:
 > Cleanup bindings dropping unneeded quotes. Once all these are fixed,
 > checking for this can be enabled in yamllint.
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  .../bindings/reset/amlogic,meson-axg-audio-arb.yaml         | 4 ++--
->  .../devicetree/bindings/reset/amlogic,meson-reset.yaml      | 4 ++--
->  .../devicetree/bindings/reset/bitmain,bm1880-reset.yaml     | 4 ++--
->  .../devicetree/bindings/reset/brcm,bcm6345-reset.yaml       | 4 ++--
->  .../devicetree/bindings/reset/brcm,brcmstb-reset.yaml       | 4 ++--
->  .../devicetree/bindings/reset/marvell,berlin2-reset.yaml    | 4 ++--
->  Documentation/devicetree/bindings/reset/microchip,rst.yaml  | 6 +++---
->  .../devicetree/bindings/reset/qca,ar7100-reset.yaml         | 4 ++--
->  Documentation/devicetree/bindings/reset/renesas,rst.yaml    | 4 ++--
->  Documentation/devicetree/bindings/reset/sunplus,reset.yaml  | 4 ++--
->  10 files changed, 21 insertions(+), 21 deletions(-)
+>  .../devicetree/bindings/mailbox/amlogic,meson-gxbb-mhu.yaml   | 4 ++--
+>  .../devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml   | 4 ++--
+>  .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml    | 4 ++--
+>  Documentation/devicetree/bindings/mailbox/sprd-mailbox.yaml   | 4 ++--
+>  Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml  | 4 ++--
+>  .../devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml  | 4 ++--
+>  6 files changed, 12 insertions(+), 12 deletions(-)
 
 Applied, thanks.
