@@ -2,75 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C0A6D5EC8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0317D6D5ED7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234723AbjDDLPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S234731AbjDDLTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 07:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234639AbjDDLPd (ORCPT
+        with ESMTP id S234722AbjDDLTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:15:33 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F661BF;
-        Tue,  4 Apr 2023 04:15:32 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id y4so129112260edo.2;
-        Tue, 04 Apr 2023 04:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680606931;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZNX9K8ck0uUOzT2dTHFGkWC9/9Gij8pMO/80UWewFWk=;
-        b=poqjbSv1ZVSUR04cF3S6ZY8DN1RMI06+QRQSSmIw4M4Cd0+1AJxLicIb0AMuZURxiR
-         XnwQx549KTEHyr0OT1yJfBqJgDj5WxvKR96Pq5SgAFRkPzZ3B5osov6GaeW5attluhBd
-         L5DsuHrD/P+uxJgqKJRziHzDuXp6fVMNXiNgaED0NJOu71PCEYqLgUHF1D5jzfCcMaXF
-         j3M4d+tl1yrvCb2mM7C519tXa55d9SqwWcKPJA0o5XByS2YHltirR5x9TCV1PKrY92av
-         WSjEPUd1s1V05CcDyFt8LPZNeBcnzOsK6LhUUH1wN2imbbE/cY0JOiTJhv8xsKMrHUx+
-         FSwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680606931;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZNX9K8ck0uUOzT2dTHFGkWC9/9Gij8pMO/80UWewFWk=;
-        b=1EJbQFHe5MaZs4He7vqfvaAL+L1oEyJKnYN0cB+oOVvJ+N3FdhIrUJsWqBo8qlNCQ+
-         g3FGWJVM18FNb6hmD8rcBG9JQTT2dP+QcjWW5ylxmx89cZXs5YrKKK/EEgxc230vM7gj
-         1lYVj9/Gxmuhxwzrz/QwnH3kmY5zX39IOBvZ9XnqBVo3ihYTL4M3OBu+CF5WSXh4W1qA
-         w9b4lPjvsLuhPvBf5gKWOo8FBZYmPdKxuT5uFpEPhtrXkfVThQfEXESaMM9PFMHQeEJC
-         di6aVJeP3TreRFsyC/DaO0jZO/Fq5Tcn/sfWPHL3Lv4GtnOGU/tMb9m/vEx/RyW2gl6J
-         VSlg==
-X-Gm-Message-State: AAQBX9ebpHH7kZMeNgPzSzabRPc10uCC90YQbxiYpoIOyoHyFMu1voyq
-        oBYnAz6qkFB8BO6JNRZV86aOplWn7+8=
-X-Google-Smtp-Source: AKy350Z6C9Gw8Vh96AW+yrfxA4Sgu7/Hq0BsTNLvh87HFfmUa8xTE/s5AyENeayPg5tTBF+PBwbciA==
-X-Received: by 2002:a17:906:f244:b0:947:fb8a:f2d2 with SMTP id gy4-20020a170906f24400b00947fb8af2d2mr1597820ejb.62.1680606931134;
-        Tue, 04 Apr 2023 04:15:31 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id s5-20020a170906454500b008e54ac90de1sm5844791ejq.74.2023.04.04.04.15.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 04:15:30 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 13:15:29 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Petlozu Pravareshwar <petlozup@nvidia.com>, jonathanh@nvidia.com,
-        p.zabel@pengutronix.de, ulf.hansson@linaro.org, kkartik@nvidia.com,
-        cai.huoqing@linux.dev, spatra@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Viswanath L <viswanathl@nvidia.com>
-Subject: Re: [PATCH v2] soc/tegra: pmc: Support software wake-up for SPE
-Message-ID: <ZCwG0SM9szT6toGG@orome>
-References: <20230330170621.258068-1-petlozup@nvidia.com>
- <f70c6d62-a7fd-c153-932f-16886e46329b@collabora.com>
+        Tue, 4 Apr 2023 07:19:46 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C5F1703
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 04:19:43 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230404111939epoutp02d25203ac53730033ed08f313fc8458af~St1NHgdDf2063420634epoutp02f
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 11:19:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230404111939epoutp02d25203ac53730033ed08f313fc8458af~St1NHgdDf2063420634epoutp02f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1680607179;
+        bh=oGGO2Uu0KUQiuSoOtyNCqRDLlKQVmo49N5hywPvTeGc=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=qpibsN420B/9LrxXZuokukGmWbgfXSEsAGvgCbJwpvriVqzCMPOGsdHiTdcWiMt4S
+         ebRxegvrRdKW0+eKkEbr00AhlglzxqsSLorl2b3qL5BxrPrqcikleLVG33Mh+VL3Wc
+         udTA3yqiHg9bUyDfdWdWAtS5YH999dipx367PXQo=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230404111938epcas2p207da7c4271046773bc437e2a67e9e174~St1Mhc_bt2672326723epcas2p25;
+        Tue,  4 Apr 2023 11:19:38 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.88]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4PrQJp0spcz4x9Px; Tue,  4 Apr
+        2023 11:19:38 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E3.92.35469.AC70C246; Tue,  4 Apr 2023 20:19:38 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230404111937epcas2p25ae33c66401ba055e7d0478b945e9ffd~St1LrbHuY2672326723epcas2p23;
+        Tue,  4 Apr 2023 11:19:37 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230404111937epsmtrp2997708b2390d2ede606223a41d70035f~St1LqjuNE0731007310epsmtrp2R;
+        Tue,  4 Apr 2023 11:19:37 +0000 (GMT)
+X-AuditID: b6c32a48-9e7f970000008a8d-34-642c07c996f1
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2E.FE.18071.9C70C246; Tue,  4 Apr 2023 20:19:37 +0900 (KST)
+Received: from [10.229.8.168] (unknown [10.229.8.168]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230404111937epsmtip1127c42fff3119cac28d1077e8f2cf915~St1LZ7KO00428904289epsmtip1k;
+        Tue,  4 Apr 2023 11:19:37 +0000 (GMT)
+Message-ID: <4b652b3c-20e1-1d87-1ee3-3aab43507100@samsung.com>
+Date:   Tue, 4 Apr 2023 20:17:13 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HWENIabzcbjHRvPD"
-Content-Disposition: inline
-In-Reply-To: <f70c6d62-a7fd-c153-932f-16886e46329b@collabora.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thunderbird/102.9.0
+Subject: Re: [PATCH 1/3] spi: s3c64xx: support spi polling mode using
+ devicetree
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Chanho Park <chanho61.park@samsung.com>
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+In-Reply-To: <a4a9d1d1-c5cd-460e-96e0-6db8048518c6@sirena.org.uk>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLJsWRmVeSWpSXmKPExsWy7bCmhe4pdp0Ug1/PmC0ezNvGZrH4x3Mm
+        i6kPn7BZXN6vbTH/yDlWi72vt7JbbHp8jdXi8q45bBYzzu9jsmj8eJPdonXvEXYHbo/rSz4x
+        e2xa1cnmcefaHjaPzUvqPfq2rGL0+LxJLoAtKtsmIzUxJbVIITUvOT8lMy/dVsk7ON453tTM
+        wFDX0NLCXEkhLzE31VbJxSdA1y0zB+g6JYWyxJxSoFBAYnGxkr6dTVF+aUmqQkZ+cYmtUmpB
+        Sk6BeYFecWJucWleul5eaomVoYGBkSlQYUJ2xqkdexgLergq5j49w9TA+JO9i5GTQ0LAROLH
+        pPusXYxcHEICOxglvu3byAbhfGKUOHv8PhOE841Rouf7XCaYlrtLj7JAJPYySjy+eYsNJCEk
+        8JpRYtkEWxCbV8BO4t+nrSwgNouAisSsAxeYIOKCEidnPgGLiwpESfTd3sQKYgsLBEmsPHgf
+        zGYWEJe49WQ+WL2IgLLE1e97wZYxC3xkkrg1cxJYgk1AW+L7+sVADRwcnAKOEn1rOCB65SW2
+        v53DDFIvIbCSQ2LB1MlsEFe7SDw/NpMFwhaWeHV8CzQApCQ+v9sLVZMt0T79DyuEXSFxccNs
+        qLixxKxn7Ywgu5gFNCXW79IHMSWAbjtyiwViLZ9Ex+G/7BBhXomONiGIRjWJ+1PPQQ2RkZh0
+        ZCU0CD0kjv7cxjSBUXEWUqDMQvL8LCTPzELYu4CRZRWjWGpBcW56arFRgQk8rpPzczcxgtOt
+        lscOxtlvP+gdYmTiYDzEKMHBrCTCq9qllSLEm5JYWZValB9fVJqTWnyI0RQYNROZpUST84EJ
+        P68k3tDE0sDEzMzQ3MjUwFxJnPdjh3KKkEB6YklqdmpqQWoRTB8TB6dUA9OUSb9crI4IbV+8
+        T9lg9lkVU6M9W70nt2d7b2ubJ/Dm6vyE6XWn/jFkzFNel2h0QqZsTsYBaanr6seKzdZYZP04
+        /XveQpH7LtfO52R8Tp/TVj9dNSe3+E3728/LlDOfX4yMyjs753xdURrTdKGo24ZPfLfM9jjy
+        eunCdbdL3jFdnLRiXl1ep8Hm5bX5RvL/HU2mTdO9xpzZox/du3vyPPZlvtxr+eYt2pNSoilb
+        e+/i5QR36+lfur/J2J74qbJ+6STfLe17+eoyZirPS98bID/95dmNqklC/5j2f09/qu66mv+G
+        TA1nS8o92f0nji2Sf/66QyyC9c3xg7PNSyfo9G4IY23Zq/mnrDX4kZ0cU1WiEktxRqKhFnNR
+        cSIAkSYmwkAEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjkeLIzCtJLcpLzFFi42LZdlhJTvcku06KQcNeJYsH87axWSz+8ZzJ
+        YurDJ2wWl/drW8w/co7VYu/rrewWmx5fY7W4vGsOm8WM8/uYLBo/3mS3aN17hN2B2+P6kk/M
+        HptWdbJ53Lm2h81j85J6j74tqxg9Pm+SC2CL4rJJSc3JLEst0rdL4Mo4tWMPY0EPV8Xcp2eY
+        Ghh/sncxcnJICJhI3F16lKWLkYtDSGA3o8Tkl6vYIBIyEsuf9UHZwhL3W46wQhS9ZJQ4eWY1
+        I0iCV8BO4t+nrSwgNouAisSsAxeYIOKCEidnPgGLiwpESXw+0AK2TVggSGLlwfusIDazgLjE
+        rSfzwepFBJQlrn7fywIR/8gkMWmCOMSyf4wS05YsAytiE9CW+L5+MVAzBwengKNE3xoOiHoz
+        ia6tXYwQtrzE9rdzmCcwCs1CcsYsJOtmIWmZhaRlASPLKkbJ1ILi3PTcYsMCw7zUcr3ixNzi
+        0rx0veT83E2M4CjT0tzBuH3VB71DjEwcjIcYJTiYlUR4Vbu0UoR4UxIrq1KL8uOLSnNSiw8x
+        SnOwKInzXug6GS8kkJ5YkpqdmlqQWgSTZeLglGpgOr85pdlW933srugz9p81V1jdWKUs2VcY
+        rXXLzqXmsthMw66FX52mcL0tCP16ROByy6qzIs17/7gG8G46a+lySTXqj6TUfV+eRP0b3sYC
+        LmcPvNrv+vxymaJn49LCi4zX1gk27zeeMjGrxv67gZnkIYcDms8vMq570iYzReHvYpslDL5m
+        /PsNtXp/RX8t+VjhmPY6es78ZackpczueWpfTGePePGK6WSlQm/4ljf7zrEddr9ZKBu7uGK3
+        ScynIGGjl2dFBZ9P33bw7t+7Abdapj3JMy7ZPkvv5wZN7rzq224dRe5ZmoKJTo036t8r3MtL
+        bj70S1+e+xRvmrlc8bUz+qxVChkX4qee3fx6+brJSizFGYmGWsxFxYkAdCGC9CEDAAA=
+X-CMS-MailID: 20230404111937epcas2p25ae33c66401ba055e7d0478b945e9ffd
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230404061409epcas2p15750d5844aa8d3655d1bfd094fac14a9
+References: <20230404060011.108561-1-jaewon02.kim@samsung.com>
+        <CGME20230404061409epcas2p15750d5844aa8d3655d1bfd094fac14a9@epcas2p1.samsung.com>
+        <20230404060011.108561-2-jaewon02.kim@samsung.com>
+        <a4a9d1d1-c5cd-460e-96e0-6db8048518c6@sirena.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,122 +126,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Mark,
 
---HWENIabzcbjHRvPD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 03, 2023 at 07:06:12PM +0300, Dmitry Osipenko wrote:
-> On 3/30/23 20:06, Petlozu Pravareshwar wrote:
-> > The Sensor Processing Engine(SPE) can trigger a software wake-up of
-> > the device. To support this wake-up for the SPE, set SR_CAPTURE_EN
-> > bit in WAKE_AOWAKE_CNTRL register associated with the wake-up for
-> > the SPE. This SR capturing logic is expected to be enabled for wakes
-> > with short pulse signalling requirements.
-> >=20
-> > Signed-off-by: Viswanath L <viswanathl@nvidia.com>
-> > Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
-> > ---
-> > v1->v2:
-> > * Rebase the change on latest code.
-> > ---
-> >  drivers/soc/tegra/pmc.c | 24 +++++++++++++++++++++++-
-> >  1 file changed, 23 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-> > index cf4cfbf9f7c5..2a2342eff622 100644
-> > --- a/drivers/soc/tegra/pmc.c
-> > +++ b/drivers/soc/tegra/pmc.c
-> > @@ -3,7 +3,7 @@
-> >   * drivers/soc/tegra/pmc.c
-> >   *
-> >   * Copyright (c) 2010 Google, Inc
-> > - * Copyright (c) 2018-2022, NVIDIA CORPORATION. All rights reserved.
-> > + * Copyright (c) 2018-2023, NVIDIA CORPORATION. All rights reserved.
-> >   *
-> >   * Author:
-> >   *	Colin Cross <ccross@google.com>
-> > @@ -177,6 +177,7 @@
-> >  /* Tegra186 and later */
-> >  #define WAKE_AOWAKE_CNTRL(x) (0x000 + ((x) << 2))
-> >  #define WAKE_AOWAKE_CNTRL_LEVEL (1 << 3)
-> > +#define WAKE_AOWAKE_CNTRL_SR_CAPTURE_EN (1 << 1)
-> >  #define WAKE_AOWAKE_MASK_W(x) (0x180 + ((x) << 2))
-> >  #define WAKE_AOWAKE_MASK_R(x) (0x300 + ((x) << 2))
-> >  #define WAKE_AOWAKE_STATUS_W(x) (0x30c + ((x) << 2))
-> > @@ -191,6 +192,8 @@
-> >  #define WAKE_AOWAKE_CTRL 0x4f4
-> >  #define  WAKE_AOWAKE_CTRL_INTR_POLARITY BIT(0)
-> > =20
-> > +#define SW_WAKE_ID		83 /* wake83 */
-> > +
-> >  /* for secure PMC */
-> >  #define TEGRA_SMC_PMC		0xc2fffe00
-> >  #define  TEGRA_SMC_PMC_READ	0xaa
-> > @@ -355,6 +358,7 @@ struct tegra_pmc_soc {
-> >  	void (*setup_irq_polarity)(struct tegra_pmc *pmc,
-> >  				   struct device_node *np,
-> >  				   bool invert);
-> > +	void (*set_wake_filters)(struct tegra_pmc *pmc);
-> >  	int (*irq_set_wake)(struct irq_data *data, unsigned int on);
-> >  	int (*irq_set_type)(struct irq_data *data, unsigned int type);
-> >  	int (*powergate_set)(struct tegra_pmc *pmc, unsigned int id,
-> > @@ -2416,6 +2420,17 @@ static int tegra210_pmc_irq_set_type(struct irq_=
-data *data, unsigned int type)
-> >  	return 0;
-> >  }
-> > =20
-> > +static void tegra186_pmc_set_wake_filters(struct tegra_pmc *pmc)
-> > +{
-> > +	u32 value;
-> > +
-> > +	/* SW Wake (wake83) needs SR_CAPTURE filter to be enabled */
-> > +	value =3D readl(pmc->wake + WAKE_AOWAKE_CNTRL(SW_WAKE_ID));
-> > +	value |=3D WAKE_AOWAKE_CNTRL_SR_CAPTURE_EN;
-> > +	writel(value, pmc->wake + WAKE_AOWAKE_CNTRL(SW_WAKE_ID));
-> > +	dev_dbg(pmc->dev, "WAKE_AOWAKE_CNTRL_83 =3D 0x%x\n", value);
-> > +}
->=20
-> To me this needs to be moved to the SPE driver, which should get the PMC
-> regmap handle and enable wake only when needed, similarly how it's done
-> by USB Tegra drivers that also need to configure PMC. Otherwise this
-> looks like a hack/workaround.
+On 23. 4. 4. 19:54, Mark Brown wrote:
+> On Tue, Apr 04, 2023 at 03:00:09PM +0900, Jaewon Kim wrote:
+>> This patch adds new 'samsung,spi-polling' property to support polling mode.
+>> In some environments, polling mode is required even if DMA is supported.
+>> Changed it to support not only with quick but also optinally with
+>> devicetree.
+> Why would this be required if we can use DMA?  If this is a performance
+> optimisation for small messages the driver should just work out when to
+> choose PIO over DMA like other drivers do.  It is hard to see this as a
+> hardware property which should be configured via DT.
 
-Wake is still only enabled when needed via the irq_set_wake() callback.
-And this is slightly different in that it pretty has no side-effects. It
-isn't a configuration option that needs to be switched every now and
-then but rather just a bit in a register that happens to have the wrong
-default value (or an inconvenient default value).
 
-For USB there are actual side-effects and some of the settings only make
-sense if a given USB port is actually used, etc. So doing the regmap
-dance is actually worth it.
+We are providing a VM environment in which several Guest OSs are running.
+If Host OS has DMA, GuestOS should use SPI as polling mode.
 
-For SPE it just doesn't seem worth it to have all of these inter-
-dependencies just for the sake of statically setting one bit once during
-boot.
+In order to support s3c64xx in a DMA-less environment, it must be 
+separated with a quirk.
+However, there is DMA in the Host OS and no DMA in the Guest OS,
+it is not correct to separate them with quirk.
 
-Thierry
+I'm considering supporting this systems with DeviceTree rather than qurik.
+If 'samsung,spi-polling' looks to be a SW configuration, how about 
+'samsung,no-dma'.
 
---HWENIabzcbjHRvPD
-Content-Type: application/pgp-signature; name="signature.asc"
+This is not to simply change the mode using DeviceTree, but to support 
+an environment without DMA.
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQsBs4ACgkQ3SOs138+
-s6En+RAAvRL37e270TWQhnw+WuuJchdJ3i+kJ9KFpCRbWXBoHv/4JB+WQHHiOpI9
-LYi231NgMEDgQvmgyRgB5sPJIGA4+9aLVqhitOHU3wm3tZBQ1lrMaymPALSOGcQs
-pHpXPFd8FO+vYdWYjVdh7K2mGT0V4eDkgNdPzdFFfMdxFSqs3taoMxUCnsKOGEZg
-JScNPs6bws+5+5qmvgkm0Uei7OuKW8UTsJOdHyma66CHF4oql2WEDB84/a2reKUB
-fIqwEI+jfHH80ilXuf755Q3zssgcePK4b3A86LqlXfgIqB0Gw+25W3a5S1pfMosk
-8mYoVIpwsXRK0jOazims3KZIMA3ILwJBgm4uC5Vj3bzcmsqlvEEoVzSXTkhdGE7I
-0cvXkXXlpx59w370QvvPPxS0yiiU/V3xBA4WUl+p3mI7MuQx/26cZ2PSIPT+VuK4
-WnyblJ9ssV7OQCSzebeR/oxmDhfsB2lqLFNCfMt4f7GUd9idkHqitr11W6rYclCp
-AJ2ZDqXLHDSlmrL3MIBd9CIpwCPVav8N3Ez7FNFj1/aly7wuqL9EW9lgIqj+7ZI+
-hCE4Txl8XaJ0GdTUWC4Dh00QqaRCBHtgeVvgGGbg/fC0tyuwYqGlvTb4Zg8MHQrD
-VxXGDdyqOtysE6dT9wRIAhDOEgzWYLYGO4GhjIhBpbDQ3TYJWQ8=
-=YpjT
------END PGP SIGNATURE-----
 
---HWENIabzcbjHRvPD--
+Thanks
+
+Jaewon Kim
+
