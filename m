@@ -2,156 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA5E6D6EF4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92846D6EF8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236295AbjDDV1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
+        id S236424AbjDDV2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjDDV1k (ORCPT
+        with ESMTP id S236422AbjDDV2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:27:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D0A19BD;
-        Tue,  4 Apr 2023 14:27:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54B15634D1;
-        Tue,  4 Apr 2023 21:27:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B025C433D2;
-        Tue,  4 Apr 2023 21:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680643658;
-        bh=bnJKYz7hgPr/gLu9S3FIC84wJhIzGVDpgOk24YANfKs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LIS/Q3mMub53GidGokOOeIViscA6jtGr1sMYGURfpsX6xV/m1BRPYyhxQXt4EeWgb
-         eMSWubsJ0xf8gWtuZ1vkQQOzfrfaTA4Gi6zpiab4zLL22ZxKX7aOsg78Ow8LVEtc4k
-         K/ljs9ow2aZhlwj5+m5qJ1mHt9/8fTm7MnjigqmrMkMgQAjxmACuLN6tenc2H8vYU2
-         LefxSUuTSHHbJnGPnTeUhILZVEYCgjbLH5ol58YxddtBaxQFhVZzIjY2AeEOyEXtJI
-         tl0kRwvht81sb86zIZLXOlfOktUYrfjxCcZs1lWrSWcW4a1GvpmP7QSASSBRxBBMS2
-         hmfTXggrYq5rQ==
-Date:   Tue, 4 Apr 2023 22:27:30 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Tom Rix <trix@redhat.com>, Weili Qian <qianweili@huawei.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Len Brown <lenb@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH V4 17/23] clocksource/timer-riscv: Add ACPI support
-Message-ID: <20230404-ammonium-cradle-a5bb0e4d4d3e@spud>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-18-sunilvl@ventanamicro.com>
+        Tue, 4 Apr 2023 17:28:04 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395551BD9;
+        Tue,  4 Apr 2023 14:28:02 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id eg48so136026612edb.13;
+        Tue, 04 Apr 2023 14:28:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112; t=1680643681;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F3Vq2XM6fughuFDtm5c57GN5MrdDCrraoSvfrWiblQU=;
+        b=Aguc2+EVruaoWDmeWTp/rvZXkJ7uOVa1KmiiPwiNegAiDA4WZWeOUGDz8seHfMwUY1
+         1O1rDFP8XJjK1tcN9X2bIIQcg/jVtlzbTGMseEBWMRfnRKkZBBWM1cDR0dbB/ISqGNNP
+         d4tdXDCfl4lZ8toTldRZAsSYXn/+r5H1CBkDdna1nnabXPfqho3Ta7lC2FILdYqMEmgU
+         tTUfV6iEpFxnNUDEyxtTyAMwcf5t5SisFTpXvumkoqhAAM1y0hXKr9Mdeun4tYt1A4b1
+         /QOaBFb9PF02DVewDATyzTI1jd+Fdw17v4aeV/fMvNL6dHc96Z78m1YKzpENPNfQsYDz
+         C8Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680643681;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F3Vq2XM6fughuFDtm5c57GN5MrdDCrraoSvfrWiblQU=;
+        b=jJZ/O2YLYwTvKVTruXg88TjrgsH8bXZF9ut3Qom+fAojALWkHV5vjWPjghmpr++MMU
+         5JYCQG5gfGLisN7RWH8htThpnVTsJvjLXqhrh6F7sGrhjuRMZWjwS4xlXGlct2tSWBt+
+         LQTCwOD4T8sETmukLSjOMFN852KP16tK6WBmklRpVgbrx2BAszK9IaysjjlaM0jnaIBY
+         MxwlCusxMKl+smnaMdeu5PPUHqWHAuh8n2ALcV9P6cBWFOy18zCl8hT5/0zpD19XTBmp
+         SBiiib4/v9SIa8PoxHCy29c8UkOuF6rIer48EPAkDY4wGriNGoCtN5Pi8jfiuUYy/SRt
+         cgGQ==
+X-Gm-Message-State: AAQBX9fVbRPu9kQVisPO6IlR3T72eCC6bN76EHpuCpVWK0gCqCeAO0cw
+        Xio62iuUrlyahACOciV4D5xC+srJjz4WymQZDqPBKs83SOc=
+X-Google-Smtp-Source: AKy350b9THEdFpt47q44R8kiLay24lRQn+dpAYK09CzKuT0xT0W0dwuzwx4PYA6d/G5OSNmH5bBzzgihj/lFtVstHYU=
+X-Received: by 2002:a17:906:3e0d:b0:92f:cbfe:1635 with SMTP id
+ k13-20020a1709063e0d00b0092fcbfe1635mr535348eji.6.1680643680653; Tue, 04 Apr
+ 2023 14:28:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="sQmAUn5NMdxQBCz+"
-Content-Disposition: inline
-In-Reply-To: <20230404182037.863533-18-sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230403202440.276757-1-martin.blumenstingl@googlemail.com>
+ <20230403202440.276757-10-martin.blumenstingl@googlemail.com>
+ <642c609d.050a0220.46d72.9a10@mx.google.com> <CADcbR4LMY3BF_aNZ-gAWsvYHnRjV=qgWW_qmJhH339L_NgmqUQ@mail.gmail.com>
+In-Reply-To: <CADcbR4LMY3BF_aNZ-gAWsvYHnRjV=qgWW_qmJhH339L_NgmqUQ@mail.gmail.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 4 Apr 2023 23:27:49 +0200
+Message-ID: <CAFBinCC2fr42FiC_LqqMf2ASDA_vY1d-NJJLHOF6pW1MjFRAzw@mail.gmail.com>
+Subject: Re: [PATCH v4 9/9] wifi: rtw88: Add support for the SDIO based
+ RTL8821CS chipset
+To:     Chris Morgan <macroalpha82@gmail.com>
+Cc:     linux-wireless@vger.kernel.org,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Nitin Gupta <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Chris,
 
---sQmAUn5NMdxQBCz+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Apr 4, 2023 at 8:16=E2=80=AFPM Chris Morgan <macroalpha82@gmail.com=
+> wrote:
+>
+> Please disregard. I was building against linux main not wireless-next.
+> I have tested and it appears to be working well, even suspend works now.
+Thanks for this update - this is great news!
+It's good to hear that suspend is now also working fine for you.
 
-On Tue, Apr 04, 2023 at 11:50:31PM +0530, Sunil V L wrote:
-> Initialize the timer driver based on RHCT table on ACPI based
-> platforms.
->=20
-> Currently, ACPI doesn't support a flag to indicate that the
-> timer interrupt can wake up the cpu irrespective of its
-> power state. It will be added in future update.
->=20
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+It would be awesome if I could get a Tested-by for this patch. This
+works by replying to the patch with a line that consists of
+"Tested-by: your name <your email address>". See [0] for an example.
 
-My only comment on v3 was about the commit message & mentioning why
-there was no handling of the timer's ability to wake the cpu, so:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Thanks,
-Conor.
+Best regards,
+Martin
 
-> ---
->  drivers/clocksource/timer-riscv.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/time=
-r-riscv.c
-> index cecc4662293b..da3071b387eb 100644
-> --- a/drivers/clocksource/timer-riscv.c
-> +++ b/drivers/clocksource/timer-riscv.c
-> @@ -10,6 +10,7 @@
-> =20
->  #define pr_fmt(fmt) "riscv-timer: " fmt
-> =20
-> +#include <linux/acpi.h>
->  #include <linux/clocksource.h>
->  #include <linux/clockchips.h>
->  #include <linux/cpu.h>
-> @@ -207,3 +208,13 @@ static int __init riscv_timer_init_dt(struct device_=
-node *n)
->  }
-> =20
->  TIMER_OF_DECLARE(riscv_timer, "riscv", riscv_timer_init_dt);
-> +
-> +#ifdef CONFIG_ACPI
-> +static int __init riscv_timer_acpi_init(struct acpi_table_header *table)
-> +{
-> +	return riscv_timer_init_common();
-> +}
-> +
-> +TIMER_ACPI_DECLARE(aclint_mtimer, ACPI_SIG_RHCT, riscv_timer_acpi_init);
-> +
-> +#endif
-> --=20
-> 2.34.1
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
---sQmAUn5NMdxQBCz+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCyWQgAKCRB4tDGHoIJi
-0rT7AQCGUlB0daUlvZlotXE9AX4dUyeEfJS6O7vxjF94PE3b8QEAib+YSnkdmpOM
-ROSIWdBZztUmg+3YEDkEHx8u7yv+GAE=
-=n76y
------END PGP SIGNATURE-----
-
---sQmAUn5NMdxQBCz+--
+[0] https://lore.kernel.org/linux-wireless/4a76b5fe-c3d6-de44-c627-3f48fafd=
+d905@lwfinger.net/
