@@ -2,77 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E7C6D6065
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CCD6D606D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234870AbjDDMb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S234737AbjDDMdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbjDDMb5 (ORCPT
+        with ESMTP id S233431AbjDDMdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:31:57 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DE3170C
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:31:55 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 7FAEF3200934;
-        Tue,  4 Apr 2023 08:31:54 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Tue, 04 Apr 2023 08:31:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:content-type:content-type:date:date:from
-        :from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1680611514; x=1680697914; bh=nt
-        6QuxRluVizW8uPZoCJ4NC8q9XQ4kfvc7TVTu/KcJw=; b=ekmuq8zkGHbLBYey+c
-        1XMecsdG2y9co0x62WU2T2zlddxfC976rXhIjQynILiMPq1jxI9RFHmdcaaWf06A
-        0NT61BrlAkFGCNzhM1pb8aW7vnk599VrAgTgXr8STZcdN8sZg5OuznQoCsxznUjN
-        nVoRQo+Fx+JpLQ9v6UZpMuN8JbgpXQml4O8rr9ceuAc9D7sEo7MrCJ0TZfIEYq2U
-        lquCMu2Y+8hni7kuv53j6vX/UxRHu/u+LCdWaC0CGK2nvxuvw+fJoDtXgrv5blhd
-        NTG74N5qr8KfM4T2nTsSySWlRmQsLSRv+vb/L7YzYEwLTbkXBq4C2jA4lW71rqup
-        BJYw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680611514; x=1680697914; bh=nt6QuxRluVizW8uPZoCJ4NC8q9XQ4kfvc7T
-        VTu/KcJw=; b=TelJz/PPtY2EeYcftDqF5K1vPxYxI1iHYy4ovtr4RgWveLbfGuj
-        s+a1/TgvBK2uBcvvqj6yh9+WEBjvuyFu5m4NrJCFqjWFM27KIMar6b8NL2QFV87b
-        V1VByMRcLozA0bJZ/3F9ppcOTkjGtvceXGzY0IYKfYXSIBaO+rI3kBhKct+bUumV
-        RMcHZqnlLq3doU7aGwIfbifsow7Gi/AEqNKtlMII1FEy9pQEvEn44I9UPV2/T0Bk
-        A+gZNX584FuL57Xpt520bcyN5LYltUSmSRQOziwm9Iy9FZgIAuoCio7OG5x5J+iS
-        vqhwIHAmYgCNZCkoTZ8Vv84QRFI+y4ZJNSg==
-X-ME-Sender: <xms:uRgsZCCNuliajZGcABZ3kq8jQJ195CX8R155lmVpqZyx2UEp-1oRKA>
-    <xme:uRgsZMjyroOxFhtGjnYkWLOyIq6VSbnEqu8AxbZXO-_BkRyTMhMiBjDtrpvxAfUaA
-    aq5WBVOgwz3Ky-rOmk>
-X-ME-Received: <xmr:uRgsZFlnXXccSYG6vgnodaOuz6_HYY887lKPMl_SCIP88SPlMkrJE6TBiN8zB12az-4ysdSkI0JlBV650OGITo0GPCxRVSOyqlJtzgs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledgheefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkgggtugesthdtredttd
-    dtvdenucfhrhhomheplfhoshhhucfvrhhiphhlvghtthcuoehjohhshhesjhhoshhhthhr
-    ihhplhgvthhtrdhorhhgqeenucggtffrrghtthgvrhhnpeelleeggedtjeejfeeuvddufe
-    eggfektdefkeehveeuvedvvdfhgeffgfdvgfffkeenucevlhhushhtvghrufhiiigvpedt
-    necurfgrrhgrmhepmhgrihhlfhhrohhmpehjohhshhesjhhoshhhthhrihhplhgvthhtrd
-    horhhg
-X-ME-Proxy: <xmx:uhgsZAxjjnYzcp42II1fPBtuP-3rCtE_KdFA4laR9MZ5_w9DWy79bg>
-    <xmx:uhgsZHS48FpanaOc2rRtnDJiyL_4wqK_LSZR5rlDrkfu1Z7Qt8CJHw>
-    <xmx:uhgsZLZdDSKZuAYD4PY-co9joRCnI5Kjm-g6d1IHoflbZUib1F4LTw>
-    <xmx:uhgsZI62ZMXW3aJI65vfTh6GDBbpKDckd_Wf8qN6z-L3VgD83jV23w>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Apr 2023 08:31:52 -0400 (EDT)
-Date:   Tue, 4 Apr 2023 21:31:48 +0900
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] prctl: Add PR_GET_AUXV to copy auxv to userspace
-Message-ID: <d81864a7f7f43bca6afa2a09fc2e850e4050ab42.1680611394.git.josh@joshtriplett.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        Tue, 4 Apr 2023 08:33:50 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F71990
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:33:48 -0700 (PDT)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230404123346epoutp0417eacf017ede978236fb21d0e36ad201~Su17NHuTL3243032430epoutp04E
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:33:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230404123346epoutp0417eacf017ede978236fb21d0e36ad201~Su17NHuTL3243032430epoutp04E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1680611626;
+        bh=CyluXGQ/M50MWKT/ymzRne/5E932eD39ooQcgkhBmfs=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=KLQuf2jw34smeS2aJvc+EmHxrxVcGdhEoBK7xGnBkKxhw/efVi6X9UBoN1JWF4krS
+         oZ3wRYw0pzCyLWbWDU2z7wcNJb/OC/bhxAJAvydYLWVgnBV5nmCj8TAKNcXf86sQ1t
+         BNTVwsdEJgajRVbZY9CkLfTUHWFobrwEBefUfbWs=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20230404123346epcas1p42412041191e78ddf51f9dec9562d8951~Su16paRWH2695126951epcas1p4G;
+        Tue,  4 Apr 2023 12:33:46 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.38.247]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4PrRyK5tHRz4x9Pr; Tue,  4 Apr
+        2023 12:33:45 +0000 (GMT)
+X-AuditID: b6c32a38-5fbfa70000029402-2f-642c19290181
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        BA.FC.37890.9291C246; Tue,  4 Apr 2023 21:33:45 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE: [RFC] vsprintf: compile error on %09pK
+Reply-To: jaewon31.kim@samsung.com
+Sender: Jaewon Kim <jaewon31.kim@samsung.com>
+From:   Jaewon Kim <jaewon31.kim@samsung.com>
+To:     Petr Mladek <pmladek@suse.com>,
+        Jaewon Kim <jaewon31.kim@samsung.com>
+CC:     David Laight <David.Laight@aculab.com>,
+        'Jaewon Kim' <jaewon31.kim@gmail.com>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        GyeongHwan Hong <gh21.hong@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <ZCwSIy5Tm0jAe1Ww@alley>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230404123345epcms1p1518b92632293f3f0bd7d12a29ba7c3e2@epcms1p1>
+Date:   Tue, 04 Apr 2023 21:33:45 +0900
+X-CMS-MailID: 20230404123345epcms1p1518b92632293f3f0bd7d12a29ba7c3e2
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 101P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJJsWRmVeSWpSXmKPExsWy7bCmvq6mpE6KQeMtPYuXhzQtdizdzGSx
+        5fcbRovuzTMZLXrfv2KyuLxrDpvFvTX/WS3+P/7KarF74yI2B06P/tlT2DxmN1xk8dg56y67
+        x6ZPk9g9+rasYvRYv+Uqi8fnTXIB7FHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaW
+        FuZKCnmJuam2Si4+AbpumTlAlykplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswK
+        9IoTc4tL89L18lJLrAwNDIxMgQoTsjO2nmxkKvjHWzHph0AD4xSuLkZODgkBE4nPh5cwdjFy
+        cQgJ7GCUaPw3lbWLkYODV0BQ4u8OYZAaYQFjiRWHzzOD2EICShJnf1xhh4jrSjR1r2YBsdkE
+        tCXeL5jECmKLCHhKnDrbxgQyk1lgMZPEgasTWCCW8UrMaH8KZUtLbF++lRHE5hRQleg69AUq
+        Lipxc/Vbdhj7/bH5jBC2iETrvbPMELagxIOfuxlh5vw5/pwNwi6WWNb5gAnCrpFYcW4VVNxc
+        ouHtSjCbV8BXov3RXjCbBWjvvG/noPa6SJya1gX2ALOAvMT2t3OYQeHALKApsX6XPkSJosTO
+        33MZYV5p2PibHZ3NLMAn8e5rDytMfMe8J1DnqEm0PPsKFZeR+PvvGesERqVZiJCehWTxLITF
+        CxiZVzGKpRYU56anFhsWmMDjNjk/dxMjOI1qWexgnPv2g94hRiYOxkOMEhzMSiK8ql1aKUK8
+        KYmVValF+fFFpTmpxYcYTYFensgsJZqcD0zkeSXxhiaWBiZmRiYWxpbGZkrivF+eaqcICaQn
+        lqRmp6YWpBbB9DFxcEo1MMm/c9ZUck5h15CqlGJQVYyKECtu+b1D/uDD8k8ctw2/fNu25fUm
+        N7EXVds/zCpwDm65rajfJ5+26pro8XfeyxWqXf7YTtH6vEzuco5DP9P2GeF7QvdtbDnacu1n
+        WO1zXUNdC45HQVdlrxxf1mbJX/6Ze8vOvLV++tstTNJtDWqzHjun2QkdyJXbcHjnacGYCctW
+        HV0xUYlB9ctnhuuFyrbHW0LjePVvGTuZHso6wPyJV27f1MtrXNwKMz58D83cMCHizX37u1Ml
+        ap7FX7+gZ95u78vn99Zf5hCDwva3byv2Jj1mj5Pd3L/iXWbLRJtpAr6Pq5Mss8R62jkPb20S
+        WHpnE3thtVcak8ki4T+pSizFGYmGWsxFxYkAWyO9ciwEAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42
+References: <ZCwSIy5Tm0jAe1Ww@alley>
+        <694722c9409b43808cfbc1fc9e495016@AcuMS.aculab.com>
+        <20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p3>
+        <ZCrMMQt2xnnZIyz6@alley>
+        <CAJrd-Uvzy18SfjjqbqZCPHjw+ujQXsBpvov4b=bfAwZrj=bCAA@mail.gmail.com>
+        <20230404101201epcms1p615a6365e64fc6e0a0fa203d41404940c@epcms1p6>
+        <CGME20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p1>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,99 +104,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a library wants to get information from auxv (for instance,
-AT_HWCAP/AT_HWCAP2), it has a few options, none of them perfectly
-reliable or ideal:
+>On Tue 2023-04-04 19:12:01, Jaewon Kim wrote:
+>> >From: Jaewon Kim
+>> >> Sent: 03 April 2023 15:40
+>> >...
+>> >> I wanted to print phys_addr_t  type value only when kptr_restrict sysctl is
+>> >> allowed. So I thought I could use %pK for that purpose. And the physical
+>> >> address is not that long. I wanted to make that length short like 9 hex.
+>> >
+>> >Isn't that is the wrong format for physical addresses anyway?
+>> >They can be larger than virtual ones (eg x86 with PAE).
+>> 
+>> Yeah, correct. I just used %pK to hide physical address, I thought it could be
+>> leak in security perspective. Could you give me advice how I can hide the
+>> address by default and look the address if kptr_restrict allow it?
+>
+>Could you please send a patch that would show what value you want to print?
+>
+>The initial mail mentioned converting %09lx to %09pK in some driver.
+>Then it included a warning when compiling from mm/page_alloc.o
+>
+                                                                                                                                                       O
+Oh I just found something I'm interested. I was printing rmem->base and
+rmem->name and wanted to hide the rmem->base. The commit aeb9267eb6b1 
+("of: reserved-mem: print out reserved-mem details during boot - v6.3-rc1")
+just used %pa. If %pa is not good enough in security perspecitve, I think
+I can use %pa.
 
-- Be main or the pre-main startup code, and grub through the stack above
-  main. Doesn't work for a library.
-- Call libc getauxval. Not ideal for libraries that are trying to be
-  libc-independent and/or don't otherwise require anything from other
-  libraries.
-- Open and read /proc/self/auxv. Doesn't work for libraries that may run
-  in arbitrarily constrained environments that may not have /proc
-  mounted (e.g. libraries that might be used by an init program or a
-  container setup tool).
-- Assume you're on the main thread and still on the original stack, and
-  try to walk the stack upwards, hoping to find auxv. Extremely bad
-  idea.
-- Ask the caller to pass auxv in for you. Not ideal for a user-friendly
-  library, and then your caller may have the same problem.
+Yes it was just my curiosity. I don't actually need the length.
 
-Add a prctl that copies current->mm->saved_auxv to a userspace buffer.
+I'm OK now.
+Thank you 
 
-Signed-off-by: Josh Triplett <josh@joshtriplett.org>
----
-
-v2:
-- Fix W=1 warning about min type mismatch
-
-I've built, booted, and tested this.
-
-man-pages snippet:
-
-.\" prctl PR_GET_AUXV
-.TP
-.BR PR_GET_AUXV " (since Linux 6.x)"
-Get the auxilliary vector (auxv) into the buffer pointed to by
-.IR "(void\~*) arg2" ,
-whose length is given by \fIarg3\fP.
-If the buffer is not long enough for the full auxilliary vector,
-the copy will be truncated.
-Return (as the function result)
-the full length of the auxilliary vector.
-\fIarg4\fP and \fIarg5\fP must be 0.
-
-Will send a patch for man-pages once merged.
-
- include/uapi/linux/prctl.h |  2 ++
- kernel/sys.c               | 15 +++++++++++++++
- 2 files changed, 17 insertions(+)
-
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index 1312a137f7fb..b2b24eaf2427 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -290,4 +290,6 @@ struct prctl_mm_map {
- #define PR_SET_VMA		0x53564d41
- # define PR_SET_VMA_ANON_NAME		0
- 
-+#define PR_GET_AUXV		0x41555856
-+
- #endif /* _LINUX_PRCTL_H */
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 495cd87d9bf4..43f922170706 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -2377,6 +2377,16 @@ static inline int prctl_get_mdwe(unsigned long arg2, unsigned long arg3,
- 		PR_MDWE_REFUSE_EXEC_GAIN : 0;
- }
- 
-+static int prctl_get_auxv(void __user *addr, unsigned long len)
-+{
-+	struct mm_struct *mm = current->mm;
-+	unsigned long size = min_t(unsigned long, sizeof(mm->saved_auxv), len);
-+
-+	if (size && copy_to_user(addr, mm->saved_auxv, size))
-+		return -EFAULT;
-+	return sizeof(mm->saved_auxv);
-+}
-+
- SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 		unsigned long, arg4, unsigned long, arg5)
- {
-@@ -2661,6 +2671,11 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 	case PR_SET_VMA:
- 		error = prctl_set_vma(arg2, arg3, arg4, arg5);
- 		break;
-+	case PR_GET_AUXV:
-+		if (arg4 || arg5)
-+			return -EINVAL;
-+		error = prctl_get_auxv((void __user *)arg2, arg3);
-+		break;
- 	default:
- 		error = -EINVAL;
- 		break;
--- 
-2.40.0
-
+>Honestly, I think that you could just use %pK or %p. IMHO, it does not
+>make sense to optimize it for the length.
+>
+>Anyway, there is still the question if the address is really worth
+>printing. Will it really help to locate a potential problem?
+>
+>Best Regards,
+>Petr
