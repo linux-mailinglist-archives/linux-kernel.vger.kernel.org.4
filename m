@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3926D6841
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8C66D6822
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbjDDQEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S234916AbjDDQBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235629AbjDDQEc (ORCPT
+        with ESMTP id S234711AbjDDQA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:04:32 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4381949E2;
-        Tue,  4 Apr 2023 09:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XM/YkwYDYZGFI0IIp06DYqUacNJSQj373t93IN8a29o=; b=TIsAixbuLFpyKt07sPwhVOn1aU
-        cGv4c07N1emcfPmogLhgtjgpYR5LP6Nol8J6+PExO760jDlXjp+iCnrnWKK5UDZCU5FyEMUHrK0C1
-        SzrfvIUBbupni78V14bc2bjHewYPLY7HCVNoH9SqFSqG/2cWP412xfsne3M0o6n8fQU1Z2r+E2QHx
-        +fmjMHwxYiumGqYm7KWWTj1cAFUYaVEKYoqK3JR4anEGIOdaaPQwrDyMDfUbtnoOrucjM9WZUX3vA
-        cX9hzeBUJB03YvO04ppUKlwYspcwruBk8VDTYKJ3joh88cne62yn4oUyr/Od+3XIdZ24B2xIuVJdx
-        WXoLpPZg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pjj5O-00FV9O-TT; Tue, 04 Apr 2023 16:00:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 07BC4300202;
-        Tue,  4 Apr 2023 18:00:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D69342CB6F7B0; Tue,  4 Apr 2023 18:00:38 +0200 (CEST)
-Date:   Tue, 4 Apr 2023 18:00:38 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yair Podemsky <ypodemsk@redhat.com>
-Cc:     linux@armlinux.org.uk, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, davem@davemloft.net, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org,
-        arnd@arndb.de, keescook@chromium.org, paulmck@kernel.org,
-        jpoimboe@kernel.org, samitolvanen@google.com, frederic@kernel.org,
-        ardb@kernel.org, juerg.haefliger@canonical.com,
-        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        tony@atomide.com, linus.walleij@linaro.org,
-        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, mtosatti@redhat.com, vschneid@redhat.com,
-        dhildenb@redhat.com, alougovs@redhat.com,
-        Frederic Weisbecker <fweisbec@gmail.com>
-Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to CPUs in kernel mode
-Message-ID: <20230404160038.GB38236@hirez.programming.kicks-ass.net>
-References: <20230404134224.137038-1-ypodemsk@redhat.com>
- <20230404134224.137038-4-ypodemsk@redhat.com>
- <20230404151217.GB297936@hirez.programming.kicks-ass.net>
+        Tue, 4 Apr 2023 12:00:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B54A40EE
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:00:56 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pjj5S-00033Z-VH; Tue, 04 Apr 2023 18:00:46 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pjj5Q-00043l-2C; Tue, 04 Apr 2023 18:00:44 +0200
+Date:   Tue, 4 Apr 2023 18:00:44 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Arun.Ramadoss@microchip.com
+Cc:     olteanv@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
+        kuba@kernel.org, edumazet@google.com, pabeni@redhat.com,
+        Woojung.Huh@microchip.com, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, kernel@pengutronix.de
+Subject: Re: [PATCH net-next v1 3/7] net: dsa: microchip: ksz8: Make
+ ksz8_r_sta_mac_table() static
+Message-ID: <20230404160044.GC4044@pengutronix.de>
+References: <20230404101842.1382986-1-o.rempel@pengutronix.de>
+ <20230404101842.1382986-4-o.rempel@pengutronix.de>
+ <6d428dfa9b1e3e008a4ecc8c8f8653843afad794.camel@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230404151217.GB297936@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <6d428dfa9b1e3e008a4ecc8c8f8653843afad794.camel@microchip.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 05:12:17PM +0200, Peter Zijlstra wrote:
-> > case 2:
-> > CPU-A                                             CPU-B
+On Tue, Apr 04, 2023 at 03:11:02PM +0000, Arun.Ramadoss@microchip.com wrote:
+> Hi Oleksij,
+> On Tue, 2023-04-04 at 12:18 +0200, Oleksij Rempel wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you
+> > know the content is safe
 > > 
-> > modify pagetables
-> > tlb_flush (memory barrier)
-> >                                                   state == CONTEXT_USER
-> > int state = atomic_read(&ct->state);
-> >                                                   Kernel-enter:
-> >                                                   state == CONTEXT_KERNEL
-> >                                                   READ(pagetable values)
-> > if (state & CT_STATE_MASK == CONTEXT_USER)
+> > As ksz8_r_sta_mac_table() is only used within ksz8795.c, there is no
+> > need
+> > to export it. Make the function static for better encapsulation.
 > > 
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > ---
+> >  drivers/net/dsa/microchip/ksz8.h    | 2 --
+> >  drivers/net/dsa/microchip/ksz8795.c | 4 ++--
+> >  2 files changed, 2 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/net/dsa/microchip/ksz8.h
+> > b/drivers/net/dsa/microchip/ksz8.h
+> > index ad2c3a72a576..d87f8ebc6323 100644
+> > --- a/drivers/net/dsa/microchip/ksz8.h
+> > +++ b/drivers/net/dsa/microchip/ksz8.h
+> > @@ -21,8 +21,6 @@ int ksz8_r_phy(struct ksz_device *dev, u16 phy, u16
+> > reg, u16 *val);
+> >  int ksz8_w_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 val);
+> >  int ksz8_r_dyn_mac_table(struct ksz_device *dev, u16 addr, u8
+> > *mac_addr,
+> >                          u8 *fid, u8 *src_port, u8 *timestamp, u16
+> > *entries);
+> > -int ksz8_r_sta_mac_table(struct ksz_device *dev, u16 addr,
+> > -                        struct alu_struct *alu);
+> 
+> 
+> ksz8_r_dyn_mac_table() also not used outside KSZ8795.h. It can
+> also be made static
+
+:) Ack, i have pending series of patch for dyn MAC table.
+
+> Acked-by: Arun Ramadoss <arun.ramadoss@microchip.com>
 
 
-Hmm, hold up; what about memory ordering, we need a store-load ordering
-between the page-table write and the context trackng load, and a
-store-load order on the context tracking update and software page-table
-walker loads.
 
-Now, iirc page-table modification is done under pte_lock (or
-page_table_lock) and that only provides a RELEASE barrier on this end,
-which is insufficient to order against a later load.
-
-Is there anything else?
-
-On the state tracking side, we have ct_state_inc() which is
-atomic_add_return() which should provide full barrier and is sufficient.
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
