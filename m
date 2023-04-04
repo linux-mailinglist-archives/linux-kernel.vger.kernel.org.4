@@ -2,143 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0346D56F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 04:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9276D56F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 04:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbjDDCzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 22:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S232940AbjDDC4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 22:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjDDCzf (ORCPT
+        with ESMTP id S232934AbjDDCz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 22:55:35 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 018E119BF
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 19:55:32 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:48454.1860087732
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 97DE0102ADA;
-        Tue,  4 Apr 2023 10:55:29 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-bkw2h with ESMTP id 9b5738e047274065a67ab0e7b4b82ca0 for tzimmermann@suse.de;
-        Tue, 04 Apr 2023 10:55:31 CST
-X-Transaction-ID: 9b5738e047274065a67ab0e7b4b82ca0
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <3c173bbe-c74a-5817-c9c5-f3364c628240@189.cn>
-Date:   Tue, 4 Apr 2023 10:55:28 +0800
+        Mon, 3 Apr 2023 22:55:59 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0471FE0;
+        Mon,  3 Apr 2023 19:55:58 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id d13so29171930pjh.0;
+        Mon, 03 Apr 2023 19:55:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680576958;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jVV9cxKF8CzU0gUghTh55PDDFH6OAM8gy1Kv/8QwOlg=;
+        b=fKxyz4NrEX6JrxqjGGRBECbIfAiBm10rZP7AV+C0+d/iGU7MOApwh0/E3YyoP5xuLT
+         B4kuBX1gYp2fJSkWfjgtqlFqdsagm9WDo0pS1zf54P0Pw44yFI8lgWtsacZMjkGfrZqp
+         AJqB2XjxIzwiwMaJC9nd0tE4lvBp/GAgRa0TDB+FOxi8ybACYJHfICrpkZdOL4LyoLfV
+         3Rkj3NcZzkuzOa/Vafb5rDMRWsUu3ikV3HYO9v8OdC8ZHf3UzeMoebsm4wlxHwoRCdCd
+         1GTK0N4hM40yTLHet1+FN1vXAZKJbFpD3Sit+6zHc8Si3muHb91ImcKQqQIeTKZu8d3C
+         4zMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680576958;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jVV9cxKF8CzU0gUghTh55PDDFH6OAM8gy1Kv/8QwOlg=;
+        b=avspT5jHgbN+ZPKqoeRdWmERfeFUty0Sna1nxm2FAqSNGfQjBKuk0qdx4i3kbBCSqt
+         UPPvh05vf/9qQaOq0jKLrGTxKTHQf37kaRXOSziWPYpvB1Oh8UNcT5kOe/seDeDggagO
+         z2ljJbG/3nOZt/j9BjKboFpnWD/qVlt2jwj7VZMbj8uVi8FTdl6zQhJi/pebQv6NyfmS
+         s63VZK1k47O0O99vycQd9WMx92w7w2Q8c4BW9JAA/ekQUdxoXmjEXr2S2Zn4uiey5BvT
+         xS52OmVehvaPBoWkK7nNLdXvZs2VTs5QsDaG09HFoubB+SziJBEpZZyVwIkGm+xNE/6R
+         fW5A==
+X-Gm-Message-State: AAQBX9fgxFZEr9sJXLCfCP5Uvn85r9CFIXHN1OTbaNA7WRMUwEh/DHKP
+        Di3xo+gxK6HN5nvjtVbF2Sc=
+X-Google-Smtp-Source: AKy350YDPvn5VoLxr2Aiy2EYPVkBZrOgl04a0POrH1smAYsgcbEjD/TnzpnM99ITKI2LP30MnRcerA==
+X-Received: by 2002:a05:6a20:1b14:b0:d7:34a1:859a with SMTP id ch20-20020a056a201b1400b000d734a1859amr958170pzb.27.1680576958291;
+        Mon, 03 Apr 2023 19:55:58 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-87.three.co.id. [180.214.233.87])
+        by smtp.gmail.com with ESMTPSA id i35-20020a631323000000b00502f017657dsm6514157pgl.83.2023.04.03.19.55.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 19:55:58 -0700 (PDT)
+Message-ID: <3d994c05-492d-f9f4-161d-123a68d4e87a@gmail.com>
+Date:   Tue, 4 Apr 2023 09:55:53 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
- clause
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        suijingfeng <suijingfeng@loongson.cn>, liyi <liyi@loongson.cn>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230325074636.136833-1-15330273260@189.cn>
- <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v7] tty: fix hang on tty device with no_room set
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     juanfengpy@gmail.com
+Cc:     Hui Li <caelli@tencent.com>, stable@vger.kernel.org,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <1679019847-1401-1-git-send-email-caelli@tencent.com>
+ <ZCuQO3A6FX305KTJ@debian.me>
 Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZCuQO3A6FX305KTJ@debian.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/4/23 09:49, Bagas Sanjaya wrote:
+> On Fri, Mar 17, 2023 at 10:24:07AM +0800, juanfengpy@gmail.com wrote:
+>> We have met a hang on pty device, the reader was blocking
+>> at epoll on master side, the writer was sleeping at wait_woken
+>> inside n_tty_write on slave side, and the write buffer on
+>> tty_port was full, we found that the reader and writer would
+>> never be woken again and blocked forever.
+> 
+> Where do you find this hanging pty? Seems like the wording makes me
+> confused. Maybe you mean "It is possible to hang pty device. In that
+> case, ..."
+> 
 
-On 2023/3/29 17:04, Thomas Zimmermann wrote:
-> (cc'ing Lucas)
->
-> Hi
->
-> Am 25.03.23 um 08:46 schrieb Sui Jingfeng:
->>   The assignment already done in drm_client_buffer_vmap(),
->>   just trival clean, no functional change.
->>
->> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->> ---
->>   drivers/gpu/drm/drm_fbdev_generic.c | 5 ++---
->>   1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
->> b/drivers/gpu/drm/drm_fbdev_generic.c
->> index 4d6325e91565..1da48e71c7f1 100644
->> --- a/drivers/gpu/drm/drm_fbdev_generic.c
->> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
->> @@ -282,7 +282,7 @@ static int drm_fbdev_damage_blit(struct 
->> drm_fb_helper *fb_helper,
->>                    struct drm_clip_rect *clip)
->>   {
->>       struct drm_client_buffer *buffer = fb_helper->buffer;
->> -    struct iosys_map map, dst;
->> +    struct iosys_map map;
->>       int ret;
->>         /*
->> @@ -302,8 +302,7 @@ static int drm_fbdev_damage_blit(struct 
->> drm_fb_helper *fb_helper,
->>       if (ret)
->>           goto out;
->>   -    dst = map;
->> -    drm_fbdev_damage_blit_real(fb_helper, clip, &dst);
->> +    drm_fbdev_damage_blit_real(fb_helper, clip, &map);
->
-> I see what you're doing and it's probably correct in this case.
->
-> But there's a larger issue with this iosys interfaces. Sometimes the 
-> address has to be modified (see calls of iosys_map_incr()). That can 
-> prevent incorrect uses of the mapping in other places, especially in 
-> unmap code.
->
-Yes, I just realized that.
+Oops, I forgot to Cc: LKML.
 
-iosys_map_incr() change the internal state of a opaque structure, this 
-is somewhat evil.
+-- 
+An old man doll... just what I always wanted! - Clara
 
-if it is non-opaque, then this is abstract failure.
-
-You have to worry about that if it is changed by a accident call 
-iosys_map_incr() from other place.
-
-The map should be const, I guess most programmer expect  the map be a const.
-
-making it const please, copy on demand, modify the copy only, leave the 
-original mapping untouched.
-
-Hope this could eliminate the embarrassing.
-
-Sorry for missing the point.
-
-> I think it would make sense to consider a separate structure for the 
-> I/O location. The buffer as a whole would still be represented by 
-> struct iosys_map.  And that new structure, let's call it struct 
-> iosys_ptr, would point to an actual location within the buffer's 
-> memory range. A few locations and helpers would need changes, but 
-> there are not so many callers that it's an issue.  This would also 
-> allow for a few debugging tests that ensure that iosys_ptr always 
-> operates within the bounds of an iosys_map.
->
-> I've long considered this idea, but there was no pressure to work on 
-> it. Maybe now.
->
-I have also get some idea from you idea.
-> Best regards
-> Thomas
->
->>         drm_client_buffer_vunmap(buffer);
->
