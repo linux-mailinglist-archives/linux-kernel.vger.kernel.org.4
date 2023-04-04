@@ -2,126 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84FC6D57F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A03D86D57FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbjDDFYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 01:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S233320AbjDDF3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 01:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbjDDFYj (ORCPT
+        with ESMTP id S231552AbjDDF3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 01:24:39 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD511BF3;
-        Mon,  3 Apr 2023 22:24:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680585878; x=1712121878;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/rQChDDRaigJECGMBoQaK+on5fRAcrFk8WAsiIoHF2g=;
-  b=cIZ+ad/u1nh9GRAKEqTgQUExryUHDhG2u+007xnGAOiuSRtDNfb0VAhu
-   XyRCaZMLdwAHahWFBK0as1fm9nOOkiVvOg9g9X8JQZvO9Id2cckzU8wsP
-   PUYmsWKJN/3WrsoLMP9UDmsoe9UO0RF9CCXBuy8uPluleeZ7v5SO6UfOj
-   XERlgZPhf/rlkEpb1QpRFbjn9W9x2SgLCSDOrHQ529EWoU78xrbgxk3ck
-   u/YrdILiItzTAZXQ6W/lXwJTyx02u98LdQY32DeLcS1JB/uR9vuIWo15U
-   nOqiY4xj8nvq21iA379CZ5WWx0xTW7lUKjuaRpDbK4u69HAdNOMelQhKv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="407153330"
-X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="407153330"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 22:24:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="810095617"
-X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="810095617"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by orsmga004.jf.intel.com with ESMTP; 03 Apr 2023 22:24:33 -0700
-Message-ID: <505a0392-57e0-312b-9350-36162e84577c@linux.intel.com>
-Date:   Tue, 4 Apr 2023 13:24:45 +0800
+        Tue, 4 Apr 2023 01:29:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF9F10E3;
+        Mon,  3 Apr 2023 22:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kvrrME49HSEm3e3PUjpTJ/N0A8XCBPZx1NZzV7RUN7w=; b=iN5/NV0ZdBH39LOKFmDddySJn4
+        O8mRnqfW7uoArL0ggKDA8qmMZkql25oVue3G1bnyKR95wYDE5Xj5/sBYAR9rSUTV8LrMfb3ULeAj+
+        A1XWRnk6HRLVvh6bXS+XLtRMmLE2n1j1F59DIl7LdJYL8DPKhaM9+YbOZGL4nJ7uNObjjkRVtK3FA
+        8DgDOOaRQ2delNCqK/zhhDYdT9Ff1ve6yB/jQONvKAx9MTbEtbZp/qbsuRnGeDVwPeTG0Y6VI8Pk4
+        FfnDXcjZbOhulsVGbgxe34wfNSs+C1Jka3G3f6RXWPgQjJM4+4TNlG2jysYEjtt/yJ94aqENfIDTf
+        blymWRPQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pjZES-00060U-2V;
+        Tue, 04 Apr 2023 05:29:24 +0000
+Date:   Mon, 3 Apr 2023 22:29:24 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v7 1/6] riscv: mm: dma-noncoherent: Switch using function
+ pointers for cache management
+Message-ID: <ZCu1tFrQCVe2sgNz@infradead.org>
+References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     baolu.lu@linux.intel.com, LKML <linux-kernel@vger.kernel.org>,
-        iommu@lists.linux.dev, Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: Re: [PATCH v3 6/7] iommu/vt-d: Implement set_dev_pasid domain op
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-References: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
- <20230331231137.1947675-7-jacob.jun.pan@linux.intel.com>
- <a63e70cc-8890-bb99-3326-0b19e81ea92e@linux.intel.com>
- <20230403144827.7b2c1ccb@jacob-builder>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230403144827.7b2c1ccb@jacob-builder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/23 5:48 AM, Jacob Pan wrote:
-> On Sat, 1 Apr 2023 21:48:36 +0800, Baolu Lu<baolu.lu@linux.intel.com>
-> wrote:
+On Thu, Mar 30, 2023 at 09:42:12PM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > 
->> On 2023/4/1 7:11, Jacob Pan wrote:
->>> Devices that use ENQCMDS to submit work on buffers mapped by DMA API
->>> must attach a PASID to the default domain of the device. In preparation
->>> for this use case, this patch implements set_dev_pasid() for the
->>> default_domain_ops.
->>>
->>> If the device context has not been set up prior to this call, this will
->>> set up the device context in addition to PASID attachment.
->>>
->>> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
->>> ---
->>>    drivers/iommu/intel/iommu.c | 21 +++++++++++++++++++++
->>>    1 file changed, 21 insertions(+)
->>>
->>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
->>> index 52b9d0d3a02c..1ad9c5a4bd8f 100644
->>> --- a/drivers/iommu/intel/iommu.c
->>> +++ b/drivers/iommu/intel/iommu.c
->>> @@ -4784,6 +4784,26 @@ static void intel_iommu_remove_dev_pasid(struct
->>> device *dev, ioasid_t pasid) domain_detach_iommu(dmar_domain,
->>> info->iommu); }
->>>    
->>> +static int intel_iommu_attach_device_pasid(struct iommu_domain *domain,
->>> +					   struct device *dev,
->>> ioasid_t pasid) +{
->>> +	struct device_domain_info *info = dev_iommu_priv_get(dev);
->>> +	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
->>> +	struct intel_iommu *iommu = info->iommu;
->>> +	int ret;
->>> +
->>> +	if (!pasid_supported(iommu))
->>> +		return -ENODEV;
->> As the domain ID will be set to the pasid entry, need to get a refcount
->> of the domain ID. Call domain_attach_iommu() here, and release it after
->> the pasid entry is torn down.
-> dmar_domain_attach_device_pasid() below will call domain_attach_iommu() and
-> release in intel_iommu_remove_dev_pasid(). The previous patch has
-> consolidated the code path with device attachment.
-> would it be sufficient?
+> Currently, selecting which CMOs to use on a given platform is done using
+> and ALTERNATIVE_X() macro. This was manageable when there were just two
+> CMO implementations, but now that there are more and more platforms coming
+> needing custom CMOs, the use of the ALTERNATIVE_X() macro is unmanageable.
+> 
+> To avoid such issues this patch switches to use of function pointers
+> instead of ALTERNATIVE_X() macro for cache management (the only drawback
+> being performance over the previous approach).
+> 
+> void (*clean_range)(unsigned long addr, unsigned long size);
+> void (*inv_range)(unsigned long addr, unsigned long size);
+> void (*flush_range)(unsigned long addr, unsigned long size);
+> 
 
-It's fine. Sorry, I overlooked this.
+NAK.  Function pointers for somthing high performance as cache
+maintainance is a complete no-go.
 
-Best regards,
-baolu
