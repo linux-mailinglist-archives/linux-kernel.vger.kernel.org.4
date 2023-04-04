@@ -2,132 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8CF6D6A4A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA536D6A4B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235947AbjDDRTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
+        id S235988AbjDDRTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235966AbjDDRTC (ORCPT
+        with ESMTP id S235938AbjDDRTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:19:02 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AEE4ED5;
-        Tue,  4 Apr 2023 10:18:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680628723; x=1712164723;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Efgn0wgG6M3dPrOoOF4i+0f2G3SonPMACefzAUfo3bY=;
-  b=eQ816N22jGlonHOa0mgO/tr3XhTJCpLzj6AZBZR1Ywsw0BQi/KWLgBgJ
-   WUSF4ypWKWwiRFzwh2PHlvQl7WwkxDxSJqe9S+4DQuz0Jp/hy9DLDbQIv
-   buCsNwrlr68psQerSRiiQN2731IKnRqijIbKQYpLd6eNTpdeqmPEWOcM1
-   j2XZ4o4GQzdK6MhGE/DStifScQ4RCsWlwun3g3lOVculDmMrF/QsntCIS
-   GJ2xj1dkCj9ysSlLTXLVEt6E8mGOIUw4YUMYFIWuBDM2AUOyRDO1NRoHO
-   +R31qVSGSLDFzP9AFGohTcSwGyXXLtVH6eDq+JagiL0TT8YRFzdOwHxcB
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="330847141"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="330847141"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 10:18:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="1016186296"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="1016186296"
-Received: from rajatkha-mobl.gar.corp.intel.com (HELO [10.215.121.35]) ([10.215.121.35])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 10:18:41 -0700
-Message-ID: <c82c6577-a363-241b-ffd6-f5c4c9ed838d@linux.intel.com>
-Date:   Tue, 4 Apr 2023 22:48:38 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] usb: typec: intel_pmc_mux: Expose IOM port status to
- debugfs
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230330104821.773053-1-rajat.khandelwal@linux.intel.com>
- <ZCVsH2KkfcMA86hJ@kroah.com>
-Content-Language: en-US
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-In-Reply-To: <ZCVsH2KkfcMA86hJ@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 4 Apr 2023 13:19:11 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A37D1989
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:19:09 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 205-20020a2503d6000000b00b7411408308so32285151ybd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:19:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680628748;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nGBT7J3oxLrG5QlbQBZ8ar3G9Xp4yDpuulB1s81czW0=;
+        b=LiBYzhWDYHduL8RDjlTCgCej44cBeYg5yDH294/Bm6SOX/UwkJHyFMjHqHLQckj9tJ
+         ajqbzPP4APlekP8ORSlTD8dGfj0xIUk9L+F0SMG05QeUa+KdEwpI9dwxtimwR6M/K8tp
+         Bmu7GomNrjrKWfWKsfLce6YKwRztSfrzoJzzYnNmkur0xzXZ6/AO6JDeguhsrXcAUV0Y
+         H2FjPNiXFkJDTPv/fxBh8tNLSqc+iiiKJypLr2qPu4DGP6hhVr1y4lATuJDS0bu55RTP
+         d+iBTQcLAbRWN75bXasqq+bpqIzRVvlv6k6PNlrMwy35zwoZW3x5hCDFCV0JArAa89/Q
+         3CEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680628748;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nGBT7J3oxLrG5QlbQBZ8ar3G9Xp4yDpuulB1s81czW0=;
+        b=DNAYiGbY6D+u3XH/ssCyumoM/IJCboOwi7+kYVQKPohZmAW6R727prqQ/d2QHKGHnz
+         pI0sihdw32A6nd8YPXERYGxGGduJXQ9zFHq0JXyJezT/6aAs+6SUnLGooEnQnVmdxhYv
+         XwzuzblHlLX9x0/c5/oxQ8J1w2Yx45SStAzwhNY6Xkaqrg/oX2Cn/OQXIq4hBrbbLdoP
+         r8c3AWa7b8opVREUsoWn8k9bd5JPhNy+oD5HZDjD7cZM2q6Vk2vS/E9nrq78f3ecN161
+         6dTo307YDOnXp9h/WRgtVmX9JDUgSizmEJYDzifuQLUOG+Dw7JC97jtrBkwr/SE2o68C
+         Y3xA==
+X-Gm-Message-State: AAQBX9fZP5SOuyLorM+tcDbqTn+3vU3vIujUzSTeydCp/7wb2o51oLcx
+        Hb++qvpDzgL0b0+QAri3Ctd9F0EtK6sG
+X-Google-Smtp-Source: AKy350bgvTjKs5YgA/5EtiXu6Vb2/j9rN2qxfJT/xXdB7KcDKJSGeK6tv3dXeWjYQNUekPpAn3Hx8uC9b7Ye
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a051:e074:d6f:dc29])
+ (user=irogers job=sendgmr) by 2002:a81:b309:0:b0:545:7b92:2890 with SMTP id
+ r9-20020a81b309000000b005457b922890mr1981501ywh.7.1680628748706; Tue, 04 Apr
+ 2023 10:19:08 -0700 (PDT)
+Date:   Tue,  4 Apr 2023 10:19:05 -0700
+Message-Id: <20230404171905.415910-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Subject: [PATCH v1] perf list: Allow listing of just libpfm4 events
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+If libpfm4 is supported then add 'perf list pfm' to list just the
+libpfm4 events.
 
-On 3/30/2023 4:31 PM, Greg KH wrote:
-> On Thu, Mar 30, 2023 at 04:18:21PM +0530, Rajat Khandelwal wrote:
->> IOM status has a crucial role during debugging to check the
->> current state of the type-C port.
->> There are ways to fetch the status, but all those require the
->> IOM port status offset, which could change with platform.
->>
->> Make a debugfs directory for intel_pmc_mux and expose the status
->> under it per port basis.
->>
->> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
->> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->> ---
->>   drivers/usb/typec/mux/intel_pmc_mux.c | 44 +++++++++++++++++++++++++++
->>   1 file changed, 44 insertions(+)
->>
->> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
->> index 34e4188a40ff..c99d20888f5d 100644
->> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
->> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
->> @@ -15,6 +15,7 @@
->>   #include <linux/usb/typec_mux.h>
->>   #include <linux/usb/typec_dp.h>
->>   #include <linux/usb/typec_tbt.h>
->> +#include <linux/debugfs.h>
->>   
->>   #include <asm/intel_scu_ipc.h>
->>   
->> @@ -145,6 +146,8 @@ struct pmc_usb {
->>   	u32 iom_port_status_offset;
->>   };
->>   
->> +static struct dentry *pmc_mux_debugfs_root;
-> Why not just look up the dentry and delete it when you want it with a
-> call to debugfs_lookup_and_remove() instead?  That way you don't have to
-> keep it around (hint, pass it back from your call to
-> pmc_mux_debugfs_init() or better yet, don't even have a
-> pmc_mux_debugfs_init() function as it only contains one line and is
-> only called in one place.
->
-> This will save you the storage space of this variable if debugfs is not
-> enabled in your kernel.  A small amount, yes, but it's nicer, right?
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/builtin-list.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-I see. Yes, though a small amount, you're anyways right.
+diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
+index 76e1d31a68ee..a60fe91d4b40 100644
+--- a/tools/perf/builtin-list.c
++++ b/tools/perf/builtin-list.c
+@@ -15,6 +15,7 @@
+ #include "util/pmu-hybrid.h"
+ #include "util/debug.h"
+ #include "util/metricgroup.h"
++#include "util/pfm.h"
+ #include "util/string2.h"
+ #include "util/strlist.h"
+ #include "util/strbuf.h"
+@@ -452,7 +453,11 @@ int cmd_list(int argc, const char **argv)
+ 		OPT_END()
+ 	};
+ 	const char * const list_usage[] = {
++#ifdef HAVE_LIBPFM
++		"perf list [<options>] [hw|sw|cache|tracepoint|pmu|sdt|metric|metricgroup|event_glob|pfm]",
++#else
+ 		"perf list [<options>] [hw|sw|cache|tracepoint|pmu|sdt|metric|metricgroup|event_glob]",
++#endif
+ 		NULL
+ 	};
+ 
+@@ -529,7 +534,12 @@ int cmd_list(int argc, const char **argv)
+ 			default_ps.metricgroups = true;
+ 			default_ps.metrics = false;
+ 			metricgroup__print(&print_cb, ps);
+-		} else if ((sep = strchr(argv[i], ':')) != NULL) {
++		}
++#ifdef HAVE_LIBPFM
++		else if (strcmp(argv[i], "pfm") == 0)
++			print_libpfm_events(&print_cb, ps);
++#endif
++		else if ((sep = strchr(argv[i], ':')) != NULL) {
+ 			char *old_pmu_glob = default_ps.pmu_glob;
+ 
+ 			default_ps.event_glob = strdup(argv[i]);
+-- 
+2.40.0.577.gac1e443424-goog
 
-1. Though a single-line function, I explicitly defined it to make it more readable.
-ATM, maintaining a small different framework within the file for another function
-(debugfs) somehow presents a more 'organized' code to me, if that makes sense? :)
-
-2. About the suggestion of not keeping the debugfs_root static throughout the
-execution, I can change it as per your suggestion, but I'd like to keep it this
-way, if that's ok? This way, it would fit nice in the future if more variables
-are to be added.
-
-Let me know your thoughts.
-
-Thanks
-Rajat
-
->
-> thanks,
->
-> greg k-h
