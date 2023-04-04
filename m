@@ -2,109 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592CB6D55A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 02:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1317A6D55AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 02:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231933AbjDDAvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 20:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
+        id S231643AbjDDAyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 20:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjDDAvC (ORCPT
+        with ESMTP id S229699AbjDDAyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 20:51:02 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB1910CB;
-        Mon,  3 Apr 2023 17:51:00 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id n14so13913736plc.8;
-        Mon, 03 Apr 2023 17:51:00 -0700 (PDT)
+        Mon, 3 Apr 2023 20:54:39 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7C92D40
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 17:54:37 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id d13so28942951pjh.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 17:54:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680569460;
+        d=atishpatra.org; s=google; t=1680569677;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EKRSKYp1K/d7cEVS79Gw2CfFkDGQoLe08di4qI6GwFc=;
-        b=Y4Sm9ZLwxJ+D+r6pF3ybUyM9uX/W2R/Dr4HzTggbAbcnH+ZO6kQCx+RGIW5DW9vq/z
-         mNbpUQcUxuiFplYd76ZytcfYMQ2+T5idvYbV3OJDE6A+YMXw704O3OrxvGpCZfw3ggvs
-         yC2EopAz8OBnJo5KSsN3akJy0IPH8lz2eqB0ZUzLDi5EUnGh24cIwMJ0Q/HT4m662zPJ
-         8GUrXZWc38SwiKWH18Govx0BOeHwgpXPcLyHrxAvFnjoFGdsJ4EZSDfTzESzdD2BkJr5
-         SfVXRWBR/+Wwlz6cptLQJz+esFusFxqqWaOfpxZuy+5t32sPiTkKNSJeyEDf8+UhzYrX
-         27lQ==
+        bh=oeRhezTe6V3KRxJiPAUxev5yCp4NThE2FwzyZbUEj/w=;
+        b=q6c9SbJLUNnXc0WkOkpocfapkQ4dqq6ipwmLvk7nGVQbE7154VWSLpmcLm4fUf/3Ft
+         gERFB/lYnNBcG5fxh+omt7M4raMfD166SOH8dmbH1aLYgwHsHLyRPMFuPdZvqGg0p42j
+         pEKnGCKhKqjN8GY63FdyGaGNiNh9cgN9AuCT0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680569460;
+        d=1e100.net; s=20210112; t=1680569677;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EKRSKYp1K/d7cEVS79Gw2CfFkDGQoLe08di4qI6GwFc=;
-        b=MB2ZitqlFaQTpkcKVXFyxx6Hf55L8OnNLkt7eq6QRlN3gs9kwiuCcsPXVOEOhZt/UZ
-         8pdbIyM2+t5GLkLUosYXscqPlAcpnH0aNGBL9/1Wf08VOKwTYBigoNfQpas0VO/+Ub2d
-         AI+ua8yKuGJTds00pcjukziSWaOmJcmTIDOyS7WkOxcKR+LaQqUEWz0gbB53EWOm8tKu
-         br9wtOQLIccskqLAAvC6UvRWSK95SLdfLXWaowHzuBt2fLeRctN8qzIGaDlc8OIVFeg2
-         cx7orQU/JzW7bT0jnwht52EkJe5eJVv//6DtbEsGv/1kkp7CA711zf+pMjjfnLOxPntZ
-         zdNA==
-X-Gm-Message-State: AAQBX9foDLAzByTDPh/sCkQAbZhO3HeWXVBYyh4RjPtXnLjZSpGZrW50
-        Flz53XLg41yZJkqd1NqYhZE+pa5jSwthwe8mY00=
-X-Google-Smtp-Source: AKy350aSCysYEOdKcdoXKNZMkelmdTgziRdPavBpkcvm7+SAoMAg2VeCxrcZIcniXwvkpWcnm/AWv4Il6OMnqcNY4n8=
-X-Received: by 2002:a17:902:d2c4:b0:1a0:1f4e:a890 with SMTP id
- n4-20020a170902d2c400b001a01f4ea890mr357591plc.1.1680569460152; Mon, 03 Apr
- 2023 17:51:00 -0700 (PDT)
+        bh=oeRhezTe6V3KRxJiPAUxev5yCp4NThE2FwzyZbUEj/w=;
+        b=VR9MfcXze2q6xGpL/XTqrnZGB6ipvKRHJzi43XnoT5UJFsuzH2YRRMnzEYcHcMI7e7
+         aai1mjXywFL7n5UDJ0zYiHNbhqNk5ZoO2LfNRqNETPTgNhh+zacJixOvOWlLQToFSU0+
+         IhcfOZtSI1dyny4UkwV5CM7WZcDUpQNxuWiL5B4octQMif1mnMduII2JlXWcKg6ctAvW
+         RjfwLpbopuo95HsLDCGX/fLf4/xni/dGTt1AoYvt03WJ9q0alGGh237UW4UW0S4Jcdev
+         p3NLj+v6JdnLFuZVGFP2APAJ/PF9nGWkQjbv7uXe8fYH6HLVo9pIs39bkO+C4LlERb66
+         fopA==
+X-Gm-Message-State: AAQBX9e/LlQe9agUZVbmmUDcKlg5o/ziOGIowYVe561fm8e5aZnZic2O
+        w1nveGgpbXEjAEOM9QGe8/fPdZHwtQ/fiE7uKQpUjHxyzo6nki4=
+X-Google-Smtp-Source: AKy350Ykn4T4uF1/NFxFPzzGrAe+qaPiHSoG2wg1K72mnjSzCZn2FZ5BVlkmrfQHF1IBbU+m52ehu4ZI7H9VV7JkwHY=
+X-Received: by 2002:a17:90b:3511:b0:240:9b27:ded4 with SMTP id
+ ls17-20020a17090b351100b002409b27ded4mr7681367pjb.4.1680569677399; Mon, 03
+ Apr 2023 17:54:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220203182641.824731-1-shy828301@gmail.com> <132ba4a4-3b1d-329d-1db4-f102eea2fd08@suse.cz>
- <9ba70a5e-4e12-0e9f-a6a4-d955bf25d0fe@redhat.com> <64ec7939-0733-7925-0ec0-d333e62c5f21@suse.cz>
- <CAHbLzkoZctsJf92Lw3wKMuSqT7-aje0SiAjc6JVW5Z3bNS1JNg@mail.gmail.com>
- <efab25ef-c29c-3671-5f26-060bba76d481@suse.cz> <CAHbLzkomXCwabFrNaNyuGBozmindHqVD0ki4n75XJ2V8Uw=9rw@mail.gmail.com>
- <5618f454-7a88-0443-59e7-df9780e9fa50@redhat.com>
-In-Reply-To: <5618f454-7a88-0443-59e7-df9780e9fa50@redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 3 Apr 2023 17:50:48 -0700
-Message-ID: <CAHbLzkp16tAzFRnM3BUnspnR-qR2JG3c9TqaNq3YHxy9u5ZC6w@mail.gmail.com>
-Subject: Re: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, kirill.shutemov@linux.intel.com,
-        jannh@google.com, willy@infradead.org, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
+References: <20230403093310.2271142-1-apatel@ventanamicro.com> <20230403093310.2271142-6-apatel@ventanamicro.com>
+In-Reply-To: <20230403093310.2271142-6-apatel@ventanamicro.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 4 Apr 2023 06:24:25 +0530
+Message-ID: <CAOnJCULaGqO1kd2tM-MG7sCHaWTo_zpnhgm5kgsJ8206Ab6zDQ@mail.gmail.com>
+Subject: Re: [PATCH v3 5/8] RISC-V: KVM: Implement subtype for CSR ONE_REG interface
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 12:30=E2=80=AFAM David Hildenbrand <david@redhat.com=
-> wrote:
+On Mon, Apr 3, 2023 at 3:03=E2=80=AFPM Anup Patel <apatel@ventanamicro.com>=
+ wrote:
 >
-> On 24.03.23 21:12, Yang Shi wrote:
-> > On Fri, Mar 24, 2023 at 4:25=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz=
-> wrote:
-> >>
-> >> On 3/23/23 21:45, Yang Shi wrote:
-> >>> On Thu, Mar 23, 2023 at 3:11=E2=80=AFAM Vlastimil Babka <vbabka@suse.=
-cz> wrote:
-> >>>
-> >>> Out of curiosity, is there any public link for this CVE? Google searc=
-h
-> >>> can't find it.
-> >>
-> >> Only this one is live so far, AFAIK
-> >>
-> >> https://bugzilla.redhat.com/show_bug.cgi?id=3D2180936
-> >
-> > Thank you.
+> To make the CSR ONE_REG interface extensible, we implement subtype
+> for the CSR ONE_REG IDs. The existing CSR ONE_REG IDs are treated
+> as subtype =3D 0 (aka General CSRs).
 >
-> There is now
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  arch/riscv/include/uapi/asm/kvm.h |  3 +-
+>  arch/riscv/kvm/vcpu.c             | 88 +++++++++++++++++++++++--------
+>  2 files changed, 69 insertions(+), 22 deletions(-)
 >
-> https://access.redhat.com/security/cve/cve-2023-1582
-
-Thank you.
-
+> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/=
+asm/kvm.h
+> index 47a7c3958229..182023dc9a51 100644
+> --- a/arch/riscv/include/uapi/asm/kvm.h
+> +++ b/arch/riscv/include/uapi/asm/kvm.h
+> @@ -65,7 +65,7 @@ struct kvm_riscv_core {
+>  #define KVM_RISCV_MODE_S       1
+>  #define KVM_RISCV_MODE_U       0
 >
+> -/* CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+> +/* General CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+>  struct kvm_riscv_csr {
+>         unsigned long sstatus;
+>         unsigned long sie;
+> @@ -152,6 +152,7 @@ enum KVM_RISCV_SBI_EXT_ID {
+>
+>  /* Control and status registers are mapped as type 3 */
+>  #define KVM_REG_RISCV_CSR              (0x03 << KVM_REG_RISCV_TYPE_SHIFT=
+)
+> +#define KVM_REG_RISCV_CSR_GENERAL      (0x0 << KVM_REG_RISCV_SUBTYPE_SHI=
+FT)
+>  #define KVM_REG_RISCV_CSR_REG(name)    \
+>                 (offsetof(struct kvm_riscv_csr, name) / sizeof(unsigned l=
+ong))
+>
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index 1fd54ec15622..aca6b4fb7519 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -460,27 +460,72 @@ static int kvm_riscv_vcpu_set_reg_core(struct kvm_v=
+cpu *vcpu,
+>         return 0;
+>  }
+>
+> +static int kvm_riscv_vcpu_general_get_csr(struct kvm_vcpu *vcpu,
+> +                                         unsigned long reg_num,
+> +                                         unsigned long *out_val)
+> +{
+> +       struct kvm_vcpu_csr *csr =3D &vcpu->arch.guest_csr;
+> +
+> +       if (reg_num >=3D sizeof(struct kvm_riscv_csr) / sizeof(unsigned l=
+ong))
+> +               return -EINVAL;
+> +
+> +       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip)) {
+> +               kvm_riscv_vcpu_flush_interrupts(vcpu);
+> +               *out_val =3D (csr->hvip >> VSIP_TO_HVIP_SHIFT) & VSIP_VAL=
+ID_MASK;
+> +       } else
+> +               *out_val =3D ((unsigned long *)csr)[reg_num];
+> +
+> +       return 0;
+> +}
+> +
+> +static inline int kvm_riscv_vcpu_general_set_csr(struct kvm_vcpu *vcpu,
+> +                                                unsigned long reg_num,
+> +                                                unsigned long reg_val)
+> +{
+> +       struct kvm_vcpu_csr *csr =3D &vcpu->arch.guest_csr;
+> +
+> +       if (reg_num >=3D sizeof(struct kvm_riscv_csr) / sizeof(unsigned l=
+ong))
+> +               return -EINVAL;
+> +
+> +       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip)) {
+> +               reg_val &=3D VSIP_VALID_MASK;
+> +               reg_val <<=3D VSIP_TO_HVIP_SHIFT;
+> +       }
+> +
+> +       ((unsigned long *)csr)[reg_num] =3D reg_val;
+> +
+> +       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip))
+> +               WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
+> +
+> +       return 0;
+> +}
+> +
+>  static int kvm_riscv_vcpu_get_reg_csr(struct kvm_vcpu *vcpu,
+>                                       const struct kvm_one_reg *reg)
+>  {
+> -       struct kvm_vcpu_csr *csr =3D &vcpu->arch.guest_csr;
+> +       int rc;
+>         unsigned long __user *uaddr =3D
+>                         (unsigned long __user *)(unsigned long)reg->addr;
+>         unsigned long reg_num =3D reg->id & ~(KVM_REG_ARCH_MASK |
+>                                             KVM_REG_SIZE_MASK |
+>                                             KVM_REG_RISCV_CSR);
+> -       unsigned long reg_val;
+> +       unsigned long reg_val, reg_subtype;
+>
+>         if (KVM_REG_SIZE(reg->id) !=3D sizeof(unsigned long))
+>                 return -EINVAL;
+> -       if (reg_num >=3D sizeof(struct kvm_riscv_csr) / sizeof(unsigned l=
+ong))
+> -               return -EINVAL;
+>
+> -       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip)) {
+> -               kvm_riscv_vcpu_flush_interrupts(vcpu);
+> -               reg_val =3D (csr->hvip >> VSIP_TO_HVIP_SHIFT) & VSIP_VALI=
+D_MASK;
+> -       } else
+> -               reg_val =3D ((unsigned long *)csr)[reg_num];
+> +       reg_subtype =3D reg_num & KVM_REG_RISCV_SUBTYPE_MASK;
+> +       reg_num &=3D ~KVM_REG_RISCV_SUBTYPE_MASK;
+> +       switch (reg_subtype) {
+> +       case KVM_REG_RISCV_CSR_GENERAL:
+> +               rc =3D kvm_riscv_vcpu_general_get_csr(vcpu, reg_num, &reg=
+_val);
+> +               break;
+> +       default:
+> +               rc =3D -EINVAL;
+> +               break;
+> +       }
+> +       if (rc)
+> +               return rc;
+>
+>         if (copy_to_user(uaddr, &reg_val, KVM_REG_SIZE(reg->id)))
+>                 return -EFAULT;
+> @@ -491,31 +536,32 @@ static int kvm_riscv_vcpu_get_reg_csr(struct kvm_vc=
+pu *vcpu,
+>  static int kvm_riscv_vcpu_set_reg_csr(struct kvm_vcpu *vcpu,
+>                                       const struct kvm_one_reg *reg)
+>  {
+> -       struct kvm_vcpu_csr *csr =3D &vcpu->arch.guest_csr;
+> +       int rc;
+>         unsigned long __user *uaddr =3D
+>                         (unsigned long __user *)(unsigned long)reg->addr;
+>         unsigned long reg_num =3D reg->id & ~(KVM_REG_ARCH_MASK |
+>                                             KVM_REG_SIZE_MASK |
+>                                             KVM_REG_RISCV_CSR);
+> -       unsigned long reg_val;
+> +       unsigned long reg_val, reg_subtype;
+>
+>         if (KVM_REG_SIZE(reg->id) !=3D sizeof(unsigned long))
+>                 return -EINVAL;
+> -       if (reg_num >=3D sizeof(struct kvm_riscv_csr) / sizeof(unsigned l=
+ong))
+> -               return -EINVAL;
+>
+>         if (copy_from_user(&reg_val, uaddr, KVM_REG_SIZE(reg->id)))
+>                 return -EFAULT;
+>
+> -       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip)) {
+> -               reg_val &=3D VSIP_VALID_MASK;
+> -               reg_val <<=3D VSIP_TO_HVIP_SHIFT;
+> +       reg_subtype =3D reg_num & KVM_REG_RISCV_SUBTYPE_MASK;
+> +       reg_num &=3D ~KVM_REG_RISCV_SUBTYPE_MASK;
+> +       switch (reg_subtype) {
+> +       case KVM_REG_RISCV_CSR_GENERAL:
+> +               rc =3D kvm_riscv_vcpu_general_set_csr(vcpu, reg_num, reg_=
+val);
+> +               break;
+> +       default:
+> +               rc =3D -EINVAL;
+> +               break;
+>         }
+> -
+> -       ((unsigned long *)csr)[reg_num] =3D reg_val;
+> -
+> -       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip))
+> -               WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
+> +       if (rc)
+> +               return rc;
+>
+>         return 0;
+>  }
 > --
-> Thanks,
+> 2.34.1
 >
-> David / dhildenb
->
+
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
+
+--=20
+Regards,
+Atish
