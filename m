@@ -2,135 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31536D6CAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC28A6D6CBA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235922AbjDDSyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 14:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
+        id S236107AbjDDS4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 14:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235913AbjDDSye (ORCPT
+        with ESMTP id S236056AbjDDS4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 14:54:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFD3170F;
-        Tue,  4 Apr 2023 11:54:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1441363845;
-        Tue,  4 Apr 2023 18:54:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B78BC433EF;
-        Tue,  4 Apr 2023 18:54:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680634472;
-        bh=2JKZvifvZo0iG/71MaLcykWMpX1Lo94xFJ1Wx7m52is=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LaGRNGMwDPas+wlQ1CR8kS2KjdEfpD/cSbkPlqyDEr4PjyVriLIwZM/Iz/mF4/ah4
-         Jb5jl+oeSFEtJDUI692YwC7tBXkiqYPWjsrVdAwq/PuuxOKXFNW/EJEylL1b2slpoX
-         p2mnLUyc9+2ulXNrbnptcFdCY7/VZ0m31JPuBqOcFumHO/KDpA12mvXKmrWdzwozz4
-         jjS2iIrD5Nk935172fOZYNbK/YpOFpvr52XL7jsHXaQljPSwKNMZnWCMBcgiMtnsrj
-         omdESzIq2PciJ3Rd/RF77zhaK2A60Dm2OqndTrNtIbA+OM7B+sNWj8n7sxyIGRT+Nv
-         0jO1s2R7W2kRw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EFAD84052D; Tue,  4 Apr 2023 15:54:29 -0300 (-03)
-Date:   Tue, 4 Apr 2023 15:54:29 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Song Liu <song@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v5 00/17] Reference count checker and related fixes
-Message-ID: <ZCxyZcnd9/4zjbQZ@kernel.org>
-References: <20230320212248.1175731-1-irogers@google.com>
- <CAP-5=fX4=pUmcFpRZ5xFds1awSr7HSo1F9rH4=D7NJXW9OXXVQ@mail.gmail.com>
- <7443d427-783b-44b6-85e6-5e667bb83a94@intel.com>
- <ZCxvYpeoemPHUmJ4@kernel.org>
+        Tue, 4 Apr 2023 14:56:30 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B063A92
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 11:56:28 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54184571389so633358677b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 11:56:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1680634588;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yuYMP9oERucJ/O/ah5M668zvZcUxIDKJFH+6ndYhYhw=;
+        b=PQaRIIZkpGihz6wkjt6tSlzCY4838BGeVloFrkgUy+TiPjGJbg3Xju0fSOz0ugEkLa
+         4M8JsBMaHjY8ojIZiBKrw25TFChUm/J4/9aimvN5zAF5yyzAJlL2UfxkMYrv/zAJW/nA
+         jwyh8THBan3RpnhNHPD9gjX0xuKBf51UcePGUO7o0LaDMyF74f8YReyFbAXUUPkQpImX
+         DC76fVSQD8bpquZb3y4h8S8ed1r8VitaUMVJbkb5wVqkWxpxh/fzAO9pT/D1XDoekIuz
+         qjzS8hMqbNGhmWQaD035n8+tMbSOtDVlAbMYXFICMdWGmUL28QNylVAGMUDdcFBiprXN
+         MQSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680634588;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yuYMP9oERucJ/O/ah5M668zvZcUxIDKJFH+6ndYhYhw=;
+        b=Ry6X0Mc+JLDIUwip25zHe39pcslKPxaKwuD5MX2CfWOasGIPt+FDC0a47rlnC8P312
+         OaiVhYye9m35rXvsyrvx2VkVoVixuBlTqmNWkyInXyEpvMBG3TL2q945QsnMd0FXG5yR
+         v0w2eR6B599QsNUVSohvOsfDr8T5c99EAdmGYW8jc7NKTN9EJyzeG4PmFq2wPR0G26eT
+         VnbpZBv0JK+mRy6zlkPogYTPFAxlCf0oCXJZJL3rGvOtjZf1A6yZuaE4JZCWH4dOAcup
+         zxOnpgs9lCuiwWvvWvpLd0J34zsx408nLD/UGkiFekBsyFZO+cYdxpo9RYwVGuvBdmmG
+         pqVg==
+X-Gm-Message-State: AAQBX9fFdsr+qvE+M4hanxRZ2/DB1gZkPSZBzJeMo4Anu9naJTtGRzfv
+        s++62ZlphvxuiW6zVB4uN6pOvmdM+ViHgUT6/e4+
+X-Google-Smtp-Source: AKy350YxxXydXcJ3GRJ0BEKkYqhynh4SF2ERZFWAntaIKyMLNleszHadlV51xUjwR+gGb8zwomvEMLjrI4Z2QWit7js=
+X-Received: by 2002:a81:b389:0:b0:544:cd0e:2f80 with SMTP id
+ r131-20020a81b389000000b00544cd0e2f80mr1986292ywh.8.1680634587849; Tue, 04
+ Apr 2023 11:56:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCxvYpeoemPHUmJ4@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com> <20230331123221.3273328-4-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230331123221.3273328-4-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 4 Apr 2023 14:56:17 -0400
+Message-ID: <CAHC9VhSMdrPP6+9cmhAU1=tDikJ5Y8_mJEORdqiaJw3pQuFDDg@mail.gmail.com>
+Subject: Re: [PATCH v10 3/4] evm: Align evm_inode_init_security() definition
+ with LSM infrastructure
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Apr 04, 2023 at 03:41:38PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Apr 04, 2023 at 08:25:41PM +0300, Adrian Hunter escreveu:
-> > On 4/04/23 18:58, Ian Rogers wrote:
-> > > Ping. It would be nice to have this landed or at least the first 10
-> > > patches that refactor the map API and are the bulk of the
-> > > lines-of-code changed. Having those landed would make it easier to
-> > > rebase in the future, but I also think the whole series is ready to
-> > > go.
-> > 
-> > I was wondering if the handling of dynamic data like struct map makes
-> > any sense at present.  Perhaps someone can reassure me.
-> > 
-> > A struct map can be updated when an MMAP event is processed.  So it
-> 
-> Yes, it can, and the update is made via a new PERF_RECORD_MMAP, right?
-> 
-> So:
-> 
-> 	perf_event__process_mmap()
-> 	  machine__process_mmap2_event()
-> 	    map__new() + thread__insert_map(thread, map)
-> 	    	maps__fixup_overlappings()
-> 			maps__insert(thread->maps, map);
-> 
-> Ok, from this point on new samples on ] map->start .. map->end ] will
-> grab a refcount to this new map in its hist_entry, right?
-> 
-> When we want to sort by dso we will look at hist_entry->map->dso, etc.
+On Fri, Mar 31, 2023 at 8:33=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Change the evm_inode_init_security() definition to align with the LSM
+> infrastructure. Keep the existing behavior of including in the HMAC
+> calculation only the first xattr provided by LSMs.
+>
+> Changing the evm_inode_init_security() definition requires passing the
+> xattr array allocated by security_inode_init_security(), and the number o=
+f
+> xattrs filled by previously invoked LSMs.
+>
+> Use the newly introduced lsm_get_xattr_slot() to position EVM correctly i=
+n
+> the xattrs array, like a regular LSM, and to increment the number of fill=
+ed
+> slots. For now, the LSM infrastructure allocates enough xattrs slots to
+> store the EVM xattr, without using the reservation mechanism.
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  include/linux/evm.h               | 13 +++++++------
+>  security/integrity/evm/evm_main.c | 16 ++++++++++------
+>  security/security.c               |  6 +++---
+>  3 files changed, 20 insertions(+), 15 deletions(-)
 
-And in 'perf top' we go decaying hist entries, when we delete the
-hist_entry, drop the reference count to things it holds, that will then
-be finally deleted when no more hist_entries point to it.
+This seems reasonable to me, but I'll want to see a sign-off from Mimi
+for the EVM bits.  Same thing for patch 4/4.
 
-> > seems like anything racing with event processing is already broken, and
-> > reference counting / locking cannot help - unless there is also
-> > copy-on-write (which there isn't at present)?
-> 
-> > For struct maps, referencing it while simultaneously processing
-> > events seems to make even less sense?
-> 
-> Can you elaborate some more?
-
-- Arnaldo
+--=20
+paul-moore.com
