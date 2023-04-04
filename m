@@ -2,140 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C64E6D5F8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1176D5F95
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbjDDLwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
+        id S234452AbjDDLxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 07:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjDDLws (ORCPT
+        with ESMTP id S234250AbjDDLxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:52:48 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4821710F3
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 04:52:46 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id r11so32479322wrr.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 04:52:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680609165;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OLv0LN8lAk3QfnUhhhnsk24mDFgoCCiKw5kM+c/FrNk=;
-        b=PIlIYQqvjr/V8cmB877Rcy8JB6XO7vQw6kz3u5ewvPi/aNCK9zVxMGitBDmI+6p/7D
-         QT79PNqb8XggeQ6ggP6RpTGCLaREBQ/fM0+tB1ZF3J9IZvdpirQg+vl9Ge/YvJxBEVM8
-         Sh7iDicitGN00XAVMZAqG5rsejGo/Wx5E6rWtsYlyqOsxIAdKBC8vIpUmNrZ1J5tJx7k
-         Ofrj8QaOZc9IWERMqUwAbI+Zemye5wxZcdNzaXrb78dbgqoMHpybLvBZq8Oar6aZrOXm
-         lPgCqlZEy3jB8t5/wdP3gtix8wLReCQtMnhSxZFXJ/M0rKVtoXWDpHquRNOney/B37us
-         z9bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680609165;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OLv0LN8lAk3QfnUhhhnsk24mDFgoCCiKw5kM+c/FrNk=;
-        b=lUFXkUTqs5xZoSDfNtADCYFNpzYvLbBCJLW8YDr4gtTW5V6DSQoYbTeMD5L709DjBd
-         1diu3fju5O6dTvmR5TOWM++P+W8c1F8Zd9a4Be4bahTisH4Ba9qX4gGWWUynK3F65s8N
-         gDboyM5GpLvoaGo40NlDIMQr6BioL+ybEeCzPiR09wZr7fTI1T0+1qXNQaxhRZFKHUhr
-         RK6yEf/cqqjhY/5W/l6p75ilOJaB/kpMLg9My7D4owFjd4uij4BPm24xitqZLmjBWu5O
-         eUNtuibkhvmns5DnKvONRITZTipmCyo2ornoI8zn/OSeY044wOfcKv+SXdcfaJFgkVfi
-         ty3w==
-X-Gm-Message-State: AAQBX9etWAzl0U5sMdbTV6FAmPMQ74kiDt+onvOw8PQ7JyDYWM5pV9No
-        yXe4i7oPaLIxjoNA5XkXe3BNPw==
-X-Google-Smtp-Source: AKy350Yya7ma4256kplKnJKWPZOqQ3wKmsQ11nyME/nhGt+TWoTPHYoPW3R82d3hK3Fcm80POIwx0w==
-X-Received: by 2002:a5d:4904:0:b0:2cf:e868:f781 with SMTP id x4-20020a5d4904000000b002cfe868f781mr1470835wrq.42.1680609164757;
-        Tue, 04 Apr 2023 04:52:44 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id d16-20020a5d4f90000000b002d51d10a3fasm12192160wru.55.2023.04.04.04.52.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 04:52:44 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 13:52:43 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 6/8] RISC-V: KVM: Add ONE_REG interface for AIA CSRs
-Message-ID: <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
-References: <20230403093310.2271142-1-apatel@ventanamicro.com>
- <20230403093310.2271142-7-apatel@ventanamicro.com>
- <osrpjiywxtkgxb5i6mfvxzfrzrnjv75uqzvlu3fouo4mqsktgj@blcmyjt3twqg>
- <CAAhSdy1JEQBiO55iCy97arO63VjGc+NicUvvwzTpK97W97LmJg@mail.gmail.com>
- <ejt3x4p7xhxfvwiafnogfwdn5dzd4qyowlht22utnbvzefsbyh@7dch4mebwckm>
+        Tue, 4 Apr 2023 07:53:51 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8FF97;
+        Tue,  4 Apr 2023 04:53:49 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 334BrcNJ012752;
+        Tue, 4 Apr 2023 06:53:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680609218;
+        bh=7/6vxYJ7RTVcIRm2WA3dwkLMPjDNfTBZL/h968j8CCM=;
+        h=From:To:CC:Subject:Date;
+        b=Duvz28m7j6y7e4b8mUcITI36a2NK8gqcHGLl89WL2LDnd7Um0SqPJ6jMlTyex7bTP
+         ihKSf8S9TQS08BNW0WJuuf5Cs0E5GWs19MIGnWmP/jILePegma0YfnLdXO4PpmjfJn
+         sTon+3Ead3YrNTJPBzE8g2iV98ge5kvrgyLdC/jU=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 334BrcbH129729
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 4 Apr 2023 06:53:38 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 4
+ Apr 2023 06:53:38 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 4 Apr 2023 06:53:38 -0500
+Received: from lelv0854.itg.ti.com (lelv0854.itg.ti.com [10.181.64.140])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 334Brc2N002950;
+        Tue, 4 Apr 2023 06:53:38 -0500
+Received: from localhost (a0501179-pc.dhcp.ti.com [10.24.69.114])
+        by lelv0854.itg.ti.com (8.14.7/8.14.7) with ESMTP id 334BraNA009968;
+        Tue, 4 Apr 2023 06:53:37 -0500
+From:   MD Danish Anwar <danishanwar@ti.com>
+To:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+Subject: [PATCH v7 0/4] Introduce PRU platform consumer API
+Date:   Tue, 4 Apr 2023 17:23:32 +0530
+Message-ID: <20230404115336.599430-1-danishanwar@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ejt3x4p7xhxfvwiafnogfwdn5dzd4qyowlht22utnbvzefsbyh@7dch4mebwckm>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 02:23:01PM +0200, Andrew Jones wrote:
-> On Mon, Apr 03, 2023 at 05:34:57PM +0530, Anup Patel wrote:
-> > On Mon, Apr 3, 2023 at 5:01 PM Andrew Jones <ajones@ventanamicro.com> wrote:
-> > >
-> > > On Mon, Apr 03, 2023 at 03:03:08PM +0530, Anup Patel wrote:
-> > > > We implement ONE_REG interface for AIA CSRs as a separate subtype
-> > > > under the CSR ONE_REG interface.
-> > > >
-> > > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > > ---
-> > > >  arch/riscv/include/uapi/asm/kvm.h | 8 ++++++++
-> > > >  arch/riscv/kvm/vcpu.c             | 8 ++++++++
-> > > >  2 files changed, 16 insertions(+)
-> > > >
-> > > > diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-> > > > index 182023dc9a51..cbc3e74fa670 100644
-> > > > --- a/arch/riscv/include/uapi/asm/kvm.h
-> > > > +++ b/arch/riscv/include/uapi/asm/kvm.h
-> > > > @@ -79,6 +79,10 @@ struct kvm_riscv_csr {
-> > > >       unsigned long scounteren;
-> > > >  };
-> > > >
-> > > > +/* AIA CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-> > > > +struct kvm_riscv_aia_csr {
-> > > > +};
-> > > > +
-> > > >  /* TIMER registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-> > > >  struct kvm_riscv_timer {
-> > > >       __u64 frequency;
-> > > > @@ -107,6 +111,7 @@ enum KVM_RISCV_ISA_EXT_ID {
-> > > >       KVM_RISCV_ISA_EXT_ZIHINTPAUSE,
-> > > >       KVM_RISCV_ISA_EXT_ZICBOM,
-> > > >       KVM_RISCV_ISA_EXT_ZBB,
-> > >
-> > > Looks like this patch is also based on "[PATCH] RISC-V: KVM: Allow Zbb
-> > > extension for Guest/VM"
-> > 
-> > Yes, do you want me to change the order of dependency?
-> 
-> It's probably best if neither depend on each other, since they're
-> independent, but otherwise the order doesn't matter. It'd be nice to call
-> the order out in the cover letter to give patchwork a chance at automatic
-> build testing, though. To call it out, I believe adding
-> 
-> Based-on: 20230401112730.2105240-1-apatel@ventanamicro.com
-> 
-> to the cover letter should work.
+Hi All,
+The Programmable Real-Time Unit and Industrial Communication Subsystem (PRU-ICSS
+or simply PRUSS) on various TI SoCs consists of dual 32-bit RISC cores
+(Programmable Real-Time Units, or PRUs) for program execution.
 
-I also just noticed that this based on "RISC-V: KVM: Add ONE_REG
-interface to enable/disable SBI extensions"[1] and it needs to be
-in order to pick up the KVM_REG_RISCV_SUBTYPE_MASK and
-KVM_REG_RISCV_SUBTYPE_SHIFT defines. It'd be good to call that
-patch out with Based-on.
+There are 3 foundation components for TI PRUSS subsystem: the PRUSS platform
+driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All of them have
+already been merged and can be found under:
+1) drivers/soc/ti/pruss.c
+   Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+2) drivers/irqchip/irq-pruss-intc.c
+   Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+3) drivers/remoteproc/pru_rproc.c
+   Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
 
-[1]: 20230331174542.2067560-2-apatel@ventanamicro.com
+The programmable nature of the PRUs provide flexibility to implement custom
+peripheral interfaces, fast real-time responses, or specialized data handling.
+Example of a PRU consumer drivers will be: 
+  - Software UART over PRUSS
+  - PRU-ICSS Ethernet EMAC
 
-Thanks,
-drew
+In order to make usage of common PRU resources and allow the consumer drivers 
+to configure the PRU hardware for specific usage the PRU API is introduced.
+
+This is the v7 of the old patch series [9].
+
+Changes from v6 [9] to v7:
+*) Addressed Simon's comment on patch 3 of this series and dropped unnecassary
+macros from the patch.
+
+Changes from v5 [1] to v6:
+*) Added Reviewed by tags of Roger and Tony to the patches.
+*) Added Acked by tag of Mathieu to patch 2 of this series.
+*) Added NULL check for @mux in pruss_cfg_get_gpmux() API.
+*) Added comment to the pruss_get() function documentation mentioning it is
+expected the caller will have done a pru_rproc_get() on @rproc.
+*) Fixed compilation warning "warning: ‘pruss_cfg_update’ defined but not used"
+in patch 3 by squashing patch 3 [7] and patch 5 [8] of previous revision
+together. Squashed patch 5 instead of patch 4 with patch 3 because patch 5 uses
+both read() and update() APIs where as patch 4 only uses update() API.
+Previously pruss_cfg_read()/update() APIs were intoroduced in patch 3
+and used in patch 4 and 5. Now these APIs are introduced as well as used in 
+patch 3.
+
+Changes from v4 [2] to v5:
+*) Addressed Roger's comment to change function argument in API 
+pruss_cfg_xfr_enable(). Instead of asking user to calcualte mask, now user
+will just provide the pru_type and mask will be calcualted inside the API.
+*) Moved enum pru_type from pru_rproc.c to include/linux/remoteproc/pruss.h
+in patch 4 / 5.
+*) Moved enum pruss_gpi_mode from patch 3/5 to patch 4/5 to introduce this
+enum in same patch as the API using it.
+*) Moved enum pruss_gp_mux_sel from patch 3/5 to patch 5/5 to introduce this
+enum in same patch as the API using it.
+*) Created new headefile drivers/soc/ti/pruss.h, private to PRUSS as asked by
+Roger. Moved all private definitions and pruss_cfg_read () / update ()
+APIs to this newly added headerfile.
+*) Renamed include/linux/pruss_driver.h to include/linux/pruss_internal.h as
+suggested by Andrew and Roger.
+
+Changes from v3 [3] to v4:
+*) Added my SoB tags in all patches as earlier SoB tags were missing in few
+patches.
+*) Added Roger's RB tags in 3 patches.
+*) Addressed Roger's comment in patch 4/5 of this series. Added check for 
+   invalid GPI mode in pruss_cfg_gpimode() API.
+*) Removed patch [4] from this series as that patch is no longer required.
+*) Made pruss_cfg_read() and pruss_cfg_update() APIs internal to pruss.c by
+   removing EXPORT_SYMBOL_GPL and making them static. Now these APIs are 
+   internal to pruss.c and PRUSS CFG space is not exposed.
+*) Moved APIs pruss_cfg_gpimode(), pruss_cfg_miirt_enable(), 
+   pruss_cfg_xfr_enable(), pruss_cfg_get_gpmux(), pruss_cfg_set_gpmux() to
+   pruss.c file as they are using APIs pruss_cfg_read / update. 
+   Defined these APIs in pruss.h file as other drivers use these APIs to 
+   perform respective operations.
+
+Changes from v2 to v3:
+*) No functional changes, the old series has been rebased on linux-next (tag:
+next-20230306).
+
+This series depends on another series which is already merged in the remoteproc
+tree [5] and is part of v6.3-rc1. This series and the remoteproc series form 
+the PRUSS consumer API which can be used by consumer drivers to utilize the 
+PRUs.
+
+One example of the consumer driver is the PRU-ICSSG ethernet driver [6],which 
+depends on this series and the remoteproc series [5].
+
+[1] https://lore.kernel.org/all/20230323062451.2925996-1-danishanwar@ti.com/
+[2] https://lore.kernel.org/all/20230313111127.1229187-1-danishanwar@ti.com/
+[3] https://lore.kernel.org/all/20230306110934.2736465-1-danishanwar@ti.com/
+[4] https://lore.kernel.org/all/20230306110934.2736465-6-danishanwar@ti.com/
+[5] https://lore.kernel.org/all/20230106121046.886863-1-danishanwar@ti.com/#t
+[6] https://lore.kernel.org/all/20230210114957.2667963-1-danishanwar@ti.com/
+[7] https://lore.kernel.org/all/20230323062451.2925996-4-danishanwar@ti.com/
+[8] https://lore.kernel.org/all/20230323062451.2925996-6-danishanwar@ti.com/
+[9] https://lore.kernel.org/all/20230331112941.823410-1-danishanwar@ti.com/
+
+Thanks and Regards,
+Md Danish Anwar
+
+Andrew F. Davis (1):
+  soc: ti: pruss: Add pruss_{request,release}_mem_region() API
+
+Suman Anna (2):
+  soc: ti: pruss: Add pruss_cfg_read()/update(),
+    pruss_cfg_get_gpmux()/set_gpmux() APIs
+  soc: ti: pruss: Add helper functions to set GPI mode, MII_RT_event and
+    XFR
+
+Tero Kristo (1):
+  soc: ti: pruss: Add pruss_get()/put() API
+
+ drivers/remoteproc/pru_rproc.c                |  17 +-
+ drivers/soc/ti/pruss.c                        | 260 +++++++++++++++++-
+ drivers/soc/ti/pruss.h                        |  88 ++++++
+ .../{pruss_driver.h => pruss_internal.h}      |  34 +--
+ include/linux/remoteproc/pruss.h              | 141 ++++++++++
+ 5 files changed, 498 insertions(+), 42 deletions(-)
+ create mode 100644 drivers/soc/ti/pruss.h
+ rename include/linux/{pruss_driver.h => pruss_internal.h} (58%)
+
+-- 
+2.25.1
+
