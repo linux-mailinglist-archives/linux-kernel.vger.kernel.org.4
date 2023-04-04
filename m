@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148466D6549
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C416D650D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235197AbjDDO1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
+        id S235522AbjDDOTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbjDDO1G (ORCPT
+        with ESMTP id S234951AbjDDOTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:27:06 -0400
-X-Greylist: delayed 457 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Apr 2023 07:26:46 PDT
-Received: from sandeen.net (sandeen.net [63.231.237.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 231BC19BF;
-        Tue,  4 Apr 2023 07:26:45 -0700 (PDT)
-Received: from [10.2.0.2] (unknown [37.19.199.145])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by sandeen.net (Postfix) with ESMTPSA id C1978325436;
-        Tue,  4 Apr 2023 09:19:07 -0500 (CDT)
-Message-ID: <e51e9fb1-ad5c-5cf8-fa04-4e3a10023739@sandeen.net>
-Date:   Tue, 4 Apr 2023 09:19:06 -0500
+        Tue, 4 Apr 2023 10:19:48 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F38B4
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:19:47 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id g7-20020a056602242700b00758e7dbd0dbso20649340iob.16
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 07:19:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680617986; x=1683209986;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ot0KYur+8nLVH0WRSyoEfyDfQEVy44kpAPp7VjgrfEU=;
+        b=wr9wgwn+nOjQ+TodN3+nXr98aT/8fu1Ys1vKdk4WuVqRuzGgRH9z4F1VlYZz5BWEmN
+         jmNH+Gdtot08JsLRvMUNO6MZIi5LBycwhzvOXIVvmFFFrtYHWh2Ki8XU+u3KJPbMjVPz
+         W957LUyRJ4pPjnsNTywlGOQkotMC6NqL7c2ZD46+xTRLiRNiZgl3I59wJAFU8FrfiQqo
+         bdHvhJzYxQ/eCI58G9KLPaLoIiXgwrAekqFT4vh5H7bZ8y5Ccblrd93peNrUcrdVKXzh
+         kEvnaRQGwnYXi6Y0P1VPG7Hl1WLDTJi8aYcCxDx3053qakFrrmJbB+i/xknUrCC4hRCr
+         jo3Q==
+X-Gm-Message-State: AAQBX9fbVUFt5Sl57b7PpDHjPrrdSqf+Zww5JY/NSz0yhNwILeozBvbH
+        JTL9tbp1W7dCJTUp7/0LZnbIryxzIQjF5tJ6Ca3P8JiuHYjP
+X-Google-Smtp-Source: AKy350Z7MFpp1VYeHsipLm/zlefsLydHgYGG92vadQj4ytQIm8IVdQw4igVowqFeUN432AECcHqyb5WeKolpVmSalIiw1rzGqE8R
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Content-Language: en-US
-To:     Ryosuke Yasuoka <ryasuoka@redhat.com>, djwong@kernel.org
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230404084701.2791683-1-ryasuoka@redhat.com>
-From:   Eric Sandeen <sandeen@sandeen.net>
-Subject: Re: [PATCH] xfs: Use for_each_perag() to iterate all available AGs
-In-Reply-To: <20230404084701.2791683-1-ryasuoka@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:94eb:0:b0:40a:dc7f:7715 with SMTP id
+ x98-20020a0294eb000000b0040adc7f7715mr1538706jah.4.1680617986468; Tue, 04 Apr
+ 2023 07:19:46 -0700 (PDT)
+Date:   Tue, 04 Apr 2023 07:19:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001632e305f8835e90@google.com>
+Subject: [syzbot] Monthly input report
+From:   syzbot <syzbot+list8e8dead94ef997c19522@syzkaller.appspotmail.com>
+To:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/23 3:47 AM, Ryosuke Yasuoka wrote:
-> for_each_perag_wrap() doesn't expect 0 as 2nd arg.
-> To iterate all the available AGs, just use for_each_perag() instead.
+Hello input maintainers/developers,
 
-Can you explain what goes wrong if it is zero? Is there a test for this?
+This is a 30-day syzbot report for the input subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/input
 
-If it's a general problem, what if the other 2 callers pass in the variable
-start_agno with a value of 0?
+During the period, 0 new issues were detected and 0 were fixed.
+In total, 14 issues are still open and 42 have been fixed so far.
 
-(I may well be missing something obvious as those macros are a bit dense)
+Some of the still happening issues:
 
-Thanks,
--Eric
- 
-> Signed-off-by: Ryosuke Yasuoka <ryasuoka@redhat.com>
-> ---
->  fs/xfs/xfs_filestream.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/xfs/xfs_filestream.c b/fs/xfs/xfs_filestream.c
-> index 22c13933c8f8..48f43c340c58 100644
-> --- a/fs/xfs/xfs_filestream.c
-> +++ b/fs/xfs/xfs_filestream.c
-> @@ -151,7 +151,7 @@ xfs_filestream_pick_ag(
->  		 * grab.
->  		 */
->  		if (!max_pag) {
-> -			for_each_perag_wrap(args->mp, 0, start_agno, args->pag)
-> +			for_each_perag(args->mp, start_agno, args->pag)
->  				break;
->  			atomic_inc(&args->pag->pagf_fstrms);
->  			*longest = 0;
+Crashes Repro Title
+2162    Yes   WARNING in input_mt_init_slots
+              https://syzkaller.appspot.com/bug?extid=0122fa359a69694395d5
+93      Yes   WARNING in cm109_urb_irq_callback/usb_submit_urb
+              https://syzkaller.appspot.com/bug?extid=2d6d691af5ab4b7e66df
+67      Yes   general protection fault in hidraw_release
+              https://syzkaller.appspot.com/bug?extid=953a33deaf38c66a915e
+49      Yes   inconsistent lock state in find_vmap_area
+              https://syzkaller.appspot.com/bug?extid=8d19062486784d15dda9
+32      Yes   WARNING in bcm5974_start_traffic/usb_submit_urb
+              https://syzkaller.appspot.com/bug?extid=348331f63b034f89b622
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
