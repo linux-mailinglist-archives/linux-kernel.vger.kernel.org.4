@@ -2,205 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C82E6D6172
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CBA6D5CBF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234596AbjDDMpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
+        id S234328AbjDDKMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 06:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbjDDMpO (ORCPT
+        with ESMTP id S233732AbjDDKMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:45:14 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FFE211D;
-        Tue,  4 Apr 2023 05:45:11 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id F35B7582196;
-        Tue,  4 Apr 2023 08:45:10 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 04 Apr 2023 08:45:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1680612310; x=1680619510; bh=V8F7vdZqNHhl5nv8/Rp3qNs+CuQC/1S5n3N
-        A9KKJTlA=; b=T33QA58TsY7L/qwKXqHoJY3rCCwL7EP6KK6tkE9cdvlHnPABYSe
-        pXpRMRtjRPUv8t7IXqaHdyujZQGXfuY4pOB9WxT8my7eIABkZ6mg9uy8XEkmZxJO
-        wv1mZAs+N8BKgoStAbRxhkRbXmKquQFq06QOel3Ch3+ftzwDyo8D5UjIU4CMcl9d
-        J85KHRZUEB1y4OrVaocXDBFJAw3Ay5ijMEkxn8baUADKTXx/SX99hDGNKvh5hpM/
-        iQWcXh3u2VlvRx0XuHoz9x2IyOrPhpadmlk3PAvPpOjakZ39kW1zcYgksOx1Z57s
-        s/BixV2wnyyYmuI6vuuOn69U52unvOOeIzw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680612310; x=1680619510; bh=V8F7vdZqNHhl5nv8/Rp3qNs+CuQC/1S5n3N
-        A9KKJTlA=; b=FYf+6KwtjH9qVK5Z73qwmZAH4ypY7EuXWjPIo1pCVCY1KSx3QW6
-        pxU++QozVrpFTDipdFOHXyyQnq0xuLQ2CG5jyu8NQu74e8We7PCzccdqxiuYWPOF
-        fs8/b70817p2eDek5EsSh6PQTQ0JIkfIIzg36hScwK4TrPiXgiQq31V3rIvHuxbg
-        9o0CiJuPHs/mcZcb1LDVw8y33LpjQFuB1aJ4rHWLMR5iuasI7KjzXKAQCU7VJ0dy
-        aTkSx4EqyP8KfJtszgOUj0msGKw7Qt+hX1mV7TnA9AMwvYLJdN/2az24Hpl/lnXy
-        BiszlfmGgwk2ZhNM77GZEBjS2/GYkobfCBg==
-X-ME-Sender: <xms:1hssZD6lSkl7dmRGL3660ig5YHUeKgIB5QxiL-TpExNmGcTw7vpgAA>
-    <xme:1hssZI4rXKYpw-r82_vBXeltdrqdXz41gQsGnzJdAGPyVZurpbq8dzZYxZb2D46ie
-    HRcsfr30KW5gyciXF0>
-X-ME-Received: <xmr:1hssZKd3qOatgI2rXxenQwFUBKoH4G8t3jJybGZ1z-UAtBToTf87fZKnWKnBWOc4b-bt1_aLRVXtPd_zu-_lAAQrGV8NYs0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledgheehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepvedvleeijeegvdekffehkeehieelhfeggfffheetkeeuledvtdeuffeh
-    teeltdffnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:1hssZEJoEvYYybTNKsFzNTOAi0zRmU3V-teS7to-4ZMApYYY8_DugA>
-    <xmx:1hssZHJ0neRbEay3gNCXL7FItwFApLfPxxDQ4sGG7sQoqkroLpOZ8Q>
-    <xmx:1hssZNycp4PSc3YTmgpSNTvEa8xZNuHAxBpcKWJVBnunSb3DtJPARw>
-    <xmx:1hssZOUJ870oxzEkQQLJJphcGfEIY95fq8iNpWwFWcD3ui5F7vvkng>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Apr 2023 08:45:09 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Tue, 04 Apr 2023 12:11:23 +0200
-Subject: [PATCH v3 33/65] clk: tegra: periph: Add a determine_rate hook
-MIME-Version: 1.0
+        Tue, 4 Apr 2023 06:12:05 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2049.outbound.protection.outlook.com [40.107.92.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B4E2735;
+        Tue,  4 Apr 2023 03:11:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lUxz2XWYofUpXzS02g7r/4upgDHwT5N6ZfKcDBFdkna6IgqYrTzHZgrLCsuKGyfA/DhJx3YxM85zJa0SxgADAI7ADsWj7O4sZ+hhQ0mWmDUd+wqtDUuoC9ZM0/mmI/r11qH9eXRNhlYRKdpH1oVTS3fdD9IELRxmfITuHU0WtDwloXLmlJKGkbvwrxmYZ8cPOscMuqNQRH4kLp7L3mST0kBlxxMH+bpTtbIg8LJcLTAF3bB60mZLmG/ZU6DR4N2jDZlllizmMOJ0clS4Fd2tPC4QwxRZcSBa9J9Leo0L+r9brT5dN5/D4H98cU6vYEq8SytvUSBpVHQpZE6PsB0ndw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WlGVa0lA6Tt6r4WaLe8aaV8zAQO54x/S6XQxRD7ZF7U=;
+ b=LP/ul3pnMkJKV0ZQuIBY3Qc+Jfa5P4UmiojJ48GPIDo1CFATCBv/NnFhSzwL6uTDbFzCBteynST86u90DcDp96mlitvyiHgYjVjhUX1ebGHxup05QWP+J2ddwi8gFuzoP6aYX4vjEw9UFXh2kFnc7GX+rF9nVijJJxnrBg7oe+aoGvt6YVY701qoLvHZTAnfLvRp/2U8X53fW3YG0Fn3RbYT0KI2YnFfqDsgWRxokCIo5+BfySIyDistfMlc8nriAqxI9JY4Pa5j2nUDf6T3hvQBKwFs0XNjEGJs8cm4srIWcjaHVPrHWgZu0A9a3cVhdAEeq+s5GlASKAtNcoPDkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WlGVa0lA6Tt6r4WaLe8aaV8zAQO54x/S6XQxRD7ZF7U=;
+ b=Zn1TCZTcViQimR9rd95FlZL3fHjIm+1+OQIiNIwwSLXXksulX1eDpOFd5/xR92Mgu8gQYGAl4DsqstZivQfJyXnBcmTKpKWm7xh69cSeeREB3us/QQg5EqU8On2kJPe54YbFoIp1/H2pSMmDj2CiLe9Hg9msh4zpNI1ILFI7vEvNJ4E/I+KXkhfPMKMXamRAgc0rNVHJlAzauYuvq8GwC+poRxlcK6w8mOGxnfc/cN4gA3ca63ccvZcYb+8/nn7S2qEc8G+oC/rlUg7CeFBk25ZvyQ8Ej6gW8/VPtPf1AjMwB2FMZ6jzdsT6xQWN16O75eDklDmmek8zfL9qfX3w1Q==
+Received: from DM6PR06CA0062.namprd06.prod.outlook.com (2603:10b6:5:54::39) by
+ CH2PR12MB4905.namprd12.prod.outlook.com (2603:10b6:610:64::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6254.33; Tue, 4 Apr 2023 10:11:35 +0000
+Received: from DM6NAM11FT057.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:54:cafe::e3) by DM6PR06CA0062.outlook.office365.com
+ (2603:10b6:5:54::39) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20 via Frontend
+ Transport; Tue, 4 Apr 2023 10:11:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ DM6NAM11FT057.mail.protection.outlook.com (10.13.172.252) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6277.28 via Frontend Transport; Tue, 4 Apr 2023 10:11:34 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 4 Apr 2023
+ 03:11:24 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Tue, 4 Apr 2023 03:11:23 -0700
+Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
+ Transport; Tue, 4 Apr 2023 03:11:23 -0700
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 4.14 00/66] 4.14.312-rc1 review
+In-Reply-To: <20230403140351.636471867@linuxfoundation.org>
+References: <20230403140351.636471867@linuxfoundation.org>
+X-NVConfidentiality: public
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221018-clk-range-checks-fixes-v3-33-9a1358472d52@cerno.tech>
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
-In-Reply-To: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org,
-        Maxime Ripard <maxime@cerno.tech>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2509; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=CVkVploTBmGsGDh1pgQkRdhTnIRCmgkdPTUL6cHj8pk=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCna37e9izlhYt3DnT9rm3BnR1Xgnvq3K3/OOOCo88M9ZOHO
- 6cJsHaUsDGJcDLJiiiwxwuZL4k7Net3JxjcPZg4rE8gQBi5OAZiIJxsjw8+dV8/9SFrb+OHbE+Wa2l
- evFv3XC3k/N3bRJLV/vc1eRqIM/+tqpl/U3NSULVmx9/if9efKDrzzZdBm89t9XvnEW1OdJF4A
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Message-ID: <a5075360-4ad8-467c-a61b-ffa180109443@drhqmail203.nvidia.com>
+Date:   Tue, 4 Apr 2023 03:11:23 -0700
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT057:EE_|CH2PR12MB4905:EE_
+X-MS-Office365-Filtering-Correlation-Id: c2bcc754-4104-41ed-4d44-08db34f4f896
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q63bpcGnDdX5jGhNW5qZTgUpAm02PX+fMQN3GWJGb5oqEuOTHIOAxIO5EnIEXEfUUHWPr2zPKsvSAlGFYcxmzbHgSpROgHfJ87v/UHF8amneoQbbMrDPBsH9zy56DR4LKJ3Jw6AsPAaW1+jutyJ1+YACeP5bgvxP3okM+w6ilfBtbdMsp7xbqgyHHTQq3GdioLvXKqI1JpWv38LDMesYpHd5JsZOjj81Ykr8KkFXurxmpkTgT4vToakDcclTtKP4uSLkr8wwfpcywUdVmgDWUeg15HZlgYYzyfYrOMPFBGLAOTGRsxpSo2thJfkW62ue/PZ5WU/zdup0MZL3tATtY0iy0eWViqIOsQk1h0X7VKtaqF2KyA/apYP0mv3+gOmJgKScpEccob3fCt3c1dXoq6zvVm/tY5BRMLW0cxPe7vCNOvtkMDXbrwdrWYglBT/gJ2z4LzzlLMcZGkdCvvliTT33ZcCDzUWE7lahMiqRJWmhRg4FX/oU0qCyXbK98O1vko27gnQ9sTwMyF6wlHNs5txKmVDstJqCsEhB0hVDi8ug9nfcdHAXtKcRvAQCE1Z7/y+pVUNF7JQWFdz587vNVktL96W389Smd8NuZa+ivpx2aZGhigtkZTaEioACnjOZYeqWY9RWft2t2L3kzb4IOEr+UZKPrqOrxNpta3z9FQDLrzz6o1d4pqcaWJWFNszz+2ylKE3tPLIpjchSZLhL7HNzkf5OctZ+6hkWSIe0WrkzmWnz9rQkNxDcEEq52FENRzzH8L4qjBciJhEARoJF+CPpFwbHH4AN8cXhbdl386w=
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(39860400002)(396003)(376002)(451199021)(36840700001)(46966006)(40470700004)(40480700001)(40460700003)(54906003)(36860700001)(4326008)(70206006)(70586007)(478600001)(6916009)(8676002)(8936002)(316002)(356005)(5660300002)(7416002)(41300700001)(7636003)(82740400003)(426003)(186003)(47076005)(336012)(966005)(26005)(31696002)(86362001)(82310400005)(2906002)(31686004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 10:11:34.8915
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2bcc754-4104-41ed-4d44-08db34f4f896
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT057.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4905
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Tegra periph nodiv clock implements a mux with a set_parent hook, but
-doesn't provide a determine_rate implementation.
+On Mon, 03 Apr 2023 16:08:08 +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.14.312 release.
+> There are 66 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.312-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-This is a bit odd, since set_parent() is there to, as its name implies,
-change the parent of a clock. However, the most likely candidate to
-trigger that parent change is a call to clk_set_rate(), with
-determine_rate() figuring out which parent is the best suited for a
-given rate.
+All tests passing for Tegra ...
 
-The other trigger would be a call to clk_set_parent(), but it's far less
-used, and it doesn't look like there's any obvious user for that clock.
+Test results for stable-v4.14:
+    8 builds:	8 pass, 0 fail
+    16 boots:	16 pass, 0 fail
+    32 tests:	32 pass, 0 fail
 
-So, the set_parent hook is effectively unused, possibly because of an
-oversight. However, it could also be an explicit decision by the
-original author to avoid any reparenting but through an explicit call to
-clk_set_parent().
+Linux version:	4.14.312-rc1-gf4c3927dd933
+Boards tested:	tegra124-jetson-tk1, tegra20-ventana,
+                tegra210-p2371-2180, tegra30-cardhu-a04
 
-The latter case would be equivalent to setting the flag
-CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
-to __clk_mux_determine_rate(). Indeed, if no determine_rate
-implementation is provided, clk_round_rate() (through
-clk_core_round_rate_nolock()) will call itself on the parent if
-CLK_SET_RATE_PARENT is set, and will not change the clock rate
-otherwise. __clk_mux_determine_rate() has the exact same behavior when
-CLK_SET_RATE_NO_REPARENT is set.
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
 
-And if it was an oversight, then we are at least explicit about our
-behavior now and it can be further refined down the line.
-
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/clk/tegra/clk-periph.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clk/tegra/clk-periph.c b/drivers/clk/tegra/clk-periph.c
-index 79ca3aa072b7..367396c62259 100644
---- a/drivers/clk/tegra/clk-periph.c
-+++ b/drivers/clk/tegra/clk-periph.c
-@@ -140,6 +140,7 @@ const struct clk_ops tegra_clk_periph_ops = {
- };
- 
- static const struct clk_ops tegra_clk_periph_nodiv_ops = {
-+	.determine_rate = __clk_mux_determine_rate,
- 	.get_parent = clk_periph_get_parent,
- 	.set_parent = clk_periph_set_parent,
- 	.is_enabled = clk_periph_is_enabled,
-@@ -170,7 +171,7 @@ static struct clk *_tegra_clk_register_periph(const char *name,
- 	bool div = !(periph->gate.flags & TEGRA_PERIPH_NO_DIV);
- 
- 	if (periph->gate.flags & TEGRA_PERIPH_NO_DIV) {
--		flags |= CLK_SET_RATE_PARENT;
-+		flags |= CLK_SET_RATE_PARENT | CLK_SET_RATE_NO_REPARENT;
- 		init.ops = &tegra_clk_periph_nodiv_ops;
- 	} else if (periph->gate.flags & TEGRA_PERIPH_NO_GATE)
- 		init.ops = &tegra_clk_periph_no_gate_ops;
-
--- 
-2.39.2
-
+Jon
