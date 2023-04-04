@@ -2,89 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB246D5C75
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D5A6D5C7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbjDDJ4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53646 "EHLO
+        id S234069AbjDDJ5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234256AbjDDJ4Q (ORCPT
+        with ESMTP id S233811AbjDDJ5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:56:16 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6B9269A;
-        Tue,  4 Apr 2023 02:56:09 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 25B0C60017;
-        Tue,  4 Apr 2023 09:56:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680602167;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gE5GYSD/Jv/st14bR6vIpX3+m96fdd5PsjXiDdC37SA=;
-        b=Qb8y+NXnhI916wxrPrrocRr3unVcblsLe1mz0RJTB8FDeOtGM5RpElRsW3EMpEZcNmFpij
-        COypw/LZJ8p5m+YGp7U5t4ulla6RC0QimLNAjJyCA0JZ6YmGv2ddXU3Jq76mcugf4H2vGD
-        WNuty7fU80FH3BYiMguCG8r4eN7eosXb6YB1nboZmWf+LXC0t1Yir3Wv0jstl0o95uipHI
-        1o86YUw6qcfFDcDNKeh0Y1a5wSeUoQ+zlNQO6Nq9oLbJIr93ps+xN7qIW2sFCNZnRc7C8o
-        q30cJIJseTBNMq4+Pn6UEcZ1iulpbmK69QOOTvIHjgBtVejV71qcVpR365E1tw==
-Date:   Tue, 4 Apr 2023 11:56:05 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
-        jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: add max313xx RTCs
-Message-ID: <202304040956056c59af98@mail.local>
-References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
- <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
- <dd6f0842-519f-1bc9-f7f5-459863dc3dcd@linaro.org>
- <202304040710049c9cc01a@mail.local>
- <996b49ab-5e2e-76bc-efb1-38c6384871f6@linaro.org>
- <2023040407444619bf5596@mail.local>
- <0fd972bd-c5e7-65cc-6992-09c4c3e88f95@linaro.org>
+        Tue, 4 Apr 2023 05:57:34 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8B72689
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:57:32 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso1403433pjf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 02:57:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1680602252;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8EeJ3Vg/hflzXly6UJfLnp/sYv8Ula1ty7RMpEhQjsE=;
+        b=DZcbyLkyTGTTuO+N7pa4ARwCTRNuL4ybs38LCUxl4HjBDH9eqjR2F0nnTnp1HWGEfc
+         PhRf8bwSKXhOdsUKHc9TxrsB5fNYFMJtf08rWMZhxTVbBRsp71RfQ4+6Ye1omj+dPl4/
+         SNS0NCBcfN3EOdGTJjny3/JDM2TZ/qHzsfDC3ASKsNYrR+VAZmbZd8gqmJ1D7hZUiYBj
+         y/NqILXWJo+WPf7Fv7k5SH72D5y39NCvUOIRvrbjST8TvSWka2VANi3vardpQuZQF+rc
+         BX132iwtB4VLe04nL1nzS6OdsrgWQ5BSA5vOt+Y0Dr1j0WT9LV2DWp1C6KtYOZqFczTL
+         6g4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680602252;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8EeJ3Vg/hflzXly6UJfLnp/sYv8Ula1ty7RMpEhQjsE=;
+        b=Xga3xDnJexv/jNPdgDoNW4tQ9zLbULsnWyy0JhhJ1Y/c6myGr3M7qtOueVyL/AlxlJ
+         QbLpnW1aItiG8o0kLn1iapLNoQ+xkiV5Vfc4jJT4lEgNRI4YKRpCjbm9I0jQ9uHKyHiE
+         VPrloAE1dvEr92mm17+Pwk80NG2CcdwGjz7YXw3u/ErCgl2URFnjqTaY7f23pNAm/7ug
+         lG6fesmAOMxIYlMEGA2Sj3xMwEwmDQObY7U5pwz7PjOW8dzRCY1eJxvi6dyx/jSyX9Ii
+         DdpbJdhQU7/ielSv8YOwyXuxZZdTdJwsqgWsxJs+VGsevpJtw4j8of2G/g6+eu9zmIvQ
+         LVrg==
+X-Gm-Message-State: AAQBX9e7LF96a6EQunl9i5k/AX6SlUFP1xerqnLDi47ZAvFd3Mv5awmH
+        TNeuoNkoq2Eth8vcgRq+Y9FD5Q==
+X-Google-Smtp-Source: AKy350YRiaOikp91648dDob3kng7cepINTfluG5WzInZqWo8yO2jZPLEMXzTjVgP71gtXNDkoKdSOg==
+X-Received: by 2002:a17:90b:3e89:b0:237:ae7c:15be with SMTP id rj9-20020a17090b3e8900b00237ae7c15bemr2086527pjb.30.1680602251950;
+        Tue, 04 Apr 2023 02:57:31 -0700 (PDT)
+Received: from [10.16.161.199] (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id iy5-20020a170903130500b0019e81c8fd01sm8005079plb.249.2023.04.04.02.57.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 02:57:31 -0700 (PDT)
+Message-ID: <79357547-d32d-9916-074d-37354d4016c3@igel.co.jp>
+Date:   Tue, 4 Apr 2023 18:57:27 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0fd972bd-c5e7-65cc-6992-09c4c3e88f95@linaro.org>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [RFC PATCH 00/11] Introduce a test for continuous transfer
+Content-Language: en-US
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Frank Li <Frank.Li@nxp.com>, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20230317113238.142970-1-mie@igel.co.jp>
+ <20230331053850.GE4973@thinkpad>
+From:   Shunsuke Mie <mie@igel.co.jp>
+In-Reply-To: <20230331053850.GE4973@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2023 10:14:33+0200, Krzysztof Kozlowski wrote:
-> On 04/04/2023 09:44, Alexandre Belloni wrote:
-> >>
-> >>> charging will always
-> >>> enable a diode, select a resistor and then have or not an extra diode.
-> >>> Figure2 of the MAX31329 datasheet is great.
-> >>
-> >> So the diode is in the max313xx? Then why enabling it is a property of
-> >> DT? Either this should be inferred from compatible or is even a policy,
-> >> not a DT property. Just because device has a register for something, is
-> >> not an argument that "something" should be in DT.
-> > 
-> > Well, it depends on the battery that is installed on the board so it
-> > makes sense to have it in DT.
-> 
-> OK, that would be a good reason, but I wonder why? Why choosing diode or
-> not depends on the battery? Wouldn't you always want to have the diode?
-> 
 
-It limits the maximum current used to charge the battery or supercap to
-not exceed what is allowed.
+On 2023/03/31 14:38, Manivannan Sadhasivam wrote:
+> On Fri, Mar 17, 2023 at 08:32:27PM +0900, Shunsuke Mie wrote:
+>> This patchset introduces testing through continuous transfer to the PCI
+>> endpoint tests. The purpose is to find bugs that may exist in the endpoint
+>> controller driver. This changes able to find bugs in the DW EDMA driver and
+>> this patchset includes the fix.
+>>
+>> This bug does not appear in the current tests because these synchronize to
+>> finish with every data transfer. However, the problem occurs with
+>> continuous DMA issuances. The continuous transfers are required to get high
+>> throughput and low latency. Therefore, the added tests will enable
+>> realistic transfer testing.
+>>
+>> This patchset is divided into three parts:
+>> - Remove duplicated definitions and improve some code [1-6/11]
+>> - Add continuous transfer tests [7-9/11]
+>> - Fix for the DW EDMA driver bug [10,11/11]
+>>
+>> This patchset has beed tested on RCar Spidar that has dw pci edma chip.
+>>
+> If you want maintainers to review the patches separately, please remove the RFC
+> tag. Unless you are looking for some overall feedback about the approach.
+Got it.
+>
+> But we are in the process of migrating the existing test under tools to
+> Kselftest framework [1]. Until then, we cannot accept patches improving the
+> existing test code. So please respin the patches on top of the Kselftest patch
+> once it got posted. It's already due for some time :/
+I understood. I'll track the work of Kselftest migration.
+>
+> Also the subject should mention "PCI endpoint".
+Yes.
+>
+> - Mani
+>
+> [1] https://lore.kernel.org/all/20221007053934.5188-1-aman1.gupta@samsung.com/
+Thank you for your comments.
+>> Shunsuke Mie (11):
+>>    misc: pci_endpoint_test: Aggregate irq_type checking
+>>    misc: pci_endpoint_test: Remove an unused variable
+>>    pci: endpoint: function/pci-epf-test: Unify a range of time
+>>      measurement
+>>    PCI: endpoint: functions/pci-epf-test: Move common difinitions to
+>>      header file
+>>    MAINTAINERS: Add a header file for pci-epf-test
+>>    misc: pci_endpoint_test: Use a common header file between endpoint
+>>      driver
+>>    PCI: endpoint: functions/pci-epf-test: Extend the test for continuous
+>>      transfers
+>>    misc: pci_endpoint_test: Support a test of continuous transfer
+>>    tools: PCI: Add 'C' option to support continuous transfer
+>>    dmaengine: dw-edma: Fix to change for continuous transfer
+>>    dmaengine: dw-edma: Fix to enable to issue dma request on DMA
+>>      processing
+>>
+>>   MAINTAINERS                                   |   1 +
+>>   drivers/dma/dw-edma/dw-edma-core.c            |  30 ++-
+>>   drivers/misc/pci_endpoint_test.c              | 132 ++++--------
+>>   drivers/pci/endpoint/functions/pci-epf-test.c | 199 ++++++++----------
+>>   include/linux/pci-epf-test.h                  |  67 ++++++
+>>   include/uapi/linux/pcitest.h                  |   1 +
+>>   tools/pci/pcitest.c                           |  13 +-
+>>   7 files changed, 231 insertions(+), 212 deletions(-)
+>>   create mode 100644 include/linux/pci-epf-test.h
+>>
+>> -- 
+>> 2.25.1
+>>
+Best,
 
+Shunsuke.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
