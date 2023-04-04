@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43186D6D42
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7071F6D6D44
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236105AbjDDTiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 15:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35842 "EHLO
+        id S235899AbjDDTib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 15:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235350AbjDDTiR (ORCPT
+        with ESMTP id S236110AbjDDTi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 15:38:17 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40537C7;
-        Tue,  4 Apr 2023 12:38:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1680637056; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=jr+O2D0F76JJU7kSwZlZ6I294JwkWu+0UOCw8XpzFlLFbtUlKp/Hhm8guCdhJGvS3U2CyVY2c/bJ5qXETP+gPh5atKuOmev9QccpfiTF3XzsLRd/m1fkTN9Fq1+P+0FS3PVf5N4QD5kZGGFuZoV9vb1B/TJ0wznJu7drD1vTO1Q=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1680637056; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=E2DTXl0wOTGge7LqnlEIvHTLL1rOaURDHtKaO0WFHcU=; 
-        b=boRmo8TnI/Eg0BvnA8v+KFgkFPo+LaF1kW8D4awVhqktQE/OgLNlcth4BlHf7hvA7El2P0vuiPS1xGjeBrHWN1Adlp2uGFz5RJeqMDRim/Dkudy5cuUZiaN5sRyGICgypefJku2DRiHO2qN3nzHZte+nC8L6zu8hBr93zTesvu4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1680637056;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Date:Date:From:From:To:To:CC:Subject:Subject:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
-        bh=E2DTXl0wOTGge7LqnlEIvHTLL1rOaURDHtKaO0WFHcU=;
-        b=ab753m7vvr7p0QelL1tg4ktxsIc5LvHNShTljT4isc+D44+NfP7kB/w8w551FhGs
-        yr6LtcGzftMAyE8pIwTcpVZNsjrN5Bwx8q/fe0flkk20nWEW9qTligyxgyPEqmodufy
-        a3rCZF/Mg3c9URAsf3Mhc2G+vbLJYkd+Tl/YPYNk=
-Received: from [127.0.0.1] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1680637054373581.3705118144012; Tue, 4 Apr 2023 12:37:34 -0700 (PDT)
-Date:   Tue, 04 Apr 2023 22:37:22 +0300
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-To:     =?UTF-8?B?TGFuZGVuIENoYW8gKOi2meeajuWujyk=?= 
-        <Landen.Chao@mediatek.com>,
-        "olteanv@gmail.com" <olteanv@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "arinc9.unal@gmail.com" <arinc9.unal@gmail.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        Sean Wang <Sean.Wang@mediatek.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "dqfext@gmail.com" <dqfext@gmail.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "erkin.bozoglu@xeront.com" <erkin.bozoglu@xeront.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_net_2/3=5D_net=3A_dsa=3A_mt7530=3A_move?= =?US-ASCII?Q?_lowering_TRGMII_driving_to_mt7530=5Fsetup=28=29?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <4d9c562eb980642381cb43f65efb2ee13d742485.camel@mediatek.com>
-References: <20230320190520.124513-1-arinc.unal@arinc9.com> <20230320190520.124513-2-arinc.unal@arinc9.com> <4d9c562eb980642381cb43f65efb2ee13d742485.camel@mediatek.com>
-Message-ID: <87B17946-4602-4D27-8756-7481846EDE35@arinc9.com>
+        Tue, 4 Apr 2023 15:38:28 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB5AC7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:38:25 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id i6so40122260ybu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 12:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680637105;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6CGGYiK7R7iym5OMqiH+Gz2BZGoptbAOBkaXb5F+LEU=;
+        b=FHG9pOZw6QmiAsoXPIuoU//8W+Zy9FAsKNV4Ix2hWzpJnqm6WKjv/tnPxvIKjz0ICe
+         inNKM4e6vkHLrcr1dAtRZdPlv2+82wL1LgaehGuzpQ9jkG19X6B80g/R2EmtwqxoXpUm
+         fCD3qaGgerG73zrDeEDzqtLGWfVRgoE8Y+F7uM22Ei2qu6A7R1SDcsJKuteZuL0SeeYN
+         5xD2JKWiT9q8TLpty/KpQWU0CGYTd0ks66+Ird2xV3c2gkE5zaxZCJk7poCJpDd1wpN7
+         cPPG9pR85FY41stTvKpEPyVgO2/iuasCzmIZjEQyBjcx9aMvTeHbE6tDbKyKpZOfcioX
+         2SDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680637105;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6CGGYiK7R7iym5OMqiH+Gz2BZGoptbAOBkaXb5F+LEU=;
+        b=lBCdS+N9YuFkz7cjkP9JyOPjebZLL2JjMb53czsaSE3NzYibZfbkOE4tgqWv/lK670
+         y+YHfsY9xSzmP0oWWDKusrELh9hkDXk3L8vaWXM1SBwBh1IIf+seCozlx+xh19ESV/HW
+         I1aOe055eRuSW28i0MSm5AEGPE7XnERbDTgGeenTTVNf6WrtzsWxUbDv+LktsJzWTh1c
+         gnwjHCaPeqXXrreWGRUPOGbO4eLuJS9m6bsPGaIqczs2P7avEeUDtSnbTkoNTBhtdgLg
+         m1wSH2tbnzXAK3ABHLDyRikP4YmFPuGZ6DbPrxCTac1nio4HbESPRFBB3B3lsn76RufF
+         12/g==
+X-Gm-Message-State: AAQBX9dseewRqyzL/aCxIisv6D2vI19EZ4qLR7i1owZBgEr6cCn33wAB
+        p9h26K7S9HgoDbNfIqdxqY+aH2rwjayx4KZ2Uj4cHA==
+X-Google-Smtp-Source: AKy350YdpwcmCAIfgrl9aBo8937S54tCb6PHrWfempCUWc3MDYV5wpRLQJ87k2u/bvsnq9FdcYwlm0/6QxVUD8QyF54=
+X-Received: by 2002:a25:ca41:0:b0:b7c:1144:a708 with SMTP id
+ a62-20020a25ca41000000b00b7c1144a708mr2525071ybg.12.1680637104711; Tue, 04
+ Apr 2023 12:38:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <20230404052228.15788-1-feng.tang@intel.com>
+In-Reply-To: <20230404052228.15788-1-feng.tang@intel.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Tue, 4 Apr 2023 12:38:13 -0700
+Message-ID: <CALvZod7XaXZsmatTieK=KTqfDABBgbZxGg=G9OcUezORA0DO5w@mail.gmail.com>
+Subject: Re: [PATCH v3] Documentation: Add document for false sharing
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Joe Mario <jmario@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>, dave.hansen@intel.com,
+        ying.huang@intel.com, tim.c.chen@intel.com, andi.kleen@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26 March 2023 21:13:49 GMT+03:00, "Landen Chao (=E8=B6=99=E7=9A=8E=E5=AE=
-=8F)" <Landen=2EChao@mediatek=2Ecom> wrote:
->On Mon, 2023-03-20 at 22:05 +0300, arinc9=2Eunal@gmail=2Ecom wrote:
->>=20
->> I asked this before, MT7530 DSA driver maintainers, please explain
->> the code
->> I mentioned on the second paragraph=2E
->>=20
->> ---
->> @@ -2207,6 +2198,15 @@ mt7530_setup(struct dsa_switch *ds)
->>=20
->>         mt7530_pll_setup(priv);
->>=20
->> +       /* Lower Tx driving for TRGMII path */
->> +       for (i =3D 0; i < NUM_TRGMII_CTRL; i++)
->> +               mt7530_write(priv, MT7530_TRGMII_TD_ODT(i),
->> +                            TD_DM_DRVP(8) | TD_DM_DRVN(8));
->> +
->I guess you ask this part, and I try my best to recall what the
->original author said years ago=2E
->It is used to adjust the RX delay of port 6 to match the tx
->signal of the link partner=2E
+On Mon, Apr 3, 2023 at 10:28=E2=80=AFPM Feng Tang <feng.tang@intel.com> wro=
+te:
+>
+> When doing performance tuning or debugging performance regressions,
+> more and more cases are found to be related to false sharing [1][2][3],
+> and the situation can be worse for newer platforms with hundreds of
+> CPUs. There are already many commits in current kernel specially
+> for mitigating the performance degradation due to false sharing.
+>
+> False sharing could harm the performance silently without being
+> noticed, due to reasons like:
+> * data members of a big data structure randomly sitting together
+>   in one cache line
+> * global data of small size are linked compactly together
+>
+> So it's better to make a simple document about the normal pattern
+> of false sharing, basic ways to mitigate it and call out to
+> developers to pay attention during code-writing.
+>
+> [ Many thanks to Dave Hansen, Ying Huang, Tim Chen, Julie Du and
+>   Yu Chen for their contributions ]
+>
+> [1]. https://lore.kernel.org/lkml/20220619150456.GB34471@xsang-OptiPlex-9=
+020/
+> [2]. https://lore.kernel.org/lkml/20201102091543.GM31092@shao2-debian/
+> [3]. https://lore.kernel.org/lkml/20230307125538.818862491@linutronix.de/
+>
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-Ok, thanks for replying=2E I will move this at the end, inside 'if (trgint=
-)'=2E Since this doesn't lower the driving, there's no apparent benefit to =
-run this if trgmii is not being used=2E
-
-Ar=C4=B1n=C3=A7
+Reviewed-by: Shakeel Butt <shakeelb@google.com>
