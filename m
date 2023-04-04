@@ -2,162 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD41A6D602E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8368A6D6031
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234392AbjDDMXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
+        id S234424AbjDDMYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234285AbjDDMXI (ORCPT
+        with ESMTP id S234912AbjDDMYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:23:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CEBB4;
-        Tue,  4 Apr 2023 05:22:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C58C61FBC;
-        Tue,  4 Apr 2023 12:22:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15742C4339B;
-        Tue,  4 Apr 2023 12:22:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680610956;
-        bh=d8RRasYjYPWEtpBKYdwpdTx43DOMzrQb8EMo3ED7bdM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZXJNDNb2Io1lVoPq3zyPDmYTDgCdJuQFY37gcSxIdGOKo1aKaBpEOw5L6r54+Xb88
-         8pPpd/ZiefuCUZfy4K9YAjLZR8R/u5hOeCHHM+n8fGCSPx0vUY0krsRDMA/cg73fL0
-         9yALEYp0EFNG+lsiMYJgVGPGTHCE+3B032/KwIlTbxBy6wcBYYiz/0/lewZV/Yfv2c
-         jplgnpiIHDzZAxfA7opGFRWbKR76gsv9mOjWtur0QkN2NE+qn69Q3BKr5iUDHAkMIv
-         inzDyswPLGPn3NQufZ2O9PgHageTSz6Kcpvc+4nU+q9SgVi6EH3mtK7YxwEPgQ9Jnk
-         qBbp96FnX9cjw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9BFE64052D; Tue,  4 Apr 2023 09:22:33 -0300 (-03)
-Date:   Tue, 4 Apr 2023 09:22:33 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Milian Wolff <milian.wolff@kdab.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: Re: [PATCH 0/1] perf report: append inlines to non-dwarf callchains
-Message-ID: <ZCwWibMZv8aRvndN@kernel.org>
-References: <20230316133557.868731-1-asavkov@redhat.com>
- <CAM9d7ciT7Wtmxt0_2ZVv4nbAb1KoeX_itTSAhz8B9T41-NeZYQ@mail.gmail.com>
- <ZBQZoyJc7mhUrL8n@samus.usersys.redhat.com>
- <CAM9d7ch9NjnaB5dB6fO7WKdwPd8M9DmNpdu4-V-8R+96ssxMvA@mail.gmail.com>
- <ZBtalEw0qKQFlVWR@kernel.org>
- <8f7077e8-bcce-a13f-48d3-92a3cb80b02a@intel.com>
- <20230331085224.GA688995@samus.usersys.redhat.com>
- <ZCs3WX4klUpe+aso@kernel.org>
- <CAM9d7cgOA97n10FPz0Bwjtmfon1En+CN2K7CYL3fQ6nrjBqF9Q@mail.gmail.com>
- <20230404065807.GB56712@samus.usersys.redhat.com>
+        Tue, 4 Apr 2023 08:24:38 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BF790;
+        Tue,  4 Apr 2023 05:24:37 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id h11so35201282lfu.8;
+        Tue, 04 Apr 2023 05:24:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680611075;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G6R6IiqyFU2ClZaJv5naRJgh7bUp5iz936cMHw9OV+0=;
+        b=CLlVmhsD9W+jDM4H5UF5xrXcP2iOLibhSEpP8evaSx7COsBP0EGRJRtLuyOGoGYJTd
+         AlfMK9/D4bu8DhgOyOxyywI6uak+ilCiTRXP2M6uUodppQEd2zLbIgNSDfq8ong57Exe
+         sR0NJkDgiaEYqWmsbQhWP8zmZS8PT/q++/rDFYL6KcOIxI+SCpMJR0/Fww4/TV14HE++
+         ZLjjhipZn3hJknDLkLdYN0exBDUnNSXzbvEnFGS7N3abYi3NvaepxxTn2oAU4i2fIMgD
+         B2zn0iofe/xNpM+iUOjid0QotkXcjpJ1ZrV6eLQZUVR7AyCqiRFEqr6Afqy5mr/zSq7R
+         QRYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680611075;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G6R6IiqyFU2ClZaJv5naRJgh7bUp5iz936cMHw9OV+0=;
+        b=H+R5WZL/tGKwAUaP2cccxZkys4KNYTH11F47+G+Zurf8L8OwBwH6v/qXFzhvfC1Ui8
+         U4tnF6zx7UiruW1CORbn9oUEoG3RLNokmiidpIQXKejhlzQg19yqwzwTts2+tLC1wri9
+         i/ryiIQ7CEsQT+pGke7jc38FhvsLMRMly6ZOwyTK/8orwktVsYb225F4ac2AleMuYhQt
+         duXIr0pFgMWrhwiAhjvo9/IzT8oVBactkFqGTse9h4I+YHuDQxA3paTFHpNrjRCLkxtc
+         SWy+KcBYBHyC6H2/4tAQcxTmNmt0jOmJ8TNIpIzGPV7OtOYMHRa/oC/4Pt+htYQRTYpX
+         +wLQ==
+X-Gm-Message-State: AAQBX9eXrrgOJODQG5ryh0865/T20tWnkolCttO4qA5GZbiME+KzNu19
+        Fcl04CtmdONr99KpZQPro9U=
+X-Google-Smtp-Source: AKy350aV1Ors/g6JzSD268/B3yKR9I6Sc9dTLZtDZeBrLlR0Wcusuyc+EViVufJPdOqwAefBMqE0Jw==
+X-Received: by 2002:ac2:4daf:0:b0:4dd:9a38:1b9c with SMTP id h15-20020ac24daf000000b004dd9a381b9cmr673660lfe.20.1680611075108;
+        Tue, 04 Apr 2023 05:24:35 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id f21-20020ac25335000000b004b40c1f1c70sm2299547lfh.212.2023.04.04.05.24.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 05:24:34 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 15:24:15 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Andrea Merello <andrea.merello@iit.it>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jagath Jog J <jagathjog1996@gmail.com>
+Subject: [RESEND PATCH v2 0/3] Improve kernel docs
+Message-ID: <cover.1680610554.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZuMzfu10wftyeGZ0"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230404065807.GB56712@samus.usersys.redhat.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Apr 04, 2023 at 08:58:07AM +0200, Artem Savkov escreveu:
-> On Mon, Apr 03, 2023 at 10:47:37PM -0700, Namhyung Kim wrote:
-> > On Mon, Apr 3, 2023 at 1:30 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > >
-> > > Em Fri, Mar 31, 2023 at 10:52:24AM +0200, Artem Savkov escreveu:
-> > > > On Thu, Mar 30, 2023 at 08:06:20AM +0300, Adrian Hunter wrote:
-> > > > > On 22/03/23 21:44, Arnaldo Carvalho de Melo wrote:
-> > > > > > Em Wed, Mar 22, 2023 at 11:18:49AM -0700, Namhyung Kim escreveu:
-> > > > > >> On Fri, Mar 17, 2023 at 12:41 AM Artem Savkov <asavkov@redhat.com> wrote:
-> > > > > >>>
-> > > > > >>> On Thu, Mar 16, 2023 at 02:26:18PM -0700, Namhyung Kim wrote:
-> > > > > >>>> Hello,
-> > > > > >>>>
-> > > > > >>>> On Thu, Mar 16, 2023 at 6:36 AM Artem Savkov <asavkov@redhat.com> wrote:
-> > > > > >>>>>
-> > > > > >>>>> In an email to Arnaldo Andrii Nakryiko suggested that perf can get
-> > > > > >>>>> information about inlined functions from dwarf when available and then
-> > > > > >>>>> add it to userspace stacktraces even in framepointer or lbr mode.
-> > > > > >>>>> Looking closer at perf it turned out all required bits and pieces are
-> > > > > >>>>> already there and inline information can be easily added to both
-> > > > > >>>>> framepointer and lbr callchains by adding an append_inlines() call to
-> > > > > >>>>> add_callchain_ip().
-> > > > > >>>>
-> > > > > >>>> Looks great!  Have you checked it with perf report -g callee ?
-> > > > > >>>> I'm not sure the ordering of inlined functions is maintained
-> > > > > >>>> properly.  Maybe you can use --no-children too to simplify
-> > > > > >>>> the output.
-> > > > > >>>
-> > > > > >>> Thanks for the suggestion. I actually have another test program with
-> > > > > >>> functions being numbered rather than (creatively) named, so it might be
-> > > > > >>> easier to use it to figure out ordering. Here's the code:
-> > > > > >>
-> > > > > >> Yep, looks good.
-> > > > > >>
-> > > > > >> Acked-by: Namhyung Kim <namhyung@kernel.org>
-> > > > > >
-> > > > > > So, I'll apply this shorter patch instead, ok?
-> > > > > >
-> > > > > > - Arnaldo
-> > > > > >
-> > > > > > diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> > > > > > index 803c9d1803dd26ef..abf6167f28217fe6 100644
-> > > > > > --- a/tools/perf/util/machine.c
-> > > > > > +++ b/tools/perf/util/machine.c
-> > > > > > @@ -44,6 +44,7 @@
-> > > > > >  #include <linux/zalloc.h>
-> > > > > >
-> > > > > >  static void __machine__remove_thread(struct machine *machine, struct thread *th, bool lock);
-> > > > > > +static int append_inlines(struct callchain_cursor *cursor, struct map_symbol *ms, u64 ip);
-> > > > > >
-> > > > > >  static struct dso *machine__kernel_dso(struct machine *machine)
-> > > > > >  {
-> > > > > > @@ -2322,6 +2323,10 @@ static int add_callchain_ip(struct thread *thread,
-> > > > > >   ms.maps = al.maps;
-> > > > > >   ms.map = al.map;
-> > > > > >   ms.sym = al.sym;
-> > > > > > +
-> > > > > > + if (append_inlines(cursor, &ms, ip) == 0)
-> > > > > > +         return 0;
-> > > > > > +
-> > > > > >   srcline = callchain_srcline(&ms, al.addr);
-> > > > > >   return callchain_cursor_append(cursor, ip, &ms,
-> > > > > >                                  branch, flags, nr_loop_iter,
-> > > > >
-> > > > > This seems to be breaking --branch-history.  I am not sure
-> > > > > append_inlines() makes sense for branches.  Maybe this should be:
-> > > > >
-> > > > >     if (!branch && !append_inlines(cursor, &ms, ip))
-> > > > >             return 0;
-> > > > >
-> > > >
-> > > > Right. So when cllchain_cursor is appended through append_inlines it
-> > > > always discards branch information, even for the non-inlined function.
-> > > > So adding !branch makes sense to me. Does anyone else see any problems
-> > > > with that?
-> > >
-> > > I'm no expert in this specific area, so for now till we get to a
-> > > conclusion on this, I'll follow Andi's suggestion and revert this patch.
-> > 
-> > I think we can simply apply Adrian's patch above.
-> 
-> I can send a v2 with this fix included if that'll be more convenient.
 
-No need, I ammended your original patch with Adrian's change.
+--ZuMzfu10wftyeGZ0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-- Arnaldo
+IIO has very nice facilities for efficiently providing data from a
+device to user (and probably also vice-versa - but I've not used that
+direction). Getting started with IIO may not be so simple though - some
+of the concepts like triggers and buffers are quite unique.
+
+This series tries to make it easier for a newcomer to write his/her first
+IIO driver by adding some documentation to used enums. Series does not
+provide extensive documentation but just documents those few entries I
+have become familiar with - but it still aims to be a starting point for
+others to add missing bits and pieces.
+
+This series is marked as v2 because the patch 1 was previously sent as a
+stan-alone RFC to collect the missing channel units. RFC can be seen
+here:
+https://lore.kernel.org/all/10a855f9adc1d710150b7f647500c3c6a769f9ca.167724=
+3698.git.mazziesaccount@gmail.com/
+
+Patches 2 and 3 were added as a result of discussion followed by the
+RFC.
+
+Revision history:
+v2 resend:
+    - rebased on v6.3-rc2
+RFCv1 =3D> v2:
+    - added patches 2 and 3
+    - added missing channel type docs provided by Jonathan
+    - added @in front of member names and fix typos pointed by Andy
+    - dropped TODOs as Jonathan clarified the units
+
+---
+
+Matti Vaittinen (3):
+  iio: Add some kerneldoc for channel types
+  iio: add documentation for iio_chan_info_enum
+  doc: Make sysfs-bus-iio doc more exact
+
+ Documentation/ABI/testing/sysfs-bus-iio |  11 +-
+ include/linux/iio/types.h               |  46 +++++++-
+ include/uapi/linux/iio/types.h          | 134 ++++++++++++++++++++++++
+ 3 files changed, 185 insertions(+), 6 deletions(-)
+
+
+base-commit: eeac8ede17557680855031c6f305ece2378af326
+--=20
+2.39.2
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--ZuMzfu10wftyeGZ0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQsFukACgkQeFA3/03a
+ocU4rQf/d0elptOx2mIQqAMlR4UbcvWRUY12Lm4aBesVKQat85H4usHh3DQvxhSk
+qXgxSlQ+8G7jq3lRQEGNCU8+xmJJRHMjg4YjAqa7Y91kenlMHl0T3fJbAaz5y4go
+i01y5QhGTBFW2/ojIZ3odeLFuoUSF7aF+jqNXBa0wz8z1zzN+1hPivDqnKNX7W76
+ujf/V/yatdSgfce2FKPsT4i/F1LApsRTXgD4EkFWmOI/KhZPHHCiManLINJrAwRW
+pTUyGAoJ6k9OYZcb++QTVSVf+tvihMvHgnLJ+LrJMVJSQLWE/LzyTvbeSNa2ygCv
+YCtQov6Orys+aqvGxSMpXLIpYxeS7Q==
+=SrQF
+-----END PGP SIGNATURE-----
+
+--ZuMzfu10wftyeGZ0--
