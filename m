@@ -2,118 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B8E6D5FBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 478586D5FD3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234498AbjDDL7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
+        id S234661AbjDDMBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234438AbjDDL7G (ORCPT
+        with ESMTP id S234660AbjDDMBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:59:06 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC48198C;
-        Tue,  4 Apr 2023 04:59:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1680609542; x=1712145542;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yf84yJ47fRZZVKYSzUL/KnC/GlQL2L+iPq43dwG8FL8=;
-  b=zhnhJF33f3h2DGrOi/Xn+8esktAdDrNiyb4Ff9LN5jL+CbbeHMeD6z53
-   vL/hvQpTEb5uxl/yaiBqJybJwTUAaqIsn6SQNCI9AnONoPK3l1gBEkh/G
-   Av9hZD6bV/xJ4hJn4K7dzRwqN0huIf8+JNpDF9GZDwvhf/5gE8Dv5HqjM
-   0R7mXLkETUwoaWLMNFcByvGlKg5soPOSUQyIVB2/PK8sPp5jYdASsekR4
-   gM16fRp0Nz/FEgKu9OdBhojAagUARIZRuSVF9rwJUbOXoqFFjtSJn+mfK
-   brRy9mDl7NMH2y5CbUDut1C+azrBCBnSVvZM7ijnu8z2uKthsMGXg0EGm
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,317,1673938800"; 
-   d="asc'?scan'208";a="208769362"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Apr 2023 04:59:00 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 4 Apr 2023 04:58:57 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 4 Apr 2023 04:58:55 -0700
-Date:   Tue, 4 Apr 2023 12:58:41 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     Anup Patel <anup@brainfault.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <bjorn@kernel.org>
-Subject: Re: [PATCH v3 6/8] RISC-V: KVM: Add ONE_REG interface for AIA CSRs
-Message-ID: <20230404-5cfffb017198773dc3e81dab@wendy>
-References: <20230403093310.2271142-1-apatel@ventanamicro.com>
- <20230403093310.2271142-7-apatel@ventanamicro.com>
- <osrpjiywxtkgxb5i6mfvxzfrzrnjv75uqzvlu3fouo4mqsktgj@blcmyjt3twqg>
- <CAAhSdy1JEQBiO55iCy97arO63VjGc+NicUvvwzTpK97W97LmJg@mail.gmail.com>
- <ejt3x4p7xhxfvwiafnogfwdn5dzd4qyowlht22utnbvzefsbyh@7dch4mebwckm>
- <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
+        Tue, 4 Apr 2023 08:01:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416DA40C3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9PdME6AIjx8zNUOdkx4hnCnYTKU8T7/wn+VsuZbpvX4=; b=AsYaGUNwtgs7Mb8yT8mTBmSz08
+        Q7zquCj15LyPeR8kg4E9xbftPYNFYRD9WKZDnmEEGGDicZ+t5guiV1zKfPFGs86fWp6cdEetpNDZi
+        QAzFOHjQ2CNjEZe9WJINFELQzObgU9U9xGrlx6KwsTsWNzHzYmAYycvTML2KdjkQLAwVDxCE/J2jW
+        l+RSUiU33ae6PCQp1m7XdElK7UfRebookUgSv++hIi6t79r4t+S6BJpKjERy6xPj2MaRKX0ECoI/f
+        Y/Y0CvT2sf1GFPyxpC9SF4HdBgCB5Z0TL6MRbWwxgQIXQ2e8lbigmyc1eiAUE8h79fJSACXqvQG4t
+        9fN+NnPg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pjfLN-00FKho-Fp; Tue, 04 Apr 2023 12:00:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3BC9A300194;
+        Tue,  4 Apr 2023 14:00:54 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 18E482C41B779; Tue,  4 Apr 2023 14:00:54 +0200 (CEST)
+Date:   Tue, 4 Apr 2023 14:00:54 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, corbet@lwn.net, qyousef@layalina.io,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net, pjt@google.com,
+        pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org, efault@gmx.de
+Subject: Re: [PATCH 08/17] sched/fair: Implement an EEVDF like policy
+Message-ID: <20230404120054.GV4253@hirez.programming.kicks-ass.net>
+References: <20230328092622.062917921@infradead.org>
+ <20230328110354.141543852@infradead.org>
+ <CAKfTPtDDBVD_N6NgBYi_5iArDXd4iL0-ddQZDKGzzLAD-2AUXg@mail.gmail.com>
+ <20230330080145.GA117836@hirez.programming.kicks-ass.net>
+ <CAKfTPtD+EiB4mnRD0z4wYg6PDn1vLKxu4fxrgfiqsm2G3+RrEQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5GJ1H1BOzV0sFIzx"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAKfTPtD+EiB4mnRD0z4wYg6PDn1vLKxu4fxrgfiqsm2G3+RrEQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---5GJ1H1BOzV0sFIzx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Mar 30, 2023 at 07:05:17PM +0200, Vincent Guittot wrote:
+> On Thu, 30 Mar 2023 at 10:04, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Wed, Mar 29, 2023 at 04:35:25PM +0200, Vincent Guittot wrote:
+> >
+> > > IIUC how it works, Vd = ve + r / wi
+> > >
+> > > So for a same weight, the vd will be earlier but it's no more alway
+> > > true for different weight
+> >
+> > Correct; but for a heavier task the time also goes slower and since it
+> > needs more time, you want it to go first. But yes, this is weird at
+> > first glance.
+> 
+> Yeah, I understand that this is needed for bounding the lag to a
+> quantum max but that makes the latency prioritization less obvious and
+> not always aligned with what we want
 
-On Tue, Apr 04, 2023 at 01:52:43PM +0200, Andrew Jones wrote:
-> On Mon, Apr 03, 2023 at 02:23:01PM +0200, Andrew Jones wrote:
+That very much depends on what we want I suppose :-) So far there's not
+been strong definitions of what we want, other than that we consider a
+negative latency nice task to get it's slice a little earlier where
+possible.
 
-> > It's probably best if neither depend on each other, since they're
-> > independent, but otherwise the order doesn't matter. It'd be nice to ca=
-ll
-> > the order out in the cover letter to give patchwork a chance at automat=
-ic
-> > build testing, though. To call it out, I believe adding
-> >=20
-> > Based-on: 20230401112730.2105240-1-apatel@ventanamicro.com
-> >=20
-> > to the cover letter should work.
->=20
-> I also just noticed that this based on "RISC-V: KVM: Add ONE_REG
-> interface to enable/disable SBI extensions"[1] and it needs to be
-> in order to pick up the KVM_REG_RISCV_SUBTYPE_MASK and
-> KVM_REG_RISCV_SUBTYPE_SHIFT defines. It'd be good to call that
-> patch out with Based-on.
->=20
-> [1]: 20230331174542.2067560-2-apatel@ventanamicro.com
+(also, I rather like that vagueness -- just like nice is rather vague,
+it gives us room for interpretation when implementing things)
 
-I've been waiting for a review on that for a while.. It's been 3
-weeks, so just gonna merge it and see what breaks!
+> let say that you have 2 tasks A and B waking up simultaneously with
+> the same vruntime; A has a negative latency nice to reflect some
+> latency constraint and B the default value.  A will run 1st if they
+> both have the same prio which is aligned with their  latency nice
+> values but B could run 1st if it increase its nice prio to reflect the
+> need for a larger cpu bandwidth so you can defeat the purpose of the
+> latency nice although there is no unfairness
+> 
+> A cares of its latency and set a negative latency nice to reduce its
+> request slice
 
---5GJ1H1BOzV0sFIzx
-Content-Type: application/pgp-signature; name="signature.asc"
+This is true; but is it really a problem? It's all relative anyway :-)
 
------BEGIN PGP SIGNATURE-----
+Specifically, if you latency-nice harder than nice it, you win again,
+also, nice is privilidged, while latency-nice is not (should it?)
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCwQ8QAKCRB4tDGHoIJi
-0i39APsEperqNGR68oYf4cBWUJa5Q4Lux1nXIgwKhMES4jyVVAD/V7XKtbDF5fmm
-GjZMMXMQKhoi5KsqHDaTwOKJ7BrEjwg=
-=kicz
------END PGP SIGNATURE-----
+The thing I like about EEVDF is that it actually makes the whole thing
+simpler, it takes away a whole bunch of magic, and yes the latency thing
+is perhaps more relative than absolute, but isn't that good enough?
 
---5GJ1H1BOzV0sFIzx--
+
+That said; IIRC there's a few papers (which I can no longer find because
+aparently google can now only give me my own patches and the opinion of
+the internet on them when I search EEVDF :/) that muck with the {w,r}
+set to build 'realtime' schedulers on top of EEVDF. So there's certainly
+room to play around a bit.
