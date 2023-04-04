@@ -2,159 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D5A6D5C7C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EA06D5C7F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbjDDJ5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
+        id S234250AbjDDJ6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233811AbjDDJ5e (ORCPT
+        with ESMTP id S233811AbjDDJ6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:57:34 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8B72689
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:57:32 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso1403433pjf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 02:57:32 -0700 (PDT)
+        Tue, 4 Apr 2023 05:58:34 -0400
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A279819AE;
+        Tue,  4 Apr 2023 02:58:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1680602252;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8EeJ3Vg/hflzXly6UJfLnp/sYv8Ula1ty7RMpEhQjsE=;
-        b=DZcbyLkyTGTTuO+N7pa4ARwCTRNuL4ybs38LCUxl4HjBDH9eqjR2F0nnTnp1HWGEfc
-         PhRf8bwSKXhOdsUKHc9TxrsB5fNYFMJtf08rWMZhxTVbBRsp71RfQ4+6Ye1omj+dPl4/
-         SNS0NCBcfN3EOdGTJjny3/JDM2TZ/qHzsfDC3ASKsNYrR+VAZmbZd8gqmJ1D7hZUiYBj
-         y/NqILXWJo+WPf7Fv7k5SH72D5y39NCvUOIRvrbjST8TvSWka2VANi3vardpQuZQF+rc
-         BX132iwtB4VLe04nL1nzS6OdsrgWQ5BSA5vOt+Y0Dr1j0WT9LV2DWp1C6KtYOZqFczTL
-         6g4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680602252;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8EeJ3Vg/hflzXly6UJfLnp/sYv8Ula1ty7RMpEhQjsE=;
-        b=Xga3xDnJexv/jNPdgDoNW4tQ9zLbULsnWyy0JhhJ1Y/c6myGr3M7qtOueVyL/AlxlJ
-         QbLpnW1aItiG8o0kLn1iapLNoQ+xkiV5Vfc4jJT4lEgNRI4YKRpCjbm9I0jQ9uHKyHiE
-         VPrloAE1dvEr92mm17+Pwk80NG2CcdwGjz7YXw3u/ErCgl2URFnjqTaY7f23pNAm/7ug
-         lG6fesmAOMxIYlMEGA2Sj3xMwEwmDQObY7U5pwz7PjOW8dzRCY1eJxvi6dyx/jSyX9Ii
-         DdpbJdhQU7/ielSv8YOwyXuxZZdTdJwsqgWsxJs+VGsevpJtw4j8of2G/g6+eu9zmIvQ
-         LVrg==
-X-Gm-Message-State: AAQBX9e7LF96a6EQunl9i5k/AX6SlUFP1xerqnLDi47ZAvFd3Mv5awmH
-        TNeuoNkoq2Eth8vcgRq+Y9FD5Q==
-X-Google-Smtp-Source: AKy350YRiaOikp91648dDob3kng7cepINTfluG5WzInZqWo8yO2jZPLEMXzTjVgP71gtXNDkoKdSOg==
-X-Received: by 2002:a17:90b:3e89:b0:237:ae7c:15be with SMTP id rj9-20020a17090b3e8900b00237ae7c15bemr2086527pjb.30.1680602251950;
-        Tue, 04 Apr 2023 02:57:31 -0700 (PDT)
-Received: from [10.16.161.199] (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id iy5-20020a170903130500b0019e81c8fd01sm8005079plb.249.2023.04.04.02.57.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 02:57:31 -0700 (PDT)
-Message-ID: <79357547-d32d-9916-074d-37354d4016c3@igel.co.jp>
-Date:   Tue, 4 Apr 2023 18:57:27 +0900
+        d=buaa.edu.cn; s=buaa; h=Received:Subject:To:Cc:References:From:
+        Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
+        Content-Transfer-Encoding:Content-Language; bh=da+9B3dO4N64/X93i
+        viw9y205qmZYA8m+wN8DpKVXss=; b=2c2MgQ7oa3RZaCEawEf8T2HeaRt5cSvYl
+        bDEpXcEO0C8f4G+TQkpcK3AVDexc++0DVnjl+7Jx1KZlKpTMdi04hZV8QGYeOOz9
+        xg80qF/s5apOMTJPECX1lP4KTxrxyXrB8m8g7XzIcKm0Wu7K+PoUcjl7n+rVJzZy
+        jhmC900vXg=
+Received: from [192.168.1.106] (unknown [10.130.159.144])
+        by coremail-app1 (Coremail) with SMTP id OCz+CgCnh5Sz9CtkRG4aAw--.18976S3;
+        Tue, 04 Apr 2023 17:58:11 +0800 (CST)
+Subject: Re: [PATCH v2] net: mac80211: Add NULL checks for sta->sdata
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <ZCBfHlOhU8LjdRg3@corigine.com>
+From:   Jia-Ju Bai <baijiaju@buaa.edu.cn>
+Message-ID: <f70554b9-eedf-43e4-9a55-a809e9b9e89a@buaa.edu.cn>
+Date:   Tue, 4 Apr 2023 17:58:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [RFC PATCH 00/11] Introduce a test for continuous transfer
+In-Reply-To: <ZCBfHlOhU8LjdRg3@corigine.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Frank Li <Frank.Li@nxp.com>, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20230317113238.142970-1-mie@igel.co.jp>
- <20230331053850.GE4973@thinkpad>
-From:   Shunsuke Mie <mie@igel.co.jp>
-In-Reply-To: <20230331053850.GE4973@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-CM-TRANSID: OCz+CgCnh5Sz9CtkRG4aAw--.18976S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxtr4xAw4DXr1kAw1Uur17Jrb_yoW7Ar47pr
+        Z5G3WaqFWUJa4xXr1fJr1Y9FyFvw48Kr18Ar1fCF1xA3ZY9FnYkF4v9rW8ZF9YkrWUJ3WS
+        vFWj939xua1qkrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvmb7Iv0xC_tr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+        cIk0rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2
+        AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v2
+        6r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI
+        0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k2
+        0xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26F1DJr1UJwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
+        UI43ZEXa7IU8489tUUUUU==
+X-CM-SenderInfo: yrruji46exttoohg3hdfq/
+X-Spam-Status: No, score=-2.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Simon,
 
-On 2023/03/31 14:38, Manivannan Sadhasivam wrote:
-> On Fri, Mar 17, 2023 at 08:32:27PM +0900, Shunsuke Mie wrote:
->> This patchset introduces testing through continuous transfer to the PCI
->> endpoint tests. The purpose is to find bugs that may exist in the endpoint
->> controller driver. This changes able to find bugs in the DW EDMA driver and
->> this patchset includes the fix.
->>
->> This bug does not appear in the current tests because these synchronize to
->> finish with every data transfer. However, the problem occurs with
->> continuous DMA issuances. The continuous transfers are required to get high
->> throughput and low latency. Therefore, the added tests will enable
->> realistic transfer testing.
->>
->> This patchset is divided into three parts:
->> - Remove duplicated definitions and improve some code [1-6/11]
->> - Add continuous transfer tests [7-9/11]
->> - Fix for the DW EDMA driver bug [10,11/11]
->>
->> This patchset has beed tested on RCar Spidar that has dw pci edma chip.
->>
-> If you want maintainers to review the patches separately, please remove the RFC
-> tag. Unless you are looking for some overall feedback about the approach.
-Got it.
->
-> But we are in the process of migrating the existing test under tools to
-> Kselftest framework [1]. Until then, we cannot accept patches improving the
-> existing test code. So please respin the patches on top of the Kselftest patch
-> once it got posted. It's already due for some time :/
-I understood. I'll track the work of Kselftest migration.
->
-> Also the subject should mention "PCI endpoint".
-Yes.
->
-> - Mani
->
-> [1] https://lore.kernel.org/all/20221007053934.5188-1-aman1.gupta@samsung.com/
-Thank you for your comments.
->> Shunsuke Mie (11):
->>    misc: pci_endpoint_test: Aggregate irq_type checking
->>    misc: pci_endpoint_test: Remove an unused variable
->>    pci: endpoint: function/pci-epf-test: Unify a range of time
->>      measurement
->>    PCI: endpoint: functions/pci-epf-test: Move common difinitions to
->>      header file
->>    MAINTAINERS: Add a header file for pci-epf-test
->>    misc: pci_endpoint_test: Use a common header file between endpoint
->>      driver
->>    PCI: endpoint: functions/pci-epf-test: Extend the test for continuous
->>      transfers
->>    misc: pci_endpoint_test: Support a test of continuous transfer
->>    tools: PCI: Add 'C' option to support continuous transfer
->>    dmaengine: dw-edma: Fix to change for continuous transfer
->>    dmaengine: dw-edma: Fix to enable to issue dma request on DMA
->>      processing
->>
->>   MAINTAINERS                                   |   1 +
->>   drivers/dma/dw-edma/dw-edma-core.c            |  30 ++-
->>   drivers/misc/pci_endpoint_test.c              | 132 ++++--------
->>   drivers/pci/endpoint/functions/pci-epf-test.c | 199 ++++++++----------
->>   include/linux/pci-epf-test.h                  |  67 ++++++
->>   include/uapi/linux/pcitest.h                  |   1 +
->>   tools/pci/pcitest.c                           |  13 +-
->>   7 files changed, 231 insertions(+), 212 deletions(-)
->>   create mode 100644 include/linux/pci-epf-test.h
->>
->> -- 
->> 2.25.1
->>
-Best,
+Thanks for your reply, and sorry for the delay.
 
-Shunsuke.
+On 2023/3/26 23:05, Simon Horman wrote:
+> On Tue, Mar 21, 2023 at 05:31:22PM +0800, Jia-Ju Bai wrote:
+>> In a previous commit 69403bad97aa ("wifi: mac80211: sdata can be NULL
+>> during AMPDU start"), sta->sdata can be NULL, and thus it should be
+>> checked before being used.
+>>
+>> However, in the same call stack, sta->sdata is also used in the
+>> following functions:
+>>
+>> ieee80211_ba_session_work()
+>>    ___ieee80211_stop_rx_ba_session(sta)
+>>      ht_dbg(sta->sdata, ...); -> No check
+>>      sdata_info(sta->sdata, ...); -> No check
+>>      ieee80211_send_delba(sta->sdata, ...) -> No check
+>>    ___ieee80211_start_rx_ba_session(sta)
+>>      ht_dbg(sta->sdata, ...); -> No check
+>>      ht_dbg_ratelimited(sta->sdata, ...); -> No check
+>>    ieee80211_tx_ba_session_handle_start(sta)
+>>      sdata = sta->sdata; if (!sdata) -> Add check by previous commit
+>>    ___ieee80211_stop_tx_ba_session(sdata)
+>>      ht_dbg(sta->sdata, ...); -> No check
+>>    ieee80211_start_tx_ba_cb(sdata)
+>>      sdata = sta->sdata; local = sdata->local -> No check
+>>    ieee80211_stop_tx_ba_cb(sdata)
+>>      ht_dbg(sta->sdata, ...); -> No check
+>>
+>> Thus, to avoid possible null-pointer dereferences, the related checks
+>> should be added.
+>>
+>> These bugs are reported by a static analysis tool implemented by myself,
+>> and they are found by extending a known bug fixed in the previous commit.
+>> Thus, they could be theoretical bugs.
+>>
+>> Signed-off-by: Jia-Ju Bai <baijiaju@buaa.edu.cn>
+>> ---
+>> v2:
+>> * Fix an error reported by checkpatch.pl, and make the bug finding
+>>    process more clear in the description. Thanks for Simon's advice.
+>> ---
+>>   net/mac80211/agg-rx.c | 68 ++++++++++++++++++++++++++-----------------
+>>   net/mac80211/agg-tx.c | 16 ++++++++--
+>>   2 files changed, 55 insertions(+), 29 deletions(-)
+>>
+>> diff --git a/net/mac80211/agg-rx.c b/net/mac80211/agg-rx.c
+>> index c6fa53230450..6616970785a2 100644
+>> --- a/net/mac80211/agg-rx.c
+>> +++ b/net/mac80211/agg-rx.c
+>> @@ -80,19 +80,21 @@ void ___ieee80211_stop_rx_ba_session(struct sta_info *sta, u16 tid,
+>>   	RCU_INIT_POINTER(sta->ampdu_mlme.tid_rx[tid], NULL);
+>>   	__clear_bit(tid, sta->ampdu_mlme.agg_session_valid);
+>>   
+>> -	ht_dbg(sta->sdata,
+>> -	       "Rx BA session stop requested for %pM tid %u %s reason: %d\n", > -	       sta->sta.addr, tid,
+>> -	       initiator == WLAN_BACK_RECIPIENT ? "recipient" : "initiator",
+>> -	       (int)reason);
+>> +	if (sta->sdata) {
+>> +		ht_dbg(sta->sdata,
+>> +		       "Rx BA session stop requested for %pM tid %u %s reason: %d\n",
+>> +		       sta->sta.addr, tid,
+>> +		       initiator == WLAN_BACK_RECIPIENT ? "recipient" : "initiator",
+>> +		       (int)reason);
+>> +	}
+> The first line of the body of ___ieee80211_stop_rx_ba_session() is:
+>
+> 	struct ieee80211_local *local = sta->sdata->local;
+>
+> So a NULL pointer dereference will have occurred before
+> the checks this change adds to that function.
+
+I checked the source code again (including the latest version 6.3-rc5).
+The first line of the body of ___ieee80211_stop_rx_ba_session() is:
+
+     struct ieee80211_local *local = sta->local;
+
+Thus, there is no dereference of sta->sdata.
+
+In a different function, namely ___ieee80211_start_rx_ba_session(), the 
+first line is:
+
+     struct ieee80211_local *local = sta->sdata->local;
+
+Thus, there should be a NULL check for sta->sdata in this function.
+I will add this in my patch v3.
+
+>
+>
+>>   
+>> -	if (drv_ampdu_action(local, sta->sdata, &params))
+>> +	if (sta->sdata && drv_ampdu_action(local, sta->sdata, &params))
+>>   		sdata_info(sta->sdata,
+>>   			   "HW problem - can not stop rx aggregation for %pM tid %d\n",
+>>   			   sta->sta.addr, tid);
+>>   
+> ...
+>
+>> diff --git a/net/mac80211/agg-tx.c b/net/mac80211/agg-tx.c
+>> index f9514bacbd4a..03b31b6e7ac7 100644
+>> --- a/net/mac80211/agg-tx.c
+>> +++ b/net/mac80211/agg-tx.c
+>> @@ -368,8 +368,10 @@ int ___ieee80211_stop_tx_ba_session(struct sta_info *sta, u16 tid,
+>>   
+>>   	spin_unlock_bh(&sta->lock);
+>>   
+>> -	ht_dbg(sta->sdata, "Tx BA session stop requested for %pM tid %u\n",
+>> -	       sta->sta.addr, tid);
+>> +	if (sta->sdata) {
+>> +		ht_dbg(sta->sdata, "Tx BA session stop requested for %pM tid %u\n",
+>> +		       sta->sta.addr, tid);
+>> +	}
+> This seems clean :)
+>
+>>   	del_timer_sync(&tid_tx->addba_resp_timer);
+>>   	del_timer_sync(&tid_tx->session_timer);
+>> @@ -776,7 +778,12 @@ void ieee80211_start_tx_ba_cb(struct sta_info *sta, int tid,
+>>   			      struct tid_ampdu_tx *tid_tx)
+>>   {
+>>   	struct ieee80211_sub_if_data *sdata = sta->sdata;
+>> -	struct ieee80211_local *local = sdata->local;
+>> +	struct ieee80211_local *local;
+>> +
+>> +	if (!sdata)
+>> +		return;
+> I'm not sure that silently ignoring non-existent sdata is the right approach.
+> Perhaps a WARN_ON or WARN_ONCE is appropriate?
+
+Okay, I will use WARN_ON  in my patch v3.
+
+>
+>> +
+>> +	local = sdata->local;
+>>   
+>>   	if (WARN_ON(test_and_set_bit(HT_AGG_STATE_DRV_READY, &tid_tx->state)))
+>>   		return;
+>> @@ -902,6 +909,9 @@ void ieee80211_stop_tx_ba_cb(struct sta_info *sta, int tid,
+>>   	bool send_delba = false;
+>>   	bool start_txq = false;
+>>   
+>> +	if (!sdata)
+>> +		return;
+>> +
+> Ditto.
+
+Okay, I will use WARN_ON  in my patch v3.
+
+>
+>>   	ht_dbg(sdata, "Stopping Tx BA session for %pM tid %d\n",
+>>   	       sta->sta.addr, tid);
+>>   
+
+
+Best wishes,
+Jia-Ju Bai
 
