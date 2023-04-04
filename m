@@ -2,74 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECA86D6FEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 00:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D6F6D6FF6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 00:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236431AbjDDWJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 18:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S236431AbjDDWOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 18:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236581AbjDDWJw (ORCPT
+        with ESMTP id S229973AbjDDWOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 18:09:52 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42963421F;
-        Tue,  4 Apr 2023 15:09:50 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id j13so32066920pjd.1;
-        Tue, 04 Apr 2023 15:09:50 -0700 (PDT)
+        Tue, 4 Apr 2023 18:14:22 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116BC40D9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 15:14:21 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-93df929479cso2753166b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 15:14:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680646190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FhW41Lz+Mez52y9+7Sqb35hmOmVdAZ3fg2uw11nAPAE=;
-        b=gUnEta5Yb6BtuCcTbAobNapAGPwc0djL/m8TaRV6zg1dmzIbN9ViSxcJdaPoUxzS4b
-         lqAg8chb72IJSS+FDlhtOK8Q6TNt1dX6HhF5uUTVwsIiKbA7yXZaggFVpSNKPB/kpfG5
-         UGE6OA1h2UEWP7hBlWDMJIm6VAA88W4h5iUein/TQ4pBlGSVHPr+4gtWEGZz1NccX+1O
-         pzrByG745s8cPaG1Bv9BjxgAeCG+TOnfx7Zf8ZthRcuoQ7uY/PzreoHfTKIwH39L6NMf
-         +ihHktT0J0n+iD3LRnqvnglDvtpJ0jraXnTyclvvFj3bOpjrIKalZFNddiclc0ueDpSP
-         hxZw==
+        d=gmail.com; s=20210112; t=1680646459;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tWU46z+LxAZ1Ey10aQVV7RoKLINUb1ekhfE7aBIl2Ps=;
+        b=L4+wRj6/x0iKLAqOjXV0y7hMh4azCyZamBDr8njWOhWQzudWScUkVwh8IAF52vxcI8
+         xyD9bv3a+6FFcxWPNXclggxwjVIkovF06vPQPlmN9KCyWnq+8R/ZnrzySv/Oldq9ydo0
+         QbUpQlg3y9orqTjrxODR/IkZNAo0ZQzQTwwCtKfhWBKj2fpodF6FbDYMuB5yR4lfnkPU
+         uSJ/ZnXvMyh7O7T1k9oe5FnM0ZuKfl0PjidDkFmVdZTF1y50l1NY5cXiR1+HiUuZOrDi
+         dSQc43O7veEpkQzrs+DxCdHp5dx9gQTprT7xkjQ2lc1T2EaNqo4JnL5Mtu6WArVz/7kH
+         WIkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680646190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FhW41Lz+Mez52y9+7Sqb35hmOmVdAZ3fg2uw11nAPAE=;
-        b=CrGrfHtBlvOjjTF4xStir0n6IHEnpwk3c3p5eO2cvlgiQBpqqsEyjqfDBMM3joe5qG
-         wRZopbF0XAfy0CnoEAghgb+GkQ3ZRkk2bor9fCvOCYfhdAWAso+xFNX1nU29fbt9IA5+
-         nKxWq5kCGr6inhS1j9pJrybfQwtwYqOO0LucM2SkCTFEg/Mnedk0YoXhQtR62FmH/D4f
-         U+89JyTOkp1mdXLBAxMKPP8x2AInWn3BANFPxu7g00JJV0fRiAZtwR6kvzNELpQqdifj
-         v5sOZ0obEfKV62ewg+7YvBUw/1fdQ74J8jtksoeCmu5I81OHtmtdwmbxF2I4p1mGfZ4L
-         jC1Q==
-X-Gm-Message-State: AAQBX9dY5SJI6FRkol+3Rv5sY3RsdJDF7XBcvF9TqKOr51m220K4M4XH
-        aEJOX7WDa8AhcjNP8G5me1EKYZ9diAyeVLtwZrY=
-X-Google-Smtp-Source: AKy350bBMyaLkYHcsUf3JTXKneddX4ZVx0+3AX9RSmsTAdcXvoVPs11LPU8Ekd9MaEE01X2e0f3RDUQs/sOmoWXiTBE=
-X-Received: by 2002:a17:90b:e09:b0:240:228:95bd with SMTP id
- ge9-20020a17090b0e0900b00240022895bdmr1533929pjb.5.1680646189645; Tue, 04 Apr
- 2023 15:09:49 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680646459;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tWU46z+LxAZ1Ey10aQVV7RoKLINUb1ekhfE7aBIl2Ps=;
+        b=Xqq/HXzNSvrGGvsuKoCoE2SHqDA3vgi3AXZ2vDVFy8ABBcZvItDJrT23TNVjWbpGUQ
+         Q5Ls90Qhr0i3JFhBJ81BFDLK0J/J4SL4LCX9FCNR3iIK1/rQNqnwhJtIsIZWqbfyAkY1
+         cykX2S+kdiX7S9Kt7g/LoIKYxQwPxLLO3tBNWHpIxMpQz2l/oeUAfDsNgKdJ6Uk7Mncj
+         TJAgLKmFZDzRNFc84W2vzdI52qKdAFFP50hruJJeZir31uA48c7mJ2+GHhGHjThdIpyP
+         y3K4k46D5ifjtgx6JnztJyUA+LGGXDmmokXgNLg1UTumynD5zieQPLCrv5FJCO77fIly
+         G9VQ==
+X-Gm-Message-State: AAQBX9ctyqXM3KYzCH/0t1BzJN1SC7uxM57TqkZfy+mIRwP9Wa+WDwmR
+        YVC76tzP9h2PECEDZBOzj/787TZi6+4=
+X-Google-Smtp-Source: AKy350bvVO6MrW64LZ9jDBgS+4RnuM/Y3HVt0DwAgjbfv9AMuqLzhJxib25vlMyWVfLmEtZXgWW/0w==
+X-Received: by 2002:aa7:d8da:0:b0:4ac:b69a:2f06 with SMTP id k26-20020aa7d8da000000b004acb69a2f06mr197334eds.0.1680646459228;
+        Tue, 04 Apr 2023 15:14:19 -0700 (PDT)
+Received: from noahgold-desk.intel.com ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id t20-20020a50d714000000b005021d17d896sm6428256edi.21.2023.04.04.15.14.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 15:14:18 -0700 (PDT)
+From:   Noah Goldstein <goldstein.w.n@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     goldstein.w.n@gmail.com, walken@google.com,
+        akpm@linux-foundation.org
+Subject: [PATCH v1] lib/rbtree: Use '+' instead of '|' for setting color.
+Date:   Tue,  4 Apr 2023 17:13:51 -0500
+Message-Id: <20230404221350.3806566-1-goldstein.w.n@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230404084308.813-1-zhangqing@loongson.cn>
-In-Reply-To: <20230404084308.813-1-zhangqing@loongson.cn>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 5 Apr 2023 00:09:38 +0200
-Message-ID: <CA+fCnZentBDXuyyrZFzPLpt8Vdfo7YyAyxbgb506LFrR+v-D9Q@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] kasan: Add __HAVE_ARCH_SHADOW_MAP to support arch
- specific mapping
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -80,76 +69,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 10:43=E2=80=AFAM Qing Zhang <zhangqing@loongson.cn> =
-wrote:
->
-> Like the LoongArch, which has many holes between different segments
-> and valid address space(256T available) is insufficient to map all
-> these segments to kasan shadow memory with the common formula provided
-> by kasan core, We need architecture specific mapping formula,different
-> segments are mapped individually, and only limited length of space of
-> that specific segment is mapped to shadow.
->
-> Therefore, when the incoming address is converted to a shadow, we need
-> to add a condition to determine whether it is valid.
->
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
->  include/linux/kasan.h | 2 ++
->  mm/kasan/kasan.h      | 6 ++++++
->  2 files changed, 8 insertions(+)
->
-> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-> index f7ef70661ce2..3b91b941873d 100644
-> --- a/include/linux/kasan.h
-> +++ b/include/linux/kasan.h
-> @@ -54,11 +54,13 @@ extern p4d_t kasan_early_shadow_p4d[MAX_PTRS_PER_P4D]=
-;
->  int kasan_populate_early_shadow(const void *shadow_start,
->                                 const void *shadow_end);
->
-> +#ifndef __HAVE_ARCH_SHADOW_MAP
->  static inline void *kasan_mem_to_shadow(const void *addr)
->  {
->         return (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT)
->                 + KASAN_SHADOW_OFFSET;
->  }
-> +#endif
->
->  int kasan_add_zero_shadow(void *start, unsigned long size);
->  void kasan_remove_zero_shadow(void *start, unsigned long size);
-> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> index a61eeee3095a..033335c13b25 100644
-> --- a/mm/kasan/kasan.h
-> +++ b/mm/kasan/kasan.h
-> @@ -291,16 +291,22 @@ struct kasan_stack_ring {
->
->  #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
->
-> +#ifndef __HAVE_ARCH_SHADOW_MAP
->  static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
->  {
->         return (void *)(((unsigned long)shadow_addr - KASAN_SHADOW_OFFSET=
-)
->                 << KASAN_SHADOW_SCALE_SHIFT);
->  }
-> +#endif
->
->  static __always_inline bool addr_has_metadata(const void *addr)
->  {
-> +#ifdef __HAVE_ARCH_SHADOW_MAP
-> +       return (kasan_mem_to_shadow((void *)addr) !=3D NULL);
-> +#else
->         return (kasan_reset_tag(addr) >=3D
->                 kasan_shadow_to_mem((void *)KASAN_SHADOW_START));
-> +#endif
->  }
->
->  /**
-> --
-> 2.20.1
->
+This has a slight benefit for x86 and has no effect on other targets.
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+The benefit to x86 is it change the codegen for setting a node to
+block from `mov %r0, %r1; or $RB_BLACK, %r1` to `lea RB_BLACK(%r0),
+%r1` which saves an instructions.
 
-Thanks!
+In all other cases it just replace ALU with ALU (or -> and) which
+perform the same on all machines I am aware of.
+
+Total instructions in rbtree.o:
+    Before  - 802
+    After   - 782
+
+so it saves about 20 `mov` instructions.
+
+Signed-off-by: Noah Goldstein <goldstein.w.n@gmail.com>
+---
+ include/linux/rbtree_augmented.h | 4 ++--
+ lib/rbtree.c                     | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/rbtree_augmented.h b/include/linux/rbtree_augmented.h
+index d1c53e9d8c75..7ee7ed5de722 100644
+--- a/include/linux/rbtree_augmented.h
++++ b/include/linux/rbtree_augmented.h
+@@ -156,13 +156,13 @@ RB_DECLARE_CALLBACKS(RBSTATIC, RBNAME,					      \
+ 
+ static inline void rb_set_parent(struct rb_node *rb, struct rb_node *p)
+ {
+-	rb->__rb_parent_color = rb_color(rb) | (unsigned long)p;
++	rb->__rb_parent_color = rb_color(rb) + (unsigned long)p;
+ }
+ 
+ static inline void rb_set_parent_color(struct rb_node *rb,
+ 				       struct rb_node *p, int color)
+ {
+-	rb->__rb_parent_color = (unsigned long)p | color;
++	rb->__rb_parent_color = (unsigned long)p + color;
+ }
+ 
+ static inline void
+diff --git a/lib/rbtree.c b/lib/rbtree.c
+index c4ac5c2421f2..5114eda6309c 100644
+--- a/lib/rbtree.c
++++ b/lib/rbtree.c
+@@ -58,7 +58,7 @@
+ 
+ static inline void rb_set_black(struct rb_node *rb)
+ {
+-	rb->__rb_parent_color |= RB_BLACK;
++	rb->__rb_parent_color += RB_BLACK;
+ }
+ 
+ static inline struct rb_node *rb_red_parent(struct rb_node *red)
+-- 
+2.34.1
+
