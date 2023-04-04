@@ -2,68 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB606D5703
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 05:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BE86D570B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 05:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbjDDDIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 23:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        id S232923AbjDDDMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 23:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjDDDIn (ORCPT
+        with ESMTP id S231546AbjDDDMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 23:08:43 -0400
-Received: from out-53.mta1.migadu.com (out-53.mta1.migadu.com [95.215.58.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683301705
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 20:08:39 -0700 (PDT)
+        Mon, 3 Apr 2023 23:12:47 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887E91705;
+        Mon,  3 Apr 2023 20:12:45 -0700 (PDT)
+X-UUID: c5cabca270304178abb617f394213a67-20230404
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:dc36bc4e-3d52-4bd6-ae7a-aab48546efa6,IP:5,U
+        RL:0,TC:0,Content:0,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:25
+X-CID-INFO: VERSION:1.1.22,REQID:dc36bc4e-3d52-4bd6-ae7a-aab48546efa6,IP:5,URL
+        :0,TC:0,Content:0,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:25
+X-CID-META: VersionHash:120426c,CLOUDID:bbb131b5-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:230404111238YBN49KMO,BulkQuantity:0,Recheck:0,SF:38|24|17|19|44|102,
+        TC:nil,Content:0,EDM:5,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,
+        OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: c5cabca270304178abb617f394213a67-20230404
+X-User: jiangfeng@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <jiangfeng@kylinos.cn>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1792328679; Tue, 04 Apr 2023 11:12:37 +0800
+From:   Feng Jiang <jiangfeng@kylinos.cn>
+To:     akpm@linux-foundation.org, shuah@kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Feng Jiang <jiangfeng@kylinos.cn>,
+        Ming Xie <xieming@kylinos.cn>
+Subject: [PATCH] selftests/mm: fix memory leak in child_memcmp_fn
+Date:   Tue,  4 Apr 2023 11:12:34 +0800
+Message-Id: <20230404031234.78272-1-jiangfeng@kylinos.cn>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1680577717;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h2jWPezVO29/X7/c6BGQ5cVlKWQV5b6jUODU7F71l8g=;
-        b=a8IcIEN7PmetPwAyDfihSGSTRo8CZoaaswAyktN+U/ZI87qi43VEdkEjA+wWSEGyLG9Cgc
-        nZsQ5LbapVAiscw+UDxP/5dccH/+j3jBFAzFwtD8Th+/n+P9TSLdcpkVa48qCV3H7RhQyh
-        Q6gKgeS/YD4HPHxFGp69ADhcSFyjUaw=
-Date:   Tue, 04 Apr 2023 03:08:30 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Yajun Deng" <yajun.deng@linux.dev>
-Message-ID: <fa40602f182b028ec44c976a30a66ae6@linux.dev>
-Subject: Re: [PATCH] cpufreq: Fix policy->freq_table is NULL in
- __cpufreq_driver_target()
-To:     "Viresh Kumar" <viresh.kumar@linaro.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230403041128.jrsvbm4ddxdyhddg@vireshk-i7>
-References: <20230403041128.jrsvbm4ddxdyhddg@vireshk-i7>
- <20230329133600.908723-1-yajun.deng@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-April 3, 2023 12:11 PM, "Viresh Kumar" <viresh.kumar@linaro.org> wrote:=
-=0A=0A> On 29-03-23, 21:36, Yajun Deng wrote:=0A> =0A>> __resolve_freq() =
-may be return target_freq if policy->freq_table is=0A>> NULL. In this cas=
-e, it should return -EINVAL before __target_index().=0A>> =0A>> Signed-of=
-f-by: Yajun Deng <yajun.deng@linux.dev>=0A>> ---=0A>> drivers/cpufreq/cpu=
-freq.c | 2 +-=0A>> 1 file changed, 1 insertion(+), 1 deletion(-)=0A>> =0A=
->> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c=0A>=
-> index c0e5be0fe2d6..308a3df1a940 100644=0A>> --- a/drivers/cpufreq/cpuf=
-req.c=0A>> +++ b/drivers/cpufreq/cpufreq.c=0A>> @@ -2299,7 +2299,7 @@ int=
- __cpufreq_driver_target(struct cpufreq_policy *policy,=0A>> return cpufr=
-eq_driver->target(policy, target_freq, relation);=0A>> }=0A>> =0A>> - if =
-(!cpufreq_driver->target_index)=0A>> + if (!cpufreq_driver->target_index =
-|| !policy->freq_table)=0A>> return -EINVAL;=0A> =0A> Hi,=0A> =0A> I have=
- sent an alternate patch [1] for this, please try it.=0A>=0A =0AThanks, v=
-2 is fine.=0A=0A> --=0A> viresh=0A> =0A> [1]=0A> https://lore.kernel.org/=
-all/53d4ed4e5b18a59a48790434f8146fb207e11c49.1680494945.git.viresh.kumar@=
-lin=0A> ro.org
+The allocated memory should be freed on return.
+
+Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+Suggested-by: Ming Xie <xieming@kylinos.cn>
+---
+ tools/testing/selftests/mm/cow.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+index 0eb2e8180aa5..c0dd2dfca51b 100644
+--- a/tools/testing/selftests/mm/cow.c
++++ b/tools/testing/selftests/mm/cow.c
+@@ -162,6 +162,10 @@ static int child_memcmp_fn(char *mem, size_t size,
+ {
+ 	char *old = malloc(size);
+ 	char buf;
++	int ret;
++
++	if (!old)
++		return -ENOMEM;
+ 
+ 	/* Backup the original content. */
+ 	memcpy(old, mem, size);
+@@ -172,7 +176,10 @@ static int child_memcmp_fn(char *mem, size_t size,
+ 		;
+ 
+ 	/* See if we still read the old values. */
+-	return memcmp(old, mem, size);
++	ret = memcmp(old, mem, size);
++	free(old);
++
++	return ret;
+ }
+ 
+ static int child_vmsplice_memcmp_fn(char *mem, size_t size,
+-- 
+2.39.2
+
