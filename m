@@ -2,172 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D325E6D68EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DEB36D68F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235056AbjDDQcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S232897AbjDDQdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbjDDQcU (ORCPT
+        with ESMTP id S231516AbjDDQd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:32:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA3D172C;
-        Tue,  4 Apr 2023 09:32:17 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2725F6603174;
-        Tue,  4 Apr 2023 17:32:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680625935;
-        bh=KuXltiexUNkpyNJrQkX/ulGpUOXgGazP2UPpdbEwY4A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LkmnNId6+hvIzALLF0eDx8nofhPV1wtsWAyQk9McBRARSAkQVYbcKgiKph3emWI+n
-         Eg/p3YL9ALg5e6DiPMnwfLV/1+7PP+vuoqfrAYFzbyL27PewiJU01at8amx+YbWi5+
-         epJSePU/a0SWvTPNudhSHzJ6kwOQeRrIhxciokKUa4V1I2ULxzXh/12NEi1vRJMD+v
-         +cfE5n9wJQOvq8ehLBeEa5bKVcDRiOMyLP1Itr1q7D1X6oaf+tj9hXhwZBx0iuTzH/
-         1kLEA+CItIKh+bKSuTJwZ4f+GSnp8r+2WQfQjeu+iJCTTr83KTJS5HnXq78SL7la9N
-         IKPvXYIv+hChw==
-Message-ID: <3eba05be-a836-d362-4e06-2d9f102c4113@collabora.com>
-Date:   Tue, 4 Apr 2023 19:32:11 +0300
+        Tue, 4 Apr 2023 12:33:29 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0E91BF3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=OHKZZ1EG3y1uOFLskk086hwVba+C+855Onv5kCrd+4s=; b=SOGAOjGKPLh5z/g9UwfDG9Xq73
+        ytrjmBAcp6/fRp6RHV51FzhDI0Gq7VZjd/TJIU8hQnfP1SxcpKehqfugdnFtWATBPQJjCBh8LS7qp
+        v4NnpksdUZCgH8I0x/ZIhKnXyY7C5P9elL82hbqWj15dKHHx7Da+/HxD8BMpiD7WJyavRGM3MM7Um
+        aizCg/LbjunV+0mUsk/lHoFGlmipEmZ5c0+7TudAJfk7JoNa59YnbyrjuQNtWh9ZIvHXuYzi+RY0c
+        8XJgj+cA36s3RaZfbBISj/Bv3d1+gitdo4WYGHhDT5Y3h8nVGlzWSkWu18lAidLChVZM/K45Q4rhP
+        hcC+mlZg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pjjax-002Dsw-2q;
+        Tue, 04 Apr 2023 16:33:19 +0000
+Message-ID: <02d3149a-27a1-ac94-45d7-9e8ca67bc73a@infradead.org>
+Date:   Tue, 4 Apr 2023 09:33:17 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Convert to DT schema
+Subject: Re: [RESEND PATCH v2 1/3] iio: Add some kerneldoc for channel types
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
- <20230403105052.426135-2-cristian.ciocaltea@collabora.com>
- <20230404141749.GB3793612-robh@kernel.org>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <20230404141749.GB3793612-robh@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andrea Merello <andrea.merello@iit.it>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <cover.1680610554.git.mazziesaccount@gmail.com>
+ <6cbe49605986fe1b82e4f3d67344e549846c5f6c.1680610554.git.mazziesaccount@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <6cbe49605986fe1b82e4f3d67344e549846c5f6c.1680610554.git.mazziesaccount@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/23 17:17, Rob Herring wrote:
-> On Mon, Apr 03, 2023 at 01:50:51PM +0300, Cristian Ciocaltea wrote:
->> Convert the PWM fan bindings to DT schema format.
->>
->> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
->> ---
->>  .../devicetree/bindings/hwmon/pwm-fan.txt     |  68 +----------
->>  .../devicetree/bindings/hwmon/pwm-fan.yaml    | 109 ++++++++++++++++++
->>  2 files changed, 110 insertions(+), 67 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->>
+Hi Matti,
 
-[...]
+On 4/4/23 05:24, Matti Vaittinen wrote:
+> For occasional contributor like me navigating the IIO channel types and
+> modifiers may be a daunting task. One may have hard time finding out
+> what type of channel should be used for device data and what units the
+> data should be converted.
+> 
+> There is a great documentation for the sysfs interfaces though. What is
+> missing is mapping of the channel types and modifiers to the sysfs
+> documentation (and entries in documentation).
+> 
+> Give a hand to a driver writer by providing some documentation and by
+> pointing to the sysfs document from the kernel doc of respective enums.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> ---
+> Changelog RFCv1 => v2:
+> - add missing channel type docs provided by Jonathan
+> - add @in front of member names and fix typos pointed by Andy
+> - drop TODOs as Jonathan clarified the units
+> 
+> Initial discussion about these docs can be found from:
+> https://lore.kernel.org/all/0e0d45b7-e582-82b2-9bac-1f70f9dad9f7@gmail.com/
+> ---
+>  include/uapi/linux/iio/types.h | 134 +++++++++++++++++++++++++++++++++
+>  1 file changed, 134 insertions(+)
+> 
+> diff --git a/include/uapi/linux/iio/types.h b/include/uapi/linux/iio/types.h
+> index c79f2f046a0b..78f4cfdc5e45 100644
+> --- a/include/uapi/linux/iio/types.h
+> +++ b/include/uapi/linux/iio/types.h
+> @@ -11,6 +11,124 @@
+>  #ifndef _UAPI_IIO_TYPES_H_
+>  #define _UAPI_IIO_TYPES_H_
+>  
+> +/**
+> + * iio_chan_type - Type of data transferred via IIO channel.
 
->> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->> new file mode 100644
->> index 000000000000..448b48ec5d73
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->> @@ -0,0 +1,109 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/hwmon/pwm-fan.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Fan connected to PWM lines
->> +
->> +maintainers:
->> +  - Jean Delvare <jdelvare@suse.com>
->> +  - Guenter Roeck <linux@roeck-us.net>
->> +
->> +properties:
->> +  compatible:
->> +    const: pwm-fan
->> +
->> +  cooling-levels:
->> +    description:
->> +      PWM duty cycle values in a range from 0 to 255 which correspond to
-> 
-> Don't put constraints in plain text:
-> 
-> items:
->   maximum: 255
-> 
->> +      thermal cooling states.
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> 
-> Unfortunately, looks like we've wound up with same property with 2 
-> differing types. A problem for another day...
-> 
->> +
->> +  fan-supply:
->> +    description: Phandle to the regulator that provides power to the fan.
->> +
->> +  interrupts:
->> +    description:
->> +      This contains an interrupt specifier for each fan tachometer output
->> +      connected to an interrupt source. The output signal must generate a
->> +      defined number of interrupts per fan revolution, which require that
->> +      it must be self resetting edge interrupts.
-> 
-> How many entries? I'm not sure how more than 1 makes sense.
+    * enum iio_chan_type - ...
 
-The 3rd example taken from the original binding uses 2 entries. So far
-it seems there are no use cases requiring more than one, so I'm going to
-limit this to 5 (the driver doesn't enforce a limit).
+as you did in patch 2/3.
 
->> +
->> +  pulses-per-revolution:
->> +    description:
->> +      Define the number of pulses per fan revolution for each tachometer
->> +      input as an integer (default is 2 interrupts per revolution).
-> 
-> default: 2
-> 
->> +      The value must be greater than zero.
-> 
-> minimum: 1
-> 
-> maximum: ??? I assume there's some practical limit here much less than 
-> 2^32.
+> + *
+...
+> + */
+>  enum iio_chan_type {
+>  	IIO_VOLTAGE,
+>  	IIO_CURRENT,
+> @@ -49,6 +167,22 @@ enum iio_chan_type {
+>  	IIO_MASSCONCENTRATION,
+>  };
+>  
+> +/**
+> + * iio_modifier - accurate class for channel data
 
-Will set it to 4, as suggested by Guenter.
+Ditto here.
 
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> 
-> Isn't this a scalar? 
+> + *
+> + * @IIO_MOD_<X,Y,Z>:	Value represents <X,Y,Z>-axis data.
+> + *			Typically used by channels of type:
+> + *			IIO_ACCEL, IIO_TEMP, IIO_GRAVITY, IIO_POSITIONRELATIVE,
+> + *			IIO_ANGL_VEL, IIO_INCLI, IIO_MAGN
+> + * @IIO_MOD_LIGHT_BOTH:	Value contains visible and infrared light components
+> + * @IIO_MOD_LIGHT_IR:	Value represents infrared radiation
+> + * @IIO_MOD_LIGHT_<RED, GREEN, BLUE>:
+> + *			Value represents visible <red, green, blue>  light
+> + * @IIO_MOD_LIGHT_CLEAR:	Value represents all visible light frequencies
+> + *
+> + * Please find the detailed documentation for reported values from the
+> + * Documentation/ABI/testing/sysfs-bus-iio.
+> + */
+>  enum iio_modifier {
+>  	IIO_NO_MOD,
+>  	IIO_MOD_X,
 
-As in the case of interrupts, the 3rd example uses 2 entries. Will set
-the same limit (5).
-
->> +
->> +  pwms:
->> +    description: The PWM that is used to control the fan.
->> +    maxItems: 1
->> +
->> +  pwm-names: true
->> +
->> +  "#cooling-cells":
->> +    description: The PWM fan can be referenced as a cooling-device.
-> 
-> Not that useful. What would be is what's in the 2 cells.
-
-Will describe its usage according to thermal-cooling-devices binding.
-
-Thanks for reviewing,
-Cristian
+Thanks.
+-- 
+~Randy
