@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C756D555A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 02:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DDC6D5560
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 02:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjDDAEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 20:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
+        id S231583AbjDDAFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 20:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjDDAEM (ORCPT
+        with ESMTP id S231543AbjDDAFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 20:04:12 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DA83AB3
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 17:04:09 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id f22so25566712plr.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 17:04:09 -0700 (PDT)
+        Mon, 3 Apr 2023 20:05:39 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934BF40E2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 17:05:38 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id j13so28837293pjd.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 17:05:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680566649;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680566738;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ISmF8nvjx0ybm2sJtfCgvvFezmys6zwifQtFbY4uoY8=;
-        b=MwdHJ64U4y9L9kZbHHfLVw/Yd20B0fWkelqUdVZKhghqkkLvcPVf5B/6AWkmBB4Iix
-         +6tiPsqWaXqSXSn8S84GPwhqvDiSgDDTDKeDa2hvLDLi4j/+CCABcLPq8xaRpG0Pt/iR
-         m3n/ZBnrLEegJD9Zp4IhyYwIdwet6dag19biR/jtwRQx3RjBfYuWQG3kN4WLeo20GAGh
-         s//j38Y0q8steIx9r+nGeDisdVHWCpXQnX2VxW9sXQnriP1zNanKE+3pzzt6D7jTcNcU
-         P+OKQEdq0B2mVWPvnZQ8CFsCe6JC6fhVy+6K1pAUcoLK6Sje4zLwkgVCCeqAr9kEdmp3
-         SwoA==
+        bh=M8biJ1aBbukeLfwN+w/+0iRNiLUjgXR0WEnlqTCaXvw=;
+        b=ofZA8lpTuIEsN+GsDqWo7mVL03MfT9lddpXOb0ihcNjz7Y9WqKBNVtSy8hdZOTQlUD
+         gZg4g6Un/Ent8M6oUc0GdNsxAwDgszjkyxwKbnYhX2yc27TBdOjzoAxlfY4fdLUFo10O
+         EGWRQ4tE14OzGgMYwRiUccsMJqhYcMMWNXPQBQHfKhQ/Keu5Q7G2n/G4hQ1T/5aPt0Ki
+         +mYREkN4bUD0FHkFrIX6PhrvnrVRl9PI16qDYtKYULHPmeJJMqBn9qMmnXr/iOg3BhcG
+         o/4IDrPzHiHL3QMzKF0QEIIDDqOMqh0+QnOKRDJUW8uDso0K7gwF5OPEAczflC0pYbYN
+         6wAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680566649;
+        d=1e100.net; s=20210112; t=1680566738;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ISmF8nvjx0ybm2sJtfCgvvFezmys6zwifQtFbY4uoY8=;
-        b=UhDf/eTdxj+Ukm8epSfqL4ERgfvYw9JPrGwDZwp+O9wXbHEiKdYMac9mnRFTHD7Fws
-         Mr7GuO7k0I1vIJwGMXuWHWHeuhlHprKAz9B3OPaY8VQ4zpRFI04cCsNH0KfAslVuyHRo
-         vkKuzw1caEnYr4eNRbHvSkxocyI3hoz/y9Fad1Va3POzQl3EvbukIyfcWNIKJvEjEVmH
-         TuUnG9MpefWuzAIDQEyaXL5EhHJIyGIAq8cUDrTEKhtsZdhPG5KGE9msM1EbJl7ta/3B
-         STYK4RL1tVvsJxMtQ2l6wGLwHd5mK7U31aOyCL3yJfGXqgljA3EkrKZpU+R3flmR/Aqw
-         q7cA==
-X-Gm-Message-State: AAQBX9dvsk7X9IrLuGhZoWoKgdnismrsLXKNJzLpdHwkyHq+W7kWDLmp
-        ciPjuSBjOSrWzsy9muDjGfuYIQ==
-X-Google-Smtp-Source: AKy350ZCXF7QNH2FUbpLyZBKB7LqVlEd3NIT2fIvf/7ilkhxZ2ZkkRksxI97+pH7cPZRyzcqEjxgZA==
-X-Received: by 2002:a05:6a20:ba9c:b0:de:807e:620e with SMTP id fb28-20020a056a20ba9c00b000de807e620emr343481pzb.58.1680566649333;
-        Mon, 03 Apr 2023 17:04:09 -0700 (PDT)
+        bh=M8biJ1aBbukeLfwN+w/+0iRNiLUjgXR0WEnlqTCaXvw=;
+        b=r14rI3yTGzKyTiSB2hHQ4fPosqS/Djad+M8IBVA1GTvg7yFUvGTlf90ykaXxRPmcaU
+         1/9Vk0kK+nsTb+nGZH63NAqOcZyg+kMZeiRghoUbfPwhnr2U5PFFbAptc1K7RNQGsdSa
+         5n2Kx4QBiqGsJnzXID5tvITJUJ1Wqs7FmtMAuCzS2aiY+e4++AiKhLWHr+EJjGge1rWf
+         0+4kEzaGrEYiSXE5X0qjRP4nO6Z8xAlXjX2j3DT+HSqxfCcGm+v77YFeLzfdJ8SVPTiH
+         Cgikt8P723UJNJBKu/h+wQhASvxQXb17RtROULniyICZdTqjtvUUQb7xq8lL/jNK1i01
+         OSlA==
+X-Gm-Message-State: AAQBX9dFPCLyZSzWbz4K96XMhl9IXnaHNGstZ60sfca+G7asNU+5UmMp
+        lj6F5/iAHZfthys+QCfQEeKbeg==
+X-Google-Smtp-Source: AKy350a8EOWlE6/ey6qlDm4l3M/bElNRWs6BENfSo8Yhhz4VqjfFZVoicQqCKM9Tl+bt2b6qzQPHBw==
+X-Received: by 2002:a17:902:f545:b0:1a1:a996:feb3 with SMTP id h5-20020a170902f54500b001a1a996feb3mr1094215plf.26.1680566733293;
+        Mon, 03 Apr 2023 17:05:33 -0700 (PDT)
 Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
-        by smtp.gmail.com with ESMTPSA id b24-20020a630c18000000b005023496e339sm6318991pgl.63.2023.04.03.17.04.08
+        by smtp.gmail.com with ESMTPSA id y1-20020a170902864100b0019c61616f82sm7098625plt.230.2023.04.03.17.05.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 17:04:08 -0700 (PDT)
+        Mon, 03 Apr 2023 17:05:32 -0700 (PDT)
 From:   Kevin Hilman <khilman@baylibre.com>
 To:     Alexandre Mergnat <amergnat@baylibre.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -73,12 +73,13 @@ Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Amjad Ouled-Ameur <aouledameur@baylibre.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Subject: Re: [PATCH v4 00/11] Improve the MT8365 SoC and EVK board support
-In-Reply-To: <CAFGrd9rKy9a4bUf1dkUtTogtWPFr5eu3jcsdaixi3hs_dWMwrg@mail.gmail.com>
+In-Reply-To: <CAFGrd9qLzcDJO_Fk_-B6XYuuxQzQoYLXmdp0Qj1Tszr0-sqNgw@mail.gmail.com>
 References: <20230203-evk-board-support-v4-0-5cffe66a38c0@baylibre.com>
  <7hy1ncydtc.fsf@baylibre.com>
  <CAFGrd9rKy9a4bUf1dkUtTogtWPFr5eu3jcsdaixi3hs_dWMwrg@mail.gmail.com>
-Date:   Mon, 03 Apr 2023 17:04:08 -0700
-Message-ID: <7h4jpwy0lj.fsf@baylibre.com>
+ <CAFGrd9qLzcDJO_Fk_-B6XYuuxQzQoYLXmdp0Qj1Tszr0-sqNgw@mail.gmail.com>
+Date:   Mon, 03 Apr 2023 17:05:32 -0700
+Message-ID: <7h1ql0y0j7.fsf@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -92,25 +93,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Alexandre Mergnat <amergnat@baylibre.com> writes:
 
-> You forgot to apply the patches merged by Matthias:
+> Here a build-able & working branch with dependencies:
+> https://gitlab.baylibre.com/baylibre/mediatek/bsp/linux/-/commits/amergnat/i350-evk-board-support
 
-Because they weren't listed as dependencies. :)
+This branch doesn't compile.
 
 Kevin
-
-> Changes in v4:
-> - Remove v3 applied patch from the serie:
->   - arm64: dts: mediatek: add ethernet support for mt8365 SoC
->   - arm64: dts: mediatek: add mmc support for mt8365 SoC
->   - arm64: dts: mediatek: add mt6357 device-tree
->   - arm64: dts: mediatek: add pwrap support to mt8365 SoC
->   - arm64: dts: mediatek: Increase the size BL31 reserved memory
->
-> ...
->
-> Changes in v3:
-> - Remove v2 applied patch from the serie:
->   - dt-bindings: mmc: mediatek,mtk-sd: add mt8365
->
-> Regards,
-> Alex
