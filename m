@@ -2,79 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44956D5FEA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2944F6D5FF0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234661AbjDDMKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S234811AbjDDMNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234401AbjDDMJB (ORCPT
+        with ESMTP id S234858AbjDDMLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:09:01 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BDC3C17
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:03:58 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id r11so32519533wrr.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 05:03:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680609837;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=H2I56WrDZlwIyTwZv99JWrXVc0DEeAqRMvCpScLvpPM=;
-        b=F3sVftBT1QGr7zDiPp6MLlWECDJLKeCxMjdAHa9LvbwfH23ZJoySJejSFzYUWQSWkM
-         1KNuZ3Gn38+p9Fn9lpr0ce0HGXzeOLeb63rUS9Ashpg2I0fMLVuC6BMXWSvcuyAlIFzV
-         EvohsGoRHux8Jl5droMXr+TmE+upVwgkZh3o3I4kP8eLsF1Y8kPHjzNvyQf6T+XHi9+x
-         0dTNfHj/0etbmjOcrU6wbnd3OZiAaQcy6sKnaaHqRK1MC3ISEJ4a28TZCA0puV7Fxwxd
-         twdvHBFDirCURjGXnAKlCqa54/hJA2B94Sy9NhUxN3O36U+R2J+5xjpu4dTtb5hjF2km
-         V8CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680609837;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H2I56WrDZlwIyTwZv99JWrXVc0DEeAqRMvCpScLvpPM=;
-        b=NNOHv580vlv7d8rIb2seMwIsQYJ7CSVkP3Tu5nYIGB7BcgimECpBkZvO2REOIe63mJ
-         mr058YJHUvr9io4AZD9KLHtEOb7VKiPfGcEDrkEHmXPwmrVb9YiWzuJGTCRaxO2QtN92
-         X0/OrPAV5dGu2ibSx1u4zN/JXJd8Kyi9IMMbxiB52WAEqbRUCbyuLYo4EiZCXUpmJfW4
-         hk+gBNwwP412RRxWLyApqYScFeGHUeW6G8hUwQUfF6QJvwCe9p8II7G0DzhQkndHSM0t
-         /8PVAK0YGjGpXdm9MAU1GZxvTEMeob7MqPJ5IWqhWPE1Fs/ZZVVaT6z2jMylbzr/KwHv
-         SnZQ==
-X-Gm-Message-State: AAQBX9dY5snOg432bauuEDpkfzHqdKhvOTwzia0T3L2cdq6jW5rsHt0G
-        1Qde6WuHuX/o9bW770G/fb5huw==
-X-Google-Smtp-Source: AKy350b7Ly63qP2Zz28vd6eldPQmdJJlgZViuOREMlTV8zIkN2q/Jzc2kuKF2MYFmZ5YqYfvGOfhDQ==
-X-Received: by 2002:a05:6000:51:b0:2dc:2431:67d0 with SMTP id k17-20020a056000005100b002dc243167d0mr1383808wrx.19.1680609836931;
-        Tue, 04 Apr 2023 05:03:56 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id e38-20020a5d5966000000b002d78a96cf5fsm12259781wri.70.2023.04.04.05.03.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 05:03:56 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 14:03:55 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 6/8] RISC-V: KVM: Add ONE_REG interface for AIA CSRs
-Message-ID: <p3ifmb3r7g3soolhapkzlqyt5nq7ivb53w5fb5pp3274dd4ohp@whtjluacebeo>
-References: <20230403093310.2271142-1-apatel@ventanamicro.com>
- <20230403093310.2271142-7-apatel@ventanamicro.com>
- <osrpjiywxtkgxb5i6mfvxzfrzrnjv75uqzvlu3fouo4mqsktgj@blcmyjt3twqg>
- <CAAhSdy1JEQBiO55iCy97arO63VjGc+NicUvvwzTpK97W97LmJg@mail.gmail.com>
- <ejt3x4p7xhxfvwiafnogfwdn5dzd4qyowlht22utnbvzefsbyh@7dch4mebwckm>
- <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
+        Tue, 4 Apr 2023 08:11:04 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B10630F2
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:08:06 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id AA6AB3200904;
+        Tue,  4 Apr 2023 08:08:05 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 04 Apr 2023 08:08:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        joshtriplett.org; h=cc:cc:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1680610085; x=1680696485; bh=Bw/h1Rh4E0vT8Nc1IFmxcu4JEtmmInnw9fc
+        s0rCMMao=; b=RqfDu87pHoRhmKtJIy++Lgz1sL5nBYETIomgBeI+GAvdqfkqWEZ
+        GNMxgr4GLq78DQoT3mbP7EXhcQwnDsW7nUtpFTOLHCKnttuN6DFTpj/Oia/uwY/f
+        DGbQHEZo+RIwA6h2X9c5UH1GOONbvbm97reYBs2g7FulZvs/78RZb0a08Y1YSp2e
+        u7tS3Xk0BT+a0xcMaSg2BmFoTBQCfecGz4Z5GpTizwQA3biP032cQ/6HugdnY2TS
+        gb2TtaQF1C6Rp5AzyKJH+TEHOv4Ymj7wffUccIBeHkMHccVzIWeZ0zc25mAkqxwj
+        7D7BwdiDAEAR2k6+mSeAtKgPAHf8XOPVR+Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680610085; x=1680696485; bh=Bw/h1Rh4E0vT8
+        Nc1IFmxcu4JEtmmInnw9fcs0rCMMao=; b=C1nRnXZubnNTUZtq/1GWW+F3fVRSQ
+        Epy9qwg5jUXNu1Brvfy8iubkikf7NvYdXf/i1i/wwOdBMtpRyWvO/6GHxfw0hwJV
+        g7hV0zeI75A7zuiY4i6ha8QekB+e9lx+tcX8pE7kEqMtDHAk+12rXXU3eqGRjO8/
+        NFkVwrNnBn7mHgroLIKiq1Fsa8CEjVWLtIPUv5vWLz0FcJ6VMTkPs5N7+RdAt/Y8
+        8G9zs0dOfOV8x8dKiK5nwkno5AUpmmSRMuMoiVqgpA4jxZSHC+OJAU3ZvmjU6bYW
+        yhb4t3GFwCwZfsFM6JBPgrtv11pHlPcJp3ax3+tFDuZJ/7BVBD0dhlBbg==
+X-ME-Sender: <xms:JBMsZAK_cIDBjaSLIvdwBZ9N-BjzR6pA9J_FyRHnwmh2Wmi6fMRx9Q>
+    <xme:JBMsZAI8axXDy2WifvAQpRjnZeCo0lrMlMxtJDoR8qyR0MHiUhdT3IkPQhPR2oa4I
+    up4iztOnZBFkBgrFXk>
+X-ME-Received: <xmr:JBMsZAuxynsbWuWoeM_GsCyTcmooayTx4g4UAXn6GahIOEzLBBs7IrWM2GHtnXKyoorSXJVI5GkjaA2brJZmlmmPu3MV8Tx0W2X5Eok>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledggeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
+    ertddttddvnecuhfhrohhmpeflohhshhcuvfhrihhplhgvthhtuceojhhoshhhsehjohhs
+    hhhtrhhiphhlvghtthdrohhrgheqnecuggftrfgrthhtvghrnhepudeigeehieejuedvte
+    dufeevtdejfeegueefgffhkefgleefteetledvtdfftefgnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhoshhhsehjohhshhhtrhhiphhlvg
+    htthdrohhrgh
+X-ME-Proxy: <xmx:JBMsZNavZNUYlFP-S3-Vm-vwqp5GOGd0e8CkRJx_LsV9l8-lyO_laA>
+    <xmx:JBMsZHbmZDsN1B8AyhJVNKgWBZkRI5Wsc71bw_uhn7FU6jJxtHeRiw>
+    <xmx:JBMsZJDAsjr6yqdyEIuXiEAX--4Q9sMqG66BabdxDDaKTcmyC-QUyg>
+    <xmx:JRMsZGVCD1zLqjWT2rFo6eYlkBchYmVWsF6XM2rjCZKRoG7hVHxG3g>
+Feedback-ID: i83e94755:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Apr 2023 08:08:02 -0400 (EDT)
+Date:   Tue, 4 Apr 2023 21:07:59 +0900
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH] prctl: Add PR_GET_AUXV to copy auxv to userspace
+Message-ID: <ZCwTHxzUAMOzXFi7@localhost>
+References: <b11a591e085f1cd06adb454b1f7cde676d317318.1680585798.git.josh@joshtriplett.org>
+ <202304041715.c3b7aJd4-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <202304041715.c3b7aJd4-lkp@intel.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,66 +86,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 01:52:43PM +0200, Andrew Jones wrote:
-> On Mon, Apr 03, 2023 at 02:23:01PM +0200, Andrew Jones wrote:
-> > On Mon, Apr 03, 2023 at 05:34:57PM +0530, Anup Patel wrote:
-> > > On Mon, Apr 3, 2023 at 5:01 PM Andrew Jones <ajones@ventanamicro.com> wrote:
-> > > >
-> > > > On Mon, Apr 03, 2023 at 03:03:08PM +0530, Anup Patel wrote:
-> > > > > We implement ONE_REG interface for AIA CSRs as a separate subtype
-> > > > > under the CSR ONE_REG interface.
-> > > > >
-> > > > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > > > ---
-> > > > >  arch/riscv/include/uapi/asm/kvm.h | 8 ++++++++
-> > > > >  arch/riscv/kvm/vcpu.c             | 8 ++++++++
-> > > > >  2 files changed, 16 insertions(+)
-> > > > >
-> > > > > diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-> > > > > index 182023dc9a51..cbc3e74fa670 100644
-> > > > > --- a/arch/riscv/include/uapi/asm/kvm.h
-> > > > > +++ b/arch/riscv/include/uapi/asm/kvm.h
-> > > > > @@ -79,6 +79,10 @@ struct kvm_riscv_csr {
-> > > > >       unsigned long scounteren;
-> > > > >  };
-> > > > >
-> > > > > +/* AIA CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-> > > > > +struct kvm_riscv_aia_csr {
-> > > > > +};
-> > > > > +
-> > > > >  /* TIMER registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-> > > > >  struct kvm_riscv_timer {
-> > > > >       __u64 frequency;
-> > > > > @@ -107,6 +111,7 @@ enum KVM_RISCV_ISA_EXT_ID {
-> > > > >       KVM_RISCV_ISA_EXT_ZIHINTPAUSE,
-> > > > >       KVM_RISCV_ISA_EXT_ZICBOM,
-> > > > >       KVM_RISCV_ISA_EXT_ZBB,
-> > > >
-> > > > Looks like this patch is also based on "[PATCH] RISC-V: KVM: Allow Zbb
-> > > > extension for Guest/VM"
-> > > 
-> > > Yes, do you want me to change the order of dependency?
-> > 
-> > It's probably best if neither depend on each other, since they're
-> > independent, but otherwise the order doesn't matter. It'd be nice to call
-> > the order out in the cover letter to give patchwork a chance at automatic
-> > build testing, though. To call it out, I believe adding
-> > 
-> > Based-on: 20230401112730.2105240-1-apatel@ventanamicro.com
-> > 
-> > to the cover letter should work.
-> 
-> I also just noticed that this based on "RISC-V: KVM: Add ONE_REG
-> interface to enable/disable SBI extensions"[1] and it needs to be
-> in order to pick up the KVM_REG_RISCV_SUBTYPE_MASK and
-> KVM_REG_RISCV_SUBTYPE_SHIFT defines. It'd be good to call that
-> patch out with Based-on.
-> 
-> [1]: 20230331174542.2067560-2-apatel@ventanamicro.com
+On Tue, Apr 04, 2023 at 05:58:51PM +0800, kernel test robot wrote:
+> reproduce (this is a W=1 build):
 
-And "RISC-V IPI Improvements",
-20230328035223.1480939-1-apatel@ventanamicro.com, which is required
-for riscv_get_intc_hwnode()
+Right, I *really* need to start doing W=1 builds. (Am I missing
+something, or did kernel builds once emit warnings about type mismatches
+on `min` by default?)
 
-Thanks,
-drew
+> >> kernel/sys.c:2383:23: warning: comparison of distinct pointer types ('typeof (sizeof (mm->saved_auxv)) *' (aka 'unsigned int *') and 'typeof (len) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+
+Will fix in v2.
