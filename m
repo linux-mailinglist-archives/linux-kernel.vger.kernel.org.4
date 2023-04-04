@@ -2,79 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF246D6B23
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9157A6D6B2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236036AbjDDSDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 14:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
+        id S236299AbjDDSFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 14:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231620AbjDDSDi (ORCPT
+        with ESMTP id S236294AbjDDSEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 14:03:38 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A4D4687;
-        Tue,  4 Apr 2023 11:03:36 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334HCIWf011465;
-        Tue, 4 Apr 2023 18:03:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=DrPOWjwYr/69zhuxEKo4W/WWCnat/PgCE9ubKirkIMs=;
- b=MIytwJfe8in0uoroKqvB1Bf6nYrJhI7dkL5Z6HgGmgF5cfQkMPPUmv0TgF3NkSvE/rqT
- 94n14e9eqRKQ2VIbkVt5B41LR1inyfF759IzDT67RRJaqKs7x6KM3vpm55CwlL11QcRJ
- g3tMAysUAVSceeUZZYKUjKVwzbYnK4ji3BYZb7+x+hil9rnVxknGHvzeUpjqR3YQ5bIc
- 68cQZhFRqp37MADE9AqUCVzZzPg39YTHTpayfc+n0X9N706u1ecUfF4re1vPyLCu7pY6
- AHDVHIdl/S3rThifFjEksuv8KAkUThnwcM4aw8aXfVBetCJ6/ils//B5SvyiMrpSTlqt uw== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prnbt0ntk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Apr 2023 18:03:31 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 334I3QxO021656;
-        Tue, 4 Apr 2023 18:03:28 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3ppdpkvtrg-1;
-        Tue, 04 Apr 2023 18:03:27 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 334I3RFh021663;
-        Tue, 4 Apr 2023 18:03:27 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 334I3Rla021662;
-        Tue, 04 Apr 2023 18:03:27 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id 0E3B63B69; Tue,  4 Apr 2023 23:33:27 +0530 (+0530)
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        broonie@kernel.org, vkoul@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org, quic_vtanuku@quicinc.com,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: [PATCH 2/2] spi: spi-qcom-qspi: Add DMA mode support
-Date:   Tue,  4 Apr 2023 23:33:20 +0530
-Message-Id: <1680631400-28865-3-git-send-email-quic_vnivarth@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1680631400-28865-1-git-send-email-quic_vnivarth@quicinc.com>
-References: <1680631400-28865-1-git-send-email-quic_vnivarth@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DbCB8Eq5AY3SbVH1XXdbaPWQaU0frJio
-X-Proofpoint-GUID: DbCB8Eq5AY3SbVH1XXdbaPWQaU0frJio
+        Tue, 4 Apr 2023 14:04:47 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F49C4EE5
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 11:04:28 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334Dx8hT023727;
+        Tue, 4 Apr 2023 18:03:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references :
+ content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
+ bh=lYriMtzpfqkZdPZegEeI0/rZvHhRrLX+P0vCUW73HKA=;
+ b=yj/MFDsWsfDZetWGXrPbL6tBU3AhYvoJFQhbyT5FI8JGdHZHBL5VZuP78cRKH237WbAP
+ jicfoU24ui9Zc1tpvtNvvmYsvaoUOVAuVVTFP4fDedE5s2GikJ1z6rlISI0TTgnnpJ89
+ MWjSqrITyVRLFW4HugabYu6aAIUhXmehfQEB3hTYCZy1br3+HTE//ZFmFLGFF82pL5bq
+ 0yyz95BDvV2/FIyamOc0gbb5JoYbBUm0ET/jmR2JiXgsqvgo/GzN+/rKA2m9LGC5/r1A
+ AfRHtLfvU6lJAweabi0zIyyyBWzoor/nt3m5C/GgE+XS+C03/OPZ3TRyR5L794J8lmwQ 8A== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppc7txfxw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 04 Apr 2023 18:03:56 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 334HYvii039569;
+        Tue, 4 Apr 2023 18:03:55 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ppt26rm61-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 04 Apr 2023 18:03:55 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lYMuK7Dx4NQrbc2DFxfdninhTu09QXqQH+nwogcawjj4hFdY8ePpuTXwqM4VNbPkdup9yXXNO4038cIdYptnbDsUsYdSTYhAz34NyclecjHc1G2uY+6DicNJH6Wixl2c7yBij/+6eE9uzsBiM//zmodSV8vsmhPbJik/nq5z9BaP+UQkG3qHiUebUgl8y/qCVvhtgfxs1cRaLLDa4L0Btb80W6kVzzRC/gUv9KPRd/irJs2beHRmXa6UgkQ4u9uf8ykGoDrnBBS1gcH0P6rlWSmb6OfA+RdDxtXsA3tuC/r8Q0ef9qzulVJnt/4c/rB6XHQAnDLL3coGxexPKioQ6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lYriMtzpfqkZdPZegEeI0/rZvHhRrLX+P0vCUW73HKA=;
+ b=m0ft0YxSkYFgEDsEvzKnQItEnGd9O5nGPBUx3z+NTVsQfsTy1sc5b1+fOg2Sm4o2nzzs6pTmD2XRDaneNI7vm4HKTA2h1p+bqlLYL41jkkzTp/fFt2AxLwFtFb+kk/inc3bB/CcA1g7QSz3qaPGqfBu8bQCwAz/hdlu+hDd/WpbsbQpXAGnZatFkUAjliFQ2iwFqaG27mkQK8oIqwnijsqc7J904+FI03tB0bN33eBfRPXVyv1+iksVsz5vnSdkDbnplIkADy2o+6ghtzzRFJC38ccCwvJv9pPZLnrwb3/HmRjSjS0kNvhYNDRevWuZadBZiI+9nHe0AFSlNzEAnvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lYriMtzpfqkZdPZegEeI0/rZvHhRrLX+P0vCUW73HKA=;
+ b=W4wEfpFrczhHIKzfKe6FfBsWnqj03t4GBP1mSe0voB3RVdlyMK21qxlQoQlwKnHtYgoikh9fA/aE/z6kqkRs9Q0nbWgwPg+bBvOjGas0NzVB6darvoC0VqSlNBpJvkVo19gx0EUx6g8hU1wUSkXvAWbB6i4XhfNuPlwsQLWsDCM=
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+ by MN0PR10MB5909.namprd10.prod.outlook.com (2603:10b6:208:3cf::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Tue, 4 Apr
+ 2023 18:03:52 +0000
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::e9ed:8782:64cb:cfc3]) by CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::e9ed:8782:64cb:cfc3%9]) with mapi id 15.20.6254.028; Tue, 4 Apr 2023
+ 18:03:52 +0000
+From:   Eric DeVolder <eric.devolder@oracle.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com, eric.devolder@oracle.com
+Subject: [PATCH v21 2/7] crash: add generic infrastructure for crash hotplug support
+Date:   Tue,  4 Apr 2023 14:03:21 -0400
+Message-Id: <20230404180326.6890-3-eric.devolder@oracle.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20230404180326.6890-1-eric.devolder@oracle.com>
+References: <20230404180326.6890-1-eric.devolder@oracle.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AM0PR04CA0010.eurprd04.prod.outlook.com
+ (2603:10a6:208:122::23) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|MN0PR10MB5909:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2b9570c0-58c1-4e02-6ffe-08db3536f2ac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dKdCClmXREVgHA2opcejiqG2z+TyNSlqikNzaAPJCtiRp7SP8WmCkiLtIhzDbeXFpGxPaX9Rskrw7JvQ2JjpWmQGrJ7Z+WJKUZFr3go3s/AT0A04ovmWh/lwIW2imTjxE/GzHsLjVp/gho4bOgwUVAOhmTfl0iKjWlcaOgy8ItHan0BJwdTRXxUh6sPdaDb/Yg0rGDCD/Cfs8Fm4SJZfvs/X05p0KDFJNA1TIlkHH0jj6aXmhlRflII2b7L+W3vbMp+hA4go7SVvd1qUHEQp/y/0qCXiCqpHmsg5epFdvaHk1CjG9MX6SfGo8r9PTorCzCYlET9prQpvAbVjCiqdGpD/lT5hS1/LMDu5baOuf5sLNJcinfaEesa1+yBRDXNVLAiSrs2ElNkTk0PGNbMpLUP4u3dPdMUrj4YzgmtOJi3QH9kLF96zQklzGbna94h9yUy/b8LeoSBfF4+crokawu0KR/lBxbFIeujiVwN57jLxkxrElaBhvl49kMqIpRrhFMtX4OGLKVnwpdv70QoE8I3R9o96YJePxFBj1Sult4ttW+JH/5ydra2MnXvPzVmLLyUuyK4xVfGJdH/aR6ceFSc58FqwRFkTmqUuvKBRfGI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(39860400002)(396003)(136003)(366004)(451199021)(83380400001)(4326008)(8676002)(66946007)(316002)(66556008)(66476007)(86362001)(2906002)(41300700001)(478600001)(36756003)(38100700002)(2616005)(8936002)(6486002)(5660300002)(6512007)(7416002)(186003)(107886003)(6666004)(26005)(6506007)(1076003)(41533002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uV/066FfoslGnLJY9GnlGFF5giYD6qHURYZqW6pOvhYox3xXbGF65yr0Z7eX?=
+ =?us-ascii?Q?TVG98mkBjUC/2Z7So6A8Y4oXcDgV4gfHLN18/CecQryJ4W0bHjSqXXWxl7uC?=
+ =?us-ascii?Q?ngb1dA1qOx3kgt6nR5oPxZCAuTHqvqLiKrKA7Rwh/yoR/TMi9vL6buXC+XxG?=
+ =?us-ascii?Q?BWrIAj9IORgpMKrz+0u2PmQ/usn65w/2/hBn6kdZFAAqR0SDVXuGV/qhuenX?=
+ =?us-ascii?Q?MgtI/FE47zf+ypUBnbIlYuNByvXxjpNfyI6k630BIqqCaVtRTjaFgPwnspfX?=
+ =?us-ascii?Q?dsamygJ0htt8vjPWjrVAVWLISkFzZR3TnLFjK+ZVW4qI1BTHA2A5RfubQwCJ?=
+ =?us-ascii?Q?WSDrYLeBShjzXjZb9zFleZZLmyQYyktnh2tG3hraKgshTmjkqtxQtZY5U7uI?=
+ =?us-ascii?Q?CJQxbuFDYqVHpJICmF86n4bAqNxxp14xtwFeIUYle6vQNZCcfW6ooHyI1pwa?=
+ =?us-ascii?Q?IEQMXUhL+L7P/jJnj96xdg7rqBC8ONs9k0mD72AzT/hXmbzRMyKgnHM70bLR?=
+ =?us-ascii?Q?1W8M60NDob+E2RGLkSynTIyBw0xWXR1eHjKx/3MzrDzT7xsVKN7MMcWcIj5T?=
+ =?us-ascii?Q?Nuc8DLvOZt1Jwmpl7Wk6KIyJHmHpSohPi5n07otZ6ILIO0Oe8l5wjZ4x9B2s?=
+ =?us-ascii?Q?dTW86cNCA2WyggN13drmDK1n2Oa8O/kRVN7XtgDMvd1+adOplqe8FYLeqx1t?=
+ =?us-ascii?Q?TgRrijhnkm/7WaPOKq4uXKcgphzZvcuykaQ+JKzQE5MmeZOdo4SaQ+Y0mLDA?=
+ =?us-ascii?Q?LqgI0CNUTB1r7Cw9HtzNWH9/VHydZo1aOvFyN7WFGRr17bHU81QW4QD5qj1y?=
+ =?us-ascii?Q?IHEGuSuPA0Bs2JFi0Kj9uiro/U7lz1I+aXhFPv7rxGNQnXb92n+VwFbK+4mI?=
+ =?us-ascii?Q?bLMoNXyXmC0vrJWiS2LFqtqUVDz4Vk4fZDBJaH7lb0yy1Ly9EGvKbyQafhuI?=
+ =?us-ascii?Q?NubDqOU8hjTdTYuM/qnm8O3TnApsCpw71MgmnT0EZjg4ehaxi8FJifZW9to0?=
+ =?us-ascii?Q?CRTCJzahoWwop7QsLTBoxfe6v8X2gxGh/MgXPKdh9H6ZrXCKE1oYP03AUWeR?=
+ =?us-ascii?Q?prBRQOEx9FMA9eDg+LL0LMmD0O6hZiDlkzSZqX7DxtbmSWZEZtZV89lleWQl?=
+ =?us-ascii?Q?61KVZy7tvN5P7gKqL4EefHFs91X8vN96UABZzb3l/6rlktKjZJGT2O8W6IAF?=
+ =?us-ascii?Q?CFHJReNa0M3lkWQxi6VN2PM59d6DaKwcoxe3on/Au9b0J4EMpLonA/iTEdLK?=
+ =?us-ascii?Q?o6eBWnNb3lQf15ZFoacydFevm8LoV1H9UfbO0/kXP9l2WsPCASZLeyi7d5Jf?=
+ =?us-ascii?Q?OHWyPuPdimKLZo10HFaY5PVIZjWXH/4x4va8oC3BYdlAi+BoeaOFPTtwtdQu?=
+ =?us-ascii?Q?I0lgUcIUtDHpw1K727vYZgy8FJ+J9p2KZWNkUkON7jAIURS+lmrPnfM9C0s5?=
+ =?us-ascii?Q?/mD4Eq7JpVmt/buMxm1RzV5XS8PIPy/jZ60AP4wcRzfugfTwM9GaR+rwNKIq?=
+ =?us-ascii?Q?One95QrVEZG2dIg0ebtNw2LgdYeUO57FUdOVUE4dH7FpeJlzwUyRdy3QlGuK?=
+ =?us-ascii?Q?YbMye1riUg+DtqKE1oi/zpxupV87MVBQHP/eycDBJAxYl2lOQRWtUg1lhvRP?=
+ =?us-ascii?Q?+g=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?p1PxMXwv/XyfrCOpJ348gc2q9dlRDiamw4ywJvSH/224C8/7mRDoXlikwmCq?=
+ =?us-ascii?Q?M36lCSBoi/TMNq1GsRjD6YnDFBZm8Iw/07pakeNNnpb4hqc1DhqOQscGvQq/?=
+ =?us-ascii?Q?FuA6WyHnYs1T7YH5IiE9uUT2QnmphiG34tMfQMirkGD5sUVMdGnL9rr10hnj?=
+ =?us-ascii?Q?PBg9u14ZNE5AhkkwpiH4SO4hh94o0WpfUHKoUwXYSn7iJfuSgGQbdo7vdbAH?=
+ =?us-ascii?Q?a5NUHU1LZ8oOMHCDOV4QkbtiLb5l0mbHnUWmIp1quew7NuvyWOxPp+vBq9WA?=
+ =?us-ascii?Q?mljJWI24L4ZM6cxLJma5oV/jtKSMO9+oKMVUsllUbY/JFWfidPVBPrIKgf3O?=
+ =?us-ascii?Q?3MXDaWFA5iXFgAL0N3g4O3+DzMYsBXFiAkqSOtiiR1CkyuwJwM+xSLgrK3I2?=
+ =?us-ascii?Q?tBzNWiDc9F523PSfKAiprTl3omCtNL5EwIGqbL7Dt2MNz5BuoNyhvTXh6sP6?=
+ =?us-ascii?Q?Cftc9K88qUshlwxiAOyTXDSrKcdiy9PlNjM3sNW/vFR0G0NJILSSfgpEmwB6?=
+ =?us-ascii?Q?8UQPs3waj5nJ0gjkWUiJYLLD1aWPQT89ilsqNkjAYmpnvMMB4ZCz9wPMhuBl?=
+ =?us-ascii?Q?oPI4c12dfFHe7UVyfdQqjuzvzOHjmAvSfiadQVDy25mAk0MFdpQD7GQhDYr2?=
+ =?us-ascii?Q?pshfq2XwxEWOpouYUygsS5iFffZzHmgDPml+0QhDHNebkbxzTou/6P2anY2m?=
+ =?us-ascii?Q?psa/A3MUcF6/5u5DkH+pn7l4bChMkjV/UtYfZ8GWa+w8qIFjbevRnQLYm0Tf?=
+ =?us-ascii?Q?IbOOO1OHTWLxd7mI7SyJQKXKUH9T86FD13RSnRNjA02hu5Z6QgGku2GdlyvC?=
+ =?us-ascii?Q?f9OVZEqACLd8t58EEcGX+8wfWYJ5lPR5WfRy/tE33xhJStO9xs93Nx3XW3af?=
+ =?us-ascii?Q?TTClQ3QNNzdsOoEaFoDGUzTRXwKUIE+hxXR8H8A1pc1sHkDTyIeXzbNSJFLv?=
+ =?us-ascii?Q?7RHvz+9Z75mRYXr7uclNImjgzlzsJo75V/vBJAAD4/J2PScRHcPIUsCgQkRb?=
+ =?us-ascii?Q?20fUafEU9G3Lqs++TuGnoIOde2HVCS9i35zfZAx+QWRWOkBbLxiOIkfTp5L7?=
+ =?us-ascii?Q?Qs5anfaXY0dpZ1oS3zILlz5B2zBRnT3YhiD/jpEVBRGDvDRfgC7XOMzafZbv?=
+ =?us-ascii?Q?B388D813tcOFeuMobZPpCWbPhZbJJoFT9IAtTNVM2jXJO4eTOyeiiLk=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b9570c0-58c1-4e02-6ffe-08db3536f2ac
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 18:03:52.2579
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: W57+O2NWikDRpeMsTvPHjkW4tNkqxKVkXnWm3Kidb3pOyLb8iTjQtR3BcGi+Uq4hrsB/tJwd2tuDYPo/RlaoyQnhj5AeuIelq8VUtCnxst4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB5909
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-04_09,2023-04-04_05,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=999
- bulkscore=0 impostorscore=0 spamscore=0 clxscore=1015 adultscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
+ malwarescore=0 adultscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2304040165
-X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,
+X-Proofpoint-ORIG-GUID: xEOmv4uMrNNQBKKYnaU9d-SVYLt_hc43
+X-Proofpoint-GUID: xEOmv4uMrNNQBKKYnaU9d-SVYLt_hc43
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,634 +172,282 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For performance improvement in terms of number of interrupts.
-Code flow for DMA mode...
-Allocate for DMA pools in probe()
-For xfers with len > 64 bytes, return true from can_dma()
-Thus framework creates and maps an sg table for each xfer buffer.
-In transfer_one() enable DMA in MSTR_CONFIG.
-Split the dma buffer of each entry of sgt into a maximum of 3 parts...
-Unaligned head, aligned middle and tail.
-For each part create a dma_cmd_descriptor.
-For head and tail allocate dma_data_descriptors
-  For tx, copy the data into allocated data descriptors
-  For rx, remember the original buffers to copy from-
-  allocated descriptors after xfer is complete
-For middle part use the aligned dma buffer.
-Link each dma_cmd_descriptor to next.
-Thus create a chain of descriptors.
-Kick-off the xfer by copying 1st cmd descriptor to-
-NEXT_DMA_DESC_ADDR register.
-On receiving DMA_CHAIN_DONE interrupt, complete the xfer and-
-free descriptors.
-If timeout happens handle error by freeing descriptors.
-In remove() free DMA pools.
+To support crash hotplug, a mechanism is needed to update the crash
+elfcorehdr upon CPU or memory changes (eg. hot un/plug or off/
+onlining). The crash elfcorehdr describes the CPUs and memory to
+be written into the vmcore.
 
-Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To track CPU changes, callbacks are registered with the cpuhp
+mechanism via cpuhp_setup_state_nocalls(CPUHP_BP_PREPARE_DYN). The
+crash hotplug elfcorehdr update has no explicit ordering requirement
+(relative to other cpuhp states), so meets the criteria for
+utilizing CPUHP_BP_PREPARE_DYN. CPUHP_BP_PREPARE_DYN is a dynamic
+state and avoids the need to introduce a new state for crash
+hotplug. Also, this is the last state in the PREPARE group, just
+prior to the STARTING group, which is very close to the CPU
+starting up in a plug/online situation, or stopping in a unplug/
+offline situation. This minimizes the window of time during an
+actual plug/online or unplug/offline situation in which the
+elfcorehdr would be inaccurate. Note that for a CPU being unplugged
+or offlined, the CPU will still be present in the list of CPUs
+generated by crash_prepare_elf64_headers(). However, there is no
+need to explicitly omit the CPU, see the discussion in the patch
+'crash: change crash_prepare_elf64_headers() to
+for_each_possible_cpu()'.
+
+To track memory changes, a notifier is registered to capture the
+memblock MEM_ONLINE and MEM_OFFLINE events via register_memory_notifier().
+
+The CPU callbacks and memory notifiers invoke crash_handle_hotplug_event()
+which performs needed tasks and then dispatches the event to the
+architecture specific arch_crash_handle_hotplug_event() to update the
+elfcorehdr with the current state of CPUs and memory. During the
+process, the kexec_lock is held.
+
+Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+Reviewed-by: Sourabh Jain <sourabhjain@linux.ibm.com>
 ---
- drivers/spi/spi-qcom-qspi.c | 429 ++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 398 insertions(+), 31 deletions(-)
+ include/linux/crash_core.h |   9 +++
+ include/linux/kexec.h      |  11 +++
+ kernel/crash_core.c        | 142 +++++++++++++++++++++++++++++++++++++
+ kernel/kexec_core.c        |   6 ++
+ 4 files changed, 168 insertions(+)
 
-diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-index fab1553..64c3bec 100644
---- a/drivers/spi/spi-qcom-qspi.c
-+++ b/drivers/spi/spi-qcom-qspi.c
-@@ -13,7 +13,8 @@
- #include <linux/pm_opp.h>
- #include <linux/spi/spi.h>
- #include <linux/spi/spi-mem.h>
--
-+#include <linux/dmapool.h>
-+#include <linux/dma-mapping.h>
+diff --git a/include/linux/crash_core.h b/include/linux/crash_core.h
+index de62a722431e..e14345cc7a22 100644
+--- a/include/linux/crash_core.h
++++ b/include/linux/crash_core.h
+@@ -84,4 +84,13 @@ int parse_crashkernel_high(char *cmdline, unsigned long long system_ram,
+ int parse_crashkernel_low(char *cmdline, unsigned long long system_ram,
+ 		unsigned long long *crash_size, unsigned long long *crash_base);
  
- #define QSPI_NUM_CS		2
- #define QSPI_BYTES_PER_WORD	4
-@@ -62,6 +63,7 @@
- #define WR_FIFO_FULL		BIT(10)
- #define WR_FIFO_OVERRUN		BIT(11)
- #define TRANSACTION_DONE	BIT(16)
-+#define DMA_CHAIN_DONE		BIT(31)
- #define QSPI_ERR_IRQS		(RESP_FIFO_UNDERRUN | HRESP_FROM_NOC_ERR | \
- 				 WR_FIFO_OVERRUN)
- #define QSPI_ALL_IRQS		(QSPI_ERR_IRQS | RESP_FIFO_RDY | \
-@@ -108,6 +110,10 @@
- #define RD_FIFO_RESET		0x0030
- #define RESET_FIFO		BIT(0)
++#define KEXEC_CRASH_HP_NONE			0
++#define KEXEC_CRASH_HP_ADD_CPU			1
++#define KEXEC_CRASH_HP_REMOVE_CPU		2
++#define KEXEC_CRASH_HP_ADD_MEMORY		3
++#define KEXEC_CRASH_HP_REMOVE_MEMORY		4
++#define KEXEC_CRASH_HP_INVALID_CPU		-1U
++
++struct kimage;
++
+ #endif /* LINUX_CRASH_CORE_H */
+diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+index 61443f8395f7..f9bd46fcbd5d 100644
+--- a/include/linux/kexec.h
++++ b/include/linux/kexec.h
+@@ -33,6 +33,7 @@ extern note_buf_t __percpu *crash_notes;
+ #include <linux/compat.h>
+ #include <linux/ioport.h>
+ #include <linux/module.h>
++#include <linux/highmem.h>
+ #include <asm/kexec.h>
  
-+#define NEXT_DMA_DESC_ADDR		0x0040
-+#define CURRENT_DMA_DESC_ADDR	0x0044
-+#define CURRENT_MEM_ADDR		0x0048
-+
- #define CUR_MEM_ADDR		0x0048
- #define HW_VERSION		0x004c
- #define RD_FIFO			0x0050
-@@ -120,6 +126,22 @@ enum qspi_dir {
- 	QSPI_WRITE,
- };
+ /* Verify architecture specific macros are defined */
+@@ -368,6 +369,12 @@ struct kimage {
+ 	struct purgatory_info purgatory_info;
+ #endif
  
-+struct qspi_cmd_desc {
-+	uint32_t data_address;
-+	uint32_t next_descriptor;
-+	uint32_t direction:1;
-+	uint32_t multi_io_mode:3;
-+	uint32_t reserved1:4;
-+	uint32_t fragment:1;
-+	uint32_t reserved2:7;
-+	uint32_t length:16;
-+	//------------------------//
-+	uint8_t *bounce_src;
-+	uint8_t *bounce_dst;
-+	uint32_t bounce_length;
-+};
-+
-+#define QSPI_MAX_NUM_DESC 5
- struct qspi_xfer {
- 	union {
- 		const void *tx_buf;
-@@ -137,11 +159,30 @@ enum qspi_clocks {
- 	QSPI_NUM_CLKS
- };
- 
-+enum qspi_xfer_mode {
-+	QSPI_INVALID,
-+	QSPI_FIFO,
-+	QSPI_DMA
-+};
-+
-+/* number of entries in sgt returned from spi framework that we can support */
-+#define QSPI_QCOM_MAX_SG 5
-+
- struct qcom_qspi {
- 	void __iomem *base;
- 	struct device *dev;
- 	struct clk_bulk_data *clks;
- 	struct qspi_xfer xfer;
-+	struct dma_pool *dma_cmd_pool;
-+	struct dma_pool *dma_data_pool;
-+	dma_addr_t dma_cmd_desc[3*QSPI_QCOM_MAX_SG];
-+	dma_addr_t dma_data_desc[2*QSPI_QCOM_MAX_SG];
-+	void *virt_cmd_desc[3*QSPI_QCOM_MAX_SG];
-+	void *virt_data_desc[2*QSPI_QCOM_MAX_SG];
-+	unsigned int n_cmd_desc;
-+	unsigned int n_data_desc;
-+	int xfer_mode;
-+	u32 iomode;
- 	struct icc_path *icc_path_cpu_to_qspi;
- 	unsigned long last_speed;
- 	/* Lock to protect data accessed by IRQs */
-@@ -151,18 +192,25 @@ struct qcom_qspi {
- static u32 qspi_buswidth_to_iomode(struct qcom_qspi *ctrl,
- 				   unsigned int buswidth)
- {
-+	u32 ret;
-+
-+	/* for DMA we dont write to PIO_XFER_CFG register, so don't shift */
- 	switch (buswidth) {
- 	case 1:
--		return SDR_1BIT << MULTI_IO_MODE_SHFT;
-+		ret = (ctrl->xfer_mode == QSPI_DMA ? SDR_1BIT : SDR_1BIT << MULTI_IO_MODE_SHFT);
-+		break;
- 	case 2:
--		return SDR_2BIT << MULTI_IO_MODE_SHFT;
-+		ret = (ctrl->xfer_mode == QSPI_DMA ? SDR_2BIT : SDR_2BIT << MULTI_IO_MODE_SHFT);
-+		break;
- 	case 4:
--		return SDR_4BIT << MULTI_IO_MODE_SHFT;
-+		ret = (ctrl->xfer_mode == QSPI_DMA ? SDR_4BIT : SDR_4BIT << MULTI_IO_MODE_SHFT);
-+		break;
- 	default:
- 		dev_warn_once(ctrl->dev,
- 				"Unexpected bus width: %u\n", buswidth);
--		return SDR_1BIT << MULTI_IO_MODE_SHFT;
-+		ret = (ctrl->xfer_mode == QSPI_DMA ? SDR_1BIT : SDR_1BIT << MULTI_IO_MODE_SHFT);
- 	}
-+	return ret;
- }
- 
- static void qcom_qspi_pio_xfer_cfg(struct qcom_qspi *ctrl)
-@@ -223,6 +271,21 @@ static void qcom_qspi_handle_err(struct spi_master *master,
- 	spin_lock_irqsave(&ctrl->lock, flags);
- 	writel(0, ctrl->base + MSTR_INT_EN);
- 	ctrl->xfer.rem_bytes = 0;
-+
-+	if (ctrl->xfer_mode == QSPI_DMA) {
-+		int ii;
-+
-+		/* free cmd and data descriptors */
-+		for (ii = 0; ii < ctrl->n_data_desc; ii++)
-+			dma_pool_free(ctrl->dma_data_pool, ctrl->virt_data_desc[ii],
-+					  ctrl->dma_data_desc[ii]);
-+		ctrl->n_data_desc = 0;
-+
-+		for (ii = 0; ii < ctrl->n_cmd_desc; ii++)
-+			dma_pool_free(ctrl->dma_cmd_pool, ctrl->virt_cmd_desc[ii],
-+					  ctrl->dma_cmd_desc[ii]);
-+		ctrl->n_cmd_desc = 0;
-+	}
- 	spin_unlock_irqrestore(&ctrl->lock, flags);
- }
- 
-@@ -230,6 +293,7 @@ static int qcom_qspi_set_speed(struct qcom_qspi *ctrl, unsigned long speed_hz)
- {
- 	int ret;
- 	unsigned int avg_bw_cpu;
-+	unsigned int peak_bw_cpu;
- 
- 	if (speed_hz == ctrl->last_speed)
- 		return 0;
-@@ -241,12 +305,16 @@ static int qcom_qspi_set_speed(struct qcom_qspi *ctrl, unsigned long speed_hz)
- 		return ret;
- 	}
- 
-+	avg_bw_cpu = Bps_to_icc(speed_hz);
- 	/*
--	 * Set BW quota for CPU as driver supports FIFO mode only.
--	 * We don't have explicit peak requirement so keep it equal to avg_bw.
-+	 * Set BW quota for CPU for FIFO to avg_bw
-+	 * as we don't have explicit peak requirement.
-+	 * TBD TBD TBD - change this as required for DMA.
-+	 * As of now same peak requirement seems to be working.
- 	 */
--	avg_bw_cpu = Bps_to_icc(speed_hz);
--	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, avg_bw_cpu, avg_bw_cpu);
-+	peak_bw_cpu = ctrl->xfer_mode == QSPI_FIFO ? avg_bw_cpu : avg_bw_cpu;
-+
-+	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, avg_bw_cpu, peak_bw_cpu);
- 	if (ret) {
- 		dev_err(ctrl->dev, "%s: ICC BW voting failed for cpu: %d\n",
- 			__func__, ret);
-@@ -258,6 +326,186 @@ static int qcom_qspi_set_speed(struct qcom_qspi *ctrl, unsigned long speed_hz)
- 	return 0;
- }
- 
-+/* aligned to 32 bytes, not to cross 1KB boundary */
-+#define QSPI_ALIGN_REQ		32
-+#define QSPI_BOUNDARY_REQ	1024
-+
-+int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, uint8_t *virt_ptr,
-+			dma_addr_t dma_ptr, uint32_t n_bytes)
-+{
-+	struct qspi_cmd_desc *virt_cmd_desc, *prev;
-+	uint8_t *virt_data_desc;
-+	dma_addr_t dma_cmd_desc, dma_data_desc;
-+
-+	if (virt_ptr && n_bytes >= QSPI_ALIGN_REQ) {
-+		dev_err(ctrl->dev,
-+			"Exiting to avert memory overwrite, n_bytes-%d\n", n_bytes);
-+		return -ENOMEM;
-+	}
-+
-+	/* allocate for dma cmd descriptor */
-+	virt_cmd_desc = (struct qspi_cmd_desc *)dma_pool_alloc(ctrl->dma_cmd_pool,
-+		GFP_KERNEL, &dma_cmd_desc);
-+	if (!virt_cmd_desc) {
-+		dev_err(ctrl->dev,
-+			"Could not allocate for cmd_desc\n");
-+		return -ENOMEM;
-+	}
-+	ctrl->virt_cmd_desc[ctrl->n_cmd_desc] = virt_cmd_desc;
-+	ctrl->dma_cmd_desc[ctrl->n_cmd_desc] = dma_cmd_desc;
-+	ctrl->n_cmd_desc++;
-+
-+	/* allocate for dma data descriptor if unaligned else use pre-aligned */
-+	if (virt_ptr) {
-+		virt_data_desc = (uint8_t *)dma_pool_zalloc(ctrl->dma_data_pool,
-+			GFP_KERNEL, &dma_data_desc);
-+		if (!virt_data_desc) {
-+			dev_err(ctrl->dev,
-+				"Could not allocate for data_desc\n");
-+			return -ENOMEM;
-+		}
-+		ctrl->virt_data_desc[ctrl->n_data_desc] = virt_data_desc;
-+		ctrl->dma_data_desc[ctrl->n_data_desc] = dma_data_desc;
-+		ctrl->n_data_desc++;
-+
-+		/*
-+		 * for tx copy xfer data into allocated buffer
-+		 * for rx setup bounce info to copy after xfer
-+		 */
-+		if (ctrl->xfer.dir == QSPI_WRITE) {
-+			memcpy(virt_data_desc, virt_ptr, n_bytes);
-+		} else {
-+			virt_cmd_desc->bounce_src = virt_data_desc;
-+			virt_cmd_desc->bounce_dst = virt_ptr;
-+			virt_cmd_desc->bounce_length = n_bytes;
-+		}
-+	} else {
-+		dma_data_desc = dma_ptr;
-+	}
-+
-+	/* setup cmd descriptor */
-+	virt_cmd_desc->data_address = (uint32_t)(uintptr_t)(dma_data_desc);
-+	virt_cmd_desc->next_descriptor = 0;
-+	virt_cmd_desc->direction = ctrl->xfer.dir;
-+	virt_cmd_desc->multi_io_mode = ctrl->iomode;
-+	virt_cmd_desc->reserved1 = 0;
-+	virt_cmd_desc->fragment = 0;
-+	virt_cmd_desc->reserved2 = 0;
-+	virt_cmd_desc->length = n_bytes;
-+
-+	/* update previous descriptor */
-+	if (ctrl->n_cmd_desc >= 2) {
-+		prev = (ctrl->virt_cmd_desc)[ctrl->n_cmd_desc - 2];
-+		prev->next_descriptor = dma_cmd_desc;
-+		prev->fragment = 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int qcom_qspi_setup_dma_desc(struct qcom_qspi *ctrl,
-+				struct spi_transfer *xfer)
-+{
-+	int ret;
-+	struct sg_table *sgt;
-+	unsigned int sg_total_len = 0;
-+	dma_addr_t dma_ptr_sg;
-+	unsigned int dma_len_sg;
-+	uint32_t prolog_bytes, aligned_bytes, epilog_bytes;
-+	dma_addr_t aligned_ptr;
-+	int ii;
-+	uint8_t *byte_ptr;
-+
-+	if (ctrl->n_cmd_desc || ctrl->n_data_desc) {
-+		dev_err(ctrl->dev, "Remnant dma buffers cmd-%d, data-%d\n",
-+			ctrl->n_cmd_desc, ctrl->n_data_desc);
-+		return -EIO;
-+	}
-+
-+	sgt = (ctrl->xfer.dir == QSPI_READ) ? &xfer->rx_sg : &xfer->tx_sg;
-+	if (!sgt->nents || sgt->nents > QSPI_QCOM_MAX_SG) {
-+		dev_err(ctrl->dev, "Cannot handle %d entries in scatter list\n", sgt->nents);
-+		return -EINVAL;
-+	}
-+
-+	for (ii = 0; ii < sgt->nents; ii++)
-+		sg_total_len += sg_dma_len(sgt->sgl + ii);
-+	if (sg_total_len != xfer->len) {
-+		dev_err(ctrl->dev, "Data lengths mismatch\n");
-+		return -EINVAL;
-+	}
-+
-+	if (ctrl->xfer.dir == QSPI_READ)
-+		byte_ptr = (uint8_t *)xfer->rx_buf;
-+	else
-+		byte_ptr = (uint8_t *)xfer->tx_buf;
-+
-+	for (ii = 0; ii < sgt->nents; ii++) {
-+		dma_ptr_sg = sg_dma_address(sgt->sgl + ii);
-+		dma_len_sg = sg_dma_len(sgt->sgl + ii);
-+
-+		aligned_ptr = PTR_ALIGN(dma_ptr_sg, QSPI_ALIGN_REQ);
-+
-+		prolog_bytes = min(dma_len_sg, (unsigned int)(aligned_ptr - dma_ptr_sg));
-+		if (prolog_bytes) {
-+			ret = qcom_qspi_alloc_desc(ctrl, byte_ptr, 0, prolog_bytes);
-+			if (ret)
-+				goto cleanup;
-+			byte_ptr += prolog_bytes;
-+		}
-+
-+		aligned_bytes = PTR_ALIGN_DOWN(dma_len_sg - prolog_bytes, QSPI_ALIGN_REQ);
-+		if (aligned_bytes) {
-+			ret = qcom_qspi_alloc_desc(ctrl, 0, aligned_ptr, aligned_bytes);
-+			if (ret)
-+				goto cleanup;
-+			byte_ptr += aligned_bytes;
-+		}
-+
-+		epilog_bytes = dma_len_sg - prolog_bytes - aligned_bytes;
-+		if (epilog_bytes) {
-+			ret = qcom_qspi_alloc_desc(ctrl, byte_ptr, 0, epilog_bytes);
-+			if (ret)
-+				goto cleanup;
-+			byte_ptr += epilog_bytes;
-+		}
-+	}
-+	return 0;
-+
-+cleanup:
-+	dev_err(ctrl->dev, "ERROR cleanup in setup_dma_desc\n");
-+	for (ii = 0; ii < ctrl->n_data_desc; ii++)
-+		dma_pool_free(ctrl->dma_data_pool, ctrl->virt_data_desc[ii],
-+				  ctrl->dma_data_desc[ii]);
-+	ctrl->n_data_desc = 0;
-+
-+	for (ii = 0; ii < ctrl->n_cmd_desc; ii++)
-+		dma_pool_free(ctrl->dma_cmd_pool, ctrl->virt_cmd_desc[ii],
-+				  ctrl->dma_cmd_desc[ii]);
-+	ctrl->n_cmd_desc = 0;
-+	return ret;
-+}
-+
-+static void qcom_qspi_dma_xfer(struct qcom_qspi *ctrl)
-+{
-+	/* Ack any previous interrupts that might be hanging around */
-+	writel(DMA_CHAIN_DONE, ctrl->base + MSTR_INT_STATUS);
-+
-+	/* Setup new interrupts */
-+	writel(DMA_CHAIN_DONE, ctrl->base + MSTR_INT_EN);
-+
-+	/* flush all writes */
-+	wmb();
-+
-+	/* kick off transfer */
-+	writel((uint32_t)(uintptr_t)(ctrl->dma_cmd_desc)[0], ctrl->base + NEXT_DMA_DESC_ADDR);
-+}
-+
-+/* Switch to DMA if transfer length exceeds this */
-+#define QSPI_MAX_BYTES_FIFO 64
-+#define NO_TX_DATA_DELAY_FOR_DMA 1
-+#define DMA_CONDITIONAL (xfer->len > QSPI_MAX_BYTES_FIFO)
-+
- static int qcom_qspi_transfer_one(struct spi_master *master,
- 				  struct spi_device *slv,
- 				  struct spi_transfer *xfer)
-@@ -266,6 +514,7 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
- 	int ret;
- 	unsigned long speed_hz;
- 	unsigned long flags;
-+	u32 mstr_cfg;
- 
- 	speed_hz = slv->max_speed_hz;
- 	if (xfer->speed_hz)
-@@ -276,6 +525,7 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
- 		return ret;
- 
- 	spin_lock_irqsave(&ctrl->lock, flags);
-+	mstr_cfg = readl(ctrl->base + MSTR_CONFIG);
- 
- 	/* We are half duplex, so either rx or tx will be set */
- 	if (xfer->rx_buf) {
-@@ -290,7 +540,31 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
- 	ctrl->xfer.is_last = list_is_last(&xfer->transfer_list,
- 					  &master->cur_msg->transfers);
- 	ctrl->xfer.rem_bytes = xfer->len;
--	qcom_qspi_pio_xfer(ctrl);
-+
-+	if (DMA_CONDITIONAL) {
-+		ctrl->xfer_mode = QSPI_DMA;
-+		ctrl->iomode = qspi_buswidth_to_iomode(ctrl, ctrl->xfer.buswidth);
-+#if NO_TX_DATA_DELAY_FOR_DMA
-+		mstr_cfg &= ~(TX_DATA_OE_DELAY_MSK | TX_DATA_DELAY_MSK);
++#ifdef CONFIG_CRASH_HOTPLUG
++	int hp_action;
++	int elfcorehdr_index;
++	bool elfcorehdr_updated;
 +#endif
-+		mstr_cfg &= ~FB_CLK_EN;
-+		mstr_cfg &= ~PIN_WPN;
-+		mstr_cfg |= DMA_ENABLE;
-+		writel(mstr_cfg, ctrl->base + MSTR_CONFIG);
 +
-+		ret = qcom_qspi_setup_dma_desc(ctrl, xfer);
-+		if (ret) {
-+			spin_unlock_irqrestore(&ctrl->lock, flags);
-+			return ret;
-+		}
-+		qcom_qspi_dma_xfer(ctrl);
-+	} else {
-+		ctrl->xfer_mode = QSPI_FIFO;
-+		mstr_cfg &= ~DMA_ENABLE;
-+		mstr_cfg |= FB_CLK_EN | PIN_WPN;
-+		writel(mstr_cfg, ctrl->base + MSTR_CONFIG);
-+		qcom_qspi_pio_xfer(ctrl);
-+	}
+ #ifdef CONFIG_IMA_KEXEC
+ 	/* Virtual address of IMA measurement buffer for kexec syscall */
+ 	void *ima_buffer;
+@@ -498,6 +505,10 @@ static inline int arch_kexec_post_alloc_pages(void *vaddr, unsigned int pages, g
+ static inline void arch_kexec_pre_free_pages(void *vaddr, unsigned int pages) { }
+ #endif
  
- 	spin_unlock_irqrestore(&ctrl->lock, flags);
++#ifndef arch_crash_handle_hotplug_event
++static inline void arch_crash_handle_hotplug_event(struct kimage *image) { }
++#endif
++
+ #else /* !CONFIG_KEXEC_CORE */
+ struct pt_regs;
+ struct task_struct;
+diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+index 45d241aebe3d..0d87b796e5cf 100644
+--- a/kernel/crash_core.c
++++ b/kernel/crash_core.c
+@@ -11,6 +11,8 @@
+ #include <linux/vmalloc.h>
+ #include <linux/sizes.h>
+ #include <linux/kexec.h>
++#include <linux/memory.h>
++#include <linux/cpuhotplug.h>
  
-@@ -298,6 +572,15 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
- 	return 1;
+ #include <asm/page.h>
+ #include <asm/sections.h>
+@@ -18,6 +20,7 @@
+ #include <crypto/sha1.h>
+ 
+ #include "kallsyms_internal.h"
++#include "kexec_internal.h"
+ 
+ /* vmcoreinfo stuff */
+ unsigned char *vmcoreinfo_data;
+@@ -697,3 +700,142 @@ static int __init crash_save_vmcoreinfo_init(void)
  }
  
-+static bool qcom_qspi_can_dma(struct spi_controller *ctlr,
-+			 struct spi_device *slv, struct spi_transfer *xfer)
+ subsys_initcall(crash_save_vmcoreinfo_init);
++
++#ifdef CONFIG_CRASH_HOTPLUG
++#undef pr_fmt
++#define pr_fmt(fmt) "crash hp: " fmt
++/*
++ * To accurately reflect hot un/plug changes of cpu and memory resources
++ * (including onling and offlining of those resources), the elfcorehdr
++ * (which is passed to the crash kernel via the elfcorehdr= parameter)
++ * must be updated with the new list of CPUs and memories.
++ *
++ * In order to make changes to elfcorehdr, two conditions are needed:
++ * First, the segment containing the elfcorehdr must be large enough
++ * to permit a growing number of resources; the elfcorehdr memory size
++ * is based on NR_CPUS_DEFAULT and CRASH_MAX_MEMORY_RANGES.
++ * Second, purgatory must explicitly exclude the elfcorehdr from the
++ * list of segments it checks (since the elfcorehdr changes and thus
++ * would require an update to purgatory itself to update the digest).
++ */
++static void crash_handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
 +{
-+	if (DMA_CONDITIONAL)
-+		return true;
++	struct kimage *image;
++
++	/* Obtain lock while changing crash information */
++	if (!kexec_trylock()) {
++		pr_info("kexec_trylock() failed, elfcorehdr may be inaccurate\n");
++		return;
++	}
++
++	/* Check kdump is not loaded */
++	if (!kexec_crash_image)
++		goto out;
++
++	image = kexec_crash_image;
++
++	if (hp_action == KEXEC_CRASH_HP_ADD_CPU ||
++		hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
++		pr_debug("hp_action %u, cpu %u\n", hp_action, cpu);
 +	else
-+		return false;
-+}
-+
- static int qcom_qspi_prepare_message(struct spi_master *master,
- 				     struct spi_message *message)
- {
-@@ -328,6 +611,40 @@ static int qcom_qspi_prepare_message(struct spi_master *master,
- 	return 0;
- }
- 
-+static int qcom_qspi_alloc_dma(struct qcom_qspi *ctrl)
-+{
-+	/* allocate for cmd descriptors pool */
-+	ctrl->dma_cmd_pool = dma_pool_create("qspi cmd desc pool",
-+		ctrl->dev, sizeof(struct qspi_cmd_desc), 0, 0);
-+	if (!ctrl->dma_cmd_pool) {
-+		dev_err(ctrl->dev, "Could not create dma pool for cmd_desc\n");
-+		return -ENOMEM;
-+	}
++		pr_debug("hp_action %u\n", hp_action);
 +
 +	/*
-+	 * allocate for data descriptors pool as per alignment
-+	 * and boundary requirements
++	 * When the struct kimage is allocated, the elfcorehdr_index
++	 * is set to -1. Find the segment containing the elfcorehdr,
++	 * if not already found. This works for both the kexec_load
++	 * and kexec_file_load paths.
 +	 */
-+	ctrl->dma_data_pool = dma_pool_create("qspi data desc pool",
-+		ctrl->dev, QSPI_ALIGN_REQ, QSPI_ALIGN_REQ, QSPI_BOUNDARY_REQ);
-+	if (!ctrl->dma_data_pool) {
-+		dev_err(ctrl->dev, "Could not create dma pool for data desc\n");
-+		dma_pool_destroy(ctrl->dma_cmd_pool);
-+		return -ENOMEM;
++	if (image->elfcorehdr_index < 0) {
++		unsigned long mem;
++		unsigned char *ptr;
++		unsigned int n;
++
++		for (n = 0; n < image->nr_segments; n++) {
++			mem = image->segment[n].mem;
++			ptr = kmap_local_page(pfn_to_page(mem >> PAGE_SHIFT));
++			if (ptr) {
++				/* The segment containing elfcorehdr */
++				if (memcmp(ptr, ELFMAG, SELFMAG) == 0)
++					image->elfcorehdr_index = (int)n;
++				kunmap_local(ptr);
++			}
++		}
 +	}
 +
++	if (image->elfcorehdr_index < 0) {
++		pr_err("unable to locate elfcorehdr segment");
++		goto out;
++	}
++
++	/* Needed in order for the segments to be updated */
++	arch_kexec_unprotect_crashkres();
++
++	/* Differentiate between normal load and hotplug update */
++	image->hp_action = hp_action;
++
++	/* Now invoke arch-specific update handler */
++	arch_crash_handle_hotplug_event(image);
++
++	/* No longer handling a hotplug event */
++	image->hp_action = KEXEC_CRASH_HP_NONE;
++	image->elfcorehdr_updated = true;
++
++	/* Change back to read-only */
++	arch_kexec_protect_crashkres();
++
++out:
++	/* Release lock now that update complete */
++	kexec_unlock();
++}
++
++static int crash_memhp_notifier(struct notifier_block *nb, unsigned long val, void *v)
++{
++	switch (val) {
++	case MEM_ONLINE:
++		crash_handle_hotplug_event(KEXEC_CRASH_HP_ADD_MEMORY,
++			KEXEC_CRASH_HP_INVALID_CPU);
++		break;
++
++	case MEM_OFFLINE:
++		crash_handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_MEMORY,
++			KEXEC_CRASH_HP_INVALID_CPU);
++		break;
++	}
++	return NOTIFY_OK;
++}
++
++static struct notifier_block crash_memhp_nb = {
++	.notifier_call = crash_memhp_notifier,
++	.priority = 0
++};
++
++static int crash_cpuhp_online(unsigned int cpu)
++{
++	crash_handle_hotplug_event(KEXEC_CRASH_HP_ADD_CPU, cpu);
 +	return 0;
 +}
 +
-+static void qcom_qspi_free_dma(struct qcom_qspi *ctrl)
++static int crash_cpuhp_offline(unsigned int cpu)
 +{
-+	/* free pool buffers */
-+	dma_pool_destroy(ctrl->dma_data_pool);
-+
-+	/* free pool */
-+	dma_pool_destroy(ctrl->dma_cmd_pool);
++	crash_handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_CPU, cpu);
++	return 0;
 +}
 +
- static irqreturn_t pio_read(struct qcom_qspi *ctrl)
- {
- 	u32 rd_fifo_status;
-@@ -426,27 +743,58 @@ static irqreturn_t qcom_qspi_irq(int irq, void *dev_id)
- 	int_status = readl(ctrl->base + MSTR_INT_STATUS);
- 	writel(int_status, ctrl->base + MSTR_INT_STATUS);
++static int __init crash_hotplug_init(void)
++{
++	int result = 0;
++
++	if (IS_ENABLED(CONFIG_MEMORY_HOTPLUG))
++		register_memory_notifier(&crash_memhp_nb);
++
++	if (IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
++		result = cpuhp_setup_state_nocalls(CPUHP_BP_PREPARE_DYN,
++			"crash/cpuhp", crash_cpuhp_online, crash_cpuhp_offline);
++	}
++
++	return result;
++}
++
++subsys_initcall(crash_hotplug_init);
++#endif
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index 3d578c6fefee..8296d019737c 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -277,6 +277,12 @@ struct kimage *do_kimage_alloc_init(void)
+ 	/* Initialize the list of unusable pages */
+ 	INIT_LIST_HEAD(&image->unusable_pages);
  
--	if (ctrl->xfer.dir == QSPI_WRITE) {
--		if (int_status & WR_FIFO_EMPTY)
--			ret = pio_write(ctrl);
--	} else {
--		if (int_status & RESP_FIFO_RDY)
--			ret = pio_read(ctrl);
--	}
--
--	if (int_status & QSPI_ERR_IRQS) {
--		if (int_status & RESP_FIFO_UNDERRUN)
--			dev_err(ctrl->dev, "IRQ error: FIFO underrun\n");
--		if (int_status & WR_FIFO_OVERRUN)
--			dev_err(ctrl->dev, "IRQ error: FIFO overrun\n");
--		if (int_status & HRESP_FROM_NOC_ERR)
--			dev_err(ctrl->dev, "IRQ error: NOC response error\n");
--		ret = IRQ_HANDLED;
--	}
--
--	if (!ctrl->xfer.rem_bytes) {
--		writel(0, ctrl->base + MSTR_INT_EN);
--		spi_finalize_current_transfer(dev_get_drvdata(ctrl->dev));
-+	if (ctrl->xfer_mode == QSPI_FIFO) {
-+		if (ctrl->xfer.dir == QSPI_WRITE) {
-+			if (int_status & WR_FIFO_EMPTY)
-+				ret = pio_write(ctrl);
-+		} else {
-+			if (int_status & RESP_FIFO_RDY)
-+				ret = pio_read(ctrl);
-+		}
++#ifdef CONFIG_CRASH_HOTPLUG
++	image->hp_action = KEXEC_CRASH_HP_NONE;
++	image->elfcorehdr_index = -1;
++	image->elfcorehdr_updated = false;
++#endif
 +
-+		if (int_status & QSPI_ERR_IRQS) {
-+			if (int_status & RESP_FIFO_UNDERRUN)
-+				dev_err(ctrl->dev, "IRQ error: FIFO underrun\n");
-+			if (int_status & WR_FIFO_OVERRUN)
-+				dev_err(ctrl->dev, "IRQ error: FIFO overrun\n");
-+			if (int_status & HRESP_FROM_NOC_ERR)
-+				dev_err(ctrl->dev, "IRQ error: NOC response error\n");
-+			ret = IRQ_HANDLED;
-+		}
-+
-+		if (!ctrl->xfer.rem_bytes) {
-+			writel(0, ctrl->base + MSTR_INT_EN);
-+			spi_finalize_current_transfer(dev_get_drvdata(ctrl->dev));
-+		}
-+	} else if (ctrl->xfer_mode == QSPI_DMA) {
-+		if (int_status & DMA_CHAIN_DONE) {
-+			int ii;
-+
-+			writel(0, ctrl->base + MSTR_INT_EN);
-+
-+			if (ctrl->xfer.dir == QSPI_READ) {
-+				struct qspi_cmd_desc *cmd_desc;
-+
-+				for (ii = 0; ii < ctrl->n_cmd_desc; ii++) {
-+					cmd_desc = (struct qspi_cmd_desc *)ctrl->virt_cmd_desc[ii];
-+					memcpy(cmd_desc->bounce_dst,
-+						cmd_desc->bounce_src, cmd_desc->bounce_length);
-+				}
-+			}
-+
-+			for (ii = 0; ii < ctrl->n_data_desc; ii++)
-+				dma_pool_free(ctrl->dma_data_pool, ctrl->virt_data_desc[ii],
-+						  ctrl->dma_data_desc[ii]);
-+			ctrl->n_data_desc = 0;
-+
-+			for (ii = 0; ii < ctrl->n_cmd_desc; ii++)
-+				dma_pool_free(ctrl->dma_cmd_pool, ctrl->virt_cmd_desc[ii],
-+						  ctrl->dma_cmd_desc[ii]);
-+			ctrl->n_cmd_desc = 0;
-+
-+			ret = IRQ_HANDLED;
-+			spi_finalize_current_transfer(dev_get_drvdata(ctrl->dev));
-+		}
- 	}
- 
- 	spin_unlock(&ctrl->lock);
-@@ -487,6 +835,9 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	/* set default mode to FIFO */
-+	ctrl->xfer_mode = QSPI_FIFO;
-+
- 	ctrl->icc_path_cpu_to_qspi = devm_of_icc_get(dev, "qspi-config");
- 	if (IS_ERR(ctrl->icc_path_cpu_to_qspi))
- 		return dev_err_probe(dev, PTR_ERR(ctrl->icc_path_cpu_to_qspi),
-@@ -517,7 +868,12 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-+	if (ret)
-+		return dev_err_probe(dev, ret, "could not set DMA mask\n");
-+
- 	master->max_speed_hz = 300000000;
-+	master->max_dma_len = 65536; /* as per HPG */
- 	master->num_chipselect = QSPI_NUM_CS;
- 	master->bus_num = -1;
- 	master->dev.of_node = pdev->dev.of_node;
-@@ -528,6 +884,7 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	master->prepare_message = qcom_qspi_prepare_message;
- 	master->transfer_one = qcom_qspi_transfer_one;
- 	master->handle_err = qcom_qspi_handle_err;
-+	master->can_dma = qcom_qspi_can_dma;
- 	master->auto_runtime_pm = true;
- 
- 	ret = devm_pm_opp_set_clkname(&pdev->dev, "core");
-@@ -540,6 +897,11 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	/* allocate for DMA descriptor pools */
-+	ret = qcom_qspi_alloc_dma(ctrl);
-+	if (ret)
-+		return ret;
-+
- 	pm_runtime_use_autosuspend(dev);
- 	pm_runtime_set_autosuspend_delay(dev, 250);
- 	pm_runtime_enable(dev);
-@@ -556,10 +918,15 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- static void qcom_qspi_remove(struct platform_device *pdev)
- {
- 	struct spi_master *master = platform_get_drvdata(pdev);
-+	struct qcom_qspi *ctrl;
-+
-+	ctrl = spi_master_get_devdata(master);
- 
- 	/* Unregister _before_ disabling pm_runtime() so we stop transfers */
- 	spi_unregister_master(master);
- 
-+	qcom_qspi_free_dma(ctrl);
-+
- 	pm_runtime_disable(&pdev->dev);
+ 	return image;
  }
  
 -- 
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+2.31.1
 
