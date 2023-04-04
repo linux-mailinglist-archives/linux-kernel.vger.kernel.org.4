@@ -2,96 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2818B6D6778
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77196D6791
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235687AbjDDPfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 11:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
+        id S235875AbjDDPhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 11:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235640AbjDDPfT (ORCPT
+        with ESMTP id S235861AbjDDPhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 11:35:19 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCC83C04;
-        Tue,  4 Apr 2023 08:35:16 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrWyq6t9tz67QSs;
-        Tue,  4 Apr 2023 23:34:27 +0800 (CST)
-Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 4 Apr
- 2023 16:35:14 +0100
-Date:   Tue, 4 Apr 2023 16:35:13 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-CC:     Arnd Bergmann <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] asm-generic/io.h: suppress endianness warnings for
- readq() and writeq()
-Message-ID: <20230404163513.00003b9f@huawei.com>
-In-Reply-To: <20230109131153.991322-1-vladimir.oltean@nxp.com>
-References: <20230109131153.991322-1-vladimir.oltean@nxp.com>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+        Tue, 4 Apr 2023 11:37:08 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A27448F;
+        Tue,  4 Apr 2023 08:36:47 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BFCAB1EC0529;
+        Tue,  4 Apr 2023 17:36:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680622600;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=2sPBGWr54kw4A2qEKLOZq6gkXB3eP7VzA6/tCd+AW20=;
+        b=oBkj6A5fT8ySiQgv98D/jFVpT6KTJBURwchEloRkx8+74BagyFD94b+5/2gA/M+JqAm2F1
+        iB973uHrvUpqzQADqUefFfsQrA9ix+brKRJdoIasP1amCoL25YiNEHIAjM0ysuPSsArfwK
+        htCiJeGmyY+o6nRzjRmvkOjhd3W2DOE=
+Date:   Tue, 4 Apr 2023 17:36:40 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     yazen.ghannam@amd.com, tony.luck@intel.com, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next v2] EDAC/amd64: clean up some inconsistent
+ indentings
+Message-ID: <20230404153640.GAZCxECKKfsQoYGM6p@fat_crate.local>
+References: <20230404022557.46409-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230404022557.46409-1-yang.lee@linux.alibaba.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  9 Jan 2023 15:11:52 +0200
-Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
-
-> Commit c1d55d50139b ("asm-generic/io.h: Fix sparse warnings on
-> big-endian architectures") missed fixing the 64-bit accessors.
+On Tue, Apr 04, 2023 at 10:25:57AM +0800, Yang Li wrote:
+> Use consistent indentation to improve the readability and eliminate
+> the below warning:
 > 
-> Arnd explains in the attached link why the casts are necessary, even if
-> __raw_readq() and __raw_writeq() do not take endian-specific types.
+> drivers/edac/amd64_edac.c:1279 umc_determine_edac_cap() warn: inconsistent indenting
 > 
-> Link: https://lore.kernel.org/lkml/9105d6fc-880b-4734-857d-e3d30b87ccf6@app.fastmail.com/
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-
-Found this when about to send an equivalent patch. Not seeing this in linux-next yet
-and would be good to clean the resulting warnings up.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4639
+> Fixes: f6a4b4a1aa16 ("EDAC/amd64: Split determine_edac_cap() into dct/umc functions")
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 > ---
->  include/asm-generic/io.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index 4c44a29b5e8e..d78c3056c98f 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -236,7 +236,7 @@ static inline u64 readq(const volatile void __iomem *addr)
->  
->  	log_read_mmio(64, addr, _THIS_IP_, _RET_IP_);
->  	__io_br();
-> -	val = __le64_to_cpu(__raw_readq(addr));
-> +	val = __le64_to_cpu((__le64 __force)__raw_readq(addr));
->  	__io_ar(val);
->  	log_post_read_mmio(val, 64, addr, _THIS_IP_, _RET_IP_);
->  	return val;
-> @@ -287,7 +287,7 @@ static inline void writeq(u64 value, volatile void __iomem *addr)
->  {
->  	log_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
->  	__io_bw();
-> -	__raw_writeq(__cpu_to_le64(value), addr);
-> +	__raw_writeq((u64 __force)__cpu_to_le64(value), addr);
->  	__io_aw();
->  	log_post_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
->  }
+> change in v2:
+> --According to yazen's suggestion, include a fixes tag and
+>   describe the changes in the commit message
+> 
+>  drivers/edac/amd64_edac.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 
+Applied, thanks.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
