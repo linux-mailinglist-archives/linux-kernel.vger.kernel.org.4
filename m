@@ -2,138 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335ED6D5C19
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29ADF6D5C27
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234181AbjDDJmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
+        id S234308AbjDDJnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234038AbjDDJl6 (ORCPT
+        with ESMTP id S234268AbjDDJnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:41:58 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001691BC0;
-        Tue,  4 Apr 2023 02:41:57 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 333N1kFO004589;
-        Tue, 4 Apr 2023 09:41:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=bv3LqF+vpq1ExVGwlnfJj1L/BJyT8J6hoWyOXdlEXJA=;
- b=c/UZtHvfqxjNhSQmY95Rzg8497/YSXnxH8PViKiGDXxpFhFgP4PsCmtFrkRCBS5X7gzj
- zK5R+TjCmWX2OpxpYCVVE6slQl0rsTgRBnLuoq7C/WDBEKPENZEIPq8jpMR6LA2VnSmi
- VI/u4AEr5kpnMM6FK8dnCgBJhE3Qyf+1rm1C6isrbMhQ0H3ldEHyUcEQxo6S2YsTrR0O
- SiE2ysX+Ru+Zz7U7MnBqxiv1eD9qWryKcaEbaZK+fnvTuiPlzCpvsFcuGDH7xYQu2fZj
- lIQ7JUkp2HHtTWJ07p91NSfz2G61u1nqtttooagzkEK8Pggbq6FdDRHfvCkzJNjfr6dT Wg== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pr4jm9nqs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Apr 2023 09:41:21 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3349fGN9026901;
-        Tue, 4 Apr 2023 09:41:16 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3ppdpkjnk9-1;
-        Tue, 04 Apr 2023 09:41:16 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3349fGdK026896;
-        Tue, 4 Apr 2023 09:41:16 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-vpernami-hyd.qualcomm.com [10.213.107.240])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3349fFNd026895;
-        Tue, 04 Apr 2023 09:41:16 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 2370923)
-        id 2BB3739CE; Tue,  4 Apr 2023 15:11:15 +0530 (+0530)
-From:   Vivek Pernamitta <quic_vpernami@quicinc.com>
-To:     mhi@lists.linux.dev
-Cc:     quic_qianyu@quicinc.com, manivannan.sadhasivam@linaro.org,
-        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
-        quic_skananth@quicinc.com,
-        Vivek Pernamitta <quic_vpernami@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Bhaumik Bhatt <bbhatt@codeaurora.org>,
-        Hemant Kumar <hemantk@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org (open list:MHI BUS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH V5] bus: mhi: host: Avoid ringing EV DB if there is no elements to process
-Date:   Tue,  4 Apr 2023 15:11:10 +0530
-Message-Id: <1680601272-8795-1-git-send-email-quic_vpernami@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 9scnxs51jytAxu9S6Q1HdGq00Z3LEbho
-X-Proofpoint-GUID: 9scnxs51jytAxu9S6Q1HdGq00Z3LEbho
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-04_02,2023-04-03_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 bulkscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 clxscore=1011 mlxscore=0
- mlxlogscore=818 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304040089
-X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 4 Apr 2023 05:43:13 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4661C19BC
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:43:11 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id h25so41609516lfv.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 02:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680601389;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KRzv9smVSuXlAiuE6nE47MRg/YlyfJfzc/qVDw1E+Jg=;
+        b=YeuAYOJg8RKBKpsfUQjs/kgAenYVEmVwzqJbLFsEPK/KvREOv8xHEoKRmXoFF7sPyG
+         v2qbxWjM6hY16GcIoIv5VlHp1y3IWXkCvM033GOY60rNXlDxTma6lriRVkpEecryoOuI
+         4Swi+Hc4peb5e13297zht3+L7ukFfdsHE1oflRo/336tvzgz+SlmDq1uV/oG7cqiw3SQ
+         ZDDW8p1Fg9K6mHpto+5dHuUssMgWQG9JwDkCUgkJMewCircHt2XNc5aqRRfRZVCQGN5L
+         UcbwPZmtLWSbcIk7BUNj1Q0lKn6PxJYm2CxlJ+uzg+3ec3cyst41vGif/jvVpx6dTIIj
+         Wt5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680601389;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KRzv9smVSuXlAiuE6nE47MRg/YlyfJfzc/qVDw1E+Jg=;
+        b=ifvkZseQxVNU/V8H8AdFfwMdr1cJHh3AFHsajcVfhnJ11Ee+D/4tZtlxiJcxnfh453
+         Pv+SLDbAtyL5YQwVDZu2GZmp3h23q9uOG2BwBvX7BbvpR5atB5CoQWx53HPl7q49OCEw
+         LQ8V+zfm3RBdp7PbF8lqhy+EfSrkPaCUPhhjee4BiywRcmLsuGQQNh0nxIv5MTg4LyLg
+         UBDDxbNMTG6X3uNnXub+jN/pWQtVpvoM2+yTrLANR1UVY2+7AKJtg49bUtZSQwJB/536
+         FLuLOSdproIxrDs1MnmVpiNfyfvOIVP8J5hdWVOKttVt4bKIm+DMcf7y+nTexn6/48+I
+         rkjg==
+X-Gm-Message-State: AAQBX9c1Q3/2e+jPH3uYqG5KopscqYGdklk0lkJl6zE9n4ewUzT6aZ/R
+        6poD5/UcQTTtJHrNk4YJbABhPQ==
+X-Google-Smtp-Source: AKy350b7Z4E6Q1dfw8Fpr7MDoDfW/n0vIeQesGBJNCLP89rnF9qd2fn2IS/qJGPHUXKFEfnY+2tHEg==
+X-Received: by 2002:ac2:4c34:0:b0:4b6:f51e:b8b6 with SMTP id u20-20020ac24c34000000b004b6f51eb8b6mr517329lfq.56.1680601389522;
+        Tue, 04 Apr 2023 02:43:09 -0700 (PDT)
+Received: from [127.0.1.1] ([85.235.12.238])
+        by smtp.gmail.com with ESMTPSA id l25-20020a19c219000000b004eb258f73a9sm2218443lfc.163.2023.04.04.02.43.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 02:43:09 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 0/9] Convert low hanging pinctrl irqchips to be immutable
+Date:   Tue, 04 Apr 2023 11:43:02 +0200
+Message-Id: <20230403-immutable-irqchips-v1-0-503788a7f6e6@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACbxK2QC/22NSw7CMAwFr1J5TaS0qcrnKoiFkxpiiYZgU4RU9
+ e64rFmO5o3eAkrCpHBqFhB6s/KjGLS7BlLGciPHozF0vgu+98HxNM0vjHcT8kyZq7rjAdMY+j2
+ 1wwAWRlRyUbCkvKVX/sz1T7dNq5Dp3//5sq5f3vhqFo8AAAA=
+To:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-curenlty mhi_process_data_event_ring()/mhi_process_ctrl_ev_ring()
-will ring DB even if there no ring elements to process.
-This could cause doorbell event to be processed by MHI device
-to check for any ring elements even it is none.
-So ring event DB only if any event ring elements are processed.
+This repeats the two-fold exercise in the GPIO subsystem
+by doing the same for pin control: let's switch over all
+easily identifiable irqchips to be immutable.
 
-Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
-changes since v5:
-	updating the commit text.
-changes since v4:
-	updating the commit text with more information.
-changes since v3:
-	- Updating commit text for multiple versions of patches.
-changes since v2:
-	- Updated comments in code.
-changes since v1:
-	- Add an check to avoid ringing EV DB in mhi_process_ctrl_ev_ring().
----
- drivers/bus/mhi/host/main.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Linus Walleij (9):
+      pinctrl: iproc: Convert to immutable irq_chip
+      pinctrl: nsp: Convert to immutable irq_chip
+      pinctrl: armada-37xx: Convert to immutable irq_chip
+      pinctrl: npcm7xx: Convert to immutable irq_chip
+      pinctrl: equilibrium: Convert to immutable irq_chip
+      pinctrl: mcp23s08: Convert to immutable irq_chip
+      pinctrl: st: Convert to immutable irq_chip
+      pinctrl: stmfx: Convert to immutable irq_chip
+      pinctrl: sx150x: Convert to immutable irq_chip
 
-diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
-index df0fbfe..1bbdb75 100644
---- a/drivers/bus/mhi/host/main.c
-+++ b/drivers/bus/mhi/host/main.c
-@@ -961,7 +961,9 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
- 	}
- 
- 	read_lock_bh(&mhi_cntrl->pm_lock);
--	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-+
-+	/* Ring EV DB only if there is any pending element to process */
-+	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
- 		mhi_ring_er_db(mhi_event);
- 	read_unlock_bh(&mhi_cntrl->pm_lock);
- 
-@@ -1031,7 +1033,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
- 		count++;
- 	}
- 	read_lock_bh(&mhi_cntrl->pm_lock);
--	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-+
-+	/* Ring EV DB only if there is any pending element to process */
-+	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
- 		mhi_ring_er_db(mhi_event);
- 	read_unlock_bh(&mhi_cntrl->pm_lock);
- 
+ drivers/pinctrl/bcm/pinctrl-iproc-gpio.c    | 38 +++++++++++------
+ drivers/pinctrl/bcm/pinctrl-nsp-gpio.c      | 23 ++++++-----
+ drivers/pinctrl/mvebu/pinctrl-armada-37xx.c | 34 ++++++++++-----
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c   | 34 +++++++--------
+ drivers/pinctrl/pinctrl-equilibrium.c       | 22 ++++++----
+ drivers/pinctrl/pinctrl-equilibrium.h       |  2 -
+ drivers/pinctrl/pinctrl-mcp23s08.c          | 36 +++++++++++-----
+ drivers/pinctrl/pinctrl-mcp23s08.h          |  1 -
+ drivers/pinctrl/pinctrl-st.c                | 16 ++++----
+ drivers/pinctrl/pinctrl-stmfx.c             | 36 ++++++++++------
+ drivers/pinctrl/pinctrl-sx150x.c            | 64 +++++++++++++++++------------
+ 11 files changed, 190 insertions(+), 116 deletions(-)
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230403-immutable-irqchips-98acd347e166
+
+Best regards,
 -- 
-2.7.4
+Linus Walleij <linus.walleij@linaro.org>
 
