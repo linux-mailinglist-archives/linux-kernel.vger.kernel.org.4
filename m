@@ -2,96 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E099C6D6EE3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4102E6D6EE9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235855AbjDDVY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
+        id S236424AbjDDVZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236560AbjDDVYz (ORCPT
+        with ESMTP id S235324AbjDDVZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:24:55 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405201701;
-        Tue,  4 Apr 2023 14:24:54 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-17e140619fdso36180114fac.11;
-        Tue, 04 Apr 2023 14:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680643493;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QOnTaTc+5QrhRyhcClArhfTQwHoDfWNZZzKAwPQKxUg=;
-        b=Fn1D0K4W5Gr/EyXlP71+kH3uncuKwrM2hOS8WzUfGnxZfNhQZW96jknFxzimNlu5j/
-         AnOBULccDYCEU3sR0N0Wx0Oq9yNKmQDJmWTIvRRLf42gbOn+vXdW1HWXmGdgZX8KQ2B6
-         Wd6N/Wna+iEwKd9O0fy9UfbLpKgTb6rjVBA3PsXOtPOupiEpme7H7GMbUEJ/WD8R6Vh+
-         5UJTW2ZtpZBXYsORx2BPzwkweyS3YJKiXlqx3f8pGP98/z+rnh6i4TmY9QdwAGZtsYzH
-         tWiPijM+dSvgqUEx9lC8NWAu8i1VUOjB3ZytK1Wt4Rn5BU4kc4ABlY2WnKrR8p/u1U6B
-         Ytvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680643493;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QOnTaTc+5QrhRyhcClArhfTQwHoDfWNZZzKAwPQKxUg=;
-        b=aTXJKLDtlUTDK9vw1yWf6WbCopMEjkxXCA8mEmVwZkleJWWff4me5NEPDNhn25A/n0
-         6iK1f6tiAfPCtUkjH/uVE1UYkwkTESRPMhjAXpHxE7F3WWZWYoMN+xF7zPF46ickdJUi
-         IiI8yVNEzJWG7+etVB1dMIsC+aV2wHXI+ATu4+3CC4ZAFI3xjn8QWwCbiqLtgtkExu1o
-         vkr6YGSAqJZ/qaL+5kXXQx8cl4Vh8dFx+Ij6w6vEr+KU4Kz6EdamvCD6BM9/HeDIGevW
-         ZX65/UPDPQ76xc0cff+KAzEiph9Dw8fRkvmA+iXHoVR6Ac8Kt9f+R1VpjqQO0OZSpKnZ
-         jQJg==
-X-Gm-Message-State: AAQBX9d82i362NRzTqgTYKlls+AR9IUlS8tqCl9vmCo4Yv84gX0p1Vf1
-        PJuzRdAnS63DSFEcMJdDCUY=
-X-Google-Smtp-Source: AKy350ZI+t7Zvp//6OObyQ3PeUXv92sErJTJkbMirHF49hpNBWvSFwhoV7S8AtRoUFVSEsAnk+JcAA==
-X-Received: by 2002:a05:6871:546:b0:17a:f1a2:c4c7 with SMTP id t6-20020a056871054600b0017af1a2c4c7mr2435640oal.42.1680643493668;
-        Tue, 04 Apr 2023 14:24:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d28-20020a4ae83c000000b0053dfd96fa61sm2407872ood.39.2023.04.04.14.24.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 14:24:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 4 Apr 2023 14:24:52 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.19 00/84] 4.19.280-rc1 review
-Message-ID: <86c9a92a-9907-488e-ab7c-66a703f9c15f@roeck-us.net>
-References: <20230403140353.406927418@linuxfoundation.org>
+        Tue, 4 Apr 2023 17:25:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11BB1701;
+        Tue,  4 Apr 2023 14:25:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87C5063A1F;
+        Tue,  4 Apr 2023 21:25:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BD27C433D2;
+        Tue,  4 Apr 2023 21:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680643547;
+        bh=hAopZSHpcyvh1rorTXdf3DGzRj2r95oUiXaa6N2Aivw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SrPS1xYQcfgbbli7ENWa19ts7ncgOPdC8p4skjF6wasxeBmojqrfOmhUA/mubgPr3
+         uDhfyMvg8HqXtQmyO1MVQ13N74r+uQncxbP96FqgsGUXyRUwaIGryb90rRsnC3FCD6
+         JHxb2j81ykhZRfKu2vGmouDAfXp2texoZ1eQ9xHceizZ7wH+t5cztBR1HsLjlHSpLY
+         TnIDZczL0uZGDid2WqRf5aULJURGKO/h4Q9R8dIpvX5/Y8YIT4WYu6mvxXVNq7jCNd
+         DPOFtDOJHfDrEbDRRVsHSPMWTiC7LOLhuA6tbhRDX5dQOs8vRBkBAVw4rVFBwr6ThM
+         4xlNiZL9xia/w==
+Date:   Tue, 4 Apr 2023 22:25:38 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        llvm@lists.linux.dev,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Tom Rix <trix@redhat.com>, Weili Qian <qianweili@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Len Brown <lenb@kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH V4 16/23] clocksource/timer-riscv: Refactor
+ riscv_timer_init_dt()
+Message-ID: <20230404-flatware-ditto-e5c71d5a36c2@spud>
+References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
+ <20230404182037.863533-17-sunilvl@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2/wGGnLCOQw3+kxM"
 Content-Disposition: inline
-In-Reply-To: <20230403140353.406927418@linuxfoundation.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230404182037.863533-17-sunilvl@ventanamicro.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 04:08:01PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.280 release.
-> There are 84 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
-> Anything received after that time might be too late.
-> 
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 431 pass: 431 fail: 0
+--2/wGGnLCOQw3+kxM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+On Tue, Apr 04, 2023 at 11:50:30PM +0530, Sunil V L wrote:
+> Refactor the timer init function such that few things can be
+> shared by both DT and ACPI based platforms.
+>=20
+> Co-developed-by: Anup Patel <apatel@ventanamicro.com>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
-Guenter
+Forget an R-b or drop it intentionally from v3?
+https://lore.kernel.org/linux-riscv/c2c1bdb5-aee6-4f4c-9f7d-073917e75b88@sp=
+ud/
+Please say why if you drop or ignore tags between versions.
+
+If this is in fact the same as v3, here's the missing tag:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+> ---
+>  drivers/clocksource/timer-riscv.c | 81 +++++++++++++++----------------
+>  1 file changed, 40 insertions(+), 41 deletions(-)
+>=20
+> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/time=
+r-riscv.c
+> index 5f0f10c7e222..cecc4662293b 100644
+> --- a/drivers/clocksource/timer-riscv.c
+> +++ b/drivers/clocksource/timer-riscv.c
+> @@ -124,61 +124,28 @@ static irqreturn_t riscv_timer_interrupt(int irq, v=
+oid *dev_id)
+>  	return IRQ_HANDLED;
+>  }
+> =20
+> -static int __init riscv_timer_init_dt(struct device_node *n)
+> +static int __init riscv_timer_init_common(void)
+>  {
+> -	int cpuid, error;
+> -	unsigned long hartid;
+> -	struct device_node *child;
+> +	int error;
+>  	struct irq_domain *domain;
+> +	struct fwnode_handle *intc_fwnode =3D riscv_get_intc_hwnode();
+> =20
+> -	error =3D riscv_of_processor_hartid(n, &hartid);
+> -	if (error < 0) {
+> -		pr_warn("Not valid hartid for node [%pOF] error =3D [%lu]\n",
+> -			n, hartid);
+> -		return error;
+> -	}
+> -
+> -	cpuid =3D riscv_hartid_to_cpuid(hartid);
+> -	if (cpuid < 0) {
+> -		pr_warn("Invalid cpuid for hartid [%lu]\n", hartid);
+> -		return cpuid;
+> -	}
+> -
+> -	if (cpuid !=3D smp_processor_id())
+> -		return 0;
+> -
+> -	child =3D of_find_compatible_node(NULL, NULL, "riscv,timer");
+> -	if (child) {
+> -		riscv_timer_cannot_wake_cpu =3D of_property_read_bool(child,
+> -					"riscv,timer-cannot-wake-cpu");
+> -		of_node_put(child);
+> -	}
+> -
+> -	domain =3D NULL;
+> -	child =3D of_get_compatible_child(n, "riscv,cpu-intc");
+> -	if (!child) {
+> -		pr_err("Failed to find INTC node [%pOF]\n", n);
+> -		return -ENODEV;
+> -	}
+> -	domain =3D irq_find_host(child);
+> -	of_node_put(child);
+> +	domain =3D irq_find_matching_fwnode(intc_fwnode, DOMAIN_BUS_ANY);
+>  	if (!domain) {
+> -		pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
+> +		pr_err("Failed to find irq_domain for INTC node [%pfwP]\n",
+> +		       intc_fwnode);
+>  		return -ENODEV;
+>  	}
+> =20
+>  	riscv_clock_event_irq =3D irq_create_mapping(domain, RV_IRQ_TIMER);
+>  	if (!riscv_clock_event_irq) {
+> -		pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
+> +		pr_err("Failed to map timer interrupt for node [%pfwP]\n", intc_fwnode=
+);
+>  		return -ENODEV;
+>  	}
+> =20
+> -	pr_info("%s: Registering clocksource cpuid [%d] hartid [%lu]\n",
+> -	       __func__, cpuid, hartid);
+>  	error =3D clocksource_register_hz(&riscv_clocksource, riscv_timebase);
+>  	if (error) {
+> -		pr_err("RISCV timer register failed [%d] for cpu =3D [%d]\n",
+> -		       error, cpuid);
+> +		pr_err("RISCV timer registration failed [%d]\n", error);
+>  		return error;
+>  	}
+> =20
+> @@ -207,4 +174,36 @@ static int __init riscv_timer_init_dt(struct device_=
+node *n)
+>  	return error;
+>  }
+> =20
+> +static int __init riscv_timer_init_dt(struct device_node *n)
+> +{
+> +	int cpuid, error;
+> +	unsigned long hartid;
+> +	struct device_node *child;
+> +
+> +	error =3D riscv_of_processor_hartid(n, &hartid);
+> +	if (error < 0) {
+> +		pr_warn("Invalid hartid for node [%pOF] error =3D [%lu]\n",
+> +			n, hartid);
+> +		return error;
+> +	}
+> +
+> +	cpuid =3D riscv_hartid_to_cpuid(hartid);
+> +	if (cpuid < 0) {
+> +		pr_warn("Invalid cpuid for hartid [%lu]\n", hartid);
+> +		return cpuid;
+> +	}
+> +
+> +	if (cpuid !=3D smp_processor_id())
+> +		return 0;
+> +
+> +	child =3D of_find_compatible_node(NULL, NULL, "riscv,timer");
+> +	if (child) {
+> +		riscv_timer_cannot_wake_cpu =3D of_property_read_bool(child,
+> +					"riscv,timer-cannot-wake-cpu");
+> +		of_node_put(child);
+> +	}
+> +
+> +	return riscv_timer_init_common();
+> +}
+> +
+>  TIMER_OF_DECLARE(riscv_timer, "riscv", riscv_timer_init_dt);
+> --=20
+> 2.34.1
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+--2/wGGnLCOQw3+kxM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCyV0gAKCRB4tDGHoIJi
+0rJlAP9rogaXV3ucgTvCBAZkBYR+WpLBvWckZ0of2CS8edy2CwD5Ac7q7WeS6lvT
+0PKSn5nYFRIl9RObVenJC1edFkd2nAg=
+=mydC
+-----END PGP SIGNATURE-----
+
+--2/wGGnLCOQw3+kxM--
