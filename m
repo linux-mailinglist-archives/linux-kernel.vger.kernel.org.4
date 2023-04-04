@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE11A6D6F48
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59A36D6F44
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236554AbjDDVt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
+        id S236461AbjDDVtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236567AbjDDVtw (ORCPT
+        with ESMTP id S235833AbjDDVto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:49:52 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF5C4C3D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 14:49:51 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-500298a69a0so14827a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 14:49:51 -0700 (PDT)
+        Tue, 4 Apr 2023 17:49:44 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3223C06
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 14:49:42 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id k37so44189101lfv.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 14:49:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680644989;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ORsASzljGfHUFCd3ogFEbqGPps8yt7IIOZl7g4K30Rg=;
-        b=s/SiwwnmdwkgdeRuDjJ02rK7CCuhb2Ml/Z5hn/DcsfFr7GYNLhNgYBAFxySLJMz8VX
-         gAxjiPpDI6f2ofADSz5Ov1GlKr6Yprh6lp9toubNZO2v6c6IJH7NRAAuuOxuqORiF8zn
-         M06YpyIt1QcvlVGPTEQI02wW0h7CBY1ct9cck7SY3hcF83eo9iqyp8jtKFLSEacgcuQl
-         lb1owLlctoBpODjGqx/Qj12WkH8TAsyk3xOg/vFwI31/uSeyU7R8/DJE3y2fQs2GiW+o
-         g6inQGM0BafkZ4JfB96QwvQyHCb73fuQzDkcYdC5bULTLsWwkmxE/WF6so5OzqVWh0KK
-         strA==
+        d=linaro.org; s=google; t=1680644981;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c9m8JcZMmWZ1S9B7I0X4OWYztsfYf55/KOOKuskJIlc=;
+        b=Z4DI99E4RIjphWZMJHkO8FxQhtyyrv0FLzs52XFk/NCyBuzC3aIkbbB18/VZ0bMg+N
+         74ywJTvuCPUi6M/CzGnDfV8nLhYpMZXX+4JqujjyExMaaqlqr+hoyPRnRYh34/kPmBPt
+         qo7mDyk/bRvemXBO4wox7UZNCGcn5b9B1XMuC2Ho90ezrTaZ5Xq2cRuWJDzPpfVnOuyU
+         mNA45YViz2w99XSWPszDS47rphCs9hsHke2IG/t1JHsHrOIHZgGWVZw+iS9YfXR1btIA
+         pi0/DSsCWXAqeJaJmNqR+sIe04N3oI/H/pRpnLRtmF4JG/CxxMUGISAeoUgCEgOBWQJJ
+         TLBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680644989;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ORsASzljGfHUFCd3ogFEbqGPps8yt7IIOZl7g4K30Rg=;
-        b=3fdi/7ocFDd7ga6qqXAf1wcyMWPVJgnVEWvSfqlMdFXXc3sog4xmSXIMq+ZSLFt4mt
-         cVTVMR3bkWnxhXBTk/YOeZbL4837m021PXmKhc/egQNyAJPotCH6RMvZO0q7FIsJkbs4
-         uhW4BYPAeBqOZU2dlhDTidcqphClOPpSC7WQcFxcupyxzYyHQRQfqZjcQuLngrGWRNKK
-         dIjg5Qi8KtuIeBE8tyaCV08ivs9E+YPzaARimvA5JIUx1yP9GCDAXg6wHhF5BvDPqL7C
-         qlEZ4XmA5QqfI5M/xI/f0oBnoHY1+3xWUbanqYaT3zEIx+kG8XTA00j3VrdH7EFfrr3Q
-         d0YA==
-X-Gm-Message-State: AAQBX9eRK9NLKQkntBbXoq0+r3CvgeY4YkSjFLqMWVEp9KNM2d+rXHu5
-        v1CTUtxmAX3MmgvLtSQFq+/jweBLCyH3GZ37/CCAew==
-X-Google-Smtp-Source: AKy350YUhgfNlQB9BgliJhDTPoAtydq+pRpI5OPND73VJuSHENJ8A+1/PZy54LksxQ0Iys/ncdz8czKD7eRq8UO4ZrA=
-X-Received: by 2002:a50:aac1:0:b0:502:1d1c:7d37 with SMTP id
- r1-20020a50aac1000000b005021d1c7d37mr20498edc.8.1680644989345; Tue, 04 Apr
- 2023 14:49:49 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680644981;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c9m8JcZMmWZ1S9B7I0X4OWYztsfYf55/KOOKuskJIlc=;
+        b=a43KiHq1OYbOpBfiBYAEWQnQhDqqSpe+C8kPix6b6Vxc5v2kxzEigHWD5bVsyYd6OD
+         ohAmVY6K5IKL4u+inDP5Mt5uttEfyPpWKuSh/qZruxhZutpQDhgxwEl8pgYWBPE+MK/V
+         Ow0BsVF6u7ktV5B7os7Lj5AVCj7kEUejwQtVy7laohTxgWu+pmpyiDwtoniDFJVv2XS8
+         NeunUvDEw0esxQFxswgG4YwH0PYUGLrwwsIqvYC8AqLwbdoY4UDCd2EXml1UBCC5Y3WT
+         JtI1VaWWvurducuLB5JPSa7IRC4VSBXuqZpkHTb29IjRlwKsYw6cX8FDDgKpho7KzYGg
+         F94w==
+X-Gm-Message-State: AAQBX9cjwuAGjcVn/+CL51o72pg/rRNjqmaAhUEmUYWhK9bqO6UD+pk7
+        LM21ZoFQM6A4QId6Vba7IbFdHA==
+X-Google-Smtp-Source: AKy350Zf+ul31Abg44Eo9e+Yy1lnbFlwfl8KiguNoPQHOntwSsbASgV+RlHuOW80PHwf7RqxDqt39g==
+X-Received: by 2002:a19:a40c:0:b0:4eb:50ba:cb06 with SMTP id q12-20020a19a40c000000b004eb50bacb06mr291289lfc.49.1680644981217;
+        Tue, 04 Apr 2023 14:49:41 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id c20-20020a197614000000b004db9dbe09c6sm2501436lff.89.2023.04.04.14.49.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 14:49:40 -0700 (PDT)
+Message-ID: <55828eac-32a7-1c6c-25de-2e031ac12f49@linaro.org>
+Date:   Wed, 5 Apr 2023 00:49:40 +0300
 MIME-Version: 1.0
-References: <20230404001353.468224-1-yosryahmed@google.com> <20230404143824.a8c57452f04929da225a17d0@linux-foundation.org>
-In-Reply-To: <20230404143824.a8c57452f04929da225a17d0@linux-foundation.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 4 Apr 2023 14:49:13 -0700
-Message-ID: <CAJD7tkbZgA7QhkuxEbp=Sam6NCA0i3cZJYF4Z1nrLK1=Rem+Gg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] Ignore non-LRU-based reclaim in memcg reclaim
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/msm/mdp5: set varaiable msm8x76_config
+ storage-class-specifier to static
+Content-Language: en-GB
+To:     Tom Rix <trix@redhat.com>, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, vladimir.lypak@gmail.com
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230404185329.1925964-1-trix@redhat.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230404185329.1925964-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,66 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 2:38=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
->
-> On Tue,  4 Apr 2023 00:13:50 +0000 Yosry Ahmed <yosryahmed@google.com> wr=
-ote:
->
-> > Upon running some proactive reclaim tests using memory.reclaim, we
-> > noticed some tests flaking where writing to memory.reclaim would be
-> > successful even though we did not reclaim the requested amount fully.
-> > Looking further into it, I discovered that *sometimes* we over-report
-> > the number of reclaimed pages in memcg reclaim.
-> >
-> > Reclaimed pages through other means than LRU-based reclaim are tracked
-> > through reclaim_state in struct scan_control, which is stashed in
-> > current task_struct. These pages are added to the number of reclaimed
-> > pages through LRUs. For memcg reclaim, these pages generally cannot be
-> > linked to the memcg under reclaim and can cause an overestimated count
-> > of reclaimed pages. This short series tries to address that.
-> >
-> > Patches 1-2 are just refactoring, they add helpers that wrap some
-> > operations on current->reclaim_state, and rename
-> > reclaim_state->reclaimed_slab to reclaim_state->reclaimed.
-> >
-> > Patch 3 ignores pages reclaimed outside of LRU reclaim in memcg reclaim=
-.
-> > The pages are uncharged anyway, so even if we end up under-reporting
-> > reclaimed pages we will still succeed in making progress during
-> > charging.
-> >
-> > Do not let the diff stat deceive you, the core of this series is patch =
-3,
-> > which has one line of code change. All the rest is refactoring and one
-> > huge comment.
-> >
->
-> Wouldn't it be better to do this as a single one-line patch for
-> backportability?  Then all the refactoring etcetera can be added on
-> later.
+On 04/04/2023 21:53, Tom Rix wrote:
+> smatch reports
+> drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c:658:26: warning: symbol
+>    'msm8x76_config' was not declared. Should it be static?
+> 
+> This variable is only used in one file so should be static.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>   drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 
-Without refactoring the code that adds reclaim_state->reclaimed to
-scan_control->nr_reclaimed into a helper (flush_reclaim_state()), the
-change would need to be done in two places instead of one, and I
-wouldn't know where to put the huge comment.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-One thing that I can do is break down patch 2 into two patches, one
-that adds the flush_reclaim_state() helper, and one that adds the
-mm_account_reclaimed_pages() helper.
+-- 
+With best wishes
+Dmitry
 
-The series would be:
-Patch 1: move set_task_reclaim_state() near other helpers
-Patch 2: introduce mm_account_reclaimed_pages()
-Patch 3: introduce flush_reclaim_state()
-Patch 4: add the one-line change (and the huge comment) to flush_reclaim_st=
-ate()
-
-Backports need only to take patches 3 & 4 (which would be localized to
-mm/vmscan.c), as patches 1 & 2 would be purely cosmetic with no
-dependency from patches 3 & 4. For the current series, patch 1 is not
-needed anyway. So this change would basically save backporters the
-part of patch 2 that is outside of mm/vmscan.c.
-
-If you think this would be useful I can send a v5 with patch 2 broken
-down into two patches.
