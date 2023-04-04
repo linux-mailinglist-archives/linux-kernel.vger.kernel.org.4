@@ -2,113 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616B36D5BB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E50A6D5BB6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234007AbjDDJSr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Apr 2023 05:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        id S234257AbjDDJUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbjDDJSm (ORCPT
+        with ESMTP id S234241AbjDDJUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:18:42 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E9C1981;
-        Tue,  4 Apr 2023 02:18:39 -0700 (PDT)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id DA2E5FF815;
-        Tue,  4 Apr 2023 09:18:35 +0000 (UTC)
-Message-ID: <366ab6c4d488645aee5cbf49fb2e9b39d9bb1e22.camel@hadess.net>
-Subject: Re: linux-next: build warning after merge of the hid tree
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Tue, 04 Apr 2023 11:18:35 +0200
-In-Reply-To: <20230404185500.7953d9d2@canb.auug.org.au>
-References: <20230404154005.449800c3@canb.auug.org.au>
-         <20230404154254.6c3be26b@canb.auug.org.au>
-         <e1eb90db85ed7adad08bb99054f5cda3cb626794.camel@hadess.net>
-         <20230404185500.7953d9d2@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.0 (3.48.0-1.fc38) 
+        Tue, 4 Apr 2023 05:20:06 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039EA19BF;
+        Tue,  4 Apr 2023 02:19:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 339F7204BB;
+        Tue,  4 Apr 2023 09:19:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680599995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i67LZvndle0FXns2qvwNfT1XOL/ofgh7nRXwodyjXPs=;
+        b=Oh3tIDquq5GAp/daRsZLPe8+keWjgn/xo26/bDtxYuh/NyIXC8eUV2ajlDvD5PdX6e3Bxc
+        LeWQwHKJ2/4tDCgTl+My4ZLnXLjN4po1o8GhZWAhU+UW6Yq397WVXZdN3DwwLA3IcuWvqN
+        CCHm9q+hpAiowzhA58WooTHxjRuiAGo=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BB5451391A;
+        Tue,  4 Apr 2023 09:19:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Z/cuK7rrK2Q+NQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 04 Apr 2023 09:19:54 +0000
+Date:   Tue, 4 Apr 2023 11:19:53 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        gscrivan@redhat.com
+Subject: Re: [PATCH 1/3] cgroup/cpuset: Make cpuset_fork() handle
+ CLONE_INTO_CGROUP properly
+Message-ID: <20230404091953.tcu3zg7npstk3ztc@blackpad>
+References: <20230331145045.2251683-1-longman@redhat.com>
+ <20230331145045.2251683-2-longman@redhat.com>
+ <20230403165523.aphsec2epqi72k27@blackpad>
+ <d9f0005c-6825-b2a0-eac3-fcbad6e32b2f@redhat.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t44yctniyorb4iao"
+Content-Disposition: inline
+In-Reply-To: <d9f0005c-6825-b2a0-eac3-fcbad6e32b2f@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-04-04 at 18:55 +1000, Stephen Rothwell wrote:
-> Hi Bastien,
-> 
-> On Tue, 04 Apr 2023 10:22:35 +0200 Bastien Nocera <hadess@hadess.net>
-> wrote:
-> > 
-> > On Tue, 2023-04-04 at 15:42 +1000, Stephen Rothwell wrote:
-> > > 
-> > > On Tue, 4 Apr 2023 15:40:05 +1000 Stephen Rothwell
-> > > <sfr@canb.auug.org.au> wrote:  
-> > > > 
-> > > > After merging the hid tree, today's linux-next build (htmldocs)
-> > > > produced
-> > > > this warning:
-> > > > 
-> > > > drivers/usb/core/message.c:1939: warning: Function parameter or
-> > > > member 'iface' not described in 'usb_set_wireless_status'
-> > > > drivers/usb/core/message.c:1939: warning: Excess function
-> > > > parameter
-> > > > 'dev' description in 'usb_set_wireless_status'
-> > > > 
-> > > > Introduced by commit
-> > > > 
-> > > >   0a4db185f078 ("USB: core: Add API to change the
-> > > > wireless_status")  
-> > > 
-> > > Also this:
-> > > 
-> > > include/linux/usb.h:270: warning: Function parameter or member
-> > > 'wireless_status_work' not described in 'usb_interface'
-> > 
-> > How does one reproduce those warnings?
-> 
-> I just ran "make htmldocs" (see above).  You may need to install some
-> software - but it will tell you if so.
-> 
 
-Before I send patches, does this look correct to you?
+--t44yctniyorb4iao
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index 7930dca84616..7c7f88ca4f62 100644
---- a/drivers/usb/core/message.c
-+++ b/drivers/usb/core/message.c
-@@ -1926,7 +1926,7 @@ static void __usb_wireless_status_intf(struct work_struct *ws)
-1926⋮1926│ 
-1927⋮1927│ /**
-1928⋮1928│  * usb_set_wireless_status - sets the wireless_status struct member
-1929⋮    │- * @dev: the device to modify
-    ⋮1929│+ * @iface: the interface to modify
-1930⋮1930│  * @status: the new wireless status
-1931⋮1931│  *
-1932⋮1932│  * Set the wireless_status struct member to the new value, and emit
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index a48eeec62a66..3d523ebf0c09 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -261,7 +261,8 @@ struct usb_interface {
- 261⋮ 261│      unsigned needs_binding:1;       /* needs delayed unbind/rebind */
- 262⋮ 262│      unsigned resetting_device:1;    /* true: bandwidth alloc after reset */
- 263⋮ 263│      unsigned authorized:1;          /* used for interface authorization */
- 264⋮    │-     enum usb_wireless_status wireless_status;
-    ⋮ 264│+     enum usb_wireless_status wireless_status; /* whether the emitter is
-    ⋮ 265│+                                                * connected to this receiver */
- 265⋮ 266│      struct work_struct wireless_status_work;
- 266⋮ 267│ 
- 267⋮ 268│      struct device dev;              /* interface specific device info */
+On Mon, Apr 03, 2023 at 01:18:42PM -0400, Waiman Long <longman@redhat.com> wrote:
+> 1) PF_NO_SETAFFINITY flag - which won't be set in the case of fork() as it
+> is for kthread only.
+> 2) DL bandwidth - Juri has a cpuset outstanding to modify the way this check
+> is being done. I want to wait until it is settled before tackling this, if
+> necessary.
 
+BTW what about CLONE_INTO_CGROUP where the target cpuset has empty
+effective cpuset?
+
+> 3) security_task_setscheduler() - the CLONE_INTO_CGROUP code has already
+> checked that, we don't need to duplicate the check.
+
+Not sure what this refers to.
+
+> So we don't need a can_fork() check for now.
+
+Anyway, good breakdown. Could you please add it to the commit message
+too?
+
+Regards,
+Michal
+
+--t44yctniyorb4iao
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZCvrtQAKCRAkDQmsBEOq
+uXeGAQCpgXtPsXDXcfOTHX/nDug4IiTdeZK6ER7w5mOHPkUAxgD/cum39WzeVSGZ
+V0835/NthpeochRAaHAX/FNgF63xlAw=
+=b803
+-----END PGP SIGNATURE-----
+
+--t44yctniyorb4iao--
