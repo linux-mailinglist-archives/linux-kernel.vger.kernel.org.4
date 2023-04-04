@@ -2,161 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1196D57D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 06:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307C96D57D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233182AbjDDE6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 00:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        id S233250AbjDDFGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 01:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbjDDE6P (ORCPT
+        with ESMTP id S232916AbjDDFGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 00:58:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1999710D9
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 21:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680584294; x=1712120294;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gYaPq0XDNja7Mbj6D/dkzEKJhUaad1UVnFibHQ0xd1k=;
-  b=lAUhQ4UtuLM31U5X+GlIAnXvG24cDAFvcQNbWkcEYw8tr8p7+/EbbQ02
-   l8V9s2im1yW8zWK9lpgO4UCqWxAOhpfMK+XOtQjN1uK3FHVAyed+vj58E
-   dHluVsQGSYMR9xy6H/lBLPQJml+BebjLP76hMO8EDHV9DrJvtr4nJnAzD
-   SiefWKWgxla6T2XlZ1+hmPQL29w/VZ28OHXtMC5fNZmWyQL/okmlLkUSe
-   k7YAM6gPeFgWiq19EcPFO4YxijqU5rQu1LWhMK51vXirKo17IJ6/Vbkqw
-   cVeHydnexUc4U2pJdFLZq/iPD2eMl4hd0aIlKqt5qpTOyz1k/V4ThuD44
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="407148663"
-X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="407148663"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 21:58:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="688752631"
-X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="688752631"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 03 Apr 2023 21:58:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pjYk8-000PCs-0r;
-        Tue, 04 Apr 2023 04:58:04 +0000
-Date:   Tue, 4 Apr 2023 12:57:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hao Luo <haoluo@google.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:54:1: warning:
- no previous prototype for 'bpf_testmod_test_btf_type_tag_percpu_1'
-Message-ID: <202304041254.hj58GxCB-lkp@intel.com>
+        Tue, 4 Apr 2023 01:06:11 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F9F1BDB;
+        Mon,  3 Apr 2023 22:06:10 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (fp76f193f3.tkyc206.ap.nuro.jp [118.241.147.243])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A4002DD;
+        Tue,  4 Apr 2023 07:06:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1680584768;
+        bh=9GWrMYDb3U4UEOCVUm6RA9iWuelR9UXKNj3mKCqSmK4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y5dsM6kiUs2Vsy1BURmaChruAsivnCgHFUCDZsmQQ9J+XHCQJIX6ppQm0JodF3iMo
+         tZn5XgR16GJ/W/pZcEdlF3Vb9RugFIj7dTrd1ugQwsZTgOWoIhwpe+Xgd/DtRKpl30
+         /W60QDWAEaFn/YPuVdnfrGMi2i8IPLH+vQW+JIVo=
+Date:   Tue, 4 Apr 2023 08:06:15 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jack Zhu <jack.zhu@starfivetech.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
+Subject: Re: [PATCH v3 6/9] media: cadence: Add operation on reset
+Message-ID: <20230404050615.GN16648@pendragon.ideasonboard.com>
+References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
+ <20230331121826.96973-7-jack.zhu@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230331121826.96973-7-jack.zhu@starfivetech.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   148341f0a2f53b5e8808d093333d85170586a15d
-commit: 50c6b8a9aea2b8dc6c4ffb0cc502b94f7f57a0dc selftests/bpf: Add a test for btf_type_tag "percpu"
-date:   1 year, 1 month ago
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=50c6b8a9aea2b8dc6c4ffb0cc502b94f7f57a0dc
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 50c6b8a9aea2b8dc6c4ffb0cc502b94f7f57a0dc
-        make O=/tmp/kselftest headers
-        make O=/tmp/kselftest -C tools/testing/selftests
+Hi Jack,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304041254.hj58GxCB-lkp@intel.com/
+Thank you for the patch.
 
-All warnings (new ones prefixed by >>):
+On Fri, Mar 31, 2023 at 08:18:23PM +0800, Jack Zhu wrote:
+> Add operation on reset for Cadence MIPI-CSI2 RX Controller.
+> 
+> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+> ---
+>  drivers/media/platform/cadence/cdns-csi2rx.c | 30 ++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+> index cc3ebb0d96f6..a1555cedb349 100644
+> --- a/drivers/media/platform/cadence/cdns-csi2rx.c
+> +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/of_graph.h>
+>  #include <linux/phy/phy.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/reset.h>
+>  #include <linux/slab.h>
+>  
+>  #include <media/v4l2-ctrls.h>
+> @@ -68,6 +69,9 @@ struct csi2rx_priv {
+>  	struct clk			*sys_clk;
+>  	struct clk			*p_clk;
+>  	struct clk			*pixel_clk[CSI2RX_STREAMS_MAX];
+> +	struct reset_control		*sys_rst;
+> +	struct reset_control		*p_rst;
+> +	struct reset_control		*pixel_rst[CSI2RX_STREAMS_MAX];
+>  	struct phy			*dphy;
+>  
+>  	u8				lanes[CSI2RX_LANES_MAX];
+> @@ -112,6 +116,7 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+>  	if (ret)
+>  		return ret;
+>  
+> +	reset_control_deassert(csi2rx->p_rst);
+>  	csi2rx_reset(csi2rx);
+>  
+>  	reg = csi2rx->num_lanes << 8;
+> @@ -154,6 +159,8 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+>  		if (ret)
+>  			goto err_disable_pixclk;
 
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:23:1: warning: no previous prototype for 'bpf_testmod_test_mod_kfunc' [-Wmissing-prototypes]
-      23 | bpf_testmod_test_mod_kfunc(int i)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:41:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_user_1' [-Wmissing-prototypes]
-      41 | bpf_testmod_test_btf_type_tag_user_1(struct bpf_testmod_btf_type_tag_1 __user *arg) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:49:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_user_2' [-Wmissing-prototypes]
-      49 | bpf_testmod_test_btf_type_tag_user_2(struct bpf_testmod_btf_type_tag_2 *arg) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:54:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_percpu_1' [-Wmissing-prototypes]
-      54 | bpf_testmod_test_btf_type_tag_percpu_1(struct bpf_testmod_btf_type_tag_1 __percpu *arg) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:59:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_percpu_2' [-Wmissing-prototypes]
-      59 | bpf_testmod_test_btf_type_tag_percpu_2(struct bpf_testmod_btf_type_tag_3 *arg) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:63:14: warning: no previous prototype for 'bpf_testmod_loop_test' [-Wmissing-prototypes]
-      63 | noinline int bpf_testmod_loop_test(int n)
-         |              ^~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:75:30: warning: no previous prototype for 'bpf_testmod_return_ptr' [-Wmissing-prototypes]
-      75 | __weak noinline struct file *bpf_testmod_return_ptr(int arg)
-         |                              ^~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:92:1: warning: no previous prototype for 'bpf_testmod_test_read' [-Wmissing-prototypes]
-      92 | bpf_testmod_test_read(struct file *file, struct kobject *kobj,
-         | ^~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:128:1: warning: no previous prototype for 'bpf_testmod_test_write' [-Wmissing-prototypes]
-     128 | bpf_testmod_test_write(struct file *file, struct kobject *kobj,
-         | ^~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.o: warning: objtool: bpf_testmod_return_ptr()+0x15: unreachable instruction
+The loop after the err_disable_pixclk label should assert the
+pixel_rst[i] reset.
 
+>  
+> +		reset_control_deassert(csi2rx->pixel_rst[i]);
+> +
+>  		writel(CSI2RX_STREAM_CFG_FIFO_MODE_LARGE_BUF,
+>  		       csi2rx->base + CSI2RX_STREAM_CFG_REG(i));
+>  
+> @@ -169,6 +176,7 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+>  	if (ret)
+>  		goto err_disable_pixclk;
+>  
+> +	reset_control_deassert(csi2rx->sys_rst);
+>  	clk_disable_unprepare(csi2rx->p_clk);
+>  
+>  	return 0;
+> @@ -188,14 +196,17 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+>  	unsigned int i;
+>  
+>  	clk_prepare_enable(csi2rx->p_clk);
+> +	reset_control_assert(csi2rx->sys_rst);
+>  	clk_disable_unprepare(csi2rx->sys_clk);
+>  
+>  	for (i = 0; i < csi2rx->max_streams; i++) {
+>  		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
+>  
+> +		reset_control_assert(csi2rx->pixel_rst[i]);
+>  		clk_disable_unprepare(csi2rx->pixel_clk[i]);
+>  	}
+>  
+> +	reset_control_assert(csi2rx->p_rst);
+>  	clk_disable_unprepare(csi2rx->p_clk);
+>  
+>  	if (v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, false))
+> @@ -299,6 +310,17 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+>  		return PTR_ERR(csi2rx->p_clk);
+>  	}
+>  
+> +	csi2rx->sys_rst =
+> +		devm_reset_control_get_optional_exclusive(&pdev->dev,
+> +							  "sys_rst");
 
-vim +/bpf_testmod_test_btf_type_tag_percpu_1 +54 tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+You can write this on two lines:
 
-    21	
-    22	noinline void
-  > 23	bpf_testmod_test_mod_kfunc(int i)
-    24	{
-    25		*(int *)this_cpu_ptr(&bpf_testmod_ksym_percpu) = i;
-    26	}
-    27	
-    28	struct bpf_testmod_btf_type_tag_1 {
-    29		int a;
-    30	};
-    31	
-    32	struct bpf_testmod_btf_type_tag_2 {
-    33		struct bpf_testmod_btf_type_tag_1 __user *p;
-    34	};
-    35	
-    36	struct bpf_testmod_btf_type_tag_3 {
-    37		struct bpf_testmod_btf_type_tag_1 __percpu *p;
-    38	};
-    39	
-    40	noinline int
-  > 41	bpf_testmod_test_btf_type_tag_user_1(struct bpf_testmod_btf_type_tag_1 __user *arg) {
-    42		BTF_TYPE_EMIT(func_proto_typedef);
-    43		BTF_TYPE_EMIT(func_proto_typedef_nested1);
-    44		BTF_TYPE_EMIT(func_proto_typedef_nested2);
-    45		return arg->a;
-    46	}
-    47	
-    48	noinline int
-    49	bpf_testmod_test_btf_type_tag_user_2(struct bpf_testmod_btf_type_tag_2 *arg) {
-    50		return arg->p->a;
-    51	}
-    52	
-    53	noinline int
-  > 54	bpf_testmod_test_btf_type_tag_percpu_1(struct bpf_testmod_btf_type_tag_1 __percpu *arg) {
-    55		return arg->a;
-    56	}
-    57	
-    58	noinline int
-  > 59	bpf_testmod_test_btf_type_tag_percpu_2(struct bpf_testmod_btf_type_tag_3 *arg) {
-    60		return arg->p->a;
-    61	}
-    62	
+	csi2rx->sys_rst = devm_reset_control_get_optional_exclusive(&pdev->dev,
+								    "sys_rst");
+> +	if (IS_ERR(csi2rx->sys_rst))
+> +		return PTR_ERR(csi2rx->sys_rst);
+> +
+> +	csi2rx->p_rst =
+> +		devm_reset_control_get_optional_exclusive(&pdev->dev, "p_rst");
+
+And here,
+
+	csi2rx->p_rst = devm_reset_control_get_optional_exclusive(&pdev->dev,
+								  "p_rst");
+
+would be the same number of lines but more readable in my opinion.
+
+> +	if (IS_ERR(csi2rx->p_rst))
+> +		return PTR_ERR(csi2rx->p_rst);
+> +
+>  	csi2rx->dphy = devm_phy_optional_get(&pdev->dev, "dphy");
+>  	if (IS_ERR(csi2rx->dphy)) {
+>  		dev_err(&pdev->dev, "Couldn't get external D-PHY\n");
+> @@ -350,6 +372,7 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+>  
+>  	for (i = 0; i < csi2rx->max_streams; i++) {
+>  		char clk_name[16];
+> +		char rst_name[16];
+
+You don't need two variables, you can rename clk_name to name, and use
+it for both clk and rst.
+
+With these small issues addressed you can add my
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+in the next version.
+
+>  
+>  		snprintf(clk_name, sizeof(clk_name), "pixel_if%u_clk", i);
+>  		csi2rx->pixel_clk[i] = devm_clk_get(&pdev->dev, clk_name);
+> @@ -357,6 +380,13 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+>  			dev_err(&pdev->dev, "Couldn't get clock %s\n", clk_name);
+>  			return PTR_ERR(csi2rx->pixel_clk[i]);
+>  		}
+> +
+> +		snprintf(rst_name, sizeof(rst_name), "pixel_if%u_rst", i);
+> +		csi2rx->pixel_rst[i] =
+> +			devm_reset_control_get_optional_exclusive(&pdev->dev,
+> +								  rst_name);
+> +		if (IS_ERR(csi2rx->pixel_rst[i]))
+> +			return PTR_ERR(csi2rx->pixel_rst[i]);
+>  	}
+>  
+>  	return 0;
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Regards,
+
+Laurent Pinchart
