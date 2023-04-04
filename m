@@ -2,92 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F9D6D5CCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC986D5CD1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234425AbjDDKMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 06:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
+        id S233952AbjDDKN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 06:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbjDDKMU (ORCPT
+        with ESMTP id S234410AbjDDKNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 06:12:20 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F8A30F5
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:12:10 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id r11so128415978edd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 03:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680603128;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xTheVrrzZgI2UatHNgx/iTW24+oxWTi/GNFmjmsvjoQ=;
-        b=ao+ZBWMwwB/pLABUItwEupGXl8poQ6XMbDDiXZ0A7majfEF3uLeXu7lGivbuFdu9IK
-         1oMth/fUFT6Ky5hxR6rlbYWGlefSkRJ8bZevmF2xdkO4G86CP9On0eqSVAFE2mg2qF6N
-         oqxywNkgi9sS8by7ChDgBpS2u/8XeFV04cIGjhSRzAjGFWqtXf3/jVHUgQT8gD7IdMPB
-         OzfqH4qdG/b83IJEzNqEyKM8SKNcfXwxwEiTm704wcvZJAL+a/ai1M2MYjDDly39ulrW
-         mq0pTt2VDD6PJjrJ5Ct15h39hHw7NdlgJ006gZphGbRbuNFbWz6les2sAWXHUsYDQnoL
-         VPrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680603128;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xTheVrrzZgI2UatHNgx/iTW24+oxWTi/GNFmjmsvjoQ=;
-        b=gGDDEXVr1qVw8ImiPq972+mS5Wl1QVIuYUMlZP4Wf1krLz2HZ9+944NoNoebPtREDi
-         h6iSOmbEzyCPM+1xdBoIRp5a65tf4xJDUgGmnvtliXo25WpkidkwQoG3UxwPnyFkximp
-         5tMLDWDEuJmS6+mWVZhJpSVy0hvuf8hc4KSd24aNOAfd3nMZ6wLb/nnoqEj5+2ixV1Kg
-         Y/ITW3X3VbI1/1DgpaWP24x2jnJQ3ZxuV6EZLkkhiig8nCTwlv3QvMQfk1cu3iSHbg6S
-         +UiLJdt6sVuvloO2t6RD2thJczfQbt2vWve1/xEk5ANUCuug5fTiBPh3NZYxc6vrGfo4
-         8+WA==
-X-Gm-Message-State: AAQBX9fW0pts5UgAZIWHiDCnmUhGcb6qQ56e+pN1s8GSD0r4R658TXwh
-        Ug8Pi73szlKkN+uJVUXjZM9pfw==
-X-Google-Smtp-Source: AKy350bDKkBioiP7BMZu/6m8PZU3hw/V+yKQqTf4KCF46eRor84VbeJ0prTRJhc1ldSMylybV2yl/g==
-X-Received: by 2002:a05:6402:2788:b0:500:2cc6:36d5 with SMTP id b8-20020a056402278800b005002cc636d5mr21154431ede.8.1680603128556;
-        Tue, 04 Apr 2023 03:12:08 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:99ed:4575:6001:8bda? ([2a02:810d:15c0:828:99ed:4575:6001:8bda])
-        by smtp.gmail.com with ESMTPSA id z21-20020a056402275500b00501d73cfc86sm5647456edd.9.2023.04.04.03.12.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 03:12:08 -0700 (PDT)
-Message-ID: <c816d432-26b8-2655-adf1-4b72b8645215@linaro.org>
-Date:   Tue, 4 Apr 2023 12:12:06 +0200
+        Tue, 4 Apr 2023 06:13:14 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5F210C7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:12:52 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pjdeQ-0007TV-5l; Tue, 04 Apr 2023 12:12:30 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pjdeM-008tQd-UU; Tue, 04 Apr 2023 12:12:26 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pjdeM-005nXc-BU; Tue, 04 Apr 2023 12:12:26 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        UNGLinuxDriver@microchip.com
+Subject: [PATCH net-next v1 1/1] net: dsa: microchip: ksz8: Make flow control, speed, and duplex on CPU port configurable
+Date:   Tue,  4 Apr 2023 12:12:25 +0200
+Message-Id: <20230404101225.1382059-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 2/6] dt-bindings: ufs: qcom: Add ICE phandle
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-References: <20230403200530.2103099-1-abel.vesa@linaro.org>
- <20230403200530.2103099-3-abel.vesa@linaro.org>
- <9fc90c8b-9234-84fa-7dab-fee9de2b9813@linaro.org>
- <ZCvm3fzSh8owVDdc@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZCvm3fzSh8owVDdc@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,42 +59,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2023 10:59, Abel Vesa wrote:
-> On 23-04-04 07:41:55, Krzysztof Kozlowski wrote:
->> On 03/04/2023 22:05, Abel Vesa wrote:
->>> Starting with SM8550, the ICE will have its own devicetree node
->>> so add the qcom,ice property to reference it.
->>>
->>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->>> ---
->>>
->>> The v4 is here:
->>> https://lore.kernel.org/all/20230327134734.3256974-4-abel.vesa@linaro.org/
->>>
->>> Changes since v4:
->>>  * Added check for sm8550 compatible w.r.t. qcom,ice in order to enforce
->>>    it while making sure none of the other platforms are allowed to use it
->>
->> Why?
-> 
-> SM8550 will be the first platform to use the new DT bindings w.r.t ICE.
+Allow flow control, speed, and duplex settings on the CPU port to be
+configurable. Previously, the speed and duplex relied on default switch
+values, which limited flexibility. Additionally, flow control was
+hardcoded and only functional in duplex mode. This update enhances the
+configurability of these parameters.
 
-This I understand, but why other platforms cannot use it?
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/net/dsa/microchip/ksz8.h       |  4 ++
+ drivers/net/dsa/microchip/ksz8795.c    | 54 ++++++++++++++++++++++----
+ drivers/net/dsa/microchip/ksz_common.c |  1 +
+ 3 files changed, 51 insertions(+), 8 deletions(-)
 
-> 
->>
->> Also, this does not solve my previous question still.
-> 
-> Well, the clocks are not added for the a few platforms (which include
-> SM8550). Same for 'ice' reg range.. So the only thing left is to
-> enforce the qcom,ice property availability only for SM8550. I believe
-> it solves the mutual exclusiveness of the "ice" reg range along with the
-> clocks versus the qcom,ice property, by enforcing at compatible level.
-
-Ah, I think I understand. That would work except I don't understand why
-enforcing qcom,qce only for specific, new SoCs. Assuming it is a correct
-hardware representation, we want it for everyone, don't we?
-
-Best regards,
-Krzysztof
+diff --git a/drivers/net/dsa/microchip/ksz8.h b/drivers/net/dsa/microchip/ksz8.h
+index ea05abfbd51d..9bb19764fa33 100644
+--- a/drivers/net/dsa/microchip/ksz8.h
++++ b/drivers/net/dsa/microchip/ksz8.h
+@@ -58,5 +58,9 @@ int ksz8_switch_detect(struct ksz_device *dev);
+ int ksz8_switch_init(struct ksz_device *dev);
+ void ksz8_switch_exit(struct ksz_device *dev);
+ int ksz8_change_mtu(struct ksz_device *dev, int port, int mtu);
++void ksz8_phylink_mac_link_up(struct ksz_device *dev, int port,
++			      unsigned int mode, phy_interface_t interface,
++			      struct phy_device *phydev, int speed, int duplex,
++			      bool tx_pause, bool rx_pause);
+ 
+ #endif
+diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
+index d0e3f6e2db1d..8917f22f90d2 100644
+--- a/drivers/net/dsa/microchip/ksz8795.c
++++ b/drivers/net/dsa/microchip/ksz8795.c
+@@ -1321,12 +1321,52 @@ void ksz8_config_cpu_port(struct dsa_switch *ds)
+ 			if (remote & KSZ8_PORT_FIBER_MODE)
+ 				p->fiber = 1;
+ 		}
+-		if (p->fiber)
+-			ksz_port_cfg(dev, i, regs[P_STP_CTRL],
+-				     PORT_FORCE_FLOW_CTRL, true);
+-		else
+-			ksz_port_cfg(dev, i, regs[P_STP_CTRL],
+-				     PORT_FORCE_FLOW_CTRL, false);
++	}
++}
++
++void ksz8_phylink_mac_link_up(struct ksz_device *dev, int port,
++			      unsigned int mode, phy_interface_t interface,
++			      struct phy_device *phydev, int speed, int duplex,
++			      bool tx_pause, bool rx_pause)
++{
++	struct dsa_switch *ds = dev->ds;
++	struct ksz_port *p;
++	u8 ctrl = 0;
++
++	p = &dev->ports[port];
++
++	if (dsa_upstream_port(ds, port)) {
++		u8 mask = SW_HALF_DUPLEX_FLOW_CTRL | SW_HALF_DUPLEX |
++			SW_FLOW_CTRL | SW_10_MBIT;
++
++		if (duplex) {
++			if (tx_pause && rx_pause)
++				ctrl |= SW_FLOW_CTRL;
++		} else {
++			ctrl |= SW_HALF_DUPLEX;
++			if (tx_pause && rx_pause)
++				ctrl |= SW_HALF_DUPLEX_FLOW_CTRL;
++		}
++
++		if (speed == SPEED_10)
++			ctrl |= SW_10_MBIT;
++
++		ksz_rmw8(dev, REG_SW_CTRL_4, mask, ctrl);
++
++		p->phydev.speed = speed;
++	} else {
++		const u16 *regs = dev->info->regs;
++
++		if (duplex) {
++			if (tx_pause && rx_pause)
++				ctrl |= PORT_FORCE_FLOW_CTRL;
++		} else {
++			if (tx_pause && rx_pause)
++				ctrl |= PORT_BACK_PRESSURE;
++		}
++
++		ksz_rmw8(dev, regs[P_STP_CTRL], PORT_FORCE_FLOW_CTRL |
++			 PORT_BACK_PRESSURE, ctrl);
+ 	}
+ }
+ 
+@@ -1380,8 +1420,6 @@ int ksz8_setup(struct dsa_switch *ds)
+ 	 */
+ 	ds->vlan_filtering_is_global = true;
+ 
+-	ksz_cfg(dev, S_REPLACE_VID_CTRL, SW_FLOW_CTRL, true);
+-
+ 	/* Enable automatic fast aging when link changed detected. */
+ 	ksz_cfg(dev, S_LINK_AGING_CTRL, SW_LINK_AUTO_AGING, true);
+ 
+diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+index 5568d7b22135..93131347ad98 100644
+--- a/drivers/net/dsa/microchip/ksz_common.c
++++ b/drivers/net/dsa/microchip/ksz_common.c
+@@ -208,6 +208,7 @@ static const struct ksz_dev_ops ksz8_dev_ops = {
+ 	.mirror_add = ksz8_port_mirror_add,
+ 	.mirror_del = ksz8_port_mirror_del,
+ 	.get_caps = ksz8_get_caps,
++	.phylink_mac_link_up = ksz8_phylink_mac_link_up,
+ 	.config_cpu_port = ksz8_config_cpu_port,
+ 	.enable_stp_addr = ksz8_enable_stp_addr,
+ 	.reset = ksz8_reset_switch,
+-- 
+2.39.2
 
