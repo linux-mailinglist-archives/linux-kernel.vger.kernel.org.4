@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8786D59D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115346D59DF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233984AbjDDHl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 03:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
+        id S233775AbjDDHmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjDDHl4 (ORCPT
+        with ESMTP id S233926AbjDDHmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 03:41:56 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B2B10EA;
-        Tue,  4 Apr 2023 00:41:55 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so35232138pjt.2;
-        Tue, 04 Apr 2023 00:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680594115;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RLZXH9LKQ7+V9D+5CMfFVNwTnI59Wm1ssSfTYrYAXlw=;
-        b=EK6HPTDKWjHlPWtWEQiBLeIj0HG/XbgwL0my/OLwgDd2a8/bbSuWJLGOMEgTRSbAyj
-         6G1q9JpHdgnJazUvFIsEwn83D5M/NuWtcnCMjEj2VS9iEh/G4dODb1tCozuvrM1wWX82
-         yOC+aa0CwWvQkrrP1GBjHtRynyGfStF7davUQSuEefNdATdWixJ8DoEloVEQXO8WxHvy
-         gbIQqZQZIoa276UC+SmrqHN2lcJVpG1PmOJ0HMTO88Rw1IEY64lgUO4tW1qIXa0YDvRh
-         G5ym5Ej6wTmYTjki5hn2GtjOLjR31gGoEgDVeaBj7a3rjw3sg6k2VIFVG/1bWzy/+9h0
-         0Rww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680594115;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RLZXH9LKQ7+V9D+5CMfFVNwTnI59Wm1ssSfTYrYAXlw=;
-        b=wCUzStAK6hgECGGYMymU2wip2wl8jb4hHpJWn7ysBAwhmYkwWEbh/JwwL2pxIIfQrs
-         4RNpy9i7AtmqcTYb4C4TAJefCe04cUJJWLIvxF4OrNL4kV7tnijQ5DxgrcJL5eqLyOI6
-         WKgGzLnn21W/ZKkY38nICQpEVZf4CjVS6nO72d8g9SMkxZ6haiVshXuJGRU56pBtTLKG
-         fNBhiEjZkd81cLjgh/FL7WQvqxMK+AxQ0Qq3Ww8anz/k8RFUlLRql28chKY1GAWx3Ota
-         1vr3hU++UVzcsNBu60EqsiaRtp3I3Uv9kiDcCtRzeWVCJgBasd3zTbPWU6jlxumWFjkw
-         icwg==
-X-Gm-Message-State: AAQBX9c4/rldnuJ9GBKlT4L5TE5CfZPjs0OjVR92KSW6tY60pzavEK7D
-        xwSJIChVsX3+7W4teeCmS1gKAboyRiOo1w==
-X-Google-Smtp-Source: AKy350blMTRFDIdKJ/XpubXFkEOOGGoCSPcjrA8g7Uhqh/eMU1v9iP2DFkO9UrzAn+6d+pnClqSc0g==
-X-Received: by 2002:a05:6a20:4e13:b0:c6:c85f:da5b with SMTP id gk19-20020a056a204e1300b000c6c85fda5bmr1479492pzb.55.1680594114951;
-        Tue, 04 Apr 2023 00:41:54 -0700 (PDT)
-Received: from Negi ([207.151.52.77])
-        by smtp.gmail.com with ESMTPSA id b24-20020a631b18000000b0050f74d435e6sm6975617pgb.18.2023.04.04.00.41.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 00:41:54 -0700 (PDT)
-From:   Soumya Negi <soumya.negi97@gmail.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Soumya Negi <soumya.negi97@gmail.com>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Input: Check sanity of pipe in pegasus_probe()
-Date:   Tue,  4 Apr 2023 00:41:45 -0700
-Message-Id: <20230404074145.11523-1-soumya.negi97@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 4 Apr 2023 03:42:19 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BD010FF;
+        Tue,  4 Apr 2023 00:42:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1680594132;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qOZ8v52pVL5DD+Gn0MGYLxezIgSQkcNGsAlQQVJ5uHQ=;
+        b=rczpZOCJplcg3kGUzumWu10j9pyrmtEYX0tOTEJGulUwch5PZbja4Y7k1nGSFPmkOAuUec
+        LmPGA1KUU98IXrRquU315uAcPDBJOcbEcGh3JgYfgm30xhfTgME9c6io7kooRf0O44FfJ7
+        axFFQyms00TieZjobmvfgM8I9oqO6yw=
+Message-ID: <c9c9fa881aeda36862d0ad8c5a46472e0e363531.camel@crapouillou.net>
+Subject: Re: [PATCH v3 01/11] dmaengine: Add API function
+ dmaengine_prep_slave_dma_array()
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Date:   Tue, 04 Apr 2023 09:42:11 +0200
+In-Reply-To: <20230404015944.502-1-hdanton@sina.com>
+References: <20230403154800.215924-1-paul@crapouillou.net>
+         <20230404015944.502-1-hdanton@sina.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix WARNING in pegasus_open/usb_submit_urb
-Syzbot bug: https://syzkaller.appspot.com/bug?id=bbc107584dcf3262253ce93183e51f3612aaeb13
-
-Warning raised because pegasus_driver submits transfer request for
-bogus URB(pipe type does not match endpoint type). Add sanity check at
-probe time for pipe value extracted from endpoint descriptor. Probe
-will fail if sanity check fails.
-
-Reported-and-tested-by: syzbot+04ee0cb4caccaed12d78@syzkaller.appspotmail.com
-Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
----
- drivers/input/tablet/pegasus_notetaker.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/input/tablet/pegasus_notetaker.c b/drivers/input/tablet/pegasus_notetaker.c
-index d836d3dcc6a2..a68da2988f9c 100644
---- a/drivers/input/tablet/pegasus_notetaker.c
-+++ b/drivers/input/tablet/pegasus_notetaker.c
-@@ -296,6 +296,12 @@ static int pegasus_probe(struct usb_interface *intf,
- 	pegasus->intf = intf;
- 
- 	pipe = usb_rcvintpipe(dev, endpoint->bEndpointAddress);
-+	/* Sanity check that pipe's type matches endpoint's type */
-+	if (usb_pipe_type_check(dev, pipe)) {
-+		error = -EINVAL;
-+		goto err_free_mem;
-+	}
-+
- 	pegasus->data_len = usb_maxpacket(dev, pipe);
- 
- 	pegasus->data = usb_alloc_coherent(dev, pegasus->data_len, GFP_KERNEL,
--- 
-2.17.1
+SGkgSGlsbGYsCgpMZSBtYXJkaSAwNCBhdnJpbCAyMDIzIMOgIDA5OjU5ICswODAwLCBIaWxsZiBE
+YW50b24gYSDDqWNyaXTCoDoKPiBPbiAzIEFwciAyMDIzIDE3OjQ3OjUwICswMjAwIFBhdWwgQ2Vy
+Y3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0Pgo+ID4gVGhpcyBmdW5jdGlvbiBjYW4gYmUgdXNl
+ZCB0byBpbml0aWF0ZSBhIHNjYXR0ZXItZ2F0aGVyIERNQSB0cmFuc2Zlcgo+ID4gd2hlcmUgdGhl
+IERNQSBhZGRyZXNzZXMgYW5kIGxlbmd0aHMgYXJlIGxvY2F0ZWQgaW5zaWRlIGFycmF5cy4KPiA+
+IAo+ID4gVGhlIG1ham9yIGRpZmZlcmVuY2Ugd2l0aCBkbWFlbmdpbmVfcHJlcF9zbGF2ZV9zZygp
+IGlzIHRoYXQgaXQKPiA+IHN1cHBvcnRzCj4gPiBzcGVjaWZ5aW5nIHRoZSBsZW5ndGhzIG9mIGVh
+Y2ggRE1BIHRyYW5zZmVyOyBhcyB0cnlpbmcgdG8gb3ZlcnJpZGUKPiA+IHRoZQo+ID4gbGVuZ3Ro
+IG9mIHRoZSB0cmFuc2ZlciB3aXRoIGRtYWVuZ2luZV9wcmVwX3NsYXZlX3NnKCkgaXMgYSB2ZXJ5
+Cj4gPiB0ZWRpb3VzCj4gPiBwcm9jZXNzLiBUaGUgaW50cm9kdWN0aW9uIG9mIGEgbmV3IEFQSSBm
+dW5jdGlvbiBpcyBhbHNvIGp1c3RpZmllZAo+ID4gYnkgdGhlCj4gPiBmYWN0IHRoYXQgc2NhdHRl
+cmxpc3RzIGFyZSBvbiB0aGVpciB3YXkgb3V0Lgo+IAo+IEdpdmVuIHNnJ3Mgd2F5b3V0IGFuZCBj
+b25jZXB0dWFsbHkgaW92ZWMgYW5kIGt2ZWMgKGluCj4gaW5jbHVkZS9saW51eC91aW8uaCksCj4g
+d2hhdCB5b3UgYWRkIHNob3VsZCBoYXZlIGJlZW4gZG1hX3ZlYyB0byBlYXNlIHBlb3BsZSBtYWtp
+bmcgdXNlIG9mCj4gaXQuCj4gCj4gwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBkbWFfdmVjIHsKPiDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRtYV9hZGRyX3TCoMKgwqDCoMKgwqBhZGRy
+Owo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc2l6ZV90wqDCoMKgwqDCoMKgwqDC
+oMKgwqBsZW47Cj4gwqDCoMKgwqDCoMKgwqDCoH07CgpXZWxsIGl0J3Mgbm90IHRvbyBsYXRlIDsp
+CgpUaGFua3MgZm9yIHRoZSBmZWVkYmFjay4KCkNoZWVycywKLVBhdWwKCj4gPiAKPiA+IFNpZ25l
+ZC1vZmYtYnk6IFBhdWwgQ2VyY3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0Pgo+ID4gCj4gPiAt
+LS0KPiA+IHYzOiBOZXcgcGF0Y2gKPiA+IC0tLQo+ID4gwqBpbmNsdWRlL2xpbnV4L2RtYWVuZ2lu
+ZS5oIHwgMTYgKysrKysrKysrKysrKysrKwo+ID4gwqAxIGZpbGUgY2hhbmdlZCwgMTYgaW5zZXJ0
+aW9ucygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9kbWFlbmdpbmUuaCBi
+L2luY2x1ZGUvbGludXgvZG1hZW5naW5lLmgKPiA+IGluZGV4IGMzNjU2ZTU5MDIxMy4uNjJlZmEy
+OGMwMDlhIDEwMDY0NAo+ID4gLS0tIGEvaW5jbHVkZS9saW51eC9kbWFlbmdpbmUuaAo+ID4gKysr
+IGIvaW5jbHVkZS9saW51eC9kbWFlbmdpbmUuaAo+ID4gQEAgLTkxMiw2ICs5MTIsMTEgQEAgc3Ry
+dWN0IGRtYV9kZXZpY2Ugewo+ID4gwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBkbWFfYXN5bmNfdHhf
+ZGVzY3JpcHRvcgo+ID4gKigqZGV2aWNlX3ByZXBfZG1hX2ludGVycnVwdCkoCj4gPiDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBkbWFfY2hhbiAqY2hhbiwgdW5zaWduZWQg
+bG9uZyBmbGFncyk7Cj4gPiDCoAo+ID4gK8KgwqDCoMKgwqDCoMKgc3RydWN0IGRtYV9hc3luY190
+eF9kZXNjcmlwdG9yCj4gPiAqKCpkZXZpY2VfcHJlcF9zbGF2ZV9kbWFfYXJyYXkpKAo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBkbWFfY2hhbiAqY2hhbiwgZG1hX2Fk
+ZHJfdCAqYWRkcnMsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc2l6ZV90ICps
+ZW5ndGhzLCBzaXplX3QgbmIsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZW51
+bSBkbWFfdHJhbnNmZXJfZGlyZWN0aW9uIGRpcmVjdGlvbiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqB1bnNpZ25lZCBsb25nIGZsYWdzKTsKPiAKPiBUaGVuIHRoZSBjYWxsYmFj
+ayBsb29rcyBsaWtlCj4gCj4gwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBkbWFfYXN5bmNfdHhfZGVz
+Y3JpcHRvciAqKCpkZXZpY2VfcHJlcF9zbGF2ZV92ZWMpKAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgc3RydWN0IGRtYV9jaGFuICpjaGFuLAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgc3RydWN0IGRtYV92ZWMgKnZlYywKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGludCBudmVjLAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZW51
+bSBkbWFfdHJhbnNmZXJfZGlyZWN0aW9uIGRpcmVjdGlvbiwKPiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoHVuc2lnbmVkIGxvbmcgZmxhZ3MpOwoK
 
