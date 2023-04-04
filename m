@@ -2,116 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5076D581A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261016D581C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbjDDFmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 01:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
+        id S233301AbjDDFnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 01:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbjDDFmA (ORCPT
+        with ESMTP id S231878AbjDDFm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 01:42:00 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936781FD6
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 22:41:58 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id t10so125741485edd.12
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 22:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680586917;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vkLggO8KDDtQGSO4O++zqyqlroGLRt9bsTLK9+jSmi4=;
-        b=PeMTuTOEu4F6ccICdsCs1oZoXTmsSvgH4YGAk/wgwuHsIb6xd112MpRWI2IvOINQ28
-         zqVwSxy2xnNtWBZ8mhTaSe8fsSWVm8g2tnDCY1PAsgCHj15PSiCx/9iu+ssXAhpm9aXq
-         KBgsTq/OQARkYgvmvMn9P9xol46hFYOkJgjzqfusG3L6Atztgmhqw0fzxQQtX+3wIm4g
-         bkvaFkzgNQGpjUs5Z2UPeKQVzpPrB476NmKvVmpLK2k3vvJ5VcgOCc57RqyX+jIxhKTF
-         4N0+a+5P/aDUNB1c9y7FANMFybV/7xw8QTZvM2STYwxluSKFXZP8OU4ju7PdFoz8n5U5
-         ZsSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680586917;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vkLggO8KDDtQGSO4O++zqyqlroGLRt9bsTLK9+jSmi4=;
-        b=hVzRZEqISiKnxOo6rMPef0ul9tONpYDAzoKxUVRvRImt6WvKpjQRHmT3pvYaDRiq6h
-         9c2MMm604vuvWNkYLoeDfJE7vFbjePd+SVEp8lzjypGDdCvJFdiUU57ZxoX0XLpcQldg
-         HGG+ffHFZjDXHc75wMgMm5RRgxwODGrRPfA+bY4Xeed9ey2iw022XyTHx8bdg/1u9+VV
-         C5NqsC9/mTs0wioR/DtQtiWsYTEmTytgxhcSReJkRpGm7Uw4OlQwXxAhKRZL+FzouJ65
-         s8HTnS2zpQ5ZuUQaadkAgojS1MyZjLhutt7kY8pqILN/UuGUaBZSR9xydGa+xF6dSxOW
-         TjKA==
-X-Gm-Message-State: AAQBX9c0uU6cRSp0l4yfZpMUGVtVmVSzCKKg3zCiQZugZRFNK85FN3Cx
-        wL7yjKBM8ta9YDGWA1G3fagaFw==
-X-Google-Smtp-Source: AKy350alQEuK+jaEwiAUarG9JUGGPd9TSw6AtgvsRBzfuLEAJRvSOasjLJIY0F94lySGnxGRn2gWtg==
-X-Received: by 2002:a17:906:33c9:b0:92b:f118:ef32 with SMTP id w9-20020a17090633c900b0092bf118ef32mr1177803eja.48.1680586917048;
-        Mon, 03 Apr 2023 22:41:57 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:233a:5c18:b527:381e? ([2a02:810d:15c0:828:233a:5c18:b527:381e])
-        by smtp.gmail.com with ESMTPSA id ga3-20020a170906b84300b0092595899cfcsm5442421ejb.53.2023.04.03.22.41.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 22:41:56 -0700 (PDT)
-Message-ID: <9fc90c8b-9234-84fa-7dab-fee9de2b9813@linaro.org>
-Date:   Tue, 4 Apr 2023 07:41:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 2/6] dt-bindings: ufs: qcom: Add ICE phandle
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 4 Apr 2023 01:42:58 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC215B6;
+        Mon,  3 Apr 2023 22:42:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PrGrH6njZz4x91;
+        Tue,  4 Apr 2023 15:42:55 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680586976;
+        bh=mMvQ96dSAogDYJvyAYX8TyYV4C1KYIk2VCoNZGW3UDY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AMsJNLazpIAYFVP/2i0b+gdGJR1aflCLdHKeAZh/I1jJBTyH3RSNLeXi/2YHudrCx
+         jmspQylp+HFY6EUBtPNh3xZxc02UVDE2Chz/evCslmZ4+eBsUKmI5Pq8OVm+ejcA0/
+         9d7ocQ01FVuEHdFFJSd4R/HcLEL1Xn/wbww9itVvHXQuHwVsah4/fzflpD6LPZ00gG
+         3E84AYALXkSumaqSNvP9mrz2lVEi1R8VYKyC0vjCSA1AIpUpVvCXnS+1BPxiZpxvMw
+         9djDtjz2rHLqU0cdsou8UCvfZZ7tWKq/bJfz4MI9ze9hbCpQHfwn5Xc3S6SUNkXqBE
+         D33M/i46xuhvQ==
+Date:   Tue, 4 Apr 2023 15:42:54 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Bastien Nocera <hadess@hadess.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-References: <20230403200530.2103099-1-abel.vesa@linaro.org>
- <20230403200530.2103099-3-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230403200530.2103099-3-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the hid tree
+Message-ID: <20230404154254.6c3be26b@canb.auug.org.au>
+In-Reply-To: <20230404154005.449800c3@canb.auug.org.au>
+References: <20230404154005.449800c3@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/iNJF7NrM=5uhGk5F/bYV4=D";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/2023 22:05, Abel Vesa wrote:
-> Starting with SM8550, the ICE will have its own devicetree node
-> so add the qcom,ice property to reference it.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> The v4 is here:
-> https://lore.kernel.org/all/20230327134734.3256974-4-abel.vesa@linaro.org/
-> 
-> Changes since v4:
->  * Added check for sm8550 compatible w.r.t. qcom,ice in order to enforce
->    it while making sure none of the other platforms are allowed to use it
+--Sig_/iNJF7NrM=5uhGk5F/bYV4=D
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Why?
+Hi all,
 
-Also, this does not solve my previous question still.
+On Tue, 4 Apr 2023 15:40:05 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the hid tree, today's linux-next build (htmldocs) produced
+> this warning:
+>=20
+> drivers/usb/core/message.c:1939: warning: Function parameter or member 'i=
+face' not described in 'usb_set_wireless_status'
+> drivers/usb/core/message.c:1939: warning: Excess function parameter 'dev'=
+ description in 'usb_set_wireless_status'
+>=20
+> Introduced by commit
+>=20
+>   0a4db185f078 ("USB: core: Add API to change the wireless_status")
 
-Best regards,
-Krzysztof
+Also this:
 
+include/linux/usb.h:270: warning: Function parameter or member 'wireless_st=
+atus_work' not described in 'usb_interface'
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/iNJF7NrM=5uhGk5F/bYV4=D
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQruN8ACgkQAVBC80lX
+0Gyb9QgAkZ8VaaAgLIXsFeW72YWHS9VUaX8Oy0O70SLhe6OqyOtT1ycL37jtunLE
+vOgOXOHSuAXEcSHVAgs73aLPTwlJsSYoH6yHfuBxwVhGt1Y0WKKVL2M8uObgCDtx
+h+Iwu1PF8DIzDzBMkfK7UZlRUSPtUWG054pAzkhXZKWS/Wjqyqc5CErPk/iAdspR
+jQ1OUjFJjXAteZTqB1XGuvfGKXNiolmWlX3ttFZ0h8RtM8hl5uHVpFDRIqT6cti/
+leWbTpRhKqF3ILK4tEoCKt4V5KVp1yxUHmqKSsA7jbtwFG1SkjbSvnHfX96OEpqJ
+P0J6i5dV95P0mtGXMf9YgDjVYqOO8g==
+=qa6j
+-----END PGP SIGNATURE-----
+
+--Sig_/iNJF7NrM=5uhGk5F/bYV4=D--
