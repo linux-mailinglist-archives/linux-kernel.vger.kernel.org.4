@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8EB6D5FD4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2A56D5FD6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234678AbjDDMBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
+        id S234914AbjDDMCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234680AbjDDMBs (ORCPT
+        with ESMTP id S234517AbjDDMBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:01:48 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4035435B5
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:01:39 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id le6so31014756plb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 05:01:39 -0700 (PDT)
+        Tue, 4 Apr 2023 08:01:53 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C05B3C03
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:01:44 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso33699775pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 05:01:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680609698;
+        d=chromium.org; s=google; t=1680609704;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4qUt+bgMbpOhTRgQhL+AHDV3zlnHqzmbomM5Wqo2t8M=;
-        b=gGkyBqM897kTx3mCEJLjxur+giZZePN0hsSQZRggvEHfuxcLZ/xAHZn7d/zocZ+B/t
-         1cIzL09rih7OgQJFA0TJpSLo18rTYMeEnbExDfttmiQbIW+B8qdcJ1V6KdSL3C2CVoIk
-         uhn8K/3B8O1z7wv+u/gk9GUet3CqJe2QvDgOU=
+        bh=Vyhfi+1sWMxl+7ZSluYYXlOU9BFaVL7c1FFz74Xev1Y=;
+        b=cpPgK8/nWgVUBBTA+Q+NHmPq/3BrBdxiVC2lvjhc5fGgylaFPc5/panj0rvENCI0Sh
+         GGcuIYS+4UxwSAR2K0MukNoiOP1u4VJYUoTPIALoJ1eIGK9MyEaSkPQDH/xxCeN3oa1F
+         cQPVr2GzWPoKMusf6zXvu113yINmDfSEd8s4U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680609698;
+        d=1e100.net; s=20210112; t=1680609704;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4qUt+bgMbpOhTRgQhL+AHDV3zlnHqzmbomM5Wqo2t8M=;
-        b=LafoohDVQcxP7rs9TkF8HOCOp94SQVin3vg/ntn4KKIC/o+NhVb1q2aqn8r1S3VlWO
-         9jqMyPJ2FNfgVRIDywshE4DgCkltxlp/H7J6QYrXxUqS9N5mccaFXuiFQPWgp5l2SPMe
-         vA+kXgaZBnxvab8IgP2ynzhjgpxGXlH5weh33MgIHRygWaZZyP/h0KxeRCaJsF1VGsdn
-         3GWqZPv5J/uNBuEw1ps6zvh57/ZfH//2lBX8hM32c03NWDNanDv/oFnQx6qdZaRdo/Y5
-         bVoDsFfh4Sd10RwGkjW6BHrTNjQ/tBjO+tbzgF4q5yAfIlOelOqvRWA7s01O0xwQgINw
-         8AQw==
-X-Gm-Message-State: AAQBX9diAY+Mw2u3HXjRcrxipi1R5SHcGv9jpBaaT8Zqs4nPCM3kko+X
-        WGFcvxhubKXEpf1JO6hdivf3rA==
-X-Google-Smtp-Source: AKy350YJmn368SsJA0s1UjNOINFx3s/OTYEKafflR1j6AXeAzEBTEXX+E3A7d0NoY4XJPEiZqkDcUw==
-X-Received: by 2002:a17:90b:1a86:b0:23f:7c82:2463 with SMTP id ng6-20020a17090b1a8600b0023f7c822463mr2874580pjb.9.1680609698541;
-        Tue, 04 Apr 2023 05:01:38 -0700 (PDT)
+        bh=Vyhfi+1sWMxl+7ZSluYYXlOU9BFaVL7c1FFz74Xev1Y=;
+        b=5hjl6fHLeZ46hwY9p3kK7TksTK8AoGA2wWFnPAi8puQgG/X54asvVUyV4RqFgt3b2C
+         FohFu0RyG8keWUXEDar85QoYhF0NTzwmj8hfgU7MySxyf1fbMs4HF3ti9FOWkhFjL+ak
+         HV294Ltph7ZYo2AR1gec9IEaTYlYv653P7QbtEt6gKBPtZyVXECfu741f2lwl0+JKzYG
+         mYUuZLgw8J5GjZaOEYQn9lNNUWxOQRc5Y7d3eu8Rqv25F267b2WLKsxwPIbquwR0EVA0
+         ygDsE1KX8MnZhGpnj8gR40YJysogLKxKNQMskDXwVCQHnEk0SCLo1KKebEWP7LfY2bXD
+         /IFA==
+X-Gm-Message-State: AAQBX9cJz77X7NZhPRpwsAtrPx42cDJytwoQiTCbLrYjIswjiXZ0CgW9
+        ehmBDkwXyVPhl+xRfj3P7c57Aw==
+X-Google-Smtp-Source: AKy350ZGp0by7zBEDeJP7f167x6LyxoDREyVG0zApneHT5l/sdT8Kwof8HJrTkmCawNC1ggmn03V2g==
+X-Received: by 2002:a17:90b:3b8a:b0:237:161d:f5ac with SMTP id pc10-20020a17090b3b8a00b00237161df5acmr2422009pjb.36.1680609703010;
+        Tue, 04 Apr 2023 05:01:43 -0700 (PDT)
 Received: from localhost ([2401:fa00:8f:203:959b:21ea:166b:c273])
-        by smtp.gmail.com with UTF8SMTPSA id q3-20020a17090a938300b0023b15e61f07sm7879485pjo.12.2023.04.04.05.01.35
+        by smtp.gmail.com with UTF8SMTPSA id e5-20020a170902744500b0019ee045a2b3sm8193256plt.308.2023.04.04.05.01.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 05:01:38 -0700 (PDT)
+        Tue, 04 Apr 2023 05:01:42 -0700 (PDT)
 From:   David Stevens <stevensd@chromium.org>
 X-Google-Original-From: David Stevens <stevensd@google.com>
 To:     linux-mm@kvack.org, Peter Xu <peterx@redhat.com>,
@@ -58,9 +58,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         David Hildenbrand <david@redhat.com>,
         Jiaqi Yan <jiaqiyan@google.com>, linux-kernel@vger.kernel.org,
         David Stevens <stevensd@chromium.org>
-Subject: [PATCH v6 3/4] mm/khugepaged: skip shmem with userfaultfd
-Date:   Tue,  4 Apr 2023 21:01:16 +0900
-Message-Id: <20230404120117.2562166-4-stevensd@google.com>
+Subject: [PATCH v6 4/4] mm/khugepaged: maintain page cache uptodate flag
+Date:   Tue,  4 Apr 2023 21:01:17 +0900
+Message-Id: <20230404120117.2562166-5-stevensd@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 In-Reply-To: <20230404120117.2562166-1-stevensd@google.com>
 References: <20230404120117.2562166-1-stevensd@google.com>
@@ -78,250 +78,208 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Stevens <stevensd@chromium.org>
 
-Make sure that collapse_file respects any userfaultfds registered with
-MODE_MISSING. If userspace has any such userfaultfds registered, then
-for any page which it knows to be missing, it may expect a
-UFFD_EVENT_PAGEFAULT. This means collapse_file needs to be careful when
-collapsing a shmem range would result in replacing an empty page with a
-THP, to avoid breaking userfaultfd.
+Make sure that collapse_file doesn't interfere with checking the
+uptodate flag in the page cache by only inserting hpage into the page
+cache after it has been updated and marked uptodate. This is achieved by
+simply not replacing present pages with hpage when iterating over the
+target range.
 
-Synchronization when checking for userfaultfds in collapse_file is
-tricky because the mmap locks can't be used to prevent races with the
-registration of new userfaultfds. Instead, we provide synchronization by
-ensuring that userspace cannot observe the fact that pages are missing
-before we check for userfaultfds. Although this allows registration of a
-userfaultfd to race with collapse_file, it ensures that userspace cannot
-observe any pages transition from missing to present after such a race
-occurs. This makes such a race indistinguishable to the collapse
-occurring immediately before the userfaultfd registration.
+The present pages are already locked, so replacing them with the locked
+hpage before the collapse is finalized is unnecessary. However, it is
+necessary to stop freezing the present pages after validating them,
+since leaving long-term frozen pages in the page cache can lead to
+deadlocks. Simply checking the reference count is sufficient to ensure
+that there are no long-term references hanging around that would the
+collapse would break. Similar to hpage, there is no reason that the
+present pages actually need to be frozen in addition to being locked.
 
-The first step to provide this synchronization is to stop filling gaps
-during the loop iterating over the target range, since the page cache
-lock can be dropped during that loop. The second step is to fill the
-gaps with XA_RETRY_ENTRY after the page cache lock is acquired the final
-time, to avoid races with accesses to the page cache that only take the
-RCU read lock.
+This fixes a race where folio_seek_hole_data would mistake hpage for
+an fallocated but unwritten page. This race is visible to userspace via
+data temporarily disappearing from SEEK_DATA/SEEK_HOLE. This also fixes
+a similar race where pages could temporarily disappear from mincore.
 
-The fact that we don't fill holes during the initial iteration means
-that collapse_file now has to handle faults occurring during the
-collapse. This is done by re-validating the number of missing pages
-after acquiring the page cache lock for the final time.
-
-This fix is targeted at khugepaged, but the change also applies to
-MADV_COLLAPSE. MADV_COLLAPSE on a range with a userfaultfd will now
-return EBUSY if there are any missing pages (instead of succeeding on
-shmem and returning EINVAL on anonymous memory). There is also now a
-window during MADV_COLLAPSE where a fault on a missing page will cause
-the syscall to fail with EAGAIN.
-
-The fact that intermediate page cache state can no longer be observed
-before the rollback of a failed collapse is also technically a
-userspace-visible change (via at least SEEK_DATA and SEEK_END), but it
-is exceedingly unlikely that anything relies on being able to observe
-that transient state.
-
+Fixes: f3f0e1d2150b ("khugepaged: add support of collapse for tmpfs/shmem pages")
 Signed-off-by: David Stevens <stevensd@chromium.org>
-Acked-by: Peter Xu <peterx@redhat.com>
 ---
- include/trace/events/huge_memory.h |   3 +-
- mm/khugepaged.c                    | 109 +++++++++++++++++++++--------
- 2 files changed, 81 insertions(+), 31 deletions(-)
+ mm/khugepaged.c | 79 ++++++++++++++++++-------------------------------
+ 1 file changed, 29 insertions(+), 50 deletions(-)
 
-diff --git a/include/trace/events/huge_memory.h b/include/trace/events/huge_memory.h
-index eca4c6f3625e..877cbf9fd2ec 100644
---- a/include/trace/events/huge_memory.h
-+++ b/include/trace/events/huge_memory.h
-@@ -38,7 +38,8 @@
- 	EM( SCAN_TRUNCATED,		"truncated")			\
- 	EM( SCAN_PAGE_HAS_PRIVATE,	"page_has_private")		\
- 	EM( SCAN_STORE_FAILED,		"store_failed")			\
--	EMe(SCAN_COPY_MC,		"copy_poisoned_page")
-+	EM( SCAN_COPY_MC,		"copy_poisoned_page")		\
-+	EMe(SCAN_PAGE_FILLED,		"page_filled")			\
- 
- #undef EM
- #undef EMe
 diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 90828272a065..7679551e9540 100644
+index 7679551e9540..a19aa140fd52 100644
 --- a/mm/khugepaged.c
 +++ b/mm/khugepaged.c
-@@ -57,6 +57,7 @@ enum scan_result {
- 	SCAN_PAGE_HAS_PRIVATE,
- 	SCAN_COPY_MC,
- 	SCAN_STORE_FAILED,
-+	SCAN_PAGE_FILLED,
- };
- 
- #define CREATE_TRACE_POINTS
-@@ -1856,8 +1857,8 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+@@ -1855,17 +1855,18 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+  *
+  * Basic scheme is simple, details are more complex:
   *  - allocate and lock a new huge page;
-  *  - scan page cache replacing old pages with the new one
+- *  - scan page cache replacing old pages with the new one
++ *  - scan page cache, locking old pages
   *    + swap/gup in pages if necessary;
-- *    + fill in gaps;
-  *    + keep old pages around in case rollback is required;
-+ *  - finalize updates to the page cache;
+- *    + keep old pages around in case rollback is required;
++ *  - copy data to new page
++ *  - handle shmem holes
++ *    + re-validate that holes weren't filled by someone else
++ *    + check for userfaultfd
+  *  - finalize updates to the page cache;
   *  - if replacing succeeds:
-  *    + copy data over;
-  *    + free old pages;
-@@ -1935,22 +1936,12 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 						result = SCAN_TRUNCATED;
- 						goto xa_locked;
- 					}
--					xas_set(&xas, index);
-+					xas_set(&xas, index + 1);
- 				}
- 				if (!shmem_charge(mapping->host, 1)) {
- 					result = SCAN_FAIL;
- 					goto xa_locked;
- 				}
--				xas_store(&xas, hpage);
--				if (xas_error(&xas)) {
--					/* revert shmem_charge performed
--					 * in the previous condition
--					 */
--					mapping->nrpages--;
--					shmem_uncharge(mapping->host, 1);
--					result = SCAN_STORE_FAILED;
--					goto xa_locked;
--				}
- 				nr_none++;
- 				continue;
- 			}
-@@ -2161,22 +2152,66 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 		index++;
- 	}
+- *    + copy data over;
+- *    + free old pages;
+  *    + unlock huge page;
++ *    + free old pages;
+  *  - if replacing failed;
+- *    + put all pages back and unfreeze them;
+- *    + restore gaps in the page cache;
++ *    + unlock old pages
+  *    + unlock and free huge page;
+  */
+ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+@@ -1913,12 +1914,6 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 		}
+ 	} while (1);
  
 -	/*
--	 * Copying old pages to huge one has succeeded, now we
--	 * need to free the old pages.
+-	 * At this point the hpage is locked and not up-to-date.
+-	 * It's safe to insert it into the page cache, because nobody would
+-	 * be able to map it or use it in another way until we unlock it.
 -	 */
--	list_for_each_entry_safe(page, tmp, &pagelist, lru) {
--		list_del(&page->lru);
--		page->mapping = NULL;
+-
+ 	xas_set(&xas, start);
+ 	for (index = start; index < end; index++) {
+ 		page = xas_next(&xas);
+@@ -2076,12 +2071,16 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 		VM_BUG_ON_PAGE(page != xas_load(&xas), page);
+ 
+ 		/*
+-		 * The page is expected to have page_count() == 3:
++		 * We control three references to the page:
+ 		 *  - we hold a pin on it;
+ 		 *  - one reference from page cache;
+ 		 *  - one from isolate_lru_page;
++		 * If those are the only references, then any new usage of the
++		 * page will have to fetch it from the page cache. That requires
++		 * locking the page to handle truncate, so any new usage will be
++		 * blocked until we unlock page after collapse/during rollback.
+ 		 */
+-		if (!page_ref_freeze(page, 3)) {
++		if (page_count(page) != 3) {
+ 			result = SCAN_PAGE_COUNT;
+ 			xas_unlock_irq(&xas);
+ 			putback_lru_page(page);
+@@ -2089,13 +2088,9 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 		}
+ 
+ 		/*
+-		 * Add the page to the list to be able to undo the collapse if
+-		 * something go wrong.
++		 * Accumulate the pages that are being collapsed.
+ 		 */
+ 		list_add_tail(&page->lru, &pagelist);
+-
+-		/* Finally, replace with the new page. */
+-		xas_store(&xas, hpage);
+ 		continue;
+ out_unlock:
+ 		unlock_page(page);
+@@ -2132,8 +2127,7 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 		goto rollback;
+ 
+ 	/*
+-	 * Replacing old pages with new one has succeeded, now we
+-	 * attempt to copy the contents.
++	 * The old pages are locked, so they won't change anymore.
+ 	 */
+ 	index = start;
+ 	list_for_each_entry(page, &pagelist, lru) {
+@@ -2222,11 +2216,11 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 		/* nr_none is always 0 for non-shmem. */
+ 		__mod_lruvec_page_state(hpage, NR_SHMEM, nr_none);
+ 	}
+-	/* Join all the small entries into a single multi-index entry. */
+-	xas_set_order(&xas, start, HPAGE_PMD_ORDER);
+-	xas_store(&xas, hpage);
+-	xas_unlock_irq(&xas);
+ 
++	/*
++	 * Mark hpage as uptodate before inserting it into the page cache so
++	 * that it isn't mistaken for an fallocated but unwritten page.
++	 */
+ 	folio = page_folio(hpage);
+ 	folio_mark_uptodate(folio);
+ 	folio_ref_add(folio, HPAGE_PMD_NR - 1);
+@@ -2235,6 +2229,11 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 		folio_mark_dirty(folio);
+ 	folio_add_lru(folio);
+ 
++	/* Join all the small entries into a single multi-index entry. */
++	xas_set_order(&xas, start, HPAGE_PMD_ORDER);
++	xas_store(&xas, hpage);
++	xas_unlock_irq(&xas);
++
+ 	/*
+ 	 * Remove pte page tables, so we can re-fault the page as huge.
+ 	 */
+@@ -2248,47 +2247,29 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 	list_for_each_entry_safe(page, tmp, &pagelist, lru) {
+ 		list_del(&page->lru);
+ 		page->mapping = NULL;
 -		page_ref_unfreeze(page, 1);
--		ClearPageActive(page);
--		ClearPageUnevictable(page);
--		unlock_page(page);
+ 		ClearPageActive(page);
+ 		ClearPageUnevictable(page);
+ 		unlock_page(page);
 -		put_page(page);
-+	if (nr_none) {
-+		struct vm_area_struct *vma;
-+		int nr_none_check = 0;
-+
-+		i_mmap_lock_read(mapping);
-+		xas_lock_irq(&xas);
-+
-+		xas_set(&xas, start);
-+		for (index = start; index < end; index++) {
-+			if (!xas_next(&xas)) {
-+				xas_store(&xas, XA_RETRY_ENTRY);
-+				if (xas_error(&xas)) {
-+					result = SCAN_STORE_FAILED;
-+					goto immap_locked;
-+				}
-+				nr_none_check++;
-+			}
-+		}
-+
-+		if (nr_none != nr_none_check) {
-+			result = SCAN_PAGE_FILLED;
-+			goto immap_locked;
-+		}
-+
-+		/*
-+		 * If userspace observed a missing page in a VMA with a MODE_MISSING
-+		 * userfaultfd, then it might expect a UFFD_EVENT_PAGEFAULT for that
-+		 * page. If so, we need to roll back to avoid suppressing such an
-+		 * event. Since wp/minor userfaultfds don't give userspace any
-+		 * guarantees that the kernel doesn't fill a missing page with a zero
-+		 * page, so they don't matter here.
-+		 *
-+		 * Any userfaultfds registered after this point will not be able to
-+		 * observe any missing pages due to the previously inserted retry
-+		 * entries.
-+		 */
-+		vma_interval_tree_foreach(vma, &mapping->i_mmap, start, end) {
-+			if (userfaultfd_missing(vma)) {
-+				result = SCAN_EXCEED_NONE_PTE;
-+				goto immap_locked;
-+			}
-+		}
-+
-+immap_locked:
-+		i_mmap_unlock_read(mapping);
-+		if (result != SCAN_SUCCEED) {
-+			xas_set(&xas, start);
-+			for (index = start; index < end; index++) {
-+				if (xas_next(&xas) == XA_RETRY_ENTRY)
-+					xas_store(&xas, NULL);
-+			}
-+
-+			xas_unlock_irq(&xas);
-+			goto rollback;
-+		}
-+	} else {
-+		xas_lock_irq(&xas);
++		folio_put_refs(page_folio(page), 3);
  	}
  
- 	nr = thp_nr_pages(hpage);
--	xas_lock_irq(&xas);
- 	if (is_shmem)
- 		__mod_lruvec_page_state(hpage, NR_SHMEM_THPS, nr);
- 	else
-@@ -2206,6 +2241,20 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 	result = retract_page_tables(mapping, start, mm, addr, hpage,
- 				     cc);
- 	unlock_page(hpage);
-+
-+	/*
-+	 * The collapse has succeeded, so free the old pages.
-+	 */
-+	list_for_each_entry_safe(page, tmp, &pagelist, lru) {
-+		list_del(&page->lru);
-+		page->mapping = NULL;
-+		page_ref_unfreeze(page, 1);
-+		ClearPageActive(page);
-+		ClearPageUnevictable(page);
-+		unlock_page(page);
-+		put_page(page);
-+	}
-+
  	goto out;
  
  rollback:
-@@ -2217,15 +2266,13 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 	/* Something went wrong: roll back page cache changes */
+-	xas_lock_irq(&xas);
+ 	if (nr_none) {
++		xas_lock_irq(&xas);
+ 		mapping->nrpages -= nr_none;
+ 		shmem_uncharge(mapping->host, nr_none);
++		xas_unlock_irq(&xas);
  	}
  
- 	xas_set(&xas, start);
--	xas_for_each(&xas, page, end - 1) {
-+	end = index;
-+	for (index = start; index < end; index++) {
-+		xas_next(&xas);
- 		page = list_first_entry_or_null(&pagelist,
- 				struct page, lru);
- 		if (!page || xas.xa_index < page->index) {
--			if (!nr_none)
--				break;
- 			nr_none--;
--			/* Put holes back where they were */
--			xas_store(&xas, NULL);
- 			continue;
- 		}
- 
-@@ -2749,12 +2796,14 @@ static int madvise_collapse_errno(enum scan_result r)
- 	case SCAN_ALLOC_HUGE_PAGE_FAIL:
- 		return -ENOMEM;
- 	case SCAN_CGROUP_CHARGE_FAIL:
-+	case SCAN_EXCEED_NONE_PTE:
- 		return -EBUSY;
- 	/* Resource temporary unavailable - trying again might succeed */
- 	case SCAN_PAGE_COUNT:
- 	case SCAN_PAGE_LOCK:
- 	case SCAN_PAGE_LRU:
- 	case SCAN_DEL_PAGE_LRU:
-+	case SCAN_PAGE_FILLED:
- 		return -EAGAIN;
+-	xas_set(&xas, start);
+-	end = index;
+-	for (index = start; index < end; index++) {
+-		xas_next(&xas);
+-		page = list_first_entry_or_null(&pagelist,
+-				struct page, lru);
+-		if (!page || xas.xa_index < page->index) {
+-			nr_none--;
+-			continue;
+-		}
+-
+-		VM_BUG_ON_PAGE(page->index != xas.xa_index, page);
+-
+-		/* Unfreeze the page. */
++	list_for_each_entry_safe(page, tmp, &pagelist, lru) {
+ 		list_del(&page->lru);
+-		page_ref_unfreeze(page, 2);
+-		xas_store(&xas, page);
+-		xas_pause(&xas);
+-		xas_unlock_irq(&xas);
+ 		unlock_page(page);
+ 		putback_lru_page(page);
+-		xas_lock_irq(&xas);
++		put_page(page);
+ 	}
+-	VM_BUG_ON(nr_none);
  	/*
- 	 * Other: Trying again likely not to succeed / error intrinsic to
+ 	 * Undo the updates of filemap_nr_thps_inc for non-SHMEM
+ 	 * file only. This undo is not needed unless failure is
+@@ -2303,8 +2284,6 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 		smp_mb();
+ 	}
+ 
+-	xas_unlock_irq(&xas);
+-
+ 	hpage->mapping = NULL;
+ 
+ 	unlock_page(hpage);
 -- 
 2.40.0.348.gf938b09366-goog
 
