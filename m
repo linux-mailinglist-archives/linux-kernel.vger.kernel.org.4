@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C1B6D6AAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AD06D6AB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236314AbjDDRdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S234758AbjDDRfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236304AbjDDRdQ (ORCPT
+        with ESMTP id S231639AbjDDRfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:33:16 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDA66E8E;
-        Tue,  4 Apr 2023 10:32:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 4 Apr 2023 13:35:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BBF5BB3;
+        Tue,  4 Apr 2023 10:34:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1656F2068F;
-        Tue,  4 Apr 2023 17:32:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680629531; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZDEd2ByE3RJ/GX+wDkyEgy/kSR273UEz9enEYcMy1b8=;
-        b=Rh0Y4PUmouQ4RsBeXmVM0zyk9aO9dNgz5lgJqiRROymxTIcq8mepaxm62rz47eD78YSCc8
-        N+f4YDtLQYOmbbnkmJLBZP1k25oDPW/cmNAkStneuDO2Rlp100x2xAs4rxoMS5ADGQHO/1
-        ESZfTdSKMrdNwWs8pTyYiI7mPWHJeys=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C0FC413920;
-        Tue,  4 Apr 2023 17:32:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id cG9ILhpfLGRJQwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 04 Apr 2023 17:32:10 +0000
-Date:   Tue, 4 Apr 2023 19:32:09 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>, Tejun Heo <tj@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH v3 4/8] memcg: replace stats_flush_lock with an atomic
-Message-ID: <20230404173209.fuw2wdbhbzdgszc6@blackpad>
-References: <20230330191801.1967435-1-yosryahmed@google.com>
- <20230330191801.1967435-5-yosryahmed@google.com>
- <20230404165258.ie6ttxobbmgn62hs@blackpad>
- <CALvZod5Y+quOS1XQvVBTvv7FRs3455j_79f0GoR+FqCFzbwkuA@mail.gmail.com>
- <CALvZod7Ao-VmB4as+VHsR+awW1jmOA18uVM7qk21mVsXTOYC2A@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7810A636D6;
+        Tue,  4 Apr 2023 17:33:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF33C433EF;
+        Tue,  4 Apr 2023 17:33:43 +0000 (UTC)
+Date:   Tue, 4 Apr 2023 18:33:40 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arch@vger.kernel.org, avagin@gmail.com, peterz@infradead.org,
+        luto@kernel.org, krisman@collabora.com, tglx@linutronix.de,
+        corbet@lwn.net, shuah@kernel.org, arnd@arndb.de,
+        Gregory Price <gregory.price@memverge.com>
+Subject: Re: [PATCH v15 2/4] syscall user dispatch: untag selector addresses
+ before access_ok
+Message-ID: <ZCxfdC+v4v6EEy4v@arm.com>
+References: <20230330212121.1688-1-gregory.price@memverge.com>
+ <20230330212121.1688-3-gregory.price@memverge.com>
+ <ZCYP+4gRZDqC0lRo@arm.com>
+ <20230404104506.GA24740@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tp4kmk7uybolwv2d"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALvZod7Ao-VmB4as+VHsR+awW1jmOA18uVM7qk21mVsXTOYC2A@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230404104506.GA24740@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 04, 2023 at 12:45:06PM +0200, Oleg Nesterov wrote:
+> doesn't this mean that access_ok() on arm64 could use
+> untagged_addr(addr) unconditionally without any security risk?
 
---tp4kmk7uybolwv2d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yes, from the security perspective, but there are ABI implications.
 
-On Tue, Apr 04, 2023 at 10:21:33AM -0700, Shakeel Butt <shakeelb@google.com> wrote:
-> > Yes indeed it is. Basically we want to avoid unconditional cache
-> > dirtying. This pattern is also used at other places in the kernel like
-> > qspinlock.
+Currently untagged_addr() in access_ok() is conditional on the user
+process enabling the tagged address ABI (prctl() that sets a TIF flag).
+The reason we did not enable this by default was a slight fear of
+breaking the ABI since tagged pointers were not allowed at the syscall
+boundary. It turned out that the fear was justified since the
+unconditional untagged_addr() in brk() broke user space (see commit
+dcde237319e6 "mm: Avoid creating virtual address aliases in
+brk()/mmap()/mremap()"; the user was doing an sbrk(PY_SSIZE_T_MAX) and
+bits 56 and higher were ignored by the kernel).
 
-Thanks for confirmation.
+I'd be ok with untagging the address unconditionally in the arm64
+access_ok() introduce another unaliased_access_ok() (I'm not good at
+naming functions) that preserves the non-tagged behaviour and we use it
+in brk/mmap/mremap().
 
-(I remembered the commit 873f64b791a2 ("mm/memcontrol.c: remove the
-redundant updating of stats_flush_threshold"). But was slightly confused
-why would it be open-coded every time.)
+This may actually be a good idea as an additional fix. If an application
+enables the tagged address ABI we still have the address aliasing issue
+for brk(). We get away with this since glibc, if MTE is enabled, stops
+using brk() for heap in favour of mmap(PROT_MTE). But one may use hwasan
+without full MTE and it would have a similar issue.
 
-> Oh also take a look at
-> https://lore.kernel.org/all/20230404052228.15788-1-feng.tang@intel.com/
-
-Thanks for the link.
-
-Michal
-
---tp4kmk7uybolwv2d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZCxfFAAKCRAkDQmsBEOq
-ubDdAP9UYeeNxfHY8xeftxD/DsD9BcOlaSaQPTOhztUjOJOmEwD+PjYu9+lFlKNJ
-In8lwXw/ZwMTHOjEVMnHwxc+TNnpwQk=
-=LYWU
------END PGP SIGNATURE-----
-
---tp4kmk7uybolwv2d--
+-- 
+Catalin
