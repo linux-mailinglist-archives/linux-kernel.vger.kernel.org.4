@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806A76D652F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAAF66D6530
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbjDDOXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
+        id S235850AbjDDOYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234951AbjDDOXw (ORCPT
+        with ESMTP id S235771AbjDDOXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:23:52 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A533E133
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:23:51 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id h19-20020a056e021d9300b00318f6b50475so21138583ila.21
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 07:23:51 -0700 (PDT)
+        Tue, 4 Apr 2023 10:23:53 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9A719BF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:23:52 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id o15-20020a056e02102f00b003261821bf26so15754455ilj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 07:23:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1680618231; x=1683210231;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3SlLCphVS7COIvWP0KM6YgJ3hMpNmeYt4UE66TAXhBg=;
-        b=KGVy34gIzb2EhnbQYcz3Efb2cVE50LuZDJJWXEIKDHu/+RWRjv51E357OSZFNJ+OtE
-         icRGFr+JaUFNyUoTCXll2splngC57meGCngQcl5bO07qffvxx1w2U3HBQKZCZibaE937
-         ME6xrlYZbqSOB/yxr6EkLKRfE3eH9DZGx6LTxdDKnoKHQH12tZy6RudXu0ZAG7TbgYHw
-         lXPzwWn8uyGPb4A6ZuniuI1NUFFW5QsQ1wREEfBx/nSJWjDE20e5YHYPS6Q4mU3z3TuP
-         ibIuTZ/lV2WFEGLT0Ny8gTi54kYm9nfvOFrYKM0wbe56A/igTnauLOPDmDv7g1Upi+0d
-         FPZw==
-X-Gm-Message-State: AAQBX9fLn9Rt3UBAxi8gFMPl2bhs0DudfJjftTw9FyucIW+W4zvvn03e
-        gZgY3W6MfjIKSxFzuctP8kTbF9HF3NoFE5jhwib7OnbffMXZ
-X-Google-Smtp-Source: AKy350Z0mNNXT0EuW2xsOe+fbbOokf0xsR7PvAWET2NX2Ap9gCGDKbW7Ov0uRnJHREoKUMl/Ribj4Ux8NNaCk0LzFXekHJRl+9Rj
+        bh=5BNqqFtf7JwuYu6Ei0uZGROtb30sqE96jVdSj88Tz84=;
+        b=qoNSXjL3yzoNhvEwOhhE1dfTWDkMnZticnxtBwI5JX2KORcgLOJdeSbRwkjTcn6ny8
+         SpDPcwdKLi3avy0AIYNmlfaekY/WTSdZgPhqqKPaHaa7/AOzCIclaNi9in7tyPUdEAZu
+         3z3vtZLtdCHkrIYHg372vWOtXlQtl1CB811w2K7HmW1s7CkiPfyg7GgzyHj4hruBR3hj
+         LkoIe6KyBjYRrlwETo3pym8LNp4RYDwc6s268jsDGht/mLtAVicDdAecMpwJH3zY7Z4S
+         rPQqHvw1U7ORhg+yqZJMpeqhXXlHB2HsRkyamga2Igz5itYz2ok1OotGPE1vLXkswH2q
+         sryg==
+X-Gm-Message-State: AAQBX9fAdDVc8VEhIudlFr6e0VTLE3brQPNSNlbcfF0vU0z5kWGgQ70a
+        HieRpgRd849bw4kd1MfH6bwCT1mwyjnspHFzji4ZaUvFviUA
+X-Google-Smtp-Source: AKy350YKvCfdVTXWwCh818WfIpJY9etqGm/HKYrokWNTRx5GLwU6zDCeB04HzFsrgA+bglLgIGB5eb2ZGhqv3RBLt31kPDqTxdkE
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b21:b0:326:1bf1:234 with SMTP id
- e1-20020a056e020b2100b003261bf10234mr1696371ilu.3.1680618231103; Tue, 04 Apr
+X-Received: by 2002:a05:6e02:1208:b0:317:9096:e80f with SMTP id
+ a8-20020a056e02120800b003179096e80fmr1687253ilq.4.1680618231424; Tue, 04 Apr
  2023 07:23:51 -0700 (PDT)
 Date:   Tue, 04 Apr 2023 07:23:51 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ab085f05f8836ccd@google.com>
-Subject: [syzbot] Monthly can report
-From:   syzbot <syzbot+list4d04fa20a60bb21c56c5@syzkaller.appspotmail.com>
-To:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mkl@pengutronix.de, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000afecda05f8836cba@google.com>
+Subject: [syzbot] Monthly kernfs report
+From:   syzbot <syzbot+lista7ffef781c2be09ec037@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tj@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -54,26 +54,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello can maintainers/developers,
+Hello kernfs maintainers/developers,
 
-This is a 30-day syzbot report for the can subsystem.
+This is a 30-day syzbot report for the kernfs subsystem.
 All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/can
+https://syzkaller.appspot.com/upstream/s/kernfs
 
 During the period, 0 new issues were detected and 1 were fixed.
-In total, 16 issues are still open and 39 have been fixed so far.
+In total, 12 issues are still open and 18 have been fixed so far.
 
 Some of the still happening issues:
 
 Crashes Repro Title
-1783    Yes   WARNING in j1939_session_deactivate
-              https://syzkaller.appspot.com/bug?extid=535e5aae63c0d0433473
-502     Yes   WARNING in j1939_session_deactivate_activate_next
-              https://syzkaller.appspot.com/bug?extid=3d2eaacbc2b94537c6c5
-277     Yes   possible deadlock in j1939_sk_queue_drop_all
-              https://syzkaller.appspot.com/bug?extid=3bd970a1887812621b4c
-55      No    possible deadlock in j1939_session_activate
-              https://syzkaller.appspot.com/bug?extid=f32cbede7fd867ce0d56
+86      Yes   WARNING in kernfs_remove_by_name_ns (3)
+              https://syzkaller.appspot.com/bug?extid=93cbdd0ab421adc5275d
+49      Yes   inconsistent lock state in find_vmap_area
+              https://syzkaller.appspot.com/bug?extid=8d19062486784d15dda9
+28      Yes   KASAN: use-after-free Read in kernfs_add_one
+              https://syzkaller.appspot.com/bug?extid=ef17b5b364116518fd65
+23      Yes   WARNING: suspicious RCU usage in mas_start
+              https://syzkaller.appspot.com/bug?extid=d79e205d463e603f47ff
 
 ---
 This report is generated by a bot. It may contain errors.
