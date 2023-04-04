@@ -2,169 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5406D6D35
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43186D6D42
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236043AbjDDTcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 15:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
+        id S236105AbjDDTiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 15:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235874AbjDDTcl (ORCPT
+        with ESMTP id S235350AbjDDTiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 15:32:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA6F2111;
-        Tue,  4 Apr 2023 12:32:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73AAA63405;
-        Tue,  4 Apr 2023 19:32:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF072C433EF;
-        Tue,  4 Apr 2023 19:32:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680636759;
-        bh=LFfoWA2YzEbR4+/VlIXveggoWRzbSy4IHBA/bJtEvF0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nAPJRfmwpFK6q/ahMzFfl+eDQKnzlut4U0+b2sbFnlO9Fj9GeCCbLehQoYnMTPibV
-         5JApelUYvhCSQZYOqB6vwV8d7DreI2mDH1W1/4TtKxZrBic5Y5AxeztHRHPdq/pJbb
-         KuucJQUFLuGbqCqKEkj3ypQ8bHDm64xBDEvlqYschwzxNjuw63Bx27IlbSvCXPtBdV
-         qTapQClE363T4gewywieMzoykbSwYItyGcbWi/oUFlmDyWYwYNDAhtveHPBsUbeq/8
-         LbU3WBUVfdwM2XV3Ggpi+WJ6QmNbochhuD+pT2gVTbdQXT2A9rzOzBicuGjTPbBx1t
-         qUOzI++N0DVzQ==
-Date:   Tue, 4 Apr 2023 12:35:33 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Subject: Re: [PATCH v3 1/7] dt-bindings: interconnect: qcom,msm8998-bwmon:
- Resolve MSM8998 support
-Message-ID: <20230404193533.5dnjjr4ilhhqd4t5@ripper>
-References: <20230304-topic-ddr_bwmon-v3-0-77a050c2fbda@linaro.org>
- <20230304-topic-ddr_bwmon-v3-1-77a050c2fbda@linaro.org>
+        Tue, 4 Apr 2023 15:38:17 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40537C7;
+        Tue,  4 Apr 2023 12:38:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1680637056; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=jr+O2D0F76JJU7kSwZlZ6I294JwkWu+0UOCw8XpzFlLFbtUlKp/Hhm8guCdhJGvS3U2CyVY2c/bJ5qXETP+gPh5atKuOmev9QccpfiTF3XzsLRd/m1fkTN9Fq1+P+0FS3PVf5N4QD5kZGGFuZoV9vb1B/TJ0wznJu7drD1vTO1Q=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1680637056; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=E2DTXl0wOTGge7LqnlEIvHTLL1rOaURDHtKaO0WFHcU=; 
+        b=boRmo8TnI/Eg0BvnA8v+KFgkFPo+LaF1kW8D4awVhqktQE/OgLNlcth4BlHf7hvA7El2P0vuiPS1xGjeBrHWN1Adlp2uGFz5RJeqMDRim/Dkudy5cuUZiaN5sRyGICgypefJku2DRiHO2qN3nzHZte+nC8L6zu8hBr93zTesvu4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1680637056;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Date:Date:From:From:To:To:CC:Subject:Subject:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
+        bh=E2DTXl0wOTGge7LqnlEIvHTLL1rOaURDHtKaO0WFHcU=;
+        b=ab753m7vvr7p0QelL1tg4ktxsIc5LvHNShTljT4isc+D44+NfP7kB/w8w551FhGs
+        yr6LtcGzftMAyE8pIwTcpVZNsjrN5Bwx8q/fe0flkk20nWEW9qTligyxgyPEqmodufy
+        a3rCZF/Mg3c9URAsf3Mhc2G+vbLJYkd+Tl/YPYNk=
+Received: from [127.0.0.1] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1680637054373581.3705118144012; Tue, 4 Apr 2023 12:37:34 -0700 (PDT)
+Date:   Tue, 04 Apr 2023 22:37:22 +0300
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+To:     =?UTF-8?B?TGFuZGVuIENoYW8gKOi2meeajuWujyk=?= 
+        <Landen.Chao@mediatek.com>,
+        "olteanv@gmail.com" <olteanv@gmail.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "arinc9.unal@gmail.com" <arinc9.unal@gmail.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        Sean Wang <Sean.Wang@mediatek.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "dqfext@gmail.com" <dqfext@gmail.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "erkin.bozoglu@xeront.com" <erkin.bozoglu@xeront.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_net_2/3=5D_net=3A_dsa=3A_mt7530=3A_move?= =?US-ASCII?Q?_lowering_TRGMII_driving_to_mt7530=5Fsetup=28=29?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <4d9c562eb980642381cb43f65efb2ee13d742485.camel@mediatek.com>
+References: <20230320190520.124513-1-arinc.unal@arinc9.com> <20230320190520.124513-2-arinc.unal@arinc9.com> <4d9c562eb980642381cb43f65efb2ee13d742485.camel@mediatek.com>
+Message-ID: <87B17946-4602-4D27-8756-7481846EDE35@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230304-topic-ddr_bwmon-v3-1-77a050c2fbda@linaro.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 03:11:19PM +0100, Konrad Dybcio wrote:
-> BWMONv4 has two sets of registers: one for handling the monitor itself
-> and one called "global" which hosts some sort of a headswitch and an
-> interrupt control register. We did not handle that one before, as on
-> SoCs starting with SDM845 they have been merged into a single contiguous
-> range.
-> 
-> To make the qcom,msm8998-bwmon less confusing and in preparation for
-> actual MSM8998 support, describe the global register space and introduce
-> new "qcom,sdm845-cpu-bwmon" compatible while keeping the
-> "qcom,sdm845-bwmon" as a fallback for SoCs with this merged register space
-> scheme.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On 26 March 2023 21:13:49 GMT+03:00, "Landen Chao (=E8=B6=99=E7=9A=8E=E5=AE=
+=8F)" <Landen=2EChao@mediatek=2Ecom> wrote:
+>On Mon, 2023-03-20 at 22:05 +0300, arinc9=2Eunal@gmail=2Ecom wrote:
+>>=20
+>> I asked this before, MT7530 DSA driver maintainers, please explain
+>> the code
+>> I mentioned on the second paragraph=2E
+>>=20
+>> ---
+>> @@ -2207,6 +2198,15 @@ mt7530_setup(struct dsa_switch *ds)
+>>=20
+>>         mt7530_pll_setup(priv);
+>>=20
+>> +       /* Lower Tx driving for TRGMII path */
+>> +       for (i =3D 0; i < NUM_TRGMII_CTRL; i++)
+>> +               mt7530_write(priv, MT7530_TRGMII_TD_ODT(i),
+>> +                            TD_DM_DRVP(8) | TD_DM_DRVN(8));
+>> +
+>I guess you ask this part, and I try my best to recall what the
+>original author said years ago=2E
+>It is used to adjust the RX delay of port 6 to match the tx
+>signal of the link partner=2E
 
-Georgi, can you please pick this patch through your tree?
+Ok, thanks for replying=2E I will move this at the end, inside 'if (trgint=
+)'=2E Since this doesn't lower the driving, there's no apparent benefit to =
+run this if trgmii is not being used=2E
 
-Regards,
-Bjorn
-
-> ---
->  .../bindings/interconnect/qcom,msm8998-bwmon.yaml  | 41 ++++++++++++++++++----
->  1 file changed, 34 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> index 12a0d3ecbabb..5d17bdcfdf70 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> @@ -22,14 +22,14 @@ description: |
->  properties:
->    compatible:
->      oneOf:
-> +      - const: qcom,msm8998-bwmon       # BWMON v4
->        - items:
->            - enum:
->                - qcom,sc7280-cpu-bwmon
->                - qcom,sc8280xp-cpu-bwmon
-> -              - qcom,sdm845-bwmon
-> +              - qcom,sdm845-cpu-bwmon
->                - qcom,sm8550-cpu-bwmon
-> -          - const: qcom,msm8998-bwmon
-> -      - const: qcom,msm8998-bwmon       # BWMON v4
-> +          - const: qcom,sdm845-bwmon    # BWMON v4, unified register space
->        - items:
->            - enum:
->                - qcom,sc8280xp-llcc-bwmon
-> @@ -49,9 +49,13 @@ properties:
->      type: object
->  
->    reg:
-> -    # BWMON v4 (currently described) and BWMON v5 use one register address
-> -    # space.  BWMON v2 uses two register spaces - not yet described.
-> -    maxItems: 1
-> +    # BWMON v5 uses one register address space, v1-v4 use one or two.
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    minItems: 1
-> +    maxItems: 2
->  
->  required:
->    - compatible
-> @@ -63,13 +67,36 @@ required:
->  
->  additionalProperties: false
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          const: qcom,msm8998-bwmon
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 2
-> +
-> +        reg-names:
-> +          items:
-> +            - const: monitor
-> +            - const: global
-> +
-> +    else:
-> +      properties:
-> +        reg:
-> +          maxItems: 1
-> +
-> +        reg-names:
-> +          maxItems: 1
-> +
->  examples:
->    - |
->      #include <dt-bindings/interconnect/qcom,sdm845.h>
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->  
->      pmu@1436400 {
-> -        compatible = "qcom,sdm845-bwmon", "qcom,msm8998-bwmon";
-> +        compatible = "qcom,sdm845-cpu-bwmon", "qcom,sdm845-bwmon";
->          reg = <0x01436400 0x600>;
->          interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
->          interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_LLCC 3>;
-> 
-> -- 
-> 2.39.2
-> 
+Ar=C4=B1n=C3=A7
