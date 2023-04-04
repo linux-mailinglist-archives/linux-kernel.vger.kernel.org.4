@@ -2,154 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2CD6D5C0B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F486D5C13
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbjDDJgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        id S234287AbjDDJio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233200AbjDDJgF (ORCPT
+        with ESMTP id S234248AbjDDJiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:36:05 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2077.outbound.protection.outlook.com [40.107.14.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE29125
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:36:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lfLWXUDnDGKtl6AHYu3ZNc1V5G9bjsxkkAbyCPnY0vmUOYjxPvOvLJoe/BsvJVrqsXazYmiE4glFUS+7a5TxX/orFArG+km8UjqA/qIrHkui3BzKvuljfmu7E2hR4fusOmsx3KQPDdfkoX/h80tfEoe8hQGBQmYHViboSKoT5ZL3r72aTwZoj3GOeaWlYFhNWcR4S7bmDbxjO9h2ayrZi/U5PJ1IYvKosOP7dC1p9lcbMRemuDLr2/1mSORbGgTGZs1tahiPFYTM93J7ttIj3gAWoZUAT94+2due96nwej/qvsyDkTo1hjzsL+0VbHzXaBCjwr0Tn/z8Q7Cx37lZbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v80m2RcHj4jEuBgv+LeEQzRouf1BoCH1zYfb5FzVVVo=;
- b=CVVsJgJK5qP76IlSA97AlHLQBF/JvXw4FurgDos/1wc5/r8V8zTu+oqtg+OU8yxB3LtR8r69o0C3gv1nP7F5BHo4Hxh1PUrquUuCXPdMPgF1WuMAAzshT6k0MNVwfm2jQrTINp2PZ4nJ2OQsDpVKrk8hhYcfUGRnTCQ4fXMaGxpklYV4fWql2JPvtBb+Jan/buYUmJM0LNYxdYR5YmwDqQmXQn7KXBlDzNOgBtocli0jiIre5Co7RJU6oCpUvnqpWmQfHgup/4+hmgYuTy7nVk66nHPtQiMXvXXkvkSkCiieRpMu/51iPl2lQV4jjySwPOwOFkujl3yiAcC0TOA0wQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v80m2RcHj4jEuBgv+LeEQzRouf1BoCH1zYfb5FzVVVo=;
- b=OBZ8CgLA15OCabnuC5ha/yvnbyoM+olvE3HqMYKM+9r9AaKAcySTRzqi96sjpmLFUYyqU8W2ebpZJCsuosbYwLnO/QOZ6W8ceZ+1fVVrJEynsG7p5EBChUItQenSqIVjfuATVNKRPZo09kHCwwew+Z0/mv4rACRKTBD9Cb6JOyM=
-Received: from VI1PR04MB5807.eurprd04.prod.outlook.com (2603:10a6:803:ec::21)
- by AS8PR04MB8932.eurprd04.prod.outlook.com (2603:10a6:20b:42f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Tue, 4 Apr
- 2023 09:36:01 +0000
-Received: from VI1PR04MB5807.eurprd04.prod.outlook.com
- ([fe80::f3bf:4013:3fe8:d452]) by VI1PR04MB5807.eurprd04.prod.outlook.com
- ([fe80::f3bf:4013:3fe8:d452%6]) with mapi id 15.20.6254.035; Tue, 4 Apr 2023
- 09:36:01 +0000
-From:   Camelia Alexandra Groza <camelia.groza@nxp.com>
-To:     Sean Anderson <sean.anderson@seco.com>,
-        Leo Li <leoyang.li@nxp.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Scott Wood <oss@buserror.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Roy Pledge <roy.pledge@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: RE: [PATCH v2 2/2] soc: fsl: qbman: Use raw spinlock for cgr_lock
-Thread-Topic: [PATCH v2 2/2] soc: fsl: qbman: Use raw spinlock for cgr_lock
-Thread-Index: AQHZY+OE1RJmUmy5N0SD/8fbwuxDUq8a6ZaA
-Date:   Tue, 4 Apr 2023 09:36:00 +0000
-Message-ID: <VI1PR04MB58070B4CEC732B16F7787F9EF2939@VI1PR04MB5807.eurprd04.prod.outlook.com>
-References: <20230331151413.1684105-1-sean.anderson@seco.com>
- <20230331151413.1684105-2-sean.anderson@seco.com>
-In-Reply-To: <20230331151413.1684105-2-sean.anderson@seco.com>
-Accept-Language: en-GB, ro-RO, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR04MB5807:EE_|AS8PR04MB8932:EE_
-x-ms-office365-filtering-correlation-id: 7dcbab4e-95cd-4ff3-52ab-08db34f00092
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zn6uP8SPbdxY6yTeCMQiH/gL5LQla3rttR5e+kF4CUoM2aUqnVj0d/ZpJJnlMQKRv1IXz4CDueFZGSpabGWxrtQkF+rRioOl0pf7Jr3ZSsMFXhkBdPxxHC321DxM/xHs2Ys1PDxob95x5JpQqyj0VdGttD1qT8RjN1TYlJwzRIWwEAZT9GDz0hCko8DdFiHsqkImEARsfHsf92UAx0CjL4CiCuuTZD5I0yQbPog6rDSMUDnXavOgAx1QwFFVLRHW/40YgHKIQJcGFOTCWy+yXLnNp050FDSRvEDaDPLZjKOA0c1iEqInlI4kKPDTuK1df0Hk/TdLY3PchAaapR4SkPBFq1jN6Z+BMHUjMqZP9Li8bq8ySpTSpik5H6j68bj2Nol5iufdLTDJ1t+FGPLyOJ9o1n3EGUuzgtOJSkXOCIfa6rTRGxvbMz0mYb6veKGWkf7ym0G4B89GE94J6VEEARrY4UN6AojsJ1iibSbLOF0vGnc0zHqlgI8UH521/t3HTyjSoCtaHLh4wx16jRG4iSuyILnp9ePFeXFFE3RTMNyRI14QHPZ3+AtIU73PW8NKH6x57kK9scqL4vmyUugmtTt/cODp/UYWHRK2rCYiuoI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5807.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(39860400002)(346002)(136003)(451199021)(478600001)(316002)(110136005)(54906003)(52536014)(8936002)(5660300002)(38070700005)(86362001)(4326008)(33656002)(2906002)(55016003)(8676002)(64756008)(76116006)(66476007)(66446008)(66556008)(122000001)(38100700002)(41300700001)(55236004)(6506007)(26005)(9686003)(53546011)(66946007)(966005)(83380400001)(186003)(71200400001)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?17p2dJ/RGF7uZb0P9RGFhLo+h1s3/8bvKwvzluH2yFqq1D2yM1BkStHvYynm?=
- =?us-ascii?Q?eyM0JmCSbNrKhzPOVpVJF+PiwLHPMhEHVXOoGNNWIZUZ1QARxFMFFXRd0bfi?=
- =?us-ascii?Q?Nm08AUgIKi7Cp/zV0WLjAybm5G0/riRMiskLvgOzXWt3tCvTdlKezI+Re/Qw?=
- =?us-ascii?Q?UD4XmiXcNmwb5dUyhTWY6xnt7+DT/YLCQJRls55u1eGITV9sJsnSZrOV94sk?=
- =?us-ascii?Q?Ddu15W11YLzWF+x8LlNWX7NpIHX2r+Ban1yklhfsVe6ClhTTwVmQ3td7tD71?=
- =?us-ascii?Q?hX8WL93OM9QQ+vp27rcGxSKhDKgu08pSadg5FTB1275SZ62Xe/91CbmvTgNQ?=
- =?us-ascii?Q?6Vo40ZoHh9pqpQtrfHiM0KH/YUJk7ap/rPphZgRym9RY9Gffs55iRdHZqsBE?=
- =?us-ascii?Q?SJHJrSxvv7ZnWekRqz7UECiB9WoopP/NrWDyuU6voBE0hUZS3d+Ocs9L0CfQ?=
- =?us-ascii?Q?hfjtIfZNW1oH4uWY69jYiV5R3E09LZfVoP7T4ACgNvb8K0NSocaps/rqAg6n?=
- =?us-ascii?Q?WwDyN7pWvdjPFRK0MeSQ1b2baojFjlvizulKJNmz+BKCWdaJorqwOGA2RtCh?=
- =?us-ascii?Q?AWpO+az8WlIn7K/S7cdBgCLyv+0aDcCpwQGWmFi7C7ZV7WKJSa8RjXC2mT3f?=
- =?us-ascii?Q?Yl2VX7hjhaGgU9+mJgrIG49J4sWVzfF714vABzG3pEFQppOZWZWw/nsbuCUN?=
- =?us-ascii?Q?MJhw7yYYj8cWwhuCdzUgSzELU+fNMN+OeG9qZCXvCxydrVHvT84xjuBEU1IH?=
- =?us-ascii?Q?rAT+//HyJt+mChzlv3nHFi+2yeeeZ7Qjx1VB+xEiVUuEUtiaraAKHujn3qgm?=
- =?us-ascii?Q?1+m0SxDW/b5rCh3IZgiUIM/M22GLfaMkIOYTbJYSvu6RvrjS3nMHwdeWDSdL?=
- =?us-ascii?Q?111uEbNLaWaJqDRxIZdhk1OrZRFyHMwycR9O9S+tLH32r846OJ5HpEPeUd6z?=
- =?us-ascii?Q?4xRemXdypi1ioWdG/KwzZzVZY6zFoAfP6KnyMTtLqPzti9xeIYz5tOi8Nbwx?=
- =?us-ascii?Q?EfMKepf6WVZFA1iMXjpu0b359CFG0I0e/JGzEndxzmOfOEmQaKcunlkk/xIN?=
- =?us-ascii?Q?ku7nWS6xT02VggtBeUMrr31I9gXbIWElK9Cmrf+2/1WReCuTf8rhRUsHNjJB?=
- =?us-ascii?Q?skco4ASQys4pJRNG6qFVJb1QrXez2uvjeHHBPiKZo/tIVR3fiWJhMHLeUtnS?=
- =?us-ascii?Q?8LMgOWVgoShBRezbdRg1vRwCw67YxM/Vx1vSWcjV8fyHvH67ONLbOqm2WKYQ?=
- =?us-ascii?Q?8LEXvPIAu6FYqsbfpXhNWCoTsBJxOYL9+2IXozU1TmukPjZAJKwtFIkddKDx?=
- =?us-ascii?Q?sFre7AzwTtJJA4VdzEF/QGwugcS23MfoeG2cZzx2TRqnLpSF6p3+BD7JE7P6?=
- =?us-ascii?Q?nH3NpIH4U5JY0ATUDvPNzdAQ9joPbnhMaQE9NVsPa8Tpk8fl8OtmPnGGOMs2?=
- =?us-ascii?Q?epu5dLFNm2RJKiQzoTrJ0MH9y6FruRlNzdKYRTVsZZi8Uder9YKXlfGxnw3k?=
- =?us-ascii?Q?cL9tcrDpDOESUMGi5l9zeXcV8Ik1yKkdaaiTqr65Qcn+fcXgTqvsw+hjY70f?=
- =?us-ascii?Q?TDNrnAONfKl65CIKr4R0Y2nPv+wBTuUyhILZ4gyK?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 4 Apr 2023 05:38:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA8019BC
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:38:21 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680601099;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0DN55bSNTQFajH9UQ/ZPWNclui6hp3/dzUXrzibB4e8=;
+        b=nLmjDCn+I8gKh1U6nup+PQOxkEIwwA5YaBFi6iv6Gi5SbuROVA4VgAny39IDeH9hZ1JIQ8
+        EyXyXzpJpX/zbwOacFeMw7mwuu5JzGhbiF3b6RR9Z84ox2bKX4mQ8A3vzrtXzfGBaS3iLF
+        Cs8jqOSO0AAzGHfLGrTEQfh8pWo3hIS+DryuDfi/hymJ+UPWBQ1C6mtyxd2UBUCOTDg6+e
+        C+nyAZjsFz4+vfmpD2nmBOxt79GsU5KmChWDSMiVHGibjjjmDI2eUGR/Wp1lR12f4VYvxg
+        heyez4urTQwcjMyfhUU6StPikyikmalcdrZoy6u3pWJ2urIt1PlpN7vCr6U8ow==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680601099;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0DN55bSNTQFajH9UQ/ZPWNclui6hp3/dzUXrzibB4e8=;
+        b=mNm+u/MFMwBwZ9t9EQ2Tsp/yvJ1Qa/SQNUQVXZL4K1u6JA/OW/xTAlSZ/ut0IGMFqy/BPV
+        fQl1nyKmy3SgrbBQ==
+To:     Ankur Arora <ankur.a.arora@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        luto@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, mingo@redhat.com, juri.lelli@redhat.com,
+        willy@infradead.org, mgorman@suse.de, peterz@infradead.org,
+        rostedt@goodmis.org, vincent.guittot@linaro.org, jon.grimm@amd.com,
+        bharata@amd.com, boris.ostrovsky@oracle.com,
+        konrad.wilk@oracle.com, ankur.a.arora@oracle.com
+Subject: Re: [PATCH 8/9] irqentry: define irqentry_exit_allow_resched()
+In-Reply-To: <20230403052233.1880567-9-ankur.a.arora@oracle.com>
+References: <20230403052233.1880567-1-ankur.a.arora@oracle.com>
+ <20230403052233.1880567-9-ankur.a.arora@oracle.com>
+Date:   Tue, 04 Apr 2023 11:38:18 +0200
+Message-ID: <87pm8kq96d.ffs@tglx>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5807.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7dcbab4e-95cd-4ff3-52ab-08db34f00092
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Apr 2023 09:36:00.8990
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZQb0kIazjDo2V4eAyrgkt6Cu4R5CgqphsTCEOmVW0RFqbM42zpRBlW6skRumVSDiIWu6i+PaY5vRJqJcP6CZXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8932
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Sean Anderson <sean.anderson@seco.com>
-> Sent: Friday, March 31, 2023 18:14
-> To: Leo Li <leoyang.li@nxp.com>; linuxppc-dev@lists.ozlabs.org; linux-arm=
--
-> kernel@lists.infradead.org
-> Cc: Scott Wood <oss@buserror.net>; Camelia Alexandra Groza
-> <camelia.groza@nxp.com>; linux-kernel@vger.kernel.org; Roy Pledge
-> <roy.pledge@nxp.com>; David S . Miller <davem@davemloft.net>; Claudiu
-> Manoil <claudiu.manoil@nxp.com>; Vladimir Oltean
-> <vladimir.oltean@nxp.com>; Sean Anderson <sean.anderson@seco.com>
-> Subject: [PATCH v2 2/2] soc: fsl: qbman: Use raw spinlock for cgr_lock
->=20
-> cgr_lock may be locked with interrupts already disabled by
-> smp_call_function_single. As such, we must use a raw spinlock to avoid
-> problems on PREEMPT_RT kernels. Although this bug has existed for a
-> while, it was not apparent until commit ef2a8d5478b9 ("net: dpaa: Adjust
-> queue depth on rate change") which invokes smp_call_function_single via
-> qman_update_cgr_safe every time a link goes up or down.
->=20
-> Fixes: c535e923bb97 ("soc/fsl: Introduce DPAA 1.x QMan device driver")
-> Reported-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Link: https://lore.kernel.org/all/20230323153935.nofnjucqjqnz34ej@skbuf/
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+On Sun, Apr 02 2023 at 22:22, Ankur Arora wrote:
+> Allow threads marked TIF_ALLOW_RESCHED to be rescheduled in irqexit.
+>
+> This is only necessary under !preempt_model_preemptible() for which
+> we reuse the same logic as irqentry_exit_code_resched().
 
-Reviewed-by: Camelia Groza <camelia.groza@nxp.com>
+This tells what this patch is doing but completely fails to explain why
+this is necessary and useful.
+
+Thanks,
+
+        tglx
