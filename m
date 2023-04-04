@@ -2,98 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0886D5F77
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285286D5F80
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234958AbjDDLuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
+        id S234996AbjDDLvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 07:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234863AbjDDLuT (ORCPT
+        with ESMTP id S234998AbjDDLvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:50:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023251982;
-        Tue,  4 Apr 2023 04:50:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F62D632A3;
-        Tue,  4 Apr 2023 11:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E2B84C4339C;
-        Tue,  4 Apr 2023 11:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680609017;
-        bh=PUme9Pqjr+nOp7BWP8OmqF17obLXySvwFTlVeaoxJaE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZTaK2r+wl4Ag8QVQjUuxGrypd22g9th1Nn/TeN3oGHJZ1ITNecen8gBdA45U8zWoH
-         TSZNhR8Ljm6WLiDpFYCz+cVhDnt6hPz0XEkNNk3iTzrv5wKk/kiyxb0vl+7ennRL1m
-         Ahkiue8KerIjcH3weqJgp9Ths6X+8EqM8DgZF1vX7+uRRpmvjBsVusFKf5XVsy0bM8
-         tT9xc8i3mqfSq5/VrHdnDm6UOUetcGBicNBKsrajoCr8j4zK9Jm2Xkn23CWb7hGwlI
-         URA93xRtzlrai17cJQnXBMaJ4hIVZ2PLEKrL9b8VvLrdGJ3vuoFE8DrEsZVq+ol+0r
-         ZMK2Xt51fPMFA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BFF37E5EA89;
-        Tue,  4 Apr 2023 11:50:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 4 Apr 2023 07:51:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E7E02D79;
+        Tue,  4 Apr 2023 04:50:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 665C0D75;
+        Tue,  4 Apr 2023 04:51:35 -0700 (PDT)
+Received: from e120937-lin.. (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A92573F762;
+        Tue,  4 Apr 2023 04:50:49 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+Cc:     sudeep.holla@arm.com, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, nicola.mazzucato@arm.com,
+        Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH v3 0/2] Add SCMI support for mailbox unidirectional channels
+Date:   Tue,  4 Apr 2023 12:50:24 +0100
+Message-Id: <20230404115026.2828149-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v4 0/3] vsock: return errors other than -ENOMEM to
- socket
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168060901777.14038.3884666734757699938.git-patchwork-notify@kernel.org>
-Date:   Tue, 04 Apr 2023 11:50:17 +0000
-References: <0d20e25a-640c-72c1-2dcb-7a53a05e3132@sberdevices.ru>
-In-Reply-To: <0d20e25a-640c-72c1-2dcb-7a53a05e3132@sberdevices.ru>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     stefanha@redhat.com, sgarzare@redhat.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        bobby.eshleman@bytedance.com, bryantan@vmware.com,
-        vdasa@vmware.com, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@sberdevices.ru,
-        oxffffaa@gmail.com, avkrasnov@sberdevices.ru, pv-drivers@vmware.com
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi,
 
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+this series aims to extend SCMI mailbox transport layer to support mailbox
+controllers that expose unidirectional channels.
 
-On Mon, 3 Apr 2023 14:23:00 +0300 you wrote:
-> Hello,
-> 
-> this patchset removes behaviour, where error code returned from any
-> transport was always switched to ENOMEM. This works in the same way as
-> patch from Bobby Eshleman:
-> commit c43170b7e157 ("vsock: return errors other than -ENOMEM to socket"),
-> but for receive calls. VMCI transport is also updated (both tx and rx
-> SOCK_STREAM callbacks), because it returns VMCI specific error code to
-> af_vsock.c (like VMCI_ERROR_*). Tx path is already merged to net, so it
-> was excluded from patchset in v4. At the same time, virtio and Hyper-V
-> transports are using general error codes, so there is no need to update
-> them.
-> 
-> [...]
+SCMI communications between an agent like Linux and the platform fw server
+happens through 2 main communication channels: an 'a2p' bidirectional
+channel (called TX in SCMI parlance) used to send synchronous commands
+and receive related replies and an optional 'p2a' unidirectional channel
+(called RX) used to convey notfications or delayed responses to
+asynchronous commands possibly emitted by the platform toward the agent.
 
-Here is the summary with links:
-  - [net-next,v4,1/3] vsock/vmci: convert VMCI error code to -ENOMEM on receive
-    https://git.kernel.org/netdev/net-next/c/f59f3006ca7b
-  - [net-next,v4,2/3] vsock: return errors other than -ENOMEM to socket
-    https://git.kernel.org/netdev/net-next/c/02ab696febab
-  - [net-next,v4,3/3] vsock/test: update expected return values
-    https://git.kernel.org/netdev/net-next/c/b5d54eb5899a
+The current SCMI mailbox transport support was modelled around mailboxes
+that were bidirectional by nature, and, as such, fit well in the above
+SCMI communication scheme, allowing us to currently describe the mailbox
+transport channels as in the following examples:
 
-You are awesome, thank you!
+ 1.  system with a single TX 'a2p' defined over a mailbox bidirectional
+     channel:
+
+	mboxes = <&mb 0 0>;
+	shmem = <&a2p_mem>;
+
+ 2. system with a TX 'a2p' defined over a bidirectional mailbox channel
+    AND an optional RX 'p2a' defined over a unidirectional channel:
+
+	mboxes = <&mb 0 0>, <&mb 0 1>,
+	shmem = <&a2p_shmem>, <&p2a_shmem>;
+
+This binding, as it is now, does NOT support the usage of mailbox
+controllers exposing channels that are unidirectional by nature, like
+it is the case with ARM MHUv2 mailboxes as an example, since 2 distinct
+unidirectional mailbox channels would be needed to represent just the
+SCMI TX bidirectional communication path.
+
+Note that the mboxes property referred in the SCMI nodes to configure the
+transport is compliant with (and parsed by) the mailbox common subsystem,
+which is the entity that exposes and finally handles the mailbox
+controller: as a consequence playing creatively (or dirty :P) with the
+syntax of the mboxes property to fit our needs is not an option.
+
+This series extends the SCMI mailbox-related bindings, which defines how
+mboxes and shmem properties are interpreted, and the logic inside the
+SCMI mailbox transport subsystem to support the usage of these type of
+unidirectional mailbox channels, while aiming to maintain backward
+compatibility with the original scheme based on bidirectional channels.
+
+With these proposed DT extensions, in addition to the above definitions,
+the following descriptions can be crafted for a system using a mailbox
+controller exposing unidirectional channels:
+
+ 2. system with a single TX 'a2p' defined over a pair of unidirectional
+    mailbox channels (similar to 1):
+
+	mboxes = <&mb_tx 0 0>, <&mb_rx 0 0>;
+	shmem = <&a2p_mem>;
+
+ 3. system with a TX 'a2p' defined over a pair of unidirectional channels
+    AND an RX 'p2a' defined over a unidirectional channel (similar to 2):
+
+	mboxes = <&mb_tx 0 0>, <&mb_rx 0 0>, <&mb_rx 0 1>;
+	shmem = <&a2p_shmem>, <&p2a_shmem>;
+
+The SCMI mailbox transport logic has been modified to select and make a
+proper use of the needed channels depending on the combination of found
+mboxes/shmem descriptors:
+
+  a) 1 mbox / 1 shmem => SCMI TX over 1 mailbox bidirectional channel
+  b) 2 mbox / 2 shmem => SCMI TX and RX over 2 mailbox bidirectional chans
+
+  c) 2 mbox / 1 shmem => SCMI TX over 2 mailbox unidirectional chans
+  d) 3 mbox / 2 shmem => SCMI TX and RX over 3 mailbox unidirectional chans
+
+with any other combination considered invalid.
+
+Note that, up until the changes in this series, the only valid configs
+accepted by the SCMI mailbox transport are a) and b): this ensures backward
+compatibility even in the case in which a DT sporting the new format (c,d)
+is, wrongly, deployed with an old kernel still not supporting this new
+logic: in such a case c) and d) configs will be simply rejected. (wrongly
+deployed because installing a c) or d) styled-DT would be required only if
+the underlying mailbox HW had effectively changed and used unidir chans)
+
+I have tested this on a JUNO board (MHUv1 bidirectional) and TotalCompute
+TC2 reference design (MHUv2 unidirectional). [1]
+
+The series is based on v6.3-rc4.
+
+Having said that, I am not completely sure if all of the above constraints
+should (and/or could) be expressed in a more formal way also in the YAML
+binding itself.
+
+Any feedback or suggestion in these regards is highly appreciated.
+
+Thanks,
+Cristian
+
+[1]: https://gitlab.arm.com/arm-reference-solutions/arm-reference-solutions-docs/-/blob/master/docs/totalcompute/tc2/tc2_sw_stack.rst
+
+----
+v2 --> v3
+ - coalesced oneOf mbox-names entries using minItems
+ - removed unidirectional channel DT example
+v1 --> v2
+ - added mbox-names unidirectional definitions and example
+
+Cristian Marussi (2):
+  dt-bindings: firmware: arm,scmi: Support mailboxes unidirectional
+    channels
+  firmware: arm_scmi: Add support for unidirectional mailbox channels
+
+ .../bindings/firmware/arm,scmi.yaml           | 48 ++++++++--
+ drivers/firmware/arm_scmi/mailbox.c           | 95 ++++++++++++++++---
+ 2 files changed, 122 insertions(+), 21 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
