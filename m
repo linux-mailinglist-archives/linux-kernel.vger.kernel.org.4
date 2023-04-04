@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A986D66B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27E66D66C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbjDDPET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 11:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
+        id S234883AbjDDPGv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Apr 2023 11:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235139AbjDDPER (ORCPT
+        with ESMTP id S234826AbjDDPGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 11:04:17 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758443C3D;
-        Tue,  4 Apr 2023 08:04:16 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id x37so19815099pga.1;
-        Tue, 04 Apr 2023 08:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680620656;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7VGuVc9iWmN4VQupgkCqNpttr0xfto+0leXdufB0lGw=;
-        b=mU6DmiDhAZ7UKCCNlA9Mtptj6wsDlsEuRXLNXv+C6PjQQ9+eohPqqbUSBjYq+/4Y9T
-         QiprHnZ+yMpXkAwaQcl3tiCq6dpc+Uedhzbl2DhoUL9k3RFW8VHXn/NtowIgjn0cqoM8
-         TS0JAaQBY2ey+rD9zftcrrWOMy+58aHXAZmG2otfCc3NJU4hF5AVLD0+pXERrjk3V3NJ
-         SEV+sddGs1ZAAvGy5AbGcz5D7MozmdIUqFukGurdCKUl52OfAowZJqTdc+UPizJboWhP
-         SC7XZi0QhILRISAMbMXQ9xDm8/OM5igATyLqIvX64XFLy0NhvKXGBiMfKLkIljHE0Pn1
-         gjAA==
+        Tue, 4 Apr 2023 11:06:49 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622E43C2F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 08:06:48 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-544787916d9so618566787b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 08:06:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680620656;
+        d=1e100.net; s=20210112; t=1680620807;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7VGuVc9iWmN4VQupgkCqNpttr0xfto+0leXdufB0lGw=;
-        b=7HYIFmUcTbzFANvcIThxWkn8GtoCof2ZqkRbOmCeIg/CnhNYXO6ALDiK4gp2Bya5vL
-         Mxn6R+hMhNTtVVVTeXTxkKRmQBI5KOilfZYalilslEIjJWpZHA3RMAdwy1j7kuvcVhyx
-         /sFRl0Xn/WE1jAjztFnCXtDIGmbYzVmsm2JMp5a98bjAQYo0vFFm22eCwbLL17CFYIKi
-         /5o9qD1E16Zoau4t1UN01hoc2jZfGm0aSwqMG8NwM4vNrKFUgIuziyzaAdLI66+tIOQO
-         050r4NE4IkK6kNdaaYsxiJp0FWLmc1KOVd9f5hxrRaeeEL0Z9nZmT8i7r3g8bLMl3HOZ
-         fKow==
-X-Gm-Message-State: AAQBX9eJyWi/XIWar8bV8NvU00cxLwd0rlDeNqmfkK9D/lBUK1LrIMwF
-        e4z3Vouc/BmCCkogCX4JDidaz+cp0Z9Df6uqDCo=
-X-Google-Smtp-Source: AKy350YmOuTFOmWeT7kjqpqgAOLQymxtocjWP1PXl0+xBXseHoBxU6EgnEB1xSvqvADaoRwE6vE+yx/8hNIwIi0K7NI=
-X-Received: by 2002:a05:6a00:22d5:b0:625:a545:3292 with SMTP id
- f21-20020a056a0022d500b00625a5453292mr1419728pfj.0.1680620655557; Tue, 04 Apr
- 2023 08:04:15 -0700 (PDT)
+        bh=KwzDPt+9Axnp6bNzN+6EpAA+HQRFVNX7yH6ulz2lZ88=;
+        b=qgaR7eW0kJgtUewGlR8rFg1TY2t2Rd+EoSDVC8kqrCSA3GweazF3yzWAQLFV1+DwtU
+         I4Owu0mjth/1ezL3Q2w99GzBAmYUUczyKD1mkO+h+p4bTY6eSXluzAyqIas0l0mjiXMV
+         ho+VyHeiFYrubFqEmFne2h5BFeSFfWqbGuZS2YsRt/PEzYomL+9qJvtSib9WbdyQyjW4
+         B7VIXoaE844CbhgZokq9ENgKRtYyAkr6nyGLt76PT3Gnm9sW4d3HlAFZoOuoc5bjTY+8
+         pBHJnSxqWuu6Y8nTBg7ArYJKIsV+fcWPHAt3aYEl4vFrpk2x9yxwEX9EBX83skgSSNnr
+         ieIQ==
+X-Gm-Message-State: AAQBX9ciygBV5zMr9+L3tWjwPOtDCkfwJTrhQM+34kvUZyT8WPA2J0n6
+        QjJMhGlCINFDb2zuQLhp96zfE2ksW2CPsZ5A
+X-Google-Smtp-Source: AKy350aZaaLZqKOEoI+FVaecc0iCkW3FVYpMfMGtlSPFxi7VwNBRvpWnksZKFtJAfEskKjBLAXpsGw==
+X-Received: by 2002:a81:6c10:0:b0:536:cb48:9059 with SMTP id h16-20020a816c10000000b00536cb489059mr3209248ywc.50.1680620807274;
+        Tue, 04 Apr 2023 08:06:47 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id dg3-20020a05690c0fc300b00545a08184fcsm3200872ywb.140.2023.04.04.08.06.46
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 08:06:46 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5463fa0c2bfso288705277b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 08:06:46 -0700 (PDT)
+X-Received: by 2002:a81:440f:0:b0:545:5e70:323f with SMTP id
+ r15-20020a81440f000000b005455e70323fmr1593040ywa.4.1680620806640; Tue, 04 Apr
+ 2023 08:06:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <30549453e8a40bb4f80f84e1a1427149b6b8b9e8.camel@gmail.com> <20230404080024.31121-1-arefev@swemel.ru>
-In-Reply-To: <20230404080024.31121-1-arefev@swemel.ru>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Tue, 4 Apr 2023 08:04:04 -0700
-Message-ID: <CAKgT0Udf_tMn-oeE_Oqu3P+ZqD0Pg65EGoSOoF0qfHeHynU5jw@mail.gmail.com>
-Subject: Re: [PATCH] net: Added security socket
-To:     Denis Arefev <arefev@swemel.ru>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, trufanov@swemel.ru, vfh@swemel.ru
+References: <20230403065207.1070974-1-bjorn@kernel.org>
+In-Reply-To: <20230403065207.1070974-1-bjorn@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 4 Apr 2023 17:06:35 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV+sqGB5V4LZAcHw_4n6=ZVPs_v0uB9V-sPTUL1EpL6eg@mail.gmail.com>
+Message-ID: <CAMuHMdV+sqGB5V4LZAcHw_4n6=ZVPs_v0uB9V-sPTUL1EpL6eg@mail.gmail.com>
+Subject: Re: [PATCH] riscv: entry: Save a0 prior syscall_enter_from_user_mode()
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Conor Dooley <conor@kernel.org>,
+        Yipeng Zou <zouyipeng@huawei.com>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 1:00=E2=80=AFAM Denis Arefev <arefev@swemel.ru> wrot=
-e:
+On Mon, Apr 3, 2023 at 8:54 AM Björn Töpel <bjorn@kernel.org> wrote:
+> From: Björn Töpel <bjorn@rivosinc.com>
 >
-> Hi Alexander. I understand your concern.
-> That's right kernel_connect is in kernel space,
-> but kernel_connect is used in RPC requests (/net/sunrpc/xprtsock.c),
-> and the RPC protocol is used by the NFS server.
-> Note kernel_sendmsg is already protected.
+> The RISC-V calling convention passes the first argument, and the
+> return value in the a0 register. For this reason, the a0 register
+> needs some extra care; When handling syscalls, the a0 register is
+> saved into regs->orig_a0, so a0 can be properly restored for,
+> e.g. interrupted syscalls.
+>
+> This functionality was broken with the introduction of the generic
+> entry patches. Here, a0 was saved into orig_a0 after calling
+> syscall_enter_from_user_mode(), which can change regs->a0 for some
+> paths, incorrectly restoring a0.
+>
+> This is resolved, by saving a0 prior doing the
+> syscall_enter_from_user_mode() call.
+>
+> Fixes: f0bddf50586d ("riscv: entry: Convert to generic entry")
+> Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> Tested-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
 
-Can you add a write-up about the need for this in the patch
-description? Your patch description described what you are doing but
-not the why. My main concern is that your patch may end up causing
-issues that could later be reverted by someone if they don't
-understand the motivation behind why you are making this change.
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Calling out things like the fact that you are trying to add security
-to RPC sockets would be useful and would make it easier for patch
-review as people more familiar with the security code could also tell
-you if this is the correct approach to this or not.
+Gr{oetje,eeting}s,
 
-Thanks,
+                        Geert
 
-- Alex
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
