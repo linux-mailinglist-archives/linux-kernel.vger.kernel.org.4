@@ -2,82 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 409DC6D6D22
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD456D6D21
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235873AbjDDT2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 15:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
+        id S235986AbjDDT22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 15:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235987AbjDDT2d (ORCPT
+        with ESMTP id S235629AbjDDT2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 15:28:33 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952F84699
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:28:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680636510; x=1712172510;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pnX2oZkahxccT55Ym8SzySplVHw8swVwxF8XJ8S7fQo=;
-  b=ZDyAF1hXwQnVRPSzU2Y22zdAZBaKsdYrDybrLMynv/1jIAD2P736s3kW
-   KeLFw26W/vcz9Q6uQyRMt56UlAEJjt2tX5n/LZOa8quzUopS/jF6/yodE
-   Uhsq78b8YQyYuFXta3r4gTeZHdM2fwpKJxhYl18PvnGtpPps42jR9vkp0
-   yTK4ToibzWSsYV9T4ef5PBs2HtK8XCRdoCaY8NEw1INlTbtugdsGesvzz
-   cl2E9QNuSItgiFhJ3+T/jbHimsF2CbsejrYS3VQi2pxLiJYm2JUeSk0x0
-   6kYS9RvG1pU9LdzGCaHTQ1TB0TUdFG7e8b4M/W6/VvQ4JFvuAJC6wApRB
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="370102384"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="370102384"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 12:27:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="797629414"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="797629414"
-Received: from jshresth-mobl1.amr.corp.intel.com (HELO [10.209.62.86]) ([10.209.62.86])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 12:27:43 -0700
-Message-ID: <d3d95889-67ec-576e-ec9c-b9bd462e1c0e@intel.com>
-Date:   Tue, 4 Apr 2023 12:27:43 -0700
+        Tue, 4 Apr 2023 15:28:25 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E38340D5
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:28:07 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id cn12so135004252edb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 12:28:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1680636486; x=1683228486;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eCVmz0T8iHiHtH7a2wMYKMxDUPs6L8UFRcHeBvRmBAU=;
+        b=W+yeEUVDtcLeK1sXdifY29Ljdfd3je0Eb7T4XfBZ+ltTmV+JKqnAYAsi3H0pOYhIl5
+         jbc0tBu6ZFDMBXbGzHwFR5QCJYtTgpqblVF8invTekBzRx86hiOKlB0FZNOe5QoDEUSW
+         pLaDnxpUbbj9Wuu9OOZgWUelYmi+VGQjlW7/A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680636486; x=1683228486;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eCVmz0T8iHiHtH7a2wMYKMxDUPs6L8UFRcHeBvRmBAU=;
+        b=k/wo41X1n58sLXEJ4Vg/68slSoJpz87KXLTYsH3aMXP7QlYjDnBHXVofx3SpuHTxJ/
+         QI+cbOMr8VcQL0vFu+MSz2Rpz1b9wMk7qpRpU3YYtvEQIKKOmKKIeq5oTJW6tjY138gD
+         k3O0QFq86s7sCo/lLB3Kkcp7ue3o27vizX0Y7tOMzjqzJiEt5u8swNRn8WW6zo+E8iue
+         TgsTWt45T5TJdBRXYxZEmpKFmtjUFjAK/LNTo085xQcHfnCDs2/l49/NOhzCZ1XNLr30
+         cEI9AeIrCp4rVtOhMFAwCe+XCwmS3f/4u8EYjjYOX5gVO4qoPbKSdcL4eEXLukd3pwf1
+         7xng==
+X-Gm-Message-State: AAQBX9fTm7Yy3jIXYn9fHc/qD2dQI4ydZ3Yi2iIjbiyyY/FAMUGlFb+V
+        qg1/Krc8CKeAaXHZHx0oeY0VYQ==
+X-Google-Smtp-Source: AKy350ZfSXIvET0COGP5gtjzSXywPfCpMp7M5ms3jss4Y0ez/AQVBbeHSNIrJP0+TaHdDf0Qe7/7Xw==
+X-Received: by 2002:a05:6402:1e8e:b0:502:1f7b:f069 with SMTP id f14-20020a0564021e8e00b005021f7bf069mr598086edf.2.1680636485980;
+        Tue, 04 Apr 2023 12:28:05 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id s10-20020a056402036a00b004e48f8df7e2sm6256896edw.72.2023.04.04.12.28.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 12:28:05 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 21:28:03 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     yq882255@163.com, Stephen Rothwell <sfr@canb.auug.org.au>,
+        lima@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Qiang Yu <yuq825@gmail.com>,
+        Erico Nunes <nunes.erico@gmail.com>
+Subject: Re: [PATCH 0/3] Revert lima fdinfo patchset
+Message-ID: <ZCx6Q5y1dgAv2q/o@phenom.ffwll.local>
+Mail-Followup-To: Emil Velikov <emil.l.velikov@gmail.com>, yq882255@163.com,
+        Stephen Rothwell <sfr@canb.auug.org.au>, lima@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Qiang Yu <yuq825@gmail.com>, Erico Nunes <nunes.erico@gmail.com>
+References: <20230404002601.24136-1-yq882255@163.com>
+ <CACvgo53mV7Aoe+omtSF0BNg+gVOWqDQ_QAmMkhikjQw-vF55Xw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 6/6] x86/efi: Safely enable unaccepted memory in UEFI
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biescheuvel <ardb@kernel.org>,
-        "Min M. Xu" <min.m.xu@intel.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Jiewen Yao <jiewen.yao@intel.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
- <cover.1680628986.git.thomas.lendacky@amd.com>
- <1d38d28c2731075d66ac65b56b813a138900f638.1680628986.git.thomas.lendacky@amd.com>
- <20230404174506.pjdikxvk2fsyy4au@box.shutemov.name>
- <bc9e6d82-c7c1-47dc-e91f-57d9b4e2bb0a@intel.com>
- <20230404180917.4fsgkzcdhqvph6io@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230404180917.4fsgkzcdhqvph6io@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACvgo53mV7Aoe+omtSF0BNg+gVOWqDQ_QAmMkhikjQw-vF55Xw@mail.gmail.com>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,25 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/23 11:09, Kirill A. Shutemov wrote:
->> If our AMD friends don't do this, what is their alternative?
-> The alternative is coordination on the host side: VMM can load a BIOS that
-> pre-accepts all memory if the kernel is older.
+On Tue, Apr 04, 2023 at 04:17:33PM +0100, Emil Velikov wrote:
+> On Tue, 4 Apr 2023 at 08:13, <yq882255@163.com> wrote:
+> >
+> > From: Qiang Yu <yuq825@gmail.com>
+> >
+> > Upstream has reverted the dependant commit
+> > df622729ddbf ("drm/scheduler: track GPU active time per entity""),
+> > but this patchset has been pushed to drm-misc-next which still
+> > has that commit. To avoid other branch build fail after merge
+> > drm-misc-next, just revert the lima patchset on drm-misc-next too.
+> >
 > 
-> I know that it is not convenient for VMM, but it is technically possible.
+> The bug/revert is unfortunate, although we better keep the build clean
+> or Linus will go bananas ^_^
+> 
+> Fwiw for the series:
+> Acked-by: Emil Velikov <emil.l.velikov@gmail.com>
 
-Yeah, either a specific BIOS or a knob to tell the BIOS what it has to
-do.  But, either way, that requires coordination between the BIOS (or
-BIOS configuration) and the specific guest.  I can see why that's
-unpalatable.
+Can you (eitehr of you really) please push asap and make sure this doesn't
+miss the last drm-misc-next pull (-rc6 is this w/e)? Otherwise we'll have
+a bit a mess.
+-Daniel
 
-> Introduce an ABI with an expiration date is much more ugly. And nobody
-> will care about the expiration date, until you will try to remove it.
+> 
+> HTH
+> -Emil
 
-Yeah, the only real expiration date for an ABI is "never".  I don't
-believe for a second that we'll ever be able to remove the interface.
-
-Either way, I'd love to hear more from folks about why a BIOS-side
-option (configuration or otherwise) is not a good option.  I know we've
-discussed this in a few mail threads, but it would be even better to get
-it into the cover letter or documentation.
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
