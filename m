@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97336D5898
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641E46D58A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233791AbjDDGQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 02:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
+        id S233770AbjDDGSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 02:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233742AbjDDGQG (ORCPT
+        with ESMTP id S233413AbjDDGSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 02:16:06 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAFA30FB;
-        Mon,  3 Apr 2023 23:15:43 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3346FD9g053403;
-        Tue, 4 Apr 2023 01:15:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680588913;
-        bh=XBRjH3CxR+z0hKee/nrrgTzBzmYllKaKKk/QFqGG+9s=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=WfZVJVwY7fTOo5GS0V7QTXafJi/4ysLXHNOGFHhfDV/dDDcvRjLk7gOCBrp8YHJl7
-         0xMj4igJ7piYIgiQa/Cbwpzf1zrRtKd1q0Rs07jIRVT82dQFjbub/BwWjNsyQtTCTY
-         V/2MaoGPxOkDZzmxPEyq7si50s7zgXf7FS3MOI58=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3346FD7I064350
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 4 Apr 2023 01:15:13 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 4
- Apr 2023 01:15:13 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 4 Apr 2023 01:15:13 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3346ExNA087499;
-        Tue, 4 Apr 2023 01:15:10 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <linux@armlinux.org.uk>, <pabeni@redhat.com>, <rogerq@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH net-next v3 3/3] net: ethernet: ti: am65-cpsw: Enable USXGMII mode for J784S4 CPSW9G
-Date:   Tue, 4 Apr 2023 11:44:59 +0530
-Message-ID: <20230404061459.1100519-4-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230404061459.1100519-1-s-vadapalli@ti.com>
-References: <20230404061459.1100519-1-s-vadapalli@ti.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 4 Apr 2023 02:18:16 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6DF1BD7;
+        Mon,  3 Apr 2023 23:17:59 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 333ATM9X029579;
+        Tue, 4 Apr 2023 06:17:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=dOcWD7hwOiecoarohEbN981aTy62qme7WLPGbsPkvIY=;
+ b=X2vJAaqOHgwYJ80O3MvPFAqd5yMlSwNGSDk3fv8WB8CXjrpXpcLkNGpqGUJffFgmf7Ve
+ mA9WTcbDfrDEVNZfKhtpnhCqWRqYRbsJxytrKbf3lIpBEn0x609I4jNqJ1kX4is3MTUR
+ ozr4eieEU2YbiBGjGWzglIvGzsdGxF+Jo5sCxKqEb26kmavpfN/RaZYV2+piNYPLdVsJ
+ htzHCIR101uOJDfjZENBB30WelRorLsx+mcKXezobQCcKHSVckvjEXHBVY6884Flih/X
+ Tm4uzj1KVSfkzpWqb41KE4c6BXVsxblZi04fY6UHAaEDH9IlRLQre1nlDP8lpMThazKY RQ== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pqw36tetb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 06:17:19 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3346HF5J025295;
+        Tue, 4 Apr 2023 06:17:15 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3ppdpkhu3g-1;
+        Tue, 04 Apr 2023 06:17:15 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3346HFWI025190;
+        Tue, 4 Apr 2023 06:17:15 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3346HFhr025188;
+        Tue, 04 Apr 2023 06:17:15 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
+        id 9519632EE; Tue,  4 Apr 2023 11:47:14 +0530 (+0530)
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+To:     linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: [PATCH 0/3] fix decoder issues with firmware version check
+Date:   Tue,  4 Apr 2023 11:47:09 +0530
+Message-Id: <1680589032-26046-1-git-send-email-quic_dikshita@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 0ftWUsmWInntVOaIrzhF3do2H3vksrzX
+X-Proofpoint-GUID: 0ftWUsmWInntVOaIrzhF3do2H3vksrzX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-03_19,2023-04-03_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
+ phishscore=0 clxscore=1015 malwarescore=0 adultscore=0 mlxscore=0
+ mlxlogscore=792 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304040057
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TI's J784S4 SoC supports USXGMII mode. Add USXGMII mode to the
-extra_modes member of the J784S4 SoC data.
+This series includes the changes to
+  - add firmware version based check to enable/disable some feature.
+  - add support of new HFI to notify sequence change event to
+    driver during resolution change at interframe.
+  - use firmware version based check to fix EOS handling for different
+    firmware versions.
 
-Configure MAC control register for supporting USXGMII mode and add
-MAC_5000FD in the "mac_capabilities" member of struct "phylink_config".
+With this series, divided the previous version [1] into
+multiple patches as suggested in review comments.
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+[1] https://patchwork.kernel.org/project/linux-media/list/?series=733169
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index f1e83d49de75..cf7bef5e3e22 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -1514,6 +1514,14 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
- 			cpsw_sl_ctl_clr(port->slave.mac_sl, CPSW_SL_CTL_EXT_EN);
- 		}
- 
-+		if (state->interface == PHY_INTERFACE_MODE_USXGMII) {
-+			cpsw_sl_ctl_set(port->slave.mac_sl,
-+					CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN);
-+		} else {
-+			cpsw_sl_ctl_clr(port->slave.mac_sl,
-+					CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN);
-+		}
-+
- 		writel(AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
- 		       port->sgmii_base + AM65_CPSW_SGMII_CONTROL_REG);
- 	}
-@@ -2171,7 +2179,8 @@ am65_cpsw_nuss_init_port_ndev(struct am65_cpsw_common *common, u32 port_idx)
- 	/* Configuring Phylink */
- 	port->slave.phylink_config.dev = &port->ndev->dev;
- 	port->slave.phylink_config.type = PHYLINK_NETDEV;
--	port->slave.phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_10 | MAC_100 | MAC_1000FD;
-+	port->slave.phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_10 | MAC_100 |
-+						      MAC_1000FD | MAC_5000FD;
- 	port->slave.phylink_config.mac_managed_pm = true; /* MAC does PM */
- 
- 	switch (port->slave.phy_if) {
-@@ -2189,6 +2198,7 @@ am65_cpsw_nuss_init_port_ndev(struct am65_cpsw_common *common, u32 port_idx)
- 
- 	case PHY_INTERFACE_MODE_QSGMII:
- 	case PHY_INTERFACE_MODE_SGMII:
-+	case PHY_INTERFACE_MODE_USXGMII:
- 		if (common->pdata.extra_modes & BIT(port->slave.phy_if)) {
- 			__set_bit(port->slave.phy_if,
- 				  port->slave.phylink_config.supported_interfaces);
-@@ -2814,7 +2824,7 @@ static const struct am65_cpsw_pdata j784s4_cpswxg_pdata = {
- 	.quirks = 0,
- 	.ale_dev_id = "am64-cpswxg",
- 	.fdqring_mode = K3_RINGACC_RING_MODE_MESSAGE,
--	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII),
-+	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII) | BIT(PHY_INTERFACE_MODE_USXGMII),
- };
- 
- static const struct of_device_id am65_cpsw_nuss_of_mtable[] = {
+Dikshita Agarwal (3):
+  venus: add firmware version based check
+  venus: enable sufficient sequence change support for vp9
+  venus: fix EOS handling in decoder stop command
+
+ drivers/media/platform/qcom/venus/core.h       | 18 ++++++++++++++++++
+ drivers/media/platform/qcom/venus/hfi_cmds.c   |  1 +
+ drivers/media/platform/qcom/venus/hfi_helper.h |  2 ++
+ drivers/media/platform/qcom/venus/hfi_msgs.c   | 11 +++++++++--
+ drivers/media/platform/qcom/venus/vdec.c       | 10 +++++++++-
+ 5 files changed, 39 insertions(+), 3 deletions(-)
+
 -- 
-2.25.1
+2.7.4
 
