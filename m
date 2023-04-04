@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319556D5E8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B558D6D5EB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234353AbjDDLFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:05:16 -0400
+        id S234639AbjDDLJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 07:09:07 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234714AbjDDLEc (ORCPT
+        with ESMTP id S234994AbjDDLIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:04:32 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF5665B2;
-        Tue,  4 Apr 2023 04:02:19 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso33540296pjb.2;
-        Tue, 04 Apr 2023 04:02:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680606110;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iLXYG9UIvfeWF+Q8/NtPlVhVUhnvAmqVeS4iKYz0Uz0=;
-        b=pz0HO8RZWzyNSUJ2QkwzWsTUwKeHQ55RS+lRq18OK3hROKy/duTTo2Oi55gEbRHlWZ
-         LeA8q8SYJ762pHWz1s8JKvo2UVKhpNcDNiUdtVCV0m/7BTvzV476wIZ/Fu0qFNzhfcqn
-         TvY12MFnOJRFLvy1gsbhy6Twb591LymsHKkfb1p7gb7WhEvUOqI0zELpRK21td7cJNNP
-         2Ktbemkvjdy8LyVK28EqY50DcqGz5bVUqc72iEyjHRW1gKtXSTIA8jC6HlqlXk7HN9Nl
-         S1c7edAdzs6VJRtxSEMTX2pbFNLWtReP/aKiWI7kR6HI6MozBvDQ1+dnnbjKBC7qqcs7
-         3Ysg==
+        Tue, 4 Apr 2023 07:08:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC9735BE
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 04:06:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680606375;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=13WWdn1CKTzFzc+LsesKqq+DZLEoqqRMtewjbJUhOYg=;
+        b=MvFu+deuAYfsl3CkbOJJRxh3bbtyiPLI5bdUiW4e4UkxPBKko5sjskH+81gJzRR/5Gk+R7
+        k90+hzW+UqCopSnCniI28UpYeoBBcU/13bSCFDxXog7HL8f/gSmHbbrAQlmGd48d5sETRS
+        XihhryJjKUbk/rnxOVx/fs1B5EXd4Bg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-2-b2dl4i-2N921683nzHapjw-1; Tue, 04 Apr 2023 07:03:03 -0400
+X-MC-Unique: b2dl4i-2N921683nzHapjw-1
+Received: by mail-wm1-f71.google.com with SMTP id h22-20020a05600c351600b003ef739416c3so11141695wmq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 04:03:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680606110;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iLXYG9UIvfeWF+Q8/NtPlVhVUhnvAmqVeS4iKYz0Uz0=;
-        b=XJcnAa93/eb7/VTQJ8JtyiXXPad1E4TQ8EadZmIfLbxjgktMkw1aVp5LGVV4lgoz5b
-         4SaU4Uh6oSYpag1Bny1+4ZHC3/UDajAo3PIzUIq7t0bTyYlqUSWuc25fV61r0WfyKTir
-         A9V2d+LGbkc9oZrQE0vbpWNKGSuzhjh+dwhAWeLq6FVJxODSbfnLldIBBH6Rnf7pdnVv
-         6KcU8VNoMorPSH65CLFWJZZYyHxr+6SxPmIcnr9t+BrQehp5boZHVR0JfQv/kj3pEnlC
-         GZoEDykBYoHa+XxmlSTTsqrTfKYz2Di98Djh4vbiyTA0mrxZAQrjQUQ1GOuo1OHuz+uf
-         hN0g==
-X-Gm-Message-State: AAQBX9fjaf/Gjrp82m+u6PtYc2+hKKn+ANJMD+ANEkLBc19/qNdHVq9m
-        kqgAeT+kZgCHaFbSiiBD69HVY774lkceX50hbl8=
-X-Google-Smtp-Source: AKy350aHxr3M+JgML644wS5Lz136pHJq5126aDOS+wBR0DZFjTtNeaBbyx5mm3eGDkvMk3XFrvyn/2mgzWXsWibaDTs=
-X-Received: by 2002:a17:902:76c3:b0:19f:3cc1:e3cc with SMTP id
- j3-20020a17090276c300b0019f3cc1e3ccmr828639plt.3.1680606110250; Tue, 04 Apr
- 2023 04:01:50 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680606182;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=13WWdn1CKTzFzc+LsesKqq+DZLEoqqRMtewjbJUhOYg=;
+        b=U+HO7n8Z+tG291QAVfBVT4SN3AwF6qWxPb+s+yUwmBnCqQeJTgbN7lf5CcMPnhjDR5
+         qQzIXlDpwueteWy11pq2l0Y+RqjQKYzPVY1eQlmmWYHiN8Y+BXPuIZRrXIWxLNM8LeAM
+         mJWnXBW4DhIsQUcRjG3iwxWU4bdLbGtYgJqkVlglKGxxM1JwJGzl1knNnNFeIWfpF3eO
+         ipz8V6IvZTfQNV41tP+pVQMRGGuvYOzd4PbSnyxT+KbZWc7gb0k5msINma84W5wLnE5p
+         kz407xnMmobmzNbVJPcRz0z1pRpGub+uNbPw+AnndhksNNORdYct1plL/WNU/sQvu2dq
+         +IsA==
+X-Gm-Message-State: AAQBX9e1BbOJnRBhk94upt1lhHGirY8bcS9zcEazZpJbwwYyEfObZ0qE
+        Pwbz/Z5dcx9ucwCcHfX8BpTjuQre2rcx5a3/1MRzDKFynLJfpOW3HaPMufTJYSYq2t6K79n7LTY
+        CYJC5E1dJJMYD4YOvKiSGi7kw
+X-Received: by 2002:a05:600c:450b:b0:3ee:9652:932 with SMTP id t11-20020a05600c450b00b003ee96520932mr15688900wmo.12.1680606181920;
+        Tue, 04 Apr 2023 04:03:01 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bZe97z66nGDbGC4iLvwGvTU+YVGSsMC3kGyTmdIJ9mqYGQOg24liH7lcGvttolkuPS/0R1tw==
+X-Received: by 2002:a05:600c:450b:b0:3ee:9652:932 with SMTP id t11-20020a05600c450b00b003ee96520932mr15688890wmo.12.1680606181666;
+        Tue, 04 Apr 2023 04:03:01 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id c3-20020a05600c0ac300b003edf2dc7ca3sm14882758wmr.34.2023.04.04.04.03.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 04:03:01 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] video/aperture: fix typos
+In-Reply-To: <87355fex1f.fsf@minerva.mail-host-address-is-not-set>
+References: <20230404040101.2165600-1-suijingfeng@loongson.cn>
+ <0ad03743-0224-b154-a149-e3e4d54b252d@suse.de>
+ <87355fex1f.fsf@minerva.mail-host-address-is-not-set>
+Date:   Tue, 04 Apr 2023 13:03:00 +0200
+Message-ID: <87zg7ndi57.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-References: <CAEm4hYXLNP6pcCj5Av35sRG6kCOF0H3+a7VfTtFfGduMgcXJhA@mail.gmail.com>
- <20230403224517.GA3472913@bhelgaas>
-In-Reply-To: <20230403224517.GA3472913@bhelgaas>
-From:   Xinghui Li <korantwork@gmail.com>
-Date:   Tue, 4 Apr 2023 19:02:59 +0800
-Message-ID: <CAEm4hYXNUdm_wdK580xsZBUWTycJFsEhjFJ+d57U_QYu6RFWxg@mail.gmail.com>
-Subject: Re: [PATCH v4] PCI: vmd: Add the module param to adjust MSI mode
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     nirmal.patel@linux.intel.com, kbusch@kernel.org,
-        jonathan.derrick@linux.dev, lpieralisi@kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 6:45=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> w=
-rote:
+Javier Martinez Canillas <javierm@redhat.com> writes:
+
+[...]
+
+>>>   	/*
+>>>   	 * Remove the device from the device hierarchy. This is the right thing
+>>> -	 * to do for firmware-based DRM drivers, such as EFI, VESA or VGA. After
+>>> +	 * to do for firmware-based fb drivers, such as EFI, VESA or VGA. After
+>>
+>> That sentences is not well phrased. Maybe say 'This is required for 
+>> firmware-provided graphics, such as EFI, VESA or VGA.'
+>>
 >
-> > In the patch I send in last email, We speculate that the VMD
-> > Controller aggregate interrupts,
-> > making the PCIe port less stressed and improving iops. In this
-> > case(lots of 4k random IO), if we enable the VMD MSI
-> > remapping, we found the interrupts from VMD Controller's MSI are less
-> > and the IOPS is much higher.
+> Graphic drivers or display drivers would indeed be more accurate here. But
+> I think that "fb drivers" is still well pharsed since the are other places
+> where either fbdev or DRM drivers for firmware-provided framebuffers are
+> named like that.
 >
-> Great, that's useful information about why users would want to use
-> this parameter.
->
-> Obviously the other half is to mention the reasons why they may not be
-> able to use it.  If "msi_remap=3Doff" were *always* safe and desirable,
-> we would just do that unconditionally and there would be no point in a
-> parameter.
->
-> > > > I place the "vmd_config_msi_remap_param" that is VMD MSI-X's mode
-> > > > param configuring helper front
-> > > > "vmd_enable_domain". So, It will not change the logic disabling
-> > > > remapping from ee81ee84f873, such as
-> > > > "Currently MSI remapping must be enabled in guest passthrough mode"=
-.
-> > > > So, if the user config the wrong type, it will not work, and they c=
-an
-> > > > find it by dmesg.
-> > >
-> > > That's kind of a problem.  I'm not in favor of something failing and
-> > > the user having to debug it via dmesg.  That causes user frustration
-> > > and problem reports.
-> >
-> > What about adding a sysfs node for it in VMD PCI bus dir, which allows
-> > users to catch VMD's MSI current working mode?
->
-> No, a sysfs node is not the answer to this.  If we *can* avoid a
-> non-working situation, we should avoid it.  If users see a non-working
-> situation, they will rightly complain, and somebody will have to debug
-> it.  We don't want that.
-emm~
-I privately suppose: In the traditional way without module parameters,
-this problem also exists. If the user disables remapping in guest os, the V=
-MD
-driver will force it to remapping mode.
-What about I add the additional description in MODULE_PARM_DESC and comment=
-?
-As for some devices not support disable remapping,  What about changing
-the param to disabae_bypass=3D0/1?
-And make it clear in the description:
-this parameter will only affect the disabling of bypass mode on
-devices that support it.
->
-> My point is that apparently guest passthrough mode is relevant and
-> maybe it should be part of the commit log about how this parameter
-> should be used.
-You are right~
-I will add some clarification on how to configure VMD MSI in the guest.
->
-> Bjorn
+
+Sui,
+
+Maybe you could post a follow-up patch to improve the comment as suggested
+by Thomas?
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
