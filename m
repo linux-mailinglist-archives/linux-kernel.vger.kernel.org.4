@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0C66D5862
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA986D5864
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbjDDGEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 02:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S233594AbjDDGE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 02:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233249AbjDDGEA (ORCPT
+        with ESMTP id S233552AbjDDGEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 02:04:00 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971412108
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:03:59 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id t10so125887938edd.12
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 23:03:59 -0700 (PDT)
+        Tue, 4 Apr 2023 02:04:24 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BEE1BC7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:04:22 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id dw2so5594881qvb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 23:04:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680588238;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ITQbTYHkWoQmQdgwcAwJqiyeakrDEM6GM3zR7BrphYk=;
-        b=UnQLeYQ8fqD+hzO06oqyAV+9WkUUYl1Lt2S8sG7HrFOGqswoE2n+Q3ZC+HyFHcwvxB
-         fdzafJgzmDfT7I7rlOFw2Wl5P/2zM7DcPApOmiDk5D+FtnisTFx/e94EYWLat7PklMTQ
-         y32IhYOyiX1mM5YmVgElIJxBHUGrafUTTfEbe5FCbk0a9wWYY5i5JP+exhHguNdwqekf
-         2txgUtbQyskTl3awYc58vJwoHgERGqFovj5bqzFmFTxrWWRoqtgcAiXwIGkVggg3OSpG
-         z/x9SP+QQDIlNJhPqEzYdzts9xU88AaPMi11p3LilKzcn1b141f/sVKXNoAPNCInBgJG
-         QwCw==
+        d=gmail.com; s=20210112; t=1680588261;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ubgV9hV0Yhsb6l5Ks66gGmhukuZ1NafV2435hbdgAVE=;
+        b=CBWpykirvUIJpCeg68XRsCGwC1j5vDbWu/AKjSp2TIT77S5BsfqfGvTTyrNZWp14b5
+         s9iQDm+QTIvsB7s1icRkXbeXhDr/MHGJVWMcNTpxPns7EpCGsBN0PbmmmfnvC7FI9QiI
+         EirMRZYMiVrRqZlfaOmkBipD2npb90RBA28XhVVQiRRqztt3bttHDX7/B69OG62g9eId
+         hE3hEmSxwXkRz2yyevPASJqEOeJ5whBsTiy1W4/h4rBYDEwr/PzZMO9TIZfbGZAjXWf8
+         nVy+mgEEhm5dwxTs43V2nEPWUiynXOu2o5HKxe24abawKdkaiBVLo61JfQCwTKAD7z4j
+         Egwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680588238;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ITQbTYHkWoQmQdgwcAwJqiyeakrDEM6GM3zR7BrphYk=;
-        b=2r2gKpXLken6aOBN22IvFtV1UDrQhl+hAc+HwIMo84tbgxHwTL5fs1P9lehVBR6hcT
-         HyCmP+LID2P2bkwdbcOG7E6NBKt+1eSHUX+eEJnowjm/rSFIM203KHxAc0wMbkLpz6Yh
-         HAy8Bv3HFWbsbHAdfoMD2809yf8XaplwqN+IH9q98Y6xJHOwZI1VXOfOturDDzj+Uk30
-         ZK06tRD+A1DuVxoLrBVwzmKGEl1GQ/nU2CajCg8D9M6X1P7ctRewxKQI3sa/wJf5iVBP
-         ZKFW10j/ZrqGJgiKPlCTEIS17SMbSl5ZGRbe97uXcHWjnBw31mTc4NEg8wqJOjzh4MKI
-         8dYw==
-X-Gm-Message-State: AAQBX9czg43v056n/jfB8qZX8u8Gw1kwdbxCkYK66mPyoXOGayiwSTyZ
-        HQRhfuviU88C9SCyzRswBVNkaw==
-X-Google-Smtp-Source: AKy350ZDbET+D27JH4HJrrFIomqIN72tXDuXuwx6o4ED2+R14BuHvZqPELiopTfjNX6tWFYqm3Thkg==
-X-Received: by 2002:a05:6402:48a:b0:502:3ff1:2fcc with SMTP id k10-20020a056402048a00b005023ff12fccmr1503841edv.35.1680588238121;
-        Mon, 03 Apr 2023 23:03:58 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:233a:5c18:b527:381e? ([2a02:810d:15c0:828:233a:5c18:b527:381e])
-        by smtp.gmail.com with ESMTPSA id 23-20020a508757000000b004fc856b208asm5427817edv.51.2023.04.03.23.03.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 23:03:57 -0700 (PDT)
-Message-ID: <af9b1432-b86b-dc65-6fbc-799364b4ca32@linaro.org>
-Date:   Tue, 4 Apr 2023 08:03:56 +0200
+        d=1e100.net; s=20210112; t=1680588261;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ubgV9hV0Yhsb6l5Ks66gGmhukuZ1NafV2435hbdgAVE=;
+        b=kNWjMA6iqtQZrksAa4RmxEV+FjjJO4txAh/TCrwDqx8g2UXx8MOnNboPv29ukjHHSh
+         xnRygC3aJAukHa1neXdXLSIOj3TK3db/xB+NWuzUWuo8W60wkJboJ9pt/cWAZKYv8qry
+         WmAykvZMmZYjcmCvH7y03oAIr29bFeUU+2o3udND5O1NeoKraHYqkl3Av/0TO7lzpT7B
+         BDg0YzwGAzlMP7rj8HNBXm9fDie/LldupE9wYepqWmGWuaS5PkJE6mK01k7llNHBouZ4
+         2oh3GbwJt49X34i/8Kd3NmTakQI5WZnn7qYgVMSRaLptdrZwf/mIoGee+KOCHua502Ow
+         1zsA==
+X-Gm-Message-State: AAQBX9dZ6YAyU9tV0Dqz5TO6p2nDK4+/kraOCqzfmyAHF20V3x11CMe8
+        4NWWrN4x8/VhEPdtzkijoFM2z2+ZAAcWIhNXVmfBA3ULX/n8/w==
+X-Google-Smtp-Source: AKy350b5p70ecznUdiF2eptg+UR86P6LTGHJFrQF8CN08WaqRYOblhWPCa8c3yKaawtyRdDKCBAr92+VcqF7AzbEOYE=
+X-Received: by 2002:a05:6214:192e:b0:5a9:5b2d:cd57 with SMTP id
+ es14-20020a056214192e00b005a95b2dcd57mr254115qvb.3.1680588260768; Mon, 03 Apr
+ 2023 23:04:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/9] dt-bindings: arm: qcom: Add QRB2210/QCM2290 and RB1
- board
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>
-Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230403-topic-rb1_qcm-v1-0-ca849b62ba07@linaro.org>
- <20230403-topic-rb1_qcm-v1-2-ca849b62ba07@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230403-topic-rb1_qcm-v1-2-ca849b62ba07@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230228161426.4508-1-ubizjak@gmail.com>
+In-Reply-To: <20230228161426.4508-1-ubizjak@gmail.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Tue, 4 Apr 2023 08:04:09 +0200
+Message-ID: <CAFULd4YYFNfN7uQeutP94j69LXwZQ-utveTFv3MVfZ9nt681rg@mail.gmail.com>
+Subject: Re: [PATCH] sched/core: Use do-while instead of for loop in set_nr_if_polling
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,41 +76,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/2023 19:36, Konrad Dybcio wrote:
-> Document QRB210, a QRB version of QCM2290.
-> 
-> Document QTI Robotics RB1 as a QRB2210 device.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+I would like to ping for the patch below. The patch normalizes
+try_cmpxchg loop to a more readable "while" instead of "for (;;)"
+loop, otherwise it is a nop.
+
+https://lore.kernel.org/lkml/20230228161426.4508-1-ubizjak@gmail.com/
+
+Uros.
+
+
+
+On Tue, Feb 28, 2023 at 5:14=E2=80=AFPM Uros Bizjak <ubizjak@gmail.com> wro=
+te:
+>
+> Use equivalent do-while loop instead of infinite for loop.
+>
+> There are no asm code changes.
+>
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Christian Brauner <brauner@kernel.org>
 > ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 05badce5fedc..f663af451eb2 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -47,6 +47,8 @@ description: |
->          msm8996
->          msm8998
->          qcs404
-> +        qcm2290
-> +        qrb2210
->          qdu1000
->          qru1000
->          sa8155p
-> @@ -353,6 +355,12 @@ properties:
->            - const: swir,wp8548
->            - const: qcom,mdm9615
->  
-> +      - description: Qualcomm Technologies, Inc. Robotics RB1
-
-This should be rather enum for all QRB2210-based boards.
-
-> +        items:
-> +          - const: qcom,qrb2210-rb1
-
-
-Best regards,
-Krzysztof
-
+>  kernel/sched/core.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index af017e038b48..349c018eaf09 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -899,14 +899,13 @@ static bool set_nr_if_polling(struct task_struct *p=
+)
+>         struct thread_info *ti =3D task_thread_info(p);
+>         typeof(ti->flags) val =3D READ_ONCE(ti->flags);
+>
+> -       for (;;) {
+> +       do {
+>                 if (!(val & _TIF_POLLING_NRFLAG))
+>                         return false;
+>                 if (val & _TIF_NEED_RESCHED)
+>                         return true;
+> -               if (try_cmpxchg(&ti->flags, &val, val | _TIF_NEED_RESCHED=
+))
+> -                       break;
+> -       }
+> +       } while (!try_cmpxchg(&ti->flags, &val, val | _TIF_NEED_RESCHED))=
+;
+> +
+>         return true;
+>  }
+>
+> --
+> 2.39.2
+>
