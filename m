@@ -2,54 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46AA6D6999
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828B46D699D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235590AbjDDQ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        id S235641AbjDDQ4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235629AbjDDQ4D (ORCPT
+        with ESMTP id S235188AbjDDQ4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:56:03 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE8F4C20;
-        Tue,  4 Apr 2023 09:55:43 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrYlc0FDZz67T1b;
-        Wed,  5 Apr 2023 00:54:52 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 4 Apr
- 2023 17:55:37 +0100
-Date:   Tue, 4 Apr 2023 17:55:37 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-CC:     <linux-cxl@vger.kernel.org>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <will@kernel.org>, <dan.j.williams@intel.com>,
-        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Davidlohr Bueso" <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH v4 5/5] docs: perf: Minimal introduction the the CXL PMU
- device and driver
-Message-ID: <20230404175537.00004782@Huawei.com>
-In-Reply-To: <bf9ef54d-65da-ce59-3b47-f3dc29a5e052@linux.intel.com>
-References: <20230330164556.31533-1-Jonathan.Cameron@huawei.com>
-        <20230330164556.31533-6-Jonathan.Cameron@huawei.com>
-        <bf9ef54d-65da-ce59-3b47-f3dc29a5e052@linux.intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 4 Apr 2023 12:56:30 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4925B8F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:56:03 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b20so133303216edd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 09:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112; t=1680627361;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iDkPzCPbOwFeM8pNdOTQrKFLlnDQsoU1nXWtiK+e4mA=;
+        b=iqVXNb1R8IhevzghcBO7gutyLdEil8JOM8mrMNUbzoGbutuR4NhoydBe6+ztX7RaJ4
+         ZcbQM2+TDOSHPyJg0o9hN/vcHilQk0aOrtGsH3kDLRy6qXniIe+VaEYeA3ejGLWJSUEU
+         Q+ZwU6x/YAT/pVpnQApEznh4Qdj6GtTBWOi3A3S6nNa3ZptUSEY0Z8KENFgytfb8SBmx
+         2Fc6eOj6GTEc8LBZb08sVY2ZOeR74va24Ca910/PYw/TUfYAwMYEx3bDCkM2IHGk8G/b
+         rrYX9wGAkcGnDkUCv5w6XXbhRbtX4UIoLG/qoC2VU/Ad8KTe41EaYV00qzZPoIr/85iq
+         tyOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680627361;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iDkPzCPbOwFeM8pNdOTQrKFLlnDQsoU1nXWtiK+e4mA=;
+        b=4JRftgGkCzTpqOhU73gR3opHu9tyV8AYchRuJbph4k/RVhPYXrsZy0nXyzxtI07vhR
+         nu0+gmVIvshRox3i091CPeuKs1qmOLOqsgXg+0u9fuwa7N5kGaox3DTB4WoKuGv2xRTx
+         1WjhpUXFriRZICdoFG9AgYZj9hCCLpCueKYuhMceRCFH38YcKsF+VG742158dFwJNU3e
+         ggQaZ2w0WQf+9qzm046gj4fTYF+Rz5YUx/fE1tIJ/22k1t8CN5nTSiEyApPIgL4vSkfT
+         gOhoVvb175eJD3IsxCaRtsqS7C6eKaRxPLEeFqd8nAypF3qfg5A4gTnnJQB+u56ICMZo
+         Nytg==
+X-Gm-Message-State: AAQBX9f1B+iAx3sHhMbGAvvLYrIE80CzDl2a89nEryqo5f2hISZyldta
+        J9a7cqxq+nqLRltElNdZFhgQcnXOU1wiyOc9iE/FwA==
+X-Google-Smtp-Source: AKy350b+i1ZaHEs6KA4tVR+ORII+g9X7ahgaAwofvUDz5ArlGO5oyFewenVOA2gJs50Nil3n4pEW5ATyQv1fgM49iYg=
+X-Received: by 2002:a17:906:3e54:b0:8b1:780d:e43d with SMTP id
+ t20-20020a1709063e5400b008b1780de43dmr103679eji.13.1680627360948; Tue, 04 Apr
+ 2023 09:56:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+References: <20230404153452.2405681-1-apatel@ventanamicro.com>
+ <20230404153452.2405681-3-apatel@ventanamicro.com> <20230404-facecloth-curdle-f2d5d46e1375@spud>
+In-Reply-To: <20230404-facecloth-curdle-f2d5d46e1375@spud>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Tue, 4 Apr 2023 22:25:49 +0530
+Message-ID: <CAAhSdy1Qk2offdz3zn0gNQKbhBy6a5MmRG0i0pgRCDZBH3dn6g@mail.gmail.com>
+Subject: Re: [PATCH v4 2/9] RISC-V: Detect AIA CSRs from ISA string
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,117 +75,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 13:45:52 -0400
-"Liang, Kan" <kan.liang@linux.intel.com> wrote:
+On Tue, Apr 4, 2023 at 10:16=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>
+> Thanks for fixing up the order Anup.
 
-> On 2023-03-30 12:45 p.m., Jonathan Cameron wrote:
-> > Very basic introduction to the device and the current driver support
-> > provided. I expect to expand on this in future versions of this patch
-> > set.
-> > 
-> > Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > 
-> > --
-> > v4: No change
-> > ---
-> >  Documentation/admin-guide/perf/cxl.rst   | 65 ++++++++++++++++++++++++
-> >  Documentation/admin-guide/perf/index.rst |  1 +
-> >  2 files changed, 66 insertions(+)
-> > 
-> > diff --git a/Documentation/admin-guide/perf/cxl.rst b/Documentation/admin-guide/perf/cxl.rst
-> > new file mode 100644
-> > index 000000000000..46235dff4b21
-> > --- /dev/null
-> > +++ b/Documentation/admin-guide/perf/cxl.rst
-> > @@ -0,0 +1,65 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +======================================
-> > +CXL Performance Monitoring Unit (CPMU)
-> > +======================================
-> > +
-> > +The CXL rev 3.0 specification provides a definition of CXL Performance
-> > +Monitoring Unit in section 13.2: Performance Monitoring.
-> > +
-> > +CXL components (e.g. Root Port, Switch Upstream Port, End Point) may have
-> > +any number of CPMU instances. CPMU capabilities are fully discoverable from
-> > +the devices. The specification provides event definitions for all CXL protocol
-> > +message types and a set of additional events for things commonly counted on
-> > +CXL devices (e.g. DRAM events).
-> > +
-> > +CPMU driver
-> > +===========
-> > +
-> > +The CPMU driver register a perf PMU with the name cpmu<id> on the CXL bus.
-> > +
-> > +    /sys/bus/cxl/device/cpmu<id>
-> > +
-> > +The associated PMU is registered as
-> > +
-> > +   /sys/bus/event_sources/devices/cpmu<id>
-> > +
-> > +In common with other CXL bus devices, the id has no specific meaning and the
-> > +relationship to specific CXL device should be established via the device parent
-> > +of the device on the CXL bus.
-> > +
-> > +PMU driver provides description of available events and filter options in sysfs.
-> > +
-> > +The "format" directory describes all formats of the config (event vendor id,
-> > +group id and mask) config1 (threshold, filter enables) and config2 (filter
-> > +parameters) fields of the perf_event_attr structure.  The "events" directory
-> > +describes all documented events show in perf list.
-> > +
-> > +The events shown in perf list are the most fine grained events with a single
-> > +bit of the event mask set. More general events may be enable by setting
-> > +multiple mask bits in config. For example, all Device to Host Read Requests
-> > +may be captured on a single counter by setting the bits for all of
-> > +
-> > +* d2h_req_rdcurr
-> > +* d2h_req_rdown
-> > +* d2h_req_rdshared
-> > +* d2h_req_rdany
-> > +* d2h_req_rdownnodata
-> > +
-> > +Example of usage::
-> > +
-> > +  $#perf list
-> > +  cpmu0/clock_ticks/                                 [Kernel PMU event]
-> > +  cpmu0/d2h_req_itomwr/                              [Kernel PMU event]
-> > +  cpmu0/d2h_req_rdany/                               [Kernel PMU event]
-> > +  cpmu0/d2h_req_rdcurr/                              [Kernel PMU event]
-> > +  -----------------------------------------------------------
-> > +
-> > +  $# perf stat -e cpmu0/clock_ticks/ -e cpmu0/d2h_req_itowrm/
-> > +
-> > +Vendor specific events may also be available and if so can be used via
-> > +
-> > +  $# perf stat -e cpmu0/vid=VID,gid=GID,mask=MASK/
-> > +
-> > +The driver does not support sampling. So "perf record" and attaching to
-> > +a task are unsupported.  
-> 
-> The PMU only supports system-wide counting. That's the reason it doesn't
-> support per-task profiling. Not because of missing sampling.
+I forgot to mention this in the change log.
 
-Ah. I've managed to fuse two different conditions. I'll break them apart for
-v5.
-
-Thanks,
-
-Jonathan
-
-> 
-> Thanks,
-> Kan
-> > diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
-> > index 9de64a40adab..f60be04e4e33 100644
-> > --- a/Documentation/admin-guide/perf/index.rst
-> > +++ b/Documentation/admin-guide/perf/index.rst
-> > @@ -21,3 +21,4 @@ Performance monitor support
-> >     alibaba_pmu
-> >     nvidia-pmu
-> >     meson-ddr-pmu
-> > +   cxl  
-> 
-
+Regards,
+Anup
