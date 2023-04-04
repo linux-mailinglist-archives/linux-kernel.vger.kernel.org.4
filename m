@@ -2,78 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E7C6D58AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9080E6D58A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233801AbjDDGSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 02:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbjDDGSS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233633AbjDDGSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 4 Apr 2023 02:18:18 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A5E1BD8;
-        Mon,  3 Apr 2023 23:18:01 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3344uOus022342;
-        Tue, 4 Apr 2023 06:17:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=QCbU4Us3JwDR7tMefYDEltxnregNvaXA8Q9OulYvGkg=;
- b=ay8Zd2wWTm5dcHLIePAADLuZlQieIRpesopzFqMS002T2v7C0DyO1AC7TFAd5NPkpD58
- CxVnhKMgQ+15/GOallIqVNUNM1JJG2xNOtnxErHaUqbjk5cwaejVBW2yqqXnq/xQMUuu
- of7lkTDkWG0SjLabAVFpRyAQTFtCIgGWibnIDhki0oNoVSL+Cdvf+OZ+d6xfc0ekJqjM
- dV2Xc5RioFZJwZwH7Ex9K+2Cp258Om6h4ebgUluP2QpgSMo2PtXvI0bG4ASX0uR553ov
- lUdB6Kv65DaGbt9zdlV3A7kySIGRBsl15074leRTispkl7liW7n7SXebjsnAzj9HU50e zA== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pqy6224ge-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Apr 2023 06:17:22 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3346HJL7026785;
-        Tue, 4 Apr 2023 06:17:19 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3ppdpkhu48-1;
-        Tue, 04 Apr 2023 06:17:19 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3346HJGq026778;
-        Tue, 4 Apr 2023 06:17:19 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3346HJvs026777;
-        Tue, 04 Apr 2023 06:17:19 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-        id 8C6D932EE; Tue,  4 Apr 2023 11:47:18 +0530 (+0530)
-From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
-To:     linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
-        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, mchehab@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Viswanath Boma <quic_vboma@quicinc.com>
-Subject: [PATCH 3/3] venus: fix EOS handling in decoder stop command
-Date:   Tue,  4 Apr 2023 11:47:12 +0530
-Message-Id: <1680589032-26046-4-git-send-email-quic_dikshita@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1680589032-26046-1-git-send-email-quic_dikshita@quicinc.com>
-References: <1680589032-26046-1-git-send-email-quic_dikshita@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: NTcNPRkZMnD2HwfTxzFoRjJzrlVTXGEP
-X-Proofpoint-ORIG-GUID: NTcNPRkZMnD2HwfTxzFoRjJzrlVTXGEP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-03_19,2023-04-03_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 bulkscore=0 mlxlogscore=999 phishscore=0 mlxscore=0
- adultscore=0 impostorscore=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304040057
-X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233337AbjDDGSQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Apr 2023 02:18:16 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753F830FF
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:17:48 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id h8so126178288ede.8
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 23:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680589062;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iDjaU2rar9tWF1A9zRNafmNtWp0F/aW8MT9UYDo8+8s=;
+        b=ER/Gjr8X3DKa1om2wxA8O4xQ/E+zMFEI/9rl+Lx047ZntTFt4fEiUvmpOwEs6vQWTD
+         3P9RIpT0v1Od8EmCfSbASaXuWCKTWn0m6XN/nGaABvumC0ywdZn6Bj0PAfh3tL+cDCz2
+         RXMnBE7s2gbQF9r+89T4JsG/JO2b9SIoQBdwFsIotIaa+ArG7i2+07TLJ9aN6Wcn10e+
+         BwP07mCUULfB7dJEH3o2Nu6WdrXboJE/vtJxSOYt41cXSaRU5yd6WAAIdZiH5h/mo2Ow
+         P2YU7V/EVlsY4xzOjcYhXMyymt1t1hngBK+2K1dZwylyAxa6xH7TqhihGUx4841mXHiv
+         /FRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680589062;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iDjaU2rar9tWF1A9zRNafmNtWp0F/aW8MT9UYDo8+8s=;
+        b=e5llHM0FNGLDC0XCyhHSJ4q0nHN7lbqx0U8flBZdG3KUTQHAukGQ9R+5II7go+sTYG
+         6vKuvrXe351QhJ8dngeRWeOl6OaAqsXW82GKbYwXqLs+ZbtLza7QvJoYLQ4SpivL+L5Q
+         IfKnMBPAHvJXaUA+s85loGkAEC38f6JopCTfZuP2+i9afiIE7ET+EGeM045U2InrTdWj
+         cU4WWPqhkQXDsPLaOnfel5QkcteR/27q2z4IISUQlwjjqSxMqAj5o3BmtJx8DtP6fz1g
+         cDilwcuIOLLBHfbnz+taaF5jqXGM0iwosi8Hr4BRAEiuP/vfLFZ8ObJz5J65WbvjviQi
+         SEiw==
+X-Gm-Message-State: AAQBX9fcFlauH1t/Lo3zQQZaOyhRj998qH/pduz7Iaoc0+6wQmCr7O0d
+        I+VVYbl7lUZ/BaDXbTpF+M37eir+v8kgRWs9r5A=
+X-Google-Smtp-Source: AKy350acMPUvg8FQaSMcxpUkt8euvDaA6UhTGNL2AIK9rmdVQWP6apDq0xztamPFlkojeWn2icK9vQ==
+X-Received: by 2002:a17:906:668c:b0:924:7f98:7c55 with SMTP id z12-20020a170906668c00b009247f987c55mr1131637ejo.48.1680589062126;
+        Mon, 03 Apr 2023 23:17:42 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:233a:5c18:b527:381e? ([2a02:810d:15c0:828:233a:5c18:b527:381e])
+        by smtp.gmail.com with ESMTPSA id i12-20020a170906a28c00b00946e6dd887csm5414775ejz.126.2023.04.03.23.17.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 23:17:41 -0700 (PDT)
+Message-ID: <dd6f0842-519f-1bc9-f7f5-459863dc3dcd@linaro.org>
+Date:   Tue, 4 Apr 2023 08:17:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: add max313xx RTCs
+Content-Language: en-US
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
+ <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,31 +80,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use firmware version based check to assign correct
-device address for EOS buffer to fix the EOS handling
-with different firmware version.
+On 03/04/2023 17:43, Ibrahim Tilki wrote:
+> Devicetree binding documentation for Analog Devices MAX313XX RTCs
+> 
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> ---
+>  .../devicetree/bindings/rtc/adi,max313xx.yaml | 144 ++++++++++++++++++
+>  1 file changed, 144 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> new file mode 100644
+> index 000000000..0c17a395e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> @@ -0,0 +1,144 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2022 Analog Devices Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/adi,max313xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices MAX313XX series I2C RTCs
+> +
+> +maintainers:
+> +  - Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> +
+> +description: Analog Devices MAX313XX series I2C RTCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max31328
+> +      - adi,max31329
+> +      - adi,max31331
+> +      - adi,max31334
+> +      - adi,max31341
+> +      - adi,max31342
+> +      - adi,max31343
+> +
+> +  reg:
+> +    description: I2C address of the RTC
+> +    items:
+> +      - enum: [0x68, 0x69]
+> +
+> +  interrupts:
+> +    description: |
 
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
-Tested-by: Nathan Hebert <nhebert@chromium.org>
----
- drivers/media/platform/qcom/venus/vdec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Do not need '|'.
 
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index f0394b9..c59b34f 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -545,7 +545,7 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
- 
- 		fdata.buffer_type = HFI_BUFFER_INPUT;
- 		fdata.flags |= HFI_BUFFERFLAG_EOS;
--		if (IS_V6(inst->core))
-+		if (IS_V6(inst->core) && is_fw_rev_or_older(inst->core, 1, 0, 87))
- 			fdata.device_addr = 0;
- 		else
- 			fdata.device_addr = 0xdeadb000;
--- 
-2.7.4
+> +      Alarm1 interrupt line of the RTC. Some of the RTCs have two interrupt
+> +      lines and alarm1 interrupt muxing depends on the clockin/clockout
+> +      configuration.
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    description: |
+
+Do not need '|'.
+
+> +      RTC can be used as a clock source through its clock output pin when
+> +      supplied.
+> +    const: 0
+> +
+> +  clocks:
+> +    description: |
+
+Do not need '|'.
+
+> +      RTC uses this clock for clock input when supplied. Clock has to provide
+> +      one of these four frequencies: 1Hz, 50Hz, 60Hz or 32.768kHz.
+> +    maxItems: 1
+> +
+> +  aux-voltage-chargeable:
+> +    enum: [0, 1, 2]
+> +    description: |
+> +      Enables trickle charger.
+> +      0: Charger is disabled (default)
+> +      1: Charger is enabled
+> +      2: Charger is enabled with a diode
+
+2 is not an allowed value. I asked to drop this property. It is coming
+from rtc.yaml. I also do not understand "with a diode". So otherwise it
+is charging with, I don't know, FET?
+
+> +
+> +  trickle-resistor-ohms:
+> +    description: Selected resistor for trickle charger.
+> +    enum: [3000, 6000, 11000]
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+Best regards,
+Krzysztof
 
