@@ -2,68 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69356D5A50
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE50E6D5A53
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbjDDIIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 04:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        id S233870AbjDDIJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 04:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233345AbjDDIIF (ORCPT
+        with ESMTP id S233451AbjDDIJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 04:08:05 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CE1171F;
-        Tue,  4 Apr 2023 01:08:03 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3952C60002;
-        Tue,  4 Apr 2023 08:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680595682;
+        Tue, 4 Apr 2023 04:09:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C521BE6
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 01:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680595710;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LGPSyPRGkCSLqISaG9m4y+A3ISEmWEMVR123mIB2ghs=;
-        b=XnwLRWHssCeGbpQlTwu4SMUx8FWX7XQrhyGJ/WpLSvGuKTL2V04QWcsEtKJkDaSZ5wdglw
-        EgrcaSA40axA8+BXoaqHn1N4kbdwSJe6V7jDXV8n+c46uhMBGULXudDWlXh/4MmdWfvLCF
-        EAn5Q8loDHe3/L30Ys4FQyWNID3w3NuqGKcvQimlmwNB3STR7ekwchZnYfr8a7bPvSajmK
-        1BAh7ycvJbqnKtarUOBOJOXE1PZM99JLsH6L8kztDtbHcrgp3aCxMwGlu71IChlnvjvoBQ
-        DWvCsEC/WKqBJgZF188wzPg0h6p5xgJcAxSbIOtze41j5/pPni4mRhUT+enINA==
-Date:   Tue, 4 Apr 2023 10:07:59 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        bh=Mtn5RoXP7HXa+BOr8vc5/QnnSmZkKMTt0vR1h1F5mXI=;
+        b=dWCvp1dn/cS7oRYxmodU9DNYaZmlDa48mfqa45z2YzC65PvKfrQJNUUUpYsJtxRwmk7mEg
+        qj2q2nRlN1kii4Phx0j23dB1FBVNhIopfwT6KcUBrl0FIIdKtXpwY4BcZobsBdG9IKYaZf
+        aDntYmi53mjPqE4s8AANz+YVUXijFSc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-78-Sd1WixYbP12rTEY9q3Kuww-1; Tue, 04 Apr 2023 04:08:28 -0400
+X-MC-Unique: Sd1WixYbP12rTEY9q3Kuww-1
+Received: by mail-wr1-f71.google.com with SMTP id p1-20020a5d6381000000b002cea6b2d5a9so3503232wru.14
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 01:08:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680595707;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mtn5RoXP7HXa+BOr8vc5/QnnSmZkKMTt0vR1h1F5mXI=;
+        b=rc5Ig0IN4i6p8VhTnf/PPgihJlLg96sjDDWwaZ5ybyp+1vkpAy1PZBJxNuty/B3yKJ
+         0HigC0kkLcMWpjbPPqTw6SeaBq4+PDnrAG62DAVfZjX3RhK/gFs/N1f8uSiDmJ7dvLFh
+         uDDxirj5GoHLSxq9ZqG2M0RFx9A/pXNxkFUSiIQ8yPPgchmBMXiI0seHXO6EVi+jqpqg
+         Ce0PZw+km4WL9/dEmsNNuVOOkDtjwH50ADP5Qm0CHGi9FGvbD5u97JgApsMEBwhwLCvH
+         V8Xvv+m7dlLmGt7dpL44uBRID4OUz5VRZQm0TICHO1d8KC4Xwy6hadfokVddcfyoqshu
+         D4Qg==
+X-Gm-Message-State: AAQBX9ea3VRwCuPHctqEODzz17BL/rRfDT/WLlDo1J64/44/QrEJ3Yz/
+        ojakTKSFKuwqmamQRMw9HRmDDmqxtUbzxIigSKNAcZjfA43yajJXcHT1a8qzsreqex2m8YITZdm
+        x0NVorFtpzgX1Yr5p3TKB4aPj
+X-Received: by 2002:a5d:4847:0:b0:2cf:e956:9740 with SMTP id n7-20020a5d4847000000b002cfe9569740mr15090854wrs.6.1680595707737;
+        Tue, 04 Apr 2023 01:08:27 -0700 (PDT)
+X-Google-Smtp-Source: AKy350a6DZsF9Oxz2qiQs8bPQTVCKprYDZAyS4oPgFEDW46CEfH2BaASGaZqnn1vnIayoOh1lJQS6w==
+X-Received: by 2002:a5d:4847:0:b0:2cf:e956:9740 with SMTP id n7-20020a5d4847000000b002cfe9569740mr15090833wrs.6.1680595707386;
+        Tue, 04 Apr 2023 01:08:27 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l18-20020adfe592000000b002c5534db60bsm11647529wrm.71.2023.04.04.01.08.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 01:08:27 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
+        linux-kernel@vger.kernel.org
+Cc:     Peter Robinson <pbrobinson@gmail.com>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Jarrah Gosbell <kernel@undef.tools>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 2/5] mfd: Add support for the Lantiq PEF2256 framer
-Message-ID: <20230404100759.5bc9cd20@bootlin.com>
-In-Reply-To: <f7ab2fcc-93fc-ce87-8767-579d33907225@linaro.org>
-References: <20230328092645.634375-1-herve.codina@bootlin.com>
-        <20230328092645.634375-3-herve.codina@bootlin.com>
-        <20230330160510.GB489249@google.com>
-        <20230331094208.41ab4420@bootlin.com>
-        <6d39e9c3-fb6a-4b2a-9889-8fe8d86716d5@linaro.org>
-        <20230331141104.42445da9@bootlin.com>
-        <a642e653-e3e2-c3d2-68cb-1efc92be05bb@linaro.org>
-        <20230331165904.4e7f46a1@bootlin.com>
-        <20230403142822.GA8371@google.com>
-        <20230404092036.2d1cd5d9@bootlin.com>
-        <f7ab2fcc-93fc-ce87-8767-579d33907225@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Martijn Braam <martijn@brixit.nl>, Ondrej Jirman <megi@xff.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH] arm64: dts: rockchip: Change serial baud rate for
+ Pinephone Pro to 1.5 MB
+In-Reply-To: <3738011.44csPzL39Z@diego>
+References: <20230403175937.2842085-1-javierm@redhat.com>
+ <3738011.44csPzL39Z@diego>
+Date:   Tue, 04 Apr 2023 10:08:25 +0200
+Message-ID: <87jzysdq86.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,117 +88,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Apr 2023 09:23:36 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+Heiko St=C3=BCbner <heiko@sntech.de> writes:
 
-> On 04/04/2023 09:20, Herve Codina wrote:
-> >> I suggest that none of this (besides the child registration, which is
-> >> achieved by a simple OF API call in this case) has anything to do with
-> >> MFD.  We are not requesting and initialising shared resources and we are
-> >> not using the MFD API to register children.  The pin control
-> >> functionality clearly needs moving to Pinctrl and the rest, if you
-> >> cannot find a suitable home for it *may be* suitable for Misc.
-> >>  
-> > 
-> > I am confused and I am not really sure to understand where to put my driver.
-> > 
-> > The core pef2256.c needs to:
-> > 1) setup the pef2256
-> > 2) add the children
-> > 
-> > To add the children it calls  devm_of_platform_populate() to add the audio
-> > parts as several audio children can be available with the same compatible
-> > string.
-> > 
-> > I plan to move the pinctrl part to the pinctrl subsystem. With this done,
-> > the core pef2256.c will probably add the children using:
-> > - a mfd_cell for the pinctrl part
-> > - devm_of_platform_populate() for the audio children
-> > 
-> > The setup (E1 lines and TDM configuration) still needs to be done by the
-> > core pef2256.c. Moving this part only to Misc will break the hierarchy.
-> > The audio children depends on the core pef2256.c as this one do the setup.
-> > Having in the audio children and the part that do the setup in same hierarchy
-> > level is not correct. Audio children should be children of the part that do
-> > the setup.
-> > 
-> > So, the structure I have in mind:
-> > - pef2256.c (MFD)
-> >   implement and do the setup at probe()
-> >   Add the children at probe():
-> >     - pef2256-pinctrl (pinctrl) added using mfd_add_devices()
-> >     - pef2256-codec (ASoC codec) added using devm_of_platform_populate()
-> > 
-> > Lee, with this in mind, can the core pef2256.c be a MFD driver ?  
-> 
-> You do not use MFD here, so why do you want to keep it in MFD? If you
-> disagree, please tell me where is the MFD code in your patch?
+Hello Heiko,
 
-I don't want to absolutely use MFD.
-I just want to put my driver somewhere and I don't know the right location
-between MFD and Misc.
+Thanks for your feedback.
 
-Basically, the driver needs to do (little simplified and error path removed):
+> Hi,
+>
+> Am Montag, 3. April 2023, 19:59:37 CEST schrieb Javier Martinez Canillas:
+>> This baud rate is set for the device by mainline u-boot and is also what
+>> is set in the Pinebook Pro Device Tree, which is a device similar to the
+>> PinePhone Pro but with a different form factor.
+>>=20
+>> Otherwise, the baud rate of the firmware and Linux don't match by default
+>> and a 'console=3DttyS2,1500000n8' kernel command line parameter is requi=
+red
+>> to have proper output for both.
+>
+> The interesting question is always if this will break someone else's setu=
+p.
 
-  static const struct mfd_cell pef2256_devs[] = {
-  	{ .name = "lantiq-pef2256-pinctrl", },
-  };
+Indeed.
 
-  static int pef2256_probe(struct platform_device *pdev)
-  {
-	struct pef2256 *pef2256;
-	void __iomem *iomem;
-	int ret;
-	int irq;
+> I've never really understood the strange setting of 1.5MBps, but on the
+> other hand it _is_ a reality on most boards.
+>
 
-	pef2256 = devm_kzalloc(&pdev->dev, sizeof(*pef2256), GFP_KERNEL);
-	if (!pef2256)
-		return -ENOMEM;
+As far as I understand, it is just to get a faster data transmission but I
+have my doubts that it is worth to divert from the more common 115200 rate
+just for this.
 
-	pef2256->dev = &pdev->dev;
+As you said though, it is a reality and also what mainline u-boot uses for
+this device.
 
-	iomem = devm_platform_ioremap_resource(pdev, 0);
+> Personally I don't care that much either way, but would like a comment
+> from the other people working on that device - if possible.
+>
 
-	pef2256->regmap = devm_regmap_init_mmio(&pdev->dev, iomem,
-						&pef2256_regmap_config);
+Same, I don't care either but just that would be good to make Linux and
+u-boot to match. If this change will break other people setups, maybe I
+can convince u-boot to sync with Linux and also use 115200 for the phone.
 
-	pef2256->mclk = devm_clk_get_enabled(&pdev->dev, "mclk");
-	pef2256->sclkr = devm_clk_get_enabled(&pdev->dev, "sclkr");
-	pef2256->sclkx = devm_clk_get_enabled(&pdev->dev, "sclkx");
+> I guess if we don't hear anything, I'll apply it nevertheless at some poi=
+nt
+>
+>
+> Heiko
+>
 
-	pef2256->reset_gpio = devm_gpiod_get_optional(&pdev->dev, "reset", GPIOD_OUT_LOW);
-	if (pef2256->reset_gpio) {
-		gpiod_set_value_cansleep(pef2256->reset_gpio, 1);
-		udelay(10);
-		gpiod_set_value_cansleep(pef2256->reset_gpio, 0);
-		udelay(10);
-	}
+--=20
+Best regards,
 
-	pef2556_of_parse(pef2256, np);
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
-	irq = platform_get_irq(pdev, 0);
-	ret = devm_request_irq(pef2256->dev, irq, pef2256_irq_handler, 0, "pef2256", pef2256);
-
-	platform_set_drvdata(pdev, pef2256);
-
-	mfd_add_devices(pef2256->dev, PLATFORM_DEVID_NONE, pef2256_devs,
-	      		ARRAY_SIZE(pef2256_devs), NULL, 0, NULL);
-
-	pef2256_setup(pef2256);
-
-	devm_of_platform_populate(pef2256->dev);
-	
-	return 0;
-  }
-
-> 
-> Best regards,
-> Krzysztof
-> 
-
-
-
--- 
-Hervé Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
