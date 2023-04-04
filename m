@@ -2,137 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955816D5C87
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7AF36D5C8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234089AbjDDJ7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
+        id S234196AbjDDKBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 06:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233977AbjDDJ7T (ORCPT
+        with ESMTP id S233319AbjDDKBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:59:19 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505E31BD6
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680602358; x=1712138358;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sWw4FO/jFyMRxxBXknWut7zEzlnQFR4CIDRAC5E0jKE=;
-  b=G3SjuQEs76hQLX+Ps8H7lcEAuP8aGRn96AI+NS7KJxF3Bu/I2A4r5o+D
-   TImyHBqk9DKKOsb7464Z19Olg0OnU4/pWLfUnEOyJRHMQqG7ug2JYLh61
-   hclcQKjOyxBxbroB2tu+jShUyVslZzb4K0qk6albO2QS8wEQc6BjO79p4
-   swgXk3WO79IT/mBuN1kP34/tWFwpCXtNpVvhKqTA/+fQ6tJcBHY9fbpvP
-   douSd1HcqqBmCfNU4DIeBxfd3xKJwL6RuNtXpXwdqqktkmEnD0N/I8/Pe
-   M97pa48lPacpAVc/tOTfkFDdt+jhcneRES+WiUQaIgond90lPCP3m6T2W
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="407199925"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="407199925"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 02:59:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="750861005"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="750861005"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Apr 2023 02:59:11 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pjdRX-000PW8-0U;
-        Tue, 04 Apr 2023 09:59:11 +0000
-Date:   Tue, 4 Apr 2023 17:58:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Josh Triplett <josh@joshtriplett.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH] prctl: Add PR_GET_AUXV to copy auxv to userspace
-Message-ID: <202304041715.c3b7aJd4-lkp@intel.com>
-References: <b11a591e085f1cd06adb454b1f7cde676d317318.1680585798.git.josh@joshtriplett.org>
+        Tue, 4 Apr 2023 06:01:06 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77A2268E
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:01:04 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id i5so128464551eda.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 03:01:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680602463;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6/EbqtYiG8jTBdNfg4iHSCY+HD2O/PfHv7vkEdFGwb4=;
+        b=PypqPuvPHBMVOCvNRpkEldZR+4v1haLUXl3tGgAapMP3hilAQsloRtmpW3QST8o+sy
+         M707x+Gkikr7TN+8WP/xmWqKMgL+ByvVfCcGbJl97uU0OiqWXlLaaymSruXTv+k+iVEP
+         ZzVahpyBw0IlpvyvZjwZJLwE+eN2Ba+PZkY39wD20n2NRMS9kNeD5jDwtxVmfxrGEq7n
+         4f7s7Jjb/abyEMEoCeWneANim6tueAaMgDgej9kZzIB43xkc7NnHgfNqHq3RT2DQKJ2p
+         GEjYc4yMZDi4r1VMMfMt+93uTXRDxA/QpgF9fY6/STfrKXHiXxaolYRjHetb3LNdzMtT
+         /a/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680602463;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6/EbqtYiG8jTBdNfg4iHSCY+HD2O/PfHv7vkEdFGwb4=;
+        b=Cx8sTQlNIIllSTsBz9aWBnUhaYUIVzqgmDSTMyy3GH+NxlUhlO6SMwA2oYSe4Max8x
+         PSM0IGh1TSVb4bAIj/CQ3HwlH/FfySJGha6SkVYuT+bbq5pC7lts+q07Hjafs6JiJcAD
+         BFKLse8B8mFaMPXPIqI2NyXKKykwnNOjzOMTrO9TMFam6gitJWmsaMx9I+LhJokOX0wR
+         tqibGrN0mwiwj/evbjLNnDhOOMV4fFseIPj+62iahUzoNuawtmfxLyrBe9vBflyP0ZSr
+         NbmYS1JnCGPPQoeWmHHMHryDJ3W8pgQduBOfU+n8sxcDn+hFszqgJ/lHbshwo9IxX43I
+         m0eQ==
+X-Gm-Message-State: AAQBX9ergK19MLFPd9Tkb5Qb2AOW1vTo4ONNMSzQ1+wCOV7Q+ZZgdR17
+        tZUNHnFx5YT3nrpAa0BD3wIrQw==
+X-Google-Smtp-Source: AKy350aD/201Rp8J8tnbsIBynEwDR67zEs3ALuwUS/9YCh8njUOYddARRcOnPrm1nnLjEHmxKm6RCg==
+X-Received: by 2002:a17:906:5e55:b0:93d:ae74:fa9e with SMTP id b21-20020a1709065e5500b0093dae74fa9emr1677310eju.7.1680602463125;
+        Tue, 04 Apr 2023 03:01:03 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:99ed:4575:6001:8bda? ([2a02:810d:15c0:828:99ed:4575:6001:8bda])
+        by smtp.gmail.com with ESMTPSA id f1-20020a170906084100b008e09deb6610sm5702697ejd.200.2023.04.04.03.01.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 03:01:02 -0700 (PDT)
+Message-ID: <0ffa9690-9709-669c-b44d-dbb93446ec95@linaro.org>
+Date:   Tue, 4 Apr 2023 12:01:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b11a591e085f1cd06adb454b1f7cde676d317318.1680585798.git.josh@joshtriplett.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] ARM: multi_v7_defconfig: make USB_DWC3 as a module
+ instead of built-in
+To:     Arnd Bergmann <arnd@arndb.de>, Roger Quadros <rogerq@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Nishanth Menon <nm@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230404084259.13752-1-rogerq@kernel.org>
+ <283f8f4c-9f8d-48b1-b161-3b712104583b@app.fastmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <283f8f4c-9f8d-48b1-b161-3b712104583b@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Josh,
+On 04/04/2023 10:51, Arnd Bergmann wrote:
+> On Tue, Apr 4, 2023, at 10:42, Roger Quadros wrote:
+>> USB_DWC3 is not required for boot on most platforms make it
+>> as a module instead of built-in.
+>>
+>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>> ---
+> 
+> Does this save a significant amount of vmlinux size? Since this
+> is a fairly common USB driver, I think it does help to have it
+> built-in for users booting from USB_STORAGE or nfsroot over
+> USB_USBNET, which are both built-in and not uncommon.
 
-kernel test robot noticed the following build warnings:
+Especially that sometimes, at least for arm64 defconfig, we added as
+built-in less critical pieces (RENESAS_ETHER_SWITCH, MARVELL_10G_PHY,
+HTE_TEGRA194, SM_VIDEOCC_8250 and other non-core clock controllers).
+This change will require several systems to update their initrd to
+include USB.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.3-rc5]
-[cannot apply to akpm-mm/mm-everything next-20230404]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Best regards,
+Krzysztof
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Josh-Triplett/prctl-Add-PR_GET_AUXV-to-copy-auxv-to-userspace/20230404-140043
-patch link:    https://lore.kernel.org/r/b11a591e085f1cd06adb454b1f7cde676d317318.1680585798.git.josh%40joshtriplett.org
-patch subject: [PATCH] prctl: Add PR_GET_AUXV to copy auxv to userspace
-config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041715.c3b7aJd4-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4323f9bd6c2ecbfd6be4f8a3830ea47a89558314
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Josh-Triplett/prctl-Add-PR_GET_AUXV-to-copy-auxv-to-userspace/20230404-140043
-        git checkout 4323f9bd6c2ecbfd6be4f8a3830ea47a89558314
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304041715.c3b7aJd4-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/sys.c:2383:23: warning: comparison of distinct pointer types ('typeof (sizeof (mm->saved_auxv)) *' (aka 'unsigned int *') and 'typeof (len) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           unsigned long size = min(sizeof(mm->saved_auxv), len);
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:67:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +2383 kernel/sys.c
-
-  2379	
-  2380	static int prctl_get_auxv(void __user *addr, unsigned long len)
-  2381	{
-  2382		struct mm_struct *mm = current->mm;
-> 2383		unsigned long size = min(sizeof(mm->saved_auxv), len);
-  2384	
-  2385		if (size && copy_to_user(addr, mm->saved_auxv, size))
-  2386			return -EFAULT;
-  2387		return sizeof(mm->saved_auxv);
-  2388	}
-  2389	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
