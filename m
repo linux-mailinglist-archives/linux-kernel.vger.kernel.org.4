@@ -2,315 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4366D6400
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3A56D6418
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235761AbjDDNxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S235569AbjDDNzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235742AbjDDNxk (ORCPT
+        with ESMTP id S235577AbjDDNz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 09:53:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72574224;
-        Tue,  4 Apr 2023 06:53:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4159E61FF6;
-        Tue,  4 Apr 2023 13:53:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01718C4339B;
-        Tue,  4 Apr 2023 13:53:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680616407;
-        bh=/XmQ33Vz5rwMvBxocOUTIIX51AasQPq8MBzmwbLl0tM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j3pvbEx+ZOhkZUE1LhdjIxby9njBvyhGGDw8XHNztZL/HYm+7Hxi7G2yVH87tLGXc
-         8CnD+aWL0pEfl8K8eEelOm98QkGvx9t82yLNNIDbeUQbrNgrgJfn5szL4qfacmifzK
-         rPf45WV4a2jbZGv1xNcqWD6pLaJXwrjXc0olsbyf9BBEd2EZkpozWqX1cpZJ+N/H4B
-         DgcmwjDTRFPqxMyHwoKOds6qUcJuJA5u8+/FD/+XXp0LvwfGWk4fHYFr/UhTWZm0gV
-         fPQ9esbG+NnpA8lDyV4zQGiCjpZvv+DaqXProbhEGTYkWTuiPCv+24pkuCN8MpR4Xn
-         uVKJnk0xDg9EA==
-Date:   Tue, 4 Apr 2023 15:53:13 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
-        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
-        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
-        corbet@lwn.net, dave.hansen@intel.com, david@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
-        joro@8bytes.org, jun.nakajima@intel.com,
-        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
-        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
-        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
-        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
-        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
-        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
-        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
-Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
- mount for memfd_restricted
-Message-ID: <20230404-amnesty-untying-01de932d4945@brauner>
-References: <cover.1680306489.git.ackerleytng@google.com>
- <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
+        Tue, 4 Apr 2023 09:55:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2178EE7C
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:54:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C2D00D75;
+        Tue,  4 Apr 2023 06:55:39 -0700 (PDT)
+Received: from e127643.broadband (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A484A3F762;
+        Tue,  4 Apr 2023 06:54:53 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
+        mike.leach@linaro.org, suzuki.poulose@arm.com
+Cc:     James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 00/13] coresight: Fix CTI module refcount leak by making it a helper device
+Date:   Tue,  4 Apr 2023 14:53:46 +0100
+Message-Id: <20230404135401.1728919-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 11:50:39PM +0000, Ackerley Tng wrote:
-> By default, the backing shmem file for a restrictedmem fd is created
-> on shmem's kernel space mount.
-> 
-> With this patch, an optional tmpfs mount can be specified via an fd,
-> which will be used as the mountpoint for backing the shmem file
-> associated with a restrictedmem fd.
-> 
-> This will help restrictedmem fds inherit the properties of the
-> provided tmpfs mounts, for example, hugepage allocation hints, NUMA
-> binding hints, etc.
-> 
-> Permissions for the fd passed to memfd_restricted() is modeled after
-> the openat() syscall, since both of these allow creation of a file
-> upon a mount/directory.
-> 
-> Permission to reference the mount the fd represents is checked upon fd
-> creation by other syscalls (e.g. fsmount(), open(), or open_tree(),
-> etc) and any process that can present memfd_restricted() with a valid
-> fd is expected to have obtained permission to use the mount
-> represented by the fd. This behavior is intended to parallel that of
-> the openat() syscall.
-> 
-> memfd_restricted() will check that the tmpfs superblock is
-> writable, and that the mount is also writable, before attempting to
-> create a restrictedmem file on the mount.
-> 
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> ---
->  include/linux/syscalls.h           |  2 +-
->  include/uapi/linux/restrictedmem.h |  8 ++++
->  mm/restrictedmem.c                 | 74 +++++++++++++++++++++++++++---
->  3 files changed, 77 insertions(+), 7 deletions(-)
->  create mode 100644 include/uapi/linux/restrictedmem.h
-> 
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index f9e9e0c820c5..a23c4c385cd3 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
->  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
->  					    unsigned long home_node,
->  					    unsigned long flags);
-> -asmlinkage long sys_memfd_restricted(unsigned int flags);
-> +asmlinkage long sys_memfd_restricted(unsigned int flags, int mount_fd);
-> 
->  /*
->   * Architecture-specific system calls
-> diff --git a/include/uapi/linux/restrictedmem.h b/include/uapi/linux/restrictedmem.h
-> new file mode 100644
-> index 000000000000..22d6f2285f6d
-> --- /dev/null
-> +++ b/include/uapi/linux/restrictedmem.h
-> @@ -0,0 +1,8 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _UAPI_LINUX_RESTRICTEDMEM_H
-> +#define _UAPI_LINUX_RESTRICTEDMEM_H
-> +
-> +/* flags for memfd_restricted */
-> +#define RMFD_USERMNT		0x0001U
-> +
-> +#endif /* _UAPI_LINUX_RESTRICTEDMEM_H */
-> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
-> index c5d869d8c2d8..f7b62364a31a 100644
-> --- a/mm/restrictedmem.c
-> +++ b/mm/restrictedmem.c
-> @@ -1,11 +1,12 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -#include "linux/sbitmap.h"
-> +#include <linux/namei.h>
->  #include <linux/pagemap.h>
->  #include <linux/pseudo_fs.h>
->  #include <linux/shmem_fs.h>
->  #include <linux/syscalls.h>
->  #include <uapi/linux/falloc.h>
->  #include <uapi/linux/magic.h>
-> +#include <uapi/linux/restrictedmem.h>
->  #include <linux/restrictedmem.h>
-> 
->  struct restrictedmem {
-> @@ -189,19 +190,20 @@ static struct file *restrictedmem_file_create(struct file *memfd)
->  	return file;
->  }
-> 
-> -SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
-> +static int restrictedmem_create(struct vfsmount *mount)
->  {
->  	struct file *file, *restricted_file;
->  	int fd, err;
-> 
-> -	if (flags)
-> -		return -EINVAL;
-> -
->  	fd = get_unused_fd_flags(0);
+Changes since v3:
 
-Any reasons the file descriptors aren't O_CLOEXEC by default? I don't
-see any reasons why we should introduce new fdtypes that aren't
-O_CLOEXEC by default. The "don't mix-and-match" train has already left
-the station anyway as we do have seccomp noitifer fds and pidfds both of
-which are O_CLOEXEC by default.
+ * Put connection loss fix at the beginning so that it can be backported
+ * Replace coresight_find_link_{x}() with coresight_find_out_connection()
+ * Reorder coresight_enable_source() arguments for consistency
+ * Add source and destination reference counts so that two link devices
+   connected together don't clash
+ * Add coresight_is_helper()
+ * Fix overwriting csdev bug in coresight_orphan_match()
+ * Don't clear conns[i]->dest_fwnode in coresight_remove_conns() in case
+   it's used again
+ * Use dev instead of adev->dev for devmem allocation in
+   acpi_coresight_parse_graph() so that it's consistent with DT mode and
+   doesn't cause a warning on free.
+ * Rename coresight_add_helper_mutex() -> coresight_add_helper()
+ * Ensure coresight_mutex isn't already held in coresight_add_helper()
+ * Return new connection from coresight_add_out_conn()
+ * Comment and formatting improvements
 
->  	if (fd < 0)
->  		return fd;
-> 
-> -	file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
-> +	if (mount)
-> +		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem", 0, VM_NORESERVE);
-> +	else
-> +		file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
-> +
->  	if (IS_ERR(file)) {
->  		err = PTR_ERR(file);
->  		goto err_fd;
-> @@ -223,6 +225,66 @@ SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
->  	return err;
->  }
-> 
-> +static bool is_shmem_mount(struct vfsmount *mnt)
-> +{
-> +	return mnt && mnt->mnt_sb && mnt->mnt_sb->s_magic == TMPFS_MAGIC;
+------------------
 
-This can just be if (mnt->mnt_sb->s_magic == TMPFS_MAGIC).
+Changes since v2:
 
-> +}
-> +
-> +static bool is_mount_root(struct file *file)
-> +{
-> +	return file->f_path.dentry == file->f_path.mnt->mnt_root;
+ * Make out_conns array contiguous instead of sparse which simplifies
+   filling and using it. New connections are always added to the end
+ * Store pointers to individual connection objects so that they can be
+   shared between inputs and outputs
+ * Fix an existing bug where connection info was lost when unloading a
+   device
+ * Simplify connection fixup functions. Now the orphan mechanism is used
+   for inputs in the same way as outputs to guarantee that all
+   connections have both an input and an output set
+ * Use input connections to disconnect devices on unload instead of
+   iterating through them all
+ * Make refcount a property of the connection rather than use it's own
+   array based on the number of inputs and outputs
+ * Fix a bug in v2 where helpers attached to the source device weren't
+   disabled because coresight-etm-perf.c was making a raw call to
+   disable rather than using a helper.
+ * Change names of connection members to make direction explicit now
+   that the connection is shared between input and outputs
+   
+------------------
 
-mount -t tmpfs tmpfs /mnt
-touch /mnt/bla
-touch /mnt/ble
-mount --bind /mnt/bla /mnt/ble
-fd = open("/mnt/ble")
-fd_restricted = memfd_restricted(fd)
+Changes since v1:
 
-IOW, this doesn't restrict it to the tmpfs root. It only restricts it to
-paths that refer to the root of any tmpfs mount. To exclude bind-mounts
-that aren't bind-mounts of the whole filesystem you want:
+ * Don't dereference handle in tmc_etr_get_buffer() when not in perf mode.
+ * Fix some W=1 warnings
+ * Add a commit to rename child/output in terms of local/remote
 
-path->dentry == path->mnt->mnt_root && 
-path->mnt->mnt_root == path->mnt->mnt_sb->s_root
+-------------------
 
-> +}
-> +
-> +static int restrictedmem_create_on_user_mount(int mount_fd)
-> +{
-> +	int ret;
-> +	struct fd f;
-> +	struct vfsmount *mnt;
-> +
-> +	f = fdget_raw(mount_fd);
-> +	if (!f.file)
-> +		return -EBADF;
-> +
-> +	ret = -EINVAL;
-> +	if (!is_mount_root(f.file))
-> +		goto out;
-> +
-> +	mnt = f.file->f_path.mnt;
-> +	if (!is_shmem_mount(mnt))
-> +		goto out;
-> +
-> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
+Currently there is a refcount leak in CTI when using system wide mode
+or tracing multithreaded applications. See the last commit for a
+reproducer. This prevents the module from being unloaded.
 
-With the current semantics you're asking whether you have write
-permissions on the /mnt/ble file in order to get answer to the question
-whether you're allowed to create an unlinked restricted memory file.
-That doesn't make much sense afaict.
+Historically there have been a few issues and fixes attempted around
+here which have resulted in some extra logic and a member to keep
+track of CTI being enabled 'struct coresight_device->ect_enabled'.
+The fix in commit 665c157e0204 ("coresight: cti: Fix hang in
+cti_disable_hw()") was also related to CTI having its own
+enable/disable path which came later than other devices.
 
-> +	if (ret)
-> +		goto out;
-> +
-> +	ret = mnt_want_write(mnt);
-> +	if (unlikely(ret))
-> +		goto out;
-> +
-> +	ret = restrictedmem_create(mnt);
-> +
-> +	mnt_drop_write(mnt);
-> +out:
-> +	fdput(f);
-> +
-> +	return ret;
-> +}
-> +
-> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
-> +{
-> +	if (flags & ~RMFD_USERMNT)
-> +		return -EINVAL;
-> +
-> +	if (flags == RMFD_USERMNT) {
+If we make CTI a helper device and enable helper devices adjacent to
+the path we get very similar enable/disable behavior to now, but with
+more reuse of the existing reference counting logic in the coresight
+core code. This also affects CATU which can have a little bit of
+its hard coded enable/disable code removed.
 
-Why do you even need this flag? It seems that @mount_fd being < 0 is
-sufficient to indicate that a new restricted memory fd is supposed to be
-created in the system instance.
+Enabling CATU on the generic path does require that input connections
+are tracked so that it can get its associated ETR buffer.
 
-> +		if (mount_fd < 0)
-> +			return -EINVAL;
-> +
-> +		return restrictedmem_create_on_user_mount(mount_fd);
-> +	} else {
-> +		return restrictedmem_create(NULL);
-> +	}
-> +}
+Applies to coresight/next (197b6b60ae7b) but also requires the
+realloc_array patch here [1].
 
-I have to say that I'm very confused by all of this the more I look at it.
+Also available in full here [2].
 
-Effectively memfd restricted functions as a wrapper filesystem around
-the tmpfs filesystem. This is basically a weird overlay filesystem.
-You're allocating tmpfs files that you stash in restrictedmem files. 
-I have to say that this seems very hacky. I didn't get this at all at
-first.
+[1]: https://lore.kernel.org/linux-arm-kernel/20230306152723.3090195-1-james.clark@arm.com/
+[2]: https://gitlab.arm.com/linux-arm/linux-jc/-/tree/james-cs-cti-module-refcount-fix-v4
 
-So what does the caller get if they call statx() on a restricted memfd?
-Do they get the device number of the tmpfs mount and the inode numbers
-of the tmpfs mount? Because it looks like they would:
+James Clark (13):
+  coresight: Fix loss of connection info when a module is unloaded
+  coresight: Use enum type for cs_mode wherever possible
+  coresight: Change name of pdata->conns
+  coresight: Rename nr_outports to nr_outconns
+  coresight: Rename connection members to make the direction explicit
+  coresight: Dynamically add connections
+  coresight: Store pointers to connections rather than an array of them
+  coresight: Simplify connection fixup mechanism
+  coresight: Store in-connections as well as out-connections
+  coresight: Make refcount a property of the connection
+  coresight: Refactor out buffer allocation function for ETR
+  coresight: Enable and disable helper devices adjacent to the path
+  coresight: Fix CTI module refcount leak by making it a helper device
 
-static int restrictedmem_getattr(struct user_namespace *mnt_userns,
-				 const struct path *path, struct kstat *stat,
-				 u32 request_mask, unsigned int query_flags)
-{
-	struct inode *inode = d_inode(path->dentry);
-	struct restrictedmem *rm = inode->i_mapping->private_data;
-	struct file *memfd = rm->memfd;
+ drivers/hwtracing/coresight/coresight-catu.c  |  21 +-
+ drivers/hwtracing/coresight/coresight-core.c  | 595 ++++++++++--------
+ .../hwtracing/coresight/coresight-cti-core.c  |  52 +-
+ .../hwtracing/coresight/coresight-cti-sysfs.c |   4 +-
+ drivers/hwtracing/coresight/coresight-cti.h   |   4 +-
+ drivers/hwtracing/coresight/coresight-etb10.c |  13 +-
+ .../hwtracing/coresight/coresight-etm-perf.c  |   4 +-
+ .../coresight/coresight-etm3x-core.c          |   6 +-
+ .../coresight/coresight-etm4x-core.c          |   6 +-
+ .../hwtracing/coresight/coresight-funnel.c    |  26 +-
+ .../hwtracing/coresight/coresight-platform.c  | 260 +++-----
+ drivers/hwtracing/coresight/coresight-priv.h  |  17 +-
+ .../coresight/coresight-replicator.c          |  23 +-
+ drivers/hwtracing/coresight/coresight-stm.c   |   6 +-
+ drivers/hwtracing/coresight/coresight-sysfs.c |  17 +-
+ .../hwtracing/coresight/coresight-tmc-etf.c   |  26 +-
+ .../hwtracing/coresight/coresight-tmc-etr.c   | 110 ++--
+ drivers/hwtracing/coresight/coresight-tmc.h   |   2 +
+ drivers/hwtracing/coresight/coresight-tpda.c  |  23 +-
+ drivers/hwtracing/coresight/coresight-tpdm.c  |   4 +-
+ drivers/hwtracing/coresight/coresight-tpiu.c  |   7 +-
+ drivers/hwtracing/coresight/coresight-trbe.c  |   3 +-
+ drivers/hwtracing/coresight/ultrasoc-smb.c    |  11 +-
+ drivers/hwtracing/coresight/ultrasoc-smb.h    |   2 +-
+ include/linux/coresight.h                     | 127 ++--
+ 25 files changed, 701 insertions(+), 668 deletions(-)
 
-	return memfd->f_inode->i_op->getattr(mnt_userns, path, stat,
-					     request_mask, query_flags);
+-- 
+2.34.1
 
-That @memfd would be a struct file allocated in a tmpfs instance, no? So
-you'd be calling the inode operation of the tmpfs file meaning that
-struct kstat will be filled up with the info from the tmpfs instance.
-
-But then if I call statfs() and check the fstype I would get
-RESTRICTEDMEM_MAGIC, no? This is... unorthodox?
-
-I'm honestly puzzled and this sounds really strange. There must be a
-better way to implement all of this.
-
-Shouldn't you try and make this a part of tmpfs proper? Make a really
-separate filesystem and add a memfs library that both tmpfs and
-restrictedmemfs can use? Add a mount option to tmpfs that makes it a
-restricted tmpfs?
