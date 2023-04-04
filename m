@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0C76D603B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAE26D603C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234683AbjDDMZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
+        id S234750AbjDDMZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234467AbjDDMYx (ORCPT
+        with ESMTP id S234667AbjDDMZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:24:53 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B5A90;
-        Tue,  4 Apr 2023 05:24:51 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id bi39so2135791qkb.13;
-        Tue, 04 Apr 2023 05:24:51 -0700 (PDT)
+        Tue, 4 Apr 2023 08:25:06 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C616B4
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:25:05 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id br6so42138276lfb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 05:25:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680611091;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yv6dGXazdk0fPECPtfqTnYk8+03xVSm7eCN2KSmwy8g=;
-        b=TgnVgVKqI2CopiCXBTlxZ9lpsr5X+TNGRGMzQdVS1liqAZw4LvDLPAzFv4wFK78BFW
-         /2a30wN26cVMWBtXw2Ie8TAte8Frd/SWo4S7RRmQZYzHIWKXYqz0K3DnXQIMK4MG1Hkv
-         ds6EO6kC1gsCQ/wFBDneTqfm0Sn57k3g+KEkI7jaYV0b9L6LyzMwtdeDSKEMWWw4uk5I
-         alGbbzgnCOY583BdrX6HA4hJQigSu9WpBlu/q0tKaGkocE+e4bX8iJppuLA0mT8lCz9v
-         u7p3HN5rjgOTIDTifw8V3Qh0iKOSf8qelMGQDxZOlRpwRg8zXvElE9oWUUXv+AVNZkje
-         jDZw==
+        d=gmail.com; s=20210112; t=1680611103;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XMqODXEYu9jCFhC1XRoj2muw8B1neNWMnNa2xJihz5k=;
+        b=bhlv4psjXuGbelQvnqFFr6+4iXeR53TUFKoKkp65/X5eCJ1hZHQHd61sypufJaG/RC
+         szLCoBxJ3tPw/GFEBHIO28XOTYUjXlyK+Y9eYAkTVR2ssxiluA8HY72BGm4DIcxE8x8O
+         +Azk6Kc37M6Ea/bs/lsQfvR52HYlyg6fjiOVICL44pyFjEztPY1qeKmcHP+YYlFLKFwi
+         PXh6x30kuzPVoiEmKOSBNUKI3DOzl31PqKUZK5Yvrk09NTd4d+6ImBQg8fSuwFtXZfRY
+         8K1ixvklV0mNSVPkje1rUDjoRh7k6tJjRl+b5w4BggQryUgg+XPH0OjlWu3WcMG9jYCs
+         JyqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680611091;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yv6dGXazdk0fPECPtfqTnYk8+03xVSm7eCN2KSmwy8g=;
-        b=1sc4CDmv2UzkwSqXm/gtGhngh8ZidCqy7u0a8cznLQQkmytV8COQp0TeQKK1x7BqAp
-         HpLTh+BMiw4IfpK6nUPtkk7GOy6O9N19UOsC7un2gbGXEjcf2ybCZvSm8VRyBzqR0x7r
-         POIfWnSeEfiKzzb8lRO+ZJR+uVUv/IdzjAlGdNOzoytlEAqacksNtq1v2Mg/GAXAEsl4
-         1veeN8KkxBQhpoFqHei1u+yBYjdT1xkE33PPS6dVMgBqCKUgL20NwFqKIxbNQeyKFlOz
-         yWdXKcn2qmpXyhIZJUThXv+I4b/mkEXp7z1UQbCDCZxBkXc+ejzeg2F+dA2kSVGOqG2o
-         AQKA==
-X-Gm-Message-State: AAQBX9c+GHe3ZnV/ZIDpvqDEjfy81lgtEpisAd5ahALmRAYANvcFXZBV
-        dTNk0+rWhfm2nxacuByU5DgyPCeJ7kXClE9+lCE=
-X-Google-Smtp-Source: AKy350aiVbMhHiGRKnFfb2o4V5k4kORRlGAY8vwxuqMcERXOV4a6D2IXcHOYATH0YHLG3/s0FrZIr5VkqDPPFqxOSfU=
-X-Received: by 2002:a05:620a:280a:b0:74a:3ca4:a121 with SMTP id
- f10-20020a05620a280a00b0074a3ca4a121mr974178qkp.6.1680611090718; Tue, 04 Apr
- 2023 05:24:50 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680611103;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XMqODXEYu9jCFhC1XRoj2muw8B1neNWMnNa2xJihz5k=;
+        b=YRzEix6yz3mkcHC/s3IWvXWC/00HORsO25+8oPkJ0TPXO0Vn/caki1jW9w8C3um5Cr
+         eK9NF6LNtBYqfgDzkcDo0nQ2KU9ydzYuQnv59RUCSUph/thUdsO1YtRM25PRbqf0KJTZ
+         FiwXi8JwGQXL4Ysu3yFwB7doN/r/mmX2nXmIu+FOoueKA6ZTVm9YszRhDi1DQnwtAXsx
+         JWYYpGMhtpcXYeEJhU9zHH4jxY6NPxL0+oWia77h3cv1MdvSwQZdZpWS8gEazFRKCL/L
+         p+54F+OsCicqYA+IfAPm7VCr5t1M3xLrriHPpbatbSs0zet3lAg/kMFMXKHmtV6vTg0+
+         iaeQ==
+X-Gm-Message-State: AAQBX9dgDD8G499dJ4TL97N+P87zXuf3zJZNnDMc0JlpFmKJwnUPf4Lx
+        pkZD6P+lkTeMQ0SlLV+U8V5YPgfx5ls=
+X-Google-Smtp-Source: AKy350bDhGOioIl+sKMt7Rcc42ozgoq3y2V0bxqx0HrYY7LlgsUCSBwdkeLvVPS6vx3ATKZWF/8hfw==
+X-Received: by 2002:a05:6512:507:b0:4e9:bdd0:b667 with SMTP id o7-20020a056512050700b004e9bdd0b667mr484715lfb.0.1680611102946;
+        Tue, 04 Apr 2023 05:25:02 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id t5-20020ac243a5000000b004eafa060a6fsm2317552lfl.145.2023.04.04.05.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 05:25:02 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 15:24:58 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andrea Merello <andrea.merello@iit.it>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v2 1/3] iio: Add some kerneldoc for channel types
+Message-ID: <6cbe49605986fe1b82e4f3d67344e549846c5f6c.1680610554.git.mazziesaccount@gmail.com>
+References: <cover.1680610554.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-References: <20230305205628.27385-1-ubizjak@gmail.com> <20230305205628.27385-2-ubizjak@gmail.com>
- <ZB2v+avNt52ac/+w@FVFF77S0Q05N> <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
- <ZB3MR8lGbnea9ui6@FVFF77S0Q05N> <ZB3QtDYuWdpiD5qk@FVFF77S0Q05N>
- <CAFULd4aFUF5k=QJD8tDp4qzm2iBF7=rNvp1SJWrg44X5hTFxtQ@mail.gmail.com> <ZCqoRNU8EJhKJVEu@FVFF77S0Q05N>
-In-Reply-To: <ZCqoRNU8EJhKJVEu@FVFF77S0Q05N>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Tue, 4 Apr 2023 14:24:38 +0200
-Message-ID: <CAFULd4ZUnbtDYXBBbuTJnq9wLSf5cZTc=hUPxg6-8KRNA7YVeQ@mail.gmail.com>
-Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg() fallbacks
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Content-Type: multipart/mixed; boundary="00000000000011a71705f881c3d7"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Xw18MM2I4xnJ1mlH"
+Content-Disposition: inline
+In-Reply-To: <cover.1680610554.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -74,278 +77,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000011a71705f881c3d7
-Content-Type: text/plain; charset="UTF-8"
+
+--Xw18MM2I4xnJ1mlH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 3, 2023 at 12:19=E2=80=AFPM Mark Rutland <mark.rutland@arm.com>=
- wrote:
->
-> On Sun, Mar 26, 2023 at 09:28:38PM +0200, Uros Bizjak wrote:
-> > On Fri, Mar 24, 2023 at 5:33=E2=80=AFPM Mark Rutland <mark.rutland@arm.=
-com> wrote:
-> > >
-> > > On Fri, Mar 24, 2023 at 04:14:22PM +0000, Mark Rutland wrote:
-> > > > On Fri, Mar 24, 2023 at 04:43:32PM +0100, Uros Bizjak wrote:
-> > > > > On Fri, Mar 24, 2023 at 3:13=E2=80=AFPM Mark Rutland <mark.rutlan=
-d@arm.com> wrote:
-> > > > > >
-> > > > > > On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote:
-> > > > > > > Cast _oldp to the type of _ptr to avoid incompatible-pointer-=
-types warning.
-> > > > > >
-> > > > > > Can you give an example of where we are passing an incompatible=
- pointer?
-> > > > >
-> > > > > An example is patch 10/10 from the series, which will fail withou=
-t
-> > > > > this fix when fallback code is used. We have:
-> > > > >
-> > > > > -       } while (local_cmpxchg(&rb->head, offset, head) !=3D offs=
-et);
-> > > > > +       } while (!local_try_cmpxchg(&rb->head, &offset, head));
-> > > > >
-> > > > > where rb->head is defined as:
-> > > > >
-> > > > > typedef struct {
-> > > > >    atomic_long_t a;
-> > > > > } local_t;
-> > > > >
-> > > > > while offset is defined as 'unsigned long'.
-> > > >
-> > > > Ok, but that's because we're doing the wrong thing to start with.
-> > > >
-> > > > Since local_t is defined in terms of atomic_long_t, we should defin=
-e the
-> > > > generic local_try_cmpxchg() in terms of atomic_long_try_cmpxchg(). =
-We'll still
-> > > > have a mismatch between 'long *' and 'unsigned long *', but then we=
- can fix
-> > > > that in the callsite:
-> > > >
-> > > >       while (!local_try_cmpxchg(&rb->head, &(long *)offset, head))
-> > >
-> > > Sorry, that should be:
-> > >
-> > >         while (!local_try_cmpxchg(&rb->head, (long *)&offset, head))
-> >
-> > The fallbacks are a bit more complicated than above, and are different
-> > from atomic_try_cmpxchg.
-> >
-> > Please note in patch 2/10, the falbacks when arch_try_cmpxchg_local
-> > are not defined call arch_cmpxchg_local. Also in patch 2/10,
-> > try_cmpxchg_local is introduced, where it calls
-> > arch_try_cmpxchg_local. Targets (and generic code) simply define (e.g.
-> > :
-> >
-> > #define local_cmpxchg(l, o, n) \
-> >        (cmpxchg_local(&((l)->a.counter), (o), (n)))
-> > +#define local_try_cmpxchg(l, po, n) \
-> > +       (try_cmpxchg_local(&((l)->a.counter), (po), (n)))
-> >
-> > which is part of the local_t API. Targets should either define all
-> > these #defines, or none. There are no partial fallbacks as is the case
-> > with atomic_t.
->
-> Whether or not there are fallbacks is immaterial.
->
-> In those cases, architectures can just as easily write C wrappers, e.g.
->
-> long local_cmpxchg(local_t *l, long old, long new)
-> {
->         return cmpxchg_local(&l->a.counter, old, new);
-> }
->
-> long local_try_cmpxchg(local_t *l, long *old, long new)
-> {
->         return try_cmpxchg_local(&l->a.counter, old, new);
-> }
+For occasional contributor like me navigating the IIO channel types and
+modifiers may be a daunting task. One may have hard time finding out
+what type of channel should be used for device data and what units the
+data should be converted.
 
-Please find attached the complete prototype patch that implements the
-above suggestion.
+There is a great documentation for the sysfs interfaces though. What is
+missing is mapping of the channel types and modifiers to the sysfs
+documentation (and entries in documentation).
 
-The patch includes:
-- implementation of instrumented try_cmpxchg{,64}_local definitions
-- corresponding arch_try_cmpxchg{,64}_local fallback definitions
-- generic local{,64}_try_cmpxchg (and local{,64}_cmpxchg) C wrappers
+Give a hand to a driver writer by providing some documentation and by
+pointing to the sysfs document from the kernel doc of respective enums.
 
-- x86 specific local_try_cmpxchg (and local_cmpxchg) C wrappers
-- x86 specific arch_try_cmpxchg_local definition
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+---
+Changelog RFCv1 =3D> v2:
+- add missing channel type docs provided by Jonathan
+- add @in front of member names and fix typos pointed by Andy
+- drop TODOs as Jonathan clarified the units
 
-- kernel/events/ring_buffer.c change to test local_try_cmpxchg
-implementation and illustrate the transition
-- arch/x86/events/core.c change to test local64_try_cmpxchg
-implementation and illustrate the transition
+Initial discussion about these docs can be found from:
+https://lore.kernel.org/all/0e0d45b7-e582-82b2-9bac-1f70f9dad9f7@gmail.com/
+---
+ include/uapi/linux/iio/types.h | 134 +++++++++++++++++++++++++++++++++
+ 1 file changed, 134 insertions(+)
 
-The definition of atomic_long_t is different for 64-bit and 32-bit
-targets (s64 vs int), so target specific C wrappers have to use
-different casts to account for this difference.
+diff --git a/include/uapi/linux/iio/types.h b/include/uapi/linux/iio/types.h
+index c79f2f046a0b..78f4cfdc5e45 100644
+--- a/include/uapi/linux/iio/types.h
++++ b/include/uapi/linux/iio/types.h
+@@ -11,6 +11,124 @@
+ #ifndef _UAPI_IIO_TYPES_H_
+ #define _UAPI_IIO_TYPES_H_
+=20
++/**
++ * iio_chan_type - Type of data transferred via IIO channel.
++ *
++ * The 'main' type of data transferred via channel. Please note that most
++ * devices also need to specify a more accurate 'sub category'. See the
++ * enum iio_modifier for this. (For example, IIO_ACCEL channel often needs=
+ to
++ * specify the direction. IIO_CONCENTRATION specifies the type of substance
++ * it measures etc).
++ *
++ * These reflect the units of the measurement via processed or unit after
++ * application of scale and offset. See the enum iio_chan_info_enum for
++ * scale and offset.
++ *
++ * Please find the detailed documentation for reported values from the
++ * Documentation/ABI/testing/sysfs-bus-iio.
++ *
++ * @IIO_ACCEL:		Acceleration, m/s^2
++ *			Doc keyword: in_accel_x_raw
++ *
++ * @IIO_ACTIVITY:	Activity state. For example a pedometer signaling
++ *			jogging, walking or staying still.
++ *			Doc keyword: in_activity_still_thresh_rising_en
++ *
++ * @IIO_ALTVOLTAGE:	Peak to peak voltage, millivolts
++ *
++ * @IIO_ANGL:		Angle of rotation, radians.
++ *			Doc keyword: in_angl_raw
++ *
++ * @IIO_ANGL_VEL:	Angular velocity, rad/s
++ *			Doc keyword: in_anglvel_x_raw
++ *
++ * @IIO_CAPACITANCE:	Capacitance, nanofarads.
++ *			Doc keyword: in_capacitanceY_raw
++ *
++ * @IIO_CCT:		Correlated color temperature, Kelvins
++ *
++ * @IIO_CURRENT:	Current, milliamps
++ *			Doc keyword: in_currentY_raw
++ *
++ * @IIO_CONCENTRATION:	Reading of a substance, percents. Used for example =
+by
++ *			devices measuring amount of CO2, O2, ethanol...
++ *			Doc keyword: in_concentration_raw
++ *
++ * @IIO_COUNT:		Deprecated, please use counter subsystem.
++ *
++ * @IIO_DISTANCE:	Distance in meters. Typically used to report measured
++ *			distance to an object or the distance covered by the
++ *			user
++ *			Doc keyword: in_distance_input
++ *
++ * @IIO_ELECTRICALCONDUCTIVITY: electric conductivity, siemens per meter
++ *			Doc keyword: in_electricalconductivity_raw
++ *
++ * @IIO_ENERGY:		Energy in Joules. Typically reported by a device
++ *			measuring energy burnt by the user.
++ *			Doc keyword: in_energy_input
++ *
++ * @IIO_GRAVITY:	Gravity, m/s^2
++ *			Doc keyword: in_gravity_x_raw
++ *
++ * @IIO_HUMIDITYRELATIVE: Relative humidity, percents
++ *			Doc keyword: in_humidityrelative_raw
++ *
++ * @IIO_INCLI:		Inclination, degrees
++ *			Doc keyword: in_incli_x_raw
++ *
++ * @IIO_INDEX:		Deprecated, please use Counter subsystem
++ *
++ * @IIO_INTENSITY:	Unitless intensity.
++ *			Doc keyword: in_intensityY_raw
++ *
++ * @IIO_LIGHT:		Visible light intensity, lux
++ *			Doc keyword: in_illuminance_raw
++ *
++ * @IIO_MAGN:		Magnetic field, Gauss.
++ *			Doc keyword: in_magn_x_raw
++ *
++ * @IIO_MASSCONCENTRATION: Mass concentration, ug / m3
++ *			Doc keyword: in_massconcentration_pm1_input
++ *
++ * @IIO_PH:		pH reading, negative base-10 logarithm of hydrodium
++ *			ions in a litre of water
++ *			Doc keyword: in_ph_raw
++ *
++ * @IIO_PHASE:		Phase difference, radians
++ *			Doc keyword: in_phaseY_raw
++ *
++ * @IIO_POSITIONRELATIVE: Relative position.
++ *			Doc keyword: in_positionrelative_x_raw
++ *
++ * @IIO_POWER:		Power, milliwatts
++ *			Doc keyword: in_powerY_raw
++ *
++ * @IIO_PRESSURE:	Pressure, kilopascal
++ *			Doc keyword: in_pressureY_raw
++ *
++ * @IIO_RESISTANCE:	Resistance, ohms
++ *			Doc keyword: in_resistance_raw
++ *
++ * @IIO_ROT:		Euler angles, deg
++ *			Doc keyword: in_rot_yaw_raw
++ *
++ * @IIO_STEPS:		Steps taken by the user
++ *			Doc keyword: in_steps_input
++ *
++ * @IIO_TEMP:		Temperature, milli degrees Celsius
++ *			Doc keyword: in_temp_raw
++ *
++ * @IIO_UVINDEX:	UV light intensity index
++ *			Doc keyword: in_uvindex_input
++ *
++ * @IIO_VELOCITY:	Current speed (norm or magnitude of the velocity
++ *			vector), m/s
++ *			Doc keyword: in_velocity_sqrt(x^2+y^2+z^2)_input
++ *
++ * @IIO_VOLTAGE:	Voltage, millivolts
++ *			Doc keyword: in_voltageY_raw
++ */
+ enum iio_chan_type {
+ 	IIO_VOLTAGE,
+ 	IIO_CURRENT,
+@@ -49,6 +167,22 @@ enum iio_chan_type {
+ 	IIO_MASSCONCENTRATION,
+ };
+=20
++/**
++ * iio_modifier - accurate class for channel data
++ *
++ * @IIO_MOD_<X,Y,Z>:	Value represents <X,Y,Z>-axis data.
++ *			Typically used by channels of type:
++ *			IIO_ACCEL, IIO_TEMP, IIO_GRAVITY, IIO_POSITIONRELATIVE,
++ *			IIO_ANGL_VEL, IIO_INCLI, IIO_MAGN
++ * @IIO_MOD_LIGHT_BOTH:	Value contains visible and infrared light componen=
+ts
++ * @IIO_MOD_LIGHT_IR:	Value represents infrared radiation
++ * @IIO_MOD_LIGHT_<RED, GREEN, BLUE>:
++ *			Value represents visible <red, green, blue>  light
++ * @IIO_MOD_LIGHT_CLEAR:	Value represents all visible light frequencies
++ *
++ * Please find the detailed documentation for reported values from the
++ * Documentation/ABI/testing/sysfs-bus-iio.
++ */
+ enum iio_modifier {
+ 	IIO_NO_MOD,
+ 	IIO_MOD_X,
+--=20
+2.39.2
 
-Uros.
 
---00000000000011a71705f881c3d7
-Content-Type: text/plain; charset="US-ASCII"; name="try_cmpxchg_local-04042023.diff.txt"
-Content-Disposition: attachment; 
-	filename="try_cmpxchg_local-04042023.diff.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lg28ey5r0>
-X-Attachment-Id: f_lg28ey5r0
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
-ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2V2ZW50cy9jb3JlLmMgYi9hcmNoL3g4Ni9ldmVudHMvY29y
-ZS5jCmluZGV4IGQwOTZiMDRiZjgwZS4uZDkzMTBlOTM2M2YxIDEwMDY0NAotLS0gYS9hcmNoL3g4
-Ni9ldmVudHMvY29yZS5jCisrKyBiL2FyY2gveDg2L2V2ZW50cy9jb3JlLmMKQEAgLTEyOSwxMyAr
-MTI5LDEyIEBAIHU2NCB4ODZfcGVyZl9ldmVudF91cGRhdGUoc3RydWN0IHBlcmZfZXZlbnQgKmV2
-ZW50KQogCSAqIGV4Y2hhbmdlIGEgbmV3IHJhdyBjb3VudCAtIHRoZW4gYWRkIHRoYXQgbmV3LXBy
-ZXYgZGVsdGEKIAkgKiBjb3VudCB0byB0aGUgZ2VuZXJpYyBldmVudCBhdG9taWNhbGx5OgogCSAq
-LwotYWdhaW46CiAJcHJldl9yYXdfY291bnQgPSBsb2NhbDY0X3JlYWQoJmh3Yy0+cHJldl9jb3Vu
-dCk7Ci0JcmRwbWNsKGh3Yy0+ZXZlbnRfYmFzZV9yZHBtYywgbmV3X3Jhd19jb3VudCk7CiAKLQlp
-ZiAobG9jYWw2NF9jbXB4Y2hnKCZod2MtPnByZXZfY291bnQsIHByZXZfcmF3X2NvdW50LAotCQkJ
-CQluZXdfcmF3X2NvdW50KSAhPSBwcmV2X3Jhd19jb3VudCkKLQkJZ290byBhZ2FpbjsKKwlkbyB7
-CisJCXJkcG1jbChod2MtPmV2ZW50X2Jhc2VfcmRwbWMsIG5ld19yYXdfY291bnQpOworCX0gd2hp
-bGUgKCFsb2NhbDY0X3RyeV9jbXB4Y2hnKCZod2MtPnByZXZfY291bnQsICZwcmV2X3Jhd19jb3Vu
-dCwKKwkJCQkgICAgICBuZXdfcmF3X2NvdW50KSk7CiAKIAkvKgogCSAqIE5vdyB3ZSBoYXZlIHRo
-ZSBuZXcgcmF3IHZhbHVlIGFuZCBoYXZlIHVwZGF0ZWQgdGhlIHByZXYKZGlmZiAtLWdpdCBhL2Fy
-Y2gveDg2L2luY2x1ZGUvYXNtL2NtcHhjaGcuaCBiL2FyY2gveDg2L2luY2x1ZGUvYXNtL2NtcHhj
-aGcuaAppbmRleCA5NGZiZTZhZTc0MzEuLjU0MDU3M2Y1MTViNyAxMDA2NDQKLS0tIGEvYXJjaC94
-ODYvaW5jbHVkZS9hc20vY21weGNoZy5oCisrKyBiL2FyY2gveDg2L2luY2x1ZGUvYXNtL2NtcHhj
-aGcuaApAQCAtMjIxLDkgKzIyMSwxNSBAQCBleHRlcm4gdm9pZCBfX2FkZF93cm9uZ19zaXplKHZv
-aWQpCiAjZGVmaW5lIF9fdHJ5X2NtcHhjaGcocHRyLCBwb2xkLCBuZXcsIHNpemUpCQkJCVwKIAlf
-X3Jhd190cnlfY21weGNoZygocHRyKSwgKHBvbGQpLCAobmV3KSwgKHNpemUpLCBMT0NLX1BSRUZJ
-WCkKIAorI2RlZmluZSBfX3RyeV9jbXB4Y2hnX2xvY2FsKHB0ciwgcG9sZCwgbmV3LCBzaXplKQkJ
-CVwKKwlfX3Jhd190cnlfY21weGNoZygocHRyKSwgKHBvbGQpLCAobmV3KSwgKHNpemUpLCAiIikK
-KwogI2RlZmluZSBhcmNoX3RyeV9jbXB4Y2hnKHB0ciwgcG9sZCwgbmV3KSAJCQkJXAogCV9fdHJ5
-X2NtcHhjaGcoKHB0ciksIChwb2xkKSwgKG5ldyksIHNpemVvZigqKHB0cikpKQogCisjZGVmaW5l
-IGFyY2hfdHJ5X2NtcHhjaGdfbG9jYWwocHRyLCBwb2xkLCBuZXcpCQkJCVwKKwlfX3RyeV9jbXB4
-Y2hnX2xvY2FsKChwdHIpLCAocG9sZCksIChuZXcpLCBzaXplb2YoKihwdHIpKSkKKwogLyoKICAq
-IHhhZGQoKSBhZGRzICJpbmMiIHRvICIqcHRyIiBhbmQgYXRvbWljYWxseSByZXR1cm5zIHRoZSBw
-cmV2aW91cwogICogdmFsdWUgb2YgIipwdHIiLgpkaWZmIC0tZ2l0IGEvYXJjaC94ODYvaW5jbHVk
-ZS9hc20vbG9jYWwuaCBiL2FyY2gveDg2L2luY2x1ZGUvYXNtL2xvY2FsLmgKaW5kZXggMzQ5YTQ3
-YWNhYTRhLi5kMjg2YTZjN2MwYjcgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL2xv
-Y2FsLmgKKysrIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vbG9jYWwuaApAQCAtMTIwLDggKzEyMCwy
-MCBAQCBzdGF0aWMgaW5saW5lIGxvbmcgbG9jYWxfc3ViX3JldHVybihsb25nIGksIGxvY2FsX3Qg
-KmwpCiAjZGVmaW5lIGxvY2FsX2luY19yZXR1cm4obCkgIChsb2NhbF9hZGRfcmV0dXJuKDEsIGwp
-KQogI2RlZmluZSBsb2NhbF9kZWNfcmV0dXJuKGwpICAobG9jYWxfc3ViX3JldHVybigxLCBsKSkK
-IAotI2RlZmluZSBsb2NhbF9jbXB4Y2hnKGwsIG8sIG4pIFwKLQkoY21weGNoZ19sb2NhbCgmKChs
-KS0+YS5jb3VudGVyKSwgKG8pLCAobikpKQorc3RhdGljIGlubGluZSBsb25nIGxvY2FsX2NtcHhj
-aGcobG9jYWxfdCAqbCwgbG9uZyBvbGQsIGxvbmcgbmV3KQoreworCXJldHVybiBjbXB4Y2hnX2xv
-Y2FsKCZsLT5hLmNvdW50ZXIsIG9sZCwgbmV3KTsKK30KKworc3RhdGljIGlubGluZSBib29sIGxv
-Y2FsX3RyeV9jbXB4Y2hnKGxvY2FsX3QgKmwsIGxvbmcgKm9sZCwgbG9uZyBuZXcpCit7CisjaWZk
-ZWYgQ09ORklHXzY0QklUCisJcmV0dXJuIHRyeV9jbXB4Y2hnX2xvY2FsKCZsLT5hLmNvdW50ZXIs
-IChzNjQgKilvbGQsIG5ldyk7CisjZWxzZQorCXJldHVybiB0cnlfY21weGNoZ19sb2NhbCgmbC0+
-YS5jb3VudGVyLCAoaW50ICopb2xkLCBuZXcpOworI2VuZGlmCit9CisKIC8qIEFsd2F5cyBoYXMg
-YSBsb2NrIHByZWZpeCAqLwogI2RlZmluZSBsb2NhbF94Y2hnKGwsIG4pICh4Y2hnKCYoKGwpLT5h
-LmNvdW50ZXIpLCAobikpKQogCmRpZmYgLS1naXQgYS9pbmNsdWRlL2FzbS1nZW5lcmljL2xvY2Fs
-LmggYi9pbmNsdWRlL2FzbS1nZW5lcmljL2xvY2FsLmgKaW5kZXggZmNhN2YxZDg0ODE4Li43Zjk3
-MDE4ZGY2NmYgMTAwNjQ0Ci0tLSBhL2luY2x1ZGUvYXNtLWdlbmVyaWMvbG9jYWwuaAorKysgYi9p
-bmNsdWRlL2FzbS1nZW5lcmljL2xvY2FsLmgKQEAgLTQyLDYgKzQyLDcgQEAgdHlwZWRlZiBzdHJ1
-Y3QKICNkZWZpbmUgbG9jYWxfaW5jX3JldHVybihsKSBhdG9taWNfbG9uZ19pbmNfcmV0dXJuKCYo
-bCktPmEpCiAKICNkZWZpbmUgbG9jYWxfY21weGNoZyhsLCBvLCBuKSBhdG9taWNfbG9uZ19jbXB4
-Y2hnKCgmKGwpLT5hKSwgKG8pLCAobikpCisjZGVmaW5lIGxvY2FsX3RyeV9jbXB4Y2hnKGwsIHBv
-LCBuKSBhdG9taWNfbG9uZ190cnlfY21weGNoZygoJihsKS0+YSksIChwbyksIChuKSkKICNkZWZp
-bmUgbG9jYWxfeGNoZyhsLCBuKSBhdG9taWNfbG9uZ194Y2hnKCgmKGwpLT5hKSwgKG4pKQogI2Rl
-ZmluZSBsb2NhbF9hZGRfdW5sZXNzKGwsIF9hLCB1KSBhdG9taWNfbG9uZ19hZGRfdW5sZXNzKCgm
-KGwpLT5hKSwgKF9hKSwgKHUpKQogI2RlZmluZSBsb2NhbF9pbmNfbm90X3plcm8obCkgYXRvbWlj
-X2xvbmdfaW5jX25vdF96ZXJvKCYobCktPmEpCmRpZmYgLS1naXQgYS9pbmNsdWRlL2FzbS1nZW5l
-cmljL2xvY2FsNjQuaCBiL2luY2x1ZGUvYXNtLWdlbmVyaWMvbG9jYWw2NC5oCmluZGV4IDc2NWJl
-MGI3ZDg4My4uMTQ5NjNhN2E2MjUzIDEwMDY0NAotLS0gYS9pbmNsdWRlL2FzbS1nZW5lcmljL2xv
-Y2FsNjQuaAorKysgYi9pbmNsdWRlL2FzbS1nZW5lcmljL2xvY2FsNjQuaApAQCAtNDIsNyArNDIs
-MTYgQEAgdHlwZWRlZiBzdHJ1Y3QgewogI2RlZmluZSBsb2NhbDY0X3N1Yl9yZXR1cm4oaSwgbCkg
-bG9jYWxfc3ViX3JldHVybigoaSksICgmKGwpLT5hKSkKICNkZWZpbmUgbG9jYWw2NF9pbmNfcmV0
-dXJuKGwpCWxvY2FsX2luY19yZXR1cm4oJihsKS0+YSkKIAotI2RlZmluZSBsb2NhbDY0X2NtcHhj
-aGcobCwgbywgbikgbG9jYWxfY21weGNoZygoJihsKS0+YSksIChvKSwgKG4pKQorc3RhdGljIGlu
-bGluZSBzNjQgbG9jYWw2NF9jbXB4Y2hnKGxvY2FsNjRfdCAqbCwgczY0IG9sZCwgczY0IG5ldykK
-K3sKKwlyZXR1cm4gbG9jYWxfY21weGNoZygmbC0+YSwgb2xkLCBuZXcpOworfQorCitzdGF0aWMg
-aW5saW5lIGJvb2wgbG9jYWw2NF90cnlfY21weGNoZyhsb2NhbDY0X3QgKmwsIHM2NCAqb2xkLCBz
-NjQgbmV3KQoreworCXJldHVybiBsb2NhbF90cnlfY21weGNoZygmbC0+YSwgKGxvbmcgKilvbGQs
-IG5ldyk7Cit9CisKICNkZWZpbmUgbG9jYWw2NF94Y2hnKGwsIG4pCWxvY2FsX3hjaGcoKCYobCkt
-PmEpLCAobikpCiAjZGVmaW5lIGxvY2FsNjRfYWRkX3VubGVzcyhsLCBfYSwgdSkgbG9jYWxfYWRk
-X3VubGVzcygoJihsKS0+YSksIChfYSksICh1KSkKICNkZWZpbmUgbG9jYWw2NF9pbmNfbm90X3pl
-cm8obCkJbG9jYWxfaW5jX25vdF96ZXJvKCYobCktPmEpCkBAIC04MSw2ICs5MCw3IEBAIHR5cGVk
-ZWYgc3RydWN0IHsKICNkZWZpbmUgbG9jYWw2NF9pbmNfcmV0dXJuKGwpCWF0b21pYzY0X2luY19y
-ZXR1cm4oJihsKS0+YSkKIAogI2RlZmluZSBsb2NhbDY0X2NtcHhjaGcobCwgbywgbikgYXRvbWlj
-NjRfY21weGNoZygoJihsKS0+YSksIChvKSwgKG4pKQorI2RlZmluZSBsb2NhbDY0X3RyeV9jbXB4
-Y2hnKGwsIHBvLCBuKSBhdG9taWM2NF90cnlfY21weGNoZygoJihsKS0+YSksIChwbyksIChuKSkK
-ICNkZWZpbmUgbG9jYWw2NF94Y2hnKGwsIG4pCWF0b21pYzY0X3hjaGcoKCYobCktPmEpLCAobikp
-CiAjZGVmaW5lIGxvY2FsNjRfYWRkX3VubGVzcyhsLCBfYSwgdSkgYXRvbWljNjRfYWRkX3VubGVz
-cygoJihsKS0+YSksIChfYSksICh1KSkKICNkZWZpbmUgbG9jYWw2NF9pbmNfbm90X3plcm8obCkJ
-YXRvbWljNjRfaW5jX25vdF96ZXJvKCYobCktPmEpCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4
-L2F0b21pYy9hdG9taWMtYXJjaC1mYWxsYmFjay5oIGIvaW5jbHVkZS9saW51eC9hdG9taWMvYXRv
-bWljLWFyY2gtZmFsbGJhY2suaAppbmRleCA3N2JjNTUyMmU2MWMuLjM2YzkyODUxY2RlZSAxMDA2
-NDQKLS0tIGEvaW5jbHVkZS9saW51eC9hdG9taWMvYXRvbWljLWFyY2gtZmFsbGJhY2suaAorKysg
-Yi9pbmNsdWRlL2xpbnV4L2F0b21pYy9hdG9taWMtYXJjaC1mYWxsYmFjay5oCkBAIC0yMTcsNiAr
-MjE3LDI4IEBACiAKICNlbmRpZiAvKiBhcmNoX3RyeV9jbXB4Y2hnNjRfcmVsYXhlZCAqLwogCisj
-aWZuZGVmIGFyY2hfdHJ5X2NtcHhjaGdfbG9jYWwKKyNkZWZpbmUgYXJjaF90cnlfY21weGNoZ19s
-b2NhbChfcHRyLCBfb2xkcCwgX25ldykgXAorKHsgXAorCXR5cGVvZigqKF9wdHIpKSAqX19fb3Ag
-PSAoX29sZHApLCBfX19vID0gKl9fX29wLCBfX19yOyBcCisJX19fciA9IGFyY2hfY21weGNoZ19s
-b2NhbCgoX3B0ciksIF9fX28sIChfbmV3KSk7IFwKKwlpZiAodW5saWtlbHkoX19fciAhPSBfX19v
-KSkgXAorCQkqX19fb3AgPSBfX19yOyBcCisJbGlrZWx5KF9fX3IgPT0gX19fbyk7IFwKK30pCisj
-ZW5kaWYgLyogYXJjaF90cnlfY21weGNoZ19sb2NhbCAqLworCisjaWZuZGVmIGFyY2hfdHJ5X2Nt
-cHhjaGc2NF9sb2NhbAorI2RlZmluZSBhcmNoX3RyeV9jbXB4Y2hnNjRfbG9jYWwoX3B0ciwgX29s
-ZHAsIF9uZXcpIFwKKyh7IFwKKwl0eXBlb2YoKihfcHRyKSkgKl9fX29wID0gKF9vbGRwKSwgX19f
-byA9ICpfX19vcCwgX19fcjsgXAorCV9fX3IgPSBhcmNoX2NtcHhjaGc2NF9sb2NhbCgoX3B0ciks
-IF9fX28sIChfbmV3KSk7IFwKKwlpZiAodW5saWtlbHkoX19fciAhPSBfX19vKSkgXAorCQkqX19f
-b3AgPSBfX19yOyBcCisJbGlrZWx5KF9fX3IgPT0gX19fbyk7IFwKK30pCisjZW5kaWYgLyogYXJj
-aF90cnlfY21weGNoZzY0X2xvY2FsICovCisKICNpZm5kZWYgYXJjaF9hdG9taWNfcmVhZF9hY3F1
-aXJlCiBzdGF0aWMgX19hbHdheXNfaW5saW5lIGludAogYXJjaF9hdG9taWNfcmVhZF9hY3F1aXJl
-KGNvbnN0IGF0b21pY190ICp2KQpAQCAtMjQ1Niw0ICsyNDc4LDQgQEAgYXJjaF9hdG9taWM2NF9k
-ZWNfaWZfcG9zaXRpdmUoYXRvbWljNjRfdCAqdikKICNlbmRpZgogCiAjZW5kaWYgLyogX0xJTlVY
-X0FUT01JQ19GQUxMQkFDS19IICovCi0vLyBiNWU4N2JkZDVlZGU2MTQ3MGMyOWY3YTdlNGRlNzgx
-YWYzNzcwZjA5CisvLyAxZjQ5YmQ0ODk1YTRiN2E1MzgzOTA2NjQ5MDI3MjA1YzUyZWM4MGFiCmRp
-ZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2F0b21pYy9hdG9taWMtaW5zdHJ1bWVudGVkLmggYi9p
-bmNsdWRlL2xpbnV4L2F0b21pYy9hdG9taWMtaW5zdHJ1bWVudGVkLmgKaW5kZXggN2ExMzllYzAz
-MGIwLi4xNGE5MjEyY2M5ODcgMTAwNjQ0Ci0tLSBhL2luY2x1ZGUvbGludXgvYXRvbWljL2F0b21p
-Yy1pbnN0cnVtZW50ZWQuaAorKysgYi9pbmNsdWRlL2xpbnV4L2F0b21pYy9hdG9taWMtaW5zdHJ1
-bWVudGVkLmgKQEAgLTIwNjYsNiArMjA2NiwyNCBAQCBhdG9taWNfbG9uZ19kZWNfaWZfcG9zaXRp
-dmUoYXRvbWljX2xvbmdfdCAqdikKIAlhcmNoX3N5bmNfY21weGNoZyhfX2FpX3B0ciwgX19WQV9B
-UkdTX18pOyBcCiB9KQogCisjZGVmaW5lIHRyeV9jbXB4Y2hnX2xvY2FsKHB0ciwgb2xkcCwgLi4u
-KSBcCisoeyBcCisJdHlwZW9mKHB0cikgX19haV9wdHIgPSAocHRyKTsgXAorCXR5cGVvZihvbGRw
-KSBfX2FpX29sZHAgPSAob2xkcCk7IFwKKwlpbnN0cnVtZW50X2F0b21pY193cml0ZShfX2FpX3B0
-ciwgc2l6ZW9mKCpfX2FpX3B0cikpOyBcCisJaW5zdHJ1bWVudF9hdG9taWNfd3JpdGUoX19haV9v
-bGRwLCBzaXplb2YoKl9fYWlfb2xkcCkpOyBcCisJYXJjaF90cnlfY21weGNoZ19sb2NhbChfX2Fp
-X3B0ciwgX19haV9vbGRwLCBfX1ZBX0FSR1NfXyk7IFwKK30pCisKKyNkZWZpbmUgdHJ5X2NtcHhj
-aGc2NF9sb2NhbChwdHIsIG9sZHAsIC4uLikgXAorKHsgXAorCXR5cGVvZihwdHIpIF9fYWlfcHRy
-ID0gKHB0cik7IFwKKwl0eXBlb2Yob2xkcCkgX19haV9vbGRwID0gKG9sZHApOyBcCisJaW5zdHJ1
-bWVudF9hdG9taWNfd3JpdGUoX19haV9wdHIsIHNpemVvZigqX19haV9wdHIpKTsgXAorCWluc3Ry
-dW1lbnRfYXRvbWljX3dyaXRlKF9fYWlfb2xkcCwgc2l6ZW9mKCpfX2FpX29sZHApKTsgXAorCWFy
-Y2hfdHJ5X2NtcHhjaGc2NF9sb2NhbChfX2FpX3B0ciwgX19haV9vbGRwLCBfX1ZBX0FSR1NfXyk7
-IFwKK30pCisKICNkZWZpbmUgY21weGNoZ19kb3VibGUocHRyLCAuLi4pIFwKICh7IFwKIAl0eXBl
-b2YocHRyKSBfX2FpX3B0ciA9IChwdHIpOyBcCkBAIC0yMDgzLDQgKzIxMDEsNCBAQCBhdG9taWNf
-bG9uZ19kZWNfaWZfcG9zaXRpdmUoYXRvbWljX2xvbmdfdCAqdikKIH0pCiAKICNlbmRpZiAvKiBf
-TElOVVhfQVRPTUlDX0lOU1RSVU1FTlRFRF9IICovCi0vLyA3NjRmNzQxZWI3N2E3YWQ1NjVkYzhk
-OTljZTI4MzdkNTU0MmU4YWVlCisvLyA0NTZlMjA2YzdlNGU2ODExMjZjNDgyZTRlZGNjNmY0Njky
-MWFjNzMxCmRpZmYgLS1naXQgYS9rZXJuZWwvZXZlbnRzL3JpbmdfYnVmZmVyLmMgYi9rZXJuZWwv
-ZXZlbnRzL3JpbmdfYnVmZmVyLmMKaW5kZXggMjczYTBmZTc5MTBhLi4xMTFhYjg1ZWU5N2QgMTAw
-NjQ0Ci0tLSBhL2tlcm5lbC9ldmVudHMvcmluZ19idWZmZXIuYworKysgYi9rZXJuZWwvZXZlbnRz
-L3JpbmdfYnVmZmVyLmMKQEAgLTE5MSw5ICsxOTEsMTAgQEAgX19wZXJmX291dHB1dF9iZWdpbihz
-dHJ1Y3QgcGVyZl9vdXRwdXRfaGFuZGxlICpoYW5kbGUsCiAKIAlwZXJmX291dHB1dF9nZXRfaGFu
-ZGxlKGhhbmRsZSk7CiAKKwlvZmZzZXQgPSBsb2NhbF9yZWFkKCZyYi0+aGVhZCk7CiAJZG8gewog
-CQl0YWlsID0gUkVBRF9PTkNFKHJiLT51c2VyX3BhZ2UtPmRhdGFfdGFpbCk7Ci0JCW9mZnNldCA9
-IGhlYWQgPSBsb2NhbF9yZWFkKCZyYi0+aGVhZCk7CisJCWhlYWQgPSBvZmZzZXQ7CiAJCWlmICgh
-cmItPm92ZXJ3cml0ZSkgewogCQkJaWYgKHVubGlrZWx5KCFyaW5nX2J1ZmZlcl9oYXNfc3BhY2Uo
-aGVhZCwgdGFpbCwKIAkJCQkJCQkgICAgcGVyZl9kYXRhX3NpemUocmIpLApAQCAtMjE3LDcgKzIx
-OCw3IEBAIF9fcGVyZl9vdXRwdXRfYmVnaW4oc3RydWN0IHBlcmZfb3V0cHV0X2hhbmRsZSAqaGFu
-ZGxlLAogCQkJaGVhZCArPSBzaXplOwogCQllbHNlCiAJCQloZWFkIC09IHNpemU7Ci0JfSB3aGls
-ZSAobG9jYWxfY21weGNoZygmcmItPmhlYWQsIG9mZnNldCwgaGVhZCkgIT0gb2Zmc2V0KTsKKwl9
-IHdoaWxlICghbG9jYWxfdHJ5X2NtcHhjaGcoJnJiLT5oZWFkLCAmb2Zmc2V0LCBoZWFkKSk7CiAK
-IAlpZiAoYmFja3dhcmQpIHsKIAkJb2Zmc2V0ID0gaGVhZDsKZGlmZiAtLWdpdCBhL3NjcmlwdHMv
-YXRvbWljL2dlbi1hdG9taWMtZmFsbGJhY2suc2ggYi9zY3JpcHRzL2F0b21pYy9nZW4tYXRvbWlj
-LWZhbGxiYWNrLnNoCmluZGV4IDNhMDc2OTVlM2M4OS4uNmU4NTNmMGRhZDhkIDEwMDc1NQotLS0g
-YS9zY3JpcHRzL2F0b21pYy9nZW4tYXRvbWljLWZhbGxiYWNrLnNoCisrKyBiL3NjcmlwdHMvYXRv
-bWljL2dlbi1hdG9taWMtZmFsbGJhY2suc2gKQEAgLTIyNSw2ICsyMjUsMTAgQEAgZm9yIGNtcHhj
-aGcgaW4gImNtcHhjaGciICJjbXB4Y2hnNjQiOyBkbwogCWdlbl90cnlfY21weGNoZ19mYWxsYmFj
-a3MgIiR7Y21weGNoZ30iCiBkb25lCiAKK2ZvciBjbXB4Y2hnIGluICJjbXB4Y2hnX2xvY2FsIiAi
-Y21weGNoZzY0X2xvY2FsIjsgZG8KKwlnZW5fdHJ5X2NtcHhjaGdfZmFsbGJhY2sgIiR7Y21weGNo
-Z30iICIiCitkb25lCisKIGdyZXAgJ15bYS16XScgIiQxIiB8IHdoaWxlIHJlYWQgbmFtZSBtZXRh
-IGFyZ3M7IGRvCiAJZ2VuX3Byb3RvICIke21ldGF9IiAiJHtuYW1lfSIgImF0b21pYyIgImludCIg
-JHthcmdzfQogZG9uZQpkaWZmIC0tZ2l0IGEvc2NyaXB0cy9hdG9taWMvZ2VuLWF0b21pYy1pbnN0
-cnVtZW50ZWQuc2ggYi9zY3JpcHRzL2F0b21pYy9nZW4tYXRvbWljLWluc3RydW1lbnRlZC5zaApp
-bmRleCA3N2MwNjUyNmE1NzQuLmM4MTY1ZTk0MzFiZiAxMDA3NTUKLS0tIGEvc2NyaXB0cy9hdG9t
-aWMvZ2VuLWF0b21pYy1pbnN0cnVtZW50ZWQuc2gKKysrIGIvc2NyaXB0cy9hdG9taWMvZ2VuLWF0
-b21pYy1pbnN0cnVtZW50ZWQuc2gKQEAgLTE3Myw3ICsxNzMsNyBAQCBmb3IgeGNoZyBpbiAieGNo
-ZyIgImNtcHhjaGciICJjbXB4Y2hnNjQiICJ0cnlfY21weGNoZyIgInRyeV9jbXB4Y2hnNjQiOyBk
-bwogCWRvbmUKIGRvbmUKIAotZm9yIHhjaGcgaW4gImNtcHhjaGdfbG9jYWwiICJjbXB4Y2hnNjRf
-bG9jYWwiICJzeW5jX2NtcHhjaGciOyBkbworZm9yIHhjaGcgaW4gImNtcHhjaGdfbG9jYWwiICJj
-bXB4Y2hnNjRfbG9jYWwiICJzeW5jX2NtcHhjaGciICJ0cnlfY21weGNoZ19sb2NhbCIgInRyeV9j
-bXB4Y2hnNjRfbG9jYWwiIDsgZG8KIAlnZW5feGNoZyAiJHt4Y2hnfSIgIiIgIiIKIAlwcmludGYg
-IlxuIgogZG9uZQo=
---00000000000011a71705f881c3d7--
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--Xw18MM2I4xnJ1mlH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQsFxoACgkQeFA3/03a
+ocWURQf+JSwfH0rH6TItjTPy+ijNB5gJbCudkp/fOqCVNr8A0uA1H3Efqhm4wci1
+xeMn7iaGSKg4e+gd41q+yK6WNBvKhuLCPeymwJge6HtBJyBGAwdsHoPapL9kFxtg
+PAJqAwGz5YaAROGah29HW03IAPdu63uUGe7UDjMYWUVBVVhFoMu1q8Isi8Ur2bQh
+pbB+MWPZ6KmMLO7UTGxyDcyeu75Oa4iuPqFykcA0e+/jtoyeNWACEyRu7D9wGIEn
+IIVB0iCJaT6iax3LichMAqjxWVvH0DL2UbJWX7JLF/IxBn6hnzRGvt5owVvJCwbv
+KFo7Xj0c2PwJzdyDNIQijM7CbZ19TA==
+=/BOS
+-----END PGP SIGNATURE-----
+
+--Xw18MM2I4xnJ1mlH--
