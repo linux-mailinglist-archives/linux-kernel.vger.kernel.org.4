@@ -2,162 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4715E6D5EEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52DB6D5EF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234851AbjDDLZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S234886AbjDDL2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 07:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234712AbjDDLZu (ORCPT
+        with ESMTP id S234295AbjDDL2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:25:50 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448241FEF;
-        Tue,  4 Apr 2023 04:25:49 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pjenL-0005Zk-3U; Tue, 04 Apr 2023 13:25:47 +0200
-Message-ID: <1473b364-777a-ede8-3ff6-36d9e1d577ad@leemhuis.info>
-Date:   Tue, 4 Apr 2023 13:25:46 +0200
+        Tue, 4 Apr 2023 07:28:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF1C1FD3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 04:28:40 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pjepm-00043P-Ln; Tue, 04 Apr 2023 13:28:18 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 42D791A6300;
+        Tue,  4 Apr 2023 11:28:13 +0000 (UTC)
+Date:   Tue, 4 Apr 2023 13:28:12 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Rob Herring <robh@kernel.org>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: Re: [PATCH v10 0/5] can: bxcan: add support for ST bxCAN controller
+Message-ID: <20230404-postage-handprint-efdb77646082@pengutronix.de>
+References: <20230328073328.3949796-1-dario.binacchi@amarulasolutions.com>
+ <20230328084710.jnrwvydewx3atxti@pengutronix.de>
+ <CABGWkvq0gOMw2J9GpLS=w+qg-3xhAst6KN9kvCuZnV9bSBJ3CA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: dmaengine: at_hdmac: Regression regarding rs485 via dma in v5.4
-Content-Language: en-US, de-DE
-To:     tudor.ambarus@microchip.com
-References: <CADBnMvj93bSO=+wU4=pLTgONV7w_hhecxQHAc_YS4P4GaqMNrA@mail.gmail.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     Linux kernel regressions list <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kristof Havasi <havasiefr@gmail.com>,
-        dmaengine@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <CADBnMvj93bSO=+wU4=pLTgONV7w_hhecxQHAc_YS4P4GaqMNrA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680607549;38fe22e1;
-X-HE-SMSGID: 1pjenL-0005Zk-3U
-X-Spam-Status: No, score=-1.9 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vrolgxtwhc7crda5"
+Content-Disposition: inline
+In-Reply-To: <CABGWkvq0gOMw2J9GpLS=w+qg-3xhAst6KN9kvCuZnV9bSBJ3CA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Adding a few pople to the list of recipients that were involved in
-developing the culprit; also CCing the regression list, as it should be
-in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
+--vrolgxtwhc7crda5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 29.03.23 16:31, Kristof Havasi wrote:
-> 
-> I was rebasing the Kernel branch of our SAMA5D35 based board from
-> v5.4.189 to v5.4.238.
-> I noticed that after the rebase we could _only send, but not receive_
-> through our RS485 interface.
-> 
-> I could bisect the problem to 77b97ef4908aa917e7b68667ec6b344cc5dc5034
-> in the v5.4.225 release. 
+On 28.03.2023 11:28:59, Dario Binacchi wrote:
+> > Applied to linux-can-next.
+>=20
+> Just one last question: To test this series, as described in the cover
+> letter, I could not use the iproute2 package since the microcontroller
+> is without MMU. I then extended busybox for the ip link command. I
+> actually also added the rtnl-link-can.c application to the libmnl
+> library. So now I find myself with two applications that have been
+> useful to me for this type of use case.
+>=20
+> Did I do useless work because I could use other tools?
 
-FWIW, that's 7176a6a8982d ("dmaengine: at_hdmac: Don't start
-transactions at tx_submit level") in mainline.
+systemd-networkd also supports CAN configuration, but I this will
+probably not work on no-MMU systemd, too.
 
-Kristof Havasi: would be good to know if this is something that happens
-with recent mainline as well, because if not it might be something the
-stable team needs to handle.
+Then there is:
 
-> If I revert this commit, the tx/rx works just
-> like before.
-> Maybe this use-case wasn't considered when this patch was created?
-> I haven't seen a documentation change regarding this in DT bindings,
-> but if the config should be something else, please let me know.
-> Otherwise this commit breaks the RS485 function of atmel_serial at
-> least in the v5.4.y branch.
-> 
-> Best Regards,
-> Kristóf Havasi
-> 
-> The relevant device tree nodes:
-> 
-> from sama5d3.dtsi:
-> 
-> usart1: serial@f0020000 {
->   compatible = "atmel,at91sam9260-usart";
->   reg = <0xf0020000 0x100>;
->   interrupts = <13 IRQ_TYPE_LEVEL_HIGH 5>;
->   dmas = <&dma0 2 AT91_DMA_CFG_PER_ID(5)>,
->   <&dma0 2 (AT91_DMA_CFG_PER_ID(6) | AT91_DMA_CFG_FIFOCFG_ASAP)>;
->   dma-names = "tx", "rx";
->   pinctrl-names = "default";
->   pinctrl-0 = <&pinctrl_usart1>;
->   clocks = <&usart1_clk>;
->   clock-names = "usart";
->   status = "disabled";
-> };
-> 
-> pinctrl_usart1: usart1-0 {
->   atmel,pins =
->   <AT91_PIOB 28 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
->    AT91_PIOB 29 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-> };
-> pinctrl_usart1_rts_cts: usart1_rts_cts-0 {
->   atmel,pins =
->   <AT91_PIOB 26 AT91_PERIPH_A AT91_PINCTRL_NONE /* PB26 periph A,
-> conflicts with GRX7 */
->    AT91_PIOB 27 AT91_PERIPH_A AT91_PINCTRL_NONE>; /* PB27 periph A,
-> conflicts with G125CKO */
-> };
-> 
-> from our dts:
-> 
-> &usart1 {
->   pinctrl-0 = <&pinctrl_usart1 &pinctrl_usart1_rts_cts>;
->   atmel,use-dma-rx;
->   atmel,use-dma-tx;
->   rs485-rx-during-tx;
->   linux,rs485-enabled-at-boot-time;
->   status = "okay";
-> };
-> 
-> HW:
-> The SAMA5D3's PB27 is connected to the |RE+DE of the RS485 transceiver
-> SP3458EN-L
+| https://git.pengutronix.de/cgit/tools/canutils
+| https://git.pengutronix.de/cgit/tools/libsocketcan
 
+that contains canconfig, but it lacks CAN-FD support.
 
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
+> If instead the tools for this use case are missing, what do you think
+> is better to do? Submit to their respective repos or add this
+> functionality to another project that I haven't considered ?
 
-#regzbot ^introduced 77b97ef4908aa
-#regzbot title dmaengine: at_hdmac: receiving data through the RS485
-interface broke
-#regzbot ignore-activity
+Yes, go ahead and upstream your changes!
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
+Marc
 
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (the parent of this mail). See page linked in footer for
-details.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+--vrolgxtwhc7crda5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQsCckACgkQvlAcSiqK
+BOiwvQf/bknW5120duEvKB4vzq6g1FE4pHri1PUIfK32NY2ZntW/rs/zYYH5KMTC
+A3DRsT4CsHVSXNDvW7JNgHJIxIZ8kFQGiAIfOv/a7OOYXZocvfBMW9yxgRqDlese
+N9BqaRggCBDhP829laPpXYntgW6k8lTMpWI7C6ANyis9tbKJ68Ut0d7bZ4eiYGme
++R4neMSudT1l+tzSobkBpDrXloivl9uXhme25xmFTtQeokwCaXSZ7CFDpNcTV2zw
+3wq4YYs3fnoxUbIauVk4mDGyoJTB0ZzDee5Kp8+ucH1+eukInkeHk37RerOpc4Wv
+Gl61KK/5ijUZNnIHiOJIS9C8Sv6kSQ==
+=L7qt
+-----END PGP SIGNATURE-----
+
+--vrolgxtwhc7crda5--
