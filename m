@@ -2,497 +2,610 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8666D5727
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 05:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B86E86D572A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 05:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbjDDDVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 23:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
+        id S232939AbjDDDXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 23:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbjDDDVp (ORCPT
+        with ESMTP id S233116AbjDDDXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 23:21:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E64C2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 20:21:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FFEC62A84
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:21:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D25C433D2;
-        Tue,  4 Apr 2023 03:21:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680578502;
-        bh=jOpQEGWKQHmQhVY00A/GlwgQoFvNoI4FN2QnHuNCfxY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YhUo/OjKRC69fgGHhniIhP6SVOomJa6nvAEqg724kQEnBs2jNjCv5AGMCfmUpqCG3
-         P7QwsBTvl9AwrKKIBwqt7DQryHw6ZFZ7pzA1zaqeUyVAj1Mbhs2n9SEyX/yetFs0w0
-         UdtznMDDcQfeTG37zXmmHvg6NMy0jKom7c7Hxm6Sa7QJR/kz20OLgUN+Gxufr++xgw
-         IHEPtNSu9Bd+MnhKiazlpWE7YlXoR0aBIbJ2nF/kWUmKOsS2WTsgjFjeOvu8FPQk71
-         Mhc4pF6v40a9P79Nvg/wqHvACXFUlaulHLd4FA534jeE8hop7qhsyrh1OWJ8Snxy1K
-         edBgrKWWv2w3g==
-Message-ID: <c55d9c61-68ac-2d9c-d325-a9d89da017cf@kernel.org>
-Date:   Tue, 4 Apr 2023 11:21:39 +0800
+        Mon, 3 Apr 2023 23:23:08 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3B210D7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 20:23:06 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id i5so125300842eda.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 20:23:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112; t=1680578584;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/9LStENr42Xow8JjflBtYy1yZhJZq/YyObg72bLOjcI=;
+        b=8EiJUvBUnTD/fPpp5qi89u/YurmWMGIbkl7CO/8qO4dBESU+ra1e8omjij5ynbi33H
+         /VeZwBX9bEXrX6DwXM+gT5jJwVDXL7avfXOXJh1NKdNAkKwGoJlYMXamJJh8/lUZwYIu
+         i7GImhinzzRtltG1xq6ukwoD6UBR1hv1OOGTo1XvgvjE3v2svydIVDyDmprEgXnLQDeN
+         PKA/y5k7QQtHE6e/6eMadiJa8xUBQseSJg/DEe13xwZHFZ9tjrZlBm05tQS+/yGSb2J3
+         7CWREXPx1InGtG0B6SQ+DTpEPEOfyYN8qEKNQvBsB2S3mlnEKR513mtg8aVu7jEUqZx8
+         jtkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680578584;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/9LStENr42Xow8JjflBtYy1yZhJZq/YyObg72bLOjcI=;
+        b=2nSEpjdmlwWNgryzbIBdCaiu/wkIBZ3qjfKw5du5BPFRtFfMcqHJikKMpV1Zopkhfb
+         q/7AwmuguWcXlRW4ceuNRnUHx6sfsu9xuS+E1LENmY/1rsHBzD0SgBdb+ia1jiK77RzC
+         7Ce/3L2DWQ1UoOdHeXZOxAVdwKHgQkfret6ZUl0auyqkARn1rsUgsiYIPXHb78pkLhlw
+         E5KmkrRboCPSoZCd4aqu6j2AIf5K91RjHqABVm6fhBlMkNv3qnyWX89pRnfj+EUH/6ML
+         fu6EQgjCaDWXyEovJaPPdywYwkd8F/5JVt/WvMQ+6MQutiSZFyY/9srTY8Qux/RJnYJ1
+         PMpA==
+X-Gm-Message-State: AAQBX9dn+M9jiBSLlaipvQaWRSr8oV1sPQ6x5XBEuzhezRGydZGSXqNi
+        5QmTp7zwW7VzRLL8dx+bS4fapV0Kjr4qoK/OJEUsu3UzzRHGNQmo
+X-Google-Smtp-Source: AKy350ZCuLHymuOREB/RI4nFC6JkRPmMNswA/2To58r8lHp0ZExakpyKc5XTCrkv0kayiCcqZa1U+Fbsr8Z6xU8bJT0=
+X-Received: by 2002:a17:906:c34e:b0:93e:aac:bb8d with SMTP id
+ ci14-20020a170906c34e00b0093e0aacbb8dmr439016ejb.13.1680578584351; Mon, 03
+ Apr 2023 20:23:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3] f2fs: add iostat latency statistics support for
- discard
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Yangtao Li <frank.li@vivo.com>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20230330150741.73158-1-frank.li@vivo.com>
- <ZCsRsfzWNmLToNzi@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <ZCsRsfzWNmLToNzi@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230403093310.2271142-1-apatel@ventanamicro.com>
+ <20230403093310.2271142-5-apatel@ventanamicro.com> <CAOnJCULKb4+=tYRJ52zd2QH==n1SarSpiS3tyvoPw=LYf=V7Ow@mail.gmail.com>
+In-Reply-To: <CAOnJCULKb4+=tYRJ52zd2QH==n1SarSpiS3tyvoPw=LYf=V7Ow@mail.gmail.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Tue, 4 Apr 2023 08:52:52 +0530
+Message-ID: <CAAhSdy2Qq2=c8MOYqr9qKfzH_zgvA+UE1NFL-nTToaLLjd2G_A@mail.gmail.com>
+Subject: Re: [PATCH v3 4/8] RISC-V: KVM: Initial skeletal support for AIA
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/4 1:49, Jaegeuk Kim wrote:
-> Could you split the patch which cleans up and adds it on top of it?
-> 
-> On 03/30, Yangtao Li wrote:
->> In this patch, it adds to account discard latency.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Link: https://lore.kernel.org/oe-kbuild-all/202303211005.RGxljvli-lkp@intel.com/
->> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+On Tue, Apr 4, 2023 at 5:20=E2=80=AFAM Atish Patra <atishp@atishpatra.org> =
+wrote:
+>
+> On Mon, Apr 3, 2023 at 3:03=E2=80=AFPM Anup Patel <apatel@ventanamicro.co=
+m> wrote:
+> >
+> > To incrementally implement AIA support, we first add minimal skeletal
+> > support which only compiles and detects AIA hardware support at the
+> > boot-time but does not provide any functionality.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > Reviewed-by: Atish Patra <atishp@rivosinc.com>
+> > ---
+> >  arch/riscv/include/asm/hwcap.h    |   6 ++
+> >  arch/riscv/include/asm/kvm_aia.h  | 109 ++++++++++++++++++++++++++++++
+> >  arch/riscv/include/asm/kvm_host.h |   7 ++
+> >  arch/riscv/kvm/Makefile           |   1 +
+> >  arch/riscv/kvm/aia.c              |  66 ++++++++++++++++++
+> >  arch/riscv/kvm/main.c             |  22 +++++-
+> >  arch/riscv/kvm/vcpu.c             |  40 ++++++++++-
+> >  arch/riscv/kvm/vcpu_insn.c        |   1 +
+> >  arch/riscv/kvm/vm.c               |   4 ++
+> >  9 files changed, 252 insertions(+), 4 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/kvm_aia.h
+> >  create mode 100644 arch/riscv/kvm/aia.c
+> >
+> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hw=
+cap.h
+> > index 9c8ae4399565..8087e11a5cf8 100644
+> > --- a/arch/riscv/include/asm/hwcap.h
+> > +++ b/arch/riscv/include/asm/hwcap.h
+> > @@ -48,6 +48,12 @@
+> >  #define RISCV_ISA_EXT_MAX              64
+> >  #define RISCV_ISA_EXT_NAME_LEN_MAX     32
+> >
+> > +#ifdef CONFIG_RISCV_M_MODE
+> > +#define RISCV_ISA_EXT_SxAIA            RISCV_ISA_EXT_SMAIA
+> > +#else
+> > +#define RISCV_ISA_EXT_SxAIA            RISCV_ISA_EXT_SSAIA
+> > +#endif
+> > +
+> >  #ifndef __ASSEMBLY__
+> >
+> >  #include <linux/jump_label.h>
+> > diff --git a/arch/riscv/include/asm/kvm_aia.h b/arch/riscv/include/asm/=
+kvm_aia.h
+> > new file mode 100644
+> > index 000000000000..258a835d4c32
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/kvm_aia.h
+> > @@ -0,0 +1,109 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Copyright (C) 2021 Western Digital Corporation or its affiliates.
+> > + * Copyright (C) 2022 Ventana Micro Systems Inc.
+> > + *
+> > + * Authors:
+> > + *     Anup Patel <apatel@ventanamicro.com>
+> > + */
+> > +
+> > +#ifndef __KVM_RISCV_AIA_H
+> > +#define __KVM_RISCV_AIA_H
+> > +
+> > +#include <linux/jump_label.h>
+> > +#include <linux/kvm_types.h>
+> > +
+> > +struct kvm_aia {
+> > +       /* In-kernel irqchip created */
+> > +       bool            in_kernel;
+> > +
+> > +       /* In-kernel irqchip initialized */
+> > +       bool            initialized;
+> > +};
+> > +
+> > +struct kvm_vcpu_aia {
+> > +};
+> > +
+> > +#define kvm_riscv_aia_initialized(k)   ((k)->arch.aia.initialized)
+> > +
+> > +#define irqchip_in_kernel(k)           ((k)->arch.aia.in_kernel)
+> > +
+> > +DECLARE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
+> > +#define kvm_riscv_aia_available() \
+> > +       static_branch_unlikely(&kvm_riscv_aia_available)
+> > +
+> > +static inline void kvm_riscv_vcpu_aia_flush_interrupts(struct kvm_vcpu=
+ *vcpu)
+> > +{
+> > +}
+> > +
+> > +static inline void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu =
+*vcpu)
+> > +{
+> > +}
+> > +
+> > +static inline bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *=
+vcpu,
+> > +                                                    u64 mask)
+> > +{
+> > +       return false;
+> > +}
+> > +
+> > +static inline void kvm_riscv_vcpu_aia_update_hvip(struct kvm_vcpu *vcp=
+u)
+> > +{
+> > +}
+> > +
+> > +static inline void kvm_riscv_vcpu_aia_load(struct kvm_vcpu *vcpu, int =
+cpu)
+> > +{
+> > +}
+> > +
+> > +static inline void kvm_riscv_vcpu_aia_put(struct kvm_vcpu *vcpu)
+> > +{
+> > +}
+> > +
+> > +static inline int kvm_riscv_vcpu_aia_get_csr(struct kvm_vcpu *vcpu,
+> > +                                            unsigned long reg_num,
+> > +                                            unsigned long *out_val)
+> > +{
+> > +       *out_val =3D 0;
+> > +       return 0;
+> > +}
+> > +
+> > +static inline int kvm_riscv_vcpu_aia_set_csr(struct kvm_vcpu *vcpu,
+> > +                                            unsigned long reg_num,
+> > +                                            unsigned long val)
+> > +{
+> > +       return 0;
+> > +}
+> > +
+> > +#define KVM_RISCV_VCPU_AIA_CSR_FUNCS
+> > +
+> > +static inline int kvm_riscv_vcpu_aia_update(struct kvm_vcpu *vcpu)
+> > +{
+> > +       return 1;
+> > +}
+> > +
+> > +static inline void kvm_riscv_vcpu_aia_reset(struct kvm_vcpu *vcpu)
+> > +{
+> > +}
+> > +
+> > +static inline int kvm_riscv_vcpu_aia_init(struct kvm_vcpu *vcpu)
+> > +{
+> > +       return 0;
+> > +}
+> > +
+> > +static inline void kvm_riscv_vcpu_aia_deinit(struct kvm_vcpu *vcpu)
+> > +{
+> > +}
+> > +
+> > +static inline void kvm_riscv_aia_init_vm(struct kvm *kvm)
+> > +{
+> > +}
+> > +
+> > +static inline void kvm_riscv_aia_destroy_vm(struct kvm *kvm)
+> > +{
+> > +}
+> > +
+> > +void kvm_riscv_aia_enable(void);
+> > +void kvm_riscv_aia_disable(void);
+> > +int kvm_riscv_aia_init(void);
+> > +void kvm_riscv_aia_exit(void);
+> > +
+> > +#endif
+> > diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm=
+/kvm_host.h
+> > index cc7da66ee0c0..3157cf748df1 100644
+> > --- a/arch/riscv/include/asm/kvm_host.h
+> > +++ b/arch/riscv/include/asm/kvm_host.h
+> > @@ -14,6 +14,7 @@
+> >  #include <linux/kvm_types.h>
+> >  #include <linux/spinlock.h>
+> >  #include <asm/hwcap.h>
+> > +#include <asm/kvm_aia.h>
+> >  #include <asm/kvm_vcpu_fp.h>
+> >  #include <asm/kvm_vcpu_insn.h>
+> >  #include <asm/kvm_vcpu_sbi.h>
+> > @@ -94,6 +95,9 @@ struct kvm_arch {
+> >
+> >         /* Guest Timer */
+> >         struct kvm_guest_timer timer;
+> > +
+> > +       /* AIA Guest/VM context */
+> > +       struct kvm_aia aia;
+> >  };
+> >
+> >  struct kvm_cpu_trap {
+> > @@ -221,6 +225,9 @@ struct kvm_vcpu_arch {
+> >         /* SBI context */
+> >         struct kvm_vcpu_sbi_context sbi_context;
+> >
+> > +       /* AIA VCPU context */
+> > +       struct kvm_vcpu_aia aia_context;
+> > +
+> >         /* Cache pages needed to program page tables with spinlock held=
+ */
+> >         struct kvm_mmu_memory_cache mmu_page_cache;
+> >
+> > diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
+> > index 278e97c06e0a..8031b8912a0d 100644
+> > --- a/arch/riscv/kvm/Makefile
+> > +++ b/arch/riscv/kvm/Makefile
+> > @@ -26,3 +26,4 @@ kvm-y +=3D vcpu_sbi_replace.o
+> >  kvm-y +=3D vcpu_sbi_hsm.o
+> >  kvm-y +=3D vcpu_timer.o
+> >  kvm-$(CONFIG_RISCV_PMU_SBI) +=3D vcpu_pmu.o vcpu_sbi_pmu.o
+> > +kvm-y +=3D aia.o
+> > diff --git a/arch/riscv/kvm/aia.c b/arch/riscv/kvm/aia.c
+> > new file mode 100644
+> > index 000000000000..7a633331cd3e
+> > --- /dev/null
+> > +++ b/arch/riscv/kvm/aia.c
+> > @@ -0,0 +1,66 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2021 Western Digital Corporation or its affiliates.
+> > + * Copyright (C) 2022 Ventana Micro Systems Inc.
+> > + *
+> > + * Authors:
+> > + *     Anup Patel <apatel@ventanamicro.com>
+> > + */
+> > +
+> > +#include <linux/kvm_host.h>
+> > +#include <asm/hwcap.h>
+> > +
+> > +DEFINE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
+> > +
+> > +static void aia_set_hvictl(bool ext_irq_pending)
+> > +{
+> > +       unsigned long hvictl;
+> > +
+> > +       /*
+> > +        * HVICTL.IID =3D=3D 9 and HVICTL.IPRIO =3D=3D 0 represents
+> > +        * no interrupt in HVICTL.
+> > +        */
+> > +
+> > +       hvictl =3D (IRQ_S_EXT << HVICTL_IID_SHIFT) & HVICTL_IID;
+> > +       hvictl |=3D ext_irq_pending;
+> > +       csr_write(CSR_HVICTL, hvictl);
+> > +}
+> > +
+> > +void kvm_riscv_aia_enable(void)
+> > +{
+> > +       if (!kvm_riscv_aia_available())
+> > +               return;
+> > +
+> > +       aia_set_hvictl(false);
+> > +       csr_write(CSR_HVIPRIO1, 0x0);
+> > +       csr_write(CSR_HVIPRIO2, 0x0);
+> > +#ifdef CONFIG_32BIT
+> > +       csr_write(CSR_HVIPH, 0x0);
+> > +       csr_write(CSR_HIDELEGH, 0x0);
+> > +       csr_write(CSR_HVIPRIO1H, 0x0);
+> > +       csr_write(CSR_HVIPRIO2H, 0x0);
+> > +#endif
+> > +}
+> > +
+> > +void kvm_riscv_aia_disable(void)
+> > +{
+> > +       if (!kvm_riscv_aia_available())
+> > +               return;
+> > +
+> > +       aia_set_hvictl(false);
+> > +}
+> > +
+> > +int kvm_riscv_aia_init(void)
+> > +{
+> > +       if (!riscv_isa_extension_available(NULL, SxAIA))
+> > +               return -ENODEV;
+> > +
+> > +       /* Enable KVM AIA support */
+> > +       static_branch_enable(&kvm_riscv_aia_available);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +void kvm_riscv_aia_exit(void)
+> > +{
+> > +}
+> > diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
+> > index 41ad7639a17b..6396352b4e4d 100644
+> > --- a/arch/riscv/kvm/main.c
+> > +++ b/arch/riscv/kvm/main.c
+> > @@ -44,11 +44,15 @@ int kvm_arch_hardware_enable(void)
+> >
+> >         csr_write(CSR_HVIP, 0);
+> >
+> > +       kvm_riscv_aia_enable();
+> > +
+> >         return 0;
+> >  }
+> >
+> >  void kvm_arch_hardware_disable(void)
+> >  {
+> > +       kvm_riscv_aia_disable();
+> > +
+> >         /*
+> >          * After clearing the hideleg CSR, the host kernel will receive
+> >          * spurious interrupts if hvip CSR has pending interrupts and t=
+he
+> > @@ -63,6 +67,7 @@ void kvm_arch_hardware_disable(void)
+> >
+> >  static int __init riscv_kvm_init(void)
+> >  {
+> > +       int rc;
+> >         const char *str;
+> >
+> >         if (!riscv_isa_extension_available(NULL, h)) {
+> > @@ -84,6 +89,10 @@ static int __init riscv_kvm_init(void)
+> >
+> >         kvm_riscv_gstage_vmid_detect();
+> >
+> > +       rc =3D kvm_riscv_aia_init();
+> > +       if (rc && rc !=3D -ENODEV)
+> > +               return rc;
+> > +
+> >         kvm_info("hypervisor extension available\n");
+> >
+> >         switch (kvm_riscv_gstage_mode()) {
+> > @@ -106,12 +115,23 @@ static int __init riscv_kvm_init(void)
+> >
+> >         kvm_info("VMID %ld bits available\n", kvm_riscv_gstage_vmid_bit=
+s());
+> >
+> > -       return kvm_init(sizeof(struct kvm_vcpu), 0, THIS_MODULE);
+> > +       if (kvm_riscv_aia_available())
+> > +               kvm_info("AIA available\n");
+> > +
+> > +       rc =3D kvm_init(sizeof(struct kvm_vcpu), 0, THIS_MODULE);
+> > +       if (rc) {
+> > +               kvm_riscv_aia_exit();
+> > +               return rc;
+> > +       }
+> > +
+> > +       return 0;
+> >  }
+> >  module_init(riscv_kvm_init);
+> >
+> >  static void __exit riscv_kvm_exit(void)
+> >  {
+> > +       kvm_riscv_aia_exit();
+> > +
+> >         kvm_exit();
+> >  }
+> >  module_exit(riscv_kvm_exit);
+> > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> > index 02b49cb94561..1fd54ec15622 100644
+> > --- a/arch/riscv/kvm/vcpu.c
+> > +++ b/arch/riscv/kvm/vcpu.c
+> > @@ -137,6 +137,8 @@ static void kvm_riscv_reset_vcpu(struct kvm_vcpu *v=
+cpu)
+> >
+> >         kvm_riscv_vcpu_timer_reset(vcpu);
+> >
+> > +       kvm_riscv_vcpu_aia_reset(vcpu);
+> > +
+> >         WRITE_ONCE(vcpu->arch.irqs_pending, 0);
+> >         WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
+> >
+> > @@ -159,6 +161,7 @@ int kvm_arch_vcpu_precreate(struct kvm *kvm, unsign=
+ed int id)
+> >
+> >  int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> >  {
+> > +       int rc;
+> >         struct kvm_cpu_context *cntx;
+> >         struct kvm_vcpu_csr *reset_csr =3D &vcpu->arch.guest_reset_csr;
+> >         unsigned long host_isa, i;
+> > @@ -201,6 +204,11 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> >         /* setup performance monitoring */
+> >         kvm_riscv_vcpu_pmu_init(vcpu);
+> >
+> > +       /* Setup VCPU AIA */
+> > +       rc =3D kvm_riscv_vcpu_aia_init(vcpu);
+> > +       if (rc)
+> > +               return rc;
+> > +
+> >         /* Reset VCPU */
+> >         kvm_riscv_reset_vcpu(vcpu);
+> >
+> > @@ -220,6 +228,9 @@ void kvm_arch_vcpu_postcreate(struct kvm_vcpu *vcpu=
+)
+> >
+> >  void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
+> >  {
+> > +       /* Cleanup VCPU AIA context */
+> > +       kvm_riscv_vcpu_aia_deinit(vcpu);
+> > +
+> >         /* Cleanup VCPU timer */
+> >         kvm_riscv_vcpu_timer_deinit(vcpu);
+> >
+> > @@ -741,6 +752,9 @@ void kvm_riscv_vcpu_flush_interrupts(struct kvm_vcp=
+u *vcpu)
+> >                 csr->hvip &=3D ~mask;
+> >                 csr->hvip |=3D val;
+> >         }
+> > +
+> > +       /* Flush AIA high interrupts */
+> > +       kvm_riscv_vcpu_aia_flush_interrupts(vcpu);
+> >  }
+> >
+> >  void kvm_riscv_vcpu_sync_interrupts(struct kvm_vcpu *vcpu)
+> > @@ -766,6 +780,9 @@ void kvm_riscv_vcpu_sync_interrupts(struct kvm_vcpu=
+ *vcpu)
+> >                 }
+> >         }
+> >
+> > +       /* Sync-up AIA high interrupts */
+> > +       kvm_riscv_vcpu_aia_sync_interrupts(vcpu);
+> > +
+> >         /* Sync-up timer CSRs */
+> >         kvm_riscv_vcpu_timer_sync(vcpu);
+> >  }
+> > @@ -802,10 +819,15 @@ int kvm_riscv_vcpu_unset_interrupt(struct kvm_vcp=
+u *vcpu, unsigned int irq)
+> >
+> >  bool kvm_riscv_vcpu_has_interrupts(struct kvm_vcpu *vcpu, unsigned lon=
+g mask)
+> >  {
+> > -       unsigned long ie =3D ((vcpu->arch.guest_csr.vsie & VSIP_VALID_M=
+ASK)
+> > -                           << VSIP_TO_HVIP_SHIFT) & mask;
+> > +       unsigned long ie;
+> > +
+> > +       ie =3D ((vcpu->arch.guest_csr.vsie & VSIP_VALID_MASK)
+> > +               << VSIP_TO_HVIP_SHIFT) & mask;
+> > +       if (READ_ONCE(vcpu->arch.irqs_pending) & ie)
+> > +               return true;
+> >
+> > -       return (READ_ONCE(vcpu->arch.irqs_pending) & ie) ? true : false=
+;
+> > +       /* Check AIA high interrupts */
+> > +       return kvm_riscv_vcpu_aia_has_interrupts(vcpu, mask);
+> >  }
+> >
+> >  void kvm_riscv_vcpu_power_off(struct kvm_vcpu *vcpu)
+> > @@ -901,6 +923,8 @@ void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int =
+cpu)
+> >         kvm_riscv_vcpu_guest_fp_restore(&vcpu->arch.guest_context,
+> >                                         vcpu->arch.isa);
+> >
+> > +       kvm_riscv_vcpu_aia_load(vcpu, cpu);
+> > +
+> >         vcpu->cpu =3D cpu;
+> >  }
+> >
+> > @@ -910,6 +934,8 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
+> >
+> >         vcpu->cpu =3D -1;
+> >
+> > +       kvm_riscv_vcpu_aia_put(vcpu);
+> > +
+> >         kvm_riscv_vcpu_guest_fp_save(&vcpu->arch.guest_context,
+> >                                      vcpu->arch.isa);
+> >         kvm_riscv_vcpu_host_fp_restore(&vcpu->arch.host_context);
+> > @@ -977,6 +1003,7 @@ static void kvm_riscv_update_hvip(struct kvm_vcpu =
+*vcpu)
+> >         struct kvm_vcpu_csr *csr =3D &vcpu->arch.guest_csr;
+> >
+> >         csr_write(CSR_HVIP, csr->hvip);
+> > +       kvm_riscv_vcpu_aia_update_hvip(vcpu);
+> >  }
+> >
+> >  /*
+> > @@ -1051,6 +1078,13 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcp=
+u)
+> >
+> >                 local_irq_disable();
+> >
+> > +               /* Update AIA HW state before entering guest */
+> > +               ret =3D kvm_riscv_vcpu_aia_update(vcpu);
+> > +               if (ret <=3D 0) {
+> > +                       local_irq_enable();
+> > +                       continue;
+> > +               }
+> > +
+>
+> Can we update AIA hw state with only preemption disabled ?
+> For CoVE (aka AP-TEE), we need interrupts enabled to issue IPIs in
+> multiple scenarios.
 
-Any particular reason to tracking discard IO stats in filesystem? It looks block layer
-has simliar stats exported via /proc/diskstats, can we reuse these stats?
+Okay, I will update in the next revision.
 
-Documentation/admin-guide/iostats.rst
+Regards,
+Anup
 
-Field 12 -- # of discards completed (unsigned long)
-     This is the total number of discards completed successfully.
-
-Field 13 -- # of discards merged (unsigned long)
-     See the description of field 2
-
-Field 14 -- # of sectors discarded (unsigned long)
-     This is the total number of sectors discarded successfully.
-
-Field 15 -- # of milliseconds spent discarding (unsigned int)
-     This is the total number of milliseconds spent by all discards (as
-     measured from blk_mq_alloc_request() to __blk_mq_end_request()).
-
-Thanks,
-
->> ---
->> v3:
->> -force conversion to enum iostat_lat_type type
->> v2:
->> -rename get_bio_iostat_private to iostat_get_bio_private
->>   fs/f2fs/data.c              |  2 +-
->>   fs/f2fs/f2fs.h              |  1 +
->>   fs/f2fs/iostat.c            | 83 +++++++++++++++++++++----------------
->>   fs/f2fs/iostat.h            | 49 +++++++++++-----------
->>   fs/f2fs/segment.c           |  8 +++-
->>   include/trace/events/f2fs.h | 68 ++++++++++++++++--------------
->>   6 files changed, 118 insertions(+), 93 deletions(-)
->>
->> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->> index 359de650772e..6bcd71a0dbac 100644
->> --- a/fs/f2fs/data.c
->> +++ b/fs/f2fs/data.c
->> @@ -2307,7 +2307,7 @@ int f2fs_read_multi_pages(struct compress_ctx *cc, struct bio **bio_ret,
->>   		if (bio_add_page(bio, page, blocksize, 0) < blocksize)
->>   			goto submit_and_realloc;
->>   
->> -		ctx = get_post_read_ctx(bio);
->> +		ctx = iostat_get_bio_private(bio);
->>   		ctx->enabled_steps |= STEP_DECOMPRESS;
->>   		refcount_inc(&dic->refcnt);
->>   
->> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
->> index 4e2596dacbf1..e73fefe0d8fb 100644
->> --- a/fs/f2fs/f2fs.h
->> +++ b/fs/f2fs/f2fs.h
->> @@ -1112,6 +1112,7 @@ enum page_type {
->>   	META_FLUSH,
->>   	IPU,		/* the below types are used by tracepoints only. */
->>   	OPU,
->> +	DISCARD,	/* used by iostat */
->>   };
->>   
->>   enum temp_type {
->> diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
->> index 3d5bfb1ad585..f40b8915ae1b 100644
->> --- a/fs/f2fs/iostat.c
->> +++ b/fs/f2fs/iostat.c
->> @@ -86,23 +86,21 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
->>   
->>   static inline void __record_iostat_latency(struct f2fs_sb_info *sbi)
->>   {
->> -	int io, idx;
->> -	struct f2fs_iostat_latency iostat_lat[MAX_IO_TYPE][NR_PAGE_TYPE];
->> +	struct f2fs_iostat_latency iostat_lat[MAX_LAT_TYPE];
->>   	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
->> +	unsigned int lat_type;
->>   	unsigned long flags;
->>   
->>   	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
->> -	for (idx = 0; idx < MAX_IO_TYPE; idx++) {
->> -		for (io = 0; io < NR_PAGE_TYPE; io++) {
->> -			iostat_lat[idx][io].peak_lat =
->> -			   jiffies_to_msecs(io_lat->peak_lat[idx][io]);
->> -			iostat_lat[idx][io].cnt = io_lat->bio_cnt[idx][io];
->> -			iostat_lat[idx][io].avg_lat = iostat_lat[idx][io].cnt ?
->> -			   jiffies_to_msecs(io_lat->sum_lat[idx][io]) / iostat_lat[idx][io].cnt : 0;
->> -			io_lat->sum_lat[idx][io] = 0;
->> -			io_lat->peak_lat[idx][io] = 0;
->> -			io_lat->bio_cnt[idx][io] = 0;
->> -		}
->> +	for (lat_type = 0; lat_type < MAX_LAT_TYPE; lat_type++) {
->> +		iostat_lat[lat_type].peak_lat =
->> +		   jiffies_to_msecs(io_lat->peak_lat[lat_type]);
->> +		iostat_lat[lat_type].cnt = io_lat->bio_cnt[lat_type];
->> +		iostat_lat[lat_type].avg_lat = iostat_lat[lat_type].cnt ?
->> +		   jiffies_to_msecs(io_lat->sum_lat[lat_type]) / iostat_lat[lat_type].cnt : 0;
->> +		io_lat->sum_lat[lat_type] = 0;
->> +		io_lat->peak_lat[lat_type] = 0;
->> +		io_lat->bio_cnt[lat_type] = 0;
->>   	}
->>   	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
->>   
->> @@ -208,62 +206,75 @@ void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
->>   	f2fs_record_iostat(sbi);
->>   }
->>   
->> -static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
->> -				enum iostat_lat_type lat_type)
->> +static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx)
->>   {
->> -	unsigned long ts_diff;
->> -	unsigned int page_type = iostat_ctx->type;
->>   	struct f2fs_sb_info *sbi = iostat_ctx->sbi;
->>   	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
->> +	unsigned int lat_type = iostat_ctx->lat_type;
->> +	unsigned long ts_diff;
->>   	unsigned long flags;
->>   
->>   	if (!sbi->iostat_enable)
->>   		return;
->>   
->> -	ts_diff = jiffies - iostat_ctx->submit_ts;
->> -	if (page_type == META_FLUSH) {
->> -		page_type = META;
->> -	} else if (page_type >= NR_PAGE_TYPE) {
->> -		f2fs_warn(sbi, "%s: %d over NR_PAGE_TYPE", __func__, page_type);
->> +	if (lat_type >= MAX_LAT_TYPE) {
->> +		f2fs_warn(sbi, "%s: %d over MAX_LAT_TYPE", __func__, lat_type);
->>   		return;
->>   	}
->> +	ts_diff = jiffies - iostat_ctx->submit_ts;
->>   
->>   	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
->> -	io_lat->sum_lat[lat_type][page_type] += ts_diff;
->> -	io_lat->bio_cnt[lat_type][page_type]++;
->> -	if (ts_diff > io_lat->peak_lat[lat_type][page_type])
->> -		io_lat->peak_lat[lat_type][page_type] = ts_diff;
->> +	io_lat->sum_lat[lat_type] += ts_diff;
->> +	io_lat->bio_cnt[lat_type]++;
->> +	if (ts_diff > io_lat->peak_lat[lat_type])
->> +		io_lat->peak_lat[lat_type] = ts_diff;
->>   	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
->>   }
->>   
->>   void iostat_update_and_unbind_ctx(struct bio *bio)
->> +{
->> +	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
->> +
->> +	if (op_is_write(bio_op(bio)) && !op_is_discard(bio_op(bio)))
->> +		bio->bi_private = iostat_ctx->sbi;
->> +	else
->> +		bio->bi_private = iostat_ctx->iostat_private;
->> +
->> +	__update_iostat_latency(iostat_ctx);
->> +	mempool_free(iostat_ctx, bio_iostat_ctx_pool);
->> +}
->> +
->> +void iostat_update_submit_ctx(struct bio *bio, enum page_type type)
->>   {
->>   	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
->>   	enum iostat_lat_type lat_type;
->>   
->> -	if (op_is_write(bio_op(bio))) {
->> +	iostat_ctx->submit_ts = jiffies;
->> +
->> +	if (type == DISCARD) {
->> +		lat_type = DISCARD_LAT;
->> +	} else if (op_is_write(bio_op(bio))) {
->>   		lat_type = bio->bi_opf & REQ_SYNC ?
->> -				WRITE_SYNC_IO : WRITE_ASYNC_IO;
->> -		bio->bi_private = iostat_ctx->sbi;
->> +				WRITE_SYNC_DATA_LAT : WRITE_ASYNC_DATA_LAT;
->> +		lat_type = (enum iostat_lat_type)(lat_type + type);
->>   	} else {
->> -		lat_type = READ_IO;
->> -		bio->bi_private = iostat_ctx->post_read_ctx;
->> +		lat_type = READ_DATA_LAT;
->> +		lat_type = (enum iostat_lat_type)(lat_type + type);
->>   	}
->>   
->> -	__update_iostat_latency(iostat_ctx, lat_type);
->> -	mempool_free(iostat_ctx, bio_iostat_ctx_pool);
->> +	iostat_ctx->lat_type = lat_type;
->>   }
->>   
->>   void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
->> -		struct bio *bio, struct bio_post_read_ctx *ctx)
->> +		struct bio *bio, void *private)
->>   {
->>   	struct bio_iostat_ctx *iostat_ctx;
->>   	/* Due to the mempool, this never fails. */
->>   	iostat_ctx = mempool_alloc(bio_iostat_ctx_pool, GFP_NOFS);
->>   	iostat_ctx->sbi = sbi;
->>   	iostat_ctx->submit_ts = 0;
->> -	iostat_ctx->type = 0;
->> -	iostat_ctx->post_read_ctx = ctx;
->> +	iostat_ctx->lat_type = 0;
->> +	iostat_ctx->iostat_private = private;
->>   	bio->bi_private = iostat_ctx;
->>   }
->>   
->> diff --git a/fs/f2fs/iostat.h b/fs/f2fs/iostat.h
->> index eb99d05cf272..67b468691498 100644
->> --- a/fs/f2fs/iostat.h
->> +++ b/fs/f2fs/iostat.h
->> @@ -6,17 +6,24 @@
->>   #ifndef __F2FS_IOSTAT_H__
->>   #define __F2FS_IOSTAT_H__
->>   
->> +#ifdef CONFIG_F2FS_IOSTAT
->> +
->>   struct bio_post_read_ctx;
->>   
->>   enum iostat_lat_type {
->> -	READ_IO = 0,
->> -	WRITE_SYNC_IO,
->> -	WRITE_ASYNC_IO,
->> -	MAX_IO_TYPE,
->> +	READ_DATA_LAT = 0,
->> +	READ_NODE_LAT,
->> +	READ_META_LAT,
->> +	WRITE_SYNC_DATA_LAT,
->> +	WRITE_SYNC_NODE_LAT,
->> +	WRITE_SYNC_META_LAT,
->> +	WRITE_ASYNC_DATA_LAT,
->> +	WRITE_ASYNC_NODE_LAT,
->> +	WRITE_ASYNC_META_LAT,
->> +	DISCARD_LAT,
->> +	MAX_LAT_TYPE,
->>   };
->>   
->> -#ifdef CONFIG_F2FS_IOSTAT
->> -
->>   #define NUM_PREALLOC_IOSTAT_CTXS	128
->>   #define DEFAULT_IOSTAT_PERIOD_MS	3000
->>   #define MIN_IOSTAT_PERIOD_MS		100
->> @@ -24,9 +31,9 @@ enum iostat_lat_type {
->>   #define MAX_IOSTAT_PERIOD_MS		8640000
->>   
->>   struct iostat_lat_info {
->> -	unsigned long sum_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* sum of io latencies */
->> -	unsigned long peak_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* peak io latency */
->> -	unsigned int bio_cnt[MAX_IO_TYPE][NR_PAGE_TYPE];	/* bio count */
->> +	unsigned long sum_lat[MAX_LAT_TYPE];	/* sum of io latencies */
->> +	unsigned long peak_lat[MAX_LAT_TYPE];	/* peak io latency */
->> +	unsigned int bio_cnt[MAX_LAT_TYPE];	/* bio count */
->>   };
->>   
->>   extern int __maybe_unused iostat_info_seq_show(struct seq_file *seq,
->> @@ -38,29 +45,21 @@ extern void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
->>   struct bio_iostat_ctx {
->>   	struct f2fs_sb_info *sbi;
->>   	unsigned long submit_ts;
->> -	enum page_type type;
->> -	struct bio_post_read_ctx *post_read_ctx;
->> +	enum iostat_lat_type lat_type;
->> +	void *iostat_private;
->>   };
->>   
->> -static inline void iostat_update_submit_ctx(struct bio *bio,
->> -			enum page_type type)
->> -{
->> -	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
->> -
->> -	iostat_ctx->submit_ts = jiffies;
->> -	iostat_ctx->type = type;
->> -}
->> -
->> -static inline struct bio_post_read_ctx *get_post_read_ctx(struct bio *bio)
->> +static inline struct bio_post_read_ctx *iostat_get_bio_private(struct bio *bio)
->>   {
->>   	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
->>   
->> -	return iostat_ctx->post_read_ctx;
->> +	return iostat_ctx->iostat_private;
->>   }
->>   
->> +extern void iostat_update_submit_ctx(struct bio *bio, enum page_type type);
->>   extern void iostat_update_and_unbind_ctx(struct bio *bio);
->>   extern void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
->> -		struct bio *bio, struct bio_post_read_ctx *ctx);
->> +		struct bio *bio, void *private);
->>   extern int f2fs_init_iostat_processing(void);
->>   extern void f2fs_destroy_iostat_processing(void);
->>   extern int f2fs_init_iostat(struct f2fs_sb_info *sbi);
->> @@ -70,10 +69,10 @@ static inline void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *in
->>   		enum iostat_type type, unsigned long long io_bytes) {}
->>   static inline void iostat_update_and_unbind_ctx(struct bio *bio) {}
->>   static inline void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
->> -		struct bio *bio, struct bio_post_read_ctx *ctx) {}
->> +		struct bio *bio, void *private) {}
->>   static inline void iostat_update_submit_ctx(struct bio *bio,
->>   		enum page_type type) {}
->> -static inline struct bio_post_read_ctx *get_post_read_ctx(struct bio *bio)
->> +static inline struct bio_post_read_ctx *iostat_get_bio_private(struct bio *bio)
->>   {
->>   	return bio->bi_private;
->>   }
->> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
->> index 72bce3808394..5a2b162812c6 100644
->> --- a/fs/f2fs/segment.c
->> +++ b/fs/f2fs/segment.c
->> @@ -1100,9 +1100,12 @@ static void __remove_discard_cmd(struct f2fs_sb_info *sbi,
->>   
->>   static void f2fs_submit_discard_endio(struct bio *bio)
->>   {
->> -	struct discard_cmd *dc = (struct discard_cmd *)bio->bi_private;
->> +	struct discard_cmd *dc;
->>   	unsigned long flags;
->>   
->> +	iostat_update_and_unbind_ctx(bio);
->> +	dc = bio->bi_private;
->> +
->>   	spin_lock_irqsave(&dc->lock, flags);
->>   	if (!dc->error)
->>   		dc->error = blk_status_to_errno(bio->bi_status);
->> @@ -1276,6 +1279,9 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
->>   		bio->bi_private = dc;
->>   		bio->bi_end_io = f2fs_submit_discard_endio;
->>   		bio->bi_opf |= flag;
->> +
->> +		iostat_alloc_and_bind_ctx(sbi, bio, dc);
->> +		iostat_update_submit_ctx(bio, DISCARD);
->>   		submit_bio(bio);
->>   
->>   		atomic_inc(&dcc->issued_discard);
->> diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
->> index 99cbc5949e3c..385291ac9ad5 100644
->> --- a/include/trace/events/f2fs.h
->> +++ b/include/trace/events/f2fs.h
->> @@ -2045,7 +2045,7 @@ struct f2fs_iostat_latency {
->>   
->>   TRACE_EVENT(f2fs_iostat_latency,
->>   
->> -	TP_PROTO(struct f2fs_sb_info *sbi, struct f2fs_iostat_latency (*iostat_lat)[NR_PAGE_TYPE]),
->> +	TP_PROTO(struct f2fs_sb_info *sbi, struct f2fs_iostat_latency *iostat_lat),
->>   
->>   	TP_ARGS(sbi, iostat_lat),
->>   
->> @@ -2078,37 +2078,43 @@ TRACE_EVENT(f2fs_iostat_latency,
->>   		__field(unsigned int,	m_wr_as_peak)
->>   		__field(unsigned int,	m_wr_as_avg)
->>   		__field(unsigned int,	m_wr_as_cnt)
->> +		__field(unsigned int,	discard_peak)
->> +		__field(unsigned int,	discard_avg)
->> +		__field(unsigned int,	discard_cnt)
->>   	),
->>   
->>   	TP_fast_assign(
->>   		__entry->dev		= sbi->sb->s_dev;
->> -		__entry->d_rd_peak	= iostat_lat[READ_IO][DATA].peak_lat;
->> -		__entry->d_rd_avg	= iostat_lat[READ_IO][DATA].avg_lat;
->> -		__entry->d_rd_cnt	= iostat_lat[READ_IO][DATA].cnt;
->> -		__entry->n_rd_peak	= iostat_lat[READ_IO][NODE].peak_lat;
->> -		__entry->n_rd_avg	= iostat_lat[READ_IO][NODE].avg_lat;
->> -		__entry->n_rd_cnt	= iostat_lat[READ_IO][NODE].cnt;
->> -		__entry->m_rd_peak	= iostat_lat[READ_IO][META].peak_lat;
->> -		__entry->m_rd_avg	= iostat_lat[READ_IO][META].avg_lat;
->> -		__entry->m_rd_cnt	= iostat_lat[READ_IO][META].cnt;
->> -		__entry->d_wr_s_peak	= iostat_lat[WRITE_SYNC_IO][DATA].peak_lat;
->> -		__entry->d_wr_s_avg	= iostat_lat[WRITE_SYNC_IO][DATA].avg_lat;
->> -		__entry->d_wr_s_cnt	= iostat_lat[WRITE_SYNC_IO][DATA].cnt;
->> -		__entry->n_wr_s_peak	= iostat_lat[WRITE_SYNC_IO][NODE].peak_lat;
->> -		__entry->n_wr_s_avg	= iostat_lat[WRITE_SYNC_IO][NODE].avg_lat;
->> -		__entry->n_wr_s_cnt	= iostat_lat[WRITE_SYNC_IO][NODE].cnt;
->> -		__entry->m_wr_s_peak	= iostat_lat[WRITE_SYNC_IO][META].peak_lat;
->> -		__entry->m_wr_s_avg	= iostat_lat[WRITE_SYNC_IO][META].avg_lat;
->> -		__entry->m_wr_s_cnt	= iostat_lat[WRITE_SYNC_IO][META].cnt;
->> -		__entry->d_wr_as_peak	= iostat_lat[WRITE_ASYNC_IO][DATA].peak_lat;
->> -		__entry->d_wr_as_avg	= iostat_lat[WRITE_ASYNC_IO][DATA].avg_lat;
->> -		__entry->d_wr_as_cnt	= iostat_lat[WRITE_ASYNC_IO][DATA].cnt;
->> -		__entry->n_wr_as_peak	= iostat_lat[WRITE_ASYNC_IO][NODE].peak_lat;
->> -		__entry->n_wr_as_avg	= iostat_lat[WRITE_ASYNC_IO][NODE].avg_lat;
->> -		__entry->n_wr_as_cnt	= iostat_lat[WRITE_ASYNC_IO][NODE].cnt;
->> -		__entry->m_wr_as_peak	= iostat_lat[WRITE_ASYNC_IO][META].peak_lat;
->> -		__entry->m_wr_as_avg	= iostat_lat[WRITE_ASYNC_IO][META].avg_lat;
->> -		__entry->m_wr_as_cnt	= iostat_lat[WRITE_ASYNC_IO][META].cnt;
->> +		__entry->d_rd_peak	= iostat_lat[READ_DATA_LAT].peak_lat;
->> +		__entry->d_rd_avg	= iostat_lat[READ_DATA_LAT].avg_lat;
->> +		__entry->d_rd_cnt	= iostat_lat[READ_DATA_LAT].cnt;
->> +		__entry->n_rd_peak	= iostat_lat[READ_NODE_LAT].peak_lat;
->> +		__entry->n_rd_avg	= iostat_lat[READ_NODE_LAT].avg_lat;
->> +		__entry->n_rd_cnt	= iostat_lat[READ_NODE_LAT].cnt;
->> +		__entry->m_rd_peak	= iostat_lat[READ_META_LAT].peak_lat;
->> +		__entry->m_rd_avg	= iostat_lat[READ_META_LAT].avg_lat;
->> +		__entry->m_rd_cnt	= iostat_lat[READ_META_LAT].cnt;
->> +		__entry->d_wr_s_peak	= iostat_lat[WRITE_SYNC_DATA_LAT].peak_lat;
->> +		__entry->d_wr_s_avg	= iostat_lat[WRITE_SYNC_DATA_LAT].avg_lat;
->> +		__entry->d_wr_s_cnt	= iostat_lat[WRITE_SYNC_DATA_LAT].cnt;
->> +		__entry->n_wr_s_peak	= iostat_lat[WRITE_SYNC_NODE_LAT].peak_lat;
->> +		__entry->n_wr_s_avg	= iostat_lat[WRITE_SYNC_NODE_LAT].avg_lat;
->> +		__entry->n_wr_s_cnt	= iostat_lat[WRITE_SYNC_NODE_LAT].cnt;
->> +		__entry->m_wr_s_peak	= iostat_lat[WRITE_SYNC_META_LAT].peak_lat;
->> +		__entry->m_wr_s_avg	= iostat_lat[WRITE_SYNC_META_LAT].avg_lat;
->> +		__entry->m_wr_s_cnt	= iostat_lat[WRITE_SYNC_META_LAT].cnt;
->> +		__entry->d_wr_as_peak	= iostat_lat[WRITE_ASYNC_DATA_LAT].peak_lat;
->> +		__entry->d_wr_as_avg	= iostat_lat[WRITE_ASYNC_DATA_LAT].avg_lat;
->> +		__entry->d_wr_as_cnt	= iostat_lat[WRITE_ASYNC_DATA_LAT].cnt;
->> +		__entry->n_wr_as_peak	= iostat_lat[WRITE_ASYNC_NODE_LAT].peak_lat;
->> +		__entry->n_wr_as_avg	= iostat_lat[WRITE_ASYNC_NODE_LAT].avg_lat;
->> +		__entry->n_wr_as_cnt	= iostat_lat[WRITE_ASYNC_NODE_LAT].cnt;
->> +		__entry->m_wr_as_peak	= iostat_lat[WRITE_ASYNC_META_LAT].peak_lat;
->> +		__entry->m_wr_as_avg	= iostat_lat[WRITE_ASYNC_META_LAT].avg_lat;
->> +		__entry->m_wr_as_cnt	= iostat_lat[WRITE_ASYNC_META_LAT].cnt;
->> +		__entry->discard_peak	= iostat_lat[DISCARD_LAT].peak_lat;
->> +		__entry->discard_avg	= iostat_lat[DISCARD_LAT].avg_lat;
->> +		__entry->discard_cnt	= iostat_lat[DISCARD_LAT].cnt;
->>   	),
->>   
->>   	TP_printk("dev = (%d,%d), "
->> @@ -2116,7 +2122,8 @@ TRACE_EVENT(f2fs_iostat_latency,
->>   		"rd_data [%u/%u/%u], rd_node [%u/%u/%u], rd_meta [%u/%u/%u], "
->>   		"wr_sync_data [%u/%u/%u], wr_sync_node [%u/%u/%u], "
->>   		"wr_sync_meta [%u/%u/%u], wr_async_data [%u/%u/%u], "
->> -		"wr_async_node [%u/%u/%u], wr_async_meta [%u/%u/%u]",
->> +		"wr_async_node [%u/%u/%u], wr_async_meta [%u/%u/%u], "
->> +		"discard [%u/%u/%u]",
->>   		show_dev(__entry->dev),
->>   		__entry->d_rd_peak, __entry->d_rd_avg, __entry->d_rd_cnt,
->>   		__entry->n_rd_peak, __entry->n_rd_avg, __entry->n_rd_cnt,
->> @@ -2126,7 +2133,8 @@ TRACE_EVENT(f2fs_iostat_latency,
->>   		__entry->m_wr_s_peak, __entry->m_wr_s_avg, __entry->m_wr_s_cnt,
->>   		__entry->d_wr_as_peak, __entry->d_wr_as_avg, __entry->d_wr_as_cnt,
->>   		__entry->n_wr_as_peak, __entry->n_wr_as_avg, __entry->n_wr_as_cnt,
->> -		__entry->m_wr_as_peak, __entry->m_wr_as_avg, __entry->m_wr_as_cnt)
->> +		__entry->m_wr_as_peak, __entry->m_wr_as_avg, __entry->m_wr_as_cnt,
->> +		__entry->discard_peak, __entry->discard_avg, __entry->discard_cnt)
->>   );
->>   #endif
->>   
->> -- 
->> 2.35.1
+>
+> >                 /*
+> >                  * Ensure we set mode to IN_GUEST_MODE after we disable
+> >                  * interrupts and before the final VCPU requests check.
+> > diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
+> > index f689337b78ff..7a6abed41bc1 100644
+> > --- a/arch/riscv/kvm/vcpu_insn.c
+> > +++ b/arch/riscv/kvm/vcpu_insn.c
+> > @@ -214,6 +214,7 @@ struct csr_func {
+> >  };
+> >
+> >  static const struct csr_func csr_funcs[] =3D {
+> > +       KVM_RISCV_VCPU_AIA_CSR_FUNCS
+> >         KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS
+> >  };
+> >
+> > diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
+> > index 65a964d7e70d..bc03d2ddcb51 100644
+> > --- a/arch/riscv/kvm/vm.c
+> > +++ b/arch/riscv/kvm/vm.c
+> > @@ -41,6 +41,8 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long t=
+ype)
+> >                 return r;
+> >         }
+> >
+> > +       kvm_riscv_aia_init_vm(kvm);
+> > +
+> >         kvm_riscv_guest_timer_init(kvm);
+> >
+> >         return 0;
+> > @@ -49,6 +51,8 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long t=
+ype)
+> >  void kvm_arch_destroy_vm(struct kvm *kvm)
+> >  {
+> >         kvm_destroy_vcpus(kvm);
+> > +
+> > +       kvm_riscv_aia_destroy_vm(kvm);
+> >  }
+> >
+> >  int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+> > --
+> > 2.34.1
+> >
+>
+>
+> --
+> Regards,
+> Atish
