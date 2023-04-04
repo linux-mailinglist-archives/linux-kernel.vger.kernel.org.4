@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC766D6A61
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BAF6D6A62
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236021AbjDDRWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
+        id S236030AbjDDRWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235977AbjDDRWl (ORCPT
+        with ESMTP id S235885AbjDDRWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:22:41 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBAD1717
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:22:24 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id eg48so133477145edb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:22:24 -0700 (PDT)
+        Tue, 4 Apr 2023 13:22:42 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F7E19F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:22:26 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id ek18so133631384edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:22:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680628943;
+        d=linaro.org; s=google; t=1680628944;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I4i10Nu53Bt3FeFdaaCNbwgGOLAXs2beXmn7v88uxP0=;
-        b=nP7X/2nPRF7l16+IigXht4VSenKiHnt3mctghSd++ZKNedKaiva0CCAjAxjoZxBdin
-         vlRSY/qROKZqZf52CIc4m5HtMdTAtqyQfKYBBUSjYvEQR15BjJfULEv/c/8RH+SwsHf+
-         IgFT+PJcy101yA6QFth7kbzUEgG1vleqwS6zy5YcC8SaQJwiKBh9tOoSMU2mHA8kkb+0
-         A+23kDJymgUD7SCRliEm4tx8gohj8hBE5Q4tywCKd9++Qp7LH6p5X1YRAxIFq/CHJqSR
-         yRHEVcjBxI4dIQ+SNC30InFyKLwNdJrqPoNMzEoUAtDSnHzJv+JuYymgYBD9zJdEgTDd
-         lw9Q==
+        bh=HO2ovPp2g8BY9KhfdMQrBMTwegDXLLj5jKc/ptyrY30=;
+        b=tjhO1KpfHhc+1lR2iyt1Hk/rwcxama/wjJ7OZ99SJ9iE5PvvnClZooJL0nqUXPFW4w
+         8PzRygBzo62hR6aADvLBLh5zaUc9K6iHxsjI8GhSstvvF0Lj0mjG16K1nLIAgvpe3lCO
+         IfvpySSB2i8q6tkhKqZxiq+I1G7MxQ6gEgFpY8mVOIr605DfgxdCPoHlgKjdf+DkmH7q
+         m79NFghwh84Eqf8YGE3vMjyxAXLo15cRhi2jqwO8XbxtMGQwFbaEvZyF60IAZAT2Uukn
+         Xy3tyVnLskveOBXY8K6of7oF+MzTS1kEAy6H9E5JdXU9fI0rQ5mTzNQBPzovDarbqu1z
+         whUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680628943;
+        d=1e100.net; s=20210112; t=1680628944;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=I4i10Nu53Bt3FeFdaaCNbwgGOLAXs2beXmn7v88uxP0=;
-        b=PY/KiCPmsH/Qh1YlQtWMYAR/HaUGR+Sn+3oqgGt9pkKL1a7yGrm6EB1U8QIdX9svcF
-         hG9Pdysy4IJrjF8QmEV9X5uRicNwbhXJGz54IjxscIGqEiP60Cot6jcf0scqiDWFHhzX
-         Y/t3HRV8h9JBLJss8lfMWCKBMusb7cRLmV3VheUgHyby93z8omEbUc3ZqNg+ly9cO7ME
-         QkuNlQNtOSDTKWjmoInkpNH3YiINVyPCkXrjFYY3uXi2ZVilZQJ6u37ZXQwlyRYAkVgI
-         d2//qIB29lVmScIX6kdpye2bv2l5/T/P14Ij2Edvnow6pxpc/8qvbEbWfHY+hcFJUS5V
-         m7gg==
-X-Gm-Message-State: AAQBX9fgn++E+S2PBDRpheWbbBZCLadQ9BwFRYwp4fP73OXlkpr4yGOK
-        WM70/YOLJaJRSTrhSBxXyQBIXg==
-X-Google-Smtp-Source: AKy350YCCfw960OjUdjDZOBMlZ3hZMSYycwEDsy99nytIwnmlzDl10aD7t23k3ygynKfOEzVEH0ioA==
-X-Received: by 2002:a17:907:a802:b0:8b1:7684:dfab with SMTP id vo2-20020a170907a80200b008b17684dfabmr369493ejc.38.1680628943281;
-        Tue, 04 Apr 2023 10:22:23 -0700 (PDT)
+        bh=HO2ovPp2g8BY9KhfdMQrBMTwegDXLLj5jKc/ptyrY30=;
+        b=USrEdnfVryCHpGvwB0vFkv0xIkREjgCFdXTM6uIgQJAXcNOs5mHZjFfu/NY+AoVTb3
+         740u/x2ta0+zU9eI2HhVzO5R63d/9n5l2YRzbleEMoZKCOg9Y2n3Q5s4Fkg5IKGNmywV
+         ny3tQRAyNL2WzLI9eO0CIj7bZNJY3FVa1M8PdFrl1K1duY0GMTtGRPVBcGke2FXiMY0p
+         yiK9RqsK4UEFfWtjX804BY8WPP47jcSoMmB3BIvV1vHlJq2LmhhSPF7dxVsN5fCjuk7L
+         rB0AGO6wkGGyvN4qvSsMTo8KizsQmODnHxcNQCRVAIAGvOVQIETrmEo6I+iFR6p70aB7
+         Z/ig==
+X-Gm-Message-State: AAQBX9f0scbODw8tJCcR0K4eVl2uW6U7LqeVomX37D85LyrXWNvwvkLV
+        xYGR9EJSP3uSVNwfdtCWcDZ+OQ==
+X-Google-Smtp-Source: AKy350Y26vq43+a2Aqrtc3D+K5XSDWstIaaK2jDuDL/irBvuLfTWCLG7XAeAr7fcVbJqkjEUOP1U2w==
+X-Received: by 2002:a17:906:f1d5:b0:870:d9a:9ebb with SMTP id gx21-20020a170906f1d500b008700d9a9ebbmr302300ejb.38.1680628944564;
+        Tue, 04 Apr 2023 10:22:24 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.22.22
+        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.22.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 10:22:22 -0700 (PDT)
+        Tue, 04 Apr 2023 10:22:23 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 02/40] dt-bindings: nvmem: qcom,spmi-sdam: fix example 'reg' property
-Date:   Tue,  4 Apr 2023 18:21:10 +0100
-Message-Id: <20230404172148.82422-3-srinivas.kandagatla@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Nick Alcock <nick.alcock@oracle.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 03/40] nvmem: xilinx: zynqmp: make modular
+Date:   Tue,  4 Apr 2023 18:21:11 +0100
+Message-Id: <20230404172148.82422-4-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
 References: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
@@ -73,62 +77,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Nick Alcock <nick.alcock@oracle.com>
 
-The SPMI PMIC register region width is fixed and should not be encoded
-in the devicetree.
+This driver has a MODULE_LICENSE but is not tristate so cannot be
+built as a module, unlike all its peers: make it modular to match.
 
-Amend the example with a parent pmic node with the expected
-'#address-cells' and '#size-cells' and fix up the 'reg' property.
-
-Fixes: 9664a6b54c57 ("dt-bindings: nvmem: add binding for QTI SPMI SDAM")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+Suggested-by: Michal Simek <michal.simek@amd.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: linux-modules@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Michal Simek <michal.simek@xilinx.com>
+Cc: linux-arm-kernel@lists.infradead.org
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- .../bindings/nvmem/qcom,spmi-sdam.yaml        | 31 +++++++++++--------
- 1 file changed, 18 insertions(+), 13 deletions(-)
+ drivers/nvmem/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml b/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml
-index e08504ef3b6e..4702f10ecca2 100644
---- a/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml
-@@ -42,17 +42,22 @@ unevaluatedProperties: false
+diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+index 6dec38805041..3b3832f4dfad 100644
+--- a/drivers/nvmem/Kconfig
++++ b/drivers/nvmem/Kconfig
+@@ -368,7 +368,7 @@ config NVMEM_VF610_OCOTP
+ 	  be called nvmem-vf610-ocotp.
  
- examples:
-   - |
--      sdam_1: nvram@b000 {
--          #address-cells = <1>;
--          #size-cells = <1>;
--          compatible = "qcom,spmi-sdam";
--          reg = <0xb000 0x100>;
--          ranges = <0 0xb000 0x100>;
--
--          /* Data cells */
--          restart_reason: restart@50 {
--              reg = <0x50 0x1>;
--              bits = <6 2>;
--          };
--      };
-+    pmic {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sdam_1: nvram@b000 {
-+            compatible = "qcom,spmi-sdam";
-+            reg = <0xb000>;
-+            #address-cells = <1>;
-+            #size-cells = <1>;
-+            ranges = <0 0xb000 0x100>;
-+
-+            /* Data cells */
-+            restart_reason: restart@50 {
-+                reg = <0x50 0x1>;
-+                bits = <6 2>;
-+            };
-+        };
-+    };
- ...
+ config NVMEM_ZYNQMP
+-	bool "Xilinx ZYNQMP SoC nvmem firmware support"
++	tristate "Xilinx ZYNQMP SoC nvmem firmware support"
+ 	depends on ARCH_ZYNQMP
+ 	help
+ 	  This is a driver to access hardware related data like
 -- 
 2.25.1
 
