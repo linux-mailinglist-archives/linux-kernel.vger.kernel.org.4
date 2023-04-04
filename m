@@ -2,127 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CC96D64E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B546D64F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235778AbjDDOMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
+        id S235230AbjDDOOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235743AbjDDOMO (ORCPT
+        with ESMTP id S235271AbjDDOOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:12:14 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6EF1A8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:12:10 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id p204so38817543ybc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 07:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680617530;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qDg8gjgCK4cCzQVwhhCZvTIORe+B4i8BW2+BbUTMc8k=;
-        b=DiobnlWTCEyBk4WPYFAHKg30bRzkskmSJ72Wcz0czZXBfiyEDWRHKO9j7HFFgmztHX
-         xTXtdNMXXSAw/AMwjYmqyhquuzlygHqo1/eOGOM8k1x+2K95ixzBaZ3AzQVnLBYkVssL
-         is9Dub6pRZJl9zSbNIakbfXudTP0IXFFXRKemRvFcXaYEfRE+jMAgdIu9rqNCsCKcqH+
-         NH2mMYvnftLWNjIjTz9qQEeVS04uRRKlmWRk2lVyO526Mp6wwBPvwvi7OOh9JxSVRmAv
-         Dq3fsXDYkQoXuTcX4jJE2kPlWqfV+GN7mu/Hnmvpj4yC8MNr7lkMYkVANC/PFdK8DxEG
-         jVTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680617530;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qDg8gjgCK4cCzQVwhhCZvTIORe+B4i8BW2+BbUTMc8k=;
-        b=H+u12//ZGi5OO5TSjkdnRx0yrhP3UgmL+lvC34I81NIYTCI6yhIfhMRe/6bwrq2v1O
-         WG8QaqnIUFT5TZqwmGJxBpyrYaIUdvDZUg+a3DfIkaTu2oAxN9Y4FyhwFbbSBs2P/q+1
-         oUZ0lEZrpGZcdOYQrw07/7gPX8cJu2j73iFU7oVqR2NqNUNhYsuf01jFKvuNytPAMU2K
-         7iEjK434DcYEWEwG4E5qo2JajFQKsPecvAtWkQPzYvXUlq8N5dDnynuhVl+kmv9f5kfg
-         FweUAd58qWbl63a9OGjxRXMiqDbKfJqLVxuogjHS4u4rMpvBIy7rKNoDW/WZUk9QbA0w
-         FQfg==
-X-Gm-Message-State: AAQBX9dHlm5gsmrfnKZW/FiGs4GuxeYuuw2iuTWuJ0mWXmZ9ce/HwdSn
-        A728LGj7mYwjC0KkPt8a515pow==
-X-Google-Smtp-Source: AKy350aJGwj3RDu4Ip5Xdz/OSHSTb1FUZElsBmHZwE/xAe13jchQE1CQ2cXbPFPEjl7DmWZ7kx4QeA==
-X-Received: by 2002:a25:aa53:0:b0:b05:af93:c3d7 with SMTP id s77-20020a25aa53000000b00b05af93c3d7mr2826487ybi.62.1680617529787;
-        Tue, 04 Apr 2023 07:12:09 -0700 (PDT)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id d195-20020a811dcc000000b00545a08184d8sm3202750ywd.104.2023.04.04.07.12.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 07:12:09 -0700 (PDT)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH v4 5/5] iio: addac: stx104: Use regmap_read_poll_timeout() for conversion poll
-Date:   Tue,  4 Apr 2023 10:12:02 -0400
-Message-Id: <f7fa811a002d0572c63b5a5ab7a478a5383ff840.1680564468.git.william.gray@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1680564468.git.william.gray@linaro.org>
-References: <cover.1680564468.git.william.gray@linaro.org>
+        Tue, 4 Apr 2023 10:14:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D9D4486
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:13:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680617575;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pHnav7rmFyKZwzKMs7eXEGCo+lHgh/MyPZc+xhNZR/U=;
+        b=JCNXS+4l+0Ei1UeH67M6gWdNsxSw7u/YXFGrBymLVcx6ndZca13B89z3zzanKMWHu6feeP
+        dj4xsWu6kmOTuGj0h2Pk1bL1WdKyxwyYSLwG1Pxsz/quVU2C13zcPN+OY5KG8Y5vM+aEzH
+        P9OFvya3cMUeXciyqsEJaMF3sF3n5XU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-622-eBD4KOx6P-yw9rbEwUxkLg-1; Tue, 04 Apr 2023 10:12:50 -0400
+X-MC-Unique: eBD4KOx6P-yw9rbEwUxkLg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E61553C10EC6;
+        Tue,  4 Apr 2023 14:12:49 +0000 (UTC)
+Received: from [10.22.32.153] (unknown [10.22.32.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2FCCE492C14;
+        Tue,  4 Apr 2023 14:12:49 +0000 (UTC)
+Message-ID: <db9689cb-7d2b-8a76-06f4-271134dd1bfb@redhat.com>
+Date:   Tue, 4 Apr 2023 10:12:48 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 3/3] cgroup/cpuset: Allow only one active attach operation
+ per cpuset
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        gscrivan@redhat.com
+References: <20230331145045.2251683-1-longman@redhat.com>
+ <20230331145045.2251683-4-longman@redhat.com>
+ <20230403164736.lpjdpzxxnjlpxrqv@blackpad>
+ <24b67530-62ce-4f9c-7b74-d41d2ccc710e@redhat.com>
+ <20230404090737.3g3uxga52bojgdu5@blackpad>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230404090737.3g3uxga52bojgdu5@blackpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ADC sample captures take a certain amount of time to complete after
-initiated; this conversion time range can be anywhere from 5 uSec to
-53.68 Seconds depending on the configuration of the Analog Input Frame
-Timer register. When the conversion is in progress, the ADC Status
-register CNV bit is high. Utilize regmap_read_poll_timeout() to poll
-until the ADC conversion is completed (or timeout if more than 53.68
-Seconds passes).
 
-Suggested-by: Jonathan Cameron <jic23@kernel.org>
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
----
-Changes in v4: none
+On 4/4/23 05:07, Michal Koutný wrote:
+> Hi.
+>
+> On Mon, Apr 03, 2023 at 01:41:33PM -0400, Waiman Long <longman@redhat.com> wrote:
+>> This patch is actually not related to the CLONE_INTO_GROUP problem in patch
+>> 1. It is a generic problem when multiple users are moving threads into
+>> cgroup.threads of the same or different cpusets simultaneously.
+> I meant this:
+> 	__cgroup_procs_write
+> 	  cgroup_kn_lock_live
+> 	    mutex_lock(&cgroup_mutex)
+>
+> and (more succintly)
+> 	cgroup_update_dfl_csses
+> 	  lockdep_assert_held(&cgroup_mutex)
+>
+> Even the threaded migrations should be synchronized here.
+> Can you please explain in more detail what's the problematic case?
 
- drivers/iio/addac/stx104.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+You are right. I missed the cgroup_mutex synchronization here. So this 
+patch isn't needed. I will drop it in the next version.
 
-diff --git a/drivers/iio/addac/stx104.c b/drivers/iio/addac/stx104.c
-index f300cce52787..0cdb824b6bb6 100644
---- a/drivers/iio/addac/stx104.c
-+++ b/drivers/iio/addac/stx104.c
-@@ -206,19 +206,22 @@ static int stx104_read_raw(struct iio_dev *indio_dev,
- 
- 		/* trigger ADC sample capture by writing to the 8-bit
- 		 * Software Strobe Register and wait for completion
-+		 * Range is 5 uSec to 53.68 Seconds in steps of 25 nanoseconds.
-+		 * The actual Analog Input Frame Timer time interval is calculated as:
-+		 * ai_time_frame_ns = ( AIFT + 1 ) * ( 25 nSec ).
-+		 * Where 0 <= AIFT <= 2147483648.
- 		 */
- 		err = regmap_write(priv->aio_ctl_map, STX104_SOFTWARE_STROBE, 0);
- 		if (err) {
- 			mutex_unlock(&priv->lock);
- 			return err;
- 		}
--		do {
--			err = regmap_read(priv->aio_ctl_map, STX104_ADC_STATUS, &adc_status);
--			if (err) {
--				mutex_unlock(&priv->lock);
--				return err;
--			}
--		} while (u8_get_bits(adc_status, STX104_CNV));
-+		err = regmap_read_poll_timeout(priv->aio_ctl_map, STX104_ADC_STATUS, adc_status,
-+					       !u8_get_bits(adc_status, STX104_CNV), 0, 53687092);
-+		if (err) {
-+			mutex_unlock(&priv->lock);
-+			return err;
-+		}
- 
- 		err = regmap_read(priv->aio_data_map, STX104_ADC_DATA, &value);
- 		if (err) {
--- 
-2.39.2
+Cheers,
+Longman
 
