@@ -2,162 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E936D5834
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4C66D5837
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbjDDFvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 01:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S233444AbjDDFvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 01:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233417AbjDDFvR (ORCPT
+        with ESMTP id S233441AbjDDFvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 01:51:17 -0400
+        Tue, 4 Apr 2023 01:51:18 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B2C1713;
-        Mon,  3 Apr 2023 22:51:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CCA1BCE
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 22:51:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680587475; x=1712123475;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n3G2OuYaOWQow3ISG9SZGQT2IwS+n1euaI1EX7smRF0=;
-  b=OqUWTeNoDqJHI4xoNdyySCyWpXO/hgnT35tu2vYAnhQ1xCL7ni5bGcIN
-   1RbwObcRoBDHPQP7DO3xFic7HCQmh6j+xAlPm2+TziW513Z2HnHGmXX4D
-   bnoOo8qLoM359sSQtV2le2qGFRBz/7xel+UXoTz783zqPO8xCNYA+1Yhx
-   zjv7qvMouw7mpLyM/Bw9voQILRcgSgTLxp8nzlwAdpK3i79R7z7DFcvWV
-   bifiGSssSF5gvWN/6KD+NjOPLkJZQJhnhl5lyMG/Gc7nTNYnI198/jRJa
-   zn1PFie/iW8c1OSNlVoN80s+v52+avdeMM86D2EaDnEodPOBs4a3P2/tq
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="322489006"
+  t=1680587477; x=1712123477;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xpM9bExXO20dg7n/9m9CqvzvBN/JhA/m7n4LAZOmaEQ=;
+  b=U1BvYFe0UwnRas7i3QB3Oa1/lM9lVD86K+Ccb5uWV/XaXwEFHZRuAReA
+   4JJi98dmUcf2VIStBH9z8wCvV2f+Ov8cEb0672NLD8yQNDsWybXS/k1Ex
+   VX8Whv1kOKpYQHngSGqKl9ILPZxCvSTWaSXrERgWiuxWTsLIP5V5UHQXX
+   +a3BOMRqfr8GKkhgCy8Jz0JsxDsk2Tmil9j6Lv5J2bw4B5G5mALZaTX3p
+   t62VdOCAtDVhhDEMo8lcofRO4oTaxTb3Zc+vpoq86gCjBQtE8xNip6/ku
+   /mMhmYPFKCSyTk4J10swDibDcArKn5PjJB8vaHNqnh9452hJM31WKioxu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="322489024"
 X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="322489006"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 22:51:14 -0700
+   d="scan'208";a="322489024"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 22:51:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="750793445"
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="775509748"
 X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="750793445"
+   d="scan'208";a="775509748"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Apr 2023 22:51:08 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Apr 2023 22:51:13 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pjZZT-000PG2-2l;
+        id 1pjZZT-000PG6-3D;
         Tue, 04 Apr 2023 05:51:07 +0000
-Date:   Tue, 4 Apr 2023 13:50:41 +0800
+Date:   Tue, 4 Apr 2023 13:50:42 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Danilo Krummrich <dakr@redhat.com>, airlied@gmail.com,
-        daniel@ffwll.ch, tzimmermann@suse.de, mripard@kernel.org,
-        corbet@lwn.net, christian.koenig@amd.com, bskeggs@redhat.com,
-        Liam.Howlett@oracle.com, matthew.brost@intel.com,
-        boris.brezillon@collabora.com, alexdeucher@gmail.com,
-        ogabbay@kernel.org, bagasdotme@gmail.com, willy@infradead.org,
-        jason@jlekstrand.net
-Cc:     oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
-        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        Danilo Krummrich <dakr@redhat.com>
-Subject: Re: [PATCH drm-next v3 13/15] drm/nouveau: nvkm/vmm: implement raw
- ops to manage uvmm
-Message-ID: <202304041311.bWxdWPX0-lkp@intel.com>
-References: <20230404012741.116502-14-dakr@redhat.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: arch/m68k/kernel/uboot.c:67:43: warning: variable 'uboot_initrd_end'
+ set but not used
+Message-ID: <202304041351.UoS1HYnY-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230404012741.116502-14-dakr@redhat.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Danilo,
+Hi Masami,
 
-kernel test robot noticed the following build warnings:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on d36d68fd1925d33066d52468b7c7c6aca6521248]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/drm-execution-context-for-GEM-buffers-v3/20230404-093042
-base:   d36d68fd1925d33066d52468b7c7c6aca6521248
-patch link:    https://lore.kernel.org/r/20230404012741.116502-14-dakr%40redhat.com
-patch subject: [PATCH drm-next v3 13/15] drm/nouveau: nvkm/vmm: implement raw ops to manage uvmm
-config: arc-randconfig-r043-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041311.bWxdWPX0-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 12.1.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   148341f0a2f53b5e8808d093333d85170586a15d
+commit: a2a9d67a26ec94a99ed29efbd61cf5be0a575678 bootconfig: Support embedding a bootconfig file in kernel
+date:   11 months ago
+config: m68k-buildonly-randconfig-r001-20230404 (https://download.01.org/0day-ci/archive/20230404/202304041351.UoS1HYnY-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ff73c969805aef784d47f6bedea6c15c8548d0bf
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Danilo-Krummrich/drm-execution-context-for-GEM-buffers-v3/20230404-093042
-        git checkout ff73c969805aef784d47f6bedea6c15c8548d0bf
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a2a9d67a26ec94a99ed29efbd61cf5be0a575678
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a2a9d67a26ec94a99ed29efbd61cf5be0a575678
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/gpu/drm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/kernel/ drivers/clk/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304041311.bWxdWPX0-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304041351.UoS1HYnY-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.h:4,
-                    from drivers/gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.h:5,
-                    from drivers/gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.c:22:
-   drivers/gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.c: In function 'nvkm_uvmm_mthd_raw_map':
->> drivers/gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.c:422:31: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     422 |                               (void *)args->argv, args->argc);
-         |                               ^
-   drivers/gpu/drm/nouveau/include/nvkm/core/memory.h:66:43: note: in definition of macro 'nvkm_memory_map'
-      66 |         (p)->func->map((p),(o),(vm),(va),(av),(ac))
-         |                                           ^~
+   arch/m68k/kernel/uboot.c: In function 'parse_uboot_commandline':
+>> arch/m68k/kernel/uboot.c:67:43: warning: variable 'uboot_initrd_end' set but not used [-Wunused-but-set-variable]
+      67 |         unsigned long uboot_initrd_start, uboot_initrd_end;
+         |                                           ^~~~~~~~~~~~~~~~
+>> arch/m68k/kernel/uboot.c:67:23: warning: variable 'uboot_initrd_start' set but not used [-Wunused-but-set-variable]
+      67 |         unsigned long uboot_initrd_start, uboot_initrd_end;
+         |                       ^~~~~~~~~~~~~~~~~~
+   arch/m68k/kernel/uboot.c:66:23: warning: variable 'uboot_kbd' set but not used [-Wunused-but-set-variable]
+      66 |         unsigned long uboot_kbd;
+         |                       ^~~~~~~~~
+   arch/m68k/kernel/uboot.c: At top level:
+   arch/m68k/kernel/uboot.c:90:13: warning: no previous prototype for 'process_uboot_commandline' [-Wmissing-prototypes]
+      90 | __init void process_uboot_commandline(char *commandp, int size)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +422 drivers/gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.c
+vim +/uboot_initrd_end +67 arch/m68k/kernel/uboot.c
 
-   388	
-   389	static int
-   390	nvkm_uvmm_mthd_raw_map(struct nvkm_uvmm *uvmm, struct nvif_vmm_raw_v0 *args)
-   391	{
-   392		struct nvkm_client *client = uvmm->object.client;
-   393		struct nvkm_vmm *vmm = uvmm->vmm;
-   394		struct nvkm_vma vma = {
-   395			.addr = args->addr,
-   396			.size = args->size,
-   397			.used = true,
-   398			.mapref = false,
-   399			.no_comp = true,
-   400		};
-   401		struct nvkm_memory *memory;
-   402		u64 handle = args->memory;
-   403		u8 refd;
-   404		int ret;
-   405	
-   406		if (!nvkm_vmm_in_managed_range(vmm, args->addr, args->size))
-   407			return -EINVAL;
-   408	
-   409		ret = nvkm_uvmm_page_index(uvmm, args->size, args->shift, &refd);
-   410		if (ret)
-   411			return ret;
-   412	
-   413		vma.page = vma.refd = refd;
-   414	
-   415		memory = nvkm_umem_search(client, args->memory);
-   416		if (IS_ERR(memory)) {
-   417			VMM_DEBUG(vmm, "memory %016llx %ld\n", handle, PTR_ERR(memory));
-   418			return PTR_ERR(memory);
-   419		}
-   420	
-   421		ret = nvkm_memory_map(memory, args->offset, vmm, &vma,
- > 422				      (void *)args->argv, args->argc);
-   423	
-   424		nvkm_memory_unref(&vma.memory);
-   425		nvkm_memory_unref(&memory);
-   426		return ret;
-   427	}
-   428	
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  30  
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  31  /*
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  32   * parse_uboot_commandline
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  33   *
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  34   * Copies u-boot commandline arguments and store them in the proper linux
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  35   * variables.
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  36   *
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  37   * Assumes:
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  38   *	_init_sp global contains the address in the stack pointer when the
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  39   *	kernel starts (see head.S::_start)
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  40   *
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  41   *	U-Boot calling convention:
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  42   *	(*kernel) (kbd, initrd_start, initrd_end, cmd_start, cmd_end);
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  43   *
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  44   *	_init_sp can be parsed as such
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  45   *
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  46   *	_init_sp+00 = u-boot cmd after jsr into kernel (skip)
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  47   *	_init_sp+04 = &kernel board_info (residual data)
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  48   *	_init_sp+08 = &initrd_start
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  49   *	_init_sp+12 = &initrd_end
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  50   *	_init_sp+16 = &cmd_start
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  51   *	_init_sp+20 = &cmd_end
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  52   *
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  53   *	This also assumes that the memory locations pointed to are still
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  54   *	unmodified. U-boot places them near the end of external SDRAM.
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  55   *
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  56   * Argument(s):
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  57   *	commandp = the linux commandline arg container to fill.
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  58   *	size     = the sizeof commandp.
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  59   *
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  60   * Returns:
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  61   */
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  62  static void __init parse_uboot_commandline(char *commandp, int size)
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  63  {
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  64  	extern unsigned long _init_sp;
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  65  	unsigned long *sp;
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  66  	unsigned long uboot_kbd;
+aa5ac789bd96c7 Greg Ungerer       2016-09-05 @67  	unsigned long uboot_initrd_start, uboot_initrd_end;
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  68  	unsigned long uboot_cmd_start, uboot_cmd_end;
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  69  
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  70  	sp = (unsigned long *)_init_sp;
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  71  	uboot_kbd = sp[1];
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  72  	uboot_initrd_start = sp[2];
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  73  	uboot_initrd_end = sp[3];
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  74  	uboot_cmd_start = sp[4];
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  75  	uboot_cmd_end = sp[5];
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  76  
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  77  	if (uboot_cmd_start && uboot_cmd_end)
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  78  		strncpy(commandp, (const char *)uboot_cmd_start, size);
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  79  #if defined(CONFIG_BLK_DEV_INITRD)
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  80  	if (uboot_initrd_start && uboot_initrd_end &&
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  81  	    (uboot_initrd_end > uboot_initrd_start)) {
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  82  		initrd_start = uboot_initrd_start;
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  83  		initrd_end = uboot_initrd_end;
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  84  		ROOT_DEV = Root_RAM0;
+7c79e1eef8c9a7 Geert Uytterhoeven 2016-12-06  85  		pr_info("initrd at 0x%lx:0x%lx\n", initrd_start, initrd_end);
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  86  	}
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  87  #endif /* if defined(CONFIG_BLK_DEV_INITRD) */
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  88  }
+aa5ac789bd96c7 Greg Ungerer       2016-09-05  89  
+
+:::::: The code at line 67 was first introduced by commit
+:::::: aa5ac789bd96c7a6628a8167de562fa660f1f481 m68k: generalize uboot command line support
+
+:::::: TO: Greg Ungerer <gerg@linux-m68k.org>
+:::::: CC: Greg Ungerer <gerg@linux-m68k.org>
 
 -- 
 0-DAY CI Kernel Test Service
