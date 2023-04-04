@@ -2,208 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2E16D6DF3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7211A6D6DF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235869AbjDDUXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 16:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
+        id S236023AbjDDUYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 16:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbjDDUXt (ORCPT
+        with ESMTP id S232851AbjDDUYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 16:23:49 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10699170F;
-        Tue,  4 Apr 2023 13:23:48 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id h25so43886128lfv.6;
-        Tue, 04 Apr 2023 13:23:47 -0700 (PDT)
+        Tue, 4 Apr 2023 16:24:38 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF2E10CA;
+        Tue,  4 Apr 2023 13:24:36 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id bx10so16885540ljb.8;
+        Tue, 04 Apr 2023 13:24:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680639826;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ONIO3Xsuk99m4ItJo+QZlE9pAbS3SFz60UJpwbYuv9E=;
-        b=mSTY3ui2/XkY66nn3lsJA4XtF/pkhNouxlbyFrAfnyVZCmF1GBJaJjiu8Cz8tyONub
-         WjsZwnSQgM0nu8CT/Hqxpcfo1r42e4a0HkM0FoLcfyc67zlKjjZF0Th0l/E0dIY+rCPN
-         RCh8W586RZqOqv/lvKZ6PbT5D/IWRq8JLVQbbzxAJY003Fhz7jaZAkzuGkCLBeIKIPgC
-         5lncCs5/C0hbhIBucR897F00ENvVCvVgIG0TevuS3urFrrQbV7WNPnbqtV0OIksK94lG
-         GJXmQZI4usxYzCBOIcKGSbI7D66/TDxAnk8B92XB8xoAhHgkhIJo3Hw4/yorHy+6YbSN
-         qEvQ==
+        d=gmail.com; s=20210112; t=1680639875;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oVf5L1s5vC5i2BV4mWtMiZo2kKfcnDSErU32Isic1c0=;
+        b=LFJn/i75qWzTZnNmOARwhUp1VIvYhF57EyWOrDLJMraSpbC3m31EuNymXVDnsaBh25
+         FhAYzTfHo9Ev+dUAVrmpib9+g6RWMFb8tqq6Nakq4Sr3gHFndTTiFNZ1j9Vdz9zEBb+F
+         C+8XPkOiLBL412T5yo2Zu2rSvdayZaiKVn1pNRSdXmFR8qkfPzqvHUl5OKjNGGLdcIe2
+         qwTx6kf22IbLR+VtcLBs+gMygBQQ16ha4RjZYDJgLC3dni4P1b4w9n1yee9TObcqU/h9
+         H5wvEvk2LaJ3vj/WT2r4LdS2JrEtJ7oIP679mxNvE+yhQZ6sKxSRuHs4rJyZZts2n4pP
+         yDtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680639826;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ONIO3Xsuk99m4ItJo+QZlE9pAbS3SFz60UJpwbYuv9E=;
-        b=W535UQKffCjNkiHcgD+pK3/IKdGsAGyh3A+6jZUd9vRIT+DMuHGxxeRq+yqAcZ758d
-         jzNTfcQ9W/motTRR7kGZBzTaGnjlBdUbQ0Ipd21twJa67YAMbjXmS+Z8pZbzRw34+f0D
-         /xj9XK0wT7Px3nms1Xw5yyPnVTUSx92QxAx+p8CukaQKtPqL/xLyI1EZ0cOag6OvbeSg
-         KZCaYGPb7zv7VJwUJlPwQMSCCwk8dfYkf0SuHndPQU5g5ckX+kZSpVWThT4zLckSeaHj
-         5zry/3N53eBsL7i0nEjJN9pZ4bA5cO1+BK9R1guEHdjhmdgNahxXmmk6BAQCl8u7/M7j
-         UPGg==
-X-Gm-Message-State: AAQBX9e8BrovK9JOUi/eouGZ6o6gEe3XBkXKVAqmCBG6mFfiwkD0Pmls
-        lmD6/eswJOgKrSanSwtjT6k=
-X-Google-Smtp-Source: AKy350ZjzzZ4kQzUPxGwuZCjm8SnY7zm1ZuBhGYkgelG4LR/U4faIN60oqv7OF89rqNiASa+nGZqoQ==
-X-Received: by 2002:ac2:511e:0:b0:4e8:893f:8079 with SMTP id q30-20020ac2511e000000b004e8893f8079mr989905lfb.64.1680639826138;
-        Tue, 04 Apr 2023 13:23:46 -0700 (PDT)
-Received: from [10.0.0.100] (host-213-145-197-218.kaisa-laajakaista.fi. [213.145.197.218])
-        by smtp.gmail.com with ESMTPSA id q17-20020a19a411000000b004d3d43c7569sm2473072lfc.3.2023.04.04.13.23.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 13:23:45 -0700 (PDT)
-Message-ID: <c3c6c922-4ab0-eef6-be87-fe5c015b2440@gmail.com>
-Date:   Tue, 4 Apr 2023 23:23:52 +0300
+        d=1e100.net; s=20210112; t=1680639875;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oVf5L1s5vC5i2BV4mWtMiZo2kKfcnDSErU32Isic1c0=;
+        b=s9Z/cPyk4y+TUKBT7yqM1bqBOpd3F1+MfHL+BuDMc41NKpyytqPlrLOVHax9namgxk
+         tC84YVlbgLwMTAUu8x3toZ+MeKCjTi0vAk/H0F91ry5bcyVLtLLtiKbwrGTwl/z1kdnO
+         ZWfx/tcBcTnnsIh7XjOX3/C16JBrE0IIyb3+j9G0Bz/mkwbbMR6VORunAacc9O+iYbeY
+         as2RD4rVJ5LmQLa18pZRKrKVKLspMoAPVQfJRh5cxbqybIdvGFcM6oEFie5YMbORX4F1
+         Wh2v0vlQ+EKRsOBn5bv0i4mMM28MuAKSzbldOI6fwviYmqyCykSVhEl5UAHrYCHVKotQ
+         lGmQ==
+X-Gm-Message-State: AAQBX9fxlZWYJlfTKCzj7M9qjmeeN26+TxCbhHTwrVP/aKcmYeTykjAK
+        Yjv9VHLkWLISTtfNPDSVZGAdH1bNLuVTuNKuGMI=
+X-Google-Smtp-Source: AKy350bAs0nGXa3BuJqVl2jqEm2na7mau8O6bShq31dmcE6naDoixDWRQlkRnuFwO9FX7EqnoB9mrJypSDMTei9CCYI=
+X-Received: by 2002:a2e:6817:0:b0:2a6:334b:21e9 with SMTP id
+ c23-20020a2e6817000000b002a6334b21e9mr1420402lja.7.1680639874591; Tue, 04 Apr
+ 2023 13:24:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>, vkoul@kernel.org
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srk@ti.com, vigneshr@ti.com
-References: <20230404081158.1266530-1-s-vadapalli@ti.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-Subject: Re: [PATCH] dmaengine: ti: k3-udma-glue: do not create glue dma
- devices for udma channels
-In-Reply-To: <20230404081158.1266530-1-s-vadapalli@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230403211548.6253-1-jorge.lopez2@hp.com> <d5fbc118-3b33-44b8-a7b6-4738e121b170@t-8ch.de>
+In-Reply-To: <d5fbc118-3b33-44b8-a7b6-4738e121b170@t-8ch.de>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Tue, 4 Apr 2023 15:24:16 -0500
+Message-ID: <CAOOmCE8z_UDs8dG0MqX+SFcvd-CTX12XXKzOrVOKDuvrPkyeCQ@mail.gmail.com>
+Subject: Re: [PATCH v7] Introduction-of-HP-BIOSCFG-driver-documentation
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Thomas,
 
+BTW, I decided to submit all files individually to facilitate the
+review process.  Only Makefile and Kconfig files will be provided as a
+single patch.
+I will be out of town until April 11 and will reply back upon my return.
 
-On 04/04/2023 11:11, Siddharth Vadapalli wrote:
-> From: Grygorii Strashko <grygorii.strashko@ti.com>
-> 
-> In case K3 DMA glue layer is using UDMA channels (AM65/J721E/J7200) it
-> doesn't need to create own DMA devices per RX/TX channels as they are never
-> used and just waste resources. The UDMA based platforms are coherent and
-> UDMA device iteslf is used for DMA memory management.
-> 
-> Hence, update K3 DMA glue layer to create K3 DMA glue DMA devices per RX/TX
-> channels only in case of PKTDMA (AM64) where coherency configurable per DMA
-> channel.
-> 
-> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> ---
->   drivers/dma/ti/k3-udma-glue.c | 70 +++++++++++++++++------------------
->   1 file changed, 34 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/dma/ti/k3-udma-glue.c b/drivers/dma/ti/k3-udma-glue.c
-> index 789193ed0386..b0c9572b0d02 100644
-> --- a/drivers/dma/ti/k3-udma-glue.c
-> +++ b/drivers/dma/ti/k3-udma-glue.c
-> @@ -293,19 +293,18 @@ struct k3_udma_glue_tx_channel *k3_udma_glue_request_tx_chn(struct device *dev,
->   	}
->   	tx_chn->udma_tchan_id = xudma_tchan_get_id(tx_chn->udma_tchanx);
->   
-> -	tx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
-> -	tx_chn->common.chan_dev.parent = xudma_get_device(tx_chn->common.udmax);
-> -	dev_set_name(&tx_chn->common.chan_dev, "tchan%d-0x%04x",
-> -		     tx_chn->udma_tchan_id, tx_chn->common.dst_thread);
-> -	ret = device_register(&tx_chn->common.chan_dev);
-> -	if (ret) {
-> -		dev_err(dev, "Channel Device registration failed %d\n", ret);
-> -		put_device(&tx_chn->common.chan_dev);
-> -		tx_chn->common.chan_dev.parent = NULL;
-> -		goto err;
-> -	}
-> -
->   	if (xudma_is_pktdma(tx_chn->common.udmax)) {
+Please see my comments below.
 
-it might be possible to narrow it down to include a test for atype_asel 
-14 or 15, but then I would move that test to a helper (passing common as 
-parameter) and re-use it in other places to avoid getting out o sync 
-overtime.
-Might not worth the effort, just an observation.
+>
+> > +             HP specific types
+> > +             -----------------
+> > +                     - ordered-list - a set of ordered list valid values
+> > +                     - sure-start
+>
+> Could you explain what "sure-start" does?
+> Is it actually an attribute type of which multiple attributes can exist?
+>
 
-> +		tx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
-> +		tx_chn->common.chan_dev.parent = xudma_get_device(tx_chn->common.udmax);
-> +		dev_set_name(&tx_chn->common.chan_dev, "tchan%d-0x%04x",
-> +			     tx_chn->udma_tchan_id, tx_chn->common.dst_thread);
-> +		ret = device_register(&tx_chn->common.chan_dev);
-> +		if (ret) {
-> +			dev_err(dev, "Channel Device registration failed %d\n", ret);
+It is an attribute type of which multiple attributes can exist.
+At this moment  Sure-Start reports both the number of audit logs and
+all logs reported by BIOS.
+Sure-Start is exposed directly under
+/sys/class/firmware-attributes/*/attributes/.   Sure Start does not
+provide any authentication.
 
-my guess is that the put_device() is still needed, no?
+> Or are there just some global properties that need to be exposed?
+> If it is global it should be directly under
+> /sys/class/firmware-attributes/*/authentication/
+> without needing the type.
+>
+> > +
+> > +
+> >               All attribute types support the following values:
+> >
+> >               current_value:
+> > @@ -42,16 +48,16 @@ Description:
+> >                               description of the at <attr>
+> >
+> >               display_name_language_code:
+> > -                                             A file that can be read to obtain
+> > -                                             the IETF language tag corresponding to the
+> > -                                             "display_name" of the <attr>
+> > +                             A file that can be read to obtain
+> > +                             the IETF language tag corresponding to the
+> > +                             "display_name" of the <attr>
+>
+> Are these reindentations and other cleanups intentional?
+>
+> If they are intentional and there are no interactions with your actual
+> patch you could split them into their own patch and submit them
+> separately.
+>
+> This way we wouldn't have to worry about them here anymore.
 
-> +			tx_chn->common.chan_dev.parent = NULL;
-> +			goto err;
-> +		}
-> +
->   		/* prepare the channel device as coherent */
->   		tx_chn->common.chan_dev.dma_coherent = true;
->   		dma_coerce_mask_and_coherent(&tx_chn->common.chan_dev,
-> @@ -912,19 +911,18 @@ k3_udma_glue_request_rx_chn_priv(struct device *dev, const char *name,
->   	}
->   	rx_chn->udma_rchan_id = xudma_rchan_get_id(rx_chn->udma_rchanx);
->   
-> -	rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
-> -	rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
-> -	dev_set_name(&rx_chn->common.chan_dev, "rchan%d-0x%04x",
-> -		     rx_chn->udma_rchan_id, rx_chn->common.src_thread);
-> -	ret = device_register(&rx_chn->common.chan_dev);
-> -	if (ret) {
-> -		dev_err(dev, "Channel Device registration failed %d\n", ret);
-> -		put_device(&rx_chn->common.chan_dev);
-> -		rx_chn->common.chan_dev.parent = NULL;
-> -		goto err;
-> -	}
-> -
->   	if (xudma_is_pktdma(rx_chn->common.udmax)) {
-> +		rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
-> +		rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
-> +		dev_set_name(&rx_chn->common.chan_dev, "rchan%d-0x%04x",
-> +			     rx_chn->udma_rchan_id, rx_chn->common.src_thread);
-> +		ret = device_register(&rx_chn->common.chan_dev);
-> +		if (ret) {
-> +			dev_err(dev, "Channel Device registration failed %d\n", ret);
-> +			rx_chn->common.chan_dev.parent = NULL;
-> +			goto err;
-> +		}
-> +
->   		/* prepare the channel device as coherent */
->   		rx_chn->common.chan_dev.dma_coherent = true;
->   		dma_coerce_mask_and_coherent(&rx_chn->common.chan_dev,
-> @@ -1044,19 +1042,19 @@ k3_udma_glue_request_remote_rx_chn(struct device *dev, const char *name,
->   		goto err;
->   	}
->   
-> -	rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
-> -	rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
-> -	dev_set_name(&rx_chn->common.chan_dev, "rchan_remote-0x%04x",
-> -		     rx_chn->common.src_thread);
-> -	ret = device_register(&rx_chn->common.chan_dev);
-> -	if (ret) {
-> -		dev_err(dev, "Channel Device registration failed %d\n", ret);
-> -		put_device(&rx_chn->common.chan_dev);
-> -		rx_chn->common.chan_dev.parent = NULL;
-> -		goto err;
-> -	}
-> -
->   	if (xudma_is_pktdma(rx_chn->common.udmax)) {
-> +		rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
-> +		rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
-> +		dev_set_name(&rx_chn->common.chan_dev, "rchan_remote-0x%04x",
-> +			     rx_chn->common.src_thread);
-> +
-> +		ret = device_register(&rx_chn->common.chan_dev);
-> +		if (ret) {
-> +			dev_err(dev, "Channel Device registration failed %d\n", ret);
-> +			rx_chn->common.chan_dev.parent = NULL;
-> +			goto err;
-> +		}
-> +
->   		/* prepare the channel device as coherent */
->   		rx_chn->common.chan_dev.dma_coherent = true;
->   		dma_coerce_mask_and_coherent(&rx_chn->common.chan_dev,
+They were unintentionally.  I will reset them back in the next review
+>
+> Note:
+> These indentations are different from the newly introduced documentation.
+>
+> >
+> > +             audit_log_entries:
+> > +                                     A read-only file that returns the events in the log.
+> > +                                     Values are separated using semi-colon (``;``)
+> > +
+> > +                                     Audit log entry format
+> > +
+> > +                                     Byte 0-15:   Requested Audit Log entry  (Each Audit log is 16 bytes)
+> > +                                     Byte 16-127: Unused
+>
+> How to interpret each log entry?
+>
 
--- 
-Péter
+Byte 0: status
+1: event id
+2: msg number
+3: severity
+4: source ID
+5: system state at event
+6-12 Time stamp
+13-15: internal buffer data
+
+Application needs to have knowledge of the data provided by BIOS in
+order to interpret the audit log.
+
+> If it is an opaque thing from the firmware that would also be useful to
+> know.
+>
+> > +
+> > +             audit_log_entry_count:
+> > +                                     A read-only file that returns the number of existing audit log events available to be read.
+> > +                                     Values are separated using comma (``,``)
+> > +
+> > +                                     [No of entries],[log entry size],[Max number of entries supported]
+>
+> Will log entry size always be 16? Or can it be bigger in the future when
+> more bytes are used?
+> This should be mentioned.
+
+Log entry size is always 16 bytes in size.  The reason is to report a
+maximum of 256 entries.  Total 4096 bytes
+>
+> Is audit_log_entry_count ever used without reading audit_log_entries
+> right after?
+Yes. The counter is necessary to determine how many logs are available
+to be read.
+
+> If not the count file could be dropped.
+>
+> > +What:                /sys/class/firmware-attributes/*/authentication/SPM/status
+> > +Date:                March 29
+> > +KernelVersion:       5.18
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description: 'status' is a read-only file that returns ASCII text reporting
+> > +             the status information.
+> > +
+> > +               State:  Not Provisioned / Provisioned / Provisioning in progress
+> > +               Version:  Major.   Minor
+> > +               Feature Bit Mask: <16-bit unsigned number display in hex>
+>
+> How are these bits to be interpreted?
+This information is provided by BIOS.  It is one of those obscure
+values from BIOS.
+>
+> > +               SPM Counter: <16-bit unsigned number display in base 10>
+> > +               Signing Key Public Key Modulus (base64):
+> > +               KEK Public Key Modulus (base64):
+>
+> Is " (base64)" supposed to be part of the contents of the file?
+
+The information reported for Signing Key and KEK public key are
+reported as base64 values.  It applies only to the data and not to the
+file contents.
+
+>
+> > +
+> > +
+> > +What:                /sys/class/firmware-attributes/*/authentication/SPM/statusbin
+> > +Date:                March 29
+> > +KernelVersion:       5.18
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description: 'statusbin' is a read-only file that returns identical status
+> > +             information reported by 'status' file in binary format.
+>
+> This documentation should contain enough information to understand the
+> files contents.
+>
+>
+> I understand that one WMI call will return all the fields that are part
+> of the "status" and "statusbin" in one response.
+>
+> Are these WMI calls especially expensive or called especially
+> frequently?
+>
+
+Unfortunately the WMI to read the Status binary data is expensive
+hence the reason of only calling once.
+
+> If not I would still argue to split them into one file per field and
+> remove the statusbin file.
+>
+
+Regards,
+
+Jorge
