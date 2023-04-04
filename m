@@ -2,91 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53406D5694
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 04:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24C26D569C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 04:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjDDCJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 22:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        id S232198AbjDDCMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 22:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbjDDCJR (ORCPT
+        with ESMTP id S231936AbjDDCMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 22:09:17 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA5C30FB
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 19:08:30 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-17aaa51a911so32941367fac.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 19:08:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680574107;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fk2M5hqyrQqjp1Jy11fiEYB/sjwVhqsm+ktwQKrJVKU=;
-        b=DN4v1XQZOAL7dovNVhE8B+xpL6etxxRuFni2Rwfv6xBNhbnTVqFu9FQYAI3gDCrNPd
-         2XtMuOt29AfFAJzg6eCX83/3QvU6TAlPp8LIk4w+GqaKez0St/NzeXaFu+Kv5nnz+FqJ
-         xQzRw4NoOLJ7kjBMqTCdNge/Pd7BJ19LslWrK1ti1S4AlYX8pFiDmTLYkqE7wQ6JrtUL
-         QH2cqrCnaGhBr8tSLYNO2eq9kenZIN6kQJUqjcjau6BV0nQxwy85hArwgVwTmFZfkmtE
-         g03bd6qaOXzPjt5MOqZQGN668RoypnMOJbEud7bU78XOtyJu3HqqTpAfcEhg3kBfadDv
-         6+vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680574107;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fk2M5hqyrQqjp1Jy11fiEYB/sjwVhqsm+ktwQKrJVKU=;
-        b=Mr8Jv59aCKg7I+vaw9voFgRFFRqOmQt8A/Cg+pkE+IwByYe4svFeGd/ZHzJKWjZz2T
-         kN9dPjGiWV8IDats/i+eyOswaax09B0Bzy1M8ogQpwWQD9Z2lIBqfhg3H9Lelo9v963M
-         gIQPVbsEx8X2ApxleHlAkB9G8OttDaFOtEEHoa639TUK76Qgq+AQHGuY1CD6g5fqMMcK
-         lUDl20n4kyzKFClPO49mmYKisB9XoUkKoXIHdvOmwCgDloG02tKU+yC0Zpce4/3YCk2O
-         BGcGua71WzwfPPowHNJRz5zguU23ehTJ2O0ffXTiZaXxzzOImwOnoh4lA7R3ehf6RIM5
-         taNQ==
-X-Gm-Message-State: AAQBX9c84pbqLu0I98cHux7Qvd05rjAOQrQBmVnN2xHGCEbCn9ZteiVx
-        e23aKzdHciZNtRKBCUdNYX4e0RF1Xz0=
-X-Google-Smtp-Source: AKy350b28e8397XDLxUDPvgzcLoHXJuAR0lyQpQggIcf+Pbi6+kbOKnBHYLmBCD7O3g1gcZtPfGgwA==
-X-Received: by 2002:a05:6870:e993:b0:17a:a1fe:736a with SMTP id r19-20020a056870e99300b0017aa1fe736amr768669oao.54.1680574106779;
-        Mon, 03 Apr 2023 19:08:26 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id tw16-20020a056871491000b0017ae909afe8sm4244534oab.34.2023.04.03.19.08.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 19:08:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 3 Apr 2023 19:08:24 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 6.3-rc5
-Message-ID: <f78f2735-b533-4912-8cbf-0f545ce23fcf@roeck-us.net>
-References: <CAHk-=wi92YtfjcczOm20_mYkWZwKKjn+dCcrx8BL9n9f55MY5g@mail.gmail.com>
+        Mon, 3 Apr 2023 22:12:18 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF22211B;
+        Mon,  3 Apr 2023 19:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680574320; x=1712110320;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TDGMjXEoOdfdpc8A+QvPYHDfLyIq7uSVZktWfPFiqD8=;
+  b=bWrXh4bZ4EDJuTt+64E8ouMUc3RY3Sg8YXg6ClLmwWDXqWm4+gqqjL3b
+   qB95Q5+AMN11ZyBDy9t9jCTRzxlt/WqqWWdKo5LWr1fWPcCG0TEsnG6BO
+   1W/FQjv6pmaqZBed6nVNtptfUSLRUKlQJJpsRSSEm8DFkYO8HA0emu381
+   vin9tOGg2sgIHsmjnLGRxYfBHePCTtKY4+fPLIjlEd/fyB22LD9eWJBvA
+   QcB5ACjpKEGSAzomFltVV7EzBahfN4Srv1qijURIt/ZxoELXbKxsZqDhN
+   eCaLalqy1WUKPmcYCF+cszbsXWaEhsoC9debvP93MieN/CoEE1sVGZ8Hx
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="326085972"
+X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
+   d="scan'208";a="326085972"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 19:11:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="686188904"
+X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
+   d="scan'208";a="686188904"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 03 Apr 2023 19:11:53 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pjW9I-000P2K-2P;
+        Tue, 04 Apr 2023 02:11:52 +0000
+Date:   Tue, 4 Apr 2023 10:10:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        netdev@vger.kernel.org, Dmitry Safonov <dima@arista.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dan Carpenter <error27@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>
+Subject: Re: [PATCH v5 01/21] [draft] net/tcp: Prepare tcp_md5sig_pool for
+ TCP-AO
+Message-ID: <202304040916.I3rkyzLG-lkp@intel.com>
+References: <20230403213420.1576559-2-dima@arista.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wi92YtfjcczOm20_mYkWZwKKjn+dCcrx8BL9n9f55MY5g@mail.gmail.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230403213420.1576559-2-dima@arista.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 02:53:41PM -0700, Linus Torvalds wrote:
-> This release continues to appear very normal and boring, which is just
-> how I like it. The commit count says that we've started calming down
-> right on schedule, and the diffstat looks normal too.
-> 
-> Of course, there may be something nasty still hiding, so you never
-> know, but at least for now we seem to be all set for a normal release
-> in three weeks.  Knock wood.
-> 
+Hi Dmitry,
 
-Finally ...
+kernel test robot noticed the following build warnings:
 
-Build results:
-	total: 153 pass: 153 fail: 0
-Qemu test results:
-	total: 520 pass: 520 fail: 0
+[auto build test WARNING on 7e364e56293bb98cae1b55fd835f5991c4e96e7d]
 
-Guenter
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230404-054020
+base:   7e364e56293bb98cae1b55fd835f5991c4e96e7d
+patch link:    https://lore.kernel.org/r/20230403213420.1576559-2-dima%40arista.com
+patch subject: [PATCH v5 01/21] [draft] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
+config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230404/202304040916.I3rkyzLG-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/94408bb4cf5cbcc772ab4d70eeb73bda183c6124
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230404-054020
+        git checkout 94408bb4cf5cbcc772ab4d70eeb73bda183c6124
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ipv4/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304040916.I3rkyzLG-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/ipv4/tcp_sigpool.c:63:9: warning: comparison of distinct pointer types ('typeof (size) *' (aka 'unsigned int *') and 'typeof (__scratch_size) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           size = max(size, __scratch_size);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +63 net/ipv4/tcp_sigpool.c
+
+    43	
+    44	/*
+    45	 * sigpool_reserve_scratch - re-allocates scratch buffer, slow-path
+    46	 * @size: request size for the scratch/temp buffer
+    47	 */
+    48	static int sigpool_reserve_scratch(size_t size)
+    49	{
+    50		struct scratches_to_free *stf;
+    51		size_t stf_sz = struct_size(stf, scratches, num_possible_cpus());
+    52		int cpu, err = 0;
+    53	
+    54		lockdep_assert_held(&cpool_mutex);
+    55		if (__scratch_size >= size)
+    56			return 0;
+    57	
+    58		stf = kmalloc(stf_sz, GFP_KERNEL);
+    59		if (!stf)
+    60			return -ENOMEM;
+    61		stf->cnt = 0;
+    62	
+  > 63		size = max(size, __scratch_size);
+    64		cpus_read_lock();
+    65		for_each_possible_cpu(cpu) {
+    66			void *scratch, *old_scratch;
+    67	
+    68			scratch = kmalloc_node(size, GFP_KERNEL, cpu_to_node(cpu));
+    69			if (!scratch) {
+    70				err = -ENOMEM;
+    71				break;
+    72			}
+    73	
+    74			old_scratch = rcu_replace_pointer(per_cpu(sigpool_scratch, cpu), scratch, lockdep_is_held(&cpool_mutex));
+    75			if (!cpu_online(cpu) || !old_scratch) {
+    76				kfree(old_scratch);
+    77				continue;
+    78			}
+    79			stf->scratches[stf->cnt++] = old_scratch;
+    80		}
+    81		cpus_read_unlock();
+    82		if (!err)
+    83			__scratch_size = size;
+    84	
+    85		call_rcu(&stf->rcu, free_old_scratches);
+    86		return err;
+    87	}
+    88	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
