@@ -2,125 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C799E6D6CD2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE47E6D6CD4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236213AbjDDTBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 15:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
+        id S236242AbjDDTCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 15:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236123AbjDDTB0 (ORCPT
+        with ESMTP id S236237AbjDDTCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 15:01:26 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854D0421F
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:01:24 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id t10so134516018edd.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 12:01:24 -0700 (PDT)
+        Tue, 4 Apr 2023 15:02:02 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F765FC6
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:01:48 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so17117228wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 12:01:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680634884;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MJfzhfU8C0LMQ39+xZRczmG3MwdDxjd8/cU7F3h/DO0=;
-        b=jYR2XcGOEiEkZeZ07K1e/e/Qf0RznZdzsoqGXWio0xrONB7hm7CO6Tsyfpz3VNooVQ
-         T8PV4pSSMnefFFRXlDbxPEkt1sCBFsyHsRKkbatLPL3K55IqxXx3pGDYwmdL/B4K0I96
-         7F4XgmZOOVsugw0ci+LNfITqtOZ+SylE/x22EB59PNn43ubCun+ceSFWsNvsGMStN6cc
-         GMYAMnv74zEKpvW2jQrGglVIel6pFlz/OjKMdjicd6+IwBY16R1/KXnYykHjgVDj28QW
-         3nTYb6cc1QplLsxheS6Jswy3N2afIIMR/So/455tDqFBZtv9c+ZrPhNI3RFLNMLo9Y65
-         P07w==
+        d=linaro.org; s=google; t=1680634907;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fbI9ejTl1eZYxaGJfUEutb0biNta2syA7d62jWYBjRE=;
+        b=HV+GSPgiJ+XLpeKDinv/5bUYZq9if67MO8wKf1iCun1/fkP6PVTGOwfbAyI33QkS46
+         tqfy1tzlHhwS/R5bkf2tyhDgaNNHgSFMqQaaENBurZNWDxsSCtbzj40vWWfg3O9Mc7Yo
+         wZw6ZrtvHzgvSxt2d3dWN3WJDfzuy6PkjVJg9VNVBz6ny4jrQ/wyHET/SBjQApqYXUCF
+         GrFrZ+yabwxuTwKxQ6HUslbelS0rH6SAMpeuzCKDaUNOI0m8g/hBcvX+Pqm6veEedERs
+         cW6JEftPmVk84qX+p2/APjrBltwmyDzg+SZoX2o8R032paKHAPsJJSj5CVjCN/4d/2Q8
+         jiAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680634884;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MJfzhfU8C0LMQ39+xZRczmG3MwdDxjd8/cU7F3h/DO0=;
-        b=OyArRa2Chbmenr4CBd9s0LEvwRlhztxgExDYFhCwTnYDN/IfOaQ+BFt2o7n0wD4WU3
-         dkh6R/x1Cl+c90aYLLwyYCZad+zajNw83OLDWfTDN7z7kWEwcyUtCY7Wx+b1lnjoVgzp
-         tC/jDdu5joNv5kiGVizXjrQbdVHItq4p0czUtuBy6My/K/CZOw6vLIBYa7042HjLfXuk
-         X8juqMDr4WNDCXgAM8QmltsozM14OhpCf4k0+cOiQ9mI1txg4R4hjn6HWajnS72M2Vrn
-         Ja9BavfaoqtxAbU+KZidob0cEV/rPWo2Ukj8vy4wMKd4oiiEaABNyxhflj+QiJNinDPo
-         n5eg==
-X-Gm-Message-State: AAQBX9dtICcwYawjiKrBk3f4ox6X2Bz/L+LZTsDzn7/EMkqH7kMbklHH
-        4EJ5ORzoTpQAWuWUJq74ORk2BA==
-X-Google-Smtp-Source: AKy350acHNH4A4LEG3R+ql8VXDXLwRtEb9G1ykKetLMqq9tM4ME2+7+RzIaR442wiKJUZcJlfBlKcw==
-X-Received: by 2002:a17:906:430a:b0:914:4277:f3e1 with SMTP id j10-20020a170906430a00b009144277f3e1mr585067ejm.53.1680634883969;
-        Tue, 04 Apr 2023 12:01:23 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:7467:56f4:40b7:cba8])
-        by smtp.gmail.com with ESMTPSA id dx21-20020a170906a85500b008d044ede804sm6257079ejb.163.2023.04.04.12.01.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 12:01:23 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        Yuti Amonkar <yamonkar@cadence.com>, Abraham I <kishon@ti.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5/5] dt-bindings: phy: ti,phy-j721e-wiz: document clock-output-names
-Date:   Tue,  4 Apr 2023 21:01:15 +0200
-Message-Id: <20230404190115.546973-5-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230404190115.546973-1-krzysztof.kozlowski@linaro.org>
-References: <20230404190115.546973-1-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20210112; t=1680634907;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fbI9ejTl1eZYxaGJfUEutb0biNta2syA7d62jWYBjRE=;
+        b=mQKWLRbyF4Ox7Ihg88PuZl2H1NX1LGmKyhg6gnpuA7//3jy8RYdATNi50XJcYy/Ijn
+         AJfGJ1taEfRU0kn4uBLak11cs17vjGWjqHyCShVE6sA0X8WIXETXUoYJ3ohPuuJOpPe8
+         AO5eSuWQFZsKpPAMPUBHo5F96CgfxLl2EU6JGSY0B/DyKvwQaoJjRsu+2Sm2z3aPWZ2x
+         QoYEs8AAJ5kdk903vQOd7ehCBi+gFDg386pXWq8D+V/kki8/yk9+AJvjEMy7yIucdf8P
+         kGrECAjPdRRzaiuc+0UOtSShAXR8u0k6tIMpby05V6UAYwrM+XL6vzN+7nReuHq2euJ7
+         NjNA==
+X-Gm-Message-State: AAQBX9dZIEjo8LtFuL4WG1gXiRUOXcq5YBFfb37IKZnj48JDhSxVRXcE
+        xAHrN91J3KK9B0YK+JjfJWHGXQ==
+X-Google-Smtp-Source: AKy350bIBHo+2GObY+lCT16x4sLljqr+6Bs5zWCJLlFAY4jIr82PanFEsL5h/KuLUXmXd52Kzb4TAA==
+X-Received: by 2002:a1c:f617:0:b0:3ee:672d:caae with SMTP id w23-20020a1cf617000000b003ee672dcaaemr2888889wmc.36.1680634906665;
+        Tue, 04 Apr 2023 12:01:46 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:abb6:73c6:c885:345d? ([2a05:6e02:1041:c10:abb6:73c6:c885:345d])
+        by smtp.googlemail.com with ESMTPSA id bh23-20020a05600c3d1700b003ee9c8cc631sm22794789wmb.23.2023.04.04.12.01.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 12:01:46 -0700 (PDT)
+Message-ID: <a7cf78b9-84f3-a10a-d192-8f45565d85c9@linaro.org>
+Date:   Tue, 4 Apr 2023 21:01:45 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 09/11] thermal/core: Add a linked device parameter
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     amitk@kernel.org, "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, rui.zhang@intel.com
+References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
+ <20230307133735.90772-10-daniel.lezcano@linaro.org>
+ <CAJZ5v0hW1B7XmU16PHRE2B6z2e-qs=X8m4v8qb--MUttiPuGqw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0hW1B7XmU16PHRE2B6z2e-qs=X8m4v8qb--MUttiPuGqw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the clock-output-names property of clock children, even though
-the nodes are actually deprecated, to fix dtbs_check warnings like:
+On 27/03/2023 18:16, Rafael J. Wysocki wrote:
+> On Tue, Mar 7, 2023 at 2:38 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> Some drivers want to create a link from the thermal zone to the device
+>> sysfs entry and vice versa.
+> 
+> Which device is this, exactly?
 
-  k3-j7200-common-proc-board.dtb: wiz@5060000: refclk-dig: 'clock-output-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+ls -alh /sys/bus/acpi/drivers/thermal/LNXTHERM:00/
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/phy/ti,phy-j721e-wiz.yaml        | 9 +++++++++
- 1 file changed, 9 insertions(+)
+[ ... ]
 
-diff --git a/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml b/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml
-index 4f3841e6a307..651f23580930 100644
---- a/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml
-+++ b/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml
-@@ -89,6 +89,9 @@ properties:
-       "#clock-cells":
-         const: 0
- 
-+      clock-output-names:
-+        maxItems: 1
-+
-       assigned-clocks:
-         maxItems: 1
- 
-@@ -122,6 +125,9 @@ patternProperties:
-       "#clock-cells":
-         const: 0
- 
-+      clock-output-names:
-+        maxItems: 1
-+
-       assigned-clocks:
-         maxItems: 1
- 
-@@ -150,6 +156,9 @@ patternProperties:
-       "#clock-cells":
-         const: 0
- 
-+      clock-output-names:
-+        maxItems: 1
-+
-     required:
-       - clocks
-       - "#clock-cells"
+lrwxrwxrwx    1         0 thermal_zone -> 
+../../../virtual/thermal/thermal_zone0
+
+[ ... ]
+
+The ACPI driver is the only one doing this AFAICT.
+
+
+>> That is the case of the APCI driver.
+>>
+>> Having a backpointer from the device to the thermal zone sounds akward
+>> as we can have the same device instantiating multiple thermal zones so
+>> there will be a conflict while creating the second link with the same
+>> name. Moreover, the userspace has enough information to build the
+>> dependency from the thermal zone device link without having this cyclic
+>> link from the device to thermal zone.
+>>
+>> Anyway, everything in its time.
+>>
+>> This change allows to create a these cyclic links tz <-> device as
+>> ACPI does and will allow to remove the code in the ACPI driver.
+> 
+> Well, I'd rather have it in the driver than in the core TBH.
+> 
+> If ACPI is the only user of this, let it do the dirty thing by itself.
+> 
+> There are two cases which would justify making this change:
+> 1. There will be more users of it going forward (seems unlikely from
+> the description).
+> 2. It gets in the way of some other changes somehow.
+> 
+> I kind of expect 2. to be the case, so how does it get in the way?
+
+Shall we do the same approach than 'Menlow' and add an option to remove 
+the thermal zone link in the acpi sysfs directory ?
+
+
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
