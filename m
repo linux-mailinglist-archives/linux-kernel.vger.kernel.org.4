@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA1A6D58F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1558E6D58E2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbjDDGwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 02:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
+        id S233456AbjDDGqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 02:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233363AbjDDGv6 (ORCPT
+        with ESMTP id S229693AbjDDGqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 02:51:58 -0400
-X-Greylist: delayed 180 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Apr 2023 23:51:55 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05772108;
-        Mon,  3 Apr 2023 23:51:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1680590739; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=F89UqXw7WQn5f+4lcR2kONlzODLlzIfwJy7Zz04RpohPSVehsbbMgZEJPSg3oqyylu
-    LlTMaa1hBjLS0Lgw9LAZnGz/jTCqdhzQ00WGJYdqdUAKi/6Gn1UZHs89ZvBjtgxKcXsv
-    vMF1xHK5gWANuy0nXxbmNKJ5GhaYhQKxmNh2fTnllCTxMP2w55/iK8UgrkbmBu4W7f/s
-    +K2LyH61OmtidXx2GGPbCwarLIsAzwLzaTsSJbzO/xUJlUCN4yxIrWNMj+jZCUQjp3oA
-    uQv8lYccEutrxumGl38oHzIfRJGzdtvNLKT1kQHFHND3EK6T4wZwN4glTJ8E6bL7buu1
-    aJjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1680590739;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=6ijxY7T4sM5SU91yAlbdXDryqtdhQfY77OxVU0pdxxg=;
-    b=eg57EhLvN99tk12f3bD6q6IFtqtKeEJVLZJStXhf/c0ek3tdTdqlwuLQc+VxhRsA1G
-    1a2j1FOM4Hgd8VKe1M8RDyJ8BDxVhcCMVj+OozlrhnHnAM2Zx8NDeUJNZKYavqJACo4b
-    OVzYp46HAWMHWv/TWgRZPZ1+4OGaEYo9KB8y29rh6IT3i+GIm71TcqRviFnOMnZnYwHY
-    bmv2hty8f0WBwxGRu8LFtVYMO1IvPTNKeBQT5biZh+8GG43vIXYj/mfxKOBfhH7Karn+
-    kbUCBjcOpe59mOtLj3BikDPz+qElEXk33OTxYevJU/Bw421sq2Z1LrWNkz00owAIIxWA
-    jGMw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1680590739;
-    s=strato-dkim-0002; d=aepfle.de;
-    h=References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=6ijxY7T4sM5SU91yAlbdXDryqtdhQfY77OxVU0pdxxg=;
-    b=c3ngVn4/aX+uKOsb7OtrvlluqoyrtRuaGsCG0sZd5jhxIDm3FxPRN0GcrbadYIE/jm
-    IoNcAbjuk44fdRBMqc+1cAp58mb0zBTMrYuwqEcI558GEEsofxgaxaBvd37Zco8ACPbx
-    xzNJCa50aJ9EcdmyffFWRLK30uPSJV6cmKqubtF7bLYIuexmV5+hG8i0Yp9BegrYN2NN
-    hSGSNOy2U6lCm1eBeW7YQ76OP9UxLj7rdC5OaYU8xZrWi5rF+rKWVx5ZuF0LWiD7ZKe3
-    XjRyVO2lq5QvI/YkNPNjHLx6ljeu17K59eBMd/W/DXiTYMv4iYMPLQLjdpXF0Tb5yf9L
-    iSYA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1680590739;
-    s=strato-dkim-0003; d=aepfle.de;
-    h=References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=6ijxY7T4sM5SU91yAlbdXDryqtdhQfY77OxVU0pdxxg=;
-    b=P7q6CRlfbfuPOWxSSptAomak804v3w43nTbCKWtzxe99UK6fWWouIZ0cSelinU4Rd2
-    pgfFyc4N9h16VUFBc0Dw==
-X-RZG-AUTH: ":P2EQZWCpfu+qG7CngxMFH1J+3q8wa/QLpd5ylWvMDX3y/OuD5rXVisR5AEWIPBvsPI52f2TnxTwFPmhSWhc+9ByBCFU+BA=="
-Received: from sender
-    by smtp.strato.de (RZmta 49.4.0 AUTH)
-    with ESMTPSA id x6987cz346jd1uM
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 4 Apr 2023 08:45:39 +0200 (CEST)
-Date:   Tue, 4 Apr 2023 08:45:30 +0200
-From:   Olaf Hering <olaf@aepfle.de>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mikelley@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
-        haiyangz@microsoft.com, decui@microsoft.com
-Subject: Re: [PATCH] Drivers: hv: Use nested hypercall for post message and
- signal event
-Message-ID: <20230404084530.2b9ca791.olaf@aepfle.de>
-In-Reply-To: <1680564178-31023-1-git-send-email-nunodasneves@linux.microsoft.com>
-References: <1680564178-31023-1-git-send-email-nunodasneves@linux.microsoft.com>
-X-Mailer: Claws Mail 20220819T065813.516423bc hat ein Softwareproblem, kann man nichts machen.
+        Tue, 4 Apr 2023 02:46:43 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B541BD2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:46:42 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id ek18so126402570edb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 23:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680590800;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s4wpR6cNIQTvfB1y29ZH5QI3kXm7zB6AepahRK+63rE=;
+        b=khwNPCkNrTb762NkLnpHGVzJhZ5WIWF+EOnsbBkt0KrE4zdGipdWW2N11ieQlQbMSe
+         E2W9Ss8tXC6cpzLZZT0u6oO7pF8kWWcAOgU9pHx8QdnCFcof3rNRbF9OptxFHfe5NN4l
+         Z/YvIroVraQD+XGuOG/Ct5g7XLLPBygDey3lq+gsT99ReTJVW+G/dewsL9He7pPCUjQG
+         k0E9K5xkRX1YqY7QAq9sjUy7WZuGGb1KhZgAexgmrLB/4vlgEuE0+z/ibwQ7LHR0dVek
+         2Yln6f2ySUBep5iWqugj8zhYt4j2RuDUiAgBPpqg/EP/i+Mla5pPm0Rsmk3Ek0oEOUH9
+         IbRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680590800;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s4wpR6cNIQTvfB1y29ZH5QI3kXm7zB6AepahRK+63rE=;
+        b=sEOtn6QRzcjj0MOzG46gWNagYAjj1LsbxdTMiYpmt3gjjyOfHMJRutr1dEWF+mYrDk
+         CP4oSD0Ko9HkvZjT7/6kV0ThBM0KnXxXzwAit9LwhViw5hNvYIeNoAZDPsXGQeFfC86V
+         ALYpkTqQXbAFLN5gpqaYKCVBbiHxOal0nuMC4q4fJUmsIUegVHUJGp9GtqjqJ2GsuFoG
+         SJlwaHaICH16/hgCdb7DTgE6/9W6C+TfjNmzjuZ3Tumta9w3JIWzHf9EROjehhS4xOr4
+         e3J6nbFJig8sdwnwAdKVKRldNHv4LWmkFlwoRU/bcuihwhbLgg6fk9a4OTkoD97gW3ue
+         JBKA==
+X-Gm-Message-State: AAQBX9dtQ3wqQuLGJPe2yAYKfRxjseIvEROHmYF8czeJ48s1f9mbZAvA
+        fZ3LNDDfnZejp8GVYvHu0AJC8g==
+X-Google-Smtp-Source: AKy350Y+t97vUdhS2WCc0Ni0IdloS9ZcFUGjiehqd+Cpuheu/4+0knXZYh9CGX1+xLnOu+l5/Bf2DQ==
+X-Received: by 2002:a17:906:235b:b0:932:c1e2:9983 with SMTP id m27-20020a170906235b00b00932c1e29983mr1420766eja.15.1680590800622;
+        Mon, 03 Apr 2023 23:46:40 -0700 (PDT)
+Received: from 1.. ([79.115.63.91])
+        by smtp.gmail.com with ESMTPSA id h12-20020a1709063c0c00b00947eafc76fbsm4488311ejg.144.2023.04.03.23.46.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 23:46:40 -0700 (PDT)
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     michael@walle.cc, pratyush@kernel.org,
+        Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc:     miquel.raynal@bootlin.com, richard@nod.at,
+        Takahiro.Kuwano@infineon.com, bacem.daassi@infineon.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 00/10] mtd: spi-nor: Address mode discovery (BFPT method & current address mode)
+Date:   Tue,  4 Apr 2023 09:46:34 +0300
+Message-Id: <168059071209.13361.9220222408280662768.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230331074606.3559258-1-tudor.ambarus@linaro.org>
+References: <20230331074606.3559258-1-tudor.ambarus@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MYRDLMDGnPR8M7CE41RN5it";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2265; i=tudor.ambarus@linaro.org; h=from:subject:message-id; bh=OcC9/K8lIgvhLa3FaB7YCnUSc/5yNfT0lL/dHR4H3l8=; b=owEBbQGS/pANAwAKAUtVT0eljRTpAcsmYgBkK8fIasVkDyCV8ikOl65YC4X+oI59U43+u/+vC xWiYTQ2rYeJATMEAAEKAB0WIQQdQirKzw7IbV4d/t9LVU9HpY0U6QUCZCvHyAAKCRBLVU9HpY0U 6Ut/B/9VlseaqQ12Q5Jfmuz95bqFwVFevcGGF6fCpq067twYUPxyOj92IXqZgxpGe2LQPgXEuJx phpQpArsUWCE5hB6FslxatZIwB6N5Ju4+03RlrEAuBLp44iObzLFJlBsy7P4g99L2nhR3jOdwMV MPbtcccGfS20MiMFYZMfjwxRTIaWHK+TQhnzgHA48CmaNl6o6NKelGTxmZBx9ymnvH3vjBdTm0A ne3LGLVzT9vqbtMxzJT4GxHl0IEcGvoc0Mjihev8yw/Kc3QzG7lxEOs2TjnIdlha03+lqFsaN14 30CDzeuDhYDAPEs7R2TxFjbh7ac9b86qrzowOKlTKw61oP8N
+X-Developer-Key: i=tudor.ambarus@linaro.org; a=openpgp; fpr=280B06FD4CAAD2980C46DDDF4DB1B079AD29CF3D
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,43 +76,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/MYRDLMDGnPR8M7CE41RN5it
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, 31 Mar 2023 07:45:56 +0000, Tudor Ambarus wrote:
+> This is a new version of the following patch sets:
+> https://lore.kernel.org/linux-mtd/20220411125346.118274-1-tudor.ambarus@microchip.com/
+> https://lore.kernel.org/linux-mtd/20230315034004.5535-1-Takahiro.Kuwano@infineon.com/
+> 
+> Changes in v5:
+> - squash 6/11 and 7/11 to have a single point of failure in case
+>   regressions are determnined by bisecting. Update commit message.
+> - get rif of the now empty winbond_nor_default_init()
+> - s/sfdp_bits_set/SFDP_MASK_CHECK
+> - set micron-st's static spi_nor_set_4byte_addr_mode_wren_en4b_ex4 only
+>   when the 4byte addr mode method is not determined at BFPT parsing time
+> - reverse xmas tree for local variables in
+>   cypress_nor_set_addr_mode_nbytes.
+> 
+> [...]
 
-Mon,  3 Apr 2023 16:22:58 -0700 Nuno Das Neves <nunodasneves@linux.microsof=
-t.com>:
+Applied to git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git,
+spi-nor/next branch. Thanks!
 
-> Only relevant for x86; nested functionality is not available in ARM64.
+[01/10] mtd: spi-nor: core: Move generic method to core - micron_st_nor_set_4byte_addr_mode
+        https://git.kernel.org/mtd/c/076aa4eac8b3
+[02/10] mtd: spi-nor: core: Update name and description of micron_st_nor_set_4byte_addr_mode
+        https://git.kernel.org/mtd/c/288df4378319
+[03/10] mtd: spi-nor: core: Update name and description of spansion_set_4byte_addr_mode
+        https://git.kernel.org/mtd/c/f1f1976224f3
+[04/10] mtd: spi-nor: core: Update name and description of spi_nor_set_4byte_addr_mode
+        https://git.kernel.org/mtd/c/d75c22f376f6
+[05/10] mtd: spi-nor: core: Make spi_nor_set_4byte_addr_mode_brwr public
+        https://git.kernel.org/mtd/c/3a4d5f4af9e6
+[06/10] mtd: spi-nor: Set the 4-Byte Address Mode method based on SFDP data
+        https://git.kernel.org/mtd/c/4e53ab0c292d
+[07/10] mtd: spi-nor: Stop exporting spi_nor_restore()
+        https://git.kernel.org/mtd/c/7fe1b00d92ea
+[08/10] mtd: spi-nor: core: Update flash's current address mode when changing address mode
+        https://git.kernel.org/mtd/c/37513c56139b
+[09/10] mtd: spi-nor: core: Introduce spi_nor_set_4byte_addr_mode()
+        https://git.kernel.org/mtd/c/b6094ac83dd4
+[10/10] mtd: spi-nor: spansion: Determine current address mode
+        https://git.kernel.org/mtd/c/c87c9b11c53c
 
-> +#if defined(CONFIG_X86_64)
-> +	else if (hv_nested)
-
-Should there be a hv_nested in the ARM64 code path?
-Looks like c4bdf94f97c86 provided such thing, so the Kconfig conditional co=
-uld be removed.
-
-Olaf
-
---Sig_/MYRDLMDGnPR8M7CE41RN5it
-Content-Type: application/pgp-signature
-Content-Description: Digitale Signatur von OpenPGP
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE97o7Um30LT3B+5b/86SN7mm1DoAFAmQrx4oACgkQ86SN7mm1
-DoBRkQ/+JkI9dSELwuWH7eBkZ4o9RwqE9rtOvmbywx7LVL4MwyAgoTRV7XS2J7yE
-NFrqZTzpWZX02vnKujglHRizuIC7rJTx7CDFFzRIAcUc+YyRiaKHiEdUqv5321ws
-daH4d5MDSImwy8bsnzrNmupsxpfSPVwCmHBou7+rwJKQR/PPBzj6MS9MGzA6aKgj
-m0cX8MuMKnJCor0wHaCb3nUYwNdU9ezQE8TXGObars/2qB3xCtJQ9IJfbmBjFK70
-hilmET7LIsXOl3ma2aAcTKd3XR59tC6gxFYunqMS0TF0wAEBnjjsnD7xk8teyZJi
-4PMZOtAARTNBj5KG1ejmYIgq8Q8nOb478yFb+ibsRPeR2QqwM05CldQ8KKjSooOK
-0cphRYVl7JJAUCvDlb0sxD+YkokxQr+snIMrBS/MLFlBUU+SNRJFirX9QtRDagoH
-vJ0Nre0RYiPHPENRGquBieRZhJZf6xcN8hg1/uIpOUcpXSHP6bWnd8B1wXHDhx4y
-96558prfkYTMtC7OAUY1Td7tON4TrsEnOlpXhZM/i/nEiZfmqJk+M/BXqb/VgrlM
-3imyM/2UjOo2B7TwWf8OFe1VfIeH+aMVz/DMzl/OAon1vtnIRXvwxowY3aBQ2miG
-YyrQTYhdTa1WLxLK1vCTRF4Ma7b+ztop6ypVE3Geocbcnpdb980=
-=AoNI
------END PGP SIGNATURE-----
-
---Sig_/MYRDLMDGnPR8M7CE41RN5it--
+Cheers,
+-- 
+Tudor Ambarus <tudor.ambarus@linaro.org>
