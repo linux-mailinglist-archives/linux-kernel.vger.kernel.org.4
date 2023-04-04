@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DEA6D6AEC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401F56D6AEA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235772AbjDDRwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235654AbjDDRwS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S235589AbjDDRwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 4 Apr 2023 13:52:18 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C28F3AAA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:52:14 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-17fcc07d6c4so21449643fac.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:52:14 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235382AbjDDRwP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Apr 2023 13:52:15 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176F82D61
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:52:12 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id h11so36405253lfu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:52:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680630733;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yNm7ut5xw3YZveb3bi0ZcN2eShh+vdiK3vTRJbWEvZA=;
-        b=h2tJpzO+g3ZA7Mm7KbV9GPDwwOmXm1vnpvbntR367mW0dQav+pdZcj+f50RJIi6beM
-         tVxQJoFUESXI9XyuMrhwrLaOBoK0n+pJvu+rtplmt2eErJQNf032DN6A4hI9pGU7nOqV
-         rA4QUKDX2VY4sFlKjFptHf+4iiEDFyv7prc6Q5h2TOLHRM3Q7b77VNFimBQ+9XvOveN1
-         DzO6yQYD9660QaKaDSCGQc7rJrxfjCPklNv041UJdiHriaz9/nvtuSsG5es7QrCwbPOP
-         cHsKzjlv8Og+hpT6y5ROIw53CeSSVBe8AverjDtAy1Hc7sxC/vZQE8D2m+d8fvdnbtuF
-         cmVA==
+        d=linaro.org; s=google; t=1680630730;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IrQ9Nk/ZqyT6PCBf5HyzrcvGRnNXSx6wEgKVrWsu1Ww=;
+        b=gryqHmNGVwdHcrupS+brUu78qIBxYUYs6tcxtpAJ5KJhB465EyC79ukjwZGMdR0uv3
+         wDE+owTqx8cu/iO1u/E9scdJAVcy26TBfYuXdeqPXJo23dXfPXXUBNqRD08bODIk2pF6
+         xsSHZW+kxwoiRRefP7TySqeEKmF/BYFyU1iTj7KRo5slDUAySfC0SjSxAO2vC08xwe/t
+         qjZ8RJi7L93v3rFgkxK4xCMDt641++armwBXRQoV6FAtVPhuFOu0G0NhBKv8s6FOsmEv
+         7GRnfLSR3xQLqIdTZCofvFSh3LrBeFDZE2v65KP5y8ocpP1J7RwAKrZBICdLlY9UFAsn
+         b/Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680630733;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yNm7ut5xw3YZveb3bi0ZcN2eShh+vdiK3vTRJbWEvZA=;
-        b=q3OcfA5YJh/HsoMCSZ+lDnCh15Ef/7bwrU674GBSp6mrZemv4E+wAAOTPEKApymk0e
-         aZyO85ZehE68043JbY7Di3REhS9AcWNoLmTv5Bz5zSlotPkqnfi9sdcPSYeNSPM6Xc9Y
-         xv/0pXF3KVZsdcrwI6wkHtne424ZmFXIF+UGQ0ZrIaDVYtjeMipIln0L1Zt5j9H3o2/y
-         QkA9jFZAr7fPVT4DBa0in0y+L4xQkWUZQ9gpYos2g663v6EamlAyhxJGsxS80ABzJalB
-         VCHpAQBTrAtjL2MamKQJEUWfZsiIrwA+ueSEZoNzwYM9FMamerWEXLrSbsVw0vAeSe1A
-         PRYw==
-X-Gm-Message-State: AAQBX9cs0NsS0v0b6CfX6SAaWd0Wi0OM0NvZoA5EJbtNedwqYNIAfUH+
-        Mw1ILXpEED4DWiFpxnWi6sGRpzPNjjCr6lEgs1DDSg==
-X-Google-Smtp-Source: AKy350aclrbPOzMya2Gmn5/BEKwLirIrj5w/kNKlHrChJIP3iEcRqHMaSM3SVKUi/0+yDBbwgDgjPwtuU+n5OtrvPAs=
-X-Received: by 2002:a05:6870:57:b0:17e:e396:cce0 with SMTP id
- 23-20020a056870005700b0017ee396cce0mr1672458oaz.9.1680630733248; Tue, 04 Apr
- 2023 10:52:13 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680630730;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IrQ9Nk/ZqyT6PCBf5HyzrcvGRnNXSx6wEgKVrWsu1Ww=;
+        b=TlrpdAYbF7DkiVGCs9IAcRW04qoItPQNamB8qtClKQIwNhzeJKZx9Of2brD/AHxuSV
+         Vi9NGT/+a4fP2HDW8Soy4vA8m2Dosl22G90LT94rc6j0cvdCAuKD7vkdp8YLJRlLzOAr
+         sMF0DpOtywrT2lnS9XuGoo5Om0Xx7YwAUPjU4w18a/hI5w81emlXqLu9F9706fM2YAEF
+         K0eDTJv7PK1bdvObSHx+utdLtXyi9v3SvJVx9v1DAQ8GBxvUpoyonBkadLN8XMzBaLj9
+         HwZ9Z0iA9hEiB6zyM+acNwEgmSljsEY1hUBBWUxZaJm33dcd0WhEkbRPT1wOsPclb4eX
+         C/7A==
+X-Gm-Message-State: AAQBX9e4/d+1+lbQKdcVeYXBKHOWEWUnbKaHnTdgONhnzJTlp2UrSE2g
+        uI1GNvoC23yXtI6gYen+7tzjhBbJMYnmK0GRVBU=
+X-Google-Smtp-Source: AKy350bPKGXIlcrnZI/qixYG1byf7Rly7InMsFsRfB8gb/+aPlSEzEY2IBTwrqlfQ7Yiny/IOPBszQ==
+X-Received: by 2002:ac2:4e49:0:b0:4db:19fb:6a7 with SMTP id f9-20020ac24e49000000b004db19fb06a7mr858515lfr.60.1680630730335;
+        Tue, 04 Apr 2023 10:52:10 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id u14-20020a056512040e00b004dc83d04840sm2417541lfk.79.2023.04.04.10.52.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 10:52:09 -0700 (PDT)
+Message-ID: <955cd520-3881-0c22-d818-13fe9a47e124@linaro.org>
+Date:   Tue, 4 Apr 2023 19:52:08 +0200
 MIME-Version: 1.0
-References: <20230206172340.2639971-1-rananta@google.com> <20230206172340.2639971-8-rananta@google.com>
- <ZCTa5wfVtGScLQEa@linux.dev>
-In-Reply-To: <ZCTa5wfVtGScLQEa@linux.dev>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Tue, 4 Apr 2023 10:52:01 -0700
-Message-ID: <CAJHc60xvSFpUs+o84fR14Rghd6rruBJkCMBtroeCeLDtjJg=gw@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] KVM: arm64: Create a fast stage-2 unmap path
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 01/18] media: venus: hfi_venus: Set
+ venus_sys_idle_indicator to false on V6
+Content-Language: en-US
+To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Marek <jonathan@marek.ca>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
+ <20230228-topic-venus-v1-1-58c2c88384e9@linaro.org>
+ <99eeebc6-69aa-c6ba-139b-92672c299747@linaro.org>
+ <893851c9-c8be-ed7f-ebde-5d90b9313f6d@linaro.org>
+ <48ac4272-0e11-d943-e950-0be8d93fb036@linaro.org>
+ <b7f0c568-72b7-3342-decc-784cd5f68b1a@linaro.org>
+ <1091d8b4-3dd3-427b-2fcb-c3e0d32b0a3b@linaro.org>
+ <aa8db9a1-ac11-acbe-1a05-b60c39989bc1@nexus-software.ie>
+ <28b0eed5-6e80-e424-70bb-ba984fdbc1ac@quicinc.com>
+ <909746ad-a6b9-18d8-cb43-b2460c7181d0@linaro.org>
+ <e93ba74a-ccde-c6bd-4302-8884144d615d@quicinc.com>
+ <bf5e30fa-5014-5585-3b8e-b1a8d2f95549@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <bf5e30fa-5014-5585-3b8e-b1a8d2f95549@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,109 +96,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 5:42=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
-v> wrote:
->
-> On Mon, Feb 06, 2023 at 05:23:40PM +0000, Raghavendra Rao Ananta wrote:
-> > The current implementation of the stage-2 unmap walker
-> > traverses the entire page-table to clear and flush the TLBs
-> > for each entry. This could be very expensive, especially if
-> > the VM is not backed by hugepages. The unmap operation could be
-> > made efficient by disconnecting the table at the very
-> > top (level at which the largest block mapping can be hosted)
-> > and do the rest of the unmapping using free_removed_table().
-> > If the system supports FEAT_TLBIRANGE, flush the entire range
-> > that has been disconnected from the rest of the page-table.
-> >
-> > Suggested-by: Ricardo Koller <ricarkol@google.com>
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > ---
-> >  arch/arm64/kvm/hyp/pgtable.c | 44 ++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 44 insertions(+)
-> >
-> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.=
-c
-> > index 0858d1fa85d6b..af3729d0971f2 100644
-> > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > @@ -1017,6 +1017,49 @@ static int stage2_unmap_walker(const struct kvm_=
-pgtable_visit_ctx *ctx,
-> >       return 0;
-> >  }
-> >
-> > +/*
-> > + * The fast walker executes only if the unmap size is exactly equal to=
- the
-> > + * largest block mapping supported (i.e. at KVM_PGTABLE_MIN_BLOCK_LEVE=
-L),
-> > + * such that the underneath hierarchy at KVM_PGTABLE_MIN_BLOCK_LEVEL c=
-an
-> > + * be disconnected from the rest of the page-table without the need to
-> > + * traverse all the PTEs, at all the levels, and unmap each and every =
-one
-> > + * of them. The disconnected table is freed using free_removed_table()=
-.
-> > + */
-> > +static int fast_stage2_unmap_walker(const struct kvm_pgtable_visit_ctx=
- *ctx,
-> > +                            enum kvm_pgtable_walk_flags visit)
-> > +{
-> > +     struct kvm_pgtable_mm_ops *mm_ops =3D ctx->mm_ops;
-> > +     kvm_pte_t *childp =3D kvm_pte_follow(ctx->old, mm_ops);
-> > +     struct kvm_s2_mmu *mmu =3D ctx->arg;
-> > +
-> > +     if (!kvm_pte_valid(ctx->old) || ctx->level !=3D KVM_PGTABLE_MIN_B=
-LOCK_LEVEL)
-> > +             return 0;
-> > +
-> > +     if (!stage2_try_break_pte(ctx, mmu))
-> > +             return -EAGAIN;
-> > +
-> > +     /*
-> > +      * Gain back a reference for stage2_unmap_walker() to free
-> > +      * this table entry from KVM_PGTABLE_MIN_BLOCK_LEVEL - 1.
-> > +      */
-> > +     mm_ops->get_page(ctx->ptep);
->
-> Doesn't this run the risk of a potential UAF if the refcount was 1 before
-> calling stage2_try_break_pte()? IOW, stage2_try_break_pte() will drop
-> the refcount to 0 on the page before this ever gets called.
->
-> Also, AFAICT this misses the CMOs that are required on systems w/o
-> FEAT_FWB. Without them it is possible that the host will read something
-> other than what was most recently written by the guest if it is using
-> noncacheable memory attributes at stage-1.
->
-> I imagine the actual bottleneck is the DSB required after every
-> CMO/TLBI. Theoretically, the unmap path could be updated to:
->
->  - Perform the appropriate CMOs for every valid leaf entry *without*
->    issuing a DSB.
->
->  - Elide TLBIs entirely that take place in the middle of the walk
->
->  - After the walk completes, dsb(ish) to guarantee that the CMOs have
->    completed and the invalid PTEs are made visible to the hardware
->    walkers. This should be done implicitly by the TLBI implementation
->
->  - Invalidate the [addr, addr + size) range of IPAs
->
-> This would also avoid over-invalidating stage-1 since we blast the
-> entire stage-1 context for every stage-2 invalidation. Thoughts?
->
-Correct me if I'm wrong, but if we invalidate the TLB after the walk
-is complete, don't you think there's a risk of race if the guest can
-hit in the TLB even though the page was unmapped?
 
-Thanks,
-Raghavendra
 
-Raghavendra
-> > +     mm_ops->free_removed_table(childp, ctx->level);
-> > +     return 0;
-> > +}
-> > +
->
-> --
-> Thanks,
-> Oliver
+On 30.03.2023 12:44, Vikash Garodia wrote:
+> On 3/24/2023 2:46 PM, Dikshita Agarwal wrote:
+>>
+>>
+>> On 3/20/2023 8:24 PM, Konrad Dybcio wrote:
+>>> On 2.03.2023 07:39, Dikshita Agarwal wrote:
+>>>> On 2/28/2023 10:23 PM, Bryan O'Donoghue wrote:
+>>>>> On 28/02/2023 15:41, Konrad Dybcio wrote:
+>>>>>>> Can you test it and make sure ?
+>>>>>> As I mentioned in the cover letter, 8250 still seems to work with this
+>>>>>> patchset. I have no idea how one would go about validating the
+>>>>>> functionality enabled through this call.
+>>>>> We offlined about this.
+>>>>>
+>>>>> I think it is correct to say you don't have access to a display to test this on sm8250.
+>>>>>
+>>>>> I do so, I will try this out for you, though I'll wait for your V2 for this series.
+>>>>>
+>>>>> ---
+>>>>> bod
+>>>> Hi Konrad,
+>>>>
+>>>> I understand from your commit text, setting this indicator for AR50L is causing issue with suspend.
+>>>>
+>>>> Ideally it shouldn't cause any such issue. I checked with FW team and got to know that this property is not supported on AR50LT so if you set it there should be some property not supported error.
+>>>>
+>>>> In my opinion it would be good to replace these versions checks with VPU version check you have introduced in your other patch and keep this setting for current targets and not set wherever not needed eg AR50LT.
+>>> So.. I did *something* and I'm no longer getting a jump to EDL.
+>>>
+>>> The *something* being knocking off hfi_core_suspend().
+>>>
+>>> If I send a sys_idle_indicator = true, I get (reformatted for
+>>> better legibility):
+>>>
+>>>
+>>> [    0.576543] qcom-venus 5a00000.video-codec: VenusFW  :
+>>> <VFW_H:HostDr:unkn:--------:-> IMAGE_VARIANT_STRING=PROD
+>>>
+>>> [    0.603818] qcom-venus 5a00000.video-codec: VenusFW  :
+>>> <VFW_H:HostDr:unkn:--------:-> OEM_IMAGE_VERSION_STRING=CRM
+>>>
+>>> [    0.608633] qcom-venus 5a00000.video-codec: VenusFW  :
+>>> <VFW_H:HostDr:unkn:--------:-> BUILD_TIME: Mar 15 2021 04:24:58
+>>>
+>>> [    0.608644] qcom-venus 5a00000.video-codec: VenusFW  :
+>>> <VFW_L:HostDr:unkn:--------:-> Host cmd 0x10005
+>>>
+>>> [    0.608655] qcom-venus 5a00000.video-codec: VenusFW  :
+>>> <VFW_E:HostDr:unkn:--------:-> VenusHostDriver_SetSysProperty(1019): HostDriver:  VenusHostDriver_SetSysProperty unsupport property!
+>>>
+>>> [    0.608667] qcom-venus 5a00000.video-codec: VenusFW  :
+>>> <VFW_E:HostDr:unkn:--------:-> WaitForHWidle(408): VENUS is idle, no HW is running
+>>>
+>>> [    0.650759] qcom-venus 5a00000.video-codec: VenusFW  :
+>>> <VFW_E:HostDr:unkn:--------:-> assert_loop(433):
+>>> FW Assertion - Z:/b/venus_proc/venus/drivers/src/VenusHostDriver.c:1020:5ab9a
+>>
+>> this "unsupported property" error and then the assert from FW is expected on AR50LT if driver sets HFI_PROPERTY_SYS_IDLE_INDICATOR to FW.
+>>
+>> As I mentioned in my other reply, this property doesn't need to be set by driver now, FW internally always enables it.
+>>
+>>> Which then crashes Venus for good (perhaps we're missing a
+>>> handler for such errors that would hard reset the hw), meaning
+>>> trying to access it through ffmpeg will result in it never firing
+>>> any IRQs, so no submitted commands ever complete.
+>>>
+>>> With this information, after uncommenting the hfi_core_suspend
+>>> call and changing:
+>>>
+>>> [1]
+>>> --- hfi_venus.c : venus_suspend_3xx() --
+>>>
+>>> - venus_prepare_power_collapse(hdev, true);
+>>> + venus_prepare_power_collapse(hdev, false);
+>>>
+>>> ----------------------------------------
+>>>
+>>> I was able to test further. Turning the ARM9 core off messes
+>>> with the sys_idle things. Perhaps some power sequencing is
+>>> wrong. The diff I just mentioned comes from the fact that
+>>> AR50L will never ever ever send a PC_PREP_DONE ack, or at
+>>> least downstream never expects it (or any other HFI6XX
+>>> target FWIW) to do so.
+>>>
+>>>
+>>> Now, I also realized the adjacent set_power_control doesn't seem to be used at
+>>> all on msm-4.19 techpack/video. Testing all the possible combinations, I get
+>>> (to make it extra clear, with all the powerdown stuff in place and only diff
+>>> [1] in place atop what I already had before):
+>>>
+>>>
+>>> [set_idle_message] [set_power_control] [result]
+>>> 0 0 - no crash at boot, venus doesn't work ->
+>>>     "Too many packets buffered for output stream 0:1."
+>>>
+>>> 0 1 - no crash at boot, ffmpeg hangs near vdec session init ->
+>>>     jump to EDL shortly after
+>>>
+>>> 1 0 - hang at boot, even before display subsys initializes ->
+>>>     platform totally hangs
+>>>
+>>> 1 1 - same as (1, 0), probably due to sys_idle_indicator being on ->
+>>>     platform totally hangs as well
+>>>
+>>> Perhaps (0, 0) is "good" and things can be worked up from there?
+>>> Can you recheck with the firmware team if this is expected?
+>>
+>> I will check regarding set_power_control(HFI_PROPERTY_SYS_CODEC_POWER_PLANE_CTRL) with FW team and get back.
+>>
+> HFI_PROPERTY_SYS_IDLE_INDICATOR is not supported beyond 8916 (which is versioned as V1 in video driver). This can be dropped.
+> 
+> Since the property is not functionally active, it is upto firmware when they might decide to start error out as unsupported property.
+> 
+> SYS_CODEC_POWER_PLANE_CTRL is supported for AR50/AR50L/IRIS1/2. It is a mandatory HFI to get the required power benefits.
+> 
+> vcodec0 GDSC should be also configured as HW_CTRL while setting POWER_PLANE_CTRL to firmware.
+> 
+Okay that's very good to know. To sum it up, the outcome you would
+expect is (more or less):
+
+- static bool venus_sys_idle_indicator = true;
+
+[...]
+
+- if(IS_V4(hdev->core) || IS_V6(hdev->core))
+-	venus_sys_idle_indicator = true;
+
++ venus_sys_idle_indicator = IS_V1(hdev->core);
+
+
+?
+
+Konrad
+>> Thanks,
+>>
+>> Dikshita
+>>
+>>> Konrad
+>>>> Thanks,
+>>>>
+>>>> Dikshita
+>>>>
