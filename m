@@ -2,129 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F9C6D6417
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 763C76D642B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235589AbjDDNzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
+        id S235565AbjDDN5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235579AbjDDNz2 (ORCPT
+        with ESMTP id S235459AbjDDN4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 09:55:28 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658611990;
-        Tue,  4 Apr 2023 06:55:01 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id o25-20020a9d4119000000b006a11eb19f8eso16171306ote.5;
-        Tue, 04 Apr 2023 06:55:01 -0700 (PDT)
+        Tue, 4 Apr 2023 09:56:33 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5563E44AE
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:55:40 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-544f7c176easo614685987b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 06:55:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680616537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wHkwTuEK0sRBaJKLMcnB+ss8uWVVS2sTLaR7SSh4ZeE=;
+        b=Qq5kv5hhcFuFy0PJtvFX4bmOosaBrR84kqX5KLBFFzUEc6HYu6DcRmucycm+pwLw4z
+         c1uAzgS+6IfRZYHJk5KJGH6BUXWCXHUvONFdF36/iOgG9fJm+Or6v5c3zg4rspaHH3g3
+         HiltUNh0Van26IVMA9fB0iQ/2JU4EmqjOAKnh9wB4GYotEL+CBZNtjApM3/Mvn7TE8jd
+         7annxlm42iGSeOwxHaUKhpp00xjGstfzsDYvTrigHwC9433728mLS/XLnCAvVdN12kQr
+         08QyncQY1xCydyx4nySCZClEtVlnx7zpGvVuhHi5DCP1Pb+uzJy0FxU1zuboEdb75qqE
+         HUcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680616500;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BJEw1H1pkfdI8k8tgnJUG93r+dsLUB9hI2v6VwBw+Ws=;
-        b=DoPgYxT62+Lbzb9yAnxIgEb8Gj9zP+Gh5RhliY4t42KEjJU8J6zlnE7ohwk2bL2FDa
-         SfRIbSOsWUh/3+iTcKIJkjFLpSno9dXuRFuzeQOGZMk2BUX1BsFb/bt4bNcFQRSGpX8d
-         VyRZ0L0a3GNCJcUi7B68nXjTDoiajQofIhJaeHCE4ejQztZj2jG/uCBEJCLK3iD38nNy
-         kqCJS7jIsYw6DBrW63fSeKQOjxcXOOY41DdGy7zcIR2Sd6U5IDNNJa/8um3F3Jz1iktY
-         fMkFPOt7Z3NytpghyBwalHUTsBNmZWUCY8AfMOtDqt2ZARWADNmcMdq1rV4WNNameUNe
-         AJvg==
-X-Gm-Message-State: AAQBX9cl2/DFg3CWd0/GyjFT7cbNOxZQ+Q1ZS2xIxS01WEZCW7gvBvvp
-        2WgG8gTCObl+5MojTw/HEg==
-X-Google-Smtp-Source: AKy350b+cqls0gSn2TeHIm4sRXtpjFeVIsHj7uZEjkZFzNbY1hEuGkXE9PfxqXau8Y9ylqfSGtmm+g==
-X-Received: by 2002:a9d:75cd:0:b0:699:896e:c9e1 with SMTP id c13-20020a9d75cd000000b00699896ec9e1mr1102300otl.34.1680616500607;
-        Tue, 04 Apr 2023 06:55:00 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s18-20020a056830149200b0069faca091acsm5499334otq.54.2023.04.04.06.54.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 06:55:00 -0700 (PDT)
-Received: (nullmailer pid 3797380 invoked by uid 1000);
-        Tue, 04 Apr 2023 13:54:59 -0000
-Date:   Tue, 4 Apr 2023 08:54:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Convert to DT schema
-Message-ID: <20230404135459.GA3793612-robh@kernel.org>
-References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
- <20230403105052.426135-2-cristian.ciocaltea@collabora.com>
- <168052514639.463695.9544022277060710805.robh@kernel.org>
- <dcd79e14-d9df-39c1-5465-4e9d71221659@collabora.com>
- <79396eed-18ab-bcee-5c7e-c3e5e61f32c3@collabora.com>
- <49c226ff-08a3-a7ca-59bd-f0b9cea865e3@collabora.com>
+        d=1e100.net; s=20210112; t=1680616537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wHkwTuEK0sRBaJKLMcnB+ss8uWVVS2sTLaR7SSh4ZeE=;
+        b=yNuZCzSJ29ZWGv5rNWDKLLYAQItmVT3pQ55zy317h50zwQRz8/yHYK4agyLOld1bR1
+         216/rtMSZ9O2+t62kdxxFhRbh0MWEgtkVKBZAjt249UfiOwnhsiyko/l+EHu4fEEzi5N
+         dIG7R5i8apdy3z20EBewZNkd/2s8bWLmn1Ic4dTJHxV8xTH3Tbi/Csqn4p4pmRBfuAHp
+         dkxyR7pvgJRIsff4sZFMW3xfCMPRYTsPWVzPeB6c2ZzPMPgOYL5FOSWcREjwmWjpblC1
+         XtEZF8X1oEfdtuYZyGZ6qshr3D5syPE/o7aDKxMGdqueR0Ch0BW4+4efrGGOK/U1C89F
+         /bFw==
+X-Gm-Message-State: AAQBX9d0lDPDPU39H/YQD3uTDXotpVFO6gn+1wPtAqgQl1ydmPypwOaW
+        eZlB/+OM5vTEeBMxIbeIV3duvVxEQ+B6Pj6SJZAWHw==
+X-Google-Smtp-Source: AKy350YrZFFIvslatnz6+JHLJxRXhURuO0Qe/CqTvhzL+6y/s/8tkJIoSvOoisaRTFct5e3xH8itE5OFyL+d4Sx3qSk=
+X-Received: by 2002:a81:e545:0:b0:545:8202:bbcf with SMTP id
+ c5-20020a81e545000000b005458202bbcfmr1485931ywm.9.1680616536968; Tue, 04 Apr
+ 2023 06:55:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <49c226ff-08a3-a7ca-59bd-f0b9cea865e3@collabora.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230203-evk-board-support-v4-0-5cffe66a38c0@baylibre.com> <20230203-evk-board-support-v4-2-5cffe66a38c0@baylibre.com>
+In-Reply-To: <20230203-evk-board-support-v4-2-5cffe66a38c0@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 4 Apr 2023 15:55:26 +0200
+Message-ID: <CACRpkdYSpMD-V0QNGwtiKCA4KAedYfmFpvdCHWhjST9uTricTg@mail.gmail.com>
+Subject: Re: [PATCH v4 02/11] dt-bindings: pinctrl: mediatek,mt8365-pinctrl:
+ add drive strength property
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 07:22:45PM +0300, Cristian Ciocaltea wrote:
-> On 4/3/23 17:43, AngeloGioacchino Del Regno wrote:
-> > Il 03/04/23 16:32, Cristian Ciocaltea ha scritto:
-> >> On 4/3/23 16:10, Rob Herring wrote:
-> >>>
-> >>> On Mon, 03 Apr 2023 13:50:51 +0300, Cristian Ciocaltea wrote:
-> >>>> Convert the PWM fan bindings to DT schema format.
-> >>>>
-> >>>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> >>>> ---
-> >>>>    .../devicetree/bindings/hwmon/pwm-fan.txt     |  68 +----------
-> >>>>    .../devicetree/bindings/hwmon/pwm-fan.yaml    | 109
-> >>>> ++++++++++++++++++
-> >>>>    2 files changed, 110 insertions(+), 67 deletions(-)
-> >>>>    create mode 100644
-> >>>> Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> >>>>
-> >>>
-> >>> Running 'make dtbs_check' with the schema in this patch gives the
-> >>> following warnings. Consider if they are expected or the schema is
-> >>> incorrect. These may not be new warnings.
-> >>>
-> >>> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> >>> This will change in the future.
-> >>>
-> >>> Full log is available here:
-> >>> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230403105052.426135-2-cristian.ciocaltea@collabora.com
-> >>>
-> >>>
-> >>> pwm-fan: 'cooling-max-state', 'cooling-min-state' do not match any of
-> >>> the regexes: 'pinctrl-[0-9]+'
-> >>>     arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
-> >>>     arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb
-> >>>
-> >>
-> >> The only references to the offending cooling-{min|max}-state are located
-> >> in a few DTS files. Assuming they are obsolete, may I simply drop them?
-> >>
-> > 
-> > If they're obsolete, you can mark them as `deprecated: true` in the
-> > binding, but
-> > dropping them entirely would be an ABI breakage, so no, you can't.
-> 
-> >From the pwm-fan driver point of view, the properties are not supported
-> and I couldn't find any indication that they could have been used in the
-> past.
-> 
-> Hence I'm not sure adding them to the binding is the proper way to
-> handle this issue.
+On Fri, Mar 31, 2023 at 7:55=E2=80=AFPM Alexandre Mergnat <amergnat@baylibr=
+e.com> wrote:
 
-They can be omitted.
+> This SoC is able to drive the following output current:
+> - 2 mA
+> - 4 mA
+> - 6 mA
+> - 8 mA
+> - 10 mA
+> - 12 mA
+> - 14 mA
+> - 16 mA
+>
+> Then drive-strength property is set with enum to reflect its HW capabilit=
+y.
+>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-Rob
+This patch does not apply to my devel branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/lo=
+g/?h=3Ddevel
 
+Can you please rebase and resend?
+
+Yours,
+Linus Walleij
