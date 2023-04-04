@@ -2,197 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AF26D5DFE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E906D5DE8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbjDDKss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 06:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
+        id S234547AbjDDKsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 06:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbjDDKsS (ORCPT
+        with ESMTP id S234514AbjDDKsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 06:48:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5072230C5
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:48:14 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 4 Apr 2023 06:48:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0F91BD7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:48:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 85711660326B;
-        Tue,  4 Apr 2023 11:48:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680605293;
-        bh=+E8hTN3wC4q97x93aXteKC9CVFfI18J5GBPZJYT7VQ0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Efpx2sJ5N9N3X1hL/oznHMWpKTzXWKL+gA3TXF9fED37IxvaVpNVe5nHbegXovHDM
-         7P55UpaxPdbpHkV3cbGNVAP00olpklBSGn1m/ZK1LRAw3mC8pjMYBdha3AI2FjF9Oe
-         F5Vw6aUDUi3DxHRsl/dRugvuEAWhjQrl8JZ4qMSXzXa8BCjBAK3L1Ya0Ug7FzjrYHZ
-         zNA7PWcT4/dCCJc5CrDnGj+B372wlqMbZDDS7encx4SKPnYoZIsi9NqaLXGvi4s7ob
-         9zT3NjbsuSweIkQJTvUJxsyAp4WPnvPEMrkzqczPvLLBmVAP42b5elmYCs3yn/YHAv
-         0F5oSJhBxnxJA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     chunkuang.hu@kernel.org
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        wenst@chromium.org
-Subject: [PATCH v3 9/9] drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
-Date:   Tue,  4 Apr 2023 12:48:00 +0200
-Message-Id: <20230404104800.301150-10-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com>
-References: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3240C63169
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:48:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DD8C433EF;
+        Tue,  4 Apr 2023 10:48:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680605288;
+        bh=5m+oqv+VG4vlFEAz1qs/LGut7wc74gTjeaa4PysObi4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Hc1x1Pbis7mqXeu8Cv9dHaLD4Rj1AXAYEybuq5NAf6ZbBa0dR27od/rXDYDBcJbiD
+         H06f0TQQk0+kRvEmeTjcjFASsw0/RruC/rqZ7i4RpUxsvDZ4TjQGfIPOe/5ECyQaaR
+         lmVUiDD7lFJTMOhJw5gXA6HD5vfWgfYSvEHU8Gc6kQfS7Pn8jX98DJlXS5JK58X75q
+         n43loDc4AOtfEJWydPWV172r9O5ekkCz0yqwOsUCpYKu+etWU3KUmb4hEYfMUbuJuy
+         1J9puP/WIciJ0i4CeIA+0E1jpmw1JW2AtU3SRMzGDsYGvfYoJjQYPL4mb1/YlHHpLG
+         ytbCe1ug+v3hQ==
+Message-ID: <4ffab766-c1ff-e009-f6e4-a602c4a0db79@kernel.org>
+Date:   Tue, 4 Apr 2023 18:48:06 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2] f2fs: remove struct victim_selection default_v_ops
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230404040051.50726-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230404040051.50726-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the eDP case we can support using aux-bus on MediaTek DP: this
-gives us the possibility to declare our panel as generic "panel-edp"
-which will automatically configure the timings and available modes
-via the EDID that we read from it.
+On 2023/4/4 12:00, Yangtao Li wrote:
+> There is only single instance of these ops, and Jaegeuk point out that:
+> 
+>      Originally this was intended to give a chance to provide other
+>      allocation option. Anyway, it seems quit hard to do it anymore.
+> 
+> So remove the indirection and call f2fs_get_victim() directly.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-To do this, move the panel parsing at the end of the probe function
-so that the hardware is initialized beforehand and also initialize
-the DPTX AUX block and power both on as, when we populate the
-aux-bus, the panel driver will trigger an EDID read to perform
-panel detection.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-Last but not least, since now the AUX transfers can happen in the
-separated aux-bus, it was necessary to add an exclusion for the
-cable_plugged_in check in `mtk_dp_aux_transfer()` and the easiest
-way to do this is to simply ignore checking that when the bridge
-type is eDP.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/gpu/drm/mediatek/mtk_dp.c | 61 ++++++++++++++++++++++++++-----
- 1 file changed, 51 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-index a67143c22024..8109f5b4392b 100644
---- a/drivers/gpu/drm/mediatek/mtk_dp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-@@ -4,6 +4,7 @@
-  * Copyright (c) 2022 BayLibre
-  */
- 
-+#include <drm/display/drm_dp_aux_bus.h>
- #include <drm/display/drm_dp.h>
- #include <drm/display/drm_dp_helper.h>
- #include <drm/drm_atomic_helper.h>
-@@ -2042,7 +2043,8 @@ static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
- 
- 	mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
- 
--	if (!mtk_dp->train_info.cable_plugged_in) {
-+	if (mtk_dp->bridge.type != DRM_MODE_CONNECTOR_eDP &&
-+	    !mtk_dp->train_info.cable_plugged_in) {
- 		ret = -EAGAIN;
- 		goto err;
- 	}
-@@ -2154,6 +2156,11 @@ static int mtk_dp_bridge_attach(struct drm_bridge *bridge,
- 	enable_irq(mtk_dp->irq);
- 	mtk_dp_hwirq_enable(mtk_dp, true);
- 
-+	if (mtk_dp->bridge.type == DRM_MODE_CONNECTOR_eDP) {
-+		mtk_dp->train_info.cable_plugged_in = true;
-+		drm_helper_hpd_irq_event(mtk_dp->drm_dev);
-+	}
-+
- 	return 0;
- 
- err_bridge_attach:
-@@ -2483,6 +2490,20 @@ static int mtk_dp_register_audio_driver(struct device *dev)
- 	return PTR_ERR_OR_ZERO(mtk_dp->audio_pdev);
- }
- 
-+static int mtk_dp_edp_link_panel(struct drm_dp_aux *mtk_aux)
-+{
-+	struct mtk_dp *mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
-+	struct device *dev = mtk_aux->dev;
-+	struct drm_bridge *panel_aux_bridge;
-+
-+	panel_aux_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
-+	if (IS_ERR(panel_aux_bridge))
-+		return PTR_ERR(panel_aux_bridge);
-+
-+	mtk_dp->next_bridge = panel_aux_bridge;
-+	return 0;
-+}
-+
- static int mtk_dp_probe(struct platform_device *pdev)
- {
- 	struct mtk_dp *mtk_dp;
-@@ -2501,21 +2522,14 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, mtk_dp->irq,
- 				     "failed to request dp irq resource\n");
- 
--	mtk_dp->next_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
--	if (IS_ERR(mtk_dp->next_bridge) &&
--	    PTR_ERR(mtk_dp->next_bridge) == -ENODEV)
--		mtk_dp->next_bridge = NULL;
--	else if (IS_ERR(mtk_dp->next_bridge))
--		return dev_err_probe(dev, PTR_ERR(mtk_dp->next_bridge),
--				     "Failed to get bridge\n");
--
- 	ret = mtk_dp_dt_parse(mtk_dp, pdev);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to parse dt\n");
- 
--	drm_dp_aux_init(&mtk_dp->aux);
- 	mtk_dp->aux.name = "aux_mtk_dp";
-+	mtk_dp->aux.dev = dev;
- 	mtk_dp->aux.transfer = mtk_dp_aux_transfer;
-+	drm_dp_aux_init(&mtk_dp->aux);
- 
- 	spin_lock_init(&mtk_dp->irq_thread_lock);
- 
-@@ -2571,6 +2585,33 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 	mtk_dp->need_debounce = true;
- 	timer_setup(&mtk_dp->debounce_timer, mtk_dp_debounce_timer, 0);
- 
-+	if (mtk_dp->bridge.type == DRM_MODE_CONNECTOR_eDP) {
-+		/* Initialize, reset and poweron the DPTX AUX block */
-+		mtk_dp_initialize_aux_settings(mtk_dp);
-+		mtk_dp_power_enable(mtk_dp);
-+
-+		/* Power on the panel to allow EDID read from aux-bus */
-+		mtk_dp_aux_panel_poweron(mtk_dp, true);
-+
-+		ret = devm_of_dp_aux_populate_bus(&mtk_dp->aux, NULL);
-+
-+		/* If the panel is present, detection is done: power off! */
-+		mtk_dp_aux_panel_poweron(mtk_dp, false);
-+		mtk_dp_power_disable(mtk_dp);
-+
-+		/* We ignore -ENODEV error, as the panel may not be on aux-bus */
-+		if (ret && ret != -ENODEV)
-+			return ret;
-+
-+		/*
-+		 * Here we don't ignore any error, as if there's no panel to
-+		 * link, eDP is not configured correctly and will be unusable.
-+		 */
-+		ret = mtk_dp_edp_link_panel(&mtk_dp->aux);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 
--- 
-2.40.0
-
+Thanks,
