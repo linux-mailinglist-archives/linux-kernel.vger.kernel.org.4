@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04096D6517
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6B96D6516
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235740AbjDDOUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
+        id S235726AbjDDOUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235646AbjDDOUs (ORCPT
+        with ESMTP id S235778AbjDDOUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:20:48 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56E02704
+        Tue, 4 Apr 2023 10:20:47 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67985EC
         for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:20:46 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id d12-20020a056e020bec00b00325e125fbe5so21269055ilu.12
+Received: by mail-il1-f199.google.com with SMTP id l10-20020a056e0205ca00b00322fdda7261so21258443ils.6
         for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 07:20:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680618046; x=1683210046;
+        d=1e100.net; s=20210112; t=1680618045; x=1683210045;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eMNGtlJZv/4J3QkC2pyZ771io5e3UBz8yYy+eISdalI=;
-        b=HzdpF9BjeB4D1OscqDMiwrv9STYB0XpgKSEP/1Ft4xp15lgqtww5P98FU4htHac1Ej
-         XLT6PR0KHUlW57wAghZyTUT7Bf/pLOOq8cTFv0G16SKqwZItPeRpBWeCwCb2vuUPrW6m
-         OdivRGhAV3GUmh4sWjazFALN+HQPUTwd6IwslcL83EZtiwCMCJzhAF7bGik+C+DlJKS9
-         NTRob6eEQMsr0uMPrWuPIULlKO0Pa/SXeFjkugtp7Han8c62LJ7WRMkI/GgMT7v59ryG
-         Cy2pMbYnhzGjonne6RG6iesquRKibJ2cglPDYfLTxOhHu6bI2bdC1lAixhOCb1HyTwTz
-         b2iQ==
-X-Gm-Message-State: AAQBX9eQMaLd3A8Yx2KLLzRGniycYG5/Mi7xX2qrt371zek8xNvjKLV4
-        daPsgyUEu57k6LYBSOHyqMaM63PIKL3mxW/HtNYtMsgctJHh
-X-Google-Smtp-Source: AKy350a+WL44nLl7X2R0Ry2vo6oea+fMVyYo4ZSOxn5TAfx3lixq7DYBV37bw38GjRlTrpDS2wQW27XIXgwOnFzkuRQ5bR5OF19O
+        bh=/GrvKtmfPcwE6VR9r1v5SQA/UQ6PE7TugBTYzb94svE=;
+        b=EnLmIqLA2+fK18pXuRiNuWDxcPXVYqoUadjgRWN9D7QGv2vf4X1h2/6ta/eSMkHXrn
+         Q5nc6Be2bs60ZFocGv3qYlmUadNxn+U2HPpe30WLZDcCX2Ecfsi9IYfPb9FG1dJ+HjQR
+         JMxIfSWLoqUZ9CHo5/8isCDEm3FKRoudizBJi6off8cRu+tQovHYNg3PCLIcdBEJNOk2
+         aF993IlxxlySooerVbUmMHsj34sWD+cyp7VpO3qD7RjGfAOnVl35YXEgELLBUy5d8G+5
+         VPJc2SD6LTTcjdLgWgia+CDQMT7GuCiFJkp8uvLnwKW+KM07Y7aq+qM2+gjJTaIGAPKx
+         Yn8g==
+X-Gm-Message-State: AAQBX9dZ7FltJvy0Zkd1RwtbCCAIqDNpXjqg3FgH1GuFqg7+0g2egs2e
+        OfUNUIS6V4fHugCkUoF6xz7qBCkvIMtTjbZGIDP2KBMy3dkG
+X-Google-Smtp-Source: AKy350brGpANmJTlt4zwcqUBj3rE8WneyIwtxCiC0oh0HxV4t8CaaY43WIPiE+2OgZJhiPeihCabdLUoykmP595ewiXqkin09CmJ
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:22d2:b0:752:fa5a:6188 with SMTP id
- e18-20020a05660222d200b00752fa5a6188mr1676000ioe.1.1680618045959; Tue, 04 Apr
+X-Received: by 2002:a02:94af:0:b0:3c5:1971:1b7f with SMTP id
+ x44-20020a0294af000000b003c519711b7fmr1465381jah.6.1680618045609; Tue, 04 Apr
  2023 07:20:45 -0700 (PDT)
 Date:   Tue, 04 Apr 2023 07:20:45 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a1f44605f8836188@google.com>
-Subject: [syzbot] Monthly f2fs report
-From:   syzbot <syzbot+listc9c597f02f7166815d68@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+Message-ID: <0000000000009ca21e05f8836105@google.com>
+Subject: [syzbot] Monthly batman report
+From:   syzbot <syzbot+list145669fba4a69e21f102@syzkaller.appspotmail.com>
+To:     a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org,
+        linux-kernel@vger.kernel.org, mareklindner@neomailbox.ch,
+        netdev@vger.kernel.org, sven@narfation.org, sw@simonwunderlich.de,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello f2fs maintainers/developers,
+Hello batman maintainers/developers,
 
-This is a 30-day syzbot report for the f2fs subsystem.
+This is a 30-day syzbot report for the batman subsystem.
 All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/f2fs
+https://syzkaller.appspot.com/upstream/s/batman
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 16 issues are still open and 27 have been fixed so far.
+During the period, 2 new issues were detected and 0 were fixed.
+In total, 8 issues are still open and 19 have been fixed so far.
 
 Some of the still happening issues:
 
 Crashes Repro Title
-77      Yes   INFO: task hung in f2fs_balance_fs
-              https://syzkaller.appspot.com/bug?extid=8b85865808c8908a0d8c
-23      Yes   kernel BUG in f2fs_evict_inode
-              https://syzkaller.appspot.com/bug?extid=e1246909d526a9d470fa
-4       No    BUG: unable to handle kernel NULL pointer dereference in f2fs_release_folio
-              https://syzkaller.appspot.com/bug?extid=00e671c059932a115ea4
+5034    Yes   WARNING: ODEBUG bug in netdev_run_todo
+              https://syzkaller.appspot.com/bug?extid=f9484b345f41843fc9a9
+1367    Yes   WARNING: ODEBUG bug in netdev_freemem (2)
+              https://syzkaller.appspot.com/bug?extid=c4521ac872a4ccc3afec
+115     Yes   INFO: rcu detected stall in batadv_nc_worker (3)
+              https://syzkaller.appspot.com/bug?extid=69904c3b4a09e8fa2e1b
 
 ---
 This report is generated by a bot. It may contain errors.
