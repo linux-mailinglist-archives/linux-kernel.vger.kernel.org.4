@@ -2,44 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551E26D6636
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01296D666F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234757AbjDDO4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
+        id S235142AbjDDO6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbjDDO4O (ORCPT
+        with ESMTP id S235528AbjDDO5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:56:14 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA5E44A3;
-        Tue,  4 Apr 2023 07:56:11 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 14:56:08 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1680620170; bh=YlApgOxHSRUtW1h2korvt3P+FHxY5UML+GHECLjEmkk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hvUlxrG6ljYPKxp8n1yYQWceJ5Kii3GeZHTutHR5uiH533zttHWR9XgPMhDKD7lA2
-         /uz8+kK/+eQ3ppqr4bGKya329IE0JGOfniwkAtwf48c4yj2DFi26rRxg0czKjaRFJK
-         PjGsIRCeOZvVgZJxGujoijvhxJ2b6jYvaLPOv2wI=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Jorge Lopez <jorgealtxwork@gmail.com>, hdegoede@redhat.com,
-        Linux x86 Platform Drivers 
-        <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v7] Introduction-of-HP-BIOSCFG-driver-documentation
-Message-ID: <ee254b4e-579d-4b32-90a4-b28bc10046fe@t-8ch.de>
-References: <20230403211548.6253-1-jorge.lopez2@hp.com>
- <ZCuMkdb6jeL4S8hz@debian.me>
+        Tue, 4 Apr 2023 10:57:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC5E4ED8
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:56:48 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 16:56:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680620205;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b8TGuHfJ8bWdeSdfb+xMIX6BS2iHed0QnwUNOtWlhpU=;
+        b=QFL4XvzjMaJAUgQ/3C7/d/EwXujZflEulBTR8tf/IrGf56+SzYiXhHAyX+B1jI2BMaaoiM
+        Yt70TwYhE/+QDATnxRWnyvvjDOi0f2yhN7WYcEb24vJh0k1JtqOLEjfGExpaTJGVtZtoK0
+        7UL5IZt8onM5ZvBiQaTHL5Vx9OrOHCW3c02t3X2VAOPSGWrgIYp/wHSZpl0dZVBmZ50Iup
+        aVZtHxp09Sz8IGXBRD8FykcHVsJXyAFhs+j96AkmJ7NqH4ldfU4GMMpmZa/cxoT2OezGZk
+        dzYhj37olUYZe/OIdKchIJaUvf7b8IF41B1TAU3G+etQ25ZB9w4yCdunVP17tQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680620205;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b8TGuHfJ8bWdeSdfb+xMIX6BS2iHed0QnwUNOtWlhpU=;
+        b=zfi5DPedHkr7oR3Q2Gg4eOjnLO5Uec9pdk3L9NvLp/Ki3bQ36QGhpyfacbg1PRNQl6MbF5
+        4O8CKFG8B6ej6DCA==
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+cc:     linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>
+Subject: Re: [PATCH v5 16/18] timer: Implement the hierarchical pull model
+In-Reply-To: <20230323142440.GC2512024@hirez.programming.kicks-ass.net>
+Message-ID: <a3338e9d-1637-2fd2-52a1-34768f9e92d8@linutronix.de>
+References: <20230301141744.16063-1-anna-maria@linutronix.de> <20230301141744.16063-17-anna-maria@linutronix.de> <20230323142440.GC2512024@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCuMkdb6jeL4S8hz@debian.me>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,64 +60,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bagas,
+On Thu, 23 Mar 2023, Peter Zijlstra wrote:
 
-On 2023-04-04 09:33:53+0700, Bagas Sanjaya wrote:
-> On Mon, Apr 03, 2023 at 04:15:48PM -0500, Jorge Lopez wrote:
-> > HP BIOS Configuration driver purpose is to provide a driver supporting
-> > the latest sysfs class firmware attributes framework allowing the user
-> > to change BIOS settings and security solutions on HP Inc.’s commercial
-> > notebooks.
-> > 
-> > Many features of HP Commercial notebooks can be managed using Windows
-> > Management Instrumentation (WMI). WMI is an implementation of Web-Based
-> > Enterprise Management (WBEM) that provides a standards-based interface
-> > for changing and monitoring system settings. HP BIOSCFG driver provides
-> > a native Linux solution and the exposed features facilitates the
-> > migration to Linux environments.
-> > 
-> > The Linux security features to be provided in hp-bioscfg driver enables
-> > managing the BIOS settings and security solutions via sysfs, a virtual
-> > filesystem that can be used by user-mode applications. The new 
-> > documentation cover features such Secure Platform Management and Sure 
-> > Start. Each section provides security feature description and identifies 
-> > sysfs directories and files exposed by the driver.
-> > 
-> > Many HP Commercial notebooks include a feature called Secure Platform
-> > Management (SPM), which replaces older password-based BIOS settings
-> > management with public key cryptography. PC secure product management
-> > begins when a target system is provisioned with cryptographic keys
-> > that are used to ensure the integrity of communications between system
-> > management utilities and the BIOS.
-> > 
-> > HP Commercial notebooks have several BIOS settings that control its 
-> > behaviour and capabilities, many of which are related to security. 
-> > To prevent unauthorized changes to these settings, the system can be 
-> > configured to use a cryptographic signature-based authorization string 
-> > that the BIOS will use to verify authorization to modify the setting.
+> On Wed, Mar 01, 2023 at 03:17:42PM +0100, Anna-Maria Behnsen wrote:
 > 
-> If this is single patch, I'd like to write the patch subject as
-> "Documentation: sysfs: document HP-specific firmware attributes".
+> > diff --git a/kernel/time/timer_migration.h b/kernel/time/timer_migration.h
+> > new file mode 100644
+> > index 000000000000..ceb336e705df
+> > --- /dev/null
+> > +++ b/kernel/time/timer_migration.h
+> > @@ -0,0 +1,123 @@
+> > +#ifndef _KERNEL_TIME_MIGRATION_H
+> > +#define _KERNEL_TIME_MIGRATION_H
+> > +
+> > +/* Per group capacity. Must be a power of 2! */
+> > +#define TMIGR_CHILDS_PER_GROUP 8
+> > +
+> > +/**
+> > + * struct tmigr_event - a timer event associated to a CPU
+> > + * @nextevt:	The node to enqueue an event in the parent group queue
+> > + * @cpu:	The CPU to which this event belongs
+> > + * @ignore:	Hint whether the event could be ignored; it is set when
+> > + *		CPU or group is active;
+> > + */
+> > +struct tmigr_event {
+> > +	struct timerqueue_node	nextevt;
+> > +	unsigned int		cpu;
+> > +	int			ignore;
+> > +};
+> > +
+> > +/**
+> > + * struct tmigr_group - timer migration hierarchy group
+> > + * @lock:		Lock protecting the event information
+> > + * @cpus:		Array with CPUs which are member of group; required for
+> > + *			sibling CPUs; used only when level == 0
 > 
-> And also, adjust the patch description accordingly, since as it is
-> written above, it looks like general documentation of HP-specific feature
-> (which should be in actual diff).
+> That's 32 bytes wasted for every group that isn't 0, maybe stick on the
+> end and conditionally allocate? Also, afaict it is only ever used during
+> setup, and as such should not be placed in a hot line, unless you've
+> done that explicitly as padding, in which case it needs a comment to
+> that effect.
 > 
-> > Version 7
-> > 	Includes only sysfs-class-firmware-attributes documentation
+> Also, since it's setup only, why can't you match against:
 > 
-> Where is the rest of patches if this is a series? Had they been merged?
+>   per_cpu_ptr(&tmigr_cpu, cpu)->parent
+> 
+> ?
 
-It was my proposal to focus on the documentation first in a single
-patch.
-So we can nail down the scope and details of the user-facing API without
-Jorge and the reviewers spending time on polishing internals that will
-change anyways.
+This cpus array is currently used to make sure siblings will end up in the
+same level 0 group. When matching against the per_cpu_ptr(&tmigr_cpu,
+cpu)->parent, I would need to rely on the topology mask and have a look if
+the sibling already has a parent.
 
-The code exists and will be submitted with future revisions again.
-You can find v6 with the code here:
-https://lore.kernel.org/all/20230309201022.9502-1-jorge.lopez2@hp.com/
+My question here is: Is it required that siblings end up in the same group
+in level 0, or is it enough if the numa node is the same?
 
-I should have also requested a note to that point with this revision.
+> > + * @parent:		Pointer to parent group
+> > + * @list:		List head that is added to per level tmigr_level_list
+> 
+> Also setup only?
 
-Thomas
+Jupp.
+
+> > + * @level:		Hierarchy level of group
+> > + * @numa_node:		Is set to numa node when level < tmigr_crossnode_level;
+> > + *			otherwise it is set to NUMA_NO_NODE; Required for setup
+> > + *			only
+> > + * @num_childs:		Counter of group childs; Required for setup only
+> > + * @num_cores:		Counter of cores per group; Required for setup only when
+> > + *			level == 0 and siblings exist
+> 
+> Also setup only, move the end?
+
+Same. Will move all the setup stuff to the end.
+
+> > + * @migr_state:		State of group (see struct tmigr_state)
+> > + * @childmask:		childmask of group in parent group; is set during setup
+> > + *			never changed; could be read lockless
+> > + * @events:		Timer queue for child events queued in the group
+> > + * @groupevt:		Next event of group; it is only reliable when group is
+> > + *			!active (ignore bit is set when group is active)
+> > + * @next_expiry:	Base monotonic expiry time of next event of group;
+> > + *			Used for racy lockless check whether remote expiry is
+> > + *			required; it is always reliable
+> 
+> This is basically leftmost of @events? A racy lockless check sorta
+> implies not reliable, comment is confusing.
+
+It's always updated and contains the expiry value of the first event which
+is enqueued into timer queue "events" - reliable is the wrong term here.
+
+> Also, isn't this identical to @groupevt.nextevt.expiry ?
+
+No, it is not identical. Because groupevt is only used and reliable, when
+the group is idle to enqueue the first group event into the parent
+group. But the migrator of the group needs to check whether timers needs to
+be handled remote because some children are idle. Therefore I do not have to
+update the whole event.
+
+> > + */
+> > +struct tmigr_group {
+> > +	raw_spinlock_t		lock;
+> > +	unsigned int		cpus[TMIGR_CHILDS_PER_GROUP];
+> > +	struct tmigr_group	*parent;
+> > +	struct list_head	list;
+> > +	unsigned int		level;
+> > +	unsigned int		numa_node;
+> > +	unsigned int		num_childs;
+> > +	unsigned int		num_cores;
+> > +	atomic_t		*migr_state;
+> 
+> Per the other email; why isn't this:
+> 
+> 	union tmigr_state	migr_state;
+> 
+> ?
+
+I will change this into a direct member. The reason for not being a direct
+member is - because it grows like this...
+
+Only for handling the tmigr_group->migr_state, atomic operations are used
+the splitted members are never accessed. All other states are not handled
+with atomic operations. If it is 'union tmigr_state' inside the
+tmigr_group, then I would need an atomic_t inside the union and the union
+gets more complex. I hope I was able to explain my point.
+
+> > +	u32			childmask;
+> > +	struct timerqueue_head	events;
+> > +	struct tmigr_event	groupevt;
+> > +	u64			next_expiry;
+> > +};
+> > +
+
+I come back to your other remarks in a separate mail.
+
+Thanks,
+
+	Anna-Maria
+
