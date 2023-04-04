@@ -2,100 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C2D6D591F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43586D5922
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233724AbjDDHFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 03:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        id S233728AbjDDHGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbjDDHFB (ORCPT
+        with ESMTP id S233200AbjDDHGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 03:05:01 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B3118C
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 00:05:00 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33474pfm083483;
-        Tue, 4 Apr 2023 02:04:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680591891;
-        bh=Xxal5gx/ThGxtq0kVEmh9gFXlfl/HsO/TSHzc+kJNrI=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=MIScsozwyq1tFznyozpYDOKWeUbA8TlPjXcAiqdwhKFiuxFpmMP0QdoiPSYGg4ZjK
-         HZtbTPcygIorH/i0Cz0CbO2SZXIG7KJf4g8WYLqF/G1NHX9B4qKzhit4H4TKGzCBMa
-         c4nMI8KFvoGE3NqKBoYJTfp70lRFIfeDZZHW5/NY=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33474pXB018681
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 4 Apr 2023 02:04:51 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 4
- Apr 2023 02:04:51 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 4 Apr 2023 02:04:51 -0500
-Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33474mbe098532;
-        Tue, 4 Apr 2023 02:04:49 -0500
-Message-ID: <66dbb0f3-cfb1-d6a5-42f9-3f3098ca1b90@ti.com>
-Date:   Tue, 4 Apr 2023 12:34:47 +0530
+        Tue, 4 Apr 2023 03:06:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16A018C
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 00:06:13 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PrJc20MBtzSqJ5;
+        Tue,  4 Apr 2023 15:02:26 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 4 Apr 2023 15:06:09 +0800
+Subject: Re: [PATCH 2/2] lib/percpu_counter: fix dying cpu compare race
+To:     Yury Norov <yury.norov@gmail.com>, Ye Bin <yebin@huaweicloud.com>
+References: <20230404014206.3752945-1-yebin@huaweicloud.com>
+ <20230404014206.3752945-3-yebin@huaweicloud.com>
+ <ZCuQhDLkRhJy081W@yury-laptop>
+CC:     <dennis@kernel.org>, <tj@kernel.org>, <cl@linux.com>,
+        <linux-mm@kvack.org>, <andriy.shevchenko@linux.intel.com>,
+        <linux@rasmusvillemoes.dk>, <linux-kernel@vger.kernel.org>,
+        <dchinner@redhat.com>
+From:   "yebin (H)" <yebin10@huawei.com>
+Message-ID: <642BCC61.70507@huawei.com>
+Date:   Tue, 4 Apr 2023 15:06:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-CC:     <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH v2 0/3] PHY-GMII-SEL: Add support for SGMII mode
-Content-Language: en-US
-To:     <vkoul@kernel.org>, <kishon@kernel.org>, <rogerq@kernel.org>
-References: <20230309063514.398705-1-s-vadapalli@ti.com>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <20230309063514.398705-1-s-vadapalli@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <ZCuQhDLkRhJy081W@yury-laptop>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.6 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-This series applies cleanly as of next-20230404. Please merge this series
-followed by the series at:
-https://lore.kernel.org/r/20230331062521.529005-1-s-vadapalli@ti.com/
-in case of no concerns.
 
-Regards,
-Siddharth.
+On 2023/4/4 10:50, Yury Norov wrote:
+> On Tue, Apr 04, 2023 at 09:42:06AM +0800, Ye Bin wrote:
+>> From: Ye Bin <yebin10@huawei.com>
+>>
+>> In commit 8b57b11cca88 ("pcpcntrs: fix dying cpu summation race") a race
+>> condition between a cpu dying and percpu_counter_sum() iterating online CPUs
+>> was identified.
+>> Acctually, there's the same race condition between a cpu dying and
+>> __percpu_counter_compare(). Here, use 'num_online_cpus()' for quick judgment.
+>> But 'num_online_cpus()' will be decreased before call 'percpu_counter_cpu_dead()',
+>> then maybe return incorrect result.
+>> To solve above issue, also need to add dying CPUs count when do quick judgment
+>> in __percpu_counter_compare().
+> Not sure I completely understood the race you are describing. All CPU
+> accounting is protected with percpu_counters_lock. Is it a real race
+> that you've faced, or hypothetical? If it's real, can you share stack
+> traces?
+>   
+>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+>> ---
+>>   lib/percpu_counter.c | 11 ++++++++++-
+>>   1 file changed, 10 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/lib/percpu_counter.c b/lib/percpu_counter.c
+>> index 5004463c4f9f..399840cb0012 100644
+>> --- a/lib/percpu_counter.c
+>> +++ b/lib/percpu_counter.c
+>> @@ -227,6 +227,15 @@ static int percpu_counter_cpu_dead(unsigned int cpu)
+>>   	return 0;
+>>   }
+>>   
+>> +static __always_inline unsigned int num_count_cpus(void)
+> This doesn't look like a good name. Maybe num_offline_cpus?
+num_count_cpus() include online CPUs and offline CPUs, use 
+num_offline_cpus() doesn't seem appropriate either.
+>
+>> +{
+>> +#ifdef CONFIG_HOTPLUG_CPU
+Perhaps we need to add a memory barrier to setting and reading 
+__num_dying_cpu.
 
-On 09/03/23 12:05, Siddharth Vadapalli wrote:
-> Hello,
-> 
-> This series adds support to configure the CPSW MAC's PHY in SGMII mode.
-> Also, SGMII mode is enabled for TI's J7200 and J721E SoCs.
-> 
-> Changes from v1:
-> 1. Add "break" statement within "case PHY_INTERFACE_MODE_SGMII".
-> 2. Add newline before "default" case.
-> 3. Update commit message of patch 1/3 to follow the existing convention.
-> 
-> v1:
-> https://lore.kernel.org/r/20230309062237.389444-1-s-vadapalli@ti.com/
-> 
-> Siddharth Vadapalli (3):
->   phy: ti: gmii-sel: Add support for SGMII mode
->   phy: ti: gmii-sel: Enable SGMII mode for J7200
->   phy: ti: gmii-sel: Enable SGMII mode for J721E
-> 
->  drivers/phy/ti/phy-gmii-sel.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
++	return (num_online_cpus() + num_dying_cpus());
+
+>                 ^                                    ^
+>           'return' is not a function. Braces are not needed
+>
+> Generally speaking, a sequence of atomic operations is not an atomic
+> operation, so the above doesn't look correct. I don't think that it
+> would be possible to implement raceless accounting based on 2 separate
+> counters.
+>
+> Most probably, you'd have to use the same approach as in 8b57b11cca88:
+>
+>          lock();
+>          for_each_cpu_or(cpu, cpu_online_mask, cpu_dying_mask)
+>                  cnt++;
+>          unlock();
+>
+> And if so, I'd suggest to implement cpumask_weight_or() for that.
+>
+>> +#else
+>> +	return num_online_cpus();
+>> +#endif
+>> +}
+>> +
+>>   /*
+>>    * Compare counter against given value.
+>>    * Return 1 if greater, 0 if equal and -1 if less
+>> @@ -237,7 +246,7 @@ int __percpu_counter_compare(struct percpu_counter *fbc, s64 rhs, s32 batch)
+>>   
+>>   	count = percpu_counter_read(fbc);
+>>   	/* Check to see if rough count will be sufficient for comparison */
+>> -	if (abs(count - rhs) > (batch * num_online_cpus())) {
+>> +	if (abs(count - rhs) > (batch * num_count_cpus())) {
+>>   		if (count > rhs)
+>>   			return 1;
+>>   		else
+>> -- 
+>> 2.31.1
+> .
+>
+
