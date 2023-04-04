@@ -2,95 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFADF6D6888
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E916D688D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235944AbjDDQMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
+        id S231639AbjDDQOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235707AbjDDQMe (ORCPT
+        with ESMTP id S231477AbjDDQOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:12:34 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AD51708;
-        Tue,  4 Apr 2023 09:12:33 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id w9so132787078edc.3;
-        Tue, 04 Apr 2023 09:12:33 -0700 (PDT)
+        Tue, 4 Apr 2023 12:14:39 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEE630ED
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:14:38 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-752fe6c6d5fso17380139f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 09:14:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680624751;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CEde4dazqs8JsdpTq9e976ZMwIeqbEXbVwUyENJtDV0=;
-        b=Z/iFB9SXOwMEOpCmleolmC6l2LhvyD3XMh7WKOQsjMrvrxUfm8ennXwNohnigYv577
-         B0hcxCfK9O73k2WCkdVlygKAlqYEEo72A8k1oNl+MsgsyTJGhgafCec/5kegRzRVLQXT
-         OCOfvy9H+0BPY68owun4pHVK1Y2z87oAUDjbO42Onc2uTvHyqB3Pk9lYHWCIitiB3L+W
-         6O1IIhVrJUlTQOnrp6Z+7/NZyyt//bCrMkRfulIemxRMeROJ6K/RYHwuMY84B7/V8FIH
-         Esd2Q2uWSlAzo36yuNwBvSFHrCTIQzFqztfrFUU82/mwACajVe92PJiD1PZ2RvDi8R/9
-         F1Tg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1680624877;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=syF/smnUwAV4ZKcd539TdCxhvG4UIaARCIo/FYWxUSE=;
+        b=NezZ/cChFX7X9N5vXRkKRhEoKwRKlZNnlxdsD2sRu8AoohuiILG5LBrAEGvIPl9G6s
+         qsZU2GdPHExGSKifbeAiQYjRsI+ST4NIb4FOf2hbvPhLeE7BeDmyJspzSfVvkmaOJe3Z
+         9PEmYVT9y1EliaMjx4A8aG5Z/W5Ca0Bv6AANKySUcTA6yO4H7X123UQXmFmcnufS/8r6
+         wPfvtb/yoesL3hxI8vKaNqvf/Zmm7AdnhY0OiIUlgigHF6tngdtCejXk6eMBFdk0MHnx
+         v9WYlWhPX81bWD9V1UUFK3UaV805MrKoC1ntg6zaSHu0HiJTm+7ijzxHjiyJMWj/0pR7
+         QDbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680624751;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CEde4dazqs8JsdpTq9e976ZMwIeqbEXbVwUyENJtDV0=;
-        b=iUBMRAh5T6utDDl3ynVEUZS5TlACSz+LAp/hUUQOY1NdPj3zDYd7Tl4pitG0RVdmbb
-         odyytsm6k/AIscy3PZw+IqHlI4wgqZ6G+x/QHH7ez8isjXr2bZLoe3a4Lv9Z8weCoDXN
-         T8dBjNK0i1UcxfJJr+fm46cTCFV4ENzTLkJAVbKYaYbrA7OnbEoiOoh2N3TBzLZh5foS
-         fzlrY0evkpyacz44ssRNQ+ODR4WxEYZmkcDvDK2tT2eUdnnI7GzKKG9KaFNvRlXmVNti
-         3juFPztn2M48Ej/kVdhEjT9C2G8aLPudKYUeWmmGevG3Up+l14Tdr6nBVkz7rigs2AOZ
-         VVqQ==
-X-Gm-Message-State: AAQBX9dfd8BN4MN2pI84OYq7OJhZQWlZEuBPlQI6zogVbAVh0jYOgFbu
-        aC2nMpFBhiM/foUcUbXy5Dc=
-X-Google-Smtp-Source: AKy350Y7Q1EvlaIMvcDZzEKWbHr8fByK3cVf/k9Wwlk6Un7sG8GyowpBQ8MoX8kuqDf1J9EYnHhtUg==
-X-Received: by 2002:a17:906:c217:b0:92d:9767:8e0a with SMTP id d23-20020a170906c21700b0092d97678e0amr102818ejz.13.1680624751436;
-        Tue, 04 Apr 2023 09:12:31 -0700 (PDT)
-Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id jo25-20020a170906f6d900b0093408d33875sm6126508ejb.49.2023.04.04.09.12.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 09:12:31 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     oder_chiou@realtek.com, thierry.reding@gmail.com,
-        Sameer Pujar <spujar@nvidia.com>,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        broonie@kernel.org, jonathanh@nvidia.com
-Cc:     kuninori.morimoto.gx@renesas.com, alsa-devel@alsa-project.org,
-        lgirdwood@gmail.com, tiwai@suse.com, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, perex@perex.cz,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: tegra: Audio codec support on Jetson AGX Orin
-Date:   Tue,  4 Apr 2023 18:12:30 +0200
-Message-Id: <168062474005.2644933.17495662209402914912.b4-ty@nvidia.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <1676263474-13346-1-git-send-email-spujar@nvidia.com>
-References: <1676263474-13346-1-git-send-email-spujar@nvidia.com>
+        d=1e100.net; s=20210112; t=1680624877;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=syF/smnUwAV4ZKcd539TdCxhvG4UIaARCIo/FYWxUSE=;
+        b=Xvq/QdClgMyoGdK5BfaAWNqIEEzWnwRaY6ykObCMf1aNY3dEXeOOVXj7YSuL4RquPi
+         R+krtpXFpKdeT+o+vhjiDo/XTUHDWeADKEoWEkitSZBmvCf/KXhsPNl758vmrXTOHCyJ
+         zC8NHGXlljITerI0DcvRzpp9CU7971Oj6E4IE6caG8LHDJjx2sh7d89q0U8NP90Q/Y2s
+         uYCAfQ3lNsbXZEkkFCFqXksi9bsdXBAGNxqGj5cjClFCqOiqi1RFnhHf7+cV6lNrs1sd
+         +ysRq/GxNDvvb/nNZIU4J8jSvmE0UWHJENY1gyb8suW4CR/sNMN7kPVBromIusYK6LaB
+         WBdw==
+X-Gm-Message-State: AAQBX9e7YAnSwTmB3HKT2qeaX+pjrF2neBftM6KagUYXi3PE6zsp7L33
+        WtFaHYHDBy4FShecoTO0e/Gu3me3GrbTjTVgtyk9Ow==
+X-Google-Smtp-Source: AKy350aPT1Rhe5H3Gy/XEyPb8/cBI4XCRpQ+Hp40vZyjmt57SEEJjNt+Cq1ZO2GQ7u2tmwJZhhTK9g==
+X-Received: by 2002:a92:c214:0:b0:325:e065:8bf8 with SMTP id j20-20020a92c214000000b00325e0658bf8mr172572ilo.0.1680624877615;
+        Tue, 04 Apr 2023 09:14:37 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id n21-20020a056638211500b0040617a81e1asm3363598jaj.59.2023.04.04.09.14.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 09:14:37 -0700 (PDT)
+Message-ID: <86c63b44-7832-6a03-11d9-d389fdaf3c16@kernel.dk>
+Date:   Tue, 4 Apr 2023 10:14:36 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/2] bio iter improvements
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        willy@infradead.org
+References: <20230327174402.1655365-1-kent.overstreet@linux.dev>
+ <ZCIVLQ6Klrps6k1g@infradead.org> <ZCNN2GE3WBjMkLkH@moria.home.lan>
+ <ZCrsbv+zKGf4jvUm@infradead.org> <ZCsAhDpsiNWpiAxS@moria.home.lan>
+ <ZCxAIR8pxOfSE6OR@infradead.org> <ZCxGdj3JKl2RPUJW@moria.home.lan>
+ <2bbdb38b-a3ac-5127-23c0-56badd113538@kernel.dk>
+ <ZCxLGLdcN5wYnxfr@moria.home.lan>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ZCxLGLdcN5wYnxfr@moria.home.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
-
-On Mon, 13 Feb 2023 10:14:34 +0530, Sameer Pujar wrote:
-> Jetson AGX Orin has onboard RT5640 audio codec. This patch adds the
-> codec device node and the bindings to I2S1 interface.
+On 4/4/23 10:06?AM, Kent Overstreet wrote:
+> On Tue, Apr 04, 2023 at 10:01:58AM -0600, Jens Axboe wrote:
+>>>> Starting to get personal instead tends to not help to convince your
+>>>> reviewers that it's really useful in general.
+>>>
+>>> I know you and others like to talk a lot about what you want as
+>>> maintainers and reviewers - but I find that the people who are the
+>>> loudest and the most authoritarian in that respect tend not to be the
+>>> people who drive discussions forward in productive ways.
+>>
+>> One issue is certainly that nobody wants to engage with people that
+>> instantly try and make this personal, or just uncomfortable in general.
 > 
+> Yeah, you like to respond to technical discussion with a *plonk*.
 > 
+> *eyeroll*
+> 
+> Christoph can handle himself, he doesn't need you defending him.
 
-Applied, thanks!
+I'm not defending Christoph, I'm trying to help YOU understand why
+your patchsets always turn sour. And I'm trying to get this toxicity off
+the list, because it's frankly not productive at all and it's hurting
+the developer environment for everybody else.
 
-[1/1] arm64: tegra: Audio codec support on Jetson AGX Orin
-      commit: b903a6c5aaa862f8b88f4be4431ccca3b6fbc187
+If everybody else seems like an asshole, maybe it's actually you? A
+little introspection would be prudent. If you can't change your tone,
+please just go somewhere else. I'm not interested.
 
-Best regards,
 -- 
-Thierry Reding <treding@nvidia.com>
+Jens Axboe
+
