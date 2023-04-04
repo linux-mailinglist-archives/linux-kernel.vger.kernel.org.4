@@ -2,140 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BF06D5C44
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5DC6D5C45
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233995AbjDDJp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
+        id S234087AbjDDJqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjDDJpx (ORCPT
+        with ESMTP id S230235AbjDDJp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:45:53 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE43B2D51;
-        Tue,  4 Apr 2023 02:45:37 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3345U3wu019939;
-        Tue, 4 Apr 2023 09:44:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=cdAMDMFLcupSroYCFsLTabB4tFiVlD0GTOdgv18U0AA=;
- b=Na30ydGLtmWetacXYUImr8M7JTlUCAFOylp0zJf4Kyd/tJNibPJ9HNxvsbY5YrbPUnt+
- tSeMVrD4Jc/UaWSoVH/Aai0WjIPsHjZioroACrgQiDjBg8VE/Ypd7XRtxiwhvs5EJkMZ
- +kcwKQiwy/1wZKv4wIby6e3Jm8R6mPN9c0mFI6kVwBbh0YZIyU7uaGG71H5KAywxNZ1p
- mWu98vvLcF71JpXd9z8Nn+hQPv6xb+OnKXJSNR8B7VTpaeWwLBUzEYtmx6n3dwFn41FV
- LNtil5gb8Wh4TjUx60rchLGiwsdW+fj4ZYVAQy34eDAKLoefzkCnHxjsp1MtsewVXF73 LQ== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pr4jm9nuy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Apr 2023 09:44:28 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3349iLko029614;
-        Tue, 4 Apr 2023 09:44:21 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3ppdpkjnuy-1;
-        Tue, 04 Apr 2023 09:44:21 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3349iLYi029607;
-        Tue, 4 Apr 2023 09:44:21 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-vpernami-hyd.qualcomm.com [10.213.107.240])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3349iKdN029605;
-        Tue, 04 Apr 2023 09:44:21 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 2370923)
-        id 34B2939CE; Tue,  4 Apr 2023 15:14:20 +0530 (+0530)
-From:   Vivek Pernamitta <quic_vpernami@quicinc.com>
-To:     mhi@lists.linux.dev
-Cc:     quic_qianyu@quicinc.com, manivannan.sadhasivam@linaro.org,
-        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
-        quic_skananth@quicinc.com,
-        Vivek Pernamitta <quic_vpernami@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Hemant Kumar <hemantk@codeaurora.org>,
-        Bhaumik Bhatt <bbhatt@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org (open list:MHI BUS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH V6] bus: mhi: host: Avoid ringing EV DB if there is no elements to process
-Date:   Tue,  4 Apr 2023 15:14:16 +0530
-Message-Id: <1680601458-9105-1-git-send-email-quic_vpernami@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3gDYPN6RF6hlM7Gy9l_1ZRh1xvylnQSw
-X-Proofpoint-GUID: 3gDYPN6RF6hlM7Gy9l_1ZRh1xvylnQSw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-04_02,2023-04-03_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 bulkscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=832 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304040090
-X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 4 Apr 2023 05:45:57 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6653126A3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680601541; x=1712137541;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=evwuNJoFJzh7/WRai7GmJeBqO2kip9yckbdJm/jV9u0=;
+  b=SEAa3ukZGycDY2UQSkHN9uRPgpIPv/AjL8+LdHO8t8ym1UrtypSoucbE
+   CK7bnnCMFwi1IubJLf0EL7WbicT6FqTK36E3FuM/BXRVR4AmMXX1WE3Cc
+   IiL8WwQcBFFjLQNmdUjr+dq9mEiU5gDLgCDKDYSHYwPhXuu8bUORk71oZ
+   dvK9yIG19Q+9tIXN9kRfQfpa5pmQQ7GTVIpt3i75Egr1IhHkbCXp3perB
+   w1vXYDsqRqK+blXBUhy0V8GgFdJdi3FdE5zyOYR0PqHsO42RvXwU/CIBi
+   +Q+KZAAUfFTWd2TBZ1J8VK6n0XgASmamYboiwy7umSainCZZcnaI2OgaJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="330720189"
+X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
+   d="scan'208";a="330720189"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 02:44:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="775576241"
+X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
+   d="scan'208";a="775576241"
+Received: from rjongalo-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.43.58])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 02:44:35 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 01/19] drm/i915/i915_scatterlist: Fix kerneldoc
+ formatting issue - missing '@'
+In-Reply-To: <20230403162059.GC8371@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230331092607.700644-1-lee@kernel.org>
+ <20230331092607.700644-2-lee@kernel.org> <87jzyt0yil.fsf@intel.com>
+ <20230403162059.GC8371@google.com>
+Date:   Tue, 04 Apr 2023 12:44:32 +0300
+Message-ID: <878rf80ynz.fsf@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-currently mhi_process_data_event_ring()/mhi_process_ctrl_ev_ring()
-will ring DB even if there no ring elements to process.
-This could cause doorbell event to be processed by MHI device
-to check for any ring elements even it is none.
-So ring event DB only if any event ring elements are processed.
+On Mon, 03 Apr 2023, Lee Jones <lee@kernel.org> wrote:
+> On Mon, 03 Apr 2023, Jani Nikula wrote:
+>
+>> On Fri, 31 Mar 2023, Lee Jones <lee@kernel.org> wrote:
+>> > Fixes the following W=1 kernel build warning(s):
+>> >
+>> >  drivers/gpu/drm/i915/i915_scatterlist.c:62: warning: Function parameter or member 'size' not described in 'i915_refct_sgt_init'
+>> >
+>> > Cc: Jani Nikula <jani.nikula@linux.intel.com>
+>> > Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+>> > Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+>> > Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+>> > Cc: David Airlie <airlied@gmail.com>
+>> > Cc: Daniel Vetter <daniel@ffwll.ch>
+>> > Cc: intel-gfx@lists.freedesktop.org
+>> > Cc: dri-devel@lists.freedesktop.org
+>> > Signed-off-by: Lee Jones <lee@kernel.org>
+>>
+>> Thanks for the patches!
+>>
+>> Applied all but one of the drm/i915 patches to drm-intel-next or
+>> drm-intel-gt-next depending on the area. There were a couple of issues
+>> that I fixed while applying. There was a conflict with patch 5/19
+>> against drm-intel-gt-next so I left that one out.
+>
+> Thanks Jani.  I'll rebase and see what's left.
 
-Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
-changes since v6:
-	updating the commit text.
-changes since v5:
-	updating the commit text.
-changes since v4:
-	updating the commit text with more information.
-changes since v3:
-	- Updating commit text for multiple versions of patches.
-changes since v2:
-	- Updated comments in code.
-changes since v1:
-	- Add an check to avoid ringing EV DB in mhi_process_ctrl_ev_ring().
----
- drivers/bus/mhi/host/main.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+We also took notice and aim to track this more aggressively [1].
 
-diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
-index df0fbfe..1bbdb75 100644
---- a/drivers/bus/mhi/host/main.c
-+++ b/drivers/bus/mhi/host/main.c
-@@ -961,7 +961,9 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
- 	}
- 
- 	read_lock_bh(&mhi_cntrl->pm_lock);
--	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-+
-+	/* Ring EV DB only if there is any pending element to process */
-+	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
- 		mhi_ring_er_db(mhi_event);
- 	read_unlock_bh(&mhi_cntrl->pm_lock);
- 
-@@ -1031,7 +1033,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
- 		count++;
- 	}
- 	read_lock_bh(&mhi_cntrl->pm_lock);
--	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-+
-+	/* Ring EV DB only if there is any pending element to process */
-+	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
- 		mhi_ring_er_db(mhi_event);
- 	read_unlock_bh(&mhi_cntrl->pm_lock);
- 
+BR,
+Jani.
+
+
+[1] https://gitlab.freedesktop.org/drm/intel/-/issues/8335
+
+
 -- 
-2.7.4
-
+Jani Nikula, Intel Open Source Graphics Center
