@@ -2,64 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7211A6D6DF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6055B6D6DF8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236023AbjDDUYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 16:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
+        id S236048AbjDDUZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 16:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbjDDUYi (ORCPT
+        with ESMTP id S229743AbjDDUY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 16:24:38 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF2E10CA;
-        Tue,  4 Apr 2023 13:24:36 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id bx10so16885540ljb.8;
-        Tue, 04 Apr 2023 13:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680639875;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oVf5L1s5vC5i2BV4mWtMiZo2kKfcnDSErU32Isic1c0=;
-        b=LFJn/i75qWzTZnNmOARwhUp1VIvYhF57EyWOrDLJMraSpbC3m31EuNymXVDnsaBh25
-         FhAYzTfHo9Ev+dUAVrmpib9+g6RWMFb8tqq6Nakq4Sr3gHFndTTiFNZ1j9Vdz9zEBb+F
-         C+8XPkOiLBL412T5yo2Zu2rSvdayZaiKVn1pNRSdXmFR8qkfPzqvHUl5OKjNGGLdcIe2
-         qwTx6kf22IbLR+VtcLBs+gMygBQQ16ha4RjZYDJgLC3dni4P1b4w9n1yee9TObcqU/h9
-         H5wvEvk2LaJ3vj/WT2r4LdS2JrEtJ7oIP679mxNvE+yhQZ6sKxSRuHs4rJyZZts2n4pP
-         yDtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680639875;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oVf5L1s5vC5i2BV4mWtMiZo2kKfcnDSErU32Isic1c0=;
-        b=s9Z/cPyk4y+TUKBT7yqM1bqBOpd3F1+MfHL+BuDMc41NKpyytqPlrLOVHax9namgxk
-         tC84YVlbgLwMTAUu8x3toZ+MeKCjTi0vAk/H0F91ry5bcyVLtLLtiKbwrGTwl/z1kdnO
-         ZWfx/tcBcTnnsIh7XjOX3/C16JBrE0IIyb3+j9G0Bz/mkwbbMR6VORunAacc9O+iYbeY
-         as2RD4rVJ5LmQLa18pZRKrKVKLspMoAPVQfJRh5cxbqybIdvGFcM6oEFie5YMbORX4F1
-         Wh2v0vlQ+EKRsOBn5bv0i4mMM28MuAKSzbldOI6fwviYmqyCykSVhEl5UAHrYCHVKotQ
-         lGmQ==
-X-Gm-Message-State: AAQBX9fxlZWYJlfTKCzj7M9qjmeeN26+TxCbhHTwrVP/aKcmYeTykjAK
-        Yjv9VHLkWLISTtfNPDSVZGAdH1bNLuVTuNKuGMI=
-X-Google-Smtp-Source: AKy350bAs0nGXa3BuJqVl2jqEm2na7mau8O6bShq31dmcE6naDoixDWRQlkRnuFwO9FX7EqnoB9mrJypSDMTei9CCYI=
-X-Received: by 2002:a2e:6817:0:b0:2a6:334b:21e9 with SMTP id
- c23-20020a2e6817000000b002a6334b21e9mr1420402lja.7.1680639874591; Tue, 04 Apr
- 2023 13:24:34 -0700 (PDT)
+        Tue, 4 Apr 2023 16:24:58 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9036846BF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 13:24:54 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 5B6783200952;
+        Tue,  4 Apr 2023 16:24:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 04 Apr 2023 16:24:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680639889; x=
+        1680726289; bh=yAP5JQyaROv72dfxTuIX3EHF8NlvyOuNvEZn4uFoTG8=; b=A
+        6/TRdHMk99ZtXR8iLfcdS9o3xIt4w6zMvl3VTdaRPoj/wEiJyjWp0POXIYShU1M3
+        L8pT5tDCO3yllfSDsv7HAIRokO0aJP66oHG3ny1SJjLOXzHk7uzEcMERsN9gvCkO
+        N1WETvPfqg+nnkKLTbGE185PeBnFqWUxkPfDhf79flbdX9nRbNAINy0+LpNAiNWn
+        JJfiKGJ7v06/OhnH0qTu1aS6D8xV1d6k4QrngAE3QYKOJUj4DEW7PK+gAkgqQs45
+        x4cSgdwQmRag5w+Me1Nh807IHUQgSBeAr6MW/Fh1n3EX+noXBimgl58wlsvffhKi
+        N2c5A2FaWIKsb8xyYtPng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680639889; x=1680726289; bh=yAP5JQyaROv72
+        dfxTuIX3EHF8NlvyOuNvEZn4uFoTG8=; b=dL43dxgRjcY/IrpJpkEs/eUTFyn+A
+        syvWtGObNaz5sJZVeK9J9ep8QB9zBwdqfAY9B5rfMxVOXMRNoy/MVjFd8KojaXiD
+        alI/kSsJzDiqPn103ae4OSFoB9NO8MWA89WNZTh5a008Qv+6j98FUU5dGjV/V1iu
+        lvzpitTp/ErjnRaQ6D4OLyqqVWBcjd39JcURWjyu+8vfvAAwXIPnHMHywGlWYiDa
+        NCvBSQFleAMxPtzIpynyA2b0WlDdmqMf62RUoFFkl9A3U6Ixqew5YE+jB+QZYR1j
+        oJUnQ0EDnvg9Ynrq9WrxO8mfoUi51M3PRgDcXObthtam/hQhOjy0nPDfw==
+X-ME-Sender: <xms:kIcsZJw5qTYG24tHymp6dfO8kP07lYers6kLYvTpyH6sG67EtFxoaQ>
+    <xme:kIcsZJTLlfsjnCFHXgEN1j_4poIahVfBwJQlFXx7GqNmBGbi_Z_Clq3-GwR9MpvoP
+    t9jx7Ulw3RHtiMgle0>
+X-ME-Received: <xmr:kIcsZDX-fq-1uX7tNxZomkPsKSCdDdbcqDpSqmln-2hLDij-8xp4mBhVIet8-tw-x3u_wA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledgudehtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhi
+    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueeh
+    tedttdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:kIcsZLhGNWWdWhAPjerMsNAXwKpgb002nkMX9ZZ6-Xzb_eMbrys24w>
+    <xmx:kIcsZLAwHPNtaPc9p2uXVY93iXYpDA5KpCILqVDJW1GwUCx8wEQw-g>
+    <xmx:kIcsZEJ35dl-xLIq-dqVSyY-ck0kJL77vvY2syI6iNQUgUzwP1R4tQ>
+    <xmx:kYcsZCU-AS6pc4-omuA2gtL1H-5ZWG2BZXVagr6h7I956xLyhJwZ1A>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Apr 2023 16:24:47 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 0CE03109AFC; Tue,  4 Apr 2023 23:24:45 +0300 (+03)
+Date:   Tue, 4 Apr 2023 23:24:45 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Min M. Xu" <min.m.xu@intel.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jiewen Yao <jiewen.yao@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v7 6/6] x86/efi: Safely enable unaccepted memory in UEFI
+Message-ID: <20230404202445.6qkl7hz67qgievqz@box.shutemov.name>
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <cover.1680628986.git.thomas.lendacky@amd.com>
+ <1d38d28c2731075d66ac65b56b813a138900f638.1680628986.git.thomas.lendacky@amd.com>
+ <20230404174506.pjdikxvk2fsyy4au@box.shutemov.name>
+ <bc9e6d82-c7c1-47dc-e91f-57d9b4e2bb0a@intel.com>
+ <20230404180917.4fsgkzcdhqvph6io@box.shutemov.name>
+ <CAMj1kXF0XyEOuSUDqgsLSYK8GSkGN1xK3RQ525+BxhG+7+vnCA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230403211548.6253-1-jorge.lopez2@hp.com> <d5fbc118-3b33-44b8-a7b6-4738e121b170@t-8ch.de>
-In-Reply-To: <d5fbc118-3b33-44b8-a7b6-4738e121b170@t-8ch.de>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Tue, 4 Apr 2023 15:24:16 -0500
-Message-ID: <CAOOmCE8z_UDs8dG0MqX+SFcvd-CTX12XXKzOrVOKDuvrPkyeCQ@mail.gmail.com>
-Subject: Re: [PATCH v7] Introduction-of-HP-BIOSCFG-driver-documentation
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXF0XyEOuSUDqgsLSYK8GSkGN1xK3RQ525+BxhG+7+vnCA@mail.gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,168 +108,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
-
-BTW, I decided to submit all files individually to facilitate the
-review process.  Only Makefile and Kconfig files will be provided as a
-single patch.
-I will be out of town until April 11 and will reply back upon my return.
-
-Please see my comments below.
-
->
-> > +             HP specific types
-> > +             -----------------
-> > +                     - ordered-list - a set of ordered list valid values
-> > +                     - sure-start
->
-> Could you explain what "sure-start" does?
-> Is it actually an attribute type of which multiple attributes can exist?
->
-
-It is an attribute type of which multiple attributes can exist.
-At this moment  Sure-Start reports both the number of audit logs and
-all logs reported by BIOS.
-Sure-Start is exposed directly under
-/sys/class/firmware-attributes/*/attributes/.   Sure Start does not
-provide any authentication.
-
-> Or are there just some global properties that need to be exposed?
-> If it is global it should be directly under
-> /sys/class/firmware-attributes/*/authentication/
-> without needing the type.
->
-> > +
-> > +
-> >               All attribute types support the following values:
+On Tue, Apr 04, 2023 at 09:49:52PM +0200, Ard Biesheuvel wrote:
+> On Tue, 4 Apr 2023 at 20:09, Kirill A. Shutemov <kirill@shutemov.name> wrote:
 > >
-> >               current_value:
-> > @@ -42,16 +48,16 @@ Description:
-> >                               description of the at <attr>
+> > On Tue, Apr 04, 2023 at 10:57:52AM -0700, Dave Hansen wrote:
+> > > On 4/4/23 10:45, Kirill A. Shutemov wrote:
+> > > > I still think it is a bad idea.
+> > > >
+> > > > As I asked before, please include my
+> > > >
+> > > > Nacked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > > >
+> > > > into the patch.
+> > >
+> > > I was pretty opposed to this when I first saw it too.  But, Tom and
+> > > company have worn down my opposition a bit.
+> > >
+> > > The fact is that we have upstream kernels out there with SEV-SNP support
+> > > that don't know anything about unaccepted memory.  They're either
+> > > relegated to using the pre-accepted memory (4GB??) or _some_ entity
+> > > needs to accept the memory.  That entity obviously can't be the kernel
+> > > unless we backport unaccepted memory support.
+> > >
+> > > This both lets the BIOS be the page-accepting entity _and_ allows the
+> > > entity to delegate that to the kernel when it needs to.
+> > >
+> > > As much as I want to nak this and pretend that that those existing
+> > > kernel's don't exist, my powers of self-delusion do have their limits.
+> > >
+> > > If our AMD friends don't do this, what is their alternative?
 > >
-> >               display_name_language_code:
-> > -                                             A file that can be read to obtain
-> > -                                             the IETF language tag corresponding to the
-> > -                                             "display_name" of the <attr>
-> > +                             A file that can be read to obtain
-> > +                             the IETF language tag corresponding to the
-> > +                             "display_name" of the <attr>
->
-> Are these reindentations and other cleanups intentional?
->
-> If they are intentional and there are no interactions with your actual
-> patch you could split them into their own patch and submit them
-> separately.
->
-> This way we wouldn't have to worry about them here anymore.
-
-They were unintentionally.  I will reset them back in the next review
->
-> Note:
-> These indentations are different from the newly introduced documentation.
->
+> > The alternative is coordination on the host side: VMM can load a BIOS that
+> > pre-accepts all memory if the kernel is older.
 > >
-> > +             audit_log_entries:
-> > +                                     A read-only file that returns the events in the log.
-> > +                                     Values are separated using semi-colon (``;``)
-> > +
-> > +                                     Audit log entry format
-> > +
-> > +                                     Byte 0-15:   Requested Audit Log entry  (Each Audit log is 16 bytes)
-> > +                                     Byte 16-127: Unused
->
-> How to interpret each log entry?
->
+> 
+> And how does one identify such a kernel? How does the VMM know which
+> kernel the guest is going to load after it boots?
 
-Byte 0: status
-1: event id
-2: msg number
-3: severity
-4: source ID
-5: system state at event
-6-12 Time stamp
-13-15: internal buffer data
+VMM has to know what it is running. Yes, it is cumbersome. But enabling
+phase for a feature is often rough. It will get smoother overtime.
 
-Application needs to have knowledge of the data provided by BIOS in
-order to interpret the audit log.
+> > I know that it is not convenient for VMM, but it is technically possible.
+> >
+> > Introduce an ABI with an expiration date is much more ugly. And nobody
+> > will care about the expiration date, until you will try to remove it.
+> >
+> 
+> None of us are thrilled about this, but the simple reality is that
+> there are kernels that do not understand unaccepted memory.
 
-> If it is an opaque thing from the firmware that would also be useful to
-> know.
->
-> > +
-> > +             audit_log_entry_count:
-> > +                                     A read-only file that returns the number of existing audit log events available to be read.
-> > +                                     Values are separated using comma (``,``)
-> > +
-> > +                                     [No of entries],[log entry size],[Max number of entries supported]
->
-> Will log entry size always be 16? Or can it be bigger in the future when
-> more bytes are used?
-> This should be mentioned.
+How is it different from any other feature the kernel is not [yet] aware
+of?
 
-Log entry size is always 16 bytes in size.  The reason is to report a
-maximum of 256 entries.  Total 4096 bytes
->
-> Is audit_log_entry_count ever used without reading audit_log_entries
-> right after?
-Yes. The counter is necessary to determine how many logs are available
-to be read.
+Like if we boot a legacy kernel on machine with persistent memory or
+memory attached over CLX, it will not see it as conventional memory.
 
-> If not the count file could be dropped.
->
-> > +What:                /sys/class/firmware-attributes/*/authentication/SPM/status
-> > +Date:                March 29
-> > +KernelVersion:       5.18
-> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
-> > +Description: 'status' is a read-only file that returns ASCII text reporting
-> > +             the status information.
-> > +
-> > +               State:  Not Provisioned / Provisioned / Provisioning in progress
-> > +               Version:  Major.   Minor
-> > +               Feature Bit Mask: <16-bit unsigned number display in hex>
->
-> How are these bits to be interpreted?
-This information is provided by BIOS.  It is one of those obscure
-values from BIOS.
->
-> > +               SPM Counter: <16-bit unsigned number display in base 10>
-> > +               Signing Key Public Key Modulus (base64):
-> > +               KEK Public Key Modulus (base64):
->
-> Is " (base64)" supposed to be part of the contents of the file?
+> EFI being
+> an extensible, generic, protocol based programmatic interface, the
+> best way of informing the loader that a kernel does understand it is
+> /not/ by adding some flag to some highly arch and OS specific header,
+> but to discover a protocol and call it.
+> 
+> We're past arguing that a legitimate need exists for a solution to
+> this problem. So what solution are you proposing?
 
-The information reported for Signing Key and KEK public key are
-reported as base64 values.  It applies only to the data and not to the
-file contents.
+I described the solution multiple times. You just don't like it.
 
->
-> > +
-> > +
-> > +What:                /sys/class/firmware-attributes/*/authentication/SPM/statusbin
-> > +Date:                March 29
-> > +KernelVersion:       5.18
-> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
-> > +Description: 'statusbin' is a read-only file that returns identical status
-> > +             information reported by 'status' file in binary format.
->
-> This documentation should contain enough information to understand the
-> files contents.
->
->
-> I understand that one WMI call will return all the fields that are part
-> of the "status" and "statusbin" in one response.
->
-> Are these WMI calls especially expensive or called especially
-> frequently?
->
-
-Unfortunately the WMI to read the Status binary data is expensive
-hence the reason of only calling once.
-
-> If not I would still argue to split them into one file per field and
-> remove the statusbin file.
->
-
-Regards,
-
-Jorge
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
