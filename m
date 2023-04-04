@@ -2,151 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442856D6D5E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF83E6D6D61
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235290AbjDDTny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 15:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39324 "EHLO
+        id S236147AbjDDToX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 15:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235273AbjDDTnw (ORCPT
+        with ESMTP id S235710AbjDDToW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 15:43:52 -0400
-Received: from out-20.mta1.migadu.com (out-20.mta1.migadu.com [IPv6:2001:41d0:203:375::14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A442727
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:43:50 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 19:43:40 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1680637429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oo72y+C9GAk4TX3Xexbl8ChW3WJT6jJtrsPurmSXTHs=;
-        b=NSRjnW/TZah/qkXgQrr9JHQ/FWR4wEvSnoja35+kwW5MrctQfwh4GlnwcLCiuPZkkCkcaA
-        /HzuZo/X+5T0jWLdwJHz4UF+6eNEPzg2jYp6klJeWrNAZvA1GLPKsZQRKcVMDTY5FNTZga
-        KodSImPt6+c6nNgwQaVEU6F24QCrwtY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     David Dai <davidai@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        kernel-team@android.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
-Message-ID: <ZCx97IKjsBibjdGc@linux.dev>
-References: <20230330224348.1006691-1-davidai@google.com>
+        Tue, 4 Apr 2023 15:44:22 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A779F5252
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:44:11 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id h8so135176536ede.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 12:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1680637450; x=1683229450;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6JHiQLQ4dqHoCx9VI6e9yGRcga3qGDdfBjn0lgNBieM=;
+        b=OHW1YE7CnqLehmIKlGxDAaoPGmF8m+0t+Lj/KLuQl/xaIfg17JICEEnTi4VEH8qTYd
+         82frSjRAWG7DbXuEASWBeGA/CWAMt36cPTyfqQ7pdqhbgr94d4Rzo2DQrWU6GSTfEkxn
+         9n9lnJKYvLuQHWTufSo0B9TzTWqcLdAMji0w8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680637450; x=1683229450;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6JHiQLQ4dqHoCx9VI6e9yGRcga3qGDdfBjn0lgNBieM=;
+        b=bL3jnjmArfhI/gn7kIjanRkwfigm3Wq7LednRLmTI/2b57lsi9F4Deji0LKoUb4fAs
+         rsmC7U/dmB8A/GxYC975dbUm+3hpVrbnz+/8JtadK5bGoGPMs64bdq8WBZMJPwhD+xZL
+         hjYl8bCwr8jjyrUtVhj11aql33BvZVJtaJNWeIgwjWt21jBpFBTQi2oSRylqEzXQXS4S
+         zTEZZwvfMKhEXjn1NbB0/CY/RB+BdkjXICwPxCcpQ8sh4uaKDwNQVR9Oxdy2KZBkVQqT
+         7nibALSLkg0ogQj6eDdfjN7n9EzaCz6CmxaXnyMbiYLRyQdBcuEVKXmRuiED8Aw3DQ4y
+         5s4A==
+X-Gm-Message-State: AAQBX9fBCWjtZ9nnNDMHpbHCn8E9hMAO7YwkQEfgA8kCDR61C61QPjqh
+        XOoctGqq2YjGcXTQugCIBttH9g8jrKRPRC2UOHiGRw==
+X-Google-Smtp-Source: AKy350Zk6u6QrmscBMUoJh4YU5za4AmkwwuDPcBK9cssi/sCeaOefFReUV9pX5dS/Q4pqa1c5ko5Ig==
+X-Received: by 2002:a17:907:3201:b0:949:55fd:34fa with SMTP id xg1-20020a170907320100b0094955fd34famr272996ejb.39.1680637449644;
+        Tue, 04 Apr 2023 12:44:09 -0700 (PDT)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
+        by smtp.gmail.com with ESMTPSA id um4-20020a170906cf8400b00928e0ea53e5sm6328569ejb.84.2023.04.04.12.44.08
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 12:44:08 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id r11so135166821edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 12:44:08 -0700 (PDT)
+X-Received: by 2002:a17:906:3b07:b0:935:3085:303b with SMTP id
+ g7-20020a1709063b0700b009353085303bmr343112ejf.15.1680637447927; Tue, 04 Apr
+ 2023 12:44:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330224348.1006691-1-davidai@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_PHOTO_EDITING_DIRECT autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAHk-=wi92YtfjcczOm20_mYkWZwKKjn+dCcrx8BL9n9f55MY5g@mail.gmail.com>
+ <f78f2735-b533-4912-8cbf-0f545ce23fcf@roeck-us.net>
+In-Reply-To: <f78f2735-b533-4912-8cbf-0f545ce23fcf@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 4 Apr 2023 12:43:51 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjRya_yH3YZ_P0o392K2DEbgTpQ-43GmkojJgADKxXPoA@mail.gmail.com>
+Message-ID: <CAHk-=wjRya_yH3YZ_P0o392K2DEbgTpQ-43GmkojJgADKxXPoA@mail.gmail.com>
+Subject: Re: Linux 6.3-rc5
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Folks,
+On Mon, Apr 3, 2023 at 7:08=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+>
+> Finally ...
 
-On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
+Yeah, well, I had to take the fix directly (and another that Thorsten
+had been tracking) because the usual channels were not working right.
 
-<snip>
+But yes, finally.
 
-> PCMark
-> Higher is better
-> +-------------------+----------+------------+--------+-------+--------+
-> | Test Case (score) | Baseline |  Hypercall | %delta |  MMIO | %delta |
-> +-------------------+----------+------------+--------+-------+--------+
-> | Weighted Total    |     6136 |       7274 |   +19% |  6867 |   +12% |
-> +-------------------+----------+------------+--------+-------+--------+
-> | Web Browsing      |     5558 |       6273 |   +13% |  6035 |    +9% |
-> +-------------------+----------+------------+--------+-------+--------+
-> | Video Editing     |     4921 |       5221 |    +6% |  5167 |    +5% |
-> +-------------------+----------+------------+--------+-------+--------+
-> | Writing           |     6864 |       8825 |   +29% |  8529 |   +24% |
-> +-------------------+----------+------------+--------+-------+--------+
-> | Photo Editing     |     7983 |      11593 |   +45% | 10812 |   +35% |
-> +-------------------+----------+------------+--------+-------+--------+
-> | Data Manipulation |     5814 |       6081 |    +5% |  5327 |    -8% |
-> +-------------------+----------+------------+--------+-------+--------+
-> 
-> PCMark Performance/mAh
-> Higher is better
-> +-----------+----------+-----------+--------+------+--------+
-> |           | Baseline | Hypercall | %delta | MMIO | %delta |
-> +-----------+----------+-----------+--------+------+--------+
-> | Score/mAh |       79 |        88 |   +11% |   83 |    +7% |
-> +-----------+----------+-----------+--------+------+--------+
-> 
-> Roblox
-> Higher is better
-> +-----+----------+------------+--------+-------+--------+
-> |     | Baseline |  Hypercall | %delta |  MMIO | %delta |
-> +-----+----------+------------+--------+-------+--------+
-> | FPS |    18.25 |      28.66 |   +57% | 24.06 |   +32% |
-> +-----+----------+------------+--------+-------+--------+
-> 
-> Roblox Frames/mAh
-> Higher is better
-> +------------+----------+------------+--------+--------+--------+
-> |            | Baseline |  Hypercall | %delta |   MMIO | %delta |
-> +------------+----------+------------+--------+--------+--------+
-> | Frames/mAh |    91.25 |     114.64 |   +26% | 103.11 |   +13% |
-> +------------+----------+------------+--------+--------+--------+
-
-</snip>
-
-> Next steps:
-> ===========
-> We are continuing to look into communication mechanisms other than
-> hypercalls that are just as/more efficient and avoid switching into the VMM
-> userspace. Any inputs in this regard are greatly appreciated.
-
-We're highly unlikely to entertain such an interface in KVM.
-
-The entire feature is dependent on pinning vCPUs to physical cores, for which
-userspace is in the driver's seat. That is a well established and documented
-policy which can be seen in the way we handle heterogeneous systems and
-vPMU.
-
-Additionally, this bloats the KVM PV ABI with highly VMM-dependent interfaces
-that I would not expect to benefit the typical user of KVM.
-
-Based on the data above, it would appear that the userspace implementation is
-in the same neighborhood as a KVM-based implementation, which only further
-weakens the case for moving this into the kernel.
-
-I certainly can appreciate the motivation for the series, but this feature
-should be in userspace as some form of a virtual device.
-
--- 
-Thanks,
-Oliver
+           Linus
