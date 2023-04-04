@@ -2,224 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486EC6D64CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3B56D64A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234748AbjDDOKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S235500AbjDDOGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235305AbjDDOKE (ORCPT
+        with ESMTP id S235436AbjDDOGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:10:04 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45918116;
-        Tue,  4 Apr 2023 07:09:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680617397; x=1712153397;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=L78+e0tJ5ruzos9E6wT4kZ3o5XjRiUNTl6iAt0Kgia8=;
-  b=BdZwVW2HUVTE/4+ziJd8nBAH3Pubz1JpKAkT2M28sZCckzGeEvRt/tac
-   irWffK6bXmc021zOpeQB/s78smEa1I97RZo4I8sy2Jadcs0KS0FhO7UUH
-   eu2isaXtFNEceWQOpItXj8EyhYlxs1xDIH7XLKqsa0wwC3knpMFgttnnm
-   iHDCzHI+cElHphYUFXM5f3j0BmxtzhTpNzIn0jNkqhxHnkplKmDUZmIWl
-   yIfbloJEKGxb9FpL5dxx5vkF8AGOlskqibBPy0X5G5IXMD5KJ26p8A4Ng
-   s2kEvBfBDQrx2kIc6b6IECwL7qhVbFxO20L0ir+eMlgMeyxpqs6WwdfVK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="344756936"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="344756936"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 07:03:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="755647975"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="755647975"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Apr 2023 07:03:38 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 4 Apr 2023 07:03:38 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 4 Apr 2023 07:03:37 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Tue, 4 Apr 2023 07:03:37 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.105)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Tue, 4 Apr 2023 07:03:37 -0700
+        Tue, 4 Apr 2023 10:06:05 -0400
+Received: from mx0b-00128a01.pphosted.com (mx0b-00128a01.pphosted.com [148.163.139.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DEA46AF;
+        Tue,  4 Apr 2023 07:05:44 -0700 (PDT)
+Received: from pps.filterd (m0167091.ppops.net [127.0.0.1])
+        by mx0b-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334Ck8eV013904;
+        Tue, 4 Apr 2023 10:05:08 -0400
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2169.outbound.protection.outlook.com [104.47.73.169])
+        by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3ppecd6v3y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 10:05:07 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R9E/KY3rzJ6xMLQwXTLImyW1nsqtL7uzbPZce/edPAFjyn39bBTHzoiYnz3l0lLkfBjxmrcybSq7GOQ2RaoXwyKDM/1wB2xGaXH6iw1EZeZ4Pa64L5F2fxKr5yNe6LQR+qL/78jLU0cHJaCkhLqDQbWD+WnEITAgTI1itVSmhjFsDvsm+4y2oanGjmmo34spHnqdXHG0q6CLT9jurORxk0yvwyjR2+QMfJSmRtkMq4nNm9r1SO3eCMVVa+p9n+YuodxsqskRMbrA06L0US5kWaTov/NKDEVY3ULHpreWlNI1MhOA93XKxcsI/1FjeReakP8Wf4raW+rjA0XIJugJKA==
+ b=DYm1QwwKln5S77L0gwrRZK1Bv2lLeMY579wwC7PTsIA2tSpQrG2z/6+Du8sWZOQGfjjZWvKZ+b6sTlW4IeQMXREX6UWsErJs3h9RG2Dorj5uGG/QmKBlxMxWiR/5Fu9Xt5VdxzjHdS/1oSbvOXbh+XZEjkKRsWZfP0wm1OQSjMe57R4N9w+PBs0wbroqWJBlfEqqpbkaH3LjKudOsMNaG3n7XmjAjd0wul9w3Azr+u06AN42WzSpMQyR5SnBU6hvu5OsB6QVlmkY54NmLKLwidyyg/n2glIl9t+HYbMALfIPX+17x8CuIfNun/RLRAeRDPCpjmwXTcd9/3/KERRIbw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tmWQZMf7C89h3B4f7b74yWhJWJZKZ25QbRUI9mQkoos=;
- b=FoSX7IQJgHuzaVpABor89t2gdXeuLQ3MZ8HWHnx0PUpPggHtW1Ck7l4vC91b4tzkRt1CV72DG1VZtKnvNJvPWbftb1mg3slL6RdMwmamKwyzLDGLWCiiO6FJX9KHeLRgD52QVdcedbUmd/o69uQpunAefCg1N9Oa21FOBIy++ndlGJeQrJaBD4fDPxj+NAcUgdqoxXKTYyrwowOHc4aV5283Gl27Oxz5UHoYDcmisxNmdURzfKxU68LCaB4+JqrS+77CwZ2u9B309x5I7oVUhOKCLx5kwoclYk7tjHGAxEsLoGR0TNP5Iv10hsP+waExxsfJGDu3iLHGB9qzrSeTdQ==
+ bh=2tfkWb/vBYUP/IxKyt18FKyzKYdrx1MXit2JHCsarAI=;
+ b=m7IfPo8EYhMef9YTsV/9sD6dtkfu++fOVaqXG6F9+fhTiKeiNSX16r1efDOCGKFPglQrf3hX3jeRqMPYpNU+JJBk4kwUYFhwcVfxCIw7injQkSoVEgRbpKu0FfbamrcoJUwKAh9PQoiOiBtcgaz+5XN/9K1pgVTOYpFuuxJcjbzYece2QjdwaA6auMLCQCoR7NrUq2YkkTlk60IhidVeKfpENm+wXOuAPA15eWFD1rVKGWnMl7Ds7uu2n8/rHZyC3R9dbrfU+bhkVnY/SUkK0WLLrGzUBn2oC0NAnUrwNfzTeCOkCdSlNid8GbLpZ/qIqpk9Fl04isnM/D6UWH8sWA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4839.namprd11.prod.outlook.com (2603:10b6:510:42::18)
- by BN9PR11MB5546.namprd11.prod.outlook.com (2603:10b6:408:103::10) with
+ smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
+ dkim=pass header.d=analog.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2tfkWb/vBYUP/IxKyt18FKyzKYdrx1MXit2JHCsarAI=;
+ b=40SvxVYrbbdP5fQD9VsZCxUVYHy4Js0pHMNrpj145ucE1r9BPEFA6Rt4Sbl6TcE5e1T4xxSfVtSvmEGvggnlPWTX6bdOwvSoLnXMrGvrzDy1hOtVOUWAu2El4F+BjaUI6Qyt214JX99CdrmcnALsSCmAUbX2sadrf7NXMVfmuXI=
+Received: from MN2PR03MB5168.namprd03.prod.outlook.com (2603:10b6:208:1ec::19)
+ by SJ0PR03MB6988.namprd03.prod.outlook.com (2603:10b6:a03:43c::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Tue, 4 Apr
- 2023 14:03:28 +0000
-Received: from PH0PR11MB4839.namprd11.prod.outlook.com
- ([fe80::60e0:f0a8:dd17:88ab]) by PH0PR11MB4839.namprd11.prod.outlook.com
- ([fe80::60e0:f0a8:dd17:88ab%7]) with mapi id 15.20.6254.033; Tue, 4 Apr 2023
- 14:03:27 +0000
-Date:   Tue, 4 Apr 2023 22:05:02 +0800
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Eric Dumazet <edumazet@google.com>
-CC:     <linux-kernel@vger.kernel.org>, <ast@kernel.org>,
-        <john.fastabend@gmail.com>, <heng.su@intel.com>, <lkp@intel.com>,
-        <linux-gpio@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <yi1.lai@intel.com>
-Subject: Re: [Syzkaller & bisect] There is WARNING: refcount bug in
- sock_map_free in v6.3-rc1
-Message-ID: <ZCwujl7qJPvMsHKv@xpf.sh.intel.com>
-References: <ZAdMB+eGT3TQEo7y@xpf.sh.intel.com>
- <ZAdVvximUvRXcGZZ@xpf.sh.intel.com>
- <ZCvusEIauvO8BLM5@xpf.sh.intel.com>
- <CANn89iJjqTyev28kzEwBjoNafn_4Ku3ZijJxQ_+Tc93TaG3D=g@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANn89iJjqTyev28kzEwBjoNafn_4Ku3ZijJxQ_+Tc93TaG3D=g@mail.gmail.com>
-X-ClientProxiedBy: SGBP274CA0001.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::13)
- To PH0PR11MB4839.namprd11.prod.outlook.com (2603:10b6:510:42::18)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Tue, 4 Apr
+ 2023 14:05:04 +0000
+Received: from MN2PR03MB5168.namprd03.prod.outlook.com
+ ([fe80::8f99:7745:fa5d:3dea]) by MN2PR03MB5168.namprd03.prod.outlook.com
+ ([fe80::8f99:7745:fa5d:3dea%4]) with mapi id 15.20.6254.033; Tue, 4 Apr 2023
+ 14:05:04 +0000
+From:   "Sahin, Okan" <Okan.Sahin@analog.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: RE: [PATCH v6 2/5] regulator: max77541: Add ADI MAX77541/MAX77540
+ Regulator Support
+Thread-Topic: [PATCH v6 2/5] regulator: max77541: Add ADI MAX77541/MAX77540
+ Regulator Support
+Thread-Index: AQHZUOhK4+ouoKvMhkWOBhvjITphT67vPEuAgCwdhdA=
+Date:   Tue, 4 Apr 2023 14:05:03 +0000
+Message-ID: <MN2PR03MB5168ACF92AFF775003C29B12E7939@MN2PR03MB5168.namprd03.prod.outlook.com>
+References: <20230307112835.81886-1-okan.sahin@analog.com>
+ <20230307112835.81886-3-okan.sahin@analog.com>
+ <ZAcrzYNesiTYLCH3@smile.fi.intel.com>
+In-Reply-To: <ZAcrzYNesiTYLCH3@smile.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcb2thbi5zYWhp?=
+ =?us-ascii?Q?blxhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4?=
+ =?us-ascii?Q?NGJhMjllMzViXG1zZ3NcbXNnLWFmNjkyNjFiLWQyZjEtMTFlZC1iZWMxLTA0?=
+ =?us-ascii?Q?N2JjYjVhYzA0OFxhbWUtdGVzdFxhZjY5MjYxZC1kMmYxLTExZWQtYmVjMS0w?=
+ =?us-ascii?Q?NDdiY2I1YWMwNDhib2R5LnR4dCIgc3o9Ijg3MjUiIHQ9IjEzMzI1MDkwNzAw?=
+ =?us-ascii?Q?MDQ4MTk4MiIgaD0iMTRSRlNvMjhIN3o0RlF6V1NrMmJiL1ZhbEt3PSIgaWQ9?=
+ =?us-ascii?Q?IiIgYmw9IjAiIGJvPSIxIiBjaT0iY0FBQUFFUkhVMVJTUlVGTkNnVUFBRW9D?=
+ =?us-ascii?Q?QUFDK0tNTngvbWJaQVlRMVZZeHVKaUpuaERWVmpHNG1JbWNEQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUhBQUFBRGFBUUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUVBQVFBQkFBQUFRZGlrNVFBQUFBQUFBQUFBQUFBQUFKNEFBQUJoQUdR?=
+ =?us-ascii?Q?QWFRQmZBSE1BWlFCakFIVUFjZ0JsQUY4QWNBQnlBRzhBYWdCbEFHTUFkQUJ6?=
+ =?us-ascii?Q?QUY4QVpnQmhBR3dBY3dCbEFGOEFaZ0J2QUhNQWFRQjBBR2tBZGdCbEFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFHRUFaQUJwQUY4QWN3QmxBR01B?=
+ =?us-ascii?Q?ZFFCeUFHVUFYd0J3QUhJQWJ3QnFBR1VBWXdCMEFITUFYd0IwQUdrQVpRQnlB?=
+ =?us-ascii?Q?REVBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFD?=
+ =?us-ascii?Q?QUFBQUFBQ2VBQUFBWVFCa0FHa0FYd0J6QUdVQVl3QjFBSElBWlFCZkFIQUFj?=
+ =?us-ascii?Q?Z0J2QUdvQVpRQmpBSFFBY3dCZkFIUUFhUUJsQUhJQU1nQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUE9PSIvPjwv?=
+ =?us-ascii?Q?bWV0YT4=3D?=
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN2PR03MB5168:EE_|SJ0PR03MB6988:EE_
+x-ms-office365-filtering-correlation-id: 6fbae053-72ba-4d49-c56c-08db35159694
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RRFicBcw3O4nwXhqPgRzejX5yiiN4untfipsuB90qGjxxOLLBibYbpGCVh1uuGP+CstHGCl2jIAFysKQ88YqLEd9YgTrhGNDIizMMLmKGH/IsZdoAUNWuS4dQpKR5uZqr7qjhHTlXNsQQEE0AFDf1ZQK/bQ/b4Gg6MqQP9VQlWHtCI8eZoHLP3nLH4I56EvzKUkagPhX1sRhpRzmbeYz4wrwPhyGyRAbxRZrIt2e/YWh5sr3t+dAZvSeES/kkP60K9shNwOOtHsBKRNuMJL0LQH659cdeP5+4V2ZxdhMeMRc8huyPjSD8oqnxTs+tfp/MaZti6V/SGocNKcfN6fScBQQZyVuAEaUmAC2U189txQWxpMIyjMIep7aufozrNT2preuU6wXABAmrzXP63/JjK7lr+q3F3wS0qhyK7qnd1wvYNTxKE8ifv/Mb2tWPN7v49iGC2cAa+2w0l+34Vx/wd4Mqq8w3xdt2FFlaE2d5maQU0GhHQPzrOAeaIYCoW8bv6lRytQTJ3yUaNSSTYGTAbMsFn0LRLh7VppoU4WqkLuF8UfZlBBCPMQ0z7cwFNwPqN7Awy3K+TaVI+un2xicfnaAUfD2g6EfBxmtdIxx91KYw5FQB9dcC13caRjcw9Uf
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR03MB5168.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(396003)(346002)(39860400002)(136003)(451199021)(186003)(55016003)(41300700001)(66556008)(7696005)(66476007)(66446008)(64756008)(4326008)(6916009)(66946007)(76116006)(8676002)(71200400001)(2906002)(38100700002)(86362001)(38070700005)(122000001)(33656002)(5660300002)(8936002)(316002)(54906003)(52536014)(7416002)(478600001)(9686003)(6506007)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JbsDYpcSBweEa6/3HbmqBfeHIcFVDnwjTJ2CvAIzh4uY4lybo7AfvJrYWHFW?=
+ =?us-ascii?Q?PEURev0HAkQV1SrH79BXPZwZZNuyZWn3W4/ZWqGpOqMTXCqOhpP6fZLVV/Sp?=
+ =?us-ascii?Q?PXQrXZv+ZKznjuSlztLu6fQDyZ0lvKEUp7Jtrp3a+0UgHqsSrcdMKUmLGa/D?=
+ =?us-ascii?Q?cfSlXZVWzJ38Gb/19vE+kvaaTLDIzlIsJcoZDjRB5qGmdgZz0LnyvvTY+4we?=
+ =?us-ascii?Q?duTEqPrgvecqRIU6/FLAmyPGQFIOtFBiJupEcaGbzqcGZfZaMDADULTsV4km?=
+ =?us-ascii?Q?Xxqvxvt0D7yqEybXyzVds05xf83pWIb0yjN9GvCA4zEYriegjMrfbfg+VzWT?=
+ =?us-ascii?Q?qhF3d1kfjmgSNYjcN0Y0Qqauh0Ku+llXBtzvVVVpAMESISo8hZAdJ0EE5iHz?=
+ =?us-ascii?Q?AHOVQvru6XhfiehhppYPiqo7CyhkS5h+lcE6SsO+sPNHsU9zBEPy/LVLs86V?=
+ =?us-ascii?Q?Pyls5fVGgSG14qaUVT6WUgJd38jS3R/fh7oY6EG2uCuCEwub8xeFLTOx/Euu?=
+ =?us-ascii?Q?nyCs6LWCjg6DiqZcmosDUHvLizOL/fjy6D7TBNjky7E9nBx5zW1ceFMHcIv5?=
+ =?us-ascii?Q?vpdCVM2B0NS8mL2SBxbDrBu9W+EguflleBlTVBGkjnvESeEUNujj2jNdOvYo?=
+ =?us-ascii?Q?gapnMjMTAK5NzEMNozEhUHi+xrlzqYSnygJAAVWJWV/+JURHQFrpPJ1HJCVk?=
+ =?us-ascii?Q?T0QIQ+tz8h2rzbwVFZQrt3QOY8rlEH3YoC3gJddXFEF8HkAjl++mZYPoRg1t?=
+ =?us-ascii?Q?KamM+56fdHiuNrabSQbqfAark+8KuxJjOqLs0tbOOYrHOQcI0pDdxbCZ3kXg?=
+ =?us-ascii?Q?v5rZ8cmFovSCYvPajeyOXPE8fkFksJ0dr0Kn3uDYCkLWrG1MSHX6LfJhT7/v?=
+ =?us-ascii?Q?DQeb542LMD2zJCLv6ZWpuFtCYDpNNrtSVHzH4TNCwvz2Zp3rhbmFq4K1qyt+?=
+ =?us-ascii?Q?5quiho+1bq9PL9UcGVvxurHUwRSL8r6vKiUqMXij8XGWMNxRy2nw0jeGLX58?=
+ =?us-ascii?Q?KghllJ8EqIFur2NxRF/Gao5QQvKg9rerPjVPYJ4q//Ifje+kExLm6dRuEf6Z?=
+ =?us-ascii?Q?/GwJYNRZ8ygLMWXaqP1V/I2bmPtvckpVgWcZO/Kc4eXcWLNrEo8vitiTYi7P?=
+ =?us-ascii?Q?hpt981/4SVVK13s196Lg4zfINfwZMGzEj6pLfHSU02t3S+OhM2j6VaIX3cbU?=
+ =?us-ascii?Q?xu9DOYGH/ifB46Gi6Gbg2MKLyQdm7rzRA7dnaOd9MXgwsfTRUCckN0eKVXxE?=
+ =?us-ascii?Q?SC3T2do8U08agsUhogHOfuc0/oUjSsZTNf3l42esi5BEhlbQ/B95nhQgbVh5?=
+ =?us-ascii?Q?ePGVbPnOXcDNkfh1hOr5NYknbd5s1JlY+yiv0i1Uus9oF8xakAw+1JU4xsi3?=
+ =?us-ascii?Q?J6GXjwirW9GenVO8TTV+GVqIwJUzBpuBV5Ji2JSbNfBHjSHjDyDnmMtLLuj0?=
+ =?us-ascii?Q?JjQmvMfyG8Y0DLEqEpaCd91fTdOtha2DGvWSJ6MYo8E/P2AD/W6MTcGOEFJ7?=
+ =?us-ascii?Q?HkR4pgId/Ec9ZPd3/NfTps1tfZ9bToRzrrnMrwYQXGFHikey+dsnku/3m66X?=
+ =?us-ascii?Q?oiS+RDHy7RJBa4PWLYw9umG4ZVPoXQurI28vEb68?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4839:EE_|BN9PR11MB5546:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55fd385b-9348-4887-406d-08db35155cfb
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: icguLl8kVQyW7tnhnALsz8rpp1XDxOWnpDofupllnSBVY0gQMW+cAwxe70i0B34B67SxiaxjbIJWzMcN4KptbBK9heclTCmCKzRbH9KUSpma0zDx+0RhHEFY0x/72XFgc2SuepzIJ1p1hL8GhEQs6o0gsud8RAdi9oQ0Q6RN06STHKq5NZ4bdJpqC7uCPR0038Qoi+oKluXPO+044Owq1KUh247ML6tjMZ0vXmj13wENFVtKrtsXtSyiIBftFLJnmmdGWSFr/jg6ScGJBPEigMuRjyzIN7ysfio60aMPH3OX5+gnxFhINpBTLQkCmKqsy5J1mvWniv3N1GDQ0UJu9+VAL0W8rrsPf+jCSXFF6mNlnBVHPyLZ8Ujt2ZZmW1b0VLToCrBLWwnmUqfZi22dC+kCeVsMycnolfuWmEqaA6/wNzOPSEtVzDw3DLnnzzHeb+rzfRkULuna0AWz0Bx1k52KYUTvUFFhnSI5t1a+z4TTJMvogPXewIqPmYrGg+hkvU8JWV4vx6cOHWRqhrXIhjxZvxalj8PHcC6F6BKRBe9Nd8UCJ+tbyzzj1GfXGbs4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4839.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(396003)(39860400002)(346002)(366004)(136003)(451199021)(66556008)(316002)(478600001)(45080400002)(66946007)(66476007)(8676002)(6916009)(107886003)(6486002)(6666004)(4326008)(38100700002)(2906002)(8936002)(41300700001)(44832011)(5660300002)(82960400001)(86362001)(6506007)(6512007)(53546011)(26005)(186003)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K1YxcFNhUFRKK3pwVmZrM3gxb0UwTUJ5YVQwTGNLeXVEc3NrbjZ3ZkFpVzAx?=
- =?utf-8?B?WVFvWCt2b3VwOXlxMFFOazJQRDVLY21QV0JmUHpRbWIvS25xa1A1ZndiekFt?=
- =?utf-8?B?YmZBSDJaSUI1ZDRtbm1MRXJpZXJ4K1Q1YTdHNEJIbU1GY3RNaG05Y1NDY0Mw?=
- =?utf-8?B?aUpwWUNsY1pNNVNtdWlWdnRtaHU1dWlnSTdxaEtkSTdWdlNNTmpPOEVuZjll?=
- =?utf-8?B?YWRjV2NDcm9QelhBb1EyQ013TVVXWnJZcGZnZXZrV2VVVmxKNmZaTWpPdjlB?=
- =?utf-8?B?ZTg2NzFVNmtPY2lCZmFQdnFoRURMSlo3VVVyRTk2RFh1dmpZRVFJZGZJZFBI?=
- =?utf-8?B?NXUzQldDL2hhYnF6RGlLYUFmTndDNnduZDJQR0dkUU4vYVFOQm9XUS9YMVk4?=
- =?utf-8?B?S2EyWWZMRVdmSmdzdlk0eklqZGlLZVpIWmRyckFqd2hDcUdlNEJlQU4wSjhm?=
- =?utf-8?B?ZWVNVDRqMVBUN2dwN0FYQkxjQVExdGtyMVBsRFFzamg1Qm40eVU3NUpxYUhw?=
- =?utf-8?B?V3JJV01pdFVUT0ExYzhXZVpuOUxqVi9zMlVtb3IvUkR2bGxFY2xlTkZLbC9O?=
- =?utf-8?B?VlR0OGRBNTN1dURUNm8vM3cvOHFwdjBKNlM3aFZGTGZkbm81ZERkZGl0R2Q2?=
- =?utf-8?B?U1FiU2dTZVYwZUdNSXNnTUI4VmRYeU8xVzdlTVB5bzJVM2hKWFR4ekdvaEdX?=
- =?utf-8?B?bmNHOXNobTBtTkhMK1pPMVpnNmJLK0JqdnVxQi9EeldvL2RNeU5wc002L0Zw?=
- =?utf-8?B?NTFBdTZBS0hYejRHWi9HM3pYMndmQktDb2hmZzU0Z3p5d3FIeWwvczVWK0Mx?=
- =?utf-8?B?RlZXME1MV2V0YXpMbDEwYzR0SVlJSXpzOGlib2tsdGU1bkZqcTVUVUJ4bi9z?=
- =?utf-8?B?RENOOTZjTk9sNmMrQnord0hMOTFQU3BqMFVycFJ1Z2E1VEs2OFRZeEdWMHpX?=
- =?utf-8?B?NGx3MXZLa1VoZEMzdjhQSlRvMGIvUDJnZ3AxS1dPMW5EZXpET2xGRVhvaTRz?=
- =?utf-8?B?VXFMdHhLSFRNQ01iS3N3U0hUY2dFQ0RmQ1c4Szl4VGlkUlo3U1NiWXFRMkZQ?=
- =?utf-8?B?YjdMQkdjVjRMZWZPZktCOGt6USt3cXFqREd3VHRrMmhWc2I2SXFxS09reXJp?=
- =?utf-8?B?ZW91byt1SlJmME1VOVAvRjFqdWpCck94Q0lhT2F4TjFHVEdUcGY2c3NQVHg1?=
- =?utf-8?B?Rml4VGs3TFhtTUZldEx6NVFOUEdIZ0cycis2bnBJd0FzeW1RMXFoYUVMNENp?=
- =?utf-8?B?K1hONFRzU1BzWDZhbVJMN3hrZm81YmFzanFFd1o5SDluSVJ2VnhETUM0Zm5P?=
- =?utf-8?B?dm5xTE03ZFZZRDU3TU8yZDJDblJUNnNRRTU4UGpNclJmTnJBVjZhRzhlS3RT?=
- =?utf-8?B?MnpFTnFHdG9PenlmdlpvZzl4cVlTa0dobHdUcmw1cnIwaFZlNmFsNkIwSGVU?=
- =?utf-8?B?dnZid1dvMVY5ZEZhZ1Y2VGx6M2plZUVrdmRyZ1FXQWN6L0QrV2ZWT0VBNUt0?=
- =?utf-8?B?Z0FCT3d6YVZuWmxrSUxROEsrTWFZZzRZS2Q1aGxwWityZUVFUWkwS0VxdENU?=
- =?utf-8?B?R3d2R0taVVQxMnRjSXBUZ3BNaEQ2ekhoSWFkdG9yMkRNUnB5MnRwRldIQ0VO?=
- =?utf-8?B?Y3c1dG1QTFIza3h0UU5wRGJad3RnYTZQOEUybStNeEcrY29wT2RWTmRqbGo1?=
- =?utf-8?B?blFkSVpCVHRuamU3SURld1R2MHJJbEdUd0ZvczJMM2tNWU93VXIvTkhYT0Vx?=
- =?utf-8?B?ZkNiQWpGYUdyYldLNnhvZmp3eC80WlBNT3hSNjFkNWFYbWRxNU5aTHRWV0ZN?=
- =?utf-8?B?cW0rdHV4OHorMFdWTXFnZDl1UnhpeUp4bkRFSUtGMnFEaVNrVzZTNjhRUlo0?=
- =?utf-8?B?S2hmcjdka0YrS1ZEcEEzaXVVSk53ZGtxU3JPMDdkM0VpSVRuQjcyVDBWMnp3?=
- =?utf-8?B?ZmxYZkZEVjNKWEhZQ0tqVDdlUkhwZzNnUTJhdWREMnFuUnNrK29NL0FCSm85?=
- =?utf-8?B?OHB3ZG9MR1VVYUx6WXdEcFRjbXJPeUlGcEU2R05Db2dnM1BsNlMzcTlSZEoy?=
- =?utf-8?B?bFBFTGd3cHlhdFJQT2tvS3QrajE2cjc5VGJnN0wrOFdOY1NDOXFSV1hnSVVQ?=
- =?utf-8?Q?xxMvEmmHinZWSqflTm5V6lbBt?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55fd385b-9348-4887-406d-08db35155cfb
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4839.namprd11.prod.outlook.com
+X-OriginatorOrg: analog.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 14:03:27.5498
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR03MB5168.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fbae053-72ba-4d49-c56c-08db35159694
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Apr 2023 14:05:03.9796
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f4AsdJWes91iCN9Kd+rkLvxQQK1U5yAHcIUH3EsEsoVYB+1kr80I7eKdfdO/IIuPlCRBtF1Fv9VPJMI+DdDt1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5546
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WeNZz/8VSEANd6owUOKe4nl7K2NwFfBKAmrmDwDJ4Z4/gE8ZKuzn+wWPaFunF9x3XQdIVt14aSgrnKiTQnUryg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB6988
+X-Proofpoint-ORIG-GUID: fC252vvT-aQIybF4ojxWVlR_whzWlhg_
+X-Proofpoint-GUID: fC252vvT-aQIybF4ojxWVlR_whzWlhg_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-04_06,2023-04-04_04,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 priorityscore=1501 suspectscore=0 spamscore=0 adultscore=0
+ clxscore=1011 mlxscore=0 phishscore=0 mlxlogscore=999 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304040131
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-04 at 11:43:36 +0200, Eric Dumazet wrote:
-> On Tue, Apr 4, 2023 at 11:31 AM Pengfei Xu <pengfei.xu@intel.com> wrote:
-> >
-> > ++ GPIO and kself-test mailing list.
-> >
-> > Hi kernel experts,
-> >
-> > It's a soft remind.
-> >
-> > My colleague Lai Yi found that similar "refcount_t: underflow; use-after-free"
-> > issue still existed in v6.3-rc5 kernel on x86 platforms.
-> >
-> > We could reproduce issue from kself-test: gpio-mockup.sh easily:
-> > kernel/tools/testing/selftests/gpio/gpio-mockup.sh:
-> >
-> > "
-> > [ 5781.338917] -----------[ cut here ]-----------
-> > [ 5781.344192] refcount_t: underflow; use-after-free.
-> > [ 5781.349666] WARNING: CPU: 250 PID: 82496 at lib/refcount.c:25 refcount_warn_saturate+0xbe/0x110
-> > [ 5781.359550] Modules linked in: gpio_mockup isst_if_mmio isst_if_mbox_pci intel_th_sth stm_core intel_th_pti intel_th_pci intel_th_gth pmt_telemetry pmt_class intel_vsec intel_rapl_msr intel_rapl_common nfsv3 rpcsec_gss_krb5 auth_rpcgss nfsv4 nfs lockd grace bridge stp llc sunrpc intel_uncore_frequency intel_uncore_frequency_common i10nm_edac nfit x86_pkg_temp_thermal intel_powerclamp coretemp iTCO_wdt ofpart kvm_intel intel_pmc_bxt iTCO_vendor_support spi_nor mtd intel_sdsi kvm spdm irqbypass dax_hmem joydev asn1_encoder snd_pcm mei_me i2c_i801 spi_intel_pci isst_if_common idxd snd_timer intel_th i2c_smbus spi_intel mei i2c_ismt ipmi_ssif cxl_acpi ipmi_si cxl_core acpi_power_meter crc32c_intel i40e igb dca igc pinctrl_emmitsburg pinctrl_intel pwm_lpss fuse [last unloaded: isst_if_mmio]
-> > [ 5781.438080] CPU: 250 PID: 82496 Comm: modprobe Not tainted 6.3.0-rc5 #1
-> > [ 5781.449711] Hardware name: Intel Corporation, BIOS IFWI 03/12/2023
-> > [ 5781.461615] RIP: 0010:refcount_warn_saturate+0xbe/0x110
-> > [ 5781.467585] Code: 01 01 e8 75 56 8e ff 0f 0b c3 cc cc cc cc 80 3d 4c 67 ac 01 00 75 85 48 c7 c7 b0 31 cd a9 c6 05 3c 67 ac 01 01 e8 52 56 8e ff <0f> 0b c3 cc cc cc cc 80 3d 27 67 ac 01 00 0f 85 5e ff ff ff 48 c7
-> > [ 5781.488761] RSP: 0018:ff45a7f44d39feb0 EFLAGS: 00010286
-> > [ 5781.494745] RAX: 0000000000000000 RBX: ffffffffc0b36540 RCX: 0000000000000000
-> > [ 5781.502871] RDX: 0000000000000002 RSI: ffffffffa9c065c8 RDI: 00000000ffffffff
-> > [ 5781.510984] RBP: ff31c1afa78cb800 R08: 0000000000000001 R09: 0000000000000003
-> > [ 5781.519100] R10: ff31c1b6fc000000 R11: ff31c1b6fc000000 R12: ff31c1afa78c4f40
-> > [ 5781.527215] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> > [ 5781.535337] FS: 00007f9bc705a740(0000) GS:ff31c1b700280000(0000) knlGS:0000000000000000
-> > [ 5781.544529] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [ 5781.551063] CR2: 00007f9bc5e50dc0 CR3: 000000093b36c003 CR4: 0000000000f71ee0
-> > [ 5781.559180] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > [ 5781.567307] DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
-> > [ 5781.575413] PKRU: 55555554
-> > [ 5781.578551] Call Trace:
-> > [ 5781.581394] <TASK>
-> > [ 5781.583868] gpio_mockup_exit+0x33/0x420 [gpio_mockup]
-> > [ 5781.589756] __do_sys_delete_module.constprop.0+0x180/0x270
-> > [ 5781.596112] ? syscall_trace_enter.constprop.0+0x17f/0x1b0
-> > [ 5781.602354] do_syscall_64+0x43/0x90
-> 
-> I hear you but this trace has nothing to do with the bpf/sockmap commit ?
-> 
-   I just saw the same WARNING from kself-test: gpio-mockup.sh, maybe
-   it's different issue, sorry.
-"
-refcount_t: underflow; use-after-free.
-[ 5781.349666] WARNING: CPU: 250 PID: 82496 at lib/refcount.c:25
-"
+>On Tue, Mar 07, 2023 at 02:28:12PM +0300, Okan Sahin wrote:
+>> Regulator driver for both MAX77541 and MAX77540.
+>> The MAX77541 is a high-efficiency step-down converter with two 3A
+>> switching phases for single-cell Li+ battery and 5VDC systems.
+>>
+>> The MAX77540 is a high-efficiency step-down converter with two 3A
+>> switching phases.
+>
+>Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>
+>But see below.
+>
+>> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
+>> ---
+>>  drivers/regulator/Kconfig              |   9 ++
+>>  drivers/regulator/Makefile             |   1 +
+>>  drivers/regulator/max77541-regulator.c | 153
+>> +++++++++++++++++++++++++
+>>  3 files changed, 163 insertions(+)
+>>  create mode 100644 drivers/regulator/max77541-regulator.c
+>>
+>> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+>> index aae28d0a489c..f0418274c083 100644
+>> --- a/drivers/regulator/Kconfig
+>> +++ b/drivers/regulator/Kconfig
+>> @@ -556,6 +556,15 @@ config REGULATOR_MAX597X
+>>  	  The MAX5970/5978 is a smart switch with no output regulation, but
+>>  	  fault protection and voltage and current monitoring capabilities.
+>>
+>> +config REGULATOR_MAX77541
+>> +	tristate "Analog Devices MAX77541/77540 Regulator"
+>> +	depends on MFD_MAX77541
+>> +	help
+>> +	  This driver controls a Analog Devices MAX77541/77540 regulators
+>> +	  via I2C bus. Both MAX77540 and MAX77541 are dual-phase
+>> +	  high-efficiency buck converter. Say Y here to
+>> +	  enable the regulator driver.
+>
+>Maybe adding what would be the module name if M is chosen?
+>
+>>  config REGULATOR_MAX77620
+>>  	tristate "Maxim 77620/MAX20024 voltage regulator"
+>>  	depends on MFD_MAX77620 || COMPILE_TEST diff --git
+>> a/drivers/regulator/Makefile b/drivers/regulator/Makefile index
+>> ee383d8fc835..1c852f3140a3 100644
+>> --- a/drivers/regulator/Makefile
+>> +++ b/drivers/regulator/Makefile
+>> @@ -68,6 +68,7 @@ obj-$(CONFIG_REGULATOR_LTC3676) +=3D ltc3676.o
+>>  obj-$(CONFIG_REGULATOR_MAX14577) +=3D max14577-regulator.o
+>>  obj-$(CONFIG_REGULATOR_MAX1586) +=3D max1586.o
+>>  obj-$(CONFIG_REGULATOR_MAX597X) +=3D max597x-regulator.o
+>> +obj-$(CONFIG_REGULATOR_MAX77541) +=3D max77541-regulator.o
+>>  obj-$(CONFIG_REGULATOR_MAX77620) +=3D max77620-regulator.o
+>>  obj-$(CONFIG_REGULATOR_MAX77650) +=3D max77650-regulator.o
+>>  obj-$(CONFIG_REGULATOR_MAX8649)	+=3D max8649.o
+>> diff --git a/drivers/regulator/max77541-regulator.c
+>> b/drivers/regulator/max77541-regulator.c
+>> new file mode 100644
+>> index 000000000000..f99caf3f3990
+>> --- /dev/null
+>> +++ b/drivers/regulator/max77541-regulator.c
+>> @@ -0,0 +1,153 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +/*
+>> + * Copyright (c) 2022 Analog Devices, Inc.
+>> + * ADI Regulator driver for the MAX77540 and MAX77541  */
+>
+>I believe Mark asked to have this C++ comment style as well.
+>
+>// Copyright (c) 2022 Analog Devices, Inc.
+>// ADI Regulator driver for the MAX77540 and MAX77541
+>
+>> +#include <linux/mfd/max77541.h>
+>> +#include <linux/mod_devicetable.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/regulator/driver.h>
+>> +
+>> +static const struct regulator_ops max77541_buck_ops =3D {
+>> +	.enable			=3D regulator_enable_regmap,
+>> +	.disable		=3D regulator_disable_regmap,
+>> +	.is_enabled		=3D regulator_is_enabled_regmap,
+>> +	.list_voltage		=3D regulator_list_voltage_pickable_linear_range,
+>> +	.get_voltage_sel	=3D regulator_get_voltage_sel_pickable_regmap,
+>> +	.set_voltage_sel	=3D regulator_set_voltage_sel_pickable_regmap,
+>> +};
+>> +
+>> +static const struct linear_range max77540_buck_ranges[] =3D {
+>> +	/* Ranges when VOLT_SEL bits are 0x00 */
+>> +	REGULATOR_LINEAR_RANGE(500000, 0x00, 0x8B, 5000),
+>> +	REGULATOR_LINEAR_RANGE(1200000, 0x8C, 0xFF, 0),
+>> +	/* Ranges when VOLT_SEL bits are 0x40 */
+>> +	REGULATOR_LINEAR_RANGE(1200000, 0x00, 0x8B, 10000),
+>> +	REGULATOR_LINEAR_RANGE(2400000, 0x8C, 0xFF, 0),
+>> +	/* Ranges when VOLT_SEL bits are  0x80 */
+>> +	REGULATOR_LINEAR_RANGE(2000000, 0x00, 0x9F, 20000),
+>> +	REGULATOR_LINEAR_RANGE(5200000, 0xA0, 0xFF, 0), };
+>> +
+>> +static const struct linear_range max77541_buck_ranges[] =3D {
+>> +	/* Ranges when VOLT_SEL bits are 0x00 */
+>> +	REGULATOR_LINEAR_RANGE(300000, 0x00, 0xB3, 5000),
+>> +	REGULATOR_LINEAR_RANGE(1200000, 0xB4, 0xFF, 0),
+>> +	/* Ranges when VOLT_SEL bits are 0x40 */
+>> +	REGULATOR_LINEAR_RANGE(1200000, 0x00, 0x8B, 10000),
+>> +	REGULATOR_LINEAR_RANGE(2400000, 0x8C, 0xFF, 0),
+>> +	/* Ranges when VOLT_SEL bits are  0x80 */
+>> +	REGULATOR_LINEAR_RANGE(2000000, 0x00, 0x9F, 20000),
+>> +	REGULATOR_LINEAR_RANGE(5200000, 0xA0, 0xFF, 0), };
+>> +
+>> +static const unsigned int max77541_buck_volt_range_sel[] =3D {
+>> +	0x00, 0x00, 0x40, 0x40, 0x80, 0x80,
+>> +};
+>> +
+>> +enum max77541_regulators {
+>> +	MAX77541_BUCK1 =3D 1,
+>> +	MAX77541_BUCK2,
+>> +};
+>> +
+>> +#define MAX77540_BUCK(_id, _ops)					\
+>> +	{	.id =3D MAX77541_BUCK ## _id,				\
+>> +		.name =3D "buck"#_id,					\
+>> +		.of_match =3D "buck"#_id,					\
+>> +		.regulators_node =3D "regulators",			\
+>> +		.enable_reg =3D MAX77541_REG_EN_CTRL,			\
+>> +		.enable_mask =3D MAX77541_BIT_M ## _id ## _EN,		\
+>> +		.ops =3D &(_ops),						\
+>> +		.type =3D REGULATOR_VOLTAGE,				\
+>> +		.linear_ranges =3D max77540_buck_ranges,			\
+>> +		.n_linear_ranges =3D ARRAY_SIZE(max77540_buck_ranges),	\
+>> +		.vsel_reg =3D MAX77541_REG_M ## _id ## _VOUT,		\
+>> +		.vsel_mask =3D MAX77541_BITS_MX_VOUT,			\
+>> +		.vsel_range_reg =3D MAX77541_REG_M ## _id ## _CFG1,	\
+>> +		.vsel_range_mask =3D MAX77541_BITS_MX_CFG1_RNG,		\
+>> +		.linear_range_selectors =3D max77541_buck_volt_range_sel, \
+>> +		.owner =3D THIS_MODULE,					\
+>> +	}
+>> +
+>> +#define MAX77541_BUCK(_id, _ops)					\
+>> +	{	.id =3D MAX77541_BUCK ## _id,				\
+>> +		.name =3D "buck"#_id,					\
+>> +		.of_match =3D "buck"#_id,					\
+>> +		.regulators_node =3D "regulators",			\
+>> +		.enable_reg =3D MAX77541_REG_EN_CTRL,			\
+>> +		.enable_mask =3D MAX77541_BIT_M ## _id ## _EN,		\
+>> +		.ops =3D &(_ops),						\
+>> +		.type =3D REGULATOR_VOLTAGE,				\
+>> +		.linear_ranges =3D max77541_buck_ranges,			\
+>> +		.n_linear_ranges =3D ARRAY_SIZE(max77541_buck_ranges),	\
+>> +		.vsel_reg =3D MAX77541_REG_M ## _id ## _VOUT,		\
+>> +		.vsel_mask =3D MAX77541_BITS_MX_VOUT,			\
+>> +		.vsel_range_reg =3D MAX77541_REG_M ## _id ## _CFG1,	\
+>> +		.vsel_range_mask =3D MAX77541_BITS_MX_CFG1_RNG,		\
+>> +		.linear_range_selectors =3D max77541_buck_volt_range_sel, \
+>> +		.owner =3D THIS_MODULE,					\
+>> +	}
+>> +
+>> +static const struct regulator_desc max77540_regulators_desc[] =3D {
+>> +	MAX77540_BUCK(1, max77541_buck_ops),
+>> +	MAX77540_BUCK(2, max77541_buck_ops), };
+>> +
+>> +static const struct regulator_desc max77541_regulators_desc[] =3D {
+>> +	MAX77541_BUCK(1, max77541_buck_ops),
+>> +	MAX77541_BUCK(2, max77541_buck_ops), };
+>> +
+>> +static int max77541_regulator_probe(struct platform_device *pdev) {
+>> +	struct regulator_config config =3D {};
+>> +	const struct regulator_desc *desc;
+>> +	struct device *dev =3D &pdev->dev;
+>> +	struct regulator_dev *rdev;
+>> +	struct max77541 *max77541 =3D dev_get_drvdata(dev->parent);
+>> +	unsigned int i;
+>> +
+>> +	config.dev =3D dev->parent;
+>> +
+>> +	switch (max77541->chip->id) {
+>> +	case MAX77540:
+>> +		desc =3D max77540_regulators_desc;
+>> +		break;
+>> +	case MAX77541:
+>> +		desc =3D max77541_regulators_desc;
+>> +		break;
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	for (i =3D 0; i < MAX77541_MAX_REGULATORS; i++) {
+>> +		rdev =3D devm_regulator_register(dev, &desc[i], &config);
+>> +		if (IS_ERR(rdev))
+>> +			return dev_err_probe(dev, PTR_ERR(rdev),
+>> +					     "Failed to register regulator\n");
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct platform_device_id max77541_regulator_platform_id[]=
+ =3D {
+>> +	{ "max77540-regulator" },
+>> +	{ "max77541-regulator" },
+>> +	{ }
+>> +};
+>> +MODULE_DEVICE_TABLE(platform, max77541_regulator_platform_id);
+>> +
+>> +static struct platform_driver max77541_regulator_driver =3D {
+>> +	.driver =3D {
+>> +		.name =3D "max77541-regulator",
+>> +	},
+>> +	.probe =3D max77541_regulator_probe,
+>> +	.id_table =3D max77541_regulator_platform_id, };
+>> +module_platform_driver(max77541_regulator_driver);
+>> +
+>> +MODULE_AUTHOR("Okan Sahin <Okan.Sahin@analog.com>");
+>> +MODULE_DESCRIPTION("MAX77540/MAX77541 regulator driver");
+>> +MODULE_LICENSE("GPL");
+>> --
+>> 2.30.2
+>>
+>
+>--
+>With Best Regards,
+>Andy Shevchenko
+>
 
-  Thanks!
-  BR.
-  -Pengfei
+Hi Andy,
 
-> My change looks correct, so your bisection might simply trigger because
-> of a wider window for another bug to surface.
-> 
-> John, do you have an idea of what is going on here ?
+Should I change comment style to C++ comment style for whole patchset?
+
+Regards,
+Okan
