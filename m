@@ -2,123 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76DA6D58EE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F476D58F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbjDDGva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 02:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
+        id S233473AbjDDGym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 02:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbjDDGv2 (ORCPT
+        with ESMTP id S233365AbjDDGyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 02:51:28 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8786B2108
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:51:25 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id n9-20020a05600c4f8900b003f05f617f3cso208499wmq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 23:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680591084;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OLvfUjZlGoiC6E8ZsiMGzI/gZ0qXzWEniLSO6l1hhK0=;
-        b=JdLUltt4dGzsZxE2SMoYArGnoBn/hat62geg6Gv8Qn65riD4njUzikP8IrHhcZXreN
-         qu+5S6QHOnvrsSOkaRtZlQOZyB1KPSNP1V7E73m/4SVvpopbMtgdY9xQVtxSJj7o6OFO
-         wjjqwoU15Uq/u01lSwnhhEdpMpZqezoW8AGC9TP1+NJtKHhaguNtfqGXOWmCM4ckVKGq
-         Rua2wsZWgIdLZQYB0yCLW7buDe0tJSHExZGrrHPG0Z3AGbCT5cy24X0lzlql11cMGB8n
-         +cY0jgQ6pbFFvC2o5DBiWokI+xroKN7ttIq9C+ESujE7klKtk3dbt5iQLz/q/HHN6rMy
-         3r8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680591084;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OLvfUjZlGoiC6E8ZsiMGzI/gZ0qXzWEniLSO6l1hhK0=;
-        b=1MDRBczr81oGcn7qBTMzd2MF4dt8y53vSZ0ppDGHWOq3H8zuHn5BcUe+KUvDxlf7jD
-         XLEZG8jbVf9Uh0i1ZsxyyaBeiMpxk8A73y7uMzjQ2o8Sj1/S7rMa6zY8KyQ85AGbCoJD
-         O9i/HqkYRqVRYaxDbOiaIadedVNlYx7WUAMbR9IvA9ht/7YU7VG1aJ9mh1lwh9ittLCs
-         kh+uxJ/1iDhWefL5YwZrlU5J1VcawIPNE7KASnndeMWWiGMj+H4z3FYdeVn6KVBPNEiI
-         fSmgmbEjVEFEQJkd518feelmFZ45P3wkmR+xqYKjqK/bPThDBBAM6IAfjAJlI1lOizlV
-         hM+w==
-X-Gm-Message-State: AAQBX9ctj5OAUbuEEb9ucU/L06stEADZiEewjUvXfPs8N66KQ23+Il0B
-        A1FmLmedJq1/H0kpx+xqv7Apcb3RPsMpgdSQF6RVsA==
-X-Google-Smtp-Source: AKy350ZvuT/VAsKLkawblV/SVB7Q8YGrIS/FPjDOqKP8dqJp8Zan1XcL6Bx+RgnUhmXZuPjroY+OcI7hM8RmL1t6+RY=
-X-Received: by 2002:a05:600c:2247:b0:3ef:6935:da8d with SMTP id
- a7-20020a05600c224700b003ef6935da8dmr470831wmm.8.1680591083936; Mon, 03 Apr
- 2023 23:51:23 -0700 (PDT)
+        Tue, 4 Apr 2023 02:54:35 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF08268B;
+        Mon,  3 Apr 2023 23:54:33 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PrJQC0zv7zkXxf;
+        Tue,  4 Apr 2023 14:53:55 +0800 (CST)
+Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 4 Apr
+ 2023 14:54:29 +0800
+Date:   Tue, 4 Apr 2023 14:54:13 +0800
+From:   Changbin Du <changbin.du@huawei.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+CC:     Changbin Du <changbin.du@huawei.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Hui Wang <hw.huiwang@huawei.com>
+Subject: Re: [PATCH] perf: script: add new output field 'dsoip'
+Message-ID: <20230404065413.5dimhrxqcfxhucd2@M910t>
+References: <20230331084418.3910903-1-changbin.du@huawei.com>
+ <f2eb0299-05cf-72f5-4bb1-c09ebb0a55a1@intel.com>
+ <20230404022608.nkffyujwwoywfxcc@M910t>
+ <adbfc5e7-9398-9741-7fd0-953dada2714e@intel.com>
 MIME-Version: 1.0
-References: <20230402100509.1154220-1-bhupesh.sharma@linaro.org>
- <20230402100509.1154220-11-bhupesh.sharma@linaro.org> <9ecab48e-e828-0a03-2bc7-678e555bc80d@kernel.org>
-In-Reply-To: <9ecab48e-e828-0a03-2bc7-678e555bc80d@kernel.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Tue, 4 Apr 2023 12:21:12 +0530
-Message-ID: <CAH=2Ntzgm0PyBfCOwj1VtAupqBqjgNoUQhH7=dHzsGmLz7OKMA@mail.gmail.com>
-Subject: Re: [PATCH v5 10/11] arm64: dts: qcom: sm8350: Add Crypto Engine support
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, konrad.dybcio@linaro.org,
-        vladimir.zapolskiy@linaro.org, rfoss@kernel.org,
-        neil.armstrong@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <adbfc5e7-9398-9741-7fd0-953dada2714e@intel.com>
+X-Originating-IP: [10.110.54.157]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 at 17:46, Georgi Djakov <djakov@kernel.org> wrote:
+On Tue, Apr 04, 2023 at 09:38:40AM +0300, Adrian Hunter wrote:
+> On 4/04/23 05:26, Changbin Du wrote:
+> > On Mon, Apr 03, 2023 at 08:28:23AM +0300, Adrian Hunter wrote:
+> >> On 31/03/23 11:44, Changbin Du wrote:
+> >>> The goal of this change is to achieve consistent output for address. Before
+> >>> this, the raw ip is printed for non-callchain and binary offset for
+> >>> callchain. Mostly what we expect is the raw ip.
+> >>>
+> >>> This patch does two changes:
+> >>>   - Always print raw ip for symbols.
+> >>>   - Add a new 'dsoip' field if we really need the binary offset, and the
+> >>
+> >> IP stands for instruction pointer, which is always a memory address,
+> >> so 'dsoip' does not seem like a good name.  What about 'dso_offset'?
+> >>
+> > This name is inherited from the comments of map::map_ip. Actually now we have
+> > three terms: dos ip, binary offset and dso offset. I also prefer to
+> > 'dso_offset'.
+> > 
+> >>>     offset is appended to dso name.
+> >>>
+> >>> Default output now:
+> >>> $ perf script
+> >>>        perf-exec 171459 5380927.621499:          1 cycles:  ffffffff8c66e1b8 [unknown] ([unknown])
+> >>>        perf-exec 171459 5380927.621524:          1 cycles:  ffffffff8c66e1b8 [unknown] ([unknown])
+> >>>        perf-exec 171459 5380927.621527:          2 cycles:  ffffffff8c66e1b8 [unknown] ([unknown])
+> >>>        perf-exec 171459 5380927.621530:         17 cycles:  ffffffff8c66e1b8 [unknown] ([unknown])
+> >>>        perf-exec 171459 5380927.621533:        194 cycles:  ffffffff8c66e1bf [unknown] ([unknown])
+> >>>        perf-exec 171459 5380927.621536:       2153 cycles:  ffffffff8c6375fe [unknown] ([unknown])
+> >>>        perf-exec 171459 5380927.621540:      23135 cycles:  ffffffff8d001ac4 [unknown] ([unknown])
+> >>>        perf-exec 171459 5380927.621555:     224703 cycles:  ffffffff8c7a5153 [unknown] ([unknown])
+> >>>               ls 171459 5380927.621686:     587397 cycles:  ffffffff8c7c43de [unknown] ([unknown])
+> >>>               ls 171459 5380927.622016:     653693 cycles:      7fe1e47278c7 _dl_map_object_deps+0x307 (/lib/x86_64-linux-gnu/ld-2.27.so)
+> >>>               ls 171459 5380927.622382:     633896 cycles:      7fe1e41bd0d0 __wmemchr_ifunc+0x0 (/lib/x86_64-linux-gnu/libc-2.27.so)
+> >>>               ls 171459 5380927.622737:     608856 cycles:      7fe1e4194594 _int_malloc+0x264 (/lib/x86_64-linux-gnu/libc-2.27.so)
+> >>>               ls 171459 5380927.623078:     586376 cycles:      55ff5293d27c [unknown] (/bin/ls)
+> >>>               ls 171459 5380927.623405:     566812 cycles:      55ff5293b202 [unknown] (/bin/ls)
+> >>>               ls 171459 5380927.623723:     549960 cycles:  ffffffff8c82b138 [unknown] ([unknown])
+> >>>
+> >>> Display 'dsoip' field:
+> >>> $ perf script -F +dsoip
+> >>>        perf-exec 171459 5380927.621499:          1 cycles:  ffffffff8c66e1b8 [unknown] ([unknown]+0x0)
+> >>>        perf-exec 171459 5380927.621524:          1 cycles:  ffffffff8c66e1b8 [unknown] ([unknown]+0x0)
+> >>>        perf-exec 171459 5380927.621527:          2 cycles:  ffffffff8c66e1b8 [unknown] ([unknown]+0x0)
+> >>>        perf-exec 171459 5380927.621530:         17 cycles:  ffffffff8c66e1b8 [unknown] ([unknown]+0x0)
+> >>>        perf-exec 171459 5380927.621533:        194 cycles:  ffffffff8c66e1bf [unknown] ([unknown]+0x0)
+> >>>        perf-exec 171459 5380927.621536:       2153 cycles:  ffffffff8c6375fe [unknown] ([unknown]+0x0)
+> >>>        perf-exec 171459 5380927.621540:      23135 cycles:  ffffffff8d001ac4 [unknown] ([unknown]+0x0)
+> >>>        perf-exec 171459 5380927.621555:     224703 cycles:  ffffffff8c7a5153 [unknown] ([unknown]+0x0)
+> >>>               ls 171459 5380927.621686:     587397 cycles:  ffffffff8c7c43de [unknown] ([unknown]+0x0)
+> >>>               ls 171459 5380927.622016:     653693 cycles:      7fe1e47278c7 _dl_map_object_deps+0x307 (/lib/x86_64-linux-gnu/ld-2.27.so+0xe8c7)
+> >>>               ls 171459 5380927.622382:     633896 cycles:      7fe1e41bd0d0 __wmemchr_ifunc+0x0 (/lib/x86_64-linux-gnu/libc-2.27.so+0xbd0d0)
+> >>>               ls 171459 5380927.622737:     608856 cycles:      7fe1e4194594 _int_malloc+0x264 (/lib/x86_64-linux-gnu/libc-2.27.so+0x94594)
+> >>>               ls 171459 5380927.623078:     586376 cycles:      55ff5293d27c [unknown] (/bin/ls+0x1227c)
+> >>>               ls 171459 5380927.623405:     566812 cycles:      55ff5293b202 [unknown] (/bin/ls+0x10202)
+> >>>               ls 171459 5380927.623723:     549960 cycles:  ffffffff8c82b138 [unknown] ([unknown]+0x0)
+> >>>
+> >>> Signed-off-by: Changbin Du <changbin.du@huawei.com>
+> >>> ---
+> >>>  tools/perf/Documentation/perf-script.txt |  2 +-
+> >>>  tools/perf/builtin-script.c              |  5 +++++
+> >>>  tools/perf/util/evsel_fprintf.c          | 26 ++++++++++++------------
+> >>>  tools/perf/util/evsel_fprintf.h          | 13 ++++++------
+> >>>  4 files changed, 26 insertions(+), 20 deletions(-)
+> >>>
+> >>> diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
+> >>> index 777a0d8ba7d1..ef392785f776 100644
+> >>> --- a/tools/perf/Documentation/perf-script.txt
+> >>> +++ b/tools/perf/Documentation/perf-script.txt
+> >>> @@ -130,7 +130,7 @@ OPTIONS
+> >>>  -F::
+> >>>  --fields::
+> >>>          Comma separated list of fields to print. Options are:
+> >>> -        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, addr, symoff,
+> >>> +        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, dsoip, addr, symoff,
+> >>>          srcline, period, iregs, uregs, brstack, brstacksym, flags, bpf-output,
+> >>>          brstackinsn, brstackinsnlen, brstackoff, callindent, insn, insnlen, synth,
+> >>>          phys_addr, metric, misc, srccode, ipc, data_page_size, code_page_size, ins_lat,
+> >>> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> >>> index a792214d1af8..a181decf7922 100644
+> >>> --- a/tools/perf/builtin-script.c
+> >>> +++ b/tools/perf/builtin-script.c
+> >>> @@ -133,6 +133,7 @@ enum perf_output_field {
+> >>>  	PERF_OUTPUT_VCPU            = 1ULL << 38,
+> >>>  	PERF_OUTPUT_CGROUP          = 1ULL << 39,
+> >>>  	PERF_OUTPUT_RETIRE_LAT      = 1ULL << 40,
+> >>> +	PERF_OUTPUT_DSOIP           = 1ULL << 41,
+> >>>  };
+> >>>  
+> >>>  struct perf_script {
+> >>> @@ -174,6 +175,7 @@ struct output_option {
+> >>>  	{.str = "ip",    .field = PERF_OUTPUT_IP},
+> >>>  	{.str = "sym",   .field = PERF_OUTPUT_SYM},
+> >>>  	{.str = "dso",   .field = PERF_OUTPUT_DSO},
+> >>> +	{.str = "dsoip", .field = PERF_OUTPUT_DSOIP},
+> >>>  	{.str = "addr",  .field = PERF_OUTPUT_ADDR},
+> >>>  	{.str = "symoff", .field = PERF_OUTPUT_SYMOFFSET},
+> >>>  	{.str = "srcline", .field = PERF_OUTPUT_SRCLINE},
+> >>> @@ -574,6 +576,9 @@ static void set_print_ip_opts(struct perf_event_attr *attr)
+> >>>  	if (PRINT_FIELD(DSO))
+> >>>  		output[type].print_ip_opts |= EVSEL__PRINT_DSO;
+> >>>  
+> >>> +	if (PRINT_FIELD(DSOIP))
+> >>> +		output[type].print_ip_opts |= EVSEL__PRINT_DSOIP;
+> >>> +
+> >>>  	if (PRINT_FIELD(SYMOFFSET))
+> >>>  		output[type].print_ip_opts |= EVSEL__PRINT_SYMOFFSET;
+> >>>  
+> >>> diff --git a/tools/perf/util/evsel_fprintf.c b/tools/perf/util/evsel_fprintf.c
+> >>> index bd22c4932d10..fd1791fab051 100644
+> >>> --- a/tools/perf/util/evsel_fprintf.c
+> >>> +++ b/tools/perf/util/evsel_fprintf.c
+> >>> @@ -116,6 +116,7 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+> >>>  	int print_ip = print_opts & EVSEL__PRINT_IP;
+> >>>  	int print_sym = print_opts & EVSEL__PRINT_SYM;
+> >>>  	int print_dso = print_opts & EVSEL__PRINT_DSO;
+> >>> +	int print_dsoip = print_opts & EVSEL__PRINT_DSOIP;
+> >>>  	int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
+> >>>  	int print_oneline = print_opts & EVSEL__PRINT_ONELINE;
+> >>>  	int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
+> >>> @@ -133,7 +134,7 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+> >>>  		while (1) {
+> >>>  			struct symbol *sym;
+> >>>  			struct map *map;
+> >>> -			u64 addr = 0;
+> >>> +			u64 dso_ip = 0;
+> >>
+> >> Renaming 'addr' just makes the patch more complicated.
+> >> Just leave it as 'addr'
+> >>
+> > Just to make the variable name reflect its real content. It's not a memory
+> > address, right?
+> 
+> We already use addr e.g. in struct addr_location.
+> 
+> If you want to rename it, make it a separate patch.
 >
-> Hi Bhupesh,
->
-> On 2.04.23 13:05, Bhupesh Sharma wrote:
-> > Add crypto engine (CE) and CE BAM related nodes and definitions to
-> > 'sm8350.dtsi'.
-> >
-> > Co-developed-by and Signed-off-by: Robert Foss <rfoss@kernel.org>
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >   arch/arm64/boot/dts/qcom/sm8350.dtsi | 22 ++++++++++++++++++++++
-> >   1 file changed, 22 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> > index 7fbc288eca58..090ee07d1800 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> > @@ -1730,6 +1730,28 @@ ufs_mem_phy_lanes: phy@1d87400 {
-> >                       };
-> >               };
-> >
-> > +             cryptobam: dma-controller@1dc4000 {
-> > +                     compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
-> > +                     reg = <0 0x01dc4000 0 0x24000>;
-> > +                     interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
-> > +                     #dma-cells = <1>;
-> > +                     qcom,ee = <0>;
-> > +                     qcom,controlled-remotely;
-> > +                     iommus = <&apps_smmu 0x594 0x0011>,
-> > +                              <&apps_smmu 0x596 0x0011>;
-> > +             };
-> > +
-> > +             crypto: crypto@1dfa000 {
-> > +                     compatible = "qcom,sm8350-qce", "qcom,sm8150-qce", "qcom,qce";
-> > +                     reg = <0 0x01dfa000 0 0x6000>;
-> > +                     dmas = <&cryptobam 4>, <&cryptobam 5>;
-> > +                     dma-names = "rx", "tx";
-> > +                     iommus = <&apps_smmu 0x594 0x0011>,
-> > +                              <&apps_smmu 0x596 0x0011>;
-> > +                     interconnects = <&aggre2_noc MASTER_CRYPTO &mc_virt SLAVE_EBI1>;
-> > +                     interconnect-names = "memory";
->
-> We switched to #interconnect-cells = <2> (since commit 4f287e31ff5f), so maybe #include
-> dt-bindings/interconnect/qcom,icc.h and add the tags.
+okay.
 
-Sure Georgi, I will fix it in the next version.
+> > 
+> >>>  
+> >>>  			node = callchain_cursor_current(cursor);
+> >>>  			if (!node)
+> >>> @@ -141,6 +142,8 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+> >>>  
+> >>>  			sym = node->ms.sym;
+> >>>  			map = node->ms.map;
+> >>> +			if (map)
+> >>> +				dso_ip = map->map_ip(map, node->ip);
+> >>
+> >> There does not seem to be any reason to move these lines of code.
+> >>
+> > yes. I cound undo this. (just a clean up to not place addr calculation betwwen
+> > printings)
+> > 
+> >>>  
+> >>>  			if (sym && sym->ignore && print_skip_ignored)
+> >>>  				goto next;
+> >>> @@ -150,20 +153,12 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+> >>>  			if (print_arrow && !first)
+> >>>  				printed += fprintf(fp, " <-");
+> >>>  
+> >>> -			if (map)
+> >>> -				addr = map->map_ip(map, node->ip);
+> >>> -
+> >>> -			if (print_ip) {
+> >>> -				/* Show binary offset for userspace addr */
+> >>> -				if (map && !map->dso->kernel)
+> >>
+> >> I would have expected to keep existing functionality unchanged i.e.
+> >>
+> > But the goal is to make printed address consistent. See below difference.
+> 
+> Then make it a separate patch.
+>
+okay. this should be done in muti-patches.
 
-Thanks,
-Bhupesh
+> > 
+> > $ perf script
+> > ...
+> > ls 1341034 2739463.008343:    2162417 cycles:
+> > 	ffffffff992a917d [unknown] ([unknown])
+> >         ffffffff992a9b0a [unknown] ([unknown])
+> >         ffffffff992efa3d [unknown] ([unknown])
+> >         ffffffff992f10c9 [unknown] ([unknown])
+> >         ffffffff992f47cc [unknown] ([unknown])
+> >         ffffffff992f4ab8 [unknown] ([unknown])
+> >         ffffffff9909daa2 [unknown] ([unknown])
+> >         ffffffff99d657a7 [unknown] ([unknown])
+> >         ffffffff99e00b67 [unknown] ([unknown])
+> >                    235d3 memset+0x53 (/usr/lib/x86_64-linux-gnu/ld-2.31.so)  # dso offset
+> >                     a61b _dl_map_object+0x1bb (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
+> > 
+> > $ perf script  -G
+> > 	      ...
+> >               ls 1341034 2739463.008876:    2053304 cycles:  ffffffffc1596923 [unknown] ([unknown])
+> >               ls 1341034 2739463.009381:    1917049 cycles:      14def8e149e6 __strcoll_l+0xd96 (/usr/lib/x86_64-linux-gnu/libc-2.31.so) # raw ip
+> > 
+> > 
+> >> -				if (map && !map->dso->kernel)
+> >> +				if (!print_dsoip && map && !map->dso->kernel)
+> >>
+> >>> -					printed += fprintf(fp, "%c%16" PRIx64, s, addr);
+> >>> -				else
+> >>> -					printed += fprintf(fp, "%c%16" PRIx64, s, node->ip);
+> >>> -			}
+> >>> +			if (print_ip)
+> >>> +				printed += fprintf(fp, "%c%16" PRIx64, s, node->ip);
+> >>>  
+> >>>  			if (print_sym) {
+> >>>  				printed += fprintf(fp, " ");
+> >>> -				node_al.addr = addr;
+> >>> +				node_al.addr = dso_ip;
+> >>>  				node_al.map  = map;
+> >>>  
+> >>>  				if (print_symoffset) {
+> >>> @@ -179,11 +174,13 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+> >>>  			if (print_dso && (!sym || !sym->inlined)) {
+> >>>  				printed += fprintf(fp, " (");
+> >>>  				printed += map__fprintf_dsoname(map, fp);
+> >>> +				if (print_dsoip)
+> >>
+> >> Better to avoid '[unknown]+0x0' i.e.
+> >>
+> >> 				if (print_dsoip && map && map->dso)
+> >>
+> > This is also to keep output consistent which is frendly for parsers (FlameGraph
+> > generator for example).
+> 
+> And yet you want to change the existing output even when the
+> new field is not requested.  That is also unfriendly.
+>
+I'd think consistency is very important. It confuses people without reading the
+code. So let's do them in seprated patches: one for consistency, another to add
+new dso_offset field.
+
+> The default perf script output is human readable. Programs
+> should use the Python scripting interface (or the dlfilter
+> interface) to get data, not scrape the human readable
+> output which is, after all, not an API.
+> 
+> Besides we don't do that (unknown+0x0) for unknown symbols, so
+> why do it for unknown offsets.
+Both (unknown) and (unknown+0x0) are good for me.
+
+> 
+> > 
+> >>> +					printed += fprintf(fp, "+0x%lx", (map && map->dso) ? dso_ip : 0);
+> >>>  				printed += fprintf(fp, ")");
+> >>>  			}
+> >>>  
+> >>>  			if (print_srcline)
+> >>> -				printed += map__fprintf_srcline(map, addr, "\n  ", fp);
+> >>> +				printed += map__fprintf_srcline(map, dso_ip, "\n  ", fp);
+> >>>  
+> >>>  			if (sym && sym->inlined)
+> >>>  				printed += fprintf(fp, " (inlined)");
+> >>> @@ -214,6 +211,7 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
+> >>>  	int print_ip = print_opts & EVSEL__PRINT_IP;
+> >>>  	int print_sym = print_opts & EVSEL__PRINT_SYM;
+> >>>  	int print_dso = print_opts & EVSEL__PRINT_DSO;
+> >>> +	int print_dsoip = print_opts & EVSEL__PRINT_DSOIP;
+> >>>  	int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
+> >>>  	int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
+> >>>  	int print_unknown_as_addr = print_opts & EVSEL__PRINT_UNKNOWN_AS_ADDR;
+> >>> @@ -242,6 +240,8 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
+> >>>  		if (print_dso) {
+> >>>  			printed += fprintf(fp, " (");
+> >>>  			printed += map__fprintf_dsoname(al->map, fp);
+> >>> +			if (print_dsoip)
+> >>
+> >> Better to avoid '[unknown]+0x0' i.e.
+> >>
+> >> 				if (print_dsoip && al->map && al->map->dso)
+> >>
+> >>
+> > Ditto.
+> > 
+> >>> +				printed += fprintf(fp, "+0x%lx", (al->map && al->map->dso) ? al->addr : 0);
+> >>>  			printed += fprintf(fp, ")");
+> >>>  		}
+> >>>  
+> >>> diff --git a/tools/perf/util/evsel_fprintf.h b/tools/perf/util/evsel_fprintf.h
+> >>> index 3093d096c29f..3f282c5840da 100644
+> >>> --- a/tools/perf/util/evsel_fprintf.h
+> >>> +++ b/tools/perf/util/evsel_fprintf.h
+> >>> @@ -20,12 +20,13 @@ int evsel__fprintf(struct evsel *evsel, struct perf_attr_details *details, FILE
+> >>>  #define EVSEL__PRINT_IP			(1<<0)
+> >>>  #define EVSEL__PRINT_SYM		(1<<1)
+> >>>  #define EVSEL__PRINT_DSO		(1<<2)
+> >>> -#define EVSEL__PRINT_SYMOFFSET		(1<<3)
+> >>> -#define EVSEL__PRINT_ONELINE		(1<<4)
+> >>> -#define EVSEL__PRINT_SRCLINE		(1<<5)
+> >>> -#define EVSEL__PRINT_UNKNOWN_AS_ADDR	(1<<6)
+> >>> -#define EVSEL__PRINT_CALLCHAIN_ARROW	(1<<7)
+> >>> -#define EVSEL__PRINT_SKIP_IGNORED	(1<<8)
+> >>> +#define EVSEL__PRINT_DSOIP		(1<<3)
+> >>> +#define EVSEL__PRINT_SYMOFFSET		(1<<4)
+> >>> +#define EVSEL__PRINT_ONELINE		(1<<5)
+> >>> +#define EVSEL__PRINT_SRCLINE		(1<<6)
+> >>> +#define EVSEL__PRINT_UNKNOWN_AS_ADDR	(1<<7)
+> >>> +#define EVSEL__PRINT_CALLCHAIN_ARROW	(1<<8)
+> >>> +#define EVSEL__PRINT_SKIP_IGNORED	(1<<9)
+> >>>  
+> >>>  struct addr_location;
+> >>>  struct perf_event_attr;
+> >>
+> >>
+> > 
+> 
+
+-- 
+Cheers,
+Changbin Du
