@@ -2,196 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBED6D63BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A974D6D63C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235283AbjDDNrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
+        id S234987AbjDDNtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235298AbjDDNrX (ORCPT
+        with ESMTP id S235114AbjDDNsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 09:47:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499AC4229
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:47:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C09F163427
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 13:47:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AE7CC4339B;
-        Tue,  4 Apr 2023 13:47:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680616039;
-        bh=s3hI1gSZ2gySWUG+iwtze6CaIbyUqzwCALU5VwazHxw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Bsf4RLy/BJ8rwdtOgTcp82pWrmVQLUyNdr85uUFTq+x41ceMQ/+1G0glp89sWKQHy
-         AMD98qZbmcd0rOhUXgxjWBSCCewdgEHlM/sZmQVLIES6KdT0FNSq3TnHGfEhb5sm23
-         opcg6mAl73J4To4jMrYmtcrFntI3R4m9xkDsSk+uw2OOEmEQRzVCXAWCarFNvt1nGw
-         +eVKvRXjRWhjwOGvZc0+0/+VLlyfvTVuF9/IHNXfkLGyVIWH2bPwQT/rISV/ZYnruO
-         GJ+dvh6z+iPDcNVRCdlSBHSrUDyVuHVgt/7o6WGSxEhe2LlmoqqaRqcRtlS7pdfZ+v
-         1WlUAJt6En/Lw==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id BD8EC15404B4; Tue,  4 Apr 2023 06:47:18 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 06:47:18 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     oe-kbuild@lists.linux.dev, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [paulmck-rcu:dev.2023.03.30a 28/35] kernel/rcu/tree.c:2149
- rcu_do_batch() error: uninitialized symbol 'jlimit'.
-Message-ID: <acd9ff41-1242-4772-a7b3-2d29c4c31261@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <90f95e84-842c-4273-90a3-93afd5353fd2@kili.mountain>
- <322a0530-42ea-46dc-8226-e1fbefe2dffa@paulmck-laptop>
- <e7650b46-851f-4341-a43f-33efe47fc65d@kili.mountain>
+        Tue, 4 Apr 2023 09:48:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219EE30ED
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:48:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680616081;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zsTIZUaOt4/p51daq2PZX1n16o1nkazviHKpSzXwqxo=;
+        b=hklnZ82eoe8wqeu8A6TfCpAOc5+OJ20nfGY/AYxgLOZhPCSjUtcg1HDwWP9qWJwRcUM1BH
+        U2hjeJX6o7R71Hu+eRxye0pnP1ieaJUinywSgEmuafk5rrEAJ1DYq1Qd+L42yzFP/dBsz9
+        /9PicI+XXvKp5Sf9pR1fi5VVTtO7S5w=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-88-4Gj2xrfTOMOWQO5iqsfj2w-1; Tue, 04 Apr 2023 09:48:00 -0400
+X-MC-Unique: 4Gj2xrfTOMOWQO5iqsfj2w-1
+Received: by mail-wr1-f70.google.com with SMTP id i25-20020adfaad9000000b002cff37de14fso3733797wrc.16
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 06:48:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680616079;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zsTIZUaOt4/p51daq2PZX1n16o1nkazviHKpSzXwqxo=;
+        b=kTbGYPjRHg7zB2aQihXCmraIYtW+gx/I+f4/Ap4cILqcIrjC/Q5Ei5WOQDizqVv3NP
+         8/OAAG8zwM/1EeAG1ZBC8UC7zbeRbuaUgWTGwHgsm6IIBSr6Lh++B4RU5z5H85WWA/em
+         aNrS3+QMObIyi4xxQo7k3uopurI9Xex24dpN4OQdPjNrcIXQnhm7ZA0zqOZFg2wTowhN
+         IRgGMIoSBMvpKghFzU5mIq6+/bJc3s+OwspcZUPbOHIrBEa6alfPR9X0WOifYIvOjYCE
+         xY+v/IS30ZTk4sJVjf2pe+ZvR1FbYvbl/VXB78TyBjJENmb4NRe1Jwfa0Lh3oQDRj1sX
+         NvWA==
+X-Gm-Message-State: AAQBX9eWPr08VhLprD1jO0E4Ang/UqdOowHXTF/GCriTdDJ6GNiEvZpL
+        ZKBTqcV74vR9F+JByPTBEJCo7pUGjtHOBeIOeRGo1/MkOve8bvxA+kfWwRBUqSdVAyjPZi0Mn/K
+        BY0cz4WDGuhtGZF/WkMSpMM+L
+X-Received: by 2002:a5d:4d11:0:b0:2ce:9819:1c1e with SMTP id z17-20020a5d4d11000000b002ce98191c1emr1783336wrt.30.1680616079624;
+        Tue, 04 Apr 2023 06:47:59 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bmtLhdkOTL49G5hyyIR/dGwEI3AOPEAjf+veEKXRQyea3PV+FawQK0/io3jdVH76JN5ImpWw==
+X-Received: by 2002:a5d:4d11:0:b0:2ce:9819:1c1e with SMTP id z17-20020a5d4d11000000b002ce98191c1emr1783320wrt.30.1680616079268;
+        Tue, 04 Apr 2023 06:47:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c709:b600:e63:6c3b:7b5d:f439? (p200300cbc709b6000e636c3b7b5df439.dip0.t-ipconnect.de. [2003:cb:c709:b600:e63:6c3b:7b5d:f439])
+        by smtp.gmail.com with ESMTPSA id d7-20020adfe2c7000000b002d419f661d6sm12391832wrj.82.2023.04.04.06.47.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 06:47:58 -0700 (PDT)
+Message-ID: <78a31392-8f9b-9705-918a-24edb650f395@redhat.com>
+Date:   Tue, 4 Apr 2023 15:47:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e7650b46-851f-4341-a43f-33efe47fc65d@kili.mountain>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 1/3] arch: Introduce ARCH_HAS_CPUMASK_BITS
+Content-Language: en-US
+To:     Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, peterz@infradead.org, arnd@arndb.de,
+        keescook@chromium.org, paulmck@kernel.org, jpoimboe@kernel.org,
+        samitolvanen@google.com, frederic@kernel.org, ardb@kernel.org,
+        juerg.haefliger@canonical.com, rmk+kernel@armlinux.org.uk,
+        geert+renesas@glider.be, tony@atomide.com,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        nick.hawkins@hpe.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, mtosatti@redhat.com, vschneid@redhat.com,
+        dhildenb@redhat.com
+Cc:     alougovs@redhat.com
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-2-ypodemsk@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230404134224.137038-2-ypodemsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 07:43:22AM +0300, Dan Carpenter wrote:
-> On Mon, Apr 03, 2023 at 09:18:58PM -0700, Paul E. McKenney wrote:
-> > On Tue, Apr 04, 2023 at 07:04:06AM +0300, Dan Carpenter wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.03.30a
-> > > head:   e222f9a512539c3f4093a55d16624d9da614800b
-> > > commit: a63baab5f60110f3631c98b55d59066f1c68c4f7 [28/35] rcu: Employ jiffies-based backstop to callback time limit
-> > > config: openrisc-randconfig-m031-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041113.A5sNFc2y-lkp@intel.com/config)
-> > > compiler: or1k-linux-gcc (GCC) 12.1.0
-> > > 
-> > > If you fix the issue, kindly add following tag where applicable
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Reported-by: Dan Carpenter <error27@gmail.com>
-> > > | Link: https://lore.kernel.org/r/202304041113.A5sNFc2y-lkp@intel.com/
-> > > 
-> > > smatch warnings:
-> > > kernel/rcu/tree.c:2149 rcu_do_batch() error: uninitialized symbol 'jlimit'.
-> > > 
-> > > vim +/jlimit +2149 kernel/rcu/tree.c
-> > > 
-> > > 5bb5d09cc4f868 kernel/rcu/tree.c Paul E. McKenney        2018-07-03  2065  static void rcu_do_batch(struct rcu_data *rdp)
-> > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2066  {
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2067  	long bl;
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2068  	long count = 0;
-> > > b5374b2df0ac1c kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2069  	int div;
-> > > b4e6039e8af8c2 kernel/rcu/tree.c Joel Fernandes (Google  2020-11-18  2070) 	bool __maybe_unused empty;
-> > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2071  	unsigned long flags;
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2072  	unsigned long jlimit;
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2073  	bool jlimit_check = false;
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2074  	long pending;
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2075  	struct rcu_cblist rcl = RCU_CBLIST_INITIALIZER(rcl);
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2076  	struct rcu_head *rhp;
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2077  	long tlimit = 0;
-> > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2078  
-> > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2079  	/* If no callbacks are ready, just return. */
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2080  	if (!rcu_segcblist_ready_cbs(&rdp->cblist)) {
-> > > 3c779dfef2c452 kernel/rcu/tree.c Paul E. McKenney        2018-07-05  2081  		trace_rcu_batch_start(rcu_state.name,
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2082  				      rcu_segcblist_n_cbs(&rdp->cblist), 0);
-> > > 3c779dfef2c452 kernel/rcu/tree.c Paul E. McKenney        2018-07-05  2083  		trace_rcu_batch_end(rcu_state.name, 0,
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2084  				    !rcu_segcblist_empty(&rdp->cblist),
-> > > 4968c300e1fa53 kernel/rcutree.c  Paul E. McKenney        2011-12-07  2085  				    need_resched(), is_idle_task(current),
-> > > 5103850654fdc6 kernel/rcu/tree.c Zqiang                  2022-04-29  2086  				    rcu_is_callbacks_kthread(rdp));
-> > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2087  		return;
-> > > 29c00b4a1d9e27 kernel/rcutree.c  Paul E. McKenney        2011-06-17  2088  	}
-> > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2089  
-> > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2090  	/*
-> > > 7b65dfa32dca1b kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2091  	 * Extract the list of ready callbacks, disabling IRQs to prevent
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2092  	 * races with call_rcu() from interrupt handlers.  Leave the
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2093  	 * callback counts, as rcu_barrier() needs to be conservative.
-> > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2094  	 */
-> > > 7b65dfa32dca1b kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2095  	rcu_nocb_lock_irqsave(rdp, flags);
-> > > 8146c4e2e2c197 kernel/rcutree.c  Paul E. McKenney        2012-01-10  2096  	WARN_ON_ONCE(cpu_is_offline(smp_processor_id()));
-> > > 253cbbff621407 kernel/rcu/tree.c Paul E. McKenney        2022-11-14  2097  	pending = rcu_segcblist_get_seglen(&rdp->cblist, RCU_DONE_TAIL);
-> > > b5374b2df0ac1c kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2098  	div = READ_ONCE(rcu_divisor);
-> > > b5374b2df0ac1c kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2099  	div = div < 0 ? 7 : div > sizeof(long) * 8 - 2 ? sizeof(long) * 8 - 2 : div;
-> > > b5374b2df0ac1c kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2100  	bl = max(rdp->blimit, pending >> div);
-> > > 70c461b1465c5e kernel/rcu/tree.c Paul E. McKenney        2023-03-21  2101  	if ((in_serving_softirq() || rdp->rcu_cpu_kthread_status == RCU_KTHREAD_RUNNING) &&
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2102  	    (IS_ENABLED(CONFIG_RCU_DOUBLE_CHECK_CB_TIME) || unlikely(bl > 100))) {
-> > >                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > > jlimit is only initialized if one of these conditions is met.
-> > > 
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2103  		const long npj = NSEC_PER_SEC / HZ;
-> > > a2b354b9950bb8 kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2104  		long rrn = READ_ONCE(rcu_resched_ns);
-> > > a2b354b9950bb8 kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2105  
-> > > a2b354b9950bb8 kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2106  		rrn = rrn < NSEC_PER_MSEC ? NSEC_PER_MSEC : rrn > NSEC_PER_SEC ? NSEC_PER_SEC : rrn;
-> > > a2b354b9950bb8 kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2107  		tlimit = local_clock() + rrn;
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2108  		jlimit = jiffies + (rrn + npj + 1) / npj;
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31  2109  		jlimit_check = true;
-> > > a2b354b9950bb8 kernel/rcu/tree.c Paul E. McKenney        2020-06-23  2110  	}
-> > > 3c779dfef2c452 kernel/rcu/tree.c Paul E. McKenney        2018-07-05  2111  	trace_rcu_batch_start(rcu_state.name,
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2112  			      rcu_segcblist_n_cbs(&rdp->cblist), bl);
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2113  	rcu_segcblist_extract_done_cbs(&rdp->cblist, &rcl);
-> > > 344e219d7d2b28 kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2114  	if (rcu_rdp_is_offloaded(rdp))
-> > > 7f36ef82e5cf0b kernel/rcu/tree.c Paul E. McKenney        2019-05-28  2115  		rdp->qlen_last_fqs_check = rcu_segcblist_n_cbs(&rdp->cblist);
-> > > 3afe7fa535491e kernel/rcu/tree.c Joel Fernandes (Google  2020-11-14  2116) 
-> > > 3afe7fa535491e kernel/rcu/tree.c Joel Fernandes (Google  2020-11-14  2117) 	trace_rcu_segcb_stats(&rdp->cblist, TPS("SegCbDequeued"));
-> > > 5d6742b37727e1 kernel/rcu/tree.c Paul E. McKenney        2019-05-15  2118  	rcu_nocb_unlock_irqrestore(rdp, flags);
-> > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2119  
-> > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2120  	/* Invoke callbacks. */
-> > > 6a949b7af82db7 kernel/rcu/tree.c Paul E. McKenney        2019-07-28  2121  	tick_dep_set_task(current, TICK_DEP_BIT_RCU);
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2122  	rhp = rcu_cblist_dequeue(&rcl);
-> > > 3afe7fa535491e kernel/rcu/tree.c Joel Fernandes (Google  2020-11-14  2123) 
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2124  	for (; rhp; rhp = rcu_cblist_dequeue(&rcl)) {
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2125) 		rcu_callback_t f;
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2126) 
-> > > 6bc335828056f3 kernel/rcu/tree.c Joel Fernandes (Google  2020-11-03  2127) 		count++;
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2128  		debug_rcu_head_unqueue(rhp);
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2129) 
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2130) 		rcu_lock_acquire(&rcu_callback_map);
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2131) 		trace_rcu_invoke_callback(rcu_state.name, rhp);
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2132) 
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2133) 		f = rhp->func;
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2134) 		WRITE_ONCE(rhp->func, (rcu_callback_t)0L);
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2135) 		f(rhp);
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2136) 
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2137) 		rcu_lock_release(&rcu_callback_map);
-> > > 77a40f97030b27 kernel/rcu/tree.c Joel Fernandes (Google  2019-08-30  2138) 
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2139  		/*
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2140  		 * Stop only if limit reached and CPU has something to do.
-> > > 15fecf89e46a96 kernel/rcu/tree.c Paul E. McKenney        2017-02-08  2141  		 */
-> > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2142  		if (in_serving_softirq()) {
-> > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2143  			if (count >= bl && (need_resched() || !is_idle_task(current)))
-> > > 64db4cfff99c04 kernel/rcutree.c  Paul E. McKenney        2008-12-18  2144  				break;
-> > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2145  			/*
-> > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2146  			 * Make sure we don't spend too much time here and deprive other
-> > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2147  			 * softirq vectors of CPU cycles.
-> > > 3e61e95e2d095e kernel/rcu/tree.c Frederic Weisbecker     2021-10-19  2148  			 */
-> > > a63baab5f60110 kernel/rcu/tree.c Paul E. McKenney        2023-03-31 @2149  			if (rcu_do_batch_check_time(count, tlimit, jlimit_check, jlimit))
-> > >                                                                                                                                                          ^^^^^^
-> > > Uninitialized?
-> > 
-> > Except that in rcu_do_batch_check_time(), jlimit is referenced only if
-> > jlimit_check is set, which it is only if jlimit is initialized.
-> > 
-> > I suppose that I could unconditionally initialize jlimit to (say) zero
-> > to shut this up, but is there a better way to communicate the intent
-> > to the tooling?
-> > 
-> > Or am I confused and there is a real use of the uninitialized value?
-> > 
-> > 							Thanx, Paul
+On 04.04.23 15:42, Yair Podemsky wrote:
+> Some architectures set and maintain the mm_cpumask bits when loading
+> or removing process from cpu.
+> This Kconfig will mark those to allow different behavior between
+> kernels that maintain the mm_cpumask and those that do not.
 > 
-> I'm going to guess that on distro kernels they're going to automatically
-> initialize stack variables to zero.  So it's not a bad option.
-> 
-> The other thing is that rcu_do_batch_check_time() is always going to be
-> inlined.  So this is officially a false positive.  If it weren't inlined
-> then passing uninitialized data is a bug regardless of whether or not
-> it's used.
-> 
-> It's also totally okay to just ignore this false positive.
 
-Would another approach be would to pass the address of jlimit in to
-rcu_do_batch_check_time()?  Taking the address of local variables usually
-suppresses some optimizations, though perhaps not important ones.
+I was wondering if we should do something along the lines of:
 
-							Thanx, Paul
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 0722859c3647..1f5c15d8e8ed 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -767,11 +767,13 @@ struct mm_struct {
+  #endif /* CONFIG_LRU_GEN */
+         } __randomize_layout;
+
++#ifdef CONFIG_MM_CPUMASK
+         /*
+          * The mm_cpumask needs to be at the end of mm_struct, because it
+          * is dynamically sized based on nr_cpu_ids.
+          */
+         unsigned long cpu_bitmap[];
++#endif
+  };
+
+But that would, of course, require additional changes to make it 
+compile. What concerns me a bit is that we have in mm/rmap.c a 
+mm_cpumask() usage. But it's glued to 
+CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH ... shaky.
+
+At least if we would properly fence it, there would be no
+accidental abuse anymore.
+
+
+> Signed-off-by: Yair Podemsky <ypodemsk@redhat.com>
+> ---
+>   arch/Kconfig         | 8 ++++++++
+>   arch/arm/Kconfig     | 1 +
+>   arch/powerpc/Kconfig | 1 +
+>   arch/s390/Kconfig    | 1 +
+>   arch/sparc/Kconfig   | 1 +
+>   arch/x86/Kconfig     | 1 +
+
+As Valentin says, there are other architectures that do the same.
+
+-- 
+Thanks,
+
+David / dhildenb
+
