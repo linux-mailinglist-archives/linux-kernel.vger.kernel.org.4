@@ -2,81 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B326D6EAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9D76D6EB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235081AbjDDVHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S236048AbjDDVKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235428AbjDDVHU (ORCPT
+        with ESMTP id S236433AbjDDVJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:07:20 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F1812D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 14:07:18 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id bj20so25245811oib.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 14:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680642438;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D8wCu932h/gRywCSwLxOAEpXzxqJvpG+Yqrg4CPRzmc=;
-        b=JAd/1nZVeoy351xux6KFsMVzLIQjl9PnuOcBokKzB3bGJ+AiPCVTDt2lioXuKb9qEq
-         5xsvX9ZUJR/B5ESv4oz0I9GWx8PfRAoXHcNqEjR+5xzUwdN1AYQqGCigmKxDNJcqs5bH
-         M91VOT22HKSZKYEFfOaVFy5dpvkSqQvQAIZmIUEXQb6XP5bZBC1r8kT/j1fKPN1oz2yq
-         8yctitBEz1sts5F9bOkZ0F7bc4Na1Sx2pgp8pEjGQxqW+XLprm0XEm5h7+jAKBJDTpxW
-         8ZBHIYFtoJ/HMbC4p2PZQHGs/BsniOmP9elZZJnM7xXiA5UV0p6m6I6fLrv/eyX7EEsw
-         w2tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680642438;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D8wCu932h/gRywCSwLxOAEpXzxqJvpG+Yqrg4CPRzmc=;
-        b=LnpSR9OTcvxoAwfkn3B560+cFXifXL1URPfCpHcznmiXZHBypT2CYokT8uFzZzPYQr
-         Jd5AqjEckjPYJuqIChgFe7QiMD4cYvR9KIJDYirPR3fBNkHiAtl63WXDTibb36v7oNl9
-         6ceKE0BB/6ADyt0cgWBiNeE3x6Vl4LyO7caMUweG3Vggd4OaUsOL6dP0a/TQbBJdpwCW
-         dzPEw0Dx9E7qFGH1jknKDwhTRBC5OSbqIV+Vl3yPin+Aj7DNHx5BiW2UMlViW+yQe94p
-         epyrLb5T/Pd6wfNe4+qINoFhwvrWw2l/tqTrZjye7ldViGRGszTv6N5AV+dW513xiGpW
-         jg6w==
-X-Gm-Message-State: AAQBX9eeYa0kQB1Wvv+kaP42jf60//wGLX7iO05dk5qgx+UtGND5X7x/
-        nM+3uuUcOxTqNUEpD7KwvUv6vcFart2TscNWqUN/jw==
-X-Google-Smtp-Source: AKy350Z0YdQn3UAJSOuwQI8sp3lim7hTJHnaVlPm9ru9ZlukibPZgsTTBipva6Zi/jo0R/RR52EY0KdPqFTpNqI9Eyo=
-X-Received: by 2002:a54:4483:0:b0:37f:ab56:ff42 with SMTP id
- v3-20020a544483000000b0037fab56ff42mr1246545oiv.9.1680642438159; Tue, 04 Apr
- 2023 14:07:18 -0700 (PDT)
+        Tue, 4 Apr 2023 17:09:52 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8756B10CC;
+        Tue,  4 Apr 2023 14:09:50 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 334L9Wpc111198;
+        Tue, 4 Apr 2023 16:09:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680642572;
+        bh=onqPr9mEVO+U7FiPIUiywjeWvi73OnugS8heMEi3tiI=;
+        h=Date:Subject:To:References:From:In-Reply-To;
+        b=sylth1/lnjw0NGNRrifehZEZ4cYLHo+2XiMv2uJRcuwnYQVMkZBjxfoablZvfx2PW
+         JIq7WsWJ6bg3/LINIo1V1qtClX8t99ycopd1d8Hm2K+yZfQiVx5rAm90fcwSzcoGC2
+         MWZK8Ukfj59a1bsRE9Z4Kwf4fXu8jxAwL8HWnchU=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 334L9W69030055
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 4 Apr 2023 16:09:32 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 4
+ Apr 2023 16:09:32 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 4 Apr 2023 16:09:32 -0500
+Received: from [10.250.32.15] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 334L9Vho059596;
+        Tue, 4 Apr 2023 16:09:32 -0500
+Message-ID: <4b9ad103-3210-18cc-50f9-935d95a1efa3@ti.com>
+Date:   Tue, 4 Apr 2023 16:09:31 -0500
 MIME-Version: 1.0
-References: <20230206172340.2639971-1-rananta@google.com> <20230206172340.2639971-8-rananta@google.com>
- <ZCTa5wfVtGScLQEa@linux.dev> <CAJHc60xvSFpUs+o84fR14Rghd6rruBJkCMBtroeCeLDtjJg=gw@mail.gmail.com>
- <ZCx4QCs+cjr4nYev@linux.dev>
-In-Reply-To: <ZCx4QCs+cjr4nYev@linux.dev>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Tue, 4 Apr 2023 14:07:06 -0700
-Message-ID: <CAJHc60xQ36vah9+eEOLqKdjamfoxijPTwXLrrhOy=NVvMW=VOw@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] KVM: arm64: Create a fast stage-2 unmap path
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     h@linux.dev, Oliver Upton <oupton@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 1/2] dt-bindings: omap: Convert omap.txt to yaml
+Content-Language: en-US
+To:     Andreas Kemnade <andreas@kemnade.info>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <tony@atomide.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>
+References: <20230404205844.3553159-1-andreas@kemnade.info>
+ <20230404205844.3553159-2-andreas@kemnade.info>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20230404205844.3553159-2-andreas@kemnade.info>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,125 +68,361 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 12:19=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
-v> wrote:
->
-> On Tue, Apr 04, 2023 at 10:52:01AM -0700, Raghavendra Rao Ananta wrote:
-> > On Wed, Mar 29, 2023 at 5:42=E2=80=AFPM Oliver Upton <oliver.upton@linu=
-x.dev> wrote:
-> > >
-> > > On Mon, Feb 06, 2023 at 05:23:40PM +0000, Raghavendra Rao Ananta wrot=
-e:
-> > > > The current implementation of the stage-2 unmap walker
-> > > > traverses the entire page-table to clear and flush the TLBs
-> > > > for each entry. This could be very expensive, especially if
-> > > > the VM is not backed by hugepages. The unmap operation could be
-> > > > made efficient by disconnecting the table at the very
-> > > > top (level at which the largest block mapping can be hosted)
-> > > > and do the rest of the unmapping using free_removed_table().
-> > > > If the system supports FEAT_TLBIRANGE, flush the entire range
-> > > > that has been disconnected from the rest of the page-table.
-> > > >
-> > > > Suggested-by: Ricardo Koller <ricarkol@google.com>
-> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > > > ---
-> > > >  arch/arm64/kvm/hyp/pgtable.c | 44 ++++++++++++++++++++++++++++++++=
-++++
-> > > >  1 file changed, 44 insertions(+)
-> > > >
-> > > > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgta=
-ble.c
-> > > > index 0858d1fa85d6b..af3729d0971f2 100644
-> > > > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > > > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > > > @@ -1017,6 +1017,49 @@ static int stage2_unmap_walker(const struct =
-kvm_pgtable_visit_ctx *ctx,
-> > > >       return 0;
-> > > >  }
-> > > >
-> > > > +/*
-> > > > + * The fast walker executes only if the unmap size is exactly equa=
-l to the
-> > > > + * largest block mapping supported (i.e. at KVM_PGTABLE_MIN_BLOCK_=
-LEVEL),
-> > > > + * such that the underneath hierarchy at KVM_PGTABLE_MIN_BLOCK_LEV=
-EL can
-> > > > + * be disconnected from the rest of the page-table without the nee=
-d to
-> > > > + * traverse all the PTEs, at all the levels, and unmap each and ev=
-ery one
-> > > > + * of them. The disconnected table is freed using free_removed_tab=
-le().
-> > > > + */
-> > > > +static int fast_stage2_unmap_walker(const struct kvm_pgtable_visit=
-_ctx *ctx,
-> > > > +                            enum kvm_pgtable_walk_flags visit)
-> > > > +{
-> > > > +     struct kvm_pgtable_mm_ops *mm_ops =3D ctx->mm_ops;
-> > > > +     kvm_pte_t *childp =3D kvm_pte_follow(ctx->old, mm_ops);
-> > > > +     struct kvm_s2_mmu *mmu =3D ctx->arg;
-> > > > +
-> > > > +     if (!kvm_pte_valid(ctx->old) || ctx->level !=3D KVM_PGTABLE_M=
-IN_BLOCK_LEVEL)
-> > > > +             return 0;
-> > > > +
-> > > > +     if (!stage2_try_break_pte(ctx, mmu))
-> > > > +             return -EAGAIN;
-> > > > +
-> > > > +     /*
-> > > > +      * Gain back a reference for stage2_unmap_walker() to free
-> > > > +      * this table entry from KVM_PGTABLE_MIN_BLOCK_LEVEL - 1.
-> > > > +      */
-> > > > +     mm_ops->get_page(ctx->ptep);
-> > >
-> > > Doesn't this run the risk of a potential UAF if the refcount was 1 be=
-fore
-> > > calling stage2_try_break_pte()? IOW, stage2_try_break_pte() will drop
-> > > the refcount to 0 on the page before this ever gets called.
-> > >
-> > > Also, AFAICT this misses the CMOs that are required on systems w/o
-> > > FEAT_FWB. Without them it is possible that the host will read somethi=
-ng
-> > > other than what was most recently written by the guest if it is using
-> > > noncacheable memory attributes at stage-1.
-> > >
-> > > I imagine the actual bottleneck is the DSB required after every
-> > > CMO/TLBI. Theoretically, the unmap path could be updated to:
-> > >
-> > >  - Perform the appropriate CMOs for every valid leaf entry *without*
-> > >    issuing a DSB.
-> > >
-> > >  - Elide TLBIs entirely that take place in the middle of the walk
-> > >
-> > >  - After the walk completes, dsb(ish) to guarantee that the CMOs have
-> > >    completed and the invalid PTEs are made visible to the hardware
-> > >    walkers. This should be done implicitly by the TLBI implementation
-> > >
-> > >  - Invalidate the [addr, addr + size) range of IPAs
-> > >
-> > > This would also avoid over-invalidating stage-1 since we blast the
-> > > entire stage-1 context for every stage-2 invalidation. Thoughts?
-> > >
-> > Correct me if I'm wrong, but if we invalidate the TLB after the walk
-> > is complete, don't you think there's a risk of race if the guest can
-> > hit in the TLB even though the page was unmapped?
->
-> Yeah, we'd need to do the CMOs _after_ making the translation invalid in
-> the page tables and completing the TLB invalidation. Apologies.
->
-> Otherwise, the only requirement we need to uphold w/ either the MMU
-> notifiers or userspace is that the translation has been invalidated at
-> the time of return.
->
-Actually, my concern about the race was against the hardware. If we
-follow the above approach, let's say we invalidated a certain set of
-PTEs, but the TLBs aren't yet invalidated. During this point if
-another vCPU accesses the range governed by the invalidated PTEs,
-wouldn't it still hit in the TLB? Have I misunderstood you or am I
-missing something?
+On 4/4/23 3:58 PM, Andreas Kemnade wrote:
+> From: Andrew Davis <afd@ti.com>
+> 
+> Convert omap.txt to yaml.
+> 
+> CC: linux-omap@vger.kernel.org
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> [various cleanup, adding Epson Moverio BT-200]
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> ---
+>   .../devicetree/bindings/arm/omap/omap.txt     | 152 ------------------
+>   Documentation/devicetree/bindings/arm/ti.yaml | 147 +++++++++++++++++
 
-Thank you.
-Raghavendra
-> --
-> Thanks,
-> Oliver
+How about
+
+Documentation/devicetree/bindings/arm/ti/omap.yaml
+
+as we already have a arm/ti/k3.yaml for our K3 devices.
+
+Andrew
+
+>   2 files changed, 147 insertions(+), 152 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/arm/ti.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/omap/omap.txt b/Documentation/devicetree/bindings/arm/omap/omap.txt
+> index fa8b31660cadd..0608ef36d0a68 100644
+> --- a/Documentation/devicetree/bindings/arm/omap/omap.txt
+> +++ b/Documentation/devicetree/bindings/arm/omap/omap.txt
+> @@ -41,49 +41,11 @@ SoC Type (optional):
+>   
+>   SoC Families:
+>   
+> -- OMAP2 generic - defaults to OMAP2420
+> -  compatible = "ti,omap2"
+> -- OMAP3 generic
+> -  compatible = "ti,omap3"
+> -- OMAP4 generic - defaults to OMAP4430
+> -  compatible = "ti,omap4"
+> -- OMAP5 generic - defaults to OMAP5430
+> -  compatible = "ti,omap5"
+>   - DRA7 generic - defaults to DRA742
+>     compatible = "ti,dra7"
+> -- AM33x generic
+> -  compatible = "ti,am33xx"
+> -- AM43x generic - defaults to AM4372
+> -  compatible = "ti,am43"
+>   
+>   SoCs:
+>   
+> -- OMAP2420
+> -  compatible = "ti,omap2420", "ti,omap2"
+> -- OMAP2430
+> -  compatible = "ti,omap2430", "ti,omap2"
+> -
+> -- OMAP3430
+> -  compatible = "ti,omap3430", "ti,omap3"
+> -  legacy: "ti,omap34xx" - please do not use any more
+> -- AM3517
+> -  compatible = "ti,am3517", "ti,omap3"
+> -- OMAP3630
+> -  compatible = "ti,omap3630", "ti,omap3"
+> -  legacy: "ti,omap36xx" - please do not use any more
+> -- AM335x
+> -  compatible = "ti,am33xx"
+> -
+> -- OMAP4430
+> -  compatible = "ti,omap4430", "ti,omap4"
+> -- OMAP4460
+> -  compatible = "ti,omap4460", "ti,omap4"
+> -
+> -- OMAP5430
+> -  compatible = "ti,omap5430", "ti,omap5"
+> -- OMAP5432
+> -  compatible = "ti,omap5432", "ti,omap5"
+> -
+>   - DRA762
+>     compatible = "ti,dra762", "ti,dra7"
+>   
+> @@ -96,116 +58,8 @@ SoCs:
+>   - DRA718
+>     compatible = "ti,dra718", "ti,dra722", "ti,dra72", "ti,dra7"
+>   
+> -- AM5748
+> -  compatible = "ti,am5748", "ti,dra762", "ti,dra7"
+> -
+> -- AM5728
+> -  compatible = "ti,am5728", "ti,dra742", "ti,dra74", "ti,dra7"
+> -
+> -- AM5726
+> -  compatible = "ti,am5726", "ti,dra742", "ti,dra74", "ti,dra7"
+> -
+> -- AM5718
+> -  compatible = "ti,am5718", "ti,dra722", "ti,dra72", "ti,dra7"
+> -
+> -- AM5716
+> -  compatible = "ti,am5716", "ti,dra722", "ti,dra72", "ti,dra7"
+> -
+> -- AM4372
+> -  compatible = "ti,am4372", "ti,am43"
+> -
+>   Boards (incomplete list of examples):
+>   
+> -- OMAP3 BeagleBoard : Low cost community board
+> -  compatible = "ti,omap3-beagle", "ti,omap3430", "ti,omap3"
+> -
+> -- OMAP3 BeagleBoard A to B4 : Early BeagleBoard revisions A to B4 with a timer quirk
+> -  compatible = "ti,omap3-beagle-ab4", "ti,omap3-beagle", "ti,omap3430", "ti,omap3"
+> -
+> -- OMAP3 Tobi with Overo : Commercial expansion board with daughter board
+> -  compatible = "gumstix,omap3-overo-tobi", "gumstix,omap3-overo", "ti,omap3430", "ti,omap3"
+> -
+> -- OMAP4 SDP : Software Development Board
+> -  compatible = "ti,omap4-sdp", "ti,omap4430", "ti,omap4"
+> -
+> -- OMAP4 PandaBoard : Low cost community board
+> -  compatible = "ti,omap4-panda", "ti,omap4430", "ti,omap4"
+> -
+> -- OMAP4 DuoVero with Parlor : Commercial expansion board with daughter board
+> -  compatible = "gumstix,omap4-duovero-parlor", "gumstix,omap4-duovero", "ti,omap4430", "ti,omap4";
+> -
+> -- OMAP4 VAR-STK-OM44 : Commercial dev kit with VAR-OM44CustomBoard and VAR-SOM-OM44 w/WLAN
+> -  compatible = "variscite,var-stk-om44", "variscite,var-som-om44", "ti,omap4460", "ti,omap4";
+> -
+> -- OMAP4 VAR-DVK-OM44 : Commercial dev kit with VAR-OM44CustomBoard, VAR-SOM-OM44 w/WLAN and LCD touchscreen
+> -  compatible = "variscite,var-dvk-om44", "variscite,var-som-om44", "ti,omap4460", "ti,omap4";
+> -
+> -- OMAP3 EVM : Software Development Board for OMAP35x, AM/DM37x
+> -  compatible = "ti,omap3-evm", "ti,omap3630", "ti,omap3"
+> -
+> -- AM335X EVM : Software Development Board for AM335x
+> -  compatible = "ti,am335x-evm", "ti,am33xx"
+> -
+> -- AM335X Bone : Low cost community board
+> -  compatible = "ti,am335x-bone", "ti,am33xx"
+> -
+> -- AM3359 ICEv2 : Low cost Industrial Communication Engine EVM.
+> -  compatible = "ti,am3359-icev2", "ti,am33xx"
+> -
+> -- AM335X OrionLXm : Substation Automation Platform
+> -  compatible = "novatech,am335x-lxm", "ti,am33xx"
+> -
+> -- AM335X phyBOARD-WEGA: Single Board Computer dev kit
+> -  compatible = "phytec,am335x-wega", "phytec,am335x-phycore-som", "ti,am33xx"
+> -
+> -- AM335X CM-T335 : System On Module, built around the Sitara AM3352/4
+> -  compatible = "compulab,cm-t335", "ti,am33xx"
+> -
+> -- AM335X SBC-T335 : single board computer, built around the Sitara AM3352/4
+> -  compatible = "compulab,sbc-t335", "compulab,cm-t335", "ti,am33xx"
+> -
+> -- AM335X phyCORE-AM335x: Development kit
+> -  compatible = "phytec,am335x-pcm-953", "phytec,am335x-phycore-som", "ti,am33xx"
+> -
+> -- AM335x phyBOARD-REGOR: Single Board Computer
+> -  compatible = "phytec,am335x-regor", "phytec,am335x-phycore-som", "ti,am33xx"
+> -
+> -- AM335X UC-8100-ME-T: Communication-centric industrial computing platform
+> -  compatible = "moxa,uc-8100-me-t", "ti,am33xx";
+> -
+> -- OMAP5 EVM : Evaluation Module
+> -  compatible = "ti,omap5-evm", "ti,omap5"
+> -
+> -- AM437x CM-T43
+> -  compatible = "compulab,am437x-cm-t43", "ti,am4372", "ti,am43"
+> -
+> -- AM437x SBC-T43
+> -  compatible = "compulab,am437x-sbc-t43", "compulab,am437x-cm-t43", "ti,am4372", "ti,am43"
+> -
+> -- AM43x EPOS EVM
+> -  compatible = "ti,am43x-epos-evm", "ti,am43", "ti,am438x"
+> -
+> -- AM437x GP EVM
+> -  compatible = "ti,am437x-gp-evm", "ti,am4372", "ti,am43"
+> -
+> -- AM437x SK EVM: AM437x StarterKit Evaluation Module
+> -  compatible = "ti,am437x-sk-evm", "ti,am4372", "ti,am43"
+> -
+> -- AM57XX CL-SOM-AM57x
+> -  compatible = "compulab,cl-som-am57x", "ti,am5728", "ti,dra742", "ti,dra74", "ti,dra7"
+> -
+> -- AM57XX SBC-AM57x
+> -  compatible = "compulab,sbc-am57x", "compulab,cl-som-am57x", "ti,am5728", "ti,dra742", "ti,dra74", "ti,dra7"
+> -
+> -- AM5748 IDK
+> -  compatible = "ti,am5748-idk", "ti,am5748", "ti,dra762", "ti,dra7";
+> -
+> -- AM5728 IDK
+> -  compatible = "ti,am5728-idk", "ti,am5728", "ti,dra742", "ti,dra74", "ti,dra7"
+> -
+> -- AM5718 IDK
+> -  compatible = "ti,am5718-idk", "ti,am5718", "ti,dra7"
+> -
+>   - DRA762 EVM:  Software Development Board for DRA762
+>     compatible = "ti,dra76-evm", "ti,dra762", "ti,dra7"
+>   
+> @@ -217,9 +71,3 @@ Boards (incomplete list of examples):
+>   
+>   - DRA718 EVM: Software Development Board for DRA718
+>     compatible = "ti,dra718-evm", "ti,dra718", "ti,dra722", "ti,dra72", "ti,dra7"
+> -
+> -- DM3730 Logic PD Torpedo + Wireless: Commercial System on Module with WiFi and Bluetooth
+> -  compatible = "logicpd,dm3730-torpedo-devkit", "ti,omap3630", "ti,omap3"
+> -
+> -- DM3730 Logic PD SOM-LV: Commercial System on Module with WiFi and Bluetooth
+> -  compatible = "logicpd,dm3730-som-lv-devkit", "ti,omap3630", "ti,omap3"
+> diff --git a/Documentation/devicetree/bindings/arm/ti.yaml b/Documentation/devicetree/bindings/arm/ti.yaml
+> new file mode 100644
+> index 0000000000000..d0374fea519d8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/ti.yaml
+> @@ -0,0 +1,147 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/ti.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments OMAP SoC architecture
+> +
+> +maintainers:
+> +  - Tony Lindgren <tony@atomide.com>
+> +
+> +description: Platforms based on Texas Instruments OMAP SoC architecture.
+> +
+> +properties:
+> +  $nodename:
+> +    const: '/'
+> +  compatible:
+> +    oneOf:
+> +
+> +      - description: TI OMAP2420 SoC based platforms
+> +        items:
+> +          - enum:
+> +              - nokia,n800
+> +              - nokia,n810
+> +              - nokia,n810-wimax
+> +              - ti,omap2420-h4
+> +          - const: ti,omap2420
+> +          - const: ti,omap2
+> +
+> +      - description: TI OMAP2430 SoC based platforms
+> +        items:
+> +          - enum:
+> +              - ti,omap2430-sdp # TI OMAP2430 SDP
+> +          - const: ti,omap2430
+> +          - const: ti,omap2
+> +
+> +      - description: TI OMAP3430 SoC based platforms
+> +        items:
+> +          - enum:
+> +              - compulab,omap3-cm-t3530
+> +              - logicpd,dm3730-som-lv-devkit  # LogicPD Zoom OMAP35xx SOM-LV Development Kit
+> +              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom OMAP35xx Torpedo Development Kit
+> +              - nokia,omap3-n900
+> +              - openpandora,omap3-pandora-600mhz
+> +              - ti,omap3430-sdp
+> +              - ti,omap3-beagle
+> +              - ti,omap3-evm                  # TI OMAP35XX EVM (TMDSEVM3530)
+> +              - ti,omap3-ldp                  # TI OMAP3430 LDP (Zoom1 Labrador)
+> +              - timll,omap3-devkit8000
+> +          - const: ti,omap3430
+> +          - const: ti,omap3
+> +
+> +      - description: TI OMAP3630 SoC based platforms
+> +        items:
+> +          - enum:
+> +              - amazon,omap3-echo             # Amazon Echo (first generation)
+> +              - compulab,omap3-cm-t3730
+> +              - goldelico,gta04
+> +              - lg,omap3-sniper               # LG Optimus Black
+> +              - logicpd,dm3730-som-lv-devkit  # LogicPD Zoom DM3730 SOM-LV Development Kit
+> +              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom DM3730 Torpedo + Wireless Development Kit
+> +              - nokia,omap3-n9
+> +              - nokia,omap3-n950
+> +              - openpandora,omap3-pandora-1ghz
+> +              - ti,omap3-beagle-xm
+> +              - ti,omap3-evm-37xx             # TI OMAP37XX EVM (TMDSEVM3730)
+> +              - ti,omap3-zoom3
+> +          - const: ti,omap3630
+> +          - const: ti,omap3
+> +
+> +      - description: TI AM35 SoC based platforms
+> +        items:
+> +          - enum:
+> +              - compulab,omap3-sbc-t3517 # CompuLab SBC-T3517 with CM-T3517
+> +              - teejet,mt_ventoux
+> +              - ti,am3517-craneboard     # TI AM3517 CraneBoard (TMDSEVM3517)
+> +              - ti,am3517-evm            # TI AM3517 EVM (AM3517/05 TMDSEVM3517)
+> +          - const: ti,am3517
+> +          - const: ti,omap3
+> +
+> +      - description: TI OMAP4430 SoC based platforms
+> +        items:
+> +          - enum:
+> +              - amazon,omap4-kc1        # Amazon Kindle Fire (first generation)
+> +              - motorola,droid4         # Motorola Droid 4 XT894
+> +              - motorola,droid-bionic   # Motorola Droid Bionic XT875
+> +              - ti,omap4-panda
+> +              - ti,omap4-sdp
+> +          - const: ti,omap4430
+> +          - const: ti,omap4
+> +
+> +      - description: TI OMAP4460 SoC based platforms
+> +        items:
+> +          - enum:
+> +              - epson,epson,embt2ws    # Epson Moverio BT-200
+> +              - ti,omap4-panda-es
+> +          - const: ti,omap4460
+> +          - const: ti,omap4
+> +
+> +      - description: TI OMAP5 SoC based platforms
+> +        items:
+> +          - enum:
+> +              - compulab,omap5-cm-t54
+> +              - isee,omap5-igep0050
+> +              - ti,omap5-uevm
+> +          - const: ti,omap5
+> +
+> +      - description: TI AM33 SoC based platforms
+> +        items:
+> +          - enum:
+> +              - bosch,am335x-guardian
+> +              - compulab,cm-t335
+> +              - gumstix,am335x-pepper
+> +              - moxa,uc-2101
+> +              - moxa,uc-8100-me-t
+> +              - novatech,am335x-lxm  # NovaTech OrionLXm
+> +              - tcl,am335x-sl50      # Toby Churchill SL50 Series
+> +              - ti,am335x-bone
+> +              - ti,am335x-evm
+> +              - ti,am335x-evmsk
+> +              - ti,am3359-icev2
+> +          - pattern: '^ti,am33(5[1246789]|xx)$' # ti,am33xx is legacy please use full SoC name
+> +
+> +      - description: TI AM43 SoC based platforms
+> +        items:
+> +          - enum:
+> +              - compulab,am437x-cm-t43
+> +              - ti,am437x-gp-evm
+> +              - ti,am437x-idk-evm
+> +              - ti,am437x-sk-evm
+> +          - pattern: '^ti,am4372[26789]$'
+> +          - const: ti,am43
+> +
+> +      - description: TI AM57 SoC based platforms
+> +        items:
+> +          - enum:
+> +              - beagle,am5729-beagleboneai
+> +              - compulab,cl-som-am57x
+> +              - ti,am5718-idk
+> +              - ti,am5728-idk
+> +              - ti,am5748-idk
+> +          - pattern: '^ti,am57[0124][689]$'
+> +          - const: ti,am57
+> +
+> +additionalProperties: true
+> +
+> +...
