@@ -2,96 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88716D6EEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF606D6EEC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235349AbjDDV0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
+        id S236430AbjDDV0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236263AbjDDVZ5 (ORCPT
+        with ESMTP id S236263AbjDDV0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:25:57 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBC04EE8;
-        Tue,  4 Apr 2023 14:25:56 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id o15-20020a4ae58f000000b00538c0ec9567so5392048oov.1;
-        Tue, 04 Apr 2023 14:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680643555;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w1lfgA3bo+QelVS2EazQZQzLteoqL38Cav9tndwQCfM=;
-        b=nAlxyVLbkQXwHFIM57BOXPlt9TpceyMPPanWsGKJI0dbdywIzN6xu2oexvuHDTvMCQ
-         +98UnockFsNGIg8eBMTGtVBrgMuXjjupXa8IlrCyl2dANDCC8RcsFXVn/CdCu8PZ8dNB
-         tbkSWf5cBo3LQdsJ/Isw7icz3j+YCewk6+hnW0kOHZvtW9j5ly6geaC7v72VN+VJdWko
-         dv9fVllJ15yBqsoqBksYydvBaVxSkq5D8CM5Q4o0CTTKTKGxz89g9g2SAq+jS1GVLegI
-         35kKlihybIMzWs8XQc5ApZPnzBhdcCrxaEU8XAj3i/odpdQjmQctDl2MN23/5gSSguW+
-         IIMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680643555;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w1lfgA3bo+QelVS2EazQZQzLteoqL38Cav9tndwQCfM=;
-        b=Jy7Mz0y5Jm91uVWQgc1LWvGoZO3qYElm+bd9aLAsCrxPEdVdWM54zlLdxkfCNH2BwN
-         X2AsXiIjWM4SZTsnDkJaBDo3Wu7yJBrAe1QOOAFSVuO409+FD5H8CvlcZKDpOI7fgwIj
-         C8Cnk3ySdr9c67j+I6AzHR8eBShL5yjmECZBrUz8Bwnl+1BUpf/rMpO1JSoguYn7UaLA
-         EjXVEESWhMHWpd8aDyNiZVtqnShXQC4h7LS816PPYNQ7eNijLXrq6uuMasX3cr7dPd+9
-         Q/O70kytJUculz/RCs3sEzhLpHZeYfQIPD2q++DKWZqFYuQu0hpQRFMV0NqpdTKbUsZw
-         wTaQ==
-X-Gm-Message-State: AAQBX9dN2AZ9ffi/6yEzcT7ATYlrnXVD2cEjV5r8ClQ57aFxV7XC2kqy
-        FhN/hrRWX1rYGXFgIDOOEoA=
-X-Google-Smtp-Source: AKy350YTueH5Ppmo8uC84BaYI61cBu7zxdcAhyRZ6wqPqI5Vc3Yd0F0LeEbBlZnUdYPx8CDdSC1zew==
-X-Received: by 2002:a4a:4950:0:b0:53b:691c:43f9 with SMTP id z77-20020a4a4950000000b0053b691c43f9mr2739635ooa.2.1680643555548;
-        Tue, 04 Apr 2023 14:25:55 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y70-20020a4a4549000000b0053e56135a1esm5940726ooa.45.2023.04.04.14.25.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 14:25:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 4 Apr 2023 14:25:54 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.4 000/104] 5.4.240-rc1 review
-Message-ID: <a61e0858-cda2-42c1-89a8-e8c4112bfe86@roeck-us.net>
-References: <20230403140403.549815164@linuxfoundation.org>
+        Tue, 4 Apr 2023 17:26:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E716119BE
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 14:26:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E55A63A24
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 21:26:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F6AC433EF;
+        Tue,  4 Apr 2023 21:26:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680643571;
+        bh=HdGr7LZcw/ZEhFFA/Xjwq5WeNU9oGInNybWeLD06ZA0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UED5Kk6R3DNRmAhMTG+Ywnq3RHU5aX+W6pYqGpDNVDqpVfXoUW9ggRpisK+bY/Egi
+         BLgDKy8qsuIxCVbagmWm/aBfu98awHeG1pnWq+7GSomEhsQMRE+GSNyoTy014eyhRM
+         kHPW2nejnAveBF50XYdZ4cYDby89w1k+BVOzxz2cFkLdzO5J47cQn55GXyNUWi0UHn
+         YIV0IlSvwJAXnnK7CvbXdeTARcSCrq3tPFUh4gDnaJcge2FfzYMXFQRjWsldlwvh7x
+         bNecB3fDxpvbGbOdtRyCdZUfxk3al7OYKP7Mpqr+hMBpMRMI0kPCYx4ovDbExhHaQr
+         XgYXKQ2g9H60Q==
+Date:   Tue, 4 Apr 2023 14:26:09 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     yonggil.song@samsung.com,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] f2fs: Fix system crash due to lack of free space in
+ LFS
+Message-ID: <ZCyV8ZSrj1rlJslZ@google.com>
+References: <CGME20230321001251epcms2p4c1fd48495643dbfca2cf82a433490bb8@epcms2p4>
+ <20230321001251epcms2p4c1fd48495643dbfca2cf82a433490bb8@epcms2p4>
+ <48f18a16-c6d8-3df4-55c5-11546e7dde35@kernel.org>
+ <ZCsGfTM1SjLblTVG@google.com>
+ <87c74724-da3d-c5fd-b70d-b80a48ec058e@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230403140403.549815164@linuxfoundation.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <87c74724-da3d-c5fd-b70d-b80a48ec058e@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 04:07:52PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.240 release.
-> There are 104 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 04/04, Chao Yu wrote:
+> On 2023/4/4 1:01, Jaegeuk Kim wrote:
+> > On 04/01, Chao Yu wrote:
+> > > On 2023/3/21 8:12, Yonggil Song wrote:
+> > > > When f2fs tries to checkpoint during foreground gc in LFS mode, system
+> > > > crash occurs due to lack of free space if the amount of dirty node and
+> > > > dentry pages generated by data migration exceeds free space.
+> > > > The reproduction sequence is as follows.
+> > > > 
+> > > >    - 20GiB capacity block device (null_blk)
+> > > >    - format and mount with LFS mode
+> > > >    - create a file and write 20,000MiB
+> > > >    - 4k random write on full range of the file
+> > > > 
+> > > >    RIP: 0010:new_curseg+0x48a/0x510 [f2fs]
+> > > >    Code: 55 e7 f5 89 c0 48 0f af c3 48 8b 5d c0 48 c1 e8 20 83 c0 01 89 43 6c 48 83 c4 28 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc <0f> 0b f0 41 80 4f 48 04 45 85 f6 0f 84 ba fd ff ff e9 ef fe ff ff
+> > > >    RSP: 0018:ffff977bc397b218 EFLAGS: 00010246
+> > > >    RAX: 00000000000027b9 RBX: 0000000000000000 RCX: 00000000000027c0
+> > > >    RDX: 0000000000000000 RSI: 00000000000027b9 RDI: ffff8c25ab4e74f8
+> > > >    RBP: ffff977bc397b268 R08: 00000000000027b9 R09: ffff8c29e4a34b40
+> > > >    R10: 0000000000000001 R11: ffff977bc397b0d8 R12: 0000000000000000
+> > > >    R13: ffff8c25b4dd81a0 R14: 0000000000000000 R15: ffff8c2f667f9000
+> > > >    FS: 0000000000000000(0000) GS:ffff8c344ec80000(0000) knlGS:0000000000000000
+> > > >    CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > >    CR2: 000000c00055d000 CR3: 0000000e30810003 CR4: 00000000003706e0
+> > > >    DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > >    DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > >    Call Trace:
+> > > >    <TASK>
+> > > >    allocate_segment_by_default+0x9c/0x110 [f2fs]
+> > > >    f2fs_allocate_data_block+0x243/0xa30 [f2fs]
+> > > >    ? __mod_lruvec_page_state+0xa0/0x150
+> > > >    do_write_page+0x80/0x160 [f2fs]
+> > > >    f2fs_do_write_node_page+0x32/0x50 [f2fs]
+> > > >    __write_node_page+0x339/0x730 [f2fs]
+> > > >    f2fs_sync_node_pages+0x5a6/0x780 [f2fs]
+> > > >    block_operations+0x257/0x340 [f2fs]
+> > > >    f2fs_write_checkpoint+0x102/0x1050 [f2fs]
+> > > >    f2fs_gc+0x27c/0x630 [f2fs]
+> > > >    ? folio_mark_dirty+0x36/0x70
+> > > >    f2fs_balance_fs+0x16f/0x180 [f2fs]
+> > > > 
+> > > > This patch adds checking whether free sections are enough before checkpoint
+> > > > during gc.
+> > > > 
+> > > > Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
+> > > > ---
+> > > >    fs/f2fs/gc.c      | 10 ++++++++--
+> > > >    fs/f2fs/gc.h      |  2 ++
+> > > >    fs/f2fs/segment.h | 27 ++++++++++++++++++++++-----
+> > > >    3 files changed, 32 insertions(+), 7 deletions(-)
+> > > > 
+> > > > diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> > > > index 4546e01b2ee0..dd563866d3c9 100644
+> > > > --- a/fs/f2fs/gc.c
+> > > > +++ b/fs/f2fs/gc.c
+> > > > @@ -1773,6 +1773,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+> > > >    		.iroot = RADIX_TREE_INIT(gc_list.iroot, GFP_NOFS),
+> > > >    	};
+> > > >    	unsigned int skipped_round = 0, round = 0;
+> > > > +	unsigned int need_lower = 0, need_upper = 0;
+> > > >    	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
+> > > >    				gc_control->nr_free_secs,
+> > > > @@ -1858,8 +1859,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+> > > >    		}
+> > > >    	}
+> > > > -	/* Write checkpoint to reclaim prefree segments */
+> > > > -	if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
+> > > > +	ret = get_need_secs(sbi, &need_lower, &need_upper);
+> > > 
+> > > Can we avoid calling has_curseg_enough_space() for this case?
+> > 
+> > Why? :P
 > 
-> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
-> Anything received after that time might be too late.
-> 
+> We won't check the return value of get_need_secs(), so it's not needed to call
+> has_curseg_enough_space() in get_need_secs() in this path, right?
 
-Build results:
-	total: 159 pass: 159 fail: 0
-Qemu test results:
-	total: 455 pass: 455 fail: 0
+I see. Thanks. I think we can do like this:
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
+[Jaegeuk Kim: code clean-up]
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ fs/f2fs/gc.c      | 10 ++++++++--
+ fs/f2fs/gc.h      |  2 ++
+ fs/f2fs/segment.h | 39 ++++++++++++++++++++++++++++++---------
+ 3 files changed, 40 insertions(+), 11 deletions(-)
 
-Guenter
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 5261b5b5e8d1..56c53dbe05c9 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1805,6 +1805,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 		.iroot = RADIX_TREE_INIT(gc_list.iroot, GFP_NOFS),
+ 	};
+ 	unsigned int skipped_round = 0, round = 0;
++	unsigned int upper_secs;
+ 
+ 	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
+ 				gc_control->nr_free_secs,
+@@ -1890,8 +1891,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 		}
+ 	}
+ 
+-	/* Write checkpoint to reclaim prefree segments */
+-	if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
++	__get_secs_required(sbi, NULL, &upper_secs, NULL);
++
++	/*
++	 * Write checkpoint to reclaim prefree segments.
++	 * We need more three extra sections for writer's data/node/dentry.
++	 */
++	if (free_sections(sbi) <= upper_secs + NR_GC_CHECKPOINT_SECS &&
+ 				prefree_segments(sbi)) {
+ 		ret = f2fs_write_checkpoint(sbi, &cpc);
+ 		if (ret)
+diff --git a/fs/f2fs/gc.h b/fs/f2fs/gc.h
+index 5ad6ac63e13f..28a00942802c 100644
+--- a/fs/f2fs/gc.h
++++ b/fs/f2fs/gc.h
+@@ -30,6 +30,8 @@
+ /* Search max. number of dirty segments to select a victim segment */
+ #define DEF_MAX_VICTIM_SEARCH 4096 /* covers 8GB */
+ 
++#define NR_GC_CHECKPOINT_SECS (3)	/* data/node/dentry sections */
++
+ struct f2fs_gc_kthread {
+ 	struct task_struct *f2fs_gc_task;
+ 	wait_queue_head_t gc_wait_queue_head;
+diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
+index 99e34d32c5c6..ac2e35170f2d 100644
+--- a/fs/f2fs/segment.h
++++ b/fs/f2fs/segment.h
+@@ -595,8 +595,12 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
+ 	return true;
+ }
+ 
+-static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
+-					int freed, int needed)
++/*
++ * calculate needed sections for dirty node/dentry
++ * and call has_curseg_enough_space
++ */
++static inline void __get_secs_required(struct f2fs_sb_info *sbi,
++		unsigned int *lower_p, unsigned int *upper_p, bool *curseg_p)
+ {
+ 	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
+ 					get_pages(sbi, F2FS_DIRTY_DENTS) +
+@@ -606,20 +610,37 @@ static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
+ 	unsigned int dent_secs = total_dent_blocks / CAP_BLKS_PER_SEC(sbi);
+ 	unsigned int node_blocks = total_node_blocks % CAP_BLKS_PER_SEC(sbi);
+ 	unsigned int dent_blocks = total_dent_blocks % CAP_BLKS_PER_SEC(sbi);
+-	unsigned int free, need_lower, need_upper;
++
++	if (lower_p)
++		*lower_p = node_secs + dent_secs;
++	if (upper_p)
++		*upper_p = node_secs + dent_secs +
++			(node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
++	if (curseg_p)
++		*curseg_p = has_curseg_enough_space(sbi,
++				node_blocks, dent_blocks);
++}
++
++static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
++					int freed, int needed)
++{
++	unsigned int free_secs, lower_secs, upper_secs;
++	bool curseg_space;
+ 
+ 	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
+ 		return false;
+ 
+-	free = free_sections(sbi) + freed;
+-	need_lower = node_secs + dent_secs + reserved_sections(sbi) + needed;
+-	need_upper = need_lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
++	__get_secs_required(sbi, &lower_secs, &upper_secs, &curseg_space);
++
++	free_secs = free_sections(sbi) + freed;
++	lower_secs += needed + reserved_sections(sbi);
++	upper_secs += needed + reserved_sections(sbi);
+ 
+-	if (free > need_upper)
++	if (free_secs > upper_secs)
+ 		return false;
+-	else if (free <= need_lower)
++	else if (free_secs <= lower_secs)
+ 		return true;
+-	return !has_curseg_enough_space(sbi, node_blocks, dent_blocks);
++	return !curseg_space;
+ }
+ 
+ static inline bool f2fs_is_checkpoint_ready(struct f2fs_sb_info *sbi)
+-- 
+2.40.0.348.gf938b09366-goog
+
