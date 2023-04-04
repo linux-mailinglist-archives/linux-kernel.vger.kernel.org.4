@@ -2,54 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44E66D5A55
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE0F6D5A61
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233970AbjDDIJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 04:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
+        id S234054AbjDDILW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 04:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233451AbjDDIJz (ORCPT
+        with ESMTP id S230169AbjDDILT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 04:09:55 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069491BD9;
-        Tue,  4 Apr 2023 01:09:53 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pjbjf-0006fr-PJ; Tue, 04 Apr 2023 10:09:47 +0200
-Message-ID: <e671189c-086e-87bd-68db-fb80678d4666@leemhuis.info>
-Date:   Tue, 4 Apr 2023 10:09:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-US, de-DE
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@gmail.com>,
+        Tue, 4 Apr 2023 04:11:19 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618931BE2;
+        Tue,  4 Apr 2023 01:11:12 -0700 (PDT)
+X-UUID: 3ebad14ed2c011edb6b9f13eb10bd0fe-20230404
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Mn5TQ4GC1j4Q+gyyX94Y4Gogj2cY2+pp64zDevcfeXI=;
+        b=kB1c9yCfTuOzCnW3gB1977tGIdq1f9WF0AxTksr82YeJsaF89IXM0Kf4RqxdTcKhDI1DNXPi9M8LmNu/Ps378N3XXjZIz1oIQ3UV3JUBmRnwWoFaBhC0TyAEe8EdmUV3Q4c0jYLMsiH0ULdPLeeezDpk+VUqSmt/qLnhb50GCAs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:d5cb6333-97fc-47ad-9653-b772a4a7bb62,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.22,REQID:d5cb6333-97fc-47ad-9653-b772a4a7bb62,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:120426c,CLOUDID:c070c4f7-ddba-41c3-91d9-10eeade8eac7,B
+        ulkID:230404161106F0S52OW1,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 3ebad14ed2c011edb6b9f13eb10bd0fe-20230404
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 176784093; Tue, 04 Apr 2023 16:11:04 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 4 Apr 2023 16:11:03 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Tue, 4 Apr 2023 16:11:02 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
-References: <20230314-doc-checkpatch-closes-tag-v4-0-d26d1fa66f9f@tessares.net>
- <20230314-doc-checkpatch-closes-tag-v4-1-d26d1fa66f9f@tessares.net>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v4 1/5] docs: process: allow Closes tags with links
-In-Reply-To: <20230314-doc-checkpatch-closes-tag-v4-1-d26d1fa66f9f@tessares.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1680595794;ab84f175;
-X-HE-SMSGID: 1pjbjf-0006fr-PJ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v4,0/8] media: mediatek: vcodec: Add debugfs file for decode and encode
+Date:   Tue, 4 Apr 2023 16:10:54 +0800
+Message-ID: <20230404081102.30713-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,73 +82,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Need to change kernel driver to open decode and encode debug log at current period,
+it's very unreasonable. Adding debugfs common interface to support decode and encode,
+using echo command to control debug log level and getting useful information for each
+instance.
 
-On 03.04.23 18:23, Matthieu Baerts wrote:
-> [...]
-> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-> index 828997bc9ff9..12d58ddc2b8a 100644
-> --- a/Documentation/process/submitting-patches.rst
-> +++ b/Documentation/process/submitting-patches.rst
-> @@ -113,11 +113,9 @@ there is no collision with your six-character ID now, that condition may
->  change five years from now.
->  
->  If related discussions or any other background information behind the change
-> -can be found on the web, add 'Link:' tags pointing to it. In case your patch
-> -fixes a bug, for example, add a tag with a URL referencing the report in the
-> -mailing list archives or a bug tracker; if the patch is a result of some
-> -earlier mailing list discussion or something documented on the web, point to
-> -it.
-> +can be found on the web, add 'Link:' tags pointing to it. If the patch is a
-> +result of some earlier mailing list discussions or something documented on the
-> +web, point to it.
->  
->  When linking to mailing list archives, preferably use the lore.kernel.org
->  message archiver service. To create the link URL, use the contents of the
-> @@ -134,6 +132,16 @@ resources. In addition to giving a URL to a mailing list archive or bug,
->  summarize the relevant points of the discussion that led to the
->  patch as submitted.
->  
-> +In case your patch fixes a bug, use the 'Closes:' tag with a URL referencing
-> +the report in the mailing list archives or a public bug tracker. For example::
-> +
-> +	Closes: https://example.com/issues/1234
+patch 1 add dbgfs common interface.
+patch 2~5 support decode.
+patch 6~7 support encode
+patch 8 add help function
+---
+changed with v3:
+- add help function for patch 8
+- remove append '\0' and enlarge buffer size for patch 4
+changed with v2:
+- using pr_debug and dev_dbg instead of pr_info for patch 2.
+- fix word fail: informatiaoin -> information for patch 3.
+- used to print each instance format information for patch 5.
+changed with v1:
+- add new patch 4 and 5.
+- using cmd 'cat vdec' to show debug information instead of pr_info directly.
+---
+Yunfei Dong (8):
+  media: mediatek: vcodec: Add debugfs interface to get debug
+    information
+  media: mediatek: vcodec: Add debug params to control different log
+    level
+  media: mediatek: vcodec: Add a debugfs file to get different useful
+    information
+  media: mediatek: vcodec: Get each context resolution information
+  media: mediatek: vcodec: Get each instance format type
+  media: mediatek: vcodec: Change dbgfs interface to support encode
+  media: mediatek: vcodec: Add encode to support dbgfs
+  media: mediatek: vcodec: Add dbgfs help function
 
-YMMV, but is this...
+ .../media/platform/mediatek/vcodec/Makefile   |   6 +
+ .../mediatek/vcodec/mtk_vcodec_dbgfs.c        | 216 ++++++++++++++++++
+ .../mediatek/vcodec/mtk_vcodec_dbgfs.h        |  72 ++++++
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h |   4 +
+ .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |   2 +
+ .../mediatek/vcodec/mtk_vcodec_util.c         |   8 +
+ .../mediatek/vcodec/mtk_vcodec_util.h         |  26 ++-
+ 8 files changed, 335 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
 
-> +Some bug trackers have the ability to close issues automatically when a
-> +commit with such a tag is applied. Some bots monitoring mailing lists can
-> +also track such tags and take certain actions. Private bug trackers and
-> +invalid URLs are forbidden.
-> +
+-- 
+2.18.0
 
-...section (and a similar one in the other document) really worth it
-and/or does it have to be that long? A simple "Some bug trackers then
-will automatically close the issue when the commit is merged" IMHO would
-suffice, but OTOH it might be considered common knowledge. And the
-"found on the web", "a public bug tracker" (both quoted above) and
-"available on the web" (quoted below) already make it pretty clear that
-links to private bug trackers are now desired. And there is also a
-"Please check the link to make sure that it is actually working and
-points to the relevant message." in submitting-patches.rst already, so
-invalid URLs are obviously not wanted either.
-
->  If your patch fixes a bug in a specific commit, e.g. you found an issue using
->  ``git bisect``, please use the 'Fixes:' tag with the first 12 characters of
->  the SHA-1 ID, and the one line summary.  Do not split the tag across multiple
-> @@ -498,9 +506,11 @@ Using Reported-by:, Tested-by:, Reviewed-by:, Suggested-by: and Fixes:
->  The Reported-by tag gives credit to people who find bugs and report them and it
->  hopefully inspires them to help us again in the future. The tag is intended for
->  bugs; please do not use it to credit feature requests. The tag should be
-> -followed by a Link: tag pointing to the report, unless the report is not
-> -available on the web. Please note that if the bug was reported in private, then
-> -ask for permission first before using the Reported-by tag.
-> +followed by a Closes: tag pointing to the report, unless the report is not
-> +available on the web. The Link: tag can be used instead of Closes: if the patch
-> +fixes a part of the issue(s) being reported. Please note that if the bug was
-> +reported in private, then ask for permission first before using the Reported-by
-> +tag.
->  
->  A Tested-by: tag indicates that the patch has been successfully tested (in
->  some environment) by the person named.  This tag informs maintainers that
-
-Ciao, Thorsten
