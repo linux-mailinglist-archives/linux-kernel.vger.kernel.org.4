@@ -2,83 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CEF6D6E83
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C43B6D6E79
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236405AbjDDVAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S236377AbjDDU7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 16:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235981AbjDDU74 (ORCPT
+        with ESMTP id S229958AbjDDU7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 16:59:56 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A418469E;
-        Tue,  4 Apr 2023 13:59:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aEJvhdz8vFgj+pWW6Gpsk1VWZm3g73dhXzFqGRKbxbI=; b=VmvKJQIvSX4/Oq148L9Zf5TnYB
-        fQIH0MiOuqhTq4MjxO4da9RjxW6bg9vRqGRSzoLvWYcfKVtQ8VYn6ebvytdM28ljHkyrw0Wkg6ZIq
-        wNolvEvCw028oas1dzwZ+NWYOUSrrorsHCpr4Q97fb0ig9ouyJ6PU4UlvKHPN5MpugunWgFpFRA5/
-        P5KAQ42npTweD149avzHfnshio7FZFn4f8xMC4DJzMP2n9oAKvU4KYhgv/JOz+985kjeiz3Pv8TdT
-        8pT2JHnrWAduOyAse3xdub4LldrwPIMQX3Wh9LqQrF0g0g/uSUa3THHQ+W87IXj0sCdhrN6KGL7xr
-        TD1OVWCA==;
-Received: from p200300ccff1e1f001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff1e:1f00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pjnki-0007u8-JY; Tue, 04 Apr 2023 22:59:44 +0200
-Received: from andi by aktux with local (Exim 4.96)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pjnki-00EuLc-11;
-        Tue, 04 Apr 2023 22:59:40 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        tony@atomide.com, afd@ti.com, andreas@kemnade.info,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH v4 2/2] MAINTAINERS: add board bindings list to OMAP2+ files
-Date:   Tue,  4 Apr 2023 22:58:44 +0200
-Message-Id: <20230404205844.3553159-3-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230404205844.3553159-1-andreas@kemnade.info>
-References: <20230404205844.3553159-1-andreas@kemnade.info>
+        Tue, 4 Apr 2023 16:59:45 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1943644BF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 13:59:44 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id a30-20020a9d3e1e000000b006a13f728172so14875129otd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 13:59:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680641983;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8XB956O45UzVksOyeGhwxzyBdQXHDRc1Q4yj23qYiJg=;
+        b=RN3hkQEhO24vo0vfwd4s0t68KhyLFB5bobj6eS6kQ1lCvGABwa562qwkSJpKBLhHsI
+         j9WyV/bZ9XUUkmDYf+xx+nqLQRXXyoH1MuACy1KypDYbTisxMcFFPsQ27f1Wt48z1eCe
+         Eff/XBDWq153oNecKmgeVWIXX2Wk5Cl2Wz2mDFmKW4gLy/ix+eYT7xT7Z8Onc9v69H+P
+         akaXzFzIepYWUiCTz/CfJFD8qj4ynB6JoyOmjfvskEHLgdwgbEkTOaNBwplMqrR2YZQl
+         92xCtdgJd+LiU2AY20nwNoj0e73AWfEbcYIiJBKhfeBA1W8r725EEmwGfIftOIdiMXdj
+         dSmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680641983;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8XB956O45UzVksOyeGhwxzyBdQXHDRc1Q4yj23qYiJg=;
+        b=H5gv8ypQm3GuL9TI+xebb55jj0vsZEjRCt40Lbop8vNxsdCOubCaAMALOlrTPXfd24
+         s91OFXbZVHSmgdIcGWAF7EKA3qNGwR8+aOJ05Ak9mncXKGTITcDq+SiBasbzP1xL4TGS
+         Dy4LLPC38Yl3i8UuV2VR8D/kDrhksh0IKE/l2v6+yhYn1vNBtYbgTg8RfhMrZDKm1DHw
+         J+LjmR476qjARHH1Mu7s38Ck2RJEWekv2QS0EK4iN84Xv0ROxcj0nGrJDtXfZJBJoVnx
+         hu5kPXZDaYkNDWiWKUhyHGY767PYQbUzX149yn1o5vsiMsupzsQHQQG7LsaPhWzAoCHF
+         WJog==
+X-Gm-Message-State: AAQBX9f2FhA640tJSZaQwKnTacm++LTVbJ63/6D1i+0+hdwbTyE28Drp
+        MW1QzcSA8n5Wf7jvjPLt4O1/QjZ5EbEu9vUbW3lx0Q==
+X-Google-Smtp-Source: AKy350Yb1ENyDDt/RXMy8DJfza/HP2Xi2qT3CKtQ2KekykdBNnmTfFThnO0XbepJYeJpk18FCS4o4myYZqokMZsT8/Y=
+X-Received: by 2002:a9d:6191:0:b0:699:7883:940d with SMTP id
+ g17-20020a9d6191000000b006997883940dmr1276983otk.7.1680641983242; Tue, 04 Apr
+ 2023 13:59:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230206172340.2639971-1-rananta@google.com> <20230206172340.2639971-5-rananta@google.com>
+ <ZCTdcJLxWBRXItSM@linux.dev> <CAJHc60xbhyiVieqzeMcB1S7UWw_J3Jyh8PqjA9GLOhudja5nmA@mail.gmail.com>
+ <ZCx13Q4nyRghItcI@linux.dev>
+In-Reply-To: <ZCx13Q4nyRghItcI@linux.dev>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Tue, 4 Apr 2023 13:59:31 -0700
+Message-ID: <CAJHc60z49Hfp0j39owGP1f+5Jv496ViVUfduAvSO36sv_2C1OA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range()
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add list of OMAP2+ boards to the corresponding section
+On Tue, Apr 4, 2023 at 12:09=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> On Mon, Apr 03, 2023 at 02:23:17PM -0700, Raghavendra Rao Ananta wrote:
+> > On Wed, Mar 29, 2023 at 5:53=E2=80=AFPM Oliver Upton <oliver.upton@linu=
+x.dev> wrote:
+> > >
+> > > On Mon, Feb 06, 2023 at 05:23:37PM +0000, Raghavendra Rao Ananta wrot=
+e:
+> > > > Implement kvm_arch_flush_remote_tlbs_range() for arm64,
+> > > > such that it can utilize the TLBI range based instructions
+> > > > if supported.
+> > > >
+> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > > ---
+> > > >  arch/arm64/include/asm/kvm_host.h |  3 +++
+> > > >  arch/arm64/kvm/mmu.c              | 15 +++++++++++++++
+> > > >  2 files changed, 18 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include=
+/asm/kvm_host.h
+> > > > index dee530d75b957..211fab0c1de74 100644
+> > > > --- a/arch/arm64/include/asm/kvm_host.h
+> > > > +++ b/arch/arm64/include/asm/kvm_host.h
+> > > > @@ -1002,6 +1002,9 @@ struct kvm *kvm_arch_alloc_vm(void);
+> > > >  #define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> > > >  int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+> > > >
+> > > > +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
+> > > > +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_=
+gfn, u64 pages);
+> > > > +
+> > > >  static inline bool kvm_vm_is_protected(struct kvm *kvm)
+> > > >  {
+> > > >       return false;
+> > > > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > > > index e98910a8d0af6..409cb187f4911 100644
+> > > > --- a/arch/arm64/kvm/mmu.c
+> > > > +++ b/arch/arm64/kvm/mmu.c
+> > > > @@ -91,6 +91,21 @@ int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+> > > >       return 0;
+> > > >  }
+> > > >
+> > > > +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_=
+gfn, u64 pages)
+> > > > +{
+> > > > +     phys_addr_t start, end;
+> > > > +
+> > > > +     if (!system_supports_tlb_range())
+> > > > +             return -EOPNOTSUPP;
+> > >
+> > > There's multiple layers of fallback throughout this series, as it wou=
+ld
+> > > appear that deep in __kvm_tlb_flush_range() you're blasting the whole
+> > > VMID if either the range is too large or the feature isn't supported.
+> > >
+> > > Is it possible to just normalize on a single spot to gate the use of
+> > > range-based invalidations? I have a slight preference for doing it de=
+ep
+> > > in the handler, as it keeps the upper layers of code a bit more
+> > > readable.
+> > >
+> > I was a little skeptical on this part, since the
+> > kvm_arch_flush_remote_tlbs_range() expects to return -EOPNOTSUPP if
+> > indeed there's no support.
+>
+> Well, the arch-neutral code can expect whatever it wants :) The only
+> real contract we have with it is to return 0 iff the specified range has
+> been invalidated, even if that comes with over-invalidating.
+>
+> > But I see your point. The if-else in kvm_pgtable_stage2_flush_range()
+> > seems redundant and I can simply manage this conditions inside
+> > __kvm_tlb_flush_range_vmid_ipa() itself, but I'll leave the
+> > kvm_arch_flush_remote_tlbs_range()'s implementation as is. Thoughts?
+>
+> The largest concern I had is that the series is testing for FEAT_TLBIRANG=
+E
+> all over the shop and I just raised that concern on this patch. AFAICT,
+> the iterative approach to invalidating a range of IPAs is effectively
+> dead code, as all flows into __kvm_tlb_flush_range_vmid_ipa() are gated
+> by system_supports_tlb_range() somewhere.
+>
+> Personally, I prefer keeping the higher level software models making
+> aggressive use of range-based interfaces and letting the actual
+> implementation under the hood select the appropriate instruction. That
+> helps readability, as it directly communicates the expected outcome of
+> the invalidation.
+>
+> So, if you want to make use of the iterative approach to TLB invalidation=
+s on
+> !TLBIRANGE systems, then this function should _not_ return EOPNOTSUPP.
+>
+Thanks for the explanation. I can make the calls consistent across the
+code, and let the actual handler deal TLBIRANGE support.
 
-CC: linux-omap@vger.kernel.org
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 40e26624ff24b..c41476a7504cd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15363,6 +15363,7 @@ W:	http://www.muru.com/linux/omap/
- W:	http://linux.omap.com/
- Q:	http://patchwork.kernel.org/project/linux-omap/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
-+F:	Documentation/devicetree/bindings/arm/ti.yaml
- F:	arch/arm/configs/omap2plus_defconfig
- F:	arch/arm/mach-omap2/
- F:	drivers/bus/ti-sysc.c
--- 
-2.39.2
-
+- Raghavendra
+> --
+> Thanks,
+> Oliver
