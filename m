@@ -2,171 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC2A6D5F33
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968FC6D5F3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbjDDLhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
+        id S234379AbjDDLjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 07:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234830AbjDDLhQ (ORCPT
+        with ESMTP id S229551AbjDDLjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:37:16 -0400
-Received: from out28-74.mail.aliyun.com (out28-74.mail.aliyun.com [115.124.28.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2108F30FB
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 04:37:12 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07663561|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0681517-0.0858733-0.845975;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.S74jMLQ_1680608227;
-Received: from 192.168.220.144(mailfrom:victor@allwinnertech.com fp:SMTPD_---.S74jMLQ_1680608227)
-          by smtp.aliyun-inc.com;
-          Tue, 04 Apr 2023 19:37:08 +0800
-Message-ID: <b187d221-228a-f032-8c93-16e148ec49ca@allwinnertech.com>
-Date:   Tue, 4 Apr 2023 19:37:06 +0800
+        Tue, 4 Apr 2023 07:39:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B728F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 04:38:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680608267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DQ1ixt4I5eKbz7gsvcX9jwc/HOMjJPpO7V63NSQms/A=;
+        b=E5W2AiStuu7T+Vznxd5rTb2FaOYwmK1qW7IkW9yMTTVRjBvwHdT0EpZj01PQg/xX2wVRG5
+        LwVOd0QwEgiIC0LJzv8yLqwBh/0D1LXNokDq57o3bgrrmAOBeHsxiT5fhcKGwWFUjERg87
+        oNWq+LK9g0nxdHDNrdQVg9pSBB+XNYU=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-636-ngb4sOebNnGBqysFPpmDJw-1; Tue, 04 Apr 2023 07:37:46 -0400
+X-MC-Unique: ngb4sOebNnGBqysFPpmDJw-1
+Received: by mail-lj1-f197.google.com with SMTP id t7-20020a2e8e67000000b002a5faaf797fso5519468ljk.9
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 04:37:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680608265;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DQ1ixt4I5eKbz7gsvcX9jwc/HOMjJPpO7V63NSQms/A=;
+        b=W8GN/CKB+GtkrA7y0mKePTZ5rIBpXYllGU+6puu4s9RQ6fsz+9RBY9bebFs/bzOpPR
+         ZUG1/cLLjb6hXt8aPCCAgVsqNQahm2Dc2teBDziNQLxVJMXHx4PUZELCT5Tq0agATF/f
+         eVAfr5+ZBRW1uOzQrLigv8ehQGrMNB777NPKWoQJSWZSDswWiBS967l2v/JBuSOB2GIL
+         c9ky4q1Nwmo4nz44i130sxwnnEEvzLYOiokwjIQqp57jdxhx+i4JrpI+scsToBez717o
+         BO0OQcwvkdhP4PRwMa8y41P4Yamo1ZVkdF45kd7nSsS/MnSbJNTn0YzZIjEhgLIUOYYN
+         qORw==
+X-Gm-Message-State: AAQBX9fdkq0jHeOLj+ZeVjSfv5hnQl6rF7woad+rIo3rlWmnakUki41B
+        TU7cSDtSf4fDWpnuwLZ31g9iRo88lX25i003kBmmdiYTczCdC1fp0U943eSgFfkdUlkqqGxQIaV
+        M53k7xf3zBT5Nz9WoNE41hmLQLqlYqwFeoQGqMCZq
+X-Received: by 2002:ac2:592b:0:b0:4d5:ca32:9bd6 with SMTP id v11-20020ac2592b000000b004d5ca329bd6mr635862lfi.2.1680608264961;
+        Tue, 04 Apr 2023 04:37:44 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bseP7CFaPX0tyIyB7qXk1VPHrYZeXwVaUUl6Pd06XKgxqWIlx83Po83mrxQGvoHE11M/6n0v8nr1sUtubUpbk=
+X-Received: by 2002:ac2:592b:0:b0:4d5:ca32:9bd6 with SMTP id
+ v11-20020ac2592b000000b004d5ca329bd6mr635853lfi.2.1680608264646; Tue, 04 Apr
+ 2023 04:37:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] tick/broadcast: Do not set oneshot_mask except
- was_periodic was true
-Content-Language: en-US
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org,
-        jindong.yue@nxp.com, linux-kernel@vger.kernel.org
-References: <20230328063629.108510-1-victor@allwinnertech.com>
- <ZCqp02hiCell/5AR@lothringen>
-From:   Victor Hassan <victor@allwinnertech.com>
-In-Reply-To: <ZCqp02hiCell/5AR@lothringen>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230404075540.14422-1-ihuguet@redhat.com> <CANiq72mkORtWGuCZBdTy8eEuf9jAtkvA63nnw47MUkREp+j6YA@mail.gmail.com>
+In-Reply-To: <CANiq72mkORtWGuCZBdTy8eEuf9jAtkvA63nnw47MUkREp+j6YA@mail.gmail.com>
+From:   =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
+Date:   Tue, 4 Apr 2023 13:37:33 +0200
+Message-ID: <CACT4ouf1+xkjEbTMepOcdZ9tBuJ+5nbK1GaHdKce9SOj5o7gXg@mail.gmail.com>
+Subject: Re: [PATCH v2] Add .editorconfig file for basic formatting
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Danny Lin <danny@kdrag0n.dev>, ojeda@kernel.org,
+        masahiroy@kernel.org, jgg@nvidia.com, mic@digikod.net,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Joe Perches <joe@perches.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 4, 2023 at 11:51=E2=80=AFAM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> Hi =C3=8D=C3=B1igo,
+>
+> On Tue, Apr 4, 2023 at 9:55=E2=80=AFAM =C3=8D=C3=B1igo Huguet <ihuguet@re=
+dhat.com> wrote:
+> >
+> > EditorConfig is a specification to define the most basic code formattin=
+g
+> > stuff, and it's supported by many editors and IDEs, either directly or
+> > via plugins, including VSCode/VSCodium, Vim, emacs and more.
+>
+> Please see https://lore.kernel.org/lkml/20200703073143.423557-1-danny@kdr=
+ag0n.dev/
+> for a previous patch & discussion, as well as commit fa60ce2cb450
+> ("treewide: remove editor modelines and cruft") for a related cleanup.
+> Cc'ing those that gave some feedback back then.
+>
+> Danny's v2 patch has some extra extensions/languages it manages as
+> well as some docs, and yours handles things that one doesn't, like the
+> Rust files and `Makefile.*` cases. So it would be nice to get a
+> version that merges everything from both of you, likely as
+> co-developers.
+
+I will be happy to prepare the patch, as co-developers, if Danny agrees.
+
+> It still remains important to see if somebody's workflow could break
+> due to this, especially for the catch-all section `[*]` and for
+> options like `trim_trailing_whitespace` which can actually break
+> things like patch files as you note in the changelog. Perhaps landing
+> it in linux-next for an extended period of time (e.g. a few kernel
+> cycles) is one way to find out, or we could start without the
+> "dangerous" options. What do others think?
+
+I can move everything from [*] to the extension based sections
+(*.{c,h} and so on), so it is safer. It can only happen that someone
+notices that a weird file is not auto-formatted, and hopefully gives
+feedback to add it to .editorconfig.
+
+About the potential break of some workflows, and after reading the
+previous conversation, I don't think there is much else we can do. In
+any case, it won't be that harmful: using editorconfig is almost
+always opt-in, and if anyone has a problem, he will disable
+editorconfig to complete the changes and hopefully give feedback.
+
+If you think that it's better to keep it in linux-next for some time,
+it's fine, but I don't think it's necessary. As I say, I don't think
+it can be that much disturbing.
+
+Finally, about the files without extension but with a shebang,
+mentioned by Masahiro, it seems that they're seriously considering
+supporting tags based on language, like [[python]] and [[bash]], but
+nothing has been done yet, so, again, there's no much we can do. If
+someone frequently update specific files and want editorconfig
+formatting for them, their full paths can be added.
+
+Regards
+
+> By the way, for the next/merged version, in your side please keep
+> `!.editorconfig` sorted and in the other side please avoid the
+> duplicated `.tc` case (which I just noticed).
+>
+> Cheers,
+> Miguel
+>
 
 
-On 4/3/2023 6:26 PM, Frederic Weisbecker wrote:
-> On Tue, Mar 28, 2023 at 02:36:29PM +0800, Victor Hassan wrote:
->> If a broadcast timer is registered after the system switched to oneshot
->> mode, a hang_task err could occur like that:
->>
->> INFO: task kworker/u15:0:7 blocked for more than 120 seconds.
->>        Tainted: G            E     5.15.41-android13-8-00002-xxx #1
->> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->> task:kworker/u16:0   state:D stack: 9808 pid:  7 ppid: 2 flags:0x00000008
->> Workqueue: events_unbound deferred_probe_work_func.cfi_jt
->> Call trace:
->>   __switch_to+0y240/0x490
->>   __schedule+0x620/0xafc
->>   schedule+0x110/0x204
->>   schedule_hrtimeout_range_clock+0x9c/0x118
->>   usleep_range_state+0x150/0x1ac
->>   _regulator_do_enable+0x528/0x878
->>   set_machine_constraints+0x6a0/0xf2c
->>   regulator_register+0x3ac/0x7ac
->>   devm_regulator_register+0xbc/0x120
->>   pmu_ext_regulator_probe+0xb0/0x1b4 [pmu_ext_regulator]
->>   platform_probe+0x70/0x194
->>   really_proe+0x320/0x68c
->>   __driver_probe_device+0x204/0x260
->>   driver_probe_device+0x48/0x1e0
->>
->> When the new broadcast timer was registered after the system switched
->> to oneshot mode, the broadcast timer was not used as periodic. If the
->> oneshot mask was set incorrectly, all cores which did not enter cpu_idle
->> state can't enter cpu_idle normally, causing the hrtimer mechanism to
->> break.
->>
->> This patch fixes the issue by moving the update action about oneshot
->> mask to a more strict conditions. The tick_broadcast_setup_oneshot would
->> be called in two typical condition, and they all will work.
->>
->> 1. tick_handle_periodic -> tick_broadcast_setup_oneshot
->>
->> The origin broadcast was periodic, so it can set the oneshot_mask bits
->> for those waiting for periodic broadcast and program the broadcast timer
->> to fire.
->>
->> 2. tick_install_broadcast_device -> tick_broadcast_setup_oneshot
->>
->> The origin broadcast was oneshot, so the cores which enter the cpu_idle
->> already used the oneshot_mask bits. It is unnecessary to update the
->> oneshot_mask.
->>
->> Fixes: 9c336c9935cf ("tick/broadcast: Allow late registered device to enter oneshot mode")
->>
->> Signed-off-by: Victor Hassan <victor@allwinnertech.com>
->> ---
->>   kernel/time/tick-broadcast.c | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/kernel/time/tick-broadcast.c b/kernel/time/tick-broadcast.c
->> index 93bf2b4e47e5..fdbbba487978 100644
->> --- a/kernel/time/tick-broadcast.c
->> +++ b/kernel/time/tick-broadcast.c
->> @@ -1041,12 +1041,13 @@ static void tick_broadcast_setup_oneshot(struct clock_event_device *bc)
->>   		 */
->>   		cpumask_copy(tmpmask, tick_broadcast_mask);
->>   		cpumask_clear_cpu(cpu, tmpmask);
->> -		cpumask_or(tick_broadcast_oneshot_mask,
->> -			   tick_broadcast_oneshot_mask, tmpmask);
->>   
->>   		if (was_periodic && !cpumask_empty(tmpmask)) {
->>   			ktime_t nextevt = tick_get_next_period();
->>   
->> +			cpumask_or(tick_broadcast_oneshot_mask,
->> +				   tick_broadcast_oneshot_mask, tmpmask);
->> +
-> 
-> Good catch, it looks like one issue that can trigger is due to the resulting
-> ignored calls to tick_broadcast_exit(). Indeed if the cpu is already in
-> tick_broadcast_oneshot_mask then cpuidle won't call the exit
-
-Hi Frederic,
-Thanks for the review. Still I have a few questions and would like to 
-discuss them further.
-
-> 
-> Leading to such race:
-> 
-> * CPU 1 stop its tick, next event is in one hour
-> * CPU 0 registers new broadcast and sets CPU 1 in tick_broadcast_oneshot_mask
-> * CPU 1 runs into cpuidle_enter_state(), and tick_broadcast_enter() is ignored because
->    the CPU is already in tick_broadcast_oneshot_mask
-
-Yes.
-
-> * CPU 1 goes to sleep
-> * CPU 0 runs the broadcast callback, sees that the next timer for CPU 1
->    is in one hour, program the broadcast to that deadline
-> * CPU 1 gets an interrupt that enqueues a new timer expiring in the next jiffy
-> * CPU 1 don't call tick_broadcast_exit and thus don't remove itself from
->    tick_broadcast_oneshot_mask
-
-I'm not sure about this... Actually, I believe CPU 1 *will* call 
-tick_broadcast_exit in this condition because I cannot find a limitation 
-on this execution path.
-
-> * CPU 1 re-enters in cpuidle_enter_state(), tick_broadcast_enter() is again
->    ignored so the new timer isn't propagated to the broadcast.
-> * CPU 1 goes to sleep and won't be woken before one hour.
-> 
-> 
->    Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-> 
-> 
-> Thanks.
-> 
-> 
-> 
-> 
->>   			clockevents_switch_state(bc, CLOCK_EVT_STATE_ONESHOT);
->>   			tick_broadcast_init_next_event(tmpmask, nextevt);
->>   			tick_broadcast_set_event(bc, cpu, nextevt);
->> -- 
->> 2.29.0
->>
+--=20
+=C3=8D=C3=B1igo Huguet
 
