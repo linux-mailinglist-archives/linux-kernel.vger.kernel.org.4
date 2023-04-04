@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352516D7034
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 00:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC19E6D7038
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 00:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236649AbjDDWhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 18:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59306 "EHLO
+        id S236656AbjDDWkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 18:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236565AbjDDWhl (ORCPT
+        with ESMTP id S236379AbjDDWkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 18:37:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85800113
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 15:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680647818;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s/FbBasFGKXho73GYLTBPrVyQLxAhNzEHS05zhrQhKI=;
-        b=EJzNiTT5nTBN1UZblHDj3Z4uZDQLGL1yaln1r8T5RMCKVTcTF9XHuivHA5grcKNTy3XBLn
-        1ODsMDk/QlrrJy68UBqbFArORPqaS4uIWkbQJNq0Mnki05farbwF2pn/JpMjyp95lntij/
-        Ycsr5U3QCvarQgU7lnRh16RbHPKM1sQ=
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
- [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-625-OWqtiNSePf2gAjX8QeEEHA-1; Tue, 04 Apr 2023 18:36:57 -0400
-X-MC-Unique: OWqtiNSePf2gAjX8QeEEHA-1
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-54be7584b28so21265467b3.16
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 15:36:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680647817;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s/FbBasFGKXho73GYLTBPrVyQLxAhNzEHS05zhrQhKI=;
-        b=444MWYTzQCWBhJ1BsyoG9EkcYeZE7EXlnnljT0iPf7LbUb6FIC23zxs3/mvYZxYFPw
-         tnaEROf2wTFyqggXho24i3wXeOmFGC5QuLmuXOgYavn9Vutl+a+v2g2x05V32kq4kLi3
-         bKbAA1796t2Zk9nq+mz7MJbOg0TmYoOM102shPxK4fSLchAtZF0bDzOjEXS0aaOkVRbI
-         C09GLIgvOQb4B4H8+7Dl/NYKXso1GsMQmvTMXdNAVCPB2+TnnpxkGHV8MRBvS8ZySlgr
-         uoxBHwrIl9yB+Kis7S1eIsd7U47EHZBhqGjO6qvzRq4XEuDTllbZ1clw1L6/BpH/1M+K
-         44wQ==
-X-Gm-Message-State: AAQBX9dgxun5gNJmO+ISz+tOoqSh8eBLav/nVDuOScl66Fbu8RD88yMe
-        jOpqRoixplx9b21G7LEQuZ3Wa5lzCLTY3NH1c/7w3ZaDFVPMeDN8r8YGs6YwlZj3wzkpdLsDGhL
-        e7NEQenP1crBvCewQ2Xa1302i
-X-Received: by 2002:a25:5ec4:0:b0:b38:fad9:e1f4 with SMTP id s187-20020a255ec4000000b00b38fad9e1f4mr4523222ybb.27.1680647817159;
-        Tue, 04 Apr 2023 15:36:57 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z+Y1glYqpspXbrweNu5K2lTRooFyGui/4SyHZmHEz9m05Pv+DeGb42aYVw1FPLAl3eznsFiw==
-X-Received: by 2002:a25:5ec4:0:b0:b38:fad9:e1f4 with SMTP id s187-20020a255ec4000000b00b38fad9e1f4mr4523202ybb.27.1680647816864;
-        Tue, 04 Apr 2023 15:36:56 -0700 (PDT)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id d206-20020a251dd7000000b00b7767ca748asm3633950ybd.39.2023.04.04.15.36.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 15:36:56 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 18:36:53 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     kernel test robot <lkp@intel.com>, jic23@kernel.org,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        andriy.shevchenko@linux.intel.com, trix@redhat.com,
-        lars@metafoo.de, nathan@kernel.org, ndesaulniers@google.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hslester96@gmail.com
-Subject: Re: [PATCH] iio: light: tsl2772: fix reading proximity-diodes from
- device tree
-Message-ID: <ZCymhaDkRkfzk2kP@x1>
-References: <20230404011455.339454-1-bmasney@redhat.com>
- <202304041451.gj8oasQp-lkp@intel.com>
- <ZCwGP6rBLgbDGvkv@x1>
- <20230404123544.6m5juesxwf4tklkm@pengutronix.de>
+        Tue, 4 Apr 2023 18:40:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A612709;
+        Tue,  4 Apr 2023 15:40:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=0i5Bbc0w1weKrsu/nCnfi4mk4ZRljnGWA85xKD9hlPA=; b=lsZG54/x6E1Vjm+EI4lpfbSaJz
+        8qBe2Ju/q4siAqopbhW4VcR/AZyS+LkNNiy6t1TlLtd2iF3cMlfRJ0dOYIkYqsJsowaX4bDXe8/ta
+        7NVzIaZLue9ohS7XE681YuluVUsWZ+tPorFNe/3aLA41bCUYiaOGmNf76Vig1iCCIqbLts08sEaVV
+        dzrVEtGp/7YUv/dZw2kfpJqcfNvFSJFrFcheuveqVYul3aM1Ib2X3Gpd4GbSw1RxzI3Oi4OhPdmdB
+        mDSqs02IdQqVXWGSi06cT9gERet0/fJ1w6zu5deGsInC60v/lvQDMpO4SorbA0/q/hm8X3BV4aZeT
+        f8ptMkNw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pjpKK-002yQQ-2n;
+        Tue, 04 Apr 2023 22:40:32 +0000
+Message-ID: <c3718ac3-3dd1-2273-68ef-3d2923778ab7@infradead.org>
+Date:   Tue, 4 Apr 2023 15:40:31 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230404123544.6m5juesxwf4tklkm@pengutronix.de>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: Build regressions/improvements in v6.3-rc4
+Content-Language: en-US
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        sparclinux@vger.kernel.org
+References: <CAHk-=whcaHLNpb7Mu_QX7ABwPgyRyfW-V8=v4Mv0S22fpjY4JQ@mail.gmail.com>
+ <20230327072641.3591802-1-geert@linux-m68k.org>
+ <eb55ca34-ca71-ed19-dae2-6e5e87c170@linux-m68k.org>
+ <CADVatmNHYar6tR3r9q42vZR5fsqZeeDb8LEmmBcrrOwhA7HpmQ@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CADVatmNHYar6tR3r9q42vZR5fsqZeeDb8LEmmBcrrOwhA7HpmQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 02:35:44PM +0200, Uwe Kleine-König wrote:
-> Hello Brian,
+
+
+On 4/4/23 14:16, Sudip Mukherjee wrote:
+> On Mon, 27 Mar 2023 at 08:29, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>
+>> On Mon, 27 Mar 2023, Geert Uytterhoeven wrote:
+>>> JFYI, when comparing v6.3-rc4[1] to v6.3-rc3[3], the summaries are:
+>>>  - build errors: +9/-1
+>>
+>>    + /kisskb/src/drivers/net/wireless/cisco/airo.c: error: 'status_rid.currentXmitRate' is used uninitialized [-Werror=uninitialized]:  => 6163:45
+>>
+>> sh4-gcc11/sh-allmodconfig
+>> seen before
+>>
+>>    + error: modpost: "ebus_dma_enable" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>>    + error: modpost: "ebus_dma_irq_enable" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>>    + error: modpost: "ebus_dma_prepare" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>>    + error: modpost: "ebus_dma_register" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>>    + error: modpost: "ebus_dma_request" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>>    + error: modpost: "ebus_dma_residue" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>>    + error: modpost: "ebus_dma_unregister" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>>    + error: modpost: "ns87303_lock" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>>
+>> sparc64-gcc11/sparc-allmodconfig
+>> seen before
 > 
-> On Tue, Apr 04, 2023 at 07:13:03AM -0400, Brian Masney wrote:
-> > This doesn't contain the code that's in iio/togreg [1], and that's why
-> > the build failed. I originally developed / built this against
-> > next-20230330. I just checked linus/master, next-20230404, iio/testing,
-> > and all have the expected code that defines prox_diode_mask.
-> > 
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/tree/drivers/iio/light/tsl2772.c?h=togreg#n593
+> Tried sparc64 allmodconfig with gcc-11 and did not see the parport
+> errors with 6ab608fe852b ("Merge tag 'for-6.3-rc4-tag' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux").
+> Is it still being seen?
 > 
-> You might want to make use of the --base parameter to git format-patch
-> for you next submission. With that the auto builders have a chance to
-> test on the right tree.
 
-I'll add the --base parameter next time. However, I think the issue is
-that this compiler error is triggered by this patch [1] that's not in
-any maintainer trees. I suspect the kernel test robot still has that in
-it's local tree from a previous round of testing against this driver.
+This is reported at  http://kisskb.ellerman.id.au/kisskb/buildresult/14905002/
 
-[1] https://lore.kernel.org/lkml/20230327120823.1369700-1-trix@redhat.com/
+I still see it on sparc32 using gcc-12.2.0.
 
-Brian
+The compiler info vs. the sparc-allmodconfig is confusing IMO.
+I am compiling with sparc-linux, not sparc64-linux.
 
+The .config file says:
+# CONFIG_64BIT is not set
+CONFIG_SPARC=y
+CONFIG_SPARC32=y
+
+
+-- 
+~Randy
