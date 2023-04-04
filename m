@@ -2,334 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89ED26D5E70
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB366D5D77
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235013AbjDDK44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 06:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
+        id S233741AbjDDK24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 06:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234886AbjDDK40 (ORCPT
+        with ESMTP id S233184AbjDDK2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 06:56:26 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287064C2C;
-        Tue,  4 Apr 2023 03:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680605663; x=1712141663;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2hEOO4AGi3vlRhLY8tgivbLZ1qLQc8RNqYRR6FbCFpw=;
-  b=m/x/Twa9/Dwk4tyfda9pzI2x+xvNUxXAdYfGBZ2ysmRK5OuoGyKCtzrh
-   mTzQMVHdXgiIZl20n0EYYaFkfScZTiArE4XMC3Ox9LypKPSEQir70ePLk
-   BmTUaxfBkrAKRzFCfw6GHdIAKCWZfHvrbWW5oaljp01uS0glbufRAofPK
-   /EwRpAVSNFOwHGrJg5dbYU75L8JQV0skPekJwiF3QIinTF9tMqFmDxdnl
-   6Szy0yqBjquAf7ebHy/FnrUoLn6Al57PFXNXJ2stYbKSZ0fuAiranZPWy
-   JjwaFLat1am9tMQj1+/U03Arclw00zbamSxqHRH8Pzs0v7n6Eh6PHguIu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="330734263"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="330734263"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 03:53:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="775597877"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="775597877"
-Received: from unknown (HELO fred..) ([172.25.112.68])
-  by FMSMGA003.fm.intel.com with ESMTP; 04 Apr 2023 03:53:07 -0700
-From:   Xin Li <xin3.li@intel.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
-        andrew.cooper3@citrix.com, seanjc@google.com, pbonzini@redhat.com,
-        ravi.v.shankar@intel.com, jiangshanlai@gmail.com,
-        shan.kang@intel.com
-Subject: [PATCH v7 33/33] KVM: x86/vmx: refactor VMX_DO_EVENT_IRQOFF to generate FRED stack frames
-Date:   Tue,  4 Apr 2023 03:27:16 -0700
-Message-Id: <20230404102716.1795-34-xin3.li@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230404102716.1795-1-xin3.li@intel.com>
-References: <20230404102716.1795-1-xin3.li@intel.com>
+        Tue, 4 Apr 2023 06:28:54 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2181A1731;
+        Tue,  4 Apr 2023 03:28:53 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id y4so128612963edo.2;
+        Tue, 04 Apr 2023 03:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680604131;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lFnhjOVDQ3ItCxmop4qZbHatGDWaTPywjSlabLzg9LE=;
+        b=cMcc5XGY1xYe2xnDmZxzicNPkAs+dVgKdBYDr5K9dUg0d0aXC3jj5+8Z8xpZ8SF+N7
+         bkFYUuUy6ug0qNFeVg84AQ7fYIphC/bZlNkFGbAHvRlyCwhKNP3x9mLUpxQd+tJad9VV
+         PqbIZbmpmlYWRj0SydPCJgOLXceOw36xGF23j2TVWYnGBegVL/c55WwWYaHkemZ6M2PD
+         R/RgsALUZsOLobzxV20mYQSM2wIENBm1WImLKXLoS3rwSBrmnNk2Zh49P+zRc4aTX8Xh
+         xmqgYmD1kF1x5x/zu4fXYqnDpKTUDS7t4w8sXpn4Y+ZjRsVzYd3WjQCV4Qt8Nvtz7eUP
+         zQOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680604131;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lFnhjOVDQ3ItCxmop4qZbHatGDWaTPywjSlabLzg9LE=;
+        b=USKqJ7foDlZ1agF51xzg6YEMzjFdibthpIhTw07Eqla/oK1MgYr4eAIpdw9HNqLK3G
+         eoTHJd/SMkNl7YDtrPs7D0VrrUTpVCqB+BdgwbC1QWPeYzf+aTGUm43seztziFARKK5C
+         igHZ23E5KqJ/wzmCA0aV3w8tP4Xx+V4ZhSpWYFt/KR6PV3QCCXQ8gY233MuNzUHYM9Ym
+         LwNikRzPNNVEjSKEijTkbn8A4gzjzH1AwWCoNenkgXLVFDiKYEGWyybIFaQEHVGrtsuL
+         O+r0XYjIR54Ra/ie36l4V0D7Oxvl1vR0OFDG8rbEcEi6wrwaXPmK1G3Ws6jyyPUDzlK8
+         7l9w==
+X-Gm-Message-State: AAQBX9e3jOE4aHzhca/CeGWJZ/e6mFmzyRuxpZ0l8P9y1OfZZ7FhcpUd
+        Zflt1R28cb0mFK3s05hVR59HK2rKpD8=
+X-Google-Smtp-Source: AKy350YTuwR0WdZcRmjxnBolJRplJ7pURoZBpPDv4DaQCLQi6MZav3gLAUxpI2FqWwmGPOf6tN1xIQ==
+X-Received: by 2002:a17:906:841a:b0:947:c09f:3a5d with SMTP id n26-20020a170906841a00b00947c09f3a5dmr1582176ejx.75.1680604131452;
+        Tue, 04 Apr 2023 03:28:51 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id x5-20020a170906b08500b0093dfd62f9dasm5745572ejy.35.2023.04.04.03.28.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 03:28:51 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 12:28:49 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
+        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
+Subject: Re: [PATCH V4 04/10] dt-bindings: timestamp: Add
+ nvidia,gpio-controller
+Message-ID: <ZCv74dMMucY24L9m@orome>
+References: <20230323012929.10815-1-dipenp@nvidia.com>
+ <20230323012929.10815-5-dipenp@nvidia.com>
+ <20230324171329.GA2062332-robh@kernel.org>
+ <7f2dc5cf-78b5-81c6-0012-26b1adce1c86@nvidia.com>
+ <19b71fef-614a-d678-2e73-95db8f226e61@linaro.org>
+ <df00404e-96a8-bf33-cbc7-25dbb09c89c7@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="j4v+jpU4YnL3mitN"
+Content-Disposition: inline
+In-Reply-To: <df00404e-96a8-bf33-cbc7-25dbb09c89c7@nvidia.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Comparing to an IDT stack frame, a FRED stack frame has extra 16 bytes of
-information pushed at the regular stack top and 8 bytes of error code _always_
-pushed at the regular stack bottom, VMX_DO_EVENT_IRQOFF can be refactored
-to generate FRED stack frames with event type and vector properly set. Thus,
-IRQ/NMI can be handled with the existing approach when FRED is enabled.
 
-As a FRED stack frame always contains an error code pushed by hardware, call
-a trampoline function first to have the return instruction address pushed on
-the regular stack. Then the trampoline function pushes an error code (0 for
-both IRQ and NMI) and jumps to fred_entrypoint_kernel() for NMI handling or
-calls external_interrupt() for IRQ handling.
+--j4v+jpU4YnL3mitN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The trampoline function for IRQ handling pushes general purpose registers to
-form a pt_regs structure and then use it to call external_interrupt(). As a
-result, IRQ handling does not execute any noinstr code.
+On Mon, Apr 03, 2023 at 09:24:17PM -0700, Dipen Patel wrote:
+> On 3/25/23 4:09 AM, Krzysztof Kozlowski wrote:
+> > On 24/03/2023 19:51, Dipen Patel wrote:
+> >> On 3/24/23 10:13 AM, Rob Herring wrote:
+> >>> On Wed, Mar 22, 2023 at 06:29:23PM -0700, Dipen Patel wrote:
+> >>>> Introducing nvidia,gpio-controller property from Tegra234 SoCs onwar=
+ds.
+> >>>> This is done to help below case.
+> >>>>
+> >>>> Without this property code would look like:
+> >>>> if (of_device_is_compatible(dev->of_node, "nvidia,tegra194-gte-aon"))
+> >>>> 	hte_dev->c =3D gpiochip_find("tegra194-gpio-aon",
+> >>>> 				   tegra_get_gpiochip_from_name);
+> >>>> else if (of_device_is_compatible(dev->of_node, "nvidia,tegra234-gte-=
+aon"))
+> >>>> 	hte_dev->c =3D gpiochip_find("tegra234-gpio-aon",
+> >>>> 				   tegra_get_gpiochip_from_name);
+> >>>> else
+> >>>> 	return -ENODEV;
+> >>>
+> >>> Or you just put the name in match data.
+> >>
+> >> Not sure I have understood this comment, but "name" the first argument=
+ is
+> >> already there to supply to callback to match data. Also, this if else =
+is
+> >> needed to know which "name" to provide.
+> >=20
+> > The point is that of_device_is_compatible() do not really scale and make
+> > code more difficult to read. Your variant-customization should in
+> > general entirely come from match/driver data.
+>=20
+> Perhaps I should not have mentioned driver related details here about how
+> this property will help, that detail will go in driver patch. In the next
+> patch series I will remove this commit and just focus on what this proper=
+ty
+> is.
 
-Export fred_entrypoint_kernel() and external_interrupt() for above changes.
+I think the point that Rob and Krzysztof are trying to make that rather
+than adding a new property for this, we can add a const char *gpio field
+to struct tegra_hte_data and then set that to the compatible string of
+the GPIO controller that we need this for.
 
-Tested-by: Shan Kang <shan.kang@intel.com>
-Signed-off-by: Xin Li <xin3.li@intel.com>
----
+To be honest, I slightly prefer the explicit phandle reference, but it
+also complicates things a bit and looking up by compatible string isn't
+all that bad.
 
-Changes since v6:
-* Export fred_entrypoint_kernel(), required when kvm-intel built as a module.
-* Reserve a REDZONE for CALL emulation and Align RSP to a 64-byte boundary
-  before pushing a new FRED stack frame.
----
- arch/x86/entry/entry_64_fred.S        |  1 +
- arch/x86/include/asm/asm-prototypes.h |  1 +
- arch/x86/include/asm/fred.h           |  1 +
- arch/x86/include/asm/traps.h          |  2 +
- arch/x86/kernel/traps.c               |  5 ++
- arch/x86/kvm/vmx/vmenter.S            | 74 ++++++++++++++++++++++++++-
- arch/x86/kvm/vmx/vmx.c                | 16 +++++-
- 7 files changed, 96 insertions(+), 4 deletions(-)
+Thierry
 
-diff --git a/arch/x86/entry/entry_64_fred.S b/arch/x86/entry/entry_64_fred.S
-index efe2bcd11273..de74ab97ff00 100644
---- a/arch/x86/entry/entry_64_fred.S
-+++ b/arch/x86/entry/entry_64_fred.S
-@@ -59,3 +59,4 @@ SYM_CODE_START_NOALIGN(fred_entrypoint_kernel)
- 	FRED_EXIT
- 	ERETS
- SYM_CODE_END(fred_entrypoint_kernel)
-+EXPORT_SYMBOL(fred_entrypoint_kernel)
-diff --git a/arch/x86/include/asm/asm-prototypes.h b/arch/x86/include/asm/asm-prototypes.h
-index b1a98fa38828..076bf8dee702 100644
---- a/arch/x86/include/asm/asm-prototypes.h
-+++ b/arch/x86/include/asm/asm-prototypes.h
-@@ -12,6 +12,7 @@
- #include <asm/special_insns.h>
- #include <asm/preempt.h>
- #include <asm/asm.h>
-+#include <asm/fred.h>
- #include <asm/gsseg.h>
- 
- #ifndef CONFIG_X86_CMPXCHG64
-diff --git a/arch/x86/include/asm/fred.h b/arch/x86/include/asm/fred.h
-index f7caf3b2f3f7..d00b9cab6aa6 100644
---- a/arch/x86/include/asm/fred.h
-+++ b/arch/x86/include/asm/fred.h
-@@ -129,6 +129,7 @@ DECLARE_FRED_HANDLER(fred_exc_machine_check);
-  * The actual assembly entry and exit points
-  */
- extern __visible void fred_entrypoint_user(void);
-+extern __visible void fred_entrypoint_kernel(void);
- 
- /*
-  * Initialization
-diff --git a/arch/x86/include/asm/traps.h b/arch/x86/include/asm/traps.h
-index 612b3d6fec53..017b95624325 100644
---- a/arch/x86/include/asm/traps.h
-+++ b/arch/x86/include/asm/traps.h
-@@ -58,4 +58,6 @@ typedef DECLARE_SYSTEM_INTERRUPT_HANDLER((*system_interrupt_handler));
- 
- system_interrupt_handler get_system_interrupt_handler(unsigned int i);
- 
-+int external_interrupt(struct pt_regs *regs);
-+
- #endif /* _ASM_X86_TRAPS_H */
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 73471053ed02..0f1fcd53cb52 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -1573,6 +1573,11 @@ int external_interrupt(struct pt_regs *regs)
- 	return 0;
- }
- 
-+#if IS_ENABLED(CONFIG_KVM_INTEL)
-+/* For KVM VMX to handle IRQs in IRQ induced VM exits. */
-+EXPORT_SYMBOL_GPL(external_interrupt);
-+#endif
-+
- #endif /* CONFIG_X86_64 */
- 
- void __init install_system_interrupt_handler(unsigned int n, const void *asm_addr, const void *addr)
-diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-index 631fd7da2bc3..f64b05b3d775 100644
---- a/arch/x86/kvm/vmx/vmenter.S
-+++ b/arch/x86/kvm/vmx/vmenter.S
-@@ -2,12 +2,14 @@
- #include <linux/linkage.h>
- #include <asm/asm.h>
- #include <asm/bitsperlong.h>
-+#include <asm/fred.h>
- #include <asm/kvm_vcpu_regs.h>
- #include <asm/nospec-branch.h>
- #include <asm/percpu.h>
- #include <asm/segment.h>
- #include "kvm-asm-offsets.h"
- #include "run_flags.h"
-+#include "../../entry/calling.h"
- 
- #define WORD_SIZE (BITS_PER_LONG / 8)
- 
-@@ -31,7 +33,7 @@
- #define VCPU_R15	__VCPU_REGS_R15 * WORD_SIZE
- #endif
- 
--.macro VMX_DO_EVENT_IRQOFF call_insn call_target
-+.macro VMX_DO_EVENT_IRQOFF call_insn call_target fred=0 nmi=0
- 	/*
- 	 * Unconditionally create a stack frame, getting the correct RSP on the
- 	 * stack (for x86-64) would take two instructions anyways, and RBP can
-@@ -41,16 +43,56 @@
- 	mov %_ASM_SP, %_ASM_BP
- 
- #ifdef CONFIG_X86_64
-+	.if \fred
-+#ifdef CONFIG_X86_FRED
-+	/*
-+	 * It's not necessary to change current stack level for handling IRQ/NMI
-+	 * because the state of the kernel stack is well defined in this place
-+	 * in the code, and it is known not to be deep in a bunch of nested I/O
-+	 * layer handlers that eat up the stack.
-+	 */
-+
-+	/* Reserve a REDZONE for CALL emulation. */
-+	sub $(FRED_CONFIG_REDZONE_AMOUNT << 6), %rsp
-+
-+	/* Align RSP to a 64-byte boundary before pushing a new stack frame */
-+	and $FRED_STACK_FRAME_RSP_MASK, %rsp
-+
-+	push $0		/* Reserved by FRED, must be 0 */
-+	push $0		/* FRED event data, 0 for NMI and external interrupts */
-+#endif
-+	.else
- 	/*
- 	 * Align RSP to a 16-byte boundary (to emulate CPU behavior) before
- 	 * creating the synthetic interrupt stack frame for the IRQ/NMI.
- 	 */
- 	and  $-16, %rsp
-+	.endif
-+
-+	.if \fred
-+	.if \nmi
-+	mov $(2 << 32 | 2 << 48), %_ASM_AX	/* NMI event type and vector */
-+	.else
-+	mov %_ASM_ARG1, %_ASM_AX
-+	shl $32, %_ASM_AX			/* external interrupt vector */
-+	.endif
-+	add $__KERNEL_DS, %_ASM_AX
-+	bts $57, %_ASM_AX			/* bit 57: 64-bit mode */
-+	push %_ASM_AX
-+	.else
- 	push $__KERNEL_DS
-+	.endif
-+
- 	push %rbp
- #endif
- 	pushf
-+	.if \nmi
-+	mov $__KERNEL_CS, %_ASM_AX
-+	bts $28, %_ASM_AX			/* set the NMI bit */
-+	push %_ASM_AX
-+	.else
- 	push $__KERNEL_CS
-+	.endif
- 	\call_insn \call_target
- 
- 	/*
-@@ -300,9 +342,19 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
- SYM_FUNC_END(__vmx_vcpu_run)
- 
- SYM_FUNC_START(vmx_do_nmi_irqoff)
--	VMX_DO_EVENT_IRQOFF call asm_exc_nmi_kvm_vmx
-+	VMX_DO_EVENT_IRQOFF call asm_exc_nmi_kvm_vmx nmi=1
- SYM_FUNC_END(vmx_do_nmi_irqoff)
- 
-+#ifdef CONFIG_X86_FRED
-+SYM_FUNC_START(vmx_do_fred_nmi_trampoline)
-+	push $0		/* FRED error code, 0 for NMI */
-+	jmp fred_entrypoint_kernel
-+SYM_FUNC_END(vmx_do_fred_nmi_trampoline)
-+
-+SYM_FUNC_START(vmx_do_fred_nmi_irqoff)
-+	VMX_DO_EVENT_IRQOFF call vmx_do_fred_nmi_trampoline fred=1 nmi=1
-+SYM_FUNC_END(vmx_do_fred_nmi_irqoff)
-+#endif
- 
- .section .text, "ax"
- 
-@@ -360,3 +412,21 @@ SYM_FUNC_END(vmread_error_trampoline)
- SYM_FUNC_START(vmx_do_interrupt_irqoff)
- 	VMX_DO_EVENT_IRQOFF CALL_NOSPEC _ASM_ARG1
- SYM_FUNC_END(vmx_do_interrupt_irqoff)
-+
-+#ifdef CONFIG_X86_FRED
-+SYM_FUNC_START(vmx_do_fred_interrupt_trampoline)
-+	push $0	/* FRED error code, 0 for NMI and external interrupts */
-+	PUSH_REGS
-+
-+	movq	%rsp, %rdi	/* %rdi -> pt_regs */
-+	call external_interrupt
-+
-+	POP_REGS
-+	addq $8,%rsp		/* Drop FRED error code */
-+	RET
-+SYM_FUNC_END(vmx_do_fred_interrupt_trampoline)
-+
-+SYM_FUNC_START(vmx_do_fred_interrupt_irqoff)
-+	VMX_DO_EVENT_IRQOFF call vmx_do_fred_interrupt_trampoline fred=1
-+SYM_FUNC_END(vmx_do_fred_interrupt_irqoff)
-+#endif
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index d2d6e1b6c788..6dfe692dfd6a 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6875,7 +6875,9 @@ static void vmx_apicv_post_state_restore(struct kvm_vcpu *vcpu)
- }
- 
- void vmx_do_interrupt_irqoff(unsigned long entry);
-+void vmx_do_fred_interrupt_irqoff(unsigned int vector);
- void vmx_do_nmi_irqoff(void);
-+void vmx_do_fred_nmi_irqoff(void);
- 
- static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
- {
-@@ -6923,7 +6925,12 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
- 		return;
- 
- 	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
--	vmx_do_interrupt_irqoff(gate_offset(desc));
-+#ifdef CONFIG_X86_64
-+	if (cpu_feature_enabled(X86_FEATURE_FRED))
-+		vmx_do_fred_interrupt_irqoff(vector);
-+	else
-+#endif
-+		vmx_do_interrupt_irqoff(gate_offset(desc));
- 	kvm_after_interrupt(vcpu);
- 
- 	vcpu->arch.at_instruction_boundary = true;
-@@ -7209,7 +7216,12 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
- 	if ((u16)vmx->exit_reason.basic == EXIT_REASON_EXCEPTION_NMI &&
- 	    is_nmi(vmx_get_intr_info(vcpu))) {
- 		kvm_before_interrupt(vcpu, KVM_HANDLING_NMI);
--		vmx_do_nmi_irqoff();
-+#ifdef CONFIG_X86_64
-+		if (cpu_feature_enabled(X86_FEATURE_FRED))
-+			vmx_do_fred_nmi_irqoff();
-+		else
-+#endif
-+			vmx_do_nmi_irqoff();
- 		kvm_after_interrupt(vcpu);
- 	}
- 
--- 
-2.34.1
+--j4v+jpU4YnL3mitN
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQr+94ACgkQ3SOs138+
+s6FuTg//RaYWUCY1EIVK5FtyolJck7DDm1TQXL5ILgE2I9QFBGSGMptLVzAvGKDa
+OlqURt08FlaVKMGrdfW6KB4d9eIUt2GI7mFBftFfFa7jB0YDRvrF1HLtUJ80xQmZ
+vcLHKiWXfOPBxK8Z1m47MUoWOnhlbbPX2asdk+kF6Zy4c1XvADfKEIckN3LDTv7z
+guxioGkdf4/yfbQrIbqxrQ0sxiOU9wQJg9ZqxMObBLtMnMPvylNN9/oP7XsuAMfD
+0+hhaM9MSQKa+/XucaqqmiHqCfoP1GoRBl6DvJezrZx4TIoI7FlGJ1QIxuecOI2G
+JDelTvifSpzlfC5giaR6GS3cQXvyvKuAG5kQfodHhyV1JdV1wVP4YguEdXFPDRoG
+mWrRImkogPPvWvy20wCaqZRor8riz8r8jYTXZBUbL8CnpGeB/7EMG7KU4X7IICTa
+yhlqAMN734OzI4EMzp/s+tZCa/QaPaE1nlPHSOBvyp+Pv2xjjzDdbDyN3vzSX1A/
+WZTWOooXjbPkvhXcxC2+toMdSGJuvqsEn5emfcnpAw3mNUYuJRF500phzK8sQoVv
+G6NetMfFRKcTTzDQznnK3gomRb6EVrKw1cRy3ZOP52s+cSILZXZKLX0aV6l8hppx
+rnEDotFl9tti4UbRn+sX2eA7IqB+ftwAQyu1f2dNCPSw0V3m3cY=
+=Zelo
+-----END PGP SIGNATURE-----
+
+--j4v+jpU4YnL3mitN--
