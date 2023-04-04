@@ -2,464 +2,841 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DE46D640E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CC06D6411
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235693AbjDDNzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
+        id S235702AbjDDNzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235707AbjDDNyj (ORCPT
+        with ESMTP id S235795AbjDDNy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 09:54:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87AFAA;
-        Tue,  4 Apr 2023 06:54:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44C0161FF6;
-        Tue,  4 Apr 2023 13:54:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC099C433EF;
-        Tue,  4 Apr 2023 13:54:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680616461;
-        bh=vnAu6Dw7d+BvhGXB+ZegXam11qi5z7yBc6KQfLkV/3E=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Sr1A24e5ZbNpPjGkrWZIqHmlKr8SzrEQNDaMPz6+2RGbiWMJ46IXbbyDhlznYjdti
-         tgSqSdh64RnkWRS2MbV2UPOzsSRoP5/Wub+4IzJWBe76hofyplv6JY+DyRYiQAUgQ3
-         QneByRIQFMnelzqbBi11iEL9kVksSS86f5EPWAkGwtXaJCzmJRq9T1xp/4N0SFS1lr
-         lfn7AEGOWX0bEs2rN1rJohXihOB3iwJjU014v4HH5ckYhTiANrAujqhggsmQON7aS6
-         cEn62o79uwERu/Vm4NwjHFK1iS692irDO6UOe+RxUlKOmpOyN3E2s32//8av9c+cUZ
-         9ig+nGeDWcfng==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 4C58815404B4; Tue,  4 Apr 2023 06:54:21 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 06:54:21 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     =?utf-8?B?5Luj5a2Q5Li6IChaaXdlaSBEYWkp?= <Ziwei.Dai@unisoc.com>
-Cc:     "urezki@gmail.com" <urezki@gmail.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "josh@joshtriplett.org" <josh@joshtriplett.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
-        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?utf-8?B?546L5Y+MIChTaHVhbmcgV2FuZyk=?= <shuang.wang@unisoc.com>,
-        =?utf-8?B?6L6b5L6d5YehIChZaWZhbiBYaW4p?= <Yifan.Xin@unisoc.com>,
-        =?utf-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>,
-        =?utf-8?B?6Zer5a2m5paHIChYdWV3ZW4gWWFuKQ==?= 
-        <Xuewen.Yan@unisoc.com>,
-        =?utf-8?B?54mb5b+X5Zu9IChaaGlndW8gTml1KQ==?= 
-        <Zhiguo.Niu@unisoc.com>,
-        =?utf-8?B?6buE5pyd6ZizIChaaGFveWFuZyBIdWFuZyk=?= 
-        <zhaoyang.huang@unisoc.com>
-Subject: Re: Re: [PATCH V2] rcu: Make sure new krcp free business is handled
- after the wanted rcu grace period.
-Message-ID: <c0d8b802-8931-44d9-8a04-6265dade23a2@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <10f5eb13d7c741c2a0e83ff1d788f398@BJMBX01.spreadtrum.com>
+        Tue, 4 Apr 2023 09:54:56 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3B14ED6
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:54:35 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id ew6so130854201edb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 06:54:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112; t=1680616474;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TkFnxmoHRbxirXSM24cAOA+5VXQ2aSXuumuYgc5N61I=;
+        b=OWLKrJtjG2lGd4pVsd7BZl8GVi7wIoLgYzbm4osikdjGGM2tD+PlAkMHnBxYJuVzBZ
+         6Jh081mYbY62g5fna7leK95EHquvyBwmaOAK5asv+VxsJjaocIvJqP59Hr4OCYli5CuN
+         X6Bb0fB/KEIt0ibpLVW7e2ELGG7NJIH3UyBwvfxkeJN8Oy16G7JIJRMO7QkjWto3tntc
+         gooEQPCfV+bLpFy7b0bva74BEVjlsCxRz9cCdeGVaIvH7syrV7VOZnyqwslrDkiBZW7Y
+         uyMFZmPwU4vWqpWCrF218NZLAw0S+108XZAFK6zU9rtRAHraqDJe9G+yePW9iMHdTz4n
+         J+6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680616474;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TkFnxmoHRbxirXSM24cAOA+5VXQ2aSXuumuYgc5N61I=;
+        b=CJfiXfRg4DMeMJo08Q0NKIu99Bl0ne37KYLMw/hRxniMlPQ0wHEL3UUz0IqxzYSncv
+         6egVhJkI+l24tVD22Cnb86ogqLwzDbp6kJi7PlHRlOGAxG4UcIJOb7vgWiDf0G6gCoQ/
+         Yxt5y0vVVPZf6R1XM1LtDpdTaixFQEqpU8bdv/JP4Bxp2aGCUFdO5ia2XcJ6myoMjVDG
+         guF+Mfblc/iUNXvVHP2tM+bW04FIuonOJ//6rHhbRxP4L2QDkoCu+Qb8ZxxXzcMYRvoo
+         ZA5E9dZxKddAhG9I8S2rzfSGpd1zcs2wJ/UVVX/Eb4qWUucuv+8AX/JZLfiFFJUjbWMj
+         3CWg==
+X-Gm-Message-State: AAQBX9dXOv2BZOljEmX89T7iToDIQ3ZADPjW6vFFllgLV8VpBvYVLClv
+        3RxsdQEiBIgwOHlwyZgmbRQaO1zAWi5g3wsnx5ZmfQ==
+X-Google-Smtp-Source: AKy350bRQJiQrD76k4kvjzbH66Sejc+CnAIInvbTFRY7diLTmfb5tOKVzlLAGPSvePhWpjes3jIj7GMXRiGwEC6BvEs=
+X-Received: by 2002:a17:906:1c55:b0:8b1:780d:e43d with SMTP id
+ l21-20020a1709061c5500b008b1780de43dmr1307077ejg.13.1680616474158; Tue, 04
+ Apr 2023 06:54:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <10f5eb13d7c741c2a0e83ff1d788f398@BJMBX01.spreadtrum.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230403093310.2271142-1-apatel@ventanamicro.com>
+ <20230403093310.2271142-8-apatel@ventanamicro.com> <boauaf7zkv6bai4jqw7gjp5yexmwgecinen2ss7s2r2qxfn7xv@4jbglkwtrafk>
+In-Reply-To: <boauaf7zkv6bai4jqw7gjp5yexmwgecinen2ss7s2r2qxfn7xv@4jbglkwtrafk>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Tue, 4 Apr 2023 19:24:22 +0530
+Message-ID: <CAAhSdy3WUR4q_tgJRXiiETYKQ5ksh=vGGAGuGufWdY7oQFxj9g@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] RISC-V: KVM: Virtualize per-HART AIA CSRs
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 01:08:39PM +0000, 代子为 (Ziwei Dai) wrote:
-> Correct error line format of my mail content and add comments.
-> 
-> > -----邮件原件-----
-> > 发件人: Paul E. McKenney <paulmck@kernel.org>
-> > 发送时间: 2023年4月4日 11:23
-> > 收件人: 代子为 (Ziwei Dai) <Ziwei.Dai@unisoc.com>
-> > 抄送: urezki@gmail.com; frederic@kernel.org; quic_neeraju@quicinc.com; josh@joshtriplett.org; rostedt@goodmis.org;
-> > mathieu.desnoyers@efficios.com; jiangshanlai@gmail.com; joel@joelfernandes.org; rcu@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > 王双 (Shuang Wang) <shuang.wang@unisoc.com>; 辛依凡 (Yifan Xin) <Yifan.Xin@unisoc.com>; 王科 (Ke Wang)
-> > <Ke.Wang@unisoc.com>; 闫学文 (Xuewen Yan) <Xuewen.Yan@unisoc.com>; 牛志国 (Zhiguo Niu) <Zhiguo.Niu@unisoc.com>; 黄朝
-> > 阳 (Zhaoyang Huang) <zhaoyang.huang@unisoc.com>
-> > 主题: Re: 答复: [PATCH V2] rcu: Make sure new krcp free business is handled after the wanted rcu grace period.
-> > 
-> > 
-> > 
-> > On Tue, Apr 04, 2023 at 02:49:15AM +0000, 代子为 (Ziwei Dai) wrote:
-> > > Hello Paul!
-> > >
-> > > > -----邮件原件-----
-> > > > 发件人: Paul E. McKenney <paulmck@kernel.org>
-> > > > 发送时间: 2023年4月4日 6:58
-> > > > 收件人: 代子为 (Ziwei Dai) <Ziwei.Dai@unisoc.com>
-> > > > 抄送: urezki@gmail.com; frederic@kernel.org; quic_neeraju@quicinc.com;
-> > > > josh@joshtriplett.org; rostedt@goodmis.org;
-> > > > mathieu.desnoyers@efficios.com; jiangshanlai@gmail.com;
-> > > > joel@joelfernandes.org; rcu@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > > > 王双 (Shuang Wang) <shuang.wang@unisoc.com>; 辛依凡 (Yifan Xin)
-> > > > <Yifan.Xin@unisoc.com>; 王科 (Ke Wang) <Ke.Wang@unisoc.com>; 闫学文
-> > > > (Xuewen Yan) <Xuewen.Yan@unisoc.com>; 牛志国 (Zhiguo Niu)
-> > > > <Zhiguo.Niu@unisoc.com>; 黄朝阳 (Zhaoyang Huang)
-> > > > <zhaoyang.huang@unisoc.com>
-> > > > 主题: Re: [PATCH V2] rcu: Make sure new krcp free business is handled after
-> > > > the wanted rcu grace period.
-> > > >
-> > > >
-> > > > 注意: 这封邮件来自于外部。除非你确定邮件内容安全，否则不要点击任
-> > > > 何链接和附件。
-> > > > CAUTION: This email originated from outside of the organization. Do not click
-> > > > links or open attachments unless you recognize the sender and know the
-> > > > content is safe.
-> > > >
-> > > >
-> > > >
-> > > > On Fri, Mar 31, 2023 at 08:42:09PM +0800, Ziwei Dai wrote:
-> > > > > In kfree_rcu_monitor(), new free business at krcp is attached to any
-> > > > > free channel at krwp. kfree_rcu_monitor() is responsible to make sure
-> > > > > new free business is handled after the rcu grace period. But if there
-> > > > > is any none-free channel at krwp already, that means there is an
-> > > > > on-going rcu work, which will cause the kvfree_call_rcu()-triggered
-> > > > > free business is done before the wanted rcu grace period ends.
-> > > > >
-> > > > > This commit ignore krwp which has non-free channel at
-> > > > > kfree_rcu_monitor(), to fix the issue that kvfree_call_rcu() loses effectiveness.
-> > > > >
-> > > > > Below is the css_set obj "from_cset" use-after-free case caused by
-> > > > > kvfree_call_rcu() losing effectiveness.
-> > > > > CPU 0 calls rcu_read_lock(), then use "from_cset", then hard irq
-> > > > > comes, the task is schedule out.
-> > > > > CPU 1 calls kfree_rcu(cset, rcu_head), willing to free "from_cset" after new gp.
-> > > > > But "from_cset" is freed right after current gp end. "from_cset" is reallocated.
-> > > > > CPU 0 's task arrives back, references "from_cset"'s member, which causes crash.
-> > > > >
-> > > > > CPU 0                                 CPU 1
-> > > > > count_memcg_event_mm()
-> > > > > |rcu_read_lock()  <---
-> > > > > |mem_cgroup_from_task()
-> > > > >  |// css_set_ptr is the "from_cset" mentioned on CPU 1  |css_set_ptr =
-> > > > > rcu_dereference((task)->cgroups)  |// Hard irq comes, current task is
-> > > > > scheduled out.
-> > > > >
-> > > > >                                       cgroup_attach_task()
-> > > > >                                       |cgroup_migrate()
-> > > > >                                       |cgroup_migrate_execute()
-> > > > >                                       |css_set_move_task(task, from_cset, to_cset, true)
-> > > > >                                       |cgroup_move_task(task, to_cset)
-> > > > >                                       |rcu_assign_pointer(.., to_cset)
-> > > > >                                       |...
-> > > > >                                       |cgroup_migrate_finish()
-> > > > >                                       |put_css_set_locked(from_cset)
-> > > > >                                       |from_cset->refcount return 0
-> > > > >                                       |kfree_rcu(cset, rcu_head) // means to free from_cset after new gp
-> > > > >                                       |add_ptr_to_bulk_krc_lock()
-> > > > >                                       |schedule_delayed_work(&krcp->monitor_work, ..)
-> > > > >
-> > > > >                                       kfree_rcu_monitor()
-> > > > >                                       |krcp->bulk_head[0]'s work attached to krwp->bulk_head_free[]
-> > > > >                                       |queue_rcu_work(system_wq, &krwp->rcu_work)
-> > > > >                                       |if rwork->rcu.work is not in WORK_STRUCT_PENDING_BIT state,
-> > > > >                                       |call_rcu(&rwork->rcu, rcu_work_rcufn) <--- request a new gp
-> > > > >
-> > > > >                                       // There is a perious call_rcu(.., rcu_work_rcufn)
-> > > > >                                       // gp end, rcu_work_rcufn() is called.
-> > > > >                                       rcu_work_rcufn()
-> > > > >                                       |__queue_work(.., rwork->wq, &rwork->work);
-> > > > >
-> > > > >                                       |kfree_rcu_work()
-> > > > >                                       |krwp->bulk_head_free[0] bulk is freed before new gp end!!!
-> > > > >                                       |The "from_cset" is freed before new gp end.
-> > > > >
-> > > > > // the task is scheduled in after many ms.
-> > > > >  |css_set_ptr->subsys[(subsys_id) <--- Caused kernel crash, because css_set_ptr is freed.
-> > > > >
-> > > > > v2: Use helper function instead of inserted code block at kfree_rcu_monitor().
-> > > > >
-> > > > > Fixes: c014efeef76a ("rcu: Add multiple in-flight batches of
-> > > > > kfree_rcu() work")
-> > > > > Signed-off-by: Ziwei Dai <ziwei.dai@unisoc.com>
-> > > >
-> > > > Good catch, thank you!!!
-> > > >
-> > > > How difficult was this to trigger?  If it can be triggered easily, this of course
-> > > > needs to go into mainline sooner rather than later.
-> > >
-> > > Roughly we can reproduce this issue within two rounds of 48h stress test,
-> > > with 20 k5.15 devices. If KASAN is enabled, the reproduce rate is higher.
-> > > So I think sooner is better.
-> > 
-> > Thank you for the info!  This is in theory an old bug, but if you can
-> > easily find out, does it trigger for you on v6.2 or earlier?
-> > 
-> 
-> We haven't ported v6.2 to our device yet...
-> 
-> > > > Longer term, would it make sense to run the three channels through RCU
-> > > > separately, in order to avoid one channel refraining from starting a grace
-> > > > period just because some other channel has callbacks waiting for a grace
-> > > > period to complete?  One argument against might be energy efficiency, but
-> > > > perhaps the ->gp_snap field could be used to get the best of both worlds.
-> > >
-> > > I see kvfree_rcu_drain_ready(krcp) is already called at the beginning of
-> > > kfree_rcu_monitor(), which polls the ->gp_snap field, to decide
-> > > whether to free channel objects immediately or after gp.
-> > > Both energy efficiency and timing seems be considered?
-> > 
-> > My concern is that running the channels separately might mean more grace
-> > periods (and thus more energy draw) on nearly idle devices, such devices
-> > usually being the ones for which energy efficiency matters most.
-> > 
-> > But perhaps Vlad, Neeraj, or Joel has some insight on this, given
-> > that they are the ones working on battery-powered devices.
-> > 
-> > > > Either way, this fixes only one bug of two.  The second bug is in the
-> > > > kfree_rcu() tests, which should have caught this bug.  Thoughts on a good fix
-> > > > for those tests?
-> > >
-> > > I inserted a msleep() between "rcu_read_lock(), get pointer via rcu_dereference()"
-> > > and "reference pointer, using the member", at the rcu scenario, then we can
-> > > reproduce this issue very soon in stress test. Can kfree_rcu() tests insert msleep()?
-> > 
-> > Another approach is to separate concerns, so that readers interact with
-> > grace periods in the rcutorture.c tests, and to add the interaction
-> > of to-be-freed memory with grace periods in the rcuscale kvfree tests.
-> > I took a step in this direction with this commit on the -rcu tree's
-> > "dev" branch:
-> > 
-> > efbe7927f479 ("rcu/kvfree: Add debug to check grace periods")
-> > 
-> > Given this, might it be possible to make rcuscale.c's kfree_rcu()
-> > testing create patterns of usage of the three channels so as to
-> > catch this bug that way?
-> > 
-> 
-> I can try it on my k5.15 device, and need some time.
-> I have a question. Do you mean add code in tree.c to create pattern
-> while channel data is being freed?
-> If so, both rcuscales.c and tree.c need to be modified for the test case.
+On Mon, Apr 3, 2023 at 10:07=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
+>
+> On Mon, Apr 03, 2023 at 03:03:09PM +0530, Anup Patel wrote:
+> > The AIA specification introduce per-HART AIA CSRs which primarily
+> > support:
+> > * 64 local interrupts on both RV64 and RV32
+> > * priority for each of the 64 local interrupts
+> > * interrupt filtering for local interrupts
+> >
+> > This patch virtualize above mentioned AIA CSRs and also extend
+> > ONE_REG interface to allow user-space save/restore Guest/VM
+> > view of these CSRs.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/kvm_aia.h  |  88 +++++----
+> >  arch/riscv/include/asm/kvm_host.h |   7 +-
+> >  arch/riscv/include/uapi/asm/kvm.h |   7 +
+> >  arch/riscv/kvm/aia.c              | 317 ++++++++++++++++++++++++++++++
+> >  arch/riscv/kvm/vcpu.c             |  53 +++--
+> >  5 files changed, 415 insertions(+), 57 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/kvm_aia.h b/arch/riscv/include/asm/=
+kvm_aia.h
+> > index 258a835d4c32..1de0717112e5 100644
+> > --- a/arch/riscv/include/asm/kvm_aia.h
+> > +++ b/arch/riscv/include/asm/kvm_aia.h
+>
+> nit: Generating the diff with --patience makes this a bit easier to read,
+> and/or several of the stub functions could have been directly put in
+> arch/riscv/kvm/aia.c in the skeleton patch to avoid so many changes in
+> this one.
+>
+> > @@ -12,6 +12,7 @@
+> >
+> >  #include <linux/jump_label.h>
+> >  #include <linux/kvm_types.h>
+> > +#include <asm/csr.h>
+> >
+> >  struct kvm_aia {
+> >       /* In-kernel irqchip created */
+> > @@ -21,7 +22,22 @@ struct kvm_aia {
+> >       bool            initialized;
+> >  };
+> >
+> > +struct kvm_vcpu_aia_csr {
+> > +     unsigned long vsiselect;
+> > +     unsigned long hviprio1;
+> > +     unsigned long hviprio2;
+> > +     unsigned long vsieh;
+> > +     unsigned long hviph;
+> > +     unsigned long hviprio1h;
+> > +     unsigned long hviprio2h;
+> > +};
+> > +
+> >  struct kvm_vcpu_aia {
+> > +     /* CPU AIA CSR context of Guest VCPU */
+> > +     struct kvm_vcpu_aia_csr guest_csr;
+> > +
+> > +     /* CPU AIA CSR context upon Guest VCPU reset */
+> > +     struct kvm_vcpu_aia_csr guest_reset_csr;
+> >  };
+> >
+> >  #define kvm_riscv_aia_initialized(k) ((k)->arch.aia.initialized)
+> > @@ -32,48 +48,50 @@ DECLARE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
+> >  #define kvm_riscv_aia_available() \
+> >       static_branch_unlikely(&kvm_riscv_aia_available)
+> >
+> > -static inline void kvm_riscv_vcpu_aia_flush_interrupts(struct kvm_vcpu=
+ *vcpu)
+> > -{
+> > -}
+> > -
+> > -static inline void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu =
+*vcpu)
+> > -{
+> > -}
+> > -
+> > -static inline bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *=
+vcpu,
+> > -                                                  u64 mask)
+> > -{
+> > -     return false;
+> > -}
+> > -
+> > -static inline void kvm_riscv_vcpu_aia_update_hvip(struct kvm_vcpu *vcp=
+u)
+> > -{
+> > -}
+> > -
+> > -static inline void kvm_riscv_vcpu_aia_load(struct kvm_vcpu *vcpu, int =
+cpu)
+> > -{
+> > -}
+> > -
+> > -static inline void kvm_riscv_vcpu_aia_put(struct kvm_vcpu *vcpu)
+> > +#define KVM_RISCV_AIA_IMSIC_TOPEI    (ISELECT_MASK + 1)
+> > +static inline int kvm_riscv_vcpu_aia_imsic_rmw(struct kvm_vcpu *vcpu,
+> > +                                            unsigned long isel,
+> > +                                            unsigned long *val,
+> > +                                            unsigned long new_val,
+> > +                                            unsigned long wr_mask)
+> >  {
+> > +     return 0;
+> >  }
+> >
+> > -static inline int kvm_riscv_vcpu_aia_get_csr(struct kvm_vcpu *vcpu,
+> > -                                          unsigned long reg_num,
+> > -                                          unsigned long *out_val)
+> > +#ifdef CONFIG_32BIT
+> > +void kvm_riscv_vcpu_aia_flush_interrupts(struct kvm_vcpu *vcpu);
+> > +void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu *vcpu);
+> > +#else
+> > +static inline void kvm_riscv_vcpu_aia_flush_interrupts(struct kvm_vcpu=
+ *vcpu)
+> >  {
+> > -     *out_val =3D 0;
+> > -     return 0;
+> >  }
+> > -
+> > -static inline int kvm_riscv_vcpu_aia_set_csr(struct kvm_vcpu *vcpu,
+> > -                                          unsigned long reg_num,
+> > -                                          unsigned long val)
+> > +static inline void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu =
+*vcpu)
+> >  {
+> > -     return 0;
+> >  }
+> > -
+> > -#define KVM_RISCV_VCPU_AIA_CSR_FUNCS
+> > +#endif
+> > +bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask=
+);
+> > +
+> > +void kvm_riscv_vcpu_aia_update_hvip(struct kvm_vcpu *vcpu);
+> > +void kvm_riscv_vcpu_aia_load(struct kvm_vcpu *vcpu, int cpu);
+> > +void kvm_riscv_vcpu_aia_put(struct kvm_vcpu *vcpu);
+> > +int kvm_riscv_vcpu_aia_get_csr(struct kvm_vcpu *vcpu,
+> > +                            unsigned long reg_num,
+> > +                            unsigned long *out_val);
+> > +int kvm_riscv_vcpu_aia_set_csr(struct kvm_vcpu *vcpu,
+> > +                            unsigned long reg_num,
+> > +                            unsigned long val);
+> > +
+> > +int kvm_riscv_vcpu_aia_rmw_topei(struct kvm_vcpu *vcpu,
+> > +                              unsigned int csr_num,
+> > +                              unsigned long *val,
+> > +                              unsigned long new_val,
+> > +                              unsigned long wr_mask);
+> > +int kvm_riscv_vcpu_aia_rmw_ireg(struct kvm_vcpu *vcpu, unsigned int cs=
+r_num,
+> > +                             unsigned long *val, unsigned long new_val=
+,
+> > +                             unsigned long wr_mask);
+> > +#define KVM_RISCV_VCPU_AIA_CSR_FUNCS \
+> > +{ .base =3D CSR_SIREG,      .count =3D 1, .func =3D kvm_riscv_vcpu_aia=
+_rmw_ireg }, \
+> > +{ .base =3D CSR_STOPEI,     .count =3D 1, .func =3D kvm_riscv_vcpu_aia=
+_rmw_topei },
+> >
+> >  static inline int kvm_riscv_vcpu_aia_update(struct kvm_vcpu *vcpu)
+> >  {
+> > diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm=
+/kvm_host.h
+> > index 3157cf748df1..ee0acccb1d3b 100644
+> > --- a/arch/riscv/include/asm/kvm_host.h
+> > +++ b/arch/riscv/include/asm/kvm_host.h
+> > @@ -204,8 +204,9 @@ struct kvm_vcpu_arch {
+> >        * in irqs_pending. Our approach is modeled around multiple produ=
+cer
+> >        * and single consumer problem where the consumer is the VCPU its=
+elf.
+> >        */
+> > -     unsigned long irqs_pending;
+> > -     unsigned long irqs_pending_mask;
+> > +#define KVM_RISCV_VCPU_NR_IRQS       64
+> > +     DECLARE_BITMAP(irqs_pending, KVM_RISCV_VCPU_NR_IRQS);
+> > +     DECLARE_BITMAP(irqs_pending_mask, KVM_RISCV_VCPU_NR_IRQS);
+>
+> I'd prefer this ulong to bitmap change, and all its repercussions, be don=
+e
+> in a separate patch.
+>
+> >
+> >       /* VCPU Timer */
+> >       struct kvm_vcpu_timer timer;
+> > @@ -334,7 +335,7 @@ int kvm_riscv_vcpu_set_interrupt(struct kvm_vcpu *v=
+cpu, unsigned int irq);
+> >  int kvm_riscv_vcpu_unset_interrupt(struct kvm_vcpu *vcpu, unsigned int=
+ irq);
+> >  void kvm_riscv_vcpu_flush_interrupts(struct kvm_vcpu *vcpu);
+> >  void kvm_riscv_vcpu_sync_interrupts(struct kvm_vcpu *vcpu);
+> > -bool kvm_riscv_vcpu_has_interrupts(struct kvm_vcpu *vcpu, unsigned lon=
+g mask);
+> > +bool kvm_riscv_vcpu_has_interrupts(struct kvm_vcpu *vcpu, u64 mask);
+> >  void kvm_riscv_vcpu_power_off(struct kvm_vcpu *vcpu);
+> >  void kvm_riscv_vcpu_power_on(struct kvm_vcpu *vcpu);
+> >
+> > diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uap=
+i/asm/kvm.h
+> > index cbc3e74fa670..c517e70ddcd6 100644
+> > --- a/arch/riscv/include/uapi/asm/kvm.h
+> > +++ b/arch/riscv/include/uapi/asm/kvm.h
+> > @@ -81,6 +81,13 @@ struct kvm_riscv_csr {
+> >
+> >  /* AIA CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+> >  struct kvm_riscv_aia_csr {
+> > +     unsigned long siselect;
+> > +     unsigned long siprio1;
+> > +     unsigned long siprio2;
+> > +     unsigned long sieh;
+> > +     unsigned long siph;
+> > +     unsigned long siprio1h;
+> > +     unsigned long siprio2h;
+> >  };
+> >
+> >  /* TIMER registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+> > diff --git a/arch/riscv/kvm/aia.c b/arch/riscv/kvm/aia.c
+> > index 7a633331cd3e..d530912f28bc 100644
+> > --- a/arch/riscv/kvm/aia.c
+> > +++ b/arch/riscv/kvm/aia.c
+> > @@ -26,6 +26,323 @@ static void aia_set_hvictl(bool ext_irq_pending)
+> >       csr_write(CSR_HVICTL, hvictl);
+> >  }
+> >
+> > +#ifdef CONFIG_32BIT
+> > +void kvm_riscv_vcpu_aia_flush_interrupts(struct kvm_vcpu *vcpu)
+> > +{
+> > +     struct kvm_vcpu_aia_csr *csr =3D &vcpu->arch.aia_context.guest_cs=
+r;
+> > +     unsigned long mask, val;
+> > +
+> > +     if (!kvm_riscv_aia_available())
+> > +             return;
+> > +
+> > +     if (READ_ONCE(vcpu->arch.irqs_pending_mask[1])) {
+> > +             mask =3D xchg_acquire(&vcpu->arch.irqs_pending_mask[1], 0=
+);
+> > +             val =3D READ_ONCE(vcpu->arch.irqs_pending[1]) & mask;
+> > +
+> > +             csr->hviph &=3D ~mask;
+> > +             csr->hviph |=3D val;
+> > +     }
+> > +}
+> > +
+> > +void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu *vcpu)
+> > +{
+> > +     struct kvm_vcpu_aia_csr *csr =3D &vcpu->arch.aia_context.guest_cs=
+r;
+> > +
+> > +     if (kvm_riscv_aia_available())
+> > +             csr->vsieh =3D csr_read(CSR_VSIEH);
+> > +}
+> > +#endif
+> > +
+> > +bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask=
+)
+> > +{
+> > +     unsigned long seip;
+> > +
+> > +     if (!kvm_riscv_aia_available())
+> > +             return false;
+> > +
+> > +#ifdef CONFIG_32BIT
+> > +     if (READ_ONCE(vcpu->arch.irqs_pending[1]) &
+> > +         (vcpu->arch.aia_context.guest_csr.vsieh & (unsigned long)(mas=
+k >> 32)))
+>
+> upper_32_bits()
+>
+> > +             return true;
+> > +#endif
+> > +
+> > +     seip =3D vcpu->arch.guest_csr.vsie;
+> > +     seip &=3D (unsigned long)mask;
+> > +     seip &=3D BIT(IRQ_S_EXT);
+>
+> Please add a blank line above the if-statement.
+>
+> > +     if (!kvm_riscv_aia_initialized(vcpu->kvm) || !seip)
+>
+> Shouldn't we check kvm_riscv_aia_initialized() at the top of this
+> function?
+>
+> > +             return false;
+> > +
+> > +     return false;
+>
+> return true
+>
+> But if we move kvm_riscv_aia_initialized() up, then we instead can do
+>
+>  return !!seip;
 
-My thought is to run the test on a system where very little else is
-happening, and then creating the temporal pattern only in rcuscale.c.
-One way would be to modify kfree_scale_thread(), perhaps using an
-additional module parameter using torture_param().
+This logic is correct. It is looking weird because it is incomplete
+and PATCH8 completes it.
 
-But just out of curiosity, what changes were you thinking of making
-in tree.c?
+It took a while to refresh my memory because I wrote this code
+almost 2 years back.
 
-							Thanx, Paul
+Regards,
+Anup
 
-> > > > I have applied Uladzislau's and Mukesh's tags, and done the usual
-> > > > wordsmithing as shown at the end of this message.  Please let me know if I
-> > > > messed anything up.
-> > >
-> > > Thank you for the improvement on the patch! It seems better now.
-> > 
-> > No problem and thank you again for the debugging and the fix!
-> > 
-> >                                                         Thanx, Paul
-> > 
-> > > > > ---
-> > > > >  kernel/rcu/tree.c | 27 +++++++++++++++++++--------
-> > > > >  1 file changed, 19 insertions(+), 8 deletions(-)
-> > > > >
-> > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c index
-> > > > > 8e880c0..7b95ee9 100644
-> > > > > --- a/kernel/rcu/tree.c
-> > > > > +++ b/kernel/rcu/tree.c
-> > > > > @@ -3024,6 +3024,18 @@ static void kfree_rcu_work(struct work_struct *work)
-> > > > >       return !!READ_ONCE(krcp->head);
-> > > > >  }
-> > > > >
-> > > > > +static bool
-> > > > > +need_wait_for_krwp_work(struct kfree_rcu_cpu_work *krwp) {
-> > > > > +     int i;
-> > > > > +
-> > > > > +     for (i = 0; i < FREE_N_CHANNELS; i++)
-> > > > > +             if (!list_empty(&krwp->bulk_head_free[i]))
-> > > > > +                     return true;
-> > > > > +
-> > > > > +     return !!krwp->head_free;
-> > > >
-> > > > This is fixed from v1, good!
-> > > >
-> > > > > +}
-> > > > > +
-> > > > >  static int krc_count(struct kfree_rcu_cpu *krcp)  {
-> > > > >       int sum = atomic_read(&krcp->head_count); @@ -3107,15 +3119,14
-> > > > > @@ static void kfree_rcu_monitor(struct work_struct *work)
-> > > > >       for (i = 0; i < KFREE_N_BATCHES; i++) {
-> > > > >               struct kfree_rcu_cpu_work *krwp = &(krcp->krw_arr[i]);
-> > > > >
-> > > > > -             // Try to detach bulk_head or head and attach it over any
-> > > > > -             // available corresponding free channel. It can be that
-> > > > > -             // a previous RCU batch is in progress, it means that
-> > > > > -             // immediately to queue another one is not possible so
-> > > > > -             // in that case the monitor work is rearmed.
-> > > > > -             if ((!list_empty(&krcp->bulk_head[0]) && list_empty(&krwp->bulk_head_free[0])) ||
-> > > > > -                     (!list_empty(&krcp->bulk_head[1]) && list_empty(&krwp->bulk_head_free[1])) ||
-> > > > > -                             (READ_ONCE(krcp->head) && !krwp->head_free)) {
-> > > > > +             // Try to detach bulk_head or head and attach it, only when
-> > > > > +             // all channels are free.  Any channel is not free means at krwp
-> > > > > +             // there is on-going rcu work to handle krwp's free business.
-> > > > > +             if (need_wait_for_krwp_work(krwp))
-> > > > > +                     continue;
-> > > > >
-> > > > > +             // kvfree_rcu_drain_ready() might handle this krcp, if so give up.
-> > > > > +             if (need_offload_krc(krcp)) {
-> > > > >                       // Channel 1 corresponds to the SLAB-pointer bulk path.
-> > > > >                       // Channel 2 corresponds to vmalloc-pointer bulk path.
-> > > > >                       for (j = 0; j < FREE_N_CHANNELS; j++) {
-> > > > > --
-> > > > > 1.9.1
-> > > >
-> > > > ------------------------------------------------------------------------
-> > > >
-> > > > commit e222f9a512539c3f4093a55d16624d9da614800b
-> > > > Author: Ziwei Dai <ziwei.dai@unisoc.com>
-> > > > Date:   Fri Mar 31 20:42:09 2023 +0800
-> > > >
-> > > >     rcu: Avoid freeing new kfree_rcu() memory after old grace period
-> > > >
-> > > >     Memory passed to kvfree_rcu() that is to be freed is tracked by a
-> > > >     per-CPU kfree_rcu_cpu structure, which in turn contains pointers
-> > > >     to kvfree_rcu_bulk_data structures that contain pointers to memory
-> > > >     that has not yet been handed to RCU, along with an kfree_rcu_cpu_work
-> > > >     structure that tracks the memory that has already been handed to RCU.
-> > > >     These structures track three categories of memory: (1) Memory for
-> > > >     kfree(), (2) Memory for kvfree(), and (3) Memory for both that arrived
-> > > >     during an OOM episode.  The first two categories are tracked in a
-> > > >     cache-friendly manner involving a dynamically allocated page of pointers
-> > > >     (the aforementioned kvfree_rcu_bulk_data structures), while the third
-> > > >     uses a simple (but decidedly cache-unfriendly) linked list through the
-> > > >     rcu_head structures in each block of memory.
-> > > >
-> > > >     On a given CPU, these three categories are handled as a unit, with that
-> > > >     CPU's kfree_rcu_cpu_work structure having one pointer for each of the
-> > > >     three categories.  Clearly, new memory for a given category cannot be
-> > > >     placed in the corresponding kfree_rcu_cpu_work structure until any old
-> > > >     memory has had its grace period elapse and thus has been removed. And
-> > > >     the kfree_rcu_monitor() function does in fact check for this.
-> > > >
-> > > >     Except that the kfree_rcu_monitor() function checks these pointers one
-> > > >     at a time.  This means that if the previous kfree_rcu() memory passed
-> > > >     to RCU had only category 1 and the current one has only category 2, the
-> > > >     kfree_rcu_monitor() function will send that current category-2 memory
-> > > >     along immediately.  This can result in memory being freed too soon,
-> > > >     that is, out from under unsuspecting RCU readers.
-> > > >
-> > > >     To see this, consider the following sequence of events, in which:
-> > > >
-> > > >     o       Task A on CPU 0 calls rcu_read_lock(), then uses "from_cset",
-> > > >             then is preempted.
-> > > >
-> > > >     o       CPU 1 calls kfree_rcu(cset, rcu_head) in order to free "from_cset"
-> > > >             after a later grace period.  Except that "from_cset" is freed
-> > > >             right after the previous grace period ended, so that "from_cset"
-> > > >             is immediately freed.  Task A resumes and references "from_cset"'s
-> > > >             member, after which nothing good happens.
-> > > >
-> > > >     In full detail:
-> > > >
-> > > >     CPU 0                                   CPU 1
-> > > >     ----------------------                  ----------------------
-> > > >     count_memcg_event_mm()
-> > > >     |rcu_read_lock()  <---
-> > > >     |mem_cgroup_from_task()
-> > > >      |// css_set_ptr is the "from_cset" mentioned on CPU 1
-> > > >      |css_set_ptr = rcu_dereference((task)->cgroups)
-> > > >      |// Hard irq comes, current task is scheduled out.
-> > > >
-> > > >                                             cgroup_attach_task()
-> > > >                                             |cgroup_migrate()
-> > > >                                             |cgroup_migrate_execute()
-> > > >                                             |css_set_move_task(task, from_cset, to_cset, true)
-> > > >                                             |cgroup_move_task(task, to_cset)
-> > > >                                             |rcu_assign_pointer(.., to_cset)
-> > > >                                             |...
-> > > >                                             |cgroup_migrate_finish()
-> > > >                                             |put_css_set_locked(from_cset)
-> > > >                                             |from_cset->refcount return 0
-> > > >                                             |kfree_rcu(cset, rcu_head) // free from_cset after new gp
-> > > >                                             |add_ptr_to_bulk_krc_lock()
-> > > >                                             |schedule_delayed_work(&krcp->monitor_work, ..)
-> > > >
-> > > >                                             kfree_rcu_monitor()
-> > > >                                             |krcp->bulk_head[0]'s work attached to krwp->bulk_head_free[]
-> > > >                                             |queue_rcu_work(system_wq, &krwp->rcu_work)
-> > > >                                             |if rwork->rcu.work is not in WORK_STRUCT_PENDING_BIT state,
-> > > >                                             |call_rcu(&rwork->rcu, rcu_work_rcufn) <--- request new gp
-> > > >
-> > > >                                             // There is a perious call_rcu(.., rcu_work_rcufn)
-> > > >                                             // gp end, rcu_work_rcufn() is called.
-> > > >                                             rcu_work_rcufn()
-> > > >                                             |__queue_work(.., rwork->wq, &rwork->work);
-> > > >
-> > > >                                             |kfree_rcu_work()
-> > > >                                             |krwp->bulk_head_free[0] bulk is freed before new gp end!!!
-> > > >                                             |The "from_cset" is freed before new gp end.
-> > > >
-> > > >     // the task resumes some time later.
-> > > >      |css_set_ptr->subsys[(subsys_id) <--- Caused kernel crash, because css_set_ptr is freed.
-> > > >
-> > > >     This commit therefore causes kfree_rcu_monitor() to refrain from moving
-> > > >     kfree_rcu() memory to the kfree_rcu_cpu_work structure until the RCU
-> > > >     grace period has completed for all three categories.
-> > > >
-> > > >     v2: Use helper function instead of inserted code block at kfree_rcu_monitor().
-> > > >
-> > > >     Fixes: c014efeef76a ("rcu: Add multiple in-flight batches of kfree_rcu() work")
-> > > >     Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> > > >     Signed-off-by: Ziwei Dai <ziwei.dai@unisoc.com>
-> > > >     Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > >
-> > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c index
-> > > > 859ee02f6614..e2dbea6cee4b 100644
-> > > > --- a/kernel/rcu/tree.c
-> > > > +++ b/kernel/rcu/tree.c
-> > > > @@ -3051,6 +3051,18 @@ need_offload_krc(struct kfree_rcu_cpu *krcp)
-> > > >         return !!READ_ONCE(krcp->head);
-> > > >  }
-> > > >
-> > > > +static bool
-> > > > +need_wait_for_krwp_work(struct kfree_rcu_cpu_work *krwp) {
-> > > > +       int i;
-> > > > +
-> > > > +       for (i = 0; i < FREE_N_CHANNELS; i++)
-> > > > +               if (!list_empty(&krwp->bulk_head_free[i]))
-> > > > +                       return true;
-> > > > +
-> > > > +       return !!krwp->head_free;
-> > > > +}
-> > > > +
-> > > >  static int krc_count(struct kfree_rcu_cpu *krcp)  {
-> > > >         int sum = atomic_read(&krcp->head_count); @@ -3134,15
-> > > > +3146,14 @@ static void kfree_rcu_monitor(struct work_struct *work)
-> > > >         for (i = 0; i < KFREE_N_BATCHES; i++) {
-> > > >                 struct kfree_rcu_cpu_work *krwp = &(krcp->krw_arr[i]);
-> > > >
-> > > > -               // Try to detach bulk_head or head and attach it over any
-> > > > -               // available corresponding free channel. It can be that
-> > > > -               // a previous RCU batch is in progress, it means that
-> > > > -               // immediately to queue another one is not possible so
-> > > > -               // in that case the monitor work is rearmed.
-> > > > -               if ((!list_empty(&krcp->bulk_head[0]) && list_empty(&krwp->bulk_head_free[0])) ||
-> > > > -                       (!list_empty(&krcp->bulk_head[1]) && list_empty(&krwp->bulk_head_free[1])) ||
-> > > > -                               (READ_ONCE(krcp->head) && !krwp->head_free)) {
-> > > > +               // Try to detach bulk_head or head and attach it, only when
-> > > > +               // all channels are free.  Any channel is not free means at krwp
-> > > > +               // there is on-going rcu work to handle krwp's free business.
-> > > > +               if (need_wait_for_krwp_work(krwp))
-> > > > +                       continue;
-> > > >
-> > > > +               // kvfree_rcu_drain_ready() might handle this krcp, if so give up.
-> > > > +               if (need_offload_krc(krcp)) {
-> > > >                         // Channel 1 corresponds to the SLAB-pointer bulk path.
-> > > >                         // Channel 2 corresponds to vmalloc-pointer bulk path.
-> > > >                         for (j = 0; j < FREE_N_CHANNELS; j++) {
+>
+> > +}
+> > +
+> > +void kvm_riscv_vcpu_aia_update_hvip(struct kvm_vcpu *vcpu)
+> > +{
+> > +     struct kvm_vcpu_csr *csr =3D &vcpu->arch.guest_csr;
+> > +
+> > +     if (!kvm_riscv_aia_available())
+> > +             return;
+> > +
+> > +#ifdef CONFIG_32BIT
+> > +     csr_write(CSR_HVIPH, vcpu->arch.aia_context.guest_csr.hviph);
+> > +#endif
+> > +     aia_set_hvictl((csr->hvip & BIT(IRQ_VS_EXT)) ? true : false);
+>
+> The compiler will manage the conversion of csr->hvip & BIT(IRQ_VS_EXT)
+> to a 1 or 0 since it's getting passed in as a boolean parameter.
+>
+> > +}
+> > +
+> > +void kvm_riscv_vcpu_aia_load(struct kvm_vcpu *vcpu, int cpu)
+> > +{
+> > +     struct kvm_vcpu_aia_csr *csr =3D &vcpu->arch.aia_context.guest_cs=
+r;
+> > +
+> > +     if (!kvm_riscv_aia_available())
+> > +             return;
+> > +
+> > +     csr_write(CSR_VSISELECT, csr->vsiselect);
+> > +     csr_write(CSR_HVIPRIO1, csr->hviprio1);
+> > +     csr_write(CSR_HVIPRIO2, csr->hviprio2);
+> > +#ifdef CONFIG_32BIT
+> > +     csr_write(CSR_VSIEH, csr->vsieh);
+> > +     csr_write(CSR_HVIPH, csr->hviph);
+> > +     csr_write(CSR_HVIPRIO1H, csr->hviprio1h);
+> > +     csr_write(CSR_HVIPRIO2H, csr->hviprio2h);
+> > +#endif
+> > +}
+> > +
+> > +void kvm_riscv_vcpu_aia_put(struct kvm_vcpu *vcpu)
+> > +{
+> > +     struct kvm_vcpu_aia_csr *csr =3D &vcpu->arch.aia_context.guest_cs=
+r;
+> > +
+> > +     if (!kvm_riscv_aia_available())
+> > +             return;
+> > +
+> > +     csr->vsiselect =3D csr_read(CSR_VSISELECT);
+> > +     csr->hviprio1 =3D csr_read(CSR_HVIPRIO1);
+> > +     csr->hviprio2 =3D csr_read(CSR_HVIPRIO2);
+> > +#ifdef CONFIG_32BIT
+> > +     csr->vsieh =3D csr_read(CSR_VSIEH);
+> > +     csr->hviph =3D csr_read(CSR_HVIPH);
+> > +     csr->hviprio1h =3D csr_read(CSR_HVIPRIO1H);
+> > +     csr->hviprio2h =3D csr_read(CSR_HVIPRIO2H);
+> > +#endif
+> > +}
+> > +
+> > +int kvm_riscv_vcpu_aia_get_csr(struct kvm_vcpu *vcpu,
+> > +                            unsigned long reg_num,
+> > +                            unsigned long *out_val)
+> > +{
+> > +     struct kvm_vcpu_aia_csr *csr =3D &vcpu->arch.aia_context.guest_cs=
+r;
+> > +
+> > +     if (reg_num >=3D sizeof(struct kvm_riscv_aia_csr) / sizeof(unsign=
+ed long))
+> > +             return -EINVAL;
+> > +
+> > +     *out_val =3D 0;
+> > +     if (kvm_riscv_aia_available())
+> > +             *out_val =3D ((unsigned long *)csr)[reg_num];
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +int kvm_riscv_vcpu_aia_set_csr(struct kvm_vcpu *vcpu,
+> > +                            unsigned long reg_num,
+> > +                            unsigned long val)
+> > +{
+> > +     struct kvm_vcpu_aia_csr *csr =3D &vcpu->arch.aia_context.guest_cs=
+r;
+> > +
+> > +     if (reg_num >=3D sizeof(struct kvm_riscv_aia_csr) / sizeof(unsign=
+ed long))
+> > +             return -EINVAL;
+> > +
+> > +     if (kvm_riscv_aia_available()) {
+> > +             ((unsigned long *)csr)[reg_num] =3D val;
+> > +
+> > +#ifdef CONFIG_32BIT
+> > +             if (reg_num =3D=3D KVM_REG_RISCV_CSR_AIA_REG(siph))
+> > +                     WRITE_ONCE(vcpu->arch.irqs_pending_mask[1], 0);
+> > +#endif
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +int kvm_riscv_vcpu_aia_rmw_topei(struct kvm_vcpu *vcpu,
+> > +                              unsigned int csr_num,
+> > +                              unsigned long *val,
+> > +                              unsigned long new_val,
+> > +                              unsigned long wr_mask)
+> > +{
+> > +     /* If AIA not available then redirect trap */
+> > +     if (!kvm_riscv_aia_available())
+> > +             return KVM_INSN_ILLEGAL_TRAP;
+> > +
+> > +     /* If AIA not initialized then forward to user space */
+> > +     if (!kvm_riscv_aia_initialized(vcpu->kvm))
+> > +             return KVM_INSN_EXIT_TO_USER_SPACE;
+> > +
+> > +     return kvm_riscv_vcpu_aia_imsic_rmw(vcpu, KVM_RISCV_AIA_IMSIC_TOP=
+EI,
+> > +                                         val, new_val, wr_mask);
+> > +}
+> > +
+> > +/*
+> > + * External IRQ priority always read-only zero. This means default
+> > + * priority order  is always preferred for external IRQs unless
+> > + * HVICTL.IID =3D=3D 9 and HVICTL.IPRIO !=3D 0
+> > + */
+> > +static int aia_irq2bitpos[] =3D {
+> > +0,     8,   -1,   -1,   16,   24,   -1,   -1, /* 0 - 7 */
+> > +32,   -1,   -1,   -1,   -1,   40,   48,   56, /* 8 - 15 */
+> > +64,   72,   80,   88,   96,  104,  112,  120, /* 16 - 23 */
+> > +-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1, /* 24 - 31 */
+> > +-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1, /* 32 - 39 */
+> > +-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1, /* 40 - 47 */
+> > +-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1, /* 48 - 55 */
+> > +-1,   -1,   -1,   -1,   -1,   -1,   -1,   -1, /* 56 - 63 */
+> > +};
+> > +
+> > +static u8 aia_get_iprio8(struct kvm_vcpu *vcpu, unsigned int irq)
+> > +{
+> > +     unsigned long hviprio;
+> > +     int bitpos =3D aia_irq2bitpos[irq];
+> > +
+> > +     if (bitpos < 0)
+> > +             return 0;
+> > +
+> > +     switch (bitpos / BITS_PER_LONG) {
+> > +     case 0:
+> > +             hviprio =3D csr_read(CSR_HVIPRIO1);
+> > +             break;
+> > +     case 1:
+> > +#ifndef CONFIG_32BIT
+> > +             hviprio =3D csr_read(CSR_HVIPRIO2);
+> > +             break;
+> > +#else
+> > +             hviprio =3D csr_read(CSR_HVIPRIO1H);
+> > +             break;
+> > +     case 2:
+> > +             hviprio =3D csr_read(CSR_HVIPRIO2);
+> > +             break;
+> > +     case 3:
+> > +             hviprio =3D csr_read(CSR_HVIPRIO2H);
+> > +             break;
+> > +#endif
+> > +     default:
+> > +             return 0;
+> > +     };
+>          ^ unnecessary ;
+> > +
+> > +     return (hviprio >> (bitpos % BITS_PER_LONG)) & TOPI_IPRIO_MASK;
+> > +}
+> > +
+> > +static void aia_set_iprio8(struct kvm_vcpu *vcpu, unsigned int irq, u8=
+ prio)
+> > +{
+> > +     unsigned long hviprio;
+> > +     int bitpos =3D aia_irq2bitpos[irq];
+> > +
+> > +     if (bitpos < 0)
+> > +             return;
+> > +
+> > +     switch (bitpos / BITS_PER_LONG) {
+> > +     case 0:
+> > +             hviprio =3D csr_read(CSR_HVIPRIO1);
+> > +             break;
+> > +     case 1:
+> > +#ifndef CONFIG_32BIT
+> > +             hviprio =3D csr_read(CSR_HVIPRIO2);
+> > +             break;
+> > +#else
+> > +             hviprio =3D csr_read(CSR_HVIPRIO1H);
+> > +             break;
+> > +     case 2:
+> > +             hviprio =3D csr_read(CSR_HVIPRIO2);
+> > +             break;
+> > +     case 3:
+> > +             hviprio =3D csr_read(CSR_HVIPRIO2H);
+> > +             break;
+> > +#endif
+> > +     default:
+> > +             return;
+> > +     };
+>          ^ unnecessary ;
+>
+> The csr read switch could be put in a helper and shared between the get
+> and set functions.
+>
+> > +
+> > +     hviprio &=3D ~((unsigned long)TOPI_IPRIO_MASK <<
+>
+> I don't think the (unsigned long) cast is necessary, as I believe
+> TOPI_IPRIO_MASK is already an unsigned long.
+>
+> > +                  (bitpos % BITS_PER_LONG));
+> > +     hviprio |=3D (unsigned long)prio << (bitpos % BITS_PER_LONG);
+> > +
+> > +     switch (bitpos / BITS_PER_LONG) {
+> > +     case 0:
+> > +             csr_write(CSR_HVIPRIO1, hviprio);
+> > +             break;
+> > +     case 1:
+> > +#ifndef CONFIG_32BIT
+> > +             csr_write(CSR_HVIPRIO2, hviprio);
+> > +             break;
+> > +#else
+> > +             csr_write(CSR_HVIPRIO1H, hviprio);
+> > +             break;
+> > +     case 2:
+> > +             csr_write(CSR_HVIPRIO2, hviprio);
+> > +             break;
+> > +     case 3:
+> > +             csr_write(CSR_HVIPRIO2H, hviprio);
+> > +             break;
+> > +#endif
+> > +     default:
+> > +             return;
+> > +     };
+>          ^ unnecessary ;
+>
+> > +}
+> > +
+> > +static int aia_rmw_iprio(struct kvm_vcpu *vcpu, unsigned int isel,
+> > +                      unsigned long *val, unsigned long new_val,
+> > +                      unsigned long wr_mask)
+> > +{
+> > +     int i, firq, nirqs;
+>
+> nit: I guessed 'f' is for 'first', but 'first_irq' would make that more
+> clear from the start.
+>
+> > +     unsigned long old_val;
+> > +
+> > +#ifndef CONFIG_32BIT
+> > +     if (isel & 0x1)
+> > +             return KVM_INSN_ILLEGAL_TRAP;
+> > +#endif
+> > +
+> > +     nirqs =3D 4 * (BITS_PER_LONG / 32);
+> > +     firq =3D ((isel - ISELECT_IPRIO0) / (BITS_PER_LONG / 32)) * (nirq=
+s);
+>
+> This is just firq =3D 4 * (isel - ISELECT_IPRIO0);
+>
+> > +
+> > +     old_val =3D 0;
+> > +     for (i =3D 0; i < nirqs; i++)
+> > +             old_val |=3D (unsigned long)aia_get_iprio8(vcpu, firq + i=
+) <<
+> > +                        (TOPI_IPRIO_BITS * i);
+>
+> nit: normally would indent to under the (
+>
+> > +
+> > +     if (val)
+> > +             *val =3D old_val;
+> > +
+> > +     if (wr_mask) {
+> > +             new_val =3D (old_val & ~wr_mask) | (new_val & wr_mask);
+> > +             for (i =3D 0; i < nirqs; i++)
+> > +                     aia_set_iprio8(vcpu, firq + i,
+> > +                     (new_val >> (TOPI_IPRIO_BITS * i)) & TOPI_IPRIO_M=
+ASK);
+>
+> nit: normally would indent to under the (
+>
+> > +     }
+> > +
+> > +     return KVM_INSN_CONTINUE_NEXT_SEPC;
+> > +}
+> > +
+> > +#define IMSIC_FIRST  0x70
+> > +#define IMSIC_LAST   0xff
+> > +int kvm_riscv_vcpu_aia_rmw_ireg(struct kvm_vcpu *vcpu, unsigned int cs=
+r_num,
+> > +                             unsigned long *val, unsigned long new_val=
+,
+> > +                             unsigned long wr_mask)
+> > +{
+> > +     unsigned int isel;
+> > +
+> > +     /* If AIA not available then redirect trap */
+> > +     if (!kvm_riscv_aia_available())
+> > +             return KVM_INSN_ILLEGAL_TRAP;
+> > +
+> > +     /* First try to emulate in kernel space */
+> > +     isel =3D csr_read(CSR_VSISELECT) & ISELECT_MASK;
+> > +     if (isel >=3D ISELECT_IPRIO0 && isel <=3D ISELECT_IPRIO15)
+> > +             return aia_rmw_iprio(vcpu, isel, val, new_val, wr_mask);
+> > +     else if (isel >=3D IMSIC_FIRST && isel <=3D IMSIC_LAST &&
+> > +              kvm_riscv_aia_initialized(vcpu->kvm))
+> > +             return kvm_riscv_vcpu_aia_imsic_rmw(vcpu, isel, val, new_=
+val,
+> > +                                                 wr_mask);
+> > +
+> > +     /* We can't handle it here so redirect to user space */
+> > +     return KVM_INSN_EXIT_TO_USER_SPACE;
+> > +}
+> > +
+> >  void kvm_riscv_aia_enable(void)
+> >  {
+> >       if (!kvm_riscv_aia_available())
+> > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> > index 15507cd3a595..30acf3ebdc3d 100644
+> > --- a/arch/riscv/kvm/vcpu.c
+> > +++ b/arch/riscv/kvm/vcpu.c
+> > @@ -141,8 +141,8 @@ static void kvm_riscv_reset_vcpu(struct kvm_vcpu *v=
+cpu)
+> >
+> >       kvm_riscv_vcpu_aia_reset(vcpu);
+> >
+> > -     WRITE_ONCE(vcpu->arch.irqs_pending, 0);
+> > -     WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
+> > +     bitmap_zero(vcpu->arch.irqs_pending, KVM_RISCV_VCPU_NR_IRQS);
+> > +     bitmap_zero(vcpu->arch.irqs_pending_mask, KVM_RISCV_VCPU_NR_IRQS)=
+;
+> >
+> >       kvm_riscv_vcpu_pmu_reset(vcpu);
+> >
+> > @@ -474,6 +474,7 @@ static int kvm_riscv_vcpu_general_get_csr(struct kv=
+m_vcpu *vcpu,
+> >       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip)) {
+> >               kvm_riscv_vcpu_flush_interrupts(vcpu);
+> >               *out_val =3D (csr->hvip >> VSIP_TO_HVIP_SHIFT) & VSIP_VAL=
+ID_MASK;
+> > +             *out_val |=3D csr->hvip & ~IRQ_LOCAL_MASK;
+> >       } else
+> >               *out_val =3D ((unsigned long *)csr)[reg_num];
+> >
+> > @@ -497,7 +498,7 @@ static inline int kvm_riscv_vcpu_general_set_csr(st=
+ruct kvm_vcpu *vcpu,
+> >       ((unsigned long *)csr)[reg_num] =3D reg_val;
+> >
+> >       if (reg_num =3D=3D KVM_REG_RISCV_CSR_REG(sip))
+> > -             WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
+> > +             WRITE_ONCE(vcpu->arch.irqs_pending_mask[0], 0);
+> >
+> >       return 0;
+> >  }
+> > @@ -799,9 +800,9 @@ void kvm_riscv_vcpu_flush_interrupts(struct kvm_vcp=
+u *vcpu)
+> >       struct kvm_vcpu_csr *csr =3D &vcpu->arch.guest_csr;
+> >       unsigned long mask, val;
+> >
+> > -     if (READ_ONCE(vcpu->arch.irqs_pending_mask)) {
+> > -             mask =3D xchg_acquire(&vcpu->arch.irqs_pending_mask, 0);
+> > -             val =3D READ_ONCE(vcpu->arch.irqs_pending) & mask;
+> > +     if (READ_ONCE(vcpu->arch.irqs_pending_mask[0])) {
+> > +             mask =3D xchg_acquire(&vcpu->arch.irqs_pending_mask[0], 0=
+);
+> > +             val =3D READ_ONCE(vcpu->arch.irqs_pending[0]) & mask;
+> >
+> >               csr->hvip &=3D ~mask;
+> >               csr->hvip |=3D val;
+> > @@ -825,12 +826,12 @@ void kvm_riscv_vcpu_sync_interrupts(struct kvm_vc=
+pu *vcpu)
+> >       if ((csr->hvip ^ hvip) & (1UL << IRQ_VS_SOFT)) {
+> >               if (hvip & (1UL << IRQ_VS_SOFT)) {
+> >                       if (!test_and_set_bit(IRQ_VS_SOFT,
+> > -                                           &v->irqs_pending_mask))
+> > -                             set_bit(IRQ_VS_SOFT, &v->irqs_pending);
+> > +                                           v->irqs_pending_mask))
+> > +                             set_bit(IRQ_VS_SOFT, v->irqs_pending);
+> >               } else {
+> >                       if (!test_and_set_bit(IRQ_VS_SOFT,
+> > -                                           &v->irqs_pending_mask))
+> > -                             clear_bit(IRQ_VS_SOFT, &v->irqs_pending);
+> > +                                           v->irqs_pending_mask))
+> > +                             clear_bit(IRQ_VS_SOFT, v->irqs_pending);
+> >               }
+> >       }
+> >
+> > @@ -843,14 +844,20 @@ void kvm_riscv_vcpu_sync_interrupts(struct kvm_vc=
+pu *vcpu)
+> >
+> >  int kvm_riscv_vcpu_set_interrupt(struct kvm_vcpu *vcpu, unsigned int i=
+rq)
+> >  {
+> > -     if (irq !=3D IRQ_VS_SOFT &&
+> > +     /*
+> > +      * We only allow VS-mode software, timer, and external
+> > +      * interrupts when irq is one of the local interrupts
+> > +      * defined by RISC-V privilege specification.
+> > +      */
+> > +     if (irq < IRQ_LOCAL_MAX &&
+> > +         irq !=3D IRQ_VS_SOFT &&
+> >           irq !=3D IRQ_VS_TIMER &&
+> >           irq !=3D IRQ_VS_EXT)
+> >               return -EINVAL;
+> >
+> > -     set_bit(irq, &vcpu->arch.irqs_pending);
+> > +     set_bit(irq, vcpu->arch.irqs_pending);
+> >       smp_mb__before_atomic();
+> > -     set_bit(irq, &vcpu->arch.irqs_pending_mask);
+> > +     set_bit(irq, vcpu->arch.irqs_pending_mask);
+> >
+> >       kvm_vcpu_kick(vcpu);
+> >
+> > @@ -859,25 +866,33 @@ int kvm_riscv_vcpu_set_interrupt(struct kvm_vcpu =
+*vcpu, unsigned int irq)
+> >
+> >  int kvm_riscv_vcpu_unset_interrupt(struct kvm_vcpu *vcpu, unsigned int=
+ irq)
+> >  {
+> > -     if (irq !=3D IRQ_VS_SOFT &&
+> > +     /*
+> > +      * We only allow VS-mode software, timer, and external
+> > +      * interrupts when irq is one of the local interrupts
+> > +      * defined by RISC-V privilege specification.
+> > +      */
+> > +     if (irq < IRQ_LOCAL_MAX &&
+> > +         irq !=3D IRQ_VS_SOFT &&
+> >           irq !=3D IRQ_VS_TIMER &&
+> >           irq !=3D IRQ_VS_EXT)
+> >               return -EINVAL;
+> >
+> > -     clear_bit(irq, &vcpu->arch.irqs_pending);
+> > +     clear_bit(irq, vcpu->arch.irqs_pending);
+> >       smp_mb__before_atomic();
+> > -     set_bit(irq, &vcpu->arch.irqs_pending_mask);
+> > +     set_bit(irq, vcpu->arch.irqs_pending_mask);
+> >
+> >       return 0;
+> >  }
+> >
+> > -bool kvm_riscv_vcpu_has_interrupts(struct kvm_vcpu *vcpu, unsigned lon=
+g mask)
+> > +bool kvm_riscv_vcpu_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
+> >  {
+> >       unsigned long ie;
+> >
+> >       ie =3D ((vcpu->arch.guest_csr.vsie & VSIP_VALID_MASK)
+> > -             << VSIP_TO_HVIP_SHIFT) & mask;
+> > -     if (READ_ONCE(vcpu->arch.irqs_pending) & ie)
+> > +             << VSIP_TO_HVIP_SHIFT) & (unsigned long)mask;
+> > +     ie |=3D vcpu->arch.guest_csr.vsie & ~IRQ_LOCAL_MASK &
+> > +             (unsigned long)mask;
+> > +     if (READ_ONCE(vcpu->arch.irqs_pending[0]) & ie)
+> >               return true;
+> >
+> >       /* Check AIA high interrupts */
+> > --
+> > 2.34.1
+> >
+>
+> Thanks,
+> drew
