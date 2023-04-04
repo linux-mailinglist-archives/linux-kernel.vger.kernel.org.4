@@ -2,149 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85E56D59A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0986D59B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233873AbjDDHaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 03:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S233830AbjDDHcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233899AbjDDH36 (ORCPT
+        with ESMTP id S233585AbjDDHcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 03:29:58 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A27B7;
-        Tue,  4 Apr 2023 00:29:38 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R531e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VfKsUhm_1680593374;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VfKsUhm_1680593374)
-          by smtp.aliyun-inc.com;
-          Tue, 04 Apr 2023 15:29:34 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        saeedm@nvidia.com, leon@kernel.org, netdev@vger.kernel.org,
-        simon.horman@corigine.com, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH net-next v3] net/mlx5e: Remove NULL check before dev_{put, hold}
-Date:   Tue,  4 Apr 2023 15:29:32 +0800
-Message-Id: <20230404072932.88383-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 4 Apr 2023 03:32:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3760188
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 00:31:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680593479;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UtZR8/RCDui641OHVeuDBdP9asgKQnGNK+6bWZHRowc=;
+        b=dy22+uNQuA43mJJtqgUQnJx5WFC/DSQ22OQAPmh9Bovj+8FHHfR0Puct6LVOkOWYSviQbJ
+        w7of5P8HbYyvbzD7+yGsZnkpcKlHnqiv5c1ZkXm8bKPBLIqMHqu+wDZOg3VM/ak8MWA+qo
+        MOvruxC2+xs6RKJf97fHgi1rAu1ceNY=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-634-2C_IgXTVN_KMHzi5LQ3e7g-1; Tue, 04 Apr 2023 03:31:18 -0400
+X-MC-Unique: 2C_IgXTVN_KMHzi5LQ3e7g-1
+Received: by mail-wm1-f71.google.com with SMTP id ay37-20020a05600c1e2500b003ee69edec16so17363862wmb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 00:31:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680593477;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UtZR8/RCDui641OHVeuDBdP9asgKQnGNK+6bWZHRowc=;
+        b=sUUlIpe/n/VSLYvfLrFRy8M3JGXofW2mF/YTKgRyl7N1KeLKqPfh+Wh3Kq1el9eDvE
+         zncASTenl2GiN74AnXf5W6cu2fKTRWipQ/SMQ9V7hkOhzkICBweLCDJ7OyMIboEG4FPc
+         lCyTy9C8iGQhAUugbN4RZ53LJaA88lhljo8DmYTAZAXCDRbMfmTr81z42ZN6piLxRJpn
+         cAjDMkW8kVL7cDpk9UFTD+TQoZ0O/gprvVrAKIjasVPzHsOjAAH0PNCQhf4vfNLyDHp0
+         YkNSeQKdVTOZrpQgoXlyYBspqQ2oCmQaD8XM91hpCa10wLRVuJOb6GNzv6dcq2IEYkzl
+         nQuQ==
+X-Gm-Message-State: AAQBX9eAJmY3LUA6yhMHpSz7aapqFEHaP1mIeR625DC3QkyqMmgJoj+n
+        zvbErCSHKLzKUq4vX4ibYdVdYBN81dG1mlZBXwg0qTpkuGpDv6OmTEkQPA4QuXSJIyPzl3QDKtB
+        t0j90f8JZ/j6rIRr2X5mCm48ert2W5QtR
+X-Received: by 2002:a05:600c:2291:b0:3ee:5d1d:6c4e with SMTP id 17-20020a05600c229100b003ee5d1d6c4emr1349584wmf.16.1680593477072;
+        Tue, 04 Apr 2023 00:31:17 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bYbI3qNHfFi766ASxpwJRAZ5scFYZVV2/fpRxOFnzGf88jPExHEZWHMpCgQEnRstVcXJdH4w==
+X-Received: by 2002:a05:600c:2291:b0:3ee:5d1d:6c4e with SMTP id 17-20020a05600c229100b003ee5d1d6c4emr1349562wmf.16.1680593476713;
+        Tue, 04 Apr 2023 00:31:16 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c709:b600:e63:6c3b:7b5d:f439? (p200300cbc709b6000e636c3b7b5df439.dip0.t-ipconnect.de. [2003:cb:c709:b600:e63:6c3b:7b5d:f439])
+        by smtp.gmail.com with ESMTPSA id ip21-20020a05600ca69500b003edf2ae2432sm20873735wmb.7.2023.04.04.00.31.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 00:31:16 -0700 (PDT)
+Message-ID: <5c415fa5-1637-883d-8136-fc4280274406@redhat.com>
+Date:   Tue, 4 Apr 2023 09:31:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] selftests/mm: fix memory leak in child_memcmp_fn
+To:     Feng Jiang <jiangfeng@kylinos.cn>, akpm@linux-foundation.org,
+        shuah@kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Xie <xieming@kylinos.cn>
+References: <20230404031234.78272-1-jiangfeng@kylinos.cn>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230404031234.78272-1-jiangfeng@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-./drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c:35:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
-./drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c:72:2-10: WARNING: NULL check before dev_{put, hold} functions is not needed.
-./drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c:80:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
-./drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c:35:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
-./drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c:734:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
-./drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c:769:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
-./drivers/net/ethernet/mellanox/mlx5/core/lag/lag.c:1450:2-10: WARNING: NULL check before dev_{put, hold} functions is not needed.
+On 04.04.23 05:12, Feng Jiang wrote:
+> The allocated memory should be freed on return.
+> 
+> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+> Suggested-by: Ming Xie <xieming@kylinos.cn>
+> ---
+>   tools/testing/selftests/mm/cow.c | 9 ++++++++-
+>   1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+> index 0eb2e8180aa5..c0dd2dfca51b 100644
+> --- a/tools/testing/selftests/mm/cow.c
+> +++ b/tools/testing/selftests/mm/cow.c
+> @@ -162,6 +162,10 @@ static int child_memcmp_fn(char *mem, size_t size,
+>   {
+>   	char *old = malloc(size);
+>   	char buf;
+> +	int ret;
+> +
+> +	if (!old)
+> +		return -ENOMEM;
+>   
+>   	/* Backup the original content. */
+>   	memcpy(old, mem, size);
+> @@ -172,7 +176,10 @@ static int child_memcmp_fn(char *mem, size_t size,
+>   		;
+>   
+>   	/* See if we still read the old values. */
+> -	return memcmp(old, mem, size);
+> +	ret = memcmp(old, mem, size);
+> +	free(old);
+> +
+> +	return ret;
+>   }
+>   
+>   static int child_vmsplice_memcmp_fn(char *mem, size_t size,
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4667
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
+NAK, the whole point of this function is that the child process will 
+exit immediately after executing this function, cleaning up automatically.
 
-change in v3:
---According to Leon's suggestion, do this cleanup for whole driver.
-
- drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c    |  9 +++------
- .../net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c  | 10 +++-------
- drivers/net/ethernet/mellanox/mlx5/core/lag/lag.c      |  3 +--
- 3 files changed, 7 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
-index 00a04fdd756f..20f6e7ed7475 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
-@@ -31,8 +31,7 @@ static void mlx5e_tc_tun_route_attr_cleanup(struct mlx5e_tc_tun_route_attr *attr
- {
- 	if (attr->n)
- 		neigh_release(attr->n);
--	if (attr->route_dev)
--		dev_put(attr->route_dev);
-+	dev_put(attr->route_dev);
- }
- 
- struct mlx5e_tc_tunnel *mlx5e_get_tc_tun(struct net_device *tunnel_dev)
-@@ -68,16 +67,14 @@ static int get_route_and_out_devs(struct mlx5e_priv *priv,
- 	 * while holding rcu read lock. Take the net_device for correctness
- 	 * sake.
- 	 */
--	if (uplink_upper)
--		dev_hold(uplink_upper);
-+	dev_hold(uplink_upper);
- 	rcu_read_unlock();
- 
- 	dst_is_lag_dev = (uplink_upper &&
- 			  netif_is_lag_master(uplink_upper) &&
- 			  real_dev == uplink_upper &&
- 			  mlx5_lag_is_sriov(priv->mdev));
--	if (uplink_upper)
--		dev_put(uplink_upper);
-+	dev_put(uplink_upper);
- 
- 	/* if the egress device isn't on the same HW e-switch or
- 	 * it's a LAG device, use the uplink
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
-index 20c2d2ecaf93..2cb2ba857155 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
-@@ -32,9 +32,7 @@ static int mlx5e_set_int_port_tunnel(struct mlx5e_priv *priv,
- 						&attr->action, out_index);
- 
- out:
--	if (route_dev)
--		dev_put(route_dev);
--
-+	dev_put(route_dev);
- 	return err;
- }
- 
-@@ -730,8 +728,7 @@ static int mlx5e_set_vf_tunnel(struct mlx5_eswitch *esw,
- 	}
- 
- out:
--	if (route_dev)
--		dev_put(route_dev);
-+	dev_put(route_dev);
- 	return err;
- }
- 
-@@ -765,8 +762,7 @@ static int mlx5e_update_vf_tunnel(struct mlx5_eswitch *esw,
- 	mlx5e_tc_match_to_reg_mod_hdr_change(esw->dev, mod_hdr_acts, VPORT_TO_REG, act_id, data);
- 
- out:
--	if (route_dev)
--		dev_put(route_dev);
-+	dev_put(route_dev);
- 	return err;
- }
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lag/lag.c b/drivers/net/ethernet/mellanox/mlx5/core/lag/lag.c
-index 5d331b940f4d..f0216bf6e215 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/lag/lag.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/lag/lag.c
-@@ -1446,8 +1446,7 @@ struct net_device *mlx5_lag_get_roce_netdev(struct mlx5_core_dev *dev)
- 	} else {
- 		ndev = ldev->pf[MLX5_LAG_P1].netdev;
- 	}
--	if (ndev)
--		dev_hold(ndev);
-+	dev_hold(ndev);
- 
- unlock:
- 	spin_unlock_irqrestore(&lag_lock, flags);
 -- 
-2.20.1.7.g153144c
+Thanks,
+
+David / dhildenb
 
