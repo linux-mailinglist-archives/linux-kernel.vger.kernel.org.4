@@ -2,147 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3656D5CB9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7966D5D26
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234393AbjDDKLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 06:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S234555AbjDDKWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 06:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234387AbjDDKLB (ORCPT
+        with ESMTP id S234480AbjDDKWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 06:11:01 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2078.outbound.protection.outlook.com [40.107.244.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B132D69;
-        Tue,  4 Apr 2023 03:10:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c1DL6mQjqQvs7BU1dEzzpJstqtvZE2iJDc7mLazK8Tg8S2AoOHdiplReb94ahejZjn521Nxc6SH5aHxPEmrX6TL3UchzcMqfIVEV9Qq56UsBODmpie4zGjW0WfeTffZMfK8dptLT6zyBUDs1S0S0LYVrXXJKqRUpEQFBN7PPlpSyj/QJ8yrTGVp4vVlimDT5Mu+7JJfnnAQ/VGviRGJpEQMX/V52C6nhepgaOL42kItftBvVXLeMaT2d01oWg6ZDqPzHlxRp+TtEmfNPSmhwAHaPFsGqpIf3QANtnSdkI3ZK55ClFF/rAFLfTOAilY1gffZ81jLYLb+PegmGY/XPAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+O15livDw9qY1zowlKWAxFbTQvv1Z8GPQKGTriuHPKE=;
- b=Ls+wCFQeSYgWwKc1SYmxuskAF88VlxbW0XY7alh2kVSc9ytJ4/Q4kvoZrtGvRi23HECpzco4AEDYE9J6AXBpMvciVZp2nem1+QYbC8UtUGIbWA6x1lLn/AJNWyRV+jgxuhm1LNSEFHSeKSH8gU6ezyzkZG/F8hWjJNGb1z1mfmPwOpjvNnRMj9dbjlKZJeu+bOBUrjAwEdpJDUOmFY9kh4r0he8xJ/04jWQWtO80Is3llYs2dnoPovE0vfukGLoJeTAgqp+125SaCsaUzaNvENekvMC1FYYEc4k+LYsMGdfSdzL5jicTDIF4EPUlJFk7UuaGZu6CUprAfU5HfVUDEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+O15livDw9qY1zowlKWAxFbTQvv1Z8GPQKGTriuHPKE=;
- b=ZFv5AVuey51yK58hqwHPhx678lq9Gr1BGNaGXlLJ8Ah3gDozVsQSpQ+/RaUZsLCUnJ87/mLAjt/juTTVrUUddzLe0/t5j8PYk387ryE8W5Bm+BmTuizisfWR/avcFopQzFVp98iMClzjSaYKu4MF+QovfkLpJSbpdWk0NCPz9d3XTvgogwN5MP9d9ErdDChbnXTNrVqpwogfWlOQDlxul0kKI6fTjIoNB0yzFtTUUqIzdVr40NYbExkkQDPXDEyxPzoXzuiNZ259dYoOmXxYag9DpeXdcPStrQfwnzKWvBw6f712JDbxS0IjI0uvkllyNEa3Nu+zqzRIkug4qd5blg==
-Received: from DM6PR18CA0007.namprd18.prod.outlook.com (2603:10b6:5:15b::20)
- by DS0PR12MB7680.namprd12.prod.outlook.com (2603:10b6:8:136::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.29; Tue, 4 Apr
- 2023 10:10:56 +0000
-Received: from DM6NAM11FT050.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:15b:cafe::5d) by DM6PR18CA0007.outlook.office365.com
- (2603:10b6:5:15b::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.28 via Frontend
- Transport; Tue, 4 Apr 2023 10:10:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT050.mail.protection.outlook.com (10.13.173.111) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6277.28 via Frontend Transport; Tue, 4 Apr 2023 10:10:56 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 4 Apr 2023
- 03:10:42 -0700
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 4 Apr 2023
- 03:10:42 -0700
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Tue, 4 Apr 2023 03:10:41 -0700
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 6.1 000/181] 6.1.23-rc1 review
-In-Reply-To: <20230403140415.090615502@linuxfoundation.org>
-References: <20230403140415.090615502@linuxfoundation.org>
-X-NVConfidentiality: public
+        Tue, 4 Apr 2023 06:22:17 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6AB3AA5;
+        Tue,  4 Apr 2023 03:22:03 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 55040582041;
+        Tue,  4 Apr 2023 06:21:57 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 04 Apr 2023 06:21:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:message-id:mime-version:reply-to
+        :sender:subject:subject:to:to; s=fm3; t=1680603717; x=
+        1680610917; bh=HfFAtQpE7BaTkEYQ0u2Ynx4ouaJzSTjkYPluvZNu8hE=; b=h
+        Pa6w32LG6ZGsw9w5HpvU1X8+s70WJVZqSVEeb0w9tGcqObzCwt/9vsQNmLbZI/hh
+        UHt52yWqIoA1S0AYq+9IyjAB0URJghQU7n2sTmfMyVFA/mkE5/QdO6oNXNPgaRwU
+        wDtHV44+nyu6r17tzpkIMMv/ieCrmFtoHZhQjQmteldfZ+fZHQpWBwDUN1ao9lyn
+        /pAqBV9TECC9lN7jEGVlPLDYiHuZK7OJcglDkJqhy8S7YtLi8+24FSwiPDEe18A0
+        Ym6cEe1NEXDnOVKILQVY50myqzVXGZCYdAdDNmFlW/3JjfnJfTa5fwlrtMohI599
+        2Y4Ow0fgwiBgGIc810prQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; t=1680603717; x=1680610917; bh=H
+        fFAtQpE7BaTkEYQ0u2Ynx4ouaJzSTjkYPluvZNu8hE=; b=u+sXLZ7CZSUuVdx1E
+        fHxv9w0Der3HiA1daXyY5iSuv0hQabFzJkwFELrXWZfnmbwKQPrnGYCQiaYv44cs
+        xuMLUpt9g+8massfJIi/9xCB4mwfSP0PP1ZBAMkca+BZoul68F3wX2d4snWi+D74
+        s+5lpznGNfnPJVUsnnmVGHDBn6YuvJjkRhtIxqGzIfjJwrdZflIZSffRRQh+Y+Cu
+        5eSVp+o7H7X6ojmF4t8J2Va11g9QYB8S0YRR+CF/T2n9AhTIhkCxpH34320JD0BM
+        roe02fONC6XwwYHEj2ho5wtveGI29hnVQ7FqQjbRNqiGodIJZeIRXgJhS/+/wk4v
+        nyZAg==
+X-ME-Sender: <xms:QvorZPY6zLvt0o6cXhzQ23zP4TAe4cJCsSMKFfdK2IiCVudBlYOQgQ>
+    <xme:QvorZOY6rGks4FqL41YSYj74tg-ZhId6cm5IcUaxjYPkrqzMqvUlxa0vEEDb0Vg4D
+    S6ruEAxTkMmv4PcMCs>
+X-ME-Received: <xmr:QvorZB8QqHLdBnfYJTsRU9U-asZkFWoEcpC-bp8uSZmm6kvKELwpQnuEIS18eFO0IeGU8XD9qsUtRE1RaIezyXk-8iaqiJU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledgvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepgfeutdejvdeiheffveetieejtdfhleekleffheejtdfhkeehfeekgedvgeei
+    tddtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:QvorZFojgtNbJTHiiXYEfZp3V-_TIESjBO6qvXjEX1jNP-dSHfSlXA>
+    <xmx:QvorZKqtZ9nRAOzsdNv3bcZ8wUb3HJFn5NMv2JbgGkCYmrC3ESxpFw>
+    <xmx:QvorZLRJyrzEISGAaDVyAwY6JiqEEqER-iGGR122q-s0osVhP8eKug>
+    <xmx:RforZPOqyIjBbuy21MUJCgJlCjRtc3KcBxXm8jWkbKOVuzrWCcu7wA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Apr 2023 06:21:53 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH v3 00/65] clk: Make determine_rate mandatory for muxes
+Date:   Tue, 04 Apr 2023 12:10:50 +0200
+Message-Id: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-MIME-Version: 1.0
-Message-ID: <40fdc1e5-4163-405c-9642-02bd37ce3ea1@rnnvmail205.nvidia.com>
-Date:   Tue, 4 Apr 2023 03:10:41 -0700
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT050:EE_|DS0PR12MB7680:EE_
-X-MS-Office365-Filtering-Correlation-Id: 97e302d5-6cae-48ba-939a-08db34f4e1b6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JtoZ6R/Nf3yHstYhBgaXCDT7ZTl3iaXR46hnIwTcft9fods83jTvB4JIfPU1k4wU5CmO33VW4lOme+PaOyp7m5TT92atJ1BVpjiOR1KzXHJyhyb9cPpXV5uys1x8WruvDdNIjqvpoIHjNqpybClNn6njmGR9dgplw36yFtcuTBJVus+OMJAdpgCT1K4lYSoIkiIFre/r4rcsNhMLxjOshCTweuyFpkJmLZ2sD/XnRcnyhs6jIfLCq7ibcuAH11oxCTkMF0syVGG0b5Oc0OC6uKKS/8GYSDJmAik3+EcHe64XhfHDKIg0NKsqv4GlL5FPsDeEGtQI6dzf1sFxSyPu3oYav7OVJHLw+hecwlyPFMgpJdYsAZZjNYL+iJWKSs0zt9bX61IiIwEBsV1ZLWGzD73z2eiYawpUasEYrKA5uzy4OovGg9ddRPg663ZLEUwivxlDqlLngGY18uuDohAqtUek7foYkO9B3hePhtXajltNWs1UNXVVjWlmW7ijQ/SIX7kU52zWh2hrDfidvEhawuHWFFdM3mBaWV/FOBf0SDkXal9E3aKiID95Um2EDgE/vK3vLgaahbSfEAl2oFKi+Z7JVEEZTiUePp6VbBxOKrU/2y/mRIjB9P6dOa4eERZY8ayz5z7CpKoAYR1CM+Luj6iaKPRYuwYRmeoI+CokjtzOc/jD2moWm95YJN1sX2vIIRUeTgfj/u5fAnXKfKN7v2XJ9+yXe8C7Mr3wrd+QrUeV3ptD8ZukiVuVdKmJu1pqjdv7+caVbPELcZnYYDOr8ZcAVhfKtqMBqEiL9ryPg8k=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(39860400002)(136003)(451199021)(36840700001)(40470700004)(46966006)(31696002)(86362001)(2906002)(82310400005)(31686004)(40460700003)(40480700001)(966005)(47076005)(336012)(186003)(26005)(478600001)(70206006)(70586007)(6916009)(36860700001)(4326008)(41300700001)(82740400003)(7416002)(5660300002)(7636003)(356005)(8676002)(316002)(54906003)(426003)(8936002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 10:10:56.4998
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97e302d5-6cae-48ba-939a-08db34f4e1b6
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT050.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7680
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAKr3K2QC/43NzQ7CIAwH8FdZOFsDZZvoyfcwHjZWhGxhCUyiM
+ Xt3626e9NT8+/HrS2RKgbI4VS+RqIQc5shB7yphfRdvBGHgLFAiKqkM2GmEtA2sJztmcOFBGVD
+ qo9MNaqyl4OO+ywQ9L1rP5/E+Tdz0IS9zem7PiuJy+ekWBRKcJmdko4yq5dlSivN+IYavbBb8z
+ 8GP0x50O5BV2tCXs67rGzN7xKMKAQAA
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org,
+        Maxime Ripard <maxime@cerno.tech>,
+        Liam Beguin <liambeguin@gmail.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8407; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=f/Knn1kk7vVUXORQfxa+QfreHaZSdTArsNS+gG1C4RA=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCna37eIXJ9r9bU2NZTxI2e6xOUNZ4zyD2zen+fTxNDRKd7e
+ xnGso5SFQYyLQVZMkSVG2HxJ3KlZrzvZ+ObBzGFlAhnCwMUpABMRMmb4Z5Yqmp38+lxyluzpNf9ry4
+ Vn/r3nLZd4auNprhVG3+VvzmH472xmvN/z4eEzPa3WC+9ftpz8f1fMw1z3nz2TjQQWz7Ll5wIA
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Apr 2023 16:07:15 +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.23 release.
-> There are 181 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.23-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi,
 
-All tests passing for Tegra ...
+This is a follow-up to a previous series that was printing a warning
+when a mux has a set_parent implementation but is missing
+determine_rate().
 
-Test results for stable-v6.1:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    130 tests:	130 pass, 0 fail
+The rationale is that set_parent() is very likely to be useful when
+changing the rate, but it's determine_rate() that takes the parenting
+decision. If we're missing it, then the current parent is always going
+to be used, and thus set_parent() will not be used. The only exception
+being a direct call to clk_set_parent(), but those are fairly rare
+compared to clk_set_rate().
 
-Linux version:	6.1.23-rc1-g01cd0041b7a5
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
+Stephen then asked to promote the warning to an error, and to fix up all
+the muxes that are in that situation first. So here it is :)
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+It was build-tested on x86, arm and arm64.
 
-Jon
+Affected drivers have been tracked down by the following coccinelle
+script:
+
+virtual report 
+
+@ clk_ops @
+identifier ops;
+position p;
+@@
+
+ struct clk_ops ops@p = {
+   ...
+ };
+
+@ has_set_parent @
+identifier clk_ops.ops;
+identifier set_parent_f;
+@@
+
+  struct clk_ops ops = {
+	.set_parent = set_parent_f,
+  };
+
+@ has_determine_rate @
+identifier clk_ops.ops;
+identifier determine_rate_f;
+@@
+
+  struct clk_ops ops = {
+	.determine_rate = determine_rate_f,
+  };
+
+@ script:python depends on report && has_set_parent && !has_determine_rate @
+ops << clk_ops.ops;
+set_parent_f << has_set_parent.set_parent_f;
+p << clk_ops.p;
+@@
+
+coccilib.report.print_report(p[0], "ERROR: %s has set_parent (%s)" % (ops, set_parent_f))
+
+Berlin is the only user still matching after this series has been
+applied, but it's because it uses a composite clock which throws the
+script off. The driver has been converted and shouldn't be a problem. 
+
+Let me know what you think,
+Maxime
+
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+---
+Changes in v3:
+- Rebased on top of next-20230404
+- Link to v2: https://lore.kernel.org/r/20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech
+
+Changes in v2:
+- Drop all the patches already applied
+- Promote the clk registration warning to an error
+- Make all muxes use determine_rate
+- Link to v1: https://lore.kernel.org/r/20221018-clk-range-checks-fixes-v1-0-f3ef80518140@cerno.tech
+
+---
+Maxime Ripard (65):
+      clk: Export clk_hw_forward_rate_request()
+      clk: lan966x: Remove unused round_rate hook
+      clk: nodrv: Add a determine_rate hook
+      clk: test: Add a determine_rate hook
+      clk: actions: composite: Add a determine_rate hook for pass clk
+      clk: at91: main: Add a determine_rate hook
+      clk: at91: sckc: Add a determine_rate hook
+      clk: berlin: div: Add a determine_rate hook
+      clk: cdce706: Add a determine_rate hook
+      clk: k210: pll: Add a determine_rate hook
+      clk: k210: aclk: Add a determine_rate hook
+      clk: k210: mux: Add a determine_rate hook
+      clk: lmk04832: clkout: Add a determine_rate hook
+      clk: lochnagar: Add a determine_rate hook
+      clk: qoriq: Add a determine_rate hook
+      clk: si5341: Add a determine_rate hook
+      clk: stm32f4: mux: Add a determine_rate hook
+      clk: vc5: mux: Add a determine_rate hook
+      clk: vc5: clkout: Add a determine_rate hook
+      clk: wm831x: clkout: Add a determine_rate hook
+      clk: davinci: da8xx-cfgchip: Add a determine_rate hook
+      clk: davinci: da8xx-cfgchip: Add a determine_rate hook
+      clk: imx: busy: Add a determine_rate hook
+      clk: imx: fixup-mux: Add a determine_rate hook
+      clk: imx: scu: Add a determine_rate hook
+      clk: mediatek: cpumux: Add a determine_rate hook
+      clk: pxa: Add a determine_rate hook
+      clk: renesas: r9a06g032: Add a determine_rate hook
+      clk: socfpga: gate: Add a determine_rate hook
+      clk: stm32: core: Add a determine_rate hook
+      clk: tegra: bpmp: Add a determine_rate hook
+      clk: tegra: super: Add a determine_rate hook
+      clk: tegra: periph: Add a determine_rate hook
+      clk: ux500: prcmu: Add a determine_rate hook
+      clk: ux500: sysctrl: Add a determine_rate hook
+      clk: versatile: sp810: Add a determine_rate hook
+      drm/tegra: sor: Add a determine_rate hook
+      phy: cadence: sierra: Add a determine_rate hook
+      phy: cadence: torrent: Add a determine_rate hook
+      phy: ti: am654-serdes: Add a determine_rate hook
+      phy: ti: j721e-wiz: Add a determine_rate hook
+      rtc: sun6i: Add a determine_rate hook
+      ASoC: tlv320aic32x4: Add a determine_rate hook
+      clk: actions: composite: div: Switch to determine_rate
+      clk: actions: composite: fact: Switch to determine_rate
+      clk: at91: smd: Switch to determine_rate
+      clk: axi-clkgen: Switch to determine_rate
+      clk: cdce706: divider: Switch to determine_rate
+      clk: cdce706: clkout: Switch to determine_rate
+      clk: si5341: Switch to determine_rate
+      clk: si5351: pll: Switch to determine_rate
+      clk: si5351: msynth: Switch to determine_rate
+      clk: si5351: clkout: Switch to determine_rate
+      clk: da8xx: clk48: Switch to determine_rate
+      clk: imx: scu: Switch to determine_rate
+      clk: ingenic: cgu: Switch to determine_rate
+      clk: ingenic: tcu: Switch to determine_rate
+      clk: sprd: composite: Switch to determine_rate
+      clk: st: flexgen: Switch to determine_rate
+      clk: stm32: composite: Switch to determine_rate
+      clk: tegra: periph: Switch to determine_rate
+      clk: tegra: super: Switch to determine_rate
+      ASoC: tlv320aic32x4: pll: Switch to determine_rate
+      ASoC: tlv320aic32x4: div: Switch to determine_rate
+      clk: Forbid to register a mux without determine_rate
+
+ drivers/clk/actions/owl-composite.c       | 35 +++++++++++-----
+ drivers/clk/actions/owl-composite.h       |  2 +-
+ drivers/clk/at91/clk-main.c               |  3 +-
+ drivers/clk/at91/clk-smd.c                | 29 +++++++------
+ drivers/clk/at91/sckc.c                   |  3 +-
+ drivers/clk/berlin/berlin2-div.c          |  3 +-
+ drivers/clk/clk-axi-clkgen.c              | 14 ++++---
+ drivers/clk/clk-cdce706.c                 | 31 ++++++++------
+ drivers/clk/clk-k210.c                    | 17 +++++---
+ drivers/clk/clk-lan966x.c                 | 17 --------
+ drivers/clk/clk-lmk04832.c                |  1 +
+ drivers/clk/clk-lochnagar.c               |  2 +
+ drivers/clk/clk-qoriq.c                   | 10 +++--
+ drivers/clk/clk-si5341.c                  | 21 +++++-----
+ drivers/clk/clk-si5351.c                  | 67 +++++++++++++++++--------------
+ drivers/clk/clk-stm32f4.c                 |  3 +-
+ drivers/clk/clk-versaclock5.c             |  8 ++--
+ drivers/clk/clk-wm831x.c                  |  3 +-
+ drivers/clk/clk.c                         | 15 +++++++
+ drivers/clk/clk_test.c                    |  1 +
+ drivers/clk/davinci/da8xx-cfgchip.c       | 15 ++++---
+ drivers/clk/imx/clk-busy.c                |  3 +-
+ drivers/clk/imx/clk-fixup-mux.c           |  3 +-
+ drivers/clk/imx/clk-scu.c                 | 27 +++++++++++--
+ drivers/clk/ingenic/cgu.c                 | 15 +++----
+ drivers/clk/ingenic/tcu.c                 | 19 +++++----
+ drivers/clk/mediatek/clk-cpumux.c         |  3 +-
+ drivers/clk/pxa/clk-pxa.c                 |  3 +-
+ drivers/clk/renesas/r9a06g032-clocks.c    |  3 +-
+ drivers/clk/socfpga/clk-gate.c            |  3 +-
+ drivers/clk/sprd/composite.c              | 16 +++++---
+ drivers/clk/st/clk-flexgen.c              | 15 +++----
+ drivers/clk/stm32/clk-stm32-core.c        | 33 ++++++++++-----
+ drivers/clk/tegra/clk-bpmp.c              |  7 +++-
+ drivers/clk/tegra/clk-periph.c            | 19 ++++++---
+ drivers/clk/tegra/clk-super.c             | 18 ++++++---
+ drivers/clk/ux500/clk-prcmu.c             |  3 +-
+ drivers/clk/ux500/clk-sysctrl.c           |  4 +-
+ drivers/clk/versatile/clk-sp810.c         |  3 +-
+ drivers/gpu/drm/tegra/sor.c               |  3 +-
+ drivers/phy/cadence/phy-cadence-sierra.c  |  1 +
+ drivers/phy/cadence/phy-cadence-torrent.c |  1 +
+ drivers/phy/ti/phy-am654-serdes.c         |  1 +
+ drivers/phy/ti/phy-j721e-wiz.c            |  1 +
+ drivers/rtc/rtc-sun6i.c                   |  2 +
+ sound/soc/codecs/tlv320aic32x4-clk.c      | 37 ++++++++++-------
+ 46 files changed, 343 insertions(+), 200 deletions(-)
+---
+base-commit: 6a53bda3aaf3de5edeea27d0b1d8781d067640b6
+change-id: 20221018-clk-range-checks-fixes-2039f3523240
+
+Best regards,
+-- 
+Maxime Ripard <maxime@cerno.tech>
+
