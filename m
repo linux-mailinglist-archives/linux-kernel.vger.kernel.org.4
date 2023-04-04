@@ -2,55 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F306D6E59
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF1E6D6E60
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236279AbjDDUsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 16:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S236316AbjDDUtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 16:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbjDDUsi (ORCPT
+        with ESMTP id S232313AbjDDUtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 16:48:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE849AC
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 13:48:37 -0700 (PDT)
+        Tue, 4 Apr 2023 16:49:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4CDAC;
+        Tue,  4 Apr 2023 13:49:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E6F961F69
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 20:48:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D45C433D2;
-        Tue,  4 Apr 2023 20:48:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B7B063874;
+        Tue,  4 Apr 2023 20:49:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA3AEC4339B;
+        Tue,  4 Apr 2023 20:49:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680641316;
-        bh=6hyqS48w9JFhBbwNOamIBNjav2KFQCOfy5UD/mrBZY8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=VGTRIsNNgviwMaBhbUjKq8r5r3oOIzifYVy8oqKqYx7EuZCYUOafZ0NSdGjPG8FLM
-         beQcdn98zSS9V5hWE9kXw6Iiuhc+zAC5sHZrei0/Wy3EmSS1SABSFM3Zl1KhZDi4wK
-         htQHka6VgE8Co6d/0j32IF5S+lOGdLd6zqjRoysgVShnyq3D012EyIlpePxWe0kVV6
-         d8che5sVVEPmKmaviILjr3xmfSJoyyFhkMNeKZyzWpxhOPfQ//eRRQJJoIKcozBA0/
-         ih3q4e6e381dg+6/D7ULk4gYuj1tJSI0doMbS3DYyb1h/NzYJDqfMVGadACZV540S2
-         Vib7l00WxYXpg==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 6D0B115404B4; Tue,  4 Apr 2023 13:48:36 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 13:48:36 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux@weissschuh.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] tools/nolibc: add testcases for vfprintf
-Message-ID: <3d05e613-d7a7-4d21-ac4d-2450613b4836@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230402184806.12440-1-w@1wt.eu>
- <530708ce-92af-41ad-84da-a691a518852b@paulmck-laptop>
- <eec66609-4baa-4412-863e-5beb704982d2@paulmck-laptop>
- <ZCyMn5VCyzYXgfIG@1wt.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCyMn5VCyzYXgfIG@1wt.eu>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        s=k20201202; t=1680641353;
+        bh=gXqIcJnn5Eq5okLMpDEb9nxUz3SeXdgGCHq7sJi3mH4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CtyWHrJha0wN1fTMK3NpqKRCmt11CL56a5Z8muzaCRqQWsJy7r5Y9Yl3zLU3fjyEH
+         hCDUmR6dQQLAq46HmHA6CY8AoaY/rVu5X32EsbMOstevgFcKnTuG0gLwkzdZB3ilhp
+         vjkw8Vm3SSrNv1Zlb0k9XyLj4TO3GqQ+Kg8tLl2XiVq/csKBVyaa6pDCfw9j9gktnZ
+         u1CgwUF4S/IlC4auLKpQzclYprcp5T9wsRxFoiyfHfDUhWhKV15DJCXOGGI8vJX8UQ
+         qrtkRfFEMJ/qgcTxiAzvcJoC7l3oAfhnMFG2mV3pn8/ejQj2NUOY8ghg/wSfjoHNOv
+         YvdRLhNXBpsRA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pjnaZ-005l6L-AO;
+        Tue, 04 Apr 2023 21:49:11 +0100
+Date:   Tue, 04 Apr 2023 21:49:10 +0100
+Message-ID: <86sfdfv0e1.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     David Dai <davidai@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+In-Reply-To: <ZCx97IKjsBibjdGc@linux.dev>
+References: <20230330224348.1006691-1-davidai@google.com>
+        <ZCx97IKjsBibjdGc@linux.dev>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: davidai@google.com, oliver.upton@linux.dev, rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, lpieralisi@kernel.org, sudeep.holla@arm.com, mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, kernel-team@android.com, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,52 +92,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 10:46:23PM +0200, Willy Tarreau wrote:
-> On Tue, Apr 04, 2023 at 01:40:32PM -0700, Paul E. McKenney wrote:
-> > On Sun, Apr 02, 2023 at 02:24:04PM -0700, Paul E. McKenney wrote:
-> > > On Sun, Apr 02, 2023 at 08:48:02PM +0200, Willy Tarreau wrote:
-> > > > Hello Paul,
-> > > > 
-> > > > Thomas added new tests for vfprintf(), which is a good idea because it
-> > > > was a new implementation, we use it a lot in the tests so we'd rather
-> > > > make sure it works! This required to implement support for memfd_create()
-> > > > that is used to collect the output into a buffer, as well as to complete
-> > > > a little bit the minimalistic FILE emulation with fileno(), fdopen(),
-> > > > fflush() and fclose(). The result is neat and works equally on glibc and
-> > > > nolibc. We just had to cheat on the pointer test because for NULL nolibc
-> > > > prints "0x0" while glibc prints "(nil)" so we check 0x1 instead to avoid
-> > > > this special case.
-> > > > 
-> > > > Finally Thomas added a new target to the makefile to ease building the
-> > > > test against the default libc. This should help detect incompatibilities
-> > > > when new features are added.
-> > > > 
-> > > > I've tested it locally with my libc and against all supported architectures
-> > > > (userland tests only), and all tests passed.
-> > > > 
-> > > > This can be added to your dev tree for 6.5 on top of the previous series.
-> > > 
-> > > Looks like some useful code to make testing more comprehensive, thank
-> > > you both!  Queued and pushed.
-> > 
-> > And finally tested:
-> > 
-> > Kernel: arch/x86/boot/bzImage is ready  (#7)
-> > make[1]: Leaving directory '/home/git/linux-build'
-> > 133 test(s) passed.
-> > 
-> >   CC      nolibc-test
-> > 133 test(s) passed.
-> > 
-> > So good agreement between user and kernel, anyway.  Usermode tests
-> > note that two of the tests are skipped (chroot_root and link_blah).
-> > Kernelmode tests all say "[OK]".
+On Tue, 04 Apr 2023 20:43:40 +0100,
+Oliver Upton <oliver.upton@linux.dev> wrote:
 > 
-> This is perfect, thank you Paul!
+> Folks,
 > 
-> Eventually I'll clean up my test script I use to build and test for all
-> archs, and commit it to help with such testing.
+> On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
+> 
+> <snip>
+> 
+> > PCMark
+> > Higher is better
+> > +-------------------+----------+------------+--------+-------+--------+
+> > | Test Case (score) | Baseline |  Hypercall | %delta |  MMIO | %delta |
+> > +-------------------+----------+------------+--------+-------+--------+
+> > | Weighted Total    |     6136 |       7274 |   +19% |  6867 |   +12% |
+> > +-------------------+----------+------------+--------+-------+--------+
+> > | Web Browsing      |     5558 |       6273 |   +13% |  6035 |    +9% |
+> > +-------------------+----------+------------+--------+-------+--------+
+> > | Video Editing     |     4921 |       5221 |    +6% |  5167 |    +5% |
+> > +-------------------+----------+------------+--------+-------+--------+
+> > | Writing           |     6864 |       8825 |   +29% |  8529 |   +24% |
+> > +-------------------+----------+------------+--------+-------+--------+
+> > | Photo Editing     |     7983 |      11593 |   +45% | 10812 |   +35% |
+> > +-------------------+----------+------------+--------+-------+--------+
+> > | Data Manipulation |     5814 |       6081 |    +5% |  5327 |    -8% |
+> > +-------------------+----------+------------+--------+-------+--------+
+> > 
+> > PCMark Performance/mAh
+> > Higher is better
+> > +-----------+----------+-----------+--------+------+--------+
+> > |           | Baseline | Hypercall | %delta | MMIO | %delta |
+> > +-----------+----------+-----------+--------+------+--------+
+> > | Score/mAh |       79 |        88 |   +11% |   83 |    +7% |
+> > +-----------+----------+-----------+--------+------+--------+
+> > 
+> > Roblox
+> > Higher is better
+> > +-----+----------+------------+--------+-------+--------+
+> > |     | Baseline |  Hypercall | %delta |  MMIO | %delta |
+> > +-----+----------+------------+--------+-------+--------+
+> > | FPS |    18.25 |      28.66 |   +57% | 24.06 |   +32% |
+> > +-----+----------+------------+--------+-------+--------+
+> > 
+> > Roblox Frames/mAh
+> > Higher is better
+> > +------------+----------+------------+--------+--------+--------+
+> > |            | Baseline |  Hypercall | %delta |   MMIO | %delta |
+> > +------------+----------+------------+--------+--------+--------+
+> > | Frames/mAh |    91.25 |     114.64 |   +26% | 103.11 |   +13% |
+> > +------------+----------+------------+--------+--------+--------+
+> 
+> </snip>
+> 
+> > Next steps:
+> > ===========
+> > We are continuing to look into communication mechanisms other than
+> > hypercalls that are just as/more efficient and avoid switching into the VMM
+> > userspace. Any inputs in this regard are greatly appreciated.
+> 
+> We're highly unlikely to entertain such an interface in KVM.
+> 
+> The entire feature is dependent on pinning vCPUs to physical cores, for which
+> userspace is in the driver's seat. That is a well established and documented
+> policy which can be seen in the way we handle heterogeneous systems and
+> vPMU.
+> 
+> Additionally, this bloats the KVM PV ABI with highly VMM-dependent interfaces
+> that I would not expect to benefit the typical user of KVM.
+> 
+> Based on the data above, it would appear that the userspace implementation is
+> in the same neighborhood as a KVM-based implementation, which only further
+> weakens the case for moving this into the kernel.
+> 
+> I certainly can appreciate the motivation for the series, but this feature
+> should be in userspace as some form of a virtual device.
 
-Thank you for confirming the test results!
++1 on all of the above.
 
-							Thanx, Paul
+The one thing I'd like to understand that the comment seems to imply
+that there is a significant difference in overhead between a hypercall
+and an MMIO. In my experience, both are pretty similar in cost for a
+handling location (both in userspace or both in the kernel). MMIO
+handling is a tiny bit more expensive due to a guaranteed TLB miss
+followed by a walk of the in-kernel device ranges, but that's all. It
+should hardly register.
+
+And if you really want some super-low latency, low overhead
+signalling, maybe an exception is the wrong tool for the job. Shared
+memory communication could be more appropriate.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
