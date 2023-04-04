@@ -2,118 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44F86D6F79
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F286D6F83
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236449AbjDDV6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S236510AbjDDV7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236276AbjDDV6u (ORCPT
+        with ESMTP id S233001AbjDDV7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:58:50 -0400
+        Tue, 4 Apr 2023 17:59:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A7710F4;
-        Tue,  4 Apr 2023 14:58:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEA610DF;
+        Tue,  4 Apr 2023 14:59:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 692CB63A3D;
-        Tue,  4 Apr 2023 21:58:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB45C433D2;
-        Tue,  4 Apr 2023 21:58:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1680645511;
-        bh=M4j3aiWi53EC30SoD9UhI7oaz89YQljZpPWCkpXYH9I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hXXYS/6KJKvu7eFOvXg1x1TzISVO3S8h5QsgNIHHycdJ/kTKeOb+Dn5+dhVIu+Jux
-         Hkos8yiVUSKC8/xGyKJTdTxXZ36EI5lVDi1Aw5OBy38rAMqj++P50jCZMlI22ylt4O
-         PrwUvXef9eQtjqvMqw5mLD1gkY8zWgMXw+eoDk+o=
-Date:   Tue, 4 Apr 2023 14:58:30 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v4 0/3] Ignore non-LRU-based reclaim in memcg reclaim
-Message-Id: <20230404145830.b34afedb427921de2f0e2426@linux-foundation.org>
-In-Reply-To: <CAJD7tkbZgA7QhkuxEbp=Sam6NCA0i3cZJYF4Z1nrLK1=Rem+Gg@mail.gmail.com>
-References: <20230404001353.468224-1-yosryahmed@google.com>
-        <20230404143824.a8c57452f04929da225a17d0@linux-foundation.org>
-        <CAJD7tkbZgA7QhkuxEbp=Sam6NCA0i3cZJYF4Z1nrLK1=Rem+Gg@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A95BA63A3D;
+        Tue,  4 Apr 2023 21:59:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15FBDC433D2;
+        Tue,  4 Apr 2023 21:59:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680645589;
+        bh=oVb/3Yv6tCP2RVhr47u84gv2ub6ZCrD3LzM01ty7vrk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=srKJzP4unsO7VCYXuoEw/yp2w/Da1xNjdL6eqfAk4O4BXMGD2eDCasq2ri+OolkBN
+         +GLaCazAspMZrawj5jRSVVbHh/ydzuyqxqlNRhly+PDdZoGwVCd7uh0tqPkODHY0ME
+         gIlPw1yX+155k4I850he81of9BweX0/iu3+xLsqqymbfQEJ/J7hYXwqaTx+2f4r9m4
+         0f6vOhJfrDXrQVgMUMOyd1w3HFg0/LW8qj8fftiRTNPyttBrosP2Cg8nb6j8nxaNLs
+         8rN7SYSWMf9zpCBnQ73B2PG8sF9Szly9Ro0J7A+wOXpUf9iwAvolFdy2TgSWY7Vz6w
+         gHTAwvOsIsnPw==
+Date:   Tue, 4 Apr 2023 22:59:41 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        llvm@lists.linux.dev, Weili Qian <qianweili@huawei.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Tom Rix <trix@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH V4 23/23] crypto: hisilicon/qm: Workaround to enable
+ build with RISC-V clang
+Message-ID: <20230404-viewpoint-shank-674a8940809a@spud>
+References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
+ <20230404182037.863533-24-sunilvl@ventanamicro.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="g2rJHKXDBniPI9UF"
+Content-Disposition: inline
+In-Reply-To: <20230404182037.863533-24-sunilvl@ventanamicro.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Apr 2023 14:49:13 -0700 Yosry Ahmed <yosryahmed@google.com> wrote:
 
-> On Tue, Apr 4, 2023 at 2:38 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Tue,  4 Apr 2023 00:13:50 +0000 Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > > Upon running some proactive reclaim tests using memory.reclaim, we
-> > > noticed some tests flaking where writing to memory.reclaim would be
-> > > successful even though we did not reclaim the requested amount fully.
-> > > Looking further into it, I discovered that *sometimes* we over-report
-> > > the number of reclaimed pages in memcg reclaim.
-> > >
-> > > Reclaimed pages through other means than LRU-based reclaim are tracked
-> > > through reclaim_state in struct scan_control, which is stashed in
-> > > current task_struct. These pages are added to the number of reclaimed
-> > > pages through LRUs. For memcg reclaim, these pages generally cannot be
-> > > linked to the memcg under reclaim and can cause an overestimated count
-> > > of reclaimed pages. This short series tries to address that.
-> > >
-> > > Patches 1-2 are just refactoring, they add helpers that wrap some
-> > > operations on current->reclaim_state, and rename
-> > > reclaim_state->reclaimed_slab to reclaim_state->reclaimed.
-> > >
-> > > Patch 3 ignores pages reclaimed outside of LRU reclaim in memcg reclaim.
-> > > The pages are uncharged anyway, so even if we end up under-reporting
-> > > reclaimed pages we will still succeed in making progress during
-> > > charging.
-> > >
-> > > Do not let the diff stat deceive you, the core of this series is patch 3,
-> > > which has one line of code change. All the rest is refactoring and one
-> > > huge comment.
-> > >
-> >
-> > Wouldn't it be better to do this as a single one-line patch for
-> > backportability?  Then all the refactoring etcetera can be added on
-> > later.
-> 
-> Without refactoring the code that adds reclaim_state->reclaimed to
-> scan_control->nr_reclaimed into a helper (flush_reclaim_state()), the
-> change would need to be done in two places instead of one, and I
-> wouldn't know where to put the huge comment.
+--g2rJHKXDBniPI9UF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Well, all depends on how desirable it it that we backport.  If "not
-desirable" then leave things as-is.  If at least "possibly desirable"
-then a simple patch with the two changes and no elaborate comment will
-suit.
+Hey Sunil,
 
+This one made me scratch my head for a bit..
+
+On Tue, Apr 04, 2023 at 11:50:37PM +0530, Sunil V L wrote:
+> With CONFIG_ACPI enabled for RISC-V, this driver gets enabled in
+> allmodconfig build. The gcc tool chain builds this driver removing the
+> inline arm64 assembly code. However, clang for RISC-V tries to build
+> the arm64 assembly and below error is seen.
+
+There's actually nothing RISC-V specific about that behaviour, that's
+just how clang works. Quoting Nathan:
+"Clang performs semantic analysis (i.e., validates assembly) before
+dead code elimination, so IS_ENABLED() is not sufficient for avoiding
+that error."
+
+> drivers/crypto/hisilicon/qm.c:627:10: error: invalid output constraint '+=
+Q' in asm
+>                        "+Q" (*((char __iomem *)fun_base))
+>                        ^
+> It appears that RISC-V clang is not smart enough to detect
+> IS_ENABLED(CONFIG_ARM64) and remove the dead code.
+
+So I think this statement is just not true, it can remove dead code, but
+only after it has done the semantic analysis.
+
+The reason that this has not been seen before, again quoting Nathan, is:
+"arm64 and x86_64 both support the Q constraint, we cannot build
+LoongArch yet (although it does not have support for Q either so same
+boat as RISC-V), and ia64 is dead/unsupported in LLVM. Those are the
+only architectures that support ACPI, so I guess that explains why we
+have seen no issues aside from RISC-V so far."
+
+> As a workaround, move this check to preprocessing stage which works
+> with the RISC-V clang tool chain.
+
+I don't think there's much else you can do!
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Perhaps it is also worth adding:
+Link: https://github.com/ClangBuiltLinux/linux/issues/999
+
+Cheers,
+Conor.
+
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> ---
+>  drivers/crypto/hisilicon/qm.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+> index e4c84433a88a..a5f521529ab2 100644
+> --- a/drivers/crypto/hisilicon/qm.c
+> +++ b/drivers/crypto/hisilicon/qm.c
+> @@ -611,13 +611,9 @@ EXPORT_SYMBOL_GPL(hisi_qm_wait_mb_ready);
+>  static void qm_mb_write(struct hisi_qm *qm, const void *src)
+>  {
+>  	void __iomem *fun_base =3D qm->io_base + QM_MB_CMD_SEND_BASE;
+> -	unsigned long tmp0 =3D 0, tmp1 =3D 0;
+> =20
+> -	if (!IS_ENABLED(CONFIG_ARM64)) {
+> -		memcpy_toio(fun_base, src, 16);
+> -		dma_wmb();
+> -		return;
+> -	}
+> +#if IS_ENABLED(CONFIG_ARM64)
+> +	unsigned long tmp0 =3D 0, tmp1 =3D 0;
+> =20
+>  	asm volatile("ldp %0, %1, %3\n"
+>  		     "stp %0, %1, %2\n"
+> @@ -627,6 +623,11 @@ static void qm_mb_write(struct hisi_qm *qm, const vo=
+id *src)
+>  		       "+Q" (*((char __iomem *)fun_base))
+>  		     : "Q" (*((char *)src))
+>  		     : "memory");
+> +#else
+> +	memcpy_toio(fun_base, src, 16);
+> +	dma_wmb();
+> +#endif
+> +
+>  }
+> =20
+>  static int qm_mb_nolock(struct hisi_qm *qm, struct qm_mailbox *mailbox)
+> --=20
+> 2.34.1
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+--g2rJHKXDBniPI9UF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCydzQAKCRB4tDGHoIJi
+0kS+APwI9urufiYlmUkAYkyAnD4XxPqkVAgS1QApjqn9spoehQD9GoxZzTCmlOmj
+V0HIsqbbKh/l2SrUpOETJlfKaSTkhwE=
+=P4m+
+-----END PGP SIGNATURE-----
+
+--g2rJHKXDBniPI9UF--
