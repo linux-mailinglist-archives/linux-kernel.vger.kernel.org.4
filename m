@@ -2,146 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E776D651F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583586D6524
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbjDDOVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
+        id S235488AbjDDOWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235771AbjDDOV2 (ORCPT
+        with ESMTP id S235466AbjDDOWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:21:28 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2119.outbound.protection.outlook.com [40.107.255.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE99210C2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:21:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E1/+KnR2QvyegDH0HqgyL+Cgxcu6L6aiEuBHXs5U93qukMIvfWFJoYRdSJQmhHtHM0PS4fldk4rP1+ghteuve4qWBsGDPP3Blv6QRz0bVo4/bfSxL/fkjci+/G1DzItrfopxBh2gt2uVoeSv7c3jlb7ZrJOHM/feOhcRRng1YS8rDplCdEgX0de6Z6dSF2fCJkvERmHgJHX0MWosVcG6fV6+NEwVct1yOe9ozqyaw0Hm5Umkrfl7Wo/8GwcxTkfZ10Htm38OaGcJqrLHoncFdGbzDuLeHszMnFJMSs7PkZwZoels14ZcMXsLnKLmjFCusH0YmFzc4gm+2pcPqrcqlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mxQVT2Lab/BDVcz6BJ5VFF55WIP2l+zcFbF6B3CEPAQ=;
- b=bOx6ZtTT+9UjDk8bP7AkwHHBjJFpmP+8/YL/kxj49qdo0H9JK8U12GM7YimHey6BlCNYZJU794C6UuO4+iT3q3c5Cgw+VIaEPhB7axpfIyQ5M3Z3y5MXj0bvk9NTTg/PjDO187IQqR6yXbvQpCbOyBr397i8loO7EPCIUGuL8RXKcoS5PN36SYWvDxl3H0SP8dMSha362sHXU2GoS/gJ1Nj5X6eIqAXrR2jfQ2/gNN5RwG2hBHYsWxlEikS88fTYI6AiUJWcN507QDrFhgdwM2Mdc2THHXhkn9z9+orR60vIDXIOT0LFf5aE7tr3CB0emtnRTs2a1qR8tViq4G1FQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mxQVT2Lab/BDVcz6BJ5VFF55WIP2l+zcFbF6B3CEPAQ=;
- b=dUyJVSsTMvdUfwkmGBjEeeeOHw8FKUWz/8xlinrHlto15XzsR41drvK9iPicUvJLH0P6KFKP46GdQbh1YsFsN+xFSOQVBcCRZoLtvsV027amfa36Vy9LZEP4XfQUsClHnkaHJkOterGdPHf0daDWcbsYoSYQgK2trUCT0dkSLtsPvl5MHmveLG+qVzMdd5rBxKHgjgVJ12Q1yMH4++PIfVhsFeEuxTuXaSigpGsRj7rvo+LqLazQOswwWb+JhYjo+kob5qsQOfVgl/f3aJpdBhsojzrNItzj9wF+eYxA63uRQ7d9Th1iEAaKG40gQZitIy/egEaK0J3sPGZYqUBYxw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by KL1PR0601MB4641.apcprd06.prod.outlook.com (2603:1096:820:82::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.34; Tue, 4 Apr
- 2023 14:21:19 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c%6]) with mapi id 15.20.6254.028; Tue, 4 Apr 2023
- 14:21:19 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@coolpad.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-erofs@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] erofs: remove unnecessary kobject_del()
-Date:   Tue,  4 Apr 2023 22:21:02 +0800
-Message-Id: <20230404142102.13226-2-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230404142102.13226-1-frank.li@vivo.com>
-References: <20230404142102.13226-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0019.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::15) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Tue, 4 Apr 2023 10:22:10 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D38128;
+        Tue,  4 Apr 2023 07:22:02 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id bj20so24316479oib.3;
+        Tue, 04 Apr 2023 07:22:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680618122;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M9ksvzbq2gQvGRcF4d3P6MDp1Pp3aLiB4KPYctYyISA=;
+        b=bHbOFbGbGFsR9Pb4Oo+S7r9160sRZRxNEIy8ZYNvCJL2l3f6mKZnBBhV2NZyTbYl70
+         PYE0uuDUo9Bf8YZ2DYyCn7aT01osXXkdpMhUzhEuU8WIAH53oDf1OhgLdbdEoaKxdX5v
+         OicwVa7zfQRVrSAu8NP6o+OE01O7+CpvPW39dqfjUDgNFqysvCHP1hCEyZSuGO36JqgO
+         5AgQS/IH68bD/O3GmX/nfE8YLXyxIaMKKMgk5kWXJB4ynEv5kBYbqknvVEnEWAw7Q2Sk
+         mnYry+GZynLD8lDew/kiBd/5R5zuynfH+VOn9SaQLkK7KOc+Q1oZldDqetdXScXPNVBR
+         abjw==
+X-Gm-Message-State: AAQBX9eJ7kjarU4UUb6yJmBW1ZZ1x8lrhh0NdB5rOE5bD5vyuKite9m4
+        uzEuydbMaXlY0DyeTJCbFA==
+X-Google-Smtp-Source: AKy350bfLilcIpHOP2DnsH5J5CDj+2U3bSb1BmQbgZesFcN/dqwmrnUzaqaa+zuxaQlLVp6rk6pDMQ==
+X-Received: by 2002:aca:bed5:0:b0:387:205b:70c7 with SMTP id o204-20020acabed5000000b00387205b70c7mr1313305oif.13.1680618121888;
+        Tue, 04 Apr 2023 07:22:01 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p8-20020acabf08000000b003871471f894sm2497572oif.27.2023.04.04.07.22.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 07:22:01 -0700 (PDT)
+Received: (nullmailer pid 3829375 invoked by uid 1000);
+        Tue, 04 Apr 2023 14:21:59 -0000
+Date:   Tue, 4 Apr 2023 09:21:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Patrick Lai <quic_plai@quicinc.com>
+Subject: Re: [PATCH v2 2/7] dt-bindings: soundwire: qcom: add 16-bit sample
+ interval
+Message-ID: <20230404142159.GA3827653-robh@kernel.org>
+References: <20230403132503.62090-1-krzysztof.kozlowski@linaro.org>
+ <20230403132503.62090-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB4641:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c4d76f0-efda-438c-4da8-08db3517dba5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hEigWHB7ymj9FXfc+/MkC+B1nERNC37zygfegOZvqVZcp4YNK6kfw1BCdDpcdAj3003gsoMqyXKfDKmI4Ko9MKhBF1GLDYeQfxMSD/RR1PmmplEAeIYdXQSrYSb5EdRXJVRqk13WO+MeyNCwz1Apot5TTAe4ziaWOY+Pul7U5JXSLDof6OtDhjx7azXnzdQ2H1DcW8QH3QxuHrPg7Sig9tgstNaQTV4YVhOGaSk1Ou2WY7onGNIQRcR6DUreGhRNS0aLRwlXpsLJRppvRlatI4uakggtbXp+rAQ720wADGBDXwbYimN+sitdIM9q6AcUrTx6efvi8v3ZntVTth+1FC33IJXaErSFjCQOy75Ib4lkkpMfWqy0jdcI8buSQYoxOUwa8190WjgmkOK6iPy6O4IKUFQsWQEMaCeUmwimzNueYEltnDpNrYXLUos2NYN1vMXOA3OeaXoLyMqZtYgccWms/pbRCop1VZebfbe+J4xK13Bi1nYU2ePKd+wq2R6dX5tLHYqNn6AlK1Px7lihkXCeAhVuN7FYhzha5kogZLZLSbPesRB6Dp4mK0Vdg0IhOS7jFawZuTF6bxHPLHPj218tspETFQMVZFWr8yVfvRyyW2owASA/6UFu7JCfelBF
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(136003)(39860400002)(366004)(451199021)(4326008)(6666004)(2616005)(6506007)(66476007)(66556008)(186003)(66946007)(26005)(6512007)(1076003)(8676002)(6486002)(41300700001)(2906002)(52116002)(83380400001)(4744005)(5660300002)(86362001)(316002)(8936002)(478600001)(36756003)(38100700002)(110136005)(38350700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2h/u2U4diDAUWqIZvttvyUqyMY7ukGVMMnTtgBYaq6lbnUKERwFk6Rg4AC4F?=
- =?us-ascii?Q?XF9XVxGya7ITOIWPITnTOhbPjuQCDGbV9MVjQE9UJCtZFNcsl8aCSdPJUP3p?=
- =?us-ascii?Q?nFzFNm/vxCCLk8kHW8Tm9wzHqQM071jNumg5SdLgynlxcSlc9S9ymTaxUpts?=
- =?us-ascii?Q?ZACZjSO+h+F8/m3WbLzs7MrmTu7BjaumMvvgEBfO1uNbmztiSQJcFa6YwzWe?=
- =?us-ascii?Q?LSHXzSjZOMXjaP3g+wkjTIuyngcF5Ct9lCx/oVTnuKyvgS1jw7JQ+19kh/v9?=
- =?us-ascii?Q?ym84z2sLwL660f3DAdLnW4t7sE8obmRgLB0ENUWe1SzMnZk6GeS3d7IRvj2D?=
- =?us-ascii?Q?v7Ddzq+ZFb2C6FrnE4bGEo2vtUEgeiqtBmR9EYc+7Z3dYkTvCLDjxxqUPjXG?=
- =?us-ascii?Q?P9Xyvn3b9aum6Ie8hEor8S92Wnav9Twx2sn4KSv2ZQLQFiezoqnuvqnAVMke?=
- =?us-ascii?Q?V2S/wvQwzj+QkUbjD7zjp0MWOV4x99alumz+WLA1S9pqGt5Y/AQiakuJgNS7?=
- =?us-ascii?Q?hZc1oVE9V9YGqzzrR7oDsaN74zuJCMMXCizQA5L2wlllu2QngQCMsGlaCDI2?=
- =?us-ascii?Q?zcmzl+j8Kic+3A0UsBmEOukhpO3GjvvEONDnaUNmVFCzJw25r3Dw7uqehK1z?=
- =?us-ascii?Q?i3iTY7sTWosvsdvhl5gwOdDQ+fALGleozPa3qNLjmg1t5nTlXhJ3v6WjCWJS?=
- =?us-ascii?Q?mqx/13bUGjg+dv3m2jvtatkanlFyZWtlZKIbxnRVP79wn7jDyIlexgq5yPxr?=
- =?us-ascii?Q?mq1TFe1TylYmUKLZcVCgtxgTgqTM7cr4uR+YCB6PIydH430PGJGC7qKZAeTT?=
- =?us-ascii?Q?H81m2DgABaSqNDgdgA9efPaDfCwZyJv+oGUlbKTMXKa9c6u/0y5TOENQA3+a?=
- =?us-ascii?Q?hsdBBk1P/raT8HlT2V7i6wX4Jd6g8yy96OZx/180x4Gh78spFm+672hlQu4Q?=
- =?us-ascii?Q?Tp2IBdDlBN1B5mVkrtLKjEsccmWCcKa2MCZrZ6u+hk9eCOf2Mc1EPESOmuXz?=
- =?us-ascii?Q?ACocEnBtEt4DpdbSr/0ohoNJV2GusTvmiayE0NyFE1nMIbaf7ga7Jpfnzvyj?=
- =?us-ascii?Q?05f55RTyZDIQt+oRNkanUPpjxkKq2c3b0b+2h94xj6vZNUuJEgsiRMgs2YQT?=
- =?us-ascii?Q?zWmCV+dfaI9FR22MxNwrsOdG1nK7DeLWK0SciOfm86pxsAQUroxVcNCRsj0E?=
- =?us-ascii?Q?crs6Swvrze++Af58WC4n0fuJox7svRyuapGMa7igl8m61uax+pxznrrSBcR3?=
- =?us-ascii?Q?5oGW+2PJquEGkzIr4CF/3vyoTvGcyw1pv+keVvovdkG29OlZ6JiYsKG6v3I4?=
- =?us-ascii?Q?caRdMYS2IjNijImvKofVTIXaa+T9/cb/WEY/drCMqlU/PDzGdl7ZUlJCoo5N?=
- =?us-ascii?Q?aitDdEtbvPPG9M6BunctQqB5vTnvzkV1Ry2afXxCqrQxSgpoRpv54ffT+k/o?=
- =?us-ascii?Q?TqUYvq9nCI+SD0sTjlkkAuUVnD639kJTDOdk6yqW0li/eifmuOfg+nmrzatk?=
- =?us-ascii?Q?+KQrCYEztqWNBpkiLfAjbDHR1kMp4NjPIBaXG73bk6IszY+Iix8aRSWeopyM?=
- =?us-ascii?Q?ciEHjCsJYE0XeZEn6Wn43WGRuXhOc5q/LAObLKGj?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c4d76f0-efda-438c-4da8-08db3517dba5
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 14:21:19.1068
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d+2YK0yB8HhBCuF/nC+WbQlr1kTaI+eXBT3oRFW7VumNJ/Tft+2pc5Wbtv0W4jQuiEfize7Csce6VIni9t8yhw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4641
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403132503.62090-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kobject_put() actually covers kobject removal automatically, which is
-single stage removal. So it is safe to kill kobject_del() directly.
+On Mon, Apr 03, 2023 at 03:24:58PM +0200, Krzysztof Kozlowski wrote:
+> The port sample interval was always 16-bit, split into low and high
+> bytes.  This split was unnecessary, although harmless for older devices
+> because all of them used only lower byte (so values < 0xff).  With
+> support for Soundwire controller on Qualcomm SM8550 and its devices,
+> both bytes will be used, thus add a new 'qcom,ports-sinterval' property
+> to allow 16-bit sample intervals.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/soundwire/qcom,soundwire.yaml    | 22 +++++++++++++++++--
+>  1 file changed, 20 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
+> index c283c594fb5c..883b8be9be1b 100644
+> --- a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
+> +++ b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
+> @@ -86,7 +86,7 @@ properties:
+>    qcom,ports-sinterval-low:
+>      $ref: /schemas/types.yaml#/definitions/uint8-array
+>      description:
+> -      Sample interval low of each data port.
+> +      Sample interval (only lowest byte) of each data port.
+>        Out ports followed by In ports. Used for Sample Interval calculation.
+>        Value of 0xff indicates that this option is not implemented
+>        or applicable for the respective data port.
+> @@ -94,6 +94,19 @@ properties:
+>      minItems: 3
+>      maxItems: 16
+>  
+> +  qcom,ports-sinterval:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      Sample interval of each data port.
+> +      Out ports followed by In ports. Used for Sample Interval calculation.
+> +      Value of 0xffff indicates that this option is not implemented
+> +      or applicable for the respective data port.
+> +      More info in MIPI Alliance SoundWire 1.0 Specifications.
+> +    minItems: 3
+> +    maxItems: 16
+> +    items:
+> +      maximum: 0xffff
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/erofs/sysfs.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Why not use uint16-array?
 
-diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-index 435e515c0792..c3ba981b4472 100644
---- a/fs/erofs/sysfs.c
-+++ b/fs/erofs/sysfs.c
-@@ -240,11 +240,8 @@ void erofs_unregister_sysfs(struct super_block *sb)
- {
- 	struct erofs_sb_info *sbi = EROFS_SB(sb);
- 
--	if (sbi->s_kobj.state_in_sysfs) {
--		kobject_del(&sbi->s_kobj);
--		kobject_put(&sbi->s_kobj);
--		wait_for_completion(&sbi->s_kobj_unregister);
--	}
-+	kobject_put(&sbi->s_kobj);
-+	wait_for_completion(&sbi->s_kobj_unregister);
- }
- 
- int __init erofs_init_sysfs(void)
--- 
-2.35.1
-
+> +
+>    qcom,ports-offset1:
+>      $ref: /schemas/types.yaml#/definitions/uint8-array
+>      description:
+> @@ -219,10 +232,15 @@ required:
+>    - '#size-cells'
+>    - qcom,dout-ports
+>    - qcom,din-ports
+> -  - qcom,ports-sinterval-low
+>    - qcom,ports-offset1
+>    - qcom,ports-offset2
+>  
+> +oneOf:
+> +  - required:
+> +      - qcom,ports-sinterval-low
+> +  - required:
+> +      - qcom,ports-sinterval
+> +
+>  additionalProperties: false
+>  
+>  examples:
+> -- 
+> 2.34.1
+> 
