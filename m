@@ -2,48 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFB86D6DF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2E16D6DF3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 22:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235981AbjDDUWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 16:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
+        id S235869AbjDDUXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 16:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235967AbjDDUWq (ORCPT
+        with ESMTP id S232851AbjDDUXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 16:22:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC5C4205
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 13:22:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53DFB63001
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 20:22:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDAE0C433D2;
-        Tue,  4 Apr 2023 20:22:42 +0000 (UTC)
-Date:   Tue, 4 Apr 2023 16:22:41 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v3] tracepoint: Fix CFI failures with tp_sub_func
-Message-ID: <20230404162232.1b2f4c2f@gandalf.local.home>
-In-Reply-To: <ZCwDAnRHjNr9ZftR@FVFF77S0Q05N>
-References: <20230324123142.7463-1-mathieu.desnoyers@efficios.com>
-        <75dbeff6-fd0c-aec1-5821-919088eda6c4@efficios.com>
-        <ZCwDAnRHjNr9ZftR@FVFF77S0Q05N>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 4 Apr 2023 16:23:49 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10699170F;
+        Tue,  4 Apr 2023 13:23:48 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id h25so43886128lfv.6;
+        Tue, 04 Apr 2023 13:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680639826;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ONIO3Xsuk99m4ItJo+QZlE9pAbS3SFz60UJpwbYuv9E=;
+        b=mSTY3ui2/XkY66nn3lsJA4XtF/pkhNouxlbyFrAfnyVZCmF1GBJaJjiu8Cz8tyONub
+         WjsZwnSQgM0nu8CT/Hqxpcfo1r42e4a0HkM0FoLcfyc67zlKjjZF0Th0l/E0dIY+rCPN
+         RCh8W586RZqOqv/lvKZ6PbT5D/IWRq8JLVQbbzxAJY003Fhz7jaZAkzuGkCLBeIKIPgC
+         5lncCs5/C0hbhIBucR897F00ENvVCvVgIG0TevuS3urFrrQbV7WNPnbqtV0OIksK94lG
+         GJXmQZI4usxYzCBOIcKGSbI7D66/TDxAnk8B92XB8xoAhHgkhIJo3Hw4/yorHy+6YbSN
+         qEvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680639826;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ONIO3Xsuk99m4ItJo+QZlE9pAbS3SFz60UJpwbYuv9E=;
+        b=W535UQKffCjNkiHcgD+pK3/IKdGsAGyh3A+6jZUd9vRIT+DMuHGxxeRq+yqAcZ758d
+         jzNTfcQ9W/motTRR7kGZBzTaGnjlBdUbQ0Ipd21twJa67YAMbjXmS+Z8pZbzRw34+f0D
+         /xj9XK0wT7Px3nms1Xw5yyPnVTUSx92QxAx+p8CukaQKtPqL/xLyI1EZ0cOag6OvbeSg
+         KZCaYGPb7zv7VJwUJlPwQMSCCwk8dfYkf0SuHndPQU5g5ckX+kZSpVWThT4zLckSeaHj
+         5zry/3N53eBsL7i0nEjJN9pZ4bA5cO1+BK9R1guEHdjhmdgNahxXmmk6BAQCl8u7/M7j
+         UPGg==
+X-Gm-Message-State: AAQBX9e8BrovK9JOUi/eouGZ6o6gEe3XBkXKVAqmCBG6mFfiwkD0Pmls
+        lmD6/eswJOgKrSanSwtjT6k=
+X-Google-Smtp-Source: AKy350ZjzzZ4kQzUPxGwuZCjm8SnY7zm1ZuBhGYkgelG4LR/U4faIN60oqv7OF89rqNiASa+nGZqoQ==
+X-Received: by 2002:ac2:511e:0:b0:4e8:893f:8079 with SMTP id q30-20020ac2511e000000b004e8893f8079mr989905lfb.64.1680639826138;
+        Tue, 04 Apr 2023 13:23:46 -0700 (PDT)
+Received: from [10.0.0.100] (host-213-145-197-218.kaisa-laajakaista.fi. [213.145.197.218])
+        by smtp.gmail.com with ESMTPSA id q17-20020a19a411000000b004d3d43c7569sm2473072lfc.3.2023.04.04.13.23.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 13:23:45 -0700 (PDT)
+Message-ID: <c3c6c922-4ab0-eef6-be87-fe5c015b2440@gmail.com>
+Date:   Tue, 4 Apr 2023 23:23:52 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>, vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srk@ti.com, vigneshr@ti.com
+References: <20230404081158.1266530-1-s-vadapalli@ti.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+Subject: Re: [PATCH] dmaengine: ti: k3-udma-glue: do not create glue dma
+ devices for udma channels
+In-Reply-To: <20230404081158.1266530-1-s-vadapalli@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,20 +76,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Apr 2023 11:59:26 +0100
-Mark Rutland <mark.rutland@arm.com> wrote:
 
-> Sorry to ping, but are you planning to pick this up, and/or did you want this
-> resent with the Testing-by typo fixed?
+
+On 04/04/2023 11:11, Siddharth Vadapalli wrote:
+> From: Grygorii Strashko <grygorii.strashko@ti.com>
 > 
-> I couldn't spot it in the tracing tree, and I'm not sure if it's still on your
-> TODO list for review or has just been missed.
+> In case K3 DMA glue layer is using UDMA channels (AM65/J721E/J7200) it
+> doesn't need to create own DMA devices per RX/TX channels as they are never
+> used and just waste resources. The UDMA based platforms are coherent and
+> UDMA device iteslf is used for DMA memory management.
+> 
+> Hence, update K3 DMA glue layer to create K3 DMA glue DMA devices per RX/TX
+> channels only in case of PKTDMA (AM64) where coherency configurable per DMA
+> channel.
+> 
+> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> ---
+>   drivers/dma/ti/k3-udma-glue.c | 70 +++++++++++++++++------------------
+>   1 file changed, 34 insertions(+), 36 deletions(-)
+> 
+> diff --git a/drivers/dma/ti/k3-udma-glue.c b/drivers/dma/ti/k3-udma-glue.c
+> index 789193ed0386..b0c9572b0d02 100644
+> --- a/drivers/dma/ti/k3-udma-glue.c
+> +++ b/drivers/dma/ti/k3-udma-glue.c
+> @@ -293,19 +293,18 @@ struct k3_udma_glue_tx_channel *k3_udma_glue_request_tx_chn(struct device *dev,
+>   	}
+>   	tx_chn->udma_tchan_id = xudma_tchan_get_id(tx_chn->udma_tchanx);
+>   
+> -	tx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
+> -	tx_chn->common.chan_dev.parent = xudma_get_device(tx_chn->common.udmax);
+> -	dev_set_name(&tx_chn->common.chan_dev, "tchan%d-0x%04x",
+> -		     tx_chn->udma_tchan_id, tx_chn->common.dst_thread);
+> -	ret = device_register(&tx_chn->common.chan_dev);
+> -	if (ret) {
+> -		dev_err(dev, "Channel Device registration failed %d\n", ret);
+> -		put_device(&tx_chn->common.chan_dev);
+> -		tx_chn->common.chan_dev.parent = NULL;
+> -		goto err;
+> -	}
+> -
+>   	if (xudma_is_pktdma(tx_chn->common.udmax)) {
 
-Actually, we may be going back to your original patches, as having a stub
-function for every trace event will allow us to attach fprobes to them. And
-we actually have a need to do that (connecting to tracepoints to get more
-info than the trace event gives).
+it might be possible to narrow it down to include a test for atype_asel 
+14 or 15, but then I would move that test to a helper (passing common as 
+parameter) and re-use it in other places to avoid getting out o sync 
+overtime.
+Might not worth the effort, just an observation.
 
-Masami is currently working on this.
+> +		tx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
+> +		tx_chn->common.chan_dev.parent = xudma_get_device(tx_chn->common.udmax);
+> +		dev_set_name(&tx_chn->common.chan_dev, "tchan%d-0x%04x",
+> +			     tx_chn->udma_tchan_id, tx_chn->common.dst_thread);
+> +		ret = device_register(&tx_chn->common.chan_dev);
+> +		if (ret) {
+> +			dev_err(dev, "Channel Device registration failed %d\n", ret);
 
--- Steve
+my guess is that the put_device() is still needed, no?
+
+> +			tx_chn->common.chan_dev.parent = NULL;
+> +			goto err;
+> +		}
+> +
+>   		/* prepare the channel device as coherent */
+>   		tx_chn->common.chan_dev.dma_coherent = true;
+>   		dma_coerce_mask_and_coherent(&tx_chn->common.chan_dev,
+> @@ -912,19 +911,18 @@ k3_udma_glue_request_rx_chn_priv(struct device *dev, const char *name,
+>   	}
+>   	rx_chn->udma_rchan_id = xudma_rchan_get_id(rx_chn->udma_rchanx);
+>   
+> -	rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
+> -	rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
+> -	dev_set_name(&rx_chn->common.chan_dev, "rchan%d-0x%04x",
+> -		     rx_chn->udma_rchan_id, rx_chn->common.src_thread);
+> -	ret = device_register(&rx_chn->common.chan_dev);
+> -	if (ret) {
+> -		dev_err(dev, "Channel Device registration failed %d\n", ret);
+> -		put_device(&rx_chn->common.chan_dev);
+> -		rx_chn->common.chan_dev.parent = NULL;
+> -		goto err;
+> -	}
+> -
+>   	if (xudma_is_pktdma(rx_chn->common.udmax)) {
+> +		rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
+> +		rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
+> +		dev_set_name(&rx_chn->common.chan_dev, "rchan%d-0x%04x",
+> +			     rx_chn->udma_rchan_id, rx_chn->common.src_thread);
+> +		ret = device_register(&rx_chn->common.chan_dev);
+> +		if (ret) {
+> +			dev_err(dev, "Channel Device registration failed %d\n", ret);
+> +			rx_chn->common.chan_dev.parent = NULL;
+> +			goto err;
+> +		}
+> +
+>   		/* prepare the channel device as coherent */
+>   		rx_chn->common.chan_dev.dma_coherent = true;
+>   		dma_coerce_mask_and_coherent(&rx_chn->common.chan_dev,
+> @@ -1044,19 +1042,19 @@ k3_udma_glue_request_remote_rx_chn(struct device *dev, const char *name,
+>   		goto err;
+>   	}
+>   
+> -	rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
+> -	rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
+> -	dev_set_name(&rx_chn->common.chan_dev, "rchan_remote-0x%04x",
+> -		     rx_chn->common.src_thread);
+> -	ret = device_register(&rx_chn->common.chan_dev);
+> -	if (ret) {
+> -		dev_err(dev, "Channel Device registration failed %d\n", ret);
+> -		put_device(&rx_chn->common.chan_dev);
+> -		rx_chn->common.chan_dev.parent = NULL;
+> -		goto err;
+> -	}
+> -
+>   	if (xudma_is_pktdma(rx_chn->common.udmax)) {
+> +		rx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
+> +		rx_chn->common.chan_dev.parent = xudma_get_device(rx_chn->common.udmax);
+> +		dev_set_name(&rx_chn->common.chan_dev, "rchan_remote-0x%04x",
+> +			     rx_chn->common.src_thread);
+> +
+> +		ret = device_register(&rx_chn->common.chan_dev);
+> +		if (ret) {
+> +			dev_err(dev, "Channel Device registration failed %d\n", ret);
+> +			rx_chn->common.chan_dev.parent = NULL;
+> +			goto err;
+> +		}
+> +
+>   		/* prepare the channel device as coherent */
+>   		rx_chn->common.chan_dev.dma_coherent = true;
+>   		dma_coerce_mask_and_coherent(&rx_chn->common.chan_dev,
+
+-- 
+Péter
