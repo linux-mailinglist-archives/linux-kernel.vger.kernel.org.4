@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DC56D63E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B27856D63E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235450AbjDDNva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        id S235408AbjDDNvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235408AbjDDNvZ (ORCPT
+        with ESMTP id S235461AbjDDNvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 09:51:25 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEF94217;
-        Tue,  4 Apr 2023 06:51:23 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id k14-20020a9d700e000000b0069faa923e7eso17341650otj.10;
-        Tue, 04 Apr 2023 06:51:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680616282;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Tue, 4 Apr 2023 09:51:42 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0701BD0
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:51:39 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id r187so38733054ybr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 06:51:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680616299;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dH0qV0hRMQiU3rBtrwZNkoVLWYzrXYIYrbxPgs77oBQ=;
-        b=imOZ1mp3KwVEXvqEaQeSv+1+2lp0C5JGyTg3US7GOpPUpVdgdoXZ5hrD/KzlwIb82O
-         WgW2LvF0hJ0UVh/DYkpf8HSl3uteDVIgMJ6TWPcQf/fkUHqet814lkwuEOpVhMreci2+
-         Db785DTMVRhSm/wbppbi/88eiJoKKXRTHKcZWH/dhsrDKea66mjsjtuRzix0TW3YzHvY
-         rdOsnoGFlJolURcLoGp+OYrQoalh88FstLh2K9qRHs6RDb6pzBpaKbBLcYDEIw21wgui
-         nAh+PfsadtHSEgFMEhOtx8H/JEr7rTYQdv6PTgyCw2fM7B/SKYPKTg7HQd6PR77D40R2
-         UbOw==
-X-Gm-Message-State: AAQBX9f5ijNKih/Ax/K0Lmla93nRCRu0ejvKWbtdrwgRoxWNG3+OkPh8
-        Q8EJoTKaOl6pkDmTMaVT/w==
-X-Google-Smtp-Source: AKy350ajbMepIhxILlKEJFxTug5uTHyx6XXjORZb9ow9pjepVuAtHVSMuR07D+VBVbYsbxkOyajiUw==
-X-Received: by 2002:a9d:1289:0:b0:68d:3fc8:7c11 with SMTP id g9-20020a9d1289000000b0068d3fc87c11mr11026951otg.12.1680616282479;
-        Tue, 04 Apr 2023 06:51:22 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r4-20020a056830134400b00697be532609sm4480817otq.73.2023.04.04.06.51.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 06:51:22 -0700 (PDT)
-Received: (nullmailer pid 3793289 invoked by uid 1000);
-        Tue, 04 Apr 2023 13:51:21 -0000
-Date:   Tue, 4 Apr 2023 08:51:21 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2] dt-bindings: input: pwm-beeper: convert to dt schema
-Message-ID: <20230404135121.GA3787069-robh@kernel.org>
-References: <20230403090640.3237060-1-peng.fan@oss.nxp.com>
- <9dc60868-b3f2-e30f-f4fe-d2fbd551d948@linaro.org>
- <DU0PR04MB9417000982CDDF5B75E309F488939@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <9422ab57-8512-0177-76fa-76347626f941@linaro.org>
+        bh=J4YY2Ln7i2hq0oc10Iv+F/nSMytyWqC2R8i3fihYHs0=;
+        b=jEXr92riDH6mScM1Fihow1FOWAzi8pYv/T5kIddUMuA65pWwIJuwm2LtV71+gI/4uZ
+         wkjoRDD16oEg+J9nlzLyY6thiJ0fehugt1GhSbqt9TAnR74/emUJTjuf0RlFUNBTytd+
+         HAFIz0AsQG9cAgfZKtjuAou7GKOM4gwvM0/VZzw5htVBP4EoGOTjmA4Czty0cMnNDlID
+         bBJXudPj9Z/1SW8YtcbaH4BLuNvd4g8ClEYW8l1e8R3N8KFQphotqe4Xno8y6dObansB
+         a58/jSz5uCbYvZIderftEMt488mkZ29jWN+eOFzhoPav8H6gKYQeIoVeRjzKdwHnbfnY
+         30oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680616299;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J4YY2Ln7i2hq0oc10Iv+F/nSMytyWqC2R8i3fihYHs0=;
+        b=2t9VjrfrGRjq+2xq8dD2XhUIxCjzDxraxwO5huNok1wr44KBiH08c/qFmPeck39wB/
+         IyBNNm+U8J1M1xKDfMatnkOUXMLlHlWBBFvpsoqarsIZ6EoEWJFsy7pOMS4x8tItTyMT
+         8MHCnEyqH3UqfI1AXblZdeQHXWzxklC2OXKepq/WTtK1xZNckPu/DWn1eZ9p4ywPH1S9
+         OwaGr2WKS/h+PS1wLscyvjRifivqHaVjjgitsoSCW4m6S9z5UnK/a/d+CdprylIlSpQH
+         9PeuLxoc2RZcKCHHVRv//ckEuNEtOvsMfhaxvOXF5PMWIFVZ+uS2mal4JRHQNDjMbTXv
+         YgVQ==
+X-Gm-Message-State: AAQBX9fECKFrNxrQVmO48bU8mVEUtaI8NHTqmowc0FpPjRy3k9rQF8Wr
+        KIVb+RhqZX9v2wSPlW9X3CaWuSixcAhgDWJItUHUj7JVfQ8DAthn
+X-Google-Smtp-Source: AKy350Z4hDyA+CjN3AQPFsgwLGlpF5ADaypBPUYYOmGdeTdX3oUilschRwpkV4TvhhY8tQ+1aOxSAfnCjwa/6l6JBlQ=
+X-Received: by 2002:a25:dfca:0:b0:b8a:b604:af0 with SMTP id
+ w193-20020a25dfca000000b00b8ab6040af0mr1337682ybg.4.1680616298842; Tue, 04
+ Apr 2023 06:51:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9422ab57-8512-0177-76fa-76347626f941@linaro.org>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230403120235.939-1-lakshmi.sowjanya.d@intel.com>
+In-Reply-To: <20230403120235.939-1-lakshmi.sowjanya.d@intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 4 Apr 2023 15:51:27 +0200
+Message-ID: <CACRpkdaJW52QstfUM=AgFe39ZvK5mKj3ZMVrCzBmcKHfq4-Q7g@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] pinctrl: Remove Intel Thunder Bay pinctrl driver
+To:     lakshmi.sowjanya.d@intel.com
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        furong.zhou@intel.com, kris.pan@intel.com, pandith.n@intel.com,
+        kenchappa.demakkanavar@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 10:17:45AM +0200, Krzysztof Kozlowski wrote:
-> On 04/04/2023 08:44, Peng Fan wrote:
-> 
-> 
-> >>
-> >>> +
-> >>> +  beeper-hz:
-> >>> +    description: bell frequency in Hz
-> >>> +    minimum: 1
-> >>> +    maximum: 4
-> >>
-> >> default is 1000, so how constraints can be lower than default? Also - missing
-> >> default.
-> > [Peng Fan] 
-> > I am not sure what maximum value should be set. Previously I set 256, Rob
-> > questioned it.
-> 
-> Yep, because 256 is power of 2, so really does not look correct. It is
-> still lower than default, right?
+On Mon, Apr 3, 2023 at 2:02=E2=80=AFPM <lakshmi.sowjanya.d@intel.com> wrote=
+:
 
-It's Hertz and an audible (to humans) range! At most that's 60 - 
-10000Hz. I imagine any beeper h/w is capable of much narrower range than 
-that, but don't know what's typical. 
+> From: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+>
+> Remove Thunder Bay specific code as the product got cancelled
+> and there are no end customers or users.
+>
+> Signed-off-by: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
 
-Rob
+Patches applied!
+
+Yours,
+Linus Walleij
