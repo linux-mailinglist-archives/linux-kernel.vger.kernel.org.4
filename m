@@ -2,375 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBED6D6F74
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3B36D6F76
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236666AbjDDV5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
+        id S235518AbjDDV6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236577AbjDDV4w (ORCPT
+        with ESMTP id S236502AbjDDV6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:56:52 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B469F4ED6;
-        Tue,  4 Apr 2023 14:56:31 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 959F69200C7; Tue,  4 Apr 2023 23:56:28 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 930F89200C6;
-        Tue,  4 Apr 2023 22:56:28 +0100 (BST)
-Date:   Tue, 4 Apr 2023 22:56:28 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-cc:     Alex Williamson <alex.williamson@redhat.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Stefan Roese <sr@denx.de>, Jim Wilson <wilson@tuliptree.org>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v7 7/7] PCI: Work around PCIe link training failures
-In-Reply-To: <alpine.DEB.2.21.2304042200040.37565@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2304042244370.37565@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2304042200040.37565@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 4 Apr 2023 17:58:06 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9539646B1;
+        Tue,  4 Apr 2023 14:57:49 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PrhSM0fCjz4x1f;
+        Wed,  5 Apr 2023 07:57:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680645427;
+        bh=mzuca2PSgg78QbSLnxysLgNmygZTvKo9G/vazc5wdSM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=byXgA4R10T0jDk9atKL9+eBpoDqYuqqRhpHBwQwMWgH12ByvilGW/q08gqyzC/0/p
+         WfEiLYir4VRKfEGvqZXeYaykYbaQ3kBieeeMe/Qpg0v7noHTzmNc27oa/PJW5phq9P
+         +UDAt3hJMCCZjllwGCI1EMNvbYeIdpUsWAG8Mx25bS6JlUNJBmU3eu+ua+ZPXHJnmb
+         zmUUVwlDwE7frZEpd8o+WTt0/TUHh1zreGSZNmuKeVw1kzgqYGXvTYgo1Upjd/jofZ
+         Amojx3D18t+yO3CaayLFZaV+STvjsDs98NDEDF9S7K8GTPWZyAnClpZD4AzUaY0lDt
+         xxdjG7bYS/K0Q==
+Date:   Wed, 5 Apr 2023 07:57:04 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the cxl tree
+Message-ID: <20230405075704.33de8121@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/wFO2dpAMQz/.=.Hn5wAKdcy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attempt to handle cases such as with a downstream port of the ASMedia 
-ASM2824 PCIe switch where link training never completes and the link 
-continues switching between speeds indefinitely with the data link layer 
-never reaching the active state.
+--Sig_/wFO2dpAMQz/.=.Hn5wAKdcy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It has been observed with a downstream port of the ASMedia ASM2824 Gen 3 
-switch wired to the upstream port of the Pericom PI7C9X2G304 Gen 2 
-switch, using a Delock Riser Card PCI Express x1 > 2 x PCIe x1 device, 
-P/N 41433, wired to a SiFive HiFive Unmatched board.  In this setup the 
-switches are supposed to negotiate the link speed of preferably 5.0GT/s, 
-falling back to 2.5GT/s.
+Hi all,
 
-Instead the link continues oscillating between the two speeds, at the 
-rate of 34-35 times per second, with link training reported repeatedly 
-active ~84% of the time.  Forcibly limiting the target link speed to 
-2.5GT/s with the upstream ASM2824 device however makes the two switches 
-communicate correctly.  Removing the speed restriction afterwards makes 
-the two devices switch to 5.0GT/s then.
+In commit
 
-Make use of these observations then and detect the inability to train 
-the link, by checking for the Data Link Layer Link Active status bit 
-being off while the Link Bandwidth Management Status indicating that 
-hardware has changed the link speed or width in an attempt to correct 
-unreliable link operation.
+  570739ce619a ("cxl/hdm: Avoid NULL deref when component registers are mis=
+sing")
 
-Restrict the speed to 2.5GT/s then with the Target Link Speed field, 
-request a retrain and wait 200ms for the data link to go up.  If this 
-turns out successful, then lift the restriction, letting the devices 
-negotiate a higher speed.
+Fixes tag
 
-Also check for a 2.5GT/s speed restriction the firmware may have already 
-arranged and lift it too with ports of devices known to continue working 
-afterwards, currently the ASM2824 only, that already report their data 
-link being up.
+  Fixes: 757f6448b100 ("cxl/hdm: Fix double allocation of @cxlhdm")
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2203022037020.56670@angie.orcam.me.uk/
-Link: https://source.denx.de/u-boot/u-boot/-/commit/a398a51ccc68
----
-Changes from v6:
+has these problem(s):
 
-- Regenerate against 6.3-rc5.
+  - Target SHA1 does not exist
 
-- Shorten the lore.kernel.org archive link in the change description.
+Maybe you meant
 
-Changes from v5:
+Fixes: 518dd2bfb981 ("cxl/hdm: Fix double allocation of @cxlhdm")
 
-- Move from a quirk into PCI core and call at device probing, hot-plug,
-  reset and resume.  Keep the ASMedia part under CONFIG_PCI_QUIRKS.
+--=20
+Cheers,
+Stephen Rothwell
 
-- Rely on `dev->link_active_reporting' rather than re-retrieving the 
-  capability.
+--Sig_/wFO2dpAMQz/.=.Hn5wAKdcy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Changes from v4:
+-----BEGIN PGP SIGNATURE-----
 
-- Remove <linux/bug.h> inclusion no longer needed.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQsnTAACgkQAVBC80lX
+0Gx7Mwf7BA8VJZvWae247wPMASDweVtm/JzlV7GjqrqcqpFVv/s0932pqjRp5RWu
+2kqfWdlAC6hWMaxblDiNQppSl/+Ou5M4q9xtChvWenVjJQWw7PX71SbN7qBrqcxn
+kKZTrlgx+qPG1MumdZ2vh1BTeBa8OO0uu2iCO/W0yRuwSFwXcNRLbjT5V2ilGfZr
+3tSS5z0LNKlzLGLYS52QKbLQtR3d2NeaVxskoVe+n4l/QRSLFt1Ji76s9OAVx6wU
+2YDhbriI8DGEj+6Gh9JT107s74RVV4UNDVxPUFZ6bu8CFO8bwKIPwROuYDpMHYhw
+t99tu/PLJVAer4r+4VvJxEgMUndqyQ==
+=FLDW
+-----END PGP SIGNATURE-----
 
-- Make the quirk generic based on probing device features rather than 
-  specific to the ASM2824 part only; take the Retrain Link bit erratum 
-  into account.
-
-- Still lift the 2.5GT/s speed restriction with the ASM2824 only.
-
-- Increase retrain timeout from 200ms to 1s (PCIE_LINK_RETRAIN_TIMEOUT).
-
-- Remove retrain success notification.
-
-- Use PCIe helpers rather than generic PCI functions throughout.
-
-- Trim down and update the wording of the change description for the 
-  switch from an ASM2824-specific to a generic fixup.
-
-Changes from v3:
-
-- Remove the <linux/pci_ids.h> entry for the ASM2824.
-
-Changes from v2:
-
-- Regenerate for 5.17-rc2 for a merge conflict.
-
-- Replace BUG_ON for a missing PCI Express capability with WARN_ON and an
-  early return.
-
-Changes from v1:
-
-- Regenerate for a merge conflict.
----
- drivers/pci/pci.c   |  154 ++++++++++++++++++++++++++++++++++++++++++++++++++--
- drivers/pci/pci.h   |    1 
- drivers/pci/probe.c |    2 
- 3 files changed, 152 insertions(+), 5 deletions(-)
-
-linux-pcie-asm2824-manual-retrain.diff
-Index: linux-macro/drivers/pci/pci.c
-===================================================================
---- linux-macro.orig/drivers/pci/pci.c
-+++ linux-macro/drivers/pci/pci.c
-@@ -859,6 +859,132 @@ int pci_wait_for_pending(struct pci_dev
- 	return 0;
- }
- 
-+/*
-+ * Retrain the link of a downstream PCIe port by hand if necessary.
-+ *
-+ * This is needed at least where a downstream port of the ASMedia ASM2824
-+ * Gen 3 switch is wired to the upstream port of the Pericom PI7C9X2G304
-+ * Gen 2 switch, and observed with the Delock Riser Card PCI Express x1 >
-+ * 2 x PCIe x1 device, P/N 41433, plugged into the SiFive HiFive Unmatched
-+ * board.
-+ *
-+ * In such a configuration the switches are supposed to negotiate the link
-+ * speed of preferably 5.0GT/s, falling back to 2.5GT/s.  However the link
-+ * continues switching between the two speeds indefinitely and the data
-+ * link layer never reaches the active state, with link training reported
-+ * repeatedly active ~84% of the time.  Forcing the target link speed to
-+ * 2.5GT/s with the upstream ASM2824 device makes the two switches talk to
-+ * each other correctly however.  And more interestingly retraining with a
-+ * higher target link speed afterwards lets the two successfully negotiate
-+ * 5.0GT/s.
-+ *
-+ * With the ASM2824 we can rely on the otherwise optional Data Link Layer
-+ * Link Active status bit and in the failed link training scenario it will
-+ * be off along with the Link Bandwidth Management Status indicating that
-+ * hardware has changed the link speed or width in an attempt to correct
-+ * unreliable link operation.  For a port that has been left unconnected
-+ * both bits will be clear.  So use this information to detect the problem
-+ * rather than polling the Link Training bit and watching out for flips or
-+ * at least the active status.
-+ *
-+ * Since the exact nature of the problem isn't known and in principle this
-+ * could trigger where an ASM2824 device is downstream rather upstream,
-+ * apply this erratum workaround to any downstream ports as long as they
-+ * support Link Active reporting and have the Link Control 2 register.
-+ * Restrict the speed to 2.5GT/s then with the Target Link Speed field,
-+ * request a retrain and wait 200ms for the data link to go up.
-+ *
-+ * If this turns out successful and we know by the Vendor:Device ID it is
-+ * safe to do so, then lift the restriction, letting the devices negotiate
-+ * a higher speed.  Also check for a similar 2.5GT/s speed restriction the
-+ * firmware may have already arranged and lift it with ports that already
-+ * report their data link being up.
-+ *
-+ * Return 0 if the link has been successfully retrained, otherwise -1.
-+ */
-+int pcie_downstream_link_retrain(struct pci_dev *dev)
-+{
-+	static const struct pci_device_id ids[] = {
-+		{ PCI_VDEVICE(ASMEDIA, 0x2824) }, /* ASMedia ASM2824 */
-+		{}
-+	};
-+	u16 lnksta, lnkctl2;
-+
-+	if (!pci_is_pcie(dev) || !pcie_downstream_port(dev) ||
-+	    !pcie_cap_has_lnkctl2(dev) || !dev->link_active_reporting)
-+		return -1;
-+
-+	pcie_capability_read_word(dev, PCI_EXP_LNKCTL2, &lnkctl2);
-+	pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
-+	if ((lnksta & (PCI_EXP_LNKSTA_LBMS | PCI_EXP_LNKSTA_DLLLA)) ==
-+	    PCI_EXP_LNKSTA_LBMS) {
-+		unsigned long timeout;
-+		u16 lnkctl;
-+
-+		pci_info(dev, "broken device, retraining non-functional downstream link at 2.5GT/s\n");
-+
-+		pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &lnkctl);
-+		lnkctl |= PCI_EXP_LNKCTL_RL;
-+		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
-+		lnkctl2 |= PCI_EXP_LNKCTL2_TLS_2_5GT;
-+		pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
-+		pcie_capability_write_word(dev, PCI_EXP_LNKCTL, lnkctl);
-+		/*
-+		 * Due to an erratum in some devices the Retrain Link bit
-+		 * needs to be cleared again manually to allow the link
-+		 * training to succeed.
-+		 */
-+		lnkctl &= ~PCI_EXP_LNKCTL_RL;
-+		if (dev->clear_retrain_link)
-+			pcie_capability_write_word(dev, PCI_EXP_LNKCTL,
-+						   lnkctl);
-+
-+		timeout = jiffies + PCIE_LINK_RETRAIN_TIMEOUT;
-+		do {
-+			pcie_capability_read_word(dev, PCI_EXP_LNKSTA,
-+					     &lnksta);
-+			if (lnksta & PCI_EXP_LNKSTA_DLLLA)
-+				break;
-+			usleep_range(10000, 20000);
-+		} while (time_before(jiffies, timeout));
-+
-+		if (!(lnksta & PCI_EXP_LNKSTA_DLLLA)) {
-+			pci_info(dev, "retraining failed\n");
-+			return -1;
-+		}
-+	}
-+
-+	if (IS_ENABLED(CONFIG_PCI_QUIRKS) && (lnksta & PCI_EXP_LNKSTA_DLLLA) &&
-+	    (lnkctl2 & PCI_EXP_LNKCTL2_TLS) == PCI_EXP_LNKCTL2_TLS_2_5GT &&
-+	    pci_match_id(ids, dev)) {
-+		u32 lnkcap;
-+		u16 lnkctl;
-+
-+		pci_info(dev, "removing 2.5GT/s downstream link speed restriction\n");
-+		pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &lnkcap);
-+		pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &lnkctl);
-+		lnkctl |= PCI_EXP_LNKCTL_RL;
-+		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
-+		lnkctl2 |= lnkcap & PCI_EXP_LNKCAP_SLS;
-+		pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
-+		pcie_capability_write_word(dev, PCI_EXP_LNKCTL, lnkctl);
-+	}
-+
-+	return 0;
-+}
-+
-+/* Same as above, but called for a downstream device.  */
-+static int pcie_upstream_link_retrain(struct pci_dev *dev)
-+{
-+	struct pci_dev *bridge;
-+
-+	bridge = pci_upstream_bridge(dev);
-+	if (bridge)
-+		return pcie_downstream_link_retrain(bridge);
-+	else
-+		return -1;
-+}
-+
- static int pci_acs_enable;
- 
- /**
-@@ -1148,8 +1274,8 @@ void pci_resume_bus(struct pci_bus *bus)
- 
- static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
- {
-+	int retrain = 0;
- 	int delay = 1;
--	u32 id;
- 
- 	/*
- 	 * After reset, the device should not silently discard config
-@@ -1163,21 +1289,37 @@ static int pci_dev_wait(struct pci_dev *
- 	 * Command register instead of Vendor ID so we don't have to
- 	 * contend with the CRS SV value.
- 	 */
--	pci_read_config_dword(dev, PCI_COMMAND, &id);
--	while (PCI_POSSIBLE_ERROR(id)) {
-+	for (;;) {
-+		u32 id;
-+
-+		pci_read_config_dword(dev, PCI_COMMAND, &id);
-+		if (!PCI_POSSIBLE_ERROR(id)) {
-+			if (delay > PCI_RESET_WAIT)
-+				pci_info(dev, "ready %dms after %s\n",
-+					 delay - 1, reset_type);
-+			break;
-+		}
-+
- 		if (delay > timeout) {
- 			pci_warn(dev, "not ready %dms after %s; giving up\n",
- 				 delay - 1, reset_type);
- 			return -ENOTTY;
- 		}
- 
--		if (delay > PCI_RESET_WAIT)
-+		if (delay > PCI_RESET_WAIT) {
-+			if (!retrain) {
-+				retrain = 1;
-+				if (pcie_upstream_link_retrain(dev) == 0) {
-+					delay = 1;
-+					continue;
-+				}
-+			}
- 			pci_info(dev, "not ready %dms after %s; waiting\n",
- 				 delay - 1, reset_type);
-+		}
- 
- 		msleep(delay);
- 		delay *= 2;
--		pci_read_config_dword(dev, PCI_COMMAND, &id);
- 	}
- 
- 	if (delay > PCI_RESET_WAIT)
-@@ -4894,6 +5036,8 @@ static bool pcie_wait_for_link_delay(str
- 		msleep(10);
- 		timeout -= 10;
- 	}
-+	if (active && !ret)
-+		ret = pcie_downstream_link_retrain(pdev) == 0;
- 	if (active && ret)
- 		msleep(delay);
- 
-Index: linux-macro/drivers/pci/pci.h
-===================================================================
---- linux-macro.orig/drivers/pci/pci.h
-+++ linux-macro/drivers/pci/pci.h
-@@ -37,6 +37,7 @@ int pci_mmap_fits(struct pci_dev *pdev,
- 		  enum pci_mmap_api mmap_api);
- 
- bool pci_reset_supported(struct pci_dev *dev);
-+int pcie_downstream_link_retrain(struct pci_dev *dev);
- void pci_init_reset_methods(struct pci_dev *dev);
- int pci_bridge_secondary_bus_reset(struct pci_dev *dev);
- int pci_bus_error_reset(struct pci_dev *dev);
-Index: linux-macro/drivers/pci/probe.c
-===================================================================
---- linux-macro.orig/drivers/pci/probe.c
-+++ linux-macro/drivers/pci/probe.c
-@@ -2549,6 +2549,8 @@ void pci_device_add(struct pci_dev *dev,
- 	dma_set_max_seg_size(&dev->dev, 65536);
- 	dma_set_seg_boundary(&dev->dev, 0xffffffff);
- 
-+	pcie_downstream_link_retrain(dev);
-+
- 	/* Fix up broken headers */
- 	pci_fixup_device(pci_fixup_header, dev);
- 
+--Sig_/wFO2dpAMQz/.=.Hn5wAKdcy--
