@@ -2,100 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912786D6828
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE536D683C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235436AbjDDQCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
+        id S235590AbjDDQEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235258AbjDDQCB (ORCPT
+        with ESMTP id S235241AbjDDQEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:02:01 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3DC1717
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:02:00 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id j2so10319463ila.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 09:02:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1680624120; x=1683216120;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=curhK01sXfmE2RlMU8WuYjmrkMgBz4YATpsIYnecl9s=;
-        b=Voe6H8asBoDcHT+e20k3gQeZBAWjN9nGktg6hvKLxI7qZX/w7TTjQ4c76fxR6H0kdr
-         l9XoSO3IVCeqx3/+Tdho7vggVvzo2WZ6NREw5t3K6LsZYymclNs7cDf7wYpBNC2qE3Dy
-         h0aB65/EpwOEjNDSGcJcrXyJL+6nrR1/tHx+hd4JpeehnF6CAA/4bIUp3UyFoeQp3GlG
-         1dNJJKsA3XVtPzBsXeJc6vfz8sMXjs1vR6t+wsvoNDLRdFVmQZqDShLchwhmpeZt93Fp
-         ZElvqp3NL//6FkB8Dbgtq1Cz6HYchWJp0m7gdjulHW4WBOl5RKHXYF0xVNRCBQYu625L
-         HUTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680624120; x=1683216120;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=curhK01sXfmE2RlMU8WuYjmrkMgBz4YATpsIYnecl9s=;
-        b=zH8yFz/qZccD+lWUpShS+xHJNKQqpvMawdeuicjJGCavLU90hLHtZUoDEkyQ5BCIcK
-         SpTErZmJmkYvay7BQW1k1RSHhyhP69WUfZOm8MB5HSH+BkSHHEvgewo8u0bi5EiFEann
-         2Z0QX2d9UQnafIdcaXZQNVqFL0uDgVwMnEfxNitvn65VXuJg8heS12R6/4O9aSqKoipS
-         vDCuasUvLgk53hHJ3cso5FH+qbLEOyoLeAvGMT9nOk3e8n+2iAPVWXyiXz5rZVFDeUr2
-         o/3KE+ftPbwjPbsNAtPbAZdT5WZ80x4sH5Pf7plJ8K3r55XNM4Z53+XENO6r9nEC7K5A
-         Vsaw==
-X-Gm-Message-State: AAQBX9f97YSqC5f2ozm37jY7YsuTAk6mvNOUhkBIUJVz/c7wuw9UcHyR
-        wL3w6IQJd+CBRynSPHquiJ74UQ==
-X-Google-Smtp-Source: AKy350ZvJfoL6Hx+3SqvCcTcVb7W0gEDSrd0utc/WEB4l8ZL6zAVfLpCbWwyW3n0PqeaSdsSyUVcPQ==
-X-Received: by 2002:a05:6e02:1cac:b0:326:3cfc:f702 with SMTP id x12-20020a056e021cac00b003263cfcf702mr133522ill.2.1680624119970;
-        Tue, 04 Apr 2023 09:01:59 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id z3-20020a029383000000b004062e2fdf23sm3332885jah.74.2023.04.04.09.01.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 09:01:59 -0700 (PDT)
-Message-ID: <2bbdb38b-a3ac-5127-23c0-56badd113538@kernel.dk>
-Date:   Tue, 4 Apr 2023 10:01:58 -0600
+        Tue, 4 Apr 2023 12:04:23 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097063AB5;
+        Tue,  4 Apr 2023 09:04:22 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 75E1D5C006A;
+        Tue,  4 Apr 2023 12:04:21 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 04 Apr 2023 12:04:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1680624261; x=1680710661; bh=B7
+        /5AIBnfIH/2s6wMTpXdZQPThBIIGqSpAmW70gcxJ8=; b=SUYHFB99wp5EVSYI4A
+        gEXfk4DR2sIW53SKv/sK8mQ40h9uHeZar2fOLogWctRXeyONjcRP5mkOyj43e20q
+        44m/5PqF9aAGQ0H6jYWa0EMDMo1k0AEYvZSylvUEiEJO0KL5m24acn6OocLRekEw
+        My46wpqs4Ug+IxaK7MtBwRQFiKV5afdHzg95mVg6idRaOaSZ2EhS4N5w2ywV6oM8
+        SVEpKF67XSH/o8uayDtAZZb7mrm0CKULLwYjV5S4fIWgTCC2otNNEA3wPcyeGr2l
+        QDqPst680TbS1zQz8M3lz8O2jfjC2txXhLwHcGEIx6ahePX1hRuAdZ7noQzjJDQQ
+        0Ebg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680624261; x=1680710661; bh=B7/5AIBnfIH/2
+        s6wMTpXdZQPThBIIGqSpAmW70gcxJ8=; b=vZBInLoRUKTwFqkSv7Om1qQpT0X9Q
+        NcFP90yaX0kv2V8raXfljaw0C0qKHuB+wmZQ2A74HefTdA+0wJvziBERC/2gwlD2
+        K+adDuhmGi25+PR/UJ05w+Q/D7qsVueSsn0TLpV3dH4guPg8lSJaEEJBcuDiM8Oi
+        hksBILaaknSQ4z8MqV6fNeO8lj9m1Dpu3acfAcCLRPvy1fsmMeW3cJL8WwdfSank
+        l7hr4UX4wL0O1gsomnV3KQNDy1eprXCxHoj3tPYZVMKB9RZpMp8HcSiRc+ygcKpY
+        613ebUUXdtNV5QE+8VkZ8Hp5EkZ/zUSq7rMQoBrLEfYZ+QeRetARqZB4A==
+X-ME-Sender: <xms:hUosZKD9yIXHX1ngbO9PMdL2NNmrCIaLr69DgD70Oa2J0kPmzBOY1g>
+    <xme:hUosZEjZ52G6SYecvog42CHGvsTJE-JFJ0Xi4Y2VILzNAeO8JWIS8c5CH-rr52dJi
+    vFzP_l8NBSr4mB2A-g>
+X-ME-Received: <xmr:hUosZNmLrrIX4CNFcSdwpp4ANTIgzs2je6h05rrUhipLQlDAsLEALASX3cd5SfRlajEbicpv8sBOBPavSp1mzxRKtvEIDrk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:hUosZIzt5USDVNgBRVjmO02gVpu3Mh1sgxkyKJkdzez4VQo55eUUKg>
+    <xmx:hUosZPSwpYpkmyfhNFJE_ufFjg0Vs-SYc4NmMJhxeQWQN6iuXpHbwQ>
+    <xmx:hUosZDYsXh9UMf1r5abS4VR4xyngz_VmqAI7dt31IYU3P8c4cyxxfw>
+    <xmx:hUosZOBnLbfNxdFy2qK1moPd_tGUDaNOL5kxABGqVGYWyZywAj3Ukw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Apr 2023 12:04:20 -0400 (EDT)
+Date:   Tue, 4 Apr 2023 18:04:19 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Rob Herring <robh@kernel.org>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH 7/7] dt-bindings: display: add panel-timing property to
+ sitronix,st7789v
+Message-ID: <20230404160419.xlnlxq7sbsqopfwo@houat>
+References: <20230314115644.3775169-1-gerald.loacker@wolfvision.net>
+ <20230314115644.3775169-8-gerald.loacker@wolfvision.net>
+ <20230316215735.GA3940832-robh@kernel.org>
+ <dd26836f-d54c-65d1-0acc-8a09745bb066@wolfvision.net>
+ <20230329091636.mu6ml3gvw5mvkhm4@penduick>
+ <d5a31f75-eb93-0ff2-cd5b-19cdec58e103@wolfvision.net>
+ <20230330145811.asot2cvux4ebbeqy@penduick>
+ <5f1f90e2-eee8-d941-e4b0-7f2411a9d415@wolfvision.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/2] bio iter improvements
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        willy@infradead.org
-References: <20230327174402.1655365-1-kent.overstreet@linux.dev>
- <ZCIVLQ6Klrps6k1g@infradead.org> <ZCNN2GE3WBjMkLkH@moria.home.lan>
- <ZCrsbv+zKGf4jvUm@infradead.org> <ZCsAhDpsiNWpiAxS@moria.home.lan>
- <ZCxAIR8pxOfSE6OR@infradead.org> <ZCxGdj3JKl2RPUJW@moria.home.lan>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZCxGdj3JKl2RPUJW@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="v7utqc2px55llm33"
+Content-Disposition: inline
+In-Reply-To: <5f1f90e2-eee8-d941-e4b0-7f2411a9d415@wolfvision.net>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> Starting to get personal instead tends to not help to convince your
->> reviewers that it's really useful in general.
-> 
-> I know you and others like to talk a lot about what you want as
-> maintainers and reviewers - but I find that the people who are the
-> loudest and the most authoritarian in that respect tend not to be the
-> people who drive discussions forward in productive ways.
 
-One issue is certainly that nobody wants to engage with people that
-instantly try and make this personal, or just uncomfortable in general.
-Then it's better to focus on other things that are more rewarding and
-pleasant, nobody needs extra drama in their life. I sure as hell don't.
-And unfortunately I find that your postings most often degenerate to
-that. Which is a shame, because there's good stuff in a lot of these
-patches, but it's often not worth the time/energy investment because of
-it.
+--v7utqc2px55llm33
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Jens Axboe
+On Fri, Mar 31, 2023 at 11:36:43AM +0200, Michael Riesch wrote:
+> On 3/30/23 16:58, Maxime Ripard wrote:
+> > On Wed, Mar 29, 2023 at 12:08:50PM +0200, Michael Riesch wrote:
+> >> On 3/29/23 11:16, Maxime Ripard wrote:
+> >>> On Thu, Mar 16, 2023 at 11:29:53PM +0100, Michael Riesch wrote:
+> >>>> Hi Rob,
+> >>>>
+> >>>> On 3/16/23 22:57, Rob Herring wrote:
+> >>>>> On Tue, Mar 14, 2023 at 12:56:44PM +0100, Gerald Loacker wrote:
+> >>>>>> The sitronix-st7789v driver now considers the panel-timing propert=
+y.
+> >>>>>
+> >>>>> I read the patch for that and still don't know 'why'. Commit messag=
+es=20
+> >>>>> should answer why.
+> >>>>>
+> >>>>>> Add the property to the documentation.
+> >>>>>
+> >>>>> We generally don't put timings in DT for panels. Why is this one=20
+> >>>>> special?
+> >>>>
+> >>>> For now, having the timings in the device tree allows for setting the
+> >>>> hsync/vsync/de polarity.
+> >>>>
+> >>>> As a next step, we aim to implement the partial mode feature of this
+> >>>> panel. It is possible to use only a certain region of the panel, whi=
+ch
+> >>>> is helpful e.g., when a part of the panel is occluded and should not=
+ be
+> >>>> considered by DRM. We thought that this could be specified as timing=
+ in DT.
+> >>>>
+> >>>> (The hactive and vactive properties serve as dimensions of this cert=
+ain
+> >>>> region, of course. We still need to specify somehow the position of =
+the
+> >>>> region. Maybe with additional properties hactive-start and vactive-s=
+tart?)
+> >>>>
+> >>>> What do you think about that?
+> >>>
+> >>> I don't see why we would need the device tree to support that. What y=
+ou
+> >>> described is essentially what overscan is for HDMI/analog output, and=
+ we
+> >>> already have everything to deal with overscan properly in KMS.
+> >>
+> >> Thanks for your response, but I am afraid I don't quite follow.
+> >>
+> >> How are we supposed to expose control over the hsync/vsync/data enable
+> >> polarity? I only know that the display controller and the panel need to
+> >> agree on a setting that works for both. What is the canonical way to do
+> >> this?
+> >=20
+> > So typically, it would come from the panel datasheet and would thus be
+> > exposed by the panel driver. st7789v is not a panel itself but a (pretty
+> > flexible) panel controller so it's not fixed and I don't think we have a
+> > good answer to that (yet).
+>=20
+> Then it seems to me that creating a panel driver (=3D st8879v panel
+> controller driver with a new compatible) would make sense.
 
+I don't see why? The entire controller is the same except (maybe) for
+some initialization data. Doing a new driver for it seems like taking
+the easy way out?
 
+> By coincidence Sebastian Reichel has come up with this approach
+> recently, see
+> https://lore.kernel.org/dri-devel/20230317232355.1554980-1-sre@kernel.org/
+> We just need a way to resolve the conflicts between the two series.
+>=20
+> Cc: Sebastian
+
+That's not a new driver though? That approach looks sane to me.
+
+> >> A different question is the partial mode, for which (IIUC) you suggest
+> >> the overscan feature. As I have never heard of this before, it would be
+> >> very nice if you could point me to some examples. Where would the
+> >> effective resolution be set in this case?
+> >=20
+> > So, back when CRT were a thing the edges of the tube were masked by the
+> > plastic case. HDMI inherited from that and that's why you still have
+> > some UI on some devices (like consoles) to setup the active area of the
+> > display.
+> >=20
+> > The underlying issue is exactly what you describe: the active area is
+> > larger than what the plastic case allows to see. I don't think anyone
+> > ever had the usecase you have, but it would be the right solution to me
+> > to solve essentially the same issue the same way we do on other output
+> > types.
+>=20
+> OK, we'll look into the overscan feature. But still the information
+> about the active area should come from the driver, right?
+
+No, the userspace is in charge there.
+
+Maxime
+
+--v7utqc2px55llm33
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZCxKgwAKCRDj7w1vZxhR
+xVipAP9Iuopj25k9qKGAx0RxPd382YqPkKlLJHe75NBMZWCIEgEA+Yk5S6h0cLuD
+lqjyBNtPVjpd1r1ePFYCbs/04ufdNwQ=
+=tyEC
+-----END PGP SIGNATURE-----
+
+--v7utqc2px55llm33--
