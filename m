@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C848D6D6A70
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F17386D6A6F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236183AbjDDRXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S236097AbjDDRXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236088AbjDDRXF (ORCPT
+        with ESMTP id S236086AbjDDRXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Apr 2023 13:23:05 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB8B55AB
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:22:44 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id t10so133434102edd.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:22:44 -0700 (PDT)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCCA5B8C
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:22:45 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id ek18so133634548edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:22:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680628963;
+        d=linaro.org; s=google; t=1680628965;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LDzlzqq+yvKoEoeTAB2VQWwWQLTQznBO+pgzOwe70fc=;
-        b=B/CB770D9L/cAHGEwv3PmEI5TyI61G9IQece3sPOe13q9W1pX8wojtfvWJlJgz0REz
-         4edHxrvh2vbHKQy9ShGk7Ruo1V/wW1hcZbW/Oy5Raf4ZWZs1MaE/44WEILx2rmcuHPhg
-         XD7yo5gPAarcq97z6Ode0kYlFkQzeAMKYX4/a+DnyhxkX/wjE61MlqahWU8qKPuiPCvf
-         rjB9ObD7K6rFw+XKbSm+m0jM8edukYblFvZrEA3uDpvxQ5yu84rgHG4EcLbA7/ASd7d6
-         CGHcXAIJKm+3D5YB7Le6/kzSVuYIBy1YILWuUSTMVcp2JkuY4JC0Ng78OF2CRv3y4+oB
-         qlXQ==
+        bh=55/HsPbECFGP1PL1OpKRnZp06obnPN7JssLV3bTa6kY=;
+        b=M2E8W7Y02eGJTtZLnCueU6ATNrT5ScFOYtIpHpI6zkuUbqW2HMGzI7zjFrQXEgifx0
+         WdvzH8z0pO03ulESrFKOYHRhB5xn2Kml/odEK44rAKPzuQi2MpUE7+0Q5U51BDDln614
+         kcWtiz+9ub8PdUv8K0CcMk12oBFE7iR+yxZoQYj9z5y8vODJFhA+vgAzv+XOAygudgL7
+         2pn0ap+NCrgquBazcSU/LuZx1GKXcaDIU3V+jBtT1ygWufmIiUH3AXZp6BzV9EXLvwnC
+         pNlG98EGcAS/gIfzcdN4RlOUKrrB1f+FD6tvbaa69BgoIzOCzTvVvsAUgRDMCd1wEo3J
+         N85g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680628963;
+        d=1e100.net; s=20210112; t=1680628965;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LDzlzqq+yvKoEoeTAB2VQWwWQLTQznBO+pgzOwe70fc=;
-        b=cnJDgGOcvs918ptatMajvWhL3OLEet0WSzDaoZvgTuPf1AOzPECTt5KX5rNhcgpcGI
-         kb1V3QVgMXPi+zcg20eOcRFedMEJf2AzTVE3ehL5u4aMgoWaZi32Q43/9knjdlopSXoN
-         88MfKQao4aT1QKjAb8hNwBNayUs6FPPi6iNfqu/V+LO0B1czBH3RjY9OhAnzoYu3dEF8
-         /UiY26B8zUmM1GzOhmzVXeVFsO3vvoqkqiXfZir7kVWXrfAE+cByFt9xQJx6/4XBh65/
-         gPIXWiVvD82tLubwy0MLuEws+W4KgNFWkx2jJrl/mJnNR10UH38wYEyjKL+fNqQUjjDX
-         kgfg==
-X-Gm-Message-State: AAQBX9f7ITyGYU/TUfNRVLmv69V0nrb5p/PZ/uOsm6vTA/yShnnNzN2d
-        SNEb2sa8B2HceqeGqPS8dCcppe9D/5OlKu6VoHg=
-X-Google-Smtp-Source: AKy350b9WhU4QktBSymlXajGmk+RPNQtB2EPRRsqZZ8Dphrb0j7lNFWBCjqo7sxAiwWISWv4Ihw0iw==
-X-Received: by 2002:a17:906:ae9a:b0:932:40f4:5c49 with SMTP id md26-20020a170906ae9a00b0093240f45c49mr318576ejb.67.1680628963071;
-        Tue, 04 Apr 2023 10:22:43 -0700 (PDT)
+        bh=55/HsPbECFGP1PL1OpKRnZp06obnPN7JssLV3bTa6kY=;
+        b=6FITfr6jTeNYgzXOkfMSrD+l/lGKMSRnGuqfn4rP5+rXIgRgvHoW3Q3EVAX9212QB9
+         vhyFliGZt9xIXyrcWonOmxbezarm/k1mzcvf2gMNzL7ghnpTOHnYE6AK/eNVByST70IO
+         xbhZranjdiN5JpEOF0AI7kL2nZ412ibTDx3dL821xqyFunG47pUr8K2nN7bVA5Jo0frL
+         xkFYNDLcjusqu8PLYPRdByEM+uqUoV14azDf6+/rEM0cqSIkQm7GyGR6AMfrzGVSzVCj
+         9AVQKNiGLmRLi8BP19OIRbICkRsr6c6uBtr+gRmsb7wFyBG82dLq9CGc5KFDudc/2qdm
+         lkyA==
+X-Gm-Message-State: AAQBX9eom7vGgbQv5d3fI8Q8zmNx7dJ597hc5X/W4BJglxSZfsgWpN3j
+        /M5y6YxKzC5ZsKdJwXH7TVLfhQyJwNKKJolMzNA=
+X-Google-Smtp-Source: AKy350ZtaeK3xkljnG68nVeuKnVaADFrYvNxg6n4gVOp2b/NZ9URm2GVykRELvPzJ2q8+ff7GuPHVQ==
+X-Received: by 2002:a17:906:e0c7:b0:895:58be:957 with SMTP id gl7-20020a170906e0c700b0089558be0957mr290833ejb.2.1680628964717;
+        Tue, 04 Apr 2023 10:22:44 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.22.41
+        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.22.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 10:22:42 -0700 (PDT)
+        Tue, 04 Apr 2023 10:22:44 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 15/40] nvmem: core: request layout modules loading
-Date:   Tue,  4 Apr 2023 18:21:23 +0100
-Message-Id: <20230404172148.82422-16-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 16/40] nvmem: core: add per-cell post processing
+Date:   Tue,  4 Apr 2023 18:21:24 +0100
+Message-Id: <20230404172148.82422-17-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
 References: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
@@ -73,55 +72,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Michael Walle <michael@walle.cc>
 
-When a storage device like an eeprom or an mtd device probes, it
-registers an nvmem device if the nvmem subsystem has been enabled (bool
-symbol). During nvmem registration, if the device is using layouts to
-expose dynamic nvmem cells, the core will first try to get a reference
-over the layout driver callbacks. In practice there is not relationship
-that can be described between the storage driver and the nvmem
-layout. So there is no way we can enforce both drivers will be built-in
-or both will be modules. If the storage device driver is built-in but
-the layout is built as a module, instead of badly failing with an
-endless probe deferral loop, lets just make a modprobe call in case the
-driver was made available in an initramfs with
-of_device_node_request_module(), and offer a fully functional system to
-the user.
+Instead of relying on the name the consumer is using for the cell, like
+it is done for the nvmem .cell_post_process configuration parameter,
+provide a per-cell post processing hook. This can then be populated by
+the NVMEM provider (or the NVMEM layout) when adding the cell.
 
+Signed-off-by: Michael Walle <michael@walle.cc>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Tested-by: Michael Walle <michael@walle.cc>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/core.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/nvmem/core.c           | 17 +++++++++++++++++
+ include/linux/nvmem-provider.h |  3 +++
+ 2 files changed, 20 insertions(+)
 
 diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 51fd792b8d70..49b4bbaf59e8 100644
+index 49b4bbaf59e8..0708f9f27898 100644
 --- a/drivers/nvmem/core.c
 +++ b/drivers/nvmem/core.c
-@@ -17,6 +17,7 @@
- #include <linux/nvmem-provider.h>
- #include <linux/gpio/consumer.h>
- #include <linux/of.h>
-+#include <linux/of_device.h>
- #include <linux/slab.h>
+@@ -54,6 +54,7 @@ struct nvmem_cell_entry {
+ 	int			bytes;
+ 	int			bit_offset;
+ 	int			nbits;
++	nvmem_cell_post_process_t read_post_process;
+ 	struct device_node	*np;
+ 	struct nvmem_device	*nvmem;
+ 	struct list_head	node;
+@@ -470,6 +471,7 @@ static int nvmem_cell_info_to_nvmem_cell_entry_nodup(struct nvmem_device *nvmem,
+ 	cell->offset = info->offset;
+ 	cell->bytes = info->bytes;
+ 	cell->name = info->name;
++	cell->read_post_process = info->read_post_process;
  
- struct nvmem_device {
-@@ -761,6 +762,13 @@ static struct nvmem_layout *nvmem_layout_get(struct nvmem_device *nvmem)
- 	if (!layout_np)
- 		return NULL;
+ 	cell->bit_offset = info->bit_offset;
+ 	cell->nbits = info->nbits;
+@@ -1563,6 +1565,13 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
+ 	if (cell->bit_offset || cell->nbits)
+ 		nvmem_shift_read_buffer_in_place(cell, buf);
+ 
++	if (cell->read_post_process) {
++		rc = cell->read_post_process(nvmem->priv, id, index,
++					     cell->offset, buf, cell->bytes);
++		if (rc)
++			return rc;
++	}
++
+ 	if (nvmem->cell_post_process) {
+ 		rc = nvmem->cell_post_process(nvmem->priv, id, index,
+ 					      cell->offset, buf, cell->bytes);
+@@ -1671,6 +1680,14 @@ static int __nvmem_cell_entry_write(struct nvmem_cell_entry *cell, void *buf, si
+ 	    (cell->bit_offset == 0 && len != cell->bytes))
+ 		return -EINVAL;
  
 +	/*
-+	 * In case the nvmem device was built-in while the layout was built as a
-+	 * module, we shall manually request the layout driver loading otherwise
-+	 * we'll never have any match.
++	 * Any cells which have a read_post_process hook are read-only because
++	 * we cannot reverse the operation and it might affect other cells,
++	 * too.
 +	 */
-+	of_request_module(layout_np);
++	if (cell->read_post_process)
++		return -EINVAL;
 +
- 	spin_lock(&nvmem_layout_lock);
+ 	if (cell->bit_offset || cell->nbits) {
+ 		buf = nvmem_cell_prepare_write_buffer(cell, buf, len);
+ 		if (IS_ERR(buf))
+diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
+index 535c5f9f3309..3bfc23553a9e 100644
+--- a/include/linux/nvmem-provider.h
++++ b/include/linux/nvmem-provider.h
+@@ -54,6 +54,8 @@ struct nvmem_keepout {
+  * @bit_offset:	Bit offset if cell is smaller than a byte.
+  * @nbits:	Number of bits.
+  * @np:		Optional device_node pointer.
++ * @read_post_process:	Callback for optional post processing of cell data
++ *			on reads.
+  */
+ struct nvmem_cell_info {
+ 	const char		*name;
+@@ -62,6 +64,7 @@ struct nvmem_cell_info {
+ 	unsigned int		bit_offset;
+ 	unsigned int		nbits;
+ 	struct device_node	*np;
++	nvmem_cell_post_process_t read_post_process;
+ };
  
- 	list_for_each_entry(l, &nvmem_layouts, node) {
+ /**
 -- 
 2.25.1
 
