@@ -2,837 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B046D8360
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356616D64C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbjDEQPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
+        id S235123AbjDDOJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjDEQOi (ORCPT
+        with ESMTP id S234443AbjDDOJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:14:38 -0400
-Received: from mx2.veeam.com (mx2.veeam.com [64.129.123.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6FB72A6;
-        Wed,  5 Apr 2023 09:14:13 -0700 (PDT)
-Received: from mx1.veeam.com (mx1.veeam.com [172.18.34.147])
+        Tue, 4 Apr 2023 10:09:28 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DF744A7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:09:17 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 035C620657;
+        Tue,  4 Apr 2023 14:09:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680617356; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yPANXDP5t/GmyxIOw625H4rq9d/nbTVMM/IIX3p3RHU=;
+        b=YE9ZDzTuAPBMe6VeomUjASYnkxq78eUiOZn8SHNlxzTYyhi1Musg9F0Q0Gr6668wTf0Hhj
+        CsO4AN1rCbrwj64whggz48vH3X8V4UO178DoeDYnduyBv7EMSNReeQcC8+lZ3YBI0RmGIz
+        kPRZi42YQO4Fg8yUczjI4IKWCKMVBP0=
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx2.veeam.com (Postfix) with ESMTPS id 857F141A9C;
-        Wed,  5 Apr 2023 12:13:40 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx2-2022; t=1680711220;
-        bh=LhDV5mScfcrjHxBu+auv0MbfrxnthkmjqU+cPTdkMCI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=Sqnx7/GRBKbL2aL1s5y+t23/f1up1Ndgp5aSpJmUtFB5lYmx59SJ44Llvt8oYm9dd
-         i961EK719Tvi34iWFuOEruLc8VTX6WvYbHm7YoVlUwpHSCqByHs6bP0LJm0aRv/nHG
-         5YMyvDBBCKDA/7yNSWAMbsNb9r0FaGfB98Gjmccl6gQ5+1fxAJ0X6+0hBdxV0seDcg
-         11AJuQ75LAP+eSmxOT9G4FKA4oQ575UI0uOpl8dk0JByqKHRdfOdUp3BQOGP2gBv2Z
-         vt3ILGyy3bWFc0rvC+DkXQbPpn0fXrm90Q796DSkBTQn8fuI3zOElZ+EQ5NkWGgUWH
-         ARzX2HJruNlkQ==
-Received: from mx4.veeam.com (mx4.amust.local [172.31.224.40])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.veeam.com (Postfix) with ESMTPS id CC6EC42401;
-        Wed,  5 Apr 2023 06:09:15 -0400 (EDT)
-Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx4.veeam.com (Postfix) with ESMTPS id 56633CB7C0;
-        Tue,  4 Apr 2023 17:09:08 +0300 (MSK)
-Received: from ssh-deb10-ssd-vb.amust.local (172.24.10.107) by
- prgmbx01.amust.local (172.24.128.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 4 Apr 2023 16:09:06 +0200
-From:   Sergei Shtepa <sergei.shtepa@veeam.com>
-To:     <axboe@kernel.dk>, <hch@infradead.org>, <corbet@lwn.net>,
-        <snitzer@kernel.org>
-CC:     <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
-        <willy@infradead.org>, <kch@nvidia.com>,
-        <martin.petersen@oracle.com>, <vkoul@kernel.org>,
-        <ming.lei@redhat.com>, <gregkh@linuxfoundation.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <sergei.shtepa@veeam.com>
-Subject: [PATCH v3 06/11] blksnap: handling and tracking I/O units
-Date:   Tue, 4 Apr 2023 16:08:30 +0200
-Message-ID: <20230404140835.25166-7-sergei.shtepa@veeam.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230404140835.25166-1-sergei.shtepa@veeam.com>
-References: <20230404140835.25166-1-sergei.shtepa@veeam.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 9AE742C141;
+        Tue,  4 Apr 2023 14:09:15 +0000 (UTC)
+Date:   Tue, 4 Apr 2023 16:09:15 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: semantic: Re: [PATCH printk v1 10/18] printk: nobkl: Add emit
+ function and callback functions for atomic printing
+Message-ID: <ZCwvi0dU0C+IUemO@alley>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
+ <20230302195618.156940-11-john.ogness@linutronix.de>
+ <ZCa3kg960HJPf9Ko@alley>
+ <87edp29kvq.fsf@jogness.linutronix.de>
+ <ZCraqrkqFtsfLWuP@alley>
+ <87ilecsrvl.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.24.10.107]
-X-ClientProxiedBy: prgmbx02.amust.local (172.24.128.103) To
- prgmbx01.amust.local (172.24.128.102)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2924031554657367
-X-Veeam-MMEX: True
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ilecsrvl.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The struct tracker contains callback functions for handling a I/O units
-of a block device. When a write request is handled, the change block
-tracking (CBT) map functions are called and initiates the process of
-copying data from the original block device to the change store.
-Registering and unregistering the tracker is provided by the functions
-blkfilter_register() and blkfilter_unregister().
-The struct cbt_map allows to store the history of block device changes.
+On Mon 2023-04-03 21:17:26, John Ogness wrote:
+> On 2023-04-03, Petr Mladek <pmladek@suse.com> wrote:
+> >> The main difference is that the kthread variant is invoked _only_
+> >> from the kthread printer. It may or may not mean that the callback
+> >> can sleep. (That depends on how the console implements the
+> >> port_lock() callback.) But the function can be certain that it wasn't
+> >> called from any bizarre interrupt/nmi/scheduler contexts.
+> >> 
+> >> The atomic callback can be called from anywhere! Including when it
+> >> was already inside the atomic callback function! That probably
+> >> requires much more careful coding than in the kthread case.
+> >
+> > Is it just about coding? Or is it also about making write_khtread()
+> > better schedulable, please?
+> 
+> For UARTs there probably isn't much of a difference because most disable
+> interrupts anyway. A diff in the latest version [0] of the 8250 nbcon
+> console between serial8250_console_write_atomic() and
+> serial8250_console_write_thread() shows no significant difference in the
+> two except that the atomic variant may prefix with a newline if it
+> interrupted a printing context.
+> 
+> But for vtcon and netconsole I expect there would be a very significant
+> difference. For vtcon (and possibly netconsole) I expect there will be
+> no atomic implementation at all.
 
-Co-developed-by: Christoph Hellwig <hch@infradead.org>
-Signed-off-by: Christoph Hellwig <hch@infradead.org>
-Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
----
- drivers/block/blksnap/cbt_map.c | 228 +++++++++++++++++++++++
- drivers/block/blksnap/cbt_map.h |  90 +++++++++
- drivers/block/blksnap/tracker.c | 320 ++++++++++++++++++++++++++++++++
- drivers/block/blksnap/tracker.h |  71 +++++++
- 4 files changed, 709 insertions(+)
- create mode 100644 drivers/block/blksnap/cbt_map.c
- create mode 100644 drivers/block/blksnap/cbt_map.h
- create mode 100644 drivers/block/blksnap/tracker.c
- create mode 100644 drivers/block/blksnap/tracker.h
+Then these consoles might need another solution for the panic()
+situation, like blocking the kthread and switching to the legacy
+mode.
 
-diff --git a/drivers/block/blksnap/cbt_map.c b/drivers/block/blksnap/cbt_map.c
-new file mode 100644
-index 000000000000..b233adc32f1a
---- /dev/null
-+++ b/drivers/block/blksnap/cbt_map.c
-@@ -0,0 +1,228 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023 Veeam Software Group GmbH */
-+#define pr_fmt(fmt) KBUILD_MODNAME "-cbt_map: " fmt
-+
-+#include <linux/slab.h>
-+#include <linux/vmalloc.h>
-+#include <uapi/linux/blksnap.h>
-+#include "cbt_map.h"
-+#include "params.h"
-+
-+static inline unsigned long long count_by_shift(sector_t capacity,
-+						unsigned long long shift)
-+{
-+	sector_t blk_size = 1ull << (shift - SECTOR_SHIFT);
-+
-+	return round_up(capacity, blk_size) / blk_size;
-+}
-+
-+static void cbt_map_calculate_block_size(struct cbt_map *cbt_map)
-+{
-+	unsigned long long count;
-+	unsigned long long shift = min(get_tracking_block_minimum_shift(),
-+				       get_tracking_block_maximum_shift());
-+
-+	pr_debug("Device capacity %llu sectors\n", cbt_map->device_capacity);
-+	/*
-+	 * The size of the tracking block is calculated based on the size of the disk
-+	 * so that the CBT table does not exceed a reasonable size.
-+	 */
-+	count = count_by_shift(cbt_map->device_capacity, shift);
-+	pr_debug("Blocks count %llu\n", count);
-+	while (count > get_tracking_block_maximum_count()) {
-+		if (shift >= get_tracking_block_maximum_shift()) {
-+			pr_info("The maximum allowable CBT block size has been reached.\n");
-+			break;
-+		}
-+		shift = shift + 1ull;
-+		count = count_by_shift(cbt_map->device_capacity, shift);
-+		pr_debug("Blocks count %llu\n", count);
-+	}
-+
-+	cbt_map->blk_size_shift = shift;
-+	cbt_map->blk_count = count;
-+	pr_debug("The optimal CBT block size was calculated as %llu bytes\n",
-+		 (1ull << cbt_map->blk_size_shift));
-+}
-+
-+static int cbt_map_allocate(struct cbt_map *cbt_map)
-+{
-+	unsigned char *read_map = NULL;
-+	unsigned char *write_map = NULL;
-+	size_t size = cbt_map->blk_count;
-+
-+	pr_debug("Allocate CBT map of %zu blocks\n", size);
-+
-+	if (cbt_map->read_map || cbt_map->write_map)
-+		return -EINVAL;
-+
-+	read_map = __vmalloc(size, GFP_NOIO | __GFP_ZERO);
-+	if (!read_map)
-+		return -ENOMEM;
-+
-+	write_map = __vmalloc(size, GFP_NOIO | __GFP_ZERO);
-+	if (!write_map) {
-+		vfree(read_map);
-+		return -ENOMEM;
-+	}
-+
-+	cbt_map->read_map = read_map;
-+	cbt_map->write_map = write_map;
-+
-+	cbt_map->snap_number_previous = 0;
-+	cbt_map->snap_number_active = 1;
-+	generate_random_uuid(cbt_map->generation_id.b);
-+	cbt_map->is_corrupted = false;
-+
-+	return 0;
-+}
-+
-+static void cbt_map_deallocate(struct cbt_map *cbt_map)
-+{
-+	cbt_map->is_corrupted = false;
-+
-+	if (cbt_map->read_map) {
-+		vfree(cbt_map->read_map);
-+		cbt_map->read_map = NULL;
-+	}
-+
-+	if (cbt_map->write_map) {
-+		vfree(cbt_map->write_map);
-+		cbt_map->write_map = NULL;
-+	}
-+}
-+
-+int cbt_map_reset(struct cbt_map *cbt_map, sector_t device_capacity)
-+{
-+	cbt_map_deallocate(cbt_map);
-+
-+	cbt_map->device_capacity = device_capacity;
-+	cbt_map_calculate_block_size(cbt_map);
-+
-+	return cbt_map_allocate(cbt_map);
-+}
-+
-+void cbt_map_destroy(struct cbt_map *cbt_map)
-+{
-+	pr_debug("CBT map destroy\n");
-+
-+	cbt_map_deallocate(cbt_map);
-+	kfree(cbt_map);
-+}
-+
-+struct cbt_map *cbt_map_create(struct block_device *bdev)
-+{
-+	struct cbt_map *cbt_map = NULL;
-+	int ret;
-+
-+	pr_debug("CBT map create\n");
-+
-+	cbt_map = kzalloc(sizeof(struct cbt_map), GFP_KERNEL);
-+	if (cbt_map == NULL)
-+		return NULL;
-+
-+	cbt_map->device_capacity = bdev_nr_sectors(bdev);
-+	cbt_map_calculate_block_size(cbt_map);
-+
-+	ret = cbt_map_allocate(cbt_map);
-+	if (ret) {
-+		pr_err("Failed to create tracker. errno=%d\n", abs(ret));
-+		cbt_map_destroy(cbt_map);
-+		return NULL;
-+	}
-+
-+	spin_lock_init(&cbt_map->locker);
-+	cbt_map->is_corrupted = false;
-+
-+	return cbt_map;
-+}
-+
-+void cbt_map_switch(struct cbt_map *cbt_map)
-+{
-+	pr_debug("CBT map switch\n");
-+	spin_lock(&cbt_map->locker);
-+
-+	cbt_map->snap_number_previous = cbt_map->snap_number_active;
-+	++cbt_map->snap_number_active;
-+	if (cbt_map->snap_number_active == 256) {
-+		cbt_map->snap_number_active = 1;
-+
-+		memset(cbt_map->write_map, 0, cbt_map->blk_count);
-+
-+		generate_random_uuid(cbt_map->generation_id.b);
-+
-+		pr_debug("CBT reset\n");
-+	} else
-+		memcpy(cbt_map->read_map, cbt_map->write_map, cbt_map->blk_count);
-+	spin_unlock(&cbt_map->locker);
-+}
-+
-+static inline int _cbt_map_set(struct cbt_map *cbt_map, sector_t sector_start,
-+			       sector_t sector_cnt, u8 snap_number,
-+			       unsigned char *map)
-+{
-+	int res = 0;
-+	u8 num;
-+	size_t inx;
-+	size_t cbt_block_first = (size_t)(
-+		sector_start >> (cbt_map->blk_size_shift - SECTOR_SHIFT));
-+	size_t cbt_block_last = (size_t)(
-+		(sector_start + sector_cnt - 1) >>
-+		(cbt_map->blk_size_shift - SECTOR_SHIFT));
-+
-+	for (inx = cbt_block_first; inx <= cbt_block_last; ++inx) {
-+		if (unlikely(inx >= cbt_map->blk_count)) {
-+			pr_err("Block index is too large\n");
-+			pr_err("Block #%zu was demanded, map size %zu blocks\n",
-+			       inx, cbt_map->blk_count);
-+			res = -EINVAL;
-+			break;
-+		}
-+
-+		num = map[inx];
-+		if (num < snap_number)
-+			map[inx] = snap_number;
-+	}
-+	return res;
-+}
-+
-+int cbt_map_set(struct cbt_map *cbt_map, sector_t sector_start,
-+		sector_t sector_cnt)
-+{
-+	int res;
-+
-+	spin_lock(&cbt_map->locker);
-+	if (unlikely(cbt_map->is_corrupted)) {
-+		spin_unlock(&cbt_map->locker);
-+		return -EINVAL;
-+	}
-+	res = _cbt_map_set(cbt_map, sector_start, sector_cnt,
-+			   (u8)cbt_map->snap_number_active, cbt_map->write_map);
-+	if (unlikely(res))
-+		cbt_map->is_corrupted = true;
-+
-+	spin_unlock(&cbt_map->locker);
-+
-+	return res;
-+}
-+
-+int cbt_map_set_both(struct cbt_map *cbt_map, sector_t sector_start,
-+		     sector_t sector_cnt)
-+{
-+	int res;
-+
-+	spin_lock(&cbt_map->locker);
-+	if (unlikely(cbt_map->is_corrupted)) {
-+		spin_unlock(&cbt_map->locker);
-+		return -EINVAL;
-+	}
-+	res = _cbt_map_set(cbt_map, sector_start, sector_cnt,
-+			   (u8)cbt_map->snap_number_active, cbt_map->write_map);
-+	if (!res)
-+		res = _cbt_map_set(cbt_map, sector_start, sector_cnt,
-+				   (u8)cbt_map->snap_number_previous,
-+				   cbt_map->read_map);
-+	spin_unlock(&cbt_map->locker);
-+
-+	return res;
-+}
-diff --git a/drivers/block/blksnap/cbt_map.h b/drivers/block/blksnap/cbt_map.h
-new file mode 100644
-index 000000000000..f87bffd5b3a7
---- /dev/null
-+++ b/drivers/block/blksnap/cbt_map.h
-@@ -0,0 +1,90 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2023 Veeam Software Group GmbH */
-+#ifndef __BLKSNAP_CBT_MAP_H
-+#define __BLKSNAP_CBT_MAP_H
-+
-+#include <linux/kernel.h>
-+#include <linux/kref.h>
-+#include <linux/uuid.h>
-+#include <linux/spinlock.h>
-+#include <linux/blkdev.h>
-+
-+struct blksnap_sectors;
-+
-+/**
-+ * struct cbt_map - The table of changes for a block device.
-+ *
-+ * @locker:
-+ *	Locking for atomic modification of structure members.
-+ * @blk_size_shift:
-+ *	The power of 2 used to specify the change tracking block size.
-+ * @blk_count:
-+ *	The number of change tracking blocks.
-+ * @device_capacity:
-+ *	The actual capacity of the device.
-+ * @read_map:
-+ *	A table of changes available for reading. This is the table that can
-+ *	be read after taking a snapshot.
-+ * @write_map:
-+ *	The current table for tracking changes.
-+ * @snap_number_active:
-+ *	The current sequential number of changes. This is the number that is written to
-+ *	the current table when the block data changes.
-+ * @snap_number_previous:
-+ *	The previous sequential number of changes. This number is used to identify the
-+ *	blocks that were changed between the penultimate snapshot and the last snapshot.
-+ * @generation_id:
-+ *	UUID of the generation of changes.
-+ * @is_corrupted:
-+ *	A flag that the change tracking data is no longer reliable.
-+ *
-+ * The change block tracking map is a byte table. Each byte stores the
-+ * sequential number of changes for one block. To determine which blocks have changed
-+ * since the previous snapshot with the change number 4, it is enough to
-+ * find all bytes with the number more than 4.
-+ *
-+ * Since one byte is allocated to track changes in one block, the change
-+ * table is created again at the 255th snapshot. At the same time, a new
-+ * unique generation identifier is generated. Tracking changes is
-+ * possible only for tables of the same generation.
-+ *
-+ * There are two tables on the change block tracking map. One is
-+ * available for reading, and the other is available for writing. At the moment of taking
-+ * a snapshot, the tables are synchronized. The user's process, when
-+ * calling the corresponding ioctl, can read the readable table.
-+ * At the same time, the change tracking mechanism continues to work with
-+ * the writable table.
-+ *
-+ * To provide the ability to mount a snapshot image as writeable, it is
-+ * possible to make changes to both of these tables simultaneously.
-+ *
-+ */
-+struct cbt_map {
-+	spinlock_t locker;
-+
-+	size_t blk_size_shift;
-+	size_t blk_count;
-+	sector_t device_capacity;
-+
-+	unsigned char *read_map;
-+	unsigned char *write_map;
-+
-+	unsigned long snap_number_active;
-+	unsigned long snap_number_previous;
-+	uuid_t generation_id;
-+
-+	bool is_corrupted;
-+};
-+
-+struct cbt_map *cbt_map_create(struct block_device *bdev);
-+int cbt_map_reset(struct cbt_map *cbt_map, sector_t device_capacity);
-+
-+void cbt_map_destroy(struct cbt_map *cbt_map);
-+
-+void cbt_map_switch(struct cbt_map *cbt_map);
-+int cbt_map_set(struct cbt_map *cbt_map, sector_t sector_start,
-+		sector_t sector_cnt);
-+int cbt_map_set_both(struct cbt_map *cbt_map, sector_t sector_start,
-+		     sector_t sector_cnt);
-+
-+#endif /* __BLKSNAP_CBT_MAP_H */
-diff --git a/drivers/block/blksnap/tracker.c b/drivers/block/blksnap/tracker.c
-new file mode 100644
-index 000000000000..3f6586b86f24
---- /dev/null
-+++ b/drivers/block/blksnap/tracker.c
-@@ -0,0 +1,320 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023 Veeam Software Group GmbH */
-+#define pr_fmt(fmt) KBUILD_MODNAME "-tracker: " fmt
-+
-+#include <linux/slab.h>
-+#include <linux/blk-mq.h>
-+#include <linux/sched/mm.h>
-+#include <linux/build_bug.h>
-+#include <uapi/linux/blksnap.h>
-+#include "tracker.h"
-+#include "cbt_map.h"
-+#include "diff_area.h"
-+#include "snapimage.h"
-+#include "snapshot.h"
-+
-+void tracker_free(struct kref *kref)
-+{
-+	struct tracker *tracker = container_of(kref, struct tracker, kref);
-+
-+	might_sleep();
-+
-+	pr_debug("Free tracker for device [%u:%u]\n", MAJOR(tracker->dev_id),
-+		 MINOR(tracker->dev_id));
-+
-+	if (tracker->diff_area)
-+		diff_area_free(tracker->diff_area);
-+	if (tracker->cbt_map)
-+		cbt_map_destroy(tracker->cbt_map);
-+
-+	kfree(tracker);
-+}
-+
-+static bool tracker_submit_bio(struct bio *bio)
-+{
-+	struct blkfilter *flt = bio->bi_bdev->bd_filter;
-+	struct tracker *tracker = container_of(flt, struct tracker, filter);
-+	sector_t count = bio_sectors(bio);
-+	struct bvec_iter copy_iter;
-+
-+	if (!op_is_write(bio_op(bio)) || !count)
-+		return false;
-+
-+	copy_iter = bio->bi_iter;
-+	if (bio_flagged(bio, BIO_REMAPPED))
-+		copy_iter.bi_sector -= bio->bi_bdev->bd_start_sect;
-+
-+	if (cbt_map_set(tracker->cbt_map, copy_iter.bi_sector, count) ||
-+	    !atomic_read(&tracker->snapshot_is_taken) ||
-+	    diff_area_is_corrupted(tracker->diff_area))
-+		return false;
-+
-+	return diff_area_cow(bio, tracker->diff_area, &copy_iter);
-+}
-+
-+static struct blkfilter *tracker_attach(struct block_device *bdev)
-+{
-+	struct tracker *tracker = NULL;
-+	struct cbt_map *cbt_map;
-+
-+	pr_debug("Creating tracker for device [%u:%u]\n",
-+		 MAJOR(bdev->bd_dev), MINOR(bdev->bd_dev));
-+
-+	cbt_map = cbt_map_create(bdev);
-+	if (!cbt_map) {
-+		pr_err("Failed to create CBT map for device [%u:%u]\n",
-+		       MAJOR(bdev->bd_dev), MINOR(bdev->bd_dev));
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	tracker = kzalloc(sizeof(struct tracker), GFP_KERNEL);
-+	if (tracker == NULL) {
-+		cbt_map_destroy(cbt_map);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	INIT_LIST_HEAD(&tracker->link);
-+	kref_init(&tracker->kref);
-+	tracker->dev_id = bdev->bd_dev;
-+	atomic_set(&tracker->snapshot_is_taken, false);
-+	tracker->cbt_map = cbt_map;
-+	tracker->diff_area = NULL;
-+
-+	pr_debug("New tracker for device [%u:%u] was created\n",
-+		 MAJOR(tracker->dev_id), MINOR(tracker->dev_id));
-+
-+	return &tracker->filter;
-+}
-+
-+static void tracker_detach(struct blkfilter *flt)
-+{
-+	struct tracker *tracker = container_of(flt, struct tracker, filter);
-+
-+	pr_debug("Detach tracker from device [%u:%u]\n",
-+		 MAJOR(tracker->dev_id), MINOR(tracker->dev_id));
-+
-+	tracker_put(tracker);
-+}
-+
-+static int ctl_cbtinfo(struct tracker *tracker, __u8 __user *buf, __u32 *plen)
-+{
-+	struct cbt_map *cbt_map = tracker->cbt_map;
-+	struct blksnap_cbtinfo arg;
-+
-+	if (!cbt_map)
-+		return -ESRCH;
-+
-+	if (*plen < sizeof(arg))
-+		return -EINVAL;
-+
-+	arg.device_capacity = (__u64)(cbt_map->device_capacity << SECTOR_SHIFT);
-+	arg.block_size = (__u32)(1 << cbt_map->blk_size_shift);
-+	arg.block_count = (__u32)cbt_map->blk_count;
-+	export_uuid(arg.generation_id.b, &cbt_map->generation_id);
-+	arg.changes_number = (__u8)cbt_map->snap_number_previous;
-+
-+	if (copy_to_user(buf, &arg, sizeof(arg)))
-+		return -ENODATA;
-+
-+	*plen = sizeof(arg);
-+	return 0;
-+}
-+
-+static int ctl_cbtmap(struct tracker *tracker, __u8 __user *buf, __u32 *plen)
-+{
-+	struct cbt_map *cbt_map = tracker->cbt_map;
-+	struct blksnap_cbtmap arg;
-+
-+	if (!cbt_map)
-+		return -ESRCH;
-+
-+	if (unlikely(cbt_map->is_corrupted)) {
-+		pr_err("CBT table was corrupted\n");
-+		return -EFAULT;
-+	}
-+
-+	if (*plen < sizeof(arg))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&arg, buf, sizeof(arg)))
-+		return -ENODATA;
-+
-+	if (copy_to_user(arg.buffer, cbt_map->read_map + arg.offset,
-+			 min_t(unsigned int, cbt_map->blk_count - arg.offset, arg.length)))
-+		return -EINVAL;
-+
-+	*plen = 0;
-+	return 0;
-+}
-+static int ctl_cbtdirty(struct tracker *tracker, __u8 __user *buf, __u32 *plen)
-+{
-+	struct cbt_map *cbt_map = tracker->cbt_map;
-+	struct blksnap_cbtdirty arg;
-+	unsigned int inx;
-+
-+	if (!cbt_map)
-+		return -ESRCH;
-+
-+	if (*plen < sizeof(arg))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&arg, buf, sizeof(arg)))
-+		return -ENODATA;
-+
-+	for (inx = 0; inx < arg.count; inx++) {
-+		struct blksnap_sectors range;
-+		int ret;
-+
-+		if (copy_from_user(&range, arg.dirty_sectors, sizeof(range)))
-+			return -ENODATA;
-+
-+		ret = cbt_map_set_both(cbt_map, range.offset, range.count);
-+		if (ret)
-+			return ret;
-+	}
-+	*plen = 0;
-+	return 0;
-+}
-+static int ctl_snapshotadd(struct tracker *tracker,
-+			   __u8 __user *buf, __u32 *plen)
-+{
-+	struct blksnap_snapshotadd arg;
-+
-+	if (*plen < sizeof(arg))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&arg, buf, sizeof(arg)))
-+		return -ENODATA;
-+
-+	*plen = 0;
-+	return  snapshot_add_device((uuid_t *)&arg.id, tracker);
-+}
-+static int ctl_snapshotinfo(struct tracker *tracker,
-+			    __u8 __user *buf, __u32 *plen)
-+{
-+	struct blksnap_snapshotinfo arg = {0};
-+
-+	if (*plen < sizeof(arg))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&arg, buf, sizeof(arg)))
-+		return -ENODATA;
-+
-+
-+	if (tracker->diff_area && diff_area_is_corrupted(tracker->diff_area))
-+		arg.error_code = tracker->diff_area->error_code;
-+	else
-+		arg.error_code = 0;
-+
-+	if (tracker->snap_disk)
-+		strncpy(arg.image, tracker->snap_disk->disk_name, IMAGE_DISK_NAME_LEN);
-+
-+	if (copy_to_user(buf, &arg, sizeof(arg)))
-+		return -ENODATA;
-+
-+	*plen = sizeof(arg);
-+	return 0;
-+}
-+
-+static int (*const ctl_table[])(struct tracker *tracker,
-+				__u8 __user *buf, __u32 *plen) = {
-+	ctl_cbtinfo,
-+	ctl_cbtmap,
-+	ctl_cbtdirty,
-+	ctl_snapshotadd,
-+	ctl_snapshotinfo,
-+};
-+
-+static int tracker_ctl(struct blkfilter *flt, const unsigned int cmd,
-+		       __u8 __user *buf, __u32 *plen)
-+{
-+	struct tracker *tracker = container_of(flt, struct tracker, filter);
-+
-+	if (cmd > ARRAY_SIZE(ctl_table))
-+		return -ENOTTY;
-+
-+	return ctl_table[cmd](tracker, buf, plen);
-+}
-+
-+static struct blkfilter_operations tracker_ops = {
-+	.owner		= THIS_MODULE,
-+	.name		= "blksnap",
-+	.attach		= tracker_attach,
-+	.detach		= tracker_detach,
-+	.ctl		= tracker_ctl,
-+	.submit_bio	= tracker_submit_bio,
-+};
-+
-+int tracker_take_snapshot(struct tracker *tracker)
-+{
-+	int ret = 0;
-+	bool cbt_reset_needed = false;
-+	struct block_device *orig_bdev = tracker->diff_area->orig_bdev;
-+	sector_t capacity;
-+	unsigned int current_flag;
-+
-+	blk_mq_freeze_queue(orig_bdev->bd_queue);
-+	current_flag = memalloc_noio_save();
-+
-+	if (tracker->cbt_map->is_corrupted) {
-+		cbt_reset_needed = true;
-+		pr_warn("Corrupted CBT table detected. CBT fault\n");
-+	}
-+
-+	capacity = bdev_nr_sectors(orig_bdev);
-+	if (tracker->cbt_map->device_capacity != capacity) {
-+		cbt_reset_needed = true;
-+		pr_warn("Device resize detected. CBT fault\n");
-+	}
-+
-+	if (cbt_reset_needed) {
-+		ret = cbt_map_reset(tracker->cbt_map, capacity);
-+		if (ret) {
-+			pr_err("Failed to create tracker. errno=%d\n",
-+			       abs(ret));
-+			return ret;
-+		}
-+	}
-+
-+	cbt_map_switch(tracker->cbt_map);
-+	atomic_set(&tracker->snapshot_is_taken, true);
-+
-+	memalloc_noio_restore(current_flag);
-+	blk_mq_unfreeze_queue(orig_bdev->bd_queue);
-+
-+	return 0;
-+}
-+
-+void tracker_release_snapshot(struct tracker *tracker)
-+{
-+	if (tracker->diff_area) {
-+		blk_mq_freeze_queue(tracker->diff_area->orig_bdev->bd_queue);
-+
-+		pr_debug("Tracker for device [%u:%u] release snapshot\n",
-+			 MAJOR(tracker->dev_id), MINOR(tracker->dev_id));
-+
-+		atomic_set(&tracker->snapshot_is_taken, false);
-+
-+		blk_mq_unfreeze_queue(tracker->diff_area->orig_bdev->bd_queue);
-+	}
-+	snapimage_free(tracker);
-+
-+	if (tracker->diff_area) {
-+		diff_area_free(tracker->diff_area);
-+		tracker->diff_area = NULL;
-+	}
-+}
-+
-+int __init tracker_init(void)
-+{
-+	pr_debug("Register filter '%s'", tracker_ops.name);
-+
-+	return blkfilter_register(&tracker_ops);
-+}
-+
-+void tracker_done(void)
-+{
-+	pr_debug("Unregister filter '%s'", tracker_ops.name);
-+
-+	blkfilter_unregister(&tracker_ops);
-+}
-diff --git a/drivers/block/blksnap/tracker.h b/drivers/block/blksnap/tracker.h
-new file mode 100644
-index 000000000000..d0972994d528
---- /dev/null
-+++ b/drivers/block/blksnap/tracker.h
-@@ -0,0 +1,71 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2023 Veeam Software Group GmbH */
-+#ifndef __BLKSNAP_TRACKER_H
-+#define __BLKSNAP_TRACKER_H
-+
-+#include <linux/blk-filter.h>
-+#include <linux/kref.h>
-+#include <linux/spinlock.h>
-+#include <linux/list.h>
-+#include <linux/rwsem.h>
-+#include <linux/blkdev.h>
-+#include <linux/fs.h>
-+
-+struct cbt_map;
-+struct diff_area;
-+
-+/**
-+ * struct tracker - Tracker for a block device.
-+ *
-+ * @filter:
-+ *	The block device filter structure.
-+ * @link:
-+ *	List header. Allows to combine trackers into a list in a snapshot.
-+ * @kref:
-+ *	The link counter allows to control the lifetime of the tracker.
-+ * @dev_id:
-+ *	Original block device ID.
-+ * @snapshot_is_taken:
-+ *	Indicates that a snapshot was taken for the device whose I/O unit are
-+ *	handled by this tracker.
-+ * @cbt_map:
-+ *	Pointer to a change block tracker map.
-+ * @diff_area:
-+ *	Pointer to a difference area.
-+ * @snap_disk:
-+ *	Snapshot image disk.
-+ *
-+ * The goal of the tracker is to handle I/O unit. The tracker detectes
-+ * the range of sectors that will change and transmits them to the CBT map
-+ * and to the difference area.
-+ */
-+struct tracker {
-+	struct blkfilter filter;
-+	struct list_head link;
-+	struct kref kref;
-+	dev_t dev_id;
-+
-+	atomic_t snapshot_is_taken;
-+
-+	struct cbt_map *cbt_map;
-+	struct diff_area *diff_area;
-+	struct gendisk *snap_disk;
-+};
-+
-+int __init tracker_init(void);
-+void tracker_done(void);
-+
-+void tracker_free(struct kref *kref);
-+static inline void tracker_put(struct tracker *tracker)
-+{
-+	if (likely(tracker))
-+		kref_put(&tracker->kref, tracker_free);
-+};
-+static inline void tracker_get(struct tracker *tracker)
-+{
-+	kref_get(&tracker->kref);
-+};
-+int tracker_take_snapshot(struct tracker *tracker);
-+void tracker_release_snapshot(struct tracker *tracker);
-+
-+#endif /* __BLKSNAP_TRACKER_H */
--- 
-2.20.1
+OK, so it might really make sense to have a separate callback
+for the kthread and emergency/panic contexts.
 
+
+> > Hmm, it is very questional if the callbacks should be optional.
+> >
+> > Do we really want to allow introducing non-blocking consoles without
+> > the way to print emergency and panic messages? Such a console would
+> > not be fully-flegged replacement of the legacy mode.
+> 
+> Not necessarily. For vtcon we are "planning" on a BSoD, probably based
+> on the kmsg_dump interface. For netconsole it could be similar.
+> 
+> We are trying to give drivers an opportunity to implement some safety
+> and control to maximize the chances of getting a dump out without
+> jeopardizing other panic functions.
+> 
+> As a quick implementation a UART driver could simply set @unsafe upon
+> entrace of write_thread() and clear it on exit. Then its write_atomic()
+> would only be called at the very end of panic() if the panic happened
+> during printing. For its write_atomic() implementation it could be a
+> NOOP if !oops_in_progress. All locking is handled with the port_lock()
+> callback, which is only called from the kthread context. It isn't
+> particularly pretty, but it most likely would be more reliable than what
+> we have now.
+
+If I get it correctly, the above scenario requires both
+write_kthread() and write_atomic(). Otherwise, it would not be
+able to print in panic() at all. Right, please?
+
+
+> > What about making write_atomic() mandatory and write_kthread()
+> > optional?
+> 
+> I doubt there will ever be a write_atomic() for vtcon. BSoD based on
+> kmsg_dump is a simpler approach.
+
+But we would need to add an infrastructure for the BSoD(). For example,
+call yet another callback at the end of panic(). Also it does not mean
+that we might completely give up on printk() messages in panic().
+
+Anyway, this might be solved later. I would really like to enforce
+having both callbacks and good enough solution for now. It might later
+be updated to another good enough solution using another panic() mode.
+
+
+> > write_atomic() would be used in the kthread when write_kthread()
+> > is not defined. write_kthread() would allow to create an alternative
+> > implementation that might work better in the well defined kthread
+> > context.
+> 
+> write_atomic() is the difficult callback to implement. It certainly
+> could be used in the write_thread() case if no write_thread() was
+> provided. But I still think there are valid cases to have a
+> write_thread() implementation without a write_atomic().
+
+The proposed framework does not provide a solution for consoles
+that can't implement write_atomic(). And ignoring the messages
+in panic() is not acceptable.
+
+Either we need to enforce another good enough solution for these
+consoles. Or we must not allow them now. We could update the logic
+later when we see how the BSoD really looks and works.
+
+Best Regards,
+Petr
