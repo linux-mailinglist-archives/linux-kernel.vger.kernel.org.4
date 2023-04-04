@@ -2,121 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1558E6D58E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12CB6D58E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233456AbjDDGqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 02:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
+        id S233586AbjDDGul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 02:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjDDGqn (ORCPT
+        with ESMTP id S233352AbjDDGuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 02:46:43 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B541BD2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:46:42 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id ek18so126402570edb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 23:46:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680590800;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s4wpR6cNIQTvfB1y29ZH5QI3kXm7zB6AepahRK+63rE=;
-        b=khwNPCkNrTb762NkLnpHGVzJhZ5WIWF+EOnsbBkt0KrE4zdGipdWW2N11ieQlQbMSe
-         E2W9Ss8tXC6cpzLZZT0u6oO7pF8kWWcAOgU9pHx8QdnCFcof3rNRbF9OptxFHfe5NN4l
-         Z/YvIroVraQD+XGuOG/Ct5g7XLLPBygDey3lq+gsT99ReTJVW+G/dewsL9He7pPCUjQG
-         k0E9K5xkRX1YqY7QAq9sjUy7WZuGGb1KhZgAexgmrLB/4vlgEuE0+z/ibwQ7LHR0dVek
-         2Yln6f2ySUBep5iWqugj8zhYt4j2RuDUiAgBPpqg/EP/i+Mla5pPm0Rsmk3Ek0oEOUH9
-         IbRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680590800;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s4wpR6cNIQTvfB1y29ZH5QI3kXm7zB6AepahRK+63rE=;
-        b=sEOtn6QRzcjj0MOzG46gWNagYAjj1LsbxdTMiYpmt3gjjyOfHMJRutr1dEWF+mYrDk
-         CP4oSD0Ko9HkvZjT7/6kV0ThBM0KnXxXzwAit9LwhViw5hNvYIeNoAZDPsXGQeFfC86V
-         ALYpkTqQXbAFLN5gpqaYKCVBbiHxOal0nuMC4q4fJUmsIUegVHUJGp9GtqjqJ2GsuFoG
-         SJlwaHaICH16/hgCdb7DTgE6/9W6C+TfjNmzjuZ3Tumta9w3JIWzHf9EROjehhS4xOr4
-         e3J6nbFJig8sdwnwAdKVKRldNHv4LWmkFlwoRU/bcuihwhbLgg6fk9a4OTkoD97gW3ue
-         JBKA==
-X-Gm-Message-State: AAQBX9dtQ3wqQuLGJPe2yAYKfRxjseIvEROHmYF8czeJ48s1f9mbZAvA
-        fZ3LNDDfnZejp8GVYvHu0AJC8g==
-X-Google-Smtp-Source: AKy350Y+t97vUdhS2WCc0Ni0IdloS9ZcFUGjiehqd+Cpuheu/4+0knXZYh9CGX1+xLnOu+l5/Bf2DQ==
-X-Received: by 2002:a17:906:235b:b0:932:c1e2:9983 with SMTP id m27-20020a170906235b00b00932c1e29983mr1420766eja.15.1680590800622;
-        Mon, 03 Apr 2023 23:46:40 -0700 (PDT)
-Received: from 1.. ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id h12-20020a1709063c0c00b00947eafc76fbsm4488311ejg.144.2023.04.03.23.46.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 23:46:40 -0700 (PDT)
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     michael@walle.cc, pratyush@kernel.org,
-        Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     miquel.raynal@bootlin.com, richard@nod.at,
-        Takahiro.Kuwano@infineon.com, bacem.daassi@infineon.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 00/10] mtd: spi-nor: Address mode discovery (BFPT method & current address mode)
-Date:   Tue,  4 Apr 2023 09:46:34 +0300
-Message-Id: <168059071209.13361.9220222408280662768.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230331074606.3559258-1-tudor.ambarus@linaro.org>
-References: <20230331074606.3559258-1-tudor.ambarus@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2265; i=tudor.ambarus@linaro.org; h=from:subject:message-id; bh=OcC9/K8lIgvhLa3FaB7YCnUSc/5yNfT0lL/dHR4H3l8=; b=owEBbQGS/pANAwAKAUtVT0eljRTpAcsmYgBkK8fIasVkDyCV8ikOl65YC4X+oI59U43+u/+vC xWiYTQ2rYeJATMEAAEKAB0WIQQdQirKzw7IbV4d/t9LVU9HpY0U6QUCZCvHyAAKCRBLVU9HpY0U 6Ut/B/9VlseaqQ12Q5Jfmuz95bqFwVFevcGGF6fCpq067twYUPxyOj92IXqZgxpGe2LQPgXEuJx phpQpArsUWCE5hB6FslxatZIwB6N5Ju4+03RlrEAuBLp44iObzLFJlBsy7P4g99L2nhR3jOdwMV MPbtcccGfS20MiMFYZMfjwxRTIaWHK+TQhnzgHA48CmaNl6o6NKelGTxmZBx9ymnvH3vjBdTm0A ne3LGLVzT9vqbtMxzJT4GxHl0IEcGvoc0Mjihev8yw/Kc3QzG7lxEOs2TjnIdlha03+lqFsaN14 30CDzeuDhYDAPEs7R2TxFjbh7ac9b86qrzowOKlTKw61oP8N
-X-Developer-Key: i=tudor.ambarus@linaro.org; a=openpgp; fpr=280B06FD4CAAD2980C46DDDF4DB1B079AD29CF3D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 4 Apr 2023 02:50:39 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4881FC7;
+        Mon,  3 Apr 2023 23:50:38 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 77F6B5C00C8;
+        Tue,  4 Apr 2023 02:50:37 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 04 Apr 2023 02:50:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1680591037; x=1680677437; bh=el
+        ixwEDiNgZqccMmgXM1U3TCkBH6pUKMQR7xL76PiyU=; b=SBTTwL3F10HK8gYxD+
+        13CEenffSlTgD8tzUSP/qjBzQX4zH70uQiiGWGmmd5RcPLXp5yvS5jVm7KzBzSss
+        gXRxBHejIO64oTiQhfZsSnf/sA1GVHtja+BuccNhulmtZfHBEXsiG7UjmUhx3NQS
+        dW+15zaUxaoE9fGQ5M6M1mx9FVUgYObFMn4wOqtjYFdCS50f4B4k1L3Jfdnj3on6
+        u8z5AjW5PcrVbCWA8/B9orGYDiG+dFn12HcARAB4wieL/QykBjyJ0WYKkNZii1l4
+        cVOA5eXWuJtJdy+J4AWSuwCBdOdtxUgpMqxWd3nmJfrVEOHNrqwxzjgTU5sZf+Uk
+        o3vQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680591037; x=1680677437; bh=elixwEDiNgZqc
+        cMmgXM1U3TCkBH6pUKMQR7xL76PiyU=; b=tRnpfs5nUR56U1Nh8AUU+/kGXjzbg
+        N2/VpAOpyt1cgY9hMLFecqRriE8heTf5+UOdmyYnPxjZDKTkvbVOPsbR3OIn18qS
+        EzfMM2G/Equ4kWfUvOBeh2Gj65eVj9dYlhQavuhGoteb/wbITcUHHKSI2SThfJJa
+        xptQXW5QlO6tKk1kYGv6bzEM/zRKtupxfpIXNbFEQ/8nIWDafEr/otECt0MfCwBO
+        wep6RlEF7QzSl/xyE2/PaFOk2HhvZf3djXNE754T7Mwuh2jh4+dohPDmrNnaped2
+        di7JcP9gPA5kanjkrlspI9KCSEnBbpJyH4BcKPzP2if13i8wBj7XJQt4g==
+X-ME-Sender: <xms:vMgrZPu7kf5XDc_8yTYtv24g-JbEuVp1mxnx8rNniRf99MTbkiMi5w>
+    <xme:vMgrZAeoSpBNX_ZYZGWVLLWBajBGcs4n4LGxMVF_pdcm7znzFZvTl5-B8SMS9loBK
+    lixlSN9l8hKfLhgbjQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeikedgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:vMgrZCwtlHLgPb-U5fpOH6uZkBSH4RT-VubLcDfY9uG9anIqzCHI7Q>
+    <xmx:vMgrZOMvIPvBkf7EfY8gHHzhZ3cs-aMN9CnrM1iC1F4EmmWF8N7kUg>
+    <xmx:vMgrZP8ZQhMsLRaCnCAynlFW2K5N34yjrGbJsB1pl5YjvyYFtiGYWA>
+    <xmx:vcgrZHMFEh0UnzcvaFtW0xWqizs-Xi_FhfgxwxfNnzopeB6f4cSTqw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 488C2B60092; Tue,  4 Apr 2023 02:50:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
+Mime-Version: 1.0
+Message-Id: <377d2841-18b5-4f61-b675-3a7c2e0db3b2@app.fastmail.com>
+In-Reply-To: <ZCu1tFrQCVe2sgNz@infradead.org>
+References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <ZCu1tFrQCVe2sgNz@infradead.org>
+Date:   Tue, 04 Apr 2023 08:50:16 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Christoph Hellwig" <hch@infradead.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     "Conor.Dooley" <conor.dooley@microchip.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        guoren <guoren@kernel.org>,
+        "Andrew Jones" <ajones@ventanamicro.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "Samuel Holland" <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "Biju Das" <biju.das.jz@bp.renesas.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v7 1/6] riscv: mm: dma-noncoherent: Switch using function pointers
+ for cache management
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Mar 2023 07:45:56 +0000, Tudor Ambarus wrote:
-> This is a new version of the following patch sets:
-> https://lore.kernel.org/linux-mtd/20220411125346.118274-1-tudor.ambarus@microchip.com/
-> https://lore.kernel.org/linux-mtd/20230315034004.5535-1-Takahiro.Kuwano@infineon.com/
-> 
-> Changes in v5:
-> - squash 6/11 and 7/11 to have a single point of failure in case
->   regressions are determnined by bisecting. Update commit message.
-> - get rif of the now empty winbond_nor_default_init()
-> - s/sfdp_bits_set/SFDP_MASK_CHECK
-> - set micron-st's static spi_nor_set_4byte_addr_mode_wren_en4b_ex4 only
->   when the 4byte addr mode method is not determined at BFPT parsing time
-> - reverse xmas tree for local variables in
->   cypress_nor_set_addr_mode_nbytes.
-> 
-> [...]
+On Tue, Apr 4, 2023, at 07:29, Christoph Hellwig wrote:
+> On Thu, Mar 30, 2023 at 09:42:12PM +0100, Prabhakar wrote:
+>> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>> 
+>> Currently, selecting which CMOs to use on a given platform is done using
+>> and ALTERNATIVE_X() macro. This was manageable when there were just two
+>> CMO implementations, but now that there are more and more platforms coming
+>> needing custom CMOs, the use of the ALTERNATIVE_X() macro is unmanageable.
+>> 
+>> To avoid such issues this patch switches to use of function pointers
+>> instead of ALTERNATIVE_X() macro for cache management (the only drawback
+>> being performance over the previous approach).
+>> 
+>> void (*clean_range)(unsigned long addr, unsigned long size);
+>> void (*inv_range)(unsigned long addr, unsigned long size);
+>> void (*flush_range)(unsigned long addr, unsigned long size);
+>> 
+>
+> NAK.  Function pointers for somthing high performance as cache
+> maintainance is a complete no-go.
 
-Applied to git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git,
-spi-nor/next branch. Thanks!
+As we already discussed, this is now planned to use a direct
+branch to the zicbom version when the function pointer is NULL,
+which should be a fast predicted branch on all standard implementations
+and only be slow on the nonstandard ones, which I think is a reasonable
+compromise.
 
-[01/10] mtd: spi-nor: core: Move generic method to core - micron_st_nor_set_4byte_addr_mode
-        https://git.kernel.org/mtd/c/076aa4eac8b3
-[02/10] mtd: spi-nor: core: Update name and description of micron_st_nor_set_4byte_addr_mode
-        https://git.kernel.org/mtd/c/288df4378319
-[03/10] mtd: spi-nor: core: Update name and description of spansion_set_4byte_addr_mode
-        https://git.kernel.org/mtd/c/f1f1976224f3
-[04/10] mtd: spi-nor: core: Update name and description of spi_nor_set_4byte_addr_mode
-        https://git.kernel.org/mtd/c/d75c22f376f6
-[05/10] mtd: spi-nor: core: Make spi_nor_set_4byte_addr_mode_brwr public
-        https://git.kernel.org/mtd/c/3a4d5f4af9e6
-[06/10] mtd: spi-nor: Set the 4-Byte Address Mode method based on SFDP data
-        https://git.kernel.org/mtd/c/4e53ab0c292d
-[07/10] mtd: spi-nor: Stop exporting spi_nor_restore()
-        https://git.kernel.org/mtd/c/7fe1b00d92ea
-[08/10] mtd: spi-nor: core: Update flash's current address mode when changing address mode
-        https://git.kernel.org/mtd/c/37513c56139b
-[09/10] mtd: spi-nor: core: Introduce spi_nor_set_4byte_addr_mode()
-        https://git.kernel.org/mtd/c/b6094ac83dd4
-[10/10] mtd: spi-nor: spansion: Determine current address mode
-        https://git.kernel.org/mtd/c/c87c9b11c53c
+I'm also not sure I'd actually consider this a fast path, since
+there is already a significant cost in accessing the invalidated
+cache lines afterwards, which is likely going to be much higher than
+the cost of an indirect branch.
 
-Cheers,
--- 
-Tudor Ambarus <tudor.ambarus@linaro.org>
+I suppose an alternative would be to use the linux/static_call.h
+infrastructure to avoid the overhead of indirect branches altogether.
+Right now, this has no riscv specific implementation though, so
+using it just turns into a regular indirect branch until someone
+implements static_call.
+
+       Arnd
