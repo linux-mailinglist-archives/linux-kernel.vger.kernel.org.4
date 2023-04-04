@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70FB6D6909
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CED6D690A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235225AbjDDQiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S235303AbjDDQi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235166AbjDDQir (ORCPT
+        with ESMTP id S235176AbjDDQir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Apr 2023 12:38:47 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE0013D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:38:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53436113
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:38:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680626279;
+        s=mimecast20190719; t=1680626282;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=x67eJiKWfkOOGp7f4Z5Mhye30XEwf/bDKb9kNuQLIhw=;
-        b=ie9rx0bEy22TtSRPwkJgtSNRWc5tl7tWVpKgWrG+DNqJ0dvZX+ESkVwyb5tnS7Sf2fnLfC
-        HaX5YeNBA/J+RNDWsJkS3wKjtsqojabOo/CxFsXsud3TDUlnlmK41QC1jlHxLKS0eknWnV
-        XqB6j2wVzCTKOoEgk2wopMIFnBSER+M=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Po1dD0V9oZXC1u6q0PdogM7Oei1BCdcz7qvnbPIGYkM=;
+        b=OdFwLT28DbbewUbIvux2oG/pwoplp++WMiKUws6hcnGjzGkLdYy2F7iG9FuegnTxGQk71U
+        fX04jPeEjNdttaxix/khwNuA6ZtQ8Pn66dY/a3ROR9Z1CeI/HuPHIxqveuf2jaKBz7ZLic
+        9JufmMIyssyWqz+EwqpPG5gnsjVlHOE=
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
+ [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-299-p-nem63GMNaSgoB1MmMQGA-1; Tue, 04 Apr 2023 12:37:57 -0400
-X-MC-Unique: p-nem63GMNaSgoB1MmMQGA-1
-Received: by mail-oi1-f198.google.com with SMTP id j6-20020aca6546000000b003890ca8e7faso7569892oiw.11
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 09:37:57 -0700 (PDT)
+ us-mta-47-R7FTlUbkPyq8V8_wkWfKcw-1; Tue, 04 Apr 2023 12:38:00 -0400
+X-MC-Unique: R7FTlUbkPyq8V8_wkWfKcw-1
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-17a678c2de9so17440054fac.14
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 09:38:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680626276;
+        d=1e100.net; s=20210112; t=1680626279;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=x67eJiKWfkOOGp7f4Z5Mhye30XEwf/bDKb9kNuQLIhw=;
-        b=e0gMnZaQebwnUPyao0QhPhSomnJ/UGU9GT9N1bAtRncCOB2J3A4kznV0wvfwWFb4Us
-         f+QTYol+6AoyFNWjuyQiXb4wfjaURtP31yzT1oXYJzYBBefS4OJFTEqSu4B78mCv1AfW
-         JoUcaTv6ZnFq87WjdU7PT5RK2zCgppZ4RqRrPiuy6FGMbVPhFxrWIeokHCcY4fMWXoTo
-         Io7NwaQ+rDYIFSqKaSmUQi8MQjpcgPdXGOF23gEW1KF6zrXn6nNaTJOWsGnMfGbvcvLL
-         VaLHX4MGz6WDtc5JJ9fnUlsccoKCsnG8Hfn3E6k+vDRdm+VAmPTCcWSt+MYNxyN0AT9l
-         cyYw==
-X-Gm-Message-State: AAQBX9cyQTl0o+MRLrBwcIY8ZsyTS2mHkbQb3965XlN7pLKM9J4yvlHm
-        G3X+2xLw1H74COP7WfdaJWCwG93uDhB9XN8z44xmOsJm6aPMrVslOyzQaFGxz9o9WOr4PCs8KiV
-        mIapM4NaNKL4MOxzYgyemYLYw
-X-Received: by 2002:a54:471a:0:b0:389:72d5:f16f with SMTP id k26-20020a54471a000000b0038972d5f16fmr1575913oik.28.1680626276555;
-        Tue, 04 Apr 2023 09:37:56 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZFxm9VKkuRCMgs6kh4K+aV5vzqKnbbzO6Oq2hq27GK/DiYuPVZe/Rh2OKQA1BsOa41q5DNAw==
-X-Received: by 2002:a54:471a:0:b0:389:72d5:f16f with SMTP id k26-20020a54471a000000b0038972d5f16fmr1575905oik.28.1680626276359;
-        Tue, 04 Apr 2023 09:37:56 -0700 (PDT)
+        bh=Po1dD0V9oZXC1u6q0PdogM7Oei1BCdcz7qvnbPIGYkM=;
+        b=sLD4Ai4wxvAV/SpCBjdOZzJGkwZckWEwfptFZoPm6xaeSo8XJBMTkijgow5G6bng4M
+         hFZURIofEK7C5ij7gzxZZjW9a8ohQYT29hWKAkBT8Oe1ebfbrYIvCoN5+KoyUE8wJgXt
+         hQd9y/sTrLBGhJNQyGk7whZZbz+EaxE2K1yoMkUYluorNCATtOWhs6yXzqCypOLGILW9
+         yoRr/vANru2QwPFty0BIGhc6v7YysQMSA9pkDNzRlnDeJFAcUpdpIGQFunRQzLrRjx+3
+         EJ7L+DS1DwmuVhs+YAflQbm68z8LQvWfIaE5ivI6EPwRU/uYFbm8alh7fvUYc4O4MND3
+         RmOw==
+X-Gm-Message-State: AAQBX9dnYGL2kgXwzjE/US9fzO9NqryTM6tEaOkvoai64UAP1n3+0Q2P
+        vmf8wwvxxqbZAe+6PyRlJINA2Xvjgx2fqp+c3yXo4wDoUVn2EgURx6mucxQC/bk6IS6gFsu9tGI
+        kLQ+m186C+LOzg6zHKwG4bTPK
+X-Received: by 2002:a05:6808:4b:b0:384:23f0:21b7 with SMTP id v11-20020a056808004b00b0038423f021b7mr1347053oic.14.1680626279663;
+        Tue, 04 Apr 2023 09:37:59 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aOrxgdZwug+N0+LNMDxyZG6RB11xLyFdHeoJrlEj4dqfaDrYNSHKssIXTp1eibxVXFi6Velw==
+X-Received: by 2002:a05:6808:4b:b0:384:23f0:21b7 with SMTP id v11-20020a056808004b00b0038423f021b7mr1347044oic.14.1680626279345;
+        Tue, 04 Apr 2023 09:37:59 -0700 (PDT)
 Received: from localhost.localdomain ([2804:1b3:a802:2599:c6a8:e6db:a08:61b6])
-        by smtp.gmail.com with ESMTPSA id bd1-20020a056808220100b0038755008179sm5264623oib.26.2023.04.04.09.37.53
+        by smtp.gmail.com with ESMTPSA id bd1-20020a056808220100b0038755008179sm5264623oib.26.2023.04.04.09.37.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 09:37:55 -0700 (PDT)
+        Tue, 04 Apr 2023 09:37:59 -0700 (PDT)
 From:   Leonardo Bras <leobras@redhat.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -65,9 +65,9 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Andrea Parri <parri.andrea@gmail.com>,
         Conor Dooley <conor.dooley@microchip.com>
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 3/6] riscv/cmpxchg: Deduplicate arch_cmpxchg() macros
-Date:   Tue,  4 Apr 2023 13:37:38 -0300
-Message-Id: <20230404163741.2762165-4-leobras@redhat.com>
+Subject: [RFC PATCH v3 4/6] riscv/cmpxchg: Deduplicate xchg() asm functions
+Date:   Tue,  4 Apr 2023 13:37:39 -0300
+Message-Id: <20230404163741.2762165-5-leobras@redhat.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230404163741.2762165-1-leobras@redhat.com>
 References: <20230404163741.2762165-1-leobras@redhat.com>
@@ -83,82 +83,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Every arch_cmpxchg define (_relaxed, _acquire, _release, vanilla) contain
-it's own define for creating tmp variables and calling the correct internal
-macro for the desired version.
+In this header every xchg define (_relaxed, _acquire, _release, vanilla)
+contain it's own asm file, both for 4-byte variables an 8-byte variables,
+on a total of 8 versions of mostly the same asm.
 
-Those defines are mostly the same code, so there is no need to keep the 4
-copies.
+This is usually bad, as it means any change may be done in up to 8
+different places.
 
-Create a helper define to avoid code duplication.
+Unify those versions by creating a new define with enough parameters to
+generate any version of the previous 8.
 
 (This did not cause any change in generated asm)
 
 Signed-off-by: Leonardo Bras <leobras@redhat.com>
 ---
- arch/riscv/include/asm/cmpxchg.h | 30 +++++++++---------------------
- 1 file changed, 9 insertions(+), 21 deletions(-)
+ arch/riscv/include/asm/cmpxchg.h | 71 ++++++++++++--------------------
+ 1 file changed, 27 insertions(+), 44 deletions(-)
 
 diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index f76a82274a4fd..f88fae357071c 100644
+index f88fae357071c..a524484946815 100644
 --- a/arch/riscv/include/asm/cmpxchg.h
 +++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -204,46 +204,34 @@
- #define __cmpxchg_relaxed(ptr, old, new, size)				\
- 	___cmpxchg(ptr, old, new, size, "", "", "")
+@@ -11,6 +11,17 @@
+ #include <asm/barrier.h>
+ #include <asm/fence.h>
  
--#define arch_cmpxchg_relaxed(ptr, o, n)					\
-+#define _arch_cmpxchg(order, ptr, o, n)					\
- ({									\
- 	__typeof__(*(ptr)) _o_ = (o);					\
- 	__typeof__(*(ptr)) _n_ = (n);					\
--	(__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),			\
--					_o_, _n_, sizeof(*(ptr)));	\
-+	(__typeof__(*(ptr))) __cmpxchg ## order((ptr), _o_, _n_,	\
-+						sizeof(*(ptr)));	\
- })
- 
-+#define arch_cmpxchg_relaxed(ptr, o, n)					\
-+	_arch_cmpxchg(_relaxed, ptr, o, n)
++#define ___xchg(sfx, prepend, append, r, p, n)				\
++({									\
++	__asm__ __volatile__ (						\
++		prepend							\
++		"	amoswap" sfx " %0, %2, %1\n"			\
++		append							\
++		: "=r" (r), "+A" (*(p))					\
++		: "r" (n)						\
++		: "memory");						\
++})
 +
- #define __cmpxchg_acquire(ptr, old, new, size)				\
- 	___cmpxchg(ptr, old, new, size, "", "", RISCV_ACQUIRE_BARRIER)
- 
- #define arch_cmpxchg_acquire(ptr, o, n)					\
--({									\
--	__typeof__(*(ptr)) _o_ = (o);					\
--	__typeof__(*(ptr)) _n_ = (n);					\
--	(__typeof__(*(ptr))) __cmpxchg_acquire((ptr),			\
--					_o_, _n_, sizeof(*(ptr)));	\
--})
-+	_arch_cmpxchg(_acquire, ptr, o, n)
- 
- #define __cmpxchg_release(ptr, old, new, size)				\
- 	___cmpxchg(ptr, old, new, size, "", RISCV_RELEASE_BARRIER, "")
- 
- #define arch_cmpxchg_release(ptr, o, n)					\
--({									\
--	__typeof__(*(ptr)) _o_ = (o);					\
--	__typeof__(*(ptr)) _n_ = (n);					\
--	(__typeof__(*(ptr))) __cmpxchg_release((ptr),			\
--					_o_, _n_, sizeof(*(ptr)));	\
--})
-+	_arch_cmpxchg(_release, ptr, o, n)
- 
- #define __cmpxchg(ptr, old, new, size)					\
- 	___cmpxchg(ptr, old, new, size, ".rl", "", "	fence rw, rw\n")
- 
- #define arch_cmpxchg(ptr, o, n)						\
--({									\
--	__typeof__(*(ptr)) _o_ = (o);					\
--	__typeof__(*(ptr)) _n_ = (n);					\
--	(__typeof__(*(ptr))) __cmpxchg((ptr),				\
--				       _o_, _n_, sizeof(*(ptr)));	\
--})
-+	_arch_cmpxchg(, ptr, o, n)
- 
- #define arch_cmpxchg_local(ptr, o, n)					\
- 	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
+ #define __xchg_relaxed(ptr, new, size)					\
+ ({									\
+ 	__typeof__(ptr) __ptr = (ptr);					\
+@@ -18,18 +29,12 @@
+ 	__typeof__(*(ptr)) __ret;					\
+ 	switch (size) {							\
+ 	case 4:								\
+-		__asm__ __volatile__ (					\
+-			"	amoswap.w %0, %2, %1\n"			\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
++		___xchg(".w", "", "",					\
++			__ret, __ptr, __new);				\
+ 		break;							\
+ 	case 8:								\
+-		__asm__ __volatile__ (					\
+-			"	amoswap.d %0, %2, %1\n"			\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
++		___xchg(".d", "", "",					\
++			__ret, __ptr, __new);				\
+ 		break;							\
+ 	default:							\
+ 		BUILD_BUG();						\
+@@ -51,20 +56,12 @@
+ 	__typeof__(*(ptr)) __ret;					\
+ 	switch (size) {							\
+ 	case 4:								\
+-		__asm__ __volatile__ (					\
+-			"	amoswap.w %0, %2, %1\n"			\
+-			RISCV_ACQUIRE_BARRIER				\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
++		___xchg(".w", "", RISCV_ACQUIRE_BARRIER,		\
++			__ret, __ptr, __new);				\
+ 		break;							\
+ 	case 8:								\
+-		__asm__ __volatile__ (					\
+-			"	amoswap.d %0, %2, %1\n"			\
+-			RISCV_ACQUIRE_BARRIER				\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
++		___xchg(".d", "", RISCV_ACQUIRE_BARRIER,		\
++			__ret, __ptr, __new);				\
+ 		break;							\
+ 	default:							\
+ 		BUILD_BUG();						\
+@@ -86,20 +83,12 @@
+ 	__typeof__(*(ptr)) __ret;					\
+ 	switch (size) {							\
+ 	case 4:								\
+-		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"	amoswap.w %0, %2, %1\n"			\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
++		___xchg(".w", RISCV_RELEASE_BARRIER, "",		\
++			__ret, __ptr, __new);				\
+ 		break;							\
+ 	case 8:								\
+-		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"	amoswap.d %0, %2, %1\n"			\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
++		___xchg(".d", RISCV_RELEASE_BARRIER, "",		\
++			__ret, __ptr, __new);				\
+ 		break;							\
+ 	default:							\
+ 		BUILD_BUG();						\
+@@ -121,18 +110,12 @@
+ 	__typeof__(*(ptr)) __ret;					\
+ 	switch (size) {							\
+ 	case 4:								\
+-		__asm__ __volatile__ (					\
+-			"	amoswap.w.aqrl %0, %2, %1\n"		\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
++		___xchg(".w.aqrl", "", "",				\
++			__ret, __ptr, __new);				\
+ 		break;							\
+ 	case 8:								\
+-		__asm__ __volatile__ (					\
+-			"	amoswap.d.aqrl %0, %2, %1\n"		\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
++		___xchg(".d.aqrl", "", "",				\
++			__ret, __ptr, __new);				\
+ 		break;							\
+ 	default:							\
+ 		BUILD_BUG();						\
 -- 
 2.40.0
 
