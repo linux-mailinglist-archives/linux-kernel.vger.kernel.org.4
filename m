@@ -2,163 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0B26D68A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8DA6D68AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235100AbjDDQWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        id S233148AbjDDQZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbjDDQWp (ORCPT
+        with ESMTP id S232952AbjDDQZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:22:45 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8325C3C2F
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:22:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680625364; x=1712161364;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TXMnWgYYUe95e5xj9YuOxrPZIevDXcLlaiDRaU0YY64=;
-  b=eARlqWd/1CkEZ4NQC9V/b3AgssmxHDt5LZjWZsgx2DqiWFgASgPnk6zU
-   6CcDXtgrXOnEcNY/hwUP4mNTx19g22U1mof7lBX1X5vkQa/2+cn/KPBnM
-   AyyqHNIuNtDrIEE7fguwJEaDsHk5xjVuQA/+mkbttg9gtFwIq31Ml58kp
-   g2edmpx+K2j2tGfDhvSMiByhlenQ1psi1VtplsnRJW1tQLvtxvBPDlnJU
-   kOjAqY+4/omFwWJzk9huz4oD3fy/eUAPig7trf4946V9G3t45rJ64sCQy
-   +4KVdDGHSF1F5YZTP1gg+I9eJptimd/YutUajEY8lkuA1CgGzHtKdsKOm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="428522222"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="428522222"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 09:22:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="755701017"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="755701017"
-Received: from pcanders-mobl1.ger.corp.intel.com (HELO [10.213.217.134]) ([10.213.217.134])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 09:22:41 -0700
-Message-ID: <74add824-76b6-96eb-b4b2-67d908474c8b@linux.intel.com>
-Date:   Tue, 4 Apr 2023 17:22:39 +0100
+        Tue, 4 Apr 2023 12:25:21 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479A1171C
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:25:20 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id p34so19387614wms.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 09:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1680625519;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vDk7Rc1+MlWExgJcsOHL4y40vJ5PAjWrSI2Xt0WKM8M=;
+        b=nQmO0GuiV4QZBXRBbBMVzHtFmDIyOn0ZbA7ZCuVmg0mv0cUepkPjSrAMNOpshj4BQp
+         uVIU+3z9FXhDrft53jJNC6siocV4dlmMcVjeN25d04FW33B4WtxzJG4xtxPom9gW+q0C
+         EOLNRuMKERDowqBWYXxK8Ib3xiLC+1boADcxBpk5ArAczCiOCFCoW/r6j5P5fnrClZNm
+         SQYupR9ilY0F2FaWhkognZ4y4Cvy5s5m31k0ojG0ZYijw9MvCLzUmz492LIINCFTk8VZ
+         TyWv+j7e0tmWrM+rVzOat6C/HAPjcxc2gMv7kr1BvKzOLbfvm7aM8mSi+B4KRmnkDK66
+         KQXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680625519;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vDk7Rc1+MlWExgJcsOHL4y40vJ5PAjWrSI2Xt0WKM8M=;
+        b=czJBWmKrTEyBHlIx602OreGkq10tLRoDk1TORuaxtAw/ilMNMWRm17D00uc2/bZdAZ
+         jJa8K9r+09cOeHyk/yKWQHsSw+l1IQlG6W1Yq/E1DYipJ0rdsPJX+aVW6f7lzdLYXQJP
+         toDoZJkHfLjq5kblG+USQTSv7BBOYKhrMjayZwWv3XDCsqdijROZkAW0qJ+e86rvi9YX
+         xnMjnSrXQ7dwz4MueV+bQ3RcJAmu0qjQGyXc/GvJ2/R4nUqTTIVHVFUFl/G7rXt4YNFm
+         V48IMm3oDYKr0KwrcUf8arNsArkPhlg3si4JW8fvIFhdp11gwCSErzsC/h8Wsg1mAjRg
+         gKSA==
+X-Gm-Message-State: AAQBX9eoMGUwlQ5gIWe9YyJ+EAW4FGGLmN6iKq9kRAth+p1GM0a+TLlu
+        1hay/lPMvmJ+mBtfiYhr0yq3ioYEnYZl6XKjDac=
+X-Google-Smtp-Source: AKy350ZEVfY7T7MI9PiLLjjET7sb4Iy02pa7upxW8SfHLpRHBZOevNEEwY0yifqPndAiXwKpzG87Hw==
+X-Received: by 2002:a7b:cd94:0:b0:3ee:5bd8:d537 with SMTP id y20-20020a7bcd94000000b003ee5bd8d537mr2409858wmj.5.1680625518762;
+        Tue, 04 Apr 2023 09:25:18 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id w18-20020a1cf612000000b003ee58e8c971sm15589813wmc.14.2023.04.04.09.25.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 09:25:18 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 18:25:17 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 7/9] RISC-V: KVM: Use bitmap for irqs_pending and
+ irqs_pending_mask
+Message-ID: <6dvutvobx754xdbbfw4ociyxuay6fqjwm3vxdp5dmsyefypvzs@ydxl65hjdwt2>
+References: <20230404153452.2405681-1-apatel@ventanamicro.com>
+ <20230404153452.2405681-8-apatel@ventanamicro.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] drm/i915/gt: Hold a wakeref for the active VM
-Content-Language: en-US
-To:     Andi Shyti <andi.shyti@linux.intel.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Chris Wilson <chris.p.wilson@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-References: <20230330-hold_wakeref_for_active_vm-v2-1-724d201499c2@intel.com>
- <ZCxEoelnOSpRiy6A@ashyti-mobl2.lan>
- <f193eb7f-19f9-b9a8-7edf-438dafb74da4@linux.intel.com>
- <ZCxJitP+XtC2/run@ashyti-mobl2.lan>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <ZCxJitP+XtC2/run@ashyti-mobl2.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404153452.2405681-8-apatel@ventanamicro.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 04/04/2023 17:00, Andi Shyti wrote:
-> Hi Tvrtko,
+On Tue, Apr 04, 2023 at 09:04:50PM +0530, Anup Patel wrote:
+> To support 64 VCPU local interrupts on RV32 host, we should use
+> bitmap for irqs_pending and irqs_pending_mask in struct kvm_vcpu_arch.
 > 
->>>> diff --git a/drivers/gpu/drm/i915/gt/intel_context.h b/drivers/gpu/drm/i915/gt/intel_context.h
->>>> index 0a8d553da3f439..48f888c3da083b 100644
->>>> --- a/drivers/gpu/drm/i915/gt/intel_context.h
->>>> +++ b/drivers/gpu/drm/i915/gt/intel_context.h
->>>> @@ -14,6 +14,7 @@
->>>>    #include "i915_drv.h"
->>>>    #include "intel_context_types.h"
->>>>    #include "intel_engine_types.h"
->>>> +#include "intel_gt_pm.h"
->>>>    #include "intel_ring_types.h"
->>>>    #include "intel_timeline_types.h"
->>>>    #include "i915_trace.h"
->>>> @@ -207,8 +208,11 @@ void intel_context_exit_engine(struct intel_context *ce);
->>>>    static inline void intel_context_enter(struct intel_context *ce)
->>>>    {
->>>>    	lockdep_assert_held(&ce->timeline->mutex);
->>>> -	if (!ce->active_count++)
->>>> -		ce->ops->enter(ce);
->>>> +	if (ce->active_count++)
->>>> +		return;
->>>> +
->>>> +	ce->ops->enter(ce);
->>>> +	intel_gt_pm_get(ce->vm->gt);
->>>>    }
->>>>    static inline void intel_context_mark_active(struct intel_context *ce)
->>>> @@ -222,8 +226,11 @@ static inline void intel_context_exit(struct intel_context *ce)
->>>>    {
->>>>    	lockdep_assert_held(&ce->timeline->mutex);
->>>>    	GEM_BUG_ON(!ce->active_count);
->>>> -	if (!--ce->active_count)
->>>> -		ce->ops->exit(ce);
->>>> +	if (--ce->active_count)
->>>> +		return;
->>>> +
->>>> +	intel_gt_pm_put_async(ce->vm->gt);
->>>> +	ce->ops->exit(ce);
->>>
->>> shouldn't these two be swapped?
-> 
-> maybe I wasn't clear here... shouldn't it be
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  arch/riscv/include/asm/kvm_host.h |  7 ++--
+>  arch/riscv/kvm/vcpu.c             | 53 ++++++++++++++++++++-----------
+>  2 files changed, 38 insertions(+), 22 deletions(-)
+>
 
-I missed this one.
-
-> 	ce->ops->exit(ce);
-> 	intel_gt_pm_put_async(ce->vm->gt);
-> 
-> Don't we need to hold the pm until exiting?
-
-I think it doesn't matter. The problematic edge case this is fixing is 
-when ce->engine->gt is different from ce->vm->gt but at this point if it 
-is safe to release one it must be safe to release the other too.
-
-Regards,
-
-Tvrtko
-
-
-> 
->>>>    }
->>>>    static inline struct intel_context *intel_context_get(struct intel_context *ce)
->>>> diff --git a/drivers/gpu/drm/i915/gt/intel_engine_pm.c b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
->>>> index e971b153fda976..ee531a5c142c77 100644
->>>> --- a/drivers/gpu/drm/i915/gt/intel_engine_pm.c
->>>> +++ b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
->>>> @@ -114,6 +114,15 @@ __queue_and_release_pm(struct i915_request *rq,
->>>>    	ENGINE_TRACE(engine, "parking\n");
->>>> +	/*
->>>> +	 * Open coded one half of intel_context_enter, which we have to omit
->>>> +	 * here (see the large comment below) and because the other part must
->>>> +	 * not be called due constructing directly with __i915_request_create
->>>> +	 * which increments active count via intel_context_mark_active.
->>>> +	 */
->>>> +	GEM_BUG_ON(rq->context->active_count != 1);
->>>> +	__intel_gt_pm_get(engine->gt);
->>>
->>> where is it's brother "put"?
->>
->> It's in request retire via intel_context_exit. Ie. request construction is
->> special here, while retirement is standard.
-> 
-> Thank you!
-> Andi
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
