@@ -2,237 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94186D5F88
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C64E6D5F8B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235000AbjDDLvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
+        id S234031AbjDDLwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 07:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234971AbjDDLvD (ORCPT
+        with ESMTP id S230144AbjDDLws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:51:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9765435A1;
-        Tue,  4 Apr 2023 04:50:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E3B0153B;
-        Tue,  4 Apr 2023 04:51:38 -0700 (PDT)
-Received: from e120937-lin.. (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D24843F762;
-        Tue,  4 Apr 2023 04:50:52 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Cc:     sudeep.holla@arm.com, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com, nicola.mazzucato@arm.com,
-        Cristian Marussi <cristian.marussi@arm.com>
-Subject: [PATCH v3 2/2] firmware: arm_scmi: Add support for unidirectional mailbox channels
-Date:   Tue,  4 Apr 2023 12:50:26 +0100
-Message-Id: <20230404115026.2828149-3-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230404115026.2828149-1-cristian.marussi@arm.com>
-References: <20230404115026.2828149-1-cristian.marussi@arm.com>
+        Tue, 4 Apr 2023 07:52:48 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4821710F3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 04:52:46 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id r11so32479322wrr.12
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 04:52:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1680609165;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OLv0LN8lAk3QfnUhhhnsk24mDFgoCCiKw5kM+c/FrNk=;
+        b=PIlIYQqvjr/V8cmB877Rcy8JB6XO7vQw6kz3u5ewvPi/aNCK9zVxMGitBDmI+6p/7D
+         QT79PNqb8XggeQ6ggP6RpTGCLaREBQ/fM0+tB1ZF3J9IZvdpirQg+vl9Ge/YvJxBEVM8
+         Sh7iDicitGN00XAVMZAqG5rsejGo/Wx5E6rWtsYlyqOsxIAdKBC8vIpUmNrZ1J5tJx7k
+         Ofrj8QaOZc9IWERMqUwAbI+Zemye5wxZcdNzaXrb78dbgqoMHpybLvBZq8Oar6aZrOXm
+         lPgCqlZEy3jB8t5/wdP3gtix8wLReCQtMnhSxZFXJ/M0rKVtoXWDpHquRNOney/B37us
+         z9bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680609165;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OLv0LN8lAk3QfnUhhhnsk24mDFgoCCiKw5kM+c/FrNk=;
+        b=lUFXkUTqs5xZoSDfNtADCYFNpzYvLbBCJLW8YDr4gtTW5V6DSQoYbTeMD5L709DjBd
+         1diu3fju5O6dTvmR5TOWM++P+W8c1F8Zd9a4Be4bahTisH4Ba9qX4gGWWUynK3F65s8N
+         gDboyM5GpLvoaGo40NlDIMQr6BioL+ybEeCzPiR09wZr7fTI1T0+1qXNQaxhRZFKHUhr
+         RK6yEf/cqqjhY/5W/l6p75ilOJaB/kpMLg9My7D4owFjd4uij4BPm24xitqZLmjBWu5O
+         eUNtuibkhvmns5DnKvONRITZTipmCyo2ornoI8zn/OSeY044wOfcKv+SXdcfaJFgkVfi
+         ty3w==
+X-Gm-Message-State: AAQBX9etWAzl0U5sMdbTV6FAmPMQ74kiDt+onvOw8PQ7JyDYWM5pV9No
+        yXe4i7oPaLIxjoNA5XkXe3BNPw==
+X-Google-Smtp-Source: AKy350Yya7ma4256kplKnJKWPZOqQ3wKmsQ11nyME/nhGt+TWoTPHYoPW3R82d3hK3Fcm80POIwx0w==
+X-Received: by 2002:a5d:4904:0:b0:2cf:e868:f781 with SMTP id x4-20020a5d4904000000b002cfe868f781mr1470835wrq.42.1680609164757;
+        Tue, 04 Apr 2023 04:52:44 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id d16-20020a5d4f90000000b002d51d10a3fasm12192160wru.55.2023.04.04.04.52.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 04:52:44 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 13:52:43 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Anup Patel <anup@brainfault.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 6/8] RISC-V: KVM: Add ONE_REG interface for AIA CSRs
+Message-ID: <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
+References: <20230403093310.2271142-1-apatel@ventanamicro.com>
+ <20230403093310.2271142-7-apatel@ventanamicro.com>
+ <osrpjiywxtkgxb5i6mfvxzfrzrnjv75uqzvlu3fouo4mqsktgj@blcmyjt3twqg>
+ <CAAhSdy1JEQBiO55iCy97arO63VjGc+NicUvvwzTpK97W97LmJg@mail.gmail.com>
+ <ejt3x4p7xhxfvwiafnogfwdn5dzd4qyowlht22utnbvzefsbyh@7dch4mebwckm>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ejt3x4p7xhxfvwiafnogfwdn5dzd4qyowlht22utnbvzefsbyh@7dch4mebwckm>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the SCMI transport layer to support mailbox controllers that expose
-communication channels that are unidirectional by nature.
+On Mon, Apr 03, 2023 at 02:23:01PM +0200, Andrew Jones wrote:
+> On Mon, Apr 03, 2023 at 05:34:57PM +0530, Anup Patel wrote:
+> > On Mon, Apr 3, 2023 at 5:01 PM Andrew Jones <ajones@ventanamicro.com> wrote:
+> > >
+> > > On Mon, Apr 03, 2023 at 03:03:08PM +0530, Anup Patel wrote:
+> > > > We implement ONE_REG interface for AIA CSRs as a separate subtype
+> > > > under the CSR ONE_REG interface.
+> > > >
+> > > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > > ---
+> > > >  arch/riscv/include/uapi/asm/kvm.h | 8 ++++++++
+> > > >  arch/riscv/kvm/vcpu.c             | 8 ++++++++
+> > > >  2 files changed, 16 insertions(+)
+> > > >
+> > > > diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+> > > > index 182023dc9a51..cbc3e74fa670 100644
+> > > > --- a/arch/riscv/include/uapi/asm/kvm.h
+> > > > +++ b/arch/riscv/include/uapi/asm/kvm.h
+> > > > @@ -79,6 +79,10 @@ struct kvm_riscv_csr {
+> > > >       unsigned long scounteren;
+> > > >  };
+> > > >
+> > > > +/* AIA CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+> > > > +struct kvm_riscv_aia_csr {
+> > > > +};
+> > > > +
+> > > >  /* TIMER registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+> > > >  struct kvm_riscv_timer {
+> > > >       __u64 frequency;
+> > > > @@ -107,6 +111,7 @@ enum KVM_RISCV_ISA_EXT_ID {
+> > > >       KVM_RISCV_ISA_EXT_ZIHINTPAUSE,
+> > > >       KVM_RISCV_ISA_EXT_ZICBOM,
+> > > >       KVM_RISCV_ISA_EXT_ZBB,
+> > >
+> > > Looks like this patch is also based on "[PATCH] RISC-V: KVM: Allow Zbb
+> > > extension for Guest/VM"
+> > 
+> > Yes, do you want me to change the order of dependency?
+> 
+> It's probably best if neither depend on each other, since they're
+> independent, but otherwise the order doesn't matter. It'd be nice to call
+> the order out in the cover letter to give patchwork a chance at automatic
+> build testing, though. To call it out, I believe adding
+> 
+> Based-on: 20230401112730.2105240-1-apatel@ventanamicro.com
+> 
+> to the cover letter should work.
 
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
- drivers/firmware/arm_scmi/mailbox.c | 95 +++++++++++++++++++++++++----
- 1 file changed, 84 insertions(+), 11 deletions(-)
+I also just noticed that this based on "RISC-V: KVM: Add ONE_REG
+interface to enable/disable SBI extensions"[1] and it needs to be
+in order to pick up the KVM_REG_RISCV_SUBTYPE_MASK and
+KVM_REG_RISCV_SUBTYPE_SHIFT defines. It'd be good to call that
+patch out with Based-on.
 
-diff --git a/drivers/firmware/arm_scmi/mailbox.c b/drivers/firmware/arm_scmi/mailbox.c
-index 112c285deb97..1efa5e9392c4 100644
---- a/drivers/firmware/arm_scmi/mailbox.c
-+++ b/drivers/firmware/arm_scmi/mailbox.c
-@@ -19,13 +19,15 @@
-  * struct scmi_mailbox - Structure representing a SCMI mailbox transport
-  *
-  * @cl: Mailbox Client
-- * @chan: Transmit/Receive mailbox channel
-+ * @chan: Transmit/Receive mailbox uni/bi-directional channel
-+ * @chan_receiver: Optional Receiver mailbox unidirectional channel
-  * @cinfo: SCMI channel info
-  * @shmem: Transmit/Receive shared memory area
-  */
- struct scmi_mailbox {
- 	struct mbox_client cl;
- 	struct mbox_chan *chan;
-+	struct mbox_chan *chan_receiver;
- 	struct scmi_chan_info *cinfo;
- 	struct scmi_shared_mem __iomem *shmem;
- };
-@@ -48,30 +50,62 @@ static void rx_callback(struct mbox_client *cl, void *m)
- 
- static bool mailbox_chan_available(struct device_node *of_node, int idx)
- {
-+	int num_mb;
-+
-+	/*
-+	 * Just check if bidirrectional channels are involved, and check the
-+	 * index accordingly; proper full validation will be made later
-+	 * in mailbox_chan_setup().
-+	 */
-+	num_mb = of_count_phandle_with_args(of_node, "mboxes", "#mbox-cells");
-+	if (num_mb == 3 && idx == 1)
-+		idx = 2;
-+
- 	return !of_parse_phandle_with_args(of_node, "mboxes",
- 					   "#mbox-cells", idx, NULL);
- }
- 
--static int mailbox_chan_validate(struct device *cdev)
-+/**
-+ * mailbox_chan_validate  - Validate transport configuration and map channels
-+ *
-+ * @cdev: Reference to the underlying transport device carrying the
-+ *	  of_node descriptor to analyze.
-+ * @a2p_rx_chan: A reference to an optional unidirectional channel to use
-+ *		 for replies on the a2p channel. Set as zero if not present.
-+ * @p2a_chan: A reference to the optional p2a channel.
-+ *	      Set as zero if not present.
-+ *
-+ * At first, validate the transport configuration as described in terms of
-+ * 'mboxes' and 'shmem', then determin which mailbox channel indexes are
-+ * appropriate to be use in the current configuration.
-+ *
-+ * Return: 0 on Success or error
-+ */
-+static int mailbox_chan_validate(struct device *cdev,
-+				 int *a2p_rx_chan, int *p2a_chan)
- {
- 	int num_mb, num_sh, ret = 0;
- 	struct device_node *np = cdev->of_node;
- 
- 	num_mb = of_count_phandle_with_args(np, "mboxes", "#mbox-cells");
- 	num_sh = of_count_phandle_with_args(np, "shmem", NULL);
-+	dev_dbg(cdev, "Found %d mboxes and %d shmems !\n", num_mb, num_sh);
-+
- 	/* Bail out if mboxes and shmem descriptors are inconsistent */
--	if (num_mb <= 0 || num_sh > 2 || num_mb != num_sh) {
--		dev_warn(cdev, "Invalid channel descriptor for '%s'\n",
--			 of_node_full_name(np));
-+	if (num_mb <= 0 || num_sh <= 0 || num_sh > 2 || num_mb > 3 ||
-+	    (num_mb == 1 && num_sh != 1) || (num_mb == 3 && num_sh != 2)) {
-+		dev_warn(cdev,
-+			 "Invalid channel descriptor for '%s' - mbs:%d  shm:%d\n",
-+			 of_node_full_name(np), num_mb, num_sh);
- 		return -EINVAL;
- 	}
- 
-+	/* Bail out if provided shmem descriptors do not refer distinct areas  */
- 	if (num_sh > 1) {
- 		struct device_node *np_tx, *np_rx;
- 
- 		np_tx = of_parse_phandle(np, "shmem", 0);
- 		np_rx = of_parse_phandle(np, "shmem", 1);
--		/* SCMI Tx and Rx shared mem areas have to be distinct */
- 		if (!np_tx || !np_rx || np_tx == np_rx) {
- 			dev_warn(cdev, "Invalid shmem descriptor for '%s'\n",
- 				 of_node_full_name(np));
-@@ -82,6 +116,29 @@ static int mailbox_chan_validate(struct device *cdev)
- 		of_node_put(np_rx);
- 	}
- 
-+	/* Calculate channels IDs to use depending on mboxes/shmem layout */
-+	if (!ret) {
-+		switch (num_mb) {
-+		case 1:
-+			*a2p_rx_chan = 0;
-+			*p2a_chan = 0;
-+			break;
-+		case 2:
-+			if (num_sh == 2) {
-+				*a2p_rx_chan = 0;
-+				*p2a_chan = 1;
-+			} else {
-+				*a2p_rx_chan = 1;
-+				*p2a_chan = 0;
-+			}
-+			break;
-+		case 3:
-+			*a2p_rx_chan = 1;
-+			*p2a_chan = 2;
-+			break;
-+		}
-+	}
-+
- 	return ret;
- }
- 
-@@ -92,15 +149,18 @@ static int mailbox_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
- 	struct device *cdev = cinfo->dev;
- 	struct scmi_mailbox *smbox;
- 	struct device_node *shmem;
--	int ret, idx = tx ? 0 : 1;
-+	int ret, a2p_rx_chan, p2a_chan, idx = tx ? 0 : 1;
- 	struct mbox_client *cl;
- 	resource_size_t size;
- 	struct resource res;
- 
--	ret = mailbox_chan_validate(cdev);
-+	ret = mailbox_chan_validate(cdev, &a2p_rx_chan, &p2a_chan);
- 	if (ret)
- 		return ret;
- 
-+	if (!tx && !p2a_chan)
-+		return -ENODEV;
-+
- 	smbox = devm_kzalloc(dev, sizeof(*smbox), GFP_KERNEL);
- 	if (!smbox)
- 		return -ENOMEM;
-@@ -130,15 +190,26 @@ static int mailbox_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
- 	cl->tx_block = false;
- 	cl->knows_txdone = tx;
- 
--	smbox->chan = mbox_request_channel(cl, tx ? 0 : 1);
-+	smbox->chan = mbox_request_channel(cl, tx ? 0 : p2a_chan);
- 	if (IS_ERR(smbox->chan)) {
- 		ret = PTR_ERR(smbox->chan);
- 		if (ret != -EPROBE_DEFER)
--			dev_err(cdev, "failed to request SCMI %s mailbox\n",
--				tx ? "Tx" : "Rx");
-+			dev_err(cdev,
-+				"failed to request SCMI %s mailbox\n", desc);
- 		return ret;
- 	}
- 
-+	/* Additional unidirectional channel for TX if needed */
-+	if (tx && a2p_rx_chan) {
-+		smbox->chan_receiver = mbox_request_channel(cl, a2p_rx_chan);
-+		if (IS_ERR(smbox->chan_receiver)) {
-+			ret = PTR_ERR(smbox->chan_receiver);
-+			if (ret != -EPROBE_DEFER)
-+				dev_err(cdev, "failed to request SCMI Tx Receiver mailbox\n");
-+			return ret;
-+		}
-+	}
-+
- 	cinfo->transport_info = smbox;
- 	smbox->cinfo = cinfo;
- 
-@@ -152,8 +223,10 @@ static int mailbox_chan_free(int id, void *p, void *data)
- 
- 	if (smbox && !IS_ERR(smbox->chan)) {
- 		mbox_free_channel(smbox->chan);
-+		mbox_free_channel(smbox->chan_receiver);
- 		cinfo->transport_info = NULL;
- 		smbox->chan = NULL;
-+		smbox->chan_receiver = NULL;
- 		smbox->cinfo = NULL;
- 	}
- 
--- 
-2.34.1
+[1]: 20230331174542.2067560-2-apatel@ventanamicro.com
 
+Thanks,
+drew
