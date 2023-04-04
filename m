@@ -2,131 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C9F6D5E99
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 937EE6D5E91
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234951AbjDDLGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
+        id S234716AbjDDLFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 07:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234800AbjDDLF7 (ORCPT
+        with ESMTP id S234667AbjDDLFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:05:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3B735A5;
-        Tue,  4 Apr 2023 04:03:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03A6563210;
-        Tue,  4 Apr 2023 11:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 504B2C433EF;
-        Tue,  4 Apr 2023 11:03:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680606192;
-        bh=aJ+ukukh1/o+Hvdqjwyk7hNPpvFV5NVh+CzU1Ihgp6M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fEn2D/bNRNRPumV4inV0NckbLrNKhZkGg6gSrCIc5i1J1jpI7vpE+MjAF+UL1+f2w
-         vkAG+ToDGyTXS6K20v/5FqON1ToY881e++SawtsQFjKtE7gecfaTFGuI+1XPgS20wy
-         KskGloRvCRRML+BPTEqMEaoKGBVacttxBnbyXOoPdhgvZCWUScNc6h4bf3fjiRGR/g
-         mNDQ2IN0ZI7Fgad2HUsl+2WUPSs3Bc1Q7bqR5zVL1wbjCpoB39toL61/MLG9UgzBk/
-         G0SSqI8VZTVnJPu/YnOFYl9kty+nC6wfXRhjAqDRMf9GeG7eMeq0S6dNmKjwhWeGM2
-         DVW8VrFiZR+yA==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pjeRR-005atW-MV;
-        Tue, 04 Apr 2023 12:03:09 +0100
+        Tue, 4 Apr 2023 07:05:30 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF7D268B
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 04:03:20 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id h8so128955298ede.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 04:03:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680606197;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P2X3kREg8ClZqoLFGTfMEQlTm6xCmy/glA1Hk2D1aa0=;
+        b=vj66DxpITdwlhJH75l7RkUQZ6WiakI8+iJL0HkFajARLadSSmedSCC38T3fau0NSAi
+         cuHLk9G6os+2CZPFZVMURrKYJtSV7XCcHUktC2KxBi0JYdJlEn3jIyfrRNS76EsHP+Gc
+         vSP5yuFfS0DKENJu13mSmPMXDHrOXQXyXBYgwI3yB8ukOi9+MFNaQF9blxs+UoTs3Txj
+         P/UnBYcmSIK9qgN4/80r2zy0VyjYl/ggKEoJFNcam6FWF7UWgHng1XycK5KJiIIpCKFx
+         8UCAyfQtf3TLsUcvIFlRm7Fj10RNvbeRR0Jx2rNoMSjsM3v8zioZQ2F1Kxd7kbRj5vr5
+         XELQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680606197;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P2X3kREg8ClZqoLFGTfMEQlTm6xCmy/glA1Hk2D1aa0=;
+        b=Zkx52/leNpR1DumSoAMELQBLofjzfp3U6ZnGyAkxHXdpyevpoZfaek1HzFQHPUc38L
+         ZORP8Tgx48Ju6SZdHdcGwMNBhqcq0DskxgwGy7xW3MdzL3RDXtE9/6mAq8tlPJkyM2uz
+         aHwSE0A3iEjzJM59jd5m9V4dxbOirgjob0Y0i1eYKEOwXBK2tAMmSEPCBCfRC49CKtit
+         JvS/EzHyS/Wvk1kRxle8cM11Pi8ieEvXtB1lMBGBtiWoUnJW/PxOzuFF/B4gWzLDzKcx
+         unGoA/TCVASjMfmFQUH6Mswh0BvNnryJIOkYagQM9htkNITdaBxtFxBWwBK0lzGs3FrE
+         eq/g==
+X-Gm-Message-State: AAQBX9enohSVeQ4nOWeh0aYdpFHOVUkUlSD+nnecIKlPN5iZMkF49CG2
+        ALNxUTc9wqSJlZihqQUW2pKigA==
+X-Google-Smtp-Source: AKy350Z6X6wonQ9ndSEeOqk1V1vulMt/+C2VlT2zTtfQjqb1wDbl0iUZQJtUmkPOwDAPJiXlYGDAKA==
+X-Received: by 2002:a17:906:1281:b0:947:405a:955f with SMTP id k1-20020a170906128100b00947405a955fmr1842422ejb.31.1680606197540;
+        Tue, 04 Apr 2023 04:03:17 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:99ed:4575:6001:8bda? ([2a02:810d:15c0:828:99ed:4575:6001:8bda])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170906d18a00b00923f05b2931sm5796213ejz.118.2023.04.04.04.03.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 04:03:17 -0700 (PDT)
+Message-ID: <5f8692af-700a-a47f-d81c-fe9c905958e1@linaro.org>
+Date:   Tue, 4 Apr 2023 13:03:15 +0200
 MIME-Version: 1.0
-Date:   Tue, 04 Apr 2023 12:03:09 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Devi Priya <quic_devipriy@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        p.zabel@pengutronix.de, shawnguo@kernel.org, arnd@arndb.de,
-        marcel.ziswiler@toradex.com, dmitry.baryshkov@linaro.org,
-        geert+renesas@glider.be, rafal@milecki.pl, nfraprado@collabora.com,
-        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, quic_srichara@quicinc.com,
-        quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
-Subject: Re: [PATCH V11 3/4] arm64: dts: qcom: Add support for ipq9574 SoC and
- RDP433 variant
-In-Reply-To: <20230404101622.5394-4-quic_devipriy@quicinc.com>
-References: <20230404101622.5394-1-quic_devipriy@quicinc.com>
- <20230404101622.5394-4-quic_devipriy@quicinc.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <d410c51ee4beeb4dfee80e13d54d598b@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v5 2/6] dt-bindings: ufs: qcom: Add ICE phandle
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20230403200530.2103099-1-abel.vesa@linaro.org>
+ <20230403200530.2103099-3-abel.vesa@linaro.org>
+ <9fc90c8b-9234-84fa-7dab-fee9de2b9813@linaro.org>
+ <ZCvm3fzSh8owVDdc@linaro.org>
+ <c816d432-26b8-2655-adf1-4b72b8645215@linaro.org>
+ <ZCv+9WjlkA4n9Dwg@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZCv+9WjlkA4n9Dwg@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: quic_devipriy@quicinc.com, agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, sboyd@kernel.org, linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de, shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com, dmitry.baryshkov@linaro.org, geert+renesas@glider.be, rafal@milecki.pl, nfraprado@collabora.com, broonie@kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, quic_srichara@quicinc.com, quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com, quic_anusha@quicinc.com, quic_poovendh@quicinc.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-04 11:16, Devi Priya wrote:
-> Add initial device tree support for Qualcomm IPQ9574 SoC and
-> Reference Design Platform(RDP) 433 which is based on IPQ9574
-> family of SoCs
+On 04/04/2023 12:41, Abel Vesa wrote:
+>>>>
+>>>> Also, this does not solve my previous question still.
+>>>
+>>> Well, the clocks are not added for the a few platforms (which include
+>>> SM8550). Same for 'ice' reg range.. So the only thing left is to
+>>> enforce the qcom,ice property availability only for SM8550. I believe
+>>> it solves the mutual exclusiveness of the "ice" reg range along with the
+>>> clocks versus the qcom,ice property, by enforcing at compatible level.
+>>
+>> Ah, I think I understand. That would work except I don't understand why
+>> enforcing qcom,qce only for specific, new SoCs. Assuming it is a correct
+>> hardware representation, we want it for everyone, don't we?
 > 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Co-developed-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> ---
->  Changes in V11:
-> 	- Dropped the unused backup clock source bias_pll_ubi_nc_clk
-> 
->  arch/arm64/boot/dts/qcom/Makefile           |   1 +
->  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts |  84 +++++++
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi       | 263 ++++++++++++++++++++
->  3 files changed, 348 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> 
+> Yes, but they will be added to the subschema (qcom,ice one) when their
+> their ICE support (ICE DT) will be added. This way, we keep the bindings
+> check without failures (for now).
 
-[...]
+I understand that then you will rework this if:then case, so I think it
+is just easier to make it correct from the first place. If there is
+qcom,qce, then reg is maxItems:1. Otherwise - maxItems can be 2. You
+achieve the same result, all DTS validate, without any need of further
+changes later.
 
-> +		intc: interrupt-controller@b000000 {
-> +			compatible = "qcom,msm-qgic2";
-> +			reg = <0x0b000000 0x1000>,  /* GICD */
-> +			      <0x0b002000 0x1000>,  /* GICC */
 
-This is definitely wrong. The GICC region cannot be less than
-8kB, as the GICC_DIR register is in the second 4kB region.
+Best regards,
+Krzysztof
 
-I'm pretty sure the kernel shouts at you when booting at EL2.
-
-> +			      <0x0b001000 0x1000>,  /* GICH */
-> +			      <0x0b004000 0x1000>;  /* GICV */
-
-Same thing here.
-
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <3>;
-> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-
-Missing target CPU encoding.
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
