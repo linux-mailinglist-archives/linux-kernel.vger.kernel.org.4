@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D116D6010
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB6A6D601F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234971AbjDDMT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S234566AbjDDMUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234750AbjDDMTZ (ORCPT
+        with ESMTP id S234758AbjDDMTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Apr 2023 08:19:25 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1FD3C3E;
-        Tue,  4 Apr 2023 05:14:55 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id eg48so129605038edb.13;
-        Tue, 04 Apr 2023 05:14:55 -0700 (PDT)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CD040C4;
+        Tue,  4 Apr 2023 05:14:57 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id eh3so129662355edb.11;
+        Tue, 04 Apr 2023 05:14:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680610494;
+        d=gmail.com; s=20210112; t=1680610496;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xcckzg95zpKeurnjtan7E8VP+EYwCJoi2cRFH+SxLY4=;
-        b=MaAjRRFugUvjadZGGJRXWMxFGP3C+fpBJg9N4EY47OixBVN6M7Ff/CxGNwnhPZSMjg
-         Rmu9tS6icUukt3KVYABNtD6RK58Y5tsb55mTyDDku7bDiccsYlKFIAeDDbqIVJdBUhHD
-         ykqEsCTrmretXQnYjLSuH+fo9x+eSVbvUOkOvpxaHR6FFqA5mO0010AD3ux8OchBB59Z
-         CP7vGg4mWcMjzfUXxh8lqF5cVH+eA2dn72TNMl+roMKrvOUczkRcOoyJIIxqzk6KOp7N
-         9a4M+DQWdzHiCtovTGKs8BrxzqSA85IY5QOKlS+a40YRr69imrL2KZhLSKnAbfBQbk6l
-         Snpw==
+        bh=sWpcdu+p0/E6sUTGVtKHFSC5GsGqtN7SMwVz/gyGBzk=;
+        b=EaLkr8nP/08C55ln4iwIgp4kUL8ORZeCB7UHmYZ38ILW6MfyOhPVNxEbMUrkTgJsYj
+         icEEZA1Uk3CytZZuFI4YLdrC/6NUFNWBgWW1BX0Ur8eK4r2u8c6HVCCqBv5Y4qOZXYuP
+         /bfoGBfIkqjUHKNsMa/cko8I3GhKZ2XCp9DdwDTUTmARBm0kn3rcDOD/JTbr9KUW0XW9
+         7/e7ON39d5Ypc41FLkrZ6HgZFmYbm0gtjdqV3eKntfQ8acj6ly2HVXNzq0HbglZVIK48
+         a5WXone5j4gQx3rNfDP6uyoVcoraCzUPTQVES9zZNEwSEGWuYi6zd47w/bq7flUhefkB
+         Fkcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680610494;
+        d=1e100.net; s=20210112; t=1680610496;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xcckzg95zpKeurnjtan7E8VP+EYwCJoi2cRFH+SxLY4=;
-        b=adyJ+/j6GAuycsVjGXx1ZSQU3sGtvN6GWNINjFEDw4TFy61uTmom/uxEeDfPopFQKi
-         JR6XUBw3aB9XuPPuvbD39g9/3Qm3R1fXNlCZyGBoWx3D5wIWg7lwJ2BtakFOS+YXvEmE
-         Cka0RiZwoI/dLAFabHJ+G77UohaivyeDhoI3XtmYRMgiWXP5GHy+7lSq127oszslnxc9
-         r5CpGc26Lxxp5Td9t6Pu44/go1s5yvu8eRgFQqGQK9mNPvCY7EtnrpbyhR/pgNyoX3bc
-         geqwuEkwqiYotcR1SXPAt2N/eAjbiZgNQT9LPe0SKLVIj/NBaO+1vN+/omSLQXsH/4Ab
-         GFRg==
-X-Gm-Message-State: AAQBX9dLFcN+PJaTFd41KnSOf9zcimVZF1FD9bgyjH027mnEgVbWzvKc
-        J/N8Y5Z1okzaaav41uzqPCY=
-X-Google-Smtp-Source: AKy350ZAccl7ypQjeajCpBxjnbYrGDamuVDbdEk5hzFtzr6jmcUkKbPu7ycNguia4WaGj1vfQpk0CA==
-X-Received: by 2002:aa7:d598:0:b0:501:cde5:4cc9 with SMTP id r24-20020aa7d598000000b00501cde54cc9mr2212071edq.39.1680610493757;
-        Tue, 04 Apr 2023 05:14:53 -0700 (PDT)
+        bh=sWpcdu+p0/E6sUTGVtKHFSC5GsGqtN7SMwVz/gyGBzk=;
+        b=7JkeVFxt0i45w5LHwfExTB+w6Yk959rt+GHgtKS8sc5UKPpQVVe1NzibydWCVVpHtC
+         F8plez0U/f0k0m2kyljbpNBDT5r08nuIy8RYEVdCacTb+NpsDmXFweoI3r6JMOOsyHcc
+         6ZQ35x7jYYugXxl+jXBp+z6azv3XO8m0CKY6kzLt/rAzSB9uTVYf9FL3RgQok94Fc39C
+         pRBF9rCraB3DpMSA9A9zog6oxZRkoEJsOeRZ6D9S0VKQMLKjI5raB7KVbqTZvYtONhfZ
+         VcwvoFB6gcJIzy1hvBMA4W5UlvtxTRui2ExoH/477oo7JtMbiA74T5h+3ffwSHRNm3HV
+         qLPA==
+X-Gm-Message-State: AAQBX9cR2+PArdcFsSx+otR2K+uaoMSbpXEAvWUdHnZ+l83bO41R2P8l
+        g/TRCUaBxq1SKJj9UhBJD2Y=
+X-Google-Smtp-Source: AKy350YQdHuwC3/O3osGuzHIwHh+ZY6uPeVw68YRZlwwXBjBJLPXqU9IgqyL7LmE+ZofbSvbnFoPMQ==
+X-Received: by 2002:a17:906:5a5e:b0:92c:138e:ff1f with SMTP id my30-20020a1709065a5e00b0092c138eff1fmr1860634ejc.18.1680610495847;
+        Tue, 04 Apr 2023 05:14:55 -0700 (PDT)
 Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id v23-20020a056402175700b004c5d1a15bd5sm5724789edx.69.2023.04.04.05.14.53
+        by smtp.gmail.com with ESMTPSA id g17-20020a17090669d100b009334a6ef3e8sm5963490ejs.141.2023.04.04.05.14.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 05:14:53 -0700 (PDT)
+        Tue, 04 Apr 2023 05:14:55 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
+To:     Lee Jones <lee@kernel.org>, dri-devel@lists.freedesktop.org
 Cc:     Daniel Vetter <daniel@ffwll.ch>,
         Thierry Reding <thierry.reding@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drm/tegra: sor: Make use of the helper function dev_err_probe()
-Date:   Tue,  4 Apr 2023 14:14:44 +0200
-Message-Id: <168061024450.2054665.8080259648129396992.b4-ty@nvidia.com>
+        linux-tegra@vger.kernel.org, David Airlie <airlied@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH 09/37] drm/tegra/dc: Remove set but unused variable 'state'
+Date:   Tue,  4 Apr 2023 14:14:46 +0200
+Message-Id: <168061024449.2054665.1446031361966014884.b4-ty@nvidia.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20210917020741.17525-1-caihuoqing@baidu.com>
-References: <20210917020741.17525-1-caihuoqing@baidu.com>
+In-Reply-To: <20230317081718.2650744-10-lee@kernel.org>
+References: <20230317081718.2650744-1-lee@kernel.org> <20230317081718.2650744-10-lee@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -78,20 +79,18 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thierry Reding <treding@nvidia.com>
 
-On Fri, 17 Sep 2021 10:07:41 +0800, Cai Huoqing wrote:
-> When possible use dev_err_probe help to properly deal with the
-> PROBE_DEFER error, the benefit is that DEFER issue will be logged
-> in the devices_deferred debugfs file.
-> And using dev_err_probe() can reduce code size, the error value
-> gets printed.
+On Fri, 17 Mar 2023 08:16:50 +0000, Lee Jones wrote:
+> Fixes the following W=1 kernel build warning(s):
+> 
+>  drivers/gpu/drm/tegra/dc.c: In function ‘tegra_crtc_calculate_memory_bandwidth’:
+>  drivers/gpu/drm/tegra/dc.c:2384:38: warning: variable ‘old_state’ set but not used [-Wunused-but-set-variable]
 > 
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] drm/tegra: sor: Make use of the helper function dev_err_probe()
-      commit: a4c56f2f8ce0e242eb51e5309a743361e2348a64
+[09/37] drm/tegra/dc: Remove set but unused variable 'state'
+        commit: 42d364ad88ee81356f0417170bafbdc894594914
 
 Best regards,
 -- 
