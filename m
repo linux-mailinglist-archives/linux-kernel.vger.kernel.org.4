@@ -2,92 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DF16D5741
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 05:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED8D6D5702
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 05:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbjDDDhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 23:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S232550AbjDDDIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 23:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjDDDhM (ORCPT
+        with ESMTP id S229541AbjDDDIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 23:37:12 -0400
-Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66EECE47;
-        Mon,  3 Apr 2023 20:37:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=k1rQvXrNNJdd31+9AY
-        3b02aZnuxnFQyMxmz0+mFMwKE=; b=e8OIhkaG1Qphn6JcA+hIYz3Ctf+ha+rJhN
-        BbCKFUBRrUIvyA8fJ69QYc8E2IrTpTtCZHHFxd7hPuxQAupAkLIpn5gn+If6px7K
-        XROLYLQacJnIGVvzTeVc/VuZjNEET9WrkgVHKzgWN6XebQzx+4PUrIZxmyOwySeW
-        1/5Zf6jZM=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by zwqz-smtp-mta-g5-1 (Coremail) with SMTP id _____wC3p0_2kytkxp+dAw--.17217S2;
-        Tue, 04 Apr 2023 11:05:27 +0800 (CST)
-From:   xiaolinkui <xiaolinkui@126.com>
-To:     dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        leon@kernel.org
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linkui Xiao <xiaolinkui@kylinos.cn>
-Subject: [PATCH] RDMA/hfi: add a judgment on the availability of cpumask
-Date:   Tue,  4 Apr 2023 11:05:25 +0800
-Message-Id: <20230404030525.24020-1-xiaolinkui@126.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: _____wC3p0_2kytkxp+dAw--.17217S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF47trWUWw4kZF47WrWUtwb_yoW8JFW8pF
-        45ZFWjgFW8Xa10ga1kAa17ArW5tas7JayvyF9Fqw1Sv345Xan0qrZ8K3W5ZryIkFykGr1a
-        qrsavr1Y9r17WFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uh18PUUUUU=
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: p0ld0z5lqn3xa6rslhhfrp/1tbiHBxH1lpEJlhTQwAAsh
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 3 Apr 2023 23:08:16 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B85810FF;
+        Mon,  3 Apr 2023 20:08:15 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id o11so30048095ple.1;
+        Mon, 03 Apr 2023 20:08:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680577695; x=1683169695;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MRnkaaj/cVgSaagBe9PehnJgOMpffWqdnxqVj0DdFK0=;
+        b=MBoIRhcYmwFydDMClcg2UreRmhzz7xW1W3ifJjOObZVq84h7WmE/Le3zwuFS+EwjSw
+         61/b2Cqr0rxDzHpSkqF6pzhykiZzzwseuoI+ACxkfNEHZayWd1c4hRe3OGnUIHJsFUFZ
+         Gro4nuRj9Sz7107JS2qefjLg+ZO8miF2mfaSnULZTZl897mooDXzcDsqdewNPakI/I6o
+         1wISUI+tn47fYLaHs/EmBPcFhVE72O5oCQ3P9oyUoWEQ/TvtaWEK4SwjLurFbL3s7VFO
+         Db9j3SOsmbsb42IuYu0y7AGFdRNW+iEnpxULLZUbTJ/Pd9gA6WZ0Ba6acbY5Og2dhrLN
+         iMLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680577695; x=1683169695;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MRnkaaj/cVgSaagBe9PehnJgOMpffWqdnxqVj0DdFK0=;
+        b=zONPEJLHgHTolmwR+LtWE9EAVEFYEJPgUJofKCAgZZ/Q2/D+G7IK2nTe4GOP/5Y2iR
+         HNAjfam3FnbcnE0tuu9cevrpKNPmRQdDON2hu+ki86fd5PRO2m+h8Uz0PrloitYUatcu
+         E48RQdKwDTpjYEe2RMQBXJ5YbMs5posQQKGj2bLS9aQeYZUv2hZ2kHiAywm/EjQpcXAm
+         B/3AESUR5LWp5gW6gmjW9mCeLj/d3YHVylgM5Ij/T28kTpVBT/JEHluM6dyn19yEvI5T
+         t3wdQlyLlhXpiAQoIe1II76gfAVhwg+3EQ4CglJR7FCRLTNAL2NX2spOOHdgVhS7FTkb
+         EDqw==
+X-Gm-Message-State: AAQBX9dfYPT3EFCFmLhfoOPIy/f2rR+dFr2hSJVveMnLjUJ7QP9KG5L5
+        TfUy9cjCm860m16o6QOmeSI=
+X-Google-Smtp-Source: AKy350blamQxgHaeX5hc8HPO9IhB+5+NqWBQpJrec0j8+FB1pQ3uAr2PPmmNHy8w06h/XkTUUqeXnA==
+X-Received: by 2002:a17:90a:4146:b0:23c:6713:45b3 with SMTP id m6-20020a17090a414600b0023c671345b3mr1398826pjg.7.1680577694750;
+        Mon, 03 Apr 2023 20:08:14 -0700 (PDT)
+Received: from [10.230.29.214] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 3-20020a17090a174300b0023f545c055bsm10242115pjm.33.2023.04.03.20.08.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 20:08:14 -0700 (PDT)
+Message-ID: <134bdc4b-e62d-7892-68d7-24f917e1e7e9@gmail.com>
+Date:   Mon, 3 Apr 2023 20:08:10 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 6.2 000/187] 6.2.10-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230403140416.015323160@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230403140416.015323160@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linkui Xiao <xiaolinkui@kylinos.cn>
 
-When CONFIG_CPUMASK_OFFSTACK is n, cpumask may fail to allocate, cpumask may
-be NULL, and performing a bitmap operation on cpumask may cause problems at
-this time.
 
-Of course, this is a unlikely event.
+On 4/3/2023 7:07 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.10 release.
+> There are 187 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.10-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
----
- drivers/infiniband/hw/hfi1/affinity.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-diff --git a/drivers/infiniband/hw/hfi1/affinity.c b/drivers/infiniband/hw/hfi1/affinity.c
-index 77ee77d4000f..3caa861f4d1d 100644
---- a/drivers/infiniband/hw/hfi1/affinity.c
-+++ b/drivers/infiniband/hw/hfi1/affinity.c
-@@ -1047,16 +1047,16 @@ int hfi1_get_proc_affinity(int node)
- 	 */
- 
- 	ret = zalloc_cpumask_var(&diff, GFP_KERNEL);
--	if (!ret)
-+	if (!ret || unlikely(!diff))
- 		goto done;
- 	ret = zalloc_cpumask_var(&hw_thread_mask, GFP_KERNEL);
--	if (!ret)
-+	if (!ret || unlikely(!hw_thread_mask))
- 		goto free_diff;
- 	ret = zalloc_cpumask_var(&available_mask, GFP_KERNEL);
--	if (!ret)
-+	if (!ret || unlikely(!available_mask))
- 		goto free_hw_thread_mask;
- 	ret = zalloc_cpumask_var(&intrs_mask, GFP_KERNEL);
--	if (!ret)
-+	if (!ret || unlikely(!intrs_mask))
- 		goto free_available_mask;
- 
- 	mutex_lock(&affinity->lock);
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.17.1
-
+Florian
