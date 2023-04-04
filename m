@@ -2,54 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B976D6CFA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDB36D6CFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235645AbjDDTJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 15:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
+        id S235574AbjDDTKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 15:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbjDDTJi (ORCPT
+        with ESMTP id S233701AbjDDTKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 15:09:38 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9013268B
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:09:35 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        Tue, 4 Apr 2023 15:10:47 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EA6268B;
+        Tue,  4 Apr 2023 12:10:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id BABCA124;
-        Tue,  4 Apr 2023 21:09:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1680635372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BAD7521DCD;
+        Tue,  4 Apr 2023 19:10:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1680635444;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=lAB1BIOMY8BqcqgSGd6f7EUawi5jlbHQsRXoh9cOqk4=;
-        b=mlpikNcY/mXReznB/BB0wm3JmwuaoXRGtacbJf89BNnuCCuE4R8qA0y2OXhZ+ocynwSMFs
-        +Ra37Ednu8v8UEajd+zHCHX/rn7aCKEARtfs5/sFjJ0wCfpkH0PzDN0CASgwLGr381/uqy
-        wTerxog+0ZBF4HUwjKDYVBJjpYb7jmJo8O67UT8HY/oB/uDgiVHaoD/s/OnqopLKZOHWIv
-        kjfF4btOGkNc54PM/vSFiD00Tac+atgEVDdmMUWIF/9IwGi3jFi/EXybAXzm4PydD6cF7T
-        cBaigX0tm+ILj2wMDrg72dx598U9aVpncjetwGJ4hsceFHtz0XrCT7RUbEPelg==
+        bh=fXseAj3MmRo3pp2E5Fqzpezipbv+z3RR3Q1pT5b2PZI=;
+        b=2mnRt/8vDXOhvMowfUb4Pzb+sFZCmozzZB38R1sRjJMkbcK1ZI50ioHBUXYwp47R2McD6U
+        tzGHCIC1v1N253EvnAyHUMNnN7G1hAPZWFkhF8QDezSLOYb97gRsdJ2DrCj+QzjujzsEg4
+        goJd7nuWGYnn0KS3DpXUup7TuU6z1VM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1680635444;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fXseAj3MmRo3pp2E5Fqzpezipbv+z3RR3Q1pT5b2PZI=;
+        b=lbB/Y8S5tCnY3bb0L0Pb0oXlhSG7nB5o0BaY1GrextSLBO7yKgmu1W/rXUllIb8Tbbm0aw
+        Zb8D5plizfNxP2AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8EE971391A;
+        Tue,  4 Apr 2023 19:10:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ouL5ITR2LGQqbwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 04 Apr 2023 19:10:44 +0000
+Date:   Tue, 4 Apr 2023 21:10:42 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     xiaoshoukui <xiaoshoukui@gmail.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiaoshoukui@ruijie.com.cn
+Subject: Re: [PATCH] btrfs: ioctl: fix inaccurate determination of
+ exclusive_operation
+Message-ID: <20230404191042.GE19619@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20230403093757.120178-1-xiaoshoukui@gmail.com>
 MIME-Version: 1.0
-Date:   Tue, 04 Apr 2023 21:09:32 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tom Rix <trix@redhat.com>
-Cc:     srinivas.kandagatla@linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] nvmem: layouts: sl28vpd: set varaiable sl28vpd_layout
- storage-class-specifier to static
-In-Reply-To: <20230404163629.1923871-1-trix@redhat.com>
-References: <20230404163629.1923871-1-trix@redhat.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <cce4b409e20b073431b44a44f7f0a614@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403093757.120178-1-xiaoshoukui@gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,17 +73,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-04-04 18:36, schrieb Tom Rix:
-> smatch reports
-> drivers/nvmem/layouts/sl28vpd.c:144:21: warning: symbol
->   'sl28vpd_layout' was not declared. Should it be static?
+On Mon, Apr 03, 2023 at 05:37:57AM -0400, xiaoshoukui wrote:
+> > Yeah I think the assertion should also check for NONE status. The paused
+> > balance makes the state tracking harder but in user-started (manual or
+> > scripted) commands it's typically not racing.
 > 
-> This variable is only used in one file so it should be static.
+> An assertion failure means that the code may not have taken careful consideration.
+> After I patched the BTRFS_EXCLOP_NONE to the assertion, regression tests shows that
+> another scenario I missed.
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> With started state == BTRFS_EXCLOP_BALANCE_PAUSED, cocurrently adding multiple devices
+> to the same mount point and btrfs_exclop_balance executed finish before the latter
+> thread execute assertion in btrfs_exclop_balance, exclusive_operation will changed to 
+> BTRFS_EXCLOP_BALANCE_PAUSED state. 
+> 
+> I also added btrfs_info before ASSERT to help troubleshooting:
+> > btrfs_info(fs_info, "fs_info exclusive_operation: %d",
+> >        fs_info->exclusive_operation);
+> > ASSERT(fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE ||
+> >        fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD ||
+> >        fs_info->exclusive_operation == BTRFS_EXCLOP_NONE);
 
-Fixes tag?
+> I think the assertion should also check for BTRFS_EXCLOP_BALANCE_PAUSED status.
 
-Reviewed-by: Michael Walle <michael@walle.cc>
+Agreed and this looks like the complete set of the compatible
+operations. I hope this does not enable some combination that should not
+be allowed but the enabling side does the try lock and allows only the
+paused + dev_add combination.
 
--michael
+Please send a fix with the analysis you dit and add the relevant parts
+of stack traces. The reproducer would be good to have in fstests, for
+the changelog please describe the conditions that could trigger the
+assertion, the reproducer itself is too long. Thanks.
