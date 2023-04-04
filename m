@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A60D6D616F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63766D6196
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235112AbjDDMpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S234995AbjDDMud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbjDDMpF (ORCPT
+        with ESMTP id S234883AbjDDMu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:45:05 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8250310A
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:45:03 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id n19so18953069wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 05:45:03 -0700 (PDT)
+        Tue, 4 Apr 2023 08:50:29 -0400
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2318044BF;
+        Tue,  4 Apr 2023 05:50:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680612302;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MXMBkctdCNamTY4/FVKOjXwTK55nCk5S+UOpQBzIuNY=;
-        b=cQK6SQigMrU5ZclT/SAzDUDNUx7G+zulB7wTJ18ksnSdps9RLER9IzWTcQaLyZTRG3
-         c07CwbGg+ztxGesd6k6dP1i+nUPMRAdlhgJmDWQwAQJrpUMtCGtjWmWAE9qIkoG/aOrU
-         s+0EYX+UIPAvhKlv9WxVpZMBIDlygJuIGNiciBrJRkQNHGhQShp6n6pItSYgFSSzFCzP
-         CBPV2utCFiUo8agmfHcvCe4JXCOhLBOhqbLbbrrxCLxWKlZCPFNUfUufGTjBl5nPo0mw
-         86KGi7UMT92gcWaDJhnT8KA0Z/BUaYmqdFSAokEnKN5GxAZEV1CqUidOk1nYm/yFwhBK
-         SQOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680612302;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MXMBkctdCNamTY4/FVKOjXwTK55nCk5S+UOpQBzIuNY=;
-        b=rAssJw4+gLapKoNWoMNvyNagrV8z/n4BPGECIOQR2EuYRymYnncn82YI91tRgXkQin
-         XrbOP0pJ1KkXsbW6MSaeMOj5NOYI1FXamrpbQRDZZAHFcpU15LhV8XL1DWW6iZ26agfg
-         jH/85knsUXu1EqGoD7dZIvKQ+cJKBCA0kc2kGYfuG+QFtc+yDsxOPI0Zok6bSuoesAy1
-         NBxROWqZna4UqfIPmEoVjLd5jvj44HYzvGPo49PNvn3xvhMsVGaj7N0rjvqd6gqKsAG9
-         ssJ0rZqiplCLlhRs1Ut4BBSk/4eLXGUpfIFodo9k7JkGvVyDIdPygOG+AzPEGx9rNnEB
-         KJUg==
-X-Gm-Message-State: AAQBX9fGsOdJTlAF5Oyzdph49iz3muUcMpoLaJPLXgGA5JEKVejhMAtb
-        FmmNQDucW699rNQXqf6w+ehnNw==
-X-Google-Smtp-Source: AKy350aDJ46ZgM3LAhDRaWhOi0JYsuXRrdzSU7xKZnzjSo9zv76g9zVQGxJRs03rEThYo0moqj7p5g==
-X-Received: by 2002:a1c:f708:0:b0:3f0:49a3:5878 with SMTP id v8-20020a1cf708000000b003f049a35878mr2049616wmh.12.1680612301923;
-        Tue, 04 Apr 2023 05:45:01 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id m17-20020a7bcb91000000b003ed1ff06faasm15015161wmi.19.2023.04.04.05.45.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 05:45:01 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 14:45:00 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 8/8] RISC-V: KVM: Implement guest external interrupt
- line management
-Message-ID: <znn7ibu4r6ivsfb3sqoandhpvqkfwr6w4q4z6vwcwqiviya5bk@dsa3f5dk7m6l>
-References: <20230403093310.2271142-1-apatel@ventanamicro.com>
- <20230403093310.2271142-9-apatel@ventanamicro.com>
+        d=buaa.edu.cn; s=buaa; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=nh81zXQ6nr
+        LzWn6GfkPmqlO2pjRmU5VKFGSRCd0pL/c=; b=WWWHWBqdbZaILRyPrJwneKVPVD
+        SPHhH+39mjvJvlltbG40kFupoPoTJtBRVQayjc5JKhIhEzfnWp3+6gHogPO1V/r9
+        rPqqRFuSi540ynhnqCZ9bB5NtMyxHsquEUNCNmn6XGLwaoH4Volcq6CjIRcf4KaT
+        jiFthstyytKJ7b+uo=
+Received: from oslab.. (unknown [10.130.159.144])
+        by coremail-app1 (Coremail) with SMTP id OCz+CgAnLgpnHCxkLekaAw--.21719S4;
+        Tue, 04 Apr 2023 20:47:35 +0800 (CST)
+From:   Jia-Ju Bai <baijiaju@buaa.edu.cn>
+To:     johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        simon.horman@corigine.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jia-Ju Bai <baijiaju@buaa.edu.cn>
+Subject: [PATCH v3] net: mac80211: Add NULL checks for sta->sdata
+Date:   Tue,  4 Apr 2023 20:47:34 +0800
+Message-Id: <20230404124734.201011-1-baijiaju@buaa.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403093310.2271142-9-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: OCz+CgAnLgpnHCxkLekaAw--.21719S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxtF4fZw4rZry7KFWrur1Dtrb_yoWfCFW8pr
+        WrGw1jqF4UJa4xZrn7Jr4F9a4Fkr10gF48ur1fCF18u3ZY9wnY9r1kury8ZF9Yyr1xJw1Y
+        vF4Uu398Ca1Du37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F1xkIjI8I6I8E6xAIw20EY4v20xvaj40_JFC_Wr1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK
+        6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_Aw1UJr1UMxC20s026xCaFV
+        Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
+        x4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
+        1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_
+        JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: yrruji46exttoohg3hdfq/
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,416 +64,271 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 03:03:10PM +0530, Anup Patel wrote:
-> The RISC-V host will have one guest external interrupt line for each
-> VS-level IMSICs associated with a HART. The guest external interrupt
-> lines are per-HART resources and hypervisor can use HGEIE, HGEIP, and
-> HIE CSRs to manage these guest external interrupt lines.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/kvm_aia.h |  10 ++
->  arch/riscv/kvm/aia.c             | 241 +++++++++++++++++++++++++++++++
->  arch/riscv/kvm/main.c            |   3 +-
->  arch/riscv/kvm/vcpu.c            |   2 +
->  4 files changed, 255 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/include/asm/kvm_aia.h b/arch/riscv/include/asm/kvm_aia.h
-> index 1de0717112e5..0938e0cadf80 100644
-> --- a/arch/riscv/include/asm/kvm_aia.h
-> +++ b/arch/riscv/include/asm/kvm_aia.h
-> @@ -44,10 +44,15 @@ struct kvm_vcpu_aia {
->  
->  #define irqchip_in_kernel(k)		((k)->arch.aia.in_kernel)
->  
-> +extern unsigned int kvm_riscv_aia_nr_hgei;
->  DECLARE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
->  #define kvm_riscv_aia_available() \
->  	static_branch_unlikely(&kvm_riscv_aia_available)
->  
-> +static inline void kvm_riscv_vcpu_aia_imsic_release(struct kvm_vcpu *vcpu)
-> +{
-> +}
-> +
->  #define KVM_RISCV_AIA_IMSIC_TOPEI	(ISELECT_MASK + 1)
->  static inline int kvm_riscv_vcpu_aia_imsic_rmw(struct kvm_vcpu *vcpu,
->  					       unsigned long isel,
-> @@ -119,6 +124,11 @@ static inline void kvm_riscv_aia_destroy_vm(struct kvm *kvm)
->  {
->  }
->  
-> +int kvm_riscv_aia_alloc_hgei(int cpu, struct kvm_vcpu *owner,
-> +			     void __iomem **hgei_va, phys_addr_t *hgei_pa);
-> +void kvm_riscv_aia_free_hgei(int cpu, int hgei);
-> +void kvm_riscv_aia_wakeon_hgei(struct kvm_vcpu *owner, bool enable);
-> +
->  void kvm_riscv_aia_enable(void);
->  void kvm_riscv_aia_disable(void);
->  int kvm_riscv_aia_init(void);
-> diff --git a/arch/riscv/kvm/aia.c b/arch/riscv/kvm/aia.c
-> index d530912f28bc..1264783e7c4d 100644
-> --- a/arch/riscv/kvm/aia.c
-> +++ b/arch/riscv/kvm/aia.c
-> @@ -7,11 +7,46 @@
->   *	Anup Patel <apatel@ventanamicro.com>
->   */
->  
-> +#include <linux/bitops.h>
-> +#include <linux/irq.h>
-> +#include <linux/irqdomain.h>
->  #include <linux/kvm_host.h>
-> +#include <linux/percpu.h>
-> +#include <linux/spinlock.h>
->  #include <asm/hwcap.h>
->  
-> +struct aia_hgei_control {
-> +	raw_spinlock_t lock;
-> +	unsigned long free_bitmap;
-> +	struct kvm_vcpu *owners[BITS_PER_LONG];
-> +};
-> +static DEFINE_PER_CPU(struct aia_hgei_control, aia_hgei);
-> +static int hgei_parent_irq;
-> +
-> +unsigned int kvm_riscv_aia_nr_hgei;
->  DEFINE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
->  
-> +static int aia_find_hgei(struct kvm_vcpu *owner)
-> +{
-> +	int i, hgei;
-> +	unsigned long flags;
-> +	struct aia_hgei_control *hgctrl = this_cpu_ptr(&aia_hgei);
-> +
-> +	raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +
-> +	hgei = -1;
-> +	for (i = 1; i <= kvm_riscv_aia_nr_hgei; i++) {
-> +		if (hgctrl->owners[i] == owner) {
-> +			hgei = i;
-> +			break;
-> +		}
-> +	}
-> +
-> +	raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-> +
-> +	return hgei;
-> +}
-> +
->  static void aia_set_hvictl(bool ext_irq_pending)
->  {
->  	unsigned long hvictl;
-> @@ -55,6 +90,7 @@ void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu *vcpu)
->  
->  bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
->  {
-> +	int hgei;
->  	unsigned long seip;
->  
->  	if (!kvm_riscv_aia_available())
-> @@ -72,6 +108,10 @@ bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
->  	if (!kvm_riscv_aia_initialized(vcpu->kvm) || !seip)
->  		return false;
->  
-> +	hgei = aia_find_hgei(vcpu);
-> +	if (hgei > 0)
-> +		return (csr_read(CSR_HGEIP) & BIT(hgei)) ? true : false;
+In a previous commit 69403bad97aa ("wifi: mac80211: sdata can be NULL
+during AMPDU start"), sta->sdata can be NULL, and thus it should be
+checked before being used.
 
-nit: return !!(csr_read(CSR_HGEIP) & BIT(hgei)) is a bit less verbose.
+However, in the same call stack, sta->sdata is also used in the
+following functions:
 
-> +
->  	return false;
->  }
->  
-> @@ -343,6 +383,144 @@ int kvm_riscv_vcpu_aia_rmw_ireg(struct kvm_vcpu *vcpu, unsigned int csr_num,
->  	return KVM_INSN_EXIT_TO_USER_SPACE;
->  }
->  
-> +int kvm_riscv_aia_alloc_hgei(int cpu, struct kvm_vcpu *owner,
-> +			     void __iomem **hgei_va, phys_addr_t *hgei_pa)
-> +{
-> +	int ret = -ENOENT;
-> +	unsigned long flags;
-> +	struct aia_hgei_control *hgctrl = per_cpu_ptr(&aia_hgei, cpu);
-> +
-> +	if (!kvm_riscv_aia_available())
-> +		return -ENODEV;
-> +	if (!hgctrl)
-> +		return -ENODEV;
+ieee80211_ba_session_work()
+  ___ieee80211_stop_rx_ba_session(sta)
+    ht_dbg(sta->sdata, ...); -> No check
+    sdata_info(sta->sdata, ...); -> No check
+    ieee80211_send_delba(sta->sdata, ...) -> No check
+  ___ieee80211_start_rx_ba_session(sta)
+    ht_dbg(sta->sdata, ...); -> No check
+    ht_dbg_ratelimited(sta->sdata, ...); -> No check
+  ieee80211_tx_ba_session_handle_start(sta)
+    sdata = sta->sdata; if (!sdata) -> Add check by previous commit
+  ___ieee80211_stop_tx_ba_session(sdata)
+    ht_dbg(sta->sdata, ...); -> No check
+  ieee80211_start_tx_ba_cb(sdata)
+    sdata = sta->sdata; local = sdata->local -> No check
+  ieee80211_stop_tx_ba_cb(sdata)
+    ht_dbg(sta->sdata, ...); -> No check
 
-nit:
+Thus, to avoid possible null-pointer dereferences, the related checks
+should be added.
 
-if (!kvm_riscv_aia_available() || !hgctrl)
-   return -ENODEV;
+These bugs are reported by a static analysis tool implemented by myself,
+and they are found by extending a known bug fixed in the previous commit.
+Thus, they could be theoretical bugs.
 
-> +
-> +	raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +
-> +	if (hgctrl->free_bitmap) {
-> +		ret = __ffs(hgctrl->free_bitmap);
-> +		hgctrl->free_bitmap &= ~BIT(ret);
-> +		hgctrl->owners[ret] = owner;
-> +	}
-> +
-> +	raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-> +
-> +	/* TODO: To be updated later by AIA in-kernel irqchip support */
-> +	if (hgei_va)
-> +		*hgei_va = NULL;
-> +	if (hgei_pa)
-> +		*hgei_pa = 0;
-> +
-> +	return ret;
-> +}
-> +
-> +void kvm_riscv_aia_free_hgei(int cpu, int hgei)
-> +{
-> +	unsigned long flags;
-> +	struct aia_hgei_control *hgctrl = per_cpu_ptr(&aia_hgei, cpu);
-> +
-> +	if (!kvm_riscv_aia_available() || !hgctrl)
-> +		return;
-> +
-> +	raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +
-> +	if (hgei > 0 && hgei <= kvm_riscv_aia_nr_hgei) {
-> +		if (!(hgctrl->free_bitmap & BIT(hgei))) {
-> +			hgctrl->free_bitmap |= BIT(hgei);
-> +			hgctrl->owners[hgei] = NULL;
-> +		}
-> +	}
-> +
-> +	raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-> +}
-> +
-> +void kvm_riscv_aia_wakeon_hgei(struct kvm_vcpu *owner, bool enable)
-> +{
-> +	int hgei;
-> +
-> +	if (!kvm_riscv_aia_available())
-> +		return;
-> +
-> +	hgei = aia_find_hgei(owner);
-> +	if (hgei > 0) {
-> +		if (enable)
-> +			csr_set(CSR_HGEIE, BIT(hgei));
-> +		else
-> +			csr_clear(CSR_HGEIE, BIT(hgei));
-> +	}
-> +}
-> +
-> +static irqreturn_t hgei_interrupt(int irq, void *dev_id)
-> +{
-> +	int i;
-> +	unsigned long hgei_mask, flags;
-> +	struct aia_hgei_control *hgctrl = this_cpu_ptr(&aia_hgei);
-> +
-> +	hgei_mask = csr_read(CSR_HGEIP) & csr_read(CSR_HGEIE);
-> +	csr_clear(CSR_HGEIE, hgei_mask);
-> +
-> +	raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +
-> +	for_each_set_bit(i, &hgei_mask, BITS_PER_LONG) {
-> +		if (hgctrl->owners[i])
-> +			kvm_vcpu_kick(hgctrl->owners[i]);
-> +	}
-> +
-> +	raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int aia_hgei_init(void)
-> +{
-> +	int cpu, rc;
-> +	struct irq_domain *domain;
-> +	struct aia_hgei_control *hgctrl;
-> +
-> +	/* Initialize per-CPU guest external interrupt line management */
-> +	for_each_possible_cpu(cpu) {
-> +		hgctrl = per_cpu_ptr(&aia_hgei, cpu);
-> +		raw_spin_lock_init(&hgctrl->lock);
-> +		if (kvm_riscv_aia_nr_hgei) {
-> +			hgctrl->free_bitmap =
-> +				BIT(kvm_riscv_aia_nr_hgei + 1) - 1;
-> +			hgctrl->free_bitmap &= ~BIT(0);
-> +		} else
-> +			hgctrl->free_bitmap = 0;
-> +	}
-> +
-> +	/* Find INTC irq domain */
-> +	domain = irq_find_matching_fwnode(riscv_get_intc_hwnode(),
-> +					  DOMAIN_BUS_ANY);
-> +	if (!domain) {
-> +		kvm_err("unable to find INTC domain\n");
-> +		return -ENOENT;
-> +	}
-> +
-> +	/* Map per-CPU SGEI interrupt from INTC domain */
-> +	hgei_parent_irq = irq_create_mapping(domain, IRQ_S_GEXT);
-> +	if (!hgei_parent_irq) {
-> +		kvm_err("unable to map SGEI IRQ\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	/* Request per-CPU SGEI interrupt */
-> +	rc = request_percpu_irq(hgei_parent_irq, hgei_interrupt,
-> +				"riscv-kvm", &aia_hgei);
-> +	if (rc) {
-> +		kvm_err("failed to request SGEI IRQ\n");
-> +		return rc;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void aia_hgei_exit(void)
-> +{
-> +	/* Free per-CPU SGEI interrupt */
-> +	free_percpu_irq(hgei_parent_irq, &aia_hgei);
-> +}
-> +
->  void kvm_riscv_aia_enable(void)
->  {
->  	if (!kvm_riscv_aia_available())
-> @@ -357,21 +535,79 @@ void kvm_riscv_aia_enable(void)
->  	csr_write(CSR_HVIPRIO1H, 0x0);
->  	csr_write(CSR_HVIPRIO2H, 0x0);
->  #endif
-> +
-> +	/* Enable per-CPU SGEI interrupt */
-> +	enable_percpu_irq(hgei_parent_irq,
-> +			  irq_get_trigger_type(hgei_parent_irq));
-> +	csr_set(CSR_HIE, BIT(IRQ_S_GEXT));
->  }
->  
->  void kvm_riscv_aia_disable(void)
->  {
-> +	int i;
-> +	unsigned long flags;
-> +	struct kvm_vcpu *vcpu;
-> +	struct aia_hgei_control *hgctrl = this_cpu_ptr(&aia_hgei);
-> +
->  	if (!kvm_riscv_aia_available())
->  		return;
->  
-> +	/* Disable per-CPU SGEI interrupt */
-> +	csr_clear(CSR_HIE, BIT(IRQ_S_GEXT));
-> +	disable_percpu_irq(hgei_parent_irq);
-> +
->  	aia_set_hvictl(false);
-> +
-> +	raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +
-> +	for (i = 0; i <= kvm_riscv_aia_nr_hgei; i++) {
+Signed-off-by: Jia-Ju Bai <baijiaju@buaa.edu.cn>
+---
+v3:
+* Add NULL check about sta->sdata related to local in the function
+  ___ieee80211_start_rx_ba_session()
+---
+v2:
+* Fix an error reported by checkpatch.pl, and make the bug finding
+  process more clear in the description. Thanks for Simon's advice.
+---
+ net/mac80211/agg-rx.c | 95 ++++++++++++++++++++++++++-----------------
+ net/mac80211/agg-tx.c | 16 ++++++--
+ 2 files changed, 71 insertions(+), 40 deletions(-)
 
-I guess this should start at i = 1, but in this case it doesn't
-matter since hgctrl->owners[0] should always be NULL.
+diff --git a/net/mac80211/agg-rx.c b/net/mac80211/agg-rx.c
+index c6fa53230450..f2e9dbd7559a 100644
+--- a/net/mac80211/agg-rx.c
++++ b/net/mac80211/agg-rx.c
+@@ -80,19 +80,21 @@ void ___ieee80211_stop_rx_ba_session(struct sta_info *sta, u16 tid,
+ 	RCU_INIT_POINTER(sta->ampdu_mlme.tid_rx[tid], NULL);
+ 	__clear_bit(tid, sta->ampdu_mlme.agg_session_valid);
+ 
+-	ht_dbg(sta->sdata,
+-	       "Rx BA session stop requested for %pM tid %u %s reason: %d\n",
+-	       sta->sta.addr, tid,
+-	       initiator == WLAN_BACK_RECIPIENT ? "recipient" : "initiator",
+-	       (int)reason);
++	if (sta->sdata) {
++		ht_dbg(sta->sdata,
++		       "Rx BA session stop requested for %pM tid %u %s reason: %d\n",
++		       sta->sta.addr, tid,
++		       initiator == WLAN_BACK_RECIPIENT ? "recipient" : "initiator",
++		       (int)reason);
++	}
+ 
+-	if (drv_ampdu_action(local, sta->sdata, &params))
++	if (sta->sdata && drv_ampdu_action(local, sta->sdata, &params))
+ 		sdata_info(sta->sdata,
+ 			   "HW problem - can not stop rx aggregation for %pM tid %d\n",
+ 			   sta->sta.addr, tid);
+ 
+ 	/* check if this is a self generated aggregation halt */
+-	if (initiator == WLAN_BACK_RECIPIENT && tx)
++	if (initiator == WLAN_BACK_RECIPIENT && tx && sta->sdata)
+ 		ieee80211_send_delba(sta->sdata, sta->sta.addr,
+ 				     tid, WLAN_BACK_RECIPIENT, reason);
+ 
+@@ -256,7 +258,7 @@ void ___ieee80211_start_rx_ba_session(struct sta_info *sta,
+ 				      u16 buf_size, bool tx, bool auto_seq,
+ 				      const struct ieee80211_addba_ext_ie *addbaext)
+ {
+-	struct ieee80211_local *local = sta->sdata->local;
++	struct ieee80211_local *local = NULL;
+ 	struct tid_ampdu_rx *tid_agg_rx;
+ 	struct ieee80211_ampdu_params params = {
+ 		.sta = &sta->sta,
+@@ -270,26 +272,35 @@ void ___ieee80211_start_rx_ba_session(struct sta_info *sta,
+ 	u16 status = WLAN_STATUS_REQUEST_DECLINED;
+ 	u16 max_buf_size;
+ 
++	if (sta->sdata)
++		local = sta->sdata->local;
++
+ 	if (tid >= IEEE80211_FIRST_TSPEC_TSID) {
+-		ht_dbg(sta->sdata,
+-		       "STA %pM requests BA session on unsupported tid %d\n",
+-		       sta->sta.addr, tid);
++		if (sta->sdata) {
++			ht_dbg(sta->sdata,
++			       "STA %pM requests BA session on unsupported tid %d\n",
++			       sta->sta.addr, tid);
++		}
+ 		goto end;
+ 	}
+ 
+ 	if (!sta->sta.deflink.ht_cap.ht_supported &&
+ 	    !sta->sta.deflink.he_cap.has_he) {
+-		ht_dbg(sta->sdata,
+-		       "STA %pM erroneously requests BA session on tid %d w/o HT\n",
+-		       sta->sta.addr, tid);
++		if (sta->sdata) {
++			ht_dbg(sta->sdata,
++			       "STA %pM erroneously requests BA session on tid %d w/o HT\n",
++			       sta->sta.addr, tid);
++		}
+ 		/* send a response anyway, it's an error case if we get here */
+ 		goto end;
+ 	}
+ 
+ 	if (test_sta_flag(sta, WLAN_STA_BLOCK_BA)) {
+-		ht_dbg(sta->sdata,
+-		       "Suspend in progress - Denying ADDBA request (%pM tid %d)\n",
+-		       sta->sta.addr, tid);
++		if (sta->sdata) {
++			ht_dbg(sta->sdata,
++			       "Suspend in progress - Denying ADDBA request (%pM tid %d)\n",
++			       sta->sta.addr, tid);
++		}
+ 		goto end;
+ 	}
+ 
+@@ -308,9 +319,11 @@ void ___ieee80211_start_rx_ba_session(struct sta_info *sta,
+ 	     (!(sta->sta.deflink.ht_cap.cap & IEEE80211_HT_CAP_DELAY_BA))) ||
+ 	    (buf_size > max_buf_size)) {
+ 		status = WLAN_STATUS_INVALID_QOS_PARAM;
+-		ht_dbg_ratelimited(sta->sdata,
+-				   "AddBA Req with bad params from %pM on tid %u. policy %d, buffer size %d\n",
+-				   sta->sta.addr, tid, ba_policy, buf_size);
++		if (sta->sdata) {
++			ht_dbg_ratelimited(sta->sdata,
++					   "AddBA Req with bad params from %pM on tid %u. policy %d, buffer size %d\n",
++					   sta->sta.addr, tid, ba_policy, buf_size);
++		}
+ 		goto end;
+ 	}
+ 	/* determine default buffer size */
+@@ -322,8 +335,10 @@ void ___ieee80211_start_rx_ba_session(struct sta_info *sta,
+ 		buf_size = sta->sta.max_rx_aggregation_subframes;
+ 	params.buf_size = buf_size;
+ 
+-	ht_dbg(sta->sdata, "AddBA Req buf_size=%d for %pM\n",
+-	       buf_size, sta->sta.addr);
++	if (sta->sdata) {
++		ht_dbg(sta->sdata, "AddBA Req buf_size=%d for %pM\n",
++		       buf_size, sta->sta.addr);
++	}
+ 
+ 	/* examine state machine */
+ 	lockdep_assert_held(&sta->ampdu_mlme.mtx);
+@@ -332,9 +347,11 @@ void ___ieee80211_start_rx_ba_session(struct sta_info *sta,
+ 		if (sta->ampdu_mlme.tid_rx_token[tid] == dialog_token) {
+ 			struct tid_ampdu_rx *tid_rx;
+ 
+-			ht_dbg_ratelimited(sta->sdata,
+-					   "updated AddBA Req from %pM on tid %u\n",
+-					   sta->sta.addr, tid);
++			if (sta->sdata) {
++				ht_dbg_ratelimited(sta->sdata,
++						   "updated AddBA Req from %pM on tid %u\n",
++						   sta->sta.addr, tid);
++			}
+ 			/* We have no API to update the timeout value in the
+ 			 * driver so reject the timeout update if the timeout
+ 			 * changed. If it did not change, i.e., no real update,
+@@ -350,9 +367,11 @@ void ___ieee80211_start_rx_ba_session(struct sta_info *sta,
+ 			goto end;
+ 		}
+ 
+-		ht_dbg_ratelimited(sta->sdata,
+-				   "unexpected AddBA Req from %pM on tid %u\n",
+-				   sta->sta.addr, tid);
++		if (sta->sdata) {
++			ht_dbg_ratelimited(sta->sdata,
++					   "unexpected AddBA Req from %pM on tid %u\n",
++					   sta->sta.addr, tid);
++		}
+ 
+ 		/* delete existing Rx BA session on the same tid */
+ 		___ieee80211_stop_rx_ba_session(sta, tid, WLAN_BACK_RECIPIENT,
+@@ -360,7 +379,7 @@ void ___ieee80211_start_rx_ba_session(struct sta_info *sta,
+ 						false);
+ 	}
+ 
+-	if (ieee80211_hw_check(&local->hw, SUPPORTS_REORDERING_BUFFER)) {
++	if (sta->sdata && ieee80211_hw_check(&local->hw, SUPPORTS_REORDERING_BUFFER)) {
+ 		ret = drv_ampdu_action(local, sta->sdata, &params);
+ 		ht_dbg(sta->sdata,
+ 		       "Rx A-MPDU request on %pM tid %d result %d\n",
+@@ -400,14 +419,16 @@ void ___ieee80211_start_rx_ba_session(struct sta_info *sta,
+ 	for (i = 0; i < buf_size; i++)
+ 		__skb_queue_head_init(&tid_agg_rx->reorder_buf[i]);
+ 
+-	ret = drv_ampdu_action(local, sta->sdata, &params);
+-	ht_dbg(sta->sdata, "Rx A-MPDU request on %pM tid %d result %d\n",
+-	       sta->sta.addr, tid, ret);
+-	if (ret) {
+-		kfree(tid_agg_rx->reorder_buf);
+-		kfree(tid_agg_rx->reorder_time);
+-		kfree(tid_agg_rx);
+-		goto end;
++	if (sta->sdata) {
++		ret = drv_ampdu_action(local, sta->sdata, &params);
++		ht_dbg(sta->sdata, "Rx A-MPDU request on %pM tid %d result %d\n",
++		       sta->sta.addr, tid, ret);
++		if (ret) {
++			kfree(tid_agg_rx->reorder_buf);
++			kfree(tid_agg_rx->reorder_time);
++			kfree(tid_agg_rx);
++			goto end;
++		}
+ 	}
+ 
+ 	/* update data */
+diff --git a/net/mac80211/agg-tx.c b/net/mac80211/agg-tx.c
+index f9514bacbd4a..db53dcaccba9 100644
+--- a/net/mac80211/agg-tx.c
++++ b/net/mac80211/agg-tx.c
+@@ -368,8 +368,10 @@ int ___ieee80211_stop_tx_ba_session(struct sta_info *sta, u16 tid,
+ 
+ 	spin_unlock_bh(&sta->lock);
+ 
+-	ht_dbg(sta->sdata, "Tx BA session stop requested for %pM tid %u\n",
+-	       sta->sta.addr, tid);
++	if (sta->sdata) {
++		ht_dbg(sta->sdata, "Tx BA session stop requested for %pM tid %u\n",
++		       sta->sta.addr, tid);
++	}
+ 
+ 	del_timer_sync(&tid_tx->addba_resp_timer);
+ 	del_timer_sync(&tid_tx->session_timer);
+@@ -776,7 +778,12 @@ void ieee80211_start_tx_ba_cb(struct sta_info *sta, int tid,
+ 			      struct tid_ampdu_tx *tid_tx)
+ {
+ 	struct ieee80211_sub_if_data *sdata = sta->sdata;
+-	struct ieee80211_local *local = sdata->local;
++	struct ieee80211_local *local;
++
++	if (WARN_ON(!sdata))
++		return;
++
++	local = sdata->local;
+ 
+ 	if (WARN_ON(test_and_set_bit(HT_AGG_STATE_DRV_READY, &tid_tx->state)))
+ 		return;
+@@ -902,6 +909,9 @@ void ieee80211_stop_tx_ba_cb(struct sta_info *sta, int tid,
+ 	bool send_delba = false;
+ 	bool start_txq = false;
+ 
++	if (WARN_ON(!sdata))
++		return;
++
+ 	ht_dbg(sdata, "Stopping Tx BA session for %pM tid %d\n",
+ 	       sta->sta.addr, tid);
+ 
+-- 
+2.34.1
 
-> +		vcpu = hgctrl->owners[i];
-> +		if (!vcpu)
-> +			continue;
-> +
-> +		/*
-> +		 * We release hgctrl->lock before notifying IMSIC
-> +		 * so that we don't have lock ordering issues.
-> +		 */
-> +		raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-> +
-> +		/* Notify IMSIC */
-> +		kvm_riscv_vcpu_aia_imsic_release(vcpu);
-> +
-> +		/*
-> +		 * Wakeup VCPU if it was blocked so that it can
-> +		 * run on other HARTs
-> +		 */
-> +		if (csr_read(CSR_HGEIE) & BIT(i)) {
-> +			csr_clear(CSR_HGEIE, BIT(i));
-> +			kvm_vcpu_kick(vcpu);
-
-Doing all this outside the lock makes me wonder what happens when 'vcpu'
-is no longer the owner at the time of kvm_riscv_vcpu_aia_imsic_release()
-or kvm_vcpu_kick(). Even if the calls on the wrong vcpu are just noise,
-then don't we still need to confirm that we release/kick the real owner
-before we return from this function?
-
-It appears safe to call kvm_vcpu_kick() while holding the lock and
-hgei_interrupt() does that. So, since there's currently no
-implementation of kvm_riscv_vcpu_aia_imsic_release(), I'm not sure what
-lock ordering issues we need to avoid.
-
-> +		}
-> +
-> +		raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +	}
-> +
-> +	raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
->  }
->  
->  int kvm_riscv_aia_init(void)
->  {
-> +	int rc;
-> +
->  	if (!riscv_isa_extension_available(NULL, SxAIA))
->  		return -ENODEV;
->  
-> +	/* Figure-out number of bits in HGEIE */
-> +	csr_write(CSR_HGEIE, -1UL);
-> +	kvm_riscv_aia_nr_hgei = fls_long(csr_read(CSR_HGEIE));
-> +	csr_write(CSR_HGEIE, 0);
-> +	if (kvm_riscv_aia_nr_hgei)
-> +		kvm_riscv_aia_nr_hgei--;
-> +
-> +	/* Initialize guest external interrupt line management */
-> +	rc = aia_hgei_init();
-> +	if (rc)
-> +		return rc;
-> +
->  	/* Enable KVM AIA support */
->  	static_branch_enable(&kvm_riscv_aia_available);
->  
-> @@ -380,4 +616,9 @@ int kvm_riscv_aia_init(void)
->  
->  void kvm_riscv_aia_exit(void)
->  {
-> +	if (!kvm_riscv_aia_available())
-> +		return;
-> +
-> +	/* Cleanup the HGEI state */
-> +	aia_hgei_exit();
->  }
-> diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
-> index 6396352b4e4d..b0b46f48f31e 100644
-> --- a/arch/riscv/kvm/main.c
-> +++ b/arch/riscv/kvm/main.c
-> @@ -116,7 +116,8 @@ static int __init riscv_kvm_init(void)
->  	kvm_info("VMID %ld bits available\n", kvm_riscv_gstage_vmid_bits());
->  
->  	if (kvm_riscv_aia_available())
-> -		kvm_info("AIA available\n");
-> +		kvm_info("AIA available with %d guest external interrupts\n",
-> +			 kvm_riscv_aia_nr_hgei);
->  
->  	rc = kvm_init(sizeof(struct kvm_vcpu), 0, THIS_MODULE);
->  	if (rc) {
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 30acf3ebdc3d..eace51dd896f 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -249,10 +249,12 @@ int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu)
->  
->  void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu)
->  {
-> +	kvm_riscv_aia_wakeon_hgei(vcpu, true);
->  }
->  
->  void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu)
->  {
-> +	kvm_riscv_aia_wakeon_hgei(vcpu, false);
->  }
->  
->  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu)
-> -- 
-> 2.34.1
->
-
-Thanks,
-drew
