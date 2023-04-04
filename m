@@ -2,89 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3546D6998
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46AA6D6999
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232313AbjDDQz5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Apr 2023 12:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
+        id S235590AbjDDQ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235395AbjDDQzw (ORCPT
+        with ESMTP id S235629AbjDDQ4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:55:52 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60353D1;
-        Tue,  4 Apr 2023 09:55:34 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pjjwE-0000HT-RK; Tue, 04 Apr 2023 18:55:18 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Jarrah Gosbell <kernel@undef.tools>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martijn Braam <martijn@brixit.nl>, Ondrej Jirman <megi@xff.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH] arm64: dts: rockchip: Change serial baud rate for Pinephone Pro
- to 1.5 MB
-Date:   Tue, 04 Apr 2023 18:55:17 +0200
-Message-ID: <3999080.iIbC2pHGDl@diego>
-In-Reply-To: <CAMdYzYqT=vVZxFK=P6xYDAht_KWk3CTsTtruPAbGqx1K9EcJsQ@mail.gmail.com>
-References: <20230403175937.2842085-1-javierm@redhat.com> <3738011.44csPzL39Z@diego>
- <CAMdYzYqT=vVZxFK=P6xYDAht_KWk3CTsTtruPAbGqx1K9EcJsQ@mail.gmail.com>
+        Tue, 4 Apr 2023 12:56:03 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE8F4C20;
+        Tue,  4 Apr 2023 09:55:43 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrYlc0FDZz67T1b;
+        Wed,  5 Apr 2023 00:54:52 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 4 Apr
+ 2023 17:55:37 +0100
+Date:   Tue, 4 Apr 2023 17:55:37 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+CC:     <linux-cxl@vger.kernel.org>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <will@kernel.org>, <dan.j.williams@intel.com>,
+        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Davidlohr Bueso" <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>
+Subject: Re: [PATCH v4 5/5] docs: perf: Minimal introduction the the CXL PMU
+ device and driver
+Message-ID: <20230404175537.00004782@Huawei.com>
+In-Reply-To: <bf9ef54d-65da-ce59-3b47-f3dc29a5e052@linux.intel.com>
+References: <20230330164556.31533-1-Jonathan.Cameron@huawei.com>
+        <20230330164556.31533-6-Jonathan.Cameron@huawei.com>
+        <bf9ef54d-65da-ce59-3b47-f3dc29a5e052@linux.intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Mon, 3 Apr 2023 13:45:52 -0400
+"Liang, Kan" <kan.liang@linux.intel.com> wrote:
 
-Am Dienstag, 4. April 2023, 14:52:02 CEST schrieb Peter Geis:
-> On Tue, Apr 4, 2023 at 3:55 AM Heiko Stübner <heiko@sntech.de> wrote:
-> >
-> > Hi,
-> >
-> > Am Montag, 3. April 2023, 19:59:37 CEST schrieb Javier Martinez Canillas:
-> > > This baud rate is set for the device by mainline u-boot and is also what
-> > > is set in the Pinebook Pro Device Tree, which is a device similar to the
-> > > PinePhone Pro but with a different form factor.
-> > >
-> > > Otherwise, the baud rate of the firmware and Linux don't match by default
-> > > and a 'console=ttyS2,1500000n8' kernel command line parameter is required
-> > > to have proper output for both.
-> >
-> > The interesting question is always if this will break someone else's setup.
-> > I've never really understood the strange setting of 1.5MBps, but on the
-> > other hand it _is_ a reality on most boards.
+> On 2023-03-30 12:45 p.m., Jonathan Cameron wrote:
+> > Very basic introduction to the device and the current driver support
+> > provided. I expect to expand on this in future versions of this patch
+> > set.
+> > 
+> > Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > 
+> > --
+> > v4: No change
+> > ---
+> >  Documentation/admin-guide/perf/cxl.rst   | 65 ++++++++++++++++++++++++
+> >  Documentation/admin-guide/perf/index.rst |  1 +
+> >  2 files changed, 66 insertions(+)
+> > 
+> > diff --git a/Documentation/admin-guide/perf/cxl.rst b/Documentation/admin-guide/perf/cxl.rst
+> > new file mode 100644
+> > index 000000000000..46235dff4b21
+> > --- /dev/null
+> > +++ b/Documentation/admin-guide/perf/cxl.rst
+> > @@ -0,0 +1,65 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +======================================
+> > +CXL Performance Monitoring Unit (CPMU)
+> > +======================================
+> > +
+> > +The CXL rev 3.0 specification provides a definition of CXL Performance
+> > +Monitoring Unit in section 13.2: Performance Monitoring.
+> > +
+> > +CXL components (e.g. Root Port, Switch Upstream Port, End Point) may have
+> > +any number of CPMU instances. CPMU capabilities are fully discoverable from
+> > +the devices. The specification provides event definitions for all CXL protocol
+> > +message types and a set of additional events for things commonly counted on
+> > +CXL devices (e.g. DRAM events).
+> > +
+> > +CPMU driver
+> > +===========
+> > +
+> > +The CPMU driver register a perf PMU with the name cpmu<id> on the CXL bus.
+> > +
+> > +    /sys/bus/cxl/device/cpmu<id>
+> > +
+> > +The associated PMU is registered as
+> > +
+> > +   /sys/bus/event_sources/devices/cpmu<id>
+> > +
+> > +In common with other CXL bus devices, the id has no specific meaning and the
+> > +relationship to specific CXL device should be established via the device parent
+> > +of the device on the CXL bus.
+> > +
+> > +PMU driver provides description of available events and filter options in sysfs.
+> > +
+> > +The "format" directory describes all formats of the config (event vendor id,
+> > +group id and mask) config1 (threshold, filter enables) and config2 (filter
+> > +parameters) fields of the perf_event_attr structure.  The "events" directory
+> > +describes all documented events show in perf list.
+> > +
+> > +The events shown in perf list are the most fine grained events with a single
+> > +bit of the event mask set. More general events may be enable by setting
+> > +multiple mask bits in config. For example, all Device to Host Read Requests
+> > +may be captured on a single counter by setting the bits for all of
+> > +
+> > +* d2h_req_rdcurr
+> > +* d2h_req_rdown
+> > +* d2h_req_rdshared
+> > +* d2h_req_rdany
+> > +* d2h_req_rdownnodata
+> > +
+> > +Example of usage::
+> > +
+> > +  $#perf list
+> > +  cpmu0/clock_ticks/                                 [Kernel PMU event]
+> > +  cpmu0/d2h_req_itomwr/                              [Kernel PMU event]
+> > +  cpmu0/d2h_req_rdany/                               [Kernel PMU event]
+> > +  cpmu0/d2h_req_rdcurr/                              [Kernel PMU event]
+> > +  -----------------------------------------------------------
+> > +
+> > +  $# perf stat -e cpmu0/clock_ticks/ -e cpmu0/d2h_req_itowrm/
+> > +
+> > +Vendor specific events may also be available and if so can be used via
+> > +
+> > +  $# perf stat -e cpmu0/vid=VID,gid=GID,mask=MASK/
+> > +
+> > +The driver does not support sampling. So "perf record" and attaching to
+> > +a task are unsupported.  
+> 
+> The PMU only supports system-wide counting. That's the reason it doesn't
+> support per-task profiling. Not because of missing sampling.
 
-> The 1.5M baud is default because the clock structure on rockchip
-> devices does not allow a clean 115200 baud. By attempting to force
-> 115200, it will always be slightly off (either low or high depending
-> on how the driver decided to round). If this actually causes any
-> problems is the subject of much debate.
+Ah. I've managed to fuse two different conditions. I'll break them apart for
+v5.
 
-thanks so much for this piece of clock-detail. As I wrote, I never really
-understood the why _before_ but also never cared that much to dive
-into it and find out.
+Thanks,
 
-So your explanation closes one knowledge gap in my head.
+Jonathan
 
-Thanks a lot :-)
-Heiko
-
-
+> 
+> Thanks,
+> Kan
+> > diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
+> > index 9de64a40adab..f60be04e4e33 100644
+> > --- a/Documentation/admin-guide/perf/index.rst
+> > +++ b/Documentation/admin-guide/perf/index.rst
+> > @@ -21,3 +21,4 @@ Performance monitor support
+> >     alibaba_pmu
+> >     nvidia-pmu
+> >     meson-ddr-pmu
+> > +   cxl  
+> 
 
