@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8516D64FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350086D6390
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235174AbjDDORI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
+        id S235357AbjDDNoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235079AbjDDORG (ORCPT
+        with ESMTP id S235320AbjDDNn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:17:06 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E141E99;
-        Tue,  4 Apr 2023 07:17:05 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PrTn71T0gz67VxZ;
-        Tue,  4 Apr 2023 21:55:55 +0800 (CST)
-Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
- lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 4 Apr 2023 14:56:40 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Robert Richter <rric@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Frank Li <Frank.li@nxp.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Liang Kan <kan.liang@linux.intel.com>
-Subject: [PATCH 28/32] dmaengine: idxd: Assign parent for event_source device
-Date:   Tue, 4 Apr 2023 14:42:21 +0100
-Message-ID: <20230404134225.13408-29-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
-References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
+        Tue, 4 Apr 2023 09:43:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D50E7C
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:43:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680615786;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DOxp/loUVwjuOPGUeDlb03eqt//Xsq563D9HmMeX0kc=;
+        b=iDsOQTsh2CjlMvP1ZuqT8+MgSaTWBdVnUUU6aE5cwuV3jbQmEtsuXODxzrdhPSqdOO0VVa
+        aVI/WT/pKuSj/LFZyYN/J3T8UpgB1XZlh6bwFI+Mt2+N/liN7BIDv4Tpa4I/1J9GBrGfO9
+        LTnO0Qlkxi7xFZ5W0/+v/jCalFFQ8jc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-pi0Svwr4ODigORJ7n6yb0Q-1; Tue, 04 Apr 2023 09:42:59 -0400
+X-MC-Unique: pi0Svwr4ODigORJ7n6yb0Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0FC07101A54F;
+        Tue,  4 Apr 2023 13:42:57 +0000 (UTC)
+Received: from ypodemsk.tlv.csb (unknown [10.39.194.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 390002166B26;
+        Tue,  4 Apr 2023 13:42:49 +0000 (UTC)
+From:   Yair Podemsky <ypodemsk@redhat.com>
+To:     linux@armlinux.org.uk, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, davem@davemloft.net, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org,
+        peterz@infradead.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        frederic@kernel.org, ardb@kernel.org,
+        juerg.haefliger@canonical.com, rmk+kernel@armlinux.org.uk,
+        geert+renesas@glider.be, tony@atomide.com,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        nick.hawkins@hpe.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, mtosatti@redhat.com, vschneid@redhat.com,
+        dhildenb@redhat.com
+Cc:     ypodemsk@redhat.com, alougovs@redhat.com
+Subject: [PATCH 1/3] arch: Introduce ARCH_HAS_CPUMASK_BITS
+Date:   Tue,  4 Apr 2023 16:42:22 +0300
+Message-Id: <20230404134224.137038-2-ypodemsk@redhat.com>
+In-Reply-To: <20230404134224.137038-1-ypodemsk@redhat.com>
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,30 +77,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the PMU device appears directly under /sys/devices/
-Only root busses should appear there, so instead assign the pmu->dev
-parent to be the iDXD PCI Device.
+Some architectures set and maintain the mm_cpumask bits when loading
+or removing process from cpu.
+This Kconfig will mark those to allow different behavior between
+kernels that maintain the mm_cpumask and those that do not.
 
-Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Yair Podemsky <ypodemsk@redhat.com>
 ---
- drivers/dma/idxd/perfmon.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/Kconfig         | 8 ++++++++
+ arch/arm/Kconfig     | 1 +
+ arch/powerpc/Kconfig | 1 +
+ arch/s390/Kconfig    | 1 +
+ arch/sparc/Kconfig   | 1 +
+ arch/x86/Kconfig     | 1 +
+ 6 files changed, 13 insertions(+)
 
-diff --git a/drivers/dma/idxd/perfmon.c b/drivers/dma/idxd/perfmon.c
-index d73004f47cf4..4d61334a814a 100644
---- a/drivers/dma/idxd/perfmon.c
-+++ b/drivers/dma/idxd/perfmon.c
-@@ -478,6 +478,7 @@ static void idxd_pmu_init(struct idxd_pmu *idxd_pmu)
- 	}
+diff --git a/arch/Kconfig b/arch/Kconfig
+index e3511afbb7f2..ec5559779e9f 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1434,6 +1434,14 @@ config ARCH_HAS_NONLEAF_PMD_YOUNG
+ 	  address translations. Page table walkers that clear the accessed bit
+ 	  may use this capability to reduce their search space.
  
- 	idxd_pmu->pmu.name		= idxd_pmu->name;
-+	idxd_pmu->pmu.parent		= &idxd_pmu->idxd->pdev->dev;
- 	idxd_pmu->pmu.attr_groups	= perfmon_attr_groups;
- 	idxd_pmu->pmu.task_ctx_nr	= perf_invalid_context;
- 	idxd_pmu->pmu.event_init	= perfmon_pmu_event_init;
++config ARCH_HAS_CPUMASK_BITS
++	bool
++	help
++	  Architectures that select this option set bits on the mm_cpumask
++	  to mark which cpus loaded the mm, The mask can then be used to
++	  control mm specific actions such as tlb_flush.
++
++
+ source "kernel/gcov/Kconfig"
+ 
+ source "scripts/gcc-plugins/Kconfig"
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index e24a9820e12f..6111059a68a3 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -70,6 +70,7 @@ config ARM
+ 	select GENERIC_SCHED_CLOCK
+ 	select GENERIC_SMP_IDLE_THREAD
+ 	select HARDIRQS_SW_RESEND
++	select ARCH_HAS_CPUMASK_BITS
+ 	select HAVE_ARCH_AUDITSYSCALL if AEABI && !OABI_COMPAT
+ 	select HAVE_ARCH_BITREVERSE if (CPU_32v7M || CPU_32v7) && !CPU_32v6
+ 	select HAVE_ARCH_JUMP_LABEL if !XIP_KERNEL && !CPU_ENDIAN_BE32 && MMU
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index a6c4407d3ec8..2fd0160f4f8e 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -144,6 +144,7 @@ config PPC
+ 	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
+ 	select ARCH_HAS_UACCESS_FLUSHCACHE
+ 	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_CPUMASK_BITS
+ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+ 	select ARCH_KEEP_MEMBLOCK
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index 9809c74e1240..b2de5ee07faf 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -86,6 +86,7 @@ config S390
+ 	select ARCH_HAS_SYSCALL_WRAPPER
+ 	select ARCH_HAS_UBSAN_SANITIZE_ALL
+ 	select ARCH_HAS_VDSO_DATA
++	select ARCH_HAS_CPUMASK_BITS
+ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+ 	select ARCH_INLINE_READ_LOCK
+ 	select ARCH_INLINE_READ_LOCK_BH
+diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+index 84437a4c6545..f9e0cf26d447 100644
+--- a/arch/sparc/Kconfig
++++ b/arch/sparc/Kconfig
+@@ -98,6 +98,7 @@ config SPARC64
+ 	select ARCH_HAS_PTE_SPECIAL
+ 	select PCI_DOMAINS if PCI
+ 	select ARCH_HAS_GIGANTIC_PAGE
++	select ARCH_HAS_CPUMASK_BITS
+ 	select HAVE_SOFTIRQ_ON_OWN_STACK
+ 	select HAVE_SETUP_PER_CPU_AREA
+ 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index a825bf031f49..d98dfdf9c6b4 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -183,6 +183,7 @@ config X86
+ 	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
+ 	select HAVE_ARCH_STACKLEAK
+ 	select HAVE_ARCH_TRACEHOOK
++	select ARCH_HAS_CPUMASK_BITS
+ 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+ 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD if X86_64
+ 	select HAVE_ARCH_USERFAULTFD_WP         if X86_64 && USERFAULTFD
 -- 
-2.37.2
+2.31.1
 
