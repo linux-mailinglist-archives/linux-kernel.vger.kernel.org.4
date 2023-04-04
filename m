@@ -2,53 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5716D5DC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8F66D5DDA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234503AbjDDKmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 06:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
+        id S234511AbjDDKqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 06:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234439AbjDDKmu (ORCPT
+        with ESMTP id S234419AbjDDKqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 06:42:50 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4511110F2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:42:49 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PrPRQ0DqmzKtdk;
-        Tue,  4 Apr 2023 18:40:18 +0800 (CST)
-Received: from [10.174.177.229] (10.174.177.229) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 4 Apr 2023 18:42:45 +0800
-Message-ID: <5e604ce7-8f06-392b-d56a-249abf9b4635@huawei.com>
-Date:   Tue, 4 Apr 2023 18:42:44 +0800
+        Tue, 4 Apr 2023 06:46:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DBA1BD7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680605124;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KlvAHwxh15I5CJgOz3iBO5tT4tChRwyHMt1NQ+o3LIA=;
+        b=Uez/INBmjghPiiZ5WId+k0xgbr6xYkMA63N7q0tRMOKeMXuQ8xbueZyhFgyd+ynBogXB6J
+        gj8cAeQPW+GnGbBhRyLr3LpEI+GYgwHDtOccrAA00LE0RCtbNSMuJqVi+LOc9P8xsTmSEM
+        rWw+07/+z1kXhedow9vGgHEfrshigyU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-KKW9AEdFMjO660zewoQhLg-1; Tue, 04 Apr 2023 06:45:19 -0400
+X-MC-Unique: KKW9AEdFMjO660zewoQhLg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B3BBB80D190;
+        Tue,  4 Apr 2023 10:45:18 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.199])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 7493B40C6EC4;
+        Tue,  4 Apr 2023 10:45:15 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Tue,  4 Apr 2023 12:45:10 +0200 (CEST)
+Date:   Tue, 4 Apr 2023 12:45:06 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arch@vger.kernel.org, avagin@gmail.com, peterz@infradead.org,
+        luto@kernel.org, krisman@collabora.com, tglx@linutronix.de,
+        corbet@lwn.net, shuah@kernel.org, arnd@arndb.de,
+        Gregory Price <gregory.price@memverge.com>
+Subject: Re: [PATCH v15 2/4] syscall user dispatch: untag selector addresses
+ before access_ok
+Message-ID: <20230404104506.GA24740@redhat.com>
+References: <20230330212121.1688-1-gregory.price@memverge.com>
+ <20230330212121.1688-3-gregory.price@memverge.com>
+ <ZCYP+4gRZDqC0lRo@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 2/2] mm: ksm: Support hwpoison for ksm page
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "sunnanyong@huawei.com" <sunnanyong@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-References: <20230330074501.205092-1-xialonglong1@huawei.com>
- <20230330074501.205092-3-xialonglong1@huawei.com>
- <20230331054243.GB1435482@hori.linux.bs1.fc.nec.co.jp>
-From:   xialonglong <xialonglong1@huawei.com>
-In-Reply-To: <20230331054243.GB1435482@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.229]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCYP+4gRZDqC0lRo@arm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,37 +70,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you very much for your reply. Your suggestion is indeed very 
-helpful and I will take some time to consider how to implement it. Once 
-I have a clear plan, I will send a separate patch to make it happen.
+Catalin,
 
-Best regards,
-Longlong Xia
-在 2023/3/31 13:42, HORIGUCHI NAOYA(堀口 直也) 写道:
-> On Thu, Mar 30, 2023 at 03:45:01PM +0800, Longlong Xia wrote:
->> hwpoison_user_mappings() is updated to support ksm pages, and add
->> collect_procs_ksm() to collect processes when the error hit an ksm
->> page. The difference from collect_procs_anon() is that it also needs
->> to traverse the rmap-item list on the stable node of the ksm page.
->> At the same time, add_to_kill_ksm() is added to handle ksm pages. And
->> task_in_to_kill_list() is added to avoid duplicate addition of tsk to
->> the to_kill list. This is because when scanning the list, if the pages
->> that make up the ksm page all come from the same process, they may be
->> added repeatedly.
->>
->> Signed-off-by: Longlong Xia <xialonglong1@huawei.com>
+doesn't this mean that access_ok() on arm64 could use
+untagged_addr(addr) unconditionally without any security risk?
+
+On 03/30, Catalin Marinas wrote:
+>
+> On Thu, Mar 30, 2023 at 05:21:22PM -0400, Gregory Price wrote:
+> > diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
+> > index 22396b234854..16086226b41c 100644
+> > --- a/kernel/entry/syscall_user_dispatch.c
+> > +++ b/kernel/entry/syscall_user_dispatch.c
+> > @@ -87,7 +87,18 @@ static int task_set_syscall_user_dispatch(struct task_struct *task, unsigned lon
+> >  		if (offset && offset + len <= offset)
+> >  			return -EINVAL;
+> >
+> > -		if (selector && !access_ok(selector, sizeof(*selector)))
+> > +		/*
+> > +		 * access_ok will clear memory tags for tagged addresses on tasks where
+> > +		 * memory tagging is enabled.  To enable a tracer to set a tracee's
+> > +		 * selector not in the same tagging state, the selector address must be
+> > +		 * untagged for access_ok, otherwise an untagged tracer will always fail
+> > +		 * to set a tagged tracee's selector.
+> > +		 *
+> > +		 * The result of this is that a tagged tracer may be capable of setting
+> > +		 * an invalid address, and the tracee will SIGSEGV on the next syscall.
+> > +		 * This is equivalent to a task setting a bad selector (selector=0x1).
+> > +		 */
+>
+> I'd drop the last paragraph above. Even without tagged pointers, a tracer
+> can set an invalid address (as you already mentioned) but the phrasing
+> some implies (to me) that if we did it differently, the tracer would not be
+> able to set an invalid pointer.
 > 
-> I don't find any specific issue by code review for now, so I'll try to
-> test your patches.
+> Either way,
 > 
-> I have one comment about duplicated KSM pages.  It seems that KSM controls
-> page duplication by limiting deduplication factor with max_page_sharing,
-> primarily for performance reason.  But I think it's imporant from memory
-> RAS's viewpoint too because that means we could allow recovery from memory
-> errors on a KSM page by making affected processes to switch to the duplicated
-> pages (without killing the processes!).  Maybe this might be beyond the scope
-> of this patchset and I'm not sure how hard it is, but if you are interested
-> in this issue, that's really nice.
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 > 
-> Thanks,
-> Naoya Horiguchi
+> -- 
+> Catalin
+> 
+
