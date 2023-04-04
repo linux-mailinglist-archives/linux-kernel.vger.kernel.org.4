@@ -2,183 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F83E6D6B36
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CAF6D6B3A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236266AbjDDSH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 14:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
+        id S236311AbjDDSHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 14:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235403AbjDDSH0 (ORCPT
+        with ESMTP id S236352AbjDDSHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 14:07:26 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8BE5BA0;
-        Tue,  4 Apr 2023 11:06:58 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334Dx6xB002554;
-        Tue, 4 Apr 2023 18:06:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=9zFJeX7d/Xih4EytaE4d0J5IlLpnQbffKbVcx0UjZMg=;
- b=etdrLTkt1yMlK+QkbO7ehi9Partbv6ZP7/y5klMMNSkZPa/zWJh8aj9G2bG5rVCXWXgp
- YGeR5PB4z2eBY4JqFKxAVKIQkt5B288Ivv4hBrJVv38jMU2+xOOPPpmqdQFq9eZonoVr
- jfP5qX4OpoYr3s8K3OtZqMtZpnKRPp+5IxCpvo2rdygdR3Vvp+9sCu0fcRXl8RBbG3l5
- qNeibUg70SjdgZzuM22vnZ1RNy2OQ7AmygwS1b+D7mjsO9WKiXAl3GIuBChMPA+V4ApT
- iDdvFwE5uvzkiPenXb64dV4mQep8kPHL2J4HOawFcLtBG9B1OHjHyQCs/mKj/rJk359K Cw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppb1dpgu9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Apr 2023 18:06:06 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 334HXcLE039448;
-        Tue, 4 Apr 2023 18:06:05 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2172.outbound.protection.outlook.com [104.47.59.172])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ppt26rq5j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Apr 2023 18:06:05 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PRIxIzz2uRlBCAMabxmVy3Pn54az0Zm6swLoC00VWNihSlgRHaTe+mMUV1PN8WDHdY2tOnGH2gAA4xUeh4jRYtW28dlTkOmfD1cRKVTekdvy8LIp05Zr4Us3+3UP7bpnKmxPbzkyHgpFYu38U6YNAWbv4EyOZOkM39aqqLX+L+qS16wKFtGDkMNTx3MRjjlQsIYbheGmyEYK51/m7dFIBFix++r+cjLhq3019pVgcKuwJyJfVEjeNstlWW3OedcJ6GPjLa9qfY5JnMX3yv4mOgS5aTr+IVEaolw0bPCSY/w7IJ51rO4lEvdPB03vJY9JUbB/dXAkjHC5yGAyfLk9Gw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9zFJeX7d/Xih4EytaE4d0J5IlLpnQbffKbVcx0UjZMg=;
- b=Jmrt7CIOaE0UEMO83dMqWe8mvzFZQeGJ+8fMZ4mAi+1fHzFE4b86PVy2ey67wLeVbaCQ+qd+KqPDniprCkFXhsc9dy5i0k8pH2RBuoGvihqNfy6orU31WoGPhjTOcyS6GX7CzLy+F8OsFn7p0R/NhDC/Yw40bZ4sKauJ2PZZqluTtJ8rv4bC8MIF09tQT0sCF3S3/3LClEN93kSIysuK/TZkWqp9bPlDbJ5Gr/Fwlatu9nEbVmY7ZL98pNc85vovKaXHhSDpo6IgtsV997TPkdLxAki23Dx62y5YjXKnA7BUgZpe/uWDmTPcSE9gSPxXYIJoqFnE+CU1oB6u5q63ag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 4 Apr 2023 14:07:45 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB5059E1
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 11:07:23 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id s20so14497966ljp.7
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 11:07:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9zFJeX7d/Xih4EytaE4d0J5IlLpnQbffKbVcx0UjZMg=;
- b=JZCwMgrxoPEFE76Ewi5qVDFCBz+x2EkeMH0O6bs+nFI+OZz0C6wbKHM27dm8uC4BSihOPGP1lhMgMdpVTxGJRsjh0DnLFB12ie6aSjcDym9oyCmt+Q2hkqNGLeg4FBcV+iOPlt5gkBiZiTTR2WDlZEoN2tB6Ml9KIYC+WUuGfmA=
-Received: from BY5PR10MB4129.namprd10.prod.outlook.com (2603:10b6:a03:210::21)
- by SA2PR10MB4587.namprd10.prod.outlook.com (2603:10b6:806:114::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Tue, 4 Apr
- 2023 18:06:02 +0000
-Received: from BY5PR10MB4129.namprd10.prod.outlook.com
- ([fe80::311:f22:99b6:7db7]) by BY5PR10MB4129.namprd10.prod.outlook.com
- ([fe80::311:f22:99b6:7db7%3]) with mapi id 15.20.6254.034; Tue, 4 Apr 2023
- 18:06:02 +0000
-From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "zbr@ioremap.net" <zbr@ioremap.net>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
-        "petrm@nvidia.com" <petrm@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v4 1/6] netlink: Reverse the patch which removed filtering
-Thread-Topic: [PATCH v4 1/6] netlink: Reverse the patch which removed
- filtering
-Thread-Index: AQHZZCxJt7hHR9OT2UmzMPODBe2VMK8V1x8AgADu1gCAAA1sAIAAevWAgALFEQCAAWR6gA==
-Date:   Tue, 4 Apr 2023 18:06:02 +0000
-Message-ID: <CC331DE1-DB40-43A7-9211-6DE08837F717@oracle.com>
-References: <20230331235528.1106675-1-anjali.k.kulkarni@oracle.com>
- <20230331235528.1106675-2-anjali.k.kulkarni@oracle.com>
- <20230331210920.399e3483@kernel.org>
- <88FD5EFE-6946-42C4-881B-329C3FE01D26@oracle.com>
- <20230401121212.454abf11@kernel.org>
- <4E631493-D61F-4778-A392-3399DF400A9D@oracle.com>
- <20230403135008.7f492aeb@kernel.org>
-In-Reply-To: <20230403135008.7f492aeb@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY5PR10MB4129:EE_|SA2PR10MB4587:EE_
-x-ms-office365-filtering-correlation-id: c609d0e0-66c5-40ab-f504-08db35374078
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hAoRfFiMBD+pA0bgloiWvJHYU+gl8nsyklMAtSh2XdkEni64CxjKFdBPcVwFzNqYP3OI/f/pC827DQv6M0PlhuMn0t/IWPLtC6Eit0U4rH5RvNX5jmIkFZSyqNKGmz1lr1jB8POWT6M7ZPhbxlikwJ81MEF/ju01V684xk6fY4RE0e+O7Ip20gC4+AYwNHyB7d3v6bX4sQDmbjbosclPm4829mSj/XEK1oJcRnqC3ll0CpbsaS7ZPrCpBPEzx1RonySsxuB2i04vh+4OwlCo3jc9M+Df84wLenNs3iTXdeBmnDhiltKtu0YU58VU/rgHLp5Z2nrOrhKnZnpintMSe9ag2OaYVDVWsDp9SRW7O+FN4aoLmIGmKC+MFH0r99YJ4WUDs/cA48WzVe2CBTRREDX+LXnTRodzpKOr1n9apNpuvcfEb28vkj1rrCzv3bMdeolwUN7UmwqgnGzLX3m2dfixMd1RbRiLu8TsoZxL0DYZTYVy/kGBhVML4j8UbgwI+TYG5mKhCdZIVNMee+cf7j5XF/jxl+ZBLU+XdhoLzDOGjJW3X2gIbRWASWsT0wXtV6tDK7lMtfw5LgSX2Lh1H5zXXYNFA7yxOxToqifybOWU5tgkLO1csDeI1Fxghwxa1x10nWbXe/ATgOc9gUJBQg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4129.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(366004)(136003)(39860400002)(346002)(451199021)(54906003)(316002)(478600001)(76116006)(66946007)(8676002)(66446008)(66556008)(66476007)(64756008)(6916009)(53546011)(71200400001)(4326008)(6486002)(2906002)(5660300002)(8936002)(4744005)(7416002)(38100700002)(41300700001)(122000001)(86362001)(33656002)(36756003)(38070700005)(2616005)(6506007)(6512007)(186003)(83380400001)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?AqhHTES4rwp/9lMLzrIuPQZF9rJmB8cRqpBqYTBCGUymD8FJs4WHmbCymBdQ?=
- =?us-ascii?Q?+7nKcgi3LJQOkWeXBpq7/msE6b/ysEYQHQ7t0jmP339j2wm12Xm3sh/OEa7q?=
- =?us-ascii?Q?FEHqpzGL83xfR6CC6HKExmzhO0NHyUJnGzUd4vJff2YyeUqd8dxff2yLiW6X?=
- =?us-ascii?Q?1jxa+xzxv74JigNFWMyW2kS/iw82bhND7sDGYZyD4WRN3MMWeoithjx2QfnO?=
- =?us-ascii?Q?eT6TOLTylX3BGR02WMVbP3JBOfRQIGB37CGIwRTObpEmwvv6QQtz9WbRrAVs?=
- =?us-ascii?Q?/hkHPfPx46RxKo2pUVuEP9d7ip/+13ida0zwL17nHk0rEj4XO5gQ+Ws7yJse?=
- =?us-ascii?Q?Mz6bK7MzoqclyjbLz+WKkFsWx/L+ySP92Rlhzm7kdeXTM0UO0ZqjiWJPAHSl?=
- =?us-ascii?Q?IszDrr8gqsaASwEvFN2/QlkekNmyeVkL9hRfJhSZEBuXatrlHl+3UmGM+g+A?=
- =?us-ascii?Q?rtcHUpEsx/Vzc0QwRVKoJgBcoGkr2/Wyo3cUmZ79dnSFsLWgzQl8tixwPU0B?=
- =?us-ascii?Q?oe5eGumFrbYItXYEC5wAERdSYXHOtH5UzxF/1qy3Yp7OpV6auYzXAraBMC/A?=
- =?us-ascii?Q?Zy2ljgSX+Jy131bx8UU7u7E0A+14Qmi0FQ3lC+5FH+utw4cD+jzQffq8UdV4?=
- =?us-ascii?Q?c8hI1gcIPQb5S2xkTEXG0DlUiKp3eDxqAsJlszCLFXjInWYzb+zv1NJ617as?=
- =?us-ascii?Q?HAD4OtlIAGlca7mSBDr7VHlU4e5z3PTycLPZqtGxSNoh5oGYXuLSz+joro4M?=
- =?us-ascii?Q?mvsnZyS7ZSKeNDCnYOpA26M1TyzmHjuZlyf+8l9iy1mxbY32lNvJ95I7dMVp?=
- =?us-ascii?Q?CXDp0ZCz1LyMN6mFkIv1MpfQrceroxBaLPGkOb1cXJiQtWMNceqx4eT/YumC?=
- =?us-ascii?Q?jfvf9aCyBPH5BHJza/ee2QQThHgteQOVpDCkIXrzq63l0uktpEzRNTtX86Fm?=
- =?us-ascii?Q?49Tb3oIBk/utYFPe8pH2hbh5a5qGu230RNiElweTjbxQHWjpUkUdXEuvjPIr?=
- =?us-ascii?Q?netWhFOENltu8CKr9piBVOobvqxQe3Ibezwglb53MnWxyyvfHvb8yVC1mxmk?=
- =?us-ascii?Q?KR0U3JxGTVLCJe7IyLV5iEppncgZMUygDEdMHAmiERdQdm8jLgid+OG1Vqtx?=
- =?us-ascii?Q?6fpbs5n1X3a/Z/2ryDrwzfiMDr7vqE1DadGgZoVA+23vRBns198fkhc1F57/?=
- =?us-ascii?Q?S7kXN3CUCRAtIKNvKPD9s6AF5UY++odXwic7w5HUDrvq75ctZAzBDvj6y8Fm?=
- =?us-ascii?Q?2AvaZtLT5Hmfj93oCy5fJis4JdrPybJWCFF2QzXaOFghLWXxQ74Z28X2AJCQ?=
- =?us-ascii?Q?RD1hWVXuduGvMVIVya0vFR2t9M/1BBSIhpp++KoGh1ErYyhpZjPoGLDyTrXu?=
- =?us-ascii?Q?K+wuOA9E2AvPtC932mCfXzKR3PLjoOBtvGfrDgBXavd3ptjV8tDbnea9KjXt?=
- =?us-ascii?Q?H71m+qYoq5wbuvB3mOXMxRCb7PPjkOBFjXUJrCxHKORLg6XxwKNUiaM5sOQ5?=
- =?us-ascii?Q?nDw1BT93eXq7S+yB5U8B/Pgrjg+4WrjL0SXSIN7PQzOw2vdKQbVj6XJ6VM2F?=
- =?us-ascii?Q?UyOlqH0LSUaMBRmvB+JQVc8qqy1xfyRGjo4OcTJQXAgrNZyliFC5TkhLijBM?=
- =?us-ascii?Q?VxFHL/wwV93s7apyra2NxRJdfjKNTXUY+mhjBo6absPu?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <45F3923DC3BEAE469F35E1ECD20D89DF@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=linaro.org; s=google; t=1680631637;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dKGYy/lnfy+kLVObhWRLvXvnRmxbL6o7FAqb6+OXgrQ=;
+        b=DbMjP6MwypN0+AIvI231crk6wvxsuu1WgEHE8k11XZwNJ4wrzM22ZnANpFzc2fIHna
+         xoU+P8AQqFjdSEJUcHCaDAwXjAOKFNZjTTr4RRqxfmX5chfPkxBWkOwkg4rkGJ4qBUZP
+         8YmaIFmy5Z1qX7WKMVTNSZ5J0z8bhI8Z4hWuQykH40P1zjalVw093YXWCaQpvO8Yox1+
+         /lJH++B4xthR9N3fAGfyZX397SX4/YQYq/+lYqQaw9yMZRb2KOQ06KXQQTv9jOJgkgM7
+         AUKntf986yXaatoMev2hFimEW1tDanBSrkmwyxDe26kjfZh2vMqA37SXRqRtlKA7Q49+
+         G28g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680631637;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dKGYy/lnfy+kLVObhWRLvXvnRmxbL6o7FAqb6+OXgrQ=;
+        b=WPse7emhDod+to7sbOehLv93uq8yiPeTe3UtlBrl1uAD5FdSvkt9gdenXuMLB+wlby
+         prnLLcwvZvzs1PmvZPuMyMAbesogXjb3Hy1xClyZkdFZPuUudKCLyPl+jMWfY/6ckefq
+         opqmULAQ+mpjGh7rozNq7pMNnYd3z9kMFgl6AhWv6ew/MlHWRuSMW+Dq7inncHEtjdfP
+         R9okF2R33DgvPFJYXbvl8FLr3sjilwgBxkftknEkEqUsMnU9n65Dpdu9IyJkprJeQkHY
+         QPqdujkqVBAasBJgi9Uwp8Psp/iv3FA2TvuqbSYTOI+Sq+VSqhh0RLO1vlnMJBFl2ipJ
+         GT3A==
+X-Gm-Message-State: AAQBX9f36OSDY6WO/BfpshcQWeeH2wu62wxBCNdaZYdQYiGATQ2DTF4Z
+        fpApzo1V0ZfJnMzPPIHoyv4UhA==
+X-Google-Smtp-Source: AKy350bTRPJNdhoD8Ppp5HPZcfIS1qN1iMMfdXM1O3Ez1bpFq/GD7QD6JQ8TrFGnaqFjGD4viKhZcg==
+X-Received: by 2002:a2e:9002:0:b0:29e:6d48:d8d5 with SMTP id h2-20020a2e9002000000b0029e6d48d8d5mr1151815ljg.29.1680631637323;
+        Tue, 04 Apr 2023 11:07:17 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id o7-20020a2e90c7000000b002958c4e96fasm2470187ljg.3.2023.04.04.11.07.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 11:07:16 -0700 (PDT)
+Message-ID: <0bd29b3e-a6c9-ff22-cfb3-1860f56b4ee5@linaro.org>
+Date:   Tue, 4 Apr 2023 20:07:15 +0200
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?Tl8r2Zhwe/7/LDkHCbluC1AfwDc1TZ2zDDM7BJrXY+eg2f6yJ7z6crg+ADQw?=
- =?us-ascii?Q?j4K7PNws/z7QEEY9giwvgxhe5G/mwGV39NXDmcLEKjsffzHc1Ymth0MLJ4dP?=
- =?us-ascii?Q?gfUz83PWdw2kx0AQEc1+pEsegoxdocQz36kEB6rQEpaYT3WSGhlje8gx1FS5?=
- =?us-ascii?Q?Hf8k9Xw0LMqP+yXJT6t/CvE89OgwhUT+Dxhv/N28rqvlfJwLpfXaMjiW8Wi9?=
- =?us-ascii?Q?V052ifRVzZTlflSq73iN/PEIyR5KTB6b/71HoBh77taHWLEkpLm3tAyc+SsB?=
- =?us-ascii?Q?VviB4BiZYUXkr18uwDSIcIkXYyDeNdHVbui5NAveETMC5MVYBdqo6gHMM8Vr?=
- =?us-ascii?Q?rT+7Ikm77wlPZWh+6ZWcFIBBw3L6VK7r+CShWLqsUXfm3f+22g7iONxPB7I/?=
- =?us-ascii?Q?ZhCJUCE0uvba1ODhTreJxBdN6c7H+6v+5IGX9nhdBevR7UfPOCoWravuB/IJ?=
- =?us-ascii?Q?RNs5/eRtstxEwXTdfsXk6Iz6+jjQHWi6PkVEMr33X6qZIyaS0+2bVU49QArC?=
- =?us-ascii?Q?1bCADxkjxaEHpx89/SfZ51r1tXR+WFOdHIqzRgZyzQz4YCVL4i/Jw6P897/d?=
- =?us-ascii?Q?mmVhaGv+4uArdRUWK8Q8+5UqCkHHjDkN3PM8nr4sK7lAsOQoO9+Jaw1BdrJP?=
- =?us-ascii?Q?yMlHuA5r1iL/oVeK/pfymRk4TLTws28fPlEIeQPWo/v0W4agGysm8RDkS1zw?=
- =?us-ascii?Q?z7TOjp62hZ4zU1sv6idoh421pwqxOyWgig2cGTWc30ScKv0BTtmyQZRIerNd?=
- =?us-ascii?Q?gXV3SfvbaxgwVaSSuL2ZoSPSac5ykXRmr1xOlm2leeHqLx8n9pkQsqULAjHQ?=
- =?us-ascii?Q?rZwLh3xMPykUZLCDXai0V692YHKV1KsMarYnh0/SULPoe/xCdIPYsl2v1hfO?=
- =?us-ascii?Q?6w8S+YyXOHp0r3LbQP3duUFsfup0P3/7yKk+JfW5zmy+8sEZYmG+ZB7Ojg25?=
- =?us-ascii?Q?wuIMJomIZDqQtz/Z5n1z9TadK9/PDbCoAeITke4aYGtRHngcq7nWg4gwNKmL?=
- =?us-ascii?Q?l2NoCfwO2mMIfH9ktbt+b58T5CGnkz/XzZE9JYuWe/FZWWut5LwTCEGTOSCz?=
- =?us-ascii?Q?7EbdOZ05Lp2JNgiO8rFuvTdeAbb7Kg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4129.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c609d0e0-66c5-40ab-f504-08db35374078
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Apr 2023 18:06:02.4018
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: huzqmvSMN1E4NF0Va0JOr5+VIvIaOIiKdoDhbaUL96xAOgU9lkBPhVZPw2HZodRqQWrj/vu/rvPpVojz2XFS8TW3fGYiqsPXMah+tvhNRDs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4587
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-04_09,2023-04-04_05,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
- malwarescore=0 adultscore=0 bulkscore=0 mlxlogscore=877 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304040165
-X-Proofpoint-GUID: GBlXsjiES1VFBa3PSmWFkRJDU9z6xwJX
-X-Proofpoint-ORIG-GUID: GBlXsjiES1VFBa3PSmWFkRJDU9z6xwJX
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 4/7] soundwire: qcom: use consistently 'ctrl' as state
+ variable name
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Patrick Lai <quic_plai@quicinc.com>
+References: <20230403132503.62090-1-krzysztof.kozlowski@linaro.org>
+ <20230403132503.62090-5-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230403132503.62090-5-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -188,26 +90,429 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-> On Apr 3, 2023, at 1:50 PM, Jakub Kicinski <kuba@kernel.org> wrote:
->=20
-> On Sun, 2 Apr 2023 02:32:19 +0000 Anjali Kulkarni wrote:
->>> Who are you hoping will merge this? =20
->> Could I request you to look into merging the patches which seem ok to
->> you, since you are listed as the maintainer for these? I can make any
->> more changes for the connector patches if you see the need..
->=20
-> The first two, you mean? We can merge them, but we need to know that
-Yes, even perhaps the first 3:-), since the third one has bug fixes which l=
-ooked ok to you?
+On 3.04.2023 15:25, Krzysztof Kozlowski wrote:
+> The pointer to 'struct qcom_swrm_ctrl' was called sometimes 'swrm' and
+> sometimes 'ctrl' variable.  Choose one - 'ctrl' - so the code will be
+> consistent and easier to read.
+> 
+> No functional change.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-> the rest is also going somewhere. Kernel has a rule against merging
-> APIs without any in-tree users, so we need a commitment that the
-> user will also reach linux-next before the merge window :(
-Yes, sounds right.
->=20
-> Christian was commenting on previous releases maybe he can take or just
-> review the last 4 patches?
-Sounds fine too. I hope Christian can review these.
-
-Anjali
-
+Konrad
+>  drivers/soundwire/qcom.c | 168 +++++++++++++++++++--------------------
+>  1 file changed, 84 insertions(+), 84 deletions(-)
+> 
+> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> index faa091e7472a..00522de47b6f 100644
+> --- a/drivers/soundwire/qcom.c
+> +++ b/drivers/soundwire/qcom.c
+> @@ -279,14 +279,14 @@ static u32 swrm_get_packed_reg_val(u8 *cmd_id, u8 cmd_data,
+>  	return val;
+>  }
+>  
+> -static int swrm_wait_for_rd_fifo_avail(struct qcom_swrm_ctrl *swrm)
+> +static int swrm_wait_for_rd_fifo_avail(struct qcom_swrm_ctrl *ctrl)
+>  {
+>  	u32 fifo_outstanding_data, value;
+>  	int fifo_retry_count = SWR_OVERFLOW_RETRY_COUNT;
+>  
+>  	do {
+>  		/* Check for fifo underflow during read */
+> -		swrm->reg_read(swrm, SWRM_CMD_FIFO_STATUS, &value);
+> +		ctrl->reg_read(ctrl, SWRM_CMD_FIFO_STATUS, &value);
+>  		fifo_outstanding_data = FIELD_GET(SWRM_RD_CMD_FIFO_CNT_MASK, value);
+>  
+>  		/* Check if read data is available in read fifo */
+> @@ -297,39 +297,39 @@ static int swrm_wait_for_rd_fifo_avail(struct qcom_swrm_ctrl *swrm)
+>  	} while (fifo_retry_count--);
+>  
+>  	if (fifo_outstanding_data == 0) {
+> -		dev_err_ratelimited(swrm->dev, "%s err read underflow\n", __func__);
+> +		dev_err_ratelimited(ctrl->dev, "%s err read underflow\n", __func__);
+>  		return -EIO;
+>  	}
+>  
+>  	return 0;
+>  }
+>  
+> -static int swrm_wait_for_wr_fifo_avail(struct qcom_swrm_ctrl *swrm)
+> +static int swrm_wait_for_wr_fifo_avail(struct qcom_swrm_ctrl *ctrl)
+>  {
+>  	u32 fifo_outstanding_cmds, value;
+>  	int fifo_retry_count = SWR_OVERFLOW_RETRY_COUNT;
+>  
+>  	do {
+>  		/* Check for fifo overflow during write */
+> -		swrm->reg_read(swrm, SWRM_CMD_FIFO_STATUS, &value);
+> +		ctrl->reg_read(ctrl, SWRM_CMD_FIFO_STATUS, &value);
+>  		fifo_outstanding_cmds = FIELD_GET(SWRM_WR_CMD_FIFO_CNT_MASK, value);
+>  
+>  		/* Check for space in write fifo before writing */
+> -		if (fifo_outstanding_cmds < swrm->wr_fifo_depth)
+> +		if (fifo_outstanding_cmds < ctrl->wr_fifo_depth)
+>  			return 0;
+>  
+>  		usleep_range(500, 510);
+>  	} while (fifo_retry_count--);
+>  
+> -	if (fifo_outstanding_cmds == swrm->wr_fifo_depth) {
+> -		dev_err_ratelimited(swrm->dev, "%s err write overflow\n", __func__);
+> +	if (fifo_outstanding_cmds == ctrl->wr_fifo_depth) {
+> +		dev_err_ratelimited(ctrl->dev, "%s err write overflow\n", __func__);
+>  		return -EIO;
+>  	}
+>  
+>  	return 0;
+>  }
+>  
+> -static int qcom_swrm_cmd_fifo_wr_cmd(struct qcom_swrm_ctrl *swrm, u8 cmd_data,
+> +static int qcom_swrm_cmd_fifo_wr_cmd(struct qcom_swrm_ctrl *ctrl, u8 cmd_data,
+>  				     u8 dev_addr, u16 reg_addr)
+>  {
+>  
+> @@ -342,20 +342,20 @@ static int qcom_swrm_cmd_fifo_wr_cmd(struct qcom_swrm_ctrl *swrm, u8 cmd_data,
+>  		val = swrm_get_packed_reg_val(&cmd_id, cmd_data,
+>  					      dev_addr, reg_addr);
+>  	} else {
+> -		val = swrm_get_packed_reg_val(&swrm->wcmd_id, cmd_data,
+> +		val = swrm_get_packed_reg_val(&ctrl->wcmd_id, cmd_data,
+>  					      dev_addr, reg_addr);
+>  	}
+>  
+> -	if (swrm_wait_for_wr_fifo_avail(swrm))
+> +	if (swrm_wait_for_wr_fifo_avail(ctrl))
+>  		return SDW_CMD_FAIL_OTHER;
+>  
+>  	if (cmd_id == SWR_BROADCAST_CMD_ID)
+> -		reinit_completion(&swrm->broadcast);
+> +		reinit_completion(&ctrl->broadcast);
+>  
+>  	/* Its assumed that write is okay as we do not get any status back */
+> -	swrm->reg_write(swrm, SWRM_CMD_FIFO_WR_CMD, val);
+> +	ctrl->reg_write(ctrl, SWRM_CMD_FIFO_WR_CMD, val);
+>  
+> -	if (swrm->version <= SWRM_VERSION_1_3_0)
+> +	if (ctrl->version <= SWRM_VERSION_1_3_0)
+>  		usleep_range(150, 155);
+>  
+>  	if (cmd_id == SWR_BROADCAST_CMD_ID) {
+> @@ -363,7 +363,7 @@ static int qcom_swrm_cmd_fifo_wr_cmd(struct qcom_swrm_ctrl *swrm, u8 cmd_data,
+>  		 * sleep for 10ms for MSM soundwire variant to allow broadcast
+>  		 * command to complete.
+>  		 */
+> -		ret = wait_for_completion_timeout(&swrm->broadcast,
+> +		ret = wait_for_completion_timeout(&ctrl->broadcast,
+>  						  msecs_to_jiffies(TIMEOUT_MS));
+>  		if (!ret)
+>  			ret = SDW_CMD_IGNORED;
+> @@ -376,41 +376,41 @@ static int qcom_swrm_cmd_fifo_wr_cmd(struct qcom_swrm_ctrl *swrm, u8 cmd_data,
+>  	return ret;
+>  }
+>  
+> -static int qcom_swrm_cmd_fifo_rd_cmd(struct qcom_swrm_ctrl *swrm,
+> +static int qcom_swrm_cmd_fifo_rd_cmd(struct qcom_swrm_ctrl *ctrl,
+>  				     u8 dev_addr, u16 reg_addr,
+>  				     u32 len, u8 *rval)
+>  {
+>  	u32 cmd_data, cmd_id, val, retry_attempt = 0;
+>  
+> -	val = swrm_get_packed_reg_val(&swrm->rcmd_id, len, dev_addr, reg_addr);
+> +	val = swrm_get_packed_reg_val(&ctrl->rcmd_id, len, dev_addr, reg_addr);
+>  
+>  	/*
+>  	 * Check for outstanding cmd wrt. write fifo depth to avoid
+>  	 * overflow as read will also increase write fifo cnt.
+>  	 */
+> -	swrm_wait_for_wr_fifo_avail(swrm);
+> +	swrm_wait_for_wr_fifo_avail(ctrl);
+>  
+>  	/* wait for FIFO RD to complete to avoid overflow */
+>  	usleep_range(100, 105);
+> -	swrm->reg_write(swrm, SWRM_CMD_FIFO_RD_CMD, val);
+> +	ctrl->reg_write(ctrl, SWRM_CMD_FIFO_RD_CMD, val);
+>  	/* wait for FIFO RD CMD complete to avoid overflow */
+>  	usleep_range(250, 255);
+>  
+> -	if (swrm_wait_for_rd_fifo_avail(swrm))
+> +	if (swrm_wait_for_rd_fifo_avail(ctrl))
+>  		return SDW_CMD_FAIL_OTHER;
+>  
+>  	do {
+> -		swrm->reg_read(swrm, SWRM_CMD_FIFO_RD_FIFO_ADDR, &cmd_data);
+> +		ctrl->reg_read(ctrl, SWRM_CMD_FIFO_RD_FIFO_ADDR, &cmd_data);
+>  		rval[0] = cmd_data & 0xFF;
+>  		cmd_id = FIELD_GET(SWRM_RD_FIFO_CMD_ID_MASK, cmd_data);
+>  
+> -		if (cmd_id != swrm->rcmd_id) {
+> +		if (cmd_id != ctrl->rcmd_id) {
+>  			if (retry_attempt < (MAX_FIFO_RD_RETRY - 1)) {
+>  				/* wait 500 us before retry on fifo read failure */
+>  				usleep_range(500, 505);
+> -				swrm->reg_write(swrm, SWRM_CMD_FIFO_CMD,
+> +				ctrl->reg_write(ctrl, SWRM_CMD_FIFO_CMD,
+>  						SWRM_CMD_FIFO_FLUSH);
+> -				swrm->reg_write(swrm, SWRM_CMD_FIFO_RD_CMD, val);
+> +				ctrl->reg_write(ctrl, SWRM_CMD_FIFO_RD_CMD, val);
+>  			}
+>  			retry_attempt++;
+>  		} else {
+> @@ -419,9 +419,9 @@ static int qcom_swrm_cmd_fifo_rd_cmd(struct qcom_swrm_ctrl *swrm,
+>  
+>  	} while (retry_attempt < MAX_FIFO_RD_RETRY);
+>  
+> -	dev_err(swrm->dev, "failed to read fifo: reg: 0x%x, rcmd_id: 0x%x,\
+> +	dev_err(ctrl->dev, "failed to read fifo: reg: 0x%x, rcmd_id: 0x%x,\
+>  		dev_num: 0x%x, cmd_data: 0x%x\n",
+> -		reg_addr, swrm->rcmd_id, dev_addr, cmd_data);
+> +		reg_addr, ctrl->rcmd_id, dev_addr, cmd_data);
+>  
+>  	return SDW_CMD_IGNORED;
+>  }
+> @@ -533,39 +533,39 @@ static int qcom_swrm_enumerate(struct sdw_bus *bus)
+>  
+>  static irqreturn_t qcom_swrm_wake_irq_handler(int irq, void *dev_id)
+>  {
+> -	struct qcom_swrm_ctrl *swrm = dev_id;
+> +	struct qcom_swrm_ctrl *ctrl = dev_id;
+>  	int ret;
+>  
+> -	ret = pm_runtime_resume_and_get(swrm->dev);
+> +	ret = pm_runtime_resume_and_get(ctrl->dev);
+>  	if (ret < 0 && ret != -EACCES) {
+> -		dev_err_ratelimited(swrm->dev,
+> +		dev_err_ratelimited(ctrl->dev,
+>  				    "pm_runtime_resume_and_get failed in %s, ret %d\n",
+>  				    __func__, ret);
+>  		return ret;
+>  	}
+>  
+> -	if (swrm->wake_irq > 0) {
+> -		if (!irqd_irq_disabled(irq_get_irq_data(swrm->wake_irq)))
+> -			disable_irq_nosync(swrm->wake_irq);
+> +	if (ctrl->wake_irq > 0) {
+> +		if (!irqd_irq_disabled(irq_get_irq_data(ctrl->wake_irq)))
+> +			disable_irq_nosync(ctrl->wake_irq);
+>  	}
+>  
+> -	pm_runtime_mark_last_busy(swrm->dev);
+> -	pm_runtime_put_autosuspend(swrm->dev);
+> +	pm_runtime_mark_last_busy(ctrl->dev);
+> +	pm_runtime_put_autosuspend(ctrl->dev);
+>  
+>  	return IRQ_HANDLED;
+>  }
+>  
+>  static irqreturn_t qcom_swrm_irq_handler(int irq, void *dev_id)
+>  {
+> -	struct qcom_swrm_ctrl *swrm = dev_id;
+> +	struct qcom_swrm_ctrl *ctrl = dev_id;
+>  	u32 value, intr_sts, intr_sts_masked, slave_status;
+>  	u32 i;
+>  	int devnum;
+>  	int ret = IRQ_HANDLED;
+> -	clk_prepare_enable(swrm->hclk);
+> +	clk_prepare_enable(ctrl->hclk);
+>  
+> -	swrm->reg_read(swrm, SWRM_INTERRUPT_STATUS, &intr_sts);
+> -	intr_sts_masked = intr_sts & swrm->intr_mask;
+> +	ctrl->reg_read(ctrl, SWRM_INTERRUPT_STATUS, &intr_sts);
+> +	intr_sts_masked = intr_sts & ctrl->intr_mask;
+>  
+>  	do {
+>  		for (i = 0; i < SWRM_INTERRUPT_MAX; i++) {
+> @@ -575,80 +575,80 @@ static irqreturn_t qcom_swrm_irq_handler(int irq, void *dev_id)
+>  
+>  			switch (value) {
+>  			case SWRM_INTERRUPT_STATUS_SLAVE_PEND_IRQ:
+> -				devnum = qcom_swrm_get_alert_slave_dev_num(swrm);
+> +				devnum = qcom_swrm_get_alert_slave_dev_num(ctrl);
+>  				if (devnum < 0) {
+> -					dev_err_ratelimited(swrm->dev,
+> +					dev_err_ratelimited(ctrl->dev,
+>  					    "no slave alert found.spurious interrupt\n");
+>  				} else {
+> -					sdw_handle_slave_status(&swrm->bus, swrm->status);
+> +					sdw_handle_slave_status(&ctrl->bus, ctrl->status);
+>  				}
+>  
+>  				break;
+>  			case SWRM_INTERRUPT_STATUS_NEW_SLAVE_ATTACHED:
+>  			case SWRM_INTERRUPT_STATUS_CHANGE_ENUM_SLAVE_STATUS:
+> -				dev_dbg_ratelimited(swrm->dev, "SWR new slave attached\n");
+> -				swrm->reg_read(swrm, SWRM_MCP_SLV_STATUS, &slave_status);
+> -				if (swrm->slave_status == slave_status) {
+> -					dev_dbg(swrm->dev, "Slave status not changed %x\n",
+> +				dev_dbg_ratelimited(ctrl->dev, "SWR new slave attached\n");
+> +				ctrl->reg_read(ctrl, SWRM_MCP_SLV_STATUS, &slave_status);
+> +				if (ctrl->slave_status == slave_status) {
+> +					dev_dbg(ctrl->dev, "Slave status not changed %x\n",
+>  						slave_status);
+>  				} else {
+> -					qcom_swrm_get_device_status(swrm);
+> -					qcom_swrm_enumerate(&swrm->bus);
+> -					sdw_handle_slave_status(&swrm->bus, swrm->status);
+> +					qcom_swrm_get_device_status(ctrl);
+> +					qcom_swrm_enumerate(&ctrl->bus);
+> +					sdw_handle_slave_status(&ctrl->bus, ctrl->status);
+>  				}
+>  				break;
+>  			case SWRM_INTERRUPT_STATUS_MASTER_CLASH_DET:
+> -				dev_err_ratelimited(swrm->dev,
+> +				dev_err_ratelimited(ctrl->dev,
+>  						"%s: SWR bus clsh detected\n",
+>  						__func__);
+> -				swrm->intr_mask &= ~SWRM_INTERRUPT_STATUS_MASTER_CLASH_DET;
+> -				swrm->reg_write(swrm, SWRM_INTERRUPT_CPU_EN, swrm->intr_mask);
+> +				ctrl->intr_mask &= ~SWRM_INTERRUPT_STATUS_MASTER_CLASH_DET;
+> +				ctrl->reg_write(ctrl, SWRM_INTERRUPT_CPU_EN, ctrl->intr_mask);
+>  				break;
+>  			case SWRM_INTERRUPT_STATUS_RD_FIFO_OVERFLOW:
+> -				swrm->reg_read(swrm, SWRM_CMD_FIFO_STATUS, &value);
+> -				dev_err_ratelimited(swrm->dev,
+> +				ctrl->reg_read(ctrl, SWRM_CMD_FIFO_STATUS, &value);
+> +				dev_err_ratelimited(ctrl->dev,
+>  					"%s: SWR read FIFO overflow fifo status 0x%x\n",
+>  					__func__, value);
+>  				break;
+>  			case SWRM_INTERRUPT_STATUS_RD_FIFO_UNDERFLOW:
+> -				swrm->reg_read(swrm, SWRM_CMD_FIFO_STATUS, &value);
+> -				dev_err_ratelimited(swrm->dev,
+> +				ctrl->reg_read(ctrl, SWRM_CMD_FIFO_STATUS, &value);
+> +				dev_err_ratelimited(ctrl->dev,
+>  					"%s: SWR read FIFO underflow fifo status 0x%x\n",
+>  					__func__, value);
+>  				break;
+>  			case SWRM_INTERRUPT_STATUS_WR_CMD_FIFO_OVERFLOW:
+> -				swrm->reg_read(swrm, SWRM_CMD_FIFO_STATUS, &value);
+> -				dev_err(swrm->dev,
+> +				ctrl->reg_read(ctrl, SWRM_CMD_FIFO_STATUS, &value);
+> +				dev_err(ctrl->dev,
+>  					"%s: SWR write FIFO overflow fifo status %x\n",
+>  					__func__, value);
+> -				swrm->reg_write(swrm, SWRM_CMD_FIFO_CMD, 0x1);
+> +				ctrl->reg_write(ctrl, SWRM_CMD_FIFO_CMD, 0x1);
+>  				break;
+>  			case SWRM_INTERRUPT_STATUS_CMD_ERROR:
+> -				swrm->reg_read(swrm, SWRM_CMD_FIFO_STATUS, &value);
+> -				dev_err_ratelimited(swrm->dev,
+> +				ctrl->reg_read(ctrl, SWRM_CMD_FIFO_STATUS, &value);
+> +				dev_err_ratelimited(ctrl->dev,
+>  					"%s: SWR CMD error, fifo status 0x%x, flushing fifo\n",
+>  					__func__, value);
+> -				swrm->reg_write(swrm, SWRM_CMD_FIFO_CMD, 0x1);
+> +				ctrl->reg_write(ctrl, SWRM_CMD_FIFO_CMD, 0x1);
+>  				break;
+>  			case SWRM_INTERRUPT_STATUS_DOUT_PORT_COLLISION:
+> -				dev_err_ratelimited(swrm->dev,
+> +				dev_err_ratelimited(ctrl->dev,
+>  						"%s: SWR Port collision detected\n",
+>  						__func__);
+> -				swrm->intr_mask &= ~SWRM_INTERRUPT_STATUS_DOUT_PORT_COLLISION;
+> -				swrm->reg_write(swrm,
+> -					SWRM_INTERRUPT_CPU_EN, swrm->intr_mask);
+> +				ctrl->intr_mask &= ~SWRM_INTERRUPT_STATUS_DOUT_PORT_COLLISION;
+> +				ctrl->reg_write(ctrl,
+> +					SWRM_INTERRUPT_CPU_EN, ctrl->intr_mask);
+>  				break;
+>  			case SWRM_INTERRUPT_STATUS_READ_EN_RD_VALID_MISMATCH:
+> -				dev_err_ratelimited(swrm->dev,
+> +				dev_err_ratelimited(ctrl->dev,
+>  					"%s: SWR read enable valid mismatch\n",
+>  					__func__);
+> -				swrm->intr_mask &=
+> +				ctrl->intr_mask &=
+>  					~SWRM_INTERRUPT_STATUS_READ_EN_RD_VALID_MISMATCH;
+> -				swrm->reg_write(swrm,
+> -					SWRM_INTERRUPT_CPU_EN, swrm->intr_mask);
+> +				ctrl->reg_write(ctrl,
+> +					SWRM_INTERRUPT_CPU_EN, ctrl->intr_mask);
+>  				break;
+>  			case SWRM_INTERRUPT_STATUS_SPECIAL_CMD_ID_FINISHED:
+> -				complete(&swrm->broadcast);
+> +				complete(&ctrl->broadcast);
+>  				break;
+>  			case SWRM_INTERRUPT_STATUS_BUS_RESET_FINISHED_V2:
+>  				break;
+> @@ -657,19 +657,19 @@ static irqreturn_t qcom_swrm_irq_handler(int irq, void *dev_id)
+>  			case SWRM_INTERRUPT_STATUS_EXT_CLK_STOP_WAKEUP:
+>  				break;
+>  			default:
+> -				dev_err_ratelimited(swrm->dev,
+> +				dev_err_ratelimited(ctrl->dev,
+>  						"%s: SWR unknown interrupt value: %d\n",
+>  						__func__, value);
+>  				ret = IRQ_NONE;
+>  				break;
+>  			}
+>  		}
+> -		swrm->reg_write(swrm, SWRM_INTERRUPT_CLEAR, intr_sts);
+> -		swrm->reg_read(swrm, SWRM_INTERRUPT_STATUS, &intr_sts);
+> -		intr_sts_masked = intr_sts & swrm->intr_mask;
+> +		ctrl->reg_write(ctrl, SWRM_INTERRUPT_CLEAR, intr_sts);
+> +		ctrl->reg_read(ctrl, SWRM_INTERRUPT_STATUS, &intr_sts);
+> +		intr_sts_masked = intr_sts & ctrl->intr_mask;
+>  	} while (intr_sts_masked);
+>  
+> -	clk_disable_unprepare(swrm->hclk);
+> +	clk_disable_unprepare(ctrl->hclk);
+>  	return ret;
+>  }
+>  
+> @@ -1301,23 +1301,23 @@ static int qcom_swrm_get_port_config(struct qcom_swrm_ctrl *ctrl)
+>  #ifdef CONFIG_DEBUG_FS
+>  static int swrm_reg_show(struct seq_file *s_file, void *data)
+>  {
+> -	struct qcom_swrm_ctrl *swrm = s_file->private;
+> +	struct qcom_swrm_ctrl *ctrl = s_file->private;
+>  	int reg, reg_val, ret;
+>  
+> -	ret = pm_runtime_resume_and_get(swrm->dev);
+> +	ret = pm_runtime_resume_and_get(ctrl->dev);
+>  	if (ret < 0 && ret != -EACCES) {
+> -		dev_err_ratelimited(swrm->dev,
+> +		dev_err_ratelimited(ctrl->dev,
+>  				    "pm_runtime_resume_and_get failed in %s, ret %d\n",
+>  				    __func__, ret);
+>  		return ret;
+>  	}
+>  
+>  	for (reg = 0; reg <= SWR_MSTR_MAX_REG_ADDR; reg += 4) {
+> -		swrm->reg_read(swrm, reg, &reg_val);
+> +		ctrl->reg_read(ctrl, reg, &reg_val);
+>  		seq_printf(s_file, "0x%.3x: 0x%.2x\n", reg, reg_val);
+>  	}
+> -	pm_runtime_mark_last_busy(swrm->dev);
+> -	pm_runtime_put_autosuspend(swrm->dev);
+> +	pm_runtime_mark_last_busy(ctrl->dev);
+> +	pm_runtime_put_autosuspend(ctrl->dev);
+>  
+>  
+>  	return 0;
+> @@ -1498,13 +1498,13 @@ static int qcom_swrm_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static bool swrm_wait_for_frame_gen_enabled(struct qcom_swrm_ctrl *swrm)
+> +static bool swrm_wait_for_frame_gen_enabled(struct qcom_swrm_ctrl *ctrl)
+>  {
+>  	int retry = SWRM_LINK_STATUS_RETRY_CNT;
+>  	int comp_sts;
+>  
+>  	do {
+> -		swrm->reg_read(swrm, SWRM_COMP_STATUS, &comp_sts);
+> +		ctrl->reg_read(ctrl, SWRM_COMP_STATUS, &comp_sts);
+>  
+>  		if (comp_sts & SWRM_FRM_GEN_ENABLED)
+>  			return true;
+> @@ -1512,7 +1512,7 @@ static bool swrm_wait_for_frame_gen_enabled(struct qcom_swrm_ctrl *swrm)
+>  		usleep_range(500, 510);
+>  	} while (retry--);
+>  
+> -	dev_err(swrm->dev, "%s: link status not %s\n", __func__,
+> +	dev_err(ctrl->dev, "%s: link status not %s\n", __func__,
+>  		comp_sts & SWRM_FRM_GEN_ENABLED ? "connected" : "disconnected");
+>  
+>  	return false;
