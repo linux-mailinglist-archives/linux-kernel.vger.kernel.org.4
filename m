@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1306D6A49
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EA36D59FD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235831AbjDDRTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S233735AbjDDHvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235961AbjDDRTC (ORCPT
+        with ESMTP id S233481AbjDDHv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:19:02 -0400
-X-Greylist: delayed 4197 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Apr 2023 10:18:44 PDT
-Received: from mail.feshiecree.pl (mail.feshiecree.pl [89.40.114.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4924EE2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:18:44 -0700 (PDT)
-Received: by mail.feshiecree.pl (Postfix, from userid 1001)
-        id 1711E88689; Tue,  4 Apr 2023 08:50:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=feshiecree.pl;
-        s=mail; t=1680594629;
-        bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=IMvyDzq1cHcRuvPDUGrNjpC+zgCBPvXt4zMW4rAqWYCspCR3RPe9yYv9ac7HM12DB
-         lJ0BIWRyeBSYMttS1TRKaktSi8+cmvO9cBgAgXW9eSMJKiCc4vyyr7Me13qF1KZOmn
-         pnhJuQFY8z8LzEv+ScR3uh4lKG30O0OExcvBRuRFT6Wa19Ka8qEgvb1mIbnPO1eg46
-         bFQZ24KxVx7MLJFBQpgTK4popGpbLKQflRz88CRvuFj4V6e/XAs9NudmfasbQMydH1
-         ubCZ9psdU6yiz5GH9sZC/HuqlJYYJENpt5v5nYqB8SufcDoqrQkDks8yVN7e6CDruX
-         ebkkbcfnjY8BA==
-Received: by feshiecree.pl for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:50:27 GMT
-Message-ID: <20230404074504-0.1.1t.5muj.0.frajd6pd5q@feshiecree.pl>
-Date:   Tue,  4 Apr 2023 07:50:27 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@feshiecree.pl>
-To:     <linux-kernel@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.feshiecree.pl
+        Tue, 4 Apr 2023 03:51:28 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A538120;
+        Tue,  4 Apr 2023 00:51:24 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pjbRg-0004x9-HG; Tue, 04 Apr 2023 09:51:12 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linux-kernel@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Peter Robinson <pbrobinson@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Jarrah Gosbell <kernel@undef.tools>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martijn Braam <martijn@brixit.nl>, Ondrej Jirman <megi@xff.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH] arm64: dts: rockchip: Change serial baud rate for Pinephone Pro
+ to 1.5 MB
+Date:   Tue, 04 Apr 2023 09:51:11 +0200
+Message-ID: <3738011.44csPzL39Z@diego>
+In-Reply-To: <20230403175937.2842085-1-javierm@redhat.com>
+References: <20230403175937.2842085-1-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SORBS_DUL,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,23 +50,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi,
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+Am Montag, 3. April 2023, 19:59:37 CEST schrieb Javier Martinez Canillas:
+> This baud rate is set for the device by mainline u-boot and is also what
+> is set in the Pinebook Pro Device Tree, which is a device similar to the
+> PinePhone Pro but with a different form factor.
+> 
+> Otherwise, the baud rate of the firmware and Linux don't match by default
+> and a 'console=ttyS2,1500000n8' kernel command line parameter is required
+> to have proper output for both.
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+The interesting question is always if this will break someone else's setup.
+I've never really understood the strange setting of 1.5MBps, but on the
+other hand it _is_ a reality on most boards.
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+Personally I don't care that much either way, but would like a comment
+from the other people working on that device - if possible.
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+I guess if we don't hear anything, I'll apply it nevertheless at some point
 
 
-Pozdrawiam
-Krystian Wieczorek
+Heiko
+
+
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
+> 
+> I tried to instead get rid of the baud rate altogether, as suggested by
+> Peter Robinson. AFAIU that should just pick whatever bad rate has been
+> using by the early console.
+> 
+> But neither using 'stdout-path = "serial2" nor 'stdout-path = &uart2'
+> worked for me.
+> 
+> In both cases I didn't have any output unless setting a baud rate using
+> the 'console='param.
+> 
+>  arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+> index a0795a2b1cb1..6bbe65bd5bd4 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+> @@ -26,7 +26,7 @@ aliases {
+>  	};
+>  
+>  	chosen {
+> -		stdout-path = "serial2:115200n8";
+> +		stdout-path = "serial2:1500000n8";
+>  	};
+>  
+>  	gpio-keys {
+> 
+> base-commit: 3adf89324a2b2a9dbc2c12d8895021e7e34e3346
+> 
+
+
+
+
