@@ -2,241 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401F56D6AEA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF986D6AF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235589AbjDDRwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
+        id S235215AbjDDRyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235382AbjDDRwP (ORCPT
+        with ESMTP id S235403AbjDDRys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:52:15 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176F82D61
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:52:12 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id h11so36405253lfu.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680630730;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IrQ9Nk/ZqyT6PCBf5HyzrcvGRnNXSx6wEgKVrWsu1Ww=;
-        b=gryqHmNGVwdHcrupS+brUu78qIBxYUYs6tcxtpAJ5KJhB465EyC79ukjwZGMdR0uv3
-         wDE+owTqx8cu/iO1u/E9scdJAVcy26TBfYuXdeqPXJo23dXfPXXUBNqRD08bODIk2pF6
-         xsSHZW+kxwoiRRefP7TySqeEKmF/BYFyU1iTj7KRo5slDUAySfC0SjSxAO2vC08xwe/t
-         qjZ8RJi7L93v3rFgkxK4xCMDt641++armwBXRQoV6FAtVPhuFOu0G0NhBKv8s6FOsmEv
-         7GRnfLSR3xQLqIdTZCofvFSh3LrBeFDZE2v65KP5y8ocpP1J7RwAKrZBICdLlY9UFAsn
-         b/Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680630730;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IrQ9Nk/ZqyT6PCBf5HyzrcvGRnNXSx6wEgKVrWsu1Ww=;
-        b=TlrpdAYbF7DkiVGCs9IAcRW04qoItPQNamB8qtClKQIwNhzeJKZx9Of2brD/AHxuSV
-         Vi9NGT/+a4fP2HDW8Soy4vA8m2Dosl22G90LT94rc6j0cvdCAuKD7vkdp8YLJRlLzOAr
-         sMF0DpOtywrT2lnS9XuGoo5Om0Xx7YwAUPjU4w18a/hI5w81emlXqLu9F9706fM2YAEF
-         K0eDTJv7PK1bdvObSHx+utdLtXyi9v3SvJVx9v1DAQ8GBxvUpoyonBkadLN8XMzBaLj9
-         HwZ9Z0iA9hEiB6zyM+acNwEgmSljsEY1hUBBWUxZaJm33dcd0WhEkbRPT1wOsPclb4eX
-         C/7A==
-X-Gm-Message-State: AAQBX9e4/d+1+lbQKdcVeYXBKHOWEWUnbKaHnTdgONhnzJTlp2UrSE2g
-        uI1GNvoC23yXtI6gYen+7tzjhBbJMYnmK0GRVBU=
-X-Google-Smtp-Source: AKy350bPKGXIlcrnZI/qixYG1byf7Rly7InMsFsRfB8gb/+aPlSEzEY2IBTwrqlfQ7Yiny/IOPBszQ==
-X-Received: by 2002:ac2:4e49:0:b0:4db:19fb:6a7 with SMTP id f9-20020ac24e49000000b004db19fb06a7mr858515lfr.60.1680630730335;
-        Tue, 04 Apr 2023 10:52:10 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id u14-20020a056512040e00b004dc83d04840sm2417541lfk.79.2023.04.04.10.52.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 10:52:09 -0700 (PDT)
-Message-ID: <955cd520-3881-0c22-d818-13fe9a47e124@linaro.org>
-Date:   Tue, 4 Apr 2023 19:52:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 01/18] media: venus: hfi_venus: Set
- venus_sys_idle_indicator to false on V6
-Content-Language: en-US
-To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Andy Gross <agross@kernel.org>,
+        Tue, 4 Apr 2023 13:54:48 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1546D173E;
+        Tue,  4 Apr 2023 10:54:46 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334FS1Zs025927;
+        Tue, 4 Apr 2023 17:54:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=9FMgAqzWWmfKJwtIieDfxdgG+12aq/apMgLgVHiNbks=;
+ b=PJHea+esC+yQSujr9M8FX4z7DUuQYBt90TIXve9os7b+c3IcjZC0W59Bboji+z/kkeLx
+ 4/6v4BAiuE8AjiUHDXJuhuPQ+AL6pTylgaDDLeUEhBJH8WAwQuuv7W/oEy7tnNXJd8Gl
+ A64PSW4S85WzJVieG3SOODEl8d12Njp+3VvdlY7eojjH5V+ojdVmzCdlWHCIaICXS/TF
+ 6PnfoK51mQDyX3CFgOeFGmP8tiovCFWu+p5Ey/G48RooTCMBYvF7cVymgOvX4TFIx8/a
+ S2e3Y3pj5u+R1NF5P1yRnqhYpaG2TTVzn6PFLq67z/lHZmjpfquEOPnciH1U2oXstVoN zQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prmkmrry4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 17:54:42 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 334HseIX026331
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 4 Apr 2023 17:54:40 GMT
+Received: from hu-gokukris-sd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 4 Apr 2023 10:54:39 -0700
+From:   Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>
+CC:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
- <20230228-topic-venus-v1-1-58c2c88384e9@linaro.org>
- <99eeebc6-69aa-c6ba-139b-92672c299747@linaro.org>
- <893851c9-c8be-ed7f-ebde-5d90b9313f6d@linaro.org>
- <48ac4272-0e11-d943-e950-0be8d93fb036@linaro.org>
- <b7f0c568-72b7-3342-decc-784cd5f68b1a@linaro.org>
- <1091d8b4-3dd3-427b-2fcb-c3e0d32b0a3b@linaro.org>
- <aa8db9a1-ac11-acbe-1a05-b60c39989bc1@nexus-software.ie>
- <28b0eed5-6e80-e424-70bb-ba984fdbc1ac@quicinc.com>
- <909746ad-a6b9-18d8-cb43-b2460c7181d0@linaro.org>
- <e93ba74a-ccde-c6bd-4302-8884144d615d@quicinc.com>
- <bf5e30fa-5014-5585-3b8e-b1a8d2f95549@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <bf5e30fa-5014-5585-3b8e-b1a8d2f95549@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        "Guru Das Srinagesh" <quic_gurus@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+Subject: [PATCH v4 1/1] soc: qcom: mdt_loader: Enhance split binary detection
+Date:   Tue, 4 Apr 2023 10:54:17 -0700
+Message-ID: <20230404175417.31185-1-quic_gokukris@quicinc.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: wMMwR4QcleHnbeMtz7DiWyHR7K849SBv
+X-Proofpoint-ORIG-GUID: wMMwR4QcleHnbeMtz7DiWyHR7K849SBv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-04_08,2023-04-04_05,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 impostorscore=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 bulkscore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304040163
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It may be that the offset of the first program header lies inside the mdt's
+filesize, in this case the loader would incorrectly assume that the bins
+were not split. The loading would then continue on to fail for split bins.
+This change updates the logic used by the mdt loader to understand whether
+the firmware images are split or not. It figures this out by checking if
+each programs header's segment lies within the file or not.
 
+Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+---
+V4 addresses the comments from V3.
 
-On 30.03.2023 12:44, Vikash Garodia wrote:
-> On 3/24/2023 2:46 PM, Dikshita Agarwal wrote:
->>
->>
->> On 3/20/2023 8:24 PM, Konrad Dybcio wrote:
->>> On 2.03.2023 07:39, Dikshita Agarwal wrote:
->>>> On 2/28/2023 10:23 PM, Bryan O'Donoghue wrote:
->>>>> On 28/02/2023 15:41, Konrad Dybcio wrote:
->>>>>>> Can you test it and make sure ?
->>>>>> As I mentioned in the cover letter, 8250 still seems to work with this
->>>>>> patchset. I have no idea how one would go about validating the
->>>>>> functionality enabled through this call.
->>>>> We offlined about this.
->>>>>
->>>>> I think it is correct to say you don't have access to a display to test this on sm8250.
->>>>>
->>>>> I do so, I will try this out for you, though I'll wait for your V2 for this series.
->>>>>
->>>>> ---
->>>>> bod
->>>> Hi Konrad,
->>>>
->>>> I understand from your commit text, setting this indicator for AR50L is causing issue with suspend.
->>>>
->>>> Ideally it shouldn't cause any such issue. I checked with FW team and got to know that this property is not supported on AR50LT so if you set it there should be some property not supported error.
->>>>
->>>> In my opinion it would be good to replace these versions checks with VPU version check you have introduced in your other patch and keep this setting for current targets and not set wherever not needed eg AR50LT.
->>> So.. I did *something* and I'm no longer getting a jump to EDL.
->>>
->>> The *something* being knocking off hfi_core_suspend().
->>>
->>> If I send a sys_idle_indicator = true, I get (reformatted for
->>> better legibility):
->>>
->>>
->>> [    0.576543] qcom-venus 5a00000.video-codec: VenusFW  :
->>> <VFW_H:HostDr:unkn:--------:-> IMAGE_VARIANT_STRING=PROD
->>>
->>> [    0.603818] qcom-venus 5a00000.video-codec: VenusFW  :
->>> <VFW_H:HostDr:unkn:--------:-> OEM_IMAGE_VERSION_STRING=CRM
->>>
->>> [    0.608633] qcom-venus 5a00000.video-codec: VenusFW  :
->>> <VFW_H:HostDr:unkn:--------:-> BUILD_TIME: Mar 15 2021 04:24:58
->>>
->>> [    0.608644] qcom-venus 5a00000.video-codec: VenusFW  :
->>> <VFW_L:HostDr:unkn:--------:-> Host cmd 0x10005
->>>
->>> [    0.608655] qcom-venus 5a00000.video-codec: VenusFW  :
->>> <VFW_E:HostDr:unkn:--------:-> VenusHostDriver_SetSysProperty(1019): HostDriver:  VenusHostDriver_SetSysProperty unsupport property!
->>>
->>> [    0.608667] qcom-venus 5a00000.video-codec: VenusFW  :
->>> <VFW_E:HostDr:unkn:--------:-> WaitForHWidle(408): VENUS is idle, no HW is running
->>>
->>> [    0.650759] qcom-venus 5a00000.video-codec: VenusFW  :
->>> <VFW_E:HostDr:unkn:--------:-> assert_loop(433):
->>> FW Assertion - Z:/b/venus_proc/venus/drivers/src/VenusHostDriver.c:1020:5ab9a
->>
->> this "unsupported property" error and then the assert from FW is expected on AR50LT if driver sets HFI_PROPERTY_SYS_IDLE_INDICATOR to FW.
->>
->> As I mentioned in my other reply, this property doesn't need to be set by driver now, FW internally always enables it.
->>
->>> Which then crashes Venus for good (perhaps we're missing a
->>> handler for such errors that would hard reset the hw), meaning
->>> trying to access it through ffmpeg will result in it never firing
->>> any IRQs, so no submitted commands ever complete.
->>>
->>> With this information, after uncommenting the hfi_core_suspend
->>> call and changing:
->>>
->>> [1]
->>> --- hfi_venus.c : venus_suspend_3xx() --
->>>
->>> - venus_prepare_power_collapse(hdev, true);
->>> + venus_prepare_power_collapse(hdev, false);
->>>
->>> ----------------------------------------
->>>
->>> I was able to test further. Turning the ARM9 core off messes
->>> with the sys_idle things. Perhaps some power sequencing is
->>> wrong. The diff I just mentioned comes from the fact that
->>> AR50L will never ever ever send a PC_PREP_DONE ack, or at
->>> least downstream never expects it (or any other HFI6XX
->>> target FWIW) to do so.
->>>
->>>
->>> Now, I also realized the adjacent set_power_control doesn't seem to be used at
->>> all on msm-4.19 techpack/video. Testing all the possible combinations, I get
->>> (to make it extra clear, with all the powerdown stuff in place and only diff
->>> [1] in place atop what I already had before):
->>>
->>>
->>> [set_idle_message] [set_power_control] [result]
->>> 0 0 - no crash at boot, venus doesn't work ->
->>>     "Too many packets buffered for output stream 0:1."
->>>
->>> 0 1 - no crash at boot, ffmpeg hangs near vdec session init ->
->>>     jump to EDL shortly after
->>>
->>> 1 0 - hang at boot, even before display subsys initializes ->
->>>     platform totally hangs
->>>
->>> 1 1 - same as (1, 0), probably due to sys_idle_indicator being on ->
->>>     platform totally hangs as well
->>>
->>> Perhaps (0, 0) is "good" and things can be worked up from there?
->>> Can you recheck with the firmware team if this is expected?
->>
->> I will check regarding set_power_control(HFI_PROPERTY_SYS_CODEC_POWER_PLANE_CTRL) with FW team and get back.
->>
-> HFI_PROPERTY_SYS_IDLE_INDICATOR is not supported beyond 8916 (which is versioned as V1 in video driver). This can be dropped.
-> 
-> Since the property is not functionally active, it is upto firmware when they might decide to start error out as unsupported property.
-> 
-> SYS_CODEC_POWER_PLANE_CTRL is supported for AR50/AR50L/IRIS1/2. It is a mandatory HFI to get the required power benefits.
-> 
-> vcodec0 GDSC should be also configured as HW_CTRL while setting POWER_PLANE_CTRL to firmware.
-> 
-Okay that's very good to know. To sum it up, the outcome you would
-expect is (more or less):
+V3 is separated out from [1] and includes
+changes addressing comments from that patch set.
 
-- static bool venus_sys_idle_indicator = true;
+[1] https://lore.kernel.org/all/20230306231202.12223-5-quic_molvera@quicinc.com/
+---
+ drivers/soc/qcom/mdt_loader.c | 27 +++++++++++++++++++++++++--
+ 1 file changed, 25 insertions(+), 2 deletions(-)
 
-[...]
+diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
+index 33dd8c315eb7..9270992728d4 100644
+--- a/drivers/soc/qcom/mdt_loader.c
++++ b/drivers/soc/qcom/mdt_loader.c
+@@ -258,6 +258,26 @@ int qcom_mdt_pas_init(struct device *dev, const struct firmware *fw,
+ }
+ EXPORT_SYMBOL_GPL(qcom_mdt_pas_init);
+ 
++static bool qcom_mdt_bins_are_split(const struct firmware *fw, const char* fw_name)
++{
++	const struct elf32_phdr *phdrs;
++	const struct elf32_hdr *ehdr;
++	uint64_t seg_start, seg_end;
++	int i;
++
++	ehdr = (struct elf32_hdr *)fw->data;
++	phdrs = (struct elf32_phdr *)(ehdr + 1);
++
++	for (i = 0; i < ehdr->e_phnum; i++) {
++		seg_start = phdrs[i].p_offset;
++		seg_end = phdrs[i].p_offset + phdrs[i].p_filesz;
++		if (seg_start > fw->size || seg_end > fw->size)
++			return true;
++	}
++
++	return false;
++}
++
+ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
+ 			   const char *fw_name, int pas_id, void *mem_region,
+ 			   phys_addr_t mem_phys, size_t mem_size,
+@@ -270,6 +290,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
+ 	phys_addr_t min_addr = PHYS_ADDR_MAX;
+ 	ssize_t offset;
+ 	bool relocate = false;
++	bool is_split;
+ 	void *ptr;
+ 	int ret = 0;
+ 	int i;
+@@ -277,6 +298,8 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
+ 	if (!fw || !mem_region || !mem_phys || !mem_size)
+ 		return -EINVAL;
+ 
++
++	is_split = qcom_mdt_bins_are_split(fw, fw_name);
+ 	ehdr = (struct elf32_hdr *)fw->data;
+ 	phdrs = (struct elf32_phdr *)(ehdr + 1);
+ 
+@@ -330,8 +353,8 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
+ 
+ 		ptr = mem_region + offset;
+ 
+-		if (phdr->p_filesz && phdr->p_offset < fw->size &&
+-		    phdr->p_offset + phdr->p_filesz <= fw->size) {
++
++		if (phdr->p_filesz && !is_split) {
+ 			/* Firmware is large enough to be non-split */
+ 			if (phdr->p_offset + phdr->p_filesz > fw->size) {
+ 				dev_err(dev, "file %s segment %d would be truncated\n",
+-- 
+2.39.2
 
-- if(IS_V4(hdev->core) || IS_V6(hdev->core))
--	venus_sys_idle_indicator = true;
-
-+ venus_sys_idle_indicator = IS_V1(hdev->core);
-
-
-?
-
-Konrad
->> Thanks,
->>
->> Dikshita
->>
->>> Konrad
->>>> Thanks,
->>>>
->>>> Dikshita
->>>>
