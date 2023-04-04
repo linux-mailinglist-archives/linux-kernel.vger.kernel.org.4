@@ -2,174 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A746D6AF9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0033E6D6AFB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235600AbjDDRzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
+        id S235812AbjDDRzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235462AbjDDRzb (ORCPT
+        with ESMTP id S235672AbjDDRzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:55:31 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0D4211F
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:55:28 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id bi9so43355992lfb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680630927;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ieDfTkWwJhNOesMJOHIhbCjLXQeB+KmYJozBwz8fCoY=;
-        b=SOc3VCi+hCBhuKwZ7HURzl5GkJfwDU/4dm2EIOUg7TrdNhB1vmg4hlhSjsLsHLxQLh
-         glgkRSYW9qcpEJZ4hdaGHXJtnh5FEXq5xsxyKcVAnA+sjij8qsFYKkUrK3c+gDY8qLVU
-         PsPkLb2o6HCKdIxpgq0fDqIdx3vU/c8MWM71fsMs3FU4P3AUppR3RPLUfmdjhmEYXLEr
-         3ASnvsswPgtKAfBDECSmQ1FLz9Tnz4vx11kKXZzUnOBlPw6/gpGDjpE+u6LHqjClhHsg
-         4vJlmRh7TvrWDRvI4IocU4aqVxZGNcyYJKe7MD94fNgJXSIPKOFcQmdmG6lIMPQ1JS5L
-         vyug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680630927;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ieDfTkWwJhNOesMJOHIhbCjLXQeB+KmYJozBwz8fCoY=;
-        b=akkmTURmzxShVVZ8Tt8fhASNDbYoQLI6w/k0AHdXb96SRKdevjI9gnh1cv8IH7FwaE
-         5HF6szlCsaGCgwMGGbPVCFGhRzLNRYAOOzpHltPe58V7AxDO8Ditp8Zs53uQtq1IY/eF
-         aUIXnAyIN0aGxHVLSHHrv5rBN/iD8hwEsdvppRCr+JtPO436Ahcy2QZikvzVf9SE+aEF
-         sBSUh7NO5J+Jb0IgqmpTlJnU90Jr1g27TlEpMOSHV8A3AuTNZzK5hIWsJcMjjHN5eE8+
-         V1AMhnDcCmtIGByKeTvb6qjWHm8CN0kCcfmkreo+EsDcn2msCRgb1hOoH1qy36lPh2nz
-         SBOA==
-X-Gm-Message-State: AAQBX9dYlpPMSXLJPVNlGEKOY8q8T05Yw/md9YCHYZYwY8RU4Jt+ZYRd
-        +mFnYIoT+uiG+pCq4+h8J3YFQw==
-X-Google-Smtp-Source: AKy350Z/JoaJOYcGFFhW3xEjCFol9E7hWV3LDlszJKbshcD10pFgJbhRK9f6OjEsUaYBczB1wqDb9A==
-X-Received: by 2002:ac2:5ec6:0:b0:4e1:5d87:330c with SMTP id d6-20020ac25ec6000000b004e15d87330cmr865154lfq.50.1680630926821;
-        Tue, 04 Apr 2023 10:55:26 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id x4-20020ac259c4000000b0048b365176d9sm2430576lfn.286.2023.04.04.10.55.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 10:55:26 -0700 (PDT)
-Message-ID: <305fcdae-84f5-7edb-26e4-588162fed018@linaro.org>
-Date:   Tue, 4 Apr 2023 19:55:24 +0200
+        Tue, 4 Apr 2023 13:55:49 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850EB35A6;
+        Tue,  4 Apr 2023 10:55:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680630947; x=1712166947;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=ftIB+tKx2BRDAIoJzyNRehniJ6AZq5kLCytThxBFL2I=;
+  b=cRoigRy71IUqyqno/OJ8arnQ3cT2A/ZMSjIhi8srvDUAnh8avqFlk44j
+   2C+Qh+nxyo4sVZzzXtn00VIH6fkTuZESx0odTS/PF7wwJi+O9FxPgeVim
+   vT1OrWZu6ZW1+5X/4by74Lm7PJiXyTq2LOJDPyns2OuuqKX1B4GxmvINY
+   Ve1RFkbdS+db+77gqvikVbKhWmQtrCnViN4PVoF6Gf3VvEIO7JymUhPbm
+   ScxKjCr4mhXVbXdqZSgYTKBLqzsANhVX1G16NQz2uwCEooLPOVo0EKqP5
+   7tnrYhuNBS49SCgFnIh0tBTHW93v1RUVu0eRYecyuSmuK1JSxZYJPnerc
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="405029064"
+X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
+   d="scan'208";a="405029064"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 10:55:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="775733761"
+X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
+   d="scan'208";a="775733761"
+Received: from vukivan-mobl2.amr.corp.intel.com ([10.212.38.37])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 10:55:29 -0700
+Message-ID: <a32bbd493a8d9decc275c327d40e15985e11b0be.camel@linux.intel.com>
+Subject: Re: [PATCH] thermal/drivers/intel/int340x: Add DLVR support
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 04 Apr 2023 10:55:28 -0700
+In-Reply-To: <CAJZ5v0gSfNpPx_6daiHSrzozeqU7iMnErbMhD6fBU9w3EtYhJw@mail.gmail.com>
+References: <20230331165336.1047102-1-srinivas.pandruvada@linux.intel.com>
+         <CAJZ5v0jocwROiayCpkp2CrmOFrBSShO5zPicWZQzaM+rj_25zg@mail.gmail.com>
+         <221ff60648e0e76920cb5054e9cfb98ec77612b1.camel@linux.intel.com>
+         <CAJZ5v0gSfNpPx_6daiHSrzozeqU7iMnErbMhD6fBU9w3EtYhJw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2] arm64: dts: qcom: sm8550: add Soundwire controllers
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230404073915.61779-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230404073915.61779-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2023-04-04 at 18:46 +0200, Rafael J. Wysocki wrote:
+> On Tue, Apr 4, 2023 at 6:39=E2=80=AFPM srinivas pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> >=20
+> > On Mon, 2023-04-03 at 20:37 +0200, Rafael J. Wysocki wrote:
+> > > On Fri, Mar 31, 2023 at 6:53=E2=80=AFPM Srinivas Pandruvada
+> > > <srinivas.pandruvada@linux.intel.com> wrote:
+> > > >=20
+> > > > Add support for DLVR (Digital Linear Voltage Regulator)
+> > > > attributes,
+> > > > which can be used to control RFIM.
+> > > > Here instead of "fivr" another directory "dlvr" is created with
+> > > > DLVR
+> > > > attributes:
+> > > >=20
+> > > > /sys/bus/pci/devices/0000:00:04.0/dlvr
+> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_freq_mhz
+> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_freq_select
+> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_hardware_rev
+> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_pll_busy
+> > > > =E2=94=9C=E2=94=80=E2=94=80 dlvr_rfim_enable
+> > > > =E2=94=94=E2=94=80=E2=94=80 dlvr_spread_spectrum_pct
+> > > >=20
+> > > > Attributes
+> > > > dlvr_freq_mhz (RO):
+> > > > Current DLVR PLL frequency in MHz.
+> > > >=20
+> > > > dlvr_freq_select (RW):
+> > > > Sets DLVR PLL clock frequency.
+> > > >=20
+> > > > dlvr_hardware_rev (RO):
+> > > > DLVR hardware revision.
+> > > >=20
+> > > > dlvr_pll_busy (RO):
+> > > > PLL can't accept frequency change when set.
+> > > >=20
+> > > > dlvr_rfim_enable (RW):
+> > > > 0: Disable RF frequency hopping, 1: Enable RF frequency
+> > > > hopping.
+> > > >=20
+> > > > dlvr_spread_spectrum_pct (RW)
+> > > > A write to this register updates the DLVR spread spectrum
+> > > > percent
+> > > > value.
+> > >=20
+> > > How is this attribute going to be used by user space in practice?
+> >=20
+> > Spread spectrum percent helps to reduce the DLVR clock noise to
+> > meet
+> > regulatory compliance. This spreading % increases bandwidth of
+> > signal
+> > transmission and hence reduces the effects of interference, noise,
+> > and
+> > signal fading.
+>=20
+> The above information should be added to the documentation I think.
+>=20
+> Still, I would like to know when user space is going to write to it
+> and how it is going to find out what value to write.
+As specified in the
+https://docs.kernel.org/driver-api/thermal/intel_dptf.html
+This is all related to reduce interference with WiFi radio frequencies.
 
+The algorithm should be read current dlvr_freq_mhz,
+dlvr_spread_spectrum_pct, current WiFi frequency (channel has a fix
+freq), find the error in WiFi frame error rates (From WiFi module), and
+do small adjustment +- to dlvr_freq. While changing the dlvr
+frequencies you may induce more interference so you spread the signal
+to reduce S/N ratio using this percent knob.
 
-On 4.04.2023 09:39, Krzysztof Kozlowski wrote:
-> Add nodes for LPASS Soundwire v2.0.0 controllers.  Use labels with
-> indices matching downstream DTS, to make any comparisons easier.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Correct IO range length.
-> 
-> The bindings and driver are here:
-> https://lore.kernel.org/linux-arm-msm/20230403132503.62090-1-krzysztof.kozlowski@linaro.org/T/#t
-> ---
->  arch/arm64/boot/dts/qcom/sm8550.dtsi | 109 +++++++++++++++++++++++++++
->  1 file changed, 109 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> index dc6150e97d46..14e4de7a1a0e 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> @@ -2004,6 +2004,33 @@ lpass_wsa2macro: codec@6aa0000 {
->  			#sound-dai-cells = <1>;
->  		};
->  
-> +		/* WSA2 */
-> +		swr3: soundwire-controller@6ab0000 {
-> +			compatible = "qcom,soundwire-v2.0.0";
-> +			reg = <0 0x06ab0000 0 0x10000>;
-> +			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&lpass_wsa2macro>;
-> +			clock-names = "iface";
-> +
-Any reason this and swr0 have comments instead of labels?
+>=20
+> > > Also should it be split like the frequency one (for consistency)?
+> >=20
+> > This is a RW field and is applied immediately unlike frequency,
+> > where
+> > it is two step process. First you specify and enable and then see
+> > the
+> > effect. So they are two fields.
+>=20
+> I was talking about dlvr_freq_mhz (RO) and dlvr_freq_select (RW).=C2=A0
+> I'm
+> not sure how the above is related to them TBH.
+The frequency is the base signal to which interference must be reduced.
+A good explanation for this technique
+https://www.eetimes.com/tutorial-on-spread-spectrum-technology/
 
-> +			qcom,din-ports = <4>;
-> +			qcom,dout-ports = <9>;
-> +
-> +			qcom,ports-sinterval =		<0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
-> +			qcom,ports-offset1 =		/bits/ 8 <0x01 0x03 0x05 0x02 0x04 0x15 0x00 0xff 0xff 0x06 0x0d 0xff 0x00>;
-> +			qcom,ports-offset2 =		/bits/ 8 <0xff 0x07 0x1f 0xff 0x07 0x1f 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
-> +			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
-> +			qcom,ports-word-length =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x18>;
-> +			qcom,ports-block-pack-mode =	/bits/ 8 <0x00 0x01 0x01 0x00 0x01 0x01 0x00 0x00 0x00 0x01 0x01 0x00 0x00>;
-> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +			qcom,ports-lane-control =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +
-> +			#address-cells = <2>;
-> +			#size-cells = <0>;
-> +			#sound-dai-cells = <1>;
-> +			status = "disabled";
-> +		};
-[...]
-
-
-> +		swr2: soundwire-controller@6d30000 {
-> +			compatible = "qcom,soundwire-v2.0.0";
-> +			reg = <0 0x06d30000 0 0x10000>;
-> +			interrupts-extended = <&intc GIC_SPI 496 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&intc GIC_SPI 520 IRQ_TYPE_LEVEL_HIGH>;
-There's no different interrupt-parent, so -extended seems excessive.
-Unless that was maybe supposed to use some PDC-mapped irq?
-
-Konrad
-> +			interrupt-names = "core", "wakeup";
-> +
-> +			clocks = <&lpass_vamacro>;
-> +			clock-names = "iface";
-> +			label = "TX";
-> +
-> +			qcom,din-ports = <4>;
-> +			qcom,dout-ports = <0>;
-> +			qcom,ports-sinterval-low =	/bits/ 8 <0x01 0x01 0x03 0x03>;
-> +			qcom,ports-offset1 =		/bits/ 8 <0x00 0x00 0x01 0x01>;
-> +			qcom,ports-offset2 =		/bits/ 8 <0x00 0x00 0x00 0x00>;
-> +			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff>;
-> +			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff 0xff>;
-> +			qcom,ports-word-length =	/bits/ 8 <0xff 0xff 0xff 0xff>;
-> +			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0xff 0xff 0xff>;
-> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff>;
-> +			qcom,ports-lane-control =	/bits/ 8 <0x01 0x02 0x00 0x00>;
-> +
-> +			#address-cells = <2>;
-> +			#size-cells = <0>;
-> +			#sound-dai-cells = <1>;
-> +			status = "disabled";
-> +		};
-> +
->  		lpass_vamacro: codec@6d44000 {
->  			compatible = "qcom,sm8550-lpass-va-macro";
->  			reg = <0 0x06d44000 0 0x1000>;
+Thanks,
+Srinivas
