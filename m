@@ -2,81 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA7F6D692D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2636D6936
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235208AbjDDQr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
+        id S232822AbjDDQtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDDQry (ORCPT
+        with ESMTP id S229881AbjDDQtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:47:54 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A18610CF
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:47:53 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id y14so33536232wrq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 09:47:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680626872;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oaSx5e17w+eQ0F1AcVamtGRazPQo+5R7R3fJynml9qc=;
-        b=tXneM2QAmpdWlmTsBeLyjMu9Q84z6jecvcZAoyME6dDKBB2jydUY+P5ujDvC32T7+/
-         eJY7OEJd2z+JSRf5f6iO8cSUl1fDdciHwnQrOvzfF3ZgE3nOIhSClDIEFRDEsUMq3aXz
-         MuOQ+YXH1xiQk2p7rk2FjgYTJH3QD0Ale7JLzRF+yKdHAp26XgBtpjVFUcQ+yXDhtUBE
-         n8rzQXqd1GqJupYRjonljWsrCRXXS/27vGYF0S4NORJ1HqkJCzoqHRtz6936GlCGLsRe
-         Zrqkzchqxif7b2GAdPJuNzECRJjMXEUjJWC/TujfdJaZUz4IyFztSmBA/nUjJb8VuhRt
-         RJLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680626872;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oaSx5e17w+eQ0F1AcVamtGRazPQo+5R7R3fJynml9qc=;
-        b=rpsnAGLL8wKS2jlkp1RZzJxQ4lkSqok6UdaZq/SQgvbkbzhOTQVw14MS5B8umm2+Nv
-         EaUA0e8nrAkIl1B7Fkow3I1WUg4oKEYPa97EaYLK5EsYqoJevi67YJpMD4Iw6QlBRVtA
-         9jRHBmXiO3nFQon3GoVA4RSIP8CGzxp+dx1O+RuxgINAVn48lLx5DKly+klOtNZC/X0O
-         1eebvFALiplH66lmn4mUTOArqrNtU5kVYOqLtT9c/W0UaZKxn6cldtmtd8NBJmnZ7snO
-         YBy/iGZpf3X5Qi5OsmoMKZBn88OMW4CsAb6p/WWD2G9HQkPiuCHOW5rhQXK/luAou/MP
-         YBFA==
-X-Gm-Message-State: AAQBX9cNue9hmHsVXL2a2ilYyQSsid2AlKLqaux1tGQW/sEWwCBOFlj1
-        kUrb8wpqmOJ85GwK8s+Aaf8UOg==
-X-Google-Smtp-Source: AKy350aJ5L9eW/Z1AJZ2Yf0nBavJ/tgFyF3nmBDpng8tle57odq3CevaTl03dHgs+C2a1jOqYBCw4g==
-X-Received: by 2002:a5d:67cf:0:b0:2e6:3804:5be with SMTP id n15-20020a5d67cf000000b002e6380405bemr2262083wrw.59.1680626871679;
-        Tue, 04 Apr 2023 09:47:51 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id e2-20020a5d5002000000b002cfe0ab1246sm12718073wrt.20.2023.04.04.09.47.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 09:47:51 -0700 (PDT)
-Message-ID: <9f1e06a1-c954-1e20-8649-4f85515f0ece@baylibre.com>
-Date:   Tue, 4 Apr 2023 18:47:50 +0200
+        Tue, 4 Apr 2023 12:49:09 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684EFE7B;
+        Tue,  4 Apr 2023 09:49:08 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334E5hE9000809;
+        Tue, 4 Apr 2023 16:48:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=xq5sbhEZFEE7jSOavNjgMoKUDELZyorIuW0tEx2/Ho8=;
+ b=bNi5vFsRqC1WGWHdGg4HKnWEo5RsDAQCLAE8AfKBhUY49vY/DaxOPczRzpj0DZYhlKP6
+ +McpLUAXTsKC4KCq1eiv/NzO+iYgV6EPI20Dkc9+6zpLKUhhVyraJqPfubEM430qEh+l
+ qhPcJ8GHXy2ADCzA4YmgddIk5L0HrVNgJEFx5jcTwmspIaNG8WHZJ8EbioiwHlaDtK1n
+ LCMfUwz7SU3b+Hg+sgQ75NstKAn2EBJJ7S0KbsR5jp/AodL53iebetv/LBVeIKqtYFzf
+ fdkMteobzUg94OerAWphLQEiqMlBJwSlFekt+Zzs55HUHQI5ZHrZXBSXN1HQMhB4+aU3 +Q== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prnbt0fh6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 16:48:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 334GmqML005062
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 4 Apr 2023 16:48:52 GMT
+Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 4 Apr 2023 09:48:43 -0700
+From:   Devi Priya <quic_devipriy@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <mani@kernel.org>, <p.zabel@pengutronix.de>,
+        <linus.walleij@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_ipkumar@quicinc.com>
+Subject: [PATCH V2 0/9] Add PCIe support for IPQ9574
+Date:   Tue, 4 Apr 2023 22:18:19 +0530
+Message-ID: <20230404164828.8031-1-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 0/2] Cleanup Mediatek pinctrl device tree binding
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230327-cleanup-pinctrl-binding-v2-0-f21fbcc3016e@baylibre.com>
- <CACRpkdYndXqTXrTakwv1mbvJBs-tG+pjOpLLCgS9crE0aBj0jA@mail.gmail.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <CACRpkdYndXqTXrTakwv1mbvJBs-tG+pjOpLLCgS9crE0aBj0jA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Wy0ULt0xuLpRLu0KwbayI96Plg9KvEmW
+X-Proofpoint-GUID: Wy0ULt0xuLpRLu0KwbayI96Plg9KvEmW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-04_08,2023-04-04_05,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=628
+ bulkscore=0 impostorscore=0 spamscore=0 clxscore=1011 adultscore=0
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304040155
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,47 +83,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+PCIe0, PCIe1, PCIe2, PCIe3 (and corresponding PHY) devices
+are found on IPQ9574 platform. The PCIe0 & PCIe1 are 1-lane
+Gen3 host whereas PCIe2 & PCIe3 are 2-lane Gen3 host.
 
-On 04/04/2023 15:56, Linus Walleij wrote:
-> On Fri, Mar 31, 2023 at 7:39 PM Alexandre Mergnat <amergnat@baylibre.com> wrote:
->
->> Deprecate properties which shall not exist, leaked upstream from downstream
->> kernels, there's no reason to use them. Here the deprecated properties and
->> the generic properties which will replace them:
->>
->> - mediatek,drive-strength-adv => drive-strength-microamp
->> - mediatek,pull-up-adv        => bias-pull-up
->> - mediatek,pull-down-adv      => bias-pull-down
->>
->> Thanks AngeloGioacchino Del Regno to reported it. [1]
->>
->> [1]: https://lore.kernel.org/all/6e08d78f-ef4c-b228-f7d2-d63767ea87b8@collabora.com/
->>
->> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
->> ---
->> Changes in v2:
->> - Change the bias-pull enum values to match with other Mediatek SoC.
->>    That allows to use MTK generic define and be compliant with the MTK
->>    common pinctrl driver.
->> - Link to v1: https://lore.kernel.org/r/20230327-cleanup-pinctrl-binding-v1-0-b695e32e4f2e@baylibre.com
-> These patches does not apply to my devel branch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
->
-> Can you please rebase and resend?
->
-> If you have several conflicting patches that need to be applied to the
-> pinctrl tree, then collect them all in a series so I can apply them all
-> at once. Thanks!
+This series adds support for enabling the same
 
-It's done here: 
-https://lore.kernel.org/all/20230327-cleanup-pinctrl-binding-v3-0-6f56d5c7a8de@baylibre.com/
+DTS patch is based on the below series
+https://lore.kernel.org/linux-arm-msm/20230329053726.14860-1-quic_kathirav@quicinc.com/
 
-I also added the patch which modify the pinctrl from the other serie:
-https://lore.kernel.org/all/CACRpkdYSpMD-V0QNGwtiKCA4KAedYfmFpvdCHWhjST9uTricTg@mail.gmail.com/
+Changes in V2:
+	- Reordered the patches and splitted the board DT changes
+	  into a separate patch as suggested
+	- Detailed change logs are added to the respective patches
+
+Devi Priya (9):
+  dt-bindings: clock: Add PCIe pipe clock definitions
+  clk: qcom: gcc-ipq9574: Add PCIe pipe clocks
+  dt-bindings: phy: qcom,qmp-pcie: Add ipq9574 bindings
+  phy: qcom-qmp-pcie: Add support for IPQ9574 g3x1 and g3x2 PCIEs
+  dt-bindings: PCI: qcom: Add IPQ9574
+  dt-bindings: pinctrl: qcom: Add few missing functions
+  arm64: dts: qcom: ipq9574: Add PCIe PHYs and controller nodes
+  arm64: dts: qcom: ipq9574: Enable PCIe PHYs and controllers
+  PCI: qcom: Add support for IPQ9574
+
+ .../devicetree/bindings/pci/qcom,pcie.yaml    |  48 +++
+ .../phy/qcom,sc8280xp-qmp-pcie-phy.yaml       | 103 ++++-
+ .../bindings/pinctrl/qcom,ipq9574-tlmm.yaml   |   6 +-
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts   |  62 +++
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         | 375 +++++++++++++++++-
+ drivers/clk/qcom/gcc-ipq9574.c                |  76 ++++
+ drivers/pci/controller/dwc/pcie-qcom.c        |  62 ++-
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      | 332 ++++++++++++++++
+ .../phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h   |  26 +-
+ .../phy/qualcomm/phy-qcom-qmp-qserdes-pll.h   |   3 +
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h  |   4 +
+ 11 files changed, 1046 insertions(+), 51 deletions(-)
 
 
-Regards,
-Alex
-
+base-commit: 31bd35b66249699343d2416658f57e97314a433a
+-- 
+2.17.1
 
