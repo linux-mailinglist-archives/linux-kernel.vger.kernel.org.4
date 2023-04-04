@@ -2,229 +2,433 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EA06D5C7F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D6F6D5C86
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234250AbjDDJ6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
+        id S233886AbjDDJ7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233811AbjDDJ6e (ORCPT
+        with ESMTP id S233200AbjDDJ7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:58:34 -0400
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A279819AE;
-        Tue,  4 Apr 2023 02:58:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=buaa.edu.cn; s=buaa; h=Received:Subject:To:Cc:References:From:
-        Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
-        Content-Transfer-Encoding:Content-Language; bh=da+9B3dO4N64/X93i
-        viw9y205qmZYA8m+wN8DpKVXss=; b=2c2MgQ7oa3RZaCEawEf8T2HeaRt5cSvYl
-        bDEpXcEO0C8f4G+TQkpcK3AVDexc++0DVnjl+7Jx1KZlKpTMdi04hZV8QGYeOOz9
-        xg80qF/s5apOMTJPECX1lP4KTxrxyXrB8m8g7XzIcKm0Wu7K+PoUcjl7n+rVJzZy
-        jhmC900vXg=
-Received: from [192.168.1.106] (unknown [10.130.159.144])
-        by coremail-app1 (Coremail) with SMTP id OCz+CgCnh5Sz9CtkRG4aAw--.18976S3;
-        Tue, 04 Apr 2023 17:58:11 +0800 (CST)
-Subject: Re: [PATCH v2] net: mac80211: Add NULL checks for sta->sdata
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     johannes@sipsolutions.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <ZCBfHlOhU8LjdRg3@corigine.com>
-From:   Jia-Ju Bai <baijiaju@buaa.edu.cn>
-Message-ID: <f70554b9-eedf-43e4-9a55-a809e9b9e89a@buaa.edu.cn>
-Date:   Tue, 4 Apr 2023 17:58:13 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.0
+        Tue, 4 Apr 2023 05:59:18 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E8319AE
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680602354; x=1712138354;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=f+D9g1sJGIOu1PYzQaGk2mKCjNZyVU3MRgwwfSUyE38=;
+  b=aRpN7LCiVj1gII9gDtRbsb5zehdPJRSuItUYUyxuw2fGdkUkDs9gGOhC
+   z4Npo2eJWq3gvJ5zzf4CmHn4oWriotsHL0moCZPE9dGwHAsc3TDKPtCQu
+   TDSEwhX9AZ2SOLtEUoMiW2U7S/wITqWfc+Ph56Iv9a8GCD7SqrigTqrm/
+   un/yMLhTuK9iOi5dOh3tUnnWgZFouZBnpsiDe7xZiCfAHI3KfwtVhJjIo
+   SBRPz5prG+7qIAtlquNoLbe8Jjdu2iTd8DCdlHUx3d943XXPSSuMrd2uL
+   9NMbD8eSifv8u/P9mFT0S6alJL2OVXrOVxcrAQ22Jwz1kWU5xb6DRonHc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="407199922"
+X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
+   d="scan'208";a="407199922"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 02:59:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="750861004"
+X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
+   d="scan'208";a="750861004"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 04 Apr 2023 02:59:11 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pjdRX-000PW6-0Q;
+        Tue, 04 Apr 2023 09:59:11 +0000
+Date:   Tue, 4 Apr 2023 17:58:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-s3c/gpio-samsung.c:50:16: sparse: sparse: restricted
+ samsung_gpio_pull_t degrades to integer
+Message-ID: <202304041709.uB1P0uVI-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <ZCBfHlOhU8LjdRg3@corigine.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: OCz+CgCnh5Sz9CtkRG4aAw--.18976S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxtr4xAw4DXr1kAw1Uur17Jrb_yoW7Ar47pr
-        Z5G3WaqFWUJa4xXr1fJr1Y9FyFvw48Kr18Ar1fCF1xA3ZY9FnYkF4v9rW8ZF9YkrWUJ3WS
-        vFWj939xua1qkrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvmb7Iv0xC_tr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-        cIk0rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2
-        AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v2
-        6r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI
-        0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k2
-        0xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26F1DJr1UJwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
-        UI43ZEXa7IU8489tUUUUU==
-X-CM-SenderInfo: yrruji46exttoohg3hdfq/
-X-Spam-Status: No, score=-2.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon,
+Hi Arnd,
 
-Thanks for your reply, and sorry for the delay.
+First bad commit (maybe != root cause):
 
-On 2023/3/26 23:05, Simon Horman wrote:
-> On Tue, Mar 21, 2023 at 05:31:22PM +0800, Jia-Ju Bai wrote:
->> In a previous commit 69403bad97aa ("wifi: mac80211: sdata can be NULL
->> during AMPDU start"), sta->sdata can be NULL, and thus it should be
->> checked before being used.
->>
->> However, in the same call stack, sta->sdata is also used in the
->> following functions:
->>
->> ieee80211_ba_session_work()
->>    ___ieee80211_stop_rx_ba_session(sta)
->>      ht_dbg(sta->sdata, ...); -> No check
->>      sdata_info(sta->sdata, ...); -> No check
->>      ieee80211_send_delba(sta->sdata, ...) -> No check
->>    ___ieee80211_start_rx_ba_session(sta)
->>      ht_dbg(sta->sdata, ...); -> No check
->>      ht_dbg_ratelimited(sta->sdata, ...); -> No check
->>    ieee80211_tx_ba_session_handle_start(sta)
->>      sdata = sta->sdata; if (!sdata) -> Add check by previous commit
->>    ___ieee80211_stop_tx_ba_session(sdata)
->>      ht_dbg(sta->sdata, ...); -> No check
->>    ieee80211_start_tx_ba_cb(sdata)
->>      sdata = sta->sdata; local = sdata->local -> No check
->>    ieee80211_stop_tx_ba_cb(sdata)
->>      ht_dbg(sta->sdata, ...); -> No check
->>
->> Thus, to avoid possible null-pointer dereferences, the related checks
->> should be added.
->>
->> These bugs are reported by a static analysis tool implemented by myself,
->> and they are found by extending a known bug fixed in the previous commit.
->> Thus, they could be theoretical bugs.
->>
->> Signed-off-by: Jia-Ju Bai <baijiaju@buaa.edu.cn>
->> ---
->> v2:
->> * Fix an error reported by checkpatch.pl, and make the bug finding
->>    process more clear in the description. Thanks for Simon's advice.
->> ---
->>   net/mac80211/agg-rx.c | 68 ++++++++++++++++++++++++++-----------------
->>   net/mac80211/agg-tx.c | 16 ++++++++--
->>   2 files changed, 55 insertions(+), 29 deletions(-)
->>
->> diff --git a/net/mac80211/agg-rx.c b/net/mac80211/agg-rx.c
->> index c6fa53230450..6616970785a2 100644
->> --- a/net/mac80211/agg-rx.c
->> +++ b/net/mac80211/agg-rx.c
->> @@ -80,19 +80,21 @@ void ___ieee80211_stop_rx_ba_session(struct sta_info *sta, u16 tid,
->>   	RCU_INIT_POINTER(sta->ampdu_mlme.tid_rx[tid], NULL);
->>   	__clear_bit(tid, sta->ampdu_mlme.agg_session_valid);
->>   
->> -	ht_dbg(sta->sdata,
->> -	       "Rx BA session stop requested for %pM tid %u %s reason: %d\n", > -	       sta->sta.addr, tid,
->> -	       initiator == WLAN_BACK_RECIPIENT ? "recipient" : "initiator",
->> -	       (int)reason);
->> +	if (sta->sdata) {
->> +		ht_dbg(sta->sdata,
->> +		       "Rx BA session stop requested for %pM tid %u %s reason: %d\n",
->> +		       sta->sta.addr, tid,
->> +		       initiator == WLAN_BACK_RECIPIENT ? "recipient" : "initiator",
->> +		       (int)reason);
->> +	}
-> The first line of the body of ___ieee80211_stop_rx_ba_session() is:
->
-> 	struct ieee80211_local *local = sta->sdata->local;
->
-> So a NULL pointer dereference will have occurred before
-> the checks this change adds to that function.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   148341f0a2f53b5e8808d093333d85170586a15d
+commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
+date:   1 year ago
+config: arm-randconfig-s031-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041709.uB1P0uVI-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-s3c/ drivers/irqchip/ drivers/scsi/ drivers/video/fbdev/
 
-I checked the source code again (including the latest version 6.3-rc5).
-The first line of the body of ___ieee80211_stop_rx_ba_session() is:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304041709.uB1P0uVI-lkp@intel.com/
 
-     struct ieee80211_local *local = sta->local;
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm/mach-s3c/gpio-samsung.c:50:16: sparse: sparse: restricted samsung_gpio_pull_t degrades to integer
+   arch/arm/mach-s3c/gpio-samsung.c:74:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted samsung_gpio_pull_t [usertype] pull @@     got int @@
+   arch/arm/mach-s3c/gpio-samsung.c:74:22: sparse:     expected restricted samsung_gpio_pull_t [usertype] pull
+   arch/arm/mach-s3c/gpio-samsung.c:74:22: sparse:     got int
+   arch/arm/mach-s3c/gpio-samsung.c:80:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted samsung_gpio_pull_t [assigned] [usertype] pull @@     got int @@
+   arch/arm/mach-s3c/gpio-samsung.c:80:22: sparse:     expected restricted samsung_gpio_pull_t [assigned] [usertype] pull
+   arch/arm/mach-s3c/gpio-samsung.c:80:22: sparse:     got int
+   arch/arm/mach-s3c/gpio-samsung.c:93:17: sparse: sparse: restricted samsung_gpio_pull_t degrades to integer
+   arch/arm/mach-s3c/gpio-samsung.c:93:17: sparse: sparse: restricted samsung_gpio_pull_t degrades to integer
+   arch/arm/mach-s3c/gpio-samsung.c:93:17: sparse: sparse: restricted samsung_gpio_pull_t degrades to integer
+   arch/arm/mach-s3c/gpio-samsung.c:1301:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] pup @@     got restricted samsung_gpio_pull_t @@
+   arch/arm/mach-s3c/gpio-samsung.c:1301:21: sparse:     expected unsigned int [usertype] pup
+   arch/arm/mach-s3c/gpio-samsung.c:1301:21: sparse:     got restricted samsung_gpio_pull_t
+--
+   drivers/irqchip/irq-gic.c:1177:44: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __percpu *[noderef] __iomem *percpu_base @@     got void [noderef] __iomem *[noderef] __percpu * @@
+   drivers/irqchip/irq-gic.c:1177:44: sparse:     expected void [noderef] __percpu *[noderef] __iomem *percpu_base
+   drivers/irqchip/irq-gic.c:1177:44: sparse:     got void [noderef] __iomem *[noderef] __percpu *
+   drivers/irqchip/irq-gic.c:1178:43: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __percpu *[noderef] __iomem *percpu_base @@     got void [noderef] __iomem *[noderef] __percpu * @@
+   drivers/irqchip/irq-gic.c:1178:43: sparse:     expected void [noderef] __percpu *[noderef] __iomem *percpu_base
+   drivers/irqchip/irq-gic.c:1178:43: sparse:     got void [noderef] __iomem *[noderef] __percpu *
+   drivers/irqchip/irq-gic.c:1189:26: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:1189:26: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:1189:26: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:1189:71: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __percpu * @@     got void [noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:1189:71: sparse:     expected void [noderef] __percpu *
+   drivers/irqchip/irq-gic.c:1189:71: sparse:     got void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:1191:26: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:1191:26: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:1191:26: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:1191:70: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __percpu * @@     got void [noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:1191:70: sparse:     expected void [noderef] __percpu *
+   drivers/irqchip/irq-gic.c:1191:70: sparse:     got void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:1257:43: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __percpu *__pdata @@     got void [noderef] __percpu *[noderef] __iomem *percpu_base @@
+   drivers/irqchip/irq-gic.c:1257:43: sparse:     expected void [noderef] __percpu *__pdata
+   drivers/irqchip/irq-gic.c:1257:43: sparse:     got void [noderef] __percpu *[noderef] __iomem *percpu_base
+   drivers/irqchip/irq-gic.c:1258:42: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __percpu *__pdata @@     got void [noderef] __percpu *[noderef] __iomem *percpu_base @@
+   drivers/irqchip/irq-gic.c:1258:42: sparse:     expected void [noderef] __percpu *__pdata
+   drivers/irqchip/irq-gic.c:1258:42: sparse:     got void [noderef] __percpu *[noderef] __iomem *percpu_base
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+>> drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void [noderef] __percpu *[assigned] pscr_ret__ @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void [noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[assigned] pscr_ret__
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu *[noderef] __iomem * @@
+   drivers/irqchip/irq-gic.c:139:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/irqchip/irq-gic.c:139:24: sparse:     got void [noderef] __percpu *[noderef] __iomem *
+   drivers/irqchip/irq-gic.c:139:24: sparse: sparse: too many warnings
 
-Thus, there is no dereference of sta->sdata.
+vim +50 arch/arm/mach-s3c/gpio-samsung.c
 
-In a different function, namely ___ieee80211_start_rx_ba_session(), the 
-first line is:
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  40  
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  41  int samsung_gpio_setpull_updown(struct samsung_gpio_chip *chip,
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  42  				unsigned int off, samsung_gpio_pull_t pull)
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  43  {
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  44  	void __iomem *reg = chip->base + 0x08;
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  45  	int shift = off * 2;
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  46  	u32 pup;
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  47  
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  48  	pup = __raw_readl(reg);
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  49  	pup &= ~(3 << shift);
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30 @50  	pup |= pull << shift;
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  51  	__raw_writel(pup, reg);
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  52  
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  53  	return 0;
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  54  }
+1b39d5f2cc5c28 drivers/gpio/gpio-samsung.c Kukjin Kim 2011-08-30  55  
 
-     struct ieee80211_local *local = sta->sdata->local;
+:::::: The code at line 50 was first introduced by commit
+:::::: 1b39d5f2cc5c28085bbf48db80bf704ab4dedda9 gpio/samsung: gpio-samsung.c to support Samsung GPIOs
 
-Thus, there should be a NULL check for sta->sdata in this function.
-I will add this in my patch v3.
+:::::: TO: Kukjin Kim <kgene.kim@samsung.com>
+:::::: CC: Kukjin Kim <kgene.kim@samsung.com>
 
->
->
->>   
->> -	if (drv_ampdu_action(local, sta->sdata, &params))
->> +	if (sta->sdata && drv_ampdu_action(local, sta->sdata, &params))
->>   		sdata_info(sta->sdata,
->>   			   "HW problem - can not stop rx aggregation for %pM tid %d\n",
->>   			   sta->sta.addr, tid);
->>   
-> ...
->
->> diff --git a/net/mac80211/agg-tx.c b/net/mac80211/agg-tx.c
->> index f9514bacbd4a..03b31b6e7ac7 100644
->> --- a/net/mac80211/agg-tx.c
->> +++ b/net/mac80211/agg-tx.c
->> @@ -368,8 +368,10 @@ int ___ieee80211_stop_tx_ba_session(struct sta_info *sta, u16 tid,
->>   
->>   	spin_unlock_bh(&sta->lock);
->>   
->> -	ht_dbg(sta->sdata, "Tx BA session stop requested for %pM tid %u\n",
->> -	       sta->sta.addr, tid);
->> +	if (sta->sdata) {
->> +		ht_dbg(sta->sdata, "Tx BA session stop requested for %pM tid %u\n",
->> +		       sta->sta.addr, tid);
->> +	}
-> This seems clean :)
->
->>   	del_timer_sync(&tid_tx->addba_resp_timer);
->>   	del_timer_sync(&tid_tx->session_timer);
->> @@ -776,7 +778,12 @@ void ieee80211_start_tx_ba_cb(struct sta_info *sta, int tid,
->>   			      struct tid_ampdu_tx *tid_tx)
->>   {
->>   	struct ieee80211_sub_if_data *sdata = sta->sdata;
->> -	struct ieee80211_local *local = sdata->local;
->> +	struct ieee80211_local *local;
->> +
->> +	if (!sdata)
->> +		return;
-> I'm not sure that silently ignoring non-existent sdata is the right approach.
-> Perhaps a WARN_ON or WARN_ONCE is appropriate?
-
-Okay, I will use WARN_ON  in my patch v3.
-
->
->> +
->> +	local = sdata->local;
->>   
->>   	if (WARN_ON(test_and_set_bit(HT_AGG_STATE_DRV_READY, &tid_tx->state)))
->>   		return;
->> @@ -902,6 +909,9 @@ void ieee80211_stop_tx_ba_cb(struct sta_info *sta, int tid,
->>   	bool send_delba = false;
->>   	bool start_txq = false;
->>   
->> +	if (!sdata)
->> +		return;
->> +
-> Ditto.
-
-Okay, I will use WARN_ON  in my patch v3.
-
->
->>   	ht_dbg(sdata, "Stopping Tx BA session for %pM tid %d\n",
->>   	       sta->sta.addr, tid);
->>   
-
-
-Best wishes,
-Jia-Ju Bai
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
