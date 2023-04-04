@@ -2,84 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF666D5B2E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0126D5B30
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbjDDIrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 04:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
+        id S234112AbjDDIsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 04:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233594AbjDDIrk (ORCPT
+        with ESMTP id S234076AbjDDIsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 04:47:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629EB1BFE
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 01:46:58 -0700 (PDT)
+        Tue, 4 Apr 2023 04:48:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DF2197
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 01:47:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680598017;
+        s=mimecast20190719; t=1680598035;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G99E3diY62ZpH4JZ1b4pZ2Ts787AInV4dhcYUQ8Vmz8=;
-        b=AJb6H1Y63PWX5b4IVqjFG07GIH83/swVhQjLknWUuiCSKvkvikIqzBX0i0lseRgNBBf/sK
-        DZtgdePYj9xTOSfWVj6Ubybz842gmdMM4by9Cguq6iXl0UOVPcHXrDUdPnO6jKk9q5Unwv
-        5rSLm//X2vl3Gt5R1pxfcWWal6Mm788=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=St04fATWGfIT10g6i4L0siP3WzQxgjh0uTI5uZltYvQ=;
+        b=cU7zg75eMs763VHrY2sozQOKDBK8tDlpeUZ2X3nNmjv56Q4d9dv/ip83iUNDAVJgBzsVKY
+        9x3THEtFPGyc733s92DrSgIC3BwPeB4ioCtlci1JK3DGIqD0PRGsQIMT02vXQ67/IkawSh
+        AXE7k9yWKUe51qztDlKVGMaj2kKYpbc=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-282-FF-Yh6L9ML6818PFtx3qiQ-1; Tue, 04 Apr 2023 04:46:56 -0400
-X-MC-Unique: FF-Yh6L9ML6818PFtx3qiQ-1
-Received: by mail-wm1-f70.google.com with SMTP id z20-20020a05600c0a1400b003edcff41678so294505wmp.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 01:46:56 -0700 (PDT)
+ us-mta-659-uyj8PsRUP9eMbqVDov0oSg-1; Tue, 04 Apr 2023 04:47:14 -0400
+X-MC-Unique: uyj8PsRUP9eMbqVDov0oSg-1
+Received: by mail-pf1-f199.google.com with SMTP id o4-20020a056a00214400b00627ddde00f4so14451551pfk.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 01:47:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680598015;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G99E3diY62ZpH4JZ1b4pZ2Ts787AInV4dhcYUQ8Vmz8=;
-        b=e0523OE1Q/apg6aigvtyh3MK+MNttrPRknKaUOn2NHnaknvg9OhSfj3Y1aDr3NlXYl
-         hbPlf58zvtzNXbYCwm94TRgLISwibz02LZGyriZWJBIm8/jdD/Q1oJBOFERBED4RQ2vj
-         eOr/apG/6OknBinjoOE9/vZlrQijhe7bh1wyoiPtlnxVvkZjbJum6kopPyj5F66ahYxx
-         kceOBvXgI8dQrcgyzzgyfP8O6eb2Pw5cRogln9nh/ja4Qxh8xZNPWWem6ickvdBCefDE
-         cHMVBf7ZE1Toa42BR4lgCprMDeoYL/3MVEZuLqYCvAjYMOvry9+P1U+TbOXsQkZdUf2F
-         gn9Q==
-X-Gm-Message-State: AAQBX9eA6WG0IjTmPMAso5xAUhN7OZug2U439QoIFPubm3T/RbnTiCMY
-        muigpMUFbVIxIs0EGrHRS481XJHbTyHeY0vXDDNZoREQLZXGviDFimCTfTQ96RRC4kkSQSBB8Tw
-        exxQFsV2zBums694N4WnLXa1m
-X-Received: by 2002:adf:f005:0:b0:2d6:cc82:3c49 with SMTP id j5-20020adff005000000b002d6cc823c49mr931479wro.13.1680598015276;
-        Tue, 04 Apr 2023 01:46:55 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z8i51Ygry+zzbcD2bOKjp+1nQQ1biyfzppPWMmvxDvdWIJCYlOOMGrJyFI4cevmr2NBMZoWw==
-X-Received: by 2002:adf:f005:0:b0:2d6:cc82:3c49 with SMTP id j5-20020adff005000000b002d6cc823c49mr931458wro.13.1680598014942;
-        Tue, 04 Apr 2023 01:46:54 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id g6-20020adfe406000000b002d743eeab39sm11753376wrm.58.2023.04.04.01.46.54
+        d=1e100.net; s=20210112; t=1680598033;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=St04fATWGfIT10g6i4L0siP3WzQxgjh0uTI5uZltYvQ=;
+        b=zKHoUaL/K3/GT1E19HvyQqYfrQWdML4kKi+7YuJxagHhOGRZ1fziwqoTIRE6EoqKhj
+         H/svpS1KqN5rt4x+3ykEXH3dHLTqlZNfsps6xB92/pR2dDq7iqVyXlU605ca3TGQBQl/
+         LggfmP9vKo7eoGk+7vxW5KQ4qcnuPc3tzWvoAmPIoNe4H8cmy4x6SxpWHWMh3g3QhxWJ
+         l9qwX4gVdzeUckAMTmb0D7vinHzRTHxaaqWOPmE/FPNiPXRSGB8v6cOAVk+R7TMTpkS1
+         hT3ub53aFcjxIFh1sjkwtQpajmD34+mGEBlNC+10JKZLZIW6l9ancI0KuL13sIXd+MSk
+         IMyQ==
+X-Gm-Message-State: AAQBX9eSac8DDQW7BH+zjS2my5EXDg2cRUbptKDCNsin3OpSV0VCoL1O
+        mqwUdZYv7j4Kk/8AievJlQyzrg3aUg6yG5DpKh+T1YkgcSexK26m2faGQ3aGD9EjIwmq2lGCsiU
+        /8xafJX8qrudHd9v/6CMaSM1j
+X-Received: by 2002:a17:90b:3b48:b0:23d:29c7:916f with SMTP id ot8-20020a17090b3b4800b0023d29c7916fmr1944931pjb.32.1680598033474;
+        Tue, 04 Apr 2023 01:47:13 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bJxkPLNVMHl66unDdw9/W27jgaZhktSUj9RGv0cbVeSHmAFsbM+C5lpa1lJz5XglkZhaNqRg==
+X-Received: by 2002:a17:90b:3b48:b0:23d:29c7:916f with SMTP id ot8-20020a17090b3b4800b0023d29c7916fmr1944909pjb.32.1680598033010;
+        Tue, 04 Apr 2023 01:47:13 -0700 (PDT)
+Received: from zeus.flets-east.jp ([240b:10:83a2:bd00:6e35:f2f5:2e21:ae3a])
+        by smtp.gmail.com with ESMTPSA id e5-20020a17090ada0500b00234e6d2de3dsm7352937pjv.11.2023.04.04.01.47.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 01:46:54 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Peter Robinson <pbrobinson@gmail.com>
-Cc:     Jarrah <kernel@undef.tools>,
-        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        linux-kernel@vger.kernel.org, Caleb Connolly <kc@postmarketos.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martijn Braam <martijn@brixit.nl>, Ondrej Jirman <megi@xff.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH] arm64: dts: rockchip: Change serial baud rate for
- Pinephone Pro to 1.5 MB
-In-Reply-To: <CALeDE9M4eNq1sfQ-UcNZr8naYThmLFxDpt=zj8WkCSzHPUY8ug@mail.gmail.com>
-References: <20230403175937.2842085-1-javierm@redhat.com>
- <3738011.44csPzL39Z@diego>
- <d7efebcc-5b5b-185e-bec8-b6b9d5d27d93@undef.tools>
- <87h6twdpi7.fsf@minerva.mail-host-address-is-not-set>
- <CALeDE9M4eNq1sfQ-UcNZr8naYThmLFxDpt=zj8WkCSzHPUY8ug@mail.gmail.com>
-Date:   Tue, 04 Apr 2023 10:46:53 +0200
-Message-ID: <87bkk4dog2.fsf@minerva.mail-host-address-is-not-set>
+        Tue, 04 Apr 2023 01:47:12 -0700 (PDT)
+From:   Ryosuke Yasuoka <ryasuoka@redhat.com>
+To:     djwong@kernel.org
+Cc:     Ryosuke Yasuoka <ryasuoka@redhat.com>, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] xfs: Use for_each_perag() to iterate all available AGs
+Date:   Tue,  4 Apr 2023 17:47:01 +0900
+Message-Id: <20230404084701.2791683-1-ryasuoka@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -90,35 +75,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Robinson <pbrobinson@gmail.com> writes:
+for_each_perag_wrap() doesn't expect 0 as 2nd arg.
+To iterate all the available AGs, just use for_each_perag() instead.
 
-> On Tue, Apr 4, 2023 at 9:24=E2=80=AFAM Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
+Signed-off-by: Ryosuke Yasuoka <ryasuoka@redhat.com>
+---
+ fs/xfs/xfs_filestream.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[...]
-
->> > At least for me it's been convenient to have both the PP and PPP use t=
-he
->> > same settings while debugging.
->> >
->>
->> Agreed, all my other boards use 115200 as well, the only exceptions are
->> the Rockpro64 and PinePhone Pro for me.
->
-> All Rockchips devices use 1.5m except a chromebook and the Puma, and
-> this device.
->
-
-Yes, I meant all the other non-rockchip boards I have. So I understood the
-appeal of what Jarrah mentioned about using 115200 for everything.
-
-Having said that, my vote would be to change the PinePhone Pro to 1.5 MB
-given that it is what all the rockchip (but two) boards use in mainline.
-
---=20
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+diff --git a/fs/xfs/xfs_filestream.c b/fs/xfs/xfs_filestream.c
+index 22c13933c8f8..48f43c340c58 100644
+--- a/fs/xfs/xfs_filestream.c
++++ b/fs/xfs/xfs_filestream.c
+@@ -151,7 +151,7 @@ xfs_filestream_pick_ag(
+ 		 * grab.
+ 		 */
+ 		if (!max_pag) {
+-			for_each_perag_wrap(args->mp, 0, start_agno, args->pag)
++			for_each_perag(args->mp, start_agno, args->pag)
+ 				break;
+ 			atomic_inc(&args->pag->pagf_fstrms);
+ 			*longest = 0;
+-- 
+2.39.2
 
