@@ -2,195 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B963C6D587A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32706D588C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233671AbjDDGNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 02:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
+        id S233294AbjDDGPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 02:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbjDDGNI (ORCPT
+        with ESMTP id S232997AbjDDGPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 02:13:08 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA54DC2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:13:06 -0700 (PDT)
-Received: from fsav415.sakura.ne.jp (fsav415.sakura.ne.jp [133.242.250.114])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3346D4oF070744;
-        Tue, 4 Apr 2023 15:13:04 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav415.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp);
- Tue, 04 Apr 2023 15:13:04 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3346D3NJ070741
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 4 Apr 2023 15:13:04 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <77e32fdc-3f63-e124-588e-7d60dd66fc9a@I-love.SAKURA.ne.jp>
-Date:   Tue, 4 Apr 2023 15:13:05 +0900
+        Tue, 4 Apr 2023 02:15:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2B72701
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:14:56 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pjZwS-0007IN-6j; Tue, 04 Apr 2023 08:14:52 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 33E2A1A5DF0;
+        Tue,  4 Apr 2023 06:14:50 +0000 (UTC)
+Date:   Tue, 4 Apr 2023 08:14:49 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: esd_usb: Add support for CAN_CTRLMODE_BERR_REPORTING
+Message-ID: <20230404-worrisome-cable-9486f6795772@pengutronix.de>
+References: <20230330184446.2802135-1-frank.jungclaus@esd.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-US
-To:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Hillf Danton <hdanton@sina.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH v3 (repost)] locking/lockdep: add
- debug_show_all_lock_holders()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="blqp6dvgfsr376jr"
+Content-Disposition: inline
+In-Reply-To: <20230330184446.2802135-1-frank.jungclaus@esd.eu>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, check_hung_uninterruptible_tasks() reports details of locks
-held in the system. Also, lockdep_print_held_locks() does not report
-details of locks held by a thread if that thread is in TASK_RUNNING state.
-Several years of experience of debugging without vmcore tells me that
-these limitations have been a barrier for understanding what went wrong
-in syzbot's "INFO: task hung in" reports.
 
-I initially thought that the cause of "INFO: task hung in" reports is
-due to over-stressing. But I understood that over-stressing is unlikely.
-I now consider that there likely is a deadlock/livelock bug where lockdep
-cannot report as a deadlock when "INFO: task hung in" is reported.
+--blqp6dvgfsr376jr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-A typical case is that thread-1 is waiting for something to happen (e.g.
-wait_event_*()) with a lock held. When thread-2 tries to hold that lock
-using e.g. mutex_lock(), check_hung_uninterruptible_tasks() reports that
-thread-2 is hung and thread-1 is holding a lock which thread-2 is trying
-to hold. But currently check_hung_uninterruptible_tasks() cannot report
-the exact location of thread-1 which gives us an important hint for
-understanding why thread-1 is holding that lock for so long period.
+On 30.03.2023 20:44:46, Frank Jungclaus wrote:
+> Announce that the driver supports CAN_CTRLMODE_BERR_REPORTING by means
+> of priv->can.ctrlmode_supported. Until now berr reporting always has
+> been active without taking care of the berr-reporting parameter given
+> to an "ip link set ..." command.
+>=20
+> Additionally apply some changes to function esd_usb_rx_event():
+> - If berr reporting is off and it is also no state change, then
+> immediately return.
+> - Unconditionally (even in case of the above "immediate return") store
+> tx- and rx-error counters, so directly use priv->bec.txerr and
+> priv->bec.rxerr instead of intermediate variables.
+> - Not directly related, but to better point out the linkage between a
+> failed alloc_can_err_skb() and stats->rx_dropped++:
+> Move the increment of the rx_dropped statistic counter (back) to
+> directly behind the err_skb allocation.
+>=20
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
 
-When check_hung_uninterruptible_tasks() reports a thread waiting for a
-lock, it is important to report backtrace of threads which already held
-that lock. Therefore, allow check_hung_uninterruptible_tasks() to report
-the exact location of threads which is holding any lock.
+Applied to linux-can-next
 
-debug_show_all_lock_holders() skips current thread if the caller is
-holding no lock, for reporting RCU lock taken inside that function is
-generally useless.
+Thanks,
+Marc
 
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
-I couldn't catch Peter's question at
-https://lkml.kernel.org/r/Y+oY3Xd43nNnkDSB@hirez.programming.kicks-ass.net .
-I consider that this patch as-is is helpful, for not all TASK_RUNNING threads
-are actually running on some CPU, aren't they? If we show backtrace of only
-TASK_RUNNING threads which are running on some CPU, we fail to get hints for
-TASK_RUNNING threads which are not running on some CPU. Therefore, I consider
-that showing backtrace of TASK_RUNNING threads which are not running on some
-CPU is better than not showing.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-Changes in v3:
-  Unshare debug_show_all_lock_holders() and debug_show_all_locks(),
-  suggested by Ingo Molnar <mingo@kernel.org>.
+--blqp6dvgfsr376jr
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Changes in v2:
-  Share debug_show_all_lock_holders() and debug_show_all_locks(),
-  suggested by Waiman Long <longman@redhat.com>.
+-----BEGIN PGP SIGNATURE-----
 
- include/linux/debug_locks.h |  5 +++++
- kernel/hung_task.c          |  2 +-
- kernel/locking/lockdep.c    | 28 ++++++++++++++++++++++++++++
- 3 files changed, 34 insertions(+), 1 deletion(-)
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQrwFYACgkQvlAcSiqK
+BOh28Af+MlH6MoPRA+EDMuSmn+NSuTSQpn2RxD9/UQrTuyig29aUjIMIVuREksym
+Dn5bVb0C9V43K6TQ767Y9lBuoVRXgXB0fdurVKHxGP0cuABf4DwhAw1UaZFvUH21
+G+WUVIHGtamM3WgQ8PR69m3Yay4RRNlxO2W90Elwnf4zZNUJdTXYlQtWZzl2ues1
+IlFaEHUE/pEj8ALmTY0kegsYD30tq6hq8u7hpUKk/NmClU2DOyH57yr6g6ziLlng
+5scVvajveEkg8F9T01z2tqBjdDJHeJ2lkj81bkXqz+/zT5LQxXXy1w9xQdToaeBA
+PX4KakMomvaFQhGK5WgP99MKcQkVgQ==
+=W/Id
+-----END PGP SIGNATURE-----
 
-diff --git a/include/linux/debug_locks.h b/include/linux/debug_locks.h
-index dbb409d77d4f..0567d5ce5b4a 100644
---- a/include/linux/debug_locks.h
-+++ b/include/linux/debug_locks.h
-@@ -50,6 +50,7 @@ extern int debug_locks_off(void);
- #ifdef CONFIG_LOCKDEP
- extern void debug_show_all_locks(void);
- extern void debug_show_held_locks(struct task_struct *task);
-+extern void debug_show_all_lock_holders(void);
- extern void debug_check_no_locks_freed(const void *from, unsigned long len);
- extern void debug_check_no_locks_held(void);
- #else
-@@ -61,6 +62,10 @@ static inline void debug_show_held_locks(struct task_struct *task)
- {
- }
- 
-+static inline void debug_show_all_lock_holders(void)
-+{
-+}
-+
- static inline void
- debug_check_no_locks_freed(const void *from, unsigned long len)
- {
-diff --git a/kernel/hung_task.c b/kernel/hung_task.c
-index 322813366c6c..12aa473b11bd 100644
---- a/kernel/hung_task.c
-+++ b/kernel/hung_task.c
-@@ -215,7 +215,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
-  unlock:
- 	rcu_read_unlock();
- 	if (hung_task_show_lock)
--		debug_show_all_locks();
-+		debug_show_all_lock_holders();
- 
- 	if (hung_task_show_all_bt) {
- 		hung_task_show_all_bt = false;
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 50d4863974e7..208292813776 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -32,6 +32,7 @@
- #include <linux/sched/clock.h>
- #include <linux/sched/task.h>
- #include <linux/sched/mm.h>
-+#include <linux/sched/debug.h>
- #include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/proc_fs.h>
-@@ -6512,6 +6513,33 @@ void debug_show_all_locks(void)
- 	pr_warn("=============================================\n\n");
- }
- EXPORT_SYMBOL_GPL(debug_show_all_locks);
-+
-+void debug_show_all_lock_holders(void)
-+{
-+	struct task_struct *g, *p;
-+
-+	if (unlikely(!debug_locks)) {
-+		pr_warn("INFO: lockdep is turned off.\n");
-+		return;
-+	}
-+	pr_warn("\nShowing all threads with locks held in the system:\n");
-+
-+	rcu_read_lock();
-+	for_each_process_thread(g, p) {
-+		if (!p->lockdep_depth)
-+			continue;
-+		if (p == current && p->lockdep_depth == 1)
-+			continue;
-+		sched_show_task(p);
-+		lockdep_print_held_locks(p);
-+		touch_nmi_watchdog();
-+		touch_all_softlockup_watchdogs();
-+	}
-+	rcu_read_unlock();
-+
-+	pr_warn("\n");
-+	pr_warn("=============================================\n\n");
-+}
- #endif
- 
- /*
--- 
-2.34.1
+--blqp6dvgfsr376jr--
