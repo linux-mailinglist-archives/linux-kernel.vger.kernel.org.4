@@ -2,205 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542D96D5D84
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569506D5D92
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234331AbjDDKat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 06:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S234285AbjDDKdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 06:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233699AbjDDKap (ORCPT
+        with ESMTP id S233699AbjDDKdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 06:30:45 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065EE1984;
-        Tue,  4 Apr 2023 03:30:42 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id fi11so5073367edb.10;
-        Tue, 04 Apr 2023 03:30:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680604240;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qPQJYuYVqddrLpsUiSF4JuC6g9/L1+GNYqEeCmgaIpw=;
-        b=Qf9ZiLsHWa67q5d6OwOb196jz2WhK7YOr7O9+et+VWP9XJTg4eS7ZGmo/pp76jWFPt
-         4Kbtvtu5S3zMCsF9eVSA/S/YNXm5ggVhITb/Ngz7+umuz+DRrtYBdfzKTl3UrdN7NzWW
-         O6IY8bxFhED+SxeYizHcRY3SwLERm5ZUtQuHN1aGTwiysQ10WcIUcldVRbRtkYiswHlM
-         nTETOQuueRAEtt0TgKyZgsrozphoT+IYOtKCMD3aGLrr4m8j5PNzK6Je3J+NQ2mth/Tq
-         N2V070Ic0y6tNpVzzPzhp6zx5ZpOQ5fxDFW2cAWXz/Wy2BIlRhwiAXRk4jwemb2Ozkk8
-         aGJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680604240;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qPQJYuYVqddrLpsUiSF4JuC6g9/L1+GNYqEeCmgaIpw=;
-        b=zQ1tRoSg6FxaZU0lOFZ4sUyIPj7ePKC1ZozNdO6A4huKHV0anGYR1SeT2sErIF7IF1
-         zedL6i/mBHOX5YSQ8JofrQNNffD3R71Fu5+NYs6SrB41jOxyBwWPUMQtO0Q4780ZVK1b
-         DPdVdTLpmgkk+fvoOZ1c0Pvdq8g3NyVixZowXB1uFIS2RbhVAIoblgbfckwH2y6qnJN3
-         vY5NoFnERDL8Wu6kyBM3sgJnbChwDVfm41BU+xJgLcUetkV7hA/oOlLRN+TAmabBCrY0
-         6QK4DqJOBc/iqC27tUrss1JQ3ZblDibK3hTftAtNrKGqSpmYBuF7D9SRJ0MJuHBDc5gz
-         dDwg==
-X-Gm-Message-State: AAQBX9cI7GJ26xqSwr5MtvdMs2yiAuOP2gmYb5Hpb81lRy6n31PlSyiO
-        4ImPwaOKtSWworREaIjlBy4=
-X-Google-Smtp-Source: AKy350br99HCbCDIQiZj8fwuuU0BjyJC/AwN7IrayX6NNSgMYELNtziysmKohGWt/IYRz9rEEj8/bQ==
-X-Received: by 2002:a17:907:8b87:b0:8e1:12b6:a8fc with SMTP id tb7-20020a1709078b8700b008e112b6a8fcmr1480812ejc.4.1680604240440;
-        Tue, 04 Apr 2023 03:30:40 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id qp24-20020a170907207800b0093f822321fesm5737690ejb.137.2023.04.04.03.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 03:30:40 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 12:30:38 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dipen Patel <dipenp@nvidia.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linus.walleij@linaro.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, robh+dt@kernel.org,
-        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
-        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
-Subject: Re: [PATCH V4 04/10] dt-bindings: timestamp: Add
- nvidia,gpio-controller
-Message-ID: <ZCv8TviVD8n4MrnW@orome>
-References: <20230323012929.10815-1-dipenp@nvidia.com>
- <20230323012929.10815-5-dipenp@nvidia.com>
- <f523c155-7d05-2034-27ea-e2e56881c0bb@linaro.org>
- <a7539193-8374-cda6-f535-360a4a8eab22@nvidia.com>
+        Tue, 4 Apr 2023 06:33:39 -0400
+Received: from ste-pvt-msa1.bahnhof.se (ste-pvt-msa1.bahnhof.se [213.80.101.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2F41713;
+        Tue,  4 Apr 2023 03:33:36 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id AF7F63F4F7;
+        Tue,  4 Apr 2023 12:33:33 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Score: -2.099
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
+Authentication-Results: ste-pvt-msa1.bahnhof.se (amavisd-new);
+        dkim=pass (2048-bit key) header.d=dalakolonin.se
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7v9jF2qnx6hJ; Tue,  4 Apr 2023 12:33:32 +0200 (CEST)
+Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id D22683F462;
+        Tue,  4 Apr 2023 12:33:31 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTP id 6CE9A9441E;
+        Tue,  4 Apr 2023 10:33:31 +0000 (UTC)
+Received: from zimbra.dalakolonin.se ([127.0.0.1])
+        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ArcmOD99wZcW; Tue,  4 Apr 2023 10:33:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTP id C53999441B;
+        Tue,  4 Apr 2023 10:33:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.dalakolonin.se C53999441B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dalakolonin.se;
+        s=D374B428-D0A7-11ED-A657-75977B426508; t=1680604409;
+        bh=3CdfL+g8jYqfBGZVji9bGfsXzXTHIklsS2W/mc7CNXg=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=j/BD9kF7UAGmhCcFf/B8Ycfh4JC1+4L9IrVCdwDtxPYceWT2Bev0fWE4pKNJBfHKN
+         Ot5VslcxDr/PbSPXFBPKot2WZoKOId6NUBmt7Fja867C9q8hKxy3jNXx/aKvXKalF6
+         TqWCbdzaiJhgIhega2dyZQyK8mQTE5pFNZ8rIezGtthXZbc8JjkmE3WzXzUOITt8A1
+         3ZudvhLntwrAciPRIh4+Eh8/ZVnBeCnvxw4FJge8YBT15pgf76DgJmIXm7IdYTXdLq
+         se4l4EdM3x5YHOO4LKdclHOEcH9fO/ZnBg0teVeLJsFY6cJ64lGCgU0I2hhfZhthS/
+         ReDxVVyKQjk5g==
+X-Virus-Scanned: amavisd-new at dalakolonin.se
+Received: from zimbra.dalakolonin.se ([127.0.0.1])
+        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id rZWjrWUB--dI; Tue,  4 Apr 2023 10:33:29 +0000 (UTC)
+Received: from dalakolonin.se (unknown [172.17.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTPSA id 7A52594416;
+        Tue,  4 Apr 2023 10:33:29 +0000 (UTC)
+Date:   Tue, 4 Apr 2023 12:33:28 +0200
+From:   Patrik =?iso-8859-1?Q?Dahlstr=F6m?= <risca@dalakolonin.se>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
+        pgoudagunta@nvidia.com, jic23@kernel.org, lars@metafoo.de,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH v2 1/7] iio: adc: palmas: remove adc_wakeupX_data
+Message-ID: <20230404103328.GD2403322@dalakolonin.se>
+References: <20230402164247.3089146-1-risca@dalakolonin.se>
+ <20230402164247.3089146-2-risca@dalakolonin.se>
+ <ED6919A6-CE57-4C31-9AE5-2C31D288A810@goldelico.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kKVfNtJEQjXZPd0A"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <a7539193-8374-cda6-f535-360a4a8eab22@nvidia.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ED6919A6-CE57-4C31-9AE5-2C31D288A810@goldelico.com>
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---kKVfNtJEQjXZPd0A
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Mar 27, 2023 at 09:58:19AM -0700, Dipen Patel wrote:
-> On 3/25/23 4:07 AM, Krzysztof Kozlowski wrote:
-> > On 23/03/2023 02:29, Dipen Patel wrote:
-> >> Introducing nvidia,gpio-controller property from Tegra234 SoCs onwards.
-> >> This is done to help below case.
-> >>
-> >> Without this property code would look like:
-> >> if (of_device_is_compatible(dev->of_node, "nvidia,tegra194-gte-aon"))
-> >> 	hte_dev->c =3D gpiochip_find("tegra194-gpio-aon",
-> >> 				   tegra_get_gpiochip_from_name);
-> >> else if (of_device_is_compatible(dev->of_node, "nvidia,tegra234-gte-ao=
-n"))
-> >> 	hte_dev->c =3D gpiochip_find("tegra234-gpio-aon",
-> >> 				   tegra_get_gpiochip_from_name);
-> >> else
-> >> 	return -ENODEV;
-> >>
-> >> This means for every future addition of the compatible string, if else
-> >> condition statements have to be expanded.
-> >>
-> >> With the property:
-> >> gpio_ctrl =3D of_parse_phandle(dev->of_node, "nvidia,gpio-controller",=
- 0);
-> >> ....
-> >> hte_dev->c =3D gpiochip_find(gpio_ctrl, tegra_get_gpiochip_from_of_nod=
-e);
-> >>
-> >> This simplifies the code significantly. The introdunction of this
-> >> property/binding does not break existing Tegra194 provider driver.
-> >>
-> >> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
-> >> ---
-> >>  .../timestamp/nvidia,tegra194-hte.yaml        | 31 +++++++++++++++++--
-> >>  1 file changed, 29 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/timestamp/nvidia,tegra1=
-94-hte.yaml b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-h=
-te.yaml
-> >> index eafc33e9ae2e..841273a3d8ae 100644
-> >> --- a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.=
-yaml
-> >> +++ b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.=
-yaml
-> >> @@ -51,6 +51,12 @@ properties:
-> >>        LIC instance has 11 slices and Tegra234 LIC has 17 slices.
-> >>      enum: [3, 11, 17]
-> >> =20
-> >> +  nvidia,gpio-controller:
-> >> +    $ref: /schemas/types.yaml#/definitions/phandle
-> >> +    description:
-> >> +      The phandle to AON gpio controller instance. This is required t=
-o handle
-> >> +      namespace conversion between GPIO and GTE.
-> >> +
-> >>    '#timestamp-cells':
-> >>      description:
-> >>        This represents number of line id arguments as specified by the
-> >> @@ -65,22 +71,43 @@ required:
-> >>    - interrupts
-> >>    - "#timestamp-cells"
-> >> =20
-> >> +allOf:
-> >> +  - if:
-> >> +      properties:
-> >> +        compatible:
-> >> +          contains:
-> >> +            enum:
-> >> +              - nvidia,tegra234-gte-aon
-> >> +    then:
-> >> +      required:
-> >> +        - nvidia,gpio-controller
-> >> +
-> >>  additionalProperties: false
-> >> =20
-> >>  examples:
-> >>    - |
-> >>      tegra_hte_aon: timestamp@c1e0000 {
-> >>                compatible =3D "nvidia,tegra194-gte-aon";
-> >> -              reg =3D <0xc1e0000 0x10000>;
-> >> +              reg =3D <0x0 0xc1e0000 0x0 0x10000>;
+On Mon, Apr 03, 2023 at 06:49:36PM +0200, H. Nikolaus Schaller wrote:
+> Hi Patrik,
+>=20
+> > Am 02.04.2023 um 18:42 schrieb Patrik Dahlstr=F6m <risca@dalakolonin.=
+se>:
 > >=20
-> > This is not really explained in commit msg... are you sure you tested i=
-t?
-> I have to revert this part back in next patch as when I upgraded dtsschem=
-a it gave me errors.
+> > It does not seem to be used by anyone and later patches in this serie=
+s
+> > are made simpler by first removing this. There is now a lot of dead c=
+ode
+> > that cannot be reached, until later patches revive it. Arguably, this=
+ is
+> > preferred over removing the code only to add it again.
+> >=20
+> > Signed-off-by: Patrik Dahlstr=F6m <risca@dalakolonin.se>
+> > ---
+> > drivers/iio/adc/palmas_gpadc.c | 50 ++++-----------------------------=
+-
+> > include/linux/mfd/palmas.h     |  8 ------
+> > 2 files changed, 6 insertions(+), 52 deletions(-)
+> >=20
+> > diff --git a/drivers/iio/adc/palmas_gpadc.c b/drivers/iio/adc/palmas_=
+gpadc.c
+> > index 24d7c096e4b8..943ac579eb1f 100644
+> > --- a/drivers/iio/adc/palmas_gpadc.c
+> > +++ b/drivers/iio/adc/palmas_gpadc.c
+> > @@ -76,6 +76,12 @@ static struct palmas_gpadc_info palmas_gpadc_info[=
+] =3D {
+> > 	PALMAS_ADC_INFO(IN15, 0, 0, 0, 0, INVALID, INVALID, true),
+> > };
+> >=20
+> > +struct palmas_adc_wakeup_property {
+> > +	int adc_channel_number;
+> > +	int adc_high_threshold;
+> > +	int adc_low_threshold;
+> > +};
+> > +
+> > /*
+> >  * struct palmas_gpadc - the palmas_gpadc structure
+> >  * @ch0_current:	channel 0 current source setting
+> > @@ -492,11 +498,6 @@ static int palmas_gpadc_get_adc_dt_data(struct p=
+latform_device *pdev,
+> > 	return 0;
+> > }
+> >=20
+> > -static void palmas_disable_wakeup(void *dev)
+>=20
+> something seems to be mixed up here.
+>=20
+> There is no palmas_disable_wakeup() upstream that can be removed. So th=
+is patch
+> can not be applied as 1/7 to any upstream kernel.
+>=20
+> Please rebase your series on either linus/master or linux-next/master.
 
-We need the 0x0 in the DTS files because we have #address-cells =3D <2>
-and #size-tells =3D <2>. For the examples, those default to just 1 cell,
-so this can't be an exact copy of what we have in the DTS files.
+I'm sorry for the confusion. I should have been more clear in the cover
+letter.
 
-Please make sure to always validate the bindings and examples.
+This series is based on Jonathan Cameron's iio tree[1], plus the patches =
+at
+[2] and [3]. The first patch is already part of linux-next and I was unde=
+r
+the impression that [3] would be soon too.
 
-Thierry
+Would it be best to rebase this series on linux-next instead?
 
---kKVfNtJEQjXZPd0A
-Content-Type: application/pgp-signature; name="signature.asc"
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
+[2] https://patchwork.kernel.org/project/linux-iio/patch/20230313205029.1=
+881745-1-risca@dalakolonin.se/
+[3] https://patchwork.kernel.org/project/linux-iio/patch/20230318163039.5=
+6115-1-jic23@kernel.org/
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQr/E4ACgkQ3SOs138+
-s6F7gQ/8CahJlsl2ie2xWVwhWMmBeCbLyErqS+oUnJBDhaLFTHrhUBNeDB0htb3x
-ZAUc3dZf+3ohXsFztk9DfVoH/3PTAxFftgN05tZHBCLXaBBoE/0uVQBVw2Q6VS7C
-q6XkykkbDFUBOzL6sJLZE3ucFdPTjG5HFmMF+UJF8NfmBLUWJrZ60kK8h3MQrjYR
-suT5Gr0EyOHy9nbtjDS3U05WW6Oyp4ppBTFWYuYbRIHgiZybCabVROR8NuCqqO5/
-17kaQheYOsyCfHwmQhNx/yH6qn/byXK0eKI8N05S9f7iBqyvgDO69LF5SVR7wZtD
-6i8DaiGS80EZtslyzEIcggM2WBklv0TO6tyRJWdsBjCoN+sFnRbTMOu/XFYvpqh5
-Fjk+Qedb/KaGYdzD+HjREyKCz8rjRJxBj+NyjiUCo/hIlXm3kBH+XihmLsY/3ZNs
-AjXxR25TIAq+yw42/gDfdx6/PzXwZtNmYq1ogpftsffj0rUTsv1v0Z5ScCWnKU15
-sIqSTXUmGBRmHErHyxV/AcgwAqljPuBVKdidyM+8IceZGD6bd56iv/Ywc28cfhNO
-cruSLxYVhvMJbMk2xX9ma8PWGAaOIkT+CTfQWC7YLMVMA8oMjPa74JQHKUlsrDb+
-GlAEoulplmcv1mbesr5bkm4rMpB6tjsoTElagX7RVgOOS2CALEI=
-=TMqU
------END PGP SIGNATURE-----
-
---kKVfNtJEQjXZPd0A--
+>=20
+> BR,
+> Nikolaus
+>=20
+> > -{
+> > -	device_wakeup_disable(dev);
+> > -}
+> > -
+> > static int palmas_gpadc_probe(struct platform_device *pdev)
+> > {
+> > 	struct palmas_gpadc *adc;
+> > @@ -547,36 +548,6 @@ static int palmas_gpadc_probe(struct platform_de=
+vice *pdev)
+> > 		return dev_err_probe(adc->dev, ret,
+> > 				     "request irq %d failed\n", adc->irq);
+> >=20
+> > -	if (gpadc_pdata->adc_wakeup1_data) {
+> > -		memcpy(&adc->wakeup1_data, gpadc_pdata->adc_wakeup1_data,
+> > -			sizeof(adc->wakeup1_data));
+> > -		adc->wakeup1_enable =3D true;
+> > -		adc->irq_auto_0 =3D  platform_get_irq(pdev, 1);
+> > -		ret =3D devm_request_threaded_irq(&pdev->dev, adc->irq_auto_0,
+> > -						NULL, palmas_gpadc_irq_auto,
+> > -						IRQF_ONESHOT,
+> > -						"palmas-adc-auto-0", adc);
+> > -		if (ret < 0)
+> > -			return dev_err_probe(adc->dev, ret,
+> > -					     "request auto0 irq %d failed\n",
+> > -					     adc->irq_auto_0);
+> > -	}
+> > -
+> > -	if (gpadc_pdata->adc_wakeup2_data) {
+> > -		memcpy(&adc->wakeup2_data, gpadc_pdata->adc_wakeup2_data,
+> > -				sizeof(adc->wakeup2_data));
+> > -		adc->wakeup2_enable =3D true;
+> > -		adc->irq_auto_1 =3D  platform_get_irq(pdev, 2);
+> > -		ret =3D devm_request_threaded_irq(&pdev->dev, adc->irq_auto_1,
+> > -						NULL, palmas_gpadc_irq_auto,
+> > -						IRQF_ONESHOT,
+> > -						"palmas-adc-auto-1", adc);
+> > -		if (ret < 0)
+> > -			return dev_err_probe(adc->dev, ret,
+> > -					     "request auto1 irq %d failed\n",
+> > -					     adc->irq_auto_1);
+> > -	}
+> > -
+> > 	/* set the current source 0 (value 0/5/15/20 uA =3D> 0..3) */
+> > 	if (gpadc_pdata->ch0_current <=3D 1)
+> > 		adc->ch0_current =3D PALMAS_ADC_CH0_CURRENT_SRC_0;
+> > @@ -616,15 +587,6 @@ static int palmas_gpadc_probe(struct platform_de=
+vice *pdev)
+> > 			palmas_gpadc_calibrate(adc, i);
+> > 	}
+> >=20
+> > -	if (adc->wakeup1_enable || adc->wakeup2_enable) {
+> > -		device_wakeup_enable(&pdev->dev);
+> > -		ret =3D devm_add_action_or_reset(&pdev->dev,
+> > -					       palmas_disable_wakeup,
+> > -					       &pdev->dev);
+> > -		if (ret)
+> > -			return ret;
+> > -	}
+> > -
+> > 	return 0;
+> > }
+> >=20
+> > diff --git a/include/linux/mfd/palmas.h b/include/linux/mfd/palmas.h
+> > index 1e61c7e9f50d..55f22adb1a9e 100644
+> > --- a/include/linux/mfd/palmas.h
+> > +++ b/include/linux/mfd/palmas.h
+> > @@ -129,12 +129,6 @@ struct palmas_pmic_driver_data {
+> > 			    struct regulator_config config);
+> > };
+> >=20
+> > -struct palmas_adc_wakeup_property {
+> > -	int adc_channel_number;
+> > -	int adc_high_threshold;
+> > -	int adc_low_threshold;
+> > -};
+> > -
+> > struct palmas_gpadc_platform_data {
+> > 	/* Channel 3 current source is only enabled during conversion */
+> > 	int ch3_current;	/* 0: off; 1: 10uA; 2: 400uA; 3: 800 uA */
+> > @@ -153,8 +147,6 @@ struct palmas_gpadc_platform_data {
+> > 	int start_polarity;
+> >=20
+> > 	int auto_conversion_period_ms;
+> > -	struct palmas_adc_wakeup_property *adc_wakeup1_data;
+> > -	struct palmas_adc_wakeup_property *adc_wakeup2_data;
+> > };
+> >=20
+> > struct palmas_reg_init {
+> > --=20
+> > 2.25.1
+> >=20
+>=20
