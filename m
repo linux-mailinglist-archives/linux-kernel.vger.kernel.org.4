@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAE26D603C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2AA6D6042
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234750AbjDDMZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
+        id S234708AbjDDMZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234667AbjDDMZG (ORCPT
+        with ESMTP id S234795AbjDDMZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:25:06 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C616B4
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:25:05 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id br6so42138276lfb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 05:25:04 -0700 (PDT)
+        Tue, 4 Apr 2023 08:25:26 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2ABE75;
+        Tue,  4 Apr 2023 05:25:22 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id y20so42220863lfj.2;
+        Tue, 04 Apr 2023 05:25:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680611103;
+        d=gmail.com; s=20210112; t=1680611121;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XMqODXEYu9jCFhC1XRoj2muw8B1neNWMnNa2xJihz5k=;
-        b=bhlv4psjXuGbelQvnqFFr6+4iXeR53TUFKoKkp65/X5eCJ1hZHQHd61sypufJaG/RC
-         szLCoBxJ3tPw/GFEBHIO28XOTYUjXlyK+Y9eYAkTVR2ssxiluA8HY72BGm4DIcxE8x8O
-         +Azk6Kc37M6Ea/bs/lsQfvR52HYlyg6fjiOVICL44pyFjEztPY1qeKmcHP+YYlFLKFwi
-         PXh6x30kuzPVoiEmKOSBNUKI3DOzl31PqKUZK5Yvrk09NTd4d+6ImBQg8fSuwFtXZfRY
-         8K1ixvklV0mNSVPkje1rUDjoRh7k6tJjRl+b5w4BggQryUgg+XPH0OjlWu3WcMG9jYCs
-         JyqQ==
+        bh=ZDU+F1pTEz7orAogZEYM3SSlzH/hcRZ96/r/Tq0s37o=;
+        b=aEOeBsszZH5JlFbVpcoaCviRe6tzX+l5bNSKVkKnFp1dTe2+iLJ2yPKc/QY9kBo1j1
+         XBXnTdZp4dqzgFFN2ZxdfXHBc+4wK0OVkK9WH99+uoq6tfmkbqefMKKk9pIOg7K4CuEF
+         7BlZiIvcAPPKSjdDTVrETXxDL/DQeHCwsQjkp1JsHVXPO4xxQpMEhAxGvQqU7XB+l4Iu
+         F0j5kCVqEKzg5mIMmmiKYonSDZnylfeB+kpTeku/euwmYSPnZ6lQBfiz/uFvpoEm45vu
+         THVbnjNtphm7hmvUJbYvXc0xJitzEpRy3X3cnrBHnnmkj5ivZrlflEsKGM2j0pNkIlFy
+         V64g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680611103;
+        d=1e100.net; s=20210112; t=1680611121;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XMqODXEYu9jCFhC1XRoj2muw8B1neNWMnNa2xJihz5k=;
-        b=YRzEix6yz3mkcHC/s3IWvXWC/00HORsO25+8oPkJ0TPXO0Vn/caki1jW9w8C3um5Cr
-         eK9NF6LNtBYqfgDzkcDo0nQ2KU9ydzYuQnv59RUCSUph/thUdsO1YtRM25PRbqf0KJTZ
-         FiwXi8JwGQXL4Ysu3yFwB7doN/r/mmX2nXmIu+FOoueKA6ZTVm9YszRhDi1DQnwtAXsx
-         JWYYpGMhtpcXYeEJhU9zHH4jxY6NPxL0+oWia77h3cv1MdvSwQZdZpWS8gEazFRKCL/L
-         p+54F+OsCicqYA+IfAPm7VCr5t1M3xLrriHPpbatbSs0zet3lAg/kMFMXKHmtV6vTg0+
-         iaeQ==
-X-Gm-Message-State: AAQBX9dgDD8G499dJ4TL97N+P87zXuf3zJZNnDMc0JlpFmKJwnUPf4Lx
-        pkZD6P+lkTeMQ0SlLV+U8V5YPgfx5ls=
-X-Google-Smtp-Source: AKy350bDhGOioIl+sKMt7Rcc42ozgoq3y2V0bxqx0HrYY7LlgsUCSBwdkeLvVPS6vx3ATKZWF/8hfw==
-X-Received: by 2002:a05:6512:507:b0:4e9:bdd0:b667 with SMTP id o7-20020a056512050700b004e9bdd0b667mr484715lfb.0.1680611102946;
-        Tue, 04 Apr 2023 05:25:02 -0700 (PDT)
+        bh=ZDU+F1pTEz7orAogZEYM3SSlzH/hcRZ96/r/Tq0s37o=;
+        b=BnKJLrnjt0J0Cw2g4bEAHVSOrSl6aGuYVLupxG8Sle5eKAPiwNj5fgQO+e70umW6ZQ
+         SzuK5iR8ZQlDtwr5hseKsgxI5vBHmbswFtHyZKqNqxqp0dKngtFGmganI/n/DflTTBk8
+         F9aSNU35wd2iPSs0WE6KGeG8XYfnGULKzZVh6sMNP+M7qkihXIPU9eitUVUHVZ62zQaA
+         bgFqfsd0tQinATmWiDogDnBHezNH/mUj+oU8C+XboiRpJki0SXhAvpGGGbIuF3kQ08z3
+         8xBXxzbPap7qUC7normlwZqHuvIKGkOji/EmjyIo4GOFnIvungNwuCHXxeiC/NSIsOkd
+         crkA==
+X-Gm-Message-State: AAQBX9dxDNukAADdMEhKMBAx6sCzLXlSaoPLR95FiWblfpzbDHhqSZr9
+        NB9rSw3v2vf2h3GXHr19udU=
+X-Google-Smtp-Source: AKy350bai4lN1Sv512f7kHwLIM9QmUZCR1nqpnxjVoPGbJfzS0xnYeUWH9y/Oidfg7c/LQMI1mebLQ==
+X-Received: by 2002:a05:6512:410:b0:4e1:36a:eda5 with SMTP id u16-20020a056512041000b004e1036aeda5mr481748lfk.30.1680611121261;
+        Tue, 04 Apr 2023 05:25:21 -0700 (PDT)
 Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id t5-20020ac243a5000000b004eafa060a6fsm2317552lfl.145.2023.04.04.05.25.01
+        by smtp.gmail.com with ESMTPSA id h27-20020ac2597b000000b004eae73a0530sm2295410lfp.39.2023.04.04.05.25.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 05:25:02 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 15:24:58 +0300
+        Tue, 04 Apr 2023 05:25:20 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 15:25:17 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andrea Merello <andrea.merello@iit.it>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v2 1/3] iio: Add some kerneldoc for channel types
-Message-ID: <6cbe49605986fe1b82e4f3d67344e549846c5f6c.1680610554.git.mazziesaccount@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v2 2/3] iio: add documentation for iio_chan_info_enum
+Message-ID: <799dfdbe77ed562c400d76a0728153263e769198.1680610554.git.mazziesaccount@gmail.com>
 References: <cover.1680610554.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Xw18MM2I4xnJ1mlH"
+        protocol="application/pgp-signature"; boundary="lBi0XkC13I/LZcNg"
 Content-Disposition: inline
 In-Reply-To: <cover.1680610554.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -78,191 +75,87 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---Xw18MM2I4xnJ1mlH
+--lBi0XkC13I/LZcNg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-For occasional contributor like me navigating the IIO channel types and
-modifiers may be a daunting task. One may have hard time finding out
-what type of channel should be used for device data and what units the
-data should be converted.
+Values in the iio_chan_info_enum are crucial for understanding the
+characteristics of an IIO channel and the data delivered via IIO channel.
+Give a hand to developers who do their first set of IIO drivers.
 
-There is a great documentation for the sysfs interfaces though. What is
-missing is mapping of the channel types and modifiers to the sysfs
-documentation (and entries in documentation).
-
-Give a hand to a driver writer by providing some documentation and by
-pointing to the sysfs document from the kernel doc of respective enums.
+Add some documentation to these channel specifiers.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 ---
-Changelog RFCv1 =3D> v2:
-- add missing channel type docs provided by Jonathan
-- add @in front of member names and fix typos pointed by Andy
-- drop TODOs as Jonathan clarified the units
-
-Initial discussion about these docs can be found from:
-https://lore.kernel.org/all/0e0d45b7-e582-82b2-9bac-1f70f9dad9f7@gmail.com/
+Please note that I did only add documentation for entries I am familiar
+with. I did still add doc placeholders for all of the enum entries to
+ease seeing which entries could still be documented. Hopefully this
+encourages people to add missing pieces of documentation.
 ---
- include/uapi/linux/iio/types.h | 134 +++++++++++++++++++++++++++++++++
- 1 file changed, 134 insertions(+)
+ include/linux/iio/types.h | 46 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 45 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/iio/types.h b/include/uapi/linux/iio/types.h
-index c79f2f046a0b..78f4cfdc5e45 100644
---- a/include/uapi/linux/iio/types.h
-+++ b/include/uapi/linux/iio/types.h
-@@ -11,6 +11,124 @@
- #ifndef _UAPI_IIO_TYPES_H_
- #define _UAPI_IIO_TYPES_H_
-=20
-+/**
-+ * iio_chan_type - Type of data transferred via IIO channel.
-+ *
-+ * The 'main' type of data transferred via channel. Please note that most
-+ * devices also need to specify a more accurate 'sub category'. See the
-+ * enum iio_modifier for this. (For example, IIO_ACCEL channel often needs=
- to
-+ * specify the direction. IIO_CONCENTRATION specifies the type of substance
-+ * it measures etc).
-+ *
-+ * These reflect the units of the measurement via processed or unit after
-+ * application of scale and offset. See the enum iio_chan_info_enum for
-+ * scale and offset.
-+ *
-+ * Please find the detailed documentation for reported values from the
-+ * Documentation/ABI/testing/sysfs-bus-iio.
-+ *
-+ * @IIO_ACCEL:		Acceleration, m/s^2
-+ *			Doc keyword: in_accel_x_raw
-+ *
-+ * @IIO_ACTIVITY:	Activity state. For example a pedometer signaling
-+ *			jogging, walking or staying still.
-+ *			Doc keyword: in_activity_still_thresh_rising_en
-+ *
-+ * @IIO_ALTVOLTAGE:	Peak to peak voltage, millivolts
-+ *
-+ * @IIO_ANGL:		Angle of rotation, radians.
-+ *			Doc keyword: in_angl_raw
-+ *
-+ * @IIO_ANGL_VEL:	Angular velocity, rad/s
-+ *			Doc keyword: in_anglvel_x_raw
-+ *
-+ * @IIO_CAPACITANCE:	Capacitance, nanofarads.
-+ *			Doc keyword: in_capacitanceY_raw
-+ *
-+ * @IIO_CCT:		Correlated color temperature, Kelvins
-+ *
-+ * @IIO_CURRENT:	Current, milliamps
-+ *			Doc keyword: in_currentY_raw
-+ *
-+ * @IIO_CONCENTRATION:	Reading of a substance, percents. Used for example =
-by
-+ *			devices measuring amount of CO2, O2, ethanol...
-+ *			Doc keyword: in_concentration_raw
-+ *
-+ * @IIO_COUNT:		Deprecated, please use counter subsystem.
-+ *
-+ * @IIO_DISTANCE:	Distance in meters. Typically used to report measured
-+ *			distance to an object or the distance covered by the
-+ *			user
-+ *			Doc keyword: in_distance_input
-+ *
-+ * @IIO_ELECTRICALCONDUCTIVITY: electric conductivity, siemens per meter
-+ *			Doc keyword: in_electricalconductivity_raw
-+ *
-+ * @IIO_ENERGY:		Energy in Joules. Typically reported by a device
-+ *			measuring energy burnt by the user.
-+ *			Doc keyword: in_energy_input
-+ *
-+ * @IIO_GRAVITY:	Gravity, m/s^2
-+ *			Doc keyword: in_gravity_x_raw
-+ *
-+ * @IIO_HUMIDITYRELATIVE: Relative humidity, percents
-+ *			Doc keyword: in_humidityrelative_raw
-+ *
-+ * @IIO_INCLI:		Inclination, degrees
-+ *			Doc keyword: in_incli_x_raw
-+ *
-+ * @IIO_INDEX:		Deprecated, please use Counter subsystem
-+ *
-+ * @IIO_INTENSITY:	Unitless intensity.
-+ *			Doc keyword: in_intensityY_raw
-+ *
-+ * @IIO_LIGHT:		Visible light intensity, lux
-+ *			Doc keyword: in_illuminance_raw
-+ *
-+ * @IIO_MAGN:		Magnetic field, Gauss.
-+ *			Doc keyword: in_magn_x_raw
-+ *
-+ * @IIO_MASSCONCENTRATION: Mass concentration, ug / m3
-+ *			Doc keyword: in_massconcentration_pm1_input
-+ *
-+ * @IIO_PH:		pH reading, negative base-10 logarithm of hydrodium
-+ *			ions in a litre of water
-+ *			Doc keyword: in_ph_raw
-+ *
-+ * @IIO_PHASE:		Phase difference, radians
-+ *			Doc keyword: in_phaseY_raw
-+ *
-+ * @IIO_POSITIONRELATIVE: Relative position.
-+ *			Doc keyword: in_positionrelative_x_raw
-+ *
-+ * @IIO_POWER:		Power, milliwatts
-+ *			Doc keyword: in_powerY_raw
-+ *
-+ * @IIO_PRESSURE:	Pressure, kilopascal
-+ *			Doc keyword: in_pressureY_raw
-+ *
-+ * @IIO_RESISTANCE:	Resistance, ohms
-+ *			Doc keyword: in_resistance_raw
-+ *
-+ * @IIO_ROT:		Euler angles, deg
-+ *			Doc keyword: in_rot_yaw_raw
-+ *
-+ * @IIO_STEPS:		Steps taken by the user
-+ *			Doc keyword: in_steps_input
-+ *
-+ * @IIO_TEMP:		Temperature, milli degrees Celsius
-+ *			Doc keyword: in_temp_raw
-+ *
-+ * @IIO_UVINDEX:	UV light intensity index
-+ *			Doc keyword: in_uvindex_input
-+ *
-+ * @IIO_VELOCITY:	Current speed (norm or magnitude of the velocity
-+ *			vector), m/s
-+ *			Doc keyword: in_velocity_sqrt(x^2+y^2+z^2)_input
-+ *
-+ * @IIO_VOLTAGE:	Voltage, millivolts
-+ *			Doc keyword: in_voltageY_raw
-+ */
- enum iio_chan_type {
- 	IIO_VOLTAGE,
- 	IIO_CURRENT,
-@@ -49,6 +167,22 @@ enum iio_chan_type {
- 	IIO_MASSCONCENTRATION,
+diff --git a/include/linux/iio/types.h b/include/linux/iio/types.h
+index 82faa98c719a..c8e3288ca24b 100644
+--- a/include/linux/iio/types.h
++++ b/include/linux/iio/types.h
+@@ -35,7 +35,51 @@ enum iio_available_type {
+ 	IIO_AVAIL_LIST,
+ 	IIO_AVAIL_RANGE,
  };
-=20
+-
 +/**
-+ * iio_modifier - accurate class for channel data
++ * enum iio_chan_info_enum - Information related to a IIO channel
 + *
-+ * @IIO_MOD_<X,Y,Z>:	Value represents <X,Y,Z>-axis data.
-+ *			Typically used by channels of type:
-+ *			IIO_ACCEL, IIO_TEMP, IIO_GRAVITY, IIO_POSITIONRELATIVE,
-+ *			IIO_ANGL_VEL, IIO_INCLI, IIO_MAGN
-+ * @IIO_MOD_LIGHT_BOTH:	Value contains visible and infrared light componen=
-ts
-+ * @IIO_MOD_LIGHT_IR:	Value represents infrared radiation
-+ * @IIO_MOD_LIGHT_<RED, GREEN, BLUE>:
-+ *			Value represents visible <red, green, blue>  light
-+ * @IIO_MOD_LIGHT_CLEAR:	Value represents all visible light frequencies
++ * Many IIO channels have extra properties. Typically these properties can=
+ be
++ * read / written by user using the read_raw or write_raw callbacks in the
++ * struct iio_info.
 + *
-+ * Please find the detailed documentation for reported values from the
-+ * Documentation/ABI/testing/sysfs-bus-iio.
++ * @IIO_CHAN_INFO_RAW:		Raw channel data as provided by device. Scale
++ *				and offset are often required to convert these
++ *				values to meaningful units.
++ * @IIO_CHAN_INFO_PROCESSED:	Processed data. Typically driver performs
++ *				computations to convert device data to more
++ *				meaningfull processed values.
++ * @IIO_CHAN_INFO_SCALE:	Scale to be applied to data in order to convert
++ *				it to units mandated by the channel type.
++ * @IIO_CHAN_INFO_OFFSET:	Offset to be applied to data in order to convert
++ *				it to units mandated by the channel type.
++ * @IIO_CHAN_INFO_CALIBSCALE:
++ * @IIO_CHAN_INFO_CALIBBIAS:
++ * @IIO_CHAN_INFO_PEAK:		Peak value (TODO: Since measurement start?)
++ * @IIO_CHAN_INFO_PEAK_SCALE:	Scale to be applied to the peak value in ord=
+er
++ *				to convert it to units mandated by the channel
++ *				type.
++ * @IIO_CHAN_INFO_QUADRATURE_CORRECTION_RAW:
++ * @IIO_CHAN_INFO_AVERAGE_RAW:	Average of raw values (TODO: Since measurem=
+ent
++ *				start or just for some undefined time?)
++ * @IIO_CHAN_INFO_SAMP_FREQ:	Sampling frequency for device.
++ * @IIO_CHAN_INFO_FREQUENCY:
++ * @IIO_CHAN_INFO_PHASE:
++ * @IIO_CHAN_INFO_HARDWAREGAIN:	Amplification applied by the hardware.
++ * @IIO_CHAN_INFO_HYSTERESIS:
++ * @IIO_CHAN_INFO_HYSTERESIS_RELATIVE:
++ * @IIO_CHAN_INFO_INT_TIME:	Integration time. Time during which the data is
++ *				accumulated by the device.
++ * @IIO_CHAN_INFO_ENABLE:
++ * @IIO_CHAN_INFO_CALIBHEIGHT:
++ * @IIO_CHAN_INFO_CALIBWEIGHT:
++ * @IIO_CHAN_INFO_DEBOUNCE_COUNT:
++ * @IIO_CHAN_INFO_DEBOUNCE_TIME:
++ * @IIO_CHAN_INFO_CALIBEMISSIVITY:
++ * @IIO_CHAN_INFO_OVERSAMPLING_RATIO:
++ * @IIO_CHAN_INFO_THERMOCOUPLE_TYPE:
++ * @IIO_CHAN_INFO_CALIBAMBIENT:
++ * @IIO_CHAN_INFO_ZEROPOINT:
 + */
- enum iio_modifier {
- 	IIO_NO_MOD,
- 	IIO_MOD_X,
+ enum iio_chan_info_enum {
+ 	IIO_CHAN_INFO_RAW =3D 0,
+ 	IIO_CHAN_INFO_PROCESSED,
 --=20
 2.39.2
 
@@ -279,19 +172,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---Xw18MM2I4xnJ1mlH
+--lBi0XkC13I/LZcNg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQsFxoACgkQeFA3/03a
-ocWURQf+JSwfH0rH6TItjTPy+ijNB5gJbCudkp/fOqCVNr8A0uA1H3Efqhm4wci1
-xeMn7iaGSKg4e+gd41q+yK6WNBvKhuLCPeymwJge6HtBJyBGAwdsHoPapL9kFxtg
-PAJqAwGz5YaAROGah29HW03IAPdu63uUGe7UDjMYWUVBVVhFoMu1q8Isi8Ur2bQh
-pbB+MWPZ6KmMLO7UTGxyDcyeu75Oa4iuPqFykcA0e+/jtoyeNWACEyRu7D9wGIEn
-IIVB0iCJaT6iax3LichMAqjxWVvH0DL2UbJWX7JLF/IxBn6hnzRGvt5owVvJCwbv
-KFo7Xj0c2PwJzdyDNIQijM7CbZ19TA==
-=/BOS
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQsFy0ACgkQeFA3/03a
+ocXoywgAzsR0B43axXDOoR+qEh8v0y+HkEDO8BKW2snO4h4QNl2Rxsq+J9hLKBlJ
+QRRYYYRu4AVYgAeNNpl53bVWWVH88t9ZA4DuEhYhhsRf8iakJ3GPRljQevDR6Dgu
+C+CDMlf3BRMGZ5+74Tto3cj0+HOIyDJf4EULlEgWBXAxrC0y3uTN2NZ9VFjoBxyC
+HOXBwP5KlW6XTgBQ7JxirbSXmg3eDPNkFG6O7ixwNC2PYOly4CiaUXcO/8bIXPZj
+L4Gg1bquWuURRBLX+msQJ96/Uwj56e8FQPxYv8aARS64e6GO+YzbDj/D55j2rwta
+m5cCHubP91q4letgXkcZgbiu3POPRg==
+=VFSj
 -----END PGP SIGNATURE-----
 
---Xw18MM2I4xnJ1mlH--
+--lBi0XkC13I/LZcNg--
