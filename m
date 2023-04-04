@@ -2,67 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241AC6D5B84
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AE86D5B8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234039AbjDDJIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
+        id S234337AbjDDJI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234275AbjDDJH6 (ORCPT
+        with ESMTP id S234262AbjDDJIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:07:58 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34001211B;
-        Tue,  4 Apr 2023 02:07:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DD1F0204A6;
-        Tue,  4 Apr 2023 09:07:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680599258; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rp1byrR7s3fkY4PjvvNsxVQi+oUszqEO+iMKVPDKdIk=;
-        b=vN5Ed2ujeDnWAjclyPn/8Eom7F+TJM78c7KtgnToFgnIAyfD/Aqnrk2NbDUMKyifUwUr3n
-        1Z0YS0qvLrdWg5nhZro2NuiBBACFME+zaWDHYJj5dEu53In+Z1Nw3swHJXTXv6oHw5ffoW
-        rhiePGvP9y7/aefjEMuTGxZqtjWmjIc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A5BCA1391A;
-        Tue,  4 Apr 2023 09:07:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 62d7J9roK2TfLAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 04 Apr 2023 09:07:38 +0000
-Date:   Tue, 4 Apr 2023 11:07:37 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        gscrivan@redhat.com
-Subject: Re: [PATCH 3/3] cgroup/cpuset: Allow only one active attach
- operation per cpuset
-Message-ID: <20230404090737.3g3uxga52bojgdu5@blackpad>
-References: <20230331145045.2251683-1-longman@redhat.com>
- <20230331145045.2251683-4-longman@redhat.com>
- <20230403164736.lpjdpzxxnjlpxrqv@blackpad>
- <24b67530-62ce-4f9c-7b74-d41d2ccc710e@redhat.com>
+        Tue, 4 Apr 2023 05:08:09 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC98E1701;
+        Tue,  4 Apr 2023 02:07:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1680599276;
+  x=1712135276;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=RzqcKnViHA1vh9MkOLSVfiaP03ZfbZpj3p4Of8+c/rY=;
+  b=gdQo6A5dXxuSEZ42q1QgR4S3lyfbdz5yhM2V8oWmBFhtyQUVzpO/4VSI
+   tceU50SANgGnV0AUigaEi52MJ1eq+etHdboqiBLLGxkA0kyaPeEM1Wc/V
+   Qo12118LKFcFMUOJDUBB2MnUlqBDCIhWtXJCCBL4kZLm2XTy/xJKWnhL3
+   /c13lqnRBDqGO71+2KPr/IC89hv1gjFBT/MGbLM+ot1glHiUQ7E72JXk/
+   WE76fpgtR5A0oSURej0YgSYkUz3+3wN74V7n/jg4l49z4CodXM++hHHUY
+   H+RntyCQqLIck5Q+YasNWIxx8bDoh4OFT6gNdBT5JgLofRJRyLwhWmmBv
+   A==;
+From:   Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
+Subject: [PATCH 0/2] Support for Texas Instruments OPT4001 Ambient Light
+ Sensor
+Date:   Tue, 4 Apr 2023 11:07:41 +0200
+Message-ID: <20230323-add-opt4001-driver-v1-0-1451dcc1bc8a@axis.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ilogas4aec7si4wz"
-Content-Disposition: inline
-In-Reply-To: <24b67530-62ce-4f9c-7b74-d41d2ccc710e@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAN3oK2QC/x2NywrCQAwAf6XkbGAfIqy/Ih6yTbQ5uC1JKULpv
+ 7v1OAzD7OBiKg73YQeTTV3n1iFeBhgnam9B5c6QQsohp4zEjPOyXkOIyKabGJZSCxHfSo4Felj
+ JBatRG6cz/ZCvYqdYTF76/d8ez+P4Aagybct9AAAA
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>,
+        <kernel@axis.com>
+X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,46 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds support for Texas Instruments OPT4001 Ambient light sensor.
 
---ilogas4aec7si4wz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The light sensor has a i2c interface and supports continuous, oneshot and
+interruptdriven measurements and has configurable conversion time and range.
 
-Hi.
+This driver uses the sensors continuous mode so it always has a updated light
+value available. The conversion time which is
+ (integration time + time to set registers) which is used to configure
+integration time through sysfs. The chip also has a configurable light
+range which this driver sets to Auto where the chip chooses range itself
+depending on previously read values.
 
-On Mon, Apr 03, 2023 at 01:41:33PM -0400, Waiman Long <longman@redhat.com> wrote:
-> This patch is actually not related to the CLONE_INTO_GROUP problem in patch
-> 1. It is a generic problem when multiple users are moving threads into
-> cgroup.threads of the same or different cpusets simultaneously.
+Since the OPT4001 has different constants used to calculate lux values
+depeding on packaging of the chip but uses the same device id, two compatible
+string are used depending on the packaging, these are "ti,opt4001-picostar"
+and "ti,opt4001-sot-5x3".
 
-I meant this:
-	__cgroup_procs_write
-	  cgroup_kn_lock_live
-	    mutex_lock(&cgroup_mutex)
+Signed-off-by: Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
+---
+Stefan Windfeldt-Prytz (2):
+      dt-bindings: Document TI OPT4001 light sensor bindings
+      iio: light: Add support for TI OPT4001 light sensor
 
-and (more succintly)
-	cgroup_update_dfl_csses
-	  lockdep_assert_held(&cgroup_mutex)
+ .../devicetree/bindings/iio/light/ti,opt4001.yaml  |  42 ++
+ drivers/iio/light/Kconfig                          |  11 +
+ drivers/iio/light/Makefile                         |   1 +
+ drivers/iio/light/opt4001.c                        | 487 +++++++++++++++++++++
+ 4 files changed, 541 insertions(+)
+---
+base-commit: 60c5238813fdfbe167eb579d58172106916b8db0
+change-id: 20230323-add-opt4001-driver-99b9aad69319
 
-Even the threaded migrations should be synchronized here.
-Can you please explain in more detail what's the problematic case?
+Best regards,
+-- 
+Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
 
-> I don't believe this patch has a dependency on patch 1.
-
-(I meant the opposite, patch 1 would depend in this 3/3. But maybe this
-one isn't need.)
-
-Michal
-
---ilogas4aec7si4wz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZCvoyAAKCRAkDQmsBEOq
-uWSoAP41lQ11CXnVKE2G4jMF7tULituGE65Jni9yu8QGOPvQEAD/cthzkgC2745v
-rrgDBOyUhh+6zjNzCq6nigOTN7j16w8=
-=z1SR
------END PGP SIGNATURE-----
-
---ilogas4aec7si4wz--
