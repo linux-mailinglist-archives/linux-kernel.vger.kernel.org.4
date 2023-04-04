@@ -2,126 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7071B6D6C08
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EFB6D6C0D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbjDDS3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 14:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
+        id S236136AbjDDSaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 14:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236432AbjDDS3J (ORCPT
+        with ESMTP id S236580AbjDDS3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 14:29:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD418A66;
-        Tue,  4 Apr 2023 11:26:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CD5363551;
-        Tue,  4 Apr 2023 18:26:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7DBC433D2;
-        Tue,  4 Apr 2023 18:25:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680632759;
-        bh=AERzV+I0kHCiQYU5gW6WzqRfRD82762Wm/mkt70YhEw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aYaeXoSUft0lZ4hauu2QMhqSKx7/WztqSy8guwEuqUUUwDn9rISfpGHcsZCmco5TH
-         e0pI6kB196vhPfK1NtukpQdxaAklgn9Dlcji9DTFm+b4d2Qb1C5vEKRmz3rOJ2NkUa
-         xqogHb/OY7XDN1bLA6buoVAoKfbFDS87fnnfcplg=
-Date:   Tue, 4 Apr 2023 20:25:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: intel_pmc_mux: Expose IOM port status to
- debugfs
-Message-ID: <2023040455-varmint-pagan-95d4@gregkh>
-References: <20230330104821.773053-1-rajat.khandelwal@linux.intel.com>
- <ZCVsH2KkfcMA86hJ@kroah.com>
- <c82c6577-a363-241b-ffd6-f5c4c9ed838d@linux.intel.com>
+        Tue, 4 Apr 2023 14:29:50 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D585FD8;
+        Tue,  4 Apr 2023 11:27:08 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id eg48so134192646edb.13;
+        Tue, 04 Apr 2023 11:27:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680632827;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Oedm92q8dEJmYYquU7xOB7iabQvVyp0aN9fXWUk/yrA=;
+        b=XiyYVXewFcg5Zs/RE3zSz+hp+YPUew6NpGgnpbQVaBtPEPsbuwFLRt4F1SKiDLvQxw
+         zCqGADWlYpvjJYZYge+LtD1oumYB4Dha7EZj2EAJQypq2ZIse29NyEj7XqN2Du6kG7bK
+         /V0ovLU9xvpCoSbaSk9h8j3e9h3ibaf9lv20xhhLwMI20nWFUP7NXN/1RqOorlNwqJXd
+         i+CudN0h/xTXXO8EKdkZUrH48IOw6DYTDGjmnHZVS6MOzMYrRmS5pa7vK5WXrLlb56xV
+         Zv3HoYKVMSdC+95rN1p+50LrxL+22N0AQY0DcRbJncfeuUfuhPUFTFd4pdL7fifDItUU
+         AiZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680632827;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oedm92q8dEJmYYquU7xOB7iabQvVyp0aN9fXWUk/yrA=;
+        b=tp3Iij4AlYmQz9Jusaz46nXp8wFx1e9IHBDshFZ/4yPDuujGWk1x2wbx0ofYJLB6yE
+         uod6CCDC0n8MoEvcJl82pl4wrmoIIyMxGbWIZtiZJEkRiwrP3nx/BW4QNxmB6b1E9EQQ
+         9ZOfAwI3x+tlmsxey48aqwepzZDM0jH6VbN92Gc3cfWiilqzkZ07OqGW/sys/r6wYRlZ
+         fKIwWG/AZ7jFRbs2xWEsCHiPzW3C0bGJkl/53vjMDUVo/z5Ytqtxl58sdKwjiV8Om0Km
+         aoF27vGnHCwlJoVv9GbeyYr5bP/ZpaH9ZUfaNq9vhhl9ysGSiIY4wt3AL19+oIjqsubG
+         nn9Q==
+X-Gm-Message-State: AAQBX9cJbQ0Af4Djl6uPUrdrHR7WHGRK75w7SX0pSI1/VwwlOp1kQh1Y
+        zhOyhObSKvzkQRQKWNtn18sIA85v/Zo=
+X-Google-Smtp-Source: AKy350bQwaPCMWY/yelOwSCvM2MDgdKIQJ7a7YBNwjxQ/uRs4U1uhwMQZH45SdEsYx4tPg62lNdc9w==
+X-Received: by 2002:a17:907:7893:b0:933:44ef:851e with SMTP id ku19-20020a170907789300b0093344ef851emr463575ejc.55.1680632827025;
+        Tue, 04 Apr 2023 11:27:07 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:310::26ef? ([2620:10d:c092:600::2:b4a4])
+        by smtp.gmail.com with ESMTPSA id c26-20020a170906341a00b008df7d2e122dsm6212465ejb.45.2023.04.04.11.27.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 11:27:06 -0700 (PDT)
+Message-ID: <b0189d79-2423-c88d-9da7-4a4ad6720808@gmail.com>
+Date:   Tue, 4 Apr 2023 19:26:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c82c6577-a363-241b-ffd6-f5c4c9ed838d@linux.intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 10/11] io_uring/rsrc: cache struct io_rsrc_node
+To:     Gabriel Krisman Bertazi <krisman@suse.de>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1680187408.git.asml.silence@gmail.com>
+ <7f5eb1b89e8dcf93739607c79bbf7aec1784cbbe.1680187408.git.asml.silence@gmail.com>
+ <87cz4p1083.fsf@suse.de> <6eaadad2-d6a6-dfbb-88aa-8ae68af2f89d@gmail.com>
+ <87wn2wzcv3.fsf@suse.de> <4cc86e76-46b7-09ce-65f9-cd27ffe4b26e@gmail.com>
+ <87h6tvzm0g.fsf@suse.de> <1e9a6dd5-b8c4-ef63-bf76-075ba0d42093@kernel.dk>
+ <87cz4jzj0y.fsf@suse.de>
+Content-Language: en-US
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <87cz4jzj0y.fsf@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 10:48:38PM +0530, Rajat Khandelwal wrote:
-> Hi,
+On 4/4/23 17:53, Gabriel Krisman Bertazi wrote:
+> Jens Axboe <axboe@kernel.dk> writes:
 > 
-> On 3/30/2023 4:31 PM, Greg KH wrote:
-> > On Thu, Mar 30, 2023 at 04:18:21PM +0530, Rajat Khandelwal wrote:
-> > > IOM status has a crucial role during debugging to check the
-> > > current state of the type-C port.
-> > > There are ways to fetch the status, but all those require the
-> > > IOM port status offset, which could change with platform.
-> > > 
-> > > Make a debugfs directory for intel_pmc_mux and expose the status
-> > > under it per port basis.
-> > > 
-> > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-> > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > ---
-> > >   drivers/usb/typec/mux/intel_pmc_mux.c | 44 +++++++++++++++++++++++++++
-> > >   1 file changed, 44 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > index 34e4188a40ff..c99d20888f5d 100644
-> > > --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> > > @@ -15,6 +15,7 @@
-> > >   #include <linux/usb/typec_mux.h>
-> > >   #include <linux/usb/typec_dp.h>
-> > >   #include <linux/usb/typec_tbt.h>
-> > > +#include <linux/debugfs.h>
-> > >   #include <asm/intel_scu_ipc.h>
-> > > @@ -145,6 +146,8 @@ struct pmc_usb {
-> > >   	u32 iom_port_status_offset;
-> > >   };
-> > > +static struct dentry *pmc_mux_debugfs_root;
-> > Why not just look up the dentry and delete it when you want it with a
-> > call to debugfs_lookup_and_remove() instead?  That way you don't have to
-> > keep it around (hint, pass it back from your call to
-> > pmc_mux_debugfs_init() or better yet, don't even have a
-> > pmc_mux_debugfs_init() function as it only contains one line and is
-> > only called in one place.
-> > 
-> > This will save you the storage space of this variable if debugfs is not
-> > enabled in your kernel.  A small amount, yes, but it's nicer, right?
+>> On 4/4/23 9:48?AM, Gabriel Krisman Bertazi wrote:
+>>> Pavel Begunkov <asml.silence@gmail.com> writes:
+>>>
+>>>> On 4/1/23 01:04, Gabriel Krisman Bertazi wrote:
+>>>>> Pavel Begunkov <asml.silence@gmail.com> writes:
+>>>
+>>>>>> I didn't try it, but kmem_cache vs kmalloc, IIRC, doesn't bring us
+>>>>>> much, definitely doesn't spare from locking, and the overhead
+>>>>>> definitely wasn't satisfactory for requests before.
+>>>>> There is no locks in the fast path of slub, as far as I know.  it has
+>>>>> a
+>>>>> per-cpu cache that is refilled once empty, quite similar to the fastpath
+>>>>> of this cache.  I imagine the performance hit in slub comes from the
+>>>>> barrier and atomic operations?
+>>>>
+>>>> Yeah, I mean all kinds of synchronisation. And I don't think
+>>>> that's the main offender here, the test is single threaded without
+>>>> contention and the system was mostly idle.
+>>>>
+>>>>> kmem_cache works fine for most hot paths of the kernel.  I think this
+>>>>
+>>>> It doesn't for io_uring. There are caches for the net side and now
+>>>> in the block layer as well. I wouldn't say it necessarily halves
+>>>> performance but definitely takes a share of CPU.
+>>>
+>>> Right.  My point is that all these caches (block, io_uring) duplicate
+>>> what the slab cache is meant to do.  Since slab became a bottleneck, I'm
+>>> looking at how to improve the situation on their side, to see if we can
+>>> drop the caching here and in block/.
+>>
+>> That would certainly be a worthy goal, and I do agree that these caches
+>> are (largely) working around deficiencies. One important point that you
+>> may miss is that most of this caching gets its performance from both
+>> avoiding atomics in slub, but also because we can guarantee that both
+>> alloc and free happen from process context. The block IRQ bits are a bit
+>> different, but apart from that, it's true elsewhere. Caching that needs
+>> to even disable IRQs locally generally doesn't beat out slub by much,
+>> the big wins are the cases where we know free+alloc is done in process
+>> context.
 > 
-> I see. Yes, though a small amount, you're anyways right.
+> Yes, I noticed that.  I was thinking of exposing a flag at kmem_cache
+> creation-time to tell slab the user promises not to use it in IRQ
+> context, so it doesn't need to worry about nested invocation in the
+> allocation/free path.  Then, for those caches, have a
+> kmem_cache_alloc_locked variant, where the synchronization is maintained
+> by the caller (i.e. by ->uring_lock here), so it can manipulate the
+> cache without atomics.
 > 
-> 1. Though a single-line function, I explicitly defined it to make it more readable.
-> ATM, maintaining a small different framework within the file for another function
-> (debugfs) somehow presents a more 'organized' code to me, if that makes sense? :)
+> I was looking at your implementation of the block cache for inspiration
+> and saw how you kept a second list for IRQ.  I'm thinking how to fit a
 
-You are wrapping an abstraction in an abstraction, i.e. piling on layers
-where they are not needed at all.  That's not normal for kernel code.
+It works fine, but one problem I had while implementing it is
+local_irq_save() in bio_put_percpu_cache() not being so cheap even when
+interrupts are already disabled. Apparently, raw_local_save_flags() is
+not as free as I wished it to be, and we can't easily pass the current
+context. Would be nice to do something about it at some point.
 
-If I am reading the code, and see that function call, I then have to go
-and find it and then see that it is making a debugfs call.  When
-instead, if you just had the debugfs call, when reading the code, you
-would instantly know what is happening and can keep on going in your
-reading.
 
-> 2. About the suggestion of not keeping the debugfs_root static throughout the
-> execution, I can change it as per your suggestion, but I'd like to keep it this
-> way, if that's ok? This way, it would fit nice in the future if more variables
-> are to be added.
+> similar change inside slub.  But for now, I want to get the simpler
+> case, which is all io_uring need.
+> 
+> I'll try to get a prototype before lsfmm and see if I get the MM folks
+> input there.
+> 
 
-We write code for what we have today.  If it needs to change in the
-future, great, we will change it then.  So no need to worry about that.
-
-Anyway, your call, but I think you can make the code overall smaller
-and simpler with my suggestions, but hey, try it out and prove me wrong!
-
-thanks,
-
-greg k-h
+-- 
+Pavel Begunkov
