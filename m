@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3013E6D598F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B496D5995
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233995AbjDDH0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 03:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
+        id S233958AbjDDH0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233847AbjDDHZz (ORCPT
+        with ESMTP id S233900AbjDDHZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 03:25:55 -0400
+        Tue, 4 Apr 2023 03:25:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDE210FE;
-        Tue,  4 Apr 2023 00:25:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639E32D72;
+        Tue,  4 Apr 2023 00:25:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7418F62F72;
-        Tue,  4 Apr 2023 07:25:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C784AC4339B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 156D362F84;
+        Tue,  4 Apr 2023 07:25:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82F1C433A4;
         Tue,  4 Apr 2023 07:25:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1680593145;
-        bh=lK8/zWshDo/p7knHs3nqkqw3bfMNK0uEzzVwr0NkiBM=;
+        bh=6VPw+Tyk0AVcTjJxQW9qyDz8FOs/GmK8LjMDuFB19zI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rPB/wr+yDTad2yBTmSiQflkAFgNdshF0/8s1D+7WMhAEXlyxGLzXKjI+fX2KJTedO
-         T2X1LICzr3JP/70KZ7afRuH1oKy7rVlSyqpU6TOqA+Ln3WK3n3Stm7w6RCXRFTLPEx
-         u8Vk1oXaC66usCFJZutXngdhXN2v/UKSYFSZXlouBAJaxcAdigiJ0TM16pga72Chnb
-         mPjJTelslaHk7q9asCKMYhJ1TWHdKjeXstCH+Jf5OhLWIHF1GfckzaUWcE81c8BtVq
-         MB1HjQ5LTfaxq2SSKMYvw+ApAMncNmUUL+JSvL7y/4bscf1iKX0ZY3c1YEcgw15wYX
-         HedZovMnblWsQ==
+        b=R6XXxMzVm+sJZ0Fq0Ah8IWQGdgiFxc8VdVCxlI4ijQBq4LZ4HFtQGhuSmTwb4I0Re
+         5uRqFZaH6JXYNQk2G7u7NE5Y6Rg7NUQCxDDcAtefe5kUwg+KycpRfauH8edVQu86ys
+         tV8uHRWH7Tj08S6mYnwdnHnleKRI7ru/lqq1aPjqsu6SbVXOyEHJszXFhKbUt2mond
+         +ZzYDZNqLeNLWf/etBYewPW76DvC7V5pjnU/akXdVPbRkUfJc4KDD0cDWuQW2O++01
+         RxEwIUKroVGjQtmKmb/DV/485oCn1ZNPnf3PrpIQzPBzw5x8htPJrKZA1BfxY3ETSg
+         H54hlPcNbf3MQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pjb3U-0004xW-Tf; Tue, 04 Apr 2023 09:26:12 +0200
+        id 1pjb3V-0004xb-0I; Tue, 04 Apr 2023 09:26:13 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 04/11] USB: dwc3: gadget: drop dead hibernation code
-Date:   Tue,  4 Apr 2023 09:25:17 +0200
-Message-Id: <20230404072524.19014-5-johan+linaro@kernel.org>
+Subject: [PATCH 05/11] USB: dwc3: drop dead hibernation code
+Date:   Tue,  4 Apr 2023 09:25:18 +0200
+Message-Id: <20230404072524.19014-6-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230404072524.19014-1-johan+linaro@kernel.org>
 References: <20230404072524.19014-1-johan+linaro@kernel.org>
@@ -60,127 +60,242 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The hibernation code is broken and has never been enabled in mainline
 and should thus be dropped.
 
-Remove the hibernation bits from the gadget code, which effectively
-reverts commits e1dadd3b0f27 ("usb: dwc3: workaround: bogus hibernation
-events") and 7b2a0368bbc9 ("usb: dwc3: gadget: set KEEP_CONNECT in case
-of hibernation") except for the spurious interrupt warning.
+Specifically, the scratch buffer DMA mapping would have been leaked on
+every suspend cycle since commit 51f5d49ad6f0 ("usb: dwc3: core:
+simplify suspend/resume operations") if this feature was ever enabled.
+
+The related error handling was also broken and could have resulted in
+attempts to unmap never mapped buffers, etc.
+
+This effectively revert commit 0ffcaf3798bf ("usb: dwc3: core: allocate
+scratch buffers").
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/usb/dwc3/gadget.c | 46 +++++----------------------------------
- 1 file changed, 6 insertions(+), 40 deletions(-)
+ drivers/usb/dwc3/core.c | 103 +---------------------------------------
+ drivers/usb/dwc3/core.h |   8 ----
+ 2 files changed, 1 insertion(+), 110 deletions(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index cf5b4f49c3ed..ef51399fd89e 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2478,7 +2478,7 @@ static void __dwc3_gadget_set_speed(struct dwc3 *dwc)
- 	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 5b362ed43e7e..d837ab511686 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -534,90 +534,6 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
+ 	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), 0);
  }
  
--static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
-+static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on)
- {
- 	u32			reg;
- 	u32			timeout = 2000;
-@@ -2497,17 +2497,11 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
- 			reg &= ~DWC3_DCTL_KEEP_CONNECT;
- 		reg |= DWC3_DCTL_RUN_STOP;
- 
--		if (dwc->has_hibernation)
--			reg |= DWC3_DCTL_KEEP_CONNECT;
--
- 		__dwc3_gadget_set_speed(dwc);
- 		dwc->pullups_connected = true;
- 	} else {
- 		reg &= ~DWC3_DCTL_RUN_STOP;
- 
--		if (dwc->has_hibernation && !suspend)
--			reg &= ~DWC3_DCTL_KEEP_CONNECT;
--
- 		dwc->pullups_connected = false;
- 	}
- 
-@@ -2574,7 +2568,7 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
- 	 * remaining event generated by the controller while polling for
- 	 * DSTS.DEVCTLHLT.
- 	 */
--	return dwc3_gadget_run_stop(dwc, false, false);
-+	return dwc3_gadget_run_stop(dwc, false);
- }
- 
- static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
-@@ -2628,7 +2622,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 
- 		dwc3_event_buffers_setup(dwc);
- 		__dwc3_gadget_start(dwc);
--		ret = dwc3_gadget_run_stop(dwc, true, false);
-+		ret = dwc3_gadget_run_stop(dwc, true);
- 	}
- 
- 	pm_runtime_put(dwc->dev);
-@@ -4195,30 +4189,6 @@ static void dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
- 	dwc->link_state = next;
- }
- 
--static void dwc3_gadget_hibernation_interrupt(struct dwc3 *dwc,
--		unsigned int evtinfo)
+-static int dwc3_alloc_scratch_buffers(struct dwc3 *dwc)
 -{
--	unsigned int is_ss = evtinfo & BIT(4);
+-	if (!dwc->has_hibernation)
+-		return 0;
 -
--	/*
--	 * WORKAROUND: DWC3 revision 2.20a with hibernation support
--	 * have a known issue which can cause USB CV TD.9.23 to fail
--	 * randomly.
--	 *
--	 * Because of this issue, core could generate bogus hibernation
--	 * events which SW needs to ignore.
--	 *
--	 * Refers to:
--	 *
--	 * STAR#9000546576: Device Mode Hibernation: Issue in USB 2.0
--	 * Device Fallback from SuperSpeed
--	 */
--	if (is_ss ^ (dwc->speed == USB_SPEED_SUPER))
--		return;
+-	if (!dwc->nr_scratch)
+-		return 0;
 -
--	/* enter hibernation here */
+-	dwc->scratchbuf = kmalloc_array(dwc->nr_scratch,
+-			DWC3_SCRATCHBUF_SIZE, GFP_KERNEL);
+-	if (!dwc->scratchbuf)
+-		return -ENOMEM;
+-
+-	return 0;
 -}
 -
- static void dwc3_gadget_interrupt(struct dwc3 *dwc,
- 		const struct dwc3_event_devt *event)
- {
-@@ -4236,11 +4206,7 @@ static void dwc3_gadget_interrupt(struct dwc3 *dwc,
- 		dwc3_gadget_wakeup_interrupt(dwc);
- 		break;
- 	case DWC3_DEVICE_EVENT_HIBER_REQ:
--		if (dev_WARN_ONCE(dwc->dev, !dwc->has_hibernation,
--					"unexpected hibernation event\n"))
--			break;
+-static int dwc3_setup_scratch_buffers(struct dwc3 *dwc)
+-{
+-	dma_addr_t scratch_addr;
+-	u32 param;
+-	int ret;
 -
--		dwc3_gadget_hibernation_interrupt(dwc, event->event_info);
-+		dev_WARN_ONCE(dwc->dev, true, "unexpected hibernation event\n");
+-	if (!dwc->has_hibernation)
+-		return 0;
+-
+-	if (!dwc->nr_scratch)
+-		return 0;
+-
+-	 /* should never fall here */
+-	if (!WARN_ON(dwc->scratchbuf))
+-		return 0;
+-
+-	scratch_addr = dma_map_single(dwc->sysdev, dwc->scratchbuf,
+-			dwc->nr_scratch * DWC3_SCRATCHBUF_SIZE,
+-			DMA_BIDIRECTIONAL);
+-	if (dma_mapping_error(dwc->sysdev, scratch_addr)) {
+-		dev_err(dwc->sysdev, "failed to map scratch buffer\n");
+-		ret = -EFAULT;
+-		goto err0;
+-	}
+-
+-	dwc->scratch_addr = scratch_addr;
+-
+-	param = lower_32_bits(scratch_addr);
+-
+-	ret = dwc3_send_gadget_generic_command(dwc,
+-			DWC3_DGCMD_SET_SCRATCHPAD_ADDR_LO, param);
+-	if (ret < 0)
+-		goto err1;
+-
+-	param = upper_32_bits(scratch_addr);
+-
+-	ret = dwc3_send_gadget_generic_command(dwc,
+-			DWC3_DGCMD_SET_SCRATCHPAD_ADDR_HI, param);
+-	if (ret < 0)
+-		goto err1;
+-
+-	return 0;
+-
+-err1:
+-	dma_unmap_single(dwc->sysdev, dwc->scratch_addr, dwc->nr_scratch *
+-			DWC3_SCRATCHBUF_SIZE, DMA_BIDIRECTIONAL);
+-
+-err0:
+-	return ret;
+-}
+-
+-static void dwc3_free_scratch_buffers(struct dwc3 *dwc)
+-{
+-	if (!dwc->has_hibernation)
+-		return;
+-
+-	if (!dwc->nr_scratch)
+-		return;
+-
+-	 /* should never fall here */
+-	if (!WARN_ON(dwc->scratchbuf))
+-		return;
+-
+-	dma_unmap_single(dwc->sysdev, dwc->scratch_addr, dwc->nr_scratch *
+-			DWC3_SCRATCHBUF_SIZE, DMA_BIDIRECTIONAL);
+-	kfree(dwc->scratchbuf);
+-}
+-
+ static void dwc3_core_num_eps(struct dwc3 *dwc)
+ {
+ 	struct dwc3_hwparams	*parms = &dwc->hwparams;
+@@ -877,7 +793,6 @@ static bool dwc3_core_is_valid(struct dwc3 *dwc)
+ 
+ static void dwc3_core_setup_global_control(struct dwc3 *dwc)
+ {
+-	u32 hwparams4 = dwc->hwparams.hwparams4;
+ 	u32 reg;
+ 
+ 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+@@ -905,9 +820,6 @@ static void dwc3_core_setup_global_control(struct dwc3 *dwc)
+ 			reg &= ~DWC3_GCTL_DSBLCLKGTNG;
  		break;
- 	case DWC3_DEVICE_EVENT_LINK_STATUS_CHANGE:
- 		dwc3_gadget_linksts_change_interrupt(dwc, event->event_info);
-@@ -4584,7 +4550,7 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
- 	if (!dwc->gadget_driver)
- 		return 0;
+ 	case DWC3_GHWPARAMS1_EN_PWROPT_HIB:
+-		/* enable hibernation here */
+-		dwc->nr_scratch = DWC3_GHWPARAMS4_HIBER_SCRATCHBUFS(hwparams4);
+-
+ 		/*
+ 		 * REVISIT Enabling this bit so that host-mode hibernation
+ 		 * will work. Device-mode hibernation is not yet implemented.
+@@ -1151,10 +1063,6 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 	dwc3_core_setup_global_control(dwc);
+ 	dwc3_core_num_eps(dwc);
  
--	dwc3_gadget_run_stop(dwc, false, false);
-+	dwc3_gadget_run_stop(dwc, false);
+-	ret = dwc3_setup_scratch_buffers(dwc);
+-	if (ret)
+-		goto err1;
+-
+ 	/* Set power down scale of suspend_clk */
+ 	dwc3_set_power_down_clk_scale(dwc);
  
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	dwc3_disconnect_gadget(dwc);
-@@ -4605,7 +4571,7 @@ int dwc3_gadget_resume(struct dwc3 *dwc)
- 	if (ret < 0)
- 		goto err0;
+@@ -1908,14 +1816,10 @@ static int dwc3_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err3;
  
--	ret = dwc3_gadget_run_stop(dwc, true, false);
-+	ret = dwc3_gadget_run_stop(dwc, true);
- 	if (ret < 0)
- 		goto err1;
+-	ret = dwc3_alloc_scratch_buffers(dwc);
+-	if (ret)
+-		goto err3;
+-
+ 	ret = dwc3_core_init(dwc);
+ 	if (ret) {
+ 		dev_err_probe(dev, ret, "failed to initialize core\n");
+-		goto err4;
++		goto err3;
+ 	}
  
+ 	dwc3_check_params(dwc);
+@@ -1944,10 +1848,6 @@ static int dwc3_probe(struct platform_device *pdev)
+ 	phy_exit(dwc->usb3_generic_phy);
+ 
+ 	dwc3_ulpi_exit(dwc);
+-
+-err4:
+-	dwc3_free_scratch_buffers(dwc);
+-
+ err3:
+ 	dwc3_free_event_buffers(dwc);
+ 
+@@ -1987,7 +1887,6 @@ static int dwc3_remove(struct platform_device *pdev)
+ 	pm_runtime_set_suspended(&pdev->dev);
+ 
+ 	dwc3_free_event_buffers(dwc);
+-	dwc3_free_scratch_buffers(dwc);
+ 
+ 	if (dwc->usb_psy)
+ 		power_supply_put(dwc->usb_psy);
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 4743e918dcaf..fbbc565d3b34 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -969,12 +969,10 @@ struct dwc3_scratchpad_array {
+  * @drd_work: workqueue used for role swapping
+  * @ep0_trb: trb which is used for the ctrl_req
+  * @bounce: address of bounce buffer
+- * @scratchbuf: address of scratch buffer
+  * @setup_buf: used while precessing STD USB requests
+  * @ep0_trb_addr: dma address of @ep0_trb
+  * @bounce_addr: dma address of @bounce
+  * @ep0_usb_req: dummy req used while handling STD USB requests
+- * @scratch_addr: dma address of scratchbuf
+  * @ep0_in_setup: one control transfer is completed and enter setup phase
+  * @lock: for synchronizing
+  * @mutex: for mode switching
+@@ -999,7 +997,6 @@ struct dwc3_scratchpad_array {
+  * @current_otg_role: current role of operation while using the OTG block
+  * @desired_otg_role: desired role of operation while using the OTG block
+  * @otg_restart_host: flag that OTG controller needs to restart host
+- * @nr_scratch: number of scratch buffers
+  * @u1u2: only used on revisions <1.83a for workaround
+  * @maximum_speed: maximum speed requested (mainly for testing purposes)
+  * @max_ssp_rate: SuperSpeed Plus maximum signaling rate and lane count
+@@ -1056,7 +1053,6 @@ struct dwc3_scratchpad_array {
+  * @delayed_status: true when gadget driver asks for delayed status
+  * @ep0_bounced: true when we used bounce buffer
+  * @ep0_expect_in: true when we expect a DATA IN transfer
+- * @has_hibernation: true when dwc3 was configured with Hibernation
+  * @sysdev_is_parent: true when dwc3 device has a parent driver
+  * @has_lpm_erratum: true when core was configured with LPM Erratum. Note that
+  *			there's now way for software to detect this in runtime.
+@@ -1123,11 +1119,9 @@ struct dwc3 {
+ 	struct work_struct	drd_work;
+ 	struct dwc3_trb		*ep0_trb;
+ 	void			*bounce;
+-	void			*scratchbuf;
+ 	u8			*setup_buf;
+ 	dma_addr_t		ep0_trb_addr;
+ 	dma_addr_t		bounce_addr;
+-	dma_addr_t		scratch_addr;
+ 	struct dwc3_request	ep0_usb_req;
+ 	struct completion	ep0_in_setup;
+ 
+@@ -1187,7 +1181,6 @@ struct dwc3 {
+ 	u32			current_otg_role;
+ 	u32			desired_otg_role;
+ 	bool			otg_restart_host;
+-	u32			nr_scratch;
+ 	u32			u1u2;
+ 	u32			maximum_speed;
+ 	u32			gadget_max_speed;
+@@ -1284,7 +1277,6 @@ struct dwc3 {
+ 	unsigned		delayed_status:1;
+ 	unsigned		ep0_bounced:1;
+ 	unsigned		ep0_expect_in:1;
+-	unsigned		has_hibernation:1;
+ 	unsigned		sysdev_is_parent:1;
+ 	unsigned		has_lpm_erratum:1;
+ 	unsigned		is_utmi_l1_suspend:1;
 -- 
 2.39.2
 
