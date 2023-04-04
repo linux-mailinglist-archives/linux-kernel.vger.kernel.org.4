@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B756D60DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4267F6D60DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbjDDMh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
+        id S234241AbjDDMhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234645AbjDDMhV (ORCPT
+        with ESMTP id S234889AbjDDMhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:37:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C655135A1
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:36:48 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pjft5-00085U-4q; Tue, 04 Apr 2023 14:35:47 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pjft3-008v3a-DB; Tue, 04 Apr 2023 14:35:45 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pjft2-00AVgL-In; Tue, 04 Apr 2023 14:35:44 +0200
-Date:   Tue, 4 Apr 2023 14:35:44 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     kernel test robot <lkp@intel.com>, jic23@kernel.org,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        andriy.shevchenko@linux.intel.com, trix@redhat.com,
-        lars@metafoo.de, nathan@kernel.org, ndesaulniers@google.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hslester96@gmail.com
-Subject: Re: [PATCH] iio: light: tsl2772: fix reading proximity-diodes from
- device tree
-Message-ID: <20230404123544.6m5juesxwf4tklkm@pengutronix.de>
-References: <20230404011455.339454-1-bmasney@redhat.com>
- <202304041451.gj8oasQp-lkp@intel.com>
- <ZCwGP6rBLgbDGvkv@x1>
+        Tue, 4 Apr 2023 08:37:07 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D0710A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:36:35 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id y4so1285417qti.5
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 05:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1680611769;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NSpzJzf1FOM6UnLnSTOqyKayxzDBWTCflEqOjyBSbCo=;
+        b=aROFRSMiUndfVZ0M+rPTRZvKbg0G3SrN6evNiK/VNwVed0c6Iio2IGw7q5tfNenTi/
+         ZYscQ8HaLXqbzKe6CtmHbNUUREysb2gwejhFwHpm/uSgW3TIKjFciYcG9KJwiDzBcBLD
+         ECIA0MoDBox8gBNQHDEB3ZwvKdpvw4ys0qypU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680611769;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NSpzJzf1FOM6UnLnSTOqyKayxzDBWTCflEqOjyBSbCo=;
+        b=owM451i3vAS6lm3391+brG5FdAsBoLIzb4gJ1ZlwmAOnSxLU3o8fPpwqWYF/1D/xDl
+         QXOHtvdNgBNrgNUhhS/BGy2H6yEmA9JZ1PXprLWk8063e85h8HsiDWXc+njd9AHvMq6U
+         WvJjLld60wFJN3iWBLmebUjkBGbV6SssN+QzSdqwczWiLQifvyYFeYq8LMXYJGm2lgcu
+         mjJuHHsOuKrv0UDupQDNgo4qeazSs5vUgEjLrMumWQOf5xpOOYz/9m/8lEBHpbTV9OkD
+         RRCaqRQ+amJG484KI6i7d0DoFAKfS7rm5T1HsQkVB7I8kRAnVXHTzf89pc/pqKa8GlLE
+         ObzA==
+X-Gm-Message-State: AAQBX9f41SGHS/9WmemQPh5bBWzvbREiEfG6Seh/K0XSaKQab4k+e7th
+        DEhAoYTThJTLKpgUyxMRbLL6hw==
+X-Google-Smtp-Source: AKy350bmIBXc+urbVoIz0HcgJ/oIEa1NP49n3CJPHcmGi2xKjny3EOfz6eI161rjIxZ0tXl+zYAJGA==
+X-Received: by 2002:a05:622a:148a:b0:3d8:6b0d:f9a4 with SMTP id t10-20020a05622a148a00b003d86b0df9a4mr3121325qtx.44.1680611769053;
+        Tue, 04 Apr 2023 05:36:09 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-7.dsl.bell.ca. [209.226.106.7])
+        by smtp.gmail.com with ESMTPSA id q19-20020ac87353000000b003e387a2fbdfsm3226631qtp.0.2023.04.04.05.36.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 05:36:08 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 08:36:07 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     workflows@vger.kernel.org, aros@gmx.com,
+        linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
+        tools@linux.kernel.org
+Subject: Re: Introducing bugbot
+Message-ID: <20230404-bacteria-refinery-a97393@meerkat>
+References: <gmnswy45efztvcyc3xqymm52h7cdfwjz64go2wy3zyeqcqwb76@36fva4hyip4q>
+ <b38de7ff-3de1-cd4a-a532-66642aea587c@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="czfim3jbpqegyq4m"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZCwGP6rBLgbDGvkv@x1>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+In-Reply-To: <b38de7ff-3de1-cd4a-a532-66642aea587c@leemhuis.info>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,47 +70,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 04, 2023 at 07:58:40AM +0200, Thorsten Leemhuis wrote:
+> Would be great if bugbot could CC the regressions list for all bugs that
+> have the regressions flag set to "yes"
 
---czfim3jbpqegyq4m
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'll see if I can add this logic and make it configurable.
 
-Hello Brian,
+> How does one make bugbot forward a bug to everyone in the signed-off-by
+> chain of a commit that caused a regression, which might or might not
+> have a bugzilla account?  When the reporter performed a bisection these
+> are the primary contacts that need to be reached out to, but the
+> maintainers and lists for the subsystem obviously should be CCed.
 
-On Tue, Apr 04, 2023 at 07:13:03AM -0400, Brian Masney wrote:
-> This doesn't contain the code that's in iio/togreg [1], and that's why
-> the build failed. I originally developed / built this against
-> next-20230330. I just checked linus/master, next-20230404, iio/testing,
-> and all have the expected code that defines prox_diode_mask.
->=20
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/tree/dr=
-ivers/iio/light/tsl2772.c?h=3Dtogreg#n593
+I can add a cf_bisected_commit field that can take a commit-id. When gathering
+recipients, we can check if we know that commit in one of the tracked
+repositories, and get the author field out of it. Would that be sufficient, or
+do we need to run get_maintainer on it for a full picture?
 
-You might want to make use of the --base parameter to git format-patch
-for you next submission. With that the auto builders have a chance to
-test on the right tree.
+Note, that you can also add addresses to Cc: on the thread -- they will be
+collected behind the scenes as each message is processed and any bugbot
+notifications originating from the bugzilla side will also include them.
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---czfim3jbpqegyq4m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQsGZ8ACgkQj4D7WH0S
-/k61mwf/ThD/ELYPWS+2DGG+2K5E/kOiiSJCCu985Ejv52/bRiUU9GH9VVFOoPU5
-BmHaG2iqF8nbShTHifTEdA0bTCa6A+ipCx12P4ztQEI4AIgY9zoiqZ2sWbUiAM4r
-hEdEPRy2fF6b5FUarVBNN3ySxgmika/6O3+VMG+T0SGwg8tqgCRpB0jGsOLvCjKa
-V4xCW7UvkgSWz2MyIdlfI5aoea18sSMZpREWsNFjevyB9b+jZ9WC46PQS37TidUA
-4Y59J5acABYXE1Ou/8BJGWT3Qbc1cgYiKnZbjOXVRNZNFM3gSb3qlH9hKXYAgSqa
-ff4wQKOyGv1nIGJgI8WqfxqdCuflJg==
-=E1z2
------END PGP SIGNATURE-----
-
---czfim3jbpqegyq4m--
+-K
