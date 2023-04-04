@@ -2,193 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB67B6D6490
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB746D6497
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235805AbjDDOB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
+        id S235419AbjDDOCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235537AbjDDOBZ (ORCPT
+        with ESMTP id S234987AbjDDOCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:01:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3C2E46AF
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:00:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 612F1D75;
-        Tue,  4 Apr 2023 07:00:41 -0700 (PDT)
-Received: from [10.57.53.173] (unknown [10.57.53.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C6103F762;
-        Tue,  4 Apr 2023 06:59:54 -0700 (PDT)
-Message-ID: <2e3c1a26-b4af-9e53-66d1-9553c86ce2bd@arm.com>
-Date:   Tue, 4 Apr 2023 14:59:53 +0100
+        Tue, 4 Apr 2023 10:02:36 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC5F4EC4
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:02:09 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-536af432ee5so616033027b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 07:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680616917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GhHi1rvDP10jyqp6elYeOU798evHTjpyzcCbCEvb8Kc=;
+        b=LGGP+RsXJ62qou0+C1xjBzSyj+8IzaLTZ6O/t/gVnmwtvFnC8CePoPk8ZSiKmtZ09t
+         6ZgPlk78Ov+L/lKuSWrK7/vcNqb+EqUk9ChBn3+Fm4XANMzbqL++UxnSlFEODa425ByS
+         5utDLusg1dlDtgj9zNNKadRhGRDgu21cjvn5qcyZugFQNGAfWbVDrbwgoCyjWVqN/avT
+         Qsr6WQ0m8uRFtpoUgAA805PfrP+Ewzw/0pQJ0AI7ecxOK51thHJMATbvv2X69/r6WEBp
+         YI8pd/8vgMCFEUSGNGt5VodRwGnzA7rFEaPI+dHmEPvkYKwGaEOf0r9AS9ZzDDL0oXv2
+         8Deg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680616917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GhHi1rvDP10jyqp6elYeOU798evHTjpyzcCbCEvb8Kc=;
+        b=CFXVW4auWq5OChzcP+GKsP16MC/K1rZk6y/QjXYZT+D9klpg0Ec/zBt/UYlfQ0/6IV
+         7ImzHoAW3KIuAYtcN6TFOKXoY7XZlOdd1eEjCmrwYGjWeXnvpw6Ch1e+MRGt45pKJB/9
+         01T7sVUKwDJ4Q7rrHRzUTmd+W21bxH/r0DkyJBarYn76PDgDjICtZOCQrAGBNPaWsX0L
+         nuKrFnd2wXD38mtpPKgjalHOiwsz7aNyst1JRBeapCtpUX4kEo4/yxkd2udly4M5x4v1
+         buTD7BwrRIMiP62CdMFpNr6L45wfu9wtQBTH0HgaUT5F5gro8vfUKDwcpwEe40I+gWKH
+         yObA==
+X-Gm-Message-State: AAQBX9flfD/1GbtZrxekudkB6OEc/KEJvImyYkbcnQcdkzUSN8CZKW64
+        dxn/K3MBdxUnbdnjAgP4wCviJAuaWij521W6MWjVLl9B5/ygm73v
+X-Google-Smtp-Source: AKy350bxbwzpZz18ICNta7OUeGE74gnB4fQ2IiKbCVd5qVGch1T/mzQirta1Ay6x7i930ZuDKOP4WhZqpAGZjoTzt6A=
+X-Received: by 2002:a81:ce07:0:b0:53d:2772:65d with SMTP id
+ t7-20020a81ce07000000b0053d2772065dmr1561312ywi.9.1680616916859; Tue, 04 Apr
+ 2023 07:01:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v3 13/13] coresight: Fix CTI module refcount leak by
- making it a helper device
-To:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
-        quic_jinlmao@quicinc.com, mike.leach@linaro.org
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20230329115329.2747724-1-james.clark@arm.com>
- <20230329115329.2747724-14-james.clark@arm.com>
- <77d890a9-9927-da8e-1460-54513784683d@arm.com>
- <61bb4e6d-5451-2f01-19b2-76c396854c23@arm.com>
- <2eecee82-2143-0da6-6132-5514336ebc6b@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <2eecee82-2143-0da6-6132-5514336ebc6b@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <cover.1680543810.git.william.gray@linaro.org>
+In-Reply-To: <cover.1680543810.git.william.gray@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 4 Apr 2023 16:01:45 +0200
+Message-ID: <CACRpkdbp0o2UDqcz17sha9WCchhwhGuFHBdWfyLSerioxiJ1qQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Fix possible deadlocks for i8255 GPIO drivers
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2023 14:04, James Clark wrote:
-> 
-> 
-> On 04/04/2023 13:55, James Clark wrote:
->>
->>
->> On 04/04/2023 10:21, Suzuki K Poulose wrote:
->>> On 29/03/2023 12:53, James Clark wrote:
->>>> The CTI module has some hard coded refcounting code that has a leak.
->>>> For example running perf and then trying to unload it fails:
->>>>
->>>>     perf record -e cs_etm// -a -- ls
->>>>     rmmod coresight_cti
->>>>
->>>>     rmmod: ERROR: Module coresight_cti is in use
->>>>
->>>> The coresight core already handles references of devices in use, so by
->>>> making CTI a normal helper device, we get working refcounting for free.
->>>>
->>>> Signed-off-by: James Clark <james.clark@arm.com>
->>>> ---
->>>>    drivers/hwtracing/coresight/coresight-core.c  | 99 ++++++-------------
->>>>    .../hwtracing/coresight/coresight-cti-core.c  | 52 +++++-----
->>>>    .../hwtracing/coresight/coresight-cti-sysfs.c |  4 +-
->>>>    drivers/hwtracing/coresight/coresight-cti.h   |  4 +-
->>>>    drivers/hwtracing/coresight/coresight-priv.h  |  4 +-
->>>>    drivers/hwtracing/coresight/coresight-sysfs.c |  4 +
->>>>    include/linux/coresight.h                     | 30 +-----
->>>>    7 files changed, 70 insertions(+), 127 deletions(-)
->>>>
->>>> diff --git a/drivers/hwtracing/coresight/coresight-core.c
->>>> b/drivers/hwtracing/coresight/coresight-core.c
->>>> index 65f5bd8516d8..458d91b4e23f 100644
->>>> --- a/drivers/hwtracing/coresight/coresight-core.c
->>>> +++ b/drivers/hwtracing/coresight/coresight-core.c
->>>> @@ -254,60 +254,39 @@ void coresight_disclaim_device(struct
->>>> coresight_device *csdev)
->>>>    }
->>>>    EXPORT_SYMBOL_GPL(coresight_disclaim_device);
->>>>    -/* enable or disable an associated CTI device of the supplied CS
->>>> device */
->>>> -static int
->>>> -coresight_control_assoc_ectdev(struct coresight_device *csdev, bool
->>>> enable)
->>>> -{
->>>> -    int ect_ret = 0;
->>>> -    struct coresight_device *ect_csdev = csdev->ect_dev;
->>>> -    struct module *mod;
->>>> -
->>>> -    if (!ect_csdev)
->>>> -        return 0;
->>>> -    if ((!ect_ops(ect_csdev)->enable) || (!ect_ops(ect_csdev)->disable))
->>>> -        return 0;
->>>> -
->>>> -    mod = ect_csdev->dev.parent->driver->owner;
->>>> -    if (enable) {
->>>> -        if (try_module_get(mod)) {
->>>> -            ect_ret = ect_ops(ect_csdev)->enable(ect_csdev);
->>>> -            if (ect_ret) {
->>>> -                module_put(mod);
->>>> -            } else {
->>>> -                get_device(ect_csdev->dev.parent);
->>>> -                csdev->ect_enabled = true;
->>>> -            }
->>>> -        } else
->>>> -            ect_ret = -ENODEV;
->>>> -    } else {
->>>> -        if (csdev->ect_enabled) {
->>>> -            ect_ret = ect_ops(ect_csdev)->disable(ect_csdev);
->>>> -            put_device(ect_csdev->dev.parent);
->>>> -            module_put(mod);
->>>> -            csdev->ect_enabled = false;
->>>> -        }
->>>> -    }
->>>> -
->>>> -    /* output warning if ECT enable is preventing trace operation */
->>>> -    if (ect_ret)
->>>> -        dev_info(&csdev->dev, "Associated ECT device (%s) %s failed\n",
->>>> -             dev_name(&ect_csdev->dev),
->>>> -             enable ? "enable" : "disable");
->>>> -    return ect_ret;
->>>> -}
->>>> -
->>>>    /*
->>>> - * Set the associated ect / cti device while holding the coresight_mutex
->>>> + * Add a helper as an output device while holding the coresight_mutex
->>>>     * to avoid a race with coresight_enable that may try to use this
->>>> value.
->>>>     */
->>>> -void coresight_set_assoc_ectdev_mutex(struct coresight_device *csdev,
->>>> -                      struct coresight_device *ect_csdev)
->>>> +void coresight_add_helper_mutex(struct coresight_device *csdev,
->>>> +                struct coresight_device *helper)
->>>
->>> minor nit: It may be a good idea to rename this, in line with the
->>> kernel naming convention :
->>>
->>>      coresight_add_helper_unlocked()
->>>
->>> Or if this is the only variant, it is OK to leave it as :
->>>      coresight_add_helper()
->>> with a big fat comment in the function description to indicate
->>> that it takes the mutex and may be even add a :
->>>
->> There is already a bit of a comment in the description but I can expand
->> on it more.
->>
->>> might_sleep() and lockdep_assert_not_held(&coresight_mutex);
->>>
->>> in the function.
->>>
->>
->> I'm not sure if lockdep_assert_not_held() would be right because
->> sometimes it could be held if another device is being created at the
->> same time? Or something like a session is started at the same time a CTI
->> device is added.
->>
-> 
-> Oh I see it's not for any task, it's just for the current one. That
-> makes sense then I can add it.
-> 
-> Although it looks like it only warns when lockdep is enabled, but don't
-> you get a warning anyway if you try to take the lock twice with lockdep
-> enabled?
+On Mon, Apr 3, 2023 at 7:53=E2=80=AFPM William Breathitt Gray
+<william.gray@linaro.org> wrote:
 
-Thats true, you could ignore the lockdep check.
+> The 104-dio-48e and 104-idi-48 drivers leverage regmap-irq to handle
+> IRQ. The default regmap locking utilizes spinlocks but this can result
+> in deadlocks for IRQ chips when running -rt kernels [0]. Enable
+> use_raw_spinlock for the regmap_config of these drivers to prevent such.
+>
+> [0] https://lore.kernel.org/all/1466065537-82027-1-git-send-email-mika.we=
+sterberg@linux.intel.com/
 
-  So I'm not sure why we would add lockdep_assert_not_held() here
-> and not on all the mutex_lock() calls?\
+This looks reasonable.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Ah. I double checked this and the coresight_mutex is static and local to
-  coresight-core.c. So there is no point in talking about locking for
-external users. So I would just leave out any suffixes and simply use
-the lockdep check implicit from mutex_lock().
-
-Suzuki
-
+Yours,
+Linus Walleij
