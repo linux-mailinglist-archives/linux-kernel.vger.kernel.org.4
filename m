@@ -2,204 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81296D6461
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB67B6D6490
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235365AbjDDN7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37800 "EHLO
+        id S235805AbjDDOB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235554AbjDDN7M (ORCPT
+        with ESMTP id S235537AbjDDOBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 09:59:12 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6E14C2D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:58:49 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id t19so31558104qta.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 06:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1680616662;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JiIK93wZ7uSv4J8mxJGBVVQMHkFGXvgas7+YLZxFgk8=;
-        b=W2ZZXSSvoqKK85OBtftLMhokRrUR88SqHxWQbB1PO4amVFNmKoFUqLMKg6m5dUelSP
-         4VYmFRjUa27+snW83x7lC/lmZJbWmwjhiff0Cva1vDLnHosjhTpPBNZfnnGK/tYMNnWe
-         DjFJ/qR6wjnIIMGZ8JAQ9C/celmu9KR2NnT+E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680616662;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JiIK93wZ7uSv4J8mxJGBVVQMHkFGXvgas7+YLZxFgk8=;
-        b=VIhpmfQevtrRJqNqgSYQZbFzKifgUoRczPT+dvq//V5LM6uYM1iW10V98AyLvsK33x
-         22VYtCYbX20WOhtdkNh5XItCZvMkT+j5ZlURWSlsOyVgvd66i3ojwn/StBXMlfsCj/vQ
-         DTRHuMR7S24qNqGvLmCrws70NjsaGs2GrGHfInPziigK1WzdH3Ds7qTCORnV+BAEUZvd
-         qU6njcrMTnBTShfOaYLw5FeC0PzZ5GjPrAMSZA7nz/GqdxgBMlKJy680J0Yi0IhQCzML
-         8gcKM5aoHJ1SCV1pjYeRVv3q/fEOJNUiDm+sPd1l2WMo16nWXdK8cEHjThCeCG3DWy7J
-         KNcQ==
-X-Gm-Message-State: AAQBX9cez33MxxLGtVkldKDGih1ZrkGDbFG6QCh06vQCWW9E8BZBRJ/6
-        e9ylc2pdsKtMT85b2BphyQbuYw==
-X-Google-Smtp-Source: AKy350bSHyobHLgm0WOYJUJYV15CA09NYOQT1uk0PNkAXAzMqVpLF440ix/aziMAwUdGPQpvcNZWVg==
-X-Received: by 2002:ac8:59cd:0:b0:3e4:e2fa:66b0 with SMTP id f13-20020ac859cd000000b003e4e2fa66b0mr3338791qtf.29.1680616661970;
-        Tue, 04 Apr 2023 06:57:41 -0700 (PDT)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05620a22ab00b00706b09b16fasm3606294qkh.11.2023.04.04.06.57.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 06:57:41 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 13:57:41 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org, hch@lst.de
-Subject: Re: [PATCH rcu 0/20] Further shrink srcu_struct to promote cache
- locality
-Message-ID: <20230404135741.GB471948@google.com>
-References: <f1b6cd5f-f0b7-4748-abd5-0dcfef0ce126@paulmck-laptop>
+        Tue, 4 Apr 2023 10:01:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3C2E46AF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:00:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 612F1D75;
+        Tue,  4 Apr 2023 07:00:41 -0700 (PDT)
+Received: from [10.57.53.173] (unknown [10.57.53.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C6103F762;
+        Tue,  4 Apr 2023 06:59:54 -0700 (PDT)
+Message-ID: <2e3c1a26-b4af-9e53-66d1-9553c86ce2bd@arm.com>
+Date:   Tue, 4 Apr 2023 14:59:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f1b6cd5f-f0b7-4748-abd5-0dcfef0ce126@paulmck-laptop>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 13/13] coresight: Fix CTI module refcount leak by
+ making it a helper device
+To:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
+        quic_jinlmao@quicinc.com, mike.leach@linaro.org
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230329115329.2747724-1-james.clark@arm.com>
+ <20230329115329.2747724-14-james.clark@arm.com>
+ <77d890a9-9927-da8e-1460-54513784683d@arm.com>
+ <61bb4e6d-5451-2f01-19b2-76c396854c23@arm.com>
+ <2eecee82-2143-0da6-6132-5514336ebc6b@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <2eecee82-2143-0da6-6132-5514336ebc6b@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 03:47:02PM -0700, Paul E. McKenney wrote:
-> Hello!
+On 04/04/2023 14:04, James Clark wrote:
 > 
-> This post-RFC series shrinks the srcu_struct structure to the bare minimum
-> required to support SRCU readers, relegating the remaining fields to a new
-> srcu_usage structure.  Statically allocated srcu_struct structures created
-> by DEFINE_SRCU() and DEFINE_STATIC_SRCU() have statically allocated
-> srcu_usage structures, but those required for dynamically allocated
-> srcu_struct structures that are initialized using init_srcu_struct()
-> are dynamically allocated.
 > 
-> The results is a reduction in the size of an srcu_struct structure from
-> a couple hundred bytes to just 24 bytes on x86_64 systems.  This can be
-> helpful when SRCU readers are used in a fastpath for which the srcu_struct
-> structure must be embedded in another structure, and especially where
-> that fastpath also needs to access fields both before and after the
-> srcu_struct structure.
+> On 04/04/2023 13:55, James Clark wrote:
+>>
+>>
+>> On 04/04/2023 10:21, Suzuki K Poulose wrote:
+>>> On 29/03/2023 12:53, James Clark wrote:
+>>>> The CTI module has some hard coded refcounting code that has a leak.
+>>>> For example running perf and then trying to unload it fails:
+>>>>
+>>>>     perf record -e cs_etm// -a -- ls
+>>>>     rmmod coresight_cti
+>>>>
+>>>>     rmmod: ERROR: Module coresight_cti is in use
+>>>>
+>>>> The coresight core already handles references of devices in use, so by
+>>>> making CTI a normal helper device, we get working refcounting for free.
+>>>>
+>>>> Signed-off-by: James Clark <james.clark@arm.com>
+>>>> ---
+>>>>    drivers/hwtracing/coresight/coresight-core.c  | 99 ++++++-------------
+>>>>    .../hwtracing/coresight/coresight-cti-core.c  | 52 +++++-----
+>>>>    .../hwtracing/coresight/coresight-cti-sysfs.c |  4 +-
+>>>>    drivers/hwtracing/coresight/coresight-cti.h   |  4 +-
+>>>>    drivers/hwtracing/coresight/coresight-priv.h  |  4 +-
+>>>>    drivers/hwtracing/coresight/coresight-sysfs.c |  4 +
+>>>>    include/linux/coresight.h                     | 30 +-----
+>>>>    7 files changed, 70 insertions(+), 127 deletions(-)
+>>>>
+>>>> diff --git a/drivers/hwtracing/coresight/coresight-core.c
+>>>> b/drivers/hwtracing/coresight/coresight-core.c
+>>>> index 65f5bd8516d8..458d91b4e23f 100644
+>>>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>>>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>>>> @@ -254,60 +254,39 @@ void coresight_disclaim_device(struct
+>>>> coresight_device *csdev)
+>>>>    }
+>>>>    EXPORT_SYMBOL_GPL(coresight_disclaim_device);
+>>>>    -/* enable or disable an associated CTI device of the supplied CS
+>>>> device */
+>>>> -static int
+>>>> -coresight_control_assoc_ectdev(struct coresight_device *csdev, bool
+>>>> enable)
+>>>> -{
+>>>> -    int ect_ret = 0;
+>>>> -    struct coresight_device *ect_csdev = csdev->ect_dev;
+>>>> -    struct module *mod;
+>>>> -
+>>>> -    if (!ect_csdev)
+>>>> -        return 0;
+>>>> -    if ((!ect_ops(ect_csdev)->enable) || (!ect_ops(ect_csdev)->disable))
+>>>> -        return 0;
+>>>> -
+>>>> -    mod = ect_csdev->dev.parent->driver->owner;
+>>>> -    if (enable) {
+>>>> -        if (try_module_get(mod)) {
+>>>> -            ect_ret = ect_ops(ect_csdev)->enable(ect_csdev);
+>>>> -            if (ect_ret) {
+>>>> -                module_put(mod);
+>>>> -            } else {
+>>>> -                get_device(ect_csdev->dev.parent);
+>>>> -                csdev->ect_enabled = true;
+>>>> -            }
+>>>> -        } else
+>>>> -            ect_ret = -ENODEV;
+>>>> -    } else {
+>>>> -        if (csdev->ect_enabled) {
+>>>> -            ect_ret = ect_ops(ect_csdev)->disable(ect_csdev);
+>>>> -            put_device(ect_csdev->dev.parent);
+>>>> -            module_put(mod);
+>>>> -            csdev->ect_enabled = false;
+>>>> -        }
+>>>> -    }
+>>>> -
+>>>> -    /* output warning if ECT enable is preventing trace operation */
+>>>> -    if (ect_ret)
+>>>> -        dev_info(&csdev->dev, "Associated ECT device (%s) %s failed\n",
+>>>> -             dev_name(&ect_csdev->dev),
+>>>> -             enable ? "enable" : "disable");
+>>>> -    return ect_ret;
+>>>> -}
+>>>> -
+>>>>    /*
+>>>> - * Set the associated ect / cti device while holding the coresight_mutex
+>>>> + * Add a helper as an output device while holding the coresight_mutex
+>>>>     * to avoid a race with coresight_enable that may try to use this
+>>>> value.
+>>>>     */
+>>>> -void coresight_set_assoc_ectdev_mutex(struct coresight_device *csdev,
+>>>> -                      struct coresight_device *ect_csdev)
+>>>> +void coresight_add_helper_mutex(struct coresight_device *csdev,
+>>>> +                struct coresight_device *helper)
+>>>
+>>> minor nit: It may be a good idea to rename this, in line with the
+>>> kernel naming convention :
+>>>
+>>>      coresight_add_helper_unlocked()
+>>>
+>>> Or if this is the only variant, it is OK to leave it as :
+>>>      coresight_add_helper()
+>>> with a big fat comment in the function description to indicate
+>>> that it takes the mutex and may be even add a :
+>>>
+>> There is already a bit of a comment in the description but I can expand
+>> on it more.
+>>
+>>> might_sleep() and lockdep_assert_not_held(&coresight_mutex);
+>>>
+>>> in the function.
+>>>
+>>
+>> I'm not sure if lockdep_assert_not_held() would be right because
+>> sometimes it could be held if another device is being created at the
+>> same time? Or something like a session is started at the same time a CTI
+>> device is added.
+>>
 > 
-> This series takes baby steps, in part because breaking SRCU means that
-> you get absolutely no console output.  Yes, I did learn this the hard way.
-> Why do you ask?  ;-)
+> Oh I see it's not for any task, it's just for the current one. That
+> makes sense then I can add it.
 > 
-> Here are those baby steps:
-> 
-> 1.	rcu-tasks: Fix warning for unused tasks_rcu_exit_srcu.
-> 
-> 2.	Add whitespace to __SRCU_STRUCT_INIT() & __DEFINE_SRCU().
-> 
-> 3.	Use static init for statically allocated in-module srcu_struct.
-> 
-> 4.	Begin offloading srcu_struct fields to srcu_update.
-> 
-> 5.	Move ->level from srcu_struct to srcu_usage.
-> 
-> 6.	Move ->srcu_size_state from srcu_struct to srcu_usage.
-> 
-> 7.	Move ->srcu_cb_mutex from srcu_struct to srcu_usage.
-> 
-> 8.	Move ->lock initialization after srcu_usage allocation.
-> 
-> 9.	Move ->lock from srcu_struct to srcu_usage.
-> 
-> 10.	Move ->srcu_gp_mutex from srcu_struct to srcu_usage.
-> 
-> 11.	Move grace-period fields from srcu_struct to srcu_usage.
-> 
-> 12.	Move heuristics fields from srcu_struct to srcu_usage.
-> 
-> 13.	Move ->sda_is_static from srcu_struct to srcu_usage.
-> 
-> 14.	Move srcu_barrier() fields from srcu_struct to srcu_usage.
-> 
-> 15.	Move work-scheduling fields from srcu_struct to srcu_usage.
-> 
-> 16.	Check for readers at module-exit time.
-> 
-> 17.	Fix long lines in srcu_get_delay().
-> 
-> 18.	Fix long lines in cleanup_srcu_struct().
-> 
-> 19.	Fix long lines in srcu_gp_end().
-> 
-> 20.	Fix long lines in srcu_funnel_gp_start().
-> 
-> Changes since the RFC series:
-> https://lore.kernel.org/all/3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop/
-> 
-> 1.	Add checks for readers of in-module statically allocated
-> 	srcu_struct structures persisting past module unload.
-> 
-> 2.	Apply Tested-by tags.
-> 
-> 3.	Apply feedback from "Zhang, Qiang1" and kernel test robot,
-> 	perhaps most notably getting rid of memory leaks and improving
-> 	the handling of statically allocated srcu_struct structures
-> 	defined within modules.
-> 
-> 4.	Drop the commit removing extraneous parentheses given the desire
-> 	to push this into the v6.4 merge window, the fact that this
-> 	commit generates conflicts with other v6.4 RCU commits, and the
-> 	low value of this commit.  It therefore remains in the v6.5 pile.
-> 
-> 						Thanx, Paul
-> 
-> ------------------------------------------------------------------------
-> 
->  b/include/linux/notifier.h |    5 
->  b/include/linux/srcutiny.h |    6 
->  b/include/linux/srcutree.h |   28 +-
->  b/kernel/rcu/rcu.h         |    6 
->  b/kernel/rcu/srcutree.c    |   19 +
->  b/kernel/rcu/tasks.h       |    2 
->  include/linux/srcutree.h   |  123 ++++++-----
->  kernel/rcu/srcutree.c      |  495 +++++++++++++++++++++++----------------------
->  8 files changed, 370 insertions(+), 314 deletions(-)
+> Although it looks like it only warns when lockdep is enabled, but don't
+> you get a warning anyway if you try to take the lock twice with lockdep
+> enabled?
 
-It looks good on my ARM64 board:
-Tested-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Thats true, you could ignore the lockdep check.
 
-Output of run:
+  So I'm not sure why we would add lockdep_assert_not_held() here
+> and not on all the mutex_lock() calls?\
 
-tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 2h --configs SRCU-P SRCU-N SRCU-T SRCU-U --trust-make
-SRCU-N ------- 204135 GPs (28.3521/s) [srcu: g1765408 f0x0 total-gps=1765408] n_max_cbs: 150000
-:CONFIG_HYPERVISOR_GUEST=y: improperly set
-:CONFIG_KVM_GUEST=y: improperly set
-SRCU-P ------- 105511 GPs (14.6543/s) [srcud: g884128 f0x0 total-gps=884128] n_max_cbs: 150000
-:CONFIG_HYPERVISOR_GUEST=y: improperly set
-:CONFIG_KVM_GUEST=y: improperly set
-SRCU-T ------- 334055 GPs (46.3965/s) [srcu: g2638072 f0x0 total-gps=2638072] n_max_cbs: 50000
-:CONFIG_HYPERVISOR_GUEST=y: improperly set
-:CONFIG_KVM_GUEST=y: improperly set
-:CONFIG_SMP: improperly set
-:CONFIG_TINY_SRCU=y: improperly set
-SRCU-U ------- 292738 GPs (40.6581/s) [srcud: g2349416 f0x0 total-gps=2349416] n_max_cbs: 50000
-:CONFIG_HYPERVISOR_GUEST=y: improperly set
-:CONFIG_KVM_GUEST=y: improperly set
-:CONFIG_SMP: improperly set
-:CONFIG_TINY_SRCU=y: improperly set
-1 runs with build errors.
+Ah. I double checked this and the coresight_mutex is static and local to
+  coresight-core.c. So there is no point in talking about locking for
+external users. So I would just leave out any suffixes and simply use
+the lockdep check implicit from mutex_lock().
 
-That "build error" is actually perl doing this:
-
-perl: warning: Please check that your locale settings:
-perl: warning: Falling back to the standard locale ("C").
-
-I think its harmless and the test did fine. It is just that my chroot is
-missing some packages (I have run into this warning before).
-
-The "improperly set" thingies are perhaps Kconfig on ARM64 setting some KVM
-options slightly differently. I have seen that before as well on this board.
-
-thanks,
-
- - Joel
+Suzuki
 
