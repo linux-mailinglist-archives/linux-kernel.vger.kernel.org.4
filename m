@@ -2,249 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FB56D6062
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7986D6064
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234827AbjDDMaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S234648AbjDDMbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbjDDMa0 (ORCPT
+        with ESMTP id S234049AbjDDMbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:30:26 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41523187
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:30:25 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id h34so23138595uag.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 05:30:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680611424;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xbgh9TKrIPAPQmUd9OtixARVlr01XDWJkFcD5ndOpIU=;
-        b=h7Jc/fRqwzSbE72HEHrF6Qm+puChRq66jIPwDc7KVBgVnnhwJpl8ZjcMdJw8VSMoBH
-         NzTuKlCDm4w6WXo/xD5nFJYLz7MOKr5fqaRKkmtqLN1j0hP6SsP26/CKhApL0SBk0iO1
-         wCWGB2CQ884DMAJd81ZrPW1+BzFqFXJUtub2syEpMwm0Zh8YEZ4Sig1pgjbYQFNo2Kps
-         +nRQ4/ntbWiKzk55U4GIeKFkpwXaiox2Mz0z70IrCcdhwSThvhzwneF9S7wk18wa/FXe
-         hO/5KvH8xQvkH62VEKNTtVUNQ0UdPitJE6DhLNzUPgHPgSfkpkFJHsqHCoqvrgBb4saS
-         XVDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680611424;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xbgh9TKrIPAPQmUd9OtixARVlr01XDWJkFcD5ndOpIU=;
-        b=oA2uYxEOLboYlCenkCgYMLS9SA6/1xUfU7pgva0LEu6YU+B3nZhlGTDzykW8rCp+kZ
-         b4JGYJ8MhJPBEKZfxT8J0sBwqJetxZoVC2u+Qt87NmuYTbDGYsHgMQZUoKE8is99VNgd
-         9p7iwyGW/taaQuAVejsqpR3spRcN6gmqMwFrgXnnGhK9fMtOmPUKK9mXHspM+G1t17d7
-         NmaPfAwUtcDYJvSL0XStEMIU3EGNQWCPmE8Chx89w1R6OlAJ7BrURww24HSd9+hf5g4l
-         jtj4Xii0Lo/edDkBKs22rtM2dLiYTr1nJbLBYICmRXyDbECeNTyD032RMQ/Qrzm3oFPI
-         bSBQ==
-X-Gm-Message-State: AAQBX9cwZNx7iDfCqTso8fvLG95Jp6yfGx/zdtzr2xWEwTHIhsBNugrE
-        coiCv2LQqqsGHU1pLImme5wgHMCsjgu9vDFMBQhkkA==
-X-Google-Smtp-Source: AKy350amVqZkX8vNf1TgCd1BJv+a0EVLtADE0arsDlDJrGykVE3ERVPi8dhCGfevy90drJlqjc+BCW7ziT/6To4bslM=
-X-Received: by 2002:ab0:53db:0:b0:688:d612:2024 with SMTP id
- l27-20020ab053db000000b00688d6122024mr1530288uaa.2.1680611424161; Tue, 04 Apr
- 2023 05:30:24 -0700 (PDT)
+        Tue, 4 Apr 2023 08:31:37 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9044810A;
+        Tue,  4 Apr 2023 05:31:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nSPkmzGlqt1XU1eZ1b0PRrbPWqC2rCztkrWEtxGct+QhoahLn8xr0d8+tvRm5eD2xtdheqKLUnYIdMa0IFmk24fIGqkiZJ2Vf46oX4L5QZ6YSh1PSUe0m2JQEmTX7yeuP34wz3EeLDPUV3VuAWqRTpLvokkZf8qEcr7/yZsKc2naf8xf49oRj8B384Pv91ifz7r4/UqGRiB62dSR90kgPYySyTI1ZbrKGkCL1VmokhryMr3TmO/TgnaOfJHFsPRsSDUEOXGpCXFdU6gTL+aI9oekVwDvcD0Md8gDOjs+3KmJdWwFIf4n2XBOnT1rXj9DP1SkQzpD472/AJ0uqZ2MiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v9JItELoRpLy6qUHJKtH1JaluE/eA0TWvuhJqnnGnNA=;
+ b=j7eecjv9OntmUAL5aT+KraWqz7qhvurN/eElE8JGvPR0BNVccDvuSoBnj+BITf2qnrZEhr2EdBOdZcua0L+GPCj5hR0bt5UUlNDrHjFaQA4Pkan8M5X28WavxrKdbdvuE1UXY6qZa/MhsXpKsDFHBSgoh5LQhboD1+rZ0c6JfRooXDDOY6mxj7nvgSJP6tOcKhJjZtMBX6wBMGaeU0rBg6kXeplyzXZHSxsof7ZUxS+kA9R7+dKmURBgJ6RWIJ9X8mO/I+4FPi/VDAquMHp7xZefG5iaNFpP9GGlGaqhbQfmoqHvyNcL+lr8uKkkUyAbK1BV3jDimRoF/Et4Uhy4XA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v9JItELoRpLy6qUHJKtH1JaluE/eA0TWvuhJqnnGnNA=;
+ b=Gzac0VtRS2Ffzaod9wGV2fXWW7G+iIwAdIj4x+O6kXvId7Xc/FSFrGnqCC+VETvHLc4IiPj33jF4MwQcerO3p+CvGmYph/EWOS7/kB+33XIxwvm4+gAxVBOsxDNv9Xp9obmeq4ZDhuaHWtoLLC5sKJ2alBYCkbweaecCkBpVGHc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by BY5PR12MB4116.namprd12.prod.outlook.com (2603:10b6:a03:210::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Tue, 4 Apr
+ 2023 12:30:29 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::d1cf:3d4a:4882:7fd3]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::d1cf:3d4a:4882:7fd3%4]) with mapi id 15.20.6254.033; Tue, 4 Apr 2023
+ 12:30:29 +0000
+Date:   Tue, 4 Apr 2023 18:00:15 +0530
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: amd-pstate: set varaiable mode_state_machine
+ storage-class-specifier to static
+Message-ID: <20230404123015.mj2ya5jhgsd6wjnq@BLR-5CG13462PL.amd.com>
+References: <20230404003337.1912901-1-trix@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404003337.1912901-1-trix@redhat.com>
+X-ClientProxiedBy: PN2PR01CA0053.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:22::28) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
 MIME-Version: 1.0
-References: <20230403140416.015323160@linuxfoundation.org>
-In-Reply-To: <20230403140416.015323160@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 4 Apr 2023 18:00:12 +0530
-Message-ID: <CA+G9fYt=i-zXOnA7vGVOiuNRsEiv0KmFxbqYt-L4VTHGEth_kQ@mail.gmail.com>
-Subject: Re: [PATCH 6.2 000/187] 6.2.10-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|BY5PR12MB4116:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb3e0766-fa70-4e4a-fc42-08db35085fd8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NyHw1HYnJfuPZHh+J11x31Z9sporDJAn2b2rXcqELdTaKyUcj6uWR++7woBkv/H/YrjzYdj2BX0UkkIAVLFJZfwx61/niKGAMhtXwP5v7jj+OIZfZsEFQ7sKU2ycWuDiaVVTFjqCBpoerol3KJurtdQHJ3Ys8Z8gc8C6Z+gPFZko5eXdtOdUhkUNBpSrCsGK9QUxWxRzMSz+f/ZtXJPdBuBqEFXJz9PrQct3oRIVDSi0PG9L0dOzH/Ldu8ahL7Z2XHSNdqXXfhFugk24l9GXqBZslXZnoD4QyGk9ncd9RqAb9ZX5iaZo151mkqNs96FKzNmvgWKi6PjFyLKO+WBFH/xu69INGKmPcGqi+gHQoJhRnt5wOQCGi5kXB9TDKiN+40UeUK0E6HV/l5d/Spat18goKSOH6M6mnyyooHABcpKq7ILgAYNt9KJbsbWufu50beM9PttN1cR69wzTFgc6zkPlfAjA79tiqjDxf5S9B0pQ2I5GtVKgWtwjYZvxQDk28167Djl86BP/9lj6nRjO3Xs1mgtM7F/iS7mA0ICpN98QBMx49YH5ovqC9X0kio8V
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(376002)(136003)(366004)(451199021)(6486002)(5660300002)(478600001)(6916009)(66476007)(86362001)(8676002)(66556008)(38100700002)(316002)(41300700001)(8936002)(4326008)(44832011)(186003)(66946007)(6506007)(26005)(6512007)(1076003)(2906002)(6666004)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BUdevjeSTMdKyRPemmazfapw/SL/CQOA7I+mujgzfTdEvlWxxbaROrrudElT?=
+ =?us-ascii?Q?JkVJW7/WBK+opJ7dRqRAAAKgL9FkXAx3xzRUNYaXGx1wXloFoquvJI66YbTE?=
+ =?us-ascii?Q?5rken/RNgXq0gt8PxN0qd5fLJSk8ds6QldlFQ5CL3ng+zokvk9WkNTb7ieh7?=
+ =?us-ascii?Q?A/lKXqbvoUjxxqt6PXis3pIML7GK2/S/7exUvhfC8jvjzxAAMbj9Me3iA9eN?=
+ =?us-ascii?Q?1kGl9D96aV2jgsl2BxaIfqZtVKYdzFOIJzpnVfl1XN4tOhz+18NldMI2tbnB?=
+ =?us-ascii?Q?pnzIicWO3lYz8noQcyKpEFDqu26ANbaXTpwbSdz9dcbu7jDo8sIwFJFNPNkH?=
+ =?us-ascii?Q?gORyUC8wggK0Ve52Jf7FhXZnpwg5RnUk9Nb92/KWQeQ145nDAjTyQXJmbnHu?=
+ =?us-ascii?Q?pOKecNn5wtXIvsm7pTUdaFq8ZikOp03JSBc0tLwGMt+2UnQh0iKeQ1eufH6B?=
+ =?us-ascii?Q?a1HTky8lgrw3k4M0j3cZAKTQp9EiC3CKCC6abO+t994csegj92tXAt6QIcJI?=
+ =?us-ascii?Q?wwHYS1eKjUTtM+Z5vZw+zDG/simf0lyJ8BeaIUK/VMUeHtVtFyMMr+MWQLXE?=
+ =?us-ascii?Q?YsMYKHu9cJkyWctrMqp+V9aIZx3upxZ7/nMB0B+z09Aw1glqR+lTcPiP+BIE?=
+ =?us-ascii?Q?Vo1CCmpkaSBWyQTbRvRCJ1uyLZiDCpUX+VZ8LwIeKlEhjgUod9VNqncUYxAb?=
+ =?us-ascii?Q?8iuYzeDAGebZDgY4ogJS71cCM0yrz8EPqb6efeTqSvusmkLOew/keWvoy4ma?=
+ =?us-ascii?Q?MgIvM+IdcM6vipa5c0Z+MCQ77NDZqdqbL5Ni2nCERNL/w8tJJ0l9A0X2svSL?=
+ =?us-ascii?Q?j7/Ol458+AprhA5O1QxhoKWF80VkN6JeVXw76twGYdmuzKcE7OZeuMSX0hep?=
+ =?us-ascii?Q?Fb9Bp9Vns/rBJAnOw+pQgf4cCyeIJO2skL7aEPfSaRL36vsy24Qd/Nv5iz2W?=
+ =?us-ascii?Q?xBuJCMaqazZhZ5pTsRmvBzS95IEt8vC5UT82L57QZ6ptFI63bArQwkDeLpQc?=
+ =?us-ascii?Q?J+5lMCF/Ylndk9X9+fPl7GqYuK784uz+cbLuf0toB5avT5c2xwMI4/ZNpnIR?=
+ =?us-ascii?Q?jJZI8F12MhcEn3hosGEAu0GgFmC0fEs4yVpKVU6Z2ytpMuYLIZ31hM9GX08O?=
+ =?us-ascii?Q?6NtWI6tsTP7DlC/bfR65Ml3fe9uL2kLA4phIXzG56noogXJHmJYIzl8RXHh7?=
+ =?us-ascii?Q?W7mcKD090KEZLSUa9xLnh6ZIttKLXZykHT+HKceQu/l2mNkKi/XIpT8p2zDF?=
+ =?us-ascii?Q?5f6p7SzM9uaRQ1QQvbEBRlo484yVEftpiPtyjndfCJdjti+eZIFV0THzL6cS?=
+ =?us-ascii?Q?kHckaH2dbomhbn7pMspFPJOi1KaCKsT0xgw1RFIElw7ufeSWna5ts6bvl3N1?=
+ =?us-ascii?Q?HpiZnmM2umJFp47/0lwP8zisJTV6vyh+e1lOPHtFiTMpGSK+H+tsgYagiig8?=
+ =?us-ascii?Q?oxXQmagHlqaTzB1YZ1c2kz0q2J3rjgmPXOoimkhsGAPhJVGZIzT0bkVOeqXM?=
+ =?us-ascii?Q?ir1zfQtGrBFzDg3BoimOESb7eDq6yTOOj9ih0wpYyMKq+r9Kc7UhuZsgMnie?=
+ =?us-ascii?Q?yM2NLMOGBLsXUjPXTb73/zst/dr60FucmKEMv7ST?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb3e0766-fa70-4e4a-fc42-08db35085fd8
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 12:30:29.0488
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pgjRUGG7LCiqcVVxYZ3aP/2em7saKvJZ4wRpznk0Dk4W2KdT/SKARuIhZy9Gm8jfWr6Ww2Ibwl1MyTOGuG6MQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4116
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 at 20:13, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.2.10 release.
-> There are 187 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.2.10-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.2.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 03 Apr 20:33, Tom Rix wrote:
+> smatch reports
+> drivers/cpufreq/amd-pstate.c:907:25: warning: symbol
+>   'mode_state_machine' was not declared. Should it be static?
+> 
+> This variable is only used in one file so it should be static.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Reviewed-by: Wyes Karny <wyes.karny@amd.com>
+Tested-by: Wyes Karny <wyes.karny@amd.com>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 6.2.10-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.2.y
-* git commit: 6e4466c69e20058ca543fa4ced70f8d745dce1ec
-* git describe: v6.2.9-188-g6e4466c69e20
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.2.y/build/v6.2.9=
--188-g6e4466c69e20
-
-## Test Regressions (compared to v6.2.9)
-
-## Metric Regressions (compared to v6.2.9)
-
-## Test Fixes (compared to v6.2.9)
-
-## Metric Fixes (compared to v6.2.9)
-
-## Test result summary
-total: 195294, pass: 167379, fail: 4270, skip: 23297, xfail: 348
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 145 total, 142 passed, 3 failed
-* arm64: 54 total, 53 passed, 1 failed
-* i386: 41 total, 38 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 36 passed, 2 failed
-* riscv: 26 total, 25 passed, 1 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 7 passed, 1 failed
-* x86_64: 46 total, 46 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-vm
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-nptl++
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* ltpa-6328543/0/tests/1_ltp-dio
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> ---
+>  drivers/cpufreq/amd-pstate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 6f4b8040d46c..5a3d4aa0f45a 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -904,7 +904,7 @@ static int amd_pstate_change_driver_mode(int mode)
+>  	return 0;
+>  }
+>  
+> -cppc_mode_transition_fn mode_state_machine[AMD_PSTATE_MAX][AMD_PSTATE_MAX] = {
+> +static cppc_mode_transition_fn mode_state_machine[AMD_PSTATE_MAX][AMD_PSTATE_MAX] = {
+>  	[AMD_PSTATE_DISABLE]         = {
+>  		[AMD_PSTATE_DISABLE]     = NULL,
+>  		[AMD_PSTATE_PASSIVE]     = amd_pstate_register_driver,
+> -- 
+> 2.27.0
+> 
