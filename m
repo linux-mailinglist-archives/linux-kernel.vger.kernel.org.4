@@ -2,191 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150C66D6EA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B326D6EAE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236033AbjDDVFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
+        id S235081AbjDDVHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbjDDVFj (ORCPT
+        with ESMTP id S235428AbjDDVHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:05:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4344EEF;
-        Tue,  4 Apr 2023 14:05:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79461637A5;
-        Tue,  4 Apr 2023 21:05:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7703CC433D2;
-        Tue,  4 Apr 2023 21:04:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680642303;
-        bh=K+YWB6gtDBp8CY/sw1YdMADMAZus/ze/KCovhnmTEck=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uvZL46gPl/xyjGjJ3q1IGZT3hEDWU5Z1qRvJ34K5e+P+rh4U8Dulcd+kZdpBk/2fg
-         EoDwLVwBfOvewMhUzO+qQ230d3TvGufRgNY7oJnYMFhMfGw5L0D0mCgXlYMgOHKi0J
-         PuzMDNMxBK9E1lgGuog9v2Hsiyk740+qVIN+PaQsIacLtF79eZe4/mXsw7v2311Cv0
-         vGVRMg689a/17buOafoebW1qYaNZhjqjV6Sni6lBzj8PimtBFJiosrY2ynzKiLUUWR
-         GydYoC8hx9jgsCvNiEmeZ/E9TqX3I0P43gNjmi/7iwuSR1RKuyy9XwomTJEvPrGQJR
-         TiSqGmVICEIfw==
-Date:   Tue, 4 Apr 2023 22:04:56 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Tom Rix <trix@redhat.com>, Weili Qian <qianweili@huawei.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Len Brown <lenb@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH V4 14/23] RISC-V: cpu: Enable cpuinfo for ACPI systems
-Message-ID: <20230404-overlaid-flatterer-22731133a75f@spud>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-15-sunilvl@ventanamicro.com>
+        Tue, 4 Apr 2023 17:07:20 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F1812D
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 14:07:18 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id bj20so25245811oib.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 14:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680642438;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D8wCu932h/gRywCSwLxOAEpXzxqJvpG+Yqrg4CPRzmc=;
+        b=JAd/1nZVeoy351xux6KFsMVzLIQjl9PnuOcBokKzB3bGJ+AiPCVTDt2lioXuKb9qEq
+         5xsvX9ZUJR/B5ESv4oz0I9GWx8PfRAoXHcNqEjR+5xzUwdN1AYQqGCigmKxDNJcqs5bH
+         M91VOT22HKSZKYEFfOaVFy5dpvkSqQvQAIZmIUEXQb6XP5bZBC1r8kT/j1fKPN1oz2yq
+         8yctitBEz1sts5F9bOkZ0F7bc4Na1Sx2pgp8pEjGQxqW+XLprm0XEm5h7+jAKBJDTpxW
+         8ZBHIYFtoJ/HMbC4p2PZQHGs/BsniOmP9elZZJnM7xXiA5UV0p6m6I6fLrv/eyX7EEsw
+         w2tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680642438;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D8wCu932h/gRywCSwLxOAEpXzxqJvpG+Yqrg4CPRzmc=;
+        b=LnpSR9OTcvxoAwfkn3B560+cFXifXL1URPfCpHcznmiXZHBypT2CYokT8uFzZzPYQr
+         Jd5AqjEckjPYJuqIChgFe7QiMD4cYvR9KIJDYirPR3fBNkHiAtl63WXDTibb36v7oNl9
+         6ceKE0BB/6ADyt0cgWBiNeE3x6Vl4LyO7caMUweG3Vggd4OaUsOL6dP0a/TQbBJdpwCW
+         dzPEw0Dx9E7qFGH1jknKDwhTRBC5OSbqIV+Vl3yPin+Aj7DNHx5BiW2UMlViW+yQe94p
+         epyrLb5T/Pd6wfNe4+qINoFhwvrWw2l/tqTrZjye7ldViGRGszTv6N5AV+dW513xiGpW
+         jg6w==
+X-Gm-Message-State: AAQBX9eeYa0kQB1Wvv+kaP42jf60//wGLX7iO05dk5qgx+UtGND5X7x/
+        nM+3uuUcOxTqNUEpD7KwvUv6vcFart2TscNWqUN/jw==
+X-Google-Smtp-Source: AKy350Z0YdQn3UAJSOuwQI8sp3lim7hTJHnaVlPm9ru9ZlukibPZgsTTBipva6Zi/jo0R/RR52EY0KdPqFTpNqI9Eyo=
+X-Received: by 2002:a54:4483:0:b0:37f:ab56:ff42 with SMTP id
+ v3-20020a544483000000b0037fab56ff42mr1246545oiv.9.1680642438159; Tue, 04 Apr
+ 2023 14:07:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zg/bxp6Ef08iSfBi"
-Content-Disposition: inline
-In-Reply-To: <20230404182037.863533-15-sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230206172340.2639971-1-rananta@google.com> <20230206172340.2639971-8-rananta@google.com>
+ <ZCTa5wfVtGScLQEa@linux.dev> <CAJHc60xvSFpUs+o84fR14Rghd6rruBJkCMBtroeCeLDtjJg=gw@mail.gmail.com>
+ <ZCx4QCs+cjr4nYev@linux.dev>
+In-Reply-To: <ZCx4QCs+cjr4nYev@linux.dev>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Tue, 4 Apr 2023 14:07:06 -0700
+Message-ID: <CAJHc60xQ36vah9+eEOLqKdjamfoxijPTwXLrrhOy=NVvMW=VOw@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] KVM: arm64: Create a fast stage-2 unmap path
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     h@linux.dev, Oliver Upton <oupton@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 4, 2023 at 12:19=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> On Tue, Apr 04, 2023 at 10:52:01AM -0700, Raghavendra Rao Ananta wrote:
+> > On Wed, Mar 29, 2023 at 5:42=E2=80=AFPM Oliver Upton <oliver.upton@linu=
+x.dev> wrote:
+> > >
+> > > On Mon, Feb 06, 2023 at 05:23:40PM +0000, Raghavendra Rao Ananta wrot=
+e:
+> > > > The current implementation of the stage-2 unmap walker
+> > > > traverses the entire page-table to clear and flush the TLBs
+> > > > for each entry. This could be very expensive, especially if
+> > > > the VM is not backed by hugepages. The unmap operation could be
+> > > > made efficient by disconnecting the table at the very
+> > > > top (level at which the largest block mapping can be hosted)
+> > > > and do the rest of the unmapping using free_removed_table().
+> > > > If the system supports FEAT_TLBIRANGE, flush the entire range
+> > > > that has been disconnected from the rest of the page-table.
+> > > >
+> > > > Suggested-by: Ricardo Koller <ricarkol@google.com>
+> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > > ---
+> > > >  arch/arm64/kvm/hyp/pgtable.c | 44 ++++++++++++++++++++++++++++++++=
+++++
+> > > >  1 file changed, 44 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgta=
+ble.c
+> > > > index 0858d1fa85d6b..af3729d0971f2 100644
+> > > > --- a/arch/arm64/kvm/hyp/pgtable.c
+> > > > +++ b/arch/arm64/kvm/hyp/pgtable.c
+> > > > @@ -1017,6 +1017,49 @@ static int stage2_unmap_walker(const struct =
+kvm_pgtable_visit_ctx *ctx,
+> > > >       return 0;
+> > > >  }
+> > > >
+> > > > +/*
+> > > > + * The fast walker executes only if the unmap size is exactly equa=
+l to the
+> > > > + * largest block mapping supported (i.e. at KVM_PGTABLE_MIN_BLOCK_=
+LEVEL),
+> > > > + * such that the underneath hierarchy at KVM_PGTABLE_MIN_BLOCK_LEV=
+EL can
+> > > > + * be disconnected from the rest of the page-table without the nee=
+d to
+> > > > + * traverse all the PTEs, at all the levels, and unmap each and ev=
+ery one
+> > > > + * of them. The disconnected table is freed using free_removed_tab=
+le().
+> > > > + */
+> > > > +static int fast_stage2_unmap_walker(const struct kvm_pgtable_visit=
+_ctx *ctx,
+> > > > +                            enum kvm_pgtable_walk_flags visit)
+> > > > +{
+> > > > +     struct kvm_pgtable_mm_ops *mm_ops =3D ctx->mm_ops;
+> > > > +     kvm_pte_t *childp =3D kvm_pte_follow(ctx->old, mm_ops);
+> > > > +     struct kvm_s2_mmu *mmu =3D ctx->arg;
+> > > > +
+> > > > +     if (!kvm_pte_valid(ctx->old) || ctx->level !=3D KVM_PGTABLE_M=
+IN_BLOCK_LEVEL)
+> > > > +             return 0;
+> > > > +
+> > > > +     if (!stage2_try_break_pte(ctx, mmu))
+> > > > +             return -EAGAIN;
+> > > > +
+> > > > +     /*
+> > > > +      * Gain back a reference for stage2_unmap_walker() to free
+> > > > +      * this table entry from KVM_PGTABLE_MIN_BLOCK_LEVEL - 1.
+> > > > +      */
+> > > > +     mm_ops->get_page(ctx->ptep);
+> > >
+> > > Doesn't this run the risk of a potential UAF if the refcount was 1 be=
+fore
+> > > calling stage2_try_break_pte()? IOW, stage2_try_break_pte() will drop
+> > > the refcount to 0 on the page before this ever gets called.
+> > >
+> > > Also, AFAICT this misses the CMOs that are required on systems w/o
+> > > FEAT_FWB. Without them it is possible that the host will read somethi=
+ng
+> > > other than what was most recently written by the guest if it is using
+> > > noncacheable memory attributes at stage-1.
+> > >
+> > > I imagine the actual bottleneck is the DSB required after every
+> > > CMO/TLBI. Theoretically, the unmap path could be updated to:
+> > >
+> > >  - Perform the appropriate CMOs for every valid leaf entry *without*
+> > >    issuing a DSB.
+> > >
+> > >  - Elide TLBIs entirely that take place in the middle of the walk
+> > >
+> > >  - After the walk completes, dsb(ish) to guarantee that the CMOs have
+> > >    completed and the invalid PTEs are made visible to the hardware
+> > >    walkers. This should be done implicitly by the TLBI implementation
+> > >
+> > >  - Invalidate the [addr, addr + size) range of IPAs
+> > >
+> > > This would also avoid over-invalidating stage-1 since we blast the
+> > > entire stage-1 context for every stage-2 invalidation. Thoughts?
+> > >
+> > Correct me if I'm wrong, but if we invalidate the TLB after the walk
+> > is complete, don't you think there's a risk of race if the guest can
+> > hit in the TLB even though the page was unmapped?
+>
+> Yeah, we'd need to do the CMOs _after_ making the translation invalid in
+> the page tables and completing the TLB invalidation. Apologies.
+>
+> Otherwise, the only requirement we need to uphold w/ either the MMU
+> notifiers or userspace is that the translation has been invalidated at
+> the time of return.
+>
+Actually, my concern about the race was against the hardware. If we
+follow the above approach, let's say we invalidated a certain set of
+PTEs, but the TLBs aren't yet invalidated. During this point if
+another vCPU accesses the range governed by the invalidated PTEs,
+wouldn't it still hit in the TLB? Have I misunderstood you or am I
+missing something?
 
---zg/bxp6Ef08iSfBi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Apr 04, 2023 at 11:50:28PM +0530, Sunil V L wrote:
-> On ACPI based platforms, few details like ISA need to be read
-> from the ACPI table. Enable cpuinfo on ACPI based systems.
->=20
-> ACPI has nothing similar to DT compatible property for each CPU.
-
-> SBI calls must be used to get vendor/arch/imp ID for any errata.
-
-ecalls are used on DT systems for this too FYI, vendorid/archid/impid
-are not contained in the DT.
-Otherwise,
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Should probably have given that conditionally last time, sorry about
-that.
-Thanks,
-Conor.
-
->=20
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
->  arch/riscv/kernel/cpu.c | 30 ++++++++++++++++++++++--------
->  1 file changed, 22 insertions(+), 8 deletions(-)
->=20
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index 8400f0cc9704..ace4752516d8 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -3,10 +3,12 @@
->   * Copyright (C) 2012 Regents of the University of California
->   */
-> =20
-> +#include <linux/acpi.h>
->  #include <linux/cpu.h>
->  #include <linux/init.h>
->  #include <linux/seq_file.h>
->  #include <linux/of.h>
-> +#include <asm/acpi.h>
->  #include <asm/csr.h>
->  #include <asm/hwcap.h>
->  #include <asm/sbi.h>
-> @@ -283,23 +285,35 @@ static void c_stop(struct seq_file *m, void *v)
->  static int c_show(struct seq_file *m, void *v)
->  {
->  	unsigned long cpu_id =3D (unsigned long)v - 1;
-> -	struct device_node *node =3D of_get_cpu_node(cpu_id, NULL);
->  	struct riscv_cpuinfo *ci =3D per_cpu_ptr(&riscv_cpuinfo, cpu_id);
-> +	struct device_node *node;
->  	const char *compat, *isa;
-> =20
->  	seq_printf(m, "processor\t: %lu\n", cpu_id);
->  	seq_printf(m, "hart\t\t: %lu\n", cpuid_to_hartid_map(cpu_id));
-> -	if (!of_property_read_string(node, "riscv,isa", &isa))
-> -		print_isa(m, isa);
-> -	print_mmu(m);
-> -	if (!of_property_read_string(node, "compatible", &compat)
-> -	    && strcmp(compat, "riscv"))
-> -		seq_printf(m, "uarch\t\t: %s\n", compat);
-> +
-> +	if (acpi_disabled) {
-> +		node =3D of_get_cpu_node(cpu_id, NULL);
-> +		if (!of_property_read_string(node, "riscv,isa", &isa))
-> +			print_isa(m, isa);
-> +
-> +		print_mmu(m);
-> +		if (!of_property_read_string(node, "compatible", &compat) &&
-> +		    strcmp(compat, "riscv"))
-> +			seq_printf(m, "uarch\t\t: %s\n", compat);
-> +
-> +		of_node_put(node);
-> +	} else {
-> +		if (!acpi_get_riscv_isa(NULL, cpu_id, &isa))
-> +			print_isa(m, isa);
-> +
-> +		print_mmu(m);
-> +	}
-> +
->  	seq_printf(m, "mvendorid\t: 0x%lx\n", ci->mvendorid);
->  	seq_printf(m, "marchid\t\t: 0x%lx\n", ci->marchid);
->  	seq_printf(m, "mimpid\t\t: 0x%lx\n", ci->mimpid);
->  	seq_puts(m, "\n");
-> -	of_node_put(node);
-> =20
->  	return 0;
->  }
-> --=20
-> 2.34.1
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
---zg/bxp6Ef08iSfBi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCyQ9wAKCRB4tDGHoIJi
-0v51AQD/Jdo80g5XJuPuPzzfpYoAjR065ytz0121HJC/oU1PNgD7BeY4NQ7krey7
-9Ah5lMqJDV5Ogs1mM3sF3tJs7eMPagQ=
-=zA1D
------END PGP SIGNATURE-----
-
---zg/bxp6Ef08iSfBi--
+Thank you.
+Raghavendra
+> --
+> Thanks,
+> Oliver
