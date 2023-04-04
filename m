@@ -2,119 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0CD6D6ECA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305506D6ECD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236100AbjDDVTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
+        id S235518AbjDDVU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236442AbjDDVSx (ORCPT
+        with ESMTP id S229743AbjDDVU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:18:53 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F404F19BC;
-        Tue,  4 Apr 2023 14:18:32 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id ek18so136118590edb.6;
-        Tue, 04 Apr 2023 14:18:32 -0700 (PDT)
+        Tue, 4 Apr 2023 17:20:26 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E727312F;
+        Tue,  4 Apr 2023 14:20:20 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id f4-20020a9d0384000000b0069fab3f4cafso18076122otf.9;
+        Tue, 04 Apr 2023 14:20:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1680643111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N5EuWHbwdKEeX6a2AZ9C4RTkT1vujytrUzBt+0O0v3M=;
-        b=BSXijNbZJBXiMzykKh9QRkhLXFK6izNgWu+k0ocaV1CceHyXMI0uOy5rdcziqYvFbF
-         OYcGiiIVlIsZVibw9dKrakGQcKvTmg3aFIdX5pwLXe/wNBO1qAyoY38icHP8bA4QA2Ok
-         eAV0nm+Q+R0Cj897TespCICHugQbjPBztEWmFc80+KrrIaLrvphirsz2Hqrwvm2hw8k3
-         sKvYwITZz8mQfX4dmjry87ipHywHWXsonh3vXKZJW+yfg2dRIVbhuLKtGyLn2ZkJvFcy
-         qCqWIw2TVkaXxK89SwPji2nm4YVXePUFJi5W5noK+GlgvlSB+9tf+f02+OgczQzRwwZB
-         JJCg==
+        d=gmail.com; s=20210112; t=1680643220;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tfxpdbuFOonJn9jZwoNDRK7Oo7M2eMNyBRNxPTgb3pE=;
+        b=nlZF5MckWdcsD3yTrtDoEG+amux9+C4Z40Fj6nowzZ4zknMCyIY0Xo/bmGo6m2A0cq
+         LrJV7s6LuFw1Lopflme4JwaNjCNFa8Vf/mSDR4WU2J1BiOcoaq5/cq6sJVWgRRMk4Enw
+         e241lrMINZA6loLBVFL98cqIkzYNMa0Bpxuf9MzVSJJ8LYmbDcFnE3PqHMoVEz1yNE3R
+         qqtyuUEbvV62jdSdBQ/dwIBG4WgG/o3m8whi+O9iOXFjORd7e3kt8kMpgJHDGeZoIV7e
+         un8MtxtrUjF8mPfbiIl6SvmQuv4iuXz9cqXn/U1ibtR5OI6XCxTHSx3oD1o8Xc810YJQ
+         CcQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680643111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680643220;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N5EuWHbwdKEeX6a2AZ9C4RTkT1vujytrUzBt+0O0v3M=;
-        b=Koib8eZMUmB1VNTRMUV4jynD50RknFQre/OgVMyxkC9+S2Ms+qvulwQWBKObEJTOsH
-         5Z0by3mi3VOKvBK024KVCPYwLyrKt0PGWlHYNB7iBY5aQ5lsj7QO2upFT3o7ool428QU
-         7rc0NGOuJofq1SOqTlHGRlwmxB296aWYu1WFuU46PwEHS4X+32o/q9HGTu96Fzi+k7YB
-         DTm6tDqw0ZuJ3mCaY/X1atG6B1mNRbPYd1kvMbwItXPwKDno0jdIINhaMnOGMDZWhnII
-         bQ9ff16tornttdg8iO5W9afcHLXikwZ/oBpD4JcWi7Ci3CYF9rrW+dHquYokE5eyEw/l
-         uUlQ==
-X-Gm-Message-State: AAQBX9dYDDijULuFk46aoroO0OibSAY6mbBrc2Xd1s4xw8F0EN0I4U+T
-        IuheXFzEwKqyKaKcyNLvW0A22KPlvk0029TK6kk=
-X-Google-Smtp-Source: AKy350bHAXCKtxXDYnrXHt+8nlQqZKE9To9ryn9MAf9sz41QNTGUz5+aTiDSXZhU533fiWr5/jy5JXzsVw31iqiq4Gg=
-X-Received: by 2002:a17:906:b6cd:b0:8b1:cd2e:177a with SMTP id
- ec13-20020a170906b6cd00b008b1cd2e177amr485125ejb.6.1680643110980; Tue, 04 Apr
- 2023 14:18:30 -0700 (PDT)
+        bh=tfxpdbuFOonJn9jZwoNDRK7Oo7M2eMNyBRNxPTgb3pE=;
+        b=xvXN/H2GQuUqIzXxdHO1RY+Yl4N+3KmUYeIF+nFWU0spcGIXze19UACiVEyFM5Lb8C
+         TNnZSbQFnVKQNCyf+jcO5f3PEmcAzzDGdTd5V8h4eNasZazRjs3Sbeq3jvG6KwEGqqP4
+         NUtEfmtqTAKzvTfvYX+laIHxTdFaaSkHl8clrpEy+NXR+N1fMb1RI+c4wh7f7LTvy8FD
+         rQvNtHq31cs1Ge5cXBGFDOOOc+7P66lvW3bkQIrwOjqlL1yR+dvsE2GR7u59dBtqz7JA
+         8mpad/JhwxDDJSBt7Q1ryYJrjlEBdt81vxq929kGitUBIxtDj8UqBrg9gDhcAbVRfEcA
+         mamQ==
+X-Gm-Message-State: AAQBX9ctrsIH/B92TQYB9TUs3vGAqqI/1DNxT8EXcxg5nhDWcD2K/nN5
+        ZVgE4RrF4zHszglpOZkLiDM=
+X-Google-Smtp-Source: AKy350aJI/6dxLYLWAoc9XvDP+IWUBXAqrb+bB5yni1lUMeuQglziJ8ffRrIZuoR4ZTcFi+pjIfVXA==
+X-Received: by 2002:a05:6830:a:b0:69c:6b3:c7af with SMTP id c10-20020a056830000a00b0069c06b3c7afmr1822503otp.16.1680643220179;
+        Tue, 04 Apr 2023 14:20:20 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m15-20020a9d6acf000000b0069f0794861asm5923942otq.63.2023.04.04.14.20.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 14:20:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 4 Apr 2023 14:20:18 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 4.14 00/66] 4.14.312-rc1 review
+Message-ID: <d2c1d38a-03b1-47ca-8b25-6a808d0f2e55@roeck-us.net>
+References: <20230403140351.636471867@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230404091442.3540092-1-michael.wei.hong.sit@intel.com>
-In-Reply-To: <20230404091442.3540092-1-michael.wei.hong.sit@intel.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 4 Apr 2023 23:18:20 +0200
-Message-ID: <CAFBinCBqsrRZbjFOe8p3e2AzgV9jqL4Qo5db6vBBmak2jqk0_A@mail.gmail.com>
-Subject: Re: [RFC net 1/1] net: stmmac: skip PHY scanning when PHY already
- attached in DT mode
-To:     Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, hkallweit1@gmail.com, andrew@lunn.ch,
-        Looi Hong Aun <hong.aun.looi@intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>,
-        Zulkifli Muhammad Husaini <muhammad.husaini.zulkifli@intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>,
-        hock.leong.kweh@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403140351.636471867@linuxfoundation.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 11:15=E2=80=AFAM Michael Sit Wei Hong
-<michael.wei.hong.sit@intel.com> wrote:
->
-> If PHY is successfully attached during phylink_fwnode_phy_connect()
-> in DT mode. MAC should not need to scan for PHY again.
->
-> Adding a logic to check if ovr_an_inband is set before scanning for
-> a PHY, since phylink_fwnode_phy_connect() returns 0 when
->
->         phy_fwnode =3D fwnode_get_phy_node(fwnode);
->         if (IS_ERR(phy_fwnode)) {
->                 if (pl->cfg_link_an_mode =3D=3D MLO_AN_PHY)
->                         return -ENODEV;
->                 return 0;
->         }
->
-> Fixes: fe2cfbc96803 ("net: stmmac: check if MAC needs to attach to a PHY"=
-)
-> Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-Thank you for working on this! Your patch fixes the issue I reported,
-Ethernet is back on my X96 Air so this patch is:
-Tested-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+On Mon, Apr 03, 2023 at 04:08:08PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.14.312 release.
+> There are 66 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
+> Anything received after that time might be too late.
+> 
 
-My understanding is that Russell King is asking for a second iteration
-of this patch with his feedback incorporated. I'm happy to test this
-second version as well if you keep me Cc'ed.
-For this second version you can also (unconditionally) add:
-Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Build results:
+	total: 168 pass: 168 fail: 0
+Qemu test results:
+	total: 430 pass: 430 fail: 0
 
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Best regards,
-Martin
+Guenter
