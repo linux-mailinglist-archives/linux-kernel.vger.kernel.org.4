@@ -2,107 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118A46D6F12
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18DD56D6F14
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236482AbjDDVjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
+        id S236501AbjDDVje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236421AbjDDVjW (ORCPT
+        with ESMTP id S236506AbjDDVjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:39:22 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA8D40FF;
-        Tue,  4 Apr 2023 14:39:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3BA411FDBE;
-        Tue,  4 Apr 2023 21:39:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1680644359;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c6rnFBcBWfr2aiT8YSmtZUrPXOfzsUgPS2qkwzrhBQs=;
-        b=Juq+gzubV1kWRI+fBWdnbjM58H1OERRfulwEMts4fHSuASfQ6Bv5GcNBosDDlj6v44k+FH
-        YSaIOuVjmrWSPAWP8psqWWbYgFn8mcPY78ij01RsT+NQ3BSiOX6tMOxeQdoqy9rlhLQWBm
-        1TVDUf0V/hGk4KQxFn4f9W/78Dx0wE0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1680644359;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c6rnFBcBWfr2aiT8YSmtZUrPXOfzsUgPS2qkwzrhBQs=;
-        b=ujFyYHLB72/95xHjjUrl1gOKROPgRo1Zmn5OLJ7fk9tgPzotZGvKHOiVFGqPvThXoxtKY2
-        ke/9GUrfIP3HAvCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D42713920;
-        Tue,  4 Apr 2023 21:39:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tiFWAgeZLGS+LQAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 04 Apr 2023 21:39:19 +0000
-Date:   Tue, 4 Apr 2023 23:39:17 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Introducing bugbot
-Message-ID: <20230404213917.GG19619@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <gmnswy45efztvcyc3xqymm52h7cdfwjz64go2wy3zyeqcqwb76@36fva4hyip4q>
- <022e2ef8-2a94-3109-ab90-9ee980915887@gmx.com>
- <20230404-uncrown-detonate-8bc1ac@meerkat>
+        Tue, 4 Apr 2023 17:39:32 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4863144AE
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 14:39:31 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-17683b570b8so36208692fac.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 14:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680644370;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jgsHBuR1JCiS/kCWx0dnvnASkNVPo+HZZkzbYVM3KlI=;
+        b=MuNihkv60/dw1sHWeHVoLEdQZgd3CzvUoCDIeu6Deb6Bvxj+65j/nLvrl1fXz61C6j
+         Q0DQSwOqdN6iOsDGzhEXgLFK2zr5E3plsQI75C3Ii668c/H9SOyfWOM+/dvNQDh8VDdX
+         stjzXWOzCZ6ACbiLOCSpf9oX/I9/2zaBpedGv0t/ETkkcJOwZMMNZ6bU/lha0HVf6Ovo
+         9JKcc1xHp5YTNeUYzEO0vBj+kBySh3Ma0TJLvygYHWfA7AGRdcDxfdcxE0OvtaGBzrzq
+         ddHITrM42b5EGo7g+x+FbtybeSyi2mTuuHB/GP0pXADhJH19IlUy+4SMmZRdrBhLLMRs
+         L8/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680644370;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jgsHBuR1JCiS/kCWx0dnvnASkNVPo+HZZkzbYVM3KlI=;
+        b=iDSvLh1FLFxu7JR58/BlDEQVlQBFFp3osaXqVQGq/l+nQQhwNQEtimBSOfi17wX6dj
+         C//6chyOFd45BVmQcJfA2oC+5uujsSo88ky/N9b5Sjs42KVKMIwNTRwpM9OvmyHTq4cc
+         qQ2Yt31fyaCLlp8p1ulXCunoAZvyiQJ8gN/AMyDCeF4kGnRNXqiAR03FGd1n8f6tVTh6
+         4AErtPm1p00C0HASNuTDWSk1wwcV2oQp5mSB7e+wrBe0rLL1wpPFy77G8RRHqdq4Lbwf
+         /MTU6SoHYaO/IiZCeoVtJ53s7n642nC2xCVUywDH7nXBs07x80KUBe+dq5ow8Y7chyQ2
+         vD8g==
+X-Gm-Message-State: AAQBX9fz/S6XG8Tkp3vk6gmxZbQgMBvQCTxMkD8UEcRiHhf6fgrVAxad
+        J+iYsr3Hfu+xfJ4uGI91cxkhECG6eVosUizRZcZAmw==
+X-Google-Smtp-Source: AKy350YI01RZ913r86Uj+mNlWwCKJQaqcSjvbxMsdhMGQNm7HvIq/UI90tkqfhSR5EWKc3FXTsEzo5hVt4+WfEhUTD0=
+X-Received: by 2002:a05:6870:339e:b0:17e:7674:8df0 with SMTP id
+ w30-20020a056870339e00b0017e76748df0mr1941907oae.9.1680644370441; Tue, 04 Apr
+ 2023 14:39:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404-uncrown-detonate-8bc1ac@meerkat>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230206172340.2639971-1-rananta@google.com> <20230206172340.2639971-3-rananta@google.com>
+ <ZCTjirkCgBkT65eP@linux.dev> <CAJHc60y1BLQC4c0qXCuqF7JfewBC_fG2xuH0Wj0AHJh9x3CK5g@mail.gmail.com>
+ <ZCxvXq0dftq/Szra@linux.dev>
+In-Reply-To: <ZCxvXq0dftq/Szra@linux.dev>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Tue, 4 Apr 2023 14:39:18 -0700
+Message-ID: <CAJHc60x2kkkHi=tO4UymOeFeKA315bibhHgSeXZpdEReFUh4-g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] KVM: arm64: Add FEAT_TLBIRANGE support
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 01:35:34PM -0400, Konstantin Ryabitsev wrote:
-> On Tue, Apr 04, 2023 at 04:16:08PM +0000, Artem S. Tashkinov wrote:
-> > I love everything about what you've done except I've got a minor feature
-> > request for the kernel bugzilla and this new workflow specifically.
-> 
-> Great to hear.
-> 
-> > Let's have a bot which polls open bug reports every 3-6 months with this
-> > question:
-> > 
-> > "Is this still an issue in the current kernel? Please leave a comment or
-> > this bug report will be closed due to inactivity".
-> 
-> I plan to do it slightly differently -- there will be a "housekeeping" command
-> running daily that will auto-close bugs that haven't seen any activity for a
-> defined period (90 days, for example), with a message like:
-> 
-> "This bug is now closed due to inactivity. Please reopen if this issue is
-> still relevant with the latest kernel version."
+On Tue, Apr 4, 2023 at 11:41=E2=80=AFAM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> On Mon, Apr 03, 2023 at 10:26:01AM -0700, Raghavendra Rao Ananta wrote:
+> > Hi Oliver,
+> >
+> > On Wed, Mar 29, 2023 at 6:19=E2=80=AFPM Oliver Upton <oliver.upton@linu=
+x.dev> wrote:
+> > >
+> > > On Mon, Feb 06, 2023 at 05:23:35PM +0000, Raghavendra Rao Ananta wrot=
+e:
+> > > > Define a generic function __kvm_tlb_flush_range() to
+> > > > invalidate the TLBs over a range of addresses. The
+> > > > implementation accepts 'op' as a generic TLBI operation.
+> > > > Upcoming patches will use this to implement IPA based
+> > > > TLB invalidations (ipas2e1is).
+> > > >
+> > > > If the system doesn't support FEAT_TLBIRANGE, the
+> > > > implementation falls back to flushing the pages one by one
+> > > > for the range supplied.
+> > > >
+> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > > ---
+> > > >  arch/arm64/include/asm/kvm_asm.h | 18 ++++++++++++++++++
+> > > >  1 file changed, 18 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/=
+asm/kvm_asm.h
+> > > > index 43c3bc0f9544d..995ff048e8851 100644
+> > > > --- a/arch/arm64/include/asm/kvm_asm.h
+> > > > +++ b/arch/arm64/include/asm/kvm_asm.h
+> > > > @@ -221,6 +221,24 @@ DECLARE_KVM_NVHE_SYM(__per_cpu_end);
+> > > >  DECLARE_KVM_HYP_SYM(__bp_harden_hyp_vecs);
+> > > >  #define __bp_harden_hyp_vecs CHOOSE_HYP_SYM(__bp_harden_hyp_vecs)
+> > > >
+> > > > +#define __kvm_tlb_flush_range(op, mmu, start, end, level, tlb_leve=
+l) do {    \
+> > > > +     unsigned long pages, stride;                                 =
+           \
+> > > > +                                                                  =
+           \
+> > > > +     stride =3D kvm_granule_size(level);                          =
+             \
+> > >
+> > > Hmm... There's a rather subtle and annoying complication here that I
+> > > don't believe is handled.
+> > >
+> > > Similar to what I said in the last spin of the series, there is no
+> > > guarantee that a range of IPAs is mapped at the exact same level
+> > > throughout. Dirty logging and memslots that aren't hugepage aligned
+> > > could lead to a mix of mapping levels being used within a range of th=
+e
+> > > IPA space.
+> > >
+> > Unlike the comment on v1, the level/stride here is used to jump the
+> > addresses in case the system doesn't support TLBIRANGE. The TTL hint
+> > is 0.
+>
+> Right. So we agree that the level is not uniform throughout the provided
+> range. The invalidation by IPA is also used if 'pages' is odd, even on
+> systems with TLBIRANGE. We must assume the worst case here, in that the
+> TLBI by IPA invalidated a single PTE-level entry. You could wind up
+> over-invalidating in that case, but you'd still be correct.
+>
+Sure, let's always assume the stride as 4k. But with
+over-invalidation, do you think the penalty is acceptable, especially
+when invalidating say >2M blocks for systems without TLBIRANGE?
+In __kvm_tlb_flush_vmid_range(), what if we just rely on the iterative
+approach for invalidating odd number pages on systems with TLBIRANGE.
+For !TLBIRANGE systems simply invalidate all of TLB (like we do
+today). Thoughts?
 
-Will there be a way to opt out of this? I'd rather see any bug closed
-after an inspection from a human, I find the auto-close messages a bit
-rude and I've read similar sentiment from others. The upstream bugzilla
-is a best-effort level of support so it's true that bugs are left open
-for months, sometimes years unfortunately, but I've seen many cases where
-the report is valid or the "fix" is to improve documentation.
+Thank you.
+Raghavendra
 
-If we had enough people routinely going through the reports then some
-sort of reminders would make sense but we don't. I take the bug
-reports a task pool if there aren't more pressing things to do, which
-may not be the same way how others use bugzilla.k.org so I'd be fine
-with opting out of the auto-close or maybe out of any bugbot
-interactions.
+
+> > That being said, do you think we can always assume the least possible
+> > stride (say, 4k) and hardcode it?
+> > With respect to alignment, since the function is only called while
+> > breaking the table PTE,  do you think it'll still be a problem even if
+> > we go with the least granularity stride?
+>
+> I believe so. If we want to apply the range-based invalidations generally
+> in KVM then we will not always be dealing with a block-aligned chunk of
+> address.
+>
+> > > > +     start =3D round_down(start, stride);                         =
+             \
+> > > > +     end =3D round_up(end, stride);                               =
+             \
+> > > > +     pages =3D (end - start) >> PAGE_SHIFT;                       =
+             \
+> > > > +                                                                  =
+           \
+> > > > +     if ((!system_supports_tlb_range() &&                         =
+           \
+> > > > +          (end - start) >=3D (MAX_TLBI_OPS * stride)) ||          =
+             \
+> > >
+> > > Doesn't checking for TLBIRANGE above eliminate the need to test again=
+st
+> > > MAX_TLBI_OPS?
+> > >
+> > Derived from __flush_tlb_range(), I think the condition is used to
+> > just flush everything if the range is too large to iterate and flush
+> > when the system doesn't support TLBIRANGE. Probably to prevent
+> > soft-lockups?
+>
+> Right, but you test above for system_supports_tlb_range(), meaning that
+> you'd unconditionally call __kvm_tlb_flush_vmid() below.
+>
+> > > > +         pages >=3D MAX_TLBI_RANGE_PAGES) {                       =
+             \
+> > > > +             __kvm_tlb_flush_vmid(mmu);                           =
+           \
+> > > > +             break;                                               =
+           \
+> > > > +     }                                                            =
+           \
+> > > > +                                                                  =
+           \
+> > > > +     __flush_tlb_range_op(op, start, pages, stride, 0, tlb_level, =
+false);    \
+> > > > +} while (0)
+>
+> --
+> Thanks,
+> Oliver
