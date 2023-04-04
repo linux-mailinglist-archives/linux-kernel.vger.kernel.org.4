@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4BD6D6041
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FBD6D6045
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234625AbjDDMZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        id S234760AbjDDM0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234882AbjDDMZl (ORCPT
+        with ESMTP id S234873AbjDDM0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:25:41 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E701B90;
-        Tue,  4 Apr 2023 05:25:39 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id bi9so42147005lfb.12;
-        Tue, 04 Apr 2023 05:25:39 -0700 (PDT)
+        Tue, 4 Apr 2023 08:26:08 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5BA40D1;
+        Tue,  4 Apr 2023 05:25:56 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id h8so129867961ede.8;
+        Tue, 04 Apr 2023 05:25:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680611138;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RGrcJymg+ckaukDnkYkL45EafR2fD169G3iZOtvge2g=;
-        b=BTa8G3OTbNddd1DNHPTZfluySBVtJTcU+LjqTGxB5GfHbOu+ALGZTpnZkdDREd01Xa
-         xAG4j6S1wYdSFnFIcY7r7wlO5MC8w6LrcRwftMKSUqnPOUK8YF1/qH/rB38MYUGa0WQY
-         Z2TqYm9O5jOKEguCJ6pqBPUovbTIXDaenrzYamibmsPabXDQZ61Aemv6bAW4zIE1ECBX
-         WAH5XVNBk/QVjybOCG5uWYG2lD4lkWPA0YeDvy2TT+a+hQB2gj0n+lKIAtyl0p2jC14d
-         jci/aUVbUHzUyF5UMpW+afWtv47wIo5i7V3EmK78BkICyPi4pWzA8k5XQbP0iArVpmJe
-         IH6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680611138;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1680611154;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RGrcJymg+ckaukDnkYkL45EafR2fD169G3iZOtvge2g=;
-        b=RSBOs0AoHfYdaDm6+jTKOsS2A2vuVpt6Uimq5KVP9jVdwDSbgt0vvp8pTam8SvKGOx
-         XmH4erMqpkgzqzIpgEpDt1/PD34wUszTDwnDQRYrhsRyDo6L2nsOsdper9f+8BW3evg4
-         iKOrVpRbYPB957WZYIl54Fiog09FUW1Ba0cXb1tFb7nijti2T6rP46pB4bF0F8RNJ15g
-         sRaSmQarWrerFOYgZItxj6AI2BdtCb/kAOB+sWQ07pTJddaiMCGsjYkHmV/nV+4OlpIR
-         egxXSZOLlG7r7f12JydFrKOQMfmkpACTUwtpsE27t0alzJ10CWM1y7aA5wraGF+3FG3G
-         lFDQ==
-X-Gm-Message-State: AAQBX9fy/dEwwc+Wg6TaTLIAdpOcZkZNAGJF21rTT+XShFQBUiDjnF7K
-        bB50gx/xyoI3yyceUvGbxAU=
-X-Google-Smtp-Source: AKy350Y0jpe/w9Uo3Kh8yAlk4zEOOyeI6H2j666l0rrxtXxYRejpjj+llllY0nfTyPhStpAjByRXzg==
-X-Received: by 2002:ac2:558d:0:b0:4e6:9b01:b92b with SMTP id v13-20020ac2558d000000b004e69b01b92bmr566067lfg.67.1680611138251;
-        Tue, 04 Apr 2023 05:25:38 -0700 (PDT)
-Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id j27-20020ac253bb000000b004eaf8b20014sm2296281lfh.76.2023.04.04.05.25.37
+        bh=lvEiamQupS534VfqUXbSuDpINFZftut0QS92LpEg7X4=;
+        b=ITg0zr2umq6uJE5uWt38EKHKISLid7v1/LtdB0gMGwoJ7m76yE9AukVpmJ3D4ucMK0
+         4VD5e/vOPPzmfkG6ioZCZQedRavVzn8oskNNDk9df6YjFG+SwOxecL3O0UuRX18nkZNo
+         6DztwhTa8v0zPMYpinELW76yH9Ts58g0M5SRUCpfsjGZuLlnA6C+wXd1yqeN2gaTNXD6
+         4bQKj3FygSn3gx6iGOtSY5yHfg9TtTA2eTBQkJTBLvJXUY3bwF+Q/rQIn/xGfInX+3dR
+         aHbKnNxhhUv6UAfLSKnLu9t/mYRqlZwfxWeHYPwXicNp56Ua77Cux1GUemRhHdNRC4ug
+         bSPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680611154;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lvEiamQupS534VfqUXbSuDpINFZftut0QS92LpEg7X4=;
+        b=WL32vLQ4f9FM5+qwTekctCJfPYHhaMgiVaNeezm49od53OvMc7V9KESjlD+NtOCTqY
+         8Hw8JkwXmIf2soZNT+mW4EvjRHjtEGU1SIzI9twR7TzX+vKC5srEq4PP2lqBDrvwkEbE
+         kzKqWnMNJUJtTd2PrUWNN7di9HWs2GKpRQtagEZVftx9HSdB8kqIqQADev97NZlGu5sk
+         H75oWIkg9EX9l4V/7nqSY4h2KG82PgRZISrLWZdFkv4szwkXdwyRUz1T5tiLoXNpF3xo
+         2yEKcXiXj1R3SD+PmTs5uhnB5ExDnqGikhv7z503IsgMrEtzn7elJyeFe14q5Crt9eli
+         geHw==
+X-Gm-Message-State: AAQBX9fUsyZdg0tryXHUoG+Cvz46QVP0f42C2zKLueo829KxGWfDXu1Y
+        oDYfeu8Q6gW+PnoDQdnNYZY=
+X-Google-Smtp-Source: AKy350ZtNIoX7YZQDjBWRvM/+GxlQgoOVYwVgBRI52Y/EHxaIjTiEupUcppEDvzfUr8QQ+yo7CRhGg==
+X-Received: by 2002:a17:907:16a6:b0:947:f4e2:aa2c with SMTP id hc38-20020a17090716a600b00947f4e2aa2cmr13829357ejc.29.1680611154246;
+        Tue, 04 Apr 2023 05:25:54 -0700 (PDT)
+Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id bu7-20020a170906a14700b0093348be32cfsm5988062ejb.90.2023.04.04.05.25.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 05:25:37 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 15:25:35 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v2 3/3] doc: Make sysfs-bus-iio doc more exact
-Message-ID: <4cbc9dd1dc5974f06be0c90e435970e1105f4636.1680610554.git.mazziesaccount@gmail.com>
-References: <cover.1680610554.git.mazziesaccount@gmail.com>
+        Tue, 04 Apr 2023 05:25:53 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Daniel Vetter <daniel@ffwll.ch>, Mikko Perttunen <cyndis@kapsi.fi>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@gmail.com>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] gpu: host1x: Don't rely on dma_fence_wait_timeout return value
+Date:   Tue,  4 Apr 2023 14:25:50 +0200
+Message-Id: <168061111512.2057226.3790183208967549717.b4-ty@nvidia.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230301135107.999976-1-cyndis@kapsi.fi>
+References: <20230301135107.999976-1-cyndis@kapsi.fi>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="oE4Bg3zikhBh1VXn"
-Content-Disposition: inline
-In-Reply-To: <cover.1680610554.git.mazziesaccount@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -74,96 +76,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Thierry Reding <treding@nvidia.com>
 
---oE4Bg3zikhBh1VXn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 1 Mar 2023 15:51:06 +0200, Mikko Perttunen wrote:
+> From: Mikko Perttunen <mperttunen@nvidia.com>
+> 
+> dma_fence_wait_timeout (along with a host of other jiffies-based
+> timeouting functions) returns zero both in case of timeout and when
+> the wait completes during the last jiffy before timeout. As such,
+> we can't rely on it to distinguish between success and timeout.
+> 
+> [...]
 
-A few IIC channel descriptions explained used units as:
-data is in foo "that can be processed into an" [unit] value. The "can be
-processed into" is quite broad statement as it does not really explain
-what this processing means. This makes units pretty much useless.
+Applied, thanks!
 
-After discussion with Jonathan, it seems the units for these channels
-should also be well-defined as for all other channels. The processing
-means the standard scale and offset application that is used throughout
-the IIO. Let's make it more obvious by stating that the units are [unit]
-after scale ane offset are applied.
+[1/1] gpu: host1x: Don't rely on dma_fence_wait_timeout return value
+      commit: c1aaee94380874fd40f7bb8417c597aba3f72c75
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- Documentation/ABI/testing/sysfs-bus-iio | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/te=
-sting/sysfs-bus-iio
-index 6ba34c0d9789..b435c6f065ae 100644
---- a/Documentation/ABI/testing/sysfs-bus-iio
-+++ b/Documentation/ABI/testing/sysfs-bus-iio
-@@ -1807,8 +1807,8 @@ What:		/sys/bus/iio/devices/iio:deviceX/out_resistanc=
-eX_raw
- KernelVersion:	4.3
- Contact:	linux-iio@vger.kernel.org
- Description:
--		Raw (unscaled no offset etc.) resistance reading that can be processed
--		into an ohm value.
-+		Raw (unscaled no offset etc.) resistance reading.
-+		Units after application of scale and offset are ohms.
-=20
- What:		/sys/bus/iio/devices/iio:deviceX/heater_enable
- KernelVersion:	4.1.0
-@@ -1894,8 +1894,9 @@ What:		/sys/bus/iio/devices/iio:deviceX/in_electrical=
-conductivity_raw
- KernelVersion:	4.8
- Contact:	linux-iio@vger.kernel.org
- Description:
--		Raw (unscaled no offset etc.) electric conductivity reading that
--		can be processed to siemens per meter.
-+		Raw (unscaled no offset etc.) electric conductivity reading.
-+		Units after application of scale and offset are siemens per
-+		meter.
-=20
- What:		/sys/bus/iio/devices/iio:deviceX/in_countY_raw
- KernelVersion:	4.10
-@@ -1952,7 +1953,7 @@ KernelVersion:	4.18
- Contact:	linux-iio@vger.kernel.org
- Description:
- 		Raw (unscaled) phase difference reading from channel Y
--		that can be processed to radians.
-+		Units after application of scale and offset are radians.
-=20
- What:		/sys/bus/iio/devices/iio:deviceX/in_massconcentration_pm1_input
- What:		/sys/bus/iio/devices/iio:deviceX/in_massconcentrationY_pm1_input
---=20
-2.39.2
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---oE4Bg3zikhBh1VXn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQsFz4ACgkQeFA3/03a
-ocUr9wgAiu3ubVp27IMsxoQqIez73QDUdxWdNu6iAhWEKQPeyDDtgl32Pbz3jBKa
-qz+QMdm5SDVYdYfVswHpYWOpnvCG94vVOwtCc4rqm8IK/i0MIUGVjcqVBx/2LxVu
-TEdy9qNO5wD/da5/AetJeEuEKoTkZPq9oy19Lbi4EXXuAWbgBT3NbM6XcFIS/snZ
-7XjH+i1pu9Qw/EgOfpNUEhC//83yb3Rf6K4Ie4BqL6g3JYIynbej0RyHELYl2yIs
-3neUwhJD21/5KR/CvqyxVrfBO2etW1/j/UaX/7sm89cU09pAs0FpJkMbHouL+wV2
-30p4W8R1EQaFEldMr6hV+qQvB/3Ohw==
-=rku9
------END PGP SIGNATURE-----
-
---oE4Bg3zikhBh1VXn--
+Best regards,
+-- 
+Thierry Reding <treding@nvidia.com>
