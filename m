@@ -2,190 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820AE6D6745
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D85F6D6747
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234357AbjDDP2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 11:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
+        id S235463AbjDDP2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 11:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjDDP15 (ORCPT
+        with ESMTP id S235271AbjDDP21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 11:27:57 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EEC4491;
-        Tue,  4 Apr 2023 08:27:56 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334EgTuB004246;
-        Tue, 4 Apr 2023 15:27:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=O9XrjVx+x40QVB09UmyJ8DMy2DCEub230J9/Ih3XMtA=;
- b=tl4hrMf8ebrGfBvICt3Wwk/AeYdLJ7zjc3HUMt0i4bbLfJRe+uRdGpW37llSj/0zhLSe
- hvL1eiJsCQpMpNFjL6C+er+YLe5n8ITbwT60aJGXLp+FwAhHyyDyqD55Q3bERn+oBQFf
- NIM8sks4X6wF164LyIdAeKHxTvCgOjprbPiiUNRtC3TCC2gmrFn304eSzE+xRwy++XkJ
- 9sM+67qceVabiVNFbguOSkZzWuSCfhttDIAYRLUE3tBKBi6VYnaTNHVOZ7jiK2aOQH3E
- K1gkrH285OQjmte2wG3P5TMCgcIVQULKpa63Cjj2Cqlmjh5IDTUJ0E7KSd8zuR/7UcYL SQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3prmh4mupe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Apr 2023 15:27:42 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 334FGxbb012836;
-        Tue, 4 Apr 2023 15:27:42 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3prmh4munj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Apr 2023 15:27:41 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3341lc4m023645;
-        Tue, 4 Apr 2023 15:27:39 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3ppbvg2m91-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Apr 2023 15:27:39 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 334FRa1N47317518
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Apr 2023 15:27:36 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 489F72004B;
-        Tue,  4 Apr 2023 15:27:36 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CC8A520040;
-        Tue,  4 Apr 2023 15:27:35 +0000 (GMT)
-Received: from [9.155.211.163] (unknown [9.155.211.163])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Apr 2023 15:27:35 +0000 (GMT)
-Message-ID: <a25455eac6a02eeb9710d9204dfe0b91938f61a1.camel@linux.ibm.com>
-Subject: Re: [PATCH] net/mlx5: stop waiting for PCI link if reset is required
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Leon Romanovsky <leon@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Alexander Schmidt <alexs@linux.ibm.com>,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 04 Apr 2023 17:27:35 +0200
-In-Reply-To: <20230403182105.GC4514@unreal>
-References: <20230403075657.168294-1-schnelle@linux.ibm.com>
-         <20230403182105.GC4514@unreal>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 4 Apr 2023 11:28:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1260349C7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 08:28:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CD2A635FE
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 15:28:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31949C433D2;
+        Tue,  4 Apr 2023 15:28:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680622098;
+        bh=Q9R/0spYK1JLY5KmDAtd1V4FUjv3MQUTeOhn9KqE2eQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hy0iHLZYL/ciUUtKwh3G/xrFsOkIo3kS/TW2h3qr3W/E584v9VOPFckjvxO8A0U9i
+         2zvFkaBpxbRPL7lBNJTHoZYdr8XT3MQM08MgcujaE5m8o7nc6Jx5CltK5362P7tklU
+         8FesFNJ6gFb8xWP67kUf2KA1RF1Zn/acIsH7Iw6wR44KkUcgq2XftXyGs3R1ezQnO+
+         qz1USJUspK+Z3GMCmqFNACTZ8ztYZLuhLs6sAs+zrw2GnNZUoMz03S28Ge0zV8QxXh
+         p5wRQjDQnzslsTj+CFRA/vQLJXEit4qrtlCtgxOaN7wonpGNR8ukcqpYYlvBETX9a4
+         8b6DS3nl6n0KQ==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH v2] f2fs: fix to check readonly condition correctly
+Date:   Tue,  4 Apr 2023 23:28:07 +0800
+Message-Id: <20230404152807.4987-1-chao@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: KSOKikWBu51tUSlcAoH1KzvH5iF1Nxvk
-X-Proofpoint-ORIG-GUID: 36_dKQ-S0GYJnTH2R6MItLTu3i7Wr5Yd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-04_06,2023-04-04_04,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- bulkscore=0 spamscore=0 malwarescore=0 clxscore=1015 impostorscore=0
- phishscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304040139
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-04-03 at 21:21 +0300, Leon Romanovsky wrote:
-> On Mon, Apr 03, 2023 at 09:56:56AM +0200, Niklas Schnelle wrote:
-> > after an error on the PCI link, the driver does not need to wait
-> > for the link to become functional again as a reset is required. Stop
-> > the wait loop in this case to accelerate the recovery flow.
-> >=20
-> > Co-developed-by: Alexander Schmidt <alexs@linux.ibm.com>
-> > Signed-off-by: Alexander Schmidt <alexs@linux.ibm.com>
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > ---
-> >  drivers/net/ethernet/mellanox/mlx5/core/health.c | 12 ++++++++++--
-> >  1 file changed, 10 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/net/ethernet/mellanox/mlx5/core/health.c b/drivers=
-/net/ethernet/mellanox/mlx5/core/health.c
-> > index f9438d4e43ca..81ca44e0705a 100644
-> > --- a/drivers/net/ethernet/mellanox/mlx5/core/health.c
-> > +++ b/drivers/net/ethernet/mellanox/mlx5/core/health.c
-> > @@ -325,6 +325,8 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *d=
-ev)
-> >  	while (sensor_pci_not_working(dev)) {
->=20
-> According to the comment in sensor_pci_not_working(), this loop is
-> supposed to wait till PCI will be ready again. Otherwise, already in
-> first iteration, we will bail out with pci_channel_offline() error.
->=20
-> Thanks
+With below case, it can mount multi-device image w/ rw option, however
+one of secondary device is set as ro, later update will cause panic, so
+let's introduce f2fs_dev_is_readonly(), and check multi-devices rw status
+in f2fs_remount() w/ it in order to avoid such inconsistent mount status.
 
-Well yes. The problem is that this works for intermittent errors
-including when the card resets itself which seems to be the use case in
-mlx5_fw_reset_complete_reload() and mlx5_devlink_reload_fw_activate().
-If there is a PCI error that requires a link reset though we see some
-problems though it does work after running into the timeout.
+mkfs.f2fs -c /dev/zram1 /dev/zram0 -f
+blockdev --setro /dev/zram1
+mount -t f2fs dev/zram0 /mnt/f2fs
+mount: /mnt/f2fs: WARNING: source write-protected, mounted read-only.
+mount -t f2fs -o remount,rw mnt/f2fs
+dd if=/dev/zero  of=/mnt/f2fs/file bs=1M count=8192
 
-As I understand it and as implemented at least on s390,
-pci_channel_io_frozen is only set for fatal errors that require a reset
-while non fatal errors will have pci_channel_io_normal (see also
-Documentation/PCI/pcieaer-howto.rst) thus I think pci_channel_offline()
-should only be true if a reset is required or there is a permanent
-error. Furthermore in the pci_channel_io_frozen state the PCI function
-may be isolated and the reads will not reach the endpoint, this is the
-case at least on s390.  Thus for errors requiring a reset the loop
-without pci_channel_offline() will run until the reset is performed or
-the timeout is reached. In the mlx5_health_try_recover() case during
-error recovery we will then indeed always loop until timeout, because
-the loop blocks mlx5_pci_err_detected() from returning thus blocking
-the reset (see Documentation/PCI/pci-error-recovery.rst). Adding Bjorn,
-maybe he can confirm or correct my assumptions here.
+kernel BUG at fs/f2fs/inline.c:258!
+RIP: 0010:f2fs_write_inline_data+0x23e/0x2d0 [f2fs]
+Call Trace:
+  f2fs_write_single_data_page+0x26b/0x9f0 [f2fs]
+  f2fs_write_cache_pages+0x389/0xa60 [f2fs]
+  __f2fs_write_data_pages+0x26b/0x2d0 [f2fs]
+  f2fs_write_data_pages+0x2e/0x40 [f2fs]
+  do_writepages+0xd3/0x1b0
+  __writeback_single_inode+0x5b/0x420
+  writeback_sb_inodes+0x236/0x5a0
+  __writeback_inodes_wb+0x56/0xf0
+  wb_writeback+0x2a3/0x490
+  wb_do_writeback+0x2b2/0x330
+  wb_workfn+0x6a/0x260
+  process_one_work+0x270/0x5e0
+  worker_thread+0x52/0x3e0
+  kthread+0xf4/0x120
+  ret_from_fork+0x29/0x50
 
-Thanks,
-Niklas
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+v2:
+- update commit message to describe details of the issue.
+- fix to do the check in f2fs_remount().
+ fs/f2fs/f2fs.h  | 5 +++++
+ fs/f2fs/super.c | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
->=20
-> >  		if (time_after(jiffies, end))
-> >  			return -ETIMEDOUT;
-> > +		if (pci_channel_offline(dev->pdev))
-> > +			return -EIO;
-> >  		msleep(100);
-> >  	}
-> >  	return 0;
-> > @@ -332,10 +334,16 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev =
-*dev)
-> > =20
-> >  static int mlx5_health_try_recover(struct mlx5_core_dev *dev)
-> >  {
-> > +	int rc;
-> > +
-> >  	mlx5_core_warn(dev, "handling bad device here\n");
-> >  	mlx5_handle_bad_state(dev);
-> > -	if (mlx5_health_wait_pci_up(dev)) {
-> > -		mlx5_core_err(dev, "health recovery flow aborted, PCI reads still no=
-t working\n");
-> > +	rc =3D mlx5_health_wait_pci_up(dev);
-> > +	if (rc) {
-> > +		if (rc =3D=3D -ETIMEDOUT)
-> > +			mlx5_core_err(dev, "health recovery flow aborted, PCI reads still n=
-ot working\n");
-> > +		else
-> > +			mlx5_core_err(dev, "health recovery flow aborted, PCI channel offli=
-ne\n");
-> >  		return -EIO;
-> >  	}
-> >  	mlx5_core_err(dev, "starting health recovery flow\n");
-> >=20
-> > base-commit: 7e364e56293bb98cae1b55fd835f5991c4e96e7d
-> > --=20
-> > 2.37.2
-> >=20
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 2d4a7ef62537..52f3badced21 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4446,6 +4446,11 @@ static inline bool f2fs_hw_is_readonly(struct f2fs_sb_info *sbi)
+ 	return false;
+ }
+ 
++static inline bool f2fs_dev_is_readonly(struct f2fs_sb_info *sbi)
++{
++	return f2fs_sb_has_readonly(sbi) || f2fs_hw_is_readonly(sbi);
++}
++
+ static inline bool f2fs_lfs_mode(struct f2fs_sb_info *sbi)
+ {
+ 	return F2FS_OPTION(sbi).fs_mode == FS_MODE_LFS;
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index d016f398fcad..75597a107157 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -2321,7 +2321,7 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+ 	if (f2fs_readonly(sb) && (*flags & SB_RDONLY))
+ 		goto skip;
+ 
+-	if (f2fs_sb_has_readonly(sbi) && !(*flags & SB_RDONLY)) {
++	if (f2fs_dev_is_readonly(sbi) && !(*flags & SB_RDONLY)) {
+ 		err = -EROFS;
+ 		goto restore_opts;
+ 	}
+-- 
+2.36.1
 
