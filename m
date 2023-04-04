@@ -2,236 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D356D5736
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 05:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9AC6D573D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 05:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbjDDD3V convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Apr 2023 23:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S232473AbjDDDeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 23:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232736AbjDDD3R (ORCPT
+        with ESMTP id S229684AbjDDDeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 23:29:17 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7089199C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 20:29:12 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 15C8724E258;
-        Tue,  4 Apr 2023 11:29:10 +0800 (CST)
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 4 Apr
- 2023 11:29:10 +0800
-Received: from localhost.localdomain (183.27.97.179) by EXMBX067.cuchost.com
- (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 4 Apr
- 2023 11:29:09 +0800
-From:   Mason Huo <mason.huo@starfivetech.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Mason Huo" <mason.huo@starfivetech.com>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Sia Jee Heng <jeeheng.sia@starfivetech.com>
-Subject: [PATCH v5] irqchip/irq-sifive-plic: Add syscore callbacks for hibernation
-Date:   Tue, 4 Apr 2023 11:29:08 +0800
-Message-ID: <20230404032908.89638-1-mason.huo@starfivetech.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 3 Apr 2023 23:34:04 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA68198A;
+        Mon,  3 Apr 2023 20:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680579242; x=1712115242;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=y95LcMuCpo5c7PKsq3CMbqvqoeAr4Ga5Vqhi17tTnUM=;
+  b=OgGza8xd+sNjLhVp4cNgOAioaCIw3LryOMErHKGt7vRa8oP3Awo+sXob
+   ieVMWP1kLcoVNJQGoYQRnZjD+so+3ROarbIRhhd/F+oySKoyOwoSnYr5M
+   GVetjEsgVkqg730Bn3+C9ufnHXpQf7xGPLJrVu5nWf9tZtdoqx6tq2L4b
+   sQe75v7VyG8H3UzmDbnguJFipwksUumGlU3nxkCF+0x+M2QUA8RB9N5Jk
+   mwcZlZtuYxAO32SkeF7G2cJbEc5MCpij5d2ZuyBWCltnrbVZnudRX7rqA
+   jN9rnZ970TxknI9iqIto9yvM2D21WXqPBNFLtcpaK8t/R7kh9mXRmTA7J
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="322472770"
+X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
+   d="scan'208";a="322472770"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 20:34:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="755494807"
+X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
+   d="scan'208";a="755494807"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Apr 2023 20:33:59 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pjXQk-000P7Q-1I;
+        Tue, 04 Apr 2023 03:33:58 +0000
+Date:   Tue, 4 Apr 2023 11:33:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Davis <afd@ti.com>, Arnd Bergmann <arnd@arndb.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Stultz <jstultz@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, Andrew Davis <afd@ti.com>
+Subject: Re: [PATCH v2] misc: sram: Add DMA-BUF Heap exporting of SRAM areas
+Message-ID: <202304041144.t5JCOGsE-lkp@intel.com>
+References: <20230403192433.26648-1-afd@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.97.179]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX067.cuchost.com
- (172.16.6.67)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403192433.26648-1-afd@ti.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The priority and enable registers of plic will be reset
-during hibernation power cycle in poweroff mode,
-add the syscore callbacks to save/restore those registers.
+Hi Andrew,
 
-Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
-Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-Reviewed-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/r/202302140709.CdkxgtPi-lkp@intel.com/
----
- drivers/irqchip/irq-sifive-plic.c | 93 ++++++++++++++++++++++++++++++-
- 1 file changed, 91 insertions(+), 2 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
-index ff47bd0dec45..e1484905b7bd 100644
---- a/drivers/irqchip/irq-sifive-plic.c
-+++ b/drivers/irqchip/irq-sifive-plic.c
-@@ -17,6 +17,7 @@
- #include <linux/of_irq.h>
- #include <linux/platform_device.h>
- #include <linux/spinlock.h>
-+#include <linux/syscore_ops.h>
- #include <asm/smp.h>
- 
- /*
-@@ -67,6 +68,8 @@ struct plic_priv {
- 	struct irq_domain *irqdomain;
- 	void __iomem *regs;
- 	unsigned long plic_quirks;
-+	unsigned int nr_irqs;
-+	unsigned long *prio_save;
- };
- 
- struct plic_handler {
-@@ -78,6 +81,7 @@ struct plic_handler {
- 	 */
- 	raw_spinlock_t		enable_lock;
- 	void __iomem		*enable_base;
-+	u32			*enable_save;
- 	struct plic_priv	*priv;
- };
- static int plic_parent_irq __ro_after_init;
-@@ -229,6 +233,71 @@ static int plic_irq_set_type(struct irq_data *d, unsigned int type)
- 	return IRQ_SET_MASK_OK;
- }
- 
-+static int plic_irq_suspend(void)
-+{
-+	unsigned int i, cpu;
-+	u32 __iomem *reg;
-+	struct plic_priv *priv;
-+
-+	priv = per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
-+
-+	for (i = 0; i < priv->nr_irqs; i++)
-+		if (readl(priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID))
-+			__set_bit(i, priv->prio_save);
-+		else
-+			__clear_bit(i, priv->prio_save);
-+
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
-+
-+		if (!handler->present)
-+			continue;
-+
-+		raw_spin_lock(&handler->enable_lock);
-+		for (i = 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
-+			reg = handler->enable_base + i * sizeof(u32);
-+			handler->enable_save[i] = readl(reg);
-+		}
-+		raw_spin_unlock(&handler->enable_lock);
-+	}
-+
-+	return 0;
-+}
-+
-+static void plic_irq_resume(void)
-+{
-+	unsigned int i, index, cpu;
-+	u32 __iomem *reg;
-+	struct plic_priv *priv;
-+
-+	priv = per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
-+
-+	for (i = 0; i < priv->nr_irqs; i++) {
-+		index = BIT_WORD(i);
-+		writel((priv->prio_save[index] & BIT_MASK(i)) ? 1 : 0,
-+		       priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
-+	}
-+
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
-+
-+		if (!handler->present)
-+			continue;
-+
-+		raw_spin_lock(&handler->enable_lock);
-+		for (i = 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
-+			reg = handler->enable_base + i * sizeof(u32);
-+			writel(handler->enable_save[i], reg);
-+		}
-+		raw_spin_unlock(&handler->enable_lock);
-+	}
-+}
-+
-+static struct syscore_ops plic_irq_syscore_ops = {
-+	.suspend	= plic_irq_suspend,
-+	.resume		= plic_irq_resume,
-+};
-+
- static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
- 			      irq_hw_number_t hwirq)
- {
-@@ -345,6 +414,7 @@ static int __init __plic_init(struct device_node *node,
- 	u32 nr_irqs;
- 	struct plic_priv *priv;
- 	struct plic_handler *handler;
-+	unsigned int cpu;
- 
- 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -363,15 +433,21 @@ static int __init __plic_init(struct device_node *node,
- 	if (WARN_ON(!nr_irqs))
- 		goto out_iounmap;
- 
-+	priv->nr_irqs = nr_irqs;
-+
-+	priv->prio_save = bitmap_alloc(nr_irqs, GFP_KERNEL);
-+	if (!priv->prio_save)
-+		goto out_free_priority_reg;
-+
- 	nr_contexts = of_irq_count(node);
- 	if (WARN_ON(!nr_contexts))
--		goto out_iounmap;
-+		goto out_free_priority_reg;
- 
- 	error = -ENOMEM;
- 	priv->irqdomain = irq_domain_add_linear(node, nr_irqs + 1,
- 			&plic_irqdomain_ops, priv);
- 	if (WARN_ON(!priv->irqdomain))
--		goto out_iounmap;
-+		goto out_free_priority_reg;
- 
- 	for (i = 0; i < nr_contexts; i++) {
- 		struct of_phandle_args parent;
-@@ -441,6 +517,11 @@ static int __init __plic_init(struct device_node *node,
- 		handler->enable_base = priv->regs + CONTEXT_ENABLE_BASE +
- 			i * CONTEXT_ENABLE_SIZE;
- 		handler->priv = priv;
-+
-+		handler->enable_save =  kcalloc(DIV_ROUND_UP(nr_irqs, 32),
-+						sizeof(*handler->enable_save), GFP_KERNEL);
-+		if (!handler->enable_save)
-+			goto out_free_enable_reg;
- done:
- 		for (hwirq = 1; hwirq <= nr_irqs; hwirq++) {
- 			plic_toggle(handler, hwirq, 0);
-@@ -461,11 +542,19 @@ static int __init __plic_init(struct device_node *node,
- 				  plic_starting_cpu, plic_dying_cpu);
- 		plic_cpuhp_setup_done = true;
- 	}
-+	register_syscore_ops(&plic_irq_syscore_ops);
- 
- 	pr_info("%pOFP: mapped %d interrupts with %d handlers for"
- 		" %d contexts.\n", node, nr_irqs, nr_handlers, nr_contexts);
- 	return 0;
- 
-+out_free_enable_reg:
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		handler = per_cpu_ptr(&plic_handlers, cpu);
-+		kfree(handler->enable_save);
-+	}
-+out_free_priority_reg:
-+	kfree(priv->prio_save);
- out_iounmap:
- 	iounmap(priv->regs);
- out_free_priv:
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus soc/for-next pza/reset/next linus/master v6.3-rc5 next-20230403]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrew-Davis/misc-sram-Add-DMA-BUF-Heap-exporting-of-SRAM-areas/20230404-032607
+patch link:    https://lore.kernel.org/r/20230403192433.26648-1-afd%40ti.com
+patch subject: [PATCH v2] misc: sram: Add DMA-BUF Heap exporting of SRAM areas
+config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20230404/202304041144.t5JCOGsE-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6fcaa3c7cfbc144dd982f9abaa1c5af50dde24a8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andrew-Davis/misc-sram-Add-DMA-BUF-Heap-exporting-of-SRAM-areas/20230404-032607
+        git checkout 6fcaa3c7cfbc144dd982f9abaa1c5af50dde24a8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304041144.t5JCOGsE-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/misc/sram-dma-heap.c:161:17: warning: no previous prototype for 'sram_dma_heap_allocate' [-Wmissing-prototypes]
+     161 | struct dma_buf *sram_dma_heap_allocate(struct dma_heap *heap,
+         |                 ^~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/sram_dma_heap_allocate +161 drivers/misc/sram-dma-heap.c
+
+   160	
+ > 161	struct dma_buf *sram_dma_heap_allocate(struct dma_heap *heap,
+   162					       unsigned long len,
+   163					       unsigned long fd_flags,
+   164					       unsigned long heap_flags)
+   165	{
+   166		struct sram_dma_heap *sram_dma_heap = dma_heap_get_drvdata(heap);
+   167		struct sram_dma_heap_buffer *buffer;
+   168	
+   169		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+   170		struct dma_buf *dmabuf;
+   171		int ret;
+   172	
+   173		buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+   174		if (!buffer)
+   175			return ERR_PTR(-ENOMEM);
+   176		buffer->pool = sram_dma_heap->pool;
+   177		INIT_LIST_HEAD(&buffer->attachments);
+   178		mutex_init(&buffer->attachments_lock);
+   179		buffer->len = len;
+   180	
+   181		buffer->vaddr = (void *)gen_pool_alloc(buffer->pool, buffer->len);
+   182		if (!buffer->vaddr) {
+   183			ret = -ENOMEM;
+   184			goto free_buffer;
+   185		}
+   186	
+   187		buffer->paddr = gen_pool_virt_to_phys(buffer->pool, (unsigned long)buffer->vaddr);
+   188		if (buffer->paddr == -1) {
+   189			ret = -ENOMEM;
+   190			goto free_pool;
+   191		}
+   192	
+   193		/* create the dmabuf */
+   194		exp_info.exp_name = dma_heap_get_name(heap);
+   195		exp_info.ops = &sram_dma_heap_buf_ops;
+   196		exp_info.size = buffer->len;
+   197		exp_info.flags = fd_flags;
+   198		exp_info.priv = buffer;
+   199		dmabuf = dma_buf_export(&exp_info);
+   200		if (IS_ERR(dmabuf)) {
+   201			ret = PTR_ERR(dmabuf);
+   202			goto free_pool;
+   203		}
+   204	
+   205		return dmabuf;
+   206	
+   207	free_pool:
+   208		gen_pool_free(buffer->pool, (unsigned long)buffer->vaddr, buffer->len);
+   209	free_buffer:
+   210		kfree(buffer);
+   211	
+   212		return ERR_PTR(ret);
+   213	}
+   214	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
