@@ -2,118 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C806D56C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 04:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C40B6D56C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 04:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbjDDCc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 22:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S229446AbjDDCdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 22:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjDDCcY (ORCPT
+        with ESMTP id S229757AbjDDCdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 22:32:24 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23919FE;
-        Mon,  3 Apr 2023 19:32:23 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PrBcM4Q5qz4whh;
-        Tue,  4 Apr 2023 12:32:19 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680575541;
-        bh=g+Ca+8o14efamQlex7/wChezECtdEwAVcLvKdZ0WtcI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rHJYBppLA0A7w+oS/BA8ig5K/bt8hD0qCNOBVtqjunGSIOBp3l5CymLq+msDLVtYo
-         Ez+HmuS0pwWVEQJNZ1aGaiFQCQTdZFj6l6cBz8KKyeEZKEZ6N+WwBDrJsBFcgk8eKG
-         S3tBSwaNHhoHts+N7yiuogtyRrAV+c9La6yxHZDCAMi8kawbHkPdJo1UsJK5aCyqK+
-         5624ZkwSh6nGBE+jPn8ISQQvvL+N3X18PIXM5i+hDPx9Jhon0HRQB0CiwwZ4ea/JEQ
-         Ottk3Qjx0e08Am7AldiuJWhL5MTxM22xA4bMuJKYXXmW+CYKS9zG3jKp03XsYhqsyA
-         H/lb28FMaWSMw==
-Date:   Tue, 4 Apr 2023 12:32:17 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     KVM <kvm@vger.kernel.org>, Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the kvm-arm tree with the kvm-fixes
- tree
-Message-ID: <20230404123217.6b784b4b@canb.auug.org.au>
+        Mon, 3 Apr 2023 22:33:12 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8041FD7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 19:33:10 -0700 (PDT)
+Date:   Tue, 04 Apr 2023 02:32:46 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1680575586; x=1680834786;
+        bh=3nDH2D2gZWk3PxPEgj9RNM8Ufiko6BkiGlNqFRgeZIo=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=YmWrCnPNa4OwZh+kUi7OOUQ3rSPOv7wowoSidd4RDgeJ8slNabMfWjBRXlezARAMW
+         P4nM8klaV8dvjBDQbig3GZzBRDbH1eWshJ7f3+DIqbZlGXrKEXVbQmlR5BRJb/HGIM
+         FUbGoZtS3EK3m1K3sf7wnQ+FqpZB8+KT2ZGtvPA/2/X5+kLCvrSsMvdD3pLsUJvurD
+         q4t4fgs9hsy8EU2Jgj0Uu4QZbrpOxRljeuLUvBUKJRPBdDuYoCxFfeO7tQo9GzLamY
+         mH9jNZh3wvwRG3gX30JQJoIZiU8ExiOJJlC6agvjm33eSf+vql107GaRYtdB0KJcZl
+         J0G6kwHlqOa6A==
+To:     Om Parikh <hack3r-0m@proton.me>
+From:   hack3r-0m <hack3r-0m@proton.me>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Olof Johansson <olof@lixom.net>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: watchdog: alphascale-asm9260: convert to DT schema
+Message-ID: <WaJw8WW0_x3pP2NOWf11aNOJx0xB-gZuE9bMTmydhniI0kSNa5M2oJkCp5PNZR9O1ySeV7RRLRf8rkpfiqd_P2udBHGf58x9bHSUZ7Vl4vU=@proton.me>
+In-Reply-To: <20230404022015.754177-1-hack3r-0m@proton.me>
+References: <20230403004138.326482-1-hack3r-0m@proton.me> <20230404022015.754177-1-hack3r-0m@proton.me>
+Feedback-ID: 58440162:user:proton
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/toJpyekP/=0eG=/jvVezQS3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        TO_EQ_FM_DIRECT_MX autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/toJpyekP/=0eG=/jvVezQS3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Thanks for the feedback, I have incorporated the fixes in the patch. Warnin=
+gs generated from `checkpatch.pl` script seems to be false positive in this=
+ case.
 
-Hi all,
+------- Original Message -------
+On Tuesday, April 4th, 2023 at 7:51 AM, Om Parikh <hack3r-0m@proton.me> wro=
+te:
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-  arch/arm64/kvm/arm.c
-
-between commit:
-
-  52882b9c7a76 ("KVM: PPC: Make KVM_CAP_IRQFD_RESAMPLE platform dependent")
-
-from the kvm-fixes tree and commit:
-
-  30ec7997d175 ("KVM: arm64: timers: Allow userspace to set the global coun=
-ter offset")
-
-from the kvm-arm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/kvm/arm.c
-index aaa752be3776,0e5a3ff8cc5a..000000000000
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@@ -220,7 -232,7 +232,8 @@@ int kvm_vm_ioctl_check_extension(struc
-  	case KVM_CAP_VCPU_ATTRIBUTES:
-  	case KVM_CAP_PTP_KVM:
-  	case KVM_CAP_ARM_SYSTEM_SUSPEND:
- +	case KVM_CAP_IRQFD_RESAMPLE:
-+ 	case KVM_CAP_COUNTER_OFFSET:
-  		r =3D 1;
-  		break;
-  	case KVM_CAP_SET_GUEST_DEBUG2:
-
---Sig_/toJpyekP/=0eG=/jvVezQS3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQrjDIACgkQAVBC80lX
-0GxnBgf+MPxydLj2MmhqjmXUtoz8BPZq7V7HRcuxAsPedrjkOZVZGYdri6F2y5xh
-p1ux2wH9PqHTYCuxdajssenvSTqDNvYZJ5tWA9cv92EfTADzFVVG+nTn/zYJiRL7
-v8w+EwHy1BezCIokKiRGzYeUeOaNkC/39kITrxzIGzRZGp8P0arlTcjdI22pr0JA
-hwGxVVRxXrXkQSo85Jzwwm3IciMCKWN9767lMlzmT4hZbYqxzeEf8v6/cVfDXuFC
-m/qwZ1Q7iFgHD1Za5BFPX1olK1Enb2K7mI5os6Y8LJT8zCxpfjBhyUXY3rjmSDbm
-MOH0VE8LdqkKHoZ7Z0Zg89w/xyzupA==
-=UnsP
------END PGP SIGNATURE-----
-
---Sig_/toJpyekP/=0eG=/jvVezQS3--
+> Makes alphascale-asm9260 dt bindings adhere to the dt json-schema
+> by replacing txt file with yaml file.
+>=20
+> Signed-off-by: Om Parikh hack3r-0m@proton.me
+>=20
+> ---
+> .../watchdog/alphascale,asm9260-wdt.yaml | 73 +++++++++++++++++++
+> .../bindings/watchdog/alphascale-asm9260.txt | 35 ---------
+> 2 files changed, 73 insertions(+), 35 deletions(-)
+> create mode 100644 Documentation/devicetree/bindings/watchdog/alphascale,=
+asm9260-wdt.yaml
+> delete mode 100644 Documentation/devicetree/bindings/watchdog/alphascale-=
+asm9260.txt
+>=20
+> diff --git a/Documentation/devicetree/bindings/watchdog/alphascale,asm926=
+0-wdt.yaml b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-=
+wdt.yaml
+> new file mode 100644
+> index 000000000000..ceee5f086e4a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.y=
+aml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/alphascale,asm9260-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Alphascale asm9260 Watchdog timer
+> +
+> +allOf:
+> + - $ref: watchdog.yaml#
+> +
+> +maintainers:
+> + - Oleksij Rempel linux@rempel-privat.de
+>=20
+> + - Olof Johansson olof@lixom.net
+>=20
+> +
+> +properties:
+> + compatible:
+> + enum:
+> + - alphascale,asm9260-wdt
+> +
+> + reg:
+> + maxItems: 1
+> +
+> + clocks:
+> + items:
+> + - description: source clock, used for tick counter
+> + - description: ahb gate
+> +
+> + clock-names:
+> + items:
+> + - const: mod
+> + - const: ahb
+> +
+> + interrupts:
+> + maxItems: 1
+> +
+> + resets:
+> + items:
+> + - description: phandle pointing to the system reset controller with lin=
+e
+> + index for the watchdog.
+> +
+> + reset-names:
+> + items:
+> + - const: wdt_rst
+> +
+> + timeout-sec: true
+> +
+> + alphascale,mode:
+> + description: to specify the reset mode of operation
+> + $ref: /schemas/types.yaml#/definitions/string
+> + enum: [hw, sw, debug]
+> +
+> +required:
+> + - compatible
+> + - reg
+> + - clocks
+> + - clock-names
+> + - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> + - |
+> + #include <dt-bindings/clock/alphascale,asm9260.h>
+>=20
+> + watchdog0: watchdog@80048000 {
+> + compatible =3D "alphascale,asm9260-wdt";
+> + reg =3D <0x80048000 0x10>;
+>=20
+> + clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
+>=20
+> + clock-names =3D "mod", "ahb";
+> + interrupts =3D <55>;
+>=20
+> + timeout-sec =3D <30>;
+>=20
+> + alphascale,mode =3D "hw";
+> + };
+> diff --git a/Documentation/devicetree/bindings/watchdog/alphascale-asm926=
+0.txt b/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
+> deleted file mode 100644
+> index 75b265a04047..000000000000
+> --- a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
+> +++ /dev/null
+> @@ -1,35 +0,0 @@
+> -Alphascale asm9260 Watchdog timer
+> -
+> -Required properties:
+> -
+> -- compatible : should be "alphascale,asm9260-wdt".
+> -- reg : Specifies base physical address and size of the registers.
+> -- clocks : the clocks feeding the watchdog timer. See clock-bindings.txt
+> -- clock-names : should be set to
+> - "mod" - source for tick counter.
+> - "ahb" - ahb gate.
+> -- resets : phandle pointing to the system reset controller with
+> - line index for the watchdog.
+> -- reset-names : should be set to "wdt_rst".
+> -
+> -Optional properties:
+> -- timeout-sec : shall contain the default watchdog timeout in seconds,
+> - if unset, the default timeout is 30 seconds.
+> -- alphascale,mode : three modes are supported
+> - "hw" - hw reset (default).
+> - "sw" - sw reset.
+> - "debug" - no action is taken.
+> -
+> -Example:
+> -
+> -watchdog0: watchdog@80048000 {
+> - compatible =3D "alphascale,asm9260-wdt";
+> - reg =3D <0x80048000 0x10>;
+>=20
+> - clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
+>=20
+> - clock-names =3D "mod", "ahb";
+> - interrupts =3D <55>;
+>=20
+> - resets =3D <&rst WDT_RESET>;
+>=20
+> - reset-names =3D "wdt_rst";
+> - timeout-sec =3D <30>;
+>=20
+> - alphascale,mode =3D "hw";
+> -};
+> --
+> 2.40.0
