@@ -2,120 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3226D668A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA836D6678
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234826AbjDDPAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 11:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
+        id S233384AbjDDO7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235483AbjDDO72 (ORCPT
+        with ESMTP id S232770AbjDDO6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:59:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B953C2F;
-        Tue,  4 Apr 2023 07:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KBh4rzbfHfMkMMlE9cw+MqyUsj44Di5Ker7OlwFYGXg=; b=FmENSU8DdsJwRKLNIy11pT5rwr
-        gZFbISKwxtxGEbpRDZI+PdPBb8ubt+23BYYSER2yHfUnSI2zgXRlA/A9liB6dhfL6rTy6LYIMRvQm
-        gyR6cAIG2mB+TC5hkfYw1+vYNcbuY++BpvLFCCjlbeWJmHkcNxGqSYl+N/wcgrOkou9YFrZd67E9m
-        w2uM4nUqUiAoo0Tu2WJytt+fQkxTpy55fgWCKZrUonHITpNDOnhhCxIBg+tWp3ViIM8YS9U4v2tUE
-        9jirZfuWp7fZAvU8W0ipyUy++FGIYwgfKD5XO1ksJowLv7OYriDmtjptXbGAC0187adFlCZx+HUPA
-        RAWV4RFA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pji6d-00FSN3-3U; Tue, 04 Apr 2023 14:57:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7720D30003A;
-        Tue,  4 Apr 2023 16:57:51 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5C05626442AC2; Tue,  4 Apr 2023 16:57:51 +0200 (CEST)
-Date:   Tue, 4 Apr 2023 16:57:51 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yair Podemsky <ypodemsk@redhat.com>
-Cc:     linux@armlinux.org.uk, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, davem@davemloft.net, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org,
-        arnd@arndb.de, keescook@chromium.org, paulmck@kernel.org,
-        jpoimboe@kernel.org, samitolvanen@google.com, frederic@kernel.org,
-        ardb@kernel.org, juerg.haefliger@canonical.com,
-        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        tony@atomide.com, linus.walleij@linaro.org,
-        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, mtosatti@redhat.com, vschneid@redhat.com,
-        dhildenb@redhat.com, alougovs@redhat.com
-Subject: Re: [PATCH 2/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to MM CPUs
-Message-ID: <20230404145751.GA297936@hirez.programming.kicks-ass.net>
-References: <20230404134224.137038-1-ypodemsk@redhat.com>
- <20230404134224.137038-3-ypodemsk@redhat.com>
+        Tue, 4 Apr 2023 10:58:55 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F4759DD
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:58:03 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id w4so31505900plg.9
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 07:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680620283;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H9uYwVcXo7cBUUBOTLZ2J2lrgVJ/xfkFZclj3HBehK8=;
+        b=UAETlx+9wQOEYw9NkD5esQ22zJR9CYzlPJFuuru/zG8A7bcoHUo5CXJ9VMeQYHfVj4
+         a6KAda1lEkoabUz13lUVXFC0HOTYZxNrY28ZtkJwknBw2NpS4RPwtznfSXXUrdnZI0T7
+         QmwkjqpQrUKWOZC3HtGUeObmFnSzFFtkmfJSqhp40MV8d2URnW6nb/8H83pnqsLUpNCo
+         9E4Ebl0P7KOXfKbvh46S7fB2ewb8ceCDSz600lMgQ4Jr1IKVVBcoP4jovOaIi2xfINbo
+         ZiZlIOrHGJNGygni7UnfXlF+ipe0cAdJEAT54EvufshEYUUh8gD6sHYaV/jSusLemeot
+         wXHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680620283;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H9uYwVcXo7cBUUBOTLZ2J2lrgVJ/xfkFZclj3HBehK8=;
+        b=ODFex+sXhmJzB9td99yRc+ExrBwIMQ++xtUt9hJDgEkcJBvST1yfyoCm1dFy6A0Rgd
+         MacGHI50h0hQOVBGDBH4iaZtSPkbnLwNyLHh++N0JkAqf95lmLerv9xZ7KuMoQgt9C7r
+         lCl8sfZBOJr2KwdpcZUIurd2UP+rsy1RYcWccvMTgD10WcIQkHjbqOMCGS8WA0Wuyc+4
+         CPAvoXWS6DyOL9EkS0pJzRIEdS1RlbxgFIKxBCw2fEzREzdcqP+MvdIU+n5jv8q7Isv7
+         LDPZp+mWeq7HcH3AWFKAW9TOwiWr6D6HNHB6dw1sn9BBHJUH+s8UTmDorx3hyxgR3gOc
+         CbbQ==
+X-Gm-Message-State: AAQBX9ckvWyR/hzkZUPwVy+48ymHqarq5pHSyq9s+qQ0pOS34c0naoR6
+        T9MN2r72RjqQaY1ueGSytE5khg==
+X-Google-Smtp-Source: AKy350YdY2blg+WDMTITRqonrmBC853Tqawrwror3LCdLvv5uZ3X8E8eImt5a/UgDnCMC9oeW3hnfg==
+X-Received: by 2002:a17:902:ec92:b0:1a2:87a2:c91a with SMTP id x18-20020a170902ec9200b001a287a2c91amr3262702plg.34.1680620283196;
+        Tue, 04 Apr 2023 07:58:03 -0700 (PDT)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id k17-20020a170902761100b0019ef86c2574sm8381272pll.270.2023.04.04.07.58.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 07:58:02 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Bernhard =?utf-8?Q?Rosenkr=C3=A4n?= =?utf-8?Q?zer?= 
+        <bero@baylibre.com>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4 00/11] Improve the MT8365 SoC and EVK board support
+In-Reply-To: <7h1ql0y0j7.fsf@baylibre.com>
+References: <20230203-evk-board-support-v4-0-5cffe66a38c0@baylibre.com>
+ <7hy1ncydtc.fsf@baylibre.com>
+ <CAFGrd9rKy9a4bUf1dkUtTogtWPFr5eu3jcsdaixi3hs_dWMwrg@mail.gmail.com>
+ <CAFGrd9qLzcDJO_Fk_-B6XYuuxQzQoYLXmdp0Qj1Tszr0-sqNgw@mail.gmail.com>
+ <7h1ql0y0j7.fsf@baylibre.com>
+Date:   Tue, 04 Apr 2023 07:58:01 -0700
+Message-ID: <7hy1n7wv7q.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404134224.137038-3-ypodemsk@redhat.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 04:42:23PM +0300, Yair Podemsky wrote:
-> diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
-> index 2b93cf6ac9ae..5ea9be6fb87c 100644
-> --- a/mm/mmu_gather.c
-> +++ b/mm/mmu_gather.c
-> @@ -191,7 +191,13 @@ static void tlb_remove_table_smp_sync(void *arg)
->  	/* Simply deliver the interrupt */
->  }
->  
-> -void tlb_remove_table_sync_one(void)
-> +#ifdef CONFIG_ARCH_HAS_CPUMASK_BITS
-> +#define REMOVE_TABLE_IPI_MASK mm_cpumask(mm)
-> +#else
-> +#define REMOVE_TABLE_IPI_MASK NULL
-> +#endif /* CONFIG_ARCH_HAS_CPUMASK_BITS */
-> +
-> +void tlb_remove_table_sync_one(struct mm_struct *mm)
->  {
->  	/*
->  	 * This isn't an RCU grace period and hence the page-tables cannot be
-> @@ -200,7 +206,8 @@ void tlb_remove_table_sync_one(void)
->  	 * It is however sufficient for software page-table walkers that rely on
->  	 * IRQ disabling.
->  	 */
-> -	smp_call_function(tlb_remove_table_smp_sync, NULL, 1);
-> +	on_each_cpu_mask(REMOVE_TABLE_IPI_MASK, tlb_remove_table_smp_sync,
-> +			NULL, true);
->  }
+Kevin Hilman <khilman@baylibre.com> writes:
 
-Uhh, I don't think NULL is a valid @mask argument. Should that not be
-something like:
+> Alexandre Mergnat <amergnat@baylibre.com> writes:
+>
+>> Here a build-able & working branch with dependencies:
+>> https://gitlab.baylibre.com/baylibre/mediatek/bsp/linux/-/commits/amergnat/i350-evk-board-support
+>
+> This branch doesn't compile.
 
-#ifdef CONFIG_ARCH_HAS_CPUMASK
-#define REMOVE_TABLE_IPI_MASK mm_cpumask(mm)
-#else
-#define REMOVE_TABLE_IPI_MASK cpu_online_mask
-#endif
+I'm wrong, it compiles fine.  I was on the wrong branch.
 
-	preempt_disable();
-	on_each_cpu_mask(REMOVE_TABLE_IPI_MASK, tlb_remove_table_smp_sync, NULL true);
-	preempt_enable();
+Sorry for the noise,
 
-
-?
+Kevin
