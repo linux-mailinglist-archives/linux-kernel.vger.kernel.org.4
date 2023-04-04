@@ -2,221 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E43B6D64D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1CB6D64DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235520AbjDDOKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
+        id S235518AbjDDOMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235330AbjDDOKs (ORCPT
+        with ESMTP id S235330AbjDDOMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:10:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7B219AE;
-        Tue,  4 Apr 2023 07:10:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5173C6316E;
-        Tue,  4 Apr 2023 14:10:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B28DC4339B;
-        Tue,  4 Apr 2023 14:10:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680617446;
-        bh=iSUrnQZaTWpAsPyP1ToiK9VLwAFedGHXJSWMqN81fOI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CQQn/99t/7NoGILbPCUwdDk3mm0kbhtHqhI6QeW71IHT50dbWnZCvzJpILXYguVdZ
-         QFB3stN+E2ku9saCUVJRuW/cTKdhP9U37PkbI6ScSYUSANy0ZgcRpwhYnlfaD217GT
-         XLRNCWAfziP+HXYQgLqXbZwA52dr/ZRFdFLrzlRYVHqM02XoePini9/DY1Bv9Z2XRP
-         +o4MMm6bRU+nWfdIIe/mgzp/IC6fdImReV9NHoYmrvbqV3gcYw10iO2sMnrHOp7Ig/
-         00xc/CbHnrEIzCQ3+mNwvK+Biu+Nqs12R97eblJuR3YQNQUMpeqEwnLLFxFwy63vJY
-         KzOpjWzrzaP0w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A5DCC4052D; Tue,  4 Apr 2023 11:10:43 -0300 (-03)
-Date:   Tue, 4 Apr 2023 11:10:43 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>
-Subject: Re: [PATCH 1/9] perf list: Use relative path for tracepoint scan
-Message-ID: <ZCwv4z5Dh/dHUMG6@kernel.org>
-References: <20230331202949.810326-1-namhyung@kernel.org>
- <20230331202949.810326-2-namhyung@kernel.org>
- <ZCtMLkNL80EkPvB1@kernel.org>
+        Tue, 4 Apr 2023 10:12:08 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677EE2D79
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:12:06 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-544787916d9so615140187b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 07:12:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680617525;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ap5QnifDiiqkIiZVcjMyWrvUdPzu45RE6/ZRmZRra9g=;
+        b=O2mAEIUmXml0vUnyKxQZcqMVeXraxjL9J/FvnL/8wVrcLZB/PcUxN+3CvUqy4y9t/c
+         MeHoIQpqRdKSEjxsWKkPeHh1T6vCe6EX57Dbkn56pUPW9Uz9BhNNvlRvJuOgEu1Z6w32
+         f/LJzGt1IvuLeP0oOGWj4bwRuvvwnN+SptlGmkypGvmMVeH+ti4XL1p8ULJJRZQq8Oyu
+         6ojlqrd/6jATJbrmpAYutRc8JqkLp6dN1DSiyCFMeJs/Htc1WkSw42v0glcwBCGp9iTt
+         81a0H/pZpP9/DBpOMq9hXBG5s6XOKoMLDkmW4fY+TpLTPZm4ZTRt7Cd32U3dZCuXBGvf
+         hhvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680617525;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ap5QnifDiiqkIiZVcjMyWrvUdPzu45RE6/ZRmZRra9g=;
+        b=JHO7KD2+QTPVDfHAVwIv8M6qNgJsR0rJ0MDw/M/F5Ac6Ia7WngG+G0ifVDdBwjqFIc
+         LchMMuE1L+6R+7fs+ycl//SJC8SJYMbewyniaNebf/fKk0xkDBUZCyJJMyVn6T0u7yNj
+         APlmWtusjK4/mvJ1epQHW4OC7EFkY4MD3wj4MFL9ScqO/46nVr4XiKlOgKV/JSIFgsi6
+         Rlr0mkLxt6IESy8DpN6ltbPkx/KKgo2vKRUtUVG/lqFEd1EEaUy4nMnRaT2JoR1SPpJS
+         uAtP2FUaROx4v/lRjUe9A2x5LszHDQh7toufEGHE0PxG6GFfo5cdfuttPwXIv/LsIVPn
+         vVQw==
+X-Gm-Message-State: AAQBX9ePKtXwYxVUh/eeUpEu+1c1MakmbZ6iYUiZDlRG5EVcRm01zCfq
+        XyBZnrSbIWrhDDdmhJIod6rQ8g==
+X-Google-Smtp-Source: AKy350anYZpdKncvP6NK23mmlxjyduZnB/P8VsZkA6z2XC+Z9XjaZ/6HSLg1AzG11K2nLzZt+hcLnQ==
+X-Received: by 2002:a0d:d583:0:b0:541:7193:e136 with SMTP id x125-20020a0dd583000000b005417193e136mr2353099ywd.23.1680617525609;
+        Tue, 04 Apr 2023 07:12:05 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id d195-20020a811dcc000000b00545a08184d8sm3202750ywd.104.2023.04.04.07.12.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 07:12:05 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH v4 0/5] Migrate STX104 to the regmap API
+Date:   Tue,  4 Apr 2023 10:11:57 -0400
+Message-Id: <cover.1680564468.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCtMLkNL80EkPvB1@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Apr 03, 2023 at 06:59:10PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Fri, Mar 31, 2023 at 01:29:41PM -0700, Namhyung Kim escreveu:
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/perf/util/print-events.c | 26 ++++++++++++++++++++------
-> >  1 file changed, 20 insertions(+), 6 deletions(-)
-> 
-> Add to add this to fix on Alma Linux 8, and scandirat isn't being found
-> on musl libc (Alpine Linux), probably we'll need some scaffolding...
+Changes in v4:
+ - Fix race conditions in stx104_read_raw() and stx104_write_raw() by
+   utilizing a mutex
+ - Improve indentation in stx104_write_raw() by bailing out early if
+   chan->output is false in for the IIO_CHAN_INFO_RAW case
+ - Remove regmap_config max_register lines as superfluous
+ - Utilize BIT() for gain calculation in stx104_read_raw()
+Changes in v3:
+ - Add STX104_ prefixes to defines to avoid potential name classes
+ - Rename SAME_CHANNEL() to STX104_SINGLE_CHANNEL() to convey intention
+   better
+ - Utilize u8_encode_bits() to define STX104_SOFTWARE_TRIGGER
+ - Adjust to utilize reg_base members in regmap_config structures
+ - Fix off-by-one errors in aio_data_wr_ranges[], aio_data_rd_ranges[],
+   and aio_data_regmap_config max_register
+ - Inline gpio_config initialization to avoid zeroing it at declaration
+ - Add blank lines between register map init blocks for clarity
+ - Utilize regmap_read_poll_timeout() for ADC conversion status poll
+Changes in v2:
+ - Relocate struct stx104_iio for the sake of a clearer patch diff
+ - Replace FIELD_PREP() and FIELD_GET() with u8_encode_bits() and
+   u8_get_bits()
 
-About scandirat I'm adding the feature test below and this patch to the
-patch that starts using scandirat():
+The regmap API supports IO port accessors so we can take advantage of
+regmap abstractions rather than handling access to the device registers
+directly in the driver.
 
-diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
-index 28aa0b9300253d0a..386b1ab0b60e1d93 100644
---- a/tools/perf/util/print-events.c
-+++ b/tools/perf/util/print-events.c
-@@ -58,11 +58,9 @@ static const struct event_symbol event_symbols_tool[PERF_TOOL_MAX] = {
- /*
-  * Print the events from <debugfs_mount_point>/tracing/events
-  */
--void print_tracepoint_events(const struct print_callbacks *print_cb, void *print_state)
-+void print_tracepoint_events(const struct print_callbacks *print_cb __maybe_unused, void *print_state __maybe_unused)
- {
--	struct dirent **sys_namelist = NULL;
- 	char *events_path = get_tracing_file("events");
--	int sys_items = tracing_events__scandir_alphasort(&sys_namelist);
- 	int events_fd = open(events_path, O_PATH);
- 
- 	put_tracing_file(events_path);
-@@ -71,6 +69,11 @@ void print_tracepoint_events(const struct print_callbacks *print_cb, void *print
- 		return;
- 	}
- 
-+#ifdef HAVE_SCANDIRAT_SUPPORT
-+{
-+	struct dirent **sys_namelist = NULL;
-+	int sys_items = tracing_events__scandir_alphasort(&sys_namelist);
-+
- 	for (int i = 0; i < sys_items; i++) {
- 		struct dirent *sys_dirent = sys_namelist[i];
- 		struct dirent **evt_namelist = NULL;
-@@ -120,7 +123,13 @@ void print_tracepoint_events(const struct print_callbacks *print_cb, void *print
- 		close(dir_fd);
- 		free(evt_namelist);
- 	}
-+
- 	free(sys_namelist);
-+}
-+#else
-+	printf("\nWARNING: Your libc doesn't have the scandir function, please ask its maintainers to implement it.\n"
-+	       "         As a rough fallback, please do 'ls %s' to see the available tracepoint events.\n", events_path);
-+#endif
- 	close(events_fd);
- }
- 
+To make the git history cleaner, a precursor patch to improve
+indentation in stx104_write_raw() and a follow-up patch to utilize
+regmap_read_poll_timeout() for polling the ADC conversion status are
+included.
 
-From b25f9de2f944a550b063322b7210f4392e622a5e Mon Sep 17 00:00:00 2001
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date: Tue, 4 Apr 2023 11:05:57 -0300
-Subject: [PATCH 1/1] tools build: Add a feature test for scandirat(), that is
- not implemented so far in musl and uclibc
+William Breathitt Gray (5):
+  iio: addac: stx104: Fix race condition for stx104_write_raw()
+  iio: addac: stx104: Fix race condition when converting
+    analog-to-digital
+  iio: addac: stx104: Improve indentation in stx104_write_raw()
+  iio: addac: stx104: Migrate to the regmap API
+  iio: addac: stx104: Use regmap_read_poll_timeout() for conversion poll
 
-We use it just when listing tracepoint events, and for root, so just
-emit a warning about it to get users to ask the library maintainers to
-implement it, as suggested in this systemd ticket:
+ drivers/iio/addac/Kconfig  |   2 +
+ drivers/iio/addac/stx104.c | 455 +++++++++++++++++++++----------------
+ 2 files changed, 261 insertions(+), 196 deletions(-)
 
- https://github.com/systemd/casync/issues/129
 
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/build/Makefile.feature   | 1 +
- tools/build/feature/Makefile   | 4 ++++
- tools/build/feature/test-all.c | 5 +++++
- tools/perf/Makefile.config     | 4 ++++
- 4 files changed, 14 insertions(+)
-
-diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
-index 214622d7537cc56b..934e2777a2dbcd90 100644
---- a/tools/build/Makefile.feature
-+++ b/tools/build/Makefile.feature
-@@ -64,6 +64,7 @@ FEATURE_TESTS_BASIC :=                  \
-         lzma                            \
-         get_cpuid                       \
-         bpf                             \
-+        scandirat			\
-         sched_getcpu			\
-         sdt				\
-         setns				\
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 0a3b9281f8b08000..0f0aa9b7d7b5e43c 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -65,6 +65,7 @@ FILES=                                          \
-          test-gettid.bin			\
-          test-jvmti.bin				\
-          test-jvmti-cmlr.bin			\
-+         test-scandirat.bin			\
-          test-sched_getcpu.bin			\
-          test-setns.bin				\
-          test-libopencsd.bin			\
-@@ -129,6 +130,9 @@ $(OUTPUT)test-get_current_dir_name.bin:
- $(OUTPUT)test-glibc.bin:
- 	$(BUILD)
- 
-+$(OUTPUT)test-scandirat.bin:
-+	$(BUILD)
-+
- $(OUTPUT)test-sched_getcpu.bin:
- 	$(BUILD)
- 
-diff --git a/tools/build/feature/test-all.c b/tools/build/feature/test-all.c
-index 957c02c7b163b579..6f4bf386a3b5c4b0 100644
---- a/tools/build/feature/test-all.c
-+++ b/tools/build/feature/test-all.c
-@@ -114,6 +114,10 @@
- # include "test-pthread-barrier.c"
- #undef main
- 
-+#define main main_test_scandirat
-+# include "test-scandirat.c"
-+#undef main
-+
- #define main main_test_sched_getcpu
- # include "test-sched_getcpu.c"
- #undef main
-@@ -206,6 +210,7 @@ int main(int argc, char *argv[])
- 	main_test_get_cpuid();
- 	main_test_bpf();
- 	main_test_libcrypto();
-+	main_test_scandirat();
- 	main_test_sched_getcpu();
- 	main_test_sdt();
- 	main_test_setns();
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index dd203f0a2b7e64e1..16bea51f0bcd95ea 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -478,6 +478,10 @@ ifdef NO_DWARF
-   NO_LIBDW_DWARF_UNWIND := 1
- endif
- 
-+ifeq ($(feature-scandirat), 1)
-+  CFLAGS += -DHAVE_SCANDIRAT_SUPPORT
-+endif
-+
- ifeq ($(feature-sched_getcpu), 1)
-   CFLAGS += -DHAVE_SCHED_GETCPU_SUPPORT
- endif
+base-commit: f73df43e957a6fc705a9bd6d143585bdf1b13365
 -- 
 2.39.2
 
