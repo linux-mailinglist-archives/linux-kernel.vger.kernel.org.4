@@ -2,164 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB20B6D5BE9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222AD6D5BEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234191AbjDDJ3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
+        id S234190AbjDDJan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234186AbjDDJ3n (ORCPT
+        with ESMTP id S233200AbjDDJak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:29:43 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D4E1BDC;
-        Tue,  4 Apr 2023 02:29:41 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id j7so37908085ybg.4;
-        Tue, 04 Apr 2023 02:29:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680600580;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=m+eL/z8RH/5rtw+dy/g/xT9VEmo4zwfmYNqhFX98Cqw=;
-        b=E21CLEBXl/AvExfe4X9ObKgn0tL4bMgbcWOtk9mmVcWVa3bwDSurtjprFskIdwsWmL
-         F7Fv6vv4tQiYeubOtRWhlpmSeESdJO9sDFFjoPpMEmrMNMPX3/DIFlmx/LVCnfg/x5yg
-         YIHrUlTJ7oksO67eUW12uxiaEOh0VM9fBTjiSl14jj8hXOatuLnBmjLdALFR0qaYAYfh
-         1YgaVcGcB/ixrMM08U7kgRhNGmZQTyvGmb+yEH/fds4Kma1wpri+WjMRog2FuEMUdpv7
-         iHu6YGokiH2qtYIE2HkK8yPShpCwDPKoUiBYBrX2y5JVA3AW+Zd09fjUEGGdiUW/th3Q
-         LQPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680600580;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m+eL/z8RH/5rtw+dy/g/xT9VEmo4zwfmYNqhFX98Cqw=;
-        b=yqRa/PdgcgYkYa8VdGfrw7WirYQAQVWZlAzIidxInJb1E+M1zZlvReWxzlz32sbdNK
-         h3MOUcwewS4Yyx2E8GeF2+eev8d5rqlaCaLylpDe44zAVcrvJBXUnK3x5RFrEmBcHAPy
-         ZRX1cARU6VoRxw8PLj5kVGVWUg4ZQSDwmLo4/1SYtCGyiJPE/Q4LaagUN+1qNRV5ijik
-         VRJYVz1EmPAKY+HutxWE06EY7ZpNLMIE7qcjrNRoybC+qR68Ln+BUa3qgmSaK3pqgOrN
-         M9mGyv0vJwEy8m0xq7+L99V3AD8U64JBGy8WxS65u/f5XgoEAzTVSRI/n1v8+84vZ0bC
-         IQ8A==
-X-Gm-Message-State: AAQBX9fAMr+fOOCQuLVbMpoKCi0Ff/rZRqf0Nbe7oKyMvx0Ll9sZpaeu
-        bbyoge6P14pGLxro71R9NhU0ciQLH3+g7pMrdMk=
-X-Google-Smtp-Source: AKy350YMnjVKc1oUniZ14UmKxTE2eBETlKxxRUa6bi1S7O7Gs/iVA8trnOr5nx5pqm+8zgB6e53f/vGt3ig4k+Zz4JE=
-X-Received: by 2002:a25:cb83:0:b0:b6a:5594:5936 with SMTP id
- b125-20020a25cb83000000b00b6a55945936mr1430996ybg.5.1680600580420; Tue, 04
- Apr 2023 02:29:40 -0700 (PDT)
+        Tue, 4 Apr 2023 05:30:40 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF69B1BD3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:30:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XxZB3SLSYvPYnBm4w8lf6rXnbcqwEa14/do4C6PCMow=; b=iiJFOb6YNge1DKARwvlpAARAQA
+        ri0AcpY0qlzrwt0AGIn8/P5XyfbGNFQ8OEpLSOXKHIpXwbsB+5GkWPBvsT+vgUMxdHFGcSrdr3ZkX
+        aFO7/FYLYP9L9MlnLEqDtl9KYqilz/5vIEP4tajqQi39rtYKgPo18nQXhUS913eyn8OYt31ITs4cN
+        FdAnHWRcWC2m4kpNqhXFH1Vkl5JxwW+2XanO3PpEhpanTb2p/32652J96lh4f4ioUjhQ7MSKv1Lj5
+        QTjMLCZO+2V0dsU7PTiFnUrt+/WM6LqzseKNT4x9IBSB6EcNnkS+jbJU87Mg+ljyBm/y30Tagy43+
+        TO540yVA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pjcyx-009Dhr-1X;
+        Tue, 04 Apr 2023 09:29:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 43A58300338;
+        Tue,  4 Apr 2023 11:29:36 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 21CF4242109F9; Tue,  4 Apr 2023 11:29:36 +0200 (CEST)
+Date:   Tue, 4 Apr 2023 11:29:36 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, corbet@lwn.net, qyousef@layalina.io,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net, pjt@google.com,
+        pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org, efault@gmx.de
+Subject: Re: [PATCH 14/17] sched/eevdf: Better handle mixed slice length
+Message-ID: <20230404092936.GD284733@hirez.programming.kicks-ass.net>
+References: <20230328092622.062917921@infradead.org>
+ <20230328110354.562078801@infradead.org>
+ <CAKfTPtAkFBw5zt0+WK7dWBUE9OrbOOExG8ueUE6ogdCEQZhpXQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230329180502.1884307-1-kal.conley@dectris.com>
- <20230329180502.1884307-9-kal.conley@dectris.com> <CAJ8uoz330DWzHabpqd+HaeAxBi2gr+GOTtnS9WJFWrt=6DaeWQ@mail.gmail.com>
- <CAHApi-nfBM=i1WeZ-jtHN87AWPvURo0LygT9yYxF=cUeYthXBQ@mail.gmail.com>
-In-Reply-To: <CAHApi-nfBM=i1WeZ-jtHN87AWPvURo0LygT9yYxF=cUeYthXBQ@mail.gmail.com>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Tue, 4 Apr 2023 11:29:29 +0200
-Message-ID: <CAJ8uoz0SEkcXQuoqYd94GreJqpCxQuf1QVgm9=Um6Wqk=s8GBw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 08/10] xsk: Support UMEM chunk_size > PAGE_SIZE
-To:     Kal Cutter Conley <kal.conley@dectris.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtAkFBw5zt0+WK7dWBUE9OrbOOExG8ueUE6ogdCEQZhpXQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Apr 2023 at 10:15, Kal Cutter Conley <kal.conley@dectris.com> wrote:
->
-> > Is not the max 64K as you test against XDP_UMEM_MAX_CHUNK_SIZE in
-> > xdp_umem_reg()?
->
-> The absolute max is 64K. In the case of HPAGE_SIZE < 64K, then it
-> would be HPAGE_SIZE.
-
-Is there such a case when HPAGE_SIZE would be less than 64K? If not,
-then just write 64K.
-
-> > > diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-> > > index e96a1151ec75..ed88880d4b68 100644
-> > > --- a/include/net/xdp_sock.h
-> > > +++ b/include/net/xdp_sock.h
-> > > @@ -28,6 +28,9 @@ struct xdp_umem {
-> > >         struct user_struct *user;
-> > >         refcount_t users;
-> > >         u8 flags;
-> > > +#ifdef CONFIG_HUGETLB_PAGE
+On Fri, Mar 31, 2023 at 05:26:51PM +0200, Vincent Guittot wrote:
+> On Tue, 28 Mar 2023 at 13:06, Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > Sanity check: have you tried compiling your code without this config set?
->
-> Yes. The CI does this also on one of the platforms (hence some of the
-> bot errors in v1).
-
-Perfect!
-
-> > >  static int xdp_umem_pin_pages(struct xdp_umem *umem, unsigned long address)
-> > >  {
-> > > +#ifdef CONFIG_HUGETLB_PAGE
+> > In the case where (due to latency-nice) there are different request
+> > sizes in the tree, the smaller requests tend to be dominated by the
+> > larger. Also note how the EEVDF lag limits are based on r_max.
 > >
-> > Let us try to get rid of most of these #ifdefs sprinkled around the
-> > code. How about hiding this inside xdp_umem_is_hugetlb() and get rid
-> > of these #ifdefs below? Since I believe it is quite uncommon not to
-> > have this config enabled, we could simplify things by always using the
-> > page_size in the pool, for example. And dito for the one in struct
-> > xdp_umem. What do you think?
->
-> I used #ifdef for `page_size` in the pool for maximum performance when
-> huge pages are disabled. We could also not worry about optimizing this
-> uncommon case though since the performance impact is very small.
-> However, I don't find the #ifdefs excessive either.
-
-Keep them to a minimum please since there are few of them in the
-current code outside of some header files. And let us assume that
-CONFIG_HUGETLB_PAGE is the common case.
-
-> > > +static void xp_check_dma_contiguity(struct xsk_dma_map *dma_map, u32 page_size)
-> > >  {
-> > > -       u32 i;
-> > > +       u32 stride = page_size >> PAGE_SHIFT; /* in order-0 pages */
-> > > +       u32 i, j;
-> > >
-> > > -       for (i = 0; i < dma_map->dma_pages_cnt - 1; i++) {
-> > > -               if (dma_map->dma_pages[i] + PAGE_SIZE == dma_map->dma_pages[i + 1])
-> > > -                       dma_map->dma_pages[i] |= XSK_NEXT_PG_CONTIG_MASK;
-> > > -               else
-> > > -                       dma_map->dma_pages[i] &= ~XSK_NEXT_PG_CONTIG_MASK;
-> > > +       for (i = 0; i + stride < dma_map->dma_pages_cnt;) {
-> > > +               if (dma_map->dma_pages[i] + page_size == dma_map->dma_pages[i + stride]) {
-> > > +                       for (j = 0; j < stride; i++, j++)
-> > > +                               dma_map->dma_pages[i] |= XSK_NEXT_PG_CONTIG_MASK;
-> > > +               } else {
-> > > +                       for (j = 0; j < stride; i++, j++)
-> > > +                               dma_map->dma_pages[i] &= ~XSK_NEXT_PG_CONTIG_MASK;
-> > > +               }
+> > Therefore; add a heuristic that for the mixed request size case, moves
+> > smaller requests to placement strategy #2 which ensures they're
+> > immidiately eligible and and due to their smaller (virtual) deadline
+> > will cause preemption.
 > >
-> > Still somewhat too conservative :-). If your page size is large you
-> > will waste a lot of the umem.  For the last page mark all the 4K
-> > "pages" that cannot cross the end of the umem due to the max size of a
-> > packet with the XSK_NEXT_PG_CONTIG_MASK bit. So you only need to add
-> > one more for-loop here to mark this, and then adjust the last for-loop
-> > below so it only marks the last bunch of 4K pages at the end of the
-> > umem as not contiguous.
->
-> I don't understand the issue. The XSK_NEXT_PG_CONTIG_MASK bit is only
-> looked at if the descriptor actually crosses a page boundary. I don't
-> think the current implementation wastes any UMEM.
+> > NOTE: this relies on update_entity_lag() to impose lag limits above
+> > a single slice.
+> >
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > ---
+> >  kernel/sched/fair.c     |   14 ++++++++++++++
+> >  kernel/sched/features.h |    1 +
+> >  kernel/sched/sched.h    |    1 +
+> >  3 files changed, 16 insertions(+)
+> >
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -616,6 +616,7 @@ avg_vruntime_add(struct cfs_rq *cfs_rq,
+> >         s64 key = entity_key(cfs_rq, se);
+> >
+> >         cfs_rq->avg_vruntime += key * weight;
+> > +       cfs_rq->avg_slice += se->slice * weight;
+> >         cfs_rq->avg_load += weight;
+> >  }
+> >
+> > @@ -626,6 +627,7 @@ avg_vruntime_sub(struct cfs_rq *cfs_rq,
+> >         s64 key = entity_key(cfs_rq, se);
+> >
+> >         cfs_rq->avg_vruntime -= key * weight;
+> > +       cfs_rq->avg_slice -= se->slice * weight;
+> >         cfs_rq->avg_load -= weight;
+> >  }
+> >
+> > @@ -4832,6 +4834,18 @@ place_entity(struct cfs_rq *cfs_rq, stru
+> >                 lag = se->vlag;
+> >
+> >                 /*
+> > +                * For latency sensitive tasks; those that have a shorter than
+> > +                * average slice and do not fully consume the slice, transition
+> > +                * to EEVDF placement strategy #2.
+> > +                */
+> > +               if (sched_feat(PLACE_FUDGE) &&
+> > +                   cfs_rq->avg_slice > se->slice * cfs_rq->avg_load) {
+> > +                       lag += vslice;
+> > +                       if (lag > 0)
+> > +                               lag = 0;
+> 
+> By using different lag policies for tasks, doesn't this create
+> unfairness between tasks ?
 
-I stand corrected. You do not waste any space, so please ignore.
+Possibly, I've just not managed to trigger it yet -- if it is an issue
+it can be fixed by ensuring we don't place the entity before its
+previous vruntime just like the sleeper hack later on.
+
+> I wanted to stress this situation with a simple use case but it seems
+> that even without changing the slice, there is a fairness problem:
+> 
+> Task A always run
+> Task B loops on : running 1ms then sleeping 1ms
+> default nice and latency nice prio bot both
+> each task should get around 50% of the time.
+> 
+> The fairness is ok with tip/sched/core
+> but with eevdf, Task B only gets around 30%
+> 
+> I haven't identified the problem so far
+
+Heh, this is actually the correct behaviour. If you have a u=1 and a
+u=.5 task, you should distribute time on a 2:1 basis, eg. 67% vs 33%.
+
+CFS has this sleeper bonus hack that makes it 50% vs 50% but that is
+strictly not correct -- although it does help a number of weird
+benchmarks.
+
