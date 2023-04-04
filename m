@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA606D6303
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C33E6D6300
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235191AbjDDNeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
+        id S234587AbjDDNeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235166AbjDDNeG (ORCPT
+        with ESMTP id S235156AbjDDNeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Apr 2023 09:34:06 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6F410F6;
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D5D40CD;
         Tue,  4 Apr 2023 06:33:31 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id b20so130696074edd.1;
+Received: by mail-ed1-x531.google.com with SMTP id ek18so130713088edb.6;
         Tue, 04 Apr 2023 06:33:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680615199;
+        d=gmail.com; s=20210112; t=1680615200;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2xyR+ozpTB5/iQfgvMX/uKm9RQHaWxYMiU1fqoI1pJo=;
-        b=g9lfSJBGwiWbr5ltzY9QQoks7ZXDckpBe3DvgJyuydIX9hxdm86VSH9zEHJw/iKPFV
-         E7Wv5Kv8PxMO/3vJv+SbUnQT4KHk5IdjKy/s0i98azoZQjprwLEUHEMwqZ/GLPLG72Ua
-         2TpzohTFy6yDqjTai7OimoWyYqWB+hKY36jX/6RqAA53pZz+cH69XKuRGRt+of6QKMO3
-         ZOSNCQ2lSWw8DS+bk7WOHu1nXip1U+nrE76z5iG8ZQSrg8DVRNmIRxtT2tiPtKso/1Kc
-         kSOUsP5rc8nlhEkvfpWh6G2hGbU8GwR2r8USPHkvwCBsMWUmFT/Ye4YLocL3e9bNDuUR
-         9hUw==
+        bh=uvRrYX/VkYr2liqoThj7T0rsfgCC4S4xc3IvCNfR1Gw=;
+        b=C0DT0hcyBMONZrAhs+SSbsdayCm5+Dl8sWjUyveyCgiGBXHX40yw2ouhhJDyA+2NFQ
+         ubkrOyEKC6TFyGvs0mScw/RFO1yVHM+2IgaM3hFuTyEi5OblJ3iRbc9hthnTtVI2/uMi
+         udW3fN6DOWGURfGTIeafAEVhcDwFoUVgZJGJ+7jsaZdRbeWRSBYvOvV8ZvWLmJPG4xtC
+         cqoh3HyYwevl2GLJyV11e22TeBAIyEAY/60DU8tapE/cTNwVXYcYGVcFdTSkQmj9qFTO
+         LKP3wRxxiekOGLKXH5FdfqGbTyxirH/jJiFcfZrlppETMpXCacFHtJJbfWmFsPSaG+3d
+         Jriw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680615199;
+        d=1e100.net; s=20210112; t=1680615200;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2xyR+ozpTB5/iQfgvMX/uKm9RQHaWxYMiU1fqoI1pJo=;
-        b=v+hkAmCd6fK/FWjC3n65+cFwgzAur3vtrbtId7BxV5HmSQFxgQPOP9HK4UaNeuL5ks
-         K8xa1QIMc9rZe7hn/RTYaE3rHMDkDAGH7H2I8teOS0TZNUqqrrT9FpzgRIC21/t2NFQc
-         zn829pgToChHXGKnH/A7WrzhG+yrcCJvCmUNz0btS8O9lsRCVXRpalJhzIVylGpFjo7r
-         1NSxRiRlHLwQV/mmfaKsq1e66XKkZLzIDkGxQFX4bsCpwczT5Eq26twTaf57B5GisuQo
-         aLgkItDwZcj/pfV9pkutoH5jf5hyeREptdjr7r3+7yaTr0ZL1HwO/zcTphQSms5fWSOH
-         g9Iw==
-X-Gm-Message-State: AAQBX9c7vDezh1Ca92ZdibgpcL4gnHdPvz9dd4xcg8yIygNJDe4VGQWY
-        NWBWsMPtHNlqaRmCMSGNbPA=
-X-Google-Smtp-Source: AKy350aviwL4P0cl4+jyR7NnaUVNJR4d1HiM0lorj4WDDx8PIdvhDABL/nihwzoBtes3FDtbsOTAOg==
-X-Received: by 2002:a17:906:29d8:b0:92f:fc08:bb0a with SMTP id y24-20020a17090629d800b0092ffc08bb0amr1972934eje.37.1680615199160;
+        bh=uvRrYX/VkYr2liqoThj7T0rsfgCC4S4xc3IvCNfR1Gw=;
+        b=JtuU9uyiBGCq34PPerRpLenPvkcR7hrnub+7s5oiQ0coCrIu2cJ+0/MZRJ1SK4o6QF
+         t+1RR2FhiIe6cW4nzMf01EDCib8FPXVbDMl9PtG9txW2FzU6cuzE+9YPCWxrRxR4OU1k
+         U6OoR2Qy7bmiL5cbZ9OWqV+vovOrGGt0E9AjDagHXMGe1TZkXSnR5okn7SBdMTGSHtQp
+         PmQ/zXxCb223MkWSyjagPz/b/o6W5VIoq7J5sBL4DL1w7g2HEhFCujs9SXe533C2V1rA
+         AQK0Zy3sM73s0qpisw5OHBL/NBJICglQ7Lihn//QpWgd0pWiDLtkAX+WtE0t/uEcglIk
+         1jPg==
+X-Gm-Message-State: AAQBX9dH6oUsDmFaBADTS558fDS+Dy1h38/ERRUvFrAK7X13s2HAYJnU
+        z5dIWpzqLFQuXUtiOyf4QC4=
+X-Google-Smtp-Source: AKy350ajSVQWBzNirJ1Il5vAytxkgh6tu1ZpBDKEDVP5rxKwSHN/faQ4eWdFnWjfXpXhAOx51ewctA==
+X-Received: by 2002:a17:906:2306:b0:92b:e3f0:275f with SMTP id l6-20020a170906230600b0092be3f0275fmr2364543eja.40.1680615199985;
         Tue, 04 Apr 2023 06:33:19 -0700 (PDT)
 Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 15-20020a170906328f00b0093e6f40d124sm5951359ejw.139.2023.04.04.06.33.18
+        by smtp.gmail.com with ESMTPSA id b17-20020a170906491100b008e57b5e0ce9sm5921995ejq.108.2023.04.04.06.33.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 06:33:18 -0700 (PDT)
+        Tue, 04 Apr 2023 06:33:19 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Maxim Schwalm <maxim.schwalm@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Svyatoslav Ryhel <clamor95@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thierry Reding <thierry.reding@gmail.com>
 Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH v3 3/4] ARM: tegra: asus-tf101: fix accelerometer mount matrix
-Date:   Tue,  4 Apr 2023 15:33:14 +0200
-Message-Id: <168061516874.2141244.5101735402055798162.b4-ty@nvidia.com>
+Subject: Re: (subset) [PATCH v3 4/4] ARM: tegra30: peripherals: add 266.5MHz nodes
+Date:   Tue,  4 Apr 2023 15:33:15 +0200
+Message-Id: <168061516875.2141244.12474864091063517769.b4-ty@nvidia.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230329090403.5274-4-clamor95@gmail.com>
-References: <20230329090403.5274-1-clamor95@gmail.com> <20230329090403.5274-4-clamor95@gmail.com>
+In-Reply-To: <20230329090403.5274-5-clamor95@gmail.com>
+References: <20230329090403.5274-1-clamor95@gmail.com> <20230329090403.5274-5-clamor95@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -81,16 +81,15 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thierry Reding <treding@nvidia.com>
 
-On Wed, 29 Mar 2023 12:04:02 +0300, Svyatoslav Ryhel wrote:
-> Accelerometer mount matrix used in tf101 downstream is inverted.
-> This new matrix was generated on actual device using calibration
-> script, like on other transformers.
+On Wed, 29 Mar 2023 12:04:03 +0300, Svyatoslav Ryhel wrote:
+> LG Optimus Vu (p895) and Optimus 4X HD (p880) have 266.5MHz RAM
+> clock and require this entry to work with it correctly.
 > 
 > 
 
 Applied, thanks!
 
-[3/4] ARM: tegra: asus-tf101: fix accelerometer mount matrix
+[4/4] ARM: tegra30: peripherals: add 266.5MHz nodes
       (no commit info)
 
 Best regards,
