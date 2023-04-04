@@ -2,157 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5B16D6FCF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 00:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B2C6D6FDC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 00:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236566AbjDDWBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 18:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S236260AbjDDWF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 18:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234499AbjDDWBg (ORCPT
+        with ESMTP id S235160AbjDDWFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 18:01:36 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5392410DF
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 15:01:35 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-4fa51496035so17214a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 15:01:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680645694;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kv2TSgddRLSEtUorKz+cZ0auOFXQwhCuKUblOc6sZ88=;
-        b=TOTaDgb1ZEQy4TpifDssiU2hMo1Cm+YqC5+7Z6FE95Mi/bEuyXC1u/M4aU3edREnRj
-         abGD92HeZ6xgeu7FjAYw6diUoPPyfBG1cfvNqWJVOrQvHCSc4aaLOHqlslc+kFKI4RFx
-         KkHaaTCIGjHuAQOfyDZVwlMnIoE8lcpPoq9l8MqbaE8cFZVMbQ5G5WhWQ91Y4e4m3QTR
-         g53IZwVWiElO21KaoaDIz3BRLFRVp/qOtK8ZbX/Pda6PygBlxrT0LK7JnQg0iB79/lEI
-         vyKrAH5GxEeI5sbsE4u+nfFz7mscCPPQJQ9sMQtaD9tMMP1mJa8nZUZS50ftg878I7kc
-         6hOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680645694;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kv2TSgddRLSEtUorKz+cZ0auOFXQwhCuKUblOc6sZ88=;
-        b=eStRnADuQhiRDxHN1Xf5g11dB5JB4EhDMCdhmEU3W2sF6UdCpev4GeZVRDdQiuqXdO
-         1MDXiB9XJJmG8iY0TU1ObU4cMPk26Bs4qhRzbmvlqCVqPyk9OS+1cLyy43pHeSReikr0
-         dV3W2uKCtJPh5tkvprG9230qxVv2kxfwyesZeNSMNAnZeZLfcMSpDukU5d1zgWSetNZr
-         c/8ITDWIe5Ct+CcFLyRkdqtkLUKNn6mdI86JCq5YJREkwkdM9ffYzQFjQrzSBD2CxZ//
-         fTyHEseQn07XHMqG5LiE8LTYzd/0ERWGEEtBoXHQZKQtT+6BcgiFE5c03VW1gsAw3Yte
-         huxA==
-X-Gm-Message-State: AAQBX9dD5xAUlbvCR37Qj/U1HZ0/rVNBmgPJZfMxQ5TKcD5iC3NytSlU
-        jUdsxen1aJhMi/aaSLgFjYmv9eDcGcTFHCJDEUPAow==
-X-Google-Smtp-Source: AKy350ZHcX0TAVCqcpBXk84eCLSYS6TADo3x8F71eFEmC/F00AdU8mbkH42S6DeFTXDJYBsmoM0gtHE9yfbMO1NG5jU=
-X-Received: by 2002:a50:cc8e:0:b0:4fb:9735:f915 with SMTP id
- q14-20020a50cc8e000000b004fb9735f915mr32964edi.8.1680645693595; Tue, 04 Apr
- 2023 15:01:33 -0700 (PDT)
+        Tue, 4 Apr 2023 18:05:54 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7043C06;
+        Tue,  4 Apr 2023 15:05:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680645953; x=1712181953;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Sx1Df8zRzu2lBXbsGavKpvQNQMu0/c/0lVd4Tj/TiwU=;
+  b=VWh7eoSFgiQMo/GdZOdkA1VgH2vTOau38q3cqFMqOniUtVSai8yqfS3q
+   zxtj5RoJQJYjB1HJiXh4GhGwD5ttM8j8m7qlRb9biEDUUESTqcTcX6Gap
+   KzeWvSwBuQG+Z2Yi6+mA7DtrP4hzXXYNAC2sW5FjQHmhQOvDor9Kjktbk
+   8EaP3Q2MJquNWbanGz51NmajlEb8bw/SqGUX6F+v6bkVIwrcEPY11+TVl
+   4feCjd4i85kyg3nUWmM1SFKGklT/FJoqsvjrPMi3xkO8wJ/NK/S8z1vtM
+   4+wOUFXjiUGSd+hFLvAlCqlZL+9q06mVTr+OHS6ERtLk7dFHgGGrydRtC
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="326350751"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="326350751"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 15:05:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="810420448"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="810420448"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 04 Apr 2023 15:05:48 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pjomh-000Q4U-0p;
+        Tue, 04 Apr 2023 22:05:47 +0000
+Date:   Wed, 5 Apr 2023 06:05:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        broonie@kernel.org, vkoul@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: Re: [PATCH 2/2] spi: spi-qcom-qspi: Add DMA mode support
+Message-ID: <202304050512.MN2oNY9Z-lkp@intel.com>
+References: <1680631400-28865-3-git-send-email-quic_vnivarth@quicinc.com>
 MIME-Version: 1.0
-References: <20230404001353.468224-1-yosryahmed@google.com>
- <20230404143824.a8c57452f04929da225a17d0@linux-foundation.org>
- <CAJD7tkbZgA7QhkuxEbp=Sam6NCA0i3cZJYF4Z1nrLK1=Rem+Gg@mail.gmail.com> <20230404145830.b34afedb427921de2f0e2426@linux-foundation.org>
-In-Reply-To: <20230404145830.b34afedb427921de2f0e2426@linux-foundation.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 4 Apr 2023 15:00:57 -0700
-Message-ID: <CAJD7tkZCmkttJo+6XGROo+pmfQ+ppQp6=qukwvAGSeSBEGF+nQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] Ignore non-LRU-based reclaim in memcg reclaim
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1680631400-28865-3-git-send-email-quic_vnivarth@quicinc.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 2:58=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
->
-> On Tue, 4 Apr 2023 14:49:13 -0700 Yosry Ahmed <yosryahmed@google.com> wro=
-te:
->
-> > On Tue, Apr 4, 2023 at 2:38=E2=80=AFPM Andrew Morton <akpm@linux-founda=
-tion.org> wrote:
-> > >
-> > > On Tue,  4 Apr 2023 00:13:50 +0000 Yosry Ahmed <yosryahmed@google.com=
-> wrote:
-> > >
-> > > > Upon running some proactive reclaim tests using memory.reclaim, we
-> > > > noticed some tests flaking where writing to memory.reclaim would be
-> > > > successful even though we did not reclaim the requested amount full=
-y.
-> > > > Looking further into it, I discovered that *sometimes* we over-repo=
-rt
-> > > > the number of reclaimed pages in memcg reclaim.
-> > > >
-> > > > Reclaimed pages through other means than LRU-based reclaim are trac=
-ked
-> > > > through reclaim_state in struct scan_control, which is stashed in
-> > > > current task_struct. These pages are added to the number of reclaim=
-ed
-> > > > pages through LRUs. For memcg reclaim, these pages generally cannot=
- be
-> > > > linked to the memcg under reclaim and can cause an overestimated co=
-unt
-> > > > of reclaimed pages. This short series tries to address that.
-> > > >
-> > > > Patches 1-2 are just refactoring, they add helpers that wrap some
-> > > > operations on current->reclaim_state, and rename
-> > > > reclaim_state->reclaimed_slab to reclaim_state->reclaimed.
-> > > >
-> > > > Patch 3 ignores pages reclaimed outside of LRU reclaim in memcg rec=
-laim.
-> > > > The pages are uncharged anyway, so even if we end up under-reportin=
-g
-> > > > reclaimed pages we will still succeed in making progress during
-> > > > charging.
-> > > >
-> > > > Do not let the diff stat deceive you, the core of this series is pa=
-tch 3,
-> > > > which has one line of code change. All the rest is refactoring and =
-one
-> > > > huge comment.
-> > > >
-> > >
-> > > Wouldn't it be better to do this as a single one-line patch for
-> > > backportability?  Then all the refactoring etcetera can be added on
-> > > later.
-> >
-> > Without refactoring the code that adds reclaim_state->reclaimed to
-> > scan_control->nr_reclaimed into a helper (flush_reclaim_state()), the
-> > change would need to be done in two places instead of one, and I
-> > wouldn't know where to put the huge comment.
->
-> Well, all depends on how desirable it it that we backport.  If "not
-> desirable" then leave things as-is.  If at least "possibly desirable"
-> then a simple patch with the two changes and no elaborate comment will
-> suit.
->
+Hi Vijaya,
 
-I would rather leave the current series as-is with an elaborate
-comment. I can send a separate single patch as a backport to stable if
-this is something that we usually do (though I am not sure how to
-format such patch).
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on robh/for-next broonie-sound/for-next linus/master v6.3-rc5 next-20230404]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vijaya-Krishna-Nivarthi/arm64-dts-qcom-sc7280-Add-stream-id-of-qspi-to-iommus/20230405-020430
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/1680631400-28865-3-git-send-email-quic_vnivarth%40quicinc.com
+patch subject: [PATCH 2/2] spi: spi-qcom-qspi: Add DMA mode support
+config: arm64-randconfig-r001-20230403 (https://download.01.org/0day-ci/archive/20230405/202304050512.MN2oNY9Z-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/72895c4ce2b53c096fa03c9f56211df21faad6dd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vijaya-Krishna-Nivarthi/arm64-dts-qcom-sc7280-Add-stream-id-of-qspi-to-iommus/20230405-020430
+        git checkout 72895c4ce2b53c096fa03c9f56211df21faad6dd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/spi/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304050512.MN2oNY9Z-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/spi/spi-qcom-qspi.c:333:5: warning: no previous prototype for function 'qcom_qspi_alloc_desc' [-Wmissing-prototypes]
+   int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, uint8_t *virt_ptr,
+       ^
+   drivers/spi/spi-qcom-qspi.c:333:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, uint8_t *virt_ptr,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/qcom_qspi_alloc_desc +333 drivers/spi/spi-qcom-qspi.c
+
+   332	
+ > 333	int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, uint8_t *virt_ptr,
+   334				dma_addr_t dma_ptr, uint32_t n_bytes)
+   335	{
+   336		struct qspi_cmd_desc *virt_cmd_desc, *prev;
+   337		uint8_t *virt_data_desc;
+   338		dma_addr_t dma_cmd_desc, dma_data_desc;
+   339	
+   340		if (virt_ptr && n_bytes >= QSPI_ALIGN_REQ) {
+   341			dev_err(ctrl->dev,
+   342				"Exiting to avert memory overwrite, n_bytes-%d\n", n_bytes);
+   343			return -ENOMEM;
+   344		}
+   345	
+   346		/* allocate for dma cmd descriptor */
+   347		virt_cmd_desc = (struct qspi_cmd_desc *)dma_pool_alloc(ctrl->dma_cmd_pool,
+   348			GFP_KERNEL, &dma_cmd_desc);
+   349		if (!virt_cmd_desc) {
+   350			dev_err(ctrl->dev,
+   351				"Could not allocate for cmd_desc\n");
+   352			return -ENOMEM;
+   353		}
+   354		ctrl->virt_cmd_desc[ctrl->n_cmd_desc] = virt_cmd_desc;
+   355		ctrl->dma_cmd_desc[ctrl->n_cmd_desc] = dma_cmd_desc;
+   356		ctrl->n_cmd_desc++;
+   357	
+   358		/* allocate for dma data descriptor if unaligned else use pre-aligned */
+   359		if (virt_ptr) {
+   360			virt_data_desc = (uint8_t *)dma_pool_zalloc(ctrl->dma_data_pool,
+   361				GFP_KERNEL, &dma_data_desc);
+   362			if (!virt_data_desc) {
+   363				dev_err(ctrl->dev,
+   364					"Could not allocate for data_desc\n");
+   365				return -ENOMEM;
+   366			}
+   367			ctrl->virt_data_desc[ctrl->n_data_desc] = virt_data_desc;
+   368			ctrl->dma_data_desc[ctrl->n_data_desc] = dma_data_desc;
+   369			ctrl->n_data_desc++;
+   370	
+   371			/*
+   372			 * for tx copy xfer data into allocated buffer
+   373			 * for rx setup bounce info to copy after xfer
+   374			 */
+   375			if (ctrl->xfer.dir == QSPI_WRITE) {
+   376				memcpy(virt_data_desc, virt_ptr, n_bytes);
+   377			} else {
+   378				virt_cmd_desc->bounce_src = virt_data_desc;
+   379				virt_cmd_desc->bounce_dst = virt_ptr;
+   380				virt_cmd_desc->bounce_length = n_bytes;
+   381			}
+   382		} else {
+   383			dma_data_desc = dma_ptr;
+   384		}
+   385	
+   386		/* setup cmd descriptor */
+   387		virt_cmd_desc->data_address = (uint32_t)(uintptr_t)(dma_data_desc);
+   388		virt_cmd_desc->next_descriptor = 0;
+   389		virt_cmd_desc->direction = ctrl->xfer.dir;
+   390		virt_cmd_desc->multi_io_mode = ctrl->iomode;
+   391		virt_cmd_desc->reserved1 = 0;
+   392		virt_cmd_desc->fragment = 0;
+   393		virt_cmd_desc->reserved2 = 0;
+   394		virt_cmd_desc->length = n_bytes;
+   395	
+   396		/* update previous descriptor */
+   397		if (ctrl->n_cmd_desc >= 2) {
+   398			prev = (ctrl->virt_cmd_desc)[ctrl->n_cmd_desc - 2];
+   399			prev->next_descriptor = dma_cmd_desc;
+   400			prev->fragment = 1;
+   401		}
+   402	
+   403		return 0;
+   404	}
+   405	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
