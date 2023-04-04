@@ -2,203 +2,375 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA996D64CC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 640486D64D2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234443AbjDDOKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
+        id S235533AbjDDOKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234748AbjDDOJp (ORCPT
+        with ESMTP id S235121AbjDDOK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:09:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5551524E;
-        Tue,  4 Apr 2023 07:09:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2874D6349F;
-        Tue,  4 Apr 2023 14:09:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8332EC43442;
-        Tue,  4 Apr 2023 14:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680617380;
-        bh=2qmUVGBHpXV9MsvqvLE8IDaWzvHLiJOY3/mdy7bAYIM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=JgHrkCGF0Qob5JaJOiXZfRV0N1N02iWzkW16jibmKdf7WVCaZr5BhRYkXdg/fyFTH
-         upfFJyIEg27UgFQeBc8IXSz6O90wffLA0VJ/oJffhwmY+oNDmOwpE9bRVZd4ZmAIyY
-         xnx/SxTQdKB12Xbp0rv1qRlrvMFUvEyX7eg+wdwvbsAsy6PRi/fBOmoH5yOReWpLUd
-         uzH9cjihfiGO0HoeXbL7lWgP7CJRnac8xqsScRLcX8teVwOGmr9i/8rZTNchpwt9k+
-         yfVovWj0GRYATuDS8/1vBigXkHyPxpf+lrb6sVMbOOVBdmx+2SDlekpZzO594s6MID
-         wPL1/IDIKiACg==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 0E46815404B4; Tue,  4 Apr 2023 07:09:40 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 07:09:40 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org, hch@lst.de
-Subject: Re: [PATCH rcu 0/20] Further shrink srcu_struct to promote cache
- locality
-Message-ID: <f2ae6531-1443-47e0-8897-0a47ca61ffec@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <f1b6cd5f-f0b7-4748-abd5-0dcfef0ce126@paulmck-laptop>
- <20230404135741.GB471948@google.com>
+        Tue, 4 Apr 2023 10:10:29 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850FD1BD0;
+        Tue,  4 Apr 2023 07:10:19 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id cf7so38846750ybb.5;
+        Tue, 04 Apr 2023 07:10:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680617418;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xfNepDO449qHca2IOuAdPFcI03PtkddPBl6DsmE6NTM=;
+        b=oHHi+3kZjDIQmt6EFjcXYh7We97dm4mzgDuIBXtuip0K3/ACKW/QirMrZbH8TPPnr1
+         ceV1sDMXNq7lNxBOo4nKzITBKKMjx23XuI2RTi3qOdDtb6s4v5HVaxw7fNv7zPlWDMdq
+         WP1FgxWjiA49aVlzDsPgdAFJiKjF8rXsYeSxZ4O3W4FLSZME3yJGN8sMHPRbQ7lCuMT+
+         4663I8iUGgv1sWiOVMVJH4v6AE4Hb/LpMXOS56gmwbLGusk46lx1a2hlr/fgdT9ofEbr
+         0bzBAgLSn4St4IL7tYqXSi14w2qBB9UmBLR1kzbfwT06Jp/p/hTuA2uP4+iyNzn8eUej
+         rJhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680617418;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xfNepDO449qHca2IOuAdPFcI03PtkddPBl6DsmE6NTM=;
+        b=zDDuGKJHDHJbcykdQ1mMiJooSNEB1fulR3lNsyxPdOQg7MgfzlqIWtmFgHRBqhFFA7
+         UFKRE+cykE+lmcN7L8h+NicLk6+Mty2LL2UtKKdnVpJbG9VMT7/h/WbQvcofwVoxg3dk
+         a5WT2j2HGXcqNC4/AsV6hSxUSuL6VsX7K1VHSEKhR8XllLT/hcwhzuhTZ2BDR7RY+Zsb
+         jVIWTdFuQ9L0ZKOmX+G2h+AR7ONLzZjDEf1pw7oRHu7OcNp+gGCnsV/IhVd/nEAgvx40
+         JdXV5i7bol5YVhSwo+5BCjnlZ73pbPZMEyYke02OVwbABFZXTvyCCLqb1iPdgYxbw89m
+         0m2A==
+X-Gm-Message-State: AAQBX9fXkc769wXj760Nf29kjvMUWOg058efixrK+m/ZonoL3T90G8k5
+        RHd15vbDrYv3p7cE9sktjy2lw7LHwFoD1E1rm3o=
+X-Google-Smtp-Source: AKy350bgFiOexYEMz+8rw2O0xaAQ6UqWi8T6Ns7FMqGx8h2OCn8ovV0529X8E1qd4vcSYQMGB4A5OnPH3huWfGBx1YI=
+X-Received: by 2002:a25:cb83:0:b0:b6a:5594:5936 with SMTP id
+ b125-20020a25cb83000000b00b6a55945936mr1901850ybg.5.1680617418410; Tue, 04
+ Apr 2023 07:10:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404135741.GB471948@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230403171304.2157326-1-suijingfeng@loongson.cn> <20230403171304.2157326-3-suijingfeng@loongson.cn>
+In-Reply-To: <20230403171304.2157326-3-suijingfeng@loongson.cn>
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+Date:   Tue, 4 Apr 2023 15:10:06 +0100
+Message-ID: <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
+Subject: Re: [PATCH v10 2/2] drm: add kms driver for loongson display controller
+To:     Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, Li Yi <liyi@loongson.cn>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        nathan@kernel.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 01:57:41PM +0000, Joel Fernandes wrote:
-> On Thu, Mar 30, 2023 at 03:47:02PM -0700, Paul E. McKenney wrote:
-> > Hello!
-> > 
-> > This post-RFC series shrinks the srcu_struct structure to the bare minimum
-> > required to support SRCU readers, relegating the remaining fields to a new
-> > srcu_usage structure.  Statically allocated srcu_struct structures created
-> > by DEFINE_SRCU() and DEFINE_STATIC_SRCU() have statically allocated
-> > srcu_usage structures, but those required for dynamically allocated
-> > srcu_struct structures that are initialized using init_srcu_struct()
-> > are dynamically allocated.
-> > 
-> > The results is a reduction in the size of an srcu_struct structure from
-> > a couple hundred bytes to just 24 bytes on x86_64 systems.  This can be
-> > helpful when SRCU readers are used in a fastpath for which the srcu_struct
-> > structure must be embedded in another structure, and especially where
-> > that fastpath also needs to access fields both before and after the
-> > srcu_struct structure.
-> > 
-> > This series takes baby steps, in part because breaking SRCU means that
-> > you get absolutely no console output.  Yes, I did learn this the hard way.
-> > Why do you ask?  ;-)
-> > 
-> > Here are those baby steps:
-> > 
-> > 1.	rcu-tasks: Fix warning for unused tasks_rcu_exit_srcu.
-> > 
-> > 2.	Add whitespace to __SRCU_STRUCT_INIT() & __DEFINE_SRCU().
-> > 
-> > 3.	Use static init for statically allocated in-module srcu_struct.
-> > 
-> > 4.	Begin offloading srcu_struct fields to srcu_update.
-> > 
-> > 5.	Move ->level from srcu_struct to srcu_usage.
-> > 
-> > 6.	Move ->srcu_size_state from srcu_struct to srcu_usage.
-> > 
-> > 7.	Move ->srcu_cb_mutex from srcu_struct to srcu_usage.
-> > 
-> > 8.	Move ->lock initialization after srcu_usage allocation.
-> > 
-> > 9.	Move ->lock from srcu_struct to srcu_usage.
-> > 
-> > 10.	Move ->srcu_gp_mutex from srcu_struct to srcu_usage.
-> > 
-> > 11.	Move grace-period fields from srcu_struct to srcu_usage.
-> > 
-> > 12.	Move heuristics fields from srcu_struct to srcu_usage.
-> > 
-> > 13.	Move ->sda_is_static from srcu_struct to srcu_usage.
-> > 
-> > 14.	Move srcu_barrier() fields from srcu_struct to srcu_usage.
-> > 
-> > 15.	Move work-scheduling fields from srcu_struct to srcu_usage.
-> > 
-> > 16.	Check for readers at module-exit time.
-> > 
-> > 17.	Fix long lines in srcu_get_delay().
-> > 
-> > 18.	Fix long lines in cleanup_srcu_struct().
-> > 
-> > 19.	Fix long lines in srcu_gp_end().
-> > 
-> > 20.	Fix long lines in srcu_funnel_gp_start().
-> > 
-> > Changes since the RFC series:
-> > https://lore.kernel.org/all/3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop/
-> > 
-> > 1.	Add checks for readers of in-module statically allocated
-> > 	srcu_struct structures persisting past module unload.
-> > 
-> > 2.	Apply Tested-by tags.
-> > 
-> > 3.	Apply feedback from "Zhang, Qiang1" and kernel test robot,
-> > 	perhaps most notably getting rid of memory leaks and improving
-> > 	the handling of statically allocated srcu_struct structures
-> > 	defined within modules.
-> > 
-> > 4.	Drop the commit removing extraneous parentheses given the desire
-> > 	to push this into the v6.4 merge window, the fact that this
-> > 	commit generates conflicts with other v6.4 RCU commits, and the
-> > 	low value of this commit.  It therefore remains in the v6.5 pile.
-> > 
-> > 						Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> >  b/include/linux/notifier.h |    5 
-> >  b/include/linux/srcutiny.h |    6 
-> >  b/include/linux/srcutree.h |   28 +-
-> >  b/kernel/rcu/rcu.h         |    6 
-> >  b/kernel/rcu/srcutree.c    |   19 +
-> >  b/kernel/rcu/tasks.h       |    2 
-> >  include/linux/srcutree.h   |  123 ++++++-----
-> >  kernel/rcu/srcutree.c      |  495 +++++++++++++++++++++++----------------------
-> >  8 files changed, 370 insertions(+), 314 deletions(-)
-> 
-> It looks good on my ARM64 board:
-> Tested-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Greetings Sui Jingfeng,
 
-Thank you!  I will apply on my rebase later today.
+I haven't been around drm-land for a while and this is the first
+driver I skim through in a few years. So take the following
+suggestions with a healthy pinch of salt.
 
-> Output of run:
-> 
-> tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 2h --configs SRCU-P SRCU-N SRCU-T SRCU-U --trust-make
-> SRCU-N ------- 204135 GPs (28.3521/s) [srcu: g1765408 f0x0 total-gps=1765408] n_max_cbs: 150000
-> :CONFIG_HYPERVISOR_GUEST=y: improperly set
-> :CONFIG_KVM_GUEST=y: improperly set
-> SRCU-P ------- 105511 GPs (14.6543/s) [srcud: g884128 f0x0 total-gps=884128] n_max_cbs: 150000
-> :CONFIG_HYPERVISOR_GUEST=y: improperly set
-> :CONFIG_KVM_GUEST=y: improperly set
-> SRCU-T ------- 334055 GPs (46.3965/s) [srcu: g2638072 f0x0 total-gps=2638072] n_max_cbs: 50000
-> :CONFIG_HYPERVISOR_GUEST=y: improperly set
-> :CONFIG_KVM_GUEST=y: improperly set
-> :CONFIG_SMP: improperly set
-> :CONFIG_TINY_SRCU=y: improperly set
-> SRCU-U ------- 292738 GPs (40.6581/s) [srcud: g2349416 f0x0 total-gps=2349416] n_max_cbs: 50000
-> :CONFIG_HYPERVISOR_GUEST=y: improperly set
-> :CONFIG_KVM_GUEST=y: improperly set
-> :CONFIG_SMP: improperly set
-> :CONFIG_TINY_SRCU=y: improperly set
-> 1 runs with build errors.
-> 
-> That "build error" is actually perl doing this:
-> 
-> perl: warning: Please check that your locale settings:
-> perl: warning: Falling back to the standard locale ("C").
-> 
-> I think its harmless and the test did fine. It is just that my chroot is
-> missing some packages (I have run into this warning before).
+Hope that helps o/
 
-Frederic ran into some similar messages where the scripts implicitly
-assumed en_us locale, but his warnings were specific to rcutorture.
+On Mon, 3 Apr 2023 at 18:13, Sui Jingfeng <suijingfeng@loongson.cn> wrote:
 
-> The "improperly set" thingies are perhaps Kconfig on ARM64 setting some KVM
-> options slightly differently. I have seen that before as well on this board.
+>   v7 -> v8:
+>    1) Zero a compile warnnings on 32-bit platform, compile with W=1
+>    2) Revise lsdc_bo_gpu_offset() and minor cleanup
+>    3) Pageflip tested on the virtual terminal with following commands
+>
+>       modetest -M loongson -s 32:1920x1080 -v
+>       modetest -M loongson -s 34:1920x1080 -v -F tiles
+>
 
-Agreed, and one of the things on the long list is to allow arch-specific
-settings for those options.
+I could be wrong, but my understanding is that new drivers should be
+capable of running under Xorg and/or Wayland compositor. There is also
+the IGT test suite, which can help verify and validate the driver's
+behaviour:
 
-The CONFIG_SMP warnings are interesting, though.  Does arm64 disallow
-!SMP builds?  ;-)
+https://www.kernel.org/doc/html/latest/gpu/drm-uapi.html
 
-							Thanx, Paul
+
+
+> +static void lsdc_crtc_reset(struct drm_crtc *crtc)
+> +{
+> +       struct lsdc_display_pipe *dispipe = crtc_to_display_pipe(crtc);
+> +       struct drm_device *ddev = crtc->dev;
+> +       struct lsdc_device *ldev = to_lsdc(ddev);
+> +       struct lsdc_crtc_state *priv_crtc_state;
+> +       unsigned int index = dispipe->index;
+> +       u32 val;
+> +
+> +       val = LSDC_PF_XRGB8888 | CFG_RESET_N;
+> +       if (ldev->descp->chip == CHIP_LS7A2000)
+> +               val |= LSDC_DMA_STEP_64_BYTES;
+> +
+> +       lsdc_crtc_wreg32(ldev, LSDC_CRTC0_CFG_REG, index, val);
+> +
+> +       if (ldev->descp->chip == CHIP_LS7A2000) {
+> +               val = PHY_CLOCK_EN | PHY_DATA_EN;
+> +               lsdc_crtc_wreg32(ldev, LSDC_CRTC0_PANEL_CONF_REG, index, val);
+> +       }
+> +
+
+AFAICT no other driver touches the HW in their reset callback. Should
+the above be moved to another callback?
+
+
+
+> +static void lsdc_crtc_atomic_enable(struct drm_crtc *crtc,
+> +                                   struct drm_atomic_state *state)
+> +{
+
+> +       val = lsdc_crtc_rreg32(ldev, LSDC_CRTC0_CFG_REG, index);
+> +       /* clear old dma step settings */
+> +       val &= ~CFG_DMA_STEP_MASK;
+> +
+> +       if (descp->chip == CHIP_LS7A2000) {
+> +               /*
+> +                * Using large dma step as much as possible,
+> +                * for improve hardware DMA efficiency.
+> +                */
+> +               if (width_in_bytes % 256 == 0)
+> +                       val |= LSDC_DMA_STEP_256_BYTES;
+> +               else if (width_in_bytes % 128 == 0)
+> +                       val |= LSDC_DMA_STEP_128_BYTES;
+> +               else if (width_in_bytes % 64 == 0)
+> +                       val |= LSDC_DMA_STEP_64_BYTES;
+> +               else  /* width_in_bytes % 32 == 0 */
+> +                       val |= LSDC_DMA_STEP_32_BYTES;
+> +       }
+> +
+> +       clk_func->update(pixpll, &priv_state->pparms);
+> +
+
+Without knowing the hardware, the clk_func abstraction seems quite
+arbitrary and unnecessary. It should be introduced when there is a
+use-case for it.
+
+
+> +       lsdc_crtc_wreg32(ldev, LSDC_CRTC0_CFG_REG, index, val | CFG_OUTPUT_EN);
+> +
+> +       drm_crtc_vblank_on(crtc);
+> +}
+> +
+
+
+> --- /dev/null
+> +++ b/drivers/gpu/drm/loongson/lsdc_debugfs.c
+
+> +void lsdc_debugfs_init(struct drm_minor *minor)
+> +{
+> +#ifdef CONFIG_DEBUG_FS
+> +       drm_debugfs_create_files(lsdc_debugfs_list,
+> +                                ARRAY_SIZE(lsdc_debugfs_list),
+> +                                minor->debugfs_root,
+> +                                minor);
+> +#endif
+> +}
+
+Should probably build the file when debugfs is enabled and provide
+no-op stub in the header. See nouveau for an example.
+
+
+> --- /dev/null
+> +++ b/drivers/gpu/drm/loongson/lsdc_drv.c
+
+> +static const struct lsdc_desc dc_in_ls7a1000 = {
+> +       .chip = CHIP_LS7A1000,
+> +       .num_of_crtc = LSDC_NUM_CRTC,
+> +       .max_pixel_clk = 200000,
+> +       .max_width = 2048,
+> +       .max_height = 2048,
+> +       .num_of_hw_cursor = 1,
+> +       .hw_cursor_w = 32,
+> +       .hw_cursor_h = 32,
+> +       .pitch_align = 256,
+> +       .mc_bits = 40,
+> +       .has_vblank_counter = false,
+> +       .has_scan_pos = true,
+> +       .has_builtin_i2c = true,
+> +       .has_vram = true,
+> +       .has_hpd_reg = false,
+> +       .is_soc = false,
+> +};
+> +
+> +static const struct lsdc_desc dc_in_ls7a2000 = {
+> +       .chip = CHIP_LS7A2000,
+> +       .num_of_crtc = LSDC_NUM_CRTC,
+> +       .max_pixel_clk = 350000,
+> +       .max_width = 4096,
+> +       .max_height = 4096,
+> +       .num_of_hw_cursor = 2,
+> +       .hw_cursor_w = 64,
+> +       .hw_cursor_h = 64,
+> +       .pitch_align = 64,
+> +       .mc_bits = 40, /* support 48, but use 40 for backward compatibility */
+> +       .has_vblank_counter = true,
+> +       .has_scan_pos = true,
+> +       .has_builtin_i2c = true,
+> +       .has_vram = true,
+> +       .has_hpd_reg = true,
+> +       .is_soc = false,
+> +};
+> +
+
+Roughly a quarter of the above are identical. It might be better to
+drop them for now and re-introduce as needed with future code.
+
+> +const char *chip_to_str(enum loongson_chip_family chip)
+> +{
+> +       if (chip == CHIP_LS7A2000)
+> +               return "LS7A2000";
+> +
+> +       if (chip == CHIP_LS7A1000)
+> +               return "LS7A1000";
+> +
+
+If it were me, I would add the name into the lsdc_desc.
+
+
+> +static enum drm_mode_status
+> +lsdc_mode_config_mode_valid(struct drm_device *ddev,
+> +                           const struct drm_display_mode *mode)
+> +{
+> +       struct lsdc_device *ldev = to_lsdc(ddev);
+> +       const struct drm_format_info *info = drm_format_info(DRM_FORMAT_XRGB8888);
+
+Short-term hard coding a format is fine, but there should be a comment
+describing why.
+
+> +       u64 min_pitch = drm_format_info_min_pitch(info, 0, mode->hdisplay);
+> +       u64 fb_size = min_pitch * mode->vdisplay;
+> +
+> +       if (fb_size * 3 > ldev->vram_size) {
+
+Why are we using 3 here? Please add an inline comment.
+
+
+> +static const struct dev_pm_ops lsdc_pm_ops = {
+> +       .suspend = lsdc_pm_suspend,
+> +       .resume = lsdc_pm_resume,
+> +       .freeze = lsdc_pm_freeze,
+> +       .thaw = lsdc_pm_thaw,
+> +       .poweroff = lsdc_pm_freeze,
+> +       .restore = lsdc_pm_resume,
+> +};
+> +
+
+The above section (and functions) should probably be wrapped in a
+CONFIG_PM_SLEEP block.
+
+
+
+> +static const struct pci_device_id lsdc_pciid_list[] = {
+> +       {PCI_VENDOR_ID_LOONGSON, 0x7a06, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_LS7A1000},
+> +       {PCI_VENDOR_ID_LOONGSON, 0x7a36, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_LS7A2000},
+> +       {0, 0, 0, 0, 0, 0, 0}
+> +};
+> +
+
+> +static int __init loongson_module_init(void)
+> +{
+
+> +       while ((pdev = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, pdev))) {
+> +               if (pdev->vendor != PCI_VENDOR_ID_LOONGSON) {
+> +                       pr_info("Discrete graphic card detected, abort\n");
+> +                       return 0;
+> +               }
+> +       }
+
+You can set the class/class_mask in the lsdc_pciid_list and drop this
+loop. The vendor is already listed above and checked by core.
+
+
+
+> +++ b/drivers/gpu/drm/loongson/lsdc_drv.h
+> @@ -0,0 +1,324 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2022 Loongson Corporation
+> + *
+
+We're in 2023, update the year across the files?
+
+
+
+> +struct lsdc_gem {
+> +       /* @mutex: protect objects list */
+> +       struct mutex mutex;
+> +       struct list_head objects;
+> +};
+> +
+
+> +struct lsdc_device {
+> +       struct drm_device base;
+> +       struct ttm_device bdev;
+> +
+> +       /* @descp: features description of the DC variant */
+> +       const struct lsdc_desc *descp;
+> +
+> +       struct pci_dev *gpu;
+> +
+> +       /* @reglock: protects concurrent access */
+> +       spinlock_t reglock;
+> +       void __iomem *reg_base;
+> +       resource_size_t vram_base;
+> +       resource_size_t vram_size;
+> +
+> +       resource_size_t gtt_size;
+> +
+> +       struct lsdc_display_pipe dispipe[LSDC_NUM_CRTC];
+> +
+> +       struct lsdc_gem gem;
+> +
+
+Last time I looked there was no other driver with a list of gem
+objects (and a mutex) in its device struct. Are you sure we need this?
+
+Very few drivers use TTM directly and I think you want to use
+drm_gem_vram_helper or drm_gem_ttm_helper instead.
+
+
+
+> +static int ls7a1000_pixpll_param_update(struct lsdc_pll * const this,
+> +                                       struct lsdc_pll_parms const *pin)
+> +{
+> +       void __iomem *reg = this->mmio;
+> +       unsigned int counter = 0;
+> +       bool locked;
+> +       u32 val;
+> +
+> +       /* Bypass the software configured PLL, using refclk directly */
+> +       val = readl(reg + 0x4);
+> +       val &= ~(1 << 8);
+> +       writel(val, reg + 0x4);
+> +
+
+There are a lot of magic numbers in this function. Let's define them
+properly in the header.
+
+
+
+> +/* Helpers for chip detection */
+> +bool lsdc_is_ls2k2000(void);
+> +bool lsdc_is_ls2k1000(void);
+> +unsigned int loongson_cpu_get_prid(u8 *impl, u8 *rev);
+
+
+Since this revision does pci_devices only, we don't need this detection right?
+
+
+Hope that helps,
+Emil
