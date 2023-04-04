@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4572B6D5917
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C2D6D591F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233724AbjDDHCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 03:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
+        id S233724AbjDDHFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233128AbjDDHCk (ORCPT
+        with ESMTP id S233221AbjDDHFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 03:02:40 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABB21BEB;
-        Tue,  4 Apr 2023 00:02:39 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id d22so19022287pgw.2;
-        Tue, 04 Apr 2023 00:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680591759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zu1/4ofEiUpEr/nAZ126vJD9LVR8thpY1qUm9I5vgVo=;
-        b=kJxouxIrSPXmym/6d+rodZfz0ak6JgSQio5etru4EHlJOlC837ebiCDoJ8ysW3uk/2
-         MGagPJdRWdpE90Xl9VwPV/+vlcI4sUXarRuETDoUPcEERavtzp5kXj3dapgnYXL0+XsD
-         a1AMDW3xVFnQe+dHw3gLQKzqnQU97jgVCfMHv5XfhLyqLvRMx4XpVGb6yHp+oblKIZO1
-         krqniqdv0H4NbdhQzPEh2uh1Z/hU6bFxBC66ZJ6gu9r/5dopJGHf+cSHaD01nqWRdFT2
-         4poZc+AF00Bd/bcL1w4qYdVSXf77EfqvX9e0l+whZjOAUcP4HWPC9ueO/D8qiYbutwbU
-         RjpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680591759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zu1/4ofEiUpEr/nAZ126vJD9LVR8thpY1qUm9I5vgVo=;
-        b=G9CFo/4usS8kyskj1kj05mSr7bpzQaceBRJVX+x4QWmKmO3Vg5KamfBfyu6zZ1Zahm
-         u90zjPEm+bDrZgY9usINQZ78eedYoQ4rim6Z0a7XGHQ9U4pxdlpVyiDpe4atprIjCzHg
-         NNpO4UJxIJYpiuHtycW6S5y9cTpcTucvuXyeq9xS0DHOxDf8wYGVXq6y4cf3Te+0Zl4M
-         aIo9Dvrvb3P7d+J+MrfOleh8S4N8sgZAU1mg3TPNkH86O3kQ6GaYfuybZ+19DqUfSvmi
-         hBeYlFruw6S696Ub59+yWaVtXw/ZP8KG31w8i2+eiBfZMHRANNH9sruA+6QW3MGG2tk0
-         xRaw==
-X-Gm-Message-State: AAQBX9ey7CMg05rvLYSeno9eng0NtvPDLCDqcvD9YuXnMVk4jV2L88nJ
-        7s+W+ZplPhc6Pcf6s3wDPdET46CRVw51/UvPkIU9kpWJJGsCTg==
-X-Google-Smtp-Source: AKy350ZNRj0xjX8FoXDbKXqut6Jzs3vhi8ZFnTBOtNbW5V4SpV4JWOoels8/aM6vlwaYr8dwDBVCN2qIxbLq5H4AoEM=
-X-Received: by 2002:a05:6a00:cc3:b0:626:1eb8:31d7 with SMTP id
- b3-20020a056a000cc300b006261eb831d7mr683117pfv.1.1680591758362; Tue, 04 Apr
- 2023 00:02:38 -0700 (PDT)
+        Tue, 4 Apr 2023 03:05:01 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B3118C
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 00:05:00 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33474pfm083483;
+        Tue, 4 Apr 2023 02:04:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680591891;
+        bh=Xxal5gx/ThGxtq0kVEmh9gFXlfl/HsO/TSHzc+kJNrI=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=MIScsozwyq1tFznyozpYDOKWeUbA8TlPjXcAiqdwhKFiuxFpmMP0QdoiPSYGg4ZjK
+         HZtbTPcygIorH/i0Cz0CbO2SZXIG7KJf4g8WYLqF/G1NHX9B4qKzhit4H4TKGzCBMa
+         c4nMI8KFvoGE3NqKBoYJTfp70lRFIfeDZZHW5/NY=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33474pXB018681
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 4 Apr 2023 02:04:51 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 4
+ Apr 2023 02:04:51 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 4 Apr 2023 02:04:51 -0500
+Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33474mbe098532;
+        Tue, 4 Apr 2023 02:04:49 -0500
+Message-ID: <66dbb0f3-cfb1-d6a5-42f9-3f3098ca1b90@ti.com>
+Date:   Tue, 4 Apr 2023 12:34:47 +0530
 MIME-Version: 1.0
-References: <1679019847-1401-1-git-send-email-caelli@tencent.com>
- <ZCuQO3A6FX305KTJ@debian.me> <3d994c05-492d-f9f4-161d-123a68d4e87a@gmail.com>
-In-Reply-To: <3d994c05-492d-f9f4-161d-123a68d4e87a@gmail.com>
-From:   caelli <juanfengpy@gmail.com>
-Date:   Tue, 4 Apr 2023 15:02:27 +0800
-Message-ID: <CAPmgiUJhocwGweOYmJcYY47CONwJAqgLA7AdDzD=Quepd6u5cw@mail.gmail.com>
-Subject: Re: [PATCH v7] tty: fix hang on tty device with no_room set
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Hui Li <caelli@tencent.com>, stable@vger.kernel.org,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+CC:     <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH v2 0/3] PHY-GMII-SEL: Add support for SGMII mode
+Content-Language: en-US
+To:     <vkoul@kernel.org>, <kishon@kernel.org>, <rogerq@kernel.org>
+References: <20230309063514.398705-1-s-vadapalli@ti.com>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230309063514.398705-1-s-vadapalli@ti.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,33 +67,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Where do you find this hanging pty? Seems like the wording makes me
-> confused. Maybe you mean "It is possible to hang pty device. In that
-> case, ..."
+Hello,
 
-Thanks for your reply, I will correct messages like this:
+This series applies cleanly as of next-20230404. Please merge this series
+followed by the series at:
+https://lore.kernel.org/r/20230331062521.529005-1-s-vadapalli@ti.com/
+in case of no concerns.
 
-"It is possible to hang pty devices in this case, the reader
-was blocking at epoll on master side, the writer was ..."
+Regards,
+Siddharth.
 
-Bagas Sanjaya <bagasdotme@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=884=E6=
-=97=A5=E5=91=A8=E4=BA=8C 10:55=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 4/4/23 09:49, Bagas Sanjaya wrote:
-> > On Fri, Mar 17, 2023 at 10:24:07AM +0800, juanfengpy@gmail.com wrote:
-> >> We have met a hang on pty device, the reader was blocking
-> >> at epoll on master side, the writer was sleeping at wait_woken
-> >> inside n_tty_write on slave side, and the write buffer on
-> >> tty_port was full, we found that the reader and writer would
-> >> never be woken again and blocked forever.
-> >
-> > Where do you find this hanging pty? Seems like the wording makes me
-> > confused. Maybe you mean "It is possible to hang pty device. In that
-> > case, ..."
-> >
->
-> Oops, I forgot to Cc: LKML.
->
-> --
-> An old man doll... just what I always wanted! - Clara
->
+On 09/03/23 12:05, Siddharth Vadapalli wrote:
+> Hello,
+> 
+> This series adds support to configure the CPSW MAC's PHY in SGMII mode.
+> Also, SGMII mode is enabled for TI's J7200 and J721E SoCs.
+> 
+> Changes from v1:
+> 1. Add "break" statement within "case PHY_INTERFACE_MODE_SGMII".
+> 2. Add newline before "default" case.
+> 3. Update commit message of patch 1/3 to follow the existing convention.
+> 
+> v1:
+> https://lore.kernel.org/r/20230309062237.389444-1-s-vadapalli@ti.com/
+> 
+> Siddharth Vadapalli (3):
+>   phy: ti: gmii-sel: Add support for SGMII mode
+>   phy: ti: gmii-sel: Enable SGMII mode for J7200
+>   phy: ti: gmii-sel: Enable SGMII mode for J721E
+> 
+>  drivers/phy/ti/phy-gmii-sel.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
