@@ -2,136 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4876F6D5DDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079B86D5DE0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbjDDKrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 06:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S234524AbjDDKrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 06:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjDDKrD (ORCPT
+        with ESMTP id S234418AbjDDKrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 06:47:03 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2111.outbound.protection.outlook.com [40.107.113.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A81E62;
-        Tue,  4 Apr 2023 03:47:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BYwUpliZiKBov/xFz3GLZCaVJWNJJeLHs8iZWih1mtpQ4ykSQMBEIlOrD7bSW0Rl8WPCfzMvhctua+KuqymFJzyui5EW8ErnapHWCtxke9/D/0NxLTNjuxrwXwQm4hCOU+NuthZcs+dd6mQ4qjR2wrqMfn6BtxZ0U7abXhi77sGiWCOSEf191Zw8+QIMVJCAD7/QZIrmGPfKqyGHyH8uHO5npLONpLnvL8Zl9JLCjJF5ZBF1RDN/RWxutbBcOEv7VGZEuzPMx5bPaTYxuKMx9JrNuwnl4i+73ebM1HXd0sNzwUr6zHyiPb42iEITomuyO7jNP4qaj79ZE/A77AmGJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7euKmCAjJZRC93Vixeo+fO/rq3kjH2uGClO6ddywbIs=;
- b=QFT2ItAtWC+5ALqlMuZ1/RyyMvAoH3xZaq+8+owuo+w0IjT+flTeComjvKE/7xL6+b3DCnM9fHcL5cbLj+GVJfAxC34HbheOCRHIaoZfuy5+Uiw13NNi7XRwc2ni98yufH9pzPlfaRwTyEto54qK0Hj8uWPdMET6+LRIZtU110akp4z4ycOXiy+soOTEPXdxWcuv3TVIWkAdvEMV2jx38QGPfQcZV9A26xXsNT8v7VlQE/BKvMNUJ9ukfTY9a0KkuHJWX+uTAU4IAHNeEgHp59/RNPwKgq8gOZ3TmK2uM7h4Ai1F2XFSagAvwKatphsGxA0CperXr5f7lwvOTbgZWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7euKmCAjJZRC93Vixeo+fO/rq3kjH2uGClO6ddywbIs=;
- b=HH9qVOPyZnIQGRfJEk9nBz3lNJg6ITEedxMmB6aGihRPufpKLJRF3L0bETcSehZEHlTIB4QgAMkYiLYJOvglSVihtSx9EzKthwBalW4ooRPlWQhF/z9JscrU08cfD6LqqgZRqU1DN5HMlQYINyQb+WVNs501dPxQhbnvIRvsPpU=
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
- by OSZPR01MB8645.jpnprd01.prod.outlook.com (2603:1096:604:18e::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.34; Tue, 4 Apr
- 2023 10:46:58 +0000
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::773c:e3ab:106d:cc3a]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::773c:e3ab:106d:cc3a%4]) with mapi id 15.20.6254.035; Tue, 4 Apr 2023
- 10:46:58 +0000
-From:   Chris Paterson <Chris.Paterson2@renesas.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "srw@sladewatkins.net" <srw@sladewatkins.net>,
-        "rwarsow@gmx.de" <rwarsow@gmx.de>
-Subject: RE: [PATCH 6.1 000/181] 6.1.23-rc1 review
-Thread-Topic: [PATCH 6.1 000/181] 6.1.23-rc1 review
-Thread-Index: AQHZZjmcWZRAQ4TkcEW67y6z7FP0Sq8a+IQQ
-Date:   Tue, 4 Apr 2023 10:46:58 +0000
-Message-ID: <TY2PR01MB3788EA4E76927B97CF9EAA3DB7939@TY2PR01MB3788.jpnprd01.prod.outlook.com>
-References: <20230403140415.090615502@linuxfoundation.org>
-In-Reply-To: <20230403140415.090615502@linuxfoundation.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|OSZPR01MB8645:EE_
-x-ms-office365-filtering-correlation-id: 759a17e0-47fc-4d7a-ed96-08db34f9ea2e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GwQMvj3AxCsfu8ynygQ4D/62/VB4WAJrEUlYdaG2P1blQ3PFqPg3cyC/T5hgmnwkfuY75YbN4IzvU3F8MOi4MYOvSu/tUxPQBjvon6WsDyqF7ZxOWT1caf9/9mTQLueNKg3luOtKwvpHlUilRL5FQeKjpP/ei0hnv878QfWNP4vmP/meZzKC7YG2yVR8cMKIl4VjEIhmnVP1vda9GWyMtdkY6XcKddHoHlecvZCeIrd/DM6MOEp8L5JuU8hE5+AbVmIJy8H0kNmh3D6ac3dGH7jNDQYCC+kmvLF9UG+HR2WVceVtOyrY38SWTvPtPhVk8yvb3PmKJZkkrTVaOHZyM+9mgxiuFVqcx/LniaS/EpZIwYQQs/U/XSXH6ImD3+ZwSI7eacE2jyx/sVypsyaK+XG7oL/0KYNnHoXvZqwjfcexqLCrZtLrM5tjF2R3A7jYvXgBLqDpgBDJUGRBuPt4QYnq4/W+7pviAIM/wgQ4g5CWSWqv4XDyJnHNqxwdB+3wTkrR6dR12fpqKgH+N0bYMCmHbOPzV5g3Bp7gboxI5bYqLWMvy6Fi3VctJMB/U28y1x2w6NqlDfmPi8m00Ub7ZYEsgc273J7kx6VjUhBSTm3vGKNDZu3koyuCpcinU4YRfis0yQaEukMq1nLA0abEYw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(39860400002)(366004)(376002)(451199021)(8936002)(8676002)(54906003)(122000001)(7416002)(38070700005)(55016003)(38100700002)(33656002)(52536014)(26005)(186003)(966005)(5660300002)(71200400001)(9686003)(66446008)(6506007)(76116006)(66476007)(66946007)(2906002)(4326008)(66556008)(4744005)(64756008)(86362001)(478600001)(7696005)(41300700001)(110136005)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZzRicWxCV1pyS3NFNDRmTndHZ1QwbWh6UUczV2MzSW0yajdkSkZTcEJaUFc3?=
- =?utf-8?B?R0ZWMDFOQVYzMlNucHVuZWxmSkZGYTcwWjFVYm1DaEsyZWUyVkIxN1ZGWkIr?=
- =?utf-8?B?ZFpmV2daZ1czYzNOVUk1UEh2bnlyZmJTdXFDUDZVR0tLU0VzQ1RzVTluRFAz?=
- =?utf-8?B?aEpnYXhlQjB4SnI1Z2RVSjJqYnhSNFNqaU9HOEc2Qk9mWjZmY1N0eTdDMVB1?=
- =?utf-8?B?em02WWNSeGxnSHJ1bVZoaVdRb0VSVm1mOU5sNEhSNmh5Z0taYlJNTE5NYUN6?=
- =?utf-8?B?a0VaWWI2eG8reFhSRlhTSHdvcERMTFJUWmUzSWJpOXdiTzMyeXE3ZXBnd29M?=
- =?utf-8?B?TkFpUGMzaHpzWmo5RnRyclZFUXV2UjViclhKamkwQVlSTE1ZOXppK2wwY0pF?=
- =?utf-8?B?SHlzTENOWmUycURwenlGckQzNUFRVUtOV3RON25obkJNVzBBZnRsTzYrNTNn?=
- =?utf-8?B?YXk0dmhPOWwrOXpsZUJaR0F6VWxwcFNOWWZoMXpqTjN6dVNtbEVlV2xwSnVx?=
- =?utf-8?B?UDZqWVJXanZOZzlCVVRKK1p1YXpEWWJ3TjFwOEF1b0pTbXdFc285TG83WVBW?=
- =?utf-8?B?dEs4VE9HcnhsbUI4bm5aUE1rSkE0dnIwdWFaSlhqemwvdFg5RnBzdFlKOE5n?=
- =?utf-8?B?NGNXWENBYTZwL2hqWFErOWZJOFlKc1RJMHQzMTQyc1o0TDZkUlIzaUQ4M1Qr?=
- =?utf-8?B?S2gwZ3ZNcmdWbTlhMGJyN2N4dWlGL0ZsSHJwY1F3RVVJdzBOcGhhdE9scHI4?=
- =?utf-8?B?SStRWnROVVcyMWhVdW50dDU2bWVXMlk0ekY5b2N2dlpJWWhJN1dmTUovenhi?=
- =?utf-8?B?b1V6VG9sM2pFL01QZEMwekpzWmc4dkRRdm0rbmRnUCswa2F0WGdvekI1R2Vy?=
- =?utf-8?B?Z2l5NFFuWTdRdDAvZG05bFhBYnl6UTZIaExSa1F2QWhwdnhEUjhlazB1ckZ4?=
- =?utf-8?B?NTZVWWU4WFdjNHM0L1o0UlhEejMzTU1MZDZtajE0VGhxcXY0dTlKakRJNkw2?=
- =?utf-8?B?R2YwbWo5QzJQM2FFTnQ1SUJyWEVCYUl0WGVLYys2ZXo5aE9sY3FOVnZJVXBR?=
- =?utf-8?B?WWprSGQrRi81QUdZQ2wrK210aVhrczY1S2UxQ3I5elhLMnlqNy8vS1RQUCtS?=
- =?utf-8?B?aC91c1FaUkUwbTBlVTRwWkJSeXlaOU51T0l1S1VMemtydG9KRGJpWnh4TGZr?=
- =?utf-8?B?WGJmb1V1ZFJ0b1pndnIyWUNEODJETUxiNTVTWkpvSW1zTEZhT1IwN2lyZlgw?=
- =?utf-8?B?VllOMzlveUhqVGdYWWhKYWZWUGhYMGF2RFZndEVVNWp1dHpVam9WM3FvT0VN?=
- =?utf-8?B?TVhqaEJGM0Z0QkUvMktkWGxzYzJRK1J2WXkwVldVUUl6cjNIWGNIUWNlSXlh?=
- =?utf-8?B?YjJoSU0zRmk5cXlUZmZPcjNxZTJtRGhMcjRPVlpyVVIydnFSY2lOaDFpRHd2?=
- =?utf-8?B?SitiL1dwNEMwY0JlbG1pQUVwdkNsOG5NQjNQZnVRTEJ4YjltbEt1YzdMOCtQ?=
- =?utf-8?B?TWc5c3dodGFsb0hYSUlqb1N0WEVCTEdZMW95YnE4cWdDMVBPWno2S2JiTHpO?=
- =?utf-8?B?ZkxCeGxzY2ZUMVUyQTQ2STBpQjcvU2pZMDc5akVHMGlpZUFJREROSWE5N2h0?=
- =?utf-8?B?QjVjb1ZUbW1QK3NyTHlVQkxpT0JmY0paR2tOOUE5OXhkSmhyNWcrcHVpc3c0?=
- =?utf-8?B?eUhiM3hDOS9Lb2RQT3ZseFhWMGxIRVVEM2NTekVKaEZGekZlOVhWT09lYVRF?=
- =?utf-8?B?QlBEVEJUSUVaZ0RvblhDY2EzVkJ2cmNkNGJScThXNnJlcThESjZLSUxrRHlT?=
- =?utf-8?B?OHBzWVJOUlBhMjhjVSs5MG1RenpLTmZvK0dYKzhxU2hVMEQvUnVUQjZiM0xi?=
- =?utf-8?B?QVV5VlhJcTdQb2phaU1VS25DRVh4cXlSbU9SQmtYTm5SbTdBdnljQjJDd1hR?=
- =?utf-8?B?TC9MbXpqTi80UVJpLzZQV01HcjFKVzdLYkgrQ2VuNlkwUHZ6M1dudWxOekg4?=
- =?utf-8?B?QkZaK0F6b3VWaWRSVGMrMHh4RFhRRDdNR0MwaDEwWFJPWTl1d3pqSUdva0N5?=
- =?utf-8?B?bGNjb05LMm50MVl2eWpha09CNHRqeDErR1dMeHlQTFcwVTVlM2dWUEg3dGg4?=
- =?utf-8?B?VWR3dFdkanVIUmF1OSsxQWgxYlpJRytKc2c3bGFRV0dXNXh3Ujh3M0thUmxr?=
- =?utf-8?B?eVE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 4 Apr 2023 06:47:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4951BD9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:47:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6E9463169
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:47:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 674D4C433EF;
+        Tue,  4 Apr 2023 10:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680605222;
+        bh=JPysGGnjPgbO37ueoLHh8BTscsjnrGxScIvFiCFfWmE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NFExaqm1mj5IDOgU1XgXIB2mUqyeogLfTPoTKFQX8GDMXSjqSwmCPNYh7vs+Jifut
+         LsRpNfb7K/mP9UFHLTYdfeblz46J20zF/WNZ75tLCZjgaHOf0l17FUkSsLZByY3GvG
+         8Tz5WQK7wpYcJGW3LUunkp+5flwTYD49AhFBxcS17c2INK07AmkiOTCk45kV6PtXMd
+         HMbGF+w67fFW7enkVzTnu5Mg/i15gtEZ2AcRG3NPAZPzdBn5Pyt+I4P2SEp210BKsD
+         AtVt7ql2/9fOX1njdXsw/7w5NuHLg2Xk+sbwm//L6WDhRODKAkWjmgT2A64cIlCfLE
+         jB9eB2oiufEOw==
+Message-ID: <08259184-d3c1-cb46-9751-e32e1bc6eb87@kernel.org>
+Date:   Tue, 4 Apr 2023 18:46:59 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 759a17e0-47fc-4d7a-ed96-08db34f9ea2e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Apr 2023 10:46:58.3035
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: v/iJHW0WL/sIJade787CuK5Mt+it67eauXMZ0DaU4CGUFYiTaVvBFBsxgfhyXftcq8NkC1GSSss0sm0I/cT4D4riMGOz5Vx0xgaOPhCnb74=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8645
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] f2fs: fix to trigger a checkpoint in the end of
+ foreground garbage collection
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230324071028.336982-1-chao@kernel.org>
+ <ZCsXRin7symPxIrn@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <ZCsXRin7symPxIrn@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -139,18 +59,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8gR3JlZywNCg0KPiBGcm9tOiBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdraEBsaW51eGZv
-dW5kYXRpb24ub3JnPg0KPiBTZW50OiBNb25kYXksIEFwcmlsIDMsIDIwMjMgMzowNyBQTQ0KPiAN
-Cj4gVGhpcyBpcyB0aGUgc3RhcnQgb2YgdGhlIHN0YWJsZSByZXZpZXcgY3ljbGUgZm9yIHRoZSA2
-LjEuMjMgcmVsZWFzZS4NCj4gVGhlcmUgYXJlIDE4MSBwYXRjaGVzIGluIHRoaXMgc2VyaWVzLCBh
-bGwgd2lsbCBiZSBwb3N0ZWQgYXMgYSByZXNwb25zZQ0KPiB0byB0aGlzIG9uZS4gIElmIGFueW9u
-ZSBoYXMgYW55IGlzc3VlcyB3aXRoIHRoZXNlIGJlaW5nIGFwcGxpZWQsIHBsZWFzZQ0KPiBsZXQg
-bWUga25vdy4NCj4gDQo+IFJlc3BvbnNlcyBzaG91bGQgYmUgbWFkZSBieSBXZWQsIDA1IEFwciAy
-MDIzIDE0OjAzOjE4ICswMDAwLg0KPiBBbnl0aGluZyByZWNlaXZlZCBhZnRlciB0aGF0IHRpbWUg
-bWlnaHQgYmUgdG9vIGxhdGUuDQogDQpDSVAgY29uZmlndXJhdGlvbnMgYnVpbHQgYW5kIGJvb3Rl
-ZCB3aXRoIExpbnV4IDYuMS4yMy1yYzEgKDAxY2QwMDQxYjdhNSk6DQpodHRwczovL2dpdGxhYi5j
-b20vY2lwLXByb2plY3QvY2lwLXRlc3RpbmcvbGludXgtc3RhYmxlLXJjLWNpLy0vcGlwZWxpbmVz
-LzgyNjU2NjY5Mw0KaHR0cHM6Ly9naXRsYWIuY29tL2NpcC1wcm9qZWN0L2NpcC10ZXN0aW5nL2xp
-bnV4LXN0YWJsZS1yYy1jaS8tL2NvbW1pdHMvbGludXgtNi4xLnkNCg0KVGVzdGVkLWJ5OiBDaHJp
-cyBQYXRlcnNvbiAoQ0lQKSA8Y2hyaXMucGF0ZXJzb24yQHJlbmVzYXMuY29tPg0KDQpLaW5kIHJl
-Z2FyZHMsIENocmlzDQo=
+On 2023/4/4 2:13, Jaegeuk Kim wrote:
+> On 03/24, Chao Yu wrote:
+>> In order to reclaim free blocks in prefree sections before latter use.
+> 
+> We were supposed to do checkpoint as is?
+
+It seems commit 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc")
+changed that logic? It caused that if has_not_enough_free_secs() returns false,
+it missed to call f2fs_write_checkpoint() before exit f2fs_gc()?
+
+@@ -1110,15 +1116,23 @@ gc_more:
+  	if (gc_type == FG_GC)
+  		sbi->cur_victim_sec = NULL_SEGNO;
+
+-	if (!sync) {
+-		if (has_not_enough_free_secs(sbi, sec_freed, 0)) {
+-			if (skipped_round > MAX_SKIP_ATOMIC_COUNT &&
+-				skipped_round * 2 >= round)
+-				f2fs_drop_inmem_pages_all(sbi, true);
++	if (sync)
++		goto stop;
++
++	if (has_not_enough_free_secs(sbi, sec_freed, 0)) {
++		if (skipped_round <= MAX_SKIP_GC_COUNT ||
++					skipped_round * 2 < round) {
+  			segno = NULL_SEGNO;
+  			goto gc_more;
+  		}
+
++		if (first_skipped < last_skipped &&
++				(last_skipped - first_skipped) >
++						sbi->skipped_gc_rwsem) {
++			f2fs_drop_inmem_pages_all(sbi, true);
++			segno = NULL_SEGNO;
++			goto gc_more;
++		}
+  		if (gc_type == FG_GC)
+  			ret = f2fs_write_checkpoint(sbi, &cpc);
+  	}
+
+> 
+>>
+>> Fixes: 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc")
+>> Signed-off-by: Chao Yu <chao@kernel.org>
+>> ---
+>>   fs/f2fs/f2fs.h    | 1 +
+>>   fs/f2fs/gc.c      | 8 ++++++++
+>>   fs/f2fs/segment.c | 1 +
+>>   3 files changed, 10 insertions(+)
+>>
+>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>> index 53a005b420cf..b1515375cb4c 100644
+>> --- a/fs/f2fs/f2fs.h
+>> +++ b/fs/f2fs/f2fs.h
+>> @@ -1269,6 +1269,7 @@ struct f2fs_gc_control {
+>>   	unsigned int victim_segno;	/* target victim segment number */
+>>   	int init_gc_type;		/* FG_GC or BG_GC */
+>>   	bool no_bg_gc;			/* check the space and stop bg_gc */
+>> +	bool reclaim_space;		/* trigger checkpoint to reclaim space */
+>>   	bool should_migrate_blocks;	/* should migrate blocks */
+>>   	bool err_gc_skipped;		/* return EAGAIN if GC skipped */
+>>   	unsigned int nr_free_secs;	/* # of free sections to do GC */
+>> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+>> index 2996d38aa89c..5a451d3d512d 100644
+>> --- a/fs/f2fs/gc.c
+>> +++ b/fs/f2fs/gc.c
+>> @@ -132,6 +132,7 @@ static int gc_thread_func(void *data)
+>>   
+>>   		gc_control.init_gc_type = sync_mode ? FG_GC : BG_GC;
+>>   		gc_control.no_bg_gc = foreground;
+>> +		gc_control.reclaim_space = foreground;
+>>   		gc_control.nr_free_secs = foreground ? 1 : 0;
+>>   
+>>   		/* if return value is not zero, no victim was selected */
+>> @@ -1880,6 +1881,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+>>   				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
+>>   		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
+>>   			goto go_gc_more;
+>> +
+>> +		/*
+>> +		 * trigger a checkpoint in the end of foreground garbage
+>> +		 * collection.
+>> +		 */
+>> +		if (gc_control->reclaim_space)
+>> +			ret = f2fs_write_checkpoint(sbi, &cpc);
+>>   		goto stop;
+>>   	}
+>>   
+>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+>> index 6c11789da884..b62af2ae1685 100644
+>> --- a/fs/f2fs/segment.c
+>> +++ b/fs/f2fs/segment.c
+>> @@ -421,6 +421,7 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
+>>   				.victim_segno = NULL_SEGNO,
+>>   				.init_gc_type = BG_GC,
+>>   				.no_bg_gc = true,
+>> +				.reclaim_space = true,
+>>   				.should_migrate_blocks = false,
+>>   				.err_gc_skipped = false,
+>>   				.nr_free_secs = 1 };
+>> -- 
+>> 2.25.1
