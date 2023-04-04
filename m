@@ -2,97 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8FBD6D6045
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810166D604B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234760AbjDDM0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
+        id S234496AbjDDM0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234873AbjDDM0I (ORCPT
+        with ESMTP id S234677AbjDDM0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:26:08 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5BA40D1;
-        Tue,  4 Apr 2023 05:25:56 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id h8so129867961ede.8;
-        Tue, 04 Apr 2023 05:25:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680611154;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lvEiamQupS534VfqUXbSuDpINFZftut0QS92LpEg7X4=;
-        b=ITg0zr2umq6uJE5uWt38EKHKISLid7v1/LtdB0gMGwoJ7m76yE9AukVpmJ3D4ucMK0
-         4VD5e/vOPPzmfkG6ioZCZQedRavVzn8oskNNDk9df6YjFG+SwOxecL3O0UuRX18nkZNo
-         6DztwhTa8v0zPMYpinELW76yH9Ts58g0M5SRUCpfsjGZuLlnA6C+wXd1yqeN2gaTNXD6
-         4bQKj3FygSn3gx6iGOtSY5yHfg9TtTA2eTBQkJTBLvJXUY3bwF+Q/rQIn/xGfInX+3dR
-         aHbKnNxhhUv6UAfLSKnLu9t/mYRqlZwfxWeHYPwXicNp56Ua77Cux1GUemRhHdNRC4ug
-         bSPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680611154;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lvEiamQupS534VfqUXbSuDpINFZftut0QS92LpEg7X4=;
-        b=WL32vLQ4f9FM5+qwTekctCJfPYHhaMgiVaNeezm49od53OvMc7V9KESjlD+NtOCTqY
-         8Hw8JkwXmIf2soZNT+mW4EvjRHjtEGU1SIzI9twR7TzX+vKC5srEq4PP2lqBDrvwkEbE
-         kzKqWnMNJUJtTd2PrUWNN7di9HWs2GKpRQtagEZVftx9HSdB8kqIqQADev97NZlGu5sk
-         H75oWIkg9EX9l4V/7nqSY4h2KG82PgRZISrLWZdFkv4szwkXdwyRUz1T5tiLoXNpF3xo
-         2yEKcXiXj1R3SD+PmTs5uhnB5ExDnqGikhv7z503IsgMrEtzn7elJyeFe14q5Crt9eli
-         geHw==
-X-Gm-Message-State: AAQBX9fUsyZdg0tryXHUoG+Cvz46QVP0f42C2zKLueo829KxGWfDXu1Y
-        oDYfeu8Q6gW+PnoDQdnNYZY=
-X-Google-Smtp-Source: AKy350ZtNIoX7YZQDjBWRvM/+GxlQgoOVYwVgBRI52Y/EHxaIjTiEupUcppEDvzfUr8QQ+yo7CRhGg==
-X-Received: by 2002:a17:907:16a6:b0:947:f4e2:aa2c with SMTP id hc38-20020a17090716a600b00947f4e2aa2cmr13829357ejc.29.1680611154246;
-        Tue, 04 Apr 2023 05:25:54 -0700 (PDT)
-Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id bu7-20020a170906a14700b0093348be32cfsm5988062ejb.90.2023.04.04.05.25.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 05:25:53 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Daniel Vetter <daniel@ffwll.ch>, Mikko Perttunen <cyndis@kapsi.fi>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@gmail.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] gpu: host1x: Don't rely on dma_fence_wait_timeout return value
-Date:   Tue,  4 Apr 2023 14:25:50 +0200
-Message-Id: <168061111512.2057226.3790183208967549717.b4-ty@nvidia.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230301135107.999976-1-cyndis@kapsi.fi>
-References: <20230301135107.999976-1-cyndis@kapsi.fi>
+        Tue, 4 Apr 2023 08:26:42 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB9E1BEF;
+        Tue,  4 Apr 2023 05:26:19 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D541B240003;
+        Tue,  4 Apr 2023 12:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1680611178;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NlIRywC4pBj6a77Ol7zVTt0l3l1RJQnARY7smlHQSoI=;
+        b=b3SYEGCikmzsZum+IK+K9om+oODTu3b9DYJuS+Uc8KGZ4imW5U/8DqBYvFOGFDewJiGKsf
+        kQ7CxLM9WoqkOXOm+eL6RzzlIkKw39Xknz9aysx5xuCoA7k7wBS1UZMPzXYrL2ogBtw8vq
+        ZmxB/o3t8el2Wmp17Nx4cI6i4NrqywrjVa7l7gH7pjluXLkoIYUieOsHRvSKtNjeFTz7DO
+        wVuvNFDzgKbK4O4XzCMJ8r7HSa9by7vHD0D8DhkUYodYqDUzsPjd+UwxcehnSLi8GoPFsR
+        JwHoGLgXFlxTnVSLtcg3//Zdmmi8THPgO6x5xosFJeWGuUOF709V3DBz8Yh5pA==
+Date:   Tue, 4 Apr 2023 14:26:16 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
+Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: add max313xx RTCs
+Message-ID: <202304041226162e231e78@mail.local>
+References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
+ <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
+ <dd6f0842-519f-1bc9-f7f5-459863dc3dcd@linaro.org>
+ <202304040710049c9cc01a@mail.local>
+ <CY4PR03MB2488DFC99C23ADE16FF40E2F96939@CY4PR03MB2488.namprd03.prod.outlook.com>
+ <1efdb870-cac2-f6ed-72b5-d0550dbb5257@linaro.org>
+ <CY4PR03MB24883E0406C2A16E566DB39196939@CY4PR03MB2488.namprd03.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CY4PR03MB24883E0406C2A16E566DB39196939@CY4PR03MB2488.namprd03.prod.outlook.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
-
-On Wed, 1 Mar 2023 15:51:06 +0200, Mikko Perttunen wrote:
-> From: Mikko Perttunen <mperttunen@nvidia.com>
+On 04/04/2023 10:35:53+0000, Tilki, Ibrahim wrote:
+> >>>>> +  aux-voltage-chargeable:
+> >>>>> +    enum: [0, 1, 2]
+> >>>>> +    description: |
+> >>>>> +      Enables trickle charger.
+> >>>>> +      0: Charger is disabled (default)
+> >>>>> +      1: Charger is enabled
+> >>>>> +      2: Charger is enabled with a diode
+> >>>>
+> >>>> 2 is not an allowed value. I asked to drop this property. It is coming
+> >>>> from rtc.yaml. I also do not understand "with a diode". So otherwise it
+> >>>> is charging with, I don't know, FET?
+> >>>
+> >>> No, what is not explained here (and maybe not unsterstood by the
+> >>> submitter) is that the RTC has an extra diode so, charging will always
+> >>> enable a diode, select a resistor and then have or not an extra diode.
+> >>> Figure2 of the MAX31329 datasheet is great.
+> >>>
+> >> 
+> >> That is exactly why I had "adi,trickle-diode-enable" property in previous patch.
+> >> So if I can't have "adi,trickle-diode-enable" and can't add an additional value
+> >> to "aux-voltage-chargeable", I am not sure how to add support for the extra
+> >> diode at this point.
+> >
+> > Ask the person who asked you to remove adi,trickle-diode-enable...
 > 
-> dma_fence_wait_timeout (along with a host of other jiffies-based
-> timeouting functions) returns zero both in case of timeout and when
-> the wait completes during the last jiffy before timeout. As such,
-> we can't rely on it to distinguish between success and timeout.
+> That was the purpose.
 > 
-> [...]
 
-Applied, thanks!
+If the earlier submission was clearer my answer would have been
+different but note how I had to dig up the datasheet to understand there
+were two diodes. All the trickle chargers have a schottky diode so
+"adi,trickle-diode-enable" nor the commit log were explicit about the
+second diode (which is a regular diode).
 
-[1/1] gpu: host1x: Don't rely on dma_fence_wait_timeout return value
-      commit: c1aaee94380874fd40f7bb8417c597aba3f72c75
+aux-voltage-chargeable is enabling a diode on all the existing RTC
+drivers so instead of trying to make me look like the bad guy you should
+rather thank for taking the time trying to get better DT bindings.
 
-Best regards,
+
 -- 
-Thierry Reding <treding@nvidia.com>
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
