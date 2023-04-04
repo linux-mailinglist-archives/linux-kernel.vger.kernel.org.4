@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC60D6D6A84
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2756D6A82
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236109AbjDDRZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
+        id S236287AbjDDRYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236205AbjDDRX5 (ORCPT
+        with ESMTP id S236199AbjDDRXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:23:57 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058845FDC
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:23:15 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id w9so133614911edc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:23:14 -0700 (PDT)
+        Tue, 4 Apr 2023 13:23:55 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26F755AD
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:23:11 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id t10so133439305edd.12
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:23:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680628990;
+        d=linaro.org; s=google; t=1680628991;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vzeb5V/SOEGPt1++ztmrQsHaT6myWHiPy1gZ7kZBJII=;
-        b=JHsg3sox3P/oVO7yc/tm0IKSC3s5sE8Dmoho40tXAtg5RoLy9xAX0UZjXDIfV6gzg1
-         CRFpKY2O6Y28IiH0HsZHlfDPdLvrGG7GKS1PvMN0r19O/3mzXkjwTfUKjn+86Kdvc8n1
-         rQ2zDWMjyJ5aJdrHFYBSehkwokcngYcBaCP83Hth4ddzD+c7lZSI7TMQiuVg76FQA6ZO
-         DFec6soEes8FLGltiU3mh51Zsk41+58M2VFJvaAkolaLUGJ6lsvdlajky+XxulWneTX5
-         Nz8QB820k2aYkVgpGk+V/OpP1irTnSwDZXRX8XX+YqGxiVCuSSa8iWiGz8FK9vLhrpK8
-         wpsQ==
+        bh=5nn6Upx/8lI3MwJj2GpjPhoavYIuxq4AilqaxqKCRx0=;
+        b=UnfAlqdR5cf/UygVfOd2H8cn+UiEPU70W94Si7BjJlm0jURmRiuVg1ZrcklHLzZRbL
+         7XYMIMSMtMlCX46wR5EQRL8obNGo9PWEhSeauRPOBzrKfmz0s1FqF+ADJSfz/q8cL1q3
+         Jghli4f5KjD28anELeVMuahASqmszAf1Ujdqi+4YMq46F4d45RyEEHLXea88Ndc8DYQD
+         HwOR4WzpBjoUSM3OUz7h5rOgvRc3kMk9xKKFTgnjVuM23oRp+Giw7R/+2QcuqroOx0Jy
+         Lc4m2pJ8B07agCQVcaLm2bWJtP6H/efteGwhQ0HIwJevXcAyNd8zMUcvnUkHZLPkSteP
+         LezQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680628990;
+        d=1e100.net; s=20210112; t=1680628991;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vzeb5V/SOEGPt1++ztmrQsHaT6myWHiPy1gZ7kZBJII=;
-        b=OSX1XJlApXseafHJnRVXdD9/91afE3SOZZk7VQGBiWuO3aRlVtV7XlUFLAsuQGWjC2
-         hR5DLLLtyW03Z85uhnNmI+LluB1NIik3YjC9RtQ7AeONtCjIXn/HiDlf+nuLfCcx3Vcp
-         oMAh9Y81okQHZLxrbbvtFA85Obqu+o6EfW3rMH1DY5wb2MP3xeuQjqrceuTOqLewdecB
-         KZ6gOCHQF2ROHH3quTttYnmv2cLb/VWdJnynxEokYpB6+Fiwak4bMFOArQ+ujxjk6ryz
-         4jDKE8UoIQu1yguslWWVDQSh1xRicLqHk9ceHEvmqVp9FHWAxHK6SEJGWvjazwa1GJbW
-         fs/Q==
-X-Gm-Message-State: AAQBX9cWDqqnXrqk6bGycSC++ZJtNGgadllSGSNiX6Kbjz3aNrxGMA9r
-        eNhzmArKOV2FL2pFp28YAlrbIA==
-X-Google-Smtp-Source: AKy350YOQeYLWZxddlltWQg0FzMK7YV6rINPyt5V0FjVmjK/Y8PjtX1T5RRT8xpmpm2u0nu1nesSfQ==
-X-Received: by 2002:a17:907:2bd2:b0:931:a0cb:1ef1 with SMTP id gv18-20020a1709072bd200b00931a0cb1ef1mr296415ejc.7.1680628990081;
-        Tue, 04 Apr 2023 10:23:10 -0700 (PDT)
+        bh=5nn6Upx/8lI3MwJj2GpjPhoavYIuxq4AilqaxqKCRx0=;
+        b=S6ep1DUji/pveRUOFZYs5OFr9ZdcFNNDfOafXUamJyYH2rMWB0weisfocM7VabCdA7
+         I9q4f/FfrCIweDKiEfV7zCnkivDzzVef25DUs7DKjKyqakgAGlUb3AUmmtwKiNUHH6gQ
+         IlXYoFemiybaAitqnxp8W+vnMi6jQE+jEqGAkGN0z3H+UtRyJENejM3PhiXdJ23JfrAd
+         qHHDm6LKbSwMigFG71yjfC+asB0/cik4S4sbpPtp5xzB182W0GqRkA/EyLPoCW8OaVKL
+         ZGzXQ0BzWb6T0i6QW7oNf6PFt5ziTQYgh6eKx75ikle8YItIc1sCzhP/3cx90sO8YgV0
+         FvOQ==
+X-Gm-Message-State: AAQBX9euym7TFiHsx1W8avHU7af7Fx/MG0mxreTQ/2mgTBvXQKtUAFiu
+        gRZ2f8dBoyIxFZxt7ZftzFVr9lwUfqLJZugDDMQ=
+X-Google-Smtp-Source: AKy350bAxpPz+Dt5ZpMM3PEpnZ6ZR0QuXo7FWEcga3C4XogDeCkKZOLpq90cu4ysxZ35OVceCo6wSQ==
+X-Received: by 2002:a17:906:a04c:b0:93d:f7a6:219b with SMTP id bg12-20020a170906a04c00b0093df7a6219bmr270334ejb.65.1680628991274;
+        Tue, 04 Apr 2023 10:23:11 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.23.08
+        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.23.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 10:23:09 -0700 (PDT)
+        Tue, 04 Apr 2023 10:23:10 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 34/40] nvmem: core: support specifying both: cell raw data & post read lengths
-Date:   Tue,  4 Apr 2023 18:21:42 +0100
-Message-Id: <20230404172148.82422-35-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 35/40] nvmem: u-boot-env: post-process "ethaddr" env variable
+Date:   Tue,  4 Apr 2023 18:21:43 +0100
+Message-Id: <20230404172148.82422-36-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
 References: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
@@ -75,114 +75,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-Callback .read_post_process() is designed to modify raw cell content
-before providing it to the consumer. So far we were dealing with
-modifications that didn't affect cell size (length). In some cases
-however cell content needs to be reformatted and resized.
+U-Boot environment variables are stored in ASCII format so "ethaddr"
+requires parsing into binary to make it work with Ethernet interfaces.
 
-It's required e.g. to provide properly formatted MAC address in case
-it's stored in a non-binary format (e.g. using ASCII).
-
-There were few discussions how to optimally handle that. Following
-possible solutions were considered:
-1. Allow .read_post_process() to realloc (resize) content buffer
-2. Allow .read_post_process() to adjust (decrease) just buffer length
-3. Register NVMEM cells using post-read sizes
-
-The preferred solution was the last one. The problem is that simply
-adjusting "bytes" in NVMEM providers would result in core code NOT
-passing whole raw data to .read_post_process() callbacks. It means
-callback functions couldn't do their job without somehow manually
-reading original cell content on their own.
-
-This patch deals with that by registering NVMEM cells with both lengths:
-raw content one and post read one. It allows:
-1. Core code to read whole raw cell content
-2. Callbacks to return content they want
+This includes support for indexes to support #nvmem-cell-cells = <1>.
 
 Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/core.c           | 11 +++++++----
- include/linux/nvmem-provider.h |  2 ++
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ drivers/nvmem/Kconfig      |  1 +
+ drivers/nvmem/u-boot-env.c | 26 ++++++++++++++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 212c5ba5789f..a62973d010ff 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -50,6 +50,7 @@ struct nvmem_device {
- struct nvmem_cell_entry {
- 	const char		*name;
- 	int			offset;
-+	size_t			raw_len;
- 	int			bytes;
- 	int			bit_offset;
- 	int			nbits;
-@@ -469,6 +470,7 @@ static int nvmem_cell_info_to_nvmem_cell_entry_nodup(struct nvmem_device *nvmem,
- {
- 	cell->nvmem = nvmem;
- 	cell->offset = info->offset;
-+	cell->raw_len = info->raw_len ?: info->bytes;
- 	cell->bytes = info->bytes;
- 	cell->name = info->name;
- 	cell->read_post_process = info->read_post_process;
-@@ -1560,7 +1562,7 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
- {
- 	int rc;
- 
--	rc = nvmem_reg_read(nvmem, cell->offset, buf, cell->bytes);
-+	rc = nvmem_reg_read(nvmem, cell->offset, buf, cell->raw_len);
- 
- 	if (rc)
- 		return rc;
-@@ -1571,7 +1573,7 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
- 
- 	if (cell->read_post_process) {
- 		rc = cell->read_post_process(cell->priv, id, index,
--					     cell->offset, buf, cell->bytes);
-+					     cell->offset, buf, cell->raw_len);
- 		if (rc)
- 			return rc;
- 	}
-@@ -1594,14 +1596,15 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
+diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+index a2afba11c890..b291b27048c7 100644
+--- a/drivers/nvmem/Kconfig
++++ b/drivers/nvmem/Kconfig
+@@ -340,6 +340,7 @@ config NVMEM_U_BOOT_ENV
+ 	tristate "U-Boot environment variables support"
+ 	depends on OF && MTD
+ 	select CRC32
++	select GENERIC_NET_UTILS
+ 	help
+ 	  U-Boot stores its setup as environment variables. This driver adds
+ 	  support for verifying & exporting such data. It also exposes variables
+diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
+index 29b1d87a3c51..ee9fd9989b6e 100644
+--- a/drivers/nvmem/u-boot-env.c
++++ b/drivers/nvmem/u-boot-env.c
+@@ -4,6 +4,8 @@
   */
- void *nvmem_cell_read(struct nvmem_cell *cell, size_t *len)
+ 
+ #include <linux/crc32.h>
++#include <linux/etherdevice.h>
++#include <linux/if_ether.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/mtd/mtd.h>
+@@ -70,6 +72,25 @@ static int u_boot_env_read(void *context, unsigned int offset, void *val,
+ 	return 0;
+ }
+ 
++static int u_boot_env_read_post_process_ethaddr(void *context, const char *id, int index,
++						unsigned int offset, void *buf, size_t bytes)
++{
++	u8 mac[ETH_ALEN];
++
++	if (bytes != 3 * ETH_ALEN - 1)
++		return -EINVAL;
++
++	if (!mac_pton(buf, mac))
++		return -EINVAL;
++
++	if (index)
++		eth_addr_add(mac, index);
++
++	ether_addr_copy(buf, mac);
++
++	return 0;
++}
++
+ static int u_boot_env_add_cells(struct u_boot_env *priv, uint8_t *buf,
+ 				size_t data_offset, size_t data_len)
  {
--	struct nvmem_device *nvmem = cell->entry->nvmem;
-+	struct nvmem_cell_entry *entry = cell->entry;
-+	struct nvmem_device *nvmem = entry->nvmem;
- 	u8 *buf;
- 	int rc;
+@@ -101,6 +122,11 @@ static int u_boot_env_add_cells(struct u_boot_env *priv, uint8_t *buf,
+ 		priv->cells[idx].offset = data_offset + value - data;
+ 		priv->cells[idx].bytes = strlen(value);
+ 		priv->cells[idx].np = of_get_child_by_name(dev->of_node, priv->cells[idx].name);
++		if (!strcmp(var, "ethaddr")) {
++			priv->cells[idx].raw_len = strlen(value);
++			priv->cells[idx].bytes = ETH_ALEN;
++			priv->cells[idx].read_post_process = u_boot_env_read_post_process_ethaddr;
++		}
+ 	}
  
- 	if (!nvmem)
- 		return ERR_PTR(-EINVAL);
- 
--	buf = kzalloc(cell->entry->bytes, GFP_KERNEL);
-+	buf = kzalloc(max_t(size_t, entry->raw_len, entry->bytes), GFP_KERNEL);
- 	if (!buf)
- 		return ERR_PTR(-ENOMEM);
- 
-diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
-index 0cf9f9490514..8ffb42ba0f62 100644
---- a/include/linux/nvmem-provider.h
-+++ b/include/linux/nvmem-provider.h
-@@ -51,6 +51,7 @@ struct nvmem_keepout {
-  * struct nvmem_cell_info - NVMEM cell description
-  * @name:	Name.
-  * @offset:	Offset within the NVMEM device.
-+ * @raw_len:	Length of raw data (without post processing).
-  * @bytes:	Length of the cell.
-  * @bit_offset:	Bit offset if cell is smaller than a byte.
-  * @nbits:	Number of bits.
-@@ -62,6 +63,7 @@ struct nvmem_keepout {
- struct nvmem_cell_info {
- 	const char		*name;
- 	unsigned int		offset;
-+	size_t			raw_len;
- 	unsigned int		bytes;
- 	unsigned int		bit_offset;
- 	unsigned int		nbits;
+ 	if (WARN_ON(idx != priv->ncells))
 -- 
 2.25.1
 
