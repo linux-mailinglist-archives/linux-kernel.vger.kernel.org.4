@@ -2,168 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130A86D6740
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820AE6D6745
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbjDDP0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 11:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S234357AbjDDP2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 11:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234830AbjDDP0g (ORCPT
+        with ESMTP id S230004AbjDDP15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 11:26:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BAB4493;
-        Tue,  4 Apr 2023 08:26:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4893635F9;
-        Tue,  4 Apr 2023 15:26:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166DCC4339B;
-        Tue,  4 Apr 2023 15:26:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680621994;
-        bh=S5RX+65IdJoFD1RV6kPG02G0jupKJXUIf9T04GMrChI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=juLKZrGeWUX9d0oOR/CCL+88qbCAb/xWCfYJOewm4RggCItQtMsffW8KgmQJXRJdf
-         wIGDohsQC49Uu+Ack+4kjWMLAjsoMV3eb751vy96HTaqKD91T/UUKbpSlW86M8yyWU
-         kzibdkPn/HM0qi9cV+Pg+vpi80+5XFQ+v5x9mDGc2lQrl4NnUSCzI4lyIjnRln2nSD
-         O5kE/0LQwnVa4MaO8VpBvXstlEflZ23NPK1LSMQlUuVw1QtKT/IAOLsLs/T1N/El4F
-         IlKMU2toIuXW4dsXuO5nqayGgzbPTQ/Kz+zZdF9SFWy3SohdZ+M+0IoBj9mTyg+9sZ
-         lTrq/E6gLN+BQ==
-Date:   Tue, 4 Apr 2023 16:26:18 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
-Message-ID: <01f32440-8dd2-4030-9006-a3123be55845@sirena.org.uk>
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-43-9a1358472d52@cerno.tech>
+        Tue, 4 Apr 2023 11:27:57 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EEC4491;
+        Tue,  4 Apr 2023 08:27:56 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334EgTuB004246;
+        Tue, 4 Apr 2023 15:27:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=O9XrjVx+x40QVB09UmyJ8DMy2DCEub230J9/Ih3XMtA=;
+ b=tl4hrMf8ebrGfBvICt3Wwk/AeYdLJ7zjc3HUMt0i4bbLfJRe+uRdGpW37llSj/0zhLSe
+ hvL1eiJsCQpMpNFjL6C+er+YLe5n8ITbwT60aJGXLp+FwAhHyyDyqD55Q3bERn+oBQFf
+ NIM8sks4X6wF164LyIdAeKHxTvCgOjprbPiiUNRtC3TCC2gmrFn304eSzE+xRwy++XkJ
+ 9sM+67qceVabiVNFbguOSkZzWuSCfhttDIAYRLUE3tBKBi6VYnaTNHVOZ7jiK2aOQH3E
+ K1gkrH285OQjmte2wG3P5TMCgcIVQULKpa63Cjj2Cqlmjh5IDTUJ0E7KSd8zuR/7UcYL SQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3prmh4mupe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 15:27:42 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 334FGxbb012836;
+        Tue, 4 Apr 2023 15:27:42 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3prmh4munj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 15:27:41 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3341lc4m023645;
+        Tue, 4 Apr 2023 15:27:39 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3ppbvg2m91-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 15:27:39 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 334FRa1N47317518
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Apr 2023 15:27:36 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 489F72004B;
+        Tue,  4 Apr 2023 15:27:36 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC8A520040;
+        Tue,  4 Apr 2023 15:27:35 +0000 (GMT)
+Received: from [9.155.211.163] (unknown [9.155.211.163])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Apr 2023 15:27:35 +0000 (GMT)
+Message-ID: <a25455eac6a02eeb9710d9204dfe0b91938f61a1.camel@linux.ibm.com>
+Subject: Re: [PATCH] net/mlx5: stop waiting for PCI link if reset is required
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Leon Romanovsky <leon@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Alexander Schmidt <alexs@linux.ibm.com>,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 04 Apr 2023 17:27:35 +0200
+In-Reply-To: <20230403182105.GC4514@unreal>
+References: <20230403075657.168294-1-schnelle@linux.ibm.com>
+         <20230403182105.GC4514@unreal>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pRxU5n1hMJtSd1CQ"
-Content-Disposition: inline
-In-Reply-To: <20221018-clk-range-checks-fixes-v3-43-9a1358472d52@cerno.tech>
-X-Cookie: Being ugly isn't illegal.  Yet.
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: KSOKikWBu51tUSlcAoH1KzvH5iF1Nxvk
+X-Proofpoint-ORIG-GUID: 36_dKQ-S0GYJnTH2R6MItLTu3i7Wr5Yd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-04_06,2023-04-04_04,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ bulkscore=0 spamscore=0 malwarescore=0 clxscore=1015 impostorscore=0
+ phishscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304040139
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2023-04-03 at 21:21 +0300, Leon Romanovsky wrote:
+> On Mon, Apr 03, 2023 at 09:56:56AM +0200, Niklas Schnelle wrote:
+> > after an error on the PCI link, the driver does not need to wait
+> > for the link to become functional again as a reset is required. Stop
+> > the wait loop in this case to accelerate the recovery flow.
+> >=20
+> > Co-developed-by: Alexander Schmidt <alexs@linux.ibm.com>
+> > Signed-off-by: Alexander Schmidt <alexs@linux.ibm.com>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> >  drivers/net/ethernet/mellanox/mlx5/core/health.c | 12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/net/ethernet/mellanox/mlx5/core/health.c b/drivers=
+/net/ethernet/mellanox/mlx5/core/health.c
+> > index f9438d4e43ca..81ca44e0705a 100644
+> > --- a/drivers/net/ethernet/mellanox/mlx5/core/health.c
+> > +++ b/drivers/net/ethernet/mellanox/mlx5/core/health.c
+> > @@ -325,6 +325,8 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *d=
+ev)
+> >  	while (sensor_pci_not_working(dev)) {
+>=20
+> According to the comment in sensor_pci_not_working(), this loop is
+> supposed to wait till PCI will be ready again. Otherwise, already in
+> first iteration, we will bail out with pci_channel_offline() error.
+>=20
+> Thanks
 
---pRxU5n1hMJtSd1CQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Well yes. The problem is that this works for intermittent errors
+including when the card resets itself which seems to be the use case in
+mlx5_fw_reset_complete_reload() and mlx5_devlink_reload_fw_activate().
+If there is a PCI error that requires a link reset though we see some
+problems though it does work after running into the timeout.
 
-On Tue, Apr 04, 2023 at 12:11:33PM +0200, Maxime Ripard wrote:
-> The tlv320aic32x4 clkin clock implements a mux with a set_parent hook,
-> but doesn't provide a determine_rate implementation.
+As I understand it and as implemented at least on s390,
+pci_channel_io_frozen is only set for fatal errors that require a reset
+while non fatal errors will have pci_channel_io_normal (see also
+Documentation/PCI/pcieaer-howto.rst) thus I think pci_channel_offline()
+should only be true if a reset is required or there is a permanent
+error. Furthermore in the pci_channel_io_frozen state the PCI function
+may be isolated and the reads will not reach the endpoint, this is the
+case at least on s390.  Thus for errors requiring a reset the loop
+without pci_channel_offline() will run until the reset is performed or
+the timeout is reached. In the mlx5_health_try_recover() case during
+error recovery we will then indeed always loop until timeout, because
+the loop blocks mlx5_pci_err_detected() from returning thus blocking
+the reset (see Documentation/PCI/pci-error-recovery.rst). Adding Bjorn,
+maybe he can confirm or correct my assumptions here.
 
-> This is a bit odd, since set_parent() is there to, as its name implies,
-> change the parent of a clock. However, the most likely candidate to
-> trigger that parent change is a call to clk_set_rate(), with
-> determine_rate() figuring out which parent is the best suited for a
-> given rate.
+Thanks,
+Niklas
 
-> The other trigger would be a call to clk_set_parent(), but it's far less
-> used, and it doesn't look like there's any obvious user for that clock.
+>=20
+> >  		if (time_after(jiffies, end))
+> >  			return -ETIMEDOUT;
+> > +		if (pci_channel_offline(dev->pdev))
+> > +			return -EIO;
+> >  		msleep(100);
+> >  	}
+> >  	return 0;
+> > @@ -332,10 +334,16 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev =
+*dev)
+> > =20
+> >  static int mlx5_health_try_recover(struct mlx5_core_dev *dev)
+> >  {
+> > +	int rc;
+> > +
+> >  	mlx5_core_warn(dev, "handling bad device here\n");
+> >  	mlx5_handle_bad_state(dev);
+> > -	if (mlx5_health_wait_pci_up(dev)) {
+> > -		mlx5_core_err(dev, "health recovery flow aborted, PCI reads still no=
+t working\n");
+> > +	rc =3D mlx5_health_wait_pci_up(dev);
+> > +	if (rc) {
+> > +		if (rc =3D=3D -ETIMEDOUT)
+> > +			mlx5_core_err(dev, "health recovery flow aborted, PCI reads still n=
+ot working\n");
+> > +		else
+> > +			mlx5_core_err(dev, "health recovery flow aborted, PCI channel offli=
+ne\n");
+> >  		return -EIO;
+> >  	}
+> >  	mlx5_core_err(dev, "starting health recovery flow\n");
+> >=20
+> > base-commit: 7e364e56293bb98cae1b55fd835f5991c4e96e7d
+> > --=20
+> > 2.37.2
+> >=20
 
-It could be configured from device tree as well couldn't it?
-
-> So, the set_parent hook is effectively unused, possibly because of an
-> oversight. However, it could also be an explicit decision by the
-> original author to avoid any reparenting but through an explicit call to
-> clk_set_parent().
-
-Historically clk_set_rate() wouldn't reparent IIRC.
-
-> The latter case would be equivalent to setting the flag
-> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
-> to __clk_mux_determine_rate(). Indeed, if no determine_rate
-> implementation is provided, clk_round_rate() (through
-> clk_core_round_rate_nolock()) will call itself on the parent if
-> CLK_SET_RATE_PARENT is set, and will not change the clock rate
-> otherwise. __clk_mux_determine_rate() has the exact same behavior when
-> CLK_SET_RATE_NO_REPARENT is set.
-
-> And if it was an oversight, then we are at least explicit about our
-> behavior now and it can be further refined down the line.
-
-To be honest it's surprising that we'd have to manually specify this, I
-would expect to be able to reparent.  I suspect it'd be better to go the
-other way here and allow reparenting.
-
---pRxU5n1hMJtSd1CQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQsQZoACgkQJNaLcl1U
-h9C4KAf9FbCqTcQH5npaqJcyqXkbkD2B/+L43dup6TDsW3MJ6KnGh7YONz0DFQtI
-yTePWQzrTp7lltc9dQ8/QOvh4Xj3HSYJ30m5Ok0oX7lCLwy3LjEHtJiou/laIivq
-v+hAN2lVJPs0oOLwI+1tyi2p+UjtHzWUJcD37bHzIsY4esaL/B/Bp7m6z1JNpyoj
-rIleJHkETKjUABBzN/UR62y6TPaPPm/hSUcy0eudfmZZhPOWkuX/iBrFcXcUgc+c
-XOAtB0+uAsDUhULdGhXZSInCoKu0mdVwLr1QoZOB7q7J3Tl83t/8Mxuk8Dr+XEWh
-JBFDNPB3HM8uQvBR5j9pbnSLt/7E/A==
-=Jkqi
------END PGP SIGNATURE-----
-
---pRxU5n1hMJtSd1CQ--
