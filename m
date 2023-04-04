@@ -2,69 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6465F6D57E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591DF6D57E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 07:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbjDDFL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 01:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S233249AbjDDFNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 01:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDDFL5 (ORCPT
+        with ESMTP id S229481AbjDDFNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 01:11:57 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32A11BF8
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 22:11:53 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id h15so27427531vsh.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 22:11:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680585111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SCiMJmUi8GaQ+x1OyTgFrNc5tQQqEFd+PygZeMOOGjI=;
-        b=YGyuMqUTM5D9CeLhG6088aMd/+HgcJ+QoHsGZlmMCscGNlPTDjJfOdxKaXEdKG86Tc
-         RJeiV03HoDKlpeCd+enyYmHAvE1uLgrT19GcPrGCrM2e3YF8xE49bgm01bM+or15PGE3
-         eg0yrLkn5f6KkSKruqEqTxHQsiU76iJrPsDHJGXVOuB598RLhT6aoaTWS2bXzs7WVs9m
-         iAV5nmL3WZs9M0sLSP1FvgDNAKsGsea/6tlhadFKLq8VmPdi8ipS40AMe5IELCqJ/7Sr
-         T6+uDSCBtsr80NpKcFfgjTcB49i9FJ8dhy1cJk+RHzGA/HAKvPOdXHEzYnBLjYVewrVT
-         ZoyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680585111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SCiMJmUi8GaQ+x1OyTgFrNc5tQQqEFd+PygZeMOOGjI=;
-        b=jXLVboKSNW/ahK8XEPQfHAYZBAgJcYKYDB1mNmC51Pq3m6fI1VAd5ab7gwGx6oav6t
-         b9B+3SnD/oMsT762M0u5FhrmrUyQZ/rEPcXA0Ip1bsTudON+XlCgbicHImaan+e01rzV
-         nik+JkpIEK+YPcO2O3drSxRy9p5HVX+4G3gEjaEcwA5D1Wa8632BX4bRqddPzGNXvPhm
-         aVwT533BRhNAYZ/KrfbxzPPuAkmzENIzX+63ZHiQGA5w9vxRhsY7DPx0CpfTyrTuTR2o
-         KZHf5e9pvMCQLsI+vHlRKPPS/kb4tEdCTez/0RIiIKbUb0drtJ2jwT3gIYusqwxm5QWu
-         OD2g==
-X-Gm-Message-State: AAQBX9cvfrPu6Ly/WX9KnKH1wgefuxg7m9Y/oWkUfSDTR1gveoCjuUDS
-        YPxN4TZm0GXEc4K6DM+hXf/6vtpOFartKLf7FJMy6g==
-X-Google-Smtp-Source: AKy350YHEjnie5+lRjtxBz/zJSLcE4i2hqRV2u+5OLxYyK4AT/Gz1r8izWK4qKq8pbmTVSQjCPJE4C3u7sKBmh52BGI=
-X-Received: by 2002:a67:ca8d:0:b0:425:d255:dd38 with SMTP id
- a13-20020a67ca8d000000b00425d255dd38mr1343193vsl.1.1680585111012; Mon, 03 Apr
- 2023 22:11:51 -0700 (PDT)
+        Tue, 4 Apr 2023 01:13:36 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE651739;
+        Mon,  3 Apr 2023 22:13:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ut/HHiiQrH+6W0fyNTzlPLqVjwvFGjhl8TQKbK7Axd8=; b=cvt1TTlN26TF0cgb4rh3Co3+FV
+        vgGt+d9nsNFdZA0OBl2JW2+f+rlG+bw3OzuT/xkbwMSNULqu2B+8kd4yd5LMOZpFrAU+FnDkfH50V
+        Yi+7olMD/3cEKdoLb8h3Op0QIyT+VBhCVxx2yPsYSqhcNUPlKTY4NFa7HtTLBH0PtLjqYyD5CbD4B
+        zGQVl7zby2llmO7PkNfUmL1BbJhHTToGJLPAvrMf9WXSjvIb8o7Ycb32CGIRr7hIJeYdm9SEnOZWH
+        GNKOvNGAg7VM6ob196o6YtNtYB4kXJlsm4dlL+uIPFZxzebEU86GVqfKKnPUwn69aShqrqKHYL/Or
+        bti9d84g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pjYz4-0004jo-1I;
+        Tue, 04 Apr 2023 05:13:30 +0000
+Date:   Mon, 3 Apr 2023 22:13:30 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sarthak Garg <quic_sartgarg@quicinc.com>
+Cc:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, quic_rampraka@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_sachgupt@quicinc.com,
+        quic_pragalla@quicinc.com, quic_sayalil@quicinc.com,
+        Brian Norris <briannorris@chromium.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH V1 1/2] mmc: core: Define new vendor ops to enable
+ internal features
+Message-ID: <ZCux+gsR8Nz4Epxw@infradead.org>
+References: <20230401165723.19762-1-quic_sartgarg@quicinc.com>
+ <20230401165723.19762-2-quic_sartgarg@quicinc.com>
 MIME-Version: 1.0
-References: <20230403140351.636471867@linuxfoundation.org>
-In-Reply-To: <20230403140351.636471867@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 4 Apr 2023 10:41:39 +0530
-Message-ID: <CA+G9fYu2dBjTD=X5josQwf0om2C1_A-Lerfnb7A9BWD=_drQ4w@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/66] 4.14.312-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230401165723.19762-2-quic_sartgarg@quicinc.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,160 +58,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 at 19:41, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.312 release.
-> There are 66 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.312-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Sat, Apr 01, 2023 at 10:27:22PM +0530, Sarthak Garg wrote:
+> Define new ops to let vendor enable internal features in
+> mmc_suspend/resume paths like partial init feature.
 
+1) vendors have absolutely no business doing anything, you might be
+   doing either something entirely wrong or use the wrong terminology
+   here.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+2) any kind of core hook not only needs a very good description, but
+   also an actual user that goes along in the same series.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 4.14.312-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.14.y
-* git commit: f4c3927dd933c23aed0848ae3b5214808b7e6e88
-* git describe: v4.14.311-67-gf4c3927dd933
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.311-67-gf4c3927dd933
-
-## Test Regressions (compared to v4.14.311)
-
-## Metric Regressions (compared to v4.14.311)
-
-## Test Fixes (compared to v4.14.311)
-
-## Metric Fixes (compared to v4.14.311)
-
-## Test result summary
-total: 63126, pass: 54139, fail: 1959, skip: 6939, xfail: 89
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 106 total, 104 passed, 2 failed
-* arm64: 33 total, 31 passed, 2 failed
-* i386: 20 total, 19 passed, 1 failed
-* mips: 21 total, 21 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 8 total, 7 passed, 1 failed
-* s390: 6 total, 5 passed, 1 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 25 total, 24 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
