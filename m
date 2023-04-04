@@ -2,109 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08776D6AFF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3366D6B02
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235144AbjDDR55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S232696AbjDDR7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbjDDR5z (ORCPT
+        with ESMTP id S231620AbjDDR7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:57:55 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBFB173E
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:57:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680631074; x=1712167074;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yb17VqhY2itSWHQvleEg2FshNonzyB9h186iH0BpvkU=;
-  b=H97t9Pe4c2iQ8v6N46DLo4fALRvBVos8E4AIO84XHona6ghVpxJx+1XV
-   D186Rpf8iff0mBC2SXl/SC1pc6TflpCZBXLfSkA2UW0PfUgUSam4aAHjR
-   JLFM0XdyIewI80sNUMkhWR4uaGE6Bf94WZDLzTNcpLuC6ayN69+hqkuPN
-   gw6ooSgafPAQnwq6lifqIMk6tsOEPxOyevK6alno+YgnXoHkkW1ZYEt1I
-   iEVuwBVb0AIlKfBb/79zWR1xDNcXzoZ2zS7747+Gpb2xsVYl/YQ9n3HEG
-   aGp2xivs6QwZXkWAUaVmKYtB/i04A3pRIJD2nW2RugMXhfZEM+ktKDDTa
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="344832446"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="344832446"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 10:57:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="719030804"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="719030804"
-Received: from jshresth-mobl1.amr.corp.intel.com (HELO [10.209.62.86]) ([10.209.62.86])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 10:57:53 -0700
-Message-ID: <bc9e6d82-c7c1-47dc-e91f-57d9b4e2bb0a@intel.com>
-Date:   Tue, 4 Apr 2023 10:57:52 -0700
+        Tue, 4 Apr 2023 13:59:09 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AA0C9;
+        Tue,  4 Apr 2023 10:59:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=W30E6yJdVpvc8OvdU150EHIgwOc4jlmRCMLcYR9/+KU=;
+        t=1680631148; x=1681840748; b=ryjFfh1UzIf8/oDSmK1Wlz9z5rTX4Zk/CbPcYPv4spt8wNz
+        Qo9anmEOWN8VeptT5ugJiRazMDwKCN61kBEQRKSL7HgudwaTtNDPGBNCZIkgxYV5P7pOmtmbP2Kze
+        PoF1mmyCnvYLKMezeVXs42AUrJMdhvN+ClW2Y5LenBx/CT69k1+xuO/xp1UUKmDnRYEOFhkXqXy1u
+        sTzhf/DANTjPvGyzo0xNGhKRJIWNUwdF1+Yti0pprvg+G5ZngW9wwXoXeDhXj6kBNOzj/NsgIH4QT
+        oJfzR0UhxqoUXREVtv7+0VMjtZGpKLzL2Z6h+t4jFFJcrNlu5qm60ApGuMlan6VA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <benjamin@sipsolutions.net>)
+        id 1pjkvr-006C1S-39;
+        Tue, 04 Apr 2023 19:59:00 +0200
+Message-ID: <fbfaed01ac773b72a5a79f9a514c646ac21d5583.camel@sipsolutions.net>
+Subject: Re: [RFC PATCH v2 3/3] kunit: kmalloc_array: Use kunit_add_action()
+From:   Benjamin Berg <benjamin@sipsolutions.net>
+To:     David Gow <davidgow@google.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Date:   Tue, 04 Apr 2023 19:58:58 +0200
+In-Reply-To: <20230331080411.981038-4-davidgow@google.com>
+References: <20230331080411.981038-1-davidgow@google.com>
+         <20230331080411.981038-4-davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 6/6] x86/efi: Safely enable unaccepted memory in UEFI
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biescheuvel <ardb@kernel.org>,
-        "Min M. Xu" <min.m.xu@intel.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Jiewen Yao <jiewen.yao@intel.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
- <cover.1680628986.git.thomas.lendacky@amd.com>
- <1d38d28c2731075d66ac65b56b813a138900f638.1680628986.git.thomas.lendacky@amd.com>
- <20230404174506.pjdikxvk2fsyy4au@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230404174506.pjdikxvk2fsyy4au@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/23 10:45, Kirill A. Shutemov wrote:
-> I still think it is a bad idea.
-> 
-> As I asked before, please include my
-> 
-> Nacked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> 
-> into the patch.
+SGksCgpPbiBGcmksIDIwMjMtMDMtMzEgYXQgMTY6MDQgKzA4MDAsICdEYXZpZCBHb3cnIHZpYSBL
+VW5pdCBEZXZlbG9wbWVudCB3cm90ZToKPiBUaGUga3VuaXRfYWRkX2FjdGlvbigpIGZ1bmN0aW9u
+IGlzIG11Y2ggc2ltcGxlciBhbmQgY2xlYW5lciB0byB1c2UgdGhhdAo+IHRoZSBmdWxsIEtVbml0
+IHJlc291cmNlIEFQSSBmb3Igc2ltcGxlIHRoaW5ncyBsaWtlIHRoZQo+IGt1bml0X2ttYWxsb2Nf
+YXJyYXkoKSBmdW5jdGlvbmFsaXR5Lgo+IAo+IFJlcGxhY2luZyBpdCBhbGxvd3MgdXMgdG8gZ2V0
+IHJpZCBvZiBhIG51bWJlciBvZiBoZWxwZXIgZnVuY3Rpb25zLCBhbmQKPiBsZWF2ZXMgdXMgd2l0
+aCBubyB1c2VzIG9mIGt1bml0X2FsbG9jX3Jlc291cmNlKCksIHdoaWNoIGhhcyBzb21lCj4gdXNh
+YmlsaXR5IHByb2JsZW1zIGFuZCBpcyBnb2luZyB0byBoYXZlIGl0cyBiZWhhdmlvdXIgbW9kaWZp
+ZWQgaW4gYW4KPiB1cGNvbWluZyBwYXRjaC4KPiAKPiBOb3RlIHRoYXQgd2UgbmVlZCB0byB1c2Ug
+a3VuaXRfZGVmZXJfdHJpZ2dlcl9hbGwoKSB0byBpbXBsZW1lbnQKPiBrdW5pdF9rZnJlZSgpLgoK
+SnVzdCBhIG5pdHBpY2s6IGt1bml0X2RlZmVyX3RyaWdnZXJfYWxsIGRvZXMgbm90IGV4aXN0IGlu
+IHRoZSBuZXcgcGF0Y2gKYW55bW9yZS4gSSBndWVzcyB0aGlzIHNob3VsZCBiZSBrdW5pdF9yZWxl
+YXNlX2FjdGlvbi4KCkJlbmphbWluCgo+IAo+IFNpZ25lZC1vZmYtYnk6IERhdmlkIEdvdyA8ZGF2
+aWRnb3dAZ29vZ2xlLmNvbT4KPiAtLS0KPiDCoGxpYi9rdW5pdC90ZXN0LmMgfCA0OCArKysrKysr
+Ky0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiDCoDEgZmlsZSBjaGFu
+Z2VkLCA4IGluc2VydGlvbnMoKyksIDQwIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9s
+aWIva3VuaXQvdGVzdC5jIGIvbGliL2t1bml0L3Rlc3QuYwo+IGluZGV4IGUyOTEwYjI2MTExMi4u
+ZWM0NWM4ODYzZjA0IDEwMDY0NAo+IC0tLSBhL2xpYi9rdW5pdC90ZXN0LmMKPiArKysgYi9saWIv
+a3VuaXQvdGVzdC5jCj4gQEAgLTcxMiw1OCArNzEyLDI2IEBAIHN0YXRpYyBzdHJ1Y3Qgbm90aWZp
+ZXJfYmxvY2sga3VuaXRfbW9kX25iID0gewo+IMKgfTsKPiDCoCNlbmRpZgo+IMKgCj4gLXN0cnVj
+dCBrdW5pdF9rbWFsbG9jX2FycmF5X3BhcmFtcyB7Cj4gLcKgwqDCoMKgwqDCoMKgc2l6ZV90IG47
+Cj4gLcKgwqDCoMKgwqDCoMKgc2l6ZV90IHNpemU7Cj4gLcKgwqDCoMKgwqDCoMKgZ2ZwX3QgZ2Zw
+Owo+IC19Owo+IC0KPiAtc3RhdGljIGludCBrdW5pdF9rbWFsbG9jX2FycmF5X2luaXQoc3RydWN0
+IGt1bml0X3Jlc291cmNlICpyZXMsIHZvaWQgKmNvbnRleHQpCj4gK3ZvaWQgKmt1bml0X2ttYWxs
+b2NfYXJyYXkoc3RydWN0IGt1bml0ICp0ZXN0LCBzaXplX3Qgbiwgc2l6ZV90IHNpemUsIGdmcF90
+IGdmcCkKPiDCoHsKPiAtwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga3VuaXRfa21hbGxvY19hcnJheV9w
+YXJhbXMgKnBhcmFtcyA9IGNvbnRleHQ7Cj4gLQo+IC3CoMKgwqDCoMKgwqDCoHJlcy0+ZGF0YSA9
+IGttYWxsb2NfYXJyYXkocGFyYW1zLT5uLCBwYXJhbXMtPnNpemUsIHBhcmFtcy0+Z2ZwKTsKPiAt
+wqDCoMKgwqDCoMKgwqBpZiAoIXJlcy0+ZGF0YSkKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgcmV0dXJuIC1FTk9NRU07Cj4gLQo+IC3CoMKgwqDCoMKgwqDCoHJldHVybiAwOwo+IC19
+Cj4gK8KgwqDCoMKgwqDCoMKgdm9pZCAqZGF0YTsKPiDCoAo+IC1zdGF0aWMgdm9pZCBrdW5pdF9r
+bWFsbG9jX2FycmF5X2ZyZWUoc3RydWN0IGt1bml0X3Jlc291cmNlICpyZXMpCj4gLXsKPiAtwqDC
+oMKgwqDCoMKgwqBrZnJlZShyZXMtPmRhdGEpOwo+IC19Cj4gK8KgwqDCoMKgwqDCoMKgZGF0YSA9
+IGttYWxsb2NfYXJyYXkobiwgc2l6ZSwgZ2ZwKTsKPiDCoAo+IC12b2lkICprdW5pdF9rbWFsbG9j
+X2FycmF5KHN0cnVjdCBrdW5pdCAqdGVzdCwgc2l6ZV90IG4sIHNpemVfdCBzaXplLCBnZnBfdCBn
+ZnApCj4gLXsKPiAtwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga3VuaXRfa21hbGxvY19hcnJheV9wYXJh
+bXMgcGFyYW1zID0gewo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAuc2l6ZSA9IHNp
+emUsCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5uID0gbiwKPiAtwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgLmdmcCA9IGdmcAo+IC3CoMKgwqDCoMKgwqDCoH07Cj4gK8Kg
+wqDCoMKgwqDCoMKgaWYgKCFkYXRhKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBy
+ZXR1cm4gTlVMTDsKPiDCoAo+IC3CoMKgwqDCoMKgwqDCoHJldHVybiBrdW5pdF9hbGxvY19yZXNv
+dXJjZSh0ZXN0LAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBrdW5pdF9rbWFsbG9jX2FycmF5X2luaXQsCj4gLcKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIGt1bml0X2ttYWxsb2NfYXJyYXlfZnJlZSwKPiAtwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZ2ZwLAo+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCAmcGFyYW1zKTsKPiArwqDCoMKgwqDCoMKgwqBrdW5pdF9hZGRfYWN0aW9u
+KHRlc3QsIChrdW5pdF9kZWZlcl9mdW5jdGlvbl90KWtmcmVlLCBkYXRhLCBnZnApOwo+ICvCoMKg
+wqDCoMKgwqDCoHJldHVybiBkYXRhOwo+IMKgfQo+IMKgRVhQT1JUX1NZTUJPTF9HUEwoa3VuaXRf
+a21hbGxvY19hcnJheSk7Cj4gwqAKPiAtc3RhdGljIGlubGluZSBib29sIGt1bml0X2tmcmVlX21h
+dGNoKHN0cnVjdCBrdW5pdCAqdGVzdCwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3Qga3VuaXRfcmVz
+b3VyY2UgKnJlcywgdm9pZCAqbWF0Y2hfZGF0YSkKPiAtewo+IC3CoMKgwqDCoMKgwqDCoC8qIE9u
+bHkgbWF0Y2ggcmVzb3VyY2VzIGFsbG9jYXRlZCB3aXRoIGt1bml0X2ttYWxsb2MoKSBhbmQgZnJp
+ZW5kcy4gKi8KPiAtwqDCoMKgwqDCoMKgwqByZXR1cm4gcmVzLT5mcmVlID09IGt1bml0X2ttYWxs
+b2NfYXJyYXlfZnJlZSAmJiByZXMtPmRhdGEgPT0gbWF0Y2hfZGF0YTsKPiAtfQo+IC0KPiDCoHZv
+aWQga3VuaXRfa2ZyZWUoc3RydWN0IGt1bml0ICp0ZXN0LCBjb25zdCB2b2lkICpwdHIpCj4gwqB7
+Cj4gwqDCoMKgwqDCoMKgwqDCoGlmICghcHRyKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgcmV0dXJuOwo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgaWYgKGt1bml0X2Rlc3Ryb3lfcmVz
+b3VyY2UodGVzdCwga3VuaXRfa2ZyZWVfbWF0Y2gsICh2b2lkICopcHRyKSkKPiAtwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgS1VOSVRfRkFJTCh0ZXN0LCAia3VuaXRfa2ZyZWU6ICVweCBh
+bHJlYWR5IGZyZWVkIG9yIG5vdCBhbGxvY2F0ZWQgYnkga3VuaXQiLCBwdHIpOwo+ICvCoMKgwqDC
+oMKgwqDCoGt1bml0X3JlbGVhc2VfYWN0aW9uKHRlc3QsIChrdW5pdF9kZWZlcl9mdW5jdGlvbl90
+KWtmcmVlLCAodm9pZCAqKXB0cik7Cj4gwqB9Cj4gwqBFWFBPUlRfU1lNQk9MX0dQTChrdW5pdF9r
+ZnJlZSk7Cj4gwqAKPiAtLSAKPiAyLjQwLjAuMzQ4LmdmOTM4YjA5MzY2LWdvb2cKPiAKCg==
 
-I was pretty opposed to this when I first saw it too.  But, Tom and
-company have worn down my opposition a bit.
-
-The fact is that we have upstream kernels out there with SEV-SNP support
-that don't know anything about unaccepted memory.  They're either
-relegated to using the pre-accepted memory (4GB??) or _some_ entity
-needs to accept the memory.  That entity obviously can't be the kernel
-unless we backport unaccepted memory support.
-
-This both lets the BIOS be the page-accepting entity _and_ allows the
-entity to delegate that to the kernel when it needs to.
-
-As much as I want to nak this and pretend that that those existing
-kernel's don't exist, my powers of self-delusion do have their limits.
-
-If our AMD friends don't do this, what is their alternative?
