@@ -2,131 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 941296D70E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 01:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DD96D70E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 01:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236631AbjDDXpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 19:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
+        id S236654AbjDDXrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 19:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236619AbjDDXpK (ORCPT
+        with ESMTP id S236625AbjDDXrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 19:45:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269824216;
-        Tue,  4 Apr 2023 16:45:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BF1B63AC8;
-        Tue,  4 Apr 2023 23:45:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5AB4C433D2;
-        Tue,  4 Apr 2023 23:45:05 +0000 (UTC)
-Date:   Tue, 4 Apr 2023 19:45:04 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH] tracing: Free error logs of tracing instances
-Message-ID: <20230404194504.5790b95f@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 4 Apr 2023 19:47:09 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938B53C3F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 16:47:08 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-93071f06a9fso6333666b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 16:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680652027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vi8MTES466++qI3K8H2RA5xq0z5Rl84WyOaFw5DuASg=;
+        b=If2bQ4PP42IMPaWPi/mxpS5uD6z8AbVQFXkkogns9TNyuIiTffcA5kdXIUSlty2ruA
+         rgjxNGKOv1BufEIWhTD9lu0c4K7mbT4yKTlNFkff+F42czJEauhWZY6XNFIGiNjhQGGi
+         wyphX7FpCilXQmTlQXOrHfAEZBurxOp8njL4j8MlQWFZfGqvlUkg+F1zYaJOC/+nb5Pm
+         dq1esF1Dqz+Fpvnkx4FwAirFKJoN4xNv4NwZ+1tfRJWFBd8Or9qU3CKgrDUU0sPaDtY6
+         0t1e9LwZ0ZXNWN9lWxopo8+RD7NR4rw/k5+aglNEJvKLnm4KjJ8YtgtcKQaKPOHxNSaU
+         At6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680652027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vi8MTES466++qI3K8H2RA5xq0z5Rl84WyOaFw5DuASg=;
+        b=2NI0Hz3b2WG7EmPYqkKD4ApeA96dUdWnPpgs5kC77MYq71OubMudnruBZVbvnoccWu
+         +SVlsjHjwWAjup5rVVT73EaCg5uE6RBliMfJPp1jW5V/lrgJtf7yxmC2dEi6ishrLaOO
+         kUSXuRBrIPO36vM4klj4vE23L4wHkNPlGRk8UFILJzxuReJLV1rYV21wbTShtvJEDxLs
+         6JMppl2Drizx7KYrae3aE4C6LeH9pxHa6Py1XUEFOtrqy+9SpjUssqA0D9G4I4nWM/OQ
+         j1vDjmnUvswM4cA6JP2ivkVmFYK63iSg6xEX1DeJ5JrSQBA8y6OxxaFzZQqNILCk5HMP
+         gd8w==
+X-Gm-Message-State: AAQBX9fzFFw1abZPwkCOwswT5NteiIrI21VkHLdITN5lP7pSsZNU+CiB
+        1QJO0/eYg6NQT7Bx6uXWfq4pBKwcWrJV2OF/MHUKRA==
+X-Google-Smtp-Source: AKy350amp5Q0CsMRA0vsSv+2EQyk24jR2b8+hCJYdKxg84vsQgd8qYOXeaFgiz9iTyZrvy0BpEcL+UO1UUrppWOUht0=
+X-Received: by 2002:a50:aac1:0:b0:502:1d1c:7d37 with SMTP id
+ r1-20020a50aac1000000b005021d1c7d37mr140133edc.8.1680652026905; Tue, 04 Apr
+ 2023 16:47:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230404001353.468224-1-yosryahmed@google.com>
+ <20230404143824.a8c57452f04929da225a17d0@linux-foundation.org>
+ <CAJD7tkbZgA7QhkuxEbp=Sam6NCA0i3cZJYF4Z1nrLK1=Rem+Gg@mail.gmail.com>
+ <20230404145830.b34afedb427921de2f0e2426@linux-foundation.org>
+ <CAJD7tkZCmkttJo+6XGROo+pmfQ+ppQp6=qukwvAGSeSBEGF+nQ@mail.gmail.com>
+ <20230404152816.cec6d41bfb9de4680ae8c787@linux-foundation.org> <20230404153124.b0fa5074cf9fc3b9925e8000@linux-foundation.org>
+In-Reply-To: <20230404153124.b0fa5074cf9fc3b9925e8000@linux-foundation.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 4 Apr 2023 16:46:30 -0700
+Message-ID: <CAJD7tkYFZGJqZ278stOWDyW3HgMP8iyAZu8hSG+bV-p9YoVxig@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] Ignore non-LRU-based reclaim in memcg reclaim
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Tue, Apr 4, 2023 at 3:31=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
+.org> wrote:
+>
+> On Tue, 4 Apr 2023 15:28:16 -0700 Andrew Morton <akpm@linux-foundation.or=
+g> wrote:
+>
+> > On Tue, 4 Apr 2023 15:00:57 -0700 Yosry Ahmed <yosryahmed@google.com> w=
+rote:
+> >
+> > > ...
+> > >
+> > > > >
+> > > > > Without refactoring the code that adds reclaim_state->reclaimed t=
+o
+> > > > > scan_control->nr_reclaimed into a helper (flush_reclaim_state()),=
+ the
+> > > > > change would need to be done in two places instead of one, and I
+> > > > > wouldn't know where to put the huge comment.
+> > > >
+> > > > Well, all depends on how desirable it it that we backport.  If "not
+> > > > desirable" then leave things as-is.  If at least "possibly desirabl=
+e"
+> > > > then a simple patch with the two changes and no elaborate comment w=
+ill
+> > > > suit.
+> > > >
+> > >
+> > > I would rather leave the current series as-is with an elaborate
+> > > comment. I can send a separate single patch as a backport to stable i=
+f
+> > > this is something that we usually do (though I am not sure how to
+> > > format such patch).
+> >
+> > -stable maintainers prefer to take something which has already been
+> > accepted by Linus.
+> >
+> > The series could be as simple as
+> >
+> > simple-two-liner.patch
+> > revert-simple-two-liner.patch
+> > this-series-as-is.patch
+> >
+> > simple-two-liner.patch goes into 6.3-rcX and -stable.  The other
+> > patches into 6.4-rc1.
+>
+> But the key question remains: how desirable is a backport?
+>
+> Looking at the changelogs I'm not seeing a clear statement of the
+> impact upon real-world users' real-world workloads.  (This is a hint).
+> So I am unable to judge.
+>
+> Please share your thoughts on this.
 
-When a tracing instance is removed, the error messages that hold errors
-that occurred in the instance needs to be freed. The following reports a
-memory leak:
+I think it's nice to have but not really important. It occasionally
+causes writes to memory.reclaim to report false positives and *might*
+cause unnecessary retrying when charging memory, but probably too rare
+to be a practical problem.
 
- # cd /sys/kernel/tracing
- # mkdir instances/foo
- # echo 'hist:keys=x' > instances/foo/events/sched/sched_switch/trigger
- # cat instances/foo/error_log
- [  117.404795] hist:sched:sched_switch: error: Couldn't find field
-   Command: hist:keys=x
-                      ^
- # rmdir instances/foo
+Personally, I intend to backport to our kernel at Google because it's
+a simple enough fix and we have occasionally seen test flakiness
+without it.
 
-Then check for memory leaks:
+I have a reworked version of the series that only has 2 patches:
+- simple-two-liner-patch (actually 5 lines)
+- one patch including all refactoring squashed (introducing
+flush_reclaim_state() with the huge comment, introducing
+mm_account_reclaimed_pages(), and moving set_task_reclaim_state()
+around).
 
- # echo scan > /sys/kernel/debug/kmemleak
- # cat /sys/kernel/debug/kmemleak
-unreferenced object 0xffff88810d8ec700 (size 192):
-  comm "bash", pid 869, jiffies 4294950577 (age 215.752s)
-  hex dump (first 32 bytes):
-    60 dd 68 61 81 88 ff ff 60 dd 68 61 81 88 ff ff  `.ha....`.ha....
-    a0 30 8c 83 ff ff ff ff 26 00 0a 00 00 00 00 00  .0......&.......
-  backtrace:
-    [<00000000dae26536>] kmalloc_trace+0x2a/0xa0
-    [<00000000b2938940>] tracing_log_err+0x277/0x2e0
-    [<000000004a0e1b07>] parse_atom+0x966/0xb40
-    [<0000000023b24337>] parse_expr+0x5f3/0xdb0
-    [<00000000594ad074>] event_hist_trigger_parse+0x27f8/0x3560
-    [<00000000293a9645>] trigger_process_regex+0x135/0x1a0
-    [<000000005c22b4f2>] event_trigger_write+0x87/0xf0
-    [<000000002cadc509>] vfs_write+0x162/0x670
-    [<0000000059c3b9be>] ksys_write+0xca/0x170
-    [<00000000f1cddc00>] do_syscall_64+0x3e/0xc0
-    [<00000000868ac68c>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
-unreferenced object 0xffff888170c35a00 (size 32):
-  comm "bash", pid 869, jiffies 4294950577 (age 215.752s)
-  hex dump (first 32 bytes):
-    0a 20 20 43 6f 6d 6d 61 6e 64 3a 20 68 69 73 74  .  Command: hist
-    3a 6b 65 79 73 3d 78 0a 00 00 00 00 00 00 00 00  :keys=x.........
-  backtrace:
-    [<000000006a747de5>] __kmalloc+0x4d/0x160
-    [<000000000039df5f>] tracing_log_err+0x29b/0x2e0
-    [<000000004a0e1b07>] parse_atom+0x966/0xb40
-    [<0000000023b24337>] parse_expr+0x5f3/0xdb0
-    [<00000000594ad074>] event_hist_trigger_parse+0x27f8/0x3560
-    [<00000000293a9645>] trigger_process_regex+0x135/0x1a0
-    [<000000005c22b4f2>] event_trigger_write+0x87/0xf0
-    [<000000002cadc509>] vfs_write+0x162/0x670
-    [<0000000059c3b9be>] ksys_write+0xca/0x170
-    [<00000000f1cddc00>] do_syscall_64+0x3e/0xc0
-    [<00000000868ac68c>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Let me know if you want me to send it as v5, or leave the current v4
+if you think backporting is not generally important.
 
-The problem is that the error log needs to be freed when the instance is
-removed.
-
-Link: https://lore.kernel.org/lkml/76134d9f-a5ba-6a0d-37b3-28310b4a1e91@alu.unizg.hr/
-
-Cc: stable@vger.kernel.org
-Fixes: 2f754e771b1a6 ("tracing: Have the error logs show up in the proper instances")
-Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/trace.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 8ae51f1dea8e..352a804b016d 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -9516,6 +9516,7 @@ static int __remove_instance(struct trace_array *tr)
- 	tracefs_remove(tr->dir);
- 	free_percpu(tr->last_func_repeats);
- 	free_trace_buffers(tr);
-+	clear_tracing_err_log(tr);
- 
- 	for (i = 0; i < tr->nr_topts; i++) {
- 		kfree(tr->topts[i].topts);
--- 
-2.39.2
-
+>
