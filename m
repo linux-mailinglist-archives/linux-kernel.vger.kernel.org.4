@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED6F6D5D7D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542D96D5D84
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 12:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234285AbjDDK3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 06:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
+        id S234331AbjDDKat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 06:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234292AbjDDK3c (ORCPT
+        with ESMTP id S233699AbjDDKap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 06:29:32 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E2D1BD6
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 03:29:30 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id k13so5283071iov.10
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 03:29:30 -0700 (PDT)
+        Tue, 4 Apr 2023 06:30:45 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065EE1984;
+        Tue,  4 Apr 2023 03:30:42 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id fi11so5073367edb.10;
+        Tue, 04 Apr 2023 03:30:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680604169;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4EmkZjYvZJVj3QnIxJ1/YfnG3WC3vCHhD00FgzBktzc=;
-        b=UT/fEhLm0SC/fiIsmvTNeoOgXz8ZErqOQFzejfAdFEvfdEfjgHfylVxuCGYJnFUJD7
-         VztWelG82Vzgkg2W03Zc0/ORaguOUDfPMG0Ul3sN9Jo1kIaior/siMoErdhdWtnOFhlY
-         +sn4xUXe/pRvKOStXyh3o8TwB/kMxWLqE0kI5VcMySufwTC1hCSfYNww0DRoNA8yn1CT
-         0iQA4hExGURB1QR/ZLJc92CWj/OB+2Ur+EhomhjsPrAXvwSXoELaSyxolnSzRNdymJpz
-         Mqb/qHNqAvLcv+8tv4F7OnW4/KrsCtNKKAG/aHMb9cwWyGL2B6MiMz3hFZ9SZ6ZrC9Cd
-         nPdQ==
+        d=gmail.com; s=20210112; t=1680604240;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qPQJYuYVqddrLpsUiSF4JuC6g9/L1+GNYqEeCmgaIpw=;
+        b=Qf9ZiLsHWa67q5d6OwOb196jz2WhK7YOr7O9+et+VWP9XJTg4eS7ZGmo/pp76jWFPt
+         4Kbtvtu5S3zMCsF9eVSA/S/YNXm5ggVhITb/Ngz7+umuz+DRrtYBdfzKTl3UrdN7NzWW
+         O6IY8bxFhED+SxeYizHcRY3SwLERm5ZUtQuHN1aGTwiysQ10WcIUcldVRbRtkYiswHlM
+         nTETOQuueRAEtt0TgKyZgsrozphoT+IYOtKCMD3aGLrr4m8j5PNzK6Je3J+NQ2mth/Tq
+         N2V070Ic0y6tNpVzzPzhp6zx5ZpOQ5fxDFW2cAWXz/Wy2BIlRhwiAXRk4jwemb2Ozkk8
+         aGJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680604169;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4EmkZjYvZJVj3QnIxJ1/YfnG3WC3vCHhD00FgzBktzc=;
-        b=Yk89f5QkNL8ZaT09vOcNYYtj2tFavEDgFPFSmxeCbwr3MIe6J7eOFrSu9MSkePbGIA
-         QOfI/khbUY5FblziV7RL68vXAzAyR73mrCjwUuRPbMDgouADq7Y+v50qsJPtDiBOOYos
-         Yh4N2UxIjDzIgdK+yjDVO0WiiSew09uRYVQFx0FjchFtOVXNA57LGL5WHs5hllrQV1TV
-         77D84xwF1M22Dgud/MUMarftZ8yhqeRLo2H5eeIN+xQL1p9AutJ4NEnjPoJ+ZUvY8W0B
-         hLJ2KzQyFvyquy3az4dMzgpvIAtKihOtoHK16s4l0rP63bZoPA6x6CitHT3+vqPYiiSz
-         YS8A==
-X-Gm-Message-State: AAQBX9fxPkYMh0Jvppw1vR8xEGuev7QppEKipum4aq3WXrJC9SBRceje
-        z3jy0QZAqodKdw2Q8imJRQVZMx/3tI9Kxs0b7eixDupYhWsWXLWDhcs=
-X-Google-Smtp-Source: AKy350awmYuEjUdfWn5va245UWflf0zZx/dwv6y8E/EYdNes0zj/Q+XcXS4dcKFkmbTVXdB6Y7z6Xb0t/VHgYkRttGw=
-X-Received: by 2002:a5d:9b0a:0:b0:753:ee63:3dc with SMTP id
- y10-20020a5d9b0a000000b00753ee6303dcmr1835631ion.20.1680604169337; Tue, 04
- Apr 2023 03:29:29 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680604240;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qPQJYuYVqddrLpsUiSF4JuC6g9/L1+GNYqEeCmgaIpw=;
+        b=zQ1tRoSg6FxaZU0lOFZ4sUyIPj7ePKC1ZozNdO6A4huKHV0anGYR1SeT2sErIF7IF1
+         zedL6i/mBHOX5YSQ8JofrQNNffD3R71Fu5+NYs6SrB41jOxyBwWPUMQtO0Q4780ZVK1b
+         DPdVdTLpmgkk+fvoOZ1c0Pvdq8g3NyVixZowXB1uFIS2RbhVAIoblgbfckwH2y6qnJN3
+         vY5NoFnERDL8Wu6kyBM3sgJnbChwDVfm41BU+xJgLcUetkV7hA/oOlLRN+TAmabBCrY0
+         6QK4DqJOBc/iqC27tUrss1JQ3ZblDibK3hTftAtNrKGqSpmYBuF7D9SRJ0MJuHBDc5gz
+         dDwg==
+X-Gm-Message-State: AAQBX9cI7GJ26xqSwr5MtvdMs2yiAuOP2gmYb5Hpb81lRy6n31PlSyiO
+        4ImPwaOKtSWworREaIjlBy4=
+X-Google-Smtp-Source: AKy350br99HCbCDIQiZj8fwuuU0BjyJC/AwN7IrayX6NNSgMYELNtziysmKohGWt/IYRz9rEEj8/bQ==
+X-Received: by 2002:a17:907:8b87:b0:8e1:12b6:a8fc with SMTP id tb7-20020a1709078b8700b008e112b6a8fcmr1480812ejc.4.1680604240440;
+        Tue, 04 Apr 2023 03:30:40 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id qp24-20020a170907207800b0093f822321fesm5737690ejb.137.2023.04.04.03.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 03:30:40 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 12:30:38 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, robh+dt@kernel.org,
+        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
+        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
+Subject: Re: [PATCH V4 04/10] dt-bindings: timestamp: Add
+ nvidia,gpio-controller
+Message-ID: <ZCv8TviVD8n4MrnW@orome>
+References: <20230323012929.10815-1-dipenp@nvidia.com>
+ <20230323012929.10815-5-dipenp@nvidia.com>
+ <f523c155-7d05-2034-27ea-e2e56881c0bb@linaro.org>
+ <a7539193-8374-cda6-f535-360a4a8eab22@nvidia.com>
 MIME-Version: 1.0
-References: <20230403122738.6006-1-zhangpeng.00@bytedance.com>
-In-Reply-To: <20230403122738.6006-1-zhangpeng.00@bytedance.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 4 Apr 2023 12:28:52 +0200
-Message-ID: <CANpmjNN4SAbJ7mRLJHZ1azOEp6e2HyL1FNZH_Qi1+2xc4rgXfw@mail.gmail.com>
-Subject: Re: [PATCH v2] mm: kfence: Improve the performance of
- __kfence_alloc() and __kfence_free()
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="kKVfNtJEQjXZPd0A"
+Content-Disposition: inline
+In-Reply-To: <a7539193-8374-cda6-f535-360a4a8eab22@nvidia.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,219 +83,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 at 14:27, 'Peng Zhang' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> In __kfence_alloc() and __kfence_free(), we will set and check canary.
-> Assuming that the size of the object is close to 0, nearly 4k memory
-> accesses are required because setting and checking canary is executed
-> byte by byte.
->
-> canary is now defined like this:
-> KFENCE_CANARY_PATTERN(addr) ((u8)0xaa ^ (u8)((unsigned long)(addr) & 0x7))
->
-> Observe that canary is only related to the lower three bits of the
-> address, so every 8 bytes of canary are the same. We can access 8-byte
-> canary each time instead of byte-by-byte, thereby optimizing nearly 4k
-> memory accesses to 4k/8 times.
->
-> Use the bcc tool funclatency to measure the latency of __kfence_alloc()
-> and __kfence_free(), the numbers (deleted the distribution of latency)
-> is posted below. Though different object sizes will have an impact on the
-> measurement, we ignore it for now and assume the average object size is
-> roughly equal.
->
-> Before patching:
-> __kfence_alloc:
-> avg = 5055 nsecs, total: 5515252 nsecs, count: 1091
-> __kfence_free:
-> avg = 5319 nsecs, total: 9735130 nsecs, count: 1830
->
-> After patching:
-> __kfence_alloc:
-> avg = 3597 nsecs, total: 6428491 nsecs, count: 1787
-> __kfence_free:
-> avg = 3046 nsecs, total: 3415390 nsecs, count: 1121
->
-> The numbers indicate that there is ~30% - ~40% performance improvement.
->
-> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
 
-Reviewed-by: Marco Elver <elver@google.com>
+--kKVfNtJEQjXZPd0A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  mm/kfence/core.c   | 70 ++++++++++++++++++++++++++++++++--------------
->  mm/kfence/kfence.h | 10 ++++++-
->  mm/kfence/report.c |  2 +-
->  3 files changed, 59 insertions(+), 23 deletions(-)
->
-> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> index 79c94ee55f97..b7fe2a2493a0 100644
-> --- a/mm/kfence/core.c
-> +++ b/mm/kfence/core.c
-> @@ -297,20 +297,13 @@ metadata_update_state(struct kfence_metadata *meta, enum kfence_object_state nex
->         WRITE_ONCE(meta->state, next);
->  }
->
-> -/* Write canary byte to @addr. */
-> -static inline bool set_canary_byte(u8 *addr)
-> -{
-> -       *addr = KFENCE_CANARY_PATTERN(addr);
-> -       return true;
-> -}
-> -
->  /* Check canary byte at @addr. */
->  static inline bool check_canary_byte(u8 *addr)
->  {
->         struct kfence_metadata *meta;
->         unsigned long flags;
->
-> -       if (likely(*addr == KFENCE_CANARY_PATTERN(addr)))
-> +       if (likely(*addr == KFENCE_CANARY_PATTERN_U8(addr)))
->                 return true;
->
->         atomic_long_inc(&counters[KFENCE_COUNTER_BUGS]);
-> @@ -323,15 +316,31 @@ static inline bool check_canary_byte(u8 *addr)
->         return false;
->  }
->
-> -/* __always_inline this to ensure we won't do an indirect call to fn. */
-> -static __always_inline void for_each_canary(const struct kfence_metadata *meta, bool (*fn)(u8 *))
-> +static inline void set_canary(const struct kfence_metadata *meta)
->  {
->         const unsigned long pageaddr = ALIGN_DOWN(meta->addr, PAGE_SIZE);
-> -       unsigned long addr;
-> +       unsigned long addr = pageaddr;
-> +
-> +       /*
-> +        * The canary may be written to part of the object memory, but it does
-> +        * not affect it. The user should initialize the object before using it.
-> +        */
-> +       for (; addr < meta->addr; addr += sizeof(u64))
-> +               *((u64 *)addr) = KFENCE_CANARY_PATTERN_U64;
-> +
-> +       addr = ALIGN_DOWN(meta->addr + meta->size, sizeof(u64));
-> +       for (; addr - pageaddr < PAGE_SIZE; addr += sizeof(u64))
-> +               *((u64 *)addr) = KFENCE_CANARY_PATTERN_U64;
-> +}
-> +
-> +static inline void check_canary(const struct kfence_metadata *meta)
-> +{
-> +       const unsigned long pageaddr = ALIGN_DOWN(meta->addr, PAGE_SIZE);
-> +       unsigned long addr = pageaddr;
->
->         /*
-> -        * We'll iterate over each canary byte per-side until fn() returns
-> -        * false. However, we'll still iterate over the canary bytes to the
-> +        * We'll iterate over each canary byte per-side until a corrupted byte
-> +        * is found. However, we'll still iterate over the canary bytes to the
->          * right of the object even if there was an error in the canary bytes to
->          * the left of the object. Specifically, if check_canary_byte()
->          * generates an error, showing both sides might give more clues as to
-> @@ -339,16 +348,35 @@ static __always_inline void for_each_canary(const struct kfence_metadata *meta,
->          */
->
->         /* Apply to left of object. */
-> -       for (addr = pageaddr; addr < meta->addr; addr++) {
-> -               if (!fn((u8 *)addr))
-> +       for (; meta->addr - addr >= sizeof(u64); addr += sizeof(u64)) {
-> +               if (unlikely(*((u64 *)addr) != KFENCE_CANARY_PATTERN_U64))
->                         break;
->         }
->
-> -       /* Apply to right of object. */
-> -       for (addr = meta->addr + meta->size; addr < pageaddr + PAGE_SIZE; addr++) {
-> -               if (!fn((u8 *)addr))
-> +       /*
-> +        * If the canary is corrupted in a certain 64 bytes, or the canary
-> +        * memory cannot be completely covered by multiple consecutive 64 bytes,
-> +        * it needs to be checked one by one.
-> +        */
-> +       for (; addr < meta->addr; addr++) {
-> +               if (unlikely(!check_canary_byte((u8 *)addr)))
->                         break;
->         }
-> +
-> +       /* Apply to right of object. */
-> +       for (addr = meta->addr + meta->size; addr % sizeof(u64) != 0; addr++) {
-> +               if (unlikely(!check_canary_byte((u8 *)addr)))
-> +                       return;
-> +       }
-> +       for (; addr - pageaddr < PAGE_SIZE; addr += sizeof(u64)) {
-> +               if (unlikely(*((u64 *)addr) != KFENCE_CANARY_PATTERN_U64)) {
-> +
+On Mon, Mar 27, 2023 at 09:58:19AM -0700, Dipen Patel wrote:
+> On 3/25/23 4:07 AM, Krzysztof Kozlowski wrote:
+> > On 23/03/2023 02:29, Dipen Patel wrote:
+> >> Introducing nvidia,gpio-controller property from Tegra234 SoCs onwards.
+> >> This is done to help below case.
+> >>
+> >> Without this property code would look like:
+> >> if (of_device_is_compatible(dev->of_node, "nvidia,tegra194-gte-aon"))
+> >> 	hte_dev->c =3D gpiochip_find("tegra194-gpio-aon",
+> >> 				   tegra_get_gpiochip_from_name);
+> >> else if (of_device_is_compatible(dev->of_node, "nvidia,tegra234-gte-ao=
+n"))
+> >> 	hte_dev->c =3D gpiochip_find("tegra234-gpio-aon",
+> >> 				   tegra_get_gpiochip_from_name);
+> >> else
+> >> 	return -ENODEV;
+> >>
+> >> This means for every future addition of the compatible string, if else
+> >> condition statements have to be expanded.
+> >>
+> >> With the property:
+> >> gpio_ctrl =3D of_parse_phandle(dev->of_node, "nvidia,gpio-controller",=
+ 0);
+> >> ....
+> >> hte_dev->c =3D gpiochip_find(gpio_ctrl, tegra_get_gpiochip_from_of_nod=
+e);
+> >>
+> >> This simplifies the code significantly. The introdunction of this
+> >> property/binding does not break existing Tegra194 provider driver.
+> >>
+> >> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
+> >> ---
+> >>  .../timestamp/nvidia,tegra194-hte.yaml        | 31 +++++++++++++++++--
+> >>  1 file changed, 29 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/timestamp/nvidia,tegra1=
+94-hte.yaml b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-h=
+te.yaml
+> >> index eafc33e9ae2e..841273a3d8ae 100644
+> >> --- a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.=
+yaml
+> >> +++ b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.=
+yaml
+> >> @@ -51,6 +51,12 @@ properties:
+> >>        LIC instance has 11 slices and Tegra234 LIC has 17 slices.
+> >>      enum: [3, 11, 17]
+> >> =20
+> >> +  nvidia,gpio-controller:
+> >> +    $ref: /schemas/types.yaml#/definitions/phandle
+> >> +    description:
+> >> +      The phandle to AON gpio controller instance. This is required t=
+o handle
+> >> +      namespace conversion between GPIO and GTE.
+> >> +
+> >>    '#timestamp-cells':
+> >>      description:
+> >>        This represents number of line id arguments as specified by the
+> >> @@ -65,22 +71,43 @@ required:
+> >>    - interrupts
+> >>    - "#timestamp-cells"
+> >> =20
+> >> +allOf:
+> >> +  - if:
+> >> +      properties:
+> >> +        compatible:
+> >> +          contains:
+> >> +            enum:
+> >> +              - nvidia,tegra234-gte-aon
+> >> +    then:
+> >> +      required:
+> >> +        - nvidia,gpio-controller
+> >> +
+> >>  additionalProperties: false
+> >> =20
+> >>  examples:
+> >>    - |
+> >>      tegra_hte_aon: timestamp@c1e0000 {
+> >>                compatible =3D "nvidia,tegra194-gte-aon";
+> >> -              reg =3D <0xc1e0000 0x10000>;
+> >> +              reg =3D <0x0 0xc1e0000 0x0 0x10000>;
+> >=20
+> > This is not really explained in commit msg... are you sure you tested i=
+t?
+> I have to revert this part back in next patch as when I upgraded dtsschem=
+a it gave me errors.
 
-Unnecessary blank line, remove.
+We need the 0x0 in the DTS files because we have #address-cells =3D <2>
+and #size-tells =3D <2>. For the examples, those default to just 1 cell,
+so this can't be an exact copy of what we have in the DTS files.
 
-> +                       for (; addr - pageaddr < PAGE_SIZE; addr++) {
-> +                               if (!check_canary_byte((u8 *)addr))
-> +                                       return;
-> +                       }
-> +               }
-> +       }
->  }
->
->  static void *kfence_guarded_alloc(struct kmem_cache *cache, size_t size, gfp_t gfp,
-> @@ -434,7 +462,7 @@ static void *kfence_guarded_alloc(struct kmem_cache *cache, size_t size, gfp_t g
->  #endif
->
->         /* Memory initialization. */
-> -       for_each_canary(meta, set_canary_byte);
-> +       set_canary(meta);
->
->         /*
->          * We check slab_want_init_on_alloc() ourselves, rather than letting
-> @@ -495,7 +523,7 @@ static void kfence_guarded_free(void *addr, struct kfence_metadata *meta, bool z
->         alloc_covered_add(meta->alloc_stack_hash, -1);
->
->         /* Check canary bytes for memory corruption. */
-> -       for_each_canary(meta, check_canary_byte);
-> +       check_canary(meta);
->
->         /*
->          * Clear memory if init-on-free is set. While we protect the page, the
-> @@ -751,7 +779,7 @@ static void kfence_check_all_canary(void)
->                 struct kfence_metadata *meta = &kfence_metadata[i];
->
->                 if (meta->state == KFENCE_OBJECT_ALLOCATED)
-> -                       for_each_canary(meta, check_canary_byte);
-> +                       check_canary(meta);
->         }
->  }
->
-> diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
-> index 600f2e2431d6..2aafc46a4aaf 100644
-> --- a/mm/kfence/kfence.h
-> +++ b/mm/kfence/kfence.h
-> @@ -21,7 +21,15 @@
->   * lower 3 bits of the address, to detect memory corruptions with higher
->   * probability, where similar constants are used.
->   */
-> -#define KFENCE_CANARY_PATTERN(addr) ((u8)0xaa ^ (u8)((unsigned long)(addr) & 0x7))
-> +#define KFENCE_CANARY_PATTERN_U8(addr) ((u8)0xaa ^ (u8)((unsigned long)(addr) & 0x7))
-> +
-> +/*
-> + * Define a continuous 8-byte canary starting from a multiple of 8. The canary
-> + * of each byte is only related to the lowest three bits of its address, so the
-> + * canary of every 8 bytes is the same. 64-bit memory can be filled and checked
-> + * at a time instead of byte by byte to improve performance.
-> + */
-> +#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^ (u64)(0x0706050403020100))
->
->  /* Maximum stack depth for reports. */
->  #define KFENCE_STACK_DEPTH 64
-> diff --git a/mm/kfence/report.c b/mm/kfence/report.c
-> index 60205f1257ef..197430a5be4a 100644
-> --- a/mm/kfence/report.c
-> +++ b/mm/kfence/report.c
-> @@ -168,7 +168,7 @@ static void print_diff_canary(unsigned long address, size_t bytes_to_show,
->
->         pr_cont("[");
->         for (cur = (const u8 *)address; cur < end; cur++) {
-> -               if (*cur == KFENCE_CANARY_PATTERN(cur))
-> +               if (*cur == KFENCE_CANARY_PATTERN_U8(cur))
->                         pr_cont(" .");
->                 else if (no_hash_pointers)
->                         pr_cont(" 0x%02x", *cur);
-> --
-> 2.20.1
+Please make sure to always validate the bindings and examples.
+
+Thierry
+
+--kKVfNtJEQjXZPd0A
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQr/E4ACgkQ3SOs138+
+s6F7gQ/8CahJlsl2ie2xWVwhWMmBeCbLyErqS+oUnJBDhaLFTHrhUBNeDB0htb3x
+ZAUc3dZf+3ohXsFztk9DfVoH/3PTAxFftgN05tZHBCLXaBBoE/0uVQBVw2Q6VS7C
+q6XkykkbDFUBOzL6sJLZE3ucFdPTjG5HFmMF+UJF8NfmBLUWJrZ60kK8h3MQrjYR
+suT5Gr0EyOHy9nbtjDS3U05WW6Oyp4ppBTFWYuYbRIHgiZybCabVROR8NuCqqO5/
+17kaQheYOsyCfHwmQhNx/yH6qn/byXK0eKI8N05S9f7iBqyvgDO69LF5SVR7wZtD
+6i8DaiGS80EZtslyzEIcggM2WBklv0TO6tyRJWdsBjCoN+sFnRbTMOu/XFYvpqh5
+Fjk+Qedb/KaGYdzD+HjREyKCz8rjRJxBj+NyjiUCo/hIlXm3kBH+XihmLsY/3ZNs
+AjXxR25TIAq+yw42/gDfdx6/PzXwZtNmYq1ogpftsffj0rUTsv1v0Z5ScCWnKU15
+sIqSTXUmGBRmHErHyxV/AcgwAqljPuBVKdidyM+8IceZGD6bd56iv/Ywc28cfhNO
+cruSLxYVhvMJbMk2xX9ma8PWGAaOIkT+CTfQWC7YLMVMA8oMjPa74JQHKUlsrDb+
+GlAEoulplmcv1mbesr5bkm4rMpB6tjsoTElagX7RVgOOS2CALEI=
+=TMqU
+-----END PGP SIGNATURE-----
+
+--kKVfNtJEQjXZPd0A--
