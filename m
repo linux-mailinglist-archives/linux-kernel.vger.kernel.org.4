@@ -2,121 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478586D5FD3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602836D5FCC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234661AbjDDMBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
+        id S234498AbjDDMB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbjDDMBp (ORCPT
+        with ESMTP id S234438AbjDDMB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:01:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416DA40C3
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9PdME6AIjx8zNUOdkx4hnCnYTKU8T7/wn+VsuZbpvX4=; b=AsYaGUNwtgs7Mb8yT8mTBmSz08
-        Q7zquCj15LyPeR8kg4E9xbftPYNFYRD9WKZDnmEEGGDicZ+t5guiV1zKfPFGs86fWp6cdEetpNDZi
-        QAzFOHjQ2CNjEZe9WJINFELQzObgU9U9xGrlx6KwsTsWNzHzYmAYycvTML2KdjkQLAwVDxCE/J2jW
-        l+RSUiU33ae6PCQp1m7XdElK7UfRebookUgSv++hIi6t79r4t+S6BJpKjERy6xPj2MaRKX0ECoI/f
-        Y/Y0CvT2sf1GFPyxpC9SF4HdBgCB5Z0TL6MRbWwxgQIXQ2e8lbigmyc1eiAUE8h79fJSACXqvQG4t
-        9fN+NnPg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pjfLN-00FKho-Fp; Tue, 04 Apr 2023 12:00:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3BC9A300194;
-        Tue,  4 Apr 2023 14:00:54 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 18E482C41B779; Tue,  4 Apr 2023 14:00:54 +0200 (CEST)
-Date:   Tue, 4 Apr 2023 14:00:54 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, corbet@lwn.net, qyousef@layalina.io,
-        chris.hyser@oracle.com, patrick.bellasi@matbug.net, pjt@google.com,
-        pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
-        yu.c.chen@intel.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org, efault@gmx.de
-Subject: Re: [PATCH 08/17] sched/fair: Implement an EEVDF like policy
-Message-ID: <20230404120054.GV4253@hirez.programming.kicks-ass.net>
-References: <20230328092622.062917921@infradead.org>
- <20230328110354.141543852@infradead.org>
- <CAKfTPtDDBVD_N6NgBYi_5iArDXd4iL0-ddQZDKGzzLAD-2AUXg@mail.gmail.com>
- <20230330080145.GA117836@hirez.programming.kicks-ass.net>
- <CAKfTPtD+EiB4mnRD0z4wYg6PDn1vLKxu4fxrgfiqsm2G3+RrEQ@mail.gmail.com>
+        Tue, 4 Apr 2023 08:01:26 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1360E198C
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:01:25 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id q20so10148416pfs.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 05:01:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680609684;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JFM6Zed11abmlBVD7n880cLrXrOUp4BMMkatUFd1HS4=;
+        b=C3IHbT9a4dE1N/jaGCLtN3lKrMYD4nnS5UX6sAc6hfVHSVColH2cqvozCtO13/mbsu
+         juY/nqUHLi/YDIQDqQioRnAZpFo64dTqxG7SxjbkPxUMfUc2I170GQlfhNqcR8l+zudk
+         lfooWs7aODyvSG5du4yamkq9tEFjfIyyLmkW0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680609684;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JFM6Zed11abmlBVD7n880cLrXrOUp4BMMkatUFd1HS4=;
+        b=8KS2DCGQ7GsIXkblZyJayztfahQZkVZWLNq3o+TnlKdcb5ja0GHIiKqdpQr1WE6/oU
+         pSe9G+8ckEf8GACF2n8VESte16OKa38XzWbENdtsh/Le2XFO1xWrjhChw/k+d+kwACRB
+         Xsx+hN+K5Gr7350DyLJo1Ll6uUxzpnsabnskJz6Qeum6lLZivn35wog2ryJlY1uOQ7eZ
+         ybPVup51U5CFTwxMZ8nhHDCiZ6PuM5bt17OSz8mEbZo7cvvqsH0VQ8peg78X9nzBWSSn
+         ctBdwbii4P099t4qXese5DrSe35OEIHzoBHdkAeBT7GXUNaoLC72q1iefKF4X2emN6Fl
+         N59w==
+X-Gm-Message-State: AAQBX9d0qaECjZDj98z1g7DJ0z/b6MWGkuL8/oAZjTZLFgfXoyGkQ50B
+        oo20vXssdAof+lLSaxv+r/2Ctw==
+X-Google-Smtp-Source: AKy350ZCcY3HX/mt7wXQZeGj97V6L7bBWjmnqXMIXPCVdC61pts3cVJwKCkX/w34d5NYlLxrb5OLyg==
+X-Received: by 2002:aa7:9a0c:0:b0:627:e342:7f0e with SMTP id w12-20020aa79a0c000000b00627e3427f0emr2078573pfj.30.1680609684479;
+        Tue, 04 Apr 2023 05:01:24 -0700 (PDT)
+Received: from localhost ([2401:fa00:8f:203:959b:21ea:166b:c273])
+        by smtp.gmail.com with UTF8SMTPSA id a5-20020aa78645000000b00627f054a3cdsm8688028pfo.31.2023.04.04.05.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 05:01:24 -0700 (PDT)
+From:   David Stevens <stevensd@chromium.org>
+X-Google-Original-From: David Stevens <stevensd@google.com>
+To:     linux-mm@kvack.org, Peter Xu <peterx@redhat.com>,
+        Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-kernel@vger.kernel.org,
+        David Stevens <stevensd@chromium.org>
+Subject: [PATCH v6 0/4] mm/khugepaged: fixes for khugepaged+shmem
+Date:   Tue,  4 Apr 2023 21:01:13 +0900
+Message-Id: <20230404120117.2562166-1-stevensd@google.com>
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtD+EiB4mnRD0z4wYg6PDn1vLKxu4fxrgfiqsm2G3+RrEQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 07:05:17PM +0200, Vincent Guittot wrote:
-> On Thu, 30 Mar 2023 at 10:04, Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Wed, Mar 29, 2023 at 04:35:25PM +0200, Vincent Guittot wrote:
-> >
-> > > IIUC how it works, Vd = ve + r / wi
-> > >
-> > > So for a same weight, the vd will be earlier but it's no more alway
-> > > true for different weight
-> >
-> > Correct; but for a heavier task the time also goes slower and since it
-> > needs more time, you want it to go first. But yes, this is weird at
-> > first glance.
-> 
-> Yeah, I understand that this is needed for bounding the lag to a
-> quantum max but that makes the latency prioritization less obvious and
-> not always aligned with what we want
+From: David Stevens <stevensd@chromium.org>
 
-That very much depends on what we want I suppose :-) So far there's not
-been strong definitions of what we want, other than that we consider a
-negative latency nice task to get it's slice a little earlier where
-possible.
+This series reworks collapse_file so that the intermediate state of the
+collapse does not leak out of collapse_file. Although this makes
+collapse_file a bit more complicated, it means that the rest of the
+kernel doesn't have to deal with the unusual state. This directly fixes
+races with both lseek and mincore.
 
-(also, I rather like that vagueness -- just like nice is rather vague,
-it gives us room for interpretation when implementing things)
+This series also fixes the fact that khugepaged completely breaks
+userfaultfd+shmem. The rework of collapse_file provides a convenient
+place to check for registered userfaultfds without making the shmem
+userfaultfd implementation care about khugepaged.
 
-> let say that you have 2 tasks A and B waking up simultaneously with
-> the same vruntime; A has a negative latency nice to reflect some
-> latency constraint and B the default value.  A will run 1st if they
-> both have the same prio which is aligned with their  latency nice
-> values but B could run 1st if it increase its nice prio to reflect the
-> need for a larger cpu bandwidth so you can defeat the purpose of the
-> latency nice although there is no unfairness
-> 
-> A cares of its latency and set a negative latency nice to reduce its
-> request slice
+Finally, this series adds a lru_add_drain after swapping in shmem pages,
+which makes the subsequent folio_isolate_lru significantly more likely
+to succeed.
 
-This is true; but is it really a problem? It's all relative anyway :-)
+v5 -> v6:
+ - Stop freezing the old pages so that we don't deadlock with
+   mc_handle_file_pte and mincore.
+ - Add missing locking around shmem charge rollback.
+ - Rebase on mm-unstable (f01f73d64cb5). Beyond straightfoward
+   conflicts, this involves adapting the fix for f520a742287e (i.e. an
+   unhandled ENOMEM).
+ - Fix bug with bounds used with vma_interval_tree_foreach.
+ - Add a patch doing lru_add_drain after swapping in the shmem case.
+ - Update/clarify some comments.
+ - Drop ack on final patch
+v4 -> v5:
+ - Rebase on mm-unstable (9caa15b8a499)
+ - Gather acks
+v3 -> v4:
+ - Base changes on mm-everything (fba720cb4dc0)
+ - Add patch to refactor error handling control flow in collapse_file
+ - Rebase userfaultfd patch with no significant logic changes
+ - Different approach for fixing lseek race
+v2 -> v3:
+ - Use XA_RETRY_ENTRY to synchronize with reads from the page cache
+   under the RCU read lock in userfaultfd fix
+ - Add patch to fix lseek race
+v1 -> v2:
+ - Different approach for userfaultfd fix
 
-Specifically, if you latency-nice harder than nice it, you win again,
-also, nice is privilidged, while latency-nice is not (should it?)
+*** BLURB HERE ***
 
-The thing I like about EEVDF is that it actually makes the whole thing
-simpler, it takes away a whole bunch of magic, and yes the latency thing
-is perhaps more relative than absolute, but isn't that good enough?
+David Stevens (4):
+  mm/khugepaged: drain lru after swapping in shmem
+  mm/khugepaged: refactor collapse_file control flow
+  mm/khugepaged: skip shmem with userfaultfd
+  mm/khugepaged: maintain page cache uptodate flag
 
+ include/trace/events/huge_memory.h |   3 +-
+ mm/khugepaged.c                    | 312 ++++++++++++++++-------------
+ 2 files changed, 171 insertions(+), 144 deletions(-)
 
-That said; IIRC there's a few papers (which I can no longer find because
-aparently google can now only give me my own patches and the opinion of
-the internet on them when I search EEVDF :/) that muck with the {w,r}
-set to build 'realtime' schedulers on top of EEVDF. So there's certainly
-room to play around a bit.
+-- 
+2.40.0.348.gf938b09366-goog
+
