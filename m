@@ -2,149 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F6E6D64FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600F96D6505
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234951AbjDDOQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
+        id S235429AbjDDORy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234581AbjDDOQc (ORCPT
+        with ESMTP id S235314AbjDDORx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:16:32 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89470116
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680617791; x=1712153791;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+Lr4OBPNnOJQUr++Peg5qVBTzEWUdgPwSRxcu2iQmrA=;
-  b=KP3L+QD77Y8PSu7JbrZ3i2VDFIoJ0s6Z4WaJokOgjNnhpuxFx+eN2KAd
-   mynYNRWxWX+IS9HMZZF81sHp2cPeJf6t49n37lMT9qWGxkZ58s9lk6AoB
-   WzMGlfQOg/lJ8qjZGoW95i2n6qKwpyZHNwJ/EZLHh0OlzvX7af+f/nrHi
-   BdDeib8L6JIsmk3Fl4x6ows4wvfmldfj0zmy6h3cfZFo+XrsXukX+37IU
-   Cjy7W/mpB63HoOp/ZgprHKR/uQbDaAK+Xni6AJqcPGvELLbVUjQ3RY7GI
-   kDrCmy8504CsVK91csv4YLfwcFETrEWqclZz90ttN9hVue7pdpNqqvXOV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="330783787"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="330783787"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 07:16:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="829992721"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="829992721"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Apr 2023 07:16:29 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pjhSW-000PlK-2G;
-        Tue, 04 Apr 2023 14:16:28 +0000
-Date:   Tue, 4 Apr 2023 22:15:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vineet Gupta <vgupta@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org
-Subject: include/linux/compiler_types.h:328:45: error: call to
- '__compiletime_assert_313' declared with attribute error: BUILD_BUG_ON
- failed: (PTRS_PER_PTE * sizeof(pte_t)) > PAGE_SIZE
-Message-ID: <202304042243.qmBldZFx-lkp@intel.com>
+        Tue, 4 Apr 2023 10:17:53 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5FC12D;
+        Tue,  4 Apr 2023 07:17:51 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id k14-20020a9d700e000000b0069faa923e7eso17384609otj.10;
+        Tue, 04 Apr 2023 07:17:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680617871;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DOEr2FRMEJDIcIVaiqrL4wvmGuw4tgVUj9P4taVN6p0=;
+        b=dHFgv/ZxLlhmVu31L58A6iX1oAaROhvaScv2FiGIaFb70th6CnjqyqnfjDw0VA188O
+         6pypUsnSy7CHKQwiSR9aY4pEIlCz/BeA6UGHr0ejyYXWaCp4ZNlzmgdvvoQFcRnsm0tS
+         fszUa1lqlrPiAYPa49kxwj9+GdgrpaEpyRAQWEO04FrlT3pdfT3WjpKMj7ZCs5TEfjy/
+         UeH+eFdSwuDg/A1vtpcOUijzq+mimr+WRu1/LQc4bH1dyH+mDZvZfP/Eeir59OBjsYzM
+         WxXNgv9TPuBdZknxjpWWi3yzAn0BjddRhbhToPog4HcVHthUO6/46JKrgXBDAUdqK4GN
+         lyEQ==
+X-Gm-Message-State: AAQBX9cwxdrCtOLfv9EOXBgQ5EQTzwxGDBumUci3sL3NRoTIu/So/vSQ
+        WKXNmpXw6fG+mQoUdbXWZg==
+X-Google-Smtp-Source: AKy350Z/4gJSmyDUUAdCoeKmLMeui7C5qh7SE2KQHAsJHQNlgvDDTup3xYyfg3dlRNRtJcarP2VRaA==
+X-Received: by 2002:a05:6830:1be4:b0:69f:91db:51f1 with SMTP id k4-20020a0568301be400b0069f91db51f1mr1462046otb.29.1680617870999;
+        Tue, 04 Apr 2023 07:17:50 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s1-20020a056830124100b0069f02111b11sm5500646otp.75.2023.04.04.07.17.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 07:17:50 -0700 (PDT)
+Received: (nullmailer pid 3824624 invoked by uid 1000);
+        Tue, 04 Apr 2023 14:17:49 -0000
+Date:   Tue, 4 Apr 2023 09:17:49 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Convert to DT schema
+Message-ID: <20230404141749.GB3793612-robh@kernel.org>
+References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
+ <20230403105052.426135-2-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230403105052.426135-2-cristian.ciocaltea@collabora.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vineet,
+On Mon, Apr 03, 2023 at 01:50:51PM +0300, Cristian Ciocaltea wrote:
+> Convert the PWM fan bindings to DT schema format.
+> 
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> ---
+>  .../devicetree/bindings/hwmon/pwm-fan.txt     |  68 +----------
+>  .../devicetree/bindings/hwmon/pwm-fan.yaml    | 109 ++++++++++++++++++
+>  2 files changed, 110 insertions(+), 67 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+> index 4509e688623a..48886f0ce415 100644
+> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+> @@ -1,67 +1 @@
+> -Bindings for a fan connected to the PWM lines
+> -
+> -Required properties:
+> -- compatible	: "pwm-fan"
+> -- pwms		: the PWM that is used to control the PWM fan
+> -- cooling-levels      : PWM duty cycle values in a range from 0 to 255
+> -			which correspond to thermal cooling states
+> -
+> -Optional properties:
+> -- fan-supply		: phandle to the regulator that provides power to the fan
+> -- interrupts		: This contains an interrupt specifier for each fan
+> -			  tachometer output connected to an interrupt source.
+> -			  The output signal must generate a defined number of
+> -			  interrupts per fan revolution, which require that
+> -			  it must be self resetting edge interrupts. See
+> -			  interrupt-controller/interrupts.txt for the format.
+> -- pulses-per-revolution : define the number of pulses per fan revolution for
+> -			  each tachometer input as an integer (default is 2
+> -			  interrupts per revolution). The value must be
+> -			  greater than zero.
+> -
+> -Example:
+> -	fan0: pwm-fan {
+> -		compatible = "pwm-fan";
+> -		#cooling-cells = <2>;
+> -		pwms = <&pwm 0 10000 0>;
+> -		cooling-levels = <0 102 170 230>;
+> -	};
+> -
+> -	thermal-zones {
+> -		cpu_thermal: cpu-thermal {
+> -			     thermal-sensors = <&tmu 0>;
+> -			     polling-delay-passive = <0>;
+> -			     polling-delay = <0>;
+> -			     trips {
+> -					cpu_alert1: cpu-alert1 {
+> -						    temperature = <100000>; /* millicelsius */
+> -						    hysteresis = <2000>; /* millicelsius */
+> -						    type = "passive";
+> -					};
+> -			     };
+> -			     cooling-maps {
+> -					map0 {
+> -						    trip = <&cpu_alert1>;
+> -						    cooling-device = <&fan0 0 1>;
+> -					};
+> -			     };
+> -		};
+> -
+> -Example 2:
+> -	fan0: pwm-fan {
+> -		compatible = "pwm-fan";
+> -		pwms = <&pwm 0 40000 0>;
+> -		fan-supply = <&reg_fan>;
+> -		interrupt-parent = <&gpio5>;
+> -		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
+> -		pulses-per-revolution = <2>;
+> -	};
+> -
+> -Example 3:
+> -	fan0: pwm-fan {
+> -		compatible = "pwm-fan";
+> -		pwms = <&pwm1 0 25000 0>;
+> -		interrupts-extended = <&gpio1 1 IRQ_TYPE_EDGE_FALLING>,
+> -			<&gpio2 5 IRQ_TYPE_EDGE_FALLING>;
+> -		pulses-per-revolution = <2>, <1>;
+> -	};
+> +This file has moved to pwm-fan.yaml.
+> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> new file mode 100644
+> index 000000000000..448b48ec5d73
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> @@ -0,0 +1,109 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/pwm-fan.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Fan connected to PWM lines
+> +
+> +maintainers:
+> +  - Jean Delvare <jdelvare@suse.com>
+> +  - Guenter Roeck <linux@roeck-us.net>
+> +
+> +properties:
+> +  compatible:
+> +    const: pwm-fan
+> +
+> +  cooling-levels:
+> +    description:
+> +      PWM duty cycle values in a range from 0 to 255 which correspond to
 
-FYI, the error/warning still remains.
+Don't put constraints in plain text:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   148341f0a2f53b5e8808d093333d85170586a15d
-commit: d9820ff76f95fa26d33e412254a89cd65b23142d ARC: mm: switch pgtable_t back to struct page *
-date:   1 year, 7 months ago
-config: arc-randconfig-r043-20230403 (https://download.01.org/0day-ci/archive/20230404/202304042243.qmBldZFx-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d9820ff76f95fa26d33e412254a89cd65b23142d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d9820ff76f95fa26d33e412254a89cd65b23142d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+items:
+  maximum: 255
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304042243.qmBldZFx-lkp@intel.com/
+> +      thermal cooling states.
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
 
-All errors (new ones prefixed by >>):
+Unfortunately, looks like we've wound up with same property with 2 
+differing types. A problem for another day...
 
-   arch/arc/mm/init.c:35:13: warning: no previous prototype for 'arc_get_mem_sz' [-Wmissing-prototypes]
-      35 | long __init arc_get_mem_sz(void)
-         |             ^~~~~~~~~~~~~~
-   arch/arc/mm/init.c:88:13: warning: no previous prototype for 'setup_arch_memory' [-Wmissing-prototypes]
-      88 | void __init setup_arch_memory(void)
-         |             ^~~~~~~~~~~~~~~~~
-   In file included from <command-line>:
-   arch/arc/mm/init.c: In function 'mem_init':
->> include/linux/compiler_types.h:328:45: error: call to '__compiletime_assert_313' declared with attribute error: BUILD_BUG_ON failed: (PTRS_PER_PTE * sizeof(pte_t)) > PAGE_SIZE
-     328 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:309:25: note: in definition of macro '__compiletime_assert'
-     309 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:328:9: note: in expansion of macro '_compiletime_assert'
-     328 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/arc/mm/init.c:194:9: note: in expansion of macro 'BUILD_BUG_ON'
-     194 |         BUILD_BUG_ON((PTRS_PER_PTE * sizeof(pte_t)) > PAGE_SIZE);
-         |         ^~~~~~~~~~~~
+> +
+> +  fan-supply:
+> +    description: Phandle to the regulator that provides power to the fan.
+> +
+> +  interrupts:
+> +    description:
+> +      This contains an interrupt specifier for each fan tachometer output
+> +      connected to an interrupt source. The output signal must generate a
+> +      defined number of interrupts per fan revolution, which require that
+> +      it must be self resetting edge interrupts.
 
+How many entries? I'm not sure how more than 1 makes sense.
 
-vim +/__compiletime_assert_313 +328 include/linux/compiler_types.h
+> +
+> +  pulses-per-revolution:
+> +    description:
+> +      Define the number of pulses per fan revolution for each tachometer
+> +      input as an integer (default is 2 interrupts per revolution).
 
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  314  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  315  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  316  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  317  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  318  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  319   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  320   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  321   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  322   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  323   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  324   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  325   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  326   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  327  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @328  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  329  
+default: 2
 
-:::::: The code at line 328 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+> +      The value must be greater than zero.
 
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
+minimum: 1
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+maximum: ??? I assume there's some practical limit here much less than 
+2^32.
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+
+Isn't this a scalar? 
+> +
+> +  pwms:
+> +    description: The PWM that is used to control the fan.
+> +    maxItems: 1
+> +
+> +  pwm-names: true
+> +
+> +  "#cooling-cells":
+> +    description: The PWM fan can be referenced as a cooling-device.
+
+Not that useful. What would be is what's in the 2 cells.
+
+> +    const: 2
+> +
+> +required:
+> +  - compatible
+> +  - pwms
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pwm-fan {
+> +      compatible = "pwm-fan";
+> +      cooling-levels = <0 102 170 230>;
+> +      pwms = <&pwm 0 10000 0>;
+> +      #cooling-cells = <2>;
+> +    };
+> +
+> +    thermal-zones {
+> +      cpu_thermal: cpu-thermal {
+> +        thermal-sensors = <&tmu 0>;
+> +        polling-delay-passive = <0>;
+> +        polling-delay = <0>;
+> +
+> +        trips {
+> +          cpu_alert1: cpu-alert1 {
+> +            temperature = <100000>; /* millicelsius */
+> +            hysteresis = <2000>; /* millicelsius */
+> +            type = "passive";
+> +          };
+> +        };
+> +
+> +        cooling-maps {
+> +          map0 {
+> +            trip = <&cpu_alert1>;
+> +            cooling-device = <&fan0 0 1>;
+> +          };
+> +        };
+> +      };
+> +    };
+> +
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    pwm-fan {
+> +      compatible = "pwm-fan";
+> +      pwms = <&pwm 0 40000 0>;
+> +      fan-supply = <&reg_fan>;
+> +      interrupt-parent = <&gpio5>;
+> +      interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
+> +      pulses-per-revolution = <2>;
+> +    };
+> +
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    pwm-fan {
+> +      compatible = "pwm-fan";
+> +      pwms = <&pwm1 0 25000 0>;
+> +      interrupts-extended = <&gpio1 1 IRQ_TYPE_EDGE_FALLING>,
+> +                            <&gpio2 5 IRQ_TYPE_EDGE_FALLING>;
+> +      pulses-per-revolution = <2>, <1>;
+> +    };
+> -- 
+> 2.40.0
+> 
