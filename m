@@ -2,58 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4226D5FEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44956D5FEA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234799AbjDDMKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
+        id S234661AbjDDMKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234360AbjDDMJB (ORCPT
+        with ESMTP id S234401AbjDDMJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Apr 2023 08:09:01 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9193040D7
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:03:50 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 3F4FE22A03;
-        Tue,  4 Apr 2023 12:03:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680609829; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Br0Z4alxU7wp3Rhk+RTaZgwypk6DPbZKhOnMSVJGT24=;
-        b=QqjCuJgfjT1BWsndH125Lho+YjEk1oOumDbtnuy9/lGIQHFI/92h9SK+lz/3+9YQJSYh/1
-        ZPhC+rRzQr5qcJjSuGWdjfbCd+gfPXLgHjS7wqgtESoRI23jCb7Vd1fr6q0xPeItTGrWU3
-        WIJK8oOxV/wHkUEtUWIESj8RqC1AXpc=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2B2A32C142;
-        Tue,  4 Apr 2023 12:03:47 +0000 (UTC)
-Date:   Tue, 4 Apr 2023 14:03:47 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Jaewon Kim <jaewon31.kim@samsung.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        'Jaewon Kim' <jaewon31.kim@gmail.com>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        GyeongHwan Hong <gh21.hong@samsung.com>
-Subject: Re: [RFC] vsprintf: compile error on %09pK
-Message-ID: <ZCwSIy5Tm0jAe1Ww@alley>
-References: <694722c9409b43808cfbc1fc9e495016@AcuMS.aculab.com>
- <20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p3>
- <ZCrMMQt2xnnZIyz6@alley>
- <CAJrd-Uvzy18SfjjqbqZCPHjw+ujQXsBpvov4b=bfAwZrj=bCAA@mail.gmail.com>
- <CGME20230403104617epcms1p383bacbca705c0d7e4fffca6833050e42@epcms1p6>
- <20230404101201epcms1p615a6365e64fc6e0a0fa203d41404940c@epcms1p6>
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BDC3C17
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:03:58 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id r11so32519533wrr.12
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 05:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1680609837;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=H2I56WrDZlwIyTwZv99JWrXVc0DEeAqRMvCpScLvpPM=;
+        b=F3sVftBT1QGr7zDiPp6MLlWECDJLKeCxMjdAHa9LvbwfH23ZJoySJejSFzYUWQSWkM
+         1KNuZ3Gn38+p9Fn9lpr0ce0HGXzeOLeb63rUS9Ashpg2I0fMLVuC6BMXWSvcuyAlIFzV
+         EvohsGoRHux8Jl5droMXr+TmE+upVwgkZh3o3I4kP8eLsF1Y8kPHjzNvyQf6T+XHi9+x
+         0dTNfHj/0etbmjOcrU6wbnd3OZiAaQcy6sKnaaHqRK1MC3ISEJ4a28TZCA0puV7Fxwxd
+         twdvHBFDirCURjGXnAKlCqa54/hJA2B94Sy9NhUxN3O36U+R2J+5xjpu4dTtb5hjF2km
+         V8CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680609837;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H2I56WrDZlwIyTwZv99JWrXVc0DEeAqRMvCpScLvpPM=;
+        b=NNOHv580vlv7d8rIb2seMwIsQYJ7CSVkP3Tu5nYIGB7BcgimECpBkZvO2REOIe63mJ
+         mr058YJHUvr9io4AZD9KLHtEOb7VKiPfGcEDrkEHmXPwmrVb9YiWzuJGTCRaxO2QtN92
+         X0/OrPAV5dGu2ibSx1u4zN/JXJd8Kyi9IMMbxiB52WAEqbRUCbyuLYo4EiZCXUpmJfW4
+         hk+gBNwwP412RRxWLyApqYScFeGHUeW6G8hUwQUfF6QJvwCe9p8II7G0DzhQkndHSM0t
+         /8PVAK0YGjGpXdm9MAU1GZxvTEMeob7MqPJ5IWqhWPE1Fs/ZZVVaT6z2jMylbzr/KwHv
+         SnZQ==
+X-Gm-Message-State: AAQBX9dY5snOg432bauuEDpkfzHqdKhvOTwzia0T3L2cdq6jW5rsHt0G
+        1Qde6WuHuX/o9bW770G/fb5huw==
+X-Google-Smtp-Source: AKy350b7Ly63qP2Zz28vd6eldPQmdJJlgZViuOREMlTV8zIkN2q/Jzc2kuKF2MYFmZ5YqYfvGOfhDQ==
+X-Received: by 2002:a05:6000:51:b0:2dc:2431:67d0 with SMTP id k17-20020a056000005100b002dc243167d0mr1383808wrx.19.1680609836931;
+        Tue, 04 Apr 2023 05:03:56 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id e38-20020a5d5966000000b002d78a96cf5fsm12259781wri.70.2023.04.04.05.03.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 05:03:56 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 14:03:55 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Anup Patel <anup@brainfault.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 6/8] RISC-V: KVM: Add ONE_REG interface for AIA CSRs
+Message-ID: <p3ifmb3r7g3soolhapkzlqyt5nq7ivb53w5fb5pp3274dd4ohp@whtjluacebeo>
+References: <20230403093310.2271142-1-apatel@ventanamicro.com>
+ <20230403093310.2271142-7-apatel@ventanamicro.com>
+ <osrpjiywxtkgxb5i6mfvxzfrzrnjv75uqzvlu3fouo4mqsktgj@blcmyjt3twqg>
+ <CAAhSdy1JEQBiO55iCy97arO63VjGc+NicUvvwzTpK97W97LmJg@mail.gmail.com>
+ <ejt3x4p7xhxfvwiafnogfwdn5dzd4qyowlht22utnbvzefsbyh@7dch4mebwckm>
+ <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230404101201epcms1p615a6365e64fc6e0a0fa203d41404940c@epcms1p6>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,31 +82,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2023-04-04 19:12:01, Jaewon Kim wrote:
-> >From: Jaewon Kim
-> >> Sent: 03 April 2023 15:40
-> >...
-> >> I wanted to print phys_addr_t  type value only when kptr_restrict sysctl is
-> >> allowed. So I thought I could use %pK for that purpose. And the physical
-> >> address is not that long. I wanted to make that length short like 9 hex.
-> >
-> >Isn't that is the wrong format for physical addresses anyway?
-> >They can be larger than virtual ones (eg x86 with PAE).
+On Tue, Apr 04, 2023 at 01:52:43PM +0200, Andrew Jones wrote:
+> On Mon, Apr 03, 2023 at 02:23:01PM +0200, Andrew Jones wrote:
+> > On Mon, Apr 03, 2023 at 05:34:57PM +0530, Anup Patel wrote:
+> > > On Mon, Apr 3, 2023 at 5:01 PM Andrew Jones <ajones@ventanamicro.com> wrote:
+> > > >
+> > > > On Mon, Apr 03, 2023 at 03:03:08PM +0530, Anup Patel wrote:
+> > > > > We implement ONE_REG interface for AIA CSRs as a separate subtype
+> > > > > under the CSR ONE_REG interface.
+> > > > >
+> > > > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > > > ---
+> > > > >  arch/riscv/include/uapi/asm/kvm.h | 8 ++++++++
+> > > > >  arch/riscv/kvm/vcpu.c             | 8 ++++++++
+> > > > >  2 files changed, 16 insertions(+)
+> > > > >
+> > > > > diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+> > > > > index 182023dc9a51..cbc3e74fa670 100644
+> > > > > --- a/arch/riscv/include/uapi/asm/kvm.h
+> > > > > +++ b/arch/riscv/include/uapi/asm/kvm.h
+> > > > > @@ -79,6 +79,10 @@ struct kvm_riscv_csr {
+> > > > >       unsigned long scounteren;
+> > > > >  };
+> > > > >
+> > > > > +/* AIA CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+> > > > > +struct kvm_riscv_aia_csr {
+> > > > > +};
+> > > > > +
+> > > > >  /* TIMER registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+> > > > >  struct kvm_riscv_timer {
+> > > > >       __u64 frequency;
+> > > > > @@ -107,6 +111,7 @@ enum KVM_RISCV_ISA_EXT_ID {
+> > > > >       KVM_RISCV_ISA_EXT_ZIHINTPAUSE,
+> > > > >       KVM_RISCV_ISA_EXT_ZICBOM,
+> > > > >       KVM_RISCV_ISA_EXT_ZBB,
+> > > >
+> > > > Looks like this patch is also based on "[PATCH] RISC-V: KVM: Allow Zbb
+> > > > extension for Guest/VM"
+> > > 
+> > > Yes, do you want me to change the order of dependency?
+> > 
+> > It's probably best if neither depend on each other, since they're
+> > independent, but otherwise the order doesn't matter. It'd be nice to call
+> > the order out in the cover letter to give patchwork a chance at automatic
+> > build testing, though. To call it out, I believe adding
+> > 
+> > Based-on: 20230401112730.2105240-1-apatel@ventanamicro.com
+> > 
+> > to the cover letter should work.
 > 
-> Yeah, correct. I just used %pK to hide physical address, I thought it could be
-> leak in security perspective. Could you give me advice how I can hide the
-> address by default and look the address if kptr_restrict allow it?
+> I also just noticed that this based on "RISC-V: KVM: Add ONE_REG
+> interface to enable/disable SBI extensions"[1] and it needs to be
+> in order to pick up the KVM_REG_RISCV_SUBTYPE_MASK and
+> KVM_REG_RISCV_SUBTYPE_SHIFT defines. It'd be good to call that
+> patch out with Based-on.
+> 
+> [1]: 20230331174542.2067560-2-apatel@ventanamicro.com
 
-Could you please send a patch that would show what value you want to print?
+And "RISC-V IPI Improvements",
+20230328035223.1480939-1-apatel@ventanamicro.com, which is required
+for riscv_get_intc_hwnode()
 
-The initial mail mentioned converting %09lx to %09pK in some driver.
-Then it included a warning when compiling from mm/page_alloc.o
-
-Honestly, I think that you could just use %pK or %p. IMHO, it does not
-make sense to optimize it for the length.
-
-Anyway, there is still the question if the address is really worth
-printing. Will it really help to locate a potential problem?
-
-Best Regards,
-Petr
+Thanks,
+drew
