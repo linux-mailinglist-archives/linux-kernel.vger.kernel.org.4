@@ -2,88 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89546D5BBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FA76D5BDD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234173AbjDDJWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
+        id S234275AbjDDJZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234140AbjDDJWA (ORCPT
+        with ESMTP id S233706AbjDDJZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:22:00 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97D11981
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:21:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=r5aK41JlmJ+wuIMmAeBq19Fz0dTVrVv8FNnEIqiUcs0=; b=pl/uWVk2g8WaNL+TeyByZcKuir
-        2DhHktRl0GxFg6D/gKiUOa+lBtcN+ihigAqKadwxiR09f1nXVr6oRt3mZGaqo1BvONkvcPAdf6tGs
-        So9RcovZCAfF2R4Y1t3nFMJ6sEtr3DnLSqrg6Hq/D3CewOnF/IBhK/Mo7QDEj8tARvn2vNzje1hsO
-        oew2b1plv8AQOVXAxhM7iP0LstnQ+Uy5uQnx6m7/NdpH3hykhXNFPw9VPdoYX+YmVBT+crgeWeCWH
-        E4pqwkR3vxzrfnNYZ4JXL4+h7SxtbcTZFVbPQnmkrWzf04t1prmj1/LHdZd2IeRrNkhiOYHAbt5oD
-        cmDUX0aQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pjcrN-009DaY-1x;
-        Tue, 04 Apr 2023 09:21:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 992A930003A;
-        Tue,  4 Apr 2023 11:21:48 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7F113242109F9; Tue,  4 Apr 2023 11:21:48 +0200 (CEST)
-Date:   Tue, 4 Apr 2023 11:21:48 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>
-Subject: Re: [RFC PATCH] sched: Fix performance regression introduced by
- mm_cid
-Message-ID: <20230404092148.GC284733@hirez.programming.kicks-ass.net>
-References: <20230403181342.210896-1-mathieu.desnoyers@efficios.com>
+        Tue, 4 Apr 2023 05:25:56 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EB01981
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:25:55 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id z83so37891474ybb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 02:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680600354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zj3a2MYNbkCFssTfjIF9gvNI8FfTYBgR4BuPPz6nhXc=;
+        b=Ha74+lmMeivYh1u52QynjkWeG4fZIvyvw5HbjOIl67pwttzzwsJRqoDCmgvBST0gSd
+         t4xqbw/tOMXsDwNloimeFslTRB23JNDJBtfWisNxDkyEP89qW+oSLRsr85GoQZtR4O8c
+         q/uiXk0IkCZNR6pRJGaP+c1VdbBqUlUNY1WueQTEQNxedWErjfokrxUpyowfwo1zorEJ
+         dUz7cIBeevTrkBs1ry0oFrc3zTGoGKtN4RDuiDR8QWguHCTA0rK2Pb+pP+mHgSOoRIJa
+         /EIsXmc34JWIO/CyUzV1+Dy78Svopna5l8JFjcMlvUMPszjQkck4DtS6hT+0PnKNa9TG
+         wmgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680600354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zj3a2MYNbkCFssTfjIF9gvNI8FfTYBgR4BuPPz6nhXc=;
+        b=qXoBLPl1tsRuIZYrBMuKOR6/CLGoIrq9CQD58Cbvc3gVqzlqF+teokmTanseuaHyZQ
+         HgK26LRR3bJMWklNdD3N3AMyow143NdQYLEmWYYcOeh4KHoGSANyiQn0bnER5u5iFT3X
+         xnSX9pv3wNwt0Yf5qCE/E9ocDb+NsacrlSK/QPe0CSHoQ3XkLYu05FskueEM4auv8tp/
+         jld/OJUmvnhTVLrMPqx+K04vPGHYjaTdMg14sngiYc3u8i8Z6/P32wEQNw+9WZ26AXVA
+         NKkpoeh2BsrONKVSlO/74pvXIDDKQa7lkH+fBQu+1LI9SN8yEe4XEsEArlOVZ9Rx3PK+
+         2cKw==
+X-Gm-Message-State: AAQBX9e37JVyAdcZLTEhaN4plcYcTS0csJizKBLUa4RFY6R+ov4231Tn
+        hjxOxgLk+AlT6dsVsf2esypIZXhkkKTZpQbp5VNWEw==
+X-Google-Smtp-Source: AKy350bUM9iWWLmPvON6nK7eho1YZvuR/HHQO7bShb1xj8yL6HbUpBmDvFZoTxGfH3EhHB31k2ylPOisedybJpfhqlM=
+X-Received: by 2002:a25:2605:0:b0:b87:8580:ee37 with SMTP id
+ m5-20020a252605000000b00b878580ee37mr2158593ybm.60.1680600354405; Tue, 04 Apr
+ 2023 02:25:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403181342.210896-1-mathieu.desnoyers@efficios.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230403122738.6006-1-zhangpeng.00@bytedance.com>
+In-Reply-To: <20230403122738.6006-1-zhangpeng.00@bytedance.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 4 Apr 2023 11:25:17 +0200
+Message-ID: <CAG_fn=UEah3DLYm2yKxBKg=L=Qc_PSnrKhZ2==snbw05XAtVZQ@mail.gmail.com>
+Subject: Re: [PATCH v2] mm: kfence: Improve the performance of
+ __kfence_alloc() and __kfence_free()
+To:     Peng Zhang <zhangpeng.00@bytedance.com>
+Cc:     elver@google.com, dvyukov@google.com, akpm@linux-foundation.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 02:13:42PM -0400, Mathieu Desnoyers wrote:
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 0d18c3969f90..775c7da6ec7f 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -2326,16 +2326,20 @@ static inline bool is_cpu_allowed(struct task_struct *p, int cpu)
->  static struct rq *move_queued_task(struct rq *rq, struct rq_flags *rf,
->  				   struct task_struct *p, int new_cpu)
->  {
-> +	int cid;
-> +
->  	lockdep_assert_rq_held(rq);
->  
->  	deactivate_task(rq, p, DEQUEUE_NOCLOCK);
->  	set_task_cpu(p, new_cpu);
-> +	cid = sched_mm_cid_migrate_from(rq, p);
->  	rq_unlock(rq, rf);
->  
->  	rq = cpu_rq(new_cpu);
->  
->  	rq_lock(rq, rf);
->  	WARN_ON_ONCE(task_cpu(p) != new_cpu);
-> +	sched_mm_cid_migrate_to(rq, p, cid);
->  	activate_task(rq, p, 0);
->  	check_preempt_curr(rq, p, 0);
->  
+> +static inline void check_canary(const struct kfence_metadata *meta)
+> +{
+> +       const unsigned long pageaddr =3D ALIGN_DOWN(meta->addr, PAGE_SIZE=
+);
+> +       unsigned long addr =3D pageaddr;
+>
+>         /*
+> -        * We'll iterate over each canary byte per-side until fn() return=
+s
+> -        * false. However, we'll still iterate over the canary bytes to t=
+he
+> +        * We'll iterate over each canary byte per-side until a corrupted=
+ byte
+> +        * is found. However, we'll still iterate over the canary bytes t=
+o the
+>          * right of the object even if there was an error in the canary b=
+ytes to
+>          * the left of the object. Specifically, if check_canary_byte()
+>          * generates an error, showing both sides might give more clues a=
+s to
+> @@ -339,16 +348,35 @@ static __always_inline void for_each_canary(const s=
+truct kfence_metadata *meta,
+>          */
+>
+>         /* Apply to left of object. */
+> -       for (addr =3D pageaddr; addr < meta->addr; addr++) {
+> -               if (!fn((u8 *)addr))
+> +       for (; meta->addr - addr >=3D sizeof(u64); addr +=3D sizeof(u64))=
+ {
+> +               if (unlikely(*((u64 *)addr) !=3D KFENCE_CANARY_PATTERN_U6=
+4))
+>                         break;
+>         }
+I am confused. Right now this loop either runs from pageaddr to
+meta_addr if there's no corruption, or breaks at the first corrupted
+byte.
+Regardless of that, we are applying check_canary_byte() to every byte
+of that range in the following loop.
+Shouldn't the two be nested, like in the case of the canary bytes to
+the right of the object?
 
-I can't find more uses? Yet there are a ton more ways to actually
-migrate tasks.
+
+>
+> -       /* Apply to right of object. */
+> -       for (addr =3D meta->addr + meta->size; addr < pageaddr + PAGE_SIZ=
+E; addr++) {
+> -               if (!fn((u8 *)addr))
+> +       /*
+> +        * If the canary is corrupted in a certain 64 bytes, or the canar=
+y
+> +        * memory cannot be completely covered by multiple consecutive 64=
+ bytes,
+> +        * it needs to be checked one by one.
+> +        */
+> +       for (; addr < meta->addr; addr++) {
+> +               if (unlikely(!check_canary_byte((u8 *)addr)))
+>                         break;
+>         }
+> +
+> +       /* Apply to right of object. */
+> +       for (addr =3D meta->addr + meta->size; addr % sizeof(u64) !=3D 0;=
+ addr++) {
+> +               if (unlikely(!check_canary_byte((u8 *)addr)))
+> +                       return;
+> +       }
+> +       for (; addr - pageaddr < PAGE_SIZE; addr +=3D sizeof(u64)) {
+> +               if (unlikely(*((u64 *)addr) !=3D KFENCE_CANARY_PATTERN_U6=
+4)) {
+> +
+> +                       for (; addr - pageaddr < PAGE_SIZE; addr++) {
+> +                               if (!check_canary_byte((u8 *)addr))
+> +                                       return;
+> +                       }
+> +               }
+> +       }
+>  }
+>
+>  static void *kfence_guarded_alloc(struct kmem_cache *cache, size_t size,=
+ gfp_t gfp,
+> @@ -434,7 +462,7 @@ static void *kfence_guarded_alloc(struct kmem_cache *=
+cache, size_t size, gfp_t g
+>  #endif
+>
+>         /* Memory initialization. */
+> -       for_each_canary(meta, set_canary_byte);
+> +       set_canary(meta);
+>
+>         /*
+>          * We check slab_want_init_on_alloc() ourselves, rather than lett=
+ing
+> @@ -495,7 +523,7 @@ static void kfence_guarded_free(void *addr, struct kf=
+ence_metadata *meta, bool z
+>         alloc_covered_add(meta->alloc_stack_hash, -1);
+>
+>         /* Check canary bytes for memory corruption. */
+> -       for_each_canary(meta, check_canary_byte);
+> +       check_canary(meta);
+>
+>         /*
+>          * Clear memory if init-on-free is set. While we protect the page=
+, the
+> @@ -751,7 +779,7 @@ static void kfence_check_all_canary(void)
+>                 struct kfence_metadata *meta =3D &kfence_metadata[i];
+>
+>                 if (meta->state =3D=3D KFENCE_OBJECT_ALLOCATED)
+> -                       for_each_canary(meta, check_canary_byte);
+> +                       check_canary(meta);
+>         }
+>  }
+>
+> diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
+> index 600f2e2431d6..2aafc46a4aaf 100644
+> --- a/mm/kfence/kfence.h
+> +++ b/mm/kfence/kfence.h
+> @@ -21,7 +21,15 @@
+>   * lower 3 bits of the address, to detect memory corruptions with higher
+>   * probability, where similar constants are used.
+>   */
+> -#define KFENCE_CANARY_PATTERN(addr) ((u8)0xaa ^ (u8)((unsigned long)(add=
+r) & 0x7))
+> +#define KFENCE_CANARY_PATTERN_U8(addr) ((u8)0xaa ^ (u8)((unsigned long)(=
+addr) & 0x7))
+> +
+> +/*
+> + * Define a continuous 8-byte canary starting from a multiple of 8. The =
+canary
+> + * of each byte is only related to the lowest three bits of its address,=
+ so the
+> + * canary of every 8 bytes is the same. 64-bit memory can be filled and =
+checked
+> + * at a time instead of byte by byte to improve performance.
+> + */
+> +#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^ (u64)(0x070=
+6050403020100))
+>
+>  /* Maximum stack depth for reports. */
+>  #define KFENCE_STACK_DEPTH 64
+> diff --git a/mm/kfence/report.c b/mm/kfence/report.c
+> index 60205f1257ef..197430a5be4a 100644
+> --- a/mm/kfence/report.c
+> +++ b/mm/kfence/report.c
+> @@ -168,7 +168,7 @@ static void print_diff_canary(unsigned long address, =
+size_t bytes_to_show,
+>
+>         pr_cont("[");
+>         for (cur =3D (const u8 *)address; cur < end; cur++) {
+> -               if (*cur =3D=3D KFENCE_CANARY_PATTERN(cur))
+> +               if (*cur =3D=3D KFENCE_CANARY_PATTERN_U8(cur))
+>                         pr_cont(" .");
+>                 else if (no_hash_pointers)
+>                         pr_cont(" 0x%02x", *cur);
+> --
+> 2.20.1
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/kasan-dev/20230403122738.6006-1-zhangpeng.00%40bytedance.com.
+
+
+
+--
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
