@@ -2,75 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EE06D5A97
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CAC6D5AA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbjDDISr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 04:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
+        id S234135AbjDDIU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 04:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233715AbjDDISh (ORCPT
+        with ESMTP id S234123AbjDDIUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 04:18:37 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A1AE41;
-        Tue,  4 Apr 2023 01:18:35 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bi9so41298547lfb.12;
-        Tue, 04 Apr 2023 01:18:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680596313;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p/QeljmY9ct+nUTJxfQkxtnhru1EvuO2W6K2JXJBd5M=;
-        b=begmmzpBpxM+H+/TfWsPuz1pxN6UU6cPTsULjtlIvyIcFJF6QmO3Bx3X6DLH8TIQic
-         pPyJbKxrMkNJBovjO1tDri2hHyY6pXJOs/rZPCwgGZ+y6fSha/lGleBEVWMq6rIu5tnI
-         zZz5j5ri4bJbHOtmkA+hoiBgOccf1kWK3Hv37eg3JbWg5ASbHZsS4i1CyfuaRiWHlyrI
-         ddoxR1DWML4ZXQJ1lfiRpUkbvwiUrlGbu/y5N0NlkHJ3USrKDM3nX8uZw/ZBFKLsf7WX
-         IbzzjCgLFlgBLqyhgMLFGgk4t0l1rjEetchT20nDlcSaxHgJgB4E55HDfk80tKl8MRP4
-         ygIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680596313;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p/QeljmY9ct+nUTJxfQkxtnhru1EvuO2W6K2JXJBd5M=;
-        b=vJiHRDzyXj8xX0fbMMXn9G4blezyQHK8uOHiFwYzeZUsZl3jlDIihMuMD96Uom66LE
-         CJruqTNyYFiDncsPz8ofkpRsEzRXYn9+xKLwZT6JE/SY38Kt/UOXjB9/g6U07h7WNS+E
-         dQE47CGzz9dkiCAN5680YiGqVYXDFuof9u3lJAMv3oV2+0Xc9iguNY/xEdylL4zNAyCp
-         iQsy0DqTWFBF6i7n97maW62bBb2PT6AuyPqeXMeGviJFTTIuxFDC3k0z+T2HR5vKfcbB
-         UKG5xbN8gnSFIpCaeFO0S2HecgdDtOhOszwxGY3srOxKG8M0hZhB7ded6FyKtAVDitx0
-         9mxg==
-X-Gm-Message-State: AAQBX9fO1FORaPT+EWhXBQfvWV2VC/wKFXBPQUoK+Twxbjb4zWfqvKMu
-        lqmPT8QzJBYNJ4TDgyel4Uno6n7Sn4g5gx6zZdI=
-X-Google-Smtp-Source: AKy350bbM5GMuM9I8+CJRhYYmrG98DJyI9xbsiBVqND+hXASyGkI2G6jgOoZflvixZBnnQGtJDOvOCVhTjRlosv1MPQ=
-X-Received: by 2002:ac2:4c85:0:b0:4d5:ca32:6fa1 with SMTP id
- d5-20020ac24c85000000b004d5ca326fa1mr478151lfl.0.1680596313053; Tue, 04 Apr
- 2023 01:18:33 -0700 (PDT)
+        Tue, 4 Apr 2023 04:20:23 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10DF1A4;
+        Tue,  4 Apr 2023 01:20:22 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3345usVj014799;
+        Tue, 4 Apr 2023 08:20:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=X3b5qJIOalorokOS7twAewMeNT3gtn3t8Ss3x3cQbCI=;
+ b=dcYu+YeXALGc4IXslie6D1Tb0e/70WP9UtTO0hnWEaacdD9ORIewfoz9Jo3yLhVIoVNx
+ 4q8BonxC9msmCKa2nBUq75OCFnMogGj1cVwpiUi1OSjqoDA0s/wMaQ1K9HdG087yJGjO
+ 0oHjqcbYh5tzlIRBc9MzlVKCxqJ93Ujsbf7o5wwDYlea6OwlqM5LkqZQzO2TXBptmDBO
+ B3DGE8JkOlVAXo6mw3SMWcjhLgXLIdr5DaLpGGQTtshDl8pE5Z2rAkVQ3H0Wtj64LtKn
+ +AYJGcz6YOmRNJNcD5wXFS2yLhOCJjHhFfxj/PZEp+nyPFUCCHDZBaRQZ2QETaRwwAWW WA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pqw36tr9n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 08:20:19 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3348KIUt021098
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 4 Apr 2023 08:20:18 GMT
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 4 Apr 2023
+ 01:20:15 -0700
+Message-ID: <ed690550-3256-f889-c18f-2182d4b904cc@quicinc.com>
+Date:   Tue, 4 Apr 2023 13:50:12 +0530
 MIME-Version: 1.0
-References: <20230403175937.2842085-1-javierm@redhat.com> <3738011.44csPzL39Z@diego>
- <d7efebcc-5b5b-185e-bec8-b6b9d5d27d93@undef.tools>
-In-Reply-To: <d7efebcc-5b5b-185e-bec8-b6b9d5d27d93@undef.tools>
-From:   Peter Robinson <pbrobinson@gmail.com>
-Date:   Tue, 4 Apr 2023 09:18:21 +0100
-Message-ID: <CALeDE9OVq8ys9Ymx6Na+a0oK6R8CpfD=fbM6FTtWGnJQn_SR5Q@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: rockchip: Change serial baud rate for
- Pinephone Pro to 1.5 MB
-To:     Jarrah <kernel@undef.tools>
-Cc:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martijn Braam <martijn@brixit.nl>, Ondrej Jirman <megi@xff.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RFC] net: qrtr: correct types of trace event parameters
+Content-Language: en-US
+To:     Simon Horman <horms@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+References: <20230402-qrtr-trace-types-v1-1-da062d368e74@kernel.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230402-qrtr-trace-types-v1-1-da062d368e74@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4uNhI53zH0IIxZvyxYztqfPi_ilI_20V
+X-Proofpoint-GUID: 4uNhI53zH0IIxZvyxYztqfPi_ilI_20V
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-04_02,2023-04-03_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
+ phishscore=0 clxscore=1011 malwarescore=0 adultscore=0 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304040077
+X-Spam-Status: No, score=-2.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,30 +82,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 9:13=E2=80=AFAM Jarrah <kernel@undef.tools> wrote:
->
-> Hi,
->
-> On 4/4/23 17:51, Heiko St=C3=BCbner wrote:
-> > The interesting question is always if this will break someone else's se=
-tup.
-> > I've never really understood the strange setting of 1.5MBps, but on the
-> > other hand it _is_ a reality on most boards.
-> >
-> > Personally I don't care that much either way, but would like a comment
-> > from the other people working on that device - if possible.
->
->
-> I don't have a strong opinion either way, but I would note that
-> Tow-Boot[0] which later models of this device ship with uses 115200,
-> meaning that this would put the device out of sync with the default
-> u-boot implementation from the factory.
 
-Upstream U-Boot support uses the 1.5m that all the other rockchip devices u=
-se.
 
-> At least for me it's been convenient to have both the PP and PPP use the
-> same settings while debugging.
+On 4/2/2023 4:45 PM, Simon Horman wrote:
+> The arguments passed to the trace events are of type unsigned int,
+> however the signature of the events used __le32 parameters.
+> 
+> I may be missing the point here, but sparse flagged this and it
+> does seem incorrect to me.
+> 
+>    net/qrtr/ns.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/qrtr.h):
+>    ./include/trace/events/qrtr.h:11:1: warning: cast to restricted __le32
+>    ./include/trace/events/qrtr.h:11:1: warning: restricted __le32 degrades to integer
+>    ./include/trace/events/qrtr.h:11:1: warning: restricted __le32 degrades to integer
+>    ... (a lot more similar warnings)
+>    net/qrtr/ns.c:115:47:    expected restricted __le32 [usertype] service
+>    net/qrtr/ns.c:115:47:    got unsigned int service
+>    net/qrtr/ns.c:115:61: warning: incorrect type in argument 2 (different base types)
+>    ... (a lot more similar warnings)
+> 
+> Signed-off-by: Simon Horman <horms@kernel.org>
+> ---
+>   include/trace/events/qrtr.h | 33 ++++++++++++++++++---------------
+>   1 file changed, 18 insertions(+), 15 deletions(-)
+> 
+> diff --git a/include/trace/events/qrtr.h b/include/trace/events/qrtr.h
+> index b1de14c3bb93..441132c67133 100644
+> --- a/include/trace/events/qrtr.h
+> +++ b/include/trace/events/qrtr.h
+> @@ -10,15 +10,16 @@
+>   
+>   TRACE_EVENT(qrtr_ns_service_announce_new,
+>   
+> -	TP_PROTO(__le32 service, __le32 instance, __le32 node, __le32 port),
+> +	TP_PROTO(unsigned int service, unsigned int instance,
+> +		 unsigned int node, unsigned int port),
+>   
+>   	TP_ARGS(service, instance, node, port),
+>   
+>   	TP_STRUCT__entry(
+> -		__field(__le32, service)
+> -		__field(__le32, instance)
+> -		__field(__le32, node)
+> -		__field(__le32, port)
+> +		__field(unsigned int, service)
+> +		__field(unsigned int, instance)
+> +		__field(unsigned int, node)
+> +		__field(unsigned int, port)
+>   	),
+>   
+>   	TP_fast_assign(
+> @@ -36,15 +37,16 @@ TRACE_EVENT(qrtr_ns_service_announce_new,
+>   
+>   TRACE_EVENT(qrtr_ns_service_announce_del,
+>   
+> -	TP_PROTO(__le32 service, __le32 instance, __le32 node, __le32 port),
+> +	TP_PROTO(unsigned int service, unsigned int instance,
+> +		 unsigned int node, unsigned int port),
+>   
+>   	TP_ARGS(service, instance, node, port),
+>   
+>   	TP_STRUCT__entry(
+> -		__field(__le32, service)
+> -		__field(__le32, instance)
+> -		__field(__le32, node)
+> -		__field(__le32, port)
+> +		__field(unsigned int, service)
+> +		__field(unsigned int, instance)
+> +		__field(unsigned int, node)
+> +		__field(unsigned int, port)
+>   	),
+>   
+>   	TP_fast_assign(
+> @@ -62,15 +64,16 @@ TRACE_EVENT(qrtr_ns_service_announce_del,
+>   
+>   TRACE_EVENT(qrtr_ns_server_add,
+>   
+> -	TP_PROTO(__le32 service, __le32 instance, __le32 node, __le32 port),
+> +	TP_PROTO(unsigned int service, unsigned int instance,
+> +		 unsigned int node, unsigned int port),
+>   
+>   	TP_ARGS(service, instance, node, port),
+>   
+>   	TP_STRUCT__entry(
+> -		__field(__le32, service)
+> -		__field(__le32, instance)
+> -		__field(__le32, node)
+> -		__field(__le32, port)
+> +		__field(unsigned int, service)
+> +		__field(unsigned int, instance)
+> +		__field(unsigned int, node)
+> +		__field(unsigned int, port)
+>   	),
+>   
+>   	TP_fast_assign(
 
-Pinebook Pro and numerous other devices use 1.5m so I don't think what
-other devices use make are ultimately particularly relevant.
+LGTM.
+
+Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
+
+--Mukesh
+
+> 
