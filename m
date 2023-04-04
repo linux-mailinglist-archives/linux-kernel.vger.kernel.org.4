@@ -2,53 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C40B6D56C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 04:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37E06D56CC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 04:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbjDDCdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 22:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
+        id S232750AbjDDCeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 22:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjDDCdM (ORCPT
+        with ESMTP id S229514AbjDDCd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 22:33:12 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8041FD7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 19:33:10 -0700 (PDT)
-Date:   Tue, 04 Apr 2023 02:32:46 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1680575586; x=1680834786;
-        bh=3nDH2D2gZWk3PxPEgj9RNM8Ufiko6BkiGlNqFRgeZIo=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=YmWrCnPNa4OwZh+kUi7OOUQ3rSPOv7wowoSidd4RDgeJ8slNabMfWjBRXlezARAMW
-         P4nM8klaV8dvjBDQbig3GZzBRDbH1eWshJ7f3+DIqbZlGXrKEXVbQmlR5BRJb/HGIM
-         FUbGoZtS3EK3m1K3sf7wnQ+FqpZB8+KT2ZGtvPA/2/X5+kLCvrSsMvdD3pLsUJvurD
-         q4t4fgs9hsy8EU2Jgj0Uu4QZbrpOxRljeuLUvBUKJRPBdDuYoCxFfeO7tQo9GzLamY
-         mH9jNZh3wvwRG3gX30JQJoIZiU8ExiOJJlC6agvjm33eSf+vql107GaRYtdB0KJcZl
-         J0G6kwHlqOa6A==
-To:     Om Parikh <hack3r-0m@proton.me>
-From:   hack3r-0m <hack3r-0m@proton.me>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Olof Johansson <olof@lixom.net>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: watchdog: alphascale-asm9260: convert to DT schema
-Message-ID: <WaJw8WW0_x3pP2NOWf11aNOJx0xB-gZuE9bMTmydhniI0kSNa5M2oJkCp5PNZR9O1ySeV7RRLRf8rkpfiqd_P2udBHGf58x9bHSUZ7Vl4vU=@proton.me>
-In-Reply-To: <20230404022015.754177-1-hack3r-0m@proton.me>
-References: <20230403004138.326482-1-hack3r-0m@proton.me> <20230404022015.754177-1-hack3r-0m@proton.me>
-Feedback-ID: 58440162:user:proton
+        Mon, 3 Apr 2023 22:33:58 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72951FFA;
+        Mon,  3 Apr 2023 19:33:56 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id l7so29104516pjg.5;
+        Mon, 03 Apr 2023 19:33:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680575636;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gn9YD3alGf58TN8N9lq3/1u5tsXKao8t2A/bH+T+1dU=;
+        b=b4lqaShApbas9ZlBE8qTB4x6yHo2QnhB8A+l7p8LEEBnff7zD+YmlrF/MBF7YpcI+T
+         G+bK8kciZ5fq9O5JOjDIIW69IGolvUbMytTkyZ0Mff4O1cu+X/uXK1WGQdMdDQKaF5Vh
+         YTZZuldGOZtjfZ8NF9JszMmbZt/qm8euwwonAXDEhJj6M3cOZc2Yecv+L/RoUAQwJ9Qf
+         Z1/aQhQspQbbhXCDSWj9FQ5JC5U7DAZPSONX4c2yOosoJN1UjwGHGZqtcu+/2rOtr2YV
+         4enWUiEEaBKBAgSi0r5Vh/TsJDjYHuWH4hK5XVEInAW9Qt9HXL0pdR0EBdoiqmZdJJi6
+         ZJoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680575636;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gn9YD3alGf58TN8N9lq3/1u5tsXKao8t2A/bH+T+1dU=;
+        b=LMPDH2CbPZSzA+LxRfyfvyimKpI/CRn6xIYVGrRc8MDK57RGLGAOJbeC9nl2e8iQlX
+         q1wmjoQ2ONS4kIOAqgbX/DvboU/+dOnTPSQ5YUmkGyL75qOGcW+A5pHfMDHHlrHQG6Uc
+         m2ADaxxVBFB2qZb1HvxhjBnWTHXLytFFVU2gYVstaK9SR+F/+FgySdIBOt/hdGRSXgrD
+         YvZS/TGK+cJOD5UQSV2g6quhhsUzUiEUJCjKoRXEq7IupS2X8su0gJ4kG1n/0mhSSG1w
+         TEWYjYEsK422JVyYzZOOoEoc5mp7OLetaTQ9owoomPReGDNv9xziyCvj4YFmXXIf4Wmu
+         bGyw==
+X-Gm-Message-State: AAQBX9etWIKlgdGPVq8xSYEI/cfOxr4+bNNGmocVJKmokqfS7MeMsNsG
+        Qdv2SAE8xg+WZbWV2t+zh7s=
+X-Google-Smtp-Source: AKy350YPVWkAxd93yXbY0JVmIPLjPmAttfmlrGLB1VF3wzesgykIT6yBU+ZgiAgVoc6qo/Z4xTr9dA==
+X-Received: by 2002:a05:6a20:bf18:b0:dc:43e8:54b7 with SMTP id gc24-20020a056a20bf1800b000dc43e854b7mr661468pzb.43.1680575636225;
+        Mon, 03 Apr 2023 19:33:56 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-40.three.co.id. [116.206.12.40])
+        by smtp.gmail.com with ESMTPSA id b3-20020a655783000000b0050b026c444fsm6548734pgr.62.2023.04.03.19.33.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 19:33:55 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 79A4310677F; Tue,  4 Apr 2023 09:33:53 +0700 (WIB)
+Date:   Tue, 4 Apr 2023 09:33:53 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Jorge Lopez <jorgealtxwork@gmail.com>, hdegoede@redhat.com,
+        Linux x86 Platform Drivers 
+        <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v7] Introduction-of-HP-BIOSCFG-driver-documentation
+Message-ID: <ZCuMkdb6jeL4S8hz@debian.me>
+References: <20230403211548.6253-1-jorge.lopez2@hp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX autolearn=unavailable autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wZWQ5ERks+J5+e0a"
+Content-Disposition: inline
+In-Reply-To: <20230403211548.6253-1-jorge.lopez2@hp.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,165 +76,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the feedback, I have incorporated the fixes in the patch. Warnin=
-gs generated from `checkpatch.pl` script seems to be false positive in this=
- case.
 
-------- Original Message -------
-On Tuesday, April 4th, 2023 at 7:51 AM, Om Parikh <hack3r-0m@proton.me> wro=
-te:
+--wZWQ5ERks+J5+e0a
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Apr 03, 2023 at 04:15:48PM -0500, Jorge Lopez wrote:
+> HP BIOS Configuration driver purpose is to provide a driver supporting
+> the latest sysfs class firmware attributes framework allowing the user
+> to change BIOS settings and security solutions on HP Inc.=E2=80=99s comme=
+rcial
+> notebooks.
+>=20
+> Many features of HP Commercial notebooks can be managed using Windows
+> Management Instrumentation (WMI). WMI is an implementation of Web-Based
+> Enterprise Management (WBEM) that provides a standards-based interface
+> for changing and monitoring system settings. HP BIOSCFG driver provides
+> a native Linux solution and the exposed features facilitates the
+> migration to Linux environments.
+>=20
+> The Linux security features to be provided in hp-bioscfg driver enables
+> managing the BIOS settings and security solutions via sysfs, a virtual
+> filesystem that can be used by user-mode applications. The new=20
+> documentation cover features such Secure Platform Management and Sure=20
+> Start. Each section provides security feature description and identifies=
+=20
+> sysfs directories and files exposed by the driver.
+>=20
+> Many HP Commercial notebooks include a feature called Secure Platform
+> Management (SPM), which replaces older password-based BIOS settings
+> management with public key cryptography. PC secure product management
+> begins when a target system is provisioned with cryptographic keys
+> that are used to ensure the integrity of communications between system
+> management utilities and the BIOS.
+>=20
+> HP Commercial notebooks have several BIOS settings that control its=20
+> behaviour and capabilities, many of which are related to security.=20
+> To prevent unauthorized changes to these settings, the system can be=20
+> configured to use a cryptographic signature-based authorization string=20
+> that the BIOS will use to verify authorization to modify the setting.
 
-> Makes alphascale-asm9260 dt bindings adhere to the dt json-schema
-> by replacing txt file with yaml file.
->=20
-> Signed-off-by: Om Parikh hack3r-0m@proton.me
->=20
-> ---
-> .../watchdog/alphascale,asm9260-wdt.yaml | 73 +++++++++++++++++++
-> .../bindings/watchdog/alphascale-asm9260.txt | 35 ---------
-> 2 files changed, 73 insertions(+), 35 deletions(-)
-> create mode 100644 Documentation/devicetree/bindings/watchdog/alphascale,=
-asm9260-wdt.yaml
-> delete mode 100644 Documentation/devicetree/bindings/watchdog/alphascale-=
-asm9260.txt
->=20
-> diff --git a/Documentation/devicetree/bindings/watchdog/alphascale,asm926=
-0-wdt.yaml b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-=
-wdt.yaml
-> new file mode 100644
-> index 000000000000..ceee5f086e4a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.y=
-aml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/alphascale,asm9260-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Alphascale asm9260 Watchdog timer
-> +
-> +allOf:
-> + - $ref: watchdog.yaml#
-> +
-> +maintainers:
-> + - Oleksij Rempel linux@rempel-privat.de
->=20
-> + - Olof Johansson olof@lixom.net
->=20
-> +
-> +properties:
-> + compatible:
-> + enum:
-> + - alphascale,asm9260-wdt
-> +
-> + reg:
-> + maxItems: 1
-> +
-> + clocks:
-> + items:
-> + - description: source clock, used for tick counter
-> + - description: ahb gate
-> +
-> + clock-names:
-> + items:
-> + - const: mod
-> + - const: ahb
-> +
-> + interrupts:
-> + maxItems: 1
-> +
-> + resets:
-> + items:
-> + - description: phandle pointing to the system reset controller with lin=
-e
-> + index for the watchdog.
-> +
-> + reset-names:
-> + items:
-> + - const: wdt_rst
-> +
-> + timeout-sec: true
-> +
-> + alphascale,mode:
-> + description: to specify the reset mode of operation
-> + $ref: /schemas/types.yaml#/definitions/string
-> + enum: [hw, sw, debug]
-> +
-> +required:
-> + - compatible
-> + - reg
-> + - clocks
-> + - clock-names
-> + - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> + - |
-> + #include <dt-bindings/clock/alphascale,asm9260.h>
->=20
-> + watchdog0: watchdog@80048000 {
-> + compatible =3D "alphascale,asm9260-wdt";
-> + reg =3D <0x80048000 0x10>;
->=20
-> + clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
->=20
-> + clock-names =3D "mod", "ahb";
-> + interrupts =3D <55>;
->=20
-> + timeout-sec =3D <30>;
->=20
-> + alphascale,mode =3D "hw";
-> + };
-> diff --git a/Documentation/devicetree/bindings/watchdog/alphascale-asm926=
-0.txt b/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-> deleted file mode 100644
-> index 75b265a04047..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-> +++ /dev/null
-> @@ -1,35 +0,0 @@
-> -Alphascale asm9260 Watchdog timer
-> -
-> -Required properties:
-> -
-> -- compatible : should be "alphascale,asm9260-wdt".
-> -- reg : Specifies base physical address and size of the registers.
-> -- clocks : the clocks feeding the watchdog timer. See clock-bindings.txt
-> -- clock-names : should be set to
-> - "mod" - source for tick counter.
-> - "ahb" - ahb gate.
-> -- resets : phandle pointing to the system reset controller with
-> - line index for the watchdog.
-> -- reset-names : should be set to "wdt_rst".
-> -
-> -Optional properties:
-> -- timeout-sec : shall contain the default watchdog timeout in seconds,
-> - if unset, the default timeout is 30 seconds.
-> -- alphascale,mode : three modes are supported
-> - "hw" - hw reset (default).
-> - "sw" - sw reset.
-> - "debug" - no action is taken.
-> -
-> -Example:
-> -
-> -watchdog0: watchdog@80048000 {
-> - compatible =3D "alphascale,asm9260-wdt";
-> - reg =3D <0x80048000 0x10>;
->=20
-> - clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
->=20
-> - clock-names =3D "mod", "ahb";
-> - interrupts =3D <55>;
->=20
-> - resets =3D <&rst WDT_RESET>;
->=20
-> - reset-names =3D "wdt_rst";
-> - timeout-sec =3D <30>;
->=20
-> - alphascale,mode =3D "hw";
-> -};
-> --
-> 2.40.0
+If this is single patch, I'd like to write the patch subject as
+"Documentation: sysfs: document HP-specific firmware attributes".
+
+And also, adjust the patch description accordingly, since as it is
+written above, it looks like general documentation of HP-specific feature
+(which should be in actual diff).
+
+> Version 7
+> 	Includes only sysfs-class-firmware-attributes documentation
+
+Where is the rest of patches if this is a series? Had they been merged?
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--wZWQ5ERks+J5+e0a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHQEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCuMjAAKCRD2uYlJVVFO
+ow7OAP9gRcmB0bGzGPNpYcIbQOXyVkzMwcRvfFZI8DazZekgfwD1F0pLNN9sqHpv
+EwDI6/5ooWivsvoDHirVWJkj0mdpCw==
+=mUcv
+-----END PGP SIGNATURE-----
+
+--wZWQ5ERks+J5+e0a--
