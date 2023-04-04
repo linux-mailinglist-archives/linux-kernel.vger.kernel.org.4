@@ -2,145 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583586D6524
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 658146D6528
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235488AbjDDOWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S235809AbjDDOWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235466AbjDDOWK (ORCPT
+        with ESMTP id S235771AbjDDOWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:22:10 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D38128;
-        Tue,  4 Apr 2023 07:22:02 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id bj20so24316479oib.3;
-        Tue, 04 Apr 2023 07:22:02 -0700 (PDT)
+        Tue, 4 Apr 2023 10:22:15 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE46449F;
+        Tue,  4 Apr 2023 07:22:14 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-17683b570b8so34681423fac.13;
+        Tue, 04 Apr 2023 07:22:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680618134;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=818uoQcqFpRfOwtGiVH6lha3tDNbDaxb6v/S7UADaBU=;
+        b=nD8tMq24jTMTPUcgwZF+n5Q1p9OUS0rdreKR9FMa1uks4hiyeeLlz6m24RLr4OVa3Y
+         M89HEipjKy44w9X4hhmz0zhVdQnhAJ3fRIzxO3N7tQlaoOPu1BlViJx3sL4w0TCTA6mH
+         Jv3/P/twetrSm7lU4bR7Preu1a2GVd2SqtZbQmQjphVgejbDsHE4PXNFFV9QtFmvy5g0
+         AVlue76+Cwc4ezdgW3fmauQ/lJVTBYbSKMRTczFeLlY8CAGkUaYm1pFbN928jfRiFeVi
+         pqmt4bgo8XLlUVzBVUU9EcSORff1tNIGsQIyI3fsYMAJhume7Qjc7m1GRFyyODydY8rM
+         MxhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680618122;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M9ksvzbq2gQvGRcF4d3P6MDp1Pp3aLiB4KPYctYyISA=;
-        b=bHbOFbGbGFsR9Pb4Oo+S7r9160sRZRxNEIy8ZYNvCJL2l3f6mKZnBBhV2NZyTbYl70
-         PYE0uuDUo9Bf8YZ2DYyCn7aT01osXXkdpMhUzhEuU8WIAH53oDf1OhgLdbdEoaKxdX5v
-         OicwVa7zfQRVrSAu8NP6o+OE01O7+CpvPW39dqfjUDgNFqysvCHP1hCEyZSuGO36JqgO
-         5AgQS/IH68bD/O3GmX/nfE8YLXyxIaMKKMgk5kWXJB4ynEv5kBYbqknvVEnEWAw7Q2Sk
-         mnYry+GZynLD8lDew/kiBd/5R5zuynfH+VOn9SaQLkK7KOc+Q1oZldDqetdXScXPNVBR
-         abjw==
-X-Gm-Message-State: AAQBX9eJ7kjarU4UUb6yJmBW1ZZ1x8lrhh0NdB5rOE5bD5vyuKite9m4
-        uzEuydbMaXlY0DyeTJCbFA==
-X-Google-Smtp-Source: AKy350bfLilcIpHOP2DnsH5J5CDj+2U3bSb1BmQbgZesFcN/dqwmrnUzaqaa+zuxaQlLVp6rk6pDMQ==
-X-Received: by 2002:aca:bed5:0:b0:387:205b:70c7 with SMTP id o204-20020acabed5000000b00387205b70c7mr1313305oif.13.1680618121888;
-        Tue, 04 Apr 2023 07:22:01 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p8-20020acabf08000000b003871471f894sm2497572oif.27.2023.04.04.07.22.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 07:22:01 -0700 (PDT)
-Received: (nullmailer pid 3829375 invoked by uid 1000);
-        Tue, 04 Apr 2023 14:21:59 -0000
-Date:   Tue, 4 Apr 2023 09:21:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Patrick Lai <quic_plai@quicinc.com>
-Subject: Re: [PATCH v2 2/7] dt-bindings: soundwire: qcom: add 16-bit sample
- interval
-Message-ID: <20230404142159.GA3827653-robh@kernel.org>
-References: <20230403132503.62090-1-krzysztof.kozlowski@linaro.org>
- <20230403132503.62090-3-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20210112; t=1680618134;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=818uoQcqFpRfOwtGiVH6lha3tDNbDaxb6v/S7UADaBU=;
+        b=luErF/5U0rjlY1cHKv1TEiKdqCOTchG2U+kYDdfAdwZ/26Amwplnss0tNyMwEySFpR
+         cBc+AyDzvg7mbsF+9sF0vNtZojaxuHUpMIMUxt1R4nkqQcl5gaLLfUE6QXz8OCkw8dmU
+         dytLZxDrGeEvcKz5OQlIG0KJVbOQYzEVyOzjLkRGVQ80EGd+6KIcHX1ZpqpIzxe6ljGZ
+         8B39hzgfLvEpyUG1+cbpV58cPGJggnd8kSgftc3EwH6K8I+QSXRSbg3jLcGDQTcqg5Zo
+         jGj0BvKahGV0WKkIQQuNZeRJgFkvG6p+I744sW2KqEhN0jWNCa6vfneWL1z1yNeB+cea
+         rHbw==
+X-Gm-Message-State: AAQBX9fW/cTnBChR1LSl6jp+yCIec7Ho61uy958fhDvFIh+j2JDcrtxb
+        0bK1H4hAiotpUxSMxFr589c=
+X-Google-Smtp-Source: AKy350bk7R/QlO6ayN2c9pBOUWWppaiidy1pXwEJUzHZrvPXrkcdz0oQVNFc6Sj9wXilZSNTdyiunA==
+X-Received: by 2002:a05:6870:ac10:b0:17a:d9b2:ab70 with SMTP id kw16-20020a056870ac1000b0017ad9b2ab70mr1717804oab.7.1680618133811;
+        Tue, 04 Apr 2023 07:22:13 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a4-20020a05680802c400b00383ef58c15bsm5150639oid.28.2023.04.04.07.22.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 07:22:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6441032d-d641-c00c-5c1b-66f65af6e6b9@roeck-us.net>
+Date:   Tue, 4 Apr 2023 07:22:11 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403132503.62090-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Convert to DT schema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
+ <20230403105052.426135-2-cristian.ciocaltea@collabora.com>
+ <20230404141749.GB3793612-robh@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230404141749.GB3793612-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 03:24:58PM +0200, Krzysztof Kozlowski wrote:
-> The port sample interval was always 16-bit, split into low and high
-> bytes.  This split was unnecessary, although harmless for older devices
-> because all of them used only lower byte (so values < 0xff).  With
-> support for Soundwire controller on Qualcomm SM8550 and its devices,
-> both bytes will be used, thus add a new 'qcom,ports-sinterval' property
-> to allow 16-bit sample intervals.
+On 4/4/23 07:17, Rob Herring wrote:
+> On Mon, Apr 03, 2023 at 01:50:51PM +0300, Cristian Ciocaltea wrote:
+>> Convert the PWM fan bindings to DT schema format.
+>>
+>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+>> ---
+>>   .../devicetree/bindings/hwmon/pwm-fan.txt     |  68 +----------
+>>   .../devicetree/bindings/hwmon/pwm-fan.yaml    | 109 ++++++++++++++++++
+>>   2 files changed, 110 insertions(+), 67 deletions(-)
+>>   create mode 100644 Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+...
+>> +
+>> +  pulses-per-revolution:
+>> +    description:
+>> +      Define the number of pulses per fan revolution for each tachometer
+>> +      input as an integer (default is 2 interrupts per revolution).
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/soundwire/qcom,soundwire.yaml    | 22 +++++++++++++++++--
->  1 file changed, 20 insertions(+), 2 deletions(-)
+> default: 2
 > 
-> diff --git a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> index c283c594fb5c..883b8be9be1b 100644
-> --- a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> +++ b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> @@ -86,7 +86,7 @@ properties:
->    qcom,ports-sinterval-low:
->      $ref: /schemas/types.yaml#/definitions/uint8-array
->      description:
-> -      Sample interval low of each data port.
-> +      Sample interval (only lowest byte) of each data port.
->        Out ports followed by In ports. Used for Sample Interval calculation.
->        Value of 0xff indicates that this option is not implemented
->        or applicable for the respective data port.
-> @@ -94,6 +94,19 @@ properties:
->      minItems: 3
->      maxItems: 16
->  
-> +  qcom,ports-sinterval:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description:
-> +      Sample interval of each data port.
-> +      Out ports followed by In ports. Used for Sample Interval calculation.
-> +      Value of 0xffff indicates that this option is not implemented
-> +      or applicable for the respective data port.
-> +      More info in MIPI Alliance SoundWire 1.0 Specifications.
-> +    minItems: 3
-> +    maxItems: 16
-> +    items:
-> +      maximum: 0xffff
+>> +      The value must be greater than zero.
+> 
+> minimum: 1
+> 
+> maximum: ??? I assume there's some practical limit here much less than
+> 2^32.
+> 
 
-Why not use uint16-array?
+Should be 1 to 4.
 
-> +
->    qcom,ports-offset1:
->      $ref: /schemas/types.yaml#/definitions/uint8-array
->      description:
-> @@ -219,10 +232,15 @@ required:
->    - '#size-cells'
->    - qcom,dout-ports
->    - qcom,din-ports
-> -  - qcom,ports-sinterval-low
->    - qcom,ports-offset1
->    - qcom,ports-offset2
->  
-> +oneOf:
-> +  - required:
-> +      - qcom,ports-sinterval-low
-> +  - required:
-> +      - qcom,ports-sinterval
-> +
->  additionalProperties: false
->  
->  examples:
-> -- 
-> 2.34.1
-> 
+Guenter
+
