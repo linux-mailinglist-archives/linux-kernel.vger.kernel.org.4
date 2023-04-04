@@ -2,137 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546246D604F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4BD6D6041
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234827AbjDDM0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
+        id S234625AbjDDMZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbjDDM0q (ORCPT
+        with ESMTP id S234882AbjDDMZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:26:46 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20610.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::610])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F96E212A;
-        Tue,  4 Apr 2023 05:26:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nHMqE6YScsjy1TIExkONv7WHmwTbFItRHKptr/+AV1tdjWrsUQAX9ZfrtxLoS7q0waRe1G1fX2uxbIs+LufZ1jgdC/7uV4qFCOWV7oaagEVAQJeNJ7riHsVY9VviXwxhXGYLKxsq8qxN8cHAtBsvU9NPN8heFGxTl7Iza5qm7qp48KLs5vDOeISojTO9C9S2z7BqozkDfwYuhs+/+PbrPnrDTuIfWtMFQ463lZV/dHX415MIGmrX1utlM+wFOd3SUCrIgeEaDbUKsfN2TuX3mPQ4AmSWNr+ummVNC5a5l+HnIics/LQ44hYUh++T/TYXWgB8lLFPVlfi9ZMr1WhXEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v3rSf80nQXERL5Q2CTDFFM+dezlKvYNWSR2PnmWwy3M=;
- b=GtlG9ersmLtNfSnWliyL1Qm00+JSGfa0Zp5ACrtQixgeWtJnpwF/4QdxI2GEdSUGil+eqsKofQ5Yd8fASV5Y0+LnfHpX1St7ziwNKtiU1N8oCbfBJV2tB67OfVbFaWhbTqS0PGz08Px6oH+v6HBuz8lEBaKisBN0p2rzgX0cUa+vYuWR1AsMC0z+CVdYdwEncGzuPiY1FGZAX21ABJ3JZn72n3fIcYnZ3hwx6DBF8K6CPfIX+yZ4kNCVS5nN20R2KGfI2s1OrT9spiwRqLs9pPygXfm0jXQNjjhGFi90tmY/tTa3ENS77UGzpo/P1DL31b+lVlNypRfBOrBAkqylgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v3rSf80nQXERL5Q2CTDFFM+dezlKvYNWSR2PnmWwy3M=;
- b=Qv75FtbuD1ahTI3s/3RQJUtmUja1KSYixCoJS4qRnziFMjZBPeQ01UNc72ek8p5oNxiYpbtOrptJehzxxv8quOR+ayUVqHf73n/XqmFMbKLbI7kcQ8zvqvOBB7PYSCzL2iBfarU8jqRhnKFOxIPlZFBzQgNTu9Hxi8DfcGMVnqU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
- SA1PR12MB6970.namprd12.prod.outlook.com (2603:10b6:806:24d::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.33; Tue, 4 Apr 2023 12:26:22 +0000
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::b6b7:4b22:74f0:dfeb]) by DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::b6b7:4b22:74f0:dfeb%2]) with mapi id 15.20.6254.034; Tue, 4 Apr 2023
- 12:26:21 +0000
-Message-ID: <f2dde9d6-dc04-4c33-7f9d-49454bb192da@amd.com>
-Date:   Tue, 4 Apr 2023 14:25:33 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH V4 17/17] x86/sev: Remove restrict interrupt injection
- from SNP_FEATURES_IMPL_REQ
-To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-References: <20230403174406.4180472-1-ltykernel@gmail.com>
- <20230403174406.4180472-18-ltykernel@gmail.com>
-Content-Language: en-US
-From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
-In-Reply-To: <20230403174406.4180472-18-ltykernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0120.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9d::13) To DM6PR12MB2810.namprd12.prod.outlook.com
- (2603:10b6:5:41::21)
+        Tue, 4 Apr 2023 08:25:41 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E701B90;
+        Tue,  4 Apr 2023 05:25:39 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id bi9so42147005lfb.12;
+        Tue, 04 Apr 2023 05:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680611138;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RGrcJymg+ckaukDnkYkL45EafR2fD169G3iZOtvge2g=;
+        b=BTa8G3OTbNddd1DNHPTZfluySBVtJTcU+LjqTGxB5GfHbOu+ALGZTpnZkdDREd01Xa
+         xAG4j6S1wYdSFnFIcY7r7wlO5MC8w6LrcRwftMKSUqnPOUK8YF1/qH/rB38MYUGa0WQY
+         Z2TqYm9O5jOKEguCJ6pqBPUovbTIXDaenrzYamibmsPabXDQZ61Aemv6bAW4zIE1ECBX
+         WAH5XVNBk/QVjybOCG5uWYG2lD4lkWPA0YeDvy2TT+a+hQB2gj0n+lKIAtyl0p2jC14d
+         jci/aUVbUHzUyF5UMpW+afWtv47wIo5i7V3EmK78BkICyPi4pWzA8k5XQbP0iArVpmJe
+         IH6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680611138;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RGrcJymg+ckaukDnkYkL45EafR2fD169G3iZOtvge2g=;
+        b=RSBOs0AoHfYdaDm6+jTKOsS2A2vuVpt6Uimq5KVP9jVdwDSbgt0vvp8pTam8SvKGOx
+         XmH4erMqpkgzqzIpgEpDt1/PD34wUszTDwnDQRYrhsRyDo6L2nsOsdper9f+8BW3evg4
+         iKOrVpRbYPB957WZYIl54Fiog09FUW1Ba0cXb1tFb7nijti2T6rP46pB4bF0F8RNJ15g
+         sRaSmQarWrerFOYgZItxj6AI2BdtCb/kAOB+sWQ07pTJddaiMCGsjYkHmV/nV+4OlpIR
+         egxXSZOLlG7r7f12JydFrKOQMfmkpACTUwtpsE27t0alzJ10CWM1y7aA5wraGF+3FG3G
+         lFDQ==
+X-Gm-Message-State: AAQBX9fy/dEwwc+Wg6TaTLIAdpOcZkZNAGJF21rTT+XShFQBUiDjnF7K
+        bB50gx/xyoI3yyceUvGbxAU=
+X-Google-Smtp-Source: AKy350Y0jpe/w9Uo3Kh8yAlk4zEOOyeI6H2j666l0rrxtXxYRejpjj+llllY0nfTyPhStpAjByRXzg==
+X-Received: by 2002:ac2:558d:0:b0:4e6:9b01:b92b with SMTP id v13-20020ac2558d000000b004e69b01b92bmr566067lfg.67.1680611138251;
+        Tue, 04 Apr 2023 05:25:38 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id j27-20020ac253bb000000b004eaf8b20014sm2296281lfh.76.2023.04.04.05.25.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 05:25:37 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 15:25:35 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v2 3/3] doc: Make sysfs-bus-iio doc more exact
+Message-ID: <4cbc9dd1dc5974f06be0c90e435970e1105f4636.1680610554.git.mazziesaccount@gmail.com>
+References: <cover.1680610554.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|SA1PR12MB6970:EE_
-X-MS-Office365-Filtering-Correlation-Id: b096c2cb-a8d3-4098-d14e-08db3507cc34
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LUSFFvkbWvAlss/wnsJ2uU0z5EUjzwfpRJh67J5HfMim1re7FMgB0r15kdg1qIIkfYFZcqWB5zSsPClxUsH+XxUUQoEuXhceWSrb2cjp6cTR1+jZl1HCCWEKVHL7DwMfMMdVol+uxrgIDQk/DvoWJnvzP3zxXY55+CM/nmKv0aoovbt6/gqcwSbaHj4Qf9CK1khy7O6nx/KBiM/FxMAoz8aX/XKN/Xt1dr8lVIMyntfwT3r8tLIgqbe/TFF3DWcwgo2UC74d9XoKDXToJhWCrUJ9KUgc94VuwaGziI5EWytBX1elGiKfPZumLiaZtQjVmjcUWB7PNwQgn2zXfcMHIHAH1LDq4FsA9eWKsa5alClHhpZ9avgrryuv9OI51dlN744qwe4yQreP7zckrtKLo7xONo5pZ4ho4t4GmGRlXXHzWtGxUboZLFLyQXgMYIGb1PYdeqJFlzOkdsfaQzNOfu5+pYrhzTdXbb/x5RQHlu8etPdJf3KQEO72VXd/6XcKdE83hkvZkZBMy89/FdsdauqRY/SrUbXRbvePH9fvJtAXCjMZ6Qw7q4Smdqn4UGh90/LhRV1XXIFhriOKfeAXnMli13QtatvgoxzBBrhTkX6pE5jy2S6bZFMgvc1g3NlfOVnhIuzbyMdkB6ykl/nw893LWTzZ9wiqWGeC2eNhaLo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(396003)(346002)(39860400002)(376002)(451199021)(478600001)(2906002)(186003)(2616005)(6512007)(6506007)(36756003)(6666004)(83380400001)(6486002)(921005)(38100700002)(4744005)(86362001)(316002)(31696002)(5660300002)(7416002)(41300700001)(7406005)(8936002)(4326008)(31686004)(66476007)(66556008)(66946007)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZE1QTWlCNEt2YTFhenp0NWVXM1JJU1k3Qm10aEtPb004VGxiQTZvVVFXdHVQ?=
- =?utf-8?B?Zy9CU0dYYTRTaXh6a0NWRkl0RFdickcxSXBFQ2U0V0ExcHdYZHRXOGllZURl?=
- =?utf-8?B?NTVERGRRMkhNTWFyMzliRHloSExWZHhSR0ZQdmRYbGsvbUJHY2RibGI0QUYw?=
- =?utf-8?B?dk0xak5MMGlJSnlzRjJRSUYxUWxpQ2NMMXJ6WnFGbGdjanF0Y08vS3hSbERN?=
- =?utf-8?B?enh4K0l3Q25acU16YVZTemtHOXdJbGNQVVhoL1c2L1NGaGVCbU1VeStnbTdL?=
- =?utf-8?B?eGhNUVRhWW9BOVlMYmk5VEJlTUlyOXJaYldqdGlXc3lvTWU5dkdQcHJteHp0?=
- =?utf-8?B?d0VRaXEyNkgwakdTaU12ZGZjWHI0T1BpaVRyV3l1RTlHc0EwSGUvamJZL2JF?=
- =?utf-8?B?Y0VvSVVyb3dic2J4aFFpTmhOWjZYK0E2WnFkSVhBQVZvbEZwMkk1bExPVE1o?=
- =?utf-8?B?WGJiYUZucnpWRlRJZlBGa3RQQjdRdGkrclBtS1hkT2JWWllJcUtZdEh0b0hG?=
- =?utf-8?B?SU5TMjNpRzAxSnNEdEN4SytmVE1LV0oxVDBlZXQ4Ryt0KzNoVzMxb2pFeVA3?=
- =?utf-8?B?UzBIaGMxcDRZWEZhR3Zxelg4TS9kUHRuYnZuVWtqQytnc0N5MkFFcmhIRmEx?=
- =?utf-8?B?WFdEdm00cWZnVHJ3WkdTZFo2RXlXZGxjcEhpeDlUTlAvVmR1b1N5d1JhcTlU?=
- =?utf-8?B?NDE2RUpTOC8wcGhYY3JqRU8wYm85L2dtcmhoNmkzKzhJekhNVnVieXJOWnVR?=
- =?utf-8?B?TE1nV2k0TWNvcnYvVVhxeDlqb2w0cExhcUJlbUlTR09EemcrbjBUaDhWOGpX?=
- =?utf-8?B?MEMvNWR4N1NLczlFT1R1TzgxK3Rqd3VFc0RLVElkdGpLeGVMcWkvbjRCa0pB?=
- =?utf-8?B?bVpWdWtrUHFqa0ZObVYvSDNQYlM1dW96VzZEc2k2S2RRZWZUQmw4V2diWi9R?=
- =?utf-8?B?dmtIM2FCNG1MRndjS1FmWmJ2VENzUWt5cVNuRGVwSVFtVEhWSzJtbGNybnVj?=
- =?utf-8?B?WEUvenVVUjBqNSs1N0tSQVhDOU5rNWIvZlhZaUMyWTNma09WZGNYN3JvWndV?=
- =?utf-8?B?cDFlNDBtTUE5azVEZ0poVmFvSDI3T0NSZVRsN2l4M0FvT3BURFhjVXlLVEhZ?=
- =?utf-8?B?eDVRNXpqNnRHY01nYUsyaldVeFpwRmFvYUdjcEEzS2t0eUd1WWQ1MXlUci9j?=
- =?utf-8?B?cmJ5LzJEcGcrSlZRRHhtS2M5RHV1dFNTbGQrYWdIMW1UWHJ6cllNRVZsMDMx?=
- =?utf-8?B?ZWpIQXR6dURHcGF6eDRGSWNCSGZGV0I4MHMxOWsxYXhPREtueDBKRTRoYUhP?=
- =?utf-8?B?T2R2SWQ2Wmt0VXUvQ0ZKM1BFZTZRTENQbTdycWIzS1kxRHNkWEg5OUNXN0Fw?=
- =?utf-8?B?djFjcHQvYzJxbjJ2dFNLQW9BaHZWN2pSdkJ6MnMrenI3MVd3eHlYcWFMc3Rt?=
- =?utf-8?B?SEpxcU1PY2dRaGxFZHZQUWY0a1ZqU0RzRkZ3cXVoSnc5aFo2Z3I0a3lKZUJa?=
- =?utf-8?B?VE5wNGRiQnVWRDJ1dERlU3JDT0J3c3M5ZjFHRjM1TFUzSENUcFRXWklDTlUz?=
- =?utf-8?B?Mk9mWTE2V3ZIQTBIeWV5LzV3YWRtZnRBMFRYaXorcEkrMEtDMTZrdXhLNm8y?=
- =?utf-8?B?dmFBWDlzeUh3dGFoZmRsd2ViMm8yUlFBaE45b0lGQWhwNFVjRUd3VGd3eVZY?=
- =?utf-8?B?MWJSRzY3Y1FxaWRrLzMzQXBsOTdsUjVNNEhzdUdrK0kzSlhLRnU0aUVwNyty?=
- =?utf-8?B?MDVQY3NlYmJsUHlIdnBxQWx0aGcwS1l5UVl5aXlLU2wwSkR4Q3J5Y2tTMG5F?=
- =?utf-8?B?dHpBaGw2THlsWkdqUGdNUG1zSnFROTdqSzY3L1h5dFNyRjk2ZURCVDA3OXhV?=
- =?utf-8?B?OW9nMFNHYjZqVTlVb3NXOGQrQ3dZUnYxRXpjR1E4TEhZTktlLzBWbnpQZjV1?=
- =?utf-8?B?TlRyTnlJallER3hpTzFoU3ZqbGJQRHgwNTNHWFB6OEVwUU1oVTczZnE1c1JU?=
- =?utf-8?B?N2ZlNHZNaGFJMWFKM1EvZ3dBNVhOeUxZQlNpd3ZjZEJzRDJNMVRDQTd2Y3pO?=
- =?utf-8?B?TnZjd3FQWEFXeTJKZnZnOWZsZEZEUnhLYTBhM3NrRStGRDBxZFd1VzhvZEVP?=
- =?utf-8?B?dUFqbVNYejNrYXphZTFUWStBaHk4OHdDNFkrUlNjaDBPbkJWV1l1QUIydWNM?=
- =?utf-8?Q?JnUTle3WSa+G+jqFw/UnK0MSIm1vzyktQ7Bp1cTxDEuC?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b096c2cb-a8d3-4098-d14e-08db3507cc34
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 12:26:21.3375
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /6LALqDz9PmyU1K83FyB5TD+ACp3xpQxqoA8rzR+eq9lMYi/ZM3Eteaz9mbJBTCpkWtPvuQgXox7SX5PWC71Ww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6970
-X-Spam-Status: No, score=-1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oE4Bg3zikhBh1VXn"
+Content-Disposition: inline
+In-Reply-To: <cover.1680610554.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -140,28 +75,95 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-> Enabled restrict interrupt injection function. Remove MSR_AMD64_
-> SNP_RESTRICTED_INJ from SNP_FEATURES_IMPL_REQ to let kernel boot
-> up with this function.
-> ---
->   arch/x86/boot/compressed/sev.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> index d63ad8f99f83..a5f41301a600 100644
-> --- a/arch/x86/boot/compressed/sev.c
-> +++ b/arch/x86/boot/compressed/sev.c
-> @@ -299,7 +299,6 @@ static void enforce_vmpl0(void)
->    */
->   #define SNP_FEATURES_IMPL_REQ	(MSR_AMD64_SNP_VTOM |			\
->   				 MSR_AMD64_SNP_REFLECT_VC |		\
-> -				 MSR_AMD64_SNP_RESTRICTED_INJ |		\
+--oE4Bg3zikhBh1VXn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Should we update the bit in "SNP_FEATURES_PRESENT" instead?
+A few IIC channel descriptions explained used units as:
+data is in foo "that can be processed into an" [unit] value. The "can be
+processed into" is quite broad statement as it does not really explain
+what this processing means. This makes units pretty much useless.
 
-Thanks,
-Pankaj	
->   				 MSR_AMD64_SNP_ALT_INJ |		\
->   				 MSR_AMD64_SNP_DEBUG_SWAP |		\
->   				 MSR_AMD64_SNP_VMPL_SSS |		\
+After discussion with Jonathan, it seems the units for these channels
+should also be well-defined as for all other channels. The processing
+means the standard scale and offset application that is used throughout
+the IIO. Let's make it more obvious by stating that the units are [unit]
+after scale ane offset are applied.
 
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+---
+ Documentation/ABI/testing/sysfs-bus-iio | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/te=
+sting/sysfs-bus-iio
+index 6ba34c0d9789..b435c6f065ae 100644
+--- a/Documentation/ABI/testing/sysfs-bus-iio
++++ b/Documentation/ABI/testing/sysfs-bus-iio
+@@ -1807,8 +1807,8 @@ What:		/sys/bus/iio/devices/iio:deviceX/out_resistanc=
+eX_raw
+ KernelVersion:	4.3
+ Contact:	linux-iio@vger.kernel.org
+ Description:
+-		Raw (unscaled no offset etc.) resistance reading that can be processed
+-		into an ohm value.
++		Raw (unscaled no offset etc.) resistance reading.
++		Units after application of scale and offset are ohms.
+=20
+ What:		/sys/bus/iio/devices/iio:deviceX/heater_enable
+ KernelVersion:	4.1.0
+@@ -1894,8 +1894,9 @@ What:		/sys/bus/iio/devices/iio:deviceX/in_electrical=
+conductivity_raw
+ KernelVersion:	4.8
+ Contact:	linux-iio@vger.kernel.org
+ Description:
+-		Raw (unscaled no offset etc.) electric conductivity reading that
+-		can be processed to siemens per meter.
++		Raw (unscaled no offset etc.) electric conductivity reading.
++		Units after application of scale and offset are siemens per
++		meter.
+=20
+ What:		/sys/bus/iio/devices/iio:deviceX/in_countY_raw
+ KernelVersion:	4.10
+@@ -1952,7 +1953,7 @@ KernelVersion:	4.18
+ Contact:	linux-iio@vger.kernel.org
+ Description:
+ 		Raw (unscaled) phase difference reading from channel Y
+-		that can be processed to radians.
++		Units after application of scale and offset are radians.
+=20
+ What:		/sys/bus/iio/devices/iio:deviceX/in_massconcentration_pm1_input
+ What:		/sys/bus/iio/devices/iio:deviceX/in_massconcentrationY_pm1_input
+--=20
+2.39.2
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--oE4Bg3zikhBh1VXn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQsFz4ACgkQeFA3/03a
+ocUr9wgAiu3ubVp27IMsxoQqIez73QDUdxWdNu6iAhWEKQPeyDDtgl32Pbz3jBKa
+qz+QMdm5SDVYdYfVswHpYWOpnvCG94vVOwtCc4rqm8IK/i0MIUGVjcqVBx/2LxVu
+TEdy9qNO5wD/da5/AetJeEuEKoTkZPq9oy19Lbi4EXXuAWbgBT3NbM6XcFIS/snZ
+7XjH+i1pu9Qw/EgOfpNUEhC//83yb3Rf6K4Ie4BqL6g3JYIynbej0RyHELYl2yIs
+3neUwhJD21/5KR/CvqyxVrfBO2etW1/j/UaX/7sm89cU09pAs0FpJkMbHouL+wV2
+30p4W8R1EQaFEldMr6hV+qQvB/3Ohw==
+=rku9
+-----END PGP SIGNATURE-----
+
+--oE4Bg3zikhBh1VXn--
