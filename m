@@ -2,77 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BB26D5A1B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EEEB6D5A20
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233951AbjDDH5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 03:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
+        id S233929AbjDDH7T convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Apr 2023 03:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjDDH5N (ORCPT
+        with ESMTP id S229629AbjDDH7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 03:57:13 -0400
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A45310EB;
-        Tue,  4 Apr 2023 00:57:12 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id A69AD100092; Tue,  4 Apr 2023 08:57:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-        t=1680595030; bh=tFJ8XvtQpKbMir3v/8NgdGKtwzIot+dw70ghZwiiuR0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y+Lans47MkyD1Ltz2+Fj0te4w5FJOeg1W/iHvD7G9b/htihCX02iV084h190jHD0P
-         3/5yI2Tv+VoM636QjQ2T2eH2GbyXTXF4JFJEUBscuoc20iBbykam4eji8/qny1kmdt
-         /YLD54F3JrqEkDkLOCMm+25/vh19Jl4mjaCNAcOQ0PfYgzZWz7jLcscDil52jWMKqb
-         GvCfmGM9Z04mSBoqbfznuiQhmxJAQ9winf3mePpGklQfsEzMVnvzrGH/E9cGFNchHV
-         B342fcTKa3h/XN5L8KtKwYbiSvAv4lR924L+Y93U0avrHyzLqtb6bzQTC6w2Q0uIVq
-         eXdEpGEQXykZQ==
-Date:   Tue, 4 Apr 2023 08:57:10 +0100
-From:   Sean Young <sean@mess.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ravi Kumar V <kumarrav@codeaurora.org>,
-        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
-        <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Matthew Lear <matthew.lear@broadcom.com>
-Subject: Re: [PATCH v2 0/2] Correct gpio-ir-recv wakeup capability
-Message-ID: <ZCvYVoH96pINE+4I@gofer.mess.org>
-References: <20230324203833.3540187-1-f.fainelli@gmail.com>
- <4cea1e91-f0d4-291f-813d-353f8b9d2a5e@gmail.com>
+        Tue, 4 Apr 2023 03:59:18 -0400
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7471B171F;
+        Tue,  4 Apr 2023 00:59:17 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 237E364551A4;
+        Tue,  4 Apr 2023 09:59:16 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Hz8yMQEoa-uq; Tue,  4 Apr 2023 09:59:15 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id AAA4164551A5;
+        Tue,  4 Apr 2023 09:59:15 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id F9UrfvwtSDma; Tue,  4 Apr 2023 09:59:15 +0200 (CEST)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 7D4B564551A4;
+        Tue,  4 Apr 2023 09:59:15 +0200 (CEST)
+Date:   Tue, 4 Apr 2023 09:59:15 +0200 (CEST)
+From:   Richard Weinberger <richard@nod.at>
+To:     davidgow <davidgow@google.com>
+Cc:     anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um <linux-um@lists.infradead.org>, x86 <x86@kernel.org>,
+        llvm <llvm@lists.linux.dev>,
+        Rust for Linux Kernel <rust-for-linux@vger.kernel.org>,
+        kunit-dev <kunit-dev@googlegroups.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        mingo <mingo@redhat.com>, tglx <tglx@linutronix.de>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Message-ID: <892003004.13106.1680595155348.JavaMail.zimbra@nod.at>
+In-Reply-To: <2128345299.463203.1680251851757.JavaMail.zimbra@nod.at>
+References: <20230318041555.4192172-1-davidgow@google.com> <CABVgOS=pr=jXq4qRrKaCy47xczDaFXFKCPanVvaZ+MfQmtwK8A@mail.gmail.com> <2128345299.463203.1680251851757.JavaMail.zimbra@nod.at>
+Subject: Re: [PATCH] arch:um: Only disable SSE on clang to work around old
+ GCC bugs
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4cea1e91-f0d4-291f-813d-353f8b9d2a5e@gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: arch:um: Only disable SSE on clang to work around old GCC bugs
+Thread-Index: KRbe3B8OBuNHdw1xcXwa3ZqHhmy+S+VRZu+O
+X-Spam-Status: No, score=0.0 required=5.0 tests=PDS_TONAME_EQ_TOLOCAL_SHORT,
+        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 03:06:44PM -0700, Florian Fainelli wrote:
-> On 3/24/23 13:38, Florian Fainelli wrote:
-> > This small patch series fixes the gpio-ir-recv binding and driver to
-> > first indicate that it can be a wake-up source for the system, and
-> > second actually make that happen.
-> > 
-> > Changes in v2:
-> > - corrected the indentation of the description for "wakeup-source"
-> > 
-> > Florian Fainelli (2):
-> >    dt-bindings: media: gpio-ir-receiver: Document wakeup-souce property
-> >    media: rc: gpio-ir-recv: Fix support for wake-up
+----- Ursprüngliche Mail -----
+>> Von: "davidgow" <davidgow@google.com>
+>> An: "richard" <richard@nod.at>, "anton ivanov"
+>> <anton.ivanov@cambridgegreys.com>, "Johannes Berg"
+>> Any chance we could get this picked up as a fix for 6.3? The UML build
+>> is still broken with older gcc versions.
 > 
-> Ping? Someone maintaining this driver?
+> Sure. Just got flooded with other stuff. :-S
 
-That's me :) Applied, thanks for the reminder.
+Patch applied to fixes branch. PR will happen soon.
 
+Thanks everyone and sorry for the delay on my side!
 
-Sean
+--
+Thanks,
+//richard
