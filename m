@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8C66D6822
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A976D6825
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 18:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234916AbjDDQBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 12:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S235390AbjDDQBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 12:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234711AbjDDQA5 (ORCPT
+        with ESMTP id S235333AbjDDQB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:00:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B54A40EE
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 09:00:56 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pjj5S-00033Z-VH; Tue, 04 Apr 2023 18:00:46 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pjj5Q-00043l-2C; Tue, 04 Apr 2023 18:00:44 +0200
-Date:   Tue, 4 Apr 2023 18:00:44 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Arun.Ramadoss@microchip.com
-Cc:     olteanv@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
-        kuba@kernel.org, edumazet@google.com, pabeni@redhat.com,
-        Woojung.Huh@microchip.com, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, kernel@pengutronix.de
-Subject: Re: [PATCH net-next v1 3/7] net: dsa: microchip: ksz8: Make
- ksz8_r_sta_mac_table() static
-Message-ID: <20230404160044.GC4044@pengutronix.de>
-References: <20230404101842.1382986-1-o.rempel@pengutronix.de>
- <20230404101842.1382986-4-o.rempel@pengutronix.de>
- <6d428dfa9b1e3e008a4ecc8c8f8653843afad794.camel@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6d428dfa9b1e3e008a4ecc8c8f8653843afad794.camel@microchip.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 4 Apr 2023 12:01:27 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9DA4EC2;
+        Tue,  4 Apr 2023 09:01:20 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id E0A415C006F;
+        Tue,  4 Apr 2023 12:01:19 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 04 Apr 2023 12:01:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1680624079; x=1680710479; bh=Qn
+        6ZM6O+VkPQESTQhCqrbkz3xFurEda57CnQ1FINQ08=; b=HljWSxrguEuItbBSH2
+        zRbg9l5WDAqQrDWhNz/NLnZdl0uzb6dkYOM6lCFsE4zp2I6ly8DGWPi23+FXZPAI
+        q3aIa8OXrd7Bmwn73GDD6vtSfCTCI7c3LfA+ZP91q2FrIdnAXCqFtosFBBjjbckZ
+        pB3h1OZM2LqROyKHc74t4enh8T+w1jCNQ+uQ3Omgsqt35q+GXNmDfjH/Dg2cFowq
+        IzFhKoDG7roj6K6XPv8S1rdPfx5MWMB/GSgvuFPLu3xv86d6ClQ0lbnQR2Mw22i5
+        aaOg0OGxdt2HJl9Mw0C6yR2y+fBL4sqbRoDKe/YLT+iTlxK9TP76q4k9EZOtf+QF
+        twXA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680624079; x=1680710479; bh=Qn6ZM6O+VkPQE
+        STQhCqrbkz3xFurEda57CnQ1FINQ08=; b=Gq+QVSlfmiiGUexss/yoaHUBoGD+d
+        mvYFkktVS5znav1yEyY0++vQSAnvr/dkWzLE5HJyohIRMCf2hSCyD1QLCiLKMvkE
+        e9eb25Se7lw+SoqpOQsYZL0BXNFCr8rEaL1sOhHq6yCdeESW8l0JobvRQSJcjT0i
+        Lxt7dzG98fLAplRLwHTkOsNr0+t12DuJrXm6yZWkDQmnp8A0Sx7+aGaK87gyV9jJ
+        iW4IzaZasoFn9QRfc4zQjPSSvRjHYN9c/g3/gP30SfjkxOy1T0o0Aee/fKHZcCVa
+        4SA8BBZ9mJup7Taown5uNlcH0lFESO47x/3ohaGOn2XIewwkx1I0i3XaQ==
+X-ME-Sender: <xms:z0ksZJRHO4JaB5fJ6XDbWe5Okye_QR-0V8WNvN69DRsss-sXug9EPw>
+    <xme:z0ksZCyO8lHVVp8nipU4ejH1FU78Daw0kF4hiN69crFAWVyuSQiZ5t2U2TnYjR_gu
+    6nV1TWOv0N6lLuueN8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:z0ksZO1o8v_RJ5xcSp62wzBUNt8ydlexnY6ZPt3ln5letcjmX1lLsw>
+    <xmx:z0ksZBAH20nsWJMAyoTTPkWjuxFFniZKayj9N_hCcdfY9xtZ--do2g>
+    <xmx:z0ksZCgmntnmKBnVj20-6CgWz1A2pN4ykrY1KmB9qYmSL8pAFIuf9g>
+    <xmx:z0ksZKLW-BIf06gIEVntBK03r2Oz0unaUAoeCynnkphRlOFlkCMz8A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A518EB60092; Tue,  4 Apr 2023 12:01:19 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
+Mime-Version: 1.0
+Message-Id: <a270b336-fc10-43fe-9c0f-8035e5bccb5e@app.fastmail.com>
+In-Reply-To: <20230310093047.dneojlst5x4qqgwg@skbuf>
+References: <20230109131153.991322-1-vladimir.oltean@nxp.com>
+ <20230310093047.dneojlst5x4qqgwg@skbuf>
+Date:   Tue, 04 Apr 2023 18:00:58 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Vladimir Oltean" <vladimir.oltean@nxp.com>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] asm-generic/io.h: suppress endianness warnings for readq() and
+ writeq()
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 03:11:02PM +0000, Arun.Ramadoss@microchip.com wrote:
-> Hi Oleksij,
-> On Tue, 2023-04-04 at 12:18 +0200, Oleksij Rempel wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you
-> > know the content is safe
-> > 
-> > As ksz8_r_sta_mac_table() is only used within ksz8795.c, there is no
-> > need
-> > to export it. Make the function static for better encapsulation.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  drivers/net/dsa/microchip/ksz8.h    | 2 --
-> >  drivers/net/dsa/microchip/ksz8795.c | 4 ++--
-> >  2 files changed, 2 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/net/dsa/microchip/ksz8.h
-> > b/drivers/net/dsa/microchip/ksz8.h
-> > index ad2c3a72a576..d87f8ebc6323 100644
-> > --- a/drivers/net/dsa/microchip/ksz8.h
-> > +++ b/drivers/net/dsa/microchip/ksz8.h
-> > @@ -21,8 +21,6 @@ int ksz8_r_phy(struct ksz_device *dev, u16 phy, u16
-> > reg, u16 *val);
-> >  int ksz8_w_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 val);
-> >  int ksz8_r_dyn_mac_table(struct ksz_device *dev, u16 addr, u8
-> > *mac_addr,
-> >                          u8 *fid, u8 *src_port, u8 *timestamp, u16
-> > *entries);
-> > -int ksz8_r_sta_mac_table(struct ksz_device *dev, u16 addr,
-> > -                        struct alu_struct *alu);
-> 
-> 
-> ksz8_r_dyn_mac_table() also not used outside KSZ8795.h. It can
-> also be made static
+On Fri, Mar 10, 2023, at 10:30, Vladimir Oltean wrote:
+> Hi Arnd,
+>
+> On Mon, Jan 09, 2023 at 03:11:52PM +0200, Vladimir Oltean wrote:
+>> Commit c1d55d50139b ("asm-generic/io.h: Fix sparse warnings on
+>> big-endian architectures") missed fixing the 64-bit accessors.
+>> 
+>> Arnd explains in the attached link why the casts are necessary, even if
+>> __raw_readq() and __raw_writeq() do not take endian-specific types.
+>> 
+>> Link: https://lore.kernel.org/lkml/9105d6fc-880b-4734-857d-e3d30b87ccf6@app.fastmail.com/
+>> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+>> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-:) Ack, i have pending series of patch for dyn MAC table.
+>>
+>
+> Did these patches get lost?
 
-> Acked-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+Yes, sorry about that. I picked them up for 6.3 now, along with another
+one that I just remembered.
 
-
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+     Arnd
