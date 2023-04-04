@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3696D5A29
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D38E6D5A2C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 10:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbjDDIBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 04:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        id S233951AbjDDICU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 04:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjDDIBq (ORCPT
+        with ESMTP id S234026AbjDDICI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 04:01:46 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE06198C;
-        Tue,  4 Apr 2023 01:01:42 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id bi31so23622068oib.9;
-        Tue, 04 Apr 2023 01:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680595301;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qj7wacCuHM8tfquKzfx6fQQY+WR52D59OKXynGSyeSE=;
-        b=fwzC1GvMOdpOTVy3nAPtU5TXO0MUxhlV6MYLmXwlzGNTg+uvRk1jTRgoZc6KKvo7SQ
-         4R4G94ha/s94Q6Xl7amdh+c1qhsd1AL1v/WIRnOsmadp7dvx1bzen6MJ51Q8cSveALRB
-         6pmeAkD7J/2LrVh3m43DgsEI/dZyQG4u7XjAodfM3Go78R7GAxuD8J96/eS0jS3HP/MO
-         HhZR1olbznPXix5E6ZG7AFS5iF6uReDPssjje7OZpR5VaNLHkw2neCVMF+IMRCDCmq9N
-         +j27fgDh658FLe+HCbY+gAwGSF9S1bjcFFfMTdP81n+o8fzQuyXChJhoP22uMMXL+e6L
-         EIHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680595301;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qj7wacCuHM8tfquKzfx6fQQY+WR52D59OKXynGSyeSE=;
-        b=0epReBEc+BffLL3wZJpt7qzejncsWtQeLI0ac2chxUg884do8gwnTuFkvQbPSu5T3I
-         bwlhz4hFUxLK9DRYbRWcqZUuyd8fynfp/5GqUIz0IFqODu5oBhjCZYRfRVBSfdrmoTIQ
-         9ZqBP7w5brPMebXBHw61Upj0Wxl3AB8i+tFpYMqzcQC2DBxUbtwILCjXzneTKiJYhl67
-         CYlOw7sGJ7+fa++/uX7Qatq2vSKf9vmCyuT5qj8PJHqlQnQuLVCpA+P4uLHvr+wXGT2A
-         MadiXr8tvypbxbsV0vIt0p03GBv6j48wLrJov8+ED7GxdHqecUGjH4odTj4GbNY3LIlt
-         G55Q==
-X-Gm-Message-State: AAQBX9c1Cc/6nF3HJBPHyW80QNOi9tW9KjX1thEFQWLnH/kDdsOEnJm1
-        DFWf43BygQrSNasVOUYMBbS+dkJtbN7LXD9L6DwajpTIMkg=
-X-Google-Smtp-Source: AKy350aHSEtuLB/5n0G4vfjplMTWsMaC6MXpBG/eIQTT8wP9Hvop1r0Ck9O7/NJYlNM8BKIeyzoUHF8nDhzCEf56er4=
-X-Received: by 2002:a05:6808:2807:b0:387:1afd:5924 with SMTP id
- et7-20020a056808280700b003871afd5924mr487816oib.8.1680595301780; Tue, 04 Apr
- 2023 01:01:41 -0700 (PDT)
+        Tue, 4 Apr 2023 04:02:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF571995;
+        Tue,  4 Apr 2023 01:02:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89F2B62EEF;
+        Tue,  4 Apr 2023 08:02:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E05FC433D2;
+        Tue,  4 Apr 2023 08:02:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680595322;
+        bh=UummvQDzVR0IbYVCIAOXvL4I/p9JIlrOwfZP/nNyf38=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kZTaQAr7He86u4Z6QLMJfftcxkExsc7zlxD/E55ymJCIONSXkRLH9+lVB5qGxRFzW
+         7cv0+RyztVKu0KPYlFUmafiCT4PZWibjGARpGgNMCglndqjdz0zmeKl3qu50wxlWkd
+         6f8lhdfZjWV7yvNvrVuEvY/rx6WAlLIs8oQla+FFSysxDP21E5gYMqXAF+Xhxwf7lA
+         RFrEOZgWB1oDJULklblJlx0w6JNDKm4MgGgvcyQLPGKBayzwJ5sfv+2w6dwQuLTfkc
+         lqimQ/pH0Qmd0BNCjpjp1MVYUpRKmxsYwiJaIpqgj1y1Ml4CVoIdCRQtSDpU6aYhg/
+         0HuNb2Eo2eg3Q==
+Message-ID: <75db038b-ec7b-80e5-2652-8c5d2a9e317a@kernel.org>
+Date:   Tue, 4 Apr 2023 11:01:58 +0300
 MIME-Version: 1.0
-References: <20230330102100.17590-1-paul@crapouillou.net> <20230401154220.755e52cb@jic23-huawei>
-In-Reply-To: <20230401154220.755e52cb@jic23-huawei>
-From:   Fabrizio Lamarque <fl.scratchpad@gmail.com>
-Date:   Tue, 4 Apr 2023 10:01:30 +0200
-Message-ID: <CAPJMGm6Xok4gM87VOFgdoNa5iBKW_d1+vNM2wXAvWxe16v=CmQ@mail.gmail.com>
-Subject: Re: [PATCH] iio: adc: ad7192: Change "shorted" channels to differential
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alisa Roman <alisa.roman@analog.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH 2/2] usb: dwc3: Support
+ 'snps,gadget-keep-connect-sys-sleep' feature
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "vigneshr@ti.com" <vigneshr@ti.com>, "srk@ti.com" <srk@ti.com>,
+        "r-gunasekaran@ti.com" <r-gunasekaran@ti.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230320185206.a4o4bmhml7rlg6f7@synopsys.com>
+ <48814d21-24d9-3141-68c8-316d071de1a8@kernel.org>
+ <20230321184346.dxmqwq5rcsc2otrj@synopsys.com>
+ <20230321190458.6uqlbtyfh3hc6ilg@synopsys.com>
+ <7db7eb59-68fc-b7b2-5a29-00b698f68cbb@kernel.org>
+ <20230322173150.nscqyzwcrecxjuaa@synopsys.com>
+ <20230323021737.pv2nrb2md54a5pdg@synopsys.com>
+ <624243b4-3fb5-6e60-e324-8df6b853205f@kernel.org>
+ <20230323205139.4on6vx555ohdec7y@synopsys.com>
+ <4d2f628e-6adc-5190-61b3-cc9d61f34a84@kernel.org>
+ <20230403233652.2exkx2ikifuo4m6h@synopsys.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230403233652.2exkx2ikifuo4m6h@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,113 +72,256 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 1, 2023 at 4:27=E2=80=AFPM Jonathan Cameron <jic23@kernel.org> =
-wrote:
->
-> On Thu, 30 Mar 2023 12:21:00 +0200
-> Paul Cercueil <paul@crapouillou.net> wrote:
->
-> > The AD7192 provides a specific channel configuration where both negativ=
-e
-> > and positive inputs are connected to AIN2. This was represented in the
-> > ad7192 driver as a IIO channel with .channel =3D 2 and .extended_name s=
-et
-> > to "shorted".
-> >
-> > The problem with this approach, is that the driver provided two IIO
-> > channels with the identifier .channel =3D 2; one "shorted" and the othe=
-r
-> > not. This goes against the IIO ABI, as a channel identifier should be
-> > unique.
-> >
-> > Address this issue by changing "shorted" channels to being differential
-> > instead, with channel 2 vs. itself, as we're actually measuring AIN2 vs=
-.
-> > itself.
-> >
-> > Note that the fix tag is for the commit that moved the driver out of
-> > staging. The bug existed before that, but backporting would become very
-> > complex further down and unlikely to happen.
-> >
-> > Fixes: b581f748cce0 ("staging: iio: adc: ad7192: move out of staging")
-> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > Co-developed-by: Alisa Roman <alisa.roman@analog.com>
-> > Signed-off-by: Alisa Roman <alisa.roman@analog.com>
->
-> +CC Fabrizio who has a fix series under review for the same driver.
->
-> I'm going to let this one sit on the list for a little while.
-> It is a breaking ABI change (that hopefully no one will notice - given
-> the first fix from Fabrizio shows the driver crashes on probe currently w=
-e
-> should be safe on that).
->
-> Arguably just changing the index would also have been an ABI change, but
-> that would have gotten past any code that didn't take much notice of the
-> channel index whereas this won't.
->
-> Anyhow, will give it a little while for comments then pick this up
-> on top of Fabrizio's fixes series.  Give me a poke in 2-3 weeks if I
-> seem to have lost it.
 
-The bug report in libiio related to this patch was from the company I work =
-for.
-I guess this confirms there are few actual users of the driver (at least
-of its later revisions).
 
-I see a somewhat limited usage of the "input2 vs input2" configuration,
-it was just causing a libiio initialization issue, without impacting
-sysfs operation.
-The breaking ABI change would impact only users of this channel
-relying on sysfs without libiio.
+On 04/04/2023 02:37, Thinh Nguyen wrote:
+> On Fri, Mar 31, 2023, Roger Quadros wrote:
+>> Hi,
+>>
+>> On 23/03/2023 22:51, Thinh Nguyen wrote:
+>>> On Thu, Mar 23, 2023, Roger Quadros wrote:
+>>>>
+>>>>
+>>>> On 23/03/2023 04:17, Thinh Nguyen wrote:
+>>>>> On Wed, Mar 22, 2023, Thinh Nguyen wrote:
+>>>>>> On Wed, Mar 22, 2023, Roger Quadros wrote:
+>>>>>>> On 21/03/2023 21:05, Thinh Nguyen wrote:
+>>>>>>>> On Tue, Mar 21, 2023, Thinh Nguyen wrote:
+>>>>>>>>> On Tue, Mar 21, 2023, Roger Quadros wrote:
+>>>>>>>>>> Hi Thinh,
+>>>>>>>>>>
+>>>>>>>>>> On 20/03/2023 20:52, Thinh Nguyen wrote:
+>>>>>>>>>>> Hi,
+>>>>>>>>>>>
+>>>>>>>>>>> On Mon, Mar 20, 2023, Roger Quadros wrote:
+>>>>>>>>>>>> Implement 'snps,gadget-keep-connect-sys-sleep' property.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Do not stop the gadget controller and disconnect if this
+>>>>>>>>>>>> property is present and we are connected to a USB Host.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Prevent System sleep if Gadget is not in USB suspend.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>>>>>>>>>>>> ---
+>>>>>>>>>>>>  drivers/usb/dwc3/core.c   | 25 +++++++++++++++++++------
+>>>>>>>>>>>>  drivers/usb/dwc3/core.h   |  2 ++
+>>>>>>>>>>>>  drivers/usb/dwc3/gadget.c | 25 +++++++++++++++++++++++--
+>>>>>>>>>>>>  3 files changed, 44 insertions(+), 8 deletions(-)
+>>>>>>>>>>>>
+>>>>>>>>>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>>>>>>>>>>>> index 476b63618511..a47bbaa27302 100644
+>>>>>>>>>>>> --- a/drivers/usb/dwc3/core.c
+>>>>>>>>>>>> +++ b/drivers/usb/dwc3/core.c
+>>>>>>>>>>>> @@ -1575,6 +1575,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>>>>>>>>>>>>  	dwc->dis_split_quirk = device_property_read_bool(dev,
+>>>>>>>>>>>>  				"snps,dis-split-quirk");
+>>>>>>>>>>>>  
+>>>>>>>>>>>> +	dwc->gadget_keep_connect_sys_sleep = device_property_read_bool(dev,
+>>>>>>>>>>>> +				"snps,gadget-keep-connect-sys-sleep");
+>>>>>>>>>>>> +
+>>>>>>>>>>>>  	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
+>>>>>>>>>>>>  	dwc->tx_de_emphasis = tx_de_emphasis;
+>>>>>>>>>>>>  
+>>>>>>>>>>>> @@ -2027,14 +2030,20 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>>>>>>>>>>>>  {
+>>>>>>>>>>>>  	unsigned long	flags;
+>>>>>>>>>>>>  	u32 reg;
+>>>>>>>>>>>> +	int ret;
+>>>>>>>>>>>>  
+>>>>>>>>>>>>  	switch (dwc->current_dr_role) {
+>>>>>>>>>>>>  	case DWC3_GCTL_PRTCAP_DEVICE:
+>>>>>>>>>>>>  		if (pm_runtime_suspended(dwc->dev))
+>>>>>>>>>>>>  			break;
+>>>>>>>>>>>> -		dwc3_gadget_suspend(dwc);
+>>>>>>>>>>>> +		ret = dwc3_gadget_suspend(dwc);
+>>>>>>>>>>>> +		if (ret) {
+>>>>>>>>>>>> +			dev_err(dwc->dev, "gadget not suspended: %d\n", ret);
+>>>>>>>>>>>> +			return ret;
+>>>>>>>>>>>> +		}
+>>>>>>>>>>>>  		synchronize_irq(dwc->irq_gadget);
+>>>>>>>>>>>> -		dwc3_core_exit(dwc);
+>>>>>>>>>>>> +		if(!dwc->gadget_keep_connect_sys_sleep)
+>>>>>>>>>>>> +			dwc3_core_exit(dwc);
+>>>>>>>>>>>>  		break;
+>>>>>>>>>>>>  	case DWC3_GCTL_PRTCAP_HOST:
+>>>>>>>>>>>>  		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+>>>>>>>>>>>> @@ -2088,11 +2097,15 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>>>>>>>>>>>>  
+>>>>>>>>>>>>  	switch (dwc->current_dr_role) {
+>>>>>>>>>>>>  	case DWC3_GCTL_PRTCAP_DEVICE:
+>>>>>>>>>>>> -		ret = dwc3_core_init_for_resume(dwc);
+>>>>>>>>>>>> -		if (ret)
+>>>>>>>>>>>> -			return ret;
+>>>>>>>>>>>> +		if (!dwc->gadget_keep_connect_sys_sleep)
+>>>>>>>>>>>> +		{
+>>>>>>>>>>>> +			ret = dwc3_core_init_for_resume(dwc);
+>>>>>>>>>>>> +			if (ret)
+>>>>>>>>>>>> +				return ret;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
+>>>>>>>>>>>> +		}
+>>>>>>>>>>>>  
+>>>>>>>>>>>> -		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
+>>>>>>>>>>>>  		dwc3_gadget_resume(dwc);
+>>>>>>>>>>>>  		break;
+>>>>>>>>>>>>  	case DWC3_GCTL_PRTCAP_HOST:
+>>>>>>>>>>>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>>>>>>>>>>>> index 582ebd9cf9c2..f84bac815bed 100644
+>>>>>>>>>>>> --- a/drivers/usb/dwc3/core.h
+>>>>>>>>>>>> +++ b/drivers/usb/dwc3/core.h
+>>>>>>>>>>>> @@ -1328,6 +1328,8 @@ struct dwc3 {
+>>>>>>>>>>>>  	unsigned		dis_split_quirk:1;
+>>>>>>>>>>>>  	unsigned		async_callbacks:1;
+>>>>>>>>>>>>  
+>>>>>>>>>>>> +	unsigned		gadget_keep_connect_sys_sleep:1;
+>>>>>>>>>>>> +
+>>>>>>>>>>>>  	u16			imod_interval;
+>>>>>>>>>>>>  
+>>>>>>>>>>>>  	int			max_cfg_eps;
+>>>>>>>>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>>>>>>>>>> index 3c63fa97a680..8062e44f63f6 100644
+>>>>>>>>>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>>>>>>>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>>>>>>>>>> @@ -4572,12 +4572,23 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
+>>>>>>>>>>>>  int dwc3_gadget_suspend(struct dwc3 *dwc)
+>>>>>>>>>>>>  {
+>>>>>>>>>>>>  	unsigned long flags;
+>>>>>>>>>>>> +	int link_state;
+>>>>>>>>>>>>  
+>>>>>>>>>>>>  	if (!dwc->gadget_driver)
+>>>>>>>>>>>>  		return 0;
+>>>>>>>>>>>>  
+>>>>>>>>>>>> -	dwc3_gadget_run_stop(dwc, false, false);
+>>>>>>>>>>>> +	if (dwc->gadget_keep_connect_sys_sleep && dwc->connected) {
+>>>>>>>>>>>> +		link_state = dwc3_gadget_get_link_state(dwc);
+>>>>>>>>>>>> +		/* Prevent PM Sleep if not in U3/L2 */
+>>>>>>>>>>>> +		if (link_state != DWC3_LINK_STATE_U3)
+>>>>>>>>>>>> +			return -EBUSY;
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +		/* don't stop/disconnect */
+>>>>>>>>>>>> +		dwc3_gadget_disable_irq(dwc);
+>>>>>>>>>>>
+>>>>>>>>>>> We shouldn't disable event interrupt here. What will happen if the
+>>>>>>>>>>
+>>>>>>>>>> Due to some reason, if I don't disable the event interrupts here then
+>>>>>>>>>> after USB resume the USB controller is malfunctioning.
+>>>>>>>>>> It no longer responds to any requests from Host.
+>>>>>>>>>
+>>>>>>>>> You should look into this. These events are important as they can tell
+>>>>>>>>> whether the host initiates resume.
+>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>>> device is disconnected and reconnect to the host while the device is
+>>>>>>>>>>> still in system suspend? The host would not be able to communicate with
+>>>>>>>>>>> the device then.
+>>>>>>>>>>
+>>>>>>>>>> In the TI platform, The system is woken up on any VBUS/linestate change
+>>>>>>>>>> and in dwc3_gadget_resume we enable the events again and check for pending
+>>>>>>>>>> events. Is it pointless to check for pending events there?
+>>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> It seems fragile for the implementation to be dependent on platform
+>>>>>>>>> specific feature right?
+>>>>>>>>>
+>>>>>>>>> Also, what will happen in a typical case when the host puts the device
+>>>>>>>>> in suspend and initiates resume while the device is in system suspend
+>>>>>>>>> (and stay in suspend over a period of time)? There is no VBUS change.
+>>>>>>>>> There will be problem if host detects no response from device in time.
+>>>>>>>>>
+>>>>>>>>> Don't we need these events to wakeup the device?
+>>>>>>>
+>>>>>>> That's why the TI implementation has line-state change detection to
+>>>>>>> detect a USB resume. We are doing a out-of-band wake-up. The wake up
+>>>>>>> events are configured in the wrapper driver (dwc3-am62.c).
+>>>>>>>
+>>>>>>> Do you know of any dwc3 implementation that uses in-band mechanism
+>>>>>>> to wake up the System. i.e. it relies on events enabled in DEVTEN register?
+>>>>>>>
+>>>>>>
+>>>>>> We rely on PME. The PME is generated from the PMU of the usb controller
+>>>>>> when it detects a resume. If your platform supports hibernation and if
+>>>>>> the resume signal is connected to the lower layer power manager of your
+>>>>>> device, then you can wakeup the system one level at a time. For example,
+>>>>>> if your device is a pci device, that wakeup signal would tie to the pci
+>>>>>> power manager, waking up the pci layer before waking up the core of the
+>>>>>> usb controller. That's how the host wakes up the host system (e.g. from
+>>>>>> remote wakeup). For this to work, we expect something similar on the
+>>>>>> device side.
+>>>>>>
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> We may not be able to suspend everything in system suspend for this
+>>>>>>>> case. I'm thinking of treating these events as if they are PME to wakeup
+>>>>>>>> the device, but they are not the same. It may not be simple to handle
+>>>>>>>> this. The lower layers may need to stay awake for the dwc3 to handle
+>>>>>>>> these events. Hm... it gets a bit complicated.
+>>>>>>>
+>>>>>>> As we are going into suspend, we are not really in a position to handle any
+>>>>>>> (DEVTEN) events till we have fully resumed.
+>>>>>>> So yes, we need to rely on platform specific implementation to wake
+>>>>>>> the System on any USB event.
+>>>>>>>
+>>>>>>
+>>>>>> You may be able to detect vbus change through the connector controller.
+>>>>>> However, the usb controller is the one that detects host resume. What
+>>>>>> platform specific implementation do you have outside of the usb
+>>>>>> controller do you have to get around that?
+>>>>>>
+>>>>>> I'm not sure if your platform supports hibernation or if the PME signal
+>>>>>> on your platform can wakeup the system, but currently dwc3 driver
+>>>>>> doesn't handle hibernation (device side). If there's no hibernation,
+>>>>>> there's no PME.
+>>>>
+>>>> No, in this TI SoC, hibernation feature is not supported in the dwc3 core.
+>>>>
+>>>>>>
+>>>>>
+>>>>> Actually, I think the dwc3 core is still on during system suspend for
+>>>>> you right? Then I think we can use the wakeup event to wakeup system
+>>>>> suspend on host resume? You can ignore about PME in this case. You may
+>>>>> need to look into what needs stay awake to allow for handling of the
+>>>>> dwc3 event.
+>>>>
+>>>> But in SoC deep-sleep state, all clocks to the dwc3 core are stopped.
+>>>> So I'm not sure if dwc3 events will work.
+>>>>
+>>>
+>>> Right, you need to keep those clocks running to detect host resume.
+>>> There's still some power saving through the dwc3 controller's handling
+>>> in suspend. You may have some limited power saving from other suspended
+>>> devices on your setup. However, I don't think we can expect the platform
+>>> to go into deep-sleep and also handle host resume.
+>>
+>> Why not? if the PHY can detect the host resume and wake up the SoC it will
+>> work right?
+>>
+> 
+> Hm... I supposed it may be possible. But it may need some unconventional
+> design? The dwc3 controller is currently registered to the phy. For that
+> to work, your phy needs to be able to talk to both the dwc3 controller
+> and some other controller (equivalent to dwc3 PMU) that manages
+> power/interrupt. The dwc3 controller would need to relinquish control to
+> this other phy controller on suspend. The phy driver would then be able
+> to assert interrupt waking up the system on resume sigal detection,
+> which in turn relinquish control to the dwc3 controller. All of this has
+> to work while the phy signaling remains synchronized with the dwc3
+> controller.
 
-I tested this patch and I confirm it solves the issue with libiio.
+My understanding is that all this is taken care by PHY integration design with
+DWC3 core on the TI SoC.
 
-Fabrizio
+> 
+> From the patches you sent, I don't see the changes necesssary for this
+> to work. If there is something that I'm missing, please also note it or
+> add it here to the series.
 
->
-> Jonathan
->
->
-> > ---
-> >  drivers/iio/adc/ad7192.c | 8 ++------
-> >  1 file changed, 2 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/iio/adc/ad7192.c b/drivers/iio/adc/ad7192.c
-> > index 55a6ab591016..99bb604b78c8 100644
-> > --- a/drivers/iio/adc/ad7192.c
-> > +++ b/drivers/iio/adc/ad7192.c
-> > @@ -897,10 +897,6 @@ static const struct iio_info ad7195_info =3D {
-> >       __AD719x_CHANNEL(_si, _channel1, -1, _address, NULL, IIO_VOLTAGE,=
- \
-> >               BIT(IIO_CHAN_INFO_SCALE), ad7192_calibsys_ext_info)
-> >
-> > -#define AD719x_SHORTED_CHANNEL(_si, _channel1, _address) \
-> > -     __AD719x_CHANNEL(_si, _channel1, -1, _address, "shorted", IIO_VOL=
-TAGE, \
-> > -             BIT(IIO_CHAN_INFO_SCALE), ad7192_calibsys_ext_info)
-> > -
-> >  #define AD719x_TEMP_CHANNEL(_si, _address) \
-> >       __AD719x_CHANNEL(_si, 0, -1, _address, NULL, IIO_TEMP, 0, NULL)
-> >
-> > @@ -908,7 +904,7 @@ static const struct iio_chan_spec ad7192_channels[]=
- =3D {
-> >       AD719x_DIFF_CHANNEL(0, 1, 2, AD7192_CH_AIN1P_AIN2M),
-> >       AD719x_DIFF_CHANNEL(1, 3, 4, AD7192_CH_AIN3P_AIN4M),
-> >       AD719x_TEMP_CHANNEL(2, AD7192_CH_TEMP),
-> > -     AD719x_SHORTED_CHANNEL(3, 2, AD7192_CH_AIN2P_AIN2M),
-> > +     AD719x_DIFF_CHANNEL(3, 2, 2, AD7192_CH_AIN2P_AIN2M),
-> >       AD719x_CHANNEL(4, 1, AD7192_CH_AIN1),
-> >       AD719x_CHANNEL(5, 2, AD7192_CH_AIN2),
-> >       AD719x_CHANNEL(6, 3, AD7192_CH_AIN3),
-> > @@ -922,7 +918,7 @@ static const struct iio_chan_spec ad7193_channels[]=
- =3D {
-> >       AD719x_DIFF_CHANNEL(2, 5, 6, AD7193_CH_AIN5P_AIN6M),
-> >       AD719x_DIFF_CHANNEL(3, 7, 8, AD7193_CH_AIN7P_AIN8M),
-> >       AD719x_TEMP_CHANNEL(4, AD7193_CH_TEMP),
-> > -     AD719x_SHORTED_CHANNEL(5, 2, AD7193_CH_AIN2P_AIN2M),
-> > +     AD719x_DIFF_CHANNEL(5, 2, 2, AD7193_CH_AIN2P_AIN2M),
-> >       AD719x_CHANNEL(6, 1, AD7193_CH_AIN1),
-> >       AD719x_CHANNEL(7, 2, AD7193_CH_AIN2),
-> >       AD719x_CHANNEL(8, 3, AD7193_CH_AIN3),
->
+There is nothing more as the details are taken care by PHY logic and
+necessary integration with DWC3.
+
+For the PHY wake-up programming details you have already checked this series [1].
+
+[1] - https://lore.kernel.org/all/20230316131226.89540-1-rogerq@kernel.org/
+
+cheers,
+-roger
+
