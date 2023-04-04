@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9276D56F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 04:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 666FE6D56F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 04:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232940AbjDDC4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 22:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S232973AbjDDC55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 22:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbjDDCz7 (ORCPT
+        with ESMTP id S229815AbjDDC54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 22:55:59 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0471FE0;
-        Mon,  3 Apr 2023 19:55:58 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id d13so29171930pjh.0;
-        Mon, 03 Apr 2023 19:55:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680576958;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jVV9cxKF8CzU0gUghTh55PDDFH6OAM8gy1Kv/8QwOlg=;
-        b=fKxyz4NrEX6JrxqjGGRBECbIfAiBm10rZP7AV+C0+d/iGU7MOApwh0/E3YyoP5xuLT
-         B4kuBX1gYp2fJSkWfjgtqlFqdsagm9WDo0pS1zf54P0Pw44yFI8lgWtsacZMjkGfrZqp
-         AJqB2XjxIzwiwMaJC9nd0tE4lvBp/GAgRa0TDB+FOxi8ybACYJHfICrpkZdOL4LyoLfV
-         3Rkj3NcZzkuzOa/Vafb5rDMRWsUu3ikV3HYO9v8OdC8ZHf3UzeMoebsm4wlxHwoRCdCd
-         1GTK0N4hM40yTLHet1+FN1vXAZKJbFpD3Sit+6zHc8Si3muHb91ImcKQqQIeTKZu8d3C
-         4zMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680576958;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jVV9cxKF8CzU0gUghTh55PDDFH6OAM8gy1Kv/8QwOlg=;
-        b=avspT5jHgbN+ZPKqoeRdWmERfeFUty0Sna1nxm2FAqSNGfQjBKuk0qdx4i3kbBCSqt
-         UPPvh05vf/9qQaOq0jKLrGTxKTHQf37kaRXOSziWPYpvB1Oh8UNcT5kOe/seDeDggagO
-         z2ljJbG/3nOZt/j9BjKboFpnWD/qVlt2jwj7VZMbj8uVi8FTdl6zQhJi/pebQv6NyfmS
-         s63VZK1k47O0O99vycQd9WMx92w7w2Q8c4BW9JAA/ekQUdxoXmjEXr2S2Zn4uiey5BvT
-         xS52OmVehvaPBoWkK7nNLdXvZs2VTs5QsDaG09HFoubB+SziJBEpZZyVwIkGm+xNE/6R
-         fW5A==
-X-Gm-Message-State: AAQBX9fgxFZEr9sJXLCfCP5Uvn85r9CFIXHN1OTbaNA7WRMUwEh/DHKP
-        Di3xo+gxK6HN5nvjtVbF2Sc=
-X-Google-Smtp-Source: AKy350YDPvn5VoLxr2Aiy2EYPVkBZrOgl04a0POrH1smAYsgcbEjD/TnzpnM99ITKI2LP30MnRcerA==
-X-Received: by 2002:a05:6a20:1b14:b0:d7:34a1:859a with SMTP id ch20-20020a056a201b1400b000d734a1859amr958170pzb.27.1680576958291;
-        Mon, 03 Apr 2023 19:55:58 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-87.three.co.id. [180.214.233.87])
-        by smtp.gmail.com with ESMTPSA id i35-20020a631323000000b00502f017657dsm6514157pgl.83.2023.04.03.19.55.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 19:55:58 -0700 (PDT)
-Message-ID: <3d994c05-492d-f9f4-161d-123a68d4e87a@gmail.com>
-Date:   Tue, 4 Apr 2023 09:55:53 +0700
+        Mon, 3 Apr 2023 22:57:56 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F70219BF;
+        Mon,  3 Apr 2023 19:57:54 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 95FD55C00D0;
+        Mon,  3 Apr 2023 22:57:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 03 Apr 2023 22:57:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tyhicks.com; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680577070; x=1680663470; bh=h6
+        jLTmnRVW7snfNMmkgCLHM59jUMA2sAlcMAGdnV2Xw=; b=MBIg+WLiErbILUNtQa
+        S2T/3Hu+7s7AciF4vUlBsJCrOXevl/qXdAYvyINUHVIsPS96cjOZ06+FsarDzPxO
+        BJaJTc51YGnlLnJBv80xiFtRDpfW5hWcEoq8aEF2p2RQMN1J1803VoMkItMhLOTK
+        0Ma73UFs0mRaKmeJTxdXg+q4NbAHpoVEdsX/vyvZP3beLqjmWaqufC0voZVKvOl5
+        14sKq3Jf+NIc/QmkZWdC4uF5940OW3w4NBRlbyyDJmChtrDQ+U46JHljbtu9U/Sc
+        V/LJrfMRf3ASvgaZklOHb/50Ycr5HNgcLSbFC3T9AfhP2ptW4r+pN/gjNsSaqnwN
+        ri2A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680577070; x=1680663470; bh=h6jLTmnRVW7sn
+        fNMmkgCLHM59jUMA2sAlcMAGdnV2Xw=; b=N/q4XmWRayOyGwwitHNVIU3hybttd
+        T4kvZk7GWXCoNHPK995+hwrukRNqXtljw3xLvYA+H+adVwdvlNs7JVdv6qdulKNo
+        9TXB452tOfRLvdZgK4qFzJH4R7oefJmDmRq+LM1o7b72uyNpqC2AxAez6pp36cb2
+        DqnHvligJ+ByDK8mR5pVISgUrOWHnZ46/fxK4rYrRruK1c1AeV6ZQ6YWOKkL8xSJ
+        BvvD//OKSyiY2PK/E55bcxJVoPg6MheBkE0dj6zCxI6GodC1NJPeOD66GJ+oBlco
+        pHN8IRnJoUFbbjCBZNEbZ1swHHmXQnYt676qxaY9ur/UjIafBHMpUmlvA==
+X-ME-Sender: <xms:LpIrZKezI0kCc0MjYdNwLwl101Th2ey2KOY8GOnJekpdq-x_neieAA>
+    <xme:LpIrZEOkhe9wtiSSQUu_TYakg1okJsh-sAiKPE0UzWVErR2UPx7s88sbRcBfTu5dL
+    eoBjWzPBWw2H-gBJ-w>
+X-ME-Received: <xmr:LpIrZLh6n4xwUz6RhSYaHcyi5H622He1BJQg5v0D1X14wv1uLW1e2P1MPJ0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeikedggeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
+    ertddttddvnecuhfhrohhmpedfvfihlhgvrhcujfhitghkshculdfoihgtrhhoshhofhht
+    mddfuceotghouggvsehthihhihgtkhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeehie
+    eiueevgfetlefhjeekleeutddtudelveevhfekgefhhffhtedtffehuedvteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegtohguvgesthihhh
+    hitghkshdrtghomh
+X-ME-Proxy: <xmx:LpIrZH_8qx56kyJOj0JSvTg4me-cjY-401L8xAXiH0AdjK4fY331Pw>
+    <xmx:LpIrZGtgbLeJhKIImAHQyuhAi8M6FywVUifzFsSmrtvMrgHvyMrCpg>
+    <xmx:LpIrZOHLT6Ufm1Osxv4VtLSHYIIz2qm0N2eljrtGfOn6Qu3nCMT6ug>
+    <xmx:LpIrZIJsfm60sLY0A_0UZxeWbrmNicGDmyrNJPHfkIZXsIE_aK3Vkg>
+Feedback-ID: i78e14604:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Apr 2023 22:57:49 -0400 (EDT)
+Date:   Mon, 3 Apr 2023 21:57:48 -0500
+From:   "Tyler Hicks (Microsoft)" <code@tyhicks.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     brauner@kernel.org, ecryptfs@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: mark ecryptfs as orphan state
+Message-ID: <ZCuSLNnFQEdOHW0c@sequoia>
+References: <20230403-frolic-constant-bc5d0fb13196@brauner>
+ <20230403134432.46726-1-frank.li@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v7] tty: fix hang on tty device with no_room set
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     juanfengpy@gmail.com
-Cc:     Hui Li <caelli@tencent.com>, stable@vger.kernel.org,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <1679019847-1401-1-git-send-email-caelli@tencent.com>
- <ZCuQO3A6FX305KTJ@debian.me>
-Content-Language: en-US
-In-Reply-To: <ZCuQO3A6FX305KTJ@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403134432.46726-1-frank.li@vivo.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/23 09:49, Bagas Sanjaya wrote:
-> On Fri, Mar 17, 2023 at 10:24:07AM +0800, juanfengpy@gmail.com wrote:
->> We have met a hang on pty device, the reader was blocking
->> at epoll on master side, the writer was sleeping at wait_woken
->> inside n_tty_write on slave side, and the write buffer on
->> tty_port was full, we found that the reader and writer would
->> never be woken again and blocked forever.
+On 2023-04-03 21:44:32, Yangtao Li wrote:
+> > I can devote some time to limping it by until removal but would also 
+> > appreciate a hand if anyone has time/interest.
 > 
-> Where do you find this hanging pty? Seems like the wording makes me
-> confused. Maybe you mean "It is possible to hang pty device. In that
-> case, ..."
-> 
+> I have time and interest, if possible, I would like to be a reviewer
+> before ecryptfs is removed.
 
-Oops, I forgot to Cc: LKML.
+Hi - I don't think an additional reviewer is going to be sufficient to
+get eCryptfs into a good state long term. There are fairly large design
+problems that need more attention. I'll send a patch to deprecate and
+mark for removal in 2025.
 
--- 
-An old man doll... just what I always wanted! - Clara
+I'll happily add you as a reviewer and appreciate your interest in
+helping.
 
+Tyler
