@@ -2,158 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3986D67D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445C36D67D7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235908AbjDDPr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 11:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S235948AbjDDPss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 11:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235898AbjDDPrZ (ORCPT
+        with ESMTP id S233030AbjDDPsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 11:47:25 -0400
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80892173E;
-        Tue,  4 Apr 2023 08:47:22 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VfMLSkR_1680623236;
-Received: from localhost.localdomain(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VfMLSkR_1680623236)
-          by smtp.aliyun-inc.com;
-          Tue, 04 Apr 2023 23:47:17 +0800
-From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org, bagasdotme@gmail.com,
-        willy@infradead.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v2] mm/swap: fix swap_info_struct race between swapoff and get_swap_pages()
-Date:   Tue,  4 Apr 2023 23:47:16 +0800
-Message-Id: <20230404154716.23058-1-rongwei.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
-References: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
+        Tue, 4 Apr 2023 11:48:36 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE6CEC;
+        Tue,  4 Apr 2023 08:48:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7EC1E20109;
+        Tue,  4 Apr 2023 15:48:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680623314; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HGw5LrR+1O1OLVrcrhC6gXtzTME++X55P6opcObz7ng=;
+        b=emRAHFwNtsMVrNM56B7CzCQhpG4ZIuqnIE6yvWbpi+IAImCY3dS9WmOhVQHzoX0t8p1Im9
+        aWL8NAh1uGdcYXsceZ2AW1XhxfHGGAWQr+D2tc/40m0VWV0k0sbBBPAl7DFgzcCQ+kPG6T
+        VHQfQRMBYPg+bVogBaLh0htYdOqVOKI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680623314;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HGw5LrR+1O1OLVrcrhC6gXtzTME++X55P6opcObz7ng=;
+        b=zWuV2MiM+ox80WN8juSTEwLMflJTFQxpXHDxmKuPkfj3fGuS41yQ30AKFlDtq4lsrEDs4R
+        71OKrEW6wZAG7iAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EFE0B1391A;
+        Tue,  4 Apr 2023 15:48:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id F2MbK9FGLGSlEQAAMHmgww
+        (envelope-from <krisman@suse.de>); Tue, 04 Apr 2023 15:48:33 +0000
+From:   Gabriel Krisman Bertazi <krisman@suse.de>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/11] io_uring/rsrc: cache struct io_rsrc_node
+Organization: SUSE
+References: <cover.1680187408.git.asml.silence@gmail.com>
+        <7f5eb1b89e8dcf93739607c79bbf7aec1784cbbe.1680187408.git.asml.silence@gmail.com>
+        <87cz4p1083.fsf@suse.de>
+        <6eaadad2-d6a6-dfbb-88aa-8ae68af2f89d@gmail.com>
+        <87wn2wzcv3.fsf@suse.de>
+        <4cc86e76-46b7-09ce-65f9-cd27ffe4b26e@gmail.com>
+Date:   Tue, 04 Apr 2023 12:48:31 -0300
+In-Reply-To: <4cc86e76-46b7-09ce-65f9-cd27ffe4b26e@gmail.com> (Pavel
+        Begunkov's message of "Tue, 4 Apr 2023 14:21:41 +0100")
+Message-ID: <87h6tvzm0g.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The si->lock must be held when deleting the si from
-the available list.  Otherwise, another thread can
-re-add the si to the available list, which can lead
-to memory corruption. The only place we have found
-where this happens is in the swapoff path. This case
-can be described as below:
+Pavel Begunkov <asml.silence@gmail.com> writes:
 
-core 0                       core 1
-swapoff
+> On 4/1/23 01:04, Gabriel Krisman Bertazi wrote:
+>> Pavel Begunkov <asml.silence@gmail.com> writes:
 
-del_from_avail_list(si)      waiting
+>>> I didn't try it, but kmem_cache vs kmalloc, IIRC, doesn't bring us
+>>> much, definitely doesn't spare from locking, and the overhead
+>>> definitely wasn't satisfactory for requests before.
+>> There is no locks in the fast path of slub, as far as I know.  it has
+>> a
+>> per-cpu cache that is refilled once empty, quite similar to the fastpath
+>> of this cache.  I imagine the performance hit in slub comes from the
+>> barrier and atomic operations?
+>
+> Yeah, I mean all kinds of synchronisation. And I don't think
+> that's the main offender here, the test is single threaded without
+> contention and the system was mostly idle.
+>
+>> kmem_cache works fine for most hot paths of the kernel.  I think this
+>
+> It doesn't for io_uring. There are caches for the net side and now
+> in the block layer as well. I wouldn't say it necessarily halves
+> performance but definitely takes a share of CPU.
 
-try lock si->lock            acquire swap_avail_lock
-                             and re-add si into
-                             swap_avail_head
+Right.  My point is that all these caches (block, io_uring) duplicate
+what the slab cache is meant to do.  Since slab became a bottleneck, I'm
+looking at how to improve the situation on their side, to see if we can
+drop the caching here and in block/.
 
-acquire si->lock but
-missing si already be
-added again, and continuing
-to clear SWP_WRITEOK, etc.
+>> If it is indeed a significant performance improvement, I guess it is
+>> fine to have another user of the cache. But I'd be curious to know how
+>> much of the performance improvement you mentioned in the cover letter is
+>> due to this patch!
+>
+> It was definitely sticking out in profiles, 5-10% of cycles, maybe
+> more
 
-It can be easily found a massive warning messages can
-be triggered inside get_swap_pages() by some special
-cases, for example, we call madvise(MADV_PAGEOUT) on
-blocks of touched memory concurrently, meanwhile, run
-much swapon-swapoff operations (e.g. stress-ng-swap).
+That's surprisingly high.  Hopefully we will can avoid this caching
+soon.  For now, feel free to add to this patch:
 
-However, in the worst case, panic can be caused by the
-above scene. In swapoff(), the memory used by si could
-be kept in swap_info[] after turning off a swap. This
-means memory corruption will not be caused immediately
-until allocated and reset for a new swap in the swapon
-path. A panic message caused:
-(with CONFIG_PLIST_DEBUG enabled)
+Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
-------------[ cut here ]------------
-top: 00000000e58a3003, n: 0000000013e75cda, p: 000000008cd4451a
-prev: 0000000035b1e58a, n: 000000008cd4451a, p: 000000002150ee8d
-next: 000000008cd4451a, n: 000000008cd4451a, p: 000000008cd4451a
-WARNING: CPU: 21 PID: 1843 at lib/plist.c:60 plist_check_prev_next_node+0x50/0x70
-Modules linked in: rfkill(E) crct10dif_ce(E)...
-CPU: 21 PID: 1843 Comm: stress-ng Kdump: ... 5.10.134+
-Hardware name: Alibaba Cloud ECS, BIOS 0.0.0 02/06/2015
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO BTYPE=--)
-pc : plist_check_prev_next_node+0x50/0x70
-lr : plist_check_prev_next_node+0x50/0x70
-sp : ffff0018009d3c30
-x29: ffff0018009d3c40 x28: ffff800011b32a98
-x27: 0000000000000000 x26: ffff001803908000
-x25: ffff8000128ea088 x24: ffff800011b32a48
-x23: 0000000000000028 x22: ffff001800875c00
-x21: ffff800010f9e520 x20: ffff001800875c00
-x19: ffff001800fdc6e0 x18: 0000000000000030
-x17: 0000000000000000 x16: 0000000000000000
-x15: 0736076307640766 x14: 0730073007380731
-x13: 0736076307640766 x12: 0730073007380731
-x11: 000000000004058d x10: 0000000085a85b76
-x9 : ffff8000101436e4 x8 : ffff800011c8ce08
-x7 : 0000000000000000 x6 : 0000000000000001
-x5 : ffff0017df9ed338 x4 : 0000000000000001
-x3 : ffff8017ce62a000 x2 : ffff0017df9ed340
-x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- plist_check_prev_next_node+0x50/0x70
- plist_check_head+0x80/0xf0
- plist_add+0x28/0x140
- add_to_avail_list+0x9c/0xf0
- _enable_swap_info+0x78/0xb4
- __do_sys_swapon+0x918/0xa10
- __arm64_sys_swapon+0x20/0x30
- el0_svc_common+0x8c/0x220
- do_el0_svc+0x2c/0x90
- el0_svc+0x1c/0x30
- el0_sync_handler+0xa8/0xb0
- el0_sync+0x148/0x180
-irq event stamp: 2082270
-
-Now, si->lock locked before calling 'del_from_avail_list()'
-to make sure other thread see the si had been deleted
-and SWP_WRITEOK cleared together, will not reinsert again.
-
-This problem exists in versions after stable 5.10.y.
-
-Cc: stable@vger.kernel.org
-Tested-by: Yongchen Yin <wb-yyc939293@alibaba-inc.com>
-Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
----
- mm/swapfile.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 62ba2bf577d7..2c718f45745f 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -679,6 +679,7 @@ static void __del_from_avail_list(struct swap_info_struct *p)
- {
- 	int nid;
- 
-+	assert_spin_locked(&p->lock);
- 	for_each_node(nid)
- 		plist_del(&p->avail_lists[nid], &swap_avail_heads[nid]);
- }
-@@ -2434,8 +2435,8 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
- 		spin_unlock(&swap_lock);
- 		goto out_dput;
- 	}
--	del_from_avail_list(p);
- 	spin_lock(&p->lock);
-+	del_from_avail_list(p);
- 	if (p->prio < 0) {
- 		struct swap_info_struct *si = p;
- 		int nid;
 -- 
-2.27.0
-
+Gabriel Krisman Bertazi
