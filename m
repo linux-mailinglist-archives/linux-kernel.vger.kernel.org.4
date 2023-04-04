@@ -2,117 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F9A6D6C04
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7071B6D6C08
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236499AbjDDS3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 14:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
+        id S235350AbjDDS3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 14:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236434AbjDDS2w (ORCPT
+        with ESMTP id S236432AbjDDS3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 14:28:52 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757D155B2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 11:26:07 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id d3so11932141ybu.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 11:26:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1680632765;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xyjoFpVijlAvxTCbOhJJ22iDzQUactcN5oOMXtPKyqU=;
-        b=fcxPf/i8xq/kSQfoVdznWlATaPoee6x4Dem/NHTsVKRgZLeTmjolTZLa/+wlaVzoo2
-         9wvH9iZDHP0vTlVzDnxPCaPpHN3tDUjPt67SQO61fkm34DihtHBMRLAFcs2rMItJTIhy
-         I6ffUk8HIw91u9pqKUvjV5A2g74DjoemZoBP07KThvSgH49wdGzmNq3+3McXhZUTP6Pp
-         haNgzYnEbjtZi+tD+GbjOtszKTPwrkXxqpENHShf5NPe98Q7/dEGAs3IkKkA7iFl8wl0
-         Nim2er0csMAF8UUSFkm0qwDshTzU0tzM7EOY6pkH15hkYpDAVagWgrcgvIf+Y7NEmhNw
-         8ElQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680632765;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xyjoFpVijlAvxTCbOhJJ22iDzQUactcN5oOMXtPKyqU=;
-        b=OiPmfQ8/bzbmbd3/IwkPIkybrgktjqgpk93UgPmipKnMfbGykdby6xU4ga4V4rEgLb
-         IaBEeO7+GaPQf+vnk7ru6g3dGYPP/XlVqzx7qAhIWpIPqTj64bXT8XtMFRsoO+So3rvs
-         wA31mTBYSwTtSerEuecpvmnlW+QRNrEeIQziVBzubDzHMJO5II40mtvDfGcawTK7IohZ
-         LsT3tt34k0Z+KaYLjYggGJWXhdnHmEpV5AW6vRUQhFUy6OOk/lGOBDSxm9Ay2IIERcG3
-         7oCHvLDvxspQZYEouwjLX28kOvAsxuyopTZzmQFD3fK0vH4gJ/nO6R8OpyWNizmQRTys
-         jCVw==
-X-Gm-Message-State: AAQBX9emPtI2yrEm1Sy8h5K7K7vdHB/M4QFwMhOx5uAB7Ti0qbnkKXSQ
-        IR1dUCWyfF6BJfSUktInzfj1Na+un5U4j7ci0Uss
-X-Google-Smtp-Source: AKy350Z1zr2YlO7SKFTwlplbfhoyc2wR4q7sivsyQWkkLJjxdDoxjxyefjzb/C0u+bqpRWOrC8ylutsAT9jk1XyHS7o=
-X-Received: by 2002:a25:7449:0:b0:b75:8ac3:d5d9 with SMTP id
- p70-20020a257449000000b00b758ac3d5d9mr2436296ybc.3.1680632765167; Tue, 04 Apr
- 2023 11:26:05 -0700 (PDT)
+        Tue, 4 Apr 2023 14:29:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD418A66;
+        Tue,  4 Apr 2023 11:26:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CD5363551;
+        Tue,  4 Apr 2023 18:26:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7DBC433D2;
+        Tue,  4 Apr 2023 18:25:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680632759;
+        bh=AERzV+I0kHCiQYU5gW6WzqRfRD82762Wm/mkt70YhEw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aYaeXoSUft0lZ4hauu2QMhqSKx7/WztqSy8guwEuqUUUwDn9rISfpGHcsZCmco5TH
+         e0pI6kB196vhPfK1NtukpQdxaAklgn9Dlcji9DTFm+b4d2Qb1C5vEKRmz3rOJ2NkUa
+         xqogHb/OY7XDN1bLA6buoVAoKfbFDS87fnnfcplg=
+Date:   Tue, 4 Apr 2023 20:25:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: intel_pmc_mux: Expose IOM port status to
+ debugfs
+Message-ID: <2023040455-varmint-pagan-95d4@gregkh>
+References: <20230330104821.773053-1-rajat.khandelwal@linux.intel.com>
+ <ZCVsH2KkfcMA86hJ@kroah.com>
+ <c82c6577-a363-241b-ffd6-f5c4c9ed838d@linux.intel.com>
 MIME-Version: 1.0
-References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com> <20230331123221.3273328-2-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20230331123221.3273328-2-roberto.sassu@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 4 Apr 2023 14:25:54 -0400
-Message-ID: <CAHC9VhT17mtnncuKVNzqr0zTU+E5R+8wMaxF4AYXS_bG9L0HZQ@mail.gmail.com>
-Subject: Re: [PATCH v10 1/4] reiserfs: Add security prefix to xattr name in reiserfs_security_write()
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c82c6577-a363-241b-ffd6-f5c4c9ed838d@linux.intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 8:33=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Reiserfs sets a security xattr at inode creation time in two stages: firs=
-t,
-> it calls reiserfs_security_init() to obtain the xattr from active LSMs;
-> then, it calls reiserfs_security_write() to actually write that xattr.
->
-> Unfortunately, it seems there is a wrong expectation that LSMs provide th=
-e
-> full xattr name in the form 'security.<suffix>'. However, LSMs always
-> provided just the suffix, causing reiserfs to not write the xattr at all
-> (if the suffix is shorter than the prefix), or to write an xattr with the
-> wrong name.
->
-> Add a temporary buffer in reiserfs_security_write(), and write to it the
-> full xattr name, before passing it to reiserfs_xattr_set_handle().
->
-> Also replace the name length check with a check that the full xattr name =
-is
-> not larger than XATTR_NAME_MAX.
->
-> Cc: stable@vger.kernel.org # v2.6.x
-> Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes=
- during inode creation")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  fs/reiserfs/xattr_security.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+On Tue, Apr 04, 2023 at 10:48:38PM +0530, Rajat Khandelwal wrote:
+> Hi,
+> 
+> On 3/30/2023 4:31 PM, Greg KH wrote:
+> > On Thu, Mar 30, 2023 at 04:18:21PM +0530, Rajat Khandelwal wrote:
+> > > IOM status has a crucial role during debugging to check the
+> > > current state of the type-C port.
+> > > There are ways to fetch the status, but all those require the
+> > > IOM port status offset, which could change with platform.
+> > > 
+> > > Make a debugfs directory for intel_pmc_mux and expose the status
+> > > under it per port basis.
+> > > 
+> > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+> > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > ---
+> > >   drivers/usb/typec/mux/intel_pmc_mux.c | 44 +++++++++++++++++++++++++++
+> > >   1 file changed, 44 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+> > > index 34e4188a40ff..c99d20888f5d 100644
+> > > --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+> > > +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+> > > @@ -15,6 +15,7 @@
+> > >   #include <linux/usb/typec_mux.h>
+> > >   #include <linux/usb/typec_dp.h>
+> > >   #include <linux/usb/typec_tbt.h>
+> > > +#include <linux/debugfs.h>
+> > >   #include <asm/intel_scu_ipc.h>
+> > > @@ -145,6 +146,8 @@ struct pmc_usb {
+> > >   	u32 iom_port_status_offset;
+> > >   };
+> > > +static struct dentry *pmc_mux_debugfs_root;
+> > Why not just look up the dentry and delete it when you want it with a
+> > call to debugfs_lookup_and_remove() instead?  That way you don't have to
+> > keep it around (hint, pass it back from your call to
+> > pmc_mux_debugfs_init() or better yet, don't even have a
+> > pmc_mux_debugfs_init() function as it only contains one line and is
+> > only called in one place.
+> > 
+> > This will save you the storage space of this variable if debugfs is not
+> > enabled in your kernel.  A small amount, yes, but it's nicer, right?
+> 
+> I see. Yes, though a small amount, you're anyways right.
+> 
+> 1. Though a single-line function, I explicitly defined it to make it more readable.
+> ATM, maintaining a small different framework within the file for another function
+> (debugfs) somehow presents a more 'organized' code to me, if that makes sense? :)
 
-This looks good to me, thanks.  While normally I would merge something
-like this into the lsm/stable-X.Y branch, I'm going to merge it into
-lsm/next to give it a week or two of extra testing.  I think anyone
-who is using reiserfs+LSM (doubtful as it looks horribly broken) would
-be okay with waiting a few more days at this point :)
+You are wrapping an abstraction in an abstraction, i.e. piling on layers
+where they are not needed at all.  That's not normal for kernel code.
 
---=20
-paul-moore.com
+If I am reading the code, and see that function call, I then have to go
+and find it and then see that it is making a debugfs call.  When
+instead, if you just had the debugfs call, when reading the code, you
+would instantly know what is happening and can keep on going in your
+reading.
+
+> 2. About the suggestion of not keeping the debugfs_root static throughout the
+> execution, I can change it as per your suggestion, but I'd like to keep it this
+> way, if that's ok? This way, it would fit nice in the future if more variables
+> are to be added.
+
+We write code for what we have today.  If it needs to change in the
+future, great, we will change it then.  So no need to worry about that.
+
+Anyway, your call, but I think you can make the code overall smaller
+and simpler with my suggestions, but hey, try it out and prove me wrong!
+
+thanks,
+
+greg k-h
