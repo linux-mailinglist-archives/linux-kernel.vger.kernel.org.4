@@ -2,168 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C72F6D6B2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF246D6B23
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236202AbjDDSEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 14:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
+        id S236036AbjDDSDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 14:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236281AbjDDSEr (ORCPT
+        with ESMTP id S231620AbjDDSDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 14:04:47 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05CA40EC
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 11:04:27 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334Dwtr9022669;
-        Tue, 4 Apr 2023 18:03:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=lEFD23QmTLYYK8yQVsZjvDDMz2M6TsVx+IjtH4pAOEY=;
- b=sgYZZK56Y2qYHhPlF3NLhdqojdmiPL2wgxU9VtwXF1QPRkcqcXl2E801IeKHo7mO5dNB
- ly5tiGxsKts9lIz8BrpIstgV9mq4d9KCVBiOqfFpouBd3p+guKss6L4Dbv32qYQAkxZY
- /XTk/uY1Vx/TtPpQXf2fjmkejhMvmd22N43zx1+ZIEIAFMYW0auQVBTP8HrefKlwotEE
- P3irWBoGw3UY8W9ZwGA7nsXxKN5Dq5XQnNyJ+NA3W4lnn6gK96IskWGiZ3RKunL6YiIa
- AdwYQ6VGF6gGHyuCmj5ByCJRMi4RVdZvJ0O0FvtmqM/d7AHZ0ilhw37h9D3bsH/XpCoU 9g== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppc7txfxn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Apr 2023 18:03:51 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 334GWQ0u002275;
-        Tue, 4 Apr 2023 18:03:50 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ppt3hg15s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Apr 2023 18:03:50 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VvpU+MCjWmZJKaOTv7hVzXBOSP51NKvzGd2+QBt5fpbmpWL0nKSaWnCX6ghhvJC29bWW5o0gWfkaBEyBXlSnTXuWsYc1WjTM/EP240lsvZpJGY40qn3whIshOBCUPBNFL1OzrpsqkFza/n/kwFiNsnA/ch7UbPaKhof0sy/xqNwiEYjVbIzqPkA46rc7q3HfE8TjP5H4hqe4pKMXl/Z1Wu6hWEvIjGj7k14/is5LzPvSHvLufDdrpRfzxZrU/zcORyUcOooITMiICovZNd11A8GhJiGIw9/TDASMEhfBDI7jjtmK+jmMGVsHWYf49A0B2tly+iXgIt0t8sXzuHidkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lEFD23QmTLYYK8yQVsZjvDDMz2M6TsVx+IjtH4pAOEY=;
- b=HvmSZV3NST0ma0elGMHXfh11N1K5izHv9cl8ZhHS+B5C9Ix22IfN/cYEWxBlpzvxtzjdDeNtAu/UR0C84yDZ6vjN5HfwHXnILsX8D9gfjvzDyw60RaTSSLhaFlGPalQXue1yyGn+P7yM4OtmF4tz+SIiT0sG9W2bGE2fSzUcNxtzn/Wra1J+MRaUBZ0dUXciqz5hB7rSdUFn/dl1Kz+rJCzZBQ6w2pBvJ4+M8z5mANBxDLUYT+LOun4iCd2ICKEU1o/QWuWIpsoNlr2aKCWj7bLZVQQAx4Cssaa5twKOEbqAPY/CFTOz1bYtbTYeywzEDh54wgVDI0jOPKAG2rCbJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lEFD23QmTLYYK8yQVsZjvDDMz2M6TsVx+IjtH4pAOEY=;
- b=vOx/6AUgtYeTxE6Fo6uZRVP1iuZi1GAj5wNOACunMCRro9p8jG+ScNeVvsomFYUIEuC4Cqdu3GR0rwCh8j+FIUxPixkcNDttXBx64PN4OSs8yjILA71sUHxrrBRzOYkkIRC1T0+myXRBm9iH7U3Q3koUoB7RLMl9AhsioPwWKJI=
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
- by MN0PR10MB5909.namprd10.prod.outlook.com (2603:10b6:208:3cf::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Tue, 4 Apr
- 2023 18:03:47 +0000
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::e9ed:8782:64cb:cfc3]) by CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::e9ed:8782:64cb:cfc3%9]) with mapi id 15.20.6254.028; Tue, 4 Apr 2023
- 18:03:46 +0000
-From:   Eric DeVolder <eric.devolder@oracle.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com, eric.devolder@oracle.com
-Subject: [PATCH v21 1/7] crash: move a few code bits to setup support of crash hotplug
-Date:   Tue,  4 Apr 2023 14:03:20 -0400
-Message-Id: <20230404180326.6890-2-eric.devolder@oracle.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230404180326.6890-1-eric.devolder@oracle.com>
-References: <20230404180326.6890-1-eric.devolder@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: FR1P215CA0027.LAMP215.PROD.OUTLOOK.COM
- (2603:10d6:201:2::13) To CO1PR10MB4531.namprd10.prod.outlook.com
- (2603:10b6:303:6c::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|MN0PR10MB5909:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c9fa7d1-aeac-4cb7-c69e-08db3536ef2d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2XQ61bHeZ9c7GlXRgPtWXYTd5CUPwjoS/NxK69vq1dSKKlzvGZpUv/AzJlCq9mYriZTrogmCd2uzCbK7ozO5ap8jrfUBLXpk2K40b+NYRnNmplf8IbpzePyAXiw4Pb0ocjCNsvy9fH5v8V8dwg/I2l2p8LDVdDj3jmhXORHJ+ryX069wIc1mrS5PJOL/qooLh6xwdKp56ubYVcp4gwaH7ewg6gBYhmNwWjh+ZSxqKegHDRQeHJRgt3pOAP+gNJe8RkALJtM/8D7rz4JYRe5N/9LcSvJTZPzoYAaO+GUiWhCMLtqDJ3+pv0X1alqFJfqY8chARrlgcyj40HnGX2Hop4GVJA5GXd2knIDL8OEGrbrQsbkQcnPxp5R6xQCelJvu/Nt1Bt3u27h8/JxQvb1osWa4NoNXq1SNFlgYDZn7xiovBhmYT0qwl478OGTuAP6P5yojqZcodAncTyNyUj+uyrPBqw501TC7NGMOUaGNoDyO625JTXqxZJBIuO/HCJJY/jPBE1FV1kWVMFKQtaQrNXq3A6ZZLgF67knZET/Fc1ZrJKDMvAeQzwJ/Vxw1mrxc
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(39860400002)(396003)(136003)(366004)(451199021)(83380400001)(4326008)(8676002)(66946007)(316002)(66556008)(66476007)(86362001)(2906002)(41300700001)(478600001)(36756003)(38100700002)(2616005)(8936002)(6486002)(5660300002)(6512007)(7416002)(186003)(107886003)(30864003)(6666004)(26005)(6506007)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?t0pJrG14eyKP/7UOMREY43yAHtxX8at+EA7iDtXpfRfN31o11QY6MZk/l9Uy?=
- =?us-ascii?Q?s5CiXEmshM7V1NDvc0j8C6ZR6yuTlDRip8DAUPsxehZQbgjBkoZAqkSi4bZE?=
- =?us-ascii?Q?NHCqYlUlbOStM58cRUJw9VnMqwTp2EBC9vE/Jlg8ouWPLZyokmbfV/oUmD8F?=
- =?us-ascii?Q?maPTJ8EaK+sbBTKxsP8qXTuswWICTb0DTpEQub67g14hIFPhisJHYhXa/irr?=
- =?us-ascii?Q?wCJF0AhPGUXP9idJGAx1J7ugDtwZzLc7hlex2Pjs3hj4dN+sZ9jVGQMDAVlP?=
- =?us-ascii?Q?y94D242yG+/CrjmSKAShvy5W1+To4NrxQOSzT2XdbRZOuZmpsa3rB/h/vUKX?=
- =?us-ascii?Q?npM0SPr+6cx7Lbkx3eLqcGZmgGfy44q4/P2yJmY2c2i2l9K9ryoz4v+Bmwgl?=
- =?us-ascii?Q?mzsE4kr5Nv/sdsUkht4NmsFjerIKYy0CaUCX0YL5Z7dyzQ+wrxuQVaeopVrS?=
- =?us-ascii?Q?UhlcEyAEPnSpP3KYfF1r1lWf9AZNHbCvRJyMCT9fUR8E1+UmKGqk9Vl9vnYh?=
- =?us-ascii?Q?gLkOXr6IE4vvchfK6rvBFyWn+RA0FuzjxtA69xUR1F+1WJ7Cl+D29STqfMLm?=
- =?us-ascii?Q?iQ0DaW/CwE94df3ko+wSA2jk9gtwD6Pt9h6Aiu35HfFU+rRtmBdModJVnfVc?=
- =?us-ascii?Q?fyQf8bHrHSwH8YP6EHGVSlKCMjeqx86SM7BasusVZ/fyGcLUr8HdPPEg9ifn?=
- =?us-ascii?Q?ffOqqpjoGuLOl79w0MEW9KKik7YZffiCsjUTosOTL0pQihhplaDbWwhJUXD3?=
- =?us-ascii?Q?BwtBoZY9GwXdU7YZtD9ujMFurgB5omyyjy3Olfwb5sHnFe1ZnEVfS742cx0L?=
- =?us-ascii?Q?LTKcSYXu6LFqvz4Z5jgLzBdMCH5VwVqnvsr5Ud9MKY6Jz3Nw9yAz7g44fQnf?=
- =?us-ascii?Q?iwo42DjUFqrraFt9FsBD7ZY+77Lck9PqA+od95BypMXxYKao3g+0pCizOB94?=
- =?us-ascii?Q?p/9tqX3ykG9Kwiw0IzRnwqEZex8KProvT+mTWK9n2nfM8abTuXJfHZiesy9r?=
- =?us-ascii?Q?tN3QcAeP2GMrV0oN5rmZA18uKeB0pYHvLywdRC6ZPVS5T+pyXmitPGoC9uSO?=
- =?us-ascii?Q?qxebtT41KkoxiXBllcRDBtJOMAo+ic/rIAG67ONZMHFG3NYRrnm7b3fWM5pW?=
- =?us-ascii?Q?XYCnf+wWFOkMCgbnMESl1CKmJBX6s+X6Hn52wsnnZI2JGefPsNnq4hz2TxIk?=
- =?us-ascii?Q?Oc6BD/EEsuWjmlCFBqFPrjzfeRaPv/1+UB6DgWcAaFzGh97FcxD22+/yOZHk?=
- =?us-ascii?Q?Z8Q0qxHUxTRtkllIg70SxVZzaCoXHAgjx2cY5CsoSDfgt80Y3mAY1wbjKRaj?=
- =?us-ascii?Q?VtENibSITlNvyotD4UpCEFLLM9CF+6Kdu9JsVON5uKFFId6V4UN9zNICXZG/?=
- =?us-ascii?Q?HuIS9Ie/xsjvbzdOD1RaTRguU2DsmQyggo4ODGFyWVKthCfmafgTFm3LckH5?=
- =?us-ascii?Q?dNVaEWHI3Nhp7c7qXFijotR30cSRMLiKe4wOiuM45+KbsdmEYf+OpGQeAX/4?=
- =?us-ascii?Q?gjKVbzDoyPU2lZI5Zf9erzTluBT98x74UP0jCSc603pFxVB1frYGEmFtpmT6?=
- =?us-ascii?Q?TPkA/1wdK/uZoGQaWLKsNqXj0US5hS7o0/jqWv+9eARuT5F0pbaxzHJTOqHZ?=
- =?us-ascii?Q?Sw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?/mHAN4Mfnp/u1qQRFHC5WTWOOU0NvQ7Z8j3AEXgvBiWU+ApKXxLh96emyqwn?=
- =?us-ascii?Q?gCA4Yg++kKgS1w9fQgzDX4eCdLF6fjrayhHm+emKWTb8VHw3uA/4gA4AaY1Y?=
- =?us-ascii?Q?kmLcCc4SCfbXU6e5tZ1eU61shi2qqth0MF1sBVlodCK6cNgj/w0a9zSJNsVF?=
- =?us-ascii?Q?D4xnzwfo/nGo1efoy/yHgTvQDBpiBhPhfY5i5mpY5jZa5WxMa0wbl6Ez/KTD?=
- =?us-ascii?Q?PKS4bYRkc45oCq/B9sf17R47BF7lvbLNAXxutYwUvHooCRY1GMbHy6GinE1H?=
- =?us-ascii?Q?Ae2Q2KA3z6SXV1TiUwkjf9XVrQckhCk72QP/8nhJVzi3GDy9lcP2HhFVUVXO?=
- =?us-ascii?Q?pNx7vZvQ19vWQgex8eR50rRjAElMxeDdRqIBErp32zgLx6XaShkYSBvffEb/?=
- =?us-ascii?Q?l92cj5pHTypF6irmA/5m/yYGhpcWlXcukVKigBZZwtw1mJwaqqRGZAP6yXhV?=
- =?us-ascii?Q?ue6xpPa0JY9VeVI3uVeuXtXYBB341DFOKE3bcwdeQnQzxQ+pQBPKyJLVTdz3?=
- =?us-ascii?Q?2lpIpcUwVT0A8TWvTI4jE0v6W5m4JtsTUt0aSPpEpUDxZd8FQaKutCXsNAp7?=
- =?us-ascii?Q?K9Bs/mghOiRX2zkote6a+1I1Cq9nuIHBNQc5BUBVUy1psopesdfx1z7sCGTM?=
- =?us-ascii?Q?O6TToJx3kZ81cirMQmh8zvGWkOOeL2x5cNfyLRamr91OoBbUMKL1oj1lb3/+?=
- =?us-ascii?Q?v9+4B/zeOD1Hl72zhbDYVun87DrXtswNSnyGXv1wFwOgClAthZfqrti+31aG?=
- =?us-ascii?Q?7P6my7Drkp59jPA08qug9/bA3ah2AJ0ER/Q9xtXBkwy7N/LrhDPrKmmRSdSv?=
- =?us-ascii?Q?wf6BwGxDIL5icwHtFFmL5p1TQ+at/Hxe9hjY0MUHyI6X7PtNP2R+S1th1ZWe?=
- =?us-ascii?Q?83l3XjqusBYlTZ3gHpABQiPBq028VpdHA8d/g6dVzoxMq8E++7ddetxw93cL?=
- =?us-ascii?Q?74j/MmUJPDshvAoWOA1U+s+4f9mW6febZeli0d3glFxE7GKd1u2iqrcqYcDw?=
- =?us-ascii?Q?PClCyJQZAUE5FI00r0CjkLl6LP6hq4LMNf/PTz93SKv9JzBrfyAHuau+2Yfa?=
- =?us-ascii?Q?0ZUuOy/FaRuxguIhX5Y2S3IOfh4kmjE7Z9saQ0m4/Bqvj6HZ0O/sTiEKCkOT?=
- =?us-ascii?Q?YMQ0T0XBwN6F8rTs37CDXrGFZGGQ6RfkUDX1tFpIcWda1YLvyWLipcs=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c9fa7d1-aeac-4cb7-c69e-08db3536ef2d
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 18:03:46.3342
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dt0vK0xCQdveCYQt2cxxWr4ntDb2HaRusoyKGKKUp92nPehTguNvM+XjnsmBGTyj9eifWXjUJ8EwnnG39LkPfIx67qV1xg2qLGbLtP1IGt8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB5909
+        Tue, 4 Apr 2023 14:03:38 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A4D4687;
+        Tue,  4 Apr 2023 11:03:36 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334HCIWf011465;
+        Tue, 4 Apr 2023 18:03:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=qcppdkim1;
+ bh=DrPOWjwYr/69zhuxEKo4W/WWCnat/PgCE9ubKirkIMs=;
+ b=MIytwJfe8in0uoroKqvB1Bf6nYrJhI7dkL5Z6HgGmgF5cfQkMPPUmv0TgF3NkSvE/rqT
+ 94n14e9eqRKQ2VIbkVt5B41LR1inyfF759IzDT67RRJaqKs7x6KM3vpm55CwlL11QcRJ
+ g3tMAysUAVSceeUZZYKUjKVwzbYnK4ji3BYZb7+x+hil9rnVxknGHvzeUpjqR3YQ5bIc
+ 68cQZhFRqp37MADE9AqUCVzZzPg39YTHTpayfc+n0X9N706u1ecUfF4re1vPyLCu7pY6
+ AHDVHIdl/S3rThifFjEksuv8KAkUThnwcM4aw8aXfVBetCJ6/ils//B5SvyiMrpSTlqt uw== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prnbt0ntk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 18:03:31 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 334I3QxO021656;
+        Tue, 4 Apr 2023 18:03:28 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3ppdpkvtrg-1;
+        Tue, 04 Apr 2023 18:03:27 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 334I3RFh021663;
+        Tue, 4 Apr 2023 18:03:27 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 334I3Rla021662;
+        Tue, 04 Apr 2023 18:03:27 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 0E3B63B69; Tue,  4 Apr 2023 23:33:27 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        broonie@kernel.org, vkoul@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [PATCH 2/2] spi: spi-qcom-qspi: Add DMA mode support
+Date:   Tue,  4 Apr 2023 23:33:20 +0530
+Message-Id: <1680631400-28865-3-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1680631400-28865-1-git-send-email-quic_vnivarth@quicinc.com>
+References: <1680631400-28865-1-git-send-email-quic_vnivarth@quicinc.com>
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: DbCB8Eq5AY3SbVH1XXdbaPWQaU0frJio
+X-Proofpoint-GUID: DbCB8Eq5AY3SbVH1XXdbaPWQaU0frJio
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-04_09,2023-04-04_05,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
- phishscore=0 bulkscore=0 mlxscore=0 malwarescore=0 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=999
+ bulkscore=0 impostorscore=0 spamscore=0 clxscore=1015 adultscore=0
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2304040165
-X-Proofpoint-ORIG-GUID: F4uBQtCyztpptcYvNnLBd05mZihhWnzT
-X-Proofpoint-GUID: F4uBQtCyztpptcYvNnLBd05mZihhWnzT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -172,458 +83,634 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The crash hotplug support leans on the work for the kexec_file_load()
-syscall. To also support the kexec_load() syscall, a few bits of code
-need to be move outside of CONFIG_KEXEC_FILE. As such, these bits are
-moved out of kexec_file.c and into a common location crash_core.c.
+For performance improvement in terms of number of interrupts.
+Code flow for DMA mode...
+Allocate for DMA pools in probe()
+For xfers with len > 64 bytes, return true from can_dma()
+Thus framework creates and maps an sg table for each xfer buffer.
+In transfer_one() enable DMA in MSTR_CONFIG.
+Split the dma buffer of each entry of sgt into a maximum of 3 parts...
+Unaligned head, aligned middle and tail.
+For each part create a dma_cmd_descriptor.
+For head and tail allocate dma_data_descriptors
+  For tx, copy the data into allocated data descriptors
+  For rx, remember the original buffers to copy from-
+  allocated descriptors after xfer is complete
+For middle part use the aligned dma buffer.
+Link each dma_cmd_descriptor to next.
+Thus create a chain of descriptors.
+Kick-off the xfer by copying 1st cmd descriptor to-
+NEXT_DMA_DESC_ADDR register.
+On receiving DMA_CHAIN_DONE interrupt, complete the xfer and-
+free descriptors.
+If timeout happens handle error by freeing descriptors.
+In remove() free DMA pools.
 
-No functionality change intended.
-
-Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-Reviewed-by: Sourabh Jain <sourabhjain@linux.ibm.com>
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 ---
- include/linux/kexec.h |  30 +++----
- kernel/crash_core.c   | 182 ++++++++++++++++++++++++++++++++++++++++++
- kernel/kexec_file.c   | 181 -----------------------------------------
- 3 files changed, 197 insertions(+), 196 deletions(-)
+ drivers/spi/spi-qcom-qspi.c | 429 ++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 398 insertions(+), 31 deletions(-)
 
-diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-index 6883c5922701..61443f8395f7 100644
---- a/include/linux/kexec.h
-+++ b/include/linux/kexec.h
-@@ -105,6 +105,21 @@ struct compat_kexec_segment {
- };
- #endif
+diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
+index fab1553..64c3bec 100644
+--- a/drivers/spi/spi-qcom-qspi.c
++++ b/drivers/spi/spi-qcom-qspi.c
+@@ -13,7 +13,8 @@
+ #include <linux/pm_opp.h>
+ #include <linux/spi/spi.h>
+ #include <linux/spi/spi-mem.h>
+-
++#include <linux/dmapool.h>
++#include <linux/dma-mapping.h>
  
-+/* Alignment required for elf header segment */
-+#define ELF_CORE_HEADER_ALIGN   4096
+ #define QSPI_NUM_CS		2
+ #define QSPI_BYTES_PER_WORD	4
+@@ -62,6 +63,7 @@
+ #define WR_FIFO_FULL		BIT(10)
+ #define WR_FIFO_OVERRUN		BIT(11)
+ #define TRANSACTION_DONE	BIT(16)
++#define DMA_CHAIN_DONE		BIT(31)
+ #define QSPI_ERR_IRQS		(RESP_FIFO_UNDERRUN | HRESP_FROM_NOC_ERR | \
+ 				 WR_FIFO_OVERRUN)
+ #define QSPI_ALL_IRQS		(QSPI_ERR_IRQS | RESP_FIFO_RDY | \
+@@ -108,6 +110,10 @@
+ #define RD_FIFO_RESET		0x0030
+ #define RESET_FIFO		BIT(0)
+ 
++#define NEXT_DMA_DESC_ADDR		0x0040
++#define CURRENT_DMA_DESC_ADDR	0x0044
++#define CURRENT_MEM_ADDR		0x0048
 +
-+struct crash_mem {
-+	unsigned int max_nr_ranges;
-+	unsigned int nr_ranges;
-+	struct range ranges[];
+ #define CUR_MEM_ADDR		0x0048
+ #define HW_VERSION		0x004c
+ #define RD_FIFO			0x0050
+@@ -120,6 +126,22 @@ enum qspi_dir {
+ 	QSPI_WRITE,
+ };
+ 
++struct qspi_cmd_desc {
++	uint32_t data_address;
++	uint32_t next_descriptor;
++	uint32_t direction:1;
++	uint32_t multi_io_mode:3;
++	uint32_t reserved1:4;
++	uint32_t fragment:1;
++	uint32_t reserved2:7;
++	uint32_t length:16;
++	//------------------------//
++	uint8_t *bounce_src;
++	uint8_t *bounce_dst;
++	uint32_t bounce_length;
 +};
 +
-+extern int crash_exclude_mem_range(struct crash_mem *mem,
-+				   unsigned long long mstart,
-+				   unsigned long long mend);
-+extern int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
-+				       void **addr, unsigned long *sz);
-+
- #ifdef CONFIG_KEXEC_FILE
- struct purgatory_info {
- 	/*
-@@ -238,21 +253,6 @@ static inline int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf)
- }
- #endif
++#define QSPI_MAX_NUM_DESC 5
+ struct qspi_xfer {
+ 	union {
+ 		const void *tx_buf;
+@@ -137,11 +159,30 @@ enum qspi_clocks {
+ 	QSPI_NUM_CLKS
+ };
  
--/* Alignment required for elf header segment */
--#define ELF_CORE_HEADER_ALIGN   4096
--
--struct crash_mem {
--	unsigned int max_nr_ranges;
--	unsigned int nr_ranges;
--	struct range ranges[];
--};
--
--extern int crash_exclude_mem_range(struct crash_mem *mem,
--				   unsigned long long mstart,
--				   unsigned long long mend);
--extern int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
--				       void **addr, unsigned long *sz);
--
- #ifndef arch_kexec_apply_relocations_add
- /*
-  * arch_kexec_apply_relocations_add - apply relocations of type RELA
-diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index 755f5f08ab38..45d241aebe3d 100644
---- a/kernel/crash_core.c
-+++ b/kernel/crash_core.c
-@@ -10,6 +10,7 @@
- #include <linux/utsname.h>
- #include <linux/vmalloc.h>
- #include <linux/sizes.h>
-+#include <linux/kexec.h>
- 
- #include <asm/page.h>
- #include <asm/sections.h>
-@@ -314,6 +315,187 @@ static int __init parse_crashkernel_dummy(char *arg)
- }
- early_param("crashkernel", parse_crashkernel_dummy);
- 
-+int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
-+			  void **addr, unsigned long *sz)
-+{
-+	Elf64_Ehdr *ehdr;
-+	Elf64_Phdr *phdr;
-+	unsigned long nr_cpus = num_possible_cpus(), nr_phdr, elf_sz;
-+	unsigned char *buf;
-+	unsigned int cpu, i;
-+	unsigned long long notes_addr;
-+	unsigned long mstart, mend;
++enum qspi_xfer_mode {
++	QSPI_INVALID,
++	QSPI_FIFO,
++	QSPI_DMA
++};
 +
-+	/* extra phdr for vmcoreinfo ELF note */
-+	nr_phdr = nr_cpus + 1;
-+	nr_phdr += mem->nr_ranges;
++/* number of entries in sgt returned from spi framework that we can support */
++#define QSPI_QCOM_MAX_SG 5
 +
-+	/*
-+	 * kexec-tools creates an extra PT_LOAD phdr for kernel text mapping
-+	 * area (for example, ffffffff80000000 - ffffffffa0000000 on x86_64).
-+	 * I think this is required by tools like gdb. So same physical
-+	 * memory will be mapped in two ELF headers. One will contain kernel
-+	 * text virtual addresses and other will have __va(physical) addresses.
-+	 */
-+
-+	nr_phdr++;
-+	elf_sz = sizeof(Elf64_Ehdr) + nr_phdr * sizeof(Elf64_Phdr);
-+	elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
-+
-+	buf = vzalloc(elf_sz);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	ehdr = (Elf64_Ehdr *)buf;
-+	phdr = (Elf64_Phdr *)(ehdr + 1);
-+	memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
-+	ehdr->e_ident[EI_CLASS] = ELFCLASS64;
-+	ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
-+	ehdr->e_ident[EI_VERSION] = EV_CURRENT;
-+	ehdr->e_ident[EI_OSABI] = ELF_OSABI;
-+	memset(ehdr->e_ident + EI_PAD, 0, EI_NIDENT - EI_PAD);
-+	ehdr->e_type = ET_CORE;
-+	ehdr->e_machine = ELF_ARCH;
-+	ehdr->e_version = EV_CURRENT;
-+	ehdr->e_phoff = sizeof(Elf64_Ehdr);
-+	ehdr->e_ehsize = sizeof(Elf64_Ehdr);
-+	ehdr->e_phentsize = sizeof(Elf64_Phdr);
-+
-+	/* Prepare one phdr of type PT_NOTE for each present CPU */
-+	for_each_present_cpu(cpu) {
-+		phdr->p_type = PT_NOTE;
-+		notes_addr = per_cpu_ptr_to_phys(per_cpu_ptr(crash_notes, cpu));
-+		phdr->p_offset = phdr->p_paddr = notes_addr;
-+		phdr->p_filesz = phdr->p_memsz = sizeof(note_buf_t);
-+		(ehdr->e_phnum)++;
-+		phdr++;
-+	}
-+
-+	/* Prepare one PT_NOTE header for vmcoreinfo */
-+	phdr->p_type = PT_NOTE;
-+	phdr->p_offset = phdr->p_paddr = paddr_vmcoreinfo_note();
-+	phdr->p_filesz = phdr->p_memsz = VMCOREINFO_NOTE_SIZE;
-+	(ehdr->e_phnum)++;
-+	phdr++;
-+
-+	/* Prepare PT_LOAD type program header for kernel text region */
-+	if (need_kernel_map) {
-+		phdr->p_type = PT_LOAD;
-+		phdr->p_flags = PF_R|PF_W|PF_X;
-+		phdr->p_vaddr = (unsigned long) _text;
-+		phdr->p_filesz = phdr->p_memsz = _end - _text;
-+		phdr->p_offset = phdr->p_paddr = __pa_symbol(_text);
-+		ehdr->e_phnum++;
-+		phdr++;
-+	}
-+
-+	/* Go through all the ranges in mem->ranges[] and prepare phdr */
-+	for (i = 0; i < mem->nr_ranges; i++) {
-+		mstart = mem->ranges[i].start;
-+		mend = mem->ranges[i].end;
-+
-+		phdr->p_type = PT_LOAD;
-+		phdr->p_flags = PF_R|PF_W|PF_X;
-+		phdr->p_offset  = mstart;
-+
-+		phdr->p_paddr = mstart;
-+		phdr->p_vaddr = (unsigned long) __va(mstart);
-+		phdr->p_filesz = phdr->p_memsz = mend - mstart + 1;
-+		phdr->p_align = 0;
-+		ehdr->e_phnum++;
-+		pr_debug("Crash PT_LOAD ELF header. phdr=%p vaddr=0x%llx, paddr=0x%llx, sz=0x%llx e_phnum=%d p_offset=0x%llx\n",
-+			phdr, phdr->p_vaddr, phdr->p_paddr, phdr->p_filesz,
-+			ehdr->e_phnum, phdr->p_offset);
-+		phdr++;
-+	}
-+
-+	*addr = buf;
-+	*sz = elf_sz;
-+	return 0;
-+}
-+
-+int crash_exclude_mem_range(struct crash_mem *mem,
-+			    unsigned long long mstart, unsigned long long mend)
-+{
-+	int i, j;
-+	unsigned long long start, end, p_start, p_end;
-+	struct range temp_range = {0, 0};
-+
-+	for (i = 0; i < mem->nr_ranges; i++) {
-+		start = mem->ranges[i].start;
-+		end = mem->ranges[i].end;
-+		p_start = mstart;
-+		p_end = mend;
-+
-+		if (mstart > end || mend < start)
-+			continue;
-+
-+		/* Truncate any area outside of range */
-+		if (mstart < start)
-+			p_start = start;
-+		if (mend > end)
-+			p_end = end;
-+
-+		/* Found completely overlapping range */
-+		if (p_start == start && p_end == end) {
-+			mem->ranges[i].start = 0;
-+			mem->ranges[i].end = 0;
-+			if (i < mem->nr_ranges - 1) {
-+				/* Shift rest of the ranges to left */
-+				for (j = i; j < mem->nr_ranges - 1; j++) {
-+					mem->ranges[j].start =
-+						mem->ranges[j+1].start;
-+					mem->ranges[j].end =
-+							mem->ranges[j+1].end;
-+				}
-+
-+				/*
-+				 * Continue to check if there are another overlapping ranges
-+				 * from the current position because of shifting the above
-+				 * mem ranges.
-+				 */
-+				i--;
-+				mem->nr_ranges--;
-+				continue;
-+			}
-+			mem->nr_ranges--;
-+			return 0;
-+		}
-+
-+		if (p_start > start && p_end < end) {
-+			/* Split original range */
-+			mem->ranges[i].end = p_start - 1;
-+			temp_range.start = p_end + 1;
-+			temp_range.end = end;
-+		} else if (p_start != start)
-+			mem->ranges[i].end = p_start - 1;
-+		else
-+			mem->ranges[i].start = p_end + 1;
-+		break;
-+	}
-+
-+	/* If a split happened, add the split to array */
-+	if (!temp_range.end)
-+		return 0;
-+
-+	/* Split happened */
-+	if (i == mem->max_nr_ranges - 1)
-+		return -ENOMEM;
-+
-+	/* Location where new range should go */
-+	j = i + 1;
-+	if (j < mem->nr_ranges) {
-+		/* Move over all ranges one slot towards the end */
-+		for (i = mem->nr_ranges - 1; i >= j; i--)
-+			mem->ranges[i + 1] = mem->ranges[i];
-+	}
-+
-+	mem->ranges[j].start = temp_range.start;
-+	mem->ranges[j].end = temp_range.end;
-+	mem->nr_ranges++;
-+	return 0;
-+}
-+
- Elf_Word *append_elf_note(Elf_Word *buf, char *name, unsigned int type,
- 			  void *data, size_t data_len)
+ struct qcom_qspi {
+ 	void __iomem *base;
+ 	struct device *dev;
+ 	struct clk_bulk_data *clks;
+ 	struct qspi_xfer xfer;
++	struct dma_pool *dma_cmd_pool;
++	struct dma_pool *dma_data_pool;
++	dma_addr_t dma_cmd_desc[3*QSPI_QCOM_MAX_SG];
++	dma_addr_t dma_data_desc[2*QSPI_QCOM_MAX_SG];
++	void *virt_cmd_desc[3*QSPI_QCOM_MAX_SG];
++	void *virt_data_desc[2*QSPI_QCOM_MAX_SG];
++	unsigned int n_cmd_desc;
++	unsigned int n_data_desc;
++	int xfer_mode;
++	u32 iomode;
+ 	struct icc_path *icc_path_cpu_to_qspi;
+ 	unsigned long last_speed;
+ 	/* Lock to protect data accessed by IRQs */
+@@ -151,18 +192,25 @@ struct qcom_qspi {
+ static u32 qspi_buswidth_to_iomode(struct qcom_qspi *ctrl,
+ 				   unsigned int buswidth)
  {
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index f1a0e4e3fb5c..0b560064579e 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -1138,184 +1138,3 @@ int kexec_purgatory_get_set_symbol(struct kimage *image, const char *name,
++	u32 ret;
++
++	/* for DMA we dont write to PIO_XFER_CFG register, so don't shift */
+ 	switch (buswidth) {
+ 	case 1:
+-		return SDR_1BIT << MULTI_IO_MODE_SHFT;
++		ret = (ctrl->xfer_mode == QSPI_DMA ? SDR_1BIT : SDR_1BIT << MULTI_IO_MODE_SHFT);
++		break;
+ 	case 2:
+-		return SDR_2BIT << MULTI_IO_MODE_SHFT;
++		ret = (ctrl->xfer_mode == QSPI_DMA ? SDR_2BIT : SDR_2BIT << MULTI_IO_MODE_SHFT);
++		break;
+ 	case 4:
+-		return SDR_4BIT << MULTI_IO_MODE_SHFT;
++		ret = (ctrl->xfer_mode == QSPI_DMA ? SDR_4BIT : SDR_4BIT << MULTI_IO_MODE_SHFT);
++		break;
+ 	default:
+ 		dev_warn_once(ctrl->dev,
+ 				"Unexpected bus width: %u\n", buswidth);
+-		return SDR_1BIT << MULTI_IO_MODE_SHFT;
++		ret = (ctrl->xfer_mode == QSPI_DMA ? SDR_1BIT : SDR_1BIT << MULTI_IO_MODE_SHFT);
+ 	}
++	return ret;
+ }
+ 
+ static void qcom_qspi_pio_xfer_cfg(struct qcom_qspi *ctrl)
+@@ -223,6 +271,21 @@ static void qcom_qspi_handle_err(struct spi_master *master,
+ 	spin_lock_irqsave(&ctrl->lock, flags);
+ 	writel(0, ctrl->base + MSTR_INT_EN);
+ 	ctrl->xfer.rem_bytes = 0;
++
++	if (ctrl->xfer_mode == QSPI_DMA) {
++		int ii;
++
++		/* free cmd and data descriptors */
++		for (ii = 0; ii < ctrl->n_data_desc; ii++)
++			dma_pool_free(ctrl->dma_data_pool, ctrl->virt_data_desc[ii],
++					  ctrl->dma_data_desc[ii]);
++		ctrl->n_data_desc = 0;
++
++		for (ii = 0; ii < ctrl->n_cmd_desc; ii++)
++			dma_pool_free(ctrl->dma_cmd_pool, ctrl->virt_cmd_desc[ii],
++					  ctrl->dma_cmd_desc[ii]);
++		ctrl->n_cmd_desc = 0;
++	}
+ 	spin_unlock_irqrestore(&ctrl->lock, flags);
+ }
+ 
+@@ -230,6 +293,7 @@ static int qcom_qspi_set_speed(struct qcom_qspi *ctrl, unsigned long speed_hz)
+ {
+ 	int ret;
+ 	unsigned int avg_bw_cpu;
++	unsigned int peak_bw_cpu;
+ 
+ 	if (speed_hz == ctrl->last_speed)
+ 		return 0;
+@@ -241,12 +305,16 @@ static int qcom_qspi_set_speed(struct qcom_qspi *ctrl, unsigned long speed_hz)
+ 		return ret;
+ 	}
+ 
++	avg_bw_cpu = Bps_to_icc(speed_hz);
+ 	/*
+-	 * Set BW quota for CPU as driver supports FIFO mode only.
+-	 * We don't have explicit peak requirement so keep it equal to avg_bw.
++	 * Set BW quota for CPU for FIFO to avg_bw
++	 * as we don't have explicit peak requirement.
++	 * TBD TBD TBD - change this as required for DMA.
++	 * As of now same peak requirement seems to be working.
+ 	 */
+-	avg_bw_cpu = Bps_to_icc(speed_hz);
+-	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, avg_bw_cpu, avg_bw_cpu);
++	peak_bw_cpu = ctrl->xfer_mode == QSPI_FIFO ? avg_bw_cpu : avg_bw_cpu;
++
++	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, avg_bw_cpu, peak_bw_cpu);
+ 	if (ret) {
+ 		dev_err(ctrl->dev, "%s: ICC BW voting failed for cpu: %d\n",
+ 			__func__, ret);
+@@ -258,6 +326,186 @@ static int qcom_qspi_set_speed(struct qcom_qspi *ctrl, unsigned long speed_hz)
  	return 0;
  }
- #endif /* CONFIG_ARCH_HAS_KEXEC_PURGATORY */
--
--int crash_exclude_mem_range(struct crash_mem *mem,
--			    unsigned long long mstart, unsigned long long mend)
--{
--	int i, j;
--	unsigned long long start, end, p_start, p_end;
--	struct range temp_range = {0, 0};
--
--	for (i = 0; i < mem->nr_ranges; i++) {
--		start = mem->ranges[i].start;
--		end = mem->ranges[i].end;
--		p_start = mstart;
--		p_end = mend;
--
--		if (mstart > end || mend < start)
--			continue;
--
--		/* Truncate any area outside of range */
--		if (mstart < start)
--			p_start = start;
--		if (mend > end)
--			p_end = end;
--
--		/* Found completely overlapping range */
--		if (p_start == start && p_end == end) {
--			mem->ranges[i].start = 0;
--			mem->ranges[i].end = 0;
--			if (i < mem->nr_ranges - 1) {
--				/* Shift rest of the ranges to left */
--				for (j = i; j < mem->nr_ranges - 1; j++) {
--					mem->ranges[j].start =
--						mem->ranges[j+1].start;
--					mem->ranges[j].end =
--							mem->ranges[j+1].end;
--				}
--
--				/*
--				 * Continue to check if there are another overlapping ranges
--				 * from the current position because of shifting the above
--				 * mem ranges.
--				 */
--				i--;
--				mem->nr_ranges--;
--				continue;
--			}
--			mem->nr_ranges--;
--			return 0;
--		}
--
--		if (p_start > start && p_end < end) {
--			/* Split original range */
--			mem->ranges[i].end = p_start - 1;
--			temp_range.start = p_end + 1;
--			temp_range.end = end;
--		} else if (p_start != start)
--			mem->ranges[i].end = p_start - 1;
--		else
--			mem->ranges[i].start = p_end + 1;
--		break;
+ 
++/* aligned to 32 bytes, not to cross 1KB boundary */
++#define QSPI_ALIGN_REQ		32
++#define QSPI_BOUNDARY_REQ	1024
++
++int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, uint8_t *virt_ptr,
++			dma_addr_t dma_ptr, uint32_t n_bytes)
++{
++	struct qspi_cmd_desc *virt_cmd_desc, *prev;
++	uint8_t *virt_data_desc;
++	dma_addr_t dma_cmd_desc, dma_data_desc;
++
++	if (virt_ptr && n_bytes >= QSPI_ALIGN_REQ) {
++		dev_err(ctrl->dev,
++			"Exiting to avert memory overwrite, n_bytes-%d\n", n_bytes);
++		return -ENOMEM;
++	}
++
++	/* allocate for dma cmd descriptor */
++	virt_cmd_desc = (struct qspi_cmd_desc *)dma_pool_alloc(ctrl->dma_cmd_pool,
++		GFP_KERNEL, &dma_cmd_desc);
++	if (!virt_cmd_desc) {
++		dev_err(ctrl->dev,
++			"Could not allocate for cmd_desc\n");
++		return -ENOMEM;
++	}
++	ctrl->virt_cmd_desc[ctrl->n_cmd_desc] = virt_cmd_desc;
++	ctrl->dma_cmd_desc[ctrl->n_cmd_desc] = dma_cmd_desc;
++	ctrl->n_cmd_desc++;
++
++	/* allocate for dma data descriptor if unaligned else use pre-aligned */
++	if (virt_ptr) {
++		virt_data_desc = (uint8_t *)dma_pool_zalloc(ctrl->dma_data_pool,
++			GFP_KERNEL, &dma_data_desc);
++		if (!virt_data_desc) {
++			dev_err(ctrl->dev,
++				"Could not allocate for data_desc\n");
++			return -ENOMEM;
++		}
++		ctrl->virt_data_desc[ctrl->n_data_desc] = virt_data_desc;
++		ctrl->dma_data_desc[ctrl->n_data_desc] = dma_data_desc;
++		ctrl->n_data_desc++;
++
++		/*
++		 * for tx copy xfer data into allocated buffer
++		 * for rx setup bounce info to copy after xfer
++		 */
++		if (ctrl->xfer.dir == QSPI_WRITE) {
++			memcpy(virt_data_desc, virt_ptr, n_bytes);
++		} else {
++			virt_cmd_desc->bounce_src = virt_data_desc;
++			virt_cmd_desc->bounce_dst = virt_ptr;
++			virt_cmd_desc->bounce_length = n_bytes;
++		}
++	} else {
++		dma_data_desc = dma_ptr;
++	}
++
++	/* setup cmd descriptor */
++	virt_cmd_desc->data_address = (uint32_t)(uintptr_t)(dma_data_desc);
++	virt_cmd_desc->next_descriptor = 0;
++	virt_cmd_desc->direction = ctrl->xfer.dir;
++	virt_cmd_desc->multi_io_mode = ctrl->iomode;
++	virt_cmd_desc->reserved1 = 0;
++	virt_cmd_desc->fragment = 0;
++	virt_cmd_desc->reserved2 = 0;
++	virt_cmd_desc->length = n_bytes;
++
++	/* update previous descriptor */
++	if (ctrl->n_cmd_desc >= 2) {
++		prev = (ctrl->virt_cmd_desc)[ctrl->n_cmd_desc - 2];
++		prev->next_descriptor = dma_cmd_desc;
++		prev->fragment = 1;
++	}
++
++	return 0;
++}
++
++static int qcom_qspi_setup_dma_desc(struct qcom_qspi *ctrl,
++				struct spi_transfer *xfer)
++{
++	int ret;
++	struct sg_table *sgt;
++	unsigned int sg_total_len = 0;
++	dma_addr_t dma_ptr_sg;
++	unsigned int dma_len_sg;
++	uint32_t prolog_bytes, aligned_bytes, epilog_bytes;
++	dma_addr_t aligned_ptr;
++	int ii;
++	uint8_t *byte_ptr;
++
++	if (ctrl->n_cmd_desc || ctrl->n_data_desc) {
++		dev_err(ctrl->dev, "Remnant dma buffers cmd-%d, data-%d\n",
++			ctrl->n_cmd_desc, ctrl->n_data_desc);
++		return -EIO;
++	}
++
++	sgt = (ctrl->xfer.dir == QSPI_READ) ? &xfer->rx_sg : &xfer->tx_sg;
++	if (!sgt->nents || sgt->nents > QSPI_QCOM_MAX_SG) {
++		dev_err(ctrl->dev, "Cannot handle %d entries in scatter list\n", sgt->nents);
++		return -EINVAL;
++	}
++
++	for (ii = 0; ii < sgt->nents; ii++)
++		sg_total_len += sg_dma_len(sgt->sgl + ii);
++	if (sg_total_len != xfer->len) {
++		dev_err(ctrl->dev, "Data lengths mismatch\n");
++		return -EINVAL;
++	}
++
++	if (ctrl->xfer.dir == QSPI_READ)
++		byte_ptr = (uint8_t *)xfer->rx_buf;
++	else
++		byte_ptr = (uint8_t *)xfer->tx_buf;
++
++	for (ii = 0; ii < sgt->nents; ii++) {
++		dma_ptr_sg = sg_dma_address(sgt->sgl + ii);
++		dma_len_sg = sg_dma_len(sgt->sgl + ii);
++
++		aligned_ptr = PTR_ALIGN(dma_ptr_sg, QSPI_ALIGN_REQ);
++
++		prolog_bytes = min(dma_len_sg, (unsigned int)(aligned_ptr - dma_ptr_sg));
++		if (prolog_bytes) {
++			ret = qcom_qspi_alloc_desc(ctrl, byte_ptr, 0, prolog_bytes);
++			if (ret)
++				goto cleanup;
++			byte_ptr += prolog_bytes;
++		}
++
++		aligned_bytes = PTR_ALIGN_DOWN(dma_len_sg - prolog_bytes, QSPI_ALIGN_REQ);
++		if (aligned_bytes) {
++			ret = qcom_qspi_alloc_desc(ctrl, 0, aligned_ptr, aligned_bytes);
++			if (ret)
++				goto cleanup;
++			byte_ptr += aligned_bytes;
++		}
++
++		epilog_bytes = dma_len_sg - prolog_bytes - aligned_bytes;
++		if (epilog_bytes) {
++			ret = qcom_qspi_alloc_desc(ctrl, byte_ptr, 0, epilog_bytes);
++			if (ret)
++				goto cleanup;
++			byte_ptr += epilog_bytes;
++		}
++	}
++	return 0;
++
++cleanup:
++	dev_err(ctrl->dev, "ERROR cleanup in setup_dma_desc\n");
++	for (ii = 0; ii < ctrl->n_data_desc; ii++)
++		dma_pool_free(ctrl->dma_data_pool, ctrl->virt_data_desc[ii],
++				  ctrl->dma_data_desc[ii]);
++	ctrl->n_data_desc = 0;
++
++	for (ii = 0; ii < ctrl->n_cmd_desc; ii++)
++		dma_pool_free(ctrl->dma_cmd_pool, ctrl->virt_cmd_desc[ii],
++				  ctrl->dma_cmd_desc[ii]);
++	ctrl->n_cmd_desc = 0;
++	return ret;
++}
++
++static void qcom_qspi_dma_xfer(struct qcom_qspi *ctrl)
++{
++	/* Ack any previous interrupts that might be hanging around */
++	writel(DMA_CHAIN_DONE, ctrl->base + MSTR_INT_STATUS);
++
++	/* Setup new interrupts */
++	writel(DMA_CHAIN_DONE, ctrl->base + MSTR_INT_EN);
++
++	/* flush all writes */
++	wmb();
++
++	/* kick off transfer */
++	writel((uint32_t)(uintptr_t)(ctrl->dma_cmd_desc)[0], ctrl->base + NEXT_DMA_DESC_ADDR);
++}
++
++/* Switch to DMA if transfer length exceeds this */
++#define QSPI_MAX_BYTES_FIFO 64
++#define NO_TX_DATA_DELAY_FOR_DMA 1
++#define DMA_CONDITIONAL (xfer->len > QSPI_MAX_BYTES_FIFO)
++
+ static int qcom_qspi_transfer_one(struct spi_master *master,
+ 				  struct spi_device *slv,
+ 				  struct spi_transfer *xfer)
+@@ -266,6 +514,7 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
+ 	int ret;
+ 	unsigned long speed_hz;
+ 	unsigned long flags;
++	u32 mstr_cfg;
+ 
+ 	speed_hz = slv->max_speed_hz;
+ 	if (xfer->speed_hz)
+@@ -276,6 +525,7 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
+ 		return ret;
+ 
+ 	spin_lock_irqsave(&ctrl->lock, flags);
++	mstr_cfg = readl(ctrl->base + MSTR_CONFIG);
+ 
+ 	/* We are half duplex, so either rx or tx will be set */
+ 	if (xfer->rx_buf) {
+@@ -290,7 +540,31 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
+ 	ctrl->xfer.is_last = list_is_last(&xfer->transfer_list,
+ 					  &master->cur_msg->transfers);
+ 	ctrl->xfer.rem_bytes = xfer->len;
+-	qcom_qspi_pio_xfer(ctrl);
++
++	if (DMA_CONDITIONAL) {
++		ctrl->xfer_mode = QSPI_DMA;
++		ctrl->iomode = qspi_buswidth_to_iomode(ctrl, ctrl->xfer.buswidth);
++#if NO_TX_DATA_DELAY_FOR_DMA
++		mstr_cfg &= ~(TX_DATA_OE_DELAY_MSK | TX_DATA_DELAY_MSK);
++#endif
++		mstr_cfg &= ~FB_CLK_EN;
++		mstr_cfg &= ~PIN_WPN;
++		mstr_cfg |= DMA_ENABLE;
++		writel(mstr_cfg, ctrl->base + MSTR_CONFIG);
++
++		ret = qcom_qspi_setup_dma_desc(ctrl, xfer);
++		if (ret) {
++			spin_unlock_irqrestore(&ctrl->lock, flags);
++			return ret;
++		}
++		qcom_qspi_dma_xfer(ctrl);
++	} else {
++		ctrl->xfer_mode = QSPI_FIFO;
++		mstr_cfg &= ~DMA_ENABLE;
++		mstr_cfg |= FB_CLK_EN | PIN_WPN;
++		writel(mstr_cfg, ctrl->base + MSTR_CONFIG);
++		qcom_qspi_pio_xfer(ctrl);
++	}
+ 
+ 	spin_unlock_irqrestore(&ctrl->lock, flags);
+ 
+@@ -298,6 +572,15 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
+ 	return 1;
+ }
+ 
++static bool qcom_qspi_can_dma(struct spi_controller *ctlr,
++			 struct spi_device *slv, struct spi_transfer *xfer)
++{
++	if (DMA_CONDITIONAL)
++		return true;
++	else
++		return false;
++}
++
+ static int qcom_qspi_prepare_message(struct spi_master *master,
+ 				     struct spi_message *message)
+ {
+@@ -328,6 +611,40 @@ static int qcom_qspi_prepare_message(struct spi_master *master,
+ 	return 0;
+ }
+ 
++static int qcom_qspi_alloc_dma(struct qcom_qspi *ctrl)
++{
++	/* allocate for cmd descriptors pool */
++	ctrl->dma_cmd_pool = dma_pool_create("qspi cmd desc pool",
++		ctrl->dev, sizeof(struct qspi_cmd_desc), 0, 0);
++	if (!ctrl->dma_cmd_pool) {
++		dev_err(ctrl->dev, "Could not create dma pool for cmd_desc\n");
++		return -ENOMEM;
++	}
++
++	/*
++	 * allocate for data descriptors pool as per alignment
++	 * and boundary requirements
++	 */
++	ctrl->dma_data_pool = dma_pool_create("qspi data desc pool",
++		ctrl->dev, QSPI_ALIGN_REQ, QSPI_ALIGN_REQ, QSPI_BOUNDARY_REQ);
++	if (!ctrl->dma_data_pool) {
++		dev_err(ctrl->dev, "Could not create dma pool for data desc\n");
++		dma_pool_destroy(ctrl->dma_cmd_pool);
++		return -ENOMEM;
++	}
++
++	return 0;
++}
++
++static void qcom_qspi_free_dma(struct qcom_qspi *ctrl)
++{
++	/* free pool buffers */
++	dma_pool_destroy(ctrl->dma_data_pool);
++
++	/* free pool */
++	dma_pool_destroy(ctrl->dma_cmd_pool);
++}
++
+ static irqreturn_t pio_read(struct qcom_qspi *ctrl)
+ {
+ 	u32 rd_fifo_status;
+@@ -426,27 +743,58 @@ static irqreturn_t qcom_qspi_irq(int irq, void *dev_id)
+ 	int_status = readl(ctrl->base + MSTR_INT_STATUS);
+ 	writel(int_status, ctrl->base + MSTR_INT_STATUS);
+ 
+-	if (ctrl->xfer.dir == QSPI_WRITE) {
+-		if (int_status & WR_FIFO_EMPTY)
+-			ret = pio_write(ctrl);
+-	} else {
+-		if (int_status & RESP_FIFO_RDY)
+-			ret = pio_read(ctrl);
 -	}
 -
--	/* If a split happened, add the split to array */
--	if (!temp_range.end)
--		return 0;
--
--	/* Split happened */
--	if (i == mem->max_nr_ranges - 1)
--		return -ENOMEM;
--
--	/* Location where new range should go */
--	j = i + 1;
--	if (j < mem->nr_ranges) {
--		/* Move over all ranges one slot towards the end */
--		for (i = mem->nr_ranges - 1; i >= j; i--)
--			mem->ranges[i + 1] = mem->ranges[i];
+-	if (int_status & QSPI_ERR_IRQS) {
+-		if (int_status & RESP_FIFO_UNDERRUN)
+-			dev_err(ctrl->dev, "IRQ error: FIFO underrun\n");
+-		if (int_status & WR_FIFO_OVERRUN)
+-			dev_err(ctrl->dev, "IRQ error: FIFO overrun\n");
+-		if (int_status & HRESP_FROM_NOC_ERR)
+-			dev_err(ctrl->dev, "IRQ error: NOC response error\n");
+-		ret = IRQ_HANDLED;
 -	}
 -
--	mem->ranges[j].start = temp_range.start;
--	mem->ranges[j].end = temp_range.end;
--	mem->nr_ranges++;
--	return 0;
--}
--
--int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
--			  void **addr, unsigned long *sz)
--{
--	Elf64_Ehdr *ehdr;
--	Elf64_Phdr *phdr;
--	unsigned long nr_cpus = num_possible_cpus(), nr_phdr, elf_sz;
--	unsigned char *buf;
--	unsigned int cpu, i;
--	unsigned long long notes_addr;
--	unsigned long mstart, mend;
--
--	/* extra phdr for vmcoreinfo ELF note */
--	nr_phdr = nr_cpus + 1;
--	nr_phdr += mem->nr_ranges;
--
--	/*
--	 * kexec-tools creates an extra PT_LOAD phdr for kernel text mapping
--	 * area (for example, ffffffff80000000 - ffffffffa0000000 on x86_64).
--	 * I think this is required by tools like gdb. So same physical
--	 * memory will be mapped in two ELF headers. One will contain kernel
--	 * text virtual addresses and other will have __va(physical) addresses.
--	 */
--
--	nr_phdr++;
--	elf_sz = sizeof(Elf64_Ehdr) + nr_phdr * sizeof(Elf64_Phdr);
--	elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
--
--	buf = vzalloc(elf_sz);
--	if (!buf)
--		return -ENOMEM;
--
--	ehdr = (Elf64_Ehdr *)buf;
--	phdr = (Elf64_Phdr *)(ehdr + 1);
--	memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
--	ehdr->e_ident[EI_CLASS] = ELFCLASS64;
--	ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
--	ehdr->e_ident[EI_VERSION] = EV_CURRENT;
--	ehdr->e_ident[EI_OSABI] = ELF_OSABI;
--	memset(ehdr->e_ident + EI_PAD, 0, EI_NIDENT - EI_PAD);
--	ehdr->e_type = ET_CORE;
--	ehdr->e_machine = ELF_ARCH;
--	ehdr->e_version = EV_CURRENT;
--	ehdr->e_phoff = sizeof(Elf64_Ehdr);
--	ehdr->e_ehsize = sizeof(Elf64_Ehdr);
--	ehdr->e_phentsize = sizeof(Elf64_Phdr);
--
--	/* Prepare one phdr of type PT_NOTE for each present CPU */
--	for_each_present_cpu(cpu) {
--		phdr->p_type = PT_NOTE;
--		notes_addr = per_cpu_ptr_to_phys(per_cpu_ptr(crash_notes, cpu));
--		phdr->p_offset = phdr->p_paddr = notes_addr;
--		phdr->p_filesz = phdr->p_memsz = sizeof(note_buf_t);
--		(ehdr->e_phnum)++;
--		phdr++;
--	}
--
--	/* Prepare one PT_NOTE header for vmcoreinfo */
--	phdr->p_type = PT_NOTE;
--	phdr->p_offset = phdr->p_paddr = paddr_vmcoreinfo_note();
--	phdr->p_filesz = phdr->p_memsz = VMCOREINFO_NOTE_SIZE;
--	(ehdr->e_phnum)++;
--	phdr++;
--
--	/* Prepare PT_LOAD type program header for kernel text region */
--	if (need_kernel_map) {
--		phdr->p_type = PT_LOAD;
--		phdr->p_flags = PF_R|PF_W|PF_X;
--		phdr->p_vaddr = (unsigned long) _text;
--		phdr->p_filesz = phdr->p_memsz = _end - _text;
--		phdr->p_offset = phdr->p_paddr = __pa_symbol(_text);
--		ehdr->e_phnum++;
--		phdr++;
--	}
--
--	/* Go through all the ranges in mem->ranges[] and prepare phdr */
--	for (i = 0; i < mem->nr_ranges; i++) {
--		mstart = mem->ranges[i].start;
--		mend = mem->ranges[i].end;
--
--		phdr->p_type = PT_LOAD;
--		phdr->p_flags = PF_R|PF_W|PF_X;
--		phdr->p_offset  = mstart;
--
--		phdr->p_paddr = mstart;
--		phdr->p_vaddr = (unsigned long) __va(mstart);
--		phdr->p_filesz = phdr->p_memsz = mend - mstart + 1;
--		phdr->p_align = 0;
--		ehdr->e_phnum++;
--		pr_debug("Crash PT_LOAD ELF header. phdr=%p vaddr=0x%llx, paddr=0x%llx, sz=0x%llx e_phnum=%d p_offset=0x%llx\n",
--			phdr, phdr->p_vaddr, phdr->p_paddr, phdr->p_filesz,
--			ehdr->e_phnum, phdr->p_offset);
--		phdr++;
--	}
--
--	*addr = buf;
--	*sz = elf_sz;
--	return 0;
--}
+-	if (!ctrl->xfer.rem_bytes) {
+-		writel(0, ctrl->base + MSTR_INT_EN);
+-		spi_finalize_current_transfer(dev_get_drvdata(ctrl->dev));
++	if (ctrl->xfer_mode == QSPI_FIFO) {
++		if (ctrl->xfer.dir == QSPI_WRITE) {
++			if (int_status & WR_FIFO_EMPTY)
++				ret = pio_write(ctrl);
++		} else {
++			if (int_status & RESP_FIFO_RDY)
++				ret = pio_read(ctrl);
++		}
++
++		if (int_status & QSPI_ERR_IRQS) {
++			if (int_status & RESP_FIFO_UNDERRUN)
++				dev_err(ctrl->dev, "IRQ error: FIFO underrun\n");
++			if (int_status & WR_FIFO_OVERRUN)
++				dev_err(ctrl->dev, "IRQ error: FIFO overrun\n");
++			if (int_status & HRESP_FROM_NOC_ERR)
++				dev_err(ctrl->dev, "IRQ error: NOC response error\n");
++			ret = IRQ_HANDLED;
++		}
++
++		if (!ctrl->xfer.rem_bytes) {
++			writel(0, ctrl->base + MSTR_INT_EN);
++			spi_finalize_current_transfer(dev_get_drvdata(ctrl->dev));
++		}
++	} else if (ctrl->xfer_mode == QSPI_DMA) {
++		if (int_status & DMA_CHAIN_DONE) {
++			int ii;
++
++			writel(0, ctrl->base + MSTR_INT_EN);
++
++			if (ctrl->xfer.dir == QSPI_READ) {
++				struct qspi_cmd_desc *cmd_desc;
++
++				for (ii = 0; ii < ctrl->n_cmd_desc; ii++) {
++					cmd_desc = (struct qspi_cmd_desc *)ctrl->virt_cmd_desc[ii];
++					memcpy(cmd_desc->bounce_dst,
++						cmd_desc->bounce_src, cmd_desc->bounce_length);
++				}
++			}
++
++			for (ii = 0; ii < ctrl->n_data_desc; ii++)
++				dma_pool_free(ctrl->dma_data_pool, ctrl->virt_data_desc[ii],
++						  ctrl->dma_data_desc[ii]);
++			ctrl->n_data_desc = 0;
++
++			for (ii = 0; ii < ctrl->n_cmd_desc; ii++)
++				dma_pool_free(ctrl->dma_cmd_pool, ctrl->virt_cmd_desc[ii],
++						  ctrl->dma_cmd_desc[ii]);
++			ctrl->n_cmd_desc = 0;
++
++			ret = IRQ_HANDLED;
++			spi_finalize_current_transfer(dev_get_drvdata(ctrl->dev));
++		}
+ 	}
+ 
+ 	spin_unlock(&ctrl->lock);
+@@ -487,6 +835,9 @@ static int qcom_qspi_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	/* set default mode to FIFO */
++	ctrl->xfer_mode = QSPI_FIFO;
++
+ 	ctrl->icc_path_cpu_to_qspi = devm_of_icc_get(dev, "qspi-config");
+ 	if (IS_ERR(ctrl->icc_path_cpu_to_qspi))
+ 		return dev_err_probe(dev, PTR_ERR(ctrl->icc_path_cpu_to_qspi),
+@@ -517,7 +868,12 @@ static int qcom_qspi_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
++	if (ret)
++		return dev_err_probe(dev, ret, "could not set DMA mask\n");
++
+ 	master->max_speed_hz = 300000000;
++	master->max_dma_len = 65536; /* as per HPG */
+ 	master->num_chipselect = QSPI_NUM_CS;
+ 	master->bus_num = -1;
+ 	master->dev.of_node = pdev->dev.of_node;
+@@ -528,6 +884,7 @@ static int qcom_qspi_probe(struct platform_device *pdev)
+ 	master->prepare_message = qcom_qspi_prepare_message;
+ 	master->transfer_one = qcom_qspi_transfer_one;
+ 	master->handle_err = qcom_qspi_handle_err;
++	master->can_dma = qcom_qspi_can_dma;
+ 	master->auto_runtime_pm = true;
+ 
+ 	ret = devm_pm_opp_set_clkname(&pdev->dev, "core");
+@@ -540,6 +897,11 @@ static int qcom_qspi_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	/* allocate for DMA descriptor pools */
++	ret = qcom_qspi_alloc_dma(ctrl);
++	if (ret)
++		return ret;
++
+ 	pm_runtime_use_autosuspend(dev);
+ 	pm_runtime_set_autosuspend_delay(dev, 250);
+ 	pm_runtime_enable(dev);
+@@ -556,10 +918,15 @@ static int qcom_qspi_probe(struct platform_device *pdev)
+ static void qcom_qspi_remove(struct platform_device *pdev)
+ {
+ 	struct spi_master *master = platform_get_drvdata(pdev);
++	struct qcom_qspi *ctrl;
++
++	ctrl = spi_master_get_devdata(master);
+ 
+ 	/* Unregister _before_ disabling pm_runtime() so we stop transfers */
+ 	spi_unregister_master(master);
+ 
++	qcom_qspi_free_dma(ctrl);
++
+ 	pm_runtime_disable(&pdev->dev);
+ }
+ 
 -- 
-2.31.1
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 
