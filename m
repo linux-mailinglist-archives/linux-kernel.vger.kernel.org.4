@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B546D64F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31C06D64F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235230AbjDDOOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S235081AbjDDONu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 10:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbjDDOOe (ORCPT
+        with ESMTP id S235737AbjDDONl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:14:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D9D4486
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:13:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680617575;
+        Tue, 4 Apr 2023 10:13:41 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ACB558F;
+        Tue,  4 Apr 2023 07:13:08 -0700 (PDT)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3D7E6100005;
+        Tue,  4 Apr 2023 14:12:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1680617587;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pHnav7rmFyKZwzKMs7eXEGCo+lHgh/MyPZc+xhNZR/U=;
-        b=JCNXS+4l+0Ei1UeH67M6gWdNsxSw7u/YXFGrBymLVcx6ndZca13B89z3zzanKMWHu6feeP
-        dj4xsWu6kmOTuGj0h2Pk1bL1WdKyxwyYSLwG1Pxsz/quVU2C13zcPN+OY5KG8Y5vM+aEzH
-        P9OFvya3cMUeXciyqsEJaMF3sF3n5XU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-622-eBD4KOx6P-yw9rbEwUxkLg-1; Tue, 04 Apr 2023 10:12:50 -0400
-X-MC-Unique: eBD4KOx6P-yw9rbEwUxkLg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E61553C10EC6;
-        Tue,  4 Apr 2023 14:12:49 +0000 (UTC)
-Received: from [10.22.32.153] (unknown [10.22.32.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2FCCE492C14;
-        Tue,  4 Apr 2023 14:12:49 +0000 (UTC)
-Message-ID: <db9689cb-7d2b-8a76-06f4-271134dd1bfb@redhat.com>
-Date:   Tue, 4 Apr 2023 10:12:48 -0400
+        bh=Zl7MLykOKA8UlNhyqu3tWD/vjZRODEGN3E9wOmRfmr8=;
+        b=HERL1THee0w4ARcbmdqBbW9M2FrPt7M+4Zaeh/18I2OVyQ3MM0Usdk7NaPHFHD9vHrkI+I
+        e6Rw2Qo8DqxzMLNRPH7tdMTM4sXVOKb3byVmNQw1hU9hyte98VxCkOevjiFKXUjndP7l0o
+        fQXdMmYky22zAt7WMMTqJNETXimQFN7kaXSK2gu+vzkgvcXwnoMVA+S4byJsnO9o0TyEdL
+        NTpBE/7o4qGE7Tm1KSr5epsIsp2X3gs1bhxOKwvfmoWs1fJ9uXdwMxKdp72zRd/W2yJ+BC
+        2f5+NrOZt/WcDePLlFvQ+Cr+DbQfAOEuR513WeF4ixVoJRbe1FkVNLOkeaT62Q==
+Date:   Tue, 4 Apr 2023 16:12:51 +0200
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [RESEND PATCH v4 03/21] staging: media: tegra-video: fix
+ .vidioc_enum_fmt_vid_cap to return all formats
+Message-ID: <20230404161251.272cc78b@booty>
+In-Reply-To: <85268d69-3d3b-2c0f-ba26-073f09052362@xs4all.nl>
+References: <20230309144320.2937553-1-luca.ceresoli@bootlin.com>
+        <20230309144320.2937553-4-luca.ceresoli@bootlin.com>
+        <85268d69-3d3b-2c0f-ba26-073f09052362@xs4all.nl>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 3/3] cgroup/cpuset: Allow only one active attach operation
- per cpuset
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        gscrivan@redhat.com
-References: <20230331145045.2251683-1-longman@redhat.com>
- <20230331145045.2251683-4-longman@redhat.com>
- <20230403164736.lpjdpzxxnjlpxrqv@blackpad>
- <24b67530-62ce-4f9c-7b74-d41d2ccc710e@redhat.com>
- <20230404090737.3g3uxga52bojgdu5@blackpad>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230404090737.3g3uxga52bojgdu5@blackpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Hans,
 
-On 4/4/23 05:07, Michal Koutný wrote:
-> Hi.
->
-> On Mon, Apr 03, 2023 at 01:41:33PM -0400, Waiman Long <longman@redhat.com> wrote:
->> This patch is actually not related to the CLONE_INTO_GROUP problem in patch
->> 1. It is a generic problem when multiple users are moving threads into
->> cgroup.threads of the same or different cpusets simultaneously.
-> I meant this:
-> 	__cgroup_procs_write
-> 	  cgroup_kn_lock_live
-> 	    mutex_lock(&cgroup_mutex)
->
-> and (more succintly)
-> 	cgroup_update_dfl_csses
-> 	  lockdep_assert_held(&cgroup_mutex)
->
-> Even the threaded migrations should be synchronized here.
-> Can you please explain in more detail what's the problematic case?
+On Wed, 29 Mar 2023 13:16:22 +0200
+Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
 
-You are right. I missed the cgroup_mutex synchronization here. So this 
-patch isn't needed. I will drop it in the next version.
+> Hi Luca,
+> 
+> I finally found the time to test this series. It looks OK, except for this patch.
 
-Cheers,
-Longman
+Thank you very much for taking the time!
 
+> The list of supported formats really has to be the intersection of what the tegra
+> supports and what the sensor supports.
+> 
+> Otherwise you would advertise pixelformats that cannot be used, and the application
+> would have no way of knowing that.
+
+As far as I understand, I think we should rather make this driver fully
+behave as an MC-centric device. It is already using MC quite
+successfully after all.
+
+Do you think this is correct?
+
+If you do, then I think the plan would be:
+
+ - Add the V4L2_CAP_IO_MC flag
+ - As the mbus_code in get_format appropriately
+ - Leave the changes in this patch unmodified otherwise
+
+Best regards,
+Luca
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
