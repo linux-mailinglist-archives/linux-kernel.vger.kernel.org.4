@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20AF66D605D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FB56D6062
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbjDDM3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
+        id S234827AbjDDMaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234878AbjDDM31 (ORCPT
+        with ESMTP id S234049AbjDDMa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:29:27 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38A610A;
-        Tue,  4 Apr 2023 05:29:14 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EFBDA100003;
-        Tue,  4 Apr 2023 12:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680611353;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1s8oWqXZyH3J7vnCQRYvzoMuk5JY0jzBHnJpra4pFT4=;
-        b=LEkYgQFJZRrGQY7HJb36jYtHL0Cs9mApMZhHebK3mUTfeinteLbMlDsHL3KSPbOlVgZoku
-        EAe3a+QvGcBW1OSutA/vaI8wainzIOjfXEfdNBaFgDaOluu0PpQ7dtQzNWMq96pmCLyTye
-        3DWfvAQXLIvvvtTauUovUmg5iNQ1k5eOgcWz6aGlSRe38adX2n3ZzRTqTIFsG+m4FqaNMv
-        5oX7D8X+DELGEAknSKMXGaIx9c9yNGzWHHLhHLWv5Rx8t1Zp5ilrFQkacnLaJi6xfDgMw7
-        UwVfaaAD9O56Sm2YSGKC7UKAT1is7oeV6jxFOLi49o+UBx5L3MQhHfbJFu/w6g==
-Date:   Tue, 4 Apr 2023 14:29:11 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: add max313xx RTCs
-Message-ID: <2023040412291166c04438@mail.local>
-References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
- <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
- <dd6f0842-519f-1bc9-f7f5-459863dc3dcd@linaro.org>
- <202304040710049c9cc01a@mail.local>
- <CY4PR03MB2488DFC99C23ADE16FF40E2F96939@CY4PR03MB2488.namprd03.prod.outlook.com>
- <1efdb870-cac2-f6ed-72b5-d0550dbb5257@linaro.org>
- <CY4PR03MB24883E0406C2A16E566DB39196939@CY4PR03MB2488.namprd03.prod.outlook.com>
- <202304041226162e231e78@mail.local>
+        Tue, 4 Apr 2023 08:30:26 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41523187
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:30:25 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id h34so23138595uag.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 05:30:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680611424;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xbgh9TKrIPAPQmUd9OtixARVlr01XDWJkFcD5ndOpIU=;
+        b=h7Jc/fRqwzSbE72HEHrF6Qm+puChRq66jIPwDc7KVBgVnnhwJpl8ZjcMdJw8VSMoBH
+         NzTuKlCDm4w6WXo/xD5nFJYLz7MOKr5fqaRKkmtqLN1j0hP6SsP26/CKhApL0SBk0iO1
+         wCWGB2CQ884DMAJd81ZrPW1+BzFqFXJUtub2syEpMwm0Zh8YEZ4Sig1pgjbYQFNo2Kps
+         +nRQ4/ntbWiKzk55U4GIeKFkpwXaiox2Mz0z70IrCcdhwSThvhzwneF9S7wk18wa/FXe
+         hO/5KvH8xQvkH62VEKNTtVUNQ0UdPitJE6DhLNzUPgHPgSfkpkFJHsqHCoqvrgBb4saS
+         XVDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680611424;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xbgh9TKrIPAPQmUd9OtixARVlr01XDWJkFcD5ndOpIU=;
+        b=oA2uYxEOLboYlCenkCgYMLS9SA6/1xUfU7pgva0LEu6YU+B3nZhlGTDzykW8rCp+kZ
+         b4JGYJ8MhJPBEKZfxT8J0sBwqJetxZoVC2u+Qt87NmuYTbDGYsHgMQZUoKE8is99VNgd
+         9p7iwyGW/taaQuAVejsqpR3spRcN6gmqMwFrgXnnGhK9fMtOmPUKK9mXHspM+G1t17d7
+         NmaPfAwUtcDYJvSL0XStEMIU3EGNQWCPmE8Chx89w1R6OlAJ7BrURww24HSd9+hf5g4l
+         jtj4Xii0Lo/edDkBKs22rtM2dLiYTr1nJbLBYICmRXyDbECeNTyD032RMQ/Qrzm3oFPI
+         bSBQ==
+X-Gm-Message-State: AAQBX9cwZNx7iDfCqTso8fvLG95Jp6yfGx/zdtzr2xWEwTHIhsBNugrE
+        coiCv2LQqqsGHU1pLImme5wgHMCsjgu9vDFMBQhkkA==
+X-Google-Smtp-Source: AKy350amVqZkX8vNf1TgCd1BJv+a0EVLtADE0arsDlDJrGykVE3ERVPi8dhCGfevy90drJlqjc+BCW7ziT/6To4bslM=
+X-Received: by 2002:ab0:53db:0:b0:688:d612:2024 with SMTP id
+ l27-20020ab053db000000b00688d6122024mr1530288uaa.2.1680611424161; Tue, 04 Apr
+ 2023 05:30:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202304041226162e231e78@mail.local>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+References: <20230403140416.015323160@linuxfoundation.org>
+In-Reply-To: <20230403140416.015323160@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 4 Apr 2023 18:00:12 +0530
+Message-ID: <CA+G9fYt=i-zXOnA7vGVOiuNRsEiv0KmFxbqYt-L4VTHGEth_kQ@mail.gmail.com>
+Subject: Re: [PATCH 6.2 000/187] 6.2.10-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,53 +72,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2023 14:26:18+0200, Alexandre Belloni wrote:
-> On 04/04/2023 10:35:53+0000, Tilki, Ibrahim wrote:
-> > >>>>> +  aux-voltage-chargeable:
-> > >>>>> +    enum: [0, 1, 2]
-> > >>>>> +    description: |
-> > >>>>> +      Enables trickle charger.
-> > >>>>> +      0: Charger is disabled (default)
-> > >>>>> +      1: Charger is enabled
-> > >>>>> +      2: Charger is enabled with a diode
-> > >>>>
-> > >>>> 2 is not an allowed value. I asked to drop this property. It is coming
-> > >>>> from rtc.yaml. I also do not understand "with a diode". So otherwise it
-> > >>>> is charging with, I don't know, FET?
-> > >>>
-> > >>> No, what is not explained here (and maybe not unsterstood by the
-> > >>> submitter) is that the RTC has an extra diode so, charging will always
-> > >>> enable a diode, select a resistor and then have or not an extra diode.
-> > >>> Figure2 of the MAX31329 datasheet is great.
-> > >>>
-> > >> 
-> > >> That is exactly why I had "adi,trickle-diode-enable" property in previous patch.
-> > >> So if I can't have "adi,trickle-diode-enable" and can't add an additional value
-> > >> to "aux-voltage-chargeable", I am not sure how to add support for the extra
-> > >> diode at this point.
-> > >
-> > > Ask the person who asked you to remove adi,trickle-diode-enable...
-> > 
-> > That was the purpose.
-> > 
-> 
-> If the earlier submission was clearer my answer would have been
-> different but note how I had to dig up the datasheet to understand there
-> were two diodes. All the trickle chargers have a schottky diode so
-> "adi,trickle-diode-enable" nor the commit log were explicit about the
-> second diode (which is a regular diode).
-> 
-> aux-voltage-chargeable is enabling a diode on all the existing RTC
-> drivers so instead of trying to make me look like the bad guy you should
-> rather thank for taking the time trying to get better DT bindings.
-> 
+On Mon, 3 Apr 2023 at 20:13, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.2.10 release.
+> There are 187 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 05 Apr 2023 14:03:18 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.2.10-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.2.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-BTW, Krzysztof, you should focus more on how v5 of the driver is still
-abusing the #clock-cells property to do pinmuxing after I repeatedly
-explain to not do that.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+## Build
+* kernel: 6.2.10-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.2.y
+* git commit: 6e4466c69e20058ca543fa4ced70f8d745dce1ec
+* git describe: v6.2.9-188-g6e4466c69e20
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.2.y/build/v6.2.9=
+-188-g6e4466c69e20
+
+## Test Regressions (compared to v6.2.9)
+
+## Metric Regressions (compared to v6.2.9)
+
+## Test Fixes (compared to v6.2.9)
+
+## Metric Fixes (compared to v6.2.9)
+
+## Test result summary
+total: 195294, pass: 167379, fail: 4270, skip: 23297, xfail: 348
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 145 total, 142 passed, 3 failed
+* arm64: 54 total, 53 passed, 1 failed
+* i386: 41 total, 38 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 36 passed, 2 failed
+* riscv: 26 total, 25 passed, 1 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 7 passed, 1 failed
+* x86_64: 46 total, 46 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-vm
+* kselftest-watchdog
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-nptl++
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* ltpa-6328543/0/tests/1_ltp-dio
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
