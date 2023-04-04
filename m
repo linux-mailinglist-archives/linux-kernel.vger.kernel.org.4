@@ -2,74 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F486D5C13
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335ED6D5C19
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234287AbjDDJio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
+        id S234181AbjDDJmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234248AbjDDJiW (ORCPT
+        with ESMTP id S234038AbjDDJl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:38:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA8019BC
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:38:21 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680601099;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0DN55bSNTQFajH9UQ/ZPWNclui6hp3/dzUXrzibB4e8=;
-        b=nLmjDCn+I8gKh1U6nup+PQOxkEIwwA5YaBFi6iv6Gi5SbuROVA4VgAny39IDeH9hZ1JIQ8
-        EyXyXzpJpX/zbwOacFeMw7mwuu5JzGhbiF3b6RR9Z84ox2bKX4mQ8A3vzrtXzfGBaS3iLF
-        Cs8jqOSO0AAzGHfLGrTEQfh8pWo3hIS+DryuDfi/hymJ+UPWBQ1C6mtyxd2UBUCOTDg6+e
-        C+nyAZjsFz4+vfmpD2nmBOxt79GsU5KmChWDSMiVHGibjjjmDI2eUGR/Wp1lR12f4VYvxg
-        heyez4urTQwcjMyfhUU6StPikyikmalcdrZoy6u3pWJ2urIt1PlpN7vCr6U8ow==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680601099;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0DN55bSNTQFajH9UQ/ZPWNclui6hp3/dzUXrzibB4e8=;
-        b=mNm+u/MFMwBwZ9t9EQ2Tsp/yvJ1Qa/SQNUQVXZL4K1u6JA/OW/xTAlSZ/ut0IGMFqy/BPV
-        fQl1nyKmy3SgrbBQ==
-To:     Ankur Arora <ankur.a.arora@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        luto@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, mingo@redhat.com, juri.lelli@redhat.com,
-        willy@infradead.org, mgorman@suse.de, peterz@infradead.org,
-        rostedt@goodmis.org, vincent.guittot@linaro.org, jon.grimm@amd.com,
-        bharata@amd.com, boris.ostrovsky@oracle.com,
-        konrad.wilk@oracle.com, ankur.a.arora@oracle.com
-Subject: Re: [PATCH 8/9] irqentry: define irqentry_exit_allow_resched()
-In-Reply-To: <20230403052233.1880567-9-ankur.a.arora@oracle.com>
-References: <20230403052233.1880567-1-ankur.a.arora@oracle.com>
- <20230403052233.1880567-9-ankur.a.arora@oracle.com>
-Date:   Tue, 04 Apr 2023 11:38:18 +0200
-Message-ID: <87pm8kq96d.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 4 Apr 2023 05:41:58 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001691BC0;
+        Tue,  4 Apr 2023 02:41:57 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 333N1kFO004589;
+        Tue, 4 Apr 2023 09:41:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=bv3LqF+vpq1ExVGwlnfJj1L/BJyT8J6hoWyOXdlEXJA=;
+ b=c/UZtHvfqxjNhSQmY95Rzg8497/YSXnxH8PViKiGDXxpFhFgP4PsCmtFrkRCBS5X7gzj
+ zK5R+TjCmWX2OpxpYCVVE6slQl0rsTgRBnLuoq7C/WDBEKPENZEIPq8jpMR6LA2VnSmi
+ VI/u4AEr5kpnMM6FK8dnCgBJhE3Qyf+1rm1C6isrbMhQ0H3ldEHyUcEQxo6S2YsTrR0O
+ SiE2ysX+Ru+Zz7U7MnBqxiv1eD9qWryKcaEbaZK+fnvTuiPlzCpvsFcuGDH7xYQu2fZj
+ lIQ7JUkp2HHtTWJ07p91NSfz2G61u1nqtttooagzkEK8Pggbq6FdDRHfvCkzJNjfr6dT Wg== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pr4jm9nqs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 09:41:21 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3349fGN9026901;
+        Tue, 4 Apr 2023 09:41:16 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3ppdpkjnk9-1;
+        Tue, 04 Apr 2023 09:41:16 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3349fGdK026896;
+        Tue, 4 Apr 2023 09:41:16 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vpernami-hyd.qualcomm.com [10.213.107.240])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3349fFNd026895;
+        Tue, 04 Apr 2023 09:41:16 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 2370923)
+        id 2BB3739CE; Tue,  4 Apr 2023 15:11:15 +0530 (+0530)
+From:   Vivek Pernamitta <quic_vpernami@quicinc.com>
+To:     mhi@lists.linux.dev
+Cc:     quic_qianyu@quicinc.com, manivannan.sadhasivam@linaro.org,
+        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
+        quic_skananth@quicinc.com,
+        Vivek Pernamitta <quic_vpernami@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Bhaumik Bhatt <bbhatt@codeaurora.org>,
+        Hemant Kumar <hemantk@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org (open list:MHI BUS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH V5] bus: mhi: host: Avoid ringing EV DB if there is no elements to process
+Date:   Tue,  4 Apr 2023 15:11:10 +0530
+Message-Id: <1680601272-8795-1-git-send-email-quic_vpernami@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 9scnxs51jytAxu9S6Q1HdGq00Z3LEbho
+X-Proofpoint-GUID: 9scnxs51jytAxu9S6Q1HdGq00Z3LEbho
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-04_02,2023-04-03_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 lowpriorityscore=0 clxscore=1011 mlxscore=0
+ mlxlogscore=818 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304040089
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02 2023 at 22:22, Ankur Arora wrote:
-> Allow threads marked TIF_ALLOW_RESCHED to be rescheduled in irqexit.
->
-> This is only necessary under !preempt_model_preemptible() for which
-> we reuse the same logic as irqentry_exit_code_resched().
+curenlty mhi_process_data_event_ring()/mhi_process_ctrl_ev_ring()
+will ring DB even if there no ring elements to process.
+This could cause doorbell event to be processed by MHI device
+to check for any ring elements even it is none.
+So ring event DB only if any event ring elements are processed.
 
-This tells what this patch is doing but completely fails to explain why
-this is necessary and useful.
+Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
+Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+changes since v5:
+	updating the commit text.
+changes since v4:
+	updating the commit text with more information.
+changes since v3:
+	- Updating commit text for multiple versions of patches.
+changes since v2:
+	- Updated comments in code.
+changes since v1:
+	- Add an check to avoid ringing EV DB in mhi_process_ctrl_ev_ring().
+---
+ drivers/bus/mhi/host/main.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Thanks,
+diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
+index df0fbfe..1bbdb75 100644
+--- a/drivers/bus/mhi/host/main.c
++++ b/drivers/bus/mhi/host/main.c
+@@ -961,7 +961,9 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
+ 	}
+ 
+ 	read_lock_bh(&mhi_cntrl->pm_lock);
+-	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
++
++	/* Ring EV DB only if there is any pending element to process */
++	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
+ 		mhi_ring_er_db(mhi_event);
+ 	read_unlock_bh(&mhi_cntrl->pm_lock);
+ 
+@@ -1031,7 +1033,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
+ 		count++;
+ 	}
+ 	read_lock_bh(&mhi_cntrl->pm_lock);
+-	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
++
++	/* Ring EV DB only if there is any pending element to process */
++	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
+ 		mhi_ring_er_db(mhi_event);
+ 	read_unlock_bh(&mhi_cntrl->pm_lock);
+ 
+-- 
+2.7.4
 
-        tglx
