@@ -2,44 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04566D64C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DE46D640E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235160AbjDDOHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54728 "EHLO
+        id S235693AbjDDNzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234918AbjDDOHu (ORCPT
+        with ESMTP id S235707AbjDDNyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:07:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5E8C3C3B
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:07:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47D661576;
-        Tue,  4 Apr 2023 06:56:35 -0700 (PDT)
-Received: from e127643.broadband (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2A82A3F762;
-        Tue,  4 Apr 2023 06:55:49 -0700 (PDT)
-From:   James Clark <james.clark@arm.com>
-To:     coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
-        mike.leach@linaro.org, suzuki.poulose@arm.com
-Cc:     James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 13/13] coresight: Fix CTI module refcount leak by making it a helper device
-Date:   Tue,  4 Apr 2023 14:53:59 +0100
-Message-Id: <20230404135401.1728919-14-james.clark@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230404135401.1728919-1-james.clark@arm.com>
-References: <20230404135401.1728919-1-james.clark@arm.com>
+        Tue, 4 Apr 2023 09:54:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87AFAA;
+        Tue,  4 Apr 2023 06:54:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44C0161FF6;
+        Tue,  4 Apr 2023 13:54:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC099C433EF;
+        Tue,  4 Apr 2023 13:54:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680616461;
+        bh=vnAu6Dw7d+BvhGXB+ZegXam11qi5z7yBc6KQfLkV/3E=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Sr1A24e5ZbNpPjGkrWZIqHmlKr8SzrEQNDaMPz6+2RGbiWMJ46IXbbyDhlznYjdti
+         tgSqSdh64RnkWRS2MbV2UPOzsSRoP5/Wub+4IzJWBe76hofyplv6JY+DyRYiQAUgQ3
+         QneByRIQFMnelzqbBi11iEL9kVksSS86f5EPWAkGwtXaJCzmJRq9T1xp/4N0SFS1lr
+         lfn7AEGOWX0bEs2rN1rJohXihOB3iwJjU014v4HH5ckYhTiANrAujqhggsmQON7aS6
+         cEn62o79uwERu/Vm4NwjHFK1iS692irDO6UOe+RxUlKOmpOyN3E2s32//8av9c+cUZ
+         9ig+nGeDWcfng==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 4C58815404B4; Tue,  4 Apr 2023 06:54:21 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 06:54:21 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     =?utf-8?B?5Luj5a2Q5Li6IChaaXdlaSBEYWkp?= <Ziwei.Dai@unisoc.com>
+Cc:     "urezki@gmail.com" <urezki@gmail.com>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "josh@joshtriplett.org" <josh@joshtriplett.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
+        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?546L5Y+MIChTaHVhbmcgV2FuZyk=?= <shuang.wang@unisoc.com>,
+        =?utf-8?B?6L6b5L6d5YehIChZaWZhbiBYaW4p?= <Yifan.Xin@unisoc.com>,
+        =?utf-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>,
+        =?utf-8?B?6Zer5a2m5paHIChYdWV3ZW4gWWFuKQ==?= 
+        <Xuewen.Yan@unisoc.com>,
+        =?utf-8?B?54mb5b+X5Zu9IChaaGlndW8gTml1KQ==?= 
+        <Zhiguo.Niu@unisoc.com>,
+        =?utf-8?B?6buE5pyd6ZizIChaaGFveWFuZyBIdWFuZyk=?= 
+        <zhaoyang.huang@unisoc.com>
+Subject: Re: Re: [PATCH V2] rcu: Make sure new krcp free business is handled
+ after the wanted rcu grace period.
+Message-ID: <c0d8b802-8931-44d9-8a04-6265dade23a2@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <10f5eb13d7c741c2a0e83ff1d788f398@BJMBX01.spreadtrum.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+In-Reply-To: <10f5eb13d7c741c2a0e83ff1d788f398@BJMBX01.spreadtrum.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,485 +76,390 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CTI module has some hard coded refcounting code that has a leak.
-For example running perf and then trying to unload it fails:
+On Tue, Apr 04, 2023 at 01:08:39PM +0000, 代子为 (Ziwei Dai) wrote:
+> Correct error line format of my mail content and add comments.
+> 
+> > -----邮件原件-----
+> > 发件人: Paul E. McKenney <paulmck@kernel.org>
+> > 发送时间: 2023年4月4日 11:23
+> > 收件人: 代子为 (Ziwei Dai) <Ziwei.Dai@unisoc.com>
+> > 抄送: urezki@gmail.com; frederic@kernel.org; quic_neeraju@quicinc.com; josh@joshtriplett.org; rostedt@goodmis.org;
+> > mathieu.desnoyers@efficios.com; jiangshanlai@gmail.com; joel@joelfernandes.org; rcu@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > 王双 (Shuang Wang) <shuang.wang@unisoc.com>; 辛依凡 (Yifan Xin) <Yifan.Xin@unisoc.com>; 王科 (Ke Wang)
+> > <Ke.Wang@unisoc.com>; 闫学文 (Xuewen Yan) <Xuewen.Yan@unisoc.com>; 牛志国 (Zhiguo Niu) <Zhiguo.Niu@unisoc.com>; 黄朝
+> > 阳 (Zhaoyang Huang) <zhaoyang.huang@unisoc.com>
+> > 主题: Re: 答复: [PATCH V2] rcu: Make sure new krcp free business is handled after the wanted rcu grace period.
+> > 
+> > 
+> > 
+> > On Tue, Apr 04, 2023 at 02:49:15AM +0000, 代子为 (Ziwei Dai) wrote:
+> > > Hello Paul!
+> > >
+> > > > -----邮件原件-----
+> > > > 发件人: Paul E. McKenney <paulmck@kernel.org>
+> > > > 发送时间: 2023年4月4日 6:58
+> > > > 收件人: 代子为 (Ziwei Dai) <Ziwei.Dai@unisoc.com>
+> > > > 抄送: urezki@gmail.com; frederic@kernel.org; quic_neeraju@quicinc.com;
+> > > > josh@joshtriplett.org; rostedt@goodmis.org;
+> > > > mathieu.desnoyers@efficios.com; jiangshanlai@gmail.com;
+> > > > joel@joelfernandes.org; rcu@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > > > 王双 (Shuang Wang) <shuang.wang@unisoc.com>; 辛依凡 (Yifan Xin)
+> > > > <Yifan.Xin@unisoc.com>; 王科 (Ke Wang) <Ke.Wang@unisoc.com>; 闫学文
+> > > > (Xuewen Yan) <Xuewen.Yan@unisoc.com>; 牛志国 (Zhiguo Niu)
+> > > > <Zhiguo.Niu@unisoc.com>; 黄朝阳 (Zhaoyang Huang)
+> > > > <zhaoyang.huang@unisoc.com>
+> > > > 主题: Re: [PATCH V2] rcu: Make sure new krcp free business is handled after
+> > > > the wanted rcu grace period.
+> > > >
+> > > >
+> > > > 注意: 这封邮件来自于外部。除非你确定邮件内容安全，否则不要点击任
+> > > > 何链接和附件。
+> > > > CAUTION: This email originated from outside of the organization. Do not click
+> > > > links or open attachments unless you recognize the sender and know the
+> > > > content is safe.
+> > > >
+> > > >
+> > > >
+> > > > On Fri, Mar 31, 2023 at 08:42:09PM +0800, Ziwei Dai wrote:
+> > > > > In kfree_rcu_monitor(), new free business at krcp is attached to any
+> > > > > free channel at krwp. kfree_rcu_monitor() is responsible to make sure
+> > > > > new free business is handled after the rcu grace period. But if there
+> > > > > is any none-free channel at krwp already, that means there is an
+> > > > > on-going rcu work, which will cause the kvfree_call_rcu()-triggered
+> > > > > free business is done before the wanted rcu grace period ends.
+> > > > >
+> > > > > This commit ignore krwp which has non-free channel at
+> > > > > kfree_rcu_monitor(), to fix the issue that kvfree_call_rcu() loses effectiveness.
+> > > > >
+> > > > > Below is the css_set obj "from_cset" use-after-free case caused by
+> > > > > kvfree_call_rcu() losing effectiveness.
+> > > > > CPU 0 calls rcu_read_lock(), then use "from_cset", then hard irq
+> > > > > comes, the task is schedule out.
+> > > > > CPU 1 calls kfree_rcu(cset, rcu_head), willing to free "from_cset" after new gp.
+> > > > > But "from_cset" is freed right after current gp end. "from_cset" is reallocated.
+> > > > > CPU 0 's task arrives back, references "from_cset"'s member, which causes crash.
+> > > > >
+> > > > > CPU 0                                 CPU 1
+> > > > > count_memcg_event_mm()
+> > > > > |rcu_read_lock()  <---
+> > > > > |mem_cgroup_from_task()
+> > > > >  |// css_set_ptr is the "from_cset" mentioned on CPU 1  |css_set_ptr =
+> > > > > rcu_dereference((task)->cgroups)  |// Hard irq comes, current task is
+> > > > > scheduled out.
+> > > > >
+> > > > >                                       cgroup_attach_task()
+> > > > >                                       |cgroup_migrate()
+> > > > >                                       |cgroup_migrate_execute()
+> > > > >                                       |css_set_move_task(task, from_cset, to_cset, true)
+> > > > >                                       |cgroup_move_task(task, to_cset)
+> > > > >                                       |rcu_assign_pointer(.., to_cset)
+> > > > >                                       |...
+> > > > >                                       |cgroup_migrate_finish()
+> > > > >                                       |put_css_set_locked(from_cset)
+> > > > >                                       |from_cset->refcount return 0
+> > > > >                                       |kfree_rcu(cset, rcu_head) // means to free from_cset after new gp
+> > > > >                                       |add_ptr_to_bulk_krc_lock()
+> > > > >                                       |schedule_delayed_work(&krcp->monitor_work, ..)
+> > > > >
+> > > > >                                       kfree_rcu_monitor()
+> > > > >                                       |krcp->bulk_head[0]'s work attached to krwp->bulk_head_free[]
+> > > > >                                       |queue_rcu_work(system_wq, &krwp->rcu_work)
+> > > > >                                       |if rwork->rcu.work is not in WORK_STRUCT_PENDING_BIT state,
+> > > > >                                       |call_rcu(&rwork->rcu, rcu_work_rcufn) <--- request a new gp
+> > > > >
+> > > > >                                       // There is a perious call_rcu(.., rcu_work_rcufn)
+> > > > >                                       // gp end, rcu_work_rcufn() is called.
+> > > > >                                       rcu_work_rcufn()
+> > > > >                                       |__queue_work(.., rwork->wq, &rwork->work);
+> > > > >
+> > > > >                                       |kfree_rcu_work()
+> > > > >                                       |krwp->bulk_head_free[0] bulk is freed before new gp end!!!
+> > > > >                                       |The "from_cset" is freed before new gp end.
+> > > > >
+> > > > > // the task is scheduled in after many ms.
+> > > > >  |css_set_ptr->subsys[(subsys_id) <--- Caused kernel crash, because css_set_ptr is freed.
+> > > > >
+> > > > > v2: Use helper function instead of inserted code block at kfree_rcu_monitor().
+> > > > >
+> > > > > Fixes: c014efeef76a ("rcu: Add multiple in-flight batches of
+> > > > > kfree_rcu() work")
+> > > > > Signed-off-by: Ziwei Dai <ziwei.dai@unisoc.com>
+> > > >
+> > > > Good catch, thank you!!!
+> > > >
+> > > > How difficult was this to trigger?  If it can be triggered easily, this of course
+> > > > needs to go into mainline sooner rather than later.
+> > >
+> > > Roughly we can reproduce this issue within two rounds of 48h stress test,
+> > > with 20 k5.15 devices. If KASAN is enabled, the reproduce rate is higher.
+> > > So I think sooner is better.
+> > 
+> > Thank you for the info!  This is in theory an old bug, but if you can
+> > easily find out, does it trigger for you on v6.2 or earlier?
+> > 
+> 
+> We haven't ported v6.2 to our device yet...
+> 
+> > > > Longer term, would it make sense to run the three channels through RCU
+> > > > separately, in order to avoid one channel refraining from starting a grace
+> > > > period just because some other channel has callbacks waiting for a grace
+> > > > period to complete?  One argument against might be energy efficiency, but
+> > > > perhaps the ->gp_snap field could be used to get the best of both worlds.
+> > >
+> > > I see kvfree_rcu_drain_ready(krcp) is already called at the beginning of
+> > > kfree_rcu_monitor(), which polls the ->gp_snap field, to decide
+> > > whether to free channel objects immediately or after gp.
+> > > Both energy efficiency and timing seems be considered?
+> > 
+> > My concern is that running the channels separately might mean more grace
+> > periods (and thus more energy draw) on nearly idle devices, such devices
+> > usually being the ones for which energy efficiency matters most.
+> > 
+> > But perhaps Vlad, Neeraj, or Joel has some insight on this, given
+> > that they are the ones working on battery-powered devices.
+> > 
+> > > > Either way, this fixes only one bug of two.  The second bug is in the
+> > > > kfree_rcu() tests, which should have caught this bug.  Thoughts on a good fix
+> > > > for those tests?
+> > >
+> > > I inserted a msleep() between "rcu_read_lock(), get pointer via rcu_dereference()"
+> > > and "reference pointer, using the member", at the rcu scenario, then we can
+> > > reproduce this issue very soon in stress test. Can kfree_rcu() tests insert msleep()?
+> > 
+> > Another approach is to separate concerns, so that readers interact with
+> > grace periods in the rcutorture.c tests, and to add the interaction
+> > of to-be-freed memory with grace periods in the rcuscale kvfree tests.
+> > I took a step in this direction with this commit on the -rcu tree's
+> > "dev" branch:
+> > 
+> > efbe7927f479 ("rcu/kvfree: Add debug to check grace periods")
+> > 
+> > Given this, might it be possible to make rcuscale.c's kfree_rcu()
+> > testing create patterns of usage of the three channels so as to
+> > catch this bug that way?
+> > 
+> 
+> I can try it on my k5.15 device, and need some time.
+> I have a question. Do you mean add code in tree.c to create pattern
+> while channel data is being freed?
+> If so, both rcuscales.c and tree.c need to be modified for the test case.
 
-  perf record -e cs_etm// -a -- ls
-  rmmod coresight_cti
+My thought is to run the test on a system where very little else is
+happening, and then creating the temporal pattern only in rcuscale.c.
+One way would be to modify kfree_scale_thread(), perhaps using an
+additional module parameter using torture_param().
 
-  rmmod: ERROR: Module coresight_cti is in use
+But just out of curiosity, what changes were you thinking of making
+in tree.c?
 
-The coresight core already handles references of devices in use, so by
-making CTI a normal helper device, we get working refcounting for free.
+							Thanx, Paul
 
-Signed-off-by: James Clark <james.clark@arm.com>
----
- drivers/hwtracing/coresight/coresight-core.c  | 106 ++++++------------
- .../hwtracing/coresight/coresight-cti-core.c  |  52 +++++----
- .../hwtracing/coresight/coresight-cti-sysfs.c |   4 +-
- drivers/hwtracing/coresight/coresight-cti.h   |   4 +-
- drivers/hwtracing/coresight/coresight-priv.h  |   4 +-
- drivers/hwtracing/coresight/coresight-sysfs.c |   4 +
- include/linux/coresight.h                     |  30 +----
- 7 files changed, 77 insertions(+), 127 deletions(-)
-
-diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-index 16689fe4ba98..12cfca3712a0 100644
---- a/drivers/hwtracing/coresight/coresight-core.c
-+++ b/drivers/hwtracing/coresight/coresight-core.c
-@@ -236,60 +236,46 @@ void coresight_disclaim_device(struct coresight_device *csdev)
- }
- EXPORT_SYMBOL_GPL(coresight_disclaim_device);
- 
--/* enable or disable an associated CTI device of the supplied CS device */
--static int
--coresight_control_assoc_ectdev(struct coresight_device *csdev, bool enable)
-+/*
-+ * Add a helper as an output device. This function takes the @coresight_mutex
-+ * because it's assumed that it's called from the helper device, outside of the
-+ * core code where the mutex would already be held. Don't add new calls to this
-+ * from inside the core code, instead try to add the new helper to the DT and
-+ * ACPI where it will be picked up and linked automatically.
-+ */
-+void coresight_add_helper(struct coresight_device *csdev,
-+			  struct coresight_device *helper)
- {
--	int ect_ret = 0;
--	struct coresight_device *ect_csdev = csdev->ect_dev;
--	struct module *mod;
-+	int i;
-+	struct coresight_connection conn = {};
-+	struct coresight_connection *new_conn;
- 
--	if (!ect_csdev)
--		return 0;
--	if ((!ect_ops(ect_csdev)->enable) || (!ect_ops(ect_csdev)->disable))
--		return 0;
-+	lockdep_assert_not_held(&coresight_mutex);
-+	might_sleep();
-+	mutex_lock(&coresight_mutex);
-+	conn.dest_fwnode = fwnode_handle_get(dev_fwnode(&helper->dev));
-+	conn.dest_dev = helper;
-+	conn.dest_port = conn.src_port = -1;
-+	conn.src_dev = csdev;
- 
--	mod = ect_csdev->dev.parent->driver->owner;
--	if (enable) {
--		if (try_module_get(mod)) {
--			ect_ret = ect_ops(ect_csdev)->enable(ect_csdev);
--			if (ect_ret) {
--				module_put(mod);
--			} else {
--				get_device(ect_csdev->dev.parent);
--				csdev->ect_enabled = true;
--			}
--		} else
--			ect_ret = -ENODEV;
--	} else {
--		if (csdev->ect_enabled) {
--			ect_ret = ect_ops(ect_csdev)->disable(ect_csdev);
--			put_device(ect_csdev->dev.parent);
--			module_put(mod);
--			csdev->ect_enabled = false;
--		}
--	}
-+	/*
-+	 * Check for duplicates because this is called every time a helper
-+	 * device is re-loaded. Existing connections will get re-linked
-+	 * automatically.
-+	 */
-+	for (i = 0; i < csdev->pdata->nr_outconns; ++i)
-+		if (csdev->pdata->out_conns[i]->dest_fwnode == conn.dest_fwnode)
-+			goto unlock;
- 
--	/* output warning if ECT enable is preventing trace operation */
--	if (ect_ret)
--		dev_info(&csdev->dev, "Associated ECT device (%s) %s failed\n",
--			 dev_name(&ect_csdev->dev),
--			 enable ? "enable" : "disable");
--	return ect_ret;
--}
-+	new_conn =
-+		coresight_add_out_conn(csdev->dev.parent, csdev->pdata, &conn);
-+	if (!IS_ERR(new_conn))
-+		coresight_add_in_conn(new_conn);
- 
--/*
-- * Set the associated ect / cti device while holding the coresight_mutex
-- * to avoid a race with coresight_enable that may try to use this value.
-- */
--void coresight_set_assoc_ectdev_mutex(struct coresight_device *csdev,
--				      struct coresight_device *ect_csdev)
--{
--	mutex_lock(&coresight_mutex);
--	csdev->ect_dev = ect_csdev;
-+unlock:
- 	mutex_unlock(&coresight_mutex);
- }
--EXPORT_SYMBOL_GPL(coresight_set_assoc_ectdev_mutex);
-+EXPORT_SYMBOL_GPL(coresight_add_helper);
- 
- static int coresight_enable_sink(struct coresight_device *csdev,
- 				 enum cs_mode mode, void *data)
-@@ -303,12 +289,8 @@ static int coresight_enable_sink(struct coresight_device *csdev,
- 	if (!sink_ops(csdev)->enable)
- 		return -EINVAL;
- 
--	ret = coresight_control_assoc_ectdev(csdev, true);
--	if (ret)
--		return ret;
- 	ret = sink_ops(csdev)->enable(csdev, mode, data);
- 	if (ret) {
--		coresight_control_assoc_ectdev(csdev, false);
- 		return ret;
- 	}
- 	csdev->enable = true;
-@@ -326,7 +308,6 @@ static void coresight_disable_sink(struct coresight_device *csdev)
- 	ret = sink_ops(csdev)->disable(csdev);
- 	if (ret)
- 		return;
--	coresight_control_assoc_ectdev(csdev, false);
- 	csdev->enable = false;
- }
- 
-@@ -351,17 +332,11 @@ static int coresight_enable_link(struct coresight_device *csdev,
- 		return PTR_ERR(outconn);
- 
- 	if (link_ops(csdev)->enable) {
--		ret = coresight_control_assoc_ectdev(csdev, true);
--		if (!ret) {
--			ret = link_ops(csdev)->enable(csdev, inconn, outconn);
--			if (ret)
--				coresight_control_assoc_ectdev(csdev, false);
--		}
-+		ret = link_ops(csdev)->enable(csdev, inconn, outconn);
-+		if (!ret)
-+			csdev->enable = true;
- 	}
- 
--	if (!ret)
--		csdev->enable = true;
--
- 	return ret;
- }
- 
-@@ -382,7 +357,6 @@ static void coresight_disable_link(struct coresight_device *csdev,
- 
- 	if (link_ops(csdev)->disable) {
- 		link_ops(csdev)->disable(csdev, inconn, outconn);
--		coresight_control_assoc_ectdev(csdev, false);
- 	}
- 
- 	if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG) {
-@@ -410,14 +384,9 @@ int coresight_enable_source(struct coresight_device *csdev, enum cs_mode mode,
- 
- 	if (!csdev->enable) {
- 		if (source_ops(csdev)->enable) {
--			ret = coresight_control_assoc_ectdev(csdev, true);
--			if (ret)
--				return ret;
- 			ret = source_ops(csdev)->enable(csdev, data, mode);
--			if (ret) {
--				coresight_control_assoc_ectdev(csdev, false);
-+			if (ret)
- 				return ret;
--			}
- 		}
- 		csdev->enable = true;
- 	}
-@@ -488,7 +457,6 @@ bool coresight_disable_source(struct coresight_device *csdev, void *data)
- 	if (atomic_dec_return(&csdev->refcnt) == 0) {
- 		if (source_ops(csdev)->disable)
- 			source_ops(csdev)->disable(csdev, data);
--		coresight_control_assoc_ectdev(csdev, false);
- 		coresight_disable_helpers(csdev);
- 		csdev->enable = false;
- 	}
-diff --git a/drivers/hwtracing/coresight/coresight-cti-core.c b/drivers/hwtracing/coresight/coresight-cti-core.c
-index 277c890a1f1f..7023ff70cc28 100644
---- a/drivers/hwtracing/coresight/coresight-cti-core.c
-+++ b/drivers/hwtracing/coresight/coresight-cti-core.c
-@@ -555,7 +555,10 @@ static void cti_add_assoc_to_csdev(struct coresight_device *csdev)
- 	mutex_lock(&ect_mutex);
- 
- 	/* exit if current is an ECT device.*/
--	if ((csdev->type == CORESIGHT_DEV_TYPE_ECT) || list_empty(&ect_net))
-+	if ((csdev->type == CORESIGHT_DEV_TYPE_HELPER &&
-+	     csdev->subtype.helper_subtype ==
-+		     CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI) ||
-+	    list_empty(&ect_net))
- 		goto cti_add_done;
- 
- 	/* if we didn't find the csdev previously we used the fwnode name */
-@@ -571,8 +574,7 @@ static void cti_add_assoc_to_csdev(struct coresight_device *csdev)
- 			 * if we found a matching csdev then update the ECT
- 			 * association pointer for the device with this CTI.
- 			 */
--			coresight_set_assoc_ectdev_mutex(csdev,
--							 ect_item->csdev);
-+			coresight_add_helper(csdev, ect_item->csdev);
- 			break;
- 		}
- 	}
-@@ -582,26 +584,30 @@ static void cti_add_assoc_to_csdev(struct coresight_device *csdev)
- 
- /*
-  * Removing the associated devices is easier.
-- * A CTI will not have a value for csdev->ect_dev.
-  */
- static void cti_remove_assoc_from_csdev(struct coresight_device *csdev)
- {
- 	struct cti_drvdata *ctidrv;
- 	struct cti_trig_con *tc;
- 	struct cti_device *ctidev;
-+	union coresight_dev_subtype cti_subtype = {
-+		.helper_subtype = CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI
-+	};
-+	struct coresight_device *cti_csdev = coresight_find_output_type(
-+		csdev->pdata, CORESIGHT_DEV_TYPE_HELPER, cti_subtype);
-+
-+	if (!cti_csdev)
-+		return;
- 
- 	mutex_lock(&ect_mutex);
--	if (csdev->ect_dev) {
--		ctidrv = csdev_to_cti_drvdata(csdev->ect_dev);
--		ctidev = &ctidrv->ctidev;
--		list_for_each_entry(tc, &ctidev->trig_cons, node) {
--			if (tc->con_dev == csdev) {
--				cti_remove_sysfs_link(ctidrv, tc);
--				tc->con_dev = NULL;
--				break;
--			}
-+	ctidrv = csdev_to_cti_drvdata(cti_csdev);
-+	ctidev = &ctidrv->ctidev;
-+	list_for_each_entry(tc, &ctidev->trig_cons, node) {
-+		if (tc->con_dev == csdev) {
-+			cti_remove_sysfs_link(ctidrv, tc);
-+			tc->con_dev = NULL;
-+			break;
- 		}
--		csdev->ect_dev = NULL;
- 	}
- 	mutex_unlock(&ect_mutex);
- }
-@@ -630,8 +636,8 @@ static void cti_update_conn_xrefs(struct cti_drvdata *drvdata)
- 			/* if we can set the sysfs link */
- 			if (cti_add_sysfs_link(drvdata, tc))
- 				/* set the CTI/csdev association */
--				coresight_set_assoc_ectdev_mutex(tc->con_dev,
--							 drvdata->csdev);
-+				coresight_add_helper(tc->con_dev,
-+						     drvdata->csdev);
- 			else
- 				/* otherwise remove reference from CTI */
- 				tc->con_dev = NULL;
-@@ -646,8 +652,6 @@ static void cti_remove_conn_xrefs(struct cti_drvdata *drvdata)
- 
- 	list_for_each_entry(tc, &ctidev->trig_cons, node) {
- 		if (tc->con_dev) {
--			coresight_set_assoc_ectdev_mutex(tc->con_dev,
--							 NULL);
- 			cti_remove_sysfs_link(drvdata, tc);
- 			tc->con_dev = NULL;
- 		}
-@@ -795,27 +799,27 @@ static void cti_pm_release(struct cti_drvdata *drvdata)
- }
- 
- /** cti ect operations **/
--int cti_enable(struct coresight_device *csdev)
-+int cti_enable(struct coresight_device *csdev, enum cs_mode mode, void *data)
- {
- 	struct cti_drvdata *drvdata = csdev_to_cti_drvdata(csdev);
- 
- 	return cti_enable_hw(drvdata);
- }
- 
--int cti_disable(struct coresight_device *csdev)
-+int cti_disable(struct coresight_device *csdev, void *data)
- {
- 	struct cti_drvdata *drvdata = csdev_to_cti_drvdata(csdev);
- 
- 	return cti_disable_hw(drvdata);
- }
- 
--static const struct coresight_ops_ect cti_ops_ect = {
-+static const struct coresight_ops_helper cti_ops_ect = {
- 	.enable = cti_enable,
- 	.disable = cti_disable,
- };
- 
- static const struct coresight_ops cti_ops = {
--	.ect_ops = &cti_ops_ect,
-+	.helper_ops = &cti_ops_ect,
- };
- 
- /*
-@@ -922,8 +926,8 @@ static int cti_probe(struct amba_device *adev, const struct amba_id *id)
- 
- 	/* set up coresight component description */
- 	cti_desc.pdata = pdata;
--	cti_desc.type = CORESIGHT_DEV_TYPE_ECT;
--	cti_desc.subtype.ect_subtype = CORESIGHT_DEV_SUBTYPE_ECT_CTI;
-+	cti_desc.type = CORESIGHT_DEV_TYPE_HELPER;
-+	cti_desc.subtype.helper_subtype = CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI;
- 	cti_desc.ops = &cti_ops;
- 	cti_desc.groups = drvdata->ctidev.con_groups;
- 	cti_desc.dev = dev;
-diff --git a/drivers/hwtracing/coresight/coresight-cti-sysfs.c b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
-index e528cff9d4e2..d25dd2737b49 100644
---- a/drivers/hwtracing/coresight/coresight-cti-sysfs.c
-+++ b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
-@@ -112,11 +112,11 @@ static ssize_t enable_store(struct device *dev,
- 		ret = pm_runtime_resume_and_get(dev->parent);
- 		if (ret)
- 			return ret;
--		ret = cti_enable(drvdata->csdev);
-+		ret = cti_enable(drvdata->csdev, CS_MODE_SYSFS, NULL);
- 		if (ret)
- 			pm_runtime_put(dev->parent);
- 	} else {
--		ret = cti_disable(drvdata->csdev);
-+		ret = cti_disable(drvdata->csdev, NULL);
- 		if (!ret)
- 			pm_runtime_put(dev->parent);
- 	}
-diff --git a/drivers/hwtracing/coresight/coresight-cti.h b/drivers/hwtracing/coresight/coresight-cti.h
-index 8b106b13a244..cb9ee616d01f 100644
---- a/drivers/hwtracing/coresight/coresight-cti.h
-+++ b/drivers/hwtracing/coresight/coresight-cti.h
-@@ -215,8 +215,8 @@ int cti_add_connection_entry(struct device *dev, struct cti_drvdata *drvdata,
- 			     const char *assoc_dev_name);
- struct cti_trig_con *cti_allocate_trig_con(struct device *dev, int in_sigs,
- 					   int out_sigs);
--int cti_enable(struct coresight_device *csdev);
--int cti_disable(struct coresight_device *csdev);
-+int cti_enable(struct coresight_device *csdev, enum cs_mode mode, void *data);
-+int cti_disable(struct coresight_device *csdev, void *data);
- void cti_write_all_hw_regs(struct cti_drvdata *drvdata);
- void cti_write_intack(struct device *dev, u32 ackval);
- void cti_write_single_reg(struct cti_drvdata *drvdata, int offset, u32 value);
-diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
-index 5575014f73e0..1801ff4e467b 100644
---- a/drivers/hwtracing/coresight/coresight-priv.h
-+++ b/drivers/hwtracing/coresight/coresight-priv.h
-@@ -211,8 +211,8 @@ void coresight_release_platform_data(struct coresight_device *csdev,
- 				     struct coresight_platform_data *pdata);
- struct coresight_device *
- coresight_find_csdev_by_fwnode(struct fwnode_handle *r_fwnode);
--void coresight_set_assoc_ectdev_mutex(struct coresight_device *csdev,
--				      struct coresight_device *ect_csdev);
-+void coresight_add_helper(struct coresight_device *csdev,
-+			  struct coresight_device *helper);
- 
- void coresight_set_percpu_sink(int cpu, struct coresight_device *csdev);
- struct coresight_device *coresight_get_percpu_sink(int cpu);
-diff --git a/drivers/hwtracing/coresight/coresight-sysfs.c b/drivers/hwtracing/coresight/coresight-sysfs.c
-index 464ba5e1343b..dd78e9fcfc4d 100644
---- a/drivers/hwtracing/coresight/coresight-sysfs.c
-+++ b/drivers/hwtracing/coresight/coresight-sysfs.c
-@@ -148,6 +148,10 @@ int coresight_make_links(struct coresight_device *orig,
- 	char *outs = NULL, *ins = NULL;
- 	struct coresight_sysfs_link *link = NULL;
- 
-+	/* Helper devices aren't shown in sysfs */
-+	if (conn->dest_port == -1 && conn->src_port == -1)
-+		return 0;
-+
- 	do {
- 		outs = devm_kasprintf(&orig->dev, GFP_KERNEL,
- 				      "out:%d", conn->src_port);
-diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-index 61dfbab5fa98..225a5fa71baf 100644
---- a/include/linux/coresight.h
-+++ b/include/linux/coresight.h
-@@ -40,8 +40,7 @@ enum coresight_dev_type {
- 	CORESIGHT_DEV_TYPE_LINK,
- 	CORESIGHT_DEV_TYPE_LINKSINK,
- 	CORESIGHT_DEV_TYPE_SOURCE,
--	CORESIGHT_DEV_TYPE_HELPER,
--	CORESIGHT_DEV_TYPE_ECT,
-+	CORESIGHT_DEV_TYPE_HELPER
- };
- 
- enum coresight_dev_subtype_sink {
-@@ -66,12 +65,7 @@ enum coresight_dev_subtype_source {
- 
- enum coresight_dev_subtype_helper {
- 	CORESIGHT_DEV_SUBTYPE_HELPER_CATU,
--};
--
--/* Embedded Cross Trigger (ECT) sub-types */
--enum coresight_dev_subtype_ect {
--	CORESIGHT_DEV_SUBTYPE_ECT_NONE,
--	CORESIGHT_DEV_SUBTYPE_ECT_CTI,
-+	CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI
- };
- 
- /**
-@@ -84,8 +78,6 @@ enum coresight_dev_subtype_ect {
-  *			by @coresight_dev_subtype_source.
-  * @helper_subtype:	type of helper this component is, as defined
-  *			by @coresight_dev_subtype_helper.
-- * @ect_subtype:        type of cross trigger this component is, as
-- *			defined by @coresight_dev_subtype_ect
-  */
- union coresight_dev_subtype {
- 	/* We have some devices which acts as LINK and SINK */
-@@ -95,7 +87,6 @@ union coresight_dev_subtype {
- 	};
- 	enum coresight_dev_subtype_source source_subtype;
- 	enum coresight_dev_subtype_helper helper_subtype;
--	enum coresight_dev_subtype_ect ect_subtype;
- };
- 
- /**
-@@ -239,8 +230,6 @@ struct coresight_sysfs_link {
-  *		from source to that sink.
-  * @ea:		Device attribute for sink representation under PMU directory.
-  * @def_sink:	cached reference to default sink found for this device.
-- * @ect_dev:	Associated cross trigger device. Not part of the trace data
-- *		path or connections.
-  * @nr_links:   number of sysfs links created to other components from this
-  *		device. These will appear in the "connections" group.
-  * @has_conns_grp: Have added a "connections" group for sysfs links.
-@@ -263,12 +252,9 @@ struct coresight_device {
- 	bool activated;	/* true only if a sink is part of a path */
- 	struct dev_ext_attribute *ea;
- 	struct coresight_device *def_sink;
--	/* cross trigger handling */
--	struct coresight_device *ect_dev;
- 	/* sysfs links between components */
- 	int nr_links;
- 	bool has_conns_grp;
--	bool ect_enabled; /* true only if associated ect device is enabled */
- 	/* system configuration and feature lists */
- 	struct list_head feature_csdev_list;
- 	struct list_head config_csdev_list;
-@@ -380,23 +366,11 @@ struct coresight_ops_helper {
- 	int (*disable)(struct coresight_device *csdev, void *data);
- };
- 
--/**
-- * struct coresight_ops_ect - Ops for an embedded cross trigger device
-- *
-- * @enable	: Enable the device
-- * @disable	: Disable the device
-- */
--struct coresight_ops_ect {
--	int (*enable)(struct coresight_device *csdev);
--	int (*disable)(struct coresight_device *csdev);
--};
--
- struct coresight_ops {
- 	const struct coresight_ops_sink *sink_ops;
- 	const struct coresight_ops_link *link_ops;
- 	const struct coresight_ops_source *source_ops;
- 	const struct coresight_ops_helper *helper_ops;
--	const struct coresight_ops_ect *ect_ops;
- };
- 
- #if IS_ENABLED(CONFIG_CORESIGHT)
--- 
-2.34.1
-
+> > > > I have applied Uladzislau's and Mukesh's tags, and done the usual
+> > > > wordsmithing as shown at the end of this message.  Please let me know if I
+> > > > messed anything up.
+> > >
+> > > Thank you for the improvement on the patch! It seems better now.
+> > 
+> > No problem and thank you again for the debugging and the fix!
+> > 
+> >                                                         Thanx, Paul
+> > 
+> > > > > ---
+> > > > >  kernel/rcu/tree.c | 27 +++++++++++++++++++--------
+> > > > >  1 file changed, 19 insertions(+), 8 deletions(-)
+> > > > >
+> > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c index
+> > > > > 8e880c0..7b95ee9 100644
+> > > > > --- a/kernel/rcu/tree.c
+> > > > > +++ b/kernel/rcu/tree.c
+> > > > > @@ -3024,6 +3024,18 @@ static void kfree_rcu_work(struct work_struct *work)
+> > > > >       return !!READ_ONCE(krcp->head);
+> > > > >  }
+> > > > >
+> > > > > +static bool
+> > > > > +need_wait_for_krwp_work(struct kfree_rcu_cpu_work *krwp) {
+> > > > > +     int i;
+> > > > > +
+> > > > > +     for (i = 0; i < FREE_N_CHANNELS; i++)
+> > > > > +             if (!list_empty(&krwp->bulk_head_free[i]))
+> > > > > +                     return true;
+> > > > > +
+> > > > > +     return !!krwp->head_free;
+> > > >
+> > > > This is fixed from v1, good!
+> > > >
+> > > > > +}
+> > > > > +
+> > > > >  static int krc_count(struct kfree_rcu_cpu *krcp)  {
+> > > > >       int sum = atomic_read(&krcp->head_count); @@ -3107,15 +3119,14
+> > > > > @@ static void kfree_rcu_monitor(struct work_struct *work)
+> > > > >       for (i = 0; i < KFREE_N_BATCHES; i++) {
+> > > > >               struct kfree_rcu_cpu_work *krwp = &(krcp->krw_arr[i]);
+> > > > >
+> > > > > -             // Try to detach bulk_head or head and attach it over any
+> > > > > -             // available corresponding free channel. It can be that
+> > > > > -             // a previous RCU batch is in progress, it means that
+> > > > > -             // immediately to queue another one is not possible so
+> > > > > -             // in that case the monitor work is rearmed.
+> > > > > -             if ((!list_empty(&krcp->bulk_head[0]) && list_empty(&krwp->bulk_head_free[0])) ||
+> > > > > -                     (!list_empty(&krcp->bulk_head[1]) && list_empty(&krwp->bulk_head_free[1])) ||
+> > > > > -                             (READ_ONCE(krcp->head) && !krwp->head_free)) {
+> > > > > +             // Try to detach bulk_head or head and attach it, only when
+> > > > > +             // all channels are free.  Any channel is not free means at krwp
+> > > > > +             // there is on-going rcu work to handle krwp's free business.
+> > > > > +             if (need_wait_for_krwp_work(krwp))
+> > > > > +                     continue;
+> > > > >
+> > > > > +             // kvfree_rcu_drain_ready() might handle this krcp, if so give up.
+> > > > > +             if (need_offload_krc(krcp)) {
+> > > > >                       // Channel 1 corresponds to the SLAB-pointer bulk path.
+> > > > >                       // Channel 2 corresponds to vmalloc-pointer bulk path.
+> > > > >                       for (j = 0; j < FREE_N_CHANNELS; j++) {
+> > > > > --
+> > > > > 1.9.1
+> > > >
+> > > > ------------------------------------------------------------------------
+> > > >
+> > > > commit e222f9a512539c3f4093a55d16624d9da614800b
+> > > > Author: Ziwei Dai <ziwei.dai@unisoc.com>
+> > > > Date:   Fri Mar 31 20:42:09 2023 +0800
+> > > >
+> > > >     rcu: Avoid freeing new kfree_rcu() memory after old grace period
+> > > >
+> > > >     Memory passed to kvfree_rcu() that is to be freed is tracked by a
+> > > >     per-CPU kfree_rcu_cpu structure, which in turn contains pointers
+> > > >     to kvfree_rcu_bulk_data structures that contain pointers to memory
+> > > >     that has not yet been handed to RCU, along with an kfree_rcu_cpu_work
+> > > >     structure that tracks the memory that has already been handed to RCU.
+> > > >     These structures track three categories of memory: (1) Memory for
+> > > >     kfree(), (2) Memory for kvfree(), and (3) Memory for both that arrived
+> > > >     during an OOM episode.  The first two categories are tracked in a
+> > > >     cache-friendly manner involving a dynamically allocated page of pointers
+> > > >     (the aforementioned kvfree_rcu_bulk_data structures), while the third
+> > > >     uses a simple (but decidedly cache-unfriendly) linked list through the
+> > > >     rcu_head structures in each block of memory.
+> > > >
+> > > >     On a given CPU, these three categories are handled as a unit, with that
+> > > >     CPU's kfree_rcu_cpu_work structure having one pointer for each of the
+> > > >     three categories.  Clearly, new memory for a given category cannot be
+> > > >     placed in the corresponding kfree_rcu_cpu_work structure until any old
+> > > >     memory has had its grace period elapse and thus has been removed. And
+> > > >     the kfree_rcu_monitor() function does in fact check for this.
+> > > >
+> > > >     Except that the kfree_rcu_monitor() function checks these pointers one
+> > > >     at a time.  This means that if the previous kfree_rcu() memory passed
+> > > >     to RCU had only category 1 and the current one has only category 2, the
+> > > >     kfree_rcu_monitor() function will send that current category-2 memory
+> > > >     along immediately.  This can result in memory being freed too soon,
+> > > >     that is, out from under unsuspecting RCU readers.
+> > > >
+> > > >     To see this, consider the following sequence of events, in which:
+> > > >
+> > > >     o       Task A on CPU 0 calls rcu_read_lock(), then uses "from_cset",
+> > > >             then is preempted.
+> > > >
+> > > >     o       CPU 1 calls kfree_rcu(cset, rcu_head) in order to free "from_cset"
+> > > >             after a later grace period.  Except that "from_cset" is freed
+> > > >             right after the previous grace period ended, so that "from_cset"
+> > > >             is immediately freed.  Task A resumes and references "from_cset"'s
+> > > >             member, after which nothing good happens.
+> > > >
+> > > >     In full detail:
+> > > >
+> > > >     CPU 0                                   CPU 1
+> > > >     ----------------------                  ----------------------
+> > > >     count_memcg_event_mm()
+> > > >     |rcu_read_lock()  <---
+> > > >     |mem_cgroup_from_task()
+> > > >      |// css_set_ptr is the "from_cset" mentioned on CPU 1
+> > > >      |css_set_ptr = rcu_dereference((task)->cgroups)
+> > > >      |// Hard irq comes, current task is scheduled out.
+> > > >
+> > > >                                             cgroup_attach_task()
+> > > >                                             |cgroup_migrate()
+> > > >                                             |cgroup_migrate_execute()
+> > > >                                             |css_set_move_task(task, from_cset, to_cset, true)
+> > > >                                             |cgroup_move_task(task, to_cset)
+> > > >                                             |rcu_assign_pointer(.., to_cset)
+> > > >                                             |...
+> > > >                                             |cgroup_migrate_finish()
+> > > >                                             |put_css_set_locked(from_cset)
+> > > >                                             |from_cset->refcount return 0
+> > > >                                             |kfree_rcu(cset, rcu_head) // free from_cset after new gp
+> > > >                                             |add_ptr_to_bulk_krc_lock()
+> > > >                                             |schedule_delayed_work(&krcp->monitor_work, ..)
+> > > >
+> > > >                                             kfree_rcu_monitor()
+> > > >                                             |krcp->bulk_head[0]'s work attached to krwp->bulk_head_free[]
+> > > >                                             |queue_rcu_work(system_wq, &krwp->rcu_work)
+> > > >                                             |if rwork->rcu.work is not in WORK_STRUCT_PENDING_BIT state,
+> > > >                                             |call_rcu(&rwork->rcu, rcu_work_rcufn) <--- request new gp
+> > > >
+> > > >                                             // There is a perious call_rcu(.., rcu_work_rcufn)
+> > > >                                             // gp end, rcu_work_rcufn() is called.
+> > > >                                             rcu_work_rcufn()
+> > > >                                             |__queue_work(.., rwork->wq, &rwork->work);
+> > > >
+> > > >                                             |kfree_rcu_work()
+> > > >                                             |krwp->bulk_head_free[0] bulk is freed before new gp end!!!
+> > > >                                             |The "from_cset" is freed before new gp end.
+> > > >
+> > > >     // the task resumes some time later.
+> > > >      |css_set_ptr->subsys[(subsys_id) <--- Caused kernel crash, because css_set_ptr is freed.
+> > > >
+> > > >     This commit therefore causes kfree_rcu_monitor() to refrain from moving
+> > > >     kfree_rcu() memory to the kfree_rcu_cpu_work structure until the RCU
+> > > >     grace period has completed for all three categories.
+> > > >
+> > > >     v2: Use helper function instead of inserted code block at kfree_rcu_monitor().
+> > > >
+> > > >     Fixes: c014efeef76a ("rcu: Add multiple in-flight batches of kfree_rcu() work")
+> > > >     Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> > > >     Signed-off-by: Ziwei Dai <ziwei.dai@unisoc.com>
+> > > >     Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > >
+> > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c index
+> > > > 859ee02f6614..e2dbea6cee4b 100644
+> > > > --- a/kernel/rcu/tree.c
+> > > > +++ b/kernel/rcu/tree.c
+> > > > @@ -3051,6 +3051,18 @@ need_offload_krc(struct kfree_rcu_cpu *krcp)
+> > > >         return !!READ_ONCE(krcp->head);
+> > > >  }
+> > > >
+> > > > +static bool
+> > > > +need_wait_for_krwp_work(struct kfree_rcu_cpu_work *krwp) {
+> > > > +       int i;
+> > > > +
+> > > > +       for (i = 0; i < FREE_N_CHANNELS; i++)
+> > > > +               if (!list_empty(&krwp->bulk_head_free[i]))
+> > > > +                       return true;
+> > > > +
+> > > > +       return !!krwp->head_free;
+> > > > +}
+> > > > +
+> > > >  static int krc_count(struct kfree_rcu_cpu *krcp)  {
+> > > >         int sum = atomic_read(&krcp->head_count); @@ -3134,15
+> > > > +3146,14 @@ static void kfree_rcu_monitor(struct work_struct *work)
+> > > >         for (i = 0; i < KFREE_N_BATCHES; i++) {
+> > > >                 struct kfree_rcu_cpu_work *krwp = &(krcp->krw_arr[i]);
+> > > >
+> > > > -               // Try to detach bulk_head or head and attach it over any
+> > > > -               // available corresponding free channel. It can be that
+> > > > -               // a previous RCU batch is in progress, it means that
+> > > > -               // immediately to queue another one is not possible so
+> > > > -               // in that case the monitor work is rearmed.
+> > > > -               if ((!list_empty(&krcp->bulk_head[0]) && list_empty(&krwp->bulk_head_free[0])) ||
+> > > > -                       (!list_empty(&krcp->bulk_head[1]) && list_empty(&krwp->bulk_head_free[1])) ||
+> > > > -                               (READ_ONCE(krcp->head) && !krwp->head_free)) {
+> > > > +               // Try to detach bulk_head or head and attach it, only when
+> > > > +               // all channels are free.  Any channel is not free means at krwp
+> > > > +               // there is on-going rcu work to handle krwp's free business.
+> > > > +               if (need_wait_for_krwp_work(krwp))
+> > > > +                       continue;
+> > > >
+> > > > +               // kvfree_rcu_drain_ready() might handle this krcp, if so give up.
+> > > > +               if (need_offload_krc(krcp)) {
+> > > >                         // Channel 1 corresponds to the SLAB-pointer bulk path.
+> > > >                         // Channel 2 corresponds to vmalloc-pointer bulk path.
+> > > >                         for (j = 0; j < FREE_N_CHANNELS; j++) {
