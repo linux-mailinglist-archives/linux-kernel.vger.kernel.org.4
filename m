@@ -2,174 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318A66D5852
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044866D585B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbjDDGAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 02:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
+        id S233552AbjDDGCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 02:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbjDDGA3 (ORCPT
+        with ESMTP id S233160AbjDDGCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 02:00:29 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455711992
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:00:27 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id B8082320096F;
-        Tue,  4 Apr 2023 02:00:25 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 04 Apr 2023 02:00:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:content-type:content-type:date:date:from
-        :from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1680588025; x=1680674425; bh=Lr
-        TlRnC1PMOEduoHyaDrJIwpQILB4R4Y2q12p1O1Lq4=; b=TVQd44oYV/EGE32s1j
-        U2FtduT+QMuANL8y4onAgbmKKMM/FqVE0EImoq9XSjzYsMgl97KwCFjN1tNKNNig
-        cWqI/KOygYxL3q5YAkffb9TL6FDpM58aLSeCiQAW8j2YeDeN/4pD8dZev1OvueCu
-        6z6eQH9PdG19ABcWHXZNVhvqRl6NN3bRJsO6GCKXq61Hw0t0f+fqg0BWaOmCjhNf
-        TWiNCElsY/dZsI91vE8Fe0rBnANoYdv2EQxoWMUWUtnoT+g2kDNTDtyoJN3TWuXg
-        BlanORl+lotAHUArBd/stRjGPHRBLFpEme6U4xP9nqlb35GkYO+RBPj0LEof8Vnn
-        7UTw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680588025; x=1680674425; bh=LrTlRnC1PMOEduoHyaDrJIwpQILB4R4Y2q1
-        2p1O1Lq4=; b=trYbBXo4nZv9yYGIl660K02BlRjcUspug0z0uEJXchR0X3vVizm
-        CWYp2aspxKTqM9H3SIhFZujUCmPiTQtnw16Ur6xG0fqdcWN9ts+KJViNLM2/c9Qj
-        KHkZNxx0rH7DkboOcSTCxPB7zordka1C1toU/ffxhO0jGDOoq2AQQDRvCGy3mQHd
-        o9GUutruWvP0B2SncJ5QjfMlvHMKlR2s/LQhCK+6ze9IlDFQQmF/a7eg6FguHT4c
-        vaM2d9NaKnP2+OuZLOS9eCkmy18L7pwaXaMby59Mk4IZtnuLFQndsj6VnRkbdWsh
-        FzrkGS0XNPKV/TbNOyiEkfzNRG3LyGN5XBw==
-X-ME-Sender: <xms:-bwrZGy1tLfxDnxTQBIYYvCZ10GZmE9xohspJO8R0zeaXq7Jc80DJA>
-    <xme:-bwrZCRjdsIq38OHOOEjOvTHiyTrSrGRfnwVnDANG8_fBEM4PpM3FTnj-uQMze8YB
-    NuLT5vyKXCntxByxug>
-X-ME-Received: <xmr:-bwrZIXmCr5UGlPwlWWhgPOQdCbWFdTV8YifHgJePIC4LRIp_9uyghkSFfsUYVqolqozNBFh9fjeBSUKzWdYifWxmaA3YsX-eUYjUUM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeikedgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkgggtugesthdtredttd
-    dtvdenucfhrhhomheplfhoshhhucfvrhhiphhlvghtthcuoehjohhshhesjhhoshhhthhr
-    ihhplhgvthhtrdhorhhgqeenucggtffrrghtthgvrhhnpeelleeggedtjeejfeeuvddufe
-    eggfektdefkeehveeuvedvvdfhgeffgfdvgfffkeenucevlhhushhtvghrufhiiigvpedt
-    necurfgrrhgrmhepmhgrihhlfhhrohhmpehjohhshhesjhhoshhhthhrihhplhgvthhtrd
-    horhhg
-X-ME-Proxy: <xmx:-bwrZMgQP9OLTEQzpTUiTAqbcOh3m0McF8_CRNni9s6PXTJjwFxt9Q>
-    <xmx:-bwrZICZkb-M6xpAxBQdBLOOjTYeV_JYcJy0evq_eORTwSvztBa6MQ>
-    <xmx:-bwrZNL3zWO_H_lNytygtBlO2qPlrRPvTj2ks6JNqCmodX7OhsI5lg>
-    <xmx:-bwrZDpvGlmDZHNW4b3mB_1v2Z4yFxlRibj62BjaTCHaZIuArkPH6g>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Apr 2023 02:00:23 -0400 (EDT)
-Date:   Tue, 4 Apr 2023 15:00:19 +0900
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] prctl: Add PR_GET_AUXV to copy auxv to userspace
-Message-ID: <b11a591e085f1cd06adb454b1f7cde676d317318.1680585798.git.josh@joshtriplett.org>
+        Tue, 4 Apr 2023 02:02:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092D71BC3
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:01:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680588092;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cEjburEshfupS59FzIzY20KcgCn+Z0OofnnG6gTk1R4=;
+        b=ggf+G/rx5zU52A1H0r99zNu4y8TDoipL1qxeO2LjCqXWGvNCa8CYVx1XVAl9DnLDvaUmcz
+        ti8ujf84LmUjWl69SxoietD3Zb1ZTeZgfF79rWxE7RX9Hp85Ax4pT3DWlmAB1W0YU/CZUa
+        eKc20xqyu4QmAaqhIai8EgwaS4m6a6o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-73-RAYnqle7O1KjYBt4-em6lQ-1; Tue, 04 Apr 2023 02:01:26 -0400
+X-MC-Unique: RAYnqle7O1KjYBt4-em6lQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C9D9811E7C;
+        Tue,  4 Apr 2023 06:01:25 +0000 (UTC)
+Received: from rh (vpn2-52-18.bne.redhat.com [10.64.52.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 257DE2027061;
+        Tue,  4 Apr 2023 06:01:23 +0000 (UTC)
+Received: from localhost ([::1] helo=rh)
+        by rh with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <dchinner@redhat.com>)
+        id 1pjZjM-002uhf-0s;
+        Tue, 04 Apr 2023 16:01:20 +1000
+Date:   Tue, 4 Apr 2023 16:01:18 +1000
+From:   Dave Chinner <dchinner@redhat.com>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     dennis@kernel.org, tj@kernel.org, cl@linux.com, linux-mm@kvack.org,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, linux-kernel@vger.kernel.org,
+        yebin10@huawei.com
+Subject: Re: [PATCH 2/2] lib/percpu_counter: fix dying cpu compare race
+Message-ID: <ZCu9LtdA+NMrfG9x@rh>
+References: <20230404014206.3752945-1-yebin@huaweicloud.com>
+ <20230404014206.3752945-3-yebin@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230404014206.3752945-3-yebin@huaweicloud.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a library wants to get information from auxv (for instance,
-AT_HWCAP/AT_HWCAP2), it has a few options, none of them perfectly
-reliable or ideal:
+On Tue, Apr 04, 2023 at 09:42:06AM +0800, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+> 
+> In commit 8b57b11cca88 ("pcpcntrs: fix dying cpu summation race") a race
+> condition between a cpu dying and percpu_counter_sum() iterating online CPUs
+> was identified.
+> Acctually, there's the same race condition between a cpu dying and
+> __percpu_counter_compare(). Here, use 'num_online_cpus()' for quick judgment.
+> But 'num_online_cpus()' will be decreased before call 'percpu_counter_cpu_dead()',
+> then maybe return incorrect result.
+> To solve above issue, also need to add dying CPUs count when do quick judgment
+> in __percpu_counter_compare().
+> 
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> ---
+>  lib/percpu_counter.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/percpu_counter.c b/lib/percpu_counter.c
+> index 5004463c4f9f..399840cb0012 100644
+> --- a/lib/percpu_counter.c
+> +++ b/lib/percpu_counter.c
+> @@ -227,6 +227,15 @@ static int percpu_counter_cpu_dead(unsigned int cpu)
+>  	return 0;
+>  }
+>  
+> +static __always_inline unsigned int num_count_cpus(void)
+> +{
+> +#ifdef CONFIG_HOTPLUG_CPU
+> +	return (num_online_cpus() + num_dying_cpus());
+> +#else
+> +	return num_online_cpus();
+> +#endif
+> +}
+> +
+>  /*
+>   * Compare counter against given value.
+>   * Return 1 if greater, 0 if equal and -1 if less
+> @@ -237,7 +246,7 @@ int __percpu_counter_compare(struct percpu_counter *fbc, s64 rhs, s32 batch)
+>  
+>  	count = percpu_counter_read(fbc);
+>  	/* Check to see if rough count will be sufficient for comparison */
+> -	if (abs(count - rhs) > (batch * num_online_cpus())) {
+> +	if (abs(count - rhs) > (batch * num_count_cpus())) {
 
-- Be main or the pre-main startup code, and grub through the stack above
-  main. Doesn't work for a library.
-- Call libc getauxval. Not ideal for libraries that are trying to be
-  libc-independent and/or don't otherwise require anything from other
-  libraries.
-- Open and read /proc/self/auxv. Doesn't work for libraries that may run
-  in arbitrarily constrained environments that may not have /proc
-  mounted (e.g. libraries that might be used by an init program or a
-  container setup tool).
-- Assume you're on the main thread and still on the original stack, and
-  try to walk the stack upwards, hoping to find auxv. Extremely bad
-  idea.
-- Ask the caller to pass auxv in for you. Not ideal for a user-friendly
-  library, and then your caller may have the same problem.
+What problem is this actually fixing? You haven't explained how the
+problem you are fixing manifests in the commit message or the cover
+letter.
 
-Add a prctl that copies current->mm->saved_auxv to a userspace buffer.
+We generally don't care about the accuracy of the comparison here
+because we've used percpu_counter_read() which is completely racy
+against on-going updates. e.g. we can get preempted between
+percpu_counter_read() and the check and so the value can be
+completely wrong by the time we actually check it. Hence checking
+online vs online+dying really doesn't fix any of the common race
+conditions that occur here.
 
-Signed-off-by: Josh Triplett <josh@joshtriplett.org>
----
+Even if we fall through to using percpu_counter_sum() for the
+comparison value, that is still not accurate in the face of racing
+updates to the counter because percpu_counter_sum only prevents
+the percpu counter from being folded back into the global sum
+while it is running. The comparison is still not precise or accurate.
 
-I've built, booted, and tested this.
+IOWs, the result of this whole function is not guaranteed to be
+precise or accurate; percpu counters cannot ever be relied on for
+exact threshold detection unless there is some form of external
+global counter synchronisation being used for those comparisons
+(e.g. a global spinlock held around all the percpu_counter_add()
+modifications as well as the __percpu_counter_compare() call).
 
-man-pages snippet:
+That's always been the issue with unsynchronised percpu counters -
+cpus dying just don't matter here because there are many other more
+common race conditions that prevent accurate, race free comparison
+of per-cpu counters.
 
-.\" prctl PR_GET_AUXV
-.TP
-.BR PR_GET_AUXV " (since Linux 6.x)"
-Get the auxilliary vector (auxv) into the buffer pointed to by
-.IR "(void\~*) arg2" ,
-whose length is given by \fIarg3\fP.
-If the buffer is not long enough for the full auxilliary vector,
-the copy will be truncated.
-Return (as the function result)
-the full length of the auxilliary vector.
-\fIarg4\fP and \fIarg5\fP must be 0.
+Cheers,
 
-Will send a patch for man-pages once merged.
-
- include/uapi/linux/prctl.h |  2 ++
- kernel/sys.c               | 15 +++++++++++++++
- 2 files changed, 17 insertions(+)
-
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index 1312a137f7fb..b2b24eaf2427 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -290,4 +290,6 @@ struct prctl_mm_map {
- #define PR_SET_VMA		0x53564d41
- # define PR_SET_VMA_ANON_NAME		0
- 
-+#define PR_GET_AUXV		0x41555856
-+
- #endif /* _LINUX_PRCTL_H */
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 495cd87d9bf4..fdd297507d7e 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -2377,6 +2377,16 @@ static inline int prctl_get_mdwe(unsigned long arg2, unsigned long arg3,
- 		PR_MDWE_REFUSE_EXEC_GAIN : 0;
- }
- 
-+static int prctl_get_auxv(void __user *addr, unsigned long len)
-+{
-+	struct mm_struct *mm = current->mm;
-+	unsigned long size = min(sizeof(mm->saved_auxv), len);
-+
-+	if (size && copy_to_user(addr, mm->saved_auxv, size))
-+		return -EFAULT;
-+	return sizeof(mm->saved_auxv);
-+}
-+
- SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 		unsigned long, arg4, unsigned long, arg5)
- {
-@@ -2661,6 +2671,11 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 	case PR_SET_VMA:
- 		error = prctl_set_vma(arg2, arg3, arg4, arg5);
- 		break;
-+	case PR_GET_AUXV:
-+		if (arg4 || arg5)
-+			return -EINVAL;
-+		error = prctl_get_auxv((void __user *)arg2, arg3);
-+		break;
- 	default:
- 		error = -EINVAL;
- 		break;
+Dave.
 -- 
-2.40.0
+Dave Chinner
+dchinner@redhat.com
+
