@@ -2,177 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4083C6D6C4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF786D6C63
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236260AbjDDSgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 14:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
+        id S234402AbjDDSjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 14:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236242AbjDDSgW (ORCPT
+        with ESMTP id S236221AbjDDSif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 14:36:22 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A91F5254
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 11:34:27 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id g19so30410087lfr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 11:34:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680633265;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=orJHNSBUSwxWAVFJS4pfzA0KQDggc/uVMZltKMKuHVI=;
-        b=PfUHGnUuhlmgR3aUQAX/r/U8r/ZYPX2YOetxeW8hJRaBzMotkiA9R1EF5V/gusMeA1
-         U1v+FlIHyLCZTiTV0xchtgK/7J2QHmFPFW0+K7Nf3Jhoq9gc37ZVC2G0mq15BeyC0JtV
-         gnL3B5nQ8Z8qFRxblML/TWf+vlgV4vFmjPGLDm6JOKixqKIiu8zckICuxtJLx2DZaNVX
-         IbWlAz6SQzsSOHdd6afDgL94AHR0nNgkREK4lqVSooo0DagE+yO4K0id2y6VtfP974gw
-         AC4bgqrbxYLhBQe+8Q7YqvFpb6I10ByCboefEESi3u1K7lWnhLz3i3C3TrlUpVWI9lzW
-         /GKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680633265;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=orJHNSBUSwxWAVFJS4pfzA0KQDggc/uVMZltKMKuHVI=;
-        b=ih1BDBGCWpEF0ssyjJbK6F5HIhOWrcRern3sRSYGxhHrTcsi4KP0r4HZK+X8zHLnVB
-         uPSjvaBl8ugXqIC5XdKbWZCCNPvOEZ2ws0DaLcWn5a/6DTcNzGmbsuZ+wFLE0S5/kGRd
-         vBnHSO7Pk39GUSkFU/7mer8XTLKMn6XdIU5Zoav+jix2NyMQYNh/zFBA7V1ZrLSD9tM9
-         5G8alvoR72Ysu5Dr6EiatepycJWtseV//ThQz2mFsD2jigaO4ZKbbnYBnrjA/zcL/Cyc
-         jLOUmxMMjog3rrHIsJZ0ztIQPFZcucSSC8aqgRbzI2l5dB4Zh78hs8dFqNuArboFww+V
-         k5/g==
-X-Gm-Message-State: AAQBX9fPefJw1Pr9mxFLYN+zG90ONSs2uddDCDuawO+1b3eJofKgGGFr
-        VpHaX/R1bJbON5cyTKYyhMdICA==
-X-Google-Smtp-Source: AKy350aU2IZ6+6MvmW6lXe5XqjRleRRPL08I9gEp/YNZl9ljG2LZXYXvWdP3hWxAhUYJdI2nZY6+nA==
-X-Received: by 2002:ac2:5989:0:b0:4de:e802:b7e3 with SMTP id w9-20020ac25989000000b004dee802b7e3mr923407lfn.19.1680633265603;
-        Tue, 04 Apr 2023 11:34:25 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id o7-20020a05651238a700b004d887e0e9edsm2439673lft.168.2023.04.04.11.34.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 11:34:25 -0700 (PDT)
-Message-ID: <0d2f0792-c7dd-7cdc-3c1c-454f445405aa@linaro.org>
-Date:   Tue, 4 Apr 2023 20:34:23 +0200
+        Tue, 4 Apr 2023 14:38:35 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970082108;
+        Tue,  4 Apr 2023 11:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680633449; x=1712169449;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BCqe1K199HYpCvTKZWDbQiWocdkrHSITuIJF8Dcwfrc=;
+  b=ioj87efvFi/PCjPPPzyvS1AWph+F7S+LhTmxYixNZ2y1j+823/b2AQde
+   3p6L0Cp5xehlcYbclfPEY3LtYilpDVTPLikn0YV3YwMHzgXSt2o70QqGH
+   46MMbzj8CuF8veaiYoDLOAeHOxyjFwj33GSTSjNKkND/p8sdiaQYzL7BN
+   nbPy382x85heDAocpnbr7mMC8/GGTJPiMH3QlP+JGEWzTkL0pdDe6KKYN
+   8v7uzhTeX5U2na6eIv3qWXuQeMlF68mrRDv1GFj+yqnAreAuCOh7V68wx
+   ZkC6lORdnhOhFynLhpCKz1qu9YDBp5g5d3VEo0lK6BWH3vSY3zG+JcQSE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="330869220"
+X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
+   d="scan'208";a="330869220"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 11:37:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="636629338"
+X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
+   d="scan'208";a="636629338"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.33.86])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 11:37:18 -0700
+Message-ID: <f2f6b5fc-11fc-11d9-ccfd-74c5baeea8ca@intel.com>
+Date:   Tue, 4 Apr 2023 21:37:12 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: sc8280xp: Add ethernet nodes
+ Firefox/102.0 Thunderbird/102.9.1
+Subject: Re: [PATCH v5 00/17] Reference count checker and related fixes
 Content-Language: en-US
-To:     Andrew Halaney <ahalaney@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, richardcochran@gmail.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, netdev@vger.kernel.org,
-        bmasney@redhat.com, echanude@redhat.com, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com
-References: <20230331215804.783439-1-ahalaney@redhat.com>
- <20230331215804.783439-3-ahalaney@redhat.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230331215804.783439-3-ahalaney@redhat.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Song Liu <song@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Stephane Eranian <eranian@google.com>
+References: <20230320212248.1175731-1-irogers@google.com>
+ <CAP-5=fX4=pUmcFpRZ5xFds1awSr7HSo1F9rH4=D7NJXW9OXXVQ@mail.gmail.com>
+ <7443d427-783b-44b6-85e6-5e667bb83a94@intel.com>
+ <CAP-5=fUvCYHLaecCKMnFwMEcbqj=UcfgHSKAtmYEtk+sJT26nQ@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fUvCYHLaecCKMnFwMEcbqj=UcfgHSKAtmYEtk+sJT26nQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 31.03.2023 23:58, Andrew Halaney wrote:
-> This platform has 2 MACs integrated in it, go ahead and describe them.
+On 4/04/23 20:35, Ian Rogers wrote:
+> On Tue, Apr 4, 2023 at 10:26 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> On 4/04/23 18:58, Ian Rogers wrote:
+>>> Ping. It would be nice to have this landed or at least the first 10
+>>> patches that refactor the map API and are the bulk of the
+>>> lines-of-code changed. Having those landed would make it easier to
+>>> rebase in the future, but I also think the whole series is ready to
+>>> go.
+>>
+>> I was wondering if the handling of dynamic data like struct map makes
+>> any sense at present.  Perhaps someone can reassure me.
+>>
+>> A struct map can be updated when an MMAP event is processed.  So it
+>> seems like anything racing with event processing is already broken, and
+>> reference counting / locking cannot help - unless there is also
+>> copy-on-write (which there isn't at present)?
+>>
+>> For struct maps, referencing it while simultaneously processing
+>> events seems to make even less sense?
 > 
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> ---
+> Agreed. The point of this work isn't to reimplement the maps/map APIs
+> but to add a layer of reference count checking. A refactor to change
+> the implementation without reference counts can delete the reference
+> count checking and I think that is great! I'm trying to get the code
+> base, in its current shape, to be more correct guided by sanitizers.
+> Unfortunately the sanitizers come from a C++ RAII world where
+> maintaining reference counts is somewhat trivial, we have to work
+> harder as done here.
 > 
-> Changes since v2:
->     * Fix spacing (Konrad)
-> 
-> Changes since v1:
->     * None
-> 
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 59 ++++++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 42bfa9fa5b96..f28ea86b128d 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -761,6 +761,65 @@ soc: soc@0 {
->  		ranges = <0 0 0 0 0x10 0>;
->  		dma-ranges = <0 0 0 0 0x10 0>;
->  
-> +		ethernet0: ethernet@20000 {
-> +			compatible = "qcom,sc8280xp-ethqos";
-> +			reg = <0x0 0x00020000 0x0 0x10000>,
-> +			      <0x0 0x00036000 0x0 0x100>;
-> +			reg-names = "stmmaceth", "rgmii";
-> +
-> +			clocks = <&gcc GCC_EMAC0_AXI_CLK>,
-> +				 <&gcc GCC_EMAC0_SLV_AHB_CLK>,
-> +				 <&gcc GCC_EMAC0_PTP_CLK>,
-> +				 <&gcc GCC_EMAC0_RGMII_CLK>;
-> +			clock-names = "stmmaceth",
-> +				      "pclk",
-> +				      "ptp_ref",
-> +				      "rgmii";
-> +
-> +			interrupts = <GIC_SPI 946 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 936 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "macirq", "eth_lpi";
-> +			iommus = <&apps_smmu 0x4c0 0xf>;
-> +			power-domains = <&gcc EMAC_0_GDSC>;
-> +
-> +			snps,tso;
-> +			snps,pbl = <32>;
-> +			rx-fifo-depth = <4096>;
-> +			tx-fifo-depth = <4096>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		ethernet1: ethernet@23000000 {
-Nodes under /soc should be ordered by their unit address, so
-in this case it belongs after dispcc1: clock-controller@..
+> A similar thing to refactoring maps is changing symbol. The rb_node
+> there accounts for 3*8 bytes of pointer, but is just to sort the
+> symbol by address. A sorted array would suffice as well complexity
+> wise, freeing 16-bytes per symbol, and is already done for symbols
+> sorted by name.
 
-With that fixed:
+Ok, just stuff to keep in mind.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> +			compatible = "qcom,sc8280xp-ethqos";
-> +			reg = <0x0 0x23000000 0x0 0x10000>,
-> +			      <0x0 0x23016000 0x0 0x100>;
-> +			reg-names = "stmmaceth", "rgmii";
-> +
-> +			clocks = <&gcc GCC_EMAC1_AXI_CLK>,
-> +				 <&gcc GCC_EMAC1_SLV_AHB_CLK>,
-> +				 <&gcc GCC_EMAC1_PTP_CLK>,
-> +				 <&gcc GCC_EMAC1_RGMII_CLK>;
-> +			clock-names = "stmmaceth",
-> +				      "pclk",
-> +				      "ptp_ref",
-> +				      "rgmii";
-> +
-> +			interrupts = <GIC_SPI 929 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 919 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "macirq", "eth_lpi";
-> +
-> +			iommus = <&apps_smmu 0x40 0xf>;
-> +			power-domains = <&gcc EMAC_1_GDSC>;
-> +
-> +			snps,tso;
-> +			snps,pbl = <32>;
-> +			rx-fifo-depth = <4096>;
-> +			tx-fifo-depth = <4096>;
-> +
-> +			status = "disabled";
-> +		};
-> +
->  		gcc: clock-controller@100000 {
->  			compatible = "qcom,gcc-sc8280xp";
->  			reg = <0x0 0x00100000 0x0 0x1f0000>;
