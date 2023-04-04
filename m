@@ -2,87 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF83E6D6D61
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664D26D6D60
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 21:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236147AbjDDToX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 15:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S236176AbjDDToC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 15:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235710AbjDDToW (ORCPT
+        with ESMTP id S235905AbjDDTn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 15:44:22 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A779F5252
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:44:11 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id h8so135176536ede.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 12:44:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1680637450; x=1683229450;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6JHiQLQ4dqHoCx9VI6e9yGRcga3qGDdfBjn0lgNBieM=;
-        b=OHW1YE7CnqLehmIKlGxDAaoPGmF8m+0t+Lj/KLuQl/xaIfg17JICEEnTi4VEH8qTYd
-         82frSjRAWG7DbXuEASWBeGA/CWAMt36cPTyfqQ7pdqhbgr94d4Rzo2DQrWU6GSTfEkxn
-         9n9lnJKYvLuQHWTufSo0B9TzTWqcLdAMji0w8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680637450; x=1683229450;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6JHiQLQ4dqHoCx9VI6e9yGRcga3qGDdfBjn0lgNBieM=;
-        b=bL3jnjmArfhI/gn7kIjanRkwfigm3Wq7LednRLmTI/2b57lsi9F4Deji0LKoUb4fAs
-         rsmC7U/dmB8A/GxYC975dbUm+3hpVrbnz+/8JtadK5bGoGPMs64bdq8WBZMJPwhD+xZL
-         hjYl8bCwr8jjyrUtVhj11aql33BvZVJtaJNWeIgwjWt21jBpFBTQi2oSRylqEzXQXS4S
-         zTEZZwvfMKhEXjn1NbB0/CY/RB+BdkjXICwPxCcpQ8sh4uaKDwNQVR9Oxdy2KZBkVQqT
-         7nibALSLkg0ogQj6eDdfjN7n9EzaCz6CmxaXnyMbiYLRyQdBcuEVKXmRuiED8Aw3DQ4y
-         5s4A==
-X-Gm-Message-State: AAQBX9fBCWjtZ9nnNDMHpbHCn8E9hMAO7YwkQEfgA8kCDR61C61QPjqh
-        XOoctGqq2YjGcXTQugCIBttH9g8jrKRPRC2UOHiGRw==
-X-Google-Smtp-Source: AKy350Zk6u6QrmscBMUoJh4YU5za4AmkwwuDPcBK9cssi/sCeaOefFReUV9pX5dS/Q4pqa1c5ko5Ig==
-X-Received: by 2002:a17:907:3201:b0:949:55fd:34fa with SMTP id xg1-20020a170907320100b0094955fd34famr272996ejb.39.1680637449644;
-        Tue, 04 Apr 2023 12:44:09 -0700 (PDT)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id um4-20020a170906cf8400b00928e0ea53e5sm6328569ejb.84.2023.04.04.12.44.08
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 12:44:08 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id r11so135166821edd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 12:44:08 -0700 (PDT)
-X-Received: by 2002:a17:906:3b07:b0:935:3085:303b with SMTP id
- g7-20020a1709063b0700b009353085303bmr343112ejf.15.1680637447927; Tue, 04 Apr
- 2023 12:44:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHk-=wi92YtfjcczOm20_mYkWZwKKjn+dCcrx8BL9n9f55MY5g@mail.gmail.com>
- <f78f2735-b533-4912-8cbf-0f545ce23fcf@roeck-us.net>
-In-Reply-To: <f78f2735-b533-4912-8cbf-0f545ce23fcf@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 4 Apr 2023 12:43:51 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjRya_yH3YZ_P0o392K2DEbgTpQ-43GmkojJgADKxXPoA@mail.gmail.com>
-Message-ID: <CAHk-=wjRya_yH3YZ_P0o392K2DEbgTpQ-43GmkojJgADKxXPoA@mail.gmail.com>
-Subject: Re: Linux 6.3-rc5
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Tue, 4 Apr 2023 15:43:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD8E4EE9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 12:43:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5569D63062
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 19:43:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0228C433EF;
+        Tue,  4 Apr 2023 19:43:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1680637436;
+        bh=1Pj9wervIvuhxnbud9M7uEnumbv+qewHT7HtKpfIDE0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u3JeDRjED8NfLSy7JgtnzRWXs8mnHtoxwLXgKI8TrOSi/KA99r+V3s3xMiq5k29wc
+         mM2t1mpsctRZyI25Rxtg1sRpN6GavOMHoh071IbNwPezCuQS7D8+tQi8YKcwGiKHMy
+         3Z27iTHQOYUlsTYsSxers71SWSjBt2yrcMul/pNo=
+Date:   Tue, 4 Apr 2023 12:43:55 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Josh Triplett <josh@joshtriplett.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] prctl: Add PR_GET_AUXV to copy auxv to userspace
+Message-Id: <20230404124355.3efa7a201d2aa9896dc6353e@linux-foundation.org>
+In-Reply-To: <d81864a7f7f43bca6afa2a09fc2e850e4050ab42.1680611394.git.josh@joshtriplett.org>
+References: <d81864a7f7f43bca6afa2a09fc2e850e4050ab42.1680611394.git.josh@joshtriplett.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 7:08=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
-rote:
+On Tue, 4 Apr 2023 21:31:48 +0900 Josh Triplett <josh@joshtriplett.org> wrote:
+
+> If a library wants to get information from auxv (for instance,
+> AT_HWCAP/AT_HWCAP2), it has a few options, none of them perfectly
+> reliable or ideal:
+> 
+> - Be main or the pre-main startup code, and grub through the stack above
+>   main. Doesn't work for a library.
+> - Call libc getauxval. Not ideal for libraries that are trying to be
+>   libc-independent and/or don't otherwise require anything from other
+>   libraries.
+> - Open and read /proc/self/auxv. Doesn't work for libraries that may run
+>   in arbitrarily constrained environments that may not have /proc
+>   mounted (e.g. libraries that might be used by an init program or a
+>   container setup tool).
+> - Assume you're on the main thread and still on the original stack, and
+>   try to walk the stack upwards, hoping to find auxv. Extremely bad
+>   idea.
+> - Ask the caller to pass auxv in for you. Not ideal for a user-friendly
+>   library, and then your caller may have the same problem.
+
+How does glibc's getauxval() do its thing?  Why can't glibc-independent
+code do the same thing?
+
+> Add a prctl that copies current->mm->saved_auxv to a userspace buffer.
+> 
+> ...
 >
-> Finally ...
+> --- a/include/uapi/linux/prctl.h
+> +++ b/include/uapi/linux/prctl.h
+> @@ -290,4 +290,6 @@ struct prctl_mm_map {
+>  #define PR_SET_VMA		0x53564d41
+>  # define PR_SET_VMA_ANON_NAME		0
+>  
+> +#define PR_GET_AUXV		0x41555856
 
-Yeah, well, I had to take the fix directly (and another that Thorsten
-had been tracking) because the usual channels were not working right.
+How was this constant arrived at?
 
-But yes, finally.
+> --- a/kernel/sys.c
+> +++ b/kernel/sys.c
+> @@ -2377,6 +2377,16 @@ static inline int prctl_get_mdwe(unsigned long arg2, unsigned long arg3,
+>  		PR_MDWE_REFUSE_EXEC_GAIN : 0;
+>  }
+>  
+> +static int prctl_get_auxv(void __user *addr, unsigned long len)
+> +{
+> +	struct mm_struct *mm = current->mm;
+> +	unsigned long size = min_t(unsigned long, sizeof(mm->saved_auxv), len);
+> +
+> +	if (size && copy_to_user(addr, mm->saved_auxv, size))
+> +		return -EFAULT;
+> +	return sizeof(mm->saved_auxv);
+> +}
 
-           Linus
+The type choices are unpleasing.  Maybe make `len' a size_t and make
+the function return a size_t?  That way prctl_get_auxv() will be much
+nicer, but the caller less so.
+
+>  SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+>  		unsigned long, arg4, unsigned long, arg5)
+>  {
+> @@ -2661,6 +2671,11 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+>  	case PR_SET_VMA:
+>  		error = prctl_set_vma(arg2, arg3, arg4, arg5);
+>  		break;
+> +	case PR_GET_AUXV:
+> +		if (arg4 || arg5)
+> +			return -EINVAL;
+> +		error = prctl_get_auxv((void __user *)arg2, arg3);
+> +		break;
+>  	default:
+>  		error = -EINVAL;
+>  		break;
+
