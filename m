@@ -2,212 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18DD56D6F14
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18536D6F16
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 23:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236501AbjDDVje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 17:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
+        id S236245AbjDDVjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 17:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236506AbjDDVjc (ORCPT
+        with ESMTP id S236520AbjDDVjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 17:39:32 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4863144AE
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 14:39:31 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-17683b570b8so36208692fac.13
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 14:39:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680644370;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jgsHBuR1JCiS/kCWx0dnvnASkNVPo+HZZkzbYVM3KlI=;
-        b=MuNihkv60/dw1sHWeHVoLEdQZgd3CzvUoCDIeu6Deb6Bvxj+65j/nLvrl1fXz61C6j
-         Q0DQSwOqdN6iOsDGzhEXgLFK2zr5E3plsQI75C3Ii668c/H9SOyfWOM+/dvNQDh8VDdX
-         stjzXWOzCZ6ACbiLOCSpf9oX/I9/2zaBpedGv0t/ETkkcJOwZMMNZ6bU/lha0HVf6Ovo
-         9JKcc1xHp5YTNeUYzEO0vBj+kBySh3Ma0TJLvygYHWfA7AGRdcDxfdcxE0OvtaGBzrzq
-         ddHITrM42b5EGo7g+x+FbtybeSyi2mTuuHB/GP0pXADhJH19IlUy+4SMmZRdrBhLLMRs
-         L8/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680644370;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jgsHBuR1JCiS/kCWx0dnvnASkNVPo+HZZkzbYVM3KlI=;
-        b=iDSvLh1FLFxu7JR58/BlDEQVlQBFFp3osaXqVQGq/l+nQQhwNQEtimBSOfi17wX6dj
-         C//6chyOFd45BVmQcJfA2oC+5uujsSo88ky/N9b5Sjs42KVKMIwNTRwpM9OvmyHTq4cc
-         qQ2Yt31fyaCLlp8p1ulXCunoAZvyiQJ8gN/AMyDCeF4kGnRNXqiAR03FGd1n8f6tVTh6
-         4AErtPm1p00C0HASNuTDWSk1wwcV2oQp5mSB7e+wrBe0rLL1wpPFy77G8RRHqdq4Lbwf
-         /MTU6SoHYaO/IiZCeoVtJ53s7n642nC2xCVUywDH7nXBs07x80KUBe+dq5ow8Y7chyQ2
-         vD8g==
-X-Gm-Message-State: AAQBX9fz/S6XG8Tkp3vk6gmxZbQgMBvQCTxMkD8UEcRiHhf6fgrVAxad
-        J+iYsr3Hfu+xfJ4uGI91cxkhECG6eVosUizRZcZAmw==
-X-Google-Smtp-Source: AKy350YI01RZ913r86Uj+mNlWwCKJQaqcSjvbxMsdhMGQNm7HvIq/UI90tkqfhSR5EWKc3FXTsEzo5hVt4+WfEhUTD0=
-X-Received: by 2002:a05:6870:339e:b0:17e:7674:8df0 with SMTP id
- w30-20020a056870339e00b0017e76748df0mr1941907oae.9.1680644370441; Tue, 04 Apr
- 2023 14:39:30 -0700 (PDT)
+        Tue, 4 Apr 2023 17:39:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A20849FE
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 14:39:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3A5F638F2
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 21:39:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E81CC433D2;
+        Tue,  4 Apr 2023 21:39:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680644380;
+        bh=NHSIcpjoPf9wpAnrKABRpzgjh7hQvftgW9HZxw+Kxug=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lzZHtbkpXSbyzyseVkhx0Ml4Tgti15LHBfISnTnRceP8Cu1omxpVMVfwTyGHFiYhc
+         sNZ5HJmV+fPMzamV3cMDeNltsdCi8BBeQnRmZ/lGrVgwb9XrF3NuoAZDz+09obhfHY
+         PKnWIPh32AYHxiobShzGPcCCXvJDj6G3c3kXXNLadY8AdjUvydUCjFcH8N6d5thjDi
+         Jn/evoP6Mc2d/2Z0vLiY1MqqcbTM1y3uAKl3CPA3OmHI1RxQlnYMJJbgCvYaL2cKhy
+         t67vRwQ4Y52Mi6nOgAI6Ptn6oMlOI75yHQtPTl8yt6GL4L8Q3ZRWaTk6BwpGdHPcl1
+         xmrb7nxqtwBCQ==
+Date:   Tue, 4 Apr 2023 14:39:38 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] f2fs: fix to trigger a checkpoint in the end of
+ foreground garbage collection
+Message-ID: <ZCyZGgf4RSEjyHTF@google.com>
+References: <20230324071028.336982-1-chao@kernel.org>
 MIME-Version: 1.0
-References: <20230206172340.2639971-1-rananta@google.com> <20230206172340.2639971-3-rananta@google.com>
- <ZCTjirkCgBkT65eP@linux.dev> <CAJHc60y1BLQC4c0qXCuqF7JfewBC_fG2xuH0Wj0AHJh9x3CK5g@mail.gmail.com>
- <ZCxvXq0dftq/Szra@linux.dev>
-In-Reply-To: <ZCxvXq0dftq/Szra@linux.dev>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Tue, 4 Apr 2023 14:39:18 -0700
-Message-ID: <CAJHc60x2kkkHi=tO4UymOeFeKA315bibhHgSeXZpdEReFUh4-g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] KVM: arm64: Add FEAT_TLBIRANGE support
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324071028.336982-1-chao@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 11:41=E2=80=AFAM Oliver Upton <oliver.upton@linux.de=
-v> wrote:
->
-> On Mon, Apr 03, 2023 at 10:26:01AM -0700, Raghavendra Rao Ananta wrote:
-> > Hi Oliver,
-> >
-> > On Wed, Mar 29, 2023 at 6:19=E2=80=AFPM Oliver Upton <oliver.upton@linu=
-x.dev> wrote:
-> > >
-> > > On Mon, Feb 06, 2023 at 05:23:35PM +0000, Raghavendra Rao Ananta wrot=
-e:
-> > > > Define a generic function __kvm_tlb_flush_range() to
-> > > > invalidate the TLBs over a range of addresses. The
-> > > > implementation accepts 'op' as a generic TLBI operation.
-> > > > Upcoming patches will use this to implement IPA based
-> > > > TLB invalidations (ipas2e1is).
-> > > >
-> > > > If the system doesn't support FEAT_TLBIRANGE, the
-> > > > implementation falls back to flushing the pages one by one
-> > > > for the range supplied.
-> > > >
-> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > > > ---
-> > > >  arch/arm64/include/asm/kvm_asm.h | 18 ++++++++++++++++++
-> > > >  1 file changed, 18 insertions(+)
-> > > >
-> > > > diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/=
-asm/kvm_asm.h
-> > > > index 43c3bc0f9544d..995ff048e8851 100644
-> > > > --- a/arch/arm64/include/asm/kvm_asm.h
-> > > > +++ b/arch/arm64/include/asm/kvm_asm.h
-> > > > @@ -221,6 +221,24 @@ DECLARE_KVM_NVHE_SYM(__per_cpu_end);
-> > > >  DECLARE_KVM_HYP_SYM(__bp_harden_hyp_vecs);
-> > > >  #define __bp_harden_hyp_vecs CHOOSE_HYP_SYM(__bp_harden_hyp_vecs)
-> > > >
-> > > > +#define __kvm_tlb_flush_range(op, mmu, start, end, level, tlb_leve=
-l) do {    \
-> > > > +     unsigned long pages, stride;                                 =
-           \
-> > > > +                                                                  =
-           \
-> > > > +     stride =3D kvm_granule_size(level);                          =
-             \
-> > >
-> > > Hmm... There's a rather subtle and annoying complication here that I
-> > > don't believe is handled.
-> > >
-> > > Similar to what I said in the last spin of the series, there is no
-> > > guarantee that a range of IPAs is mapped at the exact same level
-> > > throughout. Dirty logging and memslots that aren't hugepage aligned
-> > > could lead to a mix of mapping levels being used within a range of th=
-e
-> > > IPA space.
-> > >
-> > Unlike the comment on v1, the level/stride here is used to jump the
-> > addresses in case the system doesn't support TLBIRANGE. The TTL hint
-> > is 0.
->
-> Right. So we agree that the level is not uniform throughout the provided
-> range. The invalidation by IPA is also used if 'pages' is odd, even on
-> systems with TLBIRANGE. We must assume the worst case here, in that the
-> TLBI by IPA invalidated a single PTE-level entry. You could wind up
-> over-invalidating in that case, but you'd still be correct.
->
-Sure, let's always assume the stride as 4k. But with
-over-invalidation, do you think the penalty is acceptable, especially
-when invalidating say >2M blocks for systems without TLBIRANGE?
-In __kvm_tlb_flush_vmid_range(), what if we just rely on the iterative
-approach for invalidating odd number pages on systems with TLBIRANGE.
-For !TLBIRANGE systems simply invalidate all of TLB (like we do
-today). Thoughts?
+Can we do like this?
 
-Thank you.
-Raghavendra
+From 9a58f0e59364241aa31b555cfe793d278e39b0dc Mon Sep 17 00:00:00 2001
+From: Jaegeuk Kim <jaegeuk@kernel.org>
+Date: Tue, 4 Apr 2023 14:36:00 -0700
+Subject: [PATCH] f2fs: do checkpoint when there's not enough free sections
 
+We didn't do checkpoint in FG_GC case, which may cause losing to reclaim prefree
+sctions in time.
 
-> > That being said, do you think we can always assume the least possible
-> > stride (say, 4k) and hardcode it?
-> > With respect to alignment, since the function is only called while
-> > breaking the table PTE,  do you think it'll still be a problem even if
-> > we go with the least granularity stride?
->
-> I believe so. If we want to apply the range-based invalidations generally
-> in KVM then we will not always be dealing with a block-aligned chunk of
-> address.
->
-> > > > +     start =3D round_down(start, stride);                         =
-             \
-> > > > +     end =3D round_up(end, stride);                               =
-             \
-> > > > +     pages =3D (end - start) >> PAGE_SHIFT;                       =
-             \
-> > > > +                                                                  =
-           \
-> > > > +     if ((!system_supports_tlb_range() &&                         =
-           \
-> > > > +          (end - start) >=3D (MAX_TLBI_OPS * stride)) ||          =
-             \
-> > >
-> > > Doesn't checking for TLBIRANGE above eliminate the need to test again=
-st
-> > > MAX_TLBI_OPS?
-> > >
-> > Derived from __flush_tlb_range(), I think the condition is used to
-> > just flush everything if the range is too large to iterate and flush
-> > when the system doesn't support TLBIRANGE. Probably to prevent
-> > soft-lockups?
->
-> Right, but you test above for system_supports_tlb_range(), meaning that
-> you'd unconditionally call __kvm_tlb_flush_vmid() below.
->
-> > > > +         pages >=3D MAX_TLBI_RANGE_PAGES) {                       =
-             \
-> > > > +             __kvm_tlb_flush_vmid(mmu);                           =
-           \
-> > > > +             break;                                               =
-           \
-> > > > +     }                                                            =
-           \
-> > > > +                                                                  =
-           \
-> > > > +     __flush_tlb_range_op(op, start, pages, stride, 0, tlb_level, =
-false);    \
-> > > > +} while (0)
->
-> --
-> Thanks,
-> Oliver
+Fixes: 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc")
+Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ fs/f2fs/gc.c | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
+
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 56c53dbe05c9..f1d0dd9c5a6c 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1806,6 +1806,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 	};
+ 	unsigned int skipped_round = 0, round = 0;
+ 	unsigned int upper_secs;
++	bool stop_gc = false;
+ 
+ 	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
+ 				gc_control->nr_free_secs,
+@@ -1876,19 +1877,15 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
+ 		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
+ 			goto go_gc_more;
+-		goto stop;
+-	}
+-
+-	/* FG_GC stops GC by skip_count */
+-	if (gc_type == FG_GC) {
++		stop_gc = true;
++	} else if (gc_type == FG_GC) {
++		/* FG_GC stops GC by skip_count */
+ 		if (sbi->skipped_gc_rwsem)
+ 			skipped_round++;
+ 		round++;
+ 		if (skipped_round > MAX_SKIP_GC_COUNT &&
+-				skipped_round * 2 >= round) {
+-			ret = f2fs_write_checkpoint(sbi, &cpc);
+-			goto stop;
+-		}
++				skipped_round * 2 >= round)
++			stop_gc = true;
+ 	}
+ 
+ 	__get_secs_required(sbi, NULL, &upper_secs, NULL);
+@@ -1901,12 +1898,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 				prefree_segments(sbi)) {
+ 		ret = f2fs_write_checkpoint(sbi, &cpc);
+ 		if (ret)
+-			goto stop;
++			stop_gc = true;
+ 	}
+ go_gc_more:
+-	segno = NULL_SEGNO;
+-	goto gc_more;
+-
++	if (!stop_gc) {
++		segno = NULL_SEGNO;
++		goto gc_more;
++	}
+ stop:
+ 	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
+ 	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = gc_control->victim_segno;
+-- 
+2.40.0.348.gf938b09366-goog
+
