@@ -2,283 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C706D6C0F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1705C6D6C25
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 20:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236486AbjDDSaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 14:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S236132AbjDDScq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 14:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236624AbjDDS3z (ORCPT
+        with ESMTP id S236511AbjDDSc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 14:29:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CB276B3;
-        Tue,  4 Apr 2023 11:27:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 598D263873;
-        Tue,  4 Apr 2023 18:26:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117CDC433D2;
-        Tue,  4 Apr 2023 18:26:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680632804;
-        bh=x2wyUxBizg5qidb4H+M74LzbnnW05NTYCqgru/fINxI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=XOTcdld9uG1GKtPDTrmdNRirxmLz4r/kc2PmPEvW9ik/76ho6EVxAfHvDE3Hk57nE
-         Vkl4zjfJeqbvmi9jI+0qPNaM6ARzU44sEcE0lsWwr9c8coaDAUYVcZL/mlmL+jPkfP
-         6oDIY8VBRQPVbHXqV8rjueqDUq0S17slhHz8WI438K7rVhe8FlFjLXjTJtbW4ReEse
-         GNlLqRnFfMg1Vi80nuAP5C2Tqcx4Gn464M3lkQL3Z0hYYjnvVsQulQ4v/rUeJ+60b2
-         4NAQLdYZzJ8mmf1bhNeSJ4mWDbP8aY048zY6/QihWJGEjrfv3YMxn6oFKjWkAwt0PZ
-         hXhtipRRrrapw==
-Message-ID: <a7458f6fdfcf902e620fefb7f44a7e4700f761ae.camel@kernel.org>
-Subject: Re: [PATCH] fs/9p: Add new options to Documentation
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>
-Cc:     v9fs-developer@lists.sourceforge.net,
-        Eric Van Hensbergen <ericvh@kernel.org>,
-        asmadeus@codewreck.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 04 Apr 2023 14:26:42 -0400
-In-Reply-To: <5898218.pUKYPoVZaQ@silver>
-References: <ZCEIEKC0s/MFReT0@7e9e31583646> <3443961.DhAEVoPbTG@silver>
-         <CAFkjPT=j1esw=q-w5KTyHKDZ42BEKCERy-56TiP+Z7tdC=y05w@mail.gmail.com>
-         <5898218.pUKYPoVZaQ@silver>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 4 Apr 2023 14:32:29 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412178A77
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 11:29:38 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334DwrME025597;
+        Tue, 4 Apr 2023 18:29:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=kfa+RU8nR2vnYyyZYfy/e1+pAsF3kovtLFyx/INmi28=;
+ b=otpttKA7He6EHSA6ZK3K8UBV3U6b341j3k+dvs5wTFXq19FVsxNJ950HcpSiuS1a5efF
+ B93BqW2J85RD+W3g7mgX2ggBLEegoRcNzr34NWoT/Xd7Iolx5kI2QCA8pcdPaJ2igGz4
+ 7G4wCnlmHWLzMd2PSVkK29/xgSagtpmdLqO2O7CJ2bSjzq5raOtNvP/8sPTfzmMh8b4P
+ UV+mVduS3yvshtviTH01nWulr15vvZL5Ww5CMvociJzt8NUoLDI+AF0mBwbjbMtJQiqi
+ CNWVkdhl+ee2MEsE5+Bxyr6v/Xefhx4sLvWZg1CEs052pWb1AwypakTpgZY2cZ6MsUZY vg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppbd3xkw6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 04 Apr 2023 18:29:31 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 334IHO7j017226;
+        Tue, 4 Apr 2023 18:29:30 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pptp7hdpf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 04 Apr 2023 18:29:30 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XHsUmeOTX13BO04bkra5aZGcKeXS5dRV8GJg2UeNRX7xAMjz1MOXfS98xuZOFdfALPdIAcT4LyyqIHGO2AolvwcgqW3QdtS4IR4aYH8GxoMyuYoJ62bzA14cK5OypNgwFXEVxJ/ZAf596uHbBMS83RSB82f8OPMd2CdrUtONueKHSu2UVbdEbUmBM9KClqrvnacYdeP41BcX/noVJggMo9cKnhf+rq5Mr39jhOCeIf7Wn430nPMXVzWsrsGW+DHO8RzTzbPfjfG+s6oVzxZ/ARpJTFS4IpUhzxktNxfB6MiRPi3zN19JH8qPgWqnLAFX+y8KmK1zG9M8U7GuDHglZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kfa+RU8nR2vnYyyZYfy/e1+pAsF3kovtLFyx/INmi28=;
+ b=dwxKbrFrhgMk04KHqDVgFS81M5LueztuL0xTFm8eUF0lDaR92/6xd6C9E34zhFWIEoNXEn6sJyoB4i8di7Q8S3VlY8h1f2YmX3gLqJfc/ZjOLa1pSLeL502pqH0yjTRnZ8EtDx9u9SGUsljl3vq+NijC1M+l1LJ0zzgZDeu3i1zZeMIuGAkJktepcei+PHDGUVYdsRDLS8Q8P8rti+yS4TcFxzaykHnJ9yAt6x6iu5xmjexbBWCFScfdTiA7vI9h7FRN265a8qAiYEzpPbKo+FuFquhZs7ZuxilqYfkycxrEikz9fSUTnNZ6PrUHrbzd/niE60JMG46yYdACDuCPdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kfa+RU8nR2vnYyyZYfy/e1+pAsF3kovtLFyx/INmi28=;
+ b=FC/LJJDHMTmcze/6zhxRQzMUoTK32pPVQfvz86MmWFe3ovrwKTI7kFH23/um9NJ0tDJv9c5LHsmxkWdxhLbLz5k1CRFM+FZtJYlXCOW+QV+qT6OXfzj/0/9ZqFt/vIO88kMTP16MzZ5vRy6ppJj4pJDmqa/yw6BHSpYshRPlkCY=
+Received: from CO1PR10MB4705.namprd10.prod.outlook.com (2603:10b6:303:96::11)
+ by DS0PR10MB7065.namprd10.prod.outlook.com (2603:10b6:8:143::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Tue, 4 Apr
+ 2023 18:29:28 +0000
+Received: from CO1PR10MB4705.namprd10.prod.outlook.com
+ ([fe80::ab8d:2bb:c060:7d73]) by CO1PR10MB4705.namprd10.prod.outlook.com
+ ([fe80::ab8d:2bb:c060:7d73%5]) with mapi id 15.20.6254.035; Tue, 4 Apr 2023
+ 18:29:28 +0000
+From:   chris hyser <chris.hyser@oracle.com>
+To:     chris.hyser@oracle.com, linux-kernel@vger.kernel.org,
+        dietmar.eggemann@arm.com, peterz@infradead.org,
+        vincent.guittot@linaro.org, "Chen Yu" <yu.c.chen@intel.com>
+Subject: [PATCH v3] sched/numa: Fix divide by zero for sysctl_numa_balancing_scan_size.
+Date:   Tue,  4 Apr 2023 14:29:15 -0400
+Message-Id: <20230404182915.2264557-1-chris.hyser@oracle.com>
+X-Mailer: git-send-email 2.31.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0206.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a5::13) To CO1PR10MB4705.namprd10.prod.outlook.com
+ (2603:10b6:303:96::11)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4705:EE_|DS0PR10MB7065:EE_
+X-MS-Office365-Filtering-Correlation-Id: 510c3bfa-c59d-4c95-c5ac-08db353a8631
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ulm+76GE7g49EkN9gsf/m6/wB6CG4s2zSxsaU5O+p6u/cQJ5qF4ClR937yCDhy+K25dssLUPJKBsJjo7UyttqJg6acui5lZ3EMvMeHJB86URb1NHH7qRpm1p9lec0pLzEB6yRiqdXYkJ8pBcfZYI15TwAsSiIS1dyf7n811N7O0kwWehVIgqQgDIyzYrAYRW0VxvTO7IWVgGFBSkg/wOmrKkPB+xtDsPxyu31XDn1fn40Ni30lRuuqG6o724pPDu8ZJlzoKb6AQjRatUgRu/F+dhKt/VTry7GDbMZSk+Ze1r5imHNpfP+TgGMJ0D3fQFIQhVOfNzo7dtPKTkiNOE55NYosSRiNPeVMQR8PpSCGH/IcCqbM8TcLVj9xZjAuSfF6lX9VnhmRwFaeWb9w1cmnyLWyh4yr4UbEPFaWlIwdKsVX8TFgpTu4i6et3nX/blnmxixomYKMjH0OKnqDzgl7QYCX5i4hQQPlyP2aXoGeBQpaJxb8j4CiXtHtGmM02ucmFlBXukF44WRrNCwPYdQGJN68KioNPQ59perVpgLn2yBJhwX/01QfsHgDy30qXd
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4705.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(346002)(366004)(396003)(39860400002)(451199021)(1076003)(6506007)(6512007)(26005)(86362001)(186003)(66556008)(478600001)(316002)(6486002)(36756003)(8936002)(5660300002)(66476007)(8676002)(66946007)(2906002)(6916009)(38100700002)(41300700001)(6666004)(2616005)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hLECzwDM8/pVvQR+YYgBXK0cvFYep66CbNz0PLE65T3qEd+WSbJzasNC0/1O?=
+ =?us-ascii?Q?N1xLzq9X1D9TtKJQWo6djr/exDx2KOoH9aaK/dbSvSqqMZ+SCcQPINswoFxK?=
+ =?us-ascii?Q?l6eN/YNJ8r/exv5P7ccWWY5vAYT/O15fI7oUeqxPr5xfWYBVr8fXuwx7B96W?=
+ =?us-ascii?Q?yuLqgLtcycD3W0j3qKHeli7Wa7HRwERVTY9rl23ZHGM+W4l6OHbTB+gGgEKt?=
+ =?us-ascii?Q?u3NZJiaJTHJlZq7kR8CuR70EhWw/zJCRJB/f3XUDvIohcdwh3QN3yMXtOAa3?=
+ =?us-ascii?Q?ICjkN20QKaCmBanwXkQQxezVhiZAli3wqIR4S1sk0oNa7cw3S7LPClwAvGSr?=
+ =?us-ascii?Q?OGZZuj+p0us4NPId3Vug41ck7JbEgMeMkv/KMc+j/jWcM6uzy5SdQbLsUlm4?=
+ =?us-ascii?Q?moAnM4dRQlWFS/c/CVLH9qzeK7QW+xv1Mn6N5hqBJiNQ7nJ3svqfak2RGTPC?=
+ =?us-ascii?Q?mJrhLuVeXnbDNFaqrJ460rwEgi6suPSwLD75xEAFQxmCqbhySIc4VV8E8Bep?=
+ =?us-ascii?Q?+3P82Mn7v8uy7x2l79cSBX/IxiUaByiwiQkyOUbi3PshvxSm4zpgRetwReQf?=
+ =?us-ascii?Q?FfQoKHty+jKfM6tiRgNgXjBhuG3FqnAelGW/d/PfXnFJDvgp319EemhLTK3t?=
+ =?us-ascii?Q?/2+O5jJiTxuD6rzjs1ZrY8zf7anzNX2CCmyBIbJSbDDG4TRLaxZNciz/3s8S?=
+ =?us-ascii?Q?EfJvWrQLAfluRtDqjTaATh2uqVMs7WPWa9uWeSqgIv/wcMqS8JGDHRVjJXMe?=
+ =?us-ascii?Q?Ln/UrNXtN+0SCb8ACmhkxLZ8awndobyWcRGP8KKDHbbsUggliYivxcjmauX/?=
+ =?us-ascii?Q?JdHjb2QhbBUOZAg7Jd4g+6ql+NkpHpXxTDjhbHGfLrXw9ZtqQCxn87fOpOfQ?=
+ =?us-ascii?Q?DsxY7lOrLhnU0IurX/TK/MhyC+NX8hBIJK0S33sCzNCmtQoWmpNEo8/YDcpe?=
+ =?us-ascii?Q?aULm/F4auR5o2zq51sOJSdrzD9eCdcoVZz85Gpa1kB4flylua8a85Yq54Jlb?=
+ =?us-ascii?Q?OhsH/stClcLNhf3319dA2+sOtxsrgKPWvzhBHkWukRR5GDO1f4ZI/zSFR9D8?=
+ =?us-ascii?Q?/UHjRwFV0m/0G43RIx0NVg7eQBVyy2OBDKMMrXyd3DoAlS/yS9l2Lrz8Dyn7?=
+ =?us-ascii?Q?Ba2D8/JAeHSIjTwV8OonB7P1/I+LB6Ennt8tCf6Cp0R/r+j6I/z7WRVQJ/yW?=
+ =?us-ascii?Q?4RPLSjoGSkCmbiBp2OcDdfICT6u23qfdbkG2Y3maVQf4zRqb2W6oyRQNYFBg?=
+ =?us-ascii?Q?NSB0VsBOHoFf4ECyOL5gE7WQA5vZ2zpxP8kinAg8AvgghbH7Jxro3cQkx58M?=
+ =?us-ascii?Q?vYy9CLEDJN29g3g0Urs8L0uHuBUxxya3IZC0/qCaiSWTL6kKVLYO1m+2FZpc?=
+ =?us-ascii?Q?FB+Eom2DuLMoK6CTKnO6/WRgtclzZhOzSw5GUcB98hZ1ACNTK63cgUA2Rm9L?=
+ =?us-ascii?Q?wX1WreEYwh+F4Z8WIn4YB7C8oKIbwR2SaPOT/BYnxuyvm/gkZj3ogntF7Ydo?=
+ =?us-ascii?Q?bwqZ8OuX6a3uUnLy6F8d+DRKq8TuCGS3WFVQKMl7QZWsUIDd1e4egldl9tWW?=
+ =?us-ascii?Q?nc959B40B+2sxsdbRdkAQB5MLD8+USeihwU2Y3Rv?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: pIUTZ8ddPOF89Siit9vo6aJ6QxFIF0o0s9Xoe9AGLmSEwb+GoSRmMG7/wnWdPBYYK253k4nlaH0osn7oSFLO2N3WFgxM49FYy4vWrFoVA1CRJDYWJ5dSwcgbrj4SIgQZsvr/Vu2zI7oMfBxn31Rg7ZOZQPi6OYvNXg4E+VHJSU2nRpQbIN+Z59CERA4hyjwy5lda8wuChu0JGvfiKMABBwYGgF93KtmqBGFFafYuKc0tp6oTok549bp7Y04YLKNgqqpnjSspkFGLUKty54IsSogmC8K2U35uPIJpuFEfcwCBhru7qqbMRb8sW2snhobWTPFi4uuUg5FneisorI+GRJ3posX5N1Wjv+dZb+1Tk6ZaYYU2hnciKsT73M+ri8aGBz+MPd+C7/5cEduxKY2Zy4dw0iibxHN1TyCMjVbVOPQ3llDx0/utWHxI15ifCivDxxh/bDegx+jdhOxe8+yZHZjk3h5oN/FLsBY3fvnOfZO1XuP46RFXm5wy6aNuafb3/qdPxs8u3HdBtSfN6IWQ7d8PLQKrFNHOGLJmZZHOhcqlqbsVgeAV1MLFMdK26F8wEKr3FlIvpDebivTmnPZ4nltNR9f8dLXGaJ/PAl3leNRAm75XviFbChO6FCTCYQTtU4RSHzXkCvy/jsG9isyeDRBeYaGqAf2ZUgoWB9Q5BvTbCq/FpFgtmWTbRDwzEDzMIE+TGvwCYCb6kv7Q0akGgCrQ+KzRPSBgTUBfTKUJUOfOYSnOksrB6sRbvILViKr6CinPiUiZATvSNXD8PrYUtwMLociom1JOM6QyB3SClOB1tG6fCI3qeFMCWvRJdUlwDRJw/wh29mLviW1+kcbYWvOB9+m2jaCumNYcIY3hL6J2BUYnMKdk5+MQvk12mM+Y
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 510c3bfa-c59d-4c95-c5ac-08db353a8631
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4705.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 18:29:28.0165
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DNVXSj6+a85Qp5gUDaVEWDMOmDzQGlttU1kQNcxEgIstWyXEn9IrqbqPSFojTPm2dGIOdnNmCEGOv7n/WwPikg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7065
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-04_10,2023-04-04_05,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
+ mlxlogscore=999 bulkscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304040167
+X-Proofpoint-ORIG-GUID: pCgr0Ucsdo0oew-x2fRO67ExGb1HtHk9
+X-Proofpoint-GUID: pCgr0Ucsdo0oew-x2fRO67ExGb1HtHk9
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-04-02 at 16:07 +0200, Christian Schoenebeck wrote:
-> +CC: Jeff for experience on this caching issue with NFS ...
->=20
-> On Tuesday, March 28, 2023 5:51:51 PM CEST Eric Van Hensbergen wrote:
-> > As I work through the documentation rework and to some extent the
-> > testing matrix -- I am reconsidering some choices and wanted to open
-> > up the discussion here.
-> >=20
-> > TLDR; I'm thinking of reworking the cache options before the merge
-> > window to keep things simple while setting up for some of the future
-> > options.
->=20
-> Yeah, revising the 9p cache options highly makes sense!
->=20
-> So what is the plan on this now? I saw you sent a new patch with the "old=
-"
-> options today? So is this one here deferred?
->=20
-> > While we have a bunch of new options, in practice I expect users to
-> > probably consolidate around three models: no caching, tight caches,
-> > and expiring caches with fscache being an orthogonal add-on to the
-> > last two.
->=20
-> Actually as of today I don't know why somebody would want to use fscache
-> instead of loose. Does it actually make sense to keep fscache and if yes =
-why?
->=20
-> > The ultimate goal is to simplify the options based on expected use mode=
-ls:
-> >=20
-> > - cache=3D[ none, file, all ] (none is currently default)
->=20
-> dir?
->=20
-> > - write_policy =3D [ *writethrough, writeback ] (writethrough would be =
-default)
-> > - cache_validate =3D [ never, *open, x (seconds) ]  (cache_validate
-> > would default to open)
->=20
-> Jeff came up with the point that NFS uses a slicing time window for NFS. =
-So
-> the question is, would it make sense to add an option x seconds that migh=
-t be
-> dropped soon anyway?
+Commit 6419265899d9 ("sched/fair: Fix division by zero
+sysctl_numa_balancing_scan_size") prevented a divide by zero by using
+sysctl mechanisms to return EINVAL for a sysctl_numa_balancing_scan_size
+value of zero. When moved from a sysctl to a debugfs file, this checking
+was lost.
 
-See the acregmin/acregmax/acdirmin/acdirmax settings in nfs(5). What
-you're talking about is basically adding an actimeo=3D option.
+This patch puts zero checking back in place.
 
-If you're revising options for this stuff, then consider following NFS's
-naming. Not that they are better in any sense, but they are at least
-familiar to administrators.
+Signed-off-by: Chris Hyser <chris.hyser@oracle.com>
+---
+ kernel/sched/debug.c | 44 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 1 deletion(-)
 
-As far as the sliding window goes, the way it tracks that is a bit
-arcane, but in include/linux/nfs_fs.h:
+diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+index 1637b65ba07a..cc6a0172a598 100644
+--- a/kernel/sched/debug.c
++++ b/kernel/sched/debug.c
+@@ -278,6 +278,48 @@ static const struct file_operations sched_dynamic_fops = {
+ 
+ #endif /* CONFIG_PREEMPT_DYNAMIC */
+ 
++#ifdef CONFIG_NUMA_BALANCING
++
++static ssize_t sched_numa_scan_write(struct file *filp, const char __user *ubuf,
++				     size_t cnt, loff_t *ppos)
++{
++	int err;
++	unsigned int scan_size;
++
++	err = kstrtouint_from_user(ubuf, cnt, 10, &scan_size);
++	if (err)
++		return err;
++
++	if (!scan_size)
++		return -EINVAL;
++
++	sysctl_numa_balancing_scan_size = scan_size;
++
++	*ppos += cnt;
++	return cnt;
++}
++
++static int sched_numa_scan_show(struct seq_file *m, void *v)
++{
++	seq_printf(m, "%d\n", sysctl_numa_balancing_scan_size);
++	return 0;
++}
++
++static int sched_numa_scan_open(struct inode *inode, struct file *filp)
++{
++	return single_open(filp, sched_numa_scan_show, NULL);
++}
++
++static const struct file_operations sched_numa_scan_fops = {
++	.open		= sched_numa_scan_open,
++	.write		= sched_numa_scan_write,
++	.read		= seq_read,
++	.llseek		= seq_lseek,
++	.release	= single_release,
++};
++
++#endif /* CONFIG_NUMA_BALANCING */
++
+ __read_mostly bool sched_debug_verbose;
+ 
+ static const struct seq_operations sched_debug_sops;
+@@ -332,7 +374,7 @@ static __init int sched_init_debug(void)
+ 	debugfs_create_u32("scan_delay_ms", 0644, numa, &sysctl_numa_balancing_scan_delay);
+ 	debugfs_create_u32("scan_period_min_ms", 0644, numa, &sysctl_numa_balancing_scan_period_min);
+ 	debugfs_create_u32("scan_period_max_ms", 0644, numa, &sysctl_numa_balancing_scan_period_max);
+-	debugfs_create_u32("scan_size_mb", 0644, numa, &sysctl_numa_balancing_scan_size);
++	debugfs_create_file("scan_size_mb", 0644, numa, NULL, &sched_numa_scan_fops);
+ 	debugfs_create_u32("hot_threshold_ms", 0644, numa, &sysctl_numa_balancing_hot_threshold);
+ #endif
+ 
+-- 
+2.31.1
 
-
-        /*
-         * read_cache_jiffies is when we started read-caching this inode.
-         * attrtimeo is for how long the cached information is assumed
-         * to be valid. A successful attribute revalidation doubles
-         * attrtimeo (up to acregmax/acdirmax), a failure resets it to
-         * acregmin/acdirmin.
-         *
-         * We need to revalidate the cached attrs for this inode if
-         *
-         *      jiffies - read_cache_jiffies >=3D attrtimeo
-         *
-         * Please note the comparison is greater than or equal
-         * so that zero timeout values can be specified.
-         */
-
-
-That's probably what I'd aim for here.
-
-> > - fscache
-> >=20
-> > So, mapping of existing (deprecated) legacy modes:
-> > - none (obvious) write_policy=3Dwritethrough
-> > - *readahead -> cache=3Dfile cache_validate_open write_policy=3Dwriteth=
-rough
-> > - mmap -> cache=3Dfile cache_validate=3Dopen write_policy=3Dwriteback
->=20
-> Mmm, why is that "file"? To me "file" sounds like any access to files is
-> cached, whereas cache=3Dmmap just uses the cache if mmap() was called, no=
-t for
-> any other file access.
->=20
-> > - loose -> cache=3Dall cache_validate=3Dnever write_policy=3Dwriteback
-> > - fscache -> cache=3Dall cache_validate=3Dnever write_policy=3Dwritebac=
-k &
-> > fscache enabled
-> >=20
-> > Some things I'm less certain of: cache_validation is probably an
-> > imperfect term as is using 'open' as one of the options, in this case
-> > I'm envisioning 'open' to mean open-to-close coherency for file
-> > caching (cache is only validated on open) and validation on lookup for
-> > dir-cache coherency (using qid.version). Specifying a number here
-> > expires existing caches and requires validation after a certain number
-> > of seconds (is that the right granularity)?
->=20
-> Personally I would then really call it open-to-close or opentoclose and w=
-aste
-> some more characters in favour of clarity.
->=20
-> > So, I think this is more clear from a documentation standpoint, but
-> > unfortuantely I haven't reduced the test matrix much - in fact I've
-> > probably made it worse. I expect the common cases to basically be:
-> > - cache=3Dnone
-> > - new default? (cache=3Dall, write_policy=3Dwriteback, cache_validate=
-=3Dopen)
-> > - fscache w/(cache=3Dall, write_policy=3Dwriteback, cache_validate=3D5)
-> >=20
-> > Which would give us 3 configurations to test against versus 25
-> > (assuming testing for one time value for cache-validate=3Dx). Important
-> > to remember that this is just cache mode tests, the other mount
-> > options act as multipliers.
-> >=20
-> > Thoughts?  Alternatives?
-> >=20
-> >         -eric
-> >=20
-> > On Mon, Mar 27, 2023 at 10:38=E2=80=AFAM Christian Schoenebeck
-> > <linux_oss@crudebyte.com> wrote:
-> > >=20
-> > > On Monday, March 27, 2023 5:05:52 AM CEST Eric Van Hensbergen wrote:
-> > > > Need to update the documentation for new mount flags
-> > > > and cache modes.
-> > > >=20
-> > > > Signed-off-by: Eric Van Hensbergen <ericvh@kernel.org>
-> > > > ---
-> > > >  Documentation/filesystems/9p.rst | 29 ++++++++++++++++------------=
--
-> > > >  1 file changed, 16 insertions(+), 13 deletions(-)
-> > > >=20
-> > > > diff --git a/Documentation/filesystems/9p.rst b/Documentation/files=
-ystems/9p.rst
-> > > > index 0e800b8f73cc..6d257854a02a 100644
-> > > > --- a/Documentation/filesystems/9p.rst
-> > > > +++ b/Documentation/filesystems/9p.rst
-> > > > @@ -78,19 +78,18 @@ Options
-> > > >               offering several exported file systems.
-> > > >=20
-> > > >    cache=3Dmode specifies a caching policy.  By default, no caches =
-are used.
-> > > > -
-> > > > -                        none
-> > > > -                             default no cache policy, metadata and=
- data
-> > > > -                                alike are synchronous.
-> > > > -                     loose
-> > > > -                             no attempts are made at consistency,
-> > > > -                                intended for exclusive, read-only =
-mounts
-> > > > -                        fscache
-> > > > -                             use FS-Cache for a persistent, read-o=
-nly
-> > > > -                             cache backend.
-> > > > -                        mmap
-> > > > -                             minimal cache that is only used for r=
-ead-write
-> > > > -                                mmap.  Northing else is cached, li=
-ke cache=3Dnone
-> > > > +             Modes are progressive and inclusive.  For example, sp=
-ecifying fscache
-> > > > +             will use loose caches, writeback, and readahead.  Due=
- to their
-> > > > +             inclusive nature, only one cache mode can be specifie=
-d per mount.
-> > >=20
-> > > I would highly recommend to rather specify below for each option "thi=
-s option
-> > > implies writeback, readahead ..." etc., as it is not obvious otherwis=
-e which
-> > > option would exactly imply what. It is worth those extra few lines IM=
-O to
-> > > avoid confusion.
-> > >=20
-> > > > +
-> > > > +                     =3D=3D=3D=3D=3D=3D=3D=3D=3D       =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > +                     none            no cache of file or metadata
-> > > > +                     readahead       readahead caching of files
-> > > > +                     writeback       delayed writeback of files
-> > > > +                     mmap            support mmap operations read/=
-write with cache
-> > > > +                     loose           meta-data and file cache with=
- no coherency
-> > > > +                     fscache         use FS-Cache for a persistent=
- cache backend
-> > > > +                     =3D=3D=3D=3D=3D=3D=3D=3D=3D       =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > >=20
-> > > >    debug=3Dn    specifies debug level.  The debug level is a bitmas=
-k.
-> > > >=20
-> > > > @@ -137,6 +136,10 @@ Options
-> > > >               This can be used to share devices/named pipes/sockets=
- between
-> > > >               hosts.  This functionality will be expanded in later =
-versions.
-> > > >=20
-> > > > +  directio   bypass page cache on all read/write operations
-> > > > +
-> > > > +  ignoreqv   ignore qid.version=3D=3D0 as a marker to ignore cache
-> > > > +
-> > > >    noxattr    do not offer xattr functions on this mount.
-> > > >=20
-> > > >    access     there are four access modes.
-> > > >=20
-> > >=20
-> > >=20
-> > >=20
-> > >=20
-> >=20
->=20
->=20
->=20
->=20
-
---=20
-Jeff Layton <jlayton@kernel.org>
