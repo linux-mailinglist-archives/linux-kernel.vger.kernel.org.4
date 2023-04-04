@@ -2,91 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D987D6D5B78
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471896D5B7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbjDDJFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
+        id S234206AbjDDJGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbjDDJFM (ORCPT
+        with ESMTP id S232063AbjDDJGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:05:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF1AE62
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:05:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=72ruK2mNbys8PIyy35QTUdR95rFv5PixX6W/SrUuWJw=; b=DURlYlueYIkrRxJcf9zNnwLPPg
-        PPHqKqMRKMJNRVr/xAtnalqVCbDOY/16XfC6V780xTynhn2ccs45RDjg6lCqOY2Ln7EA1/RYMB7Gn
-        x6iMnMnZcS9L/2R0EYml0+4LnLW3t/Iio/7fzFqoW9ZHebfLCu5TBlPUT14zuUqyNsXgeKweyk2Yh
-        t+if8w4iOu4gyZLO170sw9xfXg6FhbJY0RoQeD63P54RVMtfPbzfzpjvRkgu92LLbwkvBHXTo7Yvm
-        mQPJHLHuFOOIMeTEGwHpxDlaSwYm+05PwZE7TNO/SnwnX03x1HUP3mkK+p1T/Vcov6Xs3PP4qI6Ej
-        cAIxEvhQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pjcbD-00FD8a-VI; Tue, 04 Apr 2023 09:05:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8881530003A;
-        Tue,  4 Apr 2023 11:05:07 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 711252B6E1F53; Tue,  4 Apr 2023 11:05:07 +0200 (CEST)
-Date:   Tue, 4 Apr 2023 11:05:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>
-Subject: Re: [RFC PATCH] sched: Fix performance regression introduced by
- mm_cid
-Message-ID: <20230404090507.GB284733@hirez.programming.kicks-ass.net>
-References: <20230403181342.210896-1-mathieu.desnoyers@efficios.com>
+        Tue, 4 Apr 2023 05:06:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140EBE62;
+        Tue,  4 Apr 2023 02:06:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A455E62F5E;
+        Tue,  4 Apr 2023 09:06:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD29C433EF;
+        Tue,  4 Apr 2023 09:06:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680599164;
+        bh=SJEEua9GRU1BDOjfavC76lqjXcxHCPm7HsR7H2YQ8is=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oAb/KsPmnLOxfNCeeyzXBvJpMEuDj+jLR4cpromxfT1FkuxBqR34VG52A5HVVGnTA
+         Ecavtxby+AFxTT8uLOFj12k35d5R7Ux7gdtkyPd2KakrGUlaRPli8yQj436RpKYXh9
+         6UrusM1+46XHOGuLR3Cq202muINHIy9NW17jSllO8Njk+89L0oDml8e7jY5bCQmPTa
+         po+GomdVEMwC1UQON+JqFjz82QkwMnXfUuq8QlEKqfYE17D5WQf/Mxwfu3Je0qpQPn
+         zrYu/rPDfKUzjHG5newmBs5iF/FCacjC1/uA87MjnIKm7VQw9MNk0ZvQnr16JOjlLv
+         6fA2cTJ/Zfupw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pjccY-0005mm-M9; Tue, 04 Apr 2023 11:06:30 +0200
+Date:   Tue, 4 Apr 2023 11:06:30 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org,
+        mka@chromium.org, Dhruva Gole <d-gole@ti.com>
+Subject: Re: [PATCH v4 1/1] PCI: qcom: Add support for system suspend and
+ resume
+Message-ID: <ZCvols6SivUpIbk8@hovoldconsulting.com>
+References: <20230403154922.20704-1-manivannan.sadhasivam@linaro.org>
+ <20230403154922.20704-2-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230403181342.210896-1-mathieu.desnoyers@efficios.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230403154922.20704-2-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 02:13:42PM -0400, Mathieu Desnoyers wrote:
->  void sched_mm_cid_exit_signals(struct task_struct *t)
->  {
->  	struct mm_struct *mm = t->mm;
-> -	unsigned long flags;
-> +	struct rq_flags rf;
-> +	struct rq *rq;
->  
->  	if (!mm)
->  		return;
-> -	local_irq_save(flags);
-> +
-> +	preempt_disable();
-> +	rq = this_rq();
-> +	rq_lock_irqsave(rq, &rf);
->  	mm_cid_put(mm, t->mm_cid);
-> -	t->mm_cid = -1;
-> +	t->last_mm_cid = t->mm_cid = -1;
->  	t->mm_cid_active = 0;
-> -	local_irq_restore(flags);
-> +	rq_unlock_irqrestore(rq, &rf);
-> +	preempt_enable();
->  }
+On Mon, Apr 03, 2023 at 09:19:22PM +0530, Manivannan Sadhasivam wrote:
+> During the system suspend, vote for minimal interconnect bandwidth (1KiB)
+> to keep the interconnect path active for config access and also turn OFF
+> the resources like clock and PHY if there are no active devices connected
+> to the controller. For the controllers with active devices, the resources
+> are kept ON as removing the resources will trigger access violation during
+> the late end of suspend cycle as kernel tries to access the config space of
+> PCIe devices to mask the MSIs.
+> 
+> Also, it is not desirable to put the link into L2/L3 state as that
+> implies VDD supply will be removed and the devices may go into powerdown
+> state. This will affect the lifetime of storage devices like NVMe.
+> 
+> And finally, during resume, turn ON the resources if the controller was
+> truly suspended (resources OFF) and update the interconnect bandwidth
+> based on PCIe Gen speed.
+> 
+> Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> Acked-by: Dhruva Gole <d-gole@ti.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-FWIW a *slightly* cheaper form is:
+> +	/*
+> +	 * Set minimum bandwidth required to keep data path functional during
+> +	 * suspend
 
-	preempt_disable();
-	rq = this_rq();
-	rq_lock_irqsave(rq, &rf);
-	preempt_enable_noresched(); /* holding spinlock */
-	...
-	rq_unlock_irqrestore(rq, &rf);
+Nit: For some reason you dropped the full stop ('.') here in v4 I
+noticed when comparing the diff.
 
+> +	 */
+
+Looks good to me now otherwise:
+
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+Tested-by: Johan Hovold <johan+linaro@kernel.org>
+
+Johan
