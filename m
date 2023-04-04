@@ -2,218 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA566D5596
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 02:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF5B6D5598
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 02:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbjDDAfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 20:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S230102AbjDDAgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 20:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbjDDAfM (ORCPT
+        with ESMTP id S229576AbjDDAgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 20:35:12 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A162026AD
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 17:35:10 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id jl13so22387151qvb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 17:35:10 -0700 (PDT)
+        Mon, 3 Apr 2023 20:36:31 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFE2211B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 17:36:30 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id z17so20372604vsf.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 17:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1680568509;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=89t77E0GCaocHYERVbpqEfvdDRudJVKzocTuC0O/3pU=;
-        b=RFZIAK3uyFOvXUL9RIthq6yhKCqdkBwTauoZDr6OKTcqmD6U0Js6mfP9tUb8tQDuIw
-         FaaQb0FLXbRDoarbYv6RiFZgjZ9irxQtxiJ8xLhhfLAomQk86+TiDJVoww85P10et/6O
-         KiA99eylkKLfcnkR8qgSVUp76lmqtxvyzRh4M=
+        d=google.com; s=20210112; t=1680568590;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=P7MLzQxwcJooCwdRyW+rvRjEc0Eh6fT3Q/Ld2FbVs9I=;
+        b=Xd+hak6FTXQlgC2f1bCYW8sgyicJGxCunHbwO4DYPHaleyYNERcdic7v/9ZaMqoqYS
+         hBisCVm18B94gRnWpISdHEPOe3YmqRov5q8204zLtTee18HRXnJ5nLRMzeIE3az2iw39
+         VTUdH2ph9DwfpYvjmOGUjkamNMMHZ6cHVDLuhTlEGZoZQC1VqRez17/CjDcxJ1uHg42h
+         Xdmf++AhVGA+I51HxD2Kz0911gmQ0JiIvMfpGP62QOV0dX2rTSM5DzN2prGIV9ubluk9
+         nofrpcyhfCJSynG5vImk0VanwANNvIfuGdU34levneh1xY2orTfp/MPOYk9cv3I0kCCi
+         E5xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680568509;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=89t77E0GCaocHYERVbpqEfvdDRudJVKzocTuC0O/3pU=;
-        b=5tJvI6T4O2GU/CsW2gLDNExZmoO0IPFzWuePdsezoCOE8UbSgUMW8Ew2btBlth2TzU
-         AGum/f3YGZfA5Pi7qLMvQa50iKV/9RiPu90JUH0gIErNUC/BTUUH+LTp0HTUSspaTQqe
-         sbTi1KvigcK3Gszl+DswTSFvIS8OB1Dq+uY9p91ub//1XM9BVLJ88kymk2G17/wciwsV
-         eeX8/e7/oriCC3A9fRfkb2QxAY7YcOSqNzDz+Yzwh3PY9IMpNGoACmnGS7dSrko2O/bt
-         GczOvIYTimX4D2zzCiKHqGwfASKuHS7dASgxvckm5DTx2JEqnbnc/ePJ9X9ksstBsb1B
-         iSoA==
-X-Gm-Message-State: AAQBX9dgj5TWwPqbFfgl6dPMj75TOei0PmLCLt5Z8Ll3Z9cM2glfWpKW
-        yBOaV7JgXsHElDXlCNg0A12whg==
-X-Google-Smtp-Source: AKy350YjxFimkOwi8SJYjrxfRPlO7r4I1CrglSM8TtHnUGdVa70gMbM/rGVdLWaT0dtfgRF4qYj7qg==
-X-Received: by 2002:a05:6214:d85:b0:5d5:fd1d:6ef5 with SMTP id e5-20020a0562140d8500b005d5fd1d6ef5mr945540qve.12.1680568509360;
-        Mon, 03 Apr 2023 17:35:09 -0700 (PDT)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id jh14-20020a0562141fce00b005dd8b9345b0sm3003150qvb.72.2023.04.03.17.35.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 17:35:08 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 00:35:08 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org, hch@lst.de,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Subject: Re: [PATCH rcu 04/20] srcu: Begin offloading srcu_struct fields to
- srcu_update
-Message-ID: <20230404003508.GA254019@google.com>
-References: <f1b6cd5f-f0b7-4748-abd5-0dcfef0ce126@paulmck-laptop>
- <20230330224726.662344-4-paulmck@kernel.org>
+        d=1e100.net; s=20210112; t=1680568590;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P7MLzQxwcJooCwdRyW+rvRjEc0Eh6fT3Q/Ld2FbVs9I=;
+        b=Nb6OOJclv9KDwNbTbkbLH/MBazWdhE1UHXAzcbsSTVt9OiDgiKG4DvESzOoDQ21hJg
+         yZJe9OprT0eDu/0QGoz26PHEtKEgAtZ57KOLdgT5NKRfAwyADCq39T5btTws7Jkc4I1+
+         aMhSM5Fdc7smjpF8v9Ccn+alz4NasR/fv3BNOi/zJwcGI5lijMIyqH8q+SjZqpAAriUq
+         bJV8CEIRhgA1CZF5pmDUNrY06t+tfJwWvSScVXHUaC7xCtbXyXr8+ugeHheF0Ax2DJK1
+         DqbwlGGFe9SYAlJlSkRKz5EAtJs6zWatPGvoJ3DSJ6twNB8vgaJCAsLrWS6vchGXgJaK
+         qr3Q==
+X-Gm-Message-State: AAQBX9ey2K4PXRDtD1tKsH2BE6USTkxkF6EUeyZPgu6oFqcrhnJjGTgg
+        EGOdRlC6AY3Rdbeq/ztOPju/3S29NfJPBJkDhMhLGQ==
+X-Google-Smtp-Source: AKy350as7KBp25BikdlFmQDfe7ySOC1FAeNUgcQle0FSKFkpQzxD1F7NFpNRluz9nxqx4mbiytS6m/2gxFaKSnmMkYQ=
+X-Received: by 2002:a67:d901:0:b0:422:194a:8566 with SMTP id
+ t1-20020a67d901000000b00422194a8566mr992320vsj.5.1680568589910; Mon, 03 Apr
+ 2023 17:36:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330224726.662344-4-paulmck@kernel.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230403201930.2019419-1-rmoar@google.com>
+In-Reply-To: <20230403201930.2019419-1-rmoar@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 4 Apr 2023 08:36:17 +0800
+Message-ID: <CABVgOSkjmsyi3nMtMkEf3M076mLgmSUrLXUVtvWLcESE7NnVRw@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: add tests for using current KUnit test field
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000d7eefc05f877dd20"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 03:47:10PM -0700, Paul E. McKenney wrote:
-> The current srcu_struct structure is on the order of 200 bytes in size
-> (depending on architecture and .config), which is much better than the
-> old-style 26K bytes, but still all too inconvenient when one is trying
-> to achieve good cache locality on a fastpath involving SRCU readers.
-> 
-> However, only a few fields in srcu_struct are used by SRCU readers.
-> The remaining fields could be offloaded to a new srcu_update
-> structure, thus shrinking the srcu_struct structure down to a few
-> tens of bytes.  This commit begins this noble quest, a quest that is
-> complicated by open-coded initialization of the srcu_struct within the
-> srcu_notifier_head structure.  This complication is addressed by updating
-> the srcu_notifier_head structure's open coding, given that there does
-> not appear to be a straightforward way of abstracting that initialization.
-> 
-> This commit moves only the ->node pointer to srcu_update.  Later commits
-> will move additional fields.
-> 
-> [ paulmck: Fold in qiang1.zhang@intel.com's memory-leak fix. ]
-> 
-> Link: https://lore.kernel.org/all/20230320055751.4120251-1-qiang1.zhang@intel.com/
-> Suggested-by: Christoph Hellwig <hch@lst.de>
+--000000000000d7eefc05f877dd20
+Content-Type: text/plain; charset="UTF-8"
 
-[..]
-> @@ -236,8 +236,12 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
+On Tue, 4 Apr 2023 at 04:19, Rae Moar <rmoar@google.com> wrote:
+>
+> Create test suite called "kunit_current" to add test coverage for the use
+> of current->kunit_test, which returns the current KUnit test.
+>
+> Add two test cases:
+> - kunit_current_test to test current->kunit_test and the method
+>   kunit_get_current_test(), which utilizes current->kunit_test.
+>
+> - kunit_current_fail_test to test the method
+>   kunit_fail_current_test(), which utilizes current->kunit_test.
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> ---
+
+Looks good to me, thanks!
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>
+> Changes from v1->v2:
+> - Combine two test cases to test both ways of getting current test in
+>   kunit_current_test.
+> - Changes to comments.
+> - Add kunit_cleanup to kunit_current_fail_test.
+>
+>  lib/kunit/kunit-test.c | 42 +++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 41 insertions(+), 1 deletion(-)
+>
+> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+> index b63595d3e241..42e44caa1bdd 100644
+> --- a/lib/kunit/kunit-test.c
+> +++ b/lib/kunit/kunit-test.c
+> @@ -6,6 +6,7 @@
+>   * Author: Brendan Higgins <brendanhiggins@google.com>
 >   */
->  static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
->  {
-> +	if (!is_static)
-> +		ssp->srcu_sup = kzalloc(sizeof(*ssp->srcu_sup), GFP_KERNEL);
-> +	if (!ssp->srcu_sup)
-> +		return -ENOMEM;
->  	ssp->srcu_size_state = SRCU_SIZE_SMALL;
-> -	ssp->node = NULL;
-> +	ssp->srcu_sup->node = NULL;
->  	mutex_init(&ssp->srcu_cb_mutex);
->  	mutex_init(&ssp->srcu_gp_mutex);
->  	ssp->srcu_idx = 0;
-> @@ -249,8 +253,11 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
->  	ssp->sda_is_static = is_static;
->  	if (!is_static)
->  		ssp->sda = alloc_percpu(struct srcu_data);
-> -	if (!ssp->sda)
-> +	if (!ssp->sda) {
-> +		if (!is_static)
-> +			kfree(ssp->srcu_sup);
->  		return -ENOMEM;
-> +	}
->  	init_srcu_struct_data(ssp);
->  	ssp->srcu_gp_seq_needed_exp = 0;
->  	ssp->srcu_last_gp_end = ktime_get_mono_fast_ns();
-> @@ -259,6 +266,7 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
+>  #include <kunit/test.h>
+> +#include <kunit/test-bug.h>
+>
+>  #include "try-catch-impl.h"
+>
+> @@ -532,7 +533,46 @@ static struct kunit_suite kunit_status_test_suite = {
+>         .test_cases = kunit_status_test_cases,
+>  };
+>
+> +static void kunit_current_test(struct kunit *test)
+> +{
+> +       /* Check results of both current->kunit_test and
+> +        * kunit_get_current_test() are equivalent to current test.
+> +        */
+> +       KUNIT_EXPECT_PTR_EQ(test, test, current->kunit_test);
+> +       KUNIT_EXPECT_PTR_EQ(test, test, kunit_get_current_test());
+> +}
+> +
+> +static void kunit_current_fail_test(struct kunit *test)
+> +{
+> +       struct kunit fake;
+> +
+> +       kunit_init_test(&fake, "fake test", NULL);
+> +       KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
+> +
+> +       /* Set current->kunit_test to fake test. */
+> +       current->kunit_test = &fake;
+> +
+> +       kunit_fail_current_test("This should make `fake` test fail.");
+> +       KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAILURE);
+> +       kunit_cleanup(&fake);
+> +
+> +       /* Reset current->kunit_test to current test. */
+> +       current->kunit_test = test;
+> +}
+> +
+> +static struct kunit_case kunit_current_test_cases[] = {
+> +       KUNIT_CASE(kunit_current_test),
+> +       KUNIT_CASE(kunit_current_fail_test),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite kunit_current_test_suite = {
+> +       .name = "kunit_current",
+> +       .test_cases = kunit_current_test_cases,
+> +};
+> +
+>  kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
+> -                 &kunit_log_test_suite, &kunit_status_test_suite);
+> +                 &kunit_log_test_suite, &kunit_status_test_suite,
+> +                 &kunit_current_test_suite);
+>
+>  MODULE_LICENSE("GPL v2");
+>
+> base-commit: 7232282dd47cce6a780c9414bd9baccf232c7686
+> --
+> 2.40.0.348.gf938b09366-goog
+>
 
-[1] Here there is an if (!init_srcu_struct_nodes(...)) that the diff does not show.
+--000000000000d7eefc05f877dd20
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
->  			if (!ssp->sda_is_static) {
->  				free_percpu(ssp->sda);
->  				ssp->sda = NULL;
-> +				kfree(ssp->srcu_sup);
->  				return -ENOMEM;
->  			}
->  		} else {
-
-
-Just a comment about the original code with reference to [1].
-
-Here if allocations in init_srcu_struct_nodes() fail, it will return false
-and execute the "if (!ssp->sda_is_is_static)" bit.
-
-So if the allocation in [1] fails, then if sda_is_static is true, we return
--ENOMEM, however  if sda_is_static is false, we do the following:
-
-        ssp->srcu_sup->srcu_ssp = ssp;
-        smp_store_release(&ssp->srcu_sup->srcu_gp_seq_needed, 0); /* Init done. */
-        return 0;
-
-Is that really correct?
-
-In other words, if init_srcu_struct_nodes() returns false, then passing along
-the return value of init_srcu_struct_nodes() back to the caller of
-init_srcu_struct_fields() depends on whether is_static = true or false. That
-seems a bit wrong to me, init_srcu_struct_fields() should always return
--ENOMEM  when init_srcu_struct_nodes() fails to allocate memory IMHO, whether
-is_static is true or not.
-
-Sorry if I missed something subtle, and if the code is correct to begin with.
-Also I feel the return paths could be made better to also fix the above issue
-I mentioned. How about the following diff on top of the series, would it
-work?
-
-Thanks!
-
----8<-----------------------
-
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index a887cfc89894..1975d06986fa 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -255,29 +255,30 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
- 	ssp->srcu_sup->sda_is_static = is_static;
- 	if (!is_static)
- 		ssp->sda = alloc_percpu(struct srcu_data);
--	if (!ssp->sda) {
--		if (!is_static)
--			kfree(ssp->srcu_sup);
--		return -ENOMEM;
--	}
-+	if (!ssp->sda)
-+		goto err_free_sup;
- 	init_srcu_struct_data(ssp);
- 	ssp->srcu_sup->srcu_gp_seq_needed_exp = 0;
- 	ssp->srcu_sup->srcu_last_gp_end = ktime_get_mono_fast_ns();
- 	if (READ_ONCE(ssp->srcu_sup->srcu_size_state) == SRCU_SIZE_SMALL && SRCU_SIZING_IS_INIT()) {
--		if (!init_srcu_struct_nodes(ssp, GFP_ATOMIC)) {
--			if (!ssp->srcu_sup->sda_is_static) {
--				free_percpu(ssp->sda);
--				ssp->sda = NULL;
--				kfree(ssp->srcu_sup);
--				return -ENOMEM;
--			}
--		} else {
-+		if (!init_srcu_struct_nodes(ssp, GFP_ATOMIC))
-+			goto err_free_sda;
-+		else
- 			WRITE_ONCE(ssp->srcu_sup->srcu_size_state, SRCU_SIZE_BIG);
--		}
- 	}
- 	ssp->srcu_sup->srcu_ssp = ssp;
- 	smp_store_release(&ssp->srcu_sup->srcu_gp_seq_needed, 0); /* Init done. */
- 	return 0;
-+
-+err_free_sda:
-+	if (!is_static) {
-+		free_percpu(ssp->sda);
-+		ssp->sda = NULL;
-+	}
-+err_free_sup:
-+	if (!is_static)
-+		kfree(ssp->srcu_sup);
-+	return -ENOMEM;
- }
- 
- #ifdef CONFIG_DEBUG_LOCK_ALLOC
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCg
+xcee6FhFj9C3kECcC1at7mMOtrDNDfx5TS6P0iWMUjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA0MDQwMDM2MzBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAutEOvscrZaHda2EwZv4m
+889lRWvK/u0od+YjFUna7uDQMDiH6sfTiqc9jsPB5C/c9hMEW/s7Kpq2h36d5X2T/pNQlEN0hBG0
+PBDi/fOEZLmmKACsDbIkLLtVE93XqHXKUdVuLOOFOKP7SY0VBJ+H5jFi6yB7F7zgjU+5y2/kq0Aw
+lD5cZiKbG4acdrzzsAVbbE2mtXF+2WUyN/ZvPvhh/PhFGrIvDnYUCvRlvA3w9Mi5xiL2WN2+gAHi
+L96BeI940/yDYzo9+GAHMgqGtooEGpsg1eAll30ry5AAfEUnuaAQRcZOkIFY7FGXKAcfUiXTDK1C
+wLrslNw9/c5Flrv3OQ==
+--000000000000d7eefc05f877dd20--
