@@ -2,115 +2,591 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870E66D61B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F03A6D61B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbjDDMyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
+        id S234292AbjDDMza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235136AbjDDMyT (ORCPT
+        with ESMTP id S234228AbjDDMz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:54:19 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2903A3A9A;
-        Tue,  4 Apr 2023 05:54:12 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5456249756bso611555617b3.5;
-        Tue, 04 Apr 2023 05:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680612851;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GBoR05ONySxxhgKIii08lMTHzVRyAQG8q9irevkw9T4=;
-        b=ZTPeimleyFzVxcEW1lCVGD0FQnOV54vk3xFhJQJIRe2K6svhNx6Wv6rsBX/wXrr8JI
-         a3el4IR8fn162mvqmjHyGdv69q4XkTUTlf4O/JnsKvdjCD6RcvQHR3NJJ0eOK5Iz9jY0
-         413sZIUxgj+TK7Z/g8Ax8qXs8bv7N8FkUFO6uK4f6L4RNarLZeWkJHYhiGIkoNYVvukI
-         n6ef+0Zz9fCcUbfS5hOEUQG3MFSvrRXlIli31ok9shVO1a7QNyvSc1Az3NrLCFNfTgJw
-         GDbmASYy3cfZT7fKXtang+F+xB2TkaxSaOyt1cq/8bcE5xdnZIWrZUhL7iBIxeh/U0OY
-         mhSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680612851;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GBoR05ONySxxhgKIii08lMTHzVRyAQG8q9irevkw9T4=;
-        b=vYX9coxpApWYuIUrVL7IcbWwhdzJatLntaN3mW1uYUUaa8Z8jkHQq4cBZ3Kd592sC+
-         /T4cNLp/QcWLL9l5XeuSGjWJeKeUSA2r3Pq9pm9CF9iq9NDi9HOooaznjLLaP8x8pD5Q
-         5//VwJjAMRFkoKBIMvYcduQqDiEMOkQiNuABc7SPq9IXvVa5F7yeisYlY5t9ZH7Erb+D
-         wk1b6rUeNtT97Cj4IN2kJsGC2DhZX/V5ZsPnjlffKimwdT2QVJp5Qi7T29l4NSsu6U9S
-         7V+CULdCaWBlQ5aI/i8lLHcI5VODIRTPHLjWhjuqfNk6ZhEYd4c5BjpQ6Lx84bRak3dR
-         xnvw==
-X-Gm-Message-State: AAQBX9cg+G3TkRlBWYsL89sr9ZOPZUlX4Tbpy6sohIzN5NO7qqLu3jsB
-        zs++4FNExAqPTttZDKgglKeK+XNdSU59L3WVfDU=
-X-Google-Smtp-Source: AKy350aIsS45OIJCKiiQOXVNjfwbV5m+AHCE0gtJEr/EQuFvqLoDudBbQksBbJ8EAYqscusudninaqqaBy9JV3ZfKow=
-X-Received: by 2002:a81:e60d:0:b0:544:94fe:4244 with SMTP id
- u13-20020a81e60d000000b0054494fe4244mr1386664ywl.10.1680612851267; Tue, 04
- Apr 2023 05:54:11 -0700 (PDT)
+        Tue, 4 Apr 2023 08:55:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF28610A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 05:55:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0CC82FEC;
+        Tue,  4 Apr 2023 05:56:11 -0700 (PDT)
+Received: from [192.168.1.100] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D3C9D3F762;
+        Tue,  4 Apr 2023 05:55:23 -0700 (PDT)
+Message-ID: <61bb4e6d-5451-2f01-19b2-76c396854c23@arm.com>
+Date:   Tue, 4 Apr 2023 13:55:22 +0100
 MIME-Version: 1.0
-References: <20230329180502.1884307-1-kal.conley@dectris.com>
- <20230329180502.1884307-9-kal.conley@dectris.com> <CAJ8uoz330DWzHabpqd+HaeAxBi2gr+GOTtnS9WJFWrt=6DaeWQ@mail.gmail.com>
- <CAHApi-nfBM=i1WeZ-jtHN87AWPvURo0LygT9yYxF=cUeYthXBQ@mail.gmail.com>
- <CAJ8uoz0SEkcXQuoqYd94GreJqpCxQuf1QVgm9=Um6Wqk=s8GBw@mail.gmail.com>
- <CAHApi-=ui3JofMr7y+LvuYkXCU=h7vGiKXsfuV5gog-02u-u+Q@mail.gmail.com>
- <CAJ8uoz0GgzzfrgS0189=zwY-zzogZq+=v-NCY7O+RuWrwe1n6w@mail.gmail.com>
- <CAHApi-kVF5dS=ym7PXttCVAz7jEod2cOhh27YYwkidCUogu6-A@mail.gmail.com> <CAHApi-mXt27N0dWW1QN5qZ6OOV9uVGxc-kuEd+SBF8hDJ2NPXA@mail.gmail.com>
-In-Reply-To: <CAHApi-mXt27N0dWW1QN5qZ6OOV9uVGxc-kuEd+SBF8hDJ2NPXA@mail.gmail.com>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Tue, 4 Apr 2023 14:54:00 +0200
-Message-ID: <CAJ8uoz3ORFU1b8Fd8vJ0GGrnCJLcVC+Av=YU4HzbfY9T5P2GDA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 08/10] xsk: Support UMEM chunk_size > PAGE_SIZE
-To:     Kal Cutter Conley <kal.conley@dectris.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 13/13] coresight: Fix CTI module refcount leak by
+ making it a helper device
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
+        mike.leach@linaro.org
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230329115329.2747724-1-james.clark@arm.com>
+ <20230329115329.2747724-14-james.clark@arm.com>
+ <77d890a9-9927-da8e-1460-54513784683d@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <77d890a9-9927-da8e-1460-54513784683d@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Apr 2023 at 14:32, Kal Cutter Conley <kal.conley@dectris.com> wrote:
->
-> > > > > > > Is not the max 64K as you test against XDP_UMEM_MAX_CHUNK_SIZE in
-> > > > > > > xdp_umem_reg()?
-> > > > > >
-> > > > > > The absolute max is 64K. In the case of HPAGE_SIZE < 64K, then it
-> > > > > > would be HPAGE_SIZE.
-> > > > >
-> > > > > Is there such a case when HPAGE_SIZE would be less than 64K? If not,
-> > > > > then just write 64K.
-> > > >
-> > > > Yes. While most platforms have HPAGE_SIZE defined to a compile-time
-> > > > constant >= 64K (very often 2M) there are platforms (at least ia64 and
-> > > > powerpc) where the hugepage size is configured at boot. Specifically,
-> > > > in the case of Itanium (ia64), the hugepage size may be configured at
-> > > > boot to any valid page size > PAGE_SIZE (e.g. 8K). See:
-> > > > https://elixir.bootlin.com/linux/latest/source/arch/ia64/mm/hugetlbpage.c#L159
-> > >
-> > > So for all practical purposes it is max 64K. Let us just write that then.
-> >
-> > What about when CONFIG_HUGETLB_PAGE is not defined? Should we keep it
-> > set to PAGE_SIZE in that case, or would you like it to be a fixed
-> > constant == 64K always?
->
-> Sorry. Now it's not clear to me if you are suggesting the
-> documentation be changed or the code or both?
 
-The documentation.
+
+On 04/04/2023 10:21, Suzuki K Poulose wrote:
+> On 29/03/2023 12:53, James Clark wrote:
+>> The CTI module has some hard coded refcounting code that has a leak.
+>> For example running perf and then trying to unload it fails:
+>>
+>>    perf record -e cs_etm// -a -- ls
+>>    rmmod coresight_cti
+>>
+>>    rmmod: ERROR: Module coresight_cti is in use
+>>
+>> The coresight core already handles references of devices in use, so by
+>> making CTI a normal helper device, we get working refcounting for free.
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-core.c  | 99 ++++++-------------
+>>   .../hwtracing/coresight/coresight-cti-core.c  | 52 +++++-----
+>>   .../hwtracing/coresight/coresight-cti-sysfs.c |  4 +-
+>>   drivers/hwtracing/coresight/coresight-cti.h   |  4 +-
+>>   drivers/hwtracing/coresight/coresight-priv.h  |  4 +-
+>>   drivers/hwtracing/coresight/coresight-sysfs.c |  4 +
+>>   include/linux/coresight.h                     | 30 +-----
+>>   7 files changed, 70 insertions(+), 127 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-core.c
+>> b/drivers/hwtracing/coresight/coresight-core.c
+>> index 65f5bd8516d8..458d91b4e23f 100644
+>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>> @@ -254,60 +254,39 @@ void coresight_disclaim_device(struct
+>> coresight_device *csdev)
+>>   }
+>>   EXPORT_SYMBOL_GPL(coresight_disclaim_device);
+>>   -/* enable or disable an associated CTI device of the supplied CS
+>> device */
+>> -static int
+>> -coresight_control_assoc_ectdev(struct coresight_device *csdev, bool
+>> enable)
+>> -{
+>> -    int ect_ret = 0;
+>> -    struct coresight_device *ect_csdev = csdev->ect_dev;
+>> -    struct module *mod;
+>> -
+>> -    if (!ect_csdev)
+>> -        return 0;
+>> -    if ((!ect_ops(ect_csdev)->enable) || (!ect_ops(ect_csdev)->disable))
+>> -        return 0;
+>> -
+>> -    mod = ect_csdev->dev.parent->driver->owner;
+>> -    if (enable) {
+>> -        if (try_module_get(mod)) {
+>> -            ect_ret = ect_ops(ect_csdev)->enable(ect_csdev);
+>> -            if (ect_ret) {
+>> -                module_put(mod);
+>> -            } else {
+>> -                get_device(ect_csdev->dev.parent);
+>> -                csdev->ect_enabled = true;
+>> -            }
+>> -        } else
+>> -            ect_ret = -ENODEV;
+>> -    } else {
+>> -        if (csdev->ect_enabled) {
+>> -            ect_ret = ect_ops(ect_csdev)->disable(ect_csdev);
+>> -            put_device(ect_csdev->dev.parent);
+>> -            module_put(mod);
+>> -            csdev->ect_enabled = false;
+>> -        }
+>> -    }
+>> -
+>> -    /* output warning if ECT enable is preventing trace operation */
+>> -    if (ect_ret)
+>> -        dev_info(&csdev->dev, "Associated ECT device (%s) %s failed\n",
+>> -             dev_name(&ect_csdev->dev),
+>> -             enable ? "enable" : "disable");
+>> -    return ect_ret;
+>> -}
+>> -
+>>   /*
+>> - * Set the associated ect / cti device while holding the coresight_mutex
+>> + * Add a helper as an output device while holding the coresight_mutex
+>>    * to avoid a race with coresight_enable that may try to use this
+>> value.
+>>    */
+>> -void coresight_set_assoc_ectdev_mutex(struct coresight_device *csdev,
+>> -                      struct coresight_device *ect_csdev)
+>> +void coresight_add_helper_mutex(struct coresight_device *csdev,
+>> +                struct coresight_device *helper)
+> 
+> minor nit: It may be a good idea to rename this, in line with the
+> kernel naming convention :
+> 
+>     coresight_add_helper_unlocked()
+> 
+> Or if this is the only variant, it is OK to leave it as :
+>     coresight_add_helper()
+> with a big fat comment in the function description to indicate
+> that it takes the mutex and may be even add a :
+> 
+There is already a bit of a comment in the description but I can expand
+on it more.
+
+> might_sleep() and lockdep_assert_not_held(&coresight_mutex);
+> 
+> in the function.
+> 
+
+I'm not sure if lockdep_assert_not_held() would be right because
+sometimes it could be held if another device is being created at the
+same time? Or something like a session is started at the same time a CTI
+device is added.
+
+>>   {
+>> +    int i;
+>> +    struct coresight_connection conn = {};
+>> +
+>>       mutex_lock(&coresight_mutex);
+>> -    csdev->ect_dev = ect_csdev;
+>> +    conn.dest_fwnode = fwnode_handle_get(dev_fwnode(&helper->dev));
+>> +    conn.dest_dev = helper;
+>> +    conn.dest_port = conn.src_port = -1;
+>> +    conn.src_dev = csdev;
+>> +
+>> +    /*
+>> +     * Check for duplicates because this is called every time a helper
+>> +     * device is re-loaded. Existing connections will get re-linked
+>> +     * automatically.
+>> +     */
+> 
+> Thanks for adding this comment here. It does look like the already added
+> output connection to the "origin" device would automatically resolve the
+> connection and add in the "in-connection" to the CTI device.
+> 
+>> +    for (i = 0; i < csdev->pdata->nr_outconns; ++i)
+>> +        if (csdev->pdata->out_conns[i]->dest_fwnode == conn.dest_fwnode)
+>> +            goto unlock;
+>> +
+>> +    coresight_add_out_conn(csdev->dev.parent, csdev->pdata, &conn);
+> 
+> This makes me wonder if we should return the new connection in
+> coresight_add_out_conn() in case of success, rather than assuming the
+> last one (which is always the case though.).
+> 
+> i.e.,
+>     new_conn = coresight_add_out_conn(...)
+>     if (new_conn)
+>         coresight_add_in_conn(new_conn);
+> 
+
+Yeah I thought about doing that too, will change it.
+
+>> +    coresight_add_in_conn(
+>> +        csdev->pdata->out_conns[csdev->pdata->nr_outconns - 1]);
+>> +
+>> +unlock:
+>>       mutex_unlock(&coresight_mutex);
+>>   }
+>> -EXPORT_SYMBOL_GPL(coresight_set_assoc_ectdev_mutex);
+>> +EXPORT_SYMBOL_GPL(coresight_add_helper_mutex);
+>>     static int coresight_enable_sink(struct coresight_device *csdev,
+>>                    enum cs_mode mode, void *data)
+>> @@ -321,12 +300,8 @@ static int coresight_enable_sink(struct
+>> coresight_device *csdev,
+>>       if (!sink_ops(csdev)->enable)
+>>           return -EINVAL;
+>>   -    ret = coresight_control_assoc_ectdev(csdev, true);
+>> -    if (ret)
+>> -        return ret;
+>>       ret = sink_ops(csdev)->enable(csdev, mode, data);
+>>       if (ret) {
+>> -        coresight_control_assoc_ectdev(csdev, false);
+>>           return ret;
+>>       }
+>>       csdev->enable = true;
+>> @@ -344,7 +319,6 @@ static void coresight_disable_sink(struct
+>> coresight_device *csdev)
+>>       ret = sink_ops(csdev)->disable(csdev);
+>>       if (ret)
+>>           return;
+>> -    coresight_control_assoc_ectdev(csdev, false);
+>>       csdev->enable = false;
+>>   }
+>>   @@ -369,17 +343,11 @@ static int coresight_enable_link(struct
+>> coresight_device *csdev,
+>>           return PTR_ERR(outconn);
+>>         if (link_ops(csdev)->enable) {
+>> -        ret = coresight_control_assoc_ectdev(csdev, true);
+>> -        if (!ret) {
+>> -            ret = link_ops(csdev)->enable(csdev, inconn, outconn);
+>> -            if (ret)
+>> -                coresight_control_assoc_ectdev(csdev, false);
+>> -        }
+>> +        ret = link_ops(csdev)->enable(csdev, inconn, outconn);
+>> +        if (!ret)
+>> +            csdev->enable = true;
+>>       }
+>>   -    if (!ret)
+>> -        csdev->enable = true;
+>> -
+>>       return ret;
+>>   }
+>>   @@ -400,7 +368,6 @@ static void coresight_disable_link(struct
+>> coresight_device *csdev,
+>>         if (link_ops(csdev)->disable) {
+>>           link_ops(csdev)->disable(csdev, inconn, outconn);
+>> -        coresight_control_assoc_ectdev(csdev, false);
+>>       }
+>>         if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG) {
+>> @@ -428,14 +395,9 @@ int coresight_enable_source(struct
+>> coresight_device *csdev, void *data,
+>>         if (!csdev->enable) {
+>>           if (source_ops(csdev)->enable) {
+>> -            ret = coresight_control_assoc_ectdev(csdev, true);
+>> -            if (ret)
+>> -                return ret;
+>>               ret = source_ops(csdev)->enable(csdev, data, mode);
+>> -            if (ret) {
+>> -                coresight_control_assoc_ectdev(csdev, false);
+>> +            if (ret)
+>>                   return ret;
+>> -            }
+>>           }
+>>           csdev->enable = true;
+>>       }
+>> @@ -499,7 +461,6 @@ bool coresight_disable_source(struct
+>> coresight_device *csdev, void *data)
+>>       if (atomic_dec_return(&csdev->refcnt) == 0) {
+>>           if (source_ops(csdev)->disable)
+>>               source_ops(csdev)->disable(csdev, data);
+>> -        coresight_control_assoc_ectdev(csdev, false);
+>>           coresight_disable_helpers(csdev);
+>>           csdev->enable = false;
+>>       }
+>> diff --git a/drivers/hwtracing/coresight/coresight-cti-core.c
+>> b/drivers/hwtracing/coresight/coresight-cti-core.c
+>> index 277c890a1f1f..db7a2212ec18 100644
+>> --- a/drivers/hwtracing/coresight/coresight-cti-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-cti-core.c
+>> @@ -555,7 +555,10 @@ static void cti_add_assoc_to_csdev(struct
+>> coresight_device *csdev)
+>>       mutex_lock(&ect_mutex);
+>>         /* exit if current is an ECT device.*/
+>> -    if ((csdev->type == CORESIGHT_DEV_TYPE_ECT) || list_empty(&ect_net))
+>> +    if ((csdev->type == CORESIGHT_DEV_TYPE_HELPER &&
+>> +         csdev->subtype.helper_subtype ==
+>> +             CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI) ||
+>> +        list_empty(&ect_net))
+>>           goto cti_add_done;
+>>         /* if we didn't find the csdev previously we used the fwnode
+>> name */
+>> @@ -571,8 +574,7 @@ static void cti_add_assoc_to_csdev(struct
+>> coresight_device *csdev)
+>>                * if we found a matching csdev then update the ECT
+>>                * association pointer for the device with this CTI.
+>>                */
+>> -            coresight_set_assoc_ectdev_mutex(csdev,
+>> -                             ect_item->csdev);
+>> +            coresight_add_helper_mutex(csdev, ect_item->csdev);
+>>               break;
+>>           }
+>>       }
+>> @@ -582,26 +584,30 @@ static void cti_add_assoc_to_csdev(struct
+>> coresight_device *csdev)
+>>     /*
+>>    * Removing the associated devices is easier.
+>> - * A CTI will not have a value for csdev->ect_dev.
+>>    */
+>>   static void cti_remove_assoc_from_csdev(struct coresight_device *csdev)
+>>   {
+>>       struct cti_drvdata *ctidrv;
+>>       struct cti_trig_con *tc;
+>> +    union coresight_dev_subtype cti_subtype = {
+>> +        .helper_subtype = CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI
+>> +    };
+>> +    struct coresight_device *cti_csdev = coresight_find_output_type(
+>> +        csdev->pdata, CORESIGHT_DEV_TYPE_HELPER, cti_subtype);
+> 
+> minor nit: Please could we split the initialisation ? Or at least move
+> this after the next variable declaration below ?
+> 
+> 
+> Rest looks fine to me.
+> 
+> Suzuki
+> 
+>>       struct cti_device *ctidev;
+>>   +    if (!cti_csdev)
+>> +        return;
+>> +
+>>       mutex_lock(&ect_mutex);
+>> -    if (csdev->ect_dev) {
+>> -        ctidrv = csdev_to_cti_drvdata(csdev->ect_dev);
+>> -        ctidev = &ctidrv->ctidev;
+>> -        list_for_each_entry(tc, &ctidev->trig_cons, node) {
+>> -            if (tc->con_dev == csdev) {
+>> -                cti_remove_sysfs_link(ctidrv, tc);
+>> -                tc->con_dev = NULL;
+>> -                break;
+>> -            }
+>> +    ctidrv = csdev_to_cti_drvdata(cti_csdev);
+>> +    ctidev = &ctidrv->ctidev;
+>> +    list_for_each_entry(tc, &ctidev->trig_cons, node) {
+>> +        if (tc->con_dev == csdev) {
+>> +            cti_remove_sysfs_link(ctidrv, tc);
+>> +            tc->con_dev = NULL;
+>> +            break;
+>>           }
+>> -        csdev->ect_dev = NULL;
+>>       }
+>>       mutex_unlock(&ect_mutex);
+>>   }
+>> @@ -630,8 +636,8 @@ static void cti_update_conn_xrefs(struct
+>> cti_drvdata *drvdata)
+>>               /* if we can set the sysfs link */
+>>               if (cti_add_sysfs_link(drvdata, tc))
+>>                   /* set the CTI/csdev association */
+>> -                coresight_set_assoc_ectdev_mutex(tc->con_dev,
+>> -                             drvdata->csdev);
+>> +                coresight_add_helper_mutex(tc->con_dev,
+>> +                               drvdata->csdev);
+>>               else
+>>                   /* otherwise remove reference from CTI */
+>>                   tc->con_dev = NULL;
+>> @@ -646,8 +652,6 @@ static void cti_remove_conn_xrefs(struct
+>> cti_drvdata *drvdata)
+>>         list_for_each_entry(tc, &ctidev->trig_cons, node) {
+>>           if (tc->con_dev) {
+>> -            coresight_set_assoc_ectdev_mutex(tc->con_dev,
+>> -                             NULL);
+>>               cti_remove_sysfs_link(drvdata, tc);
+>>               tc->con_dev = NULL;
+>>           }
+>> @@ -795,27 +799,27 @@ static void cti_pm_release(struct cti_drvdata
+>> *drvdata)
+>>   }
+>>     /** cti ect operations **/
+>> -int cti_enable(struct coresight_device *csdev)
+>> +int cti_enable(struct coresight_device *csdev, enum cs_mode mode,
+>> void *data)
+>>   {
+>>       struct cti_drvdata *drvdata = csdev_to_cti_drvdata(csdev);
+>>         return cti_enable_hw(drvdata);
+>>   }
+>>   -int cti_disable(struct coresight_device *csdev)
+>> +int cti_disable(struct coresight_device *csdev, void *data)
+>>   {
+>>       struct cti_drvdata *drvdata = csdev_to_cti_drvdata(csdev);
+>>         return cti_disable_hw(drvdata);
+>>   }
+>>   -static const struct coresight_ops_ect cti_ops_ect = {
+>> +static const struct coresight_ops_helper cti_ops_ect = {
+>>       .enable = cti_enable,
+>>       .disable = cti_disable,
+>>   };
+>>     static const struct coresight_ops cti_ops = {
+>> -    .ect_ops = &cti_ops_ect,
+>> +    .helper_ops = &cti_ops_ect,
+>>   };
+>>     /*
+>> @@ -922,8 +926,8 @@ static int cti_probe(struct amba_device *adev,
+>> const struct amba_id *id)
+>>         /* set up coresight component description */
+>>       cti_desc.pdata = pdata;
+>> -    cti_desc.type = CORESIGHT_DEV_TYPE_ECT;
+>> -    cti_desc.subtype.ect_subtype = CORESIGHT_DEV_SUBTYPE_ECT_CTI;
+>> +    cti_desc.type = CORESIGHT_DEV_TYPE_HELPER;
+>> +    cti_desc.subtype.helper_subtype =
+>> CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI;
+>>       cti_desc.ops = &cti_ops;
+>>       cti_desc.groups = drvdata->ctidev.con_groups;
+>>       cti_desc.dev = dev;
+>> diff --git a/drivers/hwtracing/coresight/coresight-cti-sysfs.c
+>> b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
+>> index e528cff9d4e2..d25dd2737b49 100644
+>> --- a/drivers/hwtracing/coresight/coresight-cti-sysfs.c
+>> +++ b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
+>> @@ -112,11 +112,11 @@ static ssize_t enable_store(struct device *dev,
+>>           ret = pm_runtime_resume_and_get(dev->parent);
+>>           if (ret)
+>>               return ret;
+>> -        ret = cti_enable(drvdata->csdev);
+>> +        ret = cti_enable(drvdata->csdev, CS_MODE_SYSFS, NULL);
+>>           if (ret)
+>>               pm_runtime_put(dev->parent);
+>>       } else {
+>> -        ret = cti_disable(drvdata->csdev);
+>> +        ret = cti_disable(drvdata->csdev, NULL);
+>>           if (!ret)
+>>               pm_runtime_put(dev->parent);
+>>       }
+>> diff --git a/drivers/hwtracing/coresight/coresight-cti.h
+>> b/drivers/hwtracing/coresight/coresight-cti.h
+>> index 8b106b13a244..cb9ee616d01f 100644
+>> --- a/drivers/hwtracing/coresight/coresight-cti.h
+>> +++ b/drivers/hwtracing/coresight/coresight-cti.h
+>> @@ -215,8 +215,8 @@ int cti_add_connection_entry(struct device *dev,
+>> struct cti_drvdata *drvdata,
+>>                    const char *assoc_dev_name);
+>>   struct cti_trig_con *cti_allocate_trig_con(struct device *dev, int
+>> in_sigs,
+>>                          int out_sigs);
+>> -int cti_enable(struct coresight_device *csdev);
+>> -int cti_disable(struct coresight_device *csdev);
+>> +int cti_enable(struct coresight_device *csdev, enum cs_mode mode,
+>> void *data);
+>> +int cti_disable(struct coresight_device *csdev, void *data);
+>>   void cti_write_all_hw_regs(struct cti_drvdata *drvdata);
+>>   void cti_write_intack(struct device *dev, u32 ackval);
+>>   void cti_write_single_reg(struct cti_drvdata *drvdata, int offset,
+>> u32 value);
+>> diff --git a/drivers/hwtracing/coresight/coresight-priv.h
+>> b/drivers/hwtracing/coresight/coresight-priv.h
+>> index a843f9d5c737..fff565d1cb42 100644
+>> --- a/drivers/hwtracing/coresight/coresight-priv.h
+>> +++ b/drivers/hwtracing/coresight/coresight-priv.h
+>> @@ -211,8 +211,8 @@ void coresight_release_platform_data(struct
+>> coresight_device *csdev,
+>>                        struct coresight_platform_data *pdata);
+>>   struct coresight_device *
+>>   coresight_find_csdev_by_fwnode(struct fwnode_handle *r_fwnode);
+>> -void coresight_set_assoc_ectdev_mutex(struct coresight_device *csdev,
+>> -                      struct coresight_device *ect_csdev);
+>> +void coresight_add_helper_mutex(struct coresight_device *csdev,
+>> +                struct coresight_device *helper);
+>>     void coresight_set_percpu_sink(int cpu, struct coresight_device
+>> *csdev);
+>>   struct coresight_device *coresight_get_percpu_sink(int cpu);
+>> diff --git a/drivers/hwtracing/coresight/coresight-sysfs.c
+>> b/drivers/hwtracing/coresight/coresight-sysfs.c
+>> index 464ba5e1343b..dd78e9fcfc4d 100644
+>> --- a/drivers/hwtracing/coresight/coresight-sysfs.c
+>> +++ b/drivers/hwtracing/coresight/coresight-sysfs.c
+>> @@ -148,6 +148,10 @@ int coresight_make_links(struct coresight_device
+>> *orig,
+>>       char *outs = NULL, *ins = NULL;
+>>       struct coresight_sysfs_link *link = NULL;
+>>   +    /* Helper devices aren't shown in sysfs */
+>> +    if (conn->dest_port == -1 && conn->src_port == -1)
+>> +        return 0;
+>> +
+>>       do {
+>>           outs = devm_kasprintf(&orig->dev, GFP_KERNEL,
+>>                         "out:%d", conn->src_port);
+>> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+>> index d2739a0286f1..ed37552761e4 100644
+>> --- a/include/linux/coresight.h
+>> +++ b/include/linux/coresight.h
+>> @@ -40,8 +40,7 @@ enum coresight_dev_type {
+>>       CORESIGHT_DEV_TYPE_LINK,
+>>       CORESIGHT_DEV_TYPE_LINKSINK,
+>>       CORESIGHT_DEV_TYPE_SOURCE,
+>> -    CORESIGHT_DEV_TYPE_HELPER,
+>> -    CORESIGHT_DEV_TYPE_ECT,
+>> +    CORESIGHT_DEV_TYPE_HELPER
+>>   };
+>>     enum coresight_dev_subtype_sink {
+>> @@ -66,12 +65,7 @@ enum coresight_dev_subtype_source {
+>>     enum coresight_dev_subtype_helper {
+>>       CORESIGHT_DEV_SUBTYPE_HELPER_CATU,
+>> -};
+>> -
+>> -/* Embedded Cross Trigger (ECT) sub-types */
+>> -enum coresight_dev_subtype_ect {
+>> -    CORESIGHT_DEV_SUBTYPE_ECT_NONE,
+>> -    CORESIGHT_DEV_SUBTYPE_ECT_CTI,
+>> +    CORESIGHT_DEV_SUBTYPE_HELPER_ECT_CTI
+>>   };
+>>     /**
+>> @@ -84,8 +78,6 @@ enum coresight_dev_subtype_ect {
+>>    *            by @coresight_dev_subtype_source.
+>>    * @helper_subtype:    type of helper this component is, as defined
+>>    *            by @coresight_dev_subtype_helper.
+>> - * @ect_subtype:        type of cross trigger this component is, as
+>> - *            defined by @coresight_dev_subtype_ect
+>>    */
+>>   union coresight_dev_subtype {
+>>       /* We have some devices which acts as LINK and SINK */
+>> @@ -95,7 +87,6 @@ union coresight_dev_subtype {
+>>       };
+>>       enum coresight_dev_subtype_source source_subtype;
+>>       enum coresight_dev_subtype_helper helper_subtype;
+>> -    enum coresight_dev_subtype_ect ect_subtype;
+>>   };
+>>     /**
+>> @@ -237,8 +228,6 @@ struct coresight_sysfs_link {
+>>    *        from source to that sink.
+>>    * @ea:        Device attribute for sink representation under PMU
+>> directory.
+>>    * @def_sink:    cached reference to default sink found for this
+>> device.
+>> - * @ect_dev:    Associated cross trigger device. Not part of the
+>> trace data
+>> - *        path or connections.
+>>    * @nr_links:   number of sysfs links created to other components
+>> from this
+>>    *        device. These will appear in the "connections" group.
+>>    * @has_conns_grp: Have added a "connections" group for sysfs links.
+>> @@ -261,12 +250,9 @@ struct coresight_device {
+>>       bool activated;    /* true only if a sink is part of a path */
+>>       struct dev_ext_attribute *ea;
+>>       struct coresight_device *def_sink;
+>> -    /* cross trigger handling */
+>> -    struct coresight_device *ect_dev;
+>>       /* sysfs links between components */
+>>       int nr_links;
+>>       bool has_conns_grp;
+>> -    bool ect_enabled; /* true only if associated ect device is
+>> enabled */
+>>       /* system configuration and feature lists */
+>>       struct list_head feature_csdev_list;
+>>       struct list_head config_csdev_list;
+>> @@ -378,23 +364,11 @@ struct coresight_ops_helper {
+>>       int (*disable)(struct coresight_device *csdev, void *data);
+>>   };
+>>   -/**
+>> - * struct coresight_ops_ect - Ops for an embedded cross trigger device
+>> - *
+>> - * @enable    : Enable the device
+>> - * @disable    : Disable the device
+>> - */
+>> -struct coresight_ops_ect {
+>> -    int (*enable)(struct coresight_device *csdev);
+>> -    int (*disable)(struct coresight_device *csdev);
+>> -};
+>> -
+>>   struct coresight_ops {
+>>       const struct coresight_ops_sink *sink_ops;
+>>       const struct coresight_ops_link *link_ops;
+>>       const struct coresight_ops_source *source_ops;
+>>       const struct coresight_ops_helper *helper_ops;
+>> -    const struct coresight_ops_ect *ect_ops;
+>>   };
+>>     #if IS_ENABLED(CONFIG_CORESIGHT)
+> 
