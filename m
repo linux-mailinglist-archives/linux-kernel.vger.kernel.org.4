@@ -2,105 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332E36D57AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 06:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247976D57AF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 06:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbjDDEqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 00:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
+        id S232191AbjDDEtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 00:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjDDEp7 (ORCPT
+        with ESMTP id S229699AbjDDEs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 00:45:59 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AD91A4;
-        Mon,  3 Apr 2023 21:45:57 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (fp76f193f3.tkyc206.ap.nuro.jp [118.241.147.243])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CD9FB8B;
-        Tue,  4 Apr 2023 06:45:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1680583555;
-        bh=oCBy4RuSxNUF89x5suADnlH3CCX++TyXOLO5XzzXcPI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mNKZUk6M5SK2E0q7bpevzWyxMBUw4oYsEkLwBkBRlvodVhoieDLapqovGcVSnr023
-         vpqgYAQuIk4yIlnWj0dzDfh7rTEztjEfNUGuGy+ZyN4idC2SNUa2NhLyDFfnA+tUCQ
-         L8vmW8vfzXcCQzpd/Y3JoEygs+YN/bC9Ho7/MnUQ=
-Date:   Tue, 4 Apr 2023 07:46:01 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jack Zhu <jack.zhu@starfivetech.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
-Subject: Re: [PATCH v3 5/9] media: dt-bindings: cadence-csi2rx: Add starfive
- compatible
-Message-ID: <20230404044601.GK16648@pendragon.ideasonboard.com>
-References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
- <20230331121826.96973-6-jack.zhu@starfivetech.com>
+        Tue, 4 Apr 2023 00:48:59 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06762184;
+        Mon,  3 Apr 2023 21:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680583739; x=1712119739;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=atNBv19nqFsJx7Jsp8sn5eYxALmhvo0gO3LFEzJDCZc=;
+  b=CwSjBK9kndC7sAbzC2ywHWBHuaNPOfZ68OHIo/KllJXcSHL8zsvMjWC/
+   /CwGyKg51GosfPwFKK4chEuoOZuLJFHxfWDc1MJeRfVurcjx1ed2zDFPm
+   dBICDDJtzyjSjvopordrdEyfiS0Wyf7hflJNxhoIa3bxlxMK40QR0h4IO
+   jjNICJSa4tbJKO4rTwIBxrjnsJmMiXpBKiobdnebvaq9LlbW9JEu8B6dz
+   tOlR5Iao9OYoPfb2m5War6OSE3p6lFiALlrW0HHTpJtUR5GB5HpX7mUd5
+   E3XMFjaz2aK/qOLdEecEa4lLRxuX21tHB29ihzYBUmAvdvCGCksN+hXOT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="321742175"
+X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
+   d="scan'208";a="321742175"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 21:48:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="775496240"
+X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
+   d="scan'208";a="775496240"
+Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Apr 2023 21:48:54 -0700
+From:   Song Yoong Siang <yoong.siang.song@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, stable@vger.kernel.org,
+        Song Yoong Siang <yoong.siang.song@intel.com>
+Subject: [PATCH net 1/1] net: stmmac: Add queue reset into stmmac_xdp_open() function
+Date:   Tue,  4 Apr 2023 12:48:23 +0800
+Message-Id: <20230404044823.3226144-1-yoong.siang.song@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230331121826.96973-6-jack.zhu@starfivetech.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.5 required=5.0 tests=AC_FROM_MANY_DOTS,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jack,
+Queue reset was moved out from __init_dma_rx_desc_rings() and
+__init_dma_tx_desc_rings() functions. Thus, the driver fails to transmit
+and receive packet after XDP prog setup.
 
-Thank you for the patch.
+This commit adds the missing queue reset into stmmac_xdp_open() function.
 
-On Fri, Mar 31, 2023 at 08:18:22PM +0800, Jack Zhu wrote:
-> Add starfive compatible for Starfive JH7110 SoC which has a
-> Cadence MIPI-CSI2 RX controller.
-> 
-> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+Fixes: f9ec5723c3db ("net: ethernet: stmicro: stmmac: move queue reset to dedicated functions")
+Cc: <stable@vger.kernel.org> # 6.0+
+Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  Documentation/devicetree/bindings/media/cdns,csi2rx.yaml | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-> index f8da4a35e98e..30a335b10762 100644
-> --- a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-> +++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-> @@ -15,7 +15,10 @@ description:
->  
->  properties:
->    compatible:
-> -    const: cdns,csi2rx
-> +    items:
-> +      - enum:
-> +          - starfive,jh7110-csi2rx
-> +      - const: cdns,csi2rx
->  
->    reg:
->      maxItems: 1
-> @@ -130,7 +133,7 @@ additionalProperties: false
->  examples:
->    - |
->      csi@d060000 {
-> -        compatible = "cdns,csi2rx";
-> +        compatible = "starfive,jh7110-csi2rx", "cdns,csi2rx";
->          reg = <0x0d060000 0x1000>;
->          clocks = <&byteclock 7>, <&byteclock 6>,
->                   <&coreclock 8>, <&coreclock 9>,
-
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 3e5bbfe3c41b..e4c27eb17bd2 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -6630,6 +6630,8 @@ int stmmac_xdp_open(struct net_device *dev)
+ 		goto init_error;
+ 	}
+ 
++	stmmac_reset_queues_param(priv);
++
+ 	/* DMA CSR Channel configuration */
+ 	for (chan = 0; chan < dma_csr_ch; chan++) {
+ 		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
 -- 
-Regards,
+2.34.1
 
-Laurent Pinchart
