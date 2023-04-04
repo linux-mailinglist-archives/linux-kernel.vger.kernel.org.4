@@ -2,106 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F016D58C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554BC6D58C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233557AbjDDG1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 02:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S233803AbjDDG2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 02:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjDDG1c (ORCPT
+        with ESMTP id S233782AbjDDG2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 02:27:32 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8823B138
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:27:31 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id x17so41041426lfu.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 23:27:31 -0700 (PDT)
+        Tue, 4 Apr 2023 02:28:05 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E49C173F;
+        Mon,  3 Apr 2023 23:27:58 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id i6so37476363ybu.8;
+        Mon, 03 Apr 2023 23:27:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680589650;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EeGOQuK/PqzO98tcIpRjRjtyM7MAYGn7fx/rVzbfxbA=;
-        b=EjTKQSWArVmGJn07Bgb/RFPq5OzTe3ynIe2RyF5sF6J6Zu9Hd0vb7aD+HRM8iAcVvO
-         4SvVFyxsHSrUb6S33xnWPv9ocTxqDRvt9PRAvwZxOxhYWwgpdvxlgfhlPqWvSI24ldza
-         AhFjvGx8lBjyhJfAeIap4dVjqK7hI1MXX3uST5UYCTd39PcfM/1XBT4yfGhp4XhS2XK5
-         Tm1lp/aV32UX73s9Ygr41J2Id0nRyaXcdhOfXqfRJAuyGBbQ8h1kqI/LsfJfKpqlDKWF
-         ygaY88FBUb5UeEhZ+eWID0wdxF/fcoivqeMvyONaS6BB9172Rlod8RiuGEFkcsYjhujX
-         wYFQ==
+        d=gmail.com; s=20210112; t=1680589677;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lzWN5mh4zjKBZuiFgyH01Fx6pM7fAr76VE1bFCrLAFI=;
+        b=Oj5/jF3QUtvmOAGyfveHAHWJ7xxodGK7Ikzf4AU/tl7uoZb9RCrSm/Asv4kbIY0Q2A
+         cKCaT3jCz/0QKRPp3rFtwSmPurEI/vkmxW8SR8YtLzQs11UPDE7QMkO/fNkFZ/yQCgBA
+         Zt6tfz4G/61dzTQ9GZeYpMwZ5pbzvnB/gkwRc6QHGSZVD38vD0ABIADNilV+s8AtLdGw
+         tmmeDiQ/u4fBsyg3h4sgWQqmoPRlR/Fnv6VT4mMTo++eDfzHt6TAjiRyGEleuzR+Vk/A
+         /g0UdQPQu6BYEFekSqgOPoHxB5lLYNG+DIBOoDplHVuYUU6IJtSFP5jvM/nqTQ66hv2i
+         8Ifw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680589650;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EeGOQuK/PqzO98tcIpRjRjtyM7MAYGn7fx/rVzbfxbA=;
-        b=NUxdshlU8RVnUnK6ef7dfui2nJa3UO6FSUn49kh94tEifI4v2CSB3D5+83hBPqS9WX
-         jMaEfoakWVOns2ACkqAByM02O/jZ1Sz7jD6/2XCcudAs/N9diQViih9IkqnKnUYsKgS0
-         7NzeedAWjL4NhMw4q6tiquwhTS0ecD9Q7leWgJptPWN32nGS0lGIoOEYIYOTBqLk7/OR
-         +z/QfnfCDfcTYMJrSWCrD/bvBCUvzegjpXhq7jLQRZ5ICBTx13eX6iKxYWRZtVLv3b5P
-         18vLmhsfTTOl2/fh1ZuApldCPY6MCvbppGvTbowVjahIuF/XdSjFiYQ9Gec98quEgLgn
-         rpDA==
-X-Gm-Message-State: AAQBX9dLF/KLQZvRpJVNKE8lMqH3s40EsSjqei80fd+2MdHtHTmPzgGJ
-        GCr/M/UTM9XB2MLmD++5WMRDjBZJAUiX9To1nug=
-X-Google-Smtp-Source: AKy350YiC2UwD4PywR32gwG+CKVshieQmX+ZaOSzlwo9nQhlBMJAJK90V5UaCUIkUF7iWuYN7em4AQ==
-X-Received: by 2002:ac2:4911:0:b0:4de:7a23:23e2 with SMTP id n17-20020ac24911000000b004de7a2323e2mr308513lfi.21.1680589649762;
-        Mon, 03 Apr 2023 23:27:29 -0700 (PDT)
-Received: from rayden (h-46-59-78-111.A175.priv.bahnhof.se. [46.59.78.111])
-        by smtp.gmail.com with ESMTPSA id y27-20020ac2447b000000b004e9b183fc5bsm2157556lfl.8.2023.04.03.23.27.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 23:27:29 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 08:27:27 +0200
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     arm@kernel.org, soc@kernel.org
-Cc:     op-tee@lists.trustedfirmware.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Etienne Carriere <etienne.carriere@linaro.org>
-Subject: [GIT PULL] OP-TEE per-cpu irq for v6.4.
-Message-ID: <20230404062727.GA2765560@rayden>
+        d=1e100.net; s=20210112; t=1680589677;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lzWN5mh4zjKBZuiFgyH01Fx6pM7fAr76VE1bFCrLAFI=;
+        b=3hXfSS6iapTWc02rXTJvFzNKDPOl0tBgmTSmx6XU+8OMGQHBjLQCpWxmIF1r+YMawy
+         f+Rli/RrJYgMabZ5iFdUrdb+IqzWbnNWaHPliYCcgt9AL3JIlaWYz4NhuUV83lgo3t2V
+         MIgmts/dCS53a1Eqak2dS/hyOM+xNxgCAMS6obwgLJuq0cOgiy/i5JN+txUI66DTZ7DT
+         1GDYMgM/TTOHMWdA6ajozpwTeqPJaEwc1NOR52hG4Wy26w13qzBhGGMqz5XiJ9DKI9K2
+         Ql66wL7BaeulOEX9m4QStNm+DgTPh54t6rtLugSGQbIN6uwHzEaXkMjAK7od88jWQqWG
+         HFPA==
+X-Gm-Message-State: AAQBX9eiRl8aZrYJ1Hwp9an4vAu014seysJ3ohay7aCimH2xalide3Ym
+        Ffsbe/u4VQbvO02s61vuerW8RbRK1bHJxuaS0/s=
+X-Google-Smtp-Source: AKy350ZcJPFzls7MRlRH+dlf6brGLsson0bLOy8vu2pC+W7UqBj1ShnvivhrW6T5IgUqnFhzc434Sd2sE444ABAQb/o=
+X-Received: by 2002:a25:74c4:0:b0:b6a:2590:6c63 with SMTP id
+ p187-20020a2574c4000000b00b6a25906c63mr1082914ybc.2.1680589677566; Mon, 03
+ Apr 2023 23:27:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20230403145047.33065-1-kal.conley@dectris.com> <20230403145047.33065-3-kal.conley@dectris.com>
+In-Reply-To: <20230403145047.33065-3-kal.conley@dectris.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Tue, 4 Apr 2023 08:27:46 +0200
+Message-ID: <CAJ8uoz31-=tvN_eCfxYRS8bWkgFSj=BE6oy5uLmq6UmTGys4ew@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests: xsk: Add test case for packets at
+ end of UMEM
+To:     Kal Conley <kal.conley@dectris.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello arm-soc maintainers,
+On Mon, 3 Apr 2023 at 16:52, Kal Conley <kal.conley@dectris.com> wrote:
+>
+> Add test case to testapp_invalid_desc for valid packets at the end of
+> the UMEM.
 
-Please pull these patches which add support for using per-cpu interrutps
-to signal asynchronous notifications from OP-TEE in secure world to the
-OP-TEE driver.
+Thanks.
 
-Thanks,
-Jens
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 
-The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
-
-  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
-
-are available in the Git repository at:
-
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git/ tags/optee-per-cpu-irq-for-v6.4
-
-for you to fetch changes up to b3b4ced12c1bc829888803ce07fff317e590ec1c:
-
-  optee: add per cpu asynchronous notification (2023-03-30 08:27:05 +0200)
-
-----------------------------------------------------------------
-Add OP-TEE per cpu asynchronous notification
-
-Adds support for signalling from secure world with per-cpu interrupts in
-addition to edge-triggered peripheral interrupts.
-
-----------------------------------------------------------------
-Etienne Carriere (2):
-      dt-bindings: optee driver interrupt can be a per-cpu interrupt
-      optee: add per cpu asynchronous notification
-
- .../bindings/arm/firmware/linaro,optee-tz.yaml     |   3 +-
- drivers/tee/optee/optee_private.h                  |  24 ++++
- drivers/tee/optee/smc_abi.c                        | 122 ++++++++++++++++++++-
- 3 files changed, 144 insertions(+), 5 deletions(-)
+> Signed-off-by: Kal Conley <kal.conley@dectris.com>
+> ---
+>  tools/testing/selftests/bpf/xskxceiver.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+> index 3956f5db84f3..34a1f32fe752 100644
+> --- a/tools/testing/selftests/bpf/xskxceiver.c
+> +++ b/tools/testing/selftests/bpf/xskxceiver.c
+> @@ -1662,6 +1662,8 @@ static void testapp_invalid_desc(struct test_spec *test)
+>                 {-2, PKT_SIZE, 0, false},
+>                 /* Packet too large */
+>                 {0x2000, XSK_UMEM__INVALID_FRAME_SIZE, 0, false},
+> +               /* Up to end of umem allowed */
+> +               {umem_size - PKT_SIZE, PKT_SIZE, 0, true},
+>                 /* After umem ends */
+>                 {umem_size, PKT_SIZE, 0, false},
+>                 /* Straddle the end of umem */
+> @@ -1675,16 +1677,17 @@ static void testapp_invalid_desc(struct test_spec *test)
+>
+>         if (test->ifobj_tx->umem->unaligned_mode) {
+>                 /* Crossing a page boundrary allowed */
+> -               pkts[6].valid = true;
+> +               pkts[7].valid = true;
+>         }
+>         if (test->ifobj_tx->umem->frame_size == XSK_UMEM__DEFAULT_FRAME_SIZE / 2) {
+>                 /* Crossing a 2K frame size boundrary not allowed */
+> -               pkts[7].valid = false;
+> +               pkts[8].valid = false;
+>         }
+>
+>         if (test->ifobj_tx->shared_umem) {
+>                 pkts[4].addr += umem_size;
+>                 pkts[5].addr += umem_size;
+> +               pkts[6].addr += umem_size;
+>         }
+>
+>         pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts));
+> --
+> 2.39.2
+>
