@@ -2,57 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01296D666F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 16:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3226D668A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235142AbjDDO6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 10:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S234826AbjDDPAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 11:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235528AbjDDO5g (ORCPT
+        with ESMTP id S235483AbjDDO72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 10:57:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC5E4ED8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 07:56:48 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 16:56:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680620205;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b8TGuHfJ8bWdeSdfb+xMIX6BS2iHed0QnwUNOtWlhpU=;
-        b=QFL4XvzjMaJAUgQ/3C7/d/EwXujZflEulBTR8tf/IrGf56+SzYiXhHAyX+B1jI2BMaaoiM
-        Yt70TwYhE/+QDATnxRWnyvvjDOi0f2yhN7WYcEb24vJh0k1JtqOLEjfGExpaTJGVtZtoK0
-        7UL5IZt8onM5ZvBiQaTHL5Vx9OrOHCW3c02t3X2VAOPSGWrgIYp/wHSZpl0dZVBmZ50Iup
-        aVZtHxp09Sz8IGXBRD8FykcHVsJXyAFhs+j96AkmJ7NqH4ldfU4GMMpmZa/cxoT2OezGZk
-        dzYhj37olUYZe/OIdKchIJaUvf7b8IF41B1TAU3G+etQ25ZB9w4yCdunVP17tQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680620205;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b8TGuHfJ8bWdeSdfb+xMIX6BS2iHed0QnwUNOtWlhpU=;
-        b=zfi5DPedHkr7oR3Q2Gg4eOjnLO5Uec9pdk3L9NvLp/Ki3bQ36QGhpyfacbg1PRNQl6MbF5
-        4O8CKFG8B6ej6DCA==
-From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-cc:     linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v5 16/18] timer: Implement the hierarchical pull model
-In-Reply-To: <20230323142440.GC2512024@hirez.programming.kicks-ass.net>
-Message-ID: <a3338e9d-1637-2fd2-52a1-34768f9e92d8@linutronix.de>
-References: <20230301141744.16063-1-anna-maria@linutronix.de> <20230301141744.16063-17-anna-maria@linutronix.de> <20230323142440.GC2512024@hirez.programming.kicks-ass.net>
+        Tue, 4 Apr 2023 10:59:28 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B953C2F;
+        Tue,  4 Apr 2023 07:59:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=KBh4rzbfHfMkMMlE9cw+MqyUsj44Di5Ker7OlwFYGXg=; b=FmENSU8DdsJwRKLNIy11pT5rwr
+        gZFbISKwxtxGEbpRDZI+PdPBb8ubt+23BYYSER2yHfUnSI2zgXRlA/A9liB6dhfL6rTy6LYIMRvQm
+        gyR6cAIG2mB+TC5hkfYw1+vYNcbuY++BpvLFCCjlbeWJmHkcNxGqSYl+N/wcgrOkou9YFrZd67E9m
+        w2uM4nUqUiAoo0Tu2WJytt+fQkxTpy55fgWCKZrUonHITpNDOnhhCxIBg+tWp3ViIM8YS9U4v2tUE
+        9jirZfuWp7fZAvU8W0ipyUy++FGIYwgfKD5XO1ksJowLv7OYriDmtjptXbGAC0187adFlCZx+HUPA
+        RAWV4RFA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pji6d-00FSN3-3U; Tue, 04 Apr 2023 14:57:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7720D30003A;
+        Tue,  4 Apr 2023 16:57:51 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5C05626442AC2; Tue,  4 Apr 2023 16:57:51 +0200 (CEST)
+Date:   Tue, 4 Apr 2023 16:57:51 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Yair Podemsky <ypodemsk@redhat.com>
+Cc:     linux@armlinux.org.uk, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, davem@davemloft.net, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org,
+        arnd@arndb.de, keescook@chromium.org, paulmck@kernel.org,
+        jpoimboe@kernel.org, samitolvanen@google.com, frederic@kernel.org,
+        ardb@kernel.org, juerg.haefliger@canonical.com,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        tony@atomide.com, linus.walleij@linaro.org,
+        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, mtosatti@redhat.com, vschneid@redhat.com,
+        dhildenb@redhat.com, alougovs@redhat.com
+Subject: Re: [PATCH 2/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to MM CPUs
+Message-ID: <20230404145751.GA297936@hirez.programming.kicks-ass.net>
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-3-ypodemsk@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404134224.137038-3-ypodemsk@redhat.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,141 +75,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Mar 2023, Peter Zijlstra wrote:
+On Tue, Apr 04, 2023 at 04:42:23PM +0300, Yair Podemsky wrote:
+> diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+> index 2b93cf6ac9ae..5ea9be6fb87c 100644
+> --- a/mm/mmu_gather.c
+> +++ b/mm/mmu_gather.c
+> @@ -191,7 +191,13 @@ static void tlb_remove_table_smp_sync(void *arg)
+>  	/* Simply deliver the interrupt */
+>  }
+>  
+> -void tlb_remove_table_sync_one(void)
+> +#ifdef CONFIG_ARCH_HAS_CPUMASK_BITS
+> +#define REMOVE_TABLE_IPI_MASK mm_cpumask(mm)
+> +#else
+> +#define REMOVE_TABLE_IPI_MASK NULL
+> +#endif /* CONFIG_ARCH_HAS_CPUMASK_BITS */
+> +
+> +void tlb_remove_table_sync_one(struct mm_struct *mm)
+>  {
+>  	/*
+>  	 * This isn't an RCU grace period and hence the page-tables cannot be
+> @@ -200,7 +206,8 @@ void tlb_remove_table_sync_one(void)
+>  	 * It is however sufficient for software page-table walkers that rely on
+>  	 * IRQ disabling.
+>  	 */
+> -	smp_call_function(tlb_remove_table_smp_sync, NULL, 1);
+> +	on_each_cpu_mask(REMOVE_TABLE_IPI_MASK, tlb_remove_table_smp_sync,
+> +			NULL, true);
+>  }
 
-> On Wed, Mar 01, 2023 at 03:17:42PM +0100, Anna-Maria Behnsen wrote:
-> 
-> > diff --git a/kernel/time/timer_migration.h b/kernel/time/timer_migration.h
-> > new file mode 100644
-> > index 000000000000..ceb336e705df
-> > --- /dev/null
-> > +++ b/kernel/time/timer_migration.h
-> > @@ -0,0 +1,123 @@
-> > +#ifndef _KERNEL_TIME_MIGRATION_H
-> > +#define _KERNEL_TIME_MIGRATION_H
-> > +
-> > +/* Per group capacity. Must be a power of 2! */
-> > +#define TMIGR_CHILDS_PER_GROUP 8
-> > +
-> > +/**
-> > + * struct tmigr_event - a timer event associated to a CPU
-> > + * @nextevt:	The node to enqueue an event in the parent group queue
-> > + * @cpu:	The CPU to which this event belongs
-> > + * @ignore:	Hint whether the event could be ignored; it is set when
-> > + *		CPU or group is active;
-> > + */
-> > +struct tmigr_event {
-> > +	struct timerqueue_node	nextevt;
-> > +	unsigned int		cpu;
-> > +	int			ignore;
-> > +};
-> > +
-> > +/**
-> > + * struct tmigr_group - timer migration hierarchy group
-> > + * @lock:		Lock protecting the event information
-> > + * @cpus:		Array with CPUs which are member of group; required for
-> > + *			sibling CPUs; used only when level == 0
-> 
-> That's 32 bytes wasted for every group that isn't 0, maybe stick on the
-> end and conditionally allocate? Also, afaict it is only ever used during
-> setup, and as such should not be placed in a hot line, unless you've
-> done that explicitly as padding, in which case it needs a comment to
-> that effect.
-> 
-> Also, since it's setup only, why can't you match against:
-> 
->   per_cpu_ptr(&tmigr_cpu, cpu)->parent
-> 
-> ?
+Uhh, I don't think NULL is a valid @mask argument. Should that not be
+something like:
 
-This cpus array is currently used to make sure siblings will end up in the
-same level 0 group. When matching against the per_cpu_ptr(&tmigr_cpu,
-cpu)->parent, I would need to rely on the topology mask and have a look if
-the sibling already has a parent.
+#ifdef CONFIG_ARCH_HAS_CPUMASK
+#define REMOVE_TABLE_IPI_MASK mm_cpumask(mm)
+#else
+#define REMOVE_TABLE_IPI_MASK cpu_online_mask
+#endif
 
-My question here is: Is it required that siblings end up in the same group
-in level 0, or is it enough if the numa node is the same?
+	preempt_disable();
+	on_each_cpu_mask(REMOVE_TABLE_IPI_MASK, tlb_remove_table_smp_sync, NULL true);
+	preempt_enable();
 
-> > + * @parent:		Pointer to parent group
-> > + * @list:		List head that is added to per level tmigr_level_list
-> 
-> Also setup only?
 
-Jupp.
-
-> > + * @level:		Hierarchy level of group
-> > + * @numa_node:		Is set to numa node when level < tmigr_crossnode_level;
-> > + *			otherwise it is set to NUMA_NO_NODE; Required for setup
-> > + *			only
-> > + * @num_childs:		Counter of group childs; Required for setup only
-> > + * @num_cores:		Counter of cores per group; Required for setup only when
-> > + *			level == 0 and siblings exist
-> 
-> Also setup only, move the end?
-
-Same. Will move all the setup stuff to the end.
-
-> > + * @migr_state:		State of group (see struct tmigr_state)
-> > + * @childmask:		childmask of group in parent group; is set during setup
-> > + *			never changed; could be read lockless
-> > + * @events:		Timer queue for child events queued in the group
-> > + * @groupevt:		Next event of group; it is only reliable when group is
-> > + *			!active (ignore bit is set when group is active)
-> > + * @next_expiry:	Base monotonic expiry time of next event of group;
-> > + *			Used for racy lockless check whether remote expiry is
-> > + *			required; it is always reliable
-> 
-> This is basically leftmost of @events? A racy lockless check sorta
-> implies not reliable, comment is confusing.
-
-It's always updated and contains the expiry value of the first event which
-is enqueued into timer queue "events" - reliable is the wrong term here.
-
-> Also, isn't this identical to @groupevt.nextevt.expiry ?
-
-No, it is not identical. Because groupevt is only used and reliable, when
-the group is idle to enqueue the first group event into the parent
-group. But the migrator of the group needs to check whether timers needs to
-be handled remote because some children are idle. Therefore I do not have to
-update the whole event.
-
-> > + */
-> > +struct tmigr_group {
-> > +	raw_spinlock_t		lock;
-> > +	unsigned int		cpus[TMIGR_CHILDS_PER_GROUP];
-> > +	struct tmigr_group	*parent;
-> > +	struct list_head	list;
-> > +	unsigned int		level;
-> > +	unsigned int		numa_node;
-> > +	unsigned int		num_childs;
-> > +	unsigned int		num_cores;
-> > +	atomic_t		*migr_state;
-> 
-> Per the other email; why isn't this:
-> 
-> 	union tmigr_state	migr_state;
-> 
-> ?
-
-I will change this into a direct member. The reason for not being a direct
-member is - because it grows like this...
-
-Only for handling the tmigr_group->migr_state, atomic operations are used
-the splitted members are never accessed. All other states are not handled
-with atomic operations. If it is 'union tmigr_state' inside the
-tmigr_group, then I would need an atomic_t inside the union and the union
-gets more complex. I hope I was able to explain my point.
-
-> > +	u32			childmask;
-> > +	struct timerqueue_head	events;
-> > +	struct tmigr_event	groupevt;
-> > +	u64			next_expiry;
-> > +};
-> > +
-
-I come back to your other remarks in a separate mail.
-
-Thanks,
-
-	Anna-Maria
-
+?
