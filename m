@@ -2,91 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B708D6D6204
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2366D6261
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 15:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234940AbjDDNJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 09:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        id S235152AbjDDNKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 09:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234864AbjDDNJI (ORCPT
+        with ESMTP id S235056AbjDDNKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 09:09:08 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6A81BCB
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:09:07 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id B92A35C00DB;
-        Tue,  4 Apr 2023 09:09:06 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 04 Apr 2023 09:09:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1680613746; x=1680700146; bh=nl
-        9pzHexPc+/Ir4DWYQvrErqSdf967oQaLPF8tI3qQM=; b=NJyq4gYRb7LCvMM71W
-        7GCoOxhDiP45TcZcVXzkDWuiy0Jhqs3tf5o8Q7SvWZw1jEA+9M87DWxnSr2z+uZq
-        +Wu8v17ykpaVjb9YQlGv82togjkFbOZ2OCeegEtLuMiCm8SpzdKesrgqZ0goBrPk
-        38JzMotyT0XYfr25lsws6Szudbmj5CBdQSul2Qj/BXGd+j07MoT/J4mJJHsW4srW
-        2icxfAGXnH6OCBBUMDlWz0AuZBz3l+VxbGjXL4GTPx+E6MsnW1HyLmWscP1iiMEU
-        sP1IIs0qFLE6BKnDoRdfjChnmIu6fil1qatWQA1s/iLSmtQ3yGmXwLqt6WgzlzwS
-        sVLg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680613746; x=1680700146; bh=nl9pzHexPc+/I
-        r4DWYQvrErqSdf967oQaLPF8tI3qQM=; b=deVOPiPTnvCWdtyQLuX916lrdqv+U
-        Y4xwFKcWGGYkDUWFT5d4MDB/46zfENdw4mapptAhJXdbOepyD1Nc0TFmLHtDzt0n
-        INtPHgx/9OHMn0TisBdup2ZeTnvjSoQztvNpEllFGGI3GPOzwU4DDcmvkpks0sG5
-        nHgeL5hrcDrQ1Rz9rYitFdBGl6vn7kvU4So0ehr0eyuAc7EnnMJiDr5ScJzB5phl
-        00VeI1bD8Ur8mA1pAdconLbBDuairEgtxHxqy7ASs6i8RetBsvbYWHa2LOdKxzNb
-        HfFmMiUzcl3AIaOkIjOx7XtTzK4MeB3nYgv76UnrJ8A3058q5B3QS6ZAQ==
-X-ME-Sender: <xms:cSEsZD4uMYmC0Qk2T9zuoogXpIEmYUOyVrvI6AhF_-QS5CB6u6RdWQ>
-    <xme:cSEsZI6AmkbXiEG0I9EKEPR5biU2NiRWJz2YUH3ril-kZCX01hpE1OMajAPO3fZN1
-    ntcJ9dNjQZPcC4yRQI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledgiedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:cSEsZKeokH2HHPel3UnjXX6ojLAznw9Tg33GsSjx03V-JltSL0oY6Q>
-    <xmx:cSEsZEJF9f6_i9808R14QCIX6hhPaJ3Y3KkUsMYPgrDCYFoSbPQmng>
-    <xmx:cSEsZHKNwzvcjY0S2H_g_GDFmk33MGS9CISfHc0uGNqkZPJtvwOjYw>
-    <xmx:ciEsZNhSP6WE9SRxZNrtT1KjnIcL6Sm7coVG3wRLHwu3n07g-7Guzw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id BD0FCB60092; Tue,  4 Apr 2023 09:09:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
-Mime-Version: 1.0
-Message-Id: <5a85b6db-f4c9-4cff-ab25-73fed75d6983@app.fastmail.com>
-In-Reply-To: <87cc8d92-0345-bc4b-60e8-1ca016691371@kernel.org>
-References: <20230404084259.13752-1-rogerq@kernel.org>
- <283f8f4c-9f8d-48b1-b161-3b712104583b@app.fastmail.com>
- <0ffa9690-9709-669c-b44d-dbb93446ec95@linaro.org>
- <076b5775-18eb-05b3-b803-c54420b3e5fe@kernel.org>
- <08b12571-5ca6-4e3d-8c56-5fc48827d17a@app.fastmail.com>
- <87cc8d92-0345-bc4b-60e8-1ca016691371@kernel.org>
-Date:   Tue, 04 Apr 2023 15:08:45 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Roger Quadros" <rogerq@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Russell King" <linux@armlinux.org.uk>
-Cc:     "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>,
-        "Nishanth Menon" <nm@ti.com>, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "Vignesh Raghavendra" <vigneshr@ti.com>
-Subject: Re: [PATCH] ARM: multi_v7_defconfig: make USB_DWC3 as a module instead of
- built-in
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        Tue, 4 Apr 2023 09:10:36 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0D340F7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 06:10:22 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id r11so130424764edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 06:10:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680613820;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LCbi5B1HqIhC33XdpdRXB89NTH08leNjzltupqeTFa8=;
+        b=NuTPpo7iQJYwklBLaCifkBcTMQwkPtTF4VhbOQKam//FucHsVfohj8ZwhF4n01oY1i
+         /5BHjMgL1Tie1A/hlZKY1rmfgRbuu2HHdaF47RduTpVEllJ1YeTxH2fmVYHJMGfVZwWr
+         0KtBE4RzQB64Nps9XPo1LW+QLUtNVJTJ8CfAwmB2JwD7+GKtZtL4g3RjUlNfQrsaFs/A
+         fSbiQWeOLnOPlSqP5BTthuD9RICxEClE3G7R0wivHzy6XrDvxU7c+ZjKaI2noPTAAecu
+         SC+m5MjjBiKkK5JsO5IWUr67onNs+d8bKE1dEu/lfrdwL0qVRIZjaYtKSxVRlnnusWrV
+         pBng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680613820;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LCbi5B1HqIhC33XdpdRXB89NTH08leNjzltupqeTFa8=;
+        b=5qxKTJyQXhxmQ36WzzL8u7BYESv4l1xxKFudaEU5MX8bNaiwl/TE69VLTFId9CgzwE
+         pb2NJoNGeyfqe9HqgfQmD3k/Pl6oK+cqK9472u4oQ9Ci9ZaalooTTyofapBJRYh8XvbR
+         Uzv6Vzyz0zAt7qh0ntlgrxE4u+daoiSLBnA1YQB0BdOkt5fjkAUTJApWdBLFgB2+SNPR
+         BYzs5f9+EivNDRL7jnEg7xb9OLtRjgjdVJ869Na6PVitCUndZmxuGp6jAndD+J3dHVO/
+         uMZSqHxKS51bOSrmRKww29IOeuPLWCXb3gMSlqHANqQBBOJAhWjBoXBKPAJvT1oIyXEO
+         kY5Q==
+X-Gm-Message-State: AAQBX9caVf5txzed8xaEgjZmT+JMBNQ9A0braKiN+xQAutIIl2IT2+4I
+        GEw/6u/odUNw4kfHiQv3bQr+Ug==
+X-Google-Smtp-Source: AKy350bHeq/jvus80SWXZRKF8hKRZkMU1yUYoS6L4h9+HYXhFaR54exd9V9GVMLqOznQRJtFtlrYZQ==
+X-Received: by 2002:a17:906:3756:b0:8ad:51e9:cd57 with SMTP id e22-20020a170906375600b008ad51e9cd57mr2300286ejc.49.1680613820475;
+        Tue, 04 Apr 2023 06:10:20 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7467:56f4:40b7:cba8? ([2a02:810d:15c0:828:7467:56f4:40b7:cba8])
+        by smtp.gmail.com with ESMTPSA id le3-20020a170907170300b0093b8c0952e4sm5932699ejc.219.2023.04.04.06.10.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 06:10:20 -0700 (PDT)
+Message-ID: <7d5c4407-3198-c39a-2c30-fbaeb5c53b08@linaro.org>
+Date:   Tue, 4 Apr 2023 15:10:18 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: add max313xx RTCs
+Content-Language: en-US
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
+ <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,46 +80,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023, at 14:59, Roger Quadros wrote:
-> On 04/04/2023 15:14, Arnd Bergmann wrote:
->> On Tue, Apr 4, 2023, at 13:46, Roger Quadros wrote:
->> That seems really high, so I had a look at what's going on.
->
-> It was based on the configuration we are using at TI.
->
-> (as built-in)
->
-> $ size vmlinux
->    text	   data	    bss	    dec	    hex	filename
-> 14616949	5285870	 491776	20394595	1373263	vmlinux
-> $ ls -l vmlinux
-> -rwxrwxr-x 1 roger roger 120866544 Apr  4 15:54 vmlinux
->
-> (as module)
->
-> $ size vmlinux
->    text	   data	    bss	    dec	    hex	filename
-> 14550571	5258106	 491776	20300453	135c2a5	vmlinux
-> $ ls -l vmlinux
-> -rwxrwxr-x 1 roger roger 120324528 Apr  4 15:52 vmlinux
->
->
-> $ diff built-in-config module-config
-> 5547c5547
-> < CONFIG_USB_XHCI_PLATFORM=y
+On 03/04/2023 17:43, Ibrahim Tilki wrote:
+> Devicetree binding documentation for Analog Devices MAX313XX RTCs
+> 
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 > ---
->> CONFIG_USB_XHCI_PLATFORM=m
-> 5614c5614
-> < CONFIG_USB_DWC3=y
-> ---
->> CONFIG_USB_DWC3=m
+>  .../devicetree/bindings/rtc/adi,max313xx.yaml | 144 ++++++++++++++++++
+>  1 file changed, 144 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> new file mode 100644
+> index 000000000..0c17a395e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> @@ -0,0 +1,144 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2022 Analog Devices Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/adi,max313xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices MAX313XX series I2C RTCs
+> +
+> +maintainers:
+> +  - Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> +
+> +description: Analog Devices MAX313XX series I2C RTCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max31328
+> +      - adi,max31329
+> +      - adi,max31331
+> +      - adi,max31334
+> +      - adi,max31341
+> +      - adi,max31342
+> +      - adi,max31343
+> +
+> +  reg:
+> +    description: I2C address of the RTC
+> +    items:
+> +      - enum: [0x68, 0x69]
+> +
+> +  interrupts:
+> +    description: |
+> +      Alarm1 interrupt line of the RTC. Some of the RTCs have two interrupt
+> +      lines and alarm1 interrupt muxing depends on the clockin/clockout
+> +      configuration.
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    description: |
+> +      RTC can be used as a clock source through its clock output pin when
+> +      supplied.
 
-Ok, so the size difference here is only 94KB, presumably
-because have the non-TI variants as well as debugfs and/or
-gadget mode disabled. For the file size, my guess is that
-you have CONFIG_DEBUG_INFO enabled in your config, which
-drastically increases the size of the vmlinux file, but
-not the in-memory size, or the size of the stripped and
-compressed zImage.
+This part is correct, but your implementation is not. I don't think you
+can disable or enable interrupts, based on usage of clock. Either this
+is clock (gated or not) or interrupt, not both.
 
-      Arnd
+
+Best regards,
+Krzysztof
+
