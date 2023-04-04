@@ -2,104 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3006D5966
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AF76D595C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233886AbjDDHXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 03:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51726 "EHLO
+        id S233832AbjDDHWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233864AbjDDHXF (ORCPT
+        with ESMTP id S233664AbjDDHWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 03:23:05 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE8310E3;
-        Tue,  4 Apr 2023 00:23:03 -0700 (PDT)
-Received: from DESKTOP-7O4H7L3.localdomain ([10.12.183.64])
-        (user=lishuchang@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 3347LYuw012411-3347LYux012411
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Tue, 4 Apr 2023 15:21:34 +0800
-From:   lishuchang@hust.edu.cn
-To:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Shuchang Li <lishuchang@hust.edu.cn>,
-        James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] scsi: lpfc: fix ioremap issues in 'lpfc_sli4_pci_mem_setup'
-Date:   Tue,  4 Apr 2023 15:21:32 +0800
-Message-Id: <20230404072133.1022-1-lishuchang@hust.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 4 Apr 2023 03:22:02 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FFC10E3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 00:21:59 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b20so126682991edd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 00:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680592918;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kkOGx3GMkgo2fuHiMkHQxVBiCwFud00/oKdxH1oDBEc=;
+        b=O9f6zymkXyi78dz6MnZvNgpiLT6OqNN2IcSZBe55KTxR7DY4OBqLPSOdBntZ8GiKCg
+         b29KHZyiQRIgV50y5qkEhVDQ84NXO+qjgdnpaCG8T50xT1bXUsmGW9wu+T95KiP7zmic
+         xoK+fg9nnVCOeBL4/KWUTwALfGyr0voeLteEoQlDVnunpSHSbV1T3cwpYNAxIYP3FJCS
+         5VbXSrHRMESzEo2/576L8sk7BN4J2HeGgu6MU6xLe+J9Nmb4fu7/dLdnxd2dm/SD/WC5
+         c53piKeosyWxb3biPPlT+S1+XS2FOZTGHMFcfiO9NZ4t9ZSK6YTW9j17Iw1h4GNSjqgp
+         yHSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680592918;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kkOGx3GMkgo2fuHiMkHQxVBiCwFud00/oKdxH1oDBEc=;
+        b=vDmqd1yJxL7BVCYM5pKV4djnJzSaKw4H5LJSbqTIX2tagP7wyARn36CWffEICcShHV
+         vzTDicfcNhfIrwmGGAs6b44mpOZxmoSA17yzED2jg0TeJnZU1doI7cVgEgd7FQQXDgMT
+         KLNlDwtTDAwNChXe6sdnQ/cGSua+xHAA+cqYE58NarrxAEC6B/svNETOt3KOKSQCOHUS
+         gwH2nALfC8zggJu/fmkHK9vKmGSHtr7hec7Zhmd3UdS6c4PNY7m7VPNuqhRdI/gxdfTz
+         tkeBHT2eZqHAQGqfDHIqu/jWsszWQb9h5Z7lhlzSzEFDO9PuDOkSRm5WihuFq1UpHqwK
+         LGQA==
+X-Gm-Message-State: AAQBX9f8bTz8lJxrB6QKj47kgtTXt43e/Ja9Ghnfp4CiqhkaizXUZidl
+        FLbSHgg2J/4U4y3hg6WyRcL3sw==
+X-Google-Smtp-Source: AKy350apWFIq0ibEzi1DfVtXMxjGQ4ZHptStYJF0jd8bhwTpI2kqfvkHB0M7oc++tJ58JctJxwy/wg==
+X-Received: by 2002:aa7:c78a:0:b0:502:9d16:fcb2 with SMTP id n10-20020aa7c78a000000b005029d16fcb2mr1432594eds.22.1680592918017;
+        Tue, 04 Apr 2023 00:21:58 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:233a:5c18:b527:381e? ([2a02:810d:15c0:828:233a:5c18:b527:381e])
+        by smtp.gmail.com with ESMTPSA id cw23-20020a056402229700b005028e87068fsm4126624edb.73.2023.04.04.00.21.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 00:21:57 -0700 (PDT)
+Message-ID: <996b49ab-5e2e-76bc-efb1-38c6384871f6@linaro.org>
+Date:   Tue, 4 Apr 2023 09:21:56 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: lishuchang@hust.edu.cn
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: add max313xx RTCs
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
+        jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
+ <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
+ <dd6f0842-519f-1bc9-f7f5-459863dc3dcd@linaro.org>
+ <202304040710049c9cc01a@mail.local>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <202304040710049c9cc01a@mail.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shuchang Li <lishuchang@hust.edu.cn>
+On 04/04/2023 09:10, Alexandre Belloni wrote:
+>>
+>>> +      RTC can be used as a clock source through its clock output pin when
+>>> +      supplied.
+>>> +    const: 0
+>>> +
+>>> +  clocks:
+>>> +    description: |
+>>
+>> Do not need '|'.
+>>
+>>> +      RTC uses this clock for clock input when supplied. Clock has to provide
+>>> +      one of these four frequencies: 1Hz, 50Hz, 60Hz or 32.768kHz.
+>>> +    maxItems: 1
+>>> +
+>>> +  aux-voltage-chargeable:
+>>> +    enum: [0, 1, 2]
+>>> +    description: |
+>>> +      Enables trickle charger.
+>>> +      0: Charger is disabled (default)
+>>> +      1: Charger is enabled
+>>> +      2: Charger is enabled with a diode
+>>
+>> 2 is not an allowed value. I asked to drop this property. It is coming
+>> from rtc.yaml. I also do not understand "with a diode". So otherwise it
+>> is charging with, I don't know, FET?
+> 
+> No, what is not explained here (and maybe not unsterstood by the
+> submitter) is that the RTC has an extra diode so, 
 
-When if_type equals to zero and pci_resource_start(pdev, PCI_64BIT_BAR4)
-returns false, drbl_regs_memmap_p is not remapped.This passes a NULL
-pointer to iounmap(), which can trigger a WARN() on certain arches.
+Value of 2 is still not allowed and if the patch was tested, it would be
+clearly visible. Unfortunately patch was not tested...
 
-When if_type equals to six and pci_resource_start(pdev, PCI_64BIT_BAR4)
-returns true, drbl_regs_memmap_p may has been remapped and
-ctrl_regs_memmap_p is not remapped. This is a resource leak and passes
-a NULL pointer to iounmap().
+> charging will always
+> enable a diode, select a resistor and then have or not an extra diode.
+> Figure2 of the MAX31329 datasheet is great.
 
-To fix these issues, we need to add null checks before iounmap(), and
-change some goto lables.
+So the diode is in the max313xx? Then why enabling it is a property of
+DT? Either this should be inferred from compatible or is even a policy,
+not a DT property. Just because device has a register for something, is
+not an argument that "something" should be in DT.
 
-Fixes: 1351e69fc6db ("scsi: lpfc: Add push-to-adapter support to sli4")
-Signed-off-by: Shuchang Li <lishuchang@hust.edu.cn>
----
- drivers/scsi/lpfc/lpfc_init.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 4f7485958c49..ed75230b0209 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -12026,7 +12026,7 @@ lpfc_sli4_pci_mem_setup(struct lpfc_hba *phba)
- 				goto out_iounmap_all;
- 		} else {
- 			error = -ENOMEM;
--			goto out_iounmap_all;
-+			goto out_iounmap_ctrl;
- 		}
- 	}
- 
-@@ -12044,7 +12044,7 @@ lpfc_sli4_pci_mem_setup(struct lpfc_hba *phba)
- 			dev_err(&pdev->dev,
- 			   "ioremap failed for SLI4 HBA dpp registers.\n");
- 			error = -ENOMEM;
--			goto out_iounmap_ctrl;
-+			goto out_iounmap_all;
- 		}
- 		phba->pci_bar4_memmap_p = phba->sli4_hba.dpp_regs_memmap_p;
- 	}
-@@ -12069,9 +12069,11 @@ lpfc_sli4_pci_mem_setup(struct lpfc_hba *phba)
- 	return 0;
- 
- out_iounmap_all:
--	iounmap(phba->sli4_hba.drbl_regs_memmap_p);
-+	if (phba->sli4_hba.drbl_regs_memmap_p)
-+		iounmap(phba->sli4_hba.drbl_regs_memmap_p);
- out_iounmap_ctrl:
--	iounmap(phba->sli4_hba.ctrl_regs_memmap_p);
-+	if (phba->sli4_hba.ctrl_regs_memmap_p)
-+		iounmap(phba->sli4_hba.ctrl_regs_memmap_p);
- out_iounmap_conf:
- 	iounmap(phba->sli4_hba.conf_regs_memmap_p);
- 
--- 
-2.25.1
+Best regards,
+Krzysztof
 
