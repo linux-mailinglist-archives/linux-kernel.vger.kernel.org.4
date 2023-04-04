@@ -2,92 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00BD6D562D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 03:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A551B6D562F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 03:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbjDDBhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Apr 2023 21:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        id S232789AbjDDBjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Apr 2023 21:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjDDBhp (ORCPT
+        with ESMTP id S229687AbjDDBja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Apr 2023 21:37:45 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44FDB8;
-        Mon,  3 Apr 2023 18:37:43 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4E9E65C01BE;
-        Mon,  3 Apr 2023 21:37:41 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 03 Apr 2023 21:37:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1680572261; x=1680658661; bh=GQ
-        rl89O1RAwOi5BoeGN0zQm5w3SNwrUnoP1QapVDans=; b=Z/QqfEdMmmJs0ljPwO
-        u7xPN5DG1HwhElSf3kR9ewWFdEVSNVOMjljR3qZMjlL0zMdTo2meEEeFapiDRS/C
-        Q859oCSFUv77gWgj0BiE2TdfR2ABGh4JL2oSiwpu7Xb8TZdf3AN7ze1VulOIz0cv
-        gEDK9ymmuQXAE094cV6BBnIbANDso9P+LWxMm1YFMXsdSFCzi3RMgACW696EMQtV
-        zpcvJQo2yOw7gI/m4c6+7otm8e0DhZXLKioODJbxpVCiO63ONe1qnQo6DD5Ihs6j
-        bOPrLvrd2kFf6RdEJqQ03X9PJ+OAyHE7BRhtcXZ7KSr+/4L84LDOE6bSMuDOUEOL
-        oUOg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680572261; x=1680658661; bh=GQrl89O1RAwOi
-        5BoeGN0zQm5w3SNwrUnoP1QapVDans=; b=DYNxPFQEd2dHK5hFs2GRIQh3VTwnQ
-        2uSxRajzjH+iqoMetCdRxBELRp0lnlKNSRJH7eOrNYHFwtu90aOuSPkDHqEUd6BR
-        CtbyTWGxIX+oEQ1mAQMfXxr50MZ9XK6/EO56pVtMXo2VDqSgh8IZlFpQ+Ht6gL35
-        1yFRWmBdHKndipTVg3nnmIdGF/j8btKudP+pBK6dNsnGHQ2E16lpX8QDkiYNpDh7
-        PrUh92ZaCAsGdWs7EwtK8DPd9xznTi0n+u68CRx2h4bThEmKKFgCeSiCOvu9bHU7
-        4Mle4VpPn3NTe6eC5W5eXBTGJ5rZA8UbNigNT2uXkWdmdW8YOSNK3bbxw==
-X-ME-Sender: <xms:ZH8rZGb91I3MBWSDC8j6mfcsTd75kl5YOa1tDEMkmmJ0HXUL6SfALQ>
-    <xme:ZH8rZJakVxWa7sH0-oHOkOCMndiu7DOOO_Au9V3wUtXxGCMx_68zCr4oHYsiu87Ll
-    9XoT241EtnrArSnJao>
-X-ME-Received: <xmr:ZH8rZA8w2JmA-8WmIGUrCWgxeFyhs9qL67D3QSAAf8zKkzUe-VjNinEhaGO7KlGaVqSBnCZaZYiMjOcKW6V6Rn5UYcOdM1JKq1zy>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeikedgfeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheprfgvthgv
-    rhcujfhuthhtvghrvghruceophgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvg
-    htqeenucggtffrrghtthgvrhhnpeefgfejvefgudfhfeevudekueegtdeutdejhffhhfdv
-    keejhfehheefgfehteejffenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrgh
-    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehpvght
-    vghrrdhhuhhtthgvrhgvrhesfihhohdqthdrnhgvth
-X-ME-Proxy: <xmx:ZH8rZIpc8VAac85-Pk0xYRWvNvEkoizA-2hSyLexTyCn4Me8gWbL6Q>
-    <xmx:ZH8rZBonZIelrhHpvpK528rwxTCEBDHjfNkFPnX5_Syk8GhZwjPxvg>
-    <xmx:ZH8rZGSepLkFeRphgw1fKcc-IyzKQ_J3dP6cTP6I94Kc42hdQCC6tQ>
-    <xmx:ZX8rZC65VOuQkhuJxh1lV6bqplT4Vn9GwTAP4PUMe2RZYkMyMk--ng>
-Feedback-ID: i7ce144cd:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Apr 2023 21:37:35 -0400 (EDT)
-Date:   Tue, 4 Apr 2023 11:37:31 +1000
-From:   Peter Hutterer <peter.hutterer@who-t.net>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Candle Sun <candle.sun@unisoc.com>,
-        Jose Torreguitar <jtguitar@google.com>,
-        Roderick Colenbrander <roderick.colenbrander@sony.com>,
-        Silvan Jegen <s.jegen@gmail.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>,
-        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
-        Jason Gerecke <killertofu@gmail.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
-Subject: Re: [PATCH 00/11] selftests: hid: import the tests from hid-tools
-Message-ID: <20230404013731.GA38303@quokka>
-References: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
- <20230403162024.sespaq5iwbjan4xl@mail.corp.redhat.com>
+        Mon, 3 Apr 2023 21:39:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5534EB8
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 18:38:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680572321;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8FIZEq9E2w7U9M1Y7V5ZDCr+Z6XlIynNUoEqvuqDtMY=;
+        b=JIxCb6BPMqrB4szEVWGLgRUsqYhtMRQWe6EUT6NQMOnJkOUJ1x4nZEcUiI0eIZN0x11A4z
+        l5OjjhFJRH+R0cPesi3jqo/OpQqviKaHdIHZWMYtrMHhw9EiGnbuN7h6Wg4ktkcU/hbiLj
+        +x25+/WNAo56MYqVFyCwgV+f80u8d38=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-651-dWHb09yNMYGsrNf75-dZZw-1; Mon, 03 Apr 2023 21:38:40 -0400
+X-MC-Unique: dWHb09yNMYGsrNf75-dZZw-1
+Received: by mail-qv1-f69.google.com with SMTP id e1-20020a0cd641000000b005b47df84f6eso14050110qvj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Apr 2023 18:38:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680572320;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8FIZEq9E2w7U9M1Y7V5ZDCr+Z6XlIynNUoEqvuqDtMY=;
+        b=qm+1jRvqa9oojDlwGH80AFT1oiJi94Xprpsn0kNiH8mZzNABHAY7NVN/DHnHbZNit+
+         2EoetNx8tr0AhXF4wAVw3p9wIMuCvStgW1fUTNLTcZt4gnEEsV2N5BtWvNft3txZvWQg
+         JZGFk1yJc0ZWtw5D0Za+DgIS63G92jw/h5yyQIRJ/WbKxAZNAe6U5xl5qTr6bcOcPOXW
+         2xQHaj9DCLfv5BCJKSqYLRfaZyg4MtcWw0dit99cVsKOZPbKxBBAUFmRjGG5sW8scSvJ
+         SjHI6fcBBcv3Kr/dUNrWn8bKgA+qP3IxiUGmV+Vos4rB5nbTpUF4YbJpAsp2Lg03jSgb
+         VtOQ==
+X-Gm-Message-State: AAQBX9el7UnPS4GXaEVKQ72JyMwFT0gVXikwiE+UpObXUbd/+6xIW6D3
+        MGrO9ZFigO+c1iwLD5g0NmaPqvUyXyerPrmVUCb+wkkSoGqnENbDAn5V2T4gG4A2M3BxxLlSU72
+        kw5PqFc1qyElrn8bwthx7Z6Ix
+X-Received: by 2002:a05:6214:1cc2:b0:5a3:44a1:788d with SMTP id g2-20020a0562141cc200b005a344a1788dmr1391824qvd.29.1680572319791;
+        Mon, 03 Apr 2023 18:38:39 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YH1YAZKMJbzI7OrgDA5mb6wosGMJ8r7spqB43M2GMR7OluqQRsFKZTRBtZDPJDic0qUhHBFw==
+X-Received: by 2002:a05:6214:1cc2:b0:5a3:44a1:788d with SMTP id g2-20020a0562141cc200b005a344a1788dmr1391809qvd.29.1680572319550;
+        Mon, 03 Apr 2023 18:38:39 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id k5-20020a0cebc5000000b005dd8b9345d3sm3005993qvq.107.2023.04.03.18.38.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 18:38:39 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     jic23@kernel.org, lars@metafoo.de, angelo.dureghello@timesys.com
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] iio: dac: set varaiable max5522_channels storage-class-specifier to static
+Date:   Mon,  3 Apr 2023 21:38:28 -0400
+Message-Id: <20230404013828.1914523-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403162024.sespaq5iwbjan4xl@mail.corp.redhat.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,118 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 06:20:24PM +0200, Benjamin Tissoires wrote:
-> On Feb 17 2023, Benjamin Tissoires wrote:
-> > I have been running hid-tools for a while, but it was in its own
-> > separate repository for multiple reasons. And the past few weeks
-> > I finally managed to make the kernel tests in that repo in a
-> > state where we can merge them in the kernel tree directly:
-> > 
-> > - the tests run in ~2 to 3 minutes
-> > - the tests are way more reliable than previously
-> > - the tests are mostly self-contained now (to the exception
-> >   of the Sony ones)
-> > 
-> > To be able to run the tests we need to use the latest release
-> > of hid-tools, as this project still keeps the HID parsing logic
-> > and is capable of generating the HID events.
-> > 
-> > The series also ensures we can run the tests with vmtest.sh,
-> > allowing for a quick development and test in the tree itself.
-> > 
-> > This should allow us to require tests to be added to a series
-> > when we see fit and keep them alive properly instead of having
-> > to deal with 2 repositories.
-> > 
-> > In Cc are all of the people who participated in the elaboration
-> > of those tests, so please send back a signed-off-by for each
-> > commit you are part of.
-> > 
-> > This series applies on top of the for-6.3/hid-bpf branch, which
-> > is the one that added the tools/testing/selftests/hid directory.
-> > Given that this is unlikely this series will make the cut for
-> > 6.3, we might just consider this series to be based on top of
-> > the future 6.3-rc1.
-> > 
-> > Cheers,
-> > Benjamin
-> > 
-> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > ---
-> 
-> Jiri, do you mind if I push that code in the hid tree with the following
-> changes:
-> - Peter privately gave me his signed-off-by
+smatch reports
+drivers/iio/dac/max5522.c:55:28: warning: symbol
+  'max5522_channels' was not declared. Should it be static?
 
-Apologies, this fell off my list after the initial ack in a meeting with
-Benjamin. This time publicly:
-  Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
-for the relevant commits.
+This variable is only used in one file so it should be static.
 
-Cheers,
-  Peter
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/iio/dac/max5522.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/iio/dac/max5522.c b/drivers/iio/dac/max5522.c
+index 00ba4e98fb9c..05034a306597 100644
+--- a/drivers/iio/dac/max5522.c
++++ b/drivers/iio/dac/max5522.c
+@@ -52,7 +52,7 @@ struct max5522_state {
+ 	} \
+ }
+ 
+-const struct iio_chan_spec max5522_channels[] = {
++static const struct iio_chan_spec max5522_channels[] = {
+ 	MAX5522_CHANNEL(0),
+ 	MAX5522_CHANNEL(1),
+ };
+-- 
+2.27.0
 
-> - I included changes from https://gitlab.freedesktop.org/libevdev/hid-tools/-/merge_requests/143
->   to fix the failing sony tests in v6.3
-> 
-> I am not a big fan of sending a v2 because the ML are not happy with the
-> amount of changes...
-> 
-> Cheers,
-> Benjamin
-> 
-> > Benjamin Tissoires (11):
-> >       selftests: hid: make vmtest rely on make
-> >       selftests: hid: import hid-tools hid-core tests
-> >       selftests: hid: import hid-tools hid-gamepad tests
-> >       selftests: hid: import hid-tools hid-keyboards tests
-> >       selftests: hid: import hid-tools hid-mouse tests
-> >       selftests: hid: import hid-tools hid-multitouch and hid-tablets tests
-> >       selftests: hid: import hid-tools wacom tests
-> >       selftests: hid: import hid-tools hid-apple tests
-> >       selftests: hid: import hid-tools hid-ite tests
-> >       selftests: hid: import hid-tools hid-sony and hid-playstation tests
-> >       selftests: hid: import hid-tools usb-crash tests
-> > 
-> >  tools/testing/selftests/hid/Makefile               |   12 +
-> >  tools/testing/selftests/hid/config                 |   11 +
-> >  tools/testing/selftests/hid/hid-apple.sh           |    7 +
-> >  tools/testing/selftests/hid/hid-core.sh            |    7 +
-> >  tools/testing/selftests/hid/hid-gamepad.sh         |    7 +
-> >  tools/testing/selftests/hid/hid-ite.sh             |    7 +
-> >  tools/testing/selftests/hid/hid-keyboard.sh        |    7 +
-> >  tools/testing/selftests/hid/hid-mouse.sh           |    7 +
-> >  tools/testing/selftests/hid/hid-multitouch.sh      |    7 +
-> >  tools/testing/selftests/hid/hid-sony.sh            |    7 +
-> >  tools/testing/selftests/hid/hid-tablet.sh          |    7 +
-> >  tools/testing/selftests/hid/hid-usb_crash.sh       |    7 +
-> >  tools/testing/selftests/hid/hid-wacom.sh           |    7 +
-> >  tools/testing/selftests/hid/run-hid-tools-tests.sh |   28 +
-> >  tools/testing/selftests/hid/settings               |    3 +
-> >  tools/testing/selftests/hid/tests/__init__.py      |    2 +
-> >  tools/testing/selftests/hid/tests/base.py          |  345 ++++
-> >  tools/testing/selftests/hid/tests/conftest.py      |   81 +
-> >  .../selftests/hid/tests/descriptors_wacom.py       | 1360 +++++++++++++
-> >  .../selftests/hid/tests/test_apple_keyboard.py     |  440 +++++
-> >  tools/testing/selftests/hid/tests/test_gamepad.py  |  209 ++
-> >  tools/testing/selftests/hid/tests/test_hid_core.py |  154 ++
-> >  .../selftests/hid/tests/test_ite_keyboard.py       |  166 ++
-> >  tools/testing/selftests/hid/tests/test_keyboard.py |  485 +++++
-> >  tools/testing/selftests/hid/tests/test_mouse.py    |  977 +++++++++
-> >  .../testing/selftests/hid/tests/test_multitouch.py | 2088 ++++++++++++++++++++
-> >  tools/testing/selftests/hid/tests/test_sony.py     |  282 +++
-> >  tools/testing/selftests/hid/tests/test_tablet.py   |  872 ++++++++
-> >  .../testing/selftests/hid/tests/test_usb_crash.py  |  103 +
-> >  .../selftests/hid/tests/test_wacom_generic.py      |  844 ++++++++
-> >  tools/testing/selftests/hid/vmtest.sh              |   25 +-
-> >  31 files changed, 8554 insertions(+), 10 deletions(-)
-> > ---
-> > base-commit: 2f7f4efb9411770b4ad99eb314d6418e980248b4
-> > change-id: 20230217-import-hid-tools-tests-dc0cd4f3c8a8
-> > 
-> > Best regards,
-> > -- 
-> > Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > 
-> 
