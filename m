@@ -2,71 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797476D5C40
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BF06D5C44
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 11:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbjDDJor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 05:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S233995AbjDDJp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 05:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234340AbjDDJo3 (ORCPT
+        with ESMTP id S230235AbjDDJpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 05:44:29 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58213C1E
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 02:43:56 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id m6-20020a05600c3b0600b003ee6e324b19so19665832wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 02:43:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680601428;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sfzrHqvHyLsWAPDz54joGKpO7tlrlcYlQl14281oUfc=;
-        b=kt6hKh2ZqwsC6EdtCzx3k/PeDcnjRiBhD5XFex3ZkLIMrbbKYK4Nhlec4dI3jW42Fo
-         +tjIFxb/rSXWPxbJmC8Q92QAPNJxFG/D8qzagCYjtRK3Phd6sktRA/2tYIGQ9wbnPb/i
-         cm49Vu7ptAaSIL41+rGvFxkY6VAw/1xVQggZdVKhIJurg1JoY/pzl0eFoya6v56FrJlG
-         0CFJMypiciBcGJ3Yl4e93SSxMNngkfjohOJ21fMipS6fLeyQ0WE/nTyzEoRyAyq+4S4W
-         DuNK20eUuh5gHAinueYKiM6jsJBhXmO9QJoODwBodAzOLXpMl9GI1Pt/XkRH8dIa9rLr
-         ogzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680601428;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sfzrHqvHyLsWAPDz54joGKpO7tlrlcYlQl14281oUfc=;
-        b=r+DrdxuwjTScpBIBelxBMGdiv1bVEdZiWI5wSH0/wBtTPeabfh8SKgf1FxEdgI0auZ
-         7SJ7jSvfSzxFSBA9UCUBDDWMpC3e+kl5ST25XNnhaW9t7p6JEVkSUJ1QGA4KkwE+YFcw
-         QhQ0d/3Q1DaFl9923v9Zd6s8BrQ2ipUXimTXqpj+vnoWDTc8js4VvVQX7WSxe1ag1RpU
-         3GTwU0k4/eMfKsfj972r71sZk8eK3BdkULM3C1V+dO5eJNyL0MndTx5ZBhHNTxfPY9rp
-         SRcO7UikafIf0gcFdOYQpmIGXNFAuVUZ6y0aJtGGVg6m4AX/DblIzgmTv5kO09YzX4db
-         Qnxw==
-X-Gm-Message-State: AAQBX9c+NnQSzQyJ0YdWjb9F94f32YPJcnR7E7RyLRhcru7E5zDLFq62
-        cTHvraxI1Q5WnQZs5FAyx6ajyCox/FoIXZb9RyYLUg==
-X-Google-Smtp-Source: AKy350Z1tJnnTPViJm2Vx27jvJEU/2RWZZbOBSkvq/1whW9j1cgHC1V6qAqRs6vYy5sUFAvkin6P5OpplLMG/vJF7Fk=
-X-Received: by 2002:a05:600c:201:b0:3ed:1f9f:41d5 with SMTP id
- 1-20020a05600c020100b003ed1f9f41d5mr581365wmi.0.1680601427875; Tue, 04 Apr
- 2023 02:43:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <ZAdMB+eGT3TQEo7y@xpf.sh.intel.com> <ZAdVvximUvRXcGZZ@xpf.sh.intel.com>
- <ZCvusEIauvO8BLM5@xpf.sh.intel.com>
-In-Reply-To: <ZCvusEIauvO8BLM5@xpf.sh.intel.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 4 Apr 2023 11:43:36 +0200
-Message-ID: <CANn89iJjqTyev28kzEwBjoNafn_4Ku3ZijJxQ_+Tc93TaG3D=g@mail.gmail.com>
-Subject: Re: [Syzkaller & bisect] There is WARNING: refcount bug in
- sock_map_free in v6.3-rc1
-To:     Pengfei Xu <pengfei.xu@intel.com>
-Cc:     linux-kernel@vger.kernel.org, ast@kernel.org,
-        john.fastabend@gmail.com, heng.su@intel.com, lkp@intel.com,
-        linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yi1.lai@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        Tue, 4 Apr 2023 05:45:53 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE43B2D51;
+        Tue,  4 Apr 2023 02:45:37 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3345U3wu019939;
+        Tue, 4 Apr 2023 09:44:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=cdAMDMFLcupSroYCFsLTabB4tFiVlD0GTOdgv18U0AA=;
+ b=Na30ydGLtmWetacXYUImr8M7JTlUCAFOylp0zJf4Kyd/tJNibPJ9HNxvsbY5YrbPUnt+
+ tSeMVrD4Jc/UaWSoVH/Aai0WjIPsHjZioroACrgQiDjBg8VE/Ypd7XRtxiwhvs5EJkMZ
+ +kcwKQiwy/1wZKv4wIby6e3Jm8R6mPN9c0mFI6kVwBbh0YZIyU7uaGG71H5KAywxNZ1p
+ mWu98vvLcF71JpXd9z8Nn+hQPv6xb+OnKXJSNR8B7VTpaeWwLBUzEYtmx6n3dwFn41FV
+ LNtil5gb8Wh4TjUx60rchLGiwsdW+fj4ZYVAQy34eDAKLoefzkCnHxjsp1MtsewVXF73 LQ== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pr4jm9nuy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Apr 2023 09:44:28 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3349iLko029614;
+        Tue, 4 Apr 2023 09:44:21 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3ppdpkjnuy-1;
+        Tue, 04 Apr 2023 09:44:21 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3349iLYi029607;
+        Tue, 4 Apr 2023 09:44:21 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vpernami-hyd.qualcomm.com [10.213.107.240])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3349iKdN029605;
+        Tue, 04 Apr 2023 09:44:21 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 2370923)
+        id 34B2939CE; Tue,  4 Apr 2023 15:14:20 +0530 (+0530)
+From:   Vivek Pernamitta <quic_vpernami@quicinc.com>
+To:     mhi@lists.linux.dev
+Cc:     quic_qianyu@quicinc.com, manivannan.sadhasivam@linaro.org,
+        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
+        quic_skananth@quicinc.com,
+        Vivek Pernamitta <quic_vpernami@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Hemant Kumar <hemantk@codeaurora.org>,
+        Bhaumik Bhatt <bbhatt@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org (open list:MHI BUS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH V6] bus: mhi: host: Avoid ringing EV DB if there is no elements to process
+Date:   Tue,  4 Apr 2023 15:14:16 +0530
+Message-Id: <1680601458-9105-1-git-send-email-quic_vpernami@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3gDYPN6RF6hlM7Gy9l_1ZRh1xvylnQSw
+X-Proofpoint-GUID: 3gDYPN6RF6hlM7Gy9l_1ZRh1xvylnQSw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-04_02,2023-04-03_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 lowpriorityscore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=832 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304040090
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,76 +84,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 11:31=E2=80=AFAM Pengfei Xu <pengfei.xu@intel.com> w=
-rote:
->
-> ++ GPIO and kself-test mailing list.
->
-> Hi kernel experts,
->
-> It's a soft remind.
->
-> My colleague Lai Yi found that similar "refcount_t: underflow; use-after-=
-free"
-> issue still existed in v6.3-rc5 kernel on x86 platforms.
->
-> We could reproduce issue from kself-test: gpio-mockup.sh easily:
-> kernel/tools/testing/selftests/gpio/gpio-mockup.sh:
->
-> "
-> [ 5781.338917] -----------[ cut here ]-----------
-> [ 5781.344192] refcount_t: underflow; use-after-free.
-> [ 5781.349666] WARNING: CPU: 250 PID: 82496 at lib/refcount.c:25 refcount=
-_warn_saturate+0xbe/0x110
-> [ 5781.359550] Modules linked in: gpio_mockup isst_if_mmio isst_if_mbox_p=
-ci intel_th_sth stm_core intel_th_pti intel_th_pci intel_th_gth pmt_telemet=
-ry pmt_class intel_vsec intel_rapl_msr intel_rapl_common nfsv3 rpcsec_gss_k=
-rb5 auth_rpcgss nfsv4 nfs lockd grace bridge stp llc sunrpc intel_uncore_fr=
-equency intel_uncore_frequency_common i10nm_edac nfit x86_pkg_temp_thermal =
-intel_powerclamp coretemp iTCO_wdt ofpart kvm_intel intel_pmc_bxt iTCO_vend=
-or_support spi_nor mtd intel_sdsi kvm spdm irqbypass dax_hmem joydev asn1_e=
-ncoder snd_pcm mei_me i2c_i801 spi_intel_pci isst_if_common idxd snd_timer =
-intel_th i2c_smbus spi_intel mei i2c_ismt ipmi_ssif cxl_acpi ipmi_si cxl_co=
-re acpi_power_meter crc32c_intel i40e igb dca igc pinctrl_emmitsburg pinctr=
-l_intel pwm_lpss fuse [last unloaded: isst_if_mmio]
-> [ 5781.438080] CPU: 250 PID: 82496 Comm: modprobe Not tainted 6.3.0-rc5 #=
-1
-> [ 5781.449711] Hardware name: Intel Corporation, BIOS IFWI 03/12/2023
-> [ 5781.461615] RIP: 0010:refcount_warn_saturate+0xbe/0x110
-> [ 5781.467585] Code: 01 01 e8 75 56 8e ff 0f 0b c3 cc cc cc cc 80 3d 4c 6=
-7 ac 01 00 75 85 48 c7 c7 b0 31 cd a9 c6 05 3c 67 ac 01 01 e8 52 56 8e ff <=
-0f> 0b c3 cc cc cc cc 80 3d 27 67 ac 01 00 0f 85 5e ff ff ff 48 c7
-> [ 5781.488761] RSP: 0018:ff45a7f44d39feb0 EFLAGS: 00010286
-> [ 5781.494745] RAX: 0000000000000000 RBX: ffffffffc0b36540 RCX: 000000000=
-0000000
-> [ 5781.502871] RDX: 0000000000000002 RSI: ffffffffa9c065c8 RDI: 00000000f=
-fffffff
-> [ 5781.510984] RBP: ff31c1afa78cb800 R08: 0000000000000001 R09: 000000000=
-0000003
-> [ 5781.519100] R10: ff31c1b6fc000000 R11: ff31c1b6fc000000 R12: ff31c1afa=
-78c4f40
-> [ 5781.527215] R13: 0000000000000000 R14: 0000000000000000 R15: 000000000=
-0000000
-> [ 5781.535337] FS: 00007f9bc705a740(0000) GS:ff31c1b700280000(0000) knlGS=
-:0000000000000000
-> [ 5781.544529] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 5781.551063] CR2: 00007f9bc5e50dc0 CR3: 000000093b36c003 CR4: 000000000=
-0f71ee0
-> [ 5781.559180] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000000000=
-0000000
-> [ 5781.567307] DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 000000000=
-0000400
-> [ 5781.575413] PKRU: 55555554
-> [ 5781.578551] Call Trace:
-> [ 5781.581394] <TASK>
-> [ 5781.583868] gpio_mockup_exit+0x33/0x420 [gpio_mockup]
-> [ 5781.589756] __do_sys_delete_module.constprop.0+0x180/0x270
-> [ 5781.596112] ? syscall_trace_enter.constprop.0+0x17f/0x1b0
-> [ 5781.602354] do_syscall_64+0x43/0x90
+currently mhi_process_data_event_ring()/mhi_process_ctrl_ev_ring()
+will ring DB even if there no ring elements to process.
+This could cause doorbell event to be processed by MHI device
+to check for any ring elements even it is none.
+So ring event DB only if any event ring elements are processed.
 
-I hear you but this trace has nothing to do with the bpf/sockmap commit ?
+Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
+Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+changes since v6:
+	updating the commit text.
+changes since v5:
+	updating the commit text.
+changes since v4:
+	updating the commit text with more information.
+changes since v3:
+	- Updating commit text for multiple versions of patches.
+changes since v2:
+	- Updated comments in code.
+changes since v1:
+	- Add an check to avoid ringing EV DB in mhi_process_ctrl_ev_ring().
+---
+ drivers/bus/mhi/host/main.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-My change looks correct, so your bisection might simply trigger because
-of a wider window for another bug to surface.
+diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
+index df0fbfe..1bbdb75 100644
+--- a/drivers/bus/mhi/host/main.c
++++ b/drivers/bus/mhi/host/main.c
+@@ -961,7 +961,9 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
+ 	}
+ 
+ 	read_lock_bh(&mhi_cntrl->pm_lock);
+-	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
++
++	/* Ring EV DB only if there is any pending element to process */
++	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
+ 		mhi_ring_er_db(mhi_event);
+ 	read_unlock_bh(&mhi_cntrl->pm_lock);
+ 
+@@ -1031,7 +1033,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
+ 		count++;
+ 	}
+ 	read_lock_bh(&mhi_cntrl->pm_lock);
+-	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
++
++	/* Ring EV DB only if there is any pending element to process */
++	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
+ 		mhi_ring_er_db(mhi_event);
+ 	read_unlock_bh(&mhi_cntrl->pm_lock);
+ 
+-- 
+2.7.4
 
-John, do you have an idea of what is going on here ?
