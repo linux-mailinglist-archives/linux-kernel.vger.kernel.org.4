@@ -2,52 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82146D69B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E2F6D69BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 19:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjDDRAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 13:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S235509AbjDDRCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 13:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235713AbjDDRAR (ORCPT
+        with ESMTP id S229713AbjDDRCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:00:17 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82602D1;
-        Tue,  4 Apr 2023 10:00:16 -0700 (PDT)
-Received: from [192.168.0.5] (unknown [71.212.161.12])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D7FD0210DD99;
-        Tue,  4 Apr 2023 10:00:15 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D7FD0210DD99
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1680627616;
-        bh=eekB3bYoQqC3IJ2D872oRGGQeEcgPYH1G+tXq6FWN2A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YiOICRBkseLaRSK7TUNqQ3yPBKOdljXbZ7yV6NAxoxVfjIQCj+2tXmsKJfwu3IdVm
-         1t9Wrg4ZUWgjCSBOwaYFCgWNCg/8PIs+KLf6LzqKOEftMR1tXfA6Cmrz15ZiTYO+bQ
-         vtH5IFH06p9aMbbPlxhyxxeVNbTTLbPZ0LkBVVmI=
-Message-ID: <2543a6aa-adc0-b471-6281-38130b4d6a08@linux.microsoft.com>
-Date:   Tue, 4 Apr 2023 10:00:15 -0700
+        Tue, 4 Apr 2023 13:02:06 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06763D1
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 10:02:02 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id p203so39471525ybb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 10:02:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1680627721;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EZxuHLFtNW6DOyg0Up2V+fzvewo/xPE26/VxJVS43KM=;
+        b=pgXOVRk9JdN65LKkNabkbTgzcBobSkNY05vjQSWL2ErDYSW2u6yUUWyhVR4+r2GJYt
+         Rf4AXFDHOXCQSthx35gkOeGIBo1tbYTlBSlk4MAF6EFssBpLhT+65wJ3UG2dgAv8tT2l
+         Uc6L3Z3flUUKu6E2pXFBh/K2Xsr7UnuH1oXJc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680627721;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EZxuHLFtNW6DOyg0Up2V+fzvewo/xPE26/VxJVS43KM=;
+        b=aqJqJqG9VlNmB3tgS0bQJK8+rBa8GmSfBNyrYpzXqRRkg5i7htv7imivsIjmPQ4bWR
+         9lpczf/8DOtuDGT8XRzs2x4ZBug7ITzubX4JNT3gHoech/t7uTZLt1mdZ4AWMEat0upE
+         mGS8j7XXfXmwtEurqbfrPM7yXgZ4mVPUxxQiIB0S/Vi4A9Vu5ZBJiByJBjMdA9J1lF0x
+         Gz3N7cKmoHiyg4RNb0xF57Ft0fbsjU3ulZHoqL2e1mawyk3k+uZ+W+LEdhe8rwCGn8cs
+         23fWUUdUkZBDWSPuFG3MYZvAk6GdETlAHg7KJ35R3eFeB4k6zQmnB0LvRuYyEPd7XqDg
+         GlpA==
+X-Gm-Message-State: AAQBX9dRVxQPM3A5/0O3WnzXjp58MPUR/O6ZtlAGdBNiE3U2ygSo9CTn
+        Wze6ca7VkQ7LQqdCaifyTHI4EnCdx2rziJQnFaVw8w==
+X-Google-Smtp-Source: AKy350Z7TmeWoGKs4uFwycO48nTq5+V4hfheLwSgeAH2M5abZ8O02ny5Sy+MxzKC+4uu8XORDbRs7SbiinLtq9cYgD0=
+X-Received: by 2002:a25:d984:0:b0:b69:fab9:de39 with SMTP id
+ q126-20020a25d984000000b00b69fab9de39mr2006909ybg.2.1680627721079; Tue, 04
+ Apr 2023 10:02:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] PCI: hv: Use nested hypercall for retargeting interrupts
-Content-Language: en-US
-To:     Jinank Jain <jinankjain@linux.microsoft.com>,
-        jinankjain@microsoft.com, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com
-Cc:     linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230404113546.856813-1-jinankjain@linux.microsoft.com>
-From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <20230404113546.856813-1-jinankjain@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <f1b6cd5f-f0b7-4748-abd5-0dcfef0ce126@paulmck-laptop>
+ <20230404135741.GB471948@google.com> <f2ae6531-1443-47e0-8897-0a47ca61ffec@paulmck-laptop>
+In-Reply-To: <f2ae6531-1443-47e0-8897-0a47ca61ffec@paulmck-laptop>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 4 Apr 2023 13:01:50 -0400
+Message-ID: <CAEXW_YSSSFrRpb8bM0=ebBkJHQdFGuEWRAUqGesdonk9bNohTg@mail.gmail.com>
+Subject: Re: [PATCH rcu 0/20] Further shrink srcu_struct to promote cache locality
+To:     paulmck@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org, hch@lst.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,36 +64,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+[..]
+> > The "improperly set" thingies are perhaps Kconfig on ARM64 setting some KVM
+> > options slightly differently. I have seen that before as well on this board.
+>
+> Agreed, and one of the things on the long list is to allow arch-specific
+> settings for those options.
+>
+> The CONFIG_SMP warnings are interesting, though.  Does arm64 disallow
+> !SMP builds?  ;-)
 
-On 4/4/2023 4:35 AM, Jinank Jain wrote:
-> In case of nested MSHV, retargeting interrupt hypercall should be sent
-> to L0 hypervisor instead of L1 hypervisor.
-> 
-> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
-> ---
->  drivers/pci/controller/pci-hyperv.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> index f33370b75628..2123f632ecf7 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -704,8 +704,14 @@ static void hv_arch_irq_unmask(struct irq_data *data)
->  		}
->  	}
->  
-> -	res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT | (var_size << 17),
-> -			      params, NULL);
-> +	if (hv_nested)
-> +		res = hv_do_nested_hypercall(HVCALL_RETARGET_INTERRUPT |
-> +					     (var_size << 17),
-> +					     params, NULL);
-> +	else
-> +		res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT |
-> +				      (var_size << 17),
-> +				      params, NULL);
->  
->  exit_unlock:
->  	spin_unlock_irqrestore(&hbus->retarget_msi_interrupt_lock, flags);
+Yes, it looks like it. As per arch/arm64/Kconfig, CONFIG_SMP is always
+'y' and cannot be set.
 
+config SMP
+        def_bool y
+
+Thanks.
