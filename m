@@ -2,110 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7706D5FB7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B8E6D5FBD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234428AbjDDL6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
+        id S234498AbjDDL7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 07:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233431AbjDDL6Q (ORCPT
+        with ESMTP id S234438AbjDDL7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:58:16 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E52B4;
-        Tue,  4 Apr 2023 04:58:14 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id w9so129538213edc.3;
-        Tue, 04 Apr 2023 04:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680609493;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2O5BT4d+Plee9uK16XwjOXySxN/SdqX/u56QBebNlEY=;
-        b=kCKuIal+F86YF4Q0qqMvmxV3OWyYbc2kq56MxP+75vnMxnXUHNCy8KXKlJ3969VpN4
-         7MitUr1ey78Zv13m56YsJOPEMQ7ehKHDB94P40+EBOowPXmNgtDrg9nZizxx0iPDFfdS
-         /123rm3pNsb1eel+Fl26bZ28xxqEFw7eh0+uplbANgcISA+ymFoHN46G9N74covDO+iv
-         bRkaCWrhMNHMAQQxS14HJkYPfrWLtchoa6FNGx3xLVyqqwa427zaqJUWApylSKybgT5L
-         ZpTpfeUpzxHfXgDEWraRsZdeyvl0yiUr6V4BNDcRYN0LmmlrAV8mrjB6odNzGZAEYd3S
-         ss6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680609493;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2O5BT4d+Plee9uK16XwjOXySxN/SdqX/u56QBebNlEY=;
-        b=ED3WKExuy41NaxlrNvglGYZ9r/Lh98NWBlCe3wcxQiumVB6asRhe/CNzLyMcp8UEmB
-         tK6eayOxrBEg4jokYPed8qYZOoRKs6DBZTsKq2PMwFJIlhPAWyCc+EGJYDfcaKMtOlo1
-         8PyHx8b/8CMPh6/gnO2soXlk+zfeB/FapW1jC+DY1dE8UhJtiX7VrgO9IdmwwbjsD4gZ
-         kbcHgg5UbEDcZHVwGQDbPw+xLYosB5jgJ+IdkO3asjdXenZ4Kq+B2hAph/bT11bF4B7s
-         mxw08/cNQ/Qrnv5jWiaw/2+aG7NJaR7HG7lU9oEnIez+v+X1zjqAY2NYEAZwmRBAWbFq
-         FlaA==
-X-Gm-Message-State: AAQBX9fC293fuJQkq36czlt3bTTWe/jGFiVziWxryTfiFkoqEDIjrUFu
-        DFiXs9U/hc2vC4G5K7USvz8=
-X-Google-Smtp-Source: AKy350bL/JyzCjxrIEYfRxqTD6B6ddRnhA0JirPlEFAGicLWj04kosnTaWdcG/YDxwZIvyVG5AwFCA==
-X-Received: by 2002:a17:906:79c3:b0:922:78e2:7680 with SMTP id m3-20020a17090679c300b0092278e27680mr2033954ejo.52.1680609493258;
-        Tue, 04 Apr 2023 04:58:13 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id xe8-20020a170907318800b00947ce2a1cb0sm5178645ejb.73.2023.04.04.04.58.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 04:58:13 -0700 (PDT)
-Date:   Tue, 4 Apr 2023 14:58:10 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v1 4/7] net: dsa: microchip:
- ksz8_r_sta_mac_table(): Avoid using error code for empty entries
-Message-ID: <20230404115810.eznhi7jck7g2loje@skbuf>
-References: <20230404101842.1382986-1-o.rempel@pengutronix.de>
- <20230404101842.1382986-1-o.rempel@pengutronix.de>
- <20230404101842.1382986-5-o.rempel@pengutronix.de>
- <20230404101842.1382986-5-o.rempel@pengutronix.de>
+        Tue, 4 Apr 2023 07:59:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC48198C;
+        Tue,  4 Apr 2023 04:59:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680609542; x=1712145542;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yf84yJ47fRZZVKYSzUL/KnC/GlQL2L+iPq43dwG8FL8=;
+  b=zhnhJF33f3h2DGrOi/Xn+8esktAdDrNiyb4Ff9LN5jL+CbbeHMeD6z53
+   vL/hvQpTEb5uxl/yaiBqJybJwTUAaqIsn6SQNCI9AnONoPK3l1gBEkh/G
+   Av9hZD6bV/xJ4hJn4K7dzRwqN0huIf8+JNpDF9GZDwvhf/5gE8Dv5HqjM
+   0R7mXLkETUwoaWLMNFcByvGlKg5soPOSUQyIVB2/PK8sPp5jYdASsekR4
+   gM16fRp0Nz/FEgKu9OdBhojAagUARIZRuSVF9rwJUbOXoqFFjtSJn+mfK
+   brRy9mDl7NMH2y5CbUDut1C+azrBCBnSVvZM7ijnu8z2uKthsMGXg0EGm
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,317,1673938800"; 
+   d="asc'?scan'208";a="208769362"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Apr 2023 04:59:00 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 4 Apr 2023 04:58:57 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 4 Apr 2023 04:58:55 -0700
+Date:   Tue, 4 Apr 2023 12:58:41 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     Anup Patel <anup@brainfault.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <bjorn@kernel.org>
+Subject: Re: [PATCH v3 6/8] RISC-V: KVM: Add ONE_REG interface for AIA CSRs
+Message-ID: <20230404-5cfffb017198773dc3e81dab@wendy>
+References: <20230403093310.2271142-1-apatel@ventanamicro.com>
+ <20230403093310.2271142-7-apatel@ventanamicro.com>
+ <osrpjiywxtkgxb5i6mfvxzfrzrnjv75uqzvlu3fouo4mqsktgj@blcmyjt3twqg>
+ <CAAhSdy1JEQBiO55iCy97arO63VjGc+NicUvvwzTpK97W97LmJg@mail.gmail.com>
+ <ejt3x4p7xhxfvwiafnogfwdn5dzd4qyowlht22utnbvzefsbyh@7dch4mebwckm>
+ <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="5GJ1H1BOzV0sFIzx"
 Content-Disposition: inline
-In-Reply-To: <20230404101842.1382986-5-o.rempel@pengutronix.de>
- <20230404101842.1382986-5-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 12:18:39PM +0200, Oleksij Rempel wrote:
-> Prepare for the next patch by ensuring that ksz8_r_sta_mac_table() does
-> not use error codes for empty entries. This change will enable better
-> handling of read/write errors in the upcoming patch.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
+--5GJ1H1BOzV0sFIzx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+On Tue, Apr 04, 2023 at 01:52:43PM +0200, Andrew Jones wrote:
+> On Mon, Apr 03, 2023 at 02:23:01PM +0200, Andrew Jones wrote:
 
-FWIW, it looks like for port_fdb_add(), you could skip the search in the
-static MAC table, as long as you just keep a reference to the last
-populated index, because the bridge won't allow, to my knowledge, adding
-the same MAC address twice (this has changed when we stopped allowing
-bridge bypass operations in commit b117e1e8a86d ("net: dsa: delete
-dsa_legacy_fdb_add and dsa_legacy_fdb_del")), and so, having space would
-mean that the last populated index is < dev->info->num_statics - 1.
+> > It's probably best if neither depend on each other, since they're
+> > independent, but otherwise the order doesn't matter. It'd be nice to ca=
+ll
+> > the order out in the cover letter to give patchwork a chance at automat=
+ic
+> > build testing, though. To call it out, I believe adding
+> >=20
+> > Based-on: 20230401112730.2105240-1-apatel@ventanamicro.com
+> >=20
+> > to the cover letter should work.
+>=20
+> I also just noticed that this based on "RISC-V: KVM: Add ONE_REG
+> interface to enable/disable SBI extensions"[1] and it needs to be
+> in order to pick up the KVM_REG_RISCV_SUBTYPE_MASK and
+> KVM_REG_RISCV_SUBTYPE_SHIFT defines. It'd be good to call that
+> patch out with Based-on.
+>=20
+> [1]: 20230331174542.2067560-2-apatel@ventanamicro.com
 
-This guarantee and optimization possibility is different from
-port_mdb_add(), because there, you might be asked to modify an existing
-entry, and so, you still need the search to find it. But still, you
-could limit the search for the remaining 3 operations - port_fdb_del(),
-port_mdb_add(), port_mdb_del() - just from 0 to that last populated
-entry, not to dev->info->num_statics, which should still accelerate the
-operations a bit.
+I've been waiting for a review on that for a while.. It's been 3
+weeks, so just gonna merge it and see what breaks!
+
+--5GJ1H1BOzV0sFIzx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCwQ8QAKCRB4tDGHoIJi
+0i39APsEperqNGR68oYf4cBWUJa5Q4Lux1nXIgwKhMES4jyVVAD/V7XKtbDF5fmm
+GjZMMXMQKhoi5KsqHDaTwOKJ7BrEjwg=
+=kicz
+-----END PGP SIGNATURE-----
+
+--5GJ1H1BOzV0sFIzx--
