@@ -2,76 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7B86D590D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 08:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E1B6D5910
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbjDDG7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 02:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
+        id S233652AbjDDHAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjDDG7T (ORCPT
+        with ESMTP id S229623AbjDDHAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 02:59:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F91103
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Apr 2023 23:58:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680591497;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fNPp2+ZNXETTv95TLGejYgL6e8HCBOjsfufr9g7el2c=;
-        b=cYogiLV22tUop7n1L96pclubXSRA2DFt4tX5iyQ/5Ig6XKPiNgPah3dMUzN4tedEu1Tyx3
-        bmH50nEvwAg4JrAWrsOSlZ0zwYzMTqXBxto572cxbZ+k1YgF960R3dm0OtdtTfwQ/nCkhI
-        ypSHW5b0823uKOm+WxMeG2LBMHP1Hbw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-175-kWcNkGAzP2eF7ajQflutQw-1; Tue, 04 Apr 2023 02:58:11 -0400
-X-MC-Unique: kWcNkGAzP2eF7ajQflutQw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 345C42999B32;
-        Tue,  4 Apr 2023 06:58:11 +0000 (UTC)
-Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3AF7E2027061;
-        Tue,  4 Apr 2023 06:58:09 +0000 (UTC)
-Date:   Tue, 4 Apr 2023 08:58:07 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Milian Wolff <milian.wolff@kdab.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: Re: [PATCH 0/1] perf report: append inlines to non-dwarf callchains
-Message-ID: <20230404065807.GB56712@samus.usersys.redhat.com>
-References: <20230316133557.868731-1-asavkov@redhat.com>
- <CAM9d7ciT7Wtmxt0_2ZVv4nbAb1KoeX_itTSAhz8B9T41-NeZYQ@mail.gmail.com>
- <ZBQZoyJc7mhUrL8n@samus.usersys.redhat.com>
- <CAM9d7ch9NjnaB5dB6fO7WKdwPd8M9DmNpdu4-V-8R+96ssxMvA@mail.gmail.com>
- <ZBtalEw0qKQFlVWR@kernel.org>
- <8f7077e8-bcce-a13f-48d3-92a3cb80b02a@intel.com>
- <20230331085224.GA688995@samus.usersys.redhat.com>
- <ZCs3WX4klUpe+aso@kernel.org>
- <CAM9d7cgOA97n10FPz0Bwjtmfon1En+CN2K7CYL3fQ6nrjBqF9Q@mail.gmail.com>
+        Tue, 4 Apr 2023 03:00:10 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E98E10CF;
+        Tue,  4 Apr 2023 00:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680591608; x=1712127608;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ld2eaAkEDBJ1cLPyuEHukq8mrhlyAnJBQuxn65rZM0s=;
+  b=pQZrdfZqv57+9W5Yui8+5aBifmY3RxuabM/uGmKn7SSvYHOY70VHjqWG
+   miMi5EqKJvHooM9dAijbr8EMSWcy9S42/0I0sC8zWPFSU4nJmaKGmrh38
+   lF+bg9he40UHofJJfVMOSkjvCG2YvNzH35aVnTzwYWgVe81CO4dwyyJZR
+   7XKOLYLJ5fl1ExtJHxlfdNuz56mlJQAbAqQNfK+ijX6r4FIddKHCGjJb2
+   jYwjh/hYhnGLcORMW1/9qlHUH00RYvtnW7ejtuT2+JhBpuj2Hk44xD0w8
+   aJK8g/nFMV4OvhmP7gyJVr4P7YrknQcm+A9j2z8gWqcy3EfR+9k6MyYf1
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,317,1673938800"; 
+   d="asc'?scan'208";a="207617530"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Apr 2023 00:00:07 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 4 Apr 2023 00:00:06 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 4 Apr 2023 00:00:03 -0700
+Date:   Tue, 4 Apr 2023 07:59:49 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Christoph Hellwig <hch@infradead.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        guoren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        <linux-riscv@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v7 1/6] riscv: mm: dma-noncoherent: Switch using function
+ pointers for cache management
+Message-ID: <20230404-5cd527745ab99524c5dde42c@wendy>
+References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <ZCu1tFrQCVe2sgNz@infradead.org>
+ <377d2841-18b5-4f61-b675-3a7c2e0db3b2@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZREIQbKvtp6hD4WG"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAM9d7cgOA97n10FPz0Bwjtmfon1En+CN2K7CYL3fQ6nrjBqF9Q@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <377d2841-18b5-4f61-b675-3a7c2e0db3b2@app.fastmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,88 +82,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 10:47:37PM -0700, Namhyung Kim wrote:
-> On Mon, Apr 3, 2023 at 1:30 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+--ZREIQbKvtp6hD4WG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Apr 04, 2023 at 08:50:16AM +0200, Arnd Bergmann wrote:
+> On Tue, Apr 4, 2023, at 07:29, Christoph Hellwig wrote:
+> > On Thu, Mar 30, 2023 at 09:42:12PM +0100, Prabhakar wrote:
+> >> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >>=20
+> >> Currently, selecting which CMOs to use on a given platform is done usi=
+ng
+> >> and ALTERNATIVE_X() macro. This was manageable when there were just two
+> >> CMO implementations, but now that there are more and more platforms co=
+ming
+> >> needing custom CMOs, the use of the ALTERNATIVE_X() macro is unmanagea=
+ble.
+> >>=20
+> >> To avoid such issues this patch switches to use of function pointers
+> >> instead of ALTERNATIVE_X() macro for cache management (the only drawba=
+ck
+> >> being performance over the previous approach).
+> >>=20
+> >> void (*clean_range)(unsigned long addr, unsigned long size);
+> >> void (*inv_range)(unsigned long addr, unsigned long size);
+> >> void (*flush_range)(unsigned long addr, unsigned long size);
+> >>=20
 > >
-> > Em Fri, Mar 31, 2023 at 10:52:24AM +0200, Artem Savkov escreveu:
-> > > On Thu, Mar 30, 2023 at 08:06:20AM +0300, Adrian Hunter wrote:
-> > > > On 22/03/23 21:44, Arnaldo Carvalho de Melo wrote:
-> > > > > Em Wed, Mar 22, 2023 at 11:18:49AM -0700, Namhyung Kim escreveu:
-> > > > >> On Fri, Mar 17, 2023 at 12:41 AM Artem Savkov <asavkov@redhat.com> wrote:
-> > > > >>>
-> > > > >>> On Thu, Mar 16, 2023 at 02:26:18PM -0700, Namhyung Kim wrote:
-> > > > >>>> Hello,
-> > > > >>>>
-> > > > >>>> On Thu, Mar 16, 2023 at 6:36 AM Artem Savkov <asavkov@redhat.com> wrote:
-> > > > >>>>>
-> > > > >>>>> In an email to Arnaldo Andrii Nakryiko suggested that perf can get
-> > > > >>>>> information about inlined functions from dwarf when available and then
-> > > > >>>>> add it to userspace stacktraces even in framepointer or lbr mode.
-> > > > >>>>> Looking closer at perf it turned out all required bits and pieces are
-> > > > >>>>> already there and inline information can be easily added to both
-> > > > >>>>> framepointer and lbr callchains by adding an append_inlines() call to
-> > > > >>>>> add_callchain_ip().
-> > > > >>>>
-> > > > >>>> Looks great!  Have you checked it with perf report -g callee ?
-> > > > >>>> I'm not sure the ordering of inlined functions is maintained
-> > > > >>>> properly.  Maybe you can use --no-children too to simplify
-> > > > >>>> the output.
-> > > > >>>
-> > > > >>> Thanks for the suggestion. I actually have another test program with
-> > > > >>> functions being numbered rather than (creatively) named, so it might be
-> > > > >>> easier to use it to figure out ordering. Here's the code:
-> > > > >>
-> > > > >> Yep, looks good.
-> > > > >>
-> > > > >> Acked-by: Namhyung Kim <namhyung@kernel.org>
-> > > > >
-> > > > > So, I'll apply this shorter patch instead, ok?
-> > > > >
-> > > > > - Arnaldo
-> > > > >
-> > > > > diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> > > > > index 803c9d1803dd26ef..abf6167f28217fe6 100644
-> > > > > --- a/tools/perf/util/machine.c
-> > > > > +++ b/tools/perf/util/machine.c
-> > > > > @@ -44,6 +44,7 @@
-> > > > >  #include <linux/zalloc.h>
-> > > > >
-> > > > >  static void __machine__remove_thread(struct machine *machine, struct thread *th, bool lock);
-> > > > > +static int append_inlines(struct callchain_cursor *cursor, struct map_symbol *ms, u64 ip);
-> > > > >
-> > > > >  static struct dso *machine__kernel_dso(struct machine *machine)
-> > > > >  {
-> > > > > @@ -2322,6 +2323,10 @@ static int add_callchain_ip(struct thread *thread,
-> > > > >   ms.maps = al.maps;
-> > > > >   ms.map = al.map;
-> > > > >   ms.sym = al.sym;
-> > > > > +
-> > > > > + if (append_inlines(cursor, &ms, ip) == 0)
-> > > > > +         return 0;
-> > > > > +
-> > > > >   srcline = callchain_srcline(&ms, al.addr);
-> > > > >   return callchain_cursor_append(cursor, ip, &ms,
-> > > > >                                  branch, flags, nr_loop_iter,
-> > > >
-> > > > This seems to be breaking --branch-history.  I am not sure
-> > > > append_inlines() makes sense for branches.  Maybe this should be:
-> > > >
-> > > >     if (!branch && !append_inlines(cursor, &ms, ip))
-> > > >             return 0;
-> > > >
-> > >
-> > > Right. So when cllchain_cursor is appended through append_inlines it
-> > > always discards branch information, even for the non-inlined function.
-> > > So adding !branch makes sense to me. Does anyone else see any problems
-> > > with that?
-> >
-> > I'm no expert in this specific area, so for now till we get to a
-> > conclusion on this, I'll follow Andi's suggestion and revert this patch.
-> 
-> I think we can simply apply Adrian's patch above.
+> > NAK.  Function pointers for somthing high performance as cache
+> > maintainance is a complete no-go.
+>=20
+> As we already discussed, this is now planned to use a direct
+> branch to the zicbom version when the function pointer is NULL,
+> which should be a fast predicted branch on all standard implementations
+> and only be slow on the nonstandard ones, which I think is a reasonable
+> compromise.
+>=20
+> I'm also not sure I'd actually consider this a fast path, since
+> there is already a significant cost in accessing the invalidated
+> cache lines afterwards, which is likely going to be much higher than
+> the cost of an indirect branch.
+>=20
+> I suppose an alternative would be to use the linux/static_call.h
+> infrastructure to avoid the overhead of indirect branches altogether.
+> Right now, this has no riscv specific implementation though, so
+> using it just turns into a regular indirect branch until someone
+> implements static_call.
 
-I can send a v2 with this fix included if that'll be more convenient.
+Someone actually posted an implementation for that the other day:
+https://patchwork.kernel.org/project/linux-riscv/patch/tencent_A8A256967B65=
+4625AEE1DB222514B0613B07@qq.com/
 
--- 
- Artem
+I haven't looked at it at all, other than noticing the build issues
+outside of for !rv64 || !mmu, so I have no idea what state it is
+actually in.
 
+
+--ZREIQbKvtp6hD4WG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCvK5QAKCRB4tDGHoIJi
+0u41AQC5LlNjFCo7KuWt5ZFwh4+c+I5y0gSMhl//kBtKQMsMKgD+NN9jEGHmflZR
+INGsvjP7dlUKwSSpdNO7N3SeKqmFVwo=
+=rvG3
+-----END PGP SIGNATURE-----
+
+--ZREIQbKvtp6hD4WG--
