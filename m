@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4576D676F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5766D6775
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 17:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235597AbjDDPeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 11:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        id S235123AbjDDPfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 11:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235265AbjDDPeJ (ORCPT
+        with ESMTP id S235024AbjDDPfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 11:34:09 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E5A211D;
-        Tue,  4 Apr 2023 08:34:08 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334DItm1004091;
-        Tue, 4 Apr 2023 17:33:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=DqoMUOl84qAxYmLCh80KNtJg5Ir0IEjSOZQgQ2rfR+U=;
- b=bRdm1ozxGy4JGpSVk7F+O5uEnVZiZ+VDq12thED6jcLIjSA3AjMlfGEJISx273k6Om2q
- dXIhG33FLPCjTWp4o2OYsmnT6dlDXvZ+Bcltp3E9IT6H4uQ+jz0fgZqdCqkUQGjVBBj7
- lQnSs3lZHAzkAgn5Sm88+QhE7EptAhuvLvMsr9ZKUzJECkH+tv2aOOuuXQvj9EpNxlQf
- IZoAmr3yBawR//Gn50P34rPcPge+vkF0esZGdFm/ZXW2Ru9UV4zLjZ6nMqogKZrXbZ4Q
- jO3fEOXwh5DNv4G/i46osQQz7JiWXi2V/hd2GV+g0z9+dr4CIH7ySEw+jd0h1KUzS9KV Jw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3prmny0sjm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Apr 2023 17:33:56 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D089710002A;
-        Tue,  4 Apr 2023 17:33:55 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C51152248CF;
-        Tue,  4 Apr 2023 17:33:55 +0200 (CEST)
-Received: from [10.252.11.89] (10.252.11.89) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 4 Apr
- 2023 17:33:52 +0200
-Message-ID: <14e897f3-1d11-f4d2-ad04-d328e7a57564@foss.st.com>
-Date:   Tue, 4 Apr 2023 17:33:37 +0200
+        Tue, 4 Apr 2023 11:35:12 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1422719AF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 08:35:11 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id r14so18820693oiw.12
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 08:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1680622510; x=1683214510;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C6R4aOyJyDkIgHIVotRNcx/chT2oC7UuU6Y6qIEoUAE=;
+        b=j4Q5gDOHHnM+qB7ifoJy+oxC06Zdjb9mpbd7zIX7SMvhGKkBoDsWify1l6fwb3SssM
+         N02pq7k5H0o9Hmlxm2NiGEwFdUER2roPwv10kwFFy8YE0Cd1C9H9eKvfB9OdFpJGozYm
+         FLMkRMNBQgL5JkXiSaR9238raAY8paxS8rmwYLS0pnfW/uIN0NBYqUNKOCd7kVKcKPZ6
+         h82T3FzgWs/iIAjpTKhFEh4nrllSp/gPvdowFqLjmartx45XFKmLMN5j2Y8yOzH0ZsPm
+         s+sy5jMukDwXigjWAVzcmaRwq7jf3mWiySiJcR0XOvU1ROc3iKWZ+dVPDzUVm+60yFZg
+         KeNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680622510; x=1683214510;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C6R4aOyJyDkIgHIVotRNcx/chT2oC7UuU6Y6qIEoUAE=;
+        b=5HgiYLhmbdSs1enlqI9ZE8HIIoki/EDK0aPpcUt4WGCmLGceSNJMniS6ECeSALiBJu
+         xwXA868q4wCrOa5hXqYlgKGg639WTEzPuRAMd3F1cfXvxp1BQstio5jL1IDUMb7OpMhB
+         oTJ37Q0F+89mKazi1EU+vPQKJ5bRJpLsyYS2k9hnFJRpdiBB95gjOqyOII98Dtu4oMaM
+         dbHItRBQpT+c7CHpc5EGFaJfyHVKGcX6Cpzan+brIhhVO9RuE9Q7bNEv5LBdaaIeasTu
+         Qhr3fvawkDhqHp/C624K0Uxkio1/tAtFfzqqMZW1LTRbr2MhMxgkY8RmAFYCYw8Qmcoc
+         pu7g==
+X-Gm-Message-State: AAQBX9cfspEHhjQ8FKah7UC/N1rPosDraxfFJsxrhrYadWD7WEJ63XJt
+        3e3qWbIFFUxRgKeG3C9fKTIzK9TW8AMF+qO6zYQ=
+X-Google-Smtp-Source: AKy350bhAMUu2udM02Eak5zwTeupgQEs2dp62vPjEaPrpcdme8sxsXnyn58f0Ujpp4CaSj2io/h7JQ==
+X-Received: by 2002:a05:6808:2d5:b0:386:d629:81a1 with SMTP id a21-20020a05680802d500b00386d62981a1mr1300978oid.35.1680622510321;
+        Tue, 04 Apr 2023 08:35:10 -0700 (PDT)
+Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
+        by smtp.gmail.com with ESMTPSA id w124-20020acadf82000000b00387384dc768sm5325803oig.9.2023.04.04.08.35.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 08:35:09 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v4 0/9] RISC-V KVM virtualize AIA CSRs
+Date:   Tue,  4 Apr 2023 21:04:43 +0530
+Message-Id: <20230404153452.2405681-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/5] ARM: dts: stm32: Remove the st,syscfg-tz property
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>
-References: <20230331154651.3107173-1-arnaud.pouliquen@foss.st.com>
- <20230331154651.3107173-3-arnaud.pouliquen@foss.st.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Organization: STMicroelectronics
-In-Reply-To: <20230331154651.3107173-3-arnaud.pouliquen@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.252.11.89]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-04_07,2023-04-04_04,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,48 +73,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The RISC-V AIA specification is now frozen as-per the RISC-V international
+process. The latest frozen specifcation can be found at:
+https://github.com/riscv/riscv-aia/releases/download/1.0-RC3/riscv-interrupts-1.0-RC3.pdf
 
+This series implements first phase of AIA virtualization which targets
+virtualizing AIA CSRs. This also provides a foundation for the second
+phase of AIA virtualization which will target in-kernel AIA irqchip
+(including both IMSIC and APLIC).
 
-On 3/31/23 17:46, Arnaud Pouliquen wrote:
-> Since the introduction of the SCMI server for the management
-> of the MCU hold boot in OPTEE, management of the hold boot by smc call
-> is deprecated.
-> Clean the st,syscfg-tz  which allows to determine if the trust
-> zone is enable.
+The first two patches are shared with the "Linux RISC-V AIA Support"
+series which adds AIA driver support.
 
+To test this series, use AIA drivers from the "Linux RISC-V AIA Support"
+series and use KVMTOOL from the riscv_aia_v1 branch at:
+https://github.com/avpatel/kvmtool.git
 
-Please don't waste time to review the commit message above!
+These patches can also be found in the riscv_kvm_aia_csr_v4 branch at:
+https://github.com/avpatel/linux.git
 
-The subject and the commit message is not aligned with the commit update
+Based-on: 20230401112730.2105240-1-apatel@ventanamicro.com
+(https://lore.kernel.org/lkml/20230401112730.2105240-1-apatel@ventanamicro.com/)
 
-I need to rework it in a V2. I'm waiting few days before sending the V2,
-allowing people to comment V1.
+Based-on: 20230403121527.2286489-1-apatel@ventanamicro.com
+(https://lore.kernel.org/lkml/20230403121527.2286489-1-apatel@ventanamicro.com/)
 
-For V2 I will probably copy/past the commit message of:
+Changes since v3:
+ - Split PATCH7 into two patches
+ - Addressed comments in PATCH7, PATCH8 and PATCH9
 
-[PATCH 1/5] dt-bindings: remoteproc: st,stm32-rproc: Rework reset declarations
+Changes since v2:
+ - Rebased on Linux-6.3-rc5
+ - Split PATCH5 into two separate patches as suggested by Atish.
 
-Regards,
-Arnaud
+Changes since v1:
+ - Addressed from Drew and Conor in PATCH1
+ - Use alphabetical ordering for SMAIA and SSAIA enum in PATCH2
+ - Use GENMASK() in PATCH3
 
-> 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> ---
->  arch/arm/boot/dts/stm32mp151.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-> index 4e437d3f2ed6..25626797db94 100644
-> --- a/arch/arm/boot/dts/stm32mp151.dtsi
-> +++ b/arch/arm/boot/dts/stm32mp151.dtsi
-> @@ -1820,8 +1820,8 @@ m4_rproc: m4@10000000 {
->  			      <0x30000000 0x40000>,
->  			      <0x38000000 0x10000>;
->  			resets = <&rcc MCU_R>;
-> +			reset-names = "mcu_rst";
->  			st,syscfg-holdboot = <&rcc 0x10C 0x1>;
-> -			st,syscfg-tz = <&rcc 0x000 0x1>;
->  			st,syscfg-pdds = <&pwr_mcu 0x0 0x1>;
->  			st,syscfg-rsc-tbl = <&tamp 0x144 0xFFFFFFFF>;
->  			st,syscfg-m4-state = <&tamp 0x148 0xFFFFFFFF>;
+Anup Patel (9):
+  RISC-V: Add AIA related CSR defines
+  RISC-V: Detect AIA CSRs from ISA string
+  RISC-V: KVM: Drop the _MASK suffix from hgatp.VMID mask defines
+  RISC-V: KVM: Initial skeletal support for AIA
+  RISC-V: KVM: Implement subtype for CSR ONE_REG interface
+  RISC-V: KVM: Add ONE_REG interface for AIA CSRs
+  RISC-V: KVM: Use bitmap for irqs_pending and irqs_pending_mask
+  RISC-V: KVM: Virtualize per-HART AIA CSRs
+  RISC-V: KVM: Implement guest external interrupt line management
+
+ arch/riscv/include/asm/csr.h      | 107 ++++-
+ arch/riscv/include/asm/hwcap.h    |   8 +
+ arch/riscv/include/asm/kvm_aia.h  | 137 +++++++
+ arch/riscv/include/asm/kvm_host.h |  14 +-
+ arch/riscv/include/uapi/asm/kvm.h |  18 +-
+ arch/riscv/kernel/cpu.c           |   2 +
+ arch/riscv/kernel/cpufeature.c    |   2 +
+ arch/riscv/kvm/Makefile           |   1 +
+ arch/riscv/kvm/aia.c              | 627 ++++++++++++++++++++++++++++++
+ arch/riscv/kvm/main.c             |  23 +-
+ arch/riscv/kvm/mmu.c              |   3 +-
+ arch/riscv/kvm/vcpu.c             | 190 +++++++--
+ arch/riscv/kvm/vcpu_insn.c        |   1 +
+ arch/riscv/kvm/vm.c               |   4 +
+ arch/riscv/kvm/vmid.c             |   4 +-
+ 15 files changed, 1083 insertions(+), 58 deletions(-)
+ create mode 100644 arch/riscv/include/asm/kvm_aia.h
+ create mode 100644 arch/riscv/kvm/aia.c
+
+-- 
+2.34.1
 
