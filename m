@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFD86D60E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305326D60EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 14:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234889AbjDDMiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 08:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        id S235049AbjDDMiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 08:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234964AbjDDMh7 (ORCPT
+        with ESMTP id S234923AbjDDMiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:37:59 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6584DE65;
-        Tue,  4 Apr 2023 05:37:30 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-17aceccdcf6so34302320fac.9;
-        Tue, 04 Apr 2023 05:37:30 -0700 (PDT)
+        Tue, 4 Apr 2023 08:38:00 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCA840D7;
+        Tue,  4 Apr 2023 05:37:36 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id w15-20020a056830410f00b006a386a0568dso1960586ott.4;
+        Tue, 04 Apr 2023 05:37:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680611796;
+        d=1e100.net; s=20210112; t=1680611794;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=0jw5cqutZbx/QW7WKjOQs2owiMOWHGW+suiwBs6SJ38=;
-        b=gp0iFRlZFIZk4vkje2zkclsavRf7hw6jlUvRF1UAHKjNfbDKCN3fXdJ/WYBDYk5TDf
-         +pxb2zZcR6/N0+Y4wk5RigcT2EilQL6hUbmilBy7KbJ4Tp/lY6aqsZWMkhEuSXe4zJf+
-         5YnTHMXW1t1iP7LXXMs+7LNfVskMEuV03gUqpsJEUScjVsYCvxnk3I1j5O4qHdW1bTRM
-         oO39Q6E/LCNkf3b9/nn7oDO5NzduRecwUUx6+yYHSe2GEjFaiNUeY+w76IChgko5aLUe
-         K72wn0B0RDmWaYrD30/mHmzRuTkK32hXXY/OmQfO+51p57qtaOoq7DW/DOvsKl6k5qgP
-         sKIw==
-X-Gm-Message-State: AAQBX9cU+jlbW4tmu0Kc/CMpC3wS+MPvhtYNuHRveq4QXbH7HokjBHMy
-        flKvclt20Xh0dw2Kg1T9HA==
-X-Google-Smtp-Source: AKy350bhRqX4FAch/8GEKSjtpqleOc3Q0BdTRsPuYpRjYCW4EMYiAFL7XmR8fMG3R30XCkec0VxWAA==
-X-Received: by 2002:a05:6870:d1c8:b0:17a:a7af:6cee with SMTP id b8-20020a056870d1c800b0017aa7af6ceemr1512478oac.51.1680611796368;
-        Tue, 04 Apr 2023 05:36:36 -0700 (PDT)
+        bh=zjG68dibK9/cWxjvku/lAc6j3Rz6IJnfcIxgAADMEtA=;
+        b=HSwTdP9vZGFBn85pt0qo11fS6+xcXhsGdl9FSatpcLkzmlTg/b6Nafy+KAs6TqqHB9
+         v8V2k7NOCYOPKitCvhgBjjI3X59AmmVNR4r+Nw3N9ivinBu4DmazSY570nengCY6R3zj
+         gXVAUZa5Iw9nZkzKY7uD+VQKlZg0Wgys5Kw2yHQlLzQ2bQcMqD64rlD58P+1YRnMHGUs
+         LpP8aG/YShurJcUsITc51hNIKaWniRlHit0/mcbzjO8111qb/Udc9gYmsm1+UiP8xnKh
+         Kx6E4nLII61k2jE7RyGmzBbTPlHQSW+cOdttkowG2mG3zsZEnwot9w/ihxEK4AVfEcuT
+         RLPg==
+X-Gm-Message-State: AAQBX9cfC5k6P8D1KypLKpedBCZOHOfQ/UKGnXK+jQQ2vgoa3SaTJVnj
+        geU9sVBmUTayqGe8yELmVNs3Y0vf3w==
+X-Google-Smtp-Source: AKy350Y/UGYizDkd9w8AuBHG7Ho7zL2RA+5L2HIPoQs9B4tzgKhk490HQ1Uhx9IoP13r4X7M44oWYQ==
+X-Received: by 2002:a9d:6a93:0:b0:6a1:7d40:f862 with SMTP id l19-20020a9d6a93000000b006a17d40f862mr1108755otq.35.1680611793988;
+        Tue, 04 Apr 2023 05:36:33 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y206-20020aca32d7000000b0038b0dd1c040sm3353259oiy.3.2023.04.04.05.36.35
+        by smtp.gmail.com with ESMTPSA id x5-20020a056830114500b006a2fd720f82sm4352384otq.7.2023.04.04.05.36.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 05:36:35 -0700 (PDT)
-Received: (nullmailer pid 3710629 invoked by uid 1000);
+        Tue, 04 Apr 2023 05:36:33 -0700 (PDT)
+Received: (nullmailer pid 3710626 invoked by uid 1000);
         Tue, 04 Apr 2023 12:36:32 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
 To:     Otabek Nazrullaev <otabeknazrullaev1998@gmail.com>
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        devicetree@vger.kernel.org,
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-watchdog@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230404054642.5691-1-otabeknazrullaev1998@gmail.com>
-References: <20230404054642.5691-1-otabeknazrullaev1998@gmail.com>
-Message-Id: <168061169045.3708460.6798007287517476603.robh@kernel.org>
-Subject: Re: [PATCH] watchdog: dt-bindings: atmel-at91rm9200-wdt convert to
- json-schema
+In-Reply-To: <20230404054449.5665-1-otabeknazrullaev1998@gmail.com>
+References: <20230404054449.5665-1-otabeknazrullaev1998@gmail.com>
+Message-Id: <168061168969.3708419.4281966310027889475.robh@kernel.org>
+Subject: Re: [PATCH] watchdog: dt-bindings: armada-37xx-wdt: convert text
+ binding
 Date:   Tue, 04 Apr 2023 07:36:32 -0500
 X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -72,17 +68,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 04 Apr 2023 14:46:40 +0900, Otabek Nazrullaev wrote:
-> Convert atmel AT91RM9200 system timer watchdog from text bindings
-> to YAML format
+On Tue, 04 Apr 2023 14:44:08 +0900, Otabek Nazrullaev wrote:
+> Convert Armada 37xx watchdog timer controller to YAML format
 > 
 > Signed-off-by: Otabek Nazrullaev <otabeknazrullaev1998@gmail.com>
 > ---
->  .../watchdog/atmel-at91rm9200-wdt.txt         |  9 ------
->  .../watchdog/atmel-at91rm9200-wdt.yaml        | 28 +++++++++++++++++++
->  2 files changed, 28 insertions(+), 9 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.yaml
+>  .../bindings/watchdog/armada-37xx-wdt.txt     | 23 --------
+>  .../bindings/watchdog/armada-37xx-wdt.yaml    | 54 +++++++++++++++++++
+>  2 files changed, 54 insertions(+), 23 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -91,14 +86,12 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.example.dts:18.27-20.11: Warning (unit_address_vs_reg): /example-0/watchdog@fffffd00: node has a unit name, but no reg or ranges property
-Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.example.dtb: /example-0/watchdog@fffffd00: failed to match any schema with compatible: ['atmel,at91rm9200-wdt']
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.example.dtb: watchdog@fffffd40: Unevaluated properties are not allowed ('atmel,dbg-halt', 'atmel,idle-halt', 'atmel,max-heartbeat-sec', 'atmel,min-heartbeat-sec', 'atmel,reset-type', 'atmel,watchdog-type', 'clocks', 'interrupts', 'reg' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.yaml
+Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.example.dtb: /example-0/system-controller@d000: failed to match any schema with compatible: ['marvell,armada-3700-cpu-misc', 'syscon']
 
 doc reference errors (make refcheckdocs):
+MAINTAINERS: Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230404054642.5691-1-otabeknazrullaev1998@gmail.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230404054449.5665-1-otabeknazrullaev1998@gmail.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
